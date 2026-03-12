@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50' font-size='48'%3E%F0%9F%9B%A0%EF%B8%8F%3C/text%3E%3C/svg%3E">
+  <title>Classificar objetos atendendo às suas características</title>
+  <style>
+    :root {
+      --azul: #2f80ed;
+      --azul-escuro: #1657b8;
+      --verde: #32b36b;
+      --amarelo: #f7b731;
+      --vermelho: #eb4d4b;
+      --laranja: #ff9f43;
+      --roxo: #7d3c98;
+      --texto: #20243a;
+      --fundo: #f5f8ff;
+      --cartao: #ffffff;
+      --borda: #ced9ee;
+      --sucesso: #e8f8ef;
+      --erro: #ffe8e8;
+      --sombra: 0 6px 18px rgba(22, 37, 84, 0.15);
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Verdana", "Trebuchet MS", sans-serif;
+      background: radial-gradient(circle at 0 0, #e5f0ff, transparent 38%), radial-gradient(circle at 100% 0, #d8ffe8, transparent 30%), var(--fundo);
+      color: var(--texto);
+      font-size: 18px;
+      line-height: 1.45;
+    }
+
+    .container {
+      width: min(1200px, 96vw);
+      margin: 1rem auto 2rem;
+    }
+
+    header {
+      background: linear-gradient(135deg, #2f80ed 0%, #00c9a7 50%, #ffb347 100%);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--sombra);
+    }
+
+    h1, h2, h3 { margin: 0.2rem 0 0.8rem; }
+    h1 { font-size: clamp(1.7rem, 3vw, 2.4rem); }
+    h2 { font-size: clamp(1.3rem, 2.2vw, 1.8rem); color: var(--azul-escuro); }
+    h3 { font-size: 1.2rem; }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin: 0.6rem 0;
+    }
+
+    .pill {
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      border-radius: 999px;
+      padding: 0.45rem 0.8rem;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .objectives {
+      background: rgba(0, 0, 0, 0.16);
+      border-radius: 12px;
+      padding: 0.8rem 1rem;
+      margin-top: 0.8rem;
+    }
+
+    .objectives ul { margin: 0.2rem 0 0.2rem 1.1rem; }
+
+    section {
+      background: var(--cartao);
+      border: 2px solid var(--borda);
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-top: 1rem;
+      box-shadow: var(--sombra);
+    }
+
+    .unit-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.6rem;
+    }
+
+    .duration {
+      background: #e8f2ff;
+      border-radius: 10px;
+      padding: 0.35rem 0.7rem;
+      border: 1px solid #b8d4ff;
+      font-weight: 700;
+      color: #114a9e;
+    }
+
+    .desc {
+      background: #edf6ff;
+      border-left: 4px solid var(--azul);
+      padding: 0.75rem;
+      border-radius: 10px;
+      margin-bottom: 0.7rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    select, button, input[type="text"] {
+      min-height: 44px;
+      border-radius: 10px;
+      border: 2px solid #b8c4dd;
+      font-size: 1rem;
+      padding: 0.45rem 0.7rem;
+      background: #fff;
+    }
+
+    button {
+      background: var(--azul);
+      border-color: var(--azul);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 700;
+      touch-action: manipulation;
+      transition: transform 0.18s ease, opacity 0.2s ease;
+    }
+
+    button:hover { transform: translateY(-1px); opacity: 0.95; }
+
+    .diff-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .diff-tab {
+      min-height: 44px;
+      border-radius: 999px;
+      padding: 0.45rem 0.85rem;
+      border: 2px solid #acbddf;
+      background: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      touch-action: manipulation;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .diff-tab.active { color: #fff; }
+    .diff-tab[data-level="apoio"].active { background: var(--verde); border-color: var(--verde); }
+    .diff-tab[data-level="intermedio"].active { background: var(--amarelo); border-color: #e6a111; color: #2b2200; }
+    .diff-tab[data-level="desafio"].active { background: var(--vermelho); border-color: var(--vermelho); }
+
+    .diff-content {
+      display: none;
+      padding: 0.65rem;
+      border-radius: 10px;
+      border: 1px solid #d5def0;
+      background: #f9fbff;
+      margin-bottom: 0.8rem;
+    }
+
+    .diff-content.active { display: block; }
+
+    .drag-wrap {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .items-area, .zones-area {
+      border: 2px dashed #a7b7d7;
+      border-radius: 12px;
+      padding: 0.6rem;
+      min-height: 220px;
+      background: #f8fbff;
+    }
+
+    .items-pool {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: flex-start;
+    }
+
+    .draggable {
+      min-height: 44px;
+      min-width: 44px;
+      padding: 0.45rem 0.7rem;
+      border-radius: 12px;
+      border: 2px solid #234;
+      background: #fff;
+      font-weight: 700;
+      touch-action: none;
+      user-select: none;
+      cursor: grab;
+      transition: transform 0.18s ease;
+    }
+
+    .dragging { opacity: 0.8; transform: scale(1.04); cursor: grabbing; }
+
+    .shape-bola { border-radius: 999px; }
+    .shape-cubo { border-radius: 6px; }
+    .shape-botao { border-radius: 999px; border-style: dotted; }
+    .cor-vermelho { background: #ff8e8e; }
+    .cor-azul { background: #8ec7ff; }
+
+    .zone-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+
+    .drop-zone {
+      border: 2px dashed #95a9d4;
+      border-radius: 12px;
+      padding: 0.5rem;
+      min-height: 145px;
+      background: #fff;
+    }
+
+    .drop-zone.highlight { border-color: var(--azul); background: #edf4ff; }
+    .drop-zone h4 { margin: 0 0 0.45rem; font-size: 1rem; color: #204b93; }
+    .drop-items { display: flex; gap: 0.4rem; flex-wrap: wrap; align-content: flex-start; min-height: 80px; }
+
+    .status {
+      padding: 0.65rem;
+      border-radius: 10px;
+      font-weight: 700;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      margin-top: 0.55rem;
+    }
+
+    .status.ok { background: var(--sucesso); color: #0a6b32; border: 1px solid #9ee0b6; }
+    .status.warn { background: #fff6df; color: #8a6200; border: 1px solid #ffd57a; }
+    .status.err { background: var(--erro); color: #9d1f1f; border: 1px solid #ffacac; }
+
+    .u2-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .obj-card {
+      border: 2px solid #8da3d2;
+      border-radius: 12px;
+      padding: 0.45rem 0.6rem;
+      font-weight: 700;
+      background: #fff;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .obj-card.selected { background: #eaf2ff; border-color: var(--azul); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+    }
+
+    th, td {
+      border: 1px solid #cbd8f1;
+      padding: 0.45rem;
+      text-align: left;
+      font-size: 0.96rem;
+    }
+
+    th { background: #edf4ff; }
+
+    .u3-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      align-items: start;
+    }
+
+    .zone-builder {
+      border: 2px dashed #8cc6a6;
+      background: #f2fff6;
+      border-radius: 12px;
+      padding: 0.55rem;
+    }
+
+    .mc-zone {
+      border: 2px solid #7db892;
+      border-radius: 12px;
+      background: #fff;
+      padding: 0.45rem;
+      margin-bottom: 0.5rem;
+      min-height: 110px;
+    }
+
+    .mc-zone strong {
+      display: block;
+      margin-bottom: 0.3rem;
+      color: #1c703d;
+    }
+
+    .mc-items { display: flex; flex-wrap: wrap; gap: 0.35rem; min-height: 52px; }
+    .mc-placa { width: 100%; margin-top: 0.3rem; }
+
+    .canvas-wrap {
+      position: relative;
+      min-height: 190px;
+      background: linear-gradient(180deg, #dff5ff 0%, #f1fff1 100%);
+      border-radius: 12px;
+      border: 2px solid #b9d9c2;
+      overflow: hidden;
+    }
+
+    #celebrationCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 40;
+    }
+
+    .maker-section {
+      background: #dff7e5;
+      border-color: #84d49f;
+    }
+
+    .maker-card {
+      border-left: 6px solid #36ac65;
+      background: #fff;
+      border-radius: 12px;
+      padding: 0.8rem;
+    }
+
+    .assessment {
+      background: #fff2df;
+      border-color: #ffbe66;
+    }
+
+    .checkline {
+      border: 1px solid #f3c27a;
+      border-radius: 10px;
+      padding: 0.6rem;
+      margin: 0.45rem 0;
+      background: #fff9ef;
+    }
+
+    .scale {
+      display: flex;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+      margin-top: 0.25rem;
+      font-size: 0.95rem;
+    }
+
+    .curricular {
+      background: #efe2fb;
+      border-color: #bb95de;
+    }
+
+    .curricular h2, .curricular h3 { color: #5f2a86; }
+    .curricular ul { margin: 0.3rem 0 0.5rem 1.1rem; }
+
+    .footer {
+      text-align: center;
+      color: #6f6f80;
+      font-size: 0.86rem;
+      padding: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      .drag-wrap, .u2-grid, .u3-layout { grid-template-columns: 1fr; }
+      body { font-size: 16px; }
+      .container { width: 97vw; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="celebrationCanvas" aria-hidden="true"></canvas>
+  <main class="container">
+    <header>
+      <h1>Classificar objetos atendendo às suas características</h1>
+      <div class="meta">
+        <span class="pill" aria-label="Ano escolar">1.º ano (6-7 anos)</span>
+        <span class="pill" aria-label="Duração da aula">Duração: 90 minutos</span>
+      </div>
+      <div class="objectives" aria-label="Objetivos da aula">
+        <strong>Objetivos:</strong>
+        <ul>
+          <li>Classificar objetos pelas características visíveis e justificar a regra usada.</li>
+          <li>Identificar semelhanças e diferenças entre objetos, figuras e materiais do quotidiano.</li>
+          <li>Comunicar oralmente o critério de classificação e verificar pertença a um grupo.</li>
+          <li>Aplicar a classificação num contexto maker, com organização e apresentação em grupo.</li>
+        </ul>
+      </div>
+    </header>
+
+    <section class="knowledge-unit" id="unit1">
+      <div class="unit-head">
+        <h2>Unidade 1: Descobrir uma regra de classificação</h2>
+        <span class="duration">20 min</span>
+      </div>
+      <p class="desc">Arrasta os objetos para dois grupos. Testa um critério e verifica se os objetos de cada grupo ficam mesmo com algo em comum.</p>
+
+      <div class="diff-tabs" role="tablist" aria-label="Níveis de diferenciação da unidade 1">
+        <button type="button" class="diff-tab active" data-level="apoio" role="tab" aria-selected="true">🟢 Apoio</button>
+        <button type="button" class="diff-tab" data-level="intermedio" role="tab" aria-selected="false">🟡 Intermédio</button>
+        <button type="button" class="diff-tab" data-level="desafio" role="tab" aria-selected="false">🔴 Desafio</button>
+      </div>
+      <div class="diff-content active" data-level="apoio">Usa poucos objetos e olha para algo muito visível: vermelho/azul ou redondo/não redondo. Dica: “O que é igual nestes dois?”</div>
+      <div class="diff-content" data-level="intermedio">Classifica 6 a 8 objetos por um critério escolhido e explica: “Estes ficam juntos porque...”</div>
+      <div class="diff-content" data-level="desafio">Recebe um objeto diferente e decide se cabe num grupo ou se tens de mudar a regra. Explica porquê.</div>
+
+      <div class="controls">
+        <label for="criterioTentado"><strong>Critério tentado:</strong></label>
+        <select id="criterioTentado" aria-label="Escolher critério da unidade 1">
+          <option value="cor">cor</option>
+          <option value="forma">forma</option>
+          <option value="tamanho">tamanho</option>
+          <option value="material">material</option>
+        </select>
+        <button type="button" id="u1Check" aria-label="Verificar grupos da unidade 1">Verificar grupos</button>
+        <button type="button" id="u1NewObj" aria-label="Adicionar novo objeto">Novo objeto</button>
+      </div>
+
+      <div class="drag-wrap">
+        <div class="items-area">
+          <strong>Objetos misturados</strong>
+          <div class="items-pool" id="u1Pool" aria-label="Objetos para arrastar"></div>
+        </div>
+        <div class="zones-area">
+          <strong>Grupos criados</strong>
+          <div class="zone-grid">
+            <div class="drop-zone" data-zone="A" aria-label="Grupo A">
+              <h4>Grupo A</h4>
+              <div class="drop-items" id="u1ZoneA"></div>
+            </div>
+            <div class="drop-zone" data-zone="B" aria-label="Grupo B">
+              <h4>Grupo B</h4>
+              <div class="drop-items" id="u1ZoneB"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="u1Status" class="status warn" aria-live="polite">Organiza os objetos e verifica a tua regra.</div>
+    </section>
+
+    <section class="knowledge-unit" id="unit2">
+      <div class="unit-head">
+        <h2>Unidade 2: Comparar critérios e registar</h2>
+        <span class="duration">25 min</span>
+      </div>
+      <p class="desc">Escolhe um critério, coloca os objetos no grupo certo e completa uma frase que explique a tua classificação.</p>
+
+      <div class="diff-tabs" role="tablist" aria-label="Níveis de diferenciação da unidade 2">
+        <button type="button" class="diff-tab active" data-level="apoio">🟢 Apoio</button>
+        <button type="button" class="diff-tab" data-level="intermedio">🟡 Intermédio</button>
+        <button type="button" class="diff-tab" data-level="desafio">🔴 Desafio</button>
+      </div>
+      <div class="diff-content active" data-level="apoio">Tabela com duas categorias e frase incompleta: “Ficam juntos porque têm a mesma ___”.</div>
+      <div class="diff-content" data-level="intermedio">Classifica 8 a 10 objetos e diz oralmente a regra com um exemplo correto.</div>
+      <div class="diff-content" data-level="desafio">Compara duas classificações e identifica um objeto que muda de grupo quando muda a regra.</div>
+
+      <div class="u2-grid">
+        <div>
+          <div class="controls">
+            <label for="criterioGrupo"><strong>Critério do grupo:</strong></label>
+            <select id="criterioGrupo" aria-label="Escolher critério da unidade 2">
+              <option value="forma">forma</option>
+              <option value="material">material</option>
+              <option value="tamanho">tamanho</option>
+            </select>
+            <button type="button" id="u2Auto" aria-label="Classificar automaticamente seleção">Colocar no grupo</button>
+          </div>
+          <div class="cards" id="u2Cards" aria-label="Cartões de objetos"></div>
+          <div class="status warn" id="u2Hint">Seleciona um cartão e usa “Colocar no grupo”.</div>
+        </div>
+        <div>
+          <strong>Registo</strong>
+          <table aria-label="Tabela de registo de classificação">
+            <thead>
+              <tr><th>Grupo</th><th>Objetos</th></tr>
+            </thead>
+            <tbody>
+              <tr><td id="u2Group1Name">Grupo 1</td><td id="u2Group1Items">—</td></tr>
+              <tr><td id="u2Group2Name">Grupo 2</td><td id="u2Group2Items">—</td></tr>
+            </tbody>
+          </table>
+          <div class="controls" style="margin-top:0.6rem;">
+            <label for="fraseRegisto"><strong>Frase de registo:</strong></label>
+            <select id="fraseRegisto" aria-label="Escolher frase de registo">
+              <option>Estes ficam juntos porque têm a mesma forma.</option>
+              <option>Estes ficam juntos porque são bonitos.</option>
+              <option>Estes ficam juntos porque eu gosto deles.</option>
+            </select>
+          </div>
+          <button type="button" id="u2Check" aria-label="Verificar frase e classificação">Verificar registo</button>
+          <div id="u2Status" class="status warn" aria-live="polite">Classifica por um critério observável.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="knowledge-unit" id="unit3">
+      <div class="unit-head">
+        <h2>Unidade 3: Desafio maker em Minecraft Education</h2>
+        <span class="duration">45 min</span>
+      </div>
+      <p class="desc">Cria zonas de classificação, coloca blocos coerentes e escreve placas para apresentar a regra à turma.</p>
+
+      <div class="diff-tabs" role="tablist" aria-label="Níveis de diferenciação da unidade 3">
+        <button type="button" class="diff-tab active" data-level="apoio">🟢 Apoio</button>
+        <button type="button" class="diff-tab" data-level="intermedio">🟡 Intermédio</button>
+        <button type="button" class="diff-tab" data-level="desafio">🔴 Desafio</button>
+      </div>
+      <div class="diff-content active" data-level="apoio">Usa 2 grupos visuais (ex.: vermelho/azul) e completa placas-modelo.</div>
+      <div class="diff-content" data-level="intermedio">Cria 3 zonas com um critério claro e comunica a regra com as placas.</div>
+      <div class="diff-content" data-level="desafio">Reorganiza a mesma coleção com outro critério e explica por que alguns blocos mudaram.</div>
+
+      <div class="controls">
+        <label for="criterioMinecraft"><strong>Critério Minecraft:</strong></label>
+        <select id="criterioMinecraft" aria-label="Escolher critério da unidade 3">
+          <option value="cor">cor do bloco</option>
+          <option value="material">tipo de material</option>
+          <option value="familia">forma/família de objetos</option>
+        </select>
+        <button type="button" id="u3Check" aria-label="Verificar construção maker">Verificar construção</button>
+      </div>
+
+      <div class="u3-layout">
+        <div>
+          <div class="items-area">
+            <strong>Blocos disponíveis</strong>
+            <div class="items-pool" id="u3Pool"></div>
+          </div>
+          <div class="canvas-wrap" aria-label="Pré-visualização do museu">
+            <canvas id="miniMap" width="560" height="190"></canvas>
+          </div>
+        </div>
+        <div class="zone-builder">
+          <div class="mc-zone" data-zone="1">
+            <strong>Zona 1</strong>
+            <div class="mc-items" id="u3Zone1"></div>
+            <input class="mc-placa" id="placa1" type="text" aria-label="Placa da zona 1" placeholder="Placa da zona 1">
+          </div>
+          <div class="mc-zone" data-zone="2">
+            <strong>Zona 2</strong>
+            <div class="mc-items" id="u3Zone2"></div>
+            <input class="mc-placa" id="placa2" type="text" aria-label="Placa da zona 2" placeholder="Placa da zona 2">
+          </div>
+          <div class="mc-zone" data-zone="3">
+            <strong>Zona 3</strong>
+            <div class="mc-items" id="u3Zone3"></div>
+            <input class="mc-placa" id="placa3" type="text" aria-label="Placa da zona 3" placeholder="Placa da zona 3">
+          </div>
+        </div>
+      </div>
+      <div id="u3Status" class="status warn" aria-live="polite">Constrói pelo menos 3 zonas coerentes e escreve as placas.</div>
+    </section>
+
+    <section class="maker-section">
+      <h2>🛠️ Desafios Maker</h2>
+      <div class="maker-card">
+        <h3>Minecraft: Museu das Coisas Bem Arrumadas</h3>
+        <p>Construam pelo menos 3 zonas para classificar blocos ou objetos por uma característica escolhida pelo grupo e preparem uma visita guiada de 1 minuto para explicar a vossa regra.</p>
+        <p><strong>Materiais:</strong> Minecraft Education Edition, mundo-base plano/sala vazia, blocos de cores e materiais diferentes, placas para nomear grupos.</p>
+        <p><strong>Grupo:</strong> 3-4 alunos</p>
+        <p><strong>Comunicação MEM:</strong> Cada grupo faz uma visita guiada breve, mostra um exemplo por zona e responde: “Porque fica aqui e não ali?”</p>
+      </div>
+    </section>
+
+    <section class="assessment">
+      <h2>📝 Mini-avaliação observável</h2>
+      <div class="checkline">1. Organiza 6 objetos em dois grupos coerentes e explica a característica comum.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+      </div>
+      <div class="checkline">2. Coloca corretamente um novo objeto no grupo adequado e justifica.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+      </div>
+      <div class="checkline">3. Compara duas classificações possíveis do mesmo conjunto e identifica o critério.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+      </div>
+      <div class="checkline">4. Em par, verbaliza uma frase correta sobre a regra usada.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+      </div>
+      <div class="checkline">5. No maker, constrói 3 zonas, coloca blocos coerentes e apresenta a regra oralmente.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+      </div>
+    </section>
+
+    <section class="curricular">
+      <h2>Referências curriculares</h2>
+      <h3>Aprendizagens Essenciais</h3>
+      <ul>
+        <li>Matemática (1.º ano): Classificar objetos atendendo às suas características.</li>
+        <li>Matemática (1.º ano): Descrever a forma de pensar sobre ideias e processos matemáticos, oralmente e por escrito.</li>
+        <li>Matemática (1.º ano): Usar representações múltiplas, com linguagem verbal e diagramas.</li>
+        <li>Estudo do Meio (1.º ano): Identificar propriedades de materiais e agrupá-los de acordo com as características.</li>
+        <li>Estudo do Meio (1.º ano): Colocar questões, levantar hipóteses, comprovar resultados e comunicar.</li>
+      </ul>
+      <h3>Perfil do Aluno</h3>
+      <ul>
+        <li>PA-A: Linguagens e textos</li>
+        <li>PA-B: Informação e comunicação</li>
+        <li>PA-C: Raciocínio e resolução de problemas</li>
+        <li>PA-E: Relacionamento interpessoal</li>
+        <li>PA-F: Desenvolvimento pessoal e autonomia</li>
+        <li>PA-I: Saber científico, técnico e tecnológico</li>
+      </ul>
+    </section>
+
+    <div class="footer">Gerado por PageCraft 🛠️</div>
+  </main>
+
+  <script>
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function beep(freq = 620, duration = 0.12, type = "sine") {
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = type;
+      o.frequency.value = freq;
+      g.gain.value = 0.001;
+      o.connect(g);
+      g.connect(audioCtx.destination);
+      const now = audioCtx.currentTime;
+      g.gain.exponentialRampToValueAtTime(0.08, now + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, now + duration);
+      o.start(now);
+      o.stop(now + duration);
+    }
+
+    const confettiCanvas = document.getElementById("celebrationCanvas");
+    const confettiCtx = confettiCanvas.getContext("2d");
+    let particles = [];
+    function resizeConfetti() {
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+    }
+    resizeConfetti();
+    window.addEventListener("resize", resizeConfetti);
+
+    function launchConfetti() {
+      particles = [];
+      for (let i = 0; i < 110; i++) {
+        particles.push({
+          x: Math.random() * confettiCanvas.width,
+          y: -10 - Math.random() * 120,
+          vx: (Math.random() - 0.5) * 3,
+          vy: 1.8 + Math.random() * 3.4,
+          size: 5 + Math.random() * 7,
+          rot: Math.random() * 6.28,
+          vr: (Math.random() - 0.5) * 0.2,
+          life: 80 + Math.random() * 40,
+          color: ["#ff4d6d", "#ffd93d", "#2ed573", "#1e90ff", "#ff9f1a"][Math.floor(Math.random() * 5)]
+        });
+      }
+      beep(700, 0.12, "triangle");
+      beep(880, 0.14, "triangle");
+      requestAnimationFrame(stepConfetti);
+    }
+
+    function stepConfetti() {
+      confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+      particles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.rot += p.vr;
+        p.life -= 1;
+        confettiCtx.save();
+        confettiCtx.translate(p.x, p.y);
+        confettiCtx.rotate(p.rot);
+        confettiCtx.fillStyle = p.color;
+        confettiCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.7);
+        confettiCtx.restore();
+      });
+      particles = particles.filter((p) => p.life > 0 && p.y < confettiCanvas.height + 30);
+      if (particles.length) requestAnimationFrame(stepConfetti);
+      else confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+    }
+
+    function setupTabs(scope) {
+      scope.querySelectorAll(".diff-tabs").forEach((group) => {
+        group.querySelectorAll(".diff-tab").forEach((tab) => {
+          tab.addEventListener("click", () => {
+            const unit = tab.closest("section");
+            const level = tab.dataset.level;
+            group.querySelectorAll(".diff-tab").forEach((t) => {
+              t.classList.remove("active");
+              t.setAttribute("aria-selected", "false");
+            });
+            tab.classList.add("active");
+            tab.setAttribute("aria-selected", "true");
+            unit.querySelectorAll(".diff-content").forEach((c) => c.classList.toggle("active", c.dataset.level === level));
+          });
+        });
+      });
+    }
+    setupTabs(document);
+
+    // Shared pointer drag (touch + mouse)
+    let dragEl = null;
+    function pointerDown(e) {
+      const t = e.target.closest(".draggable");
+      if (!t) return;
+      dragEl = t;
+      dragEl.classList.add("dragging");
+      t.setPointerCapture(e.pointerId);
+    }
+
+    function pointerMove(e) {
+      if (!dragEl) return;
+      const over = document.elementFromPoint(e.clientX, e.clientY);
+      document.querySelectorAll(".drop-zone, .mc-zone").forEach((z) => z.classList.remove("highlight"));
+      const zone = over && over.closest(".drop-zone, .mc-zone");
+      if (zone) zone.classList.add("highlight");
+    }
+
+    function pointerUp(e) {
+      if (!dragEl) return;
+      const over = document.elementFromPoint(e.clientX, e.clientY);
+      const zone = over && over.closest(".drop-zone, .mc-zone, #u1Pool, #u3Pool");
+      if (zone) {
+        const holder = zone.classList.contains("drop-zone") ? zone.querySelector(".drop-items")
+          : zone.classList.contains("mc-zone") ? zone.querySelector(".mc-items")
+          : zone;
+        if (holder) holder.appendChild(dragEl);
+      }
+      document.querySelectorAll(".drop-zone, .mc-zone").forEach((z) => z.classList.remove("highlight"));
+      dragEl.classList.remove("dragging");
+      dragEl = null;
+    }
+
+    document.addEventListener("pointerdown", pointerDown);
+    document.addEventListener("pointermove", pointerMove);
+    document.addEventListener("pointerup", pointerUp);
+
+    const u1Objects = [
+      { id: "o1", nome: "bola vermelha", cor: "vermelho", forma: "bola", tamanho: "pequeno", material: "borracha" },
+      { id: "o2", nome: "cubo vermelho", cor: "vermelho", forma: "cubo", tamanho: "grande", material: "madeira" },
+      { id: "o3", nome: "bola azul", cor: "azul", forma: "bola", tamanho: "grande", material: "plástico" },
+      { id: "o4", nome: "cubo azul", cor: "azul", forma: "cubo", tamanho: "pequeno", material: "metal" },
+      { id: "o5", nome: "botão vermelho", cor: "vermelho", forma: "botao", tamanho: "pequeno", material: "plástico" },
+      { id: "o6", nome: "botão azul", cor: "azul", forma: "botao", tamanho: "pequeno", material: "metal" }
+    ];
+
+    function buildDraggable(obj, prefix) {
+      const div = document.createElement("div");
+      div.className = `draggable cor-${obj.cor} shape-${obj.forma}`;
+      div.dataset.id = obj.id;
+      div.dataset.nome = obj.nome;
+      div.dataset.cor = obj.cor;
+      div.dataset.forma = obj.forma;
+      div.dataset.tamanho = obj.tamanho;
+      div.dataset.material = obj.material;
+      div.textContent = obj.nome;
+      div.setAttribute("aria-label", obj.nome);
+      div.tabIndex = 0;
+      div.id = `${prefix}_${obj.id}`;
+      return div;
+    }
+
+    const u1Pool = document.getElementById("u1Pool");
+    u1Objects.forEach((o) => u1Pool.appendChild(buildDraggable(o, "u1")));
+
+    function verifyU1() {
+      const crit = document.getElementById("criterioTentado").value;
+      const a = [...document.querySelectorAll("#u1ZoneA .draggable")];
+      const b = [...document.querySelectorAll("#u1ZoneB .draggable")];
+      const st = document.getElementById("u1Status");
+      if (a.length + b.length < 6 || a.length === 0 || b.length === 0) {
+        st.className = "status err";
+        st.textContent = "Ainda faltam objetos nos grupos. Tenta completar os dois grupos.";
+        beep(280, 0.08, "sawtooth");
+        return;
+      }
+      const same = (arr) => new Set(arr.map((el) => el.dataset[crit])).size === 1;
+      if (same(a) && same(b)) {
+        st.className = "status ok";
+        st.textContent = `Boa! Os grupos estão coerentes para o critério: ${crit}.`;
+        launchConfetti();
+      } else {
+        st.className = "status warn";
+        st.textContent = "Alguns objetos não seguem a mesma característica. Reorganiza e volta a testar.";
+        beep(340, 0.1, "square");
+      }
+    }
+
+    document.getElementById("u1Check").addEventListener("click", verifyU1);
+
+    document.getElementById("u1NewObj").addEventListener("click", () => {
+      if (document.getElementById("u1_o7")) return;
+      const novo = { id: "o7", nome: "bola verde", cor: "verde", forma: "bola", tamanho: "grande", material: "borracha" };
+      const el = buildDraggable(novo, "u1");
+      el.classList.remove("cor-azul", "cor-vermelho");
+      el.style.background = "#98f7ab";
+      u1Pool.appendChild(el);
+      const st = document.getElementById("u1Status");
+      st.className = "status warn";
+      st.textContent = "Novo objeto: decide onde fica e explica porquê.";
+      beep(520, 0.08, "triangle");
+    });
+
+    const u2Items = [
+      { nome: "colher", material: "metal", forma: "alongado", tamanho: "pequeno" },
+      { nome: "prato", material: "plástico", forma: "redondo", tamanho: "grande" },
+      { nome: "caixa", material: "madeira", forma: "quadrado", tamanho: "grande" },
+      { nome: "moeda", material: "metal", forma: "redondo", tamanho: "pequeno" },
+      { nome: "bloco", material: "plástico", forma: "quadrado", tamanho: "pequeno" },
+      { nome: "tabuleiro", material: "madeira", forma: "quadrado", tamanho: "grande" },
+      { nome: "tampa", material: "plástico", forma: "redondo", tamanho: "pequeno" },
+      { nome: "lata", material: "metal", forma: "redondo", tamanho: "grande" }
+    ];
+    const u2Groups = { g1: [], g2: [] };
+    let selectedU2 = null;
+
+    const u2Cards = document.getElementById("u2Cards");
+    u2Items.forEach((item, idx) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "obj-card";
+      b.textContent = item.nome;
+      b.dataset.idx = idx;
+      b.setAttribute("aria-label", `Cartão ${item.nome}`);
+      b.addEventListener("click", () => {
+        u2Cards.querySelectorAll(".obj-card").forEach((c) => c.classList.remove("selected"));
+        b.classList.add("selected");
+        selectedU2 = idx;
+      });
+      u2Cards.appendChild(b);
+    });
+
+    function currentU2Labels() {
+      const crit = document.getElementById("criterioGrupo").value;
+      if (crit === "forma") return ["Redondo", "Quadrado/Alongado"];
+      if (crit === "material") return ["Metal", "Não metal"];
+      return ["Grande", "Pequeno"];
+    }
+
+    function belongsGroup1(item, crit) {
+      if (crit === "forma") return item.forma === "redondo";
+      if (crit === "material") return item.material === "metal";
+      return item.tamanho === "grande";
+    }
+
+    function renderU2Table() {
+      const [l1, l2] = currentU2Labels();
+      document.getElementById("u2Group1Name").textContent = l1;
+      document.getElementById("u2Group2Name").textContent = l2;
+      const names = (arr) => arr.length ? arr.map((i) => u2Items[i].nome).join(", ") : "—";
+      document.getElementById("u2Group1Items").textContent = names(u2Groups.g1);
+      document.getElementById("u2Group2Items").textContent = names(u2Groups.g2);
+      const fr = document.getElementById("fraseRegisto");
+      fr.options[0].textContent = `Estes ficam juntos porque têm o mesmo(a) ${document.getElementById("criterioGrupo").value}.`;
+    }
+
+    document.getElementById("criterioGrupo").addEventListener("change", () => {
+      u2Groups.g1 = [];
+      u2Groups.g2 = [];
+      renderU2Table();
+      document.getElementById("u2Hint").className = "status warn";
+      document.getElementById("u2Hint").textContent = "Mudaste o critério. Volta a classificar os cartões.";
+    });
+
+    document.getElementById("u2Auto").addEventListener("click", () => {
+      const hint = document.getElementById("u2Hint");
+      if (selectedU2 === null) {
+        hint.className = "status err";
+        hint.textContent = "Escolhe um cartão primeiro.";
+        beep(300, 0.08, "square");
+        return;
+      }
+      const crit = document.getElementById("criterioGrupo").value;
+      u2Groups.g1 = u2Groups.g1.filter((i) => i !== selectedU2);
+      u2Groups.g2 = u2Groups.g2.filter((i) => i !== selectedU2);
+      if (belongsGroup1(u2Items[selectedU2], crit)) u2Groups.g1.push(selectedU2);
+      else u2Groups.g2.push(selectedU2);
+      renderU2Table();
+      hint.className = "status ok";
+      hint.textContent = `Cartão "${u2Items[selectedU2].nome}" classificado.`;
+      beep(620, 0.09, "triangle");
+    });
+
+    document.getElementById("u2Check").addEventListener("click", () => {
+      const st = document.getElementById("u2Status");
+      const frase = document.getElementById("fraseRegisto").value;
+      const crit = document.getElementById("criterioGrupo").value;
+      const total = u2Groups.g1.length + u2Groups.g2.length;
+      if (total < 8) {
+        st.className = "status err";
+        st.textContent = "Ainda faltam cartões por classificar.";
+        beep(300, 0.08, "sawtooth");
+        return;
+      }
+      const phraseOk = frase === `Estes ficam juntos porque têm o mesmo(a) ${crit}.`;
+      if (phraseOk) {
+        st.className = "status ok";
+        st.textContent = "Registo claro e comunicável. Muito bem!";
+        launchConfetti();
+      } else {
+        st.className = "status warn";
+        st.textContent = "A frase não combina com o critério escolhido. Ajusta o registo.";
+        beep(350, 0.09, "square");
+      }
+    });
+
+    renderU2Table();
+
+    const u3Blocks = [
+      { id: "b1", nome: "Lã vermelha", cor: "vermelho", material: "tecido", familia: "decoracao" },
+      { id: "b2", nome: "Lã azul", cor: "azul", material: "tecido", familia: "decoracao" },
+      { id: "b3", nome: "Carvalho", cor: "castanho", material: "madeira", familia: "bloco" },
+      { id: "b4", nome: "Pedra", cor: "cinzento", material: "rocha", familia: "bloco" },
+      { id: "b5", nome: "Vidro azul", cor: "azul", material: "vidro", familia: "bloco" },
+      { id: "b6", nome: "Lanterna", cor: "amarelo", material: "metal", familia: "objeto" },
+      { id: "b7", nome: "Porta", cor: "castanho", material: "madeira", familia: "objeto" },
+      { id: "b8", nome: "Betão vermelho", cor: "vermelho", material: "cimento", familia: "bloco" }
+    ];
+
+    const u3Pool = document.getElementById("u3Pool");
+    u3Blocks.forEach((b) => {
+      const el = document.createElement("div");
+      el.className = "draggable";
+      el.id = `u3_${b.id}`;
+      el.textContent = b.nome;
+      el.dataset.id = b.id;
+      el.dataset.cor = b.cor;
+      el.dataset.material = b.material;
+      el.dataset.familia = b.familia;
+      if (b.cor === "vermelho") el.style.background = "#ffa2a2";
+      if (b.cor === "azul") el.style.background = "#a5d4ff";
+      if (b.cor === "castanho") el.style.background = "#d6b389";
+      if (b.cor === "cinzento") el.style.background = "#d8d8dc";
+      if (b.cor === "amarelo") el.style.background = "#ffe794";
+      u3Pool.appendChild(el);
+    });
+
+    const miniMap = document.getElementById("miniMap");
+    const mmCtx = miniMap.getContext("2d");
+    function drawMiniMap() {
+      const w = miniMap.width;
+      const h = miniMap.height;
+      mmCtx.clearRect(0, 0, w, h);
+      mmCtx.fillStyle = "#95d5b2";
+      mmCtx.fillRect(0, h * 0.7, w, h * 0.3);
+      const zones = [
+        { x: 25, y: 55, label: document.getElementById("placa1").value || "Zona 1", id: "u3Zone1" },
+        { x: 205, y: 55, label: document.getElementById("placa2").value || "Zona 2", id: "u3Zone2" },
+        { x: 385, y: 55, label: document.getElementById("placa3").value || "Zona 3", id: "u3Zone3" }
+      ];
+      zones.forEach((z) => {
+        mmCtx.fillStyle = "#ffffff";
+        mmCtx.strokeStyle = "#3e8e63";
+        mmCtx.lineWidth = 3;
+        mmCtx.fillRect(z.x, z.y, 150, 90);
+        mmCtx.strokeRect(z.x, z.y, 150, 90);
+        mmCtx.fillStyle = "#20593c";
+        mmCtx.font = "16px Verdana";
+        mmCtx.fillText(z.label.slice(0, 16), z.x + 8, z.y + 20);
+        const n = document.getElementById(z.id).children.length;
+        mmCtx.fillStyle = "#2f80ed";
+        mmCtx.fillText(`Blocos: ${n}`, z.x + 8, z.y + 50);
+      });
+      requestAnimationFrame(drawMiniMap);
+    }
+    requestAnimationFrame(drawMiniMap);
+
+    ["placa1", "placa2", "placa3"].forEach((id) => {
+      document.getElementById(id).addEventListener("input", () => beep(560, 0.06, "sine"));
+    });
+
+    function verifyU3() {
+      const crit = document.getElementById("criterioMinecraft").value;
+      const z1 = [...document.querySelectorAll("#u3Zone1 .draggable")];
+      const z2 = [...document.querySelectorAll("#u3Zone2 .draggable")];
+      const z3 = [...document.querySelectorAll("#u3Zone3 .draggable")];
+      const st = document.getElementById("u3Status");
+      const placas = ["placa1", "placa2", "placa3"].map((i) => document.getElementById(i).value.trim());
+      if ([z1, z2, z3].some((z) => z.length === 0) || placas.some((p) => p.length < 3)) {
+        st.className = "status err";
+        st.textContent = "Cada zona precisa de blocos e de uma placa legível.";
+        beep(280, 0.08, "sawtooth");
+        return;
+      }
+      const coherent = (arr) => new Set(arr.map((el) => el.dataset[crit])).size === 1;
+      if (coherent(z1) && coherent(z2) && coherent(z3)) {
+        st.className = "status ok";
+        st.textContent = "Museu pronto para visita guiada! Regra mantida nas 3 zonas.";
+        launchConfetti();
+      } else {
+        st.className = "status warn";
+        st.textContent = "Há zonas com mistura de critérios. Reorganiza para manter a mesma regra.";
+        beep(350, 0.1, "square");
+      }
+    }
+
+    document.getElementById("u3Check").addEventListener("click", verifyU3);
+
+    // Unlock audio context on first interaction
+    window.addEventListener("pointerdown", () => {
+      if (audioCtx.state === "suspended") audioCtx.resume();
+    }, { once: true });
+  </script>
+</body>
+</html>
