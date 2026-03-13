@@ -1,0 +1,234 @@
+{
+  "topic": "Motor de busca vs IA — boas práticas e construção de prompts",
+  "ageRange": "8-9 anos (3.º ano)",
+  "duration": 45,
+  "objectives": [
+    "Distinguir o funcionamento de um motor de busca de uma ferramenta de IA generativa",
+    "Construir prompts claros e específicos para obter melhores respostas",
+    "Reconhecer situações em que cada ferramenta é mais adequada"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Estudo do Meio",
+        "year": "3.º ano",
+        "domain": "Tecnologia",
+        "descriptor": "Reconhecer a importância dos media e utilizar as TIC no desenvolvimento de pesquisas e na apresentação de trabalhos",
+        "source": "estudo-do-meio-3-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Estudo do Meio",
+        "year": "3.º ano",
+        "domain": "Tecnologia",
+        "descriptor": "Mobilizar saberes culturais, científicos e tecnológicos para compreender a realidade e resolver situações do quotidiano",
+        "source": "estudo-do-meio-3-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Estudo do Meio",
+        "year": "3.º ano",
+        "domain": "Sociedade",
+        "descriptor": "Comunicar adequadamente as suas ideias através da utilização de diferentes linguagens, fundamentando-as e argumentando",
+        "source": "estudo-do-meio-3-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-B: Informação e comunicação",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-D: Pensamento crítico e pensamento criativo",
+      "PA-I: Saber científico, técnico e tecnológico"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Projecto cooperativo",
+      "Circuitos de comunicação",
+      "Conselho de cooperação educativa"
+    ],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas",
+      "diário de turma"
+    ],
+    "socialOrganization": "individual (exploração 15min) → pares (desafio digital 15min) → grupo 3-4 (maker 10min) → turma (conselho 5min)"
+  },
+  "materials": [
+    "Tablet ou computador com browser (1 por aluno ou par)",
+    "Quadro interativo ou projetor",
+    "Fichas de prompt (impressas ou digitais)",
+    "Whiteboard ou flipchart para síntese"
+  ],
+  "units": [
+    {
+      "summary": "Motor de busca mostra o que existe; IA gera respostas novas",
+      "textDescription": "O aluno deve compreender que um motor de busca (como o Google) procura e mostra páginas web já existentes, enquanto uma IA generativa (como o ChatGPT) cria respostas novas combinando informação. Cada ferramenta tem vantagens diferentes.",
+      "interaction": {
+        "state": [
+          {
+            "name": "ferramenta",
+            "type": "toggle",
+            "options": [
+              "Motor de busca",
+              "IA generativa"
+            ],
+            "default": "Motor de busca"
+          },
+          {
+            "name": "pergunta",
+            "type": "dropdown",
+            "options": [
+              "O que é um tigre?",
+              "Como fazer um avião de papel?",
+              "Por que é que o céu é azul?"
+            ],
+            "default": "O que é um tigre?"
+          },
+          {
+            "name": "resultado",
+            "type": "derived",
+            "derivedFrom": "ferramenta + pergunta"
+          }
+        ],
+        "render": "Interface dividida: lado esquerdo mostra ícone de ferramenta selecionada (lupa para motor, robô para IA); centro mostra a resposta correspondente — lista de links/azul para motor, texto gerado/roxo para IA; balão 'Como funciona?' explica o processo de cada ferramenta",
+        "transition": "Toggle ferramenta → animação de transição → resultado muda (links vs texto); mudar pergunta → atualiza o exemplo mostrado → comparador lado a lado disponível",
+        "constraint": "O motor de busca só mostra o que já existe na internet; a IA pode 'inventar' ou combinar informação de formas novas",
+        "assessment": "O aluno explica com as suas palavras porque é que obtém resultados diferentes para a mesma pergunta e identifica qual ferramenta usar para encontrar um vídeo específico vs criar uma história"
+      },
+      "maker": {
+        "type": "whiteboard",
+        "challenge": "No quadro, cada par coloca um post-it com uma situação real: 'Quero ver fotos de elefantes' ou 'Quero criar uma história sobre um dragão'. A turma classifica em duas colunas: Motor de busca ou IA.",
+        "materials": [
+          "Quadro interativo ou flipchart",
+          "post-its digitais ou físicos"
+        ],
+        "groupSize": "turma (pares contribuem)",
+        "connection": "Depois de explorar a diferença na página, a turma aplica em cenários reais",
+        "communication": "Discussão coletiva no quadro: cada par explica a sua escolha",
+        "alternatives": [
+          "Sem quadro: fichas A4 em 2 colunas na parede, alunos colam com fita cola"
+        ]
+      },
+      "differentiation": {
+        "support": "Apenas 2 perguntas simples; texto em botões grandes com ícones; comparação com imagens lado a lado",
+        "standard": "3 perguntas variadas; toggle livre; aluno explora ambas as ferramentas",
+        "challenge": "Inclui pergunta ambígua ('Qual é o melhor animal?') onde a IA dá opinião e o motor dá fatos; discussão: 'Porque é que a IA tem opinião?'"
+      },
+      "duration": 15
+    },
+    {
+      "summary": "Prompts específicos geram melhores respostas",
+      "textDescription": "O aluno deve compreender que a forma como fazemos a pergunta (o prompt) afeta a qualidade da resposta da IA. Prompts vagos dão respostas vagas; prompts específicos (com contexto, formato, detalhes) dão respostas úteis.",
+      "interaction": {
+        "state": [
+          {
+            "name": "nivelEspecificidade",
+            "type": "slider",
+            "range": [
+              1,
+              3
+            ],
+            "step": 1,
+            "default": 1,
+            "unit": "nível"
+          },
+          {
+            "name": "promptAtual",
+            "type": "derived",
+            "derivedFrom": "nivelEspecificidade"
+          },
+          {
+            "name": "respostaIA",
+            "type": "derived",
+            "derivedFrom": "promptAtual"
+          }
+        ],
+        "render": "Chat estilo mensagem: topo mostra o prompt atual (muda de 'Fala-me de cães' → 'Fala-me de cães de guarda' → 'Fala-me de cães de guarda em 3 frases simples para um cartaz'); resposta da IA aparece abaixo (curta e genérica → mais focada → exata); barra 'Especificidade' com rosto feliz crescente",
+        "transition": "Arrastar slider → prompt atualiza com animação de digitação → resposta IA atualiza com comparação lado a lado opcional → indicador de qualidade muda cor",
+        "constraint": "Quanto mais detalhes incluímos no prompt (quem, o quê, como, para quê), mais útil é a resposta",
+        "assessment": "O aluno transforma um prompt vago ('Fala-me do espaço') num prompt específico com pelo menos 2 detalhes e justifica porque a resposta melhorou"
+      },
+      "maker": {
+        "type": "unplugged",
+        "challenge": "Em grupo de 3, criam 3 cartões: um com prompt vago, um médio, um específico. Troca com outro grupo que adivinha qual dá a melhor resposta. Depois, cada grupo apresenta o 'prompt vencedor'.",
+        "materials": [
+          "Cartolina ou cartões de papel",
+          "marcadores",
+          "envelopes"
+        ],
+        "groupSize": "3",
+        "connection": "Aplicam na prática o que aprenderam sobre especificidade na página",
+        "communication": "Circuito de comunicação: cada grupo lê os 3 prompts e a turma vota no melhor",
+        "alternatives": [
+          "Usar tablets: criam prompts no bloco de notas e partilham no quadro"
+        ]
+      },
+      "differentiation": {
+        "support": "Apenas 1 dimensão de melhoria (adicionar 'para crianças' ou 'em 2 frases'); modelo de preenchimento de lacunas",
+        "standard": "Slider completo; aluno experimenta os 3 níveis e cria a sua versão",
+        "challenge": "Inclui 3 dimensões (tema, formato, público-alvo); desafio: 'Cria um prompt que a IA não consiga responder bem — porquê?'"
+      },
+      "duration": 15
+    },
+    {
+      "summary": "Boas práticas: quando e como usar cada ferramenta",
+      "textDescription": "O aluno deve compreender que nem todas as situações são adequadas para usar IA ou motor de busca. Há momentos para pesquisar fatos, momentos para criar com IA, e momentos em que devemos fazer sozinhos ou perguntar a um adulto.",
+      "interaction": {
+        "state": [
+          {
+            "name": "cenario",
+            "type": "dropdown",
+            "options": [
+              "Trabalho de casa: somar 12+15",
+              "Pesquisar: quando nasceu Portugal",
+              "Criar: inventar um animal mágico",
+              "Verificar: notícia sobre meteorito"
+            ],
+            "default": "Trabalho de casa: somar 12+15"
+          },
+          {
+            "name": "escolhaFerramenta",
+            "type": "drag",
+            "targets": [
+              "Fazer sozinho",
+              "Motor de busca",
+              "IA generativa",
+              "Perguntar adulto"
+            ]
+          },
+          {
+            "name": "feedback",
+            "type": "derived",
+            "derivedFrom": "cenario + escolhaFerramenta"
+          }
+        ],
+        "render": "Cena ilustrada mostrando a situação (criança na mesa, computador, etc.); 4 zonas de destino coloridas; personagem animado reage com balão de pensamento ('Boa escolha!' ou 'Será que há melhor?'); painel explica porque a escolha é adequada ou não",
+        "transition": "Selecionar cenário → imagem muda; arrastar escolha para zona → personagem reage com animação; feedback aparece com explicação simples; botão 'Porquê?' revela justificação",
+        "constraint": "Tarefas de aprendizagem básica (cálculos simples, exercícios de casa) devem ser feitas sozinhos para treinar; notícias devem ser verificadas em fontes confiáveis (motor de busca), não só na IA",
+        "assessment": "O aluno categoriza 4 cenários corretamente e justifica pelo menos 1 escolha relacionando com o propósito (aprender vs criar vs verificar)"
+      },
+      "maker": {
+        "type": "unplugged",
+        "challenge": "Cada grupo cria um 'guia de bolso' do bom utilizador: 3 regras simples escritas e ilustradas. Colam na capa dos cadernos ou expõem na parede da sala.",
+        "materials": [
+          "Papel A5 ou cartolina",
+          "lápis de cor",
+          "tesoura",
+          "cola"
+        ],
+        "groupSize": "3-4",
+        "connection": "Síntese do que aprenderam: transformam conhecimento digital em produto físico útil",
+        "communication": "Galeria walk: grupos circulam, observam os guias dos colegas e fazem perguntas",
+        "alternatives": [
+          "Digital: criam slide no Canva Educação e projetam"
+        ]
+      },
+      "differentiation": {
+        "support": "Apenas 2 cenários simples (tarefa de casa vs pesquisa); escolha binária (certo/errado); guia com frases já escritas para completar",
+        "standard": "4 cenários; 4 opções de ferramenta; cria guia com regras originais",
+        "challenge": "Inclui cenário ético ('A IA pode fazer o meu trabalho todo?'); debate: 'O que é trapaça?'; guia inclui 'Carta de compromisso do utilizador responsável'"
+      },
+      "duration": 12
+    }
+  ],
+  "sessionFlow": "0-3min: ativação (pergunta: 'Como procuram informação na internet?') → 3-18min: Unit 1 (exploração individual + classificação no quadro) → 18-33min: Unit 2 (pares criam prompts + circuito de comunicação) → 33-45min: Unit 3 (grupos resolvem cenários + conselho de cooperação com criação do guia)"
+}

@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Motor de busca vs IA - Aula Interactiva</title>
+  <style>
+    :root {
+      --azul: #1e88e5;
+      --azul-claro: #e3f2fd;
+      --roxo: #7b1fa2;
+      --roxo-claro: #f3e5f5;
+      --verde: #2e7d32;
+      --verde-claro: #e8f5e9;
+      --laranja: #ef6c00;
+      --laranja-claro: #fff3e0;
+      --texto: #1f2937;
+      --fundo: #f7fbff;
+      --branco: #ffffff;
+      --sombra: 0 10px 25px rgba(0, 0, 0, 0.1);
+      --raio: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Verdana", "Trebuchet MS", sans-serif;
+      font-size: 18px;
+      line-height: 1.45;
+      color: var(--texto);
+      background:
+        radial-gradient(circle at 10% 10%, #fff59d 0%, transparent 25%),
+        radial-gradient(circle at 90% 20%, #b2ebf2 0%, transparent 25%),
+        linear-gradient(180deg, #f7fbff 0%, #eef7ff 100%);
+    }
+
+    .page {
+      width: min(1200px, 96vw);
+      margin: 16px auto 28px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #00acc1, #1e88e5 45%, #43a047);
+      border-radius: 22px;
+      padding: 24px;
+      color: #fff;
+      box-shadow: var(--sombra);
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(1.6rem, 2.6vw, 2.4rem);
+      margin-bottom: 8px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 12px 0 14px;
+    }
+
+    .chip {
+      background: rgba(255, 255, 255, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      border-radius: 999px;
+      padding: 8px 14px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      font-weight: 700;
+    }
+
+    .goals {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      padding: 12px 16px;
+    }
+
+    .goals ul {
+      margin: 8px 0 0 22px;
+      padding: 0;
+    }
+
+    .unit {
+      background: var(--branco);
+      margin-top: 18px;
+      border-radius: var(--raio);
+      box-shadow: var(--sombra);
+      padding: 18px;
+      border: 2px solid #dbeafe;
+    }
+
+    .unit-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .unit-title h2 {
+      font-size: clamp(1.25rem, 2.2vw, 1.7rem);
+      color: #0f4c81;
+    }
+
+    .diff-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .diff-tab {
+      border: 2px solid #9ca3af;
+      border-radius: 999px;
+      background: #fff;
+      min-height: 44px;
+      min-width: 120px;
+      padding: 8px 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.2s, border-color 0.2s;
+      touch-action: manipulation;
+    }
+
+    .diff-tab:focus-visible,
+    button:focus-visible,
+    select:focus-visible,
+    input:focus-visible {
+      outline: 3px solid #111827;
+      outline-offset: 2px;
+    }
+
+    .diff-tab[data-level="apoio"].active { background: #66bb6a; border-color: #2e7d32; color: #fff; }
+    .diff-tab[data-level="intermedio"].active { background: #f9a825; border-color: #ef6c00; color: #111; }
+    .diff-tab[data-level="desafio"].active { background: #ef5350; border-color: #b71c1c; color: #fff; }
+
+    .panel {
+      display: none;
+      animation: fadeIn 0.35s ease;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 10px 0;
+      align-items: center;
+    }
+
+    button, select {
+      font-size: 1rem;
+      border-radius: 12px;
+      border: 2px solid #cbd5e1;
+      padding: 9px 12px;
+      min-height: 44px;
+      background: #fff;
+    }
+
+    button {
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .toggle-btn.active {
+      color: #fff;
+      border-color: transparent;
+      transform: translateY(-1px);
+    }
+
+    .search-btn.active { background: #1976d2; }
+    .ai-btn.active { background: #8e24aa; }
+
+    .result-grid {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .icon-card, .response-card, .info-bubble {
+      border-radius: 14px;
+      padding: 12px;
+      border: 2px solid #dbeafe;
+      background: #fff;
+    }
+
+    .icon-card {
+      display: grid;
+      place-items: center;
+      font-size: 2rem;
+    }
+
+    .response-card {
+      min-height: 130px;
+      transition: all 0.3s ease;
+    }
+
+    .response-card.search {
+      background: var(--azul-claro);
+      border-color: #90caf9;
+    }
+
+    .response-card.ai {
+      background: var(--roxo-claro);
+      border-color: #ce93d8;
+    }
+
+    .fake-link {
+      display: block;
+      color: #0d47a1;
+      text-decoration: underline;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .compare-wrap {
+      margin-top: 10px;
+      display: none;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .compare-wrap.active {
+      display: grid;
+    }
+
+    .small-card {
+      border-radius: 12px;
+      padding: 10px;
+      border: 2px dashed #cbd5e1;
+      background: #fff;
+      min-height: 120px;
+    }
+
+    .discovery {
+      margin-top: 10px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #ffe082, #ffcc80);
+      border: 2px solid #fb8c00;
+      padding: 10px 12px;
+      display: none;
+      font-weight: 700;
+    }
+
+    .chat-box {
+      border: 2px solid #bfdbfe;
+      background: #f8fbff;
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .msg {
+      border-radius: 12px;
+      padding: 10px;
+      margin: 8px 0;
+      min-height: 56px;
+    }
+
+    .user-msg { background: #dbeafe; border: 2px solid #93c5fd; }
+    .ai-msg { background: #f3e8ff; border: 2px solid #d8b4fe; }
+
+    .quality {
+      margin-top: 8px;
+      border-radius: 12px;
+      background: #fff;
+      border: 2px solid #cbd5e1;
+      padding: 10px;
+    }
+
+    .bar {
+      height: 16px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 33%;
+      background: rgba(255, 255, 255, 0.55);
+      transition: width 0.3s ease;
+    }
+
+    .helper-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 8px 0;
+    }
+
+    .helper-chip {
+      border: 2px solid #14b8a6;
+      background: #ccfbf1;
+      border-radius: 999px;
+      padding: 8px 12px;
+      min-height: 44px;
+    }
+
+    .board {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .scene {
+      border: 2px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 10px;
+      background: #fff;
+      min-height: 120px;
+    }
+
+    .targets {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(120px, 1fr));
+      gap: 10px;
+    }
+
+    .dropzone {
+      border: 3px dashed #94a3b8;
+      border-radius: 12px;
+      min-height: 88px;
+      padding: 8px;
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .dropzone.over {
+      border-color: #0284c7;
+      background: #e0f2fe;
+    }
+
+    .draggables {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .drag-item {
+      border: 2px solid #2563eb;
+      background: #dbeafe;
+      border-radius: 12px;
+      padding: 10px 12px;
+      min-height: 44px;
+      min-width: 140px;
+      touch-action: none;
+      cursor: grab;
+      font-weight: 700;
+      text-align: center;
+      user-select: none;
+      position: relative;
+    }
+
+    .drag-item.dragging {
+      opacity: 0.9;
+      box-shadow: 0 12px 18px rgba(0,0,0,0.2);
+      cursor: grabbing;
+      z-index: 40;
+      position: fixed;
+      pointer-events: none;
+      margin: 0;
+    }
+
+    .feedback-box {
+      margin-top: 10px;
+      border-radius: 12px;
+      border: 2px solid #cbd5e1;
+      padding: 10px;
+      background: #fff;
+      min-height: 72px;
+    }
+
+    .maker {
+      margin-top: 20px;
+      background: var(--verde-claro);
+      border: 2px solid #66bb6a;
+      border-radius: var(--raio);
+      box-shadow: var(--sombra);
+      padding: 18px;
+    }
+
+    .maker-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .maker-card {
+      border-radius: 14px;
+      background: #fff;
+      border-left: 8px solid #43a047;
+      padding: 12px;
+    }
+
+    .assessment {
+      margin-top: 20px;
+      background: var(--laranja-claro);
+      border: 2px solid #ffb74d;
+      border-radius: var(--raio);
+      box-shadow: var(--sombra);
+      padding: 18px;
+    }
+
+    .assessment ol {
+      margin: 10px 0 0 24px;
+      padding: 0;
+    }
+
+    .assessment li {
+      margin-bottom: 10px;
+    }
+
+    .scale {
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+
+    .curriculum {
+      margin-top: 20px;
+      background: #7c3aed;
+      color: #fff;
+      border-radius: var(--raio);
+      box-shadow: var(--sombra);
+      padding: 18px;
+    }
+
+    .curriculum h3 { margin-bottom: 8px; }
+
+    .curriculum ul {
+      margin: 0 0 10px 22px;
+      padding: 0;
+    }
+
+    footer {
+      margin-top: 14px;
+      text-align: center;
+      font-weight: 700;
+      color: #374151;
+    }
+
+    #confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    @media (max-width: 900px) {
+      .result-grid,
+      .board {
+        grid-template-columns: 1fr;
+      }
+
+      .targets {
+        grid-template-columns: 1fr;
+      }
+
+      .compare-wrap.active {
+        grid-template-columns: 1fr;
+      }
+
+      body { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+  <main class="page">
+    <header>
+      <h1>Motor de busca vs IA: pesquisar, criar e perguntar melhor</h1>
+      <div class="meta">
+        <span class="chip">Ano: 3.º ano (8-9 anos)</span>
+        <span class="chip">Duração: 45 minutos</span>
+      </div>
+      <div class="goals">
+        <strong>Objectivos da aula</strong>
+        <ul>
+          <li>Distinguir um motor de busca de uma IA generativa.</li>
+          <li>Construir prompts claros para respostas mais úteis.</li>
+          <li>Escolher a ferramenta certa em cada situação.</li>
+        </ul>
+      </div>
+    </header>
+
+    <section class="unit" id="unit1">
+      <div class="unit-title">
+        <h2>Unidade 1 (15 min): Motor de busca mostra; IA responde</h2>
+      </div>
+      <p>Experimenta a mesma pergunta com ferramentas diferentes e observa as diferenças no resultado.</p>
+
+      <div class="diff-tabs" role="tablist" aria-label="Níveis da Unidade 1">
+        <button class="diff-tab active" data-level="apoio" role="tab" aria-selected="true">🟢 Apoio</button>
+        <button class="diff-tab" data-level="intermedio" role="tab" aria-selected="false">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="desafio" role="tab" aria-selected="false">🔴 Desafio</button>
+      </div>
+
+      <div class="controls">
+        <button id="u1-search" class="toggle-btn search-btn active" aria-label="Escolher Motor de busca">🔎 Motor de busca</button>
+        <button id="u1-ai" class="toggle-btn ai-btn" aria-label="Escolher IA generativa">🤖 IA generativa</button>
+        <label for="u1-question"><strong>Pergunta:</strong></label>
+        <select id="u1-question" aria-label="Escolher pergunta"></select>
+        <label><input type="checkbox" id="u1-compare" aria-label="Mostrar comparação lado a lado"> Comparar lado a lado</label>
+      </div>
+      <div class="result-grid">
+        <div class="icon-card" id="u1-icon" aria-live="polite">🔎</div>
+        <div class="response-card search" id="u1-response" aria-live="polite"></div>
+      </div>
+      <div class="compare-wrap" id="u1-compare-wrap" aria-live="polite"></div>
+      <div class="info-bubble" id="u1-info" aria-live="polite"></div>
+      <div class="discovery" id="u1-discovery"></div>
+
+      <div class="panel active" data-level="apoio">
+        <p><strong>Apoio:</strong> Usa botões grandes e duas perguntas simples. Observa as imagens e compara.</p>
+      </div>
+      <div class="panel" data-level="intermedio">
+        <p><strong>Intermédio:</strong> Experimenta as 3 perguntas e alterna livremente entre as duas ferramentas.</p>
+      </div>
+      <div class="panel" data-level="desafio">
+        <p><strong>Desafio:</strong> Testa “Qual é o melhor animal?” e discute: porque aparecem respostas diferentes?</p>
+      </div>
+    </section>
+
+    <section class="unit" id="unit2">
+      <div class="unit-title">
+        <h2>Unidade 2 (15 min): Prompts específicos ajudam mais</h2>
+      </div>
+      <p>Arrasta, escolhe e melhora o teu pedido. Vê como a resposta muda.</p>
+
+      <div class="diff-tabs" role="tablist" aria-label="Níveis da Unidade 2">
+        <button class="diff-tab active" data-level="apoio" role="tab" aria-selected="true">🟢 Apoio</button>
+        <button class="diff-tab" data-level="intermedio" role="tab" aria-selected="false">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="desafio" role="tab" aria-selected="false">🔴 Desafio</button>
+      </div>
+
+      <div class="panel active" data-level="apoio">
+        <div class="chat-box">
+          <p><strong>Prompt base:</strong> <span id="u2-support-base">"Fala-me de cães"</span></p>
+          <div class="helper-chips">
+            <button class="helper-chip" data-add="para crianças" aria-label="Adicionar para crianças">+ para crianças</button>
+            <button class="helper-chip" data-add="em 2 frases" aria-label="Adicionar em duas frases">+ em 2 frases</button>
+          </div>
+          <div class="msg user-msg" id="u2-support-prompt" aria-live="polite"></div>
+          <div class="msg ai-msg" id="u2-support-response" aria-live="polite"></div>
+        </div>
+        <div class="discovery" id="u2-support-discovery"></div>
+      </div>
+
+      <div class="panel" data-level="intermedio">
+        <div class="chat-box">
+          <label for="u2-slider"><strong>Especificidade</strong> 😐🙂🤩</label>
+          <input id="u2-slider" type="range" min="1" max="3" step="1" value="1" aria-label="Nível de especificidade">
+          <div class="msg user-msg" id="u2-prompt" aria-live="polite"></div>
+          <div class="msg ai-msg" id="u2-response" aria-live="polite"></div>
+          <div class="quality">
+            <div id="u2-face"><strong>Nível 1:</strong> resposta genérica 😐</div>
+            <div class="bar" aria-hidden="true"><div class="bar-fill" id="u2-fill"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" data-level="desafio">
+        <div class="chat-box">
+          <p><strong>Construtor de prompt (3 dimensões)</strong></p>
+          <div class="controls">
+            <label for="u2-topic">Tema:</label>
+            <select id="u2-topic" aria-label="Tema do prompt">
+              <option>espaço</option>
+              <option>animais marinhos</option>
+              <option>segurança na internet</option>
+            </select>
+            <label for="u2-format">Formato:</label>
+            <select id="u2-format" aria-label="Formato do texto">
+              <option>lista com 3 pontos</option>
+              <option>pequeno poema</option>
+              <option>texto explicativo</option>
+            </select>
+            <label for="u2-audience">Público:</label>
+            <select id="u2-audience" aria-label="Público-alvo">
+              <option>para crianças de 8 anos</option>
+              <option>para a turma do 3.º ano</option>
+              <option>para ler em família</option>
+            </select>
+          </div>
+          <div class="msg user-msg" id="u2-ch-prompt" aria-live="polite"></div>
+          <div class="msg ai-msg" id="u2-ch-response" aria-live="polite"></div>
+          <button id="u2-hard-btn" aria-label="Criar prompt difícil">Desafio: prompt difícil</button>
+          <div class="feedback-box" id="u2-hard-feedback" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="unit" id="unit3">
+      <div class="unit-title">
+        <h2>Unidade 3 (12 min): Boas práticas de utilização</h2>
+      </div>
+      <p>Analisa o cenário e escolhe o melhor caminho. Arrasta e larga nas zonas coloridas.</p>
+
+      <div class="diff-tabs" role="tablist" aria-label="Níveis da Unidade 3">
+        <button class="diff-tab active" data-level="apoio" role="tab" aria-selected="true">🟢 Apoio</button>
+        <button class="diff-tab" data-level="intermedio" role="tab" aria-selected="false">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="desafio" role="tab" aria-selected="false">🔴 Desafio</button>
+      </div>
+
+      <div class="panel active" data-level="apoio">
+        <div class="scene" id="u3-support-scene"></div>
+        <div class="controls">
+          <button class="u3-support-choice" data-value="certo" aria-label="Escolher opção certa">✅ Certo</button>
+          <button class="u3-support-choice" data-value="errado" aria-label="Escolher opção errada">❌ Errado</button>
+          <button id="u3-support-next" aria-label="Próximo cenário de apoio">Próximo cenário</button>
+        </div>
+        <div class="feedback-box" id="u3-support-feedback" aria-live="polite"></div>
+      </div>
+
+      <div class="panel" data-level="intermedio">
+        <div class="controls">
+          <label for="u3-scenario"><strong>Cenário:</strong></label>
+          <select id="u3-scenario" aria-label="Escolher cenário"></select>
+          <button id="u3-why" aria-label="Mostrar explicação">Porquê?</button>
+        </div>
+        <div class="board">
+          <div class="scene" id="u3-scene" aria-live="polite"></div>
+          <div class="targets" id="u3-targets"></div>
+        </div>
+        <div class="draggables" id="u3-draggables"></div>
+        <div class="feedback-box" id="u3-feedback" aria-live="polite">Arrasta uma opção para uma zona.</div>
+      </div>
+
+      <div class="panel" data-level="desafio">
+        <div class="controls">
+          <button id="u3-ethical" aria-label="Carregar cenário ético">Cenário ético</button>
+        </div>
+        <div class="board">
+          <div class="scene" id="u3-ch-scene"></div>
+          <div class="targets" id="u3-ch-targets"></div>
+        </div>
+        <div class="draggables" id="u3-ch-draggables"></div>
+        <div class="feedback-box" id="u3-ch-feedback" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="maker">
+      <h2>🛠️ Desafios Maker</h2>
+      <div class="maker-grid">
+        <article class="maker-card">
+          <h3>Whiteboard</h3>
+          <p>No quadro, cada par coloca um post-it com uma situação real. A turma classifica em duas colunas: <strong>Motor de busca</strong> ou <strong>IA</strong>.</p>
+          <p><strong>Materiais:</strong> quadro interactivo/flipchart, post-its.</p>
+        </article>
+        <article class="maker-card">
+          <h3>Unplugged 1</h3>
+          <p>Em grupo de 3, criam 3 cartões: prompt vago, médio e específico. Trocam com outro grupo e escolhem o prompt vencedor.</p>
+          <p><strong>Materiais:</strong> cartolina, marcadores, envelopes.</p>
+        </article>
+        <article class="maker-card">
+          <h3>Unplugged 2</h3>
+          <p>Criar um guia de bolso com 3 regras do bom utilizador. Ilustrar e expor na sala.</p>
+          <p><strong>Materiais:</strong> papel A5/cartolina, lápis de cor, cola.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="assessment">
+      <h2>📝 Mini-avaliação</h2>
+      <ol>
+        <li>Explico por palavras minhas a diferença entre motor de busca e IA.
+          <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+        </li>
+        <li>Escolho a ferramenta certa para: encontrar um vídeo e criar uma história.
+          <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+        </li>
+        <li>Transformo um prompt vago em prompt específico com pelo menos 2 detalhes.
+          <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+        </li>
+        <li>Categorizo 4 cenários e justifico pelo menos 1 decisão.
+          <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+        </li>
+        <li>Dou uma regra de uso responsável da IA na escola.
+          <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+        </li>
+      </ol>
+    </section>
+
+    <section class="curriculum">
+      <h3>Referências curriculares</h3>
+      <p><strong>Aprendizagens Essenciais</strong></p>
+      <ul>
+        <li>Estudo do Meio (3.º ano): Reconhecer a importância dos media e utilizar as TIC em pesquisas e apresentação de trabalhos.</li>
+        <li>Estudo do Meio (3.º ano): Mobilizar saberes culturais, científicos e tecnológicos para compreender a realidade e resolver situações do quotidiano.</li>
+        <li>Estudo do Meio (3.º ano): Comunicar ideias através de diferentes linguagens, fundamentando e argumentando.</li>
+      </ul>
+      <p><strong>Perfil do Aluno</strong></p>
+      <ul>
+        <li>PA-B: Informação e comunicação</li>
+        <li>PA-C: Raciocínio e resolução de problemas</li>
+        <li>PA-D: Pensamento crítico e pensamento criativo</li>
+        <li>PA-I: Saber científico, técnico e tecnológico</li>
+      </ul>
+    </section>
+
+    <footer>Gerado por PageCraft 🛠️</footer>
+  </main>
+
+  <script>
+    (function () {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      function playTone(freq = 620, duration = 0.08) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.value = 0.0001;
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const t = audioCtx.currentTime;
+        gain.gain.exponentialRampToValueAtTime(0.08, t + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+        osc.start(t);
+        osc.stop(t + duration);
+      }
+
+      const canvas = document.getElementById('confetti');
+      const ctx = canvas.getContext('2d');
+      let confetti = [];
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      function launchConfetti() {
+        for (let i = 0; i < 80; i += 1) {
+          confetti.push({
+            x: Math.random() * canvas.width,
+            y: -10,
+            vx: (Math.random() - 0.5) * 4,
+            vy: 1 + Math.random() * 3,
+            size: 5 + Math.random() * 6,
+            color: ['#ef5350', '#42a5f5', '#66bb6a', '#ffca28', '#ab47bc'][Math.floor(Math.random() * 5)],
+            rot: Math.random() * Math.PI
+          });
+        }
+      }
+
+      function animateConfetti() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        confetti = confetti.filter((p) => p.y < canvas.height + 20);
+        for (const p of confetti) {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += 0.1;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.65);
+          ctx.restore();
+        }
+        requestAnimationFrame(animateConfetti);
+      }
+      requestAnimationFrame(animateConfetti);
+
+      function celebrate(messageEl, text) {
+        messageEl.style.display = 'block';
+        messageEl.textContent = '🎉 ' + text;
+        playTone(660, 0.09);
+        setTimeout(() => playTone(880, 0.12), 110);
+        launchConfetti();
+      }
+
+      document.querySelectorAll('.unit').forEach((unit) => {
+        const tabs = unit.querySelectorAll('.diff-tab');
+        const panels = unit.querySelectorAll('.panel');
+        tabs.forEach((tab) => {
+          tab.addEventListener('click', () => {
+            tabs.forEach((t) => {
+              t.classList.remove('active');
+              t.setAttribute('aria-selected', 'false');
+            });
+            tab.classList.add('active');
+            tab.setAttribute('aria-selected', 'true');
+            panels.forEach((p) => p.classList.toggle('active', p.dataset.level === tab.dataset.level));
+            if (unit.id === 'unit1') updateUnit1(true);
+          });
+        });
+      });
+
+      // Unit 1
+      const u1State = {
+        ferramenta: 'Motor de busca',
+        pergunta: '',
+        seen: new Set()
+      };
+
+      const u1Questions = {
+        apoio: ['O que é um tigre?', 'Como fazer um avião de papel?'],
+        intermedio: ['O que é um tigre?', 'Como fazer um avião de papel?', 'Por que é que o céu é azul?'],
+        desafio: ['O que é um tigre?', 'Como fazer um avião de papel?', 'Por que é que o céu é azul?', 'Qual é o melhor animal?']
+      };
+
+      const u1Data = {
+        'O que é um tigre?': {
+          links: ['Enciclopédia Júnior - Tigre', 'Vídeo: Tigres na selva', 'Fotos de tigres'],
+          ai: 'Um tigre é um felino grande, com riscas pretas e laranja. Vive em algumas zonas da Ásia.'
+        },
+        'Como fazer um avião de papel?': {
+          links: ['Tutorial com imagens', 'Vídeo passo a passo', 'Modelos de aviões de papel'],
+          ai: 'Dobra uma folha ao meio, faz duas pontas para o centro e dobra as asas. Testa e ajusta as dobras.'
+        },
+        'Por que é que o céu é azul?': {
+          links: ['Experiência da luz e cores', 'Artigo: atmosfera explicada', 'Vídeo para crianças'],
+          ai: 'A luz do Sol tem várias cores. No céu, a cor azul espalha-se mais e por isso vemos azul.'
+        },
+        'Qual é o melhor animal?': {
+          links: ['Lista de animais e características', 'Enciclopédia de animais', 'Comparação: mamíferos e aves'],
+          ai: 'Depende do gosto de cada pessoa. Para uns, o cão é melhor por ser amigo; para outros, o golfinho é incrível por ser inteligente.'
+        }
+      };
+
+      const u1QuestionEl = document.getElementById('u1-question');
+      const u1SearchBtn = document.getElementById('u1-search');
+      const u1AiBtn = document.getElementById('u1-ai');
+      const u1Icon = document.getElementById('u1-icon');
+      const u1Response = document.getElementById('u1-response');
+      const u1Info = document.getElementById('u1-info');
+      const u1Compare = document.getElementById('u1-compare');
+      const u1CompareWrap = document.getElementById('u1-compare-wrap');
+      const u1Discovery = document.getElementById('u1-discovery');
+
+      function getUnit1Level() {
+        const active = document.querySelector('#unit1 .diff-tab.active');
+        return active ? active.dataset.level : 'apoio';
+      }
+
+      function fillQuestions(level) {
+        const list = u1Questions[level];
+        u1QuestionEl.innerHTML = list.map((q) => '<option>' + q + '</option>').join('');
+        if (!list.includes(u1State.pergunta)) {
+          u1State.pergunta = list[0];
+        }
+        u1QuestionEl.value = u1State.pergunta;
+      }
+
+      function renderResponse(tool, question) {
+        const data = u1Data[question];
+        if (tool === 'Motor de busca') {
+          u1Response.className = 'response-card search';
+          u1Response.innerHTML = data.links.map((l) => '<span class="fake-link">🔗 ' + l + '</span>').join('') + '<small>Resultados encontrados na web.</small>';
+          u1Icon.textContent = '🔎';
+          u1Info.textContent = 'Como funciona? Procura páginas e mostra ligações para explorares.';
+        } else {
+          u1Response.className = 'response-card ai';
+          u1Response.innerHTML = '<p>🤖 ' + data.ai + '</p><small>Resposta criada no momento.</small>';
+          u1Icon.textContent = '🤖';
+          u1Info.textContent = 'Como funciona? Junta ideias e cria uma resposta nova para ti.';
+        }
+      }
+
+      function renderCompare(question) {
+        const data = u1Data[question];
+        u1CompareWrap.innerHTML =
+          '<div class="small-card" style="background:#e3f2fd"><strong>🔎 Motor de busca</strong><br>' +
+          data.links.map((l) => '• ' + l).join('<br>') +
+          '</div><div class="small-card" style="background:#f3e5f5"><strong>🤖 IA generativa</strong><br>' +
+          data.ai + '</div>';
+      }
+
+      function updateUnit1(skipDiscovery) {
+        const level = getUnit1Level();
+        fillQuestions(level);
+        renderResponse(u1State.ferramenta, u1State.pergunta);
+        renderCompare(u1State.pergunta);
+        u1CompareWrap.classList.toggle('active', u1Compare.checked);
+        u1SearchBtn.classList.toggle('active', u1State.ferramenta === 'Motor de busca');
+        u1AiBtn.classList.toggle('active', u1State.ferramenta === 'IA generativa');
+
+        if (!skipDiscovery) {
+          u1State.seen.add(u1State.pergunta + '|' + u1State.ferramenta);
+          const a = u1State.seen.has(u1State.pergunta + '|Motor de busca');
+          const b = u1State.seen.has(u1State.pergunta + '|IA generativa');
+          if (a && b) {
+            celebrate(u1Discovery, 'Boa! Comparaste a mesma pergunta em duas ferramentas.');
+          }
+        }
+      }
+
+      u1SearchBtn.addEventListener('click', () => {
+        u1State.ferramenta = 'Motor de busca';
+        updateUnit1();
+      });
+      u1AiBtn.addEventListener('click', () => {
+        u1State.ferramenta = 'IA generativa';
+        updateUnit1();
+      });
+      u1QuestionEl.addEventListener('change', (e) => {
+        u1State.pergunta = e.target.value;
+        updateUnit1();
+      });
+      u1Compare.addEventListener('change', () => {
+        u1CompareWrap.classList.toggle('active', u1Compare.checked);
+      });
+
+      updateUnit1(true);
+
+      // Unit 2
+      const promptLevels = {
+        1: {
+          prompt: 'Fala-me de cães.',
+          response: 'Os cães são animais de companhia. Existem muitas raças.'
+        },
+        2: {
+          prompt: 'Fala-me de cães de guarda.',
+          response: 'Cães de guarda protegem casas e pessoas. Precisam de treino e regras claras.'
+        },
+        3: {
+          prompt: 'Fala-me de cães de guarda em 3 frases simples para um cartaz.',
+          response: 'Um cão de guarda ajuda a proteger a casa. Deve ser treinado com calma e respeito. Também precisa de brincar e passear.'
+        }
+      };
+
+      function typeText(el, text, speed = 18) {
+        el.textContent = '';
+        let i = 0;
+        function step() {
+          i += 1;
+          el.textContent = text.slice(0, i);
+          if (i < text.length) {
+            setTimeout(step, speed);
+          }
+        }
+        step();
+      }
+
+      const u2SupportPrompt = document.getElementById('u2-support-prompt');
+      const u2SupportResponse = document.getElementById('u2-support-response');
+      const u2SupportDiscovery = document.getElementById('u2-support-discovery');
+      const supportAdds = new Set();
+      function renderSupportPrompt() {
+        const parts = Array.from(supportAdds);
+        const txt = 'Fala-me de cães' + (parts.length ? ' ' + parts.join(' ') : '') + '.';
+        u2SupportPrompt.textContent = '🧒 ' + txt;
+        if (parts.length === 0) {
+          u2SupportResponse.textContent = '🤖 Os cães são animais queridos.';
+        } else if (parts.length === 1) {
+          u2SupportResponse.textContent = '🤖 Os cães podem ajudar a guardar casas. Texto simples para crianças.';
+        } else {
+          u2SupportResponse.textContent = '🤖 Os cães podem proteger a casa. Precisam de treino. Também precisam de carinho.';
+          celebrate(u2SupportDiscovery, 'Excelente! Tornaste o prompt mais claro.');
+        }
+      }
+
+      document.querySelectorAll('.helper-chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          supportAdds.add(chip.dataset.add);
+          renderSupportPrompt();
+        });
+      });
+      renderSupportPrompt();
+
+      const u2Slider = document.getElementById('u2-slider');
+      const u2Prompt = document.getElementById('u2-prompt');
+      const u2Response = document.getElementById('u2-response');
+      const u2Face = document.getElementById('u2-face');
+      const u2Fill = document.getElementById('u2-fill');
+
+      function renderMid() {
+        const level = Number(u2Slider.value);
+        typeText(u2Prompt, '🧒 ' + promptLevels[level].prompt, 16);
+        setTimeout(() => {
+          typeText(u2Response, '🤖 ' + promptLevels[level].response, 12);
+        }, 160);
+        u2Fill.style.width = (level * 33) + '%';
+        const labels = {
+          1: 'Nível 1: resposta genérica 😐',
+          2: 'Nível 2: resposta mais focada 🙂',
+          3: 'Nível 3: resposta bem ajustada 🤩'
+        };
+        u2Face.innerHTML = '<strong>' + labels[level] + '</strong>';
+        if (level === 3) {
+          playTone(740, 0.08);
+        }
+      }
+      u2Slider.addEventListener('input', renderMid);
+      renderMid();
+
+      const u2Topic = document.getElementById('u2-topic');
+      const u2Format = document.getElementById('u2-format');
+      const u2Audience = document.getElementById('u2-audience');
+      const u2ChPrompt = document.getElementById('u2-ch-prompt');
+      const u2ChResponse = document.getElementById('u2-ch-response');
+      const u2HardBtn = document.getElementById('u2-hard-btn');
+      const u2HardFeedback = document.getElementById('u2-hard-feedback');
+
+      function renderChallengePrompt() {
+        const prompt = 'Explica ' + u2Topic.value + ' em ' + u2Format.value + ', ' + u2Audience.value + '.';
+        u2ChPrompt.textContent = '🧒 ' + prompt;
+        u2ChResponse.textContent = '🤖 Posso fazer isso com linguagem simples e organizada.';
+      }
+      [u2Topic, u2Format, u2Audience].forEach((el) => el.addEventListener('change', renderChallengePrompt));
+      u2HardBtn.addEventListener('click', () => {
+        u2HardFeedback.textContent = 'Exemplo difícil: "Fala de tudo sobre o mundo." É muito largo e sem foco, por isso a resposta fica fraca.';
+        celebrate(u2HardFeedback, 'Bom debate! Nem todos os prompts ajudam.');
+      });
+      renderChallengePrompt();
+
+      // Unit 3 - apoio
+      const supportCases = [
+        { text: '📚 Trabalho de casa: somar 12 + 15. Devo pedir à IA para fazer tudo?', ok: 'errado', feedback: 'Para treinar, esta parte é melhor fazer sozinho/a.' },
+        { text: '🗓️ Quero saber quando nasceu Portugal. Procurar fontes fiáveis é boa ideia?', ok: 'certo', feedback: 'Boa! Para datas e factos, pesquisa em fontes confiáveis.' }
+      ];
+      let supportIndex = 0;
+      const u3SupportScene = document.getElementById('u3-support-scene');
+      const u3SupportFeedback = document.getElementById('u3-support-feedback');
+
+      function renderSupportCase() {
+        u3SupportScene.textContent = supportCases[supportIndex].text;
+        u3SupportFeedback.textContent = 'Lê o cenário e escolhe.';
+      }
+      document.querySelectorAll('.u3-support-choice').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const c = supportCases[supportIndex];
+          if (btn.dataset.value === c.ok) {
+            u3SupportFeedback.textContent = '✅ ' + c.feedback;
+            celebrate(u3SupportFeedback, 'Escolha acertada!');
+          } else {
+            u3SupportFeedback.textContent = '🤔 Tenta outra vez. Pensa no objectivo da tarefa.';
+            playTone(240, 0.1);
+          }
+        });
+      });
+      document.getElementById('u3-support-next').addEventListener('click', () => {
+        supportIndex = (supportIndex + 1) % supportCases.length;
+        renderSupportCase();
+      });
+      renderSupportCase();
+
+      // Unit 3 - intermedio/desafio drag and drop
+      const scenarios = [
+        { key: 'Trabalho de casa: somar 12+15', scene: '🧮 Estás a fazer uma conta simples do caderno.', best: 'Fazer sozinho', why: 'Treinas o teu cérebro quando tentas primeiro sozinho/a.' },
+        { key: 'Pesquisar: quando nasceu Portugal', scene: '📖 Precisas de uma data histórica correta.', best: 'Motor de busca', why: 'Podes confirmar em várias fontes e comparar informação.' },
+        { key: 'Criar: inventar um animal mágico', scene: '🎨 Queres ideias para uma personagem criativa.', best: 'IA generativa', why: 'É útil para criar ideias novas e começar histórias.' },
+        { key: 'Verificar: notícia sobre meteorito', scene: '📰 Viste uma notícia surpreendente.', best: 'Motor de busca', why: 'Convém verificar em sites de confiança e mais do que uma fonte.' }
+      ];
+
+      const tools = ['Fazer sozinho', 'Motor de busca', 'IA generativa', 'Perguntar adulto'];
+      const u3Scenario = document.getElementById('u3-scenario');
+      const u3Scene = document.getElementById('u3-scene');
+      const u3Targets = document.getElementById('u3-targets');
+      const u3Draggables = document.getElementById('u3-draggables');
+      const u3Feedback = document.getElementById('u3-feedback');
+      const u3Why = document.getElementById('u3-why');
+
+      scenarios.forEach((s) => {
+        const op = document.createElement('option');
+        op.value = s.key;
+        op.textContent = s.key;
+        u3Scenario.appendChild(op);
+      });
+
+      function buildTargets(container, labels) {
+        container.innerHTML = '';
+        labels.forEach((label) => {
+          const z = document.createElement('div');
+          z.className = 'dropzone';
+          z.dataset.target = label;
+          z.textContent = label;
+          container.appendChild(z);
+        });
+      }
+
+      function buildDraggables(container, labels, zoneContainer, onDrop) {
+        container.innerHTML = '';
+        labels.forEach((label) => {
+          const item = document.createElement('div');
+          item.className = 'drag-item';
+          item.tabIndex = 0;
+          item.setAttribute('role', 'button');
+          item.setAttribute('aria-label', 'Arrastar ' + label);
+          item.textContent = label;
+          item.dataset.value = label;
+          container.appendChild(item);
+          attachDrag(item, zoneContainer, onDrop);
+        });
+      }
+
+      function currentScenarioObj() {
+        return scenarios.find((s) => s.key === u3Scenario.value) || scenarios[0];
+      }
+
+      function renderU3Scene() {
+        const s = currentScenarioObj();
+        u3Scene.textContent = s.scene;
+        u3Feedback.textContent = 'Arrasta uma opção para uma zona.';
+      }
+
+      u3Scenario.addEventListener('change', renderU3Scene);
+      u3Why.addEventListener('click', () => {
+        const s = currentScenarioObj();
+        u3Feedback.textContent = '💡 ' + s.why;
+      });
+
+      function evaluateDrop(value, target, feedbackEl) {
+        const s = currentScenarioObj();
+        if (value === target) {
+          if (target === s.best) {
+            feedbackEl.textContent = '✅ Boa escolha! ' + s.why;
+            celebrate(feedbackEl, 'Acertaste no melhor caminho.');
+          } else {
+            feedbackEl.textContent = '🙂 Pode ajudar, mas pensa se existe opção mais adequada.';
+            playTone(420, 0.08);
+          }
+        }
+      }
+
+      function attachDrag(el, zonesWrap, onDrop) {
+        let startX = 0;
+        let startY = 0;
+        let dragging = false;
+
+        function getPoint(evt) {
+          if (evt.touches && evt.touches[0]) return { x: evt.touches[0].clientX, y: evt.touches[0].clientY };
+          if (evt.changedTouches && evt.changedTouches[0]) return { x: evt.changedTouches[0].clientX, y: evt.changedTouches[0].clientY };
+          return { x: evt.clientX, y: evt.clientY };
+        }
+
+        function start(evt) {
+          evt.preventDefault();
+          const p = getPoint(evt);
+          const rect = el.getBoundingClientRect();
+          startX = p.x - rect.left;
+          startY = p.y - rect.top;
+          dragging = true;
+          el.classList.add('dragging');
+          move(evt);
+        }
+
+        function move(evt) {
+          if (!dragging) return;
+          const p = getPoint(evt);
+          el.style.left = (p.x - startX) + 'px';
+          el.style.top = (p.y - startY) + 'px';
+          const over = document.elementFromPoint(p.x, p.y);
+          zonesWrap.querySelectorAll('.dropzone').forEach((z) => z.classList.remove('over'));
+          const zone = over && over.closest('.dropzone');
+          if (zone) zone.classList.add('over');
+        }
+
+        function end(evt) {
+          if (!dragging) return;
+          dragging = false;
+          const p = getPoint(evt);
+          const over = document.elementFromPoint(p.x, p.y);
+          const zone = over && over.closest('.dropzone');
+          zonesWrap.querySelectorAll('.dropzone').forEach((z) => z.classList.remove('over'));
+          el.classList.remove('dragging');
+          el.style.left = '';
+          el.style.top = '';
+          if (zone) {
+            onDrop(el.dataset.value, zone.dataset.target);
+          }
+        }
+
+        el.addEventListener('mousedown', start);
+        el.addEventListener('touchstart', start, { passive: false });
+        window.addEventListener('mousemove', move);
+        window.addEventListener('touchmove', move, { passive: false });
+        window.addEventListener('mouseup', end);
+        window.addEventListener('touchend', end);
+      }
+
+      buildTargets(u3Targets, tools);
+      buildDraggables(u3Draggables, tools, u3Targets, (value, target) => evaluateDrop(value, target, u3Feedback));
+      renderU3Scene();
+
+      // Unit 3 desafio
+      const u3ChScene = document.getElementById('u3-ch-scene');
+      const u3ChTargets = document.getElementById('u3-ch-targets');
+      const u3ChDraggables = document.getElementById('u3-ch-draggables');
+      const u3ChFeedback = document.getElementById('u3-ch-feedback');
+      const u3Ethical = document.getElementById('u3-ethical');
+
+      function loadEthical() {
+        u3ChScene.textContent = '⚖️ Cenário ético: "A IA pode fazer o meu trabalho todo?" Debate em grupo e assina a tua carta de compromisso.';
+        buildTargets(u3ChTargets, ['Fazer sozinho', 'IA generativa', 'Perguntar adulto', 'Motor de busca']);
+        buildDraggables(u3ChDraggables, ['Fazer sozinho', 'IA generativa', 'Perguntar adulto'], u3ChTargets, (value, target) => {
+          if (value === target && target === 'Fazer sozinho') {
+            u3ChFeedback.textContent = '✅ Regra principal: o teu trabalho escolar deve mostrar a tua aprendizagem.';
+            celebrate(u3ChFeedback, 'Uso responsável desbloqueado!');
+          } else if (value === target && target === 'Perguntar adulto') {
+            u3ChFeedback.textContent = '👍 Boa atitude para tirar dúvidas e agir com responsabilidade.';
+            playTone(520, 0.09);
+          } else if (value === target) {
+            u3ChFeedback.textContent = '🤔 Pensa se essa opção ajuda a aprender ou só a copiar.';
+            playTone(320, 0.09);
+          }
+        });
+        u3ChFeedback.textContent = 'Arrasta uma escolha e discute com o grupo: o que é trapaça?';
+      }
+      u3Ethical.addEventListener('click', loadEthical);
+      loadEthical();
+    })();
+  </script>
+</body>
+</html>
