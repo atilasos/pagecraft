@@ -1,0 +1,253 @@
+{
+  "topic": "Dobro até 10",
+  "ageRange": "7-8 anos (2.º ano)",
+  "duration": 45,
+  "objectives": [
+    "Reconhecer e calcular o dobro de números até 10.",
+    "Relacionar o dobro com adição de parcelas iguais e com 2 × n.",
+    "Aplicar o dobro em problemas simples do quotidiano escolar.",
+    "Comunicar estratégias de cálculo com linguagem matemática adequada."
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Matemática",
+        "year": "2.º ano",
+        "domain": "Números e Operações",
+        "descriptor": "Calcular e memorizar dobros de números naturais em contextos diversos.",
+        "source": "matematica-2-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Matemática",
+        "year": "2.º ano",
+        "domain": "Números e Operações",
+        "descriptor": "Relacionar adição de parcelas iguais com a multiplicação por 2.",
+        "source": "matematica-2-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Matemática",
+        "year": "2.º ano",
+        "domain": "Resolução de Problemas",
+        "descriptor": "Resolver problemas de um passo envolvendo o dobro em situações do quotidiano.",
+        "source": "matematica-2-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-D: Pensamento crítico e pensamento criativo",
+      "PA-E: Relacionamento interpessoal",
+      "PA-I: Saber científico, técnico e tecnológico"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Projecto cooperativo",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação",
+      "Conselho de cooperação educativa"
+    ],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas",
+      "diário de turma"
+    ],
+    "socialOrganization": "individual (8 min) → pares (7 min) → grupos 2-3 no maker (20 min) → turma (10 min)"
+  },
+  "materials": [
+    "Tablet ou computador com browser (1 por aluno/par)",
+    "Minecraft Education Edition (1 conta por grupo)",
+    "Quadro interactivo para partilha final",
+    "Quadro branco e marcadores"
+  ],
+  "units": [
+    {
+      "summary": "Descobrir o dobro como juntar duas quantidades iguais.",
+      "textDescription": "O aluno explora pares de colecções iguais e conclui que o dobro de um número é o total de duas partes iguais desse número.",
+      "interaction": {
+        "state": [
+          {
+            "name": "numeroBase",
+            "type": "slider",
+            "range": [
+              1,
+              10
+            ],
+            "step": 1,
+            "default": 4,
+            "unit": "itens"
+          },
+          {
+            "name": "metadeA",
+            "type": "derived",
+            "derivedFrom": "numeroBase"
+          },
+          {
+            "name": "metadeB",
+            "type": "derived",
+            "derivedFrom": "numeroBase"
+          },
+          {
+            "name": "total",
+            "type": "derived",
+            "derivedFrom": "metadeA + metadeB"
+          }
+        ],
+        "render": "Dois baús iguais lado a lado com blocos Minecraft; cada baú mostra `numeroBase` itens. Um contador central mostra o total quando os dois baús são combinados.",
+        "transition": "Arrastar o slider altera simultaneamente os itens nos dois baús; o contador de total actualiza em tempo real.",
+        "constraint": "Quando as duas colecções têm o mesmo número de itens, o total é sempre o dobro desse número.",
+        "assessment": "O aluno posiciona o slider em 3 valores pedidos (2, 5 e 9), diz em voz alta os dobros correspondentes e regista-os correctamente."
+      },
+      "maker": {
+        "type": "minecraft",
+        "challenge": "Em pares, construam duas torres iguais com N blocos (N entre 1 e 10). Depois unam as torres e coloquem uma placa com a frase: 'Dobro de N = ...'.",
+        "materials": [
+          "Minecraft Education Edition",
+          "mundo plano partilhado",
+          "placas no jogo"
+        ],
+        "groupSize": "2",
+        "connection": "O número do slider na página define a altura das duas torres iguais no Minecraft.",
+        "communication": "Cada par apresenta um exemplo no quadro e explica como encontrou o dobro.",
+        "alternatives": [
+          "Sem Minecraft: usar cubos encaixáveis para formar duas torres iguais.",
+          "Sem dispositivos: desenhar duas colunas iguais em papel quadriculado."
+        ]
+      },
+      "differentiation": {
+        "support": "Range reduzido 1-6, cores diferentes para cada baú e cartões com frase-guia 'dobro de __ é __'.",
+        "standard": "Range completo 1-10, aluno calcula e verbaliza sem apoio escrito.",
+        "challenge": "Incluir 0 e 10, pedir antecipação do total antes de mover o slider e justificar a regra com 2 × n."
+      },
+      "duration": 15
+    },
+    {
+      "summary": "Consolidar dobros até 10 por associação número-expressão-resultado.",
+      "textDescription": "O aluno relaciona diferentes representações do mesmo dobro: imagem com blocos, expressão (n+n e 2×n) e valor final.",
+      "interaction": {
+        "state": [
+          {
+            "name": "pares",
+            "type": "matching",
+            "options": [
+              "2+2",
+              "3+3",
+              "4+4",
+              "5+5",
+              "2×2",
+              "2×3",
+              "2×4",
+              "2×5",
+              "4",
+              "6",
+              "8",
+              "10"
+            ]
+          },
+          {
+            "name": "acertos",
+            "type": "derived",
+            "derivedFrom": "numero de pares correctos"
+          }
+        ],
+        "render": "Painel com três colunas: expressão aditiva, expressão multiplicativa e resultado. As ligações correctas acendem em verde com som curto.",
+        "transition": "Clicar item da coluna esquerda e depois o correspondente nas colunas seguintes cria ligação; erro limpa ligação e mostra nova tentativa.",
+        "constraint": "Expressões diferentes podem representar exactamente o mesmo dobro.",
+        "assessment": "O aluno completa pelo menos 4 de 5 correspondências sem ajuda e explica oralmente uma equivalência (ex.: 4+4 e 2×4 dão 8)."
+      },
+      "maker": {
+        "type": "minecraft",
+        "challenge": "Criem um 'museu dos dobros' com 5 stands: cada stand mostra duas filas iguais de blocos, uma placa com n+n e outra com 2×n, mais o resultado.",
+        "materials": [
+          "Minecraft Education Edition",
+          "blocos de cores distintas",
+          "placas com texto"
+        ],
+        "groupSize": "2-3",
+        "connection": "As correspondências descobertas no matching são transpostas para stands visuais no mundo Minecraft.",
+        "communication": "Visita guiada de 1 minuto por grupo para explicar um stand escolhido.",
+        "alternatives": [
+          "Sem Minecraft: cartazes A4 com desenho, expressão e resultado.",
+          "Sem dispositivos: jogo de cartas de correspondência em mesa."
+        ]
+      },
+      "differentiation": {
+        "support": "Trabalhar apenas dobros de 1 a 5, com pistas visuais de cor para cada trio de correspondência.",
+        "standard": "Dobros de 1 a 10 com feedback imediato após cada tentativa.",
+        "challenge": "Incluir itens distratores (ex.: 3+4, 2×6) e pedir justificação do porquê de não serem dobros de até 10."
+      },
+      "duration": 15
+    },
+    {
+      "summary": "Aplicar o dobro em pequenos problemas e comunicar estratégias.",
+      "textDescription": "O aluno resolve situações curtas com contexto de jogo/construção e escolhe a operação adequada para encontrar o dobro.",
+      "interaction": {
+        "state": [
+          {
+            "name": "cenario",
+            "type": "dropdown",
+            "options": [
+              "Blocos para duas muralhas iguais",
+              "Tochas para dois caminhos iguais",
+              "Portas para duas casas iguais"
+            ],
+            "default": "Blocos para duas muralhas iguais"
+          },
+          {
+            "name": "valorBase",
+            "type": "slider",
+            "range": [
+              1,
+              10
+            ],
+            "step": 1,
+            "default": 6
+          },
+          {
+            "name": "resposta",
+            "type": "quiz",
+            "options": [
+              "n + n",
+              "n - n",
+              "n + 1"
+            ],
+            "default": "n + n"
+          },
+          {
+            "name": "resultado",
+            "type": "derived",
+            "derivedFrom": "2 * valorBase"
+          }
+        ],
+        "render": "Cartão de problema com ilustração Minecraft, campo numérico grande para valor base e três opções de estratégia; ao confirmar, aparece painel com total e explicação visual.",
+        "transition": "Mudar cenário e valor base actualiza o enunciado; seleccionar estratégia e confirmar revela feedback e o total correcto.",
+        "constraint": "Em problemas de 'duas partes iguais', a estratégia válida é duplicar o valor base.",
+        "assessment": "O aluno resolve 3 problemas consecutivos, escolhe estratégia correcta em pelo menos 2 e explica uma resposta usando a expressão n+n ou 2×n."
+      },
+      "maker": {
+        "type": "minecraft",
+        "challenge": "Em grupos, recebam 3 missões (ex.: 'cada muralha tem 7 blocos'). Construam as duas partes iguais e coloquem no chão o número total com blocos de contraste.",
+        "materials": [
+          "Minecraft Education Edition",
+          "folha de missões impressa",
+          "blocos de cor de destaque para o total"
+        ],
+        "groupSize": "3-4",
+        "connection": "Cada missão replica directamente os problemas da página e valida visualmente o dobro construído.",
+        "communication": "No circuito de comunicação, cada grupo mostra um screenshot e diz a estratégia usada para chegar ao total.",
+        "alternatives": [
+          "Sem Minecraft: construir missões com tampas/cubos em tabuleiro.",
+          "Sem recursos físicos: resolver no quadro em equipas com desenho de duas partes iguais."
+        ]
+      },
+      "differentiation": {
+        "support": "Problemas com números até 6, leitura acompanhada do enunciado e quadro de apoio com dobros de referência.",
+        "standard": "Problemas com números até 10 e escolha autónoma da estratégia.",
+        "challenge": "Problemas inversos (ex.: 'o dobro é 14, qual é o número base?') e criação de um novo problema para outro grupo resolver."
+      },
+      "duration": 15
+    }
+  ],
+  "sessionFlow": "0-5 min: activação no conselho (quando usamos 'duas partes iguais' no dia a dia) e apresentação do objectivo; 5-20 min: Unit 1 em TEA com exploração guiada + mini partilha; 20-35 min: Unit 2 em pares com matching e construção do museu maker; 35-42 min: Unit 3 com problemas aplicados e missão final em grupo; 42-45 min: circuito de comunicação + conselho de cooperação (o que resultou, o que melhorar)."
+}

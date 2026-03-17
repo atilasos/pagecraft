@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PageCraft - Dobro ate 10</title>
+  <style>
+    :root {
+      --bg: #f6fbff;
+      --ink: #1f2937;
+      --blue: #1f75fe;
+      --teal: #14b8a6;
+      --yellow: #facc15;
+      --orange: #fb923c;
+      --green: #34d399;
+      --red: #ef4444;
+      --purple: #7e22ce;
+      --card: #ffffff;
+      --line: #cbd5e1;
+      --shadow: 0 8px 20px rgba(31, 41, 55, 0.12);
+      --r: 16px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Trebuchet MS", "Avenir Next", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 10% 10%, #c7f9ff 0%, #f6fbff 45%, #fff5d9 100%);
+      color: var(--ink);
+      font-size: 18px;
+      line-height: 1.45;
+      padding: 14px;
+    }
+
+    .wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      gap: 18px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1f75fe, #14b8a6 60%, #facc15 100%);
+      color: #fff;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      animation: fadeUp .5s ease;
+    }
+
+    h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 2.6vw, 2.7rem); }
+    h2 { margin: 0 0 10px; font-size: clamp(1.35rem, 2vw, 1.9rem); }
+    h3 { margin: 0 0 8px; font-size: 1.15rem; }
+
+    .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+    .pill {
+      background: rgba(255,255,255,.25);
+      border: 1px solid rgba(255,255,255,.45);
+      border-radius: 999px;
+      padding: 6px 12px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      font-weight: 700;
+    }
+
+    .objectives {
+      margin: 8px 0 0;
+      padding: 12px 14px;
+      background: rgba(0, 0, 0, .12);
+      border-radius: 12px;
+    }
+    .objectives ul { margin: 10px 0 0 20px; }
+
+    section {
+      background: var(--card);
+      border: 2px solid #e2e8f0;
+      border-radius: var(--r);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      animation: fadeUp .45s ease;
+    }
+
+    .unit-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .duration {
+      background: #e0f2fe;
+      color: #075985;
+      border: 1px solid #7dd3fc;
+      border-radius: 999px;
+      font-weight: 700;
+      padding: 6px 12px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 10px 0 14px;
+    }
+
+    .tab-btn {
+      border: 2px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 8px 14px;
+      min-height: 44px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .2s ease, background-color .2s ease, border-color .2s ease;
+      touch-action: manipulation;
+    }
+
+    .tab-btn.active { transform: translateY(-1px); }
+    .tab-btn[data-level="apoio"].active { background: #d1fae5; border-color: #10b981; }
+    .tab-btn[data-level="medio"].active { background: #fef9c3; border-color: #f59e0b; }
+    .tab-btn[data-level="desafio"].active { background: #fee2e2; border-color: #ef4444; }
+
+    .diff-card {
+      border: 2px dashed #bfd3ea;
+      border-radius: 14px;
+      padding: 10px;
+      margin-bottom: 12px;
+      background: #f8fbff;
+      display: none;
+    }
+    .diff-card.active { display: block; }
+
+    .interactive {
+      border: 2px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 12px;
+      background: linear-gradient(180deg, #ffffff, #f8fafc);
+      transition: box-shadow .25s ease;
+    }
+
+    .interactive.good { box-shadow: 0 0 0 4px rgba(16,185,129,.18); }
+    .interactive.bad { box-shadow: 0 0 0 4px rgba(239,68,68,.2); }
+
+    .control-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .value-badge {
+      background: #e0f2fe;
+      border: 2px solid #7dd3fc;
+      border-radius: 12px;
+      min-width: 68px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.2rem;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      min-height: 44px;
+      accent-color: #1f75fe;
+      cursor: pointer;
+      touch-action: pan-x;
+    }
+
+    select, input[type="number"], button, textarea {
+      font: inherit;
+      border-radius: 10px;
+      border: 2px solid #9ca3af;
+      padding: 8px 10px;
+      min-height: 44px;
+      background: #fff;
+    }
+
+    button {
+      background: #1f75fe;
+      color: #fff;
+      font-weight: 800;
+      border-color: #1f75fe;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: transform .15s ease, filter .15s ease;
+    }
+
+    button:active { transform: scale(.98); }
+    button:hover { filter: brightness(1.05); }
+
+    .chest-grid {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .chest {
+      border-radius: 14px;
+      padding: 10px;
+      border: 2px solid #334155;
+      min-height: 180px;
+      background: #fde68a;
+    }
+
+    .chest.support-a { background: #bae6fd; }
+    .chest.support-b { background: #fbcfe8; }
+
+    .chest h4 { margin: 0 0 8px; font-size: 1rem; }
+
+    .blocks {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(32px, 1fr));
+      gap: 6px;
+      align-content: start;
+      min-height: 120px;
+    }
+
+    .block {
+      min-height: 32px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      border: 1px solid #334155;
+      background: linear-gradient(145deg, #f97316, #fcd34d);
+      transition: transform .2s ease;
+    }
+
+    .block.pop { transform: scale(1.08); }
+
+    .total-counter {
+      border-radius: 999px;
+      border: 3px solid #16a34a;
+      background: #dcfce7;
+      color: #14532d;
+      min-width: 140px;
+      min-height: 140px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 1.65rem;
+      text-align: center;
+      padding: 6px;
+    }
+
+    .targets {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .target-chip {
+      border: 2px solid #94a3b8;
+      border-radius: 999px;
+      padding: 6px 10px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      background: #fff;
+    }
+    .target-chip.done { border-color: #16a34a; background: #dcfce7; }
+
+    .hint-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .hint-card {
+      background: #fffbeb;
+      border: 2px solid #facc15;
+      border-radius: 10px;
+      padding: 8px;
+      font-weight: 700;
+      min-height: 44px;
+      display: grid;
+      align-items: center;
+    }
+
+    .matching-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    .match-col {
+      border: 2px solid #dbeafe;
+      border-radius: 12px;
+      padding: 8px;
+      background: #f8fbff;
+      min-height: 220px;
+    }
+
+    .row-label {
+      border-radius: 8px;
+      background: #e0f2fe;
+      border: 2px solid #7dd3fc;
+      font-weight: 800;
+      padding: 8px;
+      margin-bottom: 8px;
+      min-height: 44px;
+      display: grid;
+      align-items: center;
+    }
+
+    .drop-slot {
+      border: 2px dashed #94a3b8;
+      border-radius: 8px;
+      padding: 8px;
+      margin-bottom: 8px;
+      min-height: 44px;
+      background: #fff;
+      display: grid;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transition: background-color .2s ease, border-color .2s ease;
+    }
+
+    .drop-slot.filled { border-style: solid; font-weight: 800; }
+    .drop-slot.correct { border-color: #16a34a; background: #dcfce7; color: #14532d; }
+    .drop-slot.wrong { border-color: #ef4444; background: #fee2e2; }
+
+    .draggables {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .drag-chip {
+      border: 2px solid #2563eb;
+      background: #dbeafe;
+      color: #1e3a8a;
+      border-radius: 999px;
+      padding: 8px 12px;
+      min-height: 44px;
+      min-width: 72px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+      position: relative;
+      transition: transform .15s ease;
+    }
+
+    .drag-chip.locked {
+      border-color: #15803d;
+      background: #bbf7d0;
+      color: #14532d;
+      cursor: default;
+    }
+
+    .drag-chip.dragging {
+      opacity: .95;
+      z-index: 1000;
+      position: fixed;
+      pointer-events: none;
+      box-shadow: 0 12px 20px rgba(15, 23, 42, .28);
+    }
+
+    .scoreline {
+      margin-top: 10px;
+      font-weight: 800;
+      color: #0f766e;
+    }
+
+    .problem {
+      border: 2px solid #93c5fd;
+      border-radius: 12px;
+      background: #eff6ff;
+      padding: 12px;
+    }
+
+    .scenario-emoji { font-size: 2rem; }
+
+    .strategy-options {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .strategy-option {
+      border: 2px solid #94a3b8;
+      border-radius: 10px;
+      padding: 8px 12px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .feedback {
+      margin-top: 10px;
+      border-radius: 12px;
+      padding: 10px;
+      border: 2px solid #cbd5e1;
+      background: #fff;
+      min-height: 60px;
+      display: grid;
+      align-items: center;
+      transition: all .2s ease;
+    }
+
+    .feedback.good { border-color: #16a34a; background: #dcfce7; }
+    .feedback.bad { border-color: #ef4444; background: #fee2e2; }
+
+    .mini-scale {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .mini-scale span {
+      border: 2px solid #fdba74;
+      background: #fff7ed;
+      border-radius: 999px;
+      padding: 6px 10px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      font-weight: 700;
+    }
+
+    .maker {
+      background: linear-gradient(180deg, #ecfdf5, #d1fae5);
+      border-color: #34d399;
+    }
+
+    .maker-card {
+      border-left: 6px solid #10b981;
+      background: #fff;
+      border-radius: 12px;
+      padding: 12px;
+      margin: 8px 0;
+    }
+
+    .assessment {
+      background: linear-gradient(180deg, #fff7ed, #ffedd5);
+      border-color: #fb923c;
+    }
+
+    .assessment-item {
+      border-bottom: 1px solid #fdba74;
+      padding: 10px 0;
+    }
+    .assessment-item:last-child { border-bottom: 0; }
+
+    .curricular {
+      background: linear-gradient(180deg, #f3e8ff, #e9d5ff);
+      border-color: #a855f7;
+    }
+
+    .flash {
+      margin-top: 10px;
+      display: none;
+      border-radius: 12px;
+      padding: 10px;
+      background: linear-gradient(90deg, #facc15, #f97316);
+      color: #fff;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    footer {
+      text-align: center;
+      color: #475569;
+      font-size: .9rem;
+      padding-bottom: 4px;
+    }
+
+    canvas#fx {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 900px) {
+      .chest-grid { grid-template-columns: 1fr; }
+      .total-counter { min-height: 96px; min-width: auto; }
+      .matching-grid { grid-template-columns: 1fr; }
+      body { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="fx" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <header>
+      <h1>Dobro ate 10</h1>
+      <div class="meta">
+        <span class="pill">Ano: 7-8 anos (2.o ano)</span>
+        <span class="pill">Duracao: 45 minutos</span>
+      </div>
+      <div class="objectives">
+        <strong>Objectivos</strong>
+        <ul>
+          <li>Reconhecer e calcular o dobro de numeros ate 10.</li>
+          <li>Relacionar o dobro com adicao de parcelas iguais e com 2 x n.</li>
+          <li>Aplicar o dobro em problemas simples do quotidiano escolar.</li>
+          <li>Comunicar estrategias de calculo com linguagem matematica adequada.</li>
+        </ul>
+      </div>
+    </header>
+
+    <section id="unit1">
+      <div class="unit-head">
+        <h2>Unidade 1: Descobrir o dobro com duas quantidades iguais</h2>
+        <span class="duration">15 min</span>
+      </div>
+      <p>Explora dois baus iguais. Move o slider e observa o total no centro.</p>
+
+      <div class="tabs" role="tablist" aria-label="Diferenciacao da unidade 1">
+        <button class="tab-btn active" data-unit="unit1" data-level="apoio" aria-label="Nivel apoio">🟢 Apoio</button>
+        <button class="tab-btn" data-unit="unit1" data-level="medio" aria-label="Nivel intermedio">🟡 Intermedio</button>
+        <button class="tab-btn" data-unit="unit1" data-level="desafio" aria-label="Nivel desafio">🔴 Desafio</button>
+      </div>
+
+      <div class="diff-card active" data-unit="unit1" data-level="apoio">Usa numeros de 1 a 6. Completa frases-guia enquanto mexes no slider.</div>
+      <div class="diff-card" data-unit="unit1" data-level="medio">Usa numeros de 1 a 10 e explica em voz alta sem cartao de ajuda.</div>
+      <div class="diff-card" data-unit="unit1" data-level="desafio">Inclui 0 e 10. Tenta antecipar o total antes de mover o slider.</div>
+
+      <div class="interactive" id="u1Board">
+        <div class="control-row">
+          <label for="u1Slider"><strong>Numero base</strong></label>
+          <span id="u1BaseBadge" class="value-badge" aria-live="polite">4</span>
+        </div>
+        <input id="u1Slider" aria-label="Slider numero base" type="range" min="1" max="6" step="1" value="4">
+
+        <div class="chest-grid">
+          <div class="chest support-a" id="chestA">
+            <h4>Bau A</h4>
+            <div class="blocks" id="blocksA"></div>
+          </div>
+          <div class="total-counter" aria-live="polite" id="u1Total">Total<br>8</div>
+          <div class="chest support-b" id="chestB">
+            <h4>Bau B</h4>
+            <div class="blocks" id="blocksB"></div>
+          </div>
+        </div>
+
+        <div class="targets" aria-label="Metas de observacao">
+          <span class="target-chip" data-target="2">2 -> dobro ?</span>
+          <span class="target-chip" data-target="5">5 -> dobro ?</span>
+          <span class="target-chip" data-target="9">9 -> dobro ?</span>
+        </div>
+
+        <div id="u1Hints" class="hint-cards">
+          <div class="hint-card">Dobro de <span id="hintN1">4</span> e <span id="hintD1">8</span></div>
+          <div class="hint-card"><span id="hintN2">4</span> + <span id="hintN3">4</span> = <span id="hintD2">8</span></div>
+        </div>
+
+        <div id="u1Challenge" style="display:none; margin-top:10px;">
+          <label for="u1Guess"><strong>Antecipacao:</strong> se o numero base for <span id="u1GuessBase">4</span>, qual e o total?</label>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
+            <input id="u1Guess" aria-label="Escrever antecipacao do total" type="number" min="0" max="20" placeholder="Escreve o total">
+            <button id="u1GuessBtn" aria-label="Validar antecipacao">Verificar</button>
+          </div>
+        </div>
+
+        <div class="flash" id="u1Flash" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section id="unit2">
+      <div class="unit-head">
+        <h2>Unidade 2: Associar representacoes do mesmo dobro</h2>
+        <span class="duration">15 min</span>
+      </div>
+      <p>Arrasta cada cartao para a coluna certa. Quando acertas, fica verde e ouves um som curto.</p>
+
+      <div class="tabs" role="tablist" aria-label="Diferenciacao da unidade 2">
+        <button class="tab-btn active" data-unit="unit2" data-level="apoio" aria-label="Nivel apoio">🟢 Apoio</button>
+        <button class="tab-btn" data-unit="unit2" data-level="medio" aria-label="Nivel intermedio">🟡 Intermedio</button>
+        <button class="tab-btn" data-unit="unit2" data-level="desafio" aria-label="Nivel desafio">🔴 Desafio</button>
+      </div>
+
+      <div class="diff-card active" data-unit="unit2" data-level="apoio">Dobros de 1 a 5, com pistas de cor.</div>
+      <div class="diff-card" data-unit="unit2" data-level="medio">Dobros ate 10, com feedback imediato.</div>
+      <div class="diff-card" data-unit="unit2" data-level="desafio">Com distratores: decide o que nao pertence aos dobros ate 10.</div>
+
+      <div class="interactive" id="u2Board">
+        <div class="matching-grid">
+          <div class="match-col">
+            <h3>n + n</h3>
+            <div id="u2AddRows"></div>
+          </div>
+          <div class="match-col">
+            <h3>2 x n (arrasta para a linha)</h3>
+            <div class="draggables" id="u2MultPool"></div>
+          </div>
+          <div class="match-col">
+            <h3>Resultado (arrasta para a linha)</h3>
+            <div class="draggables" id="u2ResPool"></div>
+          </div>
+        </div>
+
+        <div id="u2DistractorBox" style="display:none; margin-top:10px; border:2px dashed #ef4444; border-radius:10px; padding:8px;">
+          <h3>Nao e dobro ate 10</h3>
+          <div class="draggables" id="u2DistPool"></div>
+          <div class="drop-slot" id="u2DistDrop" style="margin-top:8px; min-height:64px;">Larga aqui os distratores</div>
+        </div>
+
+        <div class="scoreline" id="u2Score" aria-live="polite">Acertos: 0</div>
+        <div class="flash" id="u2Flash" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section id="unit3">
+      <div class="unit-head">
+        <h2>Unidade 3: Resolver problemas e explicar estrategia</h2>
+        <span class="duration">15 min</span>
+      </div>
+      <p>Escolhe o cenario, define o valor base e selecciona a estrategia.</p>
+
+      <div class="tabs" role="tablist" aria-label="Diferenciacao da unidade 3">
+        <button class="tab-btn active" data-unit="unit3" data-level="apoio" aria-label="Nivel apoio">🟢 Apoio</button>
+        <button class="tab-btn" data-unit="unit3" data-level="medio" aria-label="Nivel intermedio">🟡 Intermedio</button>
+        <button class="tab-btn" data-unit="unit3" data-level="desafio" aria-label="Nivel desafio">🔴 Desafio</button>
+      </div>
+
+      <div class="diff-card active" data-unit="unit3" data-level="apoio">Numeros ate 6 e quadro de apoio com dobros de referencia.</div>
+      <div class="diff-card" data-unit="unit3" data-level="medio">Numeros ate 10 e escolha autonoma da estrategia.</div>
+      <div class="diff-card" data-unit="unit3" data-level="desafio">Inclui problema inverso e cria um novo enunciado para outro grupo.</div>
+
+      <div class="interactive" id="u3Board">
+        <div class="problem">
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <span class="scenario-emoji" id="u3Emoji">🧱</span>
+            <label for="u3Scenario"><strong>Cenario</strong></label>
+            <select id="u3Scenario" aria-label="Escolher cenario">
+              <option>Blocos para duas muralhas iguais</option>
+              <option>Tochas para dois caminhos iguais</option>
+              <option>Portas para duas casas iguais</option>
+            </select>
+          </div>
+
+          <div class="control-row" style="margin-top:10px;">
+            <label for="u3Slider"><strong>Valor base</strong></label>
+            <span id="u3Badge" class="value-badge">6</span>
+          </div>
+          <input id="u3Slider" aria-label="Valor base para o problema" type="range" min="1" max="6" step="1" value="6">
+
+          <p id="u3Statement" style="margin:10px 0 0; font-weight:700;"></p>
+
+          <div class="strategy-options" role="radiogroup" aria-label="Escolher estrategia">
+            <label class="strategy-option"><input type="radio" name="strat" value="n+n" checked> n + n</label>
+            <label class="strategy-option"><input type="radio" name="strat" value="n-n"> n - n</label>
+            <label class="strategy-option"><input type="radio" name="strat" value="n+1"> n + 1</label>
+          </div>
+
+          <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+            <button id="u3Check" aria-label="Confirmar estrategia">Confirmar estrategia</button>
+            <span class="value-badge" id="u3TotalBadge" aria-live="polite">?</span>
+          </div>
+
+          <div class="feedback" id="u3Feedback" aria-live="polite">Escolhe uma estrategia e confirma.</div>
+
+          <div id="u3SupportBoard" style="margin-top:8px; display:grid; grid-template-columns:repeat(auto-fit, minmax(120px,1fr)); gap:6px;">
+            <div class="hint-card">2+2=4</div>
+            <div class="hint-card">3+3=6</div>
+            <div class="hint-card">4+4=8</div>
+            <div class="hint-card">5+5=10</div>
+            <div class="hint-card">6+6=12</div>
+          </div>
+
+          <div id="u3Inverse" style="display:none; margin-top:10px; border:2px dashed #f97316; border-radius:10px; padding:8px;">
+            <p id="u3InverseText" style="font-weight:700; margin:0 0 6px;">Problema inverso</p>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <input type="number" id="u3InverseAnswer" min="0" max="10" aria-label="Resposta do problema inverso" placeholder="Numero base">
+              <button id="u3InverseBtn" aria-label="Verificar problema inverso">Verificar</button>
+            </div>
+            <textarea id="u3Create" aria-label="Criar novo problema" rows="2" style="margin-top:8px; width:100%;" placeholder="Cria um novo problema para outro grupo."></textarea>
+          </div>
+        </div>
+
+        <div class="scoreline" id="u3Score">Resolvidos seguidos: 0 | Correctos: 0</div>
+        <div class="flash" id="u3Flash"></div>
+      </div>
+    </section>
+
+    <section class="maker">
+      <h2>🛠️ Desafios Maker</h2>
+      <div class="maker-card">
+        <strong>Minecraft</strong>: Em pares, construam duas torres iguais com N blocos (N entre 1 e 10). Depois unam as torres e coloquem uma placa com a frase: "Dobro de N = ...".
+      </div>
+      <div class="maker-card">
+        <strong>Minecraft</strong>: Criem um "museu dos dobros" com 5 stands: cada stand mostra duas filas iguais de blocos, uma placa com n+n e outra com 2xn, mais o resultado.
+      </div>
+      <div class="maker-card">
+        <strong>Minecraft</strong>: Em grupos, recebam 3 missoes (ex.: "cada muralha tem 7 blocos"). Construam as duas partes iguais e coloquem no chao o numero total com blocos de contraste.
+      </div>
+    </section>
+
+    <section class="assessment">
+      <h2>📝 Mini-avaliacao</h2>
+      <div class="assessment-item">
+        Posiciona o slider nos valores 2, 5 e 9 e diz o dobro de cada um.
+        <div class="mini-scale"><span>⬜ Ainda nao consigo</span><span>⬜ Com ajuda</span><span>⬜ Sozinho/a</span><span>⬜ Ajudo colegas</span></div>
+      </div>
+      <div class="assessment-item">
+        Completa pelo menos 4 correspondencias correctas entre n+n, 2xn e resultado.
+        <div class="mini-scale"><span>⬜ Ainda nao consigo</span><span>⬜ Com ajuda</span><span>⬜ Sozinho/a</span><span>⬜ Ajudo colegas</span></div>
+      </div>
+      <div class="assessment-item">
+        Explica oralmente uma equivalencia (ex.: 4+4 e 2x4).
+        <div class="mini-scale"><span>⬜ Ainda nao consigo</span><span>⬜ Com ajuda</span><span>⬜ Sozinho/a</span><span>⬜ Ajudo colegas</span></div>
+      </div>
+      <div class="assessment-item">
+        Resolve 3 problemas seguidos e escolhe a estrategia correcta em pelo menos 2.
+        <div class="mini-scale"><span>⬜ Ainda nao consigo</span><span>⬜ Com ajuda</span><span>⬜ Sozinho/a</span><span>⬜ Ajudo colegas</span></div>
+      </div>
+      <div class="assessment-item">
+        Usa n+n ou 2xn para justificar uma resposta.
+        <div class="mini-scale"><span>⬜ Ainda nao consigo</span><span>⬜ Com ajuda</span><span>⬜ Sozinho/a</span><span>⬜ Ajudo colegas</span></div>
+      </div>
+    </section>
+
+    <section class="curricular">
+      <h2>Referencias curriculares</h2>
+      <h3>Aprendizagens Essenciais</h3>
+      <ul>
+        <li>Matematica (2.o ano): Calcular e memorizar dobros de numeros naturais em contextos diversos.</li>
+        <li>Matematica (2.o ano): Relacionar adicao de parcelas iguais com a multiplicacao por 2.</li>
+        <li>Matematica (2.o ano): Resolver problemas de um passo envolvendo o dobro em situacoes do quotidiano.</li>
+      </ul>
+      <h3>Perfil do Aluno</h3>
+      <ul>
+        <li>PA-A: Linguagens e textos</li>
+        <li>PA-C: Raciocinio e resolucao de problemas</li>
+        <li>PA-D: Pensamento critico e pensamento criativo</li>
+        <li>PA-E: Relacionamento interpessoal</li>
+        <li>PA-I: Saber cientifico, tecnico e tecnologico</li>
+      </ul>
+    </section>
+
+    <footer>Gerado por PageCraft 🛠️</footer>
+  </div>
+
+  <script>
+    (function () {
+      const state = {
+        unit1: { level: 'apoio', numeroBase: 4, visited: new Set() },
+        unit2: { level: 'apoio', rows: [], correct: 0, distCount: 0 },
+        unit3: { level: 'apoio', valorBase: 6, correct: 0, streak: 0, inverse: { total: 14, base: 7 } }
+      };
+
+      const scenarioMap = {
+        'Blocos para duas muralhas iguais': { emoji: '🧱', label: 'muralha' },
+        'Tochas para dois caminhos iguais': { emoji: '🔥', label: 'caminho' },
+        'Portas para duas casas iguais': { emoji: '🚪', label: 'casa' }
+      };
+
+      function setupTabs() {
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const unit = btn.dataset.unit;
+            const level = btn.dataset.level;
+            document.querySelectorAll(`.tab-btn[data-unit="${unit}"]`).forEach(b => b.classList.toggle('active', b === btn));
+            document.querySelectorAll(`.diff-card[data-unit="${unit}"]`).forEach(card => card.classList.toggle('active', card.dataset.level === level));
+            if (unit === 'unit1') applyUnit1Level(level);
+            if (unit === 'unit2') applyUnit2Level(level);
+            if (unit === 'unit3') applyUnit3Level(level);
+          });
+        });
+      }
+
+      let audioCtx;
+      function beep(freq = 620, duration = 0.12, type = 'sine', gainValue = 0.05) {
+        try {
+          audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+          const o = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          o.type = type;
+          o.frequency.value = freq;
+          g.gain.value = gainValue;
+          o.connect(g);
+          g.connect(audioCtx.destination);
+          o.start();
+          g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+          o.stop(audioCtx.currentTime + duration);
+        } catch (e) {}
+      }
+
+      const fxCanvas = document.getElementById('fx');
+      const fxCtx = fxCanvas.getContext('2d');
+      let particles = [];
+      function resizeFx() {
+        fxCanvas.width = window.innerWidth;
+        fxCanvas.height = window.innerHeight;
+      }
+      resizeFx();
+      window.addEventListener('resize', resizeFx);
+
+      function confetti(x = window.innerWidth / 2, y = window.innerHeight / 3) {
+        const colors = ['#22c55e', '#3b82f6', '#f59e0b', '#ef4444', '#a855f7'];
+        for (let i = 0; i < 64; i++) {
+          particles.push({
+            x, y,
+            vx: (Math.random() - 0.5) * 7,
+            vy: (Math.random() - 0.8) * 8,
+            g: 0.16 + Math.random() * 0.1,
+            life: 55 + Math.random() * 24,
+            c: colors[Math.floor(Math.random() * colors.length)],
+            s: 4 + Math.random() * 5
+          });
+        }
+      }
+
+      function animate() {
+        fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+        particles = particles.filter(p => p.life > 0);
+        particles.forEach(p => {
+          p.life -= 1;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += p.g;
+          fxCtx.fillStyle = p.c;
+          fxCtx.fillRect(p.x, p.y, p.s, p.s);
+        });
+        requestAnimationFrame(animate);
+      }
+      requestAnimationFrame(animate);
+
+      function flashMessage(id, text, good = true) {
+        const el = document.getElementById(id);
+        el.textContent = text;
+        el.style.display = 'block';
+        el.style.background = good
+          ? 'linear-gradient(90deg,#22c55e,#16a34a)'
+          : 'linear-gradient(90deg,#ef4444,#f97316)';
+        setTimeout(() => { el.style.display = 'none'; }, 1700);
+      }
+
+      const u1Slider = document.getElementById('u1Slider');
+      const u1BaseBadge = document.getElementById('u1BaseBadge');
+      const blocksA = document.getElementById('blocksA');
+      const blocksB = document.getElementById('blocksB');
+      const u1Total = document.getElementById('u1Total');
+      const u1Hints = document.getElementById('u1Hints');
+      const u1Challenge = document.getElementById('u1Challenge');
+      const u1Board = document.getElementById('u1Board');
+
+      function renderBlocks(container, n) {
+        container.innerHTML = '';
+        for (let i = 0; i < n; i++) {
+          const b = document.createElement('div');
+          b.className = 'block pop';
+          b.textContent = '⬛';
+          container.appendChild(b);
+          requestAnimationFrame(() => b.classList.remove('pop'));
+        }
+      }
+
+      function updateUnit1() {
+        const n = Number(u1Slider.value);
+        state.unit1.numeroBase = n;
+        const total = n * 2;
+        u1BaseBadge.textContent = n;
+        u1Total.innerHTML = `Total<br>${total}`;
+        renderBlocks(blocksA, n);
+        renderBlocks(blocksB, n);
+
+        document.getElementById('hintN1').textContent = n;
+        document.getElementById('hintD1').textContent = total;
+        document.getElementById('hintN2').textContent = n;
+        document.getElementById('hintN3').textContent = n;
+        document.getElementById('hintD2').textContent = total;
+        document.getElementById('u1GuessBase').textContent = n;
+
+        [2, 5, 9].forEach(t => {
+          if (n === t) state.unit1.visited.add(t);
+          const chip = document.querySelector(`.target-chip[data-target="${t}"]`);
+          chip.classList.toggle('done', state.unit1.visited.has(t));
+          chip.textContent = state.unit1.visited.has(t) ? `✔ ${t} -> ${t * 2}` : `${t} -> dobro ?`;
+        });
+      }
+
+      function applyUnit1Level(level) {
+        state.unit1.level = level;
+        if (level === 'apoio') {
+          u1Slider.min = '1';
+          u1Slider.max = '6';
+          if (Number(u1Slider.value) > 6) u1Slider.value = '6';
+          document.getElementById('chestA').classList.add('support-a');
+          document.getElementById('chestB').classList.add('support-b');
+          u1Hints.style.display = 'flex';
+          u1Challenge.style.display = 'none';
+        } else if (level === 'medio') {
+          u1Slider.min = '1';
+          u1Slider.max = '10';
+          document.getElementById('chestA').classList.remove('support-a');
+          document.getElementById('chestB').classList.remove('support-b');
+          u1Hints.style.display = 'none';
+          u1Challenge.style.display = 'none';
+        } else {
+          u1Slider.min = '0';
+          u1Slider.max = '10';
+          document.getElementById('chestA').classList.remove('support-a');
+          document.getElementById('chestB').classList.remove('support-b');
+          u1Hints.style.display = 'none';
+          u1Challenge.style.display = 'block';
+        }
+        updateUnit1();
+      }
+
+      u1Slider.addEventListener('input', updateUnit1);
+      document.getElementById('u1GuessBtn').addEventListener('click', () => {
+        const guess = Number(document.getElementById('u1Guess').value);
+        const target = state.unit1.numeroBase * 2;
+        if (guess === target) {
+          u1Board.classList.add('good');
+          u1Board.classList.remove('bad');
+          beep(760, 0.13, 'triangle');
+          confetti();
+          flashMessage('u1Flash', 'Boa! Confirmaste a antecipacao.');
+        } else {
+          u1Board.classList.add('bad');
+          u1Board.classList.remove('good');
+          beep(220, 0.18, 'square');
+          flashMessage('u1Flash', 'Quase! Experimenta outra vez.', false);
+        }
+      });
+
+      function buildRows(ns, supportColors = false) {
+        const rowsWrap = document.getElementById('u2AddRows');
+        rowsWrap.innerHTML = '';
+        state.unit2.rows = ns.map((n, i) => {
+          const row = document.createElement('div');
+          row.className = 'row-label';
+          row.dataset.n = String(n);
+          if (supportColors) row.style.background = `hsl(${(i * 40) % 360}deg 95% 90%)`;
+          row.innerHTML = `<div><strong>${n}+${n}</strong></div>
+            <div class="drop-slot" data-kind="mult" data-n="${n}">2 x ?</div>
+            <div class="drop-slot" data-kind="res" data-n="${n}">resultado ?</div>`;
+          rowsWrap.appendChild(row);
+          return { n, mult: false, res: false };
+        });
+      }
+
+      function buildPool(id, items, kind) {
+        const pool = document.getElementById(id);
+        pool.innerHTML = '';
+        items.forEach(v => {
+          const chip = document.createElement('div');
+          chip.className = 'drag-chip';
+          chip.textContent = String(v);
+          chip.dataset.value = String(v);
+          chip.dataset.kind = kind;
+          chip.setAttribute('role', 'button');
+          chip.setAttribute('aria-label', `Cartao ${v}`);
+          pool.appendChild(chip);
+        });
+      }
+
+      function shuffle(arr) {
+        return arr.map(v => ({ v, r: Math.random() })).sort((a, b) => a.r - b.r).map(x => x.v);
+      }
+
+      function refreshU2Score() {
+        let correct = 0;
+        document.querySelectorAll('#u2AddRows .row-label').forEach(row => {
+          const ok = row.querySelector('[data-kind="mult"]').classList.contains('correct') && row.querySelector('[data-kind="res"]').classList.contains('correct');
+          if (ok) correct++;
+        });
+        state.unit2.correct = correct;
+        document.getElementById('u2Score').textContent = `Acertos: ${correct}`;
+        if (correct >= Math.min(5, state.unit2.rows.length)) {
+          confetti();
+          beep(780, 0.15, 'sine');
+          flashMessage('u2Flash', 'Excelente! Ja ligaste varias equivalencias.');
+        }
+      }
+
+      function applyUnit2Level(level) {
+        state.unit2.level = level;
+        state.unit2.distCount = 0;
+        const distBox = document.getElementById('u2DistractorBox');
+        const distPool = document.getElementById('u2DistPool');
+        if (level === 'apoio') {
+          buildRows([1, 2, 3, 4, 5], true);
+          buildPool('u2MultPool', shuffle(['2x1', '2x2', '2x3', '2x4', '2x5']), 'mult');
+          buildPool('u2ResPool', shuffle(['2', '4', '6', '8', '10']), 'res');
+          distBox.style.display = 'none';
+          distPool.innerHTML = '';
+        } else if (level === 'medio') {
+          buildRows([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], false);
+          buildPool('u2MultPool', shuffle(Array.from({ length: 10 }, (_, i) => `2x${i + 1}`)), 'mult');
+          buildPool('u2ResPool', shuffle(Array.from({ length: 10 }, (_, i) => String((i + 1) * 2))), 'res');
+          distBox.style.display = 'none';
+          distPool.innerHTML = '';
+        } else {
+          buildRows([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], false);
+          buildPool('u2MultPool', shuffle([...Array.from({ length: 10 }, (_, i) => `2x${i + 1}`), '3+4', '2x6']), 'mult');
+          buildPool('u2ResPool', shuffle([...Array.from({ length: 10 }, (_, i) => String((i + 1) * 2)), '11']), 'res');
+          distBox.style.display = 'block';
+          distPool.innerHTML = '';
+          ['3+4', '2x6', '11'].forEach(d => {
+            const chip = document.createElement('div');
+            chip.className = 'drag-chip';
+            chip.dataset.kind = 'dist';
+            chip.dataset.value = d;
+            chip.textContent = d;
+            distPool.appendChild(chip);
+          });
+        }
+        refreshU2Score();
+      }
+
+      function slotAccepts(slot, chip) {
+        const n = Number(slot.dataset.n);
+        const kind = slot.dataset.kind;
+        if (kind === 'mult') return chip.dataset.kind === 'mult' && chip.dataset.value === `2x${n}`;
+        if (kind === 'res') return chip.dataset.kind === 'res' && Number(chip.dataset.value) === n * 2;
+        return false;
+      }
+
+      function setupPointerDrag() {
+        let active = null;
+
+        function onPointerDown(e) {
+          const chip = e.target.closest('.drag-chip');
+          if (!chip || chip.classList.contains('locked')) return;
+          active = {
+            el: chip,
+            startX: e.clientX,
+            startY: e.clientY,
+            ox: e.clientX,
+            oy: e.clientY,
+            fromParent: chip.parentElement,
+            fromNext: chip.nextElementSibling
+          };
+          chip.classList.add('dragging');
+          chip.setPointerCapture(e.pointerId);
+          chip.style.left = `${e.clientX - chip.offsetWidth / 2}px`;
+          chip.style.top = `${e.clientY - chip.offsetHeight / 2}px`;
+          e.preventDefault();
+        }
+
+        function onPointerMove(e) {
+          if (!active) return;
+          active.ox = e.clientX;
+          active.oy = e.clientY;
+          active.el.style.left = `${e.clientX - active.el.offsetWidth / 2}px`;
+          active.el.style.top = `${e.clientY - active.el.offsetHeight / 2}px`;
+        }
+
+        function dropChip(chip, target) {
+          if (target && target.id === 'u2DistDrop' && chip.dataset.kind === 'dist') {
+            chip.classList.add('locked');
+            target.appendChild(chip);
+            chip.classList.remove('dragging');
+            chip.style.left = '';
+            chip.style.top = '';
+            state.unit2.distCount += 1;
+            beep(700, .1, 'triangle');
+            if (state.unit2.distCount >= 3) flashMessage('u2Flash', 'Boa justificacao dos distratores!');
+            return;
+          }
+          if (target && target.classList.contains('drop-slot')) {
+            if (slotAccepts(target, chip) && !target.classList.contains('filled')) {
+              target.textContent = chip.dataset.value;
+              target.classList.add('filled', 'correct');
+              chip.classList.add('locked');
+              chip.classList.remove('dragging');
+              chip.style.left = '';
+              chip.style.top = '';
+              target.appendChild(chip);
+              beep(820, 0.09, 'triangle');
+              refreshU2Score();
+              return;
+            }
+            target.classList.add('wrong');
+            setTimeout(() => target.classList.remove('wrong'), 400);
+            beep(220, 0.14, 'square');
+          }
+
+          chip.classList.remove('dragging');
+          chip.style.left = '';
+          chip.style.top = '';
+          if (active.fromNext) active.fromParent.insertBefore(chip, active.fromNext);
+          else active.fromParent.appendChild(chip);
+        }
+
+        function onPointerUp(e) {
+          if (!active) return;
+          const target = document.elementFromPoint(active.ox, active.oy)?.closest('.drop-slot, #u2DistDrop');
+          dropChip(active.el, target);
+          active = null;
+        }
+
+        document.addEventListener('pointerdown', onPointerDown);
+        document.addEventListener('pointermove', onPointerMove);
+        document.addEventListener('pointerup', onPointerUp);
+        document.addEventListener('pointercancel', onPointerUp);
+      }
+
+      const u3Scenario = document.getElementById('u3Scenario');
+      const u3Slider = document.getElementById('u3Slider');
+      const u3Badge = document.getElementById('u3Badge');
+      const u3Statement = document.getElementById('u3Statement');
+      const u3Emoji = document.getElementById('u3Emoji');
+      const u3Feedback = document.getElementById('u3Feedback');
+      const u3TotalBadge = document.getElementById('u3TotalBadge');
+      const u3SupportBoard = document.getElementById('u3SupportBoard');
+      const u3Inverse = document.getElementById('u3Inverse');
+
+      function updateU3Statement() {
+        const scene = u3Scenario.value;
+        const base = Number(u3Slider.value);
+        state.unit3.valorBase = base;
+        u3Badge.textContent = base;
+        u3Emoji.textContent = scenarioMap[scene].emoji;
+        u3Statement.textContent = `Cada ${scenarioMap[scene].label} usa ${base} itens. Sao duas partes iguais. Qual e o total?`;
+      }
+
+      function nextInverse() {
+        const totals = [8, 10, 12, 14, 16, 18, 20];
+        const t = totals[Math.floor(Math.random() * totals.length)];
+        state.unit3.inverse.total = t;
+        state.unit3.inverse.base = t / 2;
+        document.getElementById('u3InverseText').textContent = `Problema inverso: o dobro e ${t}. Qual e o numero base?`;
+        document.getElementById('u3InverseAnswer').value = '';
+      }
+
+      function applyUnit3Level(level) {
+        state.unit3.level = level;
+        if (level === 'apoio') {
+          u3Slider.min = '1';
+          u3Slider.max = '6';
+          if (Number(u3Slider.value) > 6) u3Slider.value = '6';
+          u3SupportBoard.style.display = 'grid';
+          u3Inverse.style.display = 'none';
+        } else if (level === 'medio') {
+          u3Slider.min = '1';
+          u3Slider.max = '10';
+          u3SupportBoard.style.display = 'none';
+          u3Inverse.style.display = 'none';
+        } else {
+          u3Slider.min = '1';
+          u3Slider.max = '10';
+          u3SupportBoard.style.display = 'none';
+          u3Inverse.style.display = 'block';
+          nextInverse();
+        }
+        updateU3Statement();
+      }
+
+      document.getElementById('u3Check').addEventListener('click', () => {
+        const selected = document.querySelector('input[name="strat"]:checked').value;
+        const base = state.unit3.valorBase;
+        const total = base * 2;
+        const good = selected === 'n+n';
+        u3TotalBadge.textContent = total;
+
+        if (good) {
+          state.unit3.correct += 1;
+          state.unit3.streak += 1;
+          u3Feedback.className = 'feedback good';
+          u3Feedback.textContent = `Boa estrategia! Duas partes de ${base} fazem ${total}.`;
+          beep(740, .11, 'triangle');
+          confetti(window.innerWidth * 0.7, window.innerHeight * 0.4);
+          flashMessage('u3Flash', 'Resposta validada com sucesso.');
+        } else {
+          state.unit3.streak = 0;
+          u3Feedback.className = 'feedback bad';
+          u3Feedback.textContent = `Tenta outra estrategia para duas partes iguais.`;
+          beep(230, .15, 'square');
+          flashMessage('u3Flash', 'Revê e tenta novamente.', false);
+        }
+        document.getElementById('u3Score').textContent = `Resolvidos seguidos: ${state.unit3.streak} | Correctos: ${state.unit3.correct}`;
+      });
+
+      document.getElementById('u3InverseBtn').addEventListener('click', () => {
+        const ans = Number(document.getElementById('u3InverseAnswer').value);
+        if (ans === state.unit3.inverse.base) {
+          beep(760, 0.12, 'triangle');
+          confetti(window.innerWidth * 0.62, window.innerHeight * 0.46);
+          flashMessage('u3Flash', 'Correto! Encontraste o numero base.');
+          nextInverse();
+        } else {
+          beep(220, 0.15, 'square');
+          flashMessage('u3Flash', 'Ainda nao. Experimenta outro numero.', false);
+        }
+      });
+
+      u3Scenario.addEventListener('change', updateU3Statement);
+      u3Slider.addEventListener('input', updateU3Statement);
+
+      setupTabs();
+      setupPointerDrag();
+      applyUnit1Level('apoio');
+      applyUnit2Level('apoio');
+      applyUnit3Level('apoio');
+    })();
+  </script>
+</body>
+</html>
