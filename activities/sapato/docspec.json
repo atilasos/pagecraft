@@ -1,0 +1,269 @@
+{
+  "topic": "Palavra 'sapato' — Método das 28 Palavras (ordem 5)",
+  "ageRange": "6 anos (1.º ano, 1.º CEB)",
+  "duration": 45,
+  "objectives": [
+    "Reconhecer globalmente a palavra 'sapato' associando-a à imagem",
+    "Segmentar 'sapato' nas três sílabas sa-pa-to e bater as palmas correspondentes",
+    "Recombinar as sílabas sa, pa, to para formar novas palavras (ex: pato)",
+    "Ler e completar a frase 'O sapato é azul.' usando a palavra trabalhada"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Reconhecer as letras do alfabeto e associá-las a sons; identificar sílabas em palavras de estrutura CV",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Ler palavras de uso frequente; segmentar e manipular sílabas em palavras simples",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Produzir enunciados simples com vocabulário relativo ao tema vestuário; responder a questões sobre o que ouviu/viu",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Escrever palavras de estrutura silábica CV com correspondência fonema-grafema já trabalhada",
+        "source": "portugues-1-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "PIT (registo de tarefa concluída)",
+      "mapa de tarefas (o aluno assinala bloco concluído)"
+    ],
+    "socialOrganization": "individual (exploração 30min) → pares (recombinação 7min) → turma (comunicação na extensão 8min)"
+  },
+  "materials": [
+    "Tablet ou computador com browser (1 por aluno ou par)",
+    "Cartão da palavra 'sapato' (imagem + palavra impressa)",
+    "Blocos de sílabas físicos (sa / pa / to) para manipulação offline",
+    "Quadro interactivo para fase colectiva"
+  ],
+  "units": [
+    {
+      "summary": "Abertura contextual: imagem e micro-história com a palavra 'sapato'",
+      "textDescription": "O aluno é apresentado à palavra através de uma cena concreta: um sapato azul no chão da sala de aula. Uma voz/texto curto conta: 'O João perdeu um sapato. Onde está o sapato do João?' A palavra aparece escrita por baixo da imagem, lida em voz alta pelo sistema.",
+      "interaction": {
+        "state": [
+          { "name": "cena", "type": "toggle", "options": ["imagem", "palavra_destacada"], "default": "imagem" },
+          { "name": "audio_ativo", "type": "toggle", "options": ["parado", "a_tocar"], "default": "parado" }
+        ],
+        "render": "Imagem a cores de um sapato azul no chão; palavra 'sapato' escrita em tipografia grande por baixo (cor: azul escuro); botão de áudio para ouvir a palavra; ao clicar na palavra, esta fica destacada com fundo amarelo suave",
+        "transition": "Clique no botão de áudio → reproduz pronúncia de 'sapato'; clique na palavra → toggle destaque; tap na imagem → imagem cresce ligeiramente (zoom suave) e palavra reforça destaque",
+        "constraint": "A palavra escrita e a imagem representam o mesmo objeto — o aluno deve descobrir esta correspondência antes de avançar",
+        "assessment": "O aluno clica na palavra quando solicitado ('toca na palavra sapato') sem confundir com distractores visuais"
+      },
+      "differentiation": {
+        "support": "Apenas imagem + palavra; botão de áudio sempre visível; sem distractores; palavra lida automaticamente ao entrar na unidade",
+        "standard": "Imagem + palavra; botão de áudio disponível; aluno clica para ouvir quando quiser",
+        "challenge": "Sem botão de áudio automático; aluno tenta ler antes de ouvir; pergunta oral: 'O que calças quando sais de casa?'"
+      },
+      "duration": 4
+    },
+    {
+      "summary": "Reconhecimento global: associar a palavra 'sapato' entre opções",
+      "textDescription": "O aluno deve identificar a palavra 'sapato' entre três opções escritas (ex: sapato, boneco, mesa) ao mesmo tempo que vê três imagens correspondentes. Foco na forma global da palavra — extensão, letras iniciais, padrão visual.",
+      "interaction": {
+        "state": [
+          { "name": "opcoes_palavras", "type": "quiz", "options": ["sapato", "boneco", "mesa"], "default": null },
+          { "name": "selecao", "type": "drag", "default": null },
+          { "name": "feedback", "type": "derived", "derivedFrom": "selecao === 'sapato' ? 'correto' : 'tenta_de_novo'" }
+        ],
+        "render": "Três cartões dispostos horizontalmente, cada um com imagem em cima e palavra em baixo; imagem de sapato em destaque no topo como referência; aluno arrasta ou clica no cartão correto; feedback ✓ verde suave ou ✗ âmbar sem eliminar opção",
+        "transition": "Clique/drag num cartão → cartão fica selecionado (borda azul); confirmação → feedback imediato; erro → cartão vibra ligeiramente, pode tentar novamente",
+        "constraint": "A palavra 'sapato' tem uma forma visual única (mais comprida, começa por 's') — reconhecê-la globalmente é o passo antes da análise silábica",
+        "assessment": "O aluno seleciona 'sapato' corretamente em 3 rondas com distractores diferentes (sem apoio de imagem na 3.ª ronda — desafio)"
+      },
+      "differentiation": {
+        "support": "Imagem de referência sempre visível; palavra 'sapato' sublinhada a tracejado azul como pista; apenas 2 opções na 1.ª ronda",
+        "standard": "3 opções com imagens; 2 rondas com imagem de referência visível",
+        "challenge": "3.ª ronda sem imagem de referência; palavras apresentadas sem imagem associada; tempo limite visual (barra de progresso suave)"
+      },
+      "duration": 5
+    },
+    {
+      "summary": "Segmentação silábica: dividir 'sapato' em sa-pa-to",
+      "textDescription": "O aluno divide a palavra 'sapato' em três sílabas arrastando blocos coloridos. Cada sílaba tem cor própria: sa=laranja, pa=verde, to=azul. O aluno bate palmas (ou clica nos blocos) contando as sílabas.",
+      "interaction": {
+        "state": [
+          { "name": "palavra_completa", "type": "toggle", "options": ["unida", "separada"], "default": "unida" },
+          { "name": "silabas_arrastadas", "type": "sorting", "options": ["sa", "pa", "to"], "default": [] },
+          { "name": "contagem", "type": "derived", "derivedFrom": "silabas_arrastadas.length" },
+          { "name": "palmas", "type": "quiz", "options": ["1", "2", "3", "4"], "default": null }
+        ],
+        "render": "Palavra 'sapato' escrita grande no topo; ao clicar 'separar' a palavra parte-se animadamente em 3 blocos coloridos (sa=laranja, pa=verde, to=azul); abaixo, 3 caixas vazias com travessões para arrastar cada bloco; contador de sílabas (1, 2, 3) aparece à medida que se arrastam; botão 'bater palmas' para contar oralmente",
+        "transition": "Clique em 'separar' → animação de quebra da palavra em 3 blocos; arrastar bloco para caixa → bloco encaixa com som suave; todos colocados → feedback positivo + contagem total animada",
+        "constraint": "A palavra 'sapato' tem exactamente 3 sílabas — nem mais, nem menos. As cores ajudam a distingui-las mas a fronteira silábica é o que importa.",
+        "assessment": "O aluno arrasta os 3 blocos para as posições corretas e indica oralmente (ou clica no número) que 'sapato' tem 3 sílabas"
+      },
+      "maker": {
+        "type": "unplugged",
+        "challenge": "Usa os blocos físicos de cartão (sa / pa / to) e cola-os em sequência numa tira de papel. Depois bate palmas 3 vezes enquanto diz a palavra em voz alta.",
+        "materials": ["blocos físicos de sílabas (sa, pa, to) em cartão colorido", "tira de papel A4 dobrada", "cola stick"],
+        "groupSize": "2",
+        "connection": "Liga a manipulação digital (arrastar blocos no ecrã) à manipulação física (blocos de cartão em mãos)",
+        "communication": "Par partilha com outro par: 'O nosso sapato tem 3 sílabas — sa, pa, to!'",
+        "alternatives": ["Sem blocos físicos: escrever as sílabas em post-its e colá-los no caderno em sequência"]
+      },
+      "differentiation": {
+        "support": "Blocos pré-colocados nas caixas; aluno apenas confirma a ordem (drag de reordenação); imagem de sapato sempre visível; contagem por palmas com apoio visual (3 mãos desenhadas)",
+        "standard": "Blocos para arrastar do banco de sílabas para as caixas; imagem disponível como apoio; conta sílabas clicando no número correto",
+        "challenge": "Palavra apresentada sem separação visual; aluno digita onde ficam as fronteiras silábicas; depois tenta com palavra nova: 'pato' — quantas sílabas?"
+      },
+      "duration": 7
+    },
+    {
+      "summary": "Recombinação: formar novas palavras com as sílabas sa, pa, to",
+      "textDescription": "Com as mesmas sílabas sa, pa, to (e opcionalmente outras sílabas conhecidas), o aluno tenta formar palavras novas. A combinação pa+to forma 'pato' (palavra real, com imagem de pato). O aluno aprende a distinguir combinações que formam palavras reais das que não formam.",
+      "interaction": {
+        "state": [
+          { "name": "silabas_disponiveis", "type": "drag", "options": ["sa", "pa", "to", "me", "ni"], "default": [] },
+          { "name": "combinacao_atual", "type": "derived", "derivedFrom": "silabas_disponiveis.join('')" },
+          { "name": "palavra_valida", "type": "derived", "derivedFrom": "['pato', 'meni', 'nipa', 'mesa'].includes(combinacao_atual) ? true : false" },
+          { "name": "imagem_revelada", "type": "toggle", "options": ["oculta", "visivel"], "default": "oculta" }
+        ],
+        "render": "Banco de sílabas coloridas (sa=laranja, pa=verde, to=azul, mais 2 sílabas de palavras anteriores); zona de construção central com caixas; ao formar combinação válida → imagem aparece à direita com animação; ao formar combinação inválida → ponto de interrogação animado; botão 'verificar'",
+        "transition": "Arrastar sílabas para a zona de construção → combinação mostrada; clicar 'verificar' → se palavra real: imagem revela-se e som toca; se não é palavra: '?' anima com curiosidade (sem negatividade); reset para tentar nova combinação",
+        "constraint": "Nem todas as combinações de sílabas formam palavras reais — a língua tem regras que só a experiência descobre. 'pato' existe, 'tosa' também, 'pasato' não.",
+        "assessment": "O aluno forma 'pato' (pa+to) corretamente e diz em voz alta 'descobri a palavra pato!'; tenta pelo menos 3 combinações diferentes"
+      },
+      "maker": {
+        "type": "unplugged",
+        "challenge": "Em pares, usar os blocos físicos de sílabas (de várias palavras já aprendidas) para criar o máximo de palavras reais possível em 3 minutos. Registar numa folha.",
+        "materials": ["conjunto de blocos físicos de sílabas (acumulado das palavras 1-5)", "folha de registo A5", "lápis"],
+        "groupSize": "2",
+        "connection": "A exploração digital revela combinações possíveis; os blocos físicos permitem experimentar mais rapidamente em modo lúdico",
+        "communication": "Cada par apresenta 1 palavra nova descoberta à turma; escreve no quadro",
+        "alternatives": ["Sem blocos: escrever sílabas em papéis separados e rearranjar sobre a mesa"]
+      },
+      "differentiation": {
+        "support": "Apenas 2 sílabas disponíveis (pa + to); imagem de pato visível como pista; word bank com 2 palavras alvo já indicadas",
+        "standard": "5 sílabas disponíveis (sa, pa, to + 2 de palavras anteriores); imagem revelada ao confirmar; 2 palavras alvo a descobrir",
+        "challenge": "7 sílabas disponíveis incluindo sílabas novas; sem pistas; escrever as palavras descobertas no caderno; criar uma frase com 'pato'"
+      },
+      "duration": 7
+    },
+    {
+      "summary": "Leitura e escrita guiada: completar a palavra 'sapato'",
+      "textDescription": "O aluno lê a palavra parcialmente escrita e completa-a selecionando ou escrevendo a sílaba em falta. Exercício de cópia guiada com escolha de sílaba. Foco na correspondência entre som ouvido e sílaba escrita.",
+      "interaction": {
+        "state": [
+          { "name": "palavra_incompleta", "type": "quiz", "options": ["sa___to", "___pa___", "sapa___"], "default": "sa___to" },
+          { "name": "opcoes_silaba", "type": "quiz", "options": ["pa", "me", "bo"], "default": null },
+          { "name": "resposta", "type": "derived", "derivedFrom": "opcoes_silaba === 'pa' ? 'correto' : 'tenta_de_novo'" },
+          { "name": "escrita_livre", "type": "canvas", "default": "" }
+        ],
+        "render": "Palavra com sílaba em falta mostrada em grande (ex: 'sa _ _ to'); abaixo, 3 botões com sílabas possíveis (pa / me / bo); ao selecionar a correta → sílaba preenche o espaço com animação; depois, linha de escrita guiada para copiar a palavra completa com apoio de pontos a tracejado",
+        "transition": "Clique numa sílaba → tentativa; correto → preenche espaço com animação verde suave + som positivo; errado → botão fica âmbar, pode tentar novamente; após acertar → aparecer linha de cópia guiada",
+        "constraint": "A sílaba que falta tem som específico que pode ser ouvido se a palavra for pronunciada devagar — segmentar oralmente ajuda a encontrar a resposta",
+        "assessment": "O aluno completa corretamente as 3 variações da palavra incompleta e copia 'sapato' na linha de escrita guiada com as 3 sílabas visivelmente separadas por cor"
+      },
+      "differentiation": {
+        "support": "Apenas 1 versão da palavra incompleta (a mais fácil: 'sapa___'); botão de áudio para ouvir a palavra devagar; 2 opções de sílaba (eliminação de distractores); linha de cópia com letras a tracejado para seguir",
+        "standard": "2 versões da palavra incompleta; 3 opções de sílaba; linha de cópia simples com espaçamento guiado",
+        "challenge": "3 versões da palavra incompleta; sem botão de áudio; escrever a palavra do zero na linha sem tracejado; depois escrever 'pato' sem apoio"
+      },
+      "duration": 8
+    },
+    {
+      "summary": "Frase simples: ler e construir 'O sapato é azul.'",
+      "textDescription": "O aluno lê a frase completa 'O sapato é azul.' e depois constrói-a arrastando palavras para a ordem correta. Foco na palavra 'sapato' dentro do contexto de frase. Introdução da noção de frase (maiúscula, ponto final).",
+      "interaction": {
+        "state": [
+          { "name": "palavras_frase", "type": "sorting", "options": ["O", "sapato", "é", "azul."], "default": [] },
+          { "name": "ordem_correta", "type": "derived", "derivedFrom": "['O', 'sapato', 'é', 'azul.'].join(' ')" },
+          { "name": "frase_construida", "type": "derived", "derivedFrom": "palavras_frase.join(' ')" },
+          { "name": "imagem_sapato_azul", "type": "toggle", "options": ["oculta", "visivel"], "default": "oculta" }
+        ],
+        "render": "Frase completa mostrada no topo com áudio; abaixo, as 4 palavras misturadas em cartões arrastáveis; zona de construção da frase com 4 espaços; imagem de sapato azul aparece à direita quando frase está correta; maiúscula e ponto final destacados com cor discreta",
+        "transition": "Arrastar cartão de palavra para posição → encaixa na zona; ao completar a ordem certa → frase acende animada + imagem revela-se + som positivo; erro de ordem → shake suave, sem revelar resposta",
+        "constraint": "Em português, a frase começa por maiúscula e termina com ponto final. A ordem das palavras importa para o sentido.",
+        "assessment": "O aluno coloca as 4 palavras na ordem correta e lê a frase em voz alta apontando para cada palavra; identifica onde está a maiúscula e o ponto final"
+      },
+      "differentiation": {
+        "support": "Frase já parcialmente construída ('O ___ é azul.'); apenas a palavra 'sapato' para arrastar; imagem de sapato azul sempre visível como pista",
+        "standard": "4 palavras para ordenar; imagem visível como contexto; lê a frase após construir",
+        "challenge": "Frase sem imagem; após construir, escrever uma frase nova com 'sapato' (ex: 'O sapato é meu.') na linha de escrita; ou substituir 'azul' por outro adjetivo de cor"
+      },
+      "duration": 7
+    },
+    {
+      "summary": "Mini-avaliação formativa: reconhecer, segmentar, reconstruir e usar 'sapato'",
+      "textDescription": "Sequência de 4 micro-tarefas observáveis que confirmam a aprendizagem da palavra 'sapato': (1) reconhecer entre opções, (2) contar sílabas, (3) reconstruir a partir de sílabas, (4) usar numa frase. Resultado visível no mapa de tarefas do aluno.",
+      "interaction": {
+        "state": [
+          { "name": "tarefa_atual", "type": "derived", "derivedFrom": "passo atual (1-4)" },
+          { "name": "resultado_1", "type": "quiz", "options": ["sapato", "boneca", "janela"], "default": null },
+          { "name": "resultado_2", "type": "quiz", "options": ["1", "2", "3", "4"], "default": null },
+          { "name": "resultado_3", "type": "sorting", "options": ["to", "sa", "pa"], "default": [] },
+          { "name": "resultado_4", "type": "canvas", "default": "" }
+        ],
+        "render": "4 tarefas em sequência com barra de progresso (1→2→3→4); cada tarefa ocupa o ecrã completo; ao completar cada uma, bolinha verde acende na barra; no final, ecrã de sumário com as 4 bolinhas e símbolo de estrela",
+        "transition": "Completar tarefa → avança automaticamente para a seguinte após 1s de feedback; erros não bloqueiam — registados internamente para o professor",
+        "constraint": "A avaliação formativa não pune o erro — serve para ver onde o aluno está e orientar o próximo passo. O aluno deve sentir que está a mostrar o que sabe.",
+        "assessment": "Critérios observáveis por tarefa: (1) seleciona 'sapato' sem hesitar; (2) escolhe '3' sílabas; (3) ordena sa-pa-to corretamente; (4) escreve ou dita frase com 'sapato' (qualquer frase válida aceite)"
+      },
+      "differentiation": {
+        "support": "Tarefa 4 em modo oral (botão de microfone ou registo pelo professor); imagens de apoio em todas as tarefas; tempo ilimitado",
+        "standard": "As 4 tarefas como descrito; tempo sugerido (não obrigatório); escrita livre na tarefa 4",
+        "challenge": "Tarefa extra: encontrar outra palavra que comece por 'sa' ou termine em 'to'; tarefa 4: escrever 2 frases diferentes com 'sapato'"
+      },
+      "duration": 4
+    },
+    {
+      "summary": "Extensão: vestuário, oralidade e criatividade com 'sapato'",
+      "textDescription": "Momento de partilha colectiva e extensão criativa. O aluno explora vocabulário de vestuário ligado a 'sapato' (bota, sandália, chinelo), desenha o seu sapato favorito e partilha com a turma. Ligação ao tema vestuário e ao contexto de vida do aluno.",
+      "interaction": {
+        "state": [
+          { "name": "escolha_atividade", "type": "dropdown", "options": ["desenho livre", "galeria de sapatos", "dicionário de vestuário"], "default": "galeria de sapatos" },
+          { "name": "outros_calcados", "type": "matching", "options": ["bota", "sandália", "chinelo", "ténis"], "default": [] },
+          { "name": "desenho", "type": "canvas", "default": "" }
+        ],
+        "render": "Galeria de imagens de diferentes tipos de calçado; aluno clica para associar nome à imagem (matching); área de desenho livre para desenhar o seu sapato favorito; botão 'mostrar à turma' envia desenho para galeria colectiva no quadro interactivo",
+        "transition": "Matching correto → imagem e nome ficam juntos com animação; área de desenho: pincel simples, 5 cores; ao clicar 'mostrar' → desenho aparece em miniatura na galeria da turma",
+        "constraint": "O vocabulário de vestuário está ligado a contextos da vida real — calçado diferente para situações diferentes (escola, praia, chuva)",
+        "assessment": "O aluno nomeia corretamente pelo menos 2 outros tipos de calçado além de 'sapato' e partilha o seu desenho com uma frase oral ('O meu sapato favorito é...')"
+      },
+      "maker": {
+        "type": "unplugged",
+        "challenge": "Desenha o teu sapato favorito numa folha e escreve (ou cola a sílaba) a palavra 'sapato' ou outro calçado que escolheste. Apresenta ao colega do lado.",
+        "materials": ["folha A5 branca", "lápis de cor", "blocos de sílabas (opcional)"],
+        "groupSize": "2",
+        "connection": "O desenho digital na página é transportado para papel físico — o aluno decide qual o meio que prefere para comunicar",
+        "communication": "Circuito de comunicação: desenhos afixados no placard de turma com etiqueta da palavra; partilha oral de 1 frase por aluno",
+        "alternatives": ["Sem materiais: apresentação oral à turma com gestos (mímica do tipo de calçado)"]
+      },
+      "differentiation": {
+        "support": "Apenas matching com 2 pares (bota/sandália); frase oral com apoio visual ('O meu ___ é ___'); desenho livre sem escrita",
+        "standard": "Matching com 4 pares; frase oral completa; desenho com etiqueta escrita",
+        "challenge": "Matching com 4 pares + escrever nomes sem apoio; criar mini-dicionário de vestuário (3 palavras + imagem desenhada); desafio: quantas sílabas tem 'sandália'?"
+      },
+      "duration": 3
+    }
+  ],
+  "sessionFlow": "0-4min: Unit 1 (abertura contextual — imagem do sapato azul, micro-história) → 4-9min: Unit 2 (reconhecimento global — selecionar palavra entre opções) → 9-16min: Unit 3 (segmentação silábica — arrastar blocos sa/pa/to + maker unplugged em pares) → 16-23min: Unit 4 (recombinação — descobrir 'pato' e outras palavras, em pares) → 23-31min: Unit 5 (leitura e escrita guiada — completar palavra + cópia) → 31-38min: Unit 6 (frase simples — ordenar e ler 'O sapato é azul.') → 38-42min: Unit 7 (mini-avaliação formativa — 4 micro-tarefas observáveis) → 42-45min: Unit 8 (extensão — galeria de calçado + desenho + partilha colectiva)"
+}

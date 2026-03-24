@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PageCraft | Palavra "sapato"</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #fff8f0;
+      --surface: #ffffff;
+      --primary: #e05fa0;
+      --accent: #f59e0b;
+      --text: #1e1b18;
+      --sa: #e05fa0;
+      --pa: #7c3aed;
+      --to: #059669;
+      --green: #22c55e;
+      --green-bg: #f0fdf4;
+      --amber-bg: #fffbeb;
+      --radius: 16px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --focus: 3px solid #7c3aed;
+      --tap: 48px;
+      --motion: 200ms ease;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at 20% -10%, #ffe8f4 0%, var(--bg) 40%), radial-gradient(circle at 90% 0%, #fff0d6 0%, transparent 30%);
+      color: var(--text);
+      font-family: 'Nunito', 'Poppins', 'Comic Sans MS', sans-serif;
+      font-size: 20px;
+      line-height: 1.5;
+    }
+
+    body {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    h1, h2, h3 { margin: 0 0 .6rem; line-height: 1.2; }
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.6rem; color: var(--primary); }
+    h3 { font-size: 1.2rem; }
+    p { margin: .4rem 0; }
+
+    button, .pill, .word-chip, .drop-slot, .card-option, .mini-btn {
+      min-height: var(--tap);
+      min-width: var(--tap);
+    }
+
+    button, select, input, textarea {
+      font: inherit;
+      border-radius: 999px;
+      border: 2px solid var(--primary);
+      padding: .7rem 1.2rem;
+      background: #fff;
+      color: var(--text);
+    }
+
+    button {
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: var(--shadow);
+      transition: transform var(--motion), box-shadow var(--motion), background var(--motion);
+      background: linear-gradient(180deg, #fff, #ffeaf4);
+      touch-action: manipulation;
+    }
+
+    button:hover { transform: scale(1.05); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); }
+    button:active { transform: scale(0.97); }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, [tabindex]:focus-visible {
+      outline: var(--focus);
+      outline-offset: 2px;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #e05fa0, #7c3aed 60%, #f59e0b);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 1.2rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1rem;
+    }
+
+    .meta {
+      display: flex;
+      gap: .8rem;
+      flex-wrap: wrap;
+      margin: .4rem 0 .8rem;
+    }
+
+    .badge {
+      background: #f59e0b;
+      color: #fff;
+      font-weight: 700;
+      border-radius: 999px;
+      padding: .25rem .75rem;
+      font-size: .95rem;
+    }
+
+    .objectives {
+      background: rgba(255, 255, 255, 0.18);
+      padding: .9rem;
+      border-radius: 12px;
+      margin: .5rem 0 0;
+    }
+
+    .objectives ul { margin: .4rem 0 .2rem 1.2rem; padding: 0; }
+
+    .unit {
+      background: var(--surface);
+      border: 2px solid var(--primary);
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin: 1rem 0;
+      box-shadow: var(--shadow);
+    }
+
+    .lead {
+      font-size: 1.02rem;
+      background: #fff2fa;
+      border-left: 6px solid var(--primary);
+      border-radius: 12px;
+      padding: .7rem .9rem;
+      margin-bottom: .8rem;
+    }
+
+    .diff-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin: .8rem 0;
+    }
+
+    .diff-tab {
+      border-radius: 999px;
+      border: 2px solid #ddd;
+      background: #fff;
+      padding: .5rem .9rem;
+      cursor: pointer;
+      user-select: none;
+      font-weight: 700;
+      transition: all var(--motion);
+    }
+
+    .diff-tab.active { color: #fff; border-color: transparent; }
+    .diff-tab[data-level="support"].active { background: #22c55e; }
+    .diff-tab[data-level="standard"].active { background: #f59e0b; }
+    .diff-tab[data-level="challenge"].active { background: #ef4444; }
+
+    .diff-content { display: none; }
+    .diff-content.active { display: block; }
+
+    .word-display {
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: .05em;
+      color: var(--primary);
+      text-transform: uppercase;
+      text-align: center;
+      margin: .5rem 0;
+      border-radius: 12px;
+      padding: .2rem .4rem;
+      transition: background var(--motion), transform var(--motion);
+    }
+
+    .word-highlight { background: #fff59d; transform: scale(1.03); }
+
+    .scene {
+      border-radius: 16px;
+      background: linear-gradient(180deg, #dbeafe, #eff6ff 65%, #e5e7eb);
+      height: 200px;
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--motion);
+    }
+
+    .scene.zoom { transform: scale(1.03); }
+
+    .shoe {
+      position: absolute;
+      left: 50%;
+      top: 55%;
+      transform: translate(-50%, -50%);
+      font-size: 4rem;
+      filter: drop-shadow(0 8px 8px rgba(0, 0, 0, .2));
+    }
+
+    .story {
+      text-align: center;
+      margin: .6rem 0;
+      font-weight: 700;
+    }
+
+    .feedback {
+      border-radius: 12px;
+      padding: .5rem .8rem;
+      margin-top: .5rem;
+      display: none;
+      font-weight: 700;
+    }
+
+    .feedback.show { display: block; }
+    .feedback.ok { background: var(--green-bg); color: #166534; border: 2px solid var(--green); }
+    .feedback.try { background: var(--amber-bg); color: #92400e; border: 2px solid var(--accent); }
+
+    .row { display: flex; gap: .7rem; flex-wrap: wrap; align-items: center; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; }
+
+    .card-option {
+      border: 2px solid #d4d4d8;
+      border-radius: 14px;
+      background: #fff;
+      padding: .8rem;
+      text-align: center;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform var(--motion), border var(--motion);
+      user-select: none;
+      touch-action: none;
+    }
+
+    .card-option.selected { border-color: #2563eb; transform: translateY(-2px); }
+    .card-option.shake { animation: shake .3s; }
+    .card-option img, .emoji-img { font-size: 2rem; display: block; margin-bottom: .3rem; }
+    .dashed-hint { text-decoration: underline dashed #2563eb; text-underline-offset: 4px; }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-3px); }
+      100% { transform: translateX(0); }
+    }
+
+    .drop-target, .slot-zone {
+      border: 3px dashed #a3a3a3;
+      border-radius: 14px;
+      min-height: 64px;
+      padding: .3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fafafa;
+    }
+
+    .syllable-bank, .sentence-bank, .recomb-bank { display: flex; gap: .5rem; flex-wrap: wrap; margin: .6rem 0; }
+
+    .syllable {
+      padding: .5rem 1.2rem;
+      color: #fff;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 36px;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+      box-shadow: var(--shadow);
+      transition: transform var(--motion), box-shadow var(--motion);
+    }
+
+    .syllable[data-syl="sa"] { background: var(--sa); }
+    .syllable[data-syl="pa"] { background: var(--pa); }
+    .syllable[data-syl="to"] { background: var(--to); }
+    .syllable.dragging { transform: scale(1.1); box-shadow: 0 10px 20px rgba(0, 0, 0, .2); }
+
+    .slot-row { display: grid; gap: .6rem; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .slot {
+      border: 2px dashed #9ca3af;
+      border-radius: 12px;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f9fafb;
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .count-bubbles { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .5rem; }
+    .count-btn { border-radius: 999px; }
+
+    .question-mark {
+      font-size: 2.2rem;
+      animation: bob 0.7s infinite alternate;
+      display: inline-block;
+    }
+
+    @keyframes bob { from { transform: translateY(0); } to { transform: translateY(-6px); } }
+
+    .guided-line {
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: .7rem;
+      margin-top: .6rem;
+      background: #f8fafc;
+    }
+
+    .trace {
+      letter-spacing: .22em;
+      color: #64748b;
+      border-bottom: 3px dotted #94a3b8;
+      padding-bottom: .2rem;
+      margin-bottom: .4rem;
+      display: inline-block;
+    }
+
+    .canvas-wrap {
+      border: 2px solid #cbd5e1;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+      margin-top: .5rem;
+    }
+
+    canvas.draw {
+      display: block;
+      width: 100%;
+      height: 150px;
+      touch-action: none;
+      background: repeating-linear-gradient(0deg, #fff, #fff 28px, #e2e8f0 29px, #fff 30px);
+    }
+
+    .sentence-slot {
+      border: 2px dashed #a1a1aa;
+      min-height: 66px;
+      border-radius: 12px;
+      padding: .2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fafafa;
+    }
+
+    .word-chip {
+      border-radius: 12px;
+      border: 2px solid #d4d4d8;
+      padding: .45rem .9rem;
+      font-weight: 700;
+      background: #fff;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .sentence-ok { color: #166534; font-weight: 800; animation: pulse .3s; }
+    @keyframes pulse { from { transform: scale(.96); } to { transform: scale(1); } }
+
+    .progress {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .4rem;
+      margin-bottom: .8rem;
+    }
+
+    .dot {
+      height: 14px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      transition: background var(--motion);
+    }
+
+    .dot.done { background: #22c55e; }
+
+    .task-screen {
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      min-height: 200px;
+      padding: .8rem;
+      background: #fff;
+    }
+
+    .hidden { display: none !important; }
+
+    .maker {
+      background: #dcfce7;
+      border: 2px solid #22c55e;
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+
+    .maker-card {
+      background: #fff;
+      border-left: 6px solid #22c55e;
+      border-radius: 12px;
+      padding: .8rem;
+      margin-top: .6rem;
+      box-shadow: var(--shadow);
+    }
+
+    .mini-assessment {
+      background: #ffedd5;
+      border: 2px solid #fb923c;
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+
+    .assessment-item {
+      background: #fff;
+      border-radius: 12px;
+      padding: .7rem;
+      margin: .6rem 0;
+      border: 1px solid #fed7aa;
+    }
+
+    .scale { display: flex; flex-wrap: wrap; gap: .7rem; font-size: .95rem; margin-top: .4rem; }
+
+    .curricular {
+      background: #ede9fe;
+      border: 2px solid #7c3aed;
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    .footer {
+      text-align: center;
+      margin: 1rem 0 .2rem;
+      color: #6b7280;
+      font-size: .9rem;
+    }
+
+    .gallery {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      margin-top: .5rem;
+    }
+
+    .thumb {
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      width: 84px;
+      height: 84px;
+      background: #fff;
+      object-fit: cover;
+    }
+
+    .color-pick { width: 32px; height: 32px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 2px #cbd5e1; cursor: pointer; }
+
+    .confetti-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .progress-bar {
+      height: 12px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+      margin-top: .6rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
+      width: 100%;
+      transition: width 1s linear;
+    }
+
+    @media (max-width: 900px) {
+      html, body { font-size: 18px; }
+      .grid-3 { grid-template-columns: 1fr; }
+      .slot-row { grid-template-columns: 1fr; }
+      .scene { height: 180px; }
+      .word-display { font-size: 40px; }
+    }
+
+    @media (max-width: 768px) {
+      html, body { font-size: 16px; }
+      body { padding: .6rem; }
+      .header, .unit, .maker, .mini-assessment, .curricular { padding: .8rem; }
+      h1 { font-size: 1.6rem; }
+      h2 { font-size: 1.3rem; }
+      .syllable { font-size: 32px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas class="confetti-layer" id="confetti" aria-hidden="true"></canvas>
+
+  <header class="header">
+    <h1>Palavra "sapato" | Método das 28 Palavras (ordem 5)</h1>
+    <div class="meta">
+      <span class="badge">Ano: 6 anos · 1.º ano</span>
+      <span class="badge">Duração: 45 minutos</span>
+      <span class="badge">Tema: vestuário 👟</span>
+    </div>
+    <div class="objectives">
+      <strong>Objetivos</strong>
+      <ul>
+        <li>Reconhecer globalmente a palavra "sapato" e associá-la à imagem.</li>
+        <li>Segmentar "sapato" em sa-pa-to e bater 3 palmas.</li>
+        <li>Recombinar sílabas para formar palavras novas, como "pato".</li>
+        <li>Ler e completar a frase "O sapato é azul.".</li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <section class="unit" id="u1">
+      <h2>Unit 1 · Abertura contextual (4 min)</h2>
+      <p class="lead">O João perdeu um sapato. Onde está o sapato do João?</p>
+      <div class="diff-tabs" role="tablist" aria-label="Níveis Unit 1">
+        <button class="diff-tab active" data-level="support" aria-label="Nível apoio">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard" aria-label="Nível intermédio">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge" aria-label="Nível desafio">🔴 Desafio</button>
+      </div>
+      <div class="diff-content active" data-level="support">
+        <p><strong>Com ajuda:</strong> imagem e palavra com áudio automático.</p>
+      </div>
+      <div class="diff-content" data-level="standard"><p><strong>Objetivo:</strong> toca quando quiseres para ouvir.</p></div>
+      <div class="diff-content" data-level="challenge"><p><strong>Desafio:</strong> lê primeiro. Pergunta: O que calças quando sais de casa?</p></div>
+
+      <div class="scene" id="u1-scene" aria-label="Cena com sapato azul" tabindex="0">
+        <span class="shoe" aria-hidden="true">👟</span>
+      </div>
+      <p class="story">O João perdeu um sapato. Onde está o sapato do João?</p>
+      <div class="word-display" id="u1-word" tabindex="0" aria-label="Palavra sapato">SAPATO</div>
+      <div class="row">
+        <button id="u1-audio" aria-label="Ouvir palavra sapato">🔊 Ouvir "sapato"</button>
+        <button id="u1-check" aria-label="Verificar toque na palavra">Toca na palavra sapato</button>
+      </div>
+      <div class="feedback" id="u1-feedback" aria-live="polite"></div>
+    </section>
+
+    <section class="unit" id="u2">
+      <h2>Unit 2 · Reconhecimento global (5 min)</h2>
+      <p class="lead">Escolhe a palavra "sapato" entre várias opções. Podes clicar ou arrastar para a zona alvo.</p>
+      <div class="diff-tabs" role="tablist" aria-label="Níveis Unit 2">
+        <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-content active" data-level="support"><p>Ronda 1 com 2 opções e pista tracejada em "sapato".</p></div>
+      <div class="diff-content" data-level="standard"><p>3 opções e 2 rondas com imagem de referência.</p></div>
+      <div class="diff-content" data-level="challenge"><p>Na 3.ª ronda não há imagem e há barra de tempo.</p></div>
+
+      <div class="row" id="u2-ref-wrap"><span class="emoji-img">👟</span><strong>Referência: sapato</strong></div>
+      <div class="progress-bar hidden" id="u2-timer"><div class="progress-fill" id="u2-fill"></div></div>
+      <div class="grid-3" id="u2-options"></div>
+      <div class="row" style="margin-top:.6rem;">
+        <div class="drop-target" id="u2-target" aria-label="Largar aqui" style="flex:1;">Larga aqui a tua escolha</div>
+        <button id="u2-confirm" aria-label="Confirmar escolha">Confirmar</button>
+        <span id="u2-round" class="badge">Ronda 1/3</span>
+      </div>
+      <div class="feedback" id="u2-feedback" aria-live="polite"></div>
+    </section>
+
+    <section class="unit" id="u3">
+      <h2>Unit 3 · Segmentação silábica (7 min)</h2>
+      <p class="lead">Separa "sapato" em blocos: sa · pa · to. Arrasta os blocos e conta as sílabas.</p>
+      <div class="diff-tabs" role="tablist" aria-label="Níveis Unit 3">
+        <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-content active" data-level="support"><p>Blocos pré-colocados. Reordena e confirma.</p></div>
+      <div class="diff-content" data-level="standard"><p>Arrasta do banco de sílabas para as caixas.</p></div>
+      <div class="diff-content" data-level="challenge"><p>Escreve as fronteiras silábicas e depois conta sílabas de "pato".</p></div>
+
+      <div class="word-display" id="u3-word">SAPATO</div>
+      <div class="row">
+        <button id="u3-separate" aria-label="Separar palavra">Separar</button>
+        <button id="u3-clap" aria-label="Bater palmas">👏 Bater palmas</button>
+        <span id="u3-count-label" class="badge">Sílabas colocadas: 0</span>
+      </div>
+
+      <div class="syllable-bank" id="u3-bank"></div>
+      <div class="slot-row" id="u3-slots">
+        <div class="slot" data-index="0" aria-label="Caixa 1">—</div>
+        <div class="slot" data-index="1" aria-label="Caixa 2">—</div>
+        <div class="slot" data-index="2" aria-label="Caixa 3">—</div>
+      </div>
+      <div class="count-bubbles">
+        <button class="count-btn" data-n="1">1</button>
+        <button class="count-btn" data-n="2">2</button>
+        <button class="count-btn" data-n="3">3</button>
+        <button class="count-btn" data-n="4">4</button>
+      </div>
+      <div id="u3-challenge" class="hidden" style="margin-top:.6rem;">
+        <label for="u3-boundary">Onde cortas as sílabas? (ex.: sa|pa|to)</label>
+        <input id="u3-boundary" aria-label="Fronteiras silábicas" placeholder="sa|pa|to" />
+        <label for="u3-pato" style="margin-left:.5rem;">"pato" tem quantas sílabas?</label>
+        <input id="u3-pato" aria-label="Número de sílabas de pato" style="width:120px;" />
+        <button id="u3-check-challenge">Verificar desafio</button>
+      </div>
+      <div class="feedback" id="u3-feedback" aria-live="polite"></div>
+    </section>
+
+    <section class="unit" id="u4">
+      <h2>Unit 4 · Recombinação (7 min)</h2>
+      <p class="lead">Combina sílabas para descobrir palavras reais. Exemplo: pa + to = pato.</p>
+      <div class="diff-tabs" role="tablist" aria-label="Níveis Unit 4">
+        <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-content active" data-level="support"><p>Usa só pa e to. A imagem de pato já está visível como pista.</p></div>
+      <div class="diff-content" data-level="standard"><p>Usa 5 sílabas. Descobre 2 palavras alvo.</p></div>
+      <div class="diff-content" data-level="challenge"><p>Usa 7 sílabas. Escreve palavras descobertas no caderno.</p></div>
+
+      <div class="recomb-bank" id="u4-bank"></div>
+      <div class="slot-row" id="u4-slots">
+        <div class="slot" data-index="0">1</div>
+        <div class="slot" data-index="1">2</div>
+        <div class="slot" data-index="2">3</div>
+      </div>
+      <div class="row" style="margin-top:.6rem;">
+        <span class="badge">Combinação: <span id="u4-current">_</span></span>
+        <button id="u4-verify">Verificar</button>
+        <button id="u4-reset">Limpar</button>
+      </div>
+      <div id="u4-image" style="font-size:3rem; margin-top:.4rem;" aria-live="polite">🦆</div>
+      <div class="feedback" id="u4-feedback" aria-live="polite"></div>
+    </section>
+
+    <section class="unit" id="u5">
+      <h2>Unit 5 · Leitura e escrita guiada (8 min)</h2>
+      <p class="lead">Completa a sílaba em falta e depois copia a palavra.</p>
+      <div class="diff-tabs" role="tablist" aria-label="Níveis Unit 5">
+        <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-content active" data-level="support"><p>1 versão fácil, áudio lento e menos distractores.</p></div>
+      <div class="diff-content" data-level="standard"><p>2 versões com 3 opções.</p></div>
+      <div class="diff-content" data-level="challenge"><p>3 versões, sem áudio e escrita sem tracejado.</p></div>
+
+      <div class="word-display" id="u5-word">SA___TO</div>
+      <div class="row" id="u5-options"></div>
+      <div class="row" style="margin-top:.5rem;">
+        <button id="u5-audio">🔊 Ouvir devagar</button>
+        <span class="badge">Ronda <span id="u5-step">1</span></span>
+      </div>
+      <div id="u5-guide" class="guided-line hidden">
+        <div id="u5-trace" class="trace">s a p a t o</div>
+        <div class="canvas-wrap">
+          <canvas class="draw" id="u5-canvas" width="900" height="180" aria-label="Escrita livre guiada"></canvas>
+        </div>
+        <button id="u5-clear">Limpar escrita</button>
+      </div>
+      <div class="row" id="u5-extra" style="margin-top:.5rem;"></div>
+      <div class="feedback" id="u5-feedback" aria-live="polite"></div>
+    </section>
+
+    <section class="unit" id="u6">
+      <h2>Unit 6 · Frase simples (7 min)</h2>
+      <p class="lead">Constrói a frase: "O sapato é azul.". A ordem das palavras importa.</p>
+      <div class="diff-tabs" role="tablist" aria-label="Níveis Unit 6">
+        <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-content active" data-level="support"><p>Frase quase pronta: arrasta só "sapato".</p></div>
+      <div class="diff-content" data-level="standard"><p>Ordena as 4 palavras com imagem de apoio.</p></div>
+      <div class="diff-content" data-level="challenge"><p>Sem imagem. Depois escreve uma frase nova com "sapato".</p></div>
+
+      <p><strong>Frase modelo:</strong> <span id="u6-model">O sapato é azul.</span></p>
+      <button id="u6-audio">🔊 Ouvir frase</button>
+      <div class="sentence-bank" id="u6-bank"></div>
+      <div class="slot-row" id="u6-slots" style="margin-top:.5rem;">
+        <div class="sentence-slot" data-index="0"></div>
+        <div class="sentence-slot" data-index="1"></div>
+        <div class="sentence-slot" data-index="2"></div>
+        <div class="sentence-slot" data-index="3"></div>
+      </div>
+      <div class="row" style="margin-top:.5rem;">
+        <button id="u6-check">Verificar frase</button>
+        <button id="u6-clear">Limpar</button>
+        <span id="u6-img" style="font-size:2rem;">👟🔵</span>
+      </div>
+      <div id="u6-new" class="hidden" style="margin-top:.6rem;">
+        <label for="u6-new-sentence">Escreve uma frase nova com "sapato":</label>
+        <input id="u6-new-sentence" aria-label="Frase nova" placeholder="O sapato é meu." style="width:min(100%,420px); border-radius:12px;" />
+      </div>
+      <div class="feedback" id="u6-feedback" aria-live="polite"></div>
+    </section>
+
+    <section class="unit" id="u7">
+      <h2>Unit 7 · Mini-avaliação formativa (4 min)</h2>
+      <p class="lead">4 micro-tarefas seguidas: reconhecer, contar sílabas, ordenar sílabas e usar numa frase.</p>
+      <div class="diff-tabs" role="tablist" aria-label="Níveis Unit 7">
+        <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-content active" data-level="support"><p>Tarefa 4 em modo oral assistido pelo professor.</p></div>
+      <div class="diff-content" data-level="standard"><p>As 4 tarefas completas com escrita livre.</p></div>
+      <div class="diff-content" data-level="challenge"><p>Tarefa extra: palavra que comece por sa ou termine em to.</p></div>
+
+      <div class="progress" id="u7-progress">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      </div>
+      <div class="task-screen" id="u7-screen"></div>
+      <div class="feedback" id="u7-feedback" aria-live="polite"></div>
+    </section>
+
+    <section class="unit" id="u8">
+      <h2>Unit 8 · Extensão criativa (3 min)</h2>
+      <p class="lead">Explora tipos de calçado, faz matching e desenha o teu sapato favorito.</p>
+      <div class="diff-tabs" role="tablist" aria-label="Níveis Unit 8">
+        <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-content active" data-level="support"><p>Matching com 2 pares e frase oral com apoio.</p></div>
+      <div class="diff-content" data-level="standard"><p>Matching com 4 pares e desenho com etiqueta.</p></div>
+      <div class="diff-content" data-level="challenge"><p>Matching sem apoio + mini-dicionário de vestuário.</p></div>
+
+      <label for="u8-activity">Escolhe atividade:</label>
+      <select id="u8-activity" aria-label="Escolher atividade">
+        <option>galeria de sapatos</option>
+        <option>desenho livre</option>
+        <option>dicionário de vestuário</option>
+      </select>
+
+      <div class="row" style="align-items:flex-start; margin-top:.6rem;">
+        <div style="flex:1; min-width:260px;">
+          <strong>Matching</strong>
+          <div class="row" id="u8-names" style="margin-top:.4rem;"></div>
+          <div class="row" id="u8-images" style="margin-top:.5rem;"></div>
+          <div class="feedback" id="u8-feedback" aria-live="polite"></div>
+        </div>
+        <div style="flex:1; min-width:260px;">
+          <strong>Desenha o teu sapato favorito</strong>
+          <div class="row" id="u8-colors" style="margin:.4rem 0;"></div>
+          <div class="canvas-wrap">
+            <canvas class="draw" id="u8-canvas" width="900" height="220" aria-label="Desenho livre"></canvas>
+          </div>
+          <div class="row" style="margin-top:.5rem;">
+            <button id="u8-show">Mostrar à turma</button>
+            <button id="u8-clear">Limpar desenho</button>
+          </div>
+          <input id="u8-label" aria-label="Etiqueta escrita" placeholder="Etiqueta: sapato / bota / sandália" style="margin-top:.5rem; width:min(100%,360px); border-radius:12px;" />
+        </div>
+      </div>
+      <div><strong>Galeria da turma</strong><div class="gallery" id="u8-gallery"></div></div>
+      <p id="u8-oral" style="margin-top:.5rem; font-weight:700;">Frase oral: "O meu sapato favorito é..."</p>
+    </section>
+
+    <section class="maker">
+      <h2>🛠️ Desafios Maker</h2>
+      <div class="maker-card">
+        <h3>Unplugged 1</h3>
+        <p>Usa blocos físicos sa/pa/to e cola numa tira de papel. Depois bate 3 palmas a dizer a palavra.</p>
+      </div>
+      <div class="maker-card">
+        <h3>Unplugged 2</h3>
+        <p>Em pares, cria o máximo de palavras reais possível com blocos de sílabas em 3 minutos.</p>
+      </div>
+      <div class="maker-card">
+        <h3>Unplugged 3</h3>
+        <p>Desenha o teu sapato favorito e escreve ou cola a palavra escolhida. Apresenta ao colega.</p>
+      </div>
+    </section>
+
+    <section class="mini-assessment">
+      <h2>📝 Mini-avaliação observável</h2>
+      <div class="assessment-item">1) Reconhece "sapato" entre outras palavras.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+      </div>
+      <div class="assessment-item">2) Segmenta "sapato" em sa-pa-to e indica 3 sílabas.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+      </div>
+      <div class="assessment-item">3) Forma "pato" com pa+to e testa outras combinações.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+      </div>
+      <div class="assessment-item">4) Completa palavras incompletas com a sílaba certa.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+      </div>
+      <div class="assessment-item">5) Constrói e lê "O sapato é azul." na ordem correta.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+      </div>
+    </section>
+
+    <section class="curricular">
+      <h2>Referências curriculares</h2>
+      <h3>Aprendizagens Essenciais</h3>
+      <ul>
+        <li>Português (1.º ano): reconhecer letras e associá-las a sons; identificar sílabas em palavras CV.</li>
+        <li>Português (1.º ano): ler palavras frequentes; segmentar e manipular sílabas simples.</li>
+        <li>Português (1.º ano): produzir enunciados simples sobre vestuário e responder a questões de compreensão.</li>
+        <li>Português (1.º ano): escrever palavras com correspondência fonema-grafema já trabalhada.</li>
+      </ul>
+      <h3>Perfil do Aluno</h3>
+      <ul>
+        <li>PA-A: Linguagens e textos</li>
+        <li>PA-C: Raciocínio e resolução de problemas</li>
+        <li>PA-F: Desenvolvimento pessoal e autonomia</li>
+      </ul>
+    </section>
+
+    <div class="footer">Gerado por PageCraft 🛠️</div>
+  </main>
+
+  <script>
+    (function () {
+      const $ = (s, p = document) => p.querySelector(s);
+      const $$ = (s, p = document) => Array.from(p.querySelectorAll(s));
+
+      let currentLevel = {
+        u1: 'support', u2: 'support', u3: 'support', u4: 'support',
+        u5: 'support', u6: 'support', u7: 'support', u8: 'support'
+      };
+
+      function speak(text, slow = false) {
+        try {
+          if ('speechSynthesis' in window) {
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'pt-PT';
+            u.rate = slow ? 0.75 : 0.95;
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(u);
+          }
+        } catch (_) {}
+      }
+
+      let audioCtx;
+      function tone(freq = 520, dur = 0.12, type = 'sine') {
+        try {
+          audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+          const o = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          o.frequency.value = freq;
+          o.type = type;
+          g.gain.value = 0.0001;
+          o.connect(g); g.connect(audioCtx.destination);
+          const now = audioCtx.currentTime;
+          g.gain.linearRampToValueAtTime(0.2, now + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+          o.start(now); o.stop(now + dur);
+        } catch (_) {}
+      }
+
+      function feedback(el, ok, msg) {
+        el.className = 'feedback show ' + (ok ? 'ok' : 'try');
+        el.textContent = (ok ? '✓ ' : '✗ ') + msg;
+        if (ok) {
+          tone(680, 0.1);
+          setTimeout(() => tone(860, 0.13), 80);
+          confettiBurst();
+        } else {
+          tone(320, 0.12, 'triangle');
+        }
+      }
+
+      const conf = $('#confetti');
+      const cctx = conf.getContext('2d');
+      let parts = [];
+      function resizeConf() {
+        conf.width = window.innerWidth;
+        conf.height = window.innerHeight;
+      }
+      resizeConf();
+      window.addEventListener('resize', resizeConf);
+
+      function confettiBurst() {
+        for (let i = 0; i < 70; i++) {
+          parts.push({
+            x: conf.width * (0.2 + Math.random() * 0.6),
+            y: conf.height * 0.2,
+            vx: (Math.random() - 0.5) * 7,
+            vy: Math.random() * -6 - 1,
+            g: 0.18,
+            s: 4 + Math.random() * 6,
+            a: 1,
+            c: ['#e05fa0', '#7c3aed', '#059669', '#f59e0b', '#22c55e'][Math.floor(Math.random() * 5)]
+          });
+        }
+      }
+
+      function animate() {
+        cctx.clearRect(0, 0, conf.width, conf.height);
+        parts.forEach(p => {
+          p.vy += p.g;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.a -= 0.012;
+          cctx.globalAlpha = Math.max(p.a, 0);
+          cctx.fillStyle = p.c;
+          cctx.fillRect(p.x, p.y, p.s, p.s);
+        });
+        parts = parts.filter(p => p.a > 0 && p.y < conf.height + 40);
+        requestAnimationFrame(animate);
+      }
+      requestAnimationFrame(animate);
+
+      $$('.unit').forEach(unit => {
+        const id = unit.id;
+        const tabs = $$('.diff-tab', unit);
+        tabs.forEach(tab => tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const level = tab.dataset.level;
+          currentLevel[id] = level;
+          $$('.diff-content', unit).forEach(c => c.classList.toggle('active', c.dataset.level === level));
+          applyLevelChanges(id, level);
+        }));
+      });
+
+      function applyLevelChanges(id, level) {
+        if (id === 'u1' && level === 'support') speak('sapato');
+        if (id === 'u2') initU2();
+        if (id === 'u3') initU3();
+        if (id === 'u4') initU4();
+        if (id === 'u5') initU5();
+        if (id === 'u6') initU6();
+        if (id === 'u7') initU7();
+        if (id === 'u8') initU8();
+      }
+
+      const u1Word = $('#u1-word');
+      const u1Scene = $('#u1-scene');
+      const u1Feedback = $('#u1-feedback');
+      let u1Touched = false;
+      function toggleWord() {
+        u1Word.classList.toggle('word-highlight');
+        u1Touched = true;
+      }
+      u1Word.addEventListener('click', toggleWord);
+      u1Word.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') toggleWord(); });
+      u1Scene.addEventListener('click', () => {
+        u1Scene.classList.toggle('zoom');
+        u1Word.classList.add('word-highlight');
+      });
+      $('#u1-audio').addEventListener('click', () => { speak('sapato'); tone(550, .14); });
+      $('#u1-check').addEventListener('click', () => {
+        feedback(u1Feedback, u1Touched || u1Word.classList.contains('word-highlight'), 'Boa! Encontraste a palavra sapato.');
+      });
+      speak('sapato');
+
+      let u2State = { round: 0, selected: null, corrects: 0, timedOut: false };
+      const u2Rounds = [
+        [{w:'sapato',e:'👟'},{w:'mesa',e:'🪑'},{w:'boneco',e:'🧸'}],
+        [{w:'boneco',e:'🧸'},{w:'sapato',e:'👟'},{w:'janela',e:'🪟'}],
+        [{w:'mesa',e:'🪑'},{w:'sapato',e:'👟'},{w:'boneca',e:'🪆'}]
+      ];
+      let timerInt;
+      function initU2() {
+        u2State = { round: 0, selected: null, corrects: 0, timedOut: false };
+        $('#u2-feedback').className = 'feedback';
+        renderU2Round();
+      }
+      function renderU2Round() {
+        const level = currentLevel.u2;
+        const optionsWrap = $('#u2-options');
+        const r = u2State.round;
+        const base = u2Rounds[r].map(x => ({...x}));
+        let arr = base;
+        if (level === 'support' && r === 0) arr = base.filter(x => x.w !== 'boneco');
+        optionsWrap.innerHTML = '';
+        arr.forEach(item => {
+          const c = document.createElement('div');
+          c.className = 'card-option';
+          c.setAttribute('data-word', item.w);
+          c.innerHTML = `<span class="emoji-img">${(level==='challenge' && r===2) ? '❓' : item.e}</span><span class="${level==='support' && item.w==='sapato' ? 'dashed-hint' : ''}">${item.w}</span>`;
+          optionsWrap.appendChild(c);
+          c.addEventListener('click', () => selectU2(c));
+          makePointerDraggable(c, word => {
+            u2State.selected = word;
+            $('#u2-target').textContent = 'Escolha: ' + word;
+          }, null, 'data-word');
+        });
+
+        $('#u2-round').textContent = `Ronda ${r + 1}/3`;
+        $('#u2-ref-wrap').classList.toggle('hidden', level === 'challenge' && r === 2);
+        if (timerInt) clearInterval(timerInt);
+        const timer = $('#u2-timer');
+        const fill = $('#u2-fill');
+        if (level === 'challenge' && r === 2) {
+          timer.classList.remove('hidden');
+          let t = 100;
+          fill.style.width = '100%';
+          timerInt = setInterval(() => {
+            t -= 2;
+            fill.style.width = Math.max(t,0) + '%';
+            if (t <= 0) {
+              clearInterval(timerInt);
+              u2State.timedOut = true;
+              feedback($('#u2-feedback'), false, 'Tempo! Tenta outra vez com calma.');
+            }
+          }, 200);
+        } else timer.classList.add('hidden');
+      }
+      function selectU2(card) {
+        $$('#u2-options .card-option').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        u2State.selected = card.dataset.word;
+      }
+      $('#u2-confirm').addEventListener('click', () => {
+        const fb = $('#u2-feedback');
+        if (!u2State.selected) return feedback(fb, false, 'Escolhe um cartão primeiro.');
+        const ok = u2State.selected === 'sapato';
+        if (ok) {
+          u2State.corrects++;
+          feedback(fb, true, 'Muito bem! Esta é a palavra sapato.');
+          u2State.round++;
+          u2State.selected = null;
+          setTimeout(() => {
+            if (u2State.round < 3) renderU2Round();
+            else feedback(fb, true, `Conseguiste ${u2State.corrects}/3 rondas.`);
+          }, 700);
+        } else {
+          const sel = $(`#u2-options .card-option[data-word="${u2State.selected}"]`);
+          if (sel) sel.classList.add('shake');
+          setTimeout(() => sel && sel.classList.remove('shake'), 300);
+          feedback(fb, false, 'Quase! Tenta novamente.');
+        }
+      });
+      initU2();
+
+      let u3Placed = ['', '', ''];
+      function initU3() {
+        u3Placed = ['', '', ''];
+        $('#u3-bank').innerHTML = '';
+        $$('#u3-slots .slot').forEach(s => s.textContent = '—');
+        $('#u3-count-label').textContent = 'Sílabas colocadas: 0';
+        $('#u3-feedback').className = 'feedback';
+        $('#u3-challenge').classList.toggle('hidden', currentLevel.u3 !== 'challenge');
+        const sylls = ['sa', 'pa', 'to'];
+        const bank = $('#u3-bank');
+        sylls.forEach((syl, i) => {
+          const b = document.createElement('div');
+          b.className = 'syllable';
+          b.dataset.syl = syl;
+          b.textContent = syl;
+          bank.appendChild(b);
+          if (currentLevel.u3 === 'support') {
+            const slot = $(`#u3-slots .slot[data-index="${i}"]`);
+            slot.textContent = syl;
+            u3Placed[i] = syl;
+          }
+          makePointerDraggable(b, sylText => {
+            const slot = nearestSlot('u3-slots');
+            if (!slot) return;
+            const i = Number(slot.dataset.index);
+            u3Placed[i] = sylText;
+            slot.textContent = sylText;
+            $('#u3-count-label').textContent = `Sílabas colocadas: ${u3Placed.filter(Boolean).length}`;
+            tone(460, 0.08);
+          }, null, 'data-syl');
+        });
+      }
+      $('#u3-separate').addEventListener('click', () => {
+        $('#u3-word').textContent = 'SA · PA · TO';
+        $('#u3-word').style.transform = 'scale(1.04)';
+        setTimeout(() => $('#u3-word').style.transform = '', 250);
+      });
+      $('#u3-clap').addEventListener('click', () => {
+        [420, 420, 420].forEach((f, i) => setTimeout(() => tone(f, 0.07), i * 300));
+      });
+      $$('#u3 .count-btn').forEach(btn => btn.addEventListener('click', () => {
+        const n = btn.dataset.n;
+        const ok = n === '3';
+        feedback($('#u3-feedback'), ok, ok ? 'Certo! "sapato" tem 3 sílabas.' : 'Conta outra vez com palmas.');
+      }));
+      $('#u3-check-challenge').addEventListener('click', () => {
+        const b = ($('#u3-boundary').value || '').replaceAll(' ', '').toLowerCase();
+        const p = ($('#u3-pato').value || '').trim();
+        const ok = (b === 'sa|pa|to' || b === 'sa-pa-to') && p === '2';
+        feedback($('#u3-feedback'), ok, ok ? 'Boa segmentação! E "pato" tem 2 sílabas.' : 'Revê as fronteiras e volta a tentar.');
+      });
+      initU3();
+
+      let u4Placed = ['', '', ''];
+      function initU4() {
+        u4Placed = ['', '', ''];
+        $('#u4-current').textContent = '_';
+        $('#u4-feedback').className = 'feedback';
+        $('#u4-image').textContent = currentLevel.u4 === 'support' ? '🦆' : '❔';
+        const bank = $('#u4-bank');
+        bank.innerHTML = '';
+        const map = {
+          support: ['pa', 'to'],
+          standard: ['sa', 'pa', 'to', 'me', 'ni'],
+          challenge: ['sa', 'pa', 'to', 'me', 'ni', 'bo', 'ta']
+        };
+        map[currentLevel.u4].forEach(syl => {
+          const d = document.createElement('div');
+          d.className = 'syllable';
+          d.dataset.syl = syl;
+          d.textContent = syl;
+          if (!['sa', 'pa', 'to'].includes(syl)) d.style.background = '#0ea5e9';
+          bank.appendChild(d);
+          makePointerDraggable(d, sylTxt => {
+            const slot = nearestSlot('u4-slots');
+            if (!slot) return;
+            const i = Number(slot.dataset.index);
+            u4Placed[i] = sylTxt;
+            slot.textContent = sylTxt;
+            $('#u4-current').textContent = u4Placed.join('');
+            tone(500, 0.08);
+          }, null, 'data-syl');
+        });
+        $$('#u4-slots .slot').forEach(s => s.textContent = s.dataset.index === '0' ? '1' : s.dataset.index === '1' ? '2' : '3');
+      }
+      $('#u4-verify').addEventListener('click', () => {
+        const word = u4Placed.join('');
+        const validMap = { pato: '🦆', mesa: '🪑', tosa: '✂️', bota: '🥾' };
+        const ok = Boolean(validMap[word]);
+        $('#u4-image').innerHTML = ok ? validMap[word] : '<span class="question-mark">❔</span>';
+        feedback($('#u4-feedback'), ok, ok ? `Descoberta! "${word}" é palavra real.` : 'Combinação curiosa. Tenta outra palavra real.');
+      });
+      $('#u4-reset').addEventListener('click', () => initU4());
+      initU4();
+
+      let u5Step = 0;
+      let u5Done = 0;
+      const u5Sets = {
+        support: [{ p: 'SAPA___', opts: ['to', 'me'], ans: 'to' }],
+        standard: [
+          { p: 'SA___TO', opts: ['pa', 'me', 'bo'], ans: 'pa' },
+          { p: '___PA___', opts: ['sa', 'me', 'bo'], ans: 'sa' }
+        ],
+        challenge: [
+          { p: 'SA___TO', opts: ['pa', 'me', 'bo'], ans: 'pa' },
+          { p: '___PA___', opts: ['sa', 'me', 'bo'], ans: 'sa' },
+          { p: 'SAPA___', opts: ['to', 'me', 'bo'], ans: 'to' }
+        ]
+      };
+      function initU5() {
+        u5Step = 0; u5Done = 0;
+        $('#u5-feedback').className = 'feedback';
+        $('#u5-guide').classList.add('hidden');
+        renderU5();
+        $('#u5-audio').classList.toggle('hidden', currentLevel.u5 === 'challenge');
+        $('#u5-trace').textContent = currentLevel.u5 === 'challenge' ? '' : 's a p a t o';
+        $('#u5-extra').innerHTML = currentLevel.u5 === 'challenge' ? '<label for="u5-pato">Escreve também: pato</label><input id="u5-pato" aria-label="Escrever pato" style="border-radius:12px;" />' : '';
+      }
+      function renderU5() {
+        const set = u5Sets[currentLevel.u5];
+        const item = set[u5Step];
+        if (!item) {
+          $('#u5-word').textContent = 'SAPATO';
+          $('#u5-guide').classList.remove('hidden');
+          feedback($('#u5-feedback'), true, 'Completaste todas as variações. Agora copia a palavra.');
+          return;
+        }
+        $('#u5-word').textContent = item.p;
+        $('#u5-step').textContent = String(u5Step + 1);
+        const w = $('#u5-options');
+        w.innerHTML = '';
+        item.opts.forEach(opt => {
+          const b = document.createElement('button');
+          b.textContent = opt;
+          b.setAttribute('aria-label', 'Escolher sílaba ' + opt);
+          b.addEventListener('click', () => {
+            const ok = opt === item.ans;
+            if (ok) {
+              u5Done++;
+              const full = item.p.replace('___', opt).replace('___', 'to');
+              $('#u5-word').textContent = full;
+              feedback($('#u5-feedback'), true, 'Correto! A sílaba encaixa bem.');
+              u5Step++;
+              setTimeout(renderU5, 800);
+            } else {
+              b.style.background = '#fffbeb';
+              b.style.borderColor = '#f59e0b';
+              feedback($('#u5-feedback'), false, 'Essa não. Ouve a palavra devagar.');
+            }
+          });
+          w.appendChild(b);
+        });
+      }
+      $('#u5-audio').addEventListener('click', () => speak('sa pa to', true));
+      initU5();
+
+      function initU6() {
+        $('#u6-feedback').className = 'feedback';
+        $('#u6-new').classList.toggle('hidden', currentLevel.u6 !== 'challenge');
+        $('#u6-img').style.visibility = currentLevel.u6 === 'challenge' ? 'hidden' : 'visible';
+        const bank = $('#u6-bank');
+        bank.innerHTML = '';
+        $$('#u6-slots .sentence-slot').forEach(s => s.textContent = '');
+        let words;
+        if (currentLevel.u6 === 'support') {
+          words = ['sapato'];
+          const slots = $$('#u6-slots .sentence-slot');
+          slots[0].textContent = 'O';
+          slots[2].textContent = 'é';
+          slots[3].textContent = 'azul.';
+        } else {
+          words = ['O', 'sapato', 'é', 'azul.'].sort(() => Math.random() - 0.5);
+        }
+        words.forEach(w => {
+          const chip = document.createElement('div');
+          chip.className = 'word-chip';
+          chip.dataset.word = w;
+          chip.textContent = w;
+          bank.appendChild(chip);
+          makePointerDraggable(chip, word => {
+            const slot = nearestSlot('u6-slots');
+            if (!slot || slot.textContent.trim()) return;
+            slot.textContent = word;
+            tone(420, 0.07);
+          }, null, 'data-word');
+        });
+      }
+      $('#u6-audio').addEventListener('click', () => speak('O sapato é azul.'));
+      $('#u6-check').addEventListener('click', () => {
+        const built = $$('#u6-slots .sentence-slot').map(s => s.textContent.trim()).join(' ');
+        const ok = built === 'O sapato é azul.';
+        if (ok) {
+          $('#u6-model').classList.add('sentence-ok');
+          feedback($('#u6-feedback'), true, 'Frase certa! Começa com maiúscula e acaba com ponto.');
+        } else {
+          $('#u6-model').classList.remove('sentence-ok');
+          $('#u6-slots').classList.add('shake');
+          setTimeout(() => $('#u6-slots').classList.remove('shake'), 300);
+          feedback($('#u6-feedback'), false, 'A ordem ainda não está certa. Tenta outra vez.');
+        }
+      });
+      $('#u6-clear').addEventListener('click', initU6);
+      initU6();
+
+      const u7 = { step: 0, results: { r1:false,r2:false,r3:false,r4:false }, errors: [] };
+      function initU7() {
+        u7.step = 0;
+        u7.results = { r1:false,r2:false,r3:false,r4:false };
+        u7.errors = [];
+        $('#u7-feedback').className = 'feedback';
+        renderU7();
+      }
+      function renderU7() {
+        $$('#u7-progress .dot').forEach((d, i) => d.classList.toggle('done', i < u7.step));
+        const s = $('#u7-screen');
+        if (u7.step === 0) {
+          s.innerHTML = '<h3>Tarefa 1: Escolhe "sapato"</h3><div class="row"><button data-v="boneca">boneca</button><button data-v="sapato">sapato</button><button data-v="janela">janela</button></div>';
+          $$('button', s).forEach(b => b.addEventListener('click', () => {
+            u7.results.r1 = b.dataset.v === 'sapato';
+            if (!u7.results.r1) u7.errors.push('t1');
+            feedback($('#u7-feedback'), u7.results.r1, u7.results.r1 ? 'Boa escolha!' : 'Registado. Avançamos.');
+            setTimeout(() => { u7.step++; renderU7(); }, 1000);
+          }));
+        } else if (u7.step === 1) {
+          s.innerHTML = '<h3>Tarefa 2: Quantas sílabas tem "sapato"?</h3><div class="row"><button data-v="1">1</button><button data-v="2">2</button><button data-v="3">3</button><button data-v="4">4</button></div>';
+          $$('button', s).forEach(b => b.addEventListener('click', () => {
+            u7.results.r2 = b.dataset.v === '3';
+            if (!u7.results.r2) u7.errors.push('t2');
+            feedback($('#u7-feedback'), u7.results.r2, u7.results.r2 ? 'Correto!' : 'Registado. Vamos continuar.');
+            setTimeout(() => { u7.step++; renderU7(); }, 1000);
+          }));
+        } else if (u7.step === 2) {
+          s.innerHTML = '<h3>Tarefa 3: Ordena as sílabas</h3><div class="recomb-bank" id="u7-bank"></div><div class="slot-row" id="u7-slots"><div class="slot" data-index="0"></div><div class="slot" data-index="1"></div><div class="slot" data-index="2"></div></div><button id="u7-check3" style="margin-top:.5rem;">Verificar</button>';
+          ['to','sa','pa'].forEach(x => {
+            const d = document.createElement('div');
+            d.className='syllable'; d.dataset.syl=x; d.textContent=x;
+            if (!['sa','pa','to'].includes(x)) d.style.background = '#0ea5e9';
+            $('#u7-bank').appendChild(d);
+            makePointerDraggable(d, syl => {
+              const slot = nearestSlot('u7-slots');
+              if (!slot) return;
+              slot.textContent = syl;
+            }, null, 'data-syl');
+          });
+          $('#u7-check3').addEventListener('click', () => {
+            const built = $$('#u7-slots .slot').map(x => x.textContent.trim()).join('-');
+            u7.results.r3 = built === 'sa-pa-to';
+            if (!u7.results.r3) u7.errors.push('t3');
+            feedback($('#u7-feedback'), u7.results.r3, u7.results.r3 ? 'Ordem certa!' : 'Registado. Próxima tarefa.');
+            setTimeout(() => { u7.step++; renderU7(); }, 1000);
+          });
+        } else if (u7.step === 3) {
+          const supportOral = currentLevel.u7 === 'support';
+          s.innerHTML = supportOral
+            ? '<h3>Tarefa 4: Diz uma frase com "sapato"</h3><p>Modo oral: o professor regista.</p><button id="u7-oral">Frase dita</button>'
+            : '<h3>Tarefa 4: Escreve uma frase com "sapato"</h3><input id="u7-text" placeholder="O sapato é azul." style="width:min(100%,420px); border-radius:12px;" /><button id="u7-send" style="margin-left:.4rem;">Concluir</button>';
+          if (supportOral) {
+            $('#u7-oral').addEventListener('click', () => {
+              u7.results.r4 = true;
+              feedback($('#u7-feedback'), true, 'Frase registada.');
+              setTimeout(() => { u7.step++; renderU7(); }, 1000);
+            });
+          } else {
+            $('#u7-send').addEventListener('click', () => {
+              const t = ($('#u7-text').value || '').toLowerCase();
+              u7.results.r4 = t.includes('sapato') && t.trim().length > 8;
+              if (!u7.results.r4) u7.errors.push('t4');
+              feedback($('#u7-feedback'), u7.results.r4, u7.results.r4 ? 'Boa frase!' : 'Registado.');
+              setTimeout(() => { u7.step++; renderU7(); }, 1000);
+            });
+          }
+        } else {
+          const okCount = Object.values(u7.results).filter(Boolean).length;
+          const extra = currentLevel.u7 === 'challenge'
+            ? '<p><strong>Tarefa extra:</strong> Escreve outra palavra que comece por "sa" ou termine em "to".</p><input placeholder="Ex.: saco" style="border-radius:12px;" /><p>Escreve 2 frases diferentes com "sapato".</p>'
+            : '';
+          s.innerHTML = `<h3>⭐ Sumário final</h3><p>Concluíste 4 tarefas. Resultado observado: ${okCount}/4.</p><p>Esta avaliação formativa serve para orientar o próximo passo.</p>${extra}`;
+          feedback($('#u7-feedback'), true, 'Fim da mini-avaliação.');
+        }
+      }
+      initU7();
+
+      let u8Pairs = [];
+      let u8PickedName = null;
+      function initU8() {
+        const lvl = currentLevel.u8;
+        const all = [
+          { name: 'bota', emoji: '🥾' },
+          { name: 'sandália', emoji: '👡' },
+          { name: 'chinelo', emoji: '🩴' },
+          { name: 'ténis', emoji: '👟' }
+        ];
+        let pairs = all;
+        if (lvl === 'support') pairs = all.slice(0,2);
+        u8Pairs = pairs.map(p => ({ ...p, ok:false }));
+        $('#u8-names').innerHTML = '';
+        $('#u8-images').innerHTML = '';
+        $('#u8-feedback').className = 'feedback';
+        u8PickedName = null;
+
+        u8Pairs.forEach(p => {
+          const b = document.createElement('button');
+          b.textContent = p.name;
+          b.dataset.name = p.name;
+          b.addEventListener('click', () => {
+            u8PickedName = p.name;
+            $$('#u8-names button').forEach(x => x.style.borderColor = '#e05fa0');
+            b.style.borderColor = '#2563eb';
+          });
+          $('#u8-names').appendChild(b);
+        });
+
+        [...u8Pairs].sort(() => Math.random() - 0.5).forEach(p => {
+          const b = document.createElement('button');
+          b.textContent = p.emoji;
+          b.style.fontSize = '1.6rem';
+          b.dataset.name = p.name;
+          b.addEventListener('click', () => {
+            if (!u8PickedName) return feedback($('#u8-feedback'), false, 'Escolhe primeiro um nome.');
+            const ok = u8PickedName === p.name;
+            if (ok) {
+              p.ok = true;
+              b.disabled = true;
+              b.style.opacity = '.6';
+              feedback($('#u8-feedback'), true, `Par certo: ${p.name}.`);
+            } else feedback($('#u8-feedback'), false, 'Ainda não corresponde. Tenta outra vez.');
+            if (u8Pairs.every(x => x.ok)) feedback($('#u8-feedback'), true, 'Excelente! Matching completo.');
+          });
+          $('#u8-images').appendChild(b);
+        });
+
+        $('#u8-oral').textContent = lvl === 'support'
+          ? 'Frase oral com apoio: "O meu ___ é ___."'
+          : 'Frase oral: "O meu sapato favorito é..."';
+      }
+
+      function setupCanvasDraw(id, clearId, colorWrapId) {
+        const c = $(id);
+        const ctx = c.getContext('2d');
+        let drawing = false;
+        let color = '#1e1b18';
+        function pos(e) {
+          const r = c.getBoundingClientRect();
+          const t = e.touches ? e.touches[0] : e;
+          const x = (t.clientX - r.left) * (c.width / r.width);
+          const y = (t.clientY - r.top) * (c.height / r.height);
+          return {x, y};
+        }
+        function start(e) { drawing = true; const p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); e.preventDefault(); }
+        function move(e) {
+          if (!drawing) return;
+          const p = pos(e);
+          ctx.lineWidth = 5;
+          ctx.lineCap = 'round';
+          ctx.strokeStyle = color;
+          ctx.lineTo(p.x, p.y);
+          ctx.stroke();
+          e.preventDefault();
+        }
+        function end() { drawing = false; }
+        c.addEventListener('mousedown', start); c.addEventListener('mousemove', move); c.addEventListener('mouseup', end);
+        c.addEventListener('mouseleave', end);
+        c.addEventListener('touchstart', start, { passive: false });
+        c.addEventListener('touchmove', move, { passive: false });
+        c.addEventListener('touchend', end);
+        if (clearId) $(clearId).addEventListener('click', () => ctx.clearRect(0, 0, c.width, c.height));
+        if (colorWrapId) {
+          const colors = ['#1e1b18', '#e05fa0', '#7c3aed', '#059669', '#f59e0b'];
+          const wrap = $(colorWrapId);
+          wrap.innerHTML = '';
+          colors.forEach(col => {
+            const d = document.createElement('button');
+            d.className = 'color-pick';
+            d.style.background = col;
+            d.setAttribute('aria-label', 'Cor ' + col);
+            d.addEventListener('click', () => color = col);
+            wrap.appendChild(d);
+          });
+        }
+        return c;
+      }
+      setupCanvasDraw('#u5-canvas', '#u5-clear');
+      const u8Canvas = setupCanvasDraw('#u8-canvas', '#u8-clear', '#u8-colors');
+
+      $('#u8-show').addEventListener('click', () => {
+        const img = document.createElement('img');
+        img.className = 'thumb';
+        img.src = u8Canvas.toDataURL('image/png');
+        img.alt = 'Desenho do aluno';
+        $('#u8-gallery').appendChild(img);
+        feedback($('#u8-feedback'), true, 'Desenho enviado para a galeria da turma.');
+      });
+      initU8();
+
+      function nearestSlot(containerId) {
+        const slots = $$('#' + containerId + ' .slot, #' + containerId + ' .sentence-slot');
+        if (!window._dragPoint) return null;
+        let best = null;
+        let bestD = Infinity;
+        slots.forEach(s => {
+          const r = s.getBoundingClientRect();
+          const cx = r.left + r.width / 2;
+          const cy = r.top + r.height / 2;
+          const d = Math.hypot(window._dragPoint.x - cx, window._dragPoint.y - cy);
+          if (d < bestD && d < 120) { bestD = d; best = s; }
+        });
+        return best;
+      }
+
+      function makePointerDraggable(el, onDrop, onMove, attrName) {
+        let clone = null;
+        const text = () => attrName ? el.getAttribute(attrName.replace('data-', '')) || el.dataset[attrName.replace('data-', '')] || el.getAttribute(attrName) : el.textContent.trim();
+        const pointerDown = e => {
+          if (e.pointerType === 'mouse' && e.button !== 0) return;
+          el.setPointerCapture(e.pointerId);
+          const r = el.getBoundingClientRect();
+          clone = el.cloneNode(true);
+          clone.style.position = 'fixed';
+          clone.style.left = r.left + 'px';
+          clone.style.top = r.top + 'px';
+          clone.style.width = r.width + 'px';
+          clone.style.opacity = '.9';
+          clone.style.pointerEvents = 'none';
+          clone.style.zIndex = '999';
+          clone.classList.add('dragging');
+          document.body.appendChild(clone);
+          window._dragPoint = { x: e.clientX, y: e.clientY };
+          e.preventDefault();
+        };
+        const pointerMove = e => {
+          if (!clone) return;
+          window._dragPoint = { x: e.clientX, y: e.clientY };
+          clone.style.left = (e.clientX - clone.offsetWidth / 2) + 'px';
+          clone.style.top = (e.clientY - clone.offsetHeight / 2) + 'px';
+          if (onMove) onMove(e);
+        };
+        const pointerUp = () => {
+          if (!clone) return;
+          clone.remove();
+          clone = null;
+          onDrop(text());
+        };
+        el.addEventListener('pointerdown', pointerDown);
+        el.addEventListener('pointermove', pointerMove);
+        el.addEventListener('pointerup', pointerUp);
+        el.addEventListener('pointercancel', pointerUp);
+      }
+
+      $('#u8-activity').addEventListener('change', e => {
+        const v = e.target.value;
+        if (v === 'dicionário de vestuário' && currentLevel.u8 === 'challenge') {
+          feedback($('#u8-feedback'), true, 'Desafio: escreve 3 palavras de vestuário com desenho.');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
