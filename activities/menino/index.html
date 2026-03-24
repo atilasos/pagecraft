@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Método das 28 Palavras - Menino</title>
+  <style>
+    :root {
+      --bg: #f0f6ff;
+      --surface: #ffffff;
+      --primary: #3b82f6;
+      --accent: #f59e0b;
+      --text: #1e1b18;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+      --support: #22c55e;
+      --standard: #f59e0b;
+      --challenge: #ef4444;
+      --syll-me: #3b82f6;
+      --syll-ni: #7c3aed;
+      --syll-na: #94a3b8;
+      --syll-no: #059669;
+      --radius: 16px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --touch: 48px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Nunito", "Poppins", "Comic Sans MS", sans-serif;
+      background: radial-gradient(circle at top right, #dbeafe, var(--bg) 40%);
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1.45;
+    }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 1.2rem; }
+    h1, h2, h3 { margin: 0.2rem 0 0.7rem; line-height: 1.2; }
+    h1 { font-size: clamp(2rem, 3.6vw, 2.6rem); }
+    h2 { font-size: clamp(1.5rem, 2.8vw, 2rem); color: #1d4ed8; }
+    h3 { font-size: clamp(1.15rem, 2.2vw, 1.4rem); }
+    p { margin: 0.4rem 0 0.7rem; }
+    .card {
+      background: var(--surface);
+      border: 2px solid var(--primary);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+    header.hero {
+      background: linear-gradient(135deg, #3b82f6, #7c3aed 55%, #059669);
+      color: #fff;
+      border-radius: 20px;
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    .meta { display: flex; gap: 0.8rem; flex-wrap: wrap; margin: 0.4rem 0 0.8rem; }
+    .badge {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      border-radius: 999px;
+      padding: 0.3rem 0.7rem;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    ul { margin: 0.3rem 0 0.3rem 1rem; }
+    li { margin-bottom: 0.3rem; }
+    .tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.7rem; }
+    .tab {
+      border: 2px solid #c8c0ba;
+      background: #fff;
+      border-radius: 999px;
+      min-height: var(--touch);
+      padding: 0.5rem 1rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+    .tab.active[data-level="support"] { background: #ecfdf3; border-color: var(--support); }
+    .tab.active[data-level="standard"] { background: #fffbeb; border-color: var(--standard); }
+    .tab.active[data-level="challenge"] { background: #fef2f2; border-color: var(--challenge); }
+    .level { display: none; }
+    .level.active { display: block; animation: fadeIn 220ms ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .btn {
+      border: 2px solid #1e40af;
+      background: var(--primary);
+      color: #fff;
+      min-height: var(--touch);
+      padding: 0.7rem 1.1rem;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.28);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      touch-action: manipulation;
+    }
+    .btn:hover { transform: scale(1.04); box-shadow: 0 8px 14px rgba(59, 130, 246, 0.35); }
+    .btn:active { transform: scale(0.97); }
+    .btn.alt { background: #fff; color: #1e40af; }
+    .scene {
+      background: linear-gradient(180deg, #bfdbfe 0 42%, #86efac 42%);
+      border: 2px dashed #64748b;
+      border-radius: 14px;
+      min-height: 180px;
+      padding: 0.9rem;
+      position: relative;
+      display: grid;
+      place-items: center;
+      text-align: center;
+    }
+    .scene.hidden .reveal-layer {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.85);
+      font-weight: 800;
+      color: #78350f;
+      border-radius: 12px;
+    }
+    .story-word {
+      padding: 0.05rem 0.24rem;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      font-weight: 800;
+      touch-action: manipulation;
+    }
+    .story-word.highlight { background: #dbeafe; border-color: var(--primary); color: #1e40af; }
+    .word-board { display: flex; gap: 0.6rem; flex-wrap: wrap; margin: 0.7rem 0; }
+    .word-card {
+      border: 2px solid #b6aaa3;
+      background: #fff;
+      border-radius: 12px;
+      padding: 0.8rem 1.1rem;
+      min-height: var(--touch);
+      min-width: 110px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: transform 0.2s ease;
+    }
+    .word-card.correct { border-color: var(--ok); background: #f0fdf4; transform: scale(1.05); }
+    .word-card.wrong { border-color: var(--warn); background: #fffbeb; }
+    .feedback {
+      margin-top: 0.4rem;
+      padding: 0.5rem 0.7rem;
+      border-radius: 10px;
+      font-weight: 700;
+      min-height: 2.2rem;
+    }
+    .feedback.ok { background: #f0fdf4; color: #166534; border: 2px solid #22c55e; }
+    .feedback.warn { background: #fffbeb; color: #92400e; border: 2px solid #f59e0b; }
+    .syll-word {
+      display: flex;
+      justify-content: center;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+      margin: 0.6rem 0;
+      font-size: clamp(2.1rem, 6vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+    .syll {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2.2ch;
+      padding: 0.2rem 0.45rem;
+      border-radius: 12px;
+      color: #fff;
+    }
+    .syll.me { background: var(--syll-me); }
+    .syll.ni { background: var(--syll-ni); }
+    .syll.na { background: var(--syll-na); }
+    .syll.no { background: var(--syll-no); }
+    .syll.flat { background: #6b7280; }
+    .syll.active { outline: 3px solid #111827; transform: scale(1.06); }
+    .syll.no-new { animation: pulseNo 1.2s ease-in-out infinite; }
+    @keyframes pulseNo {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.5); }
+      50% { box-shadow: 0 0 0 6px rgba(5, 150, 105, 0.2); }
+    }
+    .compare-row { text-align: center; font-weight: 700; margin: 0.5rem 0; font-size: 0.95rem; color: #334155; }
+    .progress { font-weight: 700; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+    .drag-area {
+      border: 2px dashed #a78bfa;
+      border-radius: 12px;
+      padding: 0.6rem;
+      margin: 0.6rem 0;
+      background: #f8fafc;
+    }
+    .token-bank, .slot-row {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+      min-height: 64px;
+      padding: 0.25rem;
+    }
+    .slot {
+      min-height: 64px;
+      min-width: 94px;
+      border: 2px dashed #9ca3af;
+      border-radius: 10px;
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.2rem;
+    }
+    .token {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #fff;
+      border-radius: 12px;
+      padding: 0.35rem 0.9rem;
+      min-width: 74px;
+      min-height: var(--touch);
+      border: 0;
+      touch-action: none;
+      cursor: grab;
+      user-select: none;
+      position: relative;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+    }
+    .token[data-syl="me"] { background: var(--syll-me); }
+    .token[data-syl="ni"] { background: var(--syll-ni); }
+    .token[data-syl="na"] { background: var(--syll-na); }
+    .token[data-syl="no"] { background: var(--syll-no); }
+    .token.lex {
+      background: #2563eb;
+      font-size: 1.05rem;
+      min-width: auto;
+    }
+    .token.dragging {
+      position: fixed;
+      z-index: 999;
+      pointer-events: none;
+      transform: scale(1.1);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+    }
+    .slot.over { border-color: #059669; background: #ecfdf5; }
+    .token-bank.over { outline: 3px solid #c4b5fd; border-radius: 10px; }
+    .word-display {
+      font-size: clamp(2rem, 5.2vw, 3rem);
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      color: var(--primary);
+      text-transform: uppercase;
+      text-align: center;
+      min-height: 2.2em;
+    }
+    .stars { display: flex; gap: 0.4rem; font-size: 1.7rem; }
+    .star { filter: grayscale(1); transition: transform 0.2s ease; }
+    .star.on { filter: grayscale(0); transform: scale(1.1); }
+    input[type="text"], textarea, select {
+      width: 100%;
+      border: 2px solid #b6aaa3;
+      border-radius: 12px;
+      padding: 0.55rem;
+      min-height: var(--touch);
+      font-size: 1rem;
+      font-family: inherit;
+      background: #fff;
+    }
+    .maker { border-color: #22c55e; background: #ecfdf3; }
+    .maker-grid {
+      display: grid;
+      gap: 0.7rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .maker-item {
+      background: #fff;
+      border: 2px solid #22c55e;
+      border-radius: 12px;
+      padding: 0.75rem;
+    }
+    .mini-assess { border-color: #f59e0b; background: #fff7ed; }
+    .scale-line {
+      border-top: 1px solid #fdba74;
+      padding: 0.45rem 0;
+      font-size: 0.95rem;
+    }
+    .curricular {
+      background: #eff6ff;
+      border: 2px solid #3b82f6;
+      border-radius: 14px;
+      padding: 1rem;
+    }
+    .small-footer { text-align: center; margin: 1rem 0; font-weight: 700; color: #1d4ed8; }
+    canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 1000; }
+    :focus-visible { outline: 3px solid #7c3aed; outline-offset: 2px; }
+    @media (max-width: 768px) {
+      body { font-size: 16px; }
+      .wrap { padding: 0.7rem; }
+      .slot { min-width: 72px; }
+      .token { min-width: 66px; font-size: 1.35rem; }
+    }
+    @media (min-width: 1440px) { .wrap { max-width: 1220px; } }
+  </style>
+</head>
+<body>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <header class="hero" aria-label="Cabeçalho da aula">
+      <h1>Método das 28 Palavras - Palavra 2: Menino</h1>
+      <div class="meta">
+        <span class="badge">Ano: 1.º ano (6-7 anos)</span>
+        <span class="badge">Duração: 45 min</span>
+        <span class="badge">Tema: Leitura e escrita</span>
+      </div>
+      <strong>Objectivos:</strong>
+      <ul>
+        <li>Reconhecer globalmente a palavra «menino».</li>
+        <li>Segmentar «menino» em me-ni-no (sílaba nova: «no»).</li>
+        <li>Recombinar sílabas (ex.: nome, nono).</li>
+        <li>Usar «menino» na frase «O menino corre.»</li>
+      </ul>
+    </header>
+
+    <section class="card" id="u1">
+      <h2>Unit 1 - Abertura contextual (5 min)</h2>
+      <p>Ouve e lê a micro-história. Descobre a palavra no texto.</p>
+      <div class="tabs" role="tablist" aria-label="Nível Unit 1">
+        <button type="button" class="tab active" data-target="u1" data-level="support" aria-label="Apoio">🟢 Apoio</button>
+        <button type="button" class="tab" data-target="u1" data-level="standard" aria-label="Intermédio">🟡 Intermédio</button>
+        <button type="button" class="tab" data-target="u1" data-level="challenge" aria-label="Desafio">🔴 Desafio</button>
+      </div>
+      <div class="level active" data-unit="u1" data-level="support">
+        <div class="scene" aria-label="Cena do recreio">
+          <div>🏫 🌳 🧒 💧<br />Um menino corre pelo recreio e salta sobre uma poça.</div>
+        </div>
+        <p>Um <span class="story-word highlight" data-u1-word>menino</span> corre pelo recreio e salta sobre uma poça.</p>
+        <button type="button" class="btn" data-u1-audio="support" aria-label="Ouvir história apoio">🔊 Ouvir história</button>
+        <div class="feedback" data-u1-fb="support"></div>
+      </div>
+      <div class="level" data-unit="u1" data-level="standard">
+        <div class="scene hidden" data-u1-scene="standard" aria-label="Cena escondida">
+          <div>🏫 🌳 🧒 💧</div>
+          <div class="reveal-layer">Toca para revelar a cena</div>
+        </div>
+        <p>Um <span class="story-word" data-u1-word>menino</span> corre pelo recreio e salta sobre uma poça.</p>
+        <button type="button" class="btn" data-u1-audio="standard" aria-label="Ouvir história intermédio">🔊 Ouvir história</button>
+        <div class="feedback" data-u1-fb="standard"></div>
+      </div>
+      <div class="level" data-unit="u1" data-level="challenge">
+        <div class="scene hidden" data-u1-scene="challenge" aria-label="Cena desafio">
+          <div>🏫 🌳 🧒 💧</div>
+          <div class="reveal-layer">Toca para revelar a cena</div>
+        </div>
+        <p>Um <span class="story-word" data-u1-word>menino</span> corre pelo recreio. Depois, salta sobre uma poça e ri.</p>
+        <p class="compare-row">Pergunta: o que tem de igual a «menina»? (me-ni-…)</p>
+        <button type="button" class="btn" data-u1-audio="challenge" aria-label="Ouvir história desafio">🔊 Ouvir história</button>
+        <div class="feedback" data-u1-fb="challenge"></div>
+      </div>
+    </section>
+
+    <section class="card" id="u2">
+      <h2>Unit 2 - Reconhecimento global (5 min)</h2>
+      <p>Qual palavra corresponde ao menino a correr?</p>
+      <div class="tabs" role="tablist" aria-label="Nível Unit 2">
+        <button type="button" class="tab active" data-target="u2" data-level="support">🟢 Apoio</button>
+        <button type="button" class="tab" data-target="u2" data-level="standard">🟡 Intermédio</button>
+        <button type="button" class="tab" data-target="u2" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="level active" data-unit="u2" data-level="support">
+        <p>🧒🏃 ➜</p>
+        <div class="word-board" data-quiz="u2s">
+          <button type="button" class="word-card" data-word="menino">menino</button>
+          <button type="button" class="word-card" data-word="boneco">boneco</button>
+        </div>
+        <button type="button" class="btn alt" data-pronounce="menino">🔊 Ouve: menino</button>
+        <button type="button" class="btn alt" data-reset="u2s">Nova ronda</button>
+        <div class="feedback" data-fb="u2s"></div>
+      </div>
+      <div class="level" data-unit="u2" data-level="standard">
+        <p>Imagem: 🧒🏃</p>
+        <div class="word-board" data-quiz="u2m">
+          <button type="button" class="word-card" data-word="menino">menino</button>
+          <button type="button" class="word-card" data-word="menina">menina</button>
+          <button type="button" class="word-card" data-word="boneco">boneco</button>
+        </div>
+        <button type="button" class="btn alt" data-reset="u2m">Nova ronda</button>
+        <div class="feedback" data-fb="u2m"></div>
+      </div>
+      <div class="level" data-unit="u2" data-level="challenge">
+        <p>Sem áudio prévio. Tenta acertar à primeira.</p>
+        <div class="word-board" data-quiz="u2d">
+          <button type="button" class="word-card" data-word="menino">menino</button>
+          <button type="button" class="word-card" data-word="menina">menina</button>
+          <button type="button" class="word-card" data-word="boneco">boneco</button>
+          <button type="button" class="word-card" data-word="mineiro">mineiro</button>
+        </div>
+        <button type="button" class="btn alt" data-reset="u2d">Nova ronda</button>
+        <div class="feedback" data-fb="u2d"></div>
+      </div>
+    </section>
+
+    <section class="card" id="u3">
+      <h2>Unit 3 - Segmentação silábica (7 min)</h2>
+      <p>Bate palmas para separar me-ni-no. A sílaba nova é <strong>no</strong>.</p>
+      <div class="tabs" role="tablist" aria-label="Nível Unit 3">
+        <button type="button" class="tab active" data-target="u3" data-level="support">🟢 Apoio</button>
+        <button type="button" class="tab" data-target="u3" data-level="standard">🟡 Intermédio</button>
+        <button type="button" class="tab" data-target="u3" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="level active" data-unit="u3" data-level="support">
+        <p class="compare-row">Compara: menina → me · ni · <span style="text-decoration:underline">na</span> &nbsp;|&nbsp; menino → me · ni · <span style="text-decoration:underline">no</span></p>
+        <div class="syll-word" data-syll-display="u3s">
+          <span class="syll me">me</span><span class="syll ni">ni</span><span class="syll no no-new">no</span>
+        </div>
+        <div class="progress">👏 <span data-claps="u3s">0</span>/3 palmas</div>
+        <button type="button" class="btn" data-clap="u3s">Palmas</button>
+        <button type="button" class="btn alt" data-model="u3s">Modelo automático</button>
+        <div class="feedback" data-fb="u3s"></div>
+      </div>
+      <div class="level" data-unit="u3" data-level="standard">
+        <div class="syll-word" data-syll-display="u3m">
+          <span class="syll me">me</span><span class="syll ni">ni</span><span class="syll no no-new">no</span>
+        </div>
+        <div class="progress">👏 <span data-claps="u3m">0</span>/3 palmas</div>
+        <button type="button" class="btn" data-clap="u3m">Palmas</button>
+        <button type="button" class="btn alt" data-toggle-sep="u3m">Mostrar juntas/separadas</button>
+        <div class="feedback" data-fb="u3m"></div>
+      </div>
+      <div class="level" data-unit="u3" data-level="challenge">
+        <label for="guessSyl">Antes de ver as cores, quantas sílabas tem?</label>
+        <select id="guessSyl" aria-label="Número de sílabas" data-guess="u3d">
+          <option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option>
+        </select>
+        <div class="syll-word" data-syll-display="u3d"><span class="syll flat">me</span><span class="syll flat">ni</span><span class="syll flat">no</span></div>
+        <div class="progress">👏 <span data-claps="u3d">0</span>/3 palmas</div>
+        <button type="button" class="btn" data-clap="u3d">Palmas</button>
+        <button type="button" class="btn alt" data-check-guess="u3d">Confirmar hipótese</button>
+        <div class="feedback" data-fb="u3d"></div>
+      </div>
+    </section>
+
+    <section class="card" id="u4">
+      <h2>Unit 4 - Reconstrução por sílabas (7 min)</h2>
+      <p>Arrasta as sílabas para formar «menino».</p>
+      <div class="tabs" role="tablist" aria-label="Nível Unit 4">
+        <button type="button" class="tab active" data-target="u4" data-level="support">🟢 Apoio</button>
+        <button type="button" class="tab" data-target="u4" data-level="standard">🟡 Intermédio</button>
+        <button type="button" class="tab" data-target="u4" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="level active" data-unit="u4" data-level="support">
+        <p>🧒🏃 1.ª sílaba já está colocada.</p>
+        <div class="drag-area" data-drag-id="u4s">
+          <div class="token-bank" data-bank>
+            <button type="button" class="token" data-syl="ni" aria-label="Sílaba ni">ni</button>
+            <button type="button" class="token" data-syl="no" aria-label="Sílaba no">no</button>
+          </div>
+          <div class="slot-row">
+            <div class="slot"><button type="button" class="token" data-syl="me" data-fixed="true">me</button></div>
+            <div class="slot" data-slot="1"></div>
+            <div class="slot" data-slot="2"></div>
+          </div>
+        </div>
+        <div class="word-display" data-formed="u4s">ME _ _</div>
+        <button type="button" class="btn" data-check-sort="u4s">Verificar</button>
+        <button type="button" class="btn alt" data-reset-drag="u4s">Repor</button>
+        <div class="feedback" data-fb="u4s"></div>
+      </div>
+      <div class="level" data-unit="u4" data-level="standard">
+        <p>🧒🏃 Ordena: no, me, ni</p>
+        <div class="drag-area" data-drag-id="u4m">
+          <div class="token-bank" data-bank>
+            <button type="button" class="token" data-syl="no">no</button>
+            <button type="button" class="token" data-syl="me">me</button>
+            <button type="button" class="token" data-syl="ni">ni</button>
+          </div>
+          <div class="slot-row">
+            <div class="slot" data-slot="1"></div>
+            <div class="slot" data-slot="2"></div>
+            <div class="slot" data-slot="3"></div>
+          </div>
+        </div>
+        <div class="word-display" data-formed="u4m">_ _ _</div>
+        <button type="button" class="btn" data-check-sort="u4m">Verificar</button>
+        <button type="button" class="btn alt" data-reset-drag="u4m">Repor</button>
+        <div class="feedback" data-fb="u4m"></div>
+      </div>
+      <div class="level" data-unit="u4" data-level="challenge">
+        <p>Sem imagem. Há uma sílaba intrusa (não entra em «menino»).</p>
+        <div class="drag-area" data-drag-id="u4d">
+          <div class="token-bank" data-bank>
+            <button type="button" class="token" data-syl="na">na</button>
+            <button type="button" class="token" data-syl="me">me</button>
+            <button type="button" class="token" data-syl="ni">ni</button>
+            <button type="button" class="token" data-syl="no">no</button>
+          </div>
+          <div class="slot-row">
+            <div class="slot" data-slot="1"></div>
+            <div class="slot" data-slot="2"></div>
+            <div class="slot" data-slot="3"></div>
+          </div>
+        </div>
+        <div class="word-display" data-formed="u4d">_ _ _</div>
+        <button type="button" class="btn" data-check-sort="u4d">Verificar</button>
+        <button type="button" class="btn alt" data-reset-drag="u4d">Repor</button>
+        <div class="feedback" data-fb="u4d"></div>
+      </div>
+    </section>
+
+    <section class="card" id="u5">
+      <h2>Unit 5 - Recombinação silábica (7 min)</h2>
+      <p>Forma combinações de duas sílabas. Decide se é palavra real.</p>
+      <div class="tabs" role="tablist" aria-label="Nível Unit 5">
+        <button type="button" class="tab active" data-target="u5" data-level="support">🟢 Apoio</button>
+        <button type="button" class="tab" data-target="u5" data-level="standard">🟡 Intermédio</button>
+        <button type="button" class="tab" data-target="u5" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="level active" data-unit="u5" data-level="support">
+        <p>Exemplo: <strong>nome</strong> = no + me ✅ &nbsp;|&nbsp; 📝 «nome»</p>
+        <div class="drag-area" data-drag-id="u5s">
+          <div class="token-bank" data-bank>
+            <button type="button" class="token" data-syl="no">no</button>
+            <button type="button" class="token" data-syl="me">me</button>
+            <button type="button" class="token" data-syl="na">na</button>
+          </div>
+          <div class="slot-row">
+            <div class="slot" data-slot="1"></div>
+            <div class="slot" data-slot="2"></div>
+          </div>
+        </div>
+        <div class="word-display" data-formed="u5s">_ _</div>
+        <button type="button" class="btn" data-classify="u5s" data-choice="real">É uma palavra</button>
+        <button type="button" class="btn alt" data-classify="u5s" data-choice="fake">Não é palavra</button>
+        <button type="button" class="btn alt" data-reset-drag="u5s">Limpar</button>
+        <div class="feedback" data-fb="u5s"></div>
+        <p>Descobertas: <span data-found="u5s">-</span></p>
+      </div>
+      <div class="level" data-unit="u5" data-level="standard">
+        <div class="drag-area" data-drag-id="u5m">
+          <div class="token-bank" data-bank>
+            <button type="button" class="token" data-syl="me">me</button>
+            <button type="button" class="token" data-syl="ni">ni</button>
+            <button type="button" class="token" data-syl="no">no</button>
+            <button type="button" class="token" data-syl="no">no</button>
+          </div>
+          <div class="slot-row">
+            <div class="slot" data-slot="1"></div>
+            <div class="slot" data-slot="2"></div>
+          </div>
+        </div>
+        <div class="word-display" data-formed="u5m">_ _</div>
+        <button type="button" class="btn" data-classify="u5m" data-choice="real">É uma palavra</button>
+        <button type="button" class="btn alt" data-classify="u5m" data-choice="fake">Não é palavra</button>
+        <button type="button" class="btn alt" data-reset-drag="u5m">Limpar</button>
+        <div class="feedback" data-fb="u5m"></div>
+        <p>Descobertas: <span data-found="u5m">-</span></p>
+      </div>
+      <div class="level" data-unit="u5" data-level="challenge">
+        <p>Encontra 3+ palavras reais (nome, nono, nona, nina…).</p>
+        <div class="drag-area" data-drag-id="u5d">
+          <div class="token-bank" data-bank>
+            <button type="button" class="token" data-syl="me">me</button>
+            <button type="button" class="token" data-syl="ni">ni</button>
+            <button type="button" class="token" data-syl="no">no</button>
+            <button type="button" class="token" data-syl="no">no</button>
+            <button type="button" class="token" data-syl="na">na</button>
+          </div>
+          <div class="slot-row">
+            <div class="slot" data-slot="1"></div>
+            <div class="slot" data-slot="2"></div>
+          </div>
+        </div>
+        <div class="word-display" data-formed="u5d">_ _</div>
+        <button type="button" class="btn" data-classify="u5d" data-choice="real">É uma palavra</button>
+        <button type="button" class="btn alt" data-classify="u5d" data-choice="fake">Não é palavra</button>
+        <button type="button" class="btn alt" data-reset-drag="u5d">Limpar</button>
+        <textarea rows="2" placeholder="Escreve as palavras reais que encontraste." aria-label="Palavras reais encontradas"></textarea>
+        <div class="feedback" data-fb="u5d"></div>
+        <p>Descobertas: <span data-found="u5d">-</span></p>
+      </div>
+    </section>
+
+    <section class="card" id="u6">
+      <h2>Unit 6 - Leitura e escrita guiada (6 min)</h2>
+      <p>Completa as lacunas com a sílaba certa.</p>
+      <div class="tabs" role="tablist" aria-label="Nível Unit 6">
+        <button type="button" class="tab active" data-target="u6" data-level="support">🟢 Apoio</button>
+        <button type="button" class="tab" data-target="u6" data-level="standard">🟡 Intermédio</button>
+        <button type="button" class="tab" data-target="u6" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="level active" data-unit="u6" data-level="support">
+        <p><strong data-gap-word="u6s">me__no</strong> (modelo: menino)</p>
+        <div class="word-board">
+          <button type="button" class="word-card" data-gap="u6s" data-choice="ni">ni</button>
+          <button type="button" class="word-card" data-gap="u6s" data-choice="no">no</button>
+        </div>
+        <button type="button" class="btn alt" data-next-gap="u6s">Próxima</button>
+        <div class="feedback" data-fb="u6s"></div>
+      </div>
+      <div class="level" data-unit="u6" data-level="standard">
+        <p><strong data-gap-word="u6m">me__no</strong></p>
+        <div class="word-board">
+          <button type="button" class="word-card" data-gap="u6m" data-choice="me">me</button>
+          <button type="button" class="word-card" data-gap="u6m" data-choice="ni">ni</button>
+          <button type="button" class="word-card" data-gap="u6m" data-choice="no">no</button>
+        </div>
+        <button type="button" class="btn alt" data-next-gap="u6m">Próxima</button>
+        <div class="feedback" data-fb="u6m"></div>
+      </div>
+      <div class="level" data-unit="u6" data-level="challenge">
+        <p><strong data-gap-word="u6d">me __ __</strong> (completa com duas sílabas)</p>
+        <div class="word-board">
+          <button type="button" class="word-card" data-gap="u6d" data-choice="ni+no">ni + no</button>
+          <button type="button" class="word-card" data-gap="u6d" data-choice="na+no">na + no</button>
+          <button type="button" class="word-card" data-gap="u6d" data-choice="ni+na">ni + na</button>
+        </div>
+        <label>Escreve «menino», «nome» e «menina»:</label>
+        <input type="text" aria-label="Escrever menino" placeholder="menino" />
+        <input type="text" aria-label="Escrever nome" placeholder="nome" />
+        <input type="text" aria-label="Escrever menina" placeholder="menina" />
+        <div class="feedback" data-fb="u6d"></div>
+      </div>
+    </section>
+
+    <section class="card" id="u7">
+      <h2>Unit 7 - Construção de frase (6 min)</h2>
+      <p>Ordena os cartões: artigo <strong>O</strong> (masculino) com «menino».</p>
+      <div class="tabs" role="tablist" aria-label="Nível Unit 7">
+        <button type="button" class="tab active" data-target="u7" data-level="support">🟢 Apoio</button>
+        <button type="button" class="tab" data-target="u7" data-level="standard">🟡 Intermédio</button>
+        <button type="button" class="tab" data-target="u7" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="level active" data-unit="u7" data-level="support">
+        <div class="drag-area" data-drag-id="u7s">
+          <div class="token-bank" data-bank>
+            <button type="button" class="token lex" data-syl="menino">menino</button>
+            <button type="button" class="token lex" data-syl="corre">corre</button>
+          </div>
+          <div class="slot-row">
+            <div class="slot"><button type="button" class="token lex" data-syl="O" data-fixed="true">O</button></div>
+            <div class="slot" data-slot="2"></div>
+            <div class="slot" data-slot="3"></div>
+            <div class="slot"><button type="button" class="token lex" data-syl="." data-fixed="true">.</button></div>
+          </div>
+        </div>
+        <div class="feedback" data-fb="u7s"></div>
+        <button type="button" class="btn" data-check-sentence="u7s">Verificar frase</button>
+      </div>
+      <div class="level" data-unit="u7" data-level="standard">
+        <div class="drag-area" data-drag-id="u7m">
+          <div class="token-bank" data-bank>
+            <button type="button" class="token lex" data-syl="O">O</button>
+            <button type="button" class="token lex" data-syl="menino">menino</button>
+            <button type="button" class="token lex" data-syl="corre">corre</button>
+            <button type="button" class="token lex" data-syl=".">.</button>
+          </div>
+          <div class="slot-row">
+            <div class="slot" data-slot="1"></div>
+            <div class="slot" data-slot="2"></div>
+            <div class="slot" data-slot="3"></div>
+            <div class="slot" data-slot="4"></div>
+          </div>
+        </div>
+        <div class="feedback" data-fb="u7m"></div>
+        <button type="button" class="btn" data-check-sentence="u7m">Verificar frase</button>
+      </div>
+      <div class="level" data-unit="u7" data-level="challenge">
+        <div class="drag-area" data-drag-id="u7d">
+          <div class="token-bank" data-bank>
+            <button type="button" class="token lex" data-syl="O">O</button>
+            <button type="button" class="token lex" data-syl="menino">menino</button>
+            <button type="button" class="token lex" data-syl="corre">corre</button>
+            <button type="button" class="token lex" data-syl="no">no</button>
+            <button type="button" class="token lex" data-syl="recreio">recreio</button>
+            <button type="button" class="token lex" data-syl=".">.</button>
+          </div>
+          <div class="slot-row">
+            <div class="slot" data-slot="1"></div>
+            <div class="slot" data-slot="2"></div>
+            <div class="slot" data-slot="3"></div>
+            <div class="slot" data-slot="4"></div>
+            <div class="slot" data-slot="5"></div>
+            <div class="slot" data-slot="6"></div>
+          </div>
+        </div>
+        <label>Cria a tua frase com «menino»:</label>
+        <input type="text" aria-label="Frase própria com menino" placeholder="O menino ..." />
+        <div class="feedback" data-fb="u7d"></div>
+        <button type="button" class="btn" data-check-sentence="u7d">Verificar frase</button>
+      </div>
+    </section>
+
+    <section class="card" id="u8">
+      <h2>Unit 8 - Mini-avaliação formativa (5 min)</h2>
+      <p>Completa as 4 tarefas. Cada estrela acende quando terminas.</p>
+      <div class="tabs" role="tablist" aria-label="Nível Unit 8">
+        <button type="button" class="tab active" data-target="u8" data-level="support">🟢 Apoio</button>
+        <button type="button" class="tab" data-target="u8" data-level="standard">🟡 Intermédio</button>
+        <button type="button" class="tab" data-target="u8" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="stars" aria-label="Barra de progresso">
+        <span class="star" data-star="1">⭐</span>
+        <span class="star" data-star="2">⭐</span>
+        <span class="star" data-star="3">⭐</span>
+        <span class="star" data-star="4">⭐</span>
+      </div>
+      <div class="level active" data-unit="u8" data-level="support">
+        <p><strong data-assess-q></strong></p>
+        <div class="word-board" data-assess-options></div>
+        <div class="feedback" data-fb="u8"></div>
+      </div>
+      <div class="level" data-unit="u8" data-level="standard">
+        <p><strong data-assess-q></strong></p>
+        <div class="word-board" data-assess-options></div>
+        <div class="feedback" data-fb="u8"></div>
+      </div>
+      <div class="level" data-unit="u8" data-level="challenge">
+        <p><strong data-assess-q></strong></p>
+        <div class="word-board" data-assess-options></div>
+        <input type="text" aria-label="Tarefa bónus" placeholder="Escreve menino, nome e uma frase." />
+        <div class="feedback" data-fb="u8"></div>
+      </div>
+    </section>
+
+    <section class="card maker">
+      <h2>🛠️ Secção Maker</h2>
+      <div class="maker-grid">
+        <article class="maker-item">
+          <h3>Cartaz vivo da palavra</h3>
+          <p>Cartaz A3 com «menino», imagem e sílabas me · ni · no em cores.</p>
+        </article>
+        <article class="maker-item">
+          <h3>Teatro das sílabas</h3>
+          <p>Em pares: cada aluno é uma sílaba e forma «menino» e «nome» no chão.</p>
+        </article>
+        <article class="maker-item">
+          <h3>Contraste menina / menino</h3>
+          <p>Com cartões, mostrar me-ni-<strong>na</strong> e me-ni-<strong>no</strong> e repetir em voz alta.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="card mini-assess">
+      <h2>📝 Mini-avaliação observável</h2>
+      <p>Escala: ⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</p>
+      <div class="scale-line">Reconhece «menino» entre palavras distractoras (incluindo «menina»).</div>
+      <div class="scale-line">Segmenta «menino» em 3 sílabas e identifica a sílaba nova «no».</div>
+      <div class="scale-line">Reconstrói me-ni-no em ordem correcta.</div>
+      <div class="scale-line">Forma pelo menos uma palavra real nova (ex.: nome, nono).</div>
+      <div class="scale-line">Constrói e lê «O menino corre.»</div>
+    </section>
+
+    <section class="curricular" aria-label="Referências curriculares">
+      <h2>Referências curriculares</h2>
+      <h3>Aprendizagens Essenciais</h3>
+      <ul>
+        <li>Pronunciar segmentos fónicos a partir dos respectivos grafemas e dígrafos, incluindo posições diferentes na palavra.</li>
+        <li>Reconhecer palavras globalmente, associando forma escrita, oral e significado.</li>
+        <li>Correspondência letra/dígrafo e som; ler sílabas e palavras.</li>
+        <li>Escrever palavras e frases simples com marcas de género e número.</li>
+      </ul>
+      <h3>Perfil do Aluno</h3>
+      <ul>
+        <li>PA-A: Linguagens e textos</li>
+        <li>PA-F: Desenvolvimento pessoal e autonomia</li>
+        <li>PA-C: Raciocínio e resolução de problemas</li>
+        <li>PA-E: Relacionamento interpessoal</li>
+      </ul>
+    </section>
+
+    <div class="small-footer">Gerado por PageCraft 🛠️</div>
+  </div>
+
+  <script>
+(function () {
+  const appState = {
+    quiz: { u2s: { tries: 0, streak: 0 }, u2m: { tries: 0, streak: 0 }, u2d: { tries: 0, streak: 0 } },
+    claps: { u3s: 0, u3m: 0, u3d: 0 },
+    found: { u5s: new Set(), u5m: new Set(), u5d: new Set() },
+    gaps: {
+      u6s: { i: 0, items: [{ g: "me__no", a: "ni" }, { g: "___nino", a: "me" }, { g: "meni__", a: "no" }] },
+      u6m: { i: 0, items: [{ g: "me__no", a: "ni" }, { g: "___nino", a: "me" }, { g: "meni__", a: "no" }] },
+      u6d: { i: 0, items: [{ g: "me __ __", a: "ni+no" }] }
+    },
+    assess: { idx: 0, score: 0 }
+  };
+
+  const realWordsStandard = new Set(["nome", "nono"]);
+  const realWordsSupport = new Set(["nome", "nona"]);
+  const realWordsChallenge = new Set(["nome", "nono", "nona", "nina"]);
+
+  function realSetFor(id) {
+    if (id === "u5s") return realWordsSupport;
+    if (id === "u5d") return realWordsChallenge;
+    return realWordsStandard;
+  }
+
+  function $(sel, root) { return (root || document).querySelector(sel); }
+  function $$(sel, root) { return [].slice.call((root || document).querySelectorAll(sel)); }
+
+  $$(".tab").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var target = btn.dataset.target;
+      var level = btn.dataset.level;
+      var unit = document.getElementById(target);
+      $$(".tab", unit).forEach(function (t) { t.classList.remove("active"); });
+      btn.classList.add("active");
+      $$(".level", unit).forEach(function (v) {
+        v.classList.toggle("active", v.dataset.level === level);
+      });
+      if (target === "u8") {
+        appState.assess.idx = 0;
+        appState.assess.score = 0;
+        $$(".star").forEach(function (s) { s.classList.remove("on"); });
+        setTimeout(renderAssess, 10);
+      }
+    });
+  });
+
+  var ctx;
+  function tone(freq, dur, type, vol) {
+    freq = freq || 440;
+    dur = dur || 0.12;
+    type = type || "sine";
+    vol = vol || 0.02;
+    ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+    var o = ctx.createOscillator();
+    var g = ctx.createGain();
+    o.frequency.value = freq;
+    o.type = type;
+    g.gain.value = vol;
+    o.connect(g).connect(ctx.destination);
+    o.start();
+    o.stop(ctx.currentTime + dur);
+  }
+  function sfx(kind) {
+    if (kind === "ok") {
+      tone(660, 0.09, "triangle", 0.04);
+      setTimeout(function () { tone(880, 0.11, "triangle", 0.04); }, 80);
+    } else if (kind === "warn") {
+      tone(270, 0.15, "sawtooth", 0.03);
+    } else {
+      tone(440, 0.06, "sine", 0.02);
+    }
+  }
+
+  function speakPT(text) {
+    if (!("speechSynthesis" in window)) return;
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = "pt-PT";
+    u.rate = 0.92;
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+  }
+
+  function setFb(id, text, type) {
+    var el = $("[data-fb='" + id + "']");
+    if (!el) return;
+    el.textContent = text;
+    el.classList.remove("ok", "warn");
+    if (type) el.classList.add(type);
+  }
+
+  function setU1Fb(level, text, type) {
+    var el = $("[data-u1-fb='" + level + "']");
+    if (!el) return;
+    el.textContent = text;
+    el.classList.remove("ok", "warn");
+    if (type) el.classList.add(type);
+  }
+
+  function setU8Fb(text, type) {
+    var active = $(".level.active[data-unit='u8'] [data-fb='u8']");
+    if (!active) return;
+    active.textContent = text;
+    active.classList.remove("ok", "warn");
+    if (type) active.classList.add(type);
+  }
+
+  var c = $("#confetti");
+  var cx = c.getContext("2d");
+  var pieces = [];
+  function resizeCanvas() { c.width = innerWidth; c.height = innerHeight; }
+  resizeCanvas();
+  addEventListener("resize", resizeCanvas);
+
+  function burst(x, y) {
+    x = x || innerWidth / 2;
+    y = y || innerHeight / 3;
+    var cols = ["#3b82f6", "#7c3aed", "#22c55e", "#f59e0b"];
+    for (var i = 0; i < 80; i++) {
+      pieces.push({
+        x: x, y: y,
+        vx: (Math.random() - 0.5) * 7,
+        vy: Math.random() * -6 - 1,
+        g: 0.16,
+        s: Math.random() * 5 + 3,
+        a: 1,
+        col: cols[i % 4]
+      });
+    }
+  }
+
+  function loop() {
+    cx.clearRect(0, 0, c.width, c.height);
+    pieces = pieces.filter(function (p) { return p.a > 0.02; });
+    for (var i = 0; i < pieces.length; i++) {
+      var p = pieces[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += p.g;
+      p.a *= 0.985;
+      cx.globalAlpha = p.a;
+      cx.fillStyle = p.col;
+      cx.fillRect(p.x, p.y, p.s, p.s);
+    }
+    cx.globalAlpha = 1;
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  $$("[data-u1-scene]").forEach(function (scene) {
+    scene.addEventListener("click", function () {
+      scene.classList.remove("hidden");
+      sfx("tap");
+    });
+  });
+
+  $$("[data-u1-word]").forEach(function (w) {
+    w.addEventListener("click", function () {
+      w.classList.toggle("highlight");
+      speakPT("menino");
+      sfx("ok");
+      var level = w.closest(".level").dataset.level;
+      setU1Fb(level, "Boa! Encontraste a palavra «menino».", "ok");
+    });
+  });
+
+  $$("[data-u1-audio]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      speakPT("Um menino corre pelo recreio e salta sobre uma poça.");
+    });
+  });
+
+  $$("[data-quiz]").forEach(function (board) {
+    board.addEventListener("click", function (e) {
+      var btn = e.target.closest(".word-card");
+      if (!btn) return;
+      var id = board.dataset.quiz;
+      var st = appState.quiz[id];
+      st.tries++;
+      $$(".word-card", board).forEach(function (c) { c.classList.remove("correct", "wrong"); });
+      if (btn.dataset.word === "menino") {
+        btn.classList.add("correct");
+        st.streak++;
+        setFb(id, st.streak >= 2 ? "Excelente! Duas rondas certas seguidas." : "Certo! Faz mais uma ronda.", "ok");
+        sfx("ok");
+        speakPT("menino");
+        burst();
+      } else {
+        btn.classList.add("wrong");
+        st.streak = 0;
+        var msg = id === "u2d" ? "No desafio, a primeira tentativa conta." : "Quase! Tenta outra vez.";
+        setFb(id, msg, "warn");
+        sfx("warn");
+      }
+    });
+  });
+
+  $$("[data-pronounce]").forEach(function (b) {
+    b.addEventListener("click", function () { speakPT("menino"); });
+  });
+  $$("[data-reset]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var id = b.dataset.reset;
+      appState.quiz[id].tries = 0;
+      var fb = $("[data-fb='" + id + "']");
+      if (fb) fb.textContent = "";
+      var board = $("[data-quiz='" + id + "']");
+      $$(".word-card", board).forEach(function (c) { c.classList.remove("correct", "wrong"); });
+    });
+  });
+
+  function renderClap(id) {
+    var n = appState.claps[id];
+    $("[data-claps='" + id + "']").textContent = n;
+    var sylls = $$(".syll", $("[data-syll-display='" + id + "']"));
+    sylls.forEach(function (s) { s.classList.remove("active"); });
+    if (n > 0 && n <= 3) sylls[n - 1].classList.add("active");
+    if (n === 3) {
+      setFb(id, "Muito bem! Três sílabas: me — ni — no. A nova é «no».", "ok");
+      sfx("ok");
+      burst();
+    }
+  }
+
+  $$("[data-clap]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var id = b.dataset.clap;
+      appState.claps[id] = Math.min(appState.claps[id] + 1, 5);
+      renderClap(id);
+      var seq = ["me", "ni", "no"][Math.min(appState.claps[id] - 1, 2)];
+      speakPT(seq);
+    });
+  });
+
+  var modelU3s = $("[data-model='u3s']");
+  if (modelU3s) {
+    modelU3s.addEventListener("click", function () {
+      appState.claps.u3s = 0;
+      renderClap("u3s");
+      [0, 1, 2].forEach(function (i) {
+        setTimeout(function () {
+          appState.claps.u3s += 1;
+          renderClap("u3s");
+          speakPT(["me", "ni", "no"][i]);
+        }, i * 600);
+      });
+    });
+  }
+
+  var toggleU3m = $("[data-toggle-sep='u3m']");
+  if (toggleU3m) {
+    toggleU3m.addEventListener("click", function () {
+      var d = $("[data-syll-display='u3m']");
+      d.style.gap = d.style.gap === "0rem" ? "0.35rem" : "0rem";
+      sfx("tap");
+    });
+  }
+
+  var checkGuess = $("[data-check-guess='u3d']");
+  if (checkGuess) {
+    checkGuess.addEventListener("click", function () {
+      var v = $("[data-guess='u3d']").value;
+      if (v === "3") {
+        setFb("u3d", "Boa previsão! Agora bate as palmas e vê a sílaba que muda face a «menina».", "ok");
+        sfx("ok");
+      } else {
+        setFb("u3d", "Conta com palmas: me — ni — …", "warn");
+        sfx("warn");
+      }
+    });
+  }
+
+  var dragState = { el: null, home: null };
+
+  function makeDraggableToken(token) {
+    token.onpointerdown = function (e) {
+      if (token.dataset.fixed === "true") return;
+      if (token.classList.contains("dragging")) return;
+      dragState.el = token;
+      dragState.home = token.parentElement;
+      token.setPointerCapture(e.pointerId);
+      token.classList.add("dragging");
+      moveToken(e.clientX, e.clientY);
+    };
+    token.onpointermove = function (e) {
+      if (dragState.el !== token) return;
+      moveToken(e.clientX, e.clientY);
+      hoverDrop(e.clientX, e.clientY);
+    };
+    token.onpointerup = function (e) {
+      if (dragState.el !== token) return;
+      dropToken(e.clientX, e.clientY);
+    };
+  }
+
+  function moveToken(x, y) {
+    var t = dragState.el;
+    t.style.left = x - t.offsetWidth / 2 + "px";
+    t.style.top = y - t.offsetHeight / 2 + "px";
+  }
+
+  function clearHover() {
+    $$(".slot.over, .token-bank.over").forEach(function (el) { el.classList.remove("over"); });
+  }
+
+  function hoverDrop(x, y) {
+    clearHover();
+    var el = document.elementFromPoint(x, y);
+    var slot = el && el.closest(".slot");
+    var bank = el && el.closest(".token-bank");
+    if (slot) slot.classList.add("over");
+    if (bank) bank.classList.add("over");
+  }
+
+  function dropToken(x, y) {
+    var t = dragState.el;
+    var el = document.elementFromPoint(x, y);
+    var slot = el && el.closest(".slot");
+    var bank = el && el.closest(".token-bank");
+    if (slot && !slot.querySelector(".token")) {
+      slot.appendChild(t);
+      sfx("tap");
+    } else if (bank) {
+      bank.appendChild(t);
+      sfx("tap");
+    } else {
+      dragState.home.appendChild(t);
+    }
+    t.classList.remove("dragging");
+    t.style.left = "";
+    t.style.top = "";
+    clearHover();
+    updateAllFormed();
+    dragState.el = null;
+  }
+
+  $$(".token").forEach(makeDraggableToken);
+
+  function getAreaWord(id) {
+    var area = $("[data-drag-id='" + id + "']");
+    if (!area) return "";
+    return $$(".slot", area)
+      .map(function (s) { return s.querySelector(".token") && s.querySelector(".token").dataset.syl || "_"; })
+      .join("")
+      .replace(/_/g, "");
+  }
+
+  function updateAllFormed() {
+    ["u4s", "u4m", "u4d", "u5s", "u5m", "u5d"].forEach(function (id) {
+      var el = $("[data-formed='" + id + "']");
+      if (!el) return;
+      var area = $("[data-drag-id='" + id + "']");
+      var txt = $$(".slot", area).map(function (s) {
+        return s.querySelector(".token") && s.querySelector(".token").dataset.syl || "_";
+      }).join(" ");
+      el.textContent = txt.toUpperCase();
+    });
+  }
+  updateAllFormed();
+
+  $$("[data-check-sort]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var id = b.dataset.checkSort;
+      var word = getAreaWord(id);
+      if (word === "menino") {
+        setFb(id, "Perfeito! Formaste MENINO.", "ok");
+        sfx("ok");
+        speakPT("menino");
+        burst();
+      } else {
+        setFb(id, "Ainda não. Tenta outra ordem (me-ni-no).", "warn");
+        sfx("warn");
+      }
+    });
+  });
+
+  $$("[data-reset-drag]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var id = b.dataset.resetDrag;
+      var area = $("[data-drag-id='" + id + "']");
+      var bank = $("[data-bank]", area);
+      $$(".slot .token", area).forEach(function (t) {
+        if (t.dataset.syl !== "me" || !area.dataset.dragId || area.dataset.dragId.indexOf("u4s") !== 0) {
+          bank.appendChild(t);
+        }
+      });
+      setFb(id, "", null);
+      updateAllFormed();
+    });
+  });
+
+  $$("[data-classify]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var id = b.dataset.classify;
+      var word = getAreaWord(id).toLowerCase();
+      var choice = b.dataset.choice;
+      var rs = realSetFor(id);
+      var isReal = rs.has(word);
+      var correct = (choice === "real" && isReal) || (choice === "fake" && !isReal);
+      if (correct) {
+        setFb(id, "Boa classificação!", "ok");
+        sfx("ok");
+        if (isReal) appState.found[id].add(word);
+        var foundEl = $("[data-found='" + id + "']");
+        if (foundEl) foundEl.textContent = Array.from(appState.found[id]).join(", ") || "-";
+        burst();
+      } else {
+        setFb(id, "Revê a combinação e tenta de novo.", "warn");
+        sfx("warn");
+      }
+    });
+  });
+
+  function renderGap(id) {
+    var st = appState.gaps[id];
+    var item = st.items[Math.min(st.i, st.items.length - 1)];
+    $("[data-gap-word='" + id + "']").textContent = item.g;
+  }
+
+  ["u6s", "u6m", "u6d"].forEach(renderGap);
+
+  $$("[data-gap]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var id = btn.dataset.gap;
+      var st = appState.gaps[id];
+      var item = st.items[st.i];
+      var choice = btn.dataset.choice;
+      if (choice === item.a) {
+        setFb(id, "Muito bem! Palavra completa: MENINO.", "ok");
+        sfx("ok");
+        speakPT("menino");
+        burst();
+      } else {
+        setFb(id, "Ainda não. Escolhe outra sílaba.", "warn");
+        sfx("warn");
+      }
+    });
+  });
+
+  $$("[data-next-gap]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var id = btn.dataset.nextGap;
+      var st = appState.gaps[id];
+      st.i = (st.i + 1) % st.items.length;
+      renderGap(id);
+    });
+  });
+
+  var sentenceTargets = {
+    u7s: "O menino corre .",
+    u7m: "O menino corre .",
+    u7d: "O menino corre no recreio ."
+  };
+
+  $$("[data-check-sentence]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var id = btn.dataset.checkSentence;
+      var area = $("[data-drag-id='" + id + "']");
+      var sentence = $$(".slot", area).map(function (s) {
+        var tok = s.querySelector(".token");
+        return tok ? tok.dataset.syl : "";
+      }).join(" ").trim();
+      if (sentence === sentenceTargets[id]) {
+        setFb(id, "Frase correcta! Lê em voz alta.", "ok");
+        sfx("ok");
+        speakPT(sentence.replace(" .", "."));
+        burst();
+      } else {
+        setFb(id, "Ordem diferente. Ajusta os cartões.", "warn");
+        sfx("warn");
+      }
+    });
+  });
+
+  var assessByLevel = {
+    support: [
+      { q: "1) Escolhe a palavra certa:", opts: ["menino", "boneco"], a: "menino" },
+      { q: "2) Quantas sílabas tem «menino»?", opts: ["3", "2"], a: "3" },
+      { q: "3) Qual ordem está certa?", opts: ["me-ni-no", "na-me-ni"], a: "me-ni-no" },
+      { q: "4) Completa: O ___ corre.", opts: ["menino", "janela"], a: "menino" }
+    ],
+    standard: [
+      { q: "1) Escolhe a palavra certa:", opts: ["menino", "menina", "boneco"], a: "menino" },
+      { q: "2) Quantas sílabas tem «menino»?", opts: ["2", "3", "4"], a: "3" },
+      { q: "3) Qual ordem está certa?", opts: ["na-me-ni", "me-ni-no", "ni-na-me"], a: "me-ni-no" },
+      { q: "4) Completa: O ___ corre.", opts: ["fita", "menino", "porta"], a: "menino" }
+    ],
+    challenge: [
+      { q: "1) Escolhe a palavra certa:", opts: ["mãe", "menino", "menina", "mineiro"], a: "menino" },
+      { q: "2) Quantas sílabas tem «menino»?", opts: ["1", "2", "3", "4"], a: "3" },
+      { q: "3) Ordem correcta:", opts: ["ni-me-no", "me-ni-no", "na-ni-me", "me-na-ni"], a: "me-ni-no" },
+      { q: "4) Completa: O ___ corre.", opts: ["porta", "menino", "bola", "fita"], a: "menino" }
+    ]
+  };
+
+  function currentAssessLevel() {
+    var u8 = $("#u8");
+    var active = $(".tab.active", u8);
+    return (active && active.dataset.level) || "support";
+  }
+
+  function renderAssess() {
+    var level = currentAssessLevel();
+    var items = assessByLevel[level];
+    var i = appState.assess.idx;
+    var block = $(".level.active[data-unit='u8']");
+    if (!block) return;
+    if (i >= items.length) {
+      $("[data-assess-q]", block).textContent = "Resumo: " + appState.assess.score + "/4 tarefas correctas.";
+      $("[data-assess-options]", block).innerHTML = "";
+      setU8Fb("Mini-avaliação terminada.", appState.assess.score >= 3 ? "ok" : "warn");
+      return;
+    }
+    $("[data-assess-q]", block).textContent = items[i].q;
+    $("[data-assess-options]", block).innerHTML = items[i].opts
+      .map(function (o) {
+        return '<button type="button" class="word-card" data-assess-choice="' + o + '">' + o + "</button>";
+      })
+      .join("");
+  }
+
+  $("#u8").addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-assess-choice]");
+    if (!btn) return;
+    var level = currentAssessLevel();
+    var items = assessByLevel[level];
+    var i = appState.assess.idx;
+    if (i >= items.length) return;
+    if (btn.dataset.assessChoice === items[i].a) {
+      appState.assess.score++;
+      setU8Fb("Certo!", "ok");
+      sfx("ok");
+    } else {
+      setU8Fb("Vamos continuar.", "warn");
+      sfx("warn");
+    }
+    var star = $("[data-star='" + (i + 1) + "']");
+    if (star) star.classList.add("on");
+    appState.assess.idx++;
+    burst();
+    renderAssess();
+  });
+
+  renderAssess();
+  setTimeout(function () {
+    speakPT("Bem-vindos. Hoje vamos explorar a palavra menino.");
+  }, 500);
+})();
+  </script>
+</body>
+</html>

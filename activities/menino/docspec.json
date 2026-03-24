@@ -1,0 +1,234 @@
+{
+  "topic": "Método das 28 Palavras — Palavra 2: Menino",
+  "ageRange": "6-7 anos (1.º ano)",
+  "duration": 45,
+  "objectives": [
+    "Reconhecer globalmente a palavra 'menino' associando-a à imagem correspondente",
+    "Segmentar a palavra 'menino' nas sílabas me-ni-no e reconstruí-la a partir de sílabas desordenadas",
+    "Recombinar sílabas da palavra 'menino' para formar novas palavras (ex: nome, nono)",
+    "Utilizar a palavra 'menino' numa frase simples, oralmente e por escrito"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Pronunciar segmentos fónicos a partir dos respectivos grafemas e dígrafos, incluindo os casos que dependem de diferentes posições dos fonemas ou grafemas na palavra"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura",
+        "descriptor": "Reconhecer palavras globalmente, associando a forma escrita à forma oral e ao significado, integrando-as progressivamente num léxico visual alargado"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura",
+        "descriptor": "Fazer a correspondência entre letra/dígrafo e fonema/som; ler sílabas e palavras constituídas por essas correspondências"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Escrita",
+        "descriptor": "Escrever palavras e frases simples, respeitando as regras de correspondência fonema-grafema e utilizando correctamente as marcas do género e do número"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-F: Desenvolvimento pessoal e autonomia",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-E: Relacionamento interpessoal"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "PIT",
+      "ficheiro de leitura individual",
+      "mapa de tarefas"
+    ],
+    "socialOrganization": "turma (abertura 5min) → individual/TEA (exploração digital 20min) → pares (recombinação e frase 10min) → turma (comunicação e avaliação 10min)"
+  },
+  "materials": [
+    "Tablet ou computador com browser (1 por aluno ou par)",
+    "Cartaz A3 com imagem de menino e palavra 'menino'",
+    "Cartões de sílabas manipuláveis: me, ni, no (+ cartões da lição anterior: na)",
+    "Quadro interactivo ou quadro branco"
+  ],
+  "units": [
+    {
+      "summary": "Abertura contextual — micro-história com a palavra 'menino'",
+      "textDescription": "O aluno ouve/lê uma micro-história ('Um menino corre pelo recreio e salta sobre uma poça.') e observa a imagem associada. A palavra 'menino' surge em contexto significativo antes de ser trabalhada isoladamente. Nota pedagógica: os alunos já conhecem 'me' e 'ni' da lição 1 ('menina') — o foco novo é a sílaba 'no'.",
+      "interaction": {
+        "state": [
+          { "name": "cenaVisivel", "type": "toggle", "options": ["oculta", "visível"], "default": "oculta" },
+          { "name": "palavraDestacada", "type": "toggle", "options": ["normal", "destacada"], "default": "normal" }
+        ],
+        "render": "Ilustração do recreio com um menino a correr e a saltar sobre uma poça; texto da micro-história por baixo com a palavra 'menino' em destaque colorido; botão para ouvir a história narrada",
+        "transition": "Clicar na imagem revela a cena completa → clicar na palavra 'menino' no texto destaca-a com cor e áudio da pronúncia",
+        "constraint": "A palavra escrita corresponde à imagem e ao som — o aluno descobre a ligação entre representação visual, escrita e oral",
+        "assessment": "O aluno aponta para a palavra 'menino' no texto quando solicitado e repete-a oralmente"
+      },
+      "differentiation": {
+        "support": "Imagem e palavra visíveis em simultâneo desde o início; narração automática; palavra pré-destacada com moldura",
+        "standard": "O aluno clica para revelar a cena e descobre a palavra destacada no texto",
+        "challenge": "Texto com 2 frases; o aluno deve encontrar a palavra 'menino' sem destaque prévio e clicar nela; pergunta: 'O que tem de igual a menina?'"
+      },
+      "duration": 5
+    },
+    {
+      "summary": "Reconhecimento global da palavra 'menino'",
+      "textDescription": "O aluno reconhece a palavra 'menino' como um todo visual, distinguindo-a de outras palavras — incluindo 'menina' (já conhecida). Associa a forma escrita à imagem e ao som, construindo o reconhecimento global e notando a diferença visual entre 'menino' e 'menina'.",
+      "interaction": {
+        "state": [
+          { "name": "opcoesPalavras", "type": "quiz", "options": ["menino", "menina", "boneco"] },
+          { "name": "respostaSeleccionada", "type": "derived", "derivedFrom": "opcoesPalavras" },
+          { "name": "tentativas", "type": "derived", "derivedFrom": "count(cliques)" }
+        ],
+        "render": "Imagem de menino a correr no topo; 3 cartões-palavra em baixo dispostos horizontalmente (menino, menina, boneco); feedback visual imediato (verde/âmbar); áudio com pronúncia ao seleccionar",
+        "transition": "Clicar num cartão-palavra → se correcto, borda verde + som de confirmação + palavra amplia; se incorrecto, borda âmbar + som neutro + nova tentativa",
+        "constraint": "Apenas a palavra 'menino' corresponde à imagem — o aluno descobre a diferença entre 'menino' e 'menina' (última sílaba: 'no' vs. 'na')",
+        "assessment": "O aluno selecciona a palavra 'menino' correctamente entre 3 opções (incluindo 'menina') em duas rondas consecutivas"
+      },
+      "differentiation": {
+        "support": "2 opções apenas (menino vs. boneco — sem 'menina' para evitar confusão inicial); imagem com seta a apontar; áudio da palavra antes de seleccionar",
+        "standard": "3 opções incluindo 'menina'; imagem disponível como apoio; uma tentativa adicional se errar",
+        "challenge": "4 opções (incluindo 'menina' e 'mineiro' — palavras visualmente próximas); sem áudio prévio; resposta na 1.ª tentativa"
+      },
+      "duration": 5
+    },
+    {
+      "summary": "Segmentação silábica da palavra 'menino' (me-ni-no)",
+      "textDescription": "O aluno divide a palavra 'menino' em 3 sílabas (me-ni-no), contando-as com palmas e visualizando a separação. Reforça a consciência fonológica. Nota: 'me' e 'ni' são conhecidas da lição 1; o foco está em isolar a sílaba nova 'no' e perceber que 'menino' partilha 2 sílabas com 'menina'.",
+      "interaction": {
+        "state": [
+          { "name": "silabasSeparadas", "type": "toggle", "options": ["juntas", "separadas"], "default": "juntas" },
+          { "name": "contadorPalmas", "type": "slider", "range": [0, 5], "step": 1, "default": 0, "unit": "palmas" },
+          { "name": "silabaActiva", "type": "derived", "derivedFrom": "contadorPalmas" }
+        ],
+        "render": "Palavra 'menino' no centro em grande; ao separar, sílabas afastam-se com cores distintas (me=azul, ni=verde, no=vermelho coral); contador de palmas com mãos animadas; áudio silábico sincronizado; destaque especial na sílaba nova 'no' (moldura a piscar subtilmente)",
+        "transition": "Clicar no botão 'palmas' incrementa o contador → cada palma destaca e pronuncia uma sílaba em sequência (me → ni → no) → ao completar 3, sílabas separam-se visualmente → toggle mostra juntas/separadas",
+        "constraint": "A palavra 'menino' tem exactamente 3 sílabas — o aluno descobre que partilha 'me' e 'ni' com 'menina' mas termina com 'no' em vez de 'na'",
+        "assessment": "O aluno bate 3 palmas correctamente sincronizadas com as sílabas e identifica a sílaba nova ('no') que distingue 'menino' de 'menina'"
+      },
+      "differentiation": {
+        "support": "Sílabas pré-separadas com cores; animação de palmas automática para modelar; comparação visual lado a lado com 'menina' (me-ni-na vs. me-ni-no)",
+        "standard": "Palavra inteira; o aluno bate palmas e conta; depois confirma com a separação visual",
+        "challenge": "Sem cores; o aluno indica o número de sílabas antes de ver a separação; depois identifica que sílaba mudou em relação a 'menina'"
+      },
+      "duration": 7
+    },
+    {
+      "summary": "Reconstrução da palavra a partir de sílabas desordenadas",
+      "textDescription": "O aluno ordena sílabas desordenadas (no-me-ni) para reconstruir a palavra 'menino'. Reforça a compreensão da estrutura silábica e a sequência correcta. Inclui a sílaba 'na' como distractor para distinguir 'menino' de 'menina'.",
+      "interaction": {
+        "state": [
+          { "name": "silabasDesordenadas", "type": "sorting", "options": ["no", "me", "ni"] },
+          { "name": "ordemActual", "type": "derived", "derivedFrom": "silabasDesordenadas" },
+          { "name": "palavraFormada", "type": "derived", "derivedFrom": "join(ordemActual)" }
+        ],
+        "render": "3 blocos arrastáveis com sílabas (no, me, ni) em cores correspondentes à unit anterior; zona-alvo com 3 posições marcadas; imagem de menino a correr visível como apoio; feedback: palavra formada aparece em baixo em tempo real",
+        "transition": "Arrastar sílaba para posição → palavra parcial actualiza em tempo real → ao completar, se me+ni+no: borda verde + áudio 'menino!' + animação de celebração; se errado: borda âmbar + 'tenta outra vez'",
+        "constraint": "Apenas a sequência me-ni-no forma a palavra correcta — a ordem das sílabas determina o significado",
+        "assessment": "O aluno ordena as 3 sílabas correctamente em menos de 3 tentativas e lê a palavra em voz alta"
+      },
+      "differentiation": {
+        "support": "1.ª sílaba (me) já colocada; apenas 2 sílabas para ordenar; feedback sonoro a cada colocação",
+        "standard": "3 sílabas desordenadas; imagem de apoio; feedback em tempo real",
+        "challenge": "4 sílabas (inclui distractor 'na'); sem imagem de apoio; tem de identificar a sílaba intrusa e formar 'menino' (não 'menina')"
+      },
+      "duration": 7
+    },
+    {
+      "summary": "Recombinação silábica — formar novas palavras com as sílabas de 'menino'",
+      "textDescription": "O aluno explora combinações das sílabas me, ni e no para formar novas palavras ou pseudo-palavras. Palavras-alvo seguras: 'nome' (no+me) e 'nono' (no+no). O aluno descobre que as sílabas são unidades reutilizáveis e que a nova sílaba 'no' abre combinações diferentes das da lição 1.",
+      "interaction": {
+        "state": [
+          { "name": "silabasDisponiveis", "type": "drag", "options": ["me", "ni", "no"] },
+          { "name": "combinacaoActual", "type": "derived", "derivedFrom": "silabasDisponiveis" },
+          { "name": "classificacao", "type": "quiz", "options": ["é uma palavra", "não é uma palavra"] }
+        ],
+        "render": "Bancada com 3 sílabas arrastáveis (me, ni, no) no topo — cada sílaba pode ser usada mais do que uma vez; zona de construção ao centro com 2 posições; palavra formada em grande; botões 'é uma palavra' / 'não é uma palavra'; lista lateral com palavras encontradas",
+        "transition": "Arrastar sílabas para zona de construção → palavra formada actualiza → aluno classifica se é ou não palavra real → se correcto, palavra vai para a lista de descobertas → limpar para nova tentativa",
+        "constraint": "Algumas combinações de sílabas formam palavras reais (nome = no+me, nono = no+no) e outras não (nino, meno) — o aluno descobre que nem toda a combinação produz uma palavra com significado",
+        "assessment": "O aluno forma pelo menos 1 palavra real nova (ex: 'nome') e distingue correctamente entre palavras reais e pseudo-palavras"
+      },
+      "differentiation": {
+        "support": "Apenas 2 sílabas de cada vez (no+me); imagem de apoio para 'nome'; modelo dado como exemplo; sílaba 'na' da lição anterior disponível para formar 'nona'",
+        "standard": "3 sílabas livres; sem imagens; classifica sozinho com feedback imediato; deve encontrar 'nome' e tentar 'nono'",
+        "challenge": "Inclui sílabas da lição anterior (na); deve encontrar 3+ palavras reais (nome, nono, mina, nona); escreve cada palavra num campo de texto"
+      },
+      "duration": 7
+    },
+    {
+      "summary": "Leitura e escrita guiada da palavra 'menino'",
+      "textDescription": "O aluno pratica a leitura da palavra completa e a escrita guiada (completar sílabas em falta). Transição do reconhecimento visual para a produção escrita. A lacuna recai especialmente sobre a sílaba nova 'no'.",
+      "interaction": {
+        "state": [
+          { "name": "palavraIncompleta", "type": "matching", "options": ["me__no", "___nino", "meni__"] },
+          { "name": "silabaEscolhida", "type": "dropdown", "options": ["me", "ni", "no"], "default": "me" },
+          { "name": "palavraCompleta", "type": "derived", "derivedFrom": "palavraIncompleta + silabaEscolhida" }
+        ],
+        "render": "Palavra 'menino' com lacuna (sílaba em falta marcada por sublinhado); sílabas disponíveis em baixo para arrastar ou seleccionar; ao completar, palavra inteira com áudio; campo de escrita livre opcional",
+        "transition": "Seleccionar/arrastar sílaba correcta para a lacuna → palavra completa aparece → áudio de confirmação → próxima variante com lacuna diferente → após 3 variantes, campo de escrita livre",
+        "constraint": "Cada posição silábica tem apenas uma sílaba correcta — o aluno descobre a posição fixa de cada sílaba na palavra",
+        "assessment": "O aluno completa 3 variantes da palavra (lacuna em posições diferentes) sem erro e escreve a palavra completa autonomamente"
+      },
+      "differentiation": {
+        "support": "Apenas 1 lacuna por vez com 2 opções de sílaba; modelo da palavra completa visível ao lado; foco na sílaba nova 'no'",
+        "standard": "1 lacuna por vez com 3 opções; sem modelo visível; 3 variantes em sequência",
+        "challenge": "2 lacunas em simultâneo; escreve a palavra inteira sem apoio visual; depois escreve 'nome' e 'menina' para contrastar"
+      },
+      "duration": 6
+    },
+    {
+      "summary": "Construção de frase simples com a palavra 'menino'",
+      "textDescription": "O aluno lê e constrói a frase 'O menino corre.' utilizando cartões-palavra. Integra a palavra num contexto sintáctico, reforçando o significado e a funcionalidade da leitura. Nota: o artigo muda para 'O' (masculino), reforçando a distinção de género.",
+      "interaction": {
+        "state": [
+          { "name": "palavrasDaFrase", "type": "sorting", "options": ["O", "menino", "corre", "."] },
+          { "name": "fraseFormada", "type": "derived", "derivedFrom": "join(palavrasDaFrase, ' ')" },
+          { "name": "fraseCorrecta", "type": "derived", "derivedFrom": "fraseFormada === 'O menino corre .'" }
+        ],
+        "render": "Cartões-palavra arrastáveis (O, menino, corre, .) dispostos fora de ordem; linha de construção em baixo com posições marcadas; ao completar, frase lida em áudio; imagem do menino a correr aparece como confirmação",
+        "transition": "Arrastar cartões-palavra para a linha de construção → frase actualiza em tempo real → ao completar correctamente: áudio lê a frase + imagem aparece + animação; se ordem errada: feedback âmbar + sugestão",
+        "constraint": "A frase tem uma ordem fixa (artigo-sujeito-verbo) com pontuação — o aluno descobre as regras de construção frásica e que 'O' acompanha 'menino' (vs. 'A' com 'menina')",
+        "assessment": "O aluno ordena os 4 elementos da frase correctamente e lê a frase em voz alta com entoação adequada"
+      },
+      "differentiation": {
+        "support": "'O' e '.' já colocados; apenas 2 palavras para ordenar (menino, corre); frase lida em áudio como modelo",
+        "standard": "4 elementos para ordenar; sem modelo áudio prévio; lê a frase sozinho",
+        "challenge": "6 elementos (ex: 'O menino corre no recreio .'); cria frase própria com 'menino' num campo de texto; compara com 'A menina sorri.'"
+      },
+      "duration": 6
+    },
+    {
+      "summary": "Mini-avaliação formativa — reconhecer, segmentar, reconstruir e usar",
+      "textDescription": "Verificação final com 4 tarefas que cobrem os critérios de avaliação do M28P: reconhecimento global, segmentação, reconstrução e uso em frase. Inclui tarefa de distinção 'menino' vs. 'menina' como verificação adicional. Resultados registados para o ficheiro individual do aluno.",
+      "interaction": {
+        "state": [
+          { "name": "tarefa", "type": "dropdown", "options": ["reconhecimento", "segmentação", "reconstrução", "frase"], "default": "reconhecimento" },
+          { "name": "resultadoTarefa", "type": "quiz", "options": ["correcto", "incorrecto"] },
+          { "name": "progressoGlobal", "type": "derived", "derivedFrom": "count(correctos) / 4" }
+        ],
+        "render": "4 mini-tarefas em sequência, cada uma num ecrã limpo: (1) identificar 'menino' entre 3 palavras (incluindo 'menina'); (2) indicar número de sílabas e nomear a sílaba nova 'no'; (3) ordenar sílabas me-ni-no; (4) completar frase 'O ___ corre.'. Barra de progresso com 4 estrelas no topo",
+        "transition": "Completar tarefa → estrela acende (verde se correcto, âmbar se com ajuda) → avança para tarefa seguinte → ao completar 4 tarefas, ecrã de resumo com estrelas conquistadas",
+        "constraint": "Cada tarefa avalia uma competência diferente — o aluno descobre o que já domina e onde precisa de mais prática",
+        "assessment": "O aluno completa as 4 tarefas: identifica a palavra 'menino' entre 3 opções (incluindo 'menina'), indica 3 sílabas, ordena me-ni-no correctamente, e completa a frase com 'menino'"
+      },
+      "differentiation": {
+        "support": "2 opções por tarefa em vez de 3; segunda tentativa permitida; apoio visual (imagem) em todas as tarefas",
+        "standard": "3 opções (incluindo 'menina'); uma tentativa por tarefa; sem imagem na tarefa de segmentação",
+        "challenge": "4 opções; inclui tarefa bónus: escrever 'menino' e 'nome' sem qualquer apoio e construir uma frase com cada palavra"
+      },
+      "duration": 5
+    }
+  ],
+  "sessionFlow": "0-5min: Abertura contextual — micro-história 'Um menino corre pelo recreio e salta sobre uma poça' com imagem e palavra em contexto → 5-10min: Reconhecimento global — identificar 'menino' entre palavras-distractor (incluindo 'menina') → 10-17min: Segmentação silábica — bater palmas me-ni-no e identificar a sílaba nova 'no' → 17-24min: Reconstrução — ordenar sílabas desordenadas para recompor a palavra (distractor 'na') → 24-31min: Recombinação — explorar novas palavras com as sílabas (nome, nono) → 31-37min: Leitura/escrita guiada — completar lacunas e escrever a palavra → 37-43min: Frase simples — construir 'O menino corre.' → 43-45min: Mini-avaliação formativa com 4 tarefas de verificação"
+}
