@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PageCraft — Visualizador</title>
+  <script src="./assets/vendor/marked.min.js"></script>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #fff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #dbe3ef;
+      --brand: #2563eb;
+      --brand2: #1d4ed8;
+      --chip: #eef4ff;
+      --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      --prose-max: 52rem;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 24px; }
+    header.top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    header.top h1 { margin: 0; font-size: clamp(1.35rem, 3vw, 1.75rem); }
+    .badge {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: var(--chip);
+      color: var(--brand2);
+    }
+    .nav { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      background: var(--brand);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+    }
+    .btn.secondary {
+      background: #fff;
+      color: var(--brand2);
+      border: 1px solid var(--line);
+    }
+    .error {
+      padding: 20px;
+      border-radius: 16px;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+    }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 24px 28px;
+      box-shadow: var(--shadow);
+    }
+    /* Markdown prose */
+    .prose {
+      max-width: var(--prose-max);
+      font-size: 1.02rem;
+    }
+    .prose h1 { font-size: 1.75rem; margin: 1.2em 0 0.5em; line-height: 1.2; }
+    .prose h2 { font-size: 1.35rem; margin: 1.4em 0 0.5em; color: #111827; border-bottom: 1px solid var(--line); padding-bottom: 0.35em; }
+    .prose h3 { font-size: 1.12rem; margin: 1.2em 0 0.4em; }
+    .prose p { margin: 0.65em 0; color: #374151; }
+    .prose ul, .prose ol { margin: 0.65em 0; padding-left: 1.4em; }
+    .prose li { margin: 0.35em 0; }
+    .prose hr { border: none; border-top: 1px solid var(--line); margin: 1.5em 0; }
+    .prose code {
+      background: #f3f4f6;
+      padding: 0.15em 0.45em;
+      border-radius: 6px;
+      font-size: 0.9em;
+    }
+    .prose pre {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 16px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-size: 0.88rem;
+    }
+    .prose pre code { background: transparent; padding: 0; color: inherit; }
+    .prose strong { color: #111827; }
+    .prose blockquote {
+      margin: 1em 0;
+      padding-left: 1em;
+      border-left: 4px solid var(--brand);
+      color: var(--muted);
+    }
+    /* DocSpec */
+    .ds-section { margin-bottom: 2rem; }
+    .ds-section:last-child { margin-bottom: 0; }
+    .ds-section h2 {
+      font-size: 1.15rem;
+      margin: 0 0 12px;
+      color: var(--brand2);
+    }
+    .ds-kv { display: grid; gap: 8px 20px; grid-template-columns: auto 1fr; font-size: 0.95rem; align-items: baseline; }
+    .ds-kv dt { color: var(--muted); font-weight: 500; }
+    .ds-kv dd { margin: 0; }
+    .ds-list { margin: 0; padding-left: 1.25rem; }
+    .ds-list li { margin: 0.4em 0; }
+    table.ds-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    table.ds-table th, table.ds-table td {
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    table.ds-table th { background: #f8fafc; font-weight: 600; }
+    .unit-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+      background: #fafbfc;
+    }
+    .unit-card h3 { margin: 0 0 10px; font-size: 1.05rem; }
+    .unit-meta { font-size: 0.85rem; color: var(--muted); margin-bottom: 10px; }
+    .dl-block dt {
+      font-weight: 600;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+    .dl-block dt:first-child { margin-top: 0; }
+    .dl-block dd { margin: 4px 0 0; white-space: pre-wrap; }
+    .json-snippet {
+      margin: 8px 0 0;
+      padding: 12px;
+      background: #1e293b;
+      color: #cbd5e1;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .flow-box {
+      padding: 14px 16px;
+      background: #f8fafc;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div>
+        <h1 id="pageTitle">PageCraft</h1>
+        <span id="viewBadge" class="badge"></span>
+      </div>
+      <nav class="nav">
+        <a class="btn secondary" href="./index.html">Catálogo</a>
+        <a id="openActivity" class="btn" href="#" style="display:none">Abrir atividade</a>
+      </nav>
+    </header>
+    <main id="main" class="panel">
+      <p id="loading">A carregar…</p>
+    </main>
+  </div>
+
+  <script>
+    function esc(s) {
+      if (s == null || s === '') return '';
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function parseQuery() {
+      const p = new URLSearchParams(window.location.search);
+      return {
+        slug: (p.get('slug') || '').trim(),
+        view: (p.get('view') || '').trim().toLowerCase()
+      };
+    }
+
+    function renderList(items, className) {
+      if (!items || !items.length) return '<p class="muted">—</p>';
+      const li = items.map((x) => '<li>' + esc(x) + '</li>').join('');
+      return '<ul class="ds-list ' + (className || '') + '">' + li + '</ul>';
+    }
+
+    function renderStateTable(rows) {
+      if (!rows || !rows.length) return '';
+      let h = '<table class="ds-table"><thead><tr><th>Estado</th><th>Tipo / detalhes</th></tr></thead><tbody>';
+      for (const row of rows) {
+        const detail = typeof row === 'object' ? JSON.stringify(row, null, 2) : String(row);
+        const name = row && row.name != null ? esc(row.name) : '—';
+        h += '<tr><td>' + name + '</td><td><pre class="json-snippet" style="margin:0">' + esc(detail) + '</pre></td></tr>';
+      }
+      h += '</tbody></table>';
+      return h;
+    }
+
+    function renderInteraction(ix) {
+      if (!ix || typeof ix !== 'object') return '';
+      let h = '<div class="dl-block">';
+      const keys = ['state', 'render', 'transition', 'constraint', 'assessment'];
+      for (const k of keys) {
+        if (ix[k] == null) continue;
+        h += '<dt>' + esc(k) + '</dt>';
+        if (k === 'state' && Array.isArray(ix[k])) {
+          h += '<dd>' + renderStateTable(ix[k]) + '</dd>';
+        } else {
+          h += '<dd>' + esc(typeof ix[k] === 'object' ? JSON.stringify(ix[k], null, 2) : ix[k]) + '</dd>';
+        }
+      }
+      h += '</div>';
+      return h;
+    }
+
+    function renderDifferentiation(d) {
+      if (!d || typeof d !== 'object') return '';
+      let h = '<div class="dl-block">';
+      if (d.support != null) h += '<dt>Apoio</dt><dd>' + esc(d.support) + '</dd>';
+      if (d.standard != null) h += '<dt>Intermédio</dt><dd>' + esc(d.standard) + '</dd>';
+      if (d.challenge != null) h += '<dt>Desafio</dt><dd>' + esc(d.challenge) + '</dd>';
+      h += '</div>';
+      return h;
+    }
+
+    function renderDocSpec(data) {
+      const cur = data.curriculum || {};
+      const ae = cur.ae || [];
+      let aeHtml = '';
+      if (ae.length) {
+        aeHtml = '<table class="ds-table"><thead><tr><th>Disciplina</th><th>Ano</th><th>Domínio</th><th>Descritor</th></tr></thead><tbody>';
+        for (const row of ae) {
+          aeHtml += '<tr><td>' + esc(row.subject) + '</td><td>' + esc(row.year) + '</td><td>' + esc(row.domain) + '</td><td>' + esc(row.descriptor);
+          if (row.source) aeHtml += '<br><small style="color:var(--muted)">' + esc(row.source) + '</small>';
+          aeHtml += '</td></tr>';
+        }
+        aeHtml += '</tbody></table>';
+      }
+
+      const mem = data.memAlignment || {};
+      let unitsHtml = '';
+      const units = data.units || [];
+      units.forEach((u, i) => {
+        const title = u.summary || ('Unidade ' + (i + 1));
+        const dur = u.duration != null ? u.duration + ' min' : '—';
+        unitsHtml += '<article class="unit-card"><h3>' + esc(title) + '</h3>';
+        unitsHtml += '<div class="unit-meta">Duração: ' + esc(dur) + '</div>';
+        if (u.textDescription) unitsHtml += '<p>' + esc(u.textDescription) + '</p>';
+        if (u.interaction) unitsHtml += renderInteraction(u.interaction);
+        if (u.differentiation) {
+          unitsHtml += '<h4 style="margin:14px 0 6px;font-size:0.95rem">Diferenciação</h4>' + renderDifferentiation(u.differentiation);
+        }
+        unitsHtml += '</article>';
+      });
+
+      return (
+        '<div class="ds-doc">' +
+        '<section class="ds-section"><h2>Visão geral</h2>' +
+        '<dl class="ds-kv">' +
+        '<dt>Tema</dt><dd>' + esc(data.topic) + '</dd>' +
+        '<dt>Idade / ano</dt><dd>' + esc(data.ageRange) + '</dd>' +
+        '<dt>Duração</dt><dd>' + esc(data.duration != null ? data.duration + ' minutos' : '—') + '</dd>' +
+        '</dl></section>' +
+        '<section class="ds-section"><h2>Objectivos</h2>' + renderList(data.objectives) + '</section>' +
+        '<section class="ds-section"><h2>Materiais</h2>' + renderList(data.materials) + '</section>' +
+        (aeHtml ? '<section class="ds-section"><h2>Currículo (AE)</h2>' + aeHtml + '</section>' : '') +
+        (cur.competencies && cur.competencies.length
+          ? '<section class="ds-section"><h2>Competências transversais</h2>' + renderList(cur.competencies) + '</section>'
+          : '') +
+        (mem.modules || mem.instruments || mem.socialOrganization
+          ? '<section class="ds-section"><h2>Alinhamento MEM</h2><dl class="ds-kv">' +
+            (mem.modules && mem.modules.length ? '<dt>Módulos</dt><dd>' + esc(mem.modules.join(' · ')) + '</dd>' : '') +
+            (mem.instruments && mem.instruments.length ? '<dt>Instrumentos</dt><dd>' + esc(mem.instruments.join(' · ')) + '</dd>' : '') +
+            (mem.socialOrganization ? '<dt>Organização social</dt><dd>' + esc(mem.socialOrganization) + '</dd>' : '') +
+            '</dl></section>'
+          : '') +
+        (data.sessionFlow
+          ? '<section class="ds-section"><h2>Fluxo da sessão</h2><div class="flow-box">' + esc(data.sessionFlow) + '</div></section>'
+          : '') +
+        (unitsHtml ? '<section class="ds-section"><h2>Unidades pedagógicas</h2>' + unitsHtml + '</section>' : '') +
+        '</div>'
+      );
+    }
+
+    const main = document.getElementById('main');
+    const pageTitle = document.getElementById('pageTitle');
+    const viewBadge = document.getElementById('viewBadge');
+    const openActivity = document.getElementById('openActivity');
+    const { slug, view } = parseQuery();
+
+    function showError(msg) {
+      main.innerHTML = '<div class="error" role="alert">' + esc(msg) + '</div>';
+    }
+
+    if (!slug || (view !== 'teacher' && view !== 'docspec')) {
+      showError(
+        'Parâmetros em falta ou inválidos. Utilize ?slug=nome-da-pasta&view=teacher ou view=docspec. Exemplo: viewer.html?slug=menina&view=teacher'
+      );
+      pageTitle.textContent = 'PageCraft';
+      viewBadge.textContent = '';
+    } else {
+      viewBadge.textContent = view === 'teacher' ? 'Guia do professor' : 'DocSpec (especificação)';
+
+      (async () => {
+        let catalog = { items: [] };
+        try {
+          const cr = await fetch('./catalog.json');
+          if (cr.ok) catalog = await cr.json();
+        } catch (_) {}
+
+        let meta = null;
+        try {
+          const mr = await fetch('./activities/' + slug + '/meta.json');
+          if (mr.ok) meta = await mr.json();
+        } catch (_) {}
+
+        const item = (catalog.items || []).find((i) => i.slug === slug);
+        const title = (item && item.title) || (meta && meta.title) || slug;
+        pageTitle.textContent = title;
+
+        const actUrl = (item && item.url) || './activities/' + slug + '/';
+        openActivity.href = actUrl;
+        openActivity.style.display = 'inline-block';
+
+        const path =
+          view === 'teacher' ? './activities/' + slug + '/teacher.md' : './activities/' + slug + '/docspec.json';
+
+        try {
+          const fr = await fetch(path);
+          if (!fr.ok) throw new Error('Não foi possível carregar o ficheiro (' + fr.status + ').');
+          const payload = view === 'teacher' ? await fr.text() : await fr.json();
+          if (view === 'teacher') {
+            const html = marked.parse(payload, { breaks: true });
+            main.innerHTML = '<article class="prose">' + html + '</article>';
+          } else {
+            main.innerHTML = renderDocSpec(payload);
+          }
+        } catch (e) {
+          showError(e.message || 'Erro ao carregar o conteúdo.');
+        }
+      })();
+    }
+  </script>
+</body>
+</html>
