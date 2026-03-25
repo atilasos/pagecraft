@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Palavra 6 — bota | PageCraft</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #FFF8F0;
+      --surface: #FFFFFF;
+      --primary: #E05FA0;
+      --accent: #F59E0B;
+      --text: #1E1B18;
+      --ta: #7C3AED;
+      --ok: #22c55e;
+      --warn: #F59E0B;
+      --radius: 16px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Nunito', 'Poppins', 'Comic Sans MS', sans-serif;
+      background: radial-gradient(circle at 20% 10%, #fff 0%, var(--bg) 45%, #ffe9f4 100%);
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1.45;
+    }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 1.5rem; }
+    header {
+      background: linear-gradient(135deg, #E05FA0, #7C3AED);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+    h1 { font-size: 2rem; margin: 0 0 .5rem; }
+    h2 { font-size: 1.6rem; margin: 0 0 .6rem; color: var(--primary); }
+    h3 { margin: .5rem 0; }
+    p { margin: .4rem 0; }
+    .meta, .badge {
+      display: inline-flex; align-items: center; gap: .35rem;
+      background: rgba(255,255,255,.2); padding: .3rem .8rem; border-radius: 999px; font-weight: 700;
+      margin-right: .4rem; min-height: 48px;
+    }
+    .obj { margin: .9rem 0 0; background: rgba(255,255,255,.18); border-radius: 12px; padding: .9rem 1rem; }
+    .obj li { margin: .3rem 0; }
+    .unit {
+      margin-top: 1rem; background: var(--surface); border: 2px solid var(--primary);
+      border-radius: var(--radius); padding: 1rem; box-shadow: var(--shadow);
+    }
+    .small { font-size: .92rem; }
+    .diff-tabs { display:flex; flex-wrap: wrap; gap:.5rem; margin: .8rem 0; }
+    .tab {
+      border: 2px solid #ddd; border-radius: 999px; background:#fff; cursor:pointer;
+      min-height: 48px; padding: .55rem 1rem; font-size: 1rem; font-weight: 700;
+      transition: .2s transform, .2s box-shadow, .2s background; touch-action: manipulation;
+    }
+    .tab.active { background: var(--text); color: #fff; border-color: var(--text); }
+    .tab:focus-visible, button:focus-visible, .card-btn:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 3px solid #7C3AED; outline-offset: 2px;
+    }
+    .diff-panel { display:none; background:#fffaf2; border:2px dashed #f5c87a; border-radius:12px; padding:.6rem .8rem; }
+    .diff-panel.active { display:block; }
+    .word-display { font-size: 48px; font-weight: 800; letter-spacing: .05em; color: var(--primary); text-transform: uppercase; }
+    .story { display:grid; grid-template-columns: 1.1fr 1fr; gap: .8rem; align-items:center; }
+    .illustration {
+      background: linear-gradient(160deg, #d8f3ff, #f2fbff);
+      border-radius: 14px; padding: .8rem; text-align:center; min-height: 220px; position: relative;
+      overflow: hidden;
+    }
+    .emoji-hero { font-size: 4.4rem; display:inline-block; transition: transform .2s; }
+    .pulse { animation: pulse .6s ease-in-out 2; }
+    @keyframes pulse { 0%,100%{transform:scale(1)}50%{transform:scale(1.1)} }
+    .bounce { animation: bounce .5s; }
+    @keyframes bounce { 0%,100%{transform:translateY(0)}40%{transform:translateY(-10px)}70%{transform:translateY(-4px)} }
+    .highlight { text-decoration: underline 4px var(--accent); font-size: 1.2em; font-weight: 800; }
+    .btn {
+      border:0; background: var(--primary); color:#fff; font-weight:800; border-radius:999px;
+      min-height: 48px; padding: .75rem 2rem; cursor:pointer; box-shadow: 0 4px 12px rgba(224,95,160,.35);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn:hover { transform: scale(1.05); box-shadow: 0 8px 18px rgba(224,95,160,.45); }
+    .btn:active { transform: scale(.97); }
+    .btn.alt { background: var(--accent); box-shadow: 0 4px 12px rgba(245,158,11,.35); }
+    .options { display:grid; grid-template-columns: repeat(auto-fit,minmax(120px,1fr)); gap:.7rem; margin-top:.7rem; }
+    .card-btn {
+      border:2px solid #ddd; background:#fff; border-radius:14px; padding:.9rem .6rem; min-height: 80px;
+      cursor:pointer; font-size: 1.6rem; transition:.2s; touch-action: manipulation;
+    }
+    .card-btn.active { border-color: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow); }
+    .card-btn.correct { border-color: var(--ok); background: #f0fdf4; }
+    .card-btn.wrong { border-color: var(--warn); background: #fffbeb; animation: shake .3s linear 2; }
+    @keyframes shake { 25%{transform:translateX(-4px)}75%{transform:translateX(4px)} }
+    .feedback { margin-top:.6rem; padding:.6rem .8rem; border-radius:12px; display:none; font-weight:700; }
+    .feedback.show { display:block; }
+    .feedback.ok { background:#f0fdf4; color:#146534; border:2px solid var(--ok); }
+    .feedback.no { background:#fffbeb; color:#92400e; border:2px solid var(--warn); }
+    .drag-row { display:flex; flex-wrap:wrap; gap:.6rem; align-items:center; margin:.6rem 0; }
+    .slot {
+      width: 120px; min-height: 76px; border:3px dashed #bbb; border-radius:12px;
+      display:flex; align-items:center; justify-content:center; font-size:1.2rem; font-weight:800; background:#fafafa;
+    }
+    .slot.filled { border-style: solid; border-color: var(--ta); background:#f3ebff; }
+    .chip {
+      min-height: 48px; padding:.5rem 1.2rem; border-radius:12px; color:#fff; font-size: 36px; font-weight:800;
+      cursor: grab; user-select:none; touch-action: none; box-shadow: var(--shadow);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .chip:active { cursor: grabbing; transform: scale(1.06); }
+    .chip.bo { background: var(--primary); }
+    .chip.ta { background: var(--ta); }
+    .chip.gray { background: #9ca3af; }
+    .mini-word { font-size: 1.2rem; padding:.35rem .7rem; border-radius:999px; border:2px solid #ddd; background:#fff; min-height:48px; }
+    .builder { display:grid; grid-template-columns: 1fr auto 1fr; gap:.6rem; align-items:center; margin:.8rem 0; }
+    .big-input, textarea {
+      width: 100%; min-height: 52px; border:2px solid #d8d8d8; border-radius:12px; font-size:1.2rem; padding:.6rem .8rem;
+    }
+    .maker { background:#E8FBEF; border:2px solid #22c55e; border-radius:var(--radius); padding:1rem; margin-top:1rem; }
+    .maker-card { background:#fff; border-left:5px solid #22c55e; padding:.8rem; border-radius:10px; margin:.5rem 0; }
+    .assessment { background:#fff3e0; border:2px solid var(--accent); border-radius:var(--radius); padding:1rem; margin-top:1rem; }
+    .ass-item { background:#fff; border-radius:10px; padding:.7rem; margin:.5rem 0; }
+    .scale { display:flex; flex-wrap:wrap; gap:.7rem; font-size:.95rem; margin-top:.4rem; }
+    .curric { background:#6b21a8; color:#fff; border-radius:var(--radius); padding:1rem; margin-top:1rem; }
+    .curric h2 { color:#fff; }
+    footer { text-align:center; margin:1rem 0 2rem; color:#6b7280; font-weight:700; }
+    #fx { position: fixed; inset: 0; pointer-events: none; z-index: 50; }
+    .stars { font-size: 1.8rem; letter-spacing: .1em; }
+    .progress { height: 14px; border-radius: 999px; background:#ffd8ac; overflow:hidden; margin:.5rem 0; }
+    .bar { height:100%; width:0; background: linear-gradient(90deg,#22c55e,#16a34a); transition: width .25s; }
+    .hide { display:none; }
+    @media (max-width: 900px) {
+      body { font-size: 18px; }
+      .story { grid-template-columns: 1fr; }
+      .builder { grid-template-columns: 1fr; }
+      .slot { width: 100px; }
+      .word-display { font-size: 40px; }
+    }
+    @media (max-width: 768px) {
+      .wrap { padding:.8rem; }
+      body { font-size: 16px; }
+      .word-display { font-size: 34px; }
+      .chip { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="fx" aria-hidden="true"></canvas>
+  <main class="wrap">
+    <header>
+      <h1>Palavra 6 — bota</h1>
+      <div>
+        <span class="meta">👧 1.º ano (6 anos)</span>
+        <span class="meta">⏱️ 45 minutos</span>
+      </div>
+      <ul class="obj">
+        <li>Reconhecer a palavra <strong>bota</strong> globalmente.</li>
+        <li>Segmentar em sílabas: <strong>bo</strong> + <strong>ta</strong>.</li>
+        <li>Recombinar sílabas e distinguir palavras reais.</li>
+        <li>Usar <strong>bota</strong> numa frase simples.</li>
+      </ul>
+    </header>
+
+    <section class="unit" id="u1">
+      <h2>1) Abertura contextual — a bota na história (4 min)</h2>
+      <div class="diff-tabs" data-unit="u1">
+        <button class="tab active" data-level="support" aria-label="Apoio">🟢 Apoio</button>
+        <button class="tab" data-level="standard" aria-label="Intermédio">🟡 Intermédio</button>
+        <button class="tab" data-level="challenge" aria-label="Desafio">🔴 Desafio</button>
+      </div>
+      <div class="diff-panel active" data-level="support">Imagem grande visível. Frase curta: "A bota pum!"</div>
+      <div class="diff-panel" data-level="standard">Micro-história completa com apoio do professor.</div>
+      <div class="diff-panel" data-level="challenge">Lê sozinho e conta quantas vezes aparece "bota".</div>
+      <div class="story">
+        <div class="illustration" aria-label="Ilustração da bota na chuva">
+          <div class="emoji-hero" id="bootHero">🧒🧥👢💧</div>
+          <p>A Marta salta nas poças... <strong>pum pum!</strong></p>
+        </div>
+        <div>
+          <p id="storyText">A Marta calça a <span id="botaWord">bota</span>. A <span class="bota-copy">bota</span> faz pum pum!</p>
+          <button class="btn" id="discoverBtn" aria-label="Descobre a palavra">Descobre a palavra</button>
+          <div id="u1Feedback" class="feedback"> </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="unit" id="u2">
+      <h2>2) Reconhecimento global — ver, ouvir, associar (4 min)</h2>
+      <div class="diff-tabs" data-unit="u2">
+        <button class="tab active" data-level="support">🟢 Apoio</button><button class="tab" data-level="standard">🟡 Intermédio</button><button class="tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-panel active" data-level="support">2 opções e pista após 5 segundos.</div>
+      <div class="diff-panel" data-level="standard">3 opções sem pista automática.</div>
+      <div class="diff-panel" data-level="challenge">4 opções escritas parecidas.</div>
+      <div class="word-display" aria-label="Palavra alvo">BOTA</div>
+      <div id="u2Options" class="options" aria-label="Cartões de escolha"></div>
+      <button class="btn alt" id="u2Confirm" aria-label="Confirmar escolha">Confirmar</button>
+      <button class="btn" id="u2Retry" aria-label="Nova tentativa">Nova tentativa</button>
+      <div id="u2Feedback" class="feedback"></div>
+    </section>
+
+    <section class="unit" id="u3">
+      <h2>3) Segmentação silábica — dividir "bota" (6 min)</h2>
+      <div class="diff-tabs" data-unit="u3">
+        <button class="tab active" data-level="support">🟢 Apoio</button><button class="tab" data-level="standard">🟡 Intermédio</button><button class="tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-panel active" data-level="support">Só "bo" e "ta".</div><div class="diff-panel" data-level="standard">4 blocos com distractores.</div><div class="diff-panel" data-level="challenge">6 blocos e segunda palavra.</div>
+      <p class="word-display">BOTA</p>
+      <div class="drag-row"><div class="slot" data-u3-slot="0" aria-label="Posição 1">1</div><div class="slot" data-u3-slot="1" aria-label="Posição 2">2</div></div>
+      <div class="drag-row" id="u3Pool" aria-label="Blocos de sílabas"></div>
+      <button class="btn alt" id="clapBtn" aria-label="Bater palmas">👏 Bater palmas</button>
+      <span class="badge" id="clapCount">Palmas: 0</span>
+      <div id="u3Feedback" class="feedback"></div>
+    </section>
+
+    <section class="unit" id="u4">
+      <h2>4) Recombinação — novas palavras (7 min)</h2>
+      <div class="diff-tabs" data-unit="u4"><button class="tab active" data-level="support">🟢 Apoio</button><button class="tab" data-level="standard">🟡 Intermédio</button><button class="tab" data-level="challenge">🔴 Desafio</button></div>
+      <div class="diff-panel active" data-level="support">Combinações semi-formadas.</div><div class="diff-panel" data-level="standard">8 sílabas, mínimo 3 palavras reais.</div><div class="diff-panel" data-level="challenge">10 sílabas e explicação das não-palavras.</div>
+      <div class="builder">
+        <div class="slot" data-u4-slot="0">1</div>
+        <div class="word-display" id="u4Current">__</div>
+        <div class="slot" data-u4-slot="1">2</div>
+      </div>
+      <div class="drag-row" id="u4Pool"></div>
+      <button class="btn alt" id="u4Check">É uma palavra?</button>
+      <div id="u4Feedback" class="feedback"></div>
+      <p><strong>⭐ Palavras encontradas:</strong> <span id="u4Found">(nenhuma ainda)</span></p>
+    </section>
+
+    <section class="unit" id="u5">
+      <h2>5) Leitura e escrita guiada (6 min)</h2>
+      <div class="diff-tabs" data-unit="u5"><button class="tab active" data-level="support">🟢 Apoio</button><button class="tab" data-level="standard">🟡 Intermédio</button><button class="tab" data-level="challenge">🔴 Desafio</button></div>
+      <div class="diff-panel active" data-level="support">2 opções e modelo sempre visível.</div><div class="diff-panel" data-level="standard">4 opções e modelo a pedido.</div><div class="diff-panel" data-level="challenge">Sem opções, de memória.</div>
+      <div id="u5Phase1">
+        <p class="word-display">___TA</p>
+        <div class="options" id="u5Options"></div>
+      </div>
+      <div id="u5Phase2" class="hide">
+        <p>Traça e copia: <span class="word-display" style="font-size:40px; opacity:.4; border-bottom:2px dashed #bbb;">BOTA</span></p>
+        <input id="u5Input" class="big-input" aria-label="Escreve bota" placeholder="Escreve aqui..." />
+        <button class="btn alt" id="u5Validate">Validar escrita</button>
+      </div>
+      <div id="u5Done" class="hide"><p class="word-display">BOTA ⭐</p></div>
+      <button class="btn" id="u5Next">Agora escreve</button>
+      <div id="u5Feedback" class="feedback"></div>
+    </section>
+
+    <section class="unit" id="u6">
+      <h2>6) Frase simples — "A bota faz pum pum." (7 min)</h2>
+      <div class="diff-tabs" data-unit="u6"><button class="tab active" data-level="support">🟢 Apoio</button><button class="tab" data-level="standard">🟡 Intermédio</button><button class="tab" data-level="challenge">🔴 Desafio</button></div>
+      <div class="diff-panel active" data-level="support">Primeira palavra já colocada.</div><div class="diff-panel" data-level="standard">Frase completa sem pista.</div><div class="diff-panel" data-level="challenge">Criar frase nova com "bota".</div>
+      <div class="drag-row" id="u6Pool"></div>
+      <div class="drag-row" id="u6Slots">
+        <div class="slot" data-u6-slot="0">1</div><div class="slot" data-u6-slot="1">2</div><div class="slot" data-u6-slot="2">3</div><div class="slot" data-u6-slot="3">4</div><div class="slot" data-u6-slot="4">5</div><div class="slot" data-u6-slot="5">6</div>
+      </div>
+      <button class="btn alt" id="u6Check">Verificar frase</button>
+      <textarea id="u6Custom" class="hide" rows="3" placeholder="Escreve a tua frase com bota:"></textarea>
+      <div id="u6Feedback" class="feedback"></div>
+    </section>
+
+    <section class="unit" id="u7">
+      <h2>7) Mini-avaliação formativa (5 min)</h2>
+      <div class="diff-tabs" data-unit="u7"><button class="tab active" data-level="support">🟢 Apoio</button><button class="tab" data-level="standard">🟡 Intermédio</button><button class="tab" data-level="challenge">🔴 Desafio</button></div>
+      <div class="diff-panel active" data-level="support">Com pista visual.</div><div class="diff-panel" data-level="standard">Sem pista extra.</div><div class="diff-panel" data-level="challenge">Inclui bónus.</div>
+      <div class="progress"><div class="bar" id="u7Bar"></div></div>
+      <div id="u7Task"></div>
+      <div id="u7Final" class="hide">
+        <p class="stars" id="u7Stars"></p>
+        <button class="btn" id="u7Learn">Ver o que aprendeste hoje</button>
+      </div>
+    </section>
+
+    <section class="unit" id="u8">
+      <h2>8) Extensão criativa (6 min)</h2>
+      <div class="diff-tabs" data-unit="u8"><button class="tab active" data-level="support">🟢 Apoio</button><button class="tab" data-level="standard">🟡 Intermédio</button><button class="tab" data-level="challenge">🔴 Desafio</button></div>
+      <div class="diff-panel active" data-level="support">Colorir e legenda com "bota".</div><div class="diff-panel" data-level="standard">Legenda de 3-5 palavras.</div><div class="diff-panel" data-level="challenge">Micro-história de 3 frases.</div>
+      <label for="u8Mode">Escolhe a actividade:</label>
+      <select id="u8Mode" aria-label="Modo de extensão" class="big-input">
+        <option>Desenhar a minha bota</option>
+        <option>Inventar uma história</option>
+        <option>Encontrar palavras com 'bo'</option>
+        <option>Canção das botas</option>
+      </select>
+      <div id="u8Work"></div>
+      <button class="btn" id="u8Share">Partilhar com a turma</button>
+      <div id="u8Feedback" class="feedback"></div>
+    </section>
+
+    <section class="maker">
+      <h2>🛠️ Desafios Maker</h2>
+      <article class="maker-card"><h3>Unplugged</h3><p>Com cartões físicos das sílabas "bo" e "ta", dispõe na mesa e bate palmas em cada sílaba. Depois tenta novas combinações.</p></article>
+      <article class="maker-card"><h3>Whiteboard</h3><p>Cria um "Mapa das Sílabas" com bo/ta no centro e setas para palavras reais encontradas.</p></article>
+      <article class="maker-card"><h3>Unplugged</h3><p>Desenha a bota dos sonhos em A4, escreve uma frase-legenda e apresenta na Galeria das Botas.</p></article>
+    </section>
+
+    <section class="assessment">
+      <h2>📝 Mini-avaliação observável</h2>
+      <div class="ass-item">1) Reconhece "bota" entre palavras parecidas.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div></div>
+      <div class="ass-item">2) Indica que "bota" tem 2 sílabas.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div></div>
+      <div class="ass-item">3) Reconstrói "bo" + "ta" na ordem correcta.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div></div>
+      <div class="ass-item">4) Ordena a frase "A bota faz pum pum.".
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div></div>
+      <div class="ass-item">5) Usa "bota" numa frase oral ou escrita.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div></div>
+    </section>
+
+    <section class="curric">
+      <h2>Referências curriculares</h2>
+      <h3>Aprendizagens Essenciais</h3>
+      <ul>
+        <li>Distinguir sílabas em palavras frequentes e identificar número de sílabas.</li>
+        <li>Relacionar letra(s)-som, reconhecer palavras frequentes, ler e escrever frases simples.</li>
+        <li>Ouvir ler e responder oralmente a questões sobre texto.</li>
+      </ul>
+      <h3>Perfil do Aluno</h3>
+      <p>PA-A: Linguagens e textos · PA-C: Raciocínio e resolução de problemas · PA-F: Desenvolvimento pessoal e autonomia</p>
+    </section>
+    <footer>Gerado por PageCraft 🛠️</footer>
+  </main>
+
+  <script>
+    const S = {
+      cenarioActiva: 'escondida', palavraDestacada: 'nao',
+      selectedU2: null, clap: 0,
+      u3Slots: [null, null], u4Slots: [null, null], u4Found: new Set(),
+      u5Phase: 'completar', u6Slots: Array(6).fill(null),
+      u7Index: 0, u7Ans: [false,false,false,false],
+      activeLevels: {u1:'support',u2:'support',u3:'support',u4:'support',u5:'support',u6:'support',u7:'support',u8:'support'}
+    };
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function beep(freq=440, dur=0.09, type='sine', vol=0.05){
+      const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+      o.type=type; o.frequency.value=freq; g.gain.value=vol;
+      o.connect(g); g.connect(audioCtx.destination); o.start();
+      g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+dur); o.stop(audioCtx.currentTime+dur);
+    }
+    function successTone(){ beep(660,.07,'triangle'); setTimeout(()=>beep(880,.1,'triangle'),80); }
+    function warnTone(){ beep(220,.1,'square'); }
+
+    const fx = document.getElementById('fx'), ctx = fx.getContext('2d');
+    let particles = [];
+    function resizeFx(){ fx.width = innerWidth * devicePixelRatio; fx.height = innerHeight * devicePixelRatio; ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0); }
+    addEventListener('resize', resizeFx); resizeFx();
+    function confetti(x=innerWidth/2,y=120){ for(let i=0;i<60;i++){ particles.push({x,y,vx:(Math.random()-0.5)*7,vy:Math.random()*-6-2,g:.14,c:["#22c55e","#E05FA0","#F59E0B","#7C3AED"][i%4],s:Math.random()*6+3,l:80}); } }
+    function tick(){ ctx.clearRect(0,0,innerWidth,innerHeight); particles=particles.filter(p=>p.l-->0); particles.forEach(p=>{p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; ctx.fillStyle=p.c; ctx.fillRect(p.x,p.y,p.s,p.s);}); requestAnimationFrame(tick);} tick();
+
+    function setupTabs(){
+      document.querySelectorAll('.diff-tabs').forEach(group=>{
+        group.addEventListener('click',e=>{
+          const btn=e.target.closest('.tab'); if(!btn) return;
+          const unit=group.dataset.unit; S.activeLevels[unit]=btn.dataset.level;
+          group.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); btn.classList.add('active');
+          const sec = group.parentElement;
+          sec.querySelectorAll('.diff-panel').forEach(p=>p.classList.toggle('active', p.dataset.level===btn.dataset.level));
+          refreshByLevel(unit);
+        });
+      });
+    }
+
+    function refreshByLevel(unit){
+      if(unit==='u2') renderU2();
+      if(unit==='u3') renderU3();
+      if(unit==='u4') renderU4();
+      if(unit==='u5') renderU5();
+      if(unit==='u6') renderU6();
+      if(unit==='u8') renderU8Work();
+    }
+
+    document.getElementById('discoverBtn').addEventListener('click', ()=>{
+      S.cenarioActiva='revelada'; S.palavraDestacada='sim';
+      const w=document.getElementById('botaWord'), hero=document.getElementById('bootHero');
+      w.classList.add('highlight','bounce'); hero.classList.add('pulse');
+      successTone(); confetti();
+      const fb = document.getElementById('u1Feedback');
+      fb.className='feedback show ok';
+      const story = document.getElementById('storyText');
+      if(S.activeLevels.u1==='support') story.innerHTML='A <span id="botaWord" class="highlight">bota</span> pum!';
+      if(S.activeLevels.u1==='challenge') {
+        const count = (story.textContent.match(/bota/gi)||[]).length;
+        fb.textContent = 'Muito bem! Encontraste "bota". No texto aparece '+count+' vezes.';
+      } else fb.textContent='Muito bem! Onde está escrita a palavra bota?';
+      setTimeout(()=>{w.classList.remove('bounce'); hero.classList.remove('pulse');},900);
+    });
+
+    function shuffle(a){ return [...a].sort(()=>Math.random()-.5); }
+    function renderU2(){
+      const lv=S.activeLevels.u2; S.selectedU2=null; document.getElementById('u2Feedback').className='feedback';
+      const op = lv==='support' ? ['bota','meia'] : (lv==='challenge' ? ['bota','botina','bote','botão'] : ['bota','sapato','meia']);
+      const wrap=document.getElementById('u2Options'); wrap.innerHTML='';
+      const arr=shuffle(op);
+      arr.forEach(v=>{
+        const b=document.createElement('button'); b.className='card-btn'; b.textContent = v==='bota'?'👢':'🧦'; if(lv==='challenge') b.textContent=v;
+        b.setAttribute('aria-label','Escolher '+v);
+        b.addEventListener('click',()=>{ S.selectedU2=v; wrap.querySelectorAll('.card-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); beep(500,.05); });
+        wrap.appendChild(b);
+      });
+      if(lv==='support'){ setTimeout(()=>{ if(!S.selectedU2){ [...wrap.children].forEach((el,i)=>{ if(arr[i]==='bota'){ el.style.boxShadow='0 0 0 4px #22c55e inset'; el.classList.add('pulse'); } }); } },5000); }
+    }
+    document.getElementById('u2Confirm').addEventListener('click',()=>{
+      const fb=document.getElementById('u2Feedback'); if(!S.selectedU2){ fb.className='feedback show no'; fb.textContent='Escolhe primeiro uma opção.'; return; }
+      const btns=[...document.querySelectorAll('#u2Options .card-btn')];
+      if(S.selectedU2==='bota'){ fb.className='feedback show ok'; fb.textContent='✓ Correcto! Esta é a imagem/palavra bota.'; successTone(); confetti(); btns.find(b=>b.classList.contains('active'))?.classList.add('correct'); }
+      else { fb.className='feedback show no'; fb.textContent='Ainda não. Procura a forma global de "bota".'; warnTone(); btns.find(b=>b.classList.contains('active'))?.classList.add('wrong'); btns.forEach((b,i)=>{ const lv=S.activeLevels.u2; const arr = lv==='support'?['bota','meia']:(lv==='challenge'?['bota','botina','bote','botão']:['bota','sapato','meia']); if((S.activeLevels.u2==='challenge'?b.textContent: (b.textContent==='👢'?'bota':'x'))==='bota') b.classList.add('correct'); }); }
+    });
+    document.getElementById('u2Retry').addEventListener('click',renderU2);
+
+    function mkChip(text, cls='gray'){
+      const d=document.createElement('div'); d.className='chip '+cls; d.textContent=text; d.dataset.val=text; d.setAttribute('role','button'); d.tabIndex=0; return d;
+    }
+
+    function renderU3(){
+      S.u3Slots=[null,null]; document.querySelectorAll('[data-u3-slot]').forEach((s,i)=>{s.textContent=String(i+1); s.classList.remove('filled'); s.innerHTML=String(i+1);});
+      const pool=document.getElementById('u3Pool'); pool.innerHTML='';
+      const lv=S.activeLevels.u3;
+      const arr = lv==='support' ? ['bo','ta'] : (lv==='challenge' ? ['bo','ta','ba','to','la','co'] : ['bo','ta','ba','to']);
+      arr.forEach(v=>pool.appendChild(mkChip(v, v==='bo'?'bo':(v==='ta'?'ta':'gray'))));
+      setupDnD('#u3 .chip','[data-u3-slot]','u3');
+      document.getElementById('u3Feedback').className='feedback';
+    }
+    document.getElementById('clapBtn').addEventListener('click',()=>{ S.clap=Math.min(2,S.clap+1); document.getElementById('clapCount').textContent='Palmas: '+S.clap; beep(340,.06,'square'); checkU3(); });
+    function checkU3(){
+      const fb=document.getElementById('u3Feedback');
+      if(S.u3Slots[0]==='bo'&&S.u3Slots[1]==='ta'&&S.clap===2){ fb.className='feedback show ok'; fb.textContent='Excelente! "bo" + "ta" e 2 palmas.'; successTone(); confetti(); }
+      else if(S.u3Slots[0]&&S.u3Slots[1]){ fb.className='feedback show no'; fb.textContent='Experimenta outra ordem e confirma 2 palmas.'; }
+    }
+
+    const realWords = new Set(['bota','bola','bolo','boca','taco','tapete']);
+    function renderU4(){
+      S.u4Slots=[null,null]; ['0','1'].forEach(i=>{const s=document.querySelector(`[data-u4-slot="${i}"]`); s.textContent=String(Number(i)+1); s.classList.remove('filled');});
+      document.getElementById('u4Current').textContent='__';
+      document.getElementById('u4Feedback').className='feedback';
+      const lv=S.activeLevels.u4;
+      const pool=document.getElementById('u4Pool'); pool.innerHTML='';
+      const arr = lv==='support' ? ['bo','ta','la','co'] : (lv==='challenge' ? ['bo','ta','la','co','ca','pe','te','lo','to','ba'] : ['bo','ta','la','co','ca','pe','te','lo']);
+      arr.forEach(v=>pool.appendChild(mkChip(v, v==='bo'?'bo':(v==='ta'?'ta':'gray'))));
+      setupDnD('#u4 .chip','[data-u4-slot]','u4');
+      updateU4Found();
+    }
+    document.getElementById('u4Check').addEventListener('click',()=>{
+      const c=(S.u4Slots[0]||'')+(S.u4Slots[1]||'');
+      const fb=document.getElementById('u4Feedback');
+      if(c.length<2){ fb.className='feedback show no'; fb.textContent='Preenche os 2 slots.'; return; }
+      if(realWords.has(c)){ fb.className='feedback show ok'; fb.textContent='✓ "'+c+'" é palavra real!'; S.u4Found.add(c); successTone(); confetti(); }
+      else { fb.className='feedback show no'; fb.textContent='"'+c+'" não é palavra aqui. Tenta nova combinação.'; warnTone(); }
+      updateU4Found();
+    });
+    function updateU4Found(){ document.getElementById('u4Found').textContent=[...S.u4Found].join(' ⭐ ') || '(nenhuma ainda)'; }
+
+    function renderU5(){
+      const lv=S.activeLevels.u5; S.u5Phase='completar';
+      document.getElementById('u5Phase1').classList.remove('hide'); document.getElementById('u5Phase2').classList.add('hide'); document.getElementById('u5Done').classList.add('hide');
+      document.getElementById('u5Next').classList.remove('hide'); document.getElementById('u5Feedback').className='feedback';
+      const options = lv==='support' ? ['bo','ba'] : (lv==='challenge' ? [] : ['bo','ba','bu','bi']);
+      const w=document.getElementById('u5Options'); w.innerHTML='';
+      if(lv==='challenge'){
+        w.innerHTML='<input id="u5Free" class="big-input" aria-label="Sílaba inicial" placeholder="Escreve a sílaba inicial" />';
+      } else {
+        shuffle(options).forEach(v=>{ const b=document.createElement('button'); b.className='mini-word'; b.textContent=v; b.addEventListener('click',()=>checkU5(v)); w.appendChild(b); });
+      }
+    }
+    function checkU5(v){
+      const fb=document.getElementById('u5Feedback');
+      if(v==='bo'){ fb.className='feedback show ok'; fb.textContent='Muito bem! A palavra começa por "bo".'; successTone(); }
+      else { fb.className='feedback show no'; fb.textContent='Quase! Tenta a sílaba inicial de "bota".'; warnTone(); }
+    }
+    document.getElementById('u5Next').addEventListener('click',()=>{
+      if(S.activeLevels.u5==='challenge'){
+        const val=(document.getElementById('u5Free')?.value||'').trim().toLowerCase();
+        checkU5(val);
+      }
+      S.u5Phase='copiar';
+      document.getElementById('u5Phase1').classList.add('hide'); document.getElementById('u5Phase2').classList.remove('hide'); document.getElementById('u5Next').classList.add('hide');
+    });
+    document.getElementById('u5Validate').addEventListener('click',()=>{
+      const t=document.getElementById('u5Input').value.trim().toLowerCase(); const fb=document.getElementById('u5Feedback');
+      if(t==='bota'){ fb.className='feedback show ok'; fb.textContent='Escreveste "bota" sem erro visível!'; successTone(); confetti(); document.getElementById('u5Done').classList.remove('hide'); }
+      else { fb.className='feedback show no'; fb.textContent='Repara na ordem das letras em "bota".'; warnTone(); }
+    });
+
+    function renderU6(){
+      const lv=S.activeLevels.u6;
+      const pool=document.getElementById('u6Pool'); pool.innerHTML=''; S.u6Slots=Array(6).fill(null);
+      document.querySelectorAll('[data-u6-slot]').forEach((s,i)=>{s.innerHTML=String(i+1); s.classList.remove('filled');});
+      let words = lv==='support' ? ['bota','pum','.'] : ['A','bota','faz','pum','pum','.'];
+      shuffle(words).forEach(w=>pool.appendChild(mkChip(w, w==='bota'?'bo':(w==='A'||w==='faz'?'ta':'gray'))));
+      setupDnD('#u6 .chip','[data-u6-slot]','u6');
+      if(lv==='support'){ const s0=document.querySelector('[data-u6-slot="0"]'); s0.textContent='A'; s0.classList.add('filled'); S.u6Slots[0]='A'; }
+      document.getElementById('u6Custom').classList.toggle('hide', lv!=='challenge');
+      document.getElementById('u6Feedback').className='feedback';
+    }
+    document.getElementById('u6Check').addEventListener('click',()=>{
+      const lv=S.activeLevels.u6; const fb=document.getElementById('u6Feedback');
+      const correct = lv==='support' ? ['A','bota','pum','.'] : ['A','bota','faz','pum','pum','.'];
+      const used = S.u6Slots.filter(Boolean).slice(0, correct.length);
+      if(JSON.stringify(used)===JSON.stringify(correct)){ fb.className='feedback show ok'; fb.textContent='Frase correcta! A bota faz pum pum.'; successTone(); confetti(innerWidth/2,240); }
+      else { fb.className='feedback show no'; fb.textContent='Ainda não. A frase precisa da ordem certa.'; warnTone(); }
+    });
+
+    const u7Task = document.getElementById('u7Task');
+    const u7Data = [
+      {q:'1) Clica na palavra correcta:', type:'choice', options:['bola','bota','boca'], ok:'bota'},
+      {q:'2) Quantas sílabas tem "bota"?', type:'choice', options:['1','2','3','4'], ok:'2'},
+      {q:'3) Reconstrói a palavra com as sílabas:', type:'drag'},
+      {q:'4) Completa: "A ___ faz pum pum."', type:'choice', options:['bota','bola','boca'], ok:'bota'}
+    ];
+    function renderU7(){
+      document.getElementById('u7Bar').style.width=((S.u7Index)/4*100)+'%';
+      if(S.u7Index>=4){
+        u7Task.classList.add('hide'); document.getElementById('u7Final').classList.remove('hide');
+        const score=S.u7Ans.filter(Boolean).length; document.getElementById('u7Bar').style.width='100%';
+        document.getElementById('u7Stars').textContent='★'.repeat(score)+'☆'.repeat(4-score)+' ('+score+'/4)'; return;
+      }
+      const t=u7Data[S.u7Index]; u7Task.classList.remove('hide'); document.getElementById('u7Final').classList.add('hide');
+      if(t.type==='choice'){
+        u7Task.innerHTML='<p><strong>'+t.q+'</strong></p><div class="options">'+t.options.map(o=>`<button class="mini-word" data-opt="${o}">${o}</button>`).join('')+'</div>';
+        u7Task.querySelectorAll('[data-opt]').forEach(b=>b.addEventListener('click',()=>{ const ok=b.dataset.opt===t.ok; S.u7Ans[S.u7Index]=ok; ok?successTone():warnTone(); if(ok) confetti(); S.u7Index++; renderU7(); }));
+      } else {
+        u7Task.innerHTML='<p><strong>'+t.q+'</strong></p><div class="drag-row"><div class="slot" id="u7s1">1</div><div class="slot" id="u7s2">2</div></div><div class="drag-row" id="u7pool"></div><button class="btn alt" id="u7check">Confirmar</button>';
+        const p=document.getElementById('u7pool'); ['ta','bo'].forEach(v=>p.appendChild(mkChip(v,v==='bo'?'bo':'ta')));
+        let slots=[null,null];
+        setupDnD('#u7 .chip','#u7s1,#u7s2','u7',(arr)=>{slots=arr;});
+        document.getElementById('u7check').addEventListener('click',()=>{ const ok=slots[0]==='bo'&&slots[1]==='ta'; S.u7Ans[S.u7Index]=ok; ok?successTone():warnTone(); if(ok) confetti(); S.u7Index++; renderU7(); });
+      }
+    }
+    document.getElementById('u7Learn').addEventListener('click',()=>{ alert('Hoje reconheceste, segmentaste e usaste a palavra "bota".'); });
+
+    function renderU8Work(){
+      const m=document.getElementById('u8Mode').value; const box=document.getElementById('u8Work');
+      if(m==='Desenhar a minha bota') box.innerHTML='<p>🎨 Desenha a tua bota e escreve uma legenda.</p><textarea rows="3" placeholder="A minha bota é..."></textarea>';
+      if(m==='Inventar uma história') box.innerHTML='<p>📖 Inventa uma história curta com "bota".</p><textarea rows="4" placeholder="Era uma vez..."></textarea>';
+      if(m==="Encontrar palavras com 'bo'") box.innerHTML='<p>🔎 Escreve palavras que começam por bo:</p><input class="big-input" placeholder="bola, bolo, ..." />';
+      if(m==='Canção das botas') box.innerHTML='<p>🎵 Cria um refrão simples com "bota" e "pum pum".</p><textarea rows="3" placeholder="Bota, bota..."></textarea>';
+    }
+    document.getElementById('u8Mode').addEventListener('change',renderU8Work);
+    document.getElementById('u8Share').addEventListener('click',()=>{ const fb=document.getElementById('u8Feedback'); fb.className='feedback show ok'; fb.textContent='Partilhado com a turma! Boa participação.'; successTone(); confetti(); });
+
+    function setupDnD(itemSel, slotSel, context, cb){
+      const items = document.querySelectorAll(itemSel);
+      const slots = document.querySelectorAll(slotSel);
+      let drag = null, offsetX = 0, offsetY = 0;
+      items.forEach(el=>{
+        el.addEventListener('pointerdown',e=>{
+          drag=el; offsetX=e.clientX-el.getBoundingClientRect().left; offsetY=e.clientY-el.getBoundingClientRect().top;
+          el.setPointerCapture(e.pointerId); el.style.position='fixed'; el.style.zIndex='1000'; el.style.transform='scale(1.1)'; move(e);
+        });
+        el.addEventListener('pointermove',e=>{ if(drag===el) move(e); });
+        el.addEventListener('pointerup',e=>{
+          if(drag!==el) return;
+          let placed=false;
+          slots.forEach((s,i)=>{
+            const r=s.getBoundingClientRect();
+            if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom){
+              s.textContent=el.dataset.val; s.classList.add('filled');
+              if(context==='u3') S.u3Slots[i]=el.dataset.val;
+              if(context==='u4') { S.u4Slots[i]=el.dataset.val; document.getElementById('u4Current').textContent=(S.u4Slots[0]||'_')+(S.u4Slots[1]||'_'); }
+              if(context==='u6') S.u6Slots[i]=el.dataset.val;
+              if(context==='u7'){ if(i===0||i===1){ if(!window.__u7slots) window.__u7slots=[null,null]; window.__u7slots[i]=el.dataset.val; if(cb) cb(window.__u7slots);} }
+              el.remove(); placed=true;
+            }
+          });
+          el.style.position=''; el.style.left=''; el.style.top=''; el.style.zIndex=''; el.style.transform='';
+          drag=null;
+          if(context==='u3') checkU3();
+          if(!placed) beep(300,.03);
+        });
+        el.addEventListener('keydown',e=>{ if(e.key==='Enter'){ beep(400,.04); } });
+      });
+      function move(e){ drag.style.left=(e.clientX-offsetX)+'px'; drag.style.top=(e.clientY-offsetY)+'px'; }
+    }
+
+    setupTabs();
+    renderU2(); renderU3(); renderU4(); renderU5(); renderU6(); renderU7(); renderU8Work();
+  </script>
+</body>
+</html>
