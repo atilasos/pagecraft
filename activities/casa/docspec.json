@@ -1,0 +1,424 @@
+{
+  "topic": "Palavra 8 — casa (M28P)",
+  "ageRange": "6 anos (1.º ano do 1.º CEB)",
+  "duration": 45,
+  "objectives": [
+    "Reconhecer a palavra 'casa' globalmente, associando-a à imagem correspondente",
+    "Segmentar a palavra 'casa' nas sílabas ca-sa e identificar cada sílaba isoladamente",
+    "Recombinar as sílabas ca e sa com sílabas já conhecidas para formar novas palavras reais",
+    "Ler e completar a frase 'A casa é grande.' com compreensão"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Desenvolver a consciência fonológica: segmentar oralmente palavras em sílabas e identificar sílabas em posição inicial, medial e final",
+        "source": "portugues-1-ano-1-ciclo-ae.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Reconhecer palavras de uso frequente em contexto de leitura global; associar imagem à palavra escrita",
+        "source": "portugues-1-ano-1-ciclo-ae.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Segmentar palavras em sílabas e reconstituir a palavra a partir das sílabas isoladas; identificar e nomear vogais e consoantes em contexto de palavra",
+        "source": "portugues-1-ano-1-ciclo-ae.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Ler frases simples com vocabulário controlado, identificando sujeito e predicado de forma implícita",
+        "source": "portugues-1-ano-1-ciclo-ae.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "PIT (Plano Individual de Trabalho)",
+      "Mapa de tarefas da turma",
+      "Registo de palavras aprendidas (cartaz coletivo)"
+    ],
+    "socialOrganization": "individual (blocos 1-3, 5-7) → pares (bloco 4 recombinação e bloco 6 frase) → turma (bloco 8 extensão/comunicação)"
+  },
+  "materials": [
+    "Tablet ou computador com browser (1 por aluno ou par)",
+    "Cartão da palavra 'casa' (cartaz da coleção M28P)",
+    "Cartões de sílabas físicos: ca / sa (para actividade unplugged opcional)",
+    "Folha de registo em papel (opcional, apoio)",
+    "Quadro interactivo para apresentação e síntese coletiva"
+  ],
+  "units": [
+    {
+      "summary": "Abertura contextual: a palavra 'casa' surge numa micro-história com imagem",
+      "textDescription": "O aluno é introduzido à palavra 'casa' através de uma imagem colorida de uma casa grande e acolhedora, acompanhada de uma micro-história narrada: 'O Tomás chegou a casa. A casa era grande e tinha um jardim. Ele entrou pela porta vermelha.' A palavra 'casa' aparece destacada na frase. O objetivo é criar contexto emocional e ativar vocabulário antes de qualquer análise.",
+      "interaction": {
+        "state": [
+          {
+            "name": "cenaAtiva",
+            "type": "toggle",
+            "options": ["casa_exterior", "casa_interior"],
+            "default": "casa_exterior"
+          },
+          {
+            "name": "palavraDestacada",
+            "type": "derived",
+            "derivedFrom": "true"
+          }
+        ],
+        "render": "Imagem grande e detalhada de uma casa (exterior). Frase 'A casa é grande.' apresentada abaixo com a palavra 'casa' destacada a cor laranja. Botão para ver o interior da casa (toggle). Seta de navegação para avançar.",
+        "transition": "Clicar no toggle 'Ver por dentro' → imagem muda para interior da casa (sala com móveis simples) → palavra 'casa' mantém destaque. Clicar 'Avançar' → passa ao bloco 2.",
+        "constraint": "A palavra 'casa' está sempre visível e destacada em todas as transições — o aluno deve associá-la visualmente ao conceito antes da análise.",
+        "assessment": "O aluno consegue apontar (ou clicar) na palavra 'casa' na frase e dizer em voz alta o que a imagem representa."
+      },
+      "maker": {
+        "type": "unplugged",
+        "challenge": "Antes de abrir a página, mostra a imagem de uma casa e pergunta: 'O que vês? Quantas partes tem uma casa?' Cada aluno responde oralmente ou com um desenho rápido (1 min).",
+        "materials": ["Imagem impressa de casa (opcional)", "papel e lápis (opcional)"],
+        "groupSize": "turma",
+        "connection": "A exploração oral activa vocabulário (porta, telhado, janela) que será reforçado na leitura da frase e na extensão final.",
+        "communication": "Respostas partilhadas oralmente com a turma antes de abrir a actividade digital.",
+        "alternatives": ["Mostrar imagem no quadro interactivo se não houver impressão disponível"]
+      },
+      "differentiation": {
+        "support": "🟢 Imagem sempre visível; frase apresentada com ícone a apontar para a palavra 'casa'; professor lê a frase em voz alta antes de o aluno interagir.",
+        "standard": "🟡 Imagem disponível; aluno lê a frase com apoio do professor se necessário; explora o toggle autonomamente.",
+        "challenge": "🔴 Aluno tenta ler a frase sozinho antes de ver a imagem; responde: 'Que outras palavras conheces que falem de uma casa?'"
+      },
+      "duration": 4
+    },
+    {
+      "summary": "Reconhecimento global: ver a palavra, ouvir a palavra, associar imagem ↔ palavra",
+      "textDescription": "O aluno vê a palavra 'casa' escrita em letra grande e ouve-a pronunciada. De seguida, realiza uma tarefa de correspondência: associar a palavra 'casa' à imagem correta entre três opções visuais (casa, carro, bota). O objetivo é consolidar o reconhecimento global da palavra antes da segmentação.",
+      "interaction": {
+        "state": [
+          {
+            "name": "opcoes",
+            "type": "quiz",
+            "options": ["imagem_casa", "imagem_carro", "imagem_bota"],
+            "default": null
+          },
+          {
+            "name": "respostaAluno",
+            "type": "derived",
+            "derivedFrom": "opcoes"
+          },
+          {
+            "name": "feedbackVisivel",
+            "type": "toggle",
+            "options": ["oculto", "visivel"],
+            "default": "oculto"
+          }
+        ],
+        "render": "Palavra 'CASA' em letra grande (72px, maiúsculas) no topo. Botão de som 🔊 para ouvir a palavra. Três imagens lado a lado com moldura clicável: casa / carro / bota. Após seleção, feedback imediato (✓ verde ou ↻ âmbar) sem indicar a resposta correta de imediato — convida a tentar outra vez.",
+        "transition": "Clicar 🔊 → reproduz áudio 'ca-sa'. Clicar imagem → regista escolha, mostra feedback. Se correto → animação de ✓ e som positivo suave; botão 'Continuar' ativo. Se errado → moldura âmbar, mensagem 'Tenta outra vez!' sem revelar resposta.",
+        "constraint": "O aluno deve reconhecer a palavra 'casa' globalmente — pela forma visual da palavra — antes de a decompor.",
+        "assessment": "O aluno selecciona a imagem correta (casa) em no máximo 2 tentativas e consegue dizer 'esta é a palavra CASA' apontando para a palavra escrita."
+      },
+      "maker": null,
+      "differentiation": {
+        "support": "🟢 Apenas duas opções (casa vs. objeto claramente diferente, ex: bota); palavra escrita com cor diferente para cada letra; professor pode nomear as imagens antes da escolha.",
+        "standard": "🟡 Três opções; sem ajuda adicional; aluno decide autonomamente.",
+        "challenge": "🔴 Quatro opções incluindo distractor próximo (ex: 'cana'); aluno deve justificar oralmente: 'Como soubeste que era essa?'"
+      },
+      "duration": 5
+    },
+    {
+      "summary": "Segmentação silábica: dividir 'casa' em ca-sa, bater palmas, arrastar blocos",
+      "textDescription": "O aluno aprende que a palavra 'casa' tem duas sílabas: CA e SA. Realiza a segmentação de três formas: (1) ouve a palavra dividida sílaba a sílaba, (2) bate palmas contando as sílabas em ecrã (tap), (3) arrasta os blocos de sílabas para as posições corretas. Cada sílaba tem uma cor própria consistente: CA = laranja, SA = azul.",
+      "interaction": {
+        "state": [
+          {
+            "name": "blocoCA",
+            "type": "drag",
+            "options": ["zona_esquerda", "zona_direita", "banco"],
+            "default": "banco"
+          },
+          {
+            "name": "blocoSA",
+            "type": "drag",
+            "options": ["zona_esquerda", "zona_direita", "banco"],
+            "default": "banco"
+          },
+          {
+            "name": "palmadasDadas",
+            "type": "slider",
+            "range": [0, 5],
+            "step": 1,
+            "default": 0,
+            "unit": "palmas"
+          },
+          {
+            "name": "ordemCorreta",
+            "type": "derived",
+            "derivedFrom": "blocoCA === 'zona_esquerda' && blocoSA === 'zona_direita'"
+          }
+        ],
+        "render": "Palavra 'casa' no topo. Abaixo: botão 🔊 que reproduz 'ca — sa' com pausa entre sílabas. Dois blocos coloridos no banco: [CA] laranja e [SA] azul. Duas zonas de destino com contorno a tracejado: [__] [__]. Contador de palmas (ícone de mãos) que incrementa com toque. Feedback ao colocar blocos na ordem correta: palavra ilumina-se e toca som.",
+        "transition": "Arrastar bloco para zona destino → snap se solto sobre zona válida, retorna ao banco caso contrário. Toque no ícone de palmas → contador incrementa. Quando CA em zona_esquerda e SA em zona_direita → animação de celebração subtil, ambos os blocos pulsam, palavra completa aparece reunida.",
+        "constraint": "A ordem das sílabas é fixa: CA vem sempre antes de SA. Trocar a ordem produz 'SACA' — que existe mas não é esta palavra; o sistema mostra o resultado e diz 'Isso faz outra palavra!'",
+        "assessment": "O aluno coloca corretamente CA e SA nas posições 1 e 2, bate 2 palmas (correspondendo a 2 sílabas) e verbaliza: 'ca-sa, duas sílabas'."
+      },
+      "maker": {
+        "type": "unplugged",
+        "challenge": "Com os cartões físicos de sílabas (CA e SA), cada par de alunos organiza as sílabas na mesa e tenta dizer a palavra. Depois batem palmas juntos enquanto dizem ca-sa.",
+        "materials": ["Cartões de sílabas impressos: CA (laranja) e SA (azul)", "Mesa ou chão para organizar"],
+        "groupSize": "2",
+        "connection": "A manipulação física dos cartões antecipa ou reforça o arrastar digital — concretiza o conceito de 'partes da palavra'.",
+        "communication": "Par mostra ao colega do lado a sua organização e explica: 'Aqui está ca, aqui está sa, juntas fazem casa.'",
+        "alternatives": ["Escrever CA e SA em pedaços de papel e recortar na hora"]
+      },
+      "differentiation": {
+        "support": "🟢 Blocos já posicionados; aluno apenas confirma a ordem tocando em cada um; professor bate palmas junto com o aluno; palavra com imagem sempre visível.",
+        "standard": "🟡 Aluno arrasta blocos autonomamente; bate palmas e conta em voz alta.",
+        "challenge": "🔴 Aluno tenta primeiro escrever as sílabas de memória antes de ver os blocos; responde: 'Quantas sílabas tem a palavra janela? E telhado?' (palavras da semana seguinte, por curiosidade)"
+      },
+      "duration": 7
+    },
+    {
+      "summary": "Recombinação silábica: formar novas palavras com ca e sa e sílabas já conhecidas",
+      "textDescription": "O aluno usa as sílabas CA e SA em combinação com sílabas aprendidas nas palavras anteriores (me, ni, na, no, u, va, de, do, sa, pa, to, bo, ta, le, que) para formar novas palavras. Palavras-alvo reais: BOCA (bo+ca), CANA (ca+na), SACO (sa+co — nota: 'co' ainda não foi aprendida, usar com cuidado), SAPA (não é palavra — ensinar a distinguir). Foco em BOCA e CANA como palavras válidas e reconhecíveis.",
+      "interaction": {
+        "state": [
+          {
+            "name": "silabaSelecionada1",
+            "type": "matching",
+            "options": ["bo", "me", "ca", "le", "pa", "na", "sa", "ta"],
+            "default": null
+          },
+          {
+            "name": "silabaSelecionada2",
+            "type": "matching",
+            "options": ["bo", "me", "ca", "le", "pa", "na", "sa", "ta"],
+            "default": null
+          },
+          {
+            "name": "palavraFormada",
+            "type": "derived",
+            "derivedFrom": "silabaSelecionada1 + silabaSelecionada2"
+          },
+          {
+            "name": "palavraValida",
+            "type": "derived",
+            "derivedFrom": "['boca','cana','casa','meta','tapa','mela'].includes(palavraFormada)"
+          }
+        ],
+        "render": "Banco de sílabas coloridas (cor consistente com aprendizagens anteriores): bo, me, ca, le, pa, na, sa, ta. Dois slots de destino [  ] + [  ]. Após colocar 2 sílabas, aparece a palavra formada em grande. Se palavraValida=true: fundo verde claro, ícone ✓, imagem da palavra (se disponível). Se palavraValida=false: fundo âmbar, texto 'Isso não é uma palavra portuguesa. Tenta outra combinação!'",
+        "transition": "Clicar/arrastar sílaba para slot 1 ou 2 → palavra pré-visualizada em tempo real. Clicar 'Verificar' → avaliação de validade. Clicar 'Limpar' → volta ao início. Palavras descobertas registadas num painel lateral 'Palavras que descobri'.",
+        "constraint": "Nem todas as combinações de sílabas formam palavras reais. O aluno deve descobrir que a língua tem regras — algumas combinações 'existem', outras 'não existem' em português.",
+        "assessment": "O aluno forma pelo menos 2 palavras válidas diferentes de 'casa' (ex: BOCA e CANA) e consegue explicar: 'Peguei no bo e no ca e fez boca!'."
+      },
+      "maker": {
+        "type": "unplugged",
+        "challenge": "Com todos os cartões de sílabas já aprendidos espalhados na mesa, o par tenta formar o maior número de palavras possível em 3 minutos. Registam numa folha as que descobriram.",
+        "materials": ["Conjunto completo de cartões de sílabas das palavras 1-8", "Folha de registo", "Lápis"],
+        "groupSize": "2",
+        "connection": "O registo em papel das palavras descobertas cria um mini-dicionário pessoal que complementa o painel digital.",
+        "communication": "Cada par partilha 1 palavra nova com a turma no quadro — o professor regista todas num cartaz coletivo.",
+        "alternatives": ["Actividade oral: professor diz uma sílaba, aluno responde com outra para formar uma palavra"]
+      },
+      "differentiation": {
+        "support": "🟢 Apenas 4 sílabas disponíveis (bo, ca, na, sa); uma combinação já pré-colocada como exemplo (bo+ca=boca); feedback imediato com imagem se válida.",
+        "standard": "🟡 8 sílabas disponíveis; aluno explora livremente; deve encontrar pelo menos 2 palavras válidas.",
+        "challenge": "🔴 12 sílabas disponíveis (incluindo algumas de palavras 9-10 como ja, ne); deve encontrar 4+ palavras; tenta criar uma frase com cada palavra que descobriu."
+      },
+      "duration": 7
+    },
+    {
+      "summary": "Leitura e escrita guiada: completar a palavra 'casa' com sílabas em falta",
+      "textDescription": "O aluno realiza exercícios de completar a palavra 'casa' em três formatos progressivos: (1) escolher a sílaba em falta entre opções (ca_a → SA), (2) ordenar sílabas desordenadas (SA CA → CASA), (3) copiar/traçar a palavra completa. O foco é consolidar a forma escrita associada ao som.",
+      "interaction": {
+        "state": [
+          {
+            "name": "exercicioAtivo",
+            "type": "dropdown",
+            "options": ["completar", "ordenar", "copiar"],
+            "default": "completar"
+          },
+          {
+            "name": "silabaEscolhida",
+            "type": "quiz",
+            "options": ["CA", "SA", "PA", "BO"],
+            "default": null
+          },
+          {
+            "name": "ordemAluno",
+            "type": "sorting",
+            "options": ["SA", "CA"],
+            "default": ["SA", "CA"]
+          },
+          {
+            "name": "textoCopiadoCorreto",
+            "type": "derived",
+            "derivedFrom": "textoCopiadoAluno.trim().toLowerCase() === 'casa'"
+          }
+        ],
+        "render": "Exercício 1 (completar): palavra 'c__a' com espaço a tracejado; 4 opções de sílaba abaixo. Exercício 2 (ordenar): blocos SA e CA desordenados; 2 slots numerados [1][2]. Exercício 3 (copiar): palavra 'casa' em tracejado grande para o aluno traçar com o dedo (canvas touch) ou campo de texto. Progresso indicado com 3 estrelas ☆☆☆ que se vão preenchendo.",
+        "transition": "Exercício 1: clicar sílaba correta → slot preenche, feedback. Exercício 2: arrastar para ordem correta → animação de junção. Exercício 3: traçar ou escrever → comparação automática (canvas: análise de traço; texto: comparação de string). Completar os 3 exercícios desbloqueia estrela dourada e avança para bloco 6.",
+        "constraint": "A palavra tem sempre a mesma forma escrita — não muda conforme o contexto. Escrever 'caza' ou 'cassa' produz feedback gentil a explicar que a forma correta é 'casa'.",
+        "assessment": "O aluno completa os 3 exercícios com sucesso: escolhe SA para completar 'c_a', ordena CA-SA corretamente e escreve/traça 'casa' de forma reconhecível."
+      },
+      "maker": null,
+      "differentiation": {
+        "support": "🟢 Exercício 1 apenas (completar); sílaba em falta tem apenas 2 opções; tracejado do exercício 3 muito marcado (pontilhado espesso); professor pode guiar o traço.",
+        "standard": "🟡 Os 3 exercícios em sequência; 4 opções no completar; traçado com pontilhado standard.",
+        "challenge": "🔴 Exercício adicional: escrever 'casa' de memória (sem modelo); depois escrever 'boca' e 'cana' usando o mesmo padrão — sem tracejado."
+      },
+      "duration": 7
+    },
+    {
+      "summary": "Frase simples: ler e construir 'A casa é grande.'",
+      "textDescription": "O aluno trabalha com a frase de referência 'A casa é grande.' em dois momentos: (1) leitura da frase completa com palavra destacada, e (2) construção da frase a partir de palavras desordenadas. O objetivo é que o aluno compreenda que 'casa' funciona numa frase real com sentido.",
+      "interaction": {
+        "state": [
+          {
+            "name": "palavrasFrase",
+            "type": "sorting",
+            "options": ["grande.", "A", "é", "casa"],
+            "default": ["grande.", "é", "A", "casa"]
+          },
+          {
+            "name": "fraseCorreta",
+            "type": "derived",
+            "derivedFrom": "palavrasFrase.join(' ') === 'A casa é grande.'"
+          },
+          {
+            "name": "palavraLida",
+            "type": "quiz",
+            "options": ["A", "casa", "é", "grande"],
+            "default": null
+          }
+        ],
+        "render": "Fase 1: frase 'A casa é grande.' apresentada palavra a palavra, com áudio de cada palavra ao clicar. Palavra 'casa' destacada a laranja. Fase 2: 4 cartões com palavras desordenadas; 4 slots para ordenar. Imagem da casa grande ao fundo como apoio contextual. Frase completa surge com animação suave quando correta.",
+        "transition": "Fase 1: clicar em cada palavra → ouve o som dessa palavra. Botão 🔊 para ouvir a frase completa. Botão 'Construir' → passa à fase 2. Fase 2: arrastar palavras para os slots → pré-visualização da frase. 'Verificar' → avalia ordem; se correto, frase aparece completa com som.",
+        "constraint": "Em português, a frase começa com maiúscula e termina com ponto final. A ordem das palavras é fixa nesta frase — mover 'casa' para outra posição cria algo estranho ou incorreto.",
+        "assessment": "O aluno ordena as 4 palavras corretamente ('A casa é grande.') e lê a frase em voz alta de forma fluente (palavra por palavra com pausa entre elas é aceitável)."
+      },
+      "maker": {
+        "type": "whiteboard",
+        "challenge": "Em pares, cada aluno diz uma frase diferente com a palavra 'casa' (ex: 'A minha casa é pequena.', 'A casa tem jardim.'). O par escreve a sua frase favorita numa tira de papel e coloca no cartaz da turma.",
+        "materials": ["Tiras de papel cortadas (A4 cortado em 3)", "Marcadores", "Cartaz da turma 'As nossas frases'"],
+        "groupSize": "2",
+        "connection": "A criação de frases próprias a partir da frase-modelo demonstra transferência — o aluno usa 'casa' em contexto novo.",
+        "communication": "Tiras coladas no cartaz da sala; leitura coletiva no final da semana.",
+        "alternatives": ["Ditar a frase ao professor para este escrever no quadro; aluno copia"]
+      },
+      "differentiation": {
+        "support": "🟢 Apenas 3 palavras na frase de ordenar (remover 'grande'); imagem da casa visível como pista; professor lê a frase modelo antes.",
+        "standard": "🟡 4 palavras; frase modelo visível durante a ordenação.",
+        "challenge": "🔴 Frase modelo ocultada durante a ordenação; após ordenar, criar uma segunda frase diferente com 'casa' de forma autónoma."
+      },
+      "duration": 7
+    },
+    {
+      "summary": "Mini-avaliação formativa: reconhecer, segmentar, reconstruir e usar 'casa'",
+      "textDescription": "Sequência rápida de 4 tarefas observáveis que verificam a aprendizagem do aluno: (1) identificar 'casa' entre 3 palavras escritas, (2) indicar quantas sílabas tem 'casa', (3) ordenar as sílabas CA-SA para reconstruir a palavra, (4) completar uma frase com 'casa'. Cada tarefa tem feedback imediato e o professor recebe um mini-relatório visual (✓/✗ por tarefa).",
+      "interaction": {
+        "state": [
+          {
+            "name": "tarefa1",
+            "type": "quiz",
+            "options": ["bota", "casa", "cana"],
+            "default": null
+          },
+          {
+            "name": "tarefa2",
+            "type": "quiz",
+            "options": ["1", "2", "3"],
+            "default": null
+          },
+          {
+            "name": "tarefa3",
+            "type": "sorting",
+            "options": ["SA", "CA"],
+            "default": ["SA", "CA"]
+          },
+          {
+            "name": "tarefa4",
+            "type": "quiz",
+            "options": ["A ___ é grande.", "A bota é grande.", "O dedo é grande."],
+            "default": null
+          },
+          {
+            "name": "pontuacaoFinal",
+            "type": "derived",
+            "derivedFrom": "[tarefa1==='casa', tarefa2==='2', tarefa3[0]==='CA', tarefa4.includes('___')].filter(Boolean).length"
+          }
+        ],
+        "render": "4 tarefas em sequência, uma por vez (sem mostrar todas de uma vez). Barra de progresso no topo (1/4, 2/4...). Cada tarefa tem título claro: 'Encontra a palavra', 'Quantas sílabas?', 'Constrói a palavra', 'Completa a frase'. No final: ecrã de sumário com 4 estrelas (☆ por completar, ★ por acertar) visível para o professor.",
+        "transition": "Responder a cada tarefa → feedback imediato (✓/↻) → botão 'Próxima' ativo. Depois da tarefa 4 → ecrã de resultados com mensagem positiva ('Muito bem! Já conheces a palavra CASA!') independentemente do resultado.",
+        "constraint": "A avaliação não é punitiva — o aluno sempre termina com mensagem positiva. O objetivo é diagnóstico para o professor, não nota para o aluno.",
+        "assessment": "Critério observável: aluno completa as 4 tarefas. Indicador de domínio: 3 ou 4 tarefas corretas na primeira tentativa. Indicador de necessidade de reforço: 1 ou 2 corretas — professor regista e volta ao bloco problemático."
+      },
+      "maker": null,
+      "differentiation": {
+        "support": "🟢 Imagem de apoio em cada tarefa; tarefa 3 com bloco CA já posicionado (só falta SA); opções de resposta reduzidas a 2.",
+        "standard": "🟡 Sem imagem de apoio; 3 opções por tarefa; ordenação de 2 sílabas.",
+        "challenge": "🔴 Tarefa adicional oral (se professor presente): 'Diz uma palavra que comece por SA' e 'Diz uma palavra que termine em CA'."
+      },
+      "duration": 5
+    },
+    {
+      "summary": "Extensão criativa: oralidade, desenho e desafio maker sobre 'casa'",
+      "textDescription": "Bloco final de extensão com três opções diferenciadas: (A) desenhar a sua casa e legendar, (B) gravar uma frase oral sobre a sua casa (se disponível microfone), (C) desafio maker: construir uma casa com Lego ou blocos e fotografar/descrever. O aluno escolhe a sua extensão (autonomia MEM). Este bloco é opcional mas recomendado para consolidação e circuito de comunicação.",
+      "interaction": {
+        "state": [
+          {
+            "name": "extensaoEscolhida",
+            "type": "dropdown",
+            "options": ["desenho", "oral", "maker"],
+            "default": "desenho"
+          },
+          {
+            "name": "legendaAluno",
+            "type": "canvas",
+            "default": null
+          },
+          {
+            "name": "fraseOralGravada",
+            "type": "toggle",
+            "options": ["nao_gravado", "gravado"],
+            "default": "nao_gravado"
+          }
+        ],
+        "render": "Ecrã de escolha com 3 cartões grandes: 🎨 'Desenha a tua casa', 🎤 'Fala sobre a tua casa', 🏗️ 'Constrói uma casa'. Ao escolher 'desenho': canvas simples com pincéis coloridos + campo de texto para legenda. Ao escolher 'oral': botão de gravação + campo para escrever a frase. Ao escolher 'maker': instruções do desafio físico + botão para fotografar o resultado.",
+        "transition": "Clicar num cartão de extensão → abre a área correspondente. Completar a extensão → botão 'Mostrar à turma' que exporta o trabalho para o quadro interactivo (ou guarda localmente).",
+        "constraint": "O aluno deve usar a palavra 'casa' no seu produto final — no desenho legendado, na frase oral ou na descrição do objeto construído.",
+        "assessment": "O aluno produz algo concreto (desenho, frase oral ou objeto construído) onde a palavra 'casa' está presente e contextualizada de forma pessoal e significativa."
+      },
+      "maker": {
+        "type": "lego",
+        "challenge": "Constrói uma casa com Lego (ou qualquer material disponível: caixas, cartão, plasticina). Deve ter pelo menos uma porta e uma janela. Depois apresenta à turma: 'Esta é a minha casa. Ela é...'",
+        "materials": ["Lego Duplo ou Lego Classic", "Caixas de cartão pequenas", "Plasticina", "Cartolina e tesoura (alternativa)"],
+        "groupSize": "2-3",
+        "connection": "A construção física concretiza o vocabulário da página (porta, janela, telhado) e prepara as palavras das próximas páginas (janela, telhado, escada — palavras 9, 10, 11 do M28P).",
+        "communication": "Apresentação de 1 minuto por grupo: 'A nossa casa tem...' usando vocabulário aprendido. Fotografar para portfólio digital.",
+        "alternatives": ["Desenhar a casa em papel e apresentar com o dedo a apontar para cada parte", "Modelar com plasticina individualmente"]
+      },
+      "differentiation": {
+        "support": "🟢 Extensão 'desenho' com modelo de casa para completar (janelas, porta já esboçadas); legenda com palavra 'casa' já escrita para o aluno copiar ou completar.",
+        "standard": "🟡 Escolha livre entre as 3 extensões; trabalho autónomo com apoio pontual do professor.",
+        "challenge": "🔴 Escrever 3 frases sobre a sua casa usando palavras das páginas anteriores (menina/menino que vive lá, o que tem lá dentro, como é grande/pequena)."
+      },
+      "duration": 10
+    }
+  ],
+  "sessionFlow": "0-4min: Bloco 1 (Abertura contextual) — activação oral + imagem da casa, micro-história, toggle interior/exterior → 4-9min: Bloco 2 (Reconhecimento global) — palavra em grande, áudio, quiz de 3 imagens → 9-16min: Bloco 3 (Segmentação silábica) — blocos CA/SA, palmas, arrastar para ordem correta → 16-23min: Bloco 4 (Recombinação) — banco de sílabas, formar BOCA e CANA, actividade unplugged em par → 23-30min: Bloco 5 (Leitura e escrita guiada) — completar, ordenar, traçar → 30-37min: Bloco 6 (Frase simples) — ordenar 'A casa é grande.', criar frase própria em par → 37-42min: Bloco 7 (Mini-avaliação) — 4 tarefas diagnósticas, sumário para professor → 42-52min: Bloco 8 (Extensão) — escolha autónoma: desenho, oral ou Lego; comunicação à turma"
+}
