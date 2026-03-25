@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>M28P - Galinha</title>
+  <style>
+    :root {
+      --bg: #FFF8F0;
+      --surface: #FFFFFF;
+      --primary: #E05FA0;
+      --accent: #F59E0B;
+      --text: #1E1B18;
+      --ok: #22c55e;
+      --warn: #F59E0B;
+      --support: #22c55e;
+      --standard: #F59E0B;
+      --challenge: #ef4444;
+      --ga: #E05FA0;
+      --li: #7C3AED;
+      --nha: #059669;
+      --shadow: 0 8px 20px rgba(0,0,0,0.08);
+      --radius: 16px;
+      --focus: 3px solid #7C3AED;
+      --touch: 48px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Nunito", "Poppins", "Trebuchet MS", sans-serif;
+      font-size: 20px;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 15%, #ffe6f4 0%, transparent 30%),
+        radial-gradient(circle at 90% 10%, #fff1c2 0%, transparent 35%),
+        var(--bg);
+    }
+
+    .app {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    .hero, .panel {
+      background: var(--surface);
+      border: 2px solid var(--primary);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 1rem 1.2rem;
+      margin-bottom: 1rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); }
+    h2 { font-size: clamp(1.4rem, 3vw, 2rem); }
+
+    .word {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      letter-spacing: .06em;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+
+    .tab {
+      min-height: var(--touch);
+      border-radius: 999px;
+      border: 2px solid transparent;
+      padding: .5rem 1rem;
+      font-weight: 800;
+      background: #fff;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .tab:hover { transform: translateY(-1px); box-shadow: 0 6px 14px rgba(0,0,0,.12); }
+    .tab:active { transform: scale(.98); }
+    .tab[data-mode="support"] { border-color: var(--support); }
+    .tab[data-mode="standard"] { border-color: var(--standard); }
+    .tab[data-mode="challenge"] { border-color: var(--challenge); }
+    .tab.active { background: #fff7ed; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      min-height: var(--touch);
+      padding: .25rem .8rem;
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 1rem;
+    }
+
+    .nav {
+      padding: .8rem;
+      position: sticky;
+      top: .6rem;
+      height: fit-content;
+    }
+
+    .nav button {
+      width: 100%;
+      text-align: left;
+      margin-bottom: .5rem;
+      padding: .7rem .8rem;
+      border-radius: 12px;
+      border: 2px solid #ffd5eb;
+      background: #fff;
+      cursor: pointer;
+      min-height: var(--touch);
+      font-weight: 700;
+    }
+
+    .nav button.active { border-color: var(--primary); background: #fff0f8; }
+
+    .panel {
+      padding: 1rem;
+      min-height: 520px;
+    }
+
+    .row { display: flex; gap: .6rem; flex-wrap: wrap; align-items: center; }
+    .stack { display: grid; gap: .75rem; }
+
+    button, select, input, textarea {
+      font: inherit;
+      min-height: var(--touch);
+      border-radius: 12px;
+      border: 2px solid #e8e8e8;
+      padding: .5rem .8rem;
+      background: #fff;
+    }
+
+    button.cta {
+      border: 0;
+      background: var(--primary);
+      color: #fff;
+      padding: .65rem 1.1rem;
+      font-weight: 800;
+      box-shadow: 0 4px 10px rgba(224,95,160,.28);
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    button.cta:hover { transform: scale(1.03); box-shadow: 0 8px 16px rgba(224,95,160,.34); }
+    button.ghost { background: #fff; color: var(--text); border: 2px solid var(--primary); }
+
+    button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible, .card:focus-visible {
+      outline: var(--focus);
+      outline-offset: 2px;
+    }
+
+    .feedback {
+      padding: .7rem .9rem;
+      border-radius: 12px;
+      border: 2px solid;
+      font-weight: 700;
+      min-height: var(--touch);
+      display: flex;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity .2s, transform .2s;
+    }
+
+    .feedback.show { opacity: 1; transform: translateY(0); }
+    .feedback.ok { color: #166534; background: #f0fdf4; border-color: var(--ok); }
+    .feedback.warn { color: #92400e; background: #fffbeb; border-color: var(--warn); }
+
+    .scene {
+      min-height: 220px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #bae6fd, #fef08a);
+      padding: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chicken {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: #fff;
+      border: 4px solid #fca5a5;
+      display: grid;
+      place-items: center;
+      font-size: 4rem;
+      user-select: none;
+      cursor: pointer;
+      transition: transform .2s;
+    }
+
+    .chicken:active { transform: scale(.96); }
+
+    .card {
+      background: #fff;
+      border: 2px solid var(--primary);
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.08);
+      padding: .6rem .9rem;
+      min-height: var(--touch);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: 800;
+      transition: transform .2s, border-color .2s, background .2s;
+      touch-action: none;
+      user-select: none;
+    }
+
+    .card:hover { transform: translateY(-1px); }
+    .card.selected { border-color: #2563eb; background: #eff6ff; }
+    .card.shake { animation: shake .35s linear; }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      50% { transform: translateX(4px); }
+      75% { transform: translateX(-2px); }
+      100% { transform: translateX(0); }
+    }
+
+    .slots { display: grid; grid-template-columns: repeat(3, minmax(70px, 1fr)); gap: .6rem; }
+    .slot {
+      min-height: 74px;
+      border: 3px dashed #d5d5d5;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: #fff;
+    }
+
+    .syllable {
+      color: #fff;
+      font-size: clamp(1.8rem, 4vw, 2.3rem);
+      font-weight: 800;
+      padding: .35rem .9rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 14px rgba(0,0,0,.12);
+    }
+
+    .ga { background: var(--ga); }
+    .li { background: var(--li); }
+    .nha { background: var(--nha); }
+
+    .board {
+      border: 2px dashed #e8c2d6;
+      border-radius: 14px;
+      padding: .8rem;
+      min-height: 140px;
+      background: #fffafc;
+    }
+
+    .progress {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .3rem;
+    }
+
+    .progress div {
+      text-align: center;
+      padding: .35rem;
+      border-radius: 999px;
+      border: 2px solid #f5d4e7;
+      font-size: .9rem;
+      font-weight: 700;
+    }
+
+    .progress .done { background: #ecfdf5; border-color: #86efac; }
+    .progress .now { background: #fff7ed; border-color: #fdba74; }
+
+    .hidden { display: none !important; }
+    .confetti { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .nav { position: static; }
+    }
+
+    @media (min-width: 1440px) {
+      body { font-size: 24px; }
+      .panel { min-height: 620px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section class="hero" aria-label="Cabeçalho">
+      <div class="row" style="justify-content:space-between;">
+        <h1>🐔 M28P - Palavra: <span class="word">GALINHA</span></h1>
+        <span class="pill" id="stars" aria-live="polite">⭐ 0</span>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Diferenciação">
+        <button class="tab active" data-mode="support" role="tab" aria-selected="true">🟢 Apoio</button>
+        <button class="tab" data-mode="standard" role="tab" aria-selected="false">🟡 Intermédio</button>
+        <button class="tab" data-mode="challenge" role="tab" aria-selected="false">🔴 Desafio</button>
+      </div>
+      <p id="modeHint">Com ajuda: pistas visuais ativas e menos distratoras.</p>
+    </section>
+
+    <div class="layout">
+      <aside class="hero nav" aria-label="Navegação das atividades">
+        <button data-step="0" class="active">1. Abertura</button>
+        <button data-step="1">2. Reconhecer</button>
+        <button data-step="2">3. Sílabas</button>
+        <button data-step="3">4. Recombinar</button>
+        <button data-step="4">5. Completar</button>
+        <button data-step="5">6. Frase</button>
+        <button data-step="6">7. Mini-avaliação</button>
+        <button data-step="7">8. Extensão</button>
+      </aside>
+
+      <main class="panel stack" id="panel" aria-live="polite"></main>
+    </div>
+  </div>
+
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <script>
+    const state = {
+      mode: 'support',
+      step: 0,
+      stars: 0,
+      audio: null,
+      recognitionRound: 0,
+      recognitionStreak: 0,
+      clapCount: 0,
+      miniStage: 0,
+      miniRetries: 0,
+      foundWords: new Set()
+    };
+
+    const modeText = {
+      support: 'Com ajuda: pistas visuais ativas e menos distratoras.',
+      standard: 'Objetivo: atividade completa com apoio mínimo.',
+      challenge: 'Desafio: menos pistas, mais autonomia.'
+    };
+
+    const scenes = [
+      { emoji: '🐔', line: 'Olá! Sou a galinha.', bg: 'linear-gradient(180deg,#bae6fd,#fde68a)' },
+      { emoji: '🥚', line: 'Eu ponho ovos!', bg: 'linear-gradient(180deg,#a7f3d0,#fde68a)' },
+      { emoji: '🐥', line: 'Os meus pintainhos nasceram do ovo!', bg: 'linear-gradient(180deg,#fbcfe8,#fef08a)' }
+    ];
+
+    function tone(type='ok') {
+      try {
+        if (!state.audio) state.audio = new (window.AudioContext || window.webkitAudioContext)();
+        const ctx = state.audio;
+        const now = ctx.currentTime;
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'sine';
+        o.frequency.value = type === 'ok' ? 660 : type === 'tap' ? 320 : 220;
+        g.gain.setValueAtTime(0.0001, now);
+        g.gain.exponentialRampToValueAtTime(0.12, now + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(now); o.stop(now + 0.2);
+      } catch (e) {}
+    }
+
+    function addStar(n=1) {
+      state.stars += n;
+      document.getElementById('stars').textContent = `⭐ ${state.stars}`;
+    }
+
+    function feedback(html, ok=true) {
+      return `<div class="feedback ${ok ? 'ok' : 'warn'} show" role="status">${ok ? '✓' : '✗'} ${html}</div>`;
+    }
+
+    function confettiBurst() {
+      const host = document.getElementById('confetti');
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const bits = Array.from({length: 42}, (_, i) => {
+        const el = document.createElement('div');
+        el.style.position = 'absolute';
+        el.style.width = '10px';
+        el.style.height = '14px';
+        el.style.left = (w / 2) + 'px';
+        el.style.top = (h / 3) + 'px';
+        el.style.background = ['#E05FA0','#F59E0B','#22c55e','#7C3AED'][i % 4];
+        el.style.borderRadius = '3px';
+        host.appendChild(el);
+        return {
+          el,
+          x: w / 2,
+          y: h / 3,
+          vx: (Math.random() - .5) * 8,
+          vy: -Math.random() * 7 - 2,
+          r: Math.random() * 360,
+          vr: (Math.random() - .5) * 16
+        };
+      });
+
+      let t = 0;
+      function frame() {
+        t += 1;
+        bits.forEach(b => {
+          b.vy += .18;
+          b.x += b.vx;
+          b.y += b.vy;
+          b.r += b.vr;
+          b.el.style.transform = `translate(${b.x}px,${b.y}px) rotate(${b.r}deg)`;
+          b.el.style.opacity = String(Math.max(0, 1 - t / 70));
+        });
+        if (t < 70) requestAnimationFrame(frame);
+        else bits.forEach(b => b.el.remove());
+      }
+      requestAnimationFrame(frame);
+    }
+
+    function setMode(mode) {
+      state.mode = mode;
+      document.querySelectorAll('.tab').forEach(t => {
+        const active = t.dataset.mode === mode;
+        t.classList.toggle('active', active);
+        t.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      document.getElementById('modeHint').textContent = modeText[mode];
+      render();
+    }
+
+    function setStep(step) {
+      state.step = step;
+      document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('active', Number(b.dataset.step) === step));
+      render();
+    }
+
+    function shuffle(a) {
+      return [...a].sort(() => Math.random() - 0.5);
+    }
+
+    function attachPointerDnD(container, draggableSel, dropSel, onDrop) {
+      const host = container;
+      let drag = null;
+
+      host.querySelectorAll(draggableSel).forEach(el => {
+        el.onpointerdown = (ev) => {
+          ev.preventDefault();
+          el.setPointerCapture(ev.pointerId);
+          const r = el.getBoundingClientRect();
+          drag = { el, dx: ev.clientX - r.left, dy: ev.clientY - r.top, home: el.parentElement };
+          el.style.position = 'fixed';
+          el.style.zIndex = '999';
+          el.style.left = r.left + 'px';
+          el.style.top = r.top + 'px';
+          el.style.transform = 'scale(1.08)';
+          tone('tap');
+        };
+
+        el.onpointermove = (ev) => {
+          if (!drag || drag.el !== el) return;
+          el.style.left = (ev.clientX - drag.dx) + 'px';
+          el.style.top = (ev.clientY - drag.dy) + 'px';
+        };
+
+        el.onpointerup = (ev) => {
+          if (!drag || drag.el !== el) return;
+          const drops = [...host.querySelectorAll(dropSel)];
+          const hit = drops.find(d => {
+            const r = d.getBoundingClientRect();
+            return ev.clientX >= r.left && ev.clientX <= r.right && ev.clientY >= r.top && ev.clientY <= r.bottom;
+          });
+          el.style.transform = '';
+          el.style.position = '';
+          el.style.left = '';
+          el.style.top = '';
+          el.style.zIndex = '';
+          if (hit) onDrop(el, hit);
+          else drag.home.appendChild(el);
+          drag = null;
+        };
+      });
+    }
+
+    function openingView() {
+      if (!window._sceneIndex) window._sceneIndex = 0;
+      const s = scenes[window._sceneIndex];
+      return `
+        <h2>1) Abertura contextual</h2>
+        <div class="scene" style="background:${s.bg};">
+          <div class="row" style="justify-content:space-between; align-items:center;">
+            <button class="chicken" id="chickenBtn" aria-label="Ouvir som da galinha">${s.emoji}</button>
+            <p style="max-width:70%; font-size:clamp(1.2rem,3vw,2rem); font-weight:800;">${s.line}</p>
+          </div>
+        </div>
+        <div class="row">
+          <button class="cta" id="nextScene">${window._sceneIndex < 2 ? 'Seguinte' : 'Começar a aprender'}</button>
+          <span class="pill">Cena ${window._sceneIndex + 1}/3</span>
+        </div>
+      `;
+    }
+
+    function recognitionView() {
+      const bank = state.mode === 'support'
+        ? ['galinha', 'borboleta']
+        : state.mode === 'standard'
+          ? ['galinha', 'gaivota', 'galo', 'borboleta', 'leque']
+          : ['galinha', 'galo', 'gaivota', 'borboleta', 'lagarta', 'guitarra'];
+
+      const picks = state.mode === 'challenge' ? 4 : bank.length > 3 ? 3 : bank.length;
+      const roundWords = shuffle(bank).slice(0, picks);
+      if (!roundWords.includes('galinha')) roundWords[0] = 'galinha';
+
+      window._recognitionWords = roundWords;
+      return `
+        <h2>2) Reconhecimento global</h2>
+        <p>Clica na palavra que combina com a imagem da galinha.</p>
+        <div class="row" style="justify-content:center; font-size:5rem;">🐔</div>
+        <div class="row" id="recognitionCards">
+          ${roundWords.map(w => `<button class="card" data-word="${w}" aria-label="Escolher ${w}">${w}</button>`).join('')}
+        </div>
+        <div id="recognitionFb"></div>
+        <div class="row">
+          <span class="pill">Ronda ${state.recognitionRound + 1}/3</span>
+          <button class="cta hidden" id="nextRecognition">Continuar</button>
+        </div>
+      `;
+    }
+
+    function segmentationView() {
+      const supportSlotBg = state.mode === 'support' ? ['#ffe4f1','#efe7ff','#dbfce7'] : ['#fff','#fff','#fff'];
+      return `
+        <h2>3) Segmentação silábica: ga · li · nha</h2>
+        <p style="opacity:.7">PALAVRA COMPLETA: <strong>galinha</strong></p>
+        <div class="row" id="segBank">
+          ${shuffle(['ga','li','nha']).map(s => `<div class="card syllable ${s}" data-syl="${s}" tabindex="0" aria-label="Sílaba ${s}">${s}</div>`).join('')}
+        </div>
+        <div class="slots" id="segSlots">
+          ${[0,1,2].map(i => `<div class="slot" data-slot="${i}" style="background:${supportSlotBg[i]}"></div>`).join('')}
+        </div>
+        <div class="row">
+          <button class="cta" id="clapBtn" aria-label="Bater palma">👏 Palmas</button>
+          <strong id="clapCount">${state.clapCount}</strong>/5
+          <button class="ghost" id="checkSeg">Verificar</button>
+        </div>
+        <div id="segFb"></div>
+      `;
+    }
+
+    function recombinationView() {
+      return `
+        <h2>4) Recombinação silábica</h2>
+        <p>Experimenta formar palavras com <strong>ga</strong>, <strong>li</strong>, <strong>nha</strong>.</p>
+        <div class="row" id="recBank">
+          ${['ga','li','nha'].map(s => `<div class="card syllable ${s}" data-syl="${s}" tabindex="0">${s}</div>`).join('')}
+        </div>
+        <div class="board">
+          <div class="slots" id="recSlots">${[0,1,2].map(i => `<div class="slot" data-slot="${i}"></div>`).join('')}</div>
+          <p>Palavra formada: <strong id="formedWord">-</strong></p>
+        </div>
+        <div class="row">
+          <button class="cta" id="existsBtn">Existe!</button>
+          <button class="ghost" id="notExistsBtn">Não existe</button>
+          <button class="ghost" id="clearRec">Limpar</button>
+          <span class="pill">Encontradas: <span id="foundCount">${state.foundWords.size}</span></span>
+        </div>
+        <div id="recFb"></div>
+      `;
+    }
+
+    function completeView() {
+      if (!window._completeRound) window._completeRound = 0;
+      const rounds = [
+        ['___', 'li', 'nha', 'ga'],
+        ['ga', '___', 'nha', 'li'],
+        ['ga', 'li', '___', 'nha']
+      ];
+      const r = rounds[window._completeRound];
+      const opts = state.mode === 'support' ? ['ga','li','nha'] : ['ga','li','nha','bo','sa','to'];
+      return `
+        <h2>5) Completar a palavra</h2>
+        <div class="progress">
+          <div class="${window._completeRound > 0 ? 'done' : 'now'}">1</div>
+          <div class="${window._completeRound > 1 ? 'done' : window._completeRound === 1 ? 'now' : ''}">2</div>
+          <div class="${window._completeRound > 2 ? 'done' : window._completeRound === 2 ? 'now' : ''}">3</div>
+          <div>✔</div>
+        </div>
+        ${state.mode === 'support' ? '<p>Modelo: <strong>ga-li-nha</strong></p>' : ''}
+        <p style="font-size:2rem; font-weight:800;">${r[0]} - ${r[1]} - ${r[2]}</p>
+        <div class="row">
+          <label for="sySel">Sílaba em falta:</label>
+          <select id="sySel" aria-label="Escolher sílaba">${opts.map(o => `<option value="${o}">${o}</option>`).join('')}</select>
+          <button class="cta" id="checkComplete">Verificar</button>
+        </div>
+        <div id="completeFb"></div>
+      `;
+    }
+
+    function sentenceView() {
+      const words = shuffle(['A','galinha','põe','ovos','.']);
+      window._sentenceTarget = ['A','galinha','põe','ovos','.'];
+      return `
+        <h2>6) Frase simples</h2>
+        <p>Ordena a frase: <strong>A galinha põe ovos.</strong></p>
+        <div class="row" style="font-size:4rem;">🐔🥚</div>
+        <div class="row" id="senBank">${words.map(w => `<div class="card" data-w="${w}" tabindex="0">${w}</div>`).join('')}</div>
+        <div class="slots" id="senSlots">${[0,1,2,3,4].map(i => `<div class="slot" data-slot="${i}"></div>`).join('')}</div>
+        <p>Frase: <strong id="sentenceOut">...</strong></p>
+        <div class="row">
+          <button class="cta" id="checkSentence">Verificar</button>
+          <button class="ghost" id="reorgSentence">Reorganizar</button>
+        </div>
+        <div id="sentenceFb"></div>
+      `;
+    }
+
+    function miniView() {
+      const stage = state.miniStage;
+      const labels = ['👀 Reconhecer', '👏 Segmentar', '🧩 Reconstruir', '📘 Frase'];
+      let body = '';
+      if (stage === 0) {
+        body = `
+          <p>Escolhe a palavra certa.</p>
+          <div class="row">${['galinha','gaivota','galo'].map(w => `<button class="card" data-mini="${w}">${w}</button>`).join('')}</div>
+          <div id="miniFb"></div>`;
+      } else if (stage === 1) {
+        body = `
+          <p>Bate 3 palmas e escolhe quantas sílabas tem "galinha".</p>
+          <div class="row"><button class="cta" id="miniClap">👏</button><strong id="miniClapCount">0</strong></div>
+          <div class="row"><select id="miniSyl"><option>1</option><option>2</option><option selected>3</option><option>4</option></select><button class="cta" id="miniSylCheck">Verificar</button></div>
+          <div id="miniFb"></div>`;
+      } else if (stage === 2) {
+        body = `
+          <p>Arrasta na ordem correta.</p>
+          <div class="row" id="miniBank">${shuffle(['ga','li','nha']).map(s => `<div class="card syllable ${s}" data-syl="${s}">${s}</div>`).join('')}</div>
+          <div class="slots" id="miniSlots">${[0,1,2].map(i=>`<div class="slot" data-slot="${i}"></div>`).join('')}</div>
+          <div class="row"><button class="cta" id="miniCheckOrder">Verificar</button></div>
+          <div id="miniFb"></div>`;
+      } else {
+        body = `
+          <p>Lê a frase e responde: o que faz a galinha?</p>
+          <p style="font-size:1.8rem; font-weight:800;">A galinha põe ovos.</p>
+          <div class="row"><button class="card" data-act="poe">Põe ovos</button><button class="card" data-act="voa">Voa no céu</button></div>
+          <div id="miniFb"></div>`;
+      }
+      return `
+        <h2>7) Mini-avaliação</h2>
+        <div class="progress">${labels.map((l,i)=>`<div class="${i < stage ? 'done' : i === stage ? 'now' : ''}">${l}</div>`).join('')}</div>
+        ${body}
+      `;
+    }
+
+    function extensionView() {
+      return `
+        <h2>8) Extensão criativa</h2>
+        <p>Escolhe um modo e usa a palavra <strong>galinha</strong>.</p>
+        <div class="row">
+          <button class="tab active" data-ext="story">🎤 Contar</button>
+          <button class="tab" data-ext="draw">✏️ Desenhar</button>
+          <button class="tab" data-ext="write">⌨️ Escrever</button>
+        </div>
+        <div id="extArea" class="board" style="min-height:260px;"></div>
+        <div id="extFb"></div>
+      `;
+    }
+
+    function render() {
+      const panel = document.getElementById('panel');
+      const views = [openingView, recognitionView, segmentationView, recombinationView, completeView, sentenceView, miniView, extensionView];
+      panel.innerHTML = views[state.step]();
+      bindStep();
+    }
+
+    function bindStep() {
+      if (state.step === 0) {
+        document.getElementById('chickenBtn').onclick = () => tone('tap');
+        document.getElementById('nextScene').onclick = () => {
+          tone('tap');
+          if (window._sceneIndex < 2) window._sceneIndex += 1;
+          else setStep(1);
+          render();
+        };
+      }
+
+      if (state.step === 1) {
+        document.querySelectorAll('#recognitionCards .card').forEach(c => c.onclick = () => {
+          document.querySelectorAll('#recognitionCards .card').forEach(x => x.classList.remove('selected'));
+          c.classList.add('selected');
+          if (c.dataset.word === 'galinha') {
+            tone('ok');
+            state.recognitionStreak += 1;
+            document.getElementById('recognitionFb').innerHTML = feedback('Muito bem! Essa é a palavra certa.', true);
+            document.getElementById('nextRecognition').classList.remove('hidden');
+          } else {
+            tone('bad');
+            c.classList.add('shake');
+            setTimeout(()=>c.classList.remove('shake'), 350);
+            state.recognitionStreak = 0;
+            document.getElementById('recognitionFb').innerHTML = feedback('Boa tentativa. Tenta outra vez.', false);
+          }
+        });
+
+        document.getElementById('nextRecognition').onclick = () => {
+          state.recognitionRound += 1;
+          if (state.recognitionRound >= 3) {
+            addStar(1);
+            confettiBurst();
+            setStep(2);
+          } else {
+            render();
+          }
+        };
+      }
+
+      if (state.step === 2) {
+        const host = document.getElementById('panel');
+        attachPointerDnD(host, '#segBank .card, #segSlots .card', '#segSlots .slot', (el, slot) => {
+          if (!slot.querySelector('.card')) slot.appendChild(el);
+          else el.parentElement.appendChild(el);
+        });
+
+        document.getElementById('clapBtn').onclick = () => {
+          state.clapCount = Math.min(5, state.clapCount + 1);
+          document.getElementById('clapCount').textContent = state.clapCount;
+          tone('tap');
+        };
+
+        document.getElementById('checkSeg').onclick = () => {
+          const order = [...document.querySelectorAll('#segSlots .slot')].map(s => s.querySelector('.card')?.dataset.syl || '');
+          const ok = order.join('-') === 'ga-li-nha' && state.clapCount === 3;
+          document.getElementById('segFb').innerHTML = ok
+            ? feedback('Perfeito! ga-li-nha com 3 palmas.', true)
+            : feedback('Quase! Lê da esquerda para a direita e bate 3 palmas.', false);
+          if (ok) {
+            tone('ok');
+            addStar(1);
+            confettiBurst();
+            setTimeout(() => setStep(3), 700);
+          } else tone('bad');
+        };
+      }
+
+      if (state.step === 3) {
+        const host = document.getElementById('panel');
+        const updateWord = () => {
+          const formed = [...document.querySelectorAll('#recSlots .slot')].map(s => s.querySelector('.card')?.dataset.syl || '').join('');
+          document.getElementById('formedWord').textContent = formed || '-';
+          return formed;
+        };
+
+        attachPointerDnD(host, '#recBank .card, #recSlots .card', '#recSlots .slot', (el, slot) => {
+          if (!slot.querySelector('.card')) slot.appendChild(el);
+          updateWord();
+        });
+
+        document.getElementById('clearRec').onclick = () => {
+          const b = document.getElementById('recBank');
+          document.querySelectorAll('#recSlots .card').forEach(c => b.appendChild(c));
+          updateWord();
+        };
+
+        function checkExists(saysExists) {
+          const formed = updateWord();
+          const real = ['linha', 'liga'];
+          const isReal = real.includes(formed);
+          const ok = (saysExists && isReal) || (!saysExists && !isReal);
+          if (ok) {
+            tone('ok');
+            if (isReal) state.foundWords.add(formed);
+            document.getElementById('foundCount').textContent = state.foundWords.size;
+            document.getElementById('recFb').innerHTML = feedback(isReal ? `Excelente! "${formed}" existe.` : 'Boa! Esta combinação não forma palavra comum.', true);
+            if (isReal) { addStar(1); confettiBurst(); }
+            if (state.mode === 'challenge' ? state.foundWords.size >= 2 : state.foundWords.size >= 1) {
+              setTimeout(() => setStep(4), 900);
+            }
+          } else {
+            tone('bad');
+            document.getElementById('recFb').innerHTML = feedback('Revê e tenta outra combinação.', false);
+          }
+        }
+
+        document.getElementById('existsBtn').onclick = () => checkExists(true);
+        document.getElementById('notExistsBtn').onclick = () => checkExists(false);
+      }
+
+      if (state.step === 4) {
+        document.getElementById('checkComplete').onclick = () => {
+          const answer = document.getElementById('sySel').value;
+          const correct = ['ga','li','nha'][window._completeRound];
+          const ok = answer === correct;
+          document.getElementById('completeFb').innerHTML = ok
+            ? feedback('Acertaste! Excelente.', true)
+            : feedback('Ainda não. Lê a palavra outra vez.', false);
+          if (ok) {
+            tone('ok');
+            window._completeRound += 1;
+            if (window._completeRound >= 3) {
+              addStar(1);
+              confettiBurst();
+              setTimeout(() => setStep(5), 700);
+            } else render();
+          } else tone('bad');
+        };
+      }
+
+      if (state.step === 5) {
+        const host = document.getElementById('panel');
+        const upd = () => {
+          const phrase = [...document.querySelectorAll('#senSlots .slot')].map(s => s.querySelector('.card')?.dataset.w || '_').join(' ');
+          document.getElementById('sentenceOut').textContent = phrase;
+          return phrase;
+        };
+        attachPointerDnD(host, '#senBank .card, #senSlots .card', '#senSlots .slot', (el, slot) => {
+          if (!slot.querySelector('.card')) slot.appendChild(el);
+          upd();
+        });
+        document.getElementById('reorgSentence').onclick = () => {
+          const b = document.getElementById('senBank');
+          document.querySelectorAll('#senSlots .card').forEach(c => b.appendChild(c));
+          upd();
+        };
+        document.getElementById('checkSentence').onclick = () => {
+          const got = [...document.querySelectorAll('#senSlots .slot')].map(s => s.querySelector('.card')?.dataset.w || '');
+          const ok = got.join(' ') === window._sentenceTarget.join(' ');
+          document.getElementById('sentenceFb').innerHTML = ok
+            ? feedback('Frase correta! A galinha põe ovos.', true)
+            : feedback('Relê a imagem e reorganiza.', false);
+          if (ok) {
+            tone('ok'); addStar(1); confettiBurst();
+            setTimeout(() => setStep(6), 800);
+          } else tone('bad');
+        };
+      }
+
+      if (state.step === 6) {
+        const nextMini = () => {
+          state.miniStage += 1;
+          if (state.miniStage > 3) {
+            addStar(2);
+            confettiBurst();
+            setTimeout(() => setStep(7), 600);
+          } else render();
+        };
+
+        if (state.miniStage === 0) {
+          document.querySelectorAll('[data-mini]').forEach(b => b.onclick = () => {
+            const ok = b.dataset.mini === 'galinha';
+            document.getElementById('miniFb').innerHTML = ok ? feedback('Correto!', true) : feedback('Tenta outra vez.', false);
+            ok ? (tone('ok'), setTimeout(nextMini, 450)) : (tone('bad'), state.miniRetries++);
+          });
+        } else if (state.miniStage === 1) {
+          let c = 0;
+          document.getElementById('miniClap').onclick = () => {
+            c = Math.min(5, c + 1);
+            document.getElementById('miniClapCount').textContent = c;
+            tone('tap');
+          };
+          document.getElementById('miniSylCheck').onclick = () => {
+            const ok = c === 3 && document.getElementById('miniSyl').value === '3';
+            document.getElementById('miniFb').innerHTML = ok ? feedback('Muito bem!', true) : feedback('Quase. São 3 sílabas.', false);
+            ok ? (tone('ok'), setTimeout(nextMini, 450)) : (tone('bad'), state.miniRetries++);
+          };
+        } else if (state.miniStage === 2) {
+          const host = document.getElementById('panel');
+          attachPointerDnD(host, '#miniBank .card, #miniSlots .card', '#miniSlots .slot', (el, slot) => {
+            if (!slot.querySelector('.card')) slot.appendChild(el);
+          });
+          document.getElementById('miniCheckOrder').onclick = () => {
+            const got = [...document.querySelectorAll('#miniSlots .slot')].map(s => s.querySelector('.card')?.dataset.syl || '').join('-');
+            const ok = got === 'ga-li-nha';
+            document.getElementById('miniFb').innerHTML = ok ? feedback('Excelente!', true) : feedback('Ainda não. Tenta de novo.', false);
+            ok ? (tone('ok'), setTimeout(nextMini, 450)) : (tone('bad'), state.miniRetries++);
+          };
+        } else {
+          document.querySelectorAll('[data-act]').forEach(b => b.onclick = () => {
+            const ok = b.dataset.act === 'poe';
+            document.getElementById('miniFb').innerHTML = ok ? feedback('Resposta certa!', true) : feedback('Lê a frase outra vez.', false);
+            if (ok) {
+              tone('ok');
+              setTimeout(nextMini, 450);
+            } else {
+              tone('bad'); state.miniRetries++;
+            }
+          });
+        }
+      }
+
+      if (state.step === 7) {
+        const area = document.getElementById('extArea');
+        const setExt = (type) => {
+          document.querySelectorAll('[data-ext]').forEach(b => b.classList.toggle('active', b.dataset.ext === type));
+          if (type === 'story') {
+            area.innerHTML = `
+              <p><strong>Prompt:</strong> Conta uma micro-história com a palavra "galinha".</p>
+              <textarea id="storyText" rows="5" aria-label="Escrever história"></textarea>
+              <button class="cta" id="shareStory">Partilhar com a turma</button>`;
+            document.getElementById('shareStory').onclick = () => {
+              const t = document.getElementById('storyText').value.trim().toLowerCase();
+              const ok = t.includes('galinha');
+              document.getElementById('extFb').innerHTML = ok ? feedback('Partilhado! Ótima produção.', true) : feedback('Inclui a palavra "galinha".', false);
+              ok ? (tone('ok'), addStar(1), confettiBurst()) : tone('bad');
+            };
+          }
+          if (type === 'draw') {
+            area.innerHTML = `
+              <canvas id="draw" width="760" height="240" aria-label="Área de desenho" style="width:100%;max-width:100%;border:2px solid #ddd;border-radius:12px;background:#fff"></canvas>
+              <div class="row"><input id="drawColor" type="color" value="#E05FA0" aria-label="Cor" /><button class="cta" id="shareDraw">Partilhar com a turma</button></div>`;
+            const c = document.getElementById('draw');
+            const ctx = c.getContext('2d');
+            let on = false;
+            c.addEventListener('pointerdown', e => { on = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); });
+            c.addEventListener('pointermove', e => {
+              if (!on) return;
+              ctx.strokeStyle = document.getElementById('drawColor').value;
+              ctx.lineWidth = 5;
+              ctx.lineCap = 'round';
+              ctx.lineTo(e.offsetX, e.offsetY);
+              ctx.stroke();
+            });
+            c.addEventListener('pointerup', () => { on = false; });
+            document.getElementById('shareDraw').onclick = () => {
+              document.getElementById('extFb').innerHTML = feedback('Desenho partilhado!', true);
+              tone('ok'); addStar(1); confettiBurst();
+            };
+          }
+          if (type === 'write') {
+            area.innerHTML = `
+              <textarea id="writeText" rows="6" aria-label="Escrever frase" placeholder="Escreve uma frase com galinha..."></textarea>
+              <button class="cta" id="shareWrite">Partilhar com a turma</button>`;
+            document.getElementById('shareWrite').onclick = () => {
+              const t = document.getElementById('writeText').value.trim().toLowerCase();
+              const ok = t.includes('galinha');
+              document.getElementById('extFb').innerHTML = ok ? feedback('Texto partilhado! Muito bem.', true) : feedback('Falta usar a palavra "galinha".', false);
+              ok ? (tone('ok'), addStar(1), confettiBurst()) : tone('bad');
+            };
+          }
+        };
+
+        document.querySelectorAll('[data-ext]').forEach(b => b.onclick = () => setExt(b.dataset.ext));
+        setExt('story');
+      }
+    }
+
+    document.querySelectorAll('.tab[data-mode]').forEach(b => b.onclick = () => setMode(b.dataset.mode));
+    document.querySelectorAll('.nav button').forEach(b => b.onclick = () => setStep(Number(b.dataset.step)));
+
+    render();
+  </script>
+</body>
+</html>
