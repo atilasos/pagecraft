@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Palavra 9 - janela | PageCraft</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Baloo+2:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #2e75ff;
+      --teal: #0fb9b1;
+      --orange: #ff9f43;
+      --green: #2ecc71;
+      --red: #ef5350;
+      --bg: #f6f8ff;
+      --ink: #16324f;
+      --card: #ffffff;
+      --purple: #7e57c2;
+      --shadow: 0 10px 24px rgba(22, 50, 79, 0.14);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Nunito", "Trebuchet MS", sans-serif;
+      background: radial-gradient(circle at 15% 10%, #e5f7ff 0%, #f8f6ff 45%, #fffaf2 100%);
+      color: var(--ink);
+      font-size: 17px;
+      line-height: 1.45;
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    h1, h2, h3 {
+      font-family: "Baloo 2", "Nunito", sans-serif;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    header {
+      background: linear-gradient(135deg, #2e75ff 0%, #11c5bf 48%, #ff9f43 100%);
+      border-radius: var(--radius);
+      padding: 20px;
+      color: #fff;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 8px 0 12px;
+      font-weight: 700;
+    }
+
+    .pill {
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.45);
+      border-radius: 999px;
+      padding: 6px 10px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .objectives {
+      background: rgba(10, 20, 40, 0.2);
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+
+    .objectives li { margin-bottom: 6px; }
+
+    .unit {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      margin-bottom: 14px;
+      border: 2px solid #dbe8ff;
+    }
+
+    .unit-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .time { font-weight: 700; color: #3d5ea8; }
+
+    .diff-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 10px 0;
+    }
+
+    .diff-tab {
+      border: 2px solid #c8d7f7;
+      border-radius: 999px;
+      background: #fff;
+      min-height: 44px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-weight: 700;
+      touch-action: manipulation;
+    }
+
+    .diff-tab.active { border-color: var(--blue); background: #e9f1ff; }
+
+    .diff-content { display: none; margin-bottom: 10px; }
+    .diff-content.active { display: block; }
+
+    .interactive {
+      border: 2px dashed #b7caf6;
+      border-radius: 14px;
+      padding: 12px;
+      background: #f9fcff;
+    }
+
+    button, .btn {
+      border: 2px solid #2e75ff;
+      background: #2e75ff;
+      color: #fff;
+      border-radius: 10px;
+      min-height: 44px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      touch-action: manipulation;
+    }
+
+    button.secondary {
+      background: #fff;
+      color: #2e75ff;
+    }
+
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+    .house {
+      position: relative;
+      margin: 10px auto;
+      width: min(100%, 520px);
+      height: 210px;
+      background: linear-gradient(#8fd3ff, #d6f2ff 60%, #a8de7f 60%, #8ccf6b);
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid #9dc6ee;
+    }
+
+    .roof {
+      position: absolute;
+      width: 260px;
+      height: 80px;
+      background: #e26f5b;
+      left: 120px;
+      top: 35px;
+      transform: skewX(-24deg);
+      border-radius: 6px;
+    }
+
+    .wall {
+      position: absolute;
+      width: 260px;
+      height: 120px;
+      background: #ffe3be;
+      left: 130px;
+      top: 78px;
+      border: 2px solid #d8b692;
+    }
+
+    .window {
+      position: absolute;
+      width: 86px;
+      height: 66px;
+      top: 102px;
+      left: 220px;
+      border: 5px solid #3866a0;
+      background: #d8f3ff;
+      cursor: pointer;
+      min-width: 44px;
+      min-height: 44px;
+    }
+
+    .curtain {
+      position: absolute;
+      top: 0;
+      width: 36px;
+      height: 60px;
+      background: rgba(255,165,89,0.7);
+      animation: sway 2.4s ease-in-out infinite;
+      transform-origin: top;
+    }
+
+    .curtain.r { right: 0; animation-delay: 1.2s; }
+
+    .sun {
+      position: absolute;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      top: 14px;
+      right: 18px;
+      background: radial-gradient(circle at 35% 35%, #fff6a0, #ffcc3f 70%);
+      box-shadow: 0 0 20px rgba(255,215,102,0.8);
+    }
+
+    .arrow-label {
+      position: absolute;
+      left: 146px;
+      top: 96px;
+      font-weight: 900;
+      color: #d35400;
+      background: rgba(255,255,255,0.85);
+      border-radius: 8px;
+      padding: 4px 7px;
+    }
+
+    .arrow-label::after {
+      content: "➜";
+      margin-left: 6px;
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(9deg); }
+    }
+
+    .pulse {
+      animation: pulse 0.9s ease-in-out infinite;
+      display: inline-block;
+      color: #e67e22;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    @keyframes pulse {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .card-btn {
+      min-height: 50px;
+      border: 2px solid #a9c2eb;
+      background: #fff;
+      border-radius: 12px;
+      font-size: 1.12rem;
+      font-weight: 800;
+      color: #1e4373;
+      cursor: pointer;
+    }
+
+    .ok { background: #d5f7e5; border-color: #2ecc71; }
+    .wrong { background: #ffe4cc; border-color: #ff9f43; animation: shake 0.35s; }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
+    }
+
+    .feedback { font-weight: 800; margin-top: 8px; min-height: 26px; }
+
+    .drag-bank, .drop-row, .compose, .sentence-zone {
+      min-height: 56px;
+      border-radius: 12px;
+      border: 2px dashed #94b6ee;
+      background: #fff;
+      padding: 8px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .drop-row { justify-content: center; }
+
+    .slot {
+      width: 90px;
+      min-height: 54px;
+      border: 2px dashed #9db8e6;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f6faff;
+      font-weight: 700;
+      color: #5a7096;
+    }
+
+    .drag {
+      user-select: none;
+      touch-action: none;
+      min-width: 60px;
+      min-height: 46px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      color: #083660;
+      font-weight: 900;
+      border: 2px solid rgba(0,0,0,0.1);
+      cursor: grab;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .drag.dragging {
+      opacity: 0.85;
+      cursor: grabbing;
+      z-index: 999;
+      pointer-events: none;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    .ja { background: #ffd3a2; }
+    .ne { background: #cfe4ff; }
+    .la { background: #cdf6d5; }
+    .ca { background: #ffe9a5; }
+    .sa { background: #f5d6ff; }
+
+    .counter { font-weight: 900; color: #2f4c82; }
+
+    .semaforo {
+      padding: 10px;
+      border-radius: 10px;
+      margin-top: 8px;
+      font-weight: 900;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+    }
+
+    .exists { background: #ddf8e8; color: #1f7a41; border: 2px solid #7ad9a2; }
+    .not-exists { background: #ffe6e1; color: #9c2f2f; border: 2px solid #f3a8a0; }
+
+    .lined {
+      border: 2px solid #9eb9eb;
+      border-radius: 10px;
+      background: repeating-linear-gradient(to bottom, #fff, #fff 29px, #dce9ff 29px, #dce9ff 30px);
+      width: 100%;
+      height: 160px;
+      touch-action: none;
+    }
+
+    .star {
+      font-size: 1.6rem;
+      opacity: 0;
+      transition: opacity .25s, transform .25s;
+      transform: scale(0.7);
+    }
+
+    .star.show { opacity: 1; transform: scale(1.1); }
+
+    .progress {
+      height: 14px;
+      border-radius: 999px;
+      background: #dfeaff;
+      overflow: hidden;
+      margin: 8px 0;
+    }
+
+    .progress > span {
+      display: block;
+      width: 25%;
+      height: 100%;
+      background: linear-gradient(90deg,#2e75ff,#11c5bf);
+      transition: width .35s;
+    }
+
+    .path-chooser {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .path-btn {
+      border: 2px solid #b6cbf2;
+      border-radius: 12px;
+      min-height: 70px;
+      background: #fff;
+      font-weight: 900;
+      font-size: 1.02rem;
+    }
+
+    .path-btn.active { border-color: #2e75ff; background: #e9f1ff; }
+
+    .maker {
+      background: #e6f9ea;
+      border: 2px solid #8cd9a0;
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-top: 8px;
+    }
+
+    .maker-card {
+      background: #fff;
+      border-left: 6px solid #37b45b;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .assessment {
+      background: #fff2de;
+      border: 2px solid #ffbd73;
+      border-radius: var(--radius);
+      padding: 14px;
+      margin: 14px 0;
+    }
+
+    .scale { display: grid; gap: 8px; }
+
+    .scale-row {
+      background: #fff;
+      border-radius: 10px;
+      padding: 8px;
+      border: 1px solid #ffd8a7;
+    }
+
+    .curricular {
+      background: #f2e8ff;
+      border: 2px solid #cbb1f8;
+      border-radius: var(--radius);
+      padding: 14px;
+      margin: 14px 0;
+    }
+
+    .tiny-footer {
+      text-align: center;
+      color: #6b6b85;
+      font-size: .9rem;
+      padding: 6px 0 12px;
+    }
+
+    .hint { color: #39567b; background: #edf4ff; border-radius: 9px; padding: 8px; }
+
+    #confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 768px) {
+      body { font-size: 16px; }
+      .wrap { padding: 10px; }
+      header { padding: 16px; }
+      .slot { width: 82px; }
+    }
+  </style>
+</head>
+<body>
+<canvas id="confetti" aria-hidden="true"></canvas>
+<div class="wrap">
+  <header>
+    <h1>Palavra 9: <strong>janela</strong></h1>
+    <div class="meta">
+      <span class="pill">Ano: 1.º CEB (6-7 anos)</span>
+      <span class="pill">Duração: 45 minutos</span>
+      <span class="pill">Método das 28 Palavras</span>
+    </div>
+    <div class="objectives">
+      <ul>
+        <li>Reconhecer a palavra <strong>janela</strong> globalmente.</li>
+        <li>Segmentar em sílabas: <strong>ja-ne-la</strong>.</li>
+        <li>Recombinar sílabas para formar novas palavras.</li>
+        <li>Usar <strong>janela</strong> numa frase simples.</li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="unit" id="u1">
+    <div class="unit-head"><h2>Unit 1: Abertura contextual</h2><span class="time">4 min</span></div>
+    <div class="diff-tabs" aria-label="Nível de diferenciação Unit 1">
+      <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+      <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+    </div>
+    <div class="diff-content active" data-level="support"><p class="hint">Seta e etiqueta visíveis. Podes ouvir a história sempre que quiseres.</p></div>
+    <div class="diff-content" data-level="standard"><p class="hint">Olha para a imagem e ouve a frase completa.</p></div>
+    <div class="diff-content" data-level="challenge"><p class="hint">Primeiro diz o que vês. Depois compara com a frase.</p></div>
+    <div class="interactive">
+      <div class="house" aria-label="Casa com janela aberta">
+        <div class="sun"></div>
+        <div class="roof"></div>
+        <div class="wall"></div>
+        <div class="window" id="windowObj" aria-label="Janela"></div>
+        <div class="curtain"></div><div class="curtain r"></div>
+        <div class="arrow-label" id="u1Arrow">janela</div>
+      </div>
+      <div class="row">
+        <button id="u1Story" aria-label="Ouvir a história">Ouvir a história</button>
+        <button class="secondary" id="u1Word" aria-label="Ouvir palavra janela">Ouvir “janela”</button>
+      </div>
+      <p id="u1Prompt" class="hint">Toca na janela da casa.</p>
+      <p id="u1Phrase" class="hidden">A <span id="u1WordHighlight">janela</span> está aberta.</p>
+      <div class="feedback" id="u1Feedback" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="unit" id="u2">
+    <div class="unit-head"><h2>Unit 2: Reconhecimento global</h2><span class="time">4 min</span></div>
+    <div class="diff-tabs" aria-label="Nível de diferenciação Unit 2">
+      <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+      <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+    </div>
+    <div class="diff-content active" data-level="support"><p class="hint">Só 2 opções. Podes ouvir as palavras antes.</p></div>
+    <div class="diff-content" data-level="standard"><p class="hint">Escolhe entre 4 opções.</p></div>
+    <div class="diff-content" data-level="challenge"><p class="hint">Lê em voz alta as 4 palavras antes de escolher.</p></div>
+    <div class="interactive">
+      <p id="u2ImageLabel" class="hint">🪟 Imagem: uma janela no centro.</p>
+      <div class="cards" id="u2Cards"></div>
+      <div class="row">
+        <button class="secondary" id="u2HearOptions">Ouvir opções</button>
+        <button id="u2Next" class="hidden">Seguinte</button>
+      </div>
+      <div id="u2ChallengeWrite" class="hidden">
+        <label for="u2MemoryInput">Escreve “janela” de memória:</label>
+        <input id="u2MemoryInput" aria-label="Escrever janela" style="min-height:44px;font-size:1rem;padding:8px;border-radius:8px;border:2px solid #9db8e6;"/>
+      </div>
+      <div class="feedback" id="u2Feedback" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="unit" id="u3">
+    <div class="unit-head"><h2>Unit 3: Segmentação silábica</h2><span class="time">7 min</span></div>
+    <div class="diff-tabs" aria-label="Nível de diferenciação Unit 3">
+      <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+      <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+    </div>
+    <div class="diff-content active" data-level="support"><p class="hint">Dica nos slots: j__ / n__ / l__. Áudio das sílabas disponível.</p></div>
+    <div class="diff-content" data-level="standard"><p class="hint">Arrasta as sílabas para os slots vazios.</p></div>
+    <div class="diff-content" data-level="challenge"><p class="hint">Blocos por cor. No fim, escreve a palavra sem apoio.</p></div>
+    <div class="interactive">
+      <h3 style="font-size:2rem;">janela</h3>
+      <div class="drop-row" id="u3Slots"></div>
+      <div class="drag-bank" id="u3Bank"></div>
+      <div class="row">
+        <button class="secondary" id="u3Hear">Ouvir sílabas</button>
+        <button class="secondary" id="u3Reset">Repor</button>
+        <span class="counter" id="u3Count">0/3 sílabas</span>
+        <span aria-hidden="true">👏</span>
+      </div>
+      <div id="u3ChallengeWrite" class="hidden">
+        <label for="u3WriteInput">Escreve a palavra completa:</label>
+        <input id="u3WriteInput" style="min-height:44px;font-size:1rem;padding:8px;border-radius:8px;border:2px solid #9db8e6;">
+      </div>
+      <div class="feedback" id="u3Feedback" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="unit" id="u4">
+    <div class="unit-head"><h2>Unit 4: Recombinação de sílabas</h2><span class="time">7 min</span></div>
+    <div class="diff-tabs" aria-label="Nível de diferenciação Unit 4">
+      <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+      <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+    </div>
+    <div class="diff-content active" data-level="support"><p class="hint">Usa só <strong>ne</strong> + <strong>la</strong>.</p></div>
+    <div class="diff-content" data-level="standard"><p class="hint">Experimenta combinações com 3 sílabas.</p></div>
+    <div class="diff-content" data-level="challenge"><p class="hint">Tens sílabas bonus: ca, sa.</p></div>
+    <div class="interactive">
+      <div class="drag-bank" id="u4Bank"></div>
+      <p><strong>Palavra formada:</strong> <span id="u4Word" style="font-size:1.4rem;">—</span></p>
+      <div class="compose" id="u4Compose" aria-label="Zona de composição"></div>
+      <div class="row"><button class="secondary" id="u4Clear">Limpar</button></div>
+      <div id="u4Semaforo" class="semaforo not-exists">Arrasta sílabas para experimentar.</div>
+      <div id="u4Nela" class="hidden hint">🖼️ Ela está <strong>nela</strong>.</div>
+      <p><strong>Palavras encontradas:</strong> <span id="u4Found">nenhuma ainda</span></p>
+    </div>
+  </section>
+
+  <section class="unit" id="u5">
+    <div class="unit-head"><h2>Unit 5: Leitura e escrita guiada</h2><span class="time">7 min</span></div>
+    <div class="diff-tabs" aria-label="Nível de diferenciação Unit 5">
+      <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+      <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+    </div>
+    <div class="diff-content active" data-level="support"><p class="hint">Sílabas coloridas e modelo tracejado.</p></div>
+    <div class="diff-content" data-level="standard"><p class="hint">Escolhe a sílaba em falta e copia.</p></div>
+    <div class="diff-content" data-level="challenge"><p class="hint">Sem opções. Escreve de memória.</p></div>
+    <div class="interactive">
+      <p id="u5Pattern" style="font-size:1.8rem;font-weight:900;">ja ___ la</p>
+      <div class="cards" id="u5Options"></div>
+      <div id="u5ChallengeInputWrap" class="hidden">
+        <label for="u5ChallengeInput">Escreve a palavra completa:</label>
+        <input id="u5ChallengeInput" style="min-height:44px;font-size:1rem;padding:8px;border-radius:8px;border:2px solid #9db8e6;"/>
+      </div>
+      <canvas id="u5Canvas" class="lined" width="900" height="300" aria-label="Zona de escrita"></canvas>
+      <div class="row">
+        <button class="secondary" id="u5ClearCanvas">Limpar escrita</button>
+        <button id="u5Check">Ver a minha palavra</button>
+      </div>
+      <div class="feedback" id="u5Feedback" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="unit" id="u6">
+    <div class="unit-head"><h2>Unit 6: Frase simples</h2><span class="time">8 min</span></div>
+    <div class="diff-tabs" aria-label="Nível de diferenciação Unit 6">
+      <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+      <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+    </div>
+    <div class="diff-content active" data-level="support"><p class="hint">Banco reduzido com frase modelo sempre visível.</p></div>
+    <div class="diff-content" data-level="standard"><p class="hint">Banco de 10 palavras para criar frase própria.</p></div>
+    <div class="diff-content" data-level="challenge"><p class="hint">Escreve 2 frases, uma delas pergunta.</p></div>
+    <div class="interactive">
+      <p style="color:#6f7d96;">Modelo: A janela está aberta.</p>
+      <div class="drag-bank" id="u6Bank"></div>
+      <p><strong>A minha frase:</strong> <span class="star" id="u6Star">⭐</span></p>
+      <div class="sentence-zone" id="u6Zone"></div>
+      <p id="u6SentenceText">—</p>
+      <div id="u6ChallengeWrap" class="hidden">
+        <label for="u6ChallengeText">Escreve 2 frases com “janela” (uma pergunta):</label>
+        <textarea id="u6ChallengeText" style="width:100%;min-height:90px;font-size:1rem;border-radius:10px;border:2px solid #9eb9eb;padding:8px;"></textarea>
+      </div>
+      <div class="row">
+        <button class="secondary" id="u6HearWord">Ouvir palavras</button>
+        <button id="u6HearSentence">Ouvir a minha frase</button>
+        <button class="secondary" id="u6Clear">Limpar frase</button>
+      </div>
+      <div class="feedback" id="u6Feedback"></div>
+    </div>
+  </section>
+
+  <section class="unit" id="u7">
+    <div class="unit-head"><h2>Unit 7: Mini-avaliação interactiva</h2><span class="time">4 min</span></div>
+    <div class="diff-tabs" aria-label="Nível de diferenciação Unit 7">
+      <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+      <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+    </div>
+    <div class="interactive">
+      <div class="progress"><span id="u7Bar"></span></div>
+      <p id="u7StepLabel"><strong>Etapa 1/4</strong></p>
+      <div id="u7Stage"></div>
+      <div class="feedback" id="u7Feedback"></div>
+    </div>
+  </section>
+
+  <section class="unit" id="u8">
+    <div class="unit-head"><h2>Unit 8: Extensão criativa</h2><span class="time">10 min</span></div>
+    <div class="diff-tabs" aria-label="Nível de diferenciação Unit 8">
+      <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+      <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+    </div>
+    <div class="interactive">
+      <div class="path-chooser">
+        <button class="path-btn active" data-path="draw">🎨 Desenho</button>
+        <button class="path-btn" data-path="oral">🎤 Oralidade</button>
+        <button class="path-btn" data-path="write">✏️ Escrita criativa</button>
+      </div>
+      <p class="hint">Temporizador: <strong id="u8Timer">08:00</strong></p>
+      <div id="u8DrawWrap">
+        <p>Desenha o que vês pela janela.</p>
+        <canvas id="u8Canvas" class="lined" width="900" height="300"></canvas>
+      </div>
+      <div id="u8OralWrap" class="hidden">
+        <p>Grava uma frase com “janela”.</p>
+        <div class="row">
+          <button id="u8Rec">Gravar / Parar</button>
+          <audio id="u8Audio" controls class="hidden"></audio>
+        </div>
+      </div>
+      <div id="u8WriteWrap" class="hidden">
+        <label for="u8Text">Escreve a tua produção:</label>
+        <textarea id="u8Text" style="width:100%;min-height:120px;font-size:1rem;border-radius:10px;border:2px solid #9eb9eb;padding:8px;"></textarea>
+      </div>
+      <div class="row"><button id="u8Share">Quero mostrar à turma!</button></div>
+      <div class="feedback" id="u8Feedback"></div>
+    </div>
+  </section>
+
+  <section class="maker">
+    <h2>🛠️ Desafios Maker</h2>
+    <article class="maker-card">
+      <h3>Unplugged: Cartões de sílabas</h3>
+      <p>Espalha <strong>ja / ne / la</strong> na mesa, forma “janela” e troca com um colega para descobrir a sílaba em falta.</p>
+    </article>
+    <article class="maker-card">
+      <h3>Whiteboard: Frases criativas</h3>
+      <p>Cada aluno/par partilha a sua frase com “janela”. A turma vota na mais criativa e cria mural colectivo.</p>
+    </article>
+    <article class="maker-card">
+      <h3>Unplugged: Janela de papel</h3>
+      <p>Dobra uma folha A4 ao meio, cria uma janela, desenha o que vês e escreve uma palavra ou frase à volta.</p>
+    </article>
+  </section>
+
+  <section class="assessment">
+    <h2>📝 Mini-avaliação observável</h2>
+    <div class="scale">
+      <div class="scale-row">1) Escolhe “janela” entre palavras parecidas. ⬜ Ainda não consigo ⬜ Com ajuda ⬜ Sozinho/a ⬜ Ajudo colegas</div>
+      <div class="scale-row">2) Segmenta “janela” em ja-ne-la com 3 palmadas. ⬜ Ainda não consigo ⬜ Com ajuda ⬜ Sozinho/a ⬜ Ajudo colegas</div>
+      <div class="scale-row">3) Recombina sílabas e encontra uma palavra válida (ex.: “nela”). ⬜ Ainda não consigo ⬜ Com ajuda ⬜ Sozinho/a ⬜ Ajudo colegas</div>
+      <div class="scale-row">4) Completa “A ___ está aberta.” com “janela”. ⬜ Ainda não consigo ⬜ Com ajuda ⬜ Sozinho/a ⬜ Ajudo colegas</div>
+      <div class="scale-row">5) Constrói uma frase com pelo menos 3 palavras e inclui “janela”. ⬜ Ainda não consigo ⬜ Com ajuda ⬜ Sozinho/a ⬜ Ajudo colegas</div>
+    </div>
+  </section>
+
+  <section class="curricular">
+    <h2>Referências curriculares</h2>
+    <h3>Aprendizagens Essenciais</h3>
+    <ul>
+      <li>Reconhecer sílabas como unidades de segmentação do oral e do escrito; identificar palavras em contexto.</li>
+      <li>Produzir enunciados com vocabulário adequado ao tema e à situação; usar frases simples.</li>
+      <li>Desenvolver consciência fonológica: segmentação, reconstrução e manipulação silábica.</li>
+    </ul>
+    <h3>Perfil do Aluno</h3>
+    <ul>
+      <li>PA-A: Linguagens e textos</li>
+      <li>PA-B: Informação e comunicação</li>
+      <li>PA-F: Desenvolvimento pessoal e autonomia</li>
+    </ul>
+  </section>
+
+  <footer class="tiny-footer">Gerado por PageCraft 🛠️</footer>
+</div>
+
+<script>
+  (function () {
+    const synth = window.speechSynthesis;
+    const confettiCanvas = document.getElementById("confetti");
+    const confCtx = confettiCanvas.getContext("2d");
+    let confettiPieces = [];
+
+    function resizeConfetti() {
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+    }
+    resizeConfetti();
+    window.addEventListener("resize", resizeConfetti);
+
+    function beep(type = "ok") {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      const ctx = new AC();
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = "sine";
+      o.frequency.value = type === "ok" ? 740 : 260;
+      g.gain.value = 0.001;
+      o.connect(g);
+      g.connect(ctx.destination);
+      o.start();
+      g.gain.exponentialRampToValueAtTime(0.1, ctx.currentTime + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.28);
+      o.stop(ctx.currentTime + 0.3);
+    }
+
+    function speak(text) {
+      if (!synth) return;
+      synth.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "pt-PT";
+      u.rate = 0.95;
+      synth.speak(u);
+    }
+
+    function confettiBurst() {
+      for (let i = 0; i < 120; i++) {
+        confettiPieces.push({
+          x: Math.random() * confettiCanvas.width,
+          y: -10,
+          vx: (Math.random() - 0.5) * 3,
+          vy: 2 + Math.random() * 4,
+          s: 4 + Math.random() * 7,
+          c: ["#ff9f43", "#2ecc71", "#2e75ff", "#ef5350", "#f6d94d"][Math.floor(Math.random() * 5)],
+          r: Math.random() * Math.PI
+        });
+      }
+    }
+
+    function drawConfetti() {
+      confCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+      confettiPieces = confettiPieces.filter(p => p.y < confettiCanvas.height + 30);
+      confettiPieces.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.r += 0.06;
+        confCtx.save();
+        confCtx.translate(p.x, p.y);
+        confCtx.rotate(p.r);
+        confCtx.fillStyle = p.c;
+        confCtx.fillRect(-p.s / 2, -p.s / 2, p.s, p.s);
+        confCtx.restore();
+      });
+      requestAnimationFrame(drawConfetti);
+    }
+    requestAnimationFrame(drawConfetti);
+
+    document.querySelectorAll(".unit").forEach(unit => {
+      const tabs = unit.querySelectorAll(".diff-tab");
+      const blocks = unit.querySelectorAll(".diff-content");
+      tabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+          tabs.forEach(t => t.classList.remove("active"));
+          tab.classList.add("active");
+          blocks.forEach(b => b.classList.toggle("active", b.dataset.level === tab.dataset.level));
+          unit.dispatchEvent(new CustomEvent("levelchange", { detail: tab.dataset.level }));
+        });
+      });
+    });
+
+    function makeDraggable(root, onDrop) {
+      let drag = null;
+      let ox = 0;
+      let oy = 0;
+
+      root.addEventListener("pointerdown", (e) => {
+        const t = e.target.closest(".drag");
+        if (!t) return;
+        drag = t;
+        const r = t.getBoundingClientRect();
+        ox = e.clientX - r.left;
+        oy = e.clientY - r.top;
+        t.classList.add("dragging");
+        t.style.position = "fixed";
+        t.style.left = (e.clientX - ox) + "px";
+        t.style.top = (e.clientY - oy) + "px";
+        t.style.width = r.width + "px";
+      });
+
+      window.addEventListener("pointermove", (e) => {
+        if (!drag) return;
+        drag.style.left = (e.clientX - ox) + "px";
+        drag.style.top = (e.clientY - oy) + "px";
+      });
+
+      window.addEventListener("pointerup", (e) => {
+        if (!drag) return;
+        const target = document.elementFromPoint(e.clientX, e.clientY);
+        const dropped = onDrop(drag, target);
+        drag.classList.remove("dragging");
+        drag.style.position = "";
+        drag.style.left = "";
+        drag.style.top = "";
+        drag.style.width = "";
+        if (!dropped) {
+          const bank = root.querySelector(".drag-bank") || root;
+          bank.appendChild(drag);
+        }
+        drag = null;
+      });
+    }
+
+    const u1 = document.getElementById("u1");
+    const u1Phrase = document.getElementById("u1Phrase");
+    const u1WordHighlight = document.getElementById("u1WordHighlight");
+    const u1Arrow = document.getElementById("u1Arrow");
+    const u1Feedback = document.getElementById("u1Feedback");
+    const u1Prompt = document.getElementById("u1Prompt");
+
+    function applyU1Level(level) {
+      u1Arrow.classList.toggle("hidden", level !== "support");
+      u1Phrase.classList.toggle("hidden", level === "challenge");
+      if (level === "challenge") {
+        u1Prompt.textContent = "Diz primeiro: O que vês nesta imagem?";
+      } else {
+        u1Prompt.textContent = "Toca na janela da casa.";
+      }
+    }
+    applyU1Level("support");
+    u1.addEventListener("levelchange", (e) => applyU1Level(e.detail));
+
+    document.getElementById("u1Story").addEventListener("click", () => {
+      speak("Numa casa alegre, a luz entrou pela janela. A janela está aberta.");
+      setTimeout(() => {
+        u1Phrase.classList.remove("hidden");
+        u1WordHighlight.classList.add("pulse");
+        u1Feedback.textContent = "Muito bem! Agora toca na palavra janela.";
+        beep("ok");
+      }, 1700);
+    });
+    document.getElementById("u1Word").addEventListener("click", () => speak("janela"));
+    document.getElementById("windowObj").addEventListener("click", () => {
+      u1Feedback.textContent = "Encontraste a janela!";
+      confettiBurst();
+      beep("ok");
+    });
+    u1WordHighlight.addEventListener("click", () => speak("janela"));
+
+    const u2 = document.getElementById("u2");
+    const u2Cards = document.getElementById("u2Cards");
+    const u2Feedback = document.getElementById("u2Feedback");
+    const u2Next = document.getElementById("u2Next");
+    const u2ChallengeWrite = document.getElementById("u2ChallengeWrite");
+    let u2Attempts = 0;
+
+    function renderU2(level) {
+      u2Cards.innerHTML = "";
+      u2Feedback.textContent = "";
+      u2Next.classList.add("hidden");
+      u2ChallengeWrite.classList.add("hidden");
+      u2Attempts = 0;
+      const options = level === "support" ? ["janela", "porta"] : ["janela", "casa", "porta", "telhado"];
+      if (level === "challenge") {
+        document.getElementById("u2ImageLabel").textContent = "Sem imagem de apoio: lê as palavras e escolhe.";
+      } else {
+        document.getElementById("u2ImageLabel").textContent = "🪟 Imagem: uma janela no centro.";
+      }
+      options.forEach(opt => {
+        const b = document.createElement("button");
+        b.className = "card-btn";
+        b.textContent = opt;
+        b.setAttribute("aria-label", "Opção " + opt);
+        b.addEventListener("click", () => {
+          u2Attempts += 1;
+          u2Cards.querySelectorAll("button").forEach(btn => btn.disabled = true);
+          if (opt === "janela") {
+            b.classList.add("ok");
+            u2Feedback.textContent = "✓ Certo! " + (u2Attempts <= 2 ? "Conseguiste em poucas tentativas." : "Boa persistência!");
+            speak("janela");
+            beep("ok");
+            confettiBurst();
+            u2Next.classList.remove("hidden");
+            if (level === "challenge") u2ChallengeWrite.classList.remove("hidden");
+          } else {
+            b.classList.add("wrong");
+            u2Feedback.textContent = "Tenta de novo.";
+            beep("no");
+            setTimeout(() => {
+              u2Cards.querySelectorAll("button").forEach(btn => { btn.disabled = false; btn.classList.remove("wrong"); });
+            }, 520);
+          }
+        });
+        u2Cards.appendChild(b);
+      });
+    }
+    renderU2("support");
+    u2.addEventListener("levelchange", e => renderU2(e.detail));
+    document.getElementById("u2HearOptions").addEventListener("click", () => {
+      const words = [...u2Cards.querySelectorAll("button")].map(b => b.textContent).join(", ");
+      speak(words);
+    });
+
+    const u3 = document.getElementById("u3");
+    const u3Slots = document.getElementById("u3Slots");
+    const u3Bank = document.getElementById("u3Bank");
+    const u3Count = document.getElementById("u3Count");
+    const u3Feedback = document.getElementById("u3Feedback");
+    const sylls = ["ja", "ne", "la"];
+
+    function shuffle(arr) {
+      return arr.slice().sort(() => Math.random() - 0.5);
+    }
+
+    function renderU3(level) {
+      u3Slots.innerHTML = "";
+      u3Bank.innerHTML = "";
+      u3Feedback.textContent = "";
+      document.getElementById("u3ChallengeWrite").classList.toggle("hidden", level !== "challenge");
+      sylls.forEach((s, i) => {
+        const slot = document.createElement("div");
+        slot.className = "slot";
+        slot.dataset.index = String(i);
+        slot.dataset.expect = s;
+        slot.textContent = level === "support" ? (s[0] + "__") : "";
+        u3Slots.appendChild(slot);
+      });
+      shuffle(sylls).forEach(s => {
+        const d = document.createElement("div");
+        d.className = "drag " + s;
+        d.dataset.syl = s;
+        d.textContent = level === "challenge" ? "" : s;
+        if (level === "challenge") d.setAttribute("aria-label", "Bloco de sílaba por cor");
+        u3Bank.appendChild(d);
+      });
+      updateU3();
+    }
+
+    function updateU3() {
+      const used = [...u3Slots.children].filter(s => s.querySelector(".drag")).length;
+      u3Count.textContent = used + "/3 sílabas";
+      if (used !== 3) return;
+      const word = [...u3Slots.children].map(s => s.querySelector(".drag")?.dataset.syl || "").join("");
+      if (word === "janela") {
+        u3Feedback.textContent = "Excelente! ja... ne... la... janela!";
+        speak("ja... ne... la... janela");
+        beep("ok");
+        confettiBurst();
+      } else {
+        u3Feedback.textContent = "Quase! Reorganiza as sílabas.";
+        beep("no");
+      }
+    }
+
+    makeDraggable(u3.querySelector(".interactive"), (drag, target) => {
+      const slot = target?.closest(".slot");
+      if (slot) {
+        if (slot.querySelector(".drag")) {
+          u3Bank.appendChild(slot.querySelector(".drag"));
+        }
+        slot.textContent = "";
+        slot.appendChild(drag);
+        updateU3();
+        return true;
+      }
+      const bank = target?.closest(".drag-bank");
+      if (bank) {
+        bank.appendChild(drag);
+        updateU3();
+        return true;
+      }
+      return false;
+    });
+
+    renderU3("support");
+    u3.addEventListener("levelchange", e => renderU3(e.detail));
+    document.getElementById("u3Reset").addEventListener("click", () => renderU3(u3.querySelector(".diff-tab.active").dataset.level));
+    document.getElementById("u3Hear").addEventListener("click", () => speak("ja, ne, la"));
+
+    const u4 = document.getElementById("u4");
+    const u4Bank = document.getElementById("u4Bank");
+    const u4Compose = document.getElementById("u4Compose");
+    const u4Word = document.getElementById("u4Word");
+    const u4Sem = document.getElementById("u4Semaforo");
+    const u4Found = document.getElementById("u4Found");
+    const found = new Set();
+
+    function renderU4(level) {
+      u4Bank.innerHTML = "";
+      u4Compose.innerHTML = "";
+      u4Word.textContent = "—";
+      found.clear();
+      u4Found.textContent = "nenhuma ainda";
+      document.getElementById("u4Nela").classList.add("hidden");
+      u4Sem.className = "semaforo not-exists";
+      u4Sem.textContent = "Arrasta sílabas para experimentar.";
+      let opts = ["ja", "ne", "la"];
+      if (level === "support") opts = ["ne", "la"];
+      if (level === "challenge") opts = ["ja", "ne", "la", "ca", "sa"];
+      opts.forEach(s => {
+        const d = document.createElement("div");
+        d.className = "drag " + s;
+        d.dataset.syl = s;
+        d.textContent = s;
+        u4Bank.appendChild(d);
+      });
+    }
+
+    function checkU4() {
+      const w = [...u4Compose.querySelectorAll(".drag")].map(d => d.dataset.syl).join("");
+      u4Word.textContent = w || "—";
+      const valid = ["nela", "janela", "la"];
+      if (!w) {
+        u4Sem.className = "semaforo not-exists";
+        u4Sem.textContent = "Arrasta sílabas para experimentar.";
+        return;
+      }
+      if (valid.includes(w)) {
+        u4Sem.className = "semaforo exists";
+        u4Sem.textContent = "🟢 Esta palavra existe!";
+        found.add(w);
+        u4Found.textContent = [...found].join(", ");
+        beep("ok");
+        if (w === "nela") {
+          document.getElementById("u4Nela").classList.remove("hidden");
+          confettiBurst();
+        }
+      } else {
+        u4Sem.className = "semaforo not-exists";
+        u4Sem.textContent = "🔴 Ainda não é uma palavra.";
+        beep("no");
+      }
+    }
+
+    makeDraggable(u4.querySelector(".interactive"), (drag, target) => {
+      const compose = target?.closest("#u4Compose");
+      const bank = target?.closest("#u4Bank");
+      if (compose) {
+        compose.appendChild(drag);
+        checkU4();
+        return true;
+      }
+      if (bank) {
+        bank.appendChild(drag);
+        checkU4();
+        return true;
+      }
+      return false;
+    });
+
+    renderU4("support");
+    u4.addEventListener("levelchange", e => renderU4(e.detail));
+    document.getElementById("u4Clear").addEventListener("click", () => {
+      [...u4Compose.querySelectorAll(".drag")].forEach(d => u4Bank.appendChild(d));
+      checkU4();
+    });
+
+    const u5 = document.getElementById("u5");
+    const u5Pattern = document.getElementById("u5Pattern");
+    const u5Options = document.getElementById("u5Options");
+    const u5Feedback = document.getElementById("u5Feedback");
+    const missingIndex = 1;
+
+    function renderU5(level) {
+      u5Options.innerHTML = "";
+      u5Feedback.textContent = "";
+      document.getElementById("u5ChallengeInputWrap").classList.toggle("hidden", level !== "challenge");
+      const parts = ["ja", "ne", "la"];
+      const show = parts.map((p, i) => i === missingIndex ? "___" : p).join(" ");
+      u5Pattern.textContent = show;
+      if (level === "challenge") return;
+      ["ja", "ne", "la"].forEach(s => {
+        const b = document.createElement("button");
+        b.className = "card-btn " + (level === "support" ? s : "");
+        b.textContent = s;
+        b.addEventListener("click", () => {
+          if (s === "ne") {
+            u5Pattern.innerHTML = "ja <span class='pulse'>ne</span> la";
+            u5Feedback.textContent = "Boa! Palavra completa.";
+            beep("ok");
+          } else {
+            u5Feedback.textContent = "Tenta outra sílaba.";
+            beep("no");
+          }
+        });
+        u5Options.appendChild(b);
+      });
+    }
+    renderU5("support");
+    u5.addEventListener("levelchange", e => renderU5(e.detail));
+
+    function initCanvas(id) {
+      const c = document.getElementById(id);
+      const ctx = c.getContext("2d");
+      let draw = false;
+      let hasInk = false;
+      ctx.lineWidth = 5;
+      ctx.lineCap = "round";
+      ctx.strokeStyle = "#204a83";
+
+      function pos(e) {
+        const r = c.getBoundingClientRect();
+        const x = ((e.clientX - r.left) / r.width) * c.width;
+        const y = ((e.clientY - r.top) / r.height) * c.height;
+        return { x, y };
+      }
+
+      c.addEventListener("pointerdown", e => {
+        draw = true;
+        c.setPointerCapture(e.pointerId);
+        const p = pos(e);
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+      });
+      c.addEventListener("pointermove", e => {
+        if (!draw) return;
+        hasInk = true;
+        const p = pos(e);
+        ctx.lineTo(p.x, p.y);
+        ctx.stroke();
+      });
+      c.addEventListener("pointerup", () => { draw = false; });
+      return {
+        clear: () => { ctx.clearRect(0, 0, c.width, c.height); hasInk = false; },
+        hasInk: () => hasInk
+      };
+    }
+
+    const u5Canvas = initCanvas("u5Canvas");
+    document.getElementById("u5ClearCanvas").addEventListener("click", u5Canvas.clear);
+    document.getElementById("u5Check").addEventListener("click", () => {
+      const level = u5.querySelector(".diff-tab.active").dataset.level;
+      if (level === "challenge") {
+        const v = document.getElementById("u5ChallengeInput").value.trim().toLowerCase();
+        if (v === "janela") {
+          u5Feedback.textContent = "Perfeito! Escreveste de memória.";
+          confettiBurst(); beep("ok");
+        } else {
+          u5Feedback.textContent = "Revê as sílabas e tenta de novo.";
+          beep("no");
+        }
+        return;
+      }
+      if (u5Canvas.hasInk()) {
+        u5Feedback.textContent = "Boa escrita! Compara com o modelo: janela.";
+        beep("ok");
+      } else {
+        u5Feedback.textContent = "Escreve primeiro na linha pautada.";
+        beep("no");
+      }
+    });
+
+    const u6 = document.getElementById("u6");
+    const u6Bank = document.getElementById("u6Bank");
+    const u6Zone = document.getElementById("u6Zone");
+    const u6Text = document.getElementById("u6SentenceText");
+    const u6Feedback = document.getElementById("u6Feedback");
+    const u6Star = document.getElementById("u6Star");
+
+    function renderU6(level) {
+      u6Bank.innerHTML = "";
+      u6Zone.innerHTML = "";
+      u6Text.textContent = "—";
+      u6Feedback.textContent = "";
+      u6Star.classList.remove("show");
+      document.getElementById("u6ChallengeWrap").classList.toggle("hidden", level !== "challenge");
+      if (level === "challenge") return;
+      const words = level === "support"
+        ? ["A", "janela", "está", "aberta", "fechada"]
+        : ["A", "janela", "está", "aberta", "fechada", "grande", "pequena", "bonita", "é", "azul"];
+      words.forEach(w => {
+        const d = document.createElement("div");
+        d.className = "drag";
+        d.dataset.word = w;
+        d.textContent = w;
+        u6Bank.appendChild(d);
+      });
+    }
+
+    function updateU6Sentence() {
+      const txt = [...u6Zone.querySelectorAll(".drag")].map(d => d.dataset.word).join(" ");
+      u6Text.textContent = txt || "—";
+      if (txt.includes("janela")) {
+        u6Star.classList.add("show");
+        u6Feedback.textContent = "Boa! A frase já inclui a palavra-chave.";
+      }
+    }
+
+    makeDraggable(u6.querySelector(".interactive"), (drag, target) => {
+      const zone = target?.closest("#u6Zone");
+      const bank = target?.closest("#u6Bank");
+      if (zone) { zone.appendChild(drag); updateU6Sentence(); return true; }
+      if (bank) { bank.appendChild(drag); updateU6Sentence(); return true; }
+      return false;
+    });
+
+    renderU6("support");
+    u6.addEventListener("levelchange", e => renderU6(e.detail));
+    document.getElementById("u6HearWord").addEventListener("click", () => {
+      const words = [...u6Bank.querySelectorAll(".drag")].map(d => d.dataset.word).join(", ");
+      if (words) speak(words);
+    });
+    document.getElementById("u6HearSentence").addEventListener("click", () => {
+      const level = u6.querySelector(".diff-tab.active").dataset.level;
+      if (level === "challenge") {
+        const t = document.getElementById("u6ChallengeText").value.trim();
+        if (t) speak(t);
+        return;
+      }
+      if (u6Text.textContent !== "—") speak(u6Text.textContent);
+    });
+    document.getElementById("u6Clear").addEventListener("click", () => {
+      [...u6Zone.querySelectorAll(".drag")].forEach(d => u6Bank.appendChild(d));
+      updateU6Sentence();
+    });
+
+    const u7 = document.getElementById("u7");
+    const u7Bar = document.getElementById("u7Bar");
+    const u7Stage = document.getElementById("u7Stage");
+    const u7StepLabel = document.getElementById("u7StepLabel");
+    const u7Feedback = document.getElementById("u7Feedback");
+    let u7Step = 1;
+    let u7Score = 0;
+
+    function u7Level() { return u7.querySelector(".diff-tab.active").dataset.level; }
+
+    function nextU7(ok) {
+      if (ok) u7Score += 1;
+      u7Step += 1;
+      if (u7Step > 4) {
+        const stars = u7Score >= 3 ? 3 : (u7Score >= 2 ? 2 : 1);
+        u7Stage.innerHTML = "<h3>Resultado final</h3><p>Estrelas: " + "⭐".repeat(stars) + "</p><p>Tarefas correctas: " + u7Score + "/4</p>";
+        u7Bar.style.width = "100%";
+        u7StepLabel.innerHTML = "<strong>Concluído</strong>";
+        u7Feedback.textContent = "Muito bem pelo esforço!";
+        confettiBurst();
+        return;
+      }
+      renderU7();
+    }
+
+    function feedbackU7(msg, ok) {
+      if (u7Level() === "challenge") return;
+      u7Feedback.textContent = msg;
+      beep(ok ? "ok" : "no");
+    }
+
+    function renderU7() {
+      u7Bar.style.width = (u7Step * 25) + "%";
+      u7StepLabel.innerHTML = "<strong>Etapa " + u7Step + "/4</strong>";
+      u7Feedback.textContent = "";
+      if (u7Step === 1) {
+        u7Stage.innerHTML = "<p>1) Escolhe a palavra certa:</p><div class='cards'><button class='card-btn'>janela</button><button class='card-btn'>porta</button><button class='card-btn'>telhado</button></div>";
+        u7Stage.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+          const ok = b.textContent === "janela";
+          feedbackU7(ok ? "Correto." : "Tenta novamente.", ok);
+          if (ok || u7Level() === "challenge") nextU7(ok);
+        }));
+      }
+      if (u7Step === 2) {
+        u7Stage.innerHTML = "<p>2) Segmenta em 3 sílabas (ordem):</p><div class='drop-row' id='u7slots'></div><div class='drag-bank' id='u7bank'></div><button class='secondary' id='u7check2'>Verificar</button>";
+        const slots = u7Stage.querySelector("#u7slots");
+        const bank = u7Stage.querySelector("#u7bank");
+        ["ja", "ne", "la"].forEach((s, i) => {
+          const sl = document.createElement("div"); sl.className = "slot"; sl.dataset.expect = s; slots.appendChild(sl);
+          const d = document.createElement("div"); d.className = "drag " + s; d.dataset.syl = s; d.textContent = s; bank.appendChild(d);
+        });
+        makeDraggable(u7Stage, (drag, target) => {
+          const slot = target?.closest(".slot"); const b = target?.closest("#u7bank");
+          if (slot) { slot.innerHTML = ""; slot.appendChild(drag); return true; }
+          if (b) { b.appendChild(drag); return true; }
+          return false;
+        });
+        u7Stage.querySelector("#u7check2").addEventListener("click", () => {
+          const got = [...slots.children].map(s => s.querySelector(".drag")?.dataset.syl || "").join("");
+          const ok = got === "janela";
+          feedbackU7(ok ? "Boa segmentação!" : "Verifica a ordem.", ok);
+          if (ok || u7Level() === "challenge") nextU7(ok);
+        });
+      }
+      if (u7Step === 3) {
+        u7Stage.innerHTML = "<p>3) Reconstrói a palavra:</p><div class='cards'><button class='card-btn'>la-ne-ja</button><button class='card-btn'>ja-ne-la</button><button class='card-btn'>ne-ja-la</button></div>";
+        u7Stage.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+          const ok = b.textContent === "ja-ne-la";
+          feedbackU7(ok ? "Certo!" : "Ainda não.", ok);
+          if (ok || u7Level() === "challenge") nextU7(ok);
+        }));
+      }
+      if (u7Step === 4) {
+        if (u7Level() === "challenge") {
+          u7Stage.innerHTML = "<p>4) Escreve uma frase original com janela:</p><textarea id='u7txt' style='width:100%;min-height:90px;font-size:1rem;border-radius:10px;border:2px solid #9eb9eb;padding:8px;'></textarea><button id='u7done'>Concluir</button>";
+          u7Stage.querySelector("#u7done").addEventListener("click", () => {
+            const t = u7Stage.querySelector("#u7txt").value.toLowerCase();
+            const ok = t.includes("janela");
+            nextU7(ok);
+          });
+        } else {
+          u7Stage.innerHTML = "<p>4) Completa: A ___ está aberta.</p><div class='cards'><button class='card-btn'>janela</button><button class='card-btn'>porta</button><button class='card-btn'>casa</button></div>";
+          u7Stage.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+            const ok = b.textContent === "janela";
+            feedbackU7(ok ? "Frase completa!" : "Revê a palavra certa.", ok);
+            if (ok || u7Level() === "challenge") nextU7(ok);
+          }));
+        }
+      }
+    }
+
+    function resetU7() {
+      u7Step = 1;
+      u7Score = 0;
+      renderU7();
+    }
+    renderU7();
+    u7.addEventListener("levelchange", resetU7);
+
+    const u8 = document.getElementById("u8");
+    const u8Feedback = document.getElementById("u8Feedback");
+    const u8Canvas = initCanvas("u8Canvas");
+    let u8Seconds = 8 * 60;
+
+    function tickU8() {
+      const m = String(Math.floor(u8Seconds / 60)).padStart(2, "0");
+      const s = String(u8Seconds % 60).padStart(2, "0");
+      document.getElementById("u8Timer").textContent = m + ":" + s;
+      if (u8Seconds > 0) u8Seconds -= 1;
+    }
+    setInterval(tickU8, 1000);
+
+    document.querySelectorAll("#u8 .path-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#u8 .path-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const p = btn.dataset.path;
+        document.getElementById("u8DrawWrap").classList.toggle("hidden", p !== "draw");
+        document.getElementById("u8OralWrap").classList.toggle("hidden", p !== "oral");
+        document.getElementById("u8WriteWrap").classList.toggle("hidden", p !== "write");
+      });
+    });
+
+    let mediaRec = null;
+    let chunks = [];
+    document.getElementById("u8Rec").addEventListener("click", async () => {
+      try {
+        if (!mediaRec || mediaRec.state === "inactive") {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRec = new MediaRecorder(stream);
+          chunks = [];
+          mediaRec.ondataavailable = e => chunks.push(e.data);
+          mediaRec.onstop = () => {
+            const blob = new Blob(chunks, { type: "audio/webm" });
+            const audio = document.getElementById("u8Audio");
+            audio.src = URL.createObjectURL(blob);
+            audio.classList.remove("hidden");
+          };
+          mediaRec.start();
+          u8Feedback.textContent = "A gravar...";
+        } else {
+          mediaRec.stop();
+          u8Feedback.textContent = "Gravação pronta para ouvir.";
+        }
+      } catch (e) {
+        u8Feedback.textContent = "Sem acesso ao microfone. Usa observação oral com o professor.";
+      }
+    });
+
+    document.getElementById("u8Share").addEventListener("click", () => {
+      const path = document.querySelector("#u8 .path-btn.active").dataset.path;
+      let ok = false;
+      if (path === "draw") ok = u8Canvas.hasInk();
+      if (path === "oral") ok = !document.getElementById("u8Audio").classList.contains("hidden");
+      if (path === "write") ok = document.getElementById("u8Text").value.trim().length > 0;
+      if (ok) {
+        u8Feedback.textContent = "Excelente! Produção pronta para partilhar.";
+        confettiBurst(); beep("ok");
+      } else {
+        u8Feedback.textContent = "Falta terminar a tua produção.";
+        beep("no");
+      }
+    });
+
+    u8.addEventListener("levelchange", (e) => {
+      const lvl = e.detail;
+      if (lvl === "support") u8Feedback.textContent = "Sugestão: escolhe Desenho e completa uma janela.";
+      if (lvl === "standard") u8Feedback.textContent = "Escolhe o percurso que preferes.";
+      if (lvl === "challenge") u8Feedback.textContent = "Desafio: história de 3 frases com janela, casa e menina.";
+    });
+
+    document.querySelectorAll("button").forEach(b => {
+      b.addEventListener("click", () => {
+        b.style.transform = "scale(0.98)";
+        setTimeout(() => b.style.transform = "", 90);
+      });
+    });
+  })();
+</script>
+</body>
+</html>

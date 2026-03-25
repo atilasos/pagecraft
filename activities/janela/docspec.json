@@ -1,0 +1,402 @@
+{
+  "topic": "Palavra 9 — janela (Método das 28 Palavras)",
+  "ageRange": "6-7 anos (1.º ano do 1.º CEB)",
+  "duration": 45,
+  "objectives": [
+    "Reconhecer a palavra 'janela' globalmente, associando imagem e forma escrita",
+    "Segmentar a palavra 'janela' nas sílabas ja-ne-la, identificando cada parte",
+    "Recombinar sílabas de 'janela' para formar novas palavras (ex: 'nela')",
+    "Usar a palavra 'janela' numa frase simples, oral ou escrita"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Reconhecer as sílabas como unidades de segmentação do oral e do escrito; identificar palavras em contexto",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Produzir enunciados com vocabulário adequado ao tema e à situação; usar frases simples",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Desenvolver a consciência fonológica: segmentação, reconstrução e manipulação silábica de palavras",
+        "source": "portugues-1-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-B: Informação e comunicação",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": ["PIT", "mapa de tarefas"],
+    "socialOrganization": "individual (blocos 1-3, 10min) → pares (recombinação, 10min) → individual (escrita guiada + frase, 15min) → turma (mini-avaliação + extensão, 10min)"
+  },
+  "materials": [
+    "Tablet ou computador com browser (1 por aluno ou par)",
+    "Cartões de sílabas físicos (ja / ne / la) — opcionais para apoio manipulativo",
+    "Quadro interactivo para apresentação colectiva",
+    "Folha de registo ou caderno (para extensão de escrita)"
+  ],
+  "units": [
+    {
+      "summary": "Abertura contextual — a janela na história da casa",
+      "textDescription": "O aluno deve compreender o significado concreto de 'janela' a partir de uma imagem de uma casa com a janela aberta. Uma micro-história coloca a palavra em contexto antes de qualquer análise formal. A palavra aparece escrita no final da cena, sublinhada.",
+      "interaction": {
+        "state": [
+          {
+            "name": "cenaVisivel",
+            "type": "toggle",
+            "options": ["imagem", "imagem+frase"],
+            "default": "imagem"
+          },
+          {
+            "name": "palavraDestacada",
+            "type": "toggle",
+            "options": ["nao", "sim"],
+            "default": "nao"
+          }
+        ],
+        "render": "Ilustração de uma casa com uma janela aberta; cortinas a ondular suavemente; o sol entra. Abaixo da imagem surge a frase 'A janela está aberta.' com a palavra 'janela' em destaque (bold, cor laranja). Botão 'Ouvir a história' lê a micro-história em voz alta.",
+        "transition": "Clicar em 'Ouvir a história' → áudio reproduz a micro-história → no final, a palavra 'janela' na frase fica iluminada e pulsa suavemente → aluno pode clicar na palavra para a ouvir isolada",
+        "constraint": "A janela é uma abertura na parede que deixa entrar luz e ar — o aluno descobre o significado funcional do objeto antes de estudar a palavra",
+        "assessment": "O aluno aponta (ou toca no ecrã) a janela na imagem e consegue repetir a frase 'A janela está aberta.' em voz alta"
+      },
+      "differentiation": {
+        "support": "🟢 Imagem com seta a apontar para a janela e etiqueta 'janela' sempre visível; áudio disponível a qualquer momento; frase com apenas 3 palavras destacadas",
+        "standard": "🟡 Imagem sem etiqueta; frase completa lida após clicar; aluno repete a frase",
+        "challenge": "🔴 Imagem sem qualquer texto; aluno diz o que vê antes de ouvir a história; depois compara com a frase"
+      },
+      "duration": 4
+    },
+    {
+      "summary": "Reconhecimento global — ver, ouvir e associar a palavra 'janela'",
+      "textDescription": "O aluno deve ser capaz de reconhecer a palavra 'janela' escrita entre outras palavras, associando-a à imagem correspondente. Treino de leitura global sem análise silábica ainda.",
+      "interaction": {
+        "state": [
+          {
+            "name": "opcoes",
+            "type": "quiz",
+            "options": ["janela", "casa", "porta", "telhado"],
+            "default": null
+          },
+          {
+            "name": "respostaCorreta",
+            "type": "derived",
+            "derivedFrom": "'janela'"
+          },
+          {
+            "name": "tentativas",
+            "type": "derived",
+            "derivedFrom": "count(respostas)"
+          }
+        ],
+        "render": "Imagem da janela no centro do ecrã. Abaixo, 4 cartões com palavras escritas em tipografia grande (janela / casa / porta / telhado). O aluno clica no cartão que corresponde à imagem. Feedback: ✓ verde claro se correto, âmbar + tremor suave se errado.",
+        "transition": "Clicar num cartão → feedback imediato visual e sonoro → se correto, palavra 'janela' fica iluminada e é lida em voz alta; se errado, cartão treme e convida a tentar de novo; após acerto, botão 'Seguinte' aparece",
+        "constraint": "A forma escrita 'janela' representa sempre o mesmo objeto — o aluno descobre que a correspondência é consistente",
+        "assessment": "O aluno selecciona a palavra 'janela' correctamente entre 3 distratores, sem ajuda, em 2 tentativas ou menos"
+      },
+      "differentiation": {
+        "support": "🟢 Apenas 2 opções (janela / porta); imagem com seta indicativa; possibilidade de ouvir cada palavra antes de escolher",
+        "standard": "🟡 4 opções; imagem sem ajuda adicional; feedback imediato",
+        "challenge": "🔴 4 opções sem imagem de apoio; aluno lê as 4 palavras em voz alta antes de escolher; após acerto, escreve a palavra de memória num campo de texto"
+      },
+      "duration": 4
+    },
+    {
+      "summary": "Segmentação silábica — dividir 'janela' em ja / ne / la",
+      "textDescription": "O aluno deve aprender a segmentar a palavra 'janela' nas três sílabas ja-ne-la, batendo palmas ou arrastando blocos. Cada sílaba tem uma cor própria e consistente: ja=laranja, ne=azul, la=verde.",
+      "interaction": {
+        "state": [
+          {
+            "name": "silabasArrastadas",
+            "type": "drag",
+            "options": ["ja", "ne", "la"],
+            "default": []
+          },
+          {
+            "name": "ordemCorreta",
+            "type": "derived",
+            "derivedFrom": "['ja','ne','la']"
+          },
+          {
+            "name": "palmadas",
+            "type": "derived",
+            "derivedFrom": "count(silabasArrastadas)"
+          }
+        ],
+        "render": "A palavra 'janela' aparece no topo, escrita em grande. Abaixo, três zonas vazias (slots) com pontinhos. À esquerda, três blocos coloridos com as sílabas: 🟠 ja / 🔵 ne / 🟢 la (posição inicial aleatória). Ícone de palmas animado convida a bater palmas enquanto se arrasta. Contador de sílabas (0/3) actualiza em tempo real.",
+        "transition": "Arrastar um bloco de sílaba para o slot correcto → bloco encaixa com animação de 'click' → contador incrementa → ao completar as 3 sílabas, a palavra é lida em voz alta com pausa entre sílabas (ja... ne... la... janela!)",
+        "constraint": "A palavra 'janela' tem exactamente 3 sílabas — cada parte tem som e forma próprios",
+        "assessment": "O aluno arrasta as 3 sílabas para os slots na ordem correcta e diz em voz alta 'ja-ne-la' batendo palmas"
+      },
+      "maker": {
+        "type": "unplugged",
+        "challenge": "Usa os cartões de sílabas físicos (ja / ne / la). Espalha-os na mesa e ordena-os para formar 'janela'. Depois troca com o colega: um esconde uma sílaba e o outro descobre qual falta.",
+        "materials": ["Cartões de sílabas impressos (ja, ne, la)", "Mesa ou chão"],
+        "groupSize": "2",
+        "connection": "Depois de fazer a actividade digital de arrastar, os alunos repetem fisicamente com cartões — o gesto motor reforça a memória da segmentação",
+        "communication": "Cada par mostra ao grupo como ordenou os cartões e diz a palavra em voz alta, sílaba por sílaba",
+        "alternatives": ["Sem cartões: escrever cada sílaba num post-it e ordenar na carteira"]
+      },
+      "differentiation": {
+        "support": "🟢 Slots já têm a inicial da sílaba como dica (j__ / n__ / l__); blocos têm imagens de apoio; áudio de cada sílaba disponível antes de arrastar",
+        "standard": "🟡 Slots vazios; blocos com sílabas apenas em texto; áudio da palavra completa disponível",
+        "challenge": "🔴 Blocos sem texto — apenas cores; aluno deve recordar qual cor corresponde a cada sílaba; após completar, escreve 'janela' sem apoio visual"
+      },
+      "duration": 7
+    },
+    {
+      "summary": "Recombinação — formar novas palavras com as sílabas de 'janela'",
+      "textDescription": "O aluno experimenta combinar as sílabas ja, ne, la de formas diferentes para descobrir quais formam palavras reais. A sílaba 'ne+la' forma 'nela' (preposição/pronome). O aluno distingue entre combinações que existem e as que não existem em português.",
+      "interaction": {
+        "state": [
+          {
+            "name": "silabasSelecionadas",
+            "type": "sorting",
+            "options": ["ja", "ne", "la"],
+            "default": []
+          },
+          {
+            "name": "palavraFormada",
+            "type": "derived",
+            "derivedFrom": "join(silabasSelecionadas)"
+          },
+          {
+            "name": "palavrasValidas",
+            "type": "derived",
+            "derivedFrom": "['nela', 'janela', 'la']"
+          },
+          {
+            "name": "resultado",
+            "type": "derived",
+            "derivedFrom": "palavraFormada in palavrasValidas ? 'existe' : 'nao-existe'"
+          }
+        ],
+        "render": "Três blocos de sílabas coloridos (ja=🟠, ne=🔵, la=🟢) que podem ser arrastados para uma zona de composição. A palavra formada aparece em grande no centro. Um semáforo visual indica: 🟢 'Esta palavra existe!' ou 🔴 'Ainda não é uma palavra!'. Exemplos de palavras encontradas aparecem numa lista à direita.",
+        "transition": "Arrastar sílabas para a zona de composição → palavra forma-se em tempo real → ao soltar, verificação automática → feedback visual e sonoro → aluno pode limpar e tentar outra combinação; ao descobrir 'nela', surge uma imagem ilustrativa com a frase 'Ela está nela.' ",
+        "constraint": "Nem toda a combinação de sons/sílabas forma uma palavra real — só certas ordens e combinações resultam em palavras da língua portuguesa",
+        "assessment": "O aluno descobre pelo menos 1 nova palavra válida (ex: 'nela') e consegue explicar por que é que 'lajan' não é uma palavra"
+      },
+      "differentiation": {
+        "support": "🟢 Apenas 2 sílabas disponíveis (ne + la) para facilitar a descoberta de 'nela'; feedback sonoro imediato com voz a dizer a palavra",
+        "standard": "🟡 As 3 sílabas disponíveis; aluno testa combinações livremente; lista de palavras encontradas como recompensa visual",
+        "challenge": "🔴 As 3 sílabas + 2 sílabas bonus (ca, sa) das palavras anteriores do método; aluno tenta encontrar o máximo de palavras possíveis; regista descobertas no caderno"
+      },
+      "duration": 7
+    },
+    {
+      "summary": "Leitura e escrita guiada — completar e copiar a palavra 'janela'",
+      "textDescription": "O aluno deve completar a palavra 'janela' com a sílaba em falta e depois copiá-la ou escrevê-la de memória. Foco na correspondência entre o oral (o que se diz) e o escrito (o que se vê e escreve).",
+      "interaction": {
+        "state": [
+          {
+            "name": "silabaEmFalta",
+            "type": "quiz",
+            "options": ["ja", "ne", "la"],
+            "default": null
+          },
+          {
+            "name": "posicaoFalta",
+            "type": "derived",
+            "derivedFrom": "random([0,1,2])"
+          },
+          {
+            "name": "palavraCompleta",
+            "type": "derived",
+            "derivedFrom": "silabaEmFalta === opcaoCorreta"
+          },
+          {
+            "name": "escritaAluno",
+            "type": "canvas",
+            "default": ""
+          }
+        ],
+        "render": "A palavra 'janela' aparece com uma sílaba substituída por '___'. Três opções de sílaba surgem abaixo (ja / ne / la). Após escolha correcta, o campo em branco preenche-se com a sílaba na cor certa. Abaixo, uma zona de escrita (linha pautada) onde o aluno pode copiar a palavra completa com o dedo ou rato.",
+        "transition": "Clicar na sílaba correcta → preenchimento animado do espaço em branco → palavra completa fica visível → convite a copiar na zona de escrita → após escrever, botão 'Ver a minha palavra' compara com o modelo",
+        "constraint": "Cada posição na palavra tem uma sílaba específica — trocar a ordem muda o som e pode tornar a palavra irreconhecível",
+        "assessment": "O aluno completa a palavra com a sílaba correcta em 2 tentativas ou menos e consegue copiar 'janela' na zona de escrita de forma legível"
+      },
+      "differentiation": {
+        "support": "🟢 Sílabas coloridas como dica de posição; a sílaba correcta é apresentada com imagem de apoio (letra inicial animada); zona de escrita com letra tracejada para seguir",
+        "standard": "🟡 Sílabas em texto simples; zona de escrita em branco; modelo visível para copiar",
+        "challenge": "🔴 Nenhuma sílaba apresentada — campo totalmente em branco; aluno escreve a palavra completa de memória sem modelo; depois faz 3 palavras do método que já conhece"
+      },
+      "duration": 7
+    },
+    {
+      "summary": "Frase simples — ler e construir frases com 'janela'",
+      "textDescription": "O aluno deve ler a frase 'A janela está aberta.' e depois construir a sua própria frase com a palavra 'janela', usando um banco de palavras simples. O foco é na utilização da palavra em contexto comunicativo real.",
+      "interaction": {
+        "state": [
+          {
+            "name": "palavrasDisponiveis",
+            "type": "drag",
+            "options": ["A", "janela", "está", "aberta", "fechada", "grande", "pequena", "bonita", "é", "azul"],
+            "default": []
+          },
+          {
+            "name": "fraseAluno",
+            "type": "derived",
+            "derivedFrom": "join(palavrasArrastadas, ' ')"
+          },
+          {
+            "name": "contem_janela",
+            "type": "derived",
+            "derivedFrom": "fraseAluno.includes('janela')"
+          }
+        ],
+        "render": "Banco de palavras em cartões coloridos na parte inferior do ecrã. Zona de frase no centro (linha larga com espaço para os cartões). A frase modelo 'A janela está aberta.' aparece no topo em cinza claro como referência. Ao completar a frase com 'janela', um ícone de estrela anima no canto. O botão 'Ouvir a minha frase' lê o que o aluno construiu.",
+        "transition": "Arrastar cartões de palavras para a zona de frase → frase constrói-se da esquerda para a direita → ao incluir 'janela', feedback positivo subtil → botão 'Ouvir a minha frase' activa síntese de voz com a frase completa → aluno pode reordenar ou substituir palavras",
+        "constraint": "A palavra 'janela' pode aparecer em muitas frases diferentes — o que muda é o resto da frase, mas o significado da palavra mantém-se",
+        "assessment": "O aluno constrói uma frase com pelo menos 3 palavras que inclua 'janela', e lê-a em voz alta de forma compreensível"
+      },
+      "maker": {
+        "type": "whiteboard",
+        "challenge": "Cada aluno ou par partilha a sua frase com 'janela' no quadro interactivo. A turma vota na frase mais criativa levantando a mão. As frases ficam visíveis num mural colectivo.",
+        "materials": ["Quadro interactivo", "Post-its digitais ou físicos"],
+        "groupSize": "turma",
+        "connection": "As frases construídas digitalmente são apresentadas à turma — o digital alimenta a comunicação colectiva",
+        "communication": "Cada aluno lê a sua frase em voz alta; turma repete em coro; frases são guardadas num mural de turma (circuito de comunicação MEM)",
+        "alternatives": ["Sem quadro: cada aluno escreve a frase num cartão e coloca no placard da sala"]
+      },
+      "differentiation": {
+        "support": "🟢 Banco reduzido (A / janela / está / aberta / fechada); frase modelo sempre visível; apoio de leitura em voz alta de cada palavra do banco",
+        "standard": "🟡 Banco de 10 palavras; frase modelo disponível como referência; aluno constrói frase própria",
+        "challenge": "🔴 Sem banco de palavras — campo de escrita livre; aluno escreve 2 frases diferentes com 'janela'; uma das frases deve ser uma pergunta"
+      },
+      "duration": 8
+    },
+    {
+      "summary": "Mini-avaliação — reconhecer, segmentar, reconstruir e usar 'janela'",
+      "textDescription": "Verificação formativa final: o aluno demonstra domínio da palavra 'janela' através de 4 tarefas encadeadas — reconhecimento, segmentação, reconstrução e uso em frase. Os critérios são observáveis e registáveis pelo professor.",
+      "interaction": {
+        "state": [
+          {
+            "name": "tarefaAtual",
+            "type": "derived",
+            "derivedFrom": "index(tarefasConcluidas) + 1"
+          },
+          {
+            "name": "tarefas",
+            "type": "quiz",
+            "options": ["reconhecimento", "segmentacao", "reconstrucao", "frase"],
+            "default": "reconhecimento"
+          },
+          {
+            "name": "pontuacao",
+            "type": "derived",
+            "derivedFrom": "count(tarefasCorretas)"
+          },
+          {
+            "name": "estrelas",
+            "type": "derived",
+            "derivedFrom": "pontuacao >= 3 ? 3 : pontuacao >= 2 ? 2 : 1"
+          }
+        ],
+        "render": "Interface de 4 etapas com barra de progresso no topo (1/4 → 2/4 → 3/4 → 4/4). Cada etapa tem a sua própria interacção: (1) escolher a palavra 'janela' entre 3 opções com imagem, (2) arrastar as 3 sílabas para os slots, (3) reconstruir a palavra com sílabas desordenadas, (4) completar a frase 'A ___ está aberta.'. No final, ecrã de resultado com estrelas (1-3) e lista de tarefas completadas.",
+        "transition": "Completar cada tarefa → barra de progresso avança → animação de transição suave → próxima tarefa → no final, resultado com estrelas e mensagem de encorajamento personalizada",
+        "constraint": "O domínio de uma palavra envolve várias competências em simultâneo: reconhecer, analisar, reconstruir e usar",
+        "assessment": "O aluno completa as 4 tarefas: (1) identifica 'janela' entre 3 opções ✓, (2) segmenta em ja-ne-la ✓, (3) reconstrói a palavra a partir de sílabas desordenadas ✓, (4) usa 'janela' numa frase ✓"
+      },
+      "differentiation": {
+        "support": "🟢 Cada tarefa tem dicas visuais (imagem + cor de sílabas); na tarefa 4, frase com apenas 1 palavra em falta; 3 tentativas por tarefa",
+        "standard": "🟡 Tarefas sem dicas adicionais; 2 tentativas por tarefa; feedback descritivo",
+        "challenge": "🔴 Tarefas em sequência sem feedback intermédio; tarefa 4 exige frase original escrita; tarefa bonus: encontrar mais 1 palavra que rimie com 'janela'"
+      },
+      "duration": 4
+    },
+    {
+      "summary": "Extensão — explorar e criar a partir de 'janela'",
+      "textDescription": "O aluno expande o trabalho com 'janela' através de expressão oral, desenho ou escrita criativa. Esta fase é diferenciada e permite que cada aluno escolha o seu percurso, respeitando a autonomia e os interesses individuais.",
+      "interaction": {
+        "state": [
+          {
+            "name": "percursoEscolhido",
+            "type": "dropdown",
+            "options": ["Desenho", "Oralidade", "Escrita criativa"],
+            "default": "Desenho"
+          },
+          {
+            "name": "producaoAluno",
+            "type": "canvas",
+            "default": ""
+          },
+          {
+            "name": "fraseOral",
+            "type": "toggle",
+            "options": ["nao-gravado", "gravado"],
+            "default": "nao-gravado"
+          }
+        ],
+        "render": "Ecrã com 3 caminhos representados por ícones grandes: 🎨 Desenho (zona de desenho digital), 🎤 Oralidade (botão de gravação de voz — alternativa: o professor observa), ✏️ Escrita criativa (campo de texto). O aluno escolhe o seu percurso e tem 5-10 minutos para criar. No final, pode partilhar com a turma.",
+        "transition": "Clicar num percurso → interface adapta-se ao tipo de produção → temporizador visual de 8 minutos aparece no canto → ao terminar, botão 'Quero mostrar à turma!' ativa modo de apresentação",
+        "constraint": "A palavra 'janela' pode inspirar muitas formas de expressão — a língua é criativa e pessoal",
+        "assessment": "O aluno produz algo (desenho, frase oral ou escrita) que mostre a sua compreensão do significado de 'janela' e partilha com pelo menos 1 colega"
+      },
+      "maker": {
+        "type": "unplugged",
+        "challenge": "Dobra uma folha de papel ao meio para criar uma 'janela' de papel. Dentro, desenha o que vês pela janela da sala de aula hoje. Escreve uma palavra ou frase à volta da janela.",
+        "materials": ["Folha A4 branca", "Lápis de cor ou canetas", "Tesoura (com supervisão)"],
+        "groupSize": "2-3",
+        "connection": "O objeto físico 'janela de papel' liga a exploração digital à expressão artística tangível — o aluno cria o referente do signo linguístico",
+        "communication": "As janelas de papel são expostas na sala de aula (circuito de comunicação MEM) com a palavra 'janela' escrita por baixo de cada uma",
+        "alternatives": ["Sem materiais de corte: dobrar e desenhar apenas com marcadores numa folha inteira; a janela é desenhada, não recortada"]
+      },
+      "differentiation": {
+        "support": "🟢 Percurso de Desenho: modelo semi-preenchido de uma janela para colorir e completar; legenda com a palavra 'janela' já escrita",
+        "standard": "🟡 Qualquer percurso à escolha; produção livre dentro do tema; partilha opcional com a turma",
+        "challenge": "🔴 Escrita criativa: inventar uma história de 3 frases com 'janela' e pelo menos 2 outras palavras do método (ex: 'casa', 'menina'); ilustrar e apresentar à turma"
+      },
+      "duration": 10
+    }
+  ],
+  "sessionFlow": "0-4min: Bloco 1 — Abertura contextual (imagem + micro-história, palavra em contexto) → 4-8min: Bloco 2 — Reconhecimento global (palavra entre 4 opções, sem análise silábica) → 8-15min: Bloco 3 — Segmentação silábica (arrastar ja/ne/la, bater palmas, actividade unplugged com cartões) → 15-22min: Bloco 4 — Recombinação (formar novas palavras, descobrir 'nela', distinguir válido/inválido) → 22-29min: Bloco 5 — Leitura e escrita guiada (completar palavra, copiar na zona de escrita) → 29-37min: Bloco 6 — Frase simples (construir frase com banco de palavras, partilha colectiva) → 37-41min: Bloco 7 — Mini-avaliação formativa (4 tarefas encadeadas, resultado com estrelas) → 41-51min: Bloco 8 — Extensão criativa (desenho / oralidade / escrita, janela de papel, mural de turma)",
+  "_meta": {
+    "method": "Método das 28 Palavras",
+    "word": "janela",
+    "order": 9,
+    "syllables": ["ja", "ne", "la"],
+    "syllableColors": {
+      "ja": "laranja (#F4A261)",
+      "ne": "azul (#4A90D9)",
+      "la": "verde (#5CB85C)"
+    },
+    "theme": "casa",
+    "sentence": "A janela está aberta.",
+    "status": "in-progress",
+    "possibleRecombinations": ["nela", "la", "janela"],
+    "safeNewWords": ["nela"],
+    "phonologicalFocus": [
+      "segmentação silábica (3 sílabas)",
+      "identificação da sílaba inicial 'ja'",
+      "reconstrução da palavra a partir de sílabas",
+      "distinção de palavras reais vs. combinações sem sentido"
+    ],
+    "vocabularyAssociations": ["casa", "porta", "telhado", "luz", "ar", "cortina"],
+    "assessmentCriteria": [
+      "Identifica a palavra 'janela' entre 3 opções visuais",
+      "Segmenta 'janela' em ja-ne-la (oral e/ou digital)",
+      "Reconstrói 'janela' a partir de sílabas desordenadas",
+      "Usa 'janela' numa frase simples oral ou escrita"
+    ],
+    "generatedBy": "Pagecraft Architect",
+    "generatedAt": "2026-03-25",
+    "schemaVersion": "DocSpec-AM v1"
+  }
+}

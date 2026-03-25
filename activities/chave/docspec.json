@@ -1,0 +1,454 @@
+{
+  "topic": "Palavra 12 — chave | Método das 28 Palavras",
+  "ageRange": "6 anos (1.º ano do 1.º CEB)",
+  "duration": 45,
+  "objectives": [
+    "Reconhecer a palavra 'chave' globalmente (leitura global) e associá-la à imagem correspondente",
+    "Segmentar a palavra 'chave' nas sílabas cha-ve e reconstituí-la a partir das sílabas desordenadas",
+    "Combinar as sílabas 'cha' e 've' com sílabas já aprendidas para formar novas palavras reais",
+    "Ler e completar a frase 'A chave abre a porta.' com apoio visual e silábico"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Identificar letras e sílabas, ler palavras e frases simples com fluência progressiva (LE1, LE2)",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Segmentar palavras em sílabas; identificar sílabas iniciais e finais; reproduzir sequências de sons (O1, O2)",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Escrever palavras e frases simples com correspondência fonema-grafema (LE7)",
+        "source": "portugues-1-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-F: Desenvolvimento pessoal e autonomia",
+      "PA-D: Pensamento crítico e pensamento criativo"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "PIT (registo individual: 'hoje trabalhei a palavra chave')",
+      "mapa de tarefas (assinalar bloco concluído)",
+      "diário de turma (registo de novas palavras descobertas)"
+    ],
+    "socialOrganization": "individual (exploração + segmentação, 20min) → pares (recombinação + frase, 15min) → turma (mini-avaliação + extensão oral, 10min)"
+  },
+  "materials": [
+    "Tablet ou computador com browser (1 por aluno ou par)",
+    "Cartão-palavra físico: 'chave' (letra grande, sem imagem — para reconhecimento global)",
+    "Blocos de sílabas recortados ou magnéticos: cha / ve (1 jogo por par)",
+    "Quadro interactivo para sessão colectiva (blocos 6 e 8)",
+    "Lápis e folha quadriculada para escrita guiada (bloco 5)",
+    "Opcional: chave real ou foto impressa para contextualização (bloco 1)"
+  ],
+  "units": [
+    {
+      "summary": "Abertura contextual — a chave na história da casa",
+      "textDescription": "Introdução da palavra 'chave' através de uma micro-história visual ligada ao contexto da casa (palavras anteriores: casa, janela, telhado, escada). A criança compreende que a chave é o objeto que permite abrir e fechar a porta da casa. A cena cria um vínculo emocional antes da análise formal da palavra.",
+      "interaction": {
+        "state": [
+          {
+            "name": "cenaAtiva",
+            "type": "toggle",
+            "options": ["animacao", "pausa"],
+            "default": "animacao"
+          },
+          {
+            "name": "cliqueChave",
+            "type": "toggle",
+            "options": ["false", "true"],
+            "default": "false"
+          },
+          {
+            "name": "portaAberta",
+            "type": "derived",
+            "derivedFrom": "cliqueChave === 'true' ? true : false"
+          }
+        ],
+        "render": "Ilustração simples da porta de uma casa (do contexto das palavras anteriores). Uma chave aparece ao lado da porta. Quando o aluno clica/toca na chave, a porta abre com animação suave. A palavra 'chave' aparece sob a imagem em letra grande. Narração áudio: 'A chave abre a porta.' (frase-âncora do M28P).",
+        "transition": "Tocar na chave → porta anima (abre) → palavra 'chave' pisca suavemente → botão 'Seguinte' fica activo",
+        "constraint": "A chave é sempre o objeto que abre — a relação objeto↔função é o eixo semântico desta palavra. O aluno deve estabelecer esta associação antes de passar à análise formal.",
+        "assessment": "O aluno toca na chave (causa) e observa a porta abrir (efeito); responde oralmente à pergunta: 'Para que serve uma chave?'"
+      },
+      "maker": {
+        "type": "unplugged",
+        "challenge": "Antes de abrir o tablet, a educadora mostra uma chave real (ou imagem impressa) e faz a pergunta: 'O que é isto? Para que serve?' Os alunos respondem em roda.",
+        "materials": ["chave real ou imagem impressa A4", "opcional: cadeado com chave"],
+        "groupSize": "turma",
+        "connection": "A exploração física do objeto precede e ancora a representação digital — activação de conhecimento prévio antes da interacção com a página.",
+        "communication": "Partilha oral em roda: cada criança diz uma coisa que se abre com chave (porta, mala, cofre, carro...)",
+        "alternatives": ["Sem objeto físico: usar foto projectada no quadro interactivo; pedir à turma para fazer gestos de 'abrir a porta'"]
+      },
+      "differentiation": {
+        "support": "🟢 A porta já aparece entreaberta; a chave tem seta piscante a indicar onde tocar; narração áudio automática sem necessidade de leitura.",
+        "standard": "🟡 Cena parada; aluno deve tocar na chave para desencadear a animação; narração activada após interacção.",
+        "challenge": "🔴 Antes de tocar, o aluno é convidado a dizer em voz alta para que serve a chave; campo de texto simples para escrever 1 palavra (ex: 'porta', 'abrir')."
+      },
+      "duration": 5
+    },
+    {
+      "summary": "Reconhecimento global — ver, ouvir, associar",
+      "textDescription": "A criança vê a palavra 'chave' escrita em letra grande, ouve a pronunciação e deve associá-la à imagem correcta entre 3 opções. Este bloco trabalha o reconhecimento global (leitura de palavra inteira), sem ainda analisar as sílabas.",
+      "interaction": {
+        "state": [
+          {
+            "name": "opcaoEscolhida",
+            "type": "quiz",
+            "options": ["chave", "janela", "escada"],
+            "default": null
+          },
+          {
+            "name": "respostaCorrecta",
+            "type": "derived",
+            "derivedFrom": "opcaoEscolhida === 'chave'"
+          },
+          {
+            "name": "audioTocou",
+            "type": "toggle",
+            "options": ["false", "true"],
+            "default": "false"
+          }
+        ],
+        "render": "Palavra 'chave' em letra grande no topo. Botão de som (🔊) para ouvir a palavra. Abaixo: 3 imagens lado a lado (chave / janela / escada — palavras já conhecidas). O aluno deve tocar na imagem que corresponde à palavra escrita. Feedback: ✓ verde claro se correcto / âmbar com nova tentativa se incorrecto.",
+        "transition": "Tocar botão 🔊 → áudio 'chave'; tocar imagem → highlight + feedback; se correcto, botão 'Seguinte' activa; se incorrecto, imagem treme levemente e fica disponível nova tentativa",
+        "constraint": "A palavra escrita e a imagem são representações do mesmo referente. O aluno deve reconhecer a palavra global sem soletrar — não é pedida leitura silábica neste bloco.",
+        "assessment": "O aluno selecciona a imagem correcta da chave em pelo menos 2 de 3 tentativas (pode haver 2 rondas com imagens diferentes)"
+      },
+      "differentiation": {
+        "support": "🟢 Apenas 2 opções de imagem (chave + 1 distractor); palavra lida em áudio automaticamente ao carregar o bloco; imagens com legenda escrita por baixo.",
+        "standard": "🟡 3 opções de imagem; áudio disponível a pedido; sem legenda nas imagens.",
+        "challenge": "🔴 4 opções de imagem (inclui 'bota' e 'leque' de palavras anteriores); sem áudio; após escolha correcta, o aluno escreve 'chave' num campo de texto simples."
+      },
+      "duration": 4
+    },
+    {
+      "summary": "Segmentação silábica — cha-ve, duas partes",
+      "textDescription": "A criança aprende que a palavra 'chave' tem duas sílabas: CHA e VE. Trabalha a segmentação batendo palmas, contando e arrastando blocos silábicos. Este é o núcleo fonológico do Método das 28 Palavras — a passagem do todo para as partes.",
+      "interaction": {
+        "state": [
+          {
+            "name": "palavraCompleta",
+            "type": "derived",
+            "derivedFrom": "'chave'"
+          },
+          {
+            "name": "silabaActiva",
+            "type": "slider",
+            "range": [0, 2],
+            "step": 1,
+            "default": 0,
+            "unit": "sílaba"
+          },
+          {
+            "name": "palmadas",
+            "type": "slider",
+            "range": [0, 5],
+            "step": 1,
+            "default": 0,
+            "unit": "palmas"
+          },
+          {
+            "name": "blocosCha",
+            "type": "drag",
+            "options": ["cha"],
+            "default": "zona-origem"
+          },
+          {
+            "name": "blocosVe",
+            "type": "drag",
+            "options": ["ve"],
+            "default": "zona-origem"
+          }
+        ],
+        "render": "Topo: imagem da chave + palavra 'chave' inteira. Fase 1 — botão de palmas: cada toque ilumina e destaca 1 sílaba (cha → ve) com cor diferente (cha=laranja, ve=azul). Contador de palmadas. Fase 2 — blocos coloridos com 'cha' (laranja) e 've' (azul) numa zona de origem; dois espaços vazios numerados (1, 2) na zona de destino. Aluno arrasta para compor a palavra.",
+        "transition": "Toque no botão de palmas → sílaba seguinte ilumina-se + áudio da sílaba; arrastar bloco para espaço correcto → encaixa + som de confirmação; blocos fora de ordem → não encaixam (regressam à origem)",
+        "constraint": "A palavra tem exactamente 2 sílabas; a ordem cha→ve é invariante. Trocar a ordem produz 've-cha' que não é uma palavra real — o aluno descobre isto ao tentar.",
+        "assessment": "O aluno bate correctamente 2 palmas e arrasta cha e ve para os espaços na ordem correcta, sem ajuda visual da palavra completa"
+      },
+      "maker": {
+        "type": "unplugged",
+        "challenge": "Com blocos físicos ou tiras de cartão, o par de alunos constrói 'cha-ve' na mesa. Depois tenta inverter ('ve-cha') e decide: 'É uma palavra real?'",
+        "materials": ["tiras de cartão com 'cha' e 've' escritas (1 jogo por par)", "velcro ou fita-cola de dupla-face"],
+        "groupSize": "2",
+        "connection": "A manipulação física dos blocos silábicos antecede ou reforça o arrastar digital — o corpo aprende antes do ecrã.",
+        "communication": "Cada par mostra à turma as suas tiras e diz em voz alta: 'cha — ve — chave'",
+        "alternatives": ["Bater palmas na mesa em vez de cartões; desenhar as sílabas com crayon em papel"]
+      },
+      "differentiation": {
+        "support": "🟢 Blocos já posicionados na ordem correcta; aluno apenas toca para ouvir cada sílaba; palmadas guiadas por animação.",
+        "standard": "🟡 Blocos na zona de origem; aluno arrasta para compor; feedback imediato de encaixe.",
+        "challenge": "🔴 Blocos misturados com sílabas de outras palavras (ca, sa, es, da); aluno deve identificar e separar apenas cha e ve, depois compor 'chave'."
+      },
+      "duration": 7
+    },
+    {
+      "summary": "Recombinação — novas palavras com cha e ve",
+      "textDescription": "A criança usa as sílabas 'cha' e 've' para descobrir novas palavras reais, combinando-as com sílabas já aprendidas nas palavras anteriores (1 a 11). Descobre que as sílabas são reutilizáveis — o princípio central do Método das 28 Palavras. Também distingue combinações que formam palavras reais das que não formam.",
+      "interaction": {
+        "state": [
+          {
+            "name": "silabaNova",
+            "type": "drag",
+            "options": ["cha", "ve"],
+            "default": "zona-cha-ve"
+          },
+          {
+            "name": "silabaDisponivel",
+            "type": "matching",
+            "options": ["pa", "la", "sa", "ta", "ca", "da", "me", "na", "le", "ne", "bo"],
+            "default": "zona-banco"
+          },
+          {
+            "name": "palavraFormada",
+            "type": "derived",
+            "derivedFrom": "silabaNova + silabaDisponivel"
+          },
+          {
+            "name": "palavraValida",
+            "type": "derived",
+            "derivedFrom": "['chapa', 'chata', 'chama', 'vela', 'veda', 'vaca'].includes(palavraFormada)"
+          }
+        ],
+        "render": "Zona superior: cartões com 'cha' (laranja) e 've' (azul). Zona do banco: sílabas aprendidas anteriormente em cartões cinzentos. Zona de composição: dois espaços + botão 'Verificar'. Painel lateral: 'Palavras descobertas 🔓' com lista que vai crescendo. Feedback: palavra válida → painel verde + som de celebração discreta; palavra inválida → 'Não é uma palavra! Tenta outra sílaba.' sem punição.",
+        "transition": "Arrastar sílaba nova + sílaba do banco → zona de composição → 'Verificar' → feedback dinâmico; se palavra válida, adiciona ao painel; sílabas regressam ao banco para nova tentativa",
+        "constraint": "Nem todas as combinações formam palavras reais em português. O critério de validade é a existência na língua — não a preferência do aluno. Palavras-alvo desta sessão: 'chapa', 'vela'.",
+        "assessment": "O aluno descobre pelo menos 2 palavras válidas (chapa + vela) e consegue dizer o significado de cada uma"
+      },
+      "differentiation": {
+        "support": "🟢 Apenas 4 sílabas no banco (pa, la, me, sa); palavras-alvo sinalizadas com pista visual (ícone apagado que acende quando a combinação é correcta).",
+        "standard": "🟡 8 sílabas no banco; sem pistas; aluno experimenta livremente; painel de descobertas.",
+        "challenge": "🔴 11 sílabas no banco; após descobrir as palavras, o aluno escreve uma frase curta com cada palavra nova encontrada."
+      },
+      "duration": 7
+    },
+    {
+      "summary": "Leitura e escrita guiada — completar e copiar",
+      "textDescription": "A criança pratica a leitura e a escrita da palavra 'chave' através de tarefas de completamento (sílaba em falta) e cópia guiada. O objectivo é consolidar a correspondência grafema-fonema e a forma ortográfica correcta da palavra, especialmente o dígrafo 'ch'.",
+      "interaction": {
+        "state": [
+          {
+            "name": "tarefaActiva",
+            "type": "dropdown",
+            "options": ["completar-silaba", "escolher-grafia", "copiar"],
+            "default": "completar-silaba"
+          },
+          {
+            "name": "silabaEscolhida",
+            "type": "quiz",
+            "options": ["cha", "sha", "xa", "ca"],
+            "default": null
+          },
+          {
+            "name": "grafiaEscolhida",
+            "type": "quiz",
+            "options": ["chave", "xave", "shave", "schave"],
+            "default": null
+          },
+          {
+            "name": "textoCopiaAluno",
+            "type": "canvas",
+            "default": ""
+          }
+        ],
+        "render": "Três fases sequenciais: (1) Palavra com sílaba inicial em falta: '___ve' — escolher entre 4 opções de sílaba; (2) Qual é a grafia correcta? — 4 opções da palavra completa; (3) Campo de escrita (linhas guiadas para copiar 'chave'). Modelo da palavra sempre visível no topo com imagem. Destaque especial no dígrafo 'ch' com cor diferente.",
+        "transition": "Seleccionar resposta na fase 1 → feedback → fase 2 disponível → feedback → fase 3 (escrita livre ou guiada). Progresso indicado por barra de 3 passos.",
+        "constraint": "Em português, o som /ʃ/ em 'chave' é escrito com 'ch' — não com 'x', 'sh' ou 'sch'. Esta regularidade ortográfica deve ser descoberta ao eliminar as alternativas incorrectas.",
+        "assessment": "O aluno selecciona 'cha' e 'chave' correctamente em ambas as fases de escolha múltipla e copia a palavra de forma legível (1 a 3 tentativas admitidas)"
+      },
+      "differentiation": {
+        "support": "🟢 Apenas 2 opções em cada escolha múltipla; modelo da palavra sempre visível durante a cópia; linha de cópia com tracejado para seguir.",
+        "standard": "🟡 4 opções; modelo visível apenas na fase 3; linhas guiadas mas sem tracejado.",
+        "challenge": "🔴 Sem modelo visível nas fases 1 e 2; na fase 3, o aluno escreve 'chave' de memória; bónus: escrever 'cha-ve' separado por hífen."
+      },
+      "duration": 6
+    },
+    {
+      "summary": "Frase simples — 'A chave abre a porta.'",
+      "textDescription": "A criança lê e reconstrói a frase-âncora do M28P para esta palavra: 'A chave abre a porta.' Trabalha a leitura de frase com apoio de imagem e constrói a frase por ordenação de palavras. Optivamente, cria uma frase própria oral ou escrita.",
+      "interaction": {
+        "state": [
+          {
+            "name": "palavrasFrase",
+            "type": "sorting",
+            "options": ["A", "chave", "abre", "a", "porta", "."],
+            "default": "desordenadas"
+          },
+          {
+            "name": "fraseCorrecta",
+            "type": "derived",
+            "derivedFrom": "palavrasFrase.join(' ') === 'A chave abre a porta .'"
+          },
+          {
+            "name": "frasePropriaAluno",
+            "type": "canvas",
+            "default": ""
+          }
+        ],
+        "render": "Topo: imagem da chave a abrir uma porta (cena dinâmica do bloco 1). Zona de baralhar: cartões com cada palavra da frase espalhados. Zona de construção: espaços numerados (1 a 6). Após construção correcta, frase aparece completa com animação da porta a abrir + narração áudio da frase. Zona de extensão: 'Faz a tua frase!' com campo de texto (desafio).",
+        "transition": "Arrastar cartão de palavra para espaço numerado; se ordem correcta → encaixa; se errada → regressa; quando frase completa e correcta → animação + áudio; botão de verificação disponível a qualquer momento",
+        "constraint": "A frase portuguesa segue uma ordem sintáctica: Sujeito (A chave) + Predicado (abre) + Complemento (a porta). Maiúscula no início e ponto final são invariantes gráficos da frase.",
+        "assessment": "O aluno ordena correctamente as 5 palavras + ponto final da frase, sem ajuda, em menos de 3 tentativas; lê a frase em voz alta após completar"
+      },
+      "maker": {
+        "type": "whiteboard",
+        "challenge": "Em pares, os alunos constroem no quadro interactivo a frase usando cartões digitais. Depois, cada par inventa oralmente 1 nova frase com 'chave' (ex: 'A chave é pequena.').",
+        "materials": ["quadro interactivo", "cartões digitais da frase (arrastar no quadro)"],
+        "groupSize": "2",
+        "connection": "A construção colaborativa no quadro reforça a construção individual na página; permite correcção entre pares.",
+        "communication": "Cada par lê a sua frase inventada em voz alta para a turma; registo no diário de turma das frases criadas.",
+        "alternatives": ["Sem quadro: cartões de palavra em papel; construir frase na mesa; ler para o colega do lado"]
+      },
+      "differentiation": {
+        "support": "🟢 Apenas 3 cartões de palavra a ordenar ('chave / abre / porta') com imagem em cada cartão; frase-modelo sempre visível.",
+        "standard": "🟡 6 cartões (frase completa + ponto); sem modelo; feedback ao verificar.",
+        "challenge": "🔴 6 cartões + 2 distractores ('janela', 'escada'); aluno deve escolher os correctos E ordenar; depois escreve 1 frase própria com 'chave'."
+      },
+      "duration": 6
+    },
+    {
+      "summary": "Mini-avaliação formativa — reconhecer, segmentar, reconstruir, usar",
+      "textDescription": "Verificação rápida dos 4 critérios observáveis do M28P para a palavra 'chave': reconhecimento global, divisão silábica, reconstrução e uso em frase. Não é teste — é check-in formativo para o aluno e para o professor. O professor observa e regista no PIT.",
+      "interaction": {
+        "state": [
+          {
+            "name": "tarefaAvaliacao",
+            "type": "dropdown",
+            "options": ["1-reconhecimento", "2-silabas", "3-reconstrucao", "4-frase"],
+            "default": "1-reconhecimento"
+          },
+          {
+            "name": "respostaTarefa1",
+            "type": "quiz",
+            "options": ["chave", "chuva", "chama", "charco"],
+            "default": null
+          },
+          {
+            "name": "numeroPalmas",
+            "type": "slider",
+            "range": [1, 5],
+            "step": 1,
+            "default": 0,
+            "unit": "palmas"
+          },
+          {
+            "name": "silabas",
+            "type": "sorting",
+            "options": ["ve", "cha"],
+            "default": "desordenadas"
+          },
+          {
+            "name": "fraseAvaliacao",
+            "type": "canvas",
+            "default": ""
+          },
+          {
+            "name": "scoreTotal",
+            "type": "derived",
+            "derivedFrom": "(respostaTarefa1 === 'chave' ? 1 : 0) + (numeroPalmas === 2 ? 1 : 0) + (silabas[0] === 'cha' && silabas[1] === 've' ? 1 : 0)"
+          }
+        ],
+        "render": "Sequência de 4 mini-tarefas com barra de progresso. Tarefa 1: 'Qual é a palavra?' — 4 opções escritas (sem imagem). Tarefa 2: 'Quantas sílabas tem chave?' — slider de 1 a 5 + botão de palmas. Tarefa 3: 'Arranja as sílabas: ve / cha'. Tarefa 4: campo de texto ou gravação de voz 'Diz uma frase com chave'. Resultado: 3 estrelas (3/3), 2 estrelas (2/3), 1 estrela + encorajamento (1/3). Sem penalização — nunca mostrar 0.",
+        "transition": "Completar cada mini-tarefa → avançar para a seguinte; no final, ecrã de resumo com resultado e mensagem de incentivo; botão 'Ver o que aprendi hoje'",
+        "constraint": "A avaliação formativa não penaliza erro — serve para identificar onde o aluno precisa de mais apoio. O score não é partilhado publicamente.",
+        "assessment": "Critérios observáveis: (1) selecciona 'chave' entre 4 palavras parecidas; (2) indica 2 palmas/sílabas; (3) ordena cha→ve correctamente; (4) produz uma frase oral ou escrita com 'chave'"
+      },
+      "differentiation": {
+        "support": "🟢 Tarefa 1 com imagem de apoio; tarefa 2 com botão de palmas animado e contagem automática; tarefa 3 com 1 sílaba já colocada; tarefa 4 oral (gravação de voz ou frase dita ao professor).",
+        "standard": "🟡 Sem apoio de imagem nas tarefas 1-3; tarefa 4 escrita ou oral à escolha.",
+        "challenge": "🔴 Tarefa 1 entre 4 palavras que começam por 'ch' (chave, chuva, chama, charco); tarefa 4 requer frase escrita com pelo menos 3 palavras."
+      },
+      "duration": 5
+    },
+    {
+      "summary": "Extensão — oralidade, desenho e criatividade com 'chave'",
+      "textDescription": "Actividade de extensão criativa que convida a criança a ir além da palavra aprendida: explorar o significado simbólico e real da chave, criar novas frases, desenhar e partilhar. Alinhado com a oralidade e expressão criativa do currículo do 1.º ano.",
+      "interaction": {
+        "state": [
+          {
+            "name": "modoExtensao",
+            "type": "dropdown",
+            "options": ["desenhar", "escrever", "descobrir"],
+            "default": "descobrir"
+          },
+          {
+            "name": "palavrasComCha",
+            "type": "matching",
+            "options": ["chá", "chapéu", "chama", "chuva", "chalé"],
+            "default": "por-descobrir"
+          },
+          {
+            "name": "desenhoAluno",
+            "type": "canvas",
+            "default": ""
+          },
+          {
+            "name": "fraseExtensao",
+            "type": "canvas",
+            "default": ""
+          }
+        ],
+        "render": "3 zonas opcionais (tabs): (1) 'Descobre!' — explorador de palavras com 'cha': cartões com imagens de palavras que começam por 'cha' para o aluno descobrir; (2) 'Desenha!' — canvas digital simples para desenhar uma chave ou uma porta; (3) 'Escreve!' — campo para criar uma frase nova. Cada zona tem um botão de partilha para o circuito MEM da turma.",
+        "transition": "Seleccionar tab → actividade correspondente; no canvas, ferramentas básicas (lápis, apagador, 3 cores); na escrita, campo de texto com teclado visual; no explorador, tocar em cartão → imagem + palavra + áudio",
+        "constraint": "A extensão é livre — não há resposta certa. O critério é a participação e a expressão. A sílaba 'cha' aparece em muitas palavras do quotidiano.",
+        "assessment": "O aluno completa pelo menos 1 das 3 actividades de extensão e partilha oralmente com o par ou com a turma o que criou/descobriu"
+      },
+      "maker": {
+        "type": "lego",
+        "challenge": "Constrói com Lego uma 'porta' e uma 'chave'. Inventa um cofre secreto ou uma casa. Apresenta à turma: 'A minha chave abre o quê?'",
+        "materials": ["Lego básico (qualquer peças disponíveis)", "papel e caneta para etiqueta"],
+        "groupSize": "2-3",
+        "connection": "O desafio Lego liga o digital (explorar palavras com 'cha') ao tangível (construir o referente da palavra) e ao oral (apresentar).",
+        "communication": "Cada grupo apresenta 1 minuto: mostra a construção, diz a frase com 'chave', regista no mapa de tarefas.",
+        "alternatives": ["Sem Lego: desenho em papel da porta e chave; ou recorte e colagem de revista"]
+      },
+      "differentiation": {
+        "support": "🟢 Apenas tab 'Descobre!' com 3 palavras (chá, chapéu, chuva) com imagem e áudio; Lego livre sem estrutura.",
+        "standard": "🟡 Acesso às 3 tabs; explorar pelo menos 3 palavras novas com 'cha'; Lego com orientação mínima.",
+        "challenge": "🔴 Escrever 2 frases novas (uma com 'chave', uma com palavra nova que começa por 'cha'); Lego: construir cena com narração de 3 frases para apresentar à turma."
+      },
+      "duration": 5
+    }
+  ],
+  "sessionFlow": "0-5min: Bloco 1 — Abertura contextual (activação oral em roda + animação digital da porta) → 5-9min: Bloco 2 — Reconhecimento global (palavra↔imagem, individual) → 9-16min: Bloco 3 — Segmentação silábica (palmas + arrasto, individual com apoio físico em pares) → 16-23min: Bloco 4 — Recombinação (pares descobrem novas palavras) → 23-29min: Bloco 5 — Leitura e escrita guiada (individual, completar + copiar) → 29-35min: Bloco 6 — Frase simples (pares no quadro + inventar frase oral) → 35-40min: Bloco 7 — Mini-avaliação formativa (individual, professor observa) → 40-45min: Bloco 8 — Extensão criativa (escolha livre: desenhar / escrever / descobrir + Lego opcional)",
+  "m28pMetadata": {
+    "wordOrder": 12,
+    "word": "chave",
+    "syllables": ["cha", "ve"],
+    "syllableCount": 2,
+    "theme": "objeto",
+    "anchorSentence": "A chave abre a porta.",
+    "diphthong": false,
+    "digraph": "ch",
+    "phonologicalFocus": ["dígrafo ch", "vogal final -e", "segmentação bissílaba"],
+    "previousSyllablesAvailable": ["me", "ni", "na", "no", "u", "va", "de", "do", "sa", "pa", "to", "bo", "ta", "le", "que", "ca", "ja", "ne", "la", "te", "lha", "es", "da"],
+    "targetRecombinations": ["chapa", "vela"],
+    "otherValidRecombinations": ["chata", "veda"],
+    "wordsWithCha": ["chá", "chapéu", "chama", "chuva", "chalé", "chato"],
+    "status": "in-progress",
+    "version": "1.0",
+    "createdAt": "2026-03-25",
+    "linkedWords": {
+      "previous": ["escada", "telhado", "janela", "casa"],
+      "next": ["galinha"]
+    }
+  }
+}

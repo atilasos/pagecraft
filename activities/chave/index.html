@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Palavra 12 — chave | Método das 28 Palavras</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FFF8F0;
+      --surface: #FFFFFF;
+      --primary: #E05FA0;
+      --accent: #F59E0B;
+      --text: #1E1B18;
+      --green: #22c55e;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --purple: #6d28d9;
+      --blue: #2563eb;
+      --cha: #f97316;
+      --ve: #0ea5e9;
+      --radius: 16px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Nunito', 'Comic Sans MS', sans-serif;
+      background: radial-gradient(circle at top right, #ffe7f5, transparent 35%), var(--bg);
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1.4;
+    }
+    .page {
+      width: min(1100px, 95vw);
+      margin: 0 auto;
+      padding: 1rem 0 2rem;
+    }
+    h1, h2, h3 { margin: 0.2rem 0 0.8rem; }
+    .main-header {
+      background: linear-gradient(135deg, #E05FA0, #7C3AED 60%, #0EA5E9);
+      color: #fff;
+      border-radius: 20px;
+      padding: 1.2rem 1.4rem;
+      box-shadow: var(--shadow);
+    }
+    .meta {
+      display: flex;
+      gap: .7rem;
+      flex-wrap: wrap;
+      margin: .5rem 0;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .badge {
+      background: rgba(255,255,255,.25);
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 999px;
+      padding: .35rem .8rem;
+    }
+    .goals {
+      margin: .75rem 0 0;
+      padding: .7rem .9rem;
+      border-radius: 12px;
+      background: rgba(255,255,255,.16);
+      font-size: .9rem;
+    }
+    .goals li { margin: .35rem 0; }
+    .unit {
+      margin-top: 1rem;
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1rem;
+      border: 2px solid #f8bbd0;
+      box-shadow: var(--shadow);
+    }
+    .unit h2 { color: #be185d; font-size: 1.4rem; }
+    .unit-intro { font-size: .95rem; margin: .35rem 0 .9rem; }
+    .word-big {
+      font-size: clamp(2.2rem, 6vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: .08em;
+      color: var(--primary);
+      text-transform: uppercase;
+      text-align: center;
+    }
+    .diff-tabs {
+      display: flex;
+      gap: .45rem;
+      flex-wrap: wrap;
+      margin: .7rem 0;
+    }
+    .diff-tab {
+      border: 2px solid #ddd;
+      border-radius: 999px;
+      min-height: 48px;
+      padding: .35rem .9rem;
+      background: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: .9rem;
+      touch-action: manipulation;
+    }
+    .diff-tab.active[data-level="support"] { border-color: var(--green); background: #f0fdf4; }
+    .diff-tab.active[data-level="standard"] { border-color: var(--amber); background: #fffbeb; }
+    .diff-tab.active[data-level="challenge"] { border-color: var(--red); background: #fef2f2; }
+    .diff-note {
+      padding: .6rem .75rem;
+      background: #fff7ed;
+      border: 1px dashed #fdba74;
+      border-radius: 10px;
+      font-size: .86rem;
+      margin-bottom: .7rem;
+    }
+    .panel {
+      background: #fff;
+      border: 2px solid #fde68a;
+      border-radius: 12px;
+      padding: .8rem;
+      margin-top: .6rem;
+    }
+    .scene {
+      min-height: 180px;
+      border-radius: 14px;
+      background: linear-gradient(180deg,#dbeafe,#fefce8);
+      position: relative;
+      overflow: hidden;
+      border: 2px solid #93c5fd;
+    }
+    .house {
+      position: absolute;
+      left: 14%;
+      bottom: 14px;
+      width: 220px;
+      height: 120px;
+      background: #fde68a;
+      border: 3px solid #92400e;
+      border-radius: 8px;
+    }
+    .door {
+      position: absolute;
+      right: 30px;
+      bottom: 0;
+      width: 55px;
+      height: 86px;
+      transform-origin: left center;
+      background: #7c2d12;
+      border-radius: 2px;
+      transition: transform .5s ease;
+    }
+    .door.open { transform: perspective(300px) rotateY(-68deg); }
+    .key-btn {
+      position: absolute;
+      right: 8%;
+      bottom: 34px;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      font-size: 1.7rem;
+      border: 3px solid #f59e0b;
+      background: #fef3c7;
+      cursor: pointer;
+      min-height: 64px;
+      min-width: 64px;
+      animation: bob 1.2s infinite ease-in-out;
+    }
+    @keyframes bob { 0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)} }
+    .next-btn, .btn {
+      border: 0;
+      border-radius: 999px;
+      min-height: 48px;
+      padding: .55rem 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      background: var(--primary);
+      color: #fff;
+      font-size: .9rem;
+    }
+    .btn.secondary { background: #0284c7; }
+    .next-btn:disabled { opacity: .4; cursor: not-allowed; }
+    .feedback {
+      margin-top: .55rem;
+      font-size: .9rem;
+      padding: .45rem .65rem;
+      border-radius: 8px;
+      display: none;
+    }
+    .feedback.show { display: block; }
+    .feedback.ok { background: #f0fdf4; color: #15803d; border: 1px solid #86efac; }
+    .feedback.warn { background: #fffbeb; color: #b45309; border: 1px solid #fcd34d; }
+    .img-grid {
+      display: grid;
+      gap: .6rem;
+      grid-template-columns: repeat(auto-fit,minmax(120px,1fr));
+      margin-top: .6rem;
+    }
+    .img-card {
+      border: 2px solid #fecdd3;
+      border-radius: 12px;
+      background: #fff;
+      min-height: 110px;
+      padding: .5rem;
+      font-size: 1.8rem;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .img-card small { display: block; font-size: .75rem; color: #444; }
+    .img-card.correct { border-color: #22c55e; background: #f0fdf4; }
+    .img-card.wrong { border-color: #f59e0b; background: #fffbeb; animation: shake .25s linear 2; }
+    @keyframes shake { 25%{transform:translateX(-5px)}75%{transform:translateX(5px)} }
+    .syllables {
+      display: flex;
+      gap: .4rem;
+      justify-content: center;
+      margin: .55rem 0;
+    }
+    .syll {
+      color: #fff;
+      border-radius: 10px;
+      padding: .35rem .75rem;
+      font-weight: 800;
+      font-size: 1.4rem;
+      opacity: .6;
+      transition: .2s;
+    }
+    .syll.cha { background: var(--cha); }
+    .syll.ve { background: var(--ve); }
+    .syll.active { transform: scale(1.07); opacity: 1; box-shadow: 0 0 0 3px #11111120; }
+    .drag-board {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .8rem;
+      margin-top: .7rem;
+    }
+    .pool, .dropzone {
+      border: 2px dashed #f9a8d4;
+      border-radius: 12px;
+      padding: .55rem;
+      min-height: 90px;
+      background: #fff;
+      display: flex;
+      flex-wrap: wrap;
+      gap: .45rem;
+      align-items: flex-start;
+    }
+    .drop-slot {
+      min-width: 90px;
+      min-height: 54px;
+      border: 2px dashed #94a3b8;
+      border-radius: 10px;
+      padding: .2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .8rem;
+    }
+    .drag-item {
+      min-height: 50px;
+      min-width: 74px;
+      border-radius: 10px;
+      padding: .4rem .7rem;
+      border: 0;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+      box-shadow: 0 3px 8px #0000001f;
+    }
+    .drag-item.gray { background: #6b7280; }
+    .drag-item.cha { background: var(--cha); }
+    .drag-item.ve { background: var(--ve); }
+    .drag-item.dragging {
+      position: fixed;
+      z-index: 9999;
+      cursor: grabbing;
+      transform: scale(1.08);
+      box-shadow: 0 10px 24px #00000030;
+      pointer-events: none;
+    }
+    .discovered-list {
+      margin: .4rem 0;
+      padding-left: 1rem;
+      font-size: .9rem;
+    }
+    .step {
+      border: 2px solid #fbcfe8;
+      border-radius: 12px;
+      padding: .6rem;
+      margin-top: .55rem;
+      background: #fff;
+    }
+    .options {
+      display: flex;
+      gap: .45rem;
+      flex-wrap: wrap;
+      margin-top: .45rem;
+    }
+    .opt {
+      border: 2px solid #e5e7eb;
+      background: #fff;
+      border-radius: 999px;
+      min-height: 48px;
+      padding: .45rem .85rem;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .opt.good { border-color: #22c55e; background: #f0fdf4; }
+    .opt.bad { border-color: #f59e0b; background: #fffbeb; }
+    .line-copy {
+      width: 100%;
+      min-height: 52px;
+      border: 2px dashed #94a3b8;
+      border-radius: 10px;
+      padding: .6rem;
+      font-size: 1.2rem;
+    }
+    .sentence-zone {
+      border: 2px dashed #f9a8d4;
+      border-radius: 12px;
+      padding: .6rem;
+      margin-top: .6rem;
+      display: flex;
+      gap: .45rem;
+      flex-wrap: wrap;
+      min-height: 74px;
+      background: #fff;
+    }
+    .progress {
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+      margin: .5rem 0;
+    }
+    .bar { height: 100%; width: 0%; background: linear-gradient(90deg,#22c55e,#f59e0b); transition: width .3s; }
+    .tabs-3 {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .45rem;
+      margin-bottom: .6rem;
+    }
+    .mode-tab {
+      border: 2px solid #ddd;
+      background: #fff;
+      border-radius: 999px;
+      min-height: 48px;
+      padding: .45rem .9rem;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .mode-tab.active { border-color: #0ea5e9; background: #ecfeff; }
+    canvas.draw {
+      width: 100%;
+      height: 210px;
+      border: 2px solid #94a3b8;
+      border-radius: 12px;
+      background: #fff;
+      touch-action: none;
+    }
+    .maker {
+      background: #e8f5e9;
+      border: 2px solid #4ade80;
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+    .maker-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+      gap: .7rem;
+    }
+    .maker-card {
+      background: #fff;
+      border: 2px solid #86efac;
+      border-radius: 12px;
+      padding: .7rem;
+      font-size: .9rem;
+    }
+    .mini {
+      background: #fff7ed;
+      border: 2px solid #fb923c;
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+    .obs { margin: .45rem 0; font-size: .92rem; }
+    .obs span { margin-right: .6rem; }
+    .curricular {
+      background: #f3e8ff;
+      border: 2px solid #c084fc;
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-top: 1rem;
+      font-size: .9rem;
+    }
+    .foot {
+      text-align: center;
+      font-size: .8rem;
+      color: #6b7280;
+      margin-top: 1.2rem;
+      padding-bottom: 1rem;
+    }
+    #fxCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+    }
+    @media (max-width: 900px) {
+      body { font-size: 18px; }
+      .drag-board { grid-template-columns: 1fr; }
+      .house { left: 8%; }
+    }
+    @media (max-width: 768px) {
+      body { font-size: 16px; }
+      .page { width: 96vw; }
+      .unit { padding: .75rem; }
+      .word-big { font-size: 2rem; }
+      .img-card { min-height: 95px; }
+    }
+    :focus-visible { outline: 3px solid #7C3AED; outline-offset: 2px; }
+    .hide { display: none !important; }
+    .blink { animation: pulse 0.5s ease-in-out 2; }
+    @keyframes pulse { 50% { transform: scale(1.07); } }
+  </style>
+</head>
+<body>
+  <canvas id="fxCanvas" aria-hidden="true"></canvas>
+  <main class="page">
+    <header class="main-header">
+      <h1>Palavra 12: <strong>chave</strong> | Método das 28 Palavras</h1>
+      <div class="meta">
+        <span class="badge">1.º ano (6 anos)</span>
+        <span class="badge">45 minutos</span>
+        <span class="badge">Leitura global + sílabas + frase</span>
+      </div>
+      <ul class="goals">
+        <li>Reconhecer <strong>chave</strong> e associar à imagem certa.</li>
+        <li>Segmentar <strong>cha-ve</strong> e reconstruir na ordem correcta.</li>
+        <li>Combinar sílabas para formar novas palavras reais.</li>
+        <li>Ler e completar: <strong>A chave abre a porta.</strong></li>
+      </ul>
+    </header>
+
+    <section class="unit" id="u1">
+      <h2>1) Abertura contextual — a chave na história da casa</h2>
+      <p class="unit-intro">Toca na chave e observa o que acontece na casa.</p>
+      <div class="diff-tabs" data-unit="u1">
+        <button class="diff-tab active" data-level="support" aria-label="Nível apoio">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard" aria-label="Nível intermédio">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge" aria-label="Nível desafio">🔴 Desafio</button>
+      </div>
+      <div class="diff-note" id="u1note">A porta já está entreaberta e a chave indica onde tocar.</div>
+      <div class="scene" aria-label="Cena da casa e da porta">
+        <div class="house" aria-hidden="true">
+          <div class="door open" id="door1"></div>
+        </div>
+        <button class="key-btn" id="keyBtn" aria-label="Tocar na chave">🔑</button>
+      </div>
+      <div class="word-big" id="wordChave">chave</div>
+      <div class="panel">
+        <button class="btn secondary" id="speakSentence" aria-label="Ouvir frase">🔊 Ouvir: "A chave abre a porta."</button>
+        <input id="u1challenge" class="line-copy hide" aria-label="Escrever para que serve" placeholder="No desafio, escreve 1 palavra: porta / abrir...">
+        <button class="next-btn" id="u1next" disabled aria-label="Seguinte">Seguinte</button>
+        <div id="u1fb" class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="unit" id="u2">
+      <h2>2) Reconhecimento global — ver, ouvir, associar</h2>
+      <div class="word-big">CHAVE</div>
+      <button class="btn secondary" id="u2audio" aria-label="Ouvir palavra chave">🔊 Ouvir palavra</button>
+      <div class="diff-tabs" data-unit="u2">
+        <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-note" id="u2note">2 imagens com legenda. Toca na imagem certa.</div>
+      <div class="img-grid" id="u2grid" aria-label="Escolher imagem correcta"></div>
+      <input id="u2write" class="line-copy hide" aria-label="Escrever a palavra chave" placeholder="Escreve: chave">
+      <div id="u2fb" class="feedback"></div>
+    </section>
+
+    <section class="unit" id="u3">
+      <h2>3) Segmentação silábica — cha-ve</h2>
+      <p class="unit-intro">Bate palmas e monta a palavra com blocos.</p>
+      <div class="diff-tabs" data-unit="u3">
+        <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-note" id="u3note">No apoio os blocos já estão na ordem certa. Toca para ouvir sílabas.</div>
+      <div class="syllables">
+        <div class="syll cha" id="syCha">cha</div>
+        <div class="syll ve" id="syVe">ve</div>
+      </div>
+      <div class="panel">
+        <button class="btn" id="clapBtn" aria-label="Botão de palmas">👏 Palma</button>
+        <label for="palmadasRange">Palmadas:</label>
+        <input id="palmadasRange" type="range" min="0" max="5" step="1" value="0" aria-label="Número de palmadas">
+        <span id="palmadasOut">0</span>
+      </div>
+      <div class="drag-board" id="u3drag">
+        <div>
+          <h3>Origem</h3>
+          <div class="pool" id="u3pool"></div>
+        </div>
+        <div>
+          <h3>Destino</h3>
+          <div class="dropzone">
+            <div class="drop-slot" data-accept="cha" data-expected="cha" aria-label="Posição 1">1</div>
+            <div class="drop-slot" data-accept="ve" data-expected="ve" aria-label="Posição 2">2</div>
+          </div>
+        </div>
+      </div>
+      <div id="u3fb" class="feedback"></div>
+    </section>
+
+    <section class="unit" id="u4">
+      <h2>4) Recombinação — novas palavras com cha e ve</h2>
+      <p class="unit-intro">Combina sílabas e verifica se forma uma palavra real.</p>
+      <div class="diff-tabs" data-unit="u4">
+        <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-note" id="u4note">No apoio tens menos sílabas e pistas visuais.</div>
+      <div class="drag-board" id="u4drag">
+        <div>
+          <h3>Sílabas</h3>
+          <div class="pool" id="u4pool"></div>
+          <div class="pool" id="u4bank"></div>
+        </div>
+        <div>
+          <h3>Composição</h3>
+          <div class="dropzone" id="u4compose">
+            <div class="drop-slot" data-accept="any" aria-label="Primeira sílaba">1</div>
+            <div class="drop-slot" data-accept="any" aria-label="Segunda sílaba">2</div>
+          </div>
+          <button class="btn" id="u4check">Verificar</button>
+          <div id="u4fb" class="feedback"></div>
+          <h3>Palavras descobertas 🔓</h3>
+          <ul class="discovered-list" id="u4found"></ul>
+          <input id="u4challenge" class="line-copy hide" placeholder="No desafio, escreve uma frase com palavra descoberta.">
+        </div>
+      </div>
+    </section>
+
+    <section class="unit" id="u5">
+      <h2>5) Leitura e escrita guiada</h2>
+      <div class="diff-tabs" data-unit="u5">
+        <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="word-big" id="u5model">CH<span style="color:#0ea5e9">A</span>VE</div>
+      <div class="progress"><div class="bar" id="u5bar"></div></div>
+      <div class="step" id="u5s1">
+        <strong>Passo 1:</strong> Completa: <strong>___ve</strong>
+        <div class="options" id="u5opts1"></div>
+      </div>
+      <div class="step" id="u5s2">
+        <strong>Passo 2:</strong> Qual é a grafia correcta?
+        <div class="options" id="u5opts2"></div>
+      </div>
+      <div class="step" id="u5s3">
+        <strong>Passo 3:</strong> Copia a palavra
+        <input id="u5copy" class="line-copy" aria-label="Copiar palavra chave" placeholder="Escreve aqui...">
+      </div>
+      <div id="u5fb" class="feedback"></div>
+    </section>
+
+    <section class="unit" id="u6">
+      <h2>6) Frase simples — A chave abre a porta.</h2>
+      <div class="diff-tabs" data-unit="u6">
+        <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-note" id="u6note">No apoio ordenas só 3 palavras principais.</div>
+      <div class="drag-board" id="u6drag">
+        <div>
+          <h3>Cartões</h3>
+          <div class="pool" id="u6pool"></div>
+        </div>
+        <div>
+          <h3>Construção</h3>
+          <div class="sentence-zone" id="u6slots"></div>
+          <button class="btn" id="u6check">Verificar frase</button>
+          <div id="u6fb" class="feedback"></div>
+          <input id="u6own" class="line-copy hide" placeholder="No desafio, escreve 1 frase própria com chave.">
+        </div>
+      </div>
+    </section>
+
+    <section class="unit" id="u7">
+      <h2>7) Mini-avaliação formativa</h2>
+      <p class="unit-intro">Não é teste. É para ver o que já consegues.</p>
+      <div class="diff-tabs" data-unit="u7">
+        <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="progress"><div class="bar" id="u7bar"></div></div>
+      <div class="step" id="u7task"></div>
+      <div class="panel">
+        <button class="btn" id="u7next">Avançar</button>
+        <div id="u7result" class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="unit" id="u8">
+      <h2>8) Extensão criativa</h2>
+      <div class="tabs-3">
+        <button class="mode-tab active" data-mode="discover">Descobre!</button>
+        <button class="mode-tab" data-mode="draw">Desenha!</button>
+        <button class="mode-tab" data-mode="write">Escreve!</button>
+      </div>
+      <div class="panel" id="u8discover">
+        <p>Toca nas palavras com <strong>cha</strong>:</p>
+        <div class="options" id="u8words"></div>
+      </div>
+      <div class="panel hide" id="u8draw">
+        <div class="options">
+          <button class="opt" data-color="#111" type="button">Preto</button>
+          <button class="opt" data-color="#ef4444" type="button">Vermelho</button>
+          <button class="opt" data-color="#2563eb" type="button">Azul</button>
+          <button class="opt" data-color="erase" type="button">Apagar</button>
+        </div>
+        <canvas class="draw" id="drawCanvas" width="900" height="260" aria-label="Área de desenho"></canvas>
+      </div>
+      <div class="panel hide" id="u8write">
+        <textarea id="u8text" class="line-copy" rows="3" placeholder="Escreve uma frase nova com chave..."></textarea>
+      </div>
+      <button class="btn secondary" id="u8share">Partilhar no circuito MEM</button>
+      <div id="u8fb" class="feedback"></div>
+    </section>
+
+    <section class="maker">
+      <h2>🛠️ Secção Maker</h2>
+      <div class="maker-grid">
+        <article class="maker-card"><strong>Unplugged:</strong> Observa uma chave real e responde: para que serve?</article>
+        <article class="maker-card"><strong>Unplugged:</strong> Constrói <em>cha-ve</em> com cartões e testa <em>ve-cha</em>.</article>
+        <article class="maker-card"><strong>Whiteboard:</strong> Ordena cartões da frase no quadro e inventa nova frase.</article>
+        <article class="maker-card"><strong>Lego:</strong> Constrói porta e chave. Apresenta: "A minha chave abre o quê?"</article>
+      </div>
+    </section>
+
+    <section class="mini">
+      <h2>📝 Mini-avaliação observável</h2>
+      <div class="obs">1) Associa a palavra <strong>chave</strong> à imagem certa.
+        <div><span>⬜ Ainda não consigo</span><span>⬜ Com ajuda</span><span>⬜ Sozinho/a</span><span>⬜ Ajudo colegas</span></div>
+      </div>
+      <div class="obs">2) Bate 2 palmas e diz <strong>cha-ve</strong>.
+        <div><span>⬜ Ainda não consigo</span><span>⬜ Com ajuda</span><span>⬜ Sozinho/a</span><span>⬜ Ajudo colegas</span></div>
+      </div>
+      <div class="obs">3) Reconstrói <strong>cha + ve</strong> na ordem correcta.
+        <div><span>⬜ Ainda não consigo</span><span>⬜ Com ajuda</span><span>⬜ Sozinho/a</span><span>⬜ Ajudo colegas</span></div>
+      </div>
+      <div class="obs">4) Ordena a frase: <strong>A chave abre a porta.</strong>
+        <div><span>⬜ Ainda não consigo</span><span>⬜ Com ajuda</span><span>⬜ Sozinho/a</span><span>⬜ Ajudo colegas</span></div>
+      </div>
+      <div class="obs">5) Diz ou escreve uma frase própria com <strong>chave</strong>.
+        <div><span>⬜ Ainda não consigo</span><span>⬜ Com ajuda</span><span>⬜ Sozinho/a</span><span>⬜ Ajudo colegas</span></div>
+      </div>
+    </section>
+
+    <section class="curricular">
+      <h3>Aprendizagens Essenciais</h3>
+      <ul>
+        <li>Português (1.º ano): Identificar letras e sílabas, ler palavras e frases simples (LE1, LE2).</li>
+        <li>Português (1.º ano): Segmentar palavras em sílabas; identificar sílabas iniciais e finais (O1, O2).</li>
+        <li>Português (1.º ano): Escrever palavras e frases simples com correspondência fonema-grafema (LE7).</li>
+      </ul>
+      <h3>Perfil do Aluno</h3>
+      <ul>
+        <li>PA-A: Linguagens e textos</li>
+        <li>PA-C: Raciocínio e resolução de problemas</li>
+        <li>PA-F: Desenvolvimento pessoal e autonomia</li>
+        <li>PA-D: Pensamento crítico e pensamento criativo</li>
+      </ul>
+    </section>
+
+    <footer class="foot">Gerado por PageCraft 🛠️</footer>
+  </main>
+
+  <script>
+    const state = {
+      level: { u1:'support',u2:'support',u3:'support',u4:'support',u5:'support',u6:'support',u7:'support' },
+      confetti: [],
+      u4Found: new Set(),
+      u5Step: 0,
+      u7Step: 0,
+      u7Answers: { t1:null, t2:0, t3:false, t4:'' },
+      drawColor: '#111'
+    };
+
+    const fxCanvas = document.getElementById('fxCanvas');
+    const fxCtx = fxCanvas.getContext('2d');
+    function resizeFx(){ fxCanvas.width = innerWidth; fxCanvas.height = innerHeight; }
+    resizeFx();
+    addEventListener('resize', resizeFx);
+
+    function tone(freq=620, dur=0.12, type='sine') {
+      try {
+        const ac = tone.ac || (tone.ac = new (window.AudioContext || window.webkitAudioContext)());
+        const o = ac.createOscillator();
+        const g = ac.createGain();
+        o.type = type; o.frequency.value = freq;
+        g.gain.value = 0.0001;
+        o.connect(g); g.connect(ac.destination);
+        o.start();
+        g.gain.exponentialRampToValueAtTime(0.11, ac.currentTime + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + dur);
+        o.stop(ac.currentTime + dur + 0.02);
+      } catch (e) {}
+    }
+    function narrate(text) {
+      if (!('speechSynthesis' in window)) return;
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'pt-PT';
+      u.rate = 0.9;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+    }
+    function confettiBurst(x = innerWidth / 2, y = 120) {
+      const colors = ['#22c55e','#eab308','#ec4899','#3b82f6','#f97316'];
+      for (let i = 0; i < 70; i++) {
+        state.confetti.push({ x, y, vx:(Math.random()-0.5)*6, vy:Math.random()*-5-2, life:65 + Math.random()*25, c: colors[(Math.random()*colors.length)|0], s: 2 + Math.random()*4 });
+      }
+    }
+    function animateFx() {
+      fxCtx.clearRect(0,0,fxCanvas.width,fxCanvas.height);
+      state.confetti = state.confetti.filter(p => p.life > 0);
+      state.confetti.forEach(p => {
+        p.life -= 1;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.11;
+        fxCtx.fillStyle = p.c;
+        fxCtx.fillRect(p.x, p.y, p.s, p.s);
+      });
+      requestAnimationFrame(animateFx);
+    }
+    requestAnimationFrame(animateFx);
+
+    function setFeedback(id, msg, ok=true) {
+      const fb = document.getElementById(id);
+      fb.textContent = msg;
+      fb.className = 'feedback show ' + (ok ? 'ok' : 'warn');
+      tone(ok ? 880 : 310, ok ? 0.15 : 0.12, ok ? 'triangle' : 'sawtooth');
+      if (ok) confettiBurst();
+    }
+
+    function initDiffTabs() {
+      document.querySelectorAll('.diff-tabs').forEach(group => {
+        group.querySelectorAll('.diff-tab').forEach(btn => {
+          btn.addEventListener('click', () => {
+            group.querySelectorAll('.diff-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const unit = group.dataset.unit;
+            state.level[unit] = btn.dataset.level;
+            refreshUnit(unit);
+          });
+        });
+      });
+    }
+
+    function initDragArea(container) {
+      let active = null;
+      container.querySelectorAll('.drag-item').forEach(item => {
+        item.onpointerdown = e => {
+          e.preventDefault();
+          const rect = item.getBoundingClientRect();
+          active = { item, ox: e.clientX - rect.left, oy: e.clientY - rect.top, parent: item.parentElement, next: item.nextSibling };
+          if (active.parent.classList.contains('drop-slot')) active.parent.classList.remove('filled');
+          item.classList.add('dragging');
+          item.style.width = rect.width + 'px';
+          item.style.left = (e.clientX - active.ox) + 'px';
+          item.style.top = (e.clientY - active.oy) + 'px';
+          document.body.appendChild(item);
+          item.setPointerCapture(e.pointerId);
+        };
+        item.onpointermove = e => {
+          if (!active || active.item !== item) return;
+          item.style.left = (e.clientX - active.ox) + 'px';
+          item.style.top = (e.clientY - active.oy) + 'px';
+        };
+        item.onpointerup = e => {
+          if (!active || active.item !== item) return;
+          const el = document.elementFromPoint(e.clientX, e.clientY);
+          const slot = el ? el.closest('.drop-slot') : null;
+          let placed = false;
+          if (slot && container.contains(slot)) {
+            const accept = slot.dataset.accept || '';
+            const token = item.dataset.token;
+            const expected = slot.dataset.expected;
+            if ((accept === 'any' || accept === token || accept.includes(token)) && (!expected || expected === token)) {
+              slot.appendChild(item);
+              slot.classList.add('filled');
+              placed = true;
+            }
+          }
+          item.classList.remove('dragging');
+          item.style.width = '';
+          item.style.left = '';
+          item.style.top = '';
+          if (!placed) {
+            if (active.next && active.parent.contains(active.next)) active.parent.insertBefore(item, active.next);
+            else active.parent.appendChild(item);
+          }
+          active = null;
+          container.dispatchEvent(new CustomEvent('dragdropchange'));
+        };
+      });
+    }
+
+    function refreshUnit(unit) {
+      if (unit === 'u1') refreshU1();
+      if (unit === 'u2') refreshU2();
+      if (unit === 'u3') refreshU3();
+      if (unit === 'u4') refreshU4();
+      if (unit === 'u5') refreshU5();
+      if (unit === 'u6') refreshU6();
+      if (unit === 'u7') refreshU7();
+    }
+
+    // U1
+    const door1 = document.getElementById('door1');
+    document.getElementById('keyBtn').addEventListener('click', () => {
+      door1.classList.add('open');
+      document.getElementById('wordChave').classList.add('blink');
+      document.getElementById('u1next').disabled = false;
+      setFeedback('u1fb', 'Muito bem! A chave abriu a porta.', true);
+      narrate('A chave abre a porta.');
+    });
+    document.getElementById('speakSentence').addEventListener('click', () => { narrate('A chave abre a porta.'); tone(720,0.1); });
+    function refreshU1() {
+      const lvl = state.level.u1;
+      const note = document.getElementById('u1note');
+      const ch = document.getElementById('u1challenge');
+      if (lvl === 'support') {
+        door1.classList.add('open');
+        note.textContent = 'A porta já está entreaberta e a chave pisca para ajuda visual.';
+        ch.classList.add('hide');
+        narrate('A chave abre a porta.');
+      } else if (lvl === 'standard') {
+        door1.classList.remove('open');
+        note.textContent = 'Cena parada. Toca na chave para abrir a porta e ouvir a frase.';
+        ch.classList.add('hide');
+      } else {
+        door1.classList.remove('open');
+        note.textContent = 'Antes de tocar, diz para que serve uma chave e escreve 1 palavra.';
+        ch.classList.remove('hide');
+      }
+      document.getElementById('u1next').disabled = true;
+      document.getElementById('u1fb').className = 'feedback';
+    }
+
+    // U2
+    const u2Data = {
+      support: [{k:'chave',e:'🔑',l:'chave'},{k:'janela',e:'🪟',l:'janela'}],
+      standard: [{k:'chave',e:'🔑'},{k:'janela',e:'🪟'},{k:'escada',e:'🪜'}],
+      challenge: [{k:'chave',e:'🔑'},{k:'janela',e:'🪟'},{k:'escada',e:'🪜'},{k:'bota',e:'🥾'}]
+    };
+    document.getElementById('u2audio').addEventListener('click', () => narrate('chave'));
+    function refreshU2() {
+      const lvl = state.level.u2;
+      document.getElementById('u2note').textContent = lvl === 'support' ? '2 imagens com legenda. Áudio automático.' : lvl === 'standard' ? '3 imagens. Áudio a pedido.' : '4 imagens sem áudio de apoio. Depois escreve a palavra.';
+      const grid = document.getElementById('u2grid');
+      grid.innerHTML = '';
+      document.getElementById('u2write').classList.toggle('hide', lvl !== 'challenge');
+      if (lvl === 'support') narrate('chave');
+      u2Data[lvl].forEach(o => {
+        const b = document.createElement('button');
+        b.className = 'img-card';
+        b.innerHTML = `${o.e}<br>${o.l ? `<small>${o.l}</small>` : ''}`;
+        b.setAttribute('aria-label', 'Imagem ' + o.k);
+        b.addEventListener('click', () => {
+          grid.querySelectorAll('.img-card').forEach(x => x.classList.remove('correct','wrong'));
+          if (o.k === 'chave') {
+            b.classList.add('correct');
+            setFeedback('u2fb', 'Acertaste! A palavra CHAVE corresponde à chave.', true);
+          } else {
+            b.classList.add('wrong');
+            setFeedback('u2fb', 'Boa tentativa. Procura o objecto que abre a porta.', false);
+          }
+        });
+        grid.appendChild(b);
+      });
+      document.getElementById('u2fb').className = 'feedback';
+    }
+
+    // U3
+    let clapIdx = 0;
+    document.getElementById('clapBtn').addEventListener('click', () => {
+      clapIdx = (clapIdx + 1) % 3;
+      const cha = document.getElementById('syCha');
+      const ve = document.getElementById('syVe');
+      cha.classList.remove('active'); ve.classList.remove('active');
+      if (clapIdx === 1) { cha.classList.add('active'); narrate('cha'); }
+      if (clapIdx === 2) { ve.classList.add('active'); narrate('ve'); }
+      const r = document.getElementById('palmadasRange');
+      r.value = Math.min(5, Number(r.value) + 1);
+      document.getElementById('palmadasOut').textContent = r.value;
+      tone(540 + Number(r.value)*20,0.08,'square');
+    });
+    document.getElementById('palmadasRange').addEventListener('input', e => {
+      document.getElementById('palmadasOut').textContent = e.target.value;
+    });
+    function makeDrag(tag, cls='gray') {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = `drag-item ${cls}`;
+      b.textContent = tag;
+      b.dataset.token = tag;
+      b.setAttribute('aria-label', 'Bloco ' + tag);
+      return b;
+    }
+    function refreshU3() {
+      const lvl = state.level.u3;
+      const pool = document.getElementById('u3pool');
+      const slots = document.querySelectorAll('#u3 .drop-slot');
+      pool.innerHTML = '';
+      slots.forEach(s => { s.innerHTML = s.getAttribute('aria-label').includes('1') ? '1' : '2'; s.classList.remove('filled'); });
+      document.getElementById('u3note').textContent = lvl === 'support' ? 'No apoio os blocos já estão na ordem certa. Toca para ouvir sílabas.' : lvl === 'standard' ? 'Arrasta cha e ve para os espaços 1 e 2.' : 'Inclui sílabas extra. Escolhe só cha e ve.';
+      if (lvl === 'support') {
+        slots[0].appendChild(makeDrag('cha','cha')); slots[0].classList.add('filled');
+        slots[1].appendChild(makeDrag('ve','ve')); slots[1].classList.add('filled');
+      } else if (lvl === 'standard') {
+        pool.appendChild(makeDrag('cha','cha'));
+        pool.appendChild(makeDrag('ve','ve'));
+      } else {
+        ['ca','sa','cha','es','ve','da'].forEach(t => pool.appendChild(makeDrag(t, t === 'cha' ? 'cha' : t === 've' ? 've' : 'gray')));
+      }
+      initDragArea(document.getElementById('u3drag'));
+      document.getElementById('u3drag').ondragdropchange = () => {
+        const ok = slots[0].querySelector('[data-token="cha"]') && slots[1].querySelector('[data-token="ve"]');
+        if (ok) setFeedback('u3fb', 'Perfeito! Formaste cha-ve na ordem certa.', true);
+      };
+      document.getElementById('u3fb').className = 'feedback';
+    }
+
+    // U4
+    const validWords = new Set(['chapa','chata','chama','vela','veda','vaca']);
+    function refreshU4() {
+      const lvl = state.level.u4;
+      const pool = document.getElementById('u4pool');
+      const bank = document.getElementById('u4bank');
+      const slots = document.querySelectorAll('#u4compose .drop-slot');
+      pool.innerHTML = '';
+      bank.innerHTML = '';
+      slots.forEach((s,i) => { s.textContent = i+1; s.classList.remove('filled'); });
+      state.u4Found.clear();
+      document.getElementById('u4found').innerHTML = '';
+      document.getElementById('u4challenge').classList.toggle('hide', lvl !== 'challenge');
+      document.getElementById('u4note').textContent = lvl === 'support' ? 'Banco reduzido: pa, la, me, sa.' : lvl === 'standard' ? 'Banco intermédio sem pistas.' : 'Banco completo de 11 sílabas.';
+      ['cha','ve'].forEach(t => pool.appendChild(makeDrag(t, t)));
+      const bankSet = lvl === 'support' ? ['pa','la','me','sa'] : lvl === 'standard' ? ['pa','la','sa','ta','ca','da','me','na'] : ['pa','la','sa','ta','ca','da','me','na','le','ne','bo'];
+      bankSet.forEach(t => bank.appendChild(makeDrag(t,'gray')));
+      initDragArea(document.getElementById('u4drag'));
+      document.getElementById('u4fb').className = 'feedback';
+    }
+    document.getElementById('u4check').addEventListener('click', () => {
+      const [s1,s2] = document.querySelectorAll('#u4compose .drop-slot');
+      const a = s1.querySelector('.drag-item');
+      const b = s2.querySelector('.drag-item');
+      if (!a || !b) return setFeedback('u4fb','Escolhe duas sílabas antes de verificar.',false);
+      const formed = a.dataset.token + b.dataset.token;
+      if (validWords.has(formed)) {
+        state.u4Found.add(formed);
+        document.getElementById('u4found').innerHTML = [...state.u4Found].map(w => `<li>${w}</li>`).join('');
+        setFeedback('u4fb', `Boa descoberta: ${formed}!`, true);
+      } else {
+        setFeedback('u4fb', 'Não é uma palavra real. Tenta outra combinação.', false);
+      }
+    });
+
+    // U5
+    function setupOptions(rootId, opts, correct, onDone) {
+      const root = document.getElementById(rootId);
+      root.innerHTML = '';
+      opts.forEach(o => {
+        const b = document.createElement('button');
+        b.className = 'opt';
+        b.textContent = o;
+        b.addEventListener('click', () => {
+          root.querySelectorAll('.opt').forEach(x => x.classList.remove('good','bad'));
+          const ok = o === correct;
+          b.classList.add(ok ? 'good' : 'bad');
+          onDone(ok);
+        });
+        root.appendChild(b);
+      });
+    }
+    function refreshU5() {
+      const lvl = state.level.u5;
+      state.u5Step = 0;
+      document.getElementById('u5bar').style.width = '0%';
+      document.getElementById('u5fb').className = 'feedback';
+      const s1 = lvl === 'support' ? ['cha','ca'] : ['cha','sha','xa','ca'];
+      const s2 = lvl === 'support' ? ['chave','xave'] : ['chave','xave','shave','schave'];
+      setupOptions('u5opts1', s1, 'cha', ok => {
+        if (ok) { state.u5Step = Math.max(state.u5Step,1); document.getElementById('u5bar').style.width='33%'; setFeedback('u5fb','Certo! A sílaba é CHA.',true); }
+        else setFeedback('u5fb','Tenta outra. Ouve o som inicial.',false);
+      });
+      setupOptions('u5opts2', s2, 'chave', ok => {
+        if (ok) { state.u5Step = Math.max(state.u5Step,2); document.getElementById('u5bar').style.width='66%'; setFeedback('u5fb','Muito bem! A grafia correcta é chave.',true); }
+        else setFeedback('u5fb','Boa tentativa. Procura o dígrafo CH.',false);
+      });
+      const model = document.getElementById('u5model');
+      model.classList.toggle('hide', lvl === 'challenge');
+      document.getElementById('u5copy').placeholder = lvl === 'challenge' ? 'Escreve de memória: chave (bónus: cha-ve)' : 'Copia aqui: chave';
+    }
+    document.getElementById('u5copy').addEventListener('input', e => {
+      const t = e.target.value.trim().toLowerCase();
+      if (t.includes('chave')) {
+        state.u5Step = 3;
+        document.getElementById('u5bar').style.width = '100%';
+        setFeedback('u5fb', 'Excelente escrita!', true);
+      }
+    });
+
+    // U6
+    function refreshU6() {
+      const lvl = state.level.u6;
+      const pool = document.getElementById('u6pool');
+      const slots = document.getElementById('u6slots');
+      pool.innerHTML = '';
+      slots.innerHTML = '';
+      document.getElementById('u6own').classList.toggle('hide', lvl !== 'challenge');
+      const words = lvl === 'support' ? ['chave','abre','porta'] : lvl === 'standard' ? ['A','chave','abre','a','porta','.'] : ['A','chave','abre','a','porta','.','janela','escada'];
+      const expected = lvl === 'support' ? ['chave','abre','porta'] : ['A','chave','abre','a','porta','.'];
+      words.forEach(w => pool.appendChild(makeDrag(w,'gray')));
+      expected.forEach((_,i) => {
+        const s = document.createElement('div');
+        s.className = 'drop-slot';
+        s.dataset.accept = 'any';
+        s.dataset.idx = i;
+        s.textContent = i+1;
+        slots.appendChild(s);
+      });
+      document.getElementById('u6note').textContent = lvl === 'support' ? 'Ordena as 3 palavras principais.' : lvl === 'standard' ? 'Ordena frase completa com ponto final.' : 'Escolhe cartões correctos e ordena.';
+      initDragArea(document.getElementById('u6drag'));
+      document.getElementById('u6fb').className = 'feedback';
+      document.getElementById('u6check').onclick = () => {
+        const built = [...slots.querySelectorAll('.drop-slot')].map(s => s.querySelector('.drag-item')?.dataset.token || '');
+        if (JSON.stringify(built) === JSON.stringify(expected)) {
+          setFeedback('u6fb', 'Frase correcta! A chave abre a porta.', true);
+          door1.classList.add('open');
+          narrate('A chave abre a porta.');
+        } else {
+          setFeedback('u6fb', 'Ainda não está na ordem certa. Tenta novamente.', false);
+        }
+      };
+    }
+
+    // U7
+    function u7RenderTask() {
+      const box = document.getElementById('u7task');
+      const lvl = state.level.u7;
+      const step = state.u7Step;
+      document.getElementById('u7bar').style.width = ((step/4)*100) + '%';
+      if (step === 0) {
+        const opts = lvl === 'challenge' ? ['chave','chuva','chama','charco'] : ['chave','chuva','chama','charco'];
+        box.innerHTML = '<strong>Tarefa 1:</strong> Qual é a palavra?';
+        const row = document.createElement('div'); row.className = 'options';
+        opts.forEach(w => {
+          const b = document.createElement('button'); b.className = 'opt'; b.textContent = w;
+          b.onclick = () => { state.u7Answers.t1 = w; row.querySelectorAll('.opt').forEach(x=>x.classList.remove('good','bad')); b.classList.add(w==='chave'?'good':'bad'); };
+          row.appendChild(b);
+        });
+        box.appendChild(row);
+      } else if (step === 1) {
+        box.innerHTML = '<strong>Tarefa 2:</strong> Quantas sílabas tem "chave"?';
+        const r = document.createElement('input');
+        r.type = 'range'; r.min = '1'; r.max = '5'; r.value = String(state.u7Answers.t2 || 1); r.setAttribute('aria-label','Número de sílabas');
+        const out = document.createElement('span'); out.textContent = ' ' + r.value + ' palmas';
+        r.oninput = () => { state.u7Answers.t2 = Number(r.value); out.textContent = ' ' + r.value + ' palmas'; };
+        box.append(r,out);
+      } else if (step === 2) {
+        box.innerHTML = '<strong>Tarefa 3:</strong> Ordena as sílabas: ve / cha';
+        const row = document.createElement('div'); row.className='options';
+        const a = document.createElement('button'); a.className='opt'; a.textContent='cha-ve';
+        const b = document.createElement('button'); b.className='opt'; b.textContent='ve-cha';
+        a.onclick = () => { state.u7Answers.t3 = true; a.classList.add('good'); b.classList.remove('bad'); };
+        b.onclick = () => { state.u7Answers.t3 = false; b.classList.add('bad'); a.classList.remove('good'); };
+        row.append(a,b); box.appendChild(row);
+      } else {
+        box.innerHTML = '<strong>Tarefa 4:</strong> Escreve uma frase com "chave"';
+        const t = document.createElement('textarea');
+        t.className = 'line-copy';
+        t.rows = 2;
+        t.placeholder = lvl === 'challenge' ? 'Pelo menos 3 palavras...' : 'Ex.: A chave abre a porta.';
+        t.oninput = () => state.u7Answers.t4 = t.value;
+        box.appendChild(t);
+      }
+    }
+    function refreshU7() {
+      state.u7Step = 0;
+      state.u7Answers = { t1:null, t2:0, t3:false, t4:'' };
+      document.getElementById('u7result').className = 'feedback';
+      u7RenderTask();
+    }
+    document.getElementById('u7next').addEventListener('click', () => {
+      if (state.u7Step < 3) {
+        state.u7Step++;
+        u7RenderTask();
+      } else {
+        let score = 0;
+        if (state.u7Answers.t1 === 'chave') score++;
+        if (state.u7Answers.t2 === 2) score++;
+        if (state.u7Answers.t3 === true) score++;
+        const stars = Math.max(1, score);
+        setFeedback('u7result', 'Resultado: ' + '⭐'.repeat(stars) + '  Continua, estás a aprender muito bem!', true);
+      }
+    });
+
+    // U8
+    function switchU8(mode) {
+      document.querySelectorAll('.mode-tab').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+      document.getElementById('u8discover').classList.toggle('hide', mode !== 'discover');
+      document.getElementById('u8draw').classList.toggle('hide', mode !== 'draw');
+      document.getElementById('u8write').classList.toggle('hide', mode !== 'write');
+    }
+    document.querySelectorAll('.mode-tab').forEach(b => b.addEventListener('click', () => switchU8(b.dataset.mode)));
+    ;['chá','chapéu','chama','chuva','chalé'].forEach(w => {
+      const b = document.createElement('button');
+      b.className = 'opt';
+      b.textContent = w;
+      b.onclick = () => { narrate(w); b.classList.add('good'); tone(640,0.1); };
+      document.getElementById('u8words').appendChild(b);
+    });
+    document.getElementById('u8share').addEventListener('click', () => setFeedback('u8fb','Partilha feita! Obrigado por mostrares o teu trabalho.',true));
+
+    // Canvas drawing
+    const drawCanvas = document.getElementById('drawCanvas');
+    const dctx = drawCanvas.getContext('2d');
+    dctx.lineCap = 'round'; dctx.lineJoin = 'round'; dctx.lineWidth = 5;
+    let drawing = false;
+    function pos(e){ const r = drawCanvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*(drawCanvas.width/r.width), y:(e.clientY-r.top)*(drawCanvas.height/r.height) }; }
+    drawCanvas.addEventListener('pointerdown', e => { drawing = true; const p = pos(e); dctx.beginPath(); dctx.moveTo(p.x,p.y); });
+    drawCanvas.addEventListener('pointermove', e => {
+      if (!drawing) return;
+      const p = pos(e);
+      if (state.drawColor === 'erase') {
+        dctx.globalCompositeOperation = 'destination-out';
+        dctx.lineWidth = 18;
+      } else {
+        dctx.globalCompositeOperation = 'source-over';
+        dctx.strokeStyle = state.drawColor;
+        dctx.lineWidth = 5;
+      }
+      dctx.lineTo(p.x,p.y);
+      dctx.stroke();
+    });
+    drawCanvas.addEventListener('pointerup', () => drawing = false);
+    drawCanvas.addEventListener('pointerleave', () => drawing = false);
+    document.querySelectorAll('#u8draw [data-color]').forEach(b => b.addEventListener('click', () => state.drawColor = b.dataset.color));
+
+    // First render
+    initDiffTabs();
+    ['u1','u2','u3','u4','u5','u6','u7'].forEach(refreshUnit);
+  </script>
+</body>
+</html>

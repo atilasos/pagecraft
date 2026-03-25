@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M28P — Palavra 11: Escada</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FFF8F0;
+      --surface: #FFFFFF;
+      --primary: #E05FA0;
+      --accent: #F59E0B;
+      --text: #1E1B18;
+      --support: #22c55e;
+      --standard: #F59E0B;
+      --challenge: #ef4444;
+      --purple: #7C3AED;
+      --radius: 16px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --touch: 48px;
+      --es: #2563eb;
+      --ca: #16a34a;
+      --da: #f97316;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 1rem;
+      font-family: 'Nunito', 'Poppins', 'Comic Sans MS', sans-serif;
+      background:
+        radial-gradient(circle at 10% 10%, #ffe7f4 0, transparent 40%),
+        radial-gradient(circle at 90% 20%, #ffe8c2 0, transparent 35%),
+        var(--bg);
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1.45;
+    }
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      display: grid;
+      gap: 1rem;
+    }
+    h1, h2, h3, p { margin: 0; }
+    header {
+      background: linear-gradient(125deg, #E05FA0, #7C3AED);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+    header h1 { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; }
+    .meta { display: flex; gap: .8rem; flex-wrap: wrap; margin-top: .75rem; font-size: 1rem; }
+    .badge { background: rgba(255,255,255,.2); border-radius: 999px; padding: .35rem .8rem; font-weight: 700; }
+    .objectives { margin-top: 1rem; background: rgba(255,255,255,.15); padding: .9rem; border-radius: 12px; }
+    .objectives li { margin: .35rem 0; }
+
+    .unit, .maker, .assessment, .curricular {
+      background: var(--surface);
+      border: 2px solid var(--primary);
+      border-radius: var(--radius);
+      padding: 1rem;
+      box-shadow: var(--shadow);
+    }
+    .unit h2 { color: var(--primary); font-size: 1.45rem; margin-bottom: .45rem; }
+    .unit small { display: inline-block; font-weight: 700; color: #5b4c49; margin-bottom: .8rem; }
+
+    .diff-tabs { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .8rem; }
+    .diff-tab {
+      min-height: var(--touch);
+      border-radius: 999px;
+      border: 2px solid #d6c9c4;
+      background: #fff;
+      padding: .6rem 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+      touch-action: manipulation;
+    }
+    .diff-tab.active[data-level="support"] { background: var(--support); color: #fff; border-color: var(--support); }
+    .diff-tab.active[data-level="standard"] { background: var(--standard); color: #fff; border-color: var(--standard); }
+    .diff-tab.active[data-level="challenge"] { background: var(--challenge); color: #fff; border-color: var(--challenge); }
+    .diff-tab:hover { transform: scale(1.04); box-shadow: 0 6px 14px rgba(0,0,0,.12); }
+    .diff-panel { display: none; }
+    .diff-panel.active { display: block; }
+
+    .interactive-box {
+      border: 2px dashed #f0c4d9;
+      border-radius: 14px;
+      padding: .8rem;
+      background: #fffafc;
+      display: grid;
+      gap: .7rem;
+    }
+    button, .word-btn, .tone-btn {
+      min-height: var(--touch);
+      border: 2px solid var(--primary);
+      border-radius: 999px;
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      padding: .6rem 1rem;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: transform .2s, filter .2s;
+      font-size: 1rem;
+    }
+    button:hover, .word-btn:hover, .tone-btn:hover { transform: scale(1.04); filter: brightness(1.04); }
+    button:active, .word-btn:active, .tone-btn:active { transform: scale(.98); }
+
+    .feedback {
+      min-height: 2.2rem;
+      border-radius: 10px;
+      padding: .45rem .7rem;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .ok { background: #f0fdf4; color: #166534; border: 2px solid #22c55e; }
+    .warn { background: #fffbeb; color: #92400e; border: 2px solid #F59E0B; }
+
+    .word-display { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; color: var(--primary); letter-spacing: .05em; text-align: center; }
+
+    .scene {
+      min-height: 170px;
+      border-radius: 12px;
+      background: linear-gradient(#dbeafe, #fef9c3 70%);
+      display: flex;
+      justify-content: center;
+      align-items: end;
+      padding: .8rem;
+      position: relative;
+      cursor: pointer;
+      user-select: none;
+    }
+    .house { font-size: clamp(2.2rem, 6vw, 4rem); }
+    .ladder { font-size: clamp(2rem, 6vw, 3.5rem); margin-left: .5rem; }
+    .cat { position: absolute; right: 32%; top: 45%; font-size: clamp(1.6rem, 4vw, 2.6rem); transition: transform .4s; }
+    .hidden-cat .cat { opacity: 0; transform: translateY(15px); }
+    .story span.target { padding: 0 .18rem; border-radius: 6px; cursor: pointer; font-weight: 800; }
+    .story span.target.hit { background: #fed7aa; color: #9a3412; }
+
+    .options { display: flex; flex-wrap: wrap; gap: .6rem; }
+    .word-btn { background: #fff; color: var(--text); border-color: #cfc8c4; }
+    .word-btn.correct { border-color: #22c55e; background: #f0fdf4; color: #166534; transform: scale(1.08); }
+    .word-btn.wrong { border-color: #f59e0b; background: #fffbeb; color: #92400e; }
+
+    .steps { display: grid; grid-template-columns: repeat(3, minmax(44px, 1fr)); gap: .5rem; }
+    .step { min-height: 52px; border-radius: 10px; border: 2px solid #d9d4d1; display: grid; place-items: center; font-weight: 800; }
+    .step.lit { background: #d1fae5; border-color: #22c55e; }
+    .syllables { display: flex; gap: .6rem; flex-wrap: wrap; justify-content: center; }
+    .syllable {
+      min-width: 60px;
+      min-height: 52px;
+      border-radius: 12px;
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 2rem;
+      font-weight: 800;
+      padding: .3rem .8rem;
+      cursor: grab;
+      touch-action: none;
+    }
+    .syllable.es { background: var(--es); }
+    .syllable.ca { background: var(--ca); }
+    .syllable.da { background: var(--da); }
+    .syllable.neutral { background: #6b7280; }
+
+    .drop-row { display: grid; grid-template-columns: repeat(4, minmax(62px, 1fr)); gap: .5rem; }
+    .drop-slot {
+      min-height: 58px;
+      border: 2px dashed #c6bab5;
+      border-radius: 10px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .drop-slot.over { border-color: #7C3AED; background: #f3e8ff; }
+
+    .dragging {
+      position: fixed !important;
+      z-index: 999;
+      pointer-events: none;
+      transform: scale(1.1);
+      box-shadow: 0 10px 20px rgba(0,0,0,.25);
+    }
+
+    .maker {
+      background: #e8f5e9;
+      border-color: #22c55e;
+    }
+    .maker h2 { color: #166534; margin-bottom: .7rem; }
+    .maker-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: .7rem; }
+    .maker-card { background: #fff; border-left: 5px solid #22c55e; border-radius: 12px; padding: .8rem; }
+
+    .assessment {
+      background: #fff7ed;
+      border-color: #f59e0b;
+    }
+    .assessment h2 { color: #9a3412; margin-bottom: .65rem; }
+    .ass-row { border-top: 1px solid #fed7aa; padding: .65rem 0; }
+    .scale { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .4rem; font-size: .95rem; }
+    label.chk { display: inline-flex; align-items: center; gap: .35rem; min-height: var(--touch); }
+
+    .curricular {
+      background: #f5ecff;
+      border-color: #7C3AED;
+      font-size: 1rem;
+    }
+    .curricular h3 { color: #5b21b6; margin-bottom: .35rem; }
+    .curricular ul { margin-top: .35rem; padding-left: 1.2rem; }
+
+    .footer { text-align: center; font-size: .9rem; color: #666; padding: .6rem; }
+
+    #confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .focusable:focus-visible, button:focus-visible, .diff-tab:focus-visible {
+      outline: 3px solid #7C3AED;
+      outline-offset: 2px;
+    }
+
+    .climber {
+      font-size: 2rem;
+      display: inline-block;
+      transform: translateY(0);
+    }
+    .climber.go { animation: climb .8s ease-out; }
+    @keyframes climb {
+      0% { transform: translate(0, 22px); }
+      50% { transform: translate(22px, 5px); }
+      100% { transform: translate(44px, -16px); }
+    }
+
+    @media (max-width: 900px) {
+      body { font-size: 18px; }
+      .drop-row { grid-template-columns: repeat(3, minmax(62px, 1fr)); }
+    }
+    @media (max-width: 768px) {
+      body { padding: .55rem; font-size: 16px; }
+      header, .unit, .maker, .assessment, .curricular { padding: .8rem; }
+      .meta { gap: .4rem; }
+      .drop-row { grid-template-columns: repeat(2, minmax(62px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+<canvas id="confetti" aria-hidden="true"></canvas>
+<div class="page">
+  <header>
+    <h1>Método das 28 Palavras — Palavra 11: ESCADA</h1>
+    <div class="meta">
+      <span class="badge">Ano: 1.º (6-7 anos)</span>
+      <span class="badge">Duração: 45 minutos</span>
+      <span class="badge">Tema: Casa</span>
+    </div>
+    <div class="objectives">
+      <strong>Objectivos da aula</strong>
+      <ul>
+        <li>Reconhecer globalmente a palavra <strong>escada</strong> com imagem e som.</li>
+        <li>Segmentar em sílabas: <strong>es-ca-da</strong> e reconstruir a palavra.</li>
+        <li>Recombinar sílabas para formar novas palavras (ex: cada, dada).</li>
+        <li>Usar a palavra <strong>escada</strong> numa frase simples.</li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="unit" id="u1">
+    <h2>Unit 1 · Abertura contextual (5 min)</h2>
+    <small>Micro-história com "escada" em contexto.</small>
+    <div class="diff-tabs" role="tablist" aria-label="Nível Unit 1">
+      <button class="diff-tab active" data-level="support" aria-label="Apoio">🟢 Apoio</button>
+      <button class="diff-tab" data-level="standard" aria-label="Intermédio">🟡 Intermédio</button>
+      <button class="diff-tab" data-level="challenge" aria-label="Desafio">🔴 Desafio</button>
+    </div>
+    <div class="interactive-box">
+      <div class="scene hidden-cat" id="u1Scene" aria-label="Cena da casa com escada e gato" tabindex="0">
+        <span class="house">🏠</span><span class="ladder">🪜</span><span class="cat">🐱</span>
+      </div>
+      <p class="story" id="u1Story">O gato sobe a <span class="target" data-word="escada">escada</span> devagar, degrau a degrau.</p>
+      <div class="options">
+        <button id="u1Reveal" aria-label="Revelar cena">Mostrar cena</button>
+        <button id="u1Narrate" aria-label="Ouvir história">🔊 Ouvir história</button>
+      </div>
+      <div id="u1Feedback" class="feedback" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="unit" id="u2">
+    <h2>Unit 2 · Reconhecimento global (5 min)</h2>
+    <small>Escolhe a palavra que corresponde à imagem.</small>
+    <div class="diff-tabs" role="tablist" aria-label="Nível Unit 2">
+      <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+      <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+    </div>
+    <div class="interactive-box">
+      <div class="word-display" aria-label="Imagem da escada">🪜</div>
+      <p id="u2Hint">Ouve e escolhe: escada.</p>
+      <div id="u2Options" class="options" aria-label="Opções de palavras"></div>
+      <div id="u2Feedback" class="feedback" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="unit" id="u3">
+    <h2>Unit 3 · Segmentação silábica (7 min)</h2>
+    <small>Conta palmas e descobre as partes da palavra.</small>
+    <div class="diff-tabs" role="tablist" aria-label="Nível Unit 3">
+      <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+      <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+    </div>
+    <div class="interactive-box">
+      <div class="word-display" id="u3Word">ES-CA-DA</div>
+      <div class="steps" aria-label="Degraus de sílabas">
+        <div class="step" id="u3s1">1</div><div class="step" id="u3s2">2</div><div class="step" id="u3s3">3</div>
+      </div>
+      <div class="syllables" id="u3Syllables" aria-label="Sílabas da palavra">
+        <div class="syllable es">es</div><div class="syllable ca">ca</div><div class="syllable da">da</div>
+      </div>
+      <div class="options">
+        <button id="u3Clap" aria-label="Bater palmas">👏 Palma</button>
+        <button id="u3Toggle" aria-label="Alternar juntas ou separadas">Juntas/Separadas</button>
+        <button id="u3Reset" aria-label="Reiniciar">Reiniciar</button>
+      </div>
+      <div class="options" id="u3GuessBox" style="display:none;">
+        <span>Quantas sílabas?</span>
+        <button class="tone-btn" data-num="2">2</button>
+        <button class="tone-btn" data-num="3">3</button>
+        <button class="tone-btn" data-num="4">4</button>
+      </div>
+      <div id="u3Feedback" class="feedback" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="unit" id="u4">
+    <h2>Unit 4 · Reconstrução por sílabas (7 min)</h2>
+    <small>Arrasta as sílabas para os degraus correctos.</small>
+    <div class="diff-tabs" role="tablist" aria-label="Nível Unit 4">
+      <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+      <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+    </div>
+    <div class="interactive-box">
+      <div class="syllables" id="u4Bank" aria-label="Sílabas desordenadas"></div>
+      <div class="drop-row" id="u4Slots" aria-label="Degraus para ordenar sílabas"></div>
+      <p class="word-display" id="u4Formed">_ _ _</p>
+      <div class="options">
+        <button id="u4Check">Verificar</button>
+        <button id="u4Clear">Limpar</button>
+      </div>
+      <div id="u4Feedback" class="feedback" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="unit" id="u5">
+    <h2>Unit 5 · Recombinação silábica (7 min)</h2>
+    <small>Forma combinações e classifica: palavra ou não palavra.</small>
+    <div class="diff-tabs" role="tablist" aria-label="Nível Unit 5">
+      <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+      <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+    </div>
+    <div class="interactive-box">
+      <div class="syllables" id="u5Bank"></div>
+      <div class="drop-row" id="u5Slots"></div>
+      <div class="word-display" id="u5Word">--</div>
+      <div class="options">
+        <button id="u5Yes">É uma palavra</button>
+        <button id="u5No">Não é uma palavra</button>
+        <button id="u5New">Nova tentativa</button>
+      </div>
+      <p><strong>Descobertas:</strong> <span id="u5Found">nenhuma</span></p>
+      <input id="u5Write" aria-label="Escrever palavra encontrada" placeholder="(Desafio) escreve palavra encontrada" style="display:none;min-height:48px;border-radius:10px;border:2px solid #ccc;padding:.5rem;font-size:1rem;">
+      <div id="u5Feedback" class="feedback" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="unit" id="u6">
+    <h2>Unit 6 · Leitura e escrita guiada (6 min)</h2>
+    <small>Completa as lacunas com a sílaba certa.</small>
+    <div class="diff-tabs" role="tablist" aria-label="Nível Unit 6">
+      <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+      <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+    </div>
+    <div class="interactive-box">
+      <div class="word-display" id="u6Gap">ES__DA</div>
+      <div class="options" id="u6Opts"></div>
+      <input id="u6Write" aria-label="Escrever escada" placeholder="Escreve: escada" style="min-height:48px;border-radius:10px;border:2px solid #ccc;padding:.5rem;font-size:1rem;display:none;">
+      <input id="u6Write2" aria-label="Escrever cada" placeholder="(Desafio) escreve: cada" style="min-height:48px;border-radius:10px;border:2px solid #ccc;padding:.5rem;font-size:1rem;display:none;">
+      <div id="u6Feedback" class="feedback" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="unit" id="u7">
+    <h2>Unit 7 · Construção de frase (6 min)</h2>
+    <small>Ordena os cartões para formar a frase.</small>
+    <div class="diff-tabs" role="tablist" aria-label="Nível Unit 7">
+      <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+      <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+    </div>
+    <div class="interactive-box">
+      <div class="syllables" id="u7Bank"></div>
+      <div class="drop-row" id="u7Slots"></div>
+      <p class="word-display" id="u7Sentence" style="font-size:1.6rem;letter-spacing:0;">...</p>
+      <div class="options">
+        <button id="u7Check">Verificar frase</button>
+        <button id="u7Reset">Reiniciar</button>
+      </div>
+      <div><span class="climber" id="u7Climber">🧒</span> <span>🪜</span></div>
+      <input id="u7Own" aria-label="Criar frase própria com escada" placeholder="(Desafio) escreve uma frase com escada" style="display:none;min-height:48px;border-radius:10px;border:2px solid #ccc;padding:.5rem;font-size:1rem;">
+      <div id="u7Feedback" class="feedback" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="unit" id="u8">
+    <h2>Unit 8 · Mini-avaliação formativa (5 min)</h2>
+    <small>4 tarefas: reconhecer, segmentar, reconstruir e usar.</small>
+    <div class="diff-tabs" role="tablist" aria-label="Nível Unit 8">
+      <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+      <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+    </div>
+    <div class="interactive-box">
+      <div id="u8Stars" aria-label="Progresso por estrelas">⭐ ⬜ ⬜ ⬜</div>
+      <p id="u8Task">Tarefa 1: escolhe a palavra correcta.</p>
+      <div id="u8Area"></div>
+      <div id="u8Feedback" class="feedback" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="maker">
+    <h2>🛠️ Secção Maker</h2>
+    <div class="maker-grid">
+      <article class="maker-card">
+        <h3>Escada de sílabas</h3>
+        <p>Constrói uma mini-escada em cartão com 3 degraus: <strong>es</strong>, <strong>ca</strong>, <strong>da</strong>. Sobe a escada a ler.</p>
+      </article>
+      <article class="maker-card">
+        <h3>Casa das palavras</h3>
+        <p>Desenha uma casa e cola palavras do tema: casa, janela, telhado, escada. Depois aponta e lê.</p>
+      </article>
+      <article class="maker-card">
+        <h3>Cartões misturados</h3>
+        <p>Cria cartões com sílabas e inventa combinações. Marca com verde as palavras reais.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="assessment">
+    <h2>📝 Mini-avaliação observável</h2>
+    <div class="ass-row">Reconhece "escada" entre palavras do tema.
+      <div class="scale">
+        <label class="chk"><input type="checkbox"> Ainda não consigo</label>
+        <label class="chk"><input type="checkbox"> Com ajuda</label>
+        <label class="chk"><input type="checkbox"> Sozinho/a</label>
+        <label class="chk"><input type="checkbox"> Ajudo colegas</label>
+      </div>
+    </div>
+    <div class="ass-row">Segmenta "escada" em es-ca-da com 3 palmas.
+      <div class="scale">
+        <label class="chk"><input type="checkbox"> Ainda não consigo</label>
+        <label class="chk"><input type="checkbox"> Com ajuda</label>
+        <label class="chk"><input type="checkbox"> Sozinho/a</label>
+        <label class="chk"><input type="checkbox"> Ajudo colegas</label>
+      </div>
+    </div>
+    <div class="ass-row">Reconstrói a palavra com sílabas desordenadas.
+      <div class="scale">
+        <label class="chk"><input type="checkbox"> Ainda não consigo</label>
+        <label class="chk"><input type="checkbox"> Com ajuda</label>
+        <label class="chk"><input type="checkbox"> Sozinho/a</label>
+        <label class="chk"><input type="checkbox"> Ajudo colegas</label>
+      </div>
+    </div>
+    <div class="ass-row">Forma pelo menos uma palavra nova com sílabas.
+      <div class="scale">
+        <label class="chk"><input type="checkbox"> Ainda não consigo</label>
+        <label class="chk"><input type="checkbox"> Com ajuda</label>
+        <label class="chk"><input type="checkbox"> Sozinho/a</label>
+        <label class="chk"><input type="checkbox"> Ajudo colegas</label>
+      </div>
+    </div>
+    <div class="ass-row">Constrói e lê uma frase simples com "escada".
+      <div class="scale">
+        <label class="chk"><input type="checkbox"> Ainda não consigo</label>
+        <label class="chk"><input type="checkbox"> Com ajuda</label>
+        <label class="chk"><input type="checkbox"> Sozinho/a</label>
+        <label class="chk"><input type="checkbox"> Ajudo colegas</label>
+      </div>
+    </div>
+  </section>
+
+  <section class="curricular">
+    <h3>Aprendizagens Essenciais</h3>
+    <ul>
+      <li>Pronunciar segmentos fónicos a partir dos respectivos grafemas e dígrafos.</li>
+      <li>Reconhecer palavras globalmente, associando forma escrita, forma oral e significado.</li>
+      <li>Fazer correspondência letra/dígrafo e fonema/som; ler sílabas e palavras.</li>
+      <li>Escrever palavras e frases simples com regras fonema-grafema.</li>
+    </ul>
+    <h3>Perfil do Aluno</h3>
+    <ul>
+      <li>PA-A: Linguagens e textos</li>
+      <li>PA-F: Desenvolvimento pessoal e autonomia</li>
+      <li>PA-C: Raciocínio e resolução de problemas</li>
+      <li>PA-E: Relacionamento interpessoal</li>
+    </ul>
+  </section>
+
+  <footer class="footer">Gerado por PageCraft 🛠️</footer>
+</div>
+
+<script>
+(() => {
+  const state = {
+    levels: { u1: 'support', u2: 'support', u3: 'support', u4: 'support', u5: 'support', u6: 'support', u7: 'support', u8: 'support' },
+    u1Hits: 0, u2Attempts: 0, u2Streak: 0, u3Count: 0, u3Separated: true,
+    u4Attempts: 0, u5Found: new Set(), u6Step: 0, u8Step: 0, u8Score: [false,false,false,false]
+  };
+
+  function setFeedback(id, msg, ok) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.className = 'feedback ' + (ok ? 'ok' : 'warn');
+  }
+
+  // Web Audio API tones
+  let audioCtx;
+  function tone(freq = 440, dur = 0.12, type = 'sine', vol = 0.04) {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    gain.gain.value = vol;
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + dur);
+  }
+  function goodSound() { tone(660, .09); setTimeout(() => tone(880, .12), 70); }
+  function neutralSound() { tone(430, .1, 'triangle'); }
+
+  function speak(text) {
+    if ('speechSynthesis' in window) {
+      const ut = new SpeechSynthesisUtterance(text);
+      ut.lang = 'pt-PT';
+      ut.rate = 0.9;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(ut);
+    } else {
+      neutralSound();
+    }
+  }
+
+  // Confetti with requestAnimationFrame
+  const cv = document.getElementById('confetti');
+  const ctx = cv.getContext('2d');
+  let confetti = [];
+  function fitCanvas() {
+    cv.width = window.innerWidth;
+    cv.height = window.innerHeight;
+  }
+  fitCanvas();
+  window.addEventListener('resize', fitCanvas);
+  function burst(x = window.innerWidth / 2, y = 140) {
+    for (let i = 0; i < 45; i++) {
+      confetti.push({ x, y, vx: (Math.random()-0.5)*7, vy: Math.random()*-6-2, g: .17, s: Math.random()*6+3, c: ['#E05FA0','#22c55e','#F59E0B','#7C3AED'][i%4], a: 1 });
+    }
+    requestAnimationFrame(animateConfetti);
+  }
+  function animateConfetti() {
+    ctx.clearRect(0,0,cv.width,cv.height);
+    confetti.forEach(p => {
+      p.vy += p.g;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.a -= .01;
+      ctx.globalAlpha = Math.max(p.a,0);
+      ctx.fillStyle = p.c;
+      ctx.fillRect(p.x,p.y,p.s,p.s);
+    });
+    confetti = confetti.filter(p => p.a > 0 && p.y < cv.height + 20);
+    ctx.globalAlpha = 1;
+    if (confetti.length) requestAnimationFrame(animateConfetti);
+  }
+
+  // Tabs
+  document.querySelectorAll('.unit').forEach(unit => {
+    const unitId = unit.id;
+    unit.querySelectorAll('.diff-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        unit.querySelectorAll('.diff-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.levels[unitId] = btn.dataset.level;
+        initUnit(unitId);
+      });
+    });
+  });
+
+  // Generic drag-drop with pointer events (touch + mouse)
+  function makeDraggable(containerSelector, slotSelector, onChange) {
+    const items = document.querySelectorAll(containerSelector + ' .draggable-token');
+    items.forEach(item => {
+      item.onpointerdown = ev => {
+        ev.preventDefault();
+        const rect = item.getBoundingClientRect();
+        const ox = ev.clientX - rect.left;
+        const oy = ev.clientY - rect.top;
+        const prevParent = item.parentElement;
+        const ph = document.createElement('span');
+        ph.style.width = rect.width + 'px';
+        ph.style.height = rect.height + 'px';
+        prevParent.insertBefore(ph, item);
+        item.classList.add('dragging');
+        item.style.left = rect.left + 'px';
+        item.style.top = rect.top + 'px';
+        document.body.appendChild(item);
+
+        function move(e) {
+          item.style.left = (e.clientX - ox) + 'px';
+          item.style.top = (e.clientY - oy) + 'px';
+          document.querySelectorAll(slotSelector).forEach(s => s.classList.remove('over'));
+          const t = document.elementFromPoint(e.clientX, e.clientY);
+          const slot = t && t.closest(slotSelector);
+          if (slot) slot.classList.add('over');
+        }
+        function up(e) {
+          document.removeEventListener('pointermove', move);
+          document.removeEventListener('pointerup', up);
+          const t = document.elementFromPoint(e.clientX, e.clientY);
+          const slot = t && t.closest(slotSelector);
+          document.querySelectorAll(slotSelector).forEach(s => s.classList.remove('over'));
+          if (slot) {
+            if (slot.firstElementChild) {
+              prevParent.appendChild(slot.firstElementChild);
+            }
+            slot.appendChild(item);
+          } else {
+            prevParent.appendChild(item);
+          }
+          item.classList.remove('dragging');
+          item.style.left = ''; item.style.top = '';
+          ph.remove();
+          if (onChange) onChange();
+        }
+        document.addEventListener('pointermove', move);
+        document.addEventListener('pointerup', up);
+      };
+    });
+  }
+
+  // Unit 1
+  function initU1() {
+    const level = state.levels.u1;
+    state.u1Hits = 0;
+    const scene = document.getElementById('u1Scene');
+    const story = document.getElementById('u1Story');
+    scene.classList.toggle('hidden-cat', level !== 'support');
+    story.innerHTML = level === 'challenge'
+      ? 'O gato sobe a <span class="target" data-word="escada">escada</span>. A <span class="target" data-word="escada">escada</span> tem muitos degraus.'
+      : 'O gato sobe a <span class="target" data-word="escada">escada</span> devagar, degrau a degrau.';
+
+    if (level === 'support') {
+      story.querySelectorAll('.target').forEach(w => w.classList.add('hit'));
+      speak('O gato sobe a escada devagar, degrau a degrau.');
+    }
+    setFeedback('u1Feedback', 'Clica na cena e na palavra "escada".', false);
+
+    story.querySelectorAll('.target').forEach(w => {
+      w.onclick = () => {
+        if (!w.classList.contains('hit')) state.u1Hits += 1;
+        w.classList.add('hit');
+        speak('escada');
+        goodSound();
+        if (level !== 'challenge' || state.u1Hits >= 2) {
+          setFeedback('u1Feedback', 'Muito bem! Ligaste imagem, palavra e som.', true);
+          burst();
+        }
+      };
+    });
+  }
+  document.getElementById('u1Reveal').onclick = () => {
+    document.getElementById('u1Scene').classList.remove('hidden-cat');
+    neutralSound();
+  };
+  document.getElementById('u1Scene').onclick = document.getElementById('u1Reveal').onclick;
+  document.getElementById('u1Narrate').onclick = () => speak(document.getElementById('u1Story').textContent);
+
+  // Unit 2
+  function initU2() {
+    const level = state.levels.u2;
+    const opts = level === 'support' ? ['escada','janela'] : level === 'standard' ? ['escada','janela','telhado'] : ['escada','janela','telhado','escola'];
+    const box = document.getElementById('u2Options');
+    box.innerHTML = '';
+    state.u2Attempts = 0;
+    document.getElementById('u2Hint').textContent = level === 'challenge' ? 'Escolhe sem ajuda de áudio prévio.' : 'Ouve e escolhe: escada.';
+    if (level !== 'challenge') speak('escada');
+
+    opts.forEach(w => {
+      const b = document.createElement('button');
+      b.className = 'word-btn';
+      b.textContent = w;
+      b.setAttribute('aria-label', 'Escolher palavra ' + w);
+      b.onclick = () => {
+        state.u2Attempts += 1;
+        [...box.children].forEach(c => c.classList.remove('correct','wrong'));
+        speak(w);
+        if (w === 'escada') {
+          b.classList.add('correct');
+          goodSound();
+          state.u2Streak += 1;
+          setFeedback('u2Feedback', 'Certo! "escada" corresponde à imagem. Ronda seguida: ' + state.u2Streak + '/2', true);
+          if (state.u2Streak >= 2) burst();
+        } else {
+          b.classList.add('wrong');
+          neutralSound();
+          state.u2Streak = 0;
+          const canRetry = level !== 'challenge' && (level === 'support' || state.u2Attempts < 3);
+          setFeedback('u2Feedback', canRetry ? 'Ainda não. Tenta outra vez.' : 'No desafio conta a 1.ª tentativa. Vamos repetir.', false);
+        }
+      };
+      box.appendChild(b);
+    });
+    setFeedback('u2Feedback', 'Escolhe a palavra que combina com a escada.', false);
+  }
+
+  // Unit 3
+  function initU3() {
+    const level = state.levels.u3;
+    state.u3Count = 0;
+    state.u3Separated = level === 'support';
+    document.getElementById('u3GuessBox').style.display = level === 'challenge' ? 'flex' : 'none';
+    if (level === 'challenge') {
+      document.getElementById('u3Word').textContent = 'ESCADA';
+      document.querySelectorAll('#u3Syllables .syllable').forEach(s => s.style.background = '#6b7280');
+    } else {
+      document.querySelectorAll('#u3Syllables .syllable').forEach(s => s.style.background = '');
+      document.getElementById('u3Word').textContent = state.u3Separated ? 'ES-CA-DA' : 'ESCADA';
+    }
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('lit'));
+    if (level === 'support') {
+      let i = 0;
+      const seq = ['es','ca','da'];
+      const auto = () => {
+        if (i >= 3) return;
+        document.getElementById('u3s' + (i+1)).classList.add('lit');
+        speak(seq[i]);
+        i += 1;
+        setTimeout(auto, 550);
+      };
+      auto();
+      setFeedback('u3Feedback', 'Modelo: escuta e repete as 3 sílabas.', true);
+    } else {
+      setFeedback('u3Feedback', 'Bate palmas para descobrir as sílabas.', false);
+    }
+  }
+  document.getElementById('u3Clap').onclick = () => {
+    state.u3Count += 1;
+    if (state.u3Count > 3) state.u3Count = 1;
+    const sylls = ['es','ca','da'];
+    document.querySelectorAll('.step').forEach((s,i) => s.classList.toggle('lit', i < state.u3Count));
+    speak(sylls[state.u3Count - 1]);
+    neutralSound();
+    if (state.u3Count === 3) {
+      document.getElementById('u3Word').textContent = 'ES-CA-DA';
+      setFeedback('u3Feedback', 'Descoberta! A palavra tem 3 sílabas.', true);
+      goodSound();
+      burst();
+    }
+  };
+  document.getElementById('u3Toggle').onclick = () => {
+    state.u3Separated = !state.u3Separated;
+    document.getElementById('u3Word').textContent = state.u3Separated ? 'ES-CA-DA' : 'ESCADA';
+  };
+  document.getElementById('u3Reset').onclick = () => initU3();
+  document.querySelectorAll('#u3GuessBox .tone-btn').forEach(b => b.onclick = () => {
+    const n = Number(b.dataset.num);
+    if (n === 3) { setFeedback('u3Feedback', 'Boa previsão! Agora confirma com palmas.', true); goodSound(); }
+    else { setFeedback('u3Feedback', 'Quase. Testa com palmas.', false); neutralSound(); }
+  });
+
+  // Unit 4
+  function initU4() {
+    const level = state.levels.u4;
+    state.u4Attempts = 0;
+    const bank = document.getElementById('u4Bank');
+    const slots = document.getElementById('u4Slots');
+    bank.innerHTML = '';
+    slots.innerHTML = '';
+    const slotCount = 3;
+    for (let i = 0; i < slotCount; i++) {
+      const s = document.createElement('div');
+      s.className = 'drop-slot';
+      s.dataset.index = i;
+      slots.appendChild(s);
+    }
+
+    const items = level === 'support' ? ['ca','da'] : level === 'standard' ? ['da','es','ca'] : ['da','es','ca','sa'];
+    if (level === 'support') {
+      const fixed = document.createElement('div');
+      fixed.className = 'syllable es';
+      fixed.textContent = 'es';
+      fixed.setAttribute('aria-label', 'Sílaba es fixa');
+      slots.children[0].appendChild(fixed);
+    }
+    items.forEach(txt => {
+      const d = document.createElement('div');
+      d.className = 'syllable draggable-token ' + (txt === 'es' ? 'es' : txt === 'ca' ? 'ca' : txt === 'da' ? 'da' : 'neutral');
+      d.textContent = txt;
+      d.setAttribute('aria-label', 'Sílaba ' + txt + ' arrastável');
+      bank.appendChild(d);
+    });
+    setFeedback('u4Feedback', 'Arrasta para formar a palavra.', false);
+    updateU4Word();
+    makeDraggable('#u4Bank, #u4Slots', '#u4Slots .drop-slot', updateU4Word);
+  }
+  function readSlots(id) {
+    return [...document.querySelectorAll(id + ' .drop-slot')].map(s => s.firstElementChild ? s.firstElementChild.textContent : '');
+  }
+  function updateU4Word() {
+    const arr = readSlots('#u4Slots').filter(Boolean);
+    document.getElementById('u4Formed').textContent = arr.length ? arr.join('') : '_ _ _';
+  }
+  document.getElementById('u4Check').onclick = () => {
+    state.u4Attempts += 1;
+    const formed = readSlots('#u4Slots').join('');
+    if (formed === 'escada') {
+      setFeedback('u4Feedback', 'Excelente! Formaste ESCADA.', true);
+      goodSound();
+      burst();
+      speak('escada');
+    } else {
+      setFeedback('u4Feedback', 'Ainda não. Tenta outra vez.', false);
+      neutralSound();
+    }
+  };
+  document.getElementById('u4Clear').onclick = () => initU4();
+
+  // Unit 5
+  function initU5() {
+    const level = state.levels.u5;
+    const bank = document.getElementById('u5Bank');
+    const slots = document.getElementById('u5Slots');
+    bank.innerHTML = '';
+    slots.innerHTML = '';
+    const tokens = level === 'support' ? ['ca','da'] : level === 'standard' ? ['es','ca','da'] : ['es','ca','da','sa','co'];
+    const slotCount = level === 'support' ? 2 : 3;
+    for (let i = 0; i < slotCount; i++) {
+      const s = document.createElement('div');
+      s.className = 'drop-slot';
+      slots.appendChild(s);
+    }
+    tokens.forEach(t => {
+      const d = document.createElement('div');
+      d.className = 'syllable draggable-token ' + (t === 'es' ? 'es' : t === 'ca' ? 'ca' : t === 'da' ? 'da' : 'neutral');
+      d.textContent = t;
+      bank.appendChild(d);
+    });
+    document.getElementById('u5Write').style.display = level === 'challenge' ? 'block' : 'none';
+    updateU5Word();
+    makeDraggable('#u5Bank, #u5Slots', '#u5Slots .drop-slot', updateU5Word);
+    setFeedback('u5Feedback', level === 'support' ? 'Exemplo inicial: CA + DA = CADA.' : 'Experimenta combinações e classifica.', false);
+  }
+  function formedU5() { return readSlots('#u5Slots').join(''); }
+  function updateU5Word() {
+    const word = formedU5();
+    document.getElementById('u5Word').textContent = word || '--';
+  }
+  function checkU5(choiceWord) {
+    const w = formedU5();
+    const real = ['cada','dada','seca'];
+    const isReal = real.includes(w);
+    if (!w) { setFeedback('u5Feedback', 'Primeiro forma uma combinação.', false); return; }
+    if ((choiceWord && isReal) || (!choiceWord && !isReal)) {
+      state.u5Found.add(w);
+      document.getElementById('u5Found').textContent = [...state.u5Found].join(', ');
+      setFeedback('u5Feedback', 'Boa! Classificação correcta.', true);
+      goodSound();
+      if (isReal) burst();
+    } else {
+      setFeedback('u5Feedback', 'Não corresponde. Tenta classificar outra vez.', false);
+      neutralSound();
+    }
+  }
+  document.getElementById('u5Yes').onclick = () => checkU5(true);
+  document.getElementById('u5No').onclick = () => checkU5(false);
+  document.getElementById('u5New').onclick = () => initU5();
+
+  // Unit 6
+  const u6Patterns = {
+    support: [{show:'ES__DA', ok:'ca', opts:['ca','da']}, {show:'__CADA', ok:'es', opts:['es','da']}, {show:'ESCA__', ok:'da', opts:['da','ca']}],
+    standard: [{show:'ES__DA', ok:'ca', opts:['es','ca','da']}, {show:'__CADA', ok:'es', opts:['es','ca','da']}, {show:'ESCA__', ok:'da', opts:['es','ca','da']}],
+    challenge: [{show:'__CA__', ok:'es+da', opts:['es','ca','da']}]
+  };
+  function initU6() {
+    state.u6Step = 0;
+    renderU6();
+  }
+  function renderU6() {
+    const level = state.levels.u6;
+    const seq = u6Patterns[level];
+    const item = seq[Math.min(state.u6Step, seq.length - 1)];
+    document.getElementById('u6Gap').textContent = item.show;
+    const box = document.getElementById('u6Opts');
+    box.innerHTML = '';
+    document.getElementById('u6Write').style.display = 'none';
+    document.getElementById('u6Write2').style.display = 'none';
+
+    if (level === 'challenge') {
+      let picks = [];
+      item.opts.forEach(o => {
+        const b = document.createElement('button');
+        b.textContent = o;
+        b.onclick = () => {
+          picks.push(o);
+          document.getElementById('u6Gap').textContent = picks.join('-') + ' + ca';
+          if (picks.length === 2) {
+            const ok = picks[0] === 'es' && picks[1] === 'da';
+            if (ok) {
+              setFeedback('u6Feedback', 'Certo: es + ca + da.', true);
+              goodSound();
+              burst();
+              document.getElementById('u6Write').style.display = 'block';
+              document.getElementById('u6Write2').style.display = 'block';
+            } else {
+              setFeedback('u6Feedback', 'Ainda não. A palavra começa por "es".', false);
+              neutralSound();
+              picks = [];
+            }
+          }
+        };
+        box.appendChild(b);
+      });
+    } else {
+      item.opts.forEach(o => {
+        const b = document.createElement('button');
+        b.textContent = o;
+        b.onclick = () => {
+          if (o === item.ok) {
+            setFeedback('u6Feedback', 'Muito bem! Lacuna correcta.', true);
+            goodSound();
+            state.u6Step += 1;
+            if (state.u6Step >= seq.length) {
+              burst();
+              document.getElementById('u6Write').style.display = 'block';
+              document.getElementById('u6Gap').textContent = 'ESCADA';
+            } else {
+              renderU6();
+            }
+          } else {
+            setFeedback('u6Feedback', 'Tenta outra sílaba.', false);
+            neutralSound();
+          }
+        };
+        box.appendChild(b);
+      });
+    }
+  }
+
+  // Unit 7
+  function initU7() {
+    const level = state.levels.u7;
+    const bank = document.getElementById('u7Bank');
+    const slots = document.getElementById('u7Slots');
+    bank.innerHTML = '';
+    slots.innerHTML = '';
+    const tokens = level === 'challenge' ? ['A','escada','da','casa','sobe','alto','.'] : ['A','escada','sobe','.'];
+    const model = level === 'challenge' ? 'A escada da casa sobe alto .' : 'A escada sobe .';
+    const fixed = level === 'support' ? ['A','.'] : [];
+
+    for (let i = 0; i < tokens.length; i++) {
+      const s = document.createElement('div');
+      s.className = 'drop-slot';
+      slots.appendChild(s);
+    }
+
+    tokens.forEach(t => {
+      if (fixed.includes(t)) {
+        const idx = t === 'A' ? 0 : tokens.length - 1;
+        const d = document.createElement('div');
+        d.className = 'syllable neutral';
+        d.textContent = t;
+        slots.children[idx].appendChild(d);
+      } else {
+        const d = document.createElement('div');
+        d.className = 'syllable draggable-token neutral';
+        d.textContent = t;
+        bank.appendChild(d);
+      }
+    });
+
+    makeDraggable('#u7Bank, #u7Slots', '#u7Slots .drop-slot', () => {
+      document.getElementById('u7Sentence').textContent = readSlots('#u7Slots').filter(Boolean).join(' ');
+    });
+    document.getElementById('u7Sentence').textContent = '...';
+    document.getElementById('u7Own').style.display = level === 'challenge' ? 'block' : 'none';
+    document.getElementById('u7Check').dataset.model = model;
+    setFeedback('u7Feedback', 'Ordena os cartões para construir a frase.', false);
+  }
+  document.getElementById('u7Check').onclick = () => {
+    const model = document.getElementById('u7Check').dataset.model;
+    const phrase = readSlots('#u7Slots').join(' ');
+    if (phrase === model) {
+      setFeedback('u7Feedback', 'Frase correcta! Lê em voz alta.', true);
+      speak(model.replace(' .','.'));
+      goodSound();
+      burst();
+      const c = document.getElementById('u7Climber');
+      c.classList.remove('go');
+      void c.offsetWidth;
+      c.classList.add('go');
+    } else {
+      setFeedback('u7Feedback', 'Revê a ordem: início com maiúscula e ponto final.', false);
+      neutralSound();
+    }
+  };
+  document.getElementById('u7Reset').onclick = () => initU7();
+
+  // Unit 8
+  function initU8() {
+    state.u8Step = 0;
+    state.u8Score = [false,false,false,false];
+    renderU8();
+  }
+  function starStr() {
+    return state.u8Score.map(v => v ? '⭐' : '⬜').join(' ');
+  }
+  function passU8(ok) {
+    state.u8Score[state.u8Step] = ok;
+    state.u8Step += 1;
+    if (state.u8Step >= 4) {
+      const c = state.u8Score.filter(Boolean).length;
+      document.getElementById('u8Task').textContent = 'Resumo final';
+      document.getElementById('u8Area').innerHTML = '<p>Degraus conquistados: <strong>' + c + '/4</strong>.</p>' +
+        '<p>' + (c === 4 ? 'Excelente trabalho! Aprendizagens consolidadas.' : 'Bom esforço! Podemos repetir os degraus em que precisas de ajuda.') + '</p>';
+      document.getElementById('u8Stars').textContent = starStr();
+      setFeedback('u8Feedback', c >= 3 ? 'Muito bom!' : 'Continua a praticar.', c >= 3);
+      if (c >= 3) { goodSound(); burst(); }
+      return;
+    }
+    renderU8();
+  }
+  function renderU8() {
+    const level = state.levels.u8;
+    const area = document.getElementById('u8Area');
+    document.getElementById('u8Stars').textContent = starStr();
+    area.innerHTML = '';
+    if (state.u8Step === 0) {
+      document.getElementById('u8Task').textContent = 'Tarefa 1: identifica "escada".';
+      const words = level === 'support' ? ['escada','janela'] : level === 'standard' ? ['escada','janela','telhado'] : ['escada','janela','telhado','escola'];
+      words.forEach(w => {
+        const b = document.createElement('button');
+        b.className = 'word-btn'; b.textContent = w;
+        b.onclick = () => { passU8(w === 'escada'); setFeedback('u8Feedback', w === 'escada' ? 'Certo.' : 'Não era essa.', w === 'escada'); };
+        area.appendChild(b);
+      });
+    } else if (state.u8Step === 1) {
+      document.getElementById('u8Task').textContent = 'Tarefa 2: quantas sílabas tem "escada"?';
+      [2,3,4].forEach(n => {
+        const b = document.createElement('button');
+        b.textContent = n;
+        b.onclick = () => { const ok = n === 3; passU8(ok); setFeedback('u8Feedback', ok ? 'Boa!' : 'Revê com palmas.', ok); };
+        area.appendChild(b);
+      });
+    } else if (state.u8Step === 2) {
+      document.getElementById('u8Task').textContent = 'Tarefa 3: ordem das sílabas.';
+      const i = document.createElement('input');
+      i.placeholder = 'Escreve a palavra completa';
+      i.style.cssText = 'min-height:48px;border-radius:10px;border:2px solid #ccc;padding:.5rem;font-size:1rem;';
+      const b = document.createElement('button');
+      b.textContent = 'Confirmar';
+      b.onclick = () => {
+        const ok = i.value.trim().toLowerCase() === 'escada';
+        passU8(ok);
+        setFeedback('u8Feedback', ok ? 'Reconstrução correcta.' : 'Tenta lembrar: es-ca-da.', ok);
+      };
+      area.append(i, b);
+    } else if (state.u8Step === 3) {
+      document.getElementById('u8Task').textContent = 'Tarefa 4: completa "A ___ sobe."';
+      const s = document.createElement('select');
+      ['escada','janela','telhado'].forEach(w => {
+        const o = document.createElement('option'); o.value = w; o.textContent = w; s.appendChild(o);
+      });
+      s.style.minHeight = '48px';
+      const b = document.createElement('button');
+      b.textContent = 'Validar';
+      b.onclick = () => {
+        const ok = s.value === 'escada';
+        passU8(ok);
+        setFeedback('u8Feedback', ok ? 'Frase completa!' : 'Nesta frase usamos "escada".', ok);
+      };
+      area.append(s, b);
+      if (level === 'challenge') {
+        const bonus = document.createElement('input');
+        bonus.placeholder = 'Bónus: palavra que começa por es-';
+        bonus.style.cssText = 'margin-top:.5rem;min-height:48px;border-radius:10px;border:2px solid #ccc;padding:.5rem;font-size:1rem;';
+        area.appendChild(bonus);
+      }
+    }
+  }
+
+  // Init all units
+  function initUnit(id) {
+    ({u1:initU1, u2:initU2, u3:initU3, u4:initU4, u5:initU5, u6:initU6, u7:initU7, u8:initU8}[id] || (()=>{}))();
+  }
+  ['u1','u2','u3','u4','u5','u6','u7','u8'].forEach(initUnit);
+})();
+</script>
+</body>
+</html>

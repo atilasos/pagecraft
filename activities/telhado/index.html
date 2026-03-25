@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Método das 28 Palavras — Palavra 10: Telhado</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #fff8f0;
+      --surface: #ffffff;
+      --primary: #e05fa0;
+      --accent: #f59e0b;
+      --text: #1e1b18;
+      --green: #22c55e;
+      --red: #ef4444;
+      --purple: #7c3aed;
+      --radius: 16px;
+      --shadow: 0 8px 20px rgba(30, 27, 24, 0.12);
+      --te: #2563eb;
+      --lha: #e11d48;
+      --do: #059669;
+      --min-touch: 48px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Nunito", "Comic Sans MS", sans-serif;
+      background: radial-gradient(circle at 15% 10%, #ffe1f1 0%, var(--bg) 35%, #fff1d8 100%);
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1.45;
+    }
+
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 1rem; }
+
+    header {
+      border-radius: var(--radius);
+      color: #fff;
+      padding: 1.4rem;
+      background: linear-gradient(130deg, #e05fa0 0%, #f97316 35%, #7c3aed 100%);
+      box-shadow: var(--shadow);
+    }
+
+    h1 { margin: 0 0 0.4rem; font-size: clamp(2rem, 4vw, 2.8rem); }
+    h2 { font-size: clamp(1.4rem, 3vw, 2rem); margin: 0 0 0.7rem; color: #9d174d; }
+    h3 { margin: 0.4rem 0; color: #7e22ce; }
+    .meta, .mini { font-size: 1rem; }
+
+    .goals {
+      margin-top: 0.9rem;
+      background: rgba(255,255,255,0.18);
+      border: 2px solid rgba(255,255,255,0.35);
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+    }
+
+    .unit, .maker, .assessment, .curriculum {
+      margin-top: 1rem;
+      background: var(--surface);
+      border: 2px solid #f3d2a8;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1rem;
+    }
+
+    .unit-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.8rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .badg { background: var(--accent); color: #fff; border-radius: 999px; padding: 0.3rem 0.8rem; font-weight: 700; }
+    .word-big { font-size: clamp(2.2rem, 6vw, 3rem); font-weight: 800; letter-spacing: 0.04em; color: var(--primary); }
+
+    .tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.6rem 0; }
+    .tab {
+      border: 2px solid #d1d5db;
+      border-radius: 999px;
+      background: #fff;
+      min-height: var(--min-touch);
+      padding: 0.55rem 1rem;
+      cursor: pointer;
+      font-weight: 700;
+      touch-action: manipulation;
+    }
+    .tab.active[data-level="support"] { background: #dcfce7; border-color: var(--green); }
+    .tab.active[data-level="standard"] { background: #fef3c7; border-color: var(--accent); }
+    .tab.active[data-level="challenge"] { background: #fee2e2; border-color: var(--red); }
+
+    button, .chip {
+      min-height: var(--min-touch);
+      border-radius: 999px;
+      border: 2px solid #d1d5db;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      background: #fff;
+      cursor: pointer;
+      font-family: inherit;
+      touch-action: manipulation;
+    }
+
+    button.primary { background: var(--primary); border-color: #be185d; color: #fff; font-weight: 700; }
+    button.green { background: #16a34a; border-color: #166534; color: #fff; }
+    button.amber { background: #f59e0b; border-color: #b45309; color: #fff; }
+
+    .panel { border: 2px dashed #f2b4cf; border-radius: 14px; padding: 0.8rem; background: #fffafc; }
+    .row { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
+    .feedback {
+      margin-top: 0.5rem;
+      min-height: 2.1rem;
+      border-radius: 10px;
+      padding: 0.4rem 0.7rem;
+      font-weight: 700;
+      background: #f3f4f6;
+    }
+    .ok { background: #f0fdf4; color: #166534; border: 2px solid #22c55e; }
+    .warn { background: #fffbeb; color: #92400e; border: 2px solid #f59e0b; }
+
+    .scene {
+      position: relative;
+      min-height: 210px;
+      border-radius: 14px;
+      background: linear-gradient(#c9efff, #e8f8ff 65%, #b7f3c6 65%, #9ae6b4 100%);
+      overflow: hidden;
+      border: 2px solid #67e8f9;
+      cursor: pointer;
+    }
+    .house { position: absolute; left: 18%; bottom: 18px; width: 220px; height: 140px; background: #fff; border: 3px solid #334155; }
+    .roof { position: absolute; left: -16px; top: -58px; width: 252px; height: 58px; background: #ef4444; clip-path: polygon(0% 100%, 50% 0%, 100% 100%); }
+    .drop-icon { border-radius: 50%; width: 56px; height: 56px; display: grid; place-items: center; font-size: 1.4rem; }
+    .rain { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .25s; }
+    .rain.on { opacity: 1; }
+    .drop { position: absolute; width: 2px; height: 16px; background: #38bdf8; animation: rain 1s linear infinite; }
+    @keyframes rain { from { transform: translateY(-18px);} to { transform: translateY(240px);} }
+
+    .story strong.word { color: #b91c1c; background: #fee2e2; border-radius: 8px; padding: 0 0.25rem; cursor: pointer; }
+    .story strong.word.found { outline: 3px solid #dc2626; }
+
+    .choice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 0.7rem; }
+    .choice { border-radius: 14px; border: 3px solid #e5e7eb; padding: 0.8rem; text-align: center; font-size: 1.4rem; font-weight: 800; background: #fff; }
+    .choice.ok { border-color: #22c55e; transform: scale(1.04); transition: transform .2s; }
+
+    .syllables { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; font-size: 2.2rem; font-weight: 800; }
+    .sy {
+      padding: 0.35rem 0.9rem;
+      border-radius: 12px;
+      color: #fff;
+      user-select: none;
+      min-height: var(--min-touch);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .te { background: var(--te); }
+    .lha { background: var(--lha); }
+    .do { background: var(--do); }
+    .sy .dig { text-decoration: underline wavy #fde68a; }
+
+    .drag-bank, .drop-row { display: flex; flex-wrap: wrap; gap: 0.6rem; min-height: 58px; align-items: center; }
+    .drag-item {
+      min-width: 74px;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 800;
+      border-radius: 12px;
+      padding: 0.2rem 0.6rem;
+      color: #fff;
+      cursor: grab;
+      touch-action: none;
+      border: 2px solid rgba(255,255,255,0.5);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .dragging {
+      position: fixed !important;
+      z-index: 9999;
+      transform: translate(-50%, -50%) scale(1.08);
+      pointer-events: none;
+      opacity: 0.95;
+    }
+
+    .drop-slot {
+      min-width: 84px;
+      min-height: 58px;
+      border: 2px dashed #9ca3af;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fafafa;
+      position: relative;
+      font-weight: 700;
+    }
+
+    .drop-slot.hot { border-color: #7c3aed; background: #f3e8ff; }
+    .drop-slot small { position: absolute; top: 2px; right: 6px; color: #6b7280; font-size: 0.7rem; }
+
+    .maker { background: #e8fce9; border-color: #22c55e; }
+    .maker-card { background: #fff; border-left: 5px solid #16a34a; border-radius: 10px; padding: 0.8rem; margin: 0.6rem 0; }
+    .assessment { background: #fff1db; border-color: #f59e0b; }
+    .scale { display: flex; flex-wrap: wrap; gap: 0.8rem; font-size: 0.95rem; }
+    .curriculum { background: #f3e8ff; border-color: #a855f7; }
+
+    .stars { display: flex; gap: 0.25rem; font-size: 1.5rem; }
+    .star { filter: grayscale(1); opacity: 0.4; }
+    .star.on.gold { filter: none; opacity: 1; color: #eab308; }
+    .star.on.blue { filter: none; opacity: 1; color: #3b82f6; }
+
+    .progress { height: 10px; border-radius: 99px; background: #e5e7eb; overflow: hidden; }
+    .progress > span { display: block; height: 100%; width: 0%; background: linear-gradient(90deg, #22c55e, #14b8a6); transition: width .3s; }
+
+    canvas#fx { position: fixed; inset: 0; pointer-events: none; z-index: 999; }
+    .hide { display: none !important; }
+    .sr { position: absolute !important; left: -9999px !important; }
+
+    @media (max-width: 768px) {
+      body { font-size: 16px; }
+      .wrap { padding: 0.6rem; }
+      .house { left: 9%; transform: scale(0.86); transform-origin: left bottom; }
+      .drag-item { font-size: 1.4rem; }
+      .word-big { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="fx" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <header>
+      <h1>Método das 28 Palavras — Palavra 10: <span style="background:#fff;color:#b91c1c;padding:0 0.35rem;border-radius:8px;">telhado</span></h1>
+      <p class="meta">1.º ano (6-7 anos) · 45 minutos · Aula interactiva</p>
+      <div class="goals">
+        <strong>Objectivos:</strong>
+        <ul>
+          <li>Reconhecer a palavra <strong>telhado</strong> e associá-la à imagem.</li>
+          <li>Segmentar em sílabas: <strong>te-lha-do</strong>.</li>
+          <li>Recombinar sílabas para novas palavras.</li>
+          <li>Usar <strong>telhado</strong> numa frase simples.</li>
+        </ul>
+      </div>
+    </header>
+
+    <section class="unit" id="u1">
+      <div class="unit-head"><h2>Unit 1 · Abertura contextual</h2><span class="badg">5 min</span></div>
+      <div class="tabs" data-unit="u1">
+        <button class="tab active" data-level="support">🟢 Apoio</button>
+        <button class="tab" data-level="standard">🟡 Intermédio</button>
+        <button class="tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="panel">
+        <div class="row" style="justify-content:space-between;">
+          <button id="u1Audio" class="primary" aria-label="Ouvir história">🔊 Ouvir história</button>
+          <button id="u1Rain" class="drop-icon" aria-label="Ativar chuva">💧</button>
+        </div>
+        <div class="scene" id="scene" aria-label="Cena da casa com telhado vermelho">
+          <div class="rain" id="rainLayer"></div>
+          <div class="house"><div class="roof" id="roofRef"></div></div>
+        </div>
+        <p class="story" id="u1Story">A chuva bate no <strong class="word">telhado</strong> vermelho da casa da avó. Pingam gotas. A família está quentinha lá dentro.</p>
+        <p class="story hide" id="u1ChallengeText">Vejo o <strong class="word multi">telhado</strong> da casa. O vento toca no <strong class="word multi">telhado</strong>. A chuva cai no <strong class="word multi">telhado</strong> de novo.</p>
+        <div class="feedback" id="u1Fb" aria-live="polite">Clica na cena para começar.</div>
+      </div>
+    </section>
+
+    <section class="unit" id="u2">
+      <div class="unit-head"><h2>Unit 2 · Reconhecimento global</h2><span class="badg">5 min</span></div>
+      <div class="tabs" data-unit="u2">
+        <button class="tab active" data-level="support">🟢 Apoio</button>
+        <button class="tab" data-level="standard">🟡 Intermédio</button>
+        <button class="tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="panel">
+        <div class="word-big">TELHADO</div>
+        <p class="mini">Ronda <span id="u2Round">1</span></p>
+        <div class="choice-grid" id="u2Choices" role="group" aria-label="Escolher palavra"></div>
+        <div class="feedback" id="u2Fb">Escolhe a palavra que combina com a imagem do telhado.</div>
+      </div>
+    </section>
+
+    <section class="unit" id="u3">
+      <div class="unit-head"><h2>Unit 3 · Segmentação silábica</h2><span class="badg">7 min</span></div>
+      <div class="tabs" data-unit="u3">
+        <button class="tab active" data-level="support">🟢 Apoio</button>
+        <button class="tab" data-level="standard">🟡 Intermédio</button>
+        <button class="tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="panel">
+        <div class="syllables" id="u3Word">
+          <span class="sy te">te</span>
+          <span class="sy lha"><span class="dig">lh</span>a</span>
+          <span class="sy do">do</span>
+        </div>
+        <div class="row">
+          <button class="primary" id="u3Clap" aria-label="Bater palma">👏 Bater palma</button>
+          <button id="u3Toggle" aria-label="Juntas ou separadas">Juntas/Separadas</button>
+          <span>Palmas: <strong id="u3Count">0</strong></span>
+        </div>
+        <div class="feedback" id="u3Fb">Bate palmas para ouvir as sílabas.</div>
+      </div>
+    </section>
+
+    <section class="unit" id="u4">
+      <div class="unit-head"><h2>Unit 4 · Reconstrução por sílabas</h2><span class="badg">7 min</span></div>
+      <div class="tabs" data-unit="u4">
+        <button class="tab active" data-level="support">🟢 Apoio</button>
+        <button class="tab" data-level="standard">🟡 Intermédio</button>
+        <button class="tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="panel">
+        <p class="mini">Arrasta para as posições 1-2-3.</p>
+        <div class="drag-bank" id="u4Bank" aria-label="Sílabas disponíveis"></div>
+        <div class="drop-row" id="u4Slots"></div>
+        <p class="word-big" id="u4Build">_ _ _</p>
+        <div class="feedback" id="u4Fb">Monta a palavra em ordem.</div>
+      </div>
+    </section>
+
+    <section class="unit" id="u5">
+      <div class="unit-head"><h2>Unit 5 · Recombinação silábica</h2><span class="badg">7 min</span></div>
+      <div class="tabs" data-unit="u5">
+        <button class="tab active" data-level="support">🟢 Apoio</button>
+        <button class="tab" data-level="standard">🟡 Intermédio</button>
+        <button class="tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="panel">
+        <div class="drag-bank" id="u5Bank"></div>
+        <div class="drop-row" id="u5Slots"></div>
+        <div class="word-big" id="u5Word">_</div>
+        <div class="row">
+          <button class="green" id="u5Yes">✓ É uma palavra</button>
+          <button class="amber" id="u5No">✗ Não é uma palavra</button>
+          <button id="u5Clear">Limpar</button>
+        </div>
+        <p><strong>Palavras que encontrei:</strong> <span id="u5Found">—</span></p>
+        <div class="feedback" id="u5Fb">Experimenta combinações.</div>
+      </div>
+    </section>
+
+    <section class="unit" id="u6">
+      <div class="unit-head"><h2>Unit 6 · Leitura e escrita guiada</h2><span class="badg">6 min</span></div>
+      <div class="tabs" data-unit="u6">
+        <button class="tab active" data-level="support">🟢 Apoio</button>
+        <button class="tab" data-level="standard">🟡 Intermédio</button>
+        <button class="tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="panel">
+        <p class="word-big" id="u6Pattern">telha___</p>
+        <div class="row" id="u6Options"></div>
+        <div class="feedback" id="u6Fb">Escolhe a sílaba certa para completar.</div>
+        <div id="u6Free" class="hide">
+          <label for="u6Input"><strong>Escreve a palavra completa:</strong></label>
+          <input id="u6Input" aria-label="Escrever telhado" style="width:100%;min-height:48px;font-size:1.1rem;border:2px solid #9ca3af;border-radius:10px;padding:0.5rem" />
+          <button id="u6Check" class="primary" style="margin-top:0.4rem">Verificar</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="unit" id="u7">
+      <div class="unit-head"><h2>Unit 7 · Construção de frase</h2><span class="badg">6 min</span></div>
+      <div class="tabs" data-unit="u7">
+        <button class="tab active" data-level="support">🟢 Apoio</button>
+        <button class="tab" data-level="standard">🟡 Intermédio</button>
+        <button class="tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="panel">
+        <div class="drag-bank" id="u7Bank"></div>
+        <div class="drop-row" id="u7Slots"></div>
+        <p class="word-big" id="u7Sentence">_</p>
+        <div class="feedback" id="u7Fb">Ordena os cartões.</div>
+        <div id="u7Extra" class="hide" style="margin-top:0.5rem;">
+          <label for="u7Input">Cria a tua frase com "telhado":</label>
+          <input id="u7Input" style="width:100%;min-height:48px;font-size:1.1rem;border:2px solid #9ca3af;border-radius:10px;padding:0.5rem" />
+        </div>
+      </div>
+    </section>
+
+    <section class="unit" id="u8">
+      <div class="unit-head"><h2>Unit 8 · Mini-avaliação formativa</h2><span class="badg">7 min</span></div>
+      <div class="tabs" data-unit="u8">
+        <button class="tab active" data-level="support">🟢 Apoio</button>
+        <button class="tab" data-level="standard">🟡 Intermédio</button>
+        <button class="tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="panel">
+        <div class="stars" id="u8Stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <div class="progress"><span id="u8Bar"></span></div>
+        <div id="u8Task" style="margin-top:0.6rem"></div>
+        <div class="feedback" id="u8Fb">Tarefa 1 de 4.</div>
+      </div>
+    </section>
+
+    <section class="maker">
+      <h2>🛠️ Desafios Maker</h2>
+      <div class="maker-card">
+        <h3>Unplugged: Mapa da Nossa Rua</h3>
+        <p>Cada aluno desenha uma casa em papel A5, escreve <strong>telhado</strong> com seta e pinta o telhado de vermelho (opcional). Depois, afixamos todos os desenhos numa cartolina colectiva.</p>
+        <p class="mini"><strong>Materiais:</strong> Papel A5, lápis de cor/marcadores, fita-cola ou pioneses, cartolina grande.</p>
+        <p class="mini"><strong>Comunicação:</strong> "Este é o telhado da minha casa. É [cor]."</p>
+      </div>
+    </section>
+
+    <section class="assessment">
+      <h2>📝 Mini-avaliação observável</h2>
+      <div class="panel" style="background:#fff7ed;border-color:#f59e0b;">
+        <p>1) Identifica <strong>telhado</strong> entre palavras parecidas.</p>
+        <p>2) Segmenta <strong>te-lha-do</strong> com 3 palmas.</p>
+        <p>3) Reconstrói a palavra com sílabas desordenadas.</p>
+        <p>4) Completa "O ___ é vermelho."</p>
+        <p>5) Lê e escreve <strong>telhado</strong> com autonomia.</p>
+        <div class="scale">
+          <label><input type="checkbox" /> ⬜ Ainda não consigo</label>
+          <label><input type="checkbox" /> ⬜ Com ajuda</label>
+          <label><input type="checkbox" /> ⬜ Sozinho/a</label>
+          <label><input type="checkbox" /> ⬜ Ajudo colegas</label>
+        </div>
+      </div>
+    </section>
+
+    <section class="curriculum">
+      <h2>Referências curriculares</h2>
+      <h3>Aprendizagens Essenciais</h3>
+      <ul>
+        <li>Pronunciar segmentos fónicos a partir de grafemas e dígrafos.</li>
+        <li>Reconhecer palavras globalmente e associar forma escrita, oral e significado.</li>
+        <li>Fazer correspondência letra/dígrafo e fonema/som, incluindo "lh".</li>
+        <li>Escrever palavras e frases simples com correção fonema-grafema.</li>
+      </ul>
+      <h3>Perfil do Aluno</h3>
+      <p>PA-A Linguagens e textos · PA-F Desenvolvimento pessoal e autonomia · PA-C Raciocínio e resolução de problemas · PA-H Sensibilidade estética e artística</p>
+    </section>
+
+    <footer style="text-align:center;padding:1rem 0 1.5rem;font-weight:700;">Gerado por PageCraft 🛠️</footer>
+  </div>
+
+  <script>
+    const state = { levels: {}, confetti: [], u2: { round: 0 }, u3: { claps: 0, separated: false }, u4: { tries: 0 }, u5: { found: [] }, u6: { idx: 0, done: 0 }, u8: { idx: 0, scores: [] } };
+    const syllableClass = { te: 'te', lha: 'lha', do: 'do', la: 'te', da: 'do', ro: 'lha' };
+
+    const fx = document.getElementById('fx');
+    const fctx = fx.getContext('2d');
+    function resizeFx() { fx.width = innerWidth; fx.height = innerHeight; }
+    addEventListener('resize', resizeFx); resizeFx();
+
+    function beep(freq = 520, dur = 0.12, type = 'sine', vol = 0.03) {
+      const C = window.AudioContext || window.webkitAudioContext;
+      if (!C) return;
+      if (!window._ac) window._ac = new C();
+      const ac = window._ac;
+      const o = ac.createOscillator();
+      const g = ac.createGain();
+      o.type = type; o.frequency.value = freq; g.gain.value = vol;
+      o.connect(g); g.connect(ac.destination);
+      o.start(); o.stop(ac.currentTime + dur);
+    }
+
+    function speak(text) {
+      if (!('speechSynthesis' in window)) return;
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'pt-PT'; u.rate = 0.9;
+      speechSynthesis.cancel(); speechSynthesis.speak(u);
+    }
+
+    function confettiBurst(x = innerWidth / 2, y = innerHeight / 3) {
+      for (let i = 0; i < 60; i++) {
+        state.confetti.push({ x, y, vx: (Math.random() - 0.5) * 8, vy: (Math.random() - 1.4) * 8, life: 60 + Math.random() * 30, c: ['#22c55e','#f59e0b','#e05fa0','#3b82f6'][i % 4] });
+      }
+      beep(740, 0.14, 'triangle', 0.05);
+    }
+
+    function animateFx() {
+      fctx.clearRect(0,0,fx.width,fx.height);
+      state.confetti = state.confetti.filter(p => p.life > 0);
+      for (const p of state.confetti) {
+        p.x += p.vx; p.y += p.vy; p.vy += 0.12; p.life -= 1;
+        fctx.fillStyle = p.c; fctx.fillRect(p.x, p.y, 4, 6);
+      }
+      requestAnimationFrame(animateFx);
+    }
+    requestAnimationFrame(animateFx);
+
+    function setFb(id, msg, kind = '') {
+      const el = document.getElementById(id);
+      el.className = 'feedback' + (kind ? ' ' + kind : '');
+      el.textContent = msg;
+    }
+
+    document.querySelectorAll('.tabs').forEach(tabset => {
+      const unit = tabset.dataset.unit;
+      state.levels[unit] = 'support';
+      tabset.querySelectorAll('.tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabset.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          state.levels[unit] = btn.dataset.level;
+          initUnit(unit);
+        });
+      });
+    });
+
+    function seedRain() {
+      const rain = document.getElementById('rainLayer');
+      rain.innerHTML = '';
+      for (let i = 0; i < 45; i++) {
+        const d = document.createElement('span');
+        d.className = 'drop';
+        d.style.left = (Math.random() * 100) + '%';
+        d.style.animationDelay = (Math.random() * 0.9) + 's';
+        d.style.opacity = 0.5 + Math.random() * 0.4;
+        rain.appendChild(d);
+      }
+    }
+    seedRain();
+
+    // Unit 1
+    let u1Found = 0;
+    const scene = document.getElementById('scene');
+    const rainLayer = document.getElementById('rainLayer');
+    scene.addEventListener('click', () => {
+      scene.dataset.revealed = '1';
+      setFb('u1Fb', 'Cena visível. Encontra a palavra telhado no texto.', 'ok');
+      beep(520, 0.08);
+    });
+    document.getElementById('u1Rain').addEventListener('click', () => {
+      rainLayer.classList.toggle('on');
+      beep(rainLayer.classList.contains('on') ? 430 : 260, 0.08);
+    });
+    document.getElementById('u1Audio').addEventListener('click', () => speak('A chuva bate no telhado vermelho da casa da avó. Pingam gotas. A família está quentinha lá dentro.'));
+    document.getElementById('u1Story').addEventListener('click', e => {
+      if (!e.target.classList.contains('word')) return;
+      e.target.classList.toggle('found');
+      setFb('u1Fb', 'Muito bem! Disseste te-lha-do.', 'ok');
+      speak('telhado'); confettiBurst();
+    });
+
+    function bindU1Challenge() {
+      u1Found = 0;
+      document.querySelectorAll('#u1ChallengeText .multi').forEach(w => {
+        w.classList.remove('found');
+        w.onclick = () => {
+          if (w.classList.contains('found')) return;
+          w.classList.add('found');
+          u1Found++;
+          beep(460 + u1Found * 80, 0.06);
+          if (u1Found === 3) { setFb('u1Fb', 'Excelente! Encontraste 3 ocorrências.', 'ok'); confettiBurst(); }
+        };
+      });
+    }
+
+    // Unit 2
+    const rounds = {
+      support: [['telhado','janela']],
+      standard: [['telhado','telha','janela'], ['telhado','tejado','telheiro']],
+      challenge: [['telhado','telha','telheiro','tijolo'], ['telhado','tejado','telheiro','telha']]
+    };
+    function renderU2() {
+      const level = state.levels.u2;
+      const opts = rounds[level][state.u2.round] || rounds[level][0];
+      const box = document.getElementById('u2Choices');
+      box.innerHTML = '';
+      document.getElementById('u2Round').textContent = state.u2.round + 1;
+      opts.sort(() => Math.random() - 0.5).forEach(w => {
+        const b = document.createElement('button');
+        b.className = 'choice'; b.textContent = w; b.setAttribute('aria-label', 'Opção ' + w);
+        b.onclick = () => {
+          speak(w);
+          if (w === 'telhado') {
+            b.classList.add('ok');
+            setFb('u2Fb', 'Correto! Esta é a palavra telhado.', 'ok');
+            confettiBurst();
+            setTimeout(() => { state.u2.round++; if (state.u2.round < rounds[level].length) renderU2(); }, 800);
+          } else {
+            b.classList.add('warn');
+            setFb('u2Fb', level === 'challenge' ? 'Tenta explicar por que não é telhado.' : 'Quase. Tenta outra vez.', 'warn');
+            beep(220, 0.1, 'square');
+          }
+        };
+        box.appendChild(b);
+      });
+      if (level === 'support') speak('Escuta: telhado. Agora escolhe.');
+    }
+
+    // Unit 3
+    function renderU3() {
+      const level = state.levels.u3;
+      state.u3.claps = 0;
+      state.u3.separated = level === 'support';
+      document.getElementById('u3Count').textContent = '0';
+      const word = document.getElementById('u3Word');
+      word.style.gap = state.u3.separated ? '0.9rem' : '0';
+      if (level === 'challenge') setFb('u3Fb', 'Primeiro diz: quantas sílabas achas que tem?', '');
+      else setFb('u3Fb', 'Bate palmas para ouvir te-lha-do.', '');
+      if (level === 'support') {
+        setTimeout(() => {
+          ['te','lha','do'].forEach((s, i) => setTimeout(() => speak(s), i * 700));
+          setFb('u3Fb', 'Modelo automático. Agora repete com palmas.', 'ok');
+        }, 300);
+      }
+    }
+    document.getElementById('u3Clap').addEventListener('click', () => {
+      state.u3.claps = Math.min(3, state.u3.claps + 1);
+      document.getElementById('u3Count').textContent = state.u3.claps;
+      const s = ['te','lha','do'][state.u3.claps - 1];
+      if (s) { speak(s); beep(420 + state.u3.claps * 60, 0.08); }
+      if (state.u3.claps === 3) {
+        state.u3.separated = true;
+        document.getElementById('u3Word').style.gap = '0.9rem';
+        setFb('u3Fb', 'Muito bem! São 3 sílabas: te-lha-do.', 'ok');
+        confettiBurst();
+      }
+    });
+    document.getElementById('u3Toggle').addEventListener('click', () => {
+      state.u3.separated = !state.u3.separated;
+      document.getElementById('u3Word').style.gap = state.u3.separated ? '0.9rem' : '0';
+    });
+
+    // Generic drag and drop with pointer events
+    function makeDrag(container, group, onChange) {
+      let active = null;
+      let home = null;
+
+      container.querySelectorAll('[data-drag-group="' + group + '"]').forEach(el => {
+        el.addEventListener('pointerdown', e => {
+          active = el;
+          home = el.parentElement;
+          el.setPointerCapture(e.pointerId);
+          el.classList.add('dragging');
+          move(e.clientX, e.clientY);
+        });
+      });
+
+      function move(x, y) {
+        if (!active) return;
+        active.style.left = x + 'px';
+        active.style.top = y + 'px';
+      }
+
+      container.addEventListener('pointermove', e => {
+        if (!active) return;
+        move(e.clientX, e.clientY);
+        container.querySelectorAll('.drop-slot,[data-bank="' + group + '"]').forEach(s => s.classList.remove('hot'));
+        const under = document.elementFromPoint(e.clientX, e.clientY);
+        const slot = under && under.closest('.drop-slot,[data-bank="' + group + '"]');
+        if (slot) slot.classList.add('hot');
+      });
+
+      container.addEventListener('pointerup', e => {
+        if (!active) return;
+        const under = document.elementFromPoint(e.clientX, e.clientY);
+        const slot = under && under.closest('.drop-slot,[data-bank="' + group + '"]');
+        container.querySelectorAll('.drop-slot,[data-bank="' + group + '"]').forEach(s => s.classList.remove('hot'));
+        active.classList.remove('dragging');
+        active.style.left = ''; active.style.top = '';
+
+        if (slot && (slot.dataset.group === group || slot.dataset.bank === group) && (slot.dataset.bank || slot.children.length === 0)) {
+          slot.appendChild(active);
+          beep(420, 0.05);
+        } else {
+          home.appendChild(active);
+        }
+        active = null;
+        if (onChange) onChange();
+      });
+    }
+
+    // Unit 4
+    function renderU4() {
+      const level = state.levels.u4;
+      const bank = document.getElementById('u4Bank');
+      const slots = document.getElementById('u4Slots');
+      bank.innerHTML = ''; slots.innerHTML = '';
+      let syll = ['do','te','lha'];
+      if (level === 'challenge') syll = ['do','te','lha','la'];
+      for (let i = 1; i <= 3; i++) {
+        const s = document.createElement('div');
+        s.className = 'drop-slot'; s.dataset.group = 'u4'; s.innerHTML = '<small>' + i + '</small>';
+        slots.appendChild(s);
+      }
+      syll.forEach(x => bank.appendChild(makeSyllable(x, 'u4')));
+      bank.dataset.bank = 'u4';
+      if (level === 'support') {
+        const te = [...bank.children].find(c => c.dataset.value === 'te');
+        slots.children[0].appendChild(te);
+      }
+      makeDrag(document.getElementById('u4'), 'u4', checkU4);
+      checkU4();
+    }
+
+    function makeSyllable(txt, group) {
+      const d = document.createElement('div');
+      d.className = 'drag-item ' + (syllableClass[txt] || 'te');
+      d.textContent = txt;
+      d.dataset.value = txt;
+      d.dataset.dragGroup = group;
+      d.setAttribute('aria-label', 'Sílaba ' + txt);
+      return d;
+    }
+
+    function checkU4() {
+      const vals = [...document.querySelectorAll('#u4Slots .drop-slot')].map(s => s.firstElementChild ? s.firstElementChild.dataset.value : '_');
+      document.getElementById('u4Build').textContent = vals.join('-');
+      if (vals.every(v => v !== '_')) {
+        state.u4.tries++;
+        if (vals.join('') === 'telhado') {
+          setFb('u4Fb', 'Boa! Formaste telhado.', 'ok');
+          confettiBurst(); speak('telhado');
+        } else {
+          setFb('u4Fb', 'Ouve bem: te-lha-do. Tenta outra vez.', 'warn');
+          beep(200, 0.14, 'square');
+        }
+      }
+    }
+
+    // Unit 5
+    function renderU5() {
+      const level = state.levels.u5;
+      state.u5.found = [];
+      const bank = document.getElementById('u5Bank');
+      const slots = document.getElementById('u5Slots');
+      bank.innerHTML = ''; slots.innerHTML = '';
+      const arr = level === 'challenge' ? ['te','lha','do','la','da','ro'] : ['te','lha','do','la','da'];
+      arr.forEach(s => bank.appendChild(makeSyllable(s, 'u5')));
+      bank.dataset.bank = 'u5';
+      const count = level === 'support' ? 2 : 3;
+      for (let i = 0; i < count; i++) {
+        const sl = document.createElement('div'); sl.className = 'drop-slot'; sl.dataset.group = 'u5'; slots.appendChild(sl);
+      }
+      if (level === 'support') {
+        slots.children[0].appendChild([...bank.children].find(n => n.dataset.value === 'te'));
+        slots.children[1].appendChild([...bank.children].find(n => n.dataset.value === 'la'));
+      }
+      makeDrag(document.getElementById('u5'), 'u5', updateU5Word);
+      updateU5Word();
+    }
+
+    function currentU5() {
+      return [...document.querySelectorAll('#u5Slots .drop-slot')].map(s => s.firstElementChild ? s.firstElementChild.dataset.value : '').join('');
+    }
+
+    function updateU5Word() {
+      const w = currentU5();
+      document.getElementById('u5Word').textContent = w || '_';
+    }
+
+    function u5Classify(isWord) {
+      const w = currentU5();
+      if (!w) return;
+      const real = new Set(['tela','lado','telha','telhado','data']);
+      const ok = (real.has(w) && isWord) || (!real.has(w) && !isWord);
+      if (ok) {
+        if (real.has(w) && !state.u5.found.includes(w)) state.u5.found.push(w);
+        document.getElementById('u5Found').textContent = state.u5.found.join(', ') || '—';
+        setFb('u5Fb', 'Boa escolha! Continua a explorar.', 'ok');
+        confettiBurst();
+      } else {
+        setFb('u5Fb', 'Hmm, pensa bem e tenta de novo.', 'warn');
+        beep(210, 0.12, 'square');
+      }
+    }
+
+    document.getElementById('u5Yes').onclick = () => u5Classify(true);
+    document.getElementById('u5No').onclick = () => u5Classify(false);
+    document.getElementById('u5Clear').onclick = () => {
+      const bank = document.getElementById('u5Bank');
+      document.querySelectorAll('#u5Slots .drag-item').forEach(d => bank.appendChild(d));
+      updateU5Word();
+    };
+
+    // Unit 6
+    const u6Patterns = {
+      support: [{ p: 'telha___', ans: 'do', opts: ['do','te'] }],
+      standard: [{ p: 'te___do', ans: 'lha', opts: ['te','lha','do'] }, { p: '___lhado', ans: 'te', opts: ['te','lha','do'] }, { p: 'telha___', ans: 'do', opts: ['te','lha','do'] }],
+      challenge: [{ p: 'te______', ans: 'lhado', opts: ['lhado','lado','te'] }, { p: '___lha___', ans: 'tedo', opts: ['tedo','dote','lado'] }]
+    };
+
+    function renderU6() {
+      state.u6.idx = 0; state.u6.done = 0;
+      document.getElementById('u6Free').classList.add('hide');
+      loadU6Step();
+    }
+
+    function loadU6Step() {
+      const level = state.levels.u6;
+      const steps = u6Patterns[level];
+      const s = steps[state.u6.idx];
+      const p = document.getElementById('u6Pattern');
+      const box = document.getElementById('u6Options');
+      if (!s) { document.getElementById('u6Free').classList.remove('hide'); setFb('u6Fb', 'Agora escreve a palavra completa.', ''); return; }
+      p.textContent = s.p;
+      box.innerHTML = '';
+      s.opts.forEach(o => {
+        const b = document.createElement('button'); b.textContent = o; b.className = 'chip';
+        b.onclick = () => {
+          if (o === s.ans) {
+            const full = s.p.replace('___', o).replace('______', o).replace('___', '');
+            p.textContent = full;
+            setFb('u6Fb', 'Certo! ' + full, 'ok');
+            speak('telhado'); confettiBurst();
+            state.u6.idx++; setTimeout(loadU6Step, 700);
+          } else {
+            setFb('u6Fb', 'Essa sílaba não encaixa aqui.', 'warn'); beep(220,0.1,'square');
+          }
+        };
+        box.appendChild(b);
+      });
+    }
+
+    document.getElementById('u6Check').onclick = () => {
+      const v = document.getElementById('u6Input').value.trim().toLowerCase();
+      if (v === 'telhado') { setFb('u6Fb', 'Excelente escrita!', 'ok'); confettiBurst(); }
+      else setFb('u6Fb', 'Revê: te-lha-do.', 'warn');
+    };
+
+    // Unit 7
+    function renderU7() {
+      const level = state.levels.u7;
+      const bank = document.getElementById('u7Bank');
+      const slots = document.getElementById('u7Slots');
+      bank.innerHTML = ''; slots.innerHTML = '';
+      const words = level === 'challenge' ? ['O','telhado','grande','é','vermelho','.'] : ['O','telhado','é','vermelho','.'];
+      words.sort(() => Math.random() - 0.5);
+      words.forEach(w => {
+        const d = document.createElement('div');
+        d.className = 'drag-item te';
+        d.style.background = w === 'telhado' ? '#e11d48' : '#2563eb';
+        d.style.fontSize = w === '.' ? '2rem' : '1.4rem';
+        d.textContent = w;
+        d.dataset.value = w;
+        d.dataset.dragGroup = 'u7';
+        bank.appendChild(d);
+      });
+      bank.dataset.bank = 'u7';
+      for (let i = 0; i < words.length; i++) { const s = document.createElement('div'); s.className = 'drop-slot'; s.dataset.group = 'u7'; slots.appendChild(s); }
+      if (level === 'support') {
+        const arr = [...bank.children];
+        slots.children[0].appendChild(arr.find(a => a.dataset.value === 'O'));
+        slots.children[slots.children.length - 1].appendChild(arr.find(a => a.dataset.value === '.'));
+        speak('O telhado é vermelho.');
+      }
+      document.getElementById('u7Extra').classList.toggle('hide', level !== 'challenge');
+      makeDrag(document.getElementById('u7'), 'u7', checkU7);
+      checkU7();
+    }
+
+    function checkU7() {
+      const vals = [...document.querySelectorAll('#u7Slots .drop-slot')].map(s => s.firstElementChild ? s.firstElementChild.dataset.value : '_');
+      const sentence = vals.join(' ').replace(' .','.');
+      document.getElementById('u7Sentence').textContent = sentence;
+      const level = state.levels.u7;
+      const expected = level === 'challenge' ? 'O telhado grande é vermelho .' : 'O telhado é vermelho .';
+      if (vals.every(v => v !== '_')) {
+        if (vals.join(' ') === expected) {
+          setFb('u7Fb', 'Frase correta! Lê em voz alta.', 'ok');
+          speak(sentence); confettiBurst();
+        } else {
+          setFb('u7Fb', 'Ouve a frase com atenção e reorganiza.', 'warn');
+          speak(level === 'challenge' ? 'O telhado grande é vermelho.' : 'O telhado é vermelho.');
+        }
+      }
+    }
+
+    // Unit 8
+    function renderU8Task() {
+      const level = state.levels.u8;
+      const idx = state.u8.idx;
+      const host = document.getElementById('u8Task');
+      if (idx >= 4) {
+        const good = state.u8.scores.filter(x => x === 'correcto').length;
+        host.innerHTML = '<h3>Resumo final</h3><p>' + (good === 4 ? 'Excelente!' : good >= 3 ? 'Muito bem!' : 'Continua a praticar!') + '</p>';
+        setFb('u8Fb', 'Avaliação concluída.', 'ok');
+        confettiBurst();
+        return;
+      }
+      const task = [
+        () => taskButtons('Escolhe a palavra certa:', level === 'support' ? ['telhado','janela'] : ['telhado','telha','telheiro'], 'telhado'),
+        () => taskButtons('Quantas sílabas tem "telhado"?', level === 'support' ? ['2','3'] : (level === 'challenge' ? ['1','2','3','4'] : ['2','3','4']), '3'),
+        () => taskSort(),
+        () => taskButtons('Completa: O ___ é vermelho.', level === 'support' ? ['telhado','janela'] : ['telhado','telha','telheiro'], 'telhado')
+      ][idx];
+      host.innerHTML = ''; host.appendChild(task());
+      setFb('u8Fb', 'Tarefa ' + (idx + 1) + ' de 4.', '');
+    }
+
+    function markU8(ok, helped = false) {
+      state.u8.scores[state.u8.idx] = ok ? (helped ? 'com ajuda' : 'correcto') : 'incorrecto';
+      const star = document.querySelectorAll('#u8Stars .star')[state.u8.idx];
+      star.classList.add('on', ok && helped ? 'blue' : 'gold');
+      document.getElementById('u8Bar').style.width = ((state.u8.idx + 1) * 25) + '%';
+      state.u8.idx++; setTimeout(renderU8Task, 450);
+      if (ok) { beep(620, 0.08); } else { beep(220, 0.09, 'square'); }
+    }
+
+    function taskButtons(label, options, ans) {
+      const w = document.createElement('div');
+      const p = document.createElement('p'); p.textContent = label; w.appendChild(p);
+      const row = document.createElement('div'); row.className = 'row';
+      let tries = 0;
+      options.forEach(o => {
+        const b = document.createElement('button'); b.textContent = o;
+        b.onclick = () => {
+          if (o === ans) { markU8(true, tries > 0); }
+          else {
+            tries++;
+            if (state.levels.u8 === 'support' && tries < 2) setFb('u8Fb', 'Dica: olha para a imagem mental do telhado.', 'warn');
+            else markU8(false, false);
+          }
+        };
+        row.appendChild(b);
+      });
+      w.appendChild(row);
+      return w;
+    }
+
+    function taskSort() {
+      const w = document.createElement('div');
+      w.innerHTML = '<p>Ordena as sílabas: lha-do-te</p><div class="drag-bank" id="u8Bank"></div><div class="drop-row" id="u8Slots"></div>';
+      const bank = w.querySelector('#u8Bank');
+      const slots = w.querySelector('#u8Slots');
+      ['lha','do','te'].forEach(s => bank.appendChild(makeSyllable(s, 'u8')));
+      bank.dataset.bank = 'u8';
+      for (let i = 0; i < 3; i++) { const sl = document.createElement('div'); sl.className = 'drop-slot'; sl.dataset.group = 'u8'; slots.appendChild(sl); }
+      makeDrag(w, 'u8', () => {
+        const v = [...slots.children].map(s => s.firstElementChild ? s.firstElementChild.dataset.value : '_').join('');
+        if (!v.includes('_')) markU8(v === 'telhado', false);
+      });
+      return w;
+    }
+
+    function initUnit(unit) {
+      if (unit === 'u1') {
+        const level = state.levels.u1;
+        document.getElementById('u1ChallengeText').classList.toggle('hide', level !== 'challenge');
+        document.getElementById('u1Story').classList.toggle('hide', level === 'challenge');
+        if (level === 'support') {
+          rainLayer.classList.add('on');
+          setFb('u1Fb', 'Apoio ativo: cena e palavra já visíveis.', 'ok');
+          speak('A chuva bate no telhado vermelho da casa da avó.');
+        } else {
+          rainLayer.classList.remove('on');
+          setFb('u1Fb', 'Clica na cena e encontra a palavra.', '');
+        }
+        if (level === 'challenge') bindU1Challenge();
+      }
+      if (unit === 'u2') { state.u2.round = 0; renderU2(); }
+      if (unit === 'u3') renderU3();
+      if (unit === 'u4') renderU4();
+      if (unit === 'u5') renderU5();
+      if (unit === 'u6') renderU6();
+      if (unit === 'u7') renderU7();
+      if (unit === 'u8') {
+        state.u8.idx = 0; state.u8.scores = [];
+        document.querySelectorAll('#u8Stars .star').forEach(s => s.className = 'star');
+        document.getElementById('u8Bar').style.width = '0%';
+        renderU8Task();
+      }
+    }
+
+    ['u1','u2','u3','u4','u5','u6','u7','u8'].forEach(initUnit);
+
+    document.body.addEventListener('pointerdown', () => {
+      if (window._ac && window._ac.state === 'suspended') window._ac.resume();
+    }, { once: true });
+  </script>
+</body>
+</html>
