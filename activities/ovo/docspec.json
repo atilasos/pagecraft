@@ -1,0 +1,410 @@
+{
+  "topic": "Palavra 14 — ovo (Método das 28 Palavras)",
+  "ageRange": "6 anos (1.º ano do 1.º CEB)",
+  "duration": 45,
+  "objectives": [
+    "Reconhecer globalmente a palavra 'ovo' e associá-la ao seu significado no tema animal/alimento",
+    "Segmentar a palavra 'ovo' nas sílabas o-vo e reconstruí-la a partir de sílabas desordenadas",
+    "Recombinar as sílabas o e vo com sílabas já conhecidas para descobrir palavras reais",
+    "Ler e construir a frase simples 'O ovo é branco.'"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Reconhecer globalmente palavras e associar forma escrita, forma oral e significado em contexto.",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Segmentar palavras em sílabas e reconstruir palavras a partir de sílabas dadas.",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Ler e escrever palavras e frases simples com progressiva autonomia, respeitando a correspondência fonema-grafema.",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Estudo do Meio",
+        "year": "1.º ano",
+        "domain": "À Descoberta dos Seres Vivos",
+        "descriptor": "Identificar animais e relacionar produtos de origem animal com o quotidiano (ex.: ovo).",
+        "source": "estudo-do-meio-1-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-E: Relacionamento interpessoal",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "Trabalho curricular comparticipado",
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas",
+      "diário de turma"
+    ],
+    "socialOrganization": "turma (abertura 5min) → individual (blocos 2,3,5,7) → pares (blocos 4,6) → turma (bloco 8 e partilha final)"
+  },
+  "materials": [
+    "Tablet ou computador com browser (1 por aluno ou par)",
+    "Cartão-palavra 'ovo' (A5)",
+    "Cartões de sílabas: o / vo",
+    "Cartões de palavras da frase: O / ovo / é / branco / .",
+    "Quadro branco ou quadro interativo",
+    "Peças Lego básicas (opcional para extensão)",
+    "Folhas A4 e marcadores"
+  ],
+  "units": [
+    {
+      "summary": "Abertura contextual — o ovo no ninho e no prato",
+      "textDescription": "O aluno observa duas cenas curtas (ovo no ninho e ovo no prato) para compreender o duplo tema da palavra: animal e alimento. A palavra aparece em contexto antes da análise silábica.",
+      "interaction": {
+        "state": [
+          {
+            "name": "cena",
+            "type": "toggle",
+            "options": ["ninho", "prato"],
+            "default": "ninho"
+          },
+          {
+            "name": "palavraVisivel",
+            "type": "toggle",
+            "options": ["não", "sim"],
+            "default": "não"
+          }
+        ],
+        "render": "Ilustração grande com botão para alternar entre duas cenas: ninho com ovos e prato com ovo cozido. Ao tocar no ícone de lupa, surge a palavra 'ovo' em letra grande sob a imagem.",
+        "transition": "Alternar cena atualiza a imagem; tocar na lupa revela a palavra; após revelar nas duas cenas, aparece botão 'continuar'.",
+        "constraint": "A mesma palavra pode nomear algo observado em contextos diferentes (animal e alimento), mantendo o mesmo significado base.",
+        "assessment": "O aluno identifica oralmente 'ovo' nas duas cenas e diz uma característica observável (ex.: 'está no ninho', 'é branco')."
+      },
+      "differentiation": {
+        "support": "🟢 Professor lê a palavra em voz alta e o aluno apenas aponta para a imagem correta em cada cena.",
+        "standard": "🟡 Aluno alterna as cenas, revela a palavra e nomeia 'ovo' autonomamente.",
+        "challenge": "🔴 Aluno explica oralmente uma diferença entre as duas cenas usando a palavra 'ovo'."
+      },
+      "duration": 5
+    },
+    {
+      "summary": "Reconhecimento global — escolher 'ovo' entre distratores",
+      "textDescription": "O aluno reconhece a forma global da palavra 'ovo' e distingue-a de outras palavras próximas visualmente.",
+      "interaction": {
+        "state": [
+          {
+            "name": "opcao",
+            "type": "quiz",
+            "options": ["ovo", "uva", "avó"],
+            "default": null
+          },
+          {
+            "name": "acerto",
+            "type": "derived",
+            "derivedFrom": "opcao === 'ovo'"
+          }
+        ],
+        "render": "Imagem de um ovo no topo e três cartões-palavra em baixo. Feedback imediato: ✓ verde claro quando correto; âmbar suave quando incorreto.",
+        "transition": "Selecionar cartão marca a resposta; se correto, avança ronda; se incorreto, nova tentativa com ordem dos cartões alterada.",
+        "constraint": "A palavra escrita correta é a que corresponde ao referente visual apresentado.",
+        "assessment": "O aluno seleciona 'ovo' corretamente em 3 rondas consecutivas com ordem de opções variável."
+      },
+      "differentiation": {
+        "support": "🟢 Duas opções apenas (ovo/uva) e áudio da palavra antes da escolha.",
+        "standard": "🟡 Três opções como descrito, sem pista visual extra.",
+        "challenge": "🔴 Quatro opções (ovo, uva, avó, ovos) e acerto na 1.ª tentativa em duas rondas seguidas."
+      },
+      "duration": 5
+    },
+    {
+      "summary": "Segmentação silábica — o-vo",
+      "textDescription": "O aluno divide a palavra 'ovo' em duas sílabas, conta as palmas e organiza os blocos silábicos na ordem correta.",
+      "interaction": {
+        "state": [
+          {
+            "name": "silabas",
+            "type": "drag",
+            "options": ["o", "vo"],
+            "default": []
+          },
+          {
+            "name": "palmas",
+            "type": "slider",
+            "range": [0, 4],
+            "step": 1,
+            "default": 0,
+            "unit": "palmas"
+          },
+          {
+            "name": "ordemCorreta",
+            "type": "derived",
+            "derivedFrom": "silabas[0] === 'o' && silabas[1] === 'vo'"
+          }
+        ],
+        "render": "Palavra 'ovo' em cinzento no topo; blocos coloridos arrastáveis (o=laranja, vo=azul) para dois espaços; contador de palmas ao lado.",
+        "transition": "Arrastar sílabas para os espaços e tocar no botão de palmas; quando houver 2 palmas e ordem correta, surge confirmação.",
+        "constraint": "'ovo' tem exatamente 2 sílabas e a ordem o→vo é fixa para manter a palavra.",
+        "assessment": "O aluno arrasta 'o' e 'vo' na ordem correta, bate 2 palmas e lê 'o-vo' apontando para cada sílaba."
+      },
+      "maker": {
+        "type": "unplugged",
+        "challenge": "Em pares, montar a palavra 'ovo' com cartões físicos de sílabas e bater 2 palmas em simultâneo.",
+        "materials": [
+          "Cartões de sílabas o/vo",
+          "Mesa de trabalho"
+        ],
+        "groupSize": "2",
+        "connection": "A manipulação física reforça a mesma sequência feita no ecrã.",
+        "communication": "Cada par mostra os cartões à turma e lê 'o-vo'.",
+        "alternatives": [
+          "Escrever as sílabas no quadro branco",
+          "Usar post-its em vez de cartões"
+        ]
+      },
+      "differentiation": {
+        "support": "🟢 Um bloco já colocado e contagem de palmas guiada pelo professor.",
+        "standard": "🟡 Dois blocos livres e contagem autónoma de palmas.",
+        "challenge": "🔴 Blocos sem cor e aluno escreve as sílabas em vez de arrastar."
+      },
+      "duration": 7
+    },
+    {
+      "summary": "Recombinação silábica — descobrir palavras reais",
+      "textDescription": "O aluno explora combinações com 'o' e 'vo' e sílabas já conhecidas, distinguindo palavras reais de não-palavras.",
+      "interaction": {
+        "state": [
+          {
+            "name": "silabaBase",
+            "type": "drag",
+            "options": ["o", "vo"],
+            "default": []
+          },
+          {
+            "name": "silabaBanco",
+            "type": "matching",
+            "options": ["va", "la", "no", "me"],
+            "default": null
+          },
+          {
+            "name": "palavraFormada",
+            "type": "derived",
+            "derivedFrom": "join([silabaBase, silabaBanco], '')"
+          },
+          {
+            "name": "classificacao",
+            "type": "quiz",
+            "options": ["existe", "não existe"],
+            "default": null
+          }
+        ],
+        "render": "Zona de construção com dois espaços; banco de sílabas lateral; palavra formada aparece em grande e o aluno classifica se existe.",
+        "transition": "Arrastar sílabas forma tentativa; escolher classificação dá feedback imediato; botão limpar inicia nova tentativa.",
+        "constraint": "Nem toda combinação silábica forma palavra real com significado em português.",
+        "assessment": "O aluno encontra pelo menos 1 palavra real (ex.: 'ovo' ou 'ovo' mantendo a base) e classifica corretamente duas combinações inválidas."
+      },
+      "differentiation": {
+        "support": "🟢 Banco com 2 sílabas e pista visual para combinação válida.",
+        "standard": "🟡 Banco com 4 sílabas e exploração livre guiada por feedback.",
+        "challenge": "🔴 Sem pistas; aluno justifica oralmente por que uma combinação não existe."
+      },
+      "duration": 7
+    },
+    {
+      "summary": "Leitura e escrita guiada — completar 'ovo'",
+      "textDescription": "O aluno completa sílaba em falta e consolida a escrita da palavra em duas posições possíveis.",
+      "interaction": {
+        "state": [
+          {
+            "name": "lacuna",
+            "type": "dropdown",
+            "options": ["_vo", "o_"],
+            "default": "_vo"
+          },
+          {
+            "name": "resposta",
+            "type": "quiz",
+            "options": ["o", "vo", "va"],
+            "default": null
+          },
+          {
+            "name": "correto",
+            "type": "derived",
+            "derivedFrom": "(lacuna === '_vo' && resposta === 'o') || (lacuna === 'o_' && resposta === 'vo')"
+          }
+        ],
+        "render": "Palavra incompleta com lacuna destacada; opções de sílaba em cartões; linha de escrita guiada para copiar 'ovo'.",
+        "transition": "Selecionar sílaba preenche a lacuna; verificar dá feedback; após duas rondas corretas, abre cópia guiada da palavra.",
+        "constraint": "Cada posição da palavra aceita apenas a sílaba correta para manter a leitura 'ovo'.",
+        "assessment": "O aluno completa corretamente as duas lacunas (_vo e o_) e copia 'ovo' de forma legível uma vez."
+      },
+      "maker": {
+        "type": "whiteboard",
+        "challenge": "No quadro branco, cada aluno escreve 'ovo' com sílabas em cores diferentes e lê em voz alta.",
+        "materials": [
+          "Quadro branco",
+          "Marcadores (2 cores)"
+        ],
+        "groupSize": "turma",
+        "connection": "A escrita no quadro transfere a estrutura silábica do digital para produção motora ampla.",
+        "communication": "Leitura coletiva com apontar sílaba a sílaba no quadro.",
+        "alternatives": [
+          "Folha A4 individual",
+          "Quadro interativo com caneta digital"
+        ]
+      },
+      "differentiation": {
+        "support": "🟢 Duas opções de resposta apenas e modelo da palavra sempre visível.",
+        "standard": "🟡 Três opções com uma distratora; cópia guiada após completar.",
+        "challenge": "🔴 Sem modelo visível na 2.ª ronda; escreve 'ovo' de memória."
+      },
+      "duration": 6
+    },
+    {
+      "summary": "Frase simples — 'O ovo é branco.'",
+      "textDescription": "O aluno ordena palavras da frase-alvo e lê o enunciado completo com sentido.",
+      "interaction": {
+        "state": [
+          {
+            "name": "ordem",
+            "type": "sorting",
+            "options": ["branco", "é", ".", "O", "ovo"],
+            "default": []
+          },
+          {
+            "name": "fraseCorreta",
+            "type": "derived",
+            "derivedFrom": "ordem.join(' ') === 'O ovo é branco .'"
+          }
+        ],
+        "render": "Cartões-palavra baralhados e linha de montagem com 5 posições; imagem de ovo branco como apoio semântico.",
+        "transition": "Arrastar cartões para as posições; verificar dá feedback; quando correto, frase é lida em áudio e destacada palavra a palavra.",
+        "constraint": "A frase afirmativa requer ordem sintática estável e termina com ponto final.",
+        "assessment": "O aluno ordena corretamente os 5 elementos e lê em voz alta 'O ovo é branco.' sem soletrar."
+      },
+      "maker": {
+        "type": "lego",
+        "challenge": "Em pares, construir com Lego um ovo (forma oval simplificada) e apresentar dizendo a frase 'O ovo é branco.'",
+        "materials": [
+          "Peças Lego claras (preferência branco/amarelo)",
+          "Base pequena"
+        ],
+        "groupSize": "2",
+        "connection": "A construção física reforça o vocabulário da frase trabalhada digitalmente.",
+        "communication": "Cada par mostra o modelo Lego e lê a frase para a turma.",
+        "alternatives": [
+          "Modelar com plasticina",
+          "Desenhar o ovo em cartão"
+        ]
+      },
+      "differentiation": {
+        "support": "🟢 Cartões 'O' e '.' já fixos; aluno ordena apenas 'ovo é branco'.",
+        "standard": "🟡 Cinco cartões totalmente baralhados.",
+        "challenge": "🔴 Acrescentar uma segunda frase própria com 'ovo' (oral ou escrita)."
+      },
+      "duration": 6
+    },
+    {
+      "summary": "Mini-avaliação formativa — 4 critérios M28P",
+      "textDescription": "Verificação observável de reconhecimento, segmentação, reconstrução e uso em frase para a palavra 'ovo'.",
+      "interaction": {
+        "state": [
+          {
+            "name": "etapa",
+            "type": "slider",
+            "range": [1, 4],
+            "step": 1,
+            "default": 1,
+            "unit": "etapa"
+          },
+          {
+            "name": "resultado",
+            "type": "derived",
+            "derivedFrom": "soma de acertos nas 4 etapas"
+          }
+        ],
+        "render": "Quatro mini-tarefas em sequência: escolher 'ovo' entre 3 palavras; indicar 2 sílabas; ordenar o-vo; completar 'O ___ é branco.'",
+        "transition": "Cada tarefa concluída avança a barra; erro permite nova tentativa rápida sem penalização pública.",
+        "constraint": "A consolidação da palavra exige domínio das quatro operações do método, não apenas reconhecimento visual.",
+        "assessment": "O aluno realiza as 4 tarefas: reconhece 'ovo', indica 2 sílabas, reconstrói o-vo e completa a frase com 'ovo'."
+      },
+      "differentiation": {
+        "support": "🟢 Duas opções por tarefa e apoio oral do professor na leitura dos enunciados.",
+        "standard": "🟡 Três opções e execução autónoma das quatro tarefas.",
+        "challenge": "🔴 Quatro opções com distratores mais próximos e resposta correta na 1.ª tentativa em 3 de 4 etapas."
+      },
+      "duration": 4
+    },
+    {
+      "summary": "Extensão e comunicação MEM — produção curta com 'ovo'",
+      "textDescription": "O aluno escolhe um modo de produção (oral, desenho ou escrita) para usar a palavra 'ovo' num novo contexto e partilhar com colegas.",
+      "interaction": {
+        "state": [
+          {
+            "name": "modo",
+            "type": "toggle",
+            "options": ["oral", "desenho", "escrita"],
+            "default": "oral"
+          },
+          {
+            "name": "producao",
+            "type": "canvas",
+            "default": ""
+          }
+        ],
+        "render": "Três botões de modo; no modo oral aparece prompt de frase; no desenho abre canvas; na escrita abre linha de texto curto.",
+        "transition": "Selecionar modo ativa a tarefa; ao concluir, botão 'partilhar' envia para apresentação no quadro/turma.",
+        "constraint": "A aprendizagem consolida-se quando a palavra é usada pelo aluno em produção própria com sentido.",
+        "assessment": "O aluno produz e partilha uma frase, desenho legendado ou enunciado oral que inclua corretamente a palavra 'ovo'."
+      },
+      "maker": {
+        "type": "unplugged",
+        "challenge": "Criar mini-cartaz 'ovo' (palavra + desenho) para o painel das 28 palavras da turma.",
+        "materials": [
+          "Folha A4",
+          "Lápis de cor",
+          "Fita-cola"
+        ],
+        "groupSize": "2-3",
+        "connection": "O cartaz transforma a aprendizagem digital em memória visual permanente na sala.",
+        "communication": "Cada grupo apresenta o cartaz em 20 segundos e cola no painel coletivo.",
+        "alternatives": [
+          "Post-it individual no caderno",
+          "Registo fotográfico no diário de turma"
+        ]
+      },
+      "differentiation": {
+        "support": "🟢 Frase-modelo disponível para completar: 'O ovo é ___.'.",
+        "standard": "🟡 Produção livre curta com apoio de imagem.",
+        "challenge": "🔴 Produção com duas frases, incluindo um novo contexto para 'ovo'."
+      },
+      "duration": 5
+    }
+  ],
+  "sessionFlow": "0-5min: abertura contextual (duas cenas: ninho/prato) → 5-10min: reconhecimento global da palavra 'ovo' → 10-17min: segmentação silábica o-vo com palmas e arrasto → 17-24min: recombinação e classificação de combinações → 24-30min: leitura e escrita guiada de 'ovo' → 30-36min: construção da frase 'O ovo é branco.' + extensão maker em pares → 36-40min: mini-avaliação formativa (4 critérios observáveis) → 40-45min: extensão criativa e comunicação MEM",
+  "m28pMetadata": {
+    "wordOrder": 14,
+    "word": "ovo",
+    "syllables": [
+      "o",
+      "vo"
+    ],
+    "syllableCount": 2,
+    "theme": "animal / alimento",
+    "anchorSentence": "O ovo é branco.",
+    "status": "done",
+    "language": "pt-PT",
+    "orthography": "AO90"
+  }
+}

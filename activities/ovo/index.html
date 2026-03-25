@@ -1,0 +1,875 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M28P - Palavra ovo</title>
+  <style>
+    :root {
+      --bg: #fff8f0;
+      --surface: #ffffff;
+      --primary: #e05fa0;
+      --accent: #f59e0b;
+      --text: #1e1b18;
+      --green: #22c55e;
+      --green-bg: #f0fdf4;
+      --amber: #f59e0b;
+      --amber-bg: #fffbeb;
+      --red: #ef4444;
+      --focus: #7c3aed;
+      --o: #f59e0b;
+      --vo: #10b981;
+      --radius: 16px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --transition: 200ms ease;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Nunito", "Poppins", "Comic Sans MS", sans-serif;
+      background: radial-gradient(circle at 15% 10%, #fff3df 0%, #fff8f0 35%, #fef6ee 100%);
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1.4;
+    }
+
+    button, select, input, .chip, .slot, .dropzone {
+      min-height: 48px;
+      min-width: 48px;
+      font-size: 1rem;
+    }
+
+    button:focus-visible, [tabindex="0"]:focus-visible, select:focus-visible, input:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .app {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    header {
+      background: linear-gradient(130deg, #ffe7f3, #fff4de);
+      border: 2px solid var(--primary);
+      border-radius: var(--radius);
+      padding: 1rem 1.2rem;
+      box-shadow: var(--shadow);
+    }
+
+    h1 {
+      margin: 0 0 .3rem;
+      font-size: 2rem;
+      color: var(--primary);
+      letter-spacing: .03em;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem;
+      font-weight: 700;
+      align-items: center;
+    }
+
+    .badge {
+      background: var(--accent);
+      color: #fff;
+      border-radius: 999px;
+      padding: .25rem .75rem;
+      font-size: .9rem;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 2px solid var(--primary);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .word-display {
+      text-align: center;
+      font-size: clamp(2.2rem, 6vw, 3rem);
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: 0.05em;
+    }
+
+    .feedback {
+      border-radius: 14px;
+      padding: .6rem .8rem;
+      font-weight: 700;
+      margin-top: .7rem;
+      min-height: 2.8rem;
+      transition: transform var(--transition), background var(--transition);
+    }
+
+    .feedback.ok {
+      background: var(--green-bg);
+      border: 2px solid var(--green);
+      color: #166534;
+      animation: pulseOk .3s ease;
+    }
+
+    .feedback.err {
+      background: var(--amber-bg);
+      border: 2px solid var(--amber);
+      color: #92400e;
+      animation: shake .25s ease;
+    }
+
+    @keyframes pulseOk {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-3px); }
+      50% { transform: translateX(3px); }
+      75% { transform: translateX(-2px); }
+      100% { transform: translateX(0); }
+    }
+
+    .mode-tabs {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+
+    .mode-btn {
+      border-radius: 999px;
+      border: 2px solid transparent;
+      padding: .45rem .9rem;
+      font-weight: 800;
+      background: #f5f5f5;
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .mode-btn:hover { transform: scale(1.05); }
+    .mode-btn:active { transform: scale(0.97); }
+
+    .mode-btn[data-mode="support"] { border-color: var(--green); }
+    .mode-btn[data-mode="standard"] { border-color: var(--amber); }
+    .mode-btn[data-mode="challenge"] { border-color: var(--red); }
+
+    .mode-btn.active { box-shadow: 0 0 0 3px #00000018; }
+
+    .unit-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .unit {
+      border: 2px solid #f1b4d4;
+      border-radius: 14px;
+      padding: .9rem;
+      background: #fff;
+      display: grid;
+      gap: .7rem;
+    }
+
+    .unit h2 {
+      font-size: 1.1rem;
+      margin: 0;
+      color: #8d3563;
+    }
+
+    .controls { display: flex; flex-wrap: wrap; gap: .6rem; }
+
+    .pill-btn, .chip {
+      border: 2px solid #e6e6e6;
+      border-radius: 999px;
+      padding: .6rem 1rem;
+      background: #fff;
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+      font-weight: 700;
+    }
+
+    .pill-btn:hover, .chip:hover { transform: scale(1.04); box-shadow: var(--shadow); }
+    .pill-btn:active, .chip:active { transform: scale(0.97); }
+
+    .chip.correct-choice { border-color: var(--green); background: #edffef; }
+    .chip.wrong-choice { border-color: var(--amber); background: #fff7e7; }
+
+    .scene {
+      border: 2px dashed #f4bfd8;
+      border-radius: 14px;
+      padding: .7rem;
+      background: #fffdf8;
+      display: grid;
+      place-items: center;
+      min-height: 140px;
+      text-align: center;
+      font-size: 1.35rem;
+    }
+
+    .reveal-word {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--primary);
+      visibility: hidden;
+      margin-top: .4rem;
+    }
+
+    .reveal-word.show { visibility: visible; }
+
+    .drag-wrap {
+      display: grid;
+      gap: .7rem;
+    }
+
+    .tokens { display: flex; gap: .6rem; flex-wrap: wrap; }
+
+    .token {
+      user-select: none;
+      border: none;
+      color: #fff;
+      border-radius: 12px;
+      padding: .5rem 1.2rem;
+      font-size: 2rem;
+      font-weight: 800;
+      cursor: grab;
+      box-shadow: var(--shadow);
+      touch-action: none;
+      transition: transform var(--transition), filter var(--transition);
+    }
+
+    .token[data-syl="o"] { background: var(--o); }
+    .token[data-syl="vo"] { background: var(--vo); }
+
+    .token.dragging { transform: scale(1.1); filter: brightness(1.05); cursor: grabbing; }
+
+    .dropzone {
+      border: 3px dashed #d9d9d9;
+      border-radius: 12px;
+      min-height: 62px;
+      display: grid;
+      place-items: center;
+      padding: .2rem;
+      background: #fafafa;
+    }
+
+    .dropzone.hit { border-color: var(--primary); background: #fff2f9; }
+
+    .slots { display: grid; grid-template-columns: repeat(2, minmax(90px, 1fr)); gap: .6rem; }
+
+    .slot {
+      border: 2px solid #dfdfdf;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 1.8rem;
+      background: #fff;
+    }
+
+    .slot[data-filled="true"] { border-color: var(--primary); }
+
+    .palmas {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      flex-wrap: wrap;
+    }
+
+    .phrase-zone {
+      display: grid;
+      gap: .5rem;
+    }
+
+    .phrase-build {
+      display: flex;
+      gap: .45rem;
+      flex-wrap: wrap;
+      border: 2px dashed #f4bfd8;
+      border-radius: 12px;
+      padding: .5rem;
+      min-height: 70px;
+      align-items: center;
+    }
+
+    .word-card {
+      border: 2px solid #f0b2d5;
+      border-radius: 12px;
+      padding: .45rem .7rem;
+      background: #fff;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform var(--transition);
+    }
+
+    .word-card:hover { transform: scale(1.04); }
+
+    .small {
+      font-size: .9rem;
+      opacity: .95;
+    }
+
+    .score {
+      font-weight: 800;
+      color: #7a2f58;
+    }
+
+    canvas#confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    @media (min-width: 900px) {
+      .unit-grid { grid-template-columns: 1fr 1fr; }
+      .unit.full { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 767px) {
+      body { font-size: 18px; }
+      .app { padding: 1rem; }
+      .token { font-size: 1.7rem; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+  <main class="app" aria-label="Lição da palavra ovo">
+    <header>
+      <h1>Palavra 14: ovo</h1>
+      <div class="meta">
+        <span class="badge">8 unidades</span>
+        <span class="badge">45 minutos</span>
+        <span class="badge">pt-PT (AO90)</span>
+      </div>
+      <p class="small">Objetivo: reconhecer <strong>ovo</strong>, segmentar <strong>o-vo</strong>, recombinar sílabas e ler a frase <strong>“O ovo é branco.”</strong></p>
+    </header>
+
+    <section class="panel" aria-label="Diferenciação">
+      <div class="mode-tabs" role="tablist" aria-label="Níveis de diferenciação">
+        <button class="mode-btn active" data-mode="support" role="tab" aria-selected="true">🟢 Com ajuda</button>
+        <button class="mode-btn" data-mode="standard" role="tab" aria-selected="false">🟡 Objetivo</button>
+        <button class="mode-btn" data-mode="challenge" role="tab" aria-selected="false">🔴 Desafio</button>
+      </div>
+      <p id="modeHint" class="small">Modo atual: 🟢 com apoio visual extra.</p>
+    </section>
+
+    <section class="panel unit-grid" aria-label="Unidades interativas">
+      <article class="unit" id="u1">
+        <h2>Unidade 1: Abertura contextual</h2>
+        <div class="scene" id="sceneBox" aria-live="polite">🐦 Ninho com ovos</div>
+        <div class="controls">
+          <button class="pill-btn" id="sceneToggle" aria-label="Alternar cena">Alternar cena</button>
+          <button class="pill-btn" id="revealBtn" aria-label="Mostrar palavra">🔎 Mostrar palavra</button>
+        </div>
+        <div id="u1Word" class="reveal-word" aria-live="polite">OVO</div>
+        <div id="fb1" class="feedback">Escolhe uma cena e revela a palavra.</div>
+      </article>
+
+      <article class="unit" id="u2">
+        <h2>Unidade 2: Reconhecimento global</h2>
+        <div class="word-display">🥚</div>
+        <div id="u2Options" class="controls" aria-label="Escolher palavra correta"></div>
+        <div class="score" id="u2Score">Rondas corretas seguidas: 0/3</div>
+        <div id="fb2" class="feedback">Toca na palavra correta.</div>
+      </article>
+
+      <article class="unit" id="u3">
+        <h2>Unidade 3: Segmentação o-vo</h2>
+        <div class="drag-wrap">
+          <div class="tokens" id="u3Tokens">
+            <button class="token" data-syl="o" aria-label="Sílaba o">o</button>
+            <button class="token" data-syl="vo" aria-label="Sílaba vo">vo</button>
+          </div>
+          <div class="slots">
+            <div class="slot dropzone" data-index="0" aria-label="Primeira sílaba">?</div>
+            <div class="slot dropzone" data-index="1" aria-label="Segunda sílaba">?</div>
+          </div>
+        </div>
+        <div class="palmas">
+          <label for="claps">Palmas:</label>
+          <input id="claps" type="range" min="0" max="4" step="1" value="0" aria-label="Número de palmas" />
+          <strong id="clapCount">0</strong>
+          <button class="pill-btn" id="u3Check">Verificar</button>
+        </div>
+        <div id="fb3" class="feedback">Arrasta as sílabas e marca 2 palmas.</div>
+      </article>
+
+      <article class="unit" id="u4">
+        <h2>Unidade 4: Recombinação silábica</h2>
+        <div class="controls" id="u4Base"></div>
+        <div class="controls" id="u4Bank"></div>
+        <p>Palavra formada: <strong id="u4Word">(vazia)</strong></p>
+        <div class="controls">
+          <button class="chip" data-class="existe">Existe</button>
+          <button class="chip" data-class="nao">Não existe</button>
+          <button class="pill-btn" id="u4Clear">Limpar</button>
+        </div>
+        <div id="fb4" class="feedback">Forma uma palavra e classifica.</div>
+      </article>
+
+      <article class="unit" id="u5">
+        <h2>Unidade 5: Completar “ovo”</h2>
+        <div class="controls">
+          <label for="gapSel">Lacuna:</label>
+          <select id="gapSel" aria-label="Escolher lacuna">
+            <option value="_vo">_vo</option>
+            <option value="o_">o_</option>
+          </select>
+        </div>
+        <div id="gapView" class="word-display">_VO</div>
+        <div class="controls" id="u5Choices"></div>
+        <label for="copyInput">Cópia guiada:</label>
+        <input id="copyInput" aria-label="Escrever a palavra ovo" placeholder="Escreve aqui" />
+        <div id="fb5" class="feedback">Completa a sílaba em falta.</div>
+      </article>
+
+      <article class="unit" id="u6">
+        <h2>Unidade 6: Frase simples</h2>
+        <p class="small">Ordena para formar: O ovo é branco.</p>
+        <div class="phrase-zone">
+          <div class="controls" id="u6Pool"></div>
+          <div id="u6Build" class="phrase-build" aria-label="Construção da frase"></div>
+          <div class="controls">
+            <button class="pill-btn" id="u6Check">Verificar frase</button>
+            <button class="pill-btn" id="u6Reset">Repor</button>
+          </div>
+        </div>
+        <div id="fb6" class="feedback">Monta a frase correta.</div>
+      </article>
+
+      <article class="unit" id="u7">
+        <h2>Unidade 7: Mini-avaliação (4 critérios)</h2>
+        <div id="u7Task" class="small"></div>
+        <div id="u7Options" class="controls"></div>
+        <div class="score" id="u7Score">Etapa 1/4 | Acertos: 0</div>
+        <div id="fb7" class="feedback">Vamos começar.</div>
+      </article>
+
+      <article class="unit full" id="u8">
+        <h2>Unidade 8: Extensão e comunicação</h2>
+        <div class="controls">
+          <button class="pill-btn" data-prod="oral">Oral</button>
+          <button class="pill-btn" data-prod="desenho">Desenho</button>
+          <button class="pill-btn" data-prod="escrita">Escrita</button>
+        </div>
+        <p id="prodPrompt">Diz: “O ovo é branco.” e acrescenta uma ideia tua.</p>
+        <textarea id="prodText" rows="3" style="width:100%; border:2px solid #f3bfd9; border-radius:12px; padding:.6rem;" aria-label="Produção curta"></textarea>
+        <div class="controls">
+          <button class="pill-btn" id="shareBtn">Partilhar</button>
+        </div>
+        <div id="fb8" class="feedback">Escolhe um modo e cria uma produção com a palavra “ovo”.</div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const state = {
+        mode: 'support',
+        u1: { scene: 'ninho', seen: new Set(), revealed: false },
+        u2: { streak: 0 },
+        u3: { slots: ['', ''], claps: 0 },
+        u4: { base: '', bank: '', word: '' },
+        u5: { gap: '_vo', answer: '', rounds: 0 },
+        u6: { pool: ['branco', 'é', '.', 'O', 'ovo'], build: [] },
+        u7: { step: 0, correct: 0 },
+        u8: { mode: 'oral' }
+      };
+
+      const modeHint = document.getElementById('modeHint');
+      document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.mode-btn').forEach(b => {
+            b.classList.remove('active');
+            b.setAttribute('aria-selected', 'false');
+          });
+          btn.classList.add('active');
+          btn.setAttribute('aria-selected', 'true');
+          state.mode = btn.dataset.mode;
+          const texts = {
+            support: 'Modo atual: 🟢 com apoio visual extra.',
+            standard: 'Modo atual: 🟡 objetivo da aula.',
+            challenge: 'Modo atual: 🔴 desafio com menos pistas.'
+          };
+          modeHint.textContent = texts[state.mode];
+          resetUnit2();
+          setupUnit4();
+          renderUnit5Choices();
+          renderUnit6();
+          renderUnit7();
+        });
+      });
+
+      function beep(ok = true) {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return;
+        const ctx = new Ctx();
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'sine';
+        o.frequency.value = ok ? 660 : 260;
+        g.gain.value = 0.0001;
+        o.connect(g);
+        g.connect(ctx.destination);
+        o.start();
+        const now = ctx.currentTime;
+        g.gain.exponentialRampToValueAtTime(0.08, now + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+        o.stop(now + 0.2);
+      }
+
+      const confettiCanvas = document.getElementById('confetti');
+      const cctx = confettiCanvas.getContext('2d');
+      let particles = [];
+
+      function resizeCanvas() {
+        confettiCanvas.width = window.innerWidth;
+        confettiCanvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      function launchConfetti() {
+        particles = Array.from({ length: 70 }, () => ({
+          x: Math.random() * confettiCanvas.width,
+          y: -10,
+          vy: 2 + Math.random() * 3,
+          vx: -1 + Math.random() * 2,
+          s: 4 + Math.random() * 7,
+          c: ['#22c55e', '#f59e0b', '#e05fa0', '#10b981'][Math.floor(Math.random() * 4)]
+        }));
+        let frames = 0;
+        function step() {
+          cctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+          particles.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            cctx.fillStyle = p.c;
+            cctx.fillRect(p.x, p.y, p.s, p.s);
+          });
+          particles = particles.filter(p => p.y < confettiCanvas.height + 20);
+          frames += 1;
+          if (frames < 90 && particles.length) requestAnimationFrame(step);
+          else cctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+        }
+        requestAnimationFrame(step);
+      }
+
+      function setFeedback(id, ok, msg) {
+        const el = document.getElementById(id);
+        el.classList.remove('ok', 'err');
+        el.classList.add(ok ? 'ok' : 'err');
+        el.textContent = `${ok ? '✓' : '✗'} ${msg}`;
+        beep(ok);
+        if (ok) launchConfetti();
+      }
+
+      // Unidade 1
+      const sceneBox = document.getElementById('sceneBox');
+      const reveal = document.getElementById('u1Word');
+      document.getElementById('sceneToggle').addEventListener('click', () => {
+        state.u1.scene = state.u1.scene === 'ninho' ? 'prato' : 'ninho';
+        sceneBox.textContent = state.u1.scene === 'ninho' ? '🐦 Ninho com ovos' : '🍽️ Prato com ovo cozido';
+      });
+      document.getElementById('revealBtn').addEventListener('click', () => {
+        reveal.classList.add('show');
+        state.u1.seen.add(state.u1.scene);
+        if (state.u1.seen.size === 2) {
+          setFeedback('fb1', true, 'Muito bem! A palavra “ovo” aparece nas duas cenas.');
+        } else {
+          setFeedback('fb1', true, 'Boa! Agora vê também a outra cena.');
+        }
+      });
+
+      // Unidade 2
+      const u2Options = document.getElementById('u2Options');
+      function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
+      function optionsByMode() {
+        if (state.mode === 'support') return ['ovo', 'uva'];
+        if (state.mode === 'challenge') return ['ovo', 'uva', 'avó', 'ovos'];
+        return ['ovo', 'uva', 'avó'];
+      }
+      function resetUnit2() {
+        u2Options.innerHTML = '';
+        const opts = shuffle(optionsByMode().slice());
+        opts.forEach(w => {
+          const b = document.createElement('button');
+          b.className = 'chip';
+          b.textContent = w;
+          b.addEventListener('click', () => {
+            if (w === 'ovo') {
+              b.classList.add('correct-choice');
+              state.u2.streak += 1;
+              setFeedback('fb2', true, 'Acertaste!');
+              if (state.u2.streak >= 3) setFeedback('fb2', true, '3 rondas seguidas! Reconhecimento global conseguido.');
+              setTimeout(resetUnit2, 500);
+            } else {
+              b.classList.add('wrong-choice');
+              state.u2.streak = 0;
+              setFeedback('fb2', false, 'Tenta de novo. Procura “ovo”.');
+              setTimeout(resetUnit2, 650);
+            }
+            document.getElementById('u2Score').textContent = `Rondas corretas seguidas: ${state.u2.streak}/3`;
+          });
+          u2Options.appendChild(b);
+        });
+      }
+      resetUnit2();
+
+      // Unidade 3 - Drag touch/mouse
+      const slots = Array.from(document.querySelectorAll('#u3 .slot'));
+      const tokens = Array.from(document.querySelectorAll('#u3 .token'));
+      tokens.forEach(token => {
+        let active = false;
+        token.addEventListener('pointerdown', e => {
+          active = true;
+          token.classList.add('dragging');
+          token.setPointerCapture(e.pointerId);
+        });
+        token.addEventListener('pointermove', e => {
+          if (!active) return;
+          token.style.transform = `translate(${e.movementX}px, ${e.movementY}px) scale(1.1)`;
+          const hit = slots.find(s => {
+            const r = s.getBoundingClientRect();
+            return e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+          });
+          slots.forEach(s => s.classList.toggle('hit', s === hit));
+        });
+        token.addEventListener('pointerup', e => {
+          if (!active) return;
+          active = false;
+          token.classList.remove('dragging');
+          token.style.transform = '';
+          const hit = slots.find(s => {
+            const r = s.getBoundingClientRect();
+            return e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+          });
+          slots.forEach(s => s.classList.remove('hit'));
+          if (hit) {
+            const idx = Number(hit.dataset.index);
+            state.u3.slots[idx] = token.dataset.syl;
+            hit.textContent = token.dataset.syl;
+            hit.dataset.filled = 'true';
+          }
+        });
+      });
+      document.getElementById('claps').addEventListener('input', e => {
+        state.u3.claps = Number(e.target.value);
+        document.getElementById('clapCount').textContent = String(state.u3.claps);
+      });
+      document.getElementById('u3Check').addEventListener('click', () => {
+        const ok = state.u3.slots[0] === 'o' && state.u3.slots[1] === 'vo' && state.u3.claps === 2;
+        if (ok) setFeedback('fb3', true, 'Perfeito! “ovo” = o-vo e 2 palmas.');
+        else setFeedback('fb3', false, 'Revê a ordem o-vo e marca 2 palmas.');
+      });
+
+      // Unidade 4
+      const baseWrap = document.getElementById('u4Base');
+      const bankWrap = document.getElementById('u4Bank');
+      function setupUnit4() {
+        state.u4 = { base: '', bank: '', word: '' };
+        const bank = state.mode === 'support' ? ['va', 'no'] : ['va', 'la', 'no', 'me'];
+        baseWrap.innerHTML = '';
+        bankWrap.innerHTML = '';
+        ['o', 'vo'].forEach(s => {
+          const b = document.createElement('button');
+          b.className = 'chip';
+          b.textContent = `Base: ${s}`;
+          b.addEventListener('click', () => { state.u4.base = s; updateU4Word(); });
+          baseWrap.appendChild(b);
+        });
+        bank.forEach(s => {
+          const b = document.createElement('button');
+          b.className = 'chip';
+          b.textContent = s;
+          b.addEventListener('click', () => { state.u4.bank = s; updateU4Word(); });
+          bankWrap.appendChild(b);
+        });
+      }
+      function updateU4Word() {
+        state.u4.word = `${state.u4.base}${state.u4.bank}`;
+        document.getElementById('u4Word').textContent = state.u4.word || '(vazia)';
+      }
+      setupUnit4();
+      document.querySelectorAll('#u4 [data-class]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const word = state.u4.word;
+          const exists = ['ovo', 'ovo'].includes(word);
+          const selectedExists = btn.dataset.class === 'existe';
+          const ok = word && ((exists && selectedExists) || (!exists && !selectedExists));
+          if (!word) return setFeedback('fb4', false, 'Primeiro forma uma combinação.');
+          setFeedback('fb4', ok, ok ? 'Boa classificação!' : 'Nem toda combinação forma palavra real.');
+        });
+      });
+      document.getElementById('u4Clear').addEventListener('click', () => {
+        state.u4 = { base: '', bank: '', word: '' };
+        updateU4Word();
+      });
+
+      // Unidade 5
+      const gapSel = document.getElementById('gapSel');
+      const gapView = document.getElementById('gapView');
+      const u5Choices = document.getElementById('u5Choices');
+      function renderGap() { gapView.textContent = gapSel.value.toUpperCase(); }
+      gapSel.addEventListener('change', () => { state.u5.gap = gapSel.value; renderGap(); renderUnit5Choices(); });
+      function choiceSet() {
+        if (state.mode === 'support') return ['o', 'vo'];
+        return ['o', 'vo', 'va'];
+      }
+      function renderUnit5Choices() {
+        u5Choices.innerHTML = '';
+        choiceSet().forEach(s => {
+          const b = document.createElement('button');
+          b.className = 'chip';
+          b.textContent = s;
+          b.addEventListener('click', () => {
+            const ok = (gapSel.value === '_vo' && s === 'o') || (gapSel.value === 'o_' && s === 'vo');
+            if (ok) {
+              state.u5.rounds += 1;
+              setFeedback('fb5', true, `Correto! Ronda ${state.u5.rounds}/2.`);
+            } else {
+              setFeedback('fb5', false, 'Ainda não. Tenta outra sílaba.');
+            }
+          });
+          u5Choices.appendChild(b);
+        });
+      }
+      renderGap();
+      renderUnit5Choices();
+      document.getElementById('copyInput').addEventListener('input', e => {
+        if (e.target.value.trim().toLowerCase() === 'ovo') {
+          setFeedback('fb5', true, 'Escrita legível: “ovo”.');
+        }
+      });
+
+      // Unidade 6
+      const u6Pool = document.getElementById('u6Pool');
+      const u6Build = document.getElementById('u6Build');
+      function initialPool() {
+        const base = ['branco', 'é', '.', 'O', 'ovo'];
+        if (state.mode === 'support') return ['O', 'ovo', 'é', 'branco', '.'];
+        return shuffle(base.slice());
+      }
+      function renderUnit6() {
+        state.u6.pool = initialPool();
+        state.u6.build = [];
+        u6Pool.innerHTML = '';
+        u6Build.innerHTML = '';
+        state.u6.pool.forEach((w, idx) => {
+          const c = document.createElement('button');
+          c.className = 'word-card';
+          c.textContent = w;
+          c.addEventListener('click', () => {
+            state.u6.build.push(w);
+            c.disabled = true;
+            drawBuild();
+          });
+          if (state.mode === 'support' && (w === 'O' || w === '.')) c.disabled = true;
+          u6Pool.appendChild(c);
+          if (state.mode === 'support' && (w === 'O' || w === '.')) {
+            state.u6.build.push(w);
+          }
+        });
+        drawBuild();
+      }
+      function drawBuild() {
+        u6Build.innerHTML = '';
+        state.u6.build.forEach(w => {
+          const p = document.createElement('span');
+          p.className = 'word-card';
+          p.textContent = w;
+          u6Build.appendChild(p);
+        });
+      }
+      renderUnit6();
+      document.getElementById('u6Check').addEventListener('click', () => {
+        const phrase = state.u6.build.join(' ').replace(' .', '.');
+        const ok = phrase === 'O ovo é branco.';
+        setFeedback('fb6', ok, ok ? 'Frase correta: O ovo é branco.' : 'Verifica a ordem e o ponto final.');
+      });
+      document.getElementById('u6Reset').addEventListener('click', renderUnit6);
+
+      // Unidade 7
+      const u7Task = document.getElementById('u7Task');
+      const u7Options = document.getElementById('u7Options');
+      const u7Score = document.getElementById('u7Score');
+      const u7Steps = [
+        {
+          q: '1) Escolhe a palavra correta para 🥚',
+          opts: state.mode === 'support' ? ['ovo', 'uva'] : ['ovo', 'uva', 'avó'],
+          ok: 'ovo'
+        },
+        {
+          q: '2) Quantas sílabas tem “ovo”?',
+          opts: ['1', '2', '3'],
+          ok: '2'
+        },
+        {
+          q: '3) Qual é a ordem certa?',
+          opts: ['vo-o', 'o-vo', 'o-va'],
+          ok: 'o-vo'
+        },
+        {
+          q: '4) Completa: O ___ é branco.',
+          opts: state.mode === 'challenge' ? ['ovo', 'uva', 'avó', 'ovoz'] : ['ovo', 'uva', 'avó'],
+          ok: 'ovo'
+        }
+      ];
+      function renderUnit7() {
+        const step = state.u7.step;
+        const info = u7Steps[step];
+        u7Task.textContent = info.q;
+        u7Options.innerHTML = '';
+        info.opts.forEach(op => {
+          const b = document.createElement('button');
+          b.className = 'chip';
+          b.textContent = op;
+          b.addEventListener('click', () => {
+            const ok = op === info.ok;
+            if (ok) state.u7.correct += 1;
+            setFeedback('fb7', ok, ok ? 'Certo!' : 'Quase. Continua.');
+            state.u7.step += 1;
+            if (state.u7.step < 4) {
+              renderUnit7();
+            } else {
+              u7Task.textContent = 'Mini-avaliação concluída.';
+              u7Options.innerHTML = '';
+              const pass = state.u7.correct >= 3;
+              setFeedback('fb7', pass, pass ? `Muito bem! ${state.u7.correct}/4.` : `${state.u7.correct}/4. Vamos repetir depois.`);
+            }
+            u7Score.textContent = `Etapa ${Math.min(state.u7.step + 1, 4)}/4 | Acertos: ${state.u7.correct}`;
+          });
+          u7Options.appendChild(b);
+        });
+      }
+      renderUnit7();
+
+      // Unidade 8
+      const prodPrompt = document.getElementById('prodPrompt');
+      const prodText = document.getElementById('prodText');
+      document.querySelectorAll('#u8 [data-prod]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.u8.mode = btn.dataset.prod;
+          if (state.u8.mode === 'oral') prodPrompt.textContent = 'Diz: “O ovo é branco.” e acrescenta uma ideia tua.';
+          if (state.u8.mode === 'desenho') prodPrompt.textContent = 'Descreve o teu desenho com a palavra “ovo”.';
+          if (state.u8.mode === 'escrita') prodPrompt.textContent = 'Escreve 1 ou 2 frases com a palavra “ovo”.';
+        });
+      });
+      document.getElementById('shareBtn').addEventListener('click', () => {
+        const txt = prodText.value.toLowerCase();
+        const ok = txt.includes('ovo') || state.u8.mode === 'oral';
+        setFeedback('fb8', ok, ok ? 'Partilha pronta para a turma!' : 'Inclui a palavra “ovo” na tua produção.');
+      });
+    })();
+  </script>
+</body>
+</html>
