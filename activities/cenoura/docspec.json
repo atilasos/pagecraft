@@ -1,0 +1,215 @@
+{
+  "topic": "Palavra 16 — cenoura (Método das 28 Palavras)",
+  "ageRange": "6-7 anos (1.º ano)",
+  "duration": 45,
+  "objectives": [
+    "Reconhecer a palavra 'cenoura' globalmente e associá-la à imagem",
+    "Segmentar 'cenoura' nas sílabas ce-nou-ra e identificar cada sílaba",
+    "Recombinar sílabas para formar novas palavras",
+    "Usar 'cenoura' numa frase simples oral ou escrita"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Desenvolver a consciência fonológica: segmentar palavras em sílabas e identificar sílabas em posição inicial, medial e final",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Ler palavras e frases simples em situações contextualizadas",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Estudo do Meio",
+        "year": "1.º ano",
+        "domain": "À Descoberta do Ambiente Natural",
+        "descriptor": "Identificar plantas comestíveis (hortícolas) e reconhecer a sua utilidade na alimentação",
+        "source": "estudo-do-meio-1-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-F: Desenvolvimento pessoal e autonomia",
+      "PA-G: Bem-estar, saúde e ambiente"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": ["PIT", "mapa de tarefas", "diário de turma"],
+    "socialOrganization": "individual (blocos 1-3, 10min) → pares (blocos 4-5, 10min) → grupo/turma (bloco 6 + avaliação, 10min)"
+  },
+  "materials": [
+    "Tablet ou computador com browser (1 por aluno ou par)",
+    "Cartões de sílabas físicos: ce / nou / ra (impressos)",
+    "Lápis e papel para escrita guiada",
+    "Imagem de cenoura (digital e/ou impressa)"
+  ],
+  "units": [
+    {
+      "summary": "Abertura contextual — a cenoura na horta",
+      "textDescription": "O aluno deve compreender que a cenoura é um vegetal que cresce na horta, debaixo da terra, e que é laranja e saudável. A palavra 'cenoura' é apresentada numa micro-história com imagem.",
+      "duration": 5,
+      "interaction": {
+        "state": [
+          { "name": "cena", "type": "toggle", "options": ["horta", "prato"], "default": "horta" },
+          { "name": "palavraVisivel", "type": "toggle", "options": ["oculta", "visivel"], "default": "oculta" }
+        ],
+        "render": "Imagem da horta com cenoura semi-enterrada; botão 'Revelar palavra' mostra o texto 'cenoura' por baixo da imagem em tipografia grande; toggle muda cena para cenoura no prato",
+        "transition": "Clicar 'Revelar' → palavraVisivel passa a 'visivel' e o texto aparece com animação suave; toggle cena → imagem muda",
+        "constraint": "A palavra escrita corresponde sempre à mesma imagem — forma escrita e imagem são inseparáveis",
+        "assessment": "O aluno aponta para a palavra e lê-a em voz alta sem apoio da imagem"
+      },
+      "differentiation": {
+        "support": "Imagem sempre visível; palavra já revelada desde o início; professor lê a micro-história em voz alta",
+        "standard": "Aluno clica para revelar a palavra e tenta ler depois de ouvir a história",
+        "challenge": "Aluno lê a história sozinho e explica o que é uma cenoura sem ver a imagem"
+      }
+    },
+    {
+      "summary": "Reconhecimento global — palavra ↔ imagem",
+      "textDescription": "O aluno deve associar a forma visual da palavra 'cenoura' à sua imagem entre distratores. Trabalha o reconhecimento global antes da análise silábica.",
+      "duration": 5,
+      "interaction": {
+        "state": [
+          { "name": "opcoes", "type": "quiz", "options": ["cenoura", "cebola", "couve"], "default": null },
+          { "name": "selecao", "type": "derived", "derivedFrom": "opcoes" },
+          { "name": "feedback", "type": "derived", "derivedFrom": "selecao === 'cenoura' ? 'correto' : 'tentar'" }
+        ],
+        "render": "Imagem de cenoura no centro; três cartões de palavra em baixo (cenoura / cebola / couve); aluno clica no cartão correto; feedback: ✓ verde claro ou ✗ âmbar",
+        "transition": "Clicar cartão → selecao atualiza → feedback exibido imediatamente; se errado, cartão volta ao lugar",
+        "constraint": "A correspondência imagem↔palavra é unívoca — só uma resposta é correcta",
+        "assessment": "O aluno selecciona 'cenoura' correctamente em 2 de 2 rondas com distratores diferentes"
+      },
+      "differentiation": {
+        "support": "Palavra 'cenoura' sublinhada em destaque; distratores com imagem também visível",
+        "standard": "Três opções de texto sem imagem nos distratores",
+        "challenge": "Quatro opções, sem imagem central — só o texto; aluno deve memorizar a forma da palavra"
+      }
+    },
+    {
+      "summary": "Segmentação silábica — ce · nou · ra",
+      "textDescription": "O aluno deve dividir 'cenoura' nas suas três sílabas (ce-nou-ra), batendo palmas e arrastando blocos de sílabas para os lugares corretos.",
+      "duration": 8,
+      "interaction": {
+        "state": [
+          { "name": "silabas", "type": "sorting", "options": ["ce", "nou", "ra", "no", "u"], "default": [] },
+          { "name": "posicoes", "type": "drag", "options": ["slot1", "slot2", "slot3"], "default": [] },
+          { "name": "palmadas", "type": "derived", "derivedFrom": "posicoes.length" }
+        ],
+        "render": "Palavra 'cenoura' no topo em letras grandes; abaixo três slots vazios (1, 2, 3); banco de blocos de sílabas coloridos (ce=laranja, nou=verde, ra=azul, mais distratores); contador de palmadas; animação de palmas ao confirmar cada sílaba",
+        "transition": "Arrastar bloco para slot → verifica se sílaba está correcta → feedback imediato; botão 'Bater palmas' incrementa contador e destaca sílaba correspondente",
+        "constraint": "A palavra 'cenoura' tem exactamente 3 sílabas: ce-nou-ra; a ordem é fixa e não pode ser alterada",
+        "assessment": "O aluno arrasta ce, nou, ra para os slots correctos sem distratores, e conta 3 palmadas"
+      },
+      "maker": {
+        "type": "unplugged",
+        "challenge": "Com os cartões físicos de sílabas (ce / nou / ra), o aluno ordena-os na mesa e bate uma palma por cada um. Depois esconde um cartão e tenta lembrar qual falta.",
+        "materials": ["Cartões físicos: ce, nou, ra"],
+        "groupSize": "2",
+        "connection": "A actividade física com cartões reforça a segmentação feita no ecrã",
+        "communication": "Par partilha com outro par qual sílaba foi mais difícil de lembrar",
+        "alternatives": ["Escrever as sílabas em post-its e ordenar na mesa"]
+      },
+      "differentiation": {
+        "support": "Sílabas pré-separadas visíveis acima dos slots; sem distratores; animação de palmas automática",
+        "standard": "Banco com 5 blocos (3 correctos + 2 distratores); aluno bate palmas manualmente",
+        "challenge": "Sem visualização prévia da palavra completa; todos os slots em branco; incluir sílaba invertida 'ar' como distrator"
+      }
+    },
+    {
+      "summary": "Recombinação silábica — novas palavras",
+      "textDescription": "O aluno usa as sílabas de 'cenoura' para formar novas palavras reais ou testar combinações. Distingue palavras que existem de palavras inventadas.",
+      "duration": 7,
+      "interaction": {
+        "state": [
+          { "name": "silabaBanco", "type": "drag", "options": ["ce", "nou", "ra", "ca", "no", "ru", "na"], "default": [] },
+          { "name": "palavraConstruida", "type": "derived", "derivedFrom": "silabaBanco.joined" },
+          { "name": "existe", "type": "quiz", "options": ["Existe!", "Não existe"], "default": null }
+        ],
+        "render": "Dois slots de construção livres; banco de sílabas coloridas; após construir palavra, dois botões: 'Existe!' / 'Não existe'; lista de palavras descobertas à direita",
+        "transition": "Arrastar sílabas → palavra constrói-se; clicar botão → feedback (✓ ou ✗) + palavra adicionada à lista se correcta",
+        "constraint": "Nem todas as combinações de sílabas formam palavras reais — o aluno deve descobrir quais existem em português",
+        "assessment": "O aluno forma pelo menos 2 palavras reais (ex: 'cara', 'cura', 'roca') e classifica correctamente 3 combinações"
+      },
+      "differentiation": {
+        "support": "Banco com apenas ce, nou, ra; palavras-alvo mostradas como imagem para confirmar; botão 'Ouvir' lê a palavra",
+        "standard": "Banco com 7 sílabas; aluno forma 2 palavras novas sem guia",
+        "challenge": "Banco com sílabas de palavras anteriores do método (ex: me, ni, na, sa, pa); aluno tenta o máximo de combinações reais em 3 minutos"
+      }
+    },
+    {
+      "summary": "Leitura e escrita guiada — completar a palavra",
+      "textDescription": "O aluno completa a palavra 'cenoura' com a sílaba em falta e escreve-a de forma guiada, consolidando a forma ortográfica.",
+      "duration": 7,
+      "interaction": {
+        "state": [
+          { "name": "silabaFalta", "type": "dropdown", "options": ["ce", "nou", "ra"], "default": null },
+          { "name": "posicaoFalta", "type": "derived", "derivedFrom": "random(1,3)" },
+          { "name": "escrita", "type": "canvas", "default": "" }
+        ],
+        "render": "Palavra com uma sílaba em branco (ex: _-nou-ra); três opções de sílaba para escolher; abaixo, área de escrita com tracejado da palavra completa para copiar",
+        "transition": "Seleccionar sílaba correcta → slot preenche-se com cor; confirmar → área de escrita activa; aluno traça/escreve a palavra",
+        "constraint": "A sílaba em falta tem sempre uma posição única correcta — não é arbitrária",
+        "assessment": "O aluno selecciona a sílaba correcta em 3 exercícios e escreve 'cenoura' de forma legível"
+      },
+      "differentiation": {
+        "support": "Sílaba em falta sempre na posição final (ra); palavra completa visível como modelo de escrita",
+        "standard": "Posição da sílaba varia; tracejado presente mas subtil",
+        "challenge": "Duas sílabas em falta; sem tracejado; aluno escreve a palavra completa de memória"
+      }
+    },
+    {
+      "summary": "Frase simples — 'A cenoura é laranja'",
+      "textDescription": "O aluno lê e constrói uma frase simples com a palavra 'cenoura', consolidando o uso contextual da palavra num enunciado completo.",
+      "duration": 8,
+      "interaction": {
+        "state": [
+          { "name": "palavrasFrase", "type": "sorting", "options": ["A", "cenoura", "é", "laranja", ".", "grande", "doce"], "default": [] },
+          { "name": "fraseCompleta", "type": "derived", "derivedFrom": "palavrasFrase.joined" },
+          { "name": "fraseCorrecta", "type": "derived", "derivedFrom": "fraseCompleta === 'A cenoura é laranja .' ? true : false" }
+        ],
+        "render": "Cartões de palavras dispersos; barra de frase com slots; aluno arrasta palavras para construir 'A cenoura é laranja.'; botão 'Verificar' dá feedback; opção 'Criar a minha frase' activa modo livre",
+        "transition": "Arrastar palavra → posição na barra; verificar → feedback por palavra correcta/incorrecta; modo livre → slots abertos para frase própria",
+        "constraint": "Uma frase válida tem sujeito + verbo + complemento e termina com ponto final",
+        "assessment": "O aluno constrói a frase correctamente OU cria uma frase própria com 'cenoura' que tenha sentido"
+      },
+      "differentiation": {
+        "support": "Apenas 4 palavras (A, cenoura, é, laranja); slots numerados com dica visual",
+        "standard": "6 palavras incluindo distratores; aluno escolhe as correctas",
+        "challenge": "Modo livre: aluno escreve uma frase própria com 'cenoura' sem modelo; partilha com a turma"
+      }
+    },
+    {
+      "summary": "Mini-avaliação formativa — reconhecer, segmentar, reconstruir, usar",
+      "textDescription": "Verificação observável dos quatro critérios do método: reconhecer a palavra, segmentar em sílabas, reconstituir a partir de sílabas desordenadas, usar em frase.",
+      "duration": 5,
+      "interaction": {
+        "state": [
+          { "name": "passo", "type": "slider", "range": [1, 4], "step": 1, "default": 1 },
+          { "name": "respostas", "type": "derived", "derivedFrom": "[]" },
+          { "name": "pontuacao", "type": "derived", "derivedFrom": "respostas.filter(r => r.correto).length" }
+        ],
+        "render": "Barra de progresso (1/4 → 4/4); cada passo mostra uma tarefa: (1) escolher palavra entre 3 imagens, (2) contar sílabas, (3) ordenar sílabas desordenadas, (4) completar frase; no final, estrelas (1-3) e resumo",
+        "transition": "Completar tarefa → avança para próxima; no final, mostra pontuação e quais tarefas acertou",
+        "constraint": "Os 4 critérios são independentes — errar um não bloqueia os seguintes",
+        "assessment": "O aluno completa os 4 passos: (1) identifica 'cenoura' entre 3 opções, (2) conta 3 sílabas, (3) ordena ce-nou-ra correctamente, (4) usa 'cenoura' numa frase com sentido"
+      },
+      "differentiation": {
+        "support": "Imagem presente em todos os passos; sílabas com cores distintas; frase com 3 palavras",
+        "standard": "Imagem removida no passo 3 e 4; 4 opções no passo 1",
+        "challenge": "Sem imagem em nenhum passo; passo 4 exige frase escrita original; tempo limite de 2 minutos"
+      }
+    }
+  ],
+  "sessionFlow": "0-5min: Bloco 1 — micro-história da cenoura na horta (activação) → 5-10min: Bloco 2 — reconhecimento global (palavra↔imagem) → 10-18min: Bloco 3 — segmentação silábica + actividade unplugged com cartões → 18-25min: Bloco 4 — recombinação, novas palavras (pares) → 25-32min: Bloco 5 — completar palavra + escrita guiada → 32-40min: Bloco 6 — frase simples, modo livre → 40-45min: Bloco 7 — mini-avaliação formativa (individual) + partilha turma"
+}

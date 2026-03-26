@@ -1,0 +1,2097 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M28P #16 — cenoura | PageCraft</title>
+<style>
+:root {
+  --bg: #F5FFF0;
+  --surface: #FFFFFF;
+  --primary: #E8820C;
+  --accent: #5B9E2E;
+  --text: #1E1B18;
+  --syl-ce: #E8820C;
+  --syl-nou: #5B9E2E;
+  --syl-ra: #C03A9B;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --incorrect: #F59E0B;
+  --incorrect-bg: #fffbeb;
+  --radius: 16px;
+  --shadow: 0 4px 12px rgba(0,0,0,0.08);
+  --font: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+  min-height: 100vh;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
+}
+.container { max-width: 960px; margin: 0 auto; padding: 0 1.5rem; }
+h1 { font-size: 2rem; font-weight: 800; }
+h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem; }
+h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+p { margin-bottom: 0.5rem; }
+
+/* HEADER */
+.page-header {
+  background: linear-gradient(135deg, var(--primary), #F59E0B, var(--accent));
+  color: #fff;
+  padding: 2rem 0;
+  text-align: center;
+  border-radius: 0 0 24px 24px;
+  margin-bottom: 1.5rem;
+}
+.page-header h1 { font-size: 2.4rem; margin-bottom: 0.3rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+.page-header .meta { font-size: 1rem; opacity: 0.95; margin-bottom: 0.8rem; }
+.page-header .meta span { margin: 0 0.5rem; }
+.objectives { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 0.5rem; }
+.objectives .obj {
+  background: rgba(255,255,255,0.25);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  backdrop-filter: blur(4px);
+}
+
+/* NAV */
+.unit-nav {
+  display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;
+  padding: 1rem 0; margin-bottom: 1rem;
+}
+.unit-nav a {
+  background: var(--surface);
+  color: var(--primary);
+  text-decoration: none;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  border: 2px solid var(--primary);
+  transition: all 0.2s;
+  min-height: 44px;
+  display: flex; align-items: center;
+}
+.unit-nav a:hover, .unit-nav a:focus { background: var(--primary); color: #fff; transform: scale(1.05); }
+
+/* UNIT */
+.unit {
+  background: var(--surface);
+  border: 2px solid var(--primary);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+.unit-header {
+  background: linear-gradient(135deg, var(--primary), #F59E0B);
+  color: #fff;
+  padding: 1rem 1.5rem;
+  display: flex; align-items: center; gap: 0.8rem;
+}
+.unit-header .unit-num {
+  background: rgba(255,255,255,0.3);
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 1.2rem;
+}
+.unit-header .unit-info h2 { font-size: 1.2rem; margin: 0; }
+.unit-header .unit-info .duration { font-size: 0.8rem; opacity: 0.9; }
+.unit-body { padding: 1.5rem; }
+
+/* DIFF TABS */
+.diff-tabs {
+  display: flex; gap: 0; border-bottom: 2px solid #eee;
+}
+.diff-tab {
+  flex: 1;
+  padding: 0.6rem;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  background: #f9f9f9;
+  transition: all 0.2s;
+  min-height: 48px;
+  font-family: var(--font);
+}
+.diff-tab:first-child { border-radius: 0; }
+.diff-tab[data-level="support"] { color: #22c55e; }
+.diff-tab[data-level="standard"] { color: #F59E0B; }
+.diff-tab[data-level="challenge"] { color: #ef4444; }
+.diff-tab.active { background: #fff; border-bottom: 3px solid currentColor; }
+.diff-tab:hover { background: #fff; }
+.diff-tab:focus { outline: 3px solid var(--accent); outline-offset: -3px; }
+
+/* BUTTONS */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 24px;
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  min-height: 48px;
+  min-width: 48px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  -webkit-user-select: none;
+  user-select: none;
+}
+.btn:hover { transform: scale(1.05); box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
+.btn:active { transform: scale(0.97); }
+.btn:focus { outline: 3px solid var(--accent); outline-offset: 2px; }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-accent { background: var(--accent); color: #fff; }
+.btn-outline { background: #fff; color: var(--primary); border: 2px solid var(--primary); }
+.btn-correct { background: var(--correct); color: #fff; }
+.btn-sm { padding: 0.5rem 1.2rem; font-size: 0.85rem; }
+
+/* SYLLABLE BLOCKS */
+.syl-block {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0.5rem 1.2rem;
+  border-radius: 12px;
+  font-size: 36px;
+  font-weight: 800;
+  color: #fff;
+  cursor: grab;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  min-width: 48px;
+  min-height: 48px;
+  text-align: center;
+}
+.syl-block:hover { transform: scale(1.08); }
+.syl-block.dragging { opacity: 0.4; }
+.syl-ce { background: var(--syl-ce); }
+.syl-nou { background: var(--syl-nou); }
+.syl-ra { background: var(--syl-ra); }
+.syl-default { background: #888; }
+.syl-no { background: #6366f1; }
+.syl-u { background: #ec4899; }
+.syl-ca { background: #0ea5e9; }
+.syl-ru { background: #14b8a6; }
+.syl-na { background: #8b5cf6; }
+.syl-ar { background: #f43f5e; }
+.syl-me { background: #f97316; }
+.syl-ni { background: #06b6d4; }
+.syl-sa { background: #a855f7; }
+.syl-pa { background: #10b981; }
+
+/* WORD CARD */
+.word-card {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0.75rem 1.5rem;
+  background: var(--surface);
+  border: 3px solid var(--primary);
+  border-radius: var(--radius);
+  font-size: 1.5rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 48px;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.word-card:hover { transform: scale(1.05); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+.word-card.selected { border-color: var(--accent); background: var(--correct-bg); }
+.word-card.correct { border-color: var(--correct); background: var(--correct-bg); animation: pulse-correct 0.5s; }
+.word-card.incorrect { border-color: var(--incorrect); background: var(--incorrect-bg); animation: shake 0.4s; }
+.word-card.highlight { border-color: var(--primary); text-decoration: underline; text-underline-offset: 4px; }
+
+/* DROP SLOTS */
+.slot-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin: 1rem 0; }
+.drop-slot {
+  width: 100px; height: 80px;
+  border: 3px dashed #ccc;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+  color: #aaa;
+  transition: all 0.2s;
+  background: #fafafa;
+}
+.drop-slot.highlight { border-color: var(--primary); background: #fff8f0; }
+.drop-slot.filled { border-style: solid; border-color: var(--accent); background: var(--correct-bg); }
+.drop-slot.correct-slot { border-color: var(--correct); background: var(--correct-bg); animation: pulse-correct 0.5s; }
+.drop-slot.incorrect-slot { border-color: var(--incorrect); background: var(--incorrect-bg); animation: shake 0.4s; }
+
+/* WORD DISPLAY */
+.word-display {
+  text-align: center;
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 1rem 0;
+}
+
+/* SCENE BOX */
+.scene-box {
+  text-align: center;
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  background: #fffef5;
+  border: 2px solid #f0e68c;
+  margin-bottom: 1rem;
+  min-height: 200px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transition: all 0.3s;
+}
+.scene-emoji { font-size: 100px; line-height: 1.1; margin-bottom: 0.5rem; transition: all 0.3s; }
+.scene-text { font-size: 1.1rem; max-width: 500px; line-height: 1.6; }
+.micro-story { font-style: italic; color: #555; font-size: 1rem; margin-top: 0.5rem; }
+
+/* FEEDBACK */
+.feedback-msg {
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 700;
+  text-align: center;
+  margin: 0.75rem 0;
+  animation: fadeIn 0.3s;
+  font-size: 1.1rem;
+}
+.feedback-correct { background: var(--correct-bg); color: #166534; border: 2px solid var(--correct); }
+.feedback-incorrect { background: var(--incorrect-bg); color: #92400e; border: 2px solid var(--incorrect); }
+
+/* PROGRESS BAR */
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--primary));
+  border-radius: 6px;
+  transition: width 0.4s ease;
+}
+
+/* STARS */
+.stars { font-size: 48px; text-align: center; margin: 1rem 0; }
+
+/* BANK */
+.syl-bank {
+  display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: center;
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: var(--radius);
+  margin: 1rem 0;
+  min-height: 60px;
+}
+
+/* WORD LIST */
+.word-list {
+  background: #f0f9ff;
+  border-radius: var(--radius);
+  padding: 1rem;
+  min-height: 60px;
+  margin: 1rem 0;
+}
+.word-list h3 { color: var(--accent); }
+.word-list .found-word {
+  display: inline-block;
+  background: var(--correct-bg);
+  border: 2px solid var(--correct);
+  border-radius: 8px;
+  padding: 0.3rem 0.8rem;
+  margin: 0.3rem;
+  font-weight: 700;
+}
+
+/* SENTENCE BAR */
+.sentence-bar {
+  display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;
+  padding: 1rem;
+  background: #f0f4ff;
+  border-radius: var(--radius);
+  min-height: 70px;
+  margin: 1rem 0;
+  border: 2px dashed #a0aec0;
+}
+.sentence-slot {
+  width: 120px; height: 56px;
+  border: 2px dashed #a0aec0;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  background: #fff;
+  font-weight: 700;
+  font-size: 1.2rem;
+  transition: all 0.2s;
+}
+.sentence-slot.filled { border-style: solid; border-color: var(--accent); }
+.sentence-slot.numbered::before {
+  content: attr(data-num);
+  position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+  background: var(--primary); color: #fff;
+  font-size: 0.6rem; padding: 1px 6px; border-radius: 8px;
+}
+.sentence-slot { position: relative; }
+
+/* WRITING CANVAS */
+.writing-area {
+  margin: 1rem 0; text-align: center;
+}
+.writing-canvas {
+  border: 3px solid #ccc;
+  border-radius: var(--radius);
+  background: #fffff5;
+  touch-action: none;
+  cursor: crosshair;
+  max-width: 100%;
+}
+
+/* TOGGLE */
+.toggle-group {
+  display: flex; gap: 0; border-radius: 24px; overflow: hidden;
+  border: 2px solid var(--primary);
+  margin: 0.5rem 0;
+  width: fit-content;
+}
+.toggle-btn {
+  padding: 0.5rem 1.5rem;
+  border: none;
+  background: #fff;
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  min-height: 44px;
+  transition: all 0.2s;
+}
+.toggle-btn.active { background: var(--primary); color: #fff; }
+.toggle-btn:focus { outline: 3px solid var(--accent); outline-offset: -3px; }
+
+/* QUIZ OPTIONS */
+.quiz-options { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin: 1rem 0; }
+
+/* CLAP COUNTER */
+.clap-counter {
+  display: flex; align-items: center; gap: 0.5rem;
+  justify-content: center;
+  font-size: 1.3rem; font-weight: 700;
+  margin: 1rem 0;
+}
+.clap-counter .count {
+  background: var(--primary);
+  color: #fff;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem;
+}
+
+/* MAKER SECTION */
+.maker-section {
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.maker-section h2 { color: #166534; }
+.maker-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.2rem;
+  margin-top: 1rem;
+  border-left: 4px solid var(--accent);
+}
+
+/* ASSESSMENT SECTION */
+.assessment-section {
+  background: linear-gradient(135deg, #fff7ed, #ffedd5);
+  border: 2px solid var(--incorrect);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.assessment-section h2 { color: #9a3412; }
+.assess-item {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 0.8rem 0;
+  border-left: 4px solid var(--incorrect);
+}
+.assess-scale {
+  display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;
+}
+.assess-scale label {
+  display: flex; align-items: center; gap: 0.3rem;
+  font-size: 0.85rem; cursor: pointer;
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  transition: background 0.2s;
+  min-height: 44px;
+}
+.assess-scale label:hover { background: #f0f0f0; }
+.assess-scale input[type="radio"] { width: 20px; height: 20px; accent-color: var(--primary); }
+
+/* CURRICULUM FOOTER */
+.curriculum-footer {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.curriculum-footer h2 { color: #fff; }
+.curriculum-footer .ae-item, .curriculum-footer .pa-item {
+  background: rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  margin: 0.4rem 0;
+  font-size: 0.9rem;
+}
+
+/* PAGECRAFT FOOTER */
+.pagecraft-footer {
+  text-align: center;
+  padding: 1.5rem;
+  color: #888;
+  font-size: 0.85rem;
+}
+
+/* DRAG CLONE */
+.drag-clone {
+  position: fixed;
+  z-index: 10000;
+  pointer-events: none;
+  transform: scale(1.1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  opacity: 0.95;
+}
+
+/* CONFETTI CANVAS */
+#confetti-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 99999;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse-correct { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-6px); } 80% { transform: translateX(6px); } }
+@keyframes pop { 0% { transform: scale(0); opacity: 0; } 60% { transform: scale(1.15); } 100% { transform: scale(1); opacity: 1; } }
+@keyframes clap-anim { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
+.anim-pop { animation: pop 0.4s ease; }
+.anim-fadeIn { animation: fadeIn 0.4s ease; }
+
+/* HIDDEN */
+.hidden { display: none !important; }
+
+/* TIMER */
+.timer-bar {
+  background: #e5e7eb;
+  border-radius: 6px;
+  height: 8px;
+  margin: 0.5rem 0;
+  overflow: hidden;
+}
+.timer-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--correct), var(--incorrect), #ef4444);
+  transition: width 1s linear;
+  border-radius: 6px;
+}
+
+/* FREE MODE */
+.free-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 3px solid var(--primary);
+  border-radius: 12px;
+  font-family: var(--font);
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-align: center;
+  min-height: 48px;
+}
+.free-input:focus { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  body { font-size: 18px; }
+  .page-header h1 { font-size: 1.8rem; }
+  .word-display { font-size: 36px; }
+  .syl-block { font-size: 28px; padding: 0.4rem 1rem; }
+  .scene-emoji { font-size: 72px; }
+  .drop-slot { width: 80px; height: 65px; }
+  .sentence-slot { width: 90px; height: 48px; font-size: 1rem; }
+  .container { padding: 0 1rem; }
+}
+@media (min-width: 1200px) {
+  .word-display { font-size: 56px; }
+  .syl-block { font-size: 42px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+<!-- HEADER -->
+<header class="page-header">
+  <div class="container">
+    <h1>🥕 Palavra 16 — cenoura</h1>
+    <div class="meta">
+      <span>📚 1.º ano</span>
+      <span>⏱️ 45 min</span>
+      <span>📖 Método das 28 Palavras</span>
+    </div>
+    <div class="objectives">
+      <span class="obj">🔍 Reconhecer a palavra</span>
+      <span class="obj">✂️ Segmentar sílabas</span>
+      <span class="obj">🔗 Recombinar sílabas</span>
+      <span class="obj">✍️ Usar numa frase</span>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="container unit-nav" aria-label="Navegação das atividades">
+  <a href="#unit1" aria-label="Atividade 1">1. Abertura</a>
+  <a href="#unit2" aria-label="Atividade 2">2. Reconhecer</a>
+  <a href="#unit3" aria-label="Atividade 3">3. Sílabas</a>
+  <a href="#unit4" aria-label="Atividade 4">4. Novas palavras</a>
+  <a href="#unit5" aria-label="Atividade 5">5. Completar</a>
+  <a href="#unit6" aria-label="Atividade 6">6. Frase</a>
+  <a href="#unit7" aria-label="Atividade 7">7. Avaliação</a>
+</nav>
+
+<main class="container">
+
+<!-- ====== UNIT 1: Abertura contextual ====== -->
+<section id="unit1" class="unit">
+  <div class="unit-header">
+    <div class="unit-num">1</div>
+    <div class="unit-info">
+      <h2>A cenoura na horta</h2>
+      <div class="duration">⏱️ 5 min — Abertura contextual</div>
+    </div>
+  </div>
+  <div class="diff-tabs" role="tablist" aria-label="Nível de dificuldade">
+    <button class="diff-tab" data-level="support" data-unit="1" role="tab" aria-label="Nível apoio">🟢 Apoio</button>
+    <button class="diff-tab active" data-level="standard" data-unit="1" role="tab" aria-label="Nível intermédio">🟡 Intermédio</button>
+    <button class="diff-tab" data-level="challenge" data-unit="1" role="tab" aria-label="Nível desafio">🔴 Desafio</button>
+  </div>
+  <div class="unit-body" id="unit1-body">
+    <div class="scene-box" id="u1-scene">
+      <div class="scene-emoji" id="u1-emoji">🥕🌱</div>
+      <p class="scene-text" id="u1-scene-text">Na horta do avô Manuel, há muitos vegetais. Debaixo da terra, esconde-se algo cor de laranja...</p>
+      <p class="micro-story" id="u1-story">— Avô, o que é aquilo laranja? — perguntou a Marta.<br>— Puxa e vê! — disse o avô com um sorriso.</p>
+    </div>
+    <div style="text-align:center;">
+      <div class="toggle-group" style="margin:0.5rem auto;">
+        <button class="toggle-btn active" id="u1-toggle-horta" aria-label="Ver na horta" onclick="Unit1.setScene('horta')">🌱 Horta</button>
+        <button class="toggle-btn" id="u1-toggle-prato" aria-label="Ver no prato" onclick="Unit1.setScene('prato')">🍽️ Prato</button>
+      </div>
+    </div>
+    <div id="u1-word-area" style="text-align:center; margin-top:1rem;">
+      <div class="word-display hidden" id="u1-word" style="animation: pop 0.5s ease;">CENOURA</div>
+      <button class="btn btn-primary" id="u1-reveal-btn" onclick="Unit1.reveal()" aria-label="Revelar a palavra">👀 Revelar palavra</button>
+    </div>
+    <div id="u1-feedback"></div>
+  </div>
+</section>
+
+<!-- ====== UNIT 2: Reconhecimento global ====== -->
+<section id="unit2" class="unit">
+  <div class="unit-header">
+    <div class="unit-num">2</div>
+    <div class="unit-info">
+      <h2>Qual é a palavra?</h2>
+      <div class="duration">⏱️ 5 min — Reconhecimento global</div>
+    </div>
+  </div>
+  <div class="diff-tabs" role="tablist">
+    <button class="diff-tab" data-level="support" data-unit="2" role="tab">🟢 Apoio</button>
+    <button class="diff-tab active" data-level="standard" data-unit="2" role="tab">🟡 Intermédio</button>
+    <button class="diff-tab" data-level="challenge" data-unit="2" role="tab">🔴 Desafio</button>
+  </div>
+  <div class="unit-body" id="unit2-body">
+    <p style="text-align:center; font-weight:700;">Olha para a imagem. Qual é a palavra certa?</p>
+    <div class="scene-box" id="u2-image" style="min-height:120px;">
+      <div class="scene-emoji" style="font-size:80px;">🥕</div>
+    </div>
+    <div class="quiz-options" id="u2-options"></div>
+    <div id="u2-feedback"></div>
+    <p style="text-align:center; font-size:0.9rem; color:#888;" id="u2-round-info"></p>
+  </div>
+</section>
+
+<!-- ====== UNIT 3: Segmentação silábica ====== -->
+<section id="unit3" class="unit">
+  <div class="unit-header">
+    <div class="unit-num">3</div>
+    <div class="unit-info">
+      <h2>Sílabas: ce · nou · ra</h2>
+      <div class="duration">⏱️ 8 min — Segmentação silábica</div>
+    </div>
+  </div>
+  <div class="diff-tabs" role="tablist">
+    <button class="diff-tab" data-level="support" data-unit="3" role="tab">🟢 Apoio</button>
+    <button class="diff-tab active" data-level="standard" data-unit="3" role="tab">🟡 Intermédio</button>
+    <button class="diff-tab" data-level="challenge" data-unit="3" role="tab">🔴 Desafio</button>
+  </div>
+  <div class="unit-body" id="unit3-body">
+    <div class="word-display" id="u3-word">CENOURA</div>
+    <p style="text-align:center;">Arrasta as sílabas certas para os lugares!</p>
+    <div id="u3-hint" class="hidden" style="text-align:center; margin:0.5rem 0;">
+      <span class="syl-block syl-ce" style="font-size:24px; cursor:default;">ce</span>
+      <span style="font-size:24px; font-weight:800;">·</span>
+      <span class="syl-block syl-nou" style="font-size:24px; cursor:default;">nou</span>
+      <span style="font-size:24px; font-weight:800;">·</span>
+      <span class="syl-block syl-ra" style="font-size:24px; cursor:default;">ra</span>
+    </div>
+    <div class="slot-row" id="u3-slots">
+      <div class="drop-slot" data-slot="0" data-expect="ce" aria-label="Primeira sílaba">1</div>
+      <div class="drop-slot" data-slot="1" data-expect="nou" aria-label="Segunda sílaba">2</div>
+      <div class="drop-slot" data-slot="2" data-expect="ra" aria-label="Terceira sílaba">3</div>
+    </div>
+    <div class="syl-bank" id="u3-bank"></div>
+    <div class="clap-counter">
+      <button class="btn btn-primary btn-sm" id="u3-clap-btn" onclick="Unit3.clap()" aria-label="Bater palmas">👏 Bater palmas</button>
+      <span>Palmadas:</span>
+      <div class="count" id="u3-clap-count">0</div>
+    </div>
+    <div id="u3-feedback"></div>
+  </div>
+</section>
+
+<!-- ====== UNIT 4: Recombinação silábica ====== -->
+<section id="unit4" class="unit">
+  <div class="unit-header">
+    <div class="unit-num">4</div>
+    <div class="unit-info">
+      <h2>Novas palavras!</h2>
+      <div class="duration">⏱️ 7 min — Recombinação silábica</div>
+    </div>
+  </div>
+  <div class="diff-tabs" role="tablist">
+    <button class="diff-tab" data-level="support" data-unit="4" role="tab">🟢 Apoio</button>
+    <button class="diff-tab active" data-level="standard" data-unit="4" role="tab">🟡 Intermédio</button>
+    <button class="diff-tab" data-level="challenge" data-unit="4" role="tab">🔴 Desafio</button>
+  </div>
+  <div class="unit-body" id="unit4-body">
+    <p style="text-align:center; font-weight:700;">Junta sílabas para formar palavras novas!</p>
+    <div class="slot-row" id="u4-slots">
+      <div class="drop-slot" data-slot="0" style="width:110px;" aria-label="Primeira sílaba">1.ª</div>
+      <div class="drop-slot" data-slot="1" style="width:110px;" aria-label="Segunda sílaba">2.ª</div>
+    </div>
+    <div id="u4-built-word" class="word-display" style="font-size:36px; min-height:50px;"></div>
+    <div style="text-align:center; margin:0.5rem 0;" id="u4-check-btns" class="hidden">
+      <button class="btn btn-correct btn-sm" onclick="Unit4.checkWord(true)" aria-label="A palavra existe">✓ Existe!</button>
+      <button class="btn btn-outline btn-sm" onclick="Unit4.checkWord(false)" aria-label="A palavra não existe" style="margin-left:0.5rem;">✗ Não existe</button>
+    </div>
+    <div class="syl-bank" id="u4-bank"></div>
+    <div style="text-align:center; margin:0.5rem 0;">
+      <button class="btn btn-outline btn-sm" onclick="Unit4.clearSlots()" aria-label="Limpar">🔄 Limpar</button>
+    </div>
+    <div id="u4-feedback"></div>
+    <div class="word-list" id="u4-found">
+      <h3>🌟 Palavras descobertas:</h3>
+      <div id="u4-found-list"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== UNIT 5: Leitura e escrita guiada ====== -->
+<section id="unit5" class="unit">
+  <div class="unit-header">
+    <div class="unit-num">5</div>
+    <div class="unit-info">
+      <h2>Completa a palavra!</h2>
+      <div class="duration">⏱️ 7 min — Leitura e escrita guiada</div>
+    </div>
+  </div>
+  <div class="diff-tabs" role="tablist">
+    <button class="diff-tab" data-level="support" data-unit="5" role="tab">🟢 Apoio</button>
+    <button class="diff-tab active" data-level="standard" data-unit="5" role="tab">🟡 Intermédio</button>
+    <button class="diff-tab" data-level="challenge" data-unit="5" role="tab">🔴 Desafio</button>
+  </div>
+  <div class="unit-body" id="unit5-body">
+    <p style="text-align:center; font-weight:700;">Que sílaba falta?</p>
+    <div class="word-display" id="u5-word" style="font-size:42px;"></div>
+    <div class="quiz-options" id="u5-options"></div>
+    <div id="u5-feedback"></div>
+    <p style="text-align:center; font-size:0.9rem; color:#888;" id="u5-progress"></p>
+    <div class="writing-area" id="u5-writing" class="hidden">
+      <h3>✍️ Agora escreve a palavra!</h3>
+      <div id="u5-model" style="text-align:center; margin:0.5rem 0;"></div>
+      <canvas id="u5-canvas" class="writing-canvas" width="500" height="120" aria-label="Área de escrita"></canvas>
+      <div style="margin-top:0.5rem;">
+        <button class="btn btn-outline btn-sm" onclick="Unit5.clearCanvas()" aria-label="Apagar escrita">🗑️ Apagar</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== UNIT 6: Frase simples ====== -->
+<section id="unit6" class="unit">
+  <div class="unit-header">
+    <div class="unit-num">6</div>
+    <div class="unit-info">
+      <h2>A cenoura é laranja.</h2>
+      <div class="duration">⏱️ 8 min — Construir frases</div>
+    </div>
+  </div>
+  <div class="diff-tabs" role="tablist">
+    <button class="diff-tab" data-level="support" data-unit="6" role="tab">🟢 Apoio</button>
+    <button class="diff-tab active" data-level="standard" data-unit="6" role="tab">🟡 Intermédio</button>
+    <button class="diff-tab" data-level="challenge" data-unit="6" role="tab">🔴 Desafio</button>
+  </div>
+  <div class="unit-body" id="unit6-body">
+    <p style="text-align:center; font-weight:700;" id="u6-instruction">Arrasta as palavras para construir a frase!</p>
+    <div class="sentence-bar" id="u6-sentence"></div>
+    <div class="syl-bank" id="u6-bank" style="min-height:80px;"></div>
+    <div style="text-align:center; margin:0.5rem 0;">
+      <button class="btn btn-primary btn-sm" onclick="Unit6.verify()" id="u6-verify-btn" aria-label="Verificar frase">✅ Verificar</button>
+      <button class="btn btn-outline btn-sm" onclick="Unit6.reset()" style="margin-left:0.5rem;" aria-label="Recomeçar">🔄 Recomeçar</button>
+    </div>
+    <div id="u6-feedback"></div>
+    <div id="u6-free-mode" class="hidden" style="margin-top:1rem;">
+      <h3>✨ Cria a tua frase com a palavra "cenoura"!</h3>
+      <input type="text" class="free-input" id="u6-free-input" placeholder="Escreve aqui a tua frase..." aria-label="Escreve uma frase com cenoura">
+      <div style="margin-top:0.5rem; text-align:center;">
+        <button class="btn btn-accent btn-sm" onclick="Unit6.checkFree()" aria-label="Verificar frase livre">✅ Verificar</button>
+      </div>
+      <div id="u6-free-feedback"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== UNIT 7: Mini-avaliação formativa ====== -->
+<section id="unit7" class="unit">
+  <div class="unit-header" style="background: linear-gradient(135deg, #7c3aed, #a78bfa);">
+    <div class="unit-num">7</div>
+    <div class="unit-info">
+      <h2>Avaliação final</h2>
+      <div class="duration">⏱️ 5 min — O que aprendeste?</div>
+    </div>
+  </div>
+  <div class="diff-tabs" role="tablist">
+    <button class="diff-tab" data-level="support" data-unit="7" role="tab">🟢 Apoio</button>
+    <button class="diff-tab active" data-level="standard" data-unit="7" role="tab">🟡 Intermédio</button>
+    <button class="diff-tab" data-level="challenge" data-unit="7" role="tab">🔴 Desafio</button>
+  </div>
+  <div class="unit-body" id="unit7-body">
+    <div class="progress-bar"><div class="progress-fill" id="u7-progress" style="width:25%;"></div></div>
+    <p style="text-align:center; font-weight:700;" id="u7-step-label">Passo 1 de 4</p>
+    <div id="u7-timer" class="hidden"><div class="timer-bar"><div class="timer-fill" id="u7-timer-fill" style="width:100%;"></div></div></div>
+    <div id="u7-content" style="min-height:200px;"></div>
+    <div id="u7-feedback"></div>
+    <div id="u7-result" class="hidden" style="text-align:center;">
+      <div class="stars" id="u7-stars"></div>
+      <h2 id="u7-result-text"></h2>
+      <div id="u7-summary"></div>
+      <button class="btn btn-primary" onclick="Unit7.restart()" style="margin-top:1rem;" aria-label="Repetir avaliação">🔄 Tentar outra vez</button>
+    </div>
+  </div>
+</section>
+
+<!-- ====== MAKER SECTION ====== -->
+<section class="maker-section">
+  <div class="container">
+    <h2>🛠️ Desafios Maker</h2>
+    <div class="maker-card">
+      <h3>📦 Atividade Unplugged — Cartões de sílabas</h3>
+      <p><strong>Desafio:</strong> Com os cartões físicos de sílabas (<strong>ce</strong> / <strong>nou</strong> / <strong>ra</strong>), ordena-os na mesa e bate uma palma por cada um. Depois esconde um cartão e tenta lembrar qual falta!</p>
+      <p><strong>Materiais:</strong> Cartões físicos: ce, nou, ra</p>
+      <p><strong>Grupo:</strong> Pares (2 alunos)</p>
+      <p><strong>Partilha:</strong> Cada par partilha com outro par qual sílaba foi mais difícil de lembrar.</p>
+      <div style="margin-top:0.5rem;">
+        <span class="syl-block syl-ce" style="font-size:24px; cursor:default;">ce</span>
+        <span class="syl-block syl-nou" style="font-size:24px; cursor:default; margin-left:0.5rem;">nou</span>
+        <span class="syl-block syl-ra" style="font-size:24px; cursor:default; margin-left:0.5rem;">ra</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== MINI-AVALIAÇÃO ====== -->
+<section class="assessment-section">
+  <div class="container">
+    <h2>📝 Mini-avaliação — O que consigo fazer?</h2>
+    <div class="assess-item">
+      <p><strong>1.</strong> Reconheço a palavra "cenoura" e leio-a em voz alta.</p>
+      <div class="assess-scale">
+        <label><input type="radio" name="a1" value="1"> ⬜ Ainda não</label>
+        <label><input type="radio" name="a1" value="2"> 🟡 Com ajuda</label>
+        <label><input type="radio" name="a1" value="3"> 🟢 Sozinho/a</label>
+        <label><input type="radio" name="a1" value="4"> 🌟 Ajudo colegas</label>
+      </div>
+    </div>
+    <div class="assess-item">
+      <p><strong>2.</strong> Separo "cenoura" em sílabas: ce - nou - ra.</p>
+      <div class="assess-scale">
+        <label><input type="radio" name="a2" value="1"> ⬜ Ainda não</label>
+        <label><input type="radio" name="a2" value="2"> 🟡 Com ajuda</label>
+        <label><input type="radio" name="a2" value="3"> 🟢 Sozinho/a</label>
+        <label><input type="radio" name="a2" value="4"> 🌟 Ajudo colegas</label>
+      </div>
+    </div>
+    <div class="assess-item">
+      <p><strong>3.</strong> Formo palavras novas com as sílabas de "cenoura".</p>
+      <div class="assess-scale">
+        <label><input type="radio" name="a3" value="1"> ⬜ Ainda não</label>
+        <label><input type="radio" name="a3" value="2"> 🟡 Com ajuda</label>
+        <label><input type="radio" name="a3" value="3"> 🟢 Sozinho/a</label>
+        <label><input type="radio" name="a3" value="4"> 🌟 Ajudo colegas</label>
+      </div>
+    </div>
+    <div class="assess-item">
+      <p><strong>4.</strong> Completo a palavra "cenoura" com a sílaba que falta.</p>
+      <div class="assess-scale">
+        <label><input type="radio" name="a4" value="1"> ⬜ Ainda não</label>
+        <label><input type="radio" name="a4" value="2"> 🟡 Com ajuda</label>
+        <label><input type="radio" name="a4" value="3"> 🟢 Sozinho/a</label>
+        <label><input type="radio" name="a4" value="4"> 🌟 Ajudo colegas</label>
+      </div>
+    </div>
+    <div class="assess-item">
+      <p><strong>5.</strong> Construo uma frase com a palavra "cenoura".</p>
+      <div class="assess-scale">
+        <label><input type="radio" name="a5" value="1"> ⬜ Ainda não</label>
+        <label><input type="radio" name="a5" value="2"> 🟡 Com ajuda</label>
+        <label><input type="radio" name="a5" value="3"> 🟢 Sozinho/a</label>
+        <label><input type="radio" name="a5" value="4"> 🌟 Ajudo colegas</label>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== CURRICULUM FOOTER ====== -->
+<section class="curriculum-footer">
+  <div class="container">
+    <h2>📚 Referências Curriculares</h2>
+    <h3 style="margin-top:1rem;">Aprendizagens Essenciais</h3>
+    <div class="ae-item">📖 <strong>Português (1.º ano):</strong> Desenvolver a consciência fonológica — segmentar palavras em sílabas e identificar sílabas em posição inicial, medial e final</div>
+    <div class="ae-item">📖 <strong>Português (1.º ano):</strong> Ler palavras e frases simples em situações contextualizadas</div>
+    <div class="ae-item">🌿 <strong>Estudo do Meio (1.º ano):</strong> Identificar plantas comestíveis (hortícolas) e reconhecer a sua utilidade na alimentação</div>
+    <h3 style="margin-top:1rem;">Perfil do Aluno</h3>
+    <div class="pa-item">PA-A: Linguagens e textos</div>
+    <div class="pa-item">PA-C: Raciocínio e resolução de problemas</div>
+    <div class="pa-item">PA-F: Desenvolvimento pessoal e autonomia</div>
+    <div class="pa-item">PA-G: Bem-estar, saúde e ambiente</div>
+  </div>
+</section>
+
+<!-- PAGECRAFT FOOTER -->
+<footer class="pagecraft-footer">
+  Gerado por PageCraft 🛠️
+</footer>
+
+</main>
+
+<script>
+/* ========================================
+   AUDIO SYSTEM (Web Audio API)
+   ======================================== */
+const AudioFX = {
+  ctx: null,
+  init() {
+    const resume = () => {
+      if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      if (this.ctx.state === 'suspended') this.ctx.resume();
+      document.removeEventListener('click', resume);
+      document.removeEventListener('touchstart', resume);
+    };
+    document.addEventListener('click', resume);
+    document.addEventListener('touchstart', resume);
+  },
+  tone(freq, dur, type) {
+    if (!this.ctx) return;
+    try {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = type || 'sine';
+      osc.frequency.value = freq;
+      gain.gain.value = 0.25;
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + dur);
+      osc.start();
+      osc.stop(this.ctx.currentTime + dur);
+    } catch(e) {}
+  },
+  correct() {
+    this.tone(523, 0.12); setTimeout(() => this.tone(659, 0.12), 100); setTimeout(() => this.tone(784, 0.2), 200);
+  },
+  incorrect() {
+    this.tone(330, 0.15, 'square'); setTimeout(() => this.tone(262, 0.25, 'square'), 120);
+  },
+  click() { this.tone(880, 0.05); },
+  clap() { this.tone(200, 0.08, 'sawtooth'); this.tone(400, 0.06, 'square'); },
+  star() { this.tone(523, 0.1); setTimeout(() => this.tone(659, 0.1), 80); setTimeout(() => this.tone(784, 0.1), 160); setTimeout(() => this.tone(1047, 0.3), 240); }
+};
+
+/* ========================================
+   CONFETTI SYSTEM
+   ======================================== */
+const Confetti = {
+  canvas: null, ctx: null, pieces: [], running: false,
+  init() {
+    this.canvas = document.getElementById('confetti-canvas');
+    this.ctx = this.canvas.getContext('2d');
+    this.resize();
+    window.addEventListener('resize', () => this.resize());
+  },
+  resize() {
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+  },
+  launch(x, y) {
+    const colors = ['#E8820C','#5B9E2E','#C03A9B','#F59E0B','#22c55e','#ef4444','#6366f1','#ec4899'];
+    for (let i = 0; i < 60; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 3 + Math.random() * 6;
+      this.pieces.push({
+        x: x || this.canvas.width / 2,
+        y: y || this.canvas.height / 3,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 4,
+        w: 6 + Math.random() * 6,
+        h: 4 + Math.random() * 4,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rot: Math.random() * 360,
+        rotV: (Math.random() - 0.5) * 12,
+        life: 1
+      });
+    }
+    if (!this.running) { this.running = true; this.animate(); }
+  },
+  animate() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.pieces.forEach(p => {
+      p.x += p.vx;
+      p.vy += 0.15;
+      p.y += p.vy;
+      p.rot += p.rotV;
+      p.life -= 0.012;
+      if (p.life <= 0) return;
+      this.ctx.save();
+      this.ctx.translate(p.x, p.y);
+      this.ctx.rotate(p.rot * Math.PI / 180);
+      this.ctx.globalAlpha = p.life;
+      this.ctx.fillStyle = p.color;
+      this.ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      this.ctx.restore();
+    });
+    this.pieces = this.pieces.filter(p => p.life > 0);
+    if (this.pieces.length > 0) {
+      requestAnimationFrame(() => this.animate());
+    } else {
+      this.running = false;
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+  }
+};
+
+/* ========================================
+   FEEDBACK UTILITY
+   ======================================== */
+function showFeedback(containerId, correct, msg) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = `<div class="feedback-msg ${correct ? 'feedback-correct' : 'feedback-incorrect'}">${correct ? '✓' : '✗'} ${msg}</div>`;
+  if (correct) AudioFX.correct(); else AudioFX.incorrect();
+  setTimeout(() => { if (el.querySelector('.feedback-msg')) el.innerHTML = ''; }, 3000);
+}
+
+function clearFeedback(containerId) {
+  document.getElementById(containerId).innerHTML = '';
+}
+
+/* ========================================
+   DRAG & DROP SYSTEM (touch + mouse)
+   ======================================== */
+const DragSystem = {
+  active: null,
+  clone: null,
+  offsetX: 0, offsetY: 0,
+  dropZones: [],
+
+  makeDraggable(el, groupId) {
+    el.setAttribute('draggable', 'false');
+    el.style.touchAction = 'none';
+    const start = (e) => {
+      e.preventDefault();
+      if (this.active) return;
+      const pt = e.touches ? e.touches[0] : e;
+      const rect = el.getBoundingClientRect();
+      this.offsetX = pt.clientX - rect.left;
+      this.offsetY = pt.clientY - rect.top;
+      this.active = { el, groupId, value: el.dataset.value };
+      el.classList.add('dragging');
+      this.clone = el.cloneNode(true);
+      this.clone.classList.remove('dragging');
+      this.clone.classList.add('drag-clone');
+      this.clone.style.width = rect.width + 'px';
+      this.clone.style.height = rect.height + 'px';
+      this.clone.style.left = (pt.clientX - this.offsetX) + 'px';
+      this.clone.style.top = (pt.clientY - this.offsetY) + 'px';
+      document.body.appendChild(this.clone);
+      AudioFX.click();
+    };
+    el.addEventListener('mousedown', start);
+    el.addEventListener('touchstart', start, { passive: false });
+  },
+
+  registerDropZone(el, groupId, onDrop) {
+    this.dropZones.push({ el, groupId, onDrop });
+  },
+
+  init() {
+    const move = (e) => {
+      if (!this.active) return;
+      e.preventDefault();
+      const pt = e.touches ? e.touches[0] : e;
+      if (this.clone) {
+        this.clone.style.left = (pt.clientX - this.offsetX) + 'px';
+        this.clone.style.top = (pt.clientY - this.offsetY) + 'px';
+      }
+      this.dropZones.forEach(dz => {
+        if (dz.groupId !== this.active.groupId) return;
+        const r = dz.el.getBoundingClientRect();
+        const over = pt.clientX >= r.left && pt.clientX <= r.right && pt.clientY >= r.top && pt.clientY <= r.bottom;
+        dz.el.classList.toggle('highlight', over);
+      });
+    };
+    const end = (e) => {
+      if (!this.active) return;
+      const pt = e.changedTouches ? e.changedTouches[0] : e;
+      let dropped = false;
+      this.dropZones.forEach(dz => {
+        dz.el.classList.remove('highlight');
+        if (dz.groupId !== this.active.groupId) return;
+        const r = dz.el.getBoundingClientRect();
+        if (pt.clientX >= r.left && pt.clientX <= r.right && pt.clientY >= r.top && pt.clientY <= r.bottom) {
+          dropped = true;
+          dz.onDrop(this.active.value, this.active.el, dz.el);
+        }
+      });
+      if (!dropped) {
+        this.active.el.classList.remove('dragging');
+      }
+      if (this.clone) { this.clone.remove(); this.clone = null; }
+      this.active = null;
+    };
+    document.addEventListener('mousemove', move);
+    document.addEventListener('touchmove', move, { passive: false });
+    document.addEventListener('mouseup', end);
+    document.addEventListener('touchend', end);
+  }
+};
+
+/* ========================================
+   DIFFERENTIATION TAB SYSTEM
+   ======================================== */
+const levels = { 1: 'standard', 2: 'standard', 3: 'standard', 4: 'standard', 5: 'standard', 6: 'standard', 7: 'standard' };
+const unitInits = {};
+
+document.querySelectorAll('.diff-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const unit = tab.dataset.unit;
+    const level = tab.dataset.level;
+    levels[unit] = level;
+    tab.parentElement.querySelectorAll('.diff-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    AudioFX.click();
+    if (unitInits[unit]) unitInits[unit]();
+  });
+});
+
+/* ========================================
+   SYLLABLE COLOR HELPER
+   ======================================== */
+function sylClass(s) {
+  const map = { ce: 'syl-ce', nou: 'syl-nou', ra: 'syl-ra', no: 'syl-no', u: 'syl-u', ca: 'syl-ca', ru: 'syl-ru', na: 'syl-na', ar: 'syl-ar', me: 'syl-me', ni: 'syl-ni', sa: 'syl-sa', pa: 'syl-pa' };
+  return map[s] || 'syl-default';
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+
+/* ========================================
+   UNIT 1: Abertura contextual
+   ======================================== */
+const Unit1 = {
+  scene: 'horta',
+  revealed: false,
+  init() {
+    const lv = levels[1];
+    this.scene = 'horta';
+    this.revealed = false;
+    const wordEl = document.getElementById('u1-word');
+    const btn = document.getElementById('u1-reveal-btn');
+    const storyEl = document.getElementById('u1-story');
+    wordEl.classList.add('hidden');
+    btn.classList.remove('hidden');
+    storyEl.classList.remove('hidden');
+    clearFeedback('u1-feedback');
+
+    if (lv === 'support') {
+      wordEl.classList.remove('hidden');
+      btn.classList.add('hidden');
+      this.revealed = true;
+    } else if (lv === 'challenge') {
+      storyEl.innerHTML = '<em>Lê a história e explica: o que é uma cenoura?</em>';
+    } else {
+      storyEl.innerHTML = '— Avô, o que é aquilo laranja? — perguntou a Marta.<br>— Puxa e vê! — disse o avô com um sorriso.';
+    }
+    this.setScene(this.scene);
+  },
+  setScene(scene) {
+    this.scene = scene;
+    const emoji = document.getElementById('u1-emoji');
+    const text = document.getElementById('u1-scene-text');
+    const lv = levels[1];
+    document.getElementById('u1-toggle-horta').classList.toggle('active', scene === 'horta');
+    document.getElementById('u1-toggle-prato').classList.toggle('active', scene === 'prato');
+    if (scene === 'horta') {
+      emoji.textContent = '🥕🌱';
+      text.textContent = 'Na horta do avô Manuel, há muitos vegetais. Debaixo da terra, esconde-se algo cor de laranja...';
+    } else {
+      emoji.textContent = '🥕🍽️';
+      text.textContent = 'No prato, a cenoura está cortada às rodelas. É laranja, crocante e muito saudável!';
+    }
+    if (lv === 'challenge') {
+      emoji.textContent = '❓';
+      text.textContent = 'Sem ver a imagem, tenta explicar: o que é uma cenoura? Como é? Onde cresce?';
+    }
+    AudioFX.click();
+  },
+  reveal() {
+    if (this.revealed) return;
+    this.revealed = true;
+    const wordEl = document.getElementById('u1-word');
+    wordEl.classList.remove('hidden');
+    wordEl.style.animation = 'none';
+    wordEl.offsetHeight;
+    wordEl.style.animation = 'pop 0.5s ease';
+    document.getElementById('u1-reveal-btn').classList.add('hidden');
+    AudioFX.correct();
+    Confetti.launch();
+    showFeedback('u1-feedback', true, 'A palavra é CENOURA! 🥕');
+  }
+};
+unitInits[1] = () => Unit1.init();
+
+/* ========================================
+   UNIT 2: Reconhecimento global
+   ======================================== */
+const Unit2 = {
+  round: 0,
+  maxRounds: 2,
+  rounds: [
+    { correct: 'cenoura', options: ['cenoura', 'cebola', 'couve'] },
+    { correct: 'cenoura', options: ['cenoura', 'coelho', 'cesto'] }
+  ],
+  init() {
+    this.round = 0;
+    clearFeedback('u2-feedback');
+    const lv = levels[2];
+    if (lv === 'challenge') {
+      this.rounds = [
+        { correct: 'cenoura', options: ['cenoura', 'cebola', 'couve', 'cesto'] },
+        { correct: 'cenoura', options: ['cenoura', 'coelho', 'coroa', 'caneta'] }
+      ];
+      document.getElementById('u2-image').classList.add('hidden');
+    } else {
+      this.rounds = [
+        { correct: 'cenoura', options: ['cenoura', 'cebola', 'couve'] },
+        { correct: 'cenoura', options: ['cenoura', 'coelho', 'cesto'] }
+      ];
+      document.getElementById('u2-image').classList.remove('hidden');
+    }
+    this.renderRound();
+  },
+  renderRound() {
+    const container = document.getElementById('u2-options');
+    const info = document.getElementById('u2-round-info');
+    container.innerHTML = '';
+    clearFeedback('u2-feedback');
+    if (this.round >= this.rounds.length) {
+      info.textContent = '';
+      showFeedback('u2-feedback', true, 'Parabéns! Acertaste todas! 🌟');
+      Confetti.launch();
+      AudioFX.star();
+      return;
+    }
+    const rd = this.rounds[this.round];
+    info.textContent = `Ronda ${this.round + 1} de ${this.rounds.length}`;
+    const opts = shuffle(rd.options);
+    const lv = levels[2];
+    opts.forEach(opt => {
+      const card = document.createElement('button');
+      card.className = 'word-card';
+      card.textContent = opt;
+      card.setAttribute('aria-label', 'Palavra: ' + opt);
+      if (lv === 'support' && opt === 'cenoura') card.classList.add('highlight');
+      card.addEventListener('click', () => this.select(opt, card));
+      container.appendChild(card);
+    });
+  },
+  select(word, card) {
+    const rd = this.rounds[this.round];
+    const container = document.getElementById('u2-options');
+    if (word === rd.correct) {
+      card.classList.add('correct');
+      showFeedback('u2-feedback', true, 'Muito bem! É a cenoura! 🥕');
+      Confetti.launch();
+      container.querySelectorAll('.word-card').forEach(c => c.style.pointerEvents = 'none');
+      this.round++;
+      setTimeout(() => this.renderRound(), 1500);
+    } else {
+      card.classList.add('incorrect');
+      showFeedback('u2-feedback', false, 'Tenta outra vez! 💪');
+      setTimeout(() => card.classList.remove('incorrect'), 600);
+    }
+  }
+};
+unitInits[2] = () => Unit2.init();
+
+/* ========================================
+   UNIT 3: Segmentação silábica
+   ======================================== */
+const Unit3 = {
+  clapCount: 0,
+  filledSlots: [null, null, null],
+  init() {
+    this.clapCount = 0;
+    this.filledSlots = [null, null, null];
+    document.getElementById('u3-clap-count').textContent = '0';
+    clearFeedback('u3-feedback');
+    const lv = levels[3];
+    const word = document.getElementById('u3-word');
+    const hint = document.getElementById('u3-hint');
+    const bank = document.getElementById('u3-bank');
+    const slotsEl = document.getElementById('u3-slots');
+
+    word.classList.toggle('hidden', lv === 'challenge');
+    hint.classList.toggle('hidden', lv !== 'support');
+
+    // Reset slots
+    slotsEl.querySelectorAll('.drop-slot').forEach(s => {
+      s.innerHTML = s.dataset.slot === '0' ? '1' : s.dataset.slot === '1' ? '2' : '3';
+      s.classList.remove('filled', 'correct-slot', 'incorrect-slot');
+      s.dataset.filled = '';
+    });
+
+    let syls;
+    if (lv === 'support') syls = ['ce', 'nou', 'ra'];
+    else if (lv === 'challenge') syls = ['ce', 'nou', 'ra', 'no', 'u', 'ar'];
+    else syls = ['ce', 'nou', 'ra', 'no', 'u'];
+
+    bank.innerHTML = '';
+    // Clear old drop zone registrations for this group
+    DragSystem.dropZones = DragSystem.dropZones.filter(dz => dz.groupId !== 'u3');
+
+    shuffle(syls).forEach(s => {
+      const block = document.createElement('span');
+      block.className = `syl-block ${sylClass(s)}`;
+      block.textContent = s;
+      block.dataset.value = s;
+      block.id = 'u3-syl-' + s + '-' + Math.random().toString(36).slice(2, 6);
+      DragSystem.makeDraggable(block, 'u3');
+      bank.appendChild(block);
+    });
+
+    slotsEl.querySelectorAll('.drop-slot').forEach(slot => {
+      DragSystem.registerDropZone(slot, 'u3', (value, srcEl, dropEl) => {
+        const idx = parseInt(dropEl.dataset.slot);
+        const expected = dropEl.dataset.expect;
+        if (this.filledSlots[idx]) return;
+        if (value === expected) {
+          dropEl.innerHTML = `<span class="syl-block ${sylClass(value)}" style="font-size:28px; cursor:default;">${value}</span>`;
+          dropEl.classList.add('filled', 'correct-slot');
+          dropEl.dataset.filled = value;
+          this.filledSlots[idx] = value;
+          srcEl.classList.add('hidden');
+          srcEl.classList.remove('dragging');
+          showFeedback('u3-feedback', true, 'Boa! 🎉');
+          if (this.filledSlots.every(s => s !== null)) {
+            setTimeout(() => {
+              showFeedback('u3-feedback', true, 'Perfeito! ce · nou · ra = CENOURA! 🥕🎉');
+              Confetti.launch();
+              AudioFX.star();
+            }, 500);
+          }
+        } else {
+          dropEl.classList.add('incorrect-slot');
+          srcEl.classList.remove('dragging');
+          showFeedback('u3-feedback', false, 'Essa sílaba não fica aí. Tenta outra! 💪');
+          setTimeout(() => dropEl.classList.remove('incorrect-slot'), 600);
+        }
+      });
+    });
+
+    if (lv === 'support') {
+      // Auto clap animation
+      document.getElementById('u3-clap-btn').textContent = '👏 Bater palmas (automático)';
+    } else {
+      document.getElementById('u3-clap-btn').textContent = '👏 Bater palmas';
+    }
+  },
+  clap() {
+    const lv = levels[3];
+    if (lv === 'support') {
+      // Automated 3 claps
+      this.clapCount = 0;
+      const syls = ['ce', 'nou', 'ra'];
+      const doClap = (i) => {
+        if (i >= 3) return;
+        this.clapCount = i + 1;
+        document.getElementById('u3-clap-count').textContent = this.clapCount;
+        document.getElementById('u3-clap-count').style.animation = 'none';
+        document.getElementById('u3-clap-count').offsetHeight;
+        document.getElementById('u3-clap-count').style.animation = 'clap-anim 0.3s';
+        AudioFX.clap();
+        setTimeout(() => doClap(i + 1), 500);
+      };
+      doClap(0);
+    } else {
+      if (this.clapCount >= 3) { this.clapCount = 0; }
+      this.clapCount++;
+      document.getElementById('u3-clap-count').textContent = this.clapCount;
+      document.getElementById('u3-clap-count').style.animation = 'none';
+      document.getElementById('u3-clap-count').offsetHeight;
+      document.getElementById('u3-clap-count').style.animation = 'clap-anim 0.3s';
+      AudioFX.clap();
+      if (this.clapCount === 3) {
+        setTimeout(() => showFeedback('u3-feedback', true, 'Três palmadas = três sílabas! 👏👏👏'), 300);
+      }
+    }
+  }
+};
+unitInits[3] = () => Unit3.init();
+
+/* ========================================
+   UNIT 4: Recombinação silábica
+   ======================================== */
+const Unit4 = {
+  filledSlots: [null, null],
+  foundWords: [],
+  validWords: {
+    'cano': true, 'nora': true, 'cana': true, 'cera': true, 'cara': true, 'rena': true,
+    'nuca': true, 'ruca': true, 'rana': true, 'noce': true, 'runa': true,
+    'cenoura': true, 'noca': true, 'pano': true, 'nome': true, 'mesa': true,
+    'mina': true, 'pena': true, 'pano': true, 'napa': true, 'mano': true,
+    'cena': true, 'rena': true, 'nora': true, 'rara': true, 'papa': true,
+    'mapa': true, 'nana': true, 'saca': true, 'pura': true, 'mana': true,
+    'nana': true, 'rama': true, 'ramo': true
+  },
+  init() {
+    this.filledSlots = [null, null];
+    this.foundWords = [];
+    clearFeedback('u4-feedback');
+    document.getElementById('u4-found-list').innerHTML = '';
+    document.getElementById('u4-built-word').textContent = '';
+    document.getElementById('u4-check-btns').classList.add('hidden');
+    const lv = levels[4];
+    const bank = document.getElementById('u4-bank');
+    bank.innerHTML = '';
+
+    // Reset slots
+    const slotsEl = document.getElementById('u4-slots');
+    slotsEl.querySelectorAll('.drop-slot').forEach(s => {
+      s.innerHTML = s.dataset.slot === '0' ? '1.ª' : '2.ª';
+      s.classList.remove('filled', 'correct-slot', 'incorrect-slot');
+      s.dataset.filled = '';
+    });
+
+    DragSystem.dropZones = DragSystem.dropZones.filter(dz => dz.groupId !== 'u4');
+
+    let syls;
+    if (lv === 'support') syls = ['ce', 'nou', 'ra'];
+    else if (lv === 'challenge') syls = ['ce', 'nou', 'ra', 'ca', 'no', 'ru', 'na', 'me', 'ni', 'sa', 'pa'];
+    else syls = ['ce', 'nou', 'ra', 'ca', 'no', 'ru', 'na'];
+
+    shuffle(syls).forEach(s => {
+      const block = document.createElement('span');
+      block.className = `syl-block ${sylClass(s)}`;
+      block.textContent = s;
+      block.dataset.value = s;
+      block.id = 'u4-syl-' + s + '-' + Math.random().toString(36).slice(2, 6);
+      DragSystem.makeDraggable(block, 'u4');
+      bank.appendChild(block);
+    });
+
+    slotsEl.querySelectorAll('.drop-slot').forEach(slot => {
+      DragSystem.registerDropZone(slot, 'u4', (value, srcEl, dropEl) => {
+        const idx = parseInt(dropEl.dataset.slot);
+        if (this.filledSlots[idx]) return;
+        dropEl.innerHTML = `<span class="syl-block ${sylClass(value)}" style="font-size:24px; cursor:default;">${value}</span>`;
+        dropEl.classList.add('filled');
+        dropEl.dataset.filled = value;
+        this.filledSlots[idx] = value;
+        srcEl.classList.remove('dragging');
+        this.updateBuiltWord();
+      });
+    });
+  },
+  updateBuiltWord() {
+    const word = this.filledSlots.filter(Boolean).join('');
+    document.getElementById('u4-built-word').textContent = word || '';
+    document.getElementById('u4-check-btns').classList.toggle('hidden', this.filledSlots.filter(Boolean).length < 2);
+  },
+  clearSlots() {
+    this.filledSlots = [null, null];
+    const slotsEl = document.getElementById('u4-slots');
+    slotsEl.querySelectorAll('.drop-slot').forEach(s => {
+      s.innerHTML = s.dataset.slot === '0' ? '1.ª' : '2.ª';
+      s.classList.remove('filled', 'correct-slot', 'incorrect-slot');
+      s.dataset.filled = '';
+    });
+    document.getElementById('u4-built-word').textContent = '';
+    document.getElementById('u4-check-btns').classList.add('hidden');
+    clearFeedback('u4-feedback');
+    // Re-show all bank blocks
+    document.querySelectorAll('#u4-bank .syl-block').forEach(b => b.classList.remove('hidden', 'dragging'));
+    this.init(); // Re-init to reset drag zones cleanly
+  },
+  checkWord(claimsExists) {
+    const word = this.filledSlots.filter(Boolean).join('');
+    const reallyExists = !!this.validWords[word];
+    if (claimsExists === reallyExists) {
+      if (reallyExists && !this.foundWords.includes(word)) {
+        this.foundWords.push(word);
+        const list = document.getElementById('u4-found-list');
+        const el = document.createElement('span');
+        el.className = 'found-word anim-pop';
+        el.textContent = word;
+        list.appendChild(el);
+      }
+      showFeedback('u4-feedback', true, reallyExists ? `Sim! "${word}" existe! 🌟` : `Correto! "${word}" não é uma palavra real. 👍`);
+      if (reallyExists) Confetti.launch();
+    } else {
+      showFeedback('u4-feedback', false, reallyExists ? `Hmm... "${word}" existe sim! 🤔` : `Hmm... "${word}" não é uma palavra real. Tenta outra! 💪`);
+    }
+    setTimeout(() => this.clearSlots(), 1800);
+  }
+};
+unitInits[4] = () => Unit4.init();
+
+/* ========================================
+   UNIT 5: Leitura e escrita guiada
+   ======================================== */
+const Unit5 = {
+  syls: ['ce', 'nou', 'ra'],
+  missingIdx: 2,
+  exerciseNum: 0,
+  maxExercises: 3,
+  canvasCtx: null,
+  drawing: false,
+  init() {
+    this.exerciseNum = 0;
+    clearFeedback('u5-feedback');
+    document.getElementById('u5-writing').classList.add('hidden');
+    this.setupCanvas();
+    this.nextExercise();
+  },
+  nextExercise() {
+    if (this.exerciseNum >= this.maxExercises) {
+      showFeedback('u5-feedback', true, 'Excelente! Agora escreve a palavra! ✍️');
+      Confetti.launch();
+      AudioFX.star();
+      document.getElementById('u5-options').innerHTML = '';
+      document.getElementById('u5-word').textContent = 'CENOURA';
+      document.getElementById('u5-word').style.color = 'var(--correct)';
+      this.showWriting();
+      return;
+    }
+    clearFeedback('u5-feedback');
+    const lv = levels[5];
+    if (lv === 'support') {
+      this.missingIdx = 2; // always last
+    } else if (lv === 'challenge') {
+      // Two missing
+      this.missingIdx = -1; // special handling
+    } else {
+      this.missingIdx = Math.floor(Math.random() * 3);
+    }
+    this.renderExercise();
+  },
+  renderExercise() {
+    const wordEl = document.getElementById('u5-word');
+    const optEl = document.getElementById('u5-options');
+    const progEl = document.getElementById('u5-progress');
+    const lv = levels[5];
+    progEl.textContent = `Exercício ${this.exerciseNum + 1} de ${this.maxExercises}`;
+
+    if (lv === 'challenge') {
+      // Two missing syllables
+      const present = Math.floor(Math.random() * 3);
+      let display = this.syls.map((s, i) => i === present ? `<span style="color:var(--primary);">${s}</span>` : '<span style="color:#ccc;">___</span>');
+      wordEl.innerHTML = display.join(' · ');
+      // For challenge, user must type the word
+      optEl.innerHTML = '';
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'free-input';
+      input.placeholder = 'Escreve a palavra completa...';
+      input.setAttribute('aria-label', 'Escreve a palavra');
+      input.style.maxWidth = '300px';
+      const checkBtn = document.createElement('button');
+      checkBtn.className = 'btn btn-primary btn-sm';
+      checkBtn.textContent = '✅ Verificar';
+      checkBtn.style.marginLeft = '0.5rem';
+      checkBtn.addEventListener('click', () => {
+        if (input.value.trim().toLowerCase() === 'cenoura') {
+          this.exerciseNum++;
+          showFeedback('u5-feedback', true, 'Perfeito! 🎉');
+          setTimeout(() => this.nextExercise(), 1200);
+        } else {
+          showFeedback('u5-feedback', false, 'Tenta outra vez! A palavra tem 3 sílabas. 💪');
+        }
+      });
+      optEl.appendChild(input);
+      optEl.appendChild(checkBtn);
+    } else {
+      let display = this.syls.map((s, i) => {
+        if (i === this.missingIdx) return '<span style="color:#ccc; border-bottom:3px dashed var(--primary); padding:0 0.5rem;">___</span>';
+        return `<span style="color:var(--primary);">${s}</span>`;
+      });
+      wordEl.innerHTML = display.join(' · ');
+      optEl.innerHTML = '';
+      const correct = this.syls[this.missingIdx];
+      shuffle(this.syls).forEach(s => {
+        const btn = document.createElement('button');
+        btn.className = `word-card`;
+        btn.textContent = s;
+        btn.style.fontSize = '1.8rem';
+        btn.setAttribute('aria-label', 'Sílaba ' + s);
+        btn.addEventListener('click', () => {
+          if (s === correct) {
+            this.exerciseNum++;
+            showFeedback('u5-feedback', true, 'Certo! 🎉');
+            wordEl.innerHTML = this.syls.map(sl => `<span style="color:var(--primary);">${sl}</span>`).join(' · ');
+            optEl.querySelectorAll('.word-card').forEach(c => c.style.pointerEvents = 'none');
+            setTimeout(() => this.nextExercise(), 1200);
+          } else {
+            btn.classList.add('incorrect');
+            showFeedback('u5-feedback', false, 'Essa não é! Tenta outra. 💪');
+            setTimeout(() => btn.classList.remove('incorrect'), 500);
+          }
+        });
+        optEl.appendChild(btn);
+      });
+    }
+  },
+  showWriting() {
+    const area = document.getElementById('u5-writing');
+    area.classList.remove('hidden');
+    area.classList.add('anim-fadeIn');
+    const lv = levels[5];
+    const model = document.getElementById('u5-model');
+    if (lv === 'support') {
+      model.innerHTML = '<span style="font-size:36px; color:var(--primary); font-weight:800; letter-spacing:0.1em;">CENOURA</span>';
+    } else if (lv === 'standard') {
+      model.innerHTML = '<span style="font-size:36px; color:#ddd; font-weight:800; letter-spacing:0.1em;">CENOURA</span>';
+    } else {
+      model.innerHTML = '<span style="font-size:1rem; color:#aaa;">Escreve de memória!</span>';
+    }
+    this.clearCanvas();
+    // Draw guide on canvas
+    if (lv !== 'challenge') {
+      const ctx = this.canvasCtx;
+      if (ctx) {
+        ctx.save();
+        ctx.font = '800 60px ' + getComputedStyle(document.body).fontFamily;
+        ctx.fillStyle = lv === 'support' ? 'rgba(232,130,12,0.15)' : 'rgba(200,200,200,0.12)';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('cenoura', 250, 60);
+        ctx.restore();
+      }
+    }
+  },
+  setupCanvas() {
+    const canvas = document.getElementById('u5-canvas');
+    this.canvasCtx = canvas.getContext('2d');
+    let isDrawing = false;
+    let lastX, lastY;
+    const getPos = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const pt = e.touches ? e.touches[0] : e;
+      return [(pt.clientX - rect.left) * (canvas.width / rect.width), (pt.clientY - rect.top) * (canvas.height / rect.height)];
+    };
+    const start = (e) => { e.preventDefault(); isDrawing = true; [lastX, lastY] = getPos(e); };
+    const move = (e) => {
+      if (!isDrawing) return;
+      e.preventDefault();
+      const [x, y] = getPos(e);
+      this.canvasCtx.beginPath();
+      this.canvasCtx.moveTo(lastX, lastY);
+      this.canvasCtx.lineTo(x, y);
+      this.canvasCtx.strokeStyle = '#1E1B18';
+      this.canvasCtx.lineWidth = 4;
+      this.canvasCtx.lineCap = 'round';
+      this.canvasCtx.stroke();
+      [lastX, lastY] = [x, y];
+    };
+    const end = () => { isDrawing = false; };
+    canvas.addEventListener('mousedown', start);
+    canvas.addEventListener('mousemove', move);
+    canvas.addEventListener('mouseup', end);
+    canvas.addEventListener('mouseleave', end);
+    canvas.addEventListener('touchstart', start, { passive: false });
+    canvas.addEventListener('touchmove', move, { passive: false });
+    canvas.addEventListener('touchend', end);
+  },
+  clearCanvas() {
+    const canvas = document.getElementById('u5-canvas');
+    this.canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+};
+unitInits[5] = () => Unit5.init();
+
+/* ========================================
+   UNIT 6: Frase simples
+   ======================================== */
+const Unit6 = {
+  targetSentence: ['A', 'cenoura', 'é', 'laranja', '.'],
+  slots: [],
+  init() {
+    clearFeedback('u6-feedback');
+    document.getElementById('u6-free-mode').classList.add('hidden');
+    document.getElementById('u6-free-feedback').innerHTML = '';
+    const lv = levels[6];
+    const sentenceEl = document.getElementById('u6-sentence');
+    const bankEl = document.getElementById('u6-bank');
+    sentenceEl.innerHTML = '';
+    bankEl.innerHTML = '';
+    this.slots = [];
+
+    DragSystem.dropZones = DragSystem.dropZones.filter(dz => dz.groupId !== 'u6');
+
+    if (lv === 'challenge') {
+      document.getElementById('u6-instruction').textContent = 'Escreve a tua frase com a palavra "cenoura"!';
+      document.getElementById('u6-verify-btn').classList.add('hidden');
+      sentenceEl.classList.add('hidden');
+      bankEl.classList.add('hidden');
+      document.getElementById('u6-free-mode').classList.remove('hidden');
+      return;
+    }
+
+    document.getElementById('u6-instruction').textContent = 'Arrasta as palavras para construir a frase!';
+    document.getElementById('u6-verify-btn').classList.remove('hidden');
+    sentenceEl.classList.remove('hidden');
+    bankEl.classList.remove('hidden');
+
+    let words;
+    if (lv === 'support') {
+      words = ['A', 'cenoura', 'é', 'laranja', '.'];
+    } else {
+      words = ['A', 'cenoura', 'é', 'laranja', '.', 'grande', 'doce'];
+    }
+
+    const numSlots = lv === 'support' ? 5 : 5;
+    for (let i = 0; i < numSlots; i++) {
+      const slot = document.createElement('div');
+      slot.className = 'sentence-slot';
+      slot.dataset.slot = i;
+      slot.dataset.filled = '';
+      if (lv === 'support') {
+        slot.dataset.num = i + 1;
+        slot.classList.add('numbered');
+      }
+      slot.textContent = '';
+      sentenceEl.appendChild(slot);
+      this.slots.push(slot);
+
+      DragSystem.registerDropZone(slot, 'u6', (value, srcEl, dropEl) => {
+        if (dropEl.dataset.filled) return;
+        dropEl.textContent = value;
+        dropEl.dataset.filled = value;
+        dropEl.classList.add('filled');
+        srcEl.classList.add('hidden');
+        srcEl.classList.remove('dragging');
+      });
+    }
+
+    shuffle(words).forEach(w => {
+      const card = document.createElement('span');
+      card.className = 'word-card';
+      card.textContent = w;
+      card.dataset.value = w;
+      card.style.fontSize = '1.2rem';
+      card.style.cursor = 'grab';
+      DragSystem.makeDraggable(card, 'u6');
+      bankEl.appendChild(card);
+    });
+  },
+  verify() {
+    const filled = this.slots.map(s => s.dataset.filled);
+    const target = this.targetSentence;
+    let allCorrect = true;
+    this.slots.forEach((s, i) => {
+      if (filled[i] === target[i]) {
+        s.style.borderColor = 'var(--correct)';
+        s.style.background = 'var(--correct-bg)';
+      } else {
+        s.style.borderColor = 'var(--incorrect)';
+        s.style.background = 'var(--incorrect-bg)';
+        allCorrect = false;
+      }
+    });
+    if (allCorrect) {
+      showFeedback('u6-feedback', true, 'Perfeito! "A cenoura é laranja." 🥕🎉');
+      Confetti.launch();
+      AudioFX.star();
+      // Show free mode option
+      setTimeout(() => {
+        document.getElementById('u6-free-mode').classList.remove('hidden');
+        document.getElementById('u6-free-mode').classList.add('anim-fadeIn');
+      }, 1500);
+    } else {
+      showFeedback('u6-feedback', false, 'Quase! Olha bem para a ordem das palavras. 💪');
+    }
+  },
+  reset() {
+    this.init();
+  },
+  checkFree() {
+    const input = document.getElementById('u6-free-input').value.trim().toLowerCase();
+    if (input.includes('cenoura') && input.length > 10) {
+      document.getElementById('u6-free-feedback').innerHTML = '<div class="feedback-msg feedback-correct">✓ Boa frase! Muito bem! 🌟</div>';
+      AudioFX.correct();
+      Confetti.launch();
+    } else if (input.includes('cenoura')) {
+      document.getElementById('u6-free-feedback').innerHTML = '<div class="feedback-msg feedback-incorrect">✗ Tenta fazer uma frase mais completa com "cenoura". 💪</div>';
+      AudioFX.incorrect();
+    } else {
+      document.getElementById('u6-free-feedback').innerHTML = '<div class="feedback-msg feedback-incorrect">✗ A tua frase precisa da palavra "cenoura"! 🥕</div>';
+      AudioFX.incorrect();
+    }
+  }
+};
+unitInits[6] = () => Unit6.init();
+
+/* ========================================
+   UNIT 7: Mini-avaliação formativa
+   ======================================== */
+const Unit7 = {
+  step: 1,
+  results: [null, null, null, null],
+  timerInterval: null,
+  init() {
+    this.step = 1;
+    this.results = [null, null, null, null];
+    document.getElementById('u7-result').classList.add('hidden');
+    clearFeedback('u7-feedback');
+    if (this.timerInterval) clearInterval(this.timerInterval);
+    const lv = levels[7];
+    if (lv === 'challenge') {
+      document.getElementById('u7-timer').classList.remove('hidden');
+      this.startTimer(120);
+    } else {
+      document.getElementById('u7-timer').classList.add('hidden');
+    }
+    this.renderStep();
+  },
+  startTimer(seconds) {
+    let remaining = seconds;
+    const fill = document.getElementById('u7-timer-fill');
+    fill.style.width = '100%';
+    if (this.timerInterval) clearInterval(this.timerInterval);
+    this.timerInterval = setInterval(() => {
+      remaining--;
+      fill.style.width = (remaining / seconds * 100) + '%';
+      if (remaining <= 0) {
+        clearInterval(this.timerInterval);
+        this.finishAssessment();
+      }
+    }, 1000);
+  },
+  renderStep() {
+    const content = document.getElementById('u7-content');
+    const label = document.getElementById('u7-step-label');
+    const progress = document.getElementById('u7-progress');
+    progress.style.width = (this.step / 4 * 100) + '%';
+    label.textContent = `Passo ${this.step} de 4`;
+    clearFeedback('u7-feedback');
+    const lv = levels[7];
+    content.innerHTML = '';
+
+    if (this.step === 1) {
+      // Choose word from images
+      const p = document.createElement('p');
+      p.style.textAlign = 'center';
+      p.style.fontWeight = '700';
+      p.textContent = 'Qual destas imagens é a cenoura?';
+      content.appendChild(p);
+
+      const opts = shuffle([
+        { emoji: '🥕', label: 'cenoura', correct: true },
+        { emoji: '🧅', label: 'cebola', correct: false },
+        { emoji: '🥬', label: 'couve', correct: false }
+      ]);
+      if (lv === 'standard' || lv === 'challenge') {
+        opts.push({ emoji: '🥒', label: 'pepino', correct: false });
+      }
+      const div = document.createElement('div');
+      div.className = 'quiz-options';
+      opts.forEach(o => {
+        const btn = document.createElement('button');
+        btn.className = 'word-card';
+        btn.style.flexDirection = 'column';
+        btn.style.display = 'flex';
+        btn.style.alignItems = 'center';
+        btn.style.gap = '0.3rem';
+        btn.style.padding = '1rem';
+        if (lv === 'support' || lv === 'standard') {
+          btn.innerHTML = `<span style="font-size:48px;">${o.emoji}</span><span>${o.label}</span>`;
+        } else {
+          btn.innerHTML = `<span>${o.label}</span>`;
+        }
+        btn.addEventListener('click', () => {
+          this.results[0] = o.correct;
+          if (o.correct) {
+            showFeedback('u7-feedback', true, 'Certo! 🥕');
+          } else {
+            showFeedback('u7-feedback', false, 'Não é essa! 🤔');
+          }
+          setTimeout(() => { this.step = 2; this.renderStep(); }, 1000);
+        });
+        div.appendChild(btn);
+      });
+      content.appendChild(div);
+
+    } else if (this.step === 2) {
+      // Count syllables
+      const p = document.createElement('p');
+      p.style.textAlign = 'center';
+      p.style.fontWeight = '700';
+      p.textContent = 'Quantas sílabas tem a palavra "cenoura"?';
+      content.appendChild(p);
+
+      if (lv === 'support') {
+        const hint = document.createElement('div');
+        hint.style.textAlign = 'center';
+        hint.style.margin = '0.5rem 0';
+        hint.innerHTML = '<span class="syl-block syl-ce" style="font-size:20px; cursor:default;">ce</span> · <span class="syl-block syl-nou" style="font-size:20px; cursor:default;">nou</span> · <span class="syl-block syl-ra" style="font-size:20px; cursor:default;">ra</span>';
+        content.appendChild(hint);
+      }
+
+      const div = document.createElement('div');
+      div.className = 'quiz-options';
+      [2, 3, 4].forEach(n => {
+        const btn = document.createElement('button');
+        btn.className = 'word-card';
+        btn.textContent = n;
+        btn.style.fontSize = '2rem';
+        btn.style.width = '80px';
+        btn.addEventListener('click', () => {
+          this.results[1] = (n === 3);
+          if (n === 3) {
+            showFeedback('u7-feedback', true, 'Sim, 3 sílabas! 👏👏👏');
+          } else {
+            showFeedback('u7-feedback', false, `Não é ${n}... 🤔`);
+          }
+          setTimeout(() => { this.step = 3; this.renderStep(); }, 1000);
+        });
+        div.appendChild(btn);
+      });
+      content.appendChild(div);
+
+    } else if (this.step === 3) {
+      // Order syllables
+      const p = document.createElement('p');
+      p.style.textAlign = 'center';
+      p.style.fontWeight = '700';
+      p.textContent = 'Põe as sílabas na ordem certa!';
+      content.appendChild(p);
+
+      if (lv === 'support') {
+        const hint = document.createElement('div');
+        hint.style.textAlign = 'center';
+        hint.style.margin = '0.5rem 0';
+        hint.innerHTML = '<span class="syl-block syl-ce" style="font-size:18px; cursor:default;">ce</span> · <span class="syl-block syl-nou" style="font-size:18px; cursor:default;">nou</span> · <span class="syl-block syl-ra" style="font-size:18px; cursor:default;">ra</span>';
+        content.appendChild(hint);
+      }
+
+      const scrambled = shuffle(['ce', 'nou', 'ra']);
+      const selected = [];
+      const resultDiv = document.createElement('div');
+      resultDiv.style.textAlign = 'center';
+      resultDiv.style.margin = '0.5rem 0';
+      resultDiv.style.minHeight = '50px';
+      resultDiv.style.fontSize = '28px';
+      resultDiv.style.fontWeight = '800';
+      content.appendChild(resultDiv);
+
+      const div = document.createElement('div');
+      div.className = 'quiz-options';
+      const buttons = {};
+      scrambled.forEach(s => {
+        const btn = document.createElement('button');
+        btn.className = `syl-block ${sylClass(s)}`;
+        btn.textContent = s;
+        btn.style.cursor = 'pointer';
+        btn.style.fontSize = '28px';
+        buttons[s] = btn;
+        btn.addEventListener('click', () => {
+          selected.push(s);
+          btn.style.opacity = '0.3';
+          btn.style.pointerEvents = 'none';
+          resultDiv.textContent = selected.join(' · ');
+          AudioFX.click();
+          if (selected.length === 3) {
+            const correct = selected[0] === 'ce' && selected[1] === 'nou' && selected[2] === 'ra';
+            this.results[2] = correct;
+            if (correct) {
+              showFeedback('u7-feedback', true, 'Perfeito! ce · nou · ra! 🎉');
+            } else {
+              showFeedback('u7-feedback', false, 'A ordem certa é: ce · nou · ra 🤔');
+            }
+            setTimeout(() => { this.step = 4; this.renderStep(); }, 1200);
+          }
+        });
+        div.appendChild(btn);
+      });
+      content.appendChild(div);
+
+    } else if (this.step === 4) {
+      // Complete sentence
+      const p = document.createElement('p');
+      p.style.textAlign = 'center';
+      p.style.fontWeight = '700';
+      content.appendChild(p);
+
+      if (lv === 'challenge') {
+        p.textContent = 'Escreve uma frase com a palavra "cenoura":';
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'free-input';
+        input.placeholder = 'Escreve aqui...';
+        input.style.maxWidth = '400px';
+        input.style.margin = '0.5rem auto';
+        input.style.display = 'block';
+        const checkBtn = document.createElement('button');
+        checkBtn.className = 'btn btn-primary btn-sm';
+        checkBtn.textContent = '✅ Verificar';
+        checkBtn.style.display = 'block';
+        checkBtn.style.margin = '0.5rem auto';
+        checkBtn.addEventListener('click', () => {
+          const val = input.value.trim().toLowerCase();
+          const correct = val.includes('cenoura') && val.length > 8;
+          this.results[3] = correct;
+          if (correct) showFeedback('u7-feedback', true, 'Boa frase! 🌟');
+          else showFeedback('u7-feedback', false, 'Tenta escrever uma frase completa com "cenoura". 💪');
+          setTimeout(() => this.finishAssessment(), 1200);
+        });
+        content.appendChild(input);
+        content.appendChild(checkBtn);
+      } else {
+        p.textContent = 'Completa a frase: A ___ é laranja.';
+        if (lv === 'support') {
+          p.innerHTML = 'Completa: A <span style="border-bottom:3px dashed var(--primary);">___</span> é laranja.';
+        }
+        const opts = shuffle(['cenoura', 'cebola', 'couve']);
+        const div = document.createElement('div');
+        div.className = 'quiz-options';
+        opts.forEach(w => {
+          const btn = document.createElement('button');
+          btn.className = 'word-card';
+          btn.textContent = w;
+          btn.addEventListener('click', () => {
+            const correct = w === 'cenoura';
+            this.results[3] = correct;
+            if (correct) showFeedback('u7-feedback', true, '"A cenoura é laranja." Perfeito! 🥕');
+            else showFeedback('u7-feedback', false, `"A ${w} é laranja"? Não parece certo... 🤔`);
+            setTimeout(() => this.finishAssessment(), 1200);
+          });
+          div.appendChild(btn);
+        });
+        content.appendChild(div);
+      }
+    }
+  },
+  finishAssessment() {
+    if (this.timerInterval) clearInterval(this.timerInterval);
+    document.getElementById('u7-timer').classList.add('hidden');
+    document.getElementById('u7-content').innerHTML = '';
+    document.getElementById('u7-step-label').textContent = 'Resultado';
+    document.getElementById('u7-progress').style.width = '100%';
+    clearFeedback('u7-feedback');
+
+    const score = this.results.filter(r => r === true).length;
+    const stars = score >= 4 ? 3 : score >= 2 ? 2 : score >= 1 ? 1 : 0;
+    const starsEl = document.getElementById('u7-stars');
+    starsEl.textContent = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+
+    const resultText = document.getElementById('u7-result-text');
+    if (stars === 3) resultText.textContent = 'Fantástico! Sabes tudo sobre a cenoura! 🥕🎉';
+    else if (stars === 2) resultText.textContent = 'Muito bem! Quase perfeito! 🌟';
+    else if (stars === 1) resultText.textContent = 'Bom começo! Vamos praticar mais! 💪';
+    else resultText.textContent = 'Não faz mal! Vamos tentar outra vez! 🤗';
+
+    const summary = document.getElementById('u7-summary');
+    const labels = ['Reconhecer', 'Contar sílabas', 'Ordenar sílabas', 'Frase'];
+    summary.innerHTML = this.results.map((r, i) =>
+      `<div style="margin:0.3rem 0;">${r ? '✅' : '❌'} ${labels[i]}</div>`
+    ).join('');
+
+    document.getElementById('u7-result').classList.remove('hidden');
+    document.getElementById('u7-result').classList.add('anim-fadeIn');
+
+    if (stars >= 2) { Confetti.launch(); AudioFX.star(); }
+  },
+  restart() {
+    this.init();
+  }
+};
+unitInits[7] = () => Unit7.init();
+
+/* ========================================
+   INITIALIZATION
+   ======================================== */
+document.addEventListener('DOMContentLoaded', () => {
+  AudioFX.init();
+  Confetti.init();
+  DragSystem.init();
+  Unit1.init();
+  Unit2.init();
+  Unit3.init();
+  Unit4.init();
+  Unit5.init();
+  Unit6.init();
+  Unit7.init();
+});
+</script>
+</body>
+</html>
