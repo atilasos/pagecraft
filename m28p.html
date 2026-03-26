@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Método das 28 Palavras — PageCraft</title>
+  <style>
+    :root {
+      --bg: #faf5ff;
+      --card: #fff;
+      --text: #1e1b4b;
+      --muted: #6b7280;
+      --line: #e9e5f5;
+      --brand: #7c3aed;
+      --brand-light: #ede9fe;
+      --brand-dark: #5b21b6;
+      --student: #059669;
+      --student-bg: #ecfdf5;
+      --teacher: #7c3aed;
+      --teacher-bg: #f5f3ff;
+      --disabled: #d1d5db;
+      --disabled-bg: #f3f4f6;
+      --shadow: 0 4px 20px rgba(91, 33, 182, 0.08);
+      --radius: 16px;
+      --touch: 48px;
+    }
+    * { box-sizing: border-box; margin: 0; }
+    body {
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      background: linear-gradient(180deg, #ede9fe 0%, var(--bg) 28%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 20px 48px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      color: var(--brand);
+      font-weight: 600;
+      font-size: 0.92rem;
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: var(--brand-light);
+      min-height: var(--touch);
+      transition: background 0.15s;
+    }
+    .back:hover { background: #ddd6fe; }
+    .header h1 {
+      font-size: clamp(1.4rem, 3.5vw, 2rem);
+      letter-spacing: -0.02em;
+      flex: 1;
+    }
+
+    /* Progress */
+    .progress-wrap {
+      margin-bottom: 28px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px 20px;
+      box-shadow: var(--shadow);
+    }
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+    .progress-info strong { color: var(--text); }
+    .progress-bar {
+      height: 8px;
+      background: var(--line);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--brand), #a78bfa);
+      border-radius: 999px;
+      transition: width 0.4s ease;
+    }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    /* Card */
+    .word-card {
+      background: var(--card);
+      border: 2px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+      box-shadow: var(--shadow);
+    }
+    .word-card.available:hover {
+      border-color: var(--brand);
+      box-shadow: 0 8px 30px rgba(91, 33, 182, 0.14);
+      transform: translateY(-2px);
+    }
+    .word-card.disabled {
+      background: var(--disabled-bg);
+      border-color: var(--disabled);
+      opacity: 0.55;
+    }
+    .word-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--brand-light);
+      color: var(--brand);
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 10px;
+    }
+    .disabled .word-num {
+      background: #e5e7eb;
+      color: var(--disabled);
+    }
+    .word-name {
+      font-size: clamp(1.3rem, 2.5vw, 1.6rem);
+      font-weight: 700;
+      margin-bottom: 14px;
+      line-height: 1.2;
+    }
+    .disabled .word-name { color: var(--disabled); }
+
+    .word-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      margin-top: auto;
+    }
+    .btn-open {
+      display: block;
+      text-decoration: none;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-align: center;
+      background: var(--student);
+      color: #fff;
+      min-height: var(--touch);
+      transition: filter 0.15s, transform 0.1s;
+    }
+    .btn-open:hover { filter: brightness(1.08); }
+    .btn-open:active { transform: scale(0.97); }
+    .teacher-links {
+      display: flex;
+      gap: 6px;
+    }
+    .btn-sm {
+      flex: 1;
+      display: block;
+      text-decoration: none;
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-align: center;
+      min-height: 36px;
+      line-height: 1.4;
+      transition: background 0.15s;
+    }
+    .btn-teacher {
+      background: var(--teacher-bg);
+      color: var(--teacher);
+    }
+    .btn-teacher:hover { background: #ede9fe; }
+    .btn-spec {
+      background: #f8fafc;
+      color: var(--muted);
+      border: 1px solid var(--line);
+    }
+    .btn-spec:hover { background: #f1f5f9; }
+
+    .disabled .word-actions { display: none; }
+    .disabled-label {
+      font-size: 0.82rem;
+      color: var(--disabled);
+      font-style: italic;
+      margin-top: auto;
+    }
+
+    /* Responsive: Tablet portrait */
+    @media (max-width: 899px) {
+      .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+      .word-card { padding: 16px 12px; }
+    }
+    /* Mobile */
+    @media (max-width: 599px) {
+      .wrap { padding: 16px 12px 36px; }
+      .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .word-card { padding: 14px 10px; }
+      .word-name { font-size: 1.15rem; }
+      .btn-open { padding: 10px 12px; font-size: 0.88rem; }
+      .teacher-links { flex-direction: column; }
+      .header { gap: 10px; }
+    }
+    /* Interactive whiteboard / large touch */
+    @media (min-width: 1200px) and (pointer: coarse) {
+      .grid { grid-template-columns: repeat(5, 1fr); gap: 20px; }
+      .word-card { padding: 28px 20px; }
+      .word-name { font-size: 1.8rem; }
+      .btn-open { padding: 16px 20px; font-size: 1.1rem; min-height: 56px; }
+      .back { padding: 14px 22px; font-size: 1rem; }
+    }
+    /* Large desktop */
+    @media (min-width: 1200px) and (pointer: fine) {
+      .grid { grid-template-columns: repeat(5, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <a class="back" href="./index.html">&#8592; Catálogo</a>
+      <h1>Método das 28 Palavras</h1>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-info">
+        <span><strong id="countAvail">0</strong> de 28 palavras disponíveis</span>
+        <span id="percent">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <section id="grid" class="grid"></section>
+  </div>
+
+  <script>
+    const ALL_WORDS = [
+      'Menina', 'Menino', 'Uva', 'Dedo', 'Sapato', 'Bota', 'Leque',
+      'Casa', 'Janela', 'Telhado', 'Escada', 'Chave', 'Galinha', 'Ovo',
+      'Rato', 'Cão', 'Girafa', 'Palhaço', 'Televisão', 'Cenoura',
+      'Árvore', 'Quadro', 'Passarinho', 'Cigarra', 'Fogueira',
+      'Flor', 'Dragão', 'Estrela'
+    ];
+
+    const grid = document.getElementById('grid');
+    const countEl = document.getElementById('countAvail');
+    const percentEl = document.getElementById('percent');
+    const fillEl = document.getElementById('progressFill');
+
+    function esc(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function viewerUrl(slug, view) {
+      return './viewer.html?slug=' + encodeURIComponent(slug) + '&view=' + encodeURIComponent(view);
+    }
+
+    fetch('./catalog.json')
+      .then(r => r.json())
+      .then(data => {
+        const m28p = {};
+        (data.items || []).forEach(it => {
+          if (it.order && (it.tags || []).some(t => t.toLowerCase() === 'm28p')) {
+            m28p[it.order] = it;
+          }
+        });
+
+        const available = Object.keys(m28p).length;
+        countEl.textContent = available;
+        const pct = Math.round((available / 28) * 100);
+        percentEl.textContent = pct + '%';
+        fillEl.style.width = pct + '%';
+
+        grid.innerHTML = ALL_WORDS.map((word, i) => {
+          const num = i + 1;
+          const it = m28p[num];
+          if (it) {
+            return (
+              '<article class="word-card available">' +
+              '<span class="word-num">' + num + '</span>' +
+              '<span class="word-name">' + esc(word) + '</span>' +
+              '<div class="word-actions">' +
+              '<a class="btn-open" href="' + esc(it.url) + '">Abrir</a>' +
+              '<div class="teacher-links">' +
+              '<a class="btn-sm btn-teacher" href="' + esc(viewerUrl(it.slug, 'teacher')) + '">Guia</a>' +
+              '<a class="btn-sm btn-spec" href="' + esc(viewerUrl(it.slug, 'docspec')) + '">DocSpec</a>' +
+              '</div>' +
+              '</div>' +
+              '</article>'
+            );
+          } else {
+            return (
+              '<article class="word-card disabled">' +
+              '<span class="word-num">' + num + '</span>' +
+              '<span class="word-name">' + esc(word) + '</span>' +
+              '<span class="disabled-label">Em breve</span>' +
+              '</article>'
+            );
+          }
+        }).join('');
+      })
+      .catch(() => {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--muted)">Não foi possível carregar as palavras.</div>';
+      });
+  </script>
+</body>
+</html>
