@@ -1,0 +1,381 @@
+{
+  "topic": "Palavra #24 — passarinho (Método das 28 Palavras)",
+  "ageRange": "6-7 anos (1.º ano, 1.º CEB)",
+  "duration": 45,
+  "objectives": [
+    "Reconhecer a palavra 'passarinho' globalmente, associando-a à imagem correspondente",
+    "Segmentar a palavra 'passarinho' nas suas quatro sílabas (pas-sa-ri-nho) com recurso a pistas visuais e motoras",
+    "Recombinar as sílabas de 'passarinho' para formar novas palavras reais em Português",
+    "Usar a palavra 'passarinho' numa frase simples, oral ou escrita"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Ler palavras com sílabas simples, identificando os padrões silábicos (V, CV, CVC, CCV); segmentar e reconstruir palavras por sílabas",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Produzir discurso oral com vocabulário e estruturas adequadas; formular frases simples com correção sintática",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Iniciação à Educação Literária",
+        "descriptor": "Ouvir e ler textos de literatura para a infância; fazer associações entre imagem e palavra escrita",
+        "source": "portugues-1-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-D: Pensamento crítico e pensamento criativo",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": ["PIT", "mapa de tarefas"],
+    "socialOrganization": "individual (exploração 30min) → pares (recombinação e frase 10min) → turma (partilha final 5min)"
+  },
+  "materials": [
+    "Tablet ou computador com browser (1 por aluno)",
+    "Headphones (opcional, para ouvir a palavra e a frase em áudio)",
+    "Cartões físicos de sílabas: pas / sa / ri / nho (plastificados, 4 cores)",
+    "Folhas de papel colorido A5 (extensão origami)",
+    "Lápis ou marcadores coloridos (mínimo 4 cores, uma por sílaba)"
+  ],
+  "units": [
+    {
+      "summary": "A palavra 'passarinho' é apresentada numa micro-história com imagem e frase contextual",
+      "textDescription": "O aluno ouve e vê uma cena com um passarinho a cantar numa árvore (árvore já aprendida na palavra #22). A palavra 'passarinho' aparece destacada na frase 'O passarinho canta.' O aluno associa a palavra à imagem antes de qualquer análise formal — consolidando a leitura global.",
+      "interaction": {
+        "state": [
+          {
+            "name": "cenaRevela",
+            "type": "toggle",
+            "options": ["cena", "palavra"],
+            "default": "cena"
+          },
+          {
+            "name": "fraseVisivel",
+            "type": "toggle",
+            "options": ["oculta", "visivel"],
+            "default": "oculta"
+          }
+        ],
+        "render": "Imagem de fundo: árvore com um passarinho a cantar (notas musicais à volta). Ao tap, a frase 'O passarinho canta.' aparece em letras grandes abaixo da imagem, com a palavra 'passarinho' destacada numa cor diferente das restantes palavras. Um botão 'Ouvir 🔊' reproduz a frase em áudio narrado. A palavra destacada tem ligeira animação de pulso.",
+        "transition": "Tap na imagem → frase aparece com animação suave de fade-in; tap em 'Ouvir 🔊' → narração da frase sílaba a sílaba com sublinhado sincronizado; tap na palavra 'passarinho' na frase → a palavra aumenta ligeiramente e é repetida em áudio isolada",
+        "constraint": "A palavra escrita e a imagem referem-se ao mesmo ser — o aluno descobre que a palavra é o nome escrito daquilo que vê na imagem",
+        "assessment": "O aluno aponta para a palavra 'passarinho' na frase quando solicitado pelo professor, sem hesitação"
+      },
+      "differentiation": {
+        "support": "🟢 Imagem sempre visível; frase com 3 palavras apenas ('O passarinho canta.'); palavra destacada em tamanho maior; narração disponível em loop; tap na imagem já revela a frase",
+        "standard": "🟡 Imagem visível como apoio; frase completa com ponto final; aluno toca na palavra para ouvir a pronúncia isolada",
+        "challenge": "🔴 Após ouvir a micro-história em áudio, o aluno tenta adivinhar a palavra antes de a ver escrita, selecionando entre 3 opções escritas ('passarinho', 'galinha', 'rato')"
+      },
+      "duration": 4
+    },
+    {
+      "summary": "O aluno reconhece a palavra 'passarinho' entre outras palavras e imagens",
+      "textDescription": "O aluno vê a palavra 'passarinho' em destaque e é convidado a identificá-la num conjunto de 3 palavras (distratores: 'passagem', 'pardal') ou a ligar a palavra à imagem correta entre 3 imagens. Consolida a forma visual global da palavra.",
+      "interaction": {
+        "state": [
+          {
+            "name": "modo",
+            "type": "dropdown",
+            "options": ["palavra→imagem", "imagem→palavra"],
+            "default": "palavra→imagem"
+          },
+          {
+            "name": "escolha",
+            "type": "quiz",
+            "options": ["passarinho", "passagem", "pardal"],
+            "default": null
+          },
+          {
+            "name": "resultado",
+            "type": "derived",
+            "derivedFrom": "escolha === 'passarinho' ? 'correto' : 'tentar-novamente'"
+          }
+        ],
+        "render": "Modo palavra→imagem: a palavra 'passarinho' no topo em destaque; 3 imagens abaixo (passarinho, folha de árvore, sapato) para selecionar a correta. Modo imagem→palavra: imagem de passarinho no topo; 3 palavras escritas abaixo para selecionar. Feedback visual imediato: borda verde + ✓ se correto; borda âmbar + ícone de tentativa se errado.",
+        "transition": "Click/tap numa imagem ou palavra → feedback instantâneo (cor de borda + ícone); se correto, animação de estrela dourada; se errado, opção fica âmbar e o aluno pode tentar de novo sem penalização",
+        "constraint": "A palavra tem forma visual constante e única — reconhecer 'passarinho' é aprender a distinguir a sua forma das palavras visualmente próximas",
+        "assessment": "O aluno seleciona corretamente a imagem correspondente a 'passarinho' e a palavra correspondente à imagem em no máximo 2 tentativas por modo"
+      },
+      "differentiation": {
+        "support": "🟢 Distratores visualmente muito diferentes; a palavra 'passarinho' permanece visível como referência no topo; 3 tentativas permitidas; narração das opções ao hover",
+        "standard": "🟡 Distratores próximos ('passagem', 'pardal'); 2 modos alternados (palavra→imagem e imagem→palavra); 2 tentativas",
+        "challenge": "🔴 4 opções em vez de 3; distrator 'pardal' incluído; após acertar, o aluno explica verbalmente como distinguiu 'passarinho' de 'pardal'"
+      },
+      "duration": 4
+    },
+    {
+      "summary": "A palavra 'passarinho' é dividida nas suas 4 sílabas: pas-sa-ri-nho",
+      "textDescription": "O aluno aprende a dividir 'passarinho' batendo palmas ou tocando em blocos coloridos, descobrindo as 4 sílabas: 'pas', 'sa', 'ri', 'nho'. Cada sílaba tem uma cor própria consistente. O aluno conta, pronuncia e reconstrói a sequência das sílabas.",
+      "interaction": {
+        "state": [
+          {
+            "name": "silabas",
+            "type": "sorting",
+            "options": ["pas", "sa", "ri", "nho"],
+            "default": ["pas", "sa", "ri", "nho"]
+          },
+          {
+            "name": "batidas",
+            "type": "quiz",
+            "options": ["2", "3", "4", "5"],
+            "default": null
+          },
+          {
+            "name": "silabaAtiva",
+            "type": "derived",
+            "derivedFrom": "índice da sílaba em reprodução de áudio (0-3)"
+          }
+        ],
+        "render": "Palavra 'passarinho' no topo. Abaixo, 4 blocos coloridos com divisória visual clara: [PAS](laranja) [SA](verde) [RI](azul) [NHO](rosa). Botão de palmada 👏 que ao ser premido narra cada sílaba com destaque sequencial do bloco correspondente. Pergunta no rodapé: 'Quantas sílabas tem passarinho?'",
+        "transition": "Tap no botão 👏 → narração sílaba a sílaba com destaque animado de cada bloco em sequência; tap num bloco individual → essa sílaba é pronunciada e o bloco pulsa; selecionar número de sílabas → feedback imediato (✓ verde para '4')",
+        "constraint": "As sílabas têm uma sequência fixa e invariável para formar a palavra correta — trocar a ordem produz algo diferente ou inexistente",
+        "assessment": "O aluno bate exatamente 4 palmas ao dizer 'pas-sa-ri-nho' em voz alta e seleciona o número '4' quando perguntado quantas sílabas tem a palavra"
+      },
+      "maker": {
+        "type": "unplugged",
+        "challenge": "Usando cartões físicos de 4 cores (pas=laranja / sa=verde / ri=azul / nho=rosa), cada criança monta a palavra no seu lugar, bate palmas 4 vezes com o grupo e depois embaralha os cartões de um colega para ele reordenar.",
+        "materials": ["Cartões de sílabas plastificados (4 cores, 1 conjunto por criança)", "mesa ou tapete para ordenar"],
+        "groupSize": "2",
+        "connection": "Os blocos digitais têm as mesmas cores dos cartões físicos — a mesma sílaba, a mesma cor, sempre",
+        "communication": "Em pares, cada criança mostra a palavra montada ao parceiro e lê em voz alta — micro-circuito oral de verificação",
+        "alternatives": ["Sem cartões plastificados: escrever as sílabas em post-its de cores diferentes e ordenar na carteira"]
+      },
+      "differentiation": {
+        "support": "🟢 Sílabas já separadas, coloridas e com áudio; aluno apenas bate palmas e confirma o número; guia de áudio sempre ativo; blocos não podem ser desordenados",
+        "standard": "🟡 Aluno divide a palavra tocando sequencialmente nos blocos e confirma o número de sílabas; áudio disponível como apoio",
+        "challenge": "🔴 Aluno divide a palavra sem cores de apoio (blocos neutros); depois tenta dividir uma palavra nova com padrão similar ('borboleta') e conta as sílabas"
+      },
+      "duration": 7
+    },
+    {
+      "summary": "As sílabas de 'passarinho' são recombinadas para formar novas palavras reais",
+      "textDescription": "O aluno usa as sílabas de 'passarinho' (pas, sa, ri, nho) e de palavras anteriores já aprendidas para formar novas palavras reais. Palavra segura: 'passa' (pas+sa). Explora-se também 'ninho' (ni+nho) com sílaba 'ni' de 'menino'/#2. O aluno distingue combinações que existem das que não existem em Português.",
+      "interaction": {
+        "state": [
+          {
+            "name": "silabasDisponiveis",
+            "type": "drag",
+            "options": ["pas", "sa", "ri", "nho", "ni", "me", "ca"],
+            "default": []
+          },
+          {
+            "name": "palavraFormada",
+            "type": "derived",
+            "derivedFrom": "silabasDisponiveis.join('')"
+          },
+          {
+            "name": "existeEmPortugues",
+            "type": "quiz",
+            "options": ["existe ✓", "não existe ✗"],
+            "default": null
+          }
+        ],
+        "render": "Banco de sílabas coloridas arrastáveis (7 opções). Zona de composição à direita com fundo tracejado. Quando o aluno forma uma palavra e confirma, aparece 'Esta palavra existe em Português?' com dois botões. Palavras corretas revelam emoji ou imagem ilustrativa; palavras inventadas mostram personagem confusa com humor suave.",
+        "transition": "Arrastar sílaba para zona de composição → palavra atualiza em tempo real; tap em 'existe/não existe' → feedback com imagem ou ícone amigável; botão 'limpar' permite recomeçar a composição",
+        "constraint": "Nem toda a combinação de sílabas forma uma palavra real — a ordem e a escolha das sílabas determinam se a palavra existe em Português",
+        "assessment": "O aluno forma corretamente pelo menos 1 nova palavra real (ex: 'passa' ou 'ninho') e confirma corretamente se existe ou não em Português"
+      },
+      "differentiation": {
+        "support": "🟢 Banco reduzido a 4 sílabas (pas, sa, ni, nho); a palavra 'passa' aparece já como exemplo completado; o aluno só precisa de confirmar 'existe'; ajuda visual e áudio permanentes",
+        "standard": "🟡 Banco completo de 7 sílabas; aluno experimenta livremente; feedback indica se a palavra existe com imagem ou ícone",
+        "challenge": "🔴 Sem sugestão inicial; aluno encontra pelo menos 3 palavras reais distintas; regista-as num campo de texto; cria uma frase curta com uma das palavras novas encontradas"
+      },
+      "duration": 7
+    },
+    {
+      "summary": "O aluno completa e escreve a palavra 'passarinho' com apoio progressivo",
+      "textDescription": "O aluno completa a palavra 'passarinho' selecionando a sílaba em falta ou digitando a palavra. A atividade é progressiva: nível 1 com 1 lacuna e imagem, nível 2 com 2 lacunas, nível 3 com a palavra inteira a compor. Consolida a ortografia e a leitura guiada.",
+      "interaction": {
+        "state": [
+          {
+            "name": "nivel",
+            "type": "slider",
+            "range": [1, 3],
+            "step": 1,
+            "default": 1,
+            "unit": "nível"
+          },
+          {
+            "name": "lacunas",
+            "type": "derived",
+            "derivedFrom": "nivel === 1 ? 1 : nivel === 2 ? 2 : 4"
+          },
+          {
+            "name": "silabaSelecionada",
+            "type": "quiz",
+            "options": ["pas", "sa", "ri", "nho"],
+            "default": null
+          },
+          {
+            "name": "palavraDigitada",
+            "type": "canvas",
+            "default": ""
+          }
+        ],
+        "render": "Nível 1: palavra com 1 lacuna ('pas-sa-ri-___') e 3 opções de sílaba abaixo. Nível 2: 2 lacunas ('pas-___-ri-___') e opções. Nível 3: 4 blocos vazios + campo de texto para digitar a palavra completa. Imagem do passarinho visível nos níveis 1 e 2 como apoio.",
+        "transition": "Selecionar sílaba → encaixe na lacuna com animação de 'puzzle' e som suave; se correto, ✓ e passa automaticamente para próxima lacuna; no nível 3, ao submeter a palavra digitada → verificação e feedback; botão de repetição disponível",
+        "constraint": "A palavra 'passarinho' tem uma ortografia fixa — não há variantes corretas; cada lacuna tem uma e só uma resposta válida",
+        "assessment": "O aluno preenche corretamente todas as lacunas do nível 2 com imagem como apoio; no nível 3, digita ou seleciona a palavra completa 'passarinho' sem apoio de imagem"
+      },
+      "differentiation": {
+        "support": "🟢 Apenas nível 1 (1 lacuna); imagem sempre visível; apenas 2 opções de sílaba; sílaba correta tem cor de destaque mais forte",
+        "standard": "🟡 Níveis 1 e 2; imagem disponível como apoio; 3 opções de sílaba por lacuna",
+        "challenge": "🔴 Nível 3 sem imagem; aluno digita a palavra completa; depois copia a palavra 3 vezes num campo de texto e tenta escrever de memória com o modelo tapado"
+      },
+      "duration": 7
+    },
+    {
+      "summary": "O aluno lê e constrói uma frase simples com a palavra 'passarinho'",
+      "textDescription": "O aluno trabalha com a frase 'O passarinho canta.' — lê-a, ordena as suas palavras embaralhadas e, no nível avançado, cria uma frase própria. Objetivo: usar a palavra aprendida em contexto comunicativo real e perceber a estrutura sujeito-verbo.",
+      "interaction": {
+        "state": [
+          {
+            "name": "palavrasFrase",
+            "type": "sorting",
+            "options": ["O", "passarinho", "canta", "."],
+            "default": ["passarinho", "O", ".", "canta"]
+          },
+          {
+            "name": "ordemCorreta",
+            "type": "derived",
+            "derivedFrom": "palavrasFrase.join(' ') === 'O passarinho canta .'"
+          },
+          {
+            "name": "frasePropria",
+            "type": "canvas",
+            "default": ""
+          }
+        ],
+        "render": "4 cartões de palavras embaralhados ('O', 'passarinho', 'canta', '.') apresentados aleatoriamente. Zona de montagem com espaços claramente marcados. Quando a ordem é correta, animação do passarinho a abrir as asas e a cantar. Abaixo, campo opcional 'Cria a tua frase' com banco de palavras simples (artigos, nomes já aprendidos, verbos simples).",
+        "transition": "Arrastar cartões → frase atualiza em tempo real na zona de montagem; quando a ordem é 'O passarinho canta .' → animação de celebração suave; tap em 'Ouvir' → narração da frase montada; campo de frase própria → aluno seleciona ou digita palavras",
+        "constraint": "A frase em Português tem ordem sujeito-verbo; a maiúscula inicial e o ponto final são convenções obrigatórias da escrita, não opcionais",
+        "assessment": "O aluno ordena corretamente a frase 'O passarinho canta.' e lê-a em voz alta; no nível desafio, constrói uma frase diferente e gramaticalmente correta com 'passarinho'"
+      },
+      "differentiation": {
+        "support": "🟢 Apenas 3 cartões ('O', 'passarinho', 'canta') com o ponto já fixo no final; imagem como guia sempre visível; leitura com apoio áudio ao hover",
+        "standard": "🟡 4 cartões incluindo ponto final; aluno ordena e lê; imagem disponível como apoio",
+        "challenge": "🔴 Após ordenar a frase base, o aluno cria uma frase própria (ex.: 'O passarinho voa alto.') usando o banco de palavras; pode também digitar livremente e submeter para verificação"
+      },
+      "duration": 7
+    },
+    {
+      "summary": "Mini-avaliação formativa — o aluno demonstra domínio da palavra 'passarinho' em 4 tarefas observáveis",
+      "textDescription": "Sequência de 4 tarefas rápidas e observáveis: (1) reconhecer a palavra entre 3 opções escritas; (2) contar as sílabas; (3) reconstruir a palavra a partir de sílabas desordenadas; (4) completar uma frase com a palavra. Progresso registável no PIT.",
+      "interaction": {
+        "state": [
+          {
+            "name": "etapa",
+            "type": "slider",
+            "range": [1, 4],
+            "step": 1,
+            "default": 1,
+            "unit": "tarefa"
+          },
+          {
+            "name": "respostaTarefa1",
+            "type": "quiz",
+            "options": ["passarinho", "passagem", "pássaro"],
+            "default": null
+          },
+          {
+            "name": "silabasOrdenadas",
+            "type": "sorting",
+            "options": ["nho", "pas", "ri", "sa"],
+            "default": ["nho", "pas", "ri", "sa"]
+          },
+          {
+            "name": "fraseLacuna",
+            "type": "quiz",
+            "options": ["passarinho", "galinha", "zebra"],
+            "default": null
+          },
+          {
+            "name": "pontuacao",
+            "type": "derived",
+            "derivedFrom": "soma das respostas corretas (0-4)"
+          }
+        ],
+        "render": "Barra de progresso de 4 etapas no topo (●●●●). Tarefa 1: escolha múltipla entre 3 palavras escritas. Tarefa 2: bater palmas digitalmente (4 taps) + selecionar número de sílabas. Tarefa 3: arrastar sílabas desordenadas (nho/pas/ri/sa) para a ordem correta. Tarefa 4: completar 'O ___ canta.' com escolha múltipla. Resultado final: 1-4 estrelas com resumo positivo e nota de reforço.",
+        "transition": "Resposta em cada tarefa → avançar automaticamente para a seguinte com transição suave; no final, estrelas animadas e resumo do que foi bem / sugestão de praticar mais; sem penalização permanente",
+        "constraint": "A avaliação é formativa — não há 'falhar', há 'tentar de novo'; o objetivo é identificar onde o aluno precisa de mais prática, não de classificar",
+        "assessment": "O aluno completa as 4 tarefas: (T1) identifica 'passarinho' entre 3 opções; (T2) conta e confirma 4 sílabas; (T3) ordena pas-sa-ri-nho corretamente; (T4) completa a frase com 'passarinho'"
+      },
+      "differentiation": {
+        "support": "🟢 Imagem de passarinho visível durante todas as 4 tarefas; 2 opções em vez de 3 nas tarefas 1 e 4; sílabas coloridas na tarefa 3; sem limite de tempo",
+        "standard": "🟡 Sem imagem nas tarefas 1 e 4; sílabas com cor na tarefa 3; 3 opções por tarefa; sem limite de tempo",
+        "challenge": "🔴 Sem imagem em nenhuma tarefa; 4 opções nas tarefas 1 e 4; tarefa extra: escrever a palavra de memória num campo de texto; limite de 30 segundos por tarefa"
+      },
+      "duration": 5
+    },
+    {
+      "summary": "Extensão criativa — o passarinho na natureza e na imaginação do aluno",
+      "textDescription": "O aluno escolhe uma extensão criativa entre três modos: desenhar um passarinho e escrever o seu nome, dizer em voz alta uma frase com a palavra, ou explorar sons de pássaros e associar imagens. Consolida a palavra em diferentes modos semióticos.",
+      "interaction": {
+        "state": [
+          {
+            "name": "modoExtensao",
+            "type": "dropdown",
+            "options": ["🎨 Desenho", "🎤 Oralidade", "🎵 Sons"],
+            "default": "🎨 Desenho"
+          },
+          {
+            "name": "canvasDesenho",
+            "type": "canvas",
+            "default": ""
+          },
+          {
+            "name": "fraseDita",
+            "type": "toggle",
+            "options": ["não", "sim"],
+            "default": "não"
+          }
+        ],
+        "render": "3 cartões de escolha visual: 🎨 'Desenha o teu passarinho', 🎤 'Diz a tua frase', 🎵 'Descobre o som'. Modo desenho: canvas simples com 4 pincéis coloridos e campo para escrever 'passarinho' por baixo do desenho. Modo oralidade: campo de texto para digitar a frase criada. Modo sons: 3 áudios curtos de pássaros diferentes — o aluno identifica qual soa mais a 'cantar'.",
+        "transition": "Selecionar modo → interface correspondente aparece com transição suave; no modo desenho, botão 'Guardar' salva a imagem; no modo oralidade, submeter a frase mostra confirmação; no modo sons, selecionar áudio → reprodução e feedback",
+        "constraint": "A extensão é aberta e criativa — não há resposta errada; o objetivo é consolidar a palavra em contextos diferentes e motivar a expressão pessoal",
+        "assessment": "O aluno completa pelo menos uma extensão à sua escolha e partilha o resultado com o professor ou turma (oral, digital ou em papel)"
+      },
+      "maker": {
+        "type": "unplugged",
+        "challenge": "Dobrar um passarinho em origami simples (3 dobras básicas) e escrever a palavra 'passarinho' nas asas com marcador fino. Na roda de partilha final, cada criança mostra o passarinho e diz em voz alta uma frase com a palavra.",
+        "materials": [
+          "Folhas de papel colorido A5 (1 por criança)",
+          "Marcador fino ou lápis",
+          "Modelo de origami simples (opcional, para projetar no quadro)"
+        ],
+        "groupSize": "turma",
+        "connection": "O passarinho de papel liga o símbolo digital à criação física — a palavra existe no mundo e pode ser segurada nas mãos",
+        "communication": "Circuito de comunicação: roda final onde cada criança mostra o origami, diz 'passarinho' e completa a frase 'O meu passarinho ___.'",
+        "alternatives": [
+          "Sem papel: desenhar o passarinho no caderno diário e escrever a palavra abaixo",
+          "Com plasticina: modelar um passarinho e colocar etiqueta com a palavra"
+        ]
+      },
+      "differentiation": {
+        "support": "🟢 Modo desenho com contorno de passarinho para colorir (não desenhar do zero); frase oral com scaffold 'O passarinho ___.' com banco de verbos simples",
+        "standard": "🟡 Escolha livre do modo; frase completa oral ou escrita com a palavra 'passarinho'",
+        "challenge": "🔴 Escrever 2 frases diferentes com 'passarinho'; descobrir e registar 3 nomes de pássaros em Português e dividir cada um em sílabas; pesquisar (com ajuda) como se chama o som que os pássaros fazem ('canto', 'piado', 'gorjeio')"
+      },
+      "duration": 4
+    }
+  ],
+  "sessionFlow": "0-4min: Abertura contextual — micro-história com imagem do passarinho na árvore (Unit 1) → 4-8min: Reconhecimento global — palavra entre opções visuais e escritas (Unit 2) → 8-15min: Segmentação silábica — pas-sa-ri-nho com palmas, blocos coloridos e cartões físicos (Unit 3) → 15-22min: Recombinação — novas palavras com as sílabas, distinguir existente/inexistente (Unit 4) → 22-29min: Leitura e escrita guiada — completar a palavra por níveis progressivos (Unit 5) → 29-36min: Frase simples — ordenar 'O passarinho canta.' e criar frase própria (Unit 6) → 36-41min: Mini-avaliação formativa em 4 tarefas observáveis (Unit 7) → 41-45min: Extensão criativa à escolha — desenho, oralidade ou sons; origami de passarinho + roda de partilha (Unit 8)"
+}

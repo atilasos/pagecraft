@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M28P #24 — passarinho | PageCraft</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#FFF8F0;--surface:#FFFFFF;--primary:#E05FA0;--accent:#F59E0B;--text:#1E1B18;
+  --syl-pas:#E05FA0;--syl-sa:#7C3AED;--syl-ri:#059669;--syl-nho:#F59E0B;
+  --correct:#22c55e;--correct-bg:#f0fdf4;--incorrect:#F59E0B;--incorrect-bg:#fffbeb;
+  --radius:16px;--shadow:0 4px 12px rgba(0,0,0,0.08);
+  --font:'Nunito','Comic Sans MS','Chalkboard SE',sans-serif;
+}
+html{font-size:20px;scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;line-height:1.5;-webkit-tap-highlight-color:transparent}
+h1,h2,h3{font-weight:800}
+button{font-family:var(--font);cursor:pointer;border:none;outline:none;-webkit-user-select:none;user-select:none}
+button:focus-visible{outline:3px solid #7C3AED;outline-offset:2px}
+
+/* === HEADER === */
+.app-header{background:var(--surface);padding:0.75rem 1rem;box-shadow:var(--shadow);position:sticky;top:0;z-index:100}
+.app-header h1{font-size:1rem;color:var(--primary);text-align:center;margin-bottom:0.5rem}
+.progress-bar{display:flex;gap:4px;justify-content:center;align-items:center;flex-wrap:wrap}
+.step-dot{width:32px;height:32px;border-radius:50%;background:#e5e7eb;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;color:#9ca3af;transition:all 0.2s;min-width:32px;min-height:32px}
+.step-dot.active{background:var(--primary);color:#fff;transform:scale(1.15)}
+.step-dot.done{background:var(--correct);color:#fff}
+.diff-bar{display:flex;justify-content:center;gap:0.5rem;margin-top:0.5rem}
+.diff-btn{padding:0.25rem 0.75rem;border-radius:999px;font-size:0.65rem;font-weight:700;background:#f3f4f6;color:#6b7280;transition:all 0.2s;min-height:36px;display:flex;align-items:center;gap:4px}
+.diff-btn.active-support{background:#dcfce7;color:#15803d;box-shadow:0 0 0 2px #22c55e}
+.diff-btn.active-standard{background:#fef9c3;color:#a16207;box-shadow:0 0 0 2px #F59E0B}
+.diff-btn.active-challenge{background:#fee2e2;color:#b91c1c;box-shadow:0 0 0 2px #ef4444}
+
+/* === MAIN === */
+main{flex:1;max-width:960px;width:100%;margin:0 auto;padding:1rem 1rem 6rem}
+.section{display:none;animation:fadeIn 0.3s ease}
+.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* === CARDS === */
+.card{background:var(--surface);border:2px solid var(--primary);border-radius:var(--radius);box-shadow:var(--shadow);padding:1.5rem;margin-bottom:1rem}
+.card h2{font-size:1.3rem;color:var(--primary);margin-bottom:0.75rem;text-align:center}
+.card p{font-size:0.9rem;margin-bottom:0.75rem;text-align:center}
+
+/* === WORD DISPLAY === */
+.word-display{font-size:2.4rem;font-weight:800;color:var(--primary);text-align:center;letter-spacing:0.05em;text-transform:uppercase;margin:0.5rem 0}
+.word-highlight{color:var(--primary);font-weight:800;position:relative}
+
+/* === SYLLABLE BLOCKS === */
+.syl-row{display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;margin:0.75rem 0}
+.syl-block{font-size:1.8rem;font-weight:800;color:#fff;padding:0.5rem 1.2rem;border-radius:12px;cursor:pointer;transition:all 0.2s;min-width:48px;min-height:48px;display:flex;align-items:center;justify-content:center;user-select:none;-webkit-user-select:none}
+.syl-block:hover{transform:scale(1.08)}
+.syl-block:active{transform:scale(0.95)}
+.syl-block.pulse{animation:pulse 0.4s ease}
+.syl-block.selected{box-shadow:0 0 0 3px #1E1B18;transform:scale(1.1)}
+.syl-block[data-syl="pas"]{background:var(--syl-pas)}
+.syl-block[data-syl="sa"]{background:var(--syl-sa)}
+.syl-block[data-syl="ri"]{background:var(--syl-ri)}
+.syl-block[data-syl="nho"]{background:var(--syl-nho)}
+.syl-block[data-syl="ni"]{background:#6366f1}
+.syl-block[data-syl="me"]{background:#0ea5e9}
+.syl-block[data-syl="ca"]{background:#f43f5e}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
+
+/* === BUTTONS === */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:0.4rem;padding:0.75rem 2rem;border-radius:999px;font-size:0.9rem;font-weight:700;min-height:48px;transition:all 0.2s;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.btn:hover{transform:scale(1.05);box-shadow:0 4px 16px rgba(0,0,0,0.15)}
+.btn:active{transform:scale(0.97)}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-accent{background:var(--accent);color:#fff}
+.btn-outline{background:transparent;border:2px solid var(--primary);color:var(--primary)}
+.btn-success{background:var(--correct);color:#fff}
+.btn-sm{padding:0.5rem 1.2rem;font-size:0.75rem;min-height:40px}
+.btn-row{display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;margin:0.75rem 0}
+
+/* === QUIZ OPTIONS === */
+.quiz-options{display:flex;flex-direction:column;gap:0.5rem;margin:0.75rem 0}
+.quiz-opt{padding:0.75rem 1.5rem;border-radius:var(--radius);border:2px solid #e5e7eb;background:var(--surface);font-size:1rem;font-weight:700;text-align:center;min-height:48px;transition:all 0.2s;cursor:pointer}
+.quiz-opt:hover{border-color:var(--primary);background:#fdf2f8}
+.quiz-opt.correct{border-color:var(--correct);background:var(--correct-bg);color:var(--correct)}
+.quiz-opt.wrong{border-color:var(--incorrect);background:var(--incorrect-bg);color:#92400e}
+.quiz-opt.disabled{pointer-events:none;opacity:0.6}
+
+/* === FEEDBACK === */
+.feedback{padding:0.75rem 1rem;border-radius:var(--radius);text-align:center;font-weight:700;font-size:0.85rem;margin:0.5rem 0;display:none}
+.feedback.show{display:block;animation:fadeIn 0.3s ease}
+.feedback.ok{background:var(--correct-bg);color:var(--correct);border:2px solid var(--correct)}
+.feedback.try{background:var(--incorrect-bg);color:#92400e;border:2px solid var(--incorrect)}
+
+/* === SCENE === */
+.scene-container{position:relative;width:100%;max-width:400px;margin:0 auto;cursor:pointer;border-radius:var(--radius);overflow:hidden;background:linear-gradient(180deg,#87CEEB 0%,#b5e8b5 70%,#7cb342 100%);aspect-ratio:4/3}
+.scene-container svg{width:100%;height:100%}
+.sentence-box{text-align:center;font-size:1.3rem;font-weight:700;padding:0.75rem;opacity:0;transition:opacity 0.5s;min-height:3rem}
+.sentence-box.visible{opacity:1}
+
+/* === COMPOSE ZONE === */
+.compose-zone{min-height:70px;border:3px dashed #d1d5db;border-radius:var(--radius);padding:0.75rem;display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;justify-content:center;margin:0.75rem 0;transition:border-color 0.2s}
+.compose-zone.has-items{border-color:var(--primary)}
+.compose-word{font-size:1.5rem;font-weight:800;text-align:center;min-height:2rem;color:var(--text)}
+
+/* === ORDERING === */
+.word-cards{display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center;margin:0.75rem 0}
+.word-card{padding:0.6rem 1.2rem;border-radius:var(--radius);background:var(--surface);border:2px solid var(--primary);font-size:1.1rem;font-weight:700;cursor:pointer;transition:all 0.2s;min-height:48px;display:flex;align-items:center;justify-content:center}
+.word-card:hover{transform:scale(1.05);background:#fdf2f8}
+.word-card.placed{opacity:0.3;pointer-events:none}
+.assembly-zone{min-height:60px;border:3px dashed #d1d5db;border-radius:var(--radius);padding:0.75rem;display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;margin:0.75rem 0}
+.assembly-zone .word-card{background:#fdf2f8}
+.assembly-zone.correct{border-color:var(--correct);background:var(--correct-bg)}
+
+/* === ASSESSMENT === */
+.task-progress{display:flex;gap:0.5rem;justify-content:center;margin-bottom:1rem}
+.task-step{width:40px;height:40px;border-radius:50%;background:#e5e7eb;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.8rem;color:#9ca3af;transition:all 0.3s}
+.task-step.current{background:var(--primary);color:#fff;transform:scale(1.1)}
+.task-step.done{background:var(--correct);color:#fff}
+.stars{text-align:center;font-size:2.5rem;margin:1rem 0}
+.star{opacity:0.2;transition:all 0.3s}
+.star.earned{opacity:1;animation:starPop 0.4s ease}
+@keyframes starPop{0%{transform:scale(0)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+
+/* === CANVAS (drawing) === */
+.draw-canvas{border:2px solid #e5e7eb;border-radius:var(--radius);background:#fff;touch-action:none;cursor:crosshair;width:100%;max-width:500px;margin:0 auto;display:block}
+.color-palette{display:flex;gap:0.5rem;justify-content:center;margin:0.5rem 0}
+.color-swatch{width:40px;height:40px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all 0.2s}
+.color-swatch.active{border-color:var(--text);transform:scale(1.15)}
+
+/* === LEVEL SELECTOR === */
+.level-sel{display:flex;gap:0.5rem;justify-content:center;margin:0.75rem 0}
+.level-btn{width:48px;height:48px;border-radius:50%;font-weight:800;font-size:1rem;border:2px solid #e5e7eb;background:var(--surface);transition:all 0.2s}
+.level-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+/* === GAP FILL === */
+.gap-word{display:flex;gap:0.3rem;justify-content:center;align-items:center;flex-wrap:wrap;margin:0.75rem 0}
+.gap-slot{width:80px;height:50px;border:3px dashed #d1d5db;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:800;color:#fff;transition:all 0.2s}
+.gap-slot.filled{border-style:solid}
+.gap-fixed{font-size:1.5rem;font-weight:800;padding:0.3rem 0.5rem;border-radius:12px;color:#fff;display:flex;align-items:center;justify-content:center}
+
+/* === NAV FOOTER === */
+.nav-footer{position:fixed;bottom:0;left:0;right:0;background:var(--surface);box-shadow:0 -2px 12px rgba(0,0,0,0.08);padding:0.75rem 1rem;display:flex;justify-content:center;gap:1rem;z-index:100}
+
+/* === IMAGE CARDS === */
+.img-options{display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;margin:0.75rem 0}
+.img-card{width:120px;padding:0.5rem;border-radius:var(--radius);border:3px solid #e5e7eb;background:var(--surface);cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:0.3rem}
+.img-card:hover{border-color:var(--primary);transform:scale(1.05)}
+.img-card svg{width:80px;height:80px}
+.img-card.correct{border-color:var(--correct);background:var(--correct-bg)}
+.img-card.wrong{border-color:var(--incorrect);background:var(--incorrect-bg)}
+.img-card span{font-size:0.7rem;font-weight:700}
+
+/* === CONFETTI === */
+.confetti-piece{position:fixed;width:10px;height:10px;border-radius:2px;z-index:9999;pointer-events:none;animation:confettiFall 1.5s ease forwards}
+@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(100vh) rotate(720deg)}}
+
+/* === MODE CARDS === */
+.mode-cards{display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;margin:0.75rem 0}
+.mode-card{padding:1rem;border-radius:var(--radius);border:2px solid #e5e7eb;background:var(--surface);cursor:pointer;transition:all 0.2s;text-align:center;min-width:120px;min-height:48px}
+.mode-card:hover{border-color:var(--primary);transform:scale(1.03)}
+.mode-card.active{border-color:var(--primary);background:#fdf2f8}
+.mode-card .mode-icon{font-size:2rem;display:block;margin-bottom:0.3rem}
+.mode-card .mode-label{font-size:0.75rem;font-weight:700}
+
+/* === TEXT INPUT === */
+.text-input{width:100%;max-width:400px;margin:0.5rem auto;display:block;padding:0.75rem 1rem;border:2px solid #e5e7eb;border-radius:var(--radius);font-family:var(--font);font-size:1rem;font-weight:700;text-align:center;min-height:48px}
+.text-input:focus{border-color:var(--primary);outline:none}
+
+/* === RESPONSIVE === */
+@media(max-width:480px){
+  html{font-size:18px}
+  .syl-block{font-size:1.4rem;padding:0.4rem 0.8rem}
+  .word-display{font-size:1.8rem}
+  .scene-container{aspect-ratio:1/1}
+  .img-card{width:90px}
+  .img-card svg{width:60px;height:60px}
+}
+
+/* === BIRD ANIMATION === */
+.bird-sing{animation:birdBounce 0.6s ease infinite alternate}
+@keyframes birdBounce{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(-3px) rotate(3deg)}}
+.note{animation:noteFloat 1.5s ease infinite;opacity:0.8}
+@keyframes noteFloat{0%{transform:translateY(0) scale(1);opacity:0.8}50%{transform:translateY(-8px) scale(1.1);opacity:1}100%{transform:translateY(0) scale(1);opacity:0.8}}
+.note:nth-child(2){animation-delay:0.3s}
+.note:nth-child(3){animation-delay:0.6s}
+
+.hidden{display:none!important}
+.text-center{text-align:center}
+.mt-1{margin-top:0.5rem}
+.mt-2{margin-top:1rem}
+</style>
+</head>
+<body>
+
+<!-- ========== HEADER ========== -->
+<header class="app-header">
+  <h1>Palavra #24 — passarinho</h1>
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="diff-bar">
+    <button class="diff-btn" data-diff="support" onclick="setDifficulty('support')">🟢 Com ajuda</button>
+    <button class="diff-btn active-standard" data-diff="standard" onclick="setDifficulty('standard')">🟡 Objetivo</button>
+    <button class="diff-btn" data-diff="challenge" onclick="setDifficulty('challenge')">🔴 Desafio</button>
+  </div>
+</header>
+
+<!-- ========== MAIN ========== -->
+<main>
+
+<!-- ===== S1: APRESENTAÇÃO ===== -->
+<section class="section active" id="s1">
+  <div class="card">
+    <h2>Descobre a palavra!</h2>
+    <p>Toca na imagem para descobrir.</p>
+    <div class="scene-container" id="scene1" onclick="revealSentence()">
+      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <!-- sky -->
+        <rect width="400" height="300" fill="url(#skyGrad)"/>
+        <defs>
+          <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#87CEEB"/>
+            <stop offset="70%" stop-color="#c8e6c9"/>
+            <stop offset="100%" stop-color="#81c784"/>
+          </linearGradient>
+        </defs>
+        <!-- sun -->
+        <circle cx="340" cy="50" r="30" fill="#FDD835" opacity="0.9"/>
+        <!-- clouds -->
+        <ellipse cx="80" cy="45" rx="40" ry="15" fill="white" opacity="0.7"/>
+        <ellipse cx="60" cy="40" rx="25" ry="12" fill="white" opacity="0.8"/>
+        <ellipse cx="280" cy="65" rx="30" ry="12" fill="white" opacity="0.6"/>
+        <!-- ground -->
+        <ellipse cx="200" cy="290" rx="220" ry="30" fill="#66bb6a"/>
+        <!-- tree trunk -->
+        <rect x="170" y="150" width="25" height="110" rx="5" fill="#795548"/>
+        <rect x="160" y="155" width="8" height="40" rx="4" fill="#795548" transform="rotate(-30,164,155)"/>
+        <rect x="195" y="145" width="7" height="35" rx="3" fill="#795548" transform="rotate(25,198,145)"/>
+        <!-- tree foliage -->
+        <circle cx="183" cy="120" r="45" fill="#388e3c"/>
+        <circle cx="155" cy="135" r="32" fill="#2e7d32"/>
+        <circle cx="215" cy="130" r="35" fill="#43a047"/>
+        <circle cx="183" cy="95" r="30" fill="#4caf50"/>
+        <!-- bird body -->
+        <g class="bird-sing" transform="translate(200,85)">
+          <ellipse cx="0" cy="0" rx="18" ry="13" fill="#FFA726"/>
+          <!-- wing -->
+          <ellipse cx="-8" cy="-2" rx="12" ry="7" fill="#F57C00" transform="rotate(-15,-8,-2)"/>
+          <!-- head -->
+          <circle cx="14" cy="-10" r="10" fill="#FFB74D"/>
+          <!-- eye -->
+          <circle cx="17" cy="-12" r="2.5" fill="#1E1B18"/>
+          <circle cx="17.5" cy="-12.5" r="0.8" fill="white"/>
+          <!-- beak -->
+          <polygon points="24,-11 30,-10 24,-8" fill="#E65100"/>
+          <!-- tail -->
+          <polygon points="-16,-2 -28,-10 -24,4" fill="#F57C00"/>
+          <!-- legs -->
+          <line x1="-3" y1="12" x2="-5" y2="20" stroke="#E65100" stroke-width="2" stroke-linecap="round"/>
+          <line x1="5" y1="12" x2="7" y2="20" stroke="#E65100" stroke-width="2" stroke-linecap="round"/>
+        </g>
+        <!-- musical notes -->
+        <g class="note" transform="translate(235,60)">
+          <text font-size="16" fill="#E05FA0">♪</text>
+        </g>
+        <g class="note" transform="translate(245,50)">
+          <text font-size="14" fill="#7C3AED">♫</text>
+        </g>
+        <g class="note" transform="translate(225,45)">
+          <text font-size="12" fill="#059669">♪</text>
+        </g>
+        <!-- flowers -->
+        <circle cx="80" cy="270" r="5" fill="#E05FA0"/>
+        <circle cx="85" cy="275" r="5" fill="#F59E0B"/>
+        <circle cx="310" cy="268" r="4" fill="#7C3AED"/>
+        <circle cx="320" cy="275" r="5" fill="#E05FA0"/>
+      </svg>
+    </div>
+    <div class="sentence-box" id="sentenceBox">
+      O <span class="word-highlight" id="wordHighlight" onclick="speakWord('passarinho')">passarinho</span> canta.
+    </div>
+    <div class="btn-row" id="audioRow" style="display:none">
+      <button class="btn btn-accent" onclick="speakSentence()">Ouvir frase 🔊</button>
+      <button class="btn btn-outline" onclick="speakWord('passarinho')">Ouvir palavra 🔊</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== S2: RECONHECIMENTO ===== -->
+<section class="section" id="s2">
+  <div class="card">
+    <h2>Encontra o passarinho!</h2>
+    <div id="recMode1">
+      <p>Qual destas imagens é um <strong>passarinho</strong>?</p>
+      <div class="word-display">PASSARINHO</div>
+      <div class="img-options" id="imgOptions">
+        <div class="img-card" data-answer="bird" onclick="checkImage(this,'bird')">
+          <svg viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="22" ry="16" fill="#FFA726"/><circle cx="66" cy="38" r="12" fill="#FFB74D"/><circle cx="70" cy="35" r="3" fill="#1E1B18"/><circle cx="70.5" cy="34.5" r="1" fill="white"/><polygon points="78,37 86,35 78,33" fill="#E65100"/><ellipse cx="38" cy="47" rx="14" ry="8" fill="#F57C00" transform="rotate(-10,38,47)"/><polygon points="28,48 16,40 20,54" fill="#F57C00"/><line x1="45" y1="65" x2="42" y2="78" stroke="#E65100" stroke-width="2.5" stroke-linecap="round"/><line x1="55" y1="65" x2="58" y2="78" stroke="#E65100" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <span>passarinho</span>
+        </div>
+        <div class="img-card" data-answer="leaf" onclick="checkImage(this,'leaf')">
+          <svg viewBox="0 0 100 100"><path d="M50 15 C20 40, 20 80, 50 90 C80 80, 80 40, 50 15Z" fill="#4caf50"/><line x1="50" y1="30" x2="50" y2="85" stroke="#2e7d32" stroke-width="2"/><line x1="50" y1="45" x2="35" y2="55" stroke="#2e7d32" stroke-width="1.5"/><line x1="50" y1="55" x2="65" y2="65" stroke="#2e7d32" stroke-width="1.5"/></svg>
+          <span>folha</span>
+        </div>
+        <div class="img-card" data-answer="shoe" onclick="checkImage(this,'shoe')">
+          <svg viewBox="0 0 100 100"><path d="M15 55 Q15 45, 30 42 L70 42 Q85 42, 90 52 L90 62 Q90 72, 80 72 L20 72 Q15 72, 15 62Z" fill="#1976D2"/><rect x="15" y="70" width="80" height="8" rx="3" fill="#795548"/><ellipse cx="35" cy="50" rx="4" ry="3" fill="#BBDEFB"/></svg>
+          <span>sapato</span>
+        </div>
+      </div>
+      <div class="feedback" id="recFeedback1"></div>
+    </div>
+    <div id="recMode2" class="hidden">
+      <p>Qual destas palavras diz <strong>passarinho</strong>?</p>
+      <div style="text-align:center;margin:0.5rem 0">
+        <svg viewBox="0 0 100 100" width="100" height="100"><ellipse cx="50" cy="50" rx="22" ry="16" fill="#FFA726"/><circle cx="66" cy="38" r="12" fill="#FFB74D"/><circle cx="70" cy="35" r="3" fill="#1E1B18"/><circle cx="70.5" cy="34.5" r="1" fill="white"/><polygon points="78,37 86,35 78,33" fill="#E65100"/><ellipse cx="38" cy="47" rx="14" ry="8" fill="#F57C00" transform="rotate(-10,38,47)"/><polygon points="28,48 16,40 20,54" fill="#F57C00"/><line x1="45" y1="65" x2="42" y2="78" stroke="#E65100" stroke-width="2.5" stroke-linecap="round"/><line x1="55" y1="65" x2="58" y2="78" stroke="#E65100" stroke-width="2.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="quiz-options" id="wordOptions">
+        <button class="quiz-opt" onclick="checkWordOpt(this,'passarinho')">passarinho</button>
+        <button class="quiz-opt" onclick="checkWordOpt(this,'passagem')">passagem</button>
+        <button class="quiz-opt" onclick="checkWordOpt(this,'pardal')">pardal</button>
+      </div>
+      <div class="feedback" id="recFeedback2"></div>
+    </div>
+    <div class="btn-row mt-1">
+      <button class="btn btn-sm btn-outline" onclick="toggleRecMode()">Trocar modo</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== S3: SEGMENTAÇÃO SILÁBICA ===== -->
+<section class="section" id="s3">
+  <div class="card">
+    <h2>As sílabas de passarinho</h2>
+    <div class="word-display">PASSARINHO</div>
+    <p>Toca em cada bloco para ouvir a sílaba!</p>
+    <div class="syl-row" id="sylRow3">
+      <div class="syl-block" data-syl="pas" onclick="playSyl(this,'pas')">PAS</div>
+      <div class="syl-block" data-syl="sa" onclick="playSyl(this,'sa')">SA</div>
+      <div class="syl-block" data-syl="ri" onclick="playSyl(this,'ri')">RI</div>
+      <div class="syl-block" data-syl="nho" onclick="playSyl(this,'nho')">NHO</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-accent" onclick="clapSequence()">Bater palmas 👏</button>
+    </div>
+    <div class="mt-2">
+      <p><strong>Quantas sílabas tem «passarinho»?</strong></p>
+      <div class="quiz-options" id="sylCount">
+        <button class="quiz-opt" onclick="checkSylCount(this,2)">2</button>
+        <button class="quiz-opt" onclick="checkSylCount(this,3)">3</button>
+        <button class="quiz-opt" onclick="checkSylCount(this,4)">4</button>
+        <button class="quiz-opt" onclick="checkSylCount(this,5)">5</button>
+      </div>
+      <div class="feedback" id="sylFeedback"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== S4: RECOMBINAÇÃO ===== -->
+<section class="section" id="s4">
+  <div class="card">
+    <h2>Cria palavras novas!</h2>
+    <p>Toca nas sílabas para formar uma palavra.</p>
+    <div class="syl-row" id="sylBank">
+      <div class="syl-block" data-syl="pas" onclick="addToCompose(this)">PAS</div>
+      <div class="syl-block" data-syl="sa" onclick="addToCompose(this)">SA</div>
+      <div class="syl-block" data-syl="ri" onclick="addToCompose(this)">RI</div>
+      <div class="syl-block" data-syl="nho" onclick="addToCompose(this)">NHO</div>
+      <div class="syl-block" data-syl="ni" onclick="addToCompose(this)">NI</div>
+      <div class="syl-block" data-syl="me" onclick="addToCompose(this)">ME</div>
+      <div class="syl-block" data-syl="ca" onclick="addToCompose(this)">CA</div>
+    </div>
+    <p style="font-size:0.7rem;color:#9ca3af">Toca numa sílaba na zona abaixo para a tirar.</p>
+    <div class="compose-zone" id="composeZone"></div>
+    <div class="compose-word" id="composeWord"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="checkComposed()">Verificar</button>
+      <button class="btn btn-outline btn-sm" onclick="clearCompose()">Limpar</button>
+    </div>
+    <div class="feedback" id="composeFeedback"></div>
+    <div id="foundWords" class="mt-1" style="text-align:center;font-size:0.8rem;color:#6b7280"></div>
+  </div>
+</section>
+
+<!-- ===== S5: ESCRITA GUIADA ===== -->
+<section class="section" id="s5">
+  <div class="card">
+    <h2>Completa a palavra!</h2>
+    <p>Escolhe o nível e preenche as sílabas que faltam.</p>
+    <div class="level-sel">
+      <button class="level-btn active" data-lv="1" onclick="setLevel(1)">1</button>
+      <button class="level-btn" data-lv="2" onclick="setLevel(2)">2</button>
+      <button class="level-btn" data-lv="3" onclick="setLevel(3)">3</button>
+    </div>
+    <div id="gapArea"></div>
+    <div class="syl-row" id="gapOptions"></div>
+    <div class="feedback" id="gapFeedback"></div>
+    <div class="btn-row">
+      <button class="btn btn-outline btn-sm" onclick="resetLevel()">Repetir</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== S6: FRASE ===== -->
+<section class="section" id="s6">
+  <div class="card">
+    <h2>Ordena a frase!</h2>
+    <p>Toca nas palavras pela ordem certa.</p>
+    <div class="assembly-zone" id="assemblyZone"></div>
+    <div class="word-cards" id="sentenceCards"></div>
+    <div class="feedback" id="sentenceFeedback"></div>
+    <div class="btn-row">
+      <button class="btn btn-outline btn-sm" onclick="resetSentence()">Recomeçar</button>
+      <button class="btn btn-accent btn-sm" id="listenSentenceBtn" style="display:none" onclick="speakSentence()">Ouvir 🔊</button>
+    </div>
+    <div id="ownSentenceArea" class="hidden mt-2">
+      <p><strong>Cria a tua frase com «passarinho»!</strong></p>
+      <input type="text" class="text-input" id="ownSentence" placeholder="O passarinho…">
+      <div class="btn-row mt-1">
+        <button class="btn btn-primary btn-sm" onclick="submitOwnSentence()">Enviar</button>
+      </div>
+      <div class="feedback" id="ownSentenceFeedback"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== S7: MINI-AVALIAÇÃO ===== -->
+<section class="section" id="s7">
+  <div class="card">
+    <h2>Mostra o que sabes!</h2>
+    <div class="task-progress" id="taskProgress">
+      <div class="task-step current" data-t="1">1</div>
+      <div class="task-step" data-t="2">2</div>
+      <div class="task-step" data-t="3">3</div>
+      <div class="task-step" data-t="4">4</div>
+    </div>
+
+    <!-- Task 1 -->
+    <div id="task1" class="task-panel">
+      <p><strong>Qual é a palavra «passarinho»?</strong></p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="assessAnswer(1,this,'passarinho')">passarinho</button>
+        <button class="quiz-opt" onclick="assessAnswer(1,this,'passagem')">passagem</button>
+        <button class="quiz-opt" onclick="assessAnswer(1,this,'pássaro')">pássaro</button>
+      </div>
+    </div>
+
+    <!-- Task 2 -->
+    <div id="task2" class="task-panel hidden">
+      <p><strong>Quantas sílabas tem «passarinho»?</strong></p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="assessAnswer(2,this,3)">3</button>
+        <button class="quiz-opt" onclick="assessAnswer(2,this,4)">4</button>
+        <button class="quiz-opt" onclick="assessAnswer(2,this,5)">5</button>
+      </div>
+    </div>
+
+    <!-- Task 3 -->
+    <div id="task3" class="task-panel hidden">
+      <p><strong>Ordena as sílabas!</strong></p>
+      <div class="assembly-zone" id="assessAssembly"></div>
+      <div class="syl-row" id="assessSylBank"></div>
+      <div class="btn-row">
+        <button class="btn btn-primary btn-sm" onclick="checkAssessOrder()">Verificar</button>
+      </div>
+    </div>
+
+    <!-- Task 4 -->
+    <div id="task4" class="task-panel hidden">
+      <p><strong>Completa: «O ___ canta.»</strong></p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="assessAnswer(4,this,'passarinho')">passarinho</button>
+        <button class="quiz-opt" onclick="assessAnswer(4,this,'galinha')">galinha</button>
+        <button class="quiz-opt" onclick="assessAnswer(4,this,'zebra')">zebra</button>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="taskResults" class="hidden">
+      <div class="stars" id="starsContainer"></div>
+      <p id="resultMsg" style="text-align:center;font-weight:700;font-size:1.1rem"></p>
+      <div class="btn-row mt-1">
+        <button class="btn btn-primary" onclick="resetAssessment()">Tentar outra vez</button>
+      </div>
+    </div>
+
+    <div class="feedback" id="assessFeedback"></div>
+  </div>
+</section>
+
+<!-- ===== S8: EXTENSÃO CRIATIVA ===== -->
+<section class="section" id="s8">
+  <div class="card">
+    <h2>Cria e imagina!</h2>
+    <p>Escolhe o que queres fazer:</p>
+    <div class="mode-cards">
+      <div class="mode-card active" onclick="setExtMode('draw')">
+        <span class="mode-icon">🎨</span>
+        <span class="mode-label">Desenha</span>
+      </div>
+      <div class="mode-card" onclick="setExtMode('speak')">
+        <span class="mode-icon">🎤</span>
+        <span class="mode-label">Diz a frase</span>
+      </div>
+      <div class="mode-card" onclick="setExtMode('sounds')">
+        <span class="mode-icon">🎵</span>
+        <span class="mode-label">Sons</span>
+      </div>
+    </div>
+
+    <!-- Draw mode -->
+    <div id="extDraw">
+      <p class="text-center">Desenha o teu passarinho!</p>
+      <div class="color-palette" id="colorPalette"></div>
+      <canvas class="draw-canvas" id="drawCanvas" width="500" height="350"></canvas>
+      <div class="btn-row mt-1">
+        <button class="btn btn-outline btn-sm" onclick="clearCanvas()">Apagar tudo</button>
+      </div>
+      <p class="text-center mt-1" style="font-size:0.8rem">Escreve «passarinho» por baixo do teu desenho:</p>
+      <input type="text" class="text-input" id="drawWord" placeholder="passarinho">
+    </div>
+
+    <!-- Speak mode -->
+    <div id="extSpeak" class="hidden">
+      <p class="text-center">Diz uma frase com a palavra «passarinho»!</p>
+      <p class="text-center" style="font-size:0.85rem;color:#6b7280">Exemplo: «O passarinho voa alto.»</p>
+      <input type="text" class="text-input" id="spokenSentence" placeholder="O passarinho…">
+      <div class="btn-row mt-1">
+        <button class="btn btn-primary btn-sm" onclick="submitSpoken()">Pronto!</button>
+      </div>
+      <div class="feedback" id="speakFeedback"></div>
+    </div>
+
+    <!-- Sounds mode -->
+    <div id="extSounds" class="hidden">
+      <p class="text-center">Qual destes sons parece um passarinho a cantar?</p>
+      <div class="btn-row">
+        <button class="btn btn-accent" onclick="playBirdSound(1)">Som 1 🎵</button>
+        <button class="btn btn-accent" onclick="playBirdSound(2)">Som 2 🎵</button>
+        <button class="btn btn-accent" onclick="playBirdSound(3)">Som 3 🎵</button>
+      </div>
+      <div class="quiz-options mt-1">
+        <button class="quiz-opt" onclick="checkBirdSound(this,1)">Som 1 — cantar</button>
+        <button class="quiz-opt" onclick="checkBirdSound(this,2)">Som 2 — zumbir</button>
+        <button class="quiz-opt" onclick="checkBirdSound(this,3)">Som 3 — rosnar</button>
+      </div>
+      <div class="feedback" id="soundFeedback"></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ========== NAVIGATION FOOTER ========== -->
+<footer class="nav-footer">
+  <button class="btn btn-outline" id="prevBtn" onclick="navigate(-1)" disabled>← Anterior</button>
+  <button class="btn btn-primary" id="nextBtn" onclick="navigate(1)">Seguinte →</button>
+</footer>
+
+<!-- ========== JAVASCRIPT ========== -->
+<script>
+(function(){
+'use strict';
+
+/* ===== STATE ===== */
+const SECTIONS = ['s1','s2','s3','s4','s5','s6','s7','s8'];
+const SECTION_NAMES = ['Apresentação','Reconhecimento','Sílabas','Recombinação','Escrita','Frase','Avaliação','Extensão'];
+let currentSection = 0;
+let difficulty = 'standard';
+let visitedSections = new Set([0]);
+
+/* Valid words for recombination */
+const VALID_WORDS = {
+  'passa':'Ação de passar',
+  'ninho':'Casa dos pássaros',
+  'mesa':'Móvel para comer',
+  'casa':'Onde moramos',
+  'rica':'Que tem muito',
+  'carinho':'Gesto de amor',
+  'passarinho':'Pássaro pequenino',
+  'menino':'Rapaz pequeno',
+  'riso':'Quando rimos',
+  'sino':'Faz «dlim dlão»',
+  'missa':'Cerimónia religiosa',
+  'rima':'Palavras que soam igual',
+  'cano':'Tubo de água',
+  'pano':'Tecido',
+  'sono':'Quando temos sono',
+  'massa':'Para comer',
+  'meca':'Cidade sagrada',
+  'caça':'Perseguir animais',
+  'saca':'Tirar de dentro',
+  'capa':'Cobertura',
+  'mapa':'Para encontrar caminhos'
+};
+let foundWordsList = [];
+
+/* Assessment state */
+let assessScore = 0;
+let assessTask = 1;
+
+/* ===== SPEECH ===== */
+function speak(text, rate){
+  rate = rate || 0.85;
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'pt-PT';
+  u.rate = rate;
+  speechSynthesis.speak(u);
+}
+window.speakWord = function(w){ speak(w, 0.7); };
+window.speakSentence = function(){ speak('O passarinho canta.', 0.7); };
+
+/* ===== NAVIGATION ===== */
+function buildProgress(){
+  var bar = document.getElementById('progressBar');
+  bar.innerHTML = '';
+  SECTIONS.forEach(function(_,i){
+    var d = document.createElement('div');
+    d.className = 'step-dot' + (i === currentSection ? ' active' : '') + (visitedSections.has(i) && i !== currentSection ? ' done' : '');
+    d.textContent = i + 1;
+    d.title = SECTION_NAMES[i];
+    d.onclick = function(){ goTo(i); };
+    d.style.cursor = 'pointer';
+    bar.appendChild(d);
+  });
+}
+
+function goTo(idx){
+  if(idx < 0 || idx >= SECTIONS.length) return;
+  document.getElementById(SECTIONS[currentSection]).classList.remove('active');
+  currentSection = idx;
+  visitedSections.add(idx);
+  document.getElementById(SECTIONS[currentSection]).classList.add('active');
+  buildProgress();
+  document.getElementById('prevBtn').disabled = currentSection === 0;
+  document.getElementById('nextBtn').textContent = currentSection === SECTIONS.length - 1 ? 'Fim ★' : 'Seguinte →';
+  window.scrollTo(0, 0);
+  if(idx === 4) initLevel();
+  if(idx === 5) initSentence();
+  if(idx === 6) initAssessment();
+}
+
+window.navigate = function(dir){ goTo(currentSection + dir); };
+
+/* ===== DIFFICULTY ===== */
+window.setDifficulty = function(d){
+  difficulty = d;
+  document.querySelectorAll('.diff-btn').forEach(function(b){
+    b.className = 'diff-btn';
+    if(b.dataset.diff === d){
+      b.classList.add('active-' + d);
+    }
+  });
+  if(currentSection === 4) initLevel();
+  if(currentSection === 5) initSentence();
+};
+
+/* ===== CONFETTI ===== */
+function confetti(){
+  var colors = ['#E05FA0','#7C3AED','#059669','#F59E0B','#22c55e','#f43f5e'];
+  for(var i = 0; i < 30; i++){
+    var p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.top = '-10px';
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.animationDuration = (1 + Math.random()) + 's';
+    p.style.animationDelay = (Math.random() * 0.5) + 's';
+    p.style.width = (6 + Math.random() * 8) + 'px';
+    p.style.height = (6 + Math.random() * 8) + 'px';
+    document.body.appendChild(p);
+    setTimeout(function(el){ el.remove(); }.bind(null, p), 2500);
+  }
+}
+
+function showFeedback(id, ok, msg){
+  var el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = 'feedback show ' + (ok ? 'ok' : 'try');
+}
+
+/* ===== S1: APRESENTAÇÃO ===== */
+let sentenceRevealed = false;
+window.revealSentence = function(){
+  if(sentenceRevealed) return;
+  sentenceRevealed = true;
+  document.getElementById('sentenceBox').classList.add('visible');
+  document.getElementById('audioRow').style.display = '';
+  speak('O passarinho canta.', 0.7);
+};
+
+/* ===== S2: RECONHECIMENTO ===== */
+let recMode = 1;
+window.toggleRecMode = function(){
+  recMode = recMode === 1 ? 2 : 1;
+  document.getElementById('recMode1').classList.toggle('hidden', recMode !== 1);
+  document.getElementById('recMode2').classList.toggle('hidden', recMode !== 2);
+  resetRecognition();
+};
+
+function resetRecognition(){
+  document.querySelectorAll('#imgOptions .img-card').forEach(function(c){ c.className = 'img-card'; });
+  document.querySelectorAll('#wordOptions .quiz-opt').forEach(function(c){ c.className = 'quiz-opt'; });
+  document.getElementById('recFeedback1').className = 'feedback';
+  document.getElementById('recFeedback2').className = 'feedback';
+}
+
+window.checkImage = function(el, answer){
+  if(el.classList.contains('correct') || el.classList.contains('wrong')) return;
+  if(answer === 'bird'){
+    el.classList.add('correct');
+    showFeedback('recFeedback1', true, '✓ Muito bem! É o passarinho!');
+    confetti();
+    speak('passarinho', 0.7);
+  } else {
+    el.classList.add('wrong');
+    showFeedback('recFeedback1', false, 'Tenta outra vez!');
+  }
+};
+
+window.checkWordOpt = function(el, answer){
+  if(el.classList.contains('correct') || el.classList.contains('wrong')) return;
+  if(answer === 'passarinho'){
+    el.classList.add('correct');
+    showFeedback('recFeedback2', true, '✓ Muito bem! É «passarinho»!');
+    confetti();
+    speak('passarinho', 0.7);
+  } else {
+    el.classList.add('wrong');
+    showFeedback('recFeedback2', false, 'Não é essa. Tenta outra!');
+  }
+};
+
+/* ===== S3: SEGMENTAÇÃO ===== */
+var sylNames = {pas:'pas',sa:'sa',ri:'ri',nho:'nho'};
+window.playSyl = function(el, syl){
+  el.classList.remove('pulse');
+  void el.offsetWidth;
+  el.classList.add('pulse');
+  speak(syl, 0.6);
+};
+
+window.clapSequence = function(){
+  var blocks = document.querySelectorAll('#sylRow3 .syl-block');
+  var syls = ['pas','sa','ri','nho'];
+  syls.forEach(function(s, i){
+    setTimeout(function(){
+      blocks[i].classList.remove('pulse');
+      void blocks[i].offsetWidth;
+      blocks[i].classList.add('pulse');
+      speak(s, 0.6);
+    }, i * 600);
+  });
+};
+
+window.checkSylCount = function(el, n){
+  if(el.classList.contains('correct') || el.classList.contains('wrong')) return;
+  if(n === 4){
+    el.classList.add('correct');
+    showFeedback('sylFeedback', true, '✓ Certo! «passarinho» tem 4 sílabas: pas-sa-ri-nho!');
+    confetti();
+  } else {
+    el.classList.add('wrong');
+    showFeedback('sylFeedback', false, 'Não é ' + n + '. Conta outra vez com palmas! 👏');
+  }
+};
+
+/* ===== S4: RECOMBINAÇÃO ===== */
+var composeSyls = [];
+
+window.addToCompose = function(el){
+  if(el.classList.contains('placed')) return;
+  var syl = el.dataset.syl;
+  composeSyls.push(syl);
+  el.classList.add('placed');
+  renderCompose();
+};
+
+function removeFromCompose(idx){
+  var syl = composeSyls[idx];
+  composeSyls.splice(idx, 1);
+  /* unmark in bank */
+  var count = {};
+  composeSyls.forEach(function(s){ count[s] = (count[s]||0)+1; });
+  document.querySelectorAll('#sylBank .syl-block').forEach(function(b){
+    var bs = b.dataset.syl;
+    var inCompose = count[bs] || 0;
+    if(inCompose > 0){
+      count[bs]--;
+    } else {
+      b.classList.remove('placed');
+    }
+  });
+  /* re-mark placed */
+  var count2 = {};
+  composeSyls.forEach(function(s){ count2[s]=(count2[s]||0)+1; });
+  document.querySelectorAll('#sylBank .syl-block').forEach(function(b){
+    var bs = b.dataset.syl;
+    if(count2[bs] && count2[bs] > 0){
+      b.classList.add('placed');
+      count2[bs]--;
+    } else {
+      b.classList.remove('placed');
+    }
+  });
+  renderCompose();
+}
+
+function renderCompose(){
+  var zone = document.getElementById('composeZone');
+  var wordEl = document.getElementById('composeWord');
+  zone.innerHTML = '';
+  composeSyls.forEach(function(s, i){
+    var d = document.createElement('div');
+    d.className = 'syl-block';
+    d.dataset.syl = s;
+    d.textContent = s.toUpperCase();
+    d.onclick = function(){ removeFromCompose(i); };
+    zone.appendChild(d);
+  });
+  zone.classList.toggle('has-items', composeSyls.length > 0);
+  wordEl.textContent = composeSyls.join('');
+  document.getElementById('composeFeedback').className = 'feedback';
+}
+
+window.clearCompose = function(){
+  composeSyls = [];
+  document.querySelectorAll('#sylBank .syl-block').forEach(function(b){ b.classList.remove('placed'); });
+  renderCompose();
+};
+
+window.checkComposed = function(){
+  var word = composeSyls.join('');
+  if(!word){
+    showFeedback('composeFeedback', false, 'Junta sílabas primeiro!');
+    return;
+  }
+  if(VALID_WORDS[word]){
+    showFeedback('composeFeedback', true, '✓ «' + word + '» existe! ' + VALID_WORDS[word]);
+    confetti();
+    speak(word, 0.7);
+    if(foundWordsList.indexOf(word) === -1){
+      foundWordsList.push(word);
+      updateFoundWords();
+    }
+  } else {
+    showFeedback('composeFeedback', false, '«' + word + '» não é uma palavra. Tenta outra combinação!');
+  }
+};
+
+function updateFoundWords(){
+  var el = document.getElementById('foundWords');
+  if(foundWordsList.length === 0){
+    el.textContent = '';
+    return;
+  }
+  el.innerHTML = '<strong>Palavras encontradas:</strong> ' + foundWordsList.map(function(w){ return '⭐ ' + w; }).join('  ');
+}
+
+/* ===== S5: ESCRITA GUIADA ===== */
+var currentLevel = 1;
+var gapSlots = [];
+var gapSyls = ['pas','sa','ri','nho'];
+var gapColors = {'pas':'var(--syl-pas)','sa':'var(--syl-sa)','ri':'var(--syl-ri)','nho':'var(--syl-nho)'};
+
+window.setLevel = function(lv){
+  currentLevel = lv;
+  document.querySelectorAll('.level-btn').forEach(function(b){
+    b.classList.toggle('active', parseInt(b.dataset.lv) === lv);
+  });
+  initLevel();
+};
+
+function initLevel(){
+  var area = document.getElementById('gapArea');
+  var opts = document.getElementById('gapOptions');
+  document.getElementById('gapFeedback').className = 'feedback';
+  area.innerHTML = '';
+  opts.innerHTML = '';
+
+  var gaps;
+  if(currentLevel === 1) gaps = [3]; /* nho is gap */
+  else if(currentLevel === 2) gaps = [1, 3]; /* sa and nho */
+  else gaps = [0,1,2,3]; /* all gaps */
+
+  gapSlots = [];
+
+  var row = document.createElement('div');
+  row.className = 'gap-word';
+
+  gapSyls.forEach(function(s, i){
+    if(gaps.indexOf(i) !== -1){
+      var slot = document.createElement('div');
+      slot.className = 'gap-slot';
+      slot.style.borderColor = gapColors[s];
+      slot.dataset.answer = s;
+      slot.dataset.idx = i;
+      slot.id = 'gap-' + i;
+      gapSlots.push({idx:i, syl:s, filled:false});
+      row.appendChild(slot);
+    } else {
+      var fixed = document.createElement('div');
+      fixed.className = 'gap-fixed';
+      fixed.textContent = s.toUpperCase();
+      fixed.style.background = gapColors[s];
+      row.appendChild(fixed);
+    }
+  });
+  area.appendChild(row);
+
+  /* Options */
+  var options = gaps.map(function(i){ return gapSyls[i]; });
+  /* Add distractors */
+  var distractors = ['nho','ri','me','ca','sa','pas'];
+  distractors.forEach(function(d){
+    if(options.indexOf(d) === -1 && options.length < (currentLevel === 1 ? 3 : 4)){
+      options.push(d);
+    }
+  });
+  shuffle(options);
+
+  options.forEach(function(s){
+    var b = document.createElement('div');
+    b.className = 'syl-block';
+    b.dataset.syl = s;
+    b.textContent = s.toUpperCase();
+    b.onclick = function(){ fillGap(s, b); };
+    opts.appendChild(b);
+  });
+}
+
+function fillGap(syl, btn){
+  /* Find first unfilled gap */
+  for(var i = 0; i < gapSlots.length; i++){
+    var g = gapSlots[i];
+    if(!g.filled){
+      var slot = document.getElementById('gap-' + g.idx);
+      if(syl === g.syl){
+        slot.textContent = syl.toUpperCase();
+        slot.style.background = gapColors[syl];
+        slot.classList.add('filled');
+        g.filled = true;
+        btn.classList.add('placed');
+        btn.style.pointerEvents = 'none';
+        speak(syl, 0.6);
+        /* Check all filled */
+        if(gapSlots.every(function(gs){ return gs.filled; })){
+          showFeedback('gapFeedback', true, '✓ Parabéns! Escreveste «passarinho»!');
+          confetti();
+          speak('passarinho', 0.7);
+        }
+      } else {
+        showFeedback('gapFeedback', false, 'Essa sílaba não encaixa aqui. Tenta outra!');
+        btn.classList.add('pulse');
+        setTimeout(function(){ btn.classList.remove('pulse'); }, 400);
+      }
+      return;
+    }
+  }
+}
+
+window.resetLevel = function(){ initLevel(); };
+
+/* ===== S6: FRASE ===== */
+var sentenceWords = ['O','passarinho','canta','.'];
+var placedSentence = [];
+
+function initSentence(){
+  placedSentence = [];
+  var cards = document.getElementById('sentenceCards');
+  var zone = document.getElementById('assemblyZone');
+  cards.innerHTML = '';
+  zone.innerHTML = '';
+  zone.classList.remove('correct');
+  document.getElementById('sentenceFeedback').className = 'feedback';
+  document.getElementById('listenSentenceBtn').style.display = 'none';
+  document.getElementById('ownSentenceArea').classList.add('hidden');
+
+  var shuffled;
+  if(difficulty === 'support'){
+    shuffled = ['passarinho','O','canta'];
+  } else {
+    shuffled = sentenceWords.slice();
+    shuffle(shuffled);
+  }
+
+  shuffled.forEach(function(w, i){
+    var c = document.createElement('div');
+    c.className = 'word-card';
+    c.textContent = w;
+    c.dataset.word = w;
+    c.dataset.idx = i;
+    c.onclick = function(){ placeWord(c); };
+    cards.appendChild(c);
+  });
+
+  if(difficulty === 'support'){
+    /* Auto-place the period */
+    var dotSlot = document.createElement('div');
+    dotSlot.className = 'word-card';
+    dotSlot.textContent = '.';
+    dotSlot.style.opacity = '0.5';
+    zone.appendChild(dotSlot);
+  }
+}
+
+function placeWord(cardEl){
+  if(cardEl.classList.contains('placed')) return;
+  cardEl.classList.add('placed');
+  placedSentence.push(cardEl.dataset.word);
+
+  var zone = document.getElementById('assemblyZone');
+  var clone = document.createElement('div');
+  clone.className = 'word-card';
+  clone.textContent = cardEl.dataset.word;
+  clone.onclick = function(){
+    /* Remove from assembly */
+    var idx = placedSentence.indexOf(cardEl.dataset.word);
+    if(idx > -1) placedSentence.splice(idx, 1);
+    cardEl.classList.remove('placed');
+    clone.remove();
+    zone.classList.remove('correct');
+    document.getElementById('sentenceFeedback').className = 'feedback';
+    document.getElementById('listenSentenceBtn').style.display = 'none';
+  };
+  zone.appendChild(clone);
+
+  /* Check */
+  var target = difficulty === 'support' ? ['O','passarinho','canta'] : sentenceWords;
+  if(placedSentence.length === target.length){
+    var correct = placedSentence.every(function(w,i){ return w === target[i]; });
+    if(correct){
+      zone.classList.add('correct');
+      showFeedback('sentenceFeedback', true, '✓ Muito bem! «O passarinho canta.»');
+      confetti();
+      speak('O passarinho canta.', 0.7);
+      document.getElementById('listenSentenceBtn').style.display = '';
+      if(difficulty === 'challenge'){
+        document.getElementById('ownSentenceArea').classList.remove('hidden');
+      }
+    } else {
+      showFeedback('sentenceFeedback', false, 'A ordem não está certa. Tenta reorganizar!');
+    }
+  }
+}
+
+window.resetSentence = initSentence;
+
+window.submitOwnSentence = function(){
+  var val = document.getElementById('ownSentence').value.trim().toLowerCase();
+  if(val.indexOf('passarinho') !== -1 && val.length > 12){
+    showFeedback('ownSentenceFeedback', true, '✓ Boa frase! Parabéns!');
+    confetti();
+  } else if(val.length < 5){
+    showFeedback('ownSentenceFeedback', false, 'Escreve uma frase com «passarinho».');
+  } else {
+    showFeedback('ownSentenceFeedback', false, 'Usa a palavra «passarinho» na tua frase!');
+  }
+};
+
+/* ===== S7: MINI-AVALIAÇÃO ===== */
+function initAssessment(){
+  assessScore = 0;
+  assessTask = 1;
+  document.querySelectorAll('.task-panel').forEach(function(p){ p.classList.add('hidden'); });
+  document.getElementById('task1').classList.remove('hidden');
+  document.getElementById('taskResults').classList.add('hidden');
+  document.getElementById('assessFeedback').className = 'feedback';
+  updateTaskProgress();
+  initAssessTask3();
+
+  /* Reset quiz opts */
+  document.querySelectorAll('#s7 .quiz-opt').forEach(function(q){ q.className = 'quiz-opt'; });
+}
+
+function updateTaskProgress(){
+  document.querySelectorAll('.task-step').forEach(function(s){
+    var t = parseInt(s.dataset.t);
+    s.className = 'task-step';
+    if(t < assessTask) s.classList.add('done');
+    if(t === assessTask) s.classList.add('current');
+  });
+}
+
+function nextTask(){
+  document.getElementById('task' + assessTask).classList.add('hidden');
+  assessTask++;
+  if(assessTask > 4){
+    showResults();
+    return;
+  }
+  updateTaskProgress();
+  document.getElementById('task' + assessTask).classList.remove('hidden');
+  document.getElementById('assessFeedback').className = 'feedback';
+}
+
+window.assessAnswer = function(task, el, answer){
+  if(el.classList.contains('correct') || el.classList.contains('wrong')) return;
+  var correct = false;
+  if(task === 1) correct = answer === 'passarinho';
+  if(task === 2) correct = answer === 4;
+  if(task === 4) correct = answer === 'passarinho';
+
+  if(correct){
+    el.classList.add('correct');
+    assessScore++;
+    showFeedback('assessFeedback', true, '✓ Certo!');
+    setTimeout(nextTask, 800);
+  } else {
+    el.classList.add('wrong');
+    showFeedback('assessFeedback', false, 'Tenta outra vez!');
+  }
+};
+
+/* Task 3: syllable ordering */
+var assessSyls = [];
+function initAssessTask3(){
+  assessSyls = [];
+  var bank = document.getElementById('assessSylBank');
+  var zone = document.getElementById('assessAssembly');
+  bank.innerHTML = '';
+  zone.innerHTML = '';
+
+  var shuffled = ['nho','pas','ri','sa'];
+  shuffle(shuffled);
+
+  shuffled.forEach(function(s){
+    var b = document.createElement('div');
+    b.className = 'syl-block';
+    b.dataset.syl = s;
+    b.textContent = s.toUpperCase();
+    b.onclick = function(){
+      if(b.classList.contains('placed')) return;
+      b.classList.add('placed');
+      assessSyls.push(s);
+      var clone = document.createElement('div');
+      clone.className = 'syl-block';
+      clone.dataset.syl = s;
+      clone.textContent = s.toUpperCase();
+      clone.onclick = function(){
+        var idx = assessSyls.indexOf(s);
+        if(idx > -1) assessSyls.splice(idx, 1);
+        b.classList.remove('placed');
+        clone.remove();
+      };
+      zone.appendChild(clone);
+    };
+    bank.appendChild(b);
+  });
+}
+
+window.checkAssessOrder = function(){
+  if(assessSyls.length !== 4){
+    showFeedback('assessFeedback', false, 'Coloca todas as 4 sílabas!');
+    return;
+  }
+  var correct = assessSyls.join('') === 'passarinho';
+  if(correct){
+    assessScore++;
+    showFeedback('assessFeedback', true, '✓ Certo! pas-sa-ri-nho!');
+    confetti();
+    setTimeout(nextTask, 800);
+  } else {
+    showFeedback('assessFeedback', false, 'A ordem não está certa. Tenta outra vez!');
+    assessSyls = [];
+    initAssessTask3();
+  }
+};
+
+function showResults(){
+  document.querySelectorAll('.task-panel').forEach(function(p){ p.classList.add('hidden'); });
+  document.getElementById('taskResults').classList.remove('hidden');
+  document.getElementById('assessFeedback').className = 'feedback';
+
+  var stars = document.getElementById('starsContainer');
+  stars.innerHTML = '';
+  for(var i = 0; i < 4; i++){
+    var s = document.createElement('span');
+    s.className = 'star' + (i < assessScore ? ' earned' : '');
+    s.textContent = '⭐';
+    s.style.animationDelay = (i * 0.2) + 's';
+    stars.appendChild(s);
+  }
+
+  var msgs = [
+    'Vamos praticar mais! Tu consegues!',
+    'Bom começo! Continua a praticar!',
+    'Muito bom! Quase perfeito!',
+    'Estás quase lá! Excelente!',
+    'Perfeito! Sabes tudo sobre «passarinho»!'
+  ];
+  document.getElementById('resultMsg').textContent = msgs[assessScore];
+  if(assessScore >= 3) confetti();
+}
+
+window.resetAssessment = initAssessment;
+
+/* ===== S8: EXTENSÃO ===== */
+window.setExtMode = function(mode){
+  document.querySelectorAll('.mode-card').forEach(function(c){ c.classList.remove('active'); });
+  event.currentTarget.classList.add('active');
+  document.getElementById('extDraw').classList.toggle('hidden', mode !== 'draw');
+  document.getElementById('extSpeak').classList.toggle('hidden', mode !== 'speak');
+  document.getElementById('extSounds').classList.toggle('hidden', mode !== 'sounds');
+};
+
+/* Drawing canvas */
+var canvas, ctx, drawing = false;
+var brushColor = '#E05FA0';
+var brushSize = 4;
+
+function initCanvas(){
+  canvas = document.getElementById('drawCanvas');
+  ctx = canvas.getContext('2d');
+  /* Resize for retina */
+  var rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * (window.devicePixelRatio || 1);
+  canvas.height = (rect.width * 0.7) * (window.devicePixelRatio || 1);
+  canvas.style.height = (rect.width * 0.7) + 'px';
+  ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  function getPos(e){
+    var r = canvas.getBoundingClientRect();
+    var clientX, clientY;
+    if(e.touches){
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+    return { x: clientX - r.left, y: clientY - r.top };
+  }
+
+  function startDraw(e){
+    e.preventDefault();
+    drawing = true;
+    var p = getPos(e);
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+  }
+  function moveDraw(e){
+    if(!drawing) return;
+    e.preventDefault();
+    var p = getPos(e);
+    ctx.lineWidth = brushSize;
+    ctx.strokeStyle = brushColor;
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+  }
+  function stopDraw(e){
+    if(e) e.preventDefault();
+    drawing = false;
+  }
+
+  canvas.addEventListener('mousedown', startDraw);
+  canvas.addEventListener('mousemove', moveDraw);
+  canvas.addEventListener('mouseup', stopDraw);
+  canvas.addEventListener('mouseleave', stopDraw);
+  canvas.addEventListener('touchstart', startDraw, {passive:false});
+  canvas.addEventListener('touchmove', moveDraw, {passive:false});
+  canvas.addEventListener('touchend', stopDraw);
+
+  /* Color palette */
+  var colors = ['#E05FA0','#7C3AED','#059669','#F59E0B','#1E1B18','#ef4444','#3b82f6','#ffffff'];
+  var palette = document.getElementById('colorPalette');
+  palette.innerHTML = '';
+  colors.forEach(function(c){
+    var sw = document.createElement('div');
+    sw.className = 'color-swatch' + (c === brushColor ? ' active' : '');
+    sw.style.background = c;
+    if(c === '#ffffff') sw.style.border = '2px solid #d1d5db';
+    sw.onclick = function(){
+      brushColor = c;
+      document.querySelectorAll('.color-swatch').forEach(function(s){ s.classList.remove('active'); });
+      sw.classList.add('active');
+    };
+    palette.appendChild(sw);
+  });
+}
+
+window.clearCanvas = function(){
+  if(!ctx) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+};
+
+/* Sounds */
+window.playBirdSound = function(n){
+  /* Use oscillator to simulate different sounds */
+  try{
+    var ac = new (window.AudioContext || window.webkitAudioContext)();
+    var osc = ac.createOscillator();
+    var gain = ac.createGain();
+    osc.connect(gain);
+    gain.connect(ac.destination);
+    gain.gain.value = 0.15;
+
+    if(n === 1){
+      /* Bird chirp: high frequency, quick modulation */
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1200, ac.currentTime);
+      osc.frequency.linearRampToValueAtTime(1800, ac.currentTime + 0.1);
+      osc.frequency.linearRampToValueAtTime(1400, ac.currentTime + 0.2);
+      osc.frequency.linearRampToValueAtTime(2000, ac.currentTime + 0.3);
+      osc.frequency.linearRampToValueAtTime(1500, ac.currentTime + 0.4);
+      gain.gain.linearRampToValueAtTime(0, ac.currentTime + 0.5);
+      osc.start();
+      osc.stop(ac.currentTime + 0.5);
+    } else if(n === 2){
+      /* Buzz: sawtooth */
+      osc.type = 'sawtooth';
+      osc.frequency.value = 150;
+      gain.gain.linearRampToValueAtTime(0, ac.currentTime + 0.6);
+      osc.start();
+      osc.stop(ac.currentTime + 0.6);
+    } else {
+      /* Growl: low square */
+      osc.type = 'square';
+      osc.frequency.value = 80;
+      gain.gain.value = 0.1;
+      gain.gain.linearRampToValueAtTime(0, ac.currentTime + 0.7);
+      osc.start();
+      osc.stop(ac.currentTime + 0.7);
+    }
+  } catch(e){}
+};
+
+window.checkBirdSound = function(el, n){
+  if(el.classList.contains('correct') || el.classList.contains('wrong')) return;
+  if(n === 1){
+    el.classList.add('correct');
+    showFeedback('soundFeedback', true, '✓ Certo! O som 1 é um canto de passarinho!');
+    confetti();
+  } else {
+    el.classList.add('wrong');
+    showFeedback('soundFeedback', false, 'Esse som não é de um passarinho. Ouve outra vez!');
+  }
+};
+
+window.submitSpoken = function(){
+  var val = document.getElementById('spokenSentence').value.trim().toLowerCase();
+  if(val.indexOf('passarinho') !== -1 && val.length > 12){
+    showFeedback('speakFeedback', true, '✓ Boa frase! Parabéns!');
+    confetti();
+    speak(val, 0.7);
+  } else if(val.length < 5){
+    showFeedback('speakFeedback', false, 'Escreve uma frase com «passarinho».');
+  } else {
+    showFeedback('speakFeedback', false, 'Não te esqueças de usar «passarinho»!');
+  }
+};
+
+/* ===== HELPERS ===== */
+function shuffle(arr){
+  for(var i = arr.length - 1; i > 0; i--){
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+  }
+  return arr;
+}
+
+/* ===== INIT ===== */
+buildProgress();
+initLevel();
+setTimeout(initCanvas, 100);
+
+})();
+</script>
+</body>
+</html>
