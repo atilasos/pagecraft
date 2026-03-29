@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M28P #19 — zebra | PageCraft</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Nunito','Comic Sans MS',sans-serif;background:#FAFAFA;color:#1A1A1A;min-height:100vh}
+  h1,h2,h3{font-weight:800}
+  .container{max-width:960px;margin:0 auto;padding:1.5rem}
+  .header{text-align:center;padding:2rem 1rem 1rem;background:linear-gradient(135deg,#1A1A1A,#555);color:white;border-radius:0 0 24px 24px;margin-bottom:2rem}
+  .header .word-display{font-size:4rem;font-weight:800;letter-spacing:.05em;margin:.5rem 0}
+  .badge{display:inline-block;background:#F59E0B;color:white;font-weight:700;padding:.25rem .75rem;border-radius:20px;font-size:1rem}
+  .section{background:white;border:2px solid #1A1A1A;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.08);padding:1.5rem;margin-bottom:1.5rem}
+  .section h2{font-size:1.5rem;color:#1A1A1A;margin-bottom:1rem}
+  .diff-bar{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
+  .diff-btn{padding:.4rem 1rem;border-radius:20px;border:2px solid transparent;font-weight:700;cursor:pointer;font-family:inherit;font-size:.9rem;min-height:40px;transition:all .2s}
+  .diff-btn.green{background:#dcfce7;color:#166534;border-color:#22c55e}
+  .diff-btn.yellow{background:#fef9c3;color:#854d0e;border-color:#F59E0B}
+  .diff-btn.red{background:#fee2e2;color:#991b1b;border-color:#ef4444}
+  .diff-btn.active{transform:scale(1.05);box-shadow:0 2px 8px rgba(0,0,0,.2)}
+  .diff-content{display:none;padding:.75rem;border-radius:12px;margin-bottom:1rem;line-height:1.6}
+  .diff-content.show{display:block}
+  .green-bg{background:#f0fdf4;border-left:4px solid #22c55e}
+  .yellow-bg{background:#fefce8;border-left:4px solid #F59E0B}
+  .red-bg{background:#fef2f2;border-left:4px solid #ef4444}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.75rem 2rem;border-radius:30px;border:none;font-family:inherit;font-weight:700;font-size:1rem;cursor:pointer;min-height:48px;transition:all .2s}
+  .btn:hover{transform:scale(1.05)}.btn:active{transform:scale(.97)}
+  .btn-p{background:#1A1A1A;color:white}
+  .btn-s{background:#F59E0B;color:white}
+  .btn-a{background:#555;color:white}
+  .btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+  .syl{display:inline-flex;align-items:center;justify-content:center;font-size:2.2rem;font-weight:800;color:white;padding:.5rem 1.2rem;border-radius:12px;min-height:48px;min-width:72px;user-select:none;transition:all .2s}
+  .syl-ze{background:#1A1A1A}
+  .syl-bra{background:#F59E0B}
+  .word-big{font-size:3rem;font-weight:800;color:#1A1A1A;letter-spacing:.05em;text-align:center;margin:1rem 0}
+  .quiz-options{display:flex;flex-wrap:wrap;gap:.75rem;margin:1rem 0}
+  .quiz-opt{padding:.75rem 1.5rem;border-radius:12px;border:2px solid #1A1A1A;background:white;font-family:inherit;font-size:1.1rem;font-weight:700;cursor:pointer;min-height:48px;transition:all .2s}
+  .quiz-opt:hover{background:#f5f5f5}
+  .quiz-opt.correct{background:#f0fdf4;border-color:#22c55e;color:#166534}
+  .quiz-opt.incorrect{background:#fffbeb;border-color:#F59E0B;color:#92400e}
+  .feedback{padding:1rem;border-radius:12px;margin:.75rem 0;font-size:1.1rem;font-weight:700;display:none}
+  .feedback.show{display:block}
+  .feedback.ok{background:#f0fdf4;color:#166534;border:2px solid #22c55e}
+  .feedback.nok{background:#fffbeb;color:#92400e;border:2px solid #F59E0B}
+  .drag-slot{width:110px;height:64px;border:2px dashed #F59E0B;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;background:#FFFDE7;color:#F59E0B;transition:all .2s}
+  .drag-slot.filled{border-style:solid;border-color:#22c55e;background:#f0fdf4;color:#166534}
+  .task-block{background:#F5F5F5;border-radius:12px;padding:1rem;margin:.75rem 0;border:1px solid #F59E0B}
+  .task-label{font-size:.85rem;font-weight:700;color:#92400e;text-transform:uppercase;margin-bottom:.5rem}
+  input[type=text]{font-family:inherit;font-size:1.1rem;padding:.5rem 1rem;border:2px solid #1A1A1A;border-radius:8px;width:100%;max-width:320px;min-height:48px;outline:none}
+  input[type=text]:focus{border-color:#F59E0B}
+  .img-card{text-align:center;padding:1rem;background:#F5F5F5;border-radius:12px;border:2px solid #1A1A1A;cursor:pointer;transition:all .2s;min-height:80px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem;font-size:1rem;font-weight:700}
+  .img-card:hover{transform:scale(1.03)}
+  .img-card.selected{background:#f0fdf4;border-color:#22c55e}
+  .word-card{padding:.5rem 1rem;border-radius:8px;border:2px solid #1A1A1A;background:white;font-weight:700;font-size:1.1rem;cursor:pointer;min-height:48px;display:flex;align-items:center;transition:all .2s}
+  .word-card:hover{background:#f5f5f5}
+  .word-card.placed{opacity:.4;cursor:not-allowed}
+  .placed-word{padding:.4rem .8rem;border-radius:8px;background:#1A1A1A;color:white;font-weight:700;font-size:1rem;cursor:pointer}
+  .nav-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+  .nav-tab{padding:.6rem 1.2rem;border-radius:30px;border:2px solid #1A1A1A;background:white;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;min-height:48px;transition:all .2s;color:#1A1A1A}
+  .nav-tab.active,.nav-tab:hover{background:#1A1A1A;color:white}
+  .block-content{display:none}
+  .block-content.active{display:block}
+  .progress-bar{background:#e5e7eb;border-radius:8px;height:12px;margin:1rem 0;overflow:hidden}
+  .progress-fill{background:linear-gradient(90deg,#1A1A1A,#F59E0B);height:100%;border-radius:8px;transition:width .5s}
+  .stars{font-size:2rem;text-align:center;letter-spacing:.5rem;margin:.5rem 0}
+  .result-summary{background:#F9F9F9;border-radius:16px;padding:1.5rem;text-align:center;margin:1rem 0}
+  .discovered-list{margin:.5rem 0;display:flex;flex-wrap:wrap;gap:.5rem}
+  .disc-word{background:#dcfce7;color:#166534;padding:.25rem .75rem;border-radius:20px;font-weight:700}
+  .sentence-slot{display:flex;flex-wrap:wrap;gap:.5rem;padding:.75rem;border:2px dashed #F59E0B;border-radius:12px;min-height:64px;align-items:center}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes stripe{0%{transform:translateX(0)}100%{transform:translateX(20px)}}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="badge">M28P #19</div>
+  <div class="word-display">🦓 zebra</div>
+  <h1>A palavra <em>zebra</em></h1>
+  <p style="opacity:.8;margin-top:.5rem">Método das 28 Palavras · 1.º ano</p>
+</div>
+<div class="container">
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showBlock('b1')">1️⃣ Descoberta</button>
+  <button class="nav-tab" onclick="showBlock('b2')">2️⃣ Reconhecimento</button>
+  <button class="nav-tab" onclick="showBlock('b3')">3️⃣ Sílabas</button>
+  <button class="nav-tab" onclick="showBlock('b4')">4️⃣ Recombinação</button>
+  <button class="nav-tab" onclick="showBlock('b5')">5️⃣ Escrita</button>
+  <button class="nav-tab" onclick="showBlock('b6')">6️⃣ Frase</button>
+  <button class="nav-tab" onclick="showBlock('b7')">7️⃣ Avaliação</button>
+  <button class="nav-tab" onclick="showBlock('b8')">8️⃣ Extensão</button>
+</div>
+
+<div id="b1" class="block-content active">
+<div class="section">
+  <h2>🌍 Bloco 1 — Descoberta da palavra</h2>
+  <div class="diff-bar">
+    <button class="diff-btn green active" onclick="sd('b1','green')">🟢 Com ajuda</button>
+    <button class="diff-btn yellow" onclick="sd('b1','yellow')">🟡 Objetivo</button>
+    <button class="diff-btn red" onclick="sd('b1','red')">🔴 Desafio</button>
+  </div>
+  <div id="b1-green" class="diff-content green-bg show">🟢 A palavra está visível desde o início, sublinhada. Aponta para a zebra!</div>
+  <div id="b1-yellow" class="diff-content yellow-bg">🟡 Lê a micro-história. Clica em "Mostrar a palavra".</div>
+  <div id="b1-red" class="diff-content red-bg">🔴 Escreve no caderno antes de clicar. Compara!</div>
+  <div style="text-align:center;background:linear-gradient(135deg,#f0f0f0,#fffde7);border-radius:16px;padding:2rem;margin:1rem 0;position:relative;overflow:hidden">
+    <div style="position:absolute;top:0;left:0;width:100%;height:8px;background:repeating-linear-gradient(90deg,#1A1A1A 0,#1A1A1A 20px,white 20px,white 40px)"></div>
+    <div style="font-size:5rem;margin:1rem 0">🦓</div>
+    <p style="font-size:1.3rem;font-weight:700;color:#1A1A1A">Na savana africana há um animal com riscas pretas e brancas.<br>Corre muito depressa.<br>Como se chama?</p>
+  </div>
+  <div id="cartaz-zebra" style="display:none;text-align:center;padding:1.5rem;background:white;border:3px solid #1A1A1A;border-radius:16px;animation:fadeIn .5s;margin:1rem 0">
+    <div style="font-size:4rem">🦓</div>
+    <div class="word-big">zebra</div>
+    <div style="display:flex;gap:8px;justify-content:center;align-items:center;margin:1rem 0">
+      <span class="syl syl-ze">ze</span>
+      <span style="font-size:2rem;color:#aaa">—</span>
+      <span class="syl syl-bra">bra</span>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:1rem">
+    <button class="btn btn-p" onclick="document.getElementById('cartaz-zebra').style.display='block';this.disabled=true;this.textContent='✅ Palavra revelada!'">🔍 Mostrar a palavra</button>
+  </div>
+</div>
+</div>
+
+<div id="b2" class="block-content">
+<div class="section">
+  <h2>👁️ Bloco 2 — Reconhecimento global</h2>
+  <div class="diff-bar">
+    <button class="diff-btn green active" onclick="sd('b2','green')">🟢 Com ajuda</button>
+    <button class="diff-btn yellow" onclick="sd('b2','yellow')">🟡 Objetivo</button>
+    <button class="diff-btn red" onclick="sd('b2','red')">🔴 Desafio</button>
+  </div>
+  <div id="b2-green" class="diff-content green-bg show">🟢 As imagens têm a primeira letra visível. Distratores bem diferentes.</div>
+  <div id="b2-yellow" class="diff-content yellow-bg">🟡 Três opções. Faz as duas tarefas.</div>
+  <div id="b2-red" class="diff-content red-bg">🔴 Justifica em voz alta por que as outras estão erradas!</div>
+  <div class="task-block">
+    <div class="task-label">Tarefa 1 — Vê "zebra", clica na imagem certa</div>
+    <div class="word-big" style="font-size:2rem">zebra</div>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin:1rem 0">
+      <div class="img-card" onclick="ci('zebra',this)" style="width:130px">🦓<br><span>?</span></div>
+      <div class="img-card" onclick="ci('palhaço',this)" style="width:130px">🤡<br><span>?</span></div>
+      <div class="img-card" onclick="ci('telhado',this)" style="width:130px">🏠<br><span>?</span></div>
+    </div>
+    <div id="b2-fb1" class="feedback"></div>
+  </div>
+  <div class="task-block">
+    <div class="task-label">Tarefa 2 — Vê 🦓, clica na palavra certa</div>
+    <div style="font-size:4rem;text-align:center;margin:.5rem 0">🦓</div>
+    <div class="quiz-options" id="b2-t2-opts">
+      <button class="quiz-opt" onclick="cw2('zebra',this)">zebra</button>
+      <button class="quiz-opt" onclick="cw2('palhaço',this)">palhaço</button>
+      <button class="quiz-opt" onclick="cw2('telhado',this)">telhado</button>
+    </div>
+    <div id="b2-fb2" class="feedback"></div>
+  </div>
+</div>
+</div>
+
+<div id="b3" class="block-content">
+<div class="section">
+  <h2>🎵 Bloco 3 — Segmentação silábica</h2>
+  <div class="diff-bar">
+    <button class="diff-btn green active" onclick="sd('b3','green')">🟢 Com ajuda</button>
+    <button class="diff-btn yellow" onclick="sd('b3','yellow')">🟡 Objetivo</button>
+    <button class="diff-btn red" onclick="sd('b3','red')">🔴 Desafio</button>
+  </div>
+  <div id="b3-green" class="diff-content green-bg show">🟢 Blocos pré-posicionados. Confirma arrastando.</div>
+  <div id="b3-yellow" class="diff-content yellow-bg">🟡 Arrasta os dois blocos e conta as palmas.</div>
+  <div id="b3-red" class="diff-content red-bg">🔴 Escreve as sílabas. Explica o grupo consonântico "br".</div>
+  <div class="word-big">ze<span style="color:#F59E0B;text-decoration:underline">br</span>a</div>
+  <div style="background:#F9F9F9;border-radius:12px;padding:1rem;margin:1rem 0">
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin:1rem 0">
+      <span class="syl syl-ze" draggable="true" ondragstart="dragS(event,'ze')">ze</span>
+      <span class="syl syl-bra" draggable="true" ondragstart="dragS(event,'bra')">bra</span>
+    </div>
+    <div style="display:flex;gap:1rem;justify-content:center;margin-top:1rem">
+      <div><div style="text-align:center;font-weight:700;margin-bottom:.4rem;color:#555">Sílaba 1</div>
+      <div class="drag-slot" id="slot1" ondragover="event.preventDefault()" ondrop="dropS(event,'slot1','ze')">⬇</div></div>
+      <div><div style="text-align:center;font-weight:700;margin-bottom:.4rem;color:#555">Sílaba 2</div>
+      <div class="drag-slot" id="slot2" ondragover="event.preventDefault()" ondrop="dropS(event,'slot2','bra')">⬇</div></div>
+    </div>
+    <div id="b3-drag-fb" class="feedback"></div>
+  </div>
+  <div class="task-block">
+    <div class="task-label">Quantas palmas? 👏</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="cp3('1',this)">1 👏</button>
+      <button class="quiz-opt" onclick="cp3('2',this)">2 👏👏</button>
+      <button class="quiz-opt" onclick="cp3('3',this)">3 👏👏👏</button>
+    </div>
+    <div id="b3-palmas-fb" class="feedback"></div>
+  </div>
+  <div class="task-block" style="background:#FFFDE7">
+    <div class="task-label">🌟 Grupo consonântico "br"</div>
+    <p>Em "bra", temos duas consoantes juntas: <strong>b + r</strong>. São inseparáveis na mesma sílaba!</p>
+    <button class="btn btn-s" style="margin-top:.75rem" onclick="document.getElementById('b3-br').style.display='block'">✨ Ver exemplos</button>
+    <div id="b3-br" style="display:none;margin-top:.75rem;background:#fffde7;border-radius:8px;padding:.75rem">
+      <strong style="color:#F59E0B">br:</strong> ze<strong>bra</strong>, li<strong>vro</strong>... &nbsp; | &nbsp;
+      <strong style="color:#1A1A1A">tr:</strong> <strong>tre</strong>m, <strong>tro</strong>mbone...
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="b4" class="block-content">
+<div class="section">
+  <h2>🔬 Bloco 4 — Recombinação</h2>
+  <div class="diff-bar">
+    <button class="diff-btn green active" onclick="sd('b4','green')">🟢 Com ajuda</button>
+    <button class="diff-btn yellow" onclick="sd('b4','yellow')">🟡 Objetivo</button>
+    <button class="diff-btn red" onclick="sd('b4','red')">🔴 Desafio</button>
+  </div>
+  <div id="b4-green" class="diff-content green-bg show">🟢 Apenas 4 sílabas. Feedback imediato.</div>
+  <div id="b4-yellow" class="diff-content yellow-bg">🟡 Oito sílabas. Testa livremente.</div>
+  <div id="b4-red" class="diff-content red-bg">🔴 Todas as sílabas. Lista palavras com "br".</div>
+  <p style="font-weight:700;margin-bottom:1rem">Clica nas sílabas para combinar:</p>
+  <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem">
+    <button class="syl syl-ze" onclick="as4('ze')" style="cursor:pointer">ze</button>
+    <button class="syl syl-bra" onclick="as4('bra')" style="cursor:pointer">bra</button>
+    <button class="syl" style="background:#059669;cursor:pointer" onclick="as4('bri')">bri</button>
+    <button class="syl" style="background:#0284c7;cursor:pointer" onclick="as4('so')">so</button>
+    <button class="syl" style="background:#7c3aed;cursor:pointer" onclick="as4('li')">li</button>
+    <button class="syl" style="background:#d97706;cursor:pointer" onclick="as4('ca')">ca</button>
+    <button class="syl" style="background:#be185d;cursor:pointer" onclick="as4('bro')">bro</button>
+    <button class="syl" style="background:#065f46;cursor:pointer" onclick="as4('sa')">sa</button>
+  </div>
+  <div style="padding:1rem;background:#F5F5F5;border-radius:12px;min-height:60px;border:2px dashed #1A1A1A;display:flex;align-items:center;justify-content:center">
+    <span id="b4-combo" style="font-size:2rem;font-weight:800;color:#1A1A1A">?</span>
+  </div>
+  <div style="display:flex;gap:.75rem;margin:1rem 0;flex-wrap:wrap">
+    <button class="btn btn-p" onclick="cc4()">🔍 É uma palavra?</button>
+    <button class="btn btn-a" onclick="cl4()">🔄 Limpar</button>
+  </div>
+  <div id="b4-fb" class="feedback"></div>
+  <p style="font-weight:700;margin-top:.75rem">✅ Descobertas:</p>
+  <div class="discovered-list" id="b4-disc"></div>
+</div>
+</div>
+
+<div id="b5" class="block-content">
+<div class="section">
+  <h2>✏️ Bloco 5 — Leitura e escrita</h2>
+  <div class="diff-bar">
+    <button class="diff-btn green active" onclick="sd('b5','green')">🟢 Com ajuda</button>
+    <button class="diff-btn yellow" onclick="sd('b5','yellow')">🟡 Objetivo</button>
+    <button class="diff-btn red" onclick="sd('b5','red')">🔴 Desafio</button>
+  </div>
+  <div id="b5-green" class="diff-content green-bg show">🟢 Sílaba destacada no modelo. 2 opções de grafia.</div>
+  <div id="b5-yellow" class="diff-content yellow-bg">🟡 4 opções. Copia no caderno.</div>
+  <div id="b5-red" class="diff-content red-bg">🔴 Escreve de memória. Encontra outros "br".</div>
+  <div class="task-block">
+    <div class="task-label">Tarefa 1 — Qual sílaba falta?</div>
+    <div style="text-align:center;margin:1rem 0">
+      <span style="font-size:2.5rem;font-weight:800;color:#1A1A1A">ze</span>
+      <span style="font-size:2.5rem;font-weight:800;color:#ccc">___</span>
+      <span style="font-size:2rem">🦓</span>
+    </div>
+    <div class="quiz-options" id="b5-t1">
+      <button class="quiz-opt" onclick="cs5('bra','b5-t1','b5-fb1')">bra</button>
+      <button class="quiz-opt" onclick="cs5('pra','b5-t1','b5-fb1')">pra</button>
+      <button class="quiz-opt" onclick="cs5('tra','b5-t1','b5-fb1')">tra</button>
+      <button class="quiz-opt" onclick="cs5('fra','b5-t1','b5-fb1')">fra</button>
+    </div>
+    <div id="b5-fb1" class="feedback"></div>
+  </div>
+  <div class="task-block">
+    <div class="task-label">Tarefa 2 — Qual a grafia correta?</div>
+    <div style="font-size:4rem;text-align:center;margin:.5rem 0">🦓</div>
+    <div class="quiz-options" id="b5-t2">
+      <button class="quiz-opt" onclick="cg5('zebra','b5-t2','b5-fb2')">zebra</button>
+      <button class="quiz-opt" onclick="cg5('zebro','b5-t2','b5-fb2')">zebro</button>
+      <button class="quiz-opt" onclick="cg5('zebrra','b5-t2','b5-fb2')">zebrra</button>
+      <button class="quiz-opt" onclick="cg5('cebra','b5-t2','b5-fb2')">cebra</button>
+    </div>
+    <div id="b5-fb2" class="feedback"></div>
+  </div>
+  <div class="task-block">
+    <div class="task-label">Tarefa 3 — Escreve a palavra</div>
+    <p style="margin-bottom:.5rem">Copia: <strong style="color:#1A1A1A">zebra</strong></p>
+    <div style="display:flex;gap:.75rem;align-items:center">
+      <input type="text" id="b5-inp" placeholder="escreve aqui..." oninput="ce5()" aria-label="Escreve zebra">
+      <span id="b5-inp-fb" style="font-size:1.5rem"></span>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="b6" class="block-content">
+<div class="section">
+  <h2>📝 Bloco 6 — Frase: "A zebra tem riscas."</h2>
+  <div class="diff-bar">
+    <button class="diff-btn green active" onclick="sd('b6','green')">🟢 Com ajuda</button>
+    <button class="diff-btn yellow" onclick="sd('b6','yellow')">🟡 Objetivo</button>
+    <button class="diff-btn red" onclick="sd('b6','red')">🔴 Desafio</button>
+  </div>
+  <div id="b6-green" class="diff-content green-bg show">🟢 3 elementos. Frase modelo sempre visível.</div>
+  <div id="b6-yellow" class="diff-content yellow-bg">🟡 5 elementos. Escreve frase própria no caderno.</div>
+  <div id="b6-red" class="diff-content red-bg">🔴 2 frases com "zebra". Usa adjetivo!</div>
+  <div style="background:#F5F5F5;border-radius:12px;padding:1rem;text-align:center;margin-bottom:1rem">
+    <p style="font-size:1.5rem;font-weight:800">A zebra tem riscas. 🦓</p>
+    <p style="font-size:.9rem;color:#666"><span style="color:#1A1A1A">Aa</span> Maiúscula &nbsp;|&nbsp; <span style="color:#F59E0B">.</span> Ponto</p>
+  </div>
+  <div class="task-block">
+    <div class="task-label">Ordena as palavras</div>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem" id="b6-bank">
+      <button class="word-card" onclick="pw6('riscas',this)">riscas</button>
+      <button class="word-card" onclick="pw6('A',this)">A</button>
+      <button class="word-card" onclick="pw6('.',this)">.</button>
+      <button class="word-card" onclick="pw6('zebra',this)">zebra</button>
+      <button class="word-card" onclick="pw6('tem',this)">tem</button>
+    </div>
+    <div class="sentence-slot" id="b6-sent"><span style="color:#aaa;font-style:italic">a frase aparece aqui…</span></div>
+    <div style="display:flex;gap:.5rem;margin-top:.75rem">
+      <button class="btn btn-p" onclick="chk6()">✅ Verificar</button>
+      <button class="btn btn-a" onclick="rst6()">🔄 Recomeçar</button>
+    </div>
+    <div id="b6-fb" class="feedback"></div>
+  </div>
+  <div class="task-block">
+    <div class="task-label">A tua frase com "zebra"</div>
+    <input type="text" id="b6-fp" placeholder="Escreve a tua frase..." style="max-width:100%;margin-bottom:.75rem" aria-label="Frase própria">
+    <button class="btn btn-s" onclick="cf6()">💬 Verificar</button>
+    <div id="b6-fp-fb" class="feedback"></div>
+  </div>
+</div>
+</div>
+
+<div id="b7" class="block-content">
+<div class="section">
+  <h2>⭐ Bloco 7 — Mini-avaliação</h2>
+  <div class="diff-bar">
+    <button class="diff-btn green active" onclick="sd('b7','green')">🟢 Com ajuda</button>
+    <button class="diff-btn yellow" onclick="sd('b7','yellow')">🟡 Objetivo</button>
+    <button class="diff-btn red" onclick="sd('b7','red')">🔴 Desafio</button>
+  </div>
+  <div id="b7-green" class="diff-content green-bg show">🟢 Imagem sempre presente. Frase oral aceite.</div>
+  <div id="b7-yellow" class="diff-content yellow-bg">🟡 Como descrito.</div>
+  <div id="b7-red" class="diff-content red-bg">🔴 Frase sem modelo. Bónus: encontra "br" na sala!</div>
+  <div class="progress-bar"><div class="progress-fill" id="b7-prog" style="width:0%"></div></div>
+  <p style="text-align:center;font-weight:700" id="b7-prog-t">Tarefa 0 de 4</p>
+  <div class="task-block">
+    <div class="task-label">1/4 — Reconhecimento</div>
+    <p>Qual palavra vai com 🦓?</p>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="ev7(1,'zebra',this)">zebra</button>
+      <button class="quiz-opt" onclick="ev7(1,'palhaço',this)">palhaço</button>
+      <button class="quiz-opt" onclick="ev7(1,'telhado',this)">telhado</button>
+    </div>
+    <div id="b7-t1-fb" class="feedback"></div>
+  </div>
+  <div class="task-block">
+    <div class="task-label">2/4 — Quantas sílabas?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="ev7(2,'2',this)">2 sílabas</button>
+      <button class="quiz-opt" onclick="ev7(2,'3',this)">3 sílabas</button>
+      <button class="quiz-opt" onclick="ev7(2,'4',this)">4 sílabas</button>
+    </div>
+    <div id="b7-t2-fb" class="feedback"></div>
+  </div>
+  <div class="task-block">
+    <div class="task-label">3/4 — Reconstrói "zebra"</div>
+    <div style="display:flex;gap:.75rem;margin:.75rem 0" id="b7-t3-bank">
+      <button class="syl syl-bra" style="cursor:pointer" onclick="et3('bra',this)">bra</button>
+      <button class="syl syl-ze" style="cursor:pointer" onclick="et3('ze',this)">ze</button>
+    </div>
+    <div id="b7-t3-built" style="min-height:48px;border:2px dashed #1A1A1A;border-radius:12px;padding:.5rem 1rem;margin-bottom:.5rem;display:flex;gap:.5rem;align-items:center">
+      <span style="color:#aaa">sílabas aqui…</span>
+    </div>
+    <button class="btn btn-p" onclick="cht3()">✅ Verificar</button>
+    <div id="b7-t3-fb" class="feedback"></div>
+  </div>
+  <div class="task-block">
+    <div class="task-label">4/4 — Frase com "zebra"</div>
+    <input type="text" id="b7-t4" placeholder="A tua frase..." style="max-width:100%;margin:.5rem 0" aria-label="Frase zebra">
+    <button class="btn btn-p" onclick="ev7(4,'frase',null)">✅ Confirmar</button>
+    <div id="b7-t4-fb" class="feedback"></div>
+  </div>
+  <div id="b7-res" class="result-summary" style="display:none">
+    <div id="b7-stars" class="stars"></div>
+    <h3 id="b7-msg" style="font-size:1.5rem"></h3>
+    <p id="b7-det" style="color:#555"></p>
+  </div>
+</div>
+</div>
+
+<div id="b8" class="block-content">
+<div class="section">
+  <h2>🎨 Bloco 8 — Extensão</h2>
+  <div class="diff-bar">
+    <button class="diff-btn green active" onclick="sd('b8','green')">🟢 Com ajuda</button>
+    <button class="diff-btn yellow" onclick="sd('b8','yellow')">🟡 Objetivo</button>
+    <button class="diff-btn red" onclick="sd('b8','red')">🔴 Desafio</button>
+  </div>
+  <div id="b8-green" class="diff-content green-bg show">🟢 Contorno pré-desenhado para colorir.</div>
+  <div id="b8-yellow" class="diff-content yellow-bg">🟡 Desenho livre com legenda e riscas.</div>
+  <div id="b8-red" class="diff-content red-bg">🔴 Mini-texto. 5 palavras com "br".</div>
+  <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem">
+    <button class="btn btn-p" onclick="se8('draw')">🎨 Desenho</button>
+    <button class="btn btn-s" onclick="se8('savana')">🌍 Savana</button>
+    <button class="btn btn-a" onclick="se8('words')">📚 Palavras "br"</button>
+  </div>
+  <div id="ext-draw" style="display:none">
+    <div style="background:linear-gradient(135deg,#f5f5f5,#fffde7);border-radius:12px;padding:1.5rem;text-align:center">
+      <div style="font-size:6rem">🦓</div>
+      <p style="font-weight:700">Desenha uma zebra no caderno.<br>Pinta as riscas pretas e brancas!<br>Escreve a legenda: <strong>zebra</strong></p>
+      <p style="font-size:.9rem;color:#555;margin-top:.5rem">Dica: alterna risca preta — espaço branco!</p>
+    </div>
+    <div style="margin-top:1rem">
+      <p style="font-weight:700;margin-bottom:.5rem">Descreve a tua zebra:</p>
+      <input type="text" placeholder="A minha zebra..." style="max-width:100%">
+    </div>
+  </div>
+  <div id="ext-savana" style="display:none">
+    <div class="task-block">
+      <div class="task-label">A savana africana</div>
+      <div style="display:flex;flex-direction:column;gap:.75rem">
+        <div style="background:white;border-radius:8px;padding:.75rem;border:1px solid #F59E0B">
+          <p style="font-weight:700">🌍 Onde vive a zebra?</p>
+          <input type="text" placeholder="A zebra vive..." style="max-width:100%;margin-top:.5rem" aria-label="Onde vive">
+        </div>
+        <div style="background:white;border-radius:8px;padding:.75rem;border:1px solid #F59E0B">
+          <p style="font-weight:700">🌿 O que come?</p>
+          <input type="text" placeholder="A zebra come..." style="max-width:100%;margin-top:.5rem" aria-label="O que come">
+        </div>
+        <div style="background:white;border-radius:8px;padding:.75rem;border:1px solid #F59E0B">
+          <p style="font-weight:700">🦁 Que animais vivem com ela?</p>
+          <input type="text" placeholder="Junto com a zebra..." style="max-width:100%;margin-top:.5rem" aria-label="Animais">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="ext-words" style="display:none">
+    <div class="task-block">
+      <div class="task-label">Palavras com grupo "br"</div>
+      <p style="margin-bottom:1rem">Conheces outras palavras com "br"? (ex: brinco, bravo...)</p>
+      <div id="b8-wlist" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem"></div>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <input type="text" id="b8-wi" placeholder="palavra com 'br'..." style="max-width:240px" onkeydown="if(event.key==='Enter')aw8()">
+        <button class="btn btn-p" onclick="aw8()">➕</button>
+      </div>
+      <p id="b8-wc" style="margin-top:.5rem;font-weight:700;color:#1A1A1A"></p>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+<div style="text-align:center;padding:1rem;color:#aaa;font-size:.85rem;margin-top:2rem">M28P #19 — zebra · PageCraft · 1.º ano · pt-PT</div>
+
+<script>
+var drag_val='',b4c=[],b4d=[],b6s=[],b7sc=[null,null,null,null],b7t3=[],brw=[];
+var b6order=['A','zebra','tem','riscas','.'];
+var rw=['zebra','zebras','brio','brisa','sabra','libra','cobra'];
+
+function showBlock(id){
+  document.querySelectorAll('.block-content').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  var m={b1:0,b2:1,b3:2,b4:3,b5:4,b6:5,b7:6,b8:7};
+  if(m[id]!==undefined)document.querySelectorAll('.nav-tab')[m[id]].classList.add('active');
+  window.scrollTo(0,0);
+}
+function sd(b,l){
+  ['green','yellow','red'].forEach(x=>{var e=document.getElementById(b+'-'+x);if(e)e.classList.toggle('show',x===l);});
+  document.querySelectorAll('#'+b+' .diff-btn').forEach(b=>b.classList.remove('active'));
+  var btn=document.querySelector('#'+b+' .diff-btn.'+l);if(btn)btn.classList.add('active');
+}
+function fb(el,ok,msg){el.className='feedback show '+(ok?'ok':'nok');el.textContent=msg;}
+function ci(v,el){
+  document.querySelectorAll('#b2 .img-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');el.querySelector('span').textContent=v;
+  fb(document.getElementById('b2-fb1'),v==='zebra','✓ Sim! O 🦓 é uma zebra!':'✗ Não é esse. Qual combina com "zebra"?');
+}
+function cw2(v,el){
+  document.querySelectorAll('#b2-t2-opts .quiz-opt').forEach(b=>b.disabled=true);
+  var f=document.getElementById('b2-fb2');
+  if(v==='zebra'){el.classList.add('correct');fb(f,true,'✓ "zebra" é a palavra certa! 🦓');}
+  else{el.classList.add('incorrect');fb(f,false,'✗ A palavra "zebra" tem o grupo "br".');}
+}
+function dragS(e,v){drag_val=v;}
+function dropS(e,id,exp){
+  e.preventDefault();
+  var s=document.getElementById(id);
+  if(drag_val===exp){
+    s.textContent=drag_val;s.classList.add('filled');
+    if(document.getElementById('slot1').classList.contains('filled')&&document.getElementById('slot2').classList.contains('filled'))
+      fb(document.getElementById('b3-drag-fb'),true,'✓ ze + bra = zebra! 🎉');
+  }else fb(document.getElementById('b3-drag-fb'),false,'✗ Tenta noutra caixa!');
+}
+function cp3(v,el){
+  document.querySelectorAll('#b3 .task-block:nth-child(2) .quiz-opt').forEach(b=>b.disabled=true);
+  var f=document.getElementById('b3-palmas-fb');
+  if(v==='2'){el.classList.add('correct');fb(f,true,'✓ "ze-bra" = 2 sílabas! 👏👏');}
+  else{el.classList.add('incorrect');fb(f,false,'✗ ze(👏)-bra(👏) = 2!');}
+}
+function as4(s){b4c.push(s);document.getElementById('b4-combo').textContent=b4c.join('');}
+function cl4(){b4c=[];document.getElementById('b4-combo').textContent='?';document.getElementById('b4-fb').style.display='none';}
+function cc4(){
+  var w=b4c.join(''),f=document.getElementById('b4-fb');
+  if(!w)return;
+  if(rw.indexOf(w)>=0){fb(f,true,'✓ "'+w+'" é palavra real! 🌟');if(b4d.indexOf(w)<0){b4d.push(w);var d=document.getElementById('b4-disc');var sp=document.createElement('span');sp.className='disc-word';sp.textContent='✓ '+w;d.appendChild(sp);}}
+  else fb(f,false,'✗ "'+w+'" não é uma palavra. Tenta outra combinação!');
+}
+function cs5(v,gId,fbId){
+  document.querySelectorAll('#'+gId+' .quiz-opt').forEach(b=>b.disabled=true);
+  var f=document.getElementById(fbId);
+  if(v==='bra'){document.querySelector('#'+gId+' [onclick*="bra"]').classList.add('correct');fb(f,true,'✓ "bra" com grupo consonântico "br"!');}
+  else{var el=document.querySelector('#'+gId+' [onclick*="'+v+'"]');if(el)el.classList.add('incorrect');fb(f,false,'✗ A sílaba certa é "bra" com "br" juntos.');}
+}
+function cg5(v,gId,fbId){
+  document.querySelectorAll('#'+gId+' .quiz-opt').forEach(b=>b.disabled=true);
+  var f=document.getElementById(fbId);
+  if(v==='zebra'){document.querySelector('#'+gId+' [onclick*="zebra"]').classList.add('correct');fb(f,true,'✓ "zebra" é a grafia correta!');}
+  else{var el=document.querySelector('#'+gId+' [onclick*="\''+v+'\'"]');if(el)el.classList.add('incorrect');fb(f,false,'✗ A grafia certa é "zebra".');}
+}
+function ce5(){
+  var v=document.getElementById('b5-inp').value.trim().toLowerCase();
+  document.getElementById('b5-inp-fb').textContent=v==='zebra'?'✅':v?'✏️':'';
+}
+function pw6(w,el){
+  if(el.classList.contains('placed'))return;
+  el.classList.add('placed');b6s.push(w);
+  var c=document.getElementById('b6-sent');
+  if(b6s.length===1)c.innerHTML='';
+  var pw=document.createElement('span');pw.className='placed-word';pw.textContent=w;c.appendChild(pw);
+}
+function chk6(){
+  var built=Array.from(document.getElementById('b6-sent').querySelectorAll('.placed-word')).map(e=>e.textContent);
+  var f=document.getElementById('b6-fb');
+  if(JSON.stringify(built)===JSON.stringify(b6order))fb(f,true,'✓ "A zebra tem riscas." — perfeito! 🌟');
+  else if(built.length<5)fb(f,false,'✗ Usa todas as palavras!');
+  else fb(f,false,'✗ A ordem não está certa. Recomeça!');
+}
+function rst6(){
+  b6s=[];document.getElementById('b6-sent').innerHTML='<span style="color:#aaa;font-style:italic">a frase aparece aqui…</span>';
+  document.querySelectorAll('#b6-bank .word-card').forEach(b=>b.classList.remove('placed'));
+  document.getElementById('b6-fb').style.display='none';
+}
+function cf6(){
+  var v=document.getElementById('b6-fp').value.trim(),f=document.getElementById('b6-fp-fb');
+  if(!v){fb(f,false,'✗ Escreve uma frase!');return;}
+  var hz=v.toLowerCase().indexOf('zebra')>=0,hm=v[0]===v[0].toUpperCase()&&v[0]!==v[0].toLowerCase(),hp=v.endsWith('.')||v.endsWith('!')||v.endsWith('?');
+  if(hz&&hm&&hp)fb(f,true,'✓ Fantástico! Frase perfeita com "zebra"! 🌟');
+  else if(!hz)fb(f,false,'✗ A frase precisa de ter "zebra"!');
+  else if(!hm)fb(f,false,'✗ Começa com maiúscula!');
+  else fb(f,false,'✗ Não te esqueças do ponto final!');
+}
+function ev7(t,exp,el){
+  var f=document.getElementById('b7-t'+t+'-fb');
+  var ok=false;
+  if(t===4){var v=document.getElementById('b7-t4').value.trim();ok=v.toLowerCase().indexOf('zebra')>=0&&v.length>3;fb(f,ok,ok?'✓ ⭐':'✗ Precisa de ter "zebra".');}
+  else if(exp==='zebra'||exp==='2'){ok=true;el.classList.add('correct');document.querySelectorAll('#b7-t'+t+'-block .quiz-opt').forEach(b=>b.disabled=true);fb(f,true,'✓ Correto! ⭐');}
+  else{el.classList.add('incorrect');document.querySelectorAll('#b7-t'+t+'-block .quiz-opt').forEach(b=>b.disabled=true);fb(f,false,'✗ Tenta de novo!');}
+  if(ok){b7sc[t-1]=1;up7();}
+}
+function et3(s,el){
+  b7t3.push(s);el.disabled=true;
+  var bd=document.getElementById('b7-t3-built');
+  if(b7t3.length===1)bd.innerHTML='';
+  var sp=document.createElement('span');sp.className='syl '+(s==='ze'?'syl-ze':'syl-bra');sp.style.fontSize='1.5rem';sp.textContent=s;bd.appendChild(sp);
+}
+function cht3(){
+  var f=document.getElementById('b7-t3-fb');
+  if(b7t3.join('')==='zebra'){fb(f,true,'✓ ze+bra=zebra! ⭐');b7sc[2]=1;up7();}
+  else{fb(f,false,'✗ Ordem: ze → bra');b7t3=[];document.getElementById('b7-t3-built').innerHTML='<span style="color:#aaa">sílabas aqui…</span>';document.querySelectorAll('#b7-t3-bank button').forEach(b=>b.disabled=false);}
+}
+function up7(){
+  var d=b7sc.filter(s=>s===1).length;
+  document.getElementById('b7-prog').style.width=(d/4*100)+'%';
+  document.getElementById('b7-prog-t').textContent='Tarefa '+d+' de 4';
+  if(d===4){
+    var r=document.getElementById('b7-res');r.style.display='block';
+    document.getElementById('b7-stars').textContent='⭐⭐⭐⭐';
+    document.getElementById('b7-msg').textContent='Fantástico! Sabes tudo sobre "zebra"! 🦓🎉';
+    document.getElementById('b7-det').textContent='Reconhecimento ✓ · Segmentação ✓ · Reconstituição ✓ · Frase ✓';
+    r.scrollIntoView({behavior:'smooth'});
+  }
+}
+function se8(t){['draw','savana','words'].forEach(x=>document.getElementById('ext-'+x).style.display=x===t?'block':'none');}
+function aw8(){
+  var i=document.getElementById('b8-wi'),v=i.value.trim().toLowerCase();
+  if(!v)return;
+  if(v.indexOf('br')<0){alert('"'+v+'" não tem "br". Tenta: brinco, bravo, brisa...');return;}
+  if(brw.indexOf(v)>=0){i.value='';return;}
+  brw.push(v);i.value='';
+  var l=document.getElementById('b8-wlist');var sp=document.createElement('span');sp.className='disc-word';sp.textContent=v;l.appendChild(sp);
+  document.getElementById('b8-wc').textContent='Encontraste '+brw.length+' palavra'+(brw.length===1?'':'s')+'! '+(brw.length>=5?'🌟':'');
+}
+</script>
+</body>
+</html>

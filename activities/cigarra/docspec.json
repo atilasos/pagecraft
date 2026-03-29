@@ -1,0 +1,141 @@
+{
+  "topic": "Palavra 26 — cigarra (Método das 28 Palavras)",
+  "ageRange": "6-7 anos (1.º ano)",
+  "duration": 45,
+  "objectives": [
+    "Reconhecer globalmente a palavra 'cigarra' e associá-la à sua imagem",
+    "Segmentar 'cigarra' em sílabas (ci-gar-ra) identificando o 'c' antes de 'i' (som /s/) e o 'rr' duplo",
+    "Recombinar sílabas para formar palavras novas",
+    "Usar a palavra 'cigarra' numa frase simples oral e escrita"
+  ],
+  "curriculum": {
+    "ae": [
+      {"subject": "Português", "year": "1.º ano", "domain": "Oralidade", "descriptor": "Identificar sílabas com grafemas especiais: 'c' antes de 'e/i' (som /s/) e 'rr' (vibrante forte)", "source": "portugues-1-ano-1-ciclo.md"},
+      {"subject": "Português", "year": "1.º ano", "domain": "Leitura e Escrita", "descriptor": "Ler palavras com 'ci/ce' e dígrafo 'rr'; reconhecer palavras frequentes", "source": "portugues-1-ano-1-ciclo.md"},
+      {"subject": "Estudo do Meio", "year": "1.º ano", "domain": "À Descoberta do Ambiente Natural", "descriptor": "Identificar insetos e os seus sons característicos no ambiente natural", "source": "estudo-do-meio-1-ano-1-ciclo.md"}
+    ],
+    "competencies": ["PA-A: Linguagens e textos", "PA-C: Raciocínio e resolução de problemas", "PA-D: Pensamento crítico", "PA-F: Autonomia"]
+  },
+  "memAlignment": {"modules": ["TEA", "Trabalho curricular comparticipado", "Circuitos de comunicação"], "instruments": ["PIT", "mapa de tarefas"], "socialOrganization": "individual (blocos 1–5) → pares (bloco 6) → turma"},
+  "materials": ["Tablet ou computador", "Caderno diário", "Lápis de cor"],
+  "units": [
+    {
+      "summary": "Bloco 1 — Abertura: a cigarra no verão",
+      "textDescription": "Cena de verão com árvores e sol. A cigarra canta. Micro-história: 'No verão quente, entre as árvores, ouve-se um som muito intenso. É um inseto que canta sem parar. Como se chama?'",
+      "interaction": {
+        "state": [{"name": "palavraRevelada", "type": "toggle", "options": ["oculta", "visivel"], "default": "oculta"}],
+        "render": "Cena verão; micro-história; botão revelar",
+        "transition": "Clicar → cartaz cigarra + palavra",
+        "constraint": "Imagem e palavra juntas",
+        "assessment": "Aluno aponta e diz"
+      },
+      "differentiation": {"support": "🟢 Palavra visível", "standard": "🟡 Revelar ao clicar", "challenge": "🔴 Escrever antes"},
+      "duration": 4
+    },
+    {
+      "summary": "Bloco 2 — Reconhecimento global",
+      "textDescription": "Reconhecimento com 'peixe' e 'funil' como distratores.",
+      "interaction": {
+        "state": [{"name": "opcao", "type": "quiz", "options": ["cigarra", "peixe", "funil"], "default": null}],
+        "render": "Tarefa 1: palavra, 3 imagens. Tarefa 2: imagem, 3 palavras.",
+        "transition": "Clicar → feedback",
+        "constraint": "'cigarra' tem 3 sílabas e rr duplo — distinta",
+        "assessment": "Seleciona corretamente"
+      },
+      "differentiation": {"support": "🟢 Primeira letra", "standard": "🟡 3 opções", "challenge": "🔴 4 com 'cigara', 'cigarra'"},
+      "duration": 4
+    },
+    {
+      "summary": "Bloco 3 — Segmentação: ci-gar-ra",
+      "textDescription": "Dividir em 3 sílabas. Destaque: 'ci' com som /s/ e 'rr' vibrante forte.",
+      "interaction": {
+        "state": [
+          {"name": "silabas", "type": "drag", "options": ["ci", "gar", "ra"], "default": null},
+          {"name": "palmadas", "type": "quiz", "options": ["1", "2", "3", "4"], "default": null}
+        ],
+        "render": "Blocos 'ci', 'gar', 'ra'; 3 caixas; destaque 'ci' e 'rr'",
+        "transition": "Arrastar → encaixe; palmadas → feedback",
+        "constraint": "'ci' = som /s/ (não /k/); 'rr' é vibrante forte (não dois r separados); 3 sílabas",
+        "assessment": "Coloca 3 blocos, 3 palmas, aponta 'ci' e 'rr'"
+      },
+      "differentiation": {"support": "🟢 Pré-posicionados", "standard": "🟡 Arrastar os 3", "challenge": "🔴 Escrever; explicar 'ci'"},
+      "duration": 6
+    },
+    {
+      "summary": "Bloco 4 — Recombinação",
+      "textDescription": "Com 'ci', 'gar', 'ra', 'rra', 'ca', 'sa', 'ta', 'ga' formar novas palavras.",
+      "interaction": {
+        "state": [{"name": "silabas", "type": "drag", "options": ["ci", "gar", "ra", "rra", "ca", "sa", "ta", "ga"], "default": null}],
+        "render": "Tabuleiro; construção; verificar; descobertas",
+        "transition": "Arrastar → feedback",
+        "constraint": "'rr' só aparece entre vogais; 'ci' tem som /s/",
+        "assessment": "2+ palavras (cigarra, carro, garra, cara)"
+      },
+      "maker": {"type": "unplugged", "challenge": "Cartões; tabela ✓/✗", "materials": ["Cartões", "Folha"], "groupSize": "2", "connection": "Físico precede digital", "communication": "Partilha", "alternatives": ["Post-its"]},
+      "differentiation": {"support": "🟢 4 sílabas", "standard": "🟡 8 sílabas", "challenge": "🔴 Sem feedback"},
+      "duration": 7
+    },
+    {
+      "summary": "Bloco 5 — Leitura e escrita: 'ci___ra'",
+      "textDescription": "Completar 'ci___ra', selecionar grafia, copiar. Foco em 'ci' e 'rr'.",
+      "interaction": {
+        "state": [
+          {"name": "silaba_falta", "type": "quiz", "options": ["gar", "car", "tar", "bar"], "default": null},
+          {"name": "grafia", "type": "quiz", "options": ["cigarra", "cigara", "cigarra", "cijarra"], "default": null}
+        ],
+        "render": "Tarefa 1: 'ci___ra'. Tarefa 2: grafias. Tarefa 3: copiar",
+        "transition": "Selecionar → feedback",
+        "constraint": "'gar' não 'car' (o som é /g/); 'rr' entre vogais necessário",
+        "assessment": "Completa, seleciona, copia"
+      },
+      "differentiation": {"support": "🟢 2 opções", "standard": "🟡 4 opções", "challenge": "🔴 De memória"},
+      "duration": 6
+    },
+    {
+      "summary": "Bloco 6 — Frase: 'A cigarra canta no verão.'",
+      "textDescription": "Ordenar palavras e criar frase própria.",
+      "interaction": {
+        "state": [{"name": "palavras", "type": "sorting", "options": ["A", "cigarra", "canta", "no", "verão", "."], "default": null}],
+        "render": "Frase modelo; 6 cartas; slots; escrita livre",
+        "transition": "Arrastar → feedback",
+        "constraint": "Maiúscula, ponto",
+        "assessment": "Ordena e escreve"
+      },
+      "differentiation": {"support": "🟢 3 elementos", "standard": "🟡 6 elementos", "challenge": "🔴 2 frases"},
+      "duration": 6
+    },
+    {
+      "summary": "Bloco 7 — Mini-avaliação",
+      "textDescription": "4 critérios M28P.",
+      "interaction": {
+        "state": [
+          {"name": "t1", "type": "quiz", "options": ["cigarra", "peixe", "funil"], "default": null},
+          {"name": "t2", "type": "sorting", "options": ["ci", "gar", "ra"], "default": null},
+          {"name": "t3", "type": "drag", "options": ["ra", "ci", "gar"], "default": null},
+          {"name": "t4", "type": "canvas", "default": null}
+        ],
+        "render": "4 tarefas; progresso; estrelas",
+        "transition": "Completar → próxima",
+        "constraint": "Não punitivo",
+        "assessment": "4 critérios"
+      },
+      "differentiation": {"support": "🟢 Imagem; oral aceite", "standard": "🟡 Como descrito", "challenge": "🔴 Sem modelo"},
+      "duration": 4
+    },
+    {
+      "summary": "Bloco 8 — Extensão",
+      "textDescription": "3 opções: desenhar cigarra, explorar sons da natureza, palavras com 'rr'.",
+      "interaction": {
+        "state": [{"name": "opcao", "type": "dropdown", "options": ["Desenho", "Sons da natureza", "Palavras rr"], "default": "Desenho"}],
+        "render": "3 cartões; actividades",
+        "transition": "Selecionar → abre",
+        "constraint": "Escolha livre",
+        "assessment": "1 elemento"
+      },
+      "maker": {"type": "unplugged", "challenge": "Desenhar cigarra e escrever 'ci-gar-ra' dividindo as sílabas nas partes do corpo (cabeça, tórax, abdómen)", "materials": ["Papel", "Lápis de cor"], "groupSize": "1", "connection": "Partes do corpo = sílabas", "communication": "Apresentar", "alternatives": ["Molde simples de inseto"]},
+      "differentiation": {"support": "🟢 Contorno", "standard": "🟡 Desenho livre", "challenge": "🔴 Mini-texto; 5 palavras rr"},
+      "duration": 8
+    }
+  ],
+  "sessionFlow": "0–4 min: Bloco 1 → 4–8 min: Bloco 2 → 8–14 min: Bloco 3 → 14–21 min: Bloco 4 → 21–27 min: Bloco 5 → 27–33 min: Bloco 6 → 33–37 min: Bloco 7 → 37–45 min: Bloco 8"
+}

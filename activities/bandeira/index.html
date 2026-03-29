@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M28P #20 — bandeira | PageCraft</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Nunito','Comic Sans MS',sans-serif;background:#F0F4FF;color:#1E1B18;min-height:100vh}
+  .container{max-width:960px;margin:0 auto;padding:1.5rem}
+  .header{text-align:center;padding:2rem 1rem 1rem;background:linear-gradient(135deg,#1D4ED8,#DC2626);color:white;border-radius:0 0 24px 24px;margin-bottom:2rem}
+  .header .wd{font-size:4rem;font-weight:800;margin:.5rem 0}
+  .badge{display:inline-block;background:#F59E0B;color:white;font-weight:700;padding:.25rem .75rem;border-radius:20px}
+  .section{background:white;border:2px solid #1D4ED8;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.08);padding:1.5rem;margin-bottom:1.5rem}
+  .section h2{font-size:1.5rem;color:#1D4ED8;margin-bottom:1rem;font-weight:800}
+  .diff-bar{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
+  .diff-btn{padding:.4rem 1rem;border-radius:20px;border:2px solid transparent;font-weight:700;cursor:pointer;font-family:inherit;font-size:.9rem;min-height:40px;transition:all .2s}
+  .diff-btn.green{background:#dcfce7;color:#166534;border-color:#22c55e}
+  .diff-btn.yellow{background:#fef9c3;color:#854d0e;border-color:#F59E0B}
+  .diff-btn.red{background:#fee2e2;color:#991b1b;border-color:#ef4444}
+  .diff-btn.active{transform:scale(1.05)}
+  .dc{display:none;padding:.75rem;border-radius:12px;margin-bottom:1rem;line-height:1.6}
+  .dc.show{display:block}.gbg{background:#f0fdf4;border-left:4px solid #22c55e}
+  .ybg{background:#fefce8;border-left:4px solid #F59E0B}.rbg{background:#fef2f2;border-left:4px solid #ef4444}
+  .btn{display:inline-flex;align-items:center;justify-content:center;padding:.75rem 2rem;border-radius:30px;border:none;font-family:inherit;font-weight:700;font-size:1rem;cursor:pointer;min-height:48px;transition:all .2s}
+  .btn:hover{transform:scale(1.05)}.btn:active{transform:scale(.97)}.btn:disabled{opacity:.4}
+  .bp{background:#1D4ED8;color:white}.bs{background:#DC2626;color:white}.ba{background:#15803D;color:white}
+  .syl{display:inline-flex;align-items:center;justify-content:center;font-size:2.2rem;font-weight:800;color:white;padding:.5rem 1.2rem;border-radius:12px;min-height:48px;min-width:72px;cursor:pointer;transition:all .2s}
+  .syl-ban{background:#1D4ED8}.syl-dei{background:#DC2626}.syl-ra{background:#15803D}
+  .wb{font-size:3rem;font-weight:800;color:#1D4ED8;text-align:center;margin:1rem 0}
+  .qo{display:flex;flex-wrap:wrap;gap:.75rem;margin:1rem 0}
+  .qopt{padding:.75rem 1.5rem;border-radius:12px;border:2px solid #1D4ED8;background:white;font-family:inherit;font-size:1.1rem;font-weight:700;cursor:pointer;min-height:48px;transition:all .2s}
+  .qopt:hover{background:#EEF2FF}.qopt.correct{background:#f0fdf4;border-color:#22c55e;color:#166534}
+  .qopt.incorrect{background:#fffbeb;border-color:#F59E0B;color:#92400e}
+  .fb{padding:1rem;border-radius:12px;margin:.75rem 0;font-size:1.1rem;font-weight:700;display:none}
+  .fb.show{display:block}.fb.ok{background:#f0fdf4;color:#166534;border:2px solid #22c55e}
+  .fb.nok{background:#fffbeb;color:#92400e;border:2px solid #F59E0B}
+  .ds{width:110px;height:64px;border:2px dashed #DC2626;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;background:#FFF5F5;color:#DC2626;transition:all .2s}
+  .ds.filled{border-style:solid;border-color:#22c55e;background:#f0fdf4;color:#166534}
+  .tb{background:#EEF2FF;border-radius:12px;padding:1rem;margin:.75rem 0;border:1px solid #F59E0B}
+  .tl{font-size:.85rem;font-weight:700;color:#92400e;text-transform:uppercase;margin-bottom:.5rem}
+  input[type=text]{font-family:inherit;font-size:1.1rem;padding:.5rem 1rem;border:2px solid #1D4ED8;border-radius:8px;width:100%;max-width:320px;min-height:48px;outline:none}
+  input[type=text]:focus{border-color:#DC2626}
+  .ic{text-align:center;padding:1rem;background:#EEF2FF;border-radius:12px;border:2px solid #1D4ED8;cursor:pointer;transition:all .2s;min-height:80px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem;font-size:1rem;font-weight:700}
+  .ic:hover{transform:scale(1.03)}.ic.selected{background:#f0fdf4;border-color:#22c55e}
+  .wc{padding:.5rem 1rem;border-radius:8px;border:2px solid #1D4ED8;background:white;font-weight:700;font-size:1.1rem;cursor:pointer;min-height:48px;display:flex;align-items:center;transition:all .2s}
+  .wc.placed{opacity:.4;cursor:not-allowed}
+  .pw{padding:.4rem .8rem;border-radius:8px;background:#1D4ED8;color:white;font-weight:700;font-size:1rem;cursor:pointer}
+  .nav-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+  .nt{padding:.6rem 1.2rem;border-radius:30px;border:2px solid #1D4ED8;background:white;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;min-height:48px;transition:all .2s;color:#1D4ED8}
+  .nt.active,.nt:hover{background:#1D4ED8;color:white}
+  .bc{display:none}.bc.active{display:block}
+  .pb{background:#e5e7eb;border-radius:8px;height:12px;margin:1rem 0;overflow:hidden}
+  .pf{background:linear-gradient(90deg,#1D4ED8,#DC2626);height:100%;border-radius:8px;transition:width .5s}
+  .rs{background:linear-gradient(135deg,#EEF2FF,#FFF5F5);border-radius:16px;padding:1.5rem;text-align:center;margin:1rem 0}
+  .dl{margin:.5rem 0;display:flex;flex-wrap:wrap;gap:.5rem}
+  .dw{background:#dcfce7;color:#166534;padding:.25rem .75rem;border-radius:20px;font-weight:700}
+  .ss{display:flex;flex-wrap:wrap;gap:.5rem;padding:.75rem;border:2px dashed #DC2626;border-radius:12px;min-height:64px;align-items:center}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes wave{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="badge">M28P #20</div>
+  <div class="wd">🏳️ bandeira</div>
+  <h1 style="font-size:2rem">A palavra <em>bandeira</em></h1>
+  <p style="opacity:.8;margin-top:.5rem">Método das 28 Palavras · 1.º ano</p>
+</div>
+<div class="container">
+<div class="nav-tabs">
+  <button class="nt active" onclick="sb('b1')">1️⃣ Descoberta</button>
+  <button class="nt" onclick="sb('b2')">2️⃣ Reconhecimento</button>
+  <button class="nt" onclick="sb('b3')">3️⃣ Sílabas</button>
+  <button class="nt" onclick="sb('b4')">4️⃣ Recombinação</button>
+  <button class="nt" onclick="sb('b5')">5️⃣ Escrita</button>
+  <button class="nt" onclick="sb('b6')">6️⃣ Frase</button>
+  <button class="nt" onclick="sb('b7')">7️⃣ Avaliação</button>
+  <button class="nt" onclick="sb('b8')">8️⃣ Extensão</button>
+</div>
+
+<div id="b1" class="bc active">
+<div class="section">
+  <h2>🎉 Bloco 1 — Descoberta da palavra</h2>
+  <div class="diff-bar">
+    <button class="diff-btn green active" onclick="sd('b1','green')">🟢 Com ajuda</button>
+    <button class="diff-btn yellow" onclick="sd('b1','yellow')">🟡 Objetivo</button>
+    <button class="diff-btn red" onclick="sd('b1','red')">🔴 Desafio</button>
+  </div>
+  <div id="b1-green" class="dc gbg show">🟢 A palavra está visível desde o início.</div>
+  <div id="b1-yellow" class="dc ybg">🟡 Clica em "Mostrar a palavra" e lê em voz alta.</div>
+  <div id="b1-red" class="dc rbg">🔴 Escreve no caderno antes de revelar.</div>
+  <div style="text-align:center;background:linear-gradient(135deg,#EEF2FF,#FFF5F5);border-radius:16px;padding:2rem;margin:1rem 0">
+    <div style="font-size:5rem;animation:wave 2s infinite">🏳️</div>
+    <p style="font-size:1.3rem;font-weight:700;margin:.5rem 0">Há uma festa na escola.<br>Há muitas cores a acenar no ar.<br>O que são essas coisas coloridas?</p>
+  </div>
+  <div id="c1" style="display:none;text-align:center;padding:1.5rem;background:white;border:3px solid #1D4ED8;border-radius:16px;animation:fadeIn .5s;margin:1rem 0">
+    <div style="font-size:4rem">🏳️</div>
+    <div class="wb">bandeira</div>
+    <div style="display:flex;gap:8px;justify-content:center;align-items:center;margin:1rem 0">
+      <span class="syl syl-ban">ban</span><span style="font-size:2rem;color:#aaa">—</span>
+      <span class="syl syl-dei">dei</span><span style="font-size:2rem;color:#aaa">—</span>
+      <span class="syl syl-ra">ra</span>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:1rem">
+    <button class="btn bp" onclick="document.getElementById('c1').style.display='block';this.disabled=true;this.textContent='✅ Revelada!'">🔍 Mostrar a palavra</button>
+  </div>
+</div>
+</div>
+
+<div id="b2" class="bc">
+<div class="section">
+  <h2>👁️ Bloco 2 — Reconhecimento global</h2>
+  <div class="diff-bar">
+    <button class="diff-btn green active" onclick="sd('b2','green')">🟢 Com ajuda</button>
+    <button class="diff-btn yellow" onclick="sd('b2','yellow')">🟡 Objetivo</button>
+    <button class="diff-btn red" onclick="sd('b2','red')">🔴 Desafio</button>
+  </div>
+  <div id="b2-green" class="dc gbg show">🟢 Primeira letra visível. Distratores diferentes.</div>
+  <div id="b2-yellow" class="dc ybg">🟡 Três opções. Faz as duas tarefas.</div>
+  <div id="b2-red" class="dc rbg">🔴 Quatro opções. Justifica!</div>
+  <div class="tb">
+    <div class="tl">Tarefa 1 — Vê "bandeira", clica na imagem</div>
+    <div class="wb" style="font-size:2rem">bandeira</div>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin:1rem 0">
+      <div class="ic" onclick="ci2('bandeira',this)" style="width:130px">🏳️<br><span>?</span></div>
+      <div class="ic" onclick="ci2('zebra',this)" style="width:130px">🦓<br><span>?</span></div>
+      <div class="ic" onclick="ci2('palhaço',this)" style="width:130px">🤡<br><span>?</span></div>
+    </div>
+    <div id="b2-fb1" class="fb"></div>
+  </div>
+  <div class="tb">
+    <div class="tl">Tarefa 2 — Vê 🏳️, clica na palavra</div>
+    <div style="font-size:4rem;text-align:center;margin:.5rem 0">🏳️</div>
+    <div class="qo" id="b2-t2">
+      <button class="qopt" onclick="cw2b('bandeira',this)">bandeira</button>
+      <button class="qopt" onclick="cw2b('zebra',this)">zebra</button>
+      <button class="qopt" onclick="cw2b('palhaço',this)">palhaço</button>
+    </div>
+    <div id="b2-fb2" class="fb"></div>
+  </div>
+</div>
+</div>
+
+<div id="b3" class="bc">
+<div class="section">
+  <h2>🎵 Bloco 3 — Segmentação: ban-dei-ra</h2>
+  <div class="diff-bar">
+    <button class="diff-btn green active" onclick="sd('b3','green')">🟢 Com ajuda</button>
+    <button class="diff-btn yellow" onclick="sd('b3','yellow')">🟡 Objetivo</button>
+    <button class="diff-btn red" onclick="sd('b3','red')">🔴 Desafio</button>
+  </div>
+  <div id="b3-green" class="dc gbg show">🟢 Blocos pré-posicionados.</div>
+  <div id="b3-yellow" class="dc ybg">🟡 Arrasta os 3 blocos.</div>
+  <div id="b3-red" class="dc rbg">🔴 Escreve as sílabas. Explica o ditongo "ei".</div>
+  <div class="wb">ban<span style="color:#DC2626;text-decoration:underline">dei</span>ra</div>
+  <div style="background:#EEF2FF;border-radius:12px;padding:1rem;margin:1rem 0">
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin:1rem 0">
+      <span class="syl syl-ban" draggable="true" ondragstart="drs(event,'ban')">ban</span>
+      <span class="syl syl-dei" draggable="true" ondragstart="drs(event,'dei')">dei</span>
+      <span class="syl syl-ra" draggable="true" ondragstart="drs(event,'ra')">ra</span>
+    </div>
+    <div style="display:flex;gap:1rem;justify-content:center;margin-top:1rem;flex-wrap:wrap">
+      <div><div style="text-align:center;font-weight:700;margin-bottom:.4rem;color:#555">1</div>
+      <div class="ds" id="s1" ondragover="event.preventDefault()" ondrop="drd(event,'s1','ban')">⬇</div></div>
+      <div><div style="text-align:center;font-weight:700;margin-bottom:.4rem;color:#555">2</div>
+      <div class="ds" id="s2" ondragover="event.preventDefault()" ondrop="drd(event,'s2','dei')">⬇</div></div>
+      <div><div style="text-align:center;font-weight:700;margin-bottom:.4rem;color:#555">3</div>
+      <div class="ds" id="s3" ondragover="event.preventDefault()" ondrop="drd(event,'s3','ra')">⬇</div></div>
+    </div>
+    <div id="b3-dfb" class="fb"></div>
+  </div>
+  <div class="tb">
+    <div class="tl">Quantas palmas? 👏</div>
+    <div class="qo">
+      <button class="qopt" onclick="cp3b('2',this)">2 👏👏</button>
+      <button class="qopt" onclick="cp3b('3',this)">3 👏👏👏</button>
+      <button class="qopt" onclick="cp3b('4',this)">4 👏👏👏👏</button>
+    </div>
+    <div id="b3-pfb" class="fb"></div>
+  </div>
+  <div class="tb" style="background:#FFF5F5">
+    <div class="tl">🌟 O ditongo "ei"</div>
+    <p>Em "dei" há um ditongo: <strong>e + i</strong> = "ei". Dois sons juntos na mesma sílaba!</p>
+    <button class="btn bs" style="margin-top:.75rem" onclick="document.getElementById('b3-ei').style.display='block'">✨ Ver exemplos</button>
+    <div id="b3-ei" style="display:none;margin-top:.75rem;background:#FFF5F5;border-radius:8px;padding:.75rem">
+      <strong style="color:#DC2626">ei:</strong> ban<strong>dei</strong>ra, p<strong>ei</strong>xe, r<strong>ei</strong>, l<strong>ei</strong>...
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="b4" class="bc">
+<div class="section">
+  <h2>🔬 Bloco 4 — Recombinação</h2>
+  <div class="diff-bar">
+    <button class="diff-btn green active" onclick="sd('b4','green')">🟢 Com ajuda</button>
+    <button class="diff-btn yellow" onclick="sd('b4','yellow')">🟡 Objetivo</button>
+    <button class="diff-btn red" onclick="sd('b4','red')">🔴 Desafio</button>
+  </div>
+  <div id="b4-green" class="dc gbg show">🟢 4 sílabas. Feedback imediato.</div>
+  <div id="b4-yellow" class="dc ybg">🟡 8 sílabas. Testa livremente.</div>
+  <div id="b4-red" class="dc rbg">🔴 Sem feedback. Lista palavras com "ei".</div>
+  <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem">
+    <button class="syl syl-ban" onclick="a4('ban')">ban</button>
+    <button class="syl syl-dei" onclick="a4('dei')">dei</button>
+    <button class="syl syl-ra" onclick="a4('ra')">ra</button>
+    <button class="syl" style="background:#7c3aed" onclick="a4('rei')">rei</button>
+    <button class="syl" style="background:#059669" onclick="a4('lei')">lei</button>
+    <button class="syl" style="background:#0284c7" onclick="a4('ca')">ca</button>
+    <button class="syl" style="background:#d97706" onclick="a4('sa')">sa</button>
+    <button class="syl" style="background:#be185d" onclick="a4('da')">da</button>
+  </div>
+  <div style="padding:1rem;background:#EEF2FF;border-radius:12px;min-height:60px;border:2px dashed #1D4ED8;display:flex;align-items:center;justify-content:center">
+    <span id="b4-c" style="font-size:2rem;font-weight:800;color:#1D4ED8">?</span>
+  </div>
+  <div style="display:flex;gap:.75rem;margin:1rem 0;flex-wrap:wrap">
+    <button class="btn bp" onclick="v4()">🔍 É uma palavra?</button>
+    <button class="btn ba" onclick="l4()">🔄 Limpar</button>
+  </div>
+  <div id="b4-fb" class="fb"></div>
+  <p style="font-weight:700;margin-top:.75rem">✅ Descobertas:</p>
+  <div class="dl" id="b4-d"></div>
+</div>
+</div>
+
+<div id="b5" class="bc">
+<div class="section">
+  <h2>✏️ Bloco 5 — Leitura e escrita</h2>
+  <div class="diff-bar">
+    <button class="diff-btn green active" onclick="sd('b5','green')">🟢 Com ajuda</button>
+    <button class="diff-btn yellow" onclick="sd('b5','yellow')">🟡 Objetivo</button>
+    <button class="diff-btn red" onclick="sd('b5','red')">🔴 Desafio</button>
+  </div>
+  <div id="b5-green" class="dc gbg show">🟢 2 opções. Modelo visível.</div>
+  <div id="b5-yellow" class="dc ybg">🟡 4 opções. Copia no caderno.</div>
+  <div id="b5-red" class="dc rbg">🔴 De memória. Encontra "ei" noutras palavras.</div>
+  <div class="tb">
+    <div class="tl">Tarefa 1 — Sílaba em falta</div>
+    <div style="text-align:center;margin:1rem 0">
+      <span style="font-size:2.5rem;font-weight:800;color:#1D4ED8">ban</span>
+      <span style="font-size:2.5rem;font-weight:800;color:#ccc">___</span>
+      <span style="font-size:2.5rem;font-weight:800;color:#15803D">ra</span>
+      <span style="font-size:2rem">🏳️</span>
+    </div>
+    <div class="qo" id="b5-t1">
+      <button class="qopt" onclick="cs5b('dei','b5-t1','b5-f1')">dei</button>
+      <button class="qopt" onclick="cs5b('de','b5-t1','b5-f1')">de</button>
+      <button class="qopt" onclick="cs5b('di','b5-t1','b5-f1')">di</button>
+      <button class="qopt" onclick="cs5b('dai','b5-t1','b5-f1')">dai</button>
+    </div>
+    <div id="b5-f1" class="fb"></div>
+  </div>
+  <div class="tb">
+    <div class="tl">Tarefa 2 — Grafia correta</div>
+    <div style="font-size:4rem;text-align:center;margin:.5rem 0">🏳️</div>
+    <div class="qo" id="b5-t2">
+      <button class="qopt" onclick="cg5b('bandeira','b5-t2','b5-f2')">bandeira</button>
+      <button class="qopt" onclick="cg5b('bandera','b5-t2','b5-f2')">bandera</button>
+      <button class="qopt" onclick="cg5b('bandaira','b5-t2','b5-f2')">bandaira</button>
+      <button class="qopt" onclick="cg5b('bundeira','b5-t2','b5-f2')">bundeira</button>
+    </div>
+    <div id="b5-f2" class="fb"></div>
+  </div>
+  <div class="tb">
+    <div class="tl">Tarefa 3 — Escreve a palavra</div>
+    <p style="margin-bottom:.5rem">Copia: <strong style="color:#1D4ED8">bandeira</strong></p>
+    <div style="display:flex;gap:.75rem;align-items:center">
+      <input type="text" id="b5-i" placeholder="escreve aqui..." oninput="ce5b()" aria-label="Escreve bandeira">
+      <span id="b5-if" style="font-size:1.5rem"></span>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="b6" class="bc">
+<div class="section">
+  <h2>📝 Bloco 6 — Frase</h2>
+  <div class="diff-bar">
+    <button class="diff-btn green active" onclick="sd('b6','green')">🟢 Com ajuda</button>
+    <button class="diff-btn yellow" onclick="sd('b6','yellow')">🟡 Objetivo</button>
+    <button class="diff-btn red" onclick="sd('b6','red')">🔴 Desafio</button>
+  </div>
+  <div id="b6-green" class="dc gbg show">🟢 3 elementos. Modelo visível.</div>
+  <div id="b6-yellow" class="dc ybg">🟡 Seis elementos. Frase própria no caderno.</div>
+  <div id="b6-red" class="dc rbg">🔴 2 frases. Usa adjetivo!</div>
+  <div style="background:#EEF2FF;border-radius:12px;padding:1rem;text-align:center;margin-bottom:1rem">
+    <p style="font-size:1.5rem;font-weight:800">A bandeira está ao vento. 🏳️</p>
+    <p style="font-size:.9rem;color:#666"><span style="color:#1D4ED8">Aa</span> Maiúscula &nbsp;|&nbsp; <span style="color:#DC2626">.</span> Ponto</p>
+  </div>
+  <div class="tb">
+    <div class="tl">Ordena as palavras</div>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem" id="b6-bk">
+      <button class="wc" onclick="pw6b('está',this)">está</button>
+      <button class="wc" onclick="pw6b('A',this)">A</button>
+      <button class="wc" onclick="pw6b('.',this)">.</button>
+      <button class="wc" onclick="pw6b('bandeira',this)">bandeira</button>
+      <button class="wc" onclick="pw6b('ao',this)">ao</button>
+      <button class="wc" onclick="pw6b('vento',this)">vento</button>
+    </div>
+    <div class="ss" id="b6-s"><span style="color:#aaa;font-style:italic">frase aqui…</span></div>
+    <div style="display:flex;gap:.5rem;margin-top:.75rem">
+      <button class="btn bp" onclick="ch6b()">✅ Verificar</button>
+      <button class="btn ba" onclick="rs6b()">🔄 Recomeçar</button>
+    </div>
+    <div id="b6-fb" class="fb"></div>
+  </div>
+  <div class="tb">
+    <div class="tl">A tua frase com "bandeira"</div>
+    <input type="text" id="b6-fp" placeholder="Escreve a tua frase..." style="max-width:100%;margin-bottom:.75rem" aria-label="Frase própria">
+    <button class="btn bs" onclick="cf6b()">💬 Verificar</button>
+    <div id="b6-fpfb" class="fb"></div>
+  </div>
+</div>
+</div>
+
+<div id="b7" class="bc">
+<div class="section">
+  <h2>⭐ Bloco 7 — Mini-avaliação</h2>
+  <div class="diff-bar">
+    <button class="diff-btn green active" onclick="sd('b7','green')">🟢 Com ajuda</button>
+    <button class="diff-btn yellow" onclick="sd('b7','yellow')">🟡 Objetivo</button>
+    <button class="diff-btn red" onclick="sd('b7','red')">🔴 Desafio</button>
+  </div>
+  <div id="b7-green" class="dc gbg show">🟢 Imagem presente. Frase oral aceite.</div>
+  <div id="b7-yellow" class="dc ybg">🟡 Como descrito.</div>
+  <div id="b7-red" class="dc rbg">🔴 Sem modelo.</div>
+  <div class="pb"><div class="pf" id="b7-p" style="width:0%"></div></div>
+  <p style="text-align:center;font-weight:700" id="b7-pt">Tarefa 0 de 4</p>
+  <div class="tb">
+    <div class="tl">1/4 — Reconhecimento</div>
+    <p>Qual palavra vai com 🏳️?</p>
+    <div class="qo">
+      <button class="qopt" onclick="e7b(1,'bandeira',this)">bandeira</button>
+      <button class="qopt" onclick="e7b(1,'zebra',this)">zebra</button>
+      <button class="qopt" onclick="e7b(1,'palhaço',this)">palhaço</button>
+    </div>
+    <div id="b7-f1" class="fb"></div>
+  </div>
+  <div class="tb">
+    <div class="tl">2/4 — Quantas sílabas?</div>
+    <div class="qo">
+      <button class="qopt" onclick="e7b(2,'2',this)">2</button>
+      <button class="qopt" onclick="e7b(2,'3',this)">3</button>
+      <button class="qopt" onclick="e7b(2,'4',this)">4</button>
+    </div>
+    <div id="b7-f2" class="fb"></div>
+  </div>
+  <div class="tb">
+    <div class="tl">3/4 — Reconstrói "bandeira"</div>
+    <div style="display:flex;gap:.75rem;margin:.75rem 0" id="b7-t3">
+      <button class="syl syl-ra" onclick="et3b('ra',this)">ra</button>
+      <button class="syl syl-ban" onclick="et3b('ban',this)">ban</button>
+      <button class="syl syl-dei" onclick="et3b('dei',this)">dei</button>
+    </div>
+    <div id="b7-t3b" style="min-height:48px;border:2px dashed #1D4ED8;border-radius:12px;padding:.5rem 1rem;margin-bottom:.5rem;display:flex;gap:.5rem;align-items:center">
+      <span style="color:#aaa">sílabas aqui…</span>
+    </div>
+    <button class="btn bp" onclick="ct3b()">✅ Verificar</button>
+    <div id="b7-f3" class="fb"></div>
+  </div>
+  <div class="tb">
+    <div class="tl">4/4 — Frase com "bandeira"</div>
+    <input type="text" id="b7-t4" placeholder="A tua frase..." style="max-width:100%;margin:.5rem 0" aria-label="Frase bandeira">
+    <button class="btn bp" onclick="e7b(4,'frase',null)">✅ Confirmar</button>
+    <div id="b7-f4" class="fb"></div>
+  </div>
+  <div id="b7-r" class="rs" style="display:none">
+    <div id="b7-st" style="font-size:2rem;letter-spacing:.5rem;margin:.5rem 0"></div>
+    <h3 id="b7-msg" style="font-size:1.5rem"></h3>
+  </div>
+</div>
+</div>
+
+<div id="b8" class="bc">
+<div class="section">
+  <h2>🎨 Bloco 8 — Extensão</h2>
+  <div class="diff-bar">
+    <button class="diff-btn green active" onclick="sd('b8','green')">🟢 Com ajuda</button>
+    <button class="diff-btn yellow" onclick="sd('b8','yellow')">🟡 Objetivo</button>
+    <button class="diff-btn red" onclick="sd('b8','red')">🔴 Desafio</button>
+  </div>
+  <div id="b8-green" class="dc gbg show">🟢 Contorno pré-desenhado.</div>
+  <div id="b8-yellow" class="dc ybg">🟡 Desenho e legenda.</div>
+  <div id="b8-red" class="dc rbg">🔴 Mini-texto. 5 palavras com "ei".</div>
+  <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem">
+    <button class="btn bp" onclick="se8b('draw')">🎨 Desenho</button>
+    <button class="btn bs" onclick="se8b('sym')">🏳️ Simbolismo</button>
+    <button class="btn ba" onclick="se8b('words')">📚 Palavras "ei"</button>
+  </div>
+  <div id="e8-draw" style="display:none">
+    <div style="background:linear-gradient(135deg,#EEF2FF,#FFF5F5);border-radius:12px;padding:1.5rem;text-align:center">
+      <div style="font-size:5rem;animation:wave 2s infinite">🏳️</div>
+      <p style="font-weight:700">Desenha e decora uma bandeira inventada!<br>Escreve <strong>ban-dei-ra</strong> na base.</p>
+    </div>
+  </div>
+  <div id="e8-sym" style="display:none">
+    <div class="tb">
+      <div class="tl">Simbolismo das bandeiras</div>
+      <div style="display:flex;flex-direction:column;gap:.75rem">
+        <div style="background:white;padding:.75rem;border-radius:8px;border:1px solid #1D4ED8">
+          <p style="font-weight:700">🎨 O que representam as cores?</p>
+          <input type="text" placeholder="As cores representam..." style="max-width:100%;margin-top:.5rem">
+        </div>
+        <div style="background:white;padding:.75rem;border-radius:8px;border:1px solid #1D4ED8">
+          <p style="font-weight:700">🏳️ Onde vês bandeiras?</p>
+          <input type="text" placeholder="Vejo bandeiras..." style="max-width:100%;margin-top:.5rem">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="e8-words" style="display:none">
+    <div class="tb">
+      <div class="tl">Palavras com ditongo "ei"</div>
+      <p style="margin-bottom:1rem">Conheces palavras com "ei"? (ex: peixe, rei, lei...)</p>
+      <div id="b8-wl" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem"></div>
+      <div style="display:flex;gap:.5rem">
+        <input type="text" id="b8-wi" placeholder="palavra com 'ei'..." style="max-width:240px" onkeydown="if(event.key==='Enter')aw8b()">
+        <button class="btn bp" onclick="aw8b()">➕</button>
+      </div>
+      <p id="b8-wc" style="margin-top:.5rem;font-weight:700;color:#1D4ED8"></p>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+<div style="text-align:center;padding:1rem;color:#aaa;font-size:.85rem;margin-top:2rem">M28P #20 — bandeira · PageCraft · 1.º ano · pt-PT</div>
+
+<script>
+var dv='',b4c=[],b4d=[],b6s=[],b7sc=[null,null,null,null],b7t3=[],eiw=[];
+var b6order=['A','bandeira','está','ao','vento','.'];
+var rw4=['bandeira','bandeirola','rei','lei','meia','peixe','reino','lei','cadeira','moldeira'];
+function sb(id){
+  document.querySelectorAll('.bc').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.nt').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  var m={b1:0,b2:1,b3:2,b4:3,b5:4,b6:5,b7:6,b8:7};
+  if(m[id]!==undefined)document.querySelectorAll('.nt')[m[id]].classList.add('active');
+  window.scrollTo(0,0);
+}
+function sd(b,l){
+  ['green','yellow','red'].forEach(x=>{var e=document.getElementById(b+'-'+x);if(e)e.classList.toggle('show',x===l);});
+  document.querySelectorAll('#'+b+' .diff-btn').forEach(b=>b.classList.remove('active'));
+  var btn=document.querySelector('#'+b+' .diff-btn.'+l);if(btn)btn.classList.add('active');
+}
+function fb(el,ok,msg){el.className='fb show '+(ok?'ok':'nok');el.textContent=msg;}
+function ci2(v,el){
+  document.querySelectorAll('#b2 .ic').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');el.querySelector('span').textContent=v;
+  fb(document.getElementById('b2-fb1'),v==='bandeira','✓ 🏳️ é uma bandeira!':'✗ Qual combina com "bandeira"?');
+}
+function cw2b(v,el){
+  document.querySelectorAll('#b2-t2 .qopt').forEach(b=>b.disabled=true);
+  var f=document.getElementById('b2-fb2');
+  if(v==='bandeira'){el.classList.add('correct');fb(f,true,'✓ "bandeira" é a palavra certa!');}
+  else{el.classList.add('incorrect');fb(f,false,'✗ A palavra "bandeira" tem 3 sílabas com "ei".');}
+}
+function drs(e,v){dv=v;}
+function drd(e,id,exp){
+  e.preventDefault();
+  var s=document.getElementById(id);
+  if(dv===exp){
+    s.textContent=dv;s.classList.add('filled');
+    if(['s1','s2','s3'].every(x=>document.getElementById(x).classList.contains('filled')))
+      fb(document.getElementById('b3-dfb'),true,'✓ ban+dei+ra = bandeira! 🎉');
+  }else fb(document.getElementById('b3-dfb'),false,'✗ Tenta noutra caixa!');
+}
+function cp3b(v,el){
+  document.querySelectorAll('#b3 .tb:nth-child(2) .qopt').forEach(b=>b.disabled=true);
+  var f=document.getElementById('b3-pfb');
+  if(v==='3'){el.classList.add('correct');fb(f,true,'✓ "ban-dei-ra" = 3 palmas! 👏👏👏');}
+  else{el.classList.add('incorrect');fb(f,false,'✗ ban(👏)-dei(👏)-ra(👏) = 3!');}
+}
+function a4(s){b4c.push(s);document.getElementById('b4-c').textContent=b4c.join('');}
+function l4(){b4c=[];document.getElementById('b4-c').textContent='?';document.getElementById('b4-fb').style.display='none';}
+function v4(){
+  var w=b4c.join(''),f=document.getElementById('b4-fb');if(!w)return;
+  if(rw4.indexOf(w)>=0){fb(f,true,'✓ "'+w+'" é palavra real! 🌟');if(b4d.indexOf(w)<0){b4d.push(w);var d=document.getElementById('b4-d');var sp=document.createElement('span');sp.className='dw';sp.textContent='✓ '+w;d.appendChild(sp);}}
+  else fb(f,false,'✗ "'+w+'" não é uma palavra. Tenta!');
+}
+function cs5b(v,g,f){
+  document.querySelectorAll('#'+g+' .qopt').forEach(b=>b.disabled=true);
+  var el=document.getElementById(f);
+  if(v==='dei'){document.querySelector('#'+g+' [onclick*="dei"]').classList.add('correct');fb(el,true,'✓ "dei" com ditongo "ei"!');}
+  else{var bt=document.querySelector('#'+g+' [onclick*="\''+v+'\'"]');if(bt)bt.classList.add('incorrect');fb(el,false,'✗ A sílaba certa é "dei" com ditongo "ei".');}
+}
+function cg5b(v,g,f){
+  document.querySelectorAll('#'+g+' .qopt').forEach(b=>b.disabled=true);
+  var el=document.getElementById(f);
+  if(v==='bandeira'){document.querySelector('#'+g+' [onclick*="bandeira"]').classList.add('correct');fb(el,true,'✓ "bandeira" com "ei" é a grafia correta!');}
+  else{var bt=document.querySelector('#'+g+' [onclick*="\''+v+'\'"]');if(bt)bt.classList.add('incorrect');fb(el,false,'✗ A grafia certa é "bandeira" com "ei".');}
+}
+function ce5b(){
+  var v=document.getElementById('b5-i').value.trim().toLowerCase();
+  document.getElementById('b5-if').textContent=v==='bandeira'?'✅':v?'✏️':'';
+}
+function pw6b(w,el){
+  if(el.classList.contains('placed'))return;
+  el.classList.add('placed');b6s.push(w);
+  var c=document.getElementById('b6-s');
+  if(b6s.length===1)c.innerHTML='';
+  var pw=document.createElement('span');pw.className='pw';pw.textContent=w;c.appendChild(pw);
+}
+function ch6b(){
+  var built=Array.from(document.getElementById('b6-s').querySelectorAll('.pw')).map(e=>e.textContent);
+  var f=document.getElementById('b6-fb');
+  if(JSON.stringify(built)===JSON.stringify(b6order))fb(f,true,'✓ Perfeito! 🌟');
+  else if(built.length<6)fb(f,false,'✗ Usa todas as palavras!');
+  else fb(f,false,'✗ Ordem incorreta. Recomeça!');
+}
+function rs6b(){
+  b6s=[];document.getElementById('b6-s').innerHTML='<span style="color:#aaa;font-style:italic">frase aqui…</span>';
+  document.querySelectorAll('#b6-bk .wc').forEach(b=>b.classList.remove('placed'));
+  document.getElementById('b6-fb').style.display='none';
+}
+function cf6b(){
+  var v=document.getElementById('b6-fp').value.trim(),f=document.getElementById('b6-fpfb');
+  if(!v){fb(f,false,'✗ Escreve!');return;}
+  var hz=v.toLowerCase().indexOf('bandeira')>=0,hm=v[0]===v[0].toUpperCase()&&v[0]!==v[0].toLowerCase(),hp=v.endsWith('.')||v.endsWith('!')||v.endsWith('?');
+  if(hz&&hm&&hp)fb(f,true,'✓ Frase perfeita com "bandeira"! 🌟');
+  else if(!hz)fb(f,false,'✗ Precisa de ter "bandeira"!');
+  else if(!hm)fb(f,false,'✗ Começa com maiúscula!');
+  else fb(f,false,'✗ Ponto final!');
+}
+function e7b(t,exp,el){
+  var f=document.getElementById('b7-f'+t);var ok=false;
+  if(t===4){var v=document.getElementById('b7-t4').value.trim();ok=v.toLowerCase().indexOf('bandeira')>=0&&v.length>3;fb(f,ok,ok?'✓ ⭐':'✗ Precisa de "bandeira".');}
+  else if(exp==='bandeira'||exp==='3'){ok=true;el.classList.add('correct');document.querySelectorAll('#b7-t'+t+'-block .qopt, #b7 .tb:nth-child('+(t+3)+') .qopt').forEach(b=>b.disabled=true);fb(f,true,'✓ ⭐');}
+  else{el.classList.add('incorrect');fb(f,false,'✗');}
+  if(ok){b7sc[t-1]=1;up7b();}
+}
+var b7t3a=[];
+function et3b(s,el){
+  b7t3a.push(s);el.disabled=true;
+  var bd=document.getElementById('b7-t3b');
+  if(b7t3a.length===1)bd.innerHTML='';
+  var sp=document.createElement('span');sp.className='syl syl-'+(s==='ban'?'ban':s==='dei'?'dei':'ra');sp.style.fontSize='1.5rem';sp.textContent=s;bd.appendChild(sp);
+}
+function ct3b(){
+  var f=document.getElementById('b7-f3');
+  if(b7t3a.join('')==='bandeira'){fb(f,true,'✓ ⭐');b7sc[2]=1;up7b();}
+  else{fb(f,false,'✗ Ordem: ban→dei→ra');b7t3a=[];document.getElementById('b7-t3b').innerHTML='<span style="color:#aaa">sílabas aqui…</span>';document.querySelectorAll('#b7-t3 button').forEach(b=>b.disabled=false);}
+}
+function up7b(){
+  var d=b7sc.filter(s=>s===1).length;
+  document.getElementById('b7-p').style.width=(d/4*100)+'%';
+  document.getElementById('b7-pt').textContent='Tarefa '+d+' de 4';
+  if(d===4){
+    var r=document.getElementById('b7-r');r.style.display='block';
+    document.getElementById('b7-st').textContent='⭐⭐⭐⭐';
+    document.getElementById('b7-msg').textContent='Fantástico! Sabes tudo sobre "bandeira"! 🏳️🎉';
+    r.scrollIntoView({behavior:'smooth'});
+  }
+}
+function se8b(t){['draw','sym','words'].forEach(x=>document.getElementById('e8-'+x).style.display=x===t?'block':'none');}
+function aw8b(){
+  var i=document.getElementById('b8-wi'),v=i.value.trim().toLowerCase();
+  if(!v)return;
+  if(v.indexOf('ei')<0){alert('"'+v+'" não tem "ei".');return;}
+  if(eiw.indexOf(v)>=0){i.value='';return;}
+  eiw.push(v);i.value='';
+  var l=document.getElementById('b8-wl');var sp=document.createElement('span');sp.className='dw';sp.textContent=v;l.appendChild(sp);
+  document.getElementById('b8-wc').textContent=''+eiw.length+' palavra'+(eiw.length===1?'':'s')+'! '+(eiw.length>=5?'🌟':'');
+}
+</script>
+</body>
+</html>

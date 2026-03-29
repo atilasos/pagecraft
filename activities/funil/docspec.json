@@ -1,0 +1,141 @@
+{
+  "topic": "Palavra 21 — funil (Método das 28 Palavras)",
+  "ageRange": "6-7 anos (1.º ano)",
+  "duration": 45,
+  "objectives": [
+    "Reconhecer globalmente a palavra 'funil' e associá-la à sua imagem",
+    "Segmentar 'funil' em sílabas (fu-nil) identificando a consoante 'l' final de sílaba",
+    "Recombinar sílabas para formar palavras novas",
+    "Usar a palavra 'funil' numa frase simples oral e escrita"
+  ],
+  "curriculum": {
+    "ae": [
+      {"subject": "Português", "year": "1.º ano", "domain": "Oralidade", "descriptor": "Identificar e manipular sílabas com consoante em coda silábica (l final)", "source": "portugues-1-ano-1-ciclo.md"},
+      {"subject": "Português", "year": "1.º ano", "domain": "Leitura e Escrita", "descriptor": "Ler palavras com coda consonântica (l, r, s); reconhecer palavras frequentes", "source": "portugues-1-ano-1-ciclo.md"},
+      {"subject": "Estudo do Meio", "year": "1.º ano", "domain": "À Descoberta do Ambiente Natural", "descriptor": "Reconhecer e nomear objetos do quotidiano e as suas funções", "source": "estudo-do-meio-1-ano-1-ciclo.md"}
+    ],
+    "competencies": ["PA-A: Linguagens e textos", "PA-C: Raciocínio e resolução de problemas", "PA-D: Pensamento crítico e pensamento criativo"]
+  },
+  "memAlignment": {"modules": ["TEA", "Trabalho curricular comparticipado", "Circuitos de comunicação"], "instruments": ["PIT", "mapa de tarefas"], "socialOrganization": "individual (blocos 1–5) → pares (bloco 6) → turma"},
+  "materials": ["Tablet ou computador", "Funil real (se disponível, como objeto físico)", "Caderno diário", "Lápis de cor"],
+  "units": [
+    {
+      "summary": "Bloco 1 — Abertura: a palavra 'funil' numa cena de cozinha",
+      "textDescription": "Cena de cozinha ou oficina com um funil. Micro-história: 'Na cozinha há um objeto que ajuda a colocar líquidos em garrafas. Tem uma forma especial. Como se chama?'",
+      "interaction": {
+        "state": [{"name": "palavraRevelada", "type": "toggle", "options": ["oculta", "visivel"], "default": "oculta"}],
+        "render": "Cena de cozinha com funil; micro-história; botão revelar",
+        "transition": "Clicar → cartaz com funil + palavra",
+        "constraint": "Imagem e palavra sempre juntas",
+        "assessment": "Aluno aponta e diz a palavra"
+      },
+      "differentiation": {"support": "🟢 Palavra visível", "standard": "🟡 Revelar ao clicar", "challenge": "🔴 Escrever antes"},
+      "duration": 4
+    },
+    {
+      "summary": "Bloco 2 — Reconhecimento global",
+      "textDescription": "Reconhecimento com distratores 'bandeira' e 'zebra'.",
+      "interaction": {
+        "state": [{"name": "opcao", "type": "quiz", "options": ["funil", "bandeira", "zebra"], "default": null}],
+        "render": "Tarefa 1: palavra, 3 imagens. Tarefa 2: imagem, 3 palavras.",
+        "transition": "Clicar → feedback",
+        "constraint": "'funil' é curta (2 sílabas) com 'l' final — distinta visualmente",
+        "assessment": "Seleciona corretamente"
+      },
+      "differentiation": {"support": "🟢 Primeira letra", "standard": "🟡 3 opções", "challenge": "🔴 4 com 'funils', 'fonil'"},
+      "duration": 4
+    },
+    {
+      "summary": "Bloco 3 — Segmentação: fu-nil",
+      "textDescription": "Dividir 'funil' em 2 sílabas, bater palmas. Destacar o 'l' final da segunda sílaba.",
+      "interaction": {
+        "state": [
+          {"name": "silabas", "type": "drag", "options": ["fu", "nil"], "default": null},
+          {"name": "palmadas", "type": "quiz", "options": ["1", "2", "3", "4"], "default": null}
+        ],
+        "render": "Blocos 'fu' e 'nil'; 2 caixas; destaque do 'l' final",
+        "transition": "Arrastar → encaixe; palmadas → feedback",
+        "constraint": "'nil' tem 'l' no final — é uma coda consonântica; 'funil' tem 2 sílabas",
+        "assessment": "Coloca blocos, seleciona '2 palmas'"
+      },
+      "differentiation": {"support": "🟢 Pré-posicionados", "standard": "🟡 Arrastar os 2", "challenge": "🔴 Escrever sílabas"},
+      "duration": 6
+    },
+    {
+      "summary": "Bloco 4 — Recombinação",
+      "textDescription": "Com 'fu', 'nil', 'fil', 'ma', 'na', 'li', 'ca', 'sol' formar combinações.",
+      "interaction": {
+        "state": [{"name": "silabas", "type": "drag", "options": ["fu", "nil", "fil", "ma", "na", "li", "ca", "so"], "default": null}],
+        "render": "Tabuleiro; construção; verificar; descobertas",
+        "transition": "Arrastar → atualiza; verificar → feedback",
+        "constraint": "Combinações válidas vs inválidas",
+        "assessment": "2+ palavras reais (funil, maçã-não, fila, mala, sol)"
+      },
+      "maker": {"type": "unplugged", "challenge": "Cartões sílabas; tabela", "materials": ["Cartões", "Folha"], "groupSize": "2", "connection": "Físico precede digital", "communication": "Partilha", "alternatives": ["Post-its"]},
+      "differentiation": {"support": "🟢 4 sílabas", "standard": "🟡 8 sílabas", "challenge": "🔴 Sem feedback imediato"},
+      "duration": 7
+    },
+    {
+      "summary": "Bloco 5 — Leitura e escrita: 'fu___'",
+      "textDescription": "Completar 'fu___', selecionar grafia, copiar. Foco no 'l' final.",
+      "interaction": {
+        "state": [
+          {"name": "silaba_falta", "type": "quiz", "options": ["nil", "mil", "ril", "fil"], "default": null},
+          {"name": "grafia", "type": "quiz", "options": ["funil", "funil", "fonil", "funir"], "default": null}
+        ],
+        "render": "Tarefa 1: 'fu___' + imagem. Tarefa 2: grafias. Tarefa 3: copiar",
+        "transition": "Selecionar → feedback",
+        "constraint": "'nil' com 'l' final; 'fonil' e 'funir' não existem",
+        "assessment": "Completa, seleciona, copia"
+      },
+      "differentiation": {"support": "🟢 2 opções", "standard": "🟡 4 opções", "challenge": "🔴 Escrever de memória"},
+      "duration": 6
+    },
+    {
+      "summary": "Bloco 6 — Frase: 'O funil é útil.'",
+      "textDescription": "Ordenar palavras e criar frase própria.",
+      "interaction": {
+        "state": [{"name": "palavras", "type": "sorting", "options": ["O", "funil", "é", "útil", "."], "default": null}],
+        "render": "Frase modelo; 5 cartas; slots; escrita livre",
+        "transition": "Arrastar → feedback",
+        "constraint": "Maiúscula, ponto final",
+        "assessment": "Ordena e escreve"
+      },
+      "differentiation": {"support": "🟢 3 elementos", "standard": "🟡 5 elementos", "challenge": "🔴 2 frases; adjetivo"},
+      "duration": 6
+    },
+    {
+      "summary": "Bloco 7 — Mini-avaliação",
+      "textDescription": "4 critérios M28P.",
+      "interaction": {
+        "state": [
+          {"name": "t1", "type": "quiz", "options": ["funil", "bandeira", "zebra"], "default": null},
+          {"name": "t2", "type": "sorting", "options": ["fu", "nil"], "default": null},
+          {"name": "t3", "type": "drag", "options": ["nil", "fu"], "default": null},
+          {"name": "t4", "type": "canvas", "default": null}
+        ],
+        "render": "4 tarefas; progresso; estrelas",
+        "transition": "Completar → próxima",
+        "constraint": "Não punitivo",
+        "assessment": "4 critérios"
+      },
+      "differentiation": {"support": "🟢 Imagem; oral aceite", "standard": "🟡 Como descrito", "challenge": "🔴 Sem modelo"},
+      "duration": 4
+    },
+    {
+      "summary": "Bloco 8 — Extensão",
+      "textDescription": "3 opções: desenhar funil, explorar funções, palavras terminadas em 'l'.",
+      "interaction": {
+        "state": [{"name": "opcao", "type": "dropdown", "options": ["Desenho", "Funções", "Palavras l"], "default": "Desenho"}],
+        "render": "3 cartões; actividades",
+        "transition": "Selecionar → abre",
+        "constraint": "Escolha livre",
+        "assessment": "1 elemento"
+      },
+      "maker": {"type": "unplugged", "challenge": "Dobrar papel em forma de funil e escrever 'fu-nil' nas duas partes", "materials": ["Papel", "Tesoura", "Lápis"], "groupSize": "1", "connection": "Forma geométrica = sílabas", "communication": "Mostrar à turma", "alternatives": ["Desenhar funil em papel"]},
+      "differentiation": {"support": "🟢 Contorno pré-desenhado", "standard": "🟡 Desenho livre", "challenge": "🔴 Mini-texto; palavras com 'l' final"},
+      "duration": 8
+    }
+  ],
+  "sessionFlow": "0–4 min: Bloco 1 → 4–8 min: Bloco 2 → 8–14 min: Bloco 3 → 14–21 min: Bloco 4 → 21–27 min: Bloco 5 → 27–33 min: Bloco 6 → 33–37 min: Bloco 7 → 37–45 min: Bloco 8"
+}

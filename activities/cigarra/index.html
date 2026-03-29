@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M28P #26 &mdash; cigarra | PageCraft</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Nunito','Comic Sans MS',sans-serif;background:#FAFAFA;color:#1E1B18;min-height:100vh}
+  .con{max-width:960px;margin:0 auto;padding:1.5rem}
+  .hdr{text-align:center;padding:2rem 1rem 1rem;background:linear-gradient(135deg,#92400E,#059669);color:white;border-radius:0 0 24px 24px;margin-bottom:2rem}
+  .wd{font-size:4rem;font-weight:800;margin:.5rem 0}
+  .bdg{display:inline-block;background:#F59E0B;color:white;font-weight:700;padding:.25rem .75rem;border-radius:20px}
+  .sec{background:white;border:2px solid #92400E;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.08);padding:1.5rem;margin-bottom:1.5rem}
+  .sec h2{font-size:1.4rem;color:#92400E;margin-bottom:1rem;font-weight:800}
+  .db{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
+  .dbt{padding:.4rem 1rem;border-radius:20px;border:2px solid transparent;font-weight:700;cursor:pointer;font-family:inherit;font-size:.9rem;min-height:40px;transition:all .2s}
+  .dbt.g{background:#dcfce7;color:#166534;border-color:#22c55e}
+  .dbt.y{background:#fef9c3;color:#854d0e;border-color:#F59E0B}
+  .dbt.r{background:#fee2e2;color:#991b1b;border-color:#ef4444}
+  .dbt.act{transform:scale(1.05)}
+  .dc{display:none;padding:.75rem;border-radius:12px;margin-bottom:1rem;line-height:1.6}
+  .dc.on{display:block}
+  .gbg{background:#f0fdf4;border-left:4px solid #22c55e}
+  .ybg{background:#fefce8;border-left:4px solid #F59E0B}
+  .rbg{background:#fef2f2;border-left:4px solid #ef4444}
+  .btn{display:inline-flex;align-items:center;justify-content:center;padding:.75rem 2rem;border-radius:30px;border:none;font-family:inherit;font-weight:700;font-size:1rem;cursor:pointer;min-height:48px;transition:all .2s}
+  .btn:hover{transform:scale(1.05)}.btn:active{transform:scale(.97)}.btn:disabled{opacity:.4}
+  .bp{background:#92400E;color:white}.bs{background:#059669;color:white}.ba{background:#555;color:white}
+  .syl{display:inline-flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800;color:white;padding:.5rem 1.2rem;border-radius:12px;min-height:48px;min-width:64px;border:none;cursor:pointer;transition:all .2s}
+  .s1{background:#92400E}.s2{background:#059669}.s3{background:#D97706}
+  .wb{font-size:3rem;font-weight:800;color:#92400E;text-align:center;margin:1rem 0}
+  .qo{display:flex;flex-wrap:wrap;gap:.75rem;margin:1rem 0}
+  .qopt{padding:.75rem 1.5rem;border-radius:12px;border:2px solid #92400E;background:white;font-family:inherit;font-size:1.1rem;font-weight:700;cursor:pointer;min-height:48px;transition:all .2s}
+  .qopt:hover{background:#f5f5f5}.qopt.ok{background:#f0fdf4;border-color:#22c55e;color:#166534}.qopt.err{background:#fffbeb;border-color:#F59E0B;color:#92400e}
+  .fb{padding:1rem;border-radius:12px;margin:.75rem 0;font-size:1rem;font-weight:700;display:none}.fb.on{display:block}.fb.ok{background:#f0fdf4;color:#166534;border:2px solid #22c55e}.fb.nok{background:#fffbeb;color:#92400e;border:2px solid #F59E0B}
+  .ds{width:100px;height:60px;border:2px dashed #059669;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;background:#f9f9f9;color:#059669;transition:all .2s}.ds.ok{border-style:solid;border-color:#22c55e;background:#f0fdf4;color:#166534}
+  .tb{background:#f9f9f9;border-radius:12px;padding:1rem;margin:.75rem 0;border:1px solid #F59E0B}.tl{font-size:.8rem;font-weight:700;color:#92400e;text-transform:uppercase;margin-bottom:.5rem}
+  input[type=text]{font-family:inherit;font-size:1rem;padding:.5rem 1rem;border:2px solid #92400E;border-radius:8px;width:100%;max-width:300px;min-height:48px;outline:none}
+  .ic{text-align:center;padding:.75rem;background:#f9f9f9;border-radius:12px;border:2px solid #92400E;cursor:pointer;min-height:72px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.25rem;font-size:.9rem;font-weight:700;transition:all .2s}.ic:hover{transform:scale(1.03)}.ic.sel{background:#f0fdf4;border-color:#22c55e}
+  .wc{padding:.5rem 1rem;border-radius:8px;border:2px solid #92400E;background:white;font-weight:700;font-size:1rem;cursor:pointer;min-height:48px;display:flex;align-items:center;transition:all .2s}.wc.pl{opacity:.4;cursor:not-allowed}
+  .pw{padding:.4rem .75rem;border-radius:8px;background:#92400E;color:white;font-weight:700;font-size:.95rem}
+  .ntabs{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+  .nt{padding:.5rem 1rem;border-radius:30px;border:2px solid #92400E;background:white;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;min-height:44px;transition:all .2s;color:#92400E}.nt.act,.nt:hover{background:#92400E;color:white}
+  .blk{display:none}.blk.on{display:block}
+  .pb{background:#e5e7eb;border-radius:8px;height:10px;margin:1rem 0;overflow:hidden}.pf{background:linear-gradient(90deg,#92400E,#059669);height:100%;border-radius:8px;transition:width .5s}
+  .rs{background:#f9f9f9;border-radius:16px;padding:1.5rem;text-align:center;margin:1rem 0}
+  .dl{margin:.5rem 0;display:flex;flex-wrap:wrap;gap:.5rem}.dw{background:#dcfce7;color:#166534;padding:.2rem .6rem;border-radius:20px;font-weight:700}
+  .ss{display:flex;flex-wrap:wrap;gap:.5rem;padding:.75rem;border:2px dashed #059669;border-radius:12px;min-height:56px;align-items:center}
+  @keyframes fi{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="bdg">M28P #26</div>
+  <div class="wd">&#129303; cigarra</div>
+  <h1 style="font-size:1.8rem">A palavra <em>cigarra</em></h1>
+  <p style="opacity:.8;margin-top:.5rem">M&eacute;todo das 28 Palavras &middot; 1.&ordm; ano</p>
+</div>
+<div class="con">
+<div class="ntabs">
+  <button class="nt act" onclick="showB('b1')">1&#65039;&#8419; Descoberta</button>
+  <button class="nt" onclick="showB('b2')">2&#65039;&#8419; Reconhecimento</button>
+  <button class="nt" onclick="showB('b3')">3&#65039;&#8419; S&iacute;labas</button>
+  <button class="nt" onclick="showB('b4')">4&#65039;&#8419; Recombina&ccedil;&atilde;o</button>
+  <button class="nt" onclick="showB('b5')">5&#65039;&#8419; Escrita</button>
+  <button class="nt" onclick="showB('b6')">6&#65039;&#8419; Frase</button>
+  <button class="nt" onclick="showB('b7')">7&#65039;&#8419; Avalia&ccedil;&atilde;o</button>
+  <button class="nt" onclick="showB('b8')">8&#65039;&#8419; Extens&atilde;o</button>
+</div>
+
+<div id="b1" class="blk on"><div class="sec">
+<h2>&#10024; Bloco 1 &mdash; Descoberta</h2>
+<div class="db"><button class="dbt g act" onclick="sdf('b1','g')">&#127802; Com ajuda</button><button class="dbt y" onclick="sdf('b1','y')">&#127803; Objetivo</button><button class="dbt r" onclick="sdf('b1','r')">&#128308; Desafio</button></div>
+<div id="b1-g" class="dc gbg on">&#127802; Palavra vis&iacute;vel desde o in&iacute;cio.</div>
+<div id="b1-y" class="dc ybg">&#127803; Clica "Mostrar" e l&ecirc; em voz alta.</div>
+<div id="b1-r" class="dc rbg">&#128308; Escreve antes de revelar.</div>
+<div style="text-align:center;background:linear-gradient(135deg,#f5f5f5,#fffde7);border-radius:16px;padding:2rem;margin:1rem 0">
+  <div style="font-size:5rem">&#129303;</div>
+  <p style="font-size:1.2rem;font-weight:700">Descobre a palavra! O que &eacute; &#129303;?</p>
+</div>
+<div id="c1" style="display:none;text-align:center;padding:1.5rem;background:white;border:3px solid #92400E;border-radius:16px;animation:fi .5s;margin:1rem 0">
+  <div style="font-size:4rem">&#129303;</div>
+  <div class="wb">cigarra</div>
+  <div style="display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin:1rem 0"><span class="syl s1">ci</span><span style="font-size:2rem;color:#aaa">&#8212;</span><span class="syl s2">gar</span><span style="font-size:2rem;color:#aaa">&#8212;</span><span class="syl s3">ra</span></div>
+</div>
+<div style="text-align:center;margin-top:1rem">
+  <button class="btn bp" onclick="document.getElementById('c1').style.display='block';this.disabled=true;this.textContent='&#10003; Revelada!'">&#128269; Mostrar a palavra</button>
+</div>
+</div></div>
+
+<div id="b2" class="blk"><div class="sec">
+<h2>&#128065;&#65038; Bloco 2 &mdash; Reconhecimento global</h2>
+<div class="db"><button class="dbt g act" onclick="sdf('b2','g')">&#127802; Com ajuda</button><button class="dbt y" onclick="sdf('b2','y')">&#127803; Objetivo</button><button class="dbt r" onclick="sdf('b2','r')">&#128308; Desafio</button></div>
+<div id="b2-g" class="dc gbg on">&#127802; Primeira letra vis&iacute;vel.</div>
+<div id="b2-y" class="dc ybg">&#127803; 3 op&ccedil;&otilde;es.</div>
+<div id="b2-r" class="dc rbg">&#128308; Justifica em voz alta!</div>
+<div class="tb"><div class="tl">Tarefa 1 &mdash; V&ecirc; "cigarra", clica na imagem</div>
+  <div class="wb" style="font-size:1.8rem">cigarra</div>
+  <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin:1rem 0">
+    <div class="ic" onclick="ci('cigarra',this)" style="width:120px">&#129303;<br><span>?</span></div>
+    <div class="ic" onclick="ci('peixe',this)" style="width:120px">&#128031;<br><span>?</span></div>
+    <div class="ic" onclick="ci('funil',this)" style="width:120px">&#128314;<br><span>?</span></div>
+  </div>
+  <div id="b2-f1" class="fb"></div>
+</div>
+<div class="tb"><div class="tl">Tarefa 2 &mdash; V&ecirc; &#129303;, clica na palavra</div>
+  <div style="font-size:3.5rem;text-align:center;margin:.5rem 0">&#129303;</div>
+  <div class="qo" id="b2-t2">
+    <button class="qopt" onclick="cw2('cigarra',this)">cigarra</button>
+    <button class="qopt" onclick="cw2('peixe',this)">peixe</button>
+    <button class="qopt" onclick="cw2('funil',this)">funil</button>
+  </div>
+  <div id="b2-f2" class="fb"></div>
+</div>
+</div></div>
+
+<div id="b3" class="blk"><div class="sec">
+<h2>&#127925; Bloco 3 &mdash; Segmenta&ccedil;&atilde;o sil&aacute;bica</h2>
+<div class="db"><button class="dbt g act" onclick="sdf('b3','g')">&#127802; Com ajuda</button><button class="dbt y" onclick="sdf('b3','y')">&#127803; Objetivo</button><button class="dbt r" onclick="sdf('b3','r')">&#128308; Desafio</button></div>
+<div id="b3-g" class="dc gbg on">&#127802; Blocos pr&eacute;-posicionados.</div>
+<div id="b3-y" class="dc ybg">&#127803; Arrasta os blocos.</div>
+<div id="b3-r" class="dc rbg">&#128308; Escreve. Explica a regra.</div>
+<div class="wb">cigarra</div>
+<div style="background:#f9f9f9;border-radius:12px;padding:1rem;margin:1rem 0">
+  <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin:1rem 0">
+    <span class="syl s1" draggable="true" ondragstart="drs(event,'ci')">ci</span>
+      <span class="syl s2" draggable="true" ondragstart="drs(event,'gar')">gar</span>
+      <span class="syl s3" draggable="true" ondragstart="drs(event,'ra')">ra</span>
+      
+  </div>
+  <div style="display:flex;gap:1rem;justify-content:center;margin-top:1rem;flex-wrap:wrap">
+    <div>
+      <div style="text-align:center;font-weight:700;margin-bottom:.4rem">1</div>
+      <div class="ds" id="sl1" ondragover="event.preventDefault()" ondrop="drd(event,'sl1','ci')">&#8595;</div>
+      </div><div>
+      <div style="text-align:center;font-weight:700;margin-bottom:.4rem">2</div>
+      <div class="ds" id="sl2" ondragover="event.preventDefault()" ondrop="drd(event,'sl2','gar')">&#8595;</div>
+      </div><div>
+      <div style="text-align:center;font-weight:700;margin-bottom:.4rem">3</div>
+      <div class="ds" id="sl3" ondragover="event.preventDefault()" ondrop="drd(event,'sl3','ra')">&#8595;</div>
+      </div>
+  </div>
+  <div id="b3-dfb" class="fb"></div>
+</div>
+<div class="tb"><div class="tl">Quantas palmas? &#128079;</div>
+  <div class="qo">
+    <button class="qopt" onclick="cp3('1',this)">1</button>
+    <button class="qopt" onclick="cp3('2',this)">2</button>
+    <button class="qopt" onclick="cp3('3',this)">3</button>
+    <button class="qopt" onclick="cp3('4',this)">4</button>
+  </div>
+  <div id="b3-pfb" class="fb"></div>
+</div>
+<div class="tb" style="background:#e8f4ff"><div class="tl">&#127775; Nota lingu&iacute;stica</div>
+  <p>Em 'ci' o 'c' antes de 'i' tem som /s/ (nao /k/). Em 'cigarra' temos 'rr' duplo (vibrante forte)!</p>
+</div>
+</div></div>
+
+<div id="b4" class="blk"><div class="sec">
+<h2>&#128300; Bloco 4 &mdash; Recombina&ccedil;&atilde;o</h2>
+<div class="db"><button class="dbt g act" onclick="sdf('b4','g')">&#127802; Com ajuda</button><button class="dbt y" onclick="sdf('b4','y')">&#127803; Objetivo</button><button class="dbt r" onclick="sdf('b4','r')">&#128308; Desafio</button></div>
+<div id="b4-g" class="dc gbg on">&#127802; 4 s&iacute;labas. Feedback imediato.</div>
+<div id="b4-y" class="dc ybg">&#127803; 8 s&iacute;labas. Testa livremente.</div>
+<div id="b4-r" class="dc rbg">&#128308; Explora sem feedback.</div>
+<div id="b4-syls" style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem"></div>
+<div style="padding:1rem;background:#f9f9f9;border-radius:12px;min-height:56px;border:2px dashed #92400E;display:flex;align-items:center;justify-content:center">
+  <span id="b4-c" style="font-size:1.8rem;font-weight:800;color:#92400E">?</span>
+</div>
+<div style="display:flex;gap:.75rem;margin:1rem 0;flex-wrap:wrap">
+  <button class="btn bp" onclick="v4()">&#128269; &Eacute; uma palavra?</button>
+  <button class="btn ba" onclick="l4()">&#8635; Limpar</button>
+</div>
+<div id="b4-fb" class="fb"></div>
+<div class="dl" id="b4-d"></div>
+</div></div>
+
+<div id="b5" class="blk"><div class="sec">
+<h2>&#9999;&#65038; Bloco 5 &mdash; Leitura e escrita</h2>
+<div class="db"><button class="dbt g act" onclick="sdf('b5','g')">&#127802; Com ajuda</button><button class="dbt y" onclick="sdf('b5','y')">&#127803; Objetivo</button><button class="dbt r" onclick="sdf('b5','r')">&#128308; Desafio</button></div>
+<div id="b5-g" class="dc gbg on">&#127802; 2 op&ccedil;&otilde;es. Modelo vis&iacute;vel.</div>
+<div id="b5-y" class="dc ybg">&#127803; 4 op&ccedil;&otilde;es. Copia no caderno.</div>
+<div id="b5-r" class="dc rbg">&#128308; Escreve de mem&oacute;ria.</div>
+<div class="tb"><div class="tl">Tarefa 1 &mdash; S&iacute;laba em falta</div>
+  <div style="text-align:center;margin:1rem 0">
+    <span style="font-size:2rem;font-weight:800;color:#92400E">ci</span>
+    <span style="font-size:2rem;font-weight:800;color:#ccc">___</span>
+    <span style="font-size:2rem">&#129303;</span>
+  </div>
+  <div class="qo" id="b5-t1">
+    <button class="qopt" onclick="cs5('gar','b5-t1','b5-f1')">gar</button>
+      <button class="qopt" onclick="cs5('car','b5-t1','b5-f1')">car</button>
+      <button class="qopt" onclick="cs5('tar','b5-t1','b5-f1')">tar</button>
+      <button class="qopt" onclick="cs5('bar','b5-t1','b5-f1')">bar</button>
+      
+  </div>
+  <div id="b5-f1" class="fb"></div>
+</div>
+<div class="tb"><div class="tl">Tarefa 2 &mdash; Grafia correta</div>
+  <div style="font-size:3.5rem;text-align:center;margin:.5rem 0">&#129303;</div>
+  <div class="qo" id="b5-t2">
+    <button class="qopt" onclick="cg5('cigarra','b5-t2','b5-f2')">cigarra</button>
+      <button class="qopt" onclick="cg5('cigara','b5-t2','b5-f2')">cigara</button>
+      <button class="qopt" onclick="cg5('cijarra','b5-t2','b5-f2')">cijarra</button>
+      <button class="qopt" onclick="cg5('cigarra','b5-t2','b5-f2')">cigarra</button>
+      
+  </div>
+  <div id="b5-f2" class="fb"></div>
+</div>
+<div class="tb"><div class="tl">Tarefa 3 &mdash; Escreve</div>
+  <p style="margin-bottom:.5rem">Copia: <strong style="color:#92400E">cigarra</strong></p>
+  <div style="display:flex;gap:.75rem;align-items:center">
+    <input type="text" id="b5-inp" placeholder="escreve aqui..." oninput="ce5()" aria-label="Escreve cigarra">
+    <span id="b5-inf" style="font-size:1.4rem"></span>
+  </div>
+</div>
+</div></div>
+
+<div id="b6" class="blk"><div class="sec">
+<h2>&#128221; Bloco 6 &mdash; Frase</h2>
+<div class="db"><button class="dbt g act" onclick="sdf('b6','g')">&#127802; Com ajuda</button><button class="dbt y" onclick="sdf('b6','y')">&#127803; Objetivo</button><button class="dbt r" onclick="sdf('b6','r')">&#128308; Desafio</button></div>
+<div id="b6-g" class="dc gbg on">&#127802; 3 elementos. Modelo vis&iacute;vel.</div>
+<div id="b6-y" class="dc ybg">&#127803; 6 elementos. Frase pr&oacute;pria no caderno.</div>
+<div id="b6-r" class="dc rbg">&#128308; 2 frases. Usa adjetivo!</div>
+<div style="background:#f9f9f9;border-radius:12px;padding:1rem;text-align:center;margin-bottom:1rem">
+  <p style="font-size:1.4rem;font-weight:800">A cigarra canta no verao. &#129303;</p>
+  <p style="font-size:.85rem;color:#666">Aa Maiúscula | . Ponto final</p>
+</div>
+<div class="tb"><div class="tl">Ordena as palavras</div>
+  <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem" id="b6-bk">
+    <button class="wc" onclick="pw6(this,'A')">A</button>
+      <button class="wc" onclick="pw6(this,'cigarra')">cigarra</button>
+      <button class="wc" onclick="pw6(this,'canta')">canta</button>
+      <button class="wc" onclick="pw6(this,'no')">no</button>
+      <button class="wc" onclick="pw6(this,'verao')">verao</button>
+      <button class="wc" onclick="pw6(this,'.')">.</button>
+      
+  </div>
+  <div class="ss" id="b6-s"><span style="color:#aaa;font-style:italic">frase aqui...</span></div>
+  <div style="display:flex;gap:.5rem;margin-top:.75rem">
+    <button class="btn bp" onclick="ch6()">&#10003; Verificar</button>
+    <button class="btn ba" onclick="rs6()">&#8635; Recomeçar</button>
+  </div>
+  <div id="b6-fb" class="fb"></div>
+</div>
+<div class="tb"><div class="tl">A tua frase com "cigarra"</div>
+  <input type="text" id="b6-fp" placeholder="Escreve a tua frase..." style="max-width:100%;margin-bottom:.75rem">
+  <button class="btn bs" onclick="cf6()">&#128172; Verificar</button>
+  <div id="b6-fpfb" class="fb"></div>
+</div>
+</div></div>
+
+<div id="b7" class="blk"><div class="sec">
+<h2>&#11088; Bloco 7 &mdash; Mini-avalia&ccedil;&atilde;o</h2>
+<div class="db"><button class="dbt g act" onclick="sdf('b7','g')">&#127802; Com ajuda</button><button class="dbt y" onclick="sdf('b7','y')">&#127803; Objetivo</button><button class="dbt r" onclick="sdf('b7','r')">&#128308; Desafio</button></div>
+<div id="b7-g" class="dc gbg on">&#127802; Imagem presente. Frase oral aceite.</div>
+<div id="b7-y" class="dc ybg">&#127803; Como descrito.</div>
+<div id="b7-r" class="dc rbg">&#128308; Sem modelo.</div>
+<div class="pb"><div class="pf" id="b7-p" style="width:0%"></div></div>
+<p style="text-align:center;font-weight:700" id="b7-pt">Tarefa 0 de 4</p>
+<div class="tb"><div class="tl">1/4 &mdash; Reconhecimento</div>
+  <div class="qo">
+    <button class="qopt" onclick="e7(1,'cigarra',this)">cigarra</button>
+    <button class="qopt" onclick="e7(1,'peixe',this)">peixe</button>
+    <button class="qopt" onclick="e7(1,'funil',this)">funil</button>
+  </div>
+  <div id="b7-f1" class="fb"></div>
+</div>
+<div class="tb"><div class="tl">2/4 &mdash; Quantas s&iacute;labas?</div>
+  <div class="qo">
+    <button class="qopt" onclick="e7(2,'3',this)">3</button>
+    <button class="qopt" onclick="e7(2,'4',this)">4</button>
+    <button class="qopt" onclick="e7(2,'2',this)">2</button>
+  </div>
+  <div id="b7-f2" class="fb"></div>
+</div>
+<div class="tb"><div class="tl">3/4 &mdash; Reconstr&oacute;i "cigarra"</div>
+  <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin:.75rem 0" id="b7-t3">
+    <button class="syl s3" onclick="et3('ra',this)">ra</button>
+      <button class="syl s2" onclick="et3('gar',this)">gar</button>
+      <button class="syl s1" onclick="et3('ci',this)">ci</button>
+      
+  </div>
+  <div id="b7-t3b" style="min-height:48px;border:2px dashed #92400E;border-radius:12px;padding:.5rem 1rem;margin-bottom:.5rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+    <span style="color:#aaa">s&iacute;labas aqui...</span>
+  </div>
+  <button class="btn bp" onclick="ct3()">&#10003; Verificar</button>
+  <div id="b7-f3" class="fb"></div>
+</div>
+<div class="tb"><div class="tl">4/4 &mdash; Frase com "cigarra"</div>
+  <input type="text" id="b7-t4" placeholder="A tua frase..." style="max-width:100%;margin:.5rem 0">
+  <button class="btn bp" onclick="e7(4,'frase',null)">&#10003; Confirmar</button>
+  <div id="b7-f4" class="fb"></div>
+</div>
+<div id="b7-res" class="rs" style="display:none">
+  <div id="b7-st" style="font-size:1.8rem;letter-spacing:.5rem;margin:.5rem 0"></div>
+  <h3 id="b7-msg" style="font-size:1.4rem"></h3>
+</div>
+</div></div>
+
+<div id="b8" class="blk"><div class="sec">
+<h2>&#127912; Bloco 8 &mdash; Extens&atilde;o</h2>
+<div class="db"><button class="dbt g act" onclick="sdf('b8','g')">&#127802; Com ajuda</button><button class="dbt y" onclick="sdf('b8','y')">&#127803; Objetivo</button><button class="dbt r" onclick="sdf('b8','r')">&#128308; Desafio</button></div>
+<div id="b8-g" class="dc gbg on">&#127802; Contorno pr&eacute;-desenhado.</div>
+<div id="b8-y" class="dc ybg">&#127803; Desenho livre com legenda.</div>
+<div id="b8-r" class="dc rbg">&#128308; Mini-texto. Palavras extra.</div>
+<div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem">
+  <button class="btn bp" onclick="se8('draw')">&#127912; Desenho</button>
+  <button class="btn bs" onclick="se8('explore')">&#128269; Explorar</button>
+  <button class="btn ba" onclick="se8('words')">&#128218; Palavras</button>
+</div>
+<div id="e8-draw" style="display:none;background:#f9f9f9;border-radius:12px;padding:1.5rem;text-align:center">
+  <div style="font-size:5rem">&#129303;</div>
+  <p style="font-weight:700;margin-top:.5rem">Desenha cigarra no caderno!<br>Legenda: <strong>ci-gar-ra</strong></p>
+  <input type="text" placeholder="O meu desenho mostra..." style="max-width:100%;margin-top:1rem">
+</div>
+<div id="e8-explore" style="display:none">
+  <div class="tb"><div class="tl">Explora&ccedil;&atilde;o</div>
+    <div style="display:flex;flex-direction:column;gap:.75rem">
+      <div style="background:white;padding:.75rem;border-radius:8px;border:1px solid #92400E">
+        <p style="font-weight:700">O que &eacute; cigarra?</p>
+        <input type="text" placeholder="cigarra &eacute;..." style="max-width:100%;margin-top:.5rem">
+      </div>
+      <div style="background:white;padding:.75rem;border-radius:8px;border:1px solid #92400E">
+        <p style="font-weight:700">Onde encontras cigarra?</p>
+        <input type="text" placeholder="Encontro cigarra..." style="max-width:100%;margin-top:.5rem">
+      </div>
+    </div>
+  </div>
+</div>
+<div id="e8-words" style="display:none">
+  <div class="tb"><div class="tl">Palavras relacionadas</div>
+    <div id="b8-wl" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem"></div>
+    <div style="display:flex;gap:.5rem">
+      <input type="text" id="b8-wi" placeholder="escreve uma palavra..." style="max-width:220px" onkeydown="if(event.key==='Enter')aw8()">
+      <button class="btn bp" onclick="aw8()">+</button>
+    </div>
+    <p id="b8-wc" style="margin-top:.5rem;font-weight:700;color:#92400E"></p>
+  </div>
+</div>
+</div></div>
+
+</div>
+<div style="text-align:center;padding:1rem;color:#aaa;font-size:.8rem;margin-top:2rem">M28P #26 &mdash; cigarra &middot; PageCraft &middot; 1.&ordm; ano &middot; pt-PT</div>
+
+<script>
+var dv='',b4c=[],b4d=[],b6s=[],b7sc=[null,null,null,null],b7t3=[],ew=[];
+var WORD='cigarra',NSYL=3,PALMAS='3';
+var B6O=["A", "cigarra", "canta", "no", "verao", "."];
+var RW=["cigarra", "garra", "carro", "cara", "caro", "garco", "ciga"];
+var SYLS=["ci", "gar", "ra"];
+var COLORS=["#92400E","#059669","#D97706"];
+var SF={};
+
+window.addEventListener('load',function(){
+  var extras=[['ca','#059669'],['sa','#0284c7'],['ma','#7c3aed'],['la','#d97706'],['ta','#be185d'],['na','#92400e'],['to','#065f46'],['bo','#555']];
+  var cont=document.getElementById('b4-syls');
+  SYLS.forEach(function(s,i){
+    var b=document.createElement('button');b.className='syl';b.style.background=COLORS[i]||COLORS[0];b.style.cursor='pointer';b.textContent=s;
+    b.addEventListener('click',function(){b4c.push(s);document.getElementById('b4-c').textContent=b4c.join('');});
+    cont.appendChild(b);
+  });
+  extras.forEach(function(a){
+    if(SYLS.indexOf(a[0])<0){
+      var b=document.createElement('button');b.className='syl';b.style.background=a[1];b.style.cursor='pointer';b.textContent=a[0];
+      b.addEventListener('click',function(){b4c.push(a[0]);document.getElementById('b4-c').textContent=b4c.join('');});
+      cont.appendChild(b);
+    }
+  });
+});
+
+function showB(id){
+  document.querySelectorAll('.blk').forEach(function(b){b.classList.remove('on');});
+  document.querySelectorAll('.nt').forEach(function(t){t.classList.remove('act');});
+  document.getElementById(id).classList.add('on');
+  var m={b1:0,b2:1,b3:2,b4:3,b5:4,b6:5,b7:6,b8:7};
+  if(m[id]!==undefined)document.querySelectorAll('.nt')[m[id]].classList.add('act');
+  window.scrollTo(0,0);
+}
+function sdf(b,l){
+  ['g','y','r'].forEach(function(x){var e=document.getElementById(b+'-'+x);if(e)e.classList.toggle('on',x===l);});
+  document.querySelectorAll('#'+b+' .dbt').forEach(function(x){x.classList.remove('act');});
+  var btn=document.querySelector('#'+b+' .dbt.'+l);if(btn)btn.classList.add('act');
+}
+function sfb(el,ok,msg){el.className='fb on '+(ok?'ok':'nok');el.textContent=msg;}
+function ci(v,el){
+  document.querySelectorAll('#b2 .ic').forEach(function(c){c.classList.remove('sel');});
+  el.classList.add('sel');el.querySelector('span').textContent=v;
+  sfb(document.getElementById('b2-f1'),v===WORD,v===WORD?'Correto! '+WORD+'!':'Qual combina com "'+WORD+'"?');
+}
+function cw2(v,el){
+  document.querySelectorAll('#b2-t2 .qopt').forEach(function(b){b.disabled=true;});
+  if(v===WORD){el.classList.add('ok');sfb(document.getElementById('b2-f2'),true,'"'+WORD+'" correto!');}
+  else{el.classList.add('err');sfb(document.getElementById('b2-f2'),false,'A palavra e "'+WORD+'".');}
+}
+function drs(e,v){dv=v;}
+function drd(e,id,exp){
+  e.preventDefault();var s=document.getElementById(id);
+  if(dv===exp){
+    s.textContent=dv;s.classList.add('ok');SF[id]=true;
+    var all=true;for(var i=1;i<=NSYL;i++){if(!SF['sl'+i]){all=false;break;}}
+    if(all)sfb(document.getElementById('b3-dfb'),true,SYLS.join('+')+' = '+WORD+'!');
+  }else sfb(document.getElementById('b3-dfb'),false,'Tenta noutra caixa!');
+}
+function cp3(v,el){
+  el.parentNode.querySelectorAll('.qopt').forEach(function(b){b.disabled=true;});
+  if(v===PALMAS){el.classList.add('ok');sfb(document.getElementById('b3-pfb'),true,SYLS.join('-')+' = '+PALMAS+' palma'+(PALMAS==='1'?'':'s')+'!');}
+  else{el.classList.add('err');sfb(document.getElementById('b3-pfb'),false,'Sao '+PALMAS+' palmas!');}
+}
+function cs5(v,gId,fId){
+  document.querySelectorAll('#'+gId+' .qopt').forEach(function(b){b.disabled=true;});
+  var sc=SYLS.length>1?SYLS[1]:SYLS[0];
+  var f=document.getElementById(fId);
+  if(v===sc){el=document.querySelector('#'+gId+' .qopt:not([disabled])');
+    document.querySelectorAll('#'+gId+' .qopt').forEach(function(b){if(b.textContent===v)b.classList.add('ok');});
+    sfb(f,true,'Correto! "'+sc+'" e a silaba certa!');}
+  else{document.querySelectorAll('#'+gId+' .qopt').forEach(function(b){if(b.textContent===v)b.classList.add('err');});sfb(f,false,'A silaba certa e "'+sc+'".');}
+}
+function cg5(v,gId,fId){
+  document.querySelectorAll('#'+gId+' .qopt').forEach(function(b){b.disabled=true;});
+  var f=document.getElementById(fId);
+  if(v===WORD){document.querySelectorAll('#'+gId+' .qopt').forEach(function(b){if(b.textContent===v)b.classList.add('ok');});sfb(f,true,'"'+WORD+'" e a grafia correta!');}
+  else{document.querySelectorAll('#'+gId+' .qopt').forEach(function(b){if(b.textContent===v)b.classList.add('err');});sfb(f,false,'A grafia certa e "'+WORD+'".');}
+}
+function ce5(){
+  var v=document.getElementById('b5-inp').value.trim().toLowerCase();
+  document.getElementById('b5-inf').textContent=v===WORD?'OK':v?'...':'';
+}
+function pw6(el,w){
+  if(el.classList.contains('pl'))return;
+  el.classList.add('pl');b6s.push(w);
+  var c=document.getElementById('b6-s');
+  if(b6s.length===1)c.innerHTML='';
+  var pw=document.createElement('span');pw.className='pw';pw.textContent=w;c.appendChild(pw);
+}
+function ch6(){
+  var built=Array.from(document.getElementById('b6-s').querySelectorAll('.pw')).map(function(e){return e.textContent;});
+  var f=document.getElementById('b6-fb');
+  if(JSON.stringify(built)===JSON.stringify(B6O))sfb(f,true,'Perfeito!');
+  else if(built.length<B6O.length)sfb(f,false,'Usa todas as palavras!');
+  else sfb(f,false,'Ordem incorreta. Recomeca!');
+}
+function rs6(){
+  b6s=[];document.getElementById('b6-s').innerHTML='<span style="color:#aaa;font-style:italic">frase aqui...</span>';
+  document.querySelectorAll('#b6-bk .wc').forEach(function(b){b.classList.remove('pl');});
+  document.getElementById('b6-fb').style.display='none';
+}
+function cf6(){
+  var v=document.getElementById('b6-fp').value.trim(),f=document.getElementById('b6-fpfb');
+  if(!v){sfb(f,false,'Escreve!');return;}
+  var hw=v.toLowerCase().indexOf(WORD)>=0,hm=v[0]===v[0].toUpperCase()&&v[0]!==v[0].toLowerCase(),hp=v.endsWith('.')||v.endsWith('!')||v.endsWith('?');
+  if(hw&&hm&&hp)sfb(f,true,'Frase perfeita com "'+WORD+'"!');
+  else if(!hw)sfb(f,false,'Precisa de ter "'+WORD+'"!');
+  else if(!hm)sfb(f,false,'Comeca com maiuscula!');
+  else sfb(f,false,'Ponto final!');
+}
+var b7t3a=[];
+function e7(t,exp,el){
+  var f=document.getElementById('b7-f'+t);var ok=false;
+  if(t===4){var v=document.getElementById('b7-t4').value.trim();ok=v.toLowerCase().indexOf(WORD)>=0&&v.length>3;sfb(f,ok,ok?'Frase com "'+WORD+'"!':'Precisa de "'+WORD+'".');}
+  else if(exp===WORD||exp===PALMAS){ok=true;el.classList.add('ok');el.parentNode.querySelectorAll('.qopt').forEach(function(b){b.disabled=true;});sfb(f,true,'Correto!');}
+  else{el.classList.add('err');el.parentNode.querySelectorAll('.qopt').forEach(function(b){b.disabled=true;});sfb(f,false,'Tenta de novo!');}
+  if(ok){b7sc[t-1]=1;up7();}
+}
+function et3(s,el){
+  b7t3a.push(s);el.disabled=true;
+  var bd=document.getElementById('b7-t3b');
+  if(b7t3a.length===1)bd.innerHTML='';
+  var i=SYLS.indexOf(s);
+  var sp=document.createElement('span');sp.className='syl';sp.style.background=COLORS[i>=0?i:0];sp.style.fontSize='1.4rem';sp.textContent=s;bd.appendChild(sp);
+}
+function ct3(){
+  var f=document.getElementById('b7-f3');
+  if(b7t3a.join('')===WORD){sfb(f,true,SYLS.join('+')+' = '+WORD+'!');b7sc[2]=1;up7();}
+  else{sfb(f,false,'Ordem: '+SYLS.join('->')+'. Tenta!');b7t3a=[];document.getElementById('b7-t3b').innerHTML='<span style="color:#aaa">silabas aqui...</span>';document.querySelectorAll('#b7-t3 button').forEach(function(b){b.disabled=false;});}
+}
+function up7(){
+  var d=b7sc.filter(function(s){return s===1;}).length;
+  document.getElementById('b7-p').style.width=(d/4*100)+'%';
+  document.getElementById('b7-pt').textContent='Tarefa '+d+' de 4';
+  if(d===4){
+    var r=document.getElementById('b7-res');r.style.display='block';
+    document.getElementById('b7-st').textContent='* * * *';
+    document.getElementById('b7-msg').textContent='Fantastico! Sabes tudo sobre "'+WORD+'"!';
+    r.scrollIntoView({behavior:'smooth'});
+  }
+}
+function se8(t){['draw','explore','words'].forEach(function(x){document.getElementById('e8-'+x).style.display=x===t?'block':'none';});}
+function aw8(){
+  var i=document.getElementById('b8-wi'),v=i.value.trim().toLowerCase();
+  if(!v||ew.indexOf(v)>=0){i.value='';return;}
+  ew.push(v);i.value='';
+  var l=document.getElementById('b8-wl');var sp=document.createElement('span');sp.className='dw';sp.textContent=v;l.appendChild(sp);
+  document.getElementById('b8-wc').textContent=ew.length+' palavra'+(ew.length===1?'':'s')+'!'+(ew.length>=5?' Meta!':'');
+}
+</script>
+</body>
+</html>

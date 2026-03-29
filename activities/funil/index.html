@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M28P #21 — funil | PageCraft</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Nunito','Comic Sans MS',sans-serif;background:#FFFBEB;color:#1E1B18;min-height:100vh}
+  .con{max-width:960px;margin:0 auto;padding:1.5rem}
+  .hdr{text-align:center;padding:2rem 1rem 1rem;background:linear-gradient(135deg,#D97706,#7C3AED);color:white;border-radius:0 0 24px 24px;margin-bottom:2rem}
+  .wd{font-size:4rem;font-weight:800;margin:.5rem 0}.bdg{display:inline-block;background:#F59E0B;color:white;font-weight:700;padding:.25rem .75rem;border-radius:20px}
+  .sec{background:white;border:2px solid #D97706;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.08);padding:1.5rem;margin-bottom:1.5rem}
+  .sec h2{font-size:1.4rem;color:#D97706;margin-bottom:1rem;font-weight:800}
+  .db{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
+  .dbt{padding:.4rem 1rem;border-radius:20px;border:2px solid transparent;font-weight:700;cursor:pointer;font-family:inherit;font-size:.9rem;min-height:40px;transition:all .2s}
+  .dbt.g{background:#dcfce7;color:#166534;border-color:#22c55e}.dbt.y{background:#fef9c3;color:#854d0e;border-color:#F59E0B}.dbt.r{background:#fee2e2;color:#991b1b;border-color:#ef4444}.dbt.act{transform:scale(1.05)}
+  .dc{display:none;padding:.75rem;border-radius:12px;margin-bottom:1rem;line-height:1.6}.dc.on{display:block}
+  .gbg{background:#f0fdf4;border-left:4px solid #22c55e}.ybg{background:#fefce8;border-left:4px solid #F59E0B}.rbg{background:#fef2f2;border-left:4px solid #ef4444}
+  .btn{display:inline-flex;align-items:center;justify-content:center;padding:.75rem 2rem;border-radius:30px;border:none;font-family:inherit;font-weight:700;font-size:1rem;cursor:pointer;min-height:48px;transition:all .2s}
+  .btn:hover{transform:scale(1.05)}.btn:active{transform:scale(.97)}.btn:disabled{opacity:.4}
+  .bp{background:#D97706;color:white}.bs{background:#7C3AED;color:white}.ba{background:#555;color:white}
+  .syl{display:inline-flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800;color:white;padding:.5rem 1.2rem;border-radius:12px;min-height:48px;min-width:64px;border:none;cursor:pointer;transition:all .2s}
+  .s1{background:#D97706}.s2{background:#7C3AED}
+  .wb{font-size:3rem;font-weight:800;color:#D97706;text-align:center;margin:1rem 0}
+  .qo{display:flex;flex-wrap:wrap;gap:.75rem;margin:1rem 0}
+  .qopt{padding:.75rem 1.5rem;border-radius:12px;border:2px solid #D97706;background:white;font-family:inherit;font-size:1.1rem;font-weight:700;cursor:pointer;min-height:48px;transition:all .2s}
+  .qopt:hover{background:#FFFBEB}.qopt.ok{background:#f0fdf4;border-color:#22c55e;color:#166534}.qopt.err{background:#fffbeb;border-color:#F59E0B;color:#92400e}
+  .fb{padding:1rem;border-radius:12px;margin:.75rem 0;font-size:1rem;font-weight:700;display:none}.fb.on{display:block}.fb.ok{background:#f0fdf4;color:#166534;border:2px solid #22c55e}.fb.nok{background:#fffbeb;color:#92400e;border:2px solid #F59E0B}
+  .ds{width:100px;height:60px;border:2px dashed #7C3AED;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;background:#f9f9f9;color:#7C3AED;transition:all .2s}.ds.ok{border-style:solid;border-color:#22c55e;background:#f0fdf4;color:#166534}
+  .tb{background:#FFFBEB;border-radius:12px;padding:1rem;margin:.75rem 0;border:1px solid #F59E0B}.tl{font-size:.8rem;font-weight:700;color:#92400e;text-transform:uppercase;margin-bottom:.5rem}
+  input[type=text]{font-family:inherit;font-size:1rem;padding:.5rem 1rem;border:2px solid #D97706;border-radius:8px;width:100%;max-width:300px;min-height:48px;outline:none}
+  .ic{text-align:center;padding:.75rem;background:#FFFBEB;border-radius:12px;border:2px solid #D97706;cursor:pointer;min-height:72px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.25rem;font-size:.9rem;font-weight:700;transition:all .2s}
+  .ic:hover{transform:scale(1.03)}.ic.sel{background:#f0fdf4;border-color:#22c55e}
+  .wc{padding:.5rem 1rem;border-radius:8px;border:2px solid #D97706;background:white;font-weight:700;font-size:1rem;cursor:pointer;min-height:48px;display:flex;align-items:center;transition:all .2s}
+  .wc.pl{opacity:.4;cursor:not-allowed}.pw{padding:.4rem .75rem;border-radius:8px;background:#D97706;color:white;font-weight:700;font-size:.95rem}
+  .ntabs{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+  .nt{padding:.5rem 1rem;border-radius:30px;border:2px solid #D97706;background:white;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;min-height:44px;transition:all .2s;color:#D97706}
+  .nt.act,.nt:hover{background:#D97706;color:white}.blk{display:none}.blk.on{display:block}
+  .pb{background:#e5e7eb;border-radius:8px;height:10px;margin:1rem 0;overflow:hidden}
+  .pf{background:linear-gradient(90deg,#D97706,#7C3AED);height:100%;border-radius:8px;transition:width .5s}
+  .rs{background:#FFFBEB;border-radius:16px;padding:1.5rem;text-align:center;margin:1rem 0}
+  .dl{margin:.5rem 0;display:flex;flex-wrap:wrap;gap:.5rem}.dw{background:#dcfce7;color:#166534;padding:.2rem .6rem;border-radius:20px;font-weight:700}
+  .ss{display:flex;flex-wrap:wrap;gap:.5rem;padding:.75rem;border:2px dashed #7C3AED;border-radius:12px;min-height:56px;align-items:center}
+  @keyframes fi{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="bdg">M28P #21</div>
+  <div class="wd">🔺 funil</div>
+  <h1 style="font-size:1.8rem">A palavra <em>funil</em></h1>
+  <p style="opacity:.8;margin-top:.5rem">Método das 28 Palavras · 1.º ano</p>
+</div>
+<div class="con">
+<div class="ntabs">
+  <button class="nt act" onclick="showB('b1')">1️⃣ Descoberta</button>
+  <button class="nt" onclick="showB('b2')">2️⃣ Reconhecimento</button>
+  <button class="nt" onclick="showB('b3')">3️⃣ Sílabas</button>
+  <button class="nt" onclick="showB('b4')">4️⃣ Recombinação</button>
+  <button class="nt" onclick="showB('b5')">5️⃣ Escrita</button>
+  <button class="nt" onclick="showB('b6')">6️⃣ Frase</button>
+  <button class="nt" onclick="showB('b7')">7️⃣ Avaliação</button>
+  <button class="nt" onclick="showB('b8')">8️⃣ Extensão</button>
+</div>
+
+<div id="b1" class="blk on"><div class="sec">
+  <h2>✨ Bloco 1 — Descoberta da palavra</h2>
+  <div class="db"><button class="dbt g act" onclick="sdf('b1','g')">🟢 Com ajuda</button><button class="dbt y" onclick="sdf('b1','y')">🟡 Objetivo</button><button class="dbt r" onclick="sdf('b1','r')">🔴 Desafio</button></div>
+  <div id="b1-g" class="dc gbg on">🟢 Palavra visível desde o início.</div>
+  <div id="b1-y" class="dc ybg">🟡 Clica "Mostrar" e lê em voz alta.</div>
+  <div id="b1-r" class="dc rbg">🔴 Escreve antes de revelar.</div>
+  <div style="text-align:center;background:#FFFBEB;border-radius:16px;padding:2rem;margin:1rem 0">
+    <div style="font-size:5rem">🔺</div>
+    <p style="font-size:1.2rem;font-weight:700">Na cozinha há um objeto especial que ajuda a colocar líquidos nas garrafas.<br>Tem uma forma triangular. Como se chama?</p>
+  </div>
+  <div id="c1" style="display:none;text-align:center;padding:1.5rem;background:white;border:3px solid #D97706;border-radius:16px;animation:fi .5s;margin:1rem 0">
+    <div style="font-size:4rem">🔺</div>
+    <div class="wb">funil</div>
+    <div style="display:flex;gap:8px;justify-content:center;align-items:center;margin:1rem 0">
+      <span class="syl s1">fu</span><span style="font-size:2rem;color:#aaa">—</span><span class="syl s2">nil</span>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:1rem">
+    <button class="btn bp" onclick="document.getElementById('c1').style.display='block';this.disabled=true;this.textContent='✅ Revelada!'">🔍 Mostrar a palavra</button>
+  </div>
+</div></div>
+
+<div id="b2" class="blk"><div class="sec">
+  <h2>👁️ Bloco 2 — Reconhecimento global</h2>
+  <div class="db"><button class="dbt g act" onclick="sdf('b2','g')">🟢 Com ajuda</button><button class="dbt y" onclick="sdf('b2','y')">🟡 Objetivo</button><button class="dbt r" onclick="sdf('b2','r')">🔴 Desafio</button></div>
+  <div id="b2-g" class="dc gbg on">🟢 Primeira letra visível.</div>
+  <div id="b2-y" class="dc ybg">🟡 3 opções. Faz as duas tarefas.</div>
+  <div id="b2-r" class="dc rbg">🔴 Justifica em voz alta!</div>
+  <div class="tb"><div class="tl">Tarefa 1 — Vê "funil", clica na imagem</div>
+    <div class="wb" style="font-size:1.8rem">funil</div>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin:1rem 0">
+      <div class="ic" onclick="ci('funil',this)" style="width:120px">🔺<br><span>?</span></div>
+      <div class="ic" onclick="ci('zebra',this)" style="width:120px">🦓<br><span>?</span></div>
+      <div class="ic" onclick="ci('bandeira',this)" style="width:120px">🏳️<br><span>?</span></div>
+    </div>
+    <div id="b2-f1" class="fb"></div>
+  </div>
+  <div class="tb"><div class="tl">Tarefa 2 — Vê 🔺, clica na palavra</div>
+    <div style="font-size:3.5rem;text-align:center;margin:.5rem 0">🔺</div>
+    <div class="qo" id="b2-t2">
+      <button class="qopt" onclick="cw2('funil',this)">funil</button>
+      <button class="qopt" onclick="cw2('zebra',this)">zebra</button>
+      <button class="qopt" onclick="cw2('bandeira',this)">bandeira</button>
+    </div>
+    <div id="b2-f2" class="fb"></div>
+  </div>
+</div></div>
+
+<div id="b3" class="blk"><div class="sec">
+  <h2>🎵 Bloco 3 — Segmentação: fu-nil</h2>
+  <div class="db"><button class="dbt g act" onclick="sdf('b3','g')">🟢 Com ajuda</button><button class="dbt y" onclick="sdf('b3','y')">🟡 Objetivo</button><button class="dbt r" onclick="sdf('b3','r')">🔴 Desafio</button></div>
+  <div id="b3-g" class="dc gbg on">🟢 Blocos pré-posicionados.</div>
+  <div id="b3-y" class="dc ybg">🟡 Arrasta os blocos e conta as palmas.</div>
+  <div id="b3-r" class="dc rbg">🔴 Escreve as sílabas. Explica a coda 'l'.</div>
+  <div class="wb">fu<span style="color:#7C3AED;text-decoration:underline">nil</span></div>
+  <div style="background:#FFFBEB;border-radius:12px;padding:1rem;margin:1rem 0">
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin:1rem 0">
+      <span class="syl s1" draggable="true" ondragstart="drs(event,'fu')">fu</span>
+      <span class="syl s2" draggable="true" ondragstart="drs(event,'nil')">nil</span>
+    </div>
+    <div style="display:flex;gap:1rem;justify-content:center;margin-top:1rem;flex-wrap:wrap">
+      <div><div style="text-align:center;font-weight:700;margin-bottom:.4rem">1</div>
+      <div class="ds" id="sl1" ondragover="event.preventDefault()" ondrop="drd(event,'sl1','fu')">⬇</div></div>
+      <div><div style="text-align:center;font-weight:700;margin-bottom:.4rem">2</div>
+      <div class="ds" id="sl2" ondragover="event.preventDefault()" ondrop="drd(event,'sl2','nil')">⬇</div></div>
+    </div>
+    <div id="b3-dfb" class="fb"></div>
+  </div>
+  <div class="tb"><div class="tl">Quantas palmas? 👏</div>
+    <div class="qo">
+      <button class="qopt" onclick="cp3('1',this)">1</button>
+      <button class="qopt" onclick="cp3('2',this)">2</button>
+      <button class="qopt" onclick="cp3('3',this)">3</button>
+    </div>
+    <div id="b3-pfb" class="fb"></div>
+  </div>
+  <div class="tb" style="background:#EDE9FE"><div class="tl">🌟 Coda consonântica</div>
+    <p>Em 'nil' o 'l' fica no <strong>final</strong> da sílaba — chamamos de <em>coda</em>. Outros exemplos: <strong>sol</strong>, <strong>mel</strong>, <strong>cal</strong>.</p>
+  </div>
+</div></div>
+
+<div id="b4" class="blk"><div class="sec">
+  <h2>🔬 Bloco 4 — Recombinação</h2>
+  <div class="db"><button class="dbt g act" onclick="sdf('b4','g')">🟢 Com ajuda</button><button class="dbt y" onclick="sdf('b4','y')">🟡 Objetivo</button><button class="dbt r" onclick="sdf('b4','r')">🔴 Desafio</button></div>
+  <div id="b4-g" class="dc gbg on">🟢 4 sílabas. Feedback imediato.</div>
+  <div id="b4-y" class="dc ybg">🟡 8 sílabas. Testa livremente.</div>
+  <div id="b4-r" class="dc rbg">🔴 Sem feedback. Lista palavras com 'l' final.</div>
+  <div id="b4-syls" style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem"></div>
+  <div style="padding:1rem;background:#FFFBEB;border-radius:12px;min-height:56px;border:2px dashed #D97706;display:flex;align-items:center;justify-content:center">
+    <span id="b4-c" style="font-size:1.8rem;font-weight:800;color:#D97706">?</span>
+  </div>
+  <div style="display:flex;gap:.75rem;margin:1rem 0;flex-wrap:wrap">
+    <button class="btn bp" onclick="v4()">🔍 É uma palavra?</button>
+    <button class="btn ba" onclick="l4()">🔄 Limpar</button>
+  </div>
+  <div id="b4-fb" class="fb"></div>
+  <div class="dl" id="b4-d"></div>
+</div></div>
+
+<div id="b5" class="blk"><div class="sec">
+  <h2>✏️ Bloco 5 — Leitura e escrita</h2>
+  <div class="db"><button class="dbt g act" onclick="sdf('b5','g')">🟢 Com ajuda</button><button class="dbt y" onclick="sdf('b5','y')">🟡 Objetivo</button><button class="dbt r" onclick="sdf('b5','r')">🔴 Desafio</button></div>
+  <div id="b5-g" class="dc gbg on">🟢 2 opções. Modelo visível.</div>
+  <div id="b5-y" class="dc ybg">🟡 4 opções. Copia no caderno.</div>
+  <div id="b5-r" class="dc rbg">🔴 Escreve de memória.</div>
+  <div class="tb"><div class="tl">Tarefa 1 — Sílaba em falta</div>
+    <div style="text-align:center;margin:1rem 0">
+      <span style="font-size:2rem;font-weight:800;color:#D97706">fu</span>
+      <span style="font-size:2rem;font-weight:800;color:#ccc">___</span>
+      <span style="font-size:2rem">🔺</span>
+    </div>
+    <div class="qo" id="b5-t1">
+      <button class="qopt" onclick="cs5('nil','b5-t1','b5-f1')">nil</button>
+      <button class="qopt" onclick="cs5('mil','b5-t1','b5-f1')">mil</button>
+      <button class="qopt" onclick="cs5('ril','b5-t1','b5-f1')">ril</button>
+      <button class="qopt" onclick="cs5('fil','b5-t1','b5-f1')">fil</button>
+    </div>
+    <div id="b5-f1" class="fb"></div>
+  </div>
+  <div class="tb"><div class="tl">Tarefa 2 — Grafia correta</div>
+    <div style="font-size:3.5rem;text-align:center;margin:.5rem 0">🔺</div>
+    <div class="qo" id="b5-t2">
+      <button class="qopt" onclick="cg5('funil','b5-t2','b5-f2')">funil</button>
+      <button class="qopt" onclick="cg5('fonil','b5-t2','b5-f2')">fonil</button>
+      <button class="qopt" onclick="cg5('funir','b5-t2','b5-f2')">funir</button>
+      <button class="qopt" onclick="cg5('funis','b5-t2','b5-f2')">funis</button>
+    </div>
+    <div id="b5-f2" class="fb"></div>
+  </div>
+  <div class="tb"><div class="tl">Tarefa 3 — Escreve</div>
+    <p style="margin-bottom:.5rem">Copia: <strong style="color:#D97706">funil</strong></p>
+    <div style="display:flex;gap:.75rem;align-items:center">
+      <input type="text" id="b5-inp" placeholder="escreve aqui..." oninput="ce5()" aria-label="Escreve funil">
+      <span id="b5-inf" style="font-size:1.4rem"></span>
+    </div>
+  </div>
+</div></div>
+
+<div id="b6" class="blk"><div class="sec">
+  <h2>📝 Bloco 6 — Frase: "O funil é útil."</h2>
+  <div class="db"><button class="dbt g act" onclick="sdf('b6','g')">🟢 Com ajuda</button><button class="dbt y" onclick="sdf('b6','y')">🟡 Objetivo</button><button class="dbt r" onclick="sdf('b6','r')">🔴 Desafio</button></div>
+  <div id="b6-g" class="dc gbg on">🟢 3 elementos. Modelo visível.</div>
+  <div id="b6-y" class="dc ybg">🟡 5 elementos. Frase própria no caderno.</div>
+  <div id="b6-r" class="dc rbg">🔴 2 frases. Usa adjetivo!</div>
+  <div style="background:#FFFBEB;border-radius:12px;padding:1rem;text-align:center;margin-bottom:1rem">
+    <p style="font-size:1.4rem;font-weight:800">O funil é útil. 🔺</p>
+    <p style="font-size:.85rem;color:#666">Aa Maiúscula | . Ponto final</p>
+  </div>
+  <div class="tb"><div class="tl">Ordena as palavras</div>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem" id="b6-bk">
+      <button class="wc" onclick="pw6(this,'é')">é</button>
+      <button class="wc" onclick="pw6(this,'O')">O</button>
+      <button class="wc" onclick="pw6(this,'.')">.</button>
+      <button class="wc" onclick="pw6(this,'funil')">funil</button>
+      <button class="wc" onclick="pw6(this,'útil')">útil</button>
+    </div>
+    <div class="ss" id="b6-s"><span style="color:#aaa;font-style:italic">frase aqui…</span></div>
+    <div style="display:flex;gap:.5rem;margin-top:.75rem">
+      <button class="btn bp" onclick="ch6()">✅ Verificar</button>
+      <button class="btn ba" onclick="rs6()">🔄 Recomeçar</button>
+    </div>
+    <div id="b6-fb" class="fb"></div>
+  </div>
+  <div class="tb"><div class="tl">A tua frase com "funil"</div>
+    <input type="text" id="b6-fp" placeholder="Escreve a tua frase..." style="max-width:100%;margin-bottom:.75rem" aria-label="Frase própria">
+    <button class="btn bs" onclick="cf6()">💬 Verificar</button>
+    <div id="b6-fpfb" class="fb"></div>
+  </div>
+</div></div>
+
+<div id="b7" class="blk"><div class="sec">
+  <h2>⭐ Bloco 7 — Mini-avaliação</h2>
+  <div class="db"><button class="dbt g act" onclick="sdf('b7','g')">🟢 Com ajuda</button><button class="dbt y" onclick="sdf('b7','y')">🟡 Objetivo</button><button class="dbt r" onclick="sdf('b7','r')">🔴 Desafio</button></div>
+  <div id="b7-g" class="dc gbg on">🟢 Imagem presente. Frase oral aceite.</div>
+  <div id="b7-y" class="dc ybg">🟡 Como descrito.</div>
+  <div id="b7-r" class="dc rbg">🔴 Sem modelo.</div>
+  <div class="pb"><div class="pf" id="b7-p" style="width:0%"></div></div>
+  <p style="text-align:center;font-weight:700" id="b7-pt">Tarefa 0 de 4</p>
+  <div class="tb"><div class="tl">1/4 — Reconhecimento</div>
+    <p>Qual palavra vai com 🔺?</p>
+    <div class="qo">
+      <button class="qopt" onclick="e7(1,'funil',this)">funil</button>
+      <button class="qopt" onclick="e7(1,'zebra',this)">zebra</button>
+      <button class="qopt" onclick="e7(1,'bandeira',this)">bandeira</button>
+    </div>
+    <div id="b7-f1" class="fb"></div>
+  </div>
+  <div class="tb"><div class="tl">2/4 — Quantas sílabas?</div>
+    <div class="qo">
+      <button class="qopt" onclick="e7(2,'2',this)">2</button>
+      <button class="qopt" onclick="e7(2,'3',this)">3</button>
+      <button class="qopt" onclick="e7(2,'1',this)">1</button>
+    </div>
+    <div id="b7-f2" class="fb"></div>
+  </div>
+  <div class="tb"><div class="tl">3/4 — Reconstrói "funil"</div>
+    <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin:.75rem 0" id="b7-t3">
+      <button class="syl s2" onclick="et3('nil',this)">nil</button>
+      <button class="syl s1" onclick="et3('fu',this)">fu</button>
+    </div>
+    <div id="b7-t3b" style="min-height:48px;border:2px dashed #D97706;border-radius:12px;padding:.5rem 1rem;margin-bottom:.5rem;display:flex;gap:.5rem;align-items:center">
+      <span style="color:#aaa">sílabas aqui…</span>
+    </div>
+    <button class="btn bp" onclick="ct3()">✅ Verificar</button>
+    <div id="b7-f3" class="fb"></div>
+  </div>
+  <div class="tb"><div class="tl">4/4 — Frase com "funil"</div>
+    <input type="text" id="b7-t4" placeholder="A tua frase..." style="max-width:100%;margin:.5rem 0" aria-label="Frase funil">
+    <button class="btn bp" onclick="e7(4,'frase',null)">✅ Confirmar</button>
+    <div id="b7-f4" class="fb"></div>
+  </div>
+  <div id="b7-res" class="rs" style="display:none">
+    <div id="b7-st" style="font-size:1.8rem;letter-spacing:.5rem;margin:.5rem 0"></div>
+    <h3 id="b7-msg" style="font-size:1.4rem"></h3>
+  </div>
+</div></div>
+
+<div id="b8" class="blk"><div class="sec">
+  <h2>🎨 Bloco 8 — Extensão</h2>
+  <div class="db"><button class="dbt g act" onclick="sdf('b8','g')">🟢 Com ajuda</button><button class="dbt y" onclick="sdf('b8','y')">🟡 Objetivo</button><button class="dbt r" onclick="sdf('b8','r')">🔴 Desafio</button></div>
+  <div id="b8-g" class="dc gbg on">🟢 Contorno pré-desenhado.</div>
+  <div id="b8-y" class="dc ybg">🟡 Desenho livre com legenda.</div>
+  <div id="b8-r" class="dc rbg">🔴 Mini-texto. Palavras com 'l' final.</div>
+  <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem">
+    <button class="btn bp" onclick="se8('draw')">🎨 Desenho</button>
+    <button class="btn bs" onclick="se8('explore')">🔍 Para que serve?</button>
+    <button class="btn ba" onclick="se8('words')">📚 Palavras 'l'</button>
+  </div>
+  <div id="e8-draw" style="display:none;background:#FFFBEB;border-radius:12px;padding:1.5rem;text-align:center">
+    <div style="font-size:5rem">🔺</div>
+    <p style="font-weight:700;margin-top:.5rem">Desenha um funil no caderno!<br>Legenda: <strong>fu-nil</strong></p>
+    <p style="font-size:.9rem;color:#666;margin-top:.5rem">Dica: o funil tem uma parte larga em cima e uma parte estreita em baixo!</p>
+    <input type="text" placeholder="O meu funil serve para..." style="max-width:100%;margin-top:1rem">
+  </div>
+  <div id="e8-explore" style="display:none">
+    <div class="tb"><div class="tl">Para que serve o funil?</div>
+      <div style="display:flex;flex-direction:column;gap:.75rem">
+        <div style="background:white;padding:.75rem;border-radius:8px;border:1px solid #D97706">
+          <p style="font-weight:700">🔺 O que é um funil?</p>
+          <input type="text" placeholder="Um funil é..." style="max-width:100%;margin-top:.5rem">
+        </div>
+        <div style="background:white;padding:.75rem;border-radius:8px;border:1px solid #D97706">
+          <p style="font-weight:700">🍶 Para que serve?</p>
+          <input type="text" placeholder="O funil serve para..." style="max-width:100%;margin-top:.5rem">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="e8-words" style="display:none">
+    <div class="tb"><div class="tl">Palavras com 'l' no final</div>
+      <p style="margin-bottom:1rem">Conheces palavras que terminam em 'l'? (ex: sol, mel, funil...)</p>
+      <div id="b8-wl" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem"></div>
+      <div style="display:flex;gap:.5rem">
+        <input type="text" id="b8-wi" placeholder="palavra com 'l' final..." style="max-width:220px" onkeydown="if(event.key==='Enter')aw8()">
+        <button class="btn bp" onclick="aw8()">+</button>
+      </div>
+      <p id="b8-wc" style="margin-top:.5rem;font-weight:700;color:#D97706"></p>
+    </div>
+  </div>
+</div></div>
+
+</div>
+<div style="text-align:center;padding:1rem;color:#aaa;font-size:.8rem;margin-top:2rem">M28P #21 — funil · PageCraft · 1.º ano · pt-PT</div>
+
+<script>
+var dv='',b4c=[],b4d=[],b6s=[],b7sc=[null,null,null,null],b7t3=[],ew=[];
+var b6o=['O','funil','é','útil','.'];
+var rw=['funil','fio','mil','sal','sol','fila','vila','nulo','fino','fado'];
+var sF={};
+
+function showB(id){
+  document.querySelectorAll('.blk').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.nt').forEach(t=>t.classList.remove('act'));
+  document.getElementById(id).classList.add('on');
+  var m={b1:0,b2:1,b3:2,b4:3,b5:4,b6:5,b7:6,b8:7};
+  if(m[id]!==undefined)document.querySelectorAll('.nt')[m[id]].classList.add('act');
+  window.scrollTo(0,0);
+}
+function sdf(b,l){
+  ['g','y','r'].forEach(x=>{var e=document.getElementById(b+'-'+x);if(e)e.classList.toggle('on',x===l);});
+  document.querySelectorAll('#'+b+' .dbt').forEach(b=>b.classList.remove('act'));
+  var btn=document.querySelector('#'+b+' .dbt.'+l);if(btn)btn.classList.add('act');
+}
+function sfb(el,ok,msg){el.className='fb on '+(ok?'ok':'nok');el.textContent=msg;}
+function ci(v,el){
+  document.querySelectorAll('#b2 .ic').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');el.querySelector('span').textContent=v;
+  sfb(document.getElementById('b2-f1'),v==='funil',v==='funil'?'✓ funil é a palavra certa!':'✗ Qual combina com "funil"?');
+}
+function cw2(v,el){
+  document.querySelectorAll('#b2-t2 .qopt').forEach(b=>b.disabled=true);
+  var f=document.getElementById('b2-f2');
+  if(v==='funil'){el.classList.add('ok');sfb(f,true,'✓ "funil" correto!');}
+  else{el.classList.add('err');sfb(f,false,'✗ A palavra é "funil".');}
+}
+function drs(e,v){dv=v;}
+function drd(e,id,exp){
+  e.preventDefault();var s=document.getElementById(id);
+  if(dv===exp){s.textContent=dv;s.classList.add('ok');sF[id]=true;
+    if(sF.sl1&&sF.sl2)sfb(document.getElementById('b3-dfb'),true,'✓ fu+nil = funil!');}
+  else sfb(document.getElementById('b3-dfb'),false,'✗ Tenta noutra caixa!');
+}
+function cp3(v,el){
+  el.parentNode.querySelectorAll('.qopt').forEach(b=>b.disabled=true);
+  var f=document.getElementById('b3-pfb');
+  if(v==='2'){el.classList.add('ok');sfb(f,true,'✓ fu-nil = 2 palmas!');}
+  else{el.classList.add('err');sfb(f,false,'✗ fu(👏)-nil(👏) = 2!');}
+}
+window.addEventListener('load',function(){
+  var extra=[['ca','#059669'],['sa','#0284c7'],['ma','#7c3aed'],['la','#d97706'],['ta','#be185d'],['na','#92400e'],['to','#065f46'],['bo','#555']];
+  var cont=document.getElementById('b4-syls');
+  [['fu','#D97706'],['nil','#7C3AED']].forEach(function(a){
+    var b=document.createElement('button');b.className='syl';b.style.background=a[1];b.style.cursor='pointer';b.textContent=a[0];
+    b.addEventListener('click',function(){b4c.push(a[0]);document.getElementById('b4-c').textContent=b4c.join('');});
+    cont.appendChild(b);
+  });
+  extra.forEach(function(a){
+    var b=document.createElement('button');b.className='syl';b.style.background=a[1];b.style.cursor='pointer';b.textContent=a[0];
+    b.addEventListener('click',function(){b4c.push(a[0]);document.getElementById('b4-c').textContent=b4c.join('');});
+    cont.appendChild(b);
+  });
+});
+function v4(){
+  var w=b4c.join(''),f=document.getElementById('b4-fb');if(!w)return;
+  if(rw.indexOf(w)>=0){sfb(f,true,'✓ "'+w+'" é palavra real!');if(b4d.indexOf(w)<0){b4d.push(w);var d=document.getElementById('b4-d');var sp=document.createElement('span');sp.className='dw';sp.textContent=w;d.appendChild(sp);}}
+  else sfb(f,false,'✗ "'+w+'" não é uma palavra. Tenta!');
+}
+function l4(){b4c=[];document.getElementById('b4-c').textContent='?';document.getElementById('b4-fb').style.display='none';}
+function cs5(v,g,fid){
+  document.querySelectorAll('#'+g+' .qopt').forEach(b=>b.disabled=true);
+  var f=document.getElementById(fid);
+  if(v==='nil'){document.querySelector('#'+g+' [onclick*="nil"]').classList.add('ok');sfb(f,true,'✓ "nil" com coda "l" é a sílaba certa!');}
+  else{var bt=document.querySelector('#'+g+' [onclick*="\''+v+'\'"]');if(bt)bt.classList.add('err');sfb(f,false,'✗ A sílaba certa é "nil".');}
+}
+function cg5(v,g,fid){
+  document.querySelectorAll('#'+g+' .qopt').forEach(b=>b.disabled=true);
+  var f=document.getElementById(fid);
+  if(v==='funil'){document.querySelector('#'+g+' [onclick*="funil"]').classList.add('ok');sfb(f,true,'✓ "funil" é a grafia correta!');}
+  else{var bt=document.querySelector('#'+g+' [onclick*="\''+v+'\'"]');if(bt)bt.classList.add('err');sfb(f,false,'✗ A grafia certa é "funil".');}
+}
+function ce5(){
+  var v=document.getElementById('b5-inp').value.trim().toLowerCase();
+  document.getElementById('b5-inf').textContent=v==='funil'?'✅':v?'✏️':'';
+}
+function pw6(el,w){
+  if(el.classList.contains('pl'))return;
+  el.classList.add('pl');b6s.push(w);
+  var c=document.getElementById('b6-s');
+  if(b6s.length===1)c.innerHTML='';
+  var pw=document.createElement('span');pw.className='pw';pw.textContent=w;c.appendChild(pw);
+}
+function ch6(){
+  var built=Array.from(document.getElementById('b6-s').querySelectorAll('.pw')).map(e=>e.textContent);
+  var f=document.getElementById('b6-fb');
+  if(JSON.stringify(built)===JSON.stringify(b6o))sfb(f,true,'✓ Perfeito!');
+  else if(built.length<5)sfb(f,false,'✗ Usa todas as palavras!');
+  else sfb(f,false,'✗ Ordem incorreta. Recomeça!');
+}
+function rs6(){
+  b6s=[];document.getElementById('b6-s').innerHTML='<span style="color:#aaa;font-style:italic">frase aqui…</span>';
+  document.querySelectorAll('#b6-bk .wc').forEach(b=>b.classList.remove('pl'));
+  document.getElementById('b6-fb').style.display='none';
+}
+function cf6(){
+  var v=document.getElementById('b6-fp').value.trim(),f=document.getElementById('b6-fpfb');
+  if(!v){sfb(f,false,'✗ Escreve!');return;}
+  var hw=v.toLowerCase().indexOf('funil')>=0,hm=v[0]===v[0].toUpperCase()&&v[0]!==v[0].toLowerCase(),hp=v.endsWith('.')||v.endsWith('!')||v.endsWith('?');
+  if(hw&&hm&&hp)sfb(f,true,'✓ Frase perfeita com "funil"!');
+  else if(!hw)sfb(f,false,'✗ Precisa de ter "funil"!');
+  else if(!hm)sfb(f,false,'✗ Começa com maiúscula!');
+  else sfb(f,false,'✗ Ponto final!');
+}
+var b7t3a=[];
+function e7(t,exp,el){
+  var f=document.getElementById('b7-f'+t);var ok=false;
+  if(t===4){var v=document.getElementById('b7-t4').value.trim();ok=v.toLowerCase().indexOf('funil')>=0&&v.length>3;sfb(f,ok,ok?'✓ Frase com "funil"!':'✗ Precisa de "funil".');}
+  else if(exp==='funil'||exp==='2'){ok=true;el.classList.add('ok');el.parentNode.querySelectorAll('.qopt').forEach(b=>b.disabled=true);sfb(f,true,'✓ Correto!');}
+  else{el.classList.add('err');el.parentNode.querySelectorAll('.qopt').forEach(b=>b.disabled=true);sfb(f,false,'✗ Tenta de novo!');}
+  if(ok){b7sc[t-1]=1;up7();}
+}
+function et3(s,el){
+  b7t3a.push(s);el.disabled=true;
+  var bd=document.getElementById('b7-t3b');
+  if(b7t3a.length===1)bd.innerHTML='';
+  var sp=document.createElement('span');sp.className='syl '+(s==='fu'?'s1':'s2');sp.style.fontSize='1.4rem';sp.textContent=s;bd.appendChild(sp);
+}
+function ct3(){
+  var f=document.getElementById('b7-f3');
+  if(b7t3a.join('')==='funil'){sfb(f,true,'✓ fu+nil=funil!');b7sc[2]=1;up7();}
+  else{sfb(f,false,'✗ Ordem: fu→nil');b7t3a=[];document.getElementById('b7-t3b').innerHTML='<span style="color:#aaa">sílabas aqui…</span>';document.querySelectorAll('#b7-t3 button').forEach(b=>b.disabled=false);}
+}
+function up7(){
+  var d=b7sc.filter(s=>s===1).length;
+  document.getElementById('b7-p').style.width=(d/4*100)+'%';
+  document.getElementById('b7-pt').textContent='Tarefa '+d+' de 4';
+  if(d===4){var r=document.getElementById('b7-res');r.style.display='block';document.getElementById('b7-st').textContent='⭐⭐⭐⭐';document.getElementById('b7-msg').textContent='Fantástico! Sabes tudo sobre "funil"! 🔺🎉';r.scrollIntoView({behavior:'smooth'});}
+}
+function se8(t){['draw','explore','words'].forEach(x=>document.getElementById('e8-'+x).style.display=x===t?'block':'none');}
+function aw8(){
+  var i=document.getElementById('b8-wi'),v=i.value.trim().toLowerCase();
+  if(!v||ew.indexOf(v)>=0){i.value='';return;}
+  ew.push(v);i.value='';
+  var l=document.getElementById('b8-wl');var sp=document.createElement('span');sp.className='dw';sp.textContent=v;l.appendChild(sp);
+  document.getElementById('b8-wc').textContent=ew.length+' palavra'+(ew.length===1?'':'s')+'!'+(ew.length>=5?' 🌟':'');
+}
+</script>
+</body>
+</html>
