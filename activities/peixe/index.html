@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M28P #25 — peixe | PageCraft</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Nunito','Comic Sans MS',sans-serif;background:#FFF8F0;color:#1E1B18;min-height:100vh}
+  h1,h2,h3{font-weight:800}
+  .container{max-width:960px;margin:0 auto;padding:1.5rem}
+  .header{text-align:center;padding:2rem 1rem 1rem;background:linear-gradient(135deg,#E05FA0,#7C3AED);color:white;border-radius:0 0 24px 24px;margin-bottom:2rem}
+  .header h1{font-size:2.5rem;margin-bottom:.5rem}
+  .header .word-display{font-size:4rem;font-weight:800;letter-spacing:.05em;margin:.5rem 0}
+  .header .badge{display:inline-block;background:#F59E0B;color:white;font-weight:700;padding:.25rem .75rem;border-radius:20px;font-size:1rem}
+  .section{background:white;border:2px solid #E05FA0;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.08);padding:1.5rem;margin-bottom:1.5rem}
+  .section h2{font-size:1.5rem;color:#E05FA0;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+  .diff-bar{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
+  .diff-btn{padding:.4rem 1rem;border-radius:20px;border:2px solid transparent;font-weight:700;cursor:pointer;font-family:inherit;font-size:.9rem;min-height:40px;transition:all .2s}
+  .diff-btn.green{background:#dcfce7;color:#166534;border-color:#22c55e}
+  .diff-btn.yellow{background:#fef9c3;color:#854d0e;border-color:#F59E0B}
+  .diff-btn.red{background:#fee2e2;color:#991b1b;border-color:#ef4444}
+  .diff-btn.active{transform:scale(1.05);box-shadow:0 2px 8px rgba(0,0,0,.2)}
+  .diff-content{display:none;padding:.75rem;border-radius:12px;margin-bottom:1rem;font-size:1rem;line-height:1.6}
+  .diff-content.green-bg{background:#f0fdf4;border-left:4px solid #22c55e}
+  .diff-content.yellow-bg{background:#fefce8;border-left:4px solid #F59E0B}
+  .diff-content.red-bg{background:#fef2f2;border-left:4px solid #ef4444}
+  .diff-content.show{display:block}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.75rem 2rem;border-radius:30px;border:none;font-family:inherit;font-weight:700;font-size:1rem;cursor:pointer;min-height:48px;min-width:48px;transition:all .2s}
+  .btn:hover{transform:scale(1.05)}
+  .btn:active{transform:scale(.97)}
+  .btn-primary{background:#E05FA0;color:white;box-shadow:0 2px 8px rgba(224,95,160,.3)}
+  .btn-secondary{background:#7C3AED;color:white;box-shadow:0 2px 8px rgba(124,58,237,.3)}
+  .btn-accent{background:#F59E0B;color:white}
+  .btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+  .syllable-block{display:inline-flex;align-items:center;justify-content:center;font-size:2.2rem;font-weight:800;color:white;padding:.5rem 1.2rem;border-radius:12px;cursor:grab;min-height:48px;min-width:72px;user-select:none;transition:all .2s}
+  .syllable-block:active{cursor:grabbing;transform:scale(1.1)}
+  .syl-pei{background:#E05FA0}
+  .syl-xe{background:#7C3AED}
+  .word-big{font-size:3rem;font-weight:800;color:#E05FA0;letter-spacing:.05em;text-align:center;margin:1rem 0}
+  .quiz-options{display:flex;flex-wrap:wrap;gap:.75rem;margin:1rem 0}
+  .quiz-opt{padding:.75rem 1.5rem;border-radius:12px;border:2px solid #E05FA0;background:white;font-family:inherit;font-size:1.1rem;font-weight:700;cursor:pointer;min-height:48px;transition:all .2s}
+  .quiz-opt:hover{background:#FFF0F8;transform:scale(1.02)}
+  .quiz-opt.correct{background:#f0fdf4;border-color:#22c55e;color:#166534}
+  .quiz-opt.incorrect{background:#fffbeb;border-color:#F59E0B;color:#92400e}
+  .feedback{padding:1rem;border-radius:12px;margin:.75rem 0;font-size:1.1rem;font-weight:700;display:none}
+  .feedback.show{display:block}
+  .feedback.ok{background:#f0fdf4;color:#166534;border:2px solid #22c55e}
+  .feedback.nok{background:#fffbeb;color:#92400e;border:2px solid #F59E0B}
+  .drag-zone{display:flex;flex-wrap:wrap;gap:.75rem;padding:1rem;border:2px dashed #E05FA0;border-radius:12px;min-height:80px;align-items:center}
+  .drag-slot{width:110px;height:64px;border:2px dashed #7C3AED;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;background:#F8F0FF;color:#7C3AED;transition:all .2s}
+  .drag-slot.filled{border-style:solid;border-color:#22c55e;background:#f0fdf4;color:#166534}
+  .fish-emoji{font-size:4rem;display:block;text-align:center;margin:1rem 0;animation:swim 3s ease-in-out infinite}
+  @keyframes swim{0%,100%{transform:translateX(0)}50%{transform:translateX(12px)}}
+  .progress-bar{background:#e5e7eb;border-radius:8px;height:12px;margin:1rem 0;overflow:hidden}
+  .progress-fill{background:linear-gradient(90deg,#E05FA0,#7C3AED);height:100%;border-radius:8px;transition:width .5s}
+  .stars{font-size:2rem;text-align:center;letter-spacing:.5rem;margin:.5rem 0}
+  .syllable-word{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin:1.5rem 0}
+  .task-block{background:#FFF8F0;border-radius:12px;padding:1rem;margin:.75rem 0;border:1px solid #F59E0B}
+  .task-label{font-size:.85rem;font-weight:700;color:#92400e;text-transform:uppercase;margin-bottom:.5rem}
+  input[type=text]{font-family:inherit;font-size:1.1rem;padding:.5rem 1rem;border:2px solid #E05FA0;border-radius:8px;width:100%;max-width:320px;min-height:48px;outline:none}
+  input[type=text]:focus{border-color:#7C3AED;box-shadow:0 0 0 3px rgba(124,58,237,.2)}
+  .image-card{text-align:center;padding:1rem;background:#F0F8FF;border-radius:12px;border:2px solid #E05FA0;cursor:pointer;transition:all .2s;min-height:80px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem;font-size:1rem;font-weight:700}
+  .image-card:hover{transform:scale(1.03);background:#e0f0ff}
+  .image-card.selected{background:#f0fdf4;border-color:#22c55e}
+  .sentence-slot{display:flex;flex-wrap:wrap;gap:.5rem;padding:.75rem;border:2px dashed #7C3AED;border-radius:12px;min-height:64px;align-items:center}
+  .word-card{padding:.5rem 1rem;border-radius:8px;border:2px solid #E05FA0;background:white;font-weight:700;font-size:1.1rem;cursor:pointer;min-height:48px;display:flex;align-items:center;transition:all .2s}
+  .word-card:hover{background:#FFF0F8;transform:scale(1.03)}
+  .word-card.placed{opacity:.4;cursor:not-allowed}
+  .placed-word{padding:.4rem .8rem;border-radius:8px;background:#7C3AED;color:white;font-weight:700;font-size:1rem;cursor:pointer;transition:all .2s}
+  .placed-word:hover{background:#E05FA0}
+  .nav-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+  .nav-tab{padding:.6rem 1.2rem;border-radius:30px;border:2px solid #E05FA0;background:white;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;min-height:48px;transition:all .2s;color:#E05FA0}
+  .nav-tab.active,.nav-tab:hover{background:#E05FA0;color:white}
+  .block-content{display:none}
+  .block-content.active{display:block}
+  .result-summary{background:linear-gradient(135deg,#FFF0F8,#F0E8FF);border-radius:16px;padding:1.5rem;text-align:center;margin:1rem 0}
+  .combination-area{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;justify-content:center;margin:1rem 0}
+  .discovered-list{margin:.5rem 0;display:flex;flex-wrap:wrap;gap:.5rem}
+  .discovered-word{background:#dcfce7;color:#166534;padding:.25rem .75rem;border-radius:20px;font-weight:700;font-size:1rem}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="badge">M28P #25</div>
+  <div class="word-display">🐟 peixe</div>
+  <h1>A palavra <em>peixe</em></h1>
+  <p style="font-size:1rem;opacity:.9">Método das 28 Palavras · 1.º ano</p>
+</div>
+<div class="container">
+
+<!-- NAV TABS -->
+<div class="nav-tabs" role="tablist">
+  <button class="nav-tab active" onclick="showBlock('b1')" role="tab">1️⃣ Descoberta</button>
+  <button class="nav-tab" onclick="showBlock('b2')" role="tab">2️⃣ Reconhecimento</button>
+  <button class="nav-tab" onclick="showBlock('b3')" role="tab">3️⃣ Sílabas</button>
+  <button class="nav-tab" onclick="showBlock('b4')" role="tab">4️⃣ Recombinação</button>
+  <button class="nav-tab" onclick="showBlock('b5')" role="tab">5️⃣ Escrita</button>
+  <button class="nav-tab" onclick="showBlock('b6')" role="tab">6️⃣ Frase</button>
+  <button class="nav-tab" onclick="showBlock('b7')" role="tab">7️⃣ Avaliação</button>
+  <button class="nav-tab" onclick="showBlock('b8')" role="tab">8️⃣ Extensão</button>
+</div>
+
+<!-- BLOCO 1 — DESCOBERTA -->
+<div id="b1" class="block-content active">
+  <div class="section">
+    <h2>🌊 Bloco 1 — Descoberta da palavra</h2>
+    <div class="diff-bar">
+      <button class="diff-btn green active" onclick="showDiff('b1','green')">🟢 Com ajuda</button>
+      <button class="diff-btn yellow" onclick="showDiff('b1','yellow')">🟡 Objetivo</button>
+      <button class="diff-btn red" onclick="showDiff('b1','red')">🔴 Desafio</button>
+    </div>
+    <div id="b1-green" class="diff-content green-bg show">🟢 A palavra está visível desde o início, sublinhada a azul. Ouve a história e aponta para o peixe!</div>
+    <div id="b1-yellow" class="diff-content yellow-bg">🟡 Lê a micro-história. Clica em "Mostrar a palavra" para revelar o cartaz e lê em voz alta para o teu par.</div>
+    <div id="b1-red" class="diff-content red-bg">🔴 Antes de clicar, escreve no caderno o que achas que é a palavra. Depois compara com o cartaz!</div>
+
+    <div style="text-align:center;background:#E0F4FF;border-radius:16px;padding:2rem;margin:1rem 0;position:relative;overflow:hidden">
+      <div style="position:absolute;top:10px;left:20px;font-size:1.5rem;opacity:.4">🫧</div>
+      <div style="position:absolute;top:30px;right:30px;font-size:1rem;opacity:.4">🫧</div>
+      <div style="position:absolute;bottom:15px;left:40px;font-size:.8rem;opacity:.3">🫧</div>
+      <span class="fish-emoji">🐟</span>
+      <p style="font-size:1.3rem;font-weight:700;color:#1E5FA0;margin:.5rem 0">Olha para o aquário!<br>Há um animal a nadar.<br>Como se chama?</p>
+    </div>
+
+    <div id="palavra-cartaz" style="display:none;text-align:center;padding:1.5rem;background:white;border:3px solid #E05FA0;border-radius:16px;animation:fadeIn .5s;margin:1rem 0">
+      <span class="fish-emoji" style="animation:none">🐟</span>
+      <div class="word-big">peixe</div>
+      <div class="syllable-word">
+        <span class="syllable-block syl-pei">pei</span>
+        <span style="font-size:2rem;font-weight:800;color:#aaa">—</span>
+        <span class="syllable-block syl-xe">xe</span>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:1rem">
+      <button class="btn btn-primary" onclick="revelarPalavra()" id="btn-revelar">🔍 Mostrar a palavra</button>
+    </div>
+  </div>
+</div>
+
+<!-- BLOCO 2 — RECONHECIMENTO -->
+<div id="b2" class="block-content">
+  <div class="section">
+    <h2>👁️ Bloco 2 — Reconhecimento global</h2>
+    <div class="diff-bar">
+      <button class="diff-btn green active" onclick="showDiff('b2','green')">🟢 Com ajuda</button>
+      <button class="diff-btn yellow" onclick="showDiff('b2','yellow')">🟡 Objetivo</button>
+      <button class="diff-btn red" onclick="showDiff('b2','red')">🔴 Desafio</button>
+    </div>
+    <div id="b2-green" class="diff-content green-bg show">🟢 As imagens têm a primeira letra visível. Os distratores são bem diferentes da palavra "peixe".</div>
+    <div id="b2-yellow" class="diff-content yellow-bg">🟡 Três opções sem apoio. Faz as duas tarefas em sequência.</div>
+    <div id="b2-red" class="diff-content red-bg">🔴 Quatro opções com palavras parecidas ("pexe", "peixo"). Justifica em voz alta por que as outras estão erradas!</div>
+
+    <!-- Tarefa 1: palavra→imagem -->
+    <div class="task-block" id="b2-t1">
+      <div class="task-label">Tarefa 1 — Vê a palavra, clica na imagem certa</div>
+      <div class="word-big" style="font-size:2rem;margin:.5rem 0">peixe</div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin:1rem 0">
+        <div class="image-card" onclick="checkImage('peixe',this)" style="width:140px">🐟<br><span>?</span></div>
+        <div class="image-card" onclick="checkImage('passarinho',this)" style="width:140px">🐦<br><span>?</span></div>
+        <div class="image-card" onclick="checkImage('rato',this)" style="width:140px">🐭<br><span>?</span></div>
+      </div>
+      <div id="b2-fb1" class="feedback"></div>
+    </div>
+
+    <!-- Tarefa 2: imagem→palavra -->
+    <div class="task-block" id="b2-t2">
+      <div class="task-label">Tarefa 2 — Vê a imagem, clica na palavra certa</div>
+      <div style="font-size:4rem;text-align:center;margin:.5rem 0">🐟</div>
+      <div class="quiz-options" id="b2-t2-opts">
+        <button class="quiz-opt" onclick="checkWord2('peixe',this)">peixe</button>
+        <button class="quiz-opt" onclick="checkWord2('passarinho',this)">passarinho</button>
+        <button class="quiz-opt" onclick="checkWord2('funil',this)">funil</button>
+      </div>
+      <div id="b2-fb2" class="feedback"></div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOCO 3 — SÍLABAS -->
+<div id="b3" class="block-content">
+  <div class="section">
+    <h2>🎵 Bloco 3 — Segmentação silábica</h2>
+    <div class="diff-bar">
+      <button class="diff-btn green active" onclick="showDiff('b3','green')">🟢 Com ajuda</button>
+      <button class="diff-btn yellow" onclick="showDiff('b3','yellow')">🟡 Objetivo</button>
+      <button class="diff-btn red" onclick="showDiff('b3','red')">🔴 Desafio</button>
+    </div>
+    <div id="b3-green" class="diff-content green-bg show">🟢 Os blocos já estão pré-posicionados. Confirma arrastando para as caixas. A divisão já está visível!</div>
+    <div id="b3-yellow" class="diff-content yellow-bg">🟡 Arrasta os dois blocos para as caixas, conta as palmas e clica no ditongo.</div>
+    <div id="b3-red" class="diff-content red-bg">🔴 Escreve as sílabas nos campos de texto. Explica o que é um ditongo. Encontra outro "ei" em palavras já aprendidas!</div>
+
+    <div class="word-big">p<span style="color:#E05FA0;text-decoration:underline">ei</span>xe</div>
+
+    <div style="background:#FFF0F8;border-radius:12px;padding:1rem;margin:1rem 0">
+      <p style="font-weight:700;margin-bottom:.75rem">Bate palmas e divide a palavra em sílabas:</p>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;justify-content:center;margin:1rem 0">
+        <span class="syllable-block syl-pei" draggable="true" ondragstart="dragStart(event,'pei')" id="drag-pei">pei</span>
+        <span class="syllable-block syl-xe" draggable="true" ondragstart="dragStart(event,'xe')" id="drag-xe">xe</span>
+      </div>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1rem">
+        <div>
+          <div style="font-weight:700;text-align:center;margin-bottom:.4rem;color:#7C3AED">Sílaba 1</div>
+          <div class="drag-slot" id="slot1" ondragover="event.preventDefault()" ondrop="dropSyl(event,'slot1','pei')">⬇</div>
+        </div>
+        <div>
+          <div style="font-weight:700;text-align:center;margin-bottom:.4rem;color:#7C3AED">Sílaba 2</div>
+          <div class="drag-slot" id="slot2" ondragover="event.preventDefault()" ondrop="dropSyl(event,'slot2','xe')">⬇</div>
+        </div>
+      </div>
+      <div id="b3-drag-fb" class="feedback"></div>
+    </div>
+
+    <div class="task-block">
+      <div class="task-label">Quantas palmas? 👏</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="checkPalmas('1',this)">1 👏</button>
+        <button class="quiz-opt" onclick="checkPalmas('2',this)">2 👏👏</button>
+        <button class="quiz-opt" onclick="checkPalmas('3',this)">3 👏👏👏</button>
+        <button class="quiz-opt" onclick="checkPalmas('4',this)">4 👏👏👏👏</button>
+      </div>
+      <div id="b3-palmas-fb" class="feedback"></div>
+    </div>
+
+    <div class="task-block" style="background:#E8F4FF">
+      <div class="task-label">🌟 O ditongo "ei"</div>
+      <p style="margin-bottom:.75rem">O ditongo <strong>ei</strong> tem dois sons (e+i) que caminham juntos na mesma sílaba!</p>
+      <div style="text-align:center">
+        <button class="btn btn-secondary" onclick="mostrarDitongo()">✨ Iluminar o ditongo "ei"</button>
+      </div>
+      <div id="b3-ditongo" style="display:none;margin-top:1rem;text-align:center;background:#F0E8FF;border-radius:12px;padding:1rem">
+        <div style="font-size:2.5rem;font-weight:800;color:#7C3AED;animation:pulse 1s ease-in-out 3">ei ✨</div>
+        <p style="color:#7C3AED;font-weight:700">Dois sons juntos! "e" + "i" = "ei"</p>
+        <p style="color:#555;margin-top:.5rem">Outros exemplos: r<strong>ei</strong>, l<strong>ei</strong>, m<strong>ei</strong>a</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOCO 4 — RECOMBINAÇÃO -->
+<div id="b4" class="block-content">
+  <div class="section">
+    <h2>🔬 Bloco 4 — Recombinação</h2>
+    <div class="diff-bar">
+      <button class="diff-btn green active" onclick="showDiff('b4','green')">🟢 Com ajuda</button>
+      <button class="diff-btn yellow" onclick="showDiff('b4','yellow')">🟡 Objetivo</button>
+      <button class="diff-btn red" onclick="showDiff('b4','red')">🔴 Desafio</button>
+    </div>
+    <div id="b4-green" class="diff-content green-bg show">🟢 Apenas 4 sílabas disponíveis (pei, xe, lei, rei). Feedback imediato com cores.</div>
+    <div id="b4-yellow" class="diff-content yellow-bg">🟡 Oito sílabas disponíveis. Testa combinações livremente!</div>
+    <div id="b4-red" class="diff-content red-bg">🔴 Todas as sílabas sem feedback imediato. Lista por escrito 3 palavras com "ei" que já conheces!</div>
+
+    <p style="margin-bottom:1rem;font-weight:700">Clica nas sílabas para combinar palavras. É uma palavra real? 🤔</p>
+
+    <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem" id="b4-syllables">
+      <button class="syllable-block syl-pei" onclick="addSyl('pei',this)" style="cursor:pointer">pei</button>
+      <button class="syllable-block syl-xe" onclick="addSyl('xe',this)" style="cursor:pointer">xe</button>
+      <button class="syllable-block" style="background:#059669;cursor:pointer" onclick="addSyl('lei',this)">lei</button>
+      <button class="syllable-block" style="background:#0284c7;cursor:pointer" onclick="addSyl('rei',this)">rei</button>
+      <button class="syllable-block" style="background:#d97706;cursor:pointer" onclick="addSyl('a',this)">a</button>
+      <button class="syllable-block" style="background:#dc2626;cursor:pointer" onclick="addSyl('ra',this)">ra</button>
+      <button class="syllable-block" style="background:#7c3aed;cursor:pointer" onclick="addSyl('mei',this)">mei</button>
+      <button class="syllable-block" style="background:#be185d;cursor:pointer" onclick="addSyl('to',this)">to</button>
+    </div>
+
+    <div class="combination-area" id="b4-combo" style="padding:1rem;background:#FFF0F8;border-radius:12px;min-height:60px;border:2px dashed #E05FA0">
+      <span id="b4-combo-text" style="font-size:2rem;font-weight:800;color:#E05FA0;min-width:80px;text-align:center">?</span>
+    </div>
+
+    <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin:1rem 0">
+      <button class="btn btn-primary" onclick="checkCombo()">🔍 É uma palavra?</button>
+      <button class="btn btn-secondary" onclick="clearCombo()">🔄 Limpar</button>
+    </div>
+    <div id="b4-fb" class="feedback"></div>
+
+    <div style="margin-top:1rem">
+      <p style="font-weight:700;margin-bottom:.5rem">✅ Palavras descobertas:</p>
+      <div class="discovered-list" id="b4-discovered"></div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOCO 5 — ESCRITA -->
+<div id="b5" class="block-content">
+  <div class="section">
+    <h2>✏️ Bloco 5 — Leitura e escrita</h2>
+    <div class="diff-bar">
+      <button class="diff-btn green active" onclick="showDiff('b5','green')">🟢 Com ajuda</button>
+      <button class="diff-btn yellow" onclick="showDiff('b5','yellow')">🟡 Objetivo</button>
+      <button class="diff-btn red" onclick="showDiff('b5','red')">🔴 Desafio</button>
+    </div>
+    <div id="b5-green" class="diff-content green-bg show">🟢 A sílaba em falta está destacada na palavra modelo. Apenas 2 opções de grafia.</div>
+    <div id="b5-yellow" class="diff-content yellow-bg">🟡 Quatro opções em todas as tarefas. Copia depois no caderno!</div>
+    <div id="b5-red" class="diff-content red-bg">🔴 Sem imagem de apoio. Escreve a palavra de memória. Encontra "xe" noutras palavras: "enxada", "baixo".</div>
+
+    <!-- Tarefa 1: sílaba em falta -->
+    <div class="task-block">
+      <div class="task-label">Tarefa 1 — Qual é a sílaba em falta?</div>
+      <div style="text-align:center;margin:1rem 0">
+        <span style="font-size:2.5rem;font-weight:800;color:#E05FA0">pei</span>
+        <span style="font-size:2.5rem;font-weight:800;color:#ccc">___</span>
+        <span style="font-size:2rem;margin-left:.5rem">🐟</span>
+      </div>
+      <div class="quiz-options" id="b5-t1-opts">
+        <button class="quiz-opt" onclick="checkSilaba('xe',this)">xe</button>
+        <button class="quiz-opt" onclick="checkSilaba('che',this)">che</button>
+        <button class="quiz-opt" onclick="checkSilaba('se',this)">se</button>
+        <button class="quiz-opt" onclick="checkSilaba('je',this)">je</button>
+      </div>
+      <div id="b5-t1-fb" class="feedback"></div>
+    </div>
+
+    <!-- Tarefa 2: grafia correta -->
+    <div class="task-block">
+      <div class="task-label">Tarefa 2 — Qual a grafia correta?</div>
+      <div style="font-size:3rem;text-align:center;margin:.5rem 0">🐟</div>
+      <div class="quiz-options" id="b5-t2-opts">
+        <button class="quiz-opt" onclick="checkGrafia('peixe',this)">peixe</button>
+        <button class="quiz-opt" onclick="checkGrafia('peixhe',this)">peixhe</button>
+        <button class="quiz-opt" onclick="checkGrafia('pexe',this)">pexe</button>
+        <button class="quiz-opt" onclick="checkGrafia('peise',this)">peise</button>
+      </div>
+      <div id="b5-t2-fb" class="feedback"></div>
+    </div>
+
+    <!-- Tarefa 3: escrever -->
+    <div class="task-block">
+      <div class="task-label">Tarefa 3 — Escreve a palavra</div>
+      <p style="margin-bottom:.5rem">Copia a palavra: <strong style="color:#E05FA0">peixe</strong></p>
+      <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap">
+        <input type="text" id="b5-input" placeholder="escreve aqui..." oninput="checkEscrita()" aria-label="Escreve peixe">
+        <span id="b5-input-fb" style="font-size:1.5rem"></span>
+      </div>
+      <div style="margin-top:.5rem;background:#F0E8FF;border-radius:8px;padding:.5rem .75rem;display:inline-block">
+        <span style="font-size:.9rem;font-weight:700;color:#7C3AED">💡 "xe" = dígrafo (x+e), um som só!</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOCO 6 — FRASE -->
+<div id="b6" class="block-content">
+  <div class="section">
+    <h2>📝 Bloco 6 — Frase: "O peixe nada."</h2>
+    <div class="diff-bar">
+      <button class="diff-btn green active" onclick="showDiff('b6','green')">🟢 Com ajuda</button>
+      <button class="diff-btn yellow" onclick="showDiff('b6','yellow')">🟡 Objetivo</button>
+      <button class="diff-btn red" onclick="showDiff('b6','red')">🔴 Desafio</button>
+    </div>
+    <div id="b6-green" class="diff-content green-bg show">🟢 Apenas 3 elementos para ordenar. A frase modelo está sempre visível.</div>
+    <div id="b6-yellow" class="diff-content yellow-bg">🟡 Quatro elementos para ordenar. Escreve a tua própria frase com 3-5 palavras no caderno.</div>
+    <div id="b6-red" class="diff-content red-bg">🔴 Cria 2 frases diferentes com "peixe". Usa um adjetivo! Sublinha sujeito e predicado.</div>
+
+    <div style="background:#E0F4FF;border-radius:12px;padding:1rem;margin-bottom:1rem;text-align:center">
+      <p style="font-size:1.5rem;font-weight:800;color:#1E5FA0">O peixe nada. 🐟</p>
+      <p style="font-size:.9rem;color:#666;margin-top:.25rem">
+        <span style="color:#E05FA0">Aa</span> Maiúscula no início &nbsp;|&nbsp;
+        <span style="color:#7C3AED">.</span> Ponto no fim
+      </p>
+    </div>
+
+    <div class="task-block">
+      <div class="task-label">Ordena as palavras para formar a frase</div>
+      <p style="font-size:.9rem;margin-bottom:.75rem">Clica nas palavras pela ordem certa:</p>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem" id="b6-word-bank">
+        <button class="word-card" onclick="placeWord('nada',this)" id="wc-nada">nada</button>
+        <button class="word-card" onclick="placeWord('O',this)" id="wc-O">O</button>
+        <button class="word-card" onclick="placeWord('.',this)" id="wc-dot">.</button>
+        <button class="word-card" onclick="placeWord('peixe',this)" id="wc-peixe">peixe</button>
+      </div>
+      <div class="sentence-slot" id="b6-sentence" style="min-height:56px;justify-content:center">
+        <span style="color:#aaa;font-style:italic">a frase aparece aqui…</span>
+      </div>
+      <div style="display:flex;gap:.5rem;margin-top:.75rem">
+        <button class="btn btn-primary" onclick="checkSentence()">✅ Verificar frase</button>
+        <button class="btn btn-secondary" onclick="resetSentence()">🔄 Recomeçar</button>
+      </div>
+      <div id="b6-fb" class="feedback"></div>
+    </div>
+
+    <div class="task-block">
+      <div class="task-label">A tua própria frase com "peixe"</div>
+      <input type="text" id="b6-frase" placeholder="Escreve a tua frase aqui..." style="max-width:100%;margin-bottom:.75rem" aria-label="Escreve a tua frase">
+      <button class="btn btn-accent" onclick="checkFrasePropria()">💬 Verificar</button>
+      <div id="b6-frase-fb" class="feedback"></div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOCO 7 — MINI-AVALIAÇÃO -->
+<div id="b7" class="block-content">
+  <div class="section">
+    <h2>⭐ Bloco 7 — Mini-avaliação</h2>
+    <div class="diff-bar">
+      <button class="diff-btn green active" onclick="showDiff('b7','green')">🟢 Com ajuda</button>
+      <button class="diff-btn yellow" onclick="showDiff('b7','yellow')">🟡 Objetivo</button>
+      <button class="diff-btn red" onclick="showDiff('b7','red')">🔴 Desafio</button>
+    </div>
+    <div id="b7-green" class="diff-content green-bg show">🟢 A imagem do peixe está presente em todas as tarefas. Tarefa 4: podes ditar ao professor.</div>
+    <div id="b7-yellow" class="diff-content yellow-bg">🟡 Faz todas as tarefas como descrito. Escreve a frase no caderno ou no campo de texto.</div>
+    <div id="b7-red" class="diff-content red-bg">🔴 Frase sem modelo ou apoio. Bónus: encontra 1 palavra com "ei" visível na sala e diz a um colega!</div>
+
+    <div class="progress-bar"><div class="progress-fill" id="b7-progress" style="width:0%"></div></div>
+    <p style="text-align:center;font-weight:700;color:#7C3AED" id="b7-prog-text">Tarefa 0 de 4</p>
+
+    <!-- T1 -->
+    <div class="task-block" id="b7-t1-block">
+      <div class="task-label">1/4 — Reconhecimento global</div>
+      <p>Qual é a palavra que vai com esta imagem? 🐟</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="evalTask(1,'peixe',this)">peixe</button>
+        <button class="quiz-opt" onclick="evalTask(1,'passarinho',this)">passarinho</button>
+        <button class="quiz-opt" onclick="evalTask(1,'funil',this)">funil</button>
+      </div>
+      <div id="b7-t1-fb" class="feedback"></div>
+    </div>
+    <!-- T2 -->
+    <div class="task-block" id="b7-t2-block">
+      <div class="task-label">2/4 — Segmentação silábica</div>
+      <p>Quantas sílabas tem "peixe"?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="evalTask(2,'2',this)">2 sílabas</button>
+        <button class="quiz-opt" onclick="evalTask(2,'3',this)">3 sílabas</button>
+        <button class="quiz-opt" onclick="evalTask(2,'4',this)">4 sílabas</button>
+      </div>
+      <div id="b7-t2-fb" class="feedback"></div>
+    </div>
+    <!-- T3 -->
+    <div class="task-block" id="b7-t3-block">
+      <div class="task-label">3/4 — Reconstituição</div>
+      <p>Ordena as sílabas para escrever "peixe":</p>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin:.75rem 0" id="b7-t3-bank">
+        <button class="syllable-block syl-xe" style="cursor:pointer" onclick="evalT3('xe',this)">xe</button>
+        <button class="syllable-block syl-pei" style="cursor:pointer" onclick="evalT3('pei',this)">pei</button>
+      </div>
+      <div id="b7-t3-built" style="min-height:48px;border:2px dashed #E05FA0;border-radius:12px;padding:.5rem 1rem;margin-bottom:.5rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+        <span style="color:#aaa">sílabas aqui…</span>
+      </div>
+      <button class="btn btn-primary" onclick="checkT3()">✅ Verificar</button>
+      <div id="b7-t3-fb" class="feedback"></div>
+    </div>
+    <!-- T4 -->
+    <div class="task-block" id="b7-t4-block">
+      <div class="task-label">4/4 — Frase com "peixe"</div>
+      <p>Escreve uma frase com a palavra "peixe":</p>
+      <input type="text" id="b7-t4-input" placeholder="A tua frase aqui..." style="max-width:100%;margin:.5rem 0" aria-label="Escreve a tua frase">
+      <button class="btn btn-primary" onclick="evalTask(4,'frase',null)">✅ Confirmar</button>
+      <div id="b7-t4-fb" class="feedback"></div>
+    </div>
+
+    <div id="b7-result" class="result-summary" style="display:none">
+      <div id="b7-stars" class="stars"></div>
+      <h3 id="b7-msg" style="font-size:1.5rem;margin:.5rem 0"></h3>
+      <p id="b7-detail" style="color:#555"></p>
+    </div>
+  </div>
+</div>
+
+<!-- BLOCO 8 — EXTENSÃO -->
+<div id="b8" class="block-content">
+  <div class="section">
+    <h2>🎨 Bloco 8 — Extensão</h2>
+    <div class="diff-bar">
+      <button class="diff-btn green active" onclick="showDiff('b8','green')">🟢 Com ajuda</button>
+      <button class="diff-btn yellow" onclick="showDiff('b8','yellow')">🟡 Objetivo</button>
+      <button class="diff-btn red" onclick="showDiff('b8','red')">🔴 Desafio</button>
+    </div>
+    <div id="b8-green" class="diff-content green-bg show">🟢 Desenho com contorno pré-desenhado para colorir. Escreve apenas "peixe" como legenda.</div>
+    <div id="b8-yellow" class="diff-content yellow-bg">🟡 Desenho livre com legenda "peixe". Responde a 2 perguntas no caderno. Faz o mini-livro com o teu par!</div>
+    <div id="b8-red" class="diff-content red-bg">🔴 Mini-texto de 2-3 frases. Lista 5 palavras com "ei". Pesquisa o nome de 3 peixes diferentes!</div>
+
+    <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem" id="b8-options">
+      <button class="btn btn-primary" onclick="showExtension('draw')" id="ext-draw-btn">🎨 Desenho e legenda</button>
+      <button class="btn btn-secondary" onclick="showExtension('oral')" id="ext-oral-btn">🗣️ Exploração oral</button>
+      <button class="btn btn-accent" onclick="showExtension('words')" id="ext-words-btn">📚 Palavras com "ei"</button>
+    </div>
+
+    <div id="ext-draw" style="display:none">
+      <div style="background:#E0F4FF;border-radius:12px;padding:1.5rem;text-align:center">
+        <div style="font-size:6rem;margin-bottom:1rem">🐟</div>
+        <p style="font-weight:700;color:#1E5FA0;margin-bottom:1rem">Desenha um peixe no teu caderno e escreve a legenda:<br><strong>peixe</strong></p>
+        <p style="font-size:.9rem;color:#555">Podes usar lápis de cor! Que cores vai ter o teu peixe? 🌈</p>
+      </div>
+      <div style="margin-top:1rem">
+        <p style="font-weight:700;margin-bottom:.5rem">Conta-nos sobre o teu peixe:</p>
+        <input type="text" id="b8-legenda" placeholder="O meu peixe é..." style="max-width:100%" aria-label="Descreve o teu peixe">
+      </div>
+    </div>
+
+    <div id="ext-oral" style="display:none">
+      <div class="task-block">
+        <div class="task-label">Perguntas sobre o peixe</div>
+        <p style="margin-bottom:1rem">Responde com um par ou escreve as respostas:</p>
+        <div style="display:flex;flex-direction:column;gap:.75rem">
+          <div style="background:white;border-radius:8px;padding:.75rem;border:1px solid #E05FA0">
+            <p style="font-weight:700">🌊 Onde vive o peixe?</p>
+            <input type="text" placeholder="O peixe vive..." style="max-width:100%;margin-top:.5rem" aria-label="Onde vive o peixe">
+          </div>
+          <div style="background:white;border-radius:8px;padding:.75rem;border:1px solid #E05FA0">
+            <p style="font-weight:700">🍽️ O que come o peixe?</p>
+            <input type="text" placeholder="O peixe come..." style="max-width:100%;margin-top:.5rem" aria-label="O que come">
+          </div>
+          <div style="background:white;border-radius:8px;padding:.75rem;border:1px solid #E05FA0">
+            <p style="font-weight:700">🏊 Como se move o peixe?</p>
+            <input type="text" placeholder="O peixe move-se..." style="max-width:100%;margin-top:.5rem" aria-label="Como se move">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="ext-words" style="display:none">
+      <div class="task-block">
+        <div class="task-label">Palavras com ditongo "ei"</div>
+        <p style="margin-bottom:1rem">Conheces outras palavras com "ei"? Escreve quantas conseguires! (ex: rei, lei, meia...)</p>
+        <div id="b8-words-list" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem"></div>
+        <div style="display:flex;gap:.5rem;align-items:center">
+          <input type="text" id="b8-word-input" placeholder="palavra com 'ei'..." style="max-width:240px" aria-label="Palavra com ei" onkeydown="if(event.key==='Enter')addEiWord()">
+          <button class="btn btn-primary" onclick="addEiWord()">➕ Adicionar</button>
+        </div>
+        <p id="b8-word-count" style="margin-top:.5rem;font-weight:700;color:#7C3AED"></p>
+      </div>
+    </div>
+
+    <div style="background:#FFF0F8;border-radius:12px;padding:1rem;margin-top:1rem;border:2px solid #E05FA0">
+      <p style="font-weight:800;color:#E05FA0;margin-bottom:.5rem">📖 Mini-livro Maker!</p>
+      <p>Dobra uma folha A4 ao meio duas vezes → 4 páginas:</p>
+      <ol style="margin-left:1.2rem;margin-top:.5rem;line-height:2">
+        <li><strong>Capa:</strong> título + desenho do peixe</li>
+        <li><strong>P.1:</strong> pei - xe (sílabas)</li>
+        <li><strong>P.2:</strong> a tua frase favorita</li>
+        <li><strong>P.3:</strong> uma palavra nova que aprendi hoje</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<div style="text-align:center;padding:1rem;color:#aaa;font-size:.85rem;margin-top:2rem">
+  M28P #25 — peixe · PageCraft · 1.º ano · pt-PT
+</div>
+
+<style>
+@keyframes fadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+</style>
+
+<script>
+// State
+var b4CurrentCombo = [];
+var b4Discovered = [];
+var b6Sentence = [];
+var b6Order = ['O','peixe','nada','.'];
+var b7Scores = [null,null,null,null];
+var b7T3Built = [];
+var eiWords = [];
+
+// Navigation
+function showBlock(id){
+  document.querySelectorAll('.block-content').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  var tabs = document.querySelectorAll('.nav-tab');
+  var map = {b1:0,b2:1,b3:2,b4:3,b5:4,b6:5,b7:6,b8:7};
+  if(map[id]!==undefined) tabs[map[id]].classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// Differentiation
+function showDiff(block, level){
+  var levels = ['green','yellow','red'];
+  levels.forEach(function(l){
+    var el = document.getElementById(block+'-'+l);
+    if(el) el.classList.toggle('show', l===level);
+  });
+  document.querySelectorAll('#'+block+' .diff-btn').forEach(function(b){b.classList.remove('active')});
+  var btn = document.querySelector('#'+block+' .diff-btn.'+level);
+  if(btn) btn.classList.add('active');
+}
+
+// Block 1
+function revelarPalavra(){
+  document.getElementById('palavra-cartaz').style.display='block';
+  document.getElementById('btn-revelar').disabled=true;
+  document.getElementById('btn-revelar').textContent='✅ Palavra revelada!';
+}
+
+// Block 2
+function checkImage(val, el){
+  document.querySelectorAll('#b2-t1 .image-card').forEach(function(c){c.classList.remove('selected')});
+  el.classList.add('selected');
+  el.querySelector('span').textContent = val;
+  var fb = document.getElementById('b2-fb1');
+  if(val==='peixe'){
+    showFeedback(fb, true, '✓ Muito bem! O 🐟 é um peixe!');
+  } else {
+    showFeedback(fb, false, '✗ Não é bem esse. Olha para a palavra "peixe" — qual das imagens combina?');
+  }
+}
+function checkWord2(val, el){
+  document.querySelectorAll('#b2-t2-opts .quiz-opt').forEach(function(b){b.disabled=true});
+  var fb = document.getElementById('b2-fb2');
+  if(val==='peixe'){
+    el.classList.add('correct');
+    showFeedback(fb, true, '✓ Excelente! "peixe" é a palavra certa para 🐟!');
+  } else {
+    el.classList.add('incorrect');
+    showFeedback(fb, false, '✗ Quase! A palavra "peixe" tem as letras p-e-i-x-e.');
+  }
+}
+
+// Block 3 — drag
+var draggingVal = '';
+function dragStart(e, val){ draggingVal=val; }
+function dropSyl(e, slotId, expected){
+  e.preventDefault();
+  var slot = document.getElementById(slotId);
+  if(draggingVal===expected){
+    slot.textContent = draggingVal;
+    slot.classList.add('filled');
+    checkDragComplete();
+  } else {
+    showFeedback(document.getElementById('b3-drag-fb'), false, '✗ Tenta noutra caixa!');
+  }
+}
+function checkDragComplete(){
+  var s1 = document.getElementById('slot1').classList.contains('filled');
+  var s2 = document.getElementById('slot2').classList.contains('filled');
+  if(s1 && s2){
+    showFeedback(document.getElementById('b3-drag-fb'), true, '✓ Perfeito! pei + xe = peixe! 🎉');
+  }
+}
+function checkPalmas(val, el){
+  document.querySelectorAll('#b3 .task-block:nth-child(2) .quiz-opt').forEach(function(b){b.disabled=true});
+  var fb = document.getElementById('b3-palmas-fb');
+  if(val==='2'){
+    el.classList.add('correct');
+    showFeedback(fb, true, '✓ Sim! "pei-xe" = 2 sílabas = 2 palmas! 👏👏');
+  } else {
+    el.classList.add('incorrect');
+    showFeedback(fb, false, '✗ Conta devagar: pei (👏) - xe (👏) = 2!');
+  }
+}
+function mostrarDitongo(){
+  document.getElementById('b3-ditongo').style.display='block';
+}
+
+// Block 4 — recombination
+var realWords = ['peixe','rei','lei','meia','pei','xe','ra','to','ca','sa','mei','raio','teia'];
+function addSyl(syl, el){
+  b4CurrentCombo.push(syl);
+  document.getElementById('b4-combo-text').textContent = b4CurrentCombo.join('');
+}
+function clearCombo(){
+  b4CurrentCombo=[];
+  document.getElementById('b4-combo-text').textContent='?';
+  document.getElementById('b4-fb').style.display='none';
+}
+function checkCombo(){
+  var word = b4CurrentCombo.join('');
+  if(!word || word==='?'){return;}
+  var fb = document.getElementById('b4-fb');
+  var isReal = realWords.indexOf(word)>=0;
+  if(isReal){
+    showFeedback(fb, true, '✓ "'+word+'" é uma palavra real! 🌟');
+    if(b4Discovered.indexOf(word)<0){
+      b4Discovered.push(word);
+      updateDiscovered();
+    }
+  } else {
+    showFeedback(fb, false, '✗ "'+word+'" não é uma palavra do português. Tenta outra combinação!');
+  }
+}
+function updateDiscovered(){
+  var container = document.getElementById('b4-discovered');
+  container.innerHTML='';
+  b4Discovered.forEach(function(w){
+    var span = document.createElement('span');
+    span.className='discovered-word';
+    span.textContent='✓ '+w;
+    container.appendChild(span);
+  });
+}
+
+// Block 5
+function checkSilaba(val, el){
+  document.querySelectorAll('#b5-t1-opts .quiz-opt').forEach(function(b){b.disabled=true});
+  var fb = document.getElementById('b5-t1-fb');
+  if(val==='xe'){
+    el.classList.add('correct');
+    showFeedback(fb, true, '✓ Correto! "pei" + "xe" = peixe! O dígrafo "xe" faz o som /sh/.');
+  } else {
+    el.classList.add('incorrect');
+    showFeedback(fb, false, '✗ A sílaba correta é "xe". "peixe" escreve-se com x e e (xe), não com "'+val+'".');
+  }
+}
+function checkGrafia(val, el){
+  document.querySelectorAll('#b5-t2-opts .quiz-opt').forEach(function(b){b.disabled=true});
+  var fb = document.getElementById('b5-t2-fb');
+  if(val==='peixe'){
+    el.classList.add('correct');
+    showFeedback(fb, true, '✓ Exato! A única grafia correta é "peixe" com "xe"!');
+  } else {
+    el.classList.add('incorrect');
+    showFeedback(fb, false, '✗ A grafia correta é "peixe". Atenção ao dígrafo "xe"!');
+  }
+}
+function checkEscrita(){
+  var val = document.getElementById('b5-input').value.trim().toLowerCase();
+  var indicator = document.getElementById('b5-input-fb');
+  if(val==='peixe'){indicator.textContent='✅';}
+  else if(val.length>0){indicator.textContent='✏️';}
+  else{indicator.textContent='';}
+}
+
+// Block 6 — sentence
+function placeWord(word, el){
+  if(el.classList.contains('placed')) return;
+  el.classList.add('placed');
+  b6Sentence.push(word);
+  var container = document.getElementById('b6-sentence');
+  if(b6Sentence.length===1){container.innerHTML='';}
+  var pw = document.createElement('span');
+  pw.className='placed-word';
+  pw.textContent=word;
+  pw.onclick=function(){removeWord(word,pw,el)};
+  container.appendChild(pw);
+}
+function removeWord(word, pw, origBtn){
+  b6Sentence = b6Sentence.filter(function(w,i){
+    var idx = b6Sentence.indexOf(word);
+    return i!==idx || (b6Sentence.splice(idx,1) && false);
+  });
+  // simpler: rebuild
+  origBtn.classList.remove('placed');
+  pw.remove();
+  if(b6Sentence.length===0){
+    document.getElementById('b6-sentence').innerHTML='<span style="color:#aaa;font-style:italic">a frase aparece aqui…</span>';
+  }
+}
+function checkSentence(){
+  var built = Array.from(document.getElementById('b6-sentence').querySelectorAll('.placed-word')).map(function(el){return el.textContent});
+  var fb = document.getElementById('b6-fb');
+  if(JSON.stringify(built)===JSON.stringify(b6Order)){
+    showFeedback(fb, true, '✓ Perfeito! "O peixe nada." — maiúscula e ponto! 🌟');
+  } else if(built.length<4){
+    showFeedback(fb, false, '✗ A frase ainda não está completa. Usa todas as palavras!');
+  } else {
+    showFeedback(fb, false, '✗ A ordem não está certa. Recomeça e pensa: quem? faz o quê?');
+  }
+}
+function resetSentence(){
+  b6Sentence=[];
+  document.getElementById('b6-sentence').innerHTML='<span style="color:#aaa;font-style:italic">a frase aparece aqui…</span>';
+  document.querySelectorAll('#b6-word-bank .word-card').forEach(function(b){b.classList.remove('placed')});
+  document.getElementById('b6-fb').style.display='none';
+}
+function checkFrasePropria(){
+  var val = document.getElementById('b6-frase').value.trim();
+  var fb = document.getElementById('b6-frase-fb');
+  if(!val){showFeedback(fb, false, '✗ Escreve uma frase!'); return;}
+  var hasPeixe = val.toLowerCase().indexOf('peixe')>=0;
+  var hasMaiuscula = val[0]===val[0].toUpperCase() && val[0]!==val[0].toLowerCase();
+  var hasPonto = val.endsWith('.')||val.endsWith('!')||val.endsWith('?');
+  if(hasPeixe && hasMaiuscula && hasPonto){
+    showFeedback(fb, true, '✓ Fantástico! A tua frase tem "peixe", começa com maiúscula e termina com ponto! 🌟');
+  } else if(!hasPeixe){
+    showFeedback(fb, false, '✗ A frase precisa de ter a palavra "peixe"!');
+  } else if(!hasMaiuscula){
+    showFeedback(fb, false, '✗ Lembra-te: a frase começa com letra maiúscula! (Aa)');
+  } else if(!hasPonto){
+    showFeedback(fb, false, '✗ Não te esqueças do ponto final! (.)');
+  } else {
+    showFeedback(fb, true, '✓ Muito bem! Frase com "peixe" ✓');
+  }
+}
+
+// Block 7 — evaluation
+function evalTask(task, expected, el){
+  var fb = document.getElementById('b7-t'+task+'-fb');
+  var correct = false;
+  if(task===4){
+    var val = document.getElementById('b7-t4-input').value.trim();
+    correct = val.toLowerCase().indexOf('peixe')>=0 && val.length>3;
+    if(correct){showFeedback(fb, true, '✓ Ótimo! Tens uma frase com "peixe"! ⭐');}
+    else{showFeedback(fb, false, '✗ A frase precisa de ter a palavra "peixe" e mais alguma coisa.');}
+  } else if(expected==='peixe'){
+    correct=true;
+    el.classList.add('correct');
+    document.querySelectorAll('#b7-t'+task+'-block .quiz-opt').forEach(function(b){b.disabled=true});
+    showFeedback(fb, true, '✓ Correto! ⭐');
+  } else if(expected==='2'){
+    correct=true;
+    el.classList.add('correct');
+    document.querySelectorAll('#b7-t'+task+'-block .quiz-opt').forEach(function(b){b.disabled=true});
+    showFeedback(fb, true, '✓ Certo! "pei-xe" = 2 sílabas! ⭐');
+  } else {
+    el.classList.add('incorrect');
+    document.querySelectorAll('#b7-t'+task+'-block .quiz-opt').forEach(function(b){b.disabled=true});
+    showFeedback(fb, false, '✗ Não é essa. Tenta de novo!');
+  }
+  if(correct){
+    b7Scores[task-1]=1;
+    updateB7Progress();
+  }
+}
+var b7T3Arr=[];
+function evalT3(syl, el){
+  b7T3Arr.push(syl);
+  el.disabled=true;
+  var built = document.getElementById('b7-t3-built');
+  if(b7T3Arr.length===1) built.innerHTML='';
+  var sp = document.createElement('span');
+  sp.className='syllable-block '+(syl==='pei'?'syl-pei':'syl-xe');
+  sp.style.fontSize='1.5rem';
+  sp.textContent=syl;
+  built.appendChild(sp);
+}
+function checkT3(){
+  var fb = document.getElementById('b7-t3-fb');
+  if(b7T3Arr.join('')==='peixe'){
+    showFeedback(fb, true, '✓ Perfeito! pei + xe = peixe! ⭐');
+    b7Scores[2]=1;
+    updateB7Progress();
+  } else {
+    showFeedback(fb, false, '✗ A ordem correta é: pei → xe. Tenta de novo!');
+    b7T3Arr=[];
+    document.getElementById('b7-t3-built').innerHTML='<span style="color:#aaa">sílabas aqui…</span>';
+    document.querySelectorAll('#b7-t3-bank button').forEach(function(b){b.disabled=false});
+  }
+}
+function updateB7Progress(){
+  var done = b7Scores.filter(function(s){return s===1}).length;
+  document.getElementById('b7-progress').style.width=(done/4*100)+'%';
+  document.getElementById('b7-prog-text').textContent='Tarefa '+done+' de 4';
+  if(done===4) showB7Result();
+}
+function showB7Result(){
+  var total = b7Scores.filter(function(s){return s===1}).length;
+  var result = document.getElementById('b7-result');
+  result.style.display='block';
+  var stars='';
+  for(var i=0;i<total;i++) stars+='⭐';
+  document.getElementById('b7-stars').textContent=stars;
+  var msgs = ['Continua a tentar! Podes sempre rever os blocos. 💪','Quase lá! Revê o que ficou a faltar. 😊','Muito bem! Só mais um passo! 👍','Fantástico! Sabes tudo sobre "peixe"! 🎉🐟'];
+  document.getElementById('b7-msg').textContent=msgs[total-1]||msgs[3];
+  var details = ['Reconhecimento','Segmentação','Reconstituição','Frase'];
+  var detail = b7Scores.map(function(s,i){return (s===1?'✓ ':'✗ ')+details[i]}).join(' · ');
+  document.getElementById('b7-detail').textContent=detail;
+  result.scrollIntoView({behavior:'smooth'});
+}
+
+// Block 8
+function showExtension(type){
+  ['draw','oral','words'].forEach(function(t){
+    document.getElementById('ext-'+t).style.display = t===type?'block':'none';
+  });
+}
+function addEiWord(){
+  var input = document.getElementById('b8-word-input');
+  var val = input.value.trim().toLowerCase();
+  if(!val) return;
+  if(val.indexOf('ei')<0){
+    alert('"'+val+'" não tem "ei". Tenta uma palavra com "ei" como rei, lei, meia...');
+    return;
+  }
+  if(eiWords.indexOf(val)>=0){input.value=''; return;}
+  eiWords.push(val);
+  input.value='';
+  var list = document.getElementById('b8-words-list');
+  var sp = document.createElement('span');
+  sp.className='discovered-word';
+  sp.textContent=val;
+  list.appendChild(sp);
+  document.getElementById('b8-word-count').textContent='Encontraste '+eiWords.length+' palavra'+(eiWords.length===1?'':'s')+'! '+(eiWords.length>=5?'🌟 Meta atingida!':'');
+}
+
+// Shared
+function showFeedback(el, ok, msg){
+  el.className = 'feedback show '+(ok?'ok':'nok');
+  el.textContent = msg;
+}
+</script>
+</body>
+</html>
