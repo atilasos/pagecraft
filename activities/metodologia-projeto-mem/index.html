@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metodologia de trabalho de projeto no MEM | PageCraft</title>
+  <style>
+    :root {
+      --bg: #EEF6F4;
+      --surface: #FFFFFF;
+      --primary: #1D4ED8;
+      --accent: #EA580C;
+      --text: #0F172A;
+      --correct: #22C55E;
+      --correct-bg: #DCFCE7;
+      --incorrect: #D97706;
+      --incorrect-bg: #FFFBEB;
+      --radius: 16px;
+      --shadow: 0 4px 14px rgba(15,23,42,0.08);
+      --font: 'Nunito', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1.5;
+    }
+    .skip-link {
+      position: absolute; left: 1rem; top: -3rem; background: var(--primary); color: #fff; padding: .75rem 1rem; border-radius: 999px; z-index: 20;
+    }
+    .skip-link:focus { top: 1rem; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 1rem; }
+    header.hero {
+      background: linear-gradient(135deg, #1D4ED8, #60A5FA 55%, #EA580C);
+      color: white;
+      border-radius: 24px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      margin: 1rem 0 1.25rem;
+    }
+    h1,h2,h3 { line-height: 1.15; }
+    h1 { font-size: clamp(2rem, 5vw, 3.2rem); margin: 0 0 .75rem; font-weight: 800; }
+    h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin: 0 0 .75rem; font-weight: 800; }
+    h3 { font-size: 1.2rem; margin: 0 0 .5rem; font-weight: 800; }
+    .meta, .pill-row { display: flex; flex-wrap: wrap; gap: .75rem; }
+    .pill, .meta-chip, .tab {
+      min-height: 48px; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; padding: .7rem 1.1rem; font-weight: 800;
+    }
+    .meta-chip { background: rgba(255,255,255,.18); }
+    .pill { background: rgba(255,255,255,.16); }
+    nav.quick {
+      display: flex; flex-wrap: wrap; gap: .75rem; margin-bottom: 1rem;
+    }
+    nav.quick a {
+      text-decoration: none; color: var(--primary); background: #fff; border: 2px solid rgba(29,78,216,.2); min-height: 48px; display: inline-flex; align-items: center; padding: .7rem 1rem; border-radius: 999px; font-weight: 800;
+    }
+    section.card {
+      background: var(--surface); border: 2px solid rgba(29,78,216,.2); border-radius: 24px; box-shadow: var(--shadow); padding: 1.25rem; margin: 0 0 1rem;
+      animation: rise .45s ease both;
+    }
+    @keyframes rise { from { opacity: 0; transform: translateY(14px);} to { opacity:1; transform:none;} }
+    .intro { font-size: 1.05rem; }
+    .route {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: .8rem; margin: 1rem 0;
+    }
+    .dropzone, .draggable, .match-item, .source-chip {
+      background: #fff; border: 2px dashed rgba(29,78,216,.35); border-radius: 18px; padding: .85rem; min-height: 76px; display:flex; align-items:center; justify-content:center; text-align:center;
+    }
+    .draggables { display:grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap:.8rem; }
+    .draggable, .source-chip, .option-btn, button, select, input[type="range"] { touch-action: manipulation; }
+    .draggable { border-style: solid; cursor: grab; font-weight: 800; background: linear-gradient(180deg,#fff,#eff6ff); }
+    .draggable.dragging { opacity: .5; transform: scale(1.03); }
+    .dropzone.filled { border-style: solid; background: #eff6ff; }
+    .controls { display:flex; flex-wrap: wrap; gap:.75rem; margin-top:1rem; }
+    button, .option-btn {
+      border: none; background: var(--primary); color: #fff; padding: .8rem 1.2rem; border-radius: 999px; font-family: inherit; font-size: 1rem; font-weight: 800; min-height: 48px; cursor: pointer; box-shadow: var(--shadow);
+    }
+    button.secondary { background: #dbeafe; color: var(--primary); }
+    .feedback {
+      margin-top: .8rem; padding: .9rem 1rem; border-radius: 18px; font-weight: 700; display:none;
+    }
+    .feedback.show { display:block; }
+    .feedback.ok { background: var(--correct-bg); color: #14532D; border:2px solid var(--correct); }
+    .feedback.warn { background: var(--incorrect-bg); color:#78350F; border:2px solid #F59E0B; }
+    .tabs { display:flex; flex-wrap:wrap; gap:.5rem; margin:.75rem 0 1rem; }
+    .tab { background:#fff; border:2px solid rgba(29,78,216,.18); color:var(--text); cursor:pointer; }
+    .tab.active { background: var(--primary); color:#fff; }
+    .tab-panel { display:none; background:#f8fbff; border-radius:18px; padding:1rem; }
+    .tab-panel.active { display:block; }
+    .match-grid { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; }
+    .match-col { display:grid; gap:.6rem; }
+    .match-item.selected { outline: 4px solid #93c5fd; }
+    .matched { background:#eff6ff; border-color: var(--correct); }
+    .mini-plan { display:grid; grid-template-columns: repeat(auto-fit,minmax(230px,1fr)); gap:1rem; }
+    label { display:grid; gap:.35rem; font-weight:700; }
+    select, input[type="range"] {
+      width:100%; min-height:48px; border-radius:14px; border:2px solid rgba(29,78,216,.22); padding:.7rem .9rem; font-family: inherit; font-size: 1rem;
+    }
+    .source-bank, .source-picked { display:flex; flex-wrap:wrap; gap:.6rem; padding:.8rem; border:2px dashed rgba(29,78,216,.25); border-radius:18px; min-height:74px; background:#f8fbff; }
+    .source-chip { min-height:48px; min-width:120px; cursor:pointer; border-style:solid; font-weight:800; padding:.7rem .9rem; }
+    .preview {
+      background: linear-gradient(180deg, #fff, #f8fbff); border:2px solid rgba(29,78,216,.18); border-radius:18px; padding:1rem;
+    }
+    .toggle-row { display:flex; gap:.75rem; flex-wrap:wrap; margin:1rem 0; }
+    .toggle-btn.active { background: var(--accent); }
+    .mode-panel { display:none; }
+    .mode-panel.active { display:block; }
+    .quiz-options { display:grid; gap:.6rem; margin-top:.8rem; }
+    .option-btn { background:#fff; color:var(--text); border:2px solid rgba(29,78,216,.2); }
+    .option-btn.correct { background: var(--correct-bg); border-color: var(--correct); color:#14532D; }
+    .option-btn.wrong { background: var(--incorrect-bg); border-color:#F59E0B; color:#78350F; }
+    .maker { background: #E8F5E9; border-color: #86EFAC; }
+    .maker-grid, .assessment-grid, .footer-grid { display:grid; gap:1rem; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); }
+    .maker-item, .assessment-item, .footer-box { background:#fff; border-radius:18px; padding:1rem; border:2px solid rgba(29,78,216,.14); }
+    .assessment { background: #FFF3E0; border-color:#FDBA74; }
+    .footer-curr { background:#F3E8FF; border-color:#C084FC; }
+    .scale { font-size:.95rem; }
+    .confetti {
+      position: fixed; inset: 0; pointer-events:none; overflow:hidden; z-index: 50;
+    }
+    .piece {
+      position:absolute; width:12px; height:12px; border-radius:3px; animation: fall 900ms linear forwards;
+    }
+    @keyframes fall { from { transform: translateY(-20px) rotate(0deg); opacity:1; } to { transform: translateY(100vh) rotate(360deg); opacity:0; } }
+    *:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { animation: none !important; transition: none !important; }
+    }
+    @media (max-width: 720px) {
+      body { font-size: 18px; }
+      .match-grid { grid-template-columns: 1fr; }
+      header.hero, section.card { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Ir para o conteúdo</a>
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+  <div class="wrap">
+    <header class="hero">
+      <div class="meta">
+        <div class="meta-chip">📘 2.º ano</div>
+        <div class="meta-chip">⏱️ 45 min</div>
+        <div class="meta-chip">🤝 MEM + projeto cooperativo</div>
+      </div>
+      <h1>Passos de um projeto no MEM</h1>
+      <p class="intro">Uma página para explorar, conversar e refletir sobre como nasce, cresce e se fecha um projeto de trabalho.</p>
+      <div class="pill-row">
+        <div class="pill">Ordenar passos</div>
+        <div class="pill">Ligar plano e função</div>
+        <div class="pill">Criar mini plano</div>
+        <div class="pill">Distinguir partilha e avaliação</div>
+      </div>
+    </header>
+
+    <nav class="quick" aria-label="Navegação rápida">
+      <a href="#u1">1. Sequência</a>
+      <a href="#u2">2. Plano</a>
+      <a href="#u3">3. Mini plano</a>
+      <a href="#u4">4. Fechar o projeto</a>
+      <a href="#maker">🛠️ Maker</a>
+      <a href="#avaliacao">📝 Mini-avaliação</a>
+    </nav>
+
+    <main id="main">
+      <section class="card" id="u1">
+        <h2>1. Pôr os passos por ordem</h2>
+        <p>Um projeto começa numa pergunta importante e só no fim chega à partilha e à reflexão.</p>
+        <div class="tabs" role="tablist" aria-label="Níveis da unidade 1">
+          <button class="tab active" data-target="u1-support">🟢 Apoio</button>
+          <button class="tab" data-target="u1-standard">🟡 Intermédio</button>
+          <button class="tab" data-target="u1-challenge">🔴 Desafio</button>
+        </div>
+        <div class="tab-panel active" id="u1-support">Usa 4 passos com mais pistas visuais.</div>
+        <div class="tab-panel" id="u1-standard">Ordena os 6 passos completos sem pistas extra.</div>
+        <div class="tab-panel" id="u1-challenge">Ordena e explica por que razão certas trocas não fazem sentido.</div>
+        <div class="draggables" id="step-bank" aria-label="Passos do projeto para arrastar"></div>
+        <div class="route" id="step-route" aria-label="Linha dos passos"></div>
+        <div class="controls">
+          <button id="check-steps">Verificar ordem</button>
+          <button class="secondary" id="reset-steps">Recomeçar</button>
+        </div>
+        <div class="feedback" id="steps-feedback"></div>
+      </section>
+
+      <section class="card" id="u2">
+        <h2>2. Ligar cada parte do plano à sua função</h2>
+        <p>O plano de projeto ajuda o grupo a saber de onde parte, para onde vai e como se organiza.</p>
+        <div class="tabs" role="tablist" aria-label="Níveis da unidade 2">
+          <button class="tab active" data-target="u2-support">🟢 Apoio</button>
+          <button class="tab" data-target="u2-standard">🟡 Intermédio</button>
+          <button class="tab" data-target="u2-challenge">🔴 Desafio</button>
+        </div>
+        <div class="tab-panel active" id="u2-support">Trabalha 3 pares com leitura apoiada.</div>
+        <div class="tab-panel" id="u2-standard">Relaciona 5 partes do plano com 5 funções.</div>
+        <div class="tab-panel" id="u2-challenge">Explica oralmente como duas partes do plano se ajudam.</div>
+        <div class="match-grid">
+          <div class="match-col" id="left-col"></div>
+          <div class="match-col" id="right-col"></div>
+        </div>
+        <div class="controls">
+          <button class="secondary" id="reset-match">Limpar ligações</button>
+        </div>
+        <div class="feedback" id="match-feedback"></div>
+      </section>
+
+      <section class="card" id="u3">
+        <h2>3. Construir um mini plano de projeto</h2>
+        <p>Agora o grupo faz escolhas. A pergunta orienta as fontes e o produto final.</p>
+        <div class="tabs" role="tablist" aria-label="Níveis da unidade 3">
+          <button class="tab active" data-target="u3-support">🟢 Apoio</button>
+          <button class="tab" data-target="u3-standard">🟡 Intermédio</button>
+          <button class="tab" data-target="u3-challenge">🔴 Desafio</button>
+        </div>
+        <div class="tab-panel active" id="u3-support">Escolhe entre menos opções e com ajuda visual.</div>
+        <div class="tab-panel" id="u3-standard">Constrói um mini plano completo e coerente.</div>
+        <div class="tab-panel" id="u3-challenge">Compara dois planos e decide qual responde melhor.</div>
+        <div class="mini-plan">
+          <label>Tema
+            <select id="tema">
+              <option>As abelhas</option>
+              <option>Os vulcões</option>
+              <option>Os robôs</option>
+              <option>O mar da Madeira</option>
+            </select>
+          </label>
+          <label>Pergunta do projeto
+            <select id="pergunta">
+              <option>Como vivem?</option>
+              <option>Porque são importantes?</option>
+              <option>O que queremos descobrir?</option>
+              <option>Como podemos mostrar aos outros?</option>
+            </select>
+          </label>
+          <label>Produto final
+            <select id="produto">
+              <option>Cartaz</option>
+              <option>Maquete</option>
+              <option>Apresentação oral</option>
+              <option>Livro pequeno</option>
+            </select>
+          </label>
+          <label>Número de dias: <span id="dias-label">3</span>
+            <input type="range" id="dias" min="1" max="5" value="3" />
+          </label>
+        </div>
+        <h3>Escolhe 2 ou 3 fontes</h3>
+        <div class="source-bank" id="source-bank" aria-label="Fontes disponíveis"></div>
+        <div class="source-picked" id="source-picked" aria-label="Fontes escolhidas"></div>
+        <div class="controls">
+          <button id="check-plan">Ver o meu plano</button>
+          <button class="secondary" id="reset-plan">Limpar plano</button>
+        </div>
+        <div class="preview" id="plan-preview" aria-live="polite"></div>
+        <div class="feedback" id="plan-feedback"></div>
+      </section>
+
+      <section class="card" id="u4">
+        <h2>4. Partilhar e refletir</h2>
+        <p>No fim do projeto, mostramos o que aprendemos e pensamos em como melhorar.</p>
+        <div class="tabs" role="tablist" aria-label="Níveis da unidade 4">
+          <button class="tab active" data-target="u4-support">🟢 Apoio</button>
+          <button class="tab" data-target="u4-standard">🟡 Intermédio</button>
+          <button class="tab" data-target="u4-challenge">🔴 Desafio</button>
+        </div>
+        <div class="tab-panel active" id="u4-support">Usa exemplos visuais e frases começadas.</div>
+        <div class="tab-panel" id="u4-standard">Distingue bem as duas etapas e responde com justificação.</div>
+        <div class="tab-panel" id="u4-challenge">Liga a avaliação a uma decisão para o próximo projeto.</div>
+        <div class="toggle-row">
+          <button class="toggle-btn active" data-mode="partilhar">Partilhar</button>
+          <button class="toggle-btn" data-mode="refletir">Refletir</button>
+        </div>
+        <div class="mode-panel active" id="mode-partilhar">
+          <p>Exemplos: mostrar um cartaz, apresentar oralmente, explicar uma maquete, ler um pequeno texto à turma.</p>
+        </div>
+        <div class="mode-panel" id="mode-refletir">
+          <p>Perguntas úteis: O que correu bem? O que foi difícil? O que podemos melhorar da próxima vez?</p>
+        </div>
+        <h3>Escolhe a melhor razão para avaliar o projeto</h3>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="feedback" id="quiz-feedback"></div>
+      </section>
+
+      <section class="card maker" id="maker">
+        <h2>🛠️ Desafios Maker no quadro</h2>
+        <div class="maker-grid">
+          <div class="maker-item"><h3>1. Linha dos passos</h3><p>A turma reconstrói a sequência do projeto com cartões grandes e discute onde começa e onde termina.</p></div>
+          <div class="maker-item"><h3>2. Partes do plano</h3><p>Cada par cola uma parte do plano e explica para que serve.</p></div>
+          <div class="maker-item"><h3>3. Proposta de projeto</h3><p>Cada grupo passa o seu mini plano para o quadro e apresenta-o à turma.</p></div>
+          <div class="maker-item"><h3>4. Síntese final</h3><p>A turma fecha com duas colunas: “Como mostramos” e “Como pensamos sobre o que fizemos”.</p></div>
+        </div>
+      </section>
+
+      <section class="card assessment" id="avaliacao">
+        <h2>📝 Mini-avaliação formativa</h2>
+        <div class="assessment-grid">
+          <div class="assessment-item"><strong>1.</strong> Ordeno os passos de um projeto e explico dois deles. <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div></div>
+          <div class="assessment-item"><strong>2.</strong> Ligo partes do plano às suas funções. <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div></div>
+          <div class="assessment-item"><strong>3.</strong> Faço um mini plano coerente com pergunta, fontes e produto. <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div></div>
+          <div class="assessment-item"><strong>4.</strong> Distingo partilhar de avaliar. <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div></div>
+          <div class="assessment-item"><strong>5.</strong> Participo com respeito, escuto e justifico escolhas. <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div></div>
+        </div>
+      </section>
+
+      <section class="card footer-curr">
+        <h2>📚 Referências curriculares</h2>
+        <div class="footer-grid">
+          <div class="footer-box">
+            <h3>Aprendizagens Essenciais</h3>
+            <ul>
+              <li>Português, 2.º ano: formular perguntas, pedidos e respostas.</li>
+              <li>Português, 2.º ano: usar a palavra na sua vez com cooperação e cortesia.</li>
+              <li>Português, 2.º ano: planear, produzir e avaliar enunciados breves informativos.</li>
+              <li>Estudo do Meio, 2.º ano: colocar questões, levantar hipóteses, comunicar conhecimento.</li>
+              <li>Estudo do Meio, 2.º ano: reconhecer a importância do diálogo, negociação e compromisso.</li>
+            </ul>
+          </div>
+          <div class="footer-box">
+            <h3>Perfil do Aluno</h3>
+            <ul>
+              <li>PA-A Linguagens e textos</li>
+              <li>PA-B Informação e comunicação</li>
+              <li>PA-C Raciocínio e resolução de problemas</li>
+              <li>PA-D Pensamento crítico e criativo</li>
+              <li>PA-E Relacionamento interpessoal</li>
+              <li>PA-F Desenvolvimento pessoal e autonomia</li>
+              <li>PA-I Saber científico, técnico e tecnológico</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer style="text-align:center;padding:1rem 0 2rem;color:#475569;font-weight:700;">Gerado por PageCraft 🛠️</footer>
+  </div>
+
+  <script>
+    const steps = [
+      { id: 'pergunta', label: '❓ Pergunta' },
+      { id: 'sabemos', label: '💭 O que já sabemos e queremos saber' },
+      { id: 'plano', label: '🗺️ Plano' },
+      { id: 'pesquisa', label: '🔎 Pesquisa' },
+      { id: 'partilha', label: '📣 Partilha' },
+      { id: 'avaliacao', label: '🪞 Avaliação' },
+    ];
+    const correctOrder = steps.map(s => s.id);
+    const bank = document.getElementById('step-bank');
+    const route = document.getElementById('step-route');
+    const stepsFeedback = document.getElementById('steps-feedback');
+
+    function playTone(freq = 560, dur = 0.12) {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.frequency.value = freq;
+        osc.type = 'sine';
+        gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
+        osc.start(); osc.stop(ctx.currentTime + dur);
+      } catch (e) {}
+    }
+
+    function burstConfetti() {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const box = document.getElementById('confetti');
+      const colors = ['#1D4ED8','#EA580C','#22C55E','#F59E0B','#A855F7'];
+      for (let i = 0; i < 28; i++) {
+        const p = document.createElement('span');
+        p.className = 'piece';
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.background = colors[i % colors.length];
+        p.style.animationDelay = (Math.random() * .2) + 's';
+        box.appendChild(p);
+        setTimeout(() => p.remove(), 1100);
+      }
+    }
+
+    function showFeedback(el, ok, text) {
+      el.className = 'feedback show ' + (ok ? 'ok' : 'warn');
+      el.textContent = text;
+      playTone(ok ? 660 : 320, ok ? 0.16 : 0.12);
+      if (ok) burstConfetti();
+    }
+
+    function setupStepSort() {
+      bank.innerHTML = '';
+      route.innerHTML = '';
+      steps.slice().sort(() => Math.random() - 0.5).forEach(step => bank.appendChild(makeStep(step)));
+      for (let i = 0; i < steps.length; i++) {
+        const zone = document.createElement('div');
+        zone.className = 'dropzone';
+        zone.dataset.index = i;
+        zone.textContent = 'Lugar ' + (i + 1);
+        zone.addEventListener('dragover', e => e.preventDefault());
+        zone.addEventListener('drop', e => handleDrop(e, zone));
+        zone.addEventListener('click', () => {
+          const picked = bank.querySelector('.draggable.selected');
+          if (picked && !zone.firstChild) zone.appendChild(picked), zone.classList.add('filled');
+        });
+        route.appendChild(zone);
+      }
+    }
+
+    function makeStep(step) {
+      const item = document.createElement('div');
+      item.className = 'draggable';
+      item.draggable = true;
+      item.dataset.id = step.id;
+      item.textContent = step.label;
+      item.tabIndex = 0;
+      item.addEventListener('dragstart', () => item.classList.add('dragging'));
+      item.addEventListener('dragend', () => item.classList.remove('dragging'));
+      item.addEventListener('click', () => {
+        document.querySelectorAll('#step-bank .draggable, #step-route .draggable').forEach(d => d.classList.remove('selected'));
+        item.classList.add('selected');
+      });
+      return item;
+    }
+
+    function handleDrop(e, zone) {
+      e.preventDefault();
+      const dragged = document.querySelector('.dragging');
+      if (!dragged) return;
+      if (zone.firstChild) bank.appendChild(zone.firstChild), zone.classList.remove('filled');
+      zone.textContent = '';
+      zone.appendChild(dragged);
+      zone.classList.add('filled');
+    }
+
+    document.getElementById('check-steps').addEventListener('click', () => {
+      const ids = [...route.children].map(z => z.firstChild?.dataset.id || '');
+      const score = ids.filter((id, i) => id === correctOrder[i]).length;
+      if (score === 6) showFeedback(stepsFeedback, true, 'Muito bem. A tua sequência faz sentido do princípio ao fim.');
+      else showFeedback(stepsFeedback, false, 'Já tens ' + score + ' no lugar certo. Revê o que vem primeiro, o que vem depois da pesquisa e o que fecha o projeto.');
+    });
+    document.getElementById('reset-steps').addEventListener('click', () => { setupStepSort(); stepsFeedback.className='feedback'; });
+    setupStepSort();
+
+    const leftItems = [
+      ['pensamos', '💭 O que pensamos deste assunto'],
+      ['queremos', '❓ O que queremos saber'],
+      ['fontes', '📚 Fontes de informação'],
+      ['produtos', '🎨 Produtos'],
+      ['datas', '📅 Datas'],
+    ];
+    const rightItems = [
+      ['pensamos', 'Partir do que já sabemos'],
+      ['queremos', 'Escolher as perguntas da pesquisa'],
+      ['fontes', 'Procurar informação em vários sítios'],
+      ['produtos', 'Decidir como vamos mostrar à turma'],
+      ['datas', 'Organizar o tempo do grupo'],
+    ];
+    const leftCol = document.getElementById('left-col');
+    const rightCol = document.getElementById('right-col');
+    const matchFeedback = document.getElementById('match-feedback');
+    let selectedLeft = null, pairs = {};
+    function renderMatching() {
+      leftCol.innerHTML=''; rightCol.innerHTML='';
+      leftItems.forEach(([id,label]) => {
+        const el = document.createElement('button');
+        el.className = 'match-item'; el.textContent = label; el.dataset.id = id;
+        if (selectedLeft === id) el.classList.add('selected');
+        if (pairs[id]) el.classList.add('matched');
+        el.addEventListener('click', () => { selectedLeft = id; renderMatching(); });
+        leftCol.appendChild(el);
+      });
+      rightItems.forEach(([id,label]) => {
+        const el = document.createElement('button');
+        el.className = 'match-item'; el.textContent = label; el.dataset.id = id;
+        const matched = Object.entries(pairs).find(([,v]) => v === id);
+        if (matched) el.classList.add('matched');
+        el.addEventListener('click', () => {
+          if (!selectedLeft) return;
+          pairs[selectedLeft] = id;
+          const correctCount = Object.entries(pairs).filter(([k,v]) => k === v).length;
+          renderMatching();
+          if (Object.keys(pairs).length === 5) {
+            if (correctCount === 5) showFeedback(matchFeedback, true, 'Ligaste muito bem as partes do plano às suas funções.');
+            else showFeedback(matchFeedback, false, 'Algumas ligações estão certas. Revê para que serve cada parte do plano.');
+          }
+        });
+        rightCol.appendChild(el);
+      });
+    }
+    document.getElementById('reset-match').addEventListener('click', () => { selectedLeft = null; pairs = {}; renderMatching(); matchFeedback.className='feedback'; });
+    renderMatching();
+
+    const sourceData = ['📕 Livro','🎤 Entrevista','🎬 Vídeo','👀 Observação'];
+    const sourceBank = document.getElementById('source-bank');
+    const sourcePicked = document.getElementById('source-picked');
+    const planPreview = document.getElementById('plan-preview');
+    const planFeedback = document.getElementById('plan-feedback');
+    const dias = document.getElementById('dias');
+    const diasLabel = document.getElementById('dias-label');
+    dias.addEventListener('input', () => diasLabel.textContent = dias.value);
+    function renderSources() {
+      sourceBank.innerHTML='';
+      sourceData.forEach(s => {
+        if ([...sourcePicked.children].some(c => c.dataset.value === s)) return;
+        const chip = document.createElement('button');
+        chip.className='source-chip'; chip.textContent=s; chip.dataset.value=s;
+        chip.addEventListener('click', () => {
+          if (sourcePicked.children.length >= 3) return;
+          sourcePicked.appendChild(chip); updatePreview(); renderSources();
+        });
+        sourceBank.appendChild(chip);
+      });
+      if (!sourcePicked.children.length) sourcePicked.innerHTML = '<span style="color:#64748b;">Escolhe 2 ou 3 fontes.</span>';
+    }
+    sourcePicked.addEventListener('click', e => {
+      const chip = e.target.closest('.source-chip');
+      if (!chip) return;
+      chip.remove(); updatePreview(); renderSources();
+    });
+    function updatePreview() {
+      const picked = [...sourcePicked.querySelectorAll('.source-chip')].map(c => c.dataset.value);
+      planPreview.innerHTML = `
+        <h3>Pré-visualização do plano</h3>
+        <p><strong>Tema:</strong> ${document.getElementById('tema').value}</p>
+        <p><strong>Pergunta:</strong> ${document.getElementById('pergunta').value}</p>
+        <p><strong>Fontes:</strong> ${picked.length ? picked.join(', ') : 'Ainda não escolhidas'}</p>
+        <p><strong>Produto final:</strong> ${document.getElementById('produto').value}</p>
+        <p><strong>Dias:</strong> ${dias.value}</p>`;
+    }
+    ['tema','pergunta','produto'].forEach(id => document.getElementById(id).addEventListener('change', updatePreview));
+    dias.addEventListener('input', updatePreview);
+    document.getElementById('check-plan').addEventListener('click', () => {
+      const picked = [...sourcePicked.querySelectorAll('.source-chip')].map(c => c.dataset.value);
+      updatePreview();
+      if (picked.length >= 2 && picked.length <= 3) showFeedback(planFeedback, true, 'O teu mini plano já está coerente. Agora explica por que escolheste essas fontes e esse produto.');
+      else showFeedback(planFeedback, false, 'Falta escolher 2 ou 3 fontes para o plano ficar completo.');
+    });
+    document.getElementById('reset-plan').addEventListener('click', () => {
+      sourcePicked.innerHTML=''; renderSources(); updatePreview(); planFeedback.className='feedback';
+      document.getElementById('tema').selectedIndex = 0; document.getElementById('pergunta').selectedIndex = 0; document.getElementById('produto').selectedIndex = 0; dias.value = 3; diasLabel.textContent = 3; updatePreview();
+    });
+    renderSources(); updatePreview();
+
+    document.querySelectorAll('.toggle-btn').forEach(btn => btn.addEventListener('click', () => {
+      document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const mode = btn.dataset.mode;
+      document.querySelectorAll('.mode-panel').forEach(p => p.classList.toggle('active', p.id === 'mode-' + mode));
+    }));
+
+    const quizOptions = ['Mostra o que aprendemos', 'Serve só para acabar depressa', 'Não interessa ao grupo'];
+    const quizWrap = document.getElementById('quiz-options');
+    const quizFeedback = document.getElementById('quiz-feedback');
+    quizOptions.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.textContent = opt;
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('correct','wrong'));
+        if (opt === 'Mostra o que aprendemos') {
+          btn.classList.add('correct');
+          showFeedback(quizFeedback, true, 'Certo. Avaliar ajuda o grupo a pensar melhor no trabalho seguinte.');
+        } else {
+          btn.classList.add('wrong');
+          showFeedback(quizFeedback, false, 'Tenta outra vez. Avaliar serve para melhorar, não é só para acabar.');
+        }
+      });
+      quizWrap.appendChild(btn);
+    });
+
+    document.querySelectorAll('.tabs').forEach(group => {
+      const buttons = group.querySelectorAll('.tab');
+      buttons.forEach(btn => btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const section = group.parentElement;
+        section.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        section.querySelector('#' + btn.dataset.target).classList.add('active');
+      }));
+    });
+  </script>
+</body>
+</html>

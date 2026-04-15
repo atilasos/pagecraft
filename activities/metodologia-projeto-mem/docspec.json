@@ -1,0 +1,278 @@
+{
+  "topic": "Metodologia de trabalho de projeto no MEM: explorar e refletir sobre os passos de um projeto",
+  "ageRange": "7-8 anos (2.º ano do 1.º CEB)",
+  "duration": 45,
+  "objectives": [
+    "Identificar e ordenar os passos de um projeto cooperativo no MEM (pergunta, saberes prévios, planeamento, pesquisa, comunicação, avaliação)",
+    "Associar os elementos de um plano de projeto à sua função no processo de investigação",
+    "Simular escolhas num mini plano de projeto, verbalizando decisões e justificações",
+    "Comunicar coletivamente uma síntese visual do processo de projeto"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "2.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Formular perguntas, pedidos e respostas a questões considerando a situação e o interlocutor",
+        "source": "portugues-2-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "2.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Usar a palavra na sua vez e empregar formas de tratamento adequadas na interação oral, com respeito pelos princípios de cooperação e cortesia",
+        "source": "portugues-2-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "2.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Planear, produzir e avaliar enunciados breves com finalidade informativa",
+        "source": "portugues-2-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Estudo do Meio",
+        "year": "2.º ano",
+        "domain": "Sociedade/Natureza/Tecnologia",
+        "descriptor": "Saber colocar questões, levantar hipóteses, fazer inferências, comprovar resultados e saber comunicar, reconhecendo como se constrói o conhecimento",
+        "source": "estudo-do-meio-2-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Estudo do Meio",
+        "year": "2.º ano",
+        "domain": "Sociedade",
+        "descriptor": "Reconhecer a importância do diálogo, da negociação e do compromisso na resolução pacífica de situações de conflito",
+        "source": "estudo-do-meio-2-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-B: Informação e comunicação",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-D: Pensamento crítico e pensamento criativo",
+      "PA-E: Relacionamento interpessoal",
+      "PA-F: Desenvolvimento pessoal e autonomia",
+      "PA-I: Saber científico, técnico e tecnológico"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Projecto cooperativo",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação",
+      "Conselho de cooperação educativa"
+    ],
+    "instruments": [
+      "lista 'Quero saber'",
+      "plano de projeto",
+      "mapa de tarefas",
+      "diário de turma"
+    ],
+    "socialOrganization": "turma (ativação) → individual (exploração inicial) → pares (associação e planeamento) → pequeno grupo/turma (síntese no quadro) → turma (reflexão final)"
+  },
+  "materials": [
+    "Tablet ou computador com browser (1 por aluno ou par)",
+    "Quadro interativo ou quadro branco",
+    "Post-its ou cartões dos passos do projeto",
+    "Marcadores"
+  ],
+  "units": [
+    {
+      "summary": "Os projetos têm uma sequência de passos que começa numa pergunta verdadeira",
+      "textDescription": "O aluno deve compreender que um projeto não começa pela resposta nem pelo produto final. Começa por uma curiosidade ou pergunta importante, avança por etapas e termina com comunicação e reflexão sobre o que foi aprendido.",
+      "interaction": {
+        "state": [
+          {
+            "name": "ordemPassos",
+            "type": "sorting"
+          },
+          {
+            "name": "confirmado",
+            "type": "derived",
+            "derivedFrom": "ordemPassos"
+          }
+        ],
+        "render": "Seis cartões ilustrados e arrastáveis mostram os passos: Pergunta, O que já sabemos e queremos saber, Plano, Pesquisa, Partilha, Avaliação. Há uma linha de percurso visual onde os cartões podem ser colocados por ordem.",
+        "transition": "O aluno arrasta os cartões para a linha temporal; ao verificar, a página destaca relações corretas e convida a rever as posições incorretas com pistas visuais.",
+        "constraint": "Num projeto, a pergunta vem antes do plano, a pesquisa acontece antes da partilha e a reflexão fecha o processo depois da comunicação.",
+        "assessment": "O aluno ordena corretamente os 6 passos e explica oralmente pelo menos duas relações de sequência usando conectores como 'primeiro', 'depois' e 'no fim'."
+      },
+      "maker": {
+        "type": "whiteboard",
+        "challenge": "No quadro, a turma reconstrói em conjunto a linha dos passos do projeto com cartões grandes e discute onde começa e onde termina um projeto.",
+        "materials": [
+          "Quadro interativo ou branco",
+          "Cartões grandes com os 6 passos"
+        ],
+        "groupSize": "turma",
+        "connection": "Depois da ordenação individual na página, a turma negocia uma versão coletiva no quadro.",
+        "communication": "Dois alunos justificam a ordem escolhida à turma e os colegas podem propor melhorias.",
+        "alternatives": [
+          "Linha no chão com folhas A4",
+          "Ímanes num quadro metálico"
+        ]
+      },
+      "differentiation": {
+        "support": "Usar apenas 4 passos com ícones e pistas de cor; a linha já mostra início e fim marcados.",
+        "standard": "Ordenar os 6 passos completos com ilustrações e sem texto de ajuda adicional.",
+        "challenge": "Ordenar os 6 passos e justificar por que razão 'pesquisa' não pode trocar de lugar com 'pergunta' nem 'avaliação' com 'partilha'."
+      },
+      "duration": 12
+    },
+    {
+      "summary": "Cada parte do plano de projeto tem uma função diferente",
+      "textDescription": "O aluno deve compreender que um plano de projeto ajuda o grupo a pensar melhor. 'O que pensamos' serve para partir do que já sabemos; 'o que queremos saber' orienta a pesquisa; fontes ajudam a procurar; produtos mostram como vamos comunicar; datas ajudam a organizar.",
+      "interaction": {
+        "state": [
+          {
+            "name": "paresPlano",
+            "type": "matching"
+          },
+          {
+            "name": "feedbackPares",
+            "type": "derived",
+            "derivedFrom": "paresPlano"
+          }
+        ],
+        "render": "Duas colunas mostram, de um lado, elementos do plano de projeto e, do outro, funções simples em linguagem infantil. Linhas coloridas ligam os pares feitos pelo aluno.",
+        "transition": "O aluno escolhe um elemento do plano e depois a função correspondente; a página mostra feedback imediato e permite corrigir sem penalização.",
+        "constraint": "Cada elemento do plano responde a uma necessidade diferente do projeto: saber de onde partimos, para onde vamos, como procuramos, como mostramos e quando fazemos.",
+        "assessment": "O aluno faz pelo menos 5 correspondências corretas entre elementos do plano e respetivas funções e lê uma delas em voz alta com sentido correto."
+      },
+      "maker": {
+        "type": "whiteboard",
+        "challenge": "No quadro, cada par cola um elemento do plano e explica à turma para que serve essa parte do projeto.",
+        "materials": [
+          "Quadro",
+          "Etiquetas com partes do plano",
+          "Etiquetas com funções"
+        ],
+        "groupSize": "2",
+        "connection": "As correspondências feitas na página passam para um mapa coletivo do plano de projeto no quadro.",
+        "communication": "Cada par apresenta uma ligação e a turma valida ou melhora a explicação.",
+        "alternatives": [
+          "Cartolina com velcro",
+          "Mesa de chão com cartões"
+        ]
+      },
+      "differentiation": {
+        "support": "Trabalhar apenas 3 pares com ícones fortes e leitura apoiada pelo professor.",
+        "standard": "Relacionar 5 elementos do plano com 5 funções em linguagem simples.",
+        "challenge": "Acrescentar uma explicação oral de como duas partes do plano se ajudam mutuamente, por exemplo perguntas e fontes."
+      },
+      "duration": 10
+    },
+    {
+      "summary": "Planear um projeto é fazer escolhas em grupo e justificar essas escolhas",
+      "textDescription": "O aluno deve experimentar montar um mini plano de projeto a partir de uma curiosidade concreta. A atividade deve mostrar que escolher pergunta, fontes, produto e datas muda o caminho do projeto e exige diálogo no grupo.",
+      "interaction": {
+        "state": [
+          {
+            "name": "tema",
+            "type": "dropdown",
+            "options": ["As abelhas", "Os vulcões", "Os robôs", "O mar da Madeira"],
+            "default": "As abelhas"
+          },
+          {
+            "name": "perguntaProjeto",
+            "type": "dropdown",
+            "options": ["O que queremos descobrir?", "Como vivem?", "Porque são importantes?", "Como podemos mostrar aos outros?"],
+            "default": "Como vivem?"
+          },
+          {
+            "name": "fontesEscolhidas",
+            "type": "drag"
+          },
+          {
+            "name": "produtoFinal",
+            "type": "dropdown",
+            "options": ["Cartaz", "Maquete", "Apresentação oral", "Livro pequeno"],
+            "default": "Cartaz"
+          },
+          {
+            "name": "diasPlano",
+            "type": "slider",
+            "range": [1, 5],
+            "step": 1,
+            "default": 3,
+            "unit": "dias"
+          }
+        ],
+        "render": "Um mini plano visual mostra um tema escolhido, uma pergunta central, cartões arrastáveis de fontes (livro, entrevista, vídeo, observação), um seletor de produto final e uma barra simples de dias. No fim surge uma pré-visualização do plano do grupo.",
+        "transition": "O aluno escolhe um tema, define a pergunta, arrasta 2 ou 3 fontes para o plano, seleciona um produto final e ajusta o número de dias; a pré-visualização atualiza em tempo real.",
+        "constraint": "As escolhas do grupo precisam de fazer sentido umas com as outras: a pergunta orienta as fontes, as fontes ajudam a responder e o produto serve para comunicar o que foi descoberto.",
+        "assessment": "O aluno completa um mini plano coerente e justifica oralmente pelo menos uma escolha de fonte e uma escolha de produto final em função da pergunta do projeto."
+      },
+      "maker": {
+        "type": "whiteboard",
+        "challenge": "Cada grupo passa o seu mini plano para o quadro e apresenta-o como proposta de projeto à turma.",
+        "materials": [
+          "Quadro",
+          "Modelo de plano grande",
+          "Post-its para tema, pergunta, fontes e produto"
+        ],
+        "groupSize": "2-4",
+        "connection": "O plano montado digitalmente é transformado numa proposta visível e discutida com a turma.",
+        "communication": "Os grupos apresentam a proposta e recebem uma pergunta dos colegas antes de a dar por fechada.",
+        "alternatives": [
+          "Cartolina A3 por grupo",
+          "Ficha impressa do plano"
+        ]
+      },
+      "differentiation": {
+        "support": "Escolher entre 2 temas, 2 fontes e 2 produtos com imagens e modelo parcialmente preenchido.",
+        "standard": "Construir um mini plano completo com 1 pergunta, 2-3 fontes, 1 produto e uma duração ajustada.",
+        "challenge": "Comparar dois planos possíveis para o mesmo tema e decidir qual responde melhor à pergunta inicial."
+      },
+      "duration": 13
+    },
+    {
+      "summary": "Comunicar e avaliar fazem parte do projeto e ajudam a melhorar o trabalho seguinte",
+      "textDescription": "O aluno deve compreender que um projeto não termina quando se recolhe informação. É preciso partilhar com os outros o que foi aprendido e pensar no que correu bem, no que foi difícil e no que pode melhorar no próximo projeto.",
+      "interaction": {
+        "state": [
+          {
+            "name": "etapaFinal",
+            "type": "toggle",
+            "options": ["Partilhar", "Refletir"],
+            "default": "Partilhar"
+          },
+          {
+            "name": "respostaReflexao",
+            "type": "quiz",
+            "options": ["Mostra o que aprendemos", "Serve só para acabar depressa", "Não interessa ao grupo"],
+            "default": "Mostra o que aprendemos"
+          }
+        ],
+        "render": "Dois painéis mostram 'Partilhar' e 'Refletir'. No modo partilhar aparecem exemplos de formas de comunicar; no modo refletir surgem perguntas simples sobre o processo. Um quiz final pede ao aluno que escolha a melhor razão para avaliar o projeto.",
+        "transition": "O aluno alterna entre os dois modos, observa exemplos, responde ao quiz e recebe feedback com linguagem positiva e concreta.",
+        "constraint": "Partilhar torna a aprendizagem pública e a avaliação ajuda o grupo a melhorar; as duas etapas são diferentes, mas ambas são necessárias no fim do projeto.",
+        "assessment": "O aluno distingue comunicação de avaliação e responde corretamente ao quiz final, completando oralmente a frase 'No fim do projeto nós partilhamos para... e avaliamos para...'."
+      },
+      "maker": {
+        "type": "whiteboard",
+        "challenge": "No quadro, a turma faz uma síntese final em duas colunas: 'Como mostramos' e 'Como pensamos sobre o que fizemos'.",
+        "materials": [
+          "Quadro",
+          "Marcadores de duas cores"
+        ],
+        "groupSize": "turma",
+        "connection": "A distinção feita na página passa para uma síntese coletiva visível para todos.",
+        "communication": "A turma fecha a sessão com duas ou três frases coletivas sobre como quer trabalhar no próximo projeto.",
+        "alternatives": [
+          "Cartaz T-chart",
+          "Duas caixas de cartões"
+        ]
+      },
+      "differentiation": {
+        "support": "Usar apenas exemplos visuais de partilha e reflexão, com frases iniciadas para completar.",
+        "standard": "Distinguir as duas etapas e responder ao quiz com justificação breve.",
+        "challenge": "Relacionar a avaliação final com uma decisão concreta para melhorar o próximo projeto do grupo."
+      },
+      "duration": 10
+    }
+  ],
+  "sessionFlow": "0-5 min: ativação em turma com uma curiosidade e conversa breve sobre como nasce um projeto. 5-17 min: exploração individual da ordenação dos passos. 17-27 min: trabalho a pares para associar partes do plano de projeto às suas funções. 27-40 min: construção em pares ou pequeno grupo de um mini plano de projeto com escolhas justificadas. 40-45 min: síntese coletiva no quadro sobre partilha e avaliação, fechando com reflexão final em conselho breve."
+}
