@@ -1,2040 +1,515 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-PT">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>M28P #17 — girafa | PageCraft</title>
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHRleHQgeT0iNTAiIGZvbnQtc2l6ZT0iNDgiPvCfk5g8L3RleHQ+PC9zdmc+" />
   <style>
     :root {
-      --bg: #fffdf0;
-      --surface: #ffffff;
-      --primary: #d4830a;
-      --accent: #7b5e2a;
-      --text: #1e1b18;
-      --muted: #6f655f;
-      --gi: #d4830a;
-      --ra: #7b5e2a;
-      --fa: #c03a9b;
-      --green: #22c55e;
-      --green-soft: #f0fdf4;
-      --amber: #f59e0b;
-      --amber-soft: #fffbeb;
-      --red: #ef4444;
-      --blue: #47a6ff;
-      --purple: #6d4cc2;
-      --orange-soft: #ffe0b5;
-      --shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+      --bg: #FFFDF0;
+      --surface: #FFFFFF;
+      --primary: #D4830A;
+      --accent: #7B5E2A;
+      --text: #1E1B18;
+      --correct: #22c55e;
+      --correct-bg: #f0fdf4;
+      --incorrect: #F59E0B;
+      --incorrect-bg: #fffbeb;
       --radius: 16px;
-      --radius-lg: 24px;
-      --slot-dash: 2px dashed rgba(30, 27, 24, 0.2);
-      --font: "Nunito", "Poppins", "Comic Sans MS", sans-serif;
-      --trans: 200ms ease;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --font: 'Nunito', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+      --touch-size: 48px;
+      --card-gap: 1rem;
     }
-
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
       font-family: var(--font);
-      color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(255, 215, 115, 0.5), transparent 28%),
-        radial-gradient(circle at top right, rgba(210, 160, 60, 0.18), transparent 25%),
-        linear-gradient(180deg, #fffdf0 0%, #fff9e2 100%);
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 20%, transparent), transparent 38%),
+        linear-gradient(180deg, color-mix(in srgb, var(--primary) 8%, var(--bg)), var(--bg));
+      color: var(--text);
       font-size: 20px;
-      line-height: 1.45;
+      line-height: 1.55;
+      min-height: 100vh;
     }
-
-    button, input, textarea, select {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-      border: 0;
-      min-height: 48px;
-    }
-
-    button:focus-visible, .focusable:focus-visible, textarea:focus-visible, input:focus-visible {
-      outline: 3px solid var(--primary);
-      outline-offset: 2px;
-    }
-
-    .page {
-      width: min(960px, calc(100vw - 24px));
-      margin: 0 auto;
-      padding: 18px 0 44px;
-    }
-
+    a, button, summary, textarea { font: inherit; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; background: var(--surface); color: var(--text); padding: 0.75rem 1rem; border-radius: 9999px; z-index: 1000; border: 2px solid var(--primary); }
+    .skip-link:focus { top: 1rem; }
+    :focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+    .shell { max-width: 1120px; margin: 0 auto; padding: 1rem 1rem 3rem; }
     .hero {
-      background:
-        linear-gradient(135deg, rgba(71, 166, 255, 0.95), rgba(212, 131, 10, 0.92)),
-        linear-gradient(180deg, #d4830a, #7b5e2a);
+      position: relative;
+      overflow: hidden;
       border-radius: 28px;
-      box-shadow: var(--shadow);
-      padding: 24px;
-      color: #fff;
-      position: relative;
-      overflow: hidden;
+      padding: 1.4rem;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 72%, white), color-mix(in srgb, var(--accent) 60%, white));
+      color: white;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
     }
-
-    .hero::before, .hero::after {
-      content: "";
-      position: absolute;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.14);
-    }
-
-    .hero::before { width: 280px; height: 280px; right: -80px; top: -90px; }
-    .hero::after { width: 180px; height: 180px; left: -30px; bottom: -90px; }
-
-    h1, h2, h3 {
-      margin: 0 0 10px;
-      line-height: 1.1;
-    }
-
-    h1 { font-size: clamp(2.1rem, 5vw, 3rem); }
-    h2 { font-size: clamp(1.5rem, 3vw, 2rem); }
-    h3 { font-size: 1.2rem; }
-
-    p { margin: 0 0 10px; }
-
-    .hero-grid, .unit-grid, .double, .triple {
-      display: grid;
-      gap: 16px;
-    }
-
-    .hero-grid { grid-template-columns: 1.6fr 1fr; align-items: start; }
-
-    .badge-row, .pill-row, .choice-row, .option-grid, .slot-row, .story-options, .criteria-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .badge, .mini-badge {
+    .hero::after { content: ""; position: absolute; inset: auto -8% -24% auto; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.14); }
+    .hero-top { display: flex; gap: 1rem; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; position: relative; z-index: 1; }
+    .hero-kicker, .hero-badge, .meta-chip, .nav-pill, .page-link span {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      border-radius: 999px;
-      padding: 7px 12px;
-      font-weight: 800;
-      background: rgba(255,255,255,0.16);
-      backdrop-filter: blur(4px);
-    }
-
-    .hero-card, .unit, .maker, .assessment-block, .curriculum, .footer-card {
-      background: var(--surface);
-      border: 2px solid rgba(212, 131, 10, 0.38);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow);
-    }
-
-    .hero-card { color: var(--text); padding: 18px; }
-
-    .goal-list {
-      display: grid;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .goal {
-      background: rgba(255,255,255,0.16);
-      border: 1px solid rgba(255,255,255,0.22);
-      border-radius: 16px;
-      padding: 10px 12px;
-    }
-
-    .section-stack {
-      display: grid;
-      gap: 18px;
-      margin-top: 18px;
-    }
-
-    .unit {
-      padding: 18px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .unit::after {
-      content: "";
-      position: absolute;
-      inset: auto -40px -50px auto;
-      width: 140px;
-      height: 140px;
-      background: radial-gradient(circle, rgba(212, 131, 10, 0.14), transparent 68%);
-      pointer-events: none;
-    }
-
-    .unit-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      align-items: start;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
-    }
-
-    .kicker {
-      color: var(--accent);
-      font-size: 0.92rem;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-
-    .tabs {
-      display: inline-flex;
-      background: #fff5de;
-      border-radius: 999px;
-      padding: 4px;
-      gap: 4px;
-      border: 1px solid rgba(212, 131, 10, 0.22);
-    }
-
-    .tab {
-      border-radius: 999px;
-      padding: 8px 12px;
-      background: transparent;
-      color: var(--text);
-      font-weight: 800;
-      transition: transform var(--trans), background var(--trans), box-shadow var(--trans);
-    }
-
-    .tab:hover { transform: translateY(-1px) scale(1.02); }
-    .tab.active {
-      background: var(--surface);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-    }
-
-    .diff-note {
-      margin-top: 8px;
-      background: #fffaf0;
-      border-left: 5px solid var(--amber);
-      border-radius: 12px;
-      padding: 10px 12px;
-      font-size: 0.95rem;
-    }
-
-    .button {
-      border-radius: 999px;
-      padding: 12px 24px;
-      font-weight: 800;
-      background: linear-gradient(180deg, #f3b340, #d4830a);
-      color: #fff;
-      box-shadow: 0 8px 16px rgba(212, 131, 10, 0.24);
-      transition: transform var(--trans), box-shadow var(--trans), filter var(--trans);
-    }
-
-    .button:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 10px 20px rgba(212, 131, 10, 0.32); }
-    .button:active { transform: scale(0.97); }
-    .button.alt { background: linear-gradient(180deg, #8a6936, #7b5e2a); }
-    .button.ghost {
-      background: #fff5de;
-      color: var(--accent);
-      box-shadow: none;
-      border: 2px solid rgba(123, 94, 42, 0.2);
-    }
-
-    .small-button {
-      padding: 9px 14px;
-      min-height: 44px;
-      border-radius: 14px;
-      font-weight: 800;
-      background: #fff2c9;
-      color: var(--text);
-    }
-
-    .status, .feedback {
-      border-radius: 14px;
-      padding: 12px 14px;
+      justify-content: center;
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 9999px;
+      padding: 0.75rem 1.25rem;
       font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      min-height: 52px;
     }
-
-    .correct {
-      background: var(--green-soft);
-      color: #18713a;
-      border: 2px solid rgba(34, 197, 94, 0.26);
-    }
-
-    .incorrect {
-      background: var(--amber-soft);
-      color: #995f02;
-      border: 2px solid rgba(245, 158, 11, 0.26);
-    }
-
-    .word-display {
-      font-size: clamp(2.3rem, 6vw, 3.2rem);
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      color: var(--primary);
-      text-transform: uppercase;
-    }
-
-    .syl-gi { color: var(--gi); }
-    .syl-ra { color: var(--ra); }
-    .syl-fa { color: var(--fa); }
-
-    .card-grid {
-      display: grid;
-      gap: 14px;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    }
-
-    .soft-card, .activity-card, .maker-card, .criterion-card {
-      border-radius: var(--radius);
-      border: 2px solid rgba(212, 131, 10, 0.22);
-      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,249,230,0.95));
-      padding: 14px;
-      position: relative;
-    }
-
-    .savana {
-      min-height: 320px;
-      border-radius: var(--radius-lg);
-      position: relative;
-      overflow: hidden;
-      background:
-        linear-gradient(180deg, #7fd3ff 0 58%, #f4d36f 58% 100%);
-      border: 2px solid rgba(71, 166, 255, 0.22);
-    }
-
-    .sun {
-      position: absolute;
-      width: 88px;
-      height: 88px;
-      border-radius: 50%;
-      background: radial-gradient(circle, #fff7b0 0%, #ffd15c 62%, rgba(255, 209, 92, 0.18) 75%);
-      top: 18px;
-      right: 18px;
-      box-shadow: 0 0 36px rgba(255, 209, 92, 0.48);
-    }
-
-    .acacia {
-      position: absolute;
-      left: 10%;
-      bottom: 78px;
-      width: 140px;
-      height: 180px;
-    }
-
-    .acacia .trunk {
-      position: absolute;
-      width: 26px;
-      height: 114px;
-      left: 52px;
-      bottom: 0;
-      background: #7b5e2a;
+    .hero-kicker { background: rgba(255,255,255,0.16); }
+    .hero-badge { background: rgba(255,255,255,0.22); }
+    .hero-grid { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.9fr); margin-top: 1.25rem; position: relative; z-index: 1; }
+    .hero-copy h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.05; margin: 0.4rem 0 0.7rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+    .hero-copy p { margin: 0.4rem 0; max-width: 45rem; }
+    .word-scene { background: rgba(255,255,255,0.14); border: 2px solid rgba(255,255,255,0.28); border-radius: 24px; padding: 1rem; backdrop-filter: blur(4px); }
+    .word-scene .emoji { font-size: clamp(3rem, 10vw, 5.5rem); line-height: 1; }
+    .meta-row, .objective-row, .syllable-row, .page-switch, .section-nav { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .meta-row { margin-top: 1rem; }
+    .meta-chip { background: rgba(255,255,255,0.18); }
+    .objective-row { margin: 1rem 0 0; padding: 0; list-style: none; }
+    .objective-row li { background: rgba(255,255,255,0.22); border-radius: 9999px; padding: 0.75rem 1rem; font-weight: 700; min-height: var(--touch-size); display: inline-flex; align-items: center; }
+    .word-spotlight { margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1.1fr 1fr; }
+    .spot-card { background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 70%, white); border-radius: 24px; padding: 1rem; box-shadow: var(--shadow); }
+    .spot-card h2 { margin: 0 0 0.75rem; font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; }
+    .spot-card .word-display { font-size: clamp(2.4rem, 7vw, 3.8rem); font-weight: 800; color: var(--primary); letter-spacing: 0.05em; text-transform: uppercase; }
+    .spot-card .mission { margin-top: 0.75rem; }
+    .syllable-row { margin-top: 1rem; }
+    .syllable-token, .syllable-chip {
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
       border-radius: 12px;
-      transform: skew(-6deg);
+      border: none;
+      color: white;
+      font-weight: 800;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      padding: 0.55rem 1rem;
+      background: var(--chip, var(--primary));
+      box-shadow: var(--shadow);
     }
-
-    .acacia .crown {
-      position: absolute;
-      width: 140px;
-      height: 76px;
-      background: #58a838;
-      border-radius: 72px 72px 50px 50px;
-      top: 0;
-      left: 0;
-      box-shadow: inset 0 -8px 0 rgba(0,0,0,0.08);
-    }
-
-    .giraffe-scene {
-      position: absolute;
-      right: 9%;
-      bottom: 34px;
-      width: 170px;
-      height: 230px;
-      transition: transform 1s ease, opacity 500ms ease;
-      transform: translateX(120px);
-      opacity: 0.4;
-    }
-
-    .giraffe-scene.revealed {
-      transform: translateX(0);
-      opacity: 1;
-    }
-
-    .story-bubble {
-      position: absolute;
-      left: 50%;
-      top: 28px;
-      transform: translateX(-50%);
-      width: min(78%, 520px);
-      background: rgba(255,255,255,0.96);
-      border-radius: 24px;
-      padding: 16px 18px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.12);
-      opacity: 0;
-      translate: 0 12px;
-      transition: opacity 500ms ease, translate 500ms ease;
-      pointer-events: none;
-    }
-
-    .story-bubble.show {
-      opacity: 1;
-      translate: 0 0;
-    }
-
-    .story-bubble::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      bottom: -14px;
-      width: 28px;
-      height: 28px;
-      background: inherit;
-      transform: rotate(45deg) translateX(-50%);
-    }
-
-    .story-floor {
-      position: absolute;
-      inset: auto 0 0 0;
-      padding: 12px;
-      background: linear-gradient(180deg, rgba(244, 211, 111, 0), rgba(123, 94, 42, 0.14));
-      display: flex;
-      justify-content: center;
-    }
-
-    .blink {
-      animation: blinkWord 0.45s ease 3;
-    }
-
-    @keyframes blinkWord {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.18; transform: scale(1.06); }
-    }
-
-    @keyframes pulseGreen {
-      0% { transform: scale(1); box-shadow: 0 0 0 rgba(34,197,94,0.2); }
-      50% { transform: scale(1.03); box-shadow: 0 0 0 16px rgba(34,197,94,0); }
-      100% { transform: scale(1); }
-    }
-
-    @keyframes wave {
-      0%, 100% { transform: rotate(0deg); }
-      50% { transform: rotate(12deg); }
-    }
-
-    .animal-stage, .clap-panel, .result-panel, .writing-pad, .curiosity-box, .wall-board {
-      border-radius: var(--radius);
-      background: #fffaf0;
-      border: 2px dashed rgba(123, 94, 42, 0.24);
-      padding: 14px;
-    }
-
-    .animal-emoji {
-      font-size: clamp(4rem, 10vw, 6rem);
-      text-align: center;
-      line-height: 1;
-    }
-
-    .option-card, .word-chip, .choice-card, .fill-option, .phrase-token, .criterion-option {
-      border-radius: 16px;
-      border: 2px solid rgba(123, 94, 42, 0.2);
+    .page-switch { margin: 1.2rem 0 0.5rem; }
+    .page-link {
+      text-decoration: none;
       background: var(--surface);
-      padding: 12px 16px;
-      font-weight: 800;
-      text-align: center;
-      min-width: 120px;
-      min-height: 52px;
-      transition: transform var(--trans), border-color var(--trans), box-shadow var(--trans), background var(--trans);
-    }
-
-    .option-card:hover, .word-chip:hover, .choice-card:hover, .fill-option:hover, .phrase-token:hover, .criterion-option:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.07);
-    }
-
-    .option-card.correct-pick, .choice-card.correct-pick, .fill-option.correct-pick, .criterion-option.correct-pick {
-      background: var(--green-soft);
-      border-color: rgba(34,197,94,0.5);
-      animation: pulseGreen 0.35s ease;
-    }
-
-    .option-card.wrong-pick, .choice-card.wrong-pick, .fill-option.wrong-pick, .criterion-option.wrong-pick {
-      background: var(--amber-soft);
-      border-color: rgba(245,158,11,0.5);
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 18px;
-      border-radius: 999px;
-      background: #f5ecd3;
-      overflow: hidden;
-      border: 1px solid rgba(123, 94, 42, 0.14);
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #ffd56d, #22c55e);
-      width: 0%;
-      transition: width 400ms ease;
-    }
-
-    .draggable-pool, .slots-wrap, .builder-area, .phrase-pool, .phrase-slots {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: stretch;
-    }
-
-    .drag-chip, .phrase-draggable {
-      padding: 10px 18px;
-      border-radius: 12px;
-      font-size: clamp(1.4rem, 3vw, 2.2rem);
-      font-weight: 900;
-      color: #fff;
-      user-select: none;
-      touch-action: none;
-      cursor: grab;
-      min-width: 74px;
-      text-align: center;
-      box-shadow: 0 7px 14px rgba(0,0,0,0.12);
-      transition: transform var(--trans), box-shadow var(--trans);
-    }
-
-    .drag-chip.dragging, .phrase-draggable.dragging {
-      transform: scale(1.1);
-      box-shadow: 0 16px 28px rgba(0,0,0,0.22);
-      cursor: grabbing;
-      position: fixed;
-      z-index: 2000;
-      margin: 0;
-      pointer-events: none;
-    }
-
-    .drag-chip[data-value="gi"] { background: var(--gi); }
-    .drag-chip[data-value="ra"] { background: var(--ra); }
-    .drag-chip[data-value="fa"] { background: var(--fa); }
-    .drag-chip[data-value="do"], .drag-chip[data-value="to"], .drag-chip[data-value="da"], .drag-chip[data-value="ca"], .drag-chip[data-value="va"], .drag-chip[data-value="la"], .drag-chip[data-value="no"] {
-      background: #4c97c2;
-    }
-
-    .slot, .build-slot, .phrase-slot {
-      min-height: 78px;
-      min-width: 92px;
-      border-radius: 16px;
-      border: var(--slot-dash);
-      background: rgba(255,255,255,0.72);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      padding: 8px;
-      position: relative;
-    }
-
-    .slot .slot-number, .phrase-slot .slot-number {
-      font-size: 0.9rem;
-      color: var(--muted);
-      font-weight: 800;
-    }
-
-    .slot.ready, .build-slot.ready, .phrase-slot.ready {
-      border-color: rgba(34,197,94,0.44);
-      background: rgba(240,253,244,0.88);
-    }
-
-    .clap-button {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      font-size: 2.4rem;
-      font-weight: 800;
-      color: #fff;
-      background: linear-gradient(180deg, #ffb347, #f59e0b);
-      box-shadow: 0 14px 24px rgba(245,158,11,0.2);
-    }
-
-    .clap-count {
-      font-size: 2.4rem;
-      font-weight: 900;
-      color: var(--accent);
-    }
-
-    .tiny-note {
-      font-size: 0.92rem;
-      color: var(--muted);
-    }
-
-    .word-preview {
-      font-size: 2rem;
-      font-weight: 900;
-      color: var(--accent);
-      min-height: 50px;
-    }
-
-    .word-list {
-      display: grid;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .word-tag {
-      background: #fff1c5;
-      border-radius: 999px;
-      padding: 8px 12px;
-      font-weight: 800;
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-      width: fit-content;
-    }
-
-    .fill-word {
-      font-size: clamp(1.8rem, 5vw, 2.7rem);
-      font-weight: 900;
-      letter-spacing: 0.05em;
-      margin-bottom: 12px;
-    }
-
-    .blank {
-      display: inline-block;
-      min-width: 110px;
-      border-bottom: 6px solid var(--primary);
-      text-align: center;
-      color: var(--primary);
-    }
-
-    .write-box, textarea {
-      width: 100%;
-      border-radius: 14px;
-      border: 2px solid rgba(123,94,42,0.2);
-      min-height: 90px;
-      padding: 12px;
-      background: #fff;
-      resize: vertical;
-    }
-
-    .phrase-token, .phrase-draggable {
-      min-width: 80px;
-      padding: 12px 16px;
-      background: #fff;
       color: var(--text);
-      font-size: 1.15rem;
-      border: 2px solid rgba(123,94,42,0.2);
-    }
-
-    .phrase-highlight {
-      color: var(--blue);
-      border-color: rgba(71,166,255,0.35);
-      background: rgba(71,166,255,0.08);
-    }
-
-    .phrase-read {
+      border: 2px solid color-mix(in srgb, var(--primary) 28%, white);
+      border-radius: 18px;
+      padding: 0.85rem 1rem;
+      min-height: var(--touch-size);
       display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      min-height: 54px;
-      padding: 10px;
-      border-radius: 14px;
-      background: #fffdf5;
-      border: 2px solid rgba(123,94,42,0.12);
-      margin-top: 10px;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: space-between;
+      flex: 1 1 200px;
+      box-shadow: var(--shadow);
+      font-weight: 700;
     }
-
-    .phrase-read span.active {
-      background: #ffe38d;
-      border-radius: 10px;
-      padding: 2px 6px;
+    .page-link.is-current { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
+    .section-nav { position: sticky; top: 0; z-index: 10; padding: 0.85rem 0 1rem; background: linear-gradient(180deg, var(--bg), rgba(255,248,240,0.88)); backdrop-filter: blur(6px); }
+    .nav-pill { text-decoration: none; background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 24%, white); padding: 0.55rem 1rem; }
+    .content { display: grid; gap: 1.1rem; }
+    .unit-card { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 35%, white); border-radius: 24px; padding: 1.15rem; box-shadow: var(--shadow); }
+    .unit-head { display: flex; gap: 1rem; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+    .unit-head h2 { margin: 0.2rem 0 0; font-size: clamp(1.45rem, 4vw, 2.1rem); font-weight: 800; }
+    .unit-kicker { color: color-mix(in srgb, var(--primary) 80%, black); font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.9rem; }
+    .unit-badge { background: color-mix(in srgb, var(--accent) 22%, var(--surface)); border: 2px solid var(--accent); border-radius: 9999px; padding: 0.65rem 1rem; font-weight: 800; min-height: var(--touch-size); display: inline-flex; align-items: center; }
+    .unit-grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.95fr); margin-top: 1rem; }
+    .unit-copy p { margin: 0.65rem 0; }
+    .unit-flow { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 1rem; }
+    .unit-flow > div, .play-card, .maker-box, .teacher-card { background: color-mix(in srgb, var(--bg) 70%, white); border-radius: 18px; padding: 0.95rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
+    .play-label { font-weight: 800; margin: 0 0 0.8rem; }
+    .pill-btn, .choice-btn, .check-card, .prompt-card {
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 9999px;
+      border: 2px solid transparent;
+      padding: 0.75rem 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
     }
-
-    .assessment-block {
-      padding: 18px;
-      background: linear-gradient(180deg, #fff3de, #ffd9a9);
-      border-color: rgba(245,158,11,0.4);
+    .pill-btn:hover, .choice-btn:hover, .check-card:hover, .prompt-card:hover, .page-link:hover { transform: scale(1.05); box-shadow: 0 10px 24px rgba(0,0,0,0.12); }
+    .pill-btn:active, .choice-btn:active, .check-card:active, .prompt-card:active, .page-link:active { transform: scale(0.97); }
+    .pill-btn { background: var(--primary); color: white; }
+    .choice-row, .check-grid, .prompt-grid, .compose-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .choice-btn, .check-card, .prompt-card { background: var(--surface); color: var(--text); border-color: color-mix(in srgb, var(--primary) 22%, white); }
+    .choice-btn.is-right, .check-card.is-done { background: var(--correct-bg); border-color: var(--correct); color: #166534; }
+    .choice-btn.is-wrong { background: var(--incorrect-bg); border-color: var(--incorrect); color: #92400e; }
+    .feedback, .helper-text { margin: 0.85rem 0 0; font-weight: 700; }
+    .feedback { min-height: 1.4em; }
+    .compose-output, .phrase-card, .cloze-word { min-height: 72px; border-radius: 18px; background: var(--surface); border: 2px dashed color-mix(in srgb, var(--primary) 35%, white); display: grid; place-items: center; font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800; color: var(--primary); padding: 0.9rem; margin-top: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .phrase-card { text-transform: none; font-size: 1.3rem; color: var(--text); }
+    .phrase-input { width: 100%; margin-top: 0.85rem; border-radius: 18px; border: 2px solid color-mix(in srgb, var(--primary) 25%, white); padding: 0.9rem 1rem; min-height: 120px; background: #fff; }
+    .diff-switcher { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; }
+    .diff-btn { min-height: var(--touch-size); min-width: var(--touch-size); border-radius: 9999px; border: 2px solid color-mix(in srgb, var(--primary) 28%, white); background: var(--surface); padding: 0.7rem 1rem; font-weight: 700; cursor: pointer; }
+    .diff-btn.is-active { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
+    .diff-panel { display: none; background: color-mix(in srgb, var(--bg) 72%, white); border-radius: 18px; padding: 0.95rem; margin-top: 0.8rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
+    .diff-panel.is-active { display: block; }
+    .teacher-guide { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 30%, white); border-radius: 24px; padding: 0.9rem 1rem; box-shadow: var(--shadow); }
+    .teacher-guide summary { min-height: var(--touch-size); display: flex; align-items: center; cursor: pointer; font-weight: 800; font-size: 1.2rem; }
+    .teacher-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 1rem; }
+    .teacher-card-wide { grid-column: 1 / -1; }
+    .teacher-card h3 { margin-top: 0; }
+    .footer { text-align: center; padding: 1.4rem 0 0; font-weight: 700; color: color-mix(in srgb, var(--text) 72%, white); }
+    .hidden { display: none !important; }
+    @media (max-width: 900px) {
+      .hero-grid, .word-spotlight, .unit-grid, .unit-flow, .teacher-grid { grid-template-columns: 1fr; }
+      .section-nav { position: static; }
     }
-
-    .criteria-row { margin-bottom: 12px; }
-
-    .criterion-dot {
-      width: 54px;
-      height: 54px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      font-size: 1.5rem;
-      background: rgba(255,255,255,0.9);
-      border: 2px solid rgba(123,94,42,0.2);
-      font-weight: 800;
-    }
-
-    .criterion-dot.done {
-      background: var(--green-soft);
-      border-color: rgba(34,197,94,0.44);
-    }
-
-    .criterion-dot.retry {
-      background: var(--amber-soft);
-      border-color: rgba(245,158,11,0.44);
-    }
-
-    .maker {
-      padding: 18px;
-      background: linear-gradient(180deg, #eafce7, #dff4db);
-      border-color: rgba(34,197,94,0.25);
-    }
-
-    .maker-card {
-      background: rgba(255,255,255,0.72);
-      border-color: rgba(34,197,94,0.24);
-    }
-
-    .curriculum {
-      padding: 18px;
-      background: linear-gradient(135deg, #7e5fd4, #5d3eb8);
-      color: #fff;
-      border-color: rgba(255,255,255,0.12);
-    }
-
-    .curriculum .soft-card {
-      background: rgba(255,255,255,0.12);
-      border-color: rgba(255,255,255,0.16);
-      color: #fff;
-    }
-
-    .footer-card {
-      margin-top: 18px;
-      padding: 14px 18px;
-      text-align: center;
-      font-weight: 900;
-      background: linear-gradient(180deg, #fff8ea, #fff0c7);
-    }
-
-    .activity-panels > div { display: none; }
-    .activity-panels > div.active { display: block; }
-
-    .mural {
-      margin-top: 12px;
-      display: grid;
-      gap: 10px;
-    }
-
-    .mural-item {
-      background: #fff;
-      border-radius: 14px;
-      border: 2px solid rgba(123,94,42,0.18);
-      padding: 10px 12px;
-    }
-
-    .confetti-layer {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 999;
-    }
-
-    .confetti {
-      position: absolute;
-      width: 10px;
-      height: 16px;
-      opacity: 0.95;
-      border-radius: 4px;
-      will-change: transform, opacity;
-    }
-
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      border: 0;
-    }
-
-    @media (max-width: 860px) {
+    @media (max-width: 640px) {
       body { font-size: 18px; }
-      .hero-grid, .double { grid-template-columns: 1fr; }
+      .shell { padding: 0.75rem 0.75rem 2.4rem; }
+      .hero { padding: 1rem; border-radius: 22px; }
+      .hero-copy h1 { font-size: clamp(2rem, 9vw, 3rem); }
+      .page-link { flex-basis: 100%; }
+      .objective-row li, .meta-chip, .hero-kicker, .hero-badge, .nav-pill { width: 100%; justify-content: center; }
+      .unit-card, .spot-card, .teacher-guide { border-radius: 20px; }
     }
-
-    @media (min-width: 861px) {
-      .double { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .triple { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
     }
   </style>
 </head>
-<body>
-  <div class="confetti-layer" id="confettiLayer" aria-hidden="true"></div>
-  <main class="page">
-    <section class="hero" aria-labelledby="heroTitle">
+<body data-page-variant="index.html" data-visible-units="1,2,3,4">
+  <a href="#main" class="skip-link">Ir para o conteúdo</a>
+  <div class="shell">
+    <header class="hero">
+      <div class="hero-top">
+        <span class="hero-kicker">M28P #17</span>
+        <span class="hero-badge">Rota completa</span>
+      </div>
       <div class="hero-grid">
-        <div>
-          <div class="badge-row">
-            <span class="badge">Palavra M28P #17</span>
-            <span class="badge">1.º ano</span>
-            <span class="badge">45 min</span>
+        <div class="hero-copy">
+          <p>Descobrir, ler e brincar</p>
+          <h1>Girafa</h1>
+          <p>Percurso completo com foco na descoberta da palavra, nas sílabas e na confiança ao ler.</p>
+          <div class="meta-row">
+            <span class="meta-chip">🦒 Palavra 17</span>
+            <span class="meta-chip">1.º ano (6-7 anos)</span>
+            <span class="meta-chip">45 min</span>
           </div>
-          <h1 id="heroTitle">Aprender a palavra <span class="word-display">GIRAFA</span></h1>
-          <p>Uma aula interactiva para reconhecer, partir em sílabas, recombinar, escrever e usar a palavra <strong>girafa</strong> em frases simples.</p>
-          <div class="goal-list">
-            <div class="goal">Reconhecer a palavra <strong>girafa</strong> como um todo.</div>
-            <div class="goal">Segmentar em três sílabas: <strong><span class="syl-gi">gi</span>-<span class="syl-ra">ra</span>-<span class="syl-fa">fa</span></strong>.</div>
-            <div class="goal">Construir novas palavras com sílabas conhecidas.</div>
-            <div class="goal">Usar <strong>girafa</strong> numa frase oral e escrita.</div>
-          </div>
+          <ul class="objective-row"><li>Reconhecer a palavra &#x27;girafa&#x27; como um todo (leitura global)</li><li>Segmentar a palavra em três sílabas: gi-ra-fa</li><li>Recombinar as sílabas gi, ra, fa com sílabas já conhecidas para formar novas palavras reais</li></ul>
         </div>
-        <aside class="hero-card" aria-label="Metadados da aula">
-          <h2>Roteiro</h2>
-          <p><strong>Idade:</strong> 6-7 anos</p>
-          <p><strong>Tema:</strong> animal</p>
-          <p><strong>Frase-modelo:</strong> A girafa tem pescoço comprido.</p>
-          <div class="soft-card" style="margin-top:12px;">
-            <p><strong>Materiais:</strong> tablet ou computador, cartões de sílabas, papel, lápis e quadro interactivo opcional.</p>
-          </div>
+        <aside class="word-scene" aria-hidden="true">
+          <div class="emoji">🦒</div>
+          <p><strong>Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</strong></p>
+          <p>Paleta própria, leitura em pt-PT AO90 e navegação pensada para toque.</p>
+          <p>Esta página trabalha as unidades 1, 2, 3, 4.</p>
         </aside>
       </div>
-    </section>
+    </header>
 
-    <section class="section-stack">
-      <article class="unit" id="unit1">
-        <div class="unit-top">
-          <div>
-            <div class="kicker">Unidade 1 · 5 min</div>
-            <h2>Abertura contextual</h2>
-            <p>A Fafa aparece na savana para ligar a imagem ao nome escrito.</p>
-          </div>
-          <div class="tabs" data-unit="1" aria-label="Diferenciação da unidade 1">
-            <button class="tab active" data-level="support">🟢 Apoio</button>
-            <button class="tab" data-level="standard">🟡 Intermédio</button>
-            <button class="tab" data-level="challenge">🔴 Desafio</button>
-          </div>
-        </div>
-        <div class="diff-note" data-diff-text="1"></div>
-        <div class="double">
-          <div class="savana" aria-label="Cena da savana">
-            <div class="sun"></div>
-            <div class="acacia" aria-hidden="true">
-              <div class="crown"></div>
-              <div class="trunk"></div>
-            </div>
-            <svg class="giraffe-scene" id="storyGiraffe" viewBox="0 0 200 260" aria-hidden="true">
-              <circle cx="103" cy="38" r="22" fill="#f5c667"/>
-              <ellipse cx="103" cy="68" rx="14" ry="18" fill="#f5c667"/>
-              <rect x="96" y="53" width="14" height="85" rx="7" fill="#f5c667"/>
-              <ellipse cx="98" cy="158" rx="36" ry="48" fill="#f5c667"/>
-              <rect x="74" y="190" width="12" height="54" rx="6" fill="#7b5e2a"/>
-              <rect x="92" y="194" width="12" height="50" rx="6" fill="#7b5e2a"/>
-              <rect x="114" y="194" width="12" height="50" rx="6" fill="#7b5e2a"/>
-              <rect x="132" y="188" width="12" height="56" rx="6" fill="#7b5e2a"/>
-              <rect x="118" y="130" width="20" height="10" rx="5" fill="#f5c667" style="transform-origin:118px 135px;" id="waveTail"/>
-              <circle cx="90" cy="30" r="5" fill="#7b5e2a"/>
-              <circle cx="116" cy="30" r="5" fill="#7b5e2a"/>
-              <circle cx="110" cy="39" r="3" fill="#1e1b18"/>
-              <circle cx="84" cy="39" r="3" fill="#1e1b18"/>
-              <circle cx="124" cy="47" r="4" fill="#7b5e2a"/>
-              <circle cx="116" cy="70" r="6" fill="#d4830a"/>
-              <circle cx="85" cy="135" r="7" fill="#d4830a"/>
-              <circle cx="118" cy="160" r="7" fill="#d4830a"/>
-              <circle cx="96" cy="186" r="7" fill="#d4830a"/>
-            </svg>
-            <div class="story-bubble" id="storyBubble">
-              <p id="storyText">A Fafa é girafa.</p>
-            </div>
-            <div class="story-floor">
-              <div class="word-display" id="storyWord" style="visibility:hidden;">GIRAFA</div>
-            </div>
-          </div>
-          <div class="soft-card">
-            <div class="pill-row" style="margin-bottom:12px;">
-              <button class="button" id="discoverBtn" aria-label="Descobrir a girafa">Descobrir!</button>
-              <button class="button alt" id="hearStoryBtn" disabled aria-label="Ouvir a história">Ouvir história</button>
-            </div>
-            <p class="tiny-note">Descobre que o animal e a palavra escrita representam a mesma coisa.</p>
-            <div class="story-options" id="storyOptions" style="margin-top:14px;"></div>
-            <div id="storyFeedback" class="feedback incorrect" style="margin-top:12px; display:none;"></div>
-            <div class="writing-pad" id="u1MemoryBox" style="margin-top:14px; display:none;">
-              <label for="u1MemoryInput"><strong>Desafio:</strong> escreve a palavra de memória antes de confirmar.</label>
-              <input id="u1MemoryInput" class="write-box" type="text" aria-label="Escrever a palavra girafa de memória">
-            </div>
-          </div>
+    <div class="page-switch" aria-label="Outras páginas desta palavra"><a class="page-link is-current" href="./index.html">Página 1<span>Atual</span></a><a class="page-link" href="./page-2.html">Página 2<span>Abrir</span></a><a class="page-link" href="./page-3.html">Página 3<span>Abrir</span></a><a class="page-link" href="./page-4.html">Página 4<span>Abrir</span></a></div>
+
+    <section class="word-spotlight" aria-label="Destaque da palavra">
+      <article class="spot-card">
+        <h2>Palavra em destaque</h2>
+        <div class="word-display">Girafa</div>
+        <p class="mission">girafa</p>
+        <div class="compose-actions">
+          <button class="pill-btn speak-btn" data-speak="Girafa">Ouvir a palavra</button>
         </div>
       </article>
-
-      <article class="unit" id="unit2">
-        <div class="unit-top">
-          <div>
-            <div class="kicker">Unidade 2 · 4 min</div>
-            <h2>Reconhecimento global</h2>
-            <p>Ver, ouvir e escolher a palavra certa para cada imagem.</p>
-          </div>
-          <div class="tabs" data-unit="2" aria-label="Diferenciação da unidade 2">
-            <button class="tab" data-level="support">🟢 Apoio</button>
-            <button class="tab active" data-level="standard">🟡 Intermédio</button>
-            <button class="tab" data-level="challenge">🔴 Desafio</button>
-          </div>
-        </div>
-        <div class="diff-note" data-diff-text="2"></div>
-        <div class="double">
-          <div class="animal-stage">
-            <div id="u2Prompt" class="tiny-note" style="margin-bottom:10px;"></div>
-            <div id="u2Animal" class="animal-emoji" aria-live="polite">🦒</div>
-            <div class="progress-bar" style="margin-top:14px;">
-              <div id="u2Progress" class="progress-fill"></div>
-            </div>
-          </div>
-          <div class="soft-card">
-            <div id="u2Options" class="option-grid"></div>
-            <div id="u2Feedback" class="feedback incorrect" style="margin-top:12px; display:none;"></div>
-            <div id="u2SpellBox" class="writing-pad" style="display:none; margin-top:12px;">
-              <label for="u2SpellInput">Soletra a palavra escolhida:</label>
-              <input id="u2SpellInput" class="write-box" type="text" aria-label="Soletrar a palavra escolhida">
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="unit" id="unit3">
-        <div class="unit-top">
-          <div>
-            <div class="kicker">Unidade 3 · 6 min</div>
-            <h2>Segmentação silábica</h2>
-            <p>Arrasta as sílabas e bate 3 palmas: <span class="syl-gi">gi</span> · <span class="syl-ra">ra</span> · <span class="syl-fa">fa</span>.</p>
-          </div>
-          <div class="tabs" data-unit="3" aria-label="Diferenciação da unidade 3">
-            <button class="tab" data-level="support">🟢 Apoio</button>
-            <button class="tab active" data-level="standard">🟡 Intermédio</button>
-            <button class="tab" data-level="challenge">🔴 Desafio</button>
-          </div>
-        </div>
-        <div class="diff-note" data-diff-text="3"></div>
-        <div class="double">
-          <div>
-            <div class="word-display" aria-label="Palavra segmentada"><span class="syl-gi">GI</span>|<span class="syl-ra">RA</span>|<span class="syl-fa">FA</span></div>
-            <div class="draggable-pool" id="syllablePool" style="margin-top:14px;"></div>
-            <div class="slots-wrap" id="syllableSlots" style="margin-top:16px;"></div>
-            <div id="u3Feedback" class="feedback incorrect" style="margin-top:12px; display:none;"></div>
-          </div>
-          <div class="clap-panel">
-            <button class="clap-button" id="clapBtn" aria-label="Bater uma palma">🤚</button>
-            <p>Palmas dadas</p>
-            <div id="clapCount" class="clap-count" aria-live="polite">0</div>
-            <div class="pill-row">
-              <button class="small-button" id="clapResetBtn">Recomeçar</button>
-              <button class="small-button" id="clapCheckBtn">Confirmar 3</button>
-            </div>
-            <div id="clapFeedback" class="feedback incorrect" style="margin-top:12px; display:none;"></div>
-          </div>
-        </div>
-      </article>
-
-      <article class="unit" id="unit4">
-        <div class="unit-top">
-          <div>
-            <div class="kicker">Unidade 4 · 7 min</div>
-            <h2>Recombinação</h2>
-            <p>Usa sílabas para descobrir palavras reais: <strong>fado</strong>, <strong>fato</strong>, <strong>fada</strong>, <strong>cara</strong>, <strong>vara</strong>, <strong>fala</strong>, <strong>rato</strong>.</p>
-          </div>
-          <div class="tabs" data-unit="4" aria-label="Diferenciação da unidade 4">
-            <button class="tab" data-level="support">🟢 Apoio</button>
-            <button class="tab active" data-level="standard">🟡 Intermédio</button>
-            <button class="tab" data-level="challenge">🔴 Desafio</button>
-          </div>
-        </div>
-        <div class="diff-note" data-diff-text="4"></div>
-        <div class="double">
-          <div>
-            <div class="draggable-pool" id="buildPool"></div>
-            <div class="builder-area" id="buildSlots" style="margin-top:16px;"></div>
-            <div class="pill-row" style="margin-top:12px;">
-              <button class="button" id="confirmBuildBtn">Confirmar</button>
-              <button class="button ghost" id="resetBuildBtn">Limpar</button>
-            </div>
-          </div>
-          <div class="result-panel">
-            <div class="tiny-note">Pré-visualização</div>
-            <div id="buildPreview" class="word-preview"></div>
-            <div id="buildFeedback" class="feedback incorrect" style="display:none; margin-top:10px;"></div>
-            <div class="word-list" id="discoveredWords"></div>
-          </div>
-        </div>
-      </article>
-
-      <article class="unit" id="unit5">
-        <div class="unit-top">
-          <div>
-            <div class="kicker">Unidade 5 · 6 min</div>
-            <h2>Leitura e escrita guiada</h2>
-            <p>Completa a sílaba em falta e consolida a ortografia da palavra.</p>
-          </div>
-          <div class="tabs" data-unit="5" aria-label="Diferenciação da unidade 5">
-            <button class="tab" data-level="support">🟢 Apoio</button>
-            <button class="tab active" data-level="standard">🟡 Intermédio</button>
-            <button class="tab" data-level="challenge">🔴 Desafio</button>
-          </div>
-        </div>
-        <div class="diff-note" data-diff-text="5"></div>
-        <div class="double">
-          <div class="soft-card">
-            <div id="u5ProgressLabel" class="tiny-note" style="margin-bottom:8px;"></div>
-            <div id="u5Variant" class="fill-word"></div>
-            <div id="u5Options" class="option-grid"></div>
-            <div id="u5Feedback" class="feedback incorrect" style="margin-top:12px; display:none;"></div>
-          </div>
-          <div class="writing-pad">
-            <p><strong>Modelo:</strong> <span class="word-display" style="font-size:2rem;">GIRAFA</span></p>
-            <div id="u5WriteWrap" style="display:none;">
-              <label for="u5WriteInput">Escreve a palavra completa:</label>
-              <textarea id="u5WriteInput" aria-label="Escrever a palavra completa"></textarea>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="unit" id="unit6">
-        <div class="unit-top">
-          <div>
-            <div class="kicker">Unidade 6 · 7 min</div>
-            <h2>Frase simples</h2>
-            <p>Ordena as palavras e lê: <strong>A girafa tem pescoço comprido.</strong></p>
-          </div>
-          <div class="tabs" data-unit="6" aria-label="Diferenciação da unidade 6">
-            <button class="tab" data-level="support">🟢 Apoio</button>
-            <button class="tab active" data-level="standard">🟡 Intermédio</button>
-            <button class="tab" data-level="challenge">🔴 Desafio</button>
-          </div>
-        </div>
-        <div class="diff-note" data-diff-text="6"></div>
-        <div class="double">
-          <div>
-            <div class="phrase-pool" id="phrasePool"></div>
-            <div class="phrase-slots" id="phraseSlots" style="margin-top:16px;"></div>
-            <div class="pill-row" style="margin-top:12px;">
-              <button class="button" id="checkPhraseBtn">Confirmar frase</button>
-              <button class="button ghost" id="resetPhraseBtn">Limpar</button>
-            </div>
-            <div id="phraseFeedback" class="feedback incorrect" style="display:none; margin-top:12px;"></div>
-          </div>
-          <div class="soft-card">
-            <p><strong>Leitura animada</strong></p>
-            <div id="phraseRead" class="phrase-read" aria-live="polite"></div>
-            <div id="u6OriginalWrap" style="display:none; margin-top:14px;">
-              <label for="u6OriginalInput">Cria uma nova frase com a palavra girafa:</label>
-              <textarea id="u6OriginalInput" aria-label="Escrever uma frase original com a palavra girafa"></textarea>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="assessment-block" id="unit7">
-        <div class="unit-top">
-          <div>
-            <div class="kicker">Unidade 7 · 5 min</div>
-            <h2>Mini-avaliação formativa</h2>
-            <p>É um mapa do que já consegues fazer com a palavra <strong>girafa</strong>.</p>
-          </div>
-          <div class="tabs" data-unit="7" aria-label="Diferenciação da mini-avaliação">
-            <button class="tab" data-level="support">🟢 Apoio</button>
-            <button class="tab active" data-level="standard">🟡 Intermédio</button>
-            <button class="tab" data-level="challenge">🔴 Desafio</button>
-          </div>
-        </div>
-        <div class="diff-note" data-diff-text="7"></div>
-        <div class="criteria-row" id="criteriaDots"></div>
-        <div class="soft-card" id="criterionStage"></div>
-        <div class="pill-row" style="margin-top:14px;">
-          <button class="button ghost" id="retryCriteriaBtn" style="display:none;">Praticar de novo</button>
-        </div>
-      </article>
-
-      <article class="unit" id="unit8">
-        <div class="unit-top">
-          <div>
-            <div class="kicker">Unidade 8 · 5 min</div>
-            <h2>Extensão autónoma</h2>
-            <p>Escolhe uma actividade e produz algo que inclua a palavra <strong>girafa</strong>.</p>
-          </div>
-          <div class="tabs" data-unit="8" aria-label="Diferenciação da unidade 8">
-            <button class="tab" data-level="support">🟢 Apoio</button>
-            <button class="tab active" data-level="standard">🟡 Intermédio</button>
-            <button class="tab" data-level="challenge">🔴 Desafio</button>
-          </div>
-        </div>
-        <div class="diff-note" data-diff-text="8"></div>
-        <div class="card-grid" id="activityCards"></div>
-        <div class="activity-panels" id="activityPanels" style="margin-top:16px;"></div>
-        <div class="wall-board">
-          <div class="pill-row" style="justify-content:space-between; align-items:center;">
-            <strong>Mural da turma</strong>
-            <button class="button alt" id="shareActivityBtn" disabled>Partilhar</button>
-          </div>
-          <div class="mural" id="muralBoard"></div>
-        </div>
+      <article class="spot-card">
+        <h2>Sílabas</h2>
+        <div class="syllable-row"><span class="syllable-token" style="--chip:#D4830A">gi</span><span class="syllable-token" style="--chip:#7B5E2A">ra</span><span class="syllable-token" style="--chip:#C03A9B">fa</span></div>
+        <p class="mission">Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</p>
       </article>
     </section>
 
-    <section class="section-stack" aria-labelledby="makerTitle">
-      <section class="maker">
-        <div class="kicker">🛠️ Maker</div>
-        <h2 id="makerTitle">Desafios maker</h2>
-        <div class="card-grid" id="makerCards"></div>
-      </section>
+    <nav class="section-nav" aria-label="Navegação das unidades"><a class="nav-pill" href="#u1-abertura-contextual-a-girafa-numa-micro-história">1</a><a class="nav-pill" href="#u2-reconhecimento-global-ver-ouvir-associar-imagem-e-palavra">2</a><a class="nav-pill" href="#u3-segmentação-silábica-gi-ra-fa-com-palmas-e-drag">3</a><a class="nav-pill" href="#u4-recombinação-novas-palavras-com-as-sílabas-de-girafa">4</a></nav>
 
-      <section class="assessment-block">
-        <div class="kicker">📝 Observação final</div>
-        <h2>4-5 itens observáveis</h2>
-        <div class="card-grid">
-          <div class="criterion-card">Reconhece <strong>girafa</strong> entre palavras escritas.</div>
-          <div class="criterion-card">Diz e conta as sílabas <strong>gi-ra-fa</strong>.</div>
-          <div class="criterion-card">Constrói palavras reais com sílabas dadas.</div>
-          <div class="criterion-card">Completa a palavra e a frase com autonomia.</div>
-          <div class="criterion-card">Partilha oralmente ou por escrito uma produção com <strong>girafa</strong>.</div>
+    <main id="main" class="content">
+      
+    <section id="u1-abertura-contextual-a-girafa-numa-micro-história" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 1</span>
+          <h2>Abertura contextual — a girafa numa micro-história</h2>
         </div>
-      </section>
-
-      <section class="curriculum">
-        <div class="kicker">Currículo</div>
-        <h2>AE e Perfil do Aluno</h2>
-        <div class="card-grid">
-          <div class="soft-card">Português · Leitura e Escrita: identificar palavras escritas, reconhecer sílabas, reconstituir palavras e escrever frases simples.</div>
-          <div class="soft-card">Português · Oralidade: produzir enunciados adequados e participar em actividades de oralidade.</div>
-          <div class="soft-card">Perfil do Aluno: Linguagens e textos, raciocínio e resolução de problemas, desenvolvimento pessoal e autonomia.</div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>O aluno é apresentado à palavra &#x27;girafa&#x27; através de uma micro-história com imagem animada. A palavra entra como protagonista antes de qualquer análise. O foco é na associação imagem-palavra e na criação de curiosidade. A girafa é descrita com o pescoço muito alto, tentando apanhar folhas de uma acácia.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Ecrã com fundo de savana africana (céu azul, acácia, terra amarela). A girafa aparece parcialmente atrás de uma árvore. Botão grande &#x27;Descobrir!&#x27; no centro. Ao clicar, a girafa desliza para o centro do ecrã com animação suave. Texto da micro-história aparece em balão: &#x27;A Fafa é uma girafa com o pescoço muito, muito comprido. Ela estica o pescoço para chegar às folhas mais altas.&#x27; A palavra GIRAFA aparece em destaque no rodapé, em letra grande.</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno aponta ou toca na palavra &#x27;girafa&#x27; quando apresentada entre 3 palavras (ex: &#x27;galinha&#x27;, &#x27;girafa&#x27;, &#x27;rato&#x27;) após ver a história</p>
+            </div>
+          </div>
+          <p>Clicar em &#x27;Descobrir&#x27; → girafa desliza para centro (animação 1s) → palavra &#x27;girafa&#x27; surge em destaque abaixo da imagem → botão &#x27;Ouvir história&#x27; ativa → após ouvir, palavra pisca 3 vezes</p>
+          <div class="maker-box"><p><strong>Desafio maker:</strong> Desenha a girafa Fafa numa folha e escreve o nome por baixo, tal como viste no ecrã. Podes inventar um nome para a tua girafa!</p><p><strong>Materiais:</strong> folha A5, lápis de cor ou marcadores finos</p><p><strong>Comunicação:</strong> Partilha o desenho com o par do lado e diz em voz alta o nome do animal</p></div>
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <button class="pill-btn reveal-btn" data-target="story-1">Mostrar a história</button>
+          <button class="pill-btn speak-btn" data-speak="girafa">Ouvir</button>
+          <div id="story-1" class="reveal-box hidden"><p>O aluno é apresentado à palavra &#x27;girafa&#x27; através de uma micro-história com imagem animada. A palavra entra como protagonista antes de qualquer análise. O foco é na associação imagem-palavra e na criação de curiosidade. A girafa é descrita com o pescoço muito alto, tentando apanhar folhas de uma acácia.</p></div>
         </div>
-      </section>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-1">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-1">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-1">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-1" class="diff-panel is-active"><p>🟢 A palavra &#x27;girafa&#x27; aparece sempre visível junto à imagem durante toda a atividade; apenas 2 palavras para identificar na fase de reconhecimento; frase da história tem 3 palavras (&#x27;A Fafa é girafa&#x27;)</p></div>
+        <div id="standard-1" class="diff-panel"><p>🟡 A palavra aparece após clicar; 3 opções de palavras para identificar; história com 2 frases completas</p></div>
+        <div id="challenge-1" class="diff-panel"><p>🔴 A palavra não tem imagem de apoio durante a identificação; 4 opções incluindo palavras com início semelhante (girafa / garrafa / galinha / gato); o aluno escreve a palavra de memória antes de ver a confirmação</p></div>
+      </div>
     </section>
+    
+    <section id="u2-reconhecimento-global-ver-ouvir-associar-imagem-e-palavra" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 2</span>
+          <h2>Reconhecimento global — ver, ouvir, associar imagem e palavra</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>O aluno pratica o reconhecimento da palavra &#x27;girafa&#x27; como uma unidade visual completa, sem análise silábica. Associa a forma escrita à imagem e ao som. Este bloco consolida a leitura global antes de passar à análise. Usa palavras de animais já conhecidos como distratores.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Imagem do animal ao centro (começa com girafa). Abaixo, 3 cartões com palavras escritas em letra grande sem serifa. O aluno seleciona a palavra que corresponde à imagem. As rondas alternam a imagem mostrada para verificar em ambas as direções (imagem → palavra; palavra → imagem). Feedback: ✓ verde suave / ✗ âmbar com nova tentativa.</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno identifica &#x27;girafa&#x27; corretamente em 3 rondas consecutivas com ordens aleatórias dos cartões</p>
+            </div>
+          </div>
+          <p>Clicar num cartão → feedback imediato → se correto, animação suave de celebração (estrelas); nova ronda com imagem diferente; após 3 rondas correctas, bloco completo</p>
+          
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Escolhe a palavra certa.</p>
+          <div class="choice-row">
+            <button class="choice-btn" data-answer="girafa" data-choice="girafa">girafa</button><button class="choice-btn" data-answer="girafa" data-choice="cenoura">cenoura</button><button class="choice-btn" data-answer="girafa" data-choice="palhaço">palhaço</button>
+          </div>
+          <p class="feedback" aria-live="polite">Procura a palavra completa.</p>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-2">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-2">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-2">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-2" class="diff-panel is-active"><p>🟢 Apenas 2 opções de palavras (girafa / rato); a sílaba inicial de cada palavra está destacada a cor diferente para facilitar a distinção visual</p></div>
+        <div id="standard-2" class="diff-panel"><p>🟡 3 opções de palavras (girafa / galinha / rato); sem destaque de sílabas; 2 rondas</p></div>
+        <div id="challenge-2" class="diff-panel"><p>🔴 4 opções incluindo palavras que começam com a mesma letra (girafa / galinha / gato / garrafa); sem imagem durante a seleção na 3.ª ronda; o aluno soletra a palavra escolhida</p></div>
+      </div>
+    </section>
+    
+    <section id="u3-segmentação-silábica-gi-ra-fa-com-palmas-e-drag" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 3</span>
+          <h2>Segmentação silábica — gi · ra · fa com palmas e drag</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>O aluno aprende a dividir &#x27;girafa&#x27; em três sílabas: gi, ra, fa. Pratica bater palmas por cada sílaba, contar o total (3) e arrastar os blocos silábicos coloridos para a posição correta. Cada sílaba tem uma cor própria e consistente em toda a página: gi=azul, ra=laranja, fa=verde.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Topo: palavra &#x27;girafa&#x27; escrita grande com separadores visuais (gi|ra|fa) e cores por sílaba (gi=azul, ra=laranja, fa=verde). Centro: 3 blocos de sílabas misturados para arrastar. Zona de destino: 3 slots numerados 1, 2, 3. Lado direito: botão de palma (🤚) que conta cliques e mostra o número. Fundo: se todos os slots estiverem certos, girafa acena em animação suave.</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno arrasta gi-ra-fa para os 3 slots correctos sem ajuda, conta 3 palmas e verbaliza: &#x27;gi-ra-fa, 3 sílabas&#x27;</p>
+            </div>
+          </div>
+          <p>Arrastar bloco para slot → encaixe com som de &#x27;clique&#x27;; colocação errada → bloco volta ao lugar de origem; todos corretos → animação de girafa a acenar; clicar botão palma → incrementa contador; confirmar 3 palmas → feedback positivo com som</p>
+          <div class="maker-box"><p><strong>Desafio maker:</strong> Com os cartões físicos de sílabas (gi / ra / fa), faz a divisão na mesa. Bate palmas enquanto dizes cada sílaba em voz alta. Desafia o teu par: ele mistura os cartões e tu pões-nos na ordem certa!</p><p><strong>Materiais:</strong> cartões de sílabas impressos: gi, ra, fa (em cores azul, laranja, verde), mesa ou chão</p><p><strong>Comunicação:</strong> Ensina o teu par como dividir a palavra, usando os cartões</p></div>
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Toca nas sílabas para formar a palavra.</p>
+          <div class="syllable-bank" data-compose="compose-3"><button class="syllable-chip" style="--chip:#D4830A" data-syllable="gi">gi</button><button class="syllable-chip" style="--chip:#7B5E2A" data-syllable="ra">ra</button><button class="syllable-chip" style="--chip:#C03A9B" data-syllable="fa">fa</button></div>
+          <div id="compose-3" class="compose-output">__</div>
+          <div class="compose-actions"><button class="pill-btn clear-compose" data-compose-clear="compose-3">Limpar</button></div>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-3">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-3">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-3">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-3" class="diff-panel is-active"><p>🟢 Bloco &#x27;gi&#x27; já está colocado no slot 1; os slots têm a cor correspondente à sílaba esperada (azul=slot1, laranja=slot2, verde=slot3); imagem da girafa sempre visível; palavra-modelo sempre visível em cima</p></div>
+        <div id="standard-3" class="diff-panel"><p>🟡 Os 3 blocos misturados; slots neutros (sem cor de dica); imagem disponível como apoio lateral</p></div>
+        <div id="challenge-3" class="diff-panel"><p>🔴 Blocos de sílabas misturados com 2 distratores (&#x27;ca&#x27;, &#x27;no&#x27; — sílabas de palavras anteriores); sem imagem; o aluno também escreve as sílabas separadas numa folha após o exercício digital</p></div>
+      </div>
+    </section>
+    
+    <section id="u4-recombinação-novas-palavras-com-as-sílabas-de-girafa" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 4</span>
+          <h2>Recombinação — novas palavras com as sílabas de &#x27;girafa&#x27;</h2>
+        </div>
+        
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>O aluno usa as sílabas gi, ra, fa e sílabas já conhecidas de palavras anteriores (do, to, da, ca, va, la) para formar novas palavras reais. Descobre que as mesmas sílabas podem construir palavras diferentes. Palavras-alvo: fado, fato, fada, cara, vara, fala, rato (revisão). Distingue combinações com sentido de combinações sem sentido.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Painel superior: pool de sílabas coloridas em grelha. Área central: 2-3 slots de construção com fundo pontilhado. Botão &#x27;Confirmar&#x27;. Resultado: palavra real → fundo verde claro + imagem pequena + definição em 3 palavras; palavra inventada → fundo âmbar + mensagem &#x27;Essa não existe em português, tenta outra!&#x27;. Painel lateral: lista de &#x27;Palavras que descobri&#x27; com ícones.</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno forma pelo menos 2 palavras reais novas além de &#x27;girafa&#x27; (ex: fado, fato) e explica o significado de cada uma</p>
+            </div>
+          </div>
+          <p>Arrastar sílabas para área de construção → word preview actualiza; clicar Confirmar → verifica dicionário → feedback + adiciona à lista se real; botão reset → limpa área para nova tentativa</p>
+          <div class="maker-box"><p><strong>Desafio maker:</strong> Com os cartões de sílabas físicos, desafio de 3 minutos: quantas palavras reais consegues formar? Escreve as que descobriste. Compara com o teu par — quem descobriu mais?</p><p><strong>Materiais:</strong> cartões de sílabas: gi, ra, fa, do, to, da, ca, va, la, papel e lápis para registar</p><p><strong>Comunicação:</strong> Cada par partilha as suas descobertas em voz alta; turma faz lista coletiva no quadro</p></div>
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Experimenta combinações com as sílabas.</p>
+          <div class="syllable-bank" data-compose="mix-4"><button class="syllable-chip" style="--chip:#D4830A" data-syllable="gi">gi</button><button class="syllable-chip" style="--chip:#7B5E2A" data-syllable="ra">ra</button><button class="syllable-chip" style="--chip:#C03A9B" data-syllable="fa">fa</button></div>
+          <div id="mix-4" class="compose-output">__</div>
+          <p class="helper-text">Nem todas as combinações resultam em palavras reais. O importante é experimentar.</p>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-4">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-4">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-4">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-4" class="diff-panel is-active"><p>🟢 Apenas 4 sílabas disponíveis (ra, fa, do, to); imagens de apoio aparecem automaticamente ao confirmar palavra real; slots coloridos com dica de quais sílabas combinam bem; objetivo: 1 palavra nova</p></div>
+        <div id="standard-4" class="diff-panel"><p>🟡 6 sílabas disponíveis; sem dicas de combinação; imagem só após confirmação correta; objetivo: 2 palavras novas</p></div>
+        <div id="challenge-4" class="diff-panel"><p>🔴 Todas as 9 sílabas disponíveis; sem feedback de imagem; o aluno deve encontrar pelo menos 4 palavras reais; regista uma definição curta para cada palavra encontrada; tenta descobrir qual palavra tem 3 sílabas</p></div>
+      </div>
+    </section>
+    
+      
+    <details class="teacher-guide">
+      <summary>Guia do professor</summary>
+      <div class="teacher-grid">
+        <article class="teacher-card">
+          <h3>Objetivos desta página</h3>
+          <ul><li>Reconhecer a palavra &#x27;girafa&#x27; como um todo (leitura global)</li><li>Segmentar a palavra em três sílabas: gi-ra-fa</li><li>Recombinar as sílabas gi, ra, fa com sílabas já conhecidas para formar novas palavras reais</li><li>Usar a palavra &#x27;girafa&#x27; numa frase simples oral e escrita</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Materiais</h3>
+          <ul><li>Tablet ou computador com browser (1 por aluno ou par)</li><li>Cartões de sílabas físicos impressos: gi / ra / fa</li><li>Cartões de sílabas de apoio: do / to / da / ca / va / la (sílabas de palavras anteriores)</li><li>Cartão-palavra da girafa (imagem + texto, formato A5)</li><li>Lápis, borracha e papel pautado para escrita guiada</li><li>Quadro interativo (opcional, para fase de comunicação final)</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Organização MEM</h3>
+          <ul><li><strong>Módulos:</strong> TEA (Trabalho de Estudo Autónomo), Trabalho curricular comparticipado, Circuitos de comunicação</li><li><strong>Instrumentos:</strong> PIT, mapa de tarefas</li><li><strong>Organização:</strong> individual (exploração e prática guiada, ~25min) → pares (recombinação e frase, ~10min) → turma (comunicação e mini-avaliação, ~10min)</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Percurso desta página</h3>
+          <ul><li>Unidade 1: Abertura contextual — a girafa numa micro-história</li><li>Unidade 2: Reconhecimento global — ver, ouvir, associar imagem e palavra</li><li>Unidade 3: Segmentação silábica — gi · ra · fa com palmas e drag</li><li>Unidade 4: Recombinação — novas palavras com as sílabas de &#x27;girafa&#x27;</li></ul>
+        </article>
+        <article class="teacher-card teacher-card-wide">
+          <h3>Referências curriculares</h3>
+          <ul><li><strong>Português · 1.º ano</strong>: Identificar palavras escritas; estabelecer relações entre a escrita e a oralidade; reconhecer sílabas como unidades fonológicas</li><li><strong>Português · 1.º ano</strong>: Produzir enunciados com vocabulário e estruturas gramaticais adequados; participar em atividades de oralidade</li><li><strong>Português · 1.º ano</strong>: Segmentar e manipular sílabas em palavras; reconstituir palavras a partir de sílabas dadas; escrever palavras e frases simples</li></ul>
+          <ul><li>PA-A: Linguagens e textos</li><li>PA-C: Raciocínio e resolução de problemas</li><li>PA-F: Desenvolvimento pessoal e autonomia</li></ul>
+        </article>
+      </div>
+    </details>
+    
+    </main>
 
-    <footer class="footer-card">Gerado por PageCraft 🛠️</footer>
-  </main>
+    <footer class="footer">PageCraft · Método das 28 Palavras · Girafa</footer>
+  </div>
 
   <script>
-    const diffTexts = {
-      1: {
-        support: "🟢 A palavra fica sempre visível e há só 2 opções para reconhecer.",
-        standard: "🟡 A palavra aparece depois do clique e escolhes entre 3 palavras.",
-        challenge: "🔴 Não há imagem na fase final, tens 4 opções parecidas e escreves de memória."
-      },
-      2: {
-        support: "🟢 Só duas palavras e a sílaba inicial está destacada para ajudar.",
-        standard: "🟡 Três opções e duas rondas completas.",
-        challenge: "🔴 Quatro opções parecidas, sem imagem na última ronda e soletração final."
-      },
-      3: {
-        support: "🟢 O bloco gi já está colocado e os slots têm cores de ajuda.",
-        standard: "🟡 As três sílabas estão misturadas e os slots são neutros.",
-        challenge: "🔴 Há distratores extra e depois escreves as sílabas separadas."
-      },
-      4: {
-        support: "🟢 Menos sílabas no painel e o objectivo é descobrir 1 palavra nova.",
-        standard: "🟡 Seis sílabas, sem dicas, e tentas encontrar 2 palavras reais.",
-        challenge: "🔴 Todas as sílabas, sem imagem de ajuda, e procuras pelo menos 4 palavras."
-      },
-      5: {
-        support: "🟢 A imagem e o modelo ficam visíveis e há só 2 opções.",
-        standard: "🟡 A sílaba em falta muda nas 3 variantes e tens 3 opções.",
-        challenge: "🔴 Quatro distratores, sem imagem, e escreves a palavra completa."
-      },
-      6: {
-        support: "🟢 Menos cartões e modelo visível para comparar.",
-        standard: "🟡 Ordenas a frase completa sem numeração extra.",
-        challenge: "🔴 Sem modelo, e no fim escreves uma frase tua."
-      },
-      7: {
-        support: "🟢 Há imagem de apoio e repetição livre.",
-        standard: "🟡 Sequência normal com uma repetição possível.",
-        challenge: "🔴 Sem imagens, frase original no critério 4 e desafio extra opcional."
-      },
-      8: {
-        support: "🟢 Guiões curtos e menos escrita.",
-        standard: "🟡 Escolha livre entre história, curiosidades e rima.",
-        challenge: "🔴 Produção mais livre e partilha oral obrigatória."
-      }
-    };
+    const synth = window.speechSynthesis;
 
-    const makerData = [
-      { title: "Desenho da Fafa", text: "Desenha a girafa Fafa numa folha e escreve o nome por baixo. Depois mostra ao teu par.", materials: "Folha A5, lápis de cor", group: "Individual" },
-      { title: "Sílabas com palmas", text: "Usa cartões gi / ra / fa na mesa. Mistura e volta a ordenar enquanto bates palmas.", materials: "Cartões coloridos", group: "Individual ou par" },
-      { title: "Corrida de palavras", text: "Forma palavras reais com os cartões de sílabas e compara as descobertas com o teu par.", materials: "Cartões + papel", group: "Par" },
-      { title: "Nova frase", text: "Inventa uma frase diferente sobre a girafa e escreve-a numa folha A3 ou no quadro.", materials: "Folha A3 ou quadro", group: "2" },
-      { title: "Mini-cartaz científico", text: "Desenha uma girafa muito alta e escreve 3 coisas que aprendeste sobre ela.", materials: "Folha A4/A3 e marcadores", group: "Individual" }
-    ];
-
-    const speechTexts = {
-      support: "A Fafa é girafa.",
-      standard: "A Fafa é uma girafa com o pescoço muito, muito comprido. Ela estica o pescoço para chegar às folhas mais altas.",
-      challenge: "A Fafa é uma girafa com o pescoço muito comprido. Estica-se para apanhar folhas lá no alto."
-    };
-
-    const state = {
-      levels: {
-        1: "support",
-        2: "standard",
-        3: "standard",
-        4: "standard",
-        5: "standard",
-        6: "standard",
-        7: "standard",
-        8: "standard"
-      },
-      u2: { round: 0, score: 0 },
-      u3: { claps: 0 },
-      u4: { found: [] },
-      u5: { step: 0 },
-      u6: {},
-      u7: { step: 0, results: [null, null, null, null], retries: 0 },
-      u8: { active: null }
-    };
-
-    const realWords = {
-      fado: { icon: "🎵", hint: "canção antiga" },
-      fato: { icon: "👔", hint: "roupa elegante" },
-      fada: { icon: "🧚", hint: "ser mágico" },
-      cara: { icon: "🙂", hint: "parte do rosto" },
-      vara: { icon: "🌿", hint: "pau comprido" },
-      fala: { icon: "💬", hint: "usa a voz" },
-      rato: { icon: "🐭", hint: "animal pequeno" },
-      girafa: { icon: "🦒", hint: "animal alto" }
-    };
-
-    function $(sel) { return document.querySelector(sel); }
-    function $all(sel) { return [...document.querySelectorAll(sel)]; }
-
-    function initTabs() {
-      $all(".tabs").forEach(tabWrap => {
-        const unit = Number(tabWrap.dataset.unit);
-        const update = () => {
-          tabWrap.querySelectorAll(".tab").forEach(btn => btn.classList.toggle("active", btn.dataset.level === state.levels[unit]));
-          const diff = document.querySelector(`[data-diff-text="${unit}"]`);
-          if (diff) diff.textContent = diffTexts[unit][state.levels[unit]];
-        };
-        tabWrap.addEventListener("click", event => {
-          const btn = event.target.closest(".tab");
-          if (!btn) return;
-          state.levels[unit] = btn.dataset.level;
-          update();
-          rerenderUnit(unit);
-        });
-        update();
-      });
-    }
-
-    function rerenderUnit(unit) {
-      if (unit === 1) renderUnit1();
-      if (unit === 2) renderUnit2(true);
-      if (unit === 3) renderUnit3();
-      if (unit === 4) renderUnit4();
-      if (unit === 5) renderUnit5(true);
-      if (unit === 6) renderUnit6();
-      if (unit === 7) renderUnit7(true);
-      if (unit === 8) renderUnit8();
-    }
-
-    let audioCtx;
-    function beep(type = "ok") {
-      try {
-        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        const now = audioCtx.currentTime;
-        const tones = {
-          ok: [523, 659],
-          bad: [240, 180],
-          click: [430, 500]
-        }[type];
-        osc.frequency.setValueAtTime(tones[0], now);
-        if (tones[1]) osc.frequency.linearRampToValueAtTime(tones[1], now + 0.12);
-        gain.gain.setValueAtTime(0.001, now);
-        gain.gain.exponentialRampToValueAtTime(0.15, now + 0.02);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
-        osc.start(now);
-        osc.stop(now + 0.2);
-      } catch (err) {}
-    }
-
-    function makeConfetti(originEl) {
-      const layer = $("#confettiLayer");
-      const rect = originEl.getBoundingClientRect();
-      const startX = rect.left + rect.width / 2;
-      const startY = rect.top + rect.height / 2;
-      const colors = ["#d4830a", "#22c55e", "#47a6ff", "#c03a9b", "#f59e0b"];
-      const items = [];
-      for (let i = 0; i < 26; i++) {
-        const node = document.createElement("div");
-        node.className = "confetti";
-        node.style.background = colors[i % colors.length];
-        layer.appendChild(node);
-        items.push({
-          node,
-          x: startX,
-          y: startY,
-          vx: (Math.random() - 0.5) * 7,
-          vy: -Math.random() * 7 - 2,
-          rot: Math.random() * 360,
-          vr: (Math.random() - 0.5) * 14,
-          life: 70 + Math.random() * 26
-        });
-      }
-      let frame = 0;
-      function tick() {
-        frame++;
-        items.forEach(item => {
-          item.x += item.vx;
-          item.y += item.vy;
-          item.vy += 0.22;
-          item.rot += item.vr;
-          item.node.style.transform = `translate(${item.x}px, ${item.y}px) rotate(${item.rot}deg)`;
-          item.node.style.opacity = Math.max(0, 1 - frame / item.life);
-        });
-        if (frame < 90) {
-          requestAnimationFrame(tick);
-        } else {
-          items.forEach(item => item.node.remove());
-        }
-      }
-      requestAnimationFrame(tick);
-    }
-
-    function feedback(el, kind, text) {
-      el.className = `feedback ${kind === "correct" ? "correct" : "incorrect"}`;
-      el.innerHTML = `${kind === "correct" ? "✓" : "✗"} ${text}`;
-      el.style.display = "inline-flex";
-      if (kind === "correct") beep("ok");
-      else beep("bad");
-    }
-
-    function setCorrectPick(node, isCorrect) {
-      node.classList.remove("correct-pick", "wrong-pick");
-      node.classList.add(isCorrect ? "correct-pick" : "wrong-pick");
-      setTimeout(() => node.classList.remove("correct-pick", "wrong-pick"), 700);
-    }
-
-    function initUnit1() {
-      $("#discoverBtn").addEventListener("click", () => {
-        $("#storyGiraffe").classList.add("revealed");
-        const word = $("#storyWord");
-        if (state.levels[1] !== "challenge") word.style.visibility = "visible";
-        $("#storyBubble").classList.add("show");
-        $("#storyText").textContent = speechTexts[state.levels[1]];
-        $("#hearStoryBtn").disabled = false;
-        beep("click");
-      });
-      $("#hearStoryBtn").addEventListener("click", () => {
-        const text = speechTexts[state.levels[1]];
-        if ("speechSynthesis" in window) {
-          window.speechSynthesis.cancel();
-          const u = new SpeechSynthesisUtterance(text);
-          u.lang = "pt-PT";
-          u.rate = 0.92;
-          window.speechSynthesis.speak(u);
-        }
-        const word = $("#storyWord");
-        word.style.visibility = "visible";
-        word.classList.remove("blink");
-        void word.offsetWidth;
-        word.classList.add("blink");
-        renderStoryOptions();
-      });
-      renderUnit1();
-    }
-
-    function renderStoryOptions() {
-      const level = state.levels[1];
-      const options = level === "support"
-        ? ["girafa", "rato"]
-        : level === "standard"
-          ? ["galinha", "girafa", "rato"]
-          : ["girafa", "garrafa", "galinha", "gato"];
-      const wrap = $("#storyOptions");
-      wrap.innerHTML = "<p><strong>Toca na palavra certa:</strong></p>";
-      options.forEach(word => {
-        const btn = document.createElement("button");
-        btn.className = "option-card";
-        btn.textContent = word;
-        btn.setAttribute("aria-label", `Escolher a palavra ${word}`);
-        btn.addEventListener("click", () => {
-          const feedbackBox = $("#storyFeedback");
-          if (level === "challenge") {
-            const typed = $("#u1MemoryInput").value.trim().toLowerCase();
-            if (!typed) {
-              feedback(feedbackBox, "incorrect", "Escreve primeiro a palavra de memória.");
-              return;
-            }
-          }
-          const ok = word === "girafa";
-          setCorrectPick(btn, ok);
-          if (ok) {
-            feedback(feedbackBox, "correct", "Muito bem! Palavra e animal combinam.");
-            makeConfetti(btn);
-          } else {
-            feedback(feedbackBox, "incorrect", "Tenta outra vez. Procura GIRAFA.");
-          }
-        });
-        wrap.appendChild(btn);
-      });
-      $("#u1MemoryBox").style.display = level === "challenge" ? "block" : "none";
-    }
-
-    function renderUnit1() {
-      $("#storyText").textContent = speechTexts[state.levels[1]];
-      $("#storyWord").style.visibility = state.levels[1] === "support" ? "visible" : ($("#storyGiraffe").classList.contains("revealed") ? "visible" : "hidden");
-      renderStoryOptions();
-    }
-
-    function initUnit2() {
-      renderUnit2(true);
-    }
-
-    function getU2Rounds() {
-      const level = state.levels[2];
-      if (level === "support") {
-        return [
-          { prompt: "Toca na palavra que combina com a imagem.", animal: "🦒", answer: "girafa", options: ["gi|rafa", "ra|to"] },
-          { prompt: "Outra vez: qual é girafa?", animal: "🦒", answer: "girafa", options: ["ra|to", "gi|rafa"] }
-        ];
-      }
-      if (level === "challenge") {
-        return [
-          { prompt: "Escolhe a palavra da imagem.", animal: "🦒", answer: "girafa", options: ["girafa", "galinha", "gato", "garrafa"] },
-          { prompt: "Procura girafa outra vez.", animal: "🦒", answer: "girafa", options: ["garrafa", "gato", "girafa", "galinha"] },
-          { prompt: "Última ronda: escolhe sem ver a imagem.", animal: "", answer: "girafa", options: ["galinha", "gato", "garrafa", "girafa"] }
-        ];
-      }
-      return [
-        { prompt: "Imagem → palavra", animal: "🦒", answer: "girafa", options: ["girafa", "galinha", "rato"] },
-        { prompt: "Outra ronda", animal: "🦒", answer: "girafa", options: ["rato", "girafa", "galinha"] }
-      ];
-    }
-
-    function renderUnit2(reset = false) {
-      if (reset) state.u2 = { round: 0, score: 0 };
-      const rounds = getU2Rounds();
-      const round = rounds[state.u2.round] || rounds[rounds.length - 1];
-      $("#u2Prompt").textContent = round.prompt;
-      $("#u2Animal").textContent = round.animal || "❓";
-      $("#u2Progress").style.width = `${(state.u2.score / rounds.length) * 100}%`;
-      const wrap = $("#u2Options");
-      wrap.innerHTML = "";
-      $("#u2Feedback").style.display = "none";
-      $("#u2SpellBox").style.display = "none";
-      round.options.forEach(option => {
-        const btn = document.createElement("button");
-        btn.className = "option-card";
-        btn.innerHTML = option.includes("|")
-          ? `<span class="syl-gi">${option.split("|")[0]}</span>${option.split("|")[1]}`
-          : option;
-        btn.addEventListener("click", () => {
-          const plain = option.replace("|", "");
-          const ok = plain === round.answer;
-          setCorrectPick(btn, ok);
-          if (ok) {
-            state.u2.score++;
-            feedback($("#u2Feedback"), "correct", "Acertaste! Vamos para a próxima.");
-            makeConfetti(btn);
-            if (state.levels[2] === "challenge" && state.u2.round === rounds.length - 1) {
-              $("#u2SpellBox").style.display = "block";
-            }
-            setTimeout(() => {
-              state.u2.round++;
-              if (state.u2.round < rounds.length) {
-                renderUnit2();
-              } else {
-                $("#u2Progress").style.width = "100%";
-                feedback($("#u2Feedback"), "correct", "Conseguiste completar o bloco.");
-              }
-            }, 750);
-          } else {
-            feedback($("#u2Feedback"), "incorrect", "Não é essa. Observa bem a forma da palavra.");
-          }
-        });
-        wrap.appendChild(btn);
-      });
-    }
-
-    function initDragSystem() {
-      const drags = new Map();
-      let current = null;
-
-      document.addEventListener("pointerdown", event => {
-        const target = event.target.closest("[data-draggable='true']");
+    document.querySelectorAll('.reveal-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        const target = document.getElementById(button.dataset.target);
         if (!target) return;
-        current = {
-          node: target,
-          origin: target.parentElement,
-          placeholder: document.createComment("drag"),
-          type: target.dataset.dragType
-        };
-        current.node.before(current.placeholder);
-        current.node.classList.add("dragging");
-        current.node.setPointerCapture(event.pointerId);
-        moveDrag(event);
+        target.classList.toggle('hidden');
       });
+    });
 
-      document.addEventListener("pointermove", event => {
-        if (!current) return;
-        moveDrag(event);
+    document.querySelectorAll('.speak-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!synth) return;
+        const utterance = new SpeechSynthesisUtterance(button.dataset.speak || '');
+        utterance.lang = 'pt-PT';
+        synth.cancel();
+        synth.speak(utterance);
       });
+    });
 
-      document.addEventListener("pointerup", event => {
-        if (!current) return;
-        const hit = document.elementFromPoint(event.clientX, event.clientY)?.closest("[data-drop-target='true']");
-        const accepted = hit && hit.dataset.accepts === current.type && !hit.querySelector("[data-draggable='true']");
-        if (accepted) {
-          hit.classList.add("ready");
-          hit.appendChild(current.node);
-          if (hit.dataset.ondrop) {
-            window[hit.dataset.ondrop]?.(hit, current.node);
-          }
-          beep("click");
-        } else {
-          current.placeholder.parentNode?.insertBefore(current.node, current.placeholder);
-        }
-        current.node.classList.remove("dragging");
-        current.node.style.left = "";
-        current.node.style.top = "";
-        current.placeholder.remove();
-        current = null;
-      });
-
-      function moveDrag(event) {
-        current.node.style.left = `${event.clientX - current.node.offsetWidth / 2}px`;
-        current.node.style.top = `${event.clientY - current.node.offsetHeight / 2}px`;
-      }
-    }
-
-    function onSyllableDrop() {
-      const values = [...$("#syllableSlots").children].map(slot => slot.querySelector("[data-value]")?.dataset.value || "");
-      const level = state.levels[3];
-      const correct = ["gi", "ra", "fa"];
-      const sliced = values.slice(0, 3);
-      if (sliced.every(Boolean)) {
-        const ok = sliced.join(",") === correct.join(",");
-        if (ok) {
-          feedback($("#u3Feedback"), "correct", "Excelente! gi-ra-fa está na ordem certa.");
-          makeConfetti($("#syllableSlots"));
-          $("#waveTail").style.animation = "wave 0.8s ease 3";
-        } else {
-          feedback($("#u3Feedback"), "incorrect", "A ordem mudou a palavra. Experimenta de novo.");
-        }
-      }
-      if (level === "challenge" && values.length > 3 && sliced.join(",") === correct.join(",")) {
-        feedback($("#u3Feedback"), "correct", "Encontraste as três sílabas certas mesmo com distratores.");
-      }
-    }
-    window.onSyllableDrop = onSyllableDrop;
-
-    function renderUnit3() {
-      state.u3.claps = 0;
-      $("#clapCount").textContent = "0";
-      $("#clapFeedback").style.display = "none";
-      $("#u3Feedback").style.display = "none";
-      const pool = $("#syllablePool");
-      const slots = $("#syllableSlots");
-      pool.innerHTML = "";
-      slots.innerHTML = "";
-      const level = state.levels[3];
-      let items = ["gi", "ra", "fa"];
-      if (level === "challenge") items = ["gi", "ra", "fa", "ca", "no"];
-      if (level === "support") {
-        const preset = document.createElement("div");
-        preset.className = "slot ready";
-        preset.dataset.dropTarget = "true";
-        preset.dataset.accepts = "syllable";
-        preset.dataset.ondrop = "onSyllableDrop";
-        preset.innerHTML = `<div class="slot-number">1</div>`;
-        const chip = makeDragChip("gi", "syllable");
-        preset.appendChild(chip);
-        slots.appendChild(preset);
-      }
-      const slotCount = 3;
-      for (let i = slots.children.length; i < slotCount; i++) {
-        const slot = document.createElement("div");
-        slot.className = "slot";
-        slot.dataset.dropTarget = "true";
-        slot.dataset.accepts = "syllable";
-        slot.dataset.ondrop = "onSyllableDrop";
-        if (level === "support") {
-          const colors = ["rgba(212,131,10,0.18)", "rgba(123,94,42,0.16)", "rgba(192,58,155,0.14)"];
-          slot.style.background = colors[i];
-        }
-        slot.innerHTML = `<div class="slot-number">${i + 1}</div>`;
-        slots.appendChild(slot);
-      }
-      items
-        .filter(item => !(level === "support" && item === "gi"))
-        .sort(() => Math.random() - 0.5)
-        .forEach(item => pool.appendChild(makeDragChip(item, "syllable")));
-    }
-
-    function makeDragChip(value, type, text = value) {
-      const chip = document.createElement("div");
-      chip.className = type === "phrase" ? "phrase-draggable" : "drag-chip";
-      if (type === "phrase" && value === "girafa") chip.classList.add("phrase-highlight");
-      chip.textContent = text;
-      chip.dataset.draggable = "true";
-      chip.dataset.dragType = type;
-      chip.dataset.value = value;
-      chip.setAttribute("tabindex", "0");
-      chip.setAttribute("role", "button");
-      chip.setAttribute("aria-label", `Arrastar ${value}`);
-      return chip;
-    }
-
-    function initUnit3() {
-      $("#clapBtn").addEventListener("click", () => {
-        state.u3.claps++;
-        $("#clapCount").textContent = state.u3.claps;
-        beep("click");
-      });
-      $("#clapResetBtn").addEventListener("click", () => {
-        state.u3.claps = 0;
-        $("#clapCount").textContent = "0";
-        $("#clapFeedback").style.display = "none";
-      });
-      $("#clapCheckBtn").addEventListener("click", () => {
-        if (state.u3.claps === 3) {
-          feedback($("#clapFeedback"), "correct", "Isso mesmo: gi-ra-fa, 3 sílabas!");
-          makeConfetti($("#clapBtn"));
-        } else {
-          feedback($("#clapFeedback"), "incorrect", "Conta outra vez. Quantas palmas deste?");
-        }
-      });
-      renderUnit3();
-    }
-
-    function onBuildDrop() {
-      updateBuildPreview();
-    }
-    window.onBuildDrop = onBuildDrop;
-
-    function renderUnit4() {
-      state.u4.found = [];
-      const pool = $("#buildPool");
-      const slots = $("#buildSlots");
-      pool.innerHTML = "";
-      slots.innerHTML = "";
-      $("#discoveredWords").innerHTML = "";
-      $("#buildPreview").textContent = "";
-      $("#buildFeedback").style.display = "none";
-      const level = state.levels[4];
-      const items = level === "support"
-        ? ["ra", "fa", "do", "to"]
-        : level === "standard"
-          ? ["ra", "fa", "do", "to", "da", "ca"]
-          : ["gi", "ra", "fa", "do", "to", "da", "ca", "va", "la"];
-      const slotCount = level === "challenge" ? 3 : 2;
-      items.forEach(item => pool.appendChild(makeDragChip(item, "build")));
-      for (let i = 0; i < slotCount; i++) {
-        const slot = document.createElement("div");
-        slot.className = "build-slot";
-        slot.dataset.dropTarget = "true";
-        slot.dataset.accepts = "build";
-        slot.dataset.ondrop = "onBuildDrop";
-        slot.innerHTML = `<div class="slot-number">${i + 1}</div>`;
-        slots.appendChild(slot);
-      }
-    }
-
-    function updateBuildPreview() {
-      const word = [...$("#buildSlots").children].map(slot => slot.querySelector("[data-value]")?.dataset.value || "").join("");
-      $("#buildPreview").textContent = word;
-    }
-
-    function initUnit4() {
-      $("#confirmBuildBtn").addEventListener("click", () => {
-        const word = $("#buildPreview").textContent.trim();
-        if (!word) {
-          feedback($("#buildFeedback"), "incorrect", "Arrasta sílabas para a área de construção.");
-          return;
-        }
-        const real = realWords[word];
-        if (real) {
-          if (!state.u4.found.includes(word)) state.u4.found.push(word);
-          feedback($("#buildFeedback"), "correct", `${word} existe! ${real.hint}.`);
-          makeConfetti($("#confirmBuildBtn"));
-          renderFoundWords();
-        } else {
-          feedback($("#buildFeedback"), "incorrect", "Essa combinação não forma uma palavra real em português.");
-        }
-      });
-      $("#resetBuildBtn").addEventListener("click", () => {
-        renderUnit4();
-      });
-      renderUnit4();
-    }
-
-    function renderFoundWords() {
-      const wrap = $("#discoveredWords");
-      wrap.innerHTML = "<strong>Palavras que descobri</strong>";
-      state.u4.found.forEach(word => {
-        const tag = document.createElement("div");
-        tag.className = "word-tag";
-        tag.textContent = `${realWords[word].icon} ${word}`;
-        wrap.appendChild(tag);
-      });
-    }
-
-    const variantsByLevel = {
-      support: [
-        { text: "gi___fa", answer: "ra", options: ["ra", "la"] },
-        { text: "gi___fa", answer: "ra", options: ["ra", "na"] },
-        { text: "gi___fa", answer: "ra", options: ["ra", "da"] }
-      ],
-      standard: [
-        { text: "gi___fa", answer: "ra", options: ["ra", "la", "na"] },
-        { text: "___rafa", answer: "gi", options: ["gi", "da", "ca"] },
-        { text: "gira___", answer: "fa", options: ["da", "fa", "la"] }
-      ],
-      challenge: [
-        { text: "gi___fa", answer: "ra", options: ["ra", "la", "na", "da"] },
-        { text: "___rafa", answer: "gi", options: ["gi", "li", "ri", "ga"] },
-        { text: "gi______", answer: "rafa", options: ["rafa", "lafa", "nada", "rada"] }
-      ]
-    };
-
-    function renderUnit5(reset = false) {
-      if (reset) state.u5.step = 0;
-      const level = state.levels[5];
-      const steps = variantsByLevel[level];
-      const current = steps[state.u5.step] || steps[steps.length - 1];
-      $("#u5ProgressLabel").textContent = `Variante ${Math.min(state.u5.step + 1, steps.length)} de ${steps.length}`;
-      const parts = current.text.split("___");
-      $("#u5Variant").innerHTML = parts.length > 1
-        ? `${parts[0]}<span class="blank"></span>${parts[1]}`
-        : `${current.text.slice(0, 2)}<span class="blank"></span>`;
-      $("#u5Feedback").style.display = "none";
-      $("#u5WriteWrap").style.display = level === "challenge" ? "block" : "none";
-      const wrap = $("#u5Options");
-      wrap.innerHTML = "";
-      current.options.forEach(option => {
-        const btn = document.createElement("button");
-        btn.className = "fill-option";
-        btn.textContent = option;
-        btn.addEventListener("click", () => {
-          const ok = option === current.answer;
-          setCorrectPick(btn, ok);
-          if (ok) {
-            feedback($("#u5Feedback"), "correct", "Muito bem! A palavra ficou completa.");
-            makeConfetti(btn);
-            setTimeout(() => {
-              state.u5.step++;
-              if (state.u5.step < steps.length) renderUnit5();
-            }, 700);
+    document.querySelectorAll('.choice-row').forEach((row) => {
+      const feedback = row.parentElement.querySelector('.feedback');
+      row.querySelectorAll('.choice-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          row.querySelectorAll('.choice-btn').forEach((item) => item.classList.remove('is-right', 'is-wrong'));
+          const rightAnswer = button.dataset.answer || button.dataset.clozeAnswer || '';
+          if (button.dataset.choice === rightAnswer) {
+            button.classList.add('is-right');
+            if (feedback) feedback.textContent = 'Muito bem!';
           } else {
-            feedback($("#u5Feedback"), "incorrect", "Essa sílaba não encaixa aqui.");
+            button.classList.add('is-wrong');
+            if (feedback) feedback.textContent = 'Tenta outra vez.';
           }
         });
-        wrap.appendChild(btn);
       });
-    }
+    });
 
-    function initUnit5() {
-      renderUnit5(true);
-    }
-
-    function onPhraseDrop() {}
-    window.onPhraseDrop = onPhraseDrop;
-
-    function renderUnit6() {
-      const level = state.levels[6];
-      const pool = $("#phrasePool");
-      const slots = $("#phraseSlots");
-      pool.innerHTML = "";
-      slots.innerHTML = "";
-      $("#phraseFeedback").style.display = "none";
-      $("#phraseRead").innerHTML = "";
-      $("#u6OriginalWrap").style.display = level === "challenge" ? "block" : "none";
-      const tokens = level === "support"
-        ? ["A", "girafa", "come"]
-        : ["A", "girafa", "tem", "pescoço", "comprido", "."];
-      tokens.sort(() => Math.random() - 0.5).forEach(token => pool.appendChild(makeDragChip(token, "phrase", token)));
-      tokens.forEach((_, index) => {
-        const slot = document.createElement("div");
-        slot.className = "phrase-slot";
-        slot.dataset.dropTarget = "true";
-        slot.dataset.accepts = "phrase";
-        slot.dataset.ondrop = "onPhraseDrop";
-        slot.innerHTML = `<div class="slot-number">${level === "support" ? "" : index + 1}</div>`;
-        slots.appendChild(slot);
-      });
-    }
-
-    function initUnit6() {
-      $("#checkPhraseBtn").addEventListener("click", () => {
-        const level = state.levels[6];
-        const target = level === "support"
-          ? ["A", "girafa", "come"]
-          : ["A", "girafa", "tem", "pescoço", "comprido", "."];
-        const current = [...$("#phraseSlots").children].map(slot => slot.querySelector("[data-value]")?.dataset.value || "");
-        const ok = current.join("|") === target.join("|");
-        if (ok) {
-          feedback($("#phraseFeedback"), "correct", "Frase correcta! Vamos ler juntos.");
-          makeConfetti($("#checkPhraseBtn"));
-          animatePhraseRead(target);
-        } else {
-          feedback($("#phraseFeedback"), "incorrect", "A ordem ainda não está certa. Tenta trocar os cartões.");
-        }
-      });
-      $("#resetPhraseBtn").addEventListener("click", () => renderUnit6());
-      renderUnit6();
-    }
-
-    function animatePhraseRead(words) {
-      const wrap = $("#phraseRead");
-      wrap.innerHTML = words.map(word => `<span>${word}</span>`).join(" ");
-      const spans = [...wrap.querySelectorAll("span")];
-      let i = 0;
-      function pulse() {
-        spans.forEach(s => s.classList.remove("active"));
-        if (spans[i]) {
-          spans[i].classList.add("active");
-          i++;
-          setTimeout(pulse, 360);
-        }
-      }
-      pulse();
-    }
-
-    function renderCriteriaDots() {
-      const wrap = $("#criteriaDots");
-      wrap.innerHTML = "";
-      state.u7.results.forEach((result, index) => {
-        const dot = document.createElement("div");
-        dot.className = "criterion-dot";
-        if (result === true) dot.classList.add("done");
-        if (result === false) dot.classList.add("retry");
-        dot.textContent = result === true ? "✓" : result === false ? "🔄" : "🦒";
-        dot.setAttribute("aria-label", `Critério ${index + 1}`);
-        wrap.appendChild(dot);
-      });
-    }
-
-    function renderUnit7(reset = false) {
-      if (reset) state.u7 = { step: 0, results: [null, null, null, null], retries: 0 };
-      renderCriteriaDots();
-      const level = state.levels[7];
-      const stage = $("#criterionStage");
-      const step = state.u7.step;
-      const withImage = level !== "challenge";
-      const image = withImage ? "<div class='animal-emoji'>🦒</div>" : "";
-      $("#retryCriteriaBtn").style.display = step >= 4 ? "inline-flex" : "none";
-      if (step === 0) {
-        stage.innerHTML = `${image}<p><strong>Critério 1:</strong> escolhe a palavra certa.</p><div id="c1Options" class="option-grid"></div><div id="c1Feedback" class="feedback incorrect" style="display:none; margin-top:12px;"></div>`;
-        const opts = level === "support" ? ["girafa", "rato"] : ["galinha", "girafa", "rato"];
-        $("#c1Options").innerHTML = "";
-        opts.forEach(word => {
-          const btn = document.createElement("button");
-          btn.className = "criterion-option";
-          btn.textContent = word;
-          btn.addEventListener("click", () => {
-            const ok = word === "girafa";
-            setCorrectPick(btn, ok);
-            state.u7.results[0] = ok;
-            if (ok) nextCriterion($("#c1Feedback"), btn, "Conseguiste reconhecer a palavra.");
-            else feedback($("#c1Feedback"), "incorrect", "Olha com atenção para a forma da palavra.");
-          });
-          $("#c1Options").appendChild(btn);
+    document.querySelectorAll('[data-compose]').forEach((bank) => {
+      const output = document.getElementById(bank.dataset.compose);
+      const parts = [];
+      bank.querySelectorAll('.syllable-chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          parts.push(chip.dataset.syllable || '');
+          if (output) output.textContent = parts.join('');
         });
-      } else if (step === 1) {
-        stage.innerHTML = `${image}<p><strong>Critério 2:</strong> quantas sílabas tem girafa?</p><div class="pill-row"><button class="small-button criterion-option" data-num="2">2</button><button class="small-button criterion-option" data-num="3">3</button><button class="small-button criterion-option" data-num="4">4</button></div><div id="c2Feedback" class="feedback incorrect" style="display:none; margin-top:12px;"></div>`;
-        stage.querySelectorAll("[data-num]").forEach(btn => btn.addEventListener("click", () => {
-          const ok = btn.dataset.num === "3";
-          setCorrectPick(btn, ok);
-          state.u7.results[1] = ok;
-          if (ok) nextCriterion($("#c2Feedback"), btn, "Muito bem: gi-ra-fa.");
-          else feedback($("#c2Feedback"), "incorrect", "Experimenta dizer a palavra devagar.");
-        }));
-      } else if (step === 2) {
-        stage.innerHTML = `${image}<p><strong>Critério 3:</strong> escolhe a ordem certa das sílabas.</p><div id="c3Options" class="option-grid"></div><div id="c3Feedback" class="feedback incorrect" style="display:none; margin-top:12px;"></div>`;
-        [["gi-ra-fa", true], ["ra-gi-fa", false], ["fa-ra-gi", false]].forEach(([label, okVal]) => {
-          const btn = document.createElement("button");
-          btn.className = "criterion-option";
-          btn.textContent = label;
-          btn.addEventListener("click", () => {
-            setCorrectPick(btn, okVal);
-            state.u7.results[2] = okVal;
-            if (okVal) nextCriterion($("#c3Feedback"), btn, "Ordenaste as sílabas correctamente.");
-            else feedback($("#c3Feedback"), "incorrect", "Essa ordem destrói a palavra.");
-          });
-          $("#c3Options").appendChild(btn);
+      });
+    });
+
+    document.querySelectorAll('.clear-compose').forEach((button) => {
+      button.addEventListener('click', () => {
+        const output = document.getElementById(button.dataset.composeClear);
+        if (output) output.textContent = '__';
+      });
+    });
+
+    document.querySelectorAll('.check-card').forEach((card) => {
+      card.addEventListener('click', () => card.classList.toggle('is-done'));
+    });
+
+    document.querySelectorAll('.diff-switcher').forEach((switcher) => {
+      const panels = switcher.nextElementSibling;
+      switcher.querySelectorAll('.diff-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          switcher.querySelectorAll('.diff-btn').forEach((item) => item.classList.remove('is-active'));
+          panels.querySelectorAll('.diff-panel').forEach((panel) => panel.classList.remove('is-active'));
+          button.classList.add('is-active');
+          const target = panels.querySelector('#' + CSS.escape(button.dataset.diff));
+          if (target) target.classList.add('is-active');
         });
-      } else if (step === 3) {
-        if (level === "challenge") {
-          stage.innerHTML = `<p><strong>Critério 4:</strong> escreve uma frase original com a palavra girafa.</p><textarea id="c4Text" aria-label="Escrever frase original com girafa"></textarea><div class="pill-row" style="margin-top:10px;"><button class="button" id="c4Check">Verificar</button></div><div id="c4Feedback" class="feedback incorrect" style="display:none; margin-top:12px;"></div>`;
-          $("#c4Check").addEventListener("click", () => {
-            const value = $("#c4Text").value.toLowerCase();
-            const ok = value.includes("girafa");
-            state.u7.results[3] = ok;
-            if (ok) nextCriterion($("#c4Feedback"), $("#c4Check"), "A frase inclui a palavra girafa.");
-            else feedback($("#c4Feedback"), "incorrect", "A tua frase precisa da palavra girafa.");
-          });
-        } else {
-          stage.innerHTML = `${image}<p><strong>Critério 4:</strong> completa a frase.</p><div class="fill-word">A girafa <span class="blank" style="min-width:90px;"></span> pescoço comprido.</div><div class="option-grid" id="c4Options"></div><div id="c4Feedback" class="feedback incorrect" style="display:none; margin-top:12px;"></div>`;
-          const options = level === "support" ? ["tem", "é"] : ["tem", "faz", "canta"];
-          options.forEach(word => {
-            const btn = document.createElement("button");
-            btn.className = "criterion-option";
-            btn.textContent = word;
-            btn.addEventListener("click", () => {
-              const ok = word === "tem";
-              setCorrectPick(btn, ok);
-              state.u7.results[3] = ok;
-              if (ok) nextCriterion($("#c4Feedback"), btn, "Conseguiste completar a frase.");
-              else feedback($("#c4Feedback"), "incorrect", "Procura o verbo certo para a frase.");
-            });
-            $("#c4Options").appendChild(btn);
-          });
-        }
-      } else {
-        stage.innerHTML = "<h3>Mapa final</h3><p>✓ verde: consegui. 🔄 âmbar: vou praticar mais.</p><div class='card-grid'>" +
-          state.u7.results.map((result, index) => `<div class="criterion-card">${result ? "✓ consegui" : "🔄 vou praticar mais"} · critério ${index + 1}</div>`).join("") +
-          "</div>" +
-          (level === "challenge" ? "<p style='margin-top:12px;'><strong>Extra opcional:</strong> encontra outra palavra com 3 sílabas que comece por gi.</p>" : "");
-      }
-    }
-
-    function nextCriterion(feedbackBox, source, text) {
-      feedback(feedbackBox, "correct", text);
-      makeConfetti(source);
-      renderCriteriaDots();
-      setTimeout(() => {
-        state.u7.step++;
-        renderUnit7();
-      }, 700);
-    }
-
-    function initUnit7() {
-      $("#retryCriteriaBtn").addEventListener("click", () => renderUnit7(true));
-      renderUnit7(true);
-    }
-
-    function renderMaker() {
-      const wrap = $("#makerCards");
-      wrap.innerHTML = "";
-      makerData.forEach(item => {
-        const card = document.createElement("div");
-        card.className = "maker-card";
-        card.innerHTML = `<h3>${item.title}</h3><p>${item.text}</p><p><strong>Materiais:</strong> ${item.materials}</p><p><strong>Grupo:</strong> ${item.group}</p>`;
-        wrap.appendChild(card);
       });
-    }
-
-    function renderUnit8() {
-      const cards = $("#activityCards");
-      const panels = $("#activityPanels");
-      cards.innerHTML = "";
-      panels.innerHTML = "";
-      const level = state.levels[8];
-      const data = [
-        { key: "historia", icon: "📖", title: "Conta a história da Fafa", desc: "Conta quem é a girafa e o que ela faz." },
-        { key: "curiosidades", icon: "🔎", title: "Descobre curiosidades", desc: "Escolhe respostas sobre girafas." },
-        { key: "rima", icon: "🎶", title: "Escreve uma rima", desc: "Completa ou inventa uma rima com girafa." }
-      ];
-      data.forEach(item => {
-        const card = document.createElement("button");
-        card.className = "activity-card";
-        card.innerHTML = `<h3>${item.icon} ${item.title}</h3><p>${item.desc}</p>`;
-        card.addEventListener("click", () => openActivity(item.key));
-        cards.appendChild(card);
-      });
-      panels.innerHTML = `
-        <div id="panel-historia">
-          <div class="soft-card">
-            <h3>📖 História</h3>
-            <p>${level === "support" ? "A girafa chama-se ___, vive ___, gosta de ___." : "Conta uma pequena história com a palavra girafa."}</p>
-            <textarea id="storyActivityText" aria-label="Escrever história da girafa"></textarea>
-          </div>
-        </div>
-        <div id="panel-curiosidades">
-          <div class="soft-card">
-            <h3>🔎 Curiosidades</h3>
-            <p>Qual destas frases está certa?</p>
-            <div class="option-grid" id="curiosityOptions"></div>
-            <div id="curiosityFeedback" class="feedback incorrect" style="display:none; margin-top:12px;"></div>
-          </div>
-        </div>
-        <div id="panel-rima">
-          <div class="soft-card">
-            <h3>🎶 Rima</h3>
-            <p>${level === "challenge" ? "Cria uma rima livre com girafa." : "Completa: A girafa olha para a folha e diz..."}</p>
-            <textarea id="rhymeActivityText" aria-label="Escrever rima com girafa"></textarea>
-          </div>
-        </div>`;
-      const curiositySet = level === "support"
-        ? [
-            ["A girafa tem pescoço comprido.", true],
-            ["A girafa é um peixe.", false]
-          ]
-        : [
-            ["A girafa tem pescoço comprido.", true],
-            ["A girafa vive debaixo de água.", false],
-            ["A girafa come folhas altas.", true],
-            ["A girafa mia como um gato.", false]
-          ];
-      $("#curiosityOptions").innerHTML = "";
-      curiositySet.forEach(([label, ok]) => {
-        const btn = document.createElement("button");
-        btn.className = "option-card";
-        btn.textContent = label;
-        btn.addEventListener("click", () => {
-          setCorrectPick(btn, ok);
-          if (ok) {
-            feedback($("#curiosityFeedback"), "correct", "Boa descoberta! Essa frase faz sentido.");
-            $("#shareActivityBtn").disabled = false;
-          } else {
-            feedback($("#curiosityFeedback"), "incorrect", "Essa frase não combina com uma girafa.");
-          }
-        });
-        $("#curiosityOptions").appendChild(btn);
-      });
-      openActivity("historia");
-    }
-
-    function openActivity(key) {
-      state.u8.active = key;
-      $("#activityPanels").querySelectorAll("div[id^='panel-']").forEach(panel => panel.classList.remove("active"));
-      $(`#panel-${key}`).classList.add("active");
-    }
-
-    function initUnit8() {
-      document.addEventListener("input", event => {
-        if (event.target.id === "storyActivityText" || event.target.id === "rhymeActivityText") {
-          const value = event.target.value.toLowerCase();
-          $("#shareActivityBtn").disabled = !value.includes("girafa");
-        }
-      });
-      $("#shareActivityBtn").addEventListener("click", () => {
-        let text = "";
-        if (state.u8.active === "historia") text = $("#storyActivityText").value.trim();
-        if (state.u8.active === "rima") text = $("#rhymeActivityText").value.trim();
-        if (state.u8.active === "curiosidades") text = "Descobri uma curiosidade sobre a girafa.";
-        if (!text || !text.toLowerCase().includes("girafa")) {
-          text = "A minha produção inclui a palavra girafa.";
-        }
-        const item = document.createElement("div");
-        item.className = "mural-item";
-        item.textContent = text;
-        $("#muralBoard").prepend(item);
-        $("#shareActivityBtn").disabled = true;
-        beep("ok");
-        makeConfetti($("#shareActivityBtn"));
-      });
-      renderUnit8();
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      initTabs();
-      initDragSystem();
-      initUnit1();
-      initUnit2();
-      initUnit3();
-      initUnit4();
-      initUnit5();
-      initUnit6();
-      initUnit7();
-      initUnit8();
-      renderMaker();
     });
   </script>
 </body>

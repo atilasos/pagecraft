@@ -1,757 +1,516 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-PT">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>M28P #18 — palhaço | PageCraft</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap');
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Nunito','Comic Sans MS',sans-serif;background:#FFF5F5;color:#1E1B18;min-height:100vh}
-  h1,h2,h3{font-weight:800}
-  .container{max-width:960px;margin:0 auto;padding:1.5rem}
-  .header{text-align:center;padding:2rem 1rem 1rem;background:linear-gradient(135deg,#E53E3E,#2B6CB0);color:white;border-radius:0 0 24px 24px;margin-bottom:2rem}
-  .header h1{font-size:2.5rem;margin-bottom:.5rem}
-  .header .word-display{font-size:4rem;font-weight:800;letter-spacing:.05em;margin:.5rem 0}
-  .header .badge{display:inline-block;background:#F59E0B;color:white;font-weight:700;padding:.25rem .75rem;border-radius:20px;font-size:1rem}
-  .section{background:white;border:2px solid #E53E3E;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.08);padding:1.5rem;margin-bottom:1.5rem}
-  .section h2{font-size:1.5rem;color:#E53E3E;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
-  .diff-bar{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
-  .diff-btn{padding:.4rem 1rem;border-radius:20px;border:2px solid transparent;font-weight:700;cursor:pointer;font-family:inherit;font-size:.9rem;min-height:40px;transition:all .2s}
-  .diff-btn.green{background:#dcfce7;color:#166534;border-color:#22c55e}
-  .diff-btn.yellow{background:#fef9c3;color:#854d0e;border-color:#F59E0B}
-  .diff-btn.red{background:#fee2e2;color:#991b1b;border-color:#ef4444}
-  .diff-btn.active{transform:scale(1.05);box-shadow:0 2px 8px rgba(0,0,0,.2)}
-  .diff-content{display:none;padding:.75rem;border-radius:12px;margin-bottom:1rem;font-size:1rem;line-height:1.6}
-  .diff-content.green-bg{background:#f0fdf4;border-left:4px solid #22c55e}
-  .diff-content.yellow-bg{background:#fefce8;border-left:4px solid #F59E0B}
-  .diff-content.red-bg{background:#fef2f2;border-left:4px solid #ef4444}
-  .diff-content.show{display:block}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.75rem 2rem;border-radius:30px;border:none;font-family:inherit;font-weight:700;font-size:1rem;cursor:pointer;min-height:48px;min-width:48px;transition:all .2s}
-  .btn:hover{transform:scale(1.05)}
-  .btn:active{transform:scale(.97)}
-  .btn-primary{background:#E53E3E;color:white;box-shadow:0 2px 8px rgba(229,62,62,.3)}
-  .btn-secondary{background:#2B6CB0;color:white;box-shadow:0 2px 8px rgba(43,108,176,.3)}
-  .btn-accent{background:#F59E0B;color:white}
-  .btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
-  .syllable-block{display:inline-flex;align-items:center;justify-content:center;font-size:2.2rem;font-weight:800;color:white;padding:.5rem 1.2rem;border-radius:12px;cursor:grab;min-height:48px;min-width:72px;user-select:none;transition:all .2s}
-  .syllable-block:active{cursor:grabbing;transform:scale(1.1)}
-  .syl-pa{background:#E53E3E}
-  .syl-lha{background:#2B6CB0}
-  .syl-co{background:#D69E2E}
-  .word-big{font-size:3rem;font-weight:800;color:#E53E3E;letter-spacing:.05em;text-align:center;margin:1rem 0}
-  .quiz-options{display:flex;flex-wrap:wrap;gap:.75rem;margin:1rem 0}
-  .quiz-opt{padding:.75rem 1.5rem;border-radius:12px;border:2px solid #E53E3E;background:white;font-family:inherit;font-size:1.1rem;font-weight:700;cursor:pointer;min-height:48px;transition:all .2s}
-  .quiz-opt:hover{background:#FFF0F0;transform:scale(1.02)}
-  .quiz-opt.correct{background:#f0fdf4;border-color:#22c55e;color:#166534}
-  .quiz-opt.incorrect{background:#fffbeb;border-color:#F59E0B;color:#92400e}
-  .feedback{padding:1rem;border-radius:12px;margin:.75rem 0;font-size:1.1rem;font-weight:700;display:none}
-  .feedback.show{display:block}
-  .feedback.ok{background:#f0fdf4;color:#166534;border:2px solid #22c55e}
-  .feedback.nok{background:#fffbeb;color:#92400e;border:2px solid #F59E0B}
-  .drag-slot{width:110px;height:64px;border:2px dashed #2B6CB0;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;background:#F0F4FF;color:#2B6CB0;transition:all .2s}
-  .drag-slot.filled{border-style:solid;border-color:#22c55e;background:#f0fdf4;color:#166534}
-  .clown-emoji{font-size:4rem;display:block;text-align:center;margin:1rem 0;animation:bounce 2s ease-in-out infinite}
-  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-  .progress-bar{background:#e5e7eb;border-radius:8px;height:12px;margin:1rem 0;overflow:hidden}
-  .progress-fill{background:linear-gradient(90deg,#E53E3E,#2B6CB0);height:100%;border-radius:8px;transition:width .5s}
-  .task-block{background:#FFF5F5;border-radius:12px;padding:1rem;margin:.75rem 0;border:1px solid #F59E0B}
-  .task-label{font-size:.85rem;font-weight:700;color:#92400e;text-transform:uppercase;margin-bottom:.5rem}
-  input[type=text]{font-family:inherit;font-size:1.1rem;padding:.5rem 1rem;border:2px solid #E53E3E;border-radius:8px;width:100%;max-width:320px;min-height:48px;outline:none}
-  input[type=text]:focus{border-color:#2B6CB0;box-shadow:0 0 0 3px rgba(43,108,176,.2)}
-  .image-card{text-align:center;padding:1rem;background:#FFF5F5;border-radius:12px;border:2px solid #E53E3E;cursor:pointer;transition:all .2s;min-height:80px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem;font-size:1rem;font-weight:700}
-  .image-card:hover{transform:scale(1.03);background:#FFE5E5}
-  .image-card.selected{background:#f0fdf4;border-color:#22c55e}
-  .word-card{padding:.5rem 1rem;border-radius:8px;border:2px solid #E53E3E;background:white;font-weight:700;font-size:1.1rem;cursor:pointer;min-height:48px;display:flex;align-items:center;transition:all .2s}
-  .word-card:hover{background:#FFF0F0;transform:scale(1.03)}
-  .word-card.placed{opacity:.4;cursor:not-allowed}
-  .placed-word{padding:.4rem .8rem;border-radius:8px;background:#2B6CB0;color:white;font-weight:700;font-size:1rem;cursor:pointer;transition:all .2s}
-  .placed-word:hover{background:#E53E3E}
-  .nav-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
-  .nav-tab{padding:.6rem 1.2rem;border-radius:30px;border:2px solid #E53E3E;background:white;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;min-height:48px;transition:all .2s;color:#E53E3E}
-  .nav-tab.active,.nav-tab:hover{background:#E53E3E;color:white}
-  .block-content{display:none}
-  .block-content.active{display:block}
-  .result-summary{background:linear-gradient(135deg,#FFF5F5,#EBF4FF);border-radius:16px;padding:1.5rem;text-align:center;margin:1rem 0}
-  .discovered-list{margin:.5rem 0;display:flex;flex-wrap:wrap;gap:.5rem}
-  .discovered-word{background:#dcfce7;color:#166534;padding:.25rem .75rem;border-radius:20px;font-weight:700;font-size:1rem}
-  .stars{font-size:2rem;text-align:center;letter-spacing:.5rem;margin:.5rem 0}
-  .sentence-slot{display:flex;flex-wrap:wrap;gap:.5rem;padding:.75rem;border:2px dashed #2B6CB0;border-radius:12px;min-height:64px;align-items:center}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M28P #18 — palhaço | PageCraft</title>
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHRleHQgeT0iNTAiIGZvbnQtc2l6ZT0iNDgiPvCfk5g8L3RleHQ+PC9zdmc+" />
+  <style>
+    :root {
+      --bg: #FFF5F5;
+      --surface: #FFFFFF;
+      --primary: #E53E3E;
+      --accent: #F59E0B;
+      --text: #1E1B18;
+      --correct: #22c55e;
+      --correct-bg: #f0fdf4;
+      --incorrect: #F59E0B;
+      --incorrect-bg: #fffbeb;
+      --radius: 16px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --font: 'Nunito', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+      --touch-size: 48px;
+      --card-gap: 1rem;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 20%, transparent), transparent 38%),
+        linear-gradient(180deg, color-mix(in srgb, var(--primary) 8%, var(--bg)), var(--bg));
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+    a, button, summary, textarea { font: inherit; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; background: var(--surface); color: var(--text); padding: 0.75rem 1rem; border-radius: 9999px; z-index: 1000; border: 2px solid var(--primary); }
+    .skip-link:focus { top: 1rem; }
+    :focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+    .shell { max-width: 1120px; margin: 0 auto; padding: 1rem 1rem 3rem; }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      padding: 1.4rem;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 72%, white), color-mix(in srgb, var(--accent) 60%, white));
+      color: white;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
+    }
+    .hero::after { content: ""; position: absolute; inset: auto -8% -24% auto; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.14); }
+    .hero-top { display: flex; gap: 1rem; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; position: relative; z-index: 1; }
+    .hero-kicker, .hero-badge, .meta-chip, .nav-pill, .page-link span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 9999px;
+      padding: 0.75rem 1.25rem;
+      font-weight: 700;
+    }
+    .hero-kicker { background: rgba(255,255,255,0.16); }
+    .hero-badge { background: rgba(255,255,255,0.22); }
+    .hero-grid { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.9fr); margin-top: 1.25rem; position: relative; z-index: 1; }
+    .hero-copy h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.05; margin: 0.4rem 0 0.7rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+    .hero-copy p { margin: 0.4rem 0; max-width: 45rem; }
+    .word-scene { background: rgba(255,255,255,0.14); border: 2px solid rgba(255,255,255,0.28); border-radius: 24px; padding: 1rem; backdrop-filter: blur(4px); }
+    .word-scene .emoji { font-size: clamp(3rem, 10vw, 5.5rem); line-height: 1; }
+    .meta-row, .objective-row, .syllable-row, .page-switch, .section-nav { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .meta-row { margin-top: 1rem; }
+    .meta-chip { background: rgba(255,255,255,0.18); }
+    .objective-row { margin: 1rem 0 0; padding: 0; list-style: none; }
+    .objective-row li { background: rgba(255,255,255,0.22); border-radius: 9999px; padding: 0.75rem 1rem; font-weight: 700; min-height: var(--touch-size); display: inline-flex; align-items: center; }
+    .word-spotlight { margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1.1fr 1fr; }
+    .spot-card { background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 70%, white); border-radius: 24px; padding: 1rem; box-shadow: var(--shadow); }
+    .spot-card h2 { margin: 0 0 0.75rem; font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; }
+    .spot-card .word-display { font-size: clamp(2.4rem, 7vw, 3.8rem); font-weight: 800; color: var(--primary); letter-spacing: 0.05em; text-transform: uppercase; }
+    .spot-card .mission { margin-top: 0.75rem; }
+    .syllable-row { margin-top: 1rem; }
+    .syllable-token, .syllable-chip {
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 12px;
+      border: none;
+      color: white;
+      font-weight: 800;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      padding: 0.55rem 1rem;
+      background: var(--chip, var(--primary));
+      box-shadow: var(--shadow);
+    }
+    .page-switch { margin: 1.2rem 0 0.5rem; }
+    .page-link {
+      text-decoration: none;
+      background: var(--surface);
+      color: var(--text);
+      border: 2px solid color-mix(in srgb, var(--primary) 28%, white);
+      border-radius: 18px;
+      padding: 0.85rem 1rem;
+      min-height: var(--touch-size);
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: space-between;
+      flex: 1 1 200px;
+      box-shadow: var(--shadow);
+      font-weight: 700;
+    }
+    .page-link.is-current { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
+    .section-nav { position: sticky; top: 0; z-index: 10; padding: 0.85rem 0 1rem; background: linear-gradient(180deg, var(--bg), rgba(255,248,240,0.88)); backdrop-filter: blur(6px); }
+    .nav-pill { text-decoration: none; background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 24%, white); padding: 0.55rem 1rem; }
+    .content { display: grid; gap: 1.1rem; }
+    .unit-card { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 35%, white); border-radius: 24px; padding: 1.15rem; box-shadow: var(--shadow); }
+    .unit-head { display: flex; gap: 1rem; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+    .unit-head h2 { margin: 0.2rem 0 0; font-size: clamp(1.45rem, 4vw, 2.1rem); font-weight: 800; }
+    .unit-kicker { color: color-mix(in srgb, var(--primary) 80%, black); font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.9rem; }
+    .unit-badge { background: color-mix(in srgb, var(--accent) 22%, var(--surface)); border: 2px solid var(--accent); border-radius: 9999px; padding: 0.65rem 1rem; font-weight: 800; min-height: var(--touch-size); display: inline-flex; align-items: center; }
+    .unit-grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.95fr); margin-top: 1rem; }
+    .unit-copy p { margin: 0.65rem 0; }
+    .unit-flow { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 1rem; }
+    .unit-flow > div, .play-card, .maker-box, .teacher-card { background: color-mix(in srgb, var(--bg) 70%, white); border-radius: 18px; padding: 0.95rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
+    .play-label { font-weight: 800; margin: 0 0 0.8rem; }
+    .pill-btn, .choice-btn, .check-card, .prompt-card {
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 9999px;
+      border: 2px solid transparent;
+      padding: 0.75rem 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+    }
+    .pill-btn:hover, .choice-btn:hover, .check-card:hover, .prompt-card:hover, .page-link:hover { transform: scale(1.05); box-shadow: 0 10px 24px rgba(0,0,0,0.12); }
+    .pill-btn:active, .choice-btn:active, .check-card:active, .prompt-card:active, .page-link:active { transform: scale(0.97); }
+    .pill-btn { background: var(--primary); color: white; }
+    .choice-row, .check-grid, .prompt-grid, .compose-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .choice-btn, .check-card, .prompt-card { background: var(--surface); color: var(--text); border-color: color-mix(in srgb, var(--primary) 22%, white); }
+    .choice-btn.is-right, .check-card.is-done { background: var(--correct-bg); border-color: var(--correct); color: #166534; }
+    .choice-btn.is-wrong { background: var(--incorrect-bg); border-color: var(--incorrect); color: #92400e; }
+    .feedback, .helper-text { margin: 0.85rem 0 0; font-weight: 700; }
+    .feedback { min-height: 1.4em; }
+    .compose-output, .phrase-card, .cloze-word { min-height: 72px; border-radius: 18px; background: var(--surface); border: 2px dashed color-mix(in srgb, var(--primary) 35%, white); display: grid; place-items: center; font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800; color: var(--primary); padding: 0.9rem; margin-top: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .phrase-card { text-transform: none; font-size: 1.3rem; color: var(--text); }
+    .phrase-input { width: 100%; margin-top: 0.85rem; border-radius: 18px; border: 2px solid color-mix(in srgb, var(--primary) 25%, white); padding: 0.9rem 1rem; min-height: 120px; background: #fff; }
+    .diff-switcher { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; }
+    .diff-btn { min-height: var(--touch-size); min-width: var(--touch-size); border-radius: 9999px; border: 2px solid color-mix(in srgb, var(--primary) 28%, white); background: var(--surface); padding: 0.7rem 1rem; font-weight: 700; cursor: pointer; }
+    .diff-btn.is-active { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
+    .diff-panel { display: none; background: color-mix(in srgb, var(--bg) 72%, white); border-radius: 18px; padding: 0.95rem; margin-top: 0.8rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
+    .diff-panel.is-active { display: block; }
+    .teacher-guide { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 30%, white); border-radius: 24px; padding: 0.9rem 1rem; box-shadow: var(--shadow); }
+    .teacher-guide summary { min-height: var(--touch-size); display: flex; align-items: center; cursor: pointer; font-weight: 800; font-size: 1.2rem; }
+    .teacher-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 1rem; }
+    .teacher-card-wide { grid-column: 1 / -1; }
+    .teacher-card h3 { margin-top: 0; }
+    .footer { text-align: center; padding: 1.4rem 0 0; font-weight: 700; color: color-mix(in srgb, var(--text) 72%, white); }
+    .hidden { display: none !important; }
+    @media (max-width: 900px) {
+      .hero-grid, .word-spotlight, .unit-grid, .unit-flow, .teacher-grid { grid-template-columns: 1fr; }
+      .section-nav { position: static; }
+    }
+    @media (max-width: 640px) {
+      body { font-size: 18px; }
+      .shell { padding: 0.75rem 0.75rem 2.4rem; }
+      .hero { padding: 1rem; border-radius: 22px; }
+      .hero-copy h1 { font-size: clamp(2rem, 9vw, 3rem); }
+      .page-link { flex-basis: 100%; }
+      .objective-row li, .meta-chip, .hero-kicker, .hero-badge, .nav-pill { width: 100%; justify-content: center; }
+      .unit-card, .spot-card, .teacher-guide { border-radius: 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
 </head>
-<body>
-<div class="header">
-  <div class="badge">M28P #18</div>
-  <div class="word-display">🤡 palhaço</div>
-  <h1>A palavra <em>palhaço</em></h1>
-  <p style="font-size:1rem;opacity:.9">Método das 28 Palavras · 1.º ano</p>
-</div>
-<div class="container">
-
-<!-- NAV TABS -->
-<div class="nav-tabs" role="tablist">
-  <button class="nav-tab active" onclick="showBlock('b1')">1️⃣ Descoberta</button>
-  <button class="nav-tab" onclick="showBlock('b2')">2️⃣ Reconhecimento</button>
-  <button class="nav-tab" onclick="showBlock('b3')">3️⃣ Sílabas</button>
-  <button class="nav-tab" onclick="showBlock('b4')">4️⃣ Recombinação</button>
-  <button class="nav-tab" onclick="showBlock('b5')">5️⃣ Escrita</button>
-  <button class="nav-tab" onclick="showBlock('b6')">6️⃣ Frase</button>
-  <button class="nav-tab" onclick="showBlock('b7')">7️⃣ Avaliação</button>
-  <button class="nav-tab" onclick="showBlock('b8')">8️⃣ Extensão</button>
-</div>
-
-<!-- BLOCO 1 -->
-<div id="b1" class="block-content active">
-  <div class="section">
-    <h2>🎪 Bloco 1 — Descoberta da palavra</h2>
-    <div class="diff-bar">
-      <button class="diff-btn green active" onclick="showDiff('b1','green')">🟢 Com ajuda</button>
-      <button class="diff-btn yellow" onclick="showDiff('b1','yellow')">🟡 Objetivo</button>
-      <button class="diff-btn red" onclick="showDiff('b1','red')">🔴 Desafio</button>
-    </div>
-    <div id="b1-green" class="diff-content green-bg show">🟢 A palavra está visível desde o início, sublinhada a vermelho. Ouve a história e aponta para o palhaço!</div>
-    <div id="b1-yellow" class="diff-content yellow-bg">🟡 Lê a micro-história. Clica em "Mostrar a palavra" e lê em voz alta para o teu par.</div>
-    <div id="b1-red" class="diff-content red-bg">🔴 Antes de clicar, escreve no caderno o que achas que é a palavra. Depois compara!</div>
-
-    <div style="text-align:center;background:linear-gradient(135deg,#FFE5E5,#E5F0FF);border-radius:16px;padding:2rem;margin:1rem 0;position:relative">
-      <div style="position:absolute;top:10px;left:15px;font-size:1.5rem">⭐</div>
-      <div style="position:absolute;top:10px;right:15px;font-size:1.5rem">🎠</div>
-      <div style="position:absolute;bottom:10px;left:30px;font-size:1rem">🎉</div>
-      <span class="clown-emoji">🤡</span>
-      <p style="font-size:1.3rem;font-weight:700;color:#1E1B18;margin:.5rem 0">No circo há um artista muito engraçado.<br>Faz rir toda a gente.<br>Como se chama?</p>
-    </div>
-
-    <div id="palavra-cartaz" style="display:none;text-align:center;padding:1.5rem;background:white;border:3px solid #E53E3E;border-radius:16px;animation:fadeIn .5s;margin:1rem 0">
-      <span class="clown-emoji" style="animation:none">🤡</span>
-      <div class="word-big">palhaço</div>
-      <div style="display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin:1rem 0">
-        <span class="syllable-block syl-pa">pa</span>
-        <span style="font-size:2rem;font-weight:800;color:#aaa">—</span>
-        <span class="syllable-block syl-lha">lha</span>
-        <span style="font-size:2rem;font-weight:800;color:#aaa">—</span>
-        <span class="syllable-block syl-co">ço</span>
+<body data-page-variant="index.html" data-visible-units="1,2,3,4">
+  <a href="#main" class="skip-link">Ir para o conteúdo</a>
+  <div class="shell">
+    <header class="hero">
+      <div class="hero-top">
+        <span class="hero-kicker">M28P #18</span>
+        <span class="hero-badge">Rota completa</span>
       </div>
-    </div>
-
-    <div style="text-align:center;margin-top:1rem">
-      <button class="btn btn-primary" onclick="revelarPalavra()" id="btn-revelar">🔍 Mostrar a palavra</button>
-    </div>
-  </div>
-</div>
-
-<!-- BLOCO 2 -->
-<div id="b2" class="block-content">
-  <div class="section">
-    <h2>👁️ Bloco 2 — Reconhecimento global</h2>
-    <div class="diff-bar">
-      <button class="diff-btn green active" onclick="showDiff('b2','green')">🟢 Com ajuda</button>
-      <button class="diff-btn yellow" onclick="showDiff('b2','yellow')">🟡 Objetivo</button>
-      <button class="diff-btn red" onclick="showDiff('b2','red')">🔴 Desafio</button>
-    </div>
-    <div id="b2-green" class="diff-content green-bg show">🟢 As imagens têm a primeira letra visível. Os distratores são bem diferentes.</div>
-    <div id="b2-yellow" class="diff-content yellow-bg">🟡 Três opções sem apoio. Faz as duas tarefas em sequência.</div>
-    <div id="b2-red" class="diff-content red-bg">🔴 Quatro opções com palavras parecidas. Justifica em voz alta!</div>
-
-    <div class="task-block" id="b2-t1">
-      <div class="task-label">Tarefa 1 — Vê a palavra, clica na imagem certa</div>
-      <div class="word-big" style="font-size:2rem;margin:.5rem 0">palhaço</div>
-      <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin:1rem 0">
-        <div class="image-card" onclick="checkImage2('palhaco',this)" style="width:140px">🤡<br><span>?</span></div>
-        <div class="image-card" onclick="checkImage2('passarinho',this)" style="width:140px">🐦<br><span>?</span></div>
-        <div class="image-card" onclick="checkImage2('telhado',this)" style="width:140px">🏠<br><span>?</span></div>
-      </div>
-      <div id="b2-fb1" class="feedback"></div>
-    </div>
-
-    <div class="task-block" id="b2-t2">
-      <div class="task-label">Tarefa 2 — Vê a imagem, clica na palavra certa</div>
-      <div style="font-size:4rem;text-align:center;margin:.5rem 0">🤡</div>
-      <div class="quiz-options" id="b2-t2-opts">
-        <button class="quiz-opt" onclick="checkWord2('palhaço',this)">palhaço</button>
-        <button class="quiz-opt" onclick="checkWord2('passarinho',this)">passarinho</button>
-        <button class="quiz-opt" onclick="checkWord2('telhado',this)">telhado</button>
-      </div>
-      <div id="b2-fb2" class="feedback"></div>
-    </div>
-  </div>
-</div>
-
-<!-- BLOCO 3 -->
-<div id="b3" class="block-content">
-  <div class="section">
-    <h2>🎵 Bloco 3 — Segmentação silábica</h2>
-    <div class="diff-bar">
-      <button class="diff-btn green active" onclick="showDiff('b3','green')">🟢 Com ajuda</button>
-      <button class="diff-btn yellow" onclick="showDiff('b3','yellow')">🟡 Objetivo</button>
-      <button class="diff-btn red" onclick="showDiff('b3','red')">🔴 Desafio</button>
-    </div>
-    <div id="b3-green" class="diff-content green-bg show">🟢 Os blocos já estão pré-posicionados. Confirma arrastando para as caixas.</div>
-    <div id="b3-yellow" class="diff-content yellow-bg">🟡 Arrasta os três blocos para as caixas e conta as palmas.</div>
-    <div id="b3-red" class="diff-content red-bg">🔴 Escreve as sílabas nos campos. Explica o que é um dígrafo. Encontra outro "lh"!</div>
-
-    <div class="word-big">pa<span style="color:#2B6CB0;text-decoration:underline">lha</span>ço</div>
-
-    <div style="background:#FFF5F5;border-radius:12px;padding:1rem;margin:1rem 0">
-      <p style="font-weight:700;margin-bottom:.75rem">Bate palmas e divide a palavra em sílabas:</p>
-      <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;justify-content:center;margin:1rem 0">
-        <span class="syllable-block syl-pa" draggable="true" ondragstart="dragStart(event,'pa')" id="drag-pa">pa</span>
-        <span class="syllable-block syl-lha" draggable="true" ondragstart="dragStart(event,'lha')" id="drag-lha">lha</span>
-        <span class="syllable-block syl-co" draggable="true" ondragstart="dragStart(event,'co')" id="drag-co">ço</span>
-      </div>
-      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1rem">
-        <div>
-          <div style="font-weight:700;text-align:center;margin-bottom:.4rem;color:#2B6CB0">Sílaba 1</div>
-          <div class="drag-slot" id="slot1" ondragover="event.preventDefault()" ondrop="dropSyl(event,'slot1','pa')">⬇</div>
-        </div>
-        <div>
-          <div style="font-weight:700;text-align:center;margin-bottom:.4rem;color:#2B6CB0">Sílaba 2</div>
-          <div class="drag-slot" id="slot2" ondragover="event.preventDefault()" ondrop="dropSyl(event,'slot2','lha')">⬇</div>
-        </div>
-        <div>
-          <div style="font-weight:700;text-align:center;margin-bottom:.4rem;color:#2B6CB0">Sílaba 3</div>
-          <div class="drag-slot" id="slot3" ondragover="event.preventDefault()" ondrop="dropSyl(event,'slot3','co')">⬇</div>
-        </div>
-      </div>
-      <div id="b3-drag-fb" class="feedback"></div>
-    </div>
-
-    <div class="task-block">
-      <div class="task-label">Quantas palmas? 👏</div>
-      <div class="quiz-options">
-        <button class="quiz-opt" onclick="checkPalmas('1',this)">1 👏</button>
-        <button class="quiz-opt" onclick="checkPalmas('2',this)">2 👏👏</button>
-        <button class="quiz-opt" onclick="checkPalmas('3',this)">3 👏👏👏</button>
-        <button class="quiz-opt" onclick="checkPalmas('4',this)">4 👏👏👏👏</button>
-      </div>
-      <div id="b3-palmas-fb" class="feedback"></div>
-    </div>
-
-    <div class="task-block" style="background:#EBF4FF">
-      <div class="task-label">🌟 O dígrafo "lh"</div>
-      <p style="margin-bottom:.75rem">O dígrafo <strong>lh</strong> tem duas letras (l+h) mas produz um único som!</p>
-      <div style="text-align:center">
-        <button class="btn btn-secondary" onclick="mostrarDigrafo()">✨ Iluminar o dígrafo "lh"</button>
-      </div>
-      <div id="b3-digrafo" style="display:none;margin-top:1rem;text-align:center;background:#EBF4FF;border-radius:12px;padding:1rem">
-        <div style="font-size:2.5rem;font-weight:800;color:#2B6CB0;animation:pulse 1s 3">lh ✨</div>
-        <p style="color:#2B6CB0;font-weight:700">Duas letras, um som!</p>
-        <p style="color:#555;margin-top:.5rem">Outros exemplos: pa<strong>lha</strong>, te<strong>lha</strong>, ga<strong>lho</strong></p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- BLOCO 4 -->
-<div id="b4" class="block-content">
-  <div class="section">
-    <h2>🔬 Bloco 4 — Recombinação</h2>
-    <div class="diff-bar">
-      <button class="diff-btn green active" onclick="showDiff('b4','green')">🟢 Com ajuda</button>
-      <button class="diff-btn yellow" onclick="showDiff('b4','yellow')">🟡 Objetivo</button>
-      <button class="diff-btn red" onclick="showDiff('b4','red')">🔴 Desafio</button>
-    </div>
-    <div id="b4-green" class="diff-content green-bg show">🟢 Apenas 4 sílabas disponíveis. Feedback imediato.</div>
-    <div id="b4-yellow" class="diff-content yellow-bg">🟡 Oito sílabas. Testa combinações livremente!</div>
-    <div id="b4-red" class="diff-content red-bg">🔴 Todas as sílabas. Lista 3 palavras com "lh" que já conheces!</div>
-
-    <p style="margin-bottom:1rem;font-weight:700">Clica nas sílabas para combinar palavras. É uma palavra real? 🤔</p>
-
-    <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem">
-      <button class="syllable-block syl-pa" onclick="addSyl('pa',this)" style="cursor:pointer">pa</button>
-      <button class="syllable-block syl-lha" onclick="addSyl('lha',this)" style="cursor:pointer">lha</button>
-      <button class="syllable-block syl-co" onclick="addSyl('ço',this)" style="cursor:pointer">ço</button>
-      <button class="syllable-block" style="background:#059669;cursor:pointer" onclick="addSyl('te',this)">te</button>
-      <button class="syllable-block" style="background:#0284c7;cursor:pointer" onclick="addSyl('lho',this)">lho</button>
-      <button class="syllable-block" style="background:#d97706;cursor:pointer" onclick="addSyl('ga',this)">ga</button>
-      <button class="syllable-block" style="background:#7c3aed;cursor:pointer" onclick="addSyl('lhe',this)">lhe</button>
-      <button class="syllable-block" style="background:#be185d;cursor:pointer" onclick="addSyl('ca',this)">ca</button>
-    </div>
-
-    <div style="padding:1rem;background:#FFF5F5;border-radius:12px;min-height:60px;border:2px dashed #E53E3E;display:flex;align-items:center;justify-content:center">
-      <span id="b4-combo-text" style="font-size:2rem;font-weight:800;color:#E53E3E;min-width:80px;text-align:center">?</span>
-    </div>
-
-    <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin:1rem 0">
-      <button class="btn btn-primary" onclick="checkCombo()">🔍 É uma palavra?</button>
-      <button class="btn btn-secondary" onclick="clearCombo()">🔄 Limpar</button>
-    </div>
-    <div id="b4-fb" class="feedback"></div>
-
-    <div style="margin-top:1rem">
-      <p style="font-weight:700;margin-bottom:.5rem">✅ Palavras descobertas:</p>
-      <div class="discovered-list" id="b4-discovered"></div>
-    </div>
-  </div>
-</div>
-
-<!-- BLOCO 5 -->
-<div id="b5" class="block-content">
-  <div class="section">
-    <h2>✏️ Bloco 5 — Leitura e escrita</h2>
-    <div class="diff-bar">
-      <button class="diff-btn green active" onclick="showDiff('b5','green')">🟢 Com ajuda</button>
-      <button class="diff-btn yellow" onclick="showDiff('b5','yellow')">🟡 Objetivo</button>
-      <button class="diff-btn red" onclick="showDiff('b5','red')">🔴 Desafio</button>
-    </div>
-    <div id="b5-green" class="diff-content green-bg show">🟢 Sílaba em falta destacada. Apenas 2 opções de grafia.</div>
-    <div id="b5-yellow" class="diff-content yellow-bg">🟡 Quatro opções. Copia depois no caderno!</div>
-    <div id="b5-red" class="diff-content red-bg">🔴 Escreve de memória. Encontra "lh" e "ç" noutras palavras.</div>
-
-    <div class="task-block">
-      <div class="task-label">Tarefa 1 — Qual é a sílaba em falta?</div>
-      <div style="text-align:center;margin:1rem 0">
-        <span style="font-size:2.5rem;font-weight:800;color:#E53E3E">pa</span>
-        <span style="font-size:2.5rem;font-weight:800;color:#ccc">___</span>
-        <span style="font-size:2.5rem;font-weight:800;color:#D69E2E">ço</span>
-        <span style="font-size:2rem;margin-left:.5rem">🤡</span>
-      </div>
-      <div class="quiz-options" id="b5-t1-opts">
-        <button class="quiz-opt" onclick="checkSilaba5('lha',this)">lha</button>
-        <button class="quiz-opt" onclick="checkSilaba5('la',this)">la</button>
-        <button class="quiz-opt" onclick="checkSilaba5('lhã',this)">lhã</button>
-        <button class="quiz-opt" onclick="checkSilaba5('lja',this)">lja</button>
-      </div>
-      <div id="b5-t1-fb" class="feedback"></div>
-    </div>
-
-    <div class="task-block">
-      <div class="task-label">Tarefa 2 — Qual a grafia correta?</div>
-      <div style="font-size:4rem;text-align:center;margin:.5rem 0">🤡</div>
-      <div class="quiz-options" id="b5-t2-opts">
-        <button class="quiz-opt" onclick="checkGrafia5('palhaço',this)">palhaço</button>
-        <button class="quiz-opt" onclick="checkGrafia5('palacio',this)">palacio</button>
-        <button class="quiz-opt" onclick="checkGrafia5('palaço',this)">palaço</button>
-        <button class="quiz-opt" onclick="checkGrafia5('palhasso',this)">palhasso</button>
-      </div>
-      <div id="b5-t2-fb" class="feedback"></div>
-    </div>
-
-    <div class="task-block">
-      <div class="task-label">Tarefa 3 — Escreve a palavra</div>
-      <p style="margin-bottom:.5rem">Copia: <strong style="color:#E53E3E">palhaço</strong></p>
-      <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap">
-        <input type="text" id="b5-input" placeholder="escreve aqui..." oninput="checkEscrita5()" aria-label="Escreve palhaço">
-        <span id="b5-input-fb" style="font-size:1.5rem"></span>
-      </div>
-      <div style="margin-top:.5rem;background:#EBF4FF;border-radius:8px;padding:.5rem .75rem;display:inline-block">
-        <span style="font-size:.9rem;font-weight:700;color:#2B6CB0">💡 "lh" = dígrafo | "ç" = cedilha</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- BLOCO 6 -->
-<div id="b6" class="block-content">
-  <div class="section">
-    <h2>📝 Bloco 6 — Frase: "O palhaço faz rir."</h2>
-    <div class="diff-bar">
-      <button class="diff-btn green active" onclick="showDiff('b6','green')">🟢 Com ajuda</button>
-      <button class="diff-btn yellow" onclick="showDiff('b6','yellow')">🟡 Objetivo</button>
-      <button class="diff-btn red" onclick="showDiff('b6','red')">🔴 Desafio</button>
-    </div>
-    <div id="b6-green" class="diff-content green-bg show">🟢 Apenas 3 elementos para ordenar. A frase modelo está sempre visível.</div>
-    <div id="b6-yellow" class="diff-content yellow-bg">🟡 Cinco elementos para ordenar. Escreve a tua própria frase no caderno.</div>
-    <div id="b6-red" class="diff-content red-bg">🔴 Cria 2 frases com "palhaço". Usa um adjetivo! Sublinha sujeito e predicado.</div>
-
-    <div style="background:linear-gradient(135deg,#FFE5E5,#EBF4FF);border-radius:12px;padding:1rem;margin-bottom:1rem;text-align:center">
-      <p style="font-size:1.5rem;font-weight:800;color:#1E1B18">O palhaço faz rir. 🤡</p>
-      <p style="font-size:.9rem;color:#666;margin-top:.25rem">
-        <span style="color:#E53E3E">Aa</span> Maiúscula no início &nbsp;|&nbsp;
-        <span style="color:#2B6CB0">.</span> Ponto no fim
-      </p>
-    </div>
-
-    <div class="task-block">
-      <div class="task-label">Ordena as palavras para formar a frase</div>
-      <p style="font-size:.9rem;margin-bottom:.75rem">Clica nas palavras pela ordem certa:</p>
-      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem" id="b6-word-bank">
-        <button class="word-card" onclick="placeWord('faz',this)" id="wc-faz">faz</button>
-        <button class="word-card" onclick="placeWord('O',this)" id="wc-O">O</button>
-        <button class="word-card" onclick="placeWord('.',this)" id="wc-dot">.</button>
-        <button class="word-card" onclick="placeWord('palhaço',this)" id="wc-palhaco">palhaço</button>
-        <button class="word-card" onclick="placeWord('rir',this)" id="wc-rir">rir</button>
-      </div>
-      <div class="sentence-slot" id="b6-sentence" style="min-height:56px;justify-content:center">
-        <span style="color:#aaa;font-style:italic">a frase aparece aqui…</span>
-      </div>
-      <div style="display:flex;gap:.5rem;margin-top:.75rem">
-        <button class="btn btn-primary" onclick="checkSentence6()">✅ Verificar frase</button>
-        <button class="btn btn-secondary" onclick="resetSentence6()">🔄 Recomeçar</button>
-      </div>
-      <div id="b6-fb" class="feedback"></div>
-    </div>
-
-    <div class="task-block">
-      <div class="task-label">A tua própria frase com "palhaço"</div>
-      <input type="text" id="b6-frase" placeholder="Escreve a tua frase..." style="max-width:100%;margin-bottom:.75rem" aria-label="Escreve a tua frase">
-      <button class="btn btn-accent" onclick="checkFrasePropria6()">💬 Verificar</button>
-      <div id="b6-frase-fb" class="feedback"></div>
-    </div>
-  </div>
-</div>
-
-<!-- BLOCO 7 -->
-<div id="b7" class="block-content">
-  <div class="section">
-    <h2>⭐ Bloco 7 — Mini-avaliação</h2>
-    <div class="diff-bar">
-      <button class="diff-btn green active" onclick="showDiff('b7','green')">🟢 Com ajuda</button>
-      <button class="diff-btn yellow" onclick="showDiff('b7','yellow')">🟡 Objetivo</button>
-      <button class="diff-btn red" onclick="showDiff('b7','red')">🔴 Desafio</button>
-    </div>
-    <div id="b7-green" class="diff-content green-bg show">🟢 Imagem do palhaço presente em todas as tarefas. Tarefa 4: podes ditar.</div>
-    <div id="b7-yellow" class="diff-content yellow-bg">🟡 Faz todas as tarefas. Escreve a frase no caderno.</div>
-    <div id="b7-red" class="diff-content red-bg">🔴 Frase sem modelo. Bónus: encontra 1 palavra com "lh" ou "ç" na sala!</div>
-
-    <div class="progress-bar"><div class="progress-fill" id="b7-progress" style="width:0%"></div></div>
-    <p style="text-align:center;font-weight:700;color:#2B6CB0" id="b7-prog-text">Tarefa 0 de 4</p>
-
-    <div class="task-block" id="b7-t1-block">
-      <div class="task-label">1/4 — Reconhecimento global</div>
-      <p>Qual é a palavra que vai com 🤡?</p>
-      <div class="quiz-options">
-        <button class="quiz-opt" onclick="evalTask7(1,'palhaço',this)">palhaço</button>
-        <button class="quiz-opt" onclick="evalTask7(1,'passarinho',this)">passarinho</button>
-        <button class="quiz-opt" onclick="evalTask7(1,'telhado',this)">telhado</button>
-      </div>
-      <div id="b7-t1-fb" class="feedback"></div>
-    </div>
-
-    <div class="task-block" id="b7-t2-block">
-      <div class="task-label">2/4 — Segmentação silábica</div>
-      <p>Quantas sílabas tem "palhaço"?</p>
-      <div class="quiz-options">
-        <button class="quiz-opt" onclick="evalTask7(2,'2',this)">2 sílabas</button>
-        <button class="quiz-opt" onclick="evalTask7(2,'3',this)">3 sílabas</button>
-        <button class="quiz-opt" onclick="evalTask7(2,'4',this)">4 sílabas</button>
-      </div>
-      <div id="b7-t2-fb" class="feedback"></div>
-    </div>
-
-    <div class="task-block" id="b7-t3-block">
-      <div class="task-label">3/4 — Reconstituição</div>
-      <p>Ordena as sílabas para escrever "palhaço":</p>
-      <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin:.75rem 0" id="b7-t3-bank">
-        <button class="syllable-block syl-co" style="cursor:pointer" onclick="evalT3_7('ço',this)">ço</button>
-        <button class="syllable-block syl-pa" style="cursor:pointer" onclick="evalT3_7('pa',this)">pa</button>
-        <button class="syllable-block syl-lha" style="cursor:pointer" onclick="evalT3_7('lha',this)">lha</button>
-      </div>
-      <div id="b7-t3-built" style="min-height:48px;border:2px dashed #E53E3E;border-radius:12px;padding:.5rem 1rem;margin-bottom:.5rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
-        <span style="color:#aaa">sílabas aqui…</span>
-      </div>
-      <button class="btn btn-primary" onclick="checkT3_7()">✅ Verificar</button>
-      <div id="b7-t3-fb" class="feedback"></div>
-    </div>
-
-    <div class="task-block" id="b7-t4-block">
-      <div class="task-label">4/4 — Frase com "palhaço"</div>
-      <p>Escreve uma frase com a palavra "palhaço":</p>
-      <input type="text" id="b7-t4-input" placeholder="A tua frase aqui..." style="max-width:100%;margin:.5rem 0" aria-label="Frase com palhaço">
-      <button class="btn btn-primary" onclick="evalTask7(4,'frase',null)">✅ Confirmar</button>
-      <div id="b7-t4-fb" class="feedback"></div>
-    </div>
-
-    <div id="b7-result" class="result-summary" style="display:none">
-      <div id="b7-stars" class="stars"></div>
-      <h3 id="b7-msg" style="font-size:1.5rem;margin:.5rem 0"></h3>
-      <p id="b7-detail" style="color:#555"></p>
-    </div>
-  </div>
-</div>
-
-<!-- BLOCO 8 -->
-<div id="b8" class="block-content">
-  <div class="section">
-    <h2>🎨 Bloco 8 — Extensão</h2>
-    <div class="diff-bar">
-      <button class="diff-btn green active" onclick="showDiff('b8','green')">🟢 Com ajuda</button>
-      <button class="diff-btn yellow" onclick="showDiff('b8','yellow')">🟡 Objetivo</button>
-      <button class="diff-btn red" onclick="showDiff('b8','red')">🔴 Desafio</button>
-    </div>
-    <div id="b8-green" class="diff-content green-bg show">🟢 Contorno de palhaço pré-desenhado. Escreve apenas "palhaço".</div>
-    <div id="b8-yellow" class="diff-content yellow-bg">🟡 Desenho livre com legenda. Faz a máscara com o teu par!</div>
-    <div id="b8-red" class="diff-content red-bg">🔴 Mini-texto de 2-3 frases. Lista 5 palavras com "lh". Pesquisa tipos de palhaços!</div>
-
-    <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem">
-      <button class="btn btn-primary" onclick="showExtension8('draw')">🎨 Desenho e legenda</button>
-      <button class="btn btn-secondary" onclick="showExtension8('drama')">🎭 Expressão dramática</button>
-      <button class="btn btn-accent" onclick="showExtension8('words')">📚 Palavras com "lh"</button>
-    </div>
-
-    <div id="ext-draw" style="display:none">
-      <div style="background:linear-gradient(135deg,#FFE5E5,#EBF4FF);border-radius:12px;padding:1.5rem;text-align:center">
-        <div style="font-size:6rem;margin-bottom:1rem">🤡</div>
-        <p style="font-weight:700;color:#1E1B18;margin-bottom:1rem">Desenha um palhaço no teu caderno e escreve:<br><strong>palhaço</strong></p>
-        <p style="font-size:.9rem;color:#555">Que cores vai ter o teu palhaço? 🌈 Que expressão vai ter?</p>
-      </div>
-      <div style="margin-top:1rem">
-        <p style="font-weight:700;margin-bottom:.5rem">Descreve o teu palhaço:</p>
-        <input type="text" placeholder="O meu palhaço é..." style="max-width:100%" aria-label="Descreve o palhaço">
-      </div>
-    </div>
-
-    <div id="ext-drama" style="display:none">
-      <div class="task-block">
-        <div class="task-label">Expressão dramática</div>
-        <p style="margin-bottom:1rem">Imita estas expressões de palhaço:</p>
-        <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center">
-          <div style="background:white;border-radius:12px;padding:1rem;text-align:center;border:2px solid #E53E3E;min-width:100px">
-            <div style="font-size:3rem">😂</div>
-            <p style="font-weight:700">Feliz</p>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p>Descobrir, ler e brincar</p>
+          <h1>Palhaço</h1>
+          <p>Percurso completo com foco na descoberta da palavra, nas sílabas e na confiança ao ler.</p>
+          <div class="meta-row">
+            <span class="meta-chip">🤡 Palavra 18</span>
+            <span class="meta-chip">1.º ano (6-7 anos)</span>
+            <span class="meta-chip">45 min</span>
           </div>
-          <div style="background:white;border-radius:12px;padding:1rem;text-align:center;border:2px solid #2B6CB0;min-width:100px">
-            <div style="font-size:3rem">😢</div>
-            <p style="font-weight:700">Triste</p>
-          </div>
-          <div style="background:white;border-radius:12px;padding:1rem;text-align:center;border:2px solid #D69E2E;min-width:100px">
-            <div style="font-size:3rem">😮</div>
-            <p style="font-weight:700">Surpreso</p>
-          </div>
+          <ul class="objective-row"><li>Reconhecer globalmente a palavra &#x27;palhaço&#x27; e associá-la à sua imagem</li><li>Segmentar &#x27;palhaço&#x27; em sílabas (pa-lha-ço) identificando o dígrafo &#x27;lh&#x27; e o cedilha &#x27;ç&#x27;</li><li>Recombinar sílabas para formar palavras novas e distinguir palavra existente de não-palavra</li></ul>
         </div>
-        <p style="margin-top:1rem;font-size:.9rem;color:#666">Diz uma frase com "palhaço" enquanto fazes cada expressão!</p>
+        <aside class="word-scene" aria-hidden="true">
+          <div class="emoji">🤡</div>
+          <p><strong>Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</strong></p>
+          <p>Paleta própria, leitura em pt-PT AO90 e navegação pensada para toque.</p>
+          <p>Esta página trabalha as unidades 1, 2, 3, 4.</p>
+        </aside>
       </div>
-    </div>
+    </header>
 
-    <div id="ext-words" style="display:none">
-      <div class="task-block">
-        <div class="task-label">Palavras com dígrafo "lh"</div>
-        <p style="margin-bottom:1rem">Conheces outras palavras com "lh"? (ex: palha, telha, galho...)</p>
-        <div id="b8-words-list" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem"></div>
-        <div style="display:flex;gap:.5rem;align-items:center">
-          <input type="text" id="b8-word-input" placeholder="palavra com 'lh'..." style="max-width:240px" aria-label="Palavra com lh" onkeydown="if(event.key==='Enter')addLhWord()">
-          <button class="btn btn-primary" onclick="addLhWord()">➕ Adicionar</button>
+    <div class="page-switch" aria-label="Outras páginas desta palavra"><a class="page-link is-current" href="./index.html">Página 1<span>Atual</span></a><a class="page-link" href="./page-2.html">Página 2<span>Abrir</span></a><a class="page-link" href="./page-3.html">Página 3<span>Abrir</span></a><a class="page-link" href="./page-4.html">Página 4<span>Abrir</span></a></div>
+
+    <section class="word-spotlight" aria-label="Destaque da palavra">
+      <article class="spot-card">
+        <h2>Palavra em destaque</h2>
+        <div class="word-display">Palhaço</div>
+        <p class="mission">palhaço</p>
+        <div class="compose-actions">
+          <button class="pill-btn speak-btn" data-speak="Palhaço">Ouvir a palavra</button>
         </div>
-        <p id="b8-word-count" style="margin-top:.5rem;font-weight:700;color:#2B6CB0"></p>
-      </div>
-    </div>
+      </article>
+      <article class="spot-card">
+        <h2>Sílabas</h2>
+        <div class="syllable-row"><span class="syllable-token" style="--chip:#E53E3E">pa</span><span class="syllable-token" style="--chip:#2B6CB0">lha</span><span class="syllable-token" style="--chip:#D69E2E">ço</span></div>
+        <p class="mission">Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</p>
+      </article>
+    </section>
 
-    <div style="background:#FFF5F5;border-radius:12px;padding:1rem;margin-top:1rem;border:2px solid #E53E3E">
-      <p style="font-weight:800;color:#E53E3E;margin-bottom:.5rem">🎭 Máscara de Palhaço Maker!</p>
-      <p>Recorta e decora uma máscara de palhaço:</p>
-      <ol style="margin-left:1.2rem;margin-top:.5rem;line-height:2">
-        <li>Dobra uma folha A4</li>
-        <li>Recorta a forma do rosto (com ajuda)</li>
-        <li>Escreve <strong>palhaço</strong> e divide: <strong>pa - lha - ço</strong></li>
-        <li>Decora com cores vivas! 🎨</li>
-      </ol>
-    </div>
+    <nav class="section-nav" aria-label="Navegação das unidades"><a class="nav-pill" href="#u1-bloco-1-abertura-contextual-a-palavra-palhaço-entra-num-circo-colorido">1</a><a class="nav-pill" href="#u2-bloco-2-reconhecimento-global-identificar-palhaço-entre-outras-palavras-e-imagens">2</a><a class="nav-pill" href="#u3-bloco-3-segmentação-silábica-dividir-palhaço-em-pa-lha-ço">3</a><a class="nav-pill" href="#u4-bloco-4-recombinação-formar-novas-palavras-com-sílabas-conhecidas">4</a></nav>
+
+    <main id="main" class="content">
+      
+    <section id="u1-bloco-1-abertura-contextual-a-palavra-palhaço-entra-num-circo-colorido" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 1</span>
+          <h2>Bloco 1 — Abertura contextual: a palavra &#x27;palhaço&#x27; entra num circo colorido</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>O aluno descobre a palavra através de uma cena animada: um palhaço colorido num circo. A palavra &#x27;palhaço&#x27; aparece associada à imagem, preparando o reconhecimento global. A cena inclui micro-história: &#x27;No circo há um artista muito engraçado. Faz rir toda a gente. Como se chama?&#x27;</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Imagem de um palhaço colorido num circo (fundo vermelho, estrelas, confettis); micro-história em texto grande por baixo; botão &#x27;Mostra a palavra&#x27; que revela o cartaz palavra+imagem em destaque com moldura colorida</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno aponta para o palhaço e diz a palavra em voz alta; o professor observa se a palavra global é reconhecida antes da análise silábica</p>
+            </div>
+          </div>
+          <p>Clicar &#x27;Mostra a palavra&#x27; → palavraRevelada muda para visível → cartaz com imagem e palavra &#x27;palhaço&#x27; aparece com animação suave de fade-in</p>
+          
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <button class="pill-btn reveal-btn" data-target="story-1">Mostrar a história</button>
+          <button class="pill-btn speak-btn" data-speak="palhaço">Ouvir</button>
+          <div id="story-1" class="reveal-box hidden"><p>O aluno descobre a palavra através de uma cena animada: um palhaço colorido num circo. A palavra &#x27;palhaço&#x27; aparece associada à imagem, preparando o reconhecimento global. A cena inclui micro-história: &#x27;No circo há um artista muito engraçado. Faz rir toda a gente. Como se chama?&#x27;</p></div>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-1">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-1">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-1">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-1" class="diff-panel is-active"><p>🟢 Cena com animação e texto de apoio; palavra visível desde o início, sublinhada a vermelho</p></div>
+        <div id="standard-1" class="diff-panel"><p>🟡 Cena com micro-história; palavra revelada ao clicar; aluno lê em voz alta para o par ou professor</p></div>
+        <div id="challenge-1" class="diff-panel"><p>🔴 Antes de revelar a palavra, o aluno escreve no caderno o que acha que é a palavra; compara depois com o cartaz</p></div>
+      </div>
+    </section>
+    
+    <section id="u2-bloco-2-reconhecimento-global-identificar-palhaço-entre-outras-palavras-e-imagens" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 2</span>
+          <h2>Bloco 2 — Reconhecimento global: identificar &#x27;palhaço&#x27; entre outras palavras e imagens</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>O aluno pratica o reconhecimento global da palavra &#x27;palhaço&#x27; em dois sentidos: palavra→imagem e imagem→palavra. Usa palavras já aprendidas como distratores para consolidar a discriminação visual da forma escrita.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Tarefa 1: palavra &#x27;palhaço&#x27; em destaque; 3 imagens abaixo para selecionar. Tarefa 2: imagem de palhaço; 3 palavras para clicar. Feedback imediato: ✓ verde / ✗ âmbar</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno seleciona corretamente &#x27;palhaço&#x27; em ambas as tarefas sem hesitação significativa</p>
+            </div>
+          </div>
+          <p>Clicar numa opção → feedback visual imediato → botão &#x27;Continuar&#x27; ativa</p>
+          
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Escolhe a palavra certa.</p>
+          <div class="choice-row">
+            <button class="choice-btn" data-answer="palhaço" data-choice="palhaço">palhaço</button><button class="choice-btn" data-answer="palhaço" data-choice="girafa">girafa</button><button class="choice-btn" data-answer="palhaço" data-choice="zebra">zebra</button>
+          </div>
+          <p class="feedback" aria-live="polite">Procura a palavra completa.</p>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-2">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-2">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-2">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-2" class="diff-panel is-active"><p>🟢 Imagens com etiqueta (primeira letra visível); distratores muito diferentes</p></div>
+        <div id="standard-2" class="diff-panel"><p>🟡 3 opções sem apoio adicional; duas tarefas em sequência</p></div>
+        <div id="challenge-2" class="diff-panel"><p>🔴 4 opções com palavras parecidas (&#x27;palhaço&#x27; vs &#x27;palhaças&#x27;, &#x27;palhço&#x27;); justificação verbal</p></div>
+      </div>
+    </section>
+    
+    <section id="u3-bloco-3-segmentação-silábica-dividir-palhaço-em-pa-lha-ço" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 3</span>
+          <h2>Bloco 3 — Segmentação silábica: dividir &#x27;palhaço&#x27; em &#x27;pa&#x27; + &#x27;lha&#x27; + &#x27;ço&#x27;</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>O aluno divide a palavra &#x27;palhaço&#x27; nas suas três sílabas (pa-lha-ço), bate palmas para contar, e arrasta blocos silábicos para caixas coloridas. Destaca-se o dígrafo &#x27;lh&#x27; (duas letras = um som) e o cedilha &#x27;ç&#x27; (c com cedilha, som suave).</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Palavra &#x27;palhaço&#x27; no centro; três blocos coloridos &#x27;pa&#x27; (vermelho), &#x27;lha&#x27; (azul), &#x27;ço&#x27; (amarelo) para colocar em caixas numeradas; contador de palmas; secção de destaque do dígrafo &#x27;lh&#x27; com animação</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno coloca corretamente os blocos &#x27;pa&#x27;, &#x27;lha&#x27; e &#x27;ço&#x27; nas caixas, seleciona &#x27;3 palmas&#x27; e aponta para o dígrafo &#x27;lh&#x27; quando solicitado</p>
+            </div>
+          </div>
+          <p>Arrastar sílabas para caixas → feedback de posição correta; clicar opção de palmadas → feedback imediato; clicar &#x27;lh&#x27; → destaque visual com nota (&#x27;lh: duas letras, um som!&#x27;)</p>
+          
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Toca nas sílabas para formar a palavra.</p>
+          <div class="syllable-bank" data-compose="compose-3"><button class="syllable-chip" style="--chip:#E53E3E" data-syllable="pa">pa</button><button class="syllable-chip" style="--chip:#2B6CB0" data-syllable="lha">lha</button><button class="syllable-chip" style="--chip:#D69E2E" data-syllable="ço">ço</button></div>
+          <div id="compose-3" class="compose-output">__</div>
+          <div class="compose-actions"><button class="pill-btn clear-compose" data-compose-clear="compose-3">Limpar</button></div>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-3">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-3">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-3">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-3" class="diff-panel is-active"><p>🟢 Blocos pré-posicionados com sombra indicativa; aluno apenas confirma arrastando; linha de divisão já visível</p></div>
+        <div id="standard-3" class="diff-panel"><p>🟡 Arrastar os três blocos; contar palmas; clicar para identificar o dígrafo</p></div>
+        <div id="challenge-3" class="diff-panel"><p>🔴 Escrever as sílabas nos campos de texto; explicar o que é um dígrafo; encontrar outro &#x27;lh&#x27; em palavras já aprendidas</p></div>
+      </div>
+    </section>
+    
+    <section id="u4-bloco-4-recombinação-formar-novas-palavras-com-sílabas-conhecidas" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 4</span>
+          <h2>Bloco 4 — Recombinação: formar novas palavras com sílabas conhecidas</h2>
+        </div>
+        
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>Usando as sílabas &#x27;pa&#x27;, &#x27;lha&#x27;, &#x27;ço&#x27; e sílabas já conhecidas, o aluno tenta formar combinações novas. Distingue combinações que formam palavras reais de não-palavras. Explora o padrão &#x27;lha/lhe/lhi/lho/lhu&#x27; como produtivo.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Área de sílabas disponíveis; zona de construção com 2-3 slots; botão &#x27;🔍 É uma palavra?&#x27;; lista de palavras descobertas</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno forma pelo menos 2 palavras reais novas além de &#x27;palhaço&#x27; (ex: &#x27;palha&#x27;, &#x27;telha&#x27;, &#x27;galho&#x27;) e identifica corretamente 1 não-palavra</p>
+            </div>
+          </div>
+          <p>Arrastar sílabas para slots → combinacao_formada actualiza; clicar &#x27;🔍&#x27; → feedback com explicação</p>
+          <div class="maker-box"><p><strong>Desafio maker:</strong> Com cartões físicos das sílabas (pa, lha, ço, lho, te, ca), o aluno e o par tentam todas as combinações de 2-3 sílabas e registam numa folha: &#x27;Palavra ✓&#x27; / &#x27;Não é palavra ✗&#x27;.</p><p><strong>Materiais:</strong> Cartões físicos com sílabas, Folha de registo com colunas, Lápis</p><p><strong>Comunicação:</strong> Cada par partilha a palavra mais inesperada que descobriu</p></div>
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Experimenta combinações com as sílabas.</p>
+          <div class="syllable-bank" data-compose="mix-4"><button class="syllable-chip" style="--chip:#E53E3E" data-syllable="pa">pa</button><button class="syllable-chip" style="--chip:#2B6CB0" data-syllable="lha">lha</button><button class="syllable-chip" style="--chip:#D69E2E" data-syllable="ço">ço</button></div>
+          <div id="mix-4" class="compose-output">__</div>
+          <p class="helper-text">Nem todas as combinações resultam em palavras reais. O importante é experimentar.</p>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-4">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-4">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-4">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-4" class="diff-panel is-active"><p>🟢 Apenas 4 sílabas disponíveis; feedback imediato de cor</p></div>
+        <div id="standard-4" class="diff-panel"><p>🟡 8 sílabas disponíveis; feedback após cada tentativa</p></div>
+        <div id="challenge-4" class="diff-panel"><p>🔴 Todas as sílabas sem feedback imediato; listar 3 palavras com &#x27;lh&#x27; que já conhece</p></div>
+      </div>
+    </section>
+    
+      
+    <details class="teacher-guide">
+      <summary>Guia do professor</summary>
+      <div class="teacher-grid">
+        <article class="teacher-card">
+          <h3>Objetivos desta página</h3>
+          <ul><li>Reconhecer globalmente a palavra &#x27;palhaço&#x27; e associá-la à sua imagem</li><li>Segmentar &#x27;palhaço&#x27; em sílabas (pa-lha-ço) identificando o dígrafo &#x27;lh&#x27; e o cedilha &#x27;ç&#x27;</li><li>Recombinar sílabas para formar palavras novas e distinguir palavra existente de não-palavra</li><li>Usar a palavra &#x27;palhaço&#x27; numa frase simples oral e escrita</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Materiais</h3>
+          <ul><li>Tablet ou computador com browser (1 por aluno ou par)</li><li>Cartões físicos com sílabas pa/lha/ço (opcional, reforço manipulativo)</li><li>Caderno diário para registo da frase</li><li>Lápis de cor para extensão</li><li>Folha A4 para máscara de palhaço (extensão maker)</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Organização MEM</h3>
+          <ul><li><strong>Módulos:</strong> TEA (Trabalho de Estudo Autónomo), Trabalho curricular comparticipado, Circuitos de comunicação</li><li><strong>Instrumentos:</strong> PIT, mapa de tarefas</li><li><strong>Organização:</strong> individual (blocos 1–5, ~30 min) → pares (bloco 6 – frase simples, ~6 min) → turma (mini-avaliação partilhada + extensão oral, ~9 min)</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Percurso desta página</h3>
+          <ul><li>Unidade 1: Bloco 1 — Abertura contextual: a palavra &#x27;palhaço&#x27; entra num circo colorido</li><li>Unidade 2: Bloco 2 — Reconhecimento global: identificar &#x27;palhaço&#x27; entre outras palavras e imagens</li><li>Unidade 3: Bloco 3 — Segmentação silábica: dividir &#x27;palhaço&#x27; em &#x27;pa&#x27; + &#x27;lha&#x27; + &#x27;ço&#x27;</li><li>Unidade 4: Bloco 4 — Recombinação: formar novas palavras com sílabas conhecidas</li></ul>
+        </article>
+        <article class="teacher-card teacher-card-wide">
+          <h3>Referências curriculares</h3>
+          <ul><li><strong>Português · 1.º ano</strong>: Identificar e manipular sílabas de palavras com dígrafos (lh) e cedilha (ç)</li><li><strong>Português · 1.º ano</strong>: Ler palavras com dígrafos (lh) e grafemas especiais (ç); reconhecer globalmente palavras de leitura frequente</li><li><strong>Português · 1.º ano</strong>: Escrever palavras e frases simples com correção ortográfica incluindo cedilha e dígrafos</li><li><strong>Expressão Dramática · 1.º ano</strong>: Explorar personagens e expressão corporal e facial associadas ao humor e à alegria</li></ul>
+          <ul><li>PA-A: Linguagens e textos</li><li>PA-C: Raciocínio e resolução de problemas</li><li>PA-D: Pensamento crítico e pensamento criativo</li><li>PA-F: Desenvolvimento pessoal e autonomia</li></ul>
+        </article>
+      </div>
+    </details>
+    
+    </main>
+
+    <footer class="footer">PageCraft · Método das 28 Palavras · Palhaço</footer>
   </div>
-</div>
 
-</div><!-- /container -->
+  <script>
+    const synth = window.speechSynthesis;
 
-<div style="text-align:center;padding:1rem;color:#aaa;font-size:.85rem;margin-top:2rem">
-  M28P #18 — palhaço · PageCraft · 1.º ano · pt-PT
-</div>
+    document.querySelectorAll('.reveal-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        const target = document.getElementById(button.dataset.target);
+        if (!target) return;
+        target.classList.toggle('hidden');
+      });
+    });
 
-<style>
-@keyframes fadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-</style>
+    document.querySelectorAll('.speak-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!synth) return;
+        const utterance = new SpeechSynthesisUtterance(button.dataset.speak || '');
+        utterance.lang = 'pt-PT';
+        synth.cancel();
+        synth.speak(utterance);
+      });
+    });
 
-<script>
-var b4CurrentCombo=[];
-var b4Discovered=[];
-var b6Sentence=[];
-var b6Order=['O','palhaço','faz','rir','.'];
-var b7Scores=[null,null,null,null];
-var b7T3Arr=[];
-var lhWords=[];
-var draggingVal='';
-var slotsState={slot1:false,slot2:false,slot3:false};
+    document.querySelectorAll('.choice-row').forEach((row) => {
+      const feedback = row.parentElement.querySelector('.feedback');
+      row.querySelectorAll('.choice-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          row.querySelectorAll('.choice-btn').forEach((item) => item.classList.remove('is-right', 'is-wrong'));
+          const rightAnswer = button.dataset.answer || button.dataset.clozeAnswer || '';
+          if (button.dataset.choice === rightAnswer) {
+            button.classList.add('is-right');
+            if (feedback) feedback.textContent = 'Muito bem!';
+          } else {
+            button.classList.add('is-wrong');
+            if (feedback) feedback.textContent = 'Tenta outra vez.';
+          }
+        });
+      });
+    });
 
-function showBlock(id){
-  document.querySelectorAll('.block-content').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  var map={b1:0,b2:1,b3:2,b4:3,b5:4,b6:5,b7:6,b8:7};
-  if(map[id]!==undefined) document.querySelectorAll('.nav-tab')[map[id]].classList.add('active');
-  window.scrollTo(0,0);
-}
-function showDiff(block,level){
-  ['green','yellow','red'].forEach(l=>{
-    var el=document.getElementById(block+'-'+l);
-    if(el) el.classList.toggle('show',l===level);
-  });
-  document.querySelectorAll('#'+block+' .diff-btn').forEach(b=>b.classList.remove('active'));
-  var btn=document.querySelector('#'+block+' .diff-btn.'+level);
-  if(btn) btn.classList.add('active');
-}
-function showFeedback(el,ok,msg){
-  el.className='feedback show '+(ok?'ok':'nok');
-  el.textContent=msg;
-}
-function revelarPalavra(){
-  document.getElementById('palavra-cartaz').style.display='block';
-  document.getElementById('btn-revelar').disabled=true;
-  document.getElementById('btn-revelar').textContent='✅ Palavra revelada!';
-}
-function checkImage2(val,el){
-  document.querySelectorAll('#b2-t1 .image-card').forEach(c=>c.classList.remove('selected'));
-  el.classList.add('selected');
-  el.querySelector('span').textContent=val==='palhaco'?'palhaço':val;
-  var fb=document.getElementById('b2-fb1');
-  showFeedback(fb,val==='palhaco','✓ Muito bem! O 🤡 é um palhaço!':'✗ Não é esse. Olha para a palavra "palhaço"!');
-}
-function checkWord2(val,el){
-  document.querySelectorAll('#b2-t2-opts .quiz-opt').forEach(b=>b.disabled=true);
-  var fb=document.getElementById('b2-fb2');
-  if(val==='palhaço'){el.classList.add('correct');showFeedback(fb,true,'✓ Excelente! "palhaço" é a palavra certa!');}
-  else{el.classList.add('incorrect');showFeedback(fb,false,'✗ A palavra "palhaço" tem o dígrafo "lh" e o cedilha "ç".');}
-}
-function dragStart(e,val){draggingVal=val;}
-function dropSyl(e,slotId,expected){
-  e.preventDefault();
-  var slot=document.getElementById(slotId);
-  if(draggingVal===expected){
-    slot.textContent=draggingVal;
-    slot.classList.add('filled');
-    slotsState[slotId]=true;
-    if(slotsState.slot1&&slotsState.slot2&&slotsState.slot3)
-      showFeedback(document.getElementById('b3-drag-fb'),true,'✓ Perfeito! pa + lha + ço = palhaço! 🎉');
-  } else {
-    showFeedback(document.getElementById('b3-drag-fb'),false,'✗ Tenta noutra caixa!');
-  }
-}
-function checkPalmas(val,el){
-  document.querySelectorAll('#b3 .task-block:nth-child(2) .quiz-opt').forEach(b=>b.disabled=true);
-  var fb=document.getElementById('b3-palmas-fb');
-  if(val==='3'){el.classList.add('correct');showFeedback(fb,true,'✓ Sim! "pa-lha-ço" = 3 sílabas = 3 palmas! 👏👏👏');}
-  else{el.classList.add('incorrect');showFeedback(fb,false,'✗ Conta devagar: pa(👏) - lha(👏) - ço(👏) = 3!');}
-}
-function mostrarDigrafo(){document.getElementById('b3-digrafo').style.display='block';}
-var realWords4=['palha','telha','galho','palhaço','calha','olha','palho','calhau','pilha','rolha','agulha','espelho'];
-function addSyl(syl,el){b4CurrentCombo.push(syl);document.getElementById('b4-combo-text').textContent=b4CurrentCombo.join('');}
-function clearCombo(){b4CurrentCombo=[];document.getElementById('b4-combo-text').textContent='?';document.getElementById('b4-fb').style.display='none';}
-function checkCombo(){
-  var word=b4CurrentCombo.join('');
-  if(!word||word==='?') return;
-  var fb=document.getElementById('b4-fb');
-  var isReal=realWords4.indexOf(word)>=0;
-  if(isReal){showFeedback(fb,true,'✓ "'+word+'" é uma palavra real! 🌟');if(b4Discovered.indexOf(word)<0){b4Discovered.push(word);updateDiscovered4();}}
-  else{showFeedback(fb,false,'✗ "'+word+'" não é uma palavra. Tenta outra combinação!');}
-}
-function updateDiscovered4(){
-  var c=document.getElementById('b4-discovered');c.innerHTML='';
-  b4Discovered.forEach(w=>{var sp=document.createElement('span');sp.className='discovered-word';sp.textContent='✓ '+w;c.appendChild(sp);});
-}
-function checkSilaba5(val,el){
-  document.querySelectorAll('#b5-t1-opts .quiz-opt').forEach(b=>b.disabled=true);
-  var fb=document.getElementById('b5-t1-fb');
-  if(val==='lha'){el.classList.add('correct');showFeedback(fb,true,'✓ Correto! "pa" + "lha" + "ço" = palhaço! O dígrafo "lh" é especial.');}
-  else{el.classList.add('incorrect');showFeedback(fb,false,'✗ A sílaba correta é "lha". "lh" é um dígrafo — duas letras, um som!');}
-}
-function checkGrafia5(val,el){
-  document.querySelectorAll('#b5-t2-opts .quiz-opt').forEach(b=>b.disabled=true);
-  var fb=document.getElementById('b5-t2-fb');
-  if(val==='palhaço'){el.classList.add('correct');showFeedback(fb,true,'✓ Exato! "palhaço" com "lh" e cedilha "ç"!');}
-  else{el.classList.add('incorrect');showFeedback(fb,false,'✗ A grafia correta é "palhaço" com "lh" (dígrafo) e "ç" (cedilha).');}
-}
-function checkEscrita5(){
-  var val=document.getElementById('b5-input').value.trim().toLowerCase();
-  var fb=document.getElementById('b5-input-fb');
-  fb.textContent=val==='palhaço'?'✅':val.length>0?'✏️':'';
-}
-var b6SentenceArr=[];
-function placeWord(word,el){
-  if(el.classList.contains('placed')) return;
-  el.classList.add('placed');
-  b6SentenceArr.push(word);
-  var container=document.getElementById('b6-sentence');
-  if(b6SentenceArr.length===1) container.innerHTML='';
-  var pw=document.createElement('span');
-  pw.className='placed-word';
-  pw.textContent=word;
-  container.appendChild(pw);
-}
-function checkSentence6(){
-  var built=Array.from(document.getElementById('b6-sentence').querySelectorAll('.placed-word')).map(el=>el.textContent);
-  var fb=document.getElementById('b6-fb');
-  if(JSON.stringify(built)===JSON.stringify(b6Order)){showFeedback(fb,true,'✓ Perfeito! "O palhaço faz rir." — com maiúscula e ponto! 🌟');}
-  else if(built.length<5){showFeedback(fb,false,'✗ A frase ainda não está completa. Usa todas as palavras!');}
-  else{showFeedback(fb,false,'✗ A ordem não está certa. Recomeça: quem? faz o quê?');}
-}
-function resetSentence6(){
-  b6SentenceArr=[];
-  document.getElementById('b6-sentence').innerHTML='<span style="color:#aaa;font-style:italic">a frase aparece aqui…</span>';
-  document.querySelectorAll('#b6-word-bank .word-card').forEach(b=>b.classList.remove('placed'));
-  document.getElementById('b6-fb').style.display='none';
-}
-function checkFrasePropria6(){
-  var val=document.getElementById('b6-frase').value.trim();
-  var fb=document.getElementById('b6-frase-fb');
-  if(!val){showFeedback(fb,false,'✗ Escreve uma frase!');return;}
-  var hasPalavra=val.toLowerCase().indexOf('palha')>=0;
-  var hasMaiuscula=val[0]===val[0].toUpperCase()&&val[0]!==val[0].toLowerCase();
-  var hasPonto=val.endsWith('.')||val.endsWith('!')||val.endsWith('?');
-  if(hasPalavra&&hasMaiuscula&&hasPonto){showFeedback(fb,true,'✓ Fantástico! Frase com "palhaço", maiúscula e ponto! 🌟');}
-  else if(!hasPalavra){showFeedback(fb,false,'✗ A frase precisa de ter "palhaço"!');}
-  else if(!hasMaiuscula){showFeedback(fb,false,'✗ Começa com letra maiúscula!');}
-  else if(!hasPonto){showFeedback(fb,false,'✗ Não te esqueças do ponto final!');}
-  else{showFeedback(fb,true,'✓ Muito bem! Frase com "palhaço" ✓');}
-}
-function evalTask7(task,expected,el){
-  var fb=document.getElementById('b7-t'+task+'-fb');
-  var correct=false;
-  if(task===4){
-    var val=document.getElementById('b7-t4-input').value.trim();
-    correct=val.toLowerCase().indexOf('palha')>=0&&val.length>3;
-    showFeedback(fb,correct,correct?'✓ Ótimo! Tens uma frase com "palhaço"! ⭐':'✗ A frase precisa de ter "palhaço".');
-  } else if(expected==='palhaço'||expected==='3'){
-    correct=true;
-    el.classList.add('correct');
-    document.querySelectorAll('#b7-t'+task+'-block .quiz-opt').forEach(b=>b.disabled=true);
-    showFeedback(fb,true,'✓ Correto! ⭐');
-  } else {
-    el.classList.add('incorrect');
-    document.querySelectorAll('#b7-t'+task+'-block .quiz-opt').forEach(b=>b.disabled=true);
-    showFeedback(fb,false,'✗ Não é essa. Tenta de novo!');
-  }
-  if(correct){b7Scores[task-1]=1;updateB7Progress7();}
-}
-function evalT3_7(syl,el){
-  b7T3Arr.push(syl);el.disabled=true;
-  var built=document.getElementById('b7-t3-built');
-  if(b7T3Arr.length===1) built.innerHTML='';
-  var sp=document.createElement('span');
-  sp.className='syllable-block '+(syl==='pa'?'syl-pa':syl==='lha'?'syl-lha':'syl-co');
-  sp.style.fontSize='1.5rem';sp.textContent=syl;built.appendChild(sp);
-}
-function checkT3_7(){
-  var fb=document.getElementById('b7-t3-fb');
-  if(b7T3Arr.join('')==='palhaço'){showFeedback(fb,true,'✓ Perfeito! pa+lha+ço = palhaço! ⭐');b7Scores[2]=1;updateB7Progress7();}
-  else{showFeedback(fb,false,'✗ A ordem é: pa → lha → ço. Tenta de novo!');b7T3Arr=[];document.getElementById('b7-t3-built').innerHTML='<span style="color:#aaa">sílabas aqui…</span>';document.querySelectorAll('#b7-t3-bank button').forEach(b=>b.disabled=false);}
-}
-function updateB7Progress7(){
-  var done=b7Scores.filter(s=>s===1).length;
-  document.getElementById('b7-progress').style.width=(done/4*100)+'%';
-  document.getElementById('b7-prog-text').textContent='Tarefa '+done+' de 4';
-  if(done===4) showB7Result7();
-}
-function showB7Result7(){
-  var total=b7Scores.filter(s=>s===1).length;
-  var result=document.getElementById('b7-result');result.style.display='block';
-  document.getElementById('b7-stars').textContent='⭐'.repeat(total);
-  var msgs=['Continua! Podes rever os blocos. 💪','Quase lá! 😊','Muito bem! 👍','Fantástico! Sabes tudo sobre "palhaço"! 🎉🤡'];
-  document.getElementById('b7-msg').textContent=msgs[total-1]||msgs[3];
-  var details=['Reconhecimento','Segmentação','Reconstituição','Frase'];
-  document.getElementById('b7-detail').textContent=b7Scores.map((s,i)=>(s===1?'✓ ':'✗ ')+details[i]).join(' · ');
-  result.scrollIntoView({behavior:'smooth'});
-}
-function showExtension8(type){
-  ['draw','drama','words'].forEach(t=>document.getElementById('ext-'+t).style.display=t===type?'block':'none');
-}
-function addLhWord(){
-  var input=document.getElementById('b8-word-input');
-  var val=input.value.trim().toLowerCase();
-  if(!val) return;
-  if(val.indexOf('lh')<0){alert('"'+val+'" não tem "lh". Tenta uma palavra com "lh" como palha, telha...');return;}
-  if(lhWords.indexOf(val)>=0){input.value='';return;}
-  lhWords.push(val);input.value='';
-  var list=document.getElementById('b8-words-list');
-  var sp=document.createElement('span');sp.className='discovered-word';sp.textContent=val;list.appendChild(sp);
-  document.getElementById('b8-word-count').textContent='Encontraste '+lhWords.length+' palavra'+(lhWords.length===1?'':'s')+'! '+(lhWords.length>=5?'🌟 Meta atingida!':'');
-}
-</script>
+    document.querySelectorAll('[data-compose]').forEach((bank) => {
+      const output = document.getElementById(bank.dataset.compose);
+      const parts = [];
+      bank.querySelectorAll('.syllable-chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          parts.push(chip.dataset.syllable || '');
+          if (output) output.textContent = parts.join('');
+        });
+      });
+    });
+
+    document.querySelectorAll('.clear-compose').forEach((button) => {
+      button.addEventListener('click', () => {
+        const output = document.getElementById(button.dataset.composeClear);
+        if (output) output.textContent = '__';
+      });
+    });
+
+    document.querySelectorAll('.check-card').forEach((card) => {
+      card.addEventListener('click', () => card.classList.toggle('is-done'));
+    });
+
+    document.querySelectorAll('.diff-switcher').forEach((switcher) => {
+      const panels = switcher.nextElementSibling;
+      switcher.querySelectorAll('.diff-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          switcher.querySelectorAll('.diff-btn').forEach((item) => item.classList.remove('is-active'));
+          panels.querySelectorAll('.diff-panel').forEach((panel) => panel.classList.remove('is-active'));
+          button.classList.add('is-active');
+          const target = panels.querySelector('#' + CSS.escape(button.dataset.diff));
+          if (target) target.classList.add('is-active');
+        });
+      });
+    });
+  </script>
 </body>
 </html>

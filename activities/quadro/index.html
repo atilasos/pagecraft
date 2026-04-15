@@ -1,1405 +1,516 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-PT">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>M28P #23 — quadro | PageCraft</title>
-<style>
-@font-face{font-family:'Nunito';font-style:normal;font-weight:400;src:local('Nunito Regular'),local('Nunito-Regular')}
-@font-face{font-family:'Nunito';font-style:normal;font-weight:700;src:local('Nunito Bold'),local('Nunito-Bold')}
-@font-face{font-family:'Nunito';font-style:normal;font-weight:800;src:local('Nunito ExtraBold'),local('Nunito-ExtraBold')}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
---bg:#FFF8F0;--surface:#FFFFFF;--primary:#E05FA0;--accent:#F59E0B;--text:#1E1B18;
---syl-qua:#2563EB;--syl-dro:#059669;
---correct:#22c55e;--correct-bg:#f0fdf4;--incorrect:#F59E0B;--incorrect-bg:#fffbeb;
---radius:16px;--shadow:0 4px 12px rgba(0,0,0,0.08);
---font:'Nunito','Comic Sans MS','Chalkboard SE',sans-serif;
-}
-html{font-size:20px;scroll-behavior:smooth}
-body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5;overflow-x:hidden}
-button{font-family:inherit;cursor:pointer;border:none;outline:none}
-button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:3px solid #7C3AED;outline-offset:2px}
-.container{max-width:960px;margin:0 auto;padding:1.5rem}
-/* NAV */
-.top-bar{background:var(--primary);color:#fff;padding:0.6rem 1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;position:sticky;top:0;z-index:100}
-.top-bar h1{font-size:1rem;font-weight:700;margin:0}
-.progress-bar{display:flex;gap:4px;align-items:center}
-.progress-dot{width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,0.35);transition:background .2s}
-.progress-dot.done{background:#fff}
-.progress-dot.active{background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,0.5)}
-/* DIFF SELECTOR */
-.diff-selector{display:flex;gap:0.5rem;justify-content:center;margin:1rem 0;flex-wrap:wrap}
-.diff-btn{padding:0.5rem 1.2rem;border-radius:999px;font-weight:700;font-size:0.8rem;min-height:48px;min-width:48px;background:var(--surface);border:2px solid #ddd;transition:all .2s}
-.diff-btn.active{border-color:var(--primary);background:var(--primary);color:#fff}
-.diff-btn:hover{transform:scale(1.05)}
-/* CARDS */
-.card{background:var(--surface);border:2px solid var(--primary);border-radius:var(--radius);box-shadow:var(--shadow);padding:1.5rem;margin-bottom:1rem}
-/* BTNS */
-.btn{display:inline-flex;align-items:center;justify-content:center;padding:0.75rem 2rem;border-radius:999px;font-weight:700;font-size:1rem;min-height:48px;min-width:48px;box-shadow:var(--shadow);transition:all .2s}
-.btn:hover{transform:scale(1.05);box-shadow:0 6px 16px rgba(0,0,0,0.12)}
-.btn:active{transform:scale(0.97)}
-.btn-primary{background:var(--primary);color:#fff}
-.btn-accent{background:var(--accent);color:#fff}
-.btn-outline{background:transparent;border:2px solid var(--primary);color:var(--primary)}
-.btn-green{background:var(--correct);color:#fff}
-.btn-nav{background:var(--primary);color:#fff;position:fixed;bottom:1.5rem;right:1.5rem;z-index:50;font-size:1.1rem;padding:0.8rem 1.8rem;box-shadow:0 4px 20px rgba(0,0,0,0.2)}
-/* WORD DISPLAY */
-.word-big{font-size:2.4rem;font-weight:800;color:var(--primary);letter-spacing:0.05em;text-transform:uppercase;text-align:center}
-/* SYLLABLE BLOCKS */
-.syl-block{display:inline-flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800;color:#fff;padding:0.5rem 1.2rem;border-radius:12px;cursor:grab;user-select:none;touch-action:none;transition:transform .15s,box-shadow .15s;min-height:48px;min-width:48px}
-.syl-block:active,.syl-block.dragging{transform:scale(1.1);box-shadow:0 8px 24px rgba(0,0,0,0.2);cursor:grabbing}
-.syl-qua{background:var(--syl-qua)}
-.syl-dro{background:var(--syl-dro)}
-.syl-other{background:#6B7280}
-/* DROP ZONES */
-.drop-zone{min-height:70px;min-width:80px;border:3px dashed #ccc;border-radius:12px;display:flex;align-items:center;justify-content:center;transition:all .2s;padding:0.5rem}
-.drop-zone.hover{border-color:var(--primary);background:rgba(224,95,160,0.08);transform:scale(1.05)}
-.drop-zone.filled{border-style:solid;border-color:var(--correct)}
-/* FEEDBACK */
-.feedback{padding:0.75rem 1.2rem;border-radius:12px;font-weight:700;text-align:center;margin:0.75rem 0;animation:fadeIn .3s}
-.feedback-correct{background:var(--correct-bg);color:var(--correct)}
-.feedback-incorrect{background:var(--incorrect-bg);color:var(--incorrect)}
-/* OPTIONS */
-.options{display:flex;gap:0.75rem;flex-wrap:wrap;justify-content:center;margin:1rem 0}
-.opt-btn{padding:0.75rem 1.5rem;border-radius:var(--radius);font-weight:700;font-size:1.1rem;min-height:48px;min-width:48px;background:var(--surface);border:2px solid #ddd;transition:all .2s}
-.opt-btn:hover{border-color:var(--primary);transform:scale(1.05)}
-.opt-btn.selected-correct{border-color:var(--correct);background:var(--correct-bg);color:var(--correct)}
-.opt-btn.selected-incorrect{border-color:var(--incorrect);background:var(--incorrect-bg);color:var(--incorrect)}
-/* SECTION */
-.section{display:none;animation:fadeIn .4s}
-.section.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-@keyframes confetti{0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:0;transform:translateY(-120px) rotate(360deg)}}
-.pulse{animation:pulse .3s}
-/* ILLUSTRATION */
-.illustration{display:flex;justify-content:center;margin:1rem 0}
-.illustration svg{max-width:100%;height:auto}
-/* STARS */
-.stars{font-size:2rem;text-align:center;margin:1rem 0}
-.star{display:inline-block;transition:all .3s}
-.star.earned{color:#F59E0B;animation:pulse .4s}
-.star.empty{color:#ddd}
-/* SENTENCE BLOCKS */
-.sentence-zone{display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center;min-height:60px;padding:0.75rem;border:3px dashed #ccc;border-radius:12px;margin:1rem 0}
-.sentence-zone.filled{border-color:var(--correct);border-style:solid}
-.word-block{padding:0.5rem 1rem;border-radius:10px;font-weight:700;font-size:1.1rem;background:#E8E0F0;cursor:grab;user-select:none;touch-action:none;min-height:48px;display:flex;align-items:center;transition:all .15s}
-.word-block:active,.word-block.dragging{transform:scale(1.08);box-shadow:0 6px 16px rgba(0,0,0,0.15)}
-.word-block.placed{background:#D1FAE5}
-/* CLAP */
-.clap-btn{font-size:2.5rem;background:none;padding:0.5rem;min-height:48px;min-width:48px;transition:transform .1s}
-.clap-btn:active{transform:scale(1.3)}
-/* ASSESSMENT PROGRESS */
-.assess-progress{display:flex;gap:6px;justify-content:center;margin:1rem 0}
-.assess-step{width:40px;height:6px;border-radius:3px;background:#ddd;transition:background .3s}
-.assess-step.done{background:var(--correct)}
-.assess-step.current{background:var(--primary)}
-/* CONFETTI */
-.confetti-particle{position:fixed;pointer-events:none;z-index:9999;width:10px;height:10px;border-radius:2px}
-/* EXTENSION */
-.ext-card{background:var(--surface);border:2px solid #ddd;border-radius:var(--radius);padding:1.2rem;cursor:pointer;transition:all .2s;min-height:48px}
-.ext-card:hover{border-color:var(--primary);transform:scale(1.02)}
-.ext-card.selected{border-color:var(--primary);background:rgba(224,95,160,0.05)}
-/* RESPONSIVE */
-@media(max-width:600px){
-html{font-size:18px}
-.word-big{font-size:1.8rem}
-.syl-block{font-size:1.4rem}
-.container{padding:1rem}
-}
-/* TYPING AREA */
-.type-area{font-family:var(--font);font-size:1.4rem;font-weight:700;padding:0.75rem 1rem;border:3px solid #ddd;border-radius:12px;width:100%;max-width:300px;text-align:center;transition:border-color .2s}
-.type-area:focus{border-color:var(--primary);outline:none}
-/* HIDDEN */
-.hidden{display:none!important}
-/* IMAGE CARDS */
-.img-card{border:3px solid #ddd;border-radius:var(--radius);padding:1rem;cursor:pointer;transition:all .2s;text-align:center;min-height:48px;min-width:48px;background:var(--surface)}
-.img-card:hover{border-color:var(--primary);transform:scale(1.03)}
-.img-card.selected-correct{border-color:var(--correct);background:var(--correct-bg)}
-.img-card.selected-incorrect{border-color:var(--incorrect);background:var(--incorrect-bg)}
-.img-card svg{max-width:120px;height:auto;margin:0 auto;display:block}
-.img-card p{font-weight:700;margin-top:0.5rem}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M28P #23 — quadro | PageCraft</title>
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHRleHQgeT0iNTAiIGZvbnQtc2l6ZT0iNDgiPvCfk5g8L3RleHQ+PC9zdmc+" />
+  <style>
+    :root {
+      --bg: #FFF8F0;
+      --surface: #FFFFFF;
+      --primary: #E05FA0;
+      --accent: #F59E0B;
+      --text: #1E1B18;
+      --correct: #22c55e;
+      --correct-bg: #f0fdf4;
+      --incorrect: #F59E0B;
+      --incorrect-bg: #fffbeb;
+      --radius: 16px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --font: 'Nunito', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+      --touch-size: 48px;
+      --card-gap: 1rem;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 20%, transparent), transparent 38%),
+        linear-gradient(180deg, color-mix(in srgb, var(--primary) 8%, var(--bg)), var(--bg));
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+    a, button, summary, textarea { font: inherit; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; background: var(--surface); color: var(--text); padding: 0.75rem 1rem; border-radius: 9999px; z-index: 1000; border: 2px solid var(--primary); }
+    .skip-link:focus { top: 1rem; }
+    :focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+    .shell { max-width: 1120px; margin: 0 auto; padding: 1rem 1rem 3rem; }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      padding: 1.4rem;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 72%, white), color-mix(in srgb, var(--accent) 60%, white));
+      color: white;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
+    }
+    .hero::after { content: ""; position: absolute; inset: auto -8% -24% auto; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.14); }
+    .hero-top { display: flex; gap: 1rem; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; position: relative; z-index: 1; }
+    .hero-kicker, .hero-badge, .meta-chip, .nav-pill, .page-link span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 9999px;
+      padding: 0.75rem 1.25rem;
+      font-weight: 700;
+    }
+    .hero-kicker { background: rgba(255,255,255,0.16); }
+    .hero-badge { background: rgba(255,255,255,0.22); }
+    .hero-grid { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.9fr); margin-top: 1.25rem; position: relative; z-index: 1; }
+    .hero-copy h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.05; margin: 0.4rem 0 0.7rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+    .hero-copy p { margin: 0.4rem 0; max-width: 45rem; }
+    .word-scene { background: rgba(255,255,255,0.14); border: 2px solid rgba(255,255,255,0.28); border-radius: 24px; padding: 1rem; backdrop-filter: blur(4px); }
+    .word-scene .emoji { font-size: clamp(3rem, 10vw, 5.5rem); line-height: 1; }
+    .meta-row, .objective-row, .syllable-row, .page-switch, .section-nav { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .meta-row { margin-top: 1rem; }
+    .meta-chip { background: rgba(255,255,255,0.18); }
+    .objective-row { margin: 1rem 0 0; padding: 0; list-style: none; }
+    .objective-row li { background: rgba(255,255,255,0.22); border-radius: 9999px; padding: 0.75rem 1rem; font-weight: 700; min-height: var(--touch-size); display: inline-flex; align-items: center; }
+    .word-spotlight { margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1.1fr 1fr; }
+    .spot-card { background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 70%, white); border-radius: 24px; padding: 1rem; box-shadow: var(--shadow); }
+    .spot-card h2 { margin: 0 0 0.75rem; font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; }
+    .spot-card .word-display { font-size: clamp(2.4rem, 7vw, 3.8rem); font-weight: 800; color: var(--primary); letter-spacing: 0.05em; text-transform: uppercase; }
+    .spot-card .mission { margin-top: 0.75rem; }
+    .syllable-row { margin-top: 1rem; }
+    .syllable-token, .syllable-chip {
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 12px;
+      border: none;
+      color: white;
+      font-weight: 800;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      padding: 0.55rem 1rem;
+      background: var(--chip, var(--primary));
+      box-shadow: var(--shadow);
+    }
+    .page-switch { margin: 1.2rem 0 0.5rem; }
+    .page-link {
+      text-decoration: none;
+      background: var(--surface);
+      color: var(--text);
+      border: 2px solid color-mix(in srgb, var(--primary) 28%, white);
+      border-radius: 18px;
+      padding: 0.85rem 1rem;
+      min-height: var(--touch-size);
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: space-between;
+      flex: 1 1 200px;
+      box-shadow: var(--shadow);
+      font-weight: 700;
+    }
+    .page-link.is-current { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
+    .section-nav { position: sticky; top: 0; z-index: 10; padding: 0.85rem 0 1rem; background: linear-gradient(180deg, var(--bg), rgba(255,248,240,0.88)); backdrop-filter: blur(6px); }
+    .nav-pill { text-decoration: none; background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 24%, white); padding: 0.55rem 1rem; }
+    .content { display: grid; gap: 1.1rem; }
+    .unit-card { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 35%, white); border-radius: 24px; padding: 1.15rem; box-shadow: var(--shadow); }
+    .unit-head { display: flex; gap: 1rem; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+    .unit-head h2 { margin: 0.2rem 0 0; font-size: clamp(1.45rem, 4vw, 2.1rem); font-weight: 800; }
+    .unit-kicker { color: color-mix(in srgb, var(--primary) 80%, black); font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.9rem; }
+    .unit-badge { background: color-mix(in srgb, var(--accent) 22%, var(--surface)); border: 2px solid var(--accent); border-radius: 9999px; padding: 0.65rem 1rem; font-weight: 800; min-height: var(--touch-size); display: inline-flex; align-items: center; }
+    .unit-grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.95fr); margin-top: 1rem; }
+    .unit-copy p { margin: 0.65rem 0; }
+    .unit-flow { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 1rem; }
+    .unit-flow > div, .play-card, .maker-box, .teacher-card { background: color-mix(in srgb, var(--bg) 70%, white); border-radius: 18px; padding: 0.95rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
+    .play-label { font-weight: 800; margin: 0 0 0.8rem; }
+    .pill-btn, .choice-btn, .check-card, .prompt-card {
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 9999px;
+      border: 2px solid transparent;
+      padding: 0.75rem 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+    }
+    .pill-btn:hover, .choice-btn:hover, .check-card:hover, .prompt-card:hover, .page-link:hover { transform: scale(1.05); box-shadow: 0 10px 24px rgba(0,0,0,0.12); }
+    .pill-btn:active, .choice-btn:active, .check-card:active, .prompt-card:active, .page-link:active { transform: scale(0.97); }
+    .pill-btn { background: var(--primary); color: white; }
+    .choice-row, .check-grid, .prompt-grid, .compose-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .choice-btn, .check-card, .prompt-card { background: var(--surface); color: var(--text); border-color: color-mix(in srgb, var(--primary) 22%, white); }
+    .choice-btn.is-right, .check-card.is-done { background: var(--correct-bg); border-color: var(--correct); color: #166534; }
+    .choice-btn.is-wrong { background: var(--incorrect-bg); border-color: var(--incorrect); color: #92400e; }
+    .feedback, .helper-text { margin: 0.85rem 0 0; font-weight: 700; }
+    .feedback { min-height: 1.4em; }
+    .compose-output, .phrase-card, .cloze-word { min-height: 72px; border-radius: 18px; background: var(--surface); border: 2px dashed color-mix(in srgb, var(--primary) 35%, white); display: grid; place-items: center; font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800; color: var(--primary); padding: 0.9rem; margin-top: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .phrase-card { text-transform: none; font-size: 1.3rem; color: var(--text); }
+    .phrase-input { width: 100%; margin-top: 0.85rem; border-radius: 18px; border: 2px solid color-mix(in srgb, var(--primary) 25%, white); padding: 0.9rem 1rem; min-height: 120px; background: #fff; }
+    .diff-switcher { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; }
+    .diff-btn { min-height: var(--touch-size); min-width: var(--touch-size); border-radius: 9999px; border: 2px solid color-mix(in srgb, var(--primary) 28%, white); background: var(--surface); padding: 0.7rem 1rem; font-weight: 700; cursor: pointer; }
+    .diff-btn.is-active { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
+    .diff-panel { display: none; background: color-mix(in srgb, var(--bg) 72%, white); border-radius: 18px; padding: 0.95rem; margin-top: 0.8rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
+    .diff-panel.is-active { display: block; }
+    .teacher-guide { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 30%, white); border-radius: 24px; padding: 0.9rem 1rem; box-shadow: var(--shadow); }
+    .teacher-guide summary { min-height: var(--touch-size); display: flex; align-items: center; cursor: pointer; font-weight: 800; font-size: 1.2rem; }
+    .teacher-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 1rem; }
+    .teacher-card-wide { grid-column: 1 / -1; }
+    .teacher-card h3 { margin-top: 0; }
+    .footer { text-align: center; padding: 1.4rem 0 0; font-weight: 700; color: color-mix(in srgb, var(--text) 72%, white); }
+    .hidden { display: none !important; }
+    @media (max-width: 900px) {
+      .hero-grid, .word-spotlight, .unit-grid, .unit-flow, .teacher-grid { grid-template-columns: 1fr; }
+      .section-nav { position: static; }
+    }
+    @media (max-width: 640px) {
+      body { font-size: 18px; }
+      .shell { padding: 0.75rem 0.75rem 2.4rem; }
+      .hero { padding: 1rem; border-radius: 22px; }
+      .hero-copy h1 { font-size: clamp(2rem, 9vw, 3rem); }
+      .page-link { flex-basis: 100%; }
+      .objective-row li, .meta-chip, .hero-kicker, .hero-badge, .nav-pill { width: 100%; justify-content: center; }
+      .unit-card, .spot-card, .teacher-guide { border-radius: 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
 </head>
-<body>
-
-<!-- TOP BAR -->
-<div class="top-bar" role="navigation" aria-label="Navegação principal">
-  <h1>M28P #23 — quadro</h1>
-  <div class="progress-bar" role="progressbar" aria-label="Progresso" aria-valuemin="1" aria-valuemax="8" aria-valuenow="1" id="progressBar">
-    <div class="progress-dot active" data-step="1"></div>
-    <div class="progress-dot" data-step="2"></div>
-    <div class="progress-dot" data-step="3"></div>
-    <div class="progress-dot" data-step="4"></div>
-    <div class="progress-dot" data-step="5"></div>
-    <div class="progress-dot" data-step="6"></div>
-    <div class="progress-dot" data-step="7"></div>
-    <div class="progress-dot" data-step="8"></div>
-  </div>
-</div>
-
-<div class="container">
-
-<!-- DIFFERENTIATION SELECTOR -->
-<div class="diff-selector" role="radiogroup" aria-label="Nível de dificuldade">
-  <button class="diff-btn" data-diff="support" onclick="setDiff('support')" aria-label="Com ajuda">🟢 Com ajuda</button>
-  <button class="diff-btn active" data-diff="standard" onclick="setDiff('standard')" aria-label="Objetivo">🟡 Objetivo</button>
-  <button class="diff-btn" data-diff="challenge" onclick="setDiff('challenge')" aria-label="Desafio">🔴 Desafio</button>
-</div>
-
-<!-- ============ SECTION 1: ABERTURA ============ -->
-<div class="section active" id="sec1" data-step="1">
-  <div class="card">
-    <h2 style="text-align:center;margin-bottom:0.75rem">🏫 A sala de aula</h2>
-    <p style="text-align:center;margin-bottom:1rem">A professora chama a turma:<br><em>«Olha para o quadro! Hoje aprendemos uma palavra nova.»</em></p>
-    <div class="illustration" id="sec1Illust">
-      <svg viewBox="0 0 400 260" width="400" aria-label="Sala de aula com quadro verde">
-        <rect x="0" y="0" width="400" height="260" fill="#FFF8F0"/>
-        <!-- Wall -->
-        <rect x="0" y="0" width="400" height="200" fill="#FEEBC8"/>
-        <!-- Floor -->
-        <rect x="0" y="200" width="400" height="60" fill="#D2B48C"/>
-        <!-- Blackboard frame -->
-        <rect x="80" y="30" width="240" height="140" rx="4" fill="#5D4037"/>
-        <!-- Blackboard -->
-        <rect x="90" y="40" width="220" height="120" rx="2" fill="#2E7D32" id="blackboard"/>
-        <!-- Chalk tray -->
-        <rect x="85" y="165" width="230" height="10" rx="2" fill="#795548"/>
-        <!-- Chalk -->
-        <rect x="180" y="166" width="30" height="7" rx="2" fill="#FFF"/>
-        <!-- Teacher -->
-        <circle cx="340" cy="150" r="18" fill="#FFCC80"/>
-        <rect x="328" y="168" width="24" height="40" rx="6" fill="#E05FA0"/>
-        <!-- Teacher arm pointing -->
-        <line x1="328" y1="180" x2="310" y2="120" stroke="#FFCC80" stroke-width="5" stroke-linecap="round"/>
-        <!-- Teacher eyes -->
-        <circle cx="335" cy="147" r="2" fill="#333"/>
-        <circle cx="345" cy="147" r="2" fill="#333"/>
-        <!-- Smile -->
-        <path d="M335 155 Q340 160 345 155" fill="none" stroke="#333" stroke-width="1.5"/>
-        <!-- Hair -->
-        <path d="M322 142 Q325 125 340 125 Q355 125 358 142" fill="#5D4037"/>
-        <!-- Word on board (hidden initially) -->
-        <text x="200" y="110" text-anchor="middle" font-family="'Nunito','Comic Sans MS',sans-serif" font-size="36" font-weight="800" fill="#FFEB3B" id="boardWord" opacity="0">quadro</text>
-      </svg>
-    </div>
-
-    <!-- Support: word visible immediately -->
-    <div class="hidden" id="sec1Support" style="text-align:center;margin-bottom:0.5rem">
-      <p style="font-weight:700;color:var(--syl-qua)">⬇ Este é o <strong>quadro</strong>!</p>
-    </div>
-
-    <div style="text-align:center;margin-top:1rem" id="sec1Actions">
-      <button class="btn btn-primary" id="sec1RevealBtn" onclick="revealWord()">👁 Ver a palavra</button>
-    </div>
-
-    <!-- Challenge: type before reveal -->
-    <div class="hidden" id="sec1Challenge" style="text-align:center;margin:1rem 0">
-      <p style="font-weight:700;margin-bottom:0.5rem">Que palavra é esta? Tenta escrever!</p>
-      <input type="text" class="type-area" id="sec1Input" placeholder="escreve aqui..." aria-label="Escrever a palavra">
-      <div style="margin-top:0.5rem">
-        <button class="btn btn-accent" onclick="checkChallengeWord()">Verificar</button>
+<body data-page-variant="index.html" data-visible-units="1,2,3,4">
+  <a href="#main" class="skip-link">Ir para o conteúdo</a>
+  <div class="shell">
+    <header class="hero">
+      <div class="hero-top">
+        <span class="hero-kicker">M28P #23</span>
+        <span class="hero-badge">Rota completa</span>
       </div>
-      <div id="sec1ChallengeFb"></div>
-    </div>
-
-    <div id="sec1Feedback" style="text-align:center;margin-top:0.75rem"></div>
-  </div>
-  <div style="text-align:center;margin-top:1rem">
-    <button class="btn btn-primary" onclick="goTo(2)">Seguinte ➜</button>
-  </div>
-</div>
-
-<!-- ============ SECTION 2: RECONHECIMENTO GLOBAL ============ -->
-<div class="section" id="sec2" data-step="2">
-  <div class="card">
-    <h2 style="text-align:center;margin-bottom:0.75rem">🔍 Encontra a palavra!</h2>
-
-    <!-- Phase 1: word → image -->
-    <div id="sec2Phase1">
-      <div class="word-big" style="margin-bottom:1rem" id="sec2WordDisplay">QUADRO</div>
-      <p style="text-align:center;margin-bottom:1rem">Qual é a imagem certa?</p>
-      <div class="options" id="sec2ImgOptions">
-        <div class="img-card" onclick="sec2SelectImg(this,'quadro')" tabindex="0" role="button" aria-label="Quadro">
-          <svg viewBox="0 0 100 80" width="100"><rect x="10" y="5" width="80" height="55" rx="2" fill="#5D4037"/><rect x="15" y="10" width="70" height="45" rx="1" fill="#2E7D32"/><rect x="12" y="58" width="76" height="5" rx="1" fill="#795548"/></svg>
-          <p>quadro</p>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p>Descobrir, ler e brincar</p>
+          <h1>Quadro</h1>
+          <p>Percurso completo com foco na descoberta da palavra, nas sílabas e na confiança ao ler.</p>
+          <div class="meta-row">
+            <span class="meta-chip">🖼️ Palavra 23</span>
+            <span class="meta-chip">1.º ano (6-7 anos)</span>
+            <span class="meta-chip">45 min</span>
+          </div>
+          <ul class="objective-row"><li>Reconhecer a palavra &#x27;quadro&#x27; como um todo, associando-a à imagem correspondente</li><li>Segmentar &#x27;quadro&#x27; nas sílabas &#x27;qua&#x27; e &#x27;dro&#x27;, batendo palmas e arrastando blocos</li><li>Recombinar sílabas conhecidas para formar e verificar novas palavras reais</li></ul>
         </div>
-        <div class="img-card" onclick="sec2SelectImg(this,'janela')" tabindex="0" role="button" aria-label="Janela">
-          <svg viewBox="0 0 100 80" width="100"><rect x="15" y="5" width="70" height="70" rx="3" fill="#90CAF9" stroke="#5D4037" stroke-width="3"/><line x1="50" y1="5" x2="50" y2="75" stroke="#5D4037" stroke-width="2"/><line x1="15" y1="40" x2="85" y2="40" stroke="#5D4037" stroke-width="2"/></svg>
-          <p>janela</p>
+        <aside class="word-scene" aria-hidden="true">
+          <div class="emoji">🖼️</div>
+          <p><strong>Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</strong></p>
+          <p>Paleta própria, leitura em pt-PT AO90 e navegação pensada para toque.</p>
+          <p>Esta página trabalha as unidades 1, 2, 3, 4.</p>
+        </aside>
+      </div>
+    </header>
+
+    <div class="page-switch" aria-label="Outras páginas desta palavra"><a class="page-link is-current" href="./index.html">Página 1<span>Atual</span></a><a class="page-link" href="./page-2.html">Página 2<span>Abrir</span></a><a class="page-link" href="./page-3.html">Página 3<span>Abrir</span></a><a class="page-link" href="./page-4.html">Página 4<span>Abrir</span></a></div>
+
+    <section class="word-spotlight" aria-label="Destaque da palavra">
+      <article class="spot-card">
+        <h2>Palavra em destaque</h2>
+        <div class="word-display">Quadro</div>
+        <p class="mission">quadro</p>
+        <div class="compose-actions">
+          <button class="pill-btn speak-btn" data-speak="Quadro">Ouvir a palavra</button>
         </div>
-        <div class="img-card" onclick="sec2SelectImg(this,'mesa')" tabindex="0" role="button" aria-label="Mesa">
-          <svg viewBox="0 0 100 80" width="100"><rect x="10" y="25" width="80" height="8" rx="2" fill="#8D6E63"/><rect x="15" y="33" width="6" height="40" fill="#795548"/><rect x="79" y="33" width="6" height="40" fill="#795548"/></svg>
-          <p>mesa</p>
-        </div>
-      </div>
-      <div id="sec2P1Feedback"></div>
-    </div>
+      </article>
+      <article class="spot-card">
+        <h2>Sílabas</h2>
+        <div class="syllable-row"><span class="syllable-token" style="--chip:#2563EB">qua</span><span class="syllable-token" style="--chip:#059669">dro</span></div>
+        <p class="mission">Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</p>
+      </article>
+    </section>
 
-    <!-- Phase 2: image → word -->
-    <div id="sec2Phase2" class="hidden">
-      <div class="illustration" style="margin-bottom:1rem">
-        <svg viewBox="0 0 160 110" width="160" aria-label="Quadro">
-          <rect x="10" y="5" width="140" height="85" rx="3" fill="#5D4037"/>
-          <rect x="17" y="12" width="126" height="71" rx="2" fill="#2E7D32"/>
-          <rect x="13" y="88" width="134" height="8" rx="2" fill="#795548"/>
-        </svg>
-      </div>
-      <p style="text-align:center;margin-bottom:1rem">Qual é a palavra certa?</p>
-      <div class="options" id="sec2WordOptions">
-        <button class="opt-btn" onclick="sec2SelectWord(this,'quadro')">quadro</button>
-        <button class="opt-btn" onclick="sec2SelectWord(this,'janela')">janela</button>
-        <button class="opt-btn" onclick="sec2SelectWord(this,'mesa')">mesa</button>
-      </div>
-      <!-- Challenge: extra confusing words -->
-      <div id="sec2ChallengeExtra" class="hidden options" style="margin-top:0.5rem">
-        <button class="opt-btn" onclick="sec2SelectWord(this,'quarto')">quarto</button>
-      </div>
-      <div id="sec2P2Feedback"></div>
-    </div>
-  </div>
-  <div style="text-align:center;margin-top:1rem;display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap">
-    <button class="btn btn-outline" onclick="goTo(1)">⬅ Anterior</button>
-    <button class="btn btn-primary" onclick="goTo(3)">Seguinte ➜</button>
-  </div>
-</div>
+    <nav class="section-nav" aria-label="Navegação das unidades"><a class="nav-pill" href="#u1-abertura-contextual-a-palavra-quadro-na-sala-de-aula">1</a><a class="nav-pill" href="#u2-reconhecimento-global-palavra-imagem">2</a><a class="nav-pill" href="#u3-segmentação-silábica-qua-dro">3</a><a class="nav-pill" href="#u4-recombinação-formar-novas-palavras-com-a-sílaba-qua">4</a></nav>
 
-<!-- ============ SECTION 3: SEGMENTAÇÃO SILÁBICA ============ -->
-<div class="section" id="sec3" data-step="3">
-  <div class="card">
-    <h2 style="text-align:center;margin-bottom:0.75rem">👏 Separa as sílabas!</h2>
-    <div class="word-big" id="sec3Word" style="margin-bottom:1rem">QUADRO</div>
-
-    <!-- Clapping -->
-    <div style="text-align:center;margin-bottom:1rem">
-      <p style="margin-bottom:0.5rem">Bate palmas para cada sílaba!</p>
-      <button class="clap-btn" onclick="doClap()" aria-label="Bater palma" id="clapBtn">👏</button>
-      <p id="clapCount" style="font-weight:700;font-size:1.2rem;margin-top:0.25rem">Palmas: 0 / 2</p>
-    </div>
-
-    <!-- Drag syllables -->
-    <div id="sec3DragArea" class="hidden">
-      <p style="text-align:center;font-weight:700;margin-bottom:0.75rem">Arrasta cada sílaba para o lugar certo!</p>
-
-      <!-- Support: dividing line shown -->
-      <div id="sec3SupportHint" class="hidden" style="text-align:center;margin-bottom:0.5rem">
-        <span style="font-size:1.4rem;font-weight:800;color:var(--syl-qua)">qua</span><span style="font-size:1.4rem;color:#999"> | </span><span style="font-size:1.4rem;font-weight:800;color:var(--syl-dro)">dro</span>
-      </div>
-
-      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:1rem" id="sec3Sources">
-        <div class="syl-block syl-dro" draggable="true" data-syl="dro" id="block-dro">dro</div>
-        <div class="syl-block syl-qua" draggable="true" data-syl="qua" id="block-qua">qua</div>
-      </div>
-      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+    <main id="main" class="content">
+      
+    <section id="u1-abertura-contextual-a-palavra-quadro-na-sala-de-aula" class="unit-card">
+      <div class="unit-head">
         <div>
-          <p style="text-align:center;font-weight:700;font-size:0.8rem;margin-bottom:0.25rem">1.ª sílaba</p>
-          <div class="drop-zone" id="drop1" data-expect="qua" style="min-width:100px;border-color:var(--syl-qua)" aria-label="Zona da primeira sílaba"></div>
+          <span class="unit-kicker">Unidade 1</span>
+          <h2>Abertura contextual: a palavra &#x27;quadro&#x27; na sala de aula</h2>
         </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>O aluno observa uma ilustração animada de uma sala de aula com um quadro verde ao centro. Uma personagem-professora aponta para o quadro onde a palavra &#x27;quadro&#x27; surge em destaque. A micro-história: &#x27;A professora chama a turma: Olha para o quadro! Hoje aprendemos uma palavra nova.&#x27; O objeto e a palavra são apresentados juntos.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Ilustração de sala de aula: quadro verde ao centro com moldura escura, professora a apontar. Botão &#x27;Ver a palavra&#x27; faz surgir &#x27;quadro&#x27; escrito em letra grande no quadro da ilustração, com animação suave de entrada e destaque em amarelo.</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno aponta ou clica no quadro da ilustração quando questionado &#x27;Onde está o quadro?&#x27; e repete a palavra oralmente pelo menos uma vez.</p>
+            </div>
+          </div>
+          <p>Clicar em &#x27;Ver a palavra&#x27; → cenaAtiva muda para &#x27;palavra&#x27; → a palavra aparece no quadro da ilustração com fade-in suave e som de giz a escrever.</p>
+          
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <button class="pill-btn reveal-btn" data-target="story-1">Mostrar a história</button>
+          <button class="pill-btn speak-btn" data-speak="quadro">Ouvir</button>
+          <div id="story-1" class="reveal-box hidden"><p>O aluno observa uma ilustração animada de uma sala de aula com um quadro verde ao centro. Uma personagem-professora aponta para o quadro onde a palavra &#x27;quadro&#x27; surge em destaque. A micro-história: &#x27;A professora chama a turma: Olha para o quadro! Hoje aprendemos uma palavra nova.&#x27; O objeto e a palavra são apresentados juntos.</p></div>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-1">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-1">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-1">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-1" class="diff-panel is-active"><p>🟢 A palavra &#x27;quadro&#x27; aparece logo visível com seta indicadora e legenda &#x27;Este é o quadro.&#x27;; imagem do objeto em destaque com contorno colorido.</p></div>
+        <div id="standard-1" class="diff-panel"><p>🟡 A palavra aparece após clicar no botão; imagem contextual da sala de aula disponível.</p></div>
+        <div id="challenge-1" class="diff-panel"><p>🔴 A imagem aparece sem a palavra; o aluno tenta ditar ou escrever a palavra antes de a revelar; depois valida clicando em &#x27;Revelar&#x27;.</p></div>
+      </div>
+    </section>
+    
+    <section id="u2-reconhecimento-global-palavra-imagem" class="unit-card">
+      <div class="unit-head">
         <div>
-          <p style="text-align:center;font-weight:700;font-size:0.8rem;margin-bottom:0.25rem">2.ª sílaba</p>
-          <div class="drop-zone" id="drop2" data-expect="dro" style="min-width:100px;border-color:var(--syl-dro)" aria-label="Zona da segunda sílaba"></div>
+          <span class="unit-kicker">Unidade 2</span>
+          <h2>Reconhecimento global: palavra ↔ imagem</h2>
         </div>
+        <span class="unit-badge">Em destaque</span>
       </div>
-      <p id="sec3Counter" style="text-align:center;font-weight:700;margin-top:0.75rem;font-size:1.1rem">__ sílabas</p>
-      <div id="sec3Feedback" style="text-align:center"></div>
-    </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>O aluno vê a palavra &#x27;quadro&#x27; em letras grandes e três imagens (quadro, janela, mesa). Seleciona a imagem correspondente. Depois o processo inverte: três palavras aparecem e o aluno identifica &#x27;quadro&#x27;. O objetivo é o reconhecimento da forma global da palavra, sem decifração sílaba a sílaba.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Fase 1: palavra &#x27;quadro&#x27; em letra grande (sans-serif, mínimo 40px) no topo; três imagens abaixo com label. Fase 2: imagem do quadro no topo; três palavras em botões abaixo. Feedback imediato: ✓ verde claro (acerto) ou âmbar com retry (erro).</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno seleciona a imagem correta do quadro na fase 1 e a palavra &#x27;quadro&#x27; na fase 2, sem hesitação prolongada.</p>
+            </div>
+          </div>
+          <p>Clicar numa imagem ou palavra → selecao atualiza → feedback imediato aparece → após 1,5s botão &#x27;Próxima fase&#x27; ativa.</p>
+          
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Escolhe a palavra certa.</p>
+          <div class="choice-row">
+            <button class="choice-btn" data-answer="quadro" data-choice="quadro">quadro</button><button class="choice-btn" data-answer="quadro" data-choice="árvore">árvore</button><button class="choice-btn" data-answer="quadro" data-choice="passarinho">passarinho</button>
+          </div>
+          <p class="feedback" aria-live="polite">Procura a palavra completa.</p>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-2">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-2">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-2">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-2" class="diff-panel is-active"><p>🟢 Imagens distratoras muito distintas (ex: bola, cão); palavra &#x27;quadro&#x27; com as letras &#x27;qu&#x27; em cor diferente como pista visual.</p></div>
+        <div id="standard-2" class="diff-panel"><p>🟡 Três opções de contexto próximo (quadro, janela, mesa); palavra sem destaque especial.</p></div>
+        <div id="challenge-2" class="diff-panel"><p>🔴 Quatro opções com palavras visualmente próximas (quadro, quarto, quadrado, quadril); sem imagem de apoio na fase imagem→palavra.</p></div>
+      </div>
+    </section>
+    
+    <section id="u3-segmentação-silábica-qua-dro" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 3</span>
+          <h2>Segmentação silábica: qua + dro</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>O aluno aprende a dividir &#x27;quadro&#x27; nas duas sílabas: &#x27;qua&#x27; e &#x27;dro&#x27;. Primeiro bate palmas duas vezes acompanhando a pronúncia. Depois arrasta blocos coloridos para os separar. Cada sílaba tem cor consistente: &#x27;qua&#x27; = azul, &#x27;dro&#x27; = laranja. O contador de sílabas reforça o conceito.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Palavra &#x27;quadro&#x27; unida no centro com fundo branco. Botão de palmas (👏) que ao ser clicado 2 vezes destaca cada sílaba sequencialmente com animação. Após palmas: duas zonas de destino coloridas (azul para &#x27;qua&#x27;, laranja para &#x27;dro&#x27;); dois blocos arrastáveis. Contador &#x27;__ sílabas&#x27; atualiza em tempo real.</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno arrasta &#x27;qua&#x27; para a zona azul e &#x27;dro&#x27; para a zona laranja, e verbaliza &#x27;qua-dro, duas sílabas&#x27; quando solicitado pelo professor.</p>
+            </div>
+          </div>
+          <p>Clicar palmas → conta palmadas (1→destaca &#x27;qua&#x27;, 2→destaca &#x27;dro&#x27;). Arrastar blocos para zonas corretas → posicaoCorreta verifica → feedback ✓ verde ou âmbar com indicação.</p>
+          
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Toca nas sílabas para formar a palavra.</p>
+          <div class="syllable-bank" data-compose="compose-3"><button class="syllable-chip" style="--chip:#2563EB" data-syllable="qua">qua</button><button class="syllable-chip" style="--chip:#059669" data-syllable="dro">dro</button></div>
+          <div id="compose-3" class="compose-output">__</div>
+          <div class="compose-actions"><button class="pill-btn clear-compose" data-compose-clear="compose-3">Limpar</button></div>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-3">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-3">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-3">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-3" class="diff-panel is-active"><p>🟢 Blocos já pré-separados; o aluno apenas confirma a ordem arrastando para zonas marcadas; imagem do quadro sempre visível; linha divisória já desenhada na palavra.</p></div>
+        <div id="standard-3" class="diff-panel"><p>🟡 Blocos misturados; o aluno arrasta para as zonas corretas; imagem disponível como apoio lateral.</p></div>
+        <div id="challenge-3" class="diff-panel"><p>🔴 Sem zonas de cor guia; o aluno separa livremente e nomeia; depois tenta separar outra palavra conhecida com 2 sílabas (ex: &#x27;de-do&#x27;, &#x27;bo-ta&#x27;) usando a mesma lógica.</p></div>
+      </div>
+    </section>
+    
+    <section id="u4-recombinação-formar-novas-palavras-com-a-sílaba-qua" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 4</span>
+          <h2>Recombinação: formar novas palavras com a sílaba &#x27;qua&#x27;</h2>
+        </div>
+        
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>O aluno experimenta combinar a sílaba &#x27;qua&#x27; com outras sílabas para descobrir palavras reais. Explora &#x27;qua+rto&#x27; = &#x27;quarto&#x27; e &#x27;qua+se&#x27; = &#x27;quase&#x27;. Aprende que nem toda a combinação forma uma palavra real em português — e isso é uma descoberta importante.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Sílaba fixa &#x27;qua&#x27; à esquerda em bloco azul. Seis sílabas arrastáveis à direita em blocos cinza. O aluno arrasta uma sílaba para junto de &#x27;qua&#x27;. A palavra formada aparece em grande no centro. Painel de resultado: &#x27;✓ Esta palavra existe!&#x27; (verde) ou &#x27;✗ Esta combinação não é uma palavra.&#x27; (âmbar). Botão de som para ouvir a palavra.</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno forma pelo menos 2 palavras válidas com &#x27;qua&#x27; e consegue explicar oralmente por que razão &#x27;qua+na&#x27; não é uma palavra real.</p>
+            </div>
+          </div>
+          <p>Arrastar sílaba → silabaCombinada atualiza → palavra formada exibe → resultadoCombinacao verifica → feedback visual e sonoro.</p>
+          <div class="maker-box"><p><strong>Desafio maker:</strong> Em pares, um aluno escreve &#x27;qua&#x27; no quadro da sala e o colega acrescenta uma sílaba para tentar formar uma palavra. A turma decide em conjunto: é uma palavra real?</p><p><strong>Materiais:</strong> Quadro da sala e giz ou marcador, lista de sílabas conhecidas no caderno</p><p><strong>Comunicação:</strong> Cada par apresenta a palavra que descobriu (ou não descobriu) à turma; registo no diário de turma com as palavras válidas encontradas.</p></div>
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Experimenta combinações com as sílabas.</p>
+          <div class="syllable-bank" data-compose="mix-4"><button class="syllable-chip" style="--chip:#2563EB" data-syllable="qua">qua</button><button class="syllable-chip" style="--chip:#059669" data-syllable="dro">dro</button></div>
+          <div id="mix-4" class="compose-output">__</div>
+          <p class="helper-text">Nem todas as combinações resultam em palavras reais. O importante é experimentar.</p>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-4">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-4">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-4">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-4" class="diff-panel is-active"><p>🟢 Apenas 2 sílabas para combinar (dro e na); imagem para cada palavra válida; feedback inclui o nome da palavra pronunciado em voz alta.</p></div>
+        <div id="standard-4" class="diff-panel"><p>🟡 6 sílabas disponíveis; descobrir pelo menos 2 palavras válidas; imagem surge após acerto como confirmação.</p></div>
+        <div id="challenge-4" class="diff-panel"><p>🔴 Inclui sílabas menos comuns; o aluno tenta também com &#x27;dro&#x27; e documenta o que encontra; explica por escrito uma palavra nova que descobriu.</p></div>
+      </div>
+    </section>
+    
+      
+    <details class="teacher-guide">
+      <summary>Guia do professor</summary>
+      <div class="teacher-grid">
+        <article class="teacher-card">
+          <h3>Objetivos desta página</h3>
+          <ul><li>Reconhecer a palavra &#x27;quadro&#x27; como um todo, associando-a à imagem correspondente</li><li>Segmentar &#x27;quadro&#x27; nas sílabas &#x27;qua&#x27; e &#x27;dro&#x27;, batendo palmas e arrastando blocos</li><li>Recombinar sílabas conhecidas para formar e verificar novas palavras reais</li><li>Ler e construir a frase &#x27;Eu escrevo no quadro.&#x27;</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Materiais</h3>
+          <ul><li>Tablet ou computador com browser (1 por aluno ou par)</li><li>Cartão físico com a palavra &#x27;quadro&#x27; e imagem</li><li>Quadro e giz ou marcador (para atividade maker)</li><li>Tiras com sílabas impressas — apoio físico opcional</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Organização MEM</h3>
+          <ul><li><strong>Módulos:</strong> TEA (Trabalho de Estudo Autónomo), Trabalho curricular comparticipado, Circuitos de comunicação</li><li><strong>Instrumentos:</strong> PIT, diário de turma</li><li><strong>Organização:</strong> individual (exploração 30min) → pares (recombinação + quadro físico 7min) → turma (comunicação + extensão 8min)</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Percurso desta página</h3>
+          <ul><li>Unidade 1: Abertura contextual: a palavra &#x27;quadro&#x27; na sala de aula</li><li>Unidade 2: Reconhecimento global: palavra ↔ imagem</li><li>Unidade 3: Segmentação silábica: qua + dro</li><li>Unidade 4: Recombinação: formar novas palavras com a sílaba &#x27;qua&#x27;</li></ul>
+        </article>
+        <article class="teacher-card teacher-card-wide">
+          <h3>Referências curriculares</h3>
+          <ul><li><strong>Português · 1.º ano</strong>: Desenvolver a consciência silábica: segmentar e reconstruir palavras por sílabas; contar sílabas</li><li><strong>Português · 1.º ano</strong>: Reconhecer palavras de uso frequente; ler palavras e frases simples com compreensão</li><li><strong>Português · 1.º ano</strong>: Produzir frases simples com correção; responder a questões sobre o que ouviu ou leu</li></ul>
+          <ul><li>PA-A: Linguagens e textos</li><li>PA-F: Desenvolvimento pessoal e autonomia</li><li>PA-C: Raciocínio e resolução de problemas</li></ul>
+        </article>
+      </div>
+    </details>
+    
+    </main>
 
-    <!-- Challenge: extra words -->
-    <div id="sec3Challenge" class="hidden" style="margin-top:1rem;text-align:center">
-      <p style="font-weight:700">Tenta também separar estas palavras em 2 sílabas:</p>
-      <div class="options" style="margin-top:0.5rem">
-        <button class="opt-btn" onclick="sec3ChallengeCheck(this,'de-do')">de + do</button>
-        <button class="opt-btn" onclick="sec3ChallengeCheck(this,'bo-ta')">bo + ta</button>
-      </div>
-      <div id="sec3ChallengeFb"></div>
-    </div>
+    <footer class="footer">PageCraft · Método das 28 Palavras · Quadro</footer>
   </div>
-  <div style="text-align:center;margin-top:1rem;display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap">
-    <button class="btn btn-outline" onclick="goTo(2)">⬅ Anterior</button>
-    <button class="btn btn-primary" onclick="goTo(4)">Seguinte ➜</button>
-  </div>
-</div>
 
-<!-- ============ SECTION 4: RECOMBINAÇÃO ============ -->
-<div class="section" id="sec4" data-step="4">
-  <div class="card">
-    <h2 style="text-align:center;margin-bottom:0.75rem">🧩 Forma palavras novas!</h2>
-    <p style="text-align:center;margin-bottom:1rem">Junta a sílaba <strong style="color:var(--syl-qua)">qua</strong> a outra sílaba e descobre palavras!</p>
-
-    <div style="display:flex;align-items:center;justify-content:center;gap:0.75rem;flex-wrap:wrap;margin-bottom:1rem">
-      <div class="syl-block syl-qua" style="cursor:default">qua</div>
-      <span style="font-size:1.5rem;font-weight:800">+</span>
-      <div class="drop-zone" id="recombiDrop" style="min-width:100px" aria-label="Arrasta uma sílaba para aqui"></div>
-    </div>
-
-    <div id="sec4Result" style="text-align:center;margin-bottom:1rem">
-      <p style="font-size:1.6rem;font-weight:800;min-height:2rem" id="sec4Word"></p>
-    </div>
-
-    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center" id="sec4Syls">
-      <div class="syl-block syl-other" draggable="true" data-syl="rto">rto</div>
-      <div class="syl-block syl-other" draggable="true" data-syl="se">se</div>
-      <div class="syl-block syl-dro" draggable="true" data-syl="dro">dro</div>
-      <div class="syl-block syl-other" draggable="true" data-syl="tro">tro</div>
-      <!-- Support: fewer options -->
-      <div class="syl-block syl-other diff-standard diff-challenge" draggable="true" data-syl="na">na</div>
-      <div class="syl-block syl-other diff-standard diff-challenge" draggable="true" data-syl="bo">bo</div>
-    </div>
-
-    <div id="sec4Feedback" style="text-align:center;margin-top:0.75rem"></div>
-    <div id="sec4Found" style="text-align:center;margin-top:0.5rem;font-weight:700;color:var(--correct)"></div>
-
-    <!-- Maker activity -->
-    <div style="margin-top:1.5rem;padding:1rem;background:#FFF5E6;border-radius:var(--radius);border:2px dashed var(--accent)">
-      <p style="font-weight:700">✏️ Atividade em pares:</p>
-      <p style="font-size:0.85rem">Um escreve <strong>qua</strong> no quadro da sala e o colega acrescenta uma sílaba. A turma decide: é uma palavra real?</p>
-    </div>
-  </div>
-  <div style="text-align:center;margin-top:1rem;display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap">
-    <button class="btn btn-outline" onclick="goTo(3)">⬅ Anterior</button>
-    <button class="btn btn-primary" onclick="goTo(5)">Seguinte ➜</button>
-  </div>
-</div>
-
-<!-- ============ SECTION 5: LEITURA E ESCRITA ============ -->
-<div class="section" id="sec5" data-step="5">
-  <div class="card">
-    <h2 style="text-align:center;margin-bottom:0.75rem">✍️ Lê e escreve!</h2>
-
-    <!-- Step 1: Complete -->
-    <div id="sec5Step1">
-      <p style="text-align:center;font-weight:700;margin-bottom:0.75rem">Completa a palavra:</p>
-      <div style="text-align:center;font-size:2rem;font-weight:800;margin-bottom:1rem">
-        <span style="color:var(--syl-qua)">qua</span><span style="color:#ccc" id="sec5Blank">___</span>
-      </div>
-      <div class="options" id="sec5Step1Opts">
-        <button class="opt-btn" onclick="sec5Complete(this,'dro')"><span style="color:var(--syl-dro);font-weight:800">dro</span></button>
-        <button class="opt-btn" onclick="sec5Complete(this,'que')">que</button>
-        <button class="opt-btn" onclick="sec5Complete(this,'bra')">bra</button>
-        <!-- Support: fewer options -->
-        <button class="opt-btn diff-standard diff-challenge" onclick="sec5Complete(this,'na')">na</button>
-      </div>
-      <div id="sec5Step1Fb"></div>
-    </div>
-
-    <!-- Step 2: Order -->
-    <div id="sec5Step2" class="hidden">
-      <p style="text-align:center;font-weight:700;margin-bottom:0.75rem">Ordena as sílabas para formar a palavra:</p>
-      <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;margin-bottom:1rem" id="sec5OrderSrc">
-        <div class="syl-block syl-dro" draggable="true" data-syl="dro" style="font-size:1.4rem">dro</div>
-        <div class="syl-block syl-qua" draggable="true" data-syl="qua" style="font-size:1.4rem">qua</div>
-      </div>
-      <div style="display:flex;gap:0.5rem;justify-content:center">
-        <div class="drop-zone" id="sec5Drop1" data-expect="qua" style="min-width:80px" aria-label="Primeira sílaba"></div>
-        <div class="drop-zone" id="sec5Drop2" data-expect="dro" style="min-width:80px" aria-label="Segunda sílaba"></div>
-      </div>
-      <div id="sec5Step2Fb" style="text-align:center;margin-top:0.5rem"></div>
-    </div>
-
-    <!-- Step 3: Copy / Write -->
-    <div id="sec5Step3" class="hidden">
-      <p style="text-align:center;font-weight:700;margin-bottom:0.5rem">Escreve a palavra:</p>
-      <!-- Standard: dotted model -->
-      <p id="sec5Model" style="text-align:center;font-size:2rem;font-weight:800;color:#ddd;letter-spacing:0.1em;margin-bottom:0.5rem">q u a d r o</p>
-      <div style="text-align:center">
-        <input type="text" class="type-area" id="sec5Input" placeholder="escreve aqui..." aria-label="Escrever quadro" style="font-size:1.6rem">
-      </div>
-      <div style="text-align:center;margin-top:0.75rem">
-        <button class="btn btn-primary" onclick="sec5CheckCopy()">Verificar ✓</button>
-      </div>
-      <div id="sec5Step3Fb" style="text-align:center;margin-top:0.5rem"></div>
-
-      <!-- Challenge extra -->
-      <div id="sec5ChallengeExtra" class="hidden" style="margin-top:1rem;text-align:center">
-        <p style="font-weight:700">Tenta escrever <em>quarto</em> — qual é a diferença?</p>
-        <input type="text" class="type-area" id="sec5ChalInput" placeholder="quarto" aria-label="Escrever quarto" style="font-size:1.4rem;margin-top:0.5rem">
-        <div style="margin-top:0.5rem"><button class="btn btn-accent" onclick="sec5CheckChallenge()">Verificar</button></div>
-        <div id="sec5ChalFb"></div>
-      </div>
-    </div>
-  </div>
-  <div style="text-align:center;margin-top:1rem;display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap">
-    <button class="btn btn-outline" onclick="goTo(4)">⬅ Anterior</button>
-    <button class="btn btn-primary" onclick="goTo(6)">Seguinte ➜</button>
-  </div>
-</div>
-
-<!-- ============ SECTION 6: FRASE ============ -->
-<div class="section" id="sec6" data-step="6">
-  <div class="card">
-    <h2 style="text-align:center;margin-bottom:0.75rem">📖 Lê e constrói a frase!</h2>
-
-    <!-- Reading phase -->
-    <div id="sec6Read">
-      <div style="text-align:center;font-size:1.5rem;font-weight:700;line-height:1.8;margin-bottom:1rem;padding:1rem;background:#F0F4FF;border-radius:var(--radius)">
-        Eu escrevo no <span style="color:var(--syl-qua);font-weight:800">quadro</span>.
-      </div>
-      <div class="illustration">
-        <svg viewBox="0 0 200 140" width="200" aria-label="Criança a escrever no quadro">
-          <rect x="60" y="10" width="130" height="90" rx="3" fill="#5D4037"/>
-          <rect x="67" y="17" width="116" height="76" rx="2" fill="#2E7D32"/>
-          <text x="125" y="60" text-anchor="middle" fill="#FFF" font-size="14" font-weight="700" font-family="'Nunito',sans-serif">ABC</text>
-          <circle cx="35" cy="75" r="14" fill="#FFCC80"/>
-          <rect x="25" y="89" width="20" height="30" rx="5" fill="#42A5F5"/>
-          <line x1="45" y1="98" x2="67" y2="55" stroke="#FFCC80" stroke-width="4" stroke-linecap="round"/>
-          <circle cx="31" cy="73" r="2" fill="#333"/>
-          <circle cx="39" cy="73" r="2" fill="#333"/>
-          <path d="M31 79 Q35 83 39 79" fill="none" stroke="#333" stroke-width="1"/>
-        </svg>
-      </div>
-      <div style="text-align:center;margin-top:1rem">
-        <button class="btn btn-primary" onclick="sec6StartBuild()">Vou construir! 🔨</button>
-      </div>
-    </div>
-
-    <!-- Build phase -->
-    <div id="sec6Build" class="hidden">
-      <p style="text-align:center;font-weight:700;margin-bottom:0.75rem">Arrasta as palavras para formar a frase:</p>
-      <div class="sentence-zone" id="sec6Target" aria-label="Zona para construir a frase"></div>
-      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center;margin-top:1rem" id="sec6Words"></div>
-      <div style="text-align:center;margin-top:0.75rem">
-        <button class="btn btn-accent" onclick="sec6Check()" id="sec6CheckBtn" disabled>Verificar ✓</button>
-      </div>
-      <div id="sec6Feedback" style="text-align:center;margin-top:0.5rem"></div>
-
-      <!-- Challenge: write own sentence -->
-      <div id="sec6Challenge" class="hidden" style="margin-top:1rem;text-align:center">
-        <p style="font-weight:700">Inventa outra frase com a palavra <em>quadro</em>:</p>
-        <input type="text" class="type-area" id="sec6ChalInput" placeholder="A minha frase..." aria-label="Escrever frase" style="max-width:100%;width:100%">
-        <div style="margin-top:0.5rem"><button class="btn btn-accent" onclick="sec6ChalCheck()">Verificar</button></div>
-        <div id="sec6ChalFb"></div>
-      </div>
-    </div>
-  </div>
-  <div style="text-align:center;margin-top:1rem;display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap">
-    <button class="btn btn-outline" onclick="goTo(5)">⬅ Anterior</button>
-    <button class="btn btn-primary" onclick="goTo(7)">Seguinte ➜</button>
-  </div>
-</div>
-
-<!-- ============ SECTION 7: MINI-AVALIAÇÃO ============ -->
-<div class="section" id="sec7" data-step="7">
-  <div class="card">
-    <h2 style="text-align:center;margin-bottom:0.75rem">⭐ Mostra o que sabes!</h2>
-    <div class="assess-progress" id="assessProgress">
-      <div class="assess-step current" data-q="1"></div>
-      <div class="assess-step" data-q="2"></div>
-      <div class="assess-step" data-q="3"></div>
-      <div class="assess-step" data-q="4"></div>
-    </div>
-
-    <!-- Q1: Recognize -->
-    <div id="assessQ1">
-      <p style="text-align:center;font-weight:700;margin:1rem 0">1. Qual destas palavras é <em>quadro</em>?</p>
-      <div class="options">
-        <button class="opt-btn" onclick="assessAnswer(1,this,'quadro')">quadro</button>
-        <button class="opt-btn" onclick="assessAnswer(1,this,'quarto')">quarto</button>
-        <button class="opt-btn" onclick="assessAnswer(1,this,'quadrado')">quadrado</button>
-      </div>
-      <div id="assessFb1"></div>
-    </div>
-
-    <!-- Q2: Separate syllables -->
-    <div id="assessQ2" class="hidden">
-      <p style="text-align:center;font-weight:700;margin:1rem 0">2. Arrasta as sílabas de <em>quadro</em> para a ordem certa:</p>
-      <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;margin-bottom:1rem" id="assessQ2Src">
-        <div class="syl-block syl-dro" draggable="true" data-syl="dro" style="font-size:1.3rem">dro</div>
-        <div class="syl-block syl-qua" draggable="true" data-syl="qua" style="font-size:1.3rem">qua</div>
-      </div>
-      <div style="display:flex;gap:0.5rem;justify-content:center">
-        <div class="drop-zone" id="assessDrop1" data-expect="qua" style="min-width:70px" aria-label="Primeira sílaba"></div>
-        <div class="drop-zone" id="assessDrop2" data-expect="dro" style="min-width:70px" aria-label="Segunda sílaba"></div>
-      </div>
-      <div id="assessFb2" style="text-align:center;margin-top:0.5rem"></div>
-    </div>
-
-    <!-- Q3: Order scrambled -->
-    <div id="assessQ3" class="hidden">
-      <p style="text-align:center;font-weight:700;margin:1rem 0">3. Ordena para formar <em>quadro</em>:</p>
-      <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;margin-bottom:1rem" id="assessQ3Src">
-        <div class="syl-block syl-dro" draggable="true" data-syl="dro" style="font-size:1.3rem">dro</div>
-        <div class="syl-block syl-qua" draggable="true" data-syl="qua" style="font-size:1.3rem">qua</div>
-      </div>
-      <div style="display:flex;gap:0.5rem;justify-content:center">
-        <div class="drop-zone" id="assessDrop3" data-expect="qua" style="min-width:70px" aria-label="Primeira"></div>
-        <div class="drop-zone" id="assessDrop4" data-expect="dro" style="min-width:70px" aria-label="Segunda"></div>
-      </div>
-      <div id="assessFb3" style="text-align:center;margin-top:0.5rem"></div>
-    </div>
-
-    <!-- Q4: Complete sentence -->
-    <div id="assessQ4" class="hidden">
-      <p style="text-align:center;font-weight:700;margin:1rem 0">4. Completa: «Eu escrevo no ___.»</p>
-      <div class="options">
-        <button class="opt-btn" onclick="assessAnswer(4,this,'quadro')">quadro</button>
-        <button class="opt-btn" onclick="assessAnswer(4,this,'janela')">janela</button>
-        <button class="opt-btn" onclick="assessAnswer(4,this,'mesa')">mesa</button>
-      </div>
-      <div id="assessFb4"></div>
-    </div>
-
-    <!-- Result -->
-    <div id="assessResult" class="hidden" style="text-align:center;margin-top:1.5rem">
-      <div class="stars" id="assessStars"></div>
-      <p style="font-weight:700;font-size:1.2rem" id="assessMsg"></p>
-      <div style="margin-top:1rem">
-        <button class="btn btn-outline" onclick="resetAssess()">Recomeçar 🔄</button>
-        <button class="btn btn-primary" onclick="goTo(8)" style="margin-left:0.5rem">Extensão ➜</button>
-      </div>
-    </div>
-
-    <!-- Challenge bonus -->
-    <div id="assessBonus" class="hidden" style="margin-top:1rem;text-align:center">
-      <p style="font-weight:700">Questão bónus: escreve outra palavra que comece com <em>qua</em>:</p>
-      <input type="text" class="type-area" id="assessBonusInput" placeholder="ex: quarto" aria-label="Palavra com qua" style="margin-top:0.5rem">
-      <div style="margin-top:0.5rem"><button class="btn btn-accent" onclick="assessBonusCheck()">Verificar</button></div>
-      <div id="assessBonusFb"></div>
-    </div>
-  </div>
-  <div style="text-align:center;margin-top:1rem;display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap">
-    <button class="btn btn-outline" onclick="goTo(6)">⬅ Anterior</button>
-    <button class="btn btn-primary" onclick="goTo(8)">Seguinte ➜</button>
-  </div>
-</div>
-
-<!-- ============ SECTION 8: EXTENSÃO ============ -->
-<div class="section" id="sec8" data-step="8">
-  <div class="card">
-    <h2 style="text-align:center;margin-bottom:0.75rem">🎨 Atividade na sala!</h2>
-    <p style="text-align:center;margin-bottom:1rem">Escolhe uma atividade para fazer fora do ecrã:</p>
-
-    <div style="display:flex;flex-direction:column;gap:0.75rem" id="sec8Options">
-      <div class="ext-card" onclick="sec8Select(this,0)" tabindex="0" role="button">
-        <p style="font-size:1.3rem">✏️ <strong>Escrever no quadro</strong></p>
-        <p style="font-size:0.85rem;color:#666">Vai ao quadro da sala e escreve «quadro» em letra grande!</p>
-      </div>
-      <div class="ext-card" onclick="sec8Select(this,1)" tabindex="0" role="button">
-        <p style="font-size:1.3rem">🎨 <strong>Desenhar o quadro</strong></p>
-        <p style="font-size:0.85rem;color:#666">Desenha o quadro da sala e escreve a palavra por baixo.</p>
-      </div>
-      <div class="ext-card" onclick="sec8Select(this,2)" tabindex="0" role="button">
-        <p style="font-size:1.3rem">🔎 <strong>Encontrar mais palavras</strong></p>
-        <p style="font-size:0.85rem;color:#666">Olha à volta: que outros objetos da sala consegues nomear?</p>
-      </div>
-    </div>
-
-    <div id="sec8Detail" class="hidden" style="margin-top:1rem;padding:1rem;background:#F0F4FF;border-radius:var(--radius)">
-      <p id="sec8DetailText" style="font-weight:700"></p>
-      <div style="text-align:center;margin-top:1rem">
-        <button class="btn btn-green" onclick="sec8Done()">Feito! ✓</button>
-      </div>
-    </div>
-
-    <div id="sec8Final" class="hidden" style="text-align:center;margin-top:1.5rem">
-      <p style="font-size:2rem">🎉</p>
-      <p style="font-size:1.3rem;font-weight:800;color:var(--primary)">Parabéns! Aprendeste a palavra «quadro»!</p>
-      <p style="margin-top:0.5rem">Agora sabes ler, separar e escrever esta palavra.</p>
-      <div style="margin-top:1rem">
-        <button class="btn btn-primary" onclick="goTo(1)">Recomeçar 🔄</button>
-      </div>
-    </div>
-  </div>
-  <div style="text-align:center;margin-top:1rem">
-    <button class="btn btn-outline" onclick="goTo(7)">⬅ Anterior</button>
-  </div>
-</div>
-
-</div><!-- /container -->
-
-<script>
-/* ===== STATE ===== */
-let currentSection = 1;
-let currentDiff = 'standard'; // support, standard, challenge
-let clapCount = 0;
-let sec3Filled = 0;
-let sec4Found = [];
-let assessScore = 0;
-let assessCurrent = 1;
-
-/* ===== NAVIGATION ===== */
-function goTo(n) {
-  if (n < 1 || n > 8) return;
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.getElementById('sec' + n).classList.add('active');
-  currentSection = n;
-  updateProgress();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  applyDiff();
-}
-
-function updateProgress() {
-  document.querySelectorAll('.progress-dot').forEach(d => {
-    const s = parseInt(d.dataset.step);
-    d.classList.toggle('active', s === currentSection);
-    d.classList.toggle('done', s < currentSection);
-  });
-  const pb = document.getElementById('progressBar');
-  if (pb) pb.setAttribute('aria-valuenow', currentSection);
-}
-
-/* ===== DIFFERENTIATION ===== */
-function setDiff(level) {
-  currentDiff = level;
-  document.querySelectorAll('.diff-btn').forEach(b => b.classList.toggle('active', b.dataset.diff === level));
-  applyDiff();
-}
-
-function applyDiff() {
-  // Show/hide diff-specific elements
-  document.querySelectorAll('.diff-standard').forEach(el => {
-    el.style.display = (currentDiff === 'standard' || currentDiff === 'challenge') ? '' : 'none';
-  });
-  document.querySelectorAll('.diff-challenge').forEach(el => {
-    el.style.display = currentDiff === 'challenge' ? '' : 'none';
-  });
-
-  // Section 1
-  const s1Support = document.getElementById('sec1Support');
-  const s1Challenge = document.getElementById('sec1Challenge');
-  const s1RevealBtn = document.getElementById('sec1RevealBtn');
-  if (currentDiff === 'support') {
-    s1Support.classList.remove('hidden');
-    s1Challenge.classList.add('hidden');
-    s1RevealBtn.style.display = '';
-    revealWord(); // auto-reveal for support
-  } else if (currentDiff === 'challenge') {
-    s1Support.classList.add('hidden');
-    s1Challenge.classList.remove('hidden');
-    s1RevealBtn.style.display = 'none';
-  } else {
-    s1Support.classList.add('hidden');
-    s1Challenge.classList.add('hidden');
-    s1RevealBtn.style.display = '';
-  }
-
-  // Section 2 challenge extras
-  const s2Chal = document.getElementById('sec2ChallengeExtra');
-  if (s2Chal) s2Chal.classList.toggle('hidden', currentDiff !== 'challenge');
-
-  // Section 2 support: highlight 'qu'
-  const s2Word = document.getElementById('sec2WordDisplay');
-  if (s2Word) {
-    if (currentDiff === 'support') {
-      s2Word.innerHTML = '<span style="color:var(--syl-qua)">QU</span>ADRO';
-    } else {
-      s2Word.textContent = 'QUADRO';
-    }
-  }
-
-  // Section 3 support hint
-  const s3Hint = document.getElementById('sec3SupportHint');
-  if (s3Hint) s3Hint.classList.toggle('hidden', currentDiff !== 'support');
-
-  // Section 3 challenge
-  const s3Chal = document.getElementById('sec3Challenge');
-  if (s3Chal) s3Chal.classList.toggle('hidden', currentDiff !== 'challenge');
-
-  // Section 5 model visibility
-  const s5Model = document.getElementById('sec5Model');
-  if (s5Model) s5Model.style.display = currentDiff === 'challenge' ? 'none' : '';
-  const s5ChalExtra = document.getElementById('sec5ChallengeExtra');
-  if (s5ChalExtra) s5ChalExtra.classList.toggle('hidden', currentDiff !== 'challenge');
-
-  // Section 6 challenge
-  const s6Chal = document.getElementById('sec6Challenge');
-  if (s6Chal) s6Chal.classList.toggle('hidden', currentDiff !== 'challenge');
-
-  // Section 7 bonus
-  const aBonus = document.getElementById('assessBonus');
-  if (aBonus) aBonus.classList.toggle('hidden', currentDiff !== 'challenge');
-
-  // Sec 5 step 1: support = 2 options only
-  const s5Opts = document.getElementById('sec5Step1Opts');
-  if (s5Opts) {
-    const btns = s5Opts.querySelectorAll('.opt-btn');
-    btns.forEach((b, i) => {
-      if (!b.classList.contains('diff-standard') && !b.classList.contains('diff-challenge')) return;
-      b.style.display = (currentDiff === 'support') ? 'none' : '';
-    });
-  }
-}
-
-/* ===== SECTION 1: REVEAL WORD ===== */
-function revealWord() {
-  const w = document.getElementById('boardWord');
-  if (w) {
-    w.style.transition = 'opacity 0.8s';
-    w.style.opacity = '1';
-  }
-  const fb = document.getElementById('sec1Feedback');
-  if (fb) fb.innerHTML = '<div class="feedback feedback-correct">✓ Esta é a palavra <strong>quadro</strong>!</div>';
-}
-
-function checkChallengeWord() {
-  const input = document.getElementById('sec1Input');
-  const fb = document.getElementById('sec1ChallengeFb');
-  const val = input.value.trim().toLowerCase();
-  if (val === 'quadro') {
-    fb.innerHTML = '<div class="feedback feedback-correct">✓ Muito bem! É mesmo «quadro»!</div>';
-    revealWord();
-  } else {
-    fb.innerHTML = '<div class="feedback feedback-incorrect">Quase! Tenta de novo — olha bem para a imagem.</div>';
-  }
-}
-
-/* ===== SECTION 2: RECOGNITION ===== */
-let sec2P1Done = false;
-function sec2SelectImg(el, choice) {
-  if (sec2P1Done) return;
-  const fb = document.getElementById('sec2P1Feedback');
-  const cards = document.querySelectorAll('#sec2ImgOptions .img-card');
-  if (choice === 'quadro') {
-    sec2P1Done = true;
-    el.classList.add('selected-correct');
-    fb.innerHTML = '<div class="feedback feedback-correct">✓ Certo! Este é o quadro!</div>';
-    setTimeout(() => {
-      document.getElementById('sec2Phase1').classList.add('hidden');
-      document.getElementById('sec2Phase2').classList.remove('hidden');
-    }, 1500);
-  } else {
-    el.classList.add('selected-incorrect');
-    fb.innerHTML = '<div class="feedback feedback-incorrect">Tenta outra vez! Qual é o quadro?</div>';
-    setTimeout(() => { el.classList.remove('selected-incorrect'); fb.innerHTML = ''; }, 1200);
-  }
-}
-
-let sec2P2Done = false;
-function sec2SelectWord(el, choice) {
-  if (sec2P2Done) return;
-  const fb = document.getElementById('sec2P2Feedback');
-  if (choice === 'quadro') {
-    sec2P2Done = true;
-    el.classList.add('selected-correct');
-    fb.innerHTML = '<div class="feedback feedback-correct">✓ Excelente! A palavra é «quadro»!</div>';
-  } else {
-    el.classList.add('selected-incorrect');
-    fb.innerHTML = '<div class="feedback feedback-incorrect">Não é essa. Olha com atenção!</div>';
-    setTimeout(() => { el.classList.remove('selected-incorrect'); fb.innerHTML = ''; }, 1200);
-  }
-}
-
-/* ===== SECTION 3: SYLLABLE SEGMENTATION ===== */
-function doClap() {
-  if (clapCount >= 2) return;
-  clapCount++;
-  const btn = document.getElementById('clapBtn');
-  btn.classList.add('pulse');
-  setTimeout(() => btn.classList.remove('pulse'), 300);
-
-  const word = document.getElementById('sec3Word');
-  if (clapCount === 1) {
-    word.innerHTML = '<span style="color:var(--syl-qua);text-decoration:underline">QUA</span>DRO';
-  } else if (clapCount === 2) {
-    word.innerHTML = '<span style="color:var(--syl-qua)">QUA</span> · <span style="color:var(--syl-dro)">DRO</span>';
-    setTimeout(() => {
-      document.getElementById('sec3DragArea').classList.remove('hidden');
-    }, 500);
-  }
-  document.getElementById('clapCount').textContent = 'Palmas: ' + clapCount + ' / 2';
-}
-
-function sec3ChallengeCheck(el, word) {
-  el.classList.add('selected-correct');
-  const fb = document.getElementById('sec3ChallengeFb');
-  fb.innerHTML = '<div class="feedback feedback-correct">✓ «' + word.replace('-', ' + ') + '» tem 2 sílabas!</div>';
-}
-
-/* ===== SECTION 4: RECOMBINATION ===== */
-const validWords = { 'rto': 'quarto', 'se': 'quase', 'dro': 'quadro', 'tro': 'quatro' };
-
-function handleRecombiDrop(syl) {
-  const result = document.getElementById('sec4Word');
-  const fb = document.getElementById('sec4Feedback');
-  const found = document.getElementById('sec4Found');
-  const word = 'qua' + syl;
-  result.textContent = word;
-
-  if (validWords[syl]) {
-    result.style.color = 'var(--correct)';
-    fb.innerHTML = '<div class="feedback feedback-correct">✓ «' + word + '» é uma palavra real!</div>';
-    if (!sec4Found.includes(word)) {
-      sec4Found.push(word);
-      found.textContent = 'Palavras encontradas: ' + sec4Found.join(', ') + ' (' + sec4Found.length + ')';
-    }
-  } else {
-    result.style.color = 'var(--incorrect)';
-    fb.innerHTML = '<div class="feedback feedback-incorrect">«' + word + '» não é uma palavra. Tenta outra!</div>';
-  }
-
-  // Return block to source after a moment
-  setTimeout(() => {
-    const drop = document.getElementById('recombiDrop');
-    drop.innerHTML = '';
-    drop.classList.remove('filled');
-  }, 1500);
-}
-
-/* ===== SECTION 5: READING & WRITING ===== */
-let sec5Step = 1;
-function sec5Complete(el, choice) {
-  const fb = document.getElementById('sec5Step1Fb');
-  if (choice === 'dro') {
-    el.classList.add('selected-correct');
-    document.getElementById('sec5Blank').innerHTML = '<span style="color:var(--syl-dro)">dro</span>';
-    fb.innerHTML = '<div class="feedback feedback-correct">✓ Certo! qua + dro = quadro!</div>';
-    setTimeout(() => {
-      document.getElementById('sec5Step1').classList.add('hidden');
-      document.getElementById('sec5Step2').classList.remove('hidden');
-      sec5Step = 2;
-    }, 1500);
-  } else {
-    el.classList.add('selected-incorrect');
-    fb.innerHTML = '<div class="feedback feedback-incorrect">Não é essa sílaba. Tenta de novo!</div>';
-    setTimeout(() => { el.classList.remove('selected-incorrect'); fb.innerHTML = ''; }, 1200);
-  }
-}
-
-function sec5CheckCopy() {
-  const val = document.getElementById('sec5Input').value.trim().toLowerCase();
-  const fb = document.getElementById('sec5Step3Fb');
-  if (val === 'quadro') {
-    fb.innerHTML = '<div class="feedback feedback-correct">✓ Perfeito! Escreveste «quadro» corretamente!</div>';
-    spawnConfetti();
-  } else if (val.length > 0) {
-    fb.innerHTML = '<div class="feedback feedback-incorrect">Quase! A palavra é «quadro». Tenta de novo.</div>';
-  }
-}
-
-function sec5CheckChallenge() {
-  const val = document.getElementById('sec5ChalInput').value.trim().toLowerCase();
-  const fb = document.getElementById('sec5ChalFb');
-  if (val === 'quarto') {
-    fb.innerHTML = '<div class="feedback feedback-correct">✓ Muito bem! «quarto» e «quadro» — quase iguais mas diferentes!</div>';
-  } else {
-    fb.innerHTML = '<div class="feedback feedback-incorrect">A palavra é «quarto». Repara: qua + rto.</div>';
-  }
-}
-
-/* ===== SECTION 6: SENTENCE ===== */
-const sentenceCorrect = ['Eu', 'escrevo', 'no', 'quadro', '.'];
-let sentencePlaced = [];
-
-function sec6StartBuild() {
-  document.getElementById('sec6Read').classList.add('hidden');
-  document.getElementById('sec6Build').classList.remove('hidden');
-
-  const wordsContainer = document.getElementById('sec6Words');
-  wordsContainer.innerHTML = '';
-  sentencePlaced = [];
-
-  // Support: fewer blocks
-  let words;
-  if (currentDiff === 'support') {
-    words = ['escrevo', 'no', 'quadro'];
-    sentencePlaced = ['Eu']; // pre-filled
-  } else {
-    words = ['quadro', 'Eu', '.', 'no', 'escrevo'];
-  }
-
-  // Shuffle
-  words.sort(() => Math.random() - 0.5);
-
-  words.forEach(w => {
-    const block = document.createElement('div');
-    block.className = 'word-block';
-    block.textContent = w;
-    block.draggable = true;
-    block.dataset.word = w;
-    block.setAttribute('role', 'button');
-    block.setAttribute('aria-label', 'Palavra: ' + w);
-    block.addEventListener('click', () => placeWord(block));
-    setupWordDrag(block);
-    wordsContainer.appendChild(block);
-  });
-
-  updateSentenceDisplay();
-}
-
-function placeWord(block) {
-  if (block.classList.contains('placed')) return;
-  sentencePlaced.push(block.dataset.word);
-  block.classList.add('placed');
-  block.style.opacity = '0.4';
-  updateSentenceDisplay();
-  document.getElementById('sec6CheckBtn').disabled = false;
-}
-
-function updateSentenceDisplay() {
-  const target = document.getElementById('sec6Target');
-  target.innerHTML = '';
-  sentencePlaced.forEach(w => {
-    const span = document.createElement('span');
-    span.className = 'word-block placed';
-    span.textContent = w;
-    span.style.cursor = 'pointer';
-    span.onclick = () => removeWordFromSentence(w);
-    target.appendChild(span);
-  });
-}
-
-function removeWordFromSentence(word) {
-  const idx = sentencePlaced.lastIndexOf(word);
-  if (idx > -1) {
-    sentencePlaced.splice(idx, 1);
-    updateSentenceDisplay();
-    // Un-place the block
-    const blocks = document.querySelectorAll('#sec6Words .word-block');
-    for (const b of blocks) {
-      if (b.dataset.word === word && b.classList.contains('placed')) {
-        b.classList.remove('placed');
-        b.style.opacity = '1';
-        break;
-      }
-    }
-  }
-}
-
-function sec6Check() {
-  const fb = document.getElementById('sec6Feedback');
-  let target;
-  if (currentDiff === 'support') {
-    target = ['Eu', 'escrevo', 'no', 'quadro'];
-  } else {
-    target = sentenceCorrect;
-  }
-
-  const isCorrect = sentencePlaced.length === target.length && sentencePlaced.every((w, i) => w === target[i]);
-  if (isCorrect) {
-    fb.innerHTML = '<div class="feedback feedback-correct">✓ Muito bem! «Eu escrevo no quadro.»</div>';
-    document.getElementById('sec6Target').classList.add('filled');
-    spawnConfetti();
-  } else {
-    fb.innerHTML = '<div class="feedback feedback-incorrect">A ordem não está certa. Lembra-te: «Eu escrevo no quadro.»</div>';
-    // Reset
-    setTimeout(() => {
-      sentencePlaced = currentDiff === 'support' ? ['Eu'] : [];
-      updateSentenceDisplay();
-      document.querySelectorAll('#sec6Words .word-block').forEach(b => {
-        b.classList.remove('placed');
-        b.style.opacity = '1';
+  <script>
+    const synth = window.speechSynthesis;
+
+    document.querySelectorAll('.reveal-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        const target = document.getElementById(button.dataset.target);
+        if (!target) return;
+        target.classList.toggle('hidden');
       });
-      fb.innerHTML = '';
-    }, 2000);
-  }
-}
-
-function sec6ChalCheck() {
-  const val = document.getElementById('sec6ChalInput').value.trim().toLowerCase();
-  const fb = document.getElementById('sec6ChalFb');
-  if (val.includes('quadro') && val.length > 7) {
-    fb.innerHTML = '<div class="feedback feedback-correct">✓ Boa frase! Tens «quadro» lá dentro!</div>';
-  } else if (val.length > 0) {
-    fb.innerHTML = '<div class="feedback feedback-incorrect">A frase precisa da palavra «quadro». Tenta de novo!</div>';
-  }
-}
-
-/* ===== SECTION 7: ASSESSMENT ===== */
-function assessAnswer(q, el, choice) {
-  const fb = document.getElementById('assessFb' + q);
-  const correct = (q === 1 && choice === 'quadro') || (q === 4 && choice === 'quadro');
-  if (correct) {
-    el.classList.add('selected-correct');
-    fb.innerHTML = '<div class="feedback feedback-correct">✓ Certo!</div>';
-    assessScore++;
-    markAssessStep(q);
-    setTimeout(() => advanceAssess(q), 1500);
-  } else {
-    el.classList.add('selected-incorrect');
-    fb.innerHTML = '<div class="feedback feedback-incorrect">Tenta outra vez!</div>';
-    if (currentDiff === 'support') {
-      // 2 attempts for support
-      setTimeout(() => { el.classList.remove('selected-incorrect'); fb.innerHTML = ''; }, 1200);
-    } else {
-      setTimeout(() => {
-        markAssessStep(q);
-        advanceAssess(q);
-      }, 1500);
-    }
-  }
-}
-
-function markAssessStep(q) {
-  const step = document.querySelector('.assess-step[data-q="' + q + '"]');
-  if (step) step.classList.add('done');
-  step.classList.remove('current');
-  const next = document.querySelector('.assess-step[data-q="' + (q + 1) + '"]');
-  if (next) next.classList.add('current');
-}
-
-function advanceAssess(fromQ) {
-  document.getElementById('assessQ' + fromQ).classList.add('hidden');
-  const next = fromQ + 1;
-  if (next <= 4) {
-    document.getElementById('assessQ' + next).classList.remove('hidden');
-    assessCurrent = next;
-  } else {
-    showAssessResult();
-  }
-}
-
-function handleAssessDrop(dropId, syl) {
-  const drop = document.getElementById(dropId);
-  const expected = drop.dataset.expect;
-  const fb = dropId.includes('Drop1') || dropId.includes('Drop3') ? null : null;
-
-  if (syl === expected) {
-    drop.classList.add('filled');
-    const block = document.createElement('div');
-    block.className = 'syl-block ' + (syl === 'qua' ? 'syl-qua' : 'syl-dro');
-    block.style.fontSize = '1.3rem';
-    block.textContent = syl;
-    drop.innerHTML = '';
-    drop.appendChild(block);
-  }
-
-  // Check if both drops filled for Q2 or Q3
-  let q, d1Id, d2Id, fbId;
-  if (dropId === 'assessDrop1' || dropId === 'assessDrop2') {
-    q = 2; d1Id = 'assessDrop1'; d2Id = 'assessDrop2'; fbId = 'assessFb2';
-  } else {
-    q = 3; d1Id = 'assessDrop3'; d2Id = 'assessDrop4'; fbId = 'assessFb3';
-  }
-
-  const d1 = document.getElementById(d1Id);
-  const d2 = document.getElementById(d2Id);
-  if (d1.classList.contains('filled') && d2.classList.contains('filled')) {
-    const fbEl = document.getElementById(fbId);
-    fbEl.innerHTML = '<div class="feedback feedback-correct">✓ Certo! qua + dro = quadro!</div>';
-    assessScore++;
-    markAssessStep(q);
-    setTimeout(() => advanceAssess(q), 1500);
-  }
-}
-
-function showAssessResult() {
-  const result = document.getElementById('assessResult');
-  result.classList.remove('hidden');
-  const starsEl = document.getElementById('assessStars');
-  let starsHtml = '';
-  for (let i = 0; i < 4; i++) {
-    starsHtml += '<span class="star ' + (i < assessScore ? 'earned' : 'empty') + '">★</span> ';
-  }
-  starsEl.innerHTML = starsHtml;
-
-  const msg = document.getElementById('assessMsg');
-  if (assessScore === 4) {
-    msg.textContent = 'Fantástico! Sabes tudo sobre «quadro»!';
-    spawnConfetti();
-  } else if (assessScore >= 2) {
-    msg.textContent = 'Muito bem! Estás quase lá!';
-  } else {
-    msg.textContent = 'Bom esforço! Vamos praticar mais!';
-  }
-
-  if (currentDiff === 'challenge') {
-    document.getElementById('assessBonus').classList.remove('hidden');
-  }
-}
-
-function assessBonusCheck() {
-  const val = document.getElementById('assessBonusInput').value.trim().toLowerCase();
-  const fb = document.getElementById('assessBonusFb');
-  const quaWords = ['quarto', 'quase', 'quadro', 'quatro', 'quadrado', 'qualidade', 'quando', 'quarenta', 'quanto', 'qual', 'qualquer', 'quartel'];
-  if (quaWords.includes(val)) {
-    fb.innerHTML = '<div class="feedback feedback-correct">✓ Boa! «' + val + '» começa com «qua»!</div>';
-  } else if (val.startsWith('qua') && val.length > 3) {
-    fb.innerHTML = '<div class="feedback feedback-correct">✓ Parece começar com «qua» — boa tentativa!</div>';
-  } else {
-    fb.innerHTML = '<div class="feedback feedback-incorrect">Precisa de começar com «qua». Pensa bem!</div>';
-  }
-}
-
-function resetAssess() {
-  assessScore = 0;
-  assessCurrent = 1;
-  document.getElementById('assessResult').classList.add('hidden');
-  document.getElementById('assessBonus').classList.add('hidden');
-  for (let i = 1; i <= 4; i++) {
-    document.getElementById('assessQ' + i).classList.add('hidden');
-    document.getElementById('assessFb' + i).innerHTML = '';
-    const step = document.querySelector('.assess-step[data-q="' + i + '"]');
-    step.classList.remove('done', 'current');
-  }
-  document.querySelector('.assess-step[data-q="1"]').classList.add('current');
-  document.getElementById('assessQ1').classList.remove('hidden');
-  // Reset buttons
-  document.querySelectorAll('#sec7 .opt-btn').forEach(b => b.classList.remove('selected-correct', 'selected-incorrect'));
-  // Reset drops
-  ['assessDrop1','assessDrop2','assessDrop3','assessDrop4'].forEach(id => {
-    const d = document.getElementById(id);
-    d.innerHTML = '';
-    d.classList.remove('filled');
-  });
-  // Re-add draggable blocks
-  resetAssessDragBlocks();
-}
-
-function resetAssessDragBlocks() {
-  ['assessQ2Src', 'assessQ3Src'].forEach(id => {
-    const c = document.getElementById(id);
-    c.innerHTML = '';
-    ['dro', 'qua'].forEach(s => {
-      const block = document.createElement('div');
-      block.className = 'syl-block ' + (s === 'qua' ? 'syl-qua' : 'syl-dro');
-      block.draggable = true;
-      block.dataset.syl = s;
-      block.style.fontSize = '1.3rem';
-      block.textContent = s;
-      setupSylDrag(block);
-      c.appendChild(block);
     });
-  });
-}
 
-/* ===== SECTION 8: EXTENSION ===== */
-const extDetails = [
-  'Vai ao quadro da sala e escreve «quadro» em letra grande e bem visível. Pede a um amigo para verificar!',
-  'Desenha o quadro da sala no teu caderno. Escreve a palavra «quadro» por baixo do desenho.',
-  'Olha à volta da sala. Encontra 3 objetos e tenta escrever os seus nomes: mesa, janela, porta...'
-];
-
-function sec8Select(el, idx) {
-  document.querySelectorAll('.ext-card').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-  document.getElementById('sec8Detail').classList.remove('hidden');
-  document.getElementById('sec8DetailText').textContent = extDetails[idx];
-}
-
-function sec8Done() {
-  document.getElementById('sec8Detail').classList.add('hidden');
-  document.getElementById('sec8Final').classList.remove('hidden');
-  spawnConfetti();
-}
-
-/* ===== DRAG & DROP ENGINE ===== */
-let draggedEl = null;
-let draggedSyl = null;
-
-function setupSylDrag(el) {
-  el.addEventListener('dragstart', e => {
-    draggedEl = el;
-    draggedSyl = el.dataset.syl;
-    el.classList.add('dragging');
-    e.dataTransfer.setData('text/plain', el.dataset.syl);
-    e.dataTransfer.effectAllowed = 'move';
-  });
-  el.addEventListener('dragend', () => {
-    el.classList.remove('dragging');
-    draggedEl = null;
-    draggedSyl = null;
-  });
-
-  // Touch support
-  let touchStartX, touchStartY, clone;
-  el.addEventListener('touchstart', e => {
-    draggedEl = el;
-    draggedSyl = el.dataset.syl;
-    el.classList.add('dragging');
-    const touch = e.touches[0];
-    touchStartX = touch.clientX;
-    touchStartY = touch.clientY;
-    clone = el.cloneNode(true);
-    clone.style.position = 'fixed';
-    clone.style.zIndex = '10000';
-    clone.style.pointerEvents = 'none';
-    clone.style.opacity = '0.85';
-    clone.style.left = (touchStartX - 40) + 'px';
-    clone.style.top = (touchStartY - 25) + 'px';
-    document.body.appendChild(clone);
-  }, { passive: true });
-
-  el.addEventListener('touchmove', e => {
-    e.preventDefault();
-    if (!clone) return;
-    const touch = e.touches[0];
-    clone.style.left = (touch.clientX - 40) + 'px';
-    clone.style.top = (touch.clientY - 25) + 'px';
-
-    // Highlight drop zones
-    document.querySelectorAll('.drop-zone').forEach(dz => {
-      const rect = dz.getBoundingClientRect();
-      if (touch.clientX >= rect.left && touch.clientX <= rect.right && touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
-        dz.classList.add('hover');
-      } else {
-        dz.classList.remove('hover');
-      }
+    document.querySelectorAll('.speak-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!synth) return;
+        const utterance = new SpeechSynthesisUtterance(button.dataset.speak || '');
+        utterance.lang = 'pt-PT';
+        synth.cancel();
+        synth.speak(utterance);
+      });
     });
-  }, { passive: false });
 
-  el.addEventListener('touchend', e => {
-    if (clone) {
-      clone.remove();
-      clone = null;
-    }
-    el.classList.remove('dragging');
-    const touch = e.changedTouches[0];
-    document.querySelectorAll('.drop-zone').forEach(dz => {
-      dz.classList.remove('hover');
-      const rect = dz.getBoundingClientRect();
-      if (touch.clientX >= rect.left && touch.clientX <= rect.right && touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
-        handleDrop(dz, draggedSyl, draggedEl);
-      }
+    document.querySelectorAll('.choice-row').forEach((row) => {
+      const feedback = row.parentElement.querySelector('.feedback');
+      row.querySelectorAll('.choice-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          row.querySelectorAll('.choice-btn').forEach((item) => item.classList.remove('is-right', 'is-wrong'));
+          const rightAnswer = button.dataset.answer || button.dataset.clozeAnswer || '';
+          if (button.dataset.choice === rightAnswer) {
+            button.classList.add('is-right');
+            if (feedback) feedback.textContent = 'Muito bem!';
+          } else {
+            button.classList.add('is-wrong');
+            if (feedback) feedback.textContent = 'Tenta outra vez.';
+          }
+        });
+      });
     });
-    draggedEl = null;
-    draggedSyl = null;
-  });
-}
 
-function setupWordDrag(el) {
-  el.addEventListener('dragstart', e => {
-    draggedEl = el;
-    e.dataTransfer.setData('text/plain', el.dataset.word);
-    e.dataTransfer.effectAllowed = 'move';
-  });
-}
-
-function setupDropZone(dz) {
-  dz.addEventListener('dragover', e => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-    dz.classList.add('hover');
-  });
-  dz.addEventListener('dragleave', () => dz.classList.remove('hover'));
-  dz.addEventListener('drop', e => {
-    e.preventDefault();
-    dz.classList.remove('hover');
-    const syl = e.dataTransfer.getData('text/plain');
-    handleDrop(dz, syl, draggedEl);
-  });
-}
-
-function handleDrop(dz, syl, srcEl) {
-  const dzId = dz.id;
-
-  // Section 3 drops
-  if (dzId === 'drop1' || dzId === 'drop2') {
-    if (dz.classList.contains('filled')) return;
-    const expected = dz.dataset.expect;
-    if (syl === expected) {
-      dz.classList.add('filled');
-      const block = document.createElement('div');
-      block.className = 'syl-block ' + (syl === 'qua' ? 'syl-qua' : 'syl-dro');
-      block.textContent = syl;
-      dz.innerHTML = '';
-      dz.appendChild(block);
-      if (srcEl) srcEl.style.display = 'none';
-      sec3Filled++;
-      document.getElementById('sec3Counter').textContent = sec3Filled + ' sílabas';
-      if (sec3Filled === 2) {
-        document.getElementById('sec3Feedback').innerHTML = '<div class="feedback feedback-correct">✓ Muito bem! qua + dro = quadro! São 2 sílabas!</div>';
-        spawnConfetti();
-      }
-    } else {
-      dz.classList.add('hover');
-      setTimeout(() => dz.classList.remove('hover'), 400);
-      const fb = document.getElementById('sec3Feedback');
-      fb.innerHTML = '<div class="feedback feedback-incorrect">Essa sílaba vai noutro lugar. Tenta de novo!</div>';
-      setTimeout(() => fb.innerHTML = '', 1500);
-    }
-    return;
-  }
-
-  // Section 4 recombination
-  if (dzId === 'recombiDrop') {
-    handleRecombiDrop(syl);
-    return;
-  }
-
-  // Section 5 drops
-  if (dzId === 'sec5Drop1' || dzId === 'sec5Drop2') {
-    if (dz.classList.contains('filled')) return;
-    const expected = dz.dataset.expect;
-    if (syl === expected) {
-      dz.classList.add('filled');
-      const block = document.createElement('div');
-      block.className = 'syl-block ' + (syl === 'qua' ? 'syl-qua' : 'syl-dro');
-      block.style.fontSize = '1.4rem';
-      block.textContent = syl;
-      dz.innerHTML = '';
-      dz.appendChild(block);
-      if (srcEl) srcEl.style.display = 'none';
-
-      const d1 = document.getElementById('sec5Drop1');
-      const d2 = document.getElementById('sec5Drop2');
-      if (d1.classList.contains('filled') && d2.classList.contains('filled')) {
-        document.getElementById('sec5Step2Fb').innerHTML = '<div class="feedback feedback-correct">✓ Certo! qua + dro = quadro!</div>';
-        setTimeout(() => {
-          document.getElementById('sec5Step2').classList.add('hidden');
-          document.getElementById('sec5Step3').classList.remove('hidden');
-          sec5Step = 3;
-        }, 1500);
-      }
-    }
-    return;
-  }
-
-  // Assessment drops
-  if (dzId.startsWith('assessDrop')) {
-    handleAssessDrop(dzId, syl);
-    return;
-  }
-
-  // Sentence target
-  if (dzId === 'sec6Target') {
-    if (srcEl && srcEl.dataset.word) {
-      placeWord(srcEl);
-    }
-    return;
-  }
-}
-
-/* ===== CONFETTI ===== */
-function spawnConfetti() {
-  const colors = ['#E05FA0', '#F59E0B', '#22c55e', '#2563EB', '#059669', '#7C3AED'];
-  for (let i = 0; i < 30; i++) {
-    const p = document.createElement('div');
-    p.className = 'confetti-particle';
-    p.style.background = colors[Math.floor(Math.random() * colors.length)];
-    p.style.left = (Math.random() * 100) + 'vw';
-    p.style.top = (60 + Math.random() * 30) + 'vh';
-    p.style.width = (6 + Math.random() * 8) + 'px';
-    p.style.height = (6 + Math.random() * 8) + 'px';
-    p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-    p.style.animation = 'confetti ' + (0.8 + Math.random() * 1.2) + 's ease-out forwards';
-    p.style.animationDelay = (Math.random() * 0.3) + 's';
-    document.body.appendChild(p);
-    setTimeout(() => p.remove(), 2500);
-  }
-}
-
-/* ===== INIT ===== */
-function init() {
-  // Setup all syllable block drag
-  document.querySelectorAll('.syl-block[draggable]').forEach(setupSylDrag);
-
-  // Setup all drop zones
-  document.querySelectorAll('.drop-zone').forEach(setupDropZone);
-
-  // Also make sentence target a drop zone
-  const sentenceTarget = document.getElementById('sec6Target');
-  if (sentenceTarget) {
-    sentenceTarget.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
-    sentenceTarget.addEventListener('drop', e => {
-      e.preventDefault();
-      if (draggedEl && draggedEl.dataset.word) {
-        placeWord(draggedEl);
-      }
+    document.querySelectorAll('[data-compose]').forEach((bank) => {
+      const output = document.getElementById(bank.dataset.compose);
+      const parts = [];
+      bank.querySelectorAll('.syllable-chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          parts.push(chip.dataset.syllable || '');
+          if (output) output.textContent = parts.join('');
+        });
+      });
     });
-  }
 
-  // Apply default differentiation
-  applyDiff();
-  updateProgress();
+    document.querySelectorAll('.clear-compose').forEach((button) => {
+      button.addEventListener('click', () => {
+        const output = document.getElementById(button.dataset.composeClear);
+        if (output) output.textContent = '__';
+      });
+    });
 
-  // Make progress dots clickable
-  document.querySelectorAll('.progress-dot').forEach(d => {
-    d.style.cursor = 'pointer';
-    d.addEventListener('click', () => goTo(parseInt(d.dataset.step)));
-  });
-}
+    document.querySelectorAll('.check-card').forEach((card) => {
+      card.addEventListener('click', () => card.classList.toggle('is-done'));
+    });
 
-document.addEventListener('DOMContentLoaded', init);
-</script>
+    document.querySelectorAll('.diff-switcher').forEach((switcher) => {
+      const panels = switcher.nextElementSibling;
+      switcher.querySelectorAll('.diff-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          switcher.querySelectorAll('.diff-btn').forEach((item) => item.classList.remove('is-active'));
+          panels.querySelectorAll('.diff-panel').forEach((panel) => panel.classList.remove('is-active'));
+          button.classList.add('is-active');
+          const target = panels.querySelector('#' + CSS.escape(button.dataset.diff));
+          if (target) target.classList.add('is-active');
+        });
+      });
+    });
+  </script>
 </body>
 </html>

@@ -1,570 +1,516 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-PT">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>M28P #20 — bandeira | PageCraft</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap');
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Nunito','Comic Sans MS',sans-serif;background:#F0F4FF;color:#1E1B18;min-height:100vh}
-  .container{max-width:960px;margin:0 auto;padding:1.5rem}
-  .header{text-align:center;padding:2rem 1rem 1rem;background:linear-gradient(135deg,#1D4ED8,#DC2626);color:white;border-radius:0 0 24px 24px;margin-bottom:2rem}
-  .header .wd{font-size:4rem;font-weight:800;margin:.5rem 0}
-  .badge{display:inline-block;background:#F59E0B;color:white;font-weight:700;padding:.25rem .75rem;border-radius:20px}
-  .section{background:white;border:2px solid #1D4ED8;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.08);padding:1.5rem;margin-bottom:1.5rem}
-  .section h2{font-size:1.5rem;color:#1D4ED8;margin-bottom:1rem;font-weight:800}
-  .diff-bar{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
-  .diff-btn{padding:.4rem 1rem;border-radius:20px;border:2px solid transparent;font-weight:700;cursor:pointer;font-family:inherit;font-size:.9rem;min-height:40px;transition:all .2s}
-  .diff-btn.green{background:#dcfce7;color:#166534;border-color:#22c55e}
-  .diff-btn.yellow{background:#fef9c3;color:#854d0e;border-color:#F59E0B}
-  .diff-btn.red{background:#fee2e2;color:#991b1b;border-color:#ef4444}
-  .diff-btn.active{transform:scale(1.05)}
-  .dc{display:none;padding:.75rem;border-radius:12px;margin-bottom:1rem;line-height:1.6}
-  .dc.show{display:block}.gbg{background:#f0fdf4;border-left:4px solid #22c55e}
-  .ybg{background:#fefce8;border-left:4px solid #F59E0B}.rbg{background:#fef2f2;border-left:4px solid #ef4444}
-  .btn{display:inline-flex;align-items:center;justify-content:center;padding:.75rem 2rem;border-radius:30px;border:none;font-family:inherit;font-weight:700;font-size:1rem;cursor:pointer;min-height:48px;transition:all .2s}
-  .btn:hover{transform:scale(1.05)}.btn:active{transform:scale(.97)}.btn:disabled{opacity:.4}
-  .bp{background:#1D4ED8;color:white}.bs{background:#DC2626;color:white}.ba{background:#15803D;color:white}
-  .syl{display:inline-flex;align-items:center;justify-content:center;font-size:2.2rem;font-weight:800;color:white;padding:.5rem 1.2rem;border-radius:12px;min-height:48px;min-width:72px;cursor:pointer;transition:all .2s}
-  .syl-ban{background:#1D4ED8}.syl-dei{background:#DC2626}.syl-ra{background:#15803D}
-  .wb{font-size:3rem;font-weight:800;color:#1D4ED8;text-align:center;margin:1rem 0}
-  .qo{display:flex;flex-wrap:wrap;gap:.75rem;margin:1rem 0}
-  .qopt{padding:.75rem 1.5rem;border-radius:12px;border:2px solid #1D4ED8;background:white;font-family:inherit;font-size:1.1rem;font-weight:700;cursor:pointer;min-height:48px;transition:all .2s}
-  .qopt:hover{background:#EEF2FF}.qopt.correct{background:#f0fdf4;border-color:#22c55e;color:#166534}
-  .qopt.incorrect{background:#fffbeb;border-color:#F59E0B;color:#92400e}
-  .fb{padding:1rem;border-radius:12px;margin:.75rem 0;font-size:1.1rem;font-weight:700;display:none}
-  .fb.show{display:block}.fb.ok{background:#f0fdf4;color:#166534;border:2px solid #22c55e}
-  .fb.nok{background:#fffbeb;color:#92400e;border:2px solid #F59E0B}
-  .ds{width:110px;height:64px;border:2px dashed #DC2626;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;background:#FFF5F5;color:#DC2626;transition:all .2s}
-  .ds.filled{border-style:solid;border-color:#22c55e;background:#f0fdf4;color:#166534}
-  .tb{background:#EEF2FF;border-radius:12px;padding:1rem;margin:.75rem 0;border:1px solid #F59E0B}
-  .tl{font-size:.85rem;font-weight:700;color:#92400e;text-transform:uppercase;margin-bottom:.5rem}
-  input[type=text]{font-family:inherit;font-size:1.1rem;padding:.5rem 1rem;border:2px solid #1D4ED8;border-radius:8px;width:100%;max-width:320px;min-height:48px;outline:none}
-  input[type=text]:focus{border-color:#DC2626}
-  .ic{text-align:center;padding:1rem;background:#EEF2FF;border-radius:12px;border:2px solid #1D4ED8;cursor:pointer;transition:all .2s;min-height:80px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem;font-size:1rem;font-weight:700}
-  .ic:hover{transform:scale(1.03)}.ic.selected{background:#f0fdf4;border-color:#22c55e}
-  .wc{padding:.5rem 1rem;border-radius:8px;border:2px solid #1D4ED8;background:white;font-weight:700;font-size:1.1rem;cursor:pointer;min-height:48px;display:flex;align-items:center;transition:all .2s}
-  .wc.placed{opacity:.4;cursor:not-allowed}
-  .pw{padding:.4rem .8rem;border-radius:8px;background:#1D4ED8;color:white;font-weight:700;font-size:1rem;cursor:pointer}
-  .nav-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
-  .nt{padding:.6rem 1.2rem;border-radius:30px;border:2px solid #1D4ED8;background:white;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;min-height:48px;transition:all .2s;color:#1D4ED8}
-  .nt.active,.nt:hover{background:#1D4ED8;color:white}
-  .bc{display:none}.bc.active{display:block}
-  .pb{background:#e5e7eb;border-radius:8px;height:12px;margin:1rem 0;overflow:hidden}
-  .pf{background:linear-gradient(90deg,#1D4ED8,#DC2626);height:100%;border-radius:8px;transition:width .5s}
-  .rs{background:linear-gradient(135deg,#EEF2FF,#FFF5F5);border-radius:16px;padding:1.5rem;text-align:center;margin:1rem 0}
-  .dl{margin:.5rem 0;display:flex;flex-wrap:wrap;gap:.5rem}
-  .dw{background:#dcfce7;color:#166534;padding:.25rem .75rem;border-radius:20px;font-weight:700}
-  .ss{display:flex;flex-wrap:wrap;gap:.5rem;padding:.75rem;border:2px dashed #DC2626;border-radius:12px;min-height:64px;align-items:center}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-  @keyframes wave{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M28P #20 — bandeira | PageCraft</title>
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHRleHQgeT0iNTAiIGZvbnQtc2l6ZT0iNDgiPvCfk5g8L3RleHQ+PC9zdmc+" />
+  <style>
+    :root {
+      --bg: #F0F4FF;
+      --surface: #FFFFFF;
+      --primary: #1D4ED8;
+      --accent: #DC2626;
+      --text: #1E1B18;
+      --correct: #22c55e;
+      --correct-bg: #f0fdf4;
+      --incorrect: #F59E0B;
+      --incorrect-bg: #fffbeb;
+      --radius: 16px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --font: 'Nunito', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+      --touch-size: 48px;
+      --card-gap: 1rem;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 20%, transparent), transparent 38%),
+        linear-gradient(180deg, color-mix(in srgb, var(--primary) 8%, var(--bg)), var(--bg));
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+    a, button, summary, textarea { font: inherit; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; background: var(--surface); color: var(--text); padding: 0.75rem 1rem; border-radius: 9999px; z-index: 1000; border: 2px solid var(--primary); }
+    .skip-link:focus { top: 1rem; }
+    :focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+    .shell { max-width: 1120px; margin: 0 auto; padding: 1rem 1rem 3rem; }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      padding: 1.4rem;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 72%, white), color-mix(in srgb, var(--accent) 60%, white));
+      color: white;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
+    }
+    .hero::after { content: ""; position: absolute; inset: auto -8% -24% auto; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.14); }
+    .hero-top { display: flex; gap: 1rem; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; position: relative; z-index: 1; }
+    .hero-kicker, .hero-badge, .meta-chip, .nav-pill, .page-link span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 9999px;
+      padding: 0.75rem 1.25rem;
+      font-weight: 700;
+    }
+    .hero-kicker { background: rgba(255,255,255,0.16); }
+    .hero-badge { background: rgba(255,255,255,0.22); }
+    .hero-grid { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.9fr); margin-top: 1.25rem; position: relative; z-index: 1; }
+    .hero-copy h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.05; margin: 0.4rem 0 0.7rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+    .hero-copy p { margin: 0.4rem 0; max-width: 45rem; }
+    .word-scene { background: rgba(255,255,255,0.14); border: 2px solid rgba(255,255,255,0.28); border-radius: 24px; padding: 1rem; backdrop-filter: blur(4px); }
+    .word-scene .emoji { font-size: clamp(3rem, 10vw, 5.5rem); line-height: 1; }
+    .meta-row, .objective-row, .syllable-row, .page-switch, .section-nav { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .meta-row { margin-top: 1rem; }
+    .meta-chip { background: rgba(255,255,255,0.18); }
+    .objective-row { margin: 1rem 0 0; padding: 0; list-style: none; }
+    .objective-row li { background: rgba(255,255,255,0.22); border-radius: 9999px; padding: 0.75rem 1rem; font-weight: 700; min-height: var(--touch-size); display: inline-flex; align-items: center; }
+    .word-spotlight { margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1.1fr 1fr; }
+    .spot-card { background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 70%, white); border-radius: 24px; padding: 1rem; box-shadow: var(--shadow); }
+    .spot-card h2 { margin: 0 0 0.75rem; font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; }
+    .spot-card .word-display { font-size: clamp(2.4rem, 7vw, 3.8rem); font-weight: 800; color: var(--primary); letter-spacing: 0.05em; text-transform: uppercase; }
+    .spot-card .mission { margin-top: 0.75rem; }
+    .syllable-row { margin-top: 1rem; }
+    .syllable-token, .syllable-chip {
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 12px;
+      border: none;
+      color: white;
+      font-weight: 800;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      padding: 0.55rem 1rem;
+      background: var(--chip, var(--primary));
+      box-shadow: var(--shadow);
+    }
+    .page-switch { margin: 1.2rem 0 0.5rem; }
+    .page-link {
+      text-decoration: none;
+      background: var(--surface);
+      color: var(--text);
+      border: 2px solid color-mix(in srgb, var(--primary) 28%, white);
+      border-radius: 18px;
+      padding: 0.85rem 1rem;
+      min-height: var(--touch-size);
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: space-between;
+      flex: 1 1 200px;
+      box-shadow: var(--shadow);
+      font-weight: 700;
+    }
+    .page-link.is-current { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
+    .section-nav { position: sticky; top: 0; z-index: 10; padding: 0.85rem 0 1rem; background: linear-gradient(180deg, var(--bg), rgba(255,248,240,0.88)); backdrop-filter: blur(6px); }
+    .nav-pill { text-decoration: none; background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 24%, white); padding: 0.55rem 1rem; }
+    .content { display: grid; gap: 1.1rem; }
+    .unit-card { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 35%, white); border-radius: 24px; padding: 1.15rem; box-shadow: var(--shadow); }
+    .unit-head { display: flex; gap: 1rem; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+    .unit-head h2 { margin: 0.2rem 0 0; font-size: clamp(1.45rem, 4vw, 2.1rem); font-weight: 800; }
+    .unit-kicker { color: color-mix(in srgb, var(--primary) 80%, black); font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.9rem; }
+    .unit-badge { background: color-mix(in srgb, var(--accent) 22%, var(--surface)); border: 2px solid var(--accent); border-radius: 9999px; padding: 0.65rem 1rem; font-weight: 800; min-height: var(--touch-size); display: inline-flex; align-items: center; }
+    .unit-grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.95fr); margin-top: 1rem; }
+    .unit-copy p { margin: 0.65rem 0; }
+    .unit-flow { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 1rem; }
+    .unit-flow > div, .play-card, .maker-box, .teacher-card { background: color-mix(in srgb, var(--bg) 70%, white); border-radius: 18px; padding: 0.95rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
+    .play-label { font-weight: 800; margin: 0 0 0.8rem; }
+    .pill-btn, .choice-btn, .check-card, .prompt-card {
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 9999px;
+      border: 2px solid transparent;
+      padding: 0.75rem 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+    }
+    .pill-btn:hover, .choice-btn:hover, .check-card:hover, .prompt-card:hover, .page-link:hover { transform: scale(1.05); box-shadow: 0 10px 24px rgba(0,0,0,0.12); }
+    .pill-btn:active, .choice-btn:active, .check-card:active, .prompt-card:active, .page-link:active { transform: scale(0.97); }
+    .pill-btn { background: var(--primary); color: white; }
+    .choice-row, .check-grid, .prompt-grid, .compose-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .choice-btn, .check-card, .prompt-card { background: var(--surface); color: var(--text); border-color: color-mix(in srgb, var(--primary) 22%, white); }
+    .choice-btn.is-right, .check-card.is-done { background: var(--correct-bg); border-color: var(--correct); color: #166534; }
+    .choice-btn.is-wrong { background: var(--incorrect-bg); border-color: var(--incorrect); color: #92400e; }
+    .feedback, .helper-text { margin: 0.85rem 0 0; font-weight: 700; }
+    .feedback { min-height: 1.4em; }
+    .compose-output, .phrase-card, .cloze-word { min-height: 72px; border-radius: 18px; background: var(--surface); border: 2px dashed color-mix(in srgb, var(--primary) 35%, white); display: grid; place-items: center; font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800; color: var(--primary); padding: 0.9rem; margin-top: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .phrase-card { text-transform: none; font-size: 1.3rem; color: var(--text); }
+    .phrase-input { width: 100%; margin-top: 0.85rem; border-radius: 18px; border: 2px solid color-mix(in srgb, var(--primary) 25%, white); padding: 0.9rem 1rem; min-height: 120px; background: #fff; }
+    .diff-switcher { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; }
+    .diff-btn { min-height: var(--touch-size); min-width: var(--touch-size); border-radius: 9999px; border: 2px solid color-mix(in srgb, var(--primary) 28%, white); background: var(--surface); padding: 0.7rem 1rem; font-weight: 700; cursor: pointer; }
+    .diff-btn.is-active { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
+    .diff-panel { display: none; background: color-mix(in srgb, var(--bg) 72%, white); border-radius: 18px; padding: 0.95rem; margin-top: 0.8rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
+    .diff-panel.is-active { display: block; }
+    .teacher-guide { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 30%, white); border-radius: 24px; padding: 0.9rem 1rem; box-shadow: var(--shadow); }
+    .teacher-guide summary { min-height: var(--touch-size); display: flex; align-items: center; cursor: pointer; font-weight: 800; font-size: 1.2rem; }
+    .teacher-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 1rem; }
+    .teacher-card-wide { grid-column: 1 / -1; }
+    .teacher-card h3 { margin-top: 0; }
+    .footer { text-align: center; padding: 1.4rem 0 0; font-weight: 700; color: color-mix(in srgb, var(--text) 72%, white); }
+    .hidden { display: none !important; }
+    @media (max-width: 900px) {
+      .hero-grid, .word-spotlight, .unit-grid, .unit-flow, .teacher-grid { grid-template-columns: 1fr; }
+      .section-nav { position: static; }
+    }
+    @media (max-width: 640px) {
+      body { font-size: 18px; }
+      .shell { padding: 0.75rem 0.75rem 2.4rem; }
+      .hero { padding: 1rem; border-radius: 22px; }
+      .hero-copy h1 { font-size: clamp(2rem, 9vw, 3rem); }
+      .page-link { flex-basis: 100%; }
+      .objective-row li, .meta-chip, .hero-kicker, .hero-badge, .nav-pill { width: 100%; justify-content: center; }
+      .unit-card, .spot-card, .teacher-guide { border-radius: 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
 </head>
-<body>
-<div class="header">
-  <div class="badge">M28P #20</div>
-  <div class="wd">🏳️ bandeira</div>
-  <h1 style="font-size:2rem">A palavra <em>bandeira</em></h1>
-  <p style="opacity:.8;margin-top:.5rem">Método das 28 Palavras · 1.º ano</p>
-</div>
-<div class="container">
-<div class="nav-tabs">
-  <button class="nt active" onclick="sb('b1')">1️⃣ Descoberta</button>
-  <button class="nt" onclick="sb('b2')">2️⃣ Reconhecimento</button>
-  <button class="nt" onclick="sb('b3')">3️⃣ Sílabas</button>
-  <button class="nt" onclick="sb('b4')">4️⃣ Recombinação</button>
-  <button class="nt" onclick="sb('b5')">5️⃣ Escrita</button>
-  <button class="nt" onclick="sb('b6')">6️⃣ Frase</button>
-  <button class="nt" onclick="sb('b7')">7️⃣ Avaliação</button>
-  <button class="nt" onclick="sb('b8')">8️⃣ Extensão</button>
-</div>
-
-<div id="b1" class="bc active">
-<div class="section">
-  <h2>🎉 Bloco 1 — Descoberta da palavra</h2>
-  <div class="diff-bar">
-    <button class="diff-btn green active" onclick="sd('b1','green')">🟢 Com ajuda</button>
-    <button class="diff-btn yellow" onclick="sd('b1','yellow')">🟡 Objetivo</button>
-    <button class="diff-btn red" onclick="sd('b1','red')">🔴 Desafio</button>
-  </div>
-  <div id="b1-green" class="dc gbg show">🟢 A palavra está visível desde o início.</div>
-  <div id="b1-yellow" class="dc ybg">🟡 Clica em "Mostrar a palavra" e lê em voz alta.</div>
-  <div id="b1-red" class="dc rbg">🔴 Escreve no caderno antes de revelar.</div>
-  <div style="text-align:center;background:linear-gradient(135deg,#EEF2FF,#FFF5F5);border-radius:16px;padding:2rem;margin:1rem 0">
-    <div style="font-size:5rem;animation:wave 2s infinite">🏳️</div>
-    <p style="font-size:1.3rem;font-weight:700;margin:.5rem 0">Há uma festa na escola.<br>Há muitas cores a acenar no ar.<br>O que são essas coisas coloridas?</p>
-  </div>
-  <div id="c1" style="display:none;text-align:center;padding:1.5rem;background:white;border:3px solid #1D4ED8;border-radius:16px;animation:fadeIn .5s;margin:1rem 0">
-    <div style="font-size:4rem">🏳️</div>
-    <div class="wb">bandeira</div>
-    <div style="display:flex;gap:8px;justify-content:center;align-items:center;margin:1rem 0">
-      <span class="syl syl-ban">ban</span><span style="font-size:2rem;color:#aaa">—</span>
-      <span class="syl syl-dei">dei</span><span style="font-size:2rem;color:#aaa">—</span>
-      <span class="syl syl-ra">ra</span>
-    </div>
-  </div>
-  <div style="text-align:center;margin-top:1rem">
-    <button class="btn bp" onclick="document.getElementById('c1').style.display='block';this.disabled=true;this.textContent='✅ Revelada!'">🔍 Mostrar a palavra</button>
-  </div>
-</div>
-</div>
-
-<div id="b2" class="bc">
-<div class="section">
-  <h2>👁️ Bloco 2 — Reconhecimento global</h2>
-  <div class="diff-bar">
-    <button class="diff-btn green active" onclick="sd('b2','green')">🟢 Com ajuda</button>
-    <button class="diff-btn yellow" onclick="sd('b2','yellow')">🟡 Objetivo</button>
-    <button class="diff-btn red" onclick="sd('b2','red')">🔴 Desafio</button>
-  </div>
-  <div id="b2-green" class="dc gbg show">🟢 Primeira letra visível. Distratores diferentes.</div>
-  <div id="b2-yellow" class="dc ybg">🟡 Três opções. Faz as duas tarefas.</div>
-  <div id="b2-red" class="dc rbg">🔴 Quatro opções. Justifica!</div>
-  <div class="tb">
-    <div class="tl">Tarefa 1 — Vê "bandeira", clica na imagem</div>
-    <div class="wb" style="font-size:2rem">bandeira</div>
-    <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin:1rem 0">
-      <div class="ic" onclick="ci2('bandeira',this)" style="width:130px">🏳️<br><span>?</span></div>
-      <div class="ic" onclick="ci2('zebra',this)" style="width:130px">🦓<br><span>?</span></div>
-      <div class="ic" onclick="ci2('palhaço',this)" style="width:130px">🤡<br><span>?</span></div>
-    </div>
-    <div id="b2-fb1" class="fb"></div>
-  </div>
-  <div class="tb">
-    <div class="tl">Tarefa 2 — Vê 🏳️, clica na palavra</div>
-    <div style="font-size:4rem;text-align:center;margin:.5rem 0">🏳️</div>
-    <div class="qo" id="b2-t2">
-      <button class="qopt" onclick="cw2b('bandeira',this)">bandeira</button>
-      <button class="qopt" onclick="cw2b('zebra',this)">zebra</button>
-      <button class="qopt" onclick="cw2b('palhaço',this)">palhaço</button>
-    </div>
-    <div id="b2-fb2" class="fb"></div>
-  </div>
-</div>
-</div>
-
-<div id="b3" class="bc">
-<div class="section">
-  <h2>🎵 Bloco 3 — Segmentação: ban-dei-ra</h2>
-  <div class="diff-bar">
-    <button class="diff-btn green active" onclick="sd('b3','green')">🟢 Com ajuda</button>
-    <button class="diff-btn yellow" onclick="sd('b3','yellow')">🟡 Objetivo</button>
-    <button class="diff-btn red" onclick="sd('b3','red')">🔴 Desafio</button>
-  </div>
-  <div id="b3-green" class="dc gbg show">🟢 Blocos pré-posicionados.</div>
-  <div id="b3-yellow" class="dc ybg">🟡 Arrasta os 3 blocos.</div>
-  <div id="b3-red" class="dc rbg">🔴 Escreve as sílabas. Explica o ditongo "ei".</div>
-  <div class="wb">ban<span style="color:#DC2626;text-decoration:underline">dei</span>ra</div>
-  <div style="background:#EEF2FF;border-radius:12px;padding:1rem;margin:1rem 0">
-    <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin:1rem 0">
-      <span class="syl syl-ban" draggable="true" ondragstart="drs(event,'ban')">ban</span>
-      <span class="syl syl-dei" draggable="true" ondragstart="drs(event,'dei')">dei</span>
-      <span class="syl syl-ra" draggable="true" ondragstart="drs(event,'ra')">ra</span>
-    </div>
-    <div style="display:flex;gap:1rem;justify-content:center;margin-top:1rem;flex-wrap:wrap">
-      <div><div style="text-align:center;font-weight:700;margin-bottom:.4rem;color:#555">1</div>
-      <div class="ds" id="s1" ondragover="event.preventDefault()" ondrop="drd(event,'s1','ban')">⬇</div></div>
-      <div><div style="text-align:center;font-weight:700;margin-bottom:.4rem;color:#555">2</div>
-      <div class="ds" id="s2" ondragover="event.preventDefault()" ondrop="drd(event,'s2','dei')">⬇</div></div>
-      <div><div style="text-align:center;font-weight:700;margin-bottom:.4rem;color:#555">3</div>
-      <div class="ds" id="s3" ondragover="event.preventDefault()" ondrop="drd(event,'s3','ra')">⬇</div></div>
-    </div>
-    <div id="b3-dfb" class="fb"></div>
-  </div>
-  <div class="tb">
-    <div class="tl">Quantas palmas? 👏</div>
-    <div class="qo">
-      <button class="qopt" onclick="cp3b('2',this)">2 👏👏</button>
-      <button class="qopt" onclick="cp3b('3',this)">3 👏👏👏</button>
-      <button class="qopt" onclick="cp3b('4',this)">4 👏👏👏👏</button>
-    </div>
-    <div id="b3-pfb" class="fb"></div>
-  </div>
-  <div class="tb" style="background:#FFF5F5">
-    <div class="tl">🌟 O ditongo "ei"</div>
-    <p>Em "dei" há um ditongo: <strong>e + i</strong> = "ei". Dois sons juntos na mesma sílaba!</p>
-    <button class="btn bs" style="margin-top:.75rem" onclick="document.getElementById('b3-ei').style.display='block'">✨ Ver exemplos</button>
-    <div id="b3-ei" style="display:none;margin-top:.75rem;background:#FFF5F5;border-radius:8px;padding:.75rem">
-      <strong style="color:#DC2626">ei:</strong> ban<strong>dei</strong>ra, p<strong>ei</strong>xe, r<strong>ei</strong>, l<strong>ei</strong>...
-    </div>
-  </div>
-</div>
-</div>
-
-<div id="b4" class="bc">
-<div class="section">
-  <h2>🔬 Bloco 4 — Recombinação</h2>
-  <div class="diff-bar">
-    <button class="diff-btn green active" onclick="sd('b4','green')">🟢 Com ajuda</button>
-    <button class="diff-btn yellow" onclick="sd('b4','yellow')">🟡 Objetivo</button>
-    <button class="diff-btn red" onclick="sd('b4','red')">🔴 Desafio</button>
-  </div>
-  <div id="b4-green" class="dc gbg show">🟢 4 sílabas. Feedback imediato.</div>
-  <div id="b4-yellow" class="dc ybg">🟡 8 sílabas. Testa livremente.</div>
-  <div id="b4-red" class="dc rbg">🔴 Sem feedback. Lista palavras com "ei".</div>
-  <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem">
-    <button class="syl syl-ban" onclick="a4('ban')">ban</button>
-    <button class="syl syl-dei" onclick="a4('dei')">dei</button>
-    <button class="syl syl-ra" onclick="a4('ra')">ra</button>
-    <button class="syl" style="background:#7c3aed" onclick="a4('rei')">rei</button>
-    <button class="syl" style="background:#059669" onclick="a4('lei')">lei</button>
-    <button class="syl" style="background:#0284c7" onclick="a4('ca')">ca</button>
-    <button class="syl" style="background:#d97706" onclick="a4('sa')">sa</button>
-    <button class="syl" style="background:#be185d" onclick="a4('da')">da</button>
-  </div>
-  <div style="padding:1rem;background:#EEF2FF;border-radius:12px;min-height:60px;border:2px dashed #1D4ED8;display:flex;align-items:center;justify-content:center">
-    <span id="b4-c" style="font-size:2rem;font-weight:800;color:#1D4ED8">?</span>
-  </div>
-  <div style="display:flex;gap:.75rem;margin:1rem 0;flex-wrap:wrap">
-    <button class="btn bp" onclick="v4()">🔍 É uma palavra?</button>
-    <button class="btn ba" onclick="l4()">🔄 Limpar</button>
-  </div>
-  <div id="b4-fb" class="fb"></div>
-  <p style="font-weight:700;margin-top:.75rem">✅ Descobertas:</p>
-  <div class="dl" id="b4-d"></div>
-</div>
-</div>
-
-<div id="b5" class="bc">
-<div class="section">
-  <h2>✏️ Bloco 5 — Leitura e escrita</h2>
-  <div class="diff-bar">
-    <button class="diff-btn green active" onclick="sd('b5','green')">🟢 Com ajuda</button>
-    <button class="diff-btn yellow" onclick="sd('b5','yellow')">🟡 Objetivo</button>
-    <button class="diff-btn red" onclick="sd('b5','red')">🔴 Desafio</button>
-  </div>
-  <div id="b5-green" class="dc gbg show">🟢 2 opções. Modelo visível.</div>
-  <div id="b5-yellow" class="dc ybg">🟡 4 opções. Copia no caderno.</div>
-  <div id="b5-red" class="dc rbg">🔴 De memória. Encontra "ei" noutras palavras.</div>
-  <div class="tb">
-    <div class="tl">Tarefa 1 — Sílaba em falta</div>
-    <div style="text-align:center;margin:1rem 0">
-      <span style="font-size:2.5rem;font-weight:800;color:#1D4ED8">ban</span>
-      <span style="font-size:2.5rem;font-weight:800;color:#ccc">___</span>
-      <span style="font-size:2.5rem;font-weight:800;color:#15803D">ra</span>
-      <span style="font-size:2rem">🏳️</span>
-    </div>
-    <div class="qo" id="b5-t1">
-      <button class="qopt" onclick="cs5b('dei','b5-t1','b5-f1')">dei</button>
-      <button class="qopt" onclick="cs5b('de','b5-t1','b5-f1')">de</button>
-      <button class="qopt" onclick="cs5b('di','b5-t1','b5-f1')">di</button>
-      <button class="qopt" onclick="cs5b('dai','b5-t1','b5-f1')">dai</button>
-    </div>
-    <div id="b5-f1" class="fb"></div>
-  </div>
-  <div class="tb">
-    <div class="tl">Tarefa 2 — Grafia correta</div>
-    <div style="font-size:4rem;text-align:center;margin:.5rem 0">🏳️</div>
-    <div class="qo" id="b5-t2">
-      <button class="qopt" onclick="cg5b('bandeira','b5-t2','b5-f2')">bandeira</button>
-      <button class="qopt" onclick="cg5b('bandera','b5-t2','b5-f2')">bandera</button>
-      <button class="qopt" onclick="cg5b('bandaira','b5-t2','b5-f2')">bandaira</button>
-      <button class="qopt" onclick="cg5b('bundeira','b5-t2','b5-f2')">bundeira</button>
-    </div>
-    <div id="b5-f2" class="fb"></div>
-  </div>
-  <div class="tb">
-    <div class="tl">Tarefa 3 — Escreve a palavra</div>
-    <p style="margin-bottom:.5rem">Copia: <strong style="color:#1D4ED8">bandeira</strong></p>
-    <div style="display:flex;gap:.75rem;align-items:center">
-      <input type="text" id="b5-i" placeholder="escreve aqui..." oninput="ce5b()" aria-label="Escreve bandeira">
-      <span id="b5-if" style="font-size:1.5rem"></span>
-    </div>
-  </div>
-</div>
-</div>
-
-<div id="b6" class="bc">
-<div class="section">
-  <h2>📝 Bloco 6 — Frase</h2>
-  <div class="diff-bar">
-    <button class="diff-btn green active" onclick="sd('b6','green')">🟢 Com ajuda</button>
-    <button class="diff-btn yellow" onclick="sd('b6','yellow')">🟡 Objetivo</button>
-    <button class="diff-btn red" onclick="sd('b6','red')">🔴 Desafio</button>
-  </div>
-  <div id="b6-green" class="dc gbg show">🟢 3 elementos. Modelo visível.</div>
-  <div id="b6-yellow" class="dc ybg">🟡 Seis elementos. Frase própria no caderno.</div>
-  <div id="b6-red" class="dc rbg">🔴 2 frases. Usa adjetivo!</div>
-  <div style="background:#EEF2FF;border-radius:12px;padding:1rem;text-align:center;margin-bottom:1rem">
-    <p style="font-size:1.5rem;font-weight:800">A bandeira está ao vento. 🏳️</p>
-    <p style="font-size:.9rem;color:#666"><span style="color:#1D4ED8">Aa</span> Maiúscula &nbsp;|&nbsp; <span style="color:#DC2626">.</span> Ponto</p>
-  </div>
-  <div class="tb">
-    <div class="tl">Ordena as palavras</div>
-    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem" id="b6-bk">
-      <button class="wc" onclick="pw6b('está',this)">está</button>
-      <button class="wc" onclick="pw6b('A',this)">A</button>
-      <button class="wc" onclick="pw6b('.',this)">.</button>
-      <button class="wc" onclick="pw6b('bandeira',this)">bandeira</button>
-      <button class="wc" onclick="pw6b('ao',this)">ao</button>
-      <button class="wc" onclick="pw6b('vento',this)">vento</button>
-    </div>
-    <div class="ss" id="b6-s"><span style="color:#aaa;font-style:italic">frase aqui…</span></div>
-    <div style="display:flex;gap:.5rem;margin-top:.75rem">
-      <button class="btn bp" onclick="ch6b()">✅ Verificar</button>
-      <button class="btn ba" onclick="rs6b()">🔄 Recomeçar</button>
-    </div>
-    <div id="b6-fb" class="fb"></div>
-  </div>
-  <div class="tb">
-    <div class="tl">A tua frase com "bandeira"</div>
-    <input type="text" id="b6-fp" placeholder="Escreve a tua frase..." style="max-width:100%;margin-bottom:.75rem" aria-label="Frase própria">
-    <button class="btn bs" onclick="cf6b()">💬 Verificar</button>
-    <div id="b6-fpfb" class="fb"></div>
-  </div>
-</div>
-</div>
-
-<div id="b7" class="bc">
-<div class="section">
-  <h2>⭐ Bloco 7 — Mini-avaliação</h2>
-  <div class="diff-bar">
-    <button class="diff-btn green active" onclick="sd('b7','green')">🟢 Com ajuda</button>
-    <button class="diff-btn yellow" onclick="sd('b7','yellow')">🟡 Objetivo</button>
-    <button class="diff-btn red" onclick="sd('b7','red')">🔴 Desafio</button>
-  </div>
-  <div id="b7-green" class="dc gbg show">🟢 Imagem presente. Frase oral aceite.</div>
-  <div id="b7-yellow" class="dc ybg">🟡 Como descrito.</div>
-  <div id="b7-red" class="dc rbg">🔴 Sem modelo.</div>
-  <div class="pb"><div class="pf" id="b7-p" style="width:0%"></div></div>
-  <p style="text-align:center;font-weight:700" id="b7-pt">Tarefa 0 de 4</p>
-  <div class="tb">
-    <div class="tl">1/4 — Reconhecimento</div>
-    <p>Qual palavra vai com 🏳️?</p>
-    <div class="qo">
-      <button class="qopt" onclick="e7b(1,'bandeira',this)">bandeira</button>
-      <button class="qopt" onclick="e7b(1,'zebra',this)">zebra</button>
-      <button class="qopt" onclick="e7b(1,'palhaço',this)">palhaço</button>
-    </div>
-    <div id="b7-f1" class="fb"></div>
-  </div>
-  <div class="tb">
-    <div class="tl">2/4 — Quantas sílabas?</div>
-    <div class="qo">
-      <button class="qopt" onclick="e7b(2,'2',this)">2</button>
-      <button class="qopt" onclick="e7b(2,'3',this)">3</button>
-      <button class="qopt" onclick="e7b(2,'4',this)">4</button>
-    </div>
-    <div id="b7-f2" class="fb"></div>
-  </div>
-  <div class="tb">
-    <div class="tl">3/4 — Reconstrói "bandeira"</div>
-    <div style="display:flex;gap:.75rem;margin:.75rem 0" id="b7-t3">
-      <button class="syl syl-ra" onclick="et3b('ra',this)">ra</button>
-      <button class="syl syl-ban" onclick="et3b('ban',this)">ban</button>
-      <button class="syl syl-dei" onclick="et3b('dei',this)">dei</button>
-    </div>
-    <div id="b7-t3b" style="min-height:48px;border:2px dashed #1D4ED8;border-radius:12px;padding:.5rem 1rem;margin-bottom:.5rem;display:flex;gap:.5rem;align-items:center">
-      <span style="color:#aaa">sílabas aqui…</span>
-    </div>
-    <button class="btn bp" onclick="ct3b()">✅ Verificar</button>
-    <div id="b7-f3" class="fb"></div>
-  </div>
-  <div class="tb">
-    <div class="tl">4/4 — Frase com "bandeira"</div>
-    <input type="text" id="b7-t4" placeholder="A tua frase..." style="max-width:100%;margin:.5rem 0" aria-label="Frase bandeira">
-    <button class="btn bp" onclick="e7b(4,'frase',null)">✅ Confirmar</button>
-    <div id="b7-f4" class="fb"></div>
-  </div>
-  <div id="b7-r" class="rs" style="display:none">
-    <div id="b7-st" style="font-size:2rem;letter-spacing:.5rem;margin:.5rem 0"></div>
-    <h3 id="b7-msg" style="font-size:1.5rem"></h3>
-  </div>
-</div>
-</div>
-
-<div id="b8" class="bc">
-<div class="section">
-  <h2>🎨 Bloco 8 — Extensão</h2>
-  <div class="diff-bar">
-    <button class="diff-btn green active" onclick="sd('b8','green')">🟢 Com ajuda</button>
-    <button class="diff-btn yellow" onclick="sd('b8','yellow')">🟡 Objetivo</button>
-    <button class="diff-btn red" onclick="sd('b8','red')">🔴 Desafio</button>
-  </div>
-  <div id="b8-green" class="dc gbg show">🟢 Contorno pré-desenhado.</div>
-  <div id="b8-yellow" class="dc ybg">🟡 Desenho e legenda.</div>
-  <div id="b8-red" class="dc rbg">🔴 Mini-texto. 5 palavras com "ei".</div>
-  <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem">
-    <button class="btn bp" onclick="se8b('draw')">🎨 Desenho</button>
-    <button class="btn bs" onclick="se8b('sym')">🏳️ Simbolismo</button>
-    <button class="btn ba" onclick="se8b('words')">📚 Palavras "ei"</button>
-  </div>
-  <div id="e8-draw" style="display:none">
-    <div style="background:linear-gradient(135deg,#EEF2FF,#FFF5F5);border-radius:12px;padding:1.5rem;text-align:center">
-      <div style="font-size:5rem;animation:wave 2s infinite">🏳️</div>
-      <p style="font-weight:700">Desenha e decora uma bandeira inventada!<br>Escreve <strong>ban-dei-ra</strong> na base.</p>
-    </div>
-  </div>
-  <div id="e8-sym" style="display:none">
-    <div class="tb">
-      <div class="tl">Simbolismo das bandeiras</div>
-      <div style="display:flex;flex-direction:column;gap:.75rem">
-        <div style="background:white;padding:.75rem;border-radius:8px;border:1px solid #1D4ED8">
-          <p style="font-weight:700">🎨 O que representam as cores?</p>
-          <input type="text" placeholder="As cores representam..." style="max-width:100%;margin-top:.5rem">
-        </div>
-        <div style="background:white;padding:.75rem;border-radius:8px;border:1px solid #1D4ED8">
-          <p style="font-weight:700">🏳️ Onde vês bandeiras?</p>
-          <input type="text" placeholder="Vejo bandeiras..." style="max-width:100%;margin-top:.5rem">
-        </div>
+<body data-page-variant="index.html" data-visible-units="1,2,3,4">
+  <a href="#main" class="skip-link">Ir para o conteúdo</a>
+  <div class="shell">
+    <header class="hero">
+      <div class="hero-top">
+        <span class="hero-kicker">M28P #20</span>
+        <span class="hero-badge">Rota completa</span>
       </div>
-    </div>
-  </div>
-  <div id="e8-words" style="display:none">
-    <div class="tb">
-      <div class="tl">Palavras com ditongo "ei"</div>
-      <p style="margin-bottom:1rem">Conheces palavras com "ei"? (ex: peixe, rei, lei...)</p>
-      <div id="b8-wl" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem"></div>
-      <div style="display:flex;gap:.5rem">
-        <input type="text" id="b8-wi" placeholder="palavra com 'ei'..." style="max-width:240px" onkeydown="if(event.key==='Enter')aw8b()">
-        <button class="btn bp" onclick="aw8b()">➕</button>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p>Descobrir, ler e brincar</p>
+          <h1>Bandeira</h1>
+          <p>Percurso completo com foco na descoberta da palavra, nas sílabas e na confiança ao ler.</p>
+          <div class="meta-row">
+            <span class="meta-chip">🚩 Palavra 20</span>
+            <span class="meta-chip">1.º ano (6-7 anos)</span>
+            <span class="meta-chip">45 min</span>
+          </div>
+          <ul class="objective-row"><li>Reconhecer globalmente a palavra &#x27;bandeira&#x27; e associá-la à sua imagem</li><li>Segmentar &#x27;bandeira&#x27; em sílabas (ban-dei-ra) identificando o ditongo &#x27;ei&#x27; e a consoante nasal &#x27;n&#x27;</li><li>Recombinar sílabas para formar palavras novas</li></ul>
+        </div>
+        <aside class="word-scene" aria-hidden="true">
+          <div class="emoji">🚩</div>
+          <p><strong>Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</strong></p>
+          <p>Paleta própria, leitura em pt-PT AO90 e navegação pensada para toque.</p>
+          <p>Esta página trabalha as unidades 1, 2, 3, 4.</p>
+        </aside>
       </div>
-      <p id="b8-wc" style="margin-top:.5rem;font-weight:700;color:#1D4ED8"></p>
-    </div>
+    </header>
+
+    <div class="page-switch" aria-label="Outras páginas desta palavra"><a class="page-link is-current" href="./index.html">Página 1<span>Atual</span></a><a class="page-link" href="./page-2.html">Página 2<span>Abrir</span></a><a class="page-link" href="./page-3.html">Página 3<span>Abrir</span></a><a class="page-link" href="./page-4.html">Página 4<span>Abrir</span></a></div>
+
+    <section class="word-spotlight" aria-label="Destaque da palavra">
+      <article class="spot-card">
+        <h2>Palavra em destaque</h2>
+        <div class="word-display">Bandeira</div>
+        <p class="mission">bandeira</p>
+        <div class="compose-actions">
+          <button class="pill-btn speak-btn" data-speak="Bandeira">Ouvir a palavra</button>
+        </div>
+      </article>
+      <article class="spot-card">
+        <h2>Sílabas</h2>
+        <div class="syllable-row"><span class="syllable-token" style="--chip:#1D4ED8">ban</span><span class="syllable-token" style="--chip:#DC2626">dei</span><span class="syllable-token" style="--chip:#15803D">ra</span></div>
+        <p class="mission">Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</p>
+      </article>
+    </section>
+
+    <nav class="section-nav" aria-label="Navegação das unidades"><a class="nav-pill" href="#u1-bloco-1-abertura-a-palavra-bandeira-numa-cena-de-celebração">1</a><a class="nav-pill" href="#u2-bloco-2-reconhecimento-global">2</a><a class="nav-pill" href="#u3-bloco-3-segmentação-ban-dei-ra">3</a><a class="nav-pill" href="#u4-bloco-4-recombinação">4</a></nav>
+
+    <main id="main" class="content">
+      
+    <section id="u1-bloco-1-abertura-a-palavra-bandeira-numa-cena-de-celebração" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 1</span>
+          <h2>Bloco 1 — Abertura: a palavra &#x27;bandeira&#x27; numa cena de celebração</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>Cena de festa com bandeiras coloridas ao vento. Micro-história: &#x27;Há uma festa na escola. Há muitas cores a acenar. O que são essas coisas coloridas?&#x27;</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Cena de festa com bandeiras; micro-história; botão revelar</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>Aluno aponta e diz a palavra</p>
+            </div>
+          </div>
+          <p>Clicar → cartaz com bandeira + palavra aparece</p>
+          
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <button class="pill-btn reveal-btn" data-target="story-1">Mostrar a história</button>
+          <button class="pill-btn speak-btn" data-speak="bandeira">Ouvir</button>
+          <div id="story-1" class="reveal-box hidden"><p>Cena de festa com bandeiras coloridas ao vento. Micro-história: &#x27;Há uma festa na escola. Há muitas cores a acenar. O que são essas coisas coloridas?&#x27;</p></div>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-1">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-1">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-1">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-1" class="diff-panel is-active"><p>🟢 Palavra visível desde o início</p></div>
+        <div id="standard-1" class="diff-panel"><p>🟡 Revelar ao clicar</p></div>
+        <div id="challenge-1" class="diff-panel"><p>🔴 Escrever antes de revelar</p></div>
+      </div>
+    </section>
+    
+    <section id="u2-bloco-2-reconhecimento-global" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 2</span>
+          <h2>Bloco 2 — Reconhecimento global</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>Reconhecimento palavra↔imagem com distratores &#x27;zebra&#x27; e &#x27;palhaço&#x27;.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Tarefa 1: palavra &#x27;bandeira&#x27;, 3 imagens. Tarefa 2: imagem bandeira, 3 palavras.</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>Seleciona corretamente em ambas</p>
+            </div>
+          </div>
+          <p>Clicar → feedback</p>
+          
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Escolhe a palavra certa.</p>
+          <div class="choice-row">
+            <button class="choice-btn" data-answer="bandeira" data-choice="bandeira">bandeira</button><button class="choice-btn" data-answer="bandeira" data-choice="zebra">zebra</button><button class="choice-btn" data-answer="bandeira" data-choice="funil">funil</button>
+          </div>
+          <p class="feedback" aria-live="polite">Procura a palavra completa.</p>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-2">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-2">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-2">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-2" class="diff-panel is-active"><p>🟢 Primeira letra visível</p></div>
+        <div id="standard-2" class="diff-panel"><p>🟡 3 opções</p></div>
+        <div id="challenge-2" class="diff-panel"><p>🔴 4 opções similares</p></div>
+      </div>
+    </section>
+    
+    <section id="u3-bloco-3-segmentação-ban-dei-ra" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 3</span>
+          <h2>Bloco 3 — Segmentação: ban-dei-ra</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>Dividir &#x27;bandeira&#x27; em 3 sílabas, bater palmas, arrastar blocos. Destaque do ditongo &#x27;ei&#x27; em &#x27;dei&#x27;.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Palavra; blocos &#x27;ban&#x27;, &#x27;dei&#x27;, &#x27;ra&#x27;; 3 caixas; destaque do ditongo &#x27;ei&#x27;</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>Coloca os 3 blocos, seleciona &#x27;3 palmas&#x27;, aponta para &#x27;ei&#x27;</p>
+            </div>
+          </div>
+          <p>Arrastar → encaixe; palmadas → feedback</p>
+          
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Toca nas sílabas para formar a palavra.</p>
+          <div class="syllable-bank" data-compose="compose-3"><button class="syllable-chip" style="--chip:#1D4ED8" data-syllable="ban">ban</button><button class="syllable-chip" style="--chip:#DC2626" data-syllable="dei">dei</button><button class="syllable-chip" style="--chip:#15803D" data-syllable="ra">ra</button></div>
+          <div id="compose-3" class="compose-output">__</div>
+          <div class="compose-actions"><button class="pill-btn clear-compose" data-compose-clear="compose-3">Limpar</button></div>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-3">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-3">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-3">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-3" class="diff-panel is-active"><p>🟢 Blocos pré-posicionados</p></div>
+        <div id="standard-3" class="diff-panel"><p>🟡 Arrastar os 3</p></div>
+        <div id="challenge-3" class="diff-panel"><p>🔴 Escrever sílabas</p></div>
+      </div>
+    </section>
+    
+    <section id="u4-bloco-4-recombinação" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 4</span>
+          <h2>Bloco 4 — Recombinação</h2>
+        </div>
+        
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>Com &#x27;ban&#x27;, &#x27;dei&#x27;, &#x27;ra&#x27;, &#x27;lei&#x27;, &#x27;rei&#x27;, &#x27;ca&#x27;, &#x27;sa&#x27;, &#x27;da&#x27; formar novas palavras.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Tabuleiro; zona construção; verificar; descobertas</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>2+ palavras reais (banido, bandeira, rei, lei, radar, cada)</p>
+            </div>
+          </div>
+          <p>Arrastar → atualiza; verificar → feedback</p>
+          <div class="maker-box"><p><strong>Desafio maker:</strong> Cartões físicos; tabela ✓/✗</p><p><strong>Materiais:</strong> Cartões, Folha</p><p><strong>Comunicação:</strong> Partilhar descoberta</p></div>
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Experimenta combinações com as sílabas.</p>
+          <div class="syllable-bank" data-compose="mix-4"><button class="syllable-chip" style="--chip:#1D4ED8" data-syllable="ban">ban</button><button class="syllable-chip" style="--chip:#DC2626" data-syllable="dei">dei</button><button class="syllable-chip" style="--chip:#15803D" data-syllable="ra">ra</button></div>
+          <div id="mix-4" class="compose-output">__</div>
+          <p class="helper-text">Nem todas as combinações resultam em palavras reais. O importante é experimentar.</p>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-4">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-4">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-4">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-4" class="diff-panel is-active"><p>🟢 4 sílabas</p></div>
+        <div id="standard-4" class="diff-panel"><p>🟡 8 sílabas</p></div>
+        <div id="challenge-4" class="diff-panel"><p>🔴 Sem feedback imediato</p></div>
+      </div>
+    </section>
+    
+      
+    <details class="teacher-guide">
+      <summary>Guia do professor</summary>
+      <div class="teacher-grid">
+        <article class="teacher-card">
+          <h3>Objetivos desta página</h3>
+          <ul><li>Reconhecer globalmente a palavra &#x27;bandeira&#x27; e associá-la à sua imagem</li><li>Segmentar &#x27;bandeira&#x27; em sílabas (ban-dei-ra) identificando o ditongo &#x27;ei&#x27; e a consoante nasal &#x27;n&#x27;</li><li>Recombinar sílabas para formar palavras novas</li><li>Usar a palavra &#x27;bandeira&#x27; numa frase simples oral e escrita</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Materiais</h3>
+          <ul><li>Tablet ou computador com browser</li><li>Caderno diário</li><li>Lápis de cor</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Organização MEM</h3>
+          <ul><li><strong>Módulos:</strong> TEA, Trabalho curricular comparticipado, Circuitos de comunicação</li><li><strong>Instrumentos:</strong> PIT, mapa de tarefas</li><li><strong>Organização:</strong> individual (blocos 1–5) → pares (bloco 6) → turma (mini-avaliação + extensão)</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Percurso desta página</h3>
+          <ul><li>Unidade 1: Bloco 1 — Abertura: a palavra &#x27;bandeira&#x27; numa cena de celebração</li><li>Unidade 2: Bloco 2 — Reconhecimento global</li><li>Unidade 3: Bloco 3 — Segmentação: ban-dei-ra</li><li>Unidade 4: Bloco 4 — Recombinação</li></ul>
+        </article>
+        <article class="teacher-card teacher-card-wide">
+          <h3>Referências curriculares</h3>
+          <ul><li><strong>Português · 1.º ano</strong>: Identificar e manipular sílabas com consoante nasal (an/ban) e ditongo (ei)</li><li><strong>Português · 1.º ano</strong>: Ler palavras com ditongos (ei) e nasais; reconhecer globalmente palavras frequentes</li><li><strong>Estudo do Meio · 1.º ano</strong>: Reconhecer símbolos nacionais (bandeira) e locais da comunidade</li></ul>
+          <ul><li>PA-A: Linguagens e textos</li><li>PA-C: Raciocínio e resolução de problemas</li><li>PA-D: Pensamento crítico e pensamento criativo</li><li>PA-F: Desenvolvimento pessoal e autonomia</li></ul>
+        </article>
+      </div>
+    </details>
+    
+    </main>
+
+    <footer class="footer">PageCraft · Método das 28 Palavras · Bandeira</footer>
   </div>
-</div>
-</div>
 
-</div>
-<div style="text-align:center;padding:1rem;color:#aaa;font-size:.85rem;margin-top:2rem">M28P #20 — bandeira · PageCraft · 1.º ano · pt-PT</div>
+  <script>
+    const synth = window.speechSynthesis;
 
-<script>
-var dv='',b4c=[],b4d=[],b6s=[],b7sc=[null,null,null,null],b7t3=[],eiw=[];
-var b6order=['A','bandeira','está','ao','vento','.'];
-var rw4=['bandeira','bandeirola','rei','lei','meia','peixe','reino','lei','cadeira','moldeira'];
-function sb(id){
-  document.querySelectorAll('.bc').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.nt').forEach(t=>t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  var m={b1:0,b2:1,b3:2,b4:3,b5:4,b6:5,b7:6,b8:7};
-  if(m[id]!==undefined)document.querySelectorAll('.nt')[m[id]].classList.add('active');
-  window.scrollTo(0,0);
-}
-function sd(b,l){
-  ['green','yellow','red'].forEach(x=>{var e=document.getElementById(b+'-'+x);if(e)e.classList.toggle('show',x===l);});
-  document.querySelectorAll('#'+b+' .diff-btn').forEach(b=>b.classList.remove('active'));
-  var btn=document.querySelector('#'+b+' .diff-btn.'+l);if(btn)btn.classList.add('active');
-}
-function fb(el,ok,msg){el.className='fb show '+(ok?'ok':'nok');el.textContent=msg;}
-function ci2(v,el){
-  document.querySelectorAll('#b2 .ic').forEach(c=>c.classList.remove('selected'));
-  el.classList.add('selected');el.querySelector('span').textContent=v;
-  fb(document.getElementById('b2-fb1'),v==='bandeira','✓ 🏳️ é uma bandeira!':'✗ Qual combina com "bandeira"?');
-}
-function cw2b(v,el){
-  document.querySelectorAll('#b2-t2 .qopt').forEach(b=>b.disabled=true);
-  var f=document.getElementById('b2-fb2');
-  if(v==='bandeira'){el.classList.add('correct');fb(f,true,'✓ "bandeira" é a palavra certa!');}
-  else{el.classList.add('incorrect');fb(f,false,'✗ A palavra "bandeira" tem 3 sílabas com "ei".');}
-}
-function drs(e,v){dv=v;}
-function drd(e,id,exp){
-  e.preventDefault();
-  var s=document.getElementById(id);
-  if(dv===exp){
-    s.textContent=dv;s.classList.add('filled');
-    if(['s1','s2','s3'].every(x=>document.getElementById(x).classList.contains('filled')))
-      fb(document.getElementById('b3-dfb'),true,'✓ ban+dei+ra = bandeira! 🎉');
-  }else fb(document.getElementById('b3-dfb'),false,'✗ Tenta noutra caixa!');
-}
-function cp3b(v,el){
-  document.querySelectorAll('#b3 .tb:nth-child(2) .qopt').forEach(b=>b.disabled=true);
-  var f=document.getElementById('b3-pfb');
-  if(v==='3'){el.classList.add('correct');fb(f,true,'✓ "ban-dei-ra" = 3 palmas! 👏👏👏');}
-  else{el.classList.add('incorrect');fb(f,false,'✗ ban(👏)-dei(👏)-ra(👏) = 3!');}
-}
-function a4(s){b4c.push(s);document.getElementById('b4-c').textContent=b4c.join('');}
-function l4(){b4c=[];document.getElementById('b4-c').textContent='?';document.getElementById('b4-fb').style.display='none';}
-function v4(){
-  var w=b4c.join(''),f=document.getElementById('b4-fb');if(!w)return;
-  if(rw4.indexOf(w)>=0){fb(f,true,'✓ "'+w+'" é palavra real! 🌟');if(b4d.indexOf(w)<0){b4d.push(w);var d=document.getElementById('b4-d');var sp=document.createElement('span');sp.className='dw';sp.textContent='✓ '+w;d.appendChild(sp);}}
-  else fb(f,false,'✗ "'+w+'" não é uma palavra. Tenta!');
-}
-function cs5b(v,g,f){
-  document.querySelectorAll('#'+g+' .qopt').forEach(b=>b.disabled=true);
-  var el=document.getElementById(f);
-  if(v==='dei'){document.querySelector('#'+g+' [onclick*="dei"]').classList.add('correct');fb(el,true,'✓ "dei" com ditongo "ei"!');}
-  else{var bt=document.querySelector('#'+g+' [onclick*="\''+v+'\'"]');if(bt)bt.classList.add('incorrect');fb(el,false,'✗ A sílaba certa é "dei" com ditongo "ei".');}
-}
-function cg5b(v,g,f){
-  document.querySelectorAll('#'+g+' .qopt').forEach(b=>b.disabled=true);
-  var el=document.getElementById(f);
-  if(v==='bandeira'){document.querySelector('#'+g+' [onclick*="bandeira"]').classList.add('correct');fb(el,true,'✓ "bandeira" com "ei" é a grafia correta!');}
-  else{var bt=document.querySelector('#'+g+' [onclick*="\''+v+'\'"]');if(bt)bt.classList.add('incorrect');fb(el,false,'✗ A grafia certa é "bandeira" com "ei".');}
-}
-function ce5b(){
-  var v=document.getElementById('b5-i').value.trim().toLowerCase();
-  document.getElementById('b5-if').textContent=v==='bandeira'?'✅':v?'✏️':'';
-}
-function pw6b(w,el){
-  if(el.classList.contains('placed'))return;
-  el.classList.add('placed');b6s.push(w);
-  var c=document.getElementById('b6-s');
-  if(b6s.length===1)c.innerHTML='';
-  var pw=document.createElement('span');pw.className='pw';pw.textContent=w;c.appendChild(pw);
-}
-function ch6b(){
-  var built=Array.from(document.getElementById('b6-s').querySelectorAll('.pw')).map(e=>e.textContent);
-  var f=document.getElementById('b6-fb');
-  if(JSON.stringify(built)===JSON.stringify(b6order))fb(f,true,'✓ Perfeito! 🌟');
-  else if(built.length<6)fb(f,false,'✗ Usa todas as palavras!');
-  else fb(f,false,'✗ Ordem incorreta. Recomeça!');
-}
-function rs6b(){
-  b6s=[];document.getElementById('b6-s').innerHTML='<span style="color:#aaa;font-style:italic">frase aqui…</span>';
-  document.querySelectorAll('#b6-bk .wc').forEach(b=>b.classList.remove('placed'));
-  document.getElementById('b6-fb').style.display='none';
-}
-function cf6b(){
-  var v=document.getElementById('b6-fp').value.trim(),f=document.getElementById('b6-fpfb');
-  if(!v){fb(f,false,'✗ Escreve!');return;}
-  var hz=v.toLowerCase().indexOf('bandeira')>=0,hm=v[0]===v[0].toUpperCase()&&v[0]!==v[0].toLowerCase(),hp=v.endsWith('.')||v.endsWith('!')||v.endsWith('?');
-  if(hz&&hm&&hp)fb(f,true,'✓ Frase perfeita com "bandeira"! 🌟');
-  else if(!hz)fb(f,false,'✗ Precisa de ter "bandeira"!');
-  else if(!hm)fb(f,false,'✗ Começa com maiúscula!');
-  else fb(f,false,'✗ Ponto final!');
-}
-function e7b(t,exp,el){
-  var f=document.getElementById('b7-f'+t);var ok=false;
-  if(t===4){var v=document.getElementById('b7-t4').value.trim();ok=v.toLowerCase().indexOf('bandeira')>=0&&v.length>3;fb(f,ok,ok?'✓ ⭐':'✗ Precisa de "bandeira".');}
-  else if(exp==='bandeira'||exp==='3'){ok=true;el.classList.add('correct');document.querySelectorAll('#b7-t'+t+'-block .qopt, #b7 .tb:nth-child('+(t+3)+') .qopt').forEach(b=>b.disabled=true);fb(f,true,'✓ ⭐');}
-  else{el.classList.add('incorrect');fb(f,false,'✗');}
-  if(ok){b7sc[t-1]=1;up7b();}
-}
-var b7t3a=[];
-function et3b(s,el){
-  b7t3a.push(s);el.disabled=true;
-  var bd=document.getElementById('b7-t3b');
-  if(b7t3a.length===1)bd.innerHTML='';
-  var sp=document.createElement('span');sp.className='syl syl-'+(s==='ban'?'ban':s==='dei'?'dei':'ra');sp.style.fontSize='1.5rem';sp.textContent=s;bd.appendChild(sp);
-}
-function ct3b(){
-  var f=document.getElementById('b7-f3');
-  if(b7t3a.join('')==='bandeira'){fb(f,true,'✓ ⭐');b7sc[2]=1;up7b();}
-  else{fb(f,false,'✗ Ordem: ban→dei→ra');b7t3a=[];document.getElementById('b7-t3b').innerHTML='<span style="color:#aaa">sílabas aqui…</span>';document.querySelectorAll('#b7-t3 button').forEach(b=>b.disabled=false);}
-}
-function up7b(){
-  var d=b7sc.filter(s=>s===1).length;
-  document.getElementById('b7-p').style.width=(d/4*100)+'%';
-  document.getElementById('b7-pt').textContent='Tarefa '+d+' de 4';
-  if(d===4){
-    var r=document.getElementById('b7-r');r.style.display='block';
-    document.getElementById('b7-st').textContent='⭐⭐⭐⭐';
-    document.getElementById('b7-msg').textContent='Fantástico! Sabes tudo sobre "bandeira"! 🏳️🎉';
-    r.scrollIntoView({behavior:'smooth'});
-  }
-}
-function se8b(t){['draw','sym','words'].forEach(x=>document.getElementById('e8-'+x).style.display=x===t?'block':'none');}
-function aw8b(){
-  var i=document.getElementById('b8-wi'),v=i.value.trim().toLowerCase();
-  if(!v)return;
-  if(v.indexOf('ei')<0){alert('"'+v+'" não tem "ei".');return;}
-  if(eiw.indexOf(v)>=0){i.value='';return;}
-  eiw.push(v);i.value='';
-  var l=document.getElementById('b8-wl');var sp=document.createElement('span');sp.className='dw';sp.textContent=v;l.appendChild(sp);
-  document.getElementById('b8-wc').textContent=''+eiw.length+' palavra'+(eiw.length===1?'':'s')+'! '+(eiw.length>=5?'🌟':'');
-}
-</script>
+    document.querySelectorAll('.reveal-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        const target = document.getElementById(button.dataset.target);
+        if (!target) return;
+        target.classList.toggle('hidden');
+      });
+    });
+
+    document.querySelectorAll('.speak-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!synth) return;
+        const utterance = new SpeechSynthesisUtterance(button.dataset.speak || '');
+        utterance.lang = 'pt-PT';
+        synth.cancel();
+        synth.speak(utterance);
+      });
+    });
+
+    document.querySelectorAll('.choice-row').forEach((row) => {
+      const feedback = row.parentElement.querySelector('.feedback');
+      row.querySelectorAll('.choice-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          row.querySelectorAll('.choice-btn').forEach((item) => item.classList.remove('is-right', 'is-wrong'));
+          const rightAnswer = button.dataset.answer || button.dataset.clozeAnswer || '';
+          if (button.dataset.choice === rightAnswer) {
+            button.classList.add('is-right');
+            if (feedback) feedback.textContent = 'Muito bem!';
+          } else {
+            button.classList.add('is-wrong');
+            if (feedback) feedback.textContent = 'Tenta outra vez.';
+          }
+        });
+      });
+    });
+
+    document.querySelectorAll('[data-compose]').forEach((bank) => {
+      const output = document.getElementById(bank.dataset.compose);
+      const parts = [];
+      bank.querySelectorAll('.syllable-chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          parts.push(chip.dataset.syllable || '');
+          if (output) output.textContent = parts.join('');
+        });
+      });
+    });
+
+    document.querySelectorAll('.clear-compose').forEach((button) => {
+      button.addEventListener('click', () => {
+        const output = document.getElementById(button.dataset.composeClear);
+        if (output) output.textContent = '__';
+      });
+    });
+
+    document.querySelectorAll('.check-card').forEach((card) => {
+      card.addEventListener('click', () => card.classList.toggle('is-done'));
+    });
+
+    document.querySelectorAll('.diff-switcher').forEach((switcher) => {
+      const panels = switcher.nextElementSibling;
+      switcher.querySelectorAll('.diff-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          switcher.querySelectorAll('.diff-btn').forEach((item) => item.classList.remove('is-active'));
+          panels.querySelectorAll('.diff-panel').forEach((panel) => panel.classList.remove('is-active'));
+          button.classList.add('is-active');
+          const target = panels.querySelector('#' + CSS.escape(button.dataset.diff));
+          if (target) target.classList.add('is-active');
+        });
+      });
+    });
+  </script>
 </body>
 </html>

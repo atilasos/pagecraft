@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M28P #5 — sapato | PageCraft</title>
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHRleHQgeT0iNTAiIGZvbnQtc2l6ZT0iNDgiPvCfk5g8L3RleHQ+PC9zdmc+" />
+  <style>
+    :root {
+      --bg: #F0FDF4;
+      --surface: #FFFFFF;
+      --primary: #059669;
+      --accent: #F59E0B;
+      --text: #1E1B18;
+      --correct: #22c55e;
+      --correct-bg: #f0fdf4;
+      --incorrect: #F59E0B;
+      --incorrect-bg: #fffbeb;
+      --radius: 16px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --font: 'Nunito', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+      --touch-size: 48px;
+      --card-gap: 1rem;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 20%, transparent), transparent 38%),
+        linear-gradient(180deg, color-mix(in srgb, var(--primary) 8%, var(--bg)), var(--bg));
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+    a, button, summary, textarea { font: inherit; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; background: var(--surface); color: var(--text); padding: 0.75rem 1rem; border-radius: 9999px; z-index: 1000; border: 2px solid var(--primary); }
+    .skip-link:focus { top: 1rem; }
+    :focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+    .shell { max-width: 1120px; margin: 0 auto; padding: 1rem 1rem 3rem; }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      padding: 1.4rem;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 72%, white), color-mix(in srgb, var(--accent) 60%, white));
+      color: white;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
+    }
+    .hero::after { content: ""; position: absolute; inset: auto -8% -24% auto; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.14); }
+    .hero-top { display: flex; gap: 1rem; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; position: relative; z-index: 1; }
+    .hero-kicker, .hero-badge, .meta-chip, .nav-pill, .page-link span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 9999px;
+      padding: 0.75rem 1.25rem;
+      font-weight: 700;
+    }
+    .hero-kicker { background: rgba(255,255,255,0.16); }
+    .hero-badge { background: rgba(255,255,255,0.22); }
+    .hero-grid { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.9fr); margin-top: 1.25rem; position: relative; z-index: 1; }
+    .hero-copy h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.05; margin: 0.4rem 0 0.7rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+    .hero-copy p { margin: 0.4rem 0; max-width: 45rem; }
+    .word-scene { background: rgba(255,255,255,0.14); border: 2px solid rgba(255,255,255,0.28); border-radius: 24px; padding: 1rem; backdrop-filter: blur(4px); }
+    .word-scene .emoji { font-size: clamp(3rem, 10vw, 5.5rem); line-height: 1; }
+    .meta-row, .objective-row, .syllable-row, .page-switch, .section-nav { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .meta-row { margin-top: 1rem; }
+    .meta-chip { background: rgba(255,255,255,0.18); }
+    .objective-row { margin: 1rem 0 0; padding: 0; list-style: none; }
+    .objective-row li { background: rgba(255,255,255,0.22); border-radius: 9999px; padding: 0.75rem 1rem; font-weight: 700; min-height: var(--touch-size); display: inline-flex; align-items: center; }
+    .word-spotlight { margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1.1fr 1fr; }
+    .spot-card { background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 70%, white); border-radius: 24px; padding: 1rem; box-shadow: var(--shadow); }
+    .spot-card h2 { margin: 0 0 0.75rem; font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; }
+    .spot-card .word-display { font-size: clamp(2.4rem, 7vw, 3.8rem); font-weight: 800; color: var(--primary); letter-spacing: 0.05em; text-transform: uppercase; }
+    .spot-card .mission { margin-top: 0.75rem; }
+    .syllable-row { margin-top: 1rem; }
+    .syllable-token, .syllable-chip {
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 12px;
+      border: none;
+      color: white;
+      font-weight: 800;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      padding: 0.55rem 1rem;
+      background: var(--chip, var(--primary));
+      box-shadow: var(--shadow);
+    }
+    .page-switch { margin: 1.2rem 0 0.5rem; }
+    .page-link {
+      text-decoration: none;
+      background: var(--surface);
+      color: var(--text);
+      border: 2px solid color-mix(in srgb, var(--primary) 28%, white);
+      border-radius: 18px;
+      padding: 0.85rem 1rem;
+      min-height: var(--touch-size);
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: space-between;
+      flex: 1 1 200px;
+      box-shadow: var(--shadow);
+      font-weight: 700;
+    }
+    .page-link.is-current { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
+    .section-nav { position: sticky; top: 0; z-index: 10; padding: 0.85rem 0 1rem; background: linear-gradient(180deg, var(--bg), rgba(255,248,240,0.88)); backdrop-filter: blur(6px); }
+    .nav-pill { text-decoration: none; background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 24%, white); padding: 0.55rem 1rem; }
+    .content { display: grid; gap: 1.1rem; }
+    .unit-card { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 35%, white); border-radius: 24px; padding: 1.15rem; box-shadow: var(--shadow); }
+    .unit-head { display: flex; gap: 1rem; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+    .unit-head h2 { margin: 0.2rem 0 0; font-size: clamp(1.45rem, 4vw, 2.1rem); font-weight: 800; }
+    .unit-kicker { color: color-mix(in srgb, var(--primary) 80%, black); font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.9rem; }
+    .unit-badge { background: color-mix(in srgb, var(--accent) 22%, var(--surface)); border: 2px solid var(--accent); border-radius: 9999px; padding: 0.65rem 1rem; font-weight: 800; min-height: var(--touch-size); display: inline-flex; align-items: center; }
+    .unit-grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.95fr); margin-top: 1rem; }
+    .unit-copy p { margin: 0.65rem 0; }
+    .unit-flow { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 1rem; }
+    .unit-flow > div, .play-card, .maker-box, .teacher-card { background: color-mix(in srgb, var(--bg) 70%, white); border-radius: 18px; padding: 0.95rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
+    .play-label { font-weight: 800; margin: 0 0 0.8rem; }
+    .pill-btn, .choice-btn, .check-card, .prompt-card {
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 9999px;
+      border: 2px solid transparent;
+      padding: 0.75rem 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+    }
+    .pill-btn:hover, .choice-btn:hover, .check-card:hover, .prompt-card:hover, .page-link:hover { transform: scale(1.05); box-shadow: 0 10px 24px rgba(0,0,0,0.12); }
+    .pill-btn:active, .choice-btn:active, .check-card:active, .prompt-card:active, .page-link:active { transform: scale(0.97); }
+    .pill-btn { background: var(--primary); color: white; }
+    .choice-row, .check-grid, .prompt-grid, .compose-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .choice-btn, .check-card, .prompt-card { background: var(--surface); color: var(--text); border-color: color-mix(in srgb, var(--primary) 22%, white); }
+    .choice-btn.is-right, .check-card.is-done { background: var(--correct-bg); border-color: var(--correct); color: #166534; }
+    .choice-btn.is-wrong { background: var(--incorrect-bg); border-color: var(--incorrect); color: #92400e; }
+    .feedback, .helper-text { margin: 0.85rem 0 0; font-weight: 700; }
+    .feedback { min-height: 1.4em; }
+    .compose-output, .phrase-card, .cloze-word { min-height: 72px; border-radius: 18px; background: var(--surface); border: 2px dashed color-mix(in srgb, var(--primary) 35%, white); display: grid; place-items: center; font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800; color: var(--primary); padding: 0.9rem; margin-top: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .phrase-card { text-transform: none; font-size: 1.3rem; color: var(--text); }
+    .phrase-input { width: 100%; margin-top: 0.85rem; border-radius: 18px; border: 2px solid color-mix(in srgb, var(--primary) 25%, white); padding: 0.9rem 1rem; min-height: 120px; background: #fff; }
+    .diff-switcher { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; }
+    .diff-btn { min-height: var(--touch-size); min-width: var(--touch-size); border-radius: 9999px; border: 2px solid color-mix(in srgb, var(--primary) 28%, white); background: var(--surface); padding: 0.7rem 1rem; font-weight: 700; cursor: pointer; }
+    .diff-btn.is-active { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
+    .diff-panel { display: none; background: color-mix(in srgb, var(--bg) 72%, white); border-radius: 18px; padding: 0.95rem; margin-top: 0.8rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
+    .diff-panel.is-active { display: block; }
+    .teacher-guide { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 30%, white); border-radius: 24px; padding: 0.9rem 1rem; box-shadow: var(--shadow); }
+    .teacher-guide summary { min-height: var(--touch-size); display: flex; align-items: center; cursor: pointer; font-weight: 800; font-size: 1.2rem; }
+    .teacher-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 1rem; }
+    .teacher-card-wide { grid-column: 1 / -1; }
+    .teacher-card h3 { margin-top: 0; }
+    .footer { text-align: center; padding: 1.4rem 0 0; font-weight: 700; color: color-mix(in srgb, var(--text) 72%, white); }
+    .hidden { display: none !important; }
+    @media (max-width: 900px) {
+      .hero-grid, .word-spotlight, .unit-grid, .unit-flow, .teacher-grid { grid-template-columns: 1fr; }
+      .section-nav { position: static; }
+    }
+    @media (max-width: 640px) {
+      body { font-size: 18px; }
+      .shell { padding: 0.75rem 0.75rem 2.4rem; }
+      .hero { padding: 1rem; border-radius: 22px; }
+      .hero-copy h1 { font-size: clamp(2rem, 9vw, 3rem); }
+      .page-link { flex-basis: 100%; }
+      .objective-row li, .meta-chip, .hero-kicker, .hero-badge, .nav-pill { width: 100%; justify-content: center; }
+      .unit-card, .spot-card, .teacher-guide { border-radius: 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body data-page-variant="page-2.html" data-visible-units="3,4,5">
+  <a href="#main" class="skip-link">Ir para o conteúdo</a>
+  <div class="shell">
+    <header class="hero">
+      <div class="hero-top">
+        <span class="hero-kicker">M28P #5</span>
+        <span class="hero-badge">Rota silábica</span>
+      </div>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p>Partir a palavra em sílabas</p>
+          <h1>Sapato</h1>
+          <p>Percurso com destaque para a segmentação, a recombinação e o treino das partes da palavra.</p>
+          <div class="meta-row">
+            <span class="meta-chip">👟 Palavra 5</span>
+            <span class="meta-chip">1.º ano (6-7 anos)</span>
+            <span class="meta-chip">45 min</span>
+          </div>
+          <ul class="objective-row"><li>Reconhecer globalmente a palavra &#x27;sapato&#x27; associando-a à imagem</li><li>Segmentar &#x27;sapato&#x27; nas três sílabas sa-pa-to e bater as palmas correspondentes</li><li>Recombinar as sílabas sa, pa, to para formar novas palavras (ex: pato)</li></ul>
+        </div>
+        <aside class="word-scene" aria-hidden="true">
+          <div class="emoji">👟</div>
+          <p><strong>Experimenta as sílabas, reorganiza-as e descobre como pequenas partes formam palavras maiores.</strong></p>
+          <p>Paleta própria, leitura em pt-PT AO90 e navegação pensada para toque.</p>
+          <p>Esta página trabalha as unidades 3, 4, 5.</p>
+        </aside>
+      </div>
+    </header>
+
+    <div class="page-switch" aria-label="Outras páginas desta palavra"><a class="page-link" href="./index.html">Página 1<span>Abrir</span></a><a class="page-link is-current" href="./page-2.html">Página 2<span>Atual</span></a><a class="page-link" href="./page-3.html">Página 3<span>Abrir</span></a><a class="page-link" href="./page-4.html">Página 4<span>Abrir</span></a></div>
+
+    <section class="word-spotlight" aria-label="Destaque da palavra">
+      <article class="spot-card">
+        <h2>Palavra em destaque</h2>
+        <div class="word-display">Sapato</div>
+        <p class="mission">sapato</p>
+        <div class="compose-actions">
+          <button class="pill-btn speak-btn" data-speak="Sapato">Ouvir a palavra</button>
+        </div>
+      </article>
+      <article class="spot-card">
+        <h2>Sílabas</h2>
+        <div class="syllable-row"><span class="syllable-token" style="--chip:#059669">sa</span><span class="syllable-token" style="--chip:#2563EB">pa</span><span class="syllable-token" style="--chip:#E05FA0">to</span></div>
+        <p class="mission">Experimenta as sílabas, reorganiza-as e descobre como pequenas partes formam palavras maiores.</p>
+      </article>
+    </section>
+
+    <nav class="section-nav" aria-label="Navegação das unidades"><a class="nav-pill" href="#u3-segmentação-silábica-dividir-sapato-em-sa-pa-to">3</a><a class="nav-pill" href="#u4-recombinação-formar-novas-palavras-com-as-sílabas-sa-pa-to">4</a><a class="nav-pill" href="#u5-leitura-e-escrita-guiada-completar-a-palavra-sapato">5</a></nav>
+
+    <main id="main" class="content">
+      
+    <section id="u3-segmentação-silábica-dividir-sapato-em-sa-pa-to" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 3</span>
+          <h2>Segmentação silábica: dividir &#x27;sapato&#x27; em sa-pa-to</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>O aluno divide a palavra &#x27;sapato&#x27; em três sílabas arrastando blocos coloridos. Cada sílaba tem cor própria: sa=laranja, pa=verde, to=azul. O aluno bate palmas (ou clica nos blocos) contando as sílabas.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Palavra &#x27;sapato&#x27; escrita grande no topo; ao clicar &#x27;separar&#x27; a palavra parte-se animadamente em 3 blocos coloridos (sa=laranja, pa=verde, to=azul); abaixo, 3 caixas vazias com travessões para arrastar cada bloco; contador de sílabas (1, 2, 3) aparece à medida que se arrastam; botão &#x27;bater palmas&#x27; para contar oralmente</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno arrasta os 3 blocos para as posições corretas e indica oralmente (ou clica no número) que &#x27;sapato&#x27; tem 3 sílabas</p>
+            </div>
+          </div>
+          <p>Clique em &#x27;separar&#x27; → animação de quebra da palavra em 3 blocos; arrastar bloco para caixa → bloco encaixa com som suave; todos colocados → feedback positivo + contagem total animada</p>
+          <div class="maker-box"><p><strong>Desafio maker:</strong> Usa os blocos físicos de cartão (sa / pa / to) e cola-os em sequência numa tira de papel. Depois bate palmas 3 vezes enquanto diz a palavra em voz alta.</p><p><strong>Materiais:</strong> blocos físicos de sílabas (sa, pa, to) em cartão colorido, tira de papel A4 dobrada, cola stick</p><p><strong>Comunicação:</strong> Par partilha com outro par: &#x27;O nosso sapato tem 3 sílabas — sa, pa, to!&#x27;</p></div>
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Toca nas sílabas para formar a palavra.</p>
+          <div class="syllable-bank" data-compose="compose-3"><button class="syllable-chip" style="--chip:#059669" data-syllable="sa">sa</button><button class="syllable-chip" style="--chip:#2563EB" data-syllable="pa">pa</button><button class="syllable-chip" style="--chip:#E05FA0" data-syllable="to">to</button></div>
+          <div id="compose-3" class="compose-output">__</div>
+          <div class="compose-actions"><button class="pill-btn clear-compose" data-compose-clear="compose-3">Limpar</button></div>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-3">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-3">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-3">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-3" class="diff-panel is-active"><p>Blocos pré-colocados nas caixas; aluno apenas confirma a ordem (drag de reordenação); imagem de sapato sempre visível; contagem por palmas com apoio visual (3 mãos desenhadas)</p></div>
+        <div id="standard-3" class="diff-panel"><p>Blocos para arrastar do banco de sílabas para as caixas; imagem disponível como apoio; conta sílabas clicando no número correto</p></div>
+        <div id="challenge-3" class="diff-panel"><p>Palavra apresentada sem separação visual; aluno digita onde ficam as fronteiras silábicas; depois tenta com palavra nova: &#x27;pato&#x27; — quantas sílabas?</p></div>
+      </div>
+    </section>
+    
+    <section id="u4-recombinação-formar-novas-palavras-com-as-sílabas-sa-pa-to" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 4</span>
+          <h2>Recombinação: formar novas palavras com as sílabas sa, pa, to</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>Com as mesmas sílabas sa, pa, to (e opcionalmente outras sílabas conhecidas), o aluno tenta formar palavras novas. A combinação pa+to forma &#x27;pato&#x27; (palavra real, com imagem de pato). O aluno aprende a distinguir combinações que formam palavras reais das que não formam.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Banco de sílabas coloridas (sa=laranja, pa=verde, to=azul, mais 2 sílabas de palavras anteriores); zona de construção central com caixas; ao formar combinação válida → imagem aparece à direita com animação; ao formar combinação inválida → ponto de interrogação animado; botão &#x27;verificar&#x27;</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno forma &#x27;pato&#x27; (pa+to) corretamente e diz em voz alta &#x27;descobri a palavra pato!&#x27;; tenta pelo menos 3 combinações diferentes</p>
+            </div>
+          </div>
+          <p>Arrastar sílabas para a zona de construção → combinação mostrada; clicar &#x27;verificar&#x27; → se palavra real: imagem revela-se e som toca; se não é palavra: &#x27;?&#x27; anima com curiosidade (sem negatividade); reset para tentar nova combinação</p>
+          <div class="maker-box"><p><strong>Desafio maker:</strong> Em pares, usar os blocos físicos de sílabas (de várias palavras já aprendidas) para criar o máximo de palavras reais possível em 3 minutos. Registar numa folha.</p><p><strong>Materiais:</strong> conjunto de blocos físicos de sílabas (acumulado das palavras 1-5), folha de registo A5, lápis</p><p><strong>Comunicação:</strong> Cada par apresenta 1 palavra nova descoberta à turma; escreve no quadro</p></div>
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Experimenta combinações com as sílabas.</p>
+          <div class="syllable-bank" data-compose="mix-4"><button class="syllable-chip" style="--chip:#059669" data-syllable="sa">sa</button><button class="syllable-chip" style="--chip:#2563EB" data-syllable="pa">pa</button><button class="syllable-chip" style="--chip:#E05FA0" data-syllable="to">to</button></div>
+          <div id="mix-4" class="compose-output">__</div>
+          <p class="helper-text">Nem todas as combinações resultam em palavras reais. O importante é experimentar.</p>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-4">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-4">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-4">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-4" class="diff-panel is-active"><p>Apenas 2 sílabas disponíveis (pa + to); imagem de pato visível como pista; word bank com 2 palavras alvo já indicadas</p></div>
+        <div id="standard-4" class="diff-panel"><p>5 sílabas disponíveis (sa, pa, to + 2 de palavras anteriores); imagem revelada ao confirmar; 2 palavras alvo a descobrir</p></div>
+        <div id="challenge-4" class="diff-panel"><p>7 sílabas disponíveis incluindo sílabas novas; sem pistas; escrever as palavras descobertas no caderno; criar uma frase com &#x27;pato&#x27;</p></div>
+      </div>
+    </section>
+    
+    <section id="u5-leitura-e-escrita-guiada-completar-a-palavra-sapato" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 5</span>
+          <h2>Leitura e escrita guiada: completar a palavra &#x27;sapato&#x27;</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>O aluno lê a palavra parcialmente escrita e completa-a selecionando ou escrevendo a sílaba em falta. Exercício de cópia guiada com escolha de sílaba. Foco na correspondência entre som ouvido e sílaba escrita.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Palavra com sílaba em falta mostrada em grande (ex: &#x27;sa _ _ to&#x27;); abaixo, 3 botões com sílabas possíveis (pa / me / bo); ao selecionar a correta → sílaba preenche o espaço com animação; depois, linha de escrita guiada para copiar a palavra completa com apoio de pontos a tracejado</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno completa corretamente as 3 variações da palavra incompleta e copia &#x27;sapato&#x27; na linha de escrita guiada com as 3 sílabas visivelmente separadas por cor</p>
+            </div>
+          </div>
+          <p>Clique numa sílaba → tentativa; correto → preenche espaço com animação verde suave + som positivo; errado → botão fica âmbar, pode tentar novamente; após acertar → aparecer linha de cópia guiada</p>
+          
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Completa a palavra.</p>
+          <div class="cloze-word">sa ___ to</div>
+          <div class="choice-row"><button class="choice-btn cloze-option" data-cloze-answer="pa" data-choice="sa">sa</button><button class="choice-btn cloze-option" data-cloze-answer="pa" data-choice="pa">pa</button><button class="choice-btn cloze-option" data-cloze-answer="pa" data-choice="to">to</button></div>
+          <p class="feedback" aria-live="polite">Escolhe a sílaba em falta.</p>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-5">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-5">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-5">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-5" class="diff-panel is-active"><p>Apenas 1 versão da palavra incompleta (a mais fácil: &#x27;sapa___&#x27;); botão de áudio para ouvir a palavra devagar; 2 opções de sílaba (eliminação de distractores); linha de cópia com letras a tracejado para seguir</p></div>
+        <div id="standard-5" class="diff-panel"><p>2 versões da palavra incompleta; 3 opções de sílaba; linha de cópia simples com espaçamento guiado</p></div>
+        <div id="challenge-5" class="diff-panel"><p>3 versões da palavra incompleta; sem botão de áudio; escrever a palavra do zero na linha sem tracejado; depois escrever &#x27;pato&#x27; sem apoio</p></div>
+      </div>
+    </section>
+    
+      
+    <details class="teacher-guide">
+      <summary>Guia do professor</summary>
+      <div class="teacher-grid">
+        <article class="teacher-card">
+          <h3>Objetivos desta página</h3>
+          <ul><li>Reconhecer globalmente a palavra &#x27;sapato&#x27; associando-a à imagem</li><li>Segmentar &#x27;sapato&#x27; nas três sílabas sa-pa-to e bater as palmas correspondentes</li><li>Recombinar as sílabas sa, pa, to para formar novas palavras (ex: pato)</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Materiais</h3>
+          <ul><li>Tablet ou computador com browser (1 por aluno ou par)</li><li>Cartão da palavra &#x27;sapato&#x27; (imagem + palavra impressa)</li><li>Blocos de sílabas físicos (sa / pa / to) para manipulação offline</li><li>Quadro interativo para fase coletiva</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Organização MEM</h3>
+          <ul><li><strong>Módulos:</strong> TEA (Trabalho de Estudo Autónomo), Trabalho curricular comparticipado, Circuitos de comunicação</li><li><strong>Instrumentos:</strong> PIT (registo de tarefa concluída), mapa de tarefas (o aluno assinala bloco concluído)</li><li><strong>Organização:</strong> individual (exploração 30min) → pares (recombinação 7min) → turma (comunicação na extensão 8min)</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Percurso desta página</h3>
+          <ul><li>Unidade 3: Segmentação silábica: dividir &#x27;sapato&#x27; em sa-pa-to</li><li>Unidade 4: Recombinação: formar novas palavras com as sílabas sa, pa, to</li><li>Unidade 5: Leitura e escrita guiada: completar a palavra &#x27;sapato&#x27;</li></ul>
+        </article>
+        <article class="teacher-card teacher-card-wide">
+          <h3>Referências curriculares</h3>
+          <ul><li><strong>Português · 1.º ano</strong>: Reconhecer as letras do alfabeto e associá-las a sons; identificar sílabas em palavras de estrutura CV</li><li><strong>Português · 1.º ano</strong>: Ler palavras de uso frequente; segmentar e manipular sílabas em palavras simples</li><li><strong>Português · 1.º ano</strong>: Produzir enunciados simples com vocabulário relativo ao tema vestuário; responder a questões sobre o que ouviu/viu</li><li><strong>Português · 1.º ano</strong>: Escrever palavras de estrutura silábica CV com correspondência fonema-grafema já trabalhada</li></ul>
+          <ul><li>PA-A: Linguagens e textos</li><li>PA-C: Raciocínio e resolução de problemas</li><li>PA-F: Desenvolvimento pessoal e autonomia</li></ul>
+        </article>
+      </div>
+    </details>
+    
+    </main>
+
+    <footer class="footer">PageCraft · Método das 28 Palavras · Sapato</footer>
+  </div>
+
+  <script>
+    const synth = window.speechSynthesis;
+
+    document.querySelectorAll('.reveal-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        const target = document.getElementById(button.dataset.target);
+        if (!target) return;
+        target.classList.toggle('hidden');
+      });
+    });
+
+    document.querySelectorAll('.speak-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!synth) return;
+        const utterance = new SpeechSynthesisUtterance(button.dataset.speak || '');
+        utterance.lang = 'pt-PT';
+        synth.cancel();
+        synth.speak(utterance);
+      });
+    });
+
+    document.querySelectorAll('.choice-row').forEach((row) => {
+      const feedback = row.parentElement.querySelector('.feedback');
+      row.querySelectorAll('.choice-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          row.querySelectorAll('.choice-btn').forEach((item) => item.classList.remove('is-right', 'is-wrong'));
+          const rightAnswer = button.dataset.answer || button.dataset.clozeAnswer || '';
+          if (button.dataset.choice === rightAnswer) {
+            button.classList.add('is-right');
+            if (feedback) feedback.textContent = 'Muito bem!';
+          } else {
+            button.classList.add('is-wrong');
+            if (feedback) feedback.textContent = 'Tenta outra vez.';
+          }
+        });
+      });
+    });
+
+    document.querySelectorAll('[data-compose]').forEach((bank) => {
+      const output = document.getElementById(bank.dataset.compose);
+      const parts = [];
+      bank.querySelectorAll('.syllable-chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          parts.push(chip.dataset.syllable || '');
+          if (output) output.textContent = parts.join('');
+        });
+      });
+    });
+
+    document.querySelectorAll('.clear-compose').forEach((button) => {
+      button.addEventListener('click', () => {
+        const output = document.getElementById(button.dataset.composeClear);
+        if (output) output.textContent = '__';
+      });
+    });
+
+    document.querySelectorAll('.check-card').forEach((card) => {
+      card.addEventListener('click', () => card.classList.toggle('is-done'));
+    });
+
+    document.querySelectorAll('.diff-switcher').forEach((switcher) => {
+      const panels = switcher.nextElementSibling;
+      switcher.querySelectorAll('.diff-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          switcher.querySelectorAll('.diff-btn').forEach((item) => item.classList.remove('is-active'));
+          panels.querySelectorAll('.diff-panel').forEach((panel) => panel.classList.remove('is-active'));
+          button.classList.add('is-active');
+          const target = panels.querySelector('#' + CSS.escape(button.dataset.diff));
+          if (target) target.classList.add('is-active');
+        });
+      });
+    });
+  </script>
+</body>
+</html>

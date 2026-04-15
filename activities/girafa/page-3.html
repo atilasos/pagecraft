@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M28P #17 — girafa | PageCraft</title>
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHRleHQgeT0iNTAiIGZvbnQtc2l6ZT0iNDgiPvCfk5g8L3RleHQ+PC9zdmc+" />
+  <style>
+    :root {
+      --bg: #FFFDF0;
+      --surface: #FFFFFF;
+      --primary: #D4830A;
+      --accent: #7B5E2A;
+      --text: #1E1B18;
+      --correct: #22c55e;
+      --correct-bg: #f0fdf4;
+      --incorrect: #F59E0B;
+      --incorrect-bg: #fffbeb;
+      --radius: 16px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --font: 'Nunito', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+      --touch-size: 48px;
+      --card-gap: 1rem;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 20%, transparent), transparent 38%),
+        linear-gradient(180deg, color-mix(in srgb, var(--primary) 8%, var(--bg)), var(--bg));
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+    a, button, summary, textarea { font: inherit; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; background: var(--surface); color: var(--text); padding: 0.75rem 1rem; border-radius: 9999px; z-index: 1000; border: 2px solid var(--primary); }
+    .skip-link:focus { top: 1rem; }
+    :focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+    .shell { max-width: 1120px; margin: 0 auto; padding: 1rem 1rem 3rem; }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      padding: 1.4rem;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 72%, white), color-mix(in srgb, var(--accent) 60%, white));
+      color: white;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
+    }
+    .hero::after { content: ""; position: absolute; inset: auto -8% -24% auto; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.14); }
+    .hero-top { display: flex; gap: 1rem; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; position: relative; z-index: 1; }
+    .hero-kicker, .hero-badge, .meta-chip, .nav-pill, .page-link span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 9999px;
+      padding: 0.75rem 1.25rem;
+      font-weight: 700;
+    }
+    .hero-kicker { background: rgba(255,255,255,0.16); }
+    .hero-badge { background: rgba(255,255,255,0.22); }
+    .hero-grid { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.9fr); margin-top: 1.25rem; position: relative; z-index: 1; }
+    .hero-copy h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.05; margin: 0.4rem 0 0.7rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+    .hero-copy p { margin: 0.4rem 0; max-width: 45rem; }
+    .word-scene { background: rgba(255,255,255,0.14); border: 2px solid rgba(255,255,255,0.28); border-radius: 24px; padding: 1rem; backdrop-filter: blur(4px); }
+    .word-scene .emoji { font-size: clamp(3rem, 10vw, 5.5rem); line-height: 1; }
+    .meta-row, .objective-row, .syllable-row, .page-switch, .section-nav { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .meta-row { margin-top: 1rem; }
+    .meta-chip { background: rgba(255,255,255,0.18); }
+    .objective-row { margin: 1rem 0 0; padding: 0; list-style: none; }
+    .objective-row li { background: rgba(255,255,255,0.22); border-radius: 9999px; padding: 0.75rem 1rem; font-weight: 700; min-height: var(--touch-size); display: inline-flex; align-items: center; }
+    .word-spotlight { margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1.1fr 1fr; }
+    .spot-card { background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 70%, white); border-radius: 24px; padding: 1rem; box-shadow: var(--shadow); }
+    .spot-card h2 { margin: 0 0 0.75rem; font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; }
+    .spot-card .word-display { font-size: clamp(2.4rem, 7vw, 3.8rem); font-weight: 800; color: var(--primary); letter-spacing: 0.05em; text-transform: uppercase; }
+    .spot-card .mission { margin-top: 0.75rem; }
+    .syllable-row { margin-top: 1rem; }
+    .syllable-token, .syllable-chip {
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 12px;
+      border: none;
+      color: white;
+      font-weight: 800;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      padding: 0.55rem 1rem;
+      background: var(--chip, var(--primary));
+      box-shadow: var(--shadow);
+    }
+    .page-switch { margin: 1.2rem 0 0.5rem; }
+    .page-link {
+      text-decoration: none;
+      background: var(--surface);
+      color: var(--text);
+      border: 2px solid color-mix(in srgb, var(--primary) 28%, white);
+      border-radius: 18px;
+      padding: 0.85rem 1rem;
+      min-height: var(--touch-size);
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: space-between;
+      flex: 1 1 200px;
+      box-shadow: var(--shadow);
+      font-weight: 700;
+    }
+    .page-link.is-current { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
+    .section-nav { position: sticky; top: 0; z-index: 10; padding: 0.85rem 0 1rem; background: linear-gradient(180deg, var(--bg), rgba(255,248,240,0.88)); backdrop-filter: blur(6px); }
+    .nav-pill { text-decoration: none; background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 24%, white); padding: 0.55rem 1rem; }
+    .content { display: grid; gap: 1.1rem; }
+    .unit-card { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 35%, white); border-radius: 24px; padding: 1.15rem; box-shadow: var(--shadow); }
+    .unit-head { display: flex; gap: 1rem; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+    .unit-head h2 { margin: 0.2rem 0 0; font-size: clamp(1.45rem, 4vw, 2.1rem); font-weight: 800; }
+    .unit-kicker { color: color-mix(in srgb, var(--primary) 80%, black); font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.9rem; }
+    .unit-badge { background: color-mix(in srgb, var(--accent) 22%, var(--surface)); border: 2px solid var(--accent); border-radius: 9999px; padding: 0.65rem 1rem; font-weight: 800; min-height: var(--touch-size); display: inline-flex; align-items: center; }
+    .unit-grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.95fr); margin-top: 1rem; }
+    .unit-copy p { margin: 0.65rem 0; }
+    .unit-flow { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 1rem; }
+    .unit-flow > div, .play-card, .maker-box, .teacher-card { background: color-mix(in srgb, var(--bg) 70%, white); border-radius: 18px; padding: 0.95rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
+    .play-label { font-weight: 800; margin: 0 0 0.8rem; }
+    .pill-btn, .choice-btn, .check-card, .prompt-card {
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 9999px;
+      border: 2px solid transparent;
+      padding: 0.75rem 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+    }
+    .pill-btn:hover, .choice-btn:hover, .check-card:hover, .prompt-card:hover, .page-link:hover { transform: scale(1.05); box-shadow: 0 10px 24px rgba(0,0,0,0.12); }
+    .pill-btn:active, .choice-btn:active, .check-card:active, .prompt-card:active, .page-link:active { transform: scale(0.97); }
+    .pill-btn { background: var(--primary); color: white; }
+    .choice-row, .check-grid, .prompt-grid, .compose-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .choice-btn, .check-card, .prompt-card { background: var(--surface); color: var(--text); border-color: color-mix(in srgb, var(--primary) 22%, white); }
+    .choice-btn.is-right, .check-card.is-done { background: var(--correct-bg); border-color: var(--correct); color: #166534; }
+    .choice-btn.is-wrong { background: var(--incorrect-bg); border-color: var(--incorrect); color: #92400e; }
+    .feedback, .helper-text { margin: 0.85rem 0 0; font-weight: 700; }
+    .feedback { min-height: 1.4em; }
+    .compose-output, .phrase-card, .cloze-word { min-height: 72px; border-radius: 18px; background: var(--surface); border: 2px dashed color-mix(in srgb, var(--primary) 35%, white); display: grid; place-items: center; font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800; color: var(--primary); padding: 0.9rem; margin-top: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .phrase-card { text-transform: none; font-size: 1.3rem; color: var(--text); }
+    .phrase-input { width: 100%; margin-top: 0.85rem; border-radius: 18px; border: 2px solid color-mix(in srgb, var(--primary) 25%, white); padding: 0.9rem 1rem; min-height: 120px; background: #fff; }
+    .diff-switcher { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; }
+    .diff-btn { min-height: var(--touch-size); min-width: var(--touch-size); border-radius: 9999px; border: 2px solid color-mix(in srgb, var(--primary) 28%, white); background: var(--surface); padding: 0.7rem 1rem; font-weight: 700; cursor: pointer; }
+    .diff-btn.is-active { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
+    .diff-panel { display: none; background: color-mix(in srgb, var(--bg) 72%, white); border-radius: 18px; padding: 0.95rem; margin-top: 0.8rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
+    .diff-panel.is-active { display: block; }
+    .teacher-guide { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 30%, white); border-radius: 24px; padding: 0.9rem 1rem; box-shadow: var(--shadow); }
+    .teacher-guide summary { min-height: var(--touch-size); display: flex; align-items: center; cursor: pointer; font-weight: 800; font-size: 1.2rem; }
+    .teacher-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 1rem; }
+    .teacher-card-wide { grid-column: 1 / -1; }
+    .teacher-card h3 { margin-top: 0; }
+    .footer { text-align: center; padding: 1.4rem 0 0; font-weight: 700; color: color-mix(in srgb, var(--text) 72%, white); }
+    .hidden { display: none !important; }
+    @media (max-width: 900px) {
+      .hero-grid, .word-spotlight, .unit-grid, .unit-flow, .teacher-grid { grid-template-columns: 1fr; }
+      .section-nav { position: static; }
+    }
+    @media (max-width: 640px) {
+      body { font-size: 18px; }
+      .shell { padding: 0.75rem 0.75rem 2.4rem; }
+      .hero { padding: 1rem; border-radius: 22px; }
+      .hero-copy h1 { font-size: clamp(2rem, 9vw, 3rem); }
+      .page-link { flex-basis: 100%; }
+      .objective-row li, .meta-chip, .hero-kicker, .hero-badge, .nav-pill { width: 100%; justify-content: center; }
+      .unit-card, .spot-card, .teacher-guide { border-radius: 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body data-page-variant="page-3.html" data-visible-units="5,6,7">
+  <a href="#main" class="skip-link">Ir para o conteúdo</a>
+  <div class="shell">
+    <header class="hero">
+      <div class="hero-top">
+        <span class="hero-kicker">M28P #17</span>
+        <span class="hero-badge">Rota de leitura</span>
+      </div>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p>Ler, completar e usar em frases</p>
+          <h1>Girafa</h1>
+          <p>Percurso centrado na leitura guiada, nas lacunas e na construção de frases simples.</p>
+          <div class="meta-row">
+            <span class="meta-chip">🦒 Palavra 17</span>
+            <span class="meta-chip">1.º ano (6-7 anos)</span>
+            <span class="meta-chip">45 min</span>
+          </div>
+          <ul class="objective-row"><li>Reconhecer a palavra &#x27;girafa&#x27; como um todo (leitura global)</li><li>Segmentar a palavra em três sílabas: gi-ra-fa</li><li>Recombinar as sílabas gi, ra, fa com sílabas já conhecidas para formar novas palavras reais</li></ul>
+        </div>
+        <aside class="word-scene" aria-hidden="true">
+          <div class="emoji">🦒</div>
+          <p><strong>Lê a palavra várias vezes, completa o que falta e usa-a numa frase clara e curta.</strong></p>
+          <p>Paleta própria, leitura em pt-PT AO90 e navegação pensada para toque.</p>
+          <p>Esta página trabalha as unidades 5, 6, 7.</p>
+        </aside>
+      </div>
+    </header>
+
+    <div class="page-switch" aria-label="Outras páginas desta palavra"><a class="page-link" href="./index.html">Página 1<span>Abrir</span></a><a class="page-link" href="./page-2.html">Página 2<span>Abrir</span></a><a class="page-link is-current" href="./page-3.html">Página 3<span>Atual</span></a><a class="page-link" href="./page-4.html">Página 4<span>Abrir</span></a></div>
+
+    <section class="word-spotlight" aria-label="Destaque da palavra">
+      <article class="spot-card">
+        <h2>Palavra em destaque</h2>
+        <div class="word-display">Girafa</div>
+        <p class="mission">girafa</p>
+        <div class="compose-actions">
+          <button class="pill-btn speak-btn" data-speak="Girafa">Ouvir a palavra</button>
+        </div>
+      </article>
+      <article class="spot-card">
+        <h2>Sílabas</h2>
+        <div class="syllable-row"><span class="syllable-token" style="--chip:#D4830A">gi</span><span class="syllable-token" style="--chip:#7B5E2A">ra</span><span class="syllable-token" style="--chip:#C03A9B">fa</span></div>
+        <p class="mission">Lê a palavra várias vezes, completa o que falta e usa-a numa frase clara e curta.</p>
+      </article>
+    </section>
+
+    <nav class="section-nav" aria-label="Navegação das unidades"><a class="nav-pill" href="#u5-leitura-e-escrita-guiada-completar-a-palavra-girafa">5</a><a class="nav-pill" href="#u6-frase-simples-ordenar-e-construir-com-girafa">6</a><a class="nav-pill" href="#u7-mini-avaliação-formativa-4-critérios-observáveis-m28p">7</a></nav>
+
+    <main id="main" class="content">
+      
+    <section id="u5-leitura-e-escrita-guiada-completar-a-palavra-girafa" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 5</span>
+          <h2>Leitura e escrita guiada — completar a palavra &#x27;girafa&#x27;</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>O aluno pratica a leitura e escrita da palavra &#x27;girafa&#x27; em contextos guiados: completar a palavra com a sílaba em falta, selecionar a sílaba correta entre opções e (no nível desafio) copiar a palavra completa. O foco é na consolidação ortográfica e na correspondência oral-escrita.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Palavra com sílaba em falta representada por espaço sublinhado largo (ex: &#x27;gi___fa&#x27;). Abaixo, 3-4 botões grandes com opções de sílabas. Imagem da girafa visível no canto. Após resposta correta, a palavra aparece completa com animação de &#x27;preenchimento&#x27; e som suave. Progresso de 3 variantes visível em cima.</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno preenche corretamente as 3 variantes (gi___fa, ___rafa, gira___) com no máximo 1 erro por variante</p>
+            </div>
+          </div>
+          <p>Clicar numa opção → preenche o espaço → feedback ✓ verde ou ✗ âmbar → se correto, animação e avança para próxima variante; se errado, opção fica âmbar e pode tentar outra</p>
+          
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Completa a palavra.</p>
+          <div class="cloze-word">gi ra ___</div>
+          <div class="choice-row"><button class="choice-btn cloze-option" data-cloze-answer="fa" data-choice="gi">gi</button><button class="choice-btn cloze-option" data-cloze-answer="fa" data-choice="ra">ra</button><button class="choice-btn cloze-option" data-cloze-answer="fa" data-choice="fa">fa</button></div>
+          <p class="feedback" aria-live="polite">Escolhe a sílaba em falta.</p>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-5">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-5">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-5">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-5" class="diff-panel is-active"><p>🟢 Imagem sempre visível; apenas 2 opções de sílabas por variante; a sílaba em falta é sempre a do meio (&#x27;gi___fa&#x27; com &#x27;ra&#x27;); palavra completa visível como modelo acima do exercício</p></div>
+        <div id="standard-5" class="diff-panel"><p>🟡 3 opções de sílabas; sílaba oculta varia nas 3 variantes; imagem disponível como apoio lateral</p></div>
+        <div id="challenge-5" class="diff-panel"><p>🔴 4 opções incluindo distratores fonéticos próximos (ra/la/na/da); sem imagem; o aluno também escreve a palavra completa numa área de texto após cada variante correta; terceira variante: ocultar 2 sílabas em simultâneo (&#x27;gi______&#x27;)</p></div>
+      </div>
+    </section>
+    
+    <section id="u6-frase-simples-ordenar-e-construir-com-girafa" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 6</span>
+          <h2>Frase simples — ordenar e construir com &#x27;girafa&#x27;</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>O aluno lê e constrói a frase-modelo &#x27;A girafa tem pescoço comprido&#x27;. Pratica a ordem das palavras na frase em português (sujeito-verbo-complemento), identifica a palavra-chave &#x27;girafa&#x27; na frase e, em extensão, cria uma nova frase própria. Este bloco liga a palavra ao seu uso comunicativo real.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Área superior: 6 cartões-palavra misturados (cada palavra num cartão com cor neutra, &#x27;girafa&#x27; em destaque azul). Área de construção: 6 slots numerados em linha. Botão &#x27;Confirmar Frase&#x27;. Imagem da girafa à direita como referência visual. Após confirmação correta: frase completa aparece com animação de leitura (uma palavra de cada vez em destaque) e áudio opcional.</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno ordena corretamente os 6 cartões-palavra e lê a frase completa em voz alta sem hesitação</p>
+            </div>
+          </div>
+          <p>Arrastar cartão-palavra para slot → frase vai sendo construída; clicar Confirmar → verifica ordem; ✓ animação de leitura progressiva / ✗ indica posição(ões) errada(s) a âmbar; pode repetir</p>
+          <div class="maker-box"><p><strong>Desafio maker:</strong> Em pares, inventem uma nova frase sobre a girafa, diferente da frase-modelo. Escrevam no quadro branco da sala ou numa folha A3.</p><p><strong>Materiais:</strong> quadro branco da sala ou folha A3, marcador de quadro ou lápis grosso</p><p><strong>Comunicação:</strong> Cada par lê a sua frase em voz alta para a turma; frases afixadas na parede da sala</p></div>
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Lê a frase e escreve a tua.</p>
+          <div class="phrase-card">girafa</div>
+          <div class="compose-actions"><button class="pill-btn speak-btn" data-speak="girafa">Ouvir a frase</button></div>
+          <textarea class="phrase-input" rows="3" placeholder="Escreve aqui uma frase com a palavra."></textarea>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-6">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-6">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-6">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-6" class="diff-panel is-active"><p>🟢 Apenas 3 cartões a ordenar (&#x27;A&#x27; / &#x27;girafa&#x27; / &#x27;come&#x27;); imagem como apoio permanente; frase-modelo completa visível acima dos slots para comparar</p></div>
+        <div id="standard-6" class="diff-panel"><p>🟡 5-6 cartões; frase-modelo visível apenas no início como referência; sem apoio de numeração nas posições</p></div>
+        <div id="challenge-6" class="diff-panel"><p>🔴 6 cartões misturados sem modelo; o aluno constrói uma segunda frase original sobre a girafa; extensão: reescrever a frase de outra forma (&#x27;O pescoço da girafa é muito comprido&#x27;)</p></div>
+      </div>
+    </section>
+    
+    <section id="u7-mini-avaliação-formativa-4-critérios-observáveis-m28p" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 7</span>
+          <h2>Mini-avaliação formativa — 4 critérios observáveis M28P</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>Avaliação formativa final dos 4 critérios observáveis do M28P para a palavra &#x27;girafa&#x27;: (1) reconhecer a palavra entre opções, (2) segmentar em sílabas, (3) reconstruir a partir de sílabas, (4) usar em frase. O aluno recebe feedback visual por critério. É um mapa do que sabe, não uma nota — o feedback é sempre positivo e orientador.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Barra de progresso com 4 etapas (ícones de girafa, 1 por critério). Critério 1: escolha entre 3 palavras; Critério 2: bater 3 palmas e confirmar número; Critério 3: arrastar sílabas na ordem certa; Critério 4: completar frase &#x27;A girafa ___&#x27;. No fim: mapa visual com 4 ícones — ✓ verde (consegui!) ou 🔄 âmbar (vou praticar mais). Sem vermelho, sem cruz.</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>Critérios observáveis: (1) identifica &#x27;girafa&#x27; entre 3 palavras escritas; (2) conta e verbaliza 3 sílabas (gi-ra-fa); (3) arrasta sílabas na ordem gi→ra→fa; (4) completa &#x27;A girafa ___ pescoço comprido&#x27;</p>
+            </div>
+          </div>
+          <p>Completar cada critério → avança automaticamente para o seguinte → no fim exibe mapa de resultados; botão &#x27;Praticar de novo&#x27; disponível para critérios com 🔄</p>
+          
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Marca o que já consegues fazer.</p>
+          <div class="check-grid">
+            <button class="check-card">Reconheço a palavra</button>
+            <button class="check-card">Separo as sílabas</button>
+            <button class="check-card">Reconstruo a palavra</button>
+            <button class="check-card">Uso a palavra numa frase</button>
+          </div>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-7">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-7">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-7">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-7" class="diff-panel is-active"><p>🟢 Cada critério tem imagem de apoio; pode repetir sem limite; critério 4 com opções para completar a frase (não escrever); critério 3 com um slot já preenchido (&#x27;gi&#x27; no lugar)</p></div>
+        <div id="standard-7" class="diff-panel"><p>🟡 Sequência normal sem apoios visuais extra; uma repetição possível por critério; critério 4 com lacuna para preencher</p></div>
+        <div id="challenge-7" class="diff-panel"><p>🔴 Sem imagem de apoio em nenhum critério; critério 4 exige escrever uma frase original completa; critério extra opcional: encontrar outra palavra com 3 sílabas que comece por &#x27;gi&#x27;</p></div>
+      </div>
+    </section>
+    
+      
+    <details class="teacher-guide">
+      <summary>Guia do professor</summary>
+      <div class="teacher-grid">
+        <article class="teacher-card">
+          <h3>Objetivos desta página</h3>
+          <ul><li>Reconhecer a palavra &#x27;girafa&#x27; como um todo (leitura global)</li><li>Segmentar a palavra em três sílabas: gi-ra-fa</li><li>Recombinar as sílabas gi, ra, fa com sílabas já conhecidas para formar novas palavras reais</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Materiais</h3>
+          <ul><li>Tablet ou computador com browser (1 por aluno ou par)</li><li>Cartões de sílabas físicos impressos: gi / ra / fa</li><li>Cartões de sílabas de apoio: do / to / da / ca / va / la (sílabas de palavras anteriores)</li><li>Cartão-palavra da girafa (imagem + texto, formato A5)</li><li>Lápis, borracha e papel pautado para escrita guiada</li><li>Quadro interativo (opcional, para fase de comunicação final)</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Organização MEM</h3>
+          <ul><li><strong>Módulos:</strong> TEA (Trabalho de Estudo Autónomo), Trabalho curricular comparticipado, Circuitos de comunicação</li><li><strong>Instrumentos:</strong> PIT, mapa de tarefas</li><li><strong>Organização:</strong> individual (exploração e prática guiada, ~25min) → pares (recombinação e frase, ~10min) → turma (comunicação e mini-avaliação, ~10min)</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Percurso desta página</h3>
+          <ul><li>Unidade 5: Leitura e escrita guiada — completar a palavra &#x27;girafa&#x27;</li><li>Unidade 6: Frase simples — ordenar e construir com &#x27;girafa&#x27;</li><li>Unidade 7: Mini-avaliação formativa — 4 critérios observáveis M28P</li></ul>
+        </article>
+        <article class="teacher-card teacher-card-wide">
+          <h3>Referências curriculares</h3>
+          <ul><li><strong>Português · 1.º ano</strong>: Identificar palavras escritas; estabelecer relações entre a escrita e a oralidade; reconhecer sílabas como unidades fonológicas</li><li><strong>Português · 1.º ano</strong>: Produzir enunciados com vocabulário e estruturas gramaticais adequados; participar em atividades de oralidade</li><li><strong>Português · 1.º ano</strong>: Segmentar e manipular sílabas em palavras; reconstituir palavras a partir de sílabas dadas; escrever palavras e frases simples</li></ul>
+          <ul><li>PA-A: Linguagens e textos</li><li>PA-C: Raciocínio e resolução de problemas</li><li>PA-F: Desenvolvimento pessoal e autonomia</li></ul>
+        </article>
+      </div>
+    </details>
+    
+    </main>
+
+    <footer class="footer">PageCraft · Método das 28 Palavras · Girafa</footer>
+  </div>
+
+  <script>
+    const synth = window.speechSynthesis;
+
+    document.querySelectorAll('.reveal-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        const target = document.getElementById(button.dataset.target);
+        if (!target) return;
+        target.classList.toggle('hidden');
+      });
+    });
+
+    document.querySelectorAll('.speak-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!synth) return;
+        const utterance = new SpeechSynthesisUtterance(button.dataset.speak || '');
+        utterance.lang = 'pt-PT';
+        synth.cancel();
+        synth.speak(utterance);
+      });
+    });
+
+    document.querySelectorAll('.choice-row').forEach((row) => {
+      const feedback = row.parentElement.querySelector('.feedback');
+      row.querySelectorAll('.choice-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          row.querySelectorAll('.choice-btn').forEach((item) => item.classList.remove('is-right', 'is-wrong'));
+          const rightAnswer = button.dataset.answer || button.dataset.clozeAnswer || '';
+          if (button.dataset.choice === rightAnswer) {
+            button.classList.add('is-right');
+            if (feedback) feedback.textContent = 'Muito bem!';
+          } else {
+            button.classList.add('is-wrong');
+            if (feedback) feedback.textContent = 'Tenta outra vez.';
+          }
+        });
+      });
+    });
+
+    document.querySelectorAll('[data-compose]').forEach((bank) => {
+      const output = document.getElementById(bank.dataset.compose);
+      const parts = [];
+      bank.querySelectorAll('.syllable-chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          parts.push(chip.dataset.syllable || '');
+          if (output) output.textContent = parts.join('');
+        });
+      });
+    });
+
+    document.querySelectorAll('.clear-compose').forEach((button) => {
+      button.addEventListener('click', () => {
+        const output = document.getElementById(button.dataset.composeClear);
+        if (output) output.textContent = '__';
+      });
+    });
+
+    document.querySelectorAll('.check-card').forEach((card) => {
+      card.addEventListener('click', () => card.classList.toggle('is-done'));
+    });
+
+    document.querySelectorAll('.diff-switcher').forEach((switcher) => {
+      const panels = switcher.nextElementSibling;
+      switcher.querySelectorAll('.diff-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          switcher.querySelectorAll('.diff-btn').forEach((item) => item.classList.remove('is-active'));
+          panels.querySelectorAll('.diff-panel').forEach((panel) => panel.classList.remove('is-active'));
+          button.classList.add('is-active');
+          const target = panels.querySelector('#' + CSS.escape(button.dataset.diff));
+          if (target) target.classList.add('is-active');
+        });
+      });
+    });
+  </script>
+</body>
+</html>

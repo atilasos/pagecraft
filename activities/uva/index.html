@@ -1,1498 +1,516 @@
-<!DOCTYPE html>
-<html lang="pt">
+<!doctype html>
+<html lang="pt-PT">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Método das 28 Palavras - Palavra 3: uva</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M28P #3 — uva | PageCraft</title>
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHRleHQgeT0iNTAiIGZvbnQtc2l6ZT0iNDgiPvCfk5g8L3RleHQ+PC9zdmc+" />
   <style>
     :root {
-      --bg: #FFF8F0;
+      --bg: #F5F3FF;
       --surface: #FFFFFF;
-      --primary: #E05FA0;
+      --primary: #7C3AED;
       --accent: #F59E0B;
       --text: #1E1B18;
-      --green: #22c55e;
-      --amber: #f59e0b;
-      --red: #ef4444;
-      --purple: #7C3AED;
-      --u: #E05FA0;
-      --va: #7C3AED;
+      --correct: #22c55e;
+      --correct-bg: #f0fdf4;
+      --incorrect: #F59E0B;
+      --incorrect-bg: #fffbeb;
       --radius: 16px;
       --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      --touch: 48px;
+      --font: 'Nunito', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+      --touch-size: 48px;
+      --card-gap: 1rem;
     }
-
     * { box-sizing: border-box; }
-
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      font-family: 'Nunito', 'Poppins', 'Comic Sans MS', sans-serif;
-      background: radial-gradient(circle at 10% 10%, #ffe6f2, var(--bg) 45%), linear-gradient(160deg, #fffdf8, #fff3e8);
+      font-family: var(--font);
+      background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 20%, transparent), transparent 38%),
+        linear-gradient(180deg, color-mix(in srgb, var(--primary) 8%, var(--bg)), var(--bg));
       color: var(--text);
       font-size: 20px;
-      line-height: 1.45;
+      line-height: 1.55;
+      min-height: 100vh;
     }
-
-    .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 1rem;
-    }
-
-    header {
-      background: linear-gradient(125deg, #e05fa0, #f59e0b, #7C3AED);
-      background-size: 180% 180%;
-      animation: shimmer 8s ease infinite;
-      color: #fff;
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      box-shadow: var(--shadow);
-      margin-bottom: 1rem;
-    }
-
-    @keyframes shimmer {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    @keyframes celebrate {
-      0% { transform: scale(.9); }
-      50% { transform: scale(1.08); }
-      100% { transform: scale(1); }
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 2rem;
-      letter-spacing: 0.02em;
-    }
-
-    h2 { margin: 0 0 .5rem; color: var(--primary); font-size: 1.45rem; }
-    h3 { margin: .2rem 0 .4rem; }
-
-    .meta { margin-top: .4rem; font-weight: 700; }
-
-    .objectives {
-      margin-top: 1rem;
-      background: rgba(255,255,255,.16);
-      border-radius: 12px;
-      padding: .8rem 1rem;
-    }
-
-    .objectives li { margin: .35rem 0; }
-
-    .unit, .panel {
-      background: var(--surface);
-      border: 2px solid var(--primary);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 1rem;
-      margin: 1rem 0;
-    }
-
-    .unit-intro { margin: 0 0 .8rem; }
-
-    .diff-tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: .5rem;
-      margin-bottom: .8rem;
-    }
-
-    .diff-tab, button, .option-btn {
-      min-height: var(--touch);
-      border-radius: 999px;
-      border: 2px solid #d8d8d8;
-      background: #fff;
-      font-weight: 800;
-      font-size: 1rem;
-      padding: .6rem 1rem;
-      cursor: pointer;
-      touch-action: manipulation;
-      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
-    }
-
-    .diff-tab.active { color: #fff; border-color: transparent; }
-    .diff-tab[data-level='support'].active { background: var(--green); }
-    .diff-tab[data-level='standard'].active { background: var(--accent); }
-    .diff-tab[data-level='challenge'].active { background: var(--red); }
-
-    button, .option-btn {
-      background: var(--primary);
-      color: #fff;
-      border-color: transparent;
-      box-shadow: 0 2px 8px rgba(224,95,160,.35);
-    }
-
-    button:hover, .option-btn:hover, .diff-tab:hover { transform: scale(1.03); }
-    button:active, .option-btn:active, .diff-tab:active { transform: scale(.97); }
-
-    .subtle-btn { background: #fff; color: var(--text); border-color: var(--primary); box-shadow: none; }
-
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: .7rem; }
-    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: .7rem; }
-
-    .story-visual {
-      background: linear-gradient(180deg, #f4e7ff, #fde2f1);
-      border-radius: 14px;
-      min-height: 190px;
-      display: grid;
-      place-items: center;
-      padding: .8rem;
-      border: 2px dashed #b48ad9;
-      text-align: center;
-    }
-
-    .bubble {
-      display: inline-block;
-      margin-top: .6rem;
-      background: #fff;
-      padding: .6rem .8rem;
-      border-radius: 14px;
-      border: 2px solid #e9c9da;
-      font-weight: 700;
-    }
-
-    .word-display {
-      margin-top: .8rem;
-      text-align: center;
-      font-size: 48px;
-      font-weight: 800;
-      letter-spacing: .06em;
-      color: var(--primary);
-      opacity: 0;
-      transform: translateY(6px);
-      transition: .25s;
-    }
-
-    .word-display.show { opacity: 1; transform: translateY(0); }
-    .word-display.outline { text-shadow: 0 0 0 #fff, 0 0 0 #fff, 2px 2px 0 #ffd44d; }
-
-    .feedback {
-      margin-top: .7rem;
-      border-radius: 12px;
-      padding: .55rem .7rem;
-      font-weight: 700;
-      min-height: 2.1rem;
-      border: 2px solid transparent;
-    }
-
-    .feedback.ok { background: #f0fdf4; color: #166534; border-color: #22c55e; }
-    .feedback.no { background: #fffbeb; color: #a16207; border-color: #f59e0b; }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 999px;
-      font-weight: 800;
-      color: #fff;
-      background: var(--accent);
-      padding: .18rem .65rem;
-      font-size: .9rem;
-      margin-left: .4rem;
-    }
-
-    .syllable {
-      user-select: none;
-      color: #fff;
-      border-radius: 12px;
-      padding: .5rem 1.2rem;
-      font-size: 36px;
-      font-weight: 800;
-      min-height: var(--touch);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 3px 10px rgba(0,0,0,.2);
-      touch-action: none;
-    }
-
-    .syllable[data-value='u'] { background: var(--u); }
-    .syllable[data-value='va'] { background: var(--va); }
-
-    .drag-source, .drag-words { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .8rem; min-height: 66px; }
-
-    .drop-area {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: .8rem;
-      margin-top: .8rem;
-    }
-
-    .slot {
-      min-height: 82px;
-      border: 3px dashed #c8b4dc;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #faf6ff;
+    a, button, summary, textarea { font: inherit; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; background: var(--surface); color: var(--text); padding: 0.75rem 1rem; border-radius: 9999px; z-index: 1000; border: 2px solid var(--primary); }
+    .skip-link:focus { top: 1rem; }
+    :focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+    .shell { max-width: 1120px; margin: 0 auto; padding: 1rem 1rem 3rem; }
+    .hero {
       position: relative;
-      font-weight: 800;
-    }
-
-    .slot-label {
-      position: absolute;
-      top: 6px;
-      left: 8px;
-      font-size: .9rem;
-      color: #5f4f77;
-    }
-
-    .slot.filled { border-style: solid; border-color: #8d57cd; }
-    .slot.correct { box-shadow: 0 0 0 3px #bbf7d0 inset; border-color: #22c55e; }
-
-    .center { text-align: center; }
-    .hidden { display: none !important; }
-    .small { font-size: .95rem; }
-
-    .read-phrase {
-      font-size: 2rem;
-      font-weight: 800;
-      text-align: center;
-      letter-spacing: .02em;
-      margin: .8rem 0;
-    }
-
-    .read-phrase .word {
-      display: inline-block;
-      padding: .08rem .32rem;
-      margin: 0 .12rem;
-      border-bottom: 4px solid #f7c4de;
-      border-radius: 8px;
-      cursor: pointer;
-      min-height: 48px;
-    }
-
-    .read-phrase .word.active { background: #ffe6f2; }
-
-    .progress-wrap {
-      background: #f6e9ff;
-      border-radius: 999px;
       overflow: hidden;
-      height: 18px;
-      border: 2px solid #dcb8ff;
-      margin: .5rem 0 .8rem;
+      border-radius: 28px;
+      padding: 1.4rem;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 72%, white), color-mix(in srgb, var(--accent) 60%, white));
+      color: white;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
     }
-
-    .progress { height: 100%; background: linear-gradient(90deg, #7C3AED, #E05FA0); width: 0%; transition: width .3s; }
-
-    .timer { font-weight: 800; color: #b91c1c; }
-
-    .maker {
-      background: #e9fbe7;
-      border-color: #22c55e;
+    .hero::after { content: ""; position: absolute; inset: auto -8% -24% auto; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.14); }
+    .hero-top { display: flex; gap: 1rem; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; position: relative; z-index: 1; }
+    .hero-kicker, .hero-badge, .meta-chip, .nav-pill, .page-link span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 9999px;
+      padding: 0.75rem 1.25rem;
+      font-weight: 700;
     }
-
-    .maker-card {
-      background: #fff;
-      border-left: 6px solid #16a34a;
+    .hero-kicker { background: rgba(255,255,255,0.16); }
+    .hero-badge { background: rgba(255,255,255,0.22); }
+    .hero-grid { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.9fr); margin-top: 1.25rem; position: relative; z-index: 1; }
+    .hero-copy h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.05; margin: 0.4rem 0 0.7rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+    .hero-copy p { margin: 0.4rem 0; max-width: 45rem; }
+    .word-scene { background: rgba(255,255,255,0.14); border: 2px solid rgba(255,255,255,0.28); border-radius: 24px; padding: 1rem; backdrop-filter: blur(4px); }
+    .word-scene .emoji { font-size: clamp(3rem, 10vw, 5.5rem); line-height: 1; }
+    .meta-row, .objective-row, .syllable-row, .page-switch, .section-nav { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .meta-row { margin-top: 1rem; }
+    .meta-chip { background: rgba(255,255,255,0.18); }
+    .objective-row { margin: 1rem 0 0; padding: 0; list-style: none; }
+    .objective-row li { background: rgba(255,255,255,0.22); border-radius: 9999px; padding: 0.75rem 1rem; font-weight: 700; min-height: var(--touch-size); display: inline-flex; align-items: center; }
+    .word-spotlight { margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1.1fr 1fr; }
+    .spot-card { background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 70%, white); border-radius: 24px; padding: 1rem; box-shadow: var(--shadow); }
+    .spot-card h2 { margin: 0 0 0.75rem; font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; }
+    .spot-card .word-display { font-size: clamp(2.4rem, 7vw, 3.8rem); font-weight: 800; color: var(--primary); letter-spacing: 0.05em; text-transform: uppercase; }
+    .spot-card .mission { margin-top: 0.75rem; }
+    .syllable-row { margin-top: 1rem; }
+    .syllable-token, .syllable-chip {
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
       border-radius: 12px;
-      padding: .8rem;
-      margin: .6rem 0;
+      border: none;
+      color: white;
+      font-weight: 800;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      padding: 0.55rem 1rem;
+      background: var(--chip, var(--primary));
+      box-shadow: var(--shadow);
     }
-
-    .assessment {
-      background: #fff4e6;
-      border-color: #fb923c;
+    .page-switch { margin: 1.2rem 0 0.5rem; }
+    .page-link {
+      text-decoration: none;
+      background: var(--surface);
+      color: var(--text);
+      border: 2px solid color-mix(in srgb, var(--primary) 28%, white);
+      border-radius: 18px;
+      padding: 0.85rem 1rem;
+      min-height: var(--touch-size);
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: space-between;
+      flex: 1 1 200px;
+      box-shadow: var(--shadow);
+      font-weight: 700;
     }
-
-    .assess-item { padding: .6rem 0; border-bottom: 1px solid #ffd7aa; }
-    .assess-item:last-child { border-bottom: none; }
-    .scale { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .35rem; font-size: .95rem; }
-
-    .curriculum {
-      background: #f3e8ff;
-      border-color: #8b5cf6;
-      font-size: 1rem;
+    .page-link.is-current { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
+    .section-nav { position: sticky; top: 0; z-index: 10; padding: 0.85rem 0 1rem; background: linear-gradient(180deg, var(--bg), rgba(255,248,240,0.88)); backdrop-filter: blur(6px); }
+    .nav-pill { text-decoration: none; background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 24%, white); padding: 0.55rem 1rem; }
+    .content { display: grid; gap: 1.1rem; }
+    .unit-card { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 35%, white); border-radius: 24px; padding: 1.15rem; box-shadow: var(--shadow); }
+    .unit-head { display: flex; gap: 1rem; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+    .unit-head h2 { margin: 0.2rem 0 0; font-size: clamp(1.45rem, 4vw, 2.1rem); font-weight: 800; }
+    .unit-kicker { color: color-mix(in srgb, var(--primary) 80%, black); font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.9rem; }
+    .unit-badge { background: color-mix(in srgb, var(--accent) 22%, var(--surface)); border: 2px solid var(--accent); border-radius: 9999px; padding: 0.65rem 1rem; font-weight: 800; min-height: var(--touch-size); display: inline-flex; align-items: center; }
+    .unit-grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.95fr); margin-top: 1rem; }
+    .unit-copy p { margin: 0.65rem 0; }
+    .unit-flow { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 1rem; }
+    .unit-flow > div, .play-card, .maker-box, .teacher-card { background: color-mix(in srgb, var(--bg) 70%, white); border-radius: 18px; padding: 0.95rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
+    .play-label { font-weight: 800; margin: 0 0 0.8rem; }
+    .pill-btn, .choice-btn, .check-card, .prompt-card {
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 9999px;
+      border: 2px solid transparent;
+      padding: 0.75rem 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
     }
-
-    .footer {
-      text-align: center;
-      padding: 1rem;
-      color: #6b7280;
-      font-size: .95rem;
+    .pill-btn:hover, .choice-btn:hover, .check-card:hover, .prompt-card:hover, .page-link:hover { transform: scale(1.05); box-shadow: 0 10px 24px rgba(0,0,0,0.12); }
+    .pill-btn:active, .choice-btn:active, .check-card:active, .prompt-card:active, .page-link:active { transform: scale(0.97); }
+    .pill-btn { background: var(--primary); color: white; }
+    .choice-row, .check-grid, .prompt-grid, .compose-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .choice-btn, .check-card, .prompt-card { background: var(--surface); color: var(--text); border-color: color-mix(in srgb, var(--primary) 22%, white); }
+    .choice-btn.is-right, .check-card.is-done { background: var(--correct-bg); border-color: var(--correct); color: #166534; }
+    .choice-btn.is-wrong { background: var(--incorrect-bg); border-color: var(--incorrect); color: #92400e; }
+    .feedback, .helper-text { margin: 0.85rem 0 0; font-weight: 700; }
+    .feedback { min-height: 1.4em; }
+    .compose-output, .phrase-card, .cloze-word { min-height: 72px; border-radius: 18px; background: var(--surface); border: 2px dashed color-mix(in srgb, var(--primary) 35%, white); display: grid; place-items: center; font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800; color: var(--primary); padding: 0.9rem; margin-top: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .phrase-card { text-transform: none; font-size: 1.3rem; color: var(--text); }
+    .phrase-input { width: 100%; margin-top: 0.85rem; border-radius: 18px; border: 2px solid color-mix(in srgb, var(--primary) 25%, white); padding: 0.9rem 1rem; min-height: 120px; background: #fff; }
+    .diff-switcher { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; }
+    .diff-btn { min-height: var(--touch-size); min-width: var(--touch-size); border-radius: 9999px; border: 2px solid color-mix(in srgb, var(--primary) 28%, white); background: var(--surface); padding: 0.7rem 1rem; font-weight: 700; cursor: pointer; }
+    .diff-btn.is-active { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
+    .diff-panel { display: none; background: color-mix(in srgb, var(--bg) 72%, white); border-radius: 18px; padding: 0.95rem; margin-top: 0.8rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
+    .diff-panel.is-active { display: block; }
+    .teacher-guide { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 30%, white); border-radius: 24px; padding: 0.9rem 1rem; box-shadow: var(--shadow); }
+    .teacher-guide summary { min-height: var(--touch-size); display: flex; align-items: center; cursor: pointer; font-weight: 800; font-size: 1.2rem; }
+    .teacher-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 1rem; }
+    .teacher-card-wide { grid-column: 1 / -1; }
+    .teacher-card h3 { margin-top: 0; }
+    .footer { text-align: center; padding: 1.4rem 0 0; font-weight: 700; color: color-mix(in srgb, var(--text) 72%, white); }
+    .hidden { display: none !important; }
+    @media (max-width: 900px) {
+      .hero-grid, .word-spotlight, .unit-grid, .unit-flow, .teacher-grid { grid-template-columns: 1fr; }
+      .section-nav { position: static; }
     }
-
-    input, textarea, select {
-      width: 100%;
-      font-size: 1rem;
-      min-height: 48px;
-      border-radius: 12px;
-      border: 2px solid #d4d4d8;
-      padding: .5rem .7rem;
+    @media (max-width: 640px) {
+      body { font-size: 18px; }
+      .shell { padding: 0.75rem 0.75rem 2.4rem; }
+      .hero { padding: 1rem; border-radius: 22px; }
+      .hero-copy h1 { font-size: clamp(2rem, 9vw, 3rem); }
+      .page-link { flex-basis: 100%; }
+      .objective-row li, .meta-chip, .hero-kicker, .hero-badge, .nav-pill { width: 100%; justify-content: center; }
+      .unit-card, .spot-card, .teacher-guide { border-radius: 20px; }
     }
-
-    .mini-canvas {
-      width: 100%;
-      height: 220px;
-      border: 2px dashed #8b5cf6;
-      border-radius: 12px;
-      background: #fff;
-      touch-action: none;
-    }
-
-    .board {
-      margin-top: .8rem;
-      background: #eefdf0;
-      border: 2px solid #86efac;
-      border-radius: 12px;
-      padding: .6rem;
-    }
-
-    #fxCanvas {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 1000;
-    }
-
-    .floating {
-      position: fixed;
-      z-index: 999;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-    }
-
-    :focus-visible {
-      outline: 3px solid #7C3AED;
-      outline-offset: 2px;
-    }
-
-    @media (max-width: 860px) {
-      body { font-size: 16px; }
-      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-      .read-phrase { font-size: 1.6rem; }
-      .word-display { font-size: 42px; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
     }
   </style>
 </head>
-<body>
-<canvas id="fxCanvas" aria-hidden="true"></canvas>
-<div class="container">
-  <header>
-    <h1>Método das 28 Palavras - Palavra 3: <strong>uva</strong></h1>
-    <div class="meta">Ano: 1.º CEB (6 anos) | Duração: 45 minutos</div>
-    <ul class="objectives">
-      <li>Reconhecer «uva» globalmente e ligar à imagem certa.</li>
-      <li>Segmentar «uva» em <strong>u-va</strong> com palmas e manipulação.</li>
-      <li>Recombinar sílabas para testar palavras conhecidas.</li>
-      <li>Ler e completar a frase <strong>«A uva é doce.»</strong></li>
-    </ul>
-  </header>
-
-  <section class="unit" id="unit1">
-    <h2>Unit 1 - Abertura contextual (4 min)</h2>
-    <p class="unit-intro">Primeiro vemos a história e a imagem. Só depois aparece a forma escrita.</p>
-    <div class="diff-tabs" role="tablist" aria-label="Diferenciação Unit 1">
-      <button class="diff-tab active" data-level="support" aria-label="Modo apoio">🟢 Apoio</button>
-      <button class="diff-tab" data-level="standard" aria-label="Modo intermédio">🟡 Intermédio</button>
-      <button class="diff-tab" data-level="challenge" aria-label="Modo desafio">🔴 Desafio</button>
-    </div>
-    <div class="story-visual">
-      <div>
-        <div style="font-size: 4rem;">🧒🛒🍇</div>
-        <div class="bubble" id="u1Story">No mercado, a criança viu um cacho de uvas. «A uva é doce.»</div>
+<body data-page-variant="index.html" data-visible-units="1,2,3,4">
+  <a href="#main" class="skip-link">Ir para o conteúdo</a>
+  <div class="shell">
+    <header class="hero">
+      <div class="hero-top">
+        <span class="hero-kicker">M28P #3</span>
+        <span class="hero-badge">Rota completa</span>
       </div>
-    </div>
-    <div class="center" style="margin-top:.8rem;">
-      <button id="u1AudioBtn" class="subtle-btn" aria-label="Ouvir frase">🔊 Ouvir frase</button>
-      <button id="u1Reveal" aria-label="Ver a palavra">Ver a palavra</button>
-    </div>
-    <div class="word-display" id="u1Word">UVA</div>
-    <div id="u1Choices" class="grid-3 hidden" style="margin-top:.8rem;">
-      <button class="option-btn" data-fruit="uva" aria-label="Escolher uva">🍇 Uva</button>
-      <button class="option-btn" data-fruit="maca" aria-label="Escolher maçã">🍎 Maçã</button>
-      <button class="option-btn" data-fruit="laranja" aria-label="Escolher laranja">🍊 Laranja</button>
-    </div>
-    <div id="u1Fb" class="feedback" aria-live="polite"></div>
-  </section>
-
-  <section class="unit" id="unit2">
-    <h2>Unit 2 - Reconhecimento global (5 min)</h2>
-    <p class="unit-intro">Acerta 3 vezes seguidas em cada modo.</p>
-    <div class="diff-tabs" role="tablist" aria-label="Diferenciação Unit 2">
-      <button class="diff-tab" data-level="support">🟢 Apoio</button>
-      <button class="diff-tab active" data-level="standard">🟡 Intermédio</button>
-      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
-    </div>
-    <div class="center"><strong id="u2ModeLabel">Modo: imagem → palavra</strong><span id="u2Streak" class="badge">0/3</span></div>
-    <div class="story-visual" id="u2Prompt" style="min-height:130px; margin-top:.6rem;"><div style="font-size:3.2rem;">🍇</div></div>
-    <div id="u2Options" class="grid-3" style="margin-top:.8rem;"></div>
-    <textarea id="u2Explain" class="hidden" aria-label="Explica a escolha" placeholder="No desafio: explica em voz alta e escreve uma frase curta..."></textarea>
-    <div id="u2Fb" class="feedback" aria-live="polite"></div>
-  </section>
-
-  <section class="unit" id="unit3">
-    <h2>Unit 3 - Segmentação silábica (7 min)</h2>
-    <p class="unit-intro">Bate palmas e organiza as sílabas para formar a palavra.</p>
-    <div class="diff-tabs" role="tablist" aria-label="Diferenciação Unit 3">
-      <button class="diff-tab" data-level="support">🟢 Apoio</button>
-      <button class="diff-tab active" data-level="standard">🟡 Intermédio</button>
-      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
-    </div>
-    <div class="center"><div class="word-display show" style="opacity:1;transform:none;">UVA</div></div>
-    <div class="center" style="margin-top:.5rem;"><button id="u3Clap" aria-label="Bater palmas">🎵 Bater palmas</button> <span id="u3Claps" class="badge">Palmas: 0</span></div>
-    <div id="u3Split" class="center" style="margin-top:.6rem;"></div>
-    <div class="drop-area" id="u3Slots">
-      <div class="slot" data-accept="u"><span class="slot-label">1.º</span></div>
-      <div class="slot" data-accept="va"><span class="slot-label">2.º</span></div>
-    </div>
-    <div id="u3Source" class="drag-source"></div>
-    <div id="u3Extra" class="small" style="margin-top:.7rem;"></div>
-    <div id="u3Fb" class="feedback" aria-live="polite"></div>
-  </section>
-
-  <section class="unit" id="unit4">
-    <h2>Unit 4 - Recombinação silábica (6 min)</h2>
-    <p class="unit-intro">Testa combinações e descobre quais fazem palavras conhecidas.</p>
-    <div class="diff-tabs" role="tablist" aria-label="Diferenciação Unit 4">
-      <button class="diff-tab" data-level="support">🟢 Apoio</button>
-      <button class="diff-tab active" data-level="standard">🟡 Intermédio</button>
-      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
-    </div>
-    <div class="grid-2">
-      <label>1.ª sílaba<select id="u4s1" aria-label="Primeira sílaba"></select></label>
-      <label>2.ª sílaba<select id="u4s2" aria-label="Segunda sílaba"></select></label>
-    </div>
-    <div class="center" style="margin-top:.8rem;">
-      <div class="word-display show" id="u4Word" style="opacity:1;transform:none;">VAU</div>
-      <div id="u4Indicator" class="feedback"></div>
-    </div>
-    <div id="u4Support" class="hidden" style="margin-top:.6rem;"></div>
-    <div id="u4Challenge" class="hidden" style="margin-top:.6rem;">
-      <label>Escreve uma sílaba nova (desafio):
-        <input id="u4NewSyl" aria-label="Sílaba nova" placeholder="ex.: ca">
-      </label>
-      <button id="u4TryNew" style="margin-top:.5rem;">Testar com "va"</button>
-      <div id="u4NewResult" class="feedback"></div>
-    </div>
-  </section>
-
-  <section class="unit" id="unit5">
-    <h2>Unit 5 - Leitura guiada (6 min)</h2>
-    <p class="unit-intro">Completa a palavra com a sílaba em falta.</p>
-    <div class="diff-tabs" role="tablist" aria-label="Diferenciação Unit 5">
-      <button class="diff-tab" data-level="support">🟢 Apoio</button>
-      <button class="diff-tab active" data-level="standard">🟡 Intermédio</button>
-      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
-    </div>
-    <div class="grid-2">
-      <div>
-        <div class="center" id="u5Prompt" style="font-size:2rem;font-weight:800;">u __</div>
-        <div class="center" id="u5Img" style="font-size:3rem; margin-top:.6rem;">🍇</div>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p>Descobrir, ler e brincar</p>
+          <h1>Uva</h1>
+          <p>Percurso completo com foco na descoberta da palavra, nas sílabas e na confiança ao ler.</p>
+          <div class="meta-row">
+            <span class="meta-chip">🍇 Palavra 3</span>
+            <span class="meta-chip">1.º ano (6-7 anos)</span>
+            <span class="meta-chip">45 min</span>
+          </div>
+          <ul class="objective-row"><li>Reconhecer a palavra «uva» globalmente (leitura global) e associá-la à imagem correspondente</li><li>Segmentar a palavra «uva» nas sílabas u-va e recontar com palmas/arrastar</li><li>Recombinar as sílabas aprendidas para identificar e discriminar novas palavras</li></ul>
+        </div>
+        <aside class="word-scene" aria-hidden="true">
+          <div class="emoji">🍇</div>
+          <p><strong>Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</strong></p>
+          <p>Paleta própria, leitura em pt-PT AO90 e navegação pensada para toque.</p>
+          <p>Esta página trabalha as unidades 1, 2, 3, 4.</p>
+        </aside>
       </div>
-      <div>
-        <div id="u5Options" class="grid-3"></div>
-        <div id="u5Confirm" class="hidden center" style="margin-top:.7rem;"><button id="u5Done">Está certo! ✅</button></div>
-        <input id="u5ChallengeInput" class="hidden" aria-label="Escrever palavra" placeholder="Desafio: escreve a palavra completa">
+    </header>
+
+    <div class="page-switch" aria-label="Outras páginas desta palavra"><a class="page-link is-current" href="./index.html">Página 1<span>Atual</span></a><a class="page-link" href="./page-2.html">Página 2<span>Abrir</span></a><a class="page-link" href="./page-3.html">Página 3<span>Abrir</span></a><a class="page-link" href="./page-4.html">Página 4<span>Abrir</span></a></div>
+
+    <section class="word-spotlight" aria-label="Destaque da palavra">
+      <article class="spot-card">
+        <h2>Palavra em destaque</h2>
+        <div class="word-display">Uva</div>
+        <p class="mission">A palavra é uva.</p>
+        <div class="compose-actions">
+          <button class="pill-btn speak-btn" data-speak="Uva">Ouvir a palavra</button>
+        </div>
+      </article>
+      <article class="spot-card">
+        <h2>Sílabas</h2>
+        <div class="syllable-row"><span class="syllable-token" style="--chip:#7C3AED">u</span><span class="syllable-token" style="--chip:#E05FA0">va</span></div>
+        <p class="mission">Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</p>
+      </article>
+    </section>
+
+    <nav class="section-nav" aria-label="Navegação das unidades"><a class="nav-pill" href="#u1-abertura-contextual-a-palavra-uva-surge-numa-micro-história-com-imagem">1</a><a class="nav-pill" href="#u2-reconhecimento-global-associar-a-palavra-uva-à-imagem-correspondente">2</a><a class="nav-pill" href="#u3-segmentação-silábica-dividir-uva-em-sílabas-u-va-com-manipulação-visual">3</a><a class="nav-pill" href="#u4-recombinação-silábica-explorar-o-que-a-sílaba-va-pode-formar-com-outras-sílabas-conhecidas">4</a></nav>
+
+    <main id="main" class="content">
+      
+    <section id="u1-abertura-contextual-a-palavra-uva-surge-numa-micro-história-com-imagem" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 1</span>
+          <h2>Abertura contextual: a palavra «uva» surge numa micro-história com imagem</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
       </div>
-    </div>
-    <div class="center"><span id="u5Step" class="badge">Exercício 1/3</span></div>
-    <div id="u5Fb" class="feedback"></div>
-  </section>
-
-  <section class="unit" id="unit6">
-    <h2>Unit 6 - Frase simples (8 min)</h2>
-    <p class="unit-intro">Lê a frase e depois constrói-a por ordem.</p>
-    <div class="diff-tabs" role="tablist" aria-label="Diferenciação Unit 6">
-      <button class="diff-tab" data-level="support">🟢 Apoio</button>
-      <button class="diff-tab active" data-level="standard">🟡 Intermédio</button>
-      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
-    </div>
-    <div class="center" style="margin-bottom:.5rem;"><button id="u6ModeBtn" class="subtle-btn">Agora constrói</button></div>
-    <div id="u6ReadMode">
-      <div class="read-phrase" id="u6PhraseRead" aria-label="Frase para ler">
-        <span class="word">A</span>
-        <span class="word">uva</span>
-        <span class="word">é</span>
-        <span class="word">doce.</span>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>O aluno contacta pela primeira vez com a palavra «uva» integrada numa cena concreta: uma criança vai ao mercado e vê um cacho de uvas. A imagem da uva aparece em destaque com a palavra escrita por baixo. O objetivo é criar contexto antes de qualquer análise formal.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Imagem a cores de um cacho de uvas roxas num mercado; balão de fala com a frase «A uva é doce.»; botão «Ver a palavra» que revela a palavra «uva» em tipografia grande sob a imagem</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno aponta para a imagem e diz «uva» em voz alta antes de ver a palavra escrita</p>
+            </div>
+          </div>
+          <p>Clique em «Ver a palavra» → palavraRevelada passa a true → palavra «uva» aparece em tipografia grande (48px, negrito) sob a imagem com animação de fade-in suave</p>
+          
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <button class="pill-btn reveal-btn" data-target="story-1">Mostrar a história</button>
+          <button class="pill-btn speak-btn" data-speak="A palavra é uva.">Ouvir</button>
+          <div id="story-1" class="reveal-box hidden"><p>O aluno contacta pela primeira vez com a palavra «uva» integrada numa cena concreta: uma criança vai ao mercado e vê um cacho de uvas. A imagem da uva aparece em destaque com a palavra escrita por baixo. O objetivo é criar contexto antes de qualquer análise formal.</p></div>
+        </div>
+        </aside>
       </div>
-      <div class="center" style="font-size:3rem;">🍇</div>
-    </div>
-    <div id="u6BuildMode" class="hidden">
-      <div class="drop-area" id="u6Slots" style="grid-template-columns:repeat(4,1fr);"></div>
-      <div class="drag-words" id="u6Source"></div>
-    </div>
-    <div id="u6Fb" class="feedback"></div>
-  </section>
-
-  <section class="unit" id="unit7">
-    <h2>Unit 7 - Mini-avaliação formativa (5 min)</h2>
-    <p class="unit-intro">Responde às tarefas em sequência.</p>
-    <div class="diff-tabs" role="tablist" aria-label="Diferenciação Unit 7">
-      <button class="diff-tab" data-level="support">🟢 Apoio</button>
-      <button class="diff-tab active" data-level="standard">🟡 Intermédio</button>
-      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
-    </div>
-    <div><strong id="u7Label">Tarefa 1/4</strong> <span id="u7Timer" class="timer hidden">45</span></div>
-    <div class="progress-wrap"><div class="progress" id="u7Progress"></div></div>
-    <div id="u7TaskArea"></div>
-    <div id="u7Fb" class="feedback"></div>
-    <div id="u7Summary" class="hidden"></div>
-  </section>
-
-  <section class="unit" id="unit8">
-    <h2>Unit 8 - Extensão criativa (4 min, opcional)</h2>
-    <p class="unit-intro">Escolhe desenhar ou escrever com a palavra «uva».</p>
-    <div class="diff-tabs" role="tablist" aria-label="Diferenciação Unit 8">
-      <button class="diff-tab" data-level="support">🟢 Apoio</button>
-      <button class="diff-tab active" data-level="standard">🟡 Intermédio</button>
-      <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
-    </div>
-    <label>Modo de extensão
-      <select id="u8Mode" aria-label="Modo da extensão">
-        <option value="draw">Desenhar</option>
-        <option value="write">Escrever frase</option>
-      </select>
-    </label>
-    <div id="u8Draw" style="margin-top:.6rem;">
-      <div class="grid-3">
-        <button class="u8Color option-btn" data-c="#7C3AED">Roxo</button>
-        <button class="u8Color option-btn" data-c="#22c55e">Verde</button>
-        <button class="u8Color option-btn" data-c="#92400e">Castanho</button>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-1">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-1">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-1">🔴 Desafio</button>
       </div>
-      <canvas id="u8Canvas" class="mini-canvas" width="860" height="220" aria-label="Canvas de desenho"></canvas>
-      <input id="u8WordInput" aria-label="Escrever palavra" placeholder="Escreve: uva">
-    </div>
-    <div id="u8Write" class="hidden" style="margin-top:.6rem;">
-      <div class="badge" style="margin-left:0;">Referência: UVA</div>
-      <textarea id="u8Text" aria-label="Escrever frase" rows="4" placeholder="Escreve uma frase com a palavra uva..."></textarea>
-    </div>
-    <button id="u8Share" style="margin-top:.6rem;">Partilhar com a turma</button>
-    <div id="u8Fb" class="feedback"></div>
-    <div class="board" id="u8Board"><strong>Painel coletivo</strong><div id="u8Posts"></div></div>
-  </section>
+      <div class="diff-panels">
+        <div id="support-1" class="diff-panel is-active"><p>Imagem ocupa 60% do ecrã; frase lida em áudio automático ao carregar; palavra já visível desde o início com contorno colorido</p></div>
+        <div id="standard-1" class="diff-panel"><p>Imagem e história visíveis; palavra revelada por clique do aluno</p></div>
+        <div id="challenge-1" class="diff-panel"><p>Aluno fecha os olhos, ouve a frase em áudio, depois aponta para a imagem correta entre 3 opções (uva / maçã / laranja) antes de ver a palavra</p></div>
+      </div>
+    </section>
+    
+    <section id="u2-reconhecimento-global-associar-a-palavra-uva-à-imagem-correspondente" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 2</span>
+          <h2>Reconhecimento global: associar a palavra «uva» à imagem correspondente</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>O aluno treina o reconhecimento global da palavra «uva» distinguindo-a de outras palavras visualmente próximas. Aparece a imagem e o aluno seleciona a palavra correta entre três opções. Depois, faz o inverso: vê a palavra e seleciona a imagem certa.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Modo imagem→palavra: imagem da uva no centro, 3 palavras dispostas abaixo (uva / ova / ava); modo palavra→imagem: palavra «uva» em destaque, 3 imagens abaixo (uva / maçã / pera); feedback imediato com ✓ verde ou ✗ âmbar</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno seleciona corretamente «uva» 3 vezes seguidas em ambos os modos (imagem→palavra e palavra→imagem)</p>
+            </div>
+          </div>
+          <p>Clique numa opção → feedback visual imediato (✓ ou ✗) → após resposta correta, contador avança; após 3 acertos consecutivos, mensagem de encorajamento e passagem automática para modo seguinte</p>
+          
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Escolhe a palavra certa.</p>
+          <div class="choice-row">
+            <button class="choice-btn" data-answer="uva" data-choice="uva">uva</button><button class="choice-btn" data-answer="uva" data-choice="menino">menino</button><button class="choice-btn" data-answer="uva" data-choice="dedo">dedo</button>
+          </div>
+          <p class="feedback" aria-live="polite">Procura a palavra completa.</p>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-2">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-2">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-2">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-2" class="diff-panel is-active"><p>Apenas 2 opções (uva / ova); imagem sempre presente; opção errada com forma muito diferente</p></div>
+        <div id="standard-2" class="diff-panel"><p>3 opções (uva / ova / ava); 2 modos sequenciais</p></div>
+        <div id="challenge-2" class="diff-panel"><p>4 opções incluindo «uvas» (plural); aluno explica em voz alta por que escolheu aquela palavra; modo palavra→imagem sem imagem de apoio</p></div>
+      </div>
+    </section>
+    
+    <section id="u3-segmentação-silábica-dividir-uva-em-sílabas-u-va-com-manipulação-visual" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 3</span>
+          <h2>Segmentação silábica: dividir «uva» em sílabas u + va com manipulação visual</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>O aluno aprende a dividir a palavra «uva» nas sílabas u e va. Conta as sílabas batendo palmas (representadas por cliques), vê os blocos de sílabas separados por cor, e arrasta-os para a posição correta. Cada sílaba tem uma cor consistente: u = azul, va = laranja.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Palavra «uva» no topo; botão «🎵 Bater palmas» que anima a separação da palavra em 2 blocos coloridos (u=azul, va=laranja) com som; zona de arrastar abaixo com 2 slots numerados; blocos de sílabas na base para arrastar</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno arrasta corretamente u para o slot 1 e va para o slot 2, e diz «u-va: duas sílabas» em voz alta</p>
+            </div>
+          </div>
+          <p>Clique em «Bater palmas» → palavra divide-se animadamente em u | va com contagem «1... 2»; arrastar bloco para slot → slot preenche-se com a sílaba; quando ambos corretos → animação de sucesso + palavra recomposta</p>
+          <div class="maker-box"><p><strong>Desafio maker:</strong> Com os cartões de sílabas impressos (u / va), o par de alunos coloca os cartões em cima da mesa na ordem certa e bate palmas enquanto lê cada sílaba</p><p><strong>Materiais:</strong> Cartões de sílabas impressos (u / va), Mesa da sala</p><p><strong>Comunicação:</strong> Um aluno segura os cartões, o outro bate palmas; trocam de papel</p></div>
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Toca nas sílabas para formar a palavra.</p>
+          <div class="syllable-bank" data-compose="compose-3"><button class="syllable-chip" style="--chip:#7C3AED" data-syllable="u">u</button><button class="syllable-chip" style="--chip:#E05FA0" data-syllable="va">va</button></div>
+          <div id="compose-3" class="compose-output">__</div>
+          <div class="compose-actions"><button class="pill-btn clear-compose" data-compose-clear="compose-3">Limpar</button></div>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-3">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-3">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-3">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-3" class="diff-panel is-active"><p>Sílabas já separadas e coloridas desde o início; aluno apenas confirma a ordem clicando; botão palmas bate automaticamente com som e animação</p></div>
+        <div id="standard-3" class="diff-panel"><p>Aluno clica em «Bater palmas» e depois arrasta os 2 blocos para os slots</p></div>
+        <div id="challenge-3" class="diff-panel"><p>Sílabas apresentadas em ordem invertida (va / u); aluno deve identificar que está errado e corrigir; depois escuta outra palavra (ex: «ovo») e conta as sílabas sem apoio visual</p></div>
+      </div>
+    </section>
+    
+    <section id="u4-recombinação-silábica-explorar-o-que-a-sílaba-va-pode-formar-com-outras-sílabas-conhecidas" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 4</span>
+          <h2>Recombinação silábica: explorar o que a sílaba «va» pode formar com outras sílabas conhecidas</h2>
+        </div>
+        
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>O aluno recombina a sílaba «va» (de «uva») com sílabas conhecidas das palavras anteriores (me, ni, na, no) para descobrir se formam palavras reais. O objetivo é compreender que as sílabas são unidades reutilizáveis e que nem toda a combinação forma uma palavra.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Dois slots de sílabas com dropdowns; área central mostra a combinação em tempo real em tipografia grande; indicador verde «✓ existe!» ou âmbar «? não conheço» dependendo de existePalavra; painel lateral com sílabas já conhecidas (me, ni, na, no, u, va)</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno identifica pelo menos 1 combinação que forma palavra real e verbaliza «estas sílabas juntas formam uma palavra que eu conheço»</p>
+            </div>
+          </div>
+          <p>Selecionar sílaba num slot → palavraFormada atualiza em tempo real → indicador muda conforme existePalavra; foco especial na combinação u+va (a nossa palavra!) com animação de estrela</p>
+          
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Experimenta combinações com as sílabas.</p>
+          <div class="syllable-bank" data-compose="mix-4"><button class="syllable-chip" style="--chip:#7C3AED" data-syllable="u">u</button><button class="syllable-chip" style="--chip:#E05FA0" data-syllable="va">va</button></div>
+          <div id="mix-4" class="compose-output">__</div>
+          <p class="helper-text">Nem todas as combinações resultam em palavras reais. O importante é experimentar.</p>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-4">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-4">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-4">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-4" class="diff-panel is-active"><p>Apenas 3 sílabas disponíveis (u, va, me); combinações pré-feitas para o aluno confirmar se existe ou não; imagem aparece quando palavra é reconhecida</p></div>
+        <div id="standard-4" class="diff-panel"><p>6 sílabas disponíveis; exploração livre; aluno testa pelo menos 4 combinações</p></div>
+        <div id="challenge-4" class="diff-panel"><p>Aluno escreve numa caixa de texto uma sílaba nova que não está na lista e testa se forma palavra; desafio: «encontra 1 palavra nova com a sílaba va» (ex: vaca se conhecer ca)</p></div>
+      </div>
+    </section>
+    
+      
+    <details class="teacher-guide">
+      <summary>Guia do professor</summary>
+      <div class="teacher-grid">
+        <article class="teacher-card">
+          <h3>Objetivos desta página</h3>
+          <ul><li>Reconhecer a palavra «uva» globalmente (leitura global) e associá-la à imagem correspondente</li><li>Segmentar a palavra «uva» nas sílabas u-va e recontar com palmas/arrastar</li><li>Recombinar as sílabas aprendidas para identificar e discriminar novas palavras</li><li>Ler e completar a frase «A uva é doce.» com apoio visual e silábico</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Materiais</h3>
+          <ul><li>Tablet ou computador com browser (1 por aluno ou par)</li><li>Cartão físico da palavra «uva» (imagem + palavra)</li><li>Cartões de sílabas impressos (u / va) para manipulação offline opcional</li><li>Lápis e folha para extensão</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Organização MEM</h3>
+          <ul><li><strong>Módulos:</strong> TEA (Trabalho de Estudo Autónomo), Trabalho curricular comparticipado</li><li><strong>Instrumentos:</strong> Cartão de palavra (cartaz da palavra + imagem), PIT (registo da palavra trabalhada), Mapa das 28 palavras (parede da sala)</li><li><strong>Organização:</strong> individual (exploração digital 35min) → pares (extensão criativa 4min) → turma (mini-síntese oral 2min)</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Percurso desta página</h3>
+          <ul><li>Unidade 1: Abertura contextual: a palavra «uva» surge numa micro-história com imagem</li><li>Unidade 2: Reconhecimento global: associar a palavra «uva» à imagem correspondente</li><li>Unidade 3: Segmentação silábica: dividir «uva» em sílabas u + va com manipulação visual</li><li>Unidade 4: Recombinação silábica: explorar o que a sílaba «va» pode formar com outras sílabas conhecidas</li></ul>
+        </article>
+        <article class="teacher-card teacher-card-wide">
+          <h3>Referências curriculares</h3>
+          <ul><li><strong>Português · 1.º ano</strong>: Articular corretamente as palavras; segmentar sílabas e fonemas oralmente em palavras do vocabulário corrente</li><li><strong>Português · 1.º ano</strong>: Reconhecer globalmente palavras; ler palavras e frases simples com vocabulário trabalhado</li><li><strong>Português · 1.º ano</strong>: Segmentar palavras em sílabas; reconstruir palavras por agregação de sílabas dadas</li><li><strong>Português · 1.º ano</strong>: Completar palavras com sílabas em falta; copiar palavras e frases com correção</li></ul>
+          <ul><li>PA-A: Linguagens e textos</li><li>PA-C: Raciocínio e resolução de problemas</li><li>PA-F: Desenvolvimento pessoal e autonomia</li></ul>
+        </article>
+      </div>
+    </details>
+    
+    </main>
 
-  <section class="panel maker">
-    <h2>🛠️ Desafios Maker</h2>
-    <div class="maker-card">
-      <h3>Unplugged - Sílabas u / va</h3>
-      <p>Em pares, coloquem os cartões <strong>u</strong> e <strong>va</strong> na ordem certa e batam palmas ao ler.</p>
-      <p class="small"><strong>Materiais:</strong> cartões impressos, mesa | <strong>Grupo:</strong> 2 | <strong>Comunicação:</strong> trocam papéis.</p>
-    </div>
-    <div class="maker-card">
-      <h3>Unplugged - Frase em cartões</h3>
-      <p>Organizem os cartões <strong>A / uva / é / doce.</strong> e leiam juntos.</p>
-      <p class="small"><strong>Materiais:</strong> cartões de palavras, mesa/chão | <strong>Grupo:</strong> 2 | <strong>Comunicação:</strong> leem para outro par.</p>
-    </div>
-    <div class="maker-card">
-      <h3>Whiteboard - Partilha final</h3>
-      <p>Partilha o desenho ou frase no quadro interativo para a turma ver o painel coletivo.</p>
-      <p class="small"><strong>Materiais:</strong> quadro/projetor, painel digital | <strong>Grupo:</strong> turma.</p>
-    </div>
-  </section>
+    <footer class="footer">PageCraft · Método das 28 Palavras · Uva</footer>
+  </div>
 
-  <section class="panel assessment">
-    <h2>📝 Mini-avaliação observável</h2>
-    <div class="assess-item">1) Reconhece «uva» entre palavras próximas.
-      <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
-    </div>
-    <div class="assess-item">2) Segmenta «uva» em 2 sílabas com palmas.
-      <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
-    </div>
-    <div class="assess-item">3) Ordena as sílabas u → va corretamente.
-      <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
-    </div>
-    <div class="assess-item">4) Reconstrói a frase «A uva é doce.»
-      <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
-    </div>
-    <div class="assess-item">5) Produz desenho ou frase nova com «uva».
-      <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
-    </div>
-  </section>
+  <script>
+    const synth = window.speechSynthesis;
 
-  <section class="panel curriculum">
-    <h2>Referências curriculares</h2>
-    <h3>Aprendizagens Essenciais</h3>
-    <ul>
-      <li>Articular palavras; segmentar sílabas e fonemas oralmente.</li>
-      <li>Reconhecer globalmente palavras e ler frases simples.</li>
-      <li>Segmentar em sílabas e reconstruir por agregação.</li>
-      <li>Completar palavras com sílabas em falta e copiar frases com correção.</li>
-    </ul>
-    <h3>Perfil do Aluno</h3>
-    <ul>
-      <li>PA-A: Linguagens e textos</li>
-      <li>PA-C: Raciocínio e resolução de problemas</li>
-      <li>PA-F: Desenvolvimento pessoal e autonomia</li>
-    </ul>
-  </section>
-
-  <div class="footer">Gerado por PageCraft 🛠️</div>
-</div>
-
-<script>
-(() => {
-  const state = {
-    levels: {
-      unit1: 'support', unit2: 'standard', unit3: 'standard', unit4: 'standard',
-      unit5: 'standard', unit6: 'standard', unit7: 'standard', unit8: 'standard'
-    }
-  };
-
-  const fxCanvas = document.getElementById('fxCanvas');
-  const fxCtx = fxCanvas.getContext('2d');
-  let particles = [];
-
-  function resizeFx() {
-    fxCanvas.width = window.innerWidth;
-    fxCanvas.height = window.innerHeight;
-  }
-
-  resizeFx();
-  window.addEventListener('resize', resizeFx);
-
-  function confetti(x = window.innerWidth / 2, y = 120) {
-    for (let i = 0; i < 26; i++) {
-      particles.push({
-        x, y,
-        vx: (Math.random() - 0.5) * 6,
-        vy: Math.random() * -4 - 2,
-        g: 0.13,
-        life: 70,
-        size: Math.random() * 6 + 4,
-        c: ['#E05FA0', '#7C3AED', '#F59E0B', '#22c55e'][Math.floor(Math.random() * 4)]
-      });
-    }
-  }
-
-  function animFx() {
-    fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
-    particles = particles.filter(p => p.life > 0);
-    particles.forEach(p => {
-      p.vy += p.g;
-      p.x += p.vx;
-      p.y += p.vy;
-      p.life -= 1;
-      fxCtx.fillStyle = p.c;
-      fxCtx.fillRect(p.x, p.y, p.size, p.size);
-    });
-    requestAnimationFrame(animFx);
-  }
-
-  animFx();
-
-  let audioCtx;
-  function beep(kind = 'ok') {
-    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-    const o = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    o.type = 'sine';
-    o.frequency.value = kind === 'ok' ? 720 : kind === 'warn' ? 340 : 520;
-    g.gain.value = .001;
-    o.connect(g);
-    g.connect(audioCtx.destination);
-    o.start();
-    g.gain.exponentialRampToValueAtTime(.16, audioCtx.currentTime + .02);
-    g.gain.exponentialRampToValueAtTime(.0001, audioCtx.currentTime + .16);
-    o.stop(audioCtx.currentTime + .18);
-  }
-
-  function speak(text) {
-    if (!('speechSynthesis' in window)) return;
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'pt-PT';
-    u.rate = .9;
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(u);
-  }
-
-  function setFb(id, msg, ok) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.textContent = msg;
-    el.classList.remove('ok', 'no');
-    if (msg) el.classList.add(ok ? 'ok' : 'no');
-  }
-
-  function getLevel(unitId) {
-    return state.levels[unitId];
-  }
-
-  document.querySelectorAll('.unit').forEach(unit => {
-    const id = unit.id;
-    unit.querySelectorAll('.diff-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        unit.querySelectorAll('.diff-tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        state.levels[id] = tab.dataset.level;
-        if (id === 'unit1') initU1();
-        if (id === 'unit2') initU2();
-        if (id === 'unit3') initU3();
-        if (id === 'unit4') initU4();
-        if (id === 'unit5') initU5();
-        if (id === 'unit6') initU6();
-        if (id === 'unit7') initU7();
-        if (id === 'unit8') initU8();
+    document.querySelectorAll('.reveal-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        const target = document.getElementById(button.dataset.target);
+        if (!target) return;
+        target.classList.toggle('hidden');
       });
     });
-  });
 
-  function shuffle(arr) {
-    const a = [...arr];
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
-
-  function makeDraggable({sourceEl, values, cls = 'syllable', onDrop}) {
-    sourceEl.innerHTML = '';
-    values.forEach(v => {
-      const b = document.createElement('div');
-      b.className = cls;
-      b.dataset.value = v;
-      b.textContent = v;
-      b.setAttribute('role', 'button');
-      b.setAttribute('aria-label', 'Item arrastável ' + v);
-      sourceEl.appendChild(b);
-    });
-
-    sourceEl.querySelectorAll('.' + cls).forEach(el => {
-      let dragging = null;
-      let offsetX = 0;
-      let offsetY = 0;
-
-      const start = (e) => {
-        e.preventDefault();
-        const pt = e.touches ? e.touches[0] : e;
-        const r = el.getBoundingClientRect();
-        dragging = el.cloneNode(true);
-        dragging.classList.add('floating');
-        document.body.appendChild(dragging);
-        offsetX = pt.clientX - r.left;
-        offsetY = pt.clientY - r.top;
-        move(e);
-      };
-
-      const move = (e) => {
-        if (!dragging) return;
-        const pt = e.touches ? e.touches[0] : e;
-        dragging.style.left = (pt.clientX - offsetX + dragging.offsetWidth / 2) + 'px';
-        dragging.style.top = (pt.clientY - offsetY + dragging.offsetHeight / 2) + 'px';
-        dragging.style.transform = 'translate(-50%, -50%) scale(1.1)';
-        dragging.style.boxShadow = '0 12px 20px rgba(0,0,0,.25)';
-      };
-
-      const end = (e) => {
-        if (!dragging) return;
-        const pt = e.changedTouches ? e.changedTouches[0] : e;
-        const drop = document.elementFromPoint(pt.clientX, pt.clientY);
-        const slot = drop && drop.closest ? drop.closest('.slot') : null;
-        if (slot) onDrop(el.dataset.value, slot);
-        dragging.remove();
-        dragging = null;
-      };
-
-      el.addEventListener('mousedown', start);
-      window.addEventListener('mousemove', move);
-      window.addEventListener('mouseup', end);
-      el.addEventListener('touchstart', start, {passive: false});
-      window.addEventListener('touchmove', move, {passive: false});
-      window.addEventListener('touchend', end);
-    });
-  }
-
-  const u1 = {
-    revealed: false,
-    challengePicked: false
-  };
-
-  function initU1() {
-    const level = getLevel('unit1');
-    u1.revealed = false;
-    u1.challengePicked = false;
-    document.getElementById('u1Choices').classList.toggle('hidden', level !== 'challenge');
-    const word = document.getElementById('u1Word');
-    word.classList.remove('show', 'outline');
-    document.getElementById('u1Reveal').disabled = level === 'challenge';
-    if (level === 'support') {
-      word.classList.add('show', 'outline');
-      setFb('u1Fb', 'Com ajuda: palavra já visível para apoiar.', true);
-      setTimeout(() => speak('A uva é doce.'), 200);
-    } else {
-      setFb('u1Fb', '', true);
-    }
-  }
-
-  document.getElementById('u1AudioBtn').addEventListener('click', () => {
-    speak('A uva é doce.');
-    beep('click');
-  });
-
-  document.getElementById('u1Reveal').addEventListener('click', () => {
-    u1.revealed = true;
-    document.getElementById('u1Word').classList.add('show');
-    setFb('u1Fb', 'Boa! A palavra apareceu depois do contexto.', true);
-    beep('ok');
-  });
-
-  document.querySelectorAll('#u1Choices .option-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const right = btn.dataset.fruit === 'uva';
-      if (right) {
-        u1.challengePicked = true;
-        document.getElementById('u1Reveal').disabled = false;
-        setFb('u1Fb', 'Excelente! Primeiro escolheste a imagem certa.', true);
-        beep('ok');
-      } else {
-        setFb('u1Fb', 'Tenta outra vez. Ouve a frase e observa.', false);
-        beep('warn');
-      }
-    });
-  });
-
-  const u2 = {
-    mode: 'img-word',
-    streak: 0,
-    doneModes: { 'img-word': false, 'word-img': false }
-  };
-
-  function u2Round() {
-    const level = getLevel('unit2');
-    const optionsWrap = document.getElementById('u2Options');
-    const prompt = document.getElementById('u2Prompt');
-    const explain = document.getElementById('u2Explain');
-    explain.classList.toggle('hidden', level !== 'challenge');
-
-    const modeLabel = u2.mode === 'img-word' ? 'Modo: imagem → palavra' : 'Modo: palavra → imagem';
-    document.getElementById('u2ModeLabel').textContent = modeLabel;
-    document.getElementById('u2Streak').textContent = u2.streak + '/3';
-
-    optionsWrap.innerHTML = '';
-
-    if (u2.mode === 'img-word') {
-      prompt.innerHTML = '<div style="font-size:3.2rem;">🍇</div>';
-      let opts = level === 'support' ? ['uva', 'ova'] : level === 'challenge' ? ['uva', 'ova', 'ava', 'uvas'] : ['uva', 'ova', 'ava'];
-      shuffle(opts).forEach(opt => {
-        const b = document.createElement('button');
-        b.className = 'option-btn';
-        b.textContent = opt;
-        b.addEventListener('click', () => checkU2(opt === 'uva'));
-        optionsWrap.appendChild(b);
+    document.querySelectorAll('.speak-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!synth) return;
+        const utterance = new SpeechSynthesisUtterance(button.dataset.speak || '');
+        utterance.lang = 'pt-PT';
+        synth.cancel();
+        synth.speak(utterance);
       });
-      optionsWrap.className = level === 'challenge' ? 'grid-4' : level === 'support' ? 'grid-2' : 'grid-3';
-    } else {
-      prompt.innerHTML = '<div class="word-display show" style="opacity:1;transform:none;">UVA</div>';
-      if (level === 'challenge') {
-        const opts = ['UVA', 'MAÇÃ', 'PERA', 'LARANJA'];
-        optionsWrap.className = 'grid-4';
-        shuffle(opts).forEach(opt => {
-          const b = document.createElement('button');
-          b.className = 'option-btn';
-          b.textContent = opt;
-          b.addEventListener('click', () => checkU2(opt === 'UVA'));
-          optionsWrap.appendChild(b);
+    });
+
+    document.querySelectorAll('.choice-row').forEach((row) => {
+      const feedback = row.parentElement.querySelector('.feedback');
+      row.querySelectorAll('.choice-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          row.querySelectorAll('.choice-btn').forEach((item) => item.classList.remove('is-right', 'is-wrong'));
+          const rightAnswer = button.dataset.answer || button.dataset.clozeAnswer || '';
+          if (button.dataset.choice === rightAnswer) {
+            button.classList.add('is-right');
+            if (feedback) feedback.textContent = 'Muito bem!';
+          } else {
+            button.classList.add('is-wrong');
+            if (feedback) feedback.textContent = 'Tenta outra vez.';
+          }
         });
-      } else {
-        const opts = ['🍇', '🍎', '🍐'];
-        const labels = {'🍇':'uva','🍎':'maca','🍐':'pera'};
-        optionsWrap.className = 'grid-3';
-        shuffle(opts).forEach(opt => {
-          const b = document.createElement('button');
-          b.className = 'option-btn';
-          b.style.fontSize = '2rem';
-          b.textContent = opt;
-          b.addEventListener('click', () => checkU2(labels[opt] === 'uva'));
-          optionsWrap.appendChild(b);
+      });
+    });
+
+    document.querySelectorAll('[data-compose]').forEach((bank) => {
+      const output = document.getElementById(bank.dataset.compose);
+      const parts = [];
+      bank.querySelectorAll('.syllable-chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          parts.push(chip.dataset.syllable || '');
+          if (output) output.textContent = parts.join('');
         });
-      }
-    }
-  }
-
-  function checkU2(ok) {
-    if (ok) {
-      u2.streak += 1;
-      setFb('u2Fb', '✓ Certo! Continua!', true);
-      beep('ok');
-      confetti();
-      if (u2.streak >= 3) {
-        u2.doneModes[u2.mode] = true;
-        if (u2.mode === 'img-word') {
-          u2.mode = 'word-img';
-          u2.streak = 0;
-          setTimeout(() => {
-            setFb('u2Fb', 'Mudamos de modo!', true);
-            u2Round();
-          }, 600);
-          return;
-        }
-        if (u2.doneModes['img-word'] && u2.doneModes['word-img']) {
-          setFb('u2Fb', 'Parabéns! 3 acertos seguidos nos dois modos! 🌟', true);
-          return;
-        }
-      }
-    } else {
-      u2.streak = 0;
-      setFb('u2Fb', '✗ Quase! Repara bem nas letras.', false);
-      beep('warn');
-    }
-    u2Round();
-  }
-
-  function initU2() {
-    u2.mode = 'img-word';
-    u2.streak = 0;
-    u2.doneModes = { 'img-word': false, 'word-img': false };
-    setFb('u2Fb', '', true);
-    u2Round();
-  }
-
-  const u3 = { claps: 0, placed: {} };
-
-  function renderU3Source() {
-    const level = getLevel('unit3');
-    const order = level === 'challenge' ? ['va', 'u'] : ['u', 'va'];
-    makeDraggable({
-      sourceEl: document.getElementById('u3Source'),
-      values: order,
-      onDrop: (value, slot) => {
-        slot.innerHTML = '<span class="slot-label">' + slot.querySelector('.slot-label')?.textContent + '</span>';
-        const n = document.createElement('div');
-        n.className = 'syllable';
-        n.dataset.value = value;
-        n.textContent = value;
-        slot.appendChild(n);
-        slot.classList.add('filled');
-        u3.placed[slot.dataset.accept] = value;
-        checkU3();
-      }
-    });
-  }
-
-  function splitU3() {
-    const wrap = document.getElementById('u3Split');
-    wrap.innerHTML = '';
-    const u = document.createElement('span');
-    u.className = 'syllable';
-    u.dataset.value = 'u';
-    u.textContent = 'u';
-    const va = document.createElement('span');
-    va.className = 'syllable';
-    va.dataset.value = 'va';
-    va.textContent = 'va';
-    wrap.appendChild(u);
-    wrap.appendChild(document.createTextNode(' '));
-    wrap.appendChild(va);
-  }
-
-  function checkU3() {
-    const s1 = document.querySelector('#u3Slots .slot:nth-child(1)');
-    const s2 = document.querySelector('#u3Slots .slot:nth-child(2)');
-    const ok = u3.placed['u'] === 'u' && u3.placed['va'] === 'va';
-    if (ok) {
-      s1.classList.add('correct');
-      s2.classList.add('correct');
-      setFb('u3Fb', 'Muito bem! u-va: duas sílabas!', true);
-      beep('ok');
-      confetti();
-    }
-  }
-
-  function initU3() {
-    const level = getLevel('unit3');
-    u3.claps = 0;
-    u3.placed = {};
-    document.getElementById('u3Claps').textContent = 'Palmas: 0';
-    document.querySelectorAll('#u3Slots .slot').forEach((slot, i) => {
-      slot.className = 'slot';
-      slot.innerHTML = '<span class="slot-label">' + (i + 1) + '.º</span>';
-    });
-    document.getElementById('u3Split').innerHTML = '';
-    setFb('u3Fb', '', true);
-    renderU3Source();
-
-    const extra = document.getElementById('u3Extra');
-    if (level === 'support') {
-      splitU3();
-      extra.textContent = 'Com ajuda: as sílabas já estão separadas e coloridas.';
-      setTimeout(() => { beep('click'); beep('click'); u3.claps = 2; document.getElementById('u3Claps').textContent = 'Palmas: 2'; }, 250);
-    } else if (level === 'challenge') {
-      extra.innerHTML = 'Desafio: depois desta palavra, ouve "ovo" e diz quantas sílabas tem. <button id="u3Ovo" class="subtle-btn">🔊 Ouvir "ovo"</button>';
-      setTimeout(() => {
-        const b = document.getElementById('u3Ovo');
-        if (b) b.onclick = () => speak('ovo');
-      }, 0);
-    } else {
-      extra.textContent = 'Intermédio: bate palmas e depois arrasta os blocos para os slots.';
-    }
-  }
-
-  document.getElementById('u3Clap').addEventListener('click', () => {
-    u3.claps += 1;
-    document.getElementById('u3Claps').textContent = 'Palmas: ' + u3.claps;
-    splitU3();
-    beep('click');
-    setFb('u3Fb', 'Conta: 1... 2...', true);
-  });
-
-  const u4 = { valid: new Set(['uva', 'vau', 'meu']) };
-
-  function fillSelect(sel, values, current) {
-    sel.innerHTML = '';
-    values.forEach(v => {
-      const o = document.createElement('option');
-      o.value = v;
-      o.textContent = v;
-      sel.appendChild(o);
-    });
-    sel.value = current;
-  }
-
-  function updateU4() {
-    const s1 = document.getElementById('u4s1').value;
-    const s2 = document.getElementById('u4s2').value;
-    const word = s1 + s2;
-    const ok = u4.valid.has(word);
-    const wordEl = document.getElementById('u4Word');
-    wordEl.textContent = word.toUpperCase();
-    wordEl.style.color = word === 'uva' ? '#E05FA0' : '#7C3AED';
-    const ind = document.getElementById('u4Indicator');
-    ind.textContent = ok ? '✓ Existe!' : '? Não conheço';
-    ind.className = 'feedback ' + (ok ? 'ok' : 'no');
-    if (word === 'uva') {
-      wordEl.style.animation = 'celebrate .4s ease';
-      confetti();
-      beep('ok');
-      setTimeout(() => wordEl.style.animation = '', 450);
-    }
-  }
-
-  function initU4() {
-    const level = getLevel('unit4');
-    const values = level === 'support' ? ['u', 'va', 'me'] : ['u', 'va', 'me', 'ni', 'na', 'no'];
-    fillSelect(document.getElementById('u4s1'), values, 'va');
-    fillSelect(document.getElementById('u4s2'), values, 'u');
-    document.getElementById('u4Support').classList.toggle('hidden', level !== 'support');
-    document.getElementById('u4Challenge').classList.toggle('hidden', level !== 'challenge');
-    if (level === 'support') {
-      const sup = document.getElementById('u4Support');
-      sup.innerHTML = '<strong>Confirma:</strong> <button class="subtle-btn u4check" data-w="uva">uva</button> <button class="subtle-btn u4check" data-w="vame">vame</button> <button class="subtle-btn u4check" data-w="meu">meu</button>';
-      sup.querySelectorAll('.u4check').forEach(b => b.onclick = () => {
-        const w = b.dataset.w;
-        const good = u4.valid.has(w);
-        setFb('u4Indicator', good ? '✓ Existe!' : '? Não conheço', good);
       });
-    }
-    updateU4();
-  }
+    });
 
-  document.getElementById('u4s1').addEventListener('change', updateU4);
-  document.getElementById('u4s2').addEventListener('change', updateU4);
-  document.getElementById('u4TryNew').addEventListener('click', () => {
-    const syl = (document.getElementById('u4NewSyl').value || '').trim().toLowerCase();
-    if (!syl) return;
-    const test = 'va' + syl;
-    const maybe = ['vaca', 'vaso', 'vaga'].includes(test);
-    setFb('u4NewResult', maybe ? 'Boa tentativa! Essa combinação pode formar palavra conhecida.' : 'Não parece uma palavra que conhecemos. Testa outra.', maybe);
-  });
-
-  const u5 = {
-    idx: 0,
-    exercises: [
-      {prompt: 'u __', correct: 'va', opts: ['va', 'na', 'me']},
-      {prompt: '__ va', correct: 'u', opts: ['u', 'na', 'me']},
-      {prompt: 'u - va', confirm: true}
-    ]
-  };
-
-  function renderU5() {
-    const level = getLevel('unit5');
-    const ex = u5.exercises[u5.idx];
-    document.getElementById('u5Prompt').textContent = ex.prompt;
-    document.getElementById('u5Step').textContent = 'Exercício ' + (u5.idx + 1) + '/3';
-    document.getElementById('u5Options').innerHTML = '';
-    document.getElementById('u5Confirm').classList.toggle('hidden', !ex.confirm);
-    document.getElementById('u5ChallengeInput').classList.toggle('hidden', level !== 'challenge');
-    document.getElementById('u5Img').classList.toggle('hidden', level === 'challenge');
-
-    if (ex.confirm) return;
-    let opts = ex.opts;
-    if (level === 'support') opts = [ex.correct, ex.opts.find(o => o !== ex.correct && o !== 'u') || 'me'];
-    if (level === 'challenge' && !opts.includes('la')) opts = [...opts, 'la'];
-
-    opts.forEach(opt => {
-      const b = document.createElement('button');
-      b.className = 'option-btn';
-      b.textContent = opt;
-      b.addEventListener('click', () => {
-        const ok = opt === ex.correct;
-        if (ok) {
-          setFb('u5Fb', 'Muito bem!', true);
-          beep('ok');
-          confetti();
-          if (level === 'support') speak('uva');
-          u5.idx += 1;
-          if (u5.idx < 3) setTimeout(renderU5, 500);
-          else setFb('u5Fb', 'Parabéns! Completaste os 3 exercícios.', true);
-        } else {
-          setFb('u5Fb', 'Quase! Tenta outra sílaba.', false);
-          beep('warn');
-        }
+    document.querySelectorAll('.clear-compose').forEach((button) => {
+      button.addEventListener('click', () => {
+        const output = document.getElementById(button.dataset.composeClear);
+        if (output) output.textContent = '__';
       });
-      document.getElementById('u5Options').appendChild(b);
-    });
-  }
-
-  function initU5() {
-    u5.idx = 0;
-    setFb('u5Fb', '', true);
-    renderU5();
-  }
-
-  document.getElementById('u5Done').addEventListener('click', () => {
-    u5.idx = 3;
-    setFb('u5Fb', 'Excelente leitura!', true);
-    confetti();
-  });
-
-  const u6 = {
-    mode: 'read',
-    words: []
-  };
-
-  function renderU6Build() {
-    const slots = document.getElementById('u6Slots');
-    slots.innerHTML = '';
-    const level = getLevel('unit6');
-    const target = level === 'support' ? ['A', 'uva', 'é', 'doce.'] : ['A', 'uva', 'é', 'doce.'];
-    const sourceWords = level === 'support' ? ['uva', 'é', 'doce.'] : shuffle([...target]);
-    u6.words = {};
-
-    target.forEach((t, i) => {
-      const s = document.createElement('div');
-      s.className = 'slot';
-      s.dataset.accept = t;
-      s.innerHTML = '<span class="slot-label">' + (i + 1) + '.º</span>';
-      if (level === 'support' && i === 0) {
-        const fixed = document.createElement('div');
-        fixed.className = 'option-btn';
-        fixed.textContent = 'A';
-        fixed.style.pointerEvents = 'none';
-        s.appendChild(fixed);
-      }
-      slots.appendChild(s);
     });
 
-    makeDraggable({
-      sourceEl: document.getElementById('u6Source'),
-      values: sourceWords,
-      cls: 'option-btn',
-      onDrop: (value, slot) => {
-        if (level === 'support' && slot.dataset.accept === 'A') return;
-        slot.innerHTML = '<span class="slot-label">' + slot.querySelector('.slot-label')?.textContent + '</span>';
-        const w = document.createElement('div');
-        w.className = 'option-btn';
-        w.textContent = value;
-        slot.appendChild(w);
-        u6.words[slot.dataset.accept] = value;
-        checkU6();
-      }
+    document.querySelectorAll('.check-card').forEach((card) => {
+      card.addEventListener('click', () => card.classList.toggle('is-done'));
     });
-  }
 
-  function checkU6() {
-    const level = getLevel('unit6');
-    const order = ['A', 'uva', 'é', 'doce.'];
-    const ok = order.every(w => (level === 'support' && w === 'A') || u6.words[w] === w);
-    if (ok) {
-      setFb('u6Fb', 'Frase correta! A uva é doce.', true);
-      confetti();
-      beep('ok');
-      speak('A uva é doce.');
-    }
-  }
-
-  function initU6() {
-    const level = getLevel('unit6');
-    u6.mode = level === 'challenge' ? 'build' : 'read';
-    document.getElementById('u6ReadMode').classList.toggle('hidden', u6.mode !== 'read');
-    document.getElementById('u6BuildMode').classList.toggle('hidden', u6.mode !== 'build');
-    document.getElementById('u6ModeBtn').textContent = u6.mode === 'read' ? 'Agora constrói' : 'Voltar a ler';
-    renderU6Build();
-    setFb('u6Fb', '', true);
-    if (level === 'support' && u6.mode === 'read') speak('A uva é doce.');
-  }
-
-  document.getElementById('u6ModeBtn').addEventListener('click', () => {
-    u6.mode = u6.mode === 'read' ? 'build' : 'read';
-    document.getElementById('u6ReadMode').classList.toggle('hidden', u6.mode !== 'read');
-    document.getElementById('u6BuildMode').classList.toggle('hidden', u6.mode !== 'build');
-    document.getElementById('u6ModeBtn').textContent = u6.mode === 'read' ? 'Agora constrói' : 'Voltar a ler';
-  });
-
-  document.querySelectorAll('#u6PhraseRead .word').forEach(w => {
-    w.addEventListener('click', () => {
-      document.querySelectorAll('#u6PhraseRead .word').forEach(x => x.classList.remove('active'));
-      w.classList.add('active');
-      speak(w.textContent.replace('.', ''));
-      beep('click');
-    });
-  });
-
-  const u7 = {
-    idx: 0,
-    answers: [],
-    timer: null,
-    left: 45
-  };
-
-  function u7Tasks() {
-    const level = getLevel('unit7');
-    const base = [
-      {q: 'Escolhe a palavra certa:', type: 'btn', opts: ['uva', 'ova', 'ava'], correct: 'uva'},
-      {q: 'Quantas sílabas tem "uva"?', type: 'btn', opts: ['1', '2', '3'], correct: '2'},
-      {q: 'Ordena as sílabas:', type: 'dragSyl'},
-      {q: 'Escolhe a frase correta:', type: 'btn', opts: ['A uva é doce.', 'Doce é uva a.', 'A doce é uva.'], correct: 'A uva é doce.'}
-    ];
-    if (level === 'challenge') base.push({q: 'Escreve uma frase nova com "uva":', type: 'text'});
-    return base;
-  }
-
-  function startU7Timer() {
-    const tEl = document.getElementById('u7Timer');
-    clearInterval(u7.timer);
-    if (getLevel('unit7') !== 'challenge') {
-      tEl.classList.add('hidden');
-      return;
-    }
-    u7.left = 45;
-    tEl.classList.remove('hidden');
-    tEl.textContent = '⏱ ' + u7.left + 's';
-    u7.timer = setInterval(() => {
-      u7.left -= 1;
-      tEl.textContent = '⏱ ' + u7.left + 's';
-      if (u7.left <= 0) {
-        clearInterval(u7.timer);
-        recordU7(false);
-      }
-    }, 1000);
-  }
-
-  function recordU7(ok) {
-    clearInterval(u7.timer);
-    u7.answers.push(ok);
-    setFb('u7Fb', ok ? '✓ Registado!' : '✗ Registado. Vamos à próxima!', ok);
-    beep(ok ? 'ok' : 'warn');
-    if (!ok && getLevel('unit7') === 'support') {
-      const area = document.getElementById('u7TaskArea');
-      const pic = document.createElement('div');
-      pic.textContent = 'Ajuda visual: 🍇';
-      pic.style.fontSize = '2rem';
-      area.appendChild(pic);
-    }
-    setTimeout(() => {
-      u7.idx += 1;
-      renderU7();
-    }, 1500);
-  }
-
-  function renderU7() {
-    const tasks = u7Tasks();
-    const area = document.getElementById('u7TaskArea');
-    const label = document.getElementById('u7Label');
-    const progress = document.getElementById('u7Progress');
-    const summary = document.getElementById('u7Summary');
-
-    if (u7.idx >= tasks.length) {
-      area.innerHTML = '';
-      label.textContent = 'Fim da mini-avaliação';
-      progress.style.width = '100%';
-      const score = u7.answers.filter(Boolean).length;
-      summary.classList.remove('hidden');
-      summary.innerHTML = '<h3>Resumo</h3>' + u7.answers.map((a, i) => '<div>Tarefa ' + (i + 1) + ': ' + (a ? '✓' : '✗') + '</div>').join('') + '<p><strong>Pontuação: ' + score + '/' + tasks.length + '</strong></p>';
-      if (score === tasks.length) {
-        confetti();
-        setFb('u7Fb', 'Brilhante! Tudo certo! 🌟', true);
-      } else if (score >= 2) {
-        setFb('u7Fb', 'Bom trabalho! Continua a treinar.', true);
-      } else {
-        setFb('u7Fb', 'Vamos repetir algumas partes para ganhar confiança.', false);
-      }
-      return;
-    }
-
-    summary.classList.add('hidden');
-    label.textContent = 'Tarefa ' + (u7.idx + 1) + '/' + tasks.length;
-    progress.style.width = ((u7.idx / tasks.length) * 100) + '%';
-    const t = tasks[u7.idx];
-    area.innerHTML = '<div style="font-weight:800;margin-bottom:.5rem;">' + t.q + '</div>';
-
-    if (t.type === 'btn') {
-      const wrap = document.createElement('div');
-      wrap.className = 'grid-3';
-      if (getLevel('unit7') === 'support' && u7.idx === 3) {
-        t.opts = ['🍇 ' + t.opts[0], '🍐 ' + t.opts[1], '🍎 ' + t.opts[2]];
-      }
-      t.opts.forEach(o => {
-        const b = document.createElement('button');
-        b.className = 'option-btn';
-        b.textContent = o;
-        b.onclick = () => {
-          const normalized = o.replace('🍇 ','').replace('🍐 ','').replace('🍎 ','');
-          recordU7(normalized === t.correct);
-        };
-        wrap.appendChild(b);
+    document.querySelectorAll('.diff-switcher').forEach((switcher) => {
+      const panels = switcher.nextElementSibling;
+      switcher.querySelectorAll('.diff-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          switcher.querySelectorAll('.diff-btn').forEach((item) => item.classList.remove('is-active'));
+          panels.querySelectorAll('.diff-panel').forEach((panel) => panel.classList.remove('is-active'));
+          button.classList.add('is-active');
+          const target = panels.querySelector('#' + CSS.escape(button.dataset.diff));
+          if (target) target.classList.add('is-active');
+        });
       });
-      area.appendChild(wrap);
-    } else if (t.type === 'dragSyl') {
-      const slots = document.createElement('div');
-      slots.className = 'drop-area';
-      slots.innerHTML = '<div class="slot" data-accept="u"><span class="slot-label">1.º</span></div><div class="slot" data-accept="va"><span class="slot-label">2.º</span></div>';
-      area.appendChild(slots);
-      const src = document.createElement('div');
-      src.className = 'drag-source';
-      area.appendChild(src);
-      const order = ['va', 'u'];
-      makeDraggable({
-        sourceEl: src,
-        values: order,
-        onDrop: (value, slot) => {
-          slot.innerHTML = '<span class="slot-label">' + slot.querySelector('.slot-label')?.textContent + '</span>';
-          const n = document.createElement('div');
-          n.className = 'syllable';
-          n.dataset.value = value;
-          n.textContent = value;
-          slot.appendChild(n);
-          const s1 = slots.children[0].querySelector('.syllable')?.dataset.value;
-          const s2 = slots.children[1].querySelector('.syllable')?.dataset.value;
-          if (s1 && s2) recordU7(s1 === 'u' && s2 === 'va');
-        }
-      });
-      if (getLevel('unit7') === 'support') {
-        slots.children[0].style.background = '#ffe4f2';
-        slots.children[1].style.background = '#efe7ff';
-      }
-    } else if (t.type === 'text') {
-      const input = document.createElement('textarea');
-      input.placeholder = 'Escreve aqui...';
-      area.appendChild(input);
-      const b = document.createElement('button');
-      b.textContent = 'Enviar frase';
-      b.onclick = () => recordU7((input.value || '').toLowerCase().includes('uva'));
-      area.appendChild(b);
-    }
-
-    startU7Timer();
-  }
-
-  function initU7() {
-    u7.idx = 0;
-    u7.answers = [];
-    setFb('u7Fb', '', true);
-    renderU7();
-  }
-
-  const u8 = {
-    color: '#7C3AED',
-    drawing: false
-  };
-
-  function drawTemplate(ctx, w, h) {
-    ctx.save();
-    ctx.strokeStyle = '#d8b4fe';
-    ctx.lineWidth = 2;
-    [[150,120],[210,100],[270,120],[190,160],[250,160]].forEach(([x,y]) => {
-      ctx.beginPath(); ctx.arc(x, y, 24, 0, Math.PI * 2); ctx.stroke();
     });
-    ctx.font = '700 36px Nunito';
-    ctx.fillStyle = '#e9d5ff';
-    ctx.fillText('uva', 340, 135);
-    ctx.restore();
-  }
-
-  function initU8() {
-    const level = getLevel('unit8');
-    const mode = document.getElementById('u8Mode').value;
-    document.getElementById('u8Draw').classList.toggle('hidden', mode !== 'draw');
-    document.getElementById('u8Write').classList.toggle('hidden', mode !== 'write');
-    if (level === 'challenge') {
-      document.getElementById('u8Text').placeholder = 'Desafio: escreve 2 frases ou mini-história (3 frases) com "uva".';
-    }
-    if (level === 'support') {
-      const c = document.getElementById('u8Canvas');
-      const ctx = c.getContext('2d');
-      ctx.clearRect(0, 0, c.width, c.height);
-      drawTemplate(ctx, c.width, c.height);
-    }
-  }
-
-  document.getElementById('u8Mode').addEventListener('change', initU8);
-  document.querySelectorAll('.u8Color').forEach(b => b.addEventListener('click', () => u8.color = b.dataset.c));
-
-  const c = document.getElementById('u8Canvas');
-  const ctx = c.getContext('2d');
-  ctx.lineWidth = 5;
-  ctx.lineCap = 'round';
-
-  function getCanvasPos(ev) {
-    const r = c.getBoundingClientRect();
-    const pt = ev.touches ? ev.touches[0] : ev;
-    return { x: (pt.clientX - r.left) * (c.width / r.width), y: (pt.clientY - r.top) * (c.height / r.height) };
-  }
-
-  let last = null;
-  function drawStart(ev) {
-    ev.preventDefault();
-    u8.drawing = true;
-    last = getCanvasPos(ev);
-  }
-
-  function drawMove(ev) {
-    if (!u8.drawing) return;
-    ev.preventDefault();
-    const p = getCanvasPos(ev);
-    ctx.strokeStyle = u8.color;
-    ctx.beginPath();
-    ctx.moveTo(last.x, last.y);
-    ctx.lineTo(p.x, p.y);
-    ctx.stroke();
-    last = p;
-  }
-
-  function drawEnd() { u8.drawing = false; }
-
-  c.addEventListener('mousedown', drawStart);
-  c.addEventListener('mousemove', drawMove);
-  window.addEventListener('mouseup', drawEnd);
-  c.addEventListener('touchstart', drawStart, {passive:false});
-  c.addEventListener('touchmove', drawMove, {passive:false});
-  window.addEventListener('touchend', drawEnd);
-
-  document.getElementById('u8Share').addEventListener('click', () => {
-    const mode = document.getElementById('u8Mode').value;
-    const posts = document.getElementById('u8Posts');
-    const card = document.createElement('div');
-    card.className = 'maker-card';
-    if (mode === 'draw') {
-      const word = document.getElementById('u8WordInput').value || 'uva';
-      const img = c.toDataURL('image/png');
-      card.innerHTML = '<div><strong>Desenho</strong> - palavra: ' + word + '</div><img alt="desenho do aluno" src="' + img + '" style="max-width:100%;border-radius:8px;border:1px solid #ddd;">';
-    } else {
-      const txt = document.getElementById('u8Text').value;
-      card.innerHTML = '<div><strong>Frase</strong></div><div>' + (txt || 'Sem texto') + '</div>';
-    }
-    posts.prepend(card);
-    setFb('u8Fb', 'Partilhado com a turma! 👏', true);
-    confetti();
-    beep('ok');
-  });
-
-  initU1();
-  initU2();
-  initU3();
-  initU4();
-  initU5();
-  initU6();
-  initU7();
-  initU8();
-})();
-</script>
+  </script>
 </body>
 </html>

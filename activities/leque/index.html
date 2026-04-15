@@ -1,1317 +1,516 @@
-<!DOCTYPE html>
-<html lang="pt">
+<!doctype html>
+<html lang="pt-PT">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PageCraft — Palavra: leque (M28P #7)</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M28P #7 — leque | PageCraft</title>
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHRleHQgeT0iNTAiIGZvbnQtc2l6ZT0iNDgiPvCfk5g8L3RleHQ+PC9zdmc+" />
   <style>
     :root {
-      --bg: #FFF8F0;
+      --bg: #FFF0F6;
       --surface: #FFFFFF;
       --primary: #E05FA0;
       --accent: #F59E0B;
       --text: #1E1B18;
-      --purple: #7C3AED;
-      --green: #22c55e;
-      --greenBg: #f0fdf4;
-      --amberBg: #fffbeb;
-      --danger: #ef4444;
+      --correct: #22c55e;
+      --correct-bg: #f0fdf4;
+      --incorrect: #F59E0B;
+      --incorrect-bg: #fffbeb;
       --radius: 16px;
-      --shadow: rgba(0,0,0,0.08) 0 4px 12px;
-      --focus: 3px solid #7C3AED;
-      --transition: 200ms ease;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --font: 'Nunito', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+      --touch-size: 48px;
+      --card-gap: 1rem;
     }
-
     * { box-sizing: border-box; }
-
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      font-family: 'Nunito', 'Poppins', 'Comic Sans MS', sans-serif;
+      font-family: var(--font);
       background:
-        radial-gradient(circle at 8% 8%, rgba(224,95,160,0.22), transparent 38%),
-        radial-gradient(circle at 92% 15%, rgba(124,58,237,0.14), transparent 42%),
-        linear-gradient(180deg, #fff8f0 0%, #fff1f8 100%);
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 20%, transparent), transparent 38%),
+        linear-gradient(180deg, color-mix(in srgb, var(--primary) 8%, var(--bg)), var(--bg));
       color: var(--text);
       font-size: 20px;
-      line-height: 1.45;
+      line-height: 1.55;
       min-height: 100vh;
-      padding: 1rem;
     }
-
-    .page {
-      max-width: 960px;
-      margin: 0 auto;
-      display: grid;
-      gap: 1rem;
+    a, button, summary, textarea { font: inherit; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; background: var(--surface); color: var(--text); padding: 0.75rem 1rem; border-radius: 9999px; z-index: 1000; border: 2px solid var(--primary); }
+    .skip-link:focus { top: 1rem; }
+    :focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+    .shell { max-width: 1120px; margin: 0 auto; padding: 1rem 1rem 3rem; }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      padding: 1.4rem;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 72%, white), color-mix(in srgb, var(--accent) 60%, white));
+      color: white;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
     }
-
-    header {
-      background: linear-gradient(135deg, #E05FA0, #7C3AED);
-      color: #fff;
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      box-shadow: var(--shadow);
-    }
-
-    h1 { margin: 0 0 0.5rem; font-size: 2rem; }
-    h2 { margin: 0 0 0.75rem; font-size: 1.5rem; color: var(--primary); }
-    h3 { margin: 0.2rem 0 0.5rem; font-size: 1.15rem; }
-    p { margin: 0.4rem 0; }
-
-    .meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.7rem;
-      margin-bottom: 0.9rem;
-    }
-
-    .badge {
-      background: #F59E0B;
-      color: #fff;
-      border-radius: 999px;
-      padding: 0.25rem 0.75rem;
-      font-weight: 700;
-      font-size: 0.95rem;
-    }
-
-    .objectives {
-      background: rgba(255,255,255,0.16);
-      border-radius: 12px;
-      padding: 0.8rem 1rem;
-      font-size: 0.96rem;
-    }
-
-    .objectives ul {
-      margin: 0.5rem 0 0;
-      padding-left: 1.15rem;
-    }
-
-    .unit {
-      background: var(--surface);
-      border: 2px solid var(--primary);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 1rem;
-    }
-
-    .unit-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 0.8rem;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      margin-bottom: 0.6rem;
-    }
-
-    .timer {
-      font-size: 0.9rem;
-      font-weight: 700;
-      background: #ffe4f3;
-      border-radius: 999px;
-      padding: 0.3rem 0.8rem;
-    }
-
-    .story {
-      background: #fff2fa;
-      padding: 0.8rem;
-      border-radius: 12px;
-      margin-bottom: 0.8rem;
-      font-size: 0.95rem;
-    }
-
-    .interactive {
-      background: #fff;
-      border: 2px dashed #f2b8d6;
-      border-radius: 12px;
-      padding: 0.8rem;
-      display: grid;
-      gap: 0.75rem;
-    }
-
-    .btn, .tab {
-      border: 0;
-      border-radius: 999px;
-      padding: 0.75rem 1.3rem;
-      font-size: 1rem;
-      font-weight: 700;
-      min-height: 48px;
-      cursor: pointer;
-      transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
-      touch-action: manipulation;
-    }
-
-    .btn:hover, .tab:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.18); }
-    .btn:active, .tab:active { transform: scale(0.97); }
-
-    .btn-primary { background: var(--primary); color: #fff; }
-    .btn-secondary { background: #fdf0ff; color: var(--purple); border: 2px solid var(--purple); }
-
-    .focusable:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
-      outline: var(--focus);
-      outline-offset: 2px;
-    }
-
-    .diff-tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 0.4rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .tab[data-level="support"] { background: #dcfce7; color: #166534; }
-    .tab[data-level="standard"] { background: #fef3c7; color: #92400e; }
-    .tab[data-level="challenge"] { background: #fee2e2; color: #991b1b; }
-    .tab.active { box-shadow: 0 0 0 3px rgba(124,58,237,0.25); }
-
-    .diff-content { display: none; font-size: 0.95rem; background: #faf7ff; border-radius: 12px; padding: 0.65rem 0.8rem; }
-    .diff-content.active { display: block; }
-
-    .word-display {
-      font-size: 48px;
-      letter-spacing: 0.05em;
-      font-weight: 800;
-      color: var(--primary);
-      text-align: center;
-      margin: 0.2rem 0;
-    }
-
-    .fan-stage {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(120px, 1fr));
-      gap: 0.8rem;
-      align-items: center;
-    }
-
-    .fan-card {
-      border: 2px solid #f3d0e3;
-      border-radius: 12px;
-      padding: 0.6rem;
-      text-align: center;
-      background: #fff;
-      transition: transform var(--transition);
-    }
-
-    .fan-icon {
-      font-size: 3rem;
-      display: inline-block;
-      transform-origin: bottom center;
-    }
-
-    .fan-card.active .fan-icon { animation: fanMove 0.6s ease; }
-    @keyframes fanMove {
-      0% { transform: rotate(0deg) scale(0.96); }
-      50% { transform: rotate(7deg) scale(1.08); }
-      100% { transform: rotate(0deg) scale(1); }
-    }
-
-    .cards-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .word-card, .syllable-block {
-      border: 2px solid #f5c7e1;
-      background: #fff;
-      border-radius: 12px;
-      min-height: 48px;
-      min-width: 64px;
+    .hero::after { content: ""; position: absolute; inset: auto -8% -24% auto; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.14); }
+    .hero-top { display: flex; gap: 1rem; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; position: relative; z-index: 1; }
+    .hero-kicker, .hero-badge, .meta-chip, .nav-pill, .page-link span {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 0.45rem 0.8rem;
-      font-size: 1.08rem;
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 9999px;
+      padding: 0.75rem 1.25rem;
       font-weight: 700;
-      user-select: none;
-      touch-action: none;
-      cursor: grab;
-      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
-      position: relative;
     }
-
-    .word-card.selected {
-      border-color: var(--green);
-      background: var(--greenBg);
-    }
-
-    .syllable-block { color: #fff; font-size: 36px; font-weight: 800; padding: 0.5rem 1.2rem; border: none; }
-    .syllable-block[data-syllable="le"] { background: #E05FA0; }
-    .syllable-block[data-syllable="que"] { background: #7C3AED; }
-
-    .dragging {
-      transform: scale(1.1);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.24);
-      cursor: grabbing;
-      z-index: 999;
-    }
-
-    .dropzone {
-      min-height: 56px;
-      border: 2px dashed #d5c1f7;
+    .hero-kicker { background: rgba(255,255,255,0.16); }
+    .hero-badge { background: rgba(255,255,255,0.22); }
+    .hero-grid { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.9fr); margin-top: 1.25rem; position: relative; z-index: 1; }
+    .hero-copy h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.05; margin: 0.4rem 0 0.7rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+    .hero-copy p { margin: 0.4rem 0; max-width: 45rem; }
+    .word-scene { background: rgba(255,255,255,0.14); border: 2px solid rgba(255,255,255,0.28); border-radius: 24px; padding: 1rem; backdrop-filter: blur(4px); }
+    .word-scene .emoji { font-size: clamp(3rem, 10vw, 5.5rem); line-height: 1; }
+    .meta-row, .objective-row, .syllable-row, .page-switch, .section-nav { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .meta-row { margin-top: 1rem; }
+    .meta-chip { background: rgba(255,255,255,0.18); }
+    .objective-row { margin: 1rem 0 0; padding: 0; list-style: none; }
+    .objective-row li { background: rgba(255,255,255,0.22); border-radius: 9999px; padding: 0.75rem 1rem; font-weight: 700; min-height: var(--touch-size); display: inline-flex; align-items: center; }
+    .word-spotlight { margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1.1fr 1fr; }
+    .spot-card { background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 70%, white); border-radius: 24px; padding: 1rem; box-shadow: var(--shadow); }
+    .spot-card h2 { margin: 0 0 0.75rem; font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; }
+    .spot-card .word-display { font-size: clamp(2.4rem, 7vw, 3.8rem); font-weight: 800; color: var(--primary); letter-spacing: 0.05em; text-transform: uppercase; }
+    .spot-card .mission { margin-top: 0.75rem; }
+    .syllable-row { margin-top: 1rem; }
+    .syllable-token, .syllable-chip {
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
       border-radius: 12px;
-      padding: 0.35rem;
+      border: none;
+      color: white;
+      font-weight: 800;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      padding: 0.55rem 1rem;
+      background: var(--chip, var(--primary));
+      box-shadow: var(--shadow);
+    }
+    .page-switch { margin: 1.2rem 0 0.5rem; }
+    .page-link {
+      text-decoration: none;
+      background: var(--surface);
+      color: var(--text);
+      border: 2px solid color-mix(in srgb, var(--primary) 28%, white);
+      border-radius: 18px;
+      padding: 0.85rem 1rem;
+      min-height: var(--touch-size);
       display: flex;
+      gap: 0.75rem;
       align-items: center;
-      gap: 0.3rem;
-      flex-wrap: wrap;
-      background: #fcf9ff;
-    }
-
-    .dropzone.hover {
-      background: #efe6ff;
-      border-color: var(--purple);
-    }
-
-    .feedback {
-      border-radius: 12px;
-      padding: 0.55rem 0.75rem;
+      justify-content: space-between;
+      flex: 1 1 200px;
+      box-shadow: var(--shadow);
       font-weight: 700;
-      font-size: 0.95rem;
-      display: none;
     }
-
-    .feedback.show { display: block; }
-    .feedback.correct {
-      background: #f0fdf4;
-      color: #166534;
-      border: 2px solid #22c55e;
-      animation: pulseGreen 0.3s;
+    .page-link.is-current { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
+    .section-nav { position: sticky; top: 0; z-index: 10; padding: 0.85rem 0 1rem; background: linear-gradient(180deg, var(--bg), rgba(255,248,240,0.88)); backdrop-filter: blur(6px); }
+    .nav-pill { text-decoration: none; background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 24%, white); padding: 0.55rem 1rem; }
+    .content { display: grid; gap: 1.1rem; }
+    .unit-card { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 35%, white); border-radius: 24px; padding: 1.15rem; box-shadow: var(--shadow); }
+    .unit-head { display: flex; gap: 1rem; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+    .unit-head h2 { margin: 0.2rem 0 0; font-size: clamp(1.45rem, 4vw, 2.1rem); font-weight: 800; }
+    .unit-kicker { color: color-mix(in srgb, var(--primary) 80%, black); font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.9rem; }
+    .unit-badge { background: color-mix(in srgb, var(--accent) 22%, var(--surface)); border: 2px solid var(--accent); border-radius: 9999px; padding: 0.65rem 1rem; font-weight: 800; min-height: var(--touch-size); display: inline-flex; align-items: center; }
+    .unit-grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.95fr); margin-top: 1rem; }
+    .unit-copy p { margin: 0.65rem 0; }
+    .unit-flow { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 1rem; }
+    .unit-flow > div, .play-card, .maker-box, .teacher-card { background: color-mix(in srgb, var(--bg) 70%, white); border-radius: 18px; padding: 0.95rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
+    .play-label { font-weight: 800; margin: 0 0 0.8rem; }
+    .pill-btn, .choice-btn, .check-card, .prompt-card {
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 9999px;
+      border: 2px solid transparent;
+      padding: 0.75rem 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
     }
-
-    .feedback.warn {
-      background: #fffbeb;
-      color: #92400e;
-      border: 2px solid #F59E0B;
-    }
-
-    @keyframes pulseGreen {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.03); }
-      100% { transform: scale(1); }
-    }
-
-    .row {
-      display: flex;
-      gap: 0.6rem;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
+    .pill-btn:hover, .choice-btn:hover, .check-card:hover, .prompt-card:hover, .page-link:hover { transform: scale(1.05); box-shadow: 0 10px 24px rgba(0,0,0,0.12); }
+    .pill-btn:active, .choice-btn:active, .check-card:active, .prompt-card:active, .page-link:active { transform: scale(0.97); }
+    .pill-btn { background: var(--primary); color: white; }
+    .choice-row, .check-grid, .prompt-grid, .compose-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .choice-btn, .check-card, .prompt-card { background: var(--surface); color: var(--text); border-color: color-mix(in srgb, var(--primary) 22%, white); }
+    .choice-btn.is-right, .check-card.is-done { background: var(--correct-bg); border-color: var(--correct); color: #166534; }
+    .choice-btn.is-wrong { background: var(--incorrect-bg); border-color: var(--incorrect); color: #92400e; }
+    .feedback, .helper-text { margin: 0.85rem 0 0; font-weight: 700; }
+    .feedback { min-height: 1.4em; }
+    .compose-output, .phrase-card, .cloze-word { min-height: 72px; border-radius: 18px; background: var(--surface); border: 2px dashed color-mix(in srgb, var(--primary) 35%, white); display: grid; place-items: center; font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800; color: var(--primary); padding: 0.9rem; margin-top: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .phrase-card { text-transform: none; font-size: 1.3rem; color: var(--text); }
+    .phrase-input { width: 100%; margin-top: 0.85rem; border-radius: 18px; border: 2px solid color-mix(in srgb, var(--primary) 25%, white); padding: 0.9rem 1rem; min-height: 120px; background: #fff; }
+    .diff-switcher { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; }
+    .diff-btn { min-height: var(--touch-size); min-width: var(--touch-size); border-radius: 9999px; border: 2px solid color-mix(in srgb, var(--primary) 28%, white); background: var(--surface); padding: 0.7rem 1rem; font-weight: 700; cursor: pointer; }
+    .diff-btn.is-active { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
+    .diff-panel { display: none; background: color-mix(in srgb, var(--bg) 72%, white); border-radius: 18px; padding: 0.95rem; margin-top: 0.8rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
+    .diff-panel.is-active { display: block; }
+    .teacher-guide { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 30%, white); border-radius: 24px; padding: 0.9rem 1rem; box-shadow: var(--shadow); }
+    .teacher-guide summary { min-height: var(--touch-size); display: flex; align-items: center; cursor: pointer; font-weight: 800; font-size: 1.2rem; }
+    .teacher-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 1rem; }
+    .teacher-card-wide { grid-column: 1 / -1; }
+    .teacher-card h3 { margin-top: 0; }
+    .footer { text-align: center; padding: 1.4rem 0 0; font-weight: 700; color: color-mix(in srgb, var(--text) 72%, white); }
     .hidden { display: none !important; }
-
-    .sentence-slot {
-      flex: 1 1 90px;
-      min-height: 62px;
-      justify-content: center;
-      background: #fff;
-    }
-
-    .phase-box {
-      border: 2px solid #f2b8d6;
-      border-radius: 12px;
-      padding: 0.6rem;
-      background: #fff9fd;
-      font-size: 0.95rem;
-    }
-
-    input[type="text"], textarea, select {
-      width: 100%;
-      border-radius: 10px;
-      border: 2px solid #d9c7ef;
-      font-size: 1rem;
-      min-height: 48px;
-      padding: 0.55rem 0.7rem;
-      font-family: inherit;
-    }
-
-    .maker {
-      background: #dcfce7;
-      border: 2px solid #22c55e;
-      border-radius: var(--radius);
-      padding: 1rem;
-    }
-
-    .maker-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 0.7rem;
-    }
-
-    .maker-card {
-      background: #fff;
-      border-left: 5px solid #22c55e;
-      border-radius: 12px;
-      padding: 0.65rem;
-      font-size: 0.93rem;
-    }
-
-    .assessment {
-      background: #ffedd5;
-      border: 2px solid #fb923c;
-      border-radius: var(--radius);
-      padding: 1rem;
-    }
-
-    .assessment table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.95rem;
-    }
-
-    .assessment th, .assessment td {
-      border: 1px solid #fdba74;
-      padding: 0.45rem;
-      text-align: left;
-      vertical-align: middle;
-    }
-
-    .assessment input[type="checkbox"] {
-      width: 24px;
-      height: 24px;
-      accent-color: #ea580c;
-    }
-
-    .curricular {
-      background: #f3e8ff;
-      border: 2px solid #a855f7;
-      border-radius: var(--radius);
-      padding: 1rem;
-      font-size: 0.95rem;
-    }
-
-    .curricular ul { margin: 0.3rem 0 0.6rem; padding-left: 1.15rem; }
-
-    .pc-footer {
-      text-align: center;
-      color: #6b21a8;
-      font-weight: 700;
-      padding: 0.6rem;
-      font-size: 0.9rem;
-    }
-
-    #confetti {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1000;
-    }
-
     @media (max-width: 900px) {
-      body { font-size: 18px; }
-      .word-display { font-size: 40px; }
-      h1 { font-size: 1.7rem; }
+      .hero-grid, .word-spotlight, .unit-grid, .unit-flow, .teacher-grid { grid-template-columns: 1fr; }
+      .section-nav { position: static; }
     }
-
-    @media (max-width: 768px) {
-      body { font-size: 16px; padding: 0.6rem; }
-      .page { gap: 0.8rem; }
-      header, .unit, .maker, .assessment, .curricular { padding: 0.8rem; }
-      .fan-stage { grid-template-columns: 1fr; }
-      .word-display { font-size: 34px; }
+    @media (max-width: 640px) {
+      body { font-size: 18px; }
+      .shell { padding: 0.75rem 0.75rem 2.4rem; }
+      .hero { padding: 1rem; border-radius: 22px; }
+      .hero-copy h1 { font-size: clamp(2rem, 9vw, 3rem); }
+      .page-link { flex-basis: 100%; }
+      .objective-row li, .meta-chip, .hero-kicker, .hero-badge, .nav-pill { width: 100%; justify-content: center; }
+      .unit-card, .spot-card, .teacher-guide { border-radius: 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
     }
   </style>
 </head>
-<body>
-  <canvas id="confetti" aria-hidden="true"></canvas>
-  <main class="page">
-    <header>
-      <h1>Palavra: leque (M28P #7)</h1>
-      <div class="meta">
-        <span class="badge">Ano: 1.º ano (6-7 anos)</span>
-        <span class="badge">Duração: 40 minutos</span>
-        <span class="badge">Tema: Leitura e escrita</span>
+<body data-page-variant="index.html" data-visible-units="1,2,3,4">
+  <a href="#main" class="skip-link">Ir para o conteúdo</a>
+  <div class="shell">
+    <header class="hero">
+      <div class="hero-top">
+        <span class="hero-kicker">M28P #7</span>
+        <span class="hero-badge">Rota completa</span>
       </div>
-      <div class="objectives" aria-label="Objectivos da aula">
-        <strong>Objectivos:</strong>
-        <ul>
-          <li>Reconhecer globalmente a palavra <strong>leque</strong> associada à imagem.</li>
-          <li>Segmentar a palavra nas sílabas <strong>le</strong> e <strong>que</strong>.</li>
-          <li>Recombinar sílabas para formar e reconhecer novas palavras.</li>
-          <li>Ler e escrever <strong>leque</strong> e a frase <strong>O leque abre e fecha.</strong></li>
-        </ul>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p>Descobrir, ler e brincar</p>
+          <h1>Leque</h1>
+          <p>Percurso completo com foco na descoberta da palavra, nas sílabas e na confiança ao ler.</p>
+          <div class="meta-row">
+            <span class="meta-chip">🪭 Palavra 7</span>
+            <span class="meta-chip">1.º ano (6-7 anos)</span>
+            <span class="meta-chip">40 min</span>
+          </div>
+          <ul class="objective-row"><li>Reconhecer globalmente a palavra &#x27;leque&#x27; associada à sua imagem.</li><li>Segmentar oralmente e visualmente a palavra &#x27;leque&#x27; nas sílabas &#x27;le&#x27; e &#x27;que&#x27;.</li><li>Recombinar as sílabas &#x27;le&#x27; e &#x27;que&#x27; para formar e reconhecer novas palavras.</li></ul>
+        </div>
+        <aside class="word-scene" aria-hidden="true">
+          <div class="emoji">🪭</div>
+          <p><strong>Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</strong></p>
+          <p>Paleta própria, leitura em pt-PT AO90 e navegação pensada para toque.</p>
+          <p>Esta página trabalha as unidades 1, 2, 3, 4.</p>
+        </aside>
       </div>
     </header>
 
-    <section class="unit" id="u1">
-      <div class="unit-head">
-        <h2>Unit 1 · Contextualização narrativa</h2>
-        <span class="timer">4 min</span>
-      </div>
-      <div class="story">"Estava um dia muito quente. A avó tirou o leque da gaveta e começou a abanar. O leque abria e fechava, abria e fechava."</div>
-      <div class="interactive">
-        <div class="row">
-          <button class="btn btn-primary" id="startStory" aria-label="Iniciar narração">Iniciar narração</button>
-          <button class="btn btn-secondary" id="nextDiscussion" aria-label="Passar para discussão">Passar para discussão</button>
-          <strong id="phaseLabel">Fase: narração</strong>
+    <div class="page-switch" aria-label="Outras páginas desta palavra"><a class="page-link is-current" href="./index.html">Página 1<span>Atual</span></a><a class="page-link" href="./page-2.html">Página 2<span>Abrir</span></a><a class="page-link" href="./page-3.html">Página 3<span>Abrir</span></a><a class="page-link" href="./page-4.html">Página 4<span>Abrir</span></a></div>
+
+    <section class="word-spotlight" aria-label="Destaque da palavra">
+      <article class="spot-card">
+        <h2>Palavra em destaque</h2>
+        <div class="word-display">Leque</div>
+        <p class="mission">leque</p>
+        <div class="compose-actions">
+          <button class="pill-btn speak-btn" data-speak="Leque">Ouvir a palavra</button>
         </div>
-        <div class="fan-stage" aria-label="Leque aberto e fechado">
-          <div class="fan-card active" id="fanOpen"><div class="fan-icon">🪭</div><p>Leque aberto</p></div>
-          <div class="fan-card" id="fanClosed"><div class="fan-icon">📏</div><p>Leque fechado</p></div>
-        </div>
-        <div class="feedback" id="u1Feedback" role="status" aria-live="polite"></div>
-      </div>
-      <div class="diff-tabs" role="tablist" aria-label="Diferenciação Unit 1">
-        <button class="tab active" data-level="support">🟢 Apoio</button>
-        <button class="tab" data-level="standard">🟡 Intermédio</button>
-        <button class="tab" data-level="challenge">🔴 Desafio</button>
-      </div>
-      <div class="diff-content active" data-level="support">Professor mostra um leque real ou foto grande; aluno aponta e nomeia partes (abas, cabo).</div>
-      <div class="diff-content" data-level="standard">Aluno descreve o leque em 1-2 frases após ouvir a história.</div>
-      <div class="diff-content" data-level="challenge">Aluno inventa e diz uma frase nova sobre o leque que não esteja na história.</div>
+      </article>
+      <article class="spot-card">
+        <h2>Sílabas</h2>
+        <div class="syllable-row"><span class="syllable-token" style="--chip:#E05FA0">le</span><span class="syllable-token" style="--chip:#2563EB">que</span></div>
+        <p class="mission">Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</p>
+      </article>
     </section>
 
-    <section class="unit" id="u2">
+    <nav class="section-nav" aria-label="Navegação das unidades"><a class="nav-pill" href="#u1-contextualização-narrativa-apresentação-de-uma-pequena-história-ou-situação-concreta-com-o-leque">1</a><a class="nav-pill" href="#u2-leitura-global-da-palavra-leque-associada-à-imagem-discriminação-entre-palavras">2</a><a class="nav-pill" href="#u3-separação-oral-e-visual-da-palavra-leque-nas-sílabas-le-e-que-contagem-e-palmas">3</a><a class="nav-pill" href="#u4-manipulação-das-sílabas-le-e-que-para-descobrir-e-explorar-novas-palavras-ou-sequências-sonoras">4</a></nav>
+
+    <main id="main" class="content">
+      
+    <section id="u1-contextualização-narrativa-apresentação-de-uma-pequena-história-ou-situação-concreta-com-o-leque" class="unit-card">
       <div class="unit-head">
-        <h2>Unit 2 · Leitura global e discriminação</h2>
-        <span class="timer">4 min</span>
+        <div>
+          <span class="unit-kicker">Unidade 1</span>
+          <h2>Contextualização narrativa: apresentação de uma pequena história ou situação concreta com o leque.</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
       </div>
-      <div class="interactive">
-        <div class="row" style="justify-content:space-between;align-items:flex-start;">
-          <div style="flex:1 1 180px;">
-            <div class="fan-card" style="background:#fff2fa;">
-              <div class="fan-icon">🪭</div>
-              <p><strong>Imagem-alvo</strong></p>
-              <div class="dropzone" id="u2Target" aria-label="Largar palavra junto da imagem"></div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>O professor apresenta uma história curta: &#x27;Estava um dia muito quente. A avó tirou o leque da gaveta e começou a abanar. O leque abria e fechava, abria e fechava.&#x27; Acompanha com imagem ou gesto. Pergunta: &#x27;O que é um leque? Para que serve?&#x27; Recolhe respostas orais e aponta palavras-chave no quadro.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Ecrã ou quadro mostra imagem do leque aberto e fechado lado a lado. Professor narra enquanto alterna entre as duas imagens.</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno descreve oralmente para que serve um leque usando pelo menos uma frase completa.</p>
             </div>
           </div>
-          <div style="flex:2 1 280px;">
-            <p><strong>Escolhe ou arrasta a palavra correcta:</strong></p>
-            <div class="cards-row" id="u2Words">
-              <div class="word-card" data-word="bola" tabindex="0" aria-label="Palavra bola">bola</div>
-              <div class="word-card" data-word="luva" tabindex="0" aria-label="Palavra luva">luva</div>
-              <div class="word-card" data-word="leque" tabindex="0" aria-label="Palavra leque">leque</div>
-              <div class="word-card" data-word="lata" tabindex="0" aria-label="Palavra lata">lata</div>
+          <p>Após 2 min de narração, alternar para modo &#x27;discussão&#x27;: alunos respondem oralmente à pergunta &#x27;O que é um leque?&#x27;.</p>
+          <div class="maker-box"><p><strong>Desafio maker:</strong> Dobrar uma folha em leque (origami simples): 3 dobras em sanfona.</p><p><strong>Comunicação:</strong> Mostrar o leque feito à turma e dizer: &#x27;O meu leque abre e fecha.&#x27;</p></div>
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <button class="pill-btn reveal-btn" data-target="story-1">Mostrar a história</button>
+          <button class="pill-btn speak-btn" data-speak="leque">Ouvir</button>
+          <div id="story-1" class="reveal-box hidden"><p>O professor apresenta uma história curta: &#x27;Estava um dia muito quente. A avó tirou o leque da gaveta e começou a abanar. O leque abria e fechava, abria e fechava.&#x27; Acompanha com imagem ou gesto. Pergunta: &#x27;O que é um leque? Para que serve?&#x27; Recolhe respostas orais e aponta palavras-chave no quadro.</p></div>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-1">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-1">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-1">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-1" class="diff-panel is-active"><p>🟢 Professor mostra um leque real ou foto grande; aluno aponta e nomeia partes (abas, cabo).</p></div>
+        <div id="standard-1" class="diff-panel"><p>🟡 Aluno descreve o leque em 1-2 frases após ouvir a história.</p></div>
+        <div id="challenge-1" class="diff-panel"><p>🔴 Aluno inventa e diz uma frase nova sobre o leque que não esteja na história.</p></div>
+      </div>
+    </section>
+    
+    <section id="u2-leitura-global-da-palavra-leque-associada-à-imagem-discriminação-entre-palavras" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 2</span>
+          <h2>Leitura global da palavra &#x27;leque&#x27; associada à imagem; discriminação entre palavras.</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>O professor escreve &#x27;leque&#x27; no quadro ao lado da imagem. Lê em voz alta, os alunos repetem. De seguida, apresenta 3-4 cartões com palavras conhecidas anteriormente (ex: &#x27;bola&#x27;, &#x27;luva&#x27;, &#x27;leque&#x27;, &#x27;lata&#x27;) e pede que identifiquem &#x27;leque&#x27;. Atividade de matching: cada aluno aponta ou coloca o cartão junto à imagem correta.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Quadro ou ecrã: imagem do leque à esquerda, 4 cartões de palavras à direita. Alunos apontam ou arrastam.</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno seleciona corretamente &#x27;leque&#x27; de entre 4 opções e lê a palavra em voz alta sem apoio.</p>
             </div>
           </div>
+          <p>Quando o aluno seleciona &#x27;leque&#x27;, a palavra ilumina-se junto à imagem. Reforço oral: professor confirma.</p>
+          <div class="maker-box"><p><strong>Desafio maker:</strong> Escrever &#x27;leque&#x27; no ar com o dedo e depois no verso da mão do colega.</p><p><strong>Comunicação:</strong> Par diz se reconheceu a palavra escrita nas costas da mão.</p></div>
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Escolhe a palavra certa.</p>
+          <div class="choice-row">
+            <button class="choice-btn" data-answer="leque" data-choice="leque">leque</button><button class="choice-btn" data-answer="leque" data-choice="bota">bota</button><button class="choice-btn" data-answer="leque" data-choice="casa">casa</button>
+          </div>
+          <p class="feedback" aria-live="polite">Procura a palavra completa.</p>
         </div>
-        <div class="feedback" id="u2Feedback" role="status" aria-live="polite"></div>
+        </aside>
       </div>
-      <div class="diff-tabs" role="tablist" aria-label="Diferenciação Unit 2">
-        <button class="tab active" data-level="support">🟢 Apoio</button>
-        <button class="tab" data-level="standard">🟡 Intermédio</button>
-        <button class="tab" data-level="challenge">🔴 Desafio</button>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-2">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-2">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-2">🔴 Desafio</button>
       </div>
-      <div class="diff-content active" data-level="support">Apenas 2 opções (leque e bola). O professor pode ler as opções em voz alta.</div>
-      <div class="diff-content" data-level="standard">4 opções. O aluno identifica e lê "leque" de forma autónoma.</div>
-      <div class="diff-content" data-level="challenge">Aluno escreve "leque" de memória no caderno sem ver o quadro.</div>
+      <div class="diff-panels">
+        <div id="support-2" class="diff-panel is-active"><p>🟢 Apenas 2 opções de escolha (leque vs. bola); professor lê as opções em voz alta.</p></div>
+        <div id="standard-2" class="diff-panel"><p>🟡 4 opções; aluno identifica e lê &#x27;leque&#x27; de forma autónoma.</p></div>
+        <div id="challenge-2" class="diff-panel"><p>🔴 Aluno escreve &#x27;leque&#x27; de memória no caderno sem ver o quadro.</p></div>
+      </div>
     </section>
-
-    <section class="unit" id="u3">
+    
+    <section id="u3-separação-oral-e-visual-da-palavra-leque-nas-sílabas-le-e-que-contagem-e-palmas" class="unit-card">
       <div class="unit-head">
-        <h2>Unit 3 · Sílabas: le | que e palmas</h2>
-        <span class="timer">6 min</span>
-      </div>
-      <div class="interactive">
-        <div class="word-display" id="u3Word">LEQUE</div>
-        <div class="row">
-          <button class="btn btn-primary" id="clapBtn" aria-label="Bater palma">👏 Bater palma</button>
-          <strong id="clapCount">Palmas: 0</strong>
+        <div>
+          <span class="unit-kicker">Unidade 3</span>
+          <h2>Separação oral e visual da palavra &#x27;leque&#x27; nas sílabas &#x27;le&#x27; e &#x27;que&#x27;; contagem e palmas.</h2>
         </div>
-        <div class="row" id="u3SplitArea">
-          <div class="syllable-block" data-syllable="le" tabindex="0" aria-label="Sílaba le">le</div>
-          <div class="syllable-block" data-syllable="que" tabindex="0" aria-label="Sílaba que">que</div>
-        </div>
-        <div class="row">
-          <div class="dropzone" id="slotLe" aria-label="Primeira sílaba" style="flex:1;">1.ª sílaba</div>
-          <div class="dropzone" id="slotQue" aria-label="Segunda sílaba" style="flex:1;">2.ª sílaba</div>
-        </div>
-        <button class="btn btn-secondary" id="checkU3" aria-label="Verificar sílabas">Verificar sílabas</button>
-        <div class="feedback" id="u3Feedback" role="status" aria-live="polite"></div>
+        <span class="unit-badge">Em destaque</span>
       </div>
-      <div class="diff-tabs" role="tablist" aria-label="Diferenciação Unit 3">
-        <button class="tab active" data-level="support">🟢 Apoio</button>
-        <button class="tab" data-level="standard">🟡 Intermédio</button>
-        <button class="tab" data-level="challenge">🔴 Desafio</button>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>Professor diz &#x27;le-que&#x27; batendo palmas em cada sílaba. Alunos repetem. No quadro, escreve &#x27;le | que&#x27; com traço separador. Distribui cartões físicos com &#x27;le&#x27; e &#x27;que&#x27; (um de cada cor). Alunos separam os cartões sobre a mesa e contam: &#x27;le&#x27; — uma palma, &#x27;que&#x27; — outra palma. Exploração: &#x27;Quantas sílabas tem leque? É uma palavra dis-sí-la-ba!&#x27;</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Ecrã ou quadro: palavra &#x27;leque&#x27; com animação de separação — as duas sílabas afastam-se. Em simultâneo, ícone de palma aparece por cada sílaba.</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno bate corretamente 2 palmas para &#x27;leque&#x27;, nomeia cada sílaba em voz alta e posiciona os cartões na ordem correta.</p>
+            </div>
+          </div>
+          <p>Aluno separa os cartões físicos → confirma com palmas → professor regista no quadro: &#x27;le&#x27; (cor A) + &#x27;que&#x27; (cor B) = &#x27;leque&#x27;.</p>
+          <div class="maker-box"><p><strong>Desafio maker:</strong> Construir uma &#x27;régua de sílabas&#x27;: dobrar uma tira de papel ao meio, escrever &#x27;le&#x27; de um lado e &#x27;que&#x27; do outro, dobrá-la e desdobrá-la como um leque.</p><p><strong>Comunicação:</strong> Mostrar a régua à turma e dizer: &#x27;Aqui está le... e aqui está que... junto: leque!&#x27;</p></div>
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Toca nas sílabas para formar a palavra.</p>
+          <div class="syllable-bank" data-compose="compose-3"><button class="syllable-chip" style="--chip:#E05FA0" data-syllable="le">le</button><button class="syllable-chip" style="--chip:#2563EB" data-syllable="que">que</button></div>
+          <div id="compose-3" class="compose-output">__</div>
+          <div class="compose-actions"><button class="pill-btn clear-compose" data-compose-clear="compose-3">Limpar</button></div>
+        </div>
+        </aside>
       </div>
-      <div class="diff-content active" data-level="support">Professor guia palma a palma. Cartões já separados para facilitar.</div>
-      <div class="diff-content" data-level="standard">Aluno separa com cartões e confirma com palmas de forma autónoma.</div>
-      <div class="diff-content" data-level="challenge">Aluno escreve sílabas separadas no caderno e inventa outra palavra dissílaba.</div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-3">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-3">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-3">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-3" class="diff-panel is-active"><p>🟢 Professor guia palma a palma, segurando a mão do aluno se necessário; cartões já separados fisicamente.</p></div>
+        <div id="standard-3" class="diff-panel"><p>🟡 Aluno separa autonomamente com cartões e confirma com palmas.</p></div>
+        <div id="challenge-3" class="diff-panel"><p>🔴 Aluno escreve as sílabas separadas no caderno e inventa outra palavra dissílaba da sua escolha.</p></div>
+      </div>
     </section>
-
-    <section class="unit" id="u4">
+    
+    <section id="u4-manipulação-das-sílabas-le-e-que-para-descobrir-e-explorar-novas-palavras-ou-sequências-sonoras" class="unit-card">
       <div class="unit-head">
-        <h2>Unit 4 · Manipulação de sílabas</h2>
-        <span class="timer">6 min</span>
-      </div>
-      <div class="interactive">
-        <p><strong>Arrasta as sílabas e testa combinações. Descobre se é palavra.</strong></p>
-        <div class="row" id="u4Pool">
-          <div class="syllable-block" data-syllable="le" tabindex="0" aria-label="Sílaba le para combinar">le</div>
-          <div class="syllable-block" data-syllable="que" tabindex="0" aria-label="Sílaba que para combinar">que</div>
+        <div>
+          <span class="unit-kicker">Unidade 4</span>
+          <h2>Manipulação das sílabas &#x27;le&#x27; e &#x27;que&#x27; para descobrir e explorar novas palavras ou sequências sonoras.</h2>
         </div>
-        <div class="dropzone" id="u4Combo" aria-label="Zona de combinação"></div>
-        <div class="row">
-          <button class="btn btn-secondary u4Choice" data-choice="sim" aria-label="A combinação é palavra sim">Sim</button>
-          <button class="btn btn-secondary u4Choice" data-choice="não" aria-label="A combinação é palavra não">Não</button>
-          <button class="btn btn-secondary u4Choice" data-choice="talvez" aria-label="A combinação é palavra talvez">Talvez</button>
-          <button class="btn btn-primary" id="u4Reset" aria-label="Limpar combinação">Limpar</button>
+        
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>Com os mesmos cartões &#x27;le&#x27; e &#x27;que&#x27;, os alunos experimentam combinações: (1) só &#x27;que&#x27; → existe! é uma palavra (partícula interrogativa). (2) &#x27;que-le&#x27; → existe? Exploramos: não é uma palavra comum em português. (3) &#x27;le&#x27; sozinho → não é palavra autónoma, mas é sílaba. O professor valoriza a descoberta: &#x27;Encontrámos que existe a palavra QUE! É a palavra que usamos quando perguntamos.&#x27; Exploração sonora: que outros sons conhecem que rimam com &#x27;le&#x27;? (pe, me, se, te, de...). Que outras palavras têm &#x27;que&#x27;? (queijo, quente, porque...).</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Mesa ou quadro: cartões &#x27;le&#x27; e &#x27;que&#x27; movíveis. Alunos testam cada combinação e indicam se é ou não uma palavra.</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>O aluno identifica corretamente que &#x27;que&#x27; é uma palavra existente em português e consegue usá-la numa frase oral (ex: &#x27;Que dia é hoje?&#x27;).</p>
+            </div>
+          </div>
+          <p>Para cada combinação testada, o aluno indica (polegar cima/baixo ou sim/não) se a sequência é uma palavra. Professor confirma e explica.</p>
+          <div class="maker-box"><p><strong>Desafio maker:</strong> Em pequeno grupo, escrever no quadro branco o máximo de palavras que contenham &#x27;que&#x27; (já conhecidas ou adivinhadas): queijo, quente, porque, parque...</p><p><strong>Comunicação:</strong> Cada grupo lê a sua lista à turma.</p></div>
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Experimenta combinações com as sílabas.</p>
+          <div class="syllable-bank" data-compose="mix-4"><button class="syllable-chip" style="--chip:#E05FA0" data-syllable="le">le</button><button class="syllable-chip" style="--chip:#2563EB" data-syllable="que">que</button></div>
+          <div id="mix-4" class="compose-output">__</div>
+          <p class="helper-text">Nem todas as combinações resultam em palavras reais. O importante é experimentar.</p>
         </div>
-        <div id="u4Current"><strong>Combinação actual:</strong> —</div>
-        <div class="feedback" id="u4Feedback" role="status" aria-live="polite"></div>
+        </aside>
       </div>
-      <div class="diff-tabs" role="tablist" aria-label="Diferenciação Unit 4">
-        <button class="tab active" data-level="support">🟢 Apoio</button>
-        <button class="tab" data-level="standard">🟡 Intermédio</button>
-        <button class="tab" data-level="challenge">🔴 Desafio</button>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-4">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-4">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-4">🔴 Desafio</button>
       </div>
-      <div class="diff-content active" data-level="support">Professor fornece lista com palavras que têm "que" e o aluno rodeia as que reconhece.</div>
-      <div class="diff-content" data-level="standard">Aluno experimenta combinações e identifica "que" como palavra existente.</div>
-      <div class="diff-content" data-level="challenge">Aluno escreve 3 palavras com "que" e lê com frase de contexto.</div>
-    </section>
-
-    <section class="unit" id="u5">
-      <div class="unit-head">
-        <h2>Unit 5 · Leitura guiada e escrita</h2>
-        <span class="timer">6 min</span>
-      </div>
-      <div class="interactive">
-        <div class="row">
-          <button class="btn btn-primary phase-btn" data-phase="modelo" aria-label="Fase com modelo">1) Com modelo</button>
-          <button class="btn btn-secondary phase-btn" data-phase="sem" disabled aria-label="Fase sem modelo">2) Sem modelo</button>
-          <button class="btn btn-secondary phase-btn" data-phase="ditado" disabled aria-label="Fase ditado">3) Ditado</button>
-        </div>
-        <div class="phase-box" id="u5Prompt">Escreve <strong>leque</strong> com modelo à vista.</div>
-        <div class="word-display" id="u5Model">LEQUE</div>
-        <input type="text" id="u5Input" aria-label="Escrever palavra leque" placeholder="Escreve aqui...">
-        <button class="btn btn-primary" id="u5Check" aria-label="Confirmar escrita">Confirmar</button>
-        <div class="feedback" id="u5Feedback" role="status" aria-live="polite"></div>
-      </div>
-      <div class="diff-tabs" role="tablist" aria-label="Diferenciação Unit 5">
-        <button class="tab active" data-level="support">🟢 Apoio</button>
-        <button class="tab" data-level="standard">🟡 Intermédio</button>
-        <button class="tab" data-level="challenge">🔴 Desafio</button>
-      </div>
-      <div class="diff-content active" data-level="support">Aluno copia "leque" com modelo à vista. Professor pode guiar o traço.</div>
-      <div class="diff-content" data-level="standard">Aluno completa as 3 fases: com modelo, sem modelo e ditado.</div>
-      <div class="diff-content" data-level="challenge">Aluno escreve "leque", separa "le-que" e assinala sílaba tónica.</div>
-    </section>
-
-    <section class="unit" id="u6">
-      <div class="unit-head">
-        <h2>Unit 6 · Reconstrução da frase</h2>
-        <span class="timer">6 min</span>
-      </div>
-      <div class="interactive">
-        <p><strong>Arrasta as tiras para formar a frase:</strong></p>
-        <div class="cards-row" id="u6Words"></div>
-        <div class="row" id="u6Slots"></div>
-        <button class="btn btn-primary" id="u6Check" aria-label="Verificar frase">Verificar frase</button>
-        <button class="btn btn-secondary" id="u6Reset" aria-label="Repor tiras">Repor</button>
-        <div class="feedback" id="u6Feedback" role="status" aria-live="polite"></div>
-      </div>
-      <div class="diff-tabs" role="tablist" aria-label="Diferenciação Unit 6">
-        <button class="tab active" data-level="support">🟢 Apoio</button>
-        <button class="tab" data-level="standard">🟡 Intermédio</button>
-        <button class="tab" data-level="challenge">🔴 Desafio</button>
-      </div>
-      <div class="diff-content active" data-level="support">Apoio: apenas "leque / abre / fecha" para ordenar.</div>
-      <div class="diff-content" data-level="standard">Frase completa com 5 palavras + ponto final.</div>
-      <div class="diff-content" data-level="challenge">Aluno cria frase nova com "leque", maiúscula inicial e ponto final.</div>
-    </section>
-
-    <section class="unit" id="u7">
-      <div class="unit-head">
-        <h2>Unit 7 · Verificação observável</h2>
-        <span class="timer">4 min</span>
-      </div>
-      <div class="interactive">
-        <div><strong id="u7TaskLabel">Tarefa 1/3: reconhecimento</strong></div>
-        <div id="u7TaskArea"></div>
-        <div class="row">
-          <label for="u7Result"><strong>Registo do professor:</strong></label>
-          <select id="u7Result" aria-label="Resultado da tarefa">
-            <option value="">Escolher...</option>
-            <option value="conseguiu">conseguiu</option>
-            <option value="com apoio">com apoio</option>
-            <option value="ainda não">ainda não</option>
-          </select>
-          <button class="btn btn-primary" id="u7Next" aria-label="Avançar para próxima tarefa">Avançar</button>
-        </div>
-        <div class="feedback" id="u7Feedback" role="status" aria-live="polite"></div>
-      </div>
-      <div class="diff-tabs" role="tablist" aria-label="Diferenciação Unit 7">
-        <button class="tab active" data-level="support">🟢 Apoio</button>
-        <button class="tab" data-level="standard">🟡 Intermédio</button>
-        <button class="tab" data-level="challenge">🔴 Desafio</button>
-      </div>
-      <div class="diff-content active" data-level="support">Apenas tarefas 1 e 2. Escrita pode ser adiada ou feita com apoio.</div>
-      <div class="diff-content" data-level="standard">As 3 tarefas completas de forma autónoma.</div>
-      <div class="diff-content" data-level="challenge">Após as 3 tarefas, escreve também "le - que" e indica a primeira sílaba.</div>
-    </section>
-
-    <section class="unit" id="u8">
-      <div class="unit-head">
-        <h2>Unit 8 · Extensão criativa</h2>
-        <span class="timer">4 min</span>
-      </div>
-      <div class="interactive">
-        <label for="extLevel"><strong>Escolhe o nível:</strong></label>
-        <select id="extLevel" aria-label="Escolher nível de extensão">
-          <option>A - desenho + palavra</option>
-          <option selected>B - frase + ilustração</option>
-          <option>C - mini-história</option>
-        </select>
-        <div id="extPrompt" class="phase-box">Escreve a frase "O leque abre e fecha." e faz uma ilustração.</div>
-        <textarea id="extText" rows="4" aria-label="Produção escrita"></textarea>
-        <div class="row">
-          <button class="btn btn-primary" id="extCheck" aria-label="Verificar produção">Verificar produção</button>
-          <button class="btn btn-secondary" id="extShare" aria-label="Partilha voluntária">Partilha voluntária</button>
-        </div>
-        <div class="feedback" id="u8Feedback" role="status" aria-live="polite"></div>
-      </div>
-      <div class="diff-tabs" role="tablist" aria-label="Diferenciação Unit 8">
-        <button class="tab active" data-level="support">🟢 Apoio</button>
-        <button class="tab" data-level="standard">🟡 Intermédio</button>
-        <button class="tab" data-level="challenge">🔴 Desafio</button>
-      </div>
-      <div class="diff-content active" data-level="support">Nível A: desenho + cópia da palavra "leque" com modelo.</div>
-      <div class="diff-content" data-level="standard">Nível B: frase + ilustração autónoma.</div>
-      <div class="diff-content" data-level="challenge">Nível C: mini-história de 2-3 frases com "leque" e outra palavra com "que".</div>
-    </section>
-
-    <section class="maker">
-      <h2 style="color:#166534;">🛠️ Desafios Maker</h2>
-      <div class="maker-grid">
-        <article class="maker-card"><strong>Unplugged:</strong> Dobrar uma folha em leque (origami simples): 3 dobras em sanfona.</article>
-        <article class="maker-card"><strong>Unplugged:</strong> Escrever "leque" no ar com o dedo e depois no verso da mão do colega.</article>
-        <article class="maker-card"><strong>Unplugged:</strong> Construir uma régua de sílabas com "le" e "que" dobrável.</article>
-        <article class="maker-card"><strong>Whiteboard:</strong> Em grupo, escrever o máximo de palavras com "que" (queijo, quente, porque, parque...).</article>
-        <article class="maker-card"><strong>Unplugged:</strong> Escrever "leque" com lápis, dedo na areia e traçado no ar.</article>
-        <article class="maker-card"><strong>Unplugged:</strong> Criar uma frase curta com "leque" e afixar no placar da turma.</article>
-        <article class="maker-card"><strong>Unplugged:</strong> Construir um leque decorado em cartolina e escrever nele uma palavra/frase.</article>
+      <div class="diff-panels">
+        <div id="support-4" class="diff-panel is-active"><p>🟢 Professor fornece lista de 4 palavras com &#x27;que&#x27; já escritas; aluno apenas rodeia as que reconhece.</p></div>
+        <div id="standard-4" class="diff-panel"><p>🟡 Aluno experimenta as combinações e identifica &#x27;que&#x27; como palavra existente.</p></div>
+        <div id="challenge-4" class="diff-panel"><p>🔴 Aluno escreve no caderno 3 palavras com &#x27;que&#x27; e lê-as em voz alta com frase de contexto.</p></div>
       </div>
     </section>
+    
+      
+    <details class="teacher-guide">
+      <summary>Guia do professor</summary>
+      <div class="teacher-grid">
+        <article class="teacher-card">
+          <h3>Objetivos desta página</h3>
+          <ul><li>Reconhecer globalmente a palavra &#x27;leque&#x27; associada à sua imagem.</li><li>Segmentar oralmente e visualmente a palavra &#x27;leque&#x27; nas sílabas &#x27;le&#x27; e &#x27;que&#x27;.</li><li>Recombinar as sílabas &#x27;le&#x27; e &#x27;que&#x27; para formar e reconhecer novas palavras.</li><li>Ler e escrever a palavra &#x27;leque&#x27; e a frase modelo &#x27;O leque abre e fecha.&#x27;</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Materiais</h3>
+          <ul><li>Cartão-imagem do leque (impresso ou digital)</li><li>Cartões silábicos físicos: &#x27;le&#x27; e &#x27;que&#x27; (2 conjuntos por par)</li><li>Quadro branco e marcadores de apagamento a seco</li><li>Caderno de língua / folha de registo individual</li><li>Lápis e borracha</li><li>Tiras de frase (&#x27;O leque abre e fecha.&#x27;) para recorte e reconstituição</li><li>Caixa/saco de silabas para manipulação cega (opcional, desafio)</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Organização MEM</h3>
+          <ul><li><strong>Módulos:</strong> TEA (Trabalho de Estudo Autónomo) — prática de leitura e escrita de palavras trabalhadas em ficheiros de língua, Tempo de Comunicação — partilha em grande grupo das descobertas silábicas, Conselho de Cooperação — registo coletivo da nova palavra no Diário de Turma</li><li><strong>Instrumentos:</strong> PIT (Plano Individual de Trabalho) — registo da palavra &#x27;leque&#x27; nas tarefas da semana, Ficheiro de língua — cartões silábicos reutilizáveis, Diário de Turma — coluna &#x27;Aprendemos esta semana&#x27;</li><li><strong>Organização:</strong> Grande grupo nas abertura e avaliação; pares na recombinação e escrita guiada; individual na mini-avaliação.</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Percurso desta página</h3>
+          <ul><li>Unidade 1: Contextualização narrativa: apresentação de uma pequena história ou situação concreta com o leque.</li><li>Unidade 2: Leitura global da palavra &#x27;leque&#x27; associada à imagem; discriminação entre palavras.</li><li>Unidade 3: Separação oral e visual da palavra &#x27;leque&#x27; nas sílabas &#x27;le&#x27; e &#x27;que&#x27;; contagem e palmas.</li><li>Unidade 4: Manipulação das sílabas &#x27;le&#x27; e &#x27;que&#x27; para descobrir e explorar novas palavras ou sequências sonoras.</li></ul>
+        </article>
+        <article class="teacher-card teacher-card-wide">
+          <h3>Referências curriculares</h3>
+          <ul><li><strong>Português · 1.º ano</strong>: Identificar palavras quanto ao número de sílabas (monossílabas, dissílabas, trissílabas).</li><li><strong>Português · 1.º ano</strong>: Ler palavras e textos simples (palavras com 2 sílabas trabalhadas no método).</li><li><strong>Português · 1.º ano</strong>: Escrever as letras do alfabeto, sílabas e palavras ditadas ou copiadas.</li><li><strong>Português · 1.º ano</strong>: Ouvir ler e ler textos de literatura infantil associados a situações do quotidiano.</li><li><strong>Português · 1.º ano</strong>: Produzir um discurso oral com vocabulário adequado ao tema e à situação.</li><li><strong>Português · 1.º ano</strong>: Recontar e recriar textos lidos ou ouvidos, utilizando imagens e palavras-chave.</li></ul>
+          <ul><li>PA-A: Linguagens e textos — utiliza diferentes linguagens para expressar e comunicar ideias.</li><li>PA-B: Informação e comunicação — seleciona e organiza informação para comunicar.</li><li>PA-G: Bem-estar, saúde e ambiente — reconhece objetos do quotidiano e a sua função.</li><li>PA-I: Saber científico, técnico e tecnológico — aplica conhecimentos fonológicos para segmentar e recombinar unidades de linguagem.</li></ul>
+        </article>
+      </div>
+    </details>
+    
+    </main>
 
-    <section class="assessment">
-      <h2 style="color:#c2410c;">📝 Mini-avaliação</h2>
-      <p>Escala: ⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</p>
-      <table aria-label="Grelha de mini-avaliação">
-        <thead>
-          <tr>
-            <th>Item observável</th>
-            <th>Ainda não</th>
-            <th>Com ajuda</th>
-            <th>Sozinho/a</th>
-            <th>Ajudo colegas</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Reconheço "leque" entre outras palavras.</td><td><input type="checkbox" aria-label="Item 1 ainda não"></td><td><input type="checkbox" aria-label="Item 1 com ajuda"></td><td><input type="checkbox" aria-label="Item 1 sozinho"></td><td><input type="checkbox" aria-label="Item 1 ajudo"></td></tr>
-          <tr><td>Bato 2 palmas e digo "le-que".</td><td><input type="checkbox" aria-label="Item 2 ainda não"></td><td><input type="checkbox" aria-label="Item 2 com ajuda"></td><td><input type="checkbox" aria-label="Item 2 sozinho"></td><td><input type="checkbox" aria-label="Item 2 ajudo"></td></tr>
-          <tr><td>Identifico que "que" é palavra em português.</td><td><input type="checkbox" aria-label="Item 3 ainda não"></td><td><input type="checkbox" aria-label="Item 3 com ajuda"></td><td><input type="checkbox" aria-label="Item 3 sozinho"></td><td><input type="checkbox" aria-label="Item 3 ajudo"></td></tr>
-          <tr><td>Escrevo "leque" na ordem certa das letras.</td><td><input type="checkbox" aria-label="Item 4 ainda não"></td><td><input type="checkbox" aria-label="Item 4 com ajuda"></td><td><input type="checkbox" aria-label="Item 4 sozinho"></td><td><input type="checkbox" aria-label="Item 4 ajudo"></td></tr>
-          <tr><td>Reconstruo e leio "O leque abre e fecha."</td><td><input type="checkbox" aria-label="Item 5 ainda não"></td><td><input type="checkbox" aria-label="Item 5 com ajuda"></td><td><input type="checkbox" aria-label="Item 5 sozinho"></td><td><input type="checkbox" aria-label="Item 5 ajudo"></td></tr>
-        </tbody>
-      </table>
-    </section>
-
-    <section class="curricular">
-      <h2 style="color:#7e22ce;">Referências curriculares</h2>
-      <h3>Aprendizagens Essenciais</h3>
-      <ul>
-        <li>Identificar palavras quanto ao número de sílabas (mono, di e trissílabas).</li>
-        <li>Ler palavras e textos simples com sílabas trabalhadas no método.</li>
-        <li>Escrever letras, sílabas e palavras ditadas ou copiadas.</li>
-        <li>Ouvir ler e ler textos associados a situações do quotidiano.</li>
-        <li>Produzir discurso oral com vocabulário adequado ao tema.</li>
-        <li>Recontar e recriar textos lidos ou ouvidos com imagens e palavras-chave.</li>
-      </ul>
-      <h3>Perfil do Aluno</h3>
-      <ul>
-        <li>PA-A: Linguagens e textos.</li>
-        <li>PA-B: Informação e comunicação.</li>
-        <li>PA-G: Bem-estar, saúde e ambiente.</li>
-        <li>PA-I: Saber científico, técnico e tecnológico.</li>
-      </ul>
-    </section>
-
-    <footer class="pc-footer">Gerado por PageCraft 🛠️</footer>
-  </main>
+    <footer class="footer">PageCraft · Método das 28 Palavras · Leque</footer>
+  </div>
 
   <script>
-    const state = {
-      storyPhase: 'narração',
-      selectedWord: '',
-      palmCount: 0,
-      writingPhase: 'modelo',
-      u4Combination: '',
-      u7Task: 0
-    };
+    const synth = window.speechSynthesis;
 
-    const audioCtx = (() => {
-      try { return new (window.AudioContext || window.webkitAudioContext)(); }
-      catch (e) { return null; }
-    })();
-
-    function beep(type = 'ok') {
-      if (!audioCtx) return;
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      o.connect(g);
-      g.connect(audioCtx.destination);
-      o.type = 'sine';
-      o.frequency.value = type === 'ok' ? 640 : 280;
-      g.gain.value = 0.001;
-      const now = audioCtx.currentTime;
-      g.gain.exponentialRampToValueAtTime(0.12, now + 0.01);
-      g.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
-      o.start(now);
-      o.stop(now + 0.17);
-    }
-
-    function showFeedback(id, ok, msg) {
-      const el = document.getElementById(id);
-      el.className = 'feedback show ' + (ok ? 'correct' : 'warn');
-      el.textContent = (ok ? '✓ ' : '✗ ') + msg;
-      beep(ok ? 'ok' : 'warn');
-      if (ok) launchConfetti();
-    }
-
-    // Confetti (requestAnimationFrame)
-    const confettiCanvas = document.getElementById('confetti');
-    const cctx = confettiCanvas.getContext('2d');
-    let particles = [];
-    function resizeCanvas() {
-      confettiCanvas.width = window.innerWidth;
-      confettiCanvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    function launchConfetti() {
-      for (let i = 0; i < 45; i++) {
-        particles.push({
-          x: Math.random() * confettiCanvas.width,
-          y: -10,
-          vx: (Math.random() - 0.5) * 4,
-          vy: Math.random() * 3 + 2,
-          s: Math.random() * 6 + 4,
-          a: Math.random() * Math.PI,
-          c: ['#E05FA0','#7C3AED','#22c55e','#F59E0B'][Math.floor(Math.random() * 4)]
-        });
-      }
-    }
-
-    function animateConfetti() {
-      cctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-      particles.forEach((p) => {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.a += 0.1;
-        cctx.save();
-        cctx.translate(p.x, p.y);
-        cctx.rotate(p.a);
-        cctx.fillStyle = p.c;
-        cctx.fillRect(-p.s / 2, -p.s / 2, p.s, p.s);
-        cctx.restore();
-      });
-      particles = particles.filter((p) => p.y < confettiCanvas.height + 20);
-      requestAnimationFrame(animateConfetti);
-    }
-    requestAnimationFrame(animateConfetti);
-
-    // Tabs
-    document.querySelectorAll('.unit').forEach((unit) => {
-      const tabs = unit.querySelectorAll('.tab');
-      const contents = unit.querySelectorAll('.diff-content');
-      tabs.forEach((tab) => {
-        tab.addEventListener('click', () => {
-          tabs.forEach(t => t.classList.remove('active'));
-          tab.classList.add('active');
-          const level = tab.dataset.level;
-          contents.forEach(c => c.classList.toggle('active', c.dataset.level === level));
-          if (unit.id === 'u2') applyU2Level(level);
-          if (unit.id === 'u6') buildSentenceLevel(level);
-        });
+    document.querySelectorAll('.reveal-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        const target = document.getElementById(button.dataset.target);
+        if (!target) return;
+        target.classList.toggle('hidden');
       });
     });
 
-    // Generic pointer drag-drop (touch + mouse)
-    let dragEl = null;
-    let ghost = null;
-    let originParent = null;
-    let originNext = null;
-
-    function attachDraggable(el) {
-      el.addEventListener('pointerdown', (e) => {
-        e.preventDefault();
-        dragEl = el;
-        originParent = el.parentNode;
-        originNext = el.nextSibling;
-        ghost = el.cloneNode(true);
-        ghost.classList.add('dragging');
-        ghost.style.position = 'fixed';
-        ghost.style.left = e.clientX - 20 + 'px';
-        ghost.style.top = e.clientY - 20 + 'px';
-        ghost.style.pointerEvents = 'none';
-        document.body.appendChild(ghost);
-        el.style.opacity = '0.35';
-        el.setPointerCapture(e.pointerId);
-      });
-
-      el.addEventListener('pointermove', (e) => {
-        if (!dragEl || !ghost) return;
-        ghost.style.left = e.clientX - 20 + 'px';
-        ghost.style.top = e.clientY - 20 + 'px';
-        document.querySelectorAll('.dropzone').forEach(z => z.classList.remove('hover'));
-        const target = document.elementFromPoint(e.clientX, e.clientY);
-        const zone = target && target.closest('.dropzone');
-        if (zone) zone.classList.add('hover');
-      });
-
-      el.addEventListener('pointerup', (e) => {
-        if (!dragEl) return;
-        const target = document.elementFromPoint(e.clientX, e.clientY);
-        const zone = target && target.closest('.dropzone');
-        document.querySelectorAll('.dropzone').forEach(z => z.classList.remove('hover'));
-        if (zone) {
-          zone.appendChild(dragEl);
-          afterDrop(zone);
-        } else if (originParent) {
-          if (originNext) originParent.insertBefore(dragEl, originNext);
-          else originParent.appendChild(dragEl);
-        }
-        dragEl.style.opacity = '1';
-        if (ghost) ghost.remove();
-        dragEl = null;
-        ghost = null;
-        originParent = null;
-        originNext = null;
-      });
-    }
-
-    function afterDrop(zone) {
-      // U2
-      if (zone.id === 'u2Target') {
-        const card = zone.querySelector('.word-card');
-        if (!card) return;
-        const word = card.dataset.word;
-        state.selectedWord = word;
-        if (word === 'leque') {
-          card.classList.add('selected');
-          showFeedback('u2Feedback', true, 'Boa! Encontraste "leque".');
-        } else {
-          showFeedback('u2Feedback', false, 'Quase. Lê letra a letra e tenta outra vez.');
-        }
-      }
-
-      // U3 slots
-      if (zone.id === 'slotLe' || zone.id === 'slotQue') {
-        const c1 = document.getElementById('slotLe').querySelector('.syllable-block');
-        const c2 = document.getElementById('slotQue').querySelector('.syllable-block');
-        if (c1 && c2 && state.palmCount === 2) {
-          const ok = c1.dataset.syllable === 'le' && c2.dataset.syllable === 'que';
-          showFeedback('u3Feedback', ok, ok ? 'Perfeito! le + que = leque.' : 'Ordem trocada. Diz as sílabas devagar.');
-        }
-      }
-
-      // U4
-      if (zone.id === 'u4Combo') {
-        updateU4Current();
-      }
-
-      // U6
-      if (zone.closest('#u6')) {
-        checkU6Auto();
-      }
-    }
-
-    // Make all draggables draggable
-    function refreshDraggables() {
-      document.querySelectorAll('.word-card, .syllable-block, .u6-token').forEach((el) => {
-        if (!el.dataset.dragReady) {
-          attachDraggable(el);
-          el.dataset.dragReady = '1';
-        }
-      });
-    }
-
-    // Unit 1
-    const phaseLabel = document.getElementById('phaseLabel');
-    let storyTimer = null;
-    let fanToggle = null;
-
-    function setStoryPhase(phase) {
-      state.storyPhase = phase;
-      phaseLabel.textContent = 'Fase: ' + phase;
-      const open = document.getElementById('fanOpen');
-      const closed = document.getElementById('fanClosed');
-      open.classList.toggle('active', phase === 'narração');
-      closed.classList.toggle('active', phase === 'discussão');
-      if (phase === 'discussão') {
-        showFeedback('u1Feedback', true, 'Momento de conversar: O que é um leque? Para que serve?');
-      }
-    }
-
-    document.getElementById('startStory').addEventListener('click', () => {
-      setStoryPhase('narração');
-      clearTimeout(storyTimer);
-      clearInterval(fanToggle);
-      let open = true;
-      fanToggle = setInterval(() => {
-        document.getElementById('fanOpen').classList.toggle('active', open);
-        document.getElementById('fanClosed').classList.toggle('active', !open);
-        open = !open;
-      }, 1000);
-      storyTimer = setTimeout(() => {
-        clearInterval(fanToggle);
-        setStoryPhase('discussão');
-      }, 120000);
-      showFeedback('u1Feedback', true, 'Narração iniciada. Depois passa para discussão.');
-    });
-
-    document.getElementById('nextDiscussion').addEventListener('click', () => {
-      clearTimeout(storyTimer);
-      clearInterval(fanToggle);
-      setStoryPhase('discussão');
-    });
-
-    // Unit 2
-    function applyU2Level(level) {
-      const all = [...document.querySelectorAll('#u2Words .word-card')];
-      all.forEach(c => c.classList.remove('hidden'));
-      if (level === 'support') {
-        all.forEach(c => {
-          if (!['leque','bola'].includes(c.dataset.word)) c.classList.add('hidden');
-        });
-      }
-      document.getElementById('u2Target').innerHTML = '';
-      all.forEach(c => {
-        if (c.classList.contains('hidden')) return;
-        document.getElementById('u2Words').appendChild(c);
-      });
-    }
-
-    document.querySelectorAll('#u2Words .word-card').forEach((card) => {
-      card.addEventListener('click', () => {
-        state.selectedWord = card.dataset.word;
-        document.querySelectorAll('#u2Words .word-card').forEach(c => c.classList.remove('selected'));
-        card.classList.add('selected');
-        if (state.selectedWord === 'leque') {
-          showFeedback('u2Feedback', true, 'Boa! A palavra correcta é "leque".');
-        } else {
-          showFeedback('u2Feedback', false, 'Ainda não. Compara as letras com atenção.');
-        }
+    document.querySelectorAll('.speak-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!synth) return;
+        const utterance = new SpeechSynthesisUtterance(button.dataset.speak || '');
+        utterance.lang = 'pt-PT';
+        synth.cancel();
+        synth.speak(utterance);
       });
     });
-    applyU2Level('support');
 
-    // Unit 3
-    const clapBtn = document.getElementById('clapBtn');
-    clapBtn.addEventListener('click', () => {
-      state.palmCount += 1;
-      document.getElementById('clapCount').textContent = 'Palmas: ' + state.palmCount;
-      beep('ok');
-      if (state.palmCount === 2) {
-        document.getElementById('u3Word').innerHTML = '<span style="color:#E05FA0;">LE</span> | <span style="color:#7C3AED;">QUE</span>';
-        showFeedback('u3Feedback', true, 'Muito bem! Agora separa as sílabas nos lugares certos.');
-      } else if (state.palmCount > 2) {
-        showFeedback('u3Feedback', false, 'Para "leque" usamos 2 palmas. Reinicia e tenta outra vez.');
-      }
-    });
-
-    document.getElementById('checkU3').addEventListener('click', () => {
-      const c1 = document.getElementById('slotLe').querySelector('.syllable-block');
-      const c2 = document.getElementById('slotQue').querySelector('.syllable-block');
-      if (state.palmCount < 2) {
-        showFeedback('u3Feedback', false, 'Primeiro bate 2 palmas para descobrir as sílabas.');
-        return;
-      }
-      const ok = c1 && c2 && c1.dataset.syllable === 'le' && c2.dataset.syllable === 'que';
-      showFeedback('u3Feedback', ok, ok ? 'Excelente! Palavra dissílaba: le-que.' : 'Ainda não. Coloca primeiro "le" e depois "que".');
-    });
-
-    // Unit 4
-    function comboText() {
-      const syll = [...document.querySelectorAll('#u4Combo .syllable-block')].map(x => x.dataset.syllable);
-      return syll.join('');
-    }
-
-    function updateU4Current() {
-      state.u4Combination = comboText();
-      document.getElementById('u4Current').innerHTML = '<strong>Combinação actual:</strong> ' + (state.u4Combination || '—');
-    }
-
-    document.querySelectorAll('.u4Choice').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const choice = btn.dataset.choice;
-        const comb = comboText();
-        if (!comb) {
-          showFeedback('u4Feedback', false, 'Arrasta sílabas para testar uma combinação.');
-          return;
-        }
-        const isWord = (comb === 'leque' || comb === 'que');
-        const correctChoice = isWord ? 'sim' : 'não';
-        if (choice === correctChoice) {
-          if (comb === 'que') {
-            showFeedback('u4Feedback', true, 'Descoberta! "que" existe e pode iniciar perguntas.');
+    document.querySelectorAll('.choice-row').forEach((row) => {
+      const feedback = row.parentElement.querySelector('.feedback');
+      row.querySelectorAll('.choice-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          row.querySelectorAll('.choice-btn').forEach((item) => item.classList.remove('is-right', 'is-wrong'));
+          const rightAnswer = button.dataset.answer || button.dataset.clozeAnswer || '';
+          if (button.dataset.choice === rightAnswer) {
+            button.classList.add('is-right');
+            if (feedback) feedback.textContent = 'Muito bem!';
           } else {
-            showFeedback('u4Feedback', true, 'Boa descoberta. Continua a explorar combinações.');
+            button.classList.add('is-wrong');
+            if (feedback) feedback.textContent = 'Tenta outra vez.';
           }
-        } else {
-          showFeedback('u4Feedback', false, 'Tenta outra vez. Diz em voz alta e pensa se usas no dia a dia.');
-        }
+        });
       });
     });
 
-    document.getElementById('u4Reset').addEventListener('click', () => {
-      const pool = document.getElementById('u4Pool');
-      document.querySelectorAll('#u4Combo .syllable-block').forEach(el => pool.appendChild(el));
-      updateU4Current();
-    });
-
-    // Unit 5
-    const phaseBtns = [...document.querySelectorAll('.phase-btn')];
-    const u5Prompt = document.getElementById('u5Prompt');
-    const u5Model = document.getElementById('u5Model');
-    const u5Input = document.getElementById('u5Input');
-
-    function setU5Phase(phase) {
-      state.writingPhase = phase;
-      phaseBtns.forEach((b) => {
-        b.classList.toggle('btn-primary', b.dataset.phase === phase);
-        b.classList.toggle('btn-secondary', b.dataset.phase !== phase);
+    document.querySelectorAll('[data-compose]').forEach((bank) => {
+      const output = document.getElementById(bank.dataset.compose);
+      const parts = [];
+      bank.querySelectorAll('.syllable-chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          parts.push(chip.dataset.syllable || '');
+          if (output) output.textContent = parts.join('');
+        });
       });
-      if (phase === 'modelo') {
-        u5Prompt.innerHTML = 'Escreve <strong>leque</strong> com modelo à vista.';
-        u5Model.classList.remove('hidden');
-      }
-      if (phase === 'sem') {
-        u5Prompt.textContent = 'Agora escreve sem modelo. Usa a tua memória visual e sonora.';
-        u5Model.classList.add('hidden');
-      }
-      if (phase === 'ditado') {
-        u5Prompt.textContent = 'Ditado: ouve "leque" e escreve.';
-        u5Model.classList.add('hidden');
-      }
-      u5Input.value = '';
-      u5Input.focus();
-    }
-
-    phaseBtns.forEach((b) => b.addEventListener('click', () => {
-      if (!b.disabled) setU5Phase(b.dataset.phase);
-    }));
-
-    document.getElementById('u5Check').addEventListener('click', () => {
-      const val = u5Input.value.trim().toLowerCase();
-      if (val !== 'leque') {
-        showFeedback('u5Feedback', false, 'Revê as letras: l-e-q-u-e. Tenta novamente.');
-        return;
-      }
-      if (state.writingPhase === 'modelo') {
-        phaseBtns.find(b => b.dataset.phase === 'sem').disabled = false;
-        setU5Phase('sem');
-        showFeedback('u5Feedback', true, 'Certo com modelo. Agora sem modelo.');
-      } else if (state.writingPhase === 'sem') {
-        phaseBtns.find(b => b.dataset.phase === 'ditado').disabled = false;
-        setU5Phase('ditado');
-        showFeedback('u5Feedback', true, 'Muito bem sem modelo. Última fase: ditado.');
-      } else {
-        showFeedback('u5Feedback', true, 'Excelente! Escreveste "leque" correctamente de memória.');
-      }
     });
 
-    // Unit 6
-    const u6Sets = {
-      support: ['leque', 'abre', 'fecha'],
-      standard: ['O', 'leque', 'abre', 'e', 'fecha', '.'],
-      challenge: ['O', 'leque', 'abre', 'e', 'fecha', '.']
-    };
-
-    function buildSentenceLevel(level) {
-      const words = u6Sets[level];
-      const pool = document.getElementById('u6Words');
-      const slots = document.getElementById('u6Slots');
-      pool.innerHTML = '';
-      slots.innerHTML = '';
-      const shuffled = [...words].sort(() => Math.random() - 0.5);
-      shuffled.forEach((w, i) => {
-        const token = document.createElement('div');
-        token.className = 'word-card u6-token';
-        token.dataset.word = w;
-        token.textContent = w;
-        token.setAttribute('tabindex', '0');
-        token.setAttribute('aria-label', 'Tira ' + w);
-        pool.appendChild(token);
+    document.querySelectorAll('.clear-compose').forEach((button) => {
+      button.addEventListener('click', () => {
+        const output = document.getElementById(button.dataset.composeClear);
+        if (output) output.textContent = '__';
       });
-      words.forEach((_, i) => {
-        const slot = document.createElement('div');
-        slot.className = 'dropzone sentence-slot';
-        slot.dataset.slot = i;
-        slot.setAttribute('aria-label', 'Posição ' + (i + 1) + ' da frase');
-        slots.appendChild(slot);
+    });
+
+    document.querySelectorAll('.check-card').forEach((card) => {
+      card.addEventListener('click', () => card.classList.toggle('is-done'));
+    });
+
+    document.querySelectorAll('.diff-switcher').forEach((switcher) => {
+      const panels = switcher.nextElementSibling;
+      switcher.querySelectorAll('.diff-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          switcher.querySelectorAll('.diff-btn').forEach((item) => item.classList.remove('is-active'));
+          panels.querySelectorAll('.diff-panel').forEach((panel) => panel.classList.remove('is-active'));
+          button.classList.add('is-active');
+          const target = panels.querySelector('#' + CSS.escape(button.dataset.diff));
+          if (target) target.classList.add('is-active');
+        });
       });
-      refreshDraggables();
-    }
-
-    function getU6Level() {
-      return document.querySelector('#u6 .tab.active').dataset.level;
-    }
-
-    function checkU6Auto() {
-      const level = getU6Level();
-      const expected = u6Sets[level];
-      const got = [...document.querySelectorAll('#u6Slots .sentence-slot')].map(s => {
-        const c = s.querySelector('.u6-token');
-        return c ? c.dataset.word : '';
-      });
-      if (got.every(Boolean)) {
-        const ok = expected.join('|') === got.join('|');
-        if (ok) showFeedback('u6Feedback', true, 'Frase correcta. Lê em voz alta: ' + expected.join(' '));
-      }
-    }
-
-    document.getElementById('u6Check').addEventListener('click', () => {
-      const level = getU6Level();
-      const expected = u6Sets[level];
-      const got = [...document.querySelectorAll('#u6Slots .sentence-slot')].map(s => {
-        const c = s.querySelector('.u6-token');
-        return c ? c.dataset.word : '';
-      });
-      if (got.some(x => !x)) {
-        showFeedback('u6Feedback', false, 'Completa todas as posições da frase.');
-        return;
-      }
-      const ok = expected.join('|') === got.join('|');
-      if (!ok) {
-        showFeedback('u6Feedback', false, 'A ordem ainda não está certa. Repara na maiúscula e no ponto final.');
-      } else {
-        showFeedback('u6Feedback', true, 'Excelente! Frase completa e correcta.');
-      }
     });
-
-    document.getElementById('u6Reset').addEventListener('click', () => buildSentenceLevel(getU6Level()));
-    buildSentenceLevel('support');
-
-    // Unit 7
-    const u7Tasks = [
-      {
-        label: 'Tarefa 1/3: reconhecimento',
-        render: () => {
-          const words = ['bola','luva','leque','lata'];
-          const box = document.createElement('div');
-          box.className = 'cards-row';
-          words.forEach((w) => {
-            const b = document.createElement('button');
-            b.className = 'btn btn-secondary';
-            b.textContent = w;
-            b.addEventListener('click', () => {
-              b.dataset.ok = w === 'leque' ? '1' : '0';
-              if (w === 'leque') showFeedback('u7Feedback', true, 'Reconhecimento correcto.');
-              else showFeedback('u7Feedback', false, 'Não é essa. Procura "leque".');
-              document.getElementById('u7TaskArea').dataset.done = w === 'leque' ? '1' : '0';
-            });
-            box.appendChild(b);
-          });
-          return box;
-        }
-      },
-      {
-        label: 'Tarefa 2/3: segmentação',
-        render: () => {
-          const wrap = document.createElement('div');
-          wrap.innerHTML = '<p>Diz "leque", bate palmas e escolhe:</p>';
-          const row = document.createElement('div');
-          row.className = 'row';
-          ['1 sílaba','2 sílabas','3 sílabas'].forEach((t, i) => {
-            const b = document.createElement('button');
-            b.className = 'btn btn-secondary';
-            b.textContent = t;
-            b.addEventListener('click', () => {
-              const ok = i === 1;
-              document.getElementById('u7TaskArea').dataset.done = ok ? '1' : '0';
-              showFeedback('u7Feedback', ok, ok ? 'Certo: 2 sílabas (le-que).' : 'Tenta outra vez. Ouve: le-que.');
-            });
-            row.appendChild(b);
-          });
-          wrap.appendChild(row);
-          return wrap;
-        }
-      },
-      {
-        label: 'Tarefa 3/3: escrita',
-        render: () => {
-          const wrap = document.createElement('div');
-          wrap.innerHTML = '<label for="u7Write">Escreve a palavra ditada:</label><input id="u7Write" type="text" aria-label="Escrever leque"><button class="btn btn-primary" id="u7WriteBtn">Confirmar escrita</button>';
-          setTimeout(() => {
-            document.getElementById('u7WriteBtn').addEventListener('click', () => {
-              const ok = document.getElementById('u7Write').value.trim().toLowerCase() === 'leque';
-              document.getElementById('u7TaskArea').dataset.done = ok ? '1' : '0';
-              showFeedback('u7Feedback', ok, ok ? 'Escrita correcta.' : 'Ainda não. Revê a ordem das letras.');
-            });
-          }, 0);
-          return wrap;
-        }
-      }
-    ];
-
-    function renderU7Task() {
-      const t = u7Tasks[state.u7Task];
-      document.getElementById('u7TaskLabel').textContent = t.label;
-      const area = document.getElementById('u7TaskArea');
-      area.innerHTML = '';
-      area.dataset.done = '0';
-      area.appendChild(t.render());
-    }
-
-    document.getElementById('u7Next').addEventListener('click', () => {
-      const area = document.getElementById('u7TaskArea');
-      if (area.dataset.done !== '1') {
-        showFeedback('u7Feedback', false, 'Primeiro conclui a tarefa actual sem ajuda dos colegas.');
-        return;
-      }
-      if (!document.getElementById('u7Result').value) {
-        showFeedback('u7Feedback', false, 'Regista o resultado da tarefa antes de avançar.');
-        return;
-      }
-      if (state.u7Task < 2) {
-        state.u7Task += 1;
-        document.getElementById('u7Result').value = '';
-        renderU7Task();
-      } else {
-        showFeedback('u7Feedback', true, 'Avaliação concluída: reconhecimento, segmentação e escrita.');
-      }
-    });
-    renderU7Task();
-
-    // Unit 8
-    const extLevel = document.getElementById('extLevel');
-    const extPrompt = document.getElementById('extPrompt');
-    const prompts = {
-      'A - desenho + palavra': 'Desenha um leque e escreve a palavra "leque" por baixo.',
-      'B - frase + ilustração': 'Escreve "O leque abre e fecha." e faz uma ilustração.',
-      'C - mini-história': 'Escreve uma mini-história de 2-3 frases com "leque" e outra palavra com "que".'
-    };
-
-    extLevel.addEventListener('change', () => {
-      extPrompt.textContent = prompts[extLevel.value];
-    });
-
-    document.getElementById('extCheck').addEventListener('click', () => {
-      const t = document.getElementById('extText').value.trim().toLowerCase();
-      if (!t.includes('leque')) {
-        showFeedback('u8Feedback', false, 'Inclui a palavra "leque" no teu registo.');
-        return;
-      }
-      if (extLevel.value.startsWith('C') && (t.split(/[.!?]/).filter(Boolean).length < 2 || !t.includes('que'))) {
-        showFeedback('u8Feedback', false, 'No nível C, escreve 2-3 frases e usa também outra palavra com "que".');
-        return;
-      }
-      showFeedback('u8Feedback', true, 'Registo legível e correcto. Muito bem!');
-    });
-
-    document.getElementById('extShare').addEventListener('click', () => {
-      showFeedback('u8Feedback', true, 'Partilha voluntária activa. Quem quiser pode ler à turma.');
-    });
-
-    refreshDraggables();
   </script>
 </body>
 </html>

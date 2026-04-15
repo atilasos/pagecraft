@@ -1,499 +1,516 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-PT">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>M28P #27 &mdash; fogueira | PageCraft</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap');
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Nunito','Comic Sans MS',sans-serif;background:#FAFAFA;color:#1E1B18;min-height:100vh}
-  .con{max-width:960px;margin:0 auto;padding:1.5rem}
-  .hdr{text-align:center;padding:2rem 1rem 1rem;background:linear-gradient(135deg,#EA580C,#DC2626);color:white;border-radius:0 0 24px 24px;margin-bottom:2rem}
-  .wd{font-size:4rem;font-weight:800;margin:.5rem 0}
-  .bdg{display:inline-block;background:#F59E0B;color:white;font-weight:700;padding:.25rem .75rem;border-radius:20px}
-  .sec{background:white;border:2px solid #EA580C;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.08);padding:1.5rem;margin-bottom:1.5rem}
-  .sec h2{font-size:1.4rem;color:#EA580C;margin-bottom:1rem;font-weight:800}
-  .db{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
-  .dbt{padding:.4rem 1rem;border-radius:20px;border:2px solid transparent;font-weight:700;cursor:pointer;font-family:inherit;font-size:.9rem;min-height:40px;transition:all .2s}
-  .dbt.g{background:#dcfce7;color:#166534;border-color:#22c55e}
-  .dbt.y{background:#fef9c3;color:#854d0e;border-color:#F59E0B}
-  .dbt.r{background:#fee2e2;color:#991b1b;border-color:#ef4444}
-  .dbt.act{transform:scale(1.05)}
-  .dc{display:none;padding:.75rem;border-radius:12px;margin-bottom:1rem;line-height:1.6}
-  .dc.on{display:block}
-  .gbg{background:#f0fdf4;border-left:4px solid #22c55e}
-  .ybg{background:#fefce8;border-left:4px solid #F59E0B}
-  .rbg{background:#fef2f2;border-left:4px solid #ef4444}
-  .btn{display:inline-flex;align-items:center;justify-content:center;padding:.75rem 2rem;border-radius:30px;border:none;font-family:inherit;font-weight:700;font-size:1rem;cursor:pointer;min-height:48px;transition:all .2s}
-  .btn:hover{transform:scale(1.05)}.btn:active{transform:scale(.97)}.btn:disabled{opacity:.4}
-  .bp{background:#EA580C;color:white}.bs{background:#DC2626;color:white}.ba{background:#555;color:white}
-  .syl{display:inline-flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800;color:white;padding:.5rem 1.2rem;border-radius:12px;min-height:48px;min-width:64px;border:none;cursor:pointer;transition:all .2s}
-  .s1{background:#EA580C}.s2{background:#DC2626}.s3{background:#D97706}
-  .wb{font-size:3rem;font-weight:800;color:#EA580C;text-align:center;margin:1rem 0}
-  .qo{display:flex;flex-wrap:wrap;gap:.75rem;margin:1rem 0}
-  .qopt{padding:.75rem 1.5rem;border-radius:12px;border:2px solid #EA580C;background:white;font-family:inherit;font-size:1.1rem;font-weight:700;cursor:pointer;min-height:48px;transition:all .2s}
-  .qopt:hover{background:#f5f5f5}.qopt.ok{background:#f0fdf4;border-color:#22c55e;color:#166534}.qopt.err{background:#fffbeb;border-color:#F59E0B;color:#92400e}
-  .fb{padding:1rem;border-radius:12px;margin:.75rem 0;font-size:1rem;font-weight:700;display:none}.fb.on{display:block}.fb.ok{background:#f0fdf4;color:#166534;border:2px solid #22c55e}.fb.nok{background:#fffbeb;color:#92400e;border:2px solid #F59E0B}
-  .ds{width:100px;height:60px;border:2px dashed #DC2626;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;background:#f9f9f9;color:#DC2626;transition:all .2s}.ds.ok{border-style:solid;border-color:#22c55e;background:#f0fdf4;color:#166534}
-  .tb{background:#f9f9f9;border-radius:12px;padding:1rem;margin:.75rem 0;border:1px solid #F59E0B}.tl{font-size:.8rem;font-weight:700;color:#92400e;text-transform:uppercase;margin-bottom:.5rem}
-  input[type=text]{font-family:inherit;font-size:1rem;padding:.5rem 1rem;border:2px solid #EA580C;border-radius:8px;width:100%;max-width:300px;min-height:48px;outline:none}
-  .ic{text-align:center;padding:.75rem;background:#f9f9f9;border-radius:12px;border:2px solid #EA580C;cursor:pointer;min-height:72px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.25rem;font-size:.9rem;font-weight:700;transition:all .2s}.ic:hover{transform:scale(1.03)}.ic.sel{background:#f0fdf4;border-color:#22c55e}
-  .wc{padding:.5rem 1rem;border-radius:8px;border:2px solid #EA580C;background:white;font-weight:700;font-size:1rem;cursor:pointer;min-height:48px;display:flex;align-items:center;transition:all .2s}.wc.pl{opacity:.4;cursor:not-allowed}
-  .pw{padding:.4rem .75rem;border-radius:8px;background:#EA580C;color:white;font-weight:700;font-size:.95rem}
-  .ntabs{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
-  .nt{padding:.5rem 1rem;border-radius:30px;border:2px solid #EA580C;background:white;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;min-height:44px;transition:all .2s;color:#EA580C}.nt.act,.nt:hover{background:#EA580C;color:white}
-  .blk{display:none}.blk.on{display:block}
-  .pb{background:#e5e7eb;border-radius:8px;height:10px;margin:1rem 0;overflow:hidden}.pf{background:linear-gradient(90deg,#EA580C,#DC2626);height:100%;border-radius:8px;transition:width .5s}
-  .rs{background:#f9f9f9;border-radius:16px;padding:1.5rem;text-align:center;margin:1rem 0}
-  .dl{margin:.5rem 0;display:flex;flex-wrap:wrap;gap:.5rem}.dw{background:#dcfce7;color:#166534;padding:.2rem .6rem;border-radius:20px;font-weight:700}
-  .ss{display:flex;flex-wrap:wrap;gap:.5rem;padding:.75rem;border:2px dashed #DC2626;border-radius:12px;min-height:56px;align-items:center}
-  @keyframes fi{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-</style>
-</head>
-<body>
-<div class="hdr">
-  <div class="bdg">M28P #27</div>
-  <div class="wd">&#128293; fogueira</div>
-  <h1 style="font-size:1.8rem">A palavra <em>fogueira</em></h1>
-  <p style="opacity:.8;margin-top:.5rem">M&eacute;todo das 28 Palavras &middot; 1.&ordm; ano</p>
-</div>
-<div class="con">
-<div class="ntabs">
-  <button class="nt act" onclick="showB('b1')">1&#65039;&#8419; Descoberta</button>
-  <button class="nt" onclick="showB('b2')">2&#65039;&#8419; Reconhecimento</button>
-  <button class="nt" onclick="showB('b3')">3&#65039;&#8419; S&iacute;labas</button>
-  <button class="nt" onclick="showB('b4')">4&#65039;&#8419; Recombina&ccedil;&atilde;o</button>
-  <button class="nt" onclick="showB('b5')">5&#65039;&#8419; Escrita</button>
-  <button class="nt" onclick="showB('b6')">6&#65039;&#8419; Frase</button>
-  <button class="nt" onclick="showB('b7')">7&#65039;&#8419; Avalia&ccedil;&atilde;o</button>
-  <button class="nt" onclick="showB('b8')">8&#65039;&#8419; Extens&atilde;o</button>
-</div>
-
-<div id="b1" class="blk on"><div class="sec">
-<h2>&#10024; Bloco 1 &mdash; Descoberta</h2>
-<div class="db"><button class="dbt g act" onclick="sdf('b1','g')">&#127802; Com ajuda</button><button class="dbt y" onclick="sdf('b1','y')">&#127803; Objetivo</button><button class="dbt r" onclick="sdf('b1','r')">&#128308; Desafio</button></div>
-<div id="b1-g" class="dc gbg on">&#127802; Palavra vis&iacute;vel desde o in&iacute;cio.</div>
-<div id="b1-y" class="dc ybg">&#127803; Clica "Mostrar" e l&ecirc; em voz alta.</div>
-<div id="b1-r" class="dc rbg">&#128308; Escreve antes de revelar.</div>
-<div style="text-align:center;background:linear-gradient(135deg,#f5f5f5,#fffde7);border-radius:16px;padding:2rem;margin:1rem 0">
-  <div style="font-size:5rem">&#128293;</div>
-  <p style="font-size:1.2rem;font-weight:700">Descobre a palavra! O que &eacute; &#128293;?</p>
-</div>
-<div id="c1" style="display:none;text-align:center;padding:1.5rem;background:white;border:3px solid #EA580C;border-radius:16px;animation:fi .5s;margin:1rem 0">
-  <div style="font-size:4rem">&#128293;</div>
-  <div class="wb">fogueira</div>
-  <div style="display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin:1rem 0"><span class="syl s1">fo</span><span style="font-size:2rem;color:#aaa">&#8212;</span><span class="syl s2">guei</span><span style="font-size:2rem;color:#aaa">&#8212;</span><span class="syl s3">ra</span></div>
-</div>
-<div style="text-align:center;margin-top:1rem">
-  <button class="btn bp" onclick="document.getElementById('c1').style.display='block';this.disabled=true;this.textContent='&#10003; Revelada!'">&#128269; Mostrar a palavra</button>
-</div>
-</div></div>
-
-<div id="b2" class="blk"><div class="sec">
-<h2>&#128065;&#65038; Bloco 2 &mdash; Reconhecimento global</h2>
-<div class="db"><button class="dbt g act" onclick="sdf('b2','g')">&#127802; Com ajuda</button><button class="dbt y" onclick="sdf('b2','y')">&#127803; Objetivo</button><button class="dbt r" onclick="sdf('b2','r')">&#128308; Desafio</button></div>
-<div id="b2-g" class="dc gbg on">&#127802; Primeira letra vis&iacute;vel.</div>
-<div id="b2-y" class="dc ybg">&#127803; 3 op&ccedil;&otilde;es.</div>
-<div id="b2-r" class="dc rbg">&#128308; Justifica em voz alta!</div>
-<div class="tb"><div class="tl">Tarefa 1 &mdash; V&ecirc; "fogueira", clica na imagem</div>
-  <div class="wb" style="font-size:1.8rem">fogueira</div>
-  <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin:1rem 0">
-    <div class="ic" onclick="ci('fogueira',this)" style="width:120px">&#128293;<br><span>?</span></div>
-    <div class="ic" onclick="ci('peixe',this)" style="width:120px">&#128031;<br><span>?</span></div>
-    <div class="ic" onclick="ci('funil',this)" style="width:120px">&#128314;<br><span>?</span></div>
-  </div>
-  <div id="b2-f1" class="fb"></div>
-</div>
-<div class="tb"><div class="tl">Tarefa 2 &mdash; V&ecirc; &#128293;, clica na palavra</div>
-  <div style="font-size:3.5rem;text-align:center;margin:.5rem 0">&#128293;</div>
-  <div class="qo" id="b2-t2">
-    <button class="qopt" onclick="cw2('fogueira',this)">fogueira</button>
-    <button class="qopt" onclick="cw2('peixe',this)">peixe</button>
-    <button class="qopt" onclick="cw2('funil',this)">funil</button>
-  </div>
-  <div id="b2-f2" class="fb"></div>
-</div>
-</div></div>
-
-<div id="b3" class="blk"><div class="sec">
-<h2>&#127925; Bloco 3 &mdash; Segmenta&ccedil;&atilde;o sil&aacute;bica</h2>
-<div class="db"><button class="dbt g act" onclick="sdf('b3','g')">&#127802; Com ajuda</button><button class="dbt y" onclick="sdf('b3','y')">&#127803; Objetivo</button><button class="dbt r" onclick="sdf('b3','r')">&#128308; Desafio</button></div>
-<div id="b3-g" class="dc gbg on">&#127802; Blocos pr&eacute;-posicionados.</div>
-<div id="b3-y" class="dc ybg">&#127803; Arrasta os blocos.</div>
-<div id="b3-r" class="dc rbg">&#128308; Escreve. Explica a regra.</div>
-<div class="wb">fogueira</div>
-<div style="background:#f9f9f9;border-radius:12px;padding:1rem;margin:1rem 0">
-  <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin:1rem 0">
-    <span class="syl s1" draggable="true" ondragstart="drs(event,'fo')">fo</span>
-      <span class="syl s2" draggable="true" ondragstart="drs(event,'guei')">guei</span>
-      <span class="syl s3" draggable="true" ondragstart="drs(event,'ra')">ra</span>
-      
-  </div>
-  <div style="display:flex;gap:1rem;justify-content:center;margin-top:1rem;flex-wrap:wrap">
-    <div>
-      <div style="text-align:center;font-weight:700;margin-bottom:.4rem">1</div>
-      <div class="ds" id="sl1" ondragover="event.preventDefault()" ondrop="drd(event,'sl1','fo')">&#8595;</div>
-      </div><div>
-      <div style="text-align:center;font-weight:700;margin-bottom:.4rem">2</div>
-      <div class="ds" id="sl2" ondragover="event.preventDefault()" ondrop="drd(event,'sl2','guei')">&#8595;</div>
-      </div><div>
-      <div style="text-align:center;font-weight:700;margin-bottom:.4rem">3</div>
-      <div class="ds" id="sl3" ondragover="event.preventDefault()" ondrop="drd(event,'sl3','ra')">&#8595;</div>
-      </div>
-  </div>
-  <div id="b3-dfb" class="fb"></div>
-</div>
-<div class="tb"><div class="tl">Quantas palmas? &#128079;</div>
-  <div class="qo">
-    <button class="qopt" onclick="cp3('1',this)">1</button>
-    <button class="qopt" onclick="cp3('2',this)">2</button>
-    <button class="qopt" onclick="cp3('3',this)">3</button>
-    <button class="qopt" onclick="cp3('4',this)">4</button>
-  </div>
-  <div id="b3-pfb" class="fb"></div>
-</div>
-<div class="tb" style="background:#e8f4ff"><div class="tl">&#127775; Nota lingu&iacute;stica</div>
-  <p>Em 'guei' o digrafo 'gu' antes de 'e/i' tem som /g/ (nao /gw/). Mais o ditongo 'ei'. 3 silabas!</p>
-</div>
-</div></div>
-
-<div id="b4" class="blk"><div class="sec">
-<h2>&#128300; Bloco 4 &mdash; Recombina&ccedil;&atilde;o</h2>
-<div class="db"><button class="dbt g act" onclick="sdf('b4','g')">&#127802; Com ajuda</button><button class="dbt y" onclick="sdf('b4','y')">&#127803; Objetivo</button><button class="dbt r" onclick="sdf('b4','r')">&#128308; Desafio</button></div>
-<div id="b4-g" class="dc gbg on">&#127802; 4 s&iacute;labas. Feedback imediato.</div>
-<div id="b4-y" class="dc ybg">&#127803; 8 s&iacute;labas. Testa livremente.</div>
-<div id="b4-r" class="dc rbg">&#128308; Explora sem feedback.</div>
-<div id="b4-syls" style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem"></div>
-<div style="padding:1rem;background:#f9f9f9;border-radius:12px;min-height:56px;border:2px dashed #EA580C;display:flex;align-items:center;justify-content:center">
-  <span id="b4-c" style="font-size:1.8rem;font-weight:800;color:#EA580C">?</span>
-</div>
-<div style="display:flex;gap:.75rem;margin:1rem 0;flex-wrap:wrap">
-  <button class="btn bp" onclick="v4()">&#128269; &Eacute; uma palavra?</button>
-  <button class="btn ba" onclick="l4()">&#8635; Limpar</button>
-</div>
-<div id="b4-fb" class="fb"></div>
-<div class="dl" id="b4-d"></div>
-</div></div>
-
-<div id="b5" class="blk"><div class="sec">
-<h2>&#9999;&#65038; Bloco 5 &mdash; Leitura e escrita</h2>
-<div class="db"><button class="dbt g act" onclick="sdf('b5','g')">&#127802; Com ajuda</button><button class="dbt y" onclick="sdf('b5','y')">&#127803; Objetivo</button><button class="dbt r" onclick="sdf('b5','r')">&#128308; Desafio</button></div>
-<div id="b5-g" class="dc gbg on">&#127802; 2 op&ccedil;&otilde;es. Modelo vis&iacute;vel.</div>
-<div id="b5-y" class="dc ybg">&#127803; 4 op&ccedil;&otilde;es. Copia no caderno.</div>
-<div id="b5-r" class="dc rbg">&#128308; Escreve de mem&oacute;ria.</div>
-<div class="tb"><div class="tl">Tarefa 1 &mdash; S&iacute;laba em falta</div>
-  <div style="text-align:center;margin:1rem 0">
-    <span style="font-size:2rem;font-weight:800;color:#EA580C">fo</span>
-    <span style="font-size:2rem;font-weight:800;color:#ccc">___</span>
-    <span style="font-size:2rem">&#128293;</span>
-  </div>
-  <div class="qo" id="b5-t1">
-    <button class="qopt" onclick="cs5('guei','b5-t1','b5-f1')">guei</button>
-      <button class="qopt" onclick="cs5('gei','b5-t1','b5-f1')">gei</button>
-      <button class="qopt" onclick="cs5('gwi','b5-t1','b5-f1')">gwi</button>
-      <button class="qopt" onclick="cs5('gue','b5-t1','b5-f1')">gue</button>
-      
-  </div>
-  <div id="b5-f1" class="fb"></div>
-</div>
-<div class="tb"><div class="tl">Tarefa 2 &mdash; Grafia correta</div>
-  <div style="font-size:3.5rem;text-align:center;margin:.5rem 0">&#128293;</div>
-  <div class="qo" id="b5-t2">
-    <button class="qopt" onclick="cg5('fogueira','b5-t2','b5-f2')">fogueira</button>
-      <button class="qopt" onclick="cg5('fogeira','b5-t2','b5-f2')">fogeira</button>
-      <button class="qopt" onclick="cg5('foguera','b5-t2','b5-f2')">foguera</button>
-      <button class="qopt" onclick="cg5('fogeira','b5-t2','b5-f2')">fogeira</button>
-      
-  </div>
-  <div id="b5-f2" class="fb"></div>
-</div>
-<div class="tb"><div class="tl">Tarefa 3 &mdash; Escreve</div>
-  <p style="margin-bottom:.5rem">Copia: <strong style="color:#EA580C">fogueira</strong></p>
-  <div style="display:flex;gap:.75rem;align-items:center">
-    <input type="text" id="b5-inp" placeholder="escreve aqui..." oninput="ce5()" aria-label="Escreve fogueira">
-    <span id="b5-inf" style="font-size:1.4rem"></span>
-  </div>
-</div>
-</div></div>
-
-<div id="b6" class="blk"><div class="sec">
-<h2>&#128221; Bloco 6 &mdash; Frase</h2>
-<div class="db"><button class="dbt g act" onclick="sdf('b6','g')">&#127802; Com ajuda</button><button class="dbt y" onclick="sdf('b6','y')">&#127803; Objetivo</button><button class="dbt r" onclick="sdf('b6','r')">&#128308; Desafio</button></div>
-<div id="b6-g" class="dc gbg on">&#127802; 3 elementos. Modelo vis&iacute;vel.</div>
-<div id="b6-y" class="dc ybg">&#127803; 6 elementos. Frase pr&oacute;pria no caderno.</div>
-<div id="b6-r" class="dc rbg">&#128308; 2 frases. Usa adjetivo!</div>
-<div style="background:#f9f9f9;border-radius:12px;padding:1rem;text-align:center;margin-bottom:1rem">
-  <p style="font-size:1.4rem;font-weight:800">A fogueira aquece a noite. &#128293;</p>
-  <p style="font-size:.85rem;color:#666">Aa Maiúscula | . Ponto final</p>
-</div>
-<div class="tb"><div class="tl">Ordena as palavras</div>
-  <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem" id="b6-bk">
-    <button class="wc" onclick="pw6(this,'A')">A</button>
-      <button class="wc" onclick="pw6(this,'fogueira')">fogueira</button>
-      <button class="wc" onclick="pw6(this,'aquece')">aquece</button>
-      <button class="wc" onclick="pw6(this,'a')">a</button>
-      <button class="wc" onclick="pw6(this,'noite')">noite</button>
-      <button class="wc" onclick="pw6(this,'.')">.</button>
-      
-  </div>
-  <div class="ss" id="b6-s"><span style="color:#aaa;font-style:italic">frase aqui...</span></div>
-  <div style="display:flex;gap:.5rem;margin-top:.75rem">
-    <button class="btn bp" onclick="ch6()">&#10003; Verificar</button>
-    <button class="btn ba" onclick="rs6()">&#8635; Recomeçar</button>
-  </div>
-  <div id="b6-fb" class="fb"></div>
-</div>
-<div class="tb"><div class="tl">A tua frase com "fogueira"</div>
-  <input type="text" id="b6-fp" placeholder="Escreve a tua frase..." style="max-width:100%;margin-bottom:.75rem">
-  <button class="btn bs" onclick="cf6()">&#128172; Verificar</button>
-  <div id="b6-fpfb" class="fb"></div>
-</div>
-</div></div>
-
-<div id="b7" class="blk"><div class="sec">
-<h2>&#11088; Bloco 7 &mdash; Mini-avalia&ccedil;&atilde;o</h2>
-<div class="db"><button class="dbt g act" onclick="sdf('b7','g')">&#127802; Com ajuda</button><button class="dbt y" onclick="sdf('b7','y')">&#127803; Objetivo</button><button class="dbt r" onclick="sdf('b7','r')">&#128308; Desafio</button></div>
-<div id="b7-g" class="dc gbg on">&#127802; Imagem presente. Frase oral aceite.</div>
-<div id="b7-y" class="dc ybg">&#127803; Como descrito.</div>
-<div id="b7-r" class="dc rbg">&#128308; Sem modelo.</div>
-<div class="pb"><div class="pf" id="b7-p" style="width:0%"></div></div>
-<p style="text-align:center;font-weight:700" id="b7-pt">Tarefa 0 de 4</p>
-<div class="tb"><div class="tl">1/4 &mdash; Reconhecimento</div>
-  <div class="qo">
-    <button class="qopt" onclick="e7(1,'fogueira',this)">fogueira</button>
-    <button class="qopt" onclick="e7(1,'peixe',this)">peixe</button>
-    <button class="qopt" onclick="e7(1,'funil',this)">funil</button>
-  </div>
-  <div id="b7-f1" class="fb"></div>
-</div>
-<div class="tb"><div class="tl">2/4 &mdash; Quantas s&iacute;labas?</div>
-  <div class="qo">
-    <button class="qopt" onclick="e7(2,'3',this)">3</button>
-    <button class="qopt" onclick="e7(2,'4',this)">4</button>
-    <button class="qopt" onclick="e7(2,'2',this)">2</button>
-  </div>
-  <div id="b7-f2" class="fb"></div>
-</div>
-<div class="tb"><div class="tl">3/4 &mdash; Reconstr&oacute;i "fogueira"</div>
-  <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin:.75rem 0" id="b7-t3">
-    <button class="syl s3" onclick="et3('ra',this)">ra</button>
-      <button class="syl s2" onclick="et3('guei',this)">guei</button>
-      <button class="syl s1" onclick="et3('fo',this)">fo</button>
-      
-  </div>
-  <div id="b7-t3b" style="min-height:48px;border:2px dashed #EA580C;border-radius:12px;padding:.5rem 1rem;margin-bottom:.5rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
-    <span style="color:#aaa">s&iacute;labas aqui...</span>
-  </div>
-  <button class="btn bp" onclick="ct3()">&#10003; Verificar</button>
-  <div id="b7-f3" class="fb"></div>
-</div>
-<div class="tb"><div class="tl">4/4 &mdash; Frase com "fogueira"</div>
-  <input type="text" id="b7-t4" placeholder="A tua frase..." style="max-width:100%;margin:.5rem 0">
-  <button class="btn bp" onclick="e7(4,'frase',null)">&#10003; Confirmar</button>
-  <div id="b7-f4" class="fb"></div>
-</div>
-<div id="b7-res" class="rs" style="display:none">
-  <div id="b7-st" style="font-size:1.8rem;letter-spacing:.5rem;margin:.5rem 0"></div>
-  <h3 id="b7-msg" style="font-size:1.4rem"></h3>
-</div>
-</div></div>
-
-<div id="b8" class="blk"><div class="sec">
-<h2>&#127912; Bloco 8 &mdash; Extens&atilde;o</h2>
-<div class="db"><button class="dbt g act" onclick="sdf('b8','g')">&#127802; Com ajuda</button><button class="dbt y" onclick="sdf('b8','y')">&#127803; Objetivo</button><button class="dbt r" onclick="sdf('b8','r')">&#128308; Desafio</button></div>
-<div id="b8-g" class="dc gbg on">&#127802; Contorno pr&eacute;-desenhado.</div>
-<div id="b8-y" class="dc ybg">&#127803; Desenho livre com legenda.</div>
-<div id="b8-r" class="dc rbg">&#128308; Mini-texto. Palavras extra.</div>
-<div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem">
-  <button class="btn bp" onclick="se8('draw')">&#127912; Desenho</button>
-  <button class="btn bs" onclick="se8('explore')">&#128269; Explorar</button>
-  <button class="btn ba" onclick="se8('words')">&#128218; Palavras</button>
-</div>
-<div id="e8-draw" style="display:none;background:#f9f9f9;border-radius:12px;padding:1.5rem;text-align:center">
-  <div style="font-size:5rem">&#128293;</div>
-  <p style="font-weight:700;margin-top:.5rem">Desenha fogueira no caderno!<br>Legenda: <strong>fo-guei-ra</strong></p>
-  <input type="text" placeholder="O meu desenho mostra..." style="max-width:100%;margin-top:1rem">
-</div>
-<div id="e8-explore" style="display:none">
-  <div class="tb"><div class="tl">Explora&ccedil;&atilde;o</div>
-    <div style="display:flex;flex-direction:column;gap:.75rem">
-      <div style="background:white;padding:.75rem;border-radius:8px;border:1px solid #EA580C">
-        <p style="font-weight:700">O que &eacute; fogueira?</p>
-        <input type="text" placeholder="fogueira &eacute;..." style="max-width:100%;margin-top:.5rem">
-      </div>
-      <div style="background:white;padding:.75rem;border-radius:8px;border:1px solid #EA580C">
-        <p style="font-weight:700">Onde encontras fogueira?</p>
-        <input type="text" placeholder="Encontro fogueira..." style="max-width:100%;margin-top:.5rem">
-      </div>
-    </div>
-  </div>
-</div>
-<div id="e8-words" style="display:none">
-  <div class="tb"><div class="tl">Palavras relacionadas</div>
-    <div id="b8-wl" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem"></div>
-    <div style="display:flex;gap:.5rem">
-      <input type="text" id="b8-wi" placeholder="escreve uma palavra..." style="max-width:220px" onkeydown="if(event.key==='Enter')aw8()">
-      <button class="btn bp" onclick="aw8()">+</button>
-    </div>
-    <p id="b8-wc" style="margin-top:.5rem;font-weight:700;color:#EA580C"></p>
-  </div>
-</div>
-</div></div>
-
-</div>
-<div style="text-align:center;padding:1rem;color:#aaa;font-size:.8rem;margin-top:2rem">M28P #27 &mdash; fogueira &middot; PageCraft &middot; 1.&ordm; ano &middot; pt-PT</div>
-
-<script>
-var dv='',b4c=[],b4d=[],b6s=[],b7sc=[null,null,null,null],b7t3=[],ew=[];
-var WORD='fogueira',NSYL=3,PALMAS='3';
-var B6O=["A", "fogueira", "aquece", "a", "noite", "."];
-var RW=["fogueira", "fogo", "foguete", "guerra", "guitarra", "guia", "fogao"];
-var SYLS=["fo", "guei", "ra"];
-var COLORS=["#EA580C","#DC2626","#D97706"];
-var SF={};
-
-window.addEventListener('load',function(){
-  var extras=[['ca','#059669'],['sa','#0284c7'],['ma','#7c3aed'],['la','#d97706'],['ta','#be185d'],['na','#92400e'],['to','#065f46'],['bo','#555']];
-  var cont=document.getElementById('b4-syls');
-  SYLS.forEach(function(s,i){
-    var b=document.createElement('button');b.className='syl';b.style.background=COLORS[i]||COLORS[0];b.style.cursor='pointer';b.textContent=s;
-    b.addEventListener('click',function(){b4c.push(s);document.getElementById('b4-c').textContent=b4c.join('');});
-    cont.appendChild(b);
-  });
-  extras.forEach(function(a){
-    if(SYLS.indexOf(a[0])<0){
-      var b=document.createElement('button');b.className='syl';b.style.background=a[1];b.style.cursor='pointer';b.textContent=a[0];
-      b.addEventListener('click',function(){b4c.push(a[0]);document.getElementById('b4-c').textContent=b4c.join('');});
-      cont.appendChild(b);
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M28P #27 — fogueira | PageCraft</title>
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHRleHQgeT0iNTAiIGZvbnQtc2l6ZT0iNDgiPvCfk5g8L3RleHQ+PC9zdmc+" />
+  <style>
+    :root {
+      --bg: #FFF7ED;
+      --surface: #FFFFFF;
+      --primary: #EA580C;
+      --accent: #DC2626;
+      --text: #1E1B18;
+      --correct: #22c55e;
+      --correct-bg: #f0fdf4;
+      --incorrect: #F59E0B;
+      --incorrect-bg: #fffbeb;
+      --radius: 16px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --font: 'Nunito', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+      --touch-size: 48px;
+      --card-gap: 1rem;
     }
-  });
-});
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 20%, transparent), transparent 38%),
+        linear-gradient(180deg, color-mix(in srgb, var(--primary) 8%, var(--bg)), var(--bg));
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+    a, button, summary, textarea { font: inherit; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; background: var(--surface); color: var(--text); padding: 0.75rem 1rem; border-radius: 9999px; z-index: 1000; border: 2px solid var(--primary); }
+    .skip-link:focus { top: 1rem; }
+    :focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+    .shell { max-width: 1120px; margin: 0 auto; padding: 1rem 1rem 3rem; }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      padding: 1.4rem;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 72%, white), color-mix(in srgb, var(--accent) 60%, white));
+      color: white;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
+    }
+    .hero::after { content: ""; position: absolute; inset: auto -8% -24% auto; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.14); }
+    .hero-top { display: flex; gap: 1rem; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; position: relative; z-index: 1; }
+    .hero-kicker, .hero-badge, .meta-chip, .nav-pill, .page-link span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 9999px;
+      padding: 0.75rem 1.25rem;
+      font-weight: 700;
+    }
+    .hero-kicker { background: rgba(255,255,255,0.16); }
+    .hero-badge { background: rgba(255,255,255,0.22); }
+    .hero-grid { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.9fr); margin-top: 1.25rem; position: relative; z-index: 1; }
+    .hero-copy h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.05; margin: 0.4rem 0 0.7rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+    .hero-copy p { margin: 0.4rem 0; max-width: 45rem; }
+    .word-scene { background: rgba(255,255,255,0.14); border: 2px solid rgba(255,255,255,0.28); border-radius: 24px; padding: 1rem; backdrop-filter: blur(4px); }
+    .word-scene .emoji { font-size: clamp(3rem, 10vw, 5.5rem); line-height: 1; }
+    .meta-row, .objective-row, .syllable-row, .page-switch, .section-nav { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .meta-row { margin-top: 1rem; }
+    .meta-chip { background: rgba(255,255,255,0.18); }
+    .objective-row { margin: 1rem 0 0; padding: 0; list-style: none; }
+    .objective-row li { background: rgba(255,255,255,0.22); border-radius: 9999px; padding: 0.75rem 1rem; font-weight: 700; min-height: var(--touch-size); display: inline-flex; align-items: center; }
+    .word-spotlight { margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1.1fr 1fr; }
+    .spot-card { background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 70%, white); border-radius: 24px; padding: 1rem; box-shadow: var(--shadow); }
+    .spot-card h2 { margin: 0 0 0.75rem; font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; }
+    .spot-card .word-display { font-size: clamp(2.4rem, 7vw, 3.8rem); font-weight: 800; color: var(--primary); letter-spacing: 0.05em; text-transform: uppercase; }
+    .spot-card .mission { margin-top: 0.75rem; }
+    .syllable-row { margin-top: 1rem; }
+    .syllable-token, .syllable-chip {
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 12px;
+      border: none;
+      color: white;
+      font-weight: 800;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      padding: 0.55rem 1rem;
+      background: var(--chip, var(--primary));
+      box-shadow: var(--shadow);
+    }
+    .page-switch { margin: 1.2rem 0 0.5rem; }
+    .page-link {
+      text-decoration: none;
+      background: var(--surface);
+      color: var(--text);
+      border: 2px solid color-mix(in srgb, var(--primary) 28%, white);
+      border-radius: 18px;
+      padding: 0.85rem 1rem;
+      min-height: var(--touch-size);
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: space-between;
+      flex: 1 1 200px;
+      box-shadow: var(--shadow);
+      font-weight: 700;
+    }
+    .page-link.is-current { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
+    .section-nav { position: sticky; top: 0; z-index: 10; padding: 0.85rem 0 1rem; background: linear-gradient(180deg, var(--bg), rgba(255,248,240,0.88)); backdrop-filter: blur(6px); }
+    .nav-pill { text-decoration: none; background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 24%, white); padding: 0.55rem 1rem; }
+    .content { display: grid; gap: 1.1rem; }
+    .unit-card { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 35%, white); border-radius: 24px; padding: 1.15rem; box-shadow: var(--shadow); }
+    .unit-head { display: flex; gap: 1rem; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+    .unit-head h2 { margin: 0.2rem 0 0; font-size: clamp(1.45rem, 4vw, 2.1rem); font-weight: 800; }
+    .unit-kicker { color: color-mix(in srgb, var(--primary) 80%, black); font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.9rem; }
+    .unit-badge { background: color-mix(in srgb, var(--accent) 22%, var(--surface)); border: 2px solid var(--accent); border-radius: 9999px; padding: 0.65rem 1rem; font-weight: 800; min-height: var(--touch-size); display: inline-flex; align-items: center; }
+    .unit-grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.95fr); margin-top: 1rem; }
+    .unit-copy p { margin: 0.65rem 0; }
+    .unit-flow { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 1rem; }
+    .unit-flow > div, .play-card, .maker-box, .teacher-card { background: color-mix(in srgb, var(--bg) 70%, white); border-radius: 18px; padding: 0.95rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
+    .play-label { font-weight: 800; margin: 0 0 0.8rem; }
+    .pill-btn, .choice-btn, .check-card, .prompt-card {
+      min-height: var(--touch-size);
+      min-width: var(--touch-size);
+      border-radius: 9999px;
+      border: 2px solid transparent;
+      padding: 0.75rem 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+    }
+    .pill-btn:hover, .choice-btn:hover, .check-card:hover, .prompt-card:hover, .page-link:hover { transform: scale(1.05); box-shadow: 0 10px 24px rgba(0,0,0,0.12); }
+    .pill-btn:active, .choice-btn:active, .check-card:active, .prompt-card:active, .page-link:active { transform: scale(0.97); }
+    .pill-btn { background: var(--primary); color: white; }
+    .choice-row, .check-grid, .prompt-grid, .compose-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .choice-btn, .check-card, .prompt-card { background: var(--surface); color: var(--text); border-color: color-mix(in srgb, var(--primary) 22%, white); }
+    .choice-btn.is-right, .check-card.is-done { background: var(--correct-bg); border-color: var(--correct); color: #166534; }
+    .choice-btn.is-wrong { background: var(--incorrect-bg); border-color: var(--incorrect); color: #92400e; }
+    .feedback, .helper-text { margin: 0.85rem 0 0; font-weight: 700; }
+    .feedback { min-height: 1.4em; }
+    .compose-output, .phrase-card, .cloze-word { min-height: 72px; border-radius: 18px; background: var(--surface); border: 2px dashed color-mix(in srgb, var(--primary) 35%, white); display: grid; place-items: center; font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800; color: var(--primary); padding: 0.9rem; margin-top: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .phrase-card { text-transform: none; font-size: 1.3rem; color: var(--text); }
+    .phrase-input { width: 100%; margin-top: 0.85rem; border-radius: 18px; border: 2px solid color-mix(in srgb, var(--primary) 25%, white); padding: 0.9rem 1rem; min-height: 120px; background: #fff; }
+    .diff-switcher { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; }
+    .diff-btn { min-height: var(--touch-size); min-width: var(--touch-size); border-radius: 9999px; border: 2px solid color-mix(in srgb, var(--primary) 28%, white); background: var(--surface); padding: 0.7rem 1rem; font-weight: 700; cursor: pointer; }
+    .diff-btn.is-active { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
+    .diff-panel { display: none; background: color-mix(in srgb, var(--bg) 72%, white); border-radius: 18px; padding: 0.95rem; margin-top: 0.8rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
+    .diff-panel.is-active { display: block; }
+    .teacher-guide { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 30%, white); border-radius: 24px; padding: 0.9rem 1rem; box-shadow: var(--shadow); }
+    .teacher-guide summary { min-height: var(--touch-size); display: flex; align-items: center; cursor: pointer; font-weight: 800; font-size: 1.2rem; }
+    .teacher-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 1rem; }
+    .teacher-card-wide { grid-column: 1 / -1; }
+    .teacher-card h3 { margin-top: 0; }
+    .footer { text-align: center; padding: 1.4rem 0 0; font-weight: 700; color: color-mix(in srgb, var(--text) 72%, white); }
+    .hidden { display: none !important; }
+    @media (max-width: 900px) {
+      .hero-grid, .word-spotlight, .unit-grid, .unit-flow, .teacher-grid { grid-template-columns: 1fr; }
+      .section-nav { position: static; }
+    }
+    @media (max-width: 640px) {
+      body { font-size: 18px; }
+      .shell { padding: 0.75rem 0.75rem 2.4rem; }
+      .hero { padding: 1rem; border-radius: 22px; }
+      .hero-copy h1 { font-size: clamp(2rem, 9vw, 3rem); }
+      .page-link { flex-basis: 100%; }
+      .objective-row li, .meta-chip, .hero-kicker, .hero-badge, .nav-pill { width: 100%; justify-content: center; }
+      .unit-card, .spot-card, .teacher-guide { border-radius: 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body data-page-variant="index.html" data-visible-units="1,2,3,4">
+  <a href="#main" class="skip-link">Ir para o conteúdo</a>
+  <div class="shell">
+    <header class="hero">
+      <div class="hero-top">
+        <span class="hero-kicker">M28P #27</span>
+        <span class="hero-badge">Rota completa</span>
+      </div>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p>Descobrir, ler e brincar</p>
+          <h1>Fogueira</h1>
+          <p>Percurso completo com foco na descoberta da palavra, nas sílabas e na confiança ao ler.</p>
+          <div class="meta-row">
+            <span class="meta-chip">🔥 Palavra 27</span>
+            <span class="meta-chip">1.º ano (6-7 anos)</span>
+            <span class="meta-chip">45 min</span>
+          </div>
+          <ul class="objective-row"><li>Reconhecer globalmente a palavra &#x27;fogueira&#x27; e associá-la à sua imagem</li><li>Segmentar &#x27;fogueira&#x27; em sílabas (fo-guei-ra) identificando o dígrafo &#x27;gu&#x27; e o ditongo &#x27;ei&#x27;</li><li>Recombinar sílabas para formar palavras novas</li></ul>
+        </div>
+        <aside class="word-scene" aria-hidden="true">
+          <div class="emoji">🔥</div>
+          <p><strong>Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</strong></p>
+          <p>Paleta própria, leitura em pt-PT AO90 e navegação pensada para toque.</p>
+          <p>Esta página trabalha as unidades 1, 2, 3, 4.</p>
+        </aside>
+      </div>
+    </header>
 
-function showB(id){
-  document.querySelectorAll('.blk').forEach(function(b){b.classList.remove('on');});
-  document.querySelectorAll('.nt').forEach(function(t){t.classList.remove('act');});
-  document.getElementById(id).classList.add('on');
-  var m={b1:0,b2:1,b3:2,b4:3,b5:4,b6:5,b7:6,b8:7};
-  if(m[id]!==undefined)document.querySelectorAll('.nt')[m[id]].classList.add('act');
-  window.scrollTo(0,0);
-}
-function sdf(b,l){
-  ['g','y','r'].forEach(function(x){var e=document.getElementById(b+'-'+x);if(e)e.classList.toggle('on',x===l);});
-  document.querySelectorAll('#'+b+' .dbt').forEach(function(x){x.classList.remove('act');});
-  var btn=document.querySelector('#'+b+' .dbt.'+l);if(btn)btn.classList.add('act');
-}
-function sfb(el,ok,msg){el.className='fb on '+(ok?'ok':'nok');el.textContent=msg;}
-function ci(v,el){
-  document.querySelectorAll('#b2 .ic').forEach(function(c){c.classList.remove('sel');});
-  el.classList.add('sel');el.querySelector('span').textContent=v;
-  sfb(document.getElementById('b2-f1'),v===WORD,v===WORD?'Correto! '+WORD+'!':'Qual combina com "'+WORD+'"?');
-}
-function cw2(v,el){
-  document.querySelectorAll('#b2-t2 .qopt').forEach(function(b){b.disabled=true;});
-  if(v===WORD){el.classList.add('ok');sfb(document.getElementById('b2-f2'),true,'"'+WORD+'" correto!');}
-  else{el.classList.add('err');sfb(document.getElementById('b2-f2'),false,'A palavra e "'+WORD+'".');}
-}
-function drs(e,v){dv=v;}
-function drd(e,id,exp){
-  e.preventDefault();var s=document.getElementById(id);
-  if(dv===exp){
-    s.textContent=dv;s.classList.add('ok');SF[id]=true;
-    var all=true;for(var i=1;i<=NSYL;i++){if(!SF['sl'+i]){all=false;break;}}
-    if(all)sfb(document.getElementById('b3-dfb'),true,SYLS.join('+')+' = '+WORD+'!');
-  }else sfb(document.getElementById('b3-dfb'),false,'Tenta noutra caixa!');
-}
-function cp3(v,el){
-  el.parentNode.querySelectorAll('.qopt').forEach(function(b){b.disabled=true;});
-  if(v===PALMAS){el.classList.add('ok');sfb(document.getElementById('b3-pfb'),true,SYLS.join('-')+' = '+PALMAS+' palma'+(PALMAS==='1'?'':'s')+'!');}
-  else{el.classList.add('err');sfb(document.getElementById('b3-pfb'),false,'Sao '+PALMAS+' palmas!');}
-}
-function cs5(v,gId,fId){
-  document.querySelectorAll('#'+gId+' .qopt').forEach(function(b){b.disabled=true;});
-  var sc=SYLS.length>1?SYLS[1]:SYLS[0];
-  var f=document.getElementById(fId);
-  if(v===sc){el=document.querySelector('#'+gId+' .qopt:not([disabled])');
-    document.querySelectorAll('#'+gId+' .qopt').forEach(function(b){if(b.textContent===v)b.classList.add('ok');});
-    sfb(f,true,'Correto! "'+sc+'" e a silaba certa!');}
-  else{document.querySelectorAll('#'+gId+' .qopt').forEach(function(b){if(b.textContent===v)b.classList.add('err');});sfb(f,false,'A silaba certa e "'+sc+'".');}
-}
-function cg5(v,gId,fId){
-  document.querySelectorAll('#'+gId+' .qopt').forEach(function(b){b.disabled=true;});
-  var f=document.getElementById(fId);
-  if(v===WORD){document.querySelectorAll('#'+gId+' .qopt').forEach(function(b){if(b.textContent===v)b.classList.add('ok');});sfb(f,true,'"'+WORD+'" e a grafia correta!');}
-  else{document.querySelectorAll('#'+gId+' .qopt').forEach(function(b){if(b.textContent===v)b.classList.add('err');});sfb(f,false,'A grafia certa e "'+WORD+'".');}
-}
-function ce5(){
-  var v=document.getElementById('b5-inp').value.trim().toLowerCase();
-  document.getElementById('b5-inf').textContent=v===WORD?'OK':v?'...':'';
-}
-function pw6(el,w){
-  if(el.classList.contains('pl'))return;
-  el.classList.add('pl');b6s.push(w);
-  var c=document.getElementById('b6-s');
-  if(b6s.length===1)c.innerHTML='';
-  var pw=document.createElement('span');pw.className='pw';pw.textContent=w;c.appendChild(pw);
-}
-function ch6(){
-  var built=Array.from(document.getElementById('b6-s').querySelectorAll('.pw')).map(function(e){return e.textContent;});
-  var f=document.getElementById('b6-fb');
-  if(JSON.stringify(built)===JSON.stringify(B6O))sfb(f,true,'Perfeito!');
-  else if(built.length<B6O.length)sfb(f,false,'Usa todas as palavras!');
-  else sfb(f,false,'Ordem incorreta. Recomeca!');
-}
-function rs6(){
-  b6s=[];document.getElementById('b6-s').innerHTML='<span style="color:#aaa;font-style:italic">frase aqui...</span>';
-  document.querySelectorAll('#b6-bk .wc').forEach(function(b){b.classList.remove('pl');});
-  document.getElementById('b6-fb').style.display='none';
-}
-function cf6(){
-  var v=document.getElementById('b6-fp').value.trim(),f=document.getElementById('b6-fpfb');
-  if(!v){sfb(f,false,'Escreve!');return;}
-  var hw=v.toLowerCase().indexOf(WORD)>=0,hm=v[0]===v[0].toUpperCase()&&v[0]!==v[0].toLowerCase(),hp=v.endsWith('.')||v.endsWith('!')||v.endsWith('?');
-  if(hw&&hm&&hp)sfb(f,true,'Frase perfeita com "'+WORD+'"!');
-  else if(!hw)sfb(f,false,'Precisa de ter "'+WORD+'"!');
-  else if(!hm)sfb(f,false,'Comeca com maiuscula!');
-  else sfb(f,false,'Ponto final!');
-}
-var b7t3a=[];
-function e7(t,exp,el){
-  var f=document.getElementById('b7-f'+t);var ok=false;
-  if(t===4){var v=document.getElementById('b7-t4').value.trim();ok=v.toLowerCase().indexOf(WORD)>=0&&v.length>3;sfb(f,ok,ok?'Frase com "'+WORD+'"!':'Precisa de "'+WORD+'".');}
-  else if(exp===WORD||exp===PALMAS){ok=true;el.classList.add('ok');el.parentNode.querySelectorAll('.qopt').forEach(function(b){b.disabled=true;});sfb(f,true,'Correto!');}
-  else{el.classList.add('err');el.parentNode.querySelectorAll('.qopt').forEach(function(b){b.disabled=true;});sfb(f,false,'Tenta de novo!');}
-  if(ok){b7sc[t-1]=1;up7();}
-}
-function et3(s,el){
-  b7t3a.push(s);el.disabled=true;
-  var bd=document.getElementById('b7-t3b');
-  if(b7t3a.length===1)bd.innerHTML='';
-  var i=SYLS.indexOf(s);
-  var sp=document.createElement('span');sp.className='syl';sp.style.background=COLORS[i>=0?i:0];sp.style.fontSize='1.4rem';sp.textContent=s;bd.appendChild(sp);
-}
-function ct3(){
-  var f=document.getElementById('b7-f3');
-  if(b7t3a.join('')===WORD){sfb(f,true,SYLS.join('+')+' = '+WORD+'!');b7sc[2]=1;up7();}
-  else{sfb(f,false,'Ordem: '+SYLS.join('->')+'. Tenta!');b7t3a=[];document.getElementById('b7-t3b').innerHTML='<span style="color:#aaa">silabas aqui...</span>';document.querySelectorAll('#b7-t3 button').forEach(function(b){b.disabled=false;});}
-}
-function up7(){
-  var d=b7sc.filter(function(s){return s===1;}).length;
-  document.getElementById('b7-p').style.width=(d/4*100)+'%';
-  document.getElementById('b7-pt').textContent='Tarefa '+d+' de 4';
-  if(d===4){
-    var r=document.getElementById('b7-res');r.style.display='block';
-    document.getElementById('b7-st').textContent='* * * *';
-    document.getElementById('b7-msg').textContent='Fantastico! Sabes tudo sobre "'+WORD+'"!';
-    r.scrollIntoView({behavior:'smooth'});
-  }
-}
-function se8(t){['draw','explore','words'].forEach(function(x){document.getElementById('e8-'+x).style.display=x===t?'block':'none';});}
-function aw8(){
-  var i=document.getElementById('b8-wi'),v=i.value.trim().toLowerCase();
-  if(!v||ew.indexOf(v)>=0){i.value='';return;}
-  ew.push(v);i.value='';
-  var l=document.getElementById('b8-wl');var sp=document.createElement('span');sp.className='dw';sp.textContent=v;l.appendChild(sp);
-  document.getElementById('b8-wc').textContent=ew.length+' palavra'+(ew.length===1?'':'s')+'!'+(ew.length>=5?' Meta!':'');
-}
-</script>
+    <div class="page-switch" aria-label="Outras páginas desta palavra"><a class="page-link is-current" href="./index.html">Página 1<span>Atual</span></a><a class="page-link" href="./page-2.html">Página 2<span>Abrir</span></a><a class="page-link" href="./page-3.html">Página 3<span>Abrir</span></a><a class="page-link" href="./page-4.html">Página 4<span>Abrir</span></a></div>
+
+    <section class="word-spotlight" aria-label="Destaque da palavra">
+      <article class="spot-card">
+        <h2>Palavra em destaque</h2>
+        <div class="word-display">Fogueira</div>
+        <p class="mission">fogueira</p>
+        <div class="compose-actions">
+          <button class="pill-btn speak-btn" data-speak="Fogueira">Ouvir a palavra</button>
+        </div>
+      </article>
+      <article class="spot-card">
+        <h2>Sílabas</h2>
+        <div class="syllable-row"><span class="syllable-token" style="--chip:#EA580C">fo</span><span class="syllable-token" style="--chip:#DC2626">guei</span><span class="syllable-token" style="--chip:#D97706">ra</span></div>
+        <p class="mission">Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</p>
+      </article>
+    </section>
+
+    <nav class="section-nav" aria-label="Navegação das unidades"><a class="nav-pill" href="#u1-bloco-1-abertura-a-fogueira-numa-noite-de-festa">1</a><a class="nav-pill" href="#u2-bloco-2-reconhecimento-global">2</a><a class="nav-pill" href="#u3-bloco-3-segmentação-fo-guei-ra">3</a><a class="nav-pill" href="#u4-bloco-4-recombinação">4</a></nav>
+
+    <main id="main" class="content">
+      
+    <section id="u1-bloco-1-abertura-a-fogueira-numa-noite-de-festa" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 1</span>
+          <h2>Bloco 1 — Abertura: a fogueira numa noite de festa</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>Cena de festa popular com fogueira. Micro-história: &#x27;Nas festas de verão, há uma enorme chama no meio da praça. Toda a gente dança à volta. Como se chama esse fogo grande?&#x27;</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Cena de festa com fogueira; micro-história; botão revelar</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>Aluno aponta e diz</p>
+            </div>
+          </div>
+          <p>Clicar → cartaz fogueira + palavra</p>
+          
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <button class="pill-btn reveal-btn" data-target="story-1">Mostrar a história</button>
+          <button class="pill-btn speak-btn" data-speak="fogueira">Ouvir</button>
+          <div id="story-1" class="reveal-box hidden"><p>Cena de festa popular com fogueira. Micro-história: &#x27;Nas festas de verão, há uma enorme chama no meio da praça. Toda a gente dança à volta. Como se chama esse fogo grande?&#x27;</p></div>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-1">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-1">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-1">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-1" class="diff-panel is-active"><p>🟢 Palavra visível</p></div>
+        <div id="standard-1" class="diff-panel"><p>🟡 Revelar</p></div>
+        <div id="challenge-1" class="diff-panel"><p>🔴 Escrever antes</p></div>
+      </div>
+    </section>
+    
+    <section id="u2-bloco-2-reconhecimento-global" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 2</span>
+          <h2>Bloco 2 — Reconhecimento global</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>Reconhecimento com &#x27;cigarra&#x27; e &#x27;peixe&#x27; como distratores.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Tarefa 1: palavra, 3 imagens. Tarefa 2: imagem, 3 palavras.</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>Seleciona corretamente</p>
+            </div>
+          </div>
+          <p>Clicar → feedback</p>
+          
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Escolhe a palavra certa.</p>
+          <div class="choice-row">
+            <button class="choice-btn" data-answer="fogueira" data-choice="fogueira">fogueira</button><button class="choice-btn" data-answer="fogueira" data-choice="cigarra">cigarra</button><button class="choice-btn" data-answer="fogueira" data-choice="flor">flor</button>
+          </div>
+          <p class="feedback" aria-live="polite">Procura a palavra completa.</p>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-2">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-2">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-2">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-2" class="diff-panel is-active"><p>🟢 Primeira letra</p></div>
+        <div id="standard-2" class="diff-panel"><p>🟡 3 opções</p></div>
+        <div id="challenge-2" class="diff-panel"><p>🔴 4 com &#x27;foguera&#x27;, &#x27;fogeira&#x27;</p></div>
+      </div>
+    </section>
+    
+    <section id="u3-bloco-3-segmentação-fo-guei-ra" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 3</span>
+          <h2>Bloco 3 — Segmentação: fo-guei-ra</h2>
+        </div>
+        <span class="unit-badge">Em destaque</span>
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>Dividir em 3 sílabas. Destacar dígrafo &#x27;gu&#x27; e ditongo &#x27;ei&#x27; em &#x27;guei&#x27;.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Blocos &#x27;fo&#x27;, &#x27;guei&#x27;, &#x27;ra&#x27;; 3 caixas; destaques &#x27;gu&#x27; e &#x27;ei&#x27;</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>Coloca 3 blocos, 3 palmas, aponta &#x27;gu&#x27; e &#x27;ei&#x27;</p>
+            </div>
+          </div>
+          <p>Arrastar → encaixe; palmadas → feedback</p>
+          
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Toca nas sílabas para formar a palavra.</p>
+          <div class="syllable-bank" data-compose="compose-3"><button class="syllable-chip" style="--chip:#EA580C" data-syllable="fo">fo</button><button class="syllable-chip" style="--chip:#DC2626" data-syllable="guei">guei</button><button class="syllable-chip" style="--chip:#D97706" data-syllable="ra">ra</button></div>
+          <div id="compose-3" class="compose-output">__</div>
+          <div class="compose-actions"><button class="pill-btn clear-compose" data-compose-clear="compose-3">Limpar</button></div>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-3">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-3">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-3">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-3" class="diff-panel is-active"><p>🟢 Pré-posicionados</p></div>
+        <div id="standard-3" class="diff-panel"><p>🟡 Arrastar os 3</p></div>
+        <div id="challenge-3" class="diff-panel"><p>🔴 Escrever; explicar &#x27;gu&#x27;</p></div>
+      </div>
+    </section>
+    
+    <section id="u4-bloco-4-recombinação" class="unit-card">
+      <div class="unit-head">
+        <div>
+          <span class="unit-kicker">Unidade 4</span>
+          <h2>Bloco 4 — Recombinação</h2>
+        </div>
+        
+      </div>
+      <div class="unit-grid">
+        <article class="unit-copy">
+          <p>Com &#x27;fo&#x27;, &#x27;guei&#x27;, &#x27;ra&#x27;, &#x27;gu&#x27;, &#x27;la&#x27;, &#x27;gue&#x27;, &#x27;to&#x27;, &#x27;ca&#x27; formar novas palavras.</p>
+          <div class="unit-flow">
+            <div>
+              <h3>O que vais fazer</h3>
+              <p>Tabuleiro; construção; verificar; descobertas</p>
+            </div>
+            <div>
+              <h3>O que observar</h3>
+              <p>2+ palavras (fogueira, fogo, guitarra, lagoa)</p>
+            </div>
+          </div>
+          <p>Arrastar → feedback</p>
+          <div class="maker-box"><p><strong>Desafio maker:</strong> Cartões; tabela</p><p><strong>Materiais:</strong> Cartões, Folha</p><p><strong>Comunicação:</strong> Partilha</p></div>
+        </article>
+        <aside class="unit-play">
+        <div class="play-card">
+          <p class="play-label">Experimenta combinações com as sílabas.</p>
+          <div class="syllable-bank" data-compose="mix-4"><button class="syllable-chip" style="--chip:#EA580C" data-syllable="fo">fo</button><button class="syllable-chip" style="--chip:#DC2626" data-syllable="guei">guei</button><button class="syllable-chip" style="--chip:#D97706" data-syllable="ra">ra</button></div>
+          <div id="mix-4" class="compose-output">__</div>
+          <p class="helper-text">Nem todas as combinações resultam em palavras reais. O importante é experimentar.</p>
+        </div>
+        </aside>
+      </div>
+      <div class="diff-switcher">
+        <button class="diff-btn is-active" data-diff="support-4">🟢 Com ajuda</button>
+        <button class="diff-btn" data-diff="standard-4">🟡 Objetivo</button>
+        <button class="diff-btn" data-diff="challenge-4">🔴 Desafio</button>
+      </div>
+      <div class="diff-panels">
+        <div id="support-4" class="diff-panel is-active"><p>🟢 4 sílabas</p></div>
+        <div id="standard-4" class="diff-panel"><p>🟡 8 sílabas</p></div>
+        <div id="challenge-4" class="diff-panel"><p>🔴 Sem feedback</p></div>
+      </div>
+    </section>
+    
+      
+    <details class="teacher-guide">
+      <summary>Guia do professor</summary>
+      <div class="teacher-grid">
+        <article class="teacher-card">
+          <h3>Objetivos desta página</h3>
+          <ul><li>Reconhecer globalmente a palavra &#x27;fogueira&#x27; e associá-la à sua imagem</li><li>Segmentar &#x27;fogueira&#x27; em sílabas (fo-guei-ra) identificando o dígrafo &#x27;gu&#x27; e o ditongo &#x27;ei&#x27;</li><li>Recombinar sílabas para formar palavras novas</li><li>Usar a palavra &#x27;fogueira&#x27; numa frase simples oral e escrita</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Materiais</h3>
+          <ul><li>Tablet ou computador</li><li>Caderno diário</li><li>Lápis de cor (laranja, vermelho, amarelo)</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Organização MEM</h3>
+          <ul><li><strong>Módulos:</strong> TEA, Trabalho curricular comparticipado, Circuitos de comunicação</li><li><strong>Instrumentos:</strong> PIT, mapa de tarefas</li><li><strong>Organização:</strong> individual (blocos 1–5) → pares (bloco 6) → turma</li></ul>
+        </article>
+        <article class="teacher-card">
+          <h3>Percurso desta página</h3>
+          <ul><li>Unidade 1: Bloco 1 — Abertura: a fogueira numa noite de festa</li><li>Unidade 2: Bloco 2 — Reconhecimento global</li><li>Unidade 3: Bloco 3 — Segmentação: fo-guei-ra</li><li>Unidade 4: Bloco 4 — Recombinação</li></ul>
+        </article>
+        <article class="teacher-card teacher-card-wide">
+          <h3>Referências curriculares</h3>
+          <ul><li><strong>Português · 1.º ano</strong>: Identificar sílabas com dígrafo &#x27;gu&#x27; (antes de e/i) e ditongo &#x27;ei&#x27;</li><li><strong>Português · 1.º ano</strong>: Ler palavras com dígrafos &#x27;gu/qu&#x27; e ditongos; reconhecer palavras frequentes</li><li><strong>Estudo do Meio · 1.º ano</strong>: Reconhecer o fogo como fenómeno natural e cultural (festas, segurança)</li></ul>
+          <ul><li>PA-A: Linguagens e textos</li><li>PA-C: Raciocínio e resolução de problemas</li><li>PA-D: Pensamento crítico</li><li>PA-F: Autonomia</li></ul>
+        </article>
+      </div>
+    </details>
+    
+    </main>
+
+    <footer class="footer">PageCraft · Método das 28 Palavras · Fogueira</footer>
+  </div>
+
+  <script>
+    const synth = window.speechSynthesis;
+
+    document.querySelectorAll('.reveal-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        const target = document.getElementById(button.dataset.target);
+        if (!target) return;
+        target.classList.toggle('hidden');
+      });
+    });
+
+    document.querySelectorAll('.speak-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!synth) return;
+        const utterance = new SpeechSynthesisUtterance(button.dataset.speak || '');
+        utterance.lang = 'pt-PT';
+        synth.cancel();
+        synth.speak(utterance);
+      });
+    });
+
+    document.querySelectorAll('.choice-row').forEach((row) => {
+      const feedback = row.parentElement.querySelector('.feedback');
+      row.querySelectorAll('.choice-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          row.querySelectorAll('.choice-btn').forEach((item) => item.classList.remove('is-right', 'is-wrong'));
+          const rightAnswer = button.dataset.answer || button.dataset.clozeAnswer || '';
+          if (button.dataset.choice === rightAnswer) {
+            button.classList.add('is-right');
+            if (feedback) feedback.textContent = 'Muito bem!';
+          } else {
+            button.classList.add('is-wrong');
+            if (feedback) feedback.textContent = 'Tenta outra vez.';
+          }
+        });
+      });
+    });
+
+    document.querySelectorAll('[data-compose]').forEach((bank) => {
+      const output = document.getElementById(bank.dataset.compose);
+      const parts = [];
+      bank.querySelectorAll('.syllable-chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          parts.push(chip.dataset.syllable || '');
+          if (output) output.textContent = parts.join('');
+        });
+      });
+    });
+
+    document.querySelectorAll('.clear-compose').forEach((button) => {
+      button.addEventListener('click', () => {
+        const output = document.getElementById(button.dataset.composeClear);
+        if (output) output.textContent = '__';
+      });
+    });
+
+    document.querySelectorAll('.check-card').forEach((card) => {
+      card.addEventListener('click', () => card.classList.toggle('is-done'));
+    });
+
+    document.querySelectorAll('.diff-switcher').forEach((switcher) => {
+      const panels = switcher.nextElementSibling;
+      switcher.querySelectorAll('.diff-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          switcher.querySelectorAll('.diff-btn').forEach((item) => item.classList.remove('is-active'));
+          panels.querySelectorAll('.diff-panel').forEach((panel) => panel.classList.remove('is-active'));
+          button.classList.add('is-active');
+          const target = panels.querySelector('#' + CSS.escape(button.dataset.diff));
+          if (target) target.classList.add('is-active');
+        });
+      });
+    });
+  </script>
 </body>
 </html>
