@@ -1,516 +1,1059 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-PT">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>M28P #4 — dedo | PageCraft</title>
-  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHRleHQgeT0iNTAiIGZvbnQtc2l6ZT0iNDgiPvCfk5g8L3RleHQ+PC9zdmc+" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Palavra "dedo" - Método das 28 Palavras</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #FFF7ED;
+      --bg: #FFF8F0;
       --surface: #FFFFFF;
-      --primary: #EA580C;
-      --accent: #F59E0B;
-      --text: #1E1B18;
-      --correct: #22c55e;
-      --correct-bg: #f0fdf4;
-      --incorrect: #F59E0B;
-      --incorrect-bg: #fffbeb;
+      --primary: #E8734A;
+      --accent: #2B7A78;
+      --text: #2D2926;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+      --de-bg: #DBEAFE;
+      --de-bd: #3B82F6;
+      --de-tx: #1E40AF;
+      --do-bg: #FFEDD5;
+      --do-bd: #F97316;
+      --do-tx: #C2410C;
       --radius: 16px;
-      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      --font: 'Nunito', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
-      --touch-size: 48px;
-      --card-gap: 1rem;
+      --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      --btnshadow: 0 2px 6px rgba(0,0,0,0.12);
     }
+
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); }
     body {
-      margin: 0;
-      font-family: var(--font);
-      background:
-        radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 20%, transparent), transparent 38%),
-        linear-gradient(180deg, color-mix(in srgb, var(--primary) 8%, var(--bg)), var(--bg));
-      color: var(--text);
+      font-family: "Nunito", system-ui, sans-serif;
       font-size: 20px;
-      line-height: 1.55;
-      min-height: 100vh;
+      line-height: 1.45;
     }
-    a, button, summary, textarea { font: inherit; }
-    .skip-link { position: absolute; left: 1rem; top: -4rem; background: var(--surface); color: var(--text); padding: 0.75rem 1rem; border-radius: 9999px; z-index: 1000; border: 2px solid var(--primary); }
-    .skip-link:focus { top: 1rem; }
-    :focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
-    .shell { max-width: 1120px; margin: 0 auto; padding: 1rem 1rem 3rem; }
-    .hero {
+
+    .wrap { max-width: 960px; margin: 0 auto; padding: 1rem; }
+    h1, h2, h3 { margin: 0 0 .6rem; line-height: 1.2; }
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.6rem; color: var(--primary); }
+    h3 { font-size: 1.2rem; }
+    p { margin: .3rem 0 .7rem; }
+
+    header {
+      background: linear-gradient(135deg, #E8734A, #F5A34C, #2B7A78);
+      color: #fff;
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1rem;
+    }
+    .meta { display: flex; gap: .6rem; flex-wrap: wrap; margin: .7rem 0; }
+    .badge {
+      background: rgba(255,255,255,.22);
+      border-radius: 999px;
+      padding: .25rem .75rem;
+      font-weight: 700;
+      font-size: .9rem;
+    }
+    .goals { background: rgba(255,255,255,.18); border-radius: 12px; padding: .8rem 1rem; }
+    .goals li { margin: .2rem 0; }
+
+    .unit {
+      background: var(--surface);
+      border: 2px solid var(--primary);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+
+    .tabs { display: flex; gap: .5rem; flex-wrap: wrap; margin: .8rem 0; }
+    .tab {
+      min-height: 44px;
+      border-radius: 999px;
+      border: 2px solid #cfc3b8;
+      background: #fff;
+      padding: .5rem .9rem;
+      font-weight: 700;
+      font-size: .95rem;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: all .2s;
+      box-shadow: var(--btnshadow);
+    }
+    .tab.active { color: #fff; }
+    .tab[data-level="support"].active { background: #22c55e; border-color: #22c55e; }
+    .tab[data-level="middle"].active { background: #f59e0b; border-color: #f59e0b; }
+    .tab[data-level="challenge"].active { background: #ef4444; border-color: #ef4444; }
+
+    .level-panel { display: none; }
+    .level-panel.active { display: block; }
+
+    .btn {
+      min-height: 44px;
+      border: 0;
+      border-radius: 999px;
+      padding: .75rem 1.5rem;
+      font-weight: 800;
+      background: var(--primary);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: var(--btnshadow);
+      transition: transform .2s, filter .2s;
+      touch-action: manipulation;
+    }
+    .btn:hover { transform: scale(1.05); }
+    .btn:focus-visible, .tab:focus-visible, .choice:focus-visible, .slot:focus-visible, input:focus-visible {
+      outline: 3px solid #111;
+      outline-offset: 2px;
+    }
+    .btn.secondary { background: var(--accent); }
+
+    .story {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: .9rem;
+      align-items: center;
+    }
+    .scene {
       position: relative;
+      background: linear-gradient(180deg, #d9f1ff, #fff7df);
+      border-radius: 14px;
+      min-height: 240px;
+      border: 2px solid #9bd1e5;
       overflow: hidden;
-      border-radius: 28px;
-      padding: 1.4rem;
-      background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 72%, white), color-mix(in srgb, var(--accent) 60%, white));
-      color: white;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
     }
-    .hero::after { content: ""; position: absolute; inset: auto -8% -24% auto; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.14); }
-    .hero-top { display: flex; gap: 1rem; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; position: relative; z-index: 1; }
-    .hero-kicker, .hero-badge, .meta-chip, .nav-pill, .page-link span {
+    .window {
+      position: absolute; right: 14px; top: 22px;
+      width: 120px; height: 95px; border: 4px solid #8fb5c6; border-radius: 10px; background: #e8f7ff;
+    }
+    .bird { position: absolute; right: 48px; top: 42px; font-size: 2rem; }
+    .kid { position: absolute; left: 20px; bottom: 14px; font-size: 4.2rem; }
+    .arrow { position: absolute; left: 120px; bottom: 70px; font-size: 2rem; opacity: 0; transition: opacity .2s; }
+    .word-dedo {
+      position: absolute; left: 170px; bottom: 95px;
+      background: #fff;
+      border: 3px solid var(--primary);
+      color: var(--primary);
+      border-radius: 10px;
+      padding: .25rem .6rem;
+      font-size: 2rem;
+      font-weight: 800;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity .25s, transform .25s;
+    }
+    .word-dedo.show { opacity: 1; transform: translateY(0); }
+
+    .card {
+      border: 2px solid #edd9cc;
+      border-radius: 14px;
+      padding: .8rem;
+      background: #fffdfa;
+    }
+
+    .choice-grid { display: grid; gap: .7rem; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+    .choice {
+      min-height: 56px;
+      font-size: 1.45rem;
+      font-weight: 800;
+      border-radius: 12px;
+      border: 2px solid #d7cbc1;
+      background: #fff;
+      cursor: pointer;
+      transition: transform .2s, border-color .2s, background .2s;
+      touch-action: manipulation;
+    }
+    .choice:hover { transform: translateY(-1px); }
+    .choice.ok { border-color: var(--ok); background: #f0fdf4; }
+    .choice.bad { border-color: var(--warn); background: #fffbeb; }
+    .shake { animation: shake .22s linear 2; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+
+    .progress { height: 12px; background: #f4e4d8; border-radius: 99px; overflow: hidden; }
+    .bar { height: 100%; width: 0%; background: linear-gradient(90deg, #2B7A78, #22c55e); transition: width .2s; }
+
+    .syllable {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 64px; min-height: 52px; padding: .5rem 1rem;
+      border-radius: 12px; font-size: 1.5rem; font-weight: 800;
+      touch-action: none; cursor: grab; user-select: none;
+    }
+    .de { background: var(--de-bg); border: 2px solid var(--de-bd); color: var(--de-tx); }
+    .do { background: var(--do-bg); border: 2px solid var(--do-bd); color: var(--do-tx); }
+    .sy-me { background: #dcfce7; border: 2px solid #22c55e; color: #166534; }
+    .sy-na { background: #ede9fe; border: 2px solid #8b5cf6; color: #5b21b6; }
+    .sy-ni { background: #fce7f3; border: 2px solid #ec4899; color: #9d174d; }
+    .sy-u { background: #fef3c7; border: 2px solid #f59e0b; color: #92400e; }
+    .sy-va { background: #fee2e2; border: 2px solid #ef4444; color: #991b1b; }
+
+    .drag-zone { display: flex; gap: .5rem; flex-wrap: wrap; padding: .6rem; border: 2px dashed #dfc8b9; border-radius: 12px; }
+    .slots { display: grid; grid-template-columns: repeat(2, minmax(90px, 1fr)); gap: .7rem; margin: .8rem 0; }
+    .slot {
+      min-height: 76px; border: 3px dashed #c9b8ab; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; font-weight: 800; background: #fff;
+    }
+    .slot.over { border-color: var(--accent); background: #eefbf9; }
+    .slot.filled { border-style: solid; }
+
+    .feedback {
+      min-height: 40px;
+      margin-top: .5rem;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    .sentence-slots { display: grid; gap: .6rem; grid-template-columns: repeat(4, minmax(80px, 1fr)); }
+    .sentence-slots.support { grid-template-columns: repeat(3, minmax(80px, 1fr)); }
+    .word-card {
+      min-height: 52px;
+      padding: .5rem .8rem;
+      border-radius: 12px;
+      border: 2px solid #d7cbc1;
+      background: #fff;
+      font-weight: 800;
+      touch-action: none;
+      cursor: grab;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: var(--touch-size);
-      min-width: var(--touch-size);
-      border-radius: 9999px;
-      padding: 0.75rem 1.25rem;
-      font-weight: 700;
+      margin-right: .4rem;
+      margin-bottom: .4rem;
     }
-    .hero-kicker { background: rgba(255,255,255,0.16); }
-    .hero-badge { background: rgba(255,255,255,0.22); }
-    .hero-grid { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.9fr); margin-top: 1.25rem; position: relative; z-index: 1; }
-    .hero-copy h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.05; margin: 0.4rem 0 0.7rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
-    .hero-copy p { margin: 0.4rem 0; max-width: 45rem; }
-    .word-scene { background: rgba(255,255,255,0.14); border: 2px solid rgba(255,255,255,0.28); border-radius: 24px; padding: 1rem; backdrop-filter: blur(4px); }
-    .word-scene .emoji { font-size: clamp(3rem, 10vw, 5.5rem); line-height: 1; }
-    .meta-row, .objective-row, .syllable-row, .page-switch, .section-nav { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-    .meta-row { margin-top: 1rem; }
-    .meta-chip { background: rgba(255,255,255,0.18); }
-    .objective-row { margin: 1rem 0 0; padding: 0; list-style: none; }
-    .objective-row li { background: rgba(255,255,255,0.22); border-radius: 9999px; padding: 0.75rem 1rem; font-weight: 700; min-height: var(--touch-size); display: inline-flex; align-items: center; }
-    .word-spotlight { margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1.1fr 1fr; }
-    .spot-card { background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 70%, white); border-radius: 24px; padding: 1rem; box-shadow: var(--shadow); }
-    .spot-card h2 { margin: 0 0 0.75rem; font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; }
-    .spot-card .word-display { font-size: clamp(2.4rem, 7vw, 3.8rem); font-weight: 800; color: var(--primary); letter-spacing: 0.05em; text-transform: uppercase; }
-    .spot-card .mission { margin-top: 0.75rem; }
-    .syllable-row { margin-top: 1rem; }
-    .syllable-token, .syllable-chip {
-      min-height: var(--touch-size);
-      min-width: var(--touch-size);
-      border-radius: 12px;
-      border: none;
-      color: white;
-      font-weight: 800;
-      font-size: clamp(1.5rem, 4vw, 2rem);
-      padding: 0.55rem 1rem;
-      background: var(--chip, var(--primary));
-      box-shadow: var(--shadow);
+
+    .maker {
+      background: #E8F5E9;
+      border: 2px solid #22c55e;
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-top: 1rem;
     }
-    .page-switch { margin: 1.2rem 0 0.5rem; }
-    .page-link {
-      text-decoration: none;
-      background: var(--surface);
-      color: var(--text);
-      border: 2px solid color-mix(in srgb, var(--primary) 28%, white);
-      border-radius: 18px;
-      padding: 0.85rem 1rem;
-      min-height: var(--touch-size);
-      display: flex;
-      gap: 0.75rem;
-      align-items: center;
-      justify-content: space-between;
-      flex: 1 1 200px;
-      box-shadow: var(--shadow);
-      font-weight: 700;
+    .maker-grid { display: grid; gap: .8rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .maker-card { border-left: 6px solid #22c55e; background: #fff; border-radius: 12px; padding: .9rem; }
+
+    .assessment {
+      background: #FFF3E0;
+      border: 2px solid #f59e0b;
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-top: 1rem;
     }
-    .page-link.is-current { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
-    .section-nav { position: sticky; top: 0; z-index: 10; padding: 0.85rem 0 1rem; background: linear-gradient(180deg, var(--bg), rgba(255,248,240,0.88)); backdrop-filter: blur(6px); }
-    .nav-pill { text-decoration: none; background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 24%, white); padding: 0.55rem 1rem; }
-    .content { display: grid; gap: 1.1rem; }
-    .unit-card { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 35%, white); border-radius: 24px; padding: 1.15rem; box-shadow: var(--shadow); }
-    .unit-head { display: flex; gap: 1rem; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
-    .unit-head h2 { margin: 0.2rem 0 0; font-size: clamp(1.45rem, 4vw, 2.1rem); font-weight: 800; }
-    .unit-kicker { color: color-mix(in srgb, var(--primary) 80%, black); font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.9rem; }
-    .unit-badge { background: color-mix(in srgb, var(--accent) 22%, var(--surface)); border: 2px solid var(--accent); border-radius: 9999px; padding: 0.65rem 1rem; font-weight: 800; min-height: var(--touch-size); display: inline-flex; align-items: center; }
-    .unit-grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.95fr); margin-top: 1rem; }
-    .unit-copy p { margin: 0.65rem 0; }
-    .unit-flow { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 1rem; }
-    .unit-flow > div, .play-card, .maker-box, .teacher-card { background: color-mix(in srgb, var(--bg) 70%, white); border-radius: 18px; padding: 0.95rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
-    .play-label { font-weight: 800; margin: 0 0 0.8rem; }
-    .pill-btn, .choice-btn, .check-card, .prompt-card {
-      min-height: var(--touch-size);
-      min-width: var(--touch-size);
-      border-radius: 9999px;
-      border: 2px solid transparent;
-      padding: 0.75rem 1.2rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+    .ass-item { padding: .5rem 0; border-bottom: 1px solid #f8c58b; }
+    .ass-item:last-child { border-bottom: 0; }
+    .scale { font-size: .95rem; }
+
+    .curriculum {
+      margin-top: 1rem;
+      background: #F3E5F5;
+      border: 2px solid #a855f7;
+      border-radius: var(--radius);
+      padding: 1rem;
     }
-    .pill-btn:hover, .choice-btn:hover, .check-card:hover, .prompt-card:hover, .page-link:hover { transform: scale(1.05); box-shadow: 0 10px 24px rgba(0,0,0,0.12); }
-    .pill-btn:active, .choice-btn:active, .check-card:active, .prompt-card:active, .page-link:active { transform: scale(0.97); }
-    .pill-btn { background: var(--primary); color: white; }
-    .choice-row, .check-grid, .prompt-grid, .compose-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-    .choice-btn, .check-card, .prompt-card { background: var(--surface); color: var(--text); border-color: color-mix(in srgb, var(--primary) 22%, white); }
-    .choice-btn.is-right, .check-card.is-done { background: var(--correct-bg); border-color: var(--correct); color: #166534; }
-    .choice-btn.is-wrong { background: var(--incorrect-bg); border-color: var(--incorrect); color: #92400e; }
-    .feedback, .helper-text { margin: 0.85rem 0 0; font-weight: 700; }
-    .feedback { min-height: 1.4em; }
-    .compose-output, .phrase-card, .cloze-word { min-height: 72px; border-radius: 18px; background: var(--surface); border: 2px dashed color-mix(in srgb, var(--primary) 35%, white); display: grid; place-items: center; font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800; color: var(--primary); padding: 0.9rem; margin-top: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
-    .phrase-card { text-transform: none; font-size: 1.3rem; color: var(--text); }
-    .phrase-input { width: 100%; margin-top: 0.85rem; border-radius: 18px; border: 2px solid color-mix(in srgb, var(--primary) 25%, white); padding: 0.9rem 1rem; min-height: 120px; background: #fff; }
-    .diff-switcher { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; }
-    .diff-btn { min-height: var(--touch-size); min-width: var(--touch-size); border-radius: 9999px; border: 2px solid color-mix(in srgb, var(--primary) 28%, white); background: var(--surface); padding: 0.7rem 1rem; font-weight: 700; cursor: pointer; }
-    .diff-btn.is-active { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
-    .diff-panel { display: none; background: color-mix(in srgb, var(--bg) 72%, white); border-radius: 18px; padding: 0.95rem; margin-top: 0.8rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
-    .diff-panel.is-active { display: block; }
-    .teacher-guide { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 30%, white); border-radius: 24px; padding: 0.9rem 1rem; box-shadow: var(--shadow); }
-    .teacher-guide summary { min-height: var(--touch-size); display: flex; align-items: center; cursor: pointer; font-weight: 800; font-size: 1.2rem; }
-    .teacher-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 1rem; }
-    .teacher-card-wide { grid-column: 1 / -1; }
-    .teacher-card h3 { margin-top: 0; }
-    .footer { text-align: center; padding: 1.4rem 0 0; font-weight: 700; color: color-mix(in srgb, var(--text) 72%, white); }
+
+    .toast {
+      position: fixed; right: 10px; bottom: 10px;
+      background: #111827; color: #fff;
+      padding: .6rem .8rem; border-radius: 10px;
+      font-size: .95rem; opacity: 0; transform: translateY(12px);
+      transition: opacity .2s, transform .2s;
+      z-index: 60;
+    }
+    .toast.show { opacity: .96; transform: translateY(0); }
+
+    .ghost {
+      position: fixed;
+      z-index: 80;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 10px 20px rgba(0,0,0,.2);
+    }
+
+    #fx {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    .small { font-size: .92rem; }
     .hidden { display: none !important; }
-    @media (max-width: 900px) {
-      .hero-grid, .word-spotlight, .unit-grid, .unit-flow, .teacher-grid { grid-template-columns: 1fr; }
-      .section-nav { position: static; }
+    .success-line { color: #166534; font-weight: 800; }
+
+    @media (max-width: 768px) {
+      body { font-size: 16px; }
+      .wrap { padding: .5rem; }
+      .story { grid-template-columns: 1fr; }
+      .sentence-slots { grid-template-columns: repeat(2, minmax(80px, 1fr)); }
+      .sentence-slots.support { grid-template-columns: repeat(3, minmax(70px, 1fr)); }
     }
-    @media (max-width: 640px) {
-      body { font-size: 18px; }
-      .shell { padding: 0.75rem 0.75rem 2.4rem; }
-      .hero { padding: 1rem; border-radius: 22px; }
-      .hero-copy h1 { font-size: clamp(2rem, 9vw, 3rem); }
-      .page-link { flex-basis: 100%; }
-      .objective-row li, .meta-chip, .hero-kicker, .hero-badge, .nav-pill { width: 100%; justify-content: center; }
-      .unit-card, .spot-card, .teacher-guide { border-radius: 20px; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after { animation: none !important; transition: none !important; }
+
+    @media (min-width: 1500px) {
+      .wrap { max-width: 1200px; }
+      h1 { font-size: 2.3rem; }
+      h2 { font-size: 1.8rem; }
     }
   </style>
 </head>
-<body data-page-variant="index.html" data-visible-units="1,2,3,4">
-  <a href="#main" class="skip-link">Ir para o conteúdo</a>
-  <div class="shell">
-    <header class="hero">
-      <div class="hero-top">
-        <span class="hero-kicker">M28P #4</span>
-        <span class="hero-badge">Rota completa</span>
-      </div>
-      <div class="hero-grid">
-        <div class="hero-copy">
-          <p>Descobrir, ler e brincar</p>
-          <h1>Dedo</h1>
-          <p>Percurso completo com foco na descoberta da palavra, nas sílabas e na confiança ao ler.</p>
-          <div class="meta-row">
-            <span class="meta-chip">☝️ Palavra 4</span>
-            <span class="meta-chip">1.º ano (6-7 anos)</span>
-            <span class="meta-chip">45 min</span>
-          </div>
-          <ul class="objective-row"><li>Reconhecer globalmente a palavra &#x27;dedo&#x27; e associá-la à imagem e ao tema corpo humano</li><li>Segmentar &#x27;dedo&#x27; nas sílabas &#x27;de&#x27; e &#x27;do&#x27;, identificando cada sílaba com a sua cor</li><li>Recombinar as sílabas aprendidas (de, do, me, na, ni, u, va) para formar novas palavras (&#x27;medo&#x27;, &#x27;nado&#x27;)</li></ul>
-        </div>
-        <aside class="word-scene" aria-hidden="true">
-          <div class="emoji">☝️</div>
-          <p><strong>Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</strong></p>
-          <p>Paleta própria, leitura em pt-PT AO90 e navegação pensada para toque.</p>
-          <p>Esta página trabalha as unidades 1, 2, 3, 4.</p>
-        </aside>
-      </div>
-    </header>
+<body>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="wrap">
+  <header>
+    <h1>Palavra "dedo" - Método das 28 Palavras (ordem 4)</h1>
+    <div class="meta">
+      <span class="badge">Ano: 6 anos (1.º ano)</span>
+      <span class="badge">Duração: 45 minutos</span>
+      <span class="badge">Tema: Corpo humano</span>
+    </div>
+    <div class="goals">
+      <strong>Objetivos:</strong>
+      <ul>
+        <li>Reconhecer globalmente a palavra "dedo" e associá-la à imagem.</li>
+        <li>Segmentar "dedo" nas sílabas "de" e "do" com cores.</li>
+        <li>Recombinar sílabas para formar novas palavras.</li>
+        <li>Ler e completar a frase "O dedo aponta.".</li>
+      </ul>
+    </div>
+  </header>
 
-    <div class="page-switch" aria-label="Outras páginas desta palavra"><a class="page-link is-current" href="./index.html">Página 1<span>Atual</span></a><a class="page-link" href="./page-2.html">Página 2<span>Abrir</span></a><a class="page-link" href="./page-3.html">Página 3<span>Abrir</span></a><a class="page-link" href="./page-4.html">Página 4<span>Abrir</span></a></div>
+  <section class="unit" id="u1">
+    <h2>1) Abertura contextual: o dedo e o corpo humano</h2>
+    <p class="small">Interacção para descobrir a ligação entre objecto real e palavra escrita.</p>
+    <div class="tabs" role="tablist" aria-label="Nível Unit 1">
+      <button class="tab" data-unit="u1" data-level="support" role="tab" aria-label="Apoio">🟢 Apoio</button>
+      <button class="tab active" data-unit="u1" data-level="middle" role="tab" aria-label="Intermédio">🟡 Intermédio</button>
+      <button class="tab" data-unit="u1" data-level="challenge" role="tab" aria-label="Desafio">🔴 Desafio</button>
+    </div>
 
-    <section class="word-spotlight" aria-label="Destaque da palavra">
-      <article class="spot-card">
-        <h2>Palavra em destaque</h2>
-        <div class="word-display">Dedo</div>
-        <p class="mission">dedo</p>
-        <div class="compose-actions">
-          <button class="pill-btn speak-btn" data-speak="Dedo">Ouvir a palavra</button>
+    <div class="level-panel" data-unit="u1" data-level="support">
+      <div class="story">
+        <div class="scene" aria-label="Cena de criança a apontar">
+          <div class="window"></div><div class="bird">🐦</div><div class="kid">🧒</div><div class="arrow" style="opacity:1">➡️</div>
+          <div class="word-dedo show" id="u1-word-support">dedo</div>
         </div>
+        <div class="card"><p><strong>História:</strong> O dedo aponta.</p><p>Aponta para a palavra e diz em voz alta.</p></div>
+      </div>
+    </div>
+
+    <div class="level-panel active" data-unit="u1" data-level="middle">
+      <div class="story">
+        <div class="scene" aria-label="Criança aponta para janela">
+          <div class="window"></div><div class="bird">🐦</div><div class="kid">🧒</div>
+          <div class="word-dedo" id="u1-word-mid">dedo</div>
+        </div>
+        <div class="card">
+          <p>O Tomás viu um pássaro na janela. Apontou com o dedo. O dedo aponta.</p>
+          <button class="btn" id="u1-show" aria-label="Mostrar palavra">Mostrar palavra</button>
+          <div class="feedback" id="u1-fb"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="level-panel" data-unit="u1" data-level="challenge">
+      <div class="story">
+        <div class="scene" aria-label="Criança aponta para janela">
+          <div class="window"></div><div class="bird">🐦</div><div class="kid">🧒</div>
+          <div class="word-dedo" id="u1-word-hard">dedo</div>
+        </div>
+        <div class="card">
+          <label for="u1-guess"><strong>Tenta escrever:</strong> como achas que se escreve?</label>
+          <input id="u1-guess" aria-label="Tentativa de escrita" style="width:100%;min-height:44px;font-size:1.1rem;margin:.4rem 0;padding:.4rem;border:2px solid #d1c3b7;border-radius:10px;">
+          <button class="btn" id="u1-reveal" aria-label="Revelar palavra">Revelar e comparar</button>
+          <div class="feedback" id="u1-fb-hard"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="unit" id="u2">
+    <h2>2) Reconhecimento global da palavra "dedo"</h2>
+    <div class="tabs" role="tablist" aria-label="Nível Unit 2">
+      <button class="tab" data-unit="u2" data-level="support" role="tab">🟢 Apoio</button>
+      <button class="tab active" data-unit="u2" data-level="middle" role="tab">🟡 Intermédio</button>
+      <button class="tab" data-unit="u2" data-level="challenge" role="tab">🔴 Desafio</button>
+    </div>
+    <div class="card">
+      <div id="u2-img" style="font-size:2.6rem">👉</div>
+      <div class="small" id="u2-round">Ronda 1/3</div>
+      <div class="progress"><div class="bar" id="u2-bar"></div></div>
+      <div class="choice-grid" id="u2-choices" style="margin-top:.7rem"></div>
+      <div class="feedback" id="u2-fb"></div>
+      <button class="btn secondary" id="u2-reset" aria-label="Reiniciar ronda">Reiniciar</button>
+    </div>
+  </section>
+
+  <section class="unit" id="u3">
+    <h2>3) Segmentação silábica: de-do</h2>
+    <div class="tabs" role="tablist" aria-label="Nível Unit 3">
+      <button class="tab" data-unit="u3" data-level="support" role="tab">🟢 Apoio</button>
+      <button class="tab active" data-unit="u3" data-level="middle" role="tab">🟡 Intermédio</button>
+      <button class="tab" data-unit="u3" data-level="challenge" role="tab">🔴 Desafio</button>
+    </div>
+
+    <div class="level-panel" data-unit="u3" data-level="support">
+      <div class="card">
+        <p style="font-size:2rem;font-weight:800"><span class="de" style="cursor:default">de</span><span style="padding:0 .2rem">|</span><span class="do" style="cursor:default">do</span></p>
+        <button class="btn" id="u3-clap-support" aria-label="Bater palmas">🤲 Palmas</button>
+        <span id="u3-claps-support" class="badge" style="background:#2B7A78;margin-left:.4rem">0/2</span>
+        <div class="slots" style="margin-top:.8rem">
+          <div class="slot" id="u3s1" data-accept="de" aria-label="Slot 1, sílaba de" style="background:#eff6ff"></div>
+          <div class="slot" id="u3s2" data-accept="do" aria-label="Slot 2, sílaba do" style="background:#fff7ed"></div>
+        </div>
+        <div class="drag-zone" id="u3-pool-support">
+          <div class="syllable de draggable" data-token="de" aria-label="Sílaba de">de</div>
+          <div class="syllable do draggable" data-token="do" aria-label="Sílaba do">do</div>
+        </div>
+        <div class="feedback" id="u3-fb-support"></div>
+      </div>
+    </div>
+
+    <div class="level-panel active" data-unit="u3" data-level="middle">
+      <div class="card">
+        <p style="font-size:2.2rem;font-weight:800">dedo</p>
+        <button class="btn" id="u3-clap" aria-label="Bater palmas">🤲 Palmas</button>
+        <span id="u3-claps" class="badge" style="background:#2B7A78;margin-left:.4rem">0/2</span>
+        <div class="slots">
+          <div class="slot" id="u3m1" data-accept="de" aria-label="Slot 1"></div>
+          <div class="slot" id="u3m2" data-accept="do" aria-label="Slot 2"></div>
+        </div>
+        <div class="drag-zone" id="u3-pool-mid">
+          <div class="syllable de draggable" data-token="de" aria-label="Sílaba de">de</div>
+          <div class="syllable do draggable" data-token="do" aria-label="Sílaba do">do</div>
+        </div>
+        <div class="feedback" id="u3-fb"></div>
+      </div>
+    </div>
+
+    <div class="level-panel" data-unit="u3" data-level="challenge">
+      <div class="card">
+        <p>Escreve as sílabas por ordem para formar a palavra.</p>
+        <div class="slots">
+          <input id="u3c1" aria-label="Sílaba 1" placeholder="sílaba 1" style="min-height:54px;font-size:1.2rem;border:2px solid #cab8ac;border-radius:10px;padding:.4rem;">
+          <input id="u3c2" aria-label="Sílaba 2" placeholder="sílaba 2" style="min-height:54px;font-size:1.2rem;border:2px solid #cab8ac;border-radius:10px;padding:.4rem;">
+        </div>
+        <button class="btn" id="u3-check-hard" aria-label="Verificar sílabas">Verificar</button>
+        <div class="feedback" id="u3-fb-hard"></div>
+        <table style="width:100%;margin-top:.7rem;border-collapse:collapse">
+          <tr><th style="text-align:left;border-bottom:2px solid #d8c7ba">Palavra</th><th style="text-align:left;border-bottom:2px solid #d8c7ba">N.º de sílabas</th></tr>
+          <tr><td>uva</td><td><input aria-label="Sílabas de uva" style="min-height:44px;width:90px"></td></tr>
+          <tr><td>menina</td><td><input aria-label="Sílabas de menina" style="min-height:44px;width:90px"></td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="unit" id="u4">
+    <h2>4) Recombinação silábica</h2>
+    <div class="tabs" role="tablist" aria-label="Nível Unit 4">
+      <button class="tab" data-unit="u4" data-level="support" role="tab">🟢 Apoio</button>
+      <button class="tab active" data-unit="u4" data-level="middle" role="tab">🟡 Intermédio</button>
+      <button class="tab" data-unit="u4" data-level="challenge" role="tab">🔴 Desafio</button>
+    </div>
+    <div class="card">
+      <div class="drag-zone" id="u4-pool"></div>
+      <div class="slots">
+        <div class="slot" id="u4s1" aria-label="Sílaba 1"></div>
+        <div class="slot" id="u4s2" aria-label="Sílaba 2"></div>
+      </div>
+      <div style="font-size:2rem;font-weight:800" id="u4-word">_ _</div>
+      <div class="feedback" id="u4-fb"></div>
+      <button class="btn secondary" id="u4-clear" aria-label="Tentar outra combinação">Tentar outra combinação</button>
+      <h3 style="margin-top:.7rem">Palavras que descobri</h3>
+      <ul id="u4-found"></ul>
+    </div>
+  </section>
+
+  <section class="unit" id="u5">
+    <h2>5) Leitura e escrita guiada: completar "dedo"</h2>
+    <div class="tabs" role="tablist" aria-label="Nível Unit 5">
+      <button class="tab" data-unit="u5" data-level="support" role="tab">🟢 Apoio</button>
+      <button class="tab active" data-unit="u5" data-level="middle" role="tab">🟡 Intermédio</button>
+      <button class="tab" data-unit="u5" data-level="challenge" role="tab">🔴 Desafio</button>
+    </div>
+    <div class="card">
+      <div class="small" id="u5-progress">Variação 1/3</div>
+      <div class="progress"><div class="bar" id="u5-bar"></div></div>
+      <div style="display:flex;gap:.8rem;align-items:center;margin-top:.7rem;flex-wrap:wrap">
+        <div id="u5-img" style="font-size:2.3rem">👉</div>
+        <div id="u5-prompt" style="font-size:2.1rem;font-weight:800">de__</div>
+      </div>
+      <div id="u5-options" class="choice-grid" style="margin-top:.7rem"></div>
+      <div id="u5-input-wrap" class="hidden" style="margin-top:.7rem">
+        <input id="u5-input" aria-label="Escreve a sílaba" placeholder="Escreve a sílaba" style="min-height:48px;font-size:1.1rem;padding:.4rem;border:2px solid #cab8ac;border-radius:10px">
+        <button class="btn" id="u5-submit">Verificar</button>
+      </div>
+      <div class="feedback" id="u5-fb"></div>
+      <button class="btn secondary" id="u5-next" aria-label="Próxima variação">Próximo</button>
+    </div>
+  </section>
+
+  <section class="unit" id="u6">
+    <h2>6) Frase simples: ordenar e ler "O dedo aponta."</h2>
+    <div class="tabs" role="tablist" aria-label="Nível Unit 6">
+      <button class="tab" data-unit="u6" data-level="support" role="tab">🟢 Apoio</button>
+      <button class="tab active" data-unit="u6" data-level="middle" role="tab">🟡 Intermédio</button>
+      <button class="tab" data-unit="u6" data-level="challenge" role="tab">🔴 Desafio</button>
+    </div>
+    <div class="card">
+      <div style="font-size:2.2rem">🧒👉</div>
+      <div id="u6-pool" style="margin-top:.6rem"></div>
+      <div class="sentence-slots" id="u6-slots"></div>
+      <div class="feedback" id="u6-fb"></div>
+      <button class="btn secondary" id="u6-read" aria-label="Ouvir de novo">Ouvir de novo</button>
+      <div id="u6-extra" class="hidden" style="margin-top:.6rem">
+        <label for="u6-own">Frase original com "dedo":</label>
+        <input id="u6-own" aria-label="Frase original" style="width:100%;min-height:48px;font-size:1.1rem;padding:.4rem;border:2px solid #cab8ac;border-radius:10px">
+      </div>
+    </div>
+  </section>
+
+  <section class="unit" id="u7">
+    <h2>7) Mini-avaliação formativa</h2>
+    <div class="tabs" role="tablist" aria-label="Nível Unit 7">
+      <button class="tab" data-unit="u7" data-level="support" role="tab">🟢 Apoio</button>
+      <button class="tab active" data-unit="u7" data-level="middle" role="tab">🟡 Intermédio</button>
+      <button class="tab" data-unit="u7" data-level="challenge" role="tab">🔴 Desafio</button>
+    </div>
+    <div class="card">
+      <div id="u7-step">Etapa 1/4</div>
+      <div class="progress"><div class="bar" id="u7-bar"></div></div>
+      <div id="u7-stage" style="margin-top:.7rem"></div>
+      <div class="feedback" id="u7-fb"></div>
+      <button class="btn secondary hidden" id="u7-results">Ver resultados</button>
+      <div id="u7-summary" class="hidden" style="margin-top:.6rem"></div>
+    </div>
+  </section>
+
+  <section class="maker">
+    <h2>🛠️ Desafios Maker</h2>
+    <div class="maker-grid">
+      <article class="maker-card">
+        <h3>Unplugged: sílabas com os dedos</h3>
+        <p>Levanta um dedo por sílaba de "de-do". Em pares, testa: "menina", "uva", "menino".</p>
+        <p class="small"><strong>Materiais:</strong> mãos, cartão (opcional), lápis. <strong>Grupo:</strong> 2.</p>
       </article>
-      <article class="spot-card">
-        <h2>Sílabas</h2>
-        <div class="syllable-row"><span class="syllable-token" style="--chip:#EA580C">de</span><span class="syllable-token" style="--chip:#2563EB">do</span></div>
-        <p class="mission">Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</p>
+      <article class="maker-card">
+        <h3>Unplugged: mural de frases</h3>
+        <p>Cria uma frase com "dedo" em cartão/post-it e afixa no mural da turma.</p>
+        <p class="small"><strong>Materiais:</strong> cartões A6/post-its, caneta de feltro. <strong>Grupo:</strong> 2.</p>
       </article>
-    </section>
+    </div>
+  </section>
 
-    <nav class="section-nav" aria-label="Navegação das unidades"><a class="nav-pill" href="#u1-abertura-contextual-o-dedo-e-o-corpo-humano">1</a><a class="nav-pill" href="#u2-reconhecimento-global-da-palavra-dedo">2</a><a class="nav-pill" href="#u3-segmentação-silábica-de-do">3</a><a class="nav-pill" href="#u4-recombinação-silábica-formar-novas-palavras-com-de-do-e-sílabas-anteriores">4</a></nav>
+  <section class="assessment">
+    <h2>📝 Mini-avaliação observável</h2>
+    <div class="ass-item">1) Reconhece "dedo" entre palavras parecidas.</div>
+    <div class="ass-item">2) Indica que "dedo" tem 2 sílabas.</div>
+    <div class="ass-item">3) Reconstrói "de" + "do" pela ordem correta.</div>
+    <div class="ass-item">4) Completa a palavra "dedo" em variações.</div>
+    <div class="ass-item">5) Ordena e lê "O dedo aponta."</div>
+    <p class="scale"><strong>Escala:</strong> ⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</p>
+  </section>
 
-    <main id="main" class="content">
-      
-    <section id="u1-abertura-contextual-o-dedo-e-o-corpo-humano" class="unit-card">
-      <div class="unit-head">
-        <div>
-          <span class="unit-kicker">Unidade 1</span>
-          <h2>Abertura contextual: o dedo e o corpo humano</h2>
-        </div>
-        <span class="unit-badge">Em destaque</span>
-      </div>
-      <div class="unit-grid">
-        <article class="unit-copy">
-          <p>O aluno é introduzido à palavra &#x27;dedo&#x27; através de uma micro-história e imagem contextualizada: uma criança aponta para a janela com o dedo indicador. A palavra aparece escrita junto da imagem. O objetivo é ativar conhecimento prévio sobre partes do corpo e criar um contexto narrativo concreto para a palavra.</p>
-          <div class="unit-flow">
-            <div>
-              <h3>O que vais fazer</h3>
-              <p>Imagem grande de uma criança a apontar com o dedo indicador para uma janela onde se vê um pássaro; texto da micro-história em caixa de texto: &#x27;O Tomás viu um pássaro na janela. Apontou com o dedo. O dedo aponta.&#x27;; botão &#x27;Mostrar palavra&#x27; revela a palavra &#x27;dedo&#x27; em destaque junto ao dedo na imagem, com tipografia grande sem serifa.</p>
-            </div>
-            <div>
-              <h3>O que observar</h3>
-              <p>O aluno aponta para a palavra &#x27;dedo&#x27; no ecrã e diz-a em voz alta quando solicitado pelo professor; identifica o dedo na imagem.</p>
-            </div>
-          </div>
-          <p>Clicar em &#x27;Mostrar palavra&#x27; → palavra &#x27;dedo&#x27; aparece em destaque junto ao dedo na imagem com animação suave de fade-in; palavra permanece visível.</p>
-          
-        </article>
-        <aside class="unit-play">
-        <div class="play-card">
-          <button class="pill-btn reveal-btn" data-target="story-1">Mostrar a história</button>
-          <button class="pill-btn speak-btn" data-speak="dedo">Ouvir</button>
-          <div id="story-1" class="reveal-box hidden"><p>O aluno é introduzido à palavra &#x27;dedo&#x27; através de uma micro-história e imagem contextualizada: uma criança aponta para a janela com o dedo indicador. A palavra aparece escrita junto da imagem. O objetivo é ativar conhecimento prévio sobre partes do corpo e criar um contexto narrativo concreto para a palavra.</p></div>
-        </div>
-        </aside>
-      </div>
-      <div class="diff-switcher">
-        <button class="diff-btn is-active" data-diff="support-1">🟢 Com ajuda</button>
-        <button class="diff-btn" data-diff="standard-1">🟡 Objetivo</button>
-        <button class="diff-btn" data-diff="challenge-1">🔴 Desafio</button>
-      </div>
-      <div class="diff-panels">
-        <div id="support-1" class="diff-panel is-active"><p>🟢 A palavra &#x27;dedo&#x27; aparece desde o início junto à imagem, sem necessidade de revelar; texto da história reduzido a 1 frase (&#x27;O dedo aponta.&#x27;); imagem de grande dimensão com seta a apontar para o dedo.</p></div>
-        <div id="standard-1" class="diff-panel"><p>🟡 Sequência normal: imagem → micro-história com 3 frases → botão para revelar palavra.</p></div>
-        <div id="challenge-1" class="diff-panel"><p>🔴 Antes de revelar a palavra, o aluno tenta escrever ou ditar como acha que se escreve &#x27;dedo&#x27;; após revelar, compara com a sua tentativa.</p></div>
-      </div>
-    </section>
-    
-    <section id="u2-reconhecimento-global-da-palavra-dedo" class="unit-card">
-      <div class="unit-head">
-        <div>
-          <span class="unit-kicker">Unidade 2</span>
-          <h2>Reconhecimento global da palavra &#x27;dedo&#x27;</h2>
-        </div>
-        <span class="unit-badge">Em destaque</span>
-      </div>
-      <div class="unit-grid">
-        <article class="unit-copy">
-          <p>O aluno reconhece a palavra &#x27;dedo&#x27; entre outras palavras visualmente semelhantes, reforçando a leitura global. Treino de discriminação visual da forma da palavra com distratores fonologicamente próximos.</p>
-          <div class="unit-flow">
-            <div>
-              <h3>O que vais fazer</h3>
-              <p>Imagem do dedo a apontar no topo; 3 cartões com palavras escritas em grande em baixo (&#x27;dedo&#x27;, &#x27;dado&#x27;, &#x27;dono&#x27; na primeira ronda); feedback imediato após seleção: ✓ verde claro ou ✗ âmbar; contador de rondas (1/3); barra de progresso.</p>
-            </div>
-            <div>
-              <h3>O que observar</h3>
-              <p>O aluno seleciona corretamente a palavra &#x27;dedo&#x27; nas 3 rondas de opções com distratores progressivamente mais semelhantes.</p>
-            </div>
-          </div>
-          <p>Clicar num cartão → feedback imediato (✓ verde ou ✗ âmbar com leve vibração); se correto, avança para próxima ronda; se errado, cartão treme e permite nova tentativa; após 3 rondas, resumo visual.</p>
-          
-        </article>
-        <aside class="unit-play">
-        <div class="play-card">
-          <p class="play-label">Escolhe a palavra certa.</p>
-          <div class="choice-row">
-            <button class="choice-btn" data-answer="dedo" data-choice="dedo">dedo</button><button class="choice-btn" data-answer="dedo" data-choice="uva">uva</button><button class="choice-btn" data-answer="dedo" data-choice="sapato">sapato</button>
-          </div>
-          <p class="feedback" aria-live="polite">Procura a palavra completa.</p>
-        </div>
-        </aside>
-      </div>
-      <div class="diff-switcher">
-        <button class="diff-btn is-active" data-diff="support-2">🟢 Com ajuda</button>
-        <button class="diff-btn" data-diff="standard-2">🟡 Objetivo</button>
-        <button class="diff-btn" data-diff="challenge-2">🔴 Desafio</button>
-      </div>
-      <div class="diff-panels">
-        <div id="support-2" class="diff-panel is-active"><p>🟢 Apenas 2 opções por ronda (dedo vs. palavra muito diferente como &#x27;uva&#x27;, depois &#x27;menina&#x27;); imagem de apoio sempre visível; apenas 2 rondas.</p></div>
-        <div id="standard-2" class="diff-panel"><p>🟡 3 opções com distratores semelhantes; imagem de apoio disponível; 3 rondas.</p></div>
-        <div id="challenge-2" class="diff-panel"><p>🔴 4 opções incluindo &#x27;dedo&#x27;, &#x27;dado&#x27;, &#x27;dono&#x27;, &#x27;demo&#x27;; sem imagem de apoio; 3 rondas com distratores distintos; após acertar, o aluno explica em voz alta o que é diferente nas outras palavras.</p></div>
-      </div>
-    </section>
-    
-    <section id="u3-segmentação-silábica-de-do" class="unit-card">
-      <div class="unit-head">
-        <div>
-          <span class="unit-kicker">Unidade 3</span>
-          <h2>Segmentação silábica: de-do</h2>
-        </div>
-        <span class="unit-badge">Em destaque</span>
-      </div>
-      <div class="unit-grid">
-        <article class="unit-copy">
-          <p>O aluno divide a palavra &#x27;dedo&#x27; nas suas duas sílabas — &#x27;de&#x27; e &#x27;do&#x27; — através de batimento de palmas e arrastamento de blocos de sílabas. Cada sílaba tem uma cor própria e consistente ao longo de toda a coleção: &#x27;de&#x27; = azul, &#x27;do&#x27; = laranja. O corpo (palmas) e o digital (arrastar) trabalham em conjunto.</p>
-          <div class="unit-flow">
-            <div>
-              <h3>O que vais fazer</h3>
-              <p>Palavra &#x27;dedo&#x27; escrita em grande no topo; abaixo, 2 slots vazios numerados (1, 2); à direita, 2 blocos coloridos arrastáveis: &#x27;de&#x27; em azul, &#x27;do&#x27; em laranja; botão de palmas (ícone 🤲) que ao ser clicado 2x anima as sílabas em sincronismo e incrementa contador; quando slots preenchidos corretamente, palavra recomposta com animação ✓.</p>
-            </div>
-            <div>
-              <h3>O que observar</h3>
-              <p>O aluno bate 2 palmas ao dizer &#x27;de-do&#x27; em voz alta e arrasta os blocos de sílabas para os slots na ordem correta sem pistas adicionais.</p>
-            </div>
-          </div>
-          <p>Clicar botão palmas 1ª vez → sílaba &#x27;de&#x27; pisca azul; 2ª vez → sílaba &#x27;do&#x27; pisca laranja; arrastar bloco &#x27;de&#x27; para slot 1 e &#x27;do&#x27; para slot 2 → palavra recomposta brilha com ✓ e som de sucesso.</p>
-          <div class="maker-box"><p><strong>Desafio maker:</strong> Usando os dedos da mão, o aluno levanta 1 dedo para cada sílaba de &#x27;dedo&#x27; enquanto diz &#x27;de-do&#x27;. Em pares, experimenta com as palavras já aprendidas: quantas sílabas tem &#x27;menina&#x27;? E &#x27;uva&#x27;? E &#x27;menino&#x27;? Regista num cartão com desenhos.</p><p><strong>Materiais:</strong> As mãos do próprio aluno, cartão de registo (opcional), lápis</p><p><strong>Comunicação:</strong> Em pares, cada aluno diz uma palavra e o parceiro conta as sílabas com os dedos; partilham 1 descoberta com a turma.</p></div>
-        </article>
-        <aside class="unit-play">
-        <div class="play-card">
-          <p class="play-label">Toca nas sílabas para formar a palavra.</p>
-          <div class="syllable-bank" data-compose="compose-3"><button class="syllable-chip" style="--chip:#EA580C" data-syllable="de">de</button><button class="syllable-chip" style="--chip:#2563EB" data-syllable="do">do</button></div>
-          <div id="compose-3" class="compose-output">__</div>
-          <div class="compose-actions"><button class="pill-btn clear-compose" data-compose-clear="compose-3">Limpar</button></div>
-        </div>
-        </aside>
-      </div>
-      <div class="diff-switcher">
-        <button class="diff-btn is-active" data-diff="support-3">🟢 Com ajuda</button>
-        <button class="diff-btn" data-diff="standard-3">🟡 Objetivo</button>
-        <button class="diff-btn" data-diff="challenge-3">🔴 Desafio</button>
-      </div>
-      <div class="diff-panels">
-        <div id="support-3" class="diff-panel is-active"><p>🟢 Sílabas já separadas visualmente na palavra &#x27;de|do&#x27; com traço divisório; blocos pré-coloridos com pista de cor no slot correspondente; contador de palmas com animação passo a passo guiada.</p></div>
-        <div id="standard-3" class="diff-panel"><p>🟡 Palavra apresentada completa sem separação; aluno arrasta blocos e bate palmas de forma autónoma.</p></div>
-        <div id="challenge-3" class="diff-panel"><p>🔴 Palavra apresentada sem cor; aluno escreve as sílabas nos slots em vez de arrastar blocos pré-formados; depois testa outras palavras (uva, menina) para comparar número de sílabas e regista numa tabela.</p></div>
-      </div>
-    </section>
-    
-    <section id="u4-recombinação-silábica-formar-novas-palavras-com-de-do-e-sílabas-anteriores" class="unit-card">
-      <div class="unit-head">
-        <div>
-          <span class="unit-kicker">Unidade 4</span>
-          <h2>Recombinação silábica: formar novas palavras com &#x27;de&#x27;, &#x27;do&#x27; e sílabas anteriores</h2>
-        </div>
-        
-      </div>
-      <div class="unit-grid">
-        <article class="unit-copy">
-          <p>O aluno usa as sílabas &#x27;de&#x27; e &#x27;do&#x27; em combinação com sílabas já aprendidas (&#x27;me&#x27;, &#x27;na&#x27;, &#x27;ni&#x27;, &#x27;u&#x27;, &#x27;va&#x27;) para descobrir novas palavras reais: &#x27;medo&#x27; (me+do) e &#x27;nado&#x27; (na+do). Distingue combinações que formam palavras reais das que não existem em português.</p>
-          <div class="unit-flow">
-            <div>
-              <h3>O que vais fazer</h3>
-              <p>Painel superior com sílabas coloridas disponíveis como blocos arrastáveis (cores consistentes com segmentação: de=azul, do=laranja, me=verde, na=roxo, ni=rosa, u=amarelo, va=vermelho); 2 slots centrais grandes; após combinar, palavra formada exibida em grande — verde com ✓ &#x27;Esta palavra existe!&#x27; ou âmbar com ✗ &#x27;Esta combinação não é uma palavra em português.&#x27;; painel lateral &#x27;Palavras que descobri&#x27; acumula sucessos com imagem associada.</p>
-            </div>
-            <div>
-              <h3>O que observar</h3>
-              <p>O aluno forma pelo menos 2 palavras reais (&#x27;medo&#x27; e &#x27;nado&#x27;) e consegue explicar oralmente o que cada uma significa; demonstra compreensão de que as sílabas podem formar palavras diferentes consoante a combinação.</p>
-            </div>
-          </div>
-          <p>Arrastar 2 sílabas para os slots → palavra formada exibida em grande → feedback automático após 1 segundo → botão &#x27;Tentar outra combinação&#x27; limpa os slots e devolve sílabas ao painel.</p>
-          
-        </article>
-        <aside class="unit-play">
-        <div class="play-card">
-          <p class="play-label">Experimenta combinações com as sílabas.</p>
-          <div class="syllable-bank" data-compose="mix-4"><button class="syllable-chip" style="--chip:#EA580C" data-syllable="de">de</button><button class="syllable-chip" style="--chip:#2563EB" data-syllable="do">do</button></div>
-          <div id="mix-4" class="compose-output">__</div>
-          <p class="helper-text">Nem todas as combinações resultam em palavras reais. O importante é experimentar.</p>
-        </div>
-        </aside>
-      </div>
-      <div class="diff-switcher">
-        <button class="diff-btn is-active" data-diff="support-4">🟢 Com ajuda</button>
-        <button class="diff-btn" data-diff="standard-4">🟡 Objetivo</button>
-        <button class="diff-btn" data-diff="challenge-4">🔴 Desafio</button>
-      </div>
-      <div class="diff-panels">
-        <div id="support-4" class="diff-panel is-active"><p>🟢 Apenas 4 sílabas disponíveis (me, na, de, do); dica visual: ao passar o rato/dedo sobre uma combinação, mostra ícone tentativo (✓/✗); palavras-alvo reduzidas a 1 (&#x27;medo&#x27;).</p></div>
-        <div id="standard-4" class="diff-panel"><p>🟡 Todas as 7 sílabas disponíveis; feedback apenas após arrastar e soltar; objetivo: encontrar 2 palavras reais.</p></div>
-        <div id="challenge-4" class="diff-panel"><p>🔴 Objetivo: encontrar 3 ou mais palavras reais; sem nenhuma dica; após encontrar, o aluno regista numa folha as palavras descobertas e desenha ou escreve o significado de cada uma; desafio extra: criar uma frase com &#x27;medo&#x27; e outra com &#x27;nado&#x27;.</p></div>
-      </div>
-    </section>
-    
-      
-    <details class="teacher-guide">
-      <summary>Guia do professor</summary>
-      <div class="teacher-grid">
-        <article class="teacher-card">
-          <h3>Objetivos desta página</h3>
-          <ul><li>Reconhecer globalmente a palavra &#x27;dedo&#x27; e associá-la à imagem e ao tema corpo humano</li><li>Segmentar &#x27;dedo&#x27; nas sílabas &#x27;de&#x27; e &#x27;do&#x27;, identificando cada sílaba com a sua cor</li><li>Recombinar as sílabas aprendidas (de, do, me, na, ni, u, va) para formar novas palavras (&#x27;medo&#x27;, &#x27;nado&#x27;)</li><li>Ler e completar a frase &#x27;O dedo aponta.&#x27; reconhecendo a palavra no contexto</li></ul>
-        </article>
-        <article class="teacher-card">
-          <h3>Materiais</h3>
-          <ul><li>Tablet ou computador com browser (1 por aluno ou par)</li><li>Cartão de palavra &#x27;dedo&#x27; (impresso ou digital)</li><li>Palmas ou instrumento de percussão simples para contar sílabas</li><li>Cartões de papel ou post-its para extensão maker</li><li>Caneta de feltro</li><li>Mural de frases da turma (parede ou placard)</li></ul>
-        </article>
-        <article class="teacher-card">
-          <h3>Organização MEM</h3>
-          <ul><li><strong>Módulos:</strong> Trabalho curricular comparticipado, TEA (Trabalho de Estudo Autónomo)</li><li><strong>Instrumentos:</strong> PIT, cartão de palavra (dedo), mural de frases da turma</li><li><strong>Organização:</strong> individual (exploração e mini-avaliação) → pares (recombinação silábica e maker unplugged) → turma (comunicação da frase no mural)</li></ul>
-        </article>
-        <article class="teacher-card">
-          <h3>Percurso desta página</h3>
-          <ul><li>Unidade 1: Abertura contextual: o dedo e o corpo humano</li><li>Unidade 2: Reconhecimento global da palavra &#x27;dedo&#x27;</li><li>Unidade 3: Segmentação silábica: de-do</li><li>Unidade 4: Recombinação silábica: formar novas palavras com &#x27;de&#x27;, &#x27;do&#x27; e sílabas anteriores</li></ul>
-        </article>
-        <article class="teacher-card teacher-card-wide">
-          <h3>Referências curriculares</h3>
-          <ul><li><strong>Português · 1.º ano</strong>: Escutar para aprender e construir conhecimentos: identificar informação essencial e segmentar oralmente palavras em sílabas</li><li><strong>Português · 1.º ano</strong>: Desenvolver a consciência fonológica: segmentar palavras em sílabas e reconstruir palavras a partir de sílabas</li><li><strong>Português · 1.º ano</strong>: Ler palavras e frases simples; reconhecer globalmente palavras do vocabulário de alta frequência</li><li><strong>Estudo do Meio · 1.º ano</strong>: Reconhecer partes do corpo humano: identificar e nomear partes da mão e do corpo</li></ul>
-          <ul><li>PA-A: Linguagens e textos</li><li>PA-F: Desenvolvimento pessoal e autonomia</li><li>PA-J: Consciência e domínio do corpo</li></ul>
-        </article>
-      </div>
-    </details>
-    
-    </main>
+  <section class="curriculum">
+    <h2 style="color:#7B1FA2">Referências curriculares</h2>
+    <h3>Aprendizagens Essenciais</h3>
+    <ul>
+      <li>Português (1.º ano): identificar informação essencial e segmentar oralmente palavras em sílabas.</li>
+      <li>Português (1.º ano): desenvolver consciência fonológica e reconstruir palavras a partir de sílabas.</li>
+      <li>Português (1.º ano): ler palavras e frases simples; reconhecer palavras frequentes.</li>
+      <li>Estudo do Meio (1.º ano): reconhecer e nomear partes do corpo humano.</li>
+    </ul>
+    <h3>Perfil do Aluno</h3>
+    <ul><li>PA-A: Linguagens e textos</li><li>PA-F: Desenvolvimento pessoal e autonomia</li><li>PA-J: Consciência e domínio do corpo</li></ul>
+  </section>
 
-    <footer class="footer">PageCraft · Método das 28 Palavras · Dedo</footer>
-  </div>
+  <footer style="text-align:center;padding:1rem;font-size:.85rem">Gerado por PageCraft 🛠️</footer>
+</div>
+<div class="toast" id="toast" aria-live="polite"></div>
 
-  <script>
-    const synth = window.speechSynthesis;
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
-    document.querySelectorAll('.reveal-btn').forEach((button) => {
-      button.addEventListener('click', () => {
-        const target = document.getElementById(button.dataset.target);
-        if (!target) return;
-        target.classList.toggle('hidden');
+  let currentUnitLevels = {u1: 'middle', u2: 'middle', u3: 'middle', u4: 'middle', u5: 'middle', u6: 'middle', u7: 'middle'};
+
+  $$('.tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const unit = btn.dataset.unit;
+      const level = btn.dataset.level;
+      currentUnitLevels[unit] = level;
+      $$(`.tab[data-unit="${unit}"]`).forEach(b => b.classList.toggle('active', b === btn));
+      $$(`.level-panel[data-unit="${unit}"]`).forEach(p => p.classList.toggle('active', p.dataset.level === level));
+      resetByUnit(unit);
+    });
+  });
+
+  const toast = $('#toast');
+  function notify(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1300);
+  }
+
+  let audioCtx;
+  function tone(ok = true) {
+    try {
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = 'sine';
+      o.frequency.value = ok ? 880 : 220;
+      g.gain.value = .0001;
+      o.connect(g); g.connect(audioCtx.destination);
+      const t = audioCtx.currentTime;
+      g.gain.exponentialRampToValueAtTime(.12, t + .01);
+      g.gain.exponentialRampToValueAtTime(.0001, t + .18);
+      o.start(t); o.stop(t + .2);
+    } catch (e) {}
+  }
+
+  const canvas = $('#fx');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  function resizeCanvas() { canvas.width = innerWidth; canvas.height = innerHeight; }
+  addEventListener('resize', resizeCanvas); resizeCanvas();
+  function burst(x = innerWidth * .5, y = innerHeight * .35) {
+    for (let i = 0; i < 28; i++) {
+      particles.push({
+        x, y,
+        vx: (Math.random() - .5) * 6,
+        vy: Math.random() * -5 - 1,
+        life: 60 + Math.random() * 30,
+        c: ['#22c55e', '#f59e0b', '#3b82f6', '#ef4444'][Math.floor(Math.random() * 4)]
       });
+    }
+  }
+  function loop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += .12;
+      p.life -= 1;
+      ctx.fillStyle = p.c;
+      ctx.fillRect(p.x, p.y, 6, 6);
+    });
+    particles = particles.filter(p => p.life > 0);
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  function speak(text) {
+    if (!('speechSynthesis' in window)) return;
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'pt-PT';
+    u.rate = .95;
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+  }
+
+  // Pointer drag system (touch + mouse)
+  function installDrag(container, opts) {
+    let ghost = null;
+    let token = null;
+
+    function clearOver() { $$('.slot', container).forEach(s => s.classList.remove('over')); }
+
+    container.addEventListener('pointerdown', (e) => {
+      const d = e.target.closest('.draggable, .word-card, .syllable');
+      if (!d || !container.contains(d)) return;
+      token = d.dataset.token || d.textContent.trim();
+      ghost = d.cloneNode(true);
+      ghost.classList.add('ghost');
+      ghost.style.left = e.clientX + 'px';
+      ghost.style.top = e.clientY + 'px';
+      document.body.appendChild(ghost);
+      d.setPointerCapture && d.setPointerCapture(e.pointerId);
+      e.preventDefault();
     });
 
-    document.querySelectorAll('.speak-btn').forEach((button) => {
-      button.addEventListener('click', () => {
-        if (!synth) return;
-        const utterance = new SpeechSynthesisUtterance(button.dataset.speak || '');
-        utterance.lang = 'pt-PT';
-        synth.cancel();
-        synth.speak(utterance);
-      });
+    container.addEventListener('pointermove', (e) => {
+      if (!ghost) return;
+      ghost.style.left = e.clientX + 'px';
+      ghost.style.top = e.clientY + 'px';
+      clearOver();
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      const s = el && el.closest('.slot');
+      if (s && container.contains(s)) s.classList.add('over');
     });
 
-    document.querySelectorAll('.choice-row').forEach((row) => {
-      const feedback = row.parentElement.querySelector('.feedback');
-      row.querySelectorAll('.choice-btn').forEach((button) => {
-        button.addEventListener('click', () => {
-          row.querySelectorAll('.choice-btn').forEach((item) => item.classList.remove('is-right', 'is-wrong'));
-          const rightAnswer = button.dataset.answer || button.dataset.clozeAnswer || '';
-          if (button.dataset.choice === rightAnswer) {
-            button.classList.add('is-right');
-            if (feedback) feedback.textContent = 'Muito bem!';
+    container.addEventListener('pointerup', (e) => {
+      if (!ghost) return;
+      clearOver();
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      const s = el && el.closest('.slot');
+      if (s && container.contains(s)) {
+        s.textContent = token;
+        s.dataset.value = token;
+        s.classList.add('filled');
+        opts && opts.onDrop && opts.onDrop(s, token);
+      }
+      ghost.remove();
+      ghost = null;
+      token = null;
+    });
+  }
+
+  // Unit 1
+  $('#u1-show').addEventListener('click', () => {
+    $('#u1-word-mid').classList.add('show');
+    $('#u1-fb').textContent = 'Muito bem! A palavra apareceu junto ao dedo.';
+    tone(true); burst();
+  });
+  $('#u1-reveal').addEventListener('click', () => {
+    const guess = ($('#u1-guess').value || '').trim().toLowerCase();
+    $('#u1-word-hard').classList.add('show');
+    const ok = guess === 'dedo';
+    $('#u1-fb-hard').textContent = ok ? 'Boa! Escreveste "dedo".' : `A tua tentativa: "${guess || '...'}". Compara com "dedo".`;
+    tone(ok); if (ok) burst();
+  });
+
+  // Unit 2
+  const u2 = {
+    middle: [['dedo','dado','dono'], ['dedo','dote','dedo'], ['dedo','dado','demo','dono']],
+    support: [['dedo','uva'], ['dedo','menina']],
+    challenge: [['dedo','dado','dono','demo'], ['dedo','dado','dono','demo'], ['dedo','dado','dono','demo']],
+    idx: 0, hits: 0
+  };
+  function renderU2() {
+    const lvl = currentUnitLevels.u2;
+    const rounds = u2[lvl];
+    if (u2.idx >= rounds.length) {
+      $('#u2-choices').innerHTML = `<p class="success-line">Resumo: ${u2.hits}/${rounds.length} rondas corretas.</p>`;
+      $('#u2-round').textContent = 'Concluído';
+      $('#u2-bar').style.width = '100%';
+      $('#u2-fb').textContent = 'Conseguiste encontrar a palavra!';
+      tone(true); burst();
+      return;
+    }
+    $('#u2-img').style.visibility = lvl === 'challenge' ? 'hidden' : 'visible';
+    $('#u2-round').textContent = `Ronda ${u2.idx + 1}/${rounds.length}`;
+    $('#u2-bar').style.width = `${(u2.idx / rounds.length) * 100}%`;
+    $('#u2-fb').textContent = '';
+    $('#u2-choices').innerHTML = '';
+    rounds[u2.idx].forEach(word => {
+      const b = document.createElement('button');
+      b.className = 'choice';
+      b.textContent = word;
+      b.setAttribute('aria-label', `Escolher ${word}`);
+      b.addEventListener('click', () => {
+        const ok = word === 'dedo';
+        if (ok) {
+          b.classList.add('ok');
+          u2.hits++;
+          tone(true);
+          setTimeout(() => { u2.idx++; renderU2(); }, 450);
+        } else {
+          b.classList.add('bad', 'shake');
+          $('#u2-fb').textContent = 'Tenta outra vez. Observa todas as letras.';
+          tone(false);
+          setTimeout(() => b.classList.remove('shake'), 250);
+        }
+      });
+      $('#u2-choices').appendChild(b);
+    });
+  }
+  $('#u2-reset').addEventListener('click', () => { u2.idx = 0; u2.hits = 0; renderU2(); });
+
+  // Unit 3
+  function installU3Check(slotA, slotB, fbId) {
+    const check = () => {
+      const ok = slotA.dataset.value === 'de' && slotB.dataset.value === 'do';
+      if (ok) { $(fbId).textContent = '✓ Palavra recomposta: de-do'; tone(true); burst(); }
+      else if (slotA.dataset.value && slotB.dataset.value) { $(fbId).textContent = 'Ordem ainda não está certa. Tenta de novo.'; tone(false); }
+    };
+    return check;
+  }
+  const u3checkMid = installU3Check($('#u3m1'), $('#u3m2'), '#u3-fb');
+  const u3checkSup = installU3Check($('#u3s1'), $('#u3s2'), '#u3-fb-support');
+  installDrag($('#u3 .level-panel[data-level="middle"]'), { onDrop: u3checkMid });
+  installDrag($('#u3 .level-panel[data-level="support"]'), { onDrop: u3checkSup });
+
+  function clapLogic(btnId, counterId, fbTarget) {
+    let n = 0;
+    $(btnId).addEventListener('click', () => {
+      n = (n % 2) + 1;
+      $(counterId).textContent = `${n}/2`;
+      if (n === 1) { $(fbTarget).textContent = 'Primeira palma: de'; notify('de'); }
+      else { $(fbTarget).textContent = 'Segunda palma: do'; notify('do'); }
+      tone(true);
+    });
+  }
+  clapLogic('#u3-clap', '#u3-claps', '#u3-fb');
+  clapLogic('#u3-clap-support', '#u3-claps-support', '#u3-fb-support');
+  $('#u3-check-hard').addEventListener('click', () => {
+    const a = ($('#u3c1').value || '').trim().toLowerCase();
+    const b = ($('#u3c2').value || '').trim().toLowerCase();
+    const ok = a === 'de' && b === 'do';
+    $('#u3-fb-hard').textContent = ok ? 'Excelente! "dedo" = de + do.' : 'Repara na ordem das sílabas.';
+    tone(ok); if (ok) burst();
+  });
+
+  // Unit 4
+  const allSyllables = ['me','ni','na','u','va','de','do'];
+  const colors = {me:'sy-me', ni:'sy-ni', na:'sy-na', u:'sy-u', va:'sy-va', de:'de', do:'do'};
+  const valid = new Set(['medo','nado','dedo','nade','vade','deva','nave','udo','dome']);
+  const found = new Set();
+
+  function getU4Syllables() {
+    const lvl = currentUnitLevels.u4;
+    return lvl === 'support' ? ['me','na','de','do'] : allSyllables;
+  }
+  function renderU4Pool() {
+    $('#u4-pool').innerHTML = '';
+    getU4Syllables().forEach(s => {
+      const d = document.createElement('div');
+      d.className = `syllable draggable ${colors[s]}`;
+      d.dataset.token = s;
+      d.textContent = s;
+      d.setAttribute('aria-label', `Sílaba ${s}`);
+      $('#u4-pool').appendChild(d);
+    });
+    $('#u4s1').textContent = ''; $('#u4s2').textContent = '';
+    $('#u4s1').dataset.value = ''; $('#u4s2').dataset.value = '';
+    $('#u4-word').textContent = '_ _';
+    $('#u4-fb').textContent = '';
+  }
+  function u4Check() {
+    const a = $('#u4s1').dataset.value || '';
+    const b = $('#u4s2').dataset.value || '';
+    if (!a || !b) return;
+    const word = a + b;
+    $('#u4-word').textContent = word;
+    setTimeout(() => {
+      const ok = valid.has(word);
+      if (ok) {
+        const target = currentUnitLevels.u4 === 'support' ? (word === 'medo') : true;
+        if (target) found.add(word);
+        $('#u4-fb').innerHTML = `✓ Esta palavra existe!`;
+        tone(true); burst();
+      } else {
+        $('#u4-fb').innerHTML = '✗ Esta combinação não é uma palavra em português.';
+        tone(false);
+      }
+      $('#u4-found').innerHTML = [...found].map(w => `<li>${w} ${w === 'medo' ? '😨' : w === 'nado' ? '🏊' : '✨'}</li>`).join('');
+    }, 1000);
+  }
+  installDrag($('#u4 .card'), { onDrop: u4Check });
+  $('#u4-clear').addEventListener('click', renderU4Pool);
+
+  // Unit 5
+  const u5 = {
+    idx: 0,
+    middle: [
+      {mask:'de__', ans:'do', opts:['do','da','di','du'], img:true},
+      {mask:'__do', ans:'de', opts:['de','da','di','du'], img:true},
+      {mask:'d__o', ans:'ed', opts:['ed','ad','id','ud'], img:false}
+    ],
+    support: [
+      {mask:'de__', ans:'do', opts:['do','ba'], img:true},
+      {mask:'__do', ans:'de', opts:['de','ba'], img:true}
+    ],
+    challenge: [
+      {mask:'de__', ans:'do', img:true},
+      {mask:'__do', ans:'de', img:true},
+      {mask:'d__o', ans:'ed', img:false},
+      {mask:'ded_', ans:'o', img:false}
+    ]
+  };
+
+  function speakDedo() { speak('dedo'); }
+  function renderU5() {
+    const lvl = currentUnitLevels.u5;
+    const arr = u5[lvl];
+    if (u5.idx >= arr.length) {
+      $('#u5-prompt').textContent = 'Concluído';
+      $('#u5-options').innerHTML = '<p class="success-line">Muito bem!</p>';
+      $('#u5-input-wrap').classList.add('hidden');
+      $('#u5-fb').textContent = 'Terminaste as variações.';
+      $('#u5-bar').style.width = '100%';
+      tone(true); burst();
+      return;
+    }
+    const cur = arr[u5.idx];
+    $('#u5-progress').textContent = `Variação ${u5.idx + 1}/${arr.length}`;
+    $('#u5-bar').style.width = `${(u5.idx / arr.length) * 100}%`;
+    $('#u5-prompt').textContent = cur.mask;
+    $('#u5-fb').textContent = '';
+    $('#u5-img').style.visibility = cur.img ? 'visible' : 'hidden';
+    $('#u5-options').innerHTML = '';
+
+    if (lvl === 'challenge') {
+      $('#u5-input-wrap').classList.remove('hidden');
+      $('#u5-options').classList.add('hidden');
+      $('#u5-input').value = '';
+    } else {
+      $('#u5-input-wrap').classList.add('hidden');
+      $('#u5-options').classList.remove('hidden');
+      cur.opts.forEach(o => {
+        const b = document.createElement('button');
+        b.className = 'choice';
+        b.textContent = o;
+        b.addEventListener('click', () => {
+          const ok = o === cur.ans;
+          b.classList.add(ok ? 'ok' : 'bad');
+          if (ok) {
+            $('#u5-fb').textContent = 'Encaixe perfeito!';
+            tone(true); burst(); speakDedo();
           } else {
-            button.classList.add('is-wrong');
-            if (feedback) feedback.textContent = 'Tenta outra vez.';
+            $('#u5-fb').textContent = 'Tenta outra sílaba.';
+            b.classList.add('shake'); tone(false);
+            setTimeout(() => b.classList.remove('shake'), 240);
           }
         });
+        $('#u5-options').appendChild(b);
+      });
+    }
+  }
+  $('#u5-submit').addEventListener('click', () => {
+    const arr = u5[currentUnitLevels.u5];
+    const cur = arr[u5.idx];
+    const val = ($('#u5-input').value || '').trim().toLowerCase();
+    const ok = val === cur.ans;
+    $('#u5-fb').textContent = ok ? 'Correto! Completa a palavra.' : 'Ainda não. Observa o padrão.';
+    tone(ok); if (ok) { burst(); speakDedo(); }
+  });
+  $('#u5-next').addEventListener('click', () => { u5.idx++; renderU5(); });
+
+  // Unit 6
+  const u6 = { words: [], slots: 4 };
+  function setupU6() {
+    const lvl = currentUnitLevels.u6;
+    $('#u6-extra').classList.toggle('hidden', lvl !== 'challenge');
+    const words = lvl === 'support' ? ['O','dedo','aponta'] : ['aponta','dedo','.','O'];
+    u6.words = words;
+    u6.slots = lvl === 'support' ? 3 : 4;
+    $('#u6-pool').innerHTML = words.map((w, i) => `<div class="word-card draggable" data-token="${w}" aria-label="Palavra ${w}" style="background:${['#fee2e2','#dbeafe','#dcfce7','#fef3c7'][i % 4]}">${w}</div>`).join('');
+    $('#u6-slots').className = lvl === 'support' ? 'sentence-slots support' : 'sentence-slots';
+    $('#u6-slots').innerHTML = '';
+    for (let i = 0; i < u6.slots; i++) {
+      const hint = lvl === 'support' ? (i === 0 ? 'Começa com maiúscula' : i === 2 ? 'Fim' : '') : '';
+      $('#u6-slots').innerHTML += `<div class="slot" data-index="${i}" aria-label="Posição ${i + 1}">${hint}</div>`;
+    }
+    $('#u6-fb').textContent = '';
+  }
+  function checkU6() {
+    const vals = $$('#u6-slots .slot').map(s => s.dataset.value || '');
+    if (vals.includes('')) return;
+    const target = currentUnitLevels.u6 === 'support' ? ['O','dedo','aponta'] : ['O','dedo','aponta','.'];
+    const ok = vals.join(' ') === target.join(' ');
+    if (ok) {
+      $('#u6-fb').textContent = target.join(' ') + (target.length === 4 ? '' : '') + ' ✓';
+      tone(true); burst();
+      speak(target.length === 4 ? 'O dedo aponta.' : 'O dedo aponta');
+    } else {
+      $('#u6-fb').textContent = 'Ainda não. Reorganiza os cartões.';
+      tone(false);
+    }
+  }
+  installDrag($('#u6 .card'), { onDrop: checkU6 });
+  $('#u6-read').addEventListener('click', () => speak('O dedo aponta.'));
+
+  // Unit 7
+  const u7 = { step: 1, answers: [], tries: {} };
+  function stageHtml() {
+    const lvl = currentUnitLevels.u7;
+    const s = u7.step;
+    if (lvl === 'support' && s > 2) return '<p>Chegaste ao fim! 🎉</p>';
+    if (s === 1) {
+      return `<div style="font-size:2rem">👉</div><div class="choice-grid">${['dedo','dado','dono'].map(w => `<button class="choice u7c" data-v="${w}">${w}</button>`).join('')}</div>`;
+    }
+    if (s === 2) {
+      if (lvl === 'support') {
+        return `<p>Avança para a próxima etapa.</p>`;
+      }
+      return `<p>Quantas sílabas tem "dedo"?</p><div class="choice-grid">${['1','2','3','4'].map(n => `<button class="choice u7c" data-v="${n}">${n}</button>`).join('')}</div>`;
+    }
+    if (s === 3) {
+      return `<p>Arrasta para formar "dedo".</p><div class="drag-zone"><div class="syllable do draggable" data-token="do">do</div><div class="syllable de draggable" data-token="de">de</div></div><div class="slots"><div class="slot" id="u7s1"></div><div class="slot" id="u7s2"></div></div><button class="btn" id="u7-check3">Confirmar</button>`;
+    }
+    if (s === 4) {
+      if (lvl === 'challenge') {
+        return `<label for="u7-original">Escreve uma frase com "dedo":</label><input id="u7-original" style="width:100%;min-height:48px;font-size:1.1rem;padding:.4rem;border:2px solid #cab8ac;border-radius:10px"><button class="btn" id="u7-save4">Guardar</button>`;
+      }
+      return `<div class="choice-grid">${['O dedo aponta.','O dado aponta.','O dono aponta.'].map(f => `<button class="choice u7c" data-v="${f}">${f}</button>`).join('')}</div>`;
+    }
+    return '';
+  }
+
+  function renderU7() {
+    const lvl = currentUnitLevels.u7;
+    const total = lvl === 'support' ? 2 : 4;
+    const showStep = Math.min(u7.step, total);
+    $('#u7-step').textContent = `Etapa ${showStep}/${total}`;
+    $('#u7-bar').style.width = `${((showStep - 1) / total) * 100}%`;
+    if (u7.step > total) {
+      $('#u7-stage').innerHTML = '<p>Concluído.</p>';
+      $('#u7-results').classList.remove('hidden');
+      $('#u7-bar').style.width = '100%';
+      return;
+    }
+    $('#u7-results').classList.add('hidden');
+    $('#u7-stage').innerHTML = stageHtml();
+
+    $$('.u7c').forEach(b => {
+      b.addEventListener('click', () => {
+        const v = b.dataset.v;
+        u7.answers[u7.step] = v;
+        setTimeout(() => { u7.step++; renderU7(); }, 1500);
       });
     });
 
-    document.querySelectorAll('[data-compose]').forEach((bank) => {
-      const output = document.getElementById(bank.dataset.compose);
-      const parts = [];
-      bank.querySelectorAll('.syllable-chip').forEach((chip) => {
-        chip.addEventListener('click', () => {
-          parts.push(chip.dataset.syllable || '');
-          if (output) output.textContent = parts.join('');
-        });
+    const c3 = $('#u7-check3');
+    if (c3) {
+      installDrag($('#u7-stage'), {});
+      c3.addEventListener('click', () => {
+        const ok = $('#u7s1').dataset.value === 'de' && $('#u7s2').dataset.value === 'do';
+        u7.answers[3] = ok ? 'ok' : 'bad';
+        setTimeout(() => { u7.step++; renderU7(); }, 1500);
       });
-    });
+    }
 
-    document.querySelectorAll('.clear-compose').forEach((button) => {
-      button.addEventListener('click', () => {
-        const output = document.getElementById(button.dataset.composeClear);
-        if (output) output.textContent = '__';
+    const save4 = $('#u7-save4');
+    if (save4) {
+      save4.addEventListener('click', () => {
+        u7.answers[4] = $('#u7-original').value || '';
+        setTimeout(() => { u7.step++; renderU7(); }, 1500);
       });
-    });
+    }
+  }
 
-    document.querySelectorAll('.check-card').forEach((card) => {
-      card.addEventListener('click', () => card.classList.toggle('is-done'));
-    });
+  $('#u7-results').addEventListener('click', () => {
+    const lvl = currentUnitLevels.u7;
+    const checks = [];
+    checks.push({k:'1) Reconhecimento', ok: u7.answers[1] === 'dedo'});
+    if (lvl !== 'support') checks.push({k:'2) Sílabas', ok: u7.answers[2] === '2'});
+    checks.push({k:'3) Reconstrução', ok: u7.answers[3] === 'ok'});
+    if (lvl !== 'support') {
+      if (lvl === 'challenge') checks.push({k:'4) Frase original', ok: (u7.answers[4] || '').toLowerCase().includes('dedo')});
+      else checks.push({k:'5) Frase correta', ok: u7.answers[4] === 'O dedo aponta.'});
+    }
+    $('#u7-summary').classList.remove('hidden');
+    $('#u7-summary').innerHTML = checks.map(c => `<div>${c.ok ? '✓' : '✗'} ${c.k}</div>`).join('');
+    tone(true);
+  });
 
-    document.querySelectorAll('.diff-switcher').forEach((switcher) => {
-      const panels = switcher.nextElementSibling;
-      switcher.querySelectorAll('.diff-btn').forEach((button) => {
-        button.addEventListener('click', () => {
-          switcher.querySelectorAll('.diff-btn').forEach((item) => item.classList.remove('is-active'));
-          panels.querySelectorAll('.diff-panel').forEach((panel) => panel.classList.remove('is-active'));
-          button.classList.add('is-active');
-          const target = panels.querySelector('#' + CSS.escape(button.dataset.diff));
-          if (target) target.classList.add('is-active');
-        });
-      });
-    });
-  </script>
+  function resetByUnit(unit) {
+    if (unit === 'u2') { u2.idx = 0; u2.hits = 0; renderU2(); }
+    if (unit === 'u4') { found.clear(); renderU4Pool(); }
+    if (unit === 'u5') { u5.idx = 0; renderU5(); }
+    if (unit === 'u6') { setupU6(); }
+    if (unit === 'u7') { u7.step = 1; u7.answers = []; renderU7(); }
+  }
+
+  // init
+  renderU2();
+  renderU4Pool();
+  renderU5();
+  setupU6();
+  renderU7();
+
+})();
+</script>
 </body>
 </html>

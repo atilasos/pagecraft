@@ -1,516 +1,583 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-PT">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>M28P #6 — bota | PageCraft</title>
-  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHRleHQgeT0iNTAiIGZvbnQtc2l6ZT0iNDgiPvCfk5g8L3RleHQ+PC9zdmc+" />
+  <title>Palavra 6 — bota | PageCraft</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #FFF7ED;
+      --bg: #FFF8F0;
       --surface: #FFFFFF;
-      --primary: #EA580C;
+      --primary: #E05FA0;
       --accent: #F59E0B;
       --text: #1E1B18;
-      --correct: #22c55e;
-      --correct-bg: #f0fdf4;
-      --incorrect: #F59E0B;
-      --incorrect-bg: #fffbeb;
+      --ta: #7C3AED;
+      --ok: #22c55e;
+      --warn: #F59E0B;
       --radius: 16px;
-      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      --font: 'Nunito', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
-      --touch-size: 48px;
-      --card-gap: 1rem;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      font-family: var(--font);
-      background:
-        radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 20%, transparent), transparent 38%),
-        linear-gradient(180deg, color-mix(in srgb, var(--primary) 8%, var(--bg)), var(--bg));
+      font-family: 'Nunito', 'Poppins', 'Comic Sans MS', sans-serif;
+      background: radial-gradient(circle at 20% 10%, #fff 0%, var(--bg) 45%, #ffe9f4 100%);
       color: var(--text);
       font-size: 20px;
-      line-height: 1.55;
-      min-height: 100vh;
+      line-height: 1.45;
     }
-    a, button, summary, textarea { font: inherit; }
-    .skip-link { position: absolute; left: 1rem; top: -4rem; background: var(--surface); color: var(--text); padding: 0.75rem 1rem; border-radius: 9999px; z-index: 1000; border: 2px solid var(--primary); }
-    .skip-link:focus { top: 1rem; }
-    :focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
-    .shell { max-width: 1120px; margin: 0 auto; padding: 1rem 1rem 3rem; }
-    .hero {
-      position: relative;
+    .wrap { max-width: 960px; margin: 0 auto; padding: 1.5rem; }
+    header {
+      background: linear-gradient(135deg, #E05FA0, #7C3AED);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+    h1 { font-size: 2rem; margin: 0 0 .5rem; }
+    h2 { font-size: 1.6rem; margin: 0 0 .6rem; color: var(--primary); }
+    h3 { margin: .5rem 0; }
+    p { margin: .4rem 0; }
+    .meta, .badge {
+      display: inline-flex; align-items: center; gap: .35rem;
+      background: rgba(255,255,255,.2); padding: .3rem .8rem; border-radius: 999px; font-weight: 700;
+      margin-right: .4rem; min-height: 48px;
+    }
+    .obj { margin: .9rem 0 0; background: rgba(255,255,255,.18); border-radius: 12px; padding: .9rem 1rem; }
+    .obj li { margin: .3rem 0; }
+    .unit {
+      margin-top: 1rem; background: var(--surface); border: 2px solid var(--primary);
+      border-radius: var(--radius); padding: 1rem; box-shadow: var(--shadow);
+    }
+    .small { font-size: .92rem; }
+    .diff-tabs { display:flex; flex-wrap: wrap; gap:.5rem; margin: .8rem 0; }
+    .tab {
+      border: 2px solid #ddd; border-radius: 999px; background:#fff; cursor:pointer;
+      min-height: 48px; padding: .55rem 1rem; font-size: 1rem; font-weight: 700;
+      transition: .2s transform, .2s box-shadow, .2s background; touch-action: manipulation;
+    }
+    .tab.active { background: var(--text); color: #fff; border-color: var(--text); }
+    .tab:focus-visible, button:focus-visible, .card-btn:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 3px solid #7C3AED; outline-offset: 2px;
+    }
+    .diff-panel { display:none; background:#fffaf2; border:2px dashed #f5c87a; border-radius:12px; padding:.6rem .8rem; }
+    .diff-panel.active { display:block; }
+    .word-display { font-size: 48px; font-weight: 800; letter-spacing: .05em; color: var(--primary); text-transform: uppercase; }
+    .story { display:grid; grid-template-columns: 1.1fr 1fr; gap: .8rem; align-items:center; }
+    .illustration {
+      background: linear-gradient(160deg, #d8f3ff, #f2fbff);
+      border-radius: 14px; padding: .8rem; text-align:center; min-height: 220px; position: relative;
       overflow: hidden;
-      border-radius: 28px;
-      padding: 1.4rem;
-      background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 72%, white), color-mix(in srgb, var(--accent) 60%, white));
-      color: white;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
     }
-    .hero::after { content: ""; position: absolute; inset: auto -8% -24% auto; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.14); }
-    .hero-top { display: flex; gap: 1rem; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; position: relative; z-index: 1; }
-    .hero-kicker, .hero-badge, .meta-chip, .nav-pill, .page-link span {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: var(--touch-size);
-      min-width: var(--touch-size);
-      border-radius: 9999px;
-      padding: 0.75rem 1.25rem;
-      font-weight: 700;
+    .emoji-hero { font-size: 4.4rem; display:inline-block; transition: transform .2s; }
+    .pulse { animation: pulse .6s ease-in-out 2; }
+    @keyframes pulse { 0%,100%{transform:scale(1)}50%{transform:scale(1.1)} }
+    .bounce { animation: bounce .5s; }
+    @keyframes bounce { 0%,100%{transform:translateY(0)}40%{transform:translateY(-10px)}70%{transform:translateY(-4px)} }
+    .highlight { text-decoration: underline 4px var(--accent); font-size: 1.2em; font-weight: 800; }
+    .btn {
+      border:0; background: var(--primary); color:#fff; font-weight:800; border-radius:999px;
+      min-height: 48px; padding: .75rem 2rem; cursor:pointer; box-shadow: 0 4px 12px rgba(224,95,160,.35);
+      transition: transform .2s, box-shadow .2s;
     }
-    .hero-kicker { background: rgba(255,255,255,0.16); }
-    .hero-badge { background: rgba(255,255,255,0.22); }
-    .hero-grid { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.9fr); margin-top: 1.25rem; position: relative; z-index: 1; }
-    .hero-copy h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.05; margin: 0.4rem 0 0.7rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
-    .hero-copy p { margin: 0.4rem 0; max-width: 45rem; }
-    .word-scene { background: rgba(255,255,255,0.14); border: 2px solid rgba(255,255,255,0.28); border-radius: 24px; padding: 1rem; backdrop-filter: blur(4px); }
-    .word-scene .emoji { font-size: clamp(3rem, 10vw, 5.5rem); line-height: 1; }
-    .meta-row, .objective-row, .syllable-row, .page-switch, .section-nav { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-    .meta-row { margin-top: 1rem; }
-    .meta-chip { background: rgba(255,255,255,0.18); }
-    .objective-row { margin: 1rem 0 0; padding: 0; list-style: none; }
-    .objective-row li { background: rgba(255,255,255,0.22); border-radius: 9999px; padding: 0.75rem 1rem; font-weight: 700; min-height: var(--touch-size); display: inline-flex; align-items: center; }
-    .word-spotlight { margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1.1fr 1fr; }
-    .spot-card { background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 70%, white); border-radius: 24px; padding: 1rem; box-shadow: var(--shadow); }
-    .spot-card h2 { margin: 0 0 0.75rem; font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; }
-    .spot-card .word-display { font-size: clamp(2.4rem, 7vw, 3.8rem); font-weight: 800; color: var(--primary); letter-spacing: 0.05em; text-transform: uppercase; }
-    .spot-card .mission { margin-top: 0.75rem; }
-    .syllable-row { margin-top: 1rem; }
-    .syllable-token, .syllable-chip {
-      min-height: var(--touch-size);
-      min-width: var(--touch-size);
-      border-radius: 12px;
-      border: none;
-      color: white;
-      font-weight: 800;
-      font-size: clamp(1.5rem, 4vw, 2rem);
-      padding: 0.55rem 1rem;
-      background: var(--chip, var(--primary));
-      box-shadow: var(--shadow);
+    .btn:hover { transform: scale(1.05); box-shadow: 0 8px 18px rgba(224,95,160,.45); }
+    .btn:active { transform: scale(.97); }
+    .btn.alt { background: var(--accent); box-shadow: 0 4px 12px rgba(245,158,11,.35); }
+    .options { display:grid; grid-template-columns: repeat(auto-fit,minmax(120px,1fr)); gap:.7rem; margin-top:.7rem; }
+    .card-btn {
+      border:2px solid #ddd; background:#fff; border-radius:14px; padding:.9rem .6rem; min-height: 80px;
+      cursor:pointer; font-size: 1.6rem; transition:.2s; touch-action: manipulation;
     }
-    .page-switch { margin: 1.2rem 0 0.5rem; }
-    .page-link {
-      text-decoration: none;
-      background: var(--surface);
-      color: var(--text);
-      border: 2px solid color-mix(in srgb, var(--primary) 28%, white);
-      border-radius: 18px;
-      padding: 0.85rem 1rem;
-      min-height: var(--touch-size);
-      display: flex;
-      gap: 0.75rem;
-      align-items: center;
-      justify-content: space-between;
-      flex: 1 1 200px;
-      box-shadow: var(--shadow);
-      font-weight: 700;
+    .card-btn.active { border-color: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow); }
+    .card-btn.correct { border-color: var(--ok); background: #f0fdf4; }
+    .card-btn.wrong { border-color: var(--warn); background: #fffbeb; animation: shake .3s linear 2; }
+    @keyframes shake { 25%{transform:translateX(-4px)}75%{transform:translateX(4px)} }
+    .feedback { margin-top:.6rem; padding:.6rem .8rem; border-radius:12px; display:none; font-weight:700; }
+    .feedback.show { display:block; }
+    .feedback.ok { background:#f0fdf4; color:#146534; border:2px solid var(--ok); }
+    .feedback.no { background:#fffbeb; color:#92400e; border:2px solid var(--warn); }
+    .drag-row { display:flex; flex-wrap:wrap; gap:.6rem; align-items:center; margin:.6rem 0; }
+    .slot {
+      width: 120px; min-height: 76px; border:3px dashed #bbb; border-radius:12px;
+      display:flex; align-items:center; justify-content:center; font-size:1.2rem; font-weight:800; background:#fafafa;
     }
-    .page-link.is-current { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
-    .section-nav { position: sticky; top: 0; z-index: 10; padding: 0.85rem 0 1rem; background: linear-gradient(180deg, var(--bg), rgba(255,248,240,0.88)); backdrop-filter: blur(6px); }
-    .nav-pill { text-decoration: none; background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 24%, white); padding: 0.55rem 1rem; }
-    .content { display: grid; gap: 1.1rem; }
-    .unit-card { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 35%, white); border-radius: 24px; padding: 1.15rem; box-shadow: var(--shadow); }
-    .unit-head { display: flex; gap: 1rem; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
-    .unit-head h2 { margin: 0.2rem 0 0; font-size: clamp(1.45rem, 4vw, 2.1rem); font-weight: 800; }
-    .unit-kicker { color: color-mix(in srgb, var(--primary) 80%, black); font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.9rem; }
-    .unit-badge { background: color-mix(in srgb, var(--accent) 22%, var(--surface)); border: 2px solid var(--accent); border-radius: 9999px; padding: 0.65rem 1rem; font-weight: 800; min-height: var(--touch-size); display: inline-flex; align-items: center; }
-    .unit-grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.95fr); margin-top: 1rem; }
-    .unit-copy p { margin: 0.65rem 0; }
-    .unit-flow { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 1rem; }
-    .unit-flow > div, .play-card, .maker-box, .teacher-card { background: color-mix(in srgb, var(--bg) 70%, white); border-radius: 18px; padding: 0.95rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
-    .play-label { font-weight: 800; margin: 0 0 0.8rem; }
-    .pill-btn, .choice-btn, .check-card, .prompt-card {
-      min-height: var(--touch-size);
-      min-width: var(--touch-size);
-      border-radius: 9999px;
-      border: 2px solid transparent;
-      padding: 0.75rem 1.2rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+    .slot.filled { border-style: solid; border-color: var(--ta); background:#f3ebff; }
+    .chip {
+      min-height: 48px; padding:.5rem 1.2rem; border-radius:12px; color:#fff; font-size: 36px; font-weight:800;
+      cursor: grab; user-select:none; touch-action: none; box-shadow: var(--shadow);
+      transition: transform .2s, box-shadow .2s;
     }
-    .pill-btn:hover, .choice-btn:hover, .check-card:hover, .prompt-card:hover, .page-link:hover { transform: scale(1.05); box-shadow: 0 10px 24px rgba(0,0,0,0.12); }
-    .pill-btn:active, .choice-btn:active, .check-card:active, .prompt-card:active, .page-link:active { transform: scale(0.97); }
-    .pill-btn { background: var(--primary); color: white; }
-    .choice-row, .check-grid, .prompt-grid, .compose-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-    .choice-btn, .check-card, .prompt-card { background: var(--surface); color: var(--text); border-color: color-mix(in srgb, var(--primary) 22%, white); }
-    .choice-btn.is-right, .check-card.is-done { background: var(--correct-bg); border-color: var(--correct); color: #166534; }
-    .choice-btn.is-wrong { background: var(--incorrect-bg); border-color: var(--incorrect); color: #92400e; }
-    .feedback, .helper-text { margin: 0.85rem 0 0; font-weight: 700; }
-    .feedback { min-height: 1.4em; }
-    .compose-output, .phrase-card, .cloze-word { min-height: 72px; border-radius: 18px; background: var(--surface); border: 2px dashed color-mix(in srgb, var(--primary) 35%, white); display: grid; place-items: center; font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800; color: var(--primary); padding: 0.9rem; margin-top: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
-    .phrase-card { text-transform: none; font-size: 1.3rem; color: var(--text); }
-    .phrase-input { width: 100%; margin-top: 0.85rem; border-radius: 18px; border: 2px solid color-mix(in srgb, var(--primary) 25%, white); padding: 0.9rem 1rem; min-height: 120px; background: #fff; }
-    .diff-switcher { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; }
-    .diff-btn { min-height: var(--touch-size); min-width: var(--touch-size); border-radius: 9999px; border: 2px solid color-mix(in srgb, var(--primary) 28%, white); background: var(--surface); padding: 0.7rem 1rem; font-weight: 700; cursor: pointer; }
-    .diff-btn.is-active { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
-    .diff-panel { display: none; background: color-mix(in srgb, var(--bg) 72%, white); border-radius: 18px; padding: 0.95rem; margin-top: 0.8rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
-    .diff-panel.is-active { display: block; }
-    .teacher-guide { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 30%, white); border-radius: 24px; padding: 0.9rem 1rem; box-shadow: var(--shadow); }
-    .teacher-guide summary { min-height: var(--touch-size); display: flex; align-items: center; cursor: pointer; font-weight: 800; font-size: 1.2rem; }
-    .teacher-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 1rem; }
-    .teacher-card-wide { grid-column: 1 / -1; }
-    .teacher-card h3 { margin-top: 0; }
-    .footer { text-align: center; padding: 1.4rem 0 0; font-weight: 700; color: color-mix(in srgb, var(--text) 72%, white); }
-    .hidden { display: none !important; }
+    .chip:active { cursor: grabbing; transform: scale(1.06); }
+    .chip.bo { background: var(--primary); }
+    .chip.ta { background: var(--ta); }
+    .chip.gray { background: #9ca3af; }
+    .mini-word { font-size: 1.2rem; padding:.35rem .7rem; border-radius:999px; border:2px solid #ddd; background:#fff; min-height:48px; }
+    .builder { display:grid; grid-template-columns: 1fr auto 1fr; gap:.6rem; align-items:center; margin:.8rem 0; }
+    .big-input, textarea {
+      width: 100%; min-height: 52px; border:2px solid #d8d8d8; border-radius:12px; font-size:1.2rem; padding:.6rem .8rem;
+    }
+    .maker { background:#E8FBEF; border:2px solid #22c55e; border-radius:var(--radius); padding:1rem; margin-top:1rem; }
+    .maker-card { background:#fff; border-left:5px solid #22c55e; padding:.8rem; border-radius:10px; margin:.5rem 0; }
+    .assessment { background:#fff3e0; border:2px solid var(--accent); border-radius:var(--radius); padding:1rem; margin-top:1rem; }
+    .ass-item { background:#fff; border-radius:10px; padding:.7rem; margin:.5rem 0; }
+    .scale { display:flex; flex-wrap:wrap; gap:.7rem; font-size:.95rem; margin-top:.4rem; }
+    .curric { background:#6b21a8; color:#fff; border-radius:var(--radius); padding:1rem; margin-top:1rem; }
+    .curric h2 { color:#fff; }
+    footer { text-align:center; margin:1rem 0 2rem; color:#6b7280; font-weight:700; }
+    #fx { position: fixed; inset: 0; pointer-events: none; z-index: 50; }
+    .stars { font-size: 1.8rem; letter-spacing: .1em; }
+    .progress { height: 14px; border-radius: 999px; background:#ffd8ac; overflow:hidden; margin:.5rem 0; }
+    .bar { height:100%; width:0; background: linear-gradient(90deg,#22c55e,#16a34a); transition: width .25s; }
+    .hide { display:none; }
     @media (max-width: 900px) {
-      .hero-grid, .word-spotlight, .unit-grid, .unit-flow, .teacher-grid { grid-template-columns: 1fr; }
-      .section-nav { position: static; }
-    }
-    @media (max-width: 640px) {
       body { font-size: 18px; }
-      .shell { padding: 0.75rem 0.75rem 2.4rem; }
-      .hero { padding: 1rem; border-radius: 22px; }
-      .hero-copy h1 { font-size: clamp(2rem, 9vw, 3rem); }
-      .page-link { flex-basis: 100%; }
-      .objective-row li, .meta-chip, .hero-kicker, .hero-badge, .nav-pill { width: 100%; justify-content: center; }
-      .unit-card, .spot-card, .teacher-guide { border-radius: 20px; }
+      .story { grid-template-columns: 1fr; }
+      .builder { grid-template-columns: 1fr; }
+      .slot { width: 100px; }
+      .word-display { font-size: 40px; }
     }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after { animation: none !important; transition: none !important; }
+    @media (max-width: 768px) {
+      .wrap { padding:.8rem; }
+      body { font-size: 16px; }
+      .word-display { font-size: 34px; }
+      .chip { font-size: 28px; }
     }
   </style>
 </head>
-<body data-page-variant="index.html" data-visible-units="1,2,3,4">
-  <a href="#main" class="skip-link">Ir para o conteúdo</a>
-  <div class="shell">
-    <header class="hero">
-      <div class="hero-top">
-        <span class="hero-kicker">M28P #6</span>
-        <span class="hero-badge">Rota completa</span>
+<body>
+  <canvas id="fx" aria-hidden="true"></canvas>
+  <main class="wrap">
+    <header>
+      <h1>Palavra 6 — bota</h1>
+      <div>
+        <span class="meta">👧 1.º ano (6 anos)</span>
+        <span class="meta">⏱️ 45 minutos</span>
       </div>
-      <div class="hero-grid">
-        <div class="hero-copy">
-          <p>Descobrir, ler e brincar</p>
-          <h1>Bota</h1>
-          <p>Percurso completo com foco na descoberta da palavra, nas sílabas e na confiança ao ler.</p>
-          <div class="meta-row">
-            <span class="meta-chip">🥾 Palavra 6</span>
-            <span class="meta-chip">1.º ano (6-7 anos)</span>
-            <span class="meta-chip">45 min</span>
-          </div>
-          <ul class="objective-row"><li>Reconhecer a palavra &#x27;bota&#x27; globalmente, associando-a à imagem e ao som</li><li>Segmentar a palavra &#x27;bota&#x27; nas sílabas &#x27;bo&#x27; e &#x27;ta&#x27;, identificando duas sílabas</li><li>Recombinar as sílabas de &#x27;bota&#x27; para distinguir combinações reais de não-palavras</li></ul>
-        </div>
-        <aside class="word-scene" aria-hidden="true">
-          <div class="emoji">🥾</div>
-          <p><strong>Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</strong></p>
-          <p>Paleta própria, leitura em pt-PT AO90 e navegação pensada para toque.</p>
-          <p>Esta página trabalha as unidades 1, 2, 3, 4.</p>
-        </aside>
-      </div>
+      <ul class="obj">
+        <li>Reconhecer a palavra <strong>bota</strong> globalmente.</li>
+        <li>Segmentar em sílabas: <strong>bo</strong> + <strong>ta</strong>.</li>
+        <li>Recombinar sílabas e distinguir palavras reais.</li>
+        <li>Usar <strong>bota</strong> numa frase simples.</li>
+      </ul>
     </header>
 
-    <div class="page-switch" aria-label="Outras páginas desta palavra"><a class="page-link is-current" href="./index.html">Página 1<span>Atual</span></a><a class="page-link" href="./page-2.html">Página 2<span>Abrir</span></a><a class="page-link" href="./page-3.html">Página 3<span>Abrir</span></a><a class="page-link" href="./page-4.html">Página 4<span>Abrir</span></a></div>
-
-    <section class="word-spotlight" aria-label="Destaque da palavra">
-      <article class="spot-card">
-        <h2>Palavra em destaque</h2>
-        <div class="word-display">Bota</div>
-        <p class="mission">bota</p>
-        <div class="compose-actions">
-          <button class="pill-btn speak-btn" data-speak="Bota">Ouvir a palavra</button>
+    <section class="unit" id="u1">
+      <h2>1) Abertura contextual — a bota na história (4 min)</h2>
+      <div class="diff-tabs" data-unit="u1">
+        <button class="tab active" data-level="support" aria-label="Apoio">🟢 Apoio</button>
+        <button class="tab" data-level="standard" aria-label="Intermédio">🟡 Intermédio</button>
+        <button class="tab" data-level="challenge" aria-label="Desafio">🔴 Desafio</button>
+      </div>
+      <div class="diff-panel active" data-level="support">Imagem grande visível. Frase curta: "A bota pum!"</div>
+      <div class="diff-panel" data-level="standard">Micro-história completa com apoio do professor.</div>
+      <div class="diff-panel" data-level="challenge">Lê sozinho e conta quantas vezes aparece "bota".</div>
+      <div class="story">
+        <div class="illustration" aria-label="Ilustração da bota na chuva">
+          <div class="emoji-hero" id="bootHero">🧒🧥👢💧</div>
+          <p>A Marta salta nas poças... <strong>pum pum!</strong></p>
         </div>
-      </article>
-      <article class="spot-card">
-        <h2>Sílabas</h2>
-        <div class="syllable-row"><span class="syllable-token" style="--chip:#EA580C">bo</span><span class="syllable-token" style="--chip:#7C3AED">ta</span></div>
-        <p class="mission">Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</p>
-      </article>
-    </section>
-
-    <nav class="section-nav" aria-label="Navegação das unidades"><a class="nav-pill" href="#u1-abertura-contextual-a-bota-na-história">1</a><a class="nav-pill" href="#u2-reconhecimento-global-ver-ouvir-associar">2</a><a class="nav-pill" href="#u3-segmentação-silábica-dividir-bota-em-bo-ta">3</a><a class="nav-pill" href="#u4-recombinação-novas-palavras-com-bo-e-ta">4</a></nav>
-
-    <main id="main" class="content">
-      
-    <section id="u1-abertura-contextual-a-bota-na-história" class="unit-card">
-      <div class="unit-head">
         <div>
-          <span class="unit-kicker">Unidade 1</span>
-          <h2>Abertura contextual — a bota na história</h2>
+          <p id="storyText">A Marta calça a <span id="botaWord">bota</span>. A <span class="bota-copy">bota</span> faz pum pum!</p>
+          <button class="btn" id="discoverBtn" aria-label="Descobre a palavra">Descobre a palavra</button>
+          <div id="u1Feedback" class="feedback"> </div>
         </div>
-        <span class="unit-badge">Em destaque</span>
-      </div>
-      <div class="unit-grid">
-        <article class="unit-copy">
-          <p>O aluno encontra a palavra &#x27;bota&#x27; inserida numa micro-história visual concreta: uma criança que calça botas para ir à chuva e descobre que as botas fazem um som engraçado (&#x27;pum pum&#x27;) ao pisar poças. A palavra surge sempre acompanhada da imagem da bota. O objetivo é criar contexto emocional e semântico antes de qualquer análise formal.</p>
-          <div class="unit-flow">
-            <div>
-              <h3>O que vais fazer</h3>
-              <p>Ilustração colorida de uma criança com botas a pisar uma poça de chuva; texto da micro-história em caixa lateral (&#x27;A Marta calça a bota. A bota faz pum pum!&#x27;); botão &#x27;Descobre a palavra&#x27; que sublinha e amplia a palavra &#x27;bota&#x27; na frase com animação de bounce.</p>
-            </div>
-            <div>
-              <h3>O que observar</h3>
-              <p>O aluno aponta ou clica na palavra &#x27;bota&#x27; quando pedido: &#x27;Onde está escrita a palavra bota?&#x27;</p>
-            </div>
-          </div>
-          <p>Clique em &#x27;Descobre a palavra&#x27; → a palavra &#x27;bota&#x27; na frase fica sublinhada e ampliada; imagem da bota pulsa ligeiramente; som da palavra &#x27;bota&#x27; reproduzido (opcional TTS).</p>
-          
-        </article>
-        <aside class="unit-play">
-        <div class="play-card">
-          <button class="pill-btn reveal-btn" data-target="story-1">Mostrar a história</button>
-          <button class="pill-btn speak-btn" data-speak="bota">Ouvir</button>
-          <div id="story-1" class="reveal-box hidden"><p>O aluno encontra a palavra &#x27;bota&#x27; inserida numa micro-história visual concreta: uma criança que calça botas para ir à chuva e descobre que as botas fazem um som engraçado (&#x27;pum pum&#x27;) ao pisar poças. A palavra surge sempre acompanhada da imagem da bota. O objetivo é criar contexto emocional e semântico antes de qualquer análise formal.</p></div>
-        </div>
-        </aside>
-      </div>
-      <div class="diff-switcher">
-        <button class="diff-btn is-active" data-diff="support-1">🟢 Com ajuda</button>
-        <button class="diff-btn" data-diff="standard-1">🟡 Objetivo</button>
-        <button class="diff-btn" data-diff="challenge-1">🔴 Desafio</button>
-      </div>
-      <div class="diff-panels">
-        <div id="support-1" class="diff-panel is-active"><p>🟢 Imagem de bota grande e colorida sempre visível ao lado do texto; frase com apenas 3 palavras (&#x27;A bota pum!&#x27;); professor lê em voz alta antes de o aluno interagir.</p></div>
-        <div id="standard-1" class="diff-panel"><p>🟡 Micro-história completa (&#x27;A bota faz pum pum.&#x27;); aluno lê com apoio do professor; palavra destacada após clique.</p></div>
-        <div id="challenge-1" class="diff-panel"><p>🔴 Aluno lê a micro-história sozinho, sem highlight automático; identifica quantas vezes aparece a palavra &#x27;bota&#x27; no texto.</p></div>
       </div>
     </section>
-    
-    <section id="u2-reconhecimento-global-ver-ouvir-associar" class="unit-card">
-      <div class="unit-head">
-        <div>
-          <span class="unit-kicker">Unidade 2</span>
-          <h2>Reconhecimento global — ver, ouvir, associar</h2>
-        </div>
-        <span class="unit-badge">Em destaque</span>
-      </div>
-      <div class="unit-grid">
-        <article class="unit-copy">
-          <p>O aluno vê a palavra &#x27;bota&#x27; isolada em letra grande e é convidado a associá-la à imagem correta entre três opções (bota, sapato, meia). O objetivo é consolidar o reconhecimento global da palavra antes de a analisar em partes. A associação imagem↔palavra é directa e imediata.</p>
-          <div class="unit-flow">
-            <div>
-              <h3>O que vais fazer</h3>
-              <p>Palavra &#x27;bota&#x27; em tipografia grande (sem serifa, 72px) no topo; três imagens abaixo (bota, sapato, meia) em cartões clicáveis; após seleção, feedback imediato (✓ verde ou âmbar); botão &#x27;Confirmar&#x27;.</p>
-            </div>
-            <div>
-              <h3>O que observar</h3>
-              <p>O aluno seleciona a imagem correta correspondente à palavra &#x27;bota&#x27; em pelo menos 2 de 3 tentativas (ordem das imagens muda).</p>
-            </div>
-          </div>
-          <p>Clicar num cartão → cartão fica realçado; clicar &#x27;Confirmar&#x27; → feedback mostrado; se correto, animação de confetti subtil; se errado, cartão oscila levemente e palavra correta destacada.</p>
-          
-        </article>
-        <aside class="unit-play">
-        <div class="play-card">
-          <p class="play-label">Escolhe a palavra certa.</p>
-          <div class="choice-row">
-            <button class="choice-btn" data-answer="bota" data-choice="bota">bota</button><button class="choice-btn" data-answer="bota" data-choice="sapato">sapato</button><button class="choice-btn" data-answer="bota" data-choice="leque">leque</button>
-          </div>
-          <p class="feedback" aria-live="polite">Procura a palavra completa.</p>
-        </div>
-        </aside>
-      </div>
-      <div class="diff-switcher">
-        <button class="diff-btn is-active" data-diff="support-2">🟢 Com ajuda</button>
-        <button class="diff-btn" data-diff="standard-2">🟡 Objetivo</button>
-        <button class="diff-btn" data-diff="challenge-2">🔴 Desafio</button>
-      </div>
-      <div class="diff-panels">
-        <div id="support-2" class="diff-panel is-active"><p>🟢 Apenas 2 opções (bota e meia); imagens muito diferentes em tamanho e cor; palavra &#x27;bota&#x27; fica a piscar ao lado da imagem correta após 5 segundos sem resposta.</p></div>
-        <div id="standard-2" class="diff-panel"><p>🟡 3 opções; imagens coloridas; sem pista automática.</p></div>
-        <div id="challenge-2" class="diff-panel"><p>🔴 4 opções incluindo &#x27;bota&#x27;, &#x27;botina&#x27;, &#x27;bote&#x27;, &#x27;botão&#x27;; aluno distingue também a forma escrita de palavras parecidas.</p></div>
-      </div>
-    </section>
-    
-    <section id="u3-segmentação-silábica-dividir-bota-em-bo-ta" class="unit-card">
-      <div class="unit-head">
-        <div>
-          <span class="unit-kicker">Unidade 3</span>
-          <h2>Segmentação silábica — dividir &#x27;bota&#x27; em &#x27;bo&#x27; + &#x27;ta&#x27;</h2>
-        </div>
-        <span class="unit-badge">Em destaque</span>
-      </div>
-      <div class="unit-grid">
-        <article class="unit-copy">
-          <p>O aluno aprende a dividir a palavra &#x27;bota&#x27; em duas sílabas: &#x27;bo&#x27; e &#x27;ta&#x27;. A tarefa central é arrastar cada sílaba para a posição correta na palavra, acompanhada de batimento de palmas ou toque (tap) para cada sílaba. O aluno deve perceber que &#x27;bota&#x27; tem exactamente 2 partes.</p>
-          <div class="unit-flow">
-            <div>
-              <h3>O que vais fazer</h3>
-              <p>Palavra &#x27;bota&#x27; em letra grande no topo; abaixo dois quadrados vazios com numeração (1 e 2); ao lado, 4 blocos de sílabas coloridas (&#x27;bo&#x27; em azul, &#x27;ta&#x27; em laranja, &#x27;ba&#x27; em cinzento, &#x27;to&#x27; em cinzento) para arrastar; contador de palmas com animação de mão.</p>
-            </div>
-            <div>
-              <h3>O que observar</h3>
-              <p>O aluno arrasta &#x27;bo&#x27; e &#x27;ta&#x27; para as posições correctas (1 e 2) sem ajuda, e indica com o contador que a palavra tem 2 sílabas.</p>
-            </div>
-          </div>
-          <p>Arrastar bloco de sílaba para quadrado → bloco encaixa com animação; botão &#x27;Bater palmas&#x27; incrementa contador; quando ambas posições correctas preenchidas, animação de palavra completa com som.</p>
-          <div class="maker-box"><p><strong>Desafio maker:</strong> Com cartões físicos das sílabas &#x27;bo&#x27; e &#x27;ta&#x27;, o aluno dispõe-os na mesa e bate palmas enquanto diz cada sílaba em voz alta. Depois tenta formar outras palavras com esses cartões.</p><p><strong>Materiais:</strong> Cartões impressos: &#x27;bo&#x27; (azul) e &#x27;ta&#x27; (laranja), Mesa ou chão limpo</p><p><strong>Comunicação:</strong> Par apresenta as suas combinações à turma: &#x27;Encontrámos bota e... tentámos tabo mas não é uma palavra!&#x27;</p></div>
-        </article>
-        <aside class="unit-play">
-        <div class="play-card">
-          <p class="play-label">Toca nas sílabas para formar a palavra.</p>
-          <div class="syllable-bank" data-compose="compose-3"><button class="syllable-chip" style="--chip:#EA580C" data-syllable="bo">bo</button><button class="syllable-chip" style="--chip:#7C3AED" data-syllable="ta">ta</button></div>
-          <div id="compose-3" class="compose-output">__</div>
-          <div class="compose-actions"><button class="pill-btn clear-compose" data-compose-clear="compose-3">Limpar</button></div>
-        </div>
-        </aside>
-      </div>
-      <div class="diff-switcher">
-        <button class="diff-btn is-active" data-diff="support-3">🟢 Com ajuda</button>
-        <button class="diff-btn" data-diff="standard-3">🟡 Objetivo</button>
-        <button class="diff-btn" data-diff="challenge-3">🔴 Desafio</button>
-      </div>
-      <div class="diff-panels">
-        <div id="support-3" class="diff-panel is-active"><p>🟢 Apenas os blocos &#x27;bo&#x27; e &#x27;ta&#x27; disponíveis (sem distractores); posições com seta indicativa; professor modela primeiro.</p></div>
-        <div id="standard-3" class="diff-panel"><p>🟡 4 blocos (2 correctos + 2 distractores &#x27;ba&#x27; e &#x27;to&#x27;); aluno divide sozinho.</p></div>
-        <div id="challenge-3" class="diff-panel"><p>🔴 6 blocos; aluno não só divide &#x27;bota&#x27; como forma uma segunda palavra de 2 sílabas com blocos restantes (&#x27;bola&#x27;, &#x27;toca&#x27;, etc.) e verifica se existe.</p></div>
-      </div>
-    </section>
-    
-    <section id="u4-recombinação-novas-palavras-com-bo-e-ta" class="unit-card">
-      <div class="unit-head">
-        <div>
-          <span class="unit-kicker">Unidade 4</span>
-          <h2>Recombinação — novas palavras com &#x27;bo&#x27; e &#x27;ta&#x27;</h2>
-        </div>
-        
-      </div>
-      <div class="unit-grid">
-        <article class="unit-copy">
-          <p>O aluno explora o que acontece quando as sílabas &#x27;bo&#x27; e &#x27;ta&#x27; se combinam com outras sílabas conhecidas: &#x27;bola&#x27;, &#x27;bolo&#x27;, &#x27;boca&#x27;, &#x27;taco&#x27;, &#x27;tapete&#x27;. A tarefa é distinguir combinações que formam palavras reais de combinações sem sentido. Esta é a descoberta crítica do método: as sílabas são blocos reutilizáveis.</p>
-          <div class="unit-flow">
-            <div>
-              <h3>O que vais fazer</h3>
-              <p>Zona de construção central com dois slots; banco de sílabas à esquerda com blocos coloridos; botão &#x27;É uma palavra?&#x27; para verificar; lista de palavras encontradas cresce à direita com ícone de estrela por cada nova palavra real.</p>
-            </div>
-            <div>
-              <h3>O que observar</h3>
-              <p>O aluno encontra pelo menos 3 palavras reais usando &#x27;bo&#x27; ou &#x27;ta&#x27; e verbaliza: &#x27;bo+la = bola, isso existe!&#x27;</p>
-            </div>
-          </div>
-          <p>Arrastar sílabas para slots → mostrar combinação; clicar &#x27;É uma palavra?&#x27; → feedback com definição simples se for real, ou sinal âmbar se não for; lista actualiza.</p>
-          <div class="maker-box"><p><strong>Desafio maker:</strong> Em grupo, criar um &#x27;Mapa das Sílabas&#x27; no quadro ou em cartolina: colocar &#x27;bo&#x27; e &#x27;ta&#x27; no centro e desenhar setas para todas as palavras encontradas. Ilustrar cada palavra com um desenho rápido.</p><p><strong>Materiais:</strong> Quadro ou cartolina A2, Marcadores coloridos, Cartões de sílabas físicos</p><p><strong>Comunicação:</strong> Grupo apresenta o Mapa das Sílabas à turma e lê as palavras encontradas em voz alta.</p></div>
-        </article>
-        <aside class="unit-play">
-        <div class="play-card">
-          <p class="play-label">Experimenta combinações com as sílabas.</p>
-          <div class="syllable-bank" data-compose="mix-4"><button class="syllable-chip" style="--chip:#EA580C" data-syllable="bo">bo</button><button class="syllable-chip" style="--chip:#7C3AED" data-syllable="ta">ta</button></div>
-          <div id="mix-4" class="compose-output">__</div>
-          <p class="helper-text">Nem todas as combinações resultam em palavras reais. O importante é experimentar.</p>
-        </div>
-        </aside>
-      </div>
-      <div class="diff-switcher">
-        <button class="diff-btn is-active" data-diff="support-4">🟢 Com ajuda</button>
-        <button class="diff-btn" data-diff="standard-4">🟡 Objetivo</button>
-        <button class="diff-btn" data-diff="challenge-4">🔴 Desafio</button>
-      </div>
-      <div class="diff-panels">
-        <div id="support-4" class="diff-panel is-active"><p>🟢 Apenas 4 sílabas disponíveis; combinações válidas já parcialmente formadas (falta 1 sílaba); professor confirma cada tentativa.</p></div>
-        <div id="standard-4" class="diff-panel"><p>🟡 8 sílabas; aluno forma e verifica livremente; mínimo de 3 palavras reais.</p></div>
-        <div id="challenge-4" class="diff-panel"><p>🔴 10 sílabas; aluno tenta encontrar 5+ palavras; regista as não-palavras e explica por que não existem; pesquisa se &#x27;tabo&#x27; existe noutras línguas.</p></div>
-      </div>
-    </section>
-    
-      
-    <details class="teacher-guide">
-      <summary>Guia do professor</summary>
-      <div class="teacher-grid">
-        <article class="teacher-card">
-          <h3>Objetivos desta página</h3>
-          <ul><li>Reconhecer a palavra &#x27;bota&#x27; globalmente, associando-a à imagem e ao som</li><li>Segmentar a palavra &#x27;bota&#x27; nas sílabas &#x27;bo&#x27; e &#x27;ta&#x27;, identificando duas sílabas</li><li>Recombinar as sílabas de &#x27;bota&#x27; para distinguir combinações reais de não-palavras</li><li>Usar a palavra &#x27;bota&#x27; numa frase simples, oral ou escrita</li></ul>
-        </article>
-        <article class="teacher-card">
-          <h3>Materiais</h3>
-          <ul><li>Tablet ou computador com browser (1 por aluno ou par)</li><li>Cartões de sílabas físicos: &#x27;bo&#x27; e &#x27;ta&#x27; (impressão ou cartolina)</li><li>Lápis e ficha de escrita guiada (opcional, papel A5)</li><li>Quadro interativo para partilha final</li><li>Peluche ou brinquedo &#x27;bota&#x27; de palco (opcional, motivação)</li></ul>
-        </article>
-        <article class="teacher-card">
-          <h3>Organização MEM</h3>
-          <ul><li><strong>Módulos:</strong> TEA (Trabalho de Estudo Autónomo), Trabalho curricular comparticipado, Circuitos de comunicação</li><li><strong>Instrumentos:</strong> PIT, mapa de tarefas, diário de turma</li><li><strong>Organização:</strong> individual (blocos 1-3: 15min) → pares (blocos 4-5: 12min) → grupo 3-4 (bloco maker/extensão: 10min) → turma (bloco 7-8: 8min)</li></ul>
-        </article>
-        <article class="teacher-card">
-          <h3>Percurso desta página</h3>
-          <ul><li>Unidade 1: Abertura contextual — a bota na história</li><li>Unidade 2: Reconhecimento global — ver, ouvir, associar</li><li>Unidade 3: Segmentação silábica — dividir &#x27;bota&#x27; em &#x27;bo&#x27; + &#x27;ta&#x27;</li><li>Unidade 4: Recombinação — novas palavras com &#x27;bo&#x27; e &#x27;ta&#x27;</li></ul>
-        </article>
-        <article class="teacher-card teacher-card-wide">
-          <h3>Referências curriculares</h3>
-          <ul><li><strong>Português · 1.º ano</strong>: Distinguir sílabas em palavras de uso frequente; identificar sílaba tónica e identificar o número de sílabas de uma palavra</li><li><strong>Português · 1.º ano</strong>: Relacionar letra(s)-som com as sílabas e com as palavras; reconhecer palavras de uso frequente; ler e escrever palavras e frases simples</li><li><strong>Português · 1.º ano</strong>: Ouvir ler e ler textos da literatura para a infância; responder oralmente a questões sobre o texto</li></ul>
-          <ul><li>PA-A: Linguagens e textos</li><li>PA-C: Raciocínio e resolução de problemas</li><li>PA-F: Desenvolvimento pessoal e autonomia</li></ul>
-        </article>
-      </div>
-    </details>
-    
-    </main>
 
-    <footer class="footer">PageCraft · Método das 28 Palavras · Bota</footer>
-  </div>
+    <section class="unit" id="u2">
+      <h2>2) Reconhecimento global — ver, ouvir, associar (4 min)</h2>
+      <div class="diff-tabs" data-unit="u2">
+        <button class="tab active" data-level="support">🟢 Apoio</button><button class="tab" data-level="standard">🟡 Intermédio</button><button class="tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-panel active" data-level="support">2 opções e pista após 5 segundos.</div>
+      <div class="diff-panel" data-level="standard">3 opções sem pista automática.</div>
+      <div class="diff-panel" data-level="challenge">4 opções escritas parecidas.</div>
+      <div class="word-display" aria-label="Palavra alvo">BOTA</div>
+      <div id="u2Options" class="options" aria-label="Cartões de escolha"></div>
+      <button class="btn alt" id="u2Confirm" aria-label="Confirmar escolha">Confirmar</button>
+      <button class="btn" id="u2Retry" aria-label="Nova tentativa">Nova tentativa</button>
+      <div id="u2Feedback" class="feedback"></div>
+    </section>
+
+    <section class="unit" id="u3">
+      <h2>3) Segmentação silábica — dividir "bota" (6 min)</h2>
+      <div class="diff-tabs" data-unit="u3">
+        <button class="tab active" data-level="support">🟢 Apoio</button><button class="tab" data-level="standard">🟡 Intermédio</button><button class="tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-panel active" data-level="support">Só "bo" e "ta".</div><div class="diff-panel" data-level="standard">4 blocos com distractores.</div><div class="diff-panel" data-level="challenge">6 blocos e segunda palavra.</div>
+      <p class="word-display">BOTA</p>
+      <div class="drag-row"><div class="slot" data-u3-slot="0" aria-label="Posição 1">1</div><div class="slot" data-u3-slot="1" aria-label="Posição 2">2</div></div>
+      <div class="drag-row" id="u3Pool" aria-label="Blocos de sílabas"></div>
+      <button class="btn alt" id="clapBtn" aria-label="Bater palmas">👏 Bater palmas</button>
+      <span class="badge" id="clapCount">Palmas: 0</span>
+      <div id="u3Feedback" class="feedback"></div>
+    </section>
+
+    <section class="unit" id="u4">
+      <h2>4) Recombinação — novas palavras (7 min)</h2>
+      <div class="diff-tabs" data-unit="u4"><button class="tab active" data-level="support">🟢 Apoio</button><button class="tab" data-level="standard">🟡 Intermédio</button><button class="tab" data-level="challenge">🔴 Desafio</button></div>
+      <div class="diff-panel active" data-level="support">Combinações semi-formadas.</div><div class="diff-panel" data-level="standard">8 sílabas, mínimo 3 palavras reais.</div><div class="diff-panel" data-level="challenge">10 sílabas e explicação das não-palavras.</div>
+      <div class="builder">
+        <div class="slot" data-u4-slot="0">1</div>
+        <div class="word-display" id="u4Current">__</div>
+        <div class="slot" data-u4-slot="1">2</div>
+      </div>
+      <div class="drag-row" id="u4Pool"></div>
+      <button class="btn alt" id="u4Check">É uma palavra?</button>
+      <div id="u4Feedback" class="feedback"></div>
+      <p><strong>⭐ Palavras encontradas:</strong> <span id="u4Found">(nenhuma ainda)</span></p>
+    </section>
+
+    <section class="unit" id="u5">
+      <h2>5) Leitura e escrita guiada (6 min)</h2>
+      <div class="diff-tabs" data-unit="u5"><button class="tab active" data-level="support">🟢 Apoio</button><button class="tab" data-level="standard">🟡 Intermédio</button><button class="tab" data-level="challenge">🔴 Desafio</button></div>
+      <div class="diff-panel active" data-level="support">2 opções e modelo sempre visível.</div><div class="diff-panel" data-level="standard">4 opções e modelo a pedido.</div><div class="diff-panel" data-level="challenge">Sem opções, de memória.</div>
+      <div id="u5Phase1">
+        <p class="word-display">___TA</p>
+        <div class="options" id="u5Options"></div>
+      </div>
+      <div id="u5Phase2" class="hide">
+        <p>Traça e copia: <span class="word-display" style="font-size:40px; opacity:.4; border-bottom:2px dashed #bbb;">BOTA</span></p>
+        <input id="u5Input" class="big-input" aria-label="Escreve bota" placeholder="Escreve aqui..." />
+        <button class="btn alt" id="u5Validate">Validar escrita</button>
+      </div>
+      <div id="u5Done" class="hide"><p class="word-display">BOTA ⭐</p></div>
+      <button class="btn" id="u5Next">Agora escreve</button>
+      <div id="u5Feedback" class="feedback"></div>
+    </section>
+
+    <section class="unit" id="u6">
+      <h2>6) Frase simples — "A bota faz pum pum." (7 min)</h2>
+      <div class="diff-tabs" data-unit="u6"><button class="tab active" data-level="support">🟢 Apoio</button><button class="tab" data-level="standard">🟡 Intermédio</button><button class="tab" data-level="challenge">🔴 Desafio</button></div>
+      <div class="diff-panel active" data-level="support">Primeira palavra já colocada.</div><div class="diff-panel" data-level="standard">Frase completa sem pista.</div><div class="diff-panel" data-level="challenge">Criar frase nova com "bota".</div>
+      <div class="drag-row" id="u6Pool"></div>
+      <div class="drag-row" id="u6Slots">
+        <div class="slot" data-u6-slot="0">1</div><div class="slot" data-u6-slot="1">2</div><div class="slot" data-u6-slot="2">3</div><div class="slot" data-u6-slot="3">4</div><div class="slot" data-u6-slot="4">5</div><div class="slot" data-u6-slot="5">6</div>
+      </div>
+      <button class="btn alt" id="u6Check">Verificar frase</button>
+      <textarea id="u6Custom" class="hide" rows="3" placeholder="Escreve a tua frase com bota:"></textarea>
+      <div id="u6Feedback" class="feedback"></div>
+    </section>
+
+    <section class="unit" id="u7">
+      <h2>7) Mini-avaliação formativa (5 min)</h2>
+      <div class="diff-tabs" data-unit="u7"><button class="tab active" data-level="support">🟢 Apoio</button><button class="tab" data-level="standard">🟡 Intermédio</button><button class="tab" data-level="challenge">🔴 Desafio</button></div>
+      <div class="diff-panel active" data-level="support">Com pista visual.</div><div class="diff-panel" data-level="standard">Sem pista extra.</div><div class="diff-panel" data-level="challenge">Inclui bónus.</div>
+      <div class="progress"><div class="bar" id="u7Bar"></div></div>
+      <div id="u7Task"></div>
+      <div id="u7Final" class="hide">
+        <p class="stars" id="u7Stars"></p>
+        <button class="btn" id="u7Learn">Ver o que aprendeste hoje</button>
+      </div>
+    </section>
+
+    <section class="unit" id="u8">
+      <h2>8) Extensão criativa (6 min)</h2>
+      <div class="diff-tabs" data-unit="u8"><button class="tab active" data-level="support">🟢 Apoio</button><button class="tab" data-level="standard">🟡 Intermédio</button><button class="tab" data-level="challenge">🔴 Desafio</button></div>
+      <div class="diff-panel active" data-level="support">Colorir e legenda com "bota".</div><div class="diff-panel" data-level="standard">Legenda de 3-5 palavras.</div><div class="diff-panel" data-level="challenge">Micro-história de 3 frases.</div>
+      <label for="u8Mode">Escolhe a actividade:</label>
+      <select id="u8Mode" aria-label="Modo de extensão" class="big-input">
+        <option>Desenhar a minha bota</option>
+        <option>Inventar uma história</option>
+        <option>Encontrar palavras com 'bo'</option>
+        <option>Canção das botas</option>
+      </select>
+      <div id="u8Work"></div>
+      <button class="btn" id="u8Share">Partilhar com a turma</button>
+      <div id="u8Feedback" class="feedback"></div>
+    </section>
+
+    <section class="maker">
+      <h2>🛠️ Desafios Maker</h2>
+      <article class="maker-card"><h3>Unplugged</h3><p>Com cartões físicos das sílabas "bo" e "ta", dispõe na mesa e bate palmas em cada sílaba. Depois tenta novas combinações.</p></article>
+      <article class="maker-card"><h3>Whiteboard</h3><p>Cria um "Mapa das Sílabas" com bo/ta no centro e setas para palavras reais encontradas.</p></article>
+      <article class="maker-card"><h3>Unplugged</h3><p>Desenha a bota dos sonhos em A4, escreve uma frase-legenda e apresenta na Galeria das Botas.</p></article>
+    </section>
+
+    <section class="assessment">
+      <h2>📝 Mini-avaliação observável</h2>
+      <div class="ass-item">1) Reconhece "bota" entre palavras parecidas.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div></div>
+      <div class="ass-item">2) Indica que "bota" tem 2 sílabas.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div></div>
+      <div class="ass-item">3) Reconstrói "bo" + "ta" na ordem correcta.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div></div>
+      <div class="ass-item">4) Ordena a frase "A bota faz pum pum.".
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div></div>
+      <div class="ass-item">5) Usa "bota" numa frase oral ou escrita.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div></div>
+    </section>
+
+    <section class="curric">
+      <h2>Referências curriculares</h2>
+      <h3>Aprendizagens Essenciais</h3>
+      <ul>
+        <li>Distinguir sílabas em palavras frequentes e identificar número de sílabas.</li>
+        <li>Relacionar letra(s)-som, reconhecer palavras frequentes, ler e escrever frases simples.</li>
+        <li>Ouvir ler e responder oralmente a questões sobre texto.</li>
+      </ul>
+      <h3>Perfil do Aluno</h3>
+      <p>PA-A: Linguagens e textos · PA-C: Raciocínio e resolução de problemas · PA-F: Desenvolvimento pessoal e autonomia</p>
+    </section>
+    <footer>Gerado por PageCraft 🛠️</footer>
+  </main>
 
   <script>
-    const synth = window.speechSynthesis;
+    const S = {
+      cenarioActiva: 'escondida', palavraDestacada: 'nao',
+      selectedU2: null, clap: 0,
+      u3Slots: [null, null], u4Slots: [null, null], u4Found: new Set(),
+      u5Phase: 'completar', u6Slots: Array(6).fill(null),
+      u7Index: 0, u7Ans: [false,false,false,false],
+      activeLevels: {u1:'support',u2:'support',u3:'support',u4:'support',u5:'support',u6:'support',u7:'support',u8:'support'}
+    };
 
-    document.querySelectorAll('.reveal-btn').forEach((button) => {
-      button.addEventListener('click', () => {
-        const target = document.getElementById(button.dataset.target);
-        if (!target) return;
-        target.classList.toggle('hidden');
-      });
-    });
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function beep(freq=440, dur=0.09, type='sine', vol=0.05){
+      const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+      o.type=type; o.frequency.value=freq; g.gain.value=vol;
+      o.connect(g); g.connect(audioCtx.destination); o.start();
+      g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+dur); o.stop(audioCtx.currentTime+dur);
+    }
+    function successTone(){ beep(660,.07,'triangle'); setTimeout(()=>beep(880,.1,'triangle'),80); }
+    function warnTone(){ beep(220,.1,'square'); }
 
-    document.querySelectorAll('.speak-btn').forEach((button) => {
-      button.addEventListener('click', () => {
-        if (!synth) return;
-        const utterance = new SpeechSynthesisUtterance(button.dataset.speak || '');
-        utterance.lang = 'pt-PT';
-        synth.cancel();
-        synth.speak(utterance);
-      });
-    });
+    const fx = document.getElementById('fx'), ctx = fx.getContext('2d');
+    let particles = [];
+    function resizeFx(){ fx.width = innerWidth * devicePixelRatio; fx.height = innerHeight * devicePixelRatio; ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0); }
+    addEventListener('resize', resizeFx); resizeFx();
+    function confetti(x=innerWidth/2,y=120){ for(let i=0;i<60;i++){ particles.push({x,y,vx:(Math.random()-0.5)*7,vy:Math.random()*-6-2,g:.14,c:["#22c55e","#E05FA0","#F59E0B","#7C3AED"][i%4],s:Math.random()*6+3,l:80}); } }
+    function tick(){ ctx.clearRect(0,0,innerWidth,innerHeight); particles=particles.filter(p=>p.l-->0); particles.forEach(p=>{p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; ctx.fillStyle=p.c; ctx.fillRect(p.x,p.y,p.s,p.s);}); requestAnimationFrame(tick);} tick();
 
-    document.querySelectorAll('.choice-row').forEach((row) => {
-      const feedback = row.parentElement.querySelector('.feedback');
-      row.querySelectorAll('.choice-btn').forEach((button) => {
-        button.addEventListener('click', () => {
-          row.querySelectorAll('.choice-btn').forEach((item) => item.classList.remove('is-right', 'is-wrong'));
-          const rightAnswer = button.dataset.answer || button.dataset.clozeAnswer || '';
-          if (button.dataset.choice === rightAnswer) {
-            button.classList.add('is-right');
-            if (feedback) feedback.textContent = 'Muito bem!';
-          } else {
-            button.classList.add('is-wrong');
-            if (feedback) feedback.textContent = 'Tenta outra vez.';
-          }
+    function setupTabs(){
+      document.querySelectorAll('.diff-tabs').forEach(group=>{
+        group.addEventListener('click',e=>{
+          const btn=e.target.closest('.tab'); if(!btn) return;
+          const unit=group.dataset.unit; S.activeLevels[unit]=btn.dataset.level;
+          group.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); btn.classList.add('active');
+          const sec = group.parentElement;
+          sec.querySelectorAll('.diff-panel').forEach(p=>p.classList.toggle('active', p.dataset.level===btn.dataset.level));
+          refreshByLevel(unit);
         });
       });
+    }
+
+    function refreshByLevel(unit){
+      if(unit==='u2') renderU2();
+      if(unit==='u3') renderU3();
+      if(unit==='u4') renderU4();
+      if(unit==='u5') renderU5();
+      if(unit==='u6') renderU6();
+      if(unit==='u8') renderU8Work();
+    }
+
+    document.getElementById('discoverBtn').addEventListener('click', ()=>{
+      S.cenarioActiva='revelada'; S.palavraDestacada='sim';
+      const w=document.getElementById('botaWord'), hero=document.getElementById('bootHero');
+      w.classList.add('highlight','bounce'); hero.classList.add('pulse');
+      successTone(); confetti();
+      const fb = document.getElementById('u1Feedback');
+      fb.className='feedback show ok';
+      const story = document.getElementById('storyText');
+      if(S.activeLevels.u1==='support') story.innerHTML='A <span id="botaWord" class="highlight">bota</span> pum!';
+      if(S.activeLevels.u1==='challenge') {
+        const count = (story.textContent.match(/bota/gi)||[]).length;
+        fb.textContent = 'Muito bem! Encontraste "bota". No texto aparece '+count+' vezes.';
+      } else fb.textContent='Muito bem! Onde está escrita a palavra bota?';
+      setTimeout(()=>{w.classList.remove('bounce'); hero.classList.remove('pulse');},900);
     });
 
-    document.querySelectorAll('[data-compose]').forEach((bank) => {
-      const output = document.getElementById(bank.dataset.compose);
-      const parts = [];
-      bank.querySelectorAll('.syllable-chip').forEach((chip) => {
-        chip.addEventListener('click', () => {
-          parts.push(chip.dataset.syllable || '');
-          if (output) output.textContent = parts.join('');
+    function shuffle(a){ return [...a].sort(()=>Math.random()-.5); }
+    function renderU2(){
+      const lv=S.activeLevels.u2; S.selectedU2=null; document.getElementById('u2Feedback').className='feedback';
+      const op = lv==='support' ? ['bota','meia'] : (lv==='challenge' ? ['bota','botina','bote','botão'] : ['bota','sapato','meia']);
+      const wrap=document.getElementById('u2Options'); wrap.innerHTML='';
+      const arr=shuffle(op);
+      arr.forEach(v=>{
+        const b=document.createElement('button'); b.className='card-btn'; b.textContent = v==='bota'?'👢':'🧦'; if(lv==='challenge') b.textContent=v;
+        b.setAttribute('aria-label','Escolher '+v);
+        b.addEventListener('click',()=>{ S.selectedU2=v; wrap.querySelectorAll('.card-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); beep(500,.05); });
+        wrap.appendChild(b);
+      });
+      if(lv==='support'){ setTimeout(()=>{ if(!S.selectedU2){ [...wrap.children].forEach((el,i)=>{ if(arr[i]==='bota'){ el.style.boxShadow='0 0 0 4px #22c55e inset'; el.classList.add('pulse'); } }); } },5000); }
+    }
+    document.getElementById('u2Confirm').addEventListener('click',()=>{
+      const fb=document.getElementById('u2Feedback'); if(!S.selectedU2){ fb.className='feedback show no'; fb.textContent='Escolhe primeiro uma opção.'; return; }
+      const btns=[...document.querySelectorAll('#u2Options .card-btn')];
+      if(S.selectedU2==='bota'){ fb.className='feedback show ok'; fb.textContent='✓ Correcto! Esta é a imagem/palavra bota.'; successTone(); confetti(); btns.find(b=>b.classList.contains('active'))?.classList.add('correct'); }
+      else { fb.className='feedback show no'; fb.textContent='Ainda não. Procura a forma global de "bota".'; warnTone(); btns.find(b=>b.classList.contains('active'))?.classList.add('wrong'); btns.forEach((b,i)=>{ const lv=S.activeLevels.u2; const arr = lv==='support'?['bota','meia']:(lv==='challenge'?['bota','botina','bote','botão']:['bota','sapato','meia']); if((S.activeLevels.u2==='challenge'?b.textContent: (b.textContent==='👢'?'bota':'x'))==='bota') b.classList.add('correct'); }); }
+    });
+    document.getElementById('u2Retry').addEventListener('click',renderU2);
+
+    function mkChip(text, cls='gray'){
+      const d=document.createElement('div'); d.className='chip '+cls; d.textContent=text; d.dataset.val=text; d.setAttribute('role','button'); d.tabIndex=0; return d;
+    }
+
+    function renderU3(){
+      S.u3Slots=[null,null]; document.querySelectorAll('[data-u3-slot]').forEach((s,i)=>{s.textContent=String(i+1); s.classList.remove('filled'); s.innerHTML=String(i+1);});
+      const pool=document.getElementById('u3Pool'); pool.innerHTML='';
+      const lv=S.activeLevels.u3;
+      const arr = lv==='support' ? ['bo','ta'] : (lv==='challenge' ? ['bo','ta','ba','to','la','co'] : ['bo','ta','ba','to']);
+      arr.forEach(v=>pool.appendChild(mkChip(v, v==='bo'?'bo':(v==='ta'?'ta':'gray'))));
+      setupDnD('#u3 .chip','[data-u3-slot]','u3');
+      document.getElementById('u3Feedback').className='feedback';
+    }
+    document.getElementById('clapBtn').addEventListener('click',()=>{ S.clap=Math.min(2,S.clap+1); document.getElementById('clapCount').textContent='Palmas: '+S.clap; beep(340,.06,'square'); checkU3(); });
+    function checkU3(){
+      const fb=document.getElementById('u3Feedback');
+      if(S.u3Slots[0]==='bo'&&S.u3Slots[1]==='ta'&&S.clap===2){ fb.className='feedback show ok'; fb.textContent='Excelente! "bo" + "ta" e 2 palmas.'; successTone(); confetti(); }
+      else if(S.u3Slots[0]&&S.u3Slots[1]){ fb.className='feedback show no'; fb.textContent='Experimenta outra ordem e confirma 2 palmas.'; }
+    }
+
+    const realWords = new Set(['bota','bola','bolo','boca','taco','tapete']);
+    function renderU4(){
+      S.u4Slots=[null,null]; ['0','1'].forEach(i=>{const s=document.querySelector(`[data-u4-slot="${i}"]`); s.textContent=String(Number(i)+1); s.classList.remove('filled');});
+      document.getElementById('u4Current').textContent='__';
+      document.getElementById('u4Feedback').className='feedback';
+      const lv=S.activeLevels.u4;
+      const pool=document.getElementById('u4Pool'); pool.innerHTML='';
+      const arr = lv==='support' ? ['bo','ta','la','co'] : (lv==='challenge' ? ['bo','ta','la','co','ca','pe','te','lo','to','ba'] : ['bo','ta','la','co','ca','pe','te','lo']);
+      arr.forEach(v=>pool.appendChild(mkChip(v, v==='bo'?'bo':(v==='ta'?'ta':'gray'))));
+      setupDnD('#u4 .chip','[data-u4-slot]','u4');
+      updateU4Found();
+    }
+    document.getElementById('u4Check').addEventListener('click',()=>{
+      const c=(S.u4Slots[0]||'')+(S.u4Slots[1]||'');
+      const fb=document.getElementById('u4Feedback');
+      if(c.length<2){ fb.className='feedback show no'; fb.textContent='Preenche os 2 slots.'; return; }
+      if(realWords.has(c)){ fb.className='feedback show ok'; fb.textContent='✓ "'+c+'" é palavra real!'; S.u4Found.add(c); successTone(); confetti(); }
+      else { fb.className='feedback show no'; fb.textContent='"'+c+'" não é palavra aqui. Tenta nova combinação.'; warnTone(); }
+      updateU4Found();
+    });
+    function updateU4Found(){ document.getElementById('u4Found').textContent=[...S.u4Found].join(' ⭐ ') || '(nenhuma ainda)'; }
+
+    function renderU5(){
+      const lv=S.activeLevels.u5; S.u5Phase='completar';
+      document.getElementById('u5Phase1').classList.remove('hide'); document.getElementById('u5Phase2').classList.add('hide'); document.getElementById('u5Done').classList.add('hide');
+      document.getElementById('u5Next').classList.remove('hide'); document.getElementById('u5Feedback').className='feedback';
+      const options = lv==='support' ? ['bo','ba'] : (lv==='challenge' ? [] : ['bo','ba','bu','bi']);
+      const w=document.getElementById('u5Options'); w.innerHTML='';
+      if(lv==='challenge'){
+        w.innerHTML='<input id="u5Free" class="big-input" aria-label="Sílaba inicial" placeholder="Escreve a sílaba inicial" />';
+      } else {
+        shuffle(options).forEach(v=>{ const b=document.createElement('button'); b.className='mini-word'; b.textContent=v; b.addEventListener('click',()=>checkU5(v)); w.appendChild(b); });
+      }
+    }
+    function checkU5(v){
+      const fb=document.getElementById('u5Feedback');
+      if(v==='bo'){ fb.className='feedback show ok'; fb.textContent='Muito bem! A palavra começa por "bo".'; successTone(); }
+      else { fb.className='feedback show no'; fb.textContent='Quase! Tenta a sílaba inicial de "bota".'; warnTone(); }
+    }
+    document.getElementById('u5Next').addEventListener('click',()=>{
+      if(S.activeLevels.u5==='challenge'){
+        const val=(document.getElementById('u5Free')?.value||'').trim().toLowerCase();
+        checkU5(val);
+      }
+      S.u5Phase='copiar';
+      document.getElementById('u5Phase1').classList.add('hide'); document.getElementById('u5Phase2').classList.remove('hide'); document.getElementById('u5Next').classList.add('hide');
+    });
+    document.getElementById('u5Validate').addEventListener('click',()=>{
+      const t=document.getElementById('u5Input').value.trim().toLowerCase(); const fb=document.getElementById('u5Feedback');
+      if(t==='bota'){ fb.className='feedback show ok'; fb.textContent='Escreveste "bota" sem erro visível!'; successTone(); confetti(); document.getElementById('u5Done').classList.remove('hide'); }
+      else { fb.className='feedback show no'; fb.textContent='Repara na ordem das letras em "bota".'; warnTone(); }
+    });
+
+    function renderU6(){
+      const lv=S.activeLevels.u6;
+      const pool=document.getElementById('u6Pool'); pool.innerHTML=''; S.u6Slots=Array(6).fill(null);
+      document.querySelectorAll('[data-u6-slot]').forEach((s,i)=>{s.innerHTML=String(i+1); s.classList.remove('filled');});
+      let words = lv==='support' ? ['bota','pum','.'] : ['A','bota','faz','pum','pum','.'];
+      shuffle(words).forEach(w=>pool.appendChild(mkChip(w, w==='bota'?'bo':(w==='A'||w==='faz'?'ta':'gray'))));
+      setupDnD('#u6 .chip','[data-u6-slot]','u6');
+      if(lv==='support'){ const s0=document.querySelector('[data-u6-slot="0"]'); s0.textContent='A'; s0.classList.add('filled'); S.u6Slots[0]='A'; }
+      document.getElementById('u6Custom').classList.toggle('hide', lv!=='challenge');
+      document.getElementById('u6Feedback').className='feedback';
+    }
+    document.getElementById('u6Check').addEventListener('click',()=>{
+      const lv=S.activeLevels.u6; const fb=document.getElementById('u6Feedback');
+      const correct = lv==='support' ? ['A','bota','pum','.'] : ['A','bota','faz','pum','pum','.'];
+      const used = S.u6Slots.filter(Boolean).slice(0, correct.length);
+      if(JSON.stringify(used)===JSON.stringify(correct)){ fb.className='feedback show ok'; fb.textContent='Frase correcta! A bota faz pum pum.'; successTone(); confetti(innerWidth/2,240); }
+      else { fb.className='feedback show no'; fb.textContent='Ainda não. A frase precisa da ordem certa.'; warnTone(); }
+    });
+
+    const u7Task = document.getElementById('u7Task');
+    const u7Data = [
+      {q:'1) Clica na palavra correcta:', type:'choice', options:['bola','bota','boca'], ok:'bota'},
+      {q:'2) Quantas sílabas tem "bota"?', type:'choice', options:['1','2','3','4'], ok:'2'},
+      {q:'3) Reconstrói a palavra com as sílabas:', type:'drag'},
+      {q:'4) Completa: "A ___ faz pum pum."', type:'choice', options:['bota','bola','boca'], ok:'bota'}
+    ];
+    function renderU7(){
+      document.getElementById('u7Bar').style.width=((S.u7Index)/4*100)+'%';
+      if(S.u7Index>=4){
+        u7Task.classList.add('hide'); document.getElementById('u7Final').classList.remove('hide');
+        const score=S.u7Ans.filter(Boolean).length; document.getElementById('u7Bar').style.width='100%';
+        document.getElementById('u7Stars').textContent='★'.repeat(score)+'☆'.repeat(4-score)+' ('+score+'/4)'; return;
+      }
+      const t=u7Data[S.u7Index]; u7Task.classList.remove('hide'); document.getElementById('u7Final').classList.add('hide');
+      if(t.type==='choice'){
+        u7Task.innerHTML='<p><strong>'+t.q+'</strong></p><div class="options">'+t.options.map(o=>`<button class="mini-word" data-opt="${o}">${o}</button>`).join('')+'</div>';
+        u7Task.querySelectorAll('[data-opt]').forEach(b=>b.addEventListener('click',()=>{ const ok=b.dataset.opt===t.ok; S.u7Ans[S.u7Index]=ok; ok?successTone():warnTone(); if(ok) confetti(); S.u7Index++; renderU7(); }));
+      } else {
+        u7Task.innerHTML='<p><strong>'+t.q+'</strong></p><div class="drag-row"><div class="slot" id="u7s1">1</div><div class="slot" id="u7s2">2</div></div><div class="drag-row" id="u7pool"></div><button class="btn alt" id="u7check">Confirmar</button>';
+        const p=document.getElementById('u7pool'); ['ta','bo'].forEach(v=>p.appendChild(mkChip(v,v==='bo'?'bo':'ta')));
+        let slots=[null,null];
+        setupDnD('#u7 .chip','#u7s1,#u7s2','u7',(arr)=>{slots=arr;});
+        document.getElementById('u7check').addEventListener('click',()=>{ const ok=slots[0]==='bo'&&slots[1]==='ta'; S.u7Ans[S.u7Index]=ok; ok?successTone():warnTone(); if(ok) confetti(); S.u7Index++; renderU7(); });
+      }
+    }
+    document.getElementById('u7Learn').addEventListener('click',()=>{ alert('Hoje reconheceste, segmentaste e usaste a palavra "bota".'); });
+
+    function renderU8Work(){
+      const m=document.getElementById('u8Mode').value; const box=document.getElementById('u8Work');
+      if(m==='Desenhar a minha bota') box.innerHTML='<p>🎨 Desenha a tua bota e escreve uma legenda.</p><textarea rows="3" placeholder="A minha bota é..."></textarea>';
+      if(m==='Inventar uma história') box.innerHTML='<p>📖 Inventa uma história curta com "bota".</p><textarea rows="4" placeholder="Era uma vez..."></textarea>';
+      if(m==="Encontrar palavras com 'bo'") box.innerHTML='<p>🔎 Escreve palavras que começam por bo:</p><input class="big-input" placeholder="bola, bolo, ..." />';
+      if(m==='Canção das botas') box.innerHTML='<p>🎵 Cria um refrão simples com "bota" e "pum pum".</p><textarea rows="3" placeholder="Bota, bota..."></textarea>';
+    }
+    document.getElementById('u8Mode').addEventListener('change',renderU8Work);
+    document.getElementById('u8Share').addEventListener('click',()=>{ const fb=document.getElementById('u8Feedback'); fb.className='feedback show ok'; fb.textContent='Partilhado com a turma! Boa participação.'; successTone(); confetti(); });
+
+    function setupDnD(itemSel, slotSel, context, cb){
+      const items = document.querySelectorAll(itemSel);
+      const slots = document.querySelectorAll(slotSel);
+      let drag = null, offsetX = 0, offsetY = 0;
+      items.forEach(el=>{
+        el.addEventListener('pointerdown',e=>{
+          drag=el; offsetX=e.clientX-el.getBoundingClientRect().left; offsetY=e.clientY-el.getBoundingClientRect().top;
+          el.setPointerCapture(e.pointerId); el.style.position='fixed'; el.style.zIndex='1000'; el.style.transform='scale(1.1)'; move(e);
         });
-      });
-    });
-
-    document.querySelectorAll('.clear-compose').forEach((button) => {
-      button.addEventListener('click', () => {
-        const output = document.getElementById(button.dataset.composeClear);
-        if (output) output.textContent = '__';
-      });
-    });
-
-    document.querySelectorAll('.check-card').forEach((card) => {
-      card.addEventListener('click', () => card.classList.toggle('is-done'));
-    });
-
-    document.querySelectorAll('.diff-switcher').forEach((switcher) => {
-      const panels = switcher.nextElementSibling;
-      switcher.querySelectorAll('.diff-btn').forEach((button) => {
-        button.addEventListener('click', () => {
-          switcher.querySelectorAll('.diff-btn').forEach((item) => item.classList.remove('is-active'));
-          panels.querySelectorAll('.diff-panel').forEach((panel) => panel.classList.remove('is-active'));
-          button.classList.add('is-active');
-          const target = panels.querySelector('#' + CSS.escape(button.dataset.diff));
-          if (target) target.classList.add('is-active');
+        el.addEventListener('pointermove',e=>{ if(drag===el) move(e); });
+        el.addEventListener('pointerup',e=>{
+          if(drag!==el) return;
+          let placed=false;
+          slots.forEach((s,i)=>{
+            const r=s.getBoundingClientRect();
+            if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom){
+              s.textContent=el.dataset.val; s.classList.add('filled');
+              if(context==='u3') S.u3Slots[i]=el.dataset.val;
+              if(context==='u4') { S.u4Slots[i]=el.dataset.val; document.getElementById('u4Current').textContent=(S.u4Slots[0]||'_')+(S.u4Slots[1]||'_'); }
+              if(context==='u6') S.u6Slots[i]=el.dataset.val;
+              if(context==='u7'){ if(i===0||i===1){ if(!window.__u7slots) window.__u7slots=[null,null]; window.__u7slots[i]=el.dataset.val; if(cb) cb(window.__u7slots);} }
+              el.remove(); placed=true;
+            }
+          });
+          el.style.position=''; el.style.left=''; el.style.top=''; el.style.zIndex=''; el.style.transform='';
+          drag=null;
+          if(context==='u3') checkU3();
+          if(!placed) beep(300,.03);
         });
+        el.addEventListener('keydown',e=>{ if(e.key==='Enter'){ beep(400,.04); } });
       });
-    });
+      function move(e){ drag.style.left=(e.clientX-offsetX)+'px'; drag.style.top=(e.clientY-offsetY)+'px'; }
+    }
+
+    setupTabs();
+    renderU2(); renderU3(); renderU4(); renderU5(); renderU6(); renderU7(); renderU8Work();
   </script>
 </body>
 </html>

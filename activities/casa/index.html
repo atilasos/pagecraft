@@ -3,514 +3,1305 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>M28P #8 — casa | PageCraft</title>
-  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHRleHQgeT0iNTAiIGZvbnQtc2l6ZT0iNDgiPvCfk5g8L3RleHQ+PC9zdmc+" />
+  <title>Palavra 8 - casa (M28P)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #FFF7ED;
+      --bg: #F0F7FF;
       --surface: #FFFFFF;
-      --primary: #EA580C;
+      --primary: #2563EB;
       --accent: #F59E0B;
       --text: #1E1B18;
-      --correct: #22c55e;
-      --correct-bg: #f0fdf4;
-      --incorrect: #F59E0B;
-      --incorrect-bg: #fffbeb;
+      --ok: #22c55e;
+      --ok-bg: #f0fdf4;
+      --warn: #F59E0B;
+      --warn-bg: #fffbeb;
+      --ca: #2563EB;
+      --sa: #059669;
       --radius: 16px;
-      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      --font: 'Nunito', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
-      --touch-size: 48px;
-      --card-gap: 1rem;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --touch: 48px;
+      --dur: 200ms;
     }
+
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html, body { margin: 0; padding: 0; }
     body {
-      margin: 0;
-      font-family: var(--font);
-      background:
-        radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 20%, transparent), transparent 38%),
-        linear-gradient(180deg, color-mix(in srgb, var(--primary) 8%, var(--bg)), var(--bg));
+      font-family: 'Nunito', 'Poppins', 'Comic Sans MS', sans-serif;
+      background: radial-gradient(circle at 10% 10%, #dbeafe, var(--bg) 45%), linear-gradient(180deg, #eff6ff, #e0f2fe 60%, #f0f7ff);
       color: var(--text);
       font-size: 20px;
-      line-height: 1.55;
-      min-height: 100vh;
+      line-height: 1.35;
     }
-    a, button, summary, textarea { font: inherit; }
-    .skip-link { position: absolute; left: 1rem; top: -4rem; background: var(--surface); color: var(--text); padding: 0.75rem 1rem; border-radius: 9999px; z-index: 1000; border: 2px solid var(--primary); }
-    .skip-link:focus { top: 1rem; }
-    :focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
-    .shell { max-width: 1120px; margin: 0 auto; padding: 1rem 1rem 3rem; }
-    .hero {
+
+    .wrap { max-width: 980px; margin: 0 auto; padding: 1rem; }
+    .card {
+      background: var(--surface);
+      border: 2px solid var(--primary);
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin: 0.9rem 0;
+      box-shadow: var(--shadow);
       position: relative;
       overflow: hidden;
-      border-radius: 28px;
-      padding: 1.4rem;
-      background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 72%, white), color-mix(in srgb, var(--accent) 60%, white));
-      color: white;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
     }
-    .hero::after { content: ""; position: absolute; inset: auto -8% -24% auto; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.14); }
-    .hero-top { display: flex; gap: 1rem; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; position: relative; z-index: 1; }
-    .hero-kicker, .hero-badge, .meta-chip, .nav-pill, .page-link span {
+
+    .header {
+      background: linear-gradient(135deg, #60a5fa, #2563eb 60%, #0ea5e9);
+      color: #fff;
+      border: none;
+    }
+    h1 { margin: 0; font-size: clamp(1.9rem, 4vw, 2.3rem); }
+    h2 { margin: 0.2rem 0 0.7rem; font-size: clamp(1.4rem, 3vw, 1.8rem); }
+    h3 { margin: 0.2rem 0 0.5rem; font-size: 1.2rem; }
+    p { margin: 0.4rem 0; }
+
+    .meta, .goals { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.6rem; }
+    .badge {
+      background: #1d4ed8;
+      color: #fff;
+      font-weight: 700;
+      border-radius: 999px;
+      padding: 0.3rem 0.9rem;
+    }
+    .goal { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); }
+
+    .mode-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; margin: 0.5rem 0; }
+    .mode-tab {
+      min-height: var(--touch);
+      border-radius: 999px;
+      border: 2px solid #cbd5e1;
+      background: #fff;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform var(--dur), box-shadow var(--dur), border-color var(--dur);
+      padding: 0.5rem;
+    }
+    .mode-tab.active { border-color: var(--primary); box-shadow: 0 6px 16px rgba(37,99,235,.18); transform: translateY(-1px); }
+
+    button, .btn {
+      min-height: var(--touch);
+      border-radius: 999px;
+      border: 2px solid transparent;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 0.65rem 1.2rem;
+      cursor: pointer;
+      transition: transform var(--dur), box-shadow var(--dur), background var(--dur);
+      box-shadow: 0 4px 10px rgba(37,99,235,.24);
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: var(--touch-size);
-      min-width: var(--touch-size);
-      border-radius: 9999px;
-      padding: 0.75rem 1.25rem;
-      font-weight: 700;
-    }
-    .hero-kicker { background: rgba(255,255,255,0.16); }
-    .hero-badge { background: rgba(255,255,255,0.22); }
-    .hero-grid { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.9fr); margin-top: 1.25rem; position: relative; z-index: 1; }
-    .hero-copy h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.05; margin: 0.4rem 0 0.7rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
-    .hero-copy p { margin: 0.4rem 0; max-width: 45rem; }
-    .word-scene { background: rgba(255,255,255,0.14); border: 2px solid rgba(255,255,255,0.28); border-radius: 24px; padding: 1rem; backdrop-filter: blur(4px); }
-    .word-scene .emoji { font-size: clamp(3rem, 10vw, 5.5rem); line-height: 1; }
-    .meta-row, .objective-row, .syllable-row, .page-switch, .section-nav { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-    .meta-row { margin-top: 1rem; }
-    .meta-chip { background: rgba(255,255,255,0.18); }
-    .objective-row { margin: 1rem 0 0; padding: 0; list-style: none; }
-    .objective-row li { background: rgba(255,255,255,0.22); border-radius: 9999px; padding: 0.75rem 1rem; font-weight: 700; min-height: var(--touch-size); display: inline-flex; align-items: center; }
-    .word-spotlight { margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1.1fr 1fr; }
-    .spot-card { background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 70%, white); border-radius: 24px; padding: 1rem; box-shadow: var(--shadow); }
-    .spot-card h2 { margin: 0 0 0.75rem; font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; }
-    .spot-card .word-display { font-size: clamp(2.4rem, 7vw, 3.8rem); font-weight: 800; color: var(--primary); letter-spacing: 0.05em; text-transform: uppercase; }
-    .spot-card .mission { margin-top: 0.75rem; }
-    .syllable-row { margin-top: 1rem; }
-    .syllable-token, .syllable-chip {
-      min-height: var(--touch-size);
-      min-width: var(--touch-size);
-      border-radius: 12px;
-      border: none;
-      color: white;
-      font-weight: 800;
-      font-size: clamp(1.5rem, 4vw, 2rem);
-      padding: 0.55rem 1rem;
-      background: var(--chip, var(--primary));
-      box-shadow: var(--shadow);
-    }
-    .page-switch { margin: 1.2rem 0 0.5rem; }
-    .page-link {
+      gap: 0.4rem;
       text-decoration: none;
-      background: var(--surface);
-      color: var(--text);
-      border: 2px solid color-mix(in srgb, var(--primary) 28%, white);
-      border-radius: 18px;
-      padding: 0.85rem 1rem;
-      min-height: var(--touch-size);
-      display: flex;
-      gap: 0.75rem;
-      align-items: center;
-      justify-content: space-between;
-      flex: 1 1 200px;
-      box-shadow: var(--shadow);
+    }
+    button:hover, .btn:hover { transform: scale(1.03); box-shadow: 0 6px 16px rgba(0,0,0,.14); }
+    button:active, .btn:active { transform: scale(0.98); }
+    button[disabled] { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .word-big {
+      font-size: clamp(2.4rem, 7vw, 4.5rem);
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      color: var(--primary);
+      text-align: center;
+      margin: 0.5rem 0;
+    }
+    .highlight { color: #ea580c; font-weight: 800; background: #ffedd5; border-radius: 10px; padding: 0 0.35rem; }
+    .row { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
+    .between { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.6rem; }
+
+    .scene {
+      height: clamp(180px, 30vw, 280px);
+      border: 2px dashed #93c5fd;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, #bfdbfe, #fef3c7);
+      display: grid;
+      place-items: center;
+      font-size: clamp(3rem, 9vw, 5rem);
+      position: relative;
+      overflow: hidden;
+    }
+    .scene .label {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      background: rgba(255,255,255,.85);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      padding: 0.2rem 0.5rem;
       font-weight: 700;
     }
-    .page-link.is-current { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
-    .section-nav { position: sticky; top: 0; z-index: 10; padding: 0.85rem 0 1rem; background: linear-gradient(180deg, var(--bg), rgba(255,248,240,0.88)); backdrop-filter: blur(6px); }
-    .nav-pill { text-decoration: none; background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 24%, white); padding: 0.55rem 1rem; }
-    .content { display: grid; gap: 1.1rem; }
-    .unit-card { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 35%, white); border-radius: 24px; padding: 1.15rem; box-shadow: var(--shadow); }
-    .unit-head { display: flex; gap: 1rem; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
-    .unit-head h2 { margin: 0.2rem 0 0; font-size: clamp(1.45rem, 4vw, 2.1rem); font-weight: 800; }
-    .unit-kicker { color: color-mix(in srgb, var(--primary) 80%, black); font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.9rem; }
-    .unit-badge { background: color-mix(in srgb, var(--accent) 22%, var(--surface)); border: 2px solid var(--accent); border-radius: 9999px; padding: 0.65rem 1rem; font-weight: 800; min-height: var(--touch-size); display: inline-flex; align-items: center; }
-    .unit-grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.95fr); margin-top: 1rem; }
-    .unit-copy p { margin: 0.65rem 0; }
-    .unit-flow { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 1rem; }
-    .unit-flow > div, .play-card, .maker-box, .teacher-card { background: color-mix(in srgb, var(--bg) 70%, white); border-radius: 18px; padding: 0.95rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
-    .play-label { font-weight: 800; margin: 0 0 0.8rem; }
-    .pill-btn, .choice-btn, .check-card, .prompt-card {
-      min-height: var(--touch-size);
-      min-width: var(--touch-size);
-      border-radius: 9999px;
-      border: 2px solid transparent;
-      padding: 0.75rem 1.2rem;
-      font-weight: 700;
+
+    .img-options { display: grid; gap: 0.7rem; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
+    .img-opt {
+      min-height: 130px;
+      border: 3px solid #bfdbfe;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 3rem;
+      background: #f8fbff;
       cursor: pointer;
-      transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+      transition: border-color var(--dur), transform var(--dur), box-shadow var(--dur);
+      touch-action: manipulation;
     }
-    .pill-btn:hover, .choice-btn:hover, .check-card:hover, .prompt-card:hover, .page-link:hover { transform: scale(1.05); box-shadow: 0 10px 24px rgba(0,0,0,0.12); }
-    .pill-btn:active, .choice-btn:active, .check-card:active, .prompt-card:active, .page-link:active { transform: scale(0.97); }
-    .pill-btn { background: var(--primary); color: white; }
-    .choice-row, .check-grid, .prompt-grid, .compose-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-    .choice-btn, .check-card, .prompt-card { background: var(--surface); color: var(--text); border-color: color-mix(in srgb, var(--primary) 22%, white); }
-    .choice-btn.is-right, .check-card.is-done { background: var(--correct-bg); border-color: var(--correct); color: #166534; }
-    .choice-btn.is-wrong { background: var(--incorrect-bg); border-color: var(--incorrect); color: #92400e; }
-    .feedback, .helper-text { margin: 0.85rem 0 0; font-weight: 700; }
-    .feedback { min-height: 1.4em; }
-    .compose-output, .phrase-card, .cloze-word { min-height: 72px; border-radius: 18px; background: var(--surface); border: 2px dashed color-mix(in srgb, var(--primary) 35%, white); display: grid; place-items: center; font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800; color: var(--primary); padding: 0.9rem; margin-top: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
-    .phrase-card { text-transform: none; font-size: 1.3rem; color: var(--text); }
-    .phrase-input { width: 100%; margin-top: 0.85rem; border-radius: 18px; border: 2px solid color-mix(in srgb, var(--primary) 25%, white); padding: 0.9rem 1rem; min-height: 120px; background: #fff; }
-    .diff-switcher { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; }
-    .diff-btn { min-height: var(--touch-size); min-width: var(--touch-size); border-radius: 9999px; border: 2px solid color-mix(in srgb, var(--primary) 28%, white); background: var(--surface); padding: 0.7rem 1rem; font-weight: 700; cursor: pointer; }
-    .diff-btn.is-active { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
-    .diff-panel { display: none; background: color-mix(in srgb, var(--bg) 72%, white); border-radius: 18px; padding: 0.95rem; margin-top: 0.8rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
-    .diff-panel.is-active { display: block; }
-    .teacher-guide { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 30%, white); border-radius: 24px; padding: 0.9rem 1rem; box-shadow: var(--shadow); }
-    .teacher-guide summary { min-height: var(--touch-size); display: flex; align-items: center; cursor: pointer; font-weight: 800; font-size: 1.2rem; }
-    .teacher-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 1rem; }
-    .teacher-card-wide { grid-column: 1 / -1; }
-    .teacher-card h3 { margin-top: 0; }
-    .footer { text-align: center; padding: 1.4rem 0 0; font-weight: 700; color: color-mix(in srgb, var(--text) 72%, white); }
+    .img-opt:hover { transform: translateY(-2px); }
+    .img-opt.selected { border-color: var(--accent); }
+    .img-opt.correct { border-color: var(--ok); background: var(--ok-bg); }
+    .img-opt.wrong { border-color: var(--warn); background: var(--warn-bg); }
+
+    .feedback {
+      margin-top: 0.6rem;
+      border-radius: 12px;
+      padding: 0.5rem 0.8rem;
+      font-weight: 700;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .feedback.ok { background: var(--ok-bg); color: #166534; border: 2px solid var(--ok); }
+    .feedback.warn { background: var(--warn-bg); color: #92400e; border: 2px solid var(--warn); }
+
+    .syllable {
+      background: #64748b;
+      color: #fff;
+      font-weight: 800;
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      border-radius: 12px;
+      padding: 0.45rem 1rem;
+      min-width: 86px;
+      text-align: center;
+      border: 2px solid rgba(255,255,255,.45);
+      user-select: none;
+      touch-action: none;
+      cursor: grab;
+      position: relative;
+      transition: transform var(--dur), box-shadow var(--dur);
+    }
+    .syllable.ca { background: var(--ca); }
+    .syllable.sa { background: var(--sa); }
+    .syllable.dragging { transform: scale(1.08); box-shadow: 0 10px 18px rgba(0,0,0,.2); z-index: 4; }
+
+    .dropzone {
+      border: 3px dashed #93c5fd;
+      border-radius: 12px;
+      min-height: 76px;
+      min-width: 110px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      background: #f8fbff;
+      transition: border-color var(--dur), background var(--dur);
+      padding: 0.4rem;
+    }
+    .dropzone.over { border-color: #1d4ed8; background: #dbeafe; }
+
+    .claps {
+      min-height: var(--touch);
+      padding: 0.5rem 0.9rem;
+      border-radius: 12px;
+      border: 2px solid #bfdbfe;
+      font-weight: 800;
+      background: #eff6ff;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .slots { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+    .chip {
+      min-height: var(--touch);
+      min-width: 54px;
+      border-radius: 999px;
+      padding: 0.55rem 0.9rem;
+      border: 2px solid #93c5fd;
+      background: #fff;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .panel {
+      border: 2px solid #cbd5e1;
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 0.7rem;
+    }
+
+    .exercise-tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.6rem 0; }
+    .exercise-tab.active { background: #0ea5e9; }
+
+    .trace-wrap { display: grid; gap: 0.6rem; }
+    canvas.trace {
+      width: 100%;
+      max-width: 560px;
+      height: 170px;
+      border: 2px dashed #60a5fa;
+      border-radius: 12px;
+      background: repeating-linear-gradient(180deg, #fff, #fff 40px, #e0f2fe 40px, #e0f2fe 42px);
+      touch-action: none;
+    }
+
+    .phrase-words { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .word-token {
+      min-height: var(--touch);
+      padding: 0.55rem 0.9rem;
+      border-radius: 999px;
+      border: 2px solid #93c5fd;
+      background: #fff;
+      cursor: pointer;
+      font-weight: 800;
+      touch-action: none;
+    }
+
+    .progress {
+      height: 16px;
+      border-radius: 999px;
+      background: #dbeafe;
+      overflow: hidden;
+      border: 2px solid #93c5fd;
+    }
+    .progress > div { height: 100%; background: linear-gradient(90deg, #22c55e, #16a34a); width: 0; transition: width var(--dur); }
+
+    .stars { font-size: 1.5rem; letter-spacing: 0.2rem; }
+
+    .maker { background: linear-gradient(180deg, #dcfce7, #bbf7d0); border-color: #22c55e; }
+    .maker-grid { display: grid; gap: 0.7rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .maker-item { border: 2px solid #22c55e; background: #f0fdf4; border-radius: 12px; padding: 0.7rem; }
+
+    .mini { background: linear-gradient(180deg, #ffedd5, #fed7aa); border-color: #f97316; }
+    .checklist { display: grid; gap: 0.5rem; }
+    .check-item { border: 2px solid #fb923c; border-radius: 12px; background: #fff7ed; padding: 0.6rem; }
+
+    .curricular { background: linear-gradient(180deg, #ede9fe, #ddd6fe); border-color: #7c3aed; }
+    .footer-end { text-align: center; font-weight: 800; color: #334155; padding: 1rem 0 2rem; }
+
     .hidden { display: none !important; }
-    @media (max-width: 900px) {
-      .hero-grid, .word-spotlight, .unit-grid, .unit-flow, .teacher-grid { grid-template-columns: 1fr; }
-      .section-nav { position: static; }
+
+    [role="button"], button, .img-opt, .word-token, .chip, .mode-tab, .exercise-tab { outline: none; }
+    :focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 2px;
     }
-    @media (max-width: 640px) {
+
+    #confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    @media (max-width: 780px) {
       body { font-size: 18px; }
-      .shell { padding: 0.75rem 0.75rem 2.4rem; }
-      .hero { padding: 1rem; border-radius: 22px; }
-      .hero-copy h1 { font-size: clamp(2rem, 9vw, 3rem); }
-      .page-link { flex-basis: 100%; }
-      .objective-row li, .meta-chip, .hero-kicker, .hero-badge, .nav-pill { width: 100%; justify-content: center; }
-      .unit-card, .spot-card, .teacher-guide { border-radius: 20px; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .wrap { padding: 0.7rem; }
+      .mode-tabs { grid-template-columns: 1fr; }
+      .word-big { font-size: 2.2rem; }
     }
   </style>
 </head>
-<body data-page-variant="index.html" data-visible-units="1,2,3,4">
-  <a href="#main" class="skip-link">Ir para o conteúdo</a>
-  <div class="shell">
-    <header class="hero">
-      <div class="hero-top">
-        <span class="hero-kicker">M28P #8</span>
-        <span class="hero-badge">Rota completa</span>
-      </div>
-      <div class="hero-grid">
-        <div class="hero-copy">
-          <p>Descobrir, ler e brincar</p>
-          <h1>Casa</h1>
-          <p>Percurso completo com foco na descoberta da palavra, nas sílabas e na confiança ao ler.</p>
-          <div class="meta-row">
-            <span class="meta-chip">🏡 Palavra 8</span>
-            <span class="meta-chip">1.º ano (6-7 anos)</span>
-            <span class="meta-chip">45 min</span>
-          </div>
-          <ul class="objective-row"><li>Reconhecer a palavra &#x27;casa&#x27; globalmente, associando-a à imagem correspondente</li><li>Segmentar a palavra &#x27;casa&#x27; nas sílabas ca-sa e identificar cada sílaba isoladamente</li><li>Recombinar as sílabas ca e sa com sílabas já conhecidas para formar novas palavras reais</li></ul>
-        </div>
-        <aside class="word-scene" aria-hidden="true">
-          <div class="emoji">🏡</div>
-          <p><strong>Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</strong></p>
-          <p>Paleta própria, leitura em pt-PT AO90 e navegação pensada para toque.</p>
-          <p>Esta página trabalha as unidades 1, 2, 3, 4.</p>
-        </aside>
-      </div>
-    </header>
+<body>
+<canvas id="confetti" aria-hidden="true"></canvas>
+<div class="wrap">
+  <section class="card header" aria-label="Cabeçalho da aula">
+    <h1>Palavra 8: <span class="highlight" style="background:#fff7ed">casa</span></h1>
+    <div class="meta">
+      <span class="badge">Ano: 6 anos | 1.º ano</span>
+      <span class="badge">Duração: 45 min</span>
+      <span class="badge">M28P</span>
+    </div>
+    <div class="goals">
+      <span class="badge goal">Reconhecer “casa” e ligar à imagem</span>
+      <span class="badge goal">Segmentar em ca-sa</span>
+      <span class="badge goal">Recombinar sílabas em novas palavras</span>
+      <span class="badge goal">Ler: “A casa é grande.”</span>
+    </div>
+  </section>
 
-    <div class="page-switch" aria-label="Outras páginas desta palavra"><a class="page-link is-current" href="./index.html">Página 1<span>Atual</span></a><a class="page-link" href="./page-2.html">Página 2<span>Abrir</span></a><a class="page-link" href="./page-3.html">Página 3<span>Abrir</span></a><a class="page-link" href="./page-4.html">Página 4<span>Abrir</span></a></div>
+  <section class="card" aria-label="Diferenciação">
+    <h2>Nível de trabalho</h2>
+    <div class="mode-tabs" role="tablist" aria-label="Escolha de nível">
+      <button class="mode-tab active" data-mode="apoio" aria-label="Nível apoio">🟢 Apoio</button>
+      <button class="mode-tab" data-mode="intermedio" aria-label="Nível intermédio">🟡 Intermédio</button>
+      <button class="mode-tab" data-mode="desafio" aria-label="Nível desafio">🔴 Desafio</button>
+    </div>
+    <p id="modeHint"><strong>Com ajuda:</strong> pistas visuais e menos opções.</p>
+  </section>
 
-    <section class="word-spotlight" aria-label="Destaque da palavra">
-      <article class="spot-card">
-        <h2>Palavra em destaque</h2>
-        <div class="word-display">Casa</div>
-        <p class="mission">casa</p>
-        <div class="compose-actions">
-          <button class="pill-btn speak-btn" data-speak="Casa">Ouvir a palavra</button>
-        </div>
-      </article>
-      <article class="spot-card">
-        <h2>Sílabas</h2>
-        <div class="syllable-row"><span class="syllable-token" style="--chip:#EA580C">ca</span><span class="syllable-token" style="--chip:#2563EB">sa</span></div>
-        <p class="mission">Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</p>
-      </article>
-    </section>
+  <section class="card" id="u1" aria-label="Unidade 1">
+    <h2>1) Abertura contextual</h2>
+    <div class="scene" id="u1Scene" aria-label="Imagem da casa">
+      <div id="u1Art" style="font-size:clamp(3rem,9vw,5rem)">🏡🌳🚪</div>
+      <div class="label" id="u1Label">Exterior da casa</div>
+    </div>
+    <p aria-live="polite">O Tomás chegou a <span class="highlight" id="wordTap" tabindex="0" role="button" aria-label="Palavra casa destacada">casa</span>. A <span class="highlight">casa</span> era grande e tinha um jardim.</p>
+    <div class="between">
+      <button id="u1Toggle" aria-label="Ver por dentro">👀 Ver por dentro</button>
+      <button id="u1Next" aria-label="Avançar para bloco 2">Avançar ➜</button>
+    </div>
+    <p class="panel" id="u1Diff"></p>
+  </section>
 
-    <nav class="section-nav" aria-label="Navegação das unidades"><a class="nav-pill" href="#u1-abertura-contextual-a-palavra-casa-surge-numa-micro-história-com-imagem">1</a><a class="nav-pill" href="#u2-reconhecimento-global-ver-a-palavra-ouvir-a-palavra-associar-imagem-palavra">2</a><a class="nav-pill" href="#u3-segmentação-silábica-dividir-casa-em-ca-sa-bater-palmas-arrastar-blocos">3</a><a class="nav-pill" href="#u4-recombinação-silábica-formar-novas-palavras-com-ca-e-sa-e-sílabas-já-conhecidas">4</a></nav>
+  <section class="card" id="u2" aria-label="Unidade 2">
+    <h2>2) Reconhecimento global</h2>
+    <div class="word-big" aria-label="Palavra em maiúsculas">CASA</div>
+    <div class="row">
+      <button id="speakCasa" aria-label="Ouvir a palavra casa">🔊 Ouvir “ca-sa”</button>
+      <span class="claps">Escolhe a imagem certa</span>
+    </div>
+    <div class="img-options" id="u2Options" aria-label="Opções de imagem"></div>
+    <div id="u2Feedback" class="feedback" aria-live="polite">Escolhe uma opção.</div>
+    <button id="u2Continue" disabled aria-label="Continuar">Continuar</button>
+    <p class="panel" id="u2Diff"></p>
+  </section>
 
-    <main id="main" class="content">
-      
-    <section id="u1-abertura-contextual-a-palavra-casa-surge-numa-micro-história-com-imagem" class="unit-card">
-      <div class="unit-head">
-        <div>
-          <span class="unit-kicker">Unidade 1</span>
-          <h2>Abertura contextual: a palavra &#x27;casa&#x27; surge numa micro-história com imagem</h2>
-        </div>
-        <span class="unit-badge">Em destaque</span>
-      </div>
-      <div class="unit-grid">
-        <article class="unit-copy">
-          <p>O aluno é introduzido à palavra &#x27;casa&#x27; através de uma imagem colorida de uma casa grande e acolhedora, acompanhada de uma micro-história narrada: &#x27;O Tomás chegou a casa. A casa era grande e tinha um jardim. Ele entrou pela porta vermelha.&#x27; A palavra &#x27;casa&#x27; aparece destacada na frase. O objetivo é criar contexto emocional e ativar vocabulário antes de qualquer análise.</p>
-          <div class="unit-flow">
-            <div>
-              <h3>O que vais fazer</h3>
-              <p>Imagem grande e detalhada de uma casa (exterior). Frase &#x27;A casa é grande.&#x27; apresentada abaixo com a palavra &#x27;casa&#x27; destacada a cor laranja. Botão para ver o interior da casa (toggle). Seta de navegação para avançar.</p>
-            </div>
-            <div>
-              <h3>O que observar</h3>
-              <p>O aluno consegue apontar (ou clicar) na palavra &#x27;casa&#x27; na frase e dizer em voz alta o que a imagem representa.</p>
-            </div>
-          </div>
-          <p>Clicar no toggle &#x27;Ver por dentro&#x27; → imagem muda para interior da casa (sala com móveis simples) → palavra &#x27;casa&#x27; mantém destaque. Clicar &#x27;Avançar&#x27; → passa ao bloco 2.</p>
-          <div class="maker-box"><p><strong>Desafio maker:</strong> Antes de abrir a página, mostra a imagem de uma casa e pergunta: &#x27;O que vês? Quantas partes tem uma casa?&#x27; Cada aluno responde oralmente ou com um desenho rápido (1 min).</p><p><strong>Materiais:</strong> Imagem impressa de casa (opcional), papel e lápis (opcional)</p><p><strong>Comunicação:</strong> Respostas partilhadas oralmente com a turma antes de abrir a atividade digital.</p></div>
-        </article>
-        <aside class="unit-play">
-        <div class="play-card">
-          <button class="pill-btn reveal-btn" data-target="story-1">Mostrar a história</button>
-          <button class="pill-btn speak-btn" data-speak="casa">Ouvir</button>
-          <div id="story-1" class="reveal-box hidden"><p>O aluno é introduzido à palavra &#x27;casa&#x27; através de uma imagem colorida de uma casa grande e acolhedora, acompanhada de uma micro-história narrada: &#x27;O Tomás chegou a casa. A casa era grande e tinha um jardim. Ele entrou pela porta vermelha.&#x27; A palavra &#x27;casa&#x27; aparece destacada na frase. O objetivo é criar contexto emocional e ativar vocabulário antes de qualquer análise.</p></div>
-        </div>
-        </aside>
-      </div>
-      <div class="diff-switcher">
-        <button class="diff-btn is-active" data-diff="support-1">🟢 Com ajuda</button>
-        <button class="diff-btn" data-diff="standard-1">🟡 Objetivo</button>
-        <button class="diff-btn" data-diff="challenge-1">🔴 Desafio</button>
-      </div>
-      <div class="diff-panels">
-        <div id="support-1" class="diff-panel is-active"><p>🟢 Imagem sempre visível; frase apresentada com ícone a apontar para a palavra &#x27;casa&#x27;; professor lê a frase em voz alta antes de o aluno interagir.</p></div>
-        <div id="standard-1" class="diff-panel"><p>🟡 Imagem disponível; aluno lê a frase com apoio do professor se necessário; explora o toggle autonomamente.</p></div>
-        <div id="challenge-1" class="diff-panel"><p>🔴 Aluno tenta ler a frase sozinho antes de ver a imagem; responde: &#x27;Que outras palavras conheces que falem de uma casa?&#x27;</p></div>
-      </div>
-    </section>
-    
-    <section id="u2-reconhecimento-global-ver-a-palavra-ouvir-a-palavra-associar-imagem-palavra" class="unit-card">
-      <div class="unit-head">
-        <div>
-          <span class="unit-kicker">Unidade 2</span>
-          <h2>Reconhecimento global: ver a palavra, ouvir a palavra, associar imagem ↔ palavra</h2>
-        </div>
-        <span class="unit-badge">Em destaque</span>
-      </div>
-      <div class="unit-grid">
-        <article class="unit-copy">
-          <p>O aluno vê a palavra &#x27;casa&#x27; escrita em letra grande e ouve-a pronunciada. De seguida, realiza uma tarefa de correspondência: associar a palavra &#x27;casa&#x27; à imagem correta entre três opções visuais (casa, carro, bota). O objetivo é consolidar o reconhecimento global da palavra antes da segmentação.</p>
-          <div class="unit-flow">
-            <div>
-              <h3>O que vais fazer</h3>
-              <p>Palavra &#x27;CASA&#x27; em letra grande (72px, maiúsculas) no topo. Botão de som 🔊 para ouvir a palavra. Três imagens lado a lado com moldura clicável: casa / carro / bota. Após seleção, feedback imediato (✓ verde ou ↻ âmbar) sem indicar a resposta correta de imediato — convida a tentar outra vez.</p>
-            </div>
-            <div>
-              <h3>O que observar</h3>
-              <p>O aluno seleciona a imagem correta (casa) em no máximo 2 tentativas e consegue dizer &#x27;esta é a palavra CASA&#x27; apontando para a palavra escrita.</p>
-            </div>
-          </div>
-          <p>Clicar 🔊 → reproduz áudio &#x27;ca-sa&#x27;. Clicar imagem → regista escolha, mostra feedback. Se correto → animação de ✓ e som positivo suave; botão &#x27;Continuar&#x27; ativo. Se errado → moldura âmbar, mensagem &#x27;Tenta outra vez!&#x27; sem revelar resposta.</p>
-          
-        </article>
-        <aside class="unit-play">
-        <div class="play-card">
-          <p class="play-label">Escolhe a palavra certa.</p>
-          <div class="choice-row">
-            <button class="choice-btn" data-answer="casa" data-choice="casa">casa</button><button class="choice-btn" data-answer="casa" data-choice="leque">leque</button><button class="choice-btn" data-answer="casa" data-choice="janela">janela</button>
-          </div>
-          <p class="feedback" aria-live="polite">Procura a palavra completa.</p>
-        </div>
-        </aside>
-      </div>
-      <div class="diff-switcher">
-        <button class="diff-btn is-active" data-diff="support-2">🟢 Com ajuda</button>
-        <button class="diff-btn" data-diff="standard-2">🟡 Objetivo</button>
-        <button class="diff-btn" data-diff="challenge-2">🔴 Desafio</button>
-      </div>
-      <div class="diff-panels">
-        <div id="support-2" class="diff-panel is-active"><p>🟢 Apenas duas opções (casa vs. objeto claramente diferente, ex: bota); palavra escrita com cor diferente para cada letra; professor pode nomear as imagens antes da escolha.</p></div>
-        <div id="standard-2" class="diff-panel"><p>🟡 Três opções; sem ajuda adicional; aluno decide autonomamente.</p></div>
-        <div id="challenge-2" class="diff-panel"><p>🔴 Quatro opções incluindo distractor próximo (ex: &#x27;cana&#x27;); aluno deve justificar oralmente: &#x27;Como soubeste que era essa?&#x27;</p></div>
-      </div>
-    </section>
-    
-    <section id="u3-segmentação-silábica-dividir-casa-em-ca-sa-bater-palmas-arrastar-blocos" class="unit-card">
-      <div class="unit-head">
-        <div>
-          <span class="unit-kicker">Unidade 3</span>
-          <h2>Segmentação silábica: dividir &#x27;casa&#x27; em ca-sa, bater palmas, arrastar blocos</h2>
-        </div>
-        <span class="unit-badge">Em destaque</span>
-      </div>
-      <div class="unit-grid">
-        <article class="unit-copy">
-          <p>O aluno aprende que a palavra &#x27;casa&#x27; tem duas sílabas: CA e SA. Realiza a segmentação de três formas: (1) ouve a palavra dividida sílaba a sílaba, (2) bate palmas contando as sílabas em ecrã (tap), (3) arrasta os blocos de sílabas para as posições corretas. Cada sílaba tem uma cor própria consistente: CA = laranja, SA = azul.</p>
-          <div class="unit-flow">
-            <div>
-              <h3>O que vais fazer</h3>
-              <p>Palavra &#x27;casa&#x27; no topo. Abaixo: botão 🔊 que reproduz &#x27;ca — sa&#x27; com pausa entre sílabas. Dois blocos coloridos no banco: [CA] laranja e [SA] azul. Duas zonas de destino com contorno a tracejado: [__] [__]. Contador de palmas (ícone de mãos) que incrementa com toque. Feedback ao colocar blocos na ordem correta: palavra ilumina-se e toca som.</p>
-            </div>
-            <div>
-              <h3>O que observar</h3>
-              <p>O aluno coloca corretamente CA e SA nas posições 1 e 2, bate 2 palmas (correspondendo a 2 sílabas) e verbaliza: &#x27;ca-sa, duas sílabas&#x27;.</p>
-            </div>
-          </div>
-          <p>Arrastar bloco para zona destino → snap se solto sobre zona válida, retorna ao banco caso contrário. Toque no ícone de palmas → contador incrementa. Quando CA em zona_esquerda e SA em zona_direita → animação de celebração subtil, ambos os blocos pulsam, palavra completa aparece reunida.</p>
-          <div class="maker-box"><p><strong>Desafio maker:</strong> Com os cartões físicos de sílabas (CA e SA), cada par de alunos organiza as sílabas na mesa e tenta dizer a palavra. Depois batem palmas juntos enquanto dizem ca-sa.</p><p><strong>Materiais:</strong> Cartões de sílabas impressos: CA (laranja) e SA (azul), Mesa ou chão para organizar</p><p><strong>Comunicação:</strong> Par mostra ao colega do lado a sua organização e explica: &#x27;Aqui está ca, aqui está sa, juntas fazem casa.&#x27;</p></div>
-        </article>
-        <aside class="unit-play">
-        <div class="play-card">
-          <p class="play-label">Toca nas sílabas para formar a palavra.</p>
-          <div class="syllable-bank" data-compose="compose-3"><button class="syllable-chip" style="--chip:#EA580C" data-syllable="ca">ca</button><button class="syllable-chip" style="--chip:#2563EB" data-syllable="sa">sa</button></div>
-          <div id="compose-3" class="compose-output">__</div>
-          <div class="compose-actions"><button class="pill-btn clear-compose" data-compose-clear="compose-3">Limpar</button></div>
-        </div>
-        </aside>
-      </div>
-      <div class="diff-switcher">
-        <button class="diff-btn is-active" data-diff="support-3">🟢 Com ajuda</button>
-        <button class="diff-btn" data-diff="standard-3">🟡 Objetivo</button>
-        <button class="diff-btn" data-diff="challenge-3">🔴 Desafio</button>
-      </div>
-      <div class="diff-panels">
-        <div id="support-3" class="diff-panel is-active"><p>🟢 Blocos já posicionados; aluno apenas confirma a ordem tocando em cada um; professor bate palmas junto com o aluno; palavra com imagem sempre visível.</p></div>
-        <div id="standard-3" class="diff-panel"><p>🟡 Aluno arrasta blocos autonomamente; bate palmas e conta em voz alta.</p></div>
-        <div id="challenge-3" class="diff-panel"><p>🔴 Aluno tenta primeiro escrever as sílabas de memória antes de ver os blocos; responde: &#x27;Quantas sílabas tem a palavra janela? E telhado?&#x27; (palavras da semana seguinte, por curiosidade)</p></div>
-      </div>
-    </section>
-    
-    <section id="u4-recombinação-silábica-formar-novas-palavras-com-ca-e-sa-e-sílabas-já-conhecidas" class="unit-card">
-      <div class="unit-head">
-        <div>
-          <span class="unit-kicker">Unidade 4</span>
-          <h2>Recombinação silábica: formar novas palavras com ca e sa e sílabas já conhecidas</h2>
-        </div>
-        
-      </div>
-      <div class="unit-grid">
-        <article class="unit-copy">
-          <p>O aluno usa as sílabas CA e SA em combinação com sílabas aprendidas nas palavras anteriores (me, ni, na, no, u, va, de, do, sa, pa, to, bo, ta, le, que) para formar novas palavras. Palavras-alvo reais: BOCA (bo+ca), CANA (ca+na), SACO (sa+co — nota: &#x27;co&#x27; ainda não foi aprendida, usar com cuidado), SAPA (não é palavra — ensinar a distinguir). Foco em BOCA e CANA como palavras válidas e reconhecíveis.</p>
-          <div class="unit-flow">
-            <div>
-              <h3>O que vais fazer</h3>
-              <p>Banco de sílabas coloridas (cor consistente com aprendizagens anteriores): bo, me, ca, le, pa, na, sa, ta. Dois slots de destino [  ] + [  ]. Após colocar 2 sílabas, aparece a palavra formada em grande. Se palavraValida=true: fundo verde claro, ícone ✓, imagem da palavra (se disponível). Se palavraValida=false: fundo âmbar, texto &#x27;Isso não é uma palavra portuguesa. Tenta outra combinação!&#x27;</p>
-            </div>
-            <div>
-              <h3>O que observar</h3>
-              <p>O aluno forma pelo menos 2 palavras válidas diferentes de &#x27;casa&#x27; (ex: BOCA e CANA) e consegue explicar: &#x27;Peguei no bo e no ca e fez boca!&#x27;.</p>
-            </div>
-          </div>
-          <p>Clicar/arrastar sílaba para slot 1 ou 2 → palavra pré-visualizada em tempo real. Clicar &#x27;Verificar&#x27; → avaliação de validade. Clicar &#x27;Limpar&#x27; → volta ao início. Palavras descobertas registadas num painel lateral &#x27;Palavras que descobri&#x27;.</p>
-          <div class="maker-box"><p><strong>Desafio maker:</strong> Com todos os cartões de sílabas já aprendidos espalhados na mesa, o par tenta formar o maior número de palavras possível em 3 minutos. Registam numa folha as que descobriram.</p><p><strong>Materiais:</strong> Conjunto completo de cartões de sílabas das palavras 1-8, Folha de registo, Lápis</p><p><strong>Comunicação:</strong> Cada par partilha 1 palavra nova com a turma no quadro — o professor regista todas num cartaz coletivo.</p></div>
-        </article>
-        <aside class="unit-play">
-        <div class="play-card">
-          <p class="play-label">Experimenta combinações com as sílabas.</p>
-          <div class="syllable-bank" data-compose="mix-4"><button class="syllable-chip" style="--chip:#EA580C" data-syllable="ca">ca</button><button class="syllable-chip" style="--chip:#2563EB" data-syllable="sa">sa</button></div>
-          <div id="mix-4" class="compose-output">__</div>
-          <p class="helper-text">Nem todas as combinações resultam em palavras reais. O importante é experimentar.</p>
-        </div>
-        </aside>
-      </div>
-      <div class="diff-switcher">
-        <button class="diff-btn is-active" data-diff="support-4">🟢 Com ajuda</button>
-        <button class="diff-btn" data-diff="standard-4">🟡 Objetivo</button>
-        <button class="diff-btn" data-diff="challenge-4">🔴 Desafio</button>
-      </div>
-      <div class="diff-panels">
-        <div id="support-4" class="diff-panel is-active"><p>🟢 Apenas 4 sílabas disponíveis (bo, ca, na, sa); uma combinação já pré-colocada como exemplo (bo+ca=boca); feedback imediato com imagem se válida.</p></div>
-        <div id="standard-4" class="diff-panel"><p>🟡 8 sílabas disponíveis; aluno explora livremente; deve encontrar pelo menos 2 palavras válidas.</p></div>
-        <div id="challenge-4" class="diff-panel"><p>🔴 12 sílabas disponíveis (incluindo algumas de palavras 9-10 como ja, ne); deve encontrar 4+ palavras; tenta criar uma frase com cada palavra que descobriu.</p></div>
-      </div>
-    </section>
-    
-      
-    <details class="teacher-guide">
-      <summary>Guia do professor</summary>
-      <div class="teacher-grid">
-        <article class="teacher-card">
-          <h3>Objetivos desta página</h3>
-          <ul><li>Reconhecer a palavra &#x27;casa&#x27; globalmente, associando-a à imagem correspondente</li><li>Segmentar a palavra &#x27;casa&#x27; nas sílabas ca-sa e identificar cada sílaba isoladamente</li><li>Recombinar as sílabas ca e sa com sílabas já conhecidas para formar novas palavras reais</li><li>Ler e completar a frase &#x27;A casa é grande.&#x27; com compreensão</li></ul>
-        </article>
-        <article class="teacher-card">
-          <h3>Materiais</h3>
-          <ul><li>Tablet ou computador com browser (1 por aluno ou par)</li><li>Cartão da palavra &#x27;casa&#x27; (cartaz da coleção M28P)</li><li>Cartões de sílabas físicos: ca / sa (para atividade unplugged opcional)</li><li>Folha de registo em papel (opcional, apoio)</li><li>Quadro interativo para apresentação e síntese coletiva</li></ul>
-        </article>
-        <article class="teacher-card">
-          <h3>Organização MEM</h3>
-          <ul><li><strong>Módulos:</strong> TEA (Trabalho de Estudo Autónomo), Trabalho curricular comparticipado, Circuitos de comunicação</li><li><strong>Instrumentos:</strong> PIT (Plano Individual de Trabalho), Mapa de tarefas da turma, Registo de palavras aprendidas (cartaz coletivo)</li><li><strong>Organização:</strong> individual (blocos 1-3, 5-7) → pares (bloco 4 recombinação e bloco 6 frase) → turma (bloco 8 extensão/comunicação)</li></ul>
-        </article>
-        <article class="teacher-card">
-          <h3>Percurso desta página</h3>
-          <ul><li>Unidade 1: Abertura contextual: a palavra &#x27;casa&#x27; surge numa micro-história com imagem</li><li>Unidade 2: Reconhecimento global: ver a palavra, ouvir a palavra, associar imagem ↔ palavra</li><li>Unidade 3: Segmentação silábica: dividir &#x27;casa&#x27; em ca-sa, bater palmas, arrastar blocos</li><li>Unidade 4: Recombinação silábica: formar novas palavras com ca e sa e sílabas já conhecidas</li></ul>
-        </article>
-        <article class="teacher-card teacher-card-wide">
-          <h3>Referências curriculares</h3>
-          <ul><li><strong>Português · 1.º ano</strong>: Desenvolver a consciência fonológica: segmentar oralmente palavras em sílabas e identificar sílabas em posição inicial, medial e final</li><li><strong>Português · 1.º ano</strong>: Reconhecer palavras de uso frequente em contexto de leitura global; associar imagem à palavra escrita</li><li><strong>Português · 1.º ano</strong>: Segmentar palavras em sílabas e reconstituir a palavra a partir das sílabas isoladas; identificar e nomear vogais e consoantes em contexto de palavra</li><li><strong>Português · 1.º ano</strong>: Ler frases simples com vocabulário controlado, identificando sujeito e predicado de forma implícita</li></ul>
-          <ul><li>PA-A: Linguagens e textos</li><li>PA-C: Raciocínio e resolução de problemas</li><li>PA-F: Desenvolvimento pessoal e autonomia</li></ul>
-        </article>
-      </div>
-    </details>
-    
-    </main>
+  <section class="card" id="u3" aria-label="Unidade 3">
+    <h2>3) Segmentação silábica</h2>
+    <div class="row">
+      <button id="speakSplit" aria-label="Ouvir sílabas">🔊 Ouvir “ca — sa”</button>
+      <button id="clapBtn" aria-label="Bater palmas">👏 Palmas</button>
+      <span class="claps" id="clapCount">0 palmas</span>
+    </div>
+    <div class="row" id="u3Bank" style="margin-top:0.7rem">
+      <div class="syllable ca" data-key="CA" aria-label="Sílaba CA" tabindex="0">CA</div>
+      <div class="syllable sa" data-key="SA" aria-label="Sílaba SA" tabindex="0">SA</div>
+    </div>
+    <div class="slots" style="margin-top:0.7rem">
+      <div class="dropzone" data-accept="1" aria-label="Zona esquerda">1</div>
+      <div class="dropzone" data-accept="2" aria-label="Zona direita">2</div>
+    </div>
+    <div class="feedback" id="u3Feedback" aria-live="polite">Coloca as sílabas nos lugares.</div>
+    <p class="panel" id="u3Diff"></p>
+  </section>
 
-    <footer class="footer">PageCraft · Método das 28 Palavras · Casa</footer>
-  </div>
+  <section class="card" id="u4" aria-label="Unidade 4">
+    <h2>4) Recombinação silábica</h2>
+    <p>Forma palavras com duas sílabas.</p>
+    <div class="row" id="u4Bank"></div>
+    <div class="slots" style="margin-top:0.6rem">
+      <div class="dropzone" id="u4Slot1" aria-label="Slot 1">[1]</div>
+      <div class="dropzone" id="u4Slot2" aria-label="Slot 2">[2]</div>
+      <button id="u4Check" aria-label="Verificar palavra">Verificar</button>
+      <button id="u4Clear" aria-label="Limpar">Limpar</button>
+    </div>
+    <div class="word-big" id="u4Word" style="font-size:2.3rem">__</div>
+    <div class="feedback" id="u4Feedback" aria-live="polite">Experimenta combinações.</div>
+    <div class="panel"><strong>Palavras que descobri:</strong> <span id="u4Found">nenhuma ainda</span></div>
+    <p class="panel" id="u4Diff"></p>
+  </section>
 
-  <script>
-    const synth = window.speechSynthesis;
+  <section class="card" id="u5" aria-label="Unidade 5">
+    <h2>5) Leitura e escrita guiada</h2>
+    <div class="exercise-tabs">
+      <button class="exercise-tab btn active" data-ex="completar" aria-label="Exercício completar">1) Completar</button>
+      <button class="exercise-tab btn" data-ex="ordenar" aria-label="Exercício ordenar">2) Ordenar</button>
+      <button class="exercise-tab btn" data-ex="copiar" aria-label="Exercício copiar">3) Copiar</button>
+    </div>
 
-    document.querySelectorAll('.reveal-btn').forEach((button) => {
-      button.addEventListener('click', () => {
-        const target = document.getElementById(button.dataset.target);
-        if (!target) return;
-        target.classList.toggle('hidden');
+    <div id="ex-completar">
+      <div class="word-big" style="font-size:2.1rem">c__a</div>
+      <div class="row" id="u5Choices"></div>
+      <div class="feedback" id="u5Fb1" aria-live="polite">Escolhe a sílaba em falta.</div>
+    </div>
+
+    <div id="ex-ordenar" class="hidden">
+      <div class="row" id="u5OrderBank">
+        <div class="syllable sa" data-key="SA">SA</div>
+        <div class="syllable ca" data-key="CA">CA</div>
+      </div>
+      <div class="slots" style="margin-top:0.6rem">
+        <div class="dropzone" data-accept="1" aria-label="Ordem 1">1</div>
+        <div class="dropzone" data-accept="2" aria-label="Ordem 2">2</div>
+      </div>
+      <div class="feedback" id="u5Fb2" aria-live="polite">Ordena para formar CASA.</div>
+    </div>
+
+    <div id="ex-copiar" class="hidden">
+      <div class="trace-wrap">
+        <canvas id="traceCanvas" class="trace" width="560" height="170" aria-label="Área para traçar a palavra casa"></canvas>
+        <input id="u5Text" aria-label="Escrever a palavra casa" placeholder="Escreve aqui: casa" style="font-size:1.05rem;padding:0.6rem;border-radius:12px;border:2px solid #93c5fd;min-height:48px" />
+        <div class="row">
+          <button id="u5CheckText" aria-label="Verificar escrita">Verificar escrita</button>
+          <button id="u5ClearTrace" aria-label="Limpar traço">Limpar traço</button>
+        </div>
+      </div>
+      <div class="feedback" id="u5Fb3" aria-live="polite">Traça ou escreve “casa”.</div>
+    </div>
+
+    <div class="stars" id="u5Stars" aria-label="Progresso de estrelas">☆☆☆</div>
+    <p class="panel" id="u5Diff"></p>
+  </section>
+
+  <section class="card" id="u6" aria-label="Unidade 6">
+    <h2>6) Frase simples</h2>
+    <div id="u6Phase1">
+      <div class="phrase-words" id="u6ReadWords"></div>
+      <div class="row" style="margin-top:0.6rem">
+        <button id="u6SpeakAll" aria-label="Ouvir frase completa">🔊 Ouvir frase</button>
+        <button id="u6ToBuild" aria-label="Ir para construir frase">Construir frase</button>
+      </div>
+    </div>
+    <div id="u6Phase2" class="hidden">
+      <div class="phrase-words" id="u6Bank"></div>
+      <div class="slots" style="margin-top:0.6rem">
+        <div class="dropzone" data-fslot="0">1</div>
+        <div class="dropzone" data-fslot="1">2</div>
+        <div class="dropzone" data-fslot="2">3</div>
+        <div class="dropzone" data-fslot="3">4</div>
+      </div>
+      <div class="row" style="margin-top:0.6rem">
+        <button id="u6Check" aria-label="Verificar frase">Verificar</button>
+        <div class="feedback" id="u6Feedback" aria-live="polite" style="flex:1">Ordena as palavras.</div>
+      </div>
+    </div>
+    <p class="panel" id="u6Diff"></p>
+  </section>
+
+  <section class="card" id="u7" aria-label="Unidade 7">
+    <h2>7) Mini-avaliação formativa interactiva</h2>
+    <div class="progress" aria-label="Barra de progresso"><div id="u7Bar"></div></div>
+    <p id="u7Step">Tarefa 1/4</p>
+    <div id="u7Task" class="panel"></div>
+    <div id="u7Fb" class="feedback" aria-live="polite">Vamos começar.</div>
+    <div class="row" style="margin-top:0.6rem">
+      <button id="u7Next" disabled aria-label="Próxima tarefa">Próxima</button>
+      <span id="u7Score" class="claps">✓ 0/4</span>
+    </div>
+    <div id="u7Summary" class="panel hidden"></div>
+    <p class="panel" id="u7Diff"></p>
+  </section>
+
+  <section class="card" id="u8" aria-label="Unidade 8">
+    <h2>8) Extensão criativa</h2>
+    <div class="img-options">
+      <button class="img-opt" data-ext="desenho" aria-label="Desenhar casa" style="font-size:1.15rem">🎨<br>Desenha a tua casa</button>
+      <button class="img-opt" data-ext="oral" aria-label="Falar sobre casa" style="font-size:1.15rem">🎤<br>Fala sobre a tua casa</button>
+      <button class="img-opt" data-ext="maker" aria-label="Construir casa" style="font-size:1.15rem">🏗️<br>Constrói uma casa</button>
+    </div>
+
+    <div id="ext-desenho" class="panel" style="margin-top:0.7rem">
+      <canvas id="drawCanvas" class="trace" width="560" height="170" aria-label="Desenhar casa"></canvas>
+      <input id="drawCaption" aria-label="Legenda com a palavra casa" placeholder="Legenda: A minha casa..." style="font-size:1.05rem;padding:0.6rem;border-radius:12px;border:2px solid #93c5fd;min-height:48px;width:100%;margin-top:0.5rem" />
+    </div>
+
+    <div id="ext-oral" class="panel hidden" style="margin-top:0.7rem">
+      <p>Diz uma frase com a palavra <strong>casa</strong>.</p>
+      <div class="row">
+        <button id="recBtn" aria-label="Gravar áudio">⏺️ Gravar</button>
+        <button id="stopRec" aria-label="Parar gravação">⏹️ Parar</button>
+        <audio id="recAudio" controls class="hidden" aria-label="Áudio gravado"></audio>
+      </div>
+      <input id="oralText" aria-label="Escrever frase oral" placeholder="Escreve a tua frase" style="font-size:1.05rem;padding:0.6rem;border-radius:12px;border:2px solid #93c5fd;min-height:48px;width:100%;margin-top:0.5rem" />
+    </div>
+
+    <div id="ext-maker" class="panel hidden" style="margin-top:0.7rem">
+      <p>Constrói uma casa com blocos. Tem de ter porta e janela.</p>
+      <p><strong>Apresentação:</strong> “Esta é a minha casa. Ela é...”</p>
+      <input id="makerDesc" aria-label="Descrição do modelo" placeholder="Descreve a tua casa" style="font-size:1.05rem;padding:0.6rem;border-radius:12px;border:2px solid #93c5fd;min-height:48px;width:100%" />
+    </div>
+
+    <div class="row" style="margin-top:0.7rem">
+      <button id="showClass" aria-label="Mostrar à turma">Mostrar à turma</button>
+      <div class="feedback" id="u8Fb" style="flex:1">Escolhe uma extensão.</div>
+    </div>
+    <p class="panel" id="u8Diff"></p>
+  </section>
+
+  <section class="card maker" aria-label="Secção maker">
+    <h2>🛠️ Desafios Maker</h2>
+    <div class="maker-grid">
+      <div class="maker-item"><strong>Unplugged</strong><br>Mostra a imagem de uma casa: “O que vês? Quantas partes tem?”</div>
+      <div class="maker-item"><strong>Unplugged</strong><br>Com cartões CA e SA, organiza na mesa e bate palmas: ca-sa.</div>
+      <div class="maker-item"><strong>Unplugged</strong><br>Com sílabas aprendidas, forma o maior número de palavras em 3 min.</div>
+      <div class="maker-item"><strong>Whiteboard</strong><br>Em pares, escreve uma frase com “casa” e cola no cartaz da turma.</div>
+      <div class="maker-item"><strong>Lego</strong><br>Constrói uma casa com porta e janela. Apresenta à turma em 1 minuto.</div>
+    </div>
+  </section>
+
+  <section class="card mini" aria-label="Mini-avaliação observável">
+    <h2>📝 Mini-avaliação (observável)</h2>
+    <div class="checklist">
+      <div class="check-item">Reconhece a palavra <strong>casa</strong> e associa à imagem certa.<br>⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+      <div class="check-item">Segmenta oralmente <strong>ca-sa</strong> e bate 2 palmas.<br>⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+      <div class="check-item">Reconstrói a palavra com as sílabas na ordem certa.<br>⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+      <div class="check-item">Forma novas palavras reais (ex.: boca, cana).<br>⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+      <div class="check-item">Lê e completa a frase “A casa é grande.” com compreensão.<br>⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+    </div>
+  </section>
+
+  <section class="card curricular" aria-label="Referências curriculares">
+    <h2>Referências curriculares</h2>
+    <h3>Aprendizagens Essenciais</h3>
+    <p>Português (1.º ano): Desenvolver a consciência fonológica: segmentar oralmente palavras em sílabas e identificar sílabas em posição inicial, medial e final.</p>
+    <p>Português (1.º ano): Reconhecer palavras frequentes em leitura global e associar imagem à palavra escrita.</p>
+    <p>Português (1.º ano): Segmentar palavras em sílabas e reconstituir a palavra a partir das sílabas isoladas; identificar vogais e consoantes em contexto.</p>
+    <p>Português (1.º ano): Ler frases simples com vocabulário controlado.</p>
+    <h3>Perfil do Aluno</h3>
+    <p>PA-A: Linguagens e textos · PA-C: Raciocínio e resolução de problemas · PA-F: Desenvolvimento pessoal e autonomia</p>
+  </section>
+
+  <div class="footer-end">Gerado por PageCraft 🛠️</div>
+</div>
+
+<script>
+(() => {
+  const state = {
+    mode: 'apoio',
+    u1Scene: 'casa_exterior',
+    u2Attempts: 0,
+    u2Done: false,
+    u3: { left: null, right: null, claps: 0 },
+    u4: { s1: null, s2: null, found: new Set() },
+    u5: { done: { completar: false, ordenar: false, copiar: false } },
+    u6: { slots: [null, null, null, null] },
+    u7: { step: 0, score: 0, firstTryCorrect: 0, attemptsCurrent: 0 },
+    u8: { ext: 'desenho', recorded: false }
+  };
+
+  const modeHints = {
+    apoio: '<strong>Com ajuda:</strong> pistas visuais e menos opções.',
+    intermedio: '<strong>Objetivo:</strong> autonomia com apoio pontual.',
+    desafio: '<strong>Desafio:</strong> menos pistas e mais criação.'
+  };
+
+  const diff = {
+    u1: {
+      apoio: '🟢 Frase com pista visual. O professor pode ler primeiro.',
+      intermedio: '🟡 Lê a frase com apoio se necessário e explora o toggle.',
+      desafio: '🔴 Lê primeiro sem imagem e diz outra palavra ligada a casa.'
+    },
+    u2: {
+      apoio: '🟢 Duas opções visuais para escolher.',
+      intermedio: '🟡 Três opções, sem ajuda extra.',
+      desafio: '🔴 Quatro opções e justificação oral.'
+    },
+    u3: {
+      apoio: '🟢 Blocos já perto dos lugares; confirma tocando.',
+      intermedio: '🟡 Arrasta autonomamente e conta as palmas.',
+      desafio: '🔴 Tenta lembrar sílabas antes de tocar nos blocos.'
+    },
+    u4: {
+      apoio: '🟢 Banco reduzido: bo, ca, na, sa.',
+      intermedio: '🟡 Banco com 8 sílabas.',
+      desafio: '🔴 Banco alargado e meta de 4+ palavras.'
+    },
+    u5: {
+      apoio: '🟢 Foco principal no completar com menos opções.',
+      intermedio: '🟡 Faz os 3 exercícios.',
+      desafio: '🔴 Escreve também de memória: casa, boca, cana.'
+    },
+    u6: {
+      apoio: '🟢 Frase simplificada na ordenação (3 palavras).',
+      intermedio: '🟡 4 palavras com modelo visível.',
+      desafio: '🔴 Modelo oculto e frase nova autónoma no final.'
+    },
+    u7: {
+      apoio: '🟢 Menos opções e pistas visuais.',
+      intermedio: '🟡 3 opções por tarefa.',
+      desafio: '🔴 Inclui desafio oral extra com SA e CA.'
+    },
+    u8: {
+      apoio: '🟢 Modelo visual no desenho e legenda guiada.',
+      intermedio: '🟡 Escolha livre das 3 extensões.',
+      desafio: '🔴 Produz 3 frases com a palavra casa.'
+    }
+  };
+
+  const qs = (s, p = document) => p.querySelector(s);
+  const qsa = (s, p = document) => [...p.querySelectorAll(s)];
+
+  function applyDiffText() {
+    qs('#modeHint').innerHTML = modeHints[state.mode];
+    ['u1','u2','u3','u4','u5','u6','u7','u8'].forEach(k => {
+      qs(`#${k}Diff`).textContent = diff[k][state.mode];
+    });
+    setupU2();
+    setupU4();
+    setupU5Choices();
+    setupU6();
+    renderU7Task();
+  }
+
+  qsa('.mode-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.mode = btn.dataset.mode;
+      qsa('.mode-tab').forEach(b => b.classList.toggle('active', b === btn));
+      applyDiffText();
+    });
+  });
+
+  function audioCtx() {
+    if (!window.__ctx) window.__ctx = new (window.AudioContext || window.webkitAudioContext)();
+    return window.__ctx;
+  }
+
+  function beep(freq = 520, dur = 0.12, type = 'sine', gain = 0.05) {
+    const ctx = audioCtx();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.value = gain;
+    o.connect(g); g.connect(ctx.destination);
+    o.start();
+    o.stop(ctx.currentTime + dur);
+  }
+
+  function positiveSound() { beep(660,.08,'triangle',.06); setTimeout(() => beep(880,.1,'triangle',.05), 80); }
+  function retrySound() { beep(280,.11,'square',.05); }
+
+  function speak(text) {
+    if ('speechSynthesis' in window) {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'pt-PT';
+      u.rate = 0.9;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+    } else {
+      beep(500, .15);
+    }
+  }
+
+  // Confetti with requestAnimationFrame
+  const confettiCanvas = qs('#confetti');
+  const cctx = confettiCanvas.getContext('2d');
+  let particles = [];
+  function resizeConfetti() { confettiCanvas.width = innerWidth; confettiCanvas.height = innerHeight; }
+  addEventListener('resize', resizeConfetti); resizeConfetti();
+
+  function fireConfetti() {
+    particles = Array.from({length: 70}, () => ({
+      x: innerWidth * (0.2 + Math.random() * 0.6),
+      y: innerHeight * 0.2,
+      vx: (Math.random() - 0.5) * 6,
+      vy: Math.random() * -4 - 2,
+      g: 0.13 + Math.random() * 0.07,
+      r: 4 + Math.random() * 5,
+      color: ['#22c55e','#f59e0b','#2563eb','#ef4444','#14b8a6'][Math.floor(Math.random()*5)],
+      a: 1
+    }));
+  }
+
+  function animateConfetti() {
+    cctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+    particles.forEach(p => {
+      p.vy += p.g;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.a -= 0.012;
+      cctx.globalAlpha = Math.max(p.a, 0);
+      cctx.fillStyle = p.color;
+      cctx.fillRect(p.x, p.y, p.r, p.r);
+    });
+    cctx.globalAlpha = 1;
+    particles = particles.filter(p => p.a > 0 && p.y < confettiCanvas.height + 30);
+    requestAnimationFrame(animateConfetti);
+  }
+  animateConfetti();
+
+  function goodFeedback(el, msg) {
+    el.textContent = `✓ ${msg}`;
+    el.classList.remove('warn');
+    el.classList.add('ok');
+    positiveSound();
+    fireConfetti();
+  }
+
+  function warnFeedback(el, msg) {
+    el.textContent = `↻ ${msg}`;
+    el.classList.remove('ok');
+    el.classList.add('warn');
+    retrySound();
+  }
+
+  // Unit 1
+  qs('#u1Toggle').addEventListener('click', () => {
+    const art = qs('#u1Art');
+    const label = qs('#u1Label');
+    if (state.u1Scene === 'casa_exterior') {
+      state.u1Scene = 'casa_interior';
+      art.textContent = '🛋️🪑🖼️';
+      label.textContent = 'Interior da casa';
+      qs('#u1Toggle').textContent = '🏠 Ver por fora';
+    } else {
+      state.u1Scene = 'casa_exterior';
+      art.textContent = '🏡🌳🚪';
+      label.textContent = 'Exterior da casa';
+      qs('#u1Toggle').textContent = '👀 Ver por dentro';
+    }
+  });
+  qs('#wordTap').addEventListener('click', () => speak('casa'));
+  qs('#wordTap').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') speak('casa'); });
+  qs('#u1Next').addEventListener('click', () => qs('#u2').scrollIntoView({behavior:'smooth'}));
+
+  // Unit 2
+  const u2All = [
+    { key: 'casa', emoji: '🏡', label: 'imagem_casa' },
+    { key: 'carro', emoji: '🚗', label: 'imagem_carro' },
+    { key: 'bota', emoji: '🥾', label: 'imagem_bota' },
+    { key: 'cana', emoji: '🎋', label: 'cana' }
+  ];
+
+  function setupU2() {
+    const host = qs('#u2Options');
+    host.innerHTML = '';
+    const n = state.mode === 'apoio' ? 2 : state.mode === 'intermedio' ? 3 : 4;
+    const opts = u2All.slice(0, n);
+    state.u2Attempts = 0; state.u2Done = false;
+    qs('#u2Continue').disabled = true;
+    qs('#u2Feedback').textContent = 'Escolhe uma opção.';
+    qs('#u2Feedback').className = 'feedback';
+
+    opts.forEach(opt => {
+      const d = document.createElement('button');
+      d.className = 'img-opt';
+      d.setAttribute('aria-label', `Opção ${opt.key}`);
+      d.innerHTML = `${opt.emoji}<br><small>${opt.key}</small>`;
+      d.addEventListener('click', () => {
+        state.u2Attempts += 1;
+        qsa('.img-opt', host).forEach(x => x.classList.remove('selected', 'correct', 'wrong'));
+        d.classList.add('selected');
+        if (opt.key === 'casa') {
+          d.classList.add('correct');
+          goodFeedback(qs('#u2Feedback'), 'Muito bem! Encontraste CASA.');
+          state.u2Done = true;
+          qs('#u2Continue').disabled = false;
+        } else {
+          d.classList.add('wrong');
+          warnFeedback(qs('#u2Feedback'), 'Tenta outra vez! Observa bem a palavra.');
+        }
+      });
+      host.appendChild(d);
+    });
+  }
+
+  qs('#speakCasa').addEventListener('click', () => speak('ca-sa'));
+  qs('#u2Continue').addEventListener('click', () => qs('#u3').scrollIntoView({behavior:'smooth'}));
+
+  // Generic pointer drag-drop (touch + mouse)
+  function attachDrag(draggable, getDropzones, onDrop) {
+    let pointerId = null, startX = 0, startY = 0, originParent = null, placed = false;
+    draggable.style.position = 'relative';
+    draggable.addEventListener('pointerdown', (e) => {
+      pointerId = e.pointerId;
+      draggable.setPointerCapture(pointerId);
+      startX = e.clientX; startY = e.clientY;
+      originParent = draggable.parentElement;
+      draggable.dataset.ox = draggable.offsetLeft;
+      draggable.dataset.oy = draggable.offsetTop;
+      draggable.classList.add('dragging');
+      draggable.style.position = 'fixed';
+      draggable.style.left = `${e.clientX - draggable.offsetWidth/2}px`;
+      draggable.style.top = `${e.clientY - draggable.offsetHeight/2}px`;
+      draggable.style.zIndex = 999;
+      placed = false;
+      e.preventDefault();
+    });
+
+    draggable.addEventListener('pointermove', (e) => {
+      if (pointerId !== e.pointerId) return;
+      draggable.style.left = `${e.clientX - draggable.offsetWidth/2}px`;
+      draggable.style.top = `${e.clientY - draggable.offsetHeight/2}px`;
+      getDropzones().forEach(z => {
+        const r = z.getBoundingClientRect();
+        const over = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+        z.classList.toggle('over', over);
       });
     });
 
-    document.querySelectorAll('.speak-btn').forEach((button) => {
-      button.addEventListener('click', () => {
-        if (!synth) return;
-        const utterance = new SpeechSynthesisUtterance(button.dataset.speak || '');
-        utterance.lang = 'pt-PT';
-        synth.cancel();
-        synth.speak(utterance);
+    draggable.addEventListener('pointerup', (e) => {
+      if (pointerId !== e.pointerId) return;
+      draggable.releasePointerCapture(pointerId);
+      pointerId = null;
+      let droppedZone = null;
+      getDropzones().forEach(z => {
+        const r = z.getBoundingClientRect();
+        const over = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+        z.classList.remove('over');
+        if (over) droppedZone = z;
       });
+      if (droppedZone) {
+        droppedZone.innerHTML = '';
+        droppedZone.appendChild(draggable);
+        draggable.style.position = 'relative';
+        draggable.style.left = '0';
+        draggable.style.top = '0';
+        draggable.style.zIndex = '1';
+        placed = true;
+        onDrop(droppedZone);
+      }
+      if (!placed) {
+        originParent.appendChild(draggable);
+        draggable.style.position = 'relative';
+        draggable.style.left = '0';
+        draggable.style.top = '0';
+        draggable.style.zIndex = '1';
+        onDrop(null);
+      }
+      draggable.classList.remove('dragging');
+    });
+  }
+
+  // Unit 3
+  const u3Bank = qs('#u3Bank');
+  const u3Zones = qsa('#u3 .dropzone');
+  const u3Feedback = qs('#u3Feedback');
+
+  function readU3Placement() {
+    const left = u3Zones[0].querySelector('.syllable')?.dataset.key || null;
+    const right = u3Zones[1].querySelector('.syllable')?.dataset.key || null;
+    state.u3.left = left;
+    state.u3.right = right;
+
+    if (left === 'CA' && right === 'SA') {
+      goodFeedback(u3Feedback, 'Perfeito! ca-sa.');
+    } else if (left && right) {
+      if (left === 'SA' && right === 'CA') {
+        warnFeedback(u3Feedback, 'Isso faz outra palavra! Experimenta outra ordem.');
+      } else {
+        warnFeedback(u3Feedback, 'Quase! Tenta outra combinação.');
+      }
+    } else {
+      u3Feedback.textContent = 'Coloca as sílabas nos lugares.';
+      u3Feedback.className = 'feedback';
+    }
+  }
+
+  qsa('#u3Bank .syllable').forEach(s => attachDrag(s, () => u3Zones, () => readU3Placement()));
+  qsa('#u3 .dropzone').forEach(z => z.addEventListener('dblclick', () => {
+    const chip = z.querySelector('.syllable');
+    if (chip) u3Bank.appendChild(chip);
+    z.textContent = z.dataset.accept;
+    readU3Placement();
+  }));
+
+  qs('#speakSplit').addEventListener('click', () => {
+    speak('ca'); setTimeout(() => speak('sa'), 550);
+  });
+  qs('#clapBtn').addEventListener('click', () => {
+    state.u3.claps = Math.min(5, state.u3.claps + 1);
+    qs('#clapCount').textContent = `${state.u3.claps} palmas`;
+    beep(440 + state.u3.claps*70, .05, 'square', .04);
+    if (state.u3.claps === 2) goodFeedback(u3Feedback, 'Duas palmas! duas sílabas.');
+  });
+
+  // Unit 4
+  const u4Valid = new Set(['boca','cana','casa','meta','tapa','mela']);
+
+  function u4SyllablesByMode() {
+    if (state.mode === 'apoio') return ['bo','ca','na','sa'];
+    if (state.mode === 'intermedio') return ['bo','me','ca','le','pa','na','sa','ta'];
+    return ['bo','me','ca','le','pa','na','sa','ta','ja','ne','co','do'];
+  }
+
+  function setupU4() {
+    const bank = qs('#u4Bank');
+    bank.innerHTML = '';
+    state.u4.s1 = null; state.u4.s2 = null;
+    qs('#u4Slot1').textContent = '[1]';
+    qs('#u4Slot2').textContent = '[2]';
+    qs('#u4Word').textContent = '__';
+    qs('#u4Feedback').textContent = 'Experimenta combinações.';
+    qs('#u4Feedback').className = 'feedback';
+
+    u4SyllablesByMode().forEach(syl => {
+      const b = document.createElement('div');
+      b.className = `syllable ${syl === 'ca' ? 'ca' : syl === 'sa' ? 'sa' : ''}`;
+      b.dataset.key = syl;
+      b.textContent = syl.toUpperCase();
+      b.style.fontSize = '1.4rem';
+      attachDrag(b, () => [qs('#u4Slot1'), qs('#u4Slot2')], (z) => {
+        if (!z) {
+          if (state.u4.s1 === syl) state.u4.s1 = null;
+          if (state.u4.s2 === syl) state.u4.s2 = null;
+        } else {
+          if (z.id === 'u4Slot1') state.u4.s1 = syl;
+          if (z.id === 'u4Slot2') state.u4.s2 = syl;
+        }
+        renderU4Word();
+      });
+      bank.appendChild(b);
+    });
+  }
+
+  function renderU4Word() {
+    const w = `${state.u4.s1 || ''}${state.u4.s2 || ''}`;
+    qs('#u4Word').textContent = w ? w.toUpperCase() : '__';
+  }
+
+  qs('#u4Check').addEventListener('click', () => {
+    const w = `${state.u4.s1 || ''}${state.u4.s2 || ''}`;
+    if (!state.u4.s1 || !state.u4.s2) return warnFeedback(qs('#u4Feedback'), 'Escolhe 2 sílabas primeiro.');
+    if (u4Valid.has(w)) {
+      state.u4.found.add(w);
+      goodFeedback(qs('#u4Feedback'), `Boa! “${w.toUpperCase()}” é palavra real.`);
+      qs('#u4Found').textContent = [...state.u4.found].map(x => x.toUpperCase()).join(', ');
+    } else {
+      warnFeedback(qs('#u4Feedback'), 'Essa combinação não forma palavra portuguesa.');
+    }
+  });
+
+  qs('#u4Clear').addEventListener('click', () => {
+    state.u4.s1 = null; state.u4.s2 = null;
+    qs('#u4Slot1').textContent = '[1]';
+    qs('#u4Slot2').textContent = '[2]';
+    setupU4();
+  });
+
+  // Unit 5
+  let activeEx = 'completar';
+  qsa('.exercise-tab').forEach(btn => btn.addEventListener('click', () => {
+    activeEx = btn.dataset.ex;
+    qsa('.exercise-tab').forEach(b => b.classList.toggle('active', b === btn));
+    ['completar','ordenar','copiar'].forEach(id => qs(`#ex-${id}`).classList.toggle('hidden', id !== activeEx));
+  }));
+
+  function setupU5Choices() {
+    const host = qs('#u5Choices');
+    host.innerHTML = '';
+    const opts = state.mode === 'apoio' ? ['SA','BO'] : ['CA','SA','PA','BO'];
+    opts.forEach(v => {
+      const b = document.createElement('button');
+      b.className = 'chip';
+      b.textContent = v;
+      b.setAttribute('aria-label', `Escolher ${v}`);
+      b.addEventListener('click', () => {
+        if (v === 'SA') {
+          state.u5.done.completar = true;
+          goodFeedback(qs('#u5Fb1'), 'Certo! c + sa = casa.');
+          updateU5Stars();
+        } else {
+          warnFeedback(qs('#u5Fb1'), 'Tenta outra sílaba.');
+        }
+      });
+      host.appendChild(b);
+    });
+  }
+
+  // U5 ordering drag
+  const u5OrderZones = qsa('#ex-ordenar .dropzone');
+  function readU5Order() {
+    const a = u5OrderZones[0].querySelector('.syllable')?.dataset.key;
+    const b = u5OrderZones[1].querySelector('.syllable')?.dataset.key;
+    if (a === 'CA' && b === 'SA') {
+      state.u5.done.ordenar = true;
+      goodFeedback(qs('#u5Fb2'), 'Ordem correta: CA-SA.');
+      updateU5Stars();
+    } else if (a && b) {
+      warnFeedback(qs('#u5Fb2'), 'Ainda não. Experimenta trocar.');
+    }
+  }
+  qsa('#u5OrderBank .syllable').forEach(s => attachDrag(s, () => u5OrderZones, () => readU5Order()));
+
+  // U5 trace canvas
+  function setupTraceCanvas(canvasId, guideText = 'casa') {
+    const cv = qs(canvasId);
+    const ctx = cv.getContext('2d');
+    let drawing = false;
+    let last = null;
+    function paintGuide() {
+      ctx.clearRect(0,0,cv.width,cv.height);
+      ctx.fillStyle = '#93c5fd';
+      ctx.font = '800 84px Nunito';
+      ctx.setLineDash([6,6]);
+      ctx.strokeStyle = '#60a5fa';
+      ctx.lineWidth = 2;
+      ctx.strokeText(guideText, 35, 115);
+      ctx.setLineDash([]);
+    }
+    paintGuide();
+
+    function pos(ev) {
+      const r = cv.getBoundingClientRect();
+      const cx = (ev.clientX - r.left) * (cv.width / r.width);
+      const cy = (ev.clientY - r.top) * (cv.height / r.height);
+      return {x: cx, y: cy};
+    }
+
+    cv.addEventListener('pointerdown', (e) => { drawing = true; last = pos(e); cv.setPointerCapture(e.pointerId); });
+    cv.addEventListener('pointermove', (e) => {
+      if (!drawing) return;
+      const p = pos(e);
+      ctx.strokeStyle = '#1d4ed8';
+      ctx.lineWidth = 6;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(last.x, last.y);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+      last = p;
+    });
+    cv.addEventListener('pointerup', () => { drawing = false; });
+
+    return { clear: paintGuide };
+  }
+
+  const traceCtrl = setupTraceCanvas('#traceCanvas');
+  qs('#u5ClearTrace').addEventListener('click', () => traceCtrl.clear());
+  qs('#u5CheckText').addEventListener('click', () => {
+    const t = qs('#u5Text').value.trim().toLowerCase();
+    if (t === 'casa') {
+      state.u5.done.copiar = true;
+      goodFeedback(qs('#u5Fb3'), 'Escrita correta!');
+      updateU5Stars();
+    } else if (t === 'caza' || t === 'cassa') {
+      warnFeedback(qs('#u5Fb3'), 'Boa tentativa. A forma correta é casa.');
+    } else {
+      warnFeedback(qs('#u5Fb3'), 'Tenta escrever “casa”.');
+    }
+  });
+
+  function updateU5Stars() {
+    const n = Object.values(state.u5.done).filter(Boolean).length;
+    qs('#u5Stars').textContent = '★'.repeat(n) + '☆'.repeat(3 - n);
+  }
+
+  // Unit 6
+  function setupU6() {
+    const words = state.mode === 'apoio' ? ['A','casa','é'] : ['A','casa','é','grande.'];
+    const read = qs('#u6ReadWords');
+    read.innerHTML = '';
+    words.forEach(w => {
+      const b = document.createElement('button');
+      b.className = 'word-token';
+      b.textContent = w;
+      if (w === 'casa') {
+        b.style.background = '#ffedd5';
+        b.style.borderColor = '#fb923c';
+      }
+      b.addEventListener('click', () => speak(w.replace('.','')));
+      read.appendChild(b);
     });
 
-    document.querySelectorAll('.choice-row').forEach((row) => {
-      const feedback = row.parentElement.querySelector('.feedback');
-      row.querySelectorAll('.choice-btn').forEach((button) => {
-        button.addEventListener('click', () => {
-          row.querySelectorAll('.choice-btn').forEach((item) => item.classList.remove('is-right', 'is-wrong'));
-          const rightAnswer = button.dataset.answer || button.dataset.clozeAnswer || '';
-          if (button.dataset.choice === rightAnswer) {
-            button.classList.add('is-right');
-            if (feedback) feedback.textContent = 'Muito bem!';
+    const shuffled = [...words].sort(() => Math.random() - 0.5);
+    const bank = qs('#u6Bank');
+    bank.innerHTML = '';
+    state.u6.slots = [null, null, null, null];
+    qsa('#u6Phase2 .dropzone').forEach((z, i) => {
+      z.textContent = String(i + 1);
+      if (i >= words.length) z.classList.add('hidden'); else z.classList.remove('hidden');
+    });
+
+    shuffled.forEach(w => {
+      const t = document.createElement('div');
+      t.className = 'word-token';
+      t.textContent = w;
+      t.dataset.word = w;
+      attachDrag(t, () => qsa('#u6Phase2 .dropzone:not(.hidden)'), (zone) => {
+        if (zone) {
+          const idx = Number(zone.dataset.fslot);
+          state.u6.slots[idx] = w;
+        }
+      });
+      bank.appendChild(t);
+    });
+    qs('#u6Feedback').textContent = 'Ordena as palavras.';
+    qs('#u6Feedback').className = 'feedback';
+  }
+
+  qs('#u6SpeakAll').addEventListener('click', () => speak(state.mode === 'apoio' ? 'A casa é' : 'A casa é grande'));
+  qs('#u6ToBuild').addEventListener('click', () => {
+    qs('#u6Phase1').classList.add('hidden');
+    qs('#u6Phase2').classList.remove('hidden');
+  });
+  qs('#u6Check').addEventListener('click', () => {
+    const expected = state.mode === 'apoio' ? ['A','casa','é'] : ['A','casa','é','grande.'];
+    const got = state.u6.slots.slice(0, expected.length);
+    const ok = expected.every((w, i) => got[i] === w);
+    if (ok) {
+      goodFeedback(qs('#u6Feedback'), expected.join(' '));
+    } else {
+      warnFeedback(qs('#u6Feedback'), 'Ordem estranha. Tenta de novo.');
+    }
+  });
+
+  // Unit 7
+  const u7Tasks = {
+    apoio: [
+      { type: 'choice', title: 'Encontra a palavra', options: ['casa','bota'], correct: 'casa' },
+      { type: 'choice', title: 'Quantas sílabas?', options: ['2','3'], correct: '2' },
+      { type: 'sort2', title: 'Constrói a palavra', correct: ['CA','SA'] },
+      { type: 'choice', title: 'Completa a frase', options: ['A ___ é grande.','A bota é grande.'], correct: 'A ___ é grande.' }
+    ],
+    intermedio: [
+      { type: 'choice', title: 'Encontra a palavra', options: ['bota','casa','cana'], correct: 'casa' },
+      { type: 'choice', title: 'Quantas sílabas?', options: ['1','2','3'], correct: '2' },
+      { type: 'sort2', title: 'Constrói a palavra', correct: ['CA','SA'] },
+      { type: 'choice', title: 'Completa a frase', options: ['A ___ é grande.','A bota é grande.','O dedo é grande.'], correct: 'A ___ é grande.' }
+    ],
+    desafio: [
+      { type: 'choice', title: 'Encontra a palavra', options: ['bota','casa','cana'], correct: 'casa' },
+      { type: 'choice', title: 'Quantas sílabas?', options: ['1','2','3'], correct: '2' },
+      { type: 'sort2', title: 'Constrói a palavra', correct: ['CA','SA'] },
+      { type: 'choice', title: 'Completa a frase', options: ['A ___ é grande.','A bota é grande.','O dedo é grande.'], correct: 'A ___ é grande.' }
+    ]
+  };
+
+  function resetU7() {
+    state.u7 = { step: 0, score: 0, firstTryCorrect: 0, attemptsCurrent: 0 };
+    qs('#u7Summary').classList.add('hidden');
+    qs('#u7Next').disabled = true;
+    renderU7Task();
+  }
+
+  function renderU7Task() {
+    const tasks = u7Tasks[state.mode];
+    const step = state.u7.step;
+    const bar = ((step) / tasks.length) * 100;
+    qs('#u7Bar').style.width = `${bar}%`;
+    qs('#u7Score').textContent = `✓ ${state.u7.score}/4`;
+
+    if (step >= tasks.length) {
+      qs('#u7Step').textContent = 'Resumo final';
+      const stars = Array.from({length: 4}, (_, i) => i < state.u7.score ? '★' : '☆').join('');
+      qs('#u7Summary').classList.remove('hidden');
+      qs('#u7Summary').innerHTML = `<p class="stars">${stars}</p><p>Muito bem! Já conheces a palavra CASA!</p><p>Professor: ${state.u7.firstTryCorrect >= 3 ? 'domínio (3-4 à primeira)' : 'precisa de reforço (1-2 à primeira)'}</p>${state.mode==='desafio' ? '<p><strong>Desafio oral:</strong> diz uma palavra que comece por SA e outra que termine em CA.</p>' : ''}`;
+      qs('#u7Task').innerHTML = '';
+      qs('#u7Next').disabled = true;
+      goodFeedback(qs('#u7Fb'), 'Avaliação concluída!');
+      qs('#u7Bar').style.width = '100%';
+      return;
+    }
+
+    state.u7.attemptsCurrent = 0;
+    qs('#u7Step').textContent = `Tarefa ${step + 1}/4`;
+    const t = tasks[step];
+    const host = qs('#u7Task');
+    host.innerHTML = `<h3>${t.title}</h3>`;
+    qs('#u7Fb').textContent = 'Responde e recebe feedback.';
+    qs('#u7Fb').className = 'feedback';
+    qs('#u7Next').disabled = true;
+
+    if (t.type === 'choice') {
+      const row = document.createElement('div');
+      row.className = 'row';
+      t.options.forEach(o => {
+        const b = document.createElement('button');
+        b.className = 'chip';
+        b.textContent = o;
+        b.addEventListener('click', () => {
+          state.u7.attemptsCurrent += 1;
+          if (o === t.correct) {
+            state.u7.score += 1;
+            if (state.u7.attemptsCurrent === 1) state.u7.firstTryCorrect += 1;
+            goodFeedback(qs('#u7Fb'), 'Certo!');
+            qs('#u7Next').disabled = false;
+            qs('#u7Score').textContent = `✓ ${state.u7.score}/4`;
           } else {
-            button.classList.add('is-wrong');
-            if (feedback) feedback.textContent = 'Tenta outra vez.';
+            warnFeedback(qs('#u7Fb'), 'Tenta outra vez.');
           }
         });
+        row.appendChild(b);
       });
-    });
+      host.appendChild(row);
+    }
 
-    document.querySelectorAll('[data-compose]').forEach((bank) => {
-      const output = document.getElementById(bank.dataset.compose);
-      const parts = [];
-      bank.querySelectorAll('.syllable-chip').forEach((chip) => {
-        chip.addEventListener('click', () => {
-          parts.push(chip.dataset.syllable || '');
-          if (output) output.textContent = parts.join('');
-        });
-      });
-    });
+    if (t.type === 'sort2') {
+      const bank = document.createElement('div');
+      bank.className = 'row';
+      const a = document.createElement('div'); a.className = 'syllable sa'; a.dataset.key='SA'; a.textContent='SA';
+      const c = document.createElement('div'); c.className = 'syllable ca'; c.dataset.key='CA'; c.textContent='CA';
+      bank.append(a,c);
+      const slotWrap = document.createElement('div');
+      slotWrap.className = 'slots';
+      const s1 = document.createElement('div'); s1.className = 'dropzone'; s1.textContent='1';
+      const s2 = document.createElement('div'); s2.className = 'dropzone'; s2.textContent='2';
+      slotWrap.append(s1,s2);
+      host.append(bank, slotWrap);
 
-    document.querySelectorAll('.clear-compose').forEach((button) => {
-      button.addEventListener('click', () => {
-        const output = document.getElementById(button.dataset.composeClear);
-        if (output) output.textContent = '__';
-      });
-    });
+      let p1 = null, p2 = null;
+      const evalSort = () => {
+        const x = s1.querySelector('.syllable')?.dataset.key;
+        const y = s2.querySelector('.syllable')?.dataset.key;
+        if (x && y) {
+          state.u7.attemptsCurrent += 1;
+          if (x === 'CA' && y === 'SA') {
+            state.u7.score += 1;
+            if (state.u7.attemptsCurrent === 1) state.u7.firstTryCorrect += 1;
+            goodFeedback(qs('#u7Fb'), 'Muito bem!');
+            qs('#u7Next').disabled = false;
+            qs('#u7Score').textContent = `✓ ${state.u7.score}/4`;
+          } else {
+            warnFeedback(qs('#u7Fb'), 'Troca a ordem.');
+          }
+        }
+        p1 = x; p2 = y;
+      };
+      attachDrag(a, () => [s1,s2], evalSort);
+      attachDrag(c, () => [s1,s2], evalSort);
+    }
+  }
 
-    document.querySelectorAll('.check-card').forEach((card) => {
-      card.addEventListener('click', () => card.classList.toggle('is-done'));
-    });
+  qs('#u7Next').addEventListener('click', () => {
+    state.u7.step += 1;
+    renderU7Task();
+  });
 
-    document.querySelectorAll('.diff-switcher').forEach((switcher) => {
-      const panels = switcher.nextElementSibling;
-      switcher.querySelectorAll('.diff-btn').forEach((button) => {
-        button.addEventListener('click', () => {
-          switcher.querySelectorAll('.diff-btn').forEach((item) => item.classList.remove('is-active'));
-          panels.querySelectorAll('.diff-panel').forEach((panel) => panel.classList.remove('is-active'));
-          button.classList.add('is-active');
-          const target = panels.querySelector('#' + CSS.escape(button.dataset.diff));
-          if (target) target.classList.add('is-active');
-        });
-      });
-    });
-  </script>
+  // Unit 8
+  const drawCtrl = setupTraceCanvas('#drawCanvas', 'casa');
+  qsa('#u8 .img-opt').forEach(b => b.addEventListener('click', () => {
+    const ext = b.dataset.ext;
+    state.u8.ext = ext;
+    qsa('#u8 .img-opt').forEach(x => x.classList.remove('selected'));
+    b.classList.add('selected');
+    ['desenho','oral','maker'].forEach(k => qs(`#ext-${k}`).classList.toggle('hidden', k !== ext));
+    qs('#u8Fb').textContent = `Escolheste: ${ext}.`;
+  }));
+
+  let mediaRec = null;
+  let chunks = [];
+  qs('#recBtn').addEventListener('click', async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+      mediaRec = new MediaRecorder(stream);
+      chunks = [];
+      mediaRec.ondataavailable = e => chunks.push(e.data);
+      mediaRec.onstop = () => {
+        const blob = new Blob(chunks, {type:'audio/webm'});
+        const url = URL.createObjectURL(blob);
+        const a = qs('#recAudio');
+        a.src = url;
+        a.classList.remove('hidden');
+        state.u8.recorded = true;
+      };
+      mediaRec.start();
+      goodFeedback(qs('#u8Fb'), 'A gravar...');
+    } catch (e) {
+      warnFeedback(qs('#u8Fb'), 'Microfone indisponível. Usa o campo de texto.');
+    }
+  });
+  qs('#stopRec').addEventListener('click', () => { if (mediaRec && mediaRec.state !== 'inactive') mediaRec.stop(); });
+
+  qs('#showClass').addEventListener('click', () => {
+    let ok = false;
+    if (state.u8.ext === 'desenho') ok = qs('#drawCaption').value.toLowerCase().includes('casa');
+    if (state.u8.ext === 'oral') ok = state.u8.recorded || qs('#oralText').value.toLowerCase().includes('casa');
+    if (state.u8.ext === 'maker') ok = qs('#makerDesc').value.toLowerCase().includes('casa');
+    if (ok) {
+      goodFeedback(qs('#u8Fb'), 'Excelente! Produto pronto para partilhar.');
+    } else {
+      warnFeedback(qs('#u8Fb'), 'Inclui a palavra “casa” no teu trabalho.');
+    }
+  });
+
+  // Boot
+  applyDiffText();
+  setupU2();
+  setupU4();
+  setupU5Choices();
+  setupU6();
+  resetU7();
+
+  // helpful keyboard shortcuts
+  addEventListener('keydown', (e) => {
+    if (e.key.toLowerCase() === 'l' && e.altKey) qs('#speakCasa').click();
+  });
+})();
+</script>
 </body>
 </html>

@@ -1,516 +1,1483 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-PT">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>M28P #5 — sapato | PageCraft</title>
-  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHRleHQgeT0iNTAiIGZvbnQtc2l6ZT0iNDgiPvCfk5g8L3RleHQ+PC9zdmc+" />
+  <title>PageCraft | Palavra "sapato"</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #F0FDF4;
-      --surface: #FFFFFF;
-      --primary: #059669;
-      --accent: #F59E0B;
-      --text: #1E1B18;
-      --correct: #22c55e;
-      --correct-bg: #f0fdf4;
-      --incorrect: #F59E0B;
-      --incorrect-bg: #fffbeb;
+      --bg: #fff8f0;
+      --surface: #ffffff;
+      --primary: #e05fa0;
+      --accent: #f59e0b;
+      --text: #1e1b18;
+      --sa: #e05fa0;
+      --pa: #7c3aed;
+      --to: #059669;
+      --green: #22c55e;
+      --green-bg: #f0fdf4;
+      --amber-bg: #fffbeb;
       --radius: 16px;
       --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      --font: 'Nunito', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
-      --touch-size: 48px;
-      --card-gap: 1rem;
+      --focus: 3px solid #7c3aed;
+      --tap: 48px;
+      --motion: 200ms ease;
     }
+
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
+
+    html, body {
       margin: 0;
-      font-family: var(--font);
-      background:
-        radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 20%, transparent), transparent 38%),
-        linear-gradient(180deg, color-mix(in srgb, var(--primary) 8%, var(--bg)), var(--bg));
+      padding: 0;
+      background: radial-gradient(circle at 20% -10%, #ffe8f4 0%, var(--bg) 40%), radial-gradient(circle at 90% 0%, #fff0d6 0%, transparent 30%);
       color: var(--text);
+      font-family: 'Nunito', 'Poppins', 'Comic Sans MS', sans-serif;
       font-size: 20px;
-      line-height: 1.55;
-      min-height: 100vh;
+      line-height: 1.5;
     }
-    a, button, summary, textarea { font: inherit; }
-    .skip-link { position: absolute; left: 1rem; top: -4rem; background: var(--surface); color: var(--text); padding: 0.75rem 1rem; border-radius: 9999px; z-index: 1000; border: 2px solid var(--primary); }
-    .skip-link:focus { top: 1rem; }
-    :focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
-    .shell { max-width: 1120px; margin: 0 auto; padding: 1rem 1rem 3rem; }
-    .hero {
+
+    body {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    h1, h2, h3 { margin: 0 0 .6rem; line-height: 1.2; }
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.6rem; color: var(--primary); }
+    h3 { font-size: 1.2rem; }
+    p { margin: .4rem 0; }
+
+    button, .pill, .word-chip, .drop-slot, .card-option, .mini-btn {
+      min-height: var(--tap);
+      min-width: var(--tap);
+    }
+
+    button, select, input, textarea {
+      font: inherit;
+      border-radius: 999px;
+      border: 2px solid var(--primary);
+      padding: .7rem 1.2rem;
+      background: #fff;
+      color: var(--text);
+    }
+
+    button {
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: var(--shadow);
+      transition: transform var(--motion), box-shadow var(--motion), background var(--motion);
+      background: linear-gradient(180deg, #fff, #ffeaf4);
+      touch-action: manipulation;
+    }
+
+    button:hover { transform: scale(1.05); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); }
+    button:active { transform: scale(0.97); }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, [tabindex]:focus-visible {
+      outline: var(--focus);
+      outline-offset: 2px;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #e05fa0, #7c3aed 60%, #f59e0b);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 1.2rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1rem;
+    }
+
+    .meta {
+      display: flex;
+      gap: .8rem;
+      flex-wrap: wrap;
+      margin: .4rem 0 .8rem;
+    }
+
+    .badge {
+      background: #f59e0b;
+      color: #fff;
+      font-weight: 700;
+      border-radius: 999px;
+      padding: .25rem .75rem;
+      font-size: .95rem;
+    }
+
+    .objectives {
+      background: rgba(255, 255, 255, 0.18);
+      padding: .9rem;
+      border-radius: 12px;
+      margin: .5rem 0 0;
+    }
+
+    .objectives ul { margin: .4rem 0 .2rem 1.2rem; padding: 0; }
+
+    .unit {
+      background: var(--surface);
+      border: 2px solid var(--primary);
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin: 1rem 0;
+      box-shadow: var(--shadow);
+    }
+
+    .lead {
+      font-size: 1.02rem;
+      background: #fff2fa;
+      border-left: 6px solid var(--primary);
+      border-radius: 12px;
+      padding: .7rem .9rem;
+      margin-bottom: .8rem;
+    }
+
+    .diff-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin: .8rem 0;
+    }
+
+    .diff-tab {
+      border-radius: 999px;
+      border: 2px solid #ddd;
+      background: #fff;
+      padding: .5rem .9rem;
+      cursor: pointer;
+      user-select: none;
+      font-weight: 700;
+      transition: all var(--motion);
+    }
+
+    .diff-tab.active { color: #fff; border-color: transparent; }
+    .diff-tab[data-level="support"].active { background: #22c55e; }
+    .diff-tab[data-level="standard"].active { background: #f59e0b; }
+    .diff-tab[data-level="challenge"].active { background: #ef4444; }
+
+    .diff-content { display: none; }
+    .diff-content.active { display: block; }
+
+    .word-display {
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: .05em;
+      color: var(--primary);
+      text-transform: uppercase;
+      text-align: center;
+      margin: .5rem 0;
+      border-radius: 12px;
+      padding: .2rem .4rem;
+      transition: background var(--motion), transform var(--motion);
+    }
+
+    .word-highlight { background: #fff59d; transform: scale(1.03); }
+
+    .scene {
+      border-radius: 16px;
+      background: linear-gradient(180deg, #dbeafe, #eff6ff 65%, #e5e7eb);
+      height: 200px;
       position: relative;
       overflow: hidden;
-      border-radius: 28px;
-      padding: 1.4rem;
-      background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 72%, white), color-mix(in srgb, var(--accent) 60%, white));
-      color: white;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
+      transition: transform var(--motion);
     }
-    .hero::after { content: ""; position: absolute; inset: auto -8% -24% auto; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.14); }
-    .hero-top { display: flex; gap: 1rem; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; position: relative; z-index: 1; }
-    .hero-kicker, .hero-badge, .meta-chip, .nav-pill, .page-link span {
-      display: inline-flex;
+
+    .scene.zoom { transform: scale(1.03); }
+
+    .shoe {
+      position: absolute;
+      left: 50%;
+      top: 55%;
+      transform: translate(-50%, -50%);
+      font-size: 4rem;
+      filter: drop-shadow(0 8px 8px rgba(0, 0, 0, .2));
+    }
+
+    .story {
+      text-align: center;
+      margin: .6rem 0;
+      font-weight: 700;
+    }
+
+    .feedback {
+      border-radius: 12px;
+      padding: .5rem .8rem;
+      margin-top: .5rem;
+      display: none;
+      font-weight: 700;
+    }
+
+    .feedback.show { display: block; }
+    .feedback.ok { background: var(--green-bg); color: #166534; border: 2px solid var(--green); }
+    .feedback.try { background: var(--amber-bg); color: #92400e; border: 2px solid var(--accent); }
+
+    .row { display: flex; gap: .7rem; flex-wrap: wrap; align-items: center; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; }
+
+    .card-option {
+      border: 2px solid #d4d4d8;
+      border-radius: 14px;
+      background: #fff;
+      padding: .8rem;
+      text-align: center;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform var(--motion), border var(--motion);
+      user-select: none;
+      touch-action: none;
+    }
+
+    .card-option.selected { border-color: #2563eb; transform: translateY(-2px); }
+    .card-option.shake { animation: shake .3s; }
+    .card-option img, .emoji-img { font-size: 2rem; display: block; margin-bottom: .3rem; }
+    .dashed-hint { text-decoration: underline dashed #2563eb; text-underline-offset: 4px; }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-3px); }
+      100% { transform: translateX(0); }
+    }
+
+    .drop-target, .slot-zone {
+      border: 3px dashed #a3a3a3;
+      border-radius: 14px;
+      min-height: 64px;
+      padding: .3rem;
+      display: flex;
       align-items: center;
       justify-content: center;
-      min-height: var(--touch-size);
-      min-width: var(--touch-size);
-      border-radius: 9999px;
-      padding: 0.75rem 1.25rem;
-      font-weight: 700;
+      background: #fafafa;
     }
-    .hero-kicker { background: rgba(255,255,255,0.16); }
-    .hero-badge { background: rgba(255,255,255,0.22); }
-    .hero-grid { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.9fr); margin-top: 1.25rem; position: relative; z-index: 1; }
-    .hero-copy h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.05; margin: 0.4rem 0 0.7rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
-    .hero-copy p { margin: 0.4rem 0; max-width: 45rem; }
-    .word-scene { background: rgba(255,255,255,0.14); border: 2px solid rgba(255,255,255,0.28); border-radius: 24px; padding: 1rem; backdrop-filter: blur(4px); }
-    .word-scene .emoji { font-size: clamp(3rem, 10vw, 5.5rem); line-height: 1; }
-    .meta-row, .objective-row, .syllable-row, .page-switch, .section-nav { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-    .meta-row { margin-top: 1rem; }
-    .meta-chip { background: rgba(255,255,255,0.18); }
-    .objective-row { margin: 1rem 0 0; padding: 0; list-style: none; }
-    .objective-row li { background: rgba(255,255,255,0.22); border-radius: 9999px; padding: 0.75rem 1rem; font-weight: 700; min-height: var(--touch-size); display: inline-flex; align-items: center; }
-    .word-spotlight { margin-top: 1rem; display: grid; gap: 1rem; grid-template-columns: 1.1fr 1fr; }
-    .spot-card { background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 70%, white); border-radius: 24px; padding: 1rem; box-shadow: var(--shadow); }
-    .spot-card h2 { margin: 0 0 0.75rem; font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; }
-    .spot-card .word-display { font-size: clamp(2.4rem, 7vw, 3.8rem); font-weight: 800; color: var(--primary); letter-spacing: 0.05em; text-transform: uppercase; }
-    .spot-card .mission { margin-top: 0.75rem; }
-    .syllable-row { margin-top: 1rem; }
-    .syllable-token, .syllable-chip {
-      min-height: var(--touch-size);
-      min-width: var(--touch-size);
+
+    .syllable-bank, .sentence-bank, .recomb-bank { display: flex; gap: .5rem; flex-wrap: wrap; margin: .6rem 0; }
+
+    .syllable {
+      padding: .5rem 1.2rem;
+      color: #fff;
       border-radius: 12px;
-      border: none;
-      color: white;
       font-weight: 800;
-      font-size: clamp(1.5rem, 4vw, 2rem);
-      padding: 0.55rem 1rem;
-      background: var(--chip, var(--primary));
+      font-size: 36px;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
       box-shadow: var(--shadow);
+      transition: transform var(--motion), box-shadow var(--motion);
     }
-    .page-switch { margin: 1.2rem 0 0.5rem; }
-    .page-link {
-      text-decoration: none;
-      background: var(--surface);
-      color: var(--text);
-      border: 2px solid color-mix(in srgb, var(--primary) 28%, white);
-      border-radius: 18px;
-      padding: 0.85rem 1rem;
-      min-height: var(--touch-size);
+
+    .syllable[data-syl="sa"] { background: var(--sa); }
+    .syllable[data-syl="pa"] { background: var(--pa); }
+    .syllable[data-syl="to"] { background: var(--to); }
+    .syllable.dragging { transform: scale(1.1); box-shadow: 0 10px 20px rgba(0, 0, 0, .2); }
+
+    .slot-row { display: grid; gap: .6rem; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .slot {
+      border: 2px dashed #9ca3af;
+      border-radius: 12px;
+      min-height: 72px;
       display: flex;
-      gap: 0.75rem;
       align-items: center;
-      justify-content: space-between;
-      flex: 1 1 200px;
-      box-shadow: var(--shadow);
+      justify-content: center;
+      background: #f9fafb;
+      font-size: 1.2rem;
       font-weight: 700;
+      text-transform: uppercase;
     }
-    .page-link.is-current { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
-    .section-nav { position: sticky; top: 0; z-index: 10; padding: 0.85rem 0 1rem; background: linear-gradient(180deg, var(--bg), rgba(255,248,240,0.88)); backdrop-filter: blur(6px); }
-    .nav-pill { text-decoration: none; background: var(--surface); color: var(--text); border: 2px solid color-mix(in srgb, var(--primary) 24%, white); padding: 0.55rem 1rem; }
-    .content { display: grid; gap: 1.1rem; }
-    .unit-card { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 35%, white); border-radius: 24px; padding: 1.15rem; box-shadow: var(--shadow); }
-    .unit-head { display: flex; gap: 1rem; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
-    .unit-head h2 { margin: 0.2rem 0 0; font-size: clamp(1.45rem, 4vw, 2.1rem); font-weight: 800; }
-    .unit-kicker { color: color-mix(in srgb, var(--primary) 80%, black); font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.9rem; }
-    .unit-badge { background: color-mix(in srgb, var(--accent) 22%, var(--surface)); border: 2px solid var(--accent); border-radius: 9999px; padding: 0.65rem 1rem; font-weight: 800; min-height: var(--touch-size); display: inline-flex; align-items: center; }
-    .unit-grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.95fr); margin-top: 1rem; }
-    .unit-copy p { margin: 0.65rem 0; }
-    .unit-flow { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 1rem; }
-    .unit-flow > div, .play-card, .maker-box, .teacher-card { background: color-mix(in srgb, var(--bg) 70%, white); border-radius: 18px; padding: 0.95rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
-    .play-label { font-weight: 800; margin: 0 0 0.8rem; }
-    .pill-btn, .choice-btn, .check-card, .prompt-card {
-      min-height: var(--touch-size);
-      min-width: var(--touch-size);
-      border-radius: 9999px;
-      border: 2px solid transparent;
-      padding: 0.75rem 1.2rem;
+
+    .count-bubbles { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .5rem; }
+    .count-btn { border-radius: 999px; }
+
+    .question-mark {
+      font-size: 2.2rem;
+      animation: bob 0.7s infinite alternate;
+      display: inline-block;
+    }
+
+    @keyframes bob { from { transform: translateY(0); } to { transform: translateY(-6px); } }
+
+    .guided-line {
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: .7rem;
+      margin-top: .6rem;
+      background: #f8fafc;
+    }
+
+    .trace {
+      letter-spacing: .22em;
+      color: #64748b;
+      border-bottom: 3px dotted #94a3b8;
+      padding-bottom: .2rem;
+      margin-bottom: .4rem;
+      display: inline-block;
+    }
+
+    .canvas-wrap {
+      border: 2px solid #cbd5e1;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+      margin-top: .5rem;
+    }
+
+    canvas.draw {
+      display: block;
+      width: 100%;
+      height: 150px;
+      touch-action: none;
+      background: repeating-linear-gradient(0deg, #fff, #fff 28px, #e2e8f0 29px, #fff 30px);
+    }
+
+    .sentence-slot {
+      border: 2px dashed #a1a1aa;
+      min-height: 66px;
+      border-radius: 12px;
+      padding: .2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fafafa;
+    }
+
+    .word-chip {
+      border-radius: 12px;
+      border: 2px solid #d4d4d8;
+      padding: .45rem .9rem;
       font-weight: 700;
-      cursor: pointer;
-      transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+      background: #fff;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
     }
-    .pill-btn:hover, .choice-btn:hover, .check-card:hover, .prompt-card:hover, .page-link:hover { transform: scale(1.05); box-shadow: 0 10px 24px rgba(0,0,0,0.12); }
-    .pill-btn:active, .choice-btn:active, .check-card:active, .prompt-card:active, .page-link:active { transform: scale(0.97); }
-    .pill-btn { background: var(--primary); color: white; }
-    .choice-row, .check-grid, .prompt-grid, .compose-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-    .choice-btn, .check-card, .prompt-card { background: var(--surface); color: var(--text); border-color: color-mix(in srgb, var(--primary) 22%, white); }
-    .choice-btn.is-right, .check-card.is-done { background: var(--correct-bg); border-color: var(--correct); color: #166534; }
-    .choice-btn.is-wrong { background: var(--incorrect-bg); border-color: var(--incorrect); color: #92400e; }
-    .feedback, .helper-text { margin: 0.85rem 0 0; font-weight: 700; }
-    .feedback { min-height: 1.4em; }
-    .compose-output, .phrase-card, .cloze-word { min-height: 72px; border-radius: 18px; background: var(--surface); border: 2px dashed color-mix(in srgb, var(--primary) 35%, white); display: grid; place-items: center; font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800; color: var(--primary); padding: 0.9rem; margin-top: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
-    .phrase-card { text-transform: none; font-size: 1.3rem; color: var(--text); }
-    .phrase-input { width: 100%; margin-top: 0.85rem; border-radius: 18px; border: 2px solid color-mix(in srgb, var(--primary) 25%, white); padding: 0.9rem 1rem; min-height: 120px; background: #fff; }
-    .diff-switcher { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; }
-    .diff-btn { min-height: var(--touch-size); min-width: var(--touch-size); border-radius: 9999px; border: 2px solid color-mix(in srgb, var(--primary) 28%, white); background: var(--surface); padding: 0.7rem 1rem; font-weight: 700; cursor: pointer; }
-    .diff-btn.is-active { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); border-color: var(--accent); }
-    .diff-panel { display: none; background: color-mix(in srgb, var(--bg) 72%, white); border-radius: 18px; padding: 0.95rem; margin-top: 0.8rem; border: 2px solid color-mix(in srgb, var(--primary) 18%, white); }
-    .diff-panel.is-active { display: block; }
-    .teacher-guide { background: var(--surface); border: 2px solid color-mix(in srgb, var(--primary) 30%, white); border-radius: 24px; padding: 0.9rem 1rem; box-shadow: var(--shadow); }
-    .teacher-guide summary { min-height: var(--touch-size); display: flex; align-items: center; cursor: pointer; font-weight: 800; font-size: 1.2rem; }
-    .teacher-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 1rem; }
-    .teacher-card-wide { grid-column: 1 / -1; }
-    .teacher-card h3 { margin-top: 0; }
-    .footer { text-align: center; padding: 1.4rem 0 0; font-weight: 700; color: color-mix(in srgb, var(--text) 72%, white); }
+
+    .sentence-ok { color: #166534; font-weight: 800; animation: pulse .3s; }
+    @keyframes pulse { from { transform: scale(.96); } to { transform: scale(1); } }
+
+    .progress {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .4rem;
+      margin-bottom: .8rem;
+    }
+
+    .dot {
+      height: 14px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      transition: background var(--motion);
+    }
+
+    .dot.done { background: #22c55e; }
+
+    .task-screen {
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      min-height: 200px;
+      padding: .8rem;
+      background: #fff;
+    }
+
     .hidden { display: none !important; }
+
+    .maker {
+      background: #dcfce7;
+      border: 2px solid #22c55e;
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+
+    .maker-card {
+      background: #fff;
+      border-left: 6px solid #22c55e;
+      border-radius: 12px;
+      padding: .8rem;
+      margin-top: .6rem;
+      box-shadow: var(--shadow);
+    }
+
+    .mini-assessment {
+      background: #ffedd5;
+      border: 2px solid #fb923c;
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+
+    .assessment-item {
+      background: #fff;
+      border-radius: 12px;
+      padding: .7rem;
+      margin: .6rem 0;
+      border: 1px solid #fed7aa;
+    }
+
+    .scale { display: flex; flex-wrap: wrap; gap: .7rem; font-size: .95rem; margin-top: .4rem; }
+
+    .curricular {
+      background: #ede9fe;
+      border: 2px solid #7c3aed;
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    .footer {
+      text-align: center;
+      margin: 1rem 0 .2rem;
+      color: #6b7280;
+      font-size: .9rem;
+    }
+
+    .gallery {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      margin-top: .5rem;
+    }
+
+    .thumb {
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      width: 84px;
+      height: 84px;
+      background: #fff;
+      object-fit: cover;
+    }
+
+    .color-pick { width: 32px; height: 32px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 2px #cbd5e1; cursor: pointer; }
+
+    .confetti-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .progress-bar {
+      height: 12px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+      margin-top: .6rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
+      width: 100%;
+      transition: width 1s linear;
+    }
+
     @media (max-width: 900px) {
-      .hero-grid, .word-spotlight, .unit-grid, .unit-flow, .teacher-grid { grid-template-columns: 1fr; }
-      .section-nav { position: static; }
+      html, body { font-size: 18px; }
+      .grid-3 { grid-template-columns: 1fr; }
+      .slot-row { grid-template-columns: 1fr; }
+      .scene { height: 180px; }
+      .word-display { font-size: 40px; }
     }
-    @media (max-width: 640px) {
-      body { font-size: 18px; }
-      .shell { padding: 0.75rem 0.75rem 2.4rem; }
-      .hero { padding: 1rem; border-radius: 22px; }
-      .hero-copy h1 { font-size: clamp(2rem, 9vw, 3rem); }
-      .page-link { flex-basis: 100%; }
-      .objective-row li, .meta-chip, .hero-kicker, .hero-badge, .nav-pill { width: 100%; justify-content: center; }
-      .unit-card, .spot-card, .teacher-guide { border-radius: 20px; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after { animation: none !important; transition: none !important; }
+
+    @media (max-width: 768px) {
+      html, body { font-size: 16px; }
+      body { padding: .6rem; }
+      .header, .unit, .maker, .mini-assessment, .curricular { padding: .8rem; }
+      h1 { font-size: 1.6rem; }
+      h2 { font-size: 1.3rem; }
+      .syllable { font-size: 32px; }
     }
   </style>
 </head>
-<body data-page-variant="index.html" data-visible-units="1,2,3,4">
-  <a href="#main" class="skip-link">Ir para o conteúdo</a>
-  <div class="shell">
-    <header class="hero">
-      <div class="hero-top">
-        <span class="hero-kicker">M28P #5</span>
-        <span class="hero-badge">Rota completa</span>
-      </div>
-      <div class="hero-grid">
-        <div class="hero-copy">
-          <p>Descobrir, ler e brincar</p>
-          <h1>Sapato</h1>
-          <p>Percurso completo com foco na descoberta da palavra, nas sílabas e na confiança ao ler.</p>
-          <div class="meta-row">
-            <span class="meta-chip">👟 Palavra 5</span>
-            <span class="meta-chip">1.º ano (6-7 anos)</span>
-            <span class="meta-chip">45 min</span>
-          </div>
-          <ul class="objective-row"><li>Reconhecer globalmente a palavra &#x27;sapato&#x27; associando-a à imagem</li><li>Segmentar &#x27;sapato&#x27; nas três sílabas sa-pa-to e bater as palmas correspondentes</li><li>Recombinar as sílabas sa, pa, to para formar novas palavras (ex: pato)</li></ul>
-        </div>
-        <aside class="word-scene" aria-hidden="true">
-          <div class="emoji">👟</div>
-          <p><strong>Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</strong></p>
-          <p>Paleta própria, leitura em pt-PT AO90 e navegação pensada para toque.</p>
-          <p>Esta página trabalha as unidades 1, 2, 3, 4.</p>
-        </aside>
-      </div>
-    </header>
+<body>
+  <canvas class="confetti-layer" id="confetti" aria-hidden="true"></canvas>
 
-    <div class="page-switch" aria-label="Outras páginas desta palavra"><a class="page-link is-current" href="./index.html">Página 1<span>Atual</span></a><a class="page-link" href="./page-2.html">Página 2<span>Abrir</span></a><a class="page-link" href="./page-3.html">Página 3<span>Abrir</span></a><a class="page-link" href="./page-4.html">Página 4<span>Abrir</span></a></div>
+  <header class="header">
+    <h1>Palavra "sapato" | Método das 28 Palavras (ordem 5)</h1>
+    <div class="meta">
+      <span class="badge">Ano: 6 anos · 1.º ano</span>
+      <span class="badge">Duração: 45 minutos</span>
+      <span class="badge">Tema: vestuário 👟</span>
+    </div>
+    <div class="objectives">
+      <strong>Objetivos</strong>
+      <ul>
+        <li>Reconhecer globalmente a palavra "sapato" e associá-la à imagem.</li>
+        <li>Segmentar "sapato" em sa-pa-to e bater 3 palmas.</li>
+        <li>Recombinar sílabas para formar palavras novas, como "pato".</li>
+        <li>Ler e completar a frase "O sapato é azul.".</li>
+      </ul>
+    </div>
+  </header>
 
-    <section class="word-spotlight" aria-label="Destaque da palavra">
-      <article class="spot-card">
-        <h2>Palavra em destaque</h2>
-        <div class="word-display">Sapato</div>
-        <p class="mission">sapato</p>
-        <div class="compose-actions">
-          <button class="pill-btn speak-btn" data-speak="Sapato">Ouvir a palavra</button>
-        </div>
-      </article>
-      <article class="spot-card">
-        <h2>Sílabas</h2>
-        <div class="syllable-row"><span class="syllable-token" style="--chip:#059669">sa</span><span class="syllable-token" style="--chip:#2563EB">pa</span><span class="syllable-token" style="--chip:#E05FA0">to</span></div>
-        <p class="mission">Explora a palavra com calma, toca nas sílabas e percorre todas as etapas da aula.</p>
-      </article>
+  <main>
+    <section class="unit" id="u1">
+      <h2>Unit 1 · Abertura contextual (4 min)</h2>
+      <p class="lead">O João perdeu um sapato. Onde está o sapato do João?</p>
+      <div class="diff-tabs" role="tablist" aria-label="Níveis Unit 1">
+        <button class="diff-tab active" data-level="support" aria-label="Nível apoio">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard" aria-label="Nível intermédio">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge" aria-label="Nível desafio">🔴 Desafio</button>
+      </div>
+      <div class="diff-content active" data-level="support">
+        <p><strong>Com ajuda:</strong> imagem e palavra com áudio automático.</p>
+      </div>
+      <div class="diff-content" data-level="standard"><p><strong>Objetivo:</strong> toca quando quiseres para ouvir.</p></div>
+      <div class="diff-content" data-level="challenge"><p><strong>Desafio:</strong> lê primeiro. Pergunta: O que calças quando sais de casa?</p></div>
+
+      <div class="scene" id="u1-scene" aria-label="Cena com sapato azul" tabindex="0">
+        <span class="shoe" aria-hidden="true">👟</span>
+      </div>
+      <p class="story">O João perdeu um sapato. Onde está o sapato do João?</p>
+      <div class="word-display" id="u1-word" tabindex="0" aria-label="Palavra sapato">SAPATO</div>
+      <div class="row">
+        <button id="u1-audio" aria-label="Ouvir palavra sapato">🔊 Ouvir "sapato"</button>
+        <button id="u1-check" aria-label="Verificar toque na palavra">Toca na palavra sapato</button>
+      </div>
+      <div class="feedback" id="u1-feedback" aria-live="polite"></div>
     </section>
 
-    <nav class="section-nav" aria-label="Navegação das unidades"><a class="nav-pill" href="#u1-abertura-contextual-imagem-e-micro-história-com-a-palavra-sapato">1</a><a class="nav-pill" href="#u2-reconhecimento-global-associar-a-palavra-sapato-entre-opções">2</a><a class="nav-pill" href="#u3-segmentação-silábica-dividir-sapato-em-sa-pa-to">3</a><a class="nav-pill" href="#u4-recombinação-formar-novas-palavras-com-as-sílabas-sa-pa-to">4</a></nav>
+    <section class="unit" id="u2">
+      <h2>Unit 2 · Reconhecimento global (5 min)</h2>
+      <p class="lead">Escolhe a palavra "sapato" entre várias opções. Podes clicar ou arrastar para a zona alvo.</p>
+      <div class="diff-tabs" role="tablist" aria-label="Níveis Unit 2">
+        <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-content active" data-level="support"><p>Ronda 1 com 2 opções e pista tracejada em "sapato".</p></div>
+      <div class="diff-content" data-level="standard"><p>3 opções e 2 rondas com imagem de referência.</p></div>
+      <div class="diff-content" data-level="challenge"><p>Na 3.ª ronda não há imagem e há barra de tempo.</p></div>
 
-    <main id="main" class="content">
-      
-    <section id="u1-abertura-contextual-imagem-e-micro-história-com-a-palavra-sapato" class="unit-card">
-      <div class="unit-head">
-        <div>
-          <span class="unit-kicker">Unidade 1</span>
-          <h2>Abertura contextual: imagem e micro-história com a palavra &#x27;sapato&#x27;</h2>
-        </div>
-        <span class="unit-badge">Em destaque</span>
+      <div class="row" id="u2-ref-wrap"><span class="emoji-img">👟</span><strong>Referência: sapato</strong></div>
+      <div class="progress-bar hidden" id="u2-timer"><div class="progress-fill" id="u2-fill"></div></div>
+      <div class="grid-3" id="u2-options"></div>
+      <div class="row" style="margin-top:.6rem;">
+        <div class="drop-target" id="u2-target" aria-label="Largar aqui" style="flex:1;">Larga aqui a tua escolha</div>
+        <button id="u2-confirm" aria-label="Confirmar escolha">Confirmar</button>
+        <span id="u2-round" class="badge">Ronda 1/3</span>
       </div>
-      <div class="unit-grid">
-        <article class="unit-copy">
-          <p>O aluno é apresentado à palavra através de uma cena concreta: um sapato azul no chão da sala de aula. Uma voz/texto curto conta: &#x27;O João perdeu um sapato. Onde está o sapato do João?&#x27; A palavra aparece escrita por baixo da imagem, lida em voz alta pelo sistema.</p>
-          <div class="unit-flow">
-            <div>
-              <h3>O que vais fazer</h3>
-              <p>Imagem a cores de um sapato azul no chão; palavra &#x27;sapato&#x27; escrita em tipografia grande por baixo (cor: azul escuro); botão de áudio para ouvir a palavra; ao clicar na palavra, esta fica destacada com fundo amarelo suave</p>
-            </div>
-            <div>
-              <h3>O que observar</h3>
-              <p>O aluno clica na palavra quando solicitado (&#x27;toca na palavra sapato&#x27;) sem confundir com distractores visuais</p>
-            </div>
-          </div>
-          <p>Clique no botão de áudio → reproduz pronúncia de &#x27;sapato&#x27;; clique na palavra → toggle destaque; tap na imagem → imagem cresce ligeiramente (zoom suave) e palavra reforça destaque</p>
-          
-        </article>
-        <aside class="unit-play">
-        <div class="play-card">
-          <button class="pill-btn reveal-btn" data-target="story-1">Mostrar a história</button>
-          <button class="pill-btn speak-btn" data-speak="sapato">Ouvir</button>
-          <div id="story-1" class="reveal-box hidden"><p>O aluno é apresentado à palavra através de uma cena concreta: um sapato azul no chão da sala de aula. Uma voz/texto curto conta: &#x27;O João perdeu um sapato. Onde está o sapato do João?&#x27; A palavra aparece escrita por baixo da imagem, lida em voz alta pelo sistema.</p></div>
-        </div>
-        </aside>
-      </div>
-      <div class="diff-switcher">
-        <button class="diff-btn is-active" data-diff="support-1">🟢 Com ajuda</button>
-        <button class="diff-btn" data-diff="standard-1">🟡 Objetivo</button>
-        <button class="diff-btn" data-diff="challenge-1">🔴 Desafio</button>
-      </div>
-      <div class="diff-panels">
-        <div id="support-1" class="diff-panel is-active"><p>Apenas imagem + palavra; botão de áudio sempre visível; sem distractores; palavra lida automaticamente ao entrar na unidade</p></div>
-        <div id="standard-1" class="diff-panel"><p>Imagem + palavra; botão de áudio disponível; aluno clica para ouvir quando quiser</p></div>
-        <div id="challenge-1" class="diff-panel"><p>Sem botão de áudio automático; aluno tenta ler antes de ouvir; pergunta oral: &#x27;O que calças quando sais de casa?&#x27;</p></div>
-      </div>
+      <div class="feedback" id="u2-feedback" aria-live="polite"></div>
     </section>
-    
-    <section id="u2-reconhecimento-global-associar-a-palavra-sapato-entre-opções" class="unit-card">
-      <div class="unit-head">
-        <div>
-          <span class="unit-kicker">Unidade 2</span>
-          <h2>Reconhecimento global: associar a palavra &#x27;sapato&#x27; entre opções</h2>
-        </div>
-        <span class="unit-badge">Em destaque</span>
-      </div>
-      <div class="unit-grid">
-        <article class="unit-copy">
-          <p>O aluno deve identificar a palavra &#x27;sapato&#x27; entre três opções escritas (ex: sapato, boneco, mesa) ao mesmo tempo que vê três imagens correspondentes. Foco na forma global da palavra — extensão, letras iniciais, padrão visual.</p>
-          <div class="unit-flow">
-            <div>
-              <h3>O que vais fazer</h3>
-              <p>Três cartões dispostos horizontalmente, cada um com imagem em cima e palavra em baixo; imagem de sapato em destaque no topo como referência; aluno arrasta ou clica no cartão correto; feedback ✓ verde suave ou ✗ âmbar sem eliminar opção</p>
-            </div>
-            <div>
-              <h3>O que observar</h3>
-              <p>O aluno seleciona &#x27;sapato&#x27; corretamente em 3 rondas com distractores diferentes (sem apoio de imagem na 3.ª ronda — desafio)</p>
-            </div>
-          </div>
-          <p>Clique/drag num cartão → cartão fica selecionado (borda azul); confirmação → feedback imediato; erro → cartão vibra ligeiramente, pode tentar novamente</p>
-          
-        </article>
-        <aside class="unit-play">
-        <div class="play-card">
-          <p class="play-label">Escolhe a palavra certa.</p>
-          <div class="choice-row">
-            <button class="choice-btn" data-answer="sapato" data-choice="sapato">sapato</button><button class="choice-btn" data-answer="sapato" data-choice="dedo">dedo</button><button class="choice-btn" data-answer="sapato" data-choice="bota">bota</button>
-          </div>
-          <p class="feedback" aria-live="polite">Procura a palavra completa.</p>
-        </div>
-        </aside>
-      </div>
-      <div class="diff-switcher">
-        <button class="diff-btn is-active" data-diff="support-2">🟢 Com ajuda</button>
-        <button class="diff-btn" data-diff="standard-2">🟡 Objetivo</button>
-        <button class="diff-btn" data-diff="challenge-2">🔴 Desafio</button>
-      </div>
-      <div class="diff-panels">
-        <div id="support-2" class="diff-panel is-active"><p>Imagem de referência sempre visível; palavra &#x27;sapato&#x27; sublinhada a tracejado azul como pista; apenas 2 opções na 1.ª ronda</p></div>
-        <div id="standard-2" class="diff-panel"><p>3 opções com imagens; 2 rondas com imagem de referência visível</p></div>
-        <div id="challenge-2" class="diff-panel"><p>3.ª ronda sem imagem de referência; palavras apresentadas sem imagem associada; tempo limite visual (barra de progresso suave)</p></div>
-      </div>
-    </section>
-    
-    <section id="u3-segmentação-silábica-dividir-sapato-em-sa-pa-to" class="unit-card">
-      <div class="unit-head">
-        <div>
-          <span class="unit-kicker">Unidade 3</span>
-          <h2>Segmentação silábica: dividir &#x27;sapato&#x27; em sa-pa-to</h2>
-        </div>
-        <span class="unit-badge">Em destaque</span>
-      </div>
-      <div class="unit-grid">
-        <article class="unit-copy">
-          <p>O aluno divide a palavra &#x27;sapato&#x27; em três sílabas arrastando blocos coloridos. Cada sílaba tem cor própria: sa=laranja, pa=verde, to=azul. O aluno bate palmas (ou clica nos blocos) contando as sílabas.</p>
-          <div class="unit-flow">
-            <div>
-              <h3>O que vais fazer</h3>
-              <p>Palavra &#x27;sapato&#x27; escrita grande no topo; ao clicar &#x27;separar&#x27; a palavra parte-se animadamente em 3 blocos coloridos (sa=laranja, pa=verde, to=azul); abaixo, 3 caixas vazias com travessões para arrastar cada bloco; contador de sílabas (1, 2, 3) aparece à medida que se arrastam; botão &#x27;bater palmas&#x27; para contar oralmente</p>
-            </div>
-            <div>
-              <h3>O que observar</h3>
-              <p>O aluno arrasta os 3 blocos para as posições corretas e indica oralmente (ou clica no número) que &#x27;sapato&#x27; tem 3 sílabas</p>
-            </div>
-          </div>
-          <p>Clique em &#x27;separar&#x27; → animação de quebra da palavra em 3 blocos; arrastar bloco para caixa → bloco encaixa com som suave; todos colocados → feedback positivo + contagem total animada</p>
-          <div class="maker-box"><p><strong>Desafio maker:</strong> Usa os blocos físicos de cartão (sa / pa / to) e cola-os em sequência numa tira de papel. Depois bate palmas 3 vezes enquanto diz a palavra em voz alta.</p><p><strong>Materiais:</strong> blocos físicos de sílabas (sa, pa, to) em cartão colorido, tira de papel A4 dobrada, cola stick</p><p><strong>Comunicação:</strong> Par partilha com outro par: &#x27;O nosso sapato tem 3 sílabas — sa, pa, to!&#x27;</p></div>
-        </article>
-        <aside class="unit-play">
-        <div class="play-card">
-          <p class="play-label">Toca nas sílabas para formar a palavra.</p>
-          <div class="syllable-bank" data-compose="compose-3"><button class="syllable-chip" style="--chip:#059669" data-syllable="sa">sa</button><button class="syllable-chip" style="--chip:#2563EB" data-syllable="pa">pa</button><button class="syllable-chip" style="--chip:#E05FA0" data-syllable="to">to</button></div>
-          <div id="compose-3" class="compose-output">__</div>
-          <div class="compose-actions"><button class="pill-btn clear-compose" data-compose-clear="compose-3">Limpar</button></div>
-        </div>
-        </aside>
-      </div>
-      <div class="diff-switcher">
-        <button class="diff-btn is-active" data-diff="support-3">🟢 Com ajuda</button>
-        <button class="diff-btn" data-diff="standard-3">🟡 Objetivo</button>
-        <button class="diff-btn" data-diff="challenge-3">🔴 Desafio</button>
-      </div>
-      <div class="diff-panels">
-        <div id="support-3" class="diff-panel is-active"><p>Blocos pré-colocados nas caixas; aluno apenas confirma a ordem (drag de reordenação); imagem de sapato sempre visível; contagem por palmas com apoio visual (3 mãos desenhadas)</p></div>
-        <div id="standard-3" class="diff-panel"><p>Blocos para arrastar do banco de sílabas para as caixas; imagem disponível como apoio; conta sílabas clicando no número correto</p></div>
-        <div id="challenge-3" class="diff-panel"><p>Palavra apresentada sem separação visual; aluno digita onde ficam as fronteiras silábicas; depois tenta com palavra nova: &#x27;pato&#x27; — quantas sílabas?</p></div>
-      </div>
-    </section>
-    
-    <section id="u4-recombinação-formar-novas-palavras-com-as-sílabas-sa-pa-to" class="unit-card">
-      <div class="unit-head">
-        <div>
-          <span class="unit-kicker">Unidade 4</span>
-          <h2>Recombinação: formar novas palavras com as sílabas sa, pa, to</h2>
-        </div>
-        
-      </div>
-      <div class="unit-grid">
-        <article class="unit-copy">
-          <p>Com as mesmas sílabas sa, pa, to (e opcionalmente outras sílabas conhecidas), o aluno tenta formar palavras novas. A combinação pa+to forma &#x27;pato&#x27; (palavra real, com imagem de pato). O aluno aprende a distinguir combinações que formam palavras reais das que não formam.</p>
-          <div class="unit-flow">
-            <div>
-              <h3>O que vais fazer</h3>
-              <p>Banco de sílabas coloridas (sa=laranja, pa=verde, to=azul, mais 2 sílabas de palavras anteriores); zona de construção central com caixas; ao formar combinação válida → imagem aparece à direita com animação; ao formar combinação inválida → ponto de interrogação animado; botão &#x27;verificar&#x27;</p>
-            </div>
-            <div>
-              <h3>O que observar</h3>
-              <p>O aluno forma &#x27;pato&#x27; (pa+to) corretamente e diz em voz alta &#x27;descobri a palavra pato!&#x27;; tenta pelo menos 3 combinações diferentes</p>
-            </div>
-          </div>
-          <p>Arrastar sílabas para a zona de construção → combinação mostrada; clicar &#x27;verificar&#x27; → se palavra real: imagem revela-se e som toca; se não é palavra: &#x27;?&#x27; anima com curiosidade (sem negatividade); reset para tentar nova combinação</p>
-          <div class="maker-box"><p><strong>Desafio maker:</strong> Em pares, usar os blocos físicos de sílabas (de várias palavras já aprendidas) para criar o máximo de palavras reais possível em 3 minutos. Registar numa folha.</p><p><strong>Materiais:</strong> conjunto de blocos físicos de sílabas (acumulado das palavras 1-5), folha de registo A5, lápis</p><p><strong>Comunicação:</strong> Cada par apresenta 1 palavra nova descoberta à turma; escreve no quadro</p></div>
-        </article>
-        <aside class="unit-play">
-        <div class="play-card">
-          <p class="play-label">Experimenta combinações com as sílabas.</p>
-          <div class="syllable-bank" data-compose="mix-4"><button class="syllable-chip" style="--chip:#059669" data-syllable="sa">sa</button><button class="syllable-chip" style="--chip:#2563EB" data-syllable="pa">pa</button><button class="syllable-chip" style="--chip:#E05FA0" data-syllable="to">to</button></div>
-          <div id="mix-4" class="compose-output">__</div>
-          <p class="helper-text">Nem todas as combinações resultam em palavras reais. O importante é experimentar.</p>
-        </div>
-        </aside>
-      </div>
-      <div class="diff-switcher">
-        <button class="diff-btn is-active" data-diff="support-4">🟢 Com ajuda</button>
-        <button class="diff-btn" data-diff="standard-4">🟡 Objetivo</button>
-        <button class="diff-btn" data-diff="challenge-4">🔴 Desafio</button>
-      </div>
-      <div class="diff-panels">
-        <div id="support-4" class="diff-panel is-active"><p>Apenas 2 sílabas disponíveis (pa + to); imagem de pato visível como pista; word bank com 2 palavras alvo já indicadas</p></div>
-        <div id="standard-4" class="diff-panel"><p>5 sílabas disponíveis (sa, pa, to + 2 de palavras anteriores); imagem revelada ao confirmar; 2 palavras alvo a descobrir</p></div>
-        <div id="challenge-4" class="diff-panel"><p>7 sílabas disponíveis incluindo sílabas novas; sem pistas; escrever as palavras descobertas no caderno; criar uma frase com &#x27;pato&#x27;</p></div>
-      </div>
-    </section>
-    
-      
-    <details class="teacher-guide">
-      <summary>Guia do professor</summary>
-      <div class="teacher-grid">
-        <article class="teacher-card">
-          <h3>Objetivos desta página</h3>
-          <ul><li>Reconhecer globalmente a palavra &#x27;sapato&#x27; associando-a à imagem</li><li>Segmentar &#x27;sapato&#x27; nas três sílabas sa-pa-to e bater as palmas correspondentes</li><li>Recombinar as sílabas sa, pa, to para formar novas palavras (ex: pato)</li><li>Ler e completar a frase &#x27;O sapato é azul.&#x27; usando a palavra trabalhada</li></ul>
-        </article>
-        <article class="teacher-card">
-          <h3>Materiais</h3>
-          <ul><li>Tablet ou computador com browser (1 por aluno ou par)</li><li>Cartão da palavra &#x27;sapato&#x27; (imagem + palavra impressa)</li><li>Blocos de sílabas físicos (sa / pa / to) para manipulação offline</li><li>Quadro interativo para fase coletiva</li></ul>
-        </article>
-        <article class="teacher-card">
-          <h3>Organização MEM</h3>
-          <ul><li><strong>Módulos:</strong> TEA (Trabalho de Estudo Autónomo), Trabalho curricular comparticipado, Circuitos de comunicação</li><li><strong>Instrumentos:</strong> PIT (registo de tarefa concluída), mapa de tarefas (o aluno assinala bloco concluído)</li><li><strong>Organização:</strong> individual (exploração 30min) → pares (recombinação 7min) → turma (comunicação na extensão 8min)</li></ul>
-        </article>
-        <article class="teacher-card">
-          <h3>Percurso desta página</h3>
-          <ul><li>Unidade 1: Abertura contextual: imagem e micro-história com a palavra &#x27;sapato&#x27;</li><li>Unidade 2: Reconhecimento global: associar a palavra &#x27;sapato&#x27; entre opções</li><li>Unidade 3: Segmentação silábica: dividir &#x27;sapato&#x27; em sa-pa-to</li><li>Unidade 4: Recombinação: formar novas palavras com as sílabas sa, pa, to</li></ul>
-        </article>
-        <article class="teacher-card teacher-card-wide">
-          <h3>Referências curriculares</h3>
-          <ul><li><strong>Português · 1.º ano</strong>: Reconhecer as letras do alfabeto e associá-las a sons; identificar sílabas em palavras de estrutura CV</li><li><strong>Português · 1.º ano</strong>: Ler palavras de uso frequente; segmentar e manipular sílabas em palavras simples</li><li><strong>Português · 1.º ano</strong>: Produzir enunciados simples com vocabulário relativo ao tema vestuário; responder a questões sobre o que ouviu/viu</li><li><strong>Português · 1.º ano</strong>: Escrever palavras de estrutura silábica CV com correspondência fonema-grafema já trabalhada</li></ul>
-          <ul><li>PA-A: Linguagens e textos</li><li>PA-C: Raciocínio e resolução de problemas</li><li>PA-F: Desenvolvimento pessoal e autonomia</li></ul>
-        </article>
-      </div>
-    </details>
-    
-    </main>
 
-    <footer class="footer">PageCraft · Método das 28 Palavras · Sapato</footer>
-  </div>
+    <section class="unit" id="u3">
+      <h2>Unit 3 · Segmentação silábica (7 min)</h2>
+      <p class="lead">Separa "sapato" em blocos: sa · pa · to. Arrasta os blocos e conta as sílabas.</p>
+      <div class="diff-tabs" role="tablist" aria-label="Níveis Unit 3">
+        <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-content active" data-level="support"><p>Blocos pré-colocados. Reordena e confirma.</p></div>
+      <div class="diff-content" data-level="standard"><p>Arrasta do banco de sílabas para as caixas.</p></div>
+      <div class="diff-content" data-level="challenge"><p>Escreve as fronteiras silábicas e depois conta sílabas de "pato".</p></div>
+
+      <div class="word-display" id="u3-word">SAPATO</div>
+      <div class="row">
+        <button id="u3-separate" aria-label="Separar palavra">Separar</button>
+        <button id="u3-clap" aria-label="Bater palmas">👏 Bater palmas</button>
+        <span id="u3-count-label" class="badge">Sílabas colocadas: 0</span>
+      </div>
+
+      <div class="syllable-bank" id="u3-bank"></div>
+      <div class="slot-row" id="u3-slots">
+        <div class="slot" data-index="0" aria-label="Caixa 1">—</div>
+        <div class="slot" data-index="1" aria-label="Caixa 2">—</div>
+        <div class="slot" data-index="2" aria-label="Caixa 3">—</div>
+      </div>
+      <div class="count-bubbles">
+        <button class="count-btn" data-n="1">1</button>
+        <button class="count-btn" data-n="2">2</button>
+        <button class="count-btn" data-n="3">3</button>
+        <button class="count-btn" data-n="4">4</button>
+      </div>
+      <div id="u3-challenge" class="hidden" style="margin-top:.6rem;">
+        <label for="u3-boundary">Onde cortas as sílabas? (ex.: sa|pa|to)</label>
+        <input id="u3-boundary" aria-label="Fronteiras silábicas" placeholder="sa|pa|to" />
+        <label for="u3-pato" style="margin-left:.5rem;">"pato" tem quantas sílabas?</label>
+        <input id="u3-pato" aria-label="Número de sílabas de pato" style="width:120px;" />
+        <button id="u3-check-challenge">Verificar desafio</button>
+      </div>
+      <div class="feedback" id="u3-feedback" aria-live="polite"></div>
+    </section>
+
+    <section class="unit" id="u4">
+      <h2>Unit 4 · Recombinação (7 min)</h2>
+      <p class="lead">Combina sílabas para descobrir palavras reais. Exemplo: pa + to = pato.</p>
+      <div class="diff-tabs" role="tablist" aria-label="Níveis Unit 4">
+        <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-content active" data-level="support"><p>Usa só pa e to. A imagem de pato já está visível como pista.</p></div>
+      <div class="diff-content" data-level="standard"><p>Usa 5 sílabas. Descobre 2 palavras alvo.</p></div>
+      <div class="diff-content" data-level="challenge"><p>Usa 7 sílabas. Escreve palavras descobertas no caderno.</p></div>
+
+      <div class="recomb-bank" id="u4-bank"></div>
+      <div class="slot-row" id="u4-slots">
+        <div class="slot" data-index="0">1</div>
+        <div class="slot" data-index="1">2</div>
+        <div class="slot" data-index="2">3</div>
+      </div>
+      <div class="row" style="margin-top:.6rem;">
+        <span class="badge">Combinação: <span id="u4-current">_</span></span>
+        <button id="u4-verify">Verificar</button>
+        <button id="u4-reset">Limpar</button>
+      </div>
+      <div id="u4-image" style="font-size:3rem; margin-top:.4rem;" aria-live="polite">🦆</div>
+      <div class="feedback" id="u4-feedback" aria-live="polite"></div>
+    </section>
+
+    <section class="unit" id="u5">
+      <h2>Unit 5 · Leitura e escrita guiada (8 min)</h2>
+      <p class="lead">Completa a sílaba em falta e depois copia a palavra.</p>
+      <div class="diff-tabs" role="tablist" aria-label="Níveis Unit 5">
+        <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-content active" data-level="support"><p>1 versão fácil, áudio lento e menos distractores.</p></div>
+      <div class="diff-content" data-level="standard"><p>2 versões com 3 opções.</p></div>
+      <div class="diff-content" data-level="challenge"><p>3 versões, sem áudio e escrita sem tracejado.</p></div>
+
+      <div class="word-display" id="u5-word">SA___TO</div>
+      <div class="row" id="u5-options"></div>
+      <div class="row" style="margin-top:.5rem;">
+        <button id="u5-audio">🔊 Ouvir devagar</button>
+        <span class="badge">Ronda <span id="u5-step">1</span></span>
+      </div>
+      <div id="u5-guide" class="guided-line hidden">
+        <div id="u5-trace" class="trace">s a p a t o</div>
+        <div class="canvas-wrap">
+          <canvas class="draw" id="u5-canvas" width="900" height="180" aria-label="Escrita livre guiada"></canvas>
+        </div>
+        <button id="u5-clear">Limpar escrita</button>
+      </div>
+      <div class="row" id="u5-extra" style="margin-top:.5rem;"></div>
+      <div class="feedback" id="u5-feedback" aria-live="polite"></div>
+    </section>
+
+    <section class="unit" id="u6">
+      <h2>Unit 6 · Frase simples (7 min)</h2>
+      <p class="lead">Constrói a frase: "O sapato é azul.". A ordem das palavras importa.</p>
+      <div class="diff-tabs" role="tablist" aria-label="Níveis Unit 6">
+        <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-content active" data-level="support"><p>Frase quase pronta: arrasta só "sapato".</p></div>
+      <div class="diff-content" data-level="standard"><p>Ordena as 4 palavras com imagem de apoio.</p></div>
+      <div class="diff-content" data-level="challenge"><p>Sem imagem. Depois escreve uma frase nova com "sapato".</p></div>
+
+      <p><strong>Frase modelo:</strong> <span id="u6-model">O sapato é azul.</span></p>
+      <button id="u6-audio">🔊 Ouvir frase</button>
+      <div class="sentence-bank" id="u6-bank"></div>
+      <div class="slot-row" id="u6-slots" style="margin-top:.5rem;">
+        <div class="sentence-slot" data-index="0"></div>
+        <div class="sentence-slot" data-index="1"></div>
+        <div class="sentence-slot" data-index="2"></div>
+        <div class="sentence-slot" data-index="3"></div>
+      </div>
+      <div class="row" style="margin-top:.5rem;">
+        <button id="u6-check">Verificar frase</button>
+        <button id="u6-clear">Limpar</button>
+        <span id="u6-img" style="font-size:2rem;">👟🔵</span>
+      </div>
+      <div id="u6-new" class="hidden" style="margin-top:.6rem;">
+        <label for="u6-new-sentence">Escreve uma frase nova com "sapato":</label>
+        <input id="u6-new-sentence" aria-label="Frase nova" placeholder="O sapato é meu." style="width:min(100%,420px); border-radius:12px;" />
+      </div>
+      <div class="feedback" id="u6-feedback" aria-live="polite"></div>
+    </section>
+
+    <section class="unit" id="u7">
+      <h2>Unit 7 · Mini-avaliação formativa (4 min)</h2>
+      <p class="lead">4 micro-tarefas seguidas: reconhecer, contar sílabas, ordenar sílabas e usar numa frase.</p>
+      <div class="diff-tabs" role="tablist" aria-label="Níveis Unit 7">
+        <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-content active" data-level="support"><p>Tarefa 4 em modo oral assistido pelo professor.</p></div>
+      <div class="diff-content" data-level="standard"><p>As 4 tarefas completas com escrita livre.</p></div>
+      <div class="diff-content" data-level="challenge"><p>Tarefa extra: palavra que comece por sa ou termine em to.</p></div>
+
+      <div class="progress" id="u7-progress">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      </div>
+      <div class="task-screen" id="u7-screen"></div>
+      <div class="feedback" id="u7-feedback" aria-live="polite"></div>
+    </section>
+
+    <section class="unit" id="u8">
+      <h2>Unit 8 · Extensão criativa (3 min)</h2>
+      <p class="lead">Explora tipos de calçado, faz matching e desenha o teu sapato favorito.</p>
+      <div class="diff-tabs" role="tablist" aria-label="Níveis Unit 8">
+        <button class="diff-tab active" data-level="support">🟢 Apoio</button>
+        <button class="diff-tab" data-level="standard">🟡 Intermédio</button>
+        <button class="diff-tab" data-level="challenge">🔴 Desafio</button>
+      </div>
+      <div class="diff-content active" data-level="support"><p>Matching com 2 pares e frase oral com apoio.</p></div>
+      <div class="diff-content" data-level="standard"><p>Matching com 4 pares e desenho com etiqueta.</p></div>
+      <div class="diff-content" data-level="challenge"><p>Matching sem apoio + mini-dicionário de vestuário.</p></div>
+
+      <label for="u8-activity">Escolhe atividade:</label>
+      <select id="u8-activity" aria-label="Escolher atividade">
+        <option>galeria de sapatos</option>
+        <option>desenho livre</option>
+        <option>dicionário de vestuário</option>
+      </select>
+
+      <div class="row" style="align-items:flex-start; margin-top:.6rem;">
+        <div style="flex:1; min-width:260px;">
+          <strong>Matching</strong>
+          <div class="row" id="u8-names" style="margin-top:.4rem;"></div>
+          <div class="row" id="u8-images" style="margin-top:.5rem;"></div>
+          <div class="feedback" id="u8-feedback" aria-live="polite"></div>
+        </div>
+        <div style="flex:1; min-width:260px;">
+          <strong>Desenha o teu sapato favorito</strong>
+          <div class="row" id="u8-colors" style="margin:.4rem 0;"></div>
+          <div class="canvas-wrap">
+            <canvas class="draw" id="u8-canvas" width="900" height="220" aria-label="Desenho livre"></canvas>
+          </div>
+          <div class="row" style="margin-top:.5rem;">
+            <button id="u8-show">Mostrar à turma</button>
+            <button id="u8-clear">Limpar desenho</button>
+          </div>
+          <input id="u8-label" aria-label="Etiqueta escrita" placeholder="Etiqueta: sapato / bota / sandália" style="margin-top:.5rem; width:min(100%,360px); border-radius:12px;" />
+        </div>
+      </div>
+      <div><strong>Galeria da turma</strong><div class="gallery" id="u8-gallery"></div></div>
+      <p id="u8-oral" style="margin-top:.5rem; font-weight:700;">Frase oral: "O meu sapato favorito é..."</p>
+    </section>
+
+    <section class="maker">
+      <h2>🛠️ Desafios Maker</h2>
+      <div class="maker-card">
+        <h3>Unplugged 1</h3>
+        <p>Usa blocos físicos sa/pa/to e cola numa tira de papel. Depois bate 3 palmas a dizer a palavra.</p>
+      </div>
+      <div class="maker-card">
+        <h3>Unplugged 2</h3>
+        <p>Em pares, cria o máximo de palavras reais possível com blocos de sílabas em 3 minutos.</p>
+      </div>
+      <div class="maker-card">
+        <h3>Unplugged 3</h3>
+        <p>Desenha o teu sapato favorito e escreve ou cola a palavra escolhida. Apresenta ao colega.</p>
+      </div>
+    </section>
+
+    <section class="mini-assessment">
+      <h2>📝 Mini-avaliação observável</h2>
+      <div class="assessment-item">1) Reconhece "sapato" entre outras palavras.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+      </div>
+      <div class="assessment-item">2) Segmenta "sapato" em sa-pa-to e indica 3 sílabas.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+      </div>
+      <div class="assessment-item">3) Forma "pato" com pa+to e testa outras combinações.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+      </div>
+      <div class="assessment-item">4) Completa palavras incompletas com a sílaba certa.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+      </div>
+      <div class="assessment-item">5) Constrói e lê "O sapato é azul." na ordem correta.
+        <div class="scale">⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas</div>
+      </div>
+    </section>
+
+    <section class="curricular">
+      <h2>Referências curriculares</h2>
+      <h3>Aprendizagens Essenciais</h3>
+      <ul>
+        <li>Português (1.º ano): reconhecer letras e associá-las a sons; identificar sílabas em palavras CV.</li>
+        <li>Português (1.º ano): ler palavras frequentes; segmentar e manipular sílabas simples.</li>
+        <li>Português (1.º ano): produzir enunciados simples sobre vestuário e responder a questões de compreensão.</li>
+        <li>Português (1.º ano): escrever palavras com correspondência fonema-grafema já trabalhada.</li>
+      </ul>
+      <h3>Perfil do Aluno</h3>
+      <ul>
+        <li>PA-A: Linguagens e textos</li>
+        <li>PA-C: Raciocínio e resolução de problemas</li>
+        <li>PA-F: Desenvolvimento pessoal e autonomia</li>
+      </ul>
+    </section>
+
+    <div class="footer">Gerado por PageCraft 🛠️</div>
+  </main>
 
   <script>
-    const synth = window.speechSynthesis;
+    (function () {
+      const $ = (s, p = document) => p.querySelector(s);
+      const $$ = (s, p = document) => Array.from(p.querySelectorAll(s));
 
-    document.querySelectorAll('.reveal-btn').forEach((button) => {
-      button.addEventListener('click', () => {
-        const target = document.getElementById(button.dataset.target);
-        if (!target) return;
-        target.classList.toggle('hidden');
-      });
-    });
+      let currentLevel = {
+        u1: 'support', u2: 'support', u3: 'support', u4: 'support',
+        u5: 'support', u6: 'support', u7: 'support', u8: 'support'
+      };
 
-    document.querySelectorAll('.speak-btn').forEach((button) => {
-      button.addEventListener('click', () => {
-        if (!synth) return;
-        const utterance = new SpeechSynthesisUtterance(button.dataset.speak || '');
-        utterance.lang = 'pt-PT';
-        synth.cancel();
-        synth.speak(utterance);
-      });
-    });
-
-    document.querySelectorAll('.choice-row').forEach((row) => {
-      const feedback = row.parentElement.querySelector('.feedback');
-      row.querySelectorAll('.choice-btn').forEach((button) => {
-        button.addEventListener('click', () => {
-          row.querySelectorAll('.choice-btn').forEach((item) => item.classList.remove('is-right', 'is-wrong'));
-          const rightAnswer = button.dataset.answer || button.dataset.clozeAnswer || '';
-          if (button.dataset.choice === rightAnswer) {
-            button.classList.add('is-right');
-            if (feedback) feedback.textContent = 'Muito bem!';
-          } else {
-            button.classList.add('is-wrong');
-            if (feedback) feedback.textContent = 'Tenta outra vez.';
+      function speak(text, slow = false) {
+        try {
+          if ('speechSynthesis' in window) {
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'pt-PT';
+            u.rate = slow ? 0.75 : 0.95;
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(u);
           }
+        } catch (_) {}
+      }
+
+      let audioCtx;
+      function tone(freq = 520, dur = 0.12, type = 'sine') {
+        try {
+          audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+          const o = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          o.frequency.value = freq;
+          o.type = type;
+          g.gain.value = 0.0001;
+          o.connect(g); g.connect(audioCtx.destination);
+          const now = audioCtx.currentTime;
+          g.gain.linearRampToValueAtTime(0.2, now + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+          o.start(now); o.stop(now + dur);
+        } catch (_) {}
+      }
+
+      function feedback(el, ok, msg) {
+        el.className = 'feedback show ' + (ok ? 'ok' : 'try');
+        el.textContent = (ok ? '✓ ' : '✗ ') + msg;
+        if (ok) {
+          tone(680, 0.1);
+          setTimeout(() => tone(860, 0.13), 80);
+          confettiBurst();
+        } else {
+          tone(320, 0.12, 'triangle');
+        }
+      }
+
+      const conf = $('#confetti');
+      const cctx = conf.getContext('2d');
+      let parts = [];
+      function resizeConf() {
+        conf.width = window.innerWidth;
+        conf.height = window.innerHeight;
+      }
+      resizeConf();
+      window.addEventListener('resize', resizeConf);
+
+      function confettiBurst() {
+        for (let i = 0; i < 70; i++) {
+          parts.push({
+            x: conf.width * (0.2 + Math.random() * 0.6),
+            y: conf.height * 0.2,
+            vx: (Math.random() - 0.5) * 7,
+            vy: Math.random() * -6 - 1,
+            g: 0.18,
+            s: 4 + Math.random() * 6,
+            a: 1,
+            c: ['#e05fa0', '#7c3aed', '#059669', '#f59e0b', '#22c55e'][Math.floor(Math.random() * 5)]
+          });
+        }
+      }
+
+      function animate() {
+        cctx.clearRect(0, 0, conf.width, conf.height);
+        parts.forEach(p => {
+          p.vy += p.g;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.a -= 0.012;
+          cctx.globalAlpha = Math.max(p.a, 0);
+          cctx.fillStyle = p.c;
+          cctx.fillRect(p.x, p.y, p.s, p.s);
         });
-      });
-    });
+        parts = parts.filter(p => p.a > 0 && p.y < conf.height + 40);
+        requestAnimationFrame(animate);
+      }
+      requestAnimationFrame(animate);
 
-    document.querySelectorAll('[data-compose]').forEach((bank) => {
-      const output = document.getElementById(bank.dataset.compose);
-      const parts = [];
-      bank.querySelectorAll('.syllable-chip').forEach((chip) => {
-        chip.addEventListener('click', () => {
-          parts.push(chip.dataset.syllable || '');
-          if (output) output.textContent = parts.join('');
+      $$('.unit').forEach(unit => {
+        const id = unit.id;
+        const tabs = $$('.diff-tab', unit);
+        tabs.forEach(tab => tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const level = tab.dataset.level;
+          currentLevel[id] = level;
+          $$('.diff-content', unit).forEach(c => c.classList.toggle('active', c.dataset.level === level));
+          applyLevelChanges(id, level);
+        }));
+      });
+
+      function applyLevelChanges(id, level) {
+        if (id === 'u1' && level === 'support') speak('sapato');
+        if (id === 'u2') initU2();
+        if (id === 'u3') initU3();
+        if (id === 'u4') initU4();
+        if (id === 'u5') initU5();
+        if (id === 'u6') initU6();
+        if (id === 'u7') initU7();
+        if (id === 'u8') initU8();
+      }
+
+      const u1Word = $('#u1-word');
+      const u1Scene = $('#u1-scene');
+      const u1Feedback = $('#u1-feedback');
+      let u1Touched = false;
+      function toggleWord() {
+        u1Word.classList.toggle('word-highlight');
+        u1Touched = true;
+      }
+      u1Word.addEventListener('click', toggleWord);
+      u1Word.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') toggleWord(); });
+      u1Scene.addEventListener('click', () => {
+        u1Scene.classList.toggle('zoom');
+        u1Word.classList.add('word-highlight');
+      });
+      $('#u1-audio').addEventListener('click', () => { speak('sapato'); tone(550, .14); });
+      $('#u1-check').addEventListener('click', () => {
+        feedback(u1Feedback, u1Touched || u1Word.classList.contains('word-highlight'), 'Boa! Encontraste a palavra sapato.');
+      });
+      speak('sapato');
+
+      let u2State = { round: 0, selected: null, corrects: 0, timedOut: false };
+      const u2Rounds = [
+        [{w:'sapato',e:'👟'},{w:'mesa',e:'🪑'},{w:'boneco',e:'🧸'}],
+        [{w:'boneco',e:'🧸'},{w:'sapato',e:'👟'},{w:'janela',e:'🪟'}],
+        [{w:'mesa',e:'🪑'},{w:'sapato',e:'👟'},{w:'boneca',e:'🪆'}]
+      ];
+      let timerInt;
+      function initU2() {
+        u2State = { round: 0, selected: null, corrects: 0, timedOut: false };
+        $('#u2-feedback').className = 'feedback';
+        renderU2Round();
+      }
+      function renderU2Round() {
+        const level = currentLevel.u2;
+        const optionsWrap = $('#u2-options');
+        const r = u2State.round;
+        const base = u2Rounds[r].map(x => ({...x}));
+        let arr = base;
+        if (level === 'support' && r === 0) arr = base.filter(x => x.w !== 'boneco');
+        optionsWrap.innerHTML = '';
+        arr.forEach(item => {
+          const c = document.createElement('div');
+          c.className = 'card-option';
+          c.setAttribute('data-word', item.w);
+          c.innerHTML = `<span class="emoji-img">${(level==='challenge' && r===2) ? '❓' : item.e}</span><span class="${level==='support' && item.w==='sapato' ? 'dashed-hint' : ''}">${item.w}</span>`;
+          optionsWrap.appendChild(c);
+          c.addEventListener('click', () => selectU2(c));
+          makePointerDraggable(c, word => {
+            u2State.selected = word;
+            $('#u2-target').textContent = 'Escolha: ' + word;
+          }, null, 'data-word');
         });
+
+        $('#u2-round').textContent = `Ronda ${r + 1}/3`;
+        $('#u2-ref-wrap').classList.toggle('hidden', level === 'challenge' && r === 2);
+        if (timerInt) clearInterval(timerInt);
+        const timer = $('#u2-timer');
+        const fill = $('#u2-fill');
+        if (level === 'challenge' && r === 2) {
+          timer.classList.remove('hidden');
+          let t = 100;
+          fill.style.width = '100%';
+          timerInt = setInterval(() => {
+            t -= 2;
+            fill.style.width = Math.max(t,0) + '%';
+            if (t <= 0) {
+              clearInterval(timerInt);
+              u2State.timedOut = true;
+              feedback($('#u2-feedback'), false, 'Tempo! Tenta outra vez com calma.');
+            }
+          }, 200);
+        } else timer.classList.add('hidden');
+      }
+      function selectU2(card) {
+        $$('#u2-options .card-option').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        u2State.selected = card.dataset.word;
+      }
+      $('#u2-confirm').addEventListener('click', () => {
+        const fb = $('#u2-feedback');
+        if (!u2State.selected) return feedback(fb, false, 'Escolhe um cartão primeiro.');
+        const ok = u2State.selected === 'sapato';
+        if (ok) {
+          u2State.corrects++;
+          feedback(fb, true, 'Muito bem! Esta é a palavra sapato.');
+          u2State.round++;
+          u2State.selected = null;
+          setTimeout(() => {
+            if (u2State.round < 3) renderU2Round();
+            else feedback(fb, true, `Conseguiste ${u2State.corrects}/3 rondas.`);
+          }, 700);
+        } else {
+          const sel = $(`#u2-options .card-option[data-word="${u2State.selected}"]`);
+          if (sel) sel.classList.add('shake');
+          setTimeout(() => sel && sel.classList.remove('shake'), 300);
+          feedback(fb, false, 'Quase! Tenta novamente.');
+        }
       });
-    });
+      initU2();
 
-    document.querySelectorAll('.clear-compose').forEach((button) => {
-      button.addEventListener('click', () => {
-        const output = document.getElementById(button.dataset.composeClear);
-        if (output) output.textContent = '__';
-      });
-    });
-
-    document.querySelectorAll('.check-card').forEach((card) => {
-      card.addEventListener('click', () => card.classList.toggle('is-done'));
-    });
-
-    document.querySelectorAll('.diff-switcher').forEach((switcher) => {
-      const panels = switcher.nextElementSibling;
-      switcher.querySelectorAll('.diff-btn').forEach((button) => {
-        button.addEventListener('click', () => {
-          switcher.querySelectorAll('.diff-btn').forEach((item) => item.classList.remove('is-active'));
-          panels.querySelectorAll('.diff-panel').forEach((panel) => panel.classList.remove('is-active'));
-          button.classList.add('is-active');
-          const target = panels.querySelector('#' + CSS.escape(button.dataset.diff));
-          if (target) target.classList.add('is-active');
+      let u3Placed = ['', '', ''];
+      function initU3() {
+        u3Placed = ['', '', ''];
+        $('#u3-bank').innerHTML = '';
+        $$('#u3-slots .slot').forEach(s => s.textContent = '—');
+        $('#u3-count-label').textContent = 'Sílabas colocadas: 0';
+        $('#u3-feedback').className = 'feedback';
+        $('#u3-challenge').classList.toggle('hidden', currentLevel.u3 !== 'challenge');
+        const sylls = ['sa', 'pa', 'to'];
+        const bank = $('#u3-bank');
+        sylls.forEach((syl, i) => {
+          const b = document.createElement('div');
+          b.className = 'syllable';
+          b.dataset.syl = syl;
+          b.textContent = syl;
+          bank.appendChild(b);
+          if (currentLevel.u3 === 'support') {
+            const slot = $(`#u3-slots .slot[data-index="${i}"]`);
+            slot.textContent = syl;
+            u3Placed[i] = syl;
+          }
+          makePointerDraggable(b, sylText => {
+            const slot = nearestSlot('u3-slots');
+            if (!slot) return;
+            const i = Number(slot.dataset.index);
+            u3Placed[i] = sylText;
+            slot.textContent = sylText;
+            $('#u3-count-label').textContent = `Sílabas colocadas: ${u3Placed.filter(Boolean).length}`;
+            tone(460, 0.08);
+          }, null, 'data-syl');
         });
+      }
+      $('#u3-separate').addEventListener('click', () => {
+        $('#u3-word').textContent = 'SA · PA · TO';
+        $('#u3-word').style.transform = 'scale(1.04)';
+        setTimeout(() => $('#u3-word').style.transform = '', 250);
       });
-    });
+      $('#u3-clap').addEventListener('click', () => {
+        [420, 420, 420].forEach((f, i) => setTimeout(() => tone(f, 0.07), i * 300));
+      });
+      $$('#u3 .count-btn').forEach(btn => btn.addEventListener('click', () => {
+        const n = btn.dataset.n;
+        const ok = n === '3';
+        feedback($('#u3-feedback'), ok, ok ? 'Certo! "sapato" tem 3 sílabas.' : 'Conta outra vez com palmas.');
+      }));
+      $('#u3-check-challenge').addEventListener('click', () => {
+        const b = ($('#u3-boundary').value || '').replaceAll(' ', '').toLowerCase();
+        const p = ($('#u3-pato').value || '').trim();
+        const ok = (b === 'sa|pa|to' || b === 'sa-pa-to') && p === '2';
+        feedback($('#u3-feedback'), ok, ok ? 'Boa segmentação! E "pato" tem 2 sílabas.' : 'Revê as fronteiras e volta a tentar.');
+      });
+      initU3();
+
+      let u4Placed = ['', '', ''];
+      function initU4() {
+        u4Placed = ['', '', ''];
+        $('#u4-current').textContent = '_';
+        $('#u4-feedback').className = 'feedback';
+        $('#u4-image').textContent = currentLevel.u4 === 'support' ? '🦆' : '❔';
+        const bank = $('#u4-bank');
+        bank.innerHTML = '';
+        const map = {
+          support: ['pa', 'to'],
+          standard: ['sa', 'pa', 'to', 'me', 'ni'],
+          challenge: ['sa', 'pa', 'to', 'me', 'ni', 'bo', 'ta']
+        };
+        map[currentLevel.u4].forEach(syl => {
+          const d = document.createElement('div');
+          d.className = 'syllable';
+          d.dataset.syl = syl;
+          d.textContent = syl;
+          if (!['sa', 'pa', 'to'].includes(syl)) d.style.background = '#0ea5e9';
+          bank.appendChild(d);
+          makePointerDraggable(d, sylTxt => {
+            const slot = nearestSlot('u4-slots');
+            if (!slot) return;
+            const i = Number(slot.dataset.index);
+            u4Placed[i] = sylTxt;
+            slot.textContent = sylTxt;
+            $('#u4-current').textContent = u4Placed.join('');
+            tone(500, 0.08);
+          }, null, 'data-syl');
+        });
+        $$('#u4-slots .slot').forEach(s => s.textContent = s.dataset.index === '0' ? '1' : s.dataset.index === '1' ? '2' : '3');
+      }
+      $('#u4-verify').addEventListener('click', () => {
+        const word = u4Placed.join('');
+        const validMap = { pato: '🦆', mesa: '🪑', tosa: '✂️', bota: '🥾' };
+        const ok = Boolean(validMap[word]);
+        $('#u4-image').innerHTML = ok ? validMap[word] : '<span class="question-mark">❔</span>';
+        feedback($('#u4-feedback'), ok, ok ? `Descoberta! "${word}" é palavra real.` : 'Combinação curiosa. Tenta outra palavra real.');
+      });
+      $('#u4-reset').addEventListener('click', () => initU4());
+      initU4();
+
+      let u5Step = 0;
+      let u5Done = 0;
+      const u5Sets = {
+        support: [{ p: 'SAPA___', opts: ['to', 'me'], ans: 'to' }],
+        standard: [
+          { p: 'SA___TO', opts: ['pa', 'me', 'bo'], ans: 'pa' },
+          { p: '___PA___', opts: ['sa', 'me', 'bo'], ans: 'sa' }
+        ],
+        challenge: [
+          { p: 'SA___TO', opts: ['pa', 'me', 'bo'], ans: 'pa' },
+          { p: '___PA___', opts: ['sa', 'me', 'bo'], ans: 'sa' },
+          { p: 'SAPA___', opts: ['to', 'me', 'bo'], ans: 'to' }
+        ]
+      };
+      function initU5() {
+        u5Step = 0; u5Done = 0;
+        $('#u5-feedback').className = 'feedback';
+        $('#u5-guide').classList.add('hidden');
+        renderU5();
+        $('#u5-audio').classList.toggle('hidden', currentLevel.u5 === 'challenge');
+        $('#u5-trace').textContent = currentLevel.u5 === 'challenge' ? '' : 's a p a t o';
+        $('#u5-extra').innerHTML = currentLevel.u5 === 'challenge' ? '<label for="u5-pato">Escreve também: pato</label><input id="u5-pato" aria-label="Escrever pato" style="border-radius:12px;" />' : '';
+      }
+      function renderU5() {
+        const set = u5Sets[currentLevel.u5];
+        const item = set[u5Step];
+        if (!item) {
+          $('#u5-word').textContent = 'SAPATO';
+          $('#u5-guide').classList.remove('hidden');
+          feedback($('#u5-feedback'), true, 'Completaste todas as variações. Agora copia a palavra.');
+          return;
+        }
+        $('#u5-word').textContent = item.p;
+        $('#u5-step').textContent = String(u5Step + 1);
+        const w = $('#u5-options');
+        w.innerHTML = '';
+        item.opts.forEach(opt => {
+          const b = document.createElement('button');
+          b.textContent = opt;
+          b.setAttribute('aria-label', 'Escolher sílaba ' + opt);
+          b.addEventListener('click', () => {
+            const ok = opt === item.ans;
+            if (ok) {
+              u5Done++;
+              const full = item.p.replace('___', opt).replace('___', 'to');
+              $('#u5-word').textContent = full;
+              feedback($('#u5-feedback'), true, 'Correto! A sílaba encaixa bem.');
+              u5Step++;
+              setTimeout(renderU5, 800);
+            } else {
+              b.style.background = '#fffbeb';
+              b.style.borderColor = '#f59e0b';
+              feedback($('#u5-feedback'), false, 'Essa não. Ouve a palavra devagar.');
+            }
+          });
+          w.appendChild(b);
+        });
+      }
+      $('#u5-audio').addEventListener('click', () => speak('sa pa to', true));
+      initU5();
+
+      function initU6() {
+        $('#u6-feedback').className = 'feedback';
+        $('#u6-new').classList.toggle('hidden', currentLevel.u6 !== 'challenge');
+        $('#u6-img').style.visibility = currentLevel.u6 === 'challenge' ? 'hidden' : 'visible';
+        const bank = $('#u6-bank');
+        bank.innerHTML = '';
+        $$('#u6-slots .sentence-slot').forEach(s => s.textContent = '');
+        let words;
+        if (currentLevel.u6 === 'support') {
+          words = ['sapato'];
+          const slots = $$('#u6-slots .sentence-slot');
+          slots[0].textContent = 'O';
+          slots[2].textContent = 'é';
+          slots[3].textContent = 'azul.';
+        } else {
+          words = ['O', 'sapato', 'é', 'azul.'].sort(() => Math.random() - 0.5);
+        }
+        words.forEach(w => {
+          const chip = document.createElement('div');
+          chip.className = 'word-chip';
+          chip.dataset.word = w;
+          chip.textContent = w;
+          bank.appendChild(chip);
+          makePointerDraggable(chip, word => {
+            const slot = nearestSlot('u6-slots');
+            if (!slot || slot.textContent.trim()) return;
+            slot.textContent = word;
+            tone(420, 0.07);
+          }, null, 'data-word');
+        });
+      }
+      $('#u6-audio').addEventListener('click', () => speak('O sapato é azul.'));
+      $('#u6-check').addEventListener('click', () => {
+        const built = $$('#u6-slots .sentence-slot').map(s => s.textContent.trim()).join(' ');
+        const ok = built === 'O sapato é azul.';
+        if (ok) {
+          $('#u6-model').classList.add('sentence-ok');
+          feedback($('#u6-feedback'), true, 'Frase certa! Começa com maiúscula e acaba com ponto.');
+        } else {
+          $('#u6-model').classList.remove('sentence-ok');
+          $('#u6-slots').classList.add('shake');
+          setTimeout(() => $('#u6-slots').classList.remove('shake'), 300);
+          feedback($('#u6-feedback'), false, 'A ordem ainda não está certa. Tenta outra vez.');
+        }
+      });
+      $('#u6-clear').addEventListener('click', initU6);
+      initU6();
+
+      const u7 = { step: 0, results: { r1:false,r2:false,r3:false,r4:false }, errors: [] };
+      function initU7() {
+        u7.step = 0;
+        u7.results = { r1:false,r2:false,r3:false,r4:false };
+        u7.errors = [];
+        $('#u7-feedback').className = 'feedback';
+        renderU7();
+      }
+      function renderU7() {
+        $$('#u7-progress .dot').forEach((d, i) => d.classList.toggle('done', i < u7.step));
+        const s = $('#u7-screen');
+        if (u7.step === 0) {
+          s.innerHTML = '<h3>Tarefa 1: Escolhe "sapato"</h3><div class="row"><button data-v="boneca">boneca</button><button data-v="sapato">sapato</button><button data-v="janela">janela</button></div>';
+          $$('button', s).forEach(b => b.addEventListener('click', () => {
+            u7.results.r1 = b.dataset.v === 'sapato';
+            if (!u7.results.r1) u7.errors.push('t1');
+            feedback($('#u7-feedback'), u7.results.r1, u7.results.r1 ? 'Boa escolha!' : 'Registado. Avançamos.');
+            setTimeout(() => { u7.step++; renderU7(); }, 1000);
+          }));
+        } else if (u7.step === 1) {
+          s.innerHTML = '<h3>Tarefa 2: Quantas sílabas tem "sapato"?</h3><div class="row"><button data-v="1">1</button><button data-v="2">2</button><button data-v="3">3</button><button data-v="4">4</button></div>';
+          $$('button', s).forEach(b => b.addEventListener('click', () => {
+            u7.results.r2 = b.dataset.v === '3';
+            if (!u7.results.r2) u7.errors.push('t2');
+            feedback($('#u7-feedback'), u7.results.r2, u7.results.r2 ? 'Correto!' : 'Registado. Vamos continuar.');
+            setTimeout(() => { u7.step++; renderU7(); }, 1000);
+          }));
+        } else if (u7.step === 2) {
+          s.innerHTML = '<h3>Tarefa 3: Ordena as sílabas</h3><div class="recomb-bank" id="u7-bank"></div><div class="slot-row" id="u7-slots"><div class="slot" data-index="0"></div><div class="slot" data-index="1"></div><div class="slot" data-index="2"></div></div><button id="u7-check3" style="margin-top:.5rem;">Verificar</button>';
+          ['to','sa','pa'].forEach(x => {
+            const d = document.createElement('div');
+            d.className='syllable'; d.dataset.syl=x; d.textContent=x;
+            if (!['sa','pa','to'].includes(x)) d.style.background = '#0ea5e9';
+            $('#u7-bank').appendChild(d);
+            makePointerDraggable(d, syl => {
+              const slot = nearestSlot('u7-slots');
+              if (!slot) return;
+              slot.textContent = syl;
+            }, null, 'data-syl');
+          });
+          $('#u7-check3').addEventListener('click', () => {
+            const built = $$('#u7-slots .slot').map(x => x.textContent.trim()).join('-');
+            u7.results.r3 = built === 'sa-pa-to';
+            if (!u7.results.r3) u7.errors.push('t3');
+            feedback($('#u7-feedback'), u7.results.r3, u7.results.r3 ? 'Ordem certa!' : 'Registado. Próxima tarefa.');
+            setTimeout(() => { u7.step++; renderU7(); }, 1000);
+          });
+        } else if (u7.step === 3) {
+          const supportOral = currentLevel.u7 === 'support';
+          s.innerHTML = supportOral
+            ? '<h3>Tarefa 4: Diz uma frase com "sapato"</h3><p>Modo oral: o professor regista.</p><button id="u7-oral">Frase dita</button>'
+            : '<h3>Tarefa 4: Escreve uma frase com "sapato"</h3><input id="u7-text" placeholder="O sapato é azul." style="width:min(100%,420px); border-radius:12px;" /><button id="u7-send" style="margin-left:.4rem;">Concluir</button>';
+          if (supportOral) {
+            $('#u7-oral').addEventListener('click', () => {
+              u7.results.r4 = true;
+              feedback($('#u7-feedback'), true, 'Frase registada.');
+              setTimeout(() => { u7.step++; renderU7(); }, 1000);
+            });
+          } else {
+            $('#u7-send').addEventListener('click', () => {
+              const t = ($('#u7-text').value || '').toLowerCase();
+              u7.results.r4 = t.includes('sapato') && t.trim().length > 8;
+              if (!u7.results.r4) u7.errors.push('t4');
+              feedback($('#u7-feedback'), u7.results.r4, u7.results.r4 ? 'Boa frase!' : 'Registado.');
+              setTimeout(() => { u7.step++; renderU7(); }, 1000);
+            });
+          }
+        } else {
+          const okCount = Object.values(u7.results).filter(Boolean).length;
+          const extra = currentLevel.u7 === 'challenge'
+            ? '<p><strong>Tarefa extra:</strong> Escreve outra palavra que comece por "sa" ou termine em "to".</p><input placeholder="Ex.: saco" style="border-radius:12px;" /><p>Escreve 2 frases diferentes com "sapato".</p>'
+            : '';
+          s.innerHTML = `<h3>⭐ Sumário final</h3><p>Concluíste 4 tarefas. Resultado observado: ${okCount}/4.</p><p>Esta avaliação formativa serve para orientar o próximo passo.</p>${extra}`;
+          feedback($('#u7-feedback'), true, 'Fim da mini-avaliação.');
+        }
+      }
+      initU7();
+
+      let u8Pairs = [];
+      let u8PickedName = null;
+      function initU8() {
+        const lvl = currentLevel.u8;
+        const all = [
+          { name: 'bota', emoji: '🥾' },
+          { name: 'sandália', emoji: '👡' },
+          { name: 'chinelo', emoji: '🩴' },
+          { name: 'ténis', emoji: '👟' }
+        ];
+        let pairs = all;
+        if (lvl === 'support') pairs = all.slice(0,2);
+        u8Pairs = pairs.map(p => ({ ...p, ok:false }));
+        $('#u8-names').innerHTML = '';
+        $('#u8-images').innerHTML = '';
+        $('#u8-feedback').className = 'feedback';
+        u8PickedName = null;
+
+        u8Pairs.forEach(p => {
+          const b = document.createElement('button');
+          b.textContent = p.name;
+          b.dataset.name = p.name;
+          b.addEventListener('click', () => {
+            u8PickedName = p.name;
+            $$('#u8-names button').forEach(x => x.style.borderColor = '#e05fa0');
+            b.style.borderColor = '#2563eb';
+          });
+          $('#u8-names').appendChild(b);
+        });
+
+        [...u8Pairs].sort(() => Math.random() - 0.5).forEach(p => {
+          const b = document.createElement('button');
+          b.textContent = p.emoji;
+          b.style.fontSize = '1.6rem';
+          b.dataset.name = p.name;
+          b.addEventListener('click', () => {
+            if (!u8PickedName) return feedback($('#u8-feedback'), false, 'Escolhe primeiro um nome.');
+            const ok = u8PickedName === p.name;
+            if (ok) {
+              p.ok = true;
+              b.disabled = true;
+              b.style.opacity = '.6';
+              feedback($('#u8-feedback'), true, `Par certo: ${p.name}.`);
+            } else feedback($('#u8-feedback'), false, 'Ainda não corresponde. Tenta outra vez.');
+            if (u8Pairs.every(x => x.ok)) feedback($('#u8-feedback'), true, 'Excelente! Matching completo.');
+          });
+          $('#u8-images').appendChild(b);
+        });
+
+        $('#u8-oral').textContent = lvl === 'support'
+          ? 'Frase oral com apoio: "O meu ___ é ___."'
+          : 'Frase oral: "O meu sapato favorito é..."';
+      }
+
+      function setupCanvasDraw(id, clearId, colorWrapId) {
+        const c = $(id);
+        const ctx = c.getContext('2d');
+        let drawing = false;
+        let color = '#1e1b18';
+        function pos(e) {
+          const r = c.getBoundingClientRect();
+          const t = e.touches ? e.touches[0] : e;
+          const x = (t.clientX - r.left) * (c.width / r.width);
+          const y = (t.clientY - r.top) * (c.height / r.height);
+          return {x, y};
+        }
+        function start(e) { drawing = true; const p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); e.preventDefault(); }
+        function move(e) {
+          if (!drawing) return;
+          const p = pos(e);
+          ctx.lineWidth = 5;
+          ctx.lineCap = 'round';
+          ctx.strokeStyle = color;
+          ctx.lineTo(p.x, p.y);
+          ctx.stroke();
+          e.preventDefault();
+        }
+        function end() { drawing = false; }
+        c.addEventListener('mousedown', start); c.addEventListener('mousemove', move); c.addEventListener('mouseup', end);
+        c.addEventListener('mouseleave', end);
+        c.addEventListener('touchstart', start, { passive: false });
+        c.addEventListener('touchmove', move, { passive: false });
+        c.addEventListener('touchend', end);
+        if (clearId) $(clearId).addEventListener('click', () => ctx.clearRect(0, 0, c.width, c.height));
+        if (colorWrapId) {
+          const colors = ['#1e1b18', '#e05fa0', '#7c3aed', '#059669', '#f59e0b'];
+          const wrap = $(colorWrapId);
+          wrap.innerHTML = '';
+          colors.forEach(col => {
+            const d = document.createElement('button');
+            d.className = 'color-pick';
+            d.style.background = col;
+            d.setAttribute('aria-label', 'Cor ' + col);
+            d.addEventListener('click', () => color = col);
+            wrap.appendChild(d);
+          });
+        }
+        return c;
+      }
+      setupCanvasDraw('#u5-canvas', '#u5-clear');
+      const u8Canvas = setupCanvasDraw('#u8-canvas', '#u8-clear', '#u8-colors');
+
+      $('#u8-show').addEventListener('click', () => {
+        const img = document.createElement('img');
+        img.className = 'thumb';
+        img.src = u8Canvas.toDataURL('image/png');
+        img.alt = 'Desenho do aluno';
+        $('#u8-gallery').appendChild(img);
+        feedback($('#u8-feedback'), true, 'Desenho enviado para a galeria da turma.');
+      });
+      initU8();
+
+      function nearestSlot(containerId) {
+        const slots = $$('#' + containerId + ' .slot, #' + containerId + ' .sentence-slot');
+        if (!window._dragPoint) return null;
+        let best = null;
+        let bestD = Infinity;
+        slots.forEach(s => {
+          const r = s.getBoundingClientRect();
+          const cx = r.left + r.width / 2;
+          const cy = r.top + r.height / 2;
+          const d = Math.hypot(window._dragPoint.x - cx, window._dragPoint.y - cy);
+          if (d < bestD && d < 120) { bestD = d; best = s; }
+        });
+        return best;
+      }
+
+      function makePointerDraggable(el, onDrop, onMove, attrName) {
+        let clone = null;
+        const text = () => attrName ? el.getAttribute(attrName.replace('data-', '')) || el.dataset[attrName.replace('data-', '')] || el.getAttribute(attrName) : el.textContent.trim();
+        const pointerDown = e => {
+          if (e.pointerType === 'mouse' && e.button !== 0) return;
+          el.setPointerCapture(e.pointerId);
+          const r = el.getBoundingClientRect();
+          clone = el.cloneNode(true);
+          clone.style.position = 'fixed';
+          clone.style.left = r.left + 'px';
+          clone.style.top = r.top + 'px';
+          clone.style.width = r.width + 'px';
+          clone.style.opacity = '.9';
+          clone.style.pointerEvents = 'none';
+          clone.style.zIndex = '999';
+          clone.classList.add('dragging');
+          document.body.appendChild(clone);
+          window._dragPoint = { x: e.clientX, y: e.clientY };
+          e.preventDefault();
+        };
+        const pointerMove = e => {
+          if (!clone) return;
+          window._dragPoint = { x: e.clientX, y: e.clientY };
+          clone.style.left = (e.clientX - clone.offsetWidth / 2) + 'px';
+          clone.style.top = (e.clientY - clone.offsetHeight / 2) + 'px';
+          if (onMove) onMove(e);
+        };
+        const pointerUp = () => {
+          if (!clone) return;
+          clone.remove();
+          clone = null;
+          onDrop(text());
+        };
+        el.addEventListener('pointerdown', pointerDown);
+        el.addEventListener('pointermove', pointerMove);
+        el.addEventListener('pointerup', pointerUp);
+        el.addEventListener('pointercancel', pointerUp);
+      }
+
+      $('#u8-activity').addEventListener('change', e => {
+        const v = e.target.value;
+        if (v === 'dicionário de vestuário' && currentLevel.u8 === 'challenge') {
+          feedback($('#u8-feedback'), true, 'Desafio: escreve 3 palavras de vestuário com desenho.');
+        }
+      });
+    })();
   </script>
 </body>
 </html>
