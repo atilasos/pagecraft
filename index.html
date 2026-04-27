@@ -350,20 +350,26 @@
       .then(r => r.json())
       .then(data => {
         const items = data.items || [];
-        const m28pItems = items.filter(it => it.order && (it.tags || []).some(t => t.toLowerCase() === 'm28p'));
-        others = items.filter(it => !(it.order && (it.tags || []).some(t => t.toLowerCase() === 'm28p')));
+        const isM28P = it => it.order && (it.tags || []).some(t => t.toLowerCase() === 'm28p');
+        const m28pItems = items.filter(isM28P);
+        others = items.filter(it => !isM28P(it));
 
-        // M28P banner info
-        const count = m28pItems.length;
+        // M28P banner info: count unique words, not page variants.
+        const byOrder = new Map();
+        m28pItems.forEach(it => {
+          const current = byOrder.get(it.order);
+          if (!current || (!it.variantOf && current.variantOf)) byOrder.set(it.order, it);
+        });
+        const count = byOrder.size;
         m28pCountEl.textContent = count + ' de 28 palavras';
-        m28pFillEl.style.width = Math.round((count / 28) * 100) + '%';
+        m28pFillEl.style.width = Math.min(100, Math.round((count / 28) * 100)) + '%';
 
-        // Preview pills (first 6 words)
-        const sorted = m28pItems.sort((a, b) => a.order - b.order);
+        // Preview pills (first 6 base words)
+        const sorted = [...byOrder.values()].sort((a, b) => a.order - b.order);
         const preview = sorted.slice(0, 6);
         const remaining = count - preview.length;
         m28pPreview.innerHTML = preview.map(it => {
-          const word = it.title.split('—').pop().trim();
+          const word = it.title.split('—').pop().trim().split('·')[0].trim();
           return '<span class="m28p-pill">' + esc(word) + '</span>';
         }).join('') + (remaining > 0 ? '<span class="m28p-pill m28p-more">+' + remaining + '</span>' : '');
 

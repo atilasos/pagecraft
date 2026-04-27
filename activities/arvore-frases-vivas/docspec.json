@@ -1,0 +1,100 @@
+{
+  "topic": "M28P · Palavra 22 — Árvore · Frases vivas",
+  "ageRange": "6-7 anos (1.º ano, 1.º CEB)",
+  "duration": 35,
+  "objectives": [
+    "Reconhecer 'Árvore' em contexto de frase simples",
+    "Ordenar palavras para construir uma frase com sentido",
+    "Ler a frase a pares, respeitando a sequência oral"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Identificar e manipular sílabas: segmentar e reconstituir palavras",
+        "source": "aprendizagens-essenciais-portugues-1-ano.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Relacionar imagem e palavra; reconhecer e ler palavras em contexto significativo",
+        "source": "aprendizagens-essenciais-portugues-1-ano.md"
+      },
+      {
+        "subject": "Estudo do Meio",
+        "year": "1.º ano",
+        "domain": "À Descoberta do Ambiente Natural",
+        "descriptor": "Identificar plantas comuns do ambiente próximo e reconhecer a sua utilidade",
+        "source": "aprendizagens-essenciais-estudo-do-meio-1-ano.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-F: Desenvolvimento pessoal e autonomia",
+      "PA-G: Bem-estar, saúde e ambiente"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas",
+      "ficheiros de leitura do TEA"
+    ],
+    "socialOrganization": "individual (blocos 1-3, ~15min) → pares (blocos 4-5, ~15min) → turma (blocos 6-8, ~15min)"
+  },
+  "materials": [
+    "Tablet/computador ou quadro interativo",
+    "Caderno ou quadro para registo",
+    "Cartões de sílabas/palavras opcionais"
+  ],
+  "units": [
+    {
+      "summary": "Completar uma frase com Árvore",
+      "textDescription": "O aluno escolhe a palavra que torna a frase coerente com a imagem/contexto.",
+      "duration": 15,
+      "interaction": {
+        "state": {
+          "targetWord": "Árvore"
+        },
+        "render": "frase lacunar e opções de palavra",
+        "transition": "seleção dá feedback sem punição",
+        "constraint": "a palavra precisa de fazer sentido na frase",
+        "assessment": "o aluno completa a frase corretamente"
+      },
+      "differentiation": {
+        "support": "ler com adulto",
+        "standard": "escolher e justificar",
+        "challenge": "criar nova frase"
+      }
+    },
+    {
+      "summary": "Ordenar frase viva",
+      "textDescription": "O aluno ordena os cartões para formar: A árvore dá sombra fresca.",
+      "duration": 20,
+      "interaction": {
+        "state": {
+          "sentence": "A árvore dá sombra fresca."
+        },
+        "render": "cartões de palavras e tabuleiro de frase",
+        "transition": "cada palavra correta entra na frase",
+        "constraint": "a frase tem uma ordem que permite leitura com sentido",
+        "assessment": "o aluno ordena e lê a frase"
+      },
+      "differentiation": {
+        "support": "modelo oral",
+        "standard": "ordenação autónoma",
+        "challenge": "substituir uma palavra mantendo sentido"
+      }
+    }
+  ],
+  "sessionFlow": "Ativação oral breve → exploração digital autónoma/pares → leitura em voz alta → registo no caderno → comunicação curta à turma."
+}

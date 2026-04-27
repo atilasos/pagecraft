@@ -1,0 +1,68 @@
+{
+  "palette": {
+    "bg": "#FAFAFA",
+    "surface": "#FFFFFF",
+    "primary": "#1A1A1A",
+    "accent": "#F59E0B",
+    "text": "#1A1A1A"
+  },
+  "syllableColors": {
+    "ze": "#1A1A1A",
+    "bra": "#F59E0B"
+  },
+  "typography": {
+    "fontFamily": "'Nunito', 'Comic Sans MS', 'Chalkboard SE', sans-serif",
+    "scale": "kids",
+    "baseSizePx": 20,
+    "headingSizePx": 32,
+    "syllableSizePx": 36,
+    "weights": [
+      400,
+      700,
+      800
+    ]
+  },
+  "layout": {
+    "borderRadius": 16,
+    "spacing": "comfortable",
+    "maxWidthPx": 960,
+    "padding": "1.5rem",
+    "cardGap": "1rem"
+  },
+  "components": {
+    "buttons": "pill, padding 0.75rem 2rem, font-weight 700, min-height 48px",
+    "cards": "surface, borda 2px solid primary, border-radius 16px",
+    "syllable_blocks": "cada sílaba num bloco colorido, font-size 36px, font-weight 800",
+    "feedback_correct": "#22c55e fundo claro, ícone ✓",
+    "feedback_incorrect": "#F59E0B fundo claro, ícone ✗",
+    "word_display": "font-size 48px, font-weight 800, color primary"
+  },
+  "differentiationIndicators": {
+    "support": {
+      "emoji": "🟢",
+      "label": "Com ajuda",
+      "color": "#22c55e"
+    },
+    "standard": {
+      "emoji": "🟡",
+      "label": "Objetivo",
+      "color": "#F59E0B"
+    },
+    "challenge": {
+      "emoji": "🔴",
+      "label": "Desafio",
+      "color": "#ef4444"
+    }
+  },
+  "motion": {
+    "transitions": "subtle",
+    "durationMs": 200
+  },
+  "accessibility": {
+    "contrast": "WCAG-AA",
+    "focusRing": true,
+    "minTouchTarget": "48px",
+    "ariaLabels": true
+  },
+  "notes": "Paleta preto/dourado evoca as riscas da zebra. ze=preto, bra=dourado/âmbar. Sem fontes remotas; usar fontes locais/fallback para garantir funcionamento offline."
+}

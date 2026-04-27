@@ -1,0 +1,100 @@
+{
+  "topic": "M28P · Palavra 16 — Cenoura · Frases vivas",
+  "ageRange": "6-7 anos (1.º ano)",
+  "duration": 35,
+  "objectives": [
+    "Reconhecer 'Cenoura' em contexto de frase simples",
+    "Ordenar palavras para construir uma frase com sentido",
+    "Ler a frase a pares, respeitando a sequência oral"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Desenvolver a consciência fonológica: segmentar palavras em sílabas e identificar sílabas em posição inicial, medial e final",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Ler palavras e frases simples em situações contextualizadas",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Estudo do Meio",
+        "year": "1.º ano",
+        "domain": "À Descoberta do Ambiente Natural",
+        "descriptor": "Identificar plantas comestíveis (hortícolas) e reconhecer a sua utilidade na alimentação",
+        "source": "estudo-do-meio-1-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-F: Desenvolvimento pessoal e autonomia",
+      "PA-G: Bem-estar, saúde e ambiente"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas",
+      "diário de turma"
+    ],
+    "socialOrganization": "individual (blocos 1-3, 10min) → pares (blocos 4-5, 10min) → grupo/turma (bloco 6 + avaliação, 10min)"
+  },
+  "materials": [
+    "Tablet/computador ou quadro interativo",
+    "Caderno ou quadro para registo",
+    "Cartões de sílabas/palavras opcionais"
+  ],
+  "units": [
+    {
+      "summary": "Completar uma frase com Cenoura",
+      "textDescription": "O aluno escolhe a palavra que torna a frase coerente com a imagem/contexto.",
+      "duration": 15,
+      "interaction": {
+        "state": {
+          "targetWord": "Cenoura"
+        },
+        "render": "frase lacunar e opções de palavra",
+        "transition": "seleção dá feedback sem punição",
+        "constraint": "a palavra precisa de fazer sentido na frase",
+        "assessment": "o aluno completa a frase corretamente"
+      },
+      "differentiation": {
+        "support": "ler com adulto",
+        "standard": "escolher e justificar",
+        "challenge": "criar nova frase"
+      }
+    },
+    {
+      "summary": "Ordenar frase viva",
+      "textDescription": "O aluno ordena os cartões para formar: A cenoura cresce na horta.",
+      "duration": 20,
+      "interaction": {
+        "state": {
+          "sentence": "A cenoura cresce na horta."
+        },
+        "render": "cartões de palavras e tabuleiro de frase",
+        "transition": "cada palavra correta entra na frase",
+        "constraint": "a frase tem uma ordem que permite leitura com sentido",
+        "assessment": "o aluno ordena e lê a frase"
+      },
+      "differentiation": {
+        "support": "modelo oral",
+        "standard": "ordenação autónoma",
+        "challenge": "substituir uma palavra mantendo sentido"
+      }
+    }
+  ],
+  "sessionFlow": "Ativação oral breve → exploração digital autónoma/pares → leitura em voz alta → registo no caderno → comunicação curta à turma."
+}

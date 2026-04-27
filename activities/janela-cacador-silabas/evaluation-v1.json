@@ -1,0 +1,34 @@
+{
+  "pass": true,
+  "route": "none",
+  "severity": "low",
+  "scores": {
+    "factual_accuracy": 4,
+    "constraint_alignment": 4,
+    "differentiation_quality": 4,
+    "ux_accessibility": 4,
+    "visual_design": 4,
+    "technical_quality": 4
+  },
+  "issues": [],
+  "required_fixes": [],
+  "evidence": [
+    "HTML self-contained com CSS/JS inline e lang=\"pt-PT\".",
+    "Design-spec das variantes sem fontUrl/URLs remotos; fontes apenas locais/fallback.",
+    "Controlos interativos com variável --touch:48px e botões com min-width/min-height.",
+    "Skip link, focus-visible, aria-live/status e fluxo por clique/teclado presentes.",
+    "Palavras longas com overflow-wrap e fonte responsiva para evitar extravasar no cartão.",
+    "Catálogo contém 28 palavras base e 56 variantes; links HTTP validados.",
+    "Amostras renderizadas por Playwright screenshot via HTTP."
+  ],
+  "acceptance_checks": [
+    "abre sem erro fatal: verificado por amostragem browser e HTTP link check",
+    "interação principal: verificada por inspeção estrutural em todas e visualmente por amostragem",
+    "layout tablet/desktop: verificado visualmente por amostragem",
+    "nível intermédio presente: OK",
+    "regra/constraint descoberta pela interação: OK",
+    "sem dependência de internet: OK"
+  ],
+  "evaluatedAt": "2026-04-27T00:00:00Z",
+  "method": "quality pass: static all-pages QA + HTTP validation + Playwright screenshot sampling"
+}

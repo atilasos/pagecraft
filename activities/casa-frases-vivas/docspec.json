@@ -1,0 +1,106 @@
+{
+  "topic": "M28P · Palavra 8 — Casa · Frases vivas",
+  "ageRange": "6 anos (1.º ano do 1.º CEB)",
+  "duration": 35,
+  "objectives": [
+    "Reconhecer 'Casa' em contexto de frase simples",
+    "Ordenar palavras para construir uma frase com sentido",
+    "Ler a frase a pares, respeitando a sequência oral"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Desenvolver a consciência fonológica: segmentar oralmente palavras em sílabas e identificar sílabas em posição inicial, medial e final",
+        "source": "portugues-1-ano-1-ciclo-ae.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Reconhecer palavras de uso frequente em contexto de leitura global; associar imagem à palavra escrita",
+        "source": "portugues-1-ano-1-ciclo-ae.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Segmentar palavras em sílabas e reconstituir a palavra a partir das sílabas isoladas; identificar e nomear vogais e consoantes em contexto de palavra",
+        "source": "portugues-1-ano-1-ciclo-ae.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Ler frases simples com vocabulário controlado, identificando sujeito e predicado de forma implícita",
+        "source": "portugues-1-ano-1-ciclo-ae.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "PIT (Plano Individual de Trabalho)",
+      "Mapa de tarefas da turma",
+      "Registo de palavras aprendidas (cartaz coletivo)"
+    ],
+    "socialOrganization": "individual (blocos 1-3, 5-7) → pares (bloco 4 recombinação e bloco 6 frase) → turma (bloco 8 extensão/comunicação)"
+  },
+  "materials": [
+    "Tablet/computador ou quadro interativo",
+    "Caderno ou quadro para registo",
+    "Cartões de sílabas/palavras opcionais"
+  ],
+  "units": [
+    {
+      "summary": "Completar uma frase com Casa",
+      "textDescription": "O aluno escolhe a palavra que torna a frase coerente com a imagem/contexto.",
+      "duration": 15,
+      "interaction": {
+        "state": {
+          "targetWord": "Casa"
+        },
+        "render": "frase lacunar e opções de palavra",
+        "transition": "seleção dá feedback sem punição",
+        "constraint": "a palavra precisa de fazer sentido na frase",
+        "assessment": "o aluno completa a frase corretamente"
+      },
+      "differentiation": {
+        "support": "ler com adulto",
+        "standard": "escolher e justificar",
+        "challenge": "criar nova frase"
+      }
+    },
+    {
+      "summary": "Ordenar frase viva",
+      "textDescription": "O aluno ordena os cartões para formar: A casa tem uma janela azul.",
+      "duration": 20,
+      "interaction": {
+        "state": {
+          "sentence": "A casa tem uma janela azul."
+        },
+        "render": "cartões de palavras e tabuleiro de frase",
+        "transition": "cada palavra correta entra na frase",
+        "constraint": "a frase tem uma ordem que permite leitura com sentido",
+        "assessment": "o aluno ordena e lê a frase"
+      },
+      "differentiation": {
+        "support": "modelo oral",
+        "standard": "ordenação autónoma",
+        "challenge": "substituir uma palavra mantendo sentido"
+      }
+    }
+  ],
+  "sessionFlow": "Ativação oral breve → exploração digital autónoma/pares → leitura em voz alta → registo no caderno → comunicação curta à turma."
+}

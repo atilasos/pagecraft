@@ -1,0 +1,147 @@
+{
+  "topic": "M28P · Palavra 9 — Janela · Frases vivas",
+  "ageRange": "6-7 anos (1.º ano do 1.º CEB)",
+  "duration": 35,
+  "objectives": [
+    "Reconhecer 'Janela' em contexto de frase simples",
+    "Ordenar palavras para construir uma frase com sentido",
+    "Ler a frase a pares, respeitando a sequência oral"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Reconhecer as sílabas como unidades de segmentação do oral e do escrito; identificar palavras em contexto",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Produzir enunciados com vocabulário adequado ao tema e à situação; usar frases simples",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Desenvolver a consciência fonológica: segmentação, reconstrução e manipulação silábica de palavras",
+        "source": "portugues-1-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-B: Informação e comunicação",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas"
+    ],
+    "socialOrganization": "individual (blocos 1-3, 10min) → pares (recombinação, 10min) → individual (escrita guiada + frase, 15min) → turma (mini-avaliação + extensão, 10min)"
+  },
+  "materials": [
+    "Tablet/computador ou quadro interativo",
+    "Caderno ou quadro para registo",
+    "Cartões de sílabas/palavras opcionais"
+  ],
+  "units": [
+    {
+      "summary": "Completar uma frase com Janela",
+      "textDescription": "O aluno escolhe a palavra que torna a frase coerente com a imagem/contexto.",
+      "duration": 15,
+      "interaction": {
+        "state": {
+          "targetWord": "Janela"
+        },
+        "render": "frase lacunar e opções de palavra",
+        "transition": "seleção dá feedback sem punição",
+        "constraint": "a palavra precisa de fazer sentido na frase",
+        "assessment": "o aluno completa a frase corretamente"
+      },
+      "differentiation": {
+        "support": "ler com adulto",
+        "standard": "escolher e justificar",
+        "challenge": "criar nova frase"
+      }
+    },
+    {
+      "summary": "Ordenar frase viva",
+      "textDescription": "O aluno ordena os cartões para formar: A janela deixa entrar luz.",
+      "duration": 20,
+      "interaction": {
+        "state": {
+          "sentence": "A janela deixa entrar luz."
+        },
+        "render": "cartões de palavras e tabuleiro de frase",
+        "transition": "cada palavra correta entra na frase",
+        "constraint": "a frase tem uma ordem que permite leitura com sentido",
+        "assessment": "o aluno ordena e lê a frase"
+      },
+      "differentiation": {
+        "support": "modelo oral",
+        "standard": "ordenação autónoma",
+        "challenge": "substituir uma palavra mantendo sentido"
+      }
+    }
+  ],
+  "sessionFlow": "Ativação oral breve → exploração digital autónoma/pares → leitura em voz alta → registo no caderno → comunicação curta à turma.",
+  "_meta": {
+    "method": "Método das 28 Palavras",
+    "word": "janela",
+    "order": 9,
+    "syllables": [
+      "ja",
+      "ne",
+      "la"
+    ],
+    "syllableColors": {
+      "ja": "laranja (#F4A261)",
+      "ne": "azul (#4A90D9)",
+      "la": "verde (#5CB85C)"
+    },
+    "theme": "casa",
+    "sentence": "A janela está aberta.",
+    "status": "in-progress",
+    "possibleRecombinations": [
+      "nela",
+      "la",
+      "janela"
+    ],
+    "safeNewWords": [
+      "nela"
+    ],
+    "phonologicalFocus": [
+      "segmentação silábica (3 sílabas)",
+      "identificação da sílaba inicial 'ja'",
+      "reconstrução da palavra a partir de sílabas",
+      "distinção de palavras reais vs. combinações sem sentido"
+    ],
+    "vocabularyAssociations": [
+      "casa",
+      "porta",
+      "telhado",
+      "luz",
+      "ar",
+      "cortina"
+    ],
+    "assessmentCriteria": [
+      "Identifica a palavra 'janela' entre 3 opções visuais",
+      "Segmenta 'janela' em ja-ne-la (oral e/ou digital)",
+      "Reconstrói 'janela' a partir de sílabas desordenadas",
+      "Usa 'janela' numa frase simples oral ou escrita"
+    ],
+    "generatedBy": "Pagecraft Architect",
+    "generatedAt": "2026-03-25",
+    "schemaVersion": "DocSpec-AM v1"
+  }
+}

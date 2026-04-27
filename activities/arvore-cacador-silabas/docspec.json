@@ -1,0 +1,104 @@
+{
+  "topic": "M28P · Palavra 22 — Árvore · Caça às sílabas",
+  "ageRange": "6-7 anos (1.º ano, 1.º CEB)",
+  "duration": 35,
+  "objectives": [
+    "Segmentar a palavra 'Árvore' em sílabas e reconstruí-la pela ordem correta",
+    "Associar som, gesto e bloco escrito numa sequência observável",
+    "Verbalizar a estratégia usada para descobrir a palavra"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Identificar e manipular sílabas: segmentar e reconstituir palavras",
+        "source": "aprendizagens-essenciais-portugues-1-ano.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Relacionar imagem e palavra; reconhecer e ler palavras em contexto significativo",
+        "source": "aprendizagens-essenciais-portugues-1-ano.md"
+      },
+      {
+        "subject": "Estudo do Meio",
+        "year": "1.º ano",
+        "domain": "À Descoberta do Ambiente Natural",
+        "descriptor": "Identificar plantas comuns do ambiente próximo e reconhecer a sua utilidade",
+        "source": "aprendizagens-essenciais-estudo-do-meio-1-ano.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-F: Desenvolvimento pessoal e autonomia",
+      "PA-G: Bem-estar, saúde e ambiente"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas",
+      "ficheiros de leitura do TEA"
+    ],
+    "socialOrganization": "individual (blocos 1-3, ~15min) → pares (blocos 4-5, ~15min) → turma (blocos 6-8, ~15min)"
+  },
+  "materials": [
+    "Tablet/computador ou quadro interativo",
+    "Caderno ou quadro para registo",
+    "Cartões de sílabas/palavras opcionais"
+  ],
+  "units": [
+    {
+      "summary": "Caça às sílabas de Árvore",
+      "textDescription": "O aluno toca nas sílabas de Árvore, escuta a sequência e reconstrói a palavra.",
+      "duration": 20,
+      "interaction": {
+        "state": {
+          "syllables": [
+            "ár",
+            "vo",
+            "re"
+          ]
+        },
+        "render": "blocos silábicos coloridos e espaços de construção",
+        "transition": "tocar na sílaba certa preenche o próximo espaço",
+        "constraint": "a palavra só fica legível quando as sílabas estão na ordem sonora correta",
+        "assessment": "o aluno ordena as sílabas e identifica o número de partes"
+      },
+      "differentiation": {
+        "support": "ler sílabas em voz alta com ajuda",
+        "standard": "ordenar autonomamente",
+        "challenge": "escrever a palavra sem modelo"
+      }
+    },
+    {
+      "summary": "Contagem silábica com palmas",
+      "textDescription": "O aluno confirma quantas partes sonoras ouviu.",
+      "duration": 15,
+      "interaction": {
+        "state": {
+          "count": 3
+        },
+        "render": "botões com números",
+        "transition": "seleção do número dá feedback",
+        "constraint": "cada palma corresponde a uma parte sonora",
+        "assessment": "o aluno escolhe a contagem correta e explica"
+      },
+      "differentiation": {
+        "support": "palmas acompanhadas",
+        "standard": "contagem autónoma",
+        "challenge": "comparar com outra palavra M28P"
+      }
+    }
+  ],
+  "sessionFlow": "Ativação oral breve → exploração digital autónoma/pares → leitura em voz alta → registo no caderno → comunicação curta à turma."
+}

@@ -1,0 +1,99 @@
+{
+  "topic": "M28P · Palavra 15 — Rato · Frases vivas",
+  "ageRange": "5-7 anos (1.º ano do 1.º CEB)",
+  "duration": 35,
+  "objectives": [
+    "Reconhecer 'Rato' em contexto de frase simples",
+    "Ordenar palavras para construir uma frase com sentido",
+    "Ler a frase a pares, respeitando a sequência oral"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Ler palavras com sílabas diretas (consoante-vogal: RA, TO); reconhecer palavras de uso frequente globalmente; segmentar palavras em sílabas oralmente e por escrito",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Identificar e manipular sílabas; contar sílabas de palavras; reconhecer som inicial e final de palavras",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Ler frases simples com palavras aprendidas; construir frases com sujeito e predicado de 3 a 5 palavras",
+        "source": "portugues-1-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-D: Pensamento crítico e pensamento criativo",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas"
+    ],
+    "socialOrganization": "individual (abertura + reconhecimento 8min) → individual/pares (segmentação + recombinação 15min) → pares (escrita guiada + frase 15min) → turma (mini-avaliação + comunicação 7min)"
+  },
+  "materials": [
+    "Tablet/computador ou quadro interativo",
+    "Caderno ou quadro para registo",
+    "Cartões de sílabas/palavras opcionais"
+  ],
+  "units": [
+    {
+      "summary": "Completar uma frase com Rato",
+      "textDescription": "O aluno escolhe a palavra que torna a frase coerente com a imagem/contexto.",
+      "duration": 15,
+      "interaction": {
+        "state": {
+          "targetWord": "Rato"
+        },
+        "render": "frase lacunar e opções de palavra",
+        "transition": "seleção dá feedback sem punição",
+        "constraint": "a palavra precisa de fazer sentido na frase",
+        "assessment": "o aluno completa a frase corretamente"
+      },
+      "differentiation": {
+        "support": "ler com adulto",
+        "standard": "escolher e justificar",
+        "challenge": "criar nova frase"
+      }
+    },
+    {
+      "summary": "Ordenar frase viva",
+      "textDescription": "O aluno ordena os cartões para formar: O rato corre para a toca.",
+      "duration": 20,
+      "interaction": {
+        "state": {
+          "sentence": "O rato corre para a toca."
+        },
+        "render": "cartões de palavras e tabuleiro de frase",
+        "transition": "cada palavra correta entra na frase",
+        "constraint": "a frase tem uma ordem que permite leitura com sentido",
+        "assessment": "o aluno ordena e lê a frase"
+      },
+      "differentiation": {
+        "support": "modelo oral",
+        "standard": "ordenação autónoma",
+        "challenge": "substituir uma palavra mantendo sentido"
+      }
+    }
+  ],
+  "sessionFlow": "Ativação oral breve → exploração digital autónoma/pares → leitura em voz alta → registo no caderno → comunicação curta à turma."
+}

@@ -1,0 +1,108 @@
+{
+  "topic": "M28P · Palavra 3 — Uva · Caça às sílabas",
+  "ageRange": "6 anos (1.º ano do 1.º CEB)",
+  "duration": 35,
+  "objectives": [
+    "Segmentar a palavra 'Uva' em sílabas e reconstruí-la pela ordem correta",
+    "Associar som, gesto e bloco escrito numa sequência observável",
+    "Verbalizar a estratégia usada para descobrir a palavra"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Articular corretamente as palavras; segmentar sílabas e fonemas oralmente em palavras do vocabulário corrente",
+        "source": "AE-Português-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Reconhecer globalmente palavras; ler palavras e frases simples com vocabulário trabalhado",
+        "source": "AE-Português-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Segmentar palavras em sílabas; reconstruir palavras por agregação de sílabas dadas",
+        "source": "AE-Português-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Completar palavras com sílabas em falta; copiar palavras e frases com correção",
+        "source": "AE-Português-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Trabalho curricular comparticipado"
+    ],
+    "instruments": [
+      "Cartão de palavra (cartaz da palavra + imagem)",
+      "PIT (registo da palavra trabalhada)",
+      "Mapa das 28 palavras (parede da sala)"
+    ],
+    "socialOrganization": "individual (exploração digital 35min) → pares (extensão criativa 4min) → turma (mini-síntese oral 2min)"
+  },
+  "materials": [
+    "Tablet/computador ou quadro interativo",
+    "Caderno ou quadro para registo",
+    "Cartões de sílabas/palavras opcionais"
+  ],
+  "units": [
+    {
+      "summary": "Caça às sílabas de Uva",
+      "textDescription": "O aluno toca nas sílabas de Uva, escuta a sequência e reconstrói a palavra.",
+      "duration": 20,
+      "interaction": {
+        "state": {
+          "syllables": [
+            "u",
+            "va"
+          ]
+        },
+        "render": "blocos silábicos coloridos e espaços de construção",
+        "transition": "tocar na sílaba certa preenche o próximo espaço",
+        "constraint": "a palavra só fica legível quando as sílabas estão na ordem sonora correta",
+        "assessment": "o aluno ordena as sílabas e identifica o número de partes"
+      },
+      "differentiation": {
+        "support": "ler sílabas em voz alta com ajuda",
+        "standard": "ordenar autonomamente",
+        "challenge": "escrever a palavra sem modelo"
+      }
+    },
+    {
+      "summary": "Contagem silábica com palmas",
+      "textDescription": "O aluno confirma quantas partes sonoras ouviu.",
+      "duration": 15,
+      "interaction": {
+        "state": {
+          "count": 2
+        },
+        "render": "botões com números",
+        "transition": "seleção do número dá feedback",
+        "constraint": "cada palma corresponde a uma parte sonora",
+        "assessment": "o aluno escolhe a contagem correta e explica"
+      },
+      "differentiation": {
+        "support": "palmas acompanhadas",
+        "standard": "contagem autónoma",
+        "challenge": "comparar com outra palavra M28P"
+      }
+    }
+  ],
+  "sessionFlow": "Ativação oral breve → exploração digital autónoma/pares → leitura em voz alta → registo no caderno → comunicação curta à turma."
+}

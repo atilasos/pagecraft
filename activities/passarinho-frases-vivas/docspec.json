@@ -1,0 +1,99 @@
+{
+  "topic": "M28P · Palavra 24 — Passarinho · Frases vivas",
+  "ageRange": "6-7 anos (1.º ano, 1.º CEB)",
+  "duration": 35,
+  "objectives": [
+    "Reconhecer 'Passarinho' em contexto de frase simples",
+    "Ordenar palavras para construir uma frase com sentido",
+    "Ler a frase a pares, respeitando a sequência oral"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Ler palavras com sílabas simples, identificando os padrões silábicos (V, CV, CVC, CCV); segmentar e reconstruir palavras por sílabas",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Produzir discurso oral com vocabulário e estruturas adequadas; formular frases simples com correção sintática",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Iniciação à Educação Literária",
+        "descriptor": "Ouvir e ler textos de literatura para a infância; fazer associações entre imagem e palavra escrita",
+        "source": "portugues-1-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-D: Pensamento crítico e pensamento criativo",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas"
+    ],
+    "socialOrganization": "individual (exploração 30min) → pares (recombinação e frase 10min) → turma (partilha final 5min)"
+  },
+  "materials": [
+    "Tablet/computador ou quadro interativo",
+    "Caderno ou quadro para registo",
+    "Cartões de sílabas/palavras opcionais"
+  ],
+  "units": [
+    {
+      "summary": "Completar uma frase com Passarinho",
+      "textDescription": "O aluno escolhe a palavra que torna a frase coerente com a imagem/contexto.",
+      "duration": 15,
+      "interaction": {
+        "state": {
+          "targetWord": "Passarinho"
+        },
+        "render": "frase lacunar e opções de palavra",
+        "transition": "seleção dá feedback sem punição",
+        "constraint": "a palavra precisa de fazer sentido na frase",
+        "assessment": "o aluno completa a frase corretamente"
+      },
+      "differentiation": {
+        "support": "ler com adulto",
+        "standard": "escolher e justificar",
+        "challenge": "criar nova frase"
+      }
+    },
+    {
+      "summary": "Ordenar frase viva",
+      "textDescription": "O aluno ordena os cartões para formar: O passarinho canta na árvore.",
+      "duration": 20,
+      "interaction": {
+        "state": {
+          "sentence": "O passarinho canta na árvore."
+        },
+        "render": "cartões de palavras e tabuleiro de frase",
+        "transition": "cada palavra correta entra na frase",
+        "constraint": "a frase tem uma ordem que permite leitura com sentido",
+        "assessment": "o aluno ordena e lê a frase"
+      },
+      "differentiation": {
+        "support": "modelo oral",
+        "standard": "ordenação autónoma",
+        "challenge": "substituir uma palavra mantendo sentido"
+      }
+    }
+  ],
+  "sessionFlow": "Ativação oral breve → exploração digital autónoma/pares → leitura em voz alta → registo no caderno → comunicação curta à turma."
+}

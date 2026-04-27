@@ -1,0 +1,109 @@
+{
+  "topic": "M28P · Palavra 8 — Casa · Caça às sílabas",
+  "ageRange": "6 anos (1.º ano do 1.º CEB)",
+  "duration": 35,
+  "objectives": [
+    "Segmentar a palavra 'Casa' em sílabas e reconstruí-la pela ordem correta",
+    "Associar som, gesto e bloco escrito numa sequência observável",
+    "Verbalizar a estratégia usada para descobrir a palavra"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Desenvolver a consciência fonológica: segmentar oralmente palavras em sílabas e identificar sílabas em posição inicial, medial e final",
+        "source": "portugues-1-ano-1-ciclo-ae.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Reconhecer palavras de uso frequente em contexto de leitura global; associar imagem à palavra escrita",
+        "source": "portugues-1-ano-1-ciclo-ae.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Segmentar palavras em sílabas e reconstituir a palavra a partir das sílabas isoladas; identificar e nomear vogais e consoantes em contexto de palavra",
+        "source": "portugues-1-ano-1-ciclo-ae.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Ler frases simples com vocabulário controlado, identificando sujeito e predicado de forma implícita",
+        "source": "portugues-1-ano-1-ciclo-ae.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "PIT (Plano Individual de Trabalho)",
+      "Mapa de tarefas da turma",
+      "Registo de palavras aprendidas (cartaz coletivo)"
+    ],
+    "socialOrganization": "individual (blocos 1-3, 5-7) → pares (bloco 4 recombinação e bloco 6 frase) → turma (bloco 8 extensão/comunicação)"
+  },
+  "materials": [
+    "Tablet/computador ou quadro interativo",
+    "Caderno ou quadro para registo",
+    "Cartões de sílabas/palavras opcionais"
+  ],
+  "units": [
+    {
+      "summary": "Caça às sílabas de Casa",
+      "textDescription": "O aluno toca nas sílabas de Casa, escuta a sequência e reconstrói a palavra.",
+      "duration": 20,
+      "interaction": {
+        "state": {
+          "syllables": [
+            "ca",
+            "sa"
+          ]
+        },
+        "render": "blocos silábicos coloridos e espaços de construção",
+        "transition": "tocar na sílaba certa preenche o próximo espaço",
+        "constraint": "a palavra só fica legível quando as sílabas estão na ordem sonora correta",
+        "assessment": "o aluno ordena as sílabas e identifica o número de partes"
+      },
+      "differentiation": {
+        "support": "ler sílabas em voz alta com ajuda",
+        "standard": "ordenar autonomamente",
+        "challenge": "escrever a palavra sem modelo"
+      }
+    },
+    {
+      "summary": "Contagem silábica com palmas",
+      "textDescription": "O aluno confirma quantas partes sonoras ouviu.",
+      "duration": 15,
+      "interaction": {
+        "state": {
+          "count": 2
+        },
+        "render": "botões com números",
+        "transition": "seleção do número dá feedback",
+        "constraint": "cada palma corresponde a uma parte sonora",
+        "assessment": "o aluno escolhe a contagem correta e explica"
+      },
+      "differentiation": {
+        "support": "palmas acompanhadas",
+        "standard": "contagem autónoma",
+        "challenge": "comparar com outra palavra M28P"
+      }
+    }
+  ],
+  "sessionFlow": "Ativação oral breve → exploração digital autónoma/pares → leitura em voz alta → registo no caderno → comunicação curta à turma."
+}

@@ -1,0 +1,103 @@
+{
+  "topic": "M28P · Palavra 20 — Bandeira · Caça às sílabas",
+  "ageRange": "6-7 anos (1.º ano)",
+  "duration": 35,
+  "objectives": [
+    "Segmentar a palavra 'Bandeira' em sílabas e reconstruí-la pela ordem correta",
+    "Associar som, gesto e bloco escrito numa sequência observável",
+    "Verbalizar a estratégia usada para descobrir a palavra"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Identificar e manipular sílabas com consoante nasal (an/ban) e ditongo (ei)",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Ler palavras com ditongos (ei) e nasais; reconhecer globalmente palavras frequentes",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Estudo do Meio",
+        "year": "1.º ano",
+        "domain": "À Descoberta de Si Mesmo",
+        "descriptor": "Reconhecer símbolos nacionais (bandeira) e locais da comunidade",
+        "source": "estudo-do-meio-1-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-D: Pensamento crítico e pensamento criativo",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas"
+    ],
+    "socialOrganization": "individual (blocos 1–5) → pares (bloco 6) → turma (mini-avaliação + extensão)"
+  },
+  "materials": [
+    "Tablet/computador ou quadro interativo",
+    "Caderno ou quadro para registo",
+    "Cartões de sílabas/palavras opcionais"
+  ],
+  "units": [
+    {
+      "summary": "Caça às sílabas de Bandeira",
+      "textDescription": "O aluno toca nas sílabas de Bandeira, escuta a sequência e reconstrói a palavra.",
+      "duration": 20,
+      "interaction": {
+        "state": {
+          "syllables": [
+            "ban",
+            "dei",
+            "ra"
+          ]
+        },
+        "render": "blocos silábicos coloridos e espaços de construção",
+        "transition": "tocar na sílaba certa preenche o próximo espaço",
+        "constraint": "a palavra só fica legível quando as sílabas estão na ordem sonora correta",
+        "assessment": "o aluno ordena as sílabas e identifica o número de partes"
+      },
+      "differentiation": {
+        "support": "ler sílabas em voz alta com ajuda",
+        "standard": "ordenar autonomamente",
+        "challenge": "escrever a palavra sem modelo"
+      }
+    },
+    {
+      "summary": "Contagem silábica com palmas",
+      "textDescription": "O aluno confirma quantas partes sonoras ouviu.",
+      "duration": 15,
+      "interaction": {
+        "state": {
+          "count": 3
+        },
+        "render": "botões com números",
+        "transition": "seleção do número dá feedback",
+        "constraint": "cada palma corresponde a uma parte sonora",
+        "assessment": "o aluno escolhe a contagem correta e explica"
+      },
+      "differentiation": {
+        "support": "palmas acompanhadas",
+        "standard": "contagem autónoma",
+        "challenge": "comparar com outra palavra M28P"
+      }
+    }
+  ],
+  "sessionFlow": "Ativação oral breve → exploração digital autónoma/pares → leitura em voz alta → registo no caderno → comunicação curta à turma."
+}

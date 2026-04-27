@@ -1,0 +1,105 @@
+{
+  "topic": "M28P · Palavra 13 — Galinha · Frases vivas",
+  "ageRange": "6 anos (1.º ano do 1.º CEB); adaptável a 5-8 anos",
+  "duration": 35,
+  "objectives": [
+    "Reconhecer 'Galinha' em contexto de frase simples",
+    "Ordenar palavras para construir uma frase com sentido",
+    "Ler a frase a pares, respeitando a sequência oral"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Desenvolver a consciência fonológica: segmentar palavras em sílabas e reconstituir palavras a partir de sílabas dadas",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Reconhecer globalmente palavras e associá-las às respetivas imagens (leitura global)",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Produzir enunciados com sentido — frases simples com sujeito e predicado em contexto comunicativo",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Estudo do Meio",
+        "year": "1.º ano",
+        "domain": "À Descoberta dos Seres Vivos",
+        "descriptor": "Identificar animais domésticos e reconhecer características básicas do seu ciclo de vida (a galinha põe ovos)",
+        "source": "estudo-do-meio-1-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "Trabalho curricular comparticipado",
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas"
+    ],
+    "socialOrganization": "turma (ativação 5min) → individual (reconhecimento + segmentação 20min) → pares (recombinação + frase 12min) → turma (avaliação + extensão 8min)"
+  },
+  "materials": [
+    "Tablet/computador ou quadro interativo",
+    "Caderno ou quadro para registo",
+    "Cartões de sílabas/palavras opcionais"
+  ],
+  "units": [
+    {
+      "summary": "Completar uma frase com Galinha",
+      "textDescription": "O aluno escolhe a palavra que torna a frase coerente com a imagem/contexto.",
+      "duration": 15,
+      "interaction": {
+        "state": {
+          "targetWord": "Galinha"
+        },
+        "render": "frase lacunar e opções de palavra",
+        "transition": "seleção dá feedback sem punição",
+        "constraint": "a palavra precisa de fazer sentido na frase",
+        "assessment": "o aluno completa a frase corretamente"
+      },
+      "differentiation": {
+        "support": "ler com adulto",
+        "standard": "escolher e justificar",
+        "challenge": "criar nova frase"
+      }
+    },
+    {
+      "summary": "Ordenar frase viva",
+      "textDescription": "O aluno ordena os cartões para formar: A galinha procura milho.",
+      "duration": 20,
+      "interaction": {
+        "state": {
+          "sentence": "A galinha procura milho."
+        },
+        "render": "cartões de palavras e tabuleiro de frase",
+        "transition": "cada palavra correta entra na frase",
+        "constraint": "a frase tem uma ordem que permite leitura com sentido",
+        "assessment": "o aluno ordena e lê a frase"
+      },
+      "differentiation": {
+        "support": "modelo oral",
+        "standard": "ordenação autónoma",
+        "challenge": "substituir uma palavra mantendo sentido"
+      }
+    }
+  ],
+  "sessionFlow": "Ativação oral breve → exploração digital autónoma/pares → leitura em voz alta → registo no caderno → comunicação curta à turma."
+}

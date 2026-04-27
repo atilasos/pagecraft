@@ -18,7 +18,7 @@ pagecraft/
       teacher.md           # guia rápido para professor
       docspec.json         # especificação estruturada (DocSpec)
       meta.json            # metadados (título, ano, tags, etc.)
-  skills/                  # componentes auxiliares (opcional)
+  skills/                  # skills e variantes por harness (opcional)
   ATTRIBUTION.md           # regras e template de atribuição
   CONTRIBUTING.md          # como contribuir
   LICENSE                  # CC BY-SA 4.0 (texto integral)

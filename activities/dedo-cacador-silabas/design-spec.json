@@ -1,0 +1,72 @@
+{
+  "palette": {
+    "bg": "#FFF7ED",
+    "surface": "#FFFFFF",
+    "primary": "#EA580C",
+    "accent": "#F59E0B",
+    "text": "#1E1B18"
+  },
+  "syllableColors": {
+    "de": "#EA580C",
+    "do": "#2563EB"
+  },
+  "typography": {
+    "fontFamily": "'Nunito', 'Comic Sans MS', 'Chalkboard SE', sans-serif",
+    "scale": "kids",
+    "baseSizePx": 20,
+    "headingSizePx": 32,
+    "syllableSizePx": 36,
+    "weights": [
+      400,
+      700,
+      800
+    ]
+  },
+  "layout": {
+    "borderRadius": 16,
+    "spacing": "comfortable",
+    "maxWidthPx": 960,
+    "padding": "1.5rem",
+    "cardGap": "1rem"
+  },
+  "components": {
+    "buttons": "pill, padding 0.75rem 2rem, font-weight 700, sombra leve, hover escala 1.05 + sombra mais forte, active escala 0.97, min-height 48px",
+    "cards": "surface, borda 2px solid primary, border-radius 16px, sombra rgba(0,0,0,0.08) 0 4px 12px",
+    "syllable_blocks": "cada sílaba num bloco colorido (ver syllableColors), font-size 36px, font-weight 800, padding 0.5rem 1.2rem, border-radius 12px, texto branco, draggable com cursor grab",
+    "badges": "pill, accent bg #F59E0B, texto branco, font-weight 700, padding 0.25rem 0.75rem",
+    "feedback_correct": "#22c55e fundo claro #f0fdf4, ícone ✓ verde, mensagem em pt-PT",
+    "feedback_incorrect": "#F59E0B fundo claro #fffbeb, ícone ✗ âmbar, mensagem encorajadora",
+    "word_display": "palavra em maiúsculas, font-size 48px, font-weight 800, color primary #EA580C, letter-spacing 0.05em"
+  },
+  "differentiationIndicators": {
+    "support": {
+      "emoji": "🟢",
+      "label": "Com ajuda",
+      "color": "#22c55e"
+    },
+    "standard": {
+      "emoji": "🟡",
+      "label": "Objetivo",
+      "color": "#F59E0B"
+    },
+    "challenge": {
+      "emoji": "🔴",
+      "label": "Desafio",
+      "color": "#ef4444"
+    }
+  },
+  "motion": {
+    "transitions": "subtle",
+    "durationMs": 200,
+    "dragFeedback": "escala 1.1 + sombra durante drag, snap suave ao soltar",
+    "correctFeedback": "pulse verde 0.3s + confetti leve"
+  },
+  "accessibility": {
+    "contrast": "WCAG-AA",
+    "focusRing": true,
+    "focusStyle": "outline 3px solid #EA580C, outline-offset 2px",
+    "minTouchTarget": "48px",
+    "ariaLabels": true
+  },
+  "notes": "Design para 'dedo' (M28P #4). Sem fontes remotas; usar fontes locais/fallback para garantir funcionamento offline."
+}

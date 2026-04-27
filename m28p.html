@@ -203,6 +203,36 @@
     }
     .btn-spec:hover { background: #f1f5f9; }
 
+
+    .variant-list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .variant-link {
+      display: block;
+      text-decoration: none;
+      padding: 9px 10px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--brand-dark);
+      background: var(--brand-light);
+      border: 1px solid #ddd6fe;
+      min-height: 40px;
+    }
+    .variant-link:hover { background: #ddd6fe; }
+    .variant-label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      margin-top: 4px;
+    }
+
     .disabled .word-actions { display: none; }
     .disabled-label {
       font-size: 0.82rem;
@@ -288,30 +318,41 @@
         const m28p = {};
         (data.items || []).forEach(it => {
           if (it.order && (it.tags || []).some(t => t.toLowerCase() === 'm28p')) {
-            m28p[it.order] = it;
+            if (!m28p[it.order]) m28p[it.order] = [];
+            m28p[it.order].push(it);
           }
         });
+        Object.values(m28p).forEach(list => list.sort((a, b) => (a.variantIndex || 0) - (b.variantIndex || 0) || a.slug.localeCompare(b.slug)));
 
         const available = Object.keys(m28p).length;
         countEl.textContent = available;
-        const pct = Math.round((available / 28) * 100);
+        const pct = Math.min(100, Math.round((available / 28) * 100));
         percentEl.textContent = pct + '%';
         fillEl.style.width = pct + '%';
 
         grid.innerHTML = ALL_WORDS.map((word, i) => {
           const num = i + 1;
-          const it = m28p[num];
+          const list = m28p[num] || [];
+          const it = list.find(x => !x.variantOf) || list[0];
+          const variants = list.filter(x => x.slug !== it.slug);
           if (it) {
+            const variantLinks = variants.length ? (
+              '<div class="variant-label">Mais páginas</div>' +
+              '<div class="variant-list">' + variants.map(v =>
+                '<a class="variant-link" href="' + esc(v.url) + '">' + esc(v.variantTitle || v.title.split('·').pop().trim()) + '</a>'
+              ).join('') + '</div>'
+            ) : '';
             return (
               '<article class="word-card available">' +
               '<span class="word-num">' + num + '</span>' +
               '<span class="word-name">' + esc(word) + '</span>' +
               '<div class="word-actions">' +
-              '<a class="btn-open" href="' + esc(it.url) + '">Abrir</a>' +
+              '<a class="btn-open" href="' + esc(it.url) + '">Abrir principal</a>' +
               '<div class="teacher-links">' +
               '<a class="btn-sm btn-teacher" href="' + esc(viewerUrl(it.slug, 'teacher')) + '">Guia</a>' +
               '<a class="btn-sm btn-spec" href="' + esc(viewerUrl(it.slug, 'docspec')) + '">DocSpec</a>' +
               '</div>' +
+              variantLinks +
               '</div>' +
               '</article>'
             );

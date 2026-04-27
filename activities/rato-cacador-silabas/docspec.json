@@ -1,0 +1,102 @@
+{
+  "topic": "M28P · Palavra 15 — Rato · Caça às sílabas",
+  "ageRange": "5-7 anos (1.º ano do 1.º CEB)",
+  "duration": 35,
+  "objectives": [
+    "Segmentar a palavra 'Rato' em sílabas e reconstruí-la pela ordem correta",
+    "Associar som, gesto e bloco escrito numa sequência observável",
+    "Verbalizar a estratégia usada para descobrir a palavra"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Ler palavras com sílabas diretas (consoante-vogal: RA, TO); reconhecer palavras de uso frequente globalmente; segmentar palavras em sílabas oralmente e por escrito",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Identificar e manipular sílabas; contar sílabas de palavras; reconhecer som inicial e final de palavras",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Ler frases simples com palavras aprendidas; construir frases com sujeito e predicado de 3 a 5 palavras",
+        "source": "portugues-1-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-D: Pensamento crítico e pensamento criativo",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas"
+    ],
+    "socialOrganization": "individual (abertura + reconhecimento 8min) → individual/pares (segmentação + recombinação 15min) → pares (escrita guiada + frase 15min) → turma (mini-avaliação + comunicação 7min)"
+  },
+  "materials": [
+    "Tablet/computador ou quadro interativo",
+    "Caderno ou quadro para registo",
+    "Cartões de sílabas/palavras opcionais"
+  ],
+  "units": [
+    {
+      "summary": "Caça às sílabas de Rato",
+      "textDescription": "O aluno toca nas sílabas de Rato, escuta a sequência e reconstrói a palavra.",
+      "duration": 20,
+      "interaction": {
+        "state": {
+          "syllables": [
+            "ra",
+            "to"
+          ]
+        },
+        "render": "blocos silábicos coloridos e espaços de construção",
+        "transition": "tocar na sílaba certa preenche o próximo espaço",
+        "constraint": "a palavra só fica legível quando as sílabas estão na ordem sonora correta",
+        "assessment": "o aluno ordena as sílabas e identifica o número de partes"
+      },
+      "differentiation": {
+        "support": "ler sílabas em voz alta com ajuda",
+        "standard": "ordenar autonomamente",
+        "challenge": "escrever a palavra sem modelo"
+      }
+    },
+    {
+      "summary": "Contagem silábica com palmas",
+      "textDescription": "O aluno confirma quantas partes sonoras ouviu.",
+      "duration": 15,
+      "interaction": {
+        "state": {
+          "count": 2
+        },
+        "render": "botões com números",
+        "transition": "seleção do número dá feedback",
+        "constraint": "cada palma corresponde a uma parte sonora",
+        "assessment": "o aluno escolhe a contagem correta e explica"
+      },
+      "differentiation": {
+        "support": "palmas acompanhadas",
+        "standard": "contagem autónoma",
+        "challenge": "comparar com outra palavra M28P"
+      }
+    }
+  ],
+  "sessionFlow": "Ativação oral breve → exploração digital autónoma/pares → leitura em voz alta → registo no caderno → comunicação curta à turma."
+}

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M28P #14 — Ovo · Caça às sílabas | PageCraft</title>
+  <style>
+    :root {
+      --bg:#FFF8F0;
+      --surface:#FFFFFF;
+      --primary:#E05FA0;
+      --accent:#F59E0B;
+      --text:#1E1B18;
+      --syll-o:#F59E0B;
+      --syll-vo:#10B981;
+      --ok:#22c55e; --ok-bg:#f0fdf4; --try:#f59e0b; --try-bg:#fffbeb;
+      --danger:#ef4444; --radius:18px; --shadow:0 8px 24px rgba(30,27,24,.10); --touch:48px;
+      --font:'Nunito','Comic Sans MS','Chalkboard SE',sans-serif;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; font-family:var(--font); color:var(--text); background:radial-gradient(circle at top right, color-mix(in srgb, var(--accent) 25%, white), var(--bg) 38%); font-size:20px; line-height:1.45; }
+    .skip-link { position:absolute; left:-999px; top:8px; background:var(--text); color:white; padding:.6rem .9rem; border-radius:999px; z-index:99; }
+    .skip-link:focus { left:8px; }
+    .wrap { width:min(100% - 24px, 1040px); margin:0 auto; padding:1rem 0 2rem; }
+    .hero { border-radius:28px; padding:1.2rem; color:white; background:linear-gradient(135deg,var(--primary),var(--accent)); box-shadow:var(--shadow); margin:1rem 0; position:relative; overflow:hidden; }
+    .hero::after { content:''; position:absolute; inset:auto -40px -70px auto; width:210px; height:210px; border-radius:50%; background:rgba(255,255,255,.18); }
+    h1,h2,h3 { line-height:1.15; margin:.2rem 0 .7rem; }
+    h1 { font-size:clamp(2rem,6vw,3.4rem); }
+    h2 { font-size:clamp(1.55rem,4vw,2.15rem); color:color-mix(in srgb,var(--primary) 72%, black); }
+    p { margin:.35rem 0 .75rem; }
+    .meta,.pills,.row { display:flex; flex-wrap:wrap; gap:.55rem; align-items:center; }
+    .pill { border:2px solid rgba(255,255,255,.72); background:rgba(255,255,255,.20); color:inherit; border-radius:999px; padding:.35rem .75rem; font-weight:800; }
+    .card { background:var(--surface); border:2px solid var(--primary); border-radius:var(--radius); box-shadow:var(--shadow); padding:1rem; margin:1rem 0; }
+    .soft { background:color-mix(in srgb,var(--bg) 72%, white); border-style:dashed; }
+    button,.button { min-width:var(--touch); min-height:var(--touch); border:2px solid color-mix(in srgb,var(--primary) 70%, black); background:var(--primary); color:white; border-radius:999px; padding:.65rem 1rem; font:inherit; font-weight:900; cursor:pointer; touch-action:manipulation; box-shadow:0 5px 14px rgba(0,0,0,.12); transition:transform .18s ease, box-shadow .18s ease, background .18s ease; }
+    button:hover,.button:hover { transform:scale(1.04); } button:active { transform:scale(.97); }
+    button.secondary { background:white; color:color-mix(in srgb,var(--primary) 72%, black); }
+    button.good { background:var(--ok); border-color:#15803d; }
+    button.warn { background:var(--try); border-color:#b45309; }
+    :focus-visible { outline:4px solid var(--accent); outline-offset:3px; }
+    .tabs { display:flex; flex-wrap:wrap; gap:.5rem; margin:.75rem 0; }
+    .tab { background:white; color:var(--text); border-color:#d6cec7; } .tab[aria-selected='true'] { background:var(--primary); color:white; border-color:color-mix(in srgb,var(--primary) 70%, black); }
+    .level { display:none; } .level.active { display:block; animation:pop .22s ease; }
+    .syllables,.slots,.choices,.word-bank { display:flex; gap:.7rem; flex-wrap:wrap; justify-content:center; margin:1rem 0; }
+    .syllable,.slot,.word-token { border-radius:16px; min-height:58px; min-width:64px; display:inline-grid; place-items:center; padding:.45rem .85rem; font-size:clamp(1.45rem,5vw,2.25rem); font-weight:1000; letter-spacing:.02em; }
+    .syllable { color:white; border:3px solid rgba(0,0,0,.10); }
+    .slot { background:#fff; border:3px dashed color-mix(in srgb,var(--primary) 60%, white); color:color-mix(in srgb,var(--primary) 65%, black); }
+    .slot.filled { border-style:solid; }
+    .target-word { font-size:clamp(2rem,8vw,4.2rem); font-weight:1000; letter-spacing:.04em; text-transform:uppercase; color:var(--primary); text-align:center; overflow-wrap:anywhere; max-width:100%; }
+    .feedback { border-radius:18px; padding:.8rem 1rem; font-weight:900; min-height:58px; display:flex; align-items:center; justify-content:center; text-align:center; background:var(--try-bg); border:2px solid var(--try); }
+    .feedback.ok { background:var(--ok-bg); border-color:var(--ok); }
+    .feedback.idle { background:white; border-color:#d6cec7; color:#6b5f57; }
+    .teacher { font-size:.95rem; background:#fff; border-left:8px solid var(--accent); }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:.8rem; }
+    .mini { font-size:.92rem; color:#5b514a; }
+    .sentence-board { display:flex; gap:.55rem; flex-wrap:wrap; justify-content:center; min-height:74px; padding:.7rem; border:3px dashed color-mix(in srgb,var(--accent) 60%, white); border-radius:18px; background:#fff; }
+    .word-token { font-size:1.25rem; background:white; border:2px solid color-mix(in srgb,var(--primary) 45%, white); color:var(--text); }
+    .word-token.used { opacity:.35; }
+    .big-emoji { font-size:clamp(4rem,14vw,7rem); line-height:1; filter:drop-shadow(0 8px 10px rgba(0,0,0,.12)); }
+    footer { text-align:center; padding:1rem; color:#655a52; }
+    @keyframes pop { from { opacity:0; transform:translateY(8px) scale(.98); } to { opacity:1; transform:none; } }
+    @media (prefers-reduced-motion:reduce) { * { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+    @media (max-width:640px) { body { font-size:18px; } .wrap { width:min(100% - 16px,1040px); } .hero { border-radius:20px; } }
+    </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Ir para o conteúdo</a>
+<div class="wrap">
+  <header class="hero">
+    <div class="meta"><span class="pill">M28P · Palavra 14</span><span class="pill">1.º ano</span><span class="pill">Caça às sílabas</span></div>
+    <h1>🥚 Ovo — Caça às sílabas</h1>
+    <p>Uma página para ouvir, tocar e reconstruir a palavra por partes, sem dar a regra pronta.</p>
+  </header>
+  <main id="main">
+    <section class="card soft" aria-labelledby="objetivo">
+      <h2 id="objetivo">O desafio</h2>
+      <p>Toca nas sílabas pela ordem certa. Quando a palavra ficar completa, observa o que acontece e explica à turma como descobriste.</p>
+      <div class="target-word" aria-label="Palavra alvo">Ovo</div>
+    </section>
+
+    <section class="card" aria-labelledby="niveis">
+      <h2 id="niveis">Escolhe o teu nível</h2>
+      <div class="tabs" role="tablist" aria-label="Níveis de diferenciação">
+        <button class="tab" role="tab" aria-selected="true" data-tab="apoio">🟢 Apoio</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="objetivo">🟡 Objetivo</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="desafio">🔴 Desafio</button>
+      </div>
+      <div class="level active" id="apoio"><p>Com ajuda: lê as sílabas em voz alta antes de tocar.</p></div>
+      <div class="level" id="objetivo"><p>Objetivo: reconstrói a palavra sem ajuda do adulto.</p></div>
+      <div class="level" id="desafio"><p>Desafio: depois de construir, tapa a palavra e escreve-a no caderno.</p></div>
+    </section>
+
+    <section class="card" aria-labelledby="construir">
+      <h2 id="construir">1. Constrói a palavra</h2>
+      <p class="mini">Usa o clique ou o teclado. Também funciona em tablet.</p>
+      <div class="slots" id="slots" aria-live="polite"><span class="slot" data-index="0" aria-label="Espaço 1">?</span>
+<span class="slot" data-index="1" aria-label="Espaço 2">?</span></div>
+      <div class="syllables" id="syllables"><button class="syllable" style="background:#10B981" data-syll="vo" aria-label="Sílaba vo">vo</button>
+<button class="syllable" style="background:#F59E0B" data-syll="o" aria-label="Sílaba o">o</button></div>
+      <div class="row" style="justify-content:center"><button id="reset" class="secondary">Recomeçar</button><button id="hear">Bater palmas</button></div>
+      <p id="buildFeedback" class="feedback idle" role="status">Toca na primeira sílaba para começar.</p>
+    </section>
+
+    <section class="card" aria-labelledby="contar">
+      <h2 id="contar">2. Quantas partes ouvimos?</h2>
+      <p>Depois de bater palmas, escolhe o número de sílabas da palavra.</p>
+      <div class="choices"><button class="secondary count-choice" data-count="1">1</button>
+<button class="secondary count-choice" data-count="2">2</button>
+<button class="secondary count-choice" data-count="3">3</button></div>
+      <p id="countFeedback" class="feedback idle" role="status">Escuta a palavra: o · vo</p>
+    </section>
+
+    <section class="card teacher" aria-labelledby="professor">
+      <h2 id="professor">Nota para o professor</h2>
+      <p><strong>Regra a descobrir:</strong> a palavra escrita pode ser reconstruída juntando as partes sonoras na ordem correta.</p>
+      <p><strong>Evidência observável:</strong> o aluno ordena as sílabas o–vo, identifica 2 partes e verbaliza a estratégia usada.</p>
+    </section>
+  </main>
+  <footer>PageCraft · Método das 28 Palavras · Ovo</footer>
+</div>
+<script>
+const expected = ["o", "vo"];
+let placed = [];
+const slots = [...document.querySelectorAll('.slot')];
+const fb = document.getElementById('buildFeedback');
+function render() {
+  slots.forEach((slot,i)=>{ slot.textContent = placed[i] || '?'; slot.classList.toggle('filled', Boolean(placed[i])); });
+  document.querySelectorAll('.syllable').forEach(btn=>{ btn.disabled = placed.includes(btn.dataset.syll); btn.style.opacity = btn.disabled ? .45 : 1; });
+}
+function say(message, ok=false) { fb.textContent = message; fb.className = 'feedback ' + (ok ? 'ok' : ''); }
+document.getElementById('syllables').addEventListener('click', e=>{
+  const btn = e.target.closest('button[data-syll]'); if(!btn) return;
+  const s = btn.dataset.syll; const need = expected[placed.length];
+  if(s === need) { placed.push(s); render();
+    if(placed.length === expected.length) say('Muito bem! Descobriste a palavra Ovo juntando as sílabas pela ordem certa.', true);
+    else say('Boa! Agora procura a próxima sílaba.');
+  } else { say('Quase! Escuta outra vez e procura a sílaba que vem agora.'); }
+});
+document.getElementById('reset').addEventListener('click', ()=>{ placed=[]; render(); say('Toca na primeira sílaba para começar.'); });
+document.getElementById('hear').addEventListener('click', ()=>{
+  let i=0; say('Vamos bater palmas: ' + expected.join(' · '), true);
+  const all=[...document.querySelectorAll('.syllable')];
+  const tick=()=>{ all.forEach(b=>b.style.transform=''); const b=all.find(x=>x.dataset.syll===expected[i]); if(b) b.style.transform='scale(1.16)'; i++; if(i<expected.length) setTimeout(tick,520); else setTimeout(()=>all.forEach(b=>b.style.transform=''),560); }; tick();
+});
+document.querySelectorAll('.count-choice').forEach(btn=>btn.addEventListener('click',()=>{
+  const ok = Number(btn.dataset.count) === expected.length;
+  const out = document.getElementById('countFeedback');
+  out.textContent = ok ? 'Certo! A palavra tem ' + expected.length + ' partes: ' + expected.join(' · ') + '.' : 'Ainda não. Bate palmas e conta só as partes que ouves.';
+  out.className = 'feedback ' + (ok ? 'ok' : '');
+}));
+document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected','false')); tab.setAttribute('aria-selected','true');
+  document.querySelectorAll('.level').forEach(l=>l.classList.remove('active')); document.getElementById(tab.dataset.tab).classList.add('active');
+}));
+render();
+</script>
+</body>
+</html>
