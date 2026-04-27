@@ -1,0 +1,75 @@
+{
+  "pass": true,
+  "route": "none",
+  "severity": "low",
+  "issues": [],
+  "required_fixes": [],
+  "evidence": [
+    {
+      "source": ".omx/reports/m28p-audit.json",
+      "summary": "Final audit reports zero priority issues for all 28 canonical M28P main pages.",
+      "page_issues": [],
+      "checks": {
+        "meaningful_context_image": true,
+        "global_recognition": true,
+        "reading_writing": true,
+        "syllabic_segmentation": true,
+        "recombination": true,
+        "sound_letter": true,
+        "new_word_generalization": true,
+        "phrases_texts": true,
+        "quick_verification": true,
+        "anti_pure_visual": true
+      }
+    },
+    {
+      "source": ".omx/reports/m28p-http-evidence.json",
+      "summary": "HTTP local status 200, 44347 bytes, page opened and includes M28P discovery section."
+    },
+    {
+      "source": ".omx/reports/m28p-js-syntax-evidence.json",
+      "summary": "node --check passed for inline JavaScript extracted from the page."
+    },
+    {
+      "source": "activities/dedo/index.html",
+      "snippet": "Descobrir para além da palavra — Não vamos só decorar a palavra. Vamos descobrir sílabas, sons e letras, formar uma palavra nova e escrever uma frase curta."
+    },
+    {
+      "source": "activities/dedo/teacher.md",
+      "snippet": "Princípio M28P — evitar uso puramente visual"
+    },
+    {
+      "source": "activities/dedo/proofread-v1.json",
+      "summary": "Proofread report pass true with pt-PT AO90 and M28P evidence."
+    }
+  ],
+  "acceptance_checks": [
+    {
+      "check": "canonical M28P page scoped",
+      "pass": true
+    },
+    {
+      "check": "docs/m28p.md essentials represented",
+      "pass": true
+    },
+    {
+      "check": "anti-pure-visual principle present",
+      "pass": true
+    },
+    {
+      "check": "offline HTML scan passed",
+      "pass": true
+    },
+    {
+      "check": "HTTP local load passed",
+      "pass": true
+    },
+    {
+      "check": "proofread considered",
+      "pass": true
+    }
+  ],
+  "limitations": [
+    "Browser console was not inspected with Playwright; compensated with HTTP load, offline dependency scan, and static artifact checks."
+  ]
+}

@@ -6,19 +6,27 @@
 
 ---
 
-## Objectivos de aprendizagem
+## Objetivos de aprendizagem
 
 - Reconhecer globalmente a palavra 'menina' associando-a à imagem correspondente
 - Segmentar a palavra 'menina' nas sílabas me-ni-na e reconstruí-la a partir de sílabas desordenadas
 - Recombinar sílabas da palavra 'menina' para formar novas palavras (ex: mina)
 - Utilizar a palavra 'menina' numa frase simples, oralmente e por escrito
 
+## Princípio M28P — evitar uso puramente visual
+
+Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.
+
+- **Som-letra/grafofonémica:** pedir que a criança diga que som ou letra observa em 'menina'.
+- **Generalização:** pedir uma palavra nova com sílabas conhecidas e uma frase curta.
+- **Verificação rápida:** observar palavra-alvo, sílabas, palavra nova e frase/frase oral.
+
 ## Materiais
 
 - Tablet ou computador com browser (1 por aluno ou par)
 - Cartaz A3 com imagem de menina e palavra 'menina'
 - Cartões de sílabas manipuláveis: me, ni, na
-- Quadro interactivo ou quadro branco
+- Quadro interativo ou quadro branco
 
 ## Alinhamento MEM
 
@@ -48,10 +56,10 @@
 **Compreender:** O aluno reconhece a palavra 'menina' como um todo visual, distinguindo-a de outras palavras. Associa a forma escrita à imagem e ao som, construindo o reconhecimento global.
 
 **Constraint:** Apenas a palavra 'menina' corresponde à imagem — o aluno descobre a correspondência imagem↔palavra pela experimentação
-**Assessment:** O aluno selecciona a palavra 'menina' correctamente entre 3 opções em duas rondas consecutivas
+**Assessment:** O aluno seleciona a palavra 'menina' correctamente entre 3 opções em duas rondas consecutivas
 
 **Diferenciação:**
-- 🟢 Apoio: 2 opções apenas (menina vs. boneca); imagem com seta a apontar; áudio da palavra antes de seleccionar
+- 🟢 Apoio: 2 opções apenas (menina vs. boneca); imagem com seta a apontar; áudio da palavra antes de selecionar
 - 🟡 Intermédio: 3 opções; imagem disponível como apoio; uma tentativa adicional se errar
 - 🔴 Desafio: 4 opções (incluindo 'mãe' — palavra visualmente próxima); sem áudio prévio; resposta na 1.ª tentativa
 

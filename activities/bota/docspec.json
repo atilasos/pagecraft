@@ -4,14 +4,19 @@
   "duration": 45,
   "word": "bota",
   "order": 6,
-  "syllables": ["bo", "ta"],
+  "syllables": [
+    "bo",
+    "ta"
+  ],
   "theme": "vestuário",
   "sentence": "A bota faz pum pum.",
   "objectives": [
     "Reconhecer a palavra 'bota' globalmente, associando-a à imagem e ao som",
     "Segmentar a palavra 'bota' nas sílabas 'bo' e 'ta', identificando duas sílabas",
     "Recombinar as sílabas de 'bota' para distinguir combinações reais de não-palavras",
-    "Usar a palavra 'bota' numa frase simples, oral ou escrita"
+    "Usar a palavra 'bota' numa frase simples, oral ou escrita",
+    "Descobrir que 'bota' não é só uma forma para memorizar: tem sílabas, sons/letras e pode ajudar a ler palavras novas.",
+    "Ler uma palavra nova com sílabas conhecidas de 'bota' e escrever uma frase curta com apoio."
   ],
   "curriculum": {
     "ae": [
@@ -49,26 +54,46 @@
       "Trabalho curricular comparticipado",
       "Circuitos de comunicação"
     ],
-    "instruments": ["PIT", "mapa de tarefas", "diário de turma"],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas",
+      "diário de turma"
+    ],
     "socialOrganization": "individual (blocos 1-3: 15min) → pares (blocos 4-5: 12min) → grupo 3-4 (bloco maker/extensão: 10min) → turma (bloco 7-8: 8min)"
   },
   "materials": [
     "Tablet ou computador com browser (1 por aluno ou par)",
     "Cartões de sílabas físicos: 'bo' e 'ta' (impressão ou cartolina)",
     "Lápis e ficha de escrita guiada (opcional, papel A5)",
-    "Quadro interactivo para partilha final",
+    "Quadro interativo para partilha final",
     "Peluche ou brinquedo 'bota' de palco (opcional, motivação)"
   ],
   "phonologicalFocus": {
     "targetWord": "bota",
-    "syllables": ["bo", "ta"],
+    "syllables": [
+      "bo",
+      "ta"
+    ],
     "syllableCount": 2,
     "stressedSyllable": "bo",
     "initialSound": "b",
-    "knownSyllables": ["ta"],
-    "newSyllables": ["bo"],
-    "safeNewWords": ["bola", "bolo", "boca", "taco", "tapete"],
-    "invalidCombinations": ["tabo", "taboa"],
+    "knownSyllables": [
+      "ta"
+    ],
+    "newSyllables": [
+      "bo"
+    ],
+    "safeNewWords": [
+      "bola",
+      "bolo",
+      "boca",
+      "taco",
+      "tapete"
+    ],
+    "invalidCombinations": [
+      "tabo",
+      "taboa"
+    ],
     "recombinationNote": "Inverter 'bo'+'ta' dá 'tabo' — não é uma palavra portuguesa; explorar esta descoberta como Constraint da unidade 4"
   },
   "units": [
@@ -77,8 +102,24 @@
       "textDescription": "O aluno encontra a palavra 'bota' inserida numa micro-história visual concreta: uma criança que calça botas para ir à chuva e descobre que as botas fazem um som engraçado ('pum pum') ao pisar poças. A palavra surge sempre acompanhada da imagem da bota. O objetivo é criar contexto emocional e semântico antes de qualquer análise formal.",
       "interaction": {
         "state": [
-          { "name": "cenanActiva", "type": "toggle", "options": ["escondida", "revelada"], "default": "escondida" },
-          { "name": "palavraDestacada", "type": "toggle", "options": ["nao", "sim"], "default": "nao" }
+          {
+            "name": "cenanActiva",
+            "type": "toggle",
+            "options": [
+              "escondida",
+              "revelada"
+            ],
+            "default": "escondida"
+          },
+          {
+            "name": "palavraDestacada",
+            "type": "toggle",
+            "options": [
+              "nao",
+              "sim"
+            ],
+            "default": "nao"
+          }
         ],
         "render": "Ilustração colorida de uma criança com botas a pisar uma poça de chuva; texto da micro-história em caixa lateral ('A Marta calça a bota. A bota faz pum pum!'); botão 'Descobre a palavra' que sublinha e amplia a palavra 'bota' na frase com animação de bounce.",
         "transition": "Clique em 'Descobre a palavra' → a palavra 'bota' na frase fica sublinhada e ampliada; imagem da bota pulsa ligeiramente; som da palavra 'bota' reproduzido (opcional TTS).",
@@ -94,16 +135,33 @@
     },
     {
       "summary": "Reconhecimento global — ver, ouvir, associar",
-      "textDescription": "O aluno vê a palavra 'bota' isolada em letra grande e é convidado a associá-la à imagem correcta entre três opções (bota, sapato, meia). O objectivo é consolidar o reconhecimento global da palavra antes de a analisar em partes. A associação imagem↔palavra é directa e imediata.",
+      "textDescription": "O aluno vê a palavra 'bota' isolada em letra grande e é convidado a associá-la à imagem correcta entre três opções (bota, sapato, meia). O objetivo é consolidar o reconhecimento global da palavra antes de a analisar em partes. A associação imagem↔palavra é directa e imediata.",
       "interaction": {
         "state": [
-          { "name": "seleccionado", "type": "quiz", "options": ["bota", "sapato", "meia"], "default": null },
-          { "name": "respostaCorrectaMostrada", "type": "toggle", "options": ["nao", "sim"], "default": "nao" }
+          {
+            "name": "selecionado",
+            "type": "quiz",
+            "options": [
+              "bota",
+              "sapato",
+              "meia"
+            ],
+            "default": null
+          },
+          {
+            "name": "respostaCorrectaMostrada",
+            "type": "toggle",
+            "options": [
+              "nao",
+              "sim"
+            ],
+            "default": "nao"
+          }
         ],
         "render": "Palavra 'bota' em tipografia grande (sem serifa, 72px) no topo; três imagens abaixo (bota, sapato, meia) em cartões clicáveis; após selecção, feedback imediato (✓ verde ou âmbar); botão 'Confirmar'.",
         "transition": "Clicar num cartão → cartão fica realçado; clicar 'Confirmar' → feedback mostrado; se correcto, animação de confetti subtil; se errado, cartão oscila levemente e palavra correcta destacada.",
         "constraint": "A palavra 'bota' tem uma forma visual única que a distingue de 'sapato' e 'meia' — o reconhecimento é global, não letra a letra.",
-        "assessment": "O aluno selecciona a imagem correcta correspondente à palavra 'bota' em pelo menos 2 de 3 tentativas (ordem das imagens muda)."
+        "assessment": "O aluno seleciona a imagem correcta correspondente à palavra 'bota' em pelo menos 2 de 3 tentativas (ordem das imagens muda)."
       },
       "differentiation": {
         "support": "🟢 Apenas 2 opções (bota e meia); imagens muito diferentes em tamanho e cor; palavra 'bota' fica a piscar ao lado da imagem correcta após 5 segundos sem resposta.",
@@ -114,26 +172,62 @@
     },
     {
       "summary": "Segmentação silábica — dividir 'bota' em 'bo' + 'ta'",
-      "textDescription": "O aluno aprende a dividir a palavra 'bota' em duas sílabas: 'bo' e 'ta'. A tarefa central é arrastar cada sílaba para a posição correcta na palavra, acompanhada de batimento de palmas ou toque (tap) para cada sílaba. O aluno deve perceber que 'bota' tem exactamente 2 partes.",
+      "textDescription": "O aluno aprende a dividir a palavra 'bota' em duas sílabas: 'bo' e 'ta'. A tarefa central é arrastar cada sílaba para a posição correcta na palavra, acompanhada de batimento de palmas ou toque (tap) para cada sílaba. O aluno deve perceber que 'bota' tem exactamente 2 partes. Observar a relação som-letra/grafofonémica: quando muda uma letra ou sílaba, muda o som e pode mudar a palavra.",
       "interaction": {
         "state": [
-          { "name": "silabas", "type": "drag", "options": ["bo", "ta", "ba", "to"], "default": [] },
-          { "name": "posicoes", "type": "sorting", "options": ["posicao_1", "posicao_2"], "default": [null, null] },
-          { "name": "palmadas", "type": "toggle", "options": ["0", "1", "2"], "default": "0" }
+          {
+            "name": "silabas",
+            "type": "drag",
+            "options": [
+              "bo",
+              "ta",
+              "ba",
+              "to"
+            ],
+            "default": []
+          },
+          {
+            "name": "posicoes",
+            "type": "sorting",
+            "options": [
+              "posicao_1",
+              "posicao_2"
+            ],
+            "default": [
+              null,
+              null
+            ]
+          },
+          {
+            "name": "palmadas",
+            "type": "toggle",
+            "options": [
+              "0",
+              "1",
+              "2"
+            ],
+            "default": "0"
+          }
         ],
         "render": "Palavra 'bota' em letra grande no topo; abaixo dois quadrados vazios com numeração (1 e 2); ao lado, 4 blocos de sílabas coloridas ('bo' em azul, 'ta' em laranja, 'ba' em cinzento, 'to' em cinzento) para arrastar; contador de palmas com animação de mão.",
         "transition": "Arrastar bloco de sílaba para quadrado → bloco encaixa com animação; botão 'Bater palmas' incrementa contador; quando ambas posições correctas preenchidas, animação de palavra completa com som.",
         "constraint": "A palavra 'bota' divide-se em exactamente 2 sílabas na ordem 'bo'→'ta'; sílabas fora de ordem ('ta'+'bo') formam uma sequência inválida em português.",
-        "assessment": "O aluno arrasta 'bo' e 'ta' para as posições correctas (1 e 2) sem ajuda, e indica com o contador que a palavra tem 2 sílabas."
+        "assessment": "O aluno arrasta 'bo' e 'ta' para as posições correctas (1 e 2) sem ajuda, e indica com o contador que a palavra tem 2 sílabas. A criança aponta uma relação som-letra e diz o que muda no som."
       },
       "maker": {
         "type": "unplugged",
         "challenge": "Com cartões físicos das sílabas 'bo' e 'ta', o aluno dispõe-os na mesa e bate palmas enquanto diz cada sílaba em voz alta. Depois tenta formar outras palavras com esses cartões.",
-        "materials": ["Cartões impressos: 'bo' (azul) e 'ta' (laranja)", "Mesa ou chão limpo"],
+        "materials": [
+          "Cartões impressos: 'bo' (azul) e 'ta' (laranja)",
+          "Mesa ou chão limpo"
+        ],
         "groupSize": "2",
         "connection": "A mesma separação feita no ecrã é repetida fisicamente com os cartões — o abstracto digital torna-se concreto e manipulável.",
         "communication": "Par apresenta as suas combinações à turma: 'Encontrámos bota e... tentámos tabo mas não é uma palavra!'",
-        "alternatives": ["Sem cartões: escrever sílabas em pedaços de papel dobrado", "Usar blocos de Lego com etiquetas coladas"]
+        "alternatives": [
+          "Sem cartões: escrever sílabas em pedaços de papel dobrado",
+          "Usar blocos de Lego com etiquetas coladas"
+        ]
       },
       "differentiation": {
         "support": "🟢 Apenas os blocos 'bo' e 'ta' disponíveis (sem distractores); posições com seta indicativa; professor modela primeiro.",
@@ -144,26 +238,58 @@
     },
     {
       "summary": "Recombinação — novas palavras com 'bo' e 'ta'",
-      "textDescription": "O aluno explora o que acontece quando as sílabas 'bo' e 'ta' se combinam com outras sílabas conhecidas: 'bola', 'bolo', 'boca', 'taco', 'tapete'. A tarefa é distinguir combinações que formam palavras reais de combinações sem sentido. Esta é a descoberta crítica do método: as sílabas são blocos reutilizáveis.",
+      "textDescription": "O aluno explora o que acontece quando as sílabas 'bo' e 'ta' se combinam com outras sílabas conhecidas: 'bola', 'bolo', 'boca', 'taco', 'tapete'. A tarefa é distinguir combinações que formam palavras reais de combinações sem sentido. Esta é a descoberta crítica do método: as sílabas são blocos reutilizáveis. Observar a relação som-letra/grafofonémica: quando muda uma letra ou sílaba, muda o som e pode mudar a palavra.",
       "interaction": {
         "state": [
-          { "name": "combinacaoActiva", "type": "drag", "options": ["bo", "ta", "la", "co", "ca", "pe", "te", "lo"], "default": [] },
-          { "name": "verificada", "type": "quiz", "options": ["palavra real", "não é palavra"], "default": null },
-          { "name": "palavrasEncontradas", "type": "derived", "derivedFrom": "lista de combinações correctas validadas" }
+          {
+            "name": "combinacaoActiva",
+            "type": "drag",
+            "options": [
+              "bo",
+              "ta",
+              "la",
+              "co",
+              "ca",
+              "pe",
+              "te",
+              "lo"
+            ],
+            "default": []
+          },
+          {
+            "name": "verificada",
+            "type": "quiz",
+            "options": [
+              "palavra real",
+              "não é palavra"
+            ],
+            "default": null
+          },
+          {
+            "name": "palavrasEncontradas",
+            "type": "derived",
+            "derivedFrom": "lista de combinações correctas validadas"
+          }
         ],
         "render": "Zona de construção central com dois slots; banco de sílabas à esquerda com blocos coloridos; botão 'É uma palavra?' para verificar; lista de palavras encontradas cresce à direita com ícone de estrela por cada nova palavra real.",
         "transition": "Arrastar sílabas para slots → mostrar combinação; clicar 'É uma palavra?' → feedback com definição simples se for real, ou sinal âmbar se não for; lista actualiza.",
         "constraint": "Nem toda a combinação de sílabas forma uma palavra portuguesa válida — a ordem e a combinação específica importam. 'bo'+'ta' = real; 'ta'+'bo' = não existe.",
-        "assessment": "O aluno encontra pelo menos 3 palavras reais usando 'bo' ou 'ta' e verbaliza: 'bo+la = bola, isso existe!'"
+        "assessment": "O aluno encontra pelo menos 3 palavras reais usando 'bo' ou 'ta' e verbaliza: 'bo+la = bola, isso existe!' A criança aponta uma relação som-letra e diz o que muda no som."
       },
       "maker": {
         "type": "whiteboard",
         "challenge": "Em grupo, criar um 'Mapa das Sílabas' no quadro ou em cartolina: colocar 'bo' e 'ta' no centro e desenhar setas para todas as palavras encontradas. Ilustrar cada palavra com um desenho rápido.",
-        "materials": ["Quadro ou cartolina A2", "Marcadores coloridos", "Cartões de sílabas físicos"],
+        "materials": [
+          "Quadro ou cartolina A2",
+          "Marcadores coloridos",
+          "Cartões de sílabas físicos"
+        ],
         "groupSize": "3-4",
-        "connection": "O mapa visual replica a estrutura de recombinação explorada no ecrã, tornando-a visível e colectiva.",
+        "connection": "O mapa visual replica a estrutura de recombinação explorada no ecrã, tornando-a visível e coletiva.",
         "communication": "Grupo apresenta o Mapa das Sílabas à turma e lê as palavras encontradas em voz alta.",
-        "alternatives": ["Sem quadro: folha A3 com post-its de sílabas reposicionáveis"]
+        "alternatives": [
+          "Sem quadro: folha A3 com post-its de sílabas reposicionáveis"
+        ]
       },
       "differentiation": {
         "support": "🟢 Apenas 4 sílabas disponíveis; combinações válidas já parcialmente formadas (falta 1 sílaba); professor confirma cada tentativa.",
@@ -174,17 +300,40 @@
     },
     {
       "summary": "Leitura e escrita guiada — completar e copiar 'bota'",
-      "textDescription": "O aluno pratica a leitura e a escrita da palavra 'bota' através de tarefas progressivas: primeiro selecciona a sílaba em falta, depois copia a palavra completa. O foco é a relação entre a forma oral (som) e a forma escrita (grafia), consolidando a memória visual da palavra.",
+      "textDescription": "O aluno pratica a leitura e a escrita da palavra 'bota' através de tarefas progressivas: primeiro seleciona a sílaba em falta, depois copia a palavra completa. O foco é a relação entre a forma oral (som) e a forma escrita (grafia), consolidando a memória visual da palavra. Observar a relação som-letra/grafofonémica: quando muda uma letra ou sílaba, muda o som e pode mudar a palavra.",
       "interaction": {
         "state": [
-          { "name": "silabaMissing", "type": "quiz", "options": ["bo", "ba", "bu", "bi"], "default": null },
-          { "name": "palavraEscrita", "type": "canvas", "default": "" },
-          { "name": "fase", "type": "toggle", "options": ["completar", "copiar", "feito"], "default": "completar" }
+          {
+            "name": "silabaMissing",
+            "type": "quiz",
+            "options": [
+              "bo",
+              "ba",
+              "bu",
+              "bi"
+            ],
+            "default": null
+          },
+          {
+            "name": "palavraEscrita",
+            "type": "canvas",
+            "default": ""
+          },
+          {
+            "name": "fase",
+            "type": "toggle",
+            "options": [
+              "completar",
+              "copiar",
+              "feito"
+            ],
+            "default": "completar"
+          }
         ],
         "render": "Fase 1 (completar): palavra '___ta' com quadrado vazio e 4 opções de sílaba clicáveis; Fase 2 (copiar): palavra 'bota' em letra pontilhada para traçar/copiar; área de escrita (input ou canvas básico); Fase 3: palavra completa com estrela de validação.",
-        "transition": "Seleccionar sílaba correcta → palavra completa com animação; botão 'Agora escreve' → avança para fase de cópia; input de texto ou traçado → validação por comparação com 'bota'.",
+        "transition": "Selecionar sílaba correcta → palavra completa com animação; botão 'Agora escreve' → avança para fase de cópia; input de texto ou traçado → validação por comparação com 'bota'.",
         "constraint": "A palavra 'bota' começa sempre com 'bo' — a sílaba inicial determina a identidade da palavra; trocar por 'ba', 'bu' ou 'bi' dá uma palavra diferente ou inexistente.",
-        "assessment": "O aluno selecciona 'bo' como sílaba inicial correcta e escreve (copia) 'bota' sem erro visível no traçado."
+        "assessment": "O aluno seleciona 'bo' como sílaba inicial correcta e escreve (copia) 'bota' sem erro visível no traçado. A criança aponta uma relação som-letra e diz o que muda no som."
       },
       "differentiation": {
         "support": "🟢 Apenas 2 opções de sílaba ('bo' e 'ba'); traçado com linha guia e pontos de início/fim; palavra modelo sempre visível.",
@@ -198,9 +347,29 @@
       "textDescription": "O aluno lê e reconstrói a frase 'A bota faz pum pum.' a partir de palavras desordenadas. Depois, no nível de desafio, cria a sua própria frase com 'bota'. O objetivo é consolidar a palavra no contexto frásico e desenvolver a consciência sintática elementar.",
       "interaction": {
         "state": [
-          { "name": "palavrasDisponiveis", "type": "sorting", "options": ["A", "bota", "faz", "pum", "pum", "."], "default": [] },
-          { "name": "fraseOrdenada", "type": "derived", "derivedFrom": "sequência das palavras arrastadas" },
-          { "name": "fraseCustom", "type": "canvas", "default": "" }
+          {
+            "name": "palavrasDisponiveis",
+            "type": "sorting",
+            "options": [
+              "A",
+              "bota",
+              "faz",
+              "pum",
+              "pum",
+              "."
+            ],
+            "default": []
+          },
+          {
+            "name": "fraseOrdenada",
+            "type": "derived",
+            "derivedFrom": "sequência das palavras arrastadas"
+          },
+          {
+            "name": "fraseCustom",
+            "type": "canvas",
+            "default": ""
+          }
         ],
         "render": "Banco de palavras desordenadas em cartões coloridos no topo; linha de construção de frase abaixo com slots numerados; botão 'Verificar frase'; no nível desafio, área de texto livre com prompt 'Escreve a tua frase com bota:'.",
         "transition": "Arrastar palavras para linha → palavras encaixam em ordem; clicar 'Verificar' → se ordem correcta, animação de bota a saltar com som 'pum pum'; se errada, cartões voltam ao banco.",
@@ -216,17 +385,35 @@
     },
     {
       "summary": "Mini-avaliação formativa — reconhecer, segmentar, reconstruir, usar",
-      "textDescription": "Sequência final de verificação com 4 tarefas observáveis: (1) reconhecer a palavra 'bota' entre 3 opções escritas; (2) indicar o número de sílabas; (3) reconstruir a palavra a partir de sílabas desordenadas; (4) completar uma frase com 'bota'. O professor observa e regista o desempenho.",
+      "textDescription": "Sequência final de verificação com 4 tarefas observáveis: (1) reconhecer a palavra 'bota' entre 3 opções escritas; (2) indicar o número de sílabas; (3) reconstruir a palavra a partir de sílabas desordenadas; (4) completar uma frase com 'bota'. O professor observa e regista o desempenho. Observar a relação som-letra/grafofonémica: quando muda uma letra ou sílaba, muda o som e pode mudar a palavra.",
       "interaction": {
         "state": [
-          { "name": "tarefaActual", "type": "toggle", "options": ["1", "2", "3", "4"], "default": "1" },
-          { "name": "respostas", "type": "derived", "derivedFrom": "array de 4 respostas booleanas" },
-          { "name": "pontuacao", "type": "derived", "derivedFrom": "sum(respostas)" }
+          {
+            "name": "tarefaActual",
+            "type": "toggle",
+            "options": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
+            "default": "1"
+          },
+          {
+            "name": "respostas",
+            "type": "derived",
+            "derivedFrom": "array de 4 respostas booleanas"
+          },
+          {
+            "name": "pontuacao",
+            "type": "derived",
+            "derivedFrom": "sum(respostas)"
+          }
         ],
         "render": "Barra de progresso no topo (4 passos); cada tarefa ocupa ecrã inteiro com instrução clara; Tarefa 1: 3 palavras escritas, clicar na correcta; Tarefa 2: contador de sílabas (1-4); Tarefa 3: arrastar 2 sílabas para reconstruir; Tarefa 4: completar frase 'A ___ faz pum pum.'; resultado final com estrelas (0-4).",
         "transition": "Resposta em cada tarefa → avançar automaticamente para próxima; no fim, mostrar resumo com estrelas e botão 'Ver o que aprendeste hoje'.",
         "constraint": "A mini-avaliação é formativa — o resultado informa o professor sobre o nível de consolidação, não classifica o aluno. 4/4 = consolidado; 2-3/4 = em progresso; <2 = necessita revisão.",
-        "assessment": "Critérios observáveis: (1) selecciona 'bota' entre 'bota', 'bola', 'boca' ✓; (2) indica 2 sílabas ✓; (3) reconstrói 'bota' de 'ta'+'bo' desordenados ✓; (4) completa 'A bota faz pum pum.' ✓"
+        "assessment": "Critérios observáveis: (1) seleciona 'bota' entre 'bota', 'bola', 'boca' ✓; (2) indica 2 sílabas ✓; (3) reconstrói 'bota' de 'ta'+'bo' desordenados ✓; (4) completa 'A bota faz pum pum.' ✓ A criança aponta uma relação som-letra e diz o que muda no som."
       },
       "differentiation": {
         "support": "🟢 Imagem de bota sempre presente; Tarefa 3 com sílabas já separadas claramente; Tarefa 4 com imagem como pista.",
@@ -240,23 +427,52 @@
       "textDescription": "Bloco livre para consolidação criativa: o aluno desenha a sua bota favorita e escreve (ou dita) uma legenda; ou em grupo, inventa uma história curta com a palavra 'bota'. Integra expressão plástica e oralidade na consolidação da leitura/escrita. Momento de partilha em circuito MEM.",
       "interaction": {
         "state": [
-          { "name": "modoExtensao", "type": "dropdown", "options": ["Desenhar a minha bota", "Inventar uma história", "Encontrar palavras com 'bo'", "Canção das botas"], "default": "Desenhar a minha bota" },
-          { "name": "producaoAluno", "type": "canvas", "default": "" },
-          { "name": "partilhado", "type": "toggle", "options": ["nao", "sim"], "default": "nao" }
+          {
+            "name": "modoExtensao",
+            "type": "dropdown",
+            "options": [
+              "Desenhar a minha bota",
+              "Inventar uma história",
+              "Encontrar palavras com 'bo'",
+              "Canção das botas"
+            ],
+            "default": "Desenhar a minha bota"
+          },
+          {
+            "name": "producaoAluno",
+            "type": "canvas",
+            "default": ""
+          },
+          {
+            "name": "partilhado",
+            "type": "toggle",
+            "options": [
+              "nao",
+              "sim"
+            ],
+            "default": "nao"
+          }
         ],
-        "render": "Cartão de escolha de actividade com ícones coloridos; área de trabalho adaptada ao modo seleccionado (canvas de desenho, área de texto, quiz de palavras, karaoke simples); botão 'Partilhar com a turma'.",
-        "transition": "Seleccionar modo → área de trabalho adapta-se; ao terminar, botão 'Partilhar' → produção enviada para quadro colectivo ou painel da turma.",
+        "render": "Cartão de escolha de atividade com ícones coloridos; área de trabalho adaptada ao modo selecionado (canvas de desenho, área de texto, quiz de palavras, karaoke simples); botão 'Partilhar com a turma'.",
+        "transition": "Selecionar modo → área de trabalho adapta-se; ao terminar, botão 'Partilhar' → produção enviada para quadro coletivo ou painel da turma.",
         "constraint": "A extensão liga a palavra 'bota' ao mundo real e à expressão pessoal — não existe resposta errada; o critério é participação genuína e uso contextualizado da palavra.",
-        "assessment": "O aluno utiliza a palavra 'bota' no contexto da actividade escolhida (legenda do desenho, história oral, lista de palavras com 'bo') de forma espontânea e contextualizada."
+        "assessment": "O aluno utiliza a palavra 'bota' no contexto da atividade escolhida (legenda do desenho, história oral, lista de palavras com 'bo') de forma espontânea e contextualizada."
       },
       "maker": {
         "type": "unplugged",
         "challenge": "Com papel A4 e lápis de cor, cada aluno desenha a sua bota dos sonhos e escreve uma frase-legenda. Os desenhos são expostos na 'Galeria das Botas' da sala. Cada aluno lê a sua frase em voz alta.",
-        "materials": ["Papel A4", "Lápis de cor ou canetas", "Fita adesiva ou pioneses para galeria de parede"],
+        "materials": [
+          "Papel A4",
+          "Lápis de cor ou canetas",
+          "Fita adesiva ou pioneses para galeria de parede"
+        ],
         "groupSize": "individual → turma",
         "connection": "O desenho materializa o conceito visual explorado no ecrã; a legenda escrita demonstra a transferência da aprendizagem da palavra para produção autónoma.",
         "communication": "Galeria da turma: cada aluno apresenta o seu desenho em 30 segundos — 'A minha bota é... e faz...'",
-        "alternatives": ["Sem papel: desenhar no tablet com app de pintura simples", "Sem tempo: partilha rápida oral em círculo (cada aluno diz 1 frase com 'bota')"]
+        "alternatives": [
+          "Sem papel: desenhar no tablet com app de pintura simples",
+          "Sem tempo: partilha rápida oral em círculo (cada aluno diz 1 frase com 'bota')"
+        ]
       },
       "differentiation": {
         "support": "🟢 Desenho livre com modelo de bota para colorir; legenda apenas com a palavra 'bota' (não frase completa).",
@@ -266,7 +482,7 @@
       "duration": 6
     }
   ],
-  "sessionFlow": "0-4min: Bloco 1 — activação com micro-história; aluno encontra a palavra 'bota' → 4-8min: Bloco 2 — reconhecimento global (imagem↔palavra) → 8-14min: Bloco 3 — segmentação silábica + manipulação física com cartões → 14-21min: Bloco 4 — recombinação de sílabas (pares) → 21-27min: Bloco 5 — completar + copiar (individual) → 27-34min: Bloco 6 — frase desordenada → ordenar e ler → 34-39min: Bloco 7 — mini-avaliação formativa (4 tarefas) → 39-45min: Bloco 8 — extensão criativa + partilha (Galeria das Botas)",
+  "sessionFlow": "0-4min: Bloco 1 — ativação com micro-história; aluno encontra a palavra 'bota' → 4-8min: Bloco 2 — reconhecimento global (imagem↔palavra) → 8-14min: Bloco 3 — segmentação silábica + manipulação física com cartões → 14-21min: Bloco 4 — recombinação de sílabas (pares) → 21-27min: Bloco 5 — completar + copiar (individual) → 27-34min: Bloco 6 — frase desordenada → ordenar e ler → 34-39min: Bloco 7 — mini-avaliação formativa (4 tarefas) → 39-45min: Bloco 8 — extensão criativa + partilha (Galeria das Botas)",
   "assessmentSummary": {
     "observable": [
       "O aluno aponta/clica na palavra 'bota' entre 3 opções escritas correctamente",
@@ -287,5 +503,13 @@
   },
   "inheritedFrom": "m28p-docspec-mae-v1",
   "generatedAt": "2026-03-25",
-  "status": "ready-for-builder"
+  "status": "ready-for-builder",
+  "m28pMethodAlignment": {
+    "principle": "Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.",
+    "meaningfulEntry": "palavra-chave com imagem/contexto antes da análise",
+    "globalRecognition": "reconhecimento global é ponto de entrada, não fim da aprendizagem",
+    "codeWork": "consciência silábica e relação som-letra/grafofonémica",
+    "generalization": "ler palavra nova com sílabas conhecidas e escrever frase curta",
+    "quickVerification": "verificação rápida observa palavra-alvo, palavra nova e frase curta"
+  }
 }

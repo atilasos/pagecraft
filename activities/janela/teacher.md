@@ -6,18 +6,26 @@
 
 ---
 
-## Objectivos de aprendizagem
+## Objetivos de aprendizagem
 
 - Reconhecer a palavra 'janela' globalmente, associando imagem e forma escrita
 - Segmentar a palavra 'janela' nas sílabas ja-ne-la, identificando cada parte
 - Recombinar sílabas de 'janela' para formar novas palavras (ex: 'nela')
 - Usar a palavra 'janela' numa frase simples, oral ou escrita
 
+## Princípio M28P — evitar uso puramente visual
+
+Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.
+
+- **Som-letra/grafofonémica:** pedir que a criança diga que som ou letra observa em 'janela'.
+- **Generalização:** pedir uma palavra nova com sílabas conhecidas e uma frase curta.
+- **Verificação rápida:** observar palavra-alvo, sílabas, palavra nova e frase/frase oral.
+
 ## Materiais
 
 - Tablet ou computador com browser (1 por aluno ou par)
 - Cartões de sílabas físicos (ja / ne / la) — opcionais para apoio manipulativo
-- Quadro interactivo para apresentação colectiva
+- Quadro interativo para apresentação coletiva
 - Folha de registo ou caderno (para extensão de escrita)
 
 ## Alinhamento MEM
@@ -29,7 +37,7 @@
 
 ## Fluxo da sessão
 
-0-4min: Bloco 1 — Abertura contextual (imagem + micro-história, palavra em contexto) → 4-8min: Bloco 2 — Reconhecimento global (palavra entre 4 opções, sem análise silábica) → 8-15min: Bloco 3 — Segmentação silábica (arrastar ja/ne/la, bater palmas, actividade unplugged com cartões) → 15-22min: Bloco 4 — Recombinação (formar novas palavras, descobrir 'nela', distinguir válido/inválido) → 22-29min: Bloco 5 — Leitura e escrita guiada (completar palavra, copiar na zona de escrita) → 29-37min: Bloco 6 — Frase simples (construir frase com banco de palavras, partilha colectiva) → 37-41min: Bloco 7 — Mini-avaliação formativa (4 tarefas encadeadas, resultado com estrelas) → 41-51min: Bloco 8 — Extensão criativa (desenho / oralidade / escrita, janela de papel, mural de turma)
+0-4min: Bloco 1 — Abertura contextual (imagem + micro-história, palavra em contexto) → 4-8min: Bloco 2 — Reconhecimento global (palavra entre 4 opções, sem análise silábica) → 8-15min: Bloco 3 — Segmentação silábica (arrastar ja/ne/la, bater palmas, atividade unplugged com cartões) → 15-22min: Bloco 4 — Recombinação (formar novas palavras, descobrir 'nela', distinguir válido/inválido) → 22-29min: Bloco 5 — Leitura e escrita guiada (completar palavra, copiar na zona de escrita) → 29-37min: Bloco 6 — Frase simples (construir frase com banco de palavras, partilha coletiva) → 37-41min: Bloco 7 — Mini-avaliação formativa (4 tarefas encadeadas, resultado com estrelas) → 41-51min: Bloco 8 — Extensão criativa (desenho / oralidade / escrita, janela de papel, mural de turma)
 
 ## Unit 1: Abertura contextual — a janela na história da casa (4 min)
 
@@ -48,7 +56,7 @@
 **Compreender:** O aluno deve ser capaz de reconhecer a palavra 'janela' escrita entre outras palavras, associando-a à imagem correspondente. Treino de leitura global sem análise silábica ainda.
 
 **Constraint:** A forma escrita 'janela' representa sempre o mesmo objeto — o aluno descobre que a correspondência é consistente
-**Assessment:** O aluno selecciona a palavra 'janela' correctamente entre 3 distratores, sem ajuda, em 2 tentativas ou menos
+**Assessment:** O aluno seleciona a palavra 'janela' correctamente entre 3 distratores, sem ajuda, em 2 tentativas ou menos
 
 **Diferenciação:**
 - 🟢 Apoio: 🟢 Apenas 2 opções (janela / porta); imagem com seta indicativa; possibilidade de ouvir cada palavra antes de escolher
@@ -70,7 +78,7 @@
 ### 🛠️ Maker — Unplugged
 - **Desafio:** Usa os cartões de sílabas físicos (ja / ne / la). Espalha-os na mesa e ordena-os para formar 'janela'. Depois troca com o colega: um esconde uma sílaba e o outro descobre qual falta.
 - **Grupo:** 2
-- **Ligação:** Depois de fazer a actividade digital de arrastar, os alunos repetem fisicamente com cartões — o gesto motor reforça a memória da segmentação
+- **Ligação:** Depois de fazer a atividade digital de arrastar, os alunos repetem fisicamente com cartões — o gesto motor reforça a memória da segmentação
 - **Comunicação:** Cada par mostra ao grupo como ordenou os cartões e diz a palavra em voz alta, sílaba por sílaba
 - **Alternativas:** Sem cartões: escrever cada sílaba num post-it e ordenar na carteira
 
@@ -111,9 +119,9 @@
 - 🔴 Desafio: 🔴 Sem banco de palavras — campo de escrita livre; aluno escreve 2 frases diferentes com 'janela'; uma das frases deve ser uma pergunta
 
 ### 🛠️ Maker — Whiteboard
-- **Desafio:** Cada aluno ou par partilha a sua frase com 'janela' no quadro interactivo. A turma vota na frase mais criativa levantando a mão. As frases ficam visíveis num mural colectivo.
+- **Desafio:** Cada aluno ou par partilha a sua frase com 'janela' no quadro interativo. A turma vota na frase mais criativa levantando a mão. As frases ficam visíveis num mural coletivo.
 - **Grupo:** turma
-- **Ligação:** As frases construídas digitalmente são apresentadas à turma — o digital alimenta a comunicação colectiva
+- **Ligação:** As frases construídas digitalmente são apresentadas à turma — o digital alimenta a comunicação coletiva
 - **Comunicação:** Cada aluno lê a sua frase em voz alta; turma repete em coro; frases são guardadas num mural de turma (circuito de comunicação MEM)
 - **Alternativas:** Sem quadro: cada aluno escreve a frase num cartão e coloca no placard da sala
 

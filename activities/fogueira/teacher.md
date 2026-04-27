@@ -6,12 +6,20 @@
 
 ---
 
-## Objectivos de aprendizagem
+## Objetivos de aprendizagem
 
 - Reconhecer globalmente a palavra 'fogueira' e associá-la à sua imagem
 - Segmentar 'fogueira' em sílabas (fo-guei-ra) identificando o dígrafo 'gu' e o ditongo 'ei'
 - Recombinar sílabas para formar palavras novas
 - Usar a palavra 'fogueira' numa frase simples oral e escrita
+
+## Princípio M28P — evitar uso puramente visual
+
+Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.
+
+- **Som-letra/grafofonémica:** pedir que a criança diga que som ou letra observa em 'fogueira'.
+- **Generalização:** pedir uma palavra nova com sílabas conhecidas e uma frase curta.
+- **Verificação rápida:** observar palavra-alvo, sílabas, palavra nova e frase/frase oral.
 
 ## Materiais
 

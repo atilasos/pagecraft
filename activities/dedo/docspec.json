@@ -6,7 +6,9 @@
     "Reconhecer globalmente a palavra 'dedo' e associá-la à imagem e ao tema corpo humano",
     "Segmentar 'dedo' nas sílabas 'de' e 'do', identificando cada sílaba com a sua cor",
     "Recombinar as sílabas aprendidas (de, do, me, na, ni, u, va) para formar novas palavras ('medo', 'nado')",
-    "Ler e completar a frase 'O dedo aponta.' reconhecendo a palavra no contexto"
+    "Ler e completar a frase 'O dedo aponta.' reconhecendo a palavra no contexto",
+    "Descobrir que 'dedo' não é só uma forma para memorizar: tem sílabas, sons/letras e pode ajudar a ler palavras novas.",
+    "Ler uma palavra nova com sílabas conhecidas de 'dedo' e escrever uma frase curta com apoio."
   ],
   "curriculum": {
     "ae": [
@@ -50,7 +52,11 @@
       "Trabalho curricular comparticipado",
       "TEA (Trabalho de Estudo Autónomo)"
     ],
-    "instruments": ["PIT", "cartão de palavra (dedo)", "mural de frases da turma"],
+    "instruments": [
+      "PIT",
+      "cartão de palavra (dedo)",
+      "mural de frases da turma"
+    ],
     "socialOrganization": "individual (exploração e mini-avaliação) → pares (recombinação silábica e maker unplugged) → turma (comunicação da frase no mural)"
   },
   "materials": [
@@ -67,8 +73,20 @@
       "textDescription": "O aluno é introduzido à palavra 'dedo' através de uma micro-história e imagem contextualizada: uma criança aponta para a janela com o dedo indicador. A palavra aparece escrita junto da imagem. O objetivo é ativar conhecimento prévio sobre partes do corpo e criar um contexto narrativo concreto para a palavra.",
       "interaction": {
         "state": [
-          { "name": "cena", "type": "toggle", "options": ["imagem", "imagem+palavra"], "default": "imagem" },
-          { "name": "palavraVisivel", "type": "derived", "derivedFrom": "cena === 'imagem+palavra'" }
+          {
+            "name": "cena",
+            "type": "toggle",
+            "options": [
+              "imagem",
+              "imagem+palavra"
+            ],
+            "default": "imagem"
+          },
+          {
+            "name": "palavraVisivel",
+            "type": "derived",
+            "derivedFrom": "cena === 'imagem+palavra'"
+          }
         ],
         "render": "Imagem grande de uma criança a apontar com o dedo indicador para uma janela onde se vê um pássaro; texto da micro-história em caixa de texto: 'O Tomás viu um pássaro na janela. Apontou com o dedo. O dedo aponta.'; botão 'Mostrar palavra' revela a palavra 'dedo' em destaque junto ao dedo na imagem, com tipografia grande sem serifa.",
         "transition": "Clicar em 'Mostrar palavra' → palavra 'dedo' aparece em destaque junto ao dedo na imagem com animação suave de fade-in; palavra permanece visível.",
@@ -88,11 +106,47 @@
       "textDescription": "O aluno reconhece a palavra 'dedo' entre outras palavras visualmente semelhantes, reforçando a leitura global. Treino de discriminação visual da forma da palavra com distratores fonologicamente próximos.",
       "interaction": {
         "state": [
-          { "name": "ronda", "type": "derived", "derivedFrom": "1" },
-          { "name": "opcoes_ronda1", "type": "quiz", "options": ["dedo", "dado", "dono"], "default": null },
-          { "name": "opcoes_ronda2", "type": "quiz", "options": ["dedo", "dote", "dedo"], "default": null },
-          { "name": "opcoes_ronda3", "type": "quiz", "options": ["dedo", "dado", "demo", "dono"], "default": null },
-          { "name": "respostasCorretas", "type": "derived", "derivedFrom": "0" }
+          {
+            "name": "ronda",
+            "type": "derived",
+            "derivedFrom": "1"
+          },
+          {
+            "name": "opcoes_ronda1",
+            "type": "quiz",
+            "options": [
+              "dedo",
+              "dado",
+              "dono"
+            ],
+            "default": null
+          },
+          {
+            "name": "opcoes_ronda2",
+            "type": "quiz",
+            "options": [
+              "dedo",
+              "dote",
+              "dedo"
+            ],
+            "default": null
+          },
+          {
+            "name": "opcoes_ronda3",
+            "type": "quiz",
+            "options": [
+              "dedo",
+              "dado",
+              "demo",
+              "dono"
+            ],
+            "default": null
+          },
+          {
+            "name": "respostasCorretas",
+            "type": "derived",
+            "derivedFrom": "0"
+          }
         ],
         "render": "Imagem do dedo a apontar no topo; 3 cartões com palavras escritas em grande em baixo ('dedo', 'dado', 'dono' na primeira ronda); feedback imediato após seleção: ✓ verde claro ou ✗ âmbar; contador de rondas (1/3); barra de progresso.",
         "transition": "Clicar num cartão → feedback imediato (✓ verde ou ✗ âmbar com leve vibração); se correto, avança para próxima ronda; se errado, cartão treme e permite nova tentativa; após 3 rondas, resumo visual.",
@@ -112,12 +166,48 @@
       "textDescription": "O aluno divide a palavra 'dedo' nas suas duas sílabas — 'de' e 'do' — através de batimento de palmas e arrastamento de blocos de sílabas. Cada sílaba tem uma cor própria e consistente ao longo de toda a coleção: 'de' = azul, 'do' = laranja. O corpo (palmas) e o digital (arrastar) trabalham em conjunto.",
       "interaction": {
         "state": [
-          { "name": "palmasBatidas", "type": "derived", "derivedFrom": "0" },
-          { "name": "bloco_de", "type": "drag", "options": ["de"], "default": null },
-          { "name": "bloco_do", "type": "drag", "options": ["do"], "default": null },
-          { "name": "slot1", "type": "sorting", "options": ["slot1"], "default": null },
-          { "name": "slot2", "type": "sorting", "options": ["slot2"], "default": null },
-          { "name": "palavraCompleta", "type": "derived", "derivedFrom": "slot1 === 'de' && slot2 === 'do'" }
+          {
+            "name": "palmasBatidas",
+            "type": "derived",
+            "derivedFrom": "0"
+          },
+          {
+            "name": "bloco_de",
+            "type": "drag",
+            "options": [
+              "de"
+            ],
+            "default": null
+          },
+          {
+            "name": "bloco_do",
+            "type": "drag",
+            "options": [
+              "do"
+            ],
+            "default": null
+          },
+          {
+            "name": "slot1",
+            "type": "sorting",
+            "options": [
+              "slot1"
+            ],
+            "default": null
+          },
+          {
+            "name": "slot2",
+            "type": "sorting",
+            "options": [
+              "slot2"
+            ],
+            "default": null
+          },
+          {
+            "name": "palavraCompleta",
+            "type": "derived",
+            "derivedFrom": "slot1 === 'de' && slot2 === 'do'"
+          }
         ],
         "render": "Palavra 'dedo' escrita em grande no topo; abaixo, 2 slots vazios numerados (1, 2); à direita, 2 blocos coloridos arrastáveis: 'de' em azul, 'do' em laranja; botão de palmas (ícone 🤲) que ao ser clicado 2x anima as sílabas em sincronismo e incrementa contador; quando slots preenchidos corretamente, palavra recomposta com animação ✓.",
         "transition": "Clicar botão palmas 1ª vez → sílaba 'de' pisca azul; 2ª vez → sílaba 'do' pisca laranja; arrastar bloco 'de' para slot 1 e 'do' para slot 2 → palavra recomposta brilha com ✓ e som de sucesso.",
@@ -127,11 +217,19 @@
       "maker": {
         "type": "unplugged",
         "challenge": "Usando os dedos da mão, o aluno levanta 1 dedo para cada sílaba de 'dedo' enquanto diz 'de-do'. Em pares, experimenta com as palavras já aprendidas: quantas sílabas tem 'menina'? E 'uva'? E 'menino'? Regista num cartão com desenhos.",
-        "materials": ["As mãos do próprio aluno", "cartão de registo (opcional)", "lápis"],
+        "materials": [
+          "As mãos do próprio aluno",
+          "cartão de registo (opcional)",
+          "lápis"
+        ],
         "groupSize": "2",
         "connection": "A contagem com dedos físicos reforça a contagem de sílabas no ecrã — o corpo torna-se instrumento de contagem fonológica, ligando o digital ao concreto.",
         "communication": "Em pares, cada aluno diz uma palavra e o parceiro conta as sílabas com os dedos; partilham 1 descoberta com a turma.",
-        "alternatives": ["Palmas", "blocos de construção (1 bloco = 1 sílaba)", "mosaicos coloridos (azul e laranja)"]
+        "alternatives": [
+          "Palmas",
+          "blocos de construção (1 bloco = 1 sílaba)",
+          "mosaicos coloridos (azul e laranja)"
+        ]
       },
       "differentiation": {
         "support": "🟢 Sílabas já separadas visualmente na palavra 'de|do' com traço divisório; blocos pré-coloridos com pista de cor no slot correspondente; contador de palmas com animação passo a passo guiada.",
@@ -142,20 +240,67 @@
     },
     {
       "summary": "Recombinação silábica: formar novas palavras com 'de', 'do' e sílabas anteriores",
-      "textDescription": "O aluno usa as sílabas 'de' e 'do' em combinação com sílabas já aprendidas ('me', 'na', 'ni', 'u', 'va') para descobrir novas palavras reais: 'medo' (me+do) e 'nado' (na+do). Distingue combinações que formam palavras reais das que não existem em português.",
+      "textDescription": "O aluno usa as sílabas 'de' e 'do' em combinação com sílabas já aprendidas ('me', 'na', 'ni', 'u', 'va') para descobrir novas palavras reais: 'medo' (me+do) e 'nado' (na+do). Distingue combinações que formam palavras reais das que não existem em português. Ler também uma palavra nova com sílabas conhecidas, para mostrar generalização e não apenas memória visual.",
       "interaction": {
         "state": [
-          { "name": "silabas_disponiveis", "type": "drag", "options": ["me", "ni", "na", "u", "va", "de", "do"], "default": ["me", "ni", "na", "u", "va", "de", "do"] },
-          { "name": "slot1", "type": "sorting", "options": ["slot1"], "default": null },
-          { "name": "slot2", "type": "sorting", "options": ["slot2"], "default": null },
-          { "name": "palavraFormada", "type": "derived", "derivedFrom": "slot1 + slot2" },
-          { "name": "palavrasValidas", "type": "derived", "derivedFrom": "['medo', 'nado', 'dedo', 'nade', 'vade', 'deva', 'nave', 'udo', 'dome']" },
-          { "name": "palavrasEncontradas", "type": "derived", "derivedFrom": "[]" }
+          {
+            "name": "silabas_disponiveis",
+            "type": "drag",
+            "options": [
+              "me",
+              "ni",
+              "na",
+              "u",
+              "va",
+              "de",
+              "do"
+            ],
+            "default": [
+              "me",
+              "ni",
+              "na",
+              "u",
+              "va",
+              "de",
+              "do"
+            ]
+          },
+          {
+            "name": "slot1",
+            "type": "sorting",
+            "options": [
+              "slot1"
+            ],
+            "default": null
+          },
+          {
+            "name": "slot2",
+            "type": "sorting",
+            "options": [
+              "slot2"
+            ],
+            "default": null
+          },
+          {
+            "name": "palavraFormada",
+            "type": "derived",
+            "derivedFrom": "slot1 + slot2"
+          },
+          {
+            "name": "palavrasValidas",
+            "type": "derived",
+            "derivedFrom": "['medo', 'nado', 'dedo', 'nade', 'vade', 'deva', 'nave', 'udo', 'dome']"
+          },
+          {
+            "name": "palavrasEncontradas",
+            "type": "derived",
+            "derivedFrom": "[]"
+          }
         ],
         "render": "Painel superior com sílabas coloridas disponíveis como blocos arrastáveis (cores consistentes com segmentação: de=azul, do=laranja, me=verde, na=roxo, ni=rosa, u=amarelo, va=vermelho); 2 slots centrais grandes; após combinar, palavra formada exibida em grande — verde com ✓ 'Esta palavra existe!' ou âmbar com ✗ 'Esta combinação não é uma palavra em português.'; painel lateral 'Palavras que descobri' acumula sucessos com imagem associada.",
         "transition": "Arrastar 2 sílabas para os slots → palavra formada exibida em grande → feedback automático após 1 segundo → botão 'Tentar outra combinação' limpa os slots e devolve sílabas ao painel.",
         "constraint": "Nem todas as combinações de sílabas formam palavras do português. 'Medo' (me+do) e 'nado' (na+do) são palavras reais com significado; o aluno deve descobrir por tentativa e erro quais combinações funcionam.",
-        "assessment": "O aluno forma pelo menos 2 palavras reais ('medo' e 'nado') e consegue explicar oralmente o que cada uma significa; demonstra compreensão de que as sílabas podem formar palavras diferentes consoante a combinação."
+        "assessment": "O aluno forma pelo menos 2 palavras reais ('medo' e 'nado') e consegue explicar oralmente o que cada uma significa; demonstra compreensão de que as sílabas podem formar palavras diferentes consoante a combinação. A criança lê uma palavra nova e escreve uma frase curta sem copiar apenas."
       },
       "maker": null,
       "differentiation": {
@@ -170,12 +315,51 @@
       "textDescription": "O aluno pratica leitura e escrita guiada completando a palavra 'dedo' com a sílaba em falta, selecionando entre opções ou escrevendo-a. Foco na correspondência grafema-sílaba e na distinção entre 'de' e 'do'.",
       "interaction": {
         "state": [
-          { "name": "variacao", "type": "derived", "derivedFrom": "1" },
-          { "name": "palavraIncompleta_v1", "type": "quiz", "options": ["de__"], "default": "de__" },
-          { "name": "palavraIncompleta_v2", "type": "quiz", "options": ["__do"], "default": "__do" },
-          { "name": "palavraIncompleta_v3", "type": "quiz", "options": ["d__o"], "default": "d__o" },
-          { "name": "opcoesSilaba", "type": "quiz", "options": ["do", "da", "di", "du"], "default": null },
-          { "name": "respostaCorreta", "type": "derived", "derivedFrom": "false" }
+          {
+            "name": "variacao",
+            "type": "derived",
+            "derivedFrom": "1"
+          },
+          {
+            "name": "palavraIncompleta_v1",
+            "type": "quiz",
+            "options": [
+              "de__"
+            ],
+            "default": "de__"
+          },
+          {
+            "name": "palavraIncompleta_v2",
+            "type": "quiz",
+            "options": [
+              "__do"
+            ],
+            "default": "__do"
+          },
+          {
+            "name": "palavraIncompleta_v3",
+            "type": "quiz",
+            "options": [
+              "d__o"
+            ],
+            "default": "d__o"
+          },
+          {
+            "name": "opcoesSilaba",
+            "type": "quiz",
+            "options": [
+              "do",
+              "da",
+              "di",
+              "du"
+            ],
+            "default": null
+          },
+          {
+            "name": "respostaCorreta",
+            "type": "derived",
+            "derivedFrom": "false"
+          }
         ],
         "render": "Palavra incompleta exibida em grande (ex: 'de__') com imagem do dedo à esquerda; 4 opções de sílaba como botões coloridos para completar; após seleção correta, palavra completa com animação de 'encaixe' (peça que se encaixa) e leitura em voz alta via texto-para-fala; barra de progresso das 3 variações.",
         "transition": "Clicar na sílaba correta → sílaba encaixa no espaço com animação; palavra completa lida em voz alta; botão 'Próximo' avança para variação seguinte; clicar em sílaba errada → botão treme levemente, sem penalização.",
@@ -195,9 +379,32 @@
       "textDescription": "O aluno lê e reconstrói a frase 'O dedo aponta.' ordenando as suas palavras em cartões arrastáveis. Compreende a estrutura de uma frase simples, a função da palavra 'dedo' como parte do sujeito e a obrigatoriedade do ponto final.",
       "interaction": {
         "state": [
-          { "name": "palavras_frase", "type": "sorting", "options": ["O", "dedo", "aponta", "."], "default": ["aponta", "dedo", ".", "O"] },
-          { "name": "fraseOrdenada", "type": "derived", "derivedFrom": "palavras_frase.join(' ')" },
-          { "name": "fraseCorreta", "type": "derived", "derivedFrom": "fraseOrdenada === 'O dedo aponta .'" }
+          {
+            "name": "palavras_frase",
+            "type": "sorting",
+            "options": [
+              "O",
+              "dedo",
+              "aponta",
+              "."
+            ],
+            "default": [
+              "aponta",
+              "dedo",
+              ".",
+              "O"
+            ]
+          },
+          {
+            "name": "fraseOrdenada",
+            "type": "derived",
+            "derivedFrom": "palavras_frase.join(' ')"
+          },
+          {
+            "name": "fraseCorreta",
+            "type": "derived",
+            "derivedFrom": "fraseOrdenada === 'O dedo aponta .'"
+          }
         ],
         "render": "4 cartões com palavras desordenadas da frase (fundo colorido distinto por cartão); zona de montagem com 4 slots numerados; imagem da criança a apontar como apoio visual constante; após ordenação correta, frase escrita animada em verde e lida em voz alta com entoação natural.",
         "transition": "Arrastar cartões de palavras para os slots → frase vai sendo formada; quando completa e correta, animação de celebração subtil (confetti suave) + leitura em voz alta; botão 'Ouvir de novo' repete a leitura.",
@@ -207,11 +414,18 @@
       "maker": {
         "type": "unplugged",
         "challenge": "Com cartões de papel ou post-its, cada aluno ou par cria uma frase nova usando a palavra 'dedo'. Exemplos possíveis: 'O meu dedo é pequeno.', 'O dedo toca a mesa.', 'O dedo aponta a estrela.' A frase é escrita (ou ditada) e afixada no mural da turma.",
-        "materials": ["Cartões de papel A6 ou post-its", "caneta de feltro", "mural de frases da turma"],
+        "materials": [
+          "Cartões de papel A6 ou post-its",
+          "caneta de feltro",
+          "mural de frases da turma"
+        ],
         "groupSize": "2",
         "connection": "Após construir a frase digital por ordenação, o aluno cria uma versão física tangível e autoral — transita de reproduzir para produzir.",
         "communication": "Afixar as frases no 'mural de frases da turma' (instrumento de pilotagem MEM); leitura partilhada no final da sessão.",
-        "alternatives": ["Ditar a frase ao professor que a escreve no quadro", "usar cartões pré-escritos para reordenar fisicamente numa mesa"]
+        "alternatives": [
+          "Ditar a frase ao professor que a escreve no quadro",
+          "usar cartões pré-escritos para reordenar fisicamente numa mesa"
+        ]
       },
       "differentiation": {
         "support": "🟢 Frase com apenas 3 elementos ('O dedo aponta' sem ponto final); cartões com imagem de apoio em cada palavra; slots numerados com indicação clara de início ('começa com maiúscula') e fim.",
@@ -222,20 +436,67 @@
     },
     {
       "summary": "Mini-avaliação formativa: reconhecer, segmentar, reconstruir e usar",
-      "textDescription": "Verificação formativa dos 4 critérios observáveis do M28P para a palavra 'dedo': (1) reconhecer entre opções visuais, (2) indicar o número de sílabas, (3) reconstruir a partir de sílabas desordenadas, (4) identificar a frase correta com a palavra. Dados visíveis e registáveis pelo professor.",
+      "textDescription": "Verificação formativa dos 4 critérios observáveis do M28P para a palavra 'dedo': (1) reconhecer entre opções visuais, (2) indicar o número de sílabas, (3) reconstruir a partir de sílabas desordenadas, (4) identificar a frase correta com a palavra. Dados visíveis e registáveis pelo professor. Ler também uma palavra nova com sílabas conhecidas, para mostrar generalização e não apenas memória visual.",
       "interaction": {
         "state": [
-          { "name": "etapa", "type": "derived", "derivedFrom": "1" },
-          { "name": "resultado1", "type": "quiz", "options": ["dedo", "dado", "dono"], "default": null },
-          { "name": "resultado2_palmas", "type": "quiz", "options": ["1", "2", "3", "4"], "default": null },
-          { "name": "resultado3_slots", "type": "sorting", "options": ["do", "de"], "default": [null, null] },
-          { "name": "resultado4_frase", "type": "quiz", "options": ["O dedo aponta.", "O dado aponta.", "O dono aponta."], "default": null },
-          { "name": "resumoResultados", "type": "derived", "derivedFrom": "[resultado1, resultado2_palmas, resultado3_slots, resultado4_frase]" }
+          {
+            "name": "etapa",
+            "type": "derived",
+            "derivedFrom": "1"
+          },
+          {
+            "name": "resultado1",
+            "type": "quiz",
+            "options": [
+              "dedo",
+              "dado",
+              "dono"
+            ],
+            "default": null
+          },
+          {
+            "name": "resultado2_palmas",
+            "type": "quiz",
+            "options": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
+            "default": null
+          },
+          {
+            "name": "resultado3_slots",
+            "type": "sorting",
+            "options": [
+              "do",
+              "de"
+            ],
+            "default": [
+              null,
+              null
+            ]
+          },
+          {
+            "name": "resultado4_frase",
+            "type": "quiz",
+            "options": [
+              "O dedo aponta.",
+              "O dado aponta.",
+              "O dono aponta."
+            ],
+            "default": null
+          },
+          {
+            "name": "resumoResultados",
+            "type": "derived",
+            "derivedFrom": "[resultado1, resultado2_palmas, resultado3_slots, resultado4_frase]"
+          }
         ],
         "render": "4 etapas sequenciais apresentadas uma de cada vez com barra de progresso (1/4, 2/4, 3/4, 4/4): (1) escolher palavra correta entre 3 opções com imagem; (2) escolher quantas sílabas tem 'dedo' (botões 1/2/3/4); (3) arrastar sílabas 'do' e 'de' (desordenadas) para formar 'dedo'; (4) selecionar a frase correta com 'dedo'. No final: resumo visual com ✓/✗ por etapa e botão 'Ver resultados' para o professor.",
         "transition": "Completar cada etapa → avança automaticamente para a seguinte após 1,5 segundos (sem feedback imediato para não influenciar etapas seguintes); no final, resumo completo revelado com indicadores por etapa.",
         "constraint": "A mini-avaliação é individual e sequencial; o feedback é dado apenas no resumo final para garantir que cada resposta é independente das anteriores.",
-        "assessment": "O aluno demonstra os 4 critérios: (1) identifica 'dedo' corretamente entre 3 opções; (2) indica 2 sílabas; (3) reconstrói 'de-do' na ordem correta a partir de sílabas desordenadas; (4) seleciona a frase correta com 'dedo'."
+        "assessment": "O aluno demonstra os 4 critérios: (1) identifica 'dedo' corretamente entre 3 opções; (2) indica 2 sílabas; (3) reconstrói 'de-do' na ordem correta a partir de sílabas desordenadas; (4) seleciona a frase correta com 'dedo'. A criança lê uma palavra nova e escreve uma frase curta sem copiar apenas."
       },
       "maker": null,
       "differentiation": {
@@ -246,5 +507,13 @@
       "duration": 6
     }
   ],
-  "sessionFlow": "0-5min: Unit 1 — abertura contextual, micro-história e ativação (imagem + revelar palavra) → 5-10min: Unit 2 — reconhecimento global, discriminação visual entre 'dedo', 'dado', 'dono' (3 rondas) → 10-17min: Unit 3 — segmentação silábica 'de-do' com palmas + arrastar blocos + maker unplugged com dedos da mão em pares → 17-25min: Unit 4 — recombinação silábica livre para descobrir 'medo' e 'nado' → 25-32min: Unit 5 — leitura e escrita guiada, completar palavra em 3 variações → 32-39min: Unit 6 — ordenar frase 'O dedo aponta.' + maker mural de frases em pares → 39-45min: Unit 7 — mini-avaliação formativa individual, 4 critérios observáveis"
+  "sessionFlow": "0-5min: Unit 1 — abertura contextual, micro-história e ativação (imagem + revelar palavra) → 5-10min: Unit 2 — reconhecimento global, discriminação visual entre 'dedo', 'dado', 'dono' (3 rondas) → 10-17min: Unit 3 — segmentação silábica 'de-do' com palmas + arrastar blocos + maker unplugged com dedos da mão em pares → 17-25min: Unit 4 — recombinação silábica livre para descobrir 'medo' e 'nado' → 25-32min: Unit 5 — leitura e escrita guiada, completar palavra em 3 variações → 32-39min: Unit 6 — ordenar frase 'O dedo aponta.' + maker mural de frases em pares → 39-45min: Unit 7 — mini-avaliação formativa individual, 4 critérios observáveis",
+  "m28pMethodAlignment": {
+    "principle": "Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.",
+    "meaningfulEntry": "palavra-chave com imagem/contexto antes da análise",
+    "globalRecognition": "reconhecimento global é ponto de entrada, não fim da aprendizagem",
+    "codeWork": "consciência silábica e relação som-letra/grafofonémica",
+    "generalization": "ler palavra nova com sílabas conhecidas e escrever frase curta",
+    "quickVerification": "verificação rápida observa palavra-alvo, palavra nova e frase curta"
+  }
 }

@@ -6,12 +6,20 @@
 
 ---
 
-## Objectivos de aprendizagem
+## Objetivos de aprendizagem
 
 - Reconhecer globalmente a palavra 'cigarra' e associá-la à sua imagem
 - Segmentar 'cigarra' em sílabas (ci-gar-ra) identificando o 'c' antes de 'i' (som /s/) e o 'rr' duplo
 - Recombinar sílabas para formar palavras novas
 - Usar a palavra 'cigarra' numa frase simples oral e escrita
+
+## Princípio M28P — evitar uso puramente visual
+
+Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.
+
+- **Som-letra/grafofonémica:** pedir que a criança diga que som ou letra observa em 'cigarra'.
+- **Generalização:** pedir uma palavra nova com sílabas conhecidas e uma frase curta.
+- **Verificação rápida:** observar palavra-alvo, sílabas, palavra nova e frase/frase oral.
 
 ## Materiais
 

@@ -6,12 +6,20 @@
 
 ---
 
-## Objectivos de aprendizagem
+## Objetivos de aprendizagem
 
 - Reconhecer globalmente a palavra 'peixe' e associá-la à sua imagem
 - Segmentar 'peixe' em sílabas (pei-xe) identificando o ditongo 'ei'
 - Recombinar sílabas para formar palavras novas e distinguir palavra existente de não-palavra
 - Usar a palavra 'peixe' numa frase simples oral e escrita
+
+## Princípio M28P — evitar uso puramente visual
+
+Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.
+
+- **Som-letra/grafofonémica:** pedir que a criança diga que som ou letra observa em 'peixe'.
+- **Generalização:** pedir uma palavra nova com sílabas conhecidas e uma frase curta.
+- **Verificação rápida:** observar palavra-alvo, sílabas, palavra nova e frase/frase oral.
 
 ## Materiais
 
@@ -125,7 +133,7 @@
 
 ## Unit 8: Bloco 8 — Extensão: ilustrar, explorar oralmente e ligar ao mundo (8 min)
 
-**Compreender:** Actividade de extensão com 3 opções à escolha do aluno: (a) desenhar e legendar um peixe, (b) explorar oralmente características dos peixes como animais aquáticos (ligação ao Estudo do Meio), ou (c) desafio escrito de palavras com ditongo 'ei'. Adequado para TEA ou trabalho autónomo em ritmo diferenciado.
+**Compreender:** Atividade de extensão com 3 opções à escolha do aluno: (a) desenhar e legendar um peixe, (b) explorar oralmente características dos peixes como animais aquáticos (ligação ao Estudo do Meio), ou (c) desafio escrito de palavras com ditongo 'ei'. Adequado para TEA ou trabalho autónomo em ritmo diferenciado.
 
 **Constraint:** A extensão é autónoma e de escolha livre — o aluno decide o caminho ao seu ritmo; não há resposta errada, há produções com mais ou menos detalhe; o professor observa sem intervir salvo pedido
 **Assessment:** O aluno produz pelo menos 1 elemento observável: um desenho legendado com a palavra 'peixe', 2 respostas orais sobre características do animal, ou 3 palavras escritas com ditongo 'ei'

@@ -5,8 +5,10 @@
   "objectives": [
     "Reconhecer globalmente a palavra 'telhado' associando-a à imagem correspondente",
     "Segmentar a palavra 'telhado' nas sílabas te-lha-do e reconstruí-la a partir de sílabas desordenadas",
-    "Recombinar sílabas da palavra 'telhado' para explorar novas palavras (ex: tela, lado)",
-    "Utilizar a palavra 'telhado' numa frase simples, oralmente e por escrito"
+    "Recombinar sílabas da palavra 'telhado' para explorar novas palavras (ex: ecrã, lado)",
+    "Utilizar a palavra 'telhado' numa frase simples, oralmente e por escrito",
+    "Descobrir que 'telhado' não é só uma forma para memorizar: tem sílabas, sons/letras e pode ajudar a ler palavras novas.",
+    "Ler uma palavra nova com sílabas conhecidas de 'telhado' e escrever uma frase curta com apoio."
   ],
   "curriculum": {
     "ae": [
@@ -59,7 +61,7 @@
     "Tablet ou computador com browser (1 por aluno ou par)",
     "Cartaz A3 com imagem de telhado vermelho e palavra 'telhado'",
     "Cartões de sílabas manipuláveis: te, lha, do",
-    "Quadro interactivo ou quadro branco",
+    "Quadro interativo ou quadro branco",
     "Lápis de cor vermelho para extensão maker (opcional)"
   ],
   "units": [
@@ -68,18 +70,42 @@
       "textDescription": "O aluno ouve/lê uma micro-história ('A chuva bate no telhado vermelho da casa da avó. Pingam gotas. A família está quentinha lá dentro.') e observa a imagem de uma casa com telhado vermelho. A palavra 'telhado' surge em contexto significativo e afectivo antes de ser trabalhada isoladamente. O dígrafo 'lh' é introduzido naturalmente neste contexto.",
       "interaction": {
         "state": [
-          { "name": "cenaVisivel", "type": "toggle", "options": ["oculta", "visível"], "default": "oculta" },
-          { "name": "palavraDestacada", "type": "toggle", "options": ["normal", "destacada"], "default": "normal" },
-          { "name": "chuvaAnimada", "type": "toggle", "options": ["parada", "animada"], "default": "parada" }
+          {
+            "name": "cenaVisivel",
+            "type": "toggle",
+            "options": [
+              "oculta",
+              "visível"
+            ],
+            "default": "oculta"
+          },
+          {
+            "name": "palavraDestacada",
+            "type": "toggle",
+            "options": [
+              "normal",
+              "destacada"
+            ],
+            "default": "normal"
+          },
+          {
+            "name": "chuvaAnimada",
+            "type": "toggle",
+            "options": [
+              "parada",
+              "animada"
+            ],
+            "default": "parada"
+          }
         ],
-        "render": "Ilustração de uma casa com telhado vermelho, com nuvens e chuva animada no fundo; texto da micro-história por baixo com a palavra 'telhado' em destaque colorido (vermelho, a combinar com o telhado); botão para ouvir a história narrada; pequeno ícone de gota de chuva para activar a animação",
-        "transition": "Clicar na imagem revela a cena completa com animação de chuva → clicar na palavra 'telhado' no texto destaca-a com cor vermelha e áudio da pronúncia clara (incluindo o dígrafo 'lh') → clicar no ícone de gota activa/desactiva a animação de chuva",
+        "render": "Ilustração de uma casa com telhado vermelho, com nuvens e chuva animada no fundo; texto da micro-história por baixo com a palavra 'telhado' em destaque colorido (vermelho, a combinar com o telhado); botão para ouvir a história narrada; pequeno ícone de gota de chuva para ativar a animação",
+        "transition": "Clicar na imagem revela a cena completa com animação de chuva → clicar na palavra 'telhado' no texto destaca-a com cor vermelha e áudio da pronúncia clara (incluindo o dígrafo 'lh') → clicar no ícone de gota ativa/desativa a animação de chuva",
         "constraint": "A palavra escrita 'telhado' corresponde à parte da casa que está no topo e protege da chuva — o aluno descobre a ligação entre representação visual, escrita e significado concreto",
         "assessment": "O aluno aponta para a palavra 'telhado' no texto quando solicitado, repete-a oralmente com pronúncia correcta do dígrafo 'lh', e indica na imagem o que é o telhado"
       },
       "differentiation": {
         "support": "Imagem e palavra visíveis em simultâneo desde o início com seta a apontar do telhado para a palavra; narração automática sem necessidade de clicar; palavra pré-destacada com moldura vermelha",
-        "standard": "O aluno clica para revelar a cena e descobre a palavra destacada no texto após interacção",
+        "standard": "O aluno clica para revelar a cena e descobre a palavra destacada no texto após interação",
         "challenge": "Texto com 3 frases; o aluno deve encontrar todas as ocorrências da palavra 'telhado' no texto e clicar em cada uma; explica oralmente o que é um telhado e para que serve"
       },
       "duration": 5
@@ -89,17 +115,33 @@
       "textDescription": "O aluno reconhece a palavra 'telhado' como um todo visual, distinguindo-a de outras palavras com contornos semelhantes. Associa a forma escrita à imagem de um telhado e ao som, construindo o reconhecimento global. Atenção especial à palavra comprida com dígrafo 'lh' ao centro.",
       "interaction": {
         "state": [
-          { "name": "opcoesPalavras", "type": "quiz", "options": ["telhado", "telha", "janela"] },
-          { "name": "respostaSeleccionada", "type": "derived", "derivedFrom": "opcoesPalavras" },
-          { "name": "tentativas", "type": "derived", "derivedFrom": "count(cliques)" }
+          {
+            "name": "opcoesPalavras",
+            "type": "quiz",
+            "options": [
+              "telhado",
+              "telha",
+              "janela"
+            ]
+          },
+          {
+            "name": "respostaSelecionada",
+            "type": "derived",
+            "derivedFrom": "opcoesPalavras"
+          },
+          {
+            "name": "tentativas",
+            "type": "derived",
+            "derivedFrom": "count(cliques)"
+          }
         ],
-        "render": "Imagem do telhado vermelho no topo; 3 cartões-palavra dispostos horizontalmente (telhado, telha, janela); cada cartão tem fundo branco e tipografia grande sem serifa; feedback visual imediato (borda verde/âmbar); áudio com pronúncia ao seleccionar cada cartão",
+        "render": "Imagem do telhado vermelho no topo; 3 cartões-palavra dispostos horizontalmente (telhado, telha, janela); cada cartão tem fundo branco e tipografia grande sem serifa; feedback visual imediato (borda verde/âmbar); áudio com pronúncia ao selecionar cada cartão",
         "transition": "Clicar num cartão-palavra → se correcto ('telhado'), borda verde + som de confirmação + cartão amplia ligeiramente; se incorrecto, borda âmbar + som neutro + indicação para tentar novamente; após acerto, ronda 2 com palavras diferentes (telhado vs. tejado vs. telheiro)",
         "constraint": "Apenas a palavra 'telhado' corresponde à imagem — o aluno descobre a correspondência imagem↔palavra exacta pela observação da forma global, distinguindo-a de palavras visualmente próximas",
-        "assessment": "O aluno selecciona a palavra 'telhado' correctamente entre 3 opções em duas rondas consecutivas, incluindo distinção de 'telha' e 'telheiro'"
+        "assessment": "O aluno seleciona a palavra 'telhado' correctamente entre 3 opções em duas rondas consecutivas, incluindo distinção de 'telha' e 'telheiro'"
       },
       "differentiation": {
-        "support": "2 opções apenas (telhado vs. janela, muito diferentes visualmente); imagem com seta vermelha a apontar para o telhado; áudio da palavra antes de seleccionar",
+        "support": "2 opções apenas (telhado vs. janela, muito diferentes visualmente); imagem com seta vermelha a apontar para o telhado; áudio da palavra antes de selecionar",
         "standard": "3 opções incluindo palavra relacionada ('telha'); imagem disponível como apoio; uma tentativa adicional se errar",
         "challenge": "4 opções (telhado, telha, telheiro, tijolo); sem áudio prévio; deve identificar na primeira tentativa e explicar por que as outras estão erradas"
       },
@@ -110,10 +152,40 @@
       "textDescription": "O aluno divide a palavra 'telhado' em 3 sílabas (te-lha-do), contando-as com palmas e visualizando a separação com cores distintas. O dígrafo 'lh' fica unido na sílaba 'lha', reforçando que é um som único. Desenvolve a consciência fonológica e a percepção do dígrafo como unidade inseparável.",
       "interaction": {
         "state": [
-          { "name": "silabasSeparadas", "type": "toggle", "options": ["juntas", "separadas"], "default": "juntas" },
-          { "name": "contadorPalmas", "type": "slider", "range": [0, 5], "step": 1, "default": 0, "unit": "palmas" },
-          { "name": "silabaActiva", "type": "derived", "derivedFrom": "contadorPalmas <= 1 ? 'te' : contadorPalmas <= 2 ? 'lha' : 'do'" },
-          { "name": "digrafoVisivel", "type": "toggle", "options": ["oculto", "visível"], "default": "oculto" }
+          {
+            "name": "silabasSeparadas",
+            "type": "toggle",
+            "options": [
+              "juntas",
+              "separadas"
+            ],
+            "default": "juntas"
+          },
+          {
+            "name": "contadorPalmas",
+            "type": "slider",
+            "range": [
+              0,
+              5
+            ],
+            "step": 1,
+            "default": 0,
+            "unit": "palmas"
+          },
+          {
+            "name": "silabaActiva",
+            "type": "derived",
+            "derivedFrom": "contadorPalmas <= 1 ? 'te' : contadorPalmas <= 2 ? 'lha' : 'do'"
+          },
+          {
+            "name": "digrafoVisivel",
+            "type": "toggle",
+            "options": [
+              "oculto",
+              "visível"
+            ],
+            "default": "oculto"
+          }
         ],
         "render": "Palavra 'telhado' no centro em grande (tipografia 48px mínimo); ao separar, sílabas afastam-se com cores distintas (te=azul, lha=vermelho, do=verde); na sílaba 'lha', o dígrafo 'lh' aparece com sublinhado ligeiro para realce; contador de palmas com ícone de mão animada; áudio silábico sincronizado (te... lha... do...); informação opcional 'lh é um dígrafo — duas letras, um só som' aparece como tooltip",
         "transition": "Clicar no botão de palmas incrementa o contador → cada palma destaca e pronuncia uma sílaba em sequência (te → lha → do) → ao completar 3, sílabas separam-se visualmente com animação suave → toggle mostra juntas/separadas; clicar no dígrafo 'lh' na sílaba separada mostra o tooltip explicativo",
@@ -132,9 +204,25 @@
       "textDescription": "O aluno ordena sílabas desordenadas (do-te-lha ou lha-do-te) para reconstruir a palavra 'telhado'. Reforça a compreensão da estrutura silábica, a sequência correcta e a posição fixa de cada sílaba. O exercício consolida também a percepção visual da palavra como sequência ordenada.",
       "interaction": {
         "state": [
-          { "name": "silabasDesordenadas", "type": "sorting", "options": ["do", "te", "lha"] },
-          { "name": "ordemActual", "type": "derived", "derivedFrom": "silabasDesordenadas" },
-          { "name": "palavraFormada", "type": "derived", "derivedFrom": "join(ordemActual)" }
+          {
+            "name": "silabasDesordenadas",
+            "type": "sorting",
+            "options": [
+              "do",
+              "te",
+              "lha"
+            ]
+          },
+          {
+            "name": "ordemActual",
+            "type": "derived",
+            "derivedFrom": "silabasDesordenadas"
+          },
+          {
+            "name": "palavraFormada",
+            "type": "derived",
+            "derivedFrom": "join(ordemActual)"
+          }
         ],
         "render": "3 blocos arrastáveis com sílabas (do, te, lha) em cores correspondentes à unit anterior (verde, azul, vermelho); zona-alvo com 3 posições marcadas com contornos pontilhados e números 1, 2, 3; imagem do telhado vermelho visível como apoio no canto superior direito; palavra formada aparece em grande em baixo em tempo real à medida que os blocos são colocados",
         "transition": "Arrastar sílaba para posição numerada → palavra parcial actualiza em tempo real (ex: 'te_' ou 'te-lha-') → ao completar com te+lha+do: borda verde em torno da zona-alvo + áudio 'telhado!' + animação de estrela; se combinação errada ao completar: borda âmbar + 'Ouve bem: te-lha-do. Tenta outra vez!'",
@@ -150,23 +238,48 @@
     },
     {
       "summary": "Recombinação silábica — formar novas palavras com as sílabas de 'telhado'",
-      "textDescription": "O aluno explora combinações das sílabas te, lha e do para formar novas palavras ou identificar pseudo-palavras. Descobre que as sílabas são unidades reutilizáveis da língua. Palavras-alvo seguras acessíveis a 1.º ano: 'tela' (te+la), 'lado' (la+do), 'data' (da+ta) — nota: algumas requerem sílabas extra disponíveis na bancada. A recombinação com sílabas extra enriquece o vocabulário.",
+      "textDescription": "O aluno explora combinações das sílabas te, lha e do para formar novas palavras ou identificar pseudo-palavras. Descobre que as sílabas são unidades reutilizáveis da língua. Palavras-alvo seguras acessíveis a 1.º ano: 'ecrã' (te+la), 'lado' (la+do), 'data' (da+ta) — nota: algumas requerem sílabas extra disponíveis na bancada. A recombinação com sílabas extra enriquece o vocabulário. Ler também uma palavra nova com sílabas conhecidas, para mostrar generalização e não apenas memória visual.",
       "interaction": {
         "state": [
-          { "name": "silabasDisponiveis", "type": "drag", "options": ["te", "lha", "do", "la", "da"] },
-          { "name": "combinacaoActual", "type": "derived", "derivedFrom": "silabasDisponiveis" },
-          { "name": "classificacao", "type": "quiz", "options": ["é uma palavra", "não é uma palavra"] },
-          { "name": "palavrasEncontradas", "type": "derived", "derivedFrom": "lista acumulada de palavras classificadas como correctas" }
+          {
+            "name": "silabasDisponiveis",
+            "type": "drag",
+            "options": [
+              "te",
+              "lha",
+              "do",
+              "la",
+              "da"
+            ]
+          },
+          {
+            "name": "combinacaoActual",
+            "type": "derived",
+            "derivedFrom": "silabasDisponiveis"
+          },
+          {
+            "name": "classificacao",
+            "type": "quiz",
+            "options": [
+              "é uma palavra",
+              "não é uma palavra"
+            ]
+          },
+          {
+            "name": "palavrasEncontradas",
+            "type": "derived",
+            "derivedFrom": "lista acumulada de palavras classificadas como correctas"
+          }
         ],
         "render": "Bancada no topo com 5 sílabas arrastáveis (te, lha, do, la, da) em blocos coloridos; zona de construção ao centro com 2-3 posições marcadas; palavra formada em grande (36px); dois botões grandes: '✓ É uma palavra' (verde) e '✗ Não é uma palavra' (âmbar); lista lateral 'Palavras que encontrei' acumula acertos; ícone de interrogação para pedir dica",
         "transition": "Arrastar sílabas para zona de construção → palavra formada actualiza → aluno prime um dos botões para classificar → se classificação correcta: palavra vai para a lista com ícone de estrela + som de confirmação; se errada: feedback suave 'Hmm, pensa bem...' → limpar zona para nova tentativa",
         "constraint": "Nem toda a combinação de sílabas forma uma palavra real com significado — o aluno descobre que as sílabas têm de se combinar de forma que a palavra exista na língua portuguesa",
-        "assessment": "O aluno forma pelo menos 2 palavras reais novas (ex: 'tela', 'lado') e distingue correctamente entre palavras reais e pseudo-palavras em pelo menos 3 casos"
+        "assessment": "O aluno forma pelo menos 2 palavras reais novas (ex: 'ecrã', 'lado') e distingue correctamente entre palavras reais e pseudo-palavras em pelo menos 3 casos A criança lê uma palavra nova e escreve uma frase curta sem copiar apenas."
       },
       "differentiation": {
-        "support": "Apenas 2 sílabas de cada vez (te + la → tela); imagem de apoio para cada palavra real encontrada; a palavra-exemplo 'tela' dada como modelo com imagem de tecido",
-        "standard": "5 sílabas disponíveis; sem imagens prévias; classifica sozinho com feedback imediato; objectivo: encontrar 2 palavras reais",
-        "challenge": "Inclui sílaba extra 'ro'; deve encontrar 3+ palavras reais (tela, lado, telha, telhado); escreve cada palavra descoberta num campo de texto; tenta usar uma das palavras numa frase oral"
+        "support": "Apenas 2 sílabas de cada vez (te + la → ecrã); imagem de apoio para cada palavra real encontrada; a palavra-exemplo 'ecrã' dada como modelo com imagem de tecido",
+        "standard": "5 sílabas disponíveis; sem imagens prévias; classifica sozinho com feedback imediato; objetivo: encontrar 2 palavras reais",
+        "challenge": "Inclui sílaba extra 'ro'; deve encontrar 3+ palavras reais (ecrã, lado, telha, telhado); escreve cada palavra descoberta num campo de texto; tenta usar uma das palavras numa frase oral"
       },
       "duration": 7
     },
@@ -175,10 +288,36 @@
       "textDescription": "O aluno pratica a leitura da palavra completa e a escrita guiada (completar sílabas em falta em diferentes posições). Transição do reconhecimento visual para a produção escrita com atenção especial ao dígrafo 'lh'. O exercício cobre as três posições silábicas (início, meio, fim) para consolidar a estrutura completa da palavra.",
       "interaction": {
         "state": [
-          { "name": "varianteActual", "type": "dropdown", "options": ["te___do", "___lha do", "telha___"], "default": "te___do" },
-          { "name": "silabaEscolhida", "type": "dropdown", "options": ["te", "lha", "do"], "default": "lha" },
-          { "name": "palavraCompleta", "type": "derived", "derivedFrom": "varianteActual preenchida com silabaEscolhida" },
-          { "name": "tentativaActual", "type": "derived", "derivedFrom": "count(submissões)" }
+          {
+            "name": "varianteActual",
+            "type": "dropdown",
+            "options": [
+              "te___do",
+              "___lha do",
+              "telha___"
+            ],
+            "default": "te___do"
+          },
+          {
+            "name": "silabaEscolhida",
+            "type": "dropdown",
+            "options": [
+              "te",
+              "lha",
+              "do"
+            ],
+            "default": "lha"
+          },
+          {
+            "name": "palavraCompleta",
+            "type": "derived",
+            "derivedFrom": "varianteActual preenchida com silabaEscolhida"
+          },
+          {
+            "name": "tentativaActual",
+            "type": "derived",
+            "derivedFrom": "count(submissões)"
+          }
         ],
         "render": "Palavra 'telhado' com lacuna (sílaba em falta marcada por sublinhado pontilhado e fundo cinzento claro); 3 sílabas disponíveis em baixo como opções clicáveis (te, lha, do), cada uma com a sua cor característica; ao completar, palavra inteira surge com áudio; após 3 variantes, campo de escrita livre aparece com linha pontilhada",
         "transition": "Clicar na sílaba correcta para preencher a lacuna → lacuna preenchida com a sílaba escolhida na cor correcta → se correcto: áudio lê a palavra completa 'telhado' + avança para próxima variante; se incorrecto: sílaba errada destaca-se em âmbar e volta ao lugar → após 3 variantes com sucesso, campo de escrita livre abre",
@@ -197,9 +336,27 @@
       "textDescription": "O aluno lê e constrói a frase 'O telhado é vermelho.' utilizando cartões-palavra arrastáveis. Integra a palavra 'telhado' num contexto sintáctico simples (artigo + sujeito + verbo + adjectivo + pontuação), reforçando o significado e a funcionalidade da leitura. A cor 'vermelho' liga visualmente à imagem do telhado trabalhada ao longo da sessão.",
       "interaction": {
         "state": [
-          { "name": "palavrasDaFrase", "type": "sorting", "options": ["O", "telhado", "é", "vermelho", "."] },
-          { "name": "fraseFormada", "type": "derived", "derivedFrom": "join(palavrasDaFrase, ' ')" },
-          { "name": "fraseCorrecta", "type": "derived", "derivedFrom": "fraseFormada === 'O telhado é vermelho .'" }
+          {
+            "name": "palavrasDaFrase",
+            "type": "sorting",
+            "options": [
+              "O",
+              "telhado",
+              "é",
+              "vermelho",
+              "."
+            ]
+          },
+          {
+            "name": "fraseFormada",
+            "type": "derived",
+            "derivedFrom": "join(palavrasDaFrase, ' ')"
+          },
+          {
+            "name": "fraseCorrecta",
+            "type": "derived",
+            "derivedFrom": "fraseFormada === 'O telhado é vermelho .'"
+          }
         ],
         "render": "5 cartões-palavra arrastáveis (O, telhado, é, vermelho, .) dispostos fora de ordem e com orientações visuais distintas (ex: cartão 'telhado' levemente maior); linha de construção em baixo com 5 posições marcadas e traços guia; ao completar correctamente, frase lida em áudio com entoação natural; imagem do telhado vermelho surge como confirmação visual",
         "transition": "Arrastar cartões-palavra para a linha de construção → frase actualiza em tempo real → ao completar 'O telhado é vermelho .': fundo da linha fica verde suave + áudio lê a frase completa + telhado na imagem ganha brilho; se ordem incorrecta ao colocar o último elemento: feedback âmbar 'Ouve a frase com atenção...' + áudio da frase correcta como modelo",
@@ -215,21 +372,43 @@
     },
     {
       "summary": "Mini-avaliação formativa — reconhecer, segmentar, reconstruir e usar 'telhado'",
-      "textDescription": "Verificação final com 4 tarefas sequenciais que cobrem os critérios de avaliação do M28P para a palavra 'telhado': reconhecimento global, segmentação silábica, reconstrução a partir de sílabas desordenadas, e uso em frase. Cada tarefa ocupa um ecrã limpo. O resultado guia o professor no planeamento do TEA individual.",
+      "textDescription": "Verificação final com 4 tarefas sequenciais que cobrem os critérios de avaliação do M28P para a palavra 'telhado': reconhecimento global, segmentação silábica, reconstrução a partir de sílabas desordenadas, e uso em frase. Cada tarefa ocupa um ecrã limpo. O resultado guia o professor no planeamento do TEA individual. Ler também uma palavra nova com sílabas conhecidas, para mostrar generalização e não apenas memória visual.",
       "interaction": {
         "state": [
-          { "name": "tarefaActual", "type": "dropdown", "options": ["reconhecimento", "segmentação", "reconstrução", "frase"], "default": "reconhecimento" },
-          { "name": "resultadoTarefa", "type": "quiz", "options": ["correcto", "incorrecto", "com ajuda"] },
-          { "name": "progressoGlobal", "type": "derived", "derivedFrom": "count(correctos) / 4" }
+          {
+            "name": "tarefaActual",
+            "type": "dropdown",
+            "options": [
+              "reconhecimento",
+              "segmentação",
+              "reconstrução",
+              "frase"
+            ],
+            "default": "reconhecimento"
+          },
+          {
+            "name": "resultadoTarefa",
+            "type": "quiz",
+            "options": [
+              "correcto",
+              "incorrecto",
+              "com ajuda"
+            ]
+          },
+          {
+            "name": "progressoGlobal",
+            "type": "derived",
+            "derivedFrom": "count(correctos) / 4"
+          }
         ],
         "render": "4 mini-tarefas em ecrã limpo sequencial: (1) identificar 'telhado' entre 3 palavras — 'telhado', 'telha', 'telheiro'; (2) indicar o número de sílabas de 'telhado' (botões 1, 2, 3, 4); (3) ordenar sílabas desordenadas lha-do-te para formar 'telhado'; (4) completar frase 'O ___ é vermelho.' com a palavra correcta. Barra de progresso com 4 estrelas no topo; cada estrela acende ao completar cada tarefa",
         "transition": "Completar tarefa correctamente → estrela correspondente acende em amarelo dourado + som suave de confirmação → avança automaticamente para próxima tarefa; com ajuda (2.ª tentativa) → estrela acende em azul; ao completar 4 tarefas → ecrã de resumo com estrelas e mensagem de encorajamento personalizada (4 estrelas douradas: 'Excelente!'; 3+: 'Muito bem!'; menos: 'Continua a praticar!')",
         "constraint": "Cada tarefa avalia uma competência distinta e complementar — o aluno e o professor descobrem quais as competências já consolidadas e quais precisam de mais prática",
-        "assessment": "O aluno completa as 4 tarefas: identifica 'telhado' entre 3 palavras; indica correctamente 3 sílabas; ordena lha-do-te → telhado; e completa a frase com 'telhado'"
+        "assessment": "O aluno completa as 4 tarefas: identifica 'telhado' entre 3 palavras; indica correctamente 3 sílabas; ordena lha-do-te → telhado; e completa a frase com 'telhado' A criança lê uma palavra nova e escreve uma frase curta sem copiar apenas."
       },
       "maker": {
         "type": "unplugged",
-        "challenge": "Após a mini-avaliação, cada aluno desenha a sua própria casa com telhado num papel A5 e escreve a palavra 'telhado' com seta a apontar. Quem quiser pinta o telhado de vermelho. Os desenhos são afixados num 'Mapa da Nossa Rua' colectivo na parede da sala.",
+        "challenge": "Após a mini-avaliação, cada aluno desenha a sua própria casa com telhado num papel A5 e escreve a palavra 'telhado' com seta a apontar. Quem quiser pinta o telhado de vermelho. Os desenhos são afixados num 'Mapa da Nossa Rua' coletivo na parede da sala.",
         "materials": [
           "Papel A5 (1 por aluno)",
           "Lápis de cor ou marcadores",
@@ -237,8 +416,8 @@
           "Cartolina grande para 'Mapa da Nossa Rua'"
         ],
         "groupSize": "individual → turma",
-        "connection": "O aluno transfere a aprendizagem digital (reconhecer/escrever 'telhado') para uma produção física; o 'Mapa da Nossa Rua' colectivo cria um circuito de comunicação MEM",
-        "communication": "Cada aluno apresenta o seu desenho à turma em 1 frase: 'Este é o telhado da minha casa. É [cor].' → os desenhos ficam no mapa colectivo visível na sala",
+        "connection": "O aluno transfere a aprendizagem digital (reconhecer/escrever 'telhado') para uma produção física; o 'Mapa da Nossa Rua' coletivo cria um circuito de comunicação MEM",
+        "communication": "Cada aluno apresenta o seu desenho à turma em 1 frase: 'Este é o telhado da minha casa. É [cor].' → os desenhos ficam no mapa coletivo visível na sala",
         "alternatives": [
           "Sem papel: desenhar no quadro da sala com giz colorido",
           "Com Lego: construir uma casa com telhado usando blocos; fotografar e escrever a legenda 'telhado' na foto impressa"
@@ -249,8 +428,16 @@
         "standard": "3 opções nas tarefas de reconhecimento e frase; uma tentativa por tarefa; imagem disponível na tarefa de segmentação; no maker, escreve a palavra de forma autónoma",
         "challenge": "4 opções incluindo 'telheiro'; sem imagem nas tarefas 2 e 3; tarefa bónus: escrever a frase completa 'O telhado é vermelho.' sem qualquer apoio; no maker, escreve duas frases sobre a sua casa"
       },
-      "duration": 7
+      "duration": 2
     }
   ],
-  "sessionFlow": "0-5min: Abertura contextual — micro-história 'A chuva bate no telhado vermelho da casa da avó' com imagem animada de chuva e palavra em contexto → 5-10min: Reconhecimento global — identificar 'telhado' entre palavras-distractor (telha, janela) → 10-17min: Segmentação silábica — bater palmas te-lha-do, descobrir o dígrafo 'lh' como unidade, visualizar separação colorida → 17-24min: Reconstrução — ordenar sílabas desordenadas (do-te-lha) para recompor a palavra → 24-31min: Recombinação — explorar novas palavras com sílabas disponíveis (tela, lado) classificando palavras reais vs. pseudo-palavras → 31-37min: Leitura/escrita guiada — completar lacunas nas 3 posições e escrever 'telhado' autonomamente → 37-43min: Frase simples — construir 'O telhado é vermelho.' com cartões-palavra → 43-45min: Mini-avaliação formativa com 4 tarefas de verificação + extensão maker (desenho da casa e mapa colectivo)"
+  "sessionFlow": "0-5min: Abertura contextual — micro-história 'A chuva bate no telhado vermelho da casa da avó' com imagem animada de chuva e palavra em contexto → 5-10min: Reconhecimento global — identificar 'telhado' entre palavras-distractor (telha, janela) → 10-17min: Segmentação silábica — bater palmas te-lha-do, descobrir o dígrafo 'lh' como unidade, visualizar separação colorida → 17-24min: Reconstrução — ordenar sílabas desordenadas (do-te-lha) para recompor a palavra → 24-31min: Recombinação — explorar novas palavras com sílabas disponíveis (ecrã, lado) classificando palavras reais vs. pseudo-palavras → 31-37min: Leitura/escrita guiada — completar lacunas nas 3 posições e escrever 'telhado' autonomamente → 37-43min: Frase simples — construir 'O telhado é vermelho.' com cartões-palavra → 43-45min: Mini-avaliação formativa com 4 tarefas de verificação + extensão maker (desenho da casa e mapa coletivo)",
+  "m28pMethodAlignment": {
+    "principle": "Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.",
+    "meaningfulEntry": "palavra-chave com imagem/contexto antes da análise",
+    "globalRecognition": "reconhecimento global é ponto de entrada, não fim da aprendizagem",
+    "codeWork": "consciência silábica e relação som-letra/grafofonémica",
+    "generalization": "ler palavra nova com sílabas conhecidas e escrever frase curta",
+    "quickVerification": "verificação rápida observa palavra-alvo, palavra nova e frase curta"
+  }
 }

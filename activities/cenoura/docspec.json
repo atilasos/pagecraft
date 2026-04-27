@@ -6,7 +6,9 @@
     "Reconhecer a palavra 'cenoura' globalmente e associá-la à imagem",
     "Segmentar 'cenoura' nas sílabas ce-nou-ra e identificar cada sílaba",
     "Recombinar sílabas para formar novas palavras",
-    "Usar 'cenoura' numa frase simples oral ou escrita"
+    "Usar 'cenoura' numa frase simples oral ou escrita",
+    "Descobrir que 'cenoura' não é só uma forma para memorizar: tem sílabas, sons/letras e pode ajudar a ler palavras novas.",
+    "Ler uma palavra nova com sílabas conhecidas de 'cenoura' e escrever uma frase curta com apoio."
   ],
   "curriculum": {
     "ae": [
@@ -45,7 +47,11 @@
       "Trabalho curricular comparticipado",
       "Circuitos de comunicação"
     ],
-    "instruments": ["PIT", "mapa de tarefas", "diário de turma"],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas",
+      "diário de turma"
+    ],
     "socialOrganization": "individual (blocos 1-3, 10min) → pares (blocos 4-5, 10min) → grupo/turma (bloco 6 + avaliação, 10min)"
   },
   "materials": [
@@ -61,8 +67,24 @@
       "duration": 5,
       "interaction": {
         "state": [
-          { "name": "cena", "type": "toggle", "options": ["horta", "prato"], "default": "horta" },
-          { "name": "palavraVisivel", "type": "toggle", "options": ["oculta", "visivel"], "default": "oculta" }
+          {
+            "name": "cena",
+            "type": "toggle",
+            "options": [
+              "horta",
+              "prato"
+            ],
+            "default": "horta"
+          },
+          {
+            "name": "palavraVisivel",
+            "type": "toggle",
+            "options": [
+              "oculta",
+              "visivel"
+            ],
+            "default": "oculta"
+          }
         ],
         "render": "Imagem da horta com cenoura semi-enterrada; botão 'Revelar palavra' mostra o texto 'cenoura' por baixo da imagem em tipografia grande; toggle muda cena para cenoura no prato",
         "transition": "Clicar 'Revelar' → palavraVisivel passa a 'visivel' e o texto aparece com animação suave; toggle cena → imagem muda",
@@ -81,14 +103,31 @@
       "duration": 5,
       "interaction": {
         "state": [
-          { "name": "opcoes", "type": "quiz", "options": ["cenoura", "cebola", "couve"], "default": null },
-          { "name": "selecao", "type": "derived", "derivedFrom": "opcoes" },
-          { "name": "feedback", "type": "derived", "derivedFrom": "selecao === 'cenoura' ? 'correto' : 'tentar'" }
+          {
+            "name": "opcoes",
+            "type": "quiz",
+            "options": [
+              "cenoura",
+              "cebola",
+              "couve"
+            ],
+            "default": null
+          },
+          {
+            "name": "selecao",
+            "type": "derived",
+            "derivedFrom": "opcoes"
+          },
+          {
+            "name": "feedback",
+            "type": "derived",
+            "derivedFrom": "selecao === 'cenoura' ? 'correto' : 'tentar'"
+          }
         ],
         "render": "Imagem de cenoura no centro; três cartões de palavra em baixo (cenoura / cebola / couve); aluno clica no cartão correto; feedback: ✓ verde claro ou ✗ âmbar",
         "transition": "Clicar cartão → selecao atualiza → feedback exibido imediatamente; se errado, cartão volta ao lugar",
         "constraint": "A correspondência imagem↔palavra é unívoca — só uma resposta é correcta",
-        "assessment": "O aluno selecciona 'cenoura' correctamente em 2 de 2 rondas com distratores diferentes"
+        "assessment": "O aluno seleciona 'cenoura' correctamente em 2 de 2 rondas com distratores diferentes"
       },
       "differentiation": {
         "support": "Palavra 'cenoura' sublinhada em destaque; distratores com imagem também visível",
@@ -102,9 +141,33 @@
       "duration": 8,
       "interaction": {
         "state": [
-          { "name": "silabas", "type": "sorting", "options": ["ce", "nou", "ra", "no", "u"], "default": [] },
-          { "name": "posicoes", "type": "drag", "options": ["slot1", "slot2", "slot3"], "default": [] },
-          { "name": "palmadas", "type": "derived", "derivedFrom": "posicoes.length" }
+          {
+            "name": "silabas",
+            "type": "sorting",
+            "options": [
+              "ce",
+              "nou",
+              "ra",
+              "no",
+              "u"
+            ],
+            "default": []
+          },
+          {
+            "name": "posicoes",
+            "type": "drag",
+            "options": [
+              "slot1",
+              "slot2",
+              "slot3"
+            ],
+            "default": []
+          },
+          {
+            "name": "palmadas",
+            "type": "derived",
+            "derivedFrom": "posicoes.length"
+          }
         ],
         "render": "Palavra 'cenoura' no topo em letras grandes; abaixo três slots vazios (1, 2, 3); banco de blocos de sílabas coloridos (ce=laranja, nou=verde, ra=azul, mais distratores); contador de palmadas; animação de palmas ao confirmar cada sílaba",
         "transition": "Arrastar bloco para slot → verifica se sílaba está correcta → feedback imediato; botão 'Bater palmas' incrementa contador e destaca sílaba correspondente",
@@ -114,11 +177,15 @@
       "maker": {
         "type": "unplugged",
         "challenge": "Com os cartões físicos de sílabas (ce / nou / ra), o aluno ordena-os na mesa e bate uma palma por cada um. Depois esconde um cartão e tenta lembrar qual falta.",
-        "materials": ["Cartões físicos: ce, nou, ra"],
+        "materials": [
+          "Cartões físicos: ce, nou, ra"
+        ],
         "groupSize": "2",
-        "connection": "A actividade física com cartões reforça a segmentação feita no ecrã",
+        "connection": "A atividade física com cartões reforça a segmentação feita no ecrã",
         "communication": "Par partilha com outro par qual sílaba foi mais difícil de lembrar",
-        "alternatives": ["Escrever as sílabas em post-its e ordenar na mesa"]
+        "alternatives": [
+          "Escrever as sílabas em post-its e ordenar na mesa"
+        ]
       },
       "differentiation": {
         "support": "Sílabas pré-separadas visíveis acima dos slots; sem distratores; animação de palmas automática",
@@ -132,9 +199,34 @@
       "duration": 7,
       "interaction": {
         "state": [
-          { "name": "silabaBanco", "type": "drag", "options": ["ce", "nou", "ra", "ca", "no", "ru", "na"], "default": [] },
-          { "name": "palavraConstruida", "type": "derived", "derivedFrom": "silabaBanco.joined" },
-          { "name": "existe", "type": "quiz", "options": ["Existe!", "Não existe"], "default": null }
+          {
+            "name": "silabaBanco",
+            "type": "drag",
+            "options": [
+              "ce",
+              "nou",
+              "ra",
+              "ca",
+              "no",
+              "ru",
+              "na"
+            ],
+            "default": []
+          },
+          {
+            "name": "palavraConstruida",
+            "type": "derived",
+            "derivedFrom": "silabaBanco.joined"
+          },
+          {
+            "name": "existe",
+            "type": "quiz",
+            "options": [
+              "Existe!",
+              "Não existe"
+            ],
+            "default": null
+          }
         ],
         "render": "Dois slots de construção livres; banco de sílabas coloridas; após construir palavra, dois botões: 'Existe!' / 'Não existe'; lista de palavras descobertas à direita",
         "transition": "Arrastar sílabas → palavra constrói-se; clicar botão → feedback (✓ ou ✗) + palavra adicionada à lista se correcta",
@@ -153,14 +245,31 @@
       "duration": 7,
       "interaction": {
         "state": [
-          { "name": "silabaFalta", "type": "dropdown", "options": ["ce", "nou", "ra"], "default": null },
-          { "name": "posicaoFalta", "type": "derived", "derivedFrom": "random(1,3)" },
-          { "name": "escrita", "type": "canvas", "default": "" }
+          {
+            "name": "silabaFalta",
+            "type": "dropdown",
+            "options": [
+              "ce",
+              "nou",
+              "ra"
+            ],
+            "default": null
+          },
+          {
+            "name": "posicaoFalta",
+            "type": "derived",
+            "derivedFrom": "random(1,3)"
+          },
+          {
+            "name": "escrita",
+            "type": "canvas",
+            "default": ""
+          }
         ],
         "render": "Palavra com uma sílaba em branco (ex: _-nou-ra); três opções de sílaba para escolher; abaixo, área de escrita com tracejado da palavra completa para copiar",
-        "transition": "Seleccionar sílaba correcta → slot preenche-se com cor; confirmar → área de escrita activa; aluno traça/escreve a palavra",
+        "transition": "Selecionar sílaba correcta → slot preenche-se com cor; confirmar → área de escrita ativa; aluno traça/escreve a palavra",
         "constraint": "A sílaba em falta tem sempre uma posição única correcta — não é arbitrária",
-        "assessment": "O aluno selecciona a sílaba correcta em 3 exercícios e escreve 'cenoura' de forma legível"
+        "assessment": "O aluno seleciona a sílaba correcta em 3 exercícios e escreve 'cenoura' de forma legível"
       },
       "differentiation": {
         "support": "Sílaba em falta sempre na posição final (ra); palavra completa visível como modelo de escrita",
@@ -174,11 +283,32 @@
       "duration": 8,
       "interaction": {
         "state": [
-          { "name": "palavrasFrase", "type": "sorting", "options": ["A", "cenoura", "é", "laranja", ".", "grande", "doce"], "default": [] },
-          { "name": "fraseCompleta", "type": "derived", "derivedFrom": "palavrasFrase.joined" },
-          { "name": "fraseCorrecta", "type": "derived", "derivedFrom": "fraseCompleta === 'A cenoura é laranja .' ? true : false" }
+          {
+            "name": "palavrasFrase",
+            "type": "sorting",
+            "options": [
+              "A",
+              "cenoura",
+              "é",
+              "laranja",
+              ".",
+              "grande",
+              "doce"
+            ],
+            "default": []
+          },
+          {
+            "name": "fraseCompleta",
+            "type": "derived",
+            "derivedFrom": "palavrasFrase.joined"
+          },
+          {
+            "name": "fraseCorrecta",
+            "type": "derived",
+            "derivedFrom": "fraseCompleta === 'A cenoura é laranja .' ? true : false"
+          }
         ],
-        "render": "Cartões de palavras dispersos; barra de frase com slots; aluno arrasta palavras para construir 'A cenoura é laranja.'; botão 'Verificar' dá feedback; opção 'Criar a minha frase' activa modo livre",
+        "render": "Cartões de palavras dispersos; barra de frase com slots; aluno arrasta palavras para construir 'A cenoura é laranja.'; botão 'Verificar' dá feedback; opção 'Criar a minha frase' ativa modo livre",
         "transition": "Arrastar palavra → posição na barra; verificar → feedback por palavra correcta/incorrecta; modo livre → slots abertos para frase própria",
         "constraint": "Uma frase válida tem sujeito + verbo + complemento e termina com ponto final",
         "assessment": "O aluno constrói a frase correctamente OU cria uma frase própria com 'cenoura' que tenha sentido"
@@ -195,9 +325,26 @@
       "duration": 5,
       "interaction": {
         "state": [
-          { "name": "passo", "type": "slider", "range": [1, 4], "step": 1, "default": 1 },
-          { "name": "respostas", "type": "derived", "derivedFrom": "[]" },
-          { "name": "pontuacao", "type": "derived", "derivedFrom": "respostas.filter(r => r.correto).length" }
+          {
+            "name": "passo",
+            "type": "slider",
+            "range": [
+              1,
+              4
+            ],
+            "step": 1,
+            "default": 1
+          },
+          {
+            "name": "respostas",
+            "type": "derived",
+            "derivedFrom": "[]"
+          },
+          {
+            "name": "pontuacao",
+            "type": "derived",
+            "derivedFrom": "respostas.filter(r => r.correto).length"
+          }
         ],
         "render": "Barra de progresso (1/4 → 4/4); cada passo mostra uma tarefa: (1) escolher palavra entre 3 imagens, (2) contar sílabas, (3) ordenar sílabas desordenadas, (4) completar frase; no final, estrelas (1-3) e resumo",
         "transition": "Completar tarefa → avança para próxima; no final, mostra pontuação e quais tarefas acertou",
@@ -211,5 +358,13 @@
       }
     }
   ],
-  "sessionFlow": "0-5min: Bloco 1 — micro-história da cenoura na horta (activação) → 5-10min: Bloco 2 — reconhecimento global (palavra↔imagem) → 10-18min: Bloco 3 — segmentação silábica + actividade unplugged com cartões → 18-25min: Bloco 4 — recombinação, novas palavras (pares) → 25-32min: Bloco 5 — completar palavra + escrita guiada → 32-40min: Bloco 6 — frase simples, modo livre → 40-45min: Bloco 7 — mini-avaliação formativa (individual) + partilha turma"
+  "sessionFlow": "0-5min: Bloco 1 — micro-história da cenoura na horta (ativação) → 5-10min: Bloco 2 — reconhecimento global (palavra↔imagem) → 10-18min: Bloco 3 — segmentação silábica + atividade unplugged com cartões → 18-25min: Bloco 4 — recombinação, novas palavras (pares) → 25-32min: Bloco 5 — completar palavra + escrita guiada → 32-40min: Bloco 6 — frase simples, modo livre → 40-45min: Bloco 7 — mini-avaliação formativa (individual) + partilha turma",
+  "m28pMethodAlignment": {
+    "principle": "Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.",
+    "meaningfulEntry": "palavra-chave com imagem/contexto antes da análise",
+    "globalRecognition": "reconhecimento global é ponto de entrada, não fim da aprendizagem",
+    "codeWork": "consciência silábica e relação som-letra/grafofonémica",
+    "generalization": "ler palavra nova com sílabas conhecidas e escrever frase curta",
+    "quickVerification": "verificação rápida observa palavra-alvo, palavra nova e frase curta"
+  }
 }

@@ -6,7 +6,9 @@
     "Reconhecer a palavra 'galinha' globalmente, associada à imagem do animal",
     "Segmentar 'galinha' nas sílabas ga-li-nha e reconstituí-la a partir das sílabas desordenadas",
     "Descobrir novas palavras reais recombinando as sílabas ga, li, nha (ex: linha, liga)",
-    "Ler e construir a frase 'A galinha põe ovos.' com as palavras em cartão"
+    "Ler e construir a frase 'A galinha põe ovos.' com as palavras em cartão",
+    "Descobrir que 'galinha' não é só uma forma para memorizar: tem sílabas, sons/letras e pode ajudar a ler palavras novas.",
+    "Ler uma palavra nova com sílabas conhecidas de 'galinha' e escrever uma frase curta com apoio."
   ],
   "curriculum": {
     "ae": [
@@ -51,7 +53,10 @@
       "TEA (Trabalho de Estudo Autónomo)",
       "Circuitos de comunicação"
     ],
-    "instruments": ["PIT", "mapa de tarefas"],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas"
+    ],
     "socialOrganization": "turma (ativação 5min) → individual (reconhecimento + segmentação 20min) → pares (recombinação + frase 12min) → turma (avaliação + extensão 8min)"
   },
   "materials": [
@@ -60,7 +65,7 @@
     "Cartões de sílabas físicos: ga / li / nha (cor diferente por sílaba: laranja / azul-claro / verde)",
     "Cartões de palavras para a frase: A / galinha / põe / ovos / .",
     "Folhas A4 e canetas de feltro coloridas para o maker",
-    "Quadro interactivo para momento colectivo"
+    "Quadro interativo para momento coletivo"
   ],
   "units": [
     {
@@ -71,7 +76,11 @@
           {
             "name": "cena",
             "type": "toggle",
-            "options": ["galinha no quintal", "galinha no ninho com ovo", "galinha com pintainhos"],
+            "options": [
+              "galinha no quintal",
+              "galinha no ninho com ovo",
+              "galinha com pintainhos"
+            ],
             "default": "galinha no quintal"
           }
         ],
@@ -95,7 +104,11 @@
           {
             "name": "opcao_selecionada",
             "type": "matching",
-            "options": ["galinha", "gaivota", "borboleta"],
+            "options": [
+              "galinha",
+              "gaivota",
+              "borboleta"
+            ],
             "default": null
           },
           {
@@ -124,13 +137,20 @@
           {
             "name": "silabas_colocadas",
             "type": "drag",
-            "options": ["ga", "li", "nha"],
+            "options": [
+              "ga",
+              "li",
+              "nha"
+            ],
             "default": []
           },
           {
             "name": "palmas_contadas",
             "type": "slider",
-            "range": [0, 5],
+            "range": [
+              0,
+              5
+            ],
             "step": 1,
             "default": 0,
             "unit": "palmas"
@@ -155,13 +175,17 @@
     },
     {
       "summary": "Recombinação silábica — novas palavras com ga, li, nha",
-      "textDescription": "O aluno deve tentar formar novas palavras reais recombinando as sílabas ga, li, nha. A exploração guiada conduz às palavras 'linha' (li+nha) e 'liga' (li+ga). O aluno descobre que nem todas as combinações formam palavras existentes, desenvolvendo a consciência lexical e a noção de que a língua tem regras.",
+      "textDescription": "O aluno deve tentar formar novas palavras reais recombinando as sílabas ga, li, nha. A exploração guiada conduz às palavras 'linha' (li+nha) e 'liga' (li+ga). O aluno descobre que nem todas as combinações formam palavras existentes, desenvolvendo a consciência lexical e a noção de que a língua tem regras. Ler também uma palavra nova com sílabas conhecidas, para mostrar generalização e não apenas memória visual.",
       "interaction": {
         "state": [
           {
             "name": "silabas_na_zona",
             "type": "drag",
-            "options": ["ga", "li", "nha"],
+            "options": [
+              "ga",
+              "li",
+              "nha"
+            ],
             "default": []
           },
           {
@@ -172,14 +196,17 @@
           {
             "name": "avaliacao_existencia",
             "type": "quiz",
-            "options": ["existe!", "não existe"],
+            "options": [
+              "existe!",
+              "não existe"
+            ],
             "default": null
           }
         ],
         "render": "Bancada de sílabas coloridas sempre disponíveis: 3 blocos (ga=laranja, li=azul, nha=verde) reutilizáveis. Zona de montagem central: até 3 slots. Palavra formada aparece em tipografia grande acima da zona. Dois botões largos: 'existe!' (verde) e 'não existe' (cinzento). Após confirmação: para palavras reais (linha, liga) → animação de confetti + ícone de dicionário aberto; para não-palavras → mensagem suave 'Não encontrei esta palavra, experimenta outra combinação!'. Contador de palavras reais encontradas (estrelinhas).",
         "transition": "Arrastar sílabas → palavra formada atualiza em tempo real; clicar 'existe' ou 'não existe' → feedback imediato; botão 'limpar' repõe a zona de montagem para nova tentativa; sem limite de tentativas.",
         "constraint": "Nem todas as combinações de sílabas formam palavras reais em português. 'linha' (li+nha) e 'liga' (li+ga) são palavras reais. A língua tem regras que determinam quais sequências de sons têm significado — descobrir essas regras é tarefa do falante.",
-        "assessment": "O aluno forma e identifica corretamente pelo menos 1 palavra real nova ('linha' ou 'liga') e justifica oralmente o seu significado: 'linha é quando a mãe cose' ou 'a liga do futebol' — contexto adequado à palavra."
+        "assessment": "O aluno forma e identifica corretamente pelo menos 1 palavra real nova ('linha' ou 'liga') e justifica oralmente o seu significado: 'linha é quando a mãe cose' ou 'a liga do futebol' — contexto adequado à palavra. A criança lê uma palavra nova e escreve uma frase curta sem copiar apenas."
       },
       "differentiation": {
         "support": "🟢 Jogo guiado: professor sugere 'tenta colocar li e nha juntos'; imagem da palavra 'linha' (fio de costura) aparece como pista se o aluno não encontrar nenhuma palavra em 2 minutos; apenas 2 tentativas necessárias para avançar.",
@@ -201,7 +228,14 @@
           {
             "name": "silaba_escolhida",
             "type": "dropdown",
-            "options": ["ga", "li", "nha", "bo", "sa", "to"],
+            "options": [
+              "ga",
+              "li",
+              "nha",
+              "bo",
+              "sa",
+              "to"
+            ],
             "default": null
           },
           {
@@ -230,7 +264,13 @@
           {
             "name": "palavras_ordenadas",
             "type": "sorting",
-            "options": ["ovos", "A", ".", "galinha", "põe"],
+            "options": [
+              "ovos",
+              "A",
+              ".",
+              "galinha",
+              "põe"
+            ],
             "default": []
           },
           {
@@ -246,15 +286,15 @@
       },
       "maker": {
         "type": "unplugged",
-        "challenge": "Cada par recebe um conjunto de cartões físicos impressos com as palavras (A / galinha / põe / ovos / .). Constroem a frase na mesa, confirmam com o par ao lado e fotografam com o tablet. As fotos são partilhadas no quadro interactivo.",
+        "challenge": "Cada par recebe um conjunto de cartões físicos impressos com as palavras (A / galinha / põe / ovos / .). Constroem a frase na mesa, confirmam com o par ao lado e fotografam com o tablet. As fotos são partilhadas no quadro interativo.",
         "materials": [
           "Cartões de palavras impressos (A / galinha / põe / ovos / .) — 1 conjunto por par",
           "Tablet para fotografar a frase montada",
-          "Quadro interactivo para apresentação"
+          "Quadro interativo para apresentação"
         ],
         "groupSize": "2",
         "connection": "A exploração digital da ordenação da frase precede e inspira a construção física — o aluno passa do ecrã para o papel, consolidando com os sentidos tácteis.",
-        "communication": "Cada par apresenta a fotografia da sua frase montada no quadro interactivo e lê em voz alta para a turma. A turma valida: 'está certo?' (polegar para cima/baixo).",
+        "communication": "Cada par apresenta a fotografia da sua frase montada no quadro interativo e lê em voz alta para a turma. A turma valida: 'está certo?' (polegar para cima/baixo).",
         "alternatives": [
           "Sem impressão: escrever as palavras em post-its e colar no caderno ou na secretária",
           "Sem tablet: apresentar a frase montada oralmente, apontando para cada cartão"
@@ -269,7 +309,7 @@
     },
     {
       "summary": "Mini-avaliação formativa — 4 competências em sequência observável",
-      "textDescription": "Verificação rápida das 4 competências-chave da sessão: reconhecimento global, segmentação, reconstrução e uso em frase. O aluno passa pelas 4 etapas em sequência com feedback imediato. Os resultados são observáveis pelo professor em tempo real.",
+      "textDescription": "Verificação rápida das 4 competências-chave da sessão: reconhecimento global, segmentação, reconstrução e uso em frase. O aluno passa pelas 4 etapas em sequência com feedback imediato. Os resultados são observáveis pelo professor em tempo real. Ler também uma palavra nova com sílabas conhecidas, para mostrar generalização e não apenas memória visual.",
       "interaction": {
         "state": [
           {
@@ -280,13 +320,20 @@
           {
             "name": "resposta_etapa1",
             "type": "quiz",
-            "options": ["galinha", "gaivota", "galo"],
+            "options": [
+              "galinha",
+              "gaivota",
+              "galo"
+            ],
             "default": null
           },
           {
             "name": "progresso",
             "type": "slider",
-            "range": [0, 4],
+            "range": [
+              0,
+              4
+            ],
             "step": 1,
             "default": 0,
             "unit": "etapas"
@@ -295,7 +342,7 @@
         "render": "Barra de progresso com 4 passos no topo (ícones: olho=reconhecer / palmas=segmentar / puzzle=reconstruir / livro=frase). Cada etapa ocupa o ecrã completo. Etapa 1: escolher a palavra certa entre 3 imagens+palavras (reconhecimento). Etapa 2: bater 3 palmas digitais e indicar quantas sílabas tem 'galinha' (dropdown 1-2-3-4). Etapa 3: arrastar 3 sílabas desordenadas (reconstrução). Etapa 4: ler a frase 'A galinha põe ovos.' e responder à pergunta 'O que faz a galinha?' (quiz 2 opções). Ecrã final: número de estrelas (1-4) + mensagem personalizada.",
         "transition": "Completar cada etapa corretamente → progresso avança com animação; erros não penalizam mas ficam registados (ícone de relógio = 'tentou mais do que uma vez'); botão 'tentar de novo' disponível por etapa; após etapa 4 → ecrã de celebração.",
         "constraint": "As 4 competências são os 4 pilares do Método das 28 Palavras: reconhecer globalmente, segmentar em sílabas, reconstruir a partir das sílabas e usar a palavra em frase com sentido. Todas são necessárias para a literacia funcional.",
-        "assessment": "O aluno: (1) seleciona 'galinha' entre 3 opções sem hesitação; (2) indica '3 sílabas' e bate 3 palmas; (3) arrasta ga-li-nha na ordem correta em menos de 20 segundos; (4) lê 'A galinha põe ovos.' em voz alta sem apoio visual da frase escrita."
+        "assessment": "O aluno: (1) seleciona 'galinha' entre 3 opções sem hesitação; (2) indica '3 sílabas' e bate 3 palmas; (3) arrasta ga-li-nha na ordem correta em menos de 20 segundos; (4) lê 'A galinha põe ovos.' em voz alta sem apoio visual da frase escrita. A criança lê uma palavra nova e escreve uma frase curta sem copiar apenas."
       },
       "differentiation": {
         "support": "🟢 Apenas etapas 1 e 2 obrigatórias; professor apoia etapas 3 e 4 oralmente (aluno responde verbalmente, professor regista); imagem de galinha sempre visível como âncora.",
@@ -312,7 +359,11 @@
           {
             "name": "modo_expressao",
             "type": "toggle",
-            "options": ["contar uma história", "desenhar", "escrever"],
+            "options": [
+              "contar uma história",
+              "desenhar",
+              "escrever"
+            ],
             "default": "contar uma história"
           },
           {
@@ -322,7 +373,7 @@
           }
         ],
         "render": "3 botões grandes de modo com ícone (microfone / lápis / teclado). Canvas central que se adapta: modo 'desenhar' → área de desenho livre com paleta de 8 cores e borracha; modo 'escrever' → campo de texto grande com linha de base; modo 'contar' → prompt de voz ('Fala para o teu professor: conta uma história com a galinha.'). Botão 'partilhar com a turma' aparece quando há produção. Galeria lateral com as produções da turma (opcional, se ligação em rede local).",
-        "transition": "Selecionar modo → canvas adapta-se com animação; produzir conteúdo → botão 'partilhar' ativa; clicar 'partilhar' → produção exibida no quadro interactivo ou guardada para painel da sala.",
+        "transition": "Selecionar modo → canvas adapta-se com animação; produzir conteúdo → botão 'partilhar' ativa; clicar 'partilhar' → produção exibida no quadro interativo ou guardada para painel da sala.",
         "constraint": "Qualquer modo de expressão é válido — o que importa é que o aluno associe a palavra 'galinha' a um novo contexto criado por si, consolidando a aprendizagem com produção própria e significativa.",
         "assessment": "O aluno produz algo (história oral, desenho legendado ou frase/texto escrito) que inclua a palavra 'galinha' usada de forma contextualmente correta, e partilha com pelo menos um colega ou para a turma."
       },
@@ -350,5 +401,13 @@
       "duration": 5
     }
   ],
-  "sessionFlow": "0-5min: Abertura contextual (turma — ativação de conhecimento prévio, 3 cenas da galinha no quintal) → 5-10min: Reconhecimento global (individual — associar imagem à palavra escrita 'galinha', 3 rondas) → 10-17min: Segmentação silábica (individual — ga·li·nha, palmas digitais, arrastar blocos coloridos) → 17-24min: Recombinação silábica (pares — descobrir 'linha' e 'liga', exploração livre) → 24-30min: Leitura e escrita guiada (individual — completar a palavra em 3 rondas com sílaba em falta) → 30-36min: Frase simples + maker unplugged (pares — ordenar 5 cartões digitais + construir frase física e fotografar) → 36-40min: Mini-avaliação formativa (individual — 4 etapas sequenciais: reconhecer, segmentar, reconstruir, ler) → 40-45min: Extensão criativa (escolha de modo + maker cartaz — produção + partilha com turma no painel)"
+  "sessionFlow": "0-5min: Abertura contextual (turma — ativação de conhecimento prévio, 3 cenas da galinha no quintal) → 5-10min: Reconhecimento global (individual — associar imagem à palavra escrita 'galinha', 3 rondas) → 10-17min: Segmentação silábica (individual — ga·li·nha, palmas digitais, arrastar blocos coloridos) → 17-24min: Recombinação silábica (pares — descobrir 'linha' e 'liga', exploração livre) → 24-30min: Leitura e escrita guiada (individual — completar a palavra em 3 rondas com sílaba em falta) → 30-36min: Frase simples + maker unplugged (pares — ordenar 5 cartões digitais + construir frase física e fotografar) → 36-40min: Mini-avaliação formativa (individual — 4 etapas sequenciais: reconhecer, segmentar, reconstruir, ler) → 40-45min: Extensão criativa (escolha de modo + maker cartaz — produção + partilha com turma no painel)",
+  "m28pMethodAlignment": {
+    "principle": "Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.",
+    "meaningfulEntry": "palavra-chave com imagem/contexto antes da análise",
+    "globalRecognition": "reconhecimento global é ponto de entrada, não fim da aprendizagem",
+    "codeWork": "consciência silábica e relação som-letra/grafofonémica",
+    "generalization": "ler palavra nova com sílabas conhecidas e escrever frase curta",
+    "quickVerification": "verificação rápida observa palavra-alvo, palavra nova e frase curta"
+  }
 }

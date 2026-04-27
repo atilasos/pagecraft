@@ -6,7 +6,9 @@
     "Reconhecer globalmente a palavra 'ovo' e associá-la ao seu significado no tema animal/alimento",
     "Segmentar a palavra 'ovo' nas sílabas o-vo e reconstruí-la a partir de sílabas desordenadas",
     "Recombinar as sílabas o e vo com sílabas já conhecidas para descobrir palavras reais",
-    "Ler e construir a frase simples 'O ovo é branco.'"
+    "Ler e construir a frase simples 'O ovo é branco.'",
+    "Descobrir que 'ovo' não é só uma forma para memorizar: tem sílabas, sons/letras e pode ajudar a ler palavras novas.",
+    "Ler uma palavra nova com sílabas conhecidas de 'ovo' e escrever uma frase curta com apoio."
   ],
   "curriculum": {
     "ae": [
@@ -77,13 +79,19 @@
           {
             "name": "cena",
             "type": "toggle",
-            "options": ["ninho", "prato"],
+            "options": [
+              "ninho",
+              "prato"
+            ],
             "default": "ninho"
           },
           {
             "name": "palavraVisivel",
             "type": "toggle",
-            "options": ["não", "sim"],
+            "options": [
+              "não",
+              "sim"
+            ],
             "default": "não"
           }
         ],
@@ -107,7 +115,11 @@
           {
             "name": "opcao",
             "type": "quiz",
-            "options": ["ovo", "uva", "avó"],
+            "options": [
+              "ovo",
+              "uva",
+              "avó"
+            ],
             "default": null
           },
           {
@@ -136,13 +148,19 @@
           {
             "name": "silabas",
             "type": "drag",
-            "options": ["o", "vo"],
+            "options": [
+              "o",
+              "vo"
+            ],
             "default": []
           },
           {
             "name": "palmas",
             "type": "slider",
-            "range": [0, 4],
+            "range": [
+              0,
+              4
+            ],
             "step": 1,
             "default": 0,
             "unit": "palmas"
@@ -182,19 +200,27 @@
     },
     {
       "summary": "Recombinação silábica — descobrir palavras reais",
-      "textDescription": "O aluno explora combinações com 'o' e 'vo' e sílabas já conhecidas, distinguindo palavras reais de não-palavras.",
+      "textDescription": "O aluno explora combinações com 'o' e 'vo' e sílabas já conhecidas, distinguindo palavras reais de não-palavras. Ler também uma palavra nova com sílabas conhecidas, para mostrar generalização e não apenas memória visual.",
       "interaction": {
         "state": [
           {
             "name": "silabaBase",
             "type": "drag",
-            "options": ["o", "vo"],
+            "options": [
+              "o",
+              "vo"
+            ],
             "default": []
           },
           {
             "name": "silabaBanco",
             "type": "matching",
-            "options": ["va", "la", "no", "me"],
+            "options": [
+              "va",
+              "la",
+              "no",
+              "me"
+            ],
             "default": null
           },
           {
@@ -205,14 +231,17 @@
           {
             "name": "classificacao",
             "type": "quiz",
-            "options": ["existe", "não existe"],
+            "options": [
+              "existe",
+              "não existe"
+            ],
             "default": null
           }
         ],
         "render": "Zona de construção com dois espaços; banco de sílabas lateral; palavra formada aparece em grande e o aluno classifica se existe.",
         "transition": "Arrastar sílabas forma tentativa; escolher classificação dá feedback imediato; botão limpar inicia nova tentativa.",
         "constraint": "Nem toda combinação silábica forma palavra real com significado em português.",
-        "assessment": "O aluno encontra pelo menos 1 palavra real (ex.: 'ovo' ou 'ovo' mantendo a base) e classifica corretamente duas combinações inválidas."
+        "assessment": "O aluno encontra pelo menos 1 palavra real (ex.: 'ovo' ou 'ovo' mantendo a base) e classifica corretamente duas combinações inválidas. A criança lê uma palavra nova e escreve uma frase curta sem copiar apenas."
       },
       "differentiation": {
         "support": "🟢 Banco com 2 sílabas e pista visual para combinação válida.",
@@ -229,13 +258,20 @@
           {
             "name": "lacuna",
             "type": "dropdown",
-            "options": ["_vo", "o_"],
+            "options": [
+              "_vo",
+              "o_"
+            ],
             "default": "_vo"
           },
           {
             "name": "resposta",
             "type": "quiz",
-            "options": ["o", "vo", "va"],
+            "options": [
+              "o",
+              "vo",
+              "va"
+            ],
             "default": null
           },
           {
@@ -279,7 +315,13 @@
           {
             "name": "ordem",
             "type": "sorting",
-            "options": ["branco", "é", ".", "O", "ovo"],
+            "options": [
+              "branco",
+              "é",
+              ".",
+              "O",
+              "ovo"
+            ],
             "default": []
           },
           {
@@ -317,13 +359,16 @@
     },
     {
       "summary": "Mini-avaliação formativa — 4 critérios M28P",
-      "textDescription": "Verificação observável de reconhecimento, segmentação, reconstrução e uso em frase para a palavra 'ovo'.",
+      "textDescription": "Verificação observável de reconhecimento, segmentação, reconstrução e uso em frase para a palavra 'ovo'. Ler também uma palavra nova com sílabas conhecidas, para mostrar generalização e não apenas memória visual.",
       "interaction": {
         "state": [
           {
             "name": "etapa",
             "type": "slider",
-            "range": [1, 4],
+            "range": [
+              1,
+              4
+            ],
             "step": 1,
             "default": 1,
             "unit": "etapa"
@@ -337,7 +382,7 @@
         "render": "Quatro mini-tarefas em sequência: escolher 'ovo' entre 3 palavras; indicar 2 sílabas; ordenar o-vo; completar 'O ___ é branco.'",
         "transition": "Cada tarefa concluída avança a barra; erro permite nova tentativa rápida sem penalização pública.",
         "constraint": "A consolidação da palavra exige domínio das quatro operações do método, não apenas reconhecimento visual.",
-        "assessment": "O aluno realiza as 4 tarefas: reconhece 'ovo', indica 2 sílabas, reconstrói o-vo e completa a frase com 'ovo'."
+        "assessment": "O aluno realiza as 4 tarefas: reconhece 'ovo', indica 2 sílabas, reconstrói o-vo e completa a frase com 'ovo'. A criança lê uma palavra nova e escreve uma frase curta sem copiar apenas."
       },
       "differentiation": {
         "support": "🟢 Duas opções por tarefa e apoio oral do professor na leitura dos enunciados.",
@@ -354,7 +399,11 @@
           {
             "name": "modo",
             "type": "toggle",
-            "options": ["oral", "desenho", "escrita"],
+            "options": [
+              "oral",
+              "desenho",
+              "escrita"
+            ],
             "default": "oral"
           },
           {
@@ -406,5 +455,13 @@
     "status": "done",
     "language": "pt-PT",
     "orthography": "AO90"
+  },
+  "m28pMethodAlignment": {
+    "principle": "Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.",
+    "meaningfulEntry": "palavra-chave com imagem/contexto antes da análise",
+    "globalRecognition": "reconhecimento global é ponto de entrada, não fim da aprendizagem",
+    "codeWork": "consciência silábica e relação som-letra/grafofonémica",
+    "generalization": "ler palavra nova com sílabas conhecidas e escrever frase curta",
+    "quickVerification": "verificação rápida observa palavra-alvo, palavra nova e frase curta"
   }
 }

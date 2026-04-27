@@ -6,12 +6,20 @@
 
 ---
 
-## Objectivos de aprendizagem
+## Objetivos de aprendizagem
 
 - Reconhecer globalmente a palavra 'dedo' e associá-la à imagem e ao tema corpo humano
 - Segmentar 'dedo' nas sílabas 'de' e 'do', identificando cada sílaba com a sua cor
 - Recombinar as sílabas aprendidas (de, do, me, na, ni, u, va) para formar novas palavras ('medo', 'nado')
 - Ler e completar a frase 'O dedo aponta.' reconhecendo a palavra no contexto
+
+## Princípio M28P — evitar uso puramente visual
+
+Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.
+
+- **Som-letra/grafofonémica:** pedir que a criança diga que som ou letra observa em 'dedo'.
+- **Generalização:** pedir uma palavra nova com sílabas conhecidas e uma frase curta.
+- **Verificação rápida:** observar palavra-alvo, sílabas, palavra nova e frase/frase oral.
 
 ## Materiais
 

@@ -6,19 +6,27 @@
 
 ---
 
-## Objectivos de aprendizagem
+## Objetivos de aprendizagem
 
 - Reconhecer globalmente a palavra 'telhado' associando-a à imagem correspondente
 - Segmentar a palavra 'telhado' nas sílabas te-lha-do e reconstruí-la a partir de sílabas desordenadas
-- Recombinar sílabas da palavra 'telhado' para explorar novas palavras (ex: tela, lado)
+- Recombinar sílabas da palavra 'telhado' para explorar novas palavras (ex: ecrã, lado)
 - Utilizar a palavra 'telhado' numa frase simples, oralmente e por escrito
+
+## Princípio M28P — evitar uso puramente visual
+
+Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.
+
+- **Som-letra/grafofonémica:** pedir que a criança diga que som ou letra observa em 'telhado'.
+- **Generalização:** pedir uma palavra nova com sílabas conhecidas e uma frase curta.
+- **Verificação rápida:** observar palavra-alvo, sílabas, palavra nova e frase/frase oral.
 
 ## Materiais
 
 - Tablet ou computador com browser (1 por aluno ou par)
 - Cartaz A3 com imagem de telhado vermelho e palavra 'telhado'
 - Cartões de sílabas manipuláveis: te, lha, do
-- Quadro interactivo ou quadro branco
+- Quadro interativo ou quadro branco
 - Lápis de cor vermelho para extensão maker (opcional)
 
 ## Alinhamento MEM
@@ -30,7 +38,7 @@
 
 ## Fluxo da sessão
 
-0-5min: Abertura contextual — micro-história 'A chuva bate no telhado vermelho da casa da avó' com imagem animada de chuva e palavra em contexto → 5-10min: Reconhecimento global — identificar 'telhado' entre palavras-distractor (telha, janela) → 10-17min: Segmentação silábica — bater palmas te-lha-do, descobrir o dígrafo 'lh' como unidade, visualizar separação colorida → 17-24min: Reconstrução — ordenar sílabas desordenadas (do-te-lha) para recompor a palavra → 24-31min: Recombinação — explorar novas palavras com sílabas disponíveis (tela, lado) classificando palavras reais vs. pseudo-palavras → 31-37min: Leitura/escrita guiada — completar lacunas nas 3 posições e escrever 'telhado' autonomamente → 37-43min: Frase simples — construir 'O telhado é vermelho.' com cartões-palavra → 43-45min: Mini-avaliação formativa com 4 tarefas de verificação + extensão maker (desenho da casa e mapa colectivo)
+0-5min: Abertura contextual — micro-história 'A chuva bate no telhado vermelho da casa da avó' com imagem animada de chuva e palavra em contexto → 5-10min: Reconhecimento global — identificar 'telhado' entre palavras-distractor (telha, janela) → 10-17min: Segmentação silábica — bater palmas te-lha-do, descobrir o dígrafo 'lh' como unidade, visualizar separação colorida → 17-24min: Reconstrução — ordenar sílabas desordenadas (do-te-lha) para recompor a palavra → 24-31min: Recombinação — explorar novas palavras com sílabas disponíveis (ecrã, lado) classificando palavras reais vs. pseudo-palavras → 31-37min: Leitura/escrita guiada — completar lacunas nas 3 posições e escrever 'telhado' autonomamente → 37-43min: Frase simples — construir 'O telhado é vermelho.' com cartões-palavra → 43-45min: Mini-avaliação formativa com 4 tarefas de verificação + extensão maker (desenho da casa e mapa coletivo)
 
 ## Unit 1: Abertura contextual — micro-história com a palavra 'telhado' (5 min)
 
@@ -41,7 +49,7 @@
 
 **Diferenciação:**
 - 🟢 Apoio: Imagem e palavra visíveis em simultâneo desde o início com seta a apontar do telhado para a palavra; narração automática sem necessidade de clicar; palavra pré-destacada com moldura vermelha
-- 🟡 Intermédio: O aluno clica para revelar a cena e descobre a palavra destacada no texto após interacção
+- 🟡 Intermédio: O aluno clica para revelar a cena e descobre a palavra destacada no texto após interação
 - 🔴 Desafio: Texto com 3 frases; o aluno deve encontrar todas as ocorrências da palavra 'telhado' no texto e clicar em cada uma; explica oralmente o que é um telhado e para que serve
 
 ## Unit 2: Reconhecimento global da palavra 'telhado' (5 min)
@@ -49,10 +57,10 @@
 **Compreender:** O aluno reconhece a palavra 'telhado' como um todo visual, distinguindo-a de outras palavras com contornos semelhantes. Associa a forma escrita à imagem de um telhado e ao som, construindo o reconhecimento global. Atenção especial à palavra comprida com dígrafo 'lh' ao centro.
 
 **Constraint:** Apenas a palavra 'telhado' corresponde à imagem — o aluno descobre a correspondência imagem↔palavra exacta pela observação da forma global, distinguindo-a de palavras visualmente próximas
-**Assessment:** O aluno selecciona a palavra 'telhado' correctamente entre 3 opções em duas rondas consecutivas, incluindo distinção de 'telha' e 'telheiro'
+**Assessment:** O aluno seleciona a palavra 'telhado' correctamente entre 3 opções em duas rondas consecutivas, incluindo distinção de 'telha' e 'telheiro'
 
 **Diferenciação:**
-- 🟢 Apoio: 2 opções apenas (telhado vs. janela, muito diferentes visualmente); imagem com seta vermelha a apontar para o telhado; áudio da palavra antes de seleccionar
+- 🟢 Apoio: 2 opções apenas (telhado vs. janela, muito diferentes visualmente); imagem com seta vermelha a apontar para o telhado; áudio da palavra antes de selecionar
 - 🟡 Intermédio: 3 opções incluindo palavra relacionada ('telha'); imagem disponível como apoio; uma tentativa adicional se errar
 - 🔴 Desafio: 4 opções (telhado, telha, telheiro, tijolo); sem áudio prévio; deve identificar na primeira tentativa e explicar por que as outras estão erradas
 
@@ -82,15 +90,15 @@
 
 ## Unit 5: Recombinação silábica — formar novas palavras com as sílabas de 'telhado' (7 min)
 
-**Compreender:** O aluno explora combinações das sílabas te, lha e do para formar novas palavras ou identificar pseudo-palavras. Descobre que as sílabas são unidades reutilizáveis da língua. Palavras-alvo seguras acessíveis a 1.º ano: 'tela' (te+la), 'lado' (la+do), 'data' (da+ta) — nota: algumas requerem sílabas extra disponíveis na bancada. A recombinação com sílabas extra enriquece o vocabulário.
+**Compreender:** O aluno explora combinações das sílabas te, lha e do para formar novas palavras ou identificar pseudo-palavras. Descobre que as sílabas são unidades reutilizáveis da língua. Palavras-alvo seguras acessíveis a 1.º ano: 'ecrã' (te+la), 'lado' (la+do), 'data' (da+ta) — nota: algumas requerem sílabas extra disponíveis na bancada. A recombinação com sílabas extra enriquece o vocabulário.
 
 **Constraint:** Nem toda a combinação de sílabas forma uma palavra real com significado — o aluno descobre que as sílabas têm de se combinar de forma que a palavra exista na língua portuguesa
-**Assessment:** O aluno forma pelo menos 2 palavras reais novas (ex: 'tela', 'lado') e distingue correctamente entre palavras reais e pseudo-palavras em pelo menos 3 casos
+**Assessment:** O aluno forma pelo menos 2 palavras reais novas (ex: 'ecrã', 'lado') e distingue correctamente entre palavras reais e pseudo-palavras em pelo menos 3 casos
 
 **Diferenciação:**
-- 🟢 Apoio: Apenas 2 sílabas de cada vez (te + la → tela); imagem de apoio para cada palavra real encontrada; a palavra-exemplo 'tela' dada como modelo com imagem de tecido
-- 🟡 Intermédio: 5 sílabas disponíveis; sem imagens prévias; classifica sozinho com feedback imediato; objectivo: encontrar 2 palavras reais
-- 🔴 Desafio: Inclui sílaba extra 'ro'; deve encontrar 3+ palavras reais (tela, lado, telha, telhado); escreve cada palavra descoberta num campo de texto; tenta usar uma das palavras numa frase oral
+- 🟢 Apoio: Apenas 2 sílabas de cada vez (te + la → ecrã); imagem de apoio para cada palavra real encontrada; a palavra-exemplo 'ecrã' dada como modelo com imagem de tecido
+- 🟡 Intermédio: 5 sílabas disponíveis; sem imagens prévias; classifica sozinho com feedback imediato; objetivo: encontrar 2 palavras reais
+- 🔴 Desafio: Inclui sílaba extra 'ro'; deve encontrar 3+ palavras reais (ecrã, lado, telha, telhado); escreve cada palavra descoberta num campo de texto; tenta usar uma das palavras numa frase oral
 
 ## Unit 6: Leitura e escrita guiada da palavra 'telhado' (6 min)
 
@@ -129,10 +137,10 @@
 - 🔴 Desafio: 4 opções incluindo 'telheiro'; sem imagem nas tarefas 2 e 3; tarefa bónus: escrever a frase completa 'O telhado é vermelho.' sem qualquer apoio; no maker, escreve duas frases sobre a sua casa
 
 ### 🛠️ Maker — Unplugged
-- **Desafio:** Após a mini-avaliação, cada aluno desenha a sua própria casa com telhado num papel A5 e escreve a palavra 'telhado' com seta a apontar. Quem quiser pinta o telhado de vermelho. Os desenhos são afixados num 'Mapa da Nossa Rua' colectivo na parede da sala.
+- **Desafio:** Após a mini-avaliação, cada aluno desenha a sua própria casa com telhado num papel A5 e escreve a palavra 'telhado' com seta a apontar. Quem quiser pinta o telhado de vermelho. Os desenhos são afixados num 'Mapa da Nossa Rua' coletivo na parede da sala.
 - **Grupo:** individual → turma
-- **Ligação:** O aluno transfere a aprendizagem digital (reconhecer/escrever 'telhado') para uma produção física; o 'Mapa da Nossa Rua' colectivo cria um circuito de comunicação MEM
-- **Comunicação:** Cada aluno apresenta o seu desenho à turma em 1 frase: 'Este é o telhado da minha casa. É [cor].' → os desenhos ficam no mapa colectivo visível na sala
+- **Ligação:** O aluno transfere a aprendizagem digital (reconhecer/escrever 'telhado') para uma produção física; o 'Mapa da Nossa Rua' coletivo cria um circuito de comunicação MEM
+- **Comunicação:** Cada aluno apresenta o seu desenho à turma em 1 frase: 'Este é o telhado da minha casa. É [cor].' → os desenhos ficam no mapa coletivo visível na sala
 - **Alternativas:** Sem papel: desenhar no quadro da sala com giz colorido; Com Lego: construir uma casa com telhado usando blocos; fotografar e escrever a legenda 'telhado' na foto impressa
 
 ---

@@ -6,7 +6,9 @@
     "Reconhecer globalmente a palavra 'peixe' e associá-la à sua imagem",
     "Segmentar 'peixe' em sílabas (pei-xe) identificando o ditongo 'ei'",
     "Recombinar sílabas para formar palavras novas e distinguir palavra existente de não-palavra",
-    "Usar a palavra 'peixe' numa frase simples oral e escrita"
+    "Usar a palavra 'peixe' numa frase simples oral e escrita",
+    "Descobrir que 'peixe' não é só uma forma para memorizar: tem sílabas, sons/letras e pode ajudar a ler palavras novas.",
+    "Ler uma palavra nova com sílabas conhecidas de 'peixe' e escrever uma frase curta com apoio."
   ],
   "curriculum": {
     "ae": [
@@ -52,7 +54,10 @@
       "Trabalho curricular comparticipado",
       "Circuitos de comunicação"
     ],
-    "instruments": ["PIT", "mapa de tarefas"],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas"
+    ],
     "socialOrganization": "individual (blocos 1–5, ~30 min) → pares (bloco 6 – frase simples, ~6 min) → turma (mini-avaliação partilhada + extensão oral, ~9 min)"
   },
   "materials": [
@@ -71,13 +76,19 @@
           {
             "name": "cenaVisivel",
             "type": "toggle",
-            "options": ["oculta", "visivel"],
+            "options": [
+              "oculta",
+              "visivel"
+            ],
             "default": "visivel"
           },
           {
             "name": "palavraRevelada",
             "type": "toggle",
-            "options": ["oculta", "visivel"],
+            "options": [
+              "oculta",
+              "visivel"
+            ],
             "default": "oculta"
           }
         ],
@@ -101,13 +112,20 @@
           {
             "name": "tarefaAtual",
             "type": "dropdown",
-            "options": ["palavra→imagem", "imagem→palavra"],
+            "options": [
+              "palavra→imagem",
+              "imagem→palavra"
+            ],
             "default": "palavra→imagem"
           },
           {
             "name": "opcaoSelecionada",
             "type": "quiz",
-            "options": ["peixe", "passarinho", "rato"],
+            "options": [
+              "peixe",
+              "passarinho",
+              "rato"
+            ],
             "default": null
           },
           {
@@ -136,19 +154,30 @@
           {
             "name": "silabas",
             "type": "drag",
-            "options": ["pei", "xe"],
+            "options": [
+              "pei",
+              "xe"
+            ],
             "default": null
           },
           {
             "name": "palmadas",
             "type": "quiz",
-            "options": ["1", "2", "3", "4"],
+            "options": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
             "default": null
           },
           {
             "name": "ditongoPintado",
             "type": "toggle",
-            "options": ["não", "sim"],
+            "options": [
+              "não",
+              "sim"
+            ],
             "default": "não"
           }
         ],
@@ -172,7 +201,18 @@
           {
             "name": "silabas_disponiveis",
             "type": "drag",
-            "options": ["pei", "xe", "lei", "rei", "mei", "a", "ra", "to", "ca", "sa"],
+            "options": [
+              "pei",
+              "xe",
+              "lei",
+              "rei",
+              "mei",
+              "a",
+              "ra",
+              "to",
+              "ca",
+              "sa"
+            ],
             "default": null
           },
           {
@@ -183,7 +223,10 @@
           {
             "name": "ehPalavra",
             "type": "quiz",
-            "options": ["Palavra real!", "Não é uma palavra."],
+            "options": [
+              "Palavra real!",
+              "Não é uma palavra."
+            ],
             "default": null
           }
         ],
@@ -223,13 +266,23 @@
           {
             "name": "silaba_em_falta",
             "type": "quiz",
-            "options": ["pei", "xe", "che", "se"],
+            "options": [
+              "pei",
+              "xe",
+              "che",
+              "se"
+            ],
             "default": null
           },
           {
             "name": "grafia_correta",
             "type": "quiz",
-            "options": ["peixe", "peixhe", "pexe", "peise"],
+            "options": [
+              "peixe",
+              "peixhe",
+              "pexe",
+              "peise"
+            ],
             "default": null
           },
           {
@@ -258,7 +311,12 @@
           {
             "name": "palavras_frase",
             "type": "sorting",
-            "options": ["O", "peixe", "nada", "."],
+            "options": [
+              "O",
+              "peixe",
+              "nada",
+              "."
+            ],
             "default": null
           },
           {
@@ -272,8 +330,8 @@
             "derivedFrom": "palavras_frase na ordem O→peixe→nada→. correcta"
           }
         ],
-        "render": "Frase modelo 'O peixe nada.' em destaque com imagem do peixe; cartas com as 4 palavras/elementos embaralhados para arrastar para slots numerados; espaço de escrita livre para frase própria activado após frase modelo correcta; ícones lembretes: Aa (maiúscula) e . (ponto final)",
-        "transition": "Arrastar palavras para slots → frase_valida actualiza → feedback visual com animação quando ordem correcta; campo de escrita livre activa; ao submeter frase própria → verificação básica de maiúscula e ponto",
+        "render": "Frase modelo 'O peixe nada.' em destaque com imagem do peixe; cartas com as 4 palavras/elementos embaralhados para arrastar para slots numerados; espaço de escrita livre para frase própria ativado após frase modelo correcta; ícones lembretes: Aa (maiúscula) e . (ponto final)",
+        "transition": "Arrastar palavras para slots → frase_valida actualiza → feedback visual com animação quando ordem correcta; campo de escrita livre ativa; ao submeter frase própria → verificação básica de maiúscula e ponto",
         "constraint": "Uma frase começa com letra maiúscula e termina com ponto final; o sujeito ('O peixe') precede o predicado ('nada'); a ordem das palavras em português segue uma lógica de sentido",
         "assessment": "O aluno ordena correctamente as 4 partes da frase e escreve (ou dita ao professor) uma frase própria com 'peixe', com maiúscula inicial e ponto final"
       },
@@ -292,19 +350,29 @@
           {
             "name": "tarefa1_reconhece",
             "type": "quiz",
-            "options": ["peixe", "passarinho", "funil"],
+            "options": [
+              "peixe",
+              "passarinho",
+              "funil"
+            ],
             "default": null
           },
           {
             "name": "tarefa2_segmenta",
             "type": "sorting",
-            "options": ["pei", "xe"],
+            "options": [
+              "pei",
+              "xe"
+            ],
             "default": null
           },
           {
             "name": "tarefa3_reconstroi",
             "type": "drag",
-            "options": ["xe", "pei"],
+            "options": [
+              "xe",
+              "pei"
+            ],
             "default": null
           },
           {
@@ -332,13 +400,17 @@
     },
     {
       "summary": "Bloco 8 — Extensão: ilustrar, explorar oralmente e ligar ao mundo",
-      "textDescription": "Actividade de extensão com 3 opções à escolha do aluno: (a) desenhar e legendar um peixe, (b) explorar oralmente características dos peixes como animais aquáticos (ligação ao Estudo do Meio), ou (c) desafio escrito de palavras com ditongo 'ei'. Adequado para TEA ou trabalho autónomo em ritmo diferenciado.",
+      "textDescription": "Atividade de extensão com 3 opções à escolha do aluno: (a) desenhar e legendar um peixe, (b) explorar oralmente características dos peixes como animais aquáticos (ligação ao Estudo do Meio), ou (c) desafio escrito de palavras com ditongo 'ei'. Adequado para TEA ou trabalho autónomo em ritmo diferenciado.",
       "interaction": {
         "state": [
           {
             "name": "opcao_extensao",
             "type": "dropdown",
-            "options": ["Desenho e legenda", "Exploração oral", "Palavras com 'ei'"],
+            "options": [
+              "Desenho e legenda",
+              "Exploração oral",
+              "Palavras com 'ei'"
+            ],
             "default": "Desenho e legenda"
           },
           {
@@ -352,8 +424,8 @@
             "default": null
           }
         ],
-        "render": "Três cartões de actividade para escolher com ícones ilustrativos; canvas de desenho com área de legenda abaixo; para exploração oral, lista de perguntas-guia ('Onde vive o peixe?', 'O que come?', 'Como se move?'); para palavras com 'ei', campo de texto livre com contador de palavras encontradas",
-        "transition": "Selecionar opção de extensão → actividade correspondente abre em ecrã completo com instruções; todas as opções guardam a produção do aluno para eventual partilha posterior",
+        "render": "Três cartões de atividade para escolher com ícones ilustrativos; canvas de desenho com área de legenda abaixo; para exploração oral, lista de perguntas-guia ('Onde vive o peixe?', 'O que come?', 'Como se move?'); para palavras com 'ei', campo de texto livre com contador de palavras encontradas",
+        "transition": "Selecionar opção de extensão → atividade correspondente abre em ecrã completo com instruções; todas as opções guardam a produção do aluno para eventual partilha posterior",
         "constraint": "A extensão é autónoma e de escolha livre — o aluno decide o caminho ao seu ritmo; não há resposta errada, há produções com mais ou menos detalhe; o professor observa sem intervir salvo pedido",
         "assessment": "O aluno produz pelo menos 1 elemento observável: um desenho legendado com a palavra 'peixe', 2 respostas orais sobre características do animal, ou 3 palavras escritas com ditongo 'ei'"
       },
@@ -382,5 +454,13 @@
       "duration": 8
     }
   ],
-  "sessionFlow": "0–4 min: Bloco 1 — cena do aquário, descoberta da palavra 'peixe' por revelação → 4–8 min: Bloco 2 — reconhecimento global palavra↔imagem com distratores → 8–14 min: Bloco 3 — segmentação silábica pei+xe, contagem de palmas, ditongo 'ei' → 14–21 min: Bloco 4 — recombinação com sílabas conhecidas, jogo de palavras/não-palavras + maker físico (opcional) → 21–27 min: Bloco 5 — leitura e escrita guiada, ortografia do dígrafo 'xe' → 27–33 min: Bloco 6 — construção da frase 'O peixe nada.' em pares + frase própria → 33–37 min: Bloco 7 — mini-avaliação formativa (4 critérios M28P observáveis) → 37–45 min: Bloco 8 — extensão autónoma à escolha + mini-livro maker + comunicação MEM"
+  "sessionFlow": "0–4 min: Bloco 1 — cena do aquário, descoberta da palavra 'peixe' por revelação → 4–8 min: Bloco 2 — reconhecimento global palavra↔imagem com distratores → 8–14 min: Bloco 3 — segmentação silábica pei+xe, contagem de palmas, ditongo 'ei' → 14–21 min: Bloco 4 — recombinação com sílabas conhecidas, jogo de palavras/não-palavras + maker físico (opcional) → 21–27 min: Bloco 5 — leitura e escrita guiada, ortografia do dígrafo 'xe' → 27–33 min: Bloco 6 — construção da frase 'O peixe nada.' em pares + frase própria → 33–37 min: Bloco 7 — mini-avaliação formativa (4 critérios M28P observáveis) → 37–45 min: Bloco 8 — extensão autónoma à escolha + mini-livro maker + comunicação MEM",
+  "m28pMethodAlignment": {
+    "principle": "Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.",
+    "meaningfulEntry": "palavra-chave com imagem/contexto antes da análise",
+    "globalRecognition": "reconhecimento global é ponto de entrada, não fim da aprendizagem",
+    "codeWork": "consciência silábica e relação som-letra/grafofonémica",
+    "generalization": "ler palavra nova com sílabas conhecidas e escrever frase curta",
+    "quickVerification": "verificação rápida observa palavra-alvo, palavra nova e frase curta"
+  }
 }

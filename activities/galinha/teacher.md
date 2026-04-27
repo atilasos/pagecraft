@@ -6,12 +6,20 @@
 
 ---
 
-## Objectivos de aprendizagem
+## Objetivos de aprendizagem
 
 - Reconhecer a palavra 'galinha' globalmente, associada à imagem do animal
 - Segmentar 'galinha' nas sílabas ga-li-nha e reconstituí-la a partir das sílabas desordenadas
 - Descobrir novas palavras reais recombinando as sílabas ga, li, nha (ex: linha, liga)
 - Ler e construir a frase 'A galinha põe ovos.' com as palavras em cartão
+
+## Princípio M28P — evitar uso puramente visual
+
+Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.
+
+- **Som-letra/grafofonémica:** pedir que a criança diga que som ou letra observa em 'galinha'.
+- **Generalização:** pedir uma palavra nova com sílabas conhecidas e uma frase curta.
+- **Verificação rápida:** observar palavra-alvo, sílabas, palavra nova e frase/frase oral.
 
 ## Materiais
 
@@ -20,7 +28,7 @@
 - Cartões de sílabas físicos: ga / li / nha (cor diferente por sílaba: laranja / azul-claro / verde)
 - Cartões de palavras para a frase: A / galinha / põe / ovos / .
 - Folhas A4 e canetas de feltro coloridas para o maker
-- Quadro interactivo para momento colectivo
+- Quadro interativo para momento coletivo
 
 ## Alinhamento MEM
 
@@ -106,10 +114,10 @@
 - 🔴 Desafio: 🔴 Aluno cria uma frase alternativa com 'galinha' (ex: 'A galinha canta no quintal.') num campo de texto livre, e ilustra com desenho rápido de 60 segundos.
 
 ### 🛠️ Maker — Unplugged
-- **Desafio:** Cada par recebe um conjunto de cartões físicos impressos com as palavras (A / galinha / põe / ovos / .). Constroem a frase na mesa, confirmam com o par ao lado e fotografam com o tablet. As fotos são partilhadas no quadro interactivo.
+- **Desafio:** Cada par recebe um conjunto de cartões físicos impressos com as palavras (A / galinha / põe / ovos / .). Constroem a frase na mesa, confirmam com o par ao lado e fotografam com o tablet. As fotos são partilhadas no quadro interativo.
 - **Grupo:** 2
 - **Ligação:** A exploração digital da ordenação da frase precede e inspira a construção física — o aluno passa do ecrã para o papel, consolidando com os sentidos tácteis.
-- **Comunicação:** Cada par apresenta a fotografia da sua frase montada no quadro interactivo e lê em voz alta para a turma. A turma valida: 'está certo?' (polegar para cima/baixo).
+- **Comunicação:** Cada par apresenta a fotografia da sua frase montada no quadro interativo e lê em voz alta para a turma. A turma valida: 'está certo?' (polegar para cima/baixo).
 - **Alternativas:** Sem impressão: escrever as palavras em post-its e colar no caderno ou na secretária; Sem tablet: apresentar a frase montada oralmente, apontando para cada cartão
 
 ## Unit 7: Mini-avaliação formativa — 4 competências em sequência observável (4 min)

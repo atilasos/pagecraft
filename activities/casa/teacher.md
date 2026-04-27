@@ -6,20 +6,28 @@
 
 ---
 
-## Objectivos de aprendizagem
+## Objetivos de aprendizagem
 
 - Reconhecer a palavra 'casa' globalmente, associando-a à imagem correspondente
 - Segmentar a palavra 'casa' nas sílabas ca-sa e identificar cada sílaba isoladamente
 - Recombinar as sílabas ca e sa com sílabas já conhecidas para formar novas palavras reais
 - Ler e completar a frase 'A casa é grande.' com compreensão
 
+## Princípio M28P — evitar uso puramente visual
+
+Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.
+
+- **Som-letra/grafofonémica:** pedir que a criança diga que som ou letra observa em 'casa'.
+- **Generalização:** pedir uma palavra nova com sílabas conhecidas e uma frase curta.
+- **Verificação rápida:** observar palavra-alvo, sílabas, palavra nova e frase/frase oral.
+
 ## Materiais
 
 - Tablet ou computador com browser (1 por aluno ou par)
 - Cartão da palavra 'casa' (cartaz da coleção M28P)
-- Cartões de sílabas físicos: ca / sa (para actividade unplugged opcional)
+- Cartões de sílabas físicos: ca / sa (para atividade unplugged opcional)
 - Folha de registo em papel (opcional, apoio)
-- Quadro interactivo para apresentação e síntese coletiva
+- Quadro interativo para apresentação e síntese coletiva
 
 ## Alinhamento MEM
 
@@ -30,7 +38,7 @@
 
 ## Fluxo da sessão
 
-0-4min: Bloco 1 (Abertura contextual) — activação oral + imagem da casa, micro-história, toggle interior/exterior → 4-9min: Bloco 2 (Reconhecimento global) — palavra em grande, áudio, quiz de 3 imagens → 9-16min: Bloco 3 (Segmentação silábica) — blocos CA/SA, palmas, arrastar para ordem correta → 16-23min: Bloco 4 (Recombinação) — banco de sílabas, formar BOCA e CANA, actividade unplugged em par → 23-30min: Bloco 5 (Leitura e escrita guiada) — completar, ordenar, traçar → 30-37min: Bloco 6 (Frase simples) — ordenar 'A casa é grande.', criar frase própria em par → 37-42min: Bloco 7 (Mini-avaliação) — 4 tarefas diagnósticas, sumário para professor → 42-52min: Bloco 8 (Extensão) — escolha autónoma: desenho, oral ou Lego; comunicação à turma
+0-4min: Bloco 1 (Abertura contextual) — ativação oral + imagem da casa, micro-história, toggle interior/exterior → 4-9min: Bloco 2 (Reconhecimento global) — palavra em grande, áudio, quiz de 3 imagens → 9-16min: Bloco 3 (Segmentação silábica) — blocos CA/SA, palmas, arrastar para ordem correta → 16-23min: Bloco 4 (Recombinação) — banco de sílabas, formar BOCA e CANA, atividade unplugged em par → 23-30min: Bloco 5 (Leitura e escrita guiada) — completar, ordenar, traçar → 30-37min: Bloco 6 (Frase simples) — ordenar 'A casa é grande.', criar frase própria em par → 37-42min: Bloco 7 (Mini-avaliação) — 4 tarefas diagnósticas, sumário para professor → 42-52min: Bloco 8 (Extensão) — escolha autónoma: desenho, oral ou Lego; comunicação à turma
 
 ## Unit 1: Abertura contextual: a palavra 'casa' surge numa micro-história com imagem (4 min)
 
@@ -47,16 +55,16 @@
 ### 🛠️ Maker — Unplugged
 - **Desafio:** Antes de abrir a página, mostra a imagem de uma casa e pergunta: 'O que vês? Quantas partes tem uma casa?' Cada aluno responde oralmente ou com um desenho rápido (1 min).
 - **Grupo:** turma
-- **Ligação:** A exploração oral activa vocabulário (porta, telhado, janela) que será reforçado na leitura da frase e na extensão final.
-- **Comunicação:** Respostas partilhadas oralmente com a turma antes de abrir a actividade digital.
-- **Alternativas:** Mostrar imagem no quadro interactivo se não houver impressão disponível
+- **Ligação:** A exploração oral ativa vocabulário (porta, telhado, janela) que será reforçado na leitura da frase e na extensão final.
+- **Comunicação:** Respostas partilhadas oralmente com a turma antes de abrir a atividade digital.
+- **Alternativas:** Mostrar imagem no quadro interativo se não houver impressão disponível
 
 ## Unit 2: Reconhecimento global: ver a palavra, ouvir a palavra, associar imagem ↔ palavra (5 min)
 
 **Compreender:** O aluno vê a palavra 'casa' escrita em letra grande e ouve-a pronunciada. De seguida, realiza uma tarefa de correspondência: associar a palavra 'casa' à imagem correta entre três opções visuais (casa, carro, bota). O objetivo é consolidar o reconhecimento global da palavra antes da segmentação.
 
 **Constraint:** O aluno deve reconhecer a palavra 'casa' globalmente — pela forma visual da palavra — antes de a decompor.
-**Assessment:** O aluno selecciona a imagem correta (casa) em no máximo 2 tentativas e consegue dizer 'esta é a palavra CASA' apontando para a palavra escrita.
+**Assessment:** O aluno seleciona a imagem correta (casa) em no máximo 2 tentativas e consegue dizer 'esta é a palavra CASA' apontando para a palavra escrita.
 
 **Diferenciação:**
 - 🟢 Apoio: 🟢 Apenas duas opções (casa vs. objeto claramente diferente, ex: bota); palavra escrita com cor diferente para cada letra; professor pode nomear as imagens antes da escolha.
@@ -99,7 +107,7 @@
 - **Grupo:** 2
 - **Ligação:** O registo em papel das palavras descobertas cria um mini-dicionário pessoal que complementa o painel digital.
 - **Comunicação:** Cada par partilha 1 palavra nova com a turma no quadro — o professor regista todas num cartaz coletivo.
-- **Alternativas:** Actividade oral: professor diz uma sílaba, aluno responde com outra para formar uma palavra
+- **Alternativas:** Atividade oral: professor diz uma sílaba, aluno responde com outra para formar uma palavra
 
 ## Unit 5: Leitura e escrita guiada: completar a palavra 'casa' com sílabas em falta (7 min)
 

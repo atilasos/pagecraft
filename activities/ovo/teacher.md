@@ -6,12 +6,20 @@
 
 ---
 
-## Objectivos de aprendizagem
+## Objetivos de aprendizagem
 
 - Reconhecer globalmente a palavra 'ovo' e associá-la ao seu significado no tema animal/alimento
 - Segmentar a palavra 'ovo' nas sílabas o-vo e reconstruí-la a partir de sílabas desordenadas
 - Recombinar as sílabas o e vo com sílabas já conhecidas para descobrir palavras reais
 - Ler e construir a frase simples 'O ovo é branco.'
+
+## Princípio M28P — evitar uso puramente visual
+
+Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.
+
+- **Som-letra/grafofonémica:** pedir que a criança diga que som ou letra observa em 'ovo'.
+- **Generalização:** pedir uma palavra nova com sílabas conhecidas e uma frase curta.
+- **Verificação rápida:** observar palavra-alvo, sílabas, palavra nova e frase/frase oral.
 
 ## Materiais
 

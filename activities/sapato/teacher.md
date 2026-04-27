@@ -6,19 +6,27 @@
 
 ---
 
-## Objectivos de aprendizagem
+## Objetivos de aprendizagem
 
 - Reconhecer globalmente a palavra 'sapato' associando-a à imagem
 - Segmentar 'sapato' nas três sílabas sa-pa-to e bater as palmas correspondentes
 - Recombinar as sílabas sa, pa, to para formar novas palavras (ex: pato)
 - Ler e completar a frase 'O sapato é azul.' usando a palavra trabalhada
 
+## Princípio M28P — evitar uso puramente visual
+
+Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.
+
+- **Som-letra/grafofonémica:** pedir que a criança diga que som ou letra observa em 'sapato'.
+- **Generalização:** pedir uma palavra nova com sílabas conhecidas e uma frase curta.
+- **Verificação rápida:** observar palavra-alvo, sílabas, palavra nova e frase/frase oral.
+
 ## Materiais
 
 - Tablet ou computador com browser (1 por aluno ou par)
 - Cartão da palavra 'sapato' (imagem + palavra impressa)
 - Blocos de sílabas físicos (sa / pa / to) para manipulação offline
-- Quadro interactivo para fase colectiva
+- Quadro interativo para fase coletiva
 
 ## Alinhamento MEM
 
@@ -29,7 +37,7 @@
 
 ## Fluxo da sessão
 
-0-4min: Unit 1 (abertura contextual — imagem do sapato azul, micro-história) → 4-9min: Unit 2 (reconhecimento global — selecionar palavra entre opções) → 9-16min: Unit 3 (segmentação silábica — arrastar blocos sa/pa/to + maker unplugged em pares) → 16-23min: Unit 4 (recombinação — descobrir 'pato' e outras palavras, em pares) → 23-31min: Unit 5 (leitura e escrita guiada — completar palavra + cópia) → 31-38min: Unit 6 (frase simples — ordenar e ler 'O sapato é azul.') → 38-42min: Unit 7 (mini-avaliação formativa — 4 micro-tarefas observáveis) → 42-45min: Unit 8 (extensão — galeria de calçado + desenho + partilha colectiva)
+0-4min: Unit 1 (abertura contextual — imagem do sapato azul, micro-história) → 4-9min: Unit 2 (reconhecimento global — selecionar palavra entre opções) → 9-16min: Unit 3 (segmentação silábica — arrastar blocos sa/pa/to + maker unplugged em pares) → 16-23min: Unit 4 (recombinação — descobrir 'pato' e outras palavras, em pares) → 23-31min: Unit 5 (leitura e escrita guiada — completar palavra + cópia) → 31-38min: Unit 6 (frase simples — ordenar e ler 'O sapato é azul.') → 38-42min: Unit 7 (mini-avaliação formativa — 4 micro-tarefas observáveis) → 42-45min: Unit 8 (extensão — galeria de calçado + desenho + partilha coletiva)
 
 ## Unit 1: Abertura contextual: imagem e micro-história com a palavra 'sapato' (4 min)
 
@@ -131,7 +139,7 @@
 
 ## Unit 8: Extensão: vestuário, oralidade e criatividade com 'sapato' (3 min)
 
-**Compreender:** Momento de partilha colectiva e extensão criativa. O aluno explora vocabulário de vestuário ligado a 'sapato' (bota, sandália, chinelo), desenha o seu sapato favorito e partilha com a turma. Ligação ao tema vestuário e ao contexto de vida do aluno.
+**Compreender:** Momento de partilha coletiva e extensão criativa. O aluno explora vocabulário de vestuário ligado a 'sapato' (bota, sandália, chinelo), desenha o seu sapato favorito e partilha com a turma. Ligação ao tema vestuário e ao contexto de vida do aluno.
 
 **Constraint:** O vocabulário de vestuário está ligado a contextos da vida real — calçado diferente para situações diferentes (escola, praia, chuva)
 **Assessment:** O aluno nomeia corretamente pelo menos 2 outros tipos de calçado além de 'sapato' e partilha o seu desenho com uma frase oral ('O meu sapato favorito é...')

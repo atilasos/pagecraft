@@ -6,7 +6,9 @@
     "Reconhecer globalmente a palavra 'palhaço' e associá-la à sua imagem",
     "Segmentar 'palhaço' em sílabas (pa-lha-ço) identificando o dígrafo 'lh' e o cedilha 'ç'",
     "Recombinar sílabas para formar palavras novas e distinguir palavra existente de não-palavra",
-    "Usar a palavra 'palhaço' numa frase simples oral e escrita"
+    "Usar a palavra 'palhaço' numa frase simples oral e escrita",
+    "Descobrir que 'palhaço' não é só uma forma para memorizar: tem sílabas, sons/letras e pode ajudar a ler palavras novas.",
+    "Ler uma palavra nova com sílabas conhecidas de 'palhaço' e escrever uma frase curta com apoio."
   ],
   "curriculum": {
     "ae": [
@@ -52,7 +54,10 @@
       "Trabalho curricular comparticipado",
       "Circuitos de comunicação"
     ],
-    "instruments": ["PIT", "mapa de tarefas"],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas"
+    ],
     "socialOrganization": "individual (blocos 1–5, ~30 min) → pares (bloco 6 – frase simples, ~6 min) → turma (mini-avaliação partilhada + extensão oral, ~9 min)"
   },
   "materials": [
@@ -68,8 +73,24 @@
       "textDescription": "O aluno descobre a palavra através de uma cena animada: um palhaço colorido num circo. A palavra 'palhaço' aparece associada à imagem, preparando o reconhecimento global. A cena inclui micro-história: 'No circo há um artista muito engraçado. Faz rir toda a gente. Como se chama?'",
       "interaction": {
         "state": [
-          {"name": "cenaVisivel", "type": "toggle", "options": ["oculta", "visivel"], "default": "visivel"},
-          {"name": "palavraRevelada", "type": "toggle", "options": ["oculta", "visivel"], "default": "oculta"}
+          {
+            "name": "cenaVisivel",
+            "type": "toggle",
+            "options": [
+              "oculta",
+              "visivel"
+            ],
+            "default": "visivel"
+          },
+          {
+            "name": "palavraRevelada",
+            "type": "toggle",
+            "options": [
+              "oculta",
+              "visivel"
+            ],
+            "default": "oculta"
+          }
         ],
         "render": "Imagem de um palhaço colorido num circo (fundo vermelho, estrelas, confettis); micro-história em texto grande por baixo; botão 'Mostra a palavra' que revela o cartaz palavra+imagem em destaque com moldura colorida",
         "transition": "Clicar 'Mostra a palavra' → palavraRevelada muda para visível → cartaz com imagem e palavra 'palhaço' aparece com animação suave de fade-in",
@@ -88,9 +109,30 @@
       "textDescription": "O aluno pratica o reconhecimento global da palavra 'palhaço' em dois sentidos: palavra→imagem e imagem→palavra. Usa palavras já aprendidas como distratores para consolidar a discriminação visual da forma escrita.",
       "interaction": {
         "state": [
-          {"name": "tarefaAtual", "type": "dropdown", "options": ["palavra→imagem", "imagem→palavra"], "default": "palavra→imagem"},
-          {"name": "opcaoSelecionada", "type": "quiz", "options": ["palhaço", "passarinho", "telhado"], "default": null},
-          {"name": "respostaCerta", "type": "derived", "derivedFrom": "opcaoSelecionada === 'palhaço'"}
+          {
+            "name": "tarefaAtual",
+            "type": "dropdown",
+            "options": [
+              "palavra→imagem",
+              "imagem→palavra"
+            ],
+            "default": "palavra→imagem"
+          },
+          {
+            "name": "opcaoSelecionada",
+            "type": "quiz",
+            "options": [
+              "palhaço",
+              "passarinho",
+              "telhado"
+            ],
+            "default": null
+          },
+          {
+            "name": "respostaCerta",
+            "type": "derived",
+            "derivedFrom": "opcaoSelecionada === 'palhaço'"
+          }
         ],
         "render": "Tarefa 1: palavra 'palhaço' em destaque; 3 imagens abaixo para selecionar. Tarefa 2: imagem de palhaço; 3 palavras para clicar. Feedback imediato: ✓ verde / ✗ âmbar",
         "transition": "Clicar numa opção → feedback visual imediato → botão 'Continuar' ativa",
@@ -109,9 +151,36 @@
       "textDescription": "O aluno divide a palavra 'palhaço' nas suas três sílabas (pa-lha-ço), bate palmas para contar, e arrasta blocos silábicos para caixas coloridas. Destaca-se o dígrafo 'lh' (duas letras = um som) e o cedilha 'ç' (c com cedilha, som suave).",
       "interaction": {
         "state": [
-          {"name": "silabas", "type": "drag", "options": ["pa", "lha", "ço"], "default": null},
-          {"name": "palmadas", "type": "quiz", "options": ["1", "2", "3", "4"], "default": null},
-          {"name": "digrafoPintado", "type": "toggle", "options": ["não", "sim"], "default": "não"}
+          {
+            "name": "silabas",
+            "type": "drag",
+            "options": [
+              "pa",
+              "lha",
+              "ço"
+            ],
+            "default": null
+          },
+          {
+            "name": "palmadas",
+            "type": "quiz",
+            "options": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
+            "default": null
+          },
+          {
+            "name": "digrafoPintado",
+            "type": "toggle",
+            "options": [
+              "não",
+              "sim"
+            ],
+            "default": "não"
+          }
         ],
         "render": "Palavra 'palhaço' no centro; três blocos coloridos 'pa' (vermelho), 'lha' (azul), 'ço' (amarelo) para colocar em caixas numeradas; contador de palmas; secção de destaque do dígrafo 'lh' com animação",
         "transition": "Arrastar sílabas para caixas → feedback de posição correcta; clicar opção de palmadas → feedback imediato; clicar 'lh' → destaque visual com nota ('lh: duas letras, um som!')",
@@ -130,9 +199,37 @@
       "textDescription": "Usando as sílabas 'pa', 'lha', 'ço' e sílabas já conhecidas, o aluno tenta formar combinações novas. Distingue combinações que formam palavras reais de não-palavras. Explora o padrão 'lha/lhe/lhi/lho/lhu' como produtivo.",
       "interaction": {
         "state": [
-          {"name": "silabas_disponiveis", "type": "drag", "options": ["pa", "lha", "ço", "pá", "lho", "te", "ca", "sa", "me", "ra"], "default": null},
-          {"name": "combinacao_formada", "type": "derived", "derivedFrom": "concatenação das sílabas arrastadas para os slots"},
-          {"name": "ehPalavra", "type": "quiz", "options": ["Palavra real!", "Não é uma palavra."], "default": null}
+          {
+            "name": "silabas_disponiveis",
+            "type": "drag",
+            "options": [
+              "pa",
+              "lha",
+              "ço",
+              "pá",
+              "lho",
+              "te",
+              "ca",
+              "sa",
+              "me",
+              "ra"
+            ],
+            "default": null
+          },
+          {
+            "name": "combinacao_formada",
+            "type": "derived",
+            "derivedFrom": "concatenação das sílabas arrastadas para os slots"
+          },
+          {
+            "name": "ehPalavra",
+            "type": "quiz",
+            "options": [
+              "Palavra real!",
+              "Não é uma palavra."
+            ],
+            "default": null
+          }
         ],
         "render": "Área de sílabas disponíveis; zona de construção com 2-3 slots; botão '🔍 É uma palavra?'; lista de palavras descobertas",
         "transition": "Arrastar sílabas para slots → combinacao_formada actualiza; clicar '🔍' → feedback com explicação",
@@ -142,11 +239,18 @@
       "maker": {
         "type": "unplugged",
         "challenge": "Com cartões físicos das sílabas (pa, lha, ço, lho, te, ca), o aluno e o par tentam todas as combinações de 2-3 sílabas e registam numa folha: 'Palavra ✓' / 'Não é palavra ✗'.",
-        "materials": ["Cartões físicos com sílabas", "Folha de registo com colunas", "Lápis"],
+        "materials": [
+          "Cartões físicos com sílabas",
+          "Folha de registo com colunas",
+          "Lápis"
+        ],
         "groupSize": "2",
         "connection": "O jogo físico de manipulação de cartões antecipa ou reforça a exploração digital",
         "communication": "Cada par partilha a palavra mais inesperada que descobriu",
-        "alternatives": ["Usar tiras de papel recortadas", "Usar post-its coloridos"]
+        "alternatives": [
+          "Usar tiras de papel recortadas",
+          "Usar post-its coloridos"
+        ]
       },
       "differentiation": {
         "support": "🟢 Apenas 4 sílabas disponíveis; feedback imediato de cor",
@@ -160,9 +264,33 @@
       "textDescription": "O aluno pratica a leitura e escrita da palavra 'palhaço': completar com sílaba em falta, selecionar a grafia correta, copiar com apoio visual. Foco especial no cedilha 'ç' e no dígrafo 'lh', frequentemente escritos erradamente.",
       "interaction": {
         "state": [
-          {"name": "silaba_em_falta", "type": "quiz", "options": ["lha", "la", "lhã", "lja"], "default": null},
-          {"name": "grafia_correta", "type": "quiz", "options": ["palhaço", "palacio", "palaço", "palhaço"], "default": null},
-          {"name": "copia_escrita", "type": "canvas", "default": null}
+          {
+            "name": "silaba_em_falta",
+            "type": "quiz",
+            "options": [
+              "lha",
+              "la",
+              "lhã",
+              "lja"
+            ],
+            "default": null
+          },
+          {
+            "name": "grafia_correta",
+            "type": "quiz",
+            "options": [
+              "palhaço",
+              "palacio",
+              "palaço",
+              "palhaço"
+            ],
+            "default": null
+          },
+          {
+            "name": "copia_escrita",
+            "type": "canvas",
+            "default": null
+          }
         ],
         "render": "Tarefa 1: 'pa___ço' com imagem de palhaço e 4 opções de sílaba do meio. Tarefa 2: 4 grafias, escolher a correta. Tarefa 3: copiar a palavra num campo de texto com validação",
         "transition": "Selecionar opção → feedback imediato ✓/✗ com explicação; confirmar escrita → validação visual",
@@ -181,12 +309,31 @@
       "textDescription": "O aluno lê a frase modelo 'O palhaço faz rir.' e reconstrói-a ordenando palavras. Em pares, experimenta criar a sua própria frase com 'palhaço'. Foca na estrutura sujeito-predicado e nas convenções de escrita.",
       "interaction": {
         "state": [
-          {"name": "palavras_frase", "type": "sorting", "options": ["O", "palhaço", "faz", "rir", "."], "default": null},
-          {"name": "frase_propria", "type": "canvas", "default": null},
-          {"name": "frase_valida", "type": "derived", "derivedFrom": "palavras_frase na ordem O→palhaço→faz→rir→. correcta"}
+          {
+            "name": "palavras_frase",
+            "type": "sorting",
+            "options": [
+              "O",
+              "palhaço",
+              "faz",
+              "rir",
+              "."
+            ],
+            "default": null
+          },
+          {
+            "name": "frase_propria",
+            "type": "canvas",
+            "default": null
+          },
+          {
+            "name": "frase_valida",
+            "type": "derived",
+            "derivedFrom": "palavras_frase na ordem O→palhaço→faz→rir→. correcta"
+          }
         ],
         "render": "Frase modelo em destaque com imagem do palhaço; cartas com as 5 palavras/elementos embaralhados para arrastar para slots; espaço de escrita livre ativado após frase modelo correta",
-        "transition": "Arrastar palavras para slots → feedback visual quando ordem correta; campo de escrita livre activa",
+        "transition": "Arrastar palavras para slots → feedback visual quando ordem correta; campo de escrita livre ativa",
         "constraint": "Uma frase começa com letra maiúscula e termina com ponto final; a ordem das palavras segue lógica de sentido",
         "assessment": "O aluno ordena corretamente as 5 partes e escreve uma frase própria com 'palhaço' com maiúscula e ponto"
       },
@@ -202,11 +349,46 @@
       "textDescription": "Avaliação rápida e sequencial dos 4 critérios: reconhecimento global, segmentação silábica, reconstrução a partir de sílabas desordenadas, e uso da palavra em frase. Registo observável e não punitivo.",
       "interaction": {
         "state": [
-          {"name": "tarefa1_reconhece", "type": "quiz", "options": ["palhaço", "passarinho", "telhado"], "default": null},
-          {"name": "tarefa2_segmenta", "type": "sorting", "options": ["pa", "lha", "ço"], "default": null},
-          {"name": "tarefa3_reconstroi", "type": "drag", "options": ["ço", "pa", "lha"], "default": null},
-          {"name": "tarefa4_frase", "type": "canvas", "default": null},
-          {"name": "pontuacao", "type": "derived", "derivedFrom": "soma das tarefas correctas (0-4)"}
+          {
+            "name": "tarefa1_reconhece",
+            "type": "quiz",
+            "options": [
+              "palhaço",
+              "passarinho",
+              "telhado"
+            ],
+            "default": null
+          },
+          {
+            "name": "tarefa2_segmenta",
+            "type": "sorting",
+            "options": [
+              "pa",
+              "lha",
+              "ço"
+            ],
+            "default": null
+          },
+          {
+            "name": "tarefa3_reconstroi",
+            "type": "drag",
+            "options": [
+              "ço",
+              "pa",
+              "lha"
+            ],
+            "default": null
+          },
+          {
+            "name": "tarefa4_frase",
+            "type": "canvas",
+            "default": null
+          },
+          {
+            "name": "pontuacao",
+            "type": "derived",
+            "derivedFrom": "soma das tarefas correctas (0-4)"
+          }
         ],
         "render": "4 tarefas sequenciais com barra de progresso; cada tarefa ocupa ecrã completo; resultado final com 🌟 por tarefa correta",
         "transition": "Completar tarefa → botão 'Próxima tarefa' ativa; no fim, mostrar resumo visual com ✓/✗",
@@ -222,26 +404,51 @@
     },
     {
       "summary": "Bloco 8 — Extensão: expressar, explorar e criar",
-      "textDescription": "Actividade de extensão com 3 opções: (a) desenhar e legendar um palhaço, (b) fazer careta de palhaço (expressão dramática), ou (c) desafio escrito de palavras com 'lh'. Adequado para TEA.",
+      "textDescription": "Atividade de extensão com 3 opções: (a) desenhar e legendar um palhaço, (b) fazer careta de palhaço (expressão dramática), ou (c) desafio escrito de palavras com 'lh'. Adequado para TEA.",
       "interaction": {
         "state": [
-          {"name": "opcao_extensao", "type": "dropdown", "options": ["Desenho e legenda", "Expressão dramática", "Palavras com 'lh'"], "default": "Desenho e legenda"},
-          {"name": "desenho", "type": "canvas", "default": null},
-          {"name": "palavras_lh", "type": "canvas", "default": null}
+          {
+            "name": "opcao_extensao",
+            "type": "dropdown",
+            "options": [
+              "Desenho e legenda",
+              "Expressão dramática",
+              "Palavras com 'lh'"
+            ],
+            "default": "Desenho e legenda"
+          },
+          {
+            "name": "desenho",
+            "type": "canvas",
+            "default": null
+          },
+          {
+            "name": "palavras_lh",
+            "type": "canvas",
+            "default": null
+          }
         ],
-        "render": "Três cartões de actividade para escolher; canvas de desenho com área de legenda; para expressão, guia de expressões faciais; para palavras, campo de texto com contador",
-        "transition": "Selecionar opção → actividade correspondente abre com instruções",
+        "render": "Três cartões de atividade para escolher; canvas de desenho com área de legenda; para expressão, guia de expressões faciais; para palavras, campo de texto com contador",
+        "transition": "Selecionar opção → atividade correspondente abre com instruções",
         "constraint": "A extensão é autónoma e de escolha livre; não há resposta errada",
         "assessment": "O aluno produz pelo menos 1 elemento observável: desenho legendado, 2 expressões faciais demonstradas, ou 3 palavras com 'lh'"
       },
       "maker": {
         "type": "unplugged",
         "challenge": "Recortar e decorar uma máscara de palhaço numa folha A4: escrever o nome 'palhaço' na máscara, dividir em sílabas (pa-lha-ço) e decorar com cores vivas.",
-        "materials": ["Folha A4", "Tesoura de pontas redondas", "Lápis de cor", "Elástico ou palhinha"],
+        "materials": [
+          "Folha A4",
+          "Tesoura de pontas redondas",
+          "Lápis de cor",
+          "Elástico ou palhinha"
+        ],
         "groupSize": "1",
         "connection": "A máscara física conecta a palavra ao seu referente de forma lúdica e táctil",
         "communication": "Apresentar a máscara à turma e dizer uma frase com 'palhaço'",
-        "alternatives": ["Desenhar a máscara sem recortar", "Usar jornal ou revista para decorar"]
+        "alternatives": [
+          "Desenhar a máscara sem recortar",
+          "Usar jornal ou revista para decorar"
+        ]
       },
       "differentiation": {
         "support": "🟢 Contorno de palhaço pré-desenhado para colorir; escrever apenas 'palhaço'",
@@ -251,5 +458,13 @@
       "duration": 8
     }
   ],
-  "sessionFlow": "0–4 min: Bloco 1 — cena do circo, descoberta de 'palhaço' → 4–8 min: Bloco 2 — reconhecimento global com distratores → 8–14 min: Bloco 3 — segmentação pa+lha+ço, 3 palmas, dígrafo 'lh' → 14–21 min: Bloco 4 — recombinação com sílabas conhecidas + maker físico → 21–27 min: Bloco 5 — leitura e escrita guiada, 'lh' e 'ç' → 27–33 min: Bloco 6 — frase 'O palhaço faz rir.' em pares → 33–37 min: Bloco 7 — mini-avaliação formativa → 37–45 min: Bloco 8 — extensão autónoma + máscara maker + comunicação MEM"
+  "sessionFlow": "0–4 min: Bloco 1 — cena do circo, descoberta de 'palhaço' → 4–8 min: Bloco 2 — reconhecimento global com distratores → 8–14 min: Bloco 3 — segmentação pa+lha+ço, 3 palmas, dígrafo 'lh' → 14–21 min: Bloco 4 — recombinação com sílabas conhecidas + maker físico → 21–27 min: Bloco 5 — leitura e escrita guiada, 'lh' e 'ç' → 27–33 min: Bloco 6 — frase 'O palhaço faz rir.' em pares → 33–37 min: Bloco 7 — mini-avaliação formativa → 37–45 min: Bloco 8 — extensão autónoma + máscara maker + comunicação MEM",
+  "m28pMethodAlignment": {
+    "principle": "Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.",
+    "meaningfulEntry": "palavra-chave com imagem/contexto antes da análise",
+    "globalRecognition": "reconhecimento global é ponto de entrada, não fim da aprendizagem",
+    "codeWork": "consciência silábica e relação som-letra/grafofonémica",
+    "generalization": "ler palavra nova com sílabas conhecidas e escrever frase curta",
+    "quickVerification": "verificação rápida observa palavra-alvo, palavra nova e frase curta"
+  }
 }

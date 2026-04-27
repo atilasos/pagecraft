@@ -4,9 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Palavra 8 - casa (M28P)</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #F0F7FF;
@@ -304,6 +301,9 @@
       .mode-tabs { grid-template-columns: 1fr; }
       .word-big { font-size: 2.2rem; }
     }
+  
+    .m28p-method-check{margin:1.25rem 0;padding:1rem;border:3px dashed var(--accent,#F59E0B);border-radius:18px;background:#fffdf5}.m28p-method-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.75rem}.m28p-method-card{min-height:48px;border-radius:16px;border:2px solid var(--primary,#E05FA0);background:#fff;color:var(--text,#1E1B18);font-weight:800;padding:.75rem}
+
   </style>
 </head>
 <body>
@@ -464,7 +464,7 @@
   </section>
 
   <section class="card" id="u7" aria-label="Unidade 7">
-    <h2>7) Mini-avaliação formativa interactiva</h2>
+    <h2>7) Mini-avaliação formativa interativa</h2>
     <div class="progress" aria-label="Barra de progresso"><div id="u7Bar"></div></div>
     <p id="u7Step">Tarefa 1/4</p>
     <div id="u7Task" class="panel"></div>
@@ -783,7 +783,7 @@
   qs('#speakCasa').addEventListener('click', () => speak('ca-sa'));
   qs('#u2Continue').addEventListener('click', () => qs('#u3').scrollIntoView({behavior:'smooth'}));
 
-  // Generic pointer drag-drop (touch + mouse)
+  // Generic pointer drag-drop (touch + rato)
   function attachDrag(draggable, getDropzones, onDrop) {
     let pointerId = null, startX = 0, startY = 0, originParent = null, placed = false;
     draggable.style.position = 'relative';
@@ -1303,5 +1303,17 @@
   });
 })();
 </script>
+
+<section class="m28p-method-check" aria-labelledby="m28p-method-title">
+  <h2 id="m28p-method-title">Descobrir para além da palavra</h2>
+  <p>Não vamos só decorar a palavra. Vamos descobrir sílabas, sons e letras, formar uma palavra nova e escrever uma frase curta.</p>
+  <div class="m28p-method-grid">
+    <button type="button" class="m28p-method-card">👏 Bate as sílabas</button>
+    <button type="button" class="m28p-method-card">🔤 Procura o som/letra que muda</button>
+    <button type="button" class="m28p-method-card">🧩 Lê uma palavra nova com sílabas conhecidas</button>
+    <button type="button" class="m28p-method-card">✍️ Escreve uma frase curta</button>
+  </div>
+</section>
+
 </body>
 </html>

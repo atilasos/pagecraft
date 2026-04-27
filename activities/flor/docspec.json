@@ -6,73 +6,197 @@
     "Reconhecer globalmente a palavra 'flor' e associá-la à sua imagem",
     "Segmentar 'flor' em 1 sílaba identificando o grupo consonântico 'fl' e o 'r' final",
     "Recombinar sílabas/grupos para formar palavras novas",
-    "Usar a palavra 'flor' numa frase simples oral e escrita"
+    "Usar a palavra 'flor' numa frase simples oral e escrita",
+    "Descobrir que 'flor' não é só uma forma para memorizar: tem sílabas, sons/letras e pode ajudar a ler palavras novas.",
+    "Ler uma palavra nova com sílabas conhecidas de 'flor' e escrever uma frase curta com apoio."
   ],
   "curriculum": {
     "ae": [
-      {"subject": "Português", "year": "1.º ano", "domain": "Oralidade", "descriptor": "Identificar palavras monossilábicas e grupos consonânticos (fl, bl, cl, pl)", "source": "portugues-1-ano-1-ciclo.md"},
-      {"subject": "Português", "year": "1.º ano", "domain": "Leitura e Escrita", "descriptor": "Ler palavras monossilábicas com grupos consonânticos e coda 'r'; reconhecer palavras frequentes", "source": "portugues-1-ano-1-ciclo.md"},
-      {"subject": "Estudo do Meio", "year": "1.º ano", "domain": "À Descoberta do Ambiente Natural", "descriptor": "Reconhecer partes de uma planta (flor, caule, folha, raiz) e a sua importância ecológica", "source": "estudo-do-meio-1-ano-1-ciclo.md"}
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Identificar palavras monossilábicas e grupos consonânticos (fl, bl, cl, pl)",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Ler palavras monossilábicas com grupos consonânticos e coda 'r'; reconhecer palavras frequentes",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Estudo do Meio",
+        "year": "1.º ano",
+        "domain": "À Descoberta do Ambiente Natural",
+        "descriptor": "Reconhecer partes de uma planta (flor, caule, folha, raiz) e a sua importância ecológica",
+        "source": "estudo-do-meio-1-ano-1-ciclo.md"
+      }
     ],
-    "competencies": ["PA-A: Linguagens e textos", "PA-C: Raciocínio e resolução de problemas", "PA-D: Pensamento crítico", "PA-F: Autonomia"]
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-D: Pensamento crítico",
+      "PA-F: Autonomia"
+    ]
   },
-  "memAlignment": {"modules": ["TEA", "Trabalho curricular comparticipado", "Circuitos de comunicação"], "instruments": ["PIT", "mapa de tarefas"], "socialOrganization": "individual (blocos 1–5) → pares (bloco 6) → turma"},
-  "materials": ["Tablet ou computador", "Caderno diário", "Lápis de cor", "Flor real ou imagem impressa (extensão)"],
+  "memAlignment": {
+    "modules": [
+      "TEA",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas"
+    ],
+    "socialOrganization": "individual (blocos 1–5) → pares (bloco 6) → turma"
+  },
+  "materials": [
+    "Tablet ou computador",
+    "Caderno diário",
+    "Lápis de cor",
+    "Flor real ou imagem impressa (extensão)"
+  ],
   "units": [
     {
       "summary": "Bloco 1 — Abertura: a palavra 'flor' num jardim colorido",
       "textDescription": "Cena de jardim com flores coloridas. Micro-história: 'No jardim da escola há muitas cores. Uma planta tem pétalas lindas e um perfume especial. Como se chama essa parte da planta?'",
       "interaction": {
-        "state": [{"name": "palavraRevelada", "type": "toggle", "options": ["oculta", "visivel"], "default": "oculta"}],
+        "state": [
+          {
+            "name": "palavraRevelada",
+            "type": "toggle",
+            "options": [
+              "oculta",
+              "visivel"
+            ],
+            "default": "oculta"
+          }
+        ],
         "render": "Jardim com flor; micro-história; botão revelar",
         "transition": "Clicar → cartaz flor + palavra",
         "constraint": "Imagem e palavra juntas",
         "assessment": "Aluno aponta e diz"
       },
-      "differentiation": {"support": "🟢 Palavra visível", "standard": "🟡 Revelar", "challenge": "🔴 Escrever antes"},
+      "differentiation": {
+        "support": "🟢 Palavra visível",
+        "standard": "🟡 Revelar",
+        "challenge": "🔴 Escrever antes"
+      },
       "duration": 4
     },
     {
       "summary": "Bloco 2 — Reconhecimento global",
       "textDescription": "Reconhecimento com 'fogueira' e 'cigarra' como distratores.",
       "interaction": {
-        "state": [{"name": "opcao", "type": "quiz", "options": ["flor", "fogueira", "cigarra"], "default": null}],
+        "state": [
+          {
+            "name": "opcao",
+            "type": "quiz",
+            "options": [
+              "flor",
+              "fogueira",
+              "cigarra"
+            ],
+            "default": null
+          }
+        ],
         "render": "Tarefa 1: palavra, 3 imagens. Tarefa 2: imagem, 3 palavras.",
         "transition": "Clicar → feedback",
         "constraint": "'flor' é monossílabo — muito curta e distinta visualmente",
         "assessment": "Seleciona corretamente"
       },
-      "differentiation": {"support": "🟢 Primeira letra", "standard": "🟡 3 opções", "challenge": "🔴 4 com 'flore', 'fror', 'flot'"},
+      "differentiation": {
+        "support": "🟢 Primeira letra",
+        "standard": "🟡 3 opções",
+        "challenge": "🔴 4 com 'flore', 'fror', 'flot'"
+      },
       "duration": 4
     },
     {
       "summary": "Bloco 3 — Segmentação: flor (1 sílaba!)",
-      "textDescription": "Descobrir que 'flor' é uma palavra de 1 sílaba. Destaque: 'fl' grupo consonântico e 'r' final.",
+      "textDescription": "Descobrir que 'flor' é uma palavra de 1 sílaba. Destaque: 'fl' grupo consonântico e 'r' final. Observar a relação som-letra/grafofonémica: quando muda uma letra ou sílaba, muda o som e pode mudar a palavra.",
       "interaction": {
         "state": [
-          {"name": "silabas", "type": "drag", "options": ["flor"], "default": null},
-          {"name": "palmadas", "type": "quiz", "options": ["1", "2", "3", "4"], "default": null}
+          {
+            "name": "silabas",
+            "type": "drag",
+            "options": [
+              "flor"
+            ],
+            "default": null
+          },
+          {
+            "name": "palmadas",
+            "type": "quiz",
+            "options": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
+            "default": null
+          }
         ],
         "render": "Palavra 'flor' inteira; bloco 'flor' (monossílabo); 1 caixa; destaque 'fl' e 'r' final; explicação monossílabo",
         "transition": "Arrastar → encaixe; palmadas → feedback especial para 1 palma",
         "constraint": "'flor' é monossílabo — apenas 1 sílaba; 'fl' é grupo consonântico (f+l); 'r' final é coda",
-        "assessment": "Coloca bloco, seleciona '1 palma', reconhece monossílabo"
+        "assessment": "Coloca bloco, seleciona '1 palma', reconhece monossílabo A criança aponta uma relação som-letra e diz o que muda no som."
       },
-      "differentiation": {"support": "🟢 Bloco pré-posicionado; explicação extra monossílabo", "standard": "🟡 Arrastar; 1 palma", "challenge": "🔴 Comparar com 'flo-res' (2 sílabas no plural)"},
+      "differentiation": {
+        "support": "🟢 Bloco pré-posicionado; explicação extra monossílabo",
+        "standard": "🟡 Arrastar; 1 palma",
+        "challenge": "🔴 Comparar com 'flo-res' (2 sílabas no plural)"
+      },
       "duration": 6
     },
     {
       "summary": "Bloco 4 — Recombinação",
       "textDescription": "Com 'flor', 'flo', 'res', 'blo', 'co', 'ca', 'li', 'so' explorar derivadas e novas palavras.",
       "interaction": {
-        "state": [{"name": "silabas", "type": "drag", "options": ["flor", "flo", "res", "blo", "co", "ca", "li", "so"], "default": null}],
+        "state": [
+          {
+            "name": "silabas",
+            "type": "drag",
+            "options": [
+              "flor",
+              "flo",
+              "res",
+              "blo",
+              "co",
+              "ca",
+              "li",
+              "so"
+            ],
+            "default": null
+          }
+        ],
         "render": "Tabuleiro; construção; verificar; descobertas",
         "transition": "Arrastar → feedback",
         "constraint": "'flor' é monossílabo; 'flores' tem 2 sílabas",
         "assessment": "2+ palavras (flor, flores, bloco, calo, floresta)"
       },
-      "maker": {"type": "unplugged", "challenge": "Cartões; tabela", "materials": ["Cartões", "Folha"], "groupSize": "2", "connection": "Físico precede digital", "communication": "Partilha", "alternatives": ["Post-its"]},
-      "differentiation": {"support": "🟢 4 sílabas", "standard": "🟡 8 sílabas", "challenge": "🔴 Sem feedback"},
+      "maker": {
+        "type": "unplugged",
+        "challenge": "Cartões; tabela",
+        "materials": [
+          "Cartões",
+          "Folha"
+        ],
+        "groupSize": "2",
+        "connection": "Físico precede digital",
+        "communication": "Partilha",
+        "alternatives": [
+          "Post-its"
+        ]
+      },
+      "differentiation": {
+        "support": "🟢 4 sílabas",
+        "standard": "🟡 8 sílabas",
+        "challenge": "🔴 Sem feedback"
+      },
       "duration": 7
     },
     {
@@ -80,28 +204,69 @@
       "textDescription": "Completar 'f___', selecionar grafia, copiar. Foco no grupo 'fl'.",
       "interaction": {
         "state": [
-          {"name": "inicio_falta", "type": "quiz", "options": ["fl", "bl", "pl", "cl"], "default": null},
-          {"name": "grafia", "type": "quiz", "options": ["flor", "fror", "flo", "floer"], "default": null}
+          {
+            "name": "inicio_falta",
+            "type": "quiz",
+            "options": [
+              "fl",
+              "bl",
+              "pl",
+              "cl"
+            ],
+            "default": null
+          },
+          {
+            "name": "grafia",
+            "type": "quiz",
+            "options": [
+              "flor",
+              "fror",
+              "flo",
+              "floer"
+            ],
+            "default": null
+          }
         ],
         "render": "Tarefa 1: '___or' + imagem. Tarefa 2: grafias. Tarefa 3: copiar",
         "transition": "Selecionar → feedback",
         "constraint": "'fl' correto; 'fror' inverte o grupo; 'flo' falta o 'r'",
         "assessment": "Completa, seleciona, copia"
       },
-      "differentiation": {"support": "🟢 2 opções", "standard": "🟡 4 opções", "challenge": "🔴 De memória"},
+      "differentiation": {
+        "support": "🟢 2 opções",
+        "standard": "🟡 4 opções",
+        "challenge": "🔴 De memória"
+      },
       "duration": 6
     },
     {
       "summary": "Bloco 6 — Frase: 'A flor tem pétalas.'",
       "textDescription": "Ordenar palavras e criar frase própria.",
       "interaction": {
-        "state": [{"name": "palavras", "type": "sorting", "options": ["A", "flor", "tem", "pétalas", "."], "default": null}],
+        "state": [
+          {
+            "name": "palavras",
+            "type": "sorting",
+            "options": [
+              "A",
+              "flor",
+              "tem",
+              "pétalas",
+              "."
+            ],
+            "default": null
+          }
+        ],
         "render": "Frase modelo; 5 cartas; slots; escrita livre",
         "transition": "Arrastar → feedback",
         "constraint": "Maiúscula, ponto",
         "assessment": "Ordena e escreve"
       },
-      "differentiation": {"support": "🟢 3 elementos", "standard": "🟡 5 elementos", "challenge": "🔴 2 frases; adjetivo de cor"},
+      "differentiation": {
+        "support": "🟢 3 elementos",
+        "standard": "🟡 5 elementos",
+        "challenge": "🔴 2 frases; adjetivo de cor"
+      },
       "duration": 6
     },
     {
@@ -109,33 +274,101 @@
       "textDescription": "4 critérios M28P. Atenção especial ao monossílabo.",
       "interaction": {
         "state": [
-          {"name": "t1", "type": "quiz", "options": ["flor", "fogueira", "cigarra"], "default": null},
-          {"name": "t2", "type": "sorting", "options": ["flor"], "default": null},
-          {"name": "t3", "type": "drag", "options": ["flor"], "default": null},
-          {"name": "t4", "type": "canvas", "default": null}
+          {
+            "name": "t1",
+            "type": "quiz",
+            "options": [
+              "flor",
+              "fogueira",
+              "cigarra"
+            ],
+            "default": null
+          },
+          {
+            "name": "t2",
+            "type": "sorting",
+            "options": [
+              "flor"
+            ],
+            "default": null
+          },
+          {
+            "name": "t3",
+            "type": "drag",
+            "options": [
+              "flor"
+            ],
+            "default": null
+          },
+          {
+            "name": "t4",
+            "type": "canvas",
+            "default": null
+          }
         ],
         "render": "4 tarefas; progresso; estrelas",
         "transition": "Completar → próxima",
         "constraint": "Não punitivo",
         "assessment": "4 critérios; tarefa 2 e 3 reconhecem monossílabo"
       },
-      "differentiation": {"support": "🟢 Imagem; oral aceite", "standard": "🟡 Como descrito", "challenge": "🔴 Sem modelo; bónus: monossílabos que conheço"},
+      "differentiation": {
+        "support": "🟢 Imagem; oral aceite",
+        "standard": "🟡 Como descrito",
+        "challenge": "🔴 Sem modelo; bónus: monossílabos que conheço"
+      },
       "duration": 4
     },
     {
       "summary": "Bloco 8 — Extensão: celebrar o fim do M28P!",
-      "textDescription": "Última palavra do método! 3 opções: desenhar flor com sílabas, explorar partes da planta, ou criar diploma M28P pessoal.",
+      "textDescription": "Última palavra do método! 3 opções: desenhar flor com sílabas, explorar partes da planta, ou criar diploma M28P pessoal. Observar a relação som-letra/grafofonémica: quando muda uma letra ou sílaba, muda o som e pode mudar a palavra.",
       "interaction": {
-        "state": [{"name": "opcao", "type": "dropdown", "options": ["Flor artística", "Partes da planta", "Diploma M28P"], "default": "Flor artística"}],
+        "state": [
+          {
+            "name": "opcao",
+            "type": "dropdown",
+            "options": [
+              "Flor artística",
+              "Partes da planta",
+              "Diploma M28P"
+            ],
+            "default": "Flor artística"
+          }
+        ],
         "render": "3 cartões; canvas flor; diagrama planta; diploma preenchível",
         "transition": "Selecionar → abre",
         "constraint": "Escolha livre; é a última palavra!",
-        "assessment": "1 elemento observável + celebração!"
+        "assessment": "1 elemento observável + celebração! A criança aponta uma relação som-letra e diz o que muda no som."
       },
-      "maker": {"type": "unplugged", "challenge": "Dobrar papel para criar uma flor de origami simples. Escrever 'flor' no centro e as 28 palavras aprendidas nas pétalas.", "materials": ["Papel colorido", "Lápis", "Tesoura"], "groupSize": "1", "connection": "28 palavras = 28 pétalas = o método completo!", "communication": "Apresentar o diploma e ler as 28 palavras", "alternatives": ["Desenhar flor com 28 pétalas numeradas"]},
-      "differentiation": {"support": "🟢 Escrever só 'flor' no diploma", "standard": "🟡 Flor artística + 5 palavras preferidas", "challenge": "🔴 Listar as 28 palavras do M28P de memória"},
+      "maker": {
+        "type": "unplugged",
+        "challenge": "Dobrar papel para criar uma flor de origami simples. Escrever 'flor' no centro e as 28 palavras aprendidas nas pétalas.",
+        "materials": [
+          "Papel colorido",
+          "Lápis",
+          "Tesoura"
+        ],
+        "groupSize": "1",
+        "connection": "28 palavras = 28 pétalas = o método completo!",
+        "communication": "Apresentar o diploma e ler as 28 palavras",
+        "alternatives": [
+          "Desenhar flor com 28 pétalas numeradas"
+        ]
+      },
+      "differentiation": {
+        "support": "🟢 Escrever só 'flor' no diploma",
+        "standard": "🟡 Flor artística + 5 palavras preferidas",
+        "challenge": "🔴 Listar as 28 palavras do M28P de memória"
+      },
       "duration": 8
     }
   ],
-  "sessionFlow": "0–4 min: Bloco 1 → 4–8 min: Bloco 2 → 8–14 min: Bloco 3 (monossílabo!) → 14–21 min: Bloco 4 → 21–27 min: Bloco 5 → 27–33 min: Bloco 6 → 33–37 min: Bloco 7 → 37–45 min: Bloco 8 (celebração M28P!)"
+  "sessionFlow": "0–4 min: Bloco 1 → 4–8 min: Bloco 2 → 8–14 min: Bloco 3 (monossílabo!) → 14–21 min: Bloco 4 → 21–27 min: Bloco 5 → 27–33 min: Bloco 6 → 33–37 min: Bloco 7 → 37–45 min: Bloco 8 (celebração M28P!)",
+  "m28pMethodAlignment": {
+    "principle": "Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.",
+    "meaningfulEntry": "palavra-chave com imagem/contexto antes da análise",
+    "globalRecognition": "reconhecimento global é ponto de entrada, não fim da aprendizagem",
+    "codeWork": "consciência silábica e relação som-letra/grafofonémica",
+    "generalization": "ler palavra nova com sílabas conhecidas e escrever frase curta",
+    "quickVerification": "verificação rápida observa palavra-alvo, palavra nova e frase curta"
+  }
 }

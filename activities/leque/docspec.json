@@ -1,12 +1,14 @@
 {
   "topic": "Palavra: leque (M28P #7)",
   "ageRange": "6-7 anos (1.º ano)",
-  "duration": 40,
+  "duration": 45,
   "objectives": [
     "Reconhecer globalmente a palavra 'leque' associada à sua imagem.",
     "Segmentar oralmente e visualmente a palavra 'leque' nas sílabas 'le' e 'que'.",
     "Recombinar as sílabas 'le' e 'que' para formar e reconhecer novas palavras.",
-    "Ler e escrever a palavra 'leque' e a frase modelo 'O leque abre e fecha.'"
+    "Ler e escrever a palavra 'leque' e a frase modelo 'O leque abre e fecha.'",
+    "Descobrir que 'leque' não é só uma forma para memorizar: tem sílabas, sons/letras e pode ajudar a ler palavras novas.",
+    "Ler uma palavra nova com sílabas conhecidas de 'leque' e escrever uma frase curta com apoio."
   ],
   "curriculum": {
     "ae": [
@@ -49,8 +51,8 @@
     ],
     "competencies": [
       "PA-A: Linguagens e textos — utiliza diferentes linguagens para expressar e comunicar ideias.",
-      "PA-B: Informação e comunicação — selecciona e organiza informação para comunicar.",
-      "PA-G: Bem-estar, saúde e ambiente — reconhece objectos do quotidiano e a sua função.",
+      "PA-B: Informação e comunicação — seleciona e organiza informação para comunicar.",
+      "PA-G: Bem-estar, saúde e ambiente — reconhece objetos do quotidiano e a sua função.",
       "PA-I: Saber científico, técnico e tecnológico — aplica conhecimentos fonológicos para segmentar e recombinar unidades de linguagem."
     ]
   },
@@ -58,7 +60,7 @@
     "modules": [
       "TEA (Trabalho de Estudo Autónomo) — prática de leitura e escrita de palavras trabalhadas em ficheiros de língua",
       "Tempo de Comunicação — partilha em grande grupo das descobertas silábicas",
-      "Conselho de Cooperação — registo colectivo da nova palavra no Diário de Turma"
+      "Conselho de Cooperação — registo coletivo da nova palavra no Diário de Turma"
     ],
     "instruments": [
       "PIT (Plano Individual de Trabalho) — registo da palavra 'leque' nas tarefas da semana",
@@ -87,13 +89,16 @@
           {
             "name": "storyPhase",
             "type": "toggle",
-            "options": ["narração", "discussão"],
+            "options": [
+              "narração",
+              "discussão"
+            ],
             "default": "narração"
           }
         ],
         "render": "Ecrã ou quadro mostra imagem do leque aberto e fechado lado a lado. Professor narra enquanto alterna entre as duas imagens.",
         "transition": "Após 2 min de narração, alternar para modo 'discussão': alunos respondem oralmente à pergunta 'O que é um leque?'.",
-        "constraint": "Os alunos não vêem a palavra escrita nesta fase — apenas a imagem e a narrativa oral.",
+        "constraint": "Os alunos não veem a palavra escrita nesta fase — apenas a imagem e a narrativa oral.",
         "assessment": "O aluno descreve oralmente para que serve um leque usando pelo menos uma frase completa."
       },
       "maker": {
@@ -114,20 +119,25 @@
       "id": 2,
       "name": "Reconhecimento global",
       "summary": "Leitura global da palavra 'leque' associada à imagem; discriminação entre palavras.",
-      "textDescription": "O professor escreve 'leque' no quadro ao lado da imagem. Lê em voz alta, os alunos repetem. De seguida, apresenta 3-4 cartões com palavras conhecidas anteriormente (ex: 'bola', 'luva', 'leque', 'lata') e pede que identifiquem 'leque'. Actividade de matching: cada aluno aponta ou coloca o cartão junto à imagem correcta.",
+      "textDescription": "O professor escreve 'leque' no quadro ao lado da imagem. Lê em voz alta, os alunos repetem. De seguida, apresenta 3-4 cartões com palavras conhecidas anteriormente (ex: 'bola', 'luva', 'leque', 'lata') e pede que identifiquem 'leque'. Atividade de matching: cada aluno aponta ou coloca o cartão junto à imagem correcta.",
       "interaction": {
         "state": [
           {
             "name": "selectedWord",
             "type": "matching",
-            "options": ["bola", "luva", "leque", "lata"],
+            "options": [
+              "bola",
+              "luva",
+              "leque",
+              "lata"
+            ],
             "default": ""
           }
         ],
         "render": "Quadro ou ecrã: imagem do leque à esquerda, 4 cartões de palavras à direita. Alunos apontam ou arrastam.",
-        "transition": "Quando o aluno selecciona 'leque', a palavra ilumina-se junto à imagem. Reforço oral: professor confirma.",
+        "transition": "Quando o aluno seleciona 'leque', a palavra ilumina-se junto à imagem. Reforço oral: professor confirma.",
         "constraint": "Todas as opções começam por 'l' para forçar discriminação grafema a grafema, não apenas letra inicial.",
-        "assessment": "O aluno selecciona correctamente 'leque' de entre 4 opções e lê a palavra em voz alta sem apoio."
+        "assessment": "O aluno seleciona correctamente 'leque' de entre 4 opções e lê a palavra em voz alta sem apoio."
       },
       "maker": {
         "type": "unplugged",
@@ -153,13 +163,20 @@
           {
             "name": "syllableCards",
             "type": "sorting",
-            "options": ["le", "que"],
+            "options": [
+              "le",
+              "que"
+            ],
             "default": "juntos"
           },
           {
             "name": "palmCount",
             "type": "derived",
-            "options": ["1", "2", "3"],
+            "options": [
+              "1",
+              "2",
+              "3"
+            ],
             "default": ""
           }
         ],
@@ -192,13 +209,22 @@
           {
             "name": "combination",
             "type": "drag",
-            "options": ["le+que", "que+le", "que", "le"],
+            "options": [
+              "le+que",
+              "que+le",
+              "que",
+              "le"
+            ],
             "default": ""
           },
           {
             "name": "isWord",
             "type": "quiz",
-            "options": ["sim", "não", "talvez"],
+            "options": [
+              "sim",
+              "não",
+              "talvez"
+            ],
             "default": ""
           }
         ],
@@ -210,7 +236,7 @@
       "maker": {
         "type": "whiteboard",
         "challenge": "Em pequeno grupo, escrever no quadro branco o máximo de palavras que contenham 'que' (já conhecidas ou adivinhadas): queijo, quente, porque, parque...",
-        "connection": "Liga a sílaba 'que' à sua presença em outras palavras do vocabulário activo dos alunos.",
+        "connection": "Liga a sílaba 'que' à sua presença em outras palavras do vocabulário ativo dos alunos.",
         "communication": "Cada grupo lê a sua lista à turma.",
         "groupSize": "Grupos de 3"
       },
@@ -231,7 +257,11 @@
           {
             "name": "writingPhase",
             "type": "toggle",
-            "options": ["com modelo", "sem modelo", "ditado"],
+            "options": [
+              "com modelo",
+              "sem modelo",
+              "ditado"
+            ],
             "default": "com modelo"
           }
         ],
@@ -264,7 +294,14 @@
           {
             "name": "wordOrder",
             "type": "sorting",
-            "options": ["O", "leque", "abre", "e", "fecha", "."],
+            "options": [
+              "O",
+              "leque",
+              "abre",
+              "e",
+              "fecha",
+              "."
+            ],
             "default": "desordenado"
           }
         ],
@@ -276,7 +313,7 @@
       "maker": {
         "type": "unplugged",
         "challenge": "Aluno cria uma nova frase curta com a palavra 'leque' (ex: 'O leque é bonito.') e escreve-a numa tira de papel para afixar no placar da turma.",
-        "connection": "Relaciona a palavra trabalhada com a produção escrita autónoma e o registo colectivo.",
+        "connection": "Relaciona a palavra trabalhada com a produção escrita autónoma e o registo coletivo.",
         "communication": "Leitura da frase criada em voz alta para a turma.",
         "groupSize": "Individual, partilha em grande grupo"
       },
@@ -297,13 +334,21 @@
           {
             "name": "task",
             "type": "toggle",
-            "options": ["reconhecimento", "segmentação", "escrita"],
+            "options": [
+              "reconhecimento",
+              "segmentação",
+              "escrita"
+            ],
             "default": "reconhecimento"
           },
           {
             "name": "result",
             "type": "dropdown",
-            "options": ["conseguiu", "com apoio", "ainda não"],
+            "options": [
+              "conseguiu",
+              "com apoio",
+              "ainda não"
+            ],
             "default": ""
           }
         ],
@@ -323,14 +368,18 @@
     {
       "id": 8,
       "name": "Extensão / desafio",
-      "summary": "Actividade de extensão criativa: produção escrita ou exploração fonológica além da palavra base.",
+      "summary": "Atividade de extensão criativa: produção escrita ou exploração fonológica além da palavra base.",
       "textDescription": "Proposta aberta com 3 níveis de concretização: (A) Desenha um leque e escreve a palavra por baixo. (B) Escreve a frase 'O leque abre e fecha.' e ilustra-a. (C) Escreve uma pequena história de 2-3 frases onde aparece a palavra 'leque'. As produções são afixadas no placar da sala ou registadas no portefólio do aluno. Se sobrar tempo, exploração lúdica: 'Quantas palavras conheces que têm a sílaba QUE?'",
       "interaction": {
         "state": [
           {
             "name": "extensionLevel",
             "type": "dropdown",
-            "options": ["A - desenho + palavra", "B - frase + ilustração", "C - mini-história"],
+            "options": [
+              "A - desenho + palavra",
+              "B - frase + ilustração",
+              "C - mini-história"
+            ],
             "default": "B - frase + ilustração"
           }
         ],
@@ -342,7 +391,7 @@
       "maker": {
         "type": "unplugged",
         "challenge": "Construir um leque decorado com cartolina (dobragem em sanfona + pega) e escrever nele uma palavra ou frase à escolha.",
-        "connection": "Integra a aprendizagem da palavra com uma actividade de expressão plástica e escrita criativa.",
+        "connection": "Integra a aprendizagem da palavra com uma atividade de expressão plástica e escrita criativa.",
         "communication": "Apresentação do leque à turma durante o Tempo de Comunicação: 'O meu leque diz...'",
         "groupSize": "Individual, partilha em grande grupo"
       },
@@ -351,8 +400,16 @@
         "standard": "🟡 Nível B: frase + ilustração autónoma.",
         "challenge": "🔴 Nível C: mini-história de 2-3 frases com 'leque', pontuação correcta e pelo menos outra palavra com 'que'."
       },
-      "duration": 4
+      "duration": 9
     }
   ],
-  "sessionFlow": "Abertura contextual (4 min) → Reconhecimento global (4 min) → Segmentação silábica (6 min) → Recombinação (6 min) → Leitura e escrita guiada (6 min) → Frase simples (6 min) → Mini-avaliação (4 min) → Extensão/desafio (4 min). Total: 40 min."
+  "sessionFlow": "Abertura contextual (4 min) → Reconhecimento global (4 min) → Segmentação silábica (6 min) → Recombinação (6 min) → Leitura e escrita guiada (6 min) → Frase simples (6 min) → Mini-avaliação (4 min) → Extensão/desafio (9 min). Total: 45 min.",
+  "m28pMethodAlignment": {
+    "principle": "Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.",
+    "meaningfulEntry": "palavra-chave com imagem/contexto antes da análise",
+    "globalRecognition": "reconhecimento global é ponto de entrada, não fim da aprendizagem",
+    "codeWork": "consciência silábica e relação som-letra/grafofonémica",
+    "generalization": "ler palavra nova com sílabas conhecidas e escrever frase curta",
+    "quickVerification": "verificação rápida observa palavra-alvo, palavra nova e frase curta"
+  }
 }

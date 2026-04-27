@@ -6,7 +6,9 @@
     "Reconhecer e ler a palavra 'rato' globalmente, associando-a à imagem do animal",
     "Segmentar 'rato' em duas sílabas (ra-to), identificar cada sílaba e reproduzi-las oralmente",
     "Recombinar as sílabas 'ra' e 'to' com sílabas conhecidas para formar novas palavras (gato, pato, cara, para)",
-    "Ler e construir uma frase simples com a palavra 'rato'"
+    "Ler e construir uma frase simples com a palavra 'rato'",
+    "Descobrir que 'rato' não é só uma forma para memorizar: tem sílabas, sons/letras e pode ajudar a ler palavras novas.",
+    "Ler uma palavra nova com sílabas conhecidas de 'rato' e escrever uma frase curta com apoio."
   ],
   "curriculum": {
     "ae": [
@@ -45,13 +47,16 @@
       "Trabalho curricular comparticipado",
       "Circuitos de comunicação"
     ],
-    "instruments": ["PIT", "mapa de tarefas"],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas"
+    ],
     "socialOrganization": "individual (abertura + reconhecimento 8min) → individual/pares (segmentação + recombinação 15min) → pares (escrita guiada + frase 15min) → turma (mini-avaliação + comunicação 7min)"
   },
   "materials": [
     "Tablet ou computador com browser (1 por aluno ou par)",
     "Cartões de sílabas físicos (ra, to, ga, pa, ca) para extensão maker — podem ser impressos",
-    "Quadro interactivo para activação e mini-avaliação colectiva",
+    "Quadro interativo para ativação e mini-avaliação coletiva",
     "Lápis e folha de registo (opcional, escrita guiada)"
   ],
   "units": [
@@ -63,7 +68,10 @@
           {
             "name": "cenaAtiva",
             "type": "toggle",
-            "options": ["historia", "palavra"],
+            "options": [
+              "historia",
+              "palavra"
+            ],
             "default": "historia"
           },
           {
@@ -72,7 +80,7 @@
             "derivedFrom": "cenaAtiva === 'palavra'"
           }
         ],
-        "render": "Painel dividido: à esquerda, ilustração de um rato cinzento pequeno numa cozinha (perto de um queijo amarelo), com legenda da micro-história em 2 frases curtas ('O rato é pequeno. Ele gosta de queijo.'). À direita, cartão grande com a palavra RATO em maiúsculas e minúsculas, com animação de surgimento suave quando cenaAtiva passa para 'palavra'. Botão 'Ver a palavra' activa a transição.",
+        "render": "Painel dividido: à esquerda, ilustração de um rato cinzento pequeno numa cozinha (perto de um queijo amarelo), com legenda da micro-história em 2 frases curtas ('O rato é pequeno. Ele gosta de queijo.'). À direita, cartão grande com a palavra RATO em maiúsculas e minúsculas, com animação de surgimento suave quando cenaAtiva passa para 'palavra'. Botão 'Ver a palavra' ativa a transição.",
         "transition": "Clicar em 'Ver a palavra' → cenaAtiva muda para 'palavra' → cartão com RATO surge com fade-in; áudio pronuncia 'ra-to' claramente.",
         "constraint": "A palavra associa-se sempre à imagem do animal antes de ser analisada isoladamente — o significado precede a forma.",
         "assessment": "O aluno aponta ou clica na imagem do rato quando lhe é pedido 'Onde está o rato?'; ouve e repete a palavra em voz alta."
@@ -92,7 +100,12 @@
           {
             "name": "opcoes",
             "type": "quiz",
-            "options": ["rito", "rato", "gato", "pato"],
+            "options": [
+              "rito",
+              "rato",
+              "gato",
+              "pato"
+            ],
             "default": null
           },
           {
@@ -109,7 +122,7 @@
         "render": "Imagem do rato no topo (referência visual permanente). Quatro cartões de palavras dispostos em grelha 2×2: 'rito', 'rato', 'gato', 'pato'. O aluno clica/toca no cartão correcto. Feedback imediato: cartão correcto fica verde com ✓; cartão errado fica âmbar com suave shake. Em seguida surge novo conjunto de palavras (2 rondas no total).",
         "transition": "Clicar num cartão → sistema verifica → feedback visual e sonoro → após 2 rondas correctas, avança automaticamente para Unit 3.",
         "constraint": "A palavra 'rato' tem uma forma visual única que o aluno aprende a reconhecer globalmente, distinguindo-a de palavras foneticamente próximas.",
-        "assessment": "O aluno selecciona 'rato' correctamente em 2 de 2 rondas consecutivas, sem ajuda de áudio."
+        "assessment": "O aluno seleciona 'rato' correctamente em 2 de 2 rondas consecutivas, sem ajuda de áudio."
       },
       "differentiation": {
         "support": "🟢 Apenas 2 opções por ronda (rato vs. gato); imagem do rato sempre visível; botão de áudio disponível.",
@@ -126,13 +139,19 @@
           {
             "name": "silabas",
             "type": "sorting",
-            "options": ["ra", "to"],
+            "options": [
+              "ra",
+              "to"
+            ],
             "default": null
           },
           {
             "name": "palmadas",
             "type": "toggle",
-            "options": ["inativo", "ativo"],
+            "options": [
+              "inativo",
+              "ativo"
+            ],
             "default": "inativo"
           },
           {
@@ -149,34 +168,47 @@
       "maker": {
         "type": "unplugged",
         "challenge": "Faz um cartão de sílabas físico: dobra uma folha ao meio, escreve RA numa metade e TO na outra, com as cores azul e laranja. Depois junta as duas metades para 'construir' a palavra RATO.",
-        "materials": ["Folha A5 ou A4 cortada", "Canetas azul e laranja ou lápis de cor"],
+        "materials": [
+          "Folha A5 ou A4 cortada",
+          "Canetas azul e laranja ou lápis de cor"
+        ],
         "groupSize": "2",
         "connection": "O cartão físico espelha os blocos de cor do ecrã — a sílaba azul e laranja têm a mesma cor nos dois contextos.",
         "communication": "Cada par mostra o seu cartão à turma e lê em voz alta ra-to.",
-        "alternatives": ["Usar post-its de cores diferentes", "Imprimir cartões de sílabas pré-preparados"]
+        "alternatives": [
+          "Usar post-its de cores diferentes",
+          "Imprimir cartões de sílabas pré-preparados"
+        ]
       },
       "differentiation": {
         "support": "🟢 Blocos de sílabas com setas de direcção; caixas de destino numeradas e com contorno pulsante; áudio de palmas sempre disponível; feedback verbal do sistema ('muito bem, essa é a primeira sílaba!').",
         "standard": "🟡 Blocos sem setas; caixas de destino simples; 1 tentativa de audio; aluno verbaliza sozinho.",
-        "challenge": "🔴 Apresenta 4 blocos: ra, to, pa, ga — o aluno selecciona apenas os 2 correctos e coloca-os em ordem; explica por que razão 'to-ra' não é a mesma palavra que 'ra-to'."
+        "challenge": "🔴 Apresenta 4 blocos: ra, to, pa, ga — o aluno seleciona apenas os 2 correctos e coloca-os em ordem; explica por que razão 'to-ra' não é a mesma palavra que 'ra-to'."
       },
       "duration": 8
     },
     {
       "summary": "Recombinação: novas palavras com ra e to",
-      "textDescription": "O aluno descobre que as sílabas 'ra' e 'to' podem combinar-se com sílabas já conhecidas (ga, pa, ca) para formar novas palavras reais: gato, pato, cara, para. Este bloco reforça a consciência de que as sílabas são peças reutilizáveis da língua.",
+      "textDescription": "O aluno descobre que as sílabas 'ra' e 'to' podem combinar-se com sílabas já conhecidas (ga, pa, ca) para formar novas palavras reais: gato, pato, cara, para. Este bloco reforça a consciência de que as sílabas são peças reutilizáveis da língua. Ler também uma palavra nova com sílabas conhecidas, para mostrar generalização e não apenas memória visual.",
       "interaction": {
         "state": [
           {
             "name": "silabaNova",
             "type": "dropdown",
-            "options": ["ga", "pa", "ca"],
+            "options": [
+              "ga",
+              "pa",
+              "ca"
+            ],
             "default": "ga"
           },
           {
             "name": "posicao",
             "type": "toggle",
-            "options": ["antes", "depois"],
+            "options": [
+              "antes",
+              "depois"
+            ],
             "default": "antes"
           },
           {
@@ -191,9 +223,9 @@
           }
         ],
         "render": "Dois slots de sílaba: slot A (cor variável = silabaNova) + slot B (azul = 'to') quando posicao = 'antes', ou slot A (azul = 'ra') + slot B (cor variável = silabaNova) quando posicao = 'depois'. Palavra formada aparece em grande no centro. Se palavraValida = true → imagem da palavra surge à direita (gato, pato, cara, para) com ✓ verde. Se inválida → interrogação ? com âmbar. Contador de palavras encontradas.",
-        "transition": "Seleccionar silabaNova no dropdown → palavra actualiza em tempo real; toggle posicao → troca slots; ao obter uma palavra válida, imagem surge e sistema congratula.",
+        "transition": "Selecionar silabaNova no dropdown → palavra actualiza em tempo real; toggle posicao → troca slots; ao obter uma palavra válida, imagem surge e sistema congratula.",
         "constraint": "Nem todas as combinações de sílabas formam palavras reais — a língua tem regras; a recombinação é uma descoberta guiada.",
-        "assessment": "O aluno encontra pelo menos 2 das 4 palavras válidas (gato, pato, cara, para) e consegue dizer o significado de cada uma."
+        "assessment": "O aluno encontra pelo menos 2 das 4 palavras válidas (gato, pato, cara, para) e consegue dizer o significado de cada uma. A criança lê uma palavra nova e escreve uma frase curta sem copiar apenas."
       },
       "differentiation": {
         "support": "🟢 Apenas uma sílaba variável (ga/pa); posição fixa (antes de 'to'); imagem aparece como dica antes da tentativa; 2 palavras alvo apenas (gato, pato).",
@@ -210,7 +242,10 @@
           {
             "name": "silabaEmFalta",
             "type": "quiz",
-            "options": ["ra", "to"],
+            "options": [
+              "ra",
+              "to"
+            ],
             "default": null
           },
           {
@@ -221,7 +256,12 @@
           {
             "name": "opcaoEscolhida",
             "type": "quiz",
-            "options": ["ra", "to", "ga", "pa"],
+            "options": [
+              "ra",
+              "to",
+              "ga",
+              "pa"
+            ],
             "default": null
           },
           {
@@ -255,7 +295,15 @@
           {
             "name": "palavrasDisponiveis",
             "type": "sorting",
-            "options": ["O", "rato", "é", "pequeno", "bonito", "cinzento", "rápido"],
+            "options": [
+              "O",
+              "rato",
+              "é",
+              "pequeno",
+              "bonito",
+              "cinzento",
+              "rápido"
+            ],
             "default": null
           },
           {
@@ -270,7 +318,7 @@
           }
         ],
         "render": "Topo: imagem do rato. Faixa de frase modelo em destaque: 'O rato é pequeno.' com leitura áudio disponível. Abaixo: banco de cartões de palavras em grelha (O, rato, é, pequeno, bonito, cinzento, rápido). Área de construção de frase: slots vazios onde o aluno arrasta as palavras. Ao completar uma frase válida (começa com 'O rato'), surge ✓ e animação de estrelas. Botão 'Tentar outra frase' permite recomeçar.",
-        "transition": "Arrastar cartão de palavra para slot → palavra encaixa; ao retirar, volta ao banco. Quando fraseValida = true → feedback positivo. Botão 'Ler a minha frase' activa áudio de síntese com a frase construída.",
+        "transition": "Arrastar cartão de palavra para slot → palavra encaixa; ao retirar, volta ao banco. Quando fraseValida = true → feedback positivo. Botão 'Ler a minha frase' ativa áudio de síntese com a frase construída.",
         "constraint": "Uma frase precisa de pelo menos um sujeito ('O rato') e um predicado mínimo — não é só uma lista de palavras.",
         "assessment": "O aluno lê a frase modelo em voz alta e constrói pelo menos uma frase válida com 'rato', que lê em voz alta para o par ou turma."
       },
@@ -283,13 +331,16 @@
     },
     {
       "summary": "Mini-avaliação formativa: reconhecer, segmentar, reconstruir e usar 'rato'",
-      "textDescription": "Bloco de consolidação e verificação observável. O aluno realiza quatro tarefas rápidas que cobrem todos os blocos anteriores: reconhecimento global, segmentação, reconstrução e uso em frase. Os resultados são observáveis pelo professor e pelo próprio aluno (auto-avaliação com pictogramas).",
+      "textDescription": "Bloco de consolidação e verificação observável. O aluno realiza quatro tarefas rápidas que cobrem todos os blocos anteriores: reconhecimento global, segmentação, reconstrução e uso em frase. Os resultados são observáveis pelo professor e pelo próprio aluno (auto-avaliação com pictogramas). Ler também uma palavra nova com sílabas conhecidas, para mostrar generalização e não apenas memória visual.",
       "interaction": {
         "state": [
           {
             "name": "tarefaAtual",
             "type": "slider",
-            "range": [1, 4],
+            "range": [
+              1,
+              4
+            ],
             "step": 1,
             "default": 1
           },
@@ -301,31 +352,48 @@
           {
             "name": "autoAvaliacao",
             "type": "quiz",
-            "options": ["😊 percebi tudo", "🤔 percebi mais ou menos", "😕 preciso de ajuda"],
+            "options": [
+              "😊 percebi tudo",
+              "🤔 percebi mais ou menos",
+              "😕 preciso de ajuda"
+            ],
             "default": null
           }
         ],
-        "render": "Barra de progresso com 4 passos numerados. Tarefa 1: seleccionar 'rato' entre 4 palavras (quiz visual). Tarefa 2: arrastar 'ra' e 'to' para caixas numeradas (sorting). Tarefa 3: reconstruir 'rato' de sílabas baralhadas (drag). Tarefa 4: escolher a frase correcta com 'rato' entre 3 opções. Ao terminar as 4 tarefas, surgem 3 pictogramas de auto-avaliação (😊🤔😕) para o aluno seleccionar. Resumo visual dos 4 resultados (✓ ou ✗) fica visível no quadro do professor.",
-        "transition": "Cada tarefa completa avança automaticamente para a seguinte após 1.5s de feedback. Após tarefa 4, surgem pictogramas de auto-avaliação. Seleccionar pictograma → registo guardado.",
-        "constraint": "A avaliação é formativa — não há nota, apenas observação de comportamento. O objectivo é o professor e o aluno identificarem o que consolidaram.",
-        "assessment": "O aluno completa as 4 tarefas: (1) selecciona 'rato' entre 4 opções, (2) arrasta ra-to na ordem correcta, (3) reconstrói 'rato' de sílabas baralhadas, (4) escolhe frase correcta. O professor observa directamente cada acção."
+        "render": "Barra de progresso com 4 passos numerados. Tarefa 1: selecionar 'rato' entre 4 palavras (quiz visual). Tarefa 2: arrastar 'ra' e 'to' para caixas numeradas (sorting). Tarefa 3: reconstruir 'rato' de sílabas baralhadas (drag). Tarefa 4: escolher a frase correcta com 'rato' entre 3 opções. Ao terminar as 4 tarefas, surgem 3 pictogramas de auto-avaliação (😊🤔😕) para o aluno selecionar. Resumo visual dos 4 resultados (✓ ou ✗) fica visível no quadro do professor.",
+        "transition": "Cada tarefa completa avança automaticamente para a seguinte após 1.5s de feedback. Após tarefa 4, surgem pictogramas de auto-avaliação. Selecionar pictograma → registo guardado.",
+        "constraint": "A avaliação é formativa — não há nota, apenas observação de comportamento. O objetivo é o professor e o aluno identificarem o que consolidaram.",
+        "assessment": "O aluno completa as 4 tarefas: (1) seleciona 'rato' entre 4 opções, (2) arrasta ra-to na ordem correcta, (3) reconstrói 'rato' de sílabas baralhadas, (4) escolhe frase correcta. O professor observa directamente cada ação. A criança lê uma palavra nova e escreve uma frase curta sem copiar apenas."
       },
       "maker": {
         "type": "unplugged",
         "challenge": "Com os cartões de sílabas físicos (ra, to, ga, pa, ca), cada par faz uma 'corrida de palavras': alternadamente, um aluno mistura os cartões e o outro monta a palavra 'rato' o mais rápido que consegue. Depois tentam montar 'gato' e 'pato'.",
-        "materials": ["Cartões de sílabas físicos (ra, to, ga, pa, ca) — 1 conjunto por par"],
+        "materials": [
+          "Cartões de sílabas físicos (ra, to, ga, pa, ca) — 1 conjunto por par"
+        ],
         "groupSize": "2",
         "connection": "Os cartões físicos espelham os blocos de sílabas do ecrã — transferência do digital para o tangível.",
         "communication": "Cada par apresenta à turma a palavra mais longa que conseguiu fazer com os seus cartões.",
-        "alternatives": ["Sem cartões: escrever sílabas em post-its e montar na mesa", "Versão digital: regressar à Unit 4 e tentar o nível desafio"]
+        "alternatives": [
+          "Sem cartões: escrever sílabas em post-its e montar na mesa",
+          "Versão digital: regressar à Unit 4 e tentar o nível desafio"
+        ]
       },
       "differentiation": {
         "support": "🟢 Apenas tarefas 1 e 2 da mini-avaliação; imagem do rato sempre visível; sem limite de tempo; botão de ajuda disponível com áudio.",
         "standard": "🟡 As 4 tarefas completas; sem limite de tempo; auto-avaliação com pictogramas.",
         "challenge": "🔴 As 4 tarefas + tarefa bónus: escrever (no tablet ou papel) uma frase nova com 'rato' que não seja 'O rato é pequeno'; partilhar com a turma e justificar a escolha do adjectivo."
       },
-      "duration": 10
+      "duration": 5
     }
   ],
-  "sessionFlow": "0-5min: Unit 1 — abertura contextual com micro-história do rato + imagem e palavra → 5-10min: Unit 2 — reconhecimento global (quiz de palavras) → 10-18min: Unit 3 — segmentação silábica ra-to, palmas, arrastar blocos (+ maker unplugged em paralelo ou pós-digital) → 18-25min: Unit 4 — recombinação: gato, pato, cara, para → 25-32min: Unit 5 — leitura e escrita guiada (completar palavra) → 32-40min: Unit 6 — frase simples (modelo + construção livre) → 40-45min: Unit 7 — mini-avaliação formativa (4 tarefas + auto-avaliação) + maker de cartões de sílabas se o tempo permitir"
+  "sessionFlow": "0-5min: Unit 1 — abertura contextual com micro-história do rato + imagem e palavra → 5-10min: Unit 2 — reconhecimento global (quiz de palavras) → 10-18min: Unit 3 — segmentação silábica ra-to, palmas, arrastar blocos (+ maker unplugged em paralelo ou pós-digital) → 18-25min: Unit 4 — recombinação: gato, pato, cara, para → 25-32min: Unit 5 — leitura e escrita guiada (completar palavra) → 32-40min: Unit 6 — frase simples (modelo + construção livre) → 40-45min: Unit 7 — mini-avaliação formativa (4 tarefas + auto-avaliação) + maker de cartões de sílabas se o tempo permitir",
+  "m28pMethodAlignment": {
+    "principle": "Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.",
+    "meaningfulEntry": "palavra-chave com imagem/contexto antes da análise",
+    "globalRecognition": "reconhecimento global é ponto de entrada, não fim da aprendizagem",
+    "codeWork": "consciência silábica e relação som-letra/grafofonémica",
+    "generalization": "ler palavra nova com sílabas conhecidas e escrever frase curta",
+    "quickVerification": "verificação rápida observa palavra-alvo, palavra nova e frase curta"
+  }
 }

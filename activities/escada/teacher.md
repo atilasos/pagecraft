@@ -6,19 +6,27 @@
 
 ---
 
-## Objectivos de aprendizagem
+## Objetivos de aprendizagem
 
 - Reconhecer globalmente a palavra 'escada' associando-a à imagem correspondente
 - Segmentar a palavra 'escada' nas sílabas es-ca-da e reconstruí-la a partir de sílabas desordenadas
 - Recombinar sílabas da palavra 'escada' para formar novas palavras (ex: cada, dada, seca)
 - Utilizar a palavra 'escada' numa frase simples, oralmente e por escrito
 
+## Princípio M28P — evitar uso puramente visual
+
+Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.
+
+- **Som-letra/grafofonémica:** pedir que a criança diga que som ou letra observa em 'escada'.
+- **Generalização:** pedir uma palavra nova com sílabas conhecidas e uma frase curta.
+- **Verificação rápida:** observar palavra-alvo, sílabas, palavra nova e frase/frase oral.
+
 ## Materiais
 
 - Tablet ou computador com browser (1 por aluno ou par)
 - Cartaz A3 com imagem de escada e palavra 'escada'
 - Cartões de sílabas manipuláveis: es, ca, da
-- Quadro interactivo ou quadro branco
+- Quadro interativo ou quadro branco
 
 ## Alinhamento MEM
 
@@ -35,7 +43,7 @@
 
 **Compreender:** O aluno ouve/lê uma micro-história ('O gato sobe a escada devagar, degrau a degrau.') e observa a imagem associada. A palavra 'escada' surge em contexto significativo — a casa — antes de ser trabalhada isoladamente. O tema da casa liga-se às palavras anteriores (casa, janela, telhado).
 
-**Constraint:** A palavra escrita 'escada' corresponde ao objecto na imagem e ao som — o aluno descobre a ligação entre representação visual, escrita e oral
+**Constraint:** A palavra escrita 'escada' corresponde ao objeto na imagem e ao som — o aluno descobre a ligação entre representação visual, escrita e oral
 **Assessment:** O aluno aponta para a palavra 'escada' no texto quando solicitado e repete-a oralmente com pronúncia correcta
 
 **Diferenciação:**
@@ -48,10 +56,10 @@
 **Compreender:** O aluno reconhece a palavra 'escada' como um todo visual, distinguindo-a de outras palavras do tema casa. Associa a forma escrita à imagem e ao som, construindo o reconhecimento global. As palavras-distractor são 'janela' e 'telhado', já conhecidas da sequência M28P.
 
 **Constraint:** Apenas a palavra 'escada' corresponde à imagem — o aluno descobre a correspondência imagem↔palavra pela experimentação, reconhecendo também diferenças visuais com palavras já aprendidas
-**Assessment:** O aluno selecciona a palavra 'escada' correctamente entre 3 opções em duas rondas consecutivas
+**Assessment:** O aluno seleciona a palavra 'escada' correctamente entre 3 opções em duas rondas consecutivas
 
 **Diferenciação:**
-- 🟢 Apoio: 2 opções apenas (escada vs. janela); imagem com seta a apontar para a escada; áudio da palavra antes de seleccionar
+- 🟢 Apoio: 2 opções apenas (escada vs. janela); imagem com seta a apontar para a escada; áudio da palavra antes de selecionar
 - 🟡 Intermédio: 3 opções com palavras do mesmo tema; imagem disponível como apoio; uma tentativa adicional se errar
 - 🔴 Desafio: 4 opções (inclui 'escola' — palavra visualmente próxima de 'escada'); sem áudio prévio; resposta na 1.ª tentativa
 
@@ -105,7 +113,7 @@
 
 ## Unit 7: Construção de frase simples com a palavra 'escada' (6 min)
 
-**Compreender:** O aluno lê e constrói a frase simples 'A escada sobe.' utilizando a palavra 'escada'. Integra a palavra num contexto sintáctico, reforçando o significado. A frase usa o verbo 'sobe' — curto, concreto, visualizável — que reforça a ideia de movimento ascendente ligada ao objecto.
+**Compreender:** O aluno lê e constrói a frase simples 'A escada sobe.' utilizando a palavra 'escada'. Integra a palavra num contexto sintáctico, reforçando o significado. A frase usa o verbo 'sobe' — curto, concreto, visualizável — que reforça a ideia de movimento ascendente ligada ao objeto.
 
 **Constraint:** A frase tem uma ordem fixa (artigo + sujeito + verbo) com pontuação — o aluno descobre as regras de construção frásica e que 'A' começa a frase em maiúscula
 **Assessment:** O aluno ordena os 4 elementos da frase correctamente e lê a frase em voz alta com entoação adequada

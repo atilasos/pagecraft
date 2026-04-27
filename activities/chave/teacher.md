@@ -6,19 +6,27 @@
 
 ---
 
-## Objectivos de aprendizagem
+## Objetivos de aprendizagem
 
 - Reconhecer a palavra 'chave' globalmente (leitura global) e associá-la à imagem correspondente
 - Segmentar a palavra 'chave' nas sílabas cha-ve e reconstituí-la a partir das sílabas desordenadas
 - Combinar as sílabas 'cha' e 've' com sílabas já aprendidas para formar novas palavras reais
 - Ler e completar a frase 'A chave abre a porta.' com apoio visual e silábico
 
+## Princípio M28P — evitar uso puramente visual
+
+Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.
+
+- **Som-letra/grafofonémica:** pedir que a criança diga que som ou letra observa em 'chave'.
+- **Generalização:** pedir uma palavra nova com sílabas conhecidas e uma frase curta.
+- **Verificação rápida:** observar palavra-alvo, sílabas, palavra nova e frase/frase oral.
+
 ## Materiais
 
 - Tablet ou computador com browser (1 por aluno ou par)
 - Cartão-palavra físico: 'chave' (letra grande, sem imagem — para reconhecimento global)
 - Blocos de sílabas recortados ou magnéticos: cha / ve (1 jogo por par)
-- Quadro interactivo para sessão colectiva (blocos 6 e 8)
+- Quadro interativo para sessão coletiva (blocos 6 e 8)
 - Lápis e folha quadriculada para escrita guiada (bloco 5)
 - Opcional: chave real ou foto impressa para contextualização (bloco 1)
 
@@ -31,7 +39,7 @@
 
 ## Fluxo da sessão
 
-0-5min: Bloco 1 — Abertura contextual (activação oral em roda + animação digital da porta) → 5-9min: Bloco 2 — Reconhecimento global (palavra↔imagem, individual) → 9-16min: Bloco 3 — Segmentação silábica (palmas + arrasto, individual com apoio físico em pares) → 16-23min: Bloco 4 — Recombinação (pares descobrem novas palavras) → 23-29min: Bloco 5 — Leitura e escrita guiada (individual, completar + copiar) → 29-35min: Bloco 6 — Frase simples (pares no quadro + inventar frase oral) → 35-40min: Bloco 7 — Mini-avaliação formativa (individual, professor observa) → 40-45min: Bloco 8 — Extensão criativa (escolha livre: desenhar / escrever / descobrir + Lego opcional)
+0-5min: Bloco 1 — Abertura contextual (ativação oral em roda + animação digital da porta) → 5-9min: Bloco 2 — Reconhecimento global (palavra↔imagem, individual) → 9-16min: Bloco 3 — Segmentação silábica (palmas + arrasto, individual com apoio físico em pares) → 16-23min: Bloco 4 — Recombinação (pares descobrem novas palavras) → 23-29min: Bloco 5 — Leitura e escrita guiada (individual, completar + copiar) → 29-35min: Bloco 6 — Frase simples (pares no quadro + inventar frase oral) → 35-40min: Bloco 7 — Mini-avaliação formativa (individual, professor observa) → 40-45min: Bloco 8 — Extensão criativa (escolha livre: desenhar / escrever / descobrir + Lego opcional)
 
 ## Unit 1: Abertura contextual — a chave na história da casa (5 min)
 
@@ -42,22 +50,22 @@
 
 **Diferenciação:**
 - 🟢 Apoio: 🟢 A porta já aparece entreaberta; a chave tem seta piscante a indicar onde tocar; narração áudio automática sem necessidade de leitura.
-- 🟡 Intermédio: 🟡 Cena parada; aluno deve tocar na chave para desencadear a animação; narração activada após interacção.
+- 🟡 Intermédio: 🟡 Cena parada; aluno deve tocar na chave para desencadear a animação; narração ativada após interação.
 - 🔴 Desafio: 🔴 Antes de tocar, o aluno é convidado a dizer em voz alta para que serve a chave; campo de texto simples para escrever 1 palavra (ex: 'porta', 'abrir').
 
 ### 🛠️ Maker — Unplugged
 - **Desafio:** Antes de abrir o tablet, a educadora mostra uma chave real (ou imagem impressa) e faz a pergunta: 'O que é isto? Para que serve?' Os alunos respondem em roda.
 - **Grupo:** turma
-- **Ligação:** A exploração física do objeto precede e ancora a representação digital — activação de conhecimento prévio antes da interacção com a página.
+- **Ligação:** A exploração física do objeto precede e ancora a representação digital — ativação de conhecimento prévio antes da interação com a página.
 - **Comunicação:** Partilha oral em roda: cada criança diz uma coisa que se abre com chave (porta, mala, cofre, carro...)
-- **Alternativas:** Sem objeto físico: usar foto projectada no quadro interactivo; pedir à turma para fazer gestos de 'abrir a porta'
+- **Alternativas:** Sem objeto físico: usar foto projectada no quadro interativo; pedir à turma para fazer gestos de 'abrir a porta'
 
 ## Unit 2: Reconhecimento global — ver, ouvir, associar (4 min)
 
 **Compreender:** A criança vê a palavra 'chave' escrita em letra grande, ouve a pronunciação e deve associá-la à imagem correcta entre 3 opções. Este bloco trabalha o reconhecimento global (leitura de palavra inteira), sem ainda analisar as sílabas.
 
 **Constraint:** A palavra escrita e a imagem são representações do mesmo referente. O aluno deve reconhecer a palavra global sem soletrar — não é pedida leitura silábica neste bloco.
-**Assessment:** O aluno selecciona a imagem correcta da chave em pelo menos 2 de 3 tentativas (pode haver 2 rondas com imagens diferentes)
+**Assessment:** O aluno seleciona a imagem correcta da chave em pelo menos 2 de 3 tentativas (pode haver 2 rondas com imagens diferentes)
 
 **Diferenciação:**
 - 🟢 Apoio: 🟢 Apenas 2 opções de imagem (chave + 1 distractor); palavra lida em áudio automaticamente ao carregar o bloco; imagens com legenda escrita por baixo.
@@ -97,10 +105,10 @@
 
 ## Unit 5: Leitura e escrita guiada — completar e copiar (6 min)
 
-**Compreender:** A criança pratica a leitura e a escrita da palavra 'chave' através de tarefas de completamento (sílaba em falta) e cópia guiada. O objectivo é consolidar a correspondência grafema-fonema e a forma ortográfica correcta da palavra, especialmente o dígrafo 'ch'.
+**Compreender:** A criança pratica a leitura e a escrita da palavra 'chave' através de tarefas de completamento (sílaba em falta) e cópia guiada. O objetivo é consolidar a correspondência grafema-fonema e a forma ortográfica correcta da palavra, especialmente o dígrafo 'ch'.
 
 **Constraint:** Em português, o som /ʃ/ em 'chave' é escrito com 'ch' — não com 'x', 'sh' ou 'sch'. Esta regularidade ortográfica deve ser descoberta ao eliminar as alternativas incorrectas.
-**Assessment:** O aluno selecciona 'cha' e 'chave' correctamente em ambas as fases de escolha múltipla e copia a palavra de forma legível (1 a 3 tentativas admitidas)
+**Assessment:** O aluno seleciona 'cha' e 'chave' correctamente em ambas as fases de escolha múltipla e copia a palavra de forma legível (1 a 3 tentativas admitidas)
 
 **Diferenciação:**
 - 🟢 Apoio: 🟢 Apenas 2 opções em cada escolha múltipla; modelo da palavra sempre visível durante a cópia; linha de cópia com tracejado para seguir.
@@ -120,7 +128,7 @@
 - 🔴 Desafio: 🔴 6 cartões + 2 distractores ('janela', 'escada'); aluno deve escolher os correctos E ordenar; depois escreve 1 frase própria com 'chave'.
 
 ### 🛠️ Maker — Whiteboard
-- **Desafio:** Em pares, os alunos constroem no quadro interactivo a frase usando cartões digitais. Depois, cada par inventa oralmente 1 nova frase com 'chave' (ex: 'A chave é pequena.').
+- **Desafio:** Em pares, os alunos constroem no quadro interativo a frase usando cartões digitais. Depois, cada par inventa oralmente 1 nova frase com 'chave' (ex: 'A chave é pequena.').
 - **Grupo:** 2
 - **Ligação:** A construção colaborativa no quadro reforça a construção individual na página; permite correcção entre pares.
 - **Comunicação:** Cada par lê a sua frase inventada em voz alta para a turma; registo no diário de turma das frases criadas.
@@ -131,7 +139,7 @@
 **Compreender:** Verificação rápida dos 4 critérios observáveis do M28P para a palavra 'chave': reconhecimento global, divisão silábica, reconstrução e uso em frase. Não é teste — é check-in formativo para o aluno e para o professor. O professor observa e regista no PIT.
 
 **Constraint:** A avaliação formativa não penaliza erro — serve para identificar onde o aluno precisa de mais apoio. O score não é partilhado publicamente.
-**Assessment:** Critérios observáveis: (1) selecciona 'chave' entre 4 palavras parecidas; (2) indica 2 palmas/sílabas; (3) ordena cha→ve correctamente; (4) produz uma frase oral ou escrita com 'chave'
+**Assessment:** Critérios observáveis: (1) seleciona 'chave' entre 4 palavras parecidas; (2) indica 2 palmas/sílabas; (3) ordena cha→ve correctamente; (4) produz uma frase oral ou escrita com 'chave'
 
 **Diferenciação:**
 - 🟢 Apoio: 🟢 Tarefa 1 com imagem de apoio; tarefa 2 com botão de palmas animado e contagem automática; tarefa 3 com 1 sílaba já colocada; tarefa 4 oral (gravação de voz ou frase dita ao professor).
@@ -140,10 +148,10 @@
 
 ## Unit 8: Extensão — oralidade, desenho e criatividade com 'chave' (5 min)
 
-**Compreender:** Actividade de extensão criativa que convida a criança a ir além da palavra aprendida: explorar o significado simbólico e real da chave, criar novas frases, desenhar e partilhar. Alinhado com a oralidade e expressão criativa do currículo do 1.º ano.
+**Compreender:** Atividade de extensão criativa que convida a criança a ir além da palavra aprendida: explorar o significado simbólico e real da chave, criar novas frases, desenhar e partilhar. Alinhado com a oralidade e expressão criativa do currículo do 1.º ano.
 
 **Constraint:** A extensão é livre — não há resposta certa. O critério é a participação e a expressão. A sílaba 'cha' aparece em muitas palavras do quotidiano.
-**Assessment:** O aluno completa pelo menos 1 das 3 actividades de extensão e partilha oralmente com o par ou com a turma o que criou/descobriu
+**Assessment:** O aluno completa pelo menos 1 das 3 atividades de extensão e partilha oralmente com o par ou com a turma o que criou/descobriu
 
 **Diferenciação:**
 - 🟢 Apoio: 🟢 Apenas tab 'Descobre!' com 3 palavras (chá, chapéu, chuva) com imagem e áudio; Lego livre sem estrutura.

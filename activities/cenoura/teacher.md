@@ -6,12 +6,20 @@
 
 ---
 
-## Objectivos de aprendizagem
+## Objetivos de aprendizagem
 
 - Reconhecer a palavra 'cenoura' globalmente e associá-la à imagem
 - Segmentar 'cenoura' nas sílabas ce-nou-ra e identificar cada sílaba
 - Recombinar sílabas para formar novas palavras
 - Usar 'cenoura' numa frase simples oral ou escrita
+
+## Princípio M28P — evitar uso puramente visual
+
+Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.
+
+- **Som-letra/grafofonémica:** pedir que a criança diga que som ou letra observa em 'cenoura'.
+- **Generalização:** pedir uma palavra nova com sílabas conhecidas e uma frase curta.
+- **Verificação rápida:** observar palavra-alvo, sílabas, palavra nova e frase/frase oral.
 
 ## Materiais
 
@@ -29,7 +37,7 @@
 
 ## Fluxo da sessão
 
-0-5min: Bloco 1 — micro-história da cenoura na horta (activação) → 5-10min: Bloco 2 — reconhecimento global (palavra↔imagem) → 10-18min: Bloco 3 — segmentação silábica + actividade unplugged com cartões → 18-25min: Bloco 4 — recombinação, novas palavras (pares) → 25-32min: Bloco 5 — completar palavra + escrita guiada → 32-40min: Bloco 6 — frase simples, modo livre → 40-45min: Bloco 7 — mini-avaliação formativa (individual) + partilha turma
+0-5min: Bloco 1 — micro-história da cenoura na horta (ativação) → 5-10min: Bloco 2 — reconhecimento global (palavra↔imagem) → 10-18min: Bloco 3 — segmentação silábica + atividade unplugged com cartões → 18-25min: Bloco 4 — recombinação, novas palavras (pares) → 25-32min: Bloco 5 — completar palavra + escrita guiada → 32-40min: Bloco 6 — frase simples, modo livre → 40-45min: Bloco 7 — mini-avaliação formativa (individual) + partilha turma
 
 ## Unit 1: Abertura contextual — a cenoura na horta (5 min)
 
@@ -48,7 +56,7 @@
 **Compreender:** O aluno deve associar a forma visual da palavra 'cenoura' à sua imagem entre distratores. Trabalha o reconhecimento global antes da análise silábica.
 
 **Constraint:** A correspondência imagem↔palavra é unívoca — só uma resposta é correcta
-**Assessment:** O aluno selecciona 'cenoura' correctamente em 2 de 2 rondas com distratores diferentes
+**Assessment:** O aluno seleciona 'cenoura' correctamente em 2 de 2 rondas com distratores diferentes
 
 **Diferenciação:**
 - 🟢 Apoio: Palavra 'cenoura' sublinhada em destaque; distratores com imagem também visível
@@ -70,7 +78,7 @@
 ### 🛠️ Maker — Unplugged
 - **Desafio:** Com os cartões físicos de sílabas (ce / nou / ra), o aluno ordena-os na mesa e bate uma palma por cada um. Depois esconde um cartão e tenta lembrar qual falta.
 - **Grupo:** 2
-- **Ligação:** A actividade física com cartões reforça a segmentação feita no ecrã
+- **Ligação:** A atividade física com cartões reforça a segmentação feita no ecrã
 - **Comunicação:** Par partilha com outro par qual sílaba foi mais difícil de lembrar
 - **Alternativas:** Escrever as sílabas em post-its e ordenar na mesa
 
@@ -91,7 +99,7 @@
 **Compreender:** O aluno completa a palavra 'cenoura' com a sílaba em falta e escreve-a de forma guiada, consolidando a forma ortográfica.
 
 **Constraint:** A sílaba em falta tem sempre uma posição única correcta — não é arbitrária
-**Assessment:** O aluno selecciona a sílaba correcta em 3 exercícios e escreve 'cenoura' de forma legível
+**Assessment:** O aluno seleciona a sílaba correcta em 3 exercícios e escreve 'cenoura' de forma legível
 
 **Diferenciação:**
 - 🟢 Apoio: Sílaba em falta sempre na posição final (ra); palavra completa visível como modelo de escrita

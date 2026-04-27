@@ -6,7 +6,9 @@
     "Reconhecer a palavra 'quadro' como um todo, associando-a à imagem correspondente",
     "Segmentar 'quadro' nas sílabas 'qua' e 'dro', batendo palmas e arrastando blocos",
     "Recombinar sílabas conhecidas para formar e verificar novas palavras reais",
-    "Ler e construir a frase 'Eu escrevo no quadro.'"
+    "Ler e construir a frase 'Eu escrevo no quadro.'",
+    "Descobrir que 'quadro' não é só uma forma para memorizar: tem sílabas, sons/letras e pode ajudar a ler palavras novas.",
+    "Ler uma palavra nova com sílabas conhecidas de 'quadro' e escrever uma frase curta com apoio."
   ],
   "curriculum": {
     "ae": [
@@ -44,7 +46,10 @@
       "Trabalho curricular comparticipado",
       "Circuitos de comunicação"
     ],
-    "instruments": ["PIT", "diário de turma"],
+    "instruments": [
+      "PIT",
+      "diário de turma"
+    ],
     "socialOrganization": "individual (exploração 30min) → pares (recombinação + quadro físico 7min) → turma (comunicação + extensão 8min)"
   },
   "materials": [
@@ -59,8 +64,20 @@
       "textDescription": "O aluno observa uma ilustração animada de uma sala de aula com um quadro verde ao centro. Uma personagem-professora aponta para o quadro onde a palavra 'quadro' surge em destaque. A micro-história: 'A professora chama a turma: Olha para o quadro! Hoje aprendemos uma palavra nova.' O objeto e a palavra são apresentados juntos.",
       "interaction": {
         "state": [
-          { "name": "cenaAtiva", "type": "toggle", "options": ["imagem", "palavra"], "default": "imagem" },
-          { "name": "palavraVisivel", "type": "derived", "derivedFrom": "cenaAtiva === 'palavra'" }
+          {
+            "name": "cenaAtiva",
+            "type": "toggle",
+            "options": [
+              "imagem",
+              "palavra"
+            ],
+            "default": "imagem"
+          },
+          {
+            "name": "palavraVisivel",
+            "type": "derived",
+            "derivedFrom": "cenaAtiva === 'palavra'"
+          }
         ],
         "render": "Ilustração de sala de aula: quadro verde ao centro com moldura escura, professora a apontar. Botão 'Ver a palavra' faz surgir 'quadro' escrito em letra grande no quadro da ilustração, com animação suave de entrada e destaque em amarelo.",
         "transition": "Clicar em 'Ver a palavra' → cenaAtiva muda para 'palavra' → a palavra aparece no quadro da ilustração com fade-in suave e som de giz a escrever.",
@@ -76,17 +93,38 @@
     },
     {
       "summary": "Reconhecimento global: palavra ↔ imagem",
-      "textDescription": "O aluno vê a palavra 'quadro' em letras grandes e três imagens (quadro, janela, mesa). Seleciona a imagem correspondente. Depois o processo inverte: três palavras aparecem e o aluno identifica 'quadro'. O objetivo é o reconhecimento da forma global da palavra, sem decifração sílaba a sílaba.",
+      "textDescription": "O aluno vê a palavra 'quadro' em letras grandes e três imagens (quadro, janela, mesa). Seleciona a imagem correspondente. Depois o processo inverte: três palavras aparecem e o aluno identifica 'quadro'. O objetivo é o reconhecimento da forma global da palavra, sem decifração sílaba a sílaba. Observar a relação som-letra/grafofonémica: quando muda uma letra ou sílaba, muda o som e pode mudar a palavra.",
       "interaction": {
         "state": [
-          { "name": "faseReconhecimento", "type": "dropdown", "options": ["palavra→imagem", "imagem→palavra"], "default": "palavra→imagem" },
-          { "name": "selecao", "type": "quiz", "options": ["quadro", "janela", "mesa"], "default": null },
-          { "name": "acerto", "type": "derived", "derivedFrom": "selecao === 'quadro'" }
+          {
+            "name": "faseReconhecimento",
+            "type": "dropdown",
+            "options": [
+              "palavra→imagem",
+              "imagem→palavra"
+            ],
+            "default": "palavra→imagem"
+          },
+          {
+            "name": "selecao",
+            "type": "quiz",
+            "options": [
+              "quadro",
+              "janela",
+              "mesa"
+            ],
+            "default": null
+          },
+          {
+            "name": "acerto",
+            "type": "derived",
+            "derivedFrom": "selecao === 'quadro'"
+          }
         ],
         "render": "Fase 1: palavra 'quadro' em letra grande (sans-serif, mínimo 40px) no topo; três imagens abaixo com label. Fase 2: imagem do quadro no topo; três palavras em botões abaixo. Feedback imediato: ✓ verde claro (acerto) ou âmbar com retry (erro).",
         "transition": "Clicar numa imagem ou palavra → selecao atualiza → feedback imediato aparece → após 1,5s botão 'Próxima fase' ativa.",
         "constraint": "O aluno deve reconhecer a palavra pela sua forma global antes de a analisar em sílabas.",
-        "assessment": "O aluno seleciona a imagem correta do quadro na fase 1 e a palavra 'quadro' na fase 2, sem hesitação prolongada."
+        "assessment": "O aluno seleciona a imagem correta do quadro na fase 1 e a palavra 'quadro' na fase 2, sem hesitação prolongada. A criança aponta uma relação som-letra e diz o que muda no som."
       },
       "differentiation": {
         "support": "🟢 Imagens distratoras muito distintas (ex: bola, cão); palavra 'quadro' com as letras 'qu' em cor diferente como pista visual.",
@@ -97,17 +135,38 @@
     },
     {
       "summary": "Segmentação silábica: qua + dro",
-      "textDescription": "O aluno aprende a dividir 'quadro' nas duas sílabas: 'qua' e 'dro'. Primeiro bate palmas duas vezes acompanhando a pronúncia. Depois arrasta blocos coloridos para os separar. Cada sílaba tem cor consistente: 'qua' = azul, 'dro' = laranja. O contador de sílabas reforça o conceito.",
+      "textDescription": "O aluno aprende a dividir 'quadro' nas duas sílabas: 'qua' e 'dro'. Primeiro bate palmas duas vezes acompanhando a pronúncia. Depois arrasta blocos coloridos para os separar. Cada sílaba tem cor consistente: 'qua' = azul, 'dro' = laranja. O contador de sílabas reforça o conceito. Observar a relação som-letra/grafofonémica: quando muda uma letra ou sílaba, muda o som e pode mudar a palavra.",
       "interaction": {
         "state": [
-          { "name": "palmadas", "type": "toggle", "options": ["0", "1", "2"], "default": "0" },
-          { "name": "silabas", "type": "drag", "options": ["qua", "dro"], "default": null },
-          { "name": "posicaoCorreta", "type": "derived", "derivedFrom": "silabas[0] === 'qua' && silabas[1] === 'dro'" }
+          {
+            "name": "palmadas",
+            "type": "toggle",
+            "options": [
+              "0",
+              "1",
+              "2"
+            ],
+            "default": "0"
+          },
+          {
+            "name": "silabas",
+            "type": "drag",
+            "options": [
+              "qua",
+              "dro"
+            ],
+            "default": null
+          },
+          {
+            "name": "posicaoCorreta",
+            "type": "derived",
+            "derivedFrom": "silabas[0] === 'qua' && silabas[1] === 'dro'"
+          }
         ],
         "render": "Palavra 'quadro' unida no centro com fundo branco. Botão de palmas (👏) que ao ser clicado 2 vezes destaca cada sílaba sequencialmente com animação. Após palmas: duas zonas de destino coloridas (azul para 'qua', laranja para 'dro'); dois blocos arrastáveis. Contador '__ sílabas' atualiza em tempo real.",
         "transition": "Clicar palmas → conta palmadas (1→destaca 'qua', 2→destaca 'dro'). Arrastar blocos para zonas corretas → posicaoCorreta verifica → feedback ✓ verde ou âmbar com indicação.",
         "constraint": "'quadro' tem exatamente 2 sílabas. A ordem é sempre 'qua' primeiro, 'dro' depois — trocar a ordem não forma a mesma palavra.",
-        "assessment": "O aluno arrasta 'qua' para a zona azul e 'dro' para a zona laranja, e verbaliza 'qua-dro, duas sílabas' quando solicitado pelo professor."
+        "assessment": "O aluno arrasta 'qua' para a zona azul e 'dro' para a zona laranja, e verbaliza 'qua-dro, duas sílabas' quando solicitado pelo professor. A criança aponta uma relação som-letra e diz o que muda no som."
       },
       "differentiation": {
         "support": "🟢 Blocos já pré-separados; o aluno apenas confirma a ordem arrastando para zonas marcadas; imagem do quadro sempre visível; linha divisória já desenhada na palavra.",
@@ -118,26 +177,55 @@
     },
     {
       "summary": "Recombinação: formar novas palavras com a sílaba 'qua'",
-      "textDescription": "O aluno experimenta combinar a sílaba 'qua' com outras sílabas para descobrir palavras reais. Explora 'qua+rto' = 'quarto' e 'qua+se' = 'quase'. Aprende que nem toda a combinação forma uma palavra real em português — e isso é uma descoberta importante.",
+      "textDescription": "O aluno experimenta combinar a sílaba 'qua' com outras sílabas para descobrir palavras reais. Explora 'qua+rto' = 'quarto' e 'qua+se' = 'quase'. Aprende que nem toda a combinação forma uma palavra real em português — e isso é uma descoberta importante. Observar a relação som-letra/grafofonémica: quando muda uma letra ou sílaba, muda o som e pode mudar a palavra.",
       "interaction": {
         "state": [
-          { "name": "silabaSelecionada", "type": "dropdown", "options": ["qua", "dro"], "default": "qua" },
-          { "name": "silabaCombinada", "type": "sorting", "options": ["rto", "se", "dro", "tro", "na", "bo"], "default": null },
-          { "name": "resultadoCombinacao", "type": "derived", "derivedFrom": "['quarto','quase','quadro','quatro'].includes(silabaSelecionada + silabaCombinada) ? 'existe' : 'não existe'" }
+          {
+            "name": "silabaSelecionada",
+            "type": "dropdown",
+            "options": [
+              "qua",
+              "dro"
+            ],
+            "default": "qua"
+          },
+          {
+            "name": "silabaCombinada",
+            "type": "sorting",
+            "options": [
+              "rto",
+              "se",
+              "dro",
+              "tro",
+              "na",
+              "bo"
+            ],
+            "default": null
+          },
+          {
+            "name": "resultadoCombinacao",
+            "type": "derived",
+            "derivedFrom": "['quarto','quase','quadro','quatro'].includes(silabaSelecionada + silabaCombinada) ? 'existe' : 'não existe'"
+          }
         ],
         "render": "Sílaba fixa 'qua' à esquerda em bloco azul. Seis sílabas arrastáveis à direita em blocos cinza. O aluno arrasta uma sílaba para junto de 'qua'. A palavra formada aparece em grande no centro. Painel de resultado: '✓ Esta palavra existe!' (verde) ou '✗ Esta combinação não é uma palavra.' (âmbar). Botão de som para ouvir a palavra.",
         "transition": "Arrastar sílaba → silabaCombinada atualiza → palavra formada exibe → resultadoCombinacao verifica → feedback visual e sonoro.",
         "constraint": "Nem todas as combinações de sílabas formam palavras reais. Palavras válidas com 'qua': quarto (qua+rto), quase (qua+se), quadro (qua+dro), quatro (qua+tro).",
-        "assessment": "O aluno forma pelo menos 2 palavras válidas com 'qua' e consegue explicar oralmente por que razão 'qua+na' não é uma palavra real."
+        "assessment": "O aluno forma pelo menos 2 palavras válidas com 'qua' e consegue explicar oralmente por que razão 'qua+na' não é uma palavra real. A criança aponta uma relação som-letra e diz o que muda no som."
       },
       "maker": {
         "type": "whiteboard",
         "challenge": "Em pares, um aluno escreve 'qua' no quadro da sala e o colega acrescenta uma sílaba para tentar formar uma palavra. A turma decide em conjunto: é uma palavra real?",
-        "materials": ["Quadro da sala e giz ou marcador", "lista de sílabas conhecidas no caderno"],
+        "materials": [
+          "Quadro da sala e giz ou marcador",
+          "lista de sílabas conhecidas no caderno"
+        ],
         "groupSize": "2",
         "connection": "Após explorar as combinações no tablet, os pares testam fisicamente no quadro real, criando uma ponte direta entre a atividade digital e o objeto 'quadro' do tema.",
         "communication": "Cada par apresenta a palavra que descobriu (ou não descobriu) à turma; registo no diário de turma com as palavras válidas encontradas.",
-        "alternatives": ["Sem quadro disponível: tiras de papel com sílabas impressas para montar sobre a mesa"]
+        "alternatives": [
+          "Sem quadro disponível: tiras de papel com sílabas impressas para montar sobre a mesa"
+        ]
       },
       "differentiation": {
         "support": "🟢 Apenas 2 sílabas para combinar (dro e na); imagem para cada palavra válida; feedback inclui o nome da palavra pronunciado em voz alta.",
@@ -148,18 +236,49 @@
     },
     {
       "summary": "Leitura e escrita guiada: completar e copiar 'quadro'",
-      "textDescription": "O aluno trabalha a palavra escrita em três momentos progressivos: escolher a sílaba em falta ('qua___'), ordenar sílabas baralhadas ('dro' e 'qua'), e copiar ou traçar a palavra completa. Foco na correspondência entre a sílaba falada e a forma escrita.",
+      "textDescription": "O aluno trabalha a palavra escrita em três momentos progressivos: escolher a sílaba em falta ('qua___'), ordenar sílabas baralhadas ('dro' e 'qua'), e copiar ou traçar a palavra completa. Foco na correspondência entre a sílaba falada e a forma escrita. Observar a relação som-letra/grafofonémica: quando muda uma letra ou sílaba, muda o som e pode mudar a palavra.",
       "interaction": {
         "state": [
-          { "name": "etapaEscrita", "type": "dropdown", "options": ["completar", "ordenar", "copiar"], "default": "completar" },
-          { "name": "silabaSelecionada", "type": "quiz", "options": ["qua", "dro", "que", "bra"], "default": null },
-          { "name": "ordemSilabas", "type": "sorting", "options": ["dro", "qua"], "default": null },
-          { "name": "palavraCopiada", "type": "canvas", "default": "" }
+          {
+            "name": "etapaEscrita",
+            "type": "dropdown",
+            "options": [
+              "completar",
+              "ordenar",
+              "copiar"
+            ],
+            "default": "completar"
+          },
+          {
+            "name": "silabaSelecionada",
+            "type": "quiz",
+            "options": [
+              "qua",
+              "dro",
+              "que",
+              "bra"
+            ],
+            "default": null
+          },
+          {
+            "name": "ordemSilabas",
+            "type": "sorting",
+            "options": [
+              "dro",
+              "qua"
+            ],
+            "default": null
+          },
+          {
+            "name": "palavraCopiada",
+            "type": "canvas",
+            "default": ""
+          }
         ],
         "render": "Etapa 1: palavra 'qua___' em grande com 3-4 opções de sílaba em botões. Etapa 2: blocos 'dro' e 'qua' fora de ordem para arrastar e compor a palavra. Etapa 3: modelo 'quadro' em pontilhado/tracejado para traçar, ou campo de texto simples para digitar.",
         "transition": "Selecionar sílaba correta → avança para etapa seguinte com animação de confirmação. Ordenar sílabas corretamente → avança. Copiar/traçar → botão 'Concluído' confirma.",
         "constraint": "A palavra 'quadro' tem sempre as sílabas nesta ordem: 'qua' primeiro, 'dro' depois. A forma escrita corresponde exatamente ao que se diz.",
-        "assessment": "O aluno seleciona 'dro' para completar 'qua___', ordena 'qua+dro' corretamente (não 'dro+qua'), e copia ou traça 'quadro' com grafia reconhecível."
+        "assessment": "O aluno seleciona 'dro' para completar 'qua___', ordena 'qua+dro' corretamente (não 'dro+qua'), e copia ou traça 'quadro' com grafia reconhecível. A criança aponta uma relação som-letra e diz o que muda no som."
       },
       "differentiation": {
         "support": "🟢 Sílaba em falta indicada com cor e pista visual; apenas 2 opções de escolha; cópia com modelo muito visível, letra grande e linha guia.",
@@ -173,9 +292,32 @@
       "textDescription": "O aluno lê a frase 'Eu escrevo no quadro.' completa, ouve-a em áudio, e depois reconstrói-a arrastando blocos-palavra para a ordem correta. Identifica a palavra 'quadro' na frase e percebe que esta descreve uma ação familiar da sala de aula.",
       "interaction": {
         "state": [
-          { "name": "faseFrase", "type": "toggle", "options": ["leitura", "construção"], "default": "leitura" },
-          { "name": "palavrasFrase", "type": "sorting", "options": ["Eu", "escrevo", "no", "quadro", "."], "default": null },
-          { "name": "fraseCorreta", "type": "derived", "derivedFrom": "palavrasFrase.join(' ') === 'Eu escrevo no quadro .'" }
+          {
+            "name": "faseFrase",
+            "type": "toggle",
+            "options": [
+              "leitura",
+              "construção"
+            ],
+            "default": "leitura"
+          },
+          {
+            "name": "palavrasFrase",
+            "type": "sorting",
+            "options": [
+              "Eu",
+              "escrevo",
+              "no",
+              "quadro",
+              "."
+            ],
+            "default": null
+          },
+          {
+            "name": "fraseCorreta",
+            "type": "derived",
+            "derivedFrom": "palavrasFrase.join(' ') === 'Eu escrevo no quadro .'"
+          }
         ],
         "render": "Fase leitura: frase completa 'Eu escrevo no quadro.' com a palavra 'quadro' em destaque (azul). Botão de som (🔊) para ouvir a frase lida em voz alta. Imagem de criança a escrever no quadro. Fase construção: 5 blocos-palavra misturados; zona de destino em linha para compor a frase.",
         "transition": "Ouvir/ler frase → clicar 'Vou construir!' → blocos aparecem misturados → arrastar para a zona de destino na ordem correta → fraseCorreta verifica → feedback com animação.",
@@ -191,19 +333,59 @@
     },
     {
       "summary": "Mini-avaliação formativa: reconhecer, segmentar, reconstruir e usar 'quadro'",
-      "textDescription": "Verificação rápida com 4 momentos observáveis: (1) reconhecer 'quadro' entre 3 palavras escritas, (2) separar em sílabas arrastando blocos, (3) ordenar sílabas baralhadas para reconstruir a palavra, (4) completar a frase 'Eu escrevo no ___.'. O objetivo é diagnóstico, não classificativo.",
+      "textDescription": "Verificação rápida com 4 momentos observáveis: (1) reconhecer 'quadro' entre 3 palavras escritas, (2) separar em sílabas arrastando blocos, (3) ordenar sílabas baralhadas para reconstruir a palavra, (4) completar a frase 'Eu escrevo no ___.'. O objetivo é diagnóstico, não classificativo. Observar a relação som-letra/grafofonémica: quando muda uma letra ou sílaba, muda o som e pode mudar a palavra.",
       "interaction": {
         "state": [
-          { "name": "perguntaAtiva", "type": "dropdown", "options": ["1", "2", "3", "4"], "default": "1" },
-          { "name": "respostaPergunta1", "type": "quiz", "options": ["quadro", "quarto", "quadrado"], "default": null },
-          { "name": "silabas", "type": "sorting", "options": ["dro", "qua"], "default": null },
-          { "name": "respostaPergunta4", "type": "quiz", "options": ["quadro", "janela", "mesa"], "default": null },
-          { "name": "pontuacao", "type": "derived", "derivedFrom": "acertos / 4" }
+          {
+            "name": "perguntaAtiva",
+            "type": "dropdown",
+            "options": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
+            "default": "1"
+          },
+          {
+            "name": "respostaPergunta1",
+            "type": "quiz",
+            "options": [
+              "quadro",
+              "quarto",
+              "quadrado"
+            ],
+            "default": null
+          },
+          {
+            "name": "silabas",
+            "type": "sorting",
+            "options": [
+              "dro",
+              "qua"
+            ],
+            "default": null
+          },
+          {
+            "name": "respostaPergunta4",
+            "type": "quiz",
+            "options": [
+              "quadro",
+              "janela",
+              "mesa"
+            ],
+            "default": null
+          },
+          {
+            "name": "pontuacao",
+            "type": "derived",
+            "derivedFrom": "acertos / 4"
+          }
         ],
         "render": "Barra de progresso com 4 passos no topo. Cada pergunta ocupa o ecrã completo com instrução clara. No final: painel com resultado visual (1-4 estrelas) e mensagem de encorajamento sem nota numérica. Botão 'Recomeçar' ou 'Ir para a extensão'.",
         "transition": "Responder → feedback imediato → avançar automaticamente após 2s → próxima pergunta → no final, mostrar resultado e opções.",
         "constraint": "Avaliação formativa: objetivo é identificar o que cada aluno já consolidou para orientar o professor, não para classificar o aluno.",
-        "assessment": "O aluno: (1) seleciona 'quadro' entre 3 opções escritas; (2) arrasta 'qua' e 'dro' para posições corretas; (3) ordena 'dro+qua' → 'qua+dro'; (4) escolhe 'quadro' para completar 'Eu escrevo no ___.'"
+        "assessment": "O aluno: (1) seleciona 'quadro' entre 3 opções escritas; (2) arrasta 'qua' e 'dro' para posições corretas; (3) ordena 'dro+qua' → 'qua+dro'; (4) escolhe 'quadro' para completar 'Eu escrevo no ___.' A criança aponta uma relação som-letra e diz o que muda no som."
       },
       "differentiation": {
         "support": "🟢 Cada pergunta tem imagem de apoio; 2 tentativas antes de mostrar a resposta correta; texto das opções em tamanho maior.",
@@ -217,8 +399,25 @@
       "textDescription": "O aluno faz a ponte do digital para o físico: escreve a palavra 'quadro' no quadro real da sala de aula, lê-a para a turma, e opcionalmente ilustra. A extensão consolida o tema 'sala de aula' e cria uma ligação concreta entre o objeto e a palavra aprendida.",
       "interaction": {
         "state": [
-          { "name": "atividadeEscolhida", "type": "dropdown", "options": ["escrever no quadro", "desenhar o quadro", "encontrar mais palavras da sala"], "default": "escrever no quadro" },
-          { "name": "registoFeito", "type": "toggle", "options": ["não", "sim"], "default": "não" }
+          {
+            "name": "atividadeEscolhida",
+            "type": "dropdown",
+            "options": [
+              "escrever no quadro",
+              "desenhar o quadro",
+              "encontrar mais palavras da sala"
+            ],
+            "default": "escrever no quadro"
+          },
+          {
+            "name": "registoFeito",
+            "type": "toggle",
+            "options": [
+              "não",
+              "sim"
+            ],
+            "default": "não"
+          }
         ],
         "render": "Ecrã com 3 opções de extensão ilustradas com ícones grandes. Cada opção mostra instrução simples (máximo 2 frases). Ao selecionar, instruções detalhadas aparecem. Botão 'Feito! ✓' para registar conclusão. Mensagem final de parabéns com animação simples.",
         "transition": "Selecionar atividade → instruções detalhadas surgem → atividade realizada offline → marcar 'Feito!' → mensagem de parabéns e confeti simples.",
@@ -228,11 +427,17 @@
       "maker": {
         "type": "whiteboard",
         "challenge": "Vai ao quadro da sala e escreve 'quadro' em letra grande e bem visível. Pede a um amigo para verificar se está bem escrito. Quem quiser pode desenhar um quadro à volta da palavra para decorar!",
-        "materials": ["Quadro da sala de aula", "giz ou marcador de quadro branco", "apagador"],
+        "materials": [
+          "Quadro da sala de aula",
+          "giz ou marcador de quadro branco",
+          "apagador"
+        ],
         "groupSize": "2",
         "connection": "O aluno usa fisicamente o objeto 'quadro' — o mesmo do tema da lição — para praticar a escrita da palavra que acabou de aprender, tornando a aprendizagem concreta e significativa.",
         "communication": "Cada aluno lê a palavra que escreveu em voz alta para a turma. Registo fotográfico opcional para o diário de turma ou portfólio.",
-        "alternatives": ["Sem quadro disponível: folha de papel A3 sobre a mesa, escrever com marcador grosso"]
+        "alternatives": [
+          "Sem quadro disponível: folha de papel A3 sobre a mesa, escrever com marcador grosso"
+        ]
       },
       "differentiation": {
         "support": "🟢 Cópia com modelo visível (cartão 'quadro' na mão); traçar por cima de letras pontilhadas numa folha antes de ir ao quadro.",
@@ -242,5 +447,13 @@
       "duration": 6
     }
   ],
-  "sessionFlow": "0-5min: Unit 1 — abertura contextual (ilustração da sala, quadro verde, micro-história) → 5-9min: Unit 2 — reconhecimento global (palavra↔imagem, duas fases) → 9-15min: Unit 3 — segmentação silábica (palmas, arrastar qua+dro) → 15-22min: Unit 4 — recombinação (qua+rto, qua+se; atividade maker em pares no quadro físico) → 22-28min: Unit 5 — leitura e escrita guiada (completar, ordenar, copiar) → 28-34min: Unit 6 — frase simples (ler e construir 'Eu escrevo no quadro.') → 34-39min: Unit 7 — mini-avaliação formativa (4 momentos observáveis) → 39-45min: Unit 8 — extensão maker (escrever no quadro real, partilha com turma)"
+  "sessionFlow": "0-5min: Unit 1 — abertura contextual (ilustração da sala, quadro verde, micro-história) → 5-9min: Unit 2 — reconhecimento global (palavra↔imagem, duas fases) → 9-15min: Unit 3 — segmentação silábica (palmas, arrastar qua+dro) → 15-22min: Unit 4 — recombinação (qua+rto, qua+se; atividade maker em pares no quadro físico) → 22-28min: Unit 5 — leitura e escrita guiada (completar, ordenar, copiar) → 28-34min: Unit 6 — frase simples (ler e construir 'Eu escrevo no quadro.') → 34-39min: Unit 7 — mini-avaliação formativa (4 momentos observáveis) → 39-45min: Unit 8 — extensão maker (escrever no quadro real, partilha com turma)",
+  "m28pMethodAlignment": {
+    "principle": "Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.",
+    "meaningfulEntry": "palavra-chave com imagem/contexto antes da análise",
+    "globalRecognition": "reconhecimento global é ponto de entrada, não fim da aprendizagem",
+    "codeWork": "consciência silábica e relação som-letra/grafofonémica",
+    "generalization": "ler palavra nova com sílabas conhecidas e escrever frase curta",
+    "quickVerification": "verificação rápida observa palavra-alvo, palavra nova e frase curta"
+  }
 }

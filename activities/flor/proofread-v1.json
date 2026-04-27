@@ -1,0 +1,29 @@
+{
+  "pass": true,
+  "language": "pt-PT AO90",
+  "issues": [],
+  "evidence": [
+    {
+      "file": "activities/flor/teacher.md",
+      "section": "Princípio M28P",
+      "snippet": "Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida."
+    },
+    {
+      "file": "activities/flor/docspec.json",
+      "field": "m28pMethodAlignment",
+      "snippet": "reconhecimento global é ponto de entrada, não fim da aprendizagem; consciência silábica e relação som-letra/grafofonémica"
+    },
+    {
+      "file": "activities/flor/index.html",
+      "section": "Descobrir para além da palavra",
+      "snippet": "Não vamos só decorar a palavra. Vamos descobrir sílabas, sons e letras, formar uma palavra nova e escrever uma frase curta."
+    }
+  ],
+  "checks": {
+    "pt_PT_AO90": true,
+    "age_appropriate": true,
+    "m28p_not_pure_visual": true,
+    "no_pt_BR_tokens": true,
+    "sensitive_claims_about_dislexia": false
+  }
+}

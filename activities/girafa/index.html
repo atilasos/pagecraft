@@ -763,6 +763,9 @@
       .double { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .triple { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
+  
+    .m28p-method-check{margin:1.25rem 0;padding:1rem;border:3px dashed var(--accent,#F59E0B);border-radius:18px;background:#fffdf5}.m28p-method-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.75rem}.m28p-method-card{min-height:48px;border-radius:16px;border:2px solid var(--primary,#E05FA0);background:#fff;color:var(--text,#1E1B18);font-weight:800;padding:.75rem}
+
   </style>
 </head>
 <body>
@@ -777,7 +780,7 @@
             <span class="badge">45 min</span>
           </div>
           <h1 id="heroTitle">Aprender a palavra <span class="word-display">GIRAFA</span></h1>
-          <p>Uma aula interactiva para reconhecer, partir em sílabas, recombinar, escrever e usar a palavra <strong>girafa</strong> em frases simples.</p>
+          <p>Uma aula interativa para reconhecer, partir em sílabas, recombinar, escrever e usar a palavra <strong>girafa</strong> em frases simples.</p>
           <div class="goal-list">
             <div class="goal">Reconhecer a palavra <strong>girafa</strong> como um todo.</div>
             <div class="goal">Segmentar em três sílabas: <strong><span class="syl-gi">gi</span>-<span class="syl-ra">ra</span>-<span class="syl-fa">fa</span></strong>.</div>
@@ -791,7 +794,7 @@
           <p><strong>Tema:</strong> animal</p>
           <p><strong>Frase-modelo:</strong> A girafa tem pescoço comprido.</p>
           <div class="soft-card" style="margin-top:12px;">
-            <p><strong>Materiais:</strong> tablet ou computador, cartões de sílabas, papel, lápis e quadro interactivo opcional.</p>
+            <p><strong>Materiais:</strong> tablet ou computador, cartões de sílabas, papel, lápis e quadro interativo opcional.</p>
           </div>
         </aside>
       </div>
@@ -1053,7 +1056,7 @@
           <div>
             <div class="kicker">Unidade 8 · 5 min</div>
             <h2>Extensão autónoma</h2>
-            <p>Escolhe uma actividade e produz algo que inclua a palavra <strong>girafa</strong>.</p>
+            <p>Escolhe uma atividade e produz algo que inclua a palavra <strong>girafa</strong>.</p>
           </div>
           <div class="tabs" data-unit="8" aria-label="Diferenciação da unidade 8">
             <button class="tab" data-level="support">🟢 Apoio</button>
@@ -1098,14 +1101,26 @@
         <h2>AE e Perfil do Aluno</h2>
         <div class="card-grid">
           <div class="soft-card">Português · Leitura e Escrita: identificar palavras escritas, reconhecer sílabas, reconstituir palavras e escrever frases simples.</div>
-          <div class="soft-card">Português · Oralidade: produzir enunciados adequados e participar em actividades de oralidade.</div>
+          <div class="soft-card">Português · Oralidade: produzir enunciados adequados e participar em atividades de oralidade.</div>
           <div class="soft-card">Perfil do Aluno: Linguagens e textos, raciocínio e resolução de problemas, desenvolvimento pessoal e autonomia.</div>
         </div>
       </section>
     </section>
 
     <footer class="footer-card">Gerado por PageCraft 🛠️</footer>
-  </main>
+  
+<section class="m28p-method-check" aria-labelledby="m28p-method-title">
+  <h2 id="m28p-method-title">Descobrir para além da palavra</h2>
+  <p>Não vamos só decorar a palavra. Vamos descobrir sílabas, sons e letras, formar uma palavra nova e escrever uma frase curta.</p>
+  <div class="m28p-method-grid">
+    <button type="button" class="m28p-method-card">👏 Bate as sílabas</button>
+    <button type="button" class="m28p-method-card">🔤 Procura o som/letra que muda</button>
+    <button type="button" class="m28p-method-card">🧩 Lê uma palavra nova com sílabas conhecidas</button>
+    <button type="button" class="m28p-method-card">✍️ Escreve uma frase curta</button>
+  </div>
+</section>
+
+</main>
 
   <script>
     const diffTexts = {
@@ -1125,7 +1140,7 @@
         challenge: "🔴 Há distratores extra e depois escreves as sílabas separadas."
       },
       4: {
-        support: "🟢 Menos sílabas no painel e o objectivo é descobrir 1 palavra nova.",
+        support: "🟢 Menos sílabas no painel e o objetivo é descobrir 1 palavra nova.",
         standard: "🟡 Seis sílabas, sem dicas, e tentas encontrar 2 palavras reais.",
         challenge: "🔴 Todas as sílabas, sem imagem de ajuda, e procuras pelo menos 4 palavras."
       },

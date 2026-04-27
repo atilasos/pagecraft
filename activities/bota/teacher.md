@@ -6,19 +6,27 @@
 
 ---
 
-## Objectivos de aprendizagem
+## Objetivos de aprendizagem
 
 - Reconhecer a palavra 'bota' globalmente, associando-a à imagem e ao som
 - Segmentar a palavra 'bota' nas sílabas 'bo' e 'ta', identificando duas sílabas
 - Recombinar as sílabas de 'bota' para distinguir combinações reais de não-palavras
 - Usar a palavra 'bota' numa frase simples, oral ou escrita
 
+## Princípio M28P — evitar uso puramente visual
+
+Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.
+
+- **Som-letra/grafofonémica:** pedir que a criança diga que som ou letra observa em 'bota'.
+- **Generalização:** pedir uma palavra nova com sílabas conhecidas e uma frase curta.
+- **Verificação rápida:** observar palavra-alvo, sílabas, palavra nova e frase/frase oral.
+
 ## Materiais
 
 - Tablet ou computador com browser (1 por aluno ou par)
 - Cartões de sílabas físicos: 'bo' e 'ta' (impressão ou cartolina)
 - Lápis e ficha de escrita guiada (opcional, papel A5)
-- Quadro interactivo para partilha final
+- Quadro interativo para partilha final
 - Peluche ou brinquedo 'bota' de palco (opcional, motivação)
 
 ## Alinhamento MEM
@@ -30,7 +38,7 @@
 
 ## Fluxo da sessão
 
-0-4min: Bloco 1 — activação com micro-história; aluno encontra a palavra 'bota' → 4-8min: Bloco 2 — reconhecimento global (imagem↔palavra) → 8-14min: Bloco 3 — segmentação silábica + manipulação física com cartões → 14-21min: Bloco 4 — recombinação de sílabas (pares) → 21-27min: Bloco 5 — completar + copiar (individual) → 27-34min: Bloco 6 — frase desordenada → ordenar e ler → 34-39min: Bloco 7 — mini-avaliação formativa (4 tarefas) → 39-45min: Bloco 8 — extensão criativa + partilha (Galeria das Botas)
+0-4min: Bloco 1 — ativação com micro-história; aluno encontra a palavra 'bota' → 4-8min: Bloco 2 — reconhecimento global (imagem↔palavra) → 8-14min: Bloco 3 — segmentação silábica + manipulação física com cartões → 14-21min: Bloco 4 — recombinação de sílabas (pares) → 21-27min: Bloco 5 — completar + copiar (individual) → 27-34min: Bloco 6 — frase desordenada → ordenar e ler → 34-39min: Bloco 7 — mini-avaliação formativa (4 tarefas) → 39-45min: Bloco 8 — extensão criativa + partilha (Galeria das Botas)
 
 ## Unit 1: Abertura contextual — a bota na história (4 min)
 
@@ -46,10 +54,10 @@
 
 ## Unit 2: Reconhecimento global — ver, ouvir, associar (4 min)
 
-**Compreender:** O aluno vê a palavra 'bota' isolada em letra grande e é convidado a associá-la à imagem correcta entre três opções (bota, sapato, meia). O objectivo é consolidar o reconhecimento global da palavra antes de a analisar em partes. A associação imagem↔palavra é directa e imediata.
+**Compreender:** O aluno vê a palavra 'bota' isolada em letra grande e é convidado a associá-la à imagem correcta entre três opções (bota, sapato, meia). O objetivo é consolidar o reconhecimento global da palavra antes de a analisar em partes. A associação imagem↔palavra é directa e imediata.
 
 **Constraint:** A palavra 'bota' tem uma forma visual única que a distingue de 'sapato' e 'meia' — o reconhecimento é global, não letra a letra.
-**Assessment:** O aluno selecciona a imagem correcta correspondente à palavra 'bota' em pelo menos 2 de 3 tentativas (ordem das imagens muda).
+**Assessment:** O aluno seleciona a imagem correcta correspondente à palavra 'bota' em pelo menos 2 de 3 tentativas (ordem das imagens muda).
 
 **Diferenciação:**
 - 🟢 Apoio: 🟢 Apenas 2 opções (bota e meia); imagens muito diferentes em tamanho e cor; palavra 'bota' fica a piscar ao lado da imagem correcta após 5 segundos sem resposta.
@@ -90,16 +98,16 @@
 ### 🛠️ Maker — Whiteboard
 - **Desafio:** Em grupo, criar um 'Mapa das Sílabas' no quadro ou em cartolina: colocar 'bo' e 'ta' no centro e desenhar setas para todas as palavras encontradas. Ilustrar cada palavra com um desenho rápido.
 - **Grupo:** 3-4
-- **Ligação:** O mapa visual replica a estrutura de recombinação explorada no ecrã, tornando-a visível e colectiva.
+- **Ligação:** O mapa visual replica a estrutura de recombinação explorada no ecrã, tornando-a visível e coletiva.
 - **Comunicação:** Grupo apresenta o Mapa das Sílabas à turma e lê as palavras encontradas em voz alta.
 - **Alternativas:** Sem quadro: folha A3 com post-its de sílabas reposicionáveis
 
 ## Unit 5: Leitura e escrita guiada — completar e copiar 'bota' (6 min)
 
-**Compreender:** O aluno pratica a leitura e a escrita da palavra 'bota' através de tarefas progressivas: primeiro selecciona a sílaba em falta, depois copia a palavra completa. O foco é a relação entre a forma oral (som) e a forma escrita (grafia), consolidando a memória visual da palavra.
+**Compreender:** O aluno pratica a leitura e a escrita da palavra 'bota' através de tarefas progressivas: primeiro seleciona a sílaba em falta, depois copia a palavra completa. O foco é a relação entre a forma oral (som) e a forma escrita (grafia), consolidando a memória visual da palavra.
 
 **Constraint:** A palavra 'bota' começa sempre com 'bo' — a sílaba inicial determina a identidade da palavra; trocar por 'ba', 'bu' ou 'bi' dá uma palavra diferente ou inexistente.
-**Assessment:** O aluno selecciona 'bo' como sílaba inicial correcta e escreve (copia) 'bota' sem erro visível no traçado.
+**Assessment:** O aluno seleciona 'bo' como sílaba inicial correcta e escreve (copia) 'bota' sem erro visível no traçado.
 
 **Diferenciação:**
 - 🟢 Apoio: 🟢 Apenas 2 opções de sílaba ('bo' e 'ba'); traçado com linha guia e pontos de início/fim; palavra modelo sempre visível.
@@ -123,7 +131,7 @@
 **Compreender:** Sequência final de verificação com 4 tarefas observáveis: (1) reconhecer a palavra 'bota' entre 3 opções escritas; (2) indicar o número de sílabas; (3) reconstruir a palavra a partir de sílabas desordenadas; (4) completar uma frase com 'bota'. O professor observa e regista o desempenho.
 
 **Constraint:** A mini-avaliação é formativa — o resultado informa o professor sobre o nível de consolidação, não classifica o aluno. 4/4 = consolidado; 2-3/4 = em progresso; <2 = necessita revisão.
-**Assessment:** Critérios observáveis: (1) selecciona 'bota' entre 'bota', 'bola', 'boca' ✓; (2) indica 2 sílabas ✓; (3) reconstrói 'bota' de 'ta'+'bo' desordenados ✓; (4) completa 'A bota faz pum pum.' ✓
+**Assessment:** Critérios observáveis: (1) seleciona 'bota' entre 'bota', 'bola', 'boca' ✓; (2) indica 2 sílabas ✓; (3) reconstrói 'bota' de 'ta'+'bo' desordenados ✓; (4) completa 'A bota faz pum pum.' ✓
 
 **Diferenciação:**
 - 🟢 Apoio: 🟢 Imagem de bota sempre presente; Tarefa 3 com sílabas já separadas claramente; Tarefa 4 com imagem como pista.
@@ -135,7 +143,7 @@
 **Compreender:** Bloco livre para consolidação criativa: o aluno desenha a sua bota favorita e escreve (ou dita) uma legenda; ou em grupo, inventa uma história curta com a palavra 'bota'. Integra expressão plástica e oralidade na consolidação da leitura/escrita. Momento de partilha em circuito MEM.
 
 **Constraint:** A extensão liga a palavra 'bota' ao mundo real e à expressão pessoal — não existe resposta errada; o critério é participação genuína e uso contextualizado da palavra.
-**Assessment:** O aluno utiliza a palavra 'bota' no contexto da actividade escolhida (legenda do desenho, história oral, lista de palavras com 'bo') de forma espontânea e contextualizada.
+**Assessment:** O aluno utiliza a palavra 'bota' no contexto da atividade escolhida (legenda do desenho, história oral, lista de palavras com 'bo') de forma espontânea e contextualizada.
 
 **Diferenciação:**
 - 🟢 Apoio: 🟢 Desenho livre com modelo de bota para colorir; legenda apenas com a palavra 'bota' (não frase completa).

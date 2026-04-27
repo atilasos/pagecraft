@@ -6,7 +6,9 @@
     "Reconhecer a palavra global 'árvore' associada à sua imagem",
     "Segmentar 'árvore' nas sílabas ár-vo-re e recontar batendo palmas",
     "Recombinar as sílabas para formar novas palavras (ex.: vó, ré, voar)",
-    "Usar a palavra 'árvore' numa frase simples oral ou escrita"
+    "Usar a palavra 'árvore' numa frase simples oral ou escrita",
+    "Descobrir que 'árvore' não é só uma forma para memorizar: tem sílabas, sons/letras e pode ajudar a ler palavras novas.",
+    "Ler uma palavra nova com sílabas conhecidas de 'árvore' e escrever uma frase curta com apoio."
   ],
   "curriculum": {
     "ae": [
@@ -45,31 +47,41 @@
       "Trabalho curricular comparticipado",
       "Circuitos de comunicação"
     ],
-    "instruments": ["PIT", "mapa de tarefas", "ficheiros de leitura do TEA"],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas",
+      "ficheiros de leitura do TEA"
+    ],
     "socialOrganization": "individual (blocos 1-3, ~15min) → pares (blocos 4-5, ~15min) → turma (blocos 6-8, ~15min)"
   },
   "materials": [
     "Tablet ou computador com browser (1 por aluno ou par)",
     "Imagem de uma árvore frondosa (embutida na página)",
     "Cartões de sílabas físicos: ár / vo / re (opcional, extensão unplugged)",
-    "Quadro interactivo para síntese colectiva"
+    "Quadro interativo para síntese coletiva"
   ],
   "units": [
     {
       "summary": "Bloco 1 — Abertura contextual: a árvore na nossa vida",
-      "textDescription": "O aluno entra na cena através de uma micro-história: uma criança senta-se à sombra de uma árvore num dia quente. A imagem da árvore aparece em destaque com a palavra escrita por baixo. O objectivo é criar familiaridade emocional e contextual com a palavra antes da análise.",
+      "textDescription": "O aluno entra na cena através de uma micro-história: uma criança senta-se à sombra de uma árvore num dia quente. A imagem da árvore aparece em destaque com a palavra escrita por baixo. O objetivo é criar familiaridade emocional e contextual com a palavra antes da análise.",
       "interaction": {
         "state": [
           {
             "name": "cenaActiva",
             "type": "toggle",
-            "options": ["imagem", "palavra"],
+            "options": [
+              "imagem",
+              "palavra"
+            ],
             "default": "imagem"
           },
           {
             "name": "audioActivo",
             "type": "toggle",
-            "options": ["off", "on"],
+            "options": [
+              "off",
+              "on"
+            ],
             "default": "off"
           }
         ],
@@ -93,7 +105,12 @@
           {
             "name": "opcaoSelecionada",
             "type": "quiz",
-            "options": ["árvore", "aveiro", "arco", "árvore"],
+            "options": [
+              "árvore",
+              "aveiro",
+              "arco",
+              "árvore"
+            ],
             "default": null
           },
           {
@@ -105,7 +122,7 @@
         "render": "Imagem de uma árvore no centro; três cartões com palavras: 'árvore', 'aveiro', 'arco'; aluno clica no cartão correcto; feedback imediato: ✓ verde claro ou âmbar com destaque na sílaba diferente",
         "transition": "Clique num cartão → feedback visual imediato (✓ ou destaque da diferença); após acerto, novo par de opções aparece (3 rondas no total)",
         "constraint": "Palavras visualmente próximas não são a mesma palavra — a forma escrita completa é o que identifica cada palavra",
-        "assessment": "O aluno selecciona a palavra 'árvore' correctamente em 3 de 3 rondas com opções distratoras"
+        "assessment": "O aluno seleciona a palavra 'árvore' correctamente em 3 de 3 rondas com opções distratoras"
       },
       "differentiation": {
         "support": "Apenas 2 opções por ronda; palavra 'árvore' sempre em destaque de cor; imagem presente",
@@ -116,13 +133,17 @@
     },
     {
       "summary": "Bloco 3 — Segmentação silábica: ár-vo-re",
-      "textDescription": "O aluno aprende a dividir 'árvore' nas suas três sílabas (ár / vo / re), associando cada sílaba a uma cor distinta. O gesto de bater palmas é mapeado para a interacção de toque/clique.",
+      "textDescription": "O aluno aprende a dividir 'árvore' nas suas três sílabas (ár / vo / re), associando cada sílaba a uma cor distinta. O gesto de bater palmas é mapeado para a interação de toque/clique.",
       "interaction": {
         "state": [
           {
             "name": "silabaDestacada",
             "type": "drag",
-            "options": ["ár", "vo", "re"],
+            "options": [
+              "ár",
+              "vo",
+              "re"
+            ],
             "default": null
           },
           {
@@ -151,7 +172,11 @@
           {
             "name": "silabaArrastada",
             "type": "drag",
-            "options": ["ár", "vo", "re"],
+            "options": [
+              "ár",
+              "vo",
+              "re"
+            ],
             "default": null
           },
           {
@@ -173,11 +198,17 @@
       "maker": {
         "type": "unplugged",
         "challenge": "Com os cartões físicos de sílabas (ár / vo / re), tenta arranjar as peças de formas diferentes. Quantas combinações consegues? Escreve numa folha as que achas que são palavras reais.",
-        "materials": ["Cartões de sílabas impressos: ár / vo / re", "Folha de registo", "Lápis"],
+        "materials": [
+          "Cartões de sílabas impressos: ár / vo / re",
+          "Folha de registo",
+          "Lápis"
+        ],
         "groupSize": "2",
         "connection": "Depois de explorar no digital, o par testa fisicamente as mesmas combinações e compara os resultados",
         "communication": "Cada par partilha à turma 1 palavra nova que descobriu; escreve-a no quadro",
-        "alternatives": ["Sem cartões físicos: desenhar as sílabas em post-its e reorganizá-los na mesa"]
+        "alternatives": [
+          "Sem cartões físicos: desenhar as sílabas em post-its e reorganizá-los na mesa"
+        ]
       },
       "differentiation": {
         "support": "Apenas 2 sílabas disponíveis (vo + re); combinações possíveis reduzidas a 2; feedback imediato com imagem",
@@ -194,7 +225,11 @@
           {
             "name": "silabaEmFalta",
             "type": "quiz",
-            "options": ["ár", "vo", "re"],
+            "options": [
+              "ár",
+              "vo",
+              "re"
+            ],
             "default": null
           },
           {
@@ -209,7 +244,7 @@
           }
         ],
         "render": "Palavra parcial: ex. '___-vo-re' com espaço para completar; três opções de sílaba abaixo; após completar correctamente, linha de escrita aparece com a palavra a tracejado para copiar; botão de áudio para ouvir a pronunciação",
-        "transition": "Clique na sílaba correcta → preenche o espaço + feedback verde; linha de escrita activada → aluno traça ou escreve sobre o tracejado; submeter → compara com modelo",
+        "transition": "Clique na sílaba correcta → preenche o espaço + feedback verde; linha de escrita ativada → aluno traça ou escreve sobre o tracejado; submeter → compara com modelo",
         "constraint": "A palavra escrita deve ter exactamente a mesma forma que o modelo — a acentuação e a ordem das sílabas são obrigatórias",
         "assessment": "O aluno completa a palavra com a sílaba correcta e copia 'árvore' de forma legível na linha de escrita"
       },
@@ -222,13 +257,22 @@
     },
     {
       "summary": "Bloco 6 — Frase simples: ler e construir com 'árvore'",
-      "textDescription": "O aluno lê a frase-modelo 'A árvore dá sombra.' e depois constrói a sua própria frase usando 'árvore', seleccionando palavras de um banco ou escrevendo livremente.",
+      "textDescription": "O aluno lê a frase-modelo 'A árvore dá sombra.' e depois constrói a sua própria frase usando 'árvore', selecionando palavras de um banco ou escrevendo livremente.",
       "interaction": {
         "state": [
           {
             "name": "palavrasSelecionadas",
             "type": "sorting",
-            "options": ["A", "árvore", "dá", "sombra", "é", "bonita", "grande", "verde"],
+            "options": [
+              "A",
+              "árvore",
+              "dá",
+              "sombra",
+              "é",
+              "bonita",
+              "grande",
+              "verde"
+            ],
             "default": []
           },
           {
@@ -262,32 +306,48 @@
           {
             "name": "criterio1",
             "type": "quiz",
-            "options": ["árvore", "areia", "avental"],
+            "options": [
+              "árvore",
+              "areia",
+              "avental"
+            ],
             "default": null
           },
           {
             "name": "criterio2",
             "type": "sorting",
-            "options": ["re", "ár", "vo"],
+            "options": [
+              "re",
+              "ár",
+              "vo"
+            ],
             "default": []
           },
           {
             "name": "criterio3",
             "type": "drag",
-            "options": ["ár", "vo", "re"],
+            "options": [
+              "ár",
+              "vo",
+              "re"
+            ],
             "default": []
           },
           {
             "name": "criterio4",
             "type": "quiz",
-            "options": ["A árvore dá sombra.", "A árvore bebe sumo.", "O árvore voa alto."],
+            "options": [
+              "A árvore dá sombra.",
+              "A árvore bebe sumo.",
+              "O árvore voa alto."
+            ],
             "default": null
           }
         ],
-        "render": "4 cartões sequenciais com microtarefas: 1) identificar 'árvore' entre 3 palavras; 2) ordenar sílabas desordenadas; 3) arrastar sílabas para reconstruir; 4) seleccionar a frase correcta. Barra de progresso visível. Resultado final: 4 ✓ verdes ou indicação de revisão.",
+        "render": "4 cartões sequenciais com microtarefas: 1) identificar 'árvore' entre 3 palavras; 2) ordenar sílabas desordenadas; 3) arrastar sílabas para reconstruir; 4) selecionar a frase correcta. Barra de progresso visível. Resultado final: 4 ✓ verdes ou indicação de revisão.",
         "transition": "Cada microtarefa desbloqueada após acerto na anterior; feedback imediato por critério; no final, resumo visual dos 4 critérios com cor (verde=ok, âmbar=rever)",
         "constraint": "Os 4 critérios são independentes — o aluno pode acertar em 3 e errar num; cada um avalia uma competência distinta",
-        "assessment": "Critérios observáveis: (1) identifica 'árvore' entre 3 opções ✓; (2) ordena ár-vo-re correctamente ✓; (3) reconstrói 'árvore' arrastando sílabas ✓; (4) selecciona frase gramaticalmente correcta ✓"
+        "assessment": "Critérios observáveis: (1) identifica 'árvore' entre 3 opções ✓; (2) ordena ár-vo-re correctamente ✓; (3) reconstrói 'árvore' arrastando sílabas ✓; (4) seleciona frase gramaticalmente correcta ✓"
       },
       "differentiation": {
         "support": "Critério 2 com sílabas já parcialmente ordenadas (falta só a última); critério 4 com imagem de apoio",
@@ -298,13 +358,17 @@
     },
     {
       "summary": "Bloco 8 — Extensão: a árvore no mundo real e no maker",
-      "textDescription": "Actividade de extensão que liga a palavra 'árvore' ao ambiente natural e a um desafio criativo maker. O aluno pode desenhar, escrever ou construir, consoante o percurso.",
+      "textDescription": "Atividade de extensão que liga a palavra 'árvore' ao ambiente natural e a um desafio criativo maker. O aluno pode desenhar, escrever ou construir, consoante o percurso.",
       "interaction": {
         "state": [
           {
             "name": "extensaoEscolhida",
             "type": "dropdown",
-            "options": ["Desenhar uma árvore", "Escrever sobre a minha árvore favorita", "Desafio maker"],
+            "options": [
+              "Desenhar uma árvore",
+              "Escrever sobre a minha árvore favorita",
+              "Desafio maker"
+            ],
             "default": "Desenhar uma árvore"
           },
           {
@@ -313,27 +377,43 @@
             "default": null
           }
         ],
-        "render": "Três botões de escolha de extensão; ao seleccionar, aparece a área de trabalho correspondente: canvas de desenho, área de escrita guiada, ou instruções do desafio maker; botão 'Partilhar com a turma' no final",
-        "transition": "Seleccionar extensão → área de trabalho activa; completar → botão de partilha disponível; clique em partilhar → envia para galeria colectiva do quadro interactivo",
+        "render": "Três botões de escolha de extensão; ao selecionar, aparece a área de trabalho correspondente: canvas de desenho, área de escrita guiada, ou instruções do desafio maker; botão 'Partilhar com a turma' no final",
+        "transition": "Selecionar extensão → área de trabalho ativa; completar → botão de partilha disponível; clique em partilhar → envia para galeria coletiva do quadro interativo",
         "constraint": "A extensão deve manter ligação à palavra 'árvore' — não é tempo livre, é expressão com intenção",
         "assessment": "O aluno produz algo (desenho, texto ou construção) que inclui 'árvore' de forma reconhecível e partilha com a turma"
       },
       "maker": {
         "type": "unplugged",
         "challenge": "Constrói uma árvore com materiais da sala: papel enrolado (tronco), papel verde rasgado (folhas), palitos ou clips (galhos). Escreve na raiz da tua árvore uma frase com 'árvore'.",
-        "materials": ["Papel de jornal ou kraft", "Papel verde (folhas)", "Fita-cola ou cola", "Palitos ou clips (opcional)", "Caneta ou marcador"],
+        "materials": [
+          "Papel de jornal ou kraft",
+          "Papel verde (folhas)",
+          "Fita-cola ou cola",
+          "Palitos ou clips (opcional)",
+          "Caneta ou marcador"
+        ],
         "groupSize": "2-3",
         "connection": "Depois de explorar a palavra digitalmente, o grupo cria uma representação física 3D da árvore e anexa uma etiqueta com a palavra e uma frase",
         "communication": "Apresentação rápida à turma: cada grupo mostra a sua árvore e lê a frase em voz alta (circuito de comunicação MEM)",
-        "alternatives": ["Sem materiais físicos: desenho no canvas digital com etiqueta de texto; ou colagem digital com imagens de folhas"]
+        "alternatives": [
+          "Sem materiais físicos: desenho no canvas digital com etiqueta de texto; ou colagem digital com imagens de folhas"
+        ]
       },
       "differentiation": {
         "support": "Desenho com contorno pré-desenhado da árvore para colorir; frase com espaço para completar: 'A árvore é ___.'",
         "standard": "Escolha livre entre as 3 extensões; produção autónoma com apoio da palavra no topo",
         "challenge": "Escrever 3 frases sobre árvores (uma positiva, uma negativa, uma interrogativa); ou pesquisar (com apoio do adulto) o nome de 3 árvores portuguesas e escrever uma frase sobre cada"
       },
-      "duration": 9
+      "duration": 3
     }
   ],
-  "sessionFlow": "0-4min: Bloco 1 — micro-história da árvore, activação emocional → 4-8min: Bloco 2 — reconhecimento global, identificar a palavra → 8-15min: Bloco 3 — segmentação silábica ár-vo-re, palmas → 15-23min: Bloco 4 — recombinação e exploração em pares (+ maker unplugged opcional) → 23-30min: Bloco 5 — leitura e escrita guiada, copiar a palavra → 30-37min: Bloco 6 — construção de frase com 'árvore' → 37-42min: Bloco 7 — mini-avaliação formativa (4 critérios) → 42-45min (ou mais): Bloco 8 — extensão maker, partilha em circuito de comunicação"
+  "sessionFlow": "0-4min: Bloco 1 — micro-história da árvore, ativação emocional → 4-8min: Bloco 2 — reconhecimento global, identificar a palavra → 8-15min: Bloco 3 — segmentação silábica ár-vo-re, palmas → 15-23min: Bloco 4 — recombinação e exploração em pares (+ maker unplugged opcional) → 23-30min: Bloco 5 — leitura e escrita guiada, copiar a palavra → 30-37min: Bloco 6 — construção de frase com 'árvore' → 37-42min: Bloco 7 — mini-avaliação formativa (4 critérios) → 42-45min (ou mais): Bloco 8 — extensão maker, partilha em circuito de comunicação",
+  "m28pMethodAlignment": {
+    "principle": "Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.",
+    "meaningfulEntry": "palavra-chave com imagem/contexto antes da análise",
+    "globalRecognition": "reconhecimento global é ponto de entrada, não fim da aprendizagem",
+    "codeWork": "consciência silábica e relação som-letra/grafofonémica",
+    "generalization": "ler palavra nova com sílabas conhecidas e escrever frase curta",
+    "quickVerification": "verificação rápida observa palavra-alvo, palavra nova e frase curta"
+  }
 }

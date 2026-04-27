@@ -6,18 +6,26 @@
 
 ---
 
-## Objectivos de aprendizagem
+## Objetivos de aprendizagem
 
 - Reconhecer e ler a palavra 'rato' globalmente, associando-a à imagem do animal
 - Segmentar 'rato' em duas sílabas (ra-to), identificar cada sílaba e reproduzi-las oralmente
 - Recombinar as sílabas 'ra' e 'to' com sílabas conhecidas para formar novas palavras (gato, pato, cara, para)
 - Ler e construir uma frase simples com a palavra 'rato'
 
+## Princípio M28P — evitar uso puramente visual
+
+Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.
+
+- **Som-letra/grafofonémica:** pedir que a criança diga que som ou letra observa em 'rato'.
+- **Generalização:** pedir uma palavra nova com sílabas conhecidas e uma frase curta.
+- **Verificação rápida:** observar palavra-alvo, sílabas, palavra nova e frase/frase oral.
+
 ## Materiais
 
 - Tablet ou computador com browser (1 por aluno ou par)
 - Cartões de sílabas físicos (ra, to, ga, pa, ca) para extensão maker — podem ser impressos
-- Quadro interactivo para activação e mini-avaliação colectiva
+- Quadro interativo para ativação e mini-avaliação coletiva
 - Lápis e folha de registo (opcional, escrita guiada)
 
 ## Alinhamento MEM
@@ -48,7 +56,7 @@
 **Compreender:** O aluno treina o reconhecimento global da palavra 'rato' — distingui-la visualmente de outras palavras com forma parecida (ex: rito, gato, pato, rato). Este bloco treina a memória visual da palavra como um todo, antes da análise silábica.
 
 **Constraint:** A palavra 'rato' tem uma forma visual única que o aluno aprende a reconhecer globalmente, distinguindo-a de palavras foneticamente próximas.
-**Assessment:** O aluno selecciona 'rato' correctamente em 2 de 2 rondas consecutivas, sem ajuda de áudio.
+**Assessment:** O aluno seleciona 'rato' correctamente em 2 de 2 rondas consecutivas, sem ajuda de áudio.
 
 **Diferenciação:**
 - 🟢 Apoio: 🟢 Apenas 2 opções por ronda (rato vs. gato); imagem do rato sempre visível; botão de áudio disponível.
@@ -65,7 +73,7 @@
 **Diferenciação:**
 - 🟢 Apoio: 🟢 Blocos de sílabas com setas de direcção; caixas de destino numeradas e com contorno pulsante; áudio de palmas sempre disponível; feedback verbal do sistema ('muito bem, essa é a primeira sílaba!').
 - 🟡 Intermédio: 🟡 Blocos sem setas; caixas de destino simples; 1 tentativa de audio; aluno verbaliza sozinho.
-- 🔴 Desafio: 🔴 Apresenta 4 blocos: ra, to, pa, ga — o aluno selecciona apenas os 2 correctos e coloca-os em ordem; explica por que razão 'to-ra' não é a mesma palavra que 'ra-to'.
+- 🔴 Desafio: 🔴 Apresenta 4 blocos: ra, to, pa, ga — o aluno seleciona apenas os 2 correctos e coloca-os em ordem; explica por que razão 'to-ra' não é a mesma palavra que 'ra-to'.
 
 ### 🛠️ Maker — Unplugged
 - **Desafio:** Faz um cartão de sílabas físico: dobra uma folha ao meio, escreve RA numa metade e TO na outra, com as cores azul e laranja. Depois junta as duas metades para 'construir' a palavra RATO.
@@ -114,8 +122,8 @@
 
 **Compreender:** Bloco de consolidação e verificação observável. O aluno realiza quatro tarefas rápidas que cobrem todos os blocos anteriores: reconhecimento global, segmentação, reconstrução e uso em frase. Os resultados são observáveis pelo professor e pelo próprio aluno (auto-avaliação com pictogramas).
 
-**Constraint:** A avaliação é formativa — não há nota, apenas observação de comportamento. O objectivo é o professor e o aluno identificarem o que consolidaram.
-**Assessment:** O aluno completa as 4 tarefas: (1) selecciona 'rato' entre 4 opções, (2) arrasta ra-to na ordem correcta, (3) reconstrói 'rato' de sílabas baralhadas, (4) escolhe frase correcta. O professor observa directamente cada acção.
+**Constraint:** A avaliação é formativa — não há nota, apenas observação de comportamento. O objetivo é o professor e o aluno identificarem o que consolidaram.
+**Assessment:** O aluno completa as 4 tarefas: (1) seleciona 'rato' entre 4 opções, (2) arrasta ra-to na ordem correcta, (3) reconstrói 'rato' de sílabas baralhadas, (4) escolhe frase correcta. O professor observa directamente cada ação.
 
 **Diferenciação:**
 - 🟢 Apoio: 🟢 Apenas tarefas 1 e 2 da mini-avaliação; imagem do rato sempre visível; sem limite de tempo; botão de ajuda disponível com áudio.

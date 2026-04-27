@@ -1,17 +1,25 @@
 # Palavra: leque (M28P #7)
 
 **Ano:** 6-7 anos (1.º ano)  
-**Duração:** 40 minutos  
+**Duração:** 45 minutos  
 **Gerado por:** PageCraft 🛠️ — 2026-03-25
 
 ---
 
-## Objectivos de aprendizagem
+## Objetivos de aprendizagem
 
 - Reconhecer globalmente a palavra 'leque' associada à sua imagem.
 - Segmentar oralmente e visualmente a palavra 'leque' nas sílabas 'le' e 'que'.
 - Recombinar as sílabas 'le' e 'que' para formar e reconhecer novas palavras.
 - Ler e escrever a palavra 'leque' e a frase modelo 'O leque abre e fecha.'
+
+## Princípio M28P — evitar uso puramente visual
+
+Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.
+
+- **Som-letra/grafofonémica:** pedir que a criança diga que som ou letra observa em 'leque'.
+- **Generalização:** pedir uma palavra nova com sílabas conhecidas e uma frase curta.
+- **Verificação rápida:** observar palavra-alvo, sílabas, palavra nova e frase/frase oral.
 
 ## Materiais
 
@@ -27,18 +35,18 @@
 
 - TEA (Trabalho de Estudo Autónomo) — prática de leitura e escrita de palavras trabalhadas em ficheiros de língua
 - Tempo de Comunicação — partilha em grande grupo das descobertas silábicas
-- Conselho de Cooperação — registo colectivo da nova palavra no Diário de Turma
+- Conselho de Cooperação — registo coletivo da nova palavra no Diário de Turma
 - **Organização social:** Grande grupo nas abertura e avaliação; pares na recombinação e escrita guiada; individual na mini-avaliação.
 
 ## Fluxo da sessão
 
-Abertura contextual (4 min) → Reconhecimento global (4 min) → Segmentação silábica (6 min) → Recombinação (6 min) → Leitura e escrita guiada (6 min) → Frase simples (6 min) → Mini-avaliação (4 min) → Extensão/desafio (4 min). Total: 40 min.
+Abertura contextual (4 min) → Reconhecimento global (4 min) → Segmentação silábica (6 min) → Recombinação (6 min) → Leitura e escrita guiada (6 min) → Frase simples (6 min) → Mini-avaliação (4 min) → Extensão/desafio (9 min). Total: 45 min.
 
 ## Unit 1: Contextualização narrativa: apresentação de uma pequena história ou situação concreta com o leque. (4 min)
 
 **Compreender:** O professor apresenta uma história curta: 'Estava um dia muito quente. A avó tirou o leque da gaveta e começou a abanar. O leque abria e fechava, abria e fechava.' Acompanha com imagem ou gesto. Pergunta: 'O que é um leque? Para que serve?' Recolhe respostas orais e aponta palavras-chave no quadro.
 
-**Constraint:** Os alunos não vêem a palavra escrita nesta fase — apenas a imagem e a narrativa oral.
+**Constraint:** Os alunos não veem a palavra escrita nesta fase — apenas a imagem e a narrativa oral.
 **Assessment:** O aluno descreve oralmente para que serve um leque usando pelo menos uma frase completa.
 
 **Diferenciação:**
@@ -54,10 +62,10 @@ Abertura contextual (4 min) → Reconhecimento global (4 min) → Segmentação 
 
 ## Unit 2: Leitura global da palavra 'leque' associada à imagem; discriminação entre palavras. (4 min)
 
-**Compreender:** O professor escreve 'leque' no quadro ao lado da imagem. Lê em voz alta, os alunos repetem. De seguida, apresenta 3-4 cartões com palavras conhecidas anteriormente (ex: 'bola', 'luva', 'leque', 'lata') e pede que identifiquem 'leque'. Actividade de matching: cada aluno aponta ou coloca o cartão junto à imagem correcta.
+**Compreender:** O professor escreve 'leque' no quadro ao lado da imagem. Lê em voz alta, os alunos repetem. De seguida, apresenta 3-4 cartões com palavras conhecidas anteriormente (ex: 'bola', 'luva', 'leque', 'lata') e pede que identifiquem 'leque'. Atividade de matching: cada aluno aponta ou coloca o cartão junto à imagem correcta.
 
 **Constraint:** Todas as opções começam por 'l' para forçar discriminação grafema a grafema, não apenas letra inicial.
-**Assessment:** O aluno selecciona correctamente 'leque' de entre 4 opções e lê a palavra em voz alta sem apoio.
+**Assessment:** O aluno seleciona correctamente 'leque' de entre 4 opções e lê a palavra em voz alta sem apoio.
 
 **Diferenciação:**
 - 🟢 Apoio: 🟢 Apenas 2 opções de escolha (leque vs. bola); professor lê as opções em voz alta.
@@ -103,7 +111,7 @@ Abertura contextual (4 min) → Reconhecimento global (4 min) → Segmentação 
 ### 🛠️ Maker — Whiteboard
 - **Desafio:** Em pequeno grupo, escrever no quadro branco o máximo de palavras que contenham 'que' (já conhecidas ou adivinhadas): queijo, quente, porque, parque...
 - **Grupo:** Grupos de 3
-- **Ligação:** Liga a sílaba 'que' à sua presença em outras palavras do vocabulário activo dos alunos.
+- **Ligação:** Liga a sílaba 'que' à sua presença em outras palavras do vocabulário ativo dos alunos.
 - **Comunicação:** Cada grupo lê a sua lista à turma.
 
 ## Unit 5: Leitura guiada da palavra 'leque' e escrita no caderno com modelo visual. (6 min)
@@ -139,7 +147,7 @@ Abertura contextual (4 min) → Reconhecimento global (4 min) → Segmentação 
 ### 🛠️ Maker — Unplugged
 - **Desafio:** Aluno cria uma nova frase curta com a palavra 'leque' (ex: 'O leque é bonito.') e escreve-a numa tira de papel para afixar no placar da turma.
 - **Grupo:** Individual, partilha em grande grupo
-- **Ligação:** Relaciona a palavra trabalhada com a produção escrita autónoma e o registo colectivo.
+- **Ligação:** Relaciona a palavra trabalhada com a produção escrita autónoma e o registo coletivo.
 - **Comunicação:** Leitura da frase criada em voz alta para a turma.
 
 ## Unit 7: Verificação observável das aprendizagens da sessão: reconhecimento global, segmentação e escrita. (4 min)
@@ -154,7 +162,7 @@ Abertura contextual (4 min) → Reconhecimento global (4 min) → Segmentação 
 - 🟡 Intermédio: 🟡 As 3 tarefas completas de forma autónoma.
 - 🔴 Desafio: 🔴 Após as 3 tarefas, o aluno escreve ainda as sílabas separadas 'le - que' e indica qual é a primeira.
 
-## Unit 8: Actividade de extensão criativa: produção escrita ou exploração fonológica além da palavra base. (4 min)
+## Unit 8: Atividade de extensão criativa: produção escrita ou exploração fonológica além da palavra base. (9 min)
 
 **Compreender:** Proposta aberta com 3 níveis de concretização: (A) Desenha um leque e escreve a palavra por baixo. (B) Escreve a frase 'O leque abre e fecha.' e ilustra-a. (C) Escreve uma pequena história de 2-3 frases onde aparece a palavra 'leque'. As produções são afixadas no placar da sala ou registadas no portefólio do aluno. Se sobrar tempo, exploração lúdica: 'Quantas palavras conheces que têm a sílaba QUE?'
 
@@ -169,7 +177,7 @@ Abertura contextual (4 min) → Reconhecimento global (4 min) → Segmentação 
 ### 🛠️ Maker — Unplugged
 - **Desafio:** Construir um leque decorado com cartolina (dobragem em sanfona + pega) e escrever nele uma palavra ou frase à escolha.
 - **Grupo:** Individual, partilha em grande grupo
-- **Ligação:** Integra a aprendizagem da palavra com uma actividade de expressão plástica e escrita criativa.
+- **Ligação:** Integra a aprendizagem da palavra com uma atividade de expressão plástica e escrita criativa.
 - **Comunicação:** Apresentação do leque à turma durante o Tempo de Comunicação: 'O meu leque diz...'
 
 ---
@@ -186,8 +194,8 @@ Abertura contextual (4 min) → Reconhecimento global (4 min) → Segmentação 
 
 ### Perfil do Aluno
 - PA-A: Linguagens e textos — utiliza diferentes linguagens para expressar e comunicar ideias.
-- PA-B: Informação e comunicação — selecciona e organiza informação para comunicar.
-- PA-G: Bem-estar, saúde e ambiente — reconhece objectos do quotidiano e a sua função.
+- PA-B: Informação e comunicação — seleciona e organiza informação para comunicar.
+- PA-G: Bem-estar, saúde e ambiente — reconhece objetos do quotidiano e a sua função.
 - PA-I: Saber científico, técnico e tecnológico — aplica conhecimentos fonológicos para segmentar e recombinar unidades de linguagem.
 
 ---

@@ -6,7 +6,9 @@
     "Reconhecer globalmente a palavra 'zebra' e associá-la à sua imagem",
     "Segmentar 'zebra' em sílabas (ze-bra) identificando o grupo consonântico 'br'",
     "Recombinar sílabas para formar palavras novas e distinguir palavra existente de não-palavra",
-    "Usar a palavra 'zebra' numa frase simples oral e escrita"
+    "Usar a palavra 'zebra' numa frase simples oral e escrita",
+    "Descobrir que 'zebra' não é só uma forma para memorizar: tem sílabas, sons/letras e pode ajudar a ler palavras novas.",
+    "Ler uma palavra nova com sílabas conhecidas de 'zebra' e escrever uma frase curta com apoio."
   ],
   "curriculum": {
     "ae": [
@@ -40,8 +42,15 @@
     ]
   },
   "memAlignment": {
-    "modules": ["TEA", "Trabalho curricular comparticipado", "Circuitos de comunicação"],
-    "instruments": ["PIT", "mapa de tarefas"],
+    "modules": [
+      "TEA",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas"
+    ],
     "socialOrganization": "individual (blocos 1–5) → pares (bloco 6) → turma (mini-avaliação + extensão)"
   },
   "materials": [
@@ -55,7 +64,17 @@
       "summary": "Bloco 1 — Abertura contextual: a palavra 'zebra' numa savana africana",
       "textDescription": "O aluno descobre a palavra através de uma cena de savana: uma zebra com riscas pretas e brancas. Micro-história: 'Na savana africana há um animal com riscas pretas e brancas. Como se chama?'",
       "interaction": {
-        "state": [{"name": "palavraRevelada", "type": "toggle", "options": ["oculta", "visivel"], "default": "oculta"}],
+        "state": [
+          {
+            "name": "palavraRevelada",
+            "type": "toggle",
+            "options": [
+              "oculta",
+              "visivel"
+            ],
+            "default": "oculta"
+          }
+        ],
         "render": "Cena de savana com zebra; micro-história; botão 'Mostrar a palavra' que revela cartaz",
         "transition": "Clicar → cartaz com zebra + palavra aparece com fade-in",
         "constraint": "Palavra e imagem surgem sempre juntas",
@@ -72,7 +91,18 @@
       "summary": "Bloco 2 — Reconhecimento global: identificar 'zebra' entre outras palavras e imagens",
       "textDescription": "Reconhecimento global da palavra 'zebra' em dois sentidos: palavra→imagem e imagem→palavra.",
       "interaction": {
-        "state": [{"name": "opcaoSelecionada", "type": "quiz", "options": ["zebra", "palhaço", "telhado"], "default": null}],
+        "state": [
+          {
+            "name": "opcaoSelecionada",
+            "type": "quiz",
+            "options": [
+              "zebra",
+              "palhaço",
+              "telhado"
+            ],
+            "default": null
+          }
+        ],
         "render": "Tarefa 1: palavra 'zebra', 3 imagens. Tarefa 2: imagem zebra, 3 palavras. Feedback ✓/✗",
         "transition": "Clicar → feedback imediato",
         "constraint": "A forma escrita de 'zebra' é única com o grupo 'br'",
@@ -87,16 +117,34 @@
     },
     {
       "summary": "Bloco 3 — Segmentação silábica: dividir 'zebra' em 'ze' + 'bra'",
-      "textDescription": "O aluno divide 'zebra' em 2 sílabas, bate palmas, arrasta blocos. Destaca-se o grupo 'br' como duas consoantes juntas na mesma sílaba.",
+      "textDescription": "O aluno divide 'zebra' em 2 sílabas, bate palmas, arrasta blocos. Destaca-se o grupo 'br' como duas consoantes juntas na mesma sílaba. Observar a relação som-letra/grafofonémica: quando muda uma letra ou sílaba, muda o som e pode mudar a palavra.",
       "interaction": {
         "state": [
-          {"name": "silabas", "type": "drag", "options": ["ze", "bra"], "default": null},
-          {"name": "palmadas", "type": "quiz", "options": ["1", "2", "3", "4"], "default": null}
+          {
+            "name": "silabas",
+            "type": "drag",
+            "options": [
+              "ze",
+              "bra"
+            ],
+            "default": null
+          },
+          {
+            "name": "palmadas",
+            "type": "quiz",
+            "options": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
+            "default": null
+          }
         ],
         "render": "Palavra 'zebra'; blocos 'ze' e 'bra'; caixas numeradas; secção de destaque do grupo 'br'",
         "transition": "Arrastar → encaixe animado; palmadas → feedback imediato",
         "constraint": "'bra' é uma sílaba com grupo consonântico (b+r); 'zebra' tem 2 sílabas",
-        "assessment": "Coloca corretamente os blocos, seleciona '2 palmas', aponta para 'br'"
+        "assessment": "Coloca corretamente os blocos, seleciona '2 palmas', aponta para 'br' A criança aponta uma relação som-letra e diz o que muda no som."
       },
       "differentiation": {
         "support": "🟢 Blocos pré-posicionados; linha de divisão visível",
@@ -107,22 +155,43 @@
     },
     {
       "summary": "Bloco 4 — Recombinação: formar novas palavras com sílabas conhecidas",
-      "textDescription": "Com sílabas 'ze', 'bra', 'bro', 'li', 'ca', 'sa', 'bri', 'tre' o aluno forma combinações e distingue palavras reais de não-palavras.",
+      "textDescription": "Com sílabas 'ze', 'bra', 'bro', 'li', 'ca', 'sa', 'bri', 'tre' o aluno forma combinações e distingue palavras reais de não-palavras. Observar a relação som-letra/grafofonémica: quando muda uma letra ou sílaba, muda o som e pode mudar a palavra.",
       "interaction": {
-        "state": [{"name": "silabas_disponiveis", "type": "drag", "options": ["ze", "bra", "bro", "li", "ca", "sa", "bri", "lo"], "default": null}],
+        "state": [
+          {
+            "name": "silabas_disponiveis",
+            "type": "drag",
+            "options": [
+              "ze",
+              "bra",
+              "bro",
+              "li",
+              "ca",
+              "sa",
+              "bri",
+              "lo"
+            ],
+            "default": null
+          }
+        ],
         "render": "Tabuleiro de sílabas; zona de construção; botão verificar; lista de descobertas",
         "transition": "Arrastar → atualiza; verificar → feedback",
         "constraint": "Ordem das sílabas importa em português",
-        "assessment": "Forma 2+ palavras reais (ex: zebra, brio, brisa, zebu) e identifica 1 não-palavra"
+        "assessment": "Forma 2+ palavras reais (ex: zebra, brio, brisa, zebu) e identifica 1 não-palavra A criança aponta uma relação som-letra e diz o que muda no som."
       },
       "maker": {
         "type": "unplugged",
         "challenge": "Cartões físicos de sílabas; registar combinações em tabela ✓/✗",
-        "materials": ["Cartões", "Folha de registo"],
+        "materials": [
+          "Cartões",
+          "Folha de registo"
+        ],
         "groupSize": "2",
         "connection": "Manipulação física antecipa exploração digital",
         "communication": "Partilhar a palavra mais inesperada",
-        "alternatives": ["Post-its coloridos"]
+        "alternatives": [
+          "Post-its coloridos"
+        ]
       },
       "differentiation": {
         "support": "🟢 4 sílabas; feedback imediato",
@@ -133,16 +202,36 @@
     },
     {
       "summary": "Bloco 5 — Leitura e escrita guiada: completar e copiar 'zebra'",
-      "textDescription": "Completar 'ze___' com a sílaba correta, selecionar grafia correta, copiar a palavra. Foco no grupo consonântico 'br'.",
+      "textDescription": "Completar 'ze___' com a sílaba correta, selecionar grafia correta, copiar a palavra. Foco no grupo consonântico 'br'. Observar a relação som-letra/grafofonémica: quando muda uma letra ou sílaba, muda o som e pode mudar a palavra.",
       "interaction": {
         "state": [
-          {"name": "silaba_em_falta", "type": "quiz", "options": ["bra", "pra", "tra", "fra"], "default": null},
-          {"name": "grafia_correta", "type": "quiz", "options": ["zebra", "zebro", "zebras", "zebrra"], "default": null}
+          {
+            "name": "silaba_em_falta",
+            "type": "quiz",
+            "options": [
+              "bra",
+              "pra",
+              "tra",
+              "fra"
+            ],
+            "default": null
+          },
+          {
+            "name": "grafia_correta",
+            "type": "quiz",
+            "options": [
+              "zebra",
+              "zebro",
+              "zebras",
+              "zebrra"
+            ],
+            "default": null
+          }
         ],
         "render": "Tarefa 1: 'ze___' + imagem + 4 opções. Tarefa 2: 4 grafias. Tarefa 3: copiar",
         "transition": "Selecionar → feedback ✓/✗",
         "constraint": "'bra' com grupo consonântico br; não existe 'pra', 'tra', 'fra' nesta palavra",
-        "assessment": "Completa 'ze___' com 'bra', seleciona 'zebra', copia corretamente"
+        "assessment": "Completa 'ze___' com 'bra', seleciona 'zebra', copia corretamente A criança aponta uma relação som-letra e diz o que muda no som."
       },
       "differentiation": {
         "support": "🟢 2 opções; modelo sempre visível",
@@ -155,7 +244,20 @@
       "summary": "Bloco 6 — Frase simples: ler e construir 'A zebra tem riscas.'",
       "textDescription": "Ordenar as palavras da frase e criar frase própria com 'zebra'.",
       "interaction": {
-        "state": [{"name": "palavras_frase", "type": "sorting", "options": ["A", "zebra", "tem", "riscas", "."], "default": null}],
+        "state": [
+          {
+            "name": "palavras_frase",
+            "type": "sorting",
+            "options": [
+              "A",
+              "zebra",
+              "tem",
+              "riscas",
+              "."
+            ],
+            "default": null
+          }
+        ],
         "render": "Frase modelo; 5 cartas embaralhadas; slots; espaço de escrita livre",
         "transition": "Arrastar → feedback quando correta",
         "constraint": "Frase começa com maiúscula, termina com ponto",
@@ -170,18 +272,47 @@
     },
     {
       "summary": "Bloco 7 — Mini-avaliação formativa",
-      "textDescription": "4 critérios: reconhecimento, segmentação, reconstituição, frase.",
+      "textDescription": "4 critérios: reconhecimento, segmentação, reconstituição, frase. Observar a relação som-letra/grafofonémica: quando muda uma letra ou sílaba, muda o som e pode mudar a palavra.",
       "interaction": {
         "state": [
-          {"name": "tarefa1", "type": "quiz", "options": ["zebra", "palhaço", "telhado"], "default": null},
-          {"name": "tarefa2", "type": "sorting", "options": ["ze", "bra"], "default": null},
-          {"name": "tarefa3", "type": "drag", "options": ["bra", "ze"], "default": null},
-          {"name": "tarefa4", "type": "canvas", "default": null}
+          {
+            "name": "tarefa1",
+            "type": "quiz",
+            "options": [
+              "zebra",
+              "palhaço",
+              "telhado"
+            ],
+            "default": null
+          },
+          {
+            "name": "tarefa2",
+            "type": "sorting",
+            "options": [
+              "ze",
+              "bra"
+            ],
+            "default": null
+          },
+          {
+            "name": "tarefa3",
+            "type": "drag",
+            "options": [
+              "bra",
+              "ze"
+            ],
+            "default": null
+          },
+          {
+            "name": "tarefa4",
+            "type": "canvas",
+            "default": null
+          }
         ],
         "render": "4 tarefas sequenciais; barra de progresso; estrelas no fim",
         "transition": "Completar → próxima tarefa",
         "constraint": "Avaliação não punitiva",
-        "assessment": "4 critérios observáveis do M28P"
+        "assessment": "4 critérios observáveis do M28P A criança aponta uma relação som-letra e diz o que muda no som."
       },
       "differentiation": {
         "support": "🟢 Imagem presente em todas; frase oral aceite",
@@ -194,20 +325,36 @@
       "summary": "Bloco 8 — Extensão: explorar, ilustrar e criar",
       "textDescription": "3 opções: desenhar zebra com riscas, explorar o habitat da savana, ou desafio de palavras com 'br'.",
       "interaction": {
-        "state": [{"name": "opcao", "type": "dropdown", "options": ["Desenho", "Savana", "Palavras br"], "default": "Desenho"}],
-        "render": "3 cartões de actividade; canvas de desenho; perguntas sobre savana; campo de palavras",
-        "transition": "Selecionar → actividade abre",
+        "state": [
+          {
+            "name": "opcao",
+            "type": "dropdown",
+            "options": [
+              "Desenho",
+              "Savana",
+              "Palavras br"
+            ],
+            "default": "Desenho"
+          }
+        ],
+        "render": "3 cartões de atividade; canvas de desenho; perguntas sobre savana; campo de palavras",
+        "transition": "Selecionar → atividade abre",
         "constraint": "Escolha livre do aluno",
         "assessment": "1 elemento observável produzido"
       },
       "maker": {
         "type": "unplugged",
         "challenge": "Desenhar zebra em papel e pintar as riscas (alternando preto e branco). Escrever 'ze-bra' dividindo as sílabas em cada risca.",
-        "materials": ["Papel branco", "Marcadores preto e branco"],
+        "materials": [
+          "Papel branco",
+          "Marcadores preto e branco"
+        ],
         "groupSize": "1",
         "connection": "Riscas = alternância = padrão = sílabas alternadas",
         "communication": "Apresentar à turma",
-        "alternatives": ["Usar régua para fazer riscas retas"]
+        "alternatives": [
+          "Usar régua para fazer riscas retas"
+        ]
       },
       "differentiation": {
         "support": "🟢 Contorno de zebra pré-desenhado para colorir",
@@ -217,5 +364,13 @@
       "duration": 8
     }
   ],
-  "sessionFlow": "0–4 min: Bloco 1 → 4–8 min: Bloco 2 → 8–14 min: Bloco 3 → 14–21 min: Bloco 4 → 21–27 min: Bloco 5 → 27–33 min: Bloco 6 → 33–37 min: Bloco 7 → 37–45 min: Bloco 8"
+  "sessionFlow": "0–4 min: Bloco 1 → 4–8 min: Bloco 2 → 8–14 min: Bloco 3 → 14–21 min: Bloco 4 → 21–27 min: Bloco 5 → 27–33 min: Bloco 6 → 33–37 min: Bloco 7 → 37–45 min: Bloco 8",
+  "m28pMethodAlignment": {
+    "principle": "Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.",
+    "meaningfulEntry": "palavra-chave com imagem/contexto antes da análise",
+    "globalRecognition": "reconhecimento global é ponto de entrada, não fim da aprendizagem",
+    "codeWork": "consciência silábica e relação som-letra/grafofonémica",
+    "generalization": "ler palavra nova com sílabas conhecidas e escrever frase curta",
+    "quickVerification": "verificação rápida observa palavra-alvo, palavra nova e frase curta"
+  }
 }

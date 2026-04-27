@@ -6,12 +6,20 @@
 
 ---
 
-## Objectivos de aprendizagem
+## Objetivos de aprendizagem
 
 - Reconhecer globalmente a palavra 'palhaço' e associá-la à sua imagem
 - Segmentar 'palhaço' em sílabas (pa-lha-ço) identificando o dígrafo 'lh' e o cedilha 'ç'
 - Recombinar sílabas para formar palavras novas e distinguir palavra existente de não-palavra
 - Usar a palavra 'palhaço' numa frase simples oral e escrita
+
+## Princípio M28P — evitar uso puramente visual
+
+Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.
+
+- **Som-letra/grafofonémica:** pedir que a criança diga que som ou letra observa em 'palhaço'.
+- **Generalização:** pedir uma palavra nova com sílabas conhecidas e uma frase curta.
+- **Verificação rápida:** observar palavra-alvo, sílabas, palavra nova e frase/frase oral.
 
 ## Materiais
 
@@ -125,7 +133,7 @@
 
 ## Unit 8: Bloco 8 — Extensão: expressar, explorar e criar (8 min)
 
-**Compreender:** Actividade de extensão com 3 opções: (a) desenhar e legendar um palhaço, (b) fazer careta de palhaço (expressão dramática), ou (c) desafio escrito de palavras com 'lh'. Adequado para TEA.
+**Compreender:** Atividade de extensão com 3 opções: (a) desenhar e legendar um palhaço, (b) fazer careta de palhaço (expressão dramática), ou (c) desafio escrito de palavras com 'lh'. Adequado para TEA.
 
 **Constraint:** A extensão é autónoma e de escolha livre; não há resposta errada
 **Assessment:** O aluno produz pelo menos 1 elemento observável: desenho legendado, 2 expressões faciais demonstradas, ou 3 palavras com 'lh'

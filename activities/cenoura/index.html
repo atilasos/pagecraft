@@ -554,7 +554,10 @@ p { margin-bottom: 0.5rem; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
-</style>
+
+    .m28p-method-check{margin:1.25rem 0;padding:1rem;border:3px dashed var(--accent,#F59E0B);border-radius:18px;background:#fffdf5}.m28p-method-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.75rem}.m28p-method-card{min-height:48px;border-radius:16px;border:2px solid var(--primary,#E05FA0);background:#fff;color:var(--text,#1E1B18);font-weight:800;padding:.75rem}
+
+  </style>
 </head>
 <body>
 
@@ -912,6 +915,18 @@ p { margin-bottom: 0.5rem; }
   Gerado por PageCraft 🛠️
 </footer>
 
+
+<section class="m28p-method-check" aria-labelledby="m28p-method-title">
+  <h2 id="m28p-method-title">Descobrir para além da palavra</h2>
+  <p>Não vamos só decorar a palavra. Vamos descobrir sílabas, sons e letras, formar uma palavra nova e escrever uma frase curta.</p>
+  <div class="m28p-method-grid">
+    <button type="button" class="m28p-method-card">👏 Bate as sílabas</button>
+    <button type="button" class="m28p-method-card">🔤 Procura o som/letra que muda</button>
+    <button type="button" class="m28p-method-card">🧩 Lê uma palavra nova com sílabas conhecidas</button>
+    <button type="button" class="m28p-method-card">✍️ Escreve uma frase curta</button>
+  </div>
+</section>
+
 </main>
 
 <script>
@@ -1033,7 +1048,7 @@ function clearFeedback(containerId) {
 }
 
 /* ========================================
-   DRAG & DROP SYSTEM (touch + mouse)
+   DRAG & DROP SYSTEM (touch + rato)
    ======================================== */
 const DragSystem = {
   active: null,
@@ -1063,7 +1078,7 @@ const DragSystem = {
       document.body.appendChild(this.clone);
       AudioFX.click();
     };
-    el.addEventListener('mousedown', start);
+    el.addEventListener('ratodown', start);
     el.addEventListener('touchstart', start, { passive: false });
   },
 
@@ -1106,9 +1121,9 @@ const DragSystem = {
       if (this.clone) { this.clone.remove(); this.clone = null; }
       this.active = null;
     };
-    document.addEventListener('mousemove', move);
+    document.addEventListener('ratomove', move);
     document.addEventListener('touchmove', move, { passive: false });
-    document.addEventListener('mouseup', end);
+    document.addEventListener('ratoup', end);
     document.addEventListener('touchend', end);
   }
 };
@@ -1664,10 +1679,10 @@ const Unit5 = {
       [lastX, lastY] = [x, y];
     };
     const end = () => { isDrawing = false; };
-    canvas.addEventListener('mousedown', start);
-    canvas.addEventListener('mousemove', move);
-    canvas.addEventListener('mouseup', end);
-    canvas.addEventListener('mouseleave', end);
+    canvas.addEventListener('ratodown', start);
+    canvas.addEventListener('ratomove', move);
+    canvas.addEventListener('ratoup', end);
+    canvas.addEventListener('ratoleave', end);
     canvas.addEventListener('touchstart', start, { passive: false });
     canvas.addEventListener('touchmove', move, { passive: false });
     canvas.addEventListener('touchend', end);

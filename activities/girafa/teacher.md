@@ -6,12 +6,20 @@
 
 ---
 
-## Objectivos de aprendizagem
+## Objetivos de aprendizagem
 
 - Reconhecer a palavra 'girafa' como um todo (leitura global)
 - Segmentar a palavra em três sílabas: gi-ra-fa
 - Recombinar as sílabas gi, ra, fa com sílabas já conhecidas para formar novas palavras reais
 - Usar a palavra 'girafa' numa frase simples oral e escrita
+
+## Princípio M28P — evitar uso puramente visual
+
+Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.
+
+- **Som-letra/grafofonémica:** pedir que a criança diga que som ou letra observa em 'girafa'.
+- **Generalização:** pedir uma palavra nova com sílabas conhecidas e uma frase curta.
+- **Verificação rápida:** observar palavra-alvo, sílabas, palavra nova e frase/frase oral.
 
 ## Materiais
 
@@ -20,7 +28,7 @@
 - Cartões de sílabas de apoio: do / to / da / ca / va / la (sílabas de palavras anteriores)
 - Cartão-palavra da girafa (imagem + texto, formato A5)
 - Lápis, borracha e papel pautado para escrita guiada
-- Quadro interactivo (opcional, para fase de comunicação final)
+- Quadro interativo (opcional, para fase de comunicação final)
 
 ## Alinhamento MEM
 
@@ -41,7 +49,7 @@
 **Assessment:** O aluno aponta ou toca na palavra 'girafa' quando apresentada entre 3 palavras (ex: 'galinha', 'girafa', 'rato') após ver a história
 
 **Diferenciação:**
-- 🟢 Apoio: 🟢 A palavra 'girafa' aparece sempre visível junto à imagem durante toda a actividade; apenas 2 palavras para identificar na fase de reconhecimento; frase da história tem 3 palavras ('A Fafa é girafa')
+- 🟢 Apoio: 🟢 A palavra 'girafa' aparece sempre visível junto à imagem durante toda a atividade; apenas 2 palavras para identificar na fase de reconhecimento; frase da história tem 3 palavras ('A Fafa é girafa')
 - 🟡 Intermédio: 🟡 A palavra aparece após clicar; 3 opções de palavras para identificar; história com 2 frases completas
 - 🔴 Desafio: 🔴 A palavra não tem imagem de apoio durante a identificação; 4 opções incluindo palavras com início semelhante (girafa / garrafa / galinha / gato); o aluno escreve a palavra de memória antes de ver a confirmação
 
@@ -91,20 +99,20 @@
 **Assessment:** O aluno forma pelo menos 2 palavras reais novas além de 'girafa' (ex: fado, fato) e explica o significado de cada uma
 
 **Diferenciação:**
-- 🟢 Apoio: 🟢 Apenas 4 sílabas disponíveis (ra, fa, do, to); imagens de apoio aparecem automaticamente ao confirmar palavra real; slots coloridos com dica de quais sílabas combinam bem; objectivo: 1 palavra nova
-- 🟡 Intermédio: 🟡 6 sílabas disponíveis; sem dicas de combinação; imagem só após confirmação correcta; objectivo: 2 palavras novas
+- 🟢 Apoio: 🟢 Apenas 4 sílabas disponíveis (ra, fa, do, to); imagens de apoio aparecem automaticamente ao confirmar palavra real; slots coloridos com dica de quais sílabas combinam bem; objetivo: 1 palavra nova
+- 🟡 Intermédio: 🟡 6 sílabas disponíveis; sem dicas de combinação; imagem só após confirmação correcta; objetivo: 2 palavras novas
 - 🔴 Desafio: 🔴 Todas as 9 sílabas disponíveis; sem feedback de imagem; o aluno deve encontrar pelo menos 4 palavras reais; regista uma definição curta para cada palavra encontrada; tenta descobrir qual palavra tem 3 sílabas
 
 ### 🛠️ Maker — Unplugged
 - **Desafio:** Com os cartões de sílabas físicos, desafio de 3 minutos: quantas palavras reais consegues formar? Escreve as que descobriste. Compara com o teu par — quem descobriu mais?
 - **Grupo:** par (competição cooperativa)
 - **Ligação:** A recombinação digital agora torna-se uma corrida de palavras com materiais físicos — mesma exploração, suporte diferente
-- **Comunicação:** Cada par partilha as suas descobertas em voz alta; turma faz lista colectiva no quadro
-- **Alternativas:** Letras magnéticas no quadro branco da sala; cada grupo adiciona as suas palavras ao quadro colectivo
+- **Comunicação:** Cada par partilha as suas descobertas em voz alta; turma faz lista coletiva no quadro
+- **Alternativas:** Letras magnéticas no quadro branco da sala; cada grupo adiciona as suas palavras ao quadro coletivo
 
 ## Unit 5: Leitura e escrita guiada — completar a palavra 'girafa' (6 min)
 
-**Compreender:** O aluno pratica a leitura e escrita da palavra 'girafa' em contextos guiados: completar a palavra com a sílaba em falta, seleccionar a sílaba correcta entre opções e (no nível desafio) copiar a palavra completa. O foco é na consolidação ortográfica e na correspondência oral-escrita.
+**Compreender:** O aluno pratica a leitura e escrita da palavra 'girafa' em contextos guiados: completar a palavra com a sílaba em falta, selecionar a sílaba correcta entre opções e (no nível desafio) copiar a palavra completa. O foco é na consolidação ortográfica e na correspondência oral-escrita.
 
 **Constraint:** A palavra 'girafa' tem uma ortografia fixa — só existe uma sílaba correcta para cada posição; a posição das sílabas não é arbitrária
 **Assessment:** O aluno preenche correctamente as 3 variantes (gi___fa, ___rafa, gira___) com no máximo 1 erro por variante
@@ -147,15 +155,15 @@
 
 ## Unit 8: Extensão — explorar, criar e partilhar com autonomia (5 min)
 
-**Compreender:** O aluno escolhe uma actividade de extensão de acordo com o seu interesse e percurso. As três opções ligam a palavra 'girafa' a diferentes modos de expressão: oralidade narrativa, descoberta de curiosidades sobre girafas, e escrita criativa com rima. O foco é na autonomia e na produção comunicativa.
+**Compreender:** O aluno escolhe uma atividade de extensão de acordo com o seu interesse e percurso. As três opções ligam a palavra 'girafa' a diferentes modos de expressão: oralidade narrativa, descoberta de curiosidades sobre girafas, e escrita criativa com rima. O foco é na autonomia e na produção comunicativa.
 
 **Constraint:** Qualquer produção de extensão deve incluir a palavra 'girafa' — a liberdade criativa está ancorada à palavra da sessão
 **Assessment:** O aluno produz algo que contém a palavra 'girafa': uma frase oral, um texto curto, uma resposta a uma curiosidade, ou uma rima com a palavra
 
 **Diferenciação:**
-- 🟢 Apoio: 🟢 Actividade A com guião estruturado: 'A girafa chama-se ___, vive ___, gosta de ___' — apenas preencher lacunas; actividade B com 2 curiosidades (não 4); sem pressão de escrita
-- 🟡 Intermédio: 🟡 Escolha livre entre as 3 actividades; produção com palavras-chave como apoio lateral
-- 🔴 Desafio: 🔴 Actividade C sem modelo de rima; criar uma história com 'girafa' e pelo menos 2 outras palavras aprendidas nas últimas 3 sessões (ex: galinha, cenoura, rato); partilha oral obrigatória para a turma
+- 🟢 Apoio: 🟢 Atividade A com guião estruturado: 'A girafa chama-se ___, vive ___, gosta de ___' — apenas preencher lacunas; atividade B com 2 curiosidades (não 4); sem pressão de escrita
+- 🟡 Intermédio: 🟡 Escolha livre entre as 3 atividades; produção com palavras-chave como apoio lateral
+- 🔴 Desafio: 🔴 Atividade C sem modelo de rima; criar uma história com 'girafa' e pelo menos 2 outras palavras aprendidas nas últimas 3 sessões (ex: galinha, cenoura, rato); partilha oral obrigatória para a turma
 
 ### 🛠️ Maker — Unplugged
 - **Desafio:** Desenha a girafa Fafa com o pescoço tão comprido que sai da folha! Escreve 3 coisas que aprendeste sobre a girafa à volta do desenho. Podes usar legendas como num livro de ciências.
@@ -170,7 +178,7 @@
 
 ### Aprendizagens Essenciais
 - **Português (1.º ano):** Identificar palavras escritas; estabelecer relações entre a escrita e a oralidade; reconhecer sílabas como unidades fonológicas
-- **Português (1.º ano):** Produzir enunciados com vocabulário e estruturas gramaticais adequados; participar em actividades de oralidade
+- **Português (1.º ano):** Produzir enunciados com vocabulário e estruturas gramaticais adequados; participar em atividades de oralidade
 - **Português (1.º ano):** Segmentar e manipular sílabas em palavras; reconstituir palavras a partir de sílabas dadas; escrever palavras e frases simples
 
 ### Perfil do Aluno

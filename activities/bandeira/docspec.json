@@ -6,81 +6,198 @@
     "Reconhecer globalmente a palavra 'bandeira' e associá-la à sua imagem",
     "Segmentar 'bandeira' em sílabas (ban-dei-ra) identificando o ditongo 'ei' e a consoante nasal 'n'",
     "Recombinar sílabas para formar palavras novas",
-    "Usar a palavra 'bandeira' numa frase simples oral e escrita"
+    "Usar a palavra 'bandeira' numa frase simples oral e escrita",
+    "Descobrir que 'bandeira' não é só uma forma para memorizar: tem sílabas, sons/letras e pode ajudar a ler palavras novas.",
+    "Ler uma palavra nova com sílabas conhecidas de 'bandeira' e escrever uma frase curta com apoio."
   ],
   "curriculum": {
     "ae": [
-      {"subject": "Português", "year": "1.º ano", "domain": "Oralidade", "descriptor": "Identificar e manipular sílabas com consoante nasal (an/ban) e ditongo (ei)", "source": "portugues-1-ano-1-ciclo.md"},
-      {"subject": "Português", "year": "1.º ano", "domain": "Leitura e Escrita", "descriptor": "Ler palavras com ditongos (ei) e nasais; reconhecer globalmente palavras frequentes", "source": "portugues-1-ano-1-ciclo.md"},
-      {"subject": "Estudo do Meio", "year": "1.º ano", "domain": "À Descoberta de Si Mesmo", "descriptor": "Reconhecer símbolos nacionais (bandeira) e locais da comunidade", "source": "estudo-do-meio-1-ano-1-ciclo.md"}
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Identificar e manipular sílabas com consoante nasal (an/ban) e ditongo (ei)",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Ler palavras com ditongos (ei) e nasais; reconhecer globalmente palavras frequentes",
+        "source": "portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Estudo do Meio",
+        "year": "1.º ano",
+        "domain": "À Descoberta de Si Mesmo",
+        "descriptor": "Reconhecer símbolos nacionais (bandeira) e locais da comunidade",
+        "source": "estudo-do-meio-1-ano-1-ciclo.md"
+      }
     ],
-    "competencies": ["PA-A: Linguagens e textos", "PA-C: Raciocínio e resolução de problemas", "PA-D: Pensamento crítico e pensamento criativo", "PA-F: Desenvolvimento pessoal e autonomia"]
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-D: Pensamento crítico e pensamento criativo",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ]
   },
   "memAlignment": {
-    "modules": ["TEA", "Trabalho curricular comparticipado", "Circuitos de comunicação"],
-    "instruments": ["PIT", "mapa de tarefas"],
+    "modules": [
+      "TEA",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "PIT",
+      "mapa de tarefas"
+    ],
     "socialOrganization": "individual (blocos 1–5) → pares (bloco 6) → turma (mini-avaliação + extensão)"
   },
-  "materials": ["Tablet ou computador com browser", "Caderno diário", "Lápis de cor"],
+  "materials": [
+    "Tablet ou computador com browser",
+    "Caderno diário",
+    "Lápis de cor"
+  ],
   "units": [
     {
       "summary": "Bloco 1 — Abertura: a palavra 'bandeira' numa cena de celebração",
       "textDescription": "Cena de festa com bandeiras coloridas ao vento. Micro-história: 'Há uma festa na escola. Há muitas cores a acenar. O que são essas coisas coloridas?'",
       "interaction": {
-        "state": [{"name": "palavraRevelada", "type": "toggle", "options": ["oculta", "visivel"], "default": "oculta"}],
+        "state": [
+          {
+            "name": "palavraRevelada",
+            "type": "toggle",
+            "options": [
+              "oculta",
+              "visivel"
+            ],
+            "default": "oculta"
+          }
+        ],
         "render": "Cena de festa com bandeiras; micro-história; botão revelar",
         "transition": "Clicar → cartaz com bandeira + palavra aparece",
         "constraint": "Palavra e imagem juntas sempre",
         "assessment": "Aluno aponta e diz a palavra"
       },
-      "differentiation": {"support": "🟢 Palavra visível desde o início", "standard": "🟡 Revelar ao clicar", "challenge": "🔴 Escrever antes de revelar"},
+      "differentiation": {
+        "support": "🟢 Palavra visível desde o início",
+        "standard": "🟡 Revelar ao clicar",
+        "challenge": "🔴 Escrever antes de revelar"
+      },
       "duration": 4
     },
     {
       "summary": "Bloco 2 — Reconhecimento global",
       "textDescription": "Reconhecimento palavra↔imagem com distratores 'zebra' e 'palhaço'.",
       "interaction": {
-        "state": [{"name": "opcaoSelecionada", "type": "quiz", "options": ["bandeira", "zebra", "palhaço"], "default": null}],
+        "state": [
+          {
+            "name": "opcaoSelecionada",
+            "type": "quiz",
+            "options": [
+              "bandeira",
+              "zebra",
+              "palhaço"
+            ],
+            "default": null
+          }
+        ],
         "render": "Tarefa 1: palavra 'bandeira', 3 imagens. Tarefa 2: imagem bandeira, 3 palavras.",
         "transition": "Clicar → feedback",
         "constraint": "'bandeira' tem 3 sílabas e termina em 'ra' — visualmente distinta",
         "assessment": "Seleciona corretamente em ambas"
       },
-      "differentiation": {"support": "🟢 Primeira letra visível", "standard": "🟡 3 opções", "challenge": "🔴 4 opções similares"},
+      "differentiation": {
+        "support": "🟢 Primeira letra visível",
+        "standard": "🟡 3 opções",
+        "challenge": "🔴 4 opções similares"
+      },
       "duration": 4
     },
     {
       "summary": "Bloco 3 — Segmentação: ban-dei-ra",
-      "textDescription": "Dividir 'bandeira' em 3 sílabas, bater palmas, arrastar blocos. Destaque do ditongo 'ei' em 'dei'.",
+      "textDescription": "Dividir 'bandeira' em 3 sílabas, bater palmas, arrastar blocos. Destaque do ditongo 'ei' em 'dei'. Observar a relação som-letra/grafofonémica: quando muda uma letra ou sílaba, muda o som e pode mudar a palavra.",
       "interaction": {
         "state": [
-          {"name": "silabas", "type": "drag", "options": ["ban", "dei", "ra"], "default": null},
-          {"name": "palmadas", "type": "quiz", "options": ["1", "2", "3", "4"], "default": null}
+          {
+            "name": "silabas",
+            "type": "drag",
+            "options": [
+              "ban",
+              "dei",
+              "ra"
+            ],
+            "default": null
+          },
+          {
+            "name": "palmadas",
+            "type": "quiz",
+            "options": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
+            "default": null
+          }
         ],
         "render": "Palavra; blocos 'ban', 'dei', 'ra'; 3 caixas; destaque do ditongo 'ei'",
         "transition": "Arrastar → encaixe; palmadas → feedback",
         "constraint": "'bandeira' tem 3 sílabas; 'dei' contém o ditongo 'ei'",
-        "assessment": "Coloca os 3 blocos, seleciona '3 palmas', aponta para 'ei'"
+        "assessment": "Coloca os 3 blocos, seleciona '3 palmas', aponta para 'ei' A criança aponta uma relação som-letra e diz o que muda no som."
       },
-      "differentiation": {"support": "🟢 Blocos pré-posicionados", "standard": "🟡 Arrastar os 3", "challenge": "🔴 Escrever sílabas"},
+      "differentiation": {
+        "support": "🟢 Blocos pré-posicionados",
+        "standard": "🟡 Arrastar os 3",
+        "challenge": "🔴 Escrever sílabas"
+      },
       "duration": 6
     },
     {
       "summary": "Bloco 4 — Recombinação",
       "textDescription": "Com 'ban', 'dei', 'ra', 'lei', 'rei', 'ca', 'sa', 'da' formar novas palavras.",
       "interaction": {
-        "state": [{"name": "silabas_disponiveis", "type": "drag", "options": ["ban", "dei", "ra", "lei", "rei", "ca", "sa", "da"], "default": null}],
+        "state": [
+          {
+            "name": "silabas_disponiveis",
+            "type": "drag",
+            "options": [
+              "ban",
+              "dei",
+              "ra",
+              "lei",
+              "rei",
+              "ca",
+              "sa",
+              "da"
+            ],
+            "default": null
+          }
+        ],
         "render": "Tabuleiro; zona construção; verificar; descobertas",
         "transition": "Arrastar → atualiza; verificar → feedback",
         "constraint": "Ordem importa",
         "assessment": "2+ palavras reais (banido, bandeira, rei, lei, radar, cada)"
       },
       "maker": {
-        "type": "unplugged", "challenge": "Cartões físicos; tabela ✓/✗", "materials": ["Cartões", "Folha"],
-        "groupSize": "2", "connection": "Manipulação precede digital", "communication": "Partilhar descoberta",
-        "alternatives": ["Post-its"]
+        "type": "unplugged",
+        "challenge": "Cartões físicos; tabela ✓/✗",
+        "materials": [
+          "Cartões",
+          "Folha"
+        ],
+        "groupSize": "2",
+        "connection": "Manipulação precede digital",
+        "communication": "Partilhar descoberta",
+        "alternatives": [
+          "Post-its"
+        ]
       },
-      "differentiation": {"support": "🟢 4 sílabas", "standard": "🟡 8 sílabas", "challenge": "🔴 Sem feedback imediato"},
+      "differentiation": {
+        "support": "🟢 4 sílabas",
+        "standard": "🟡 8 sílabas",
+        "challenge": "🔴 Sem feedback imediato"
+      },
       "duration": 7
     },
     {
@@ -88,68 +205,176 @@
       "textDescription": "Completar 'ban___ra', selecionar grafia, copiar. Foco no ditongo 'ei'.",
       "interaction": {
         "state": [
-          {"name": "silaba_em_falta", "type": "quiz", "options": ["dei", "de", "di", "dai"], "default": null},
-          {"name": "grafia_correta", "type": "quiz", "options": ["bandeira", "bandera", "bandaira", "bundeira"], "default": null}
+          {
+            "name": "silaba_em_falta",
+            "type": "quiz",
+            "options": [
+              "dei",
+              "de",
+              "di",
+              "dai"
+            ],
+            "default": null
+          },
+          {
+            "name": "grafia_correta",
+            "type": "quiz",
+            "options": [
+              "bandeira",
+              "bandera",
+              "bandaira",
+              "bundeira"
+            ],
+            "default": null
+          }
         ],
         "render": "Tarefa 1: 'ban___ra' + imagem + 4 opções. Tarefa 2: 4 grafias. Tarefa 3: copiar",
         "transition": "Selecionar → feedback",
         "constraint": "'dei' com ditongo 'ei'; não existe 'bandera' em português",
         "assessment": "Completa, seleciona, copia corretamente"
       },
-      "differentiation": {"support": "🟢 2 opções; modelo visível", "standard": "🟡 4 opções", "challenge": "🔴 Escrever de memória"},
+      "differentiation": {
+        "support": "🟢 2 opções; modelo visível",
+        "standard": "🟡 4 opções",
+        "challenge": "🔴 Escrever de memória"
+      },
       "duration": 6
     },
     {
       "summary": "Bloco 6 — Frase: 'A bandeira está ao vento.'",
       "textDescription": "Ordenar palavras e criar frase própria.",
       "interaction": {
-        "state": [{"name": "palavras_frase", "type": "sorting", "options": ["A", "bandeira", "está", "ao", "vento", "."], "default": null}],
+        "state": [
+          {
+            "name": "palavras_frase",
+            "type": "sorting",
+            "options": [
+              "A",
+              "bandeira",
+              "está",
+              "ao",
+              "vento",
+              "."
+            ],
+            "default": null
+          }
+        ],
         "render": "Frase modelo; 6 cartas; slots; escrita livre",
         "transition": "Arrastar → feedback",
         "constraint": "Maiúscula início, ponto final",
         "assessment": "Ordena e escreve frase própria"
       },
-      "differentiation": {"support": "🟢 3 elementos", "standard": "🟡 6 elementos", "challenge": "🔴 2 frases; adjetivo"},
+      "differentiation": {
+        "support": "🟢 3 elementos",
+        "standard": "🟡 6 elementos",
+        "challenge": "🔴 2 frases; adjetivo"
+      },
       "duration": 6
     },
     {
       "summary": "Bloco 7 — Mini-avaliação formativa",
-      "textDescription": "4 critérios: reconhecimento, segmentação, reconstituição, frase.",
+      "textDescription": "4 critérios: reconhecimento, segmentação, reconstituição, frase. Observar a relação som-letra/grafofonémica: quando muda uma letra ou sílaba, muda o som e pode mudar a palavra.",
       "interaction": {
         "state": [
-          {"name": "t1", "type": "quiz", "options": ["bandeira", "zebra", "palhaço"], "default": null},
-          {"name": "t2", "type": "sorting", "options": ["ban", "dei", "ra"], "default": null},
-          {"name": "t3", "type": "drag", "options": ["ra", "ban", "dei"], "default": null},
-          {"name": "t4", "type": "canvas", "default": null}
+          {
+            "name": "t1",
+            "type": "quiz",
+            "options": [
+              "bandeira",
+              "zebra",
+              "palhaço"
+            ],
+            "default": null
+          },
+          {
+            "name": "t2",
+            "type": "sorting",
+            "options": [
+              "ban",
+              "dei",
+              "ra"
+            ],
+            "default": null
+          },
+          {
+            "name": "t3",
+            "type": "drag",
+            "options": [
+              "ra",
+              "ban",
+              "dei"
+            ],
+            "default": null
+          },
+          {
+            "name": "t4",
+            "type": "canvas",
+            "default": null
+          }
         ],
         "render": "4 tarefas; progresso; estrelas",
         "transition": "Completar → próxima",
         "constraint": "Não punitivo",
-        "assessment": "4 critérios M28P"
+        "assessment": "4 critérios M28P A criança aponta uma relação som-letra e diz o que muda no som."
       },
-      "differentiation": {"support": "🟢 Imagem presente; oral aceite", "standard": "🟡 Como descrito", "challenge": "🔴 Frase sem modelo"},
+      "differentiation": {
+        "support": "🟢 Imagem presente; oral aceite",
+        "standard": "🟡 Como descrito",
+        "challenge": "🔴 Frase sem modelo"
+      },
       "duration": 4
     },
     {
       "summary": "Bloco 8 — Extensão",
       "textDescription": "3 opções: desenhar bandeira, explorar simbolismo, palavras com 'ei'.",
       "interaction": {
-        "state": [{"name": "opcao", "type": "dropdown", "options": ["Desenho", "Simbolismo", "Palavras ei"], "default": "Desenho"}],
+        "state": [
+          {
+            "name": "opcao",
+            "type": "dropdown",
+            "options": [
+              "Desenho",
+              "Simbolismo",
+              "Palavras ei"
+            ],
+            "default": "Desenho"
+          }
+        ],
         "render": "3 cartões; canvas desenho; perguntas; campo palavras",
-        "transition": "Selecionar → abre actividade",
+        "transition": "Selecionar → abre atividade",
         "constraint": "Escolha livre",
         "assessment": "1 elemento observável"
       },
       "maker": {
-        "type": "unplugged", "challenge": "Desenhar e colorir uma bandeira inventada, escrever 'bandeira' na base dividindo sílabas",
-        "materials": ["Papel", "Lápis de cor", "Palhinha ou palito"], "groupSize": "1",
+        "type": "unplugged",
+        "challenge": "Desenhar e colorir uma bandeira inventada, escrever 'bandeira' na base dividindo sílabas",
+        "materials": [
+          "Papel",
+          "Lápis de cor",
+          "Palhinha ou palito"
+        ],
+        "groupSize": "1",
         "connection": "Criar símbolo próprio reforça identidade e palavra",
         "communication": "Apresentar e explicar as cores escolhidas",
-        "alternatives": ["Usar tecido ou papel de jornal"]
+        "alternatives": [
+          "Usar tecido ou papel de jornal"
+        ]
       },
-      "differentiation": {"support": "🟢 Contorno pré-desenhado", "standard": "🟡 Desenho livre + legenda", "challenge": "🔴 Mini-texto; 5 palavras com 'ei'"},
+      "differentiation": {
+        "support": "🟢 Contorno pré-desenhado",
+        "standard": "🟡 Desenho livre + legenda",
+        "challenge": "🔴 Mini-texto; 5 palavras com 'ei'"
+      },
       "duration": 8
     }
   ],
-  "sessionFlow": "0–4 min: Bloco 1 → 4–8 min: Bloco 2 → 8–14 min: Bloco 3 → 14–21 min: Bloco 4 → 21–27 min: Bloco 5 → 27–33 min: Bloco 6 → 33–37 min: Bloco 7 → 37–45 min: Bloco 8"
+  "sessionFlow": "0–4 min: Bloco 1 → 4–8 min: Bloco 2 → 8–14 min: Bloco 3 → 14–21 min: Bloco 4 → 21–27 min: Bloco 5 → 27–33 min: Bloco 6 → 33–37 min: Bloco 7 → 37–45 min: Bloco 8",
+  "m28pMethodAlignment": {
+    "principle": "Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.",
+    "meaningfulEntry": "palavra-chave com imagem/contexto antes da análise",
+    "globalRecognition": "reconhecimento global é ponto de entrada, não fim da aprendizagem",
+    "codeWork": "consciência silábica e relação som-letra/grafofonémica",
+    "generalization": "ler palavra nova com sílabas conhecidas e escrever frase curta",
+    "quickVerification": "verificação rápida observa palavra-alvo, palavra nova e frase curta"
+  }
 }

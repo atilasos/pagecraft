@@ -6,7 +6,9 @@
     "Reconhecer a palavra «uva» globalmente (leitura global) e associá-la à imagem correspondente",
     "Segmentar a palavra «uva» nas sílabas u-va e recontar com palmas/arrastar",
     "Recombinar as sílabas aprendidas para identificar e discriminar novas palavras",
-    "Ler e completar a frase «A uva é doce.» com apoio visual e silábico"
+    "Ler e completar a frase «A uva é doce.» com apoio visual e silábico",
+    "Descobrir que 'uva' não é só uma forma para memorizar: tem sílabas, sons/letras e pode ajudar a ler palavras novas.",
+    "Ler uma palavra nova com sílabas conhecidas de 'uva' e escrever uma frase curta com apoio."
   ],
   "curriculum": {
     "ae": [
@@ -72,13 +74,19 @@
           {
             "name": "cenanVisible",
             "type": "toggle",
-            "options": ["historia", "palavra"],
+            "options": [
+              "historia",
+              "palavra"
+            ],
             "default": "historia"
           },
           {
             "name": "palavraRevelada",
             "type": "toggle",
-            "options": [false, true],
+            "options": [
+              false,
+              true
+            ],
             "default": false
           }
         ],
@@ -102,13 +110,21 @@
           {
             "name": "modoJogo",
             "type": "dropdown",
-            "options": ["imagem→palavra", "palavra→imagem"],
+            "options": [
+              "imagem→palavra",
+              "palavra→imagem"
+            ],
             "default": "imagem→palavra"
           },
           {
             "name": "opcoes",
             "type": "quiz",
-            "options": ["uva", "ova", "uva", "ava"],
+            "options": [
+              "uva",
+              "ova",
+              "uva",
+              "ava"
+            ],
             "default": null
           },
           {
@@ -142,7 +158,10 @@
           {
             "name": "silabasArrastadas",
             "type": "drag",
-            "options": ["u", "va"],
+            "options": [
+              "u",
+              "va"
+            ],
             "default": []
           },
           {
@@ -164,11 +183,16 @@
       "maker": {
         "type": "unplugged",
         "challenge": "Com os cartões de sílabas impressos (u / va), o par de alunos coloca os cartões em cima da mesa na ordem certa e bate palmas enquanto lê cada sílaba",
-        "materials": ["Cartões de sílabas impressos (u / va)", "Mesa da sala"],
+        "materials": [
+          "Cartões de sílabas impressos (u / va)",
+          "Mesa da sala"
+        ],
         "groupSize": "2",
         "connection": "A manipulação física dos cartões replica o arrastar digital; reforça a memória muscular da segmentação",
         "communication": "Um aluno segura os cartões, o outro bate palmas; trocam de papel",
-        "alternatives": ["Sem cartões: escrever u e va em post-its e colocar na ordem certa"]
+        "alternatives": [
+          "Sem cartões: escrever u e va em post-its e colocar na ordem certa"
+        ]
       },
       "differentiation": {
         "support": "Sílabas já separadas e coloridas desde o início; aluno apenas confirma a ordem clicando; botão palmas bate automaticamente com som e animação",
@@ -179,19 +203,33 @@
     },
     {
       "summary": "Recombinação silábica: explorar o que a sílaba «va» pode formar com outras sílabas conhecidas",
-      "textDescription": "O aluno recombina a sílaba «va» (de «uva») com sílabas conhecidas das palavras anteriores (me, ni, na, no) para descobrir se formam palavras reais. O objetivo é compreender que as sílabas são unidades reutilizáveis e que nem toda a combinação forma uma palavra.",
+      "textDescription": "O aluno recombina a sílaba «va» (de «uva») com sílabas conhecidas das palavras anteriores (me, ni, na, no) para descobrir se formam palavras reais. O objetivo é compreender que as sílabas são unidades reutilizáveis e que nem toda a combinação forma uma palavra. Ler também uma palavra nova com sílabas conhecidas, para mostrar generalização e não apenas memória visual.",
       "interaction": {
         "state": [
           {
             "name": "silaba1",
             "type": "dropdown",
-            "options": ["u", "va", "me", "ni", "na", "no"],
+            "options": [
+              "u",
+              "va",
+              "me",
+              "ni",
+              "na",
+              "no"
+            ],
             "default": "va"
           },
           {
             "name": "silaba2",
             "type": "dropdown",
-            "options": ["u", "va", "me", "ni", "na", "no"],
+            "options": [
+              "u",
+              "va",
+              "me",
+              "ni",
+              "na",
+              "no"
+            ],
             "default": "u"
           },
           {
@@ -208,7 +246,7 @@
         "render": "Dois slots de sílabas com dropdowns; área central mostra a combinação em tempo real em tipografia grande; indicador verde «✓ existe!» ou âmbar «? não conheço» dependendo de existePalavra; painel lateral com sílabas já conhecidas (me, ni, na, no, u, va)",
         "transition": "Selecionar sílaba num slot → palavraFormada atualiza em tempo real → indicador muda conforme existePalavra; foco especial na combinação u+va (a nossa palavra!) com animação de estrela",
         "constraint": "Nem todas as combinações de sílabas formam palavras reais; só a ordem u+va forma «uva»; a ordem va+u forma «vaú» que não existe em português",
-        "assessment": "O aluno identifica pelo menos 1 combinação que forma palavra real e verbaliza «estas sílabas juntas formam uma palavra que eu conheço»"
+        "assessment": "O aluno identifica pelo menos 1 combinação que forma palavra real e verbaliza «estas sílabas juntas formam uma palavra que eu conheço» A criança lê uma palavra nova e escreve uma frase curta sem copiar apenas."
       },
       "differentiation": {
         "support": "Apenas 3 sílabas disponíveis (u, va, me); combinações pré-feitas para o aluno confirmar se existe ou não; imagem aparece quando palavra é reconhecida",
@@ -225,13 +263,21 @@
           {
             "name": "exercicioAtual",
             "type": "dropdown",
-            "options": ["u__a", "__va", "u-va (confirmar)"],
+            "options": [
+              "u__a",
+              "__va",
+              "u-va (confirmar)"
+            ],
             "default": "u__a"
           },
           {
             "name": "silabaEscolhida",
             "type": "quiz",
-            "options": ["va", "na", "me"],
+            "options": [
+              "va",
+              "na",
+              "me"
+            ],
             "default": null
           },
           {
@@ -260,7 +306,12 @@
           {
             "name": "palavrasArrastadas",
             "type": "drag",
-            "options": ["A", "uva", "é", "doce."],
+            "options": [
+              "A",
+              "uva",
+              "é",
+              "doce."
+            ],
             "default": []
           },
           {
@@ -271,7 +322,10 @@
           {
             "name": "modoAtivo",
             "type": "toggle",
-            "options": ["ler", "construir"],
+            "options": [
+              "ler",
+              "construir"
+            ],
             "default": "ler"
           }
         ],
@@ -283,11 +337,16 @@
       "maker": {
         "type": "unplugged",
         "challenge": "O par de alunos recebe 4 cartões com as palavras da frase (A / uva / é / doce.) em papel. Colocam-nos em cima da mesa na ordem correta e leem a frase juntos.",
-        "materials": ["Cartões de palavras impressos (A / uva / é / doce.)", "Mesa ou chão"],
+        "materials": [
+          "Cartões de palavras impressos (A / uva / é / doce.)",
+          "Mesa ou chão"
+        ],
         "groupSize": "2",
         "connection": "Manipulação física dos cartões replica o arrastar digital; reforça a compreensão da estrutura frásica",
         "communication": "Cada par lê a frase em voz alta para o par ao lado",
-        "alternatives": ["Sem cartões: escrever cada palavra num post-it e ordenar na mesa"]
+        "alternatives": [
+          "Sem cartões: escrever cada palavra num post-it e ordenar na mesa"
+        ]
       },
       "differentiation": {
         "support": "Modo ler com áudio obrigatório antes de construir; apenas 3 palavras a ordenar (uva / é / doce); artigo já colocado no slot 1",
@@ -298,7 +357,7 @@
     },
     {
       "summary": "Mini-avaliação formativa: reconhecer + segmentar + reconstruir + usar em frase",
-      "textDescription": "Avaliação observável com 4 tarefas sequenciais que verificam as aprendizagens da sessão: (1) reconhecer «uva» entre 3 palavras, (2) indicar o número correto de sílabas, (3) ordenar as sílabas u-va, (4) selecionar a frase correta com «uva». O professor/monitor observa e regista.",
+      "textDescription": "Avaliação observável com 4 tarefas sequenciais que verificam as aprendizagens da sessão: (1) reconhecer «uva» entre 3 palavras, (2) indicar o número correto de sílabas, (3) ordenar as sílabas u-va, (4) selecionar a frase correta com «uva». O professor/monitor observa e regista. Ler também uma palavra nova com sílabas conhecidas, para mostrar generalização e não apenas memória visual.",
       "interaction": {
         "state": [
           {
@@ -320,7 +379,7 @@
         "render": "4 tarefas apresentadas sequencialmente, uma de cada vez; barra de progresso no topo (Tarefa 1/4); cada tarefa tem instrução clara, área de resposta e feedback imediato; no final, resumo visual com ✓/✗ por tarefa e mensagem adaptada à pontuação",
         "transition": "Resposta dada → feedback imediato → após 1.5s passa automaticamente para tarefa seguinte; na última tarefa, mostra resumo completo; pontuação 4/4 → animação de estrelas; 2-3/4 → mensagem de encorajamento; <2/4 → sugere repetir unidades específicas",
         "constraint": "Cada tarefa avalia uma competência distinta; não é possível avançar sem responder; feedback não revela a resposta correta imediatamente (mostra ✓ ou ✗ e avança)",
-        "assessment": "Critérios observáveis: (1) seleciona «uva» entre uva/ova/ava; (2) clica «2 sílabas» entre 1/2/3; (3) arrasta u→slot1 e va→slot2; (4) seleciona «A uva é doce.» entre 3 frases"
+        "assessment": "Critérios observáveis: (1) seleciona «uva» entre uva/ova/ava; (2) clica «2 sílabas» entre 1/2/3; (3) arrasta u→slot1 e va→slot2; (4) seleciona «A uva é doce.» entre 3 frases A criança lê uma palavra nova e escreve uma frase curta sem copiar apenas."
       },
       "differentiation": {
         "support": "Após erro, imagem de apoio aparece automaticamente; tarefa 3 tem sílabas pré-coloridas com indicação de posição; tarefa 4 tem imagem junto a cada frase",
@@ -337,7 +396,10 @@
           {
             "name": "modoExtensao",
             "type": "dropdown",
-            "options": ["desenhar", "escrever frase"],
+            "options": [
+              "desenhar",
+              "escrever frase"
+            ],
             "default": "desenhar"
           },
           {
@@ -359,11 +421,16 @@
       "maker": {
         "type": "whiteboard",
         "challenge": "Partilhar o desenho ou frase no quadro interativo da sala; a turma vê todas as produções num painel coletivo no final da sessão",
-        "materials": ["Quadro interativo ou projetor", "Painel de partilha digital"],
+        "materials": [
+          "Quadro interativo ou projetor",
+          "Painel de partilha digital"
+        ],
         "groupSize": "turma",
         "connection": "As produções individuais são reunidas num circuito de comunicação coletivo, típico do MEM",
         "communication": "Cada aluno (voluntário) apresenta o seu desenho/frase à turma em 30 segundos",
-        "alternatives": ["Sem quadro: imprimir os desenhos e afixar no painel das 28 palavras da sala"]
+        "alternatives": [
+          "Sem quadro: imprimir os desenhos e afixar no painel das 28 palavras da sala"
+        ]
       },
       "differentiation": {
         "support": "Modelo de desenho da uva para colorir em vez de canvas livre; palavra «uva» já impressa para copiar por cima",
@@ -373,5 +440,13 @@
       "duration": 4
     }
   ],
-  "sessionFlow": "0-4min: Abertura contextual (micro-história + imagem + revelação da palavra) → 4-9min: Reconhecimento global (imagem↔palavra, 2 modos) → 9-16min: Segmentação silábica (palmas + arrastar u/va) + manipulação offline com cartões → 16-22min: Recombinação silábica (explorar sílabas conhecidas) → 22-28min: Leitura guiada (completar palavra com sílaba em falta) → 28-36min: Frase simples (ler + construir «A uva é doce.») + manipulação com cartões de palavras → 36-41min: Mini-avaliação formativa (4 tarefas observáveis) → 41-45min: Extensão criativa (desenho ou frase livre + partilha)"
+  "sessionFlow": "0-4min: Abertura contextual (micro-história + imagem + revelação da palavra) → 4-9min: Reconhecimento global (imagem↔palavra, 2 modos) → 9-16min: Segmentação silábica (palmas + arrastar u/va) + manipulação offline com cartões → 16-22min: Recombinação silábica (explorar sílabas conhecidas) → 22-28min: Leitura guiada (completar palavra com sílaba em falta) → 28-36min: Frase simples (ler + construir «A uva é doce.») + manipulação com cartões de palavras → 36-41min: Mini-avaliação formativa (4 tarefas observáveis) → 41-45min: Extensão criativa (desenho ou frase livre + partilha)",
+  "m28pMethodAlignment": {
+    "principle": "Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.",
+    "meaningfulEntry": "palavra-chave com imagem/contexto antes da análise",
+    "globalRecognition": "reconhecimento global é ponto de entrada, não fim da aprendizagem",
+    "codeWork": "consciência silábica e relação som-letra/grafofonémica",
+    "generalization": "ler palavra nova com sílabas conhecidas e escrever frase curta",
+    "quickVerification": "verificação rápida observa palavra-alvo, palavra nova e frase curta"
+  }
 }

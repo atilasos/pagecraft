@@ -6,19 +6,27 @@
 
 ---
 
-## Objectivos de aprendizagem
+## Objetivos de aprendizagem
 
 - Reconhecer a palavra global 'árvore' associada à sua imagem
 - Segmentar 'árvore' nas sílabas ár-vo-re e recontar batendo palmas
 - Recombinar as sílabas para formar novas palavras (ex.: vó, ré, voar)
 - Usar a palavra 'árvore' numa frase simples oral ou escrita
 
+## Princípio M28P — evitar uso puramente visual
+
+Este ciclo M28P não é só memorizar a forma visual da palavra: parte da palavra com imagem/contexto, passa por sílabas, sons/letras, recombinação, leitura de palavra nova, escrita de frase curta e verificação rápida.
+
+- **Som-letra/grafofonémica:** pedir que a criança diga que som ou letra observa em 'árvore'.
+- **Generalização:** pedir uma palavra nova com sílabas conhecidas e uma frase curta.
+- **Verificação rápida:** observar palavra-alvo, sílabas, palavra nova e frase/frase oral.
+
 ## Materiais
 
 - Tablet ou computador com browser (1 por aluno ou par)
 - Imagem de uma árvore frondosa (embutida na página)
 - Cartões de sílabas físicos: ár / vo / re (opcional, extensão unplugged)
-- Quadro interactivo para síntese colectiva
+- Quadro interativo para síntese coletiva
 
 ## Alinhamento MEM
 
@@ -29,11 +37,11 @@
 
 ## Fluxo da sessão
 
-0-4min: Bloco 1 — micro-história da árvore, activação emocional → 4-8min: Bloco 2 — reconhecimento global, identificar a palavra → 8-15min: Bloco 3 — segmentação silábica ár-vo-re, palmas → 15-23min: Bloco 4 — recombinação e exploração em pares (+ maker unplugged opcional) → 23-30min: Bloco 5 — leitura e escrita guiada, copiar a palavra → 30-37min: Bloco 6 — construção de frase com 'árvore' → 37-42min: Bloco 7 — mini-avaliação formativa (4 critérios) → 42-45min (ou mais): Bloco 8 — extensão maker, partilha em circuito de comunicação
+0-4min: Bloco 1 — micro-história da árvore, ativação emocional → 4-8min: Bloco 2 — reconhecimento global, identificar a palavra → 8-15min: Bloco 3 — segmentação silábica ár-vo-re, palmas → 15-23min: Bloco 4 — recombinação e exploração em pares (+ maker unplugged opcional) → 23-30min: Bloco 5 — leitura e escrita guiada, copiar a palavra → 30-37min: Bloco 6 — construção de frase com 'árvore' → 37-42min: Bloco 7 — mini-avaliação formativa (4 critérios) → 42-45min (ou mais): Bloco 8 — extensão maker, partilha em circuito de comunicação
 
 ## Unit 1: Bloco 1 — Abertura contextual: a árvore na nossa vida (4 min)
 
-**Compreender:** O aluno entra na cena através de uma micro-história: uma criança senta-se à sombra de uma árvore num dia quente. A imagem da árvore aparece em destaque com a palavra escrita por baixo. O objectivo é criar familiaridade emocional e contextual com a palavra antes da análise.
+**Compreender:** O aluno entra na cena através de uma micro-história: uma criança senta-se à sombra de uma árvore num dia quente. A imagem da árvore aparece em destaque com a palavra escrita por baixo. O objetivo é criar familiaridade emocional e contextual com a palavra antes da análise.
 
 **Constraint:** A palavra e a imagem representam o mesmo conceito — a leitura global precede a análise silábica
 **Assessment:** O aluno aponta para a palavra 'árvore' quando ouve a frase e repete-a em voz alta
@@ -48,7 +56,7 @@
 **Compreender:** O aluno treina o reconhecimento visual da palavra 'árvore' como um todo, distinguindo-a de palavras parecidas ou de outras palavras já aprendidas. Reforça a ligação imagem-palavra.
 
 **Constraint:** Palavras visualmente próximas não são a mesma palavra — a forma escrita completa é o que identifica cada palavra
-**Assessment:** O aluno selecciona a palavra 'árvore' correctamente em 3 de 3 rondas com opções distratoras
+**Assessment:** O aluno seleciona a palavra 'árvore' correctamente em 3 de 3 rondas com opções distratoras
 
 **Diferenciação:**
 - 🟢 Apoio: Apenas 2 opções por ronda; palavra 'árvore' sempre em destaque de cor; imagem presente
@@ -57,7 +65,7 @@
 
 ## Unit 3: Bloco 3 — Segmentação silábica: ár-vo-re (7 min)
 
-**Compreender:** O aluno aprende a dividir 'árvore' nas suas três sílabas (ár / vo / re), associando cada sílaba a uma cor distinta. O gesto de bater palmas é mapeado para a interacção de toque/clique.
+**Compreender:** O aluno aprende a dividir 'árvore' nas suas três sílabas (ár / vo / re), associando cada sílaba a uma cor distinta. O gesto de bater palmas é mapeado para a interação de toque/clique.
 
 **Constraint:** Cada sílaba é uma unidade de som — 'árvore' tem exactamente 3 sílabas; não se pode dividir de outra forma
 **Assessment:** O aluno clica nos três blocos pela ordem correcta (ár → vo → re) e confirma que a palavra tem 3 sílabas
@@ -100,7 +108,7 @@
 
 ## Unit 6: Bloco 6 — Frase simples: ler e construir com 'árvore' (7 min)
 
-**Compreender:** O aluno lê a frase-modelo 'A árvore dá sombra.' e depois constrói a sua própria frase usando 'árvore', seleccionando palavras de um banco ou escrevendo livremente.
+**Compreender:** O aluno lê a frase-modelo 'A árvore dá sombra.' e depois constrói a sua própria frase usando 'árvore', selecionando palavras de um banco ou escrevendo livremente.
 
 **Constraint:** Uma frase precisa de ter pelo menos sujeito + predicado e deve incluir a palavra 'árvore'
 **Assessment:** O aluno constrói uma frase com pelo menos 3 palavras que inclui 'árvore' e faz sentido; lê-a em voz alta
@@ -115,7 +123,7 @@
 **Compreender:** Avaliação rápida e observável dos 4 critérios do M28P: reconhecimento, segmentação, reconstrução e uso em frase. Cada critério tem uma microtarefa clara.
 
 **Constraint:** Os 4 critérios são independentes — o aluno pode acertar em 3 e errar num; cada um avalia uma competência distinta
-**Assessment:** Critérios observáveis: (1) identifica 'árvore' entre 3 opções ✓; (2) ordena ár-vo-re correctamente ✓; (3) reconstrói 'árvore' arrastando sílabas ✓; (4) selecciona frase gramaticalmente correcta ✓
+**Assessment:** Critérios observáveis: (1) identifica 'árvore' entre 3 opções ✓; (2) ordena ár-vo-re correctamente ✓; (3) reconstrói 'árvore' arrastando sílabas ✓; (4) seleciona frase gramaticalmente correcta ✓
 
 **Diferenciação:**
 - 🟢 Apoio: Critério 2 com sílabas já parcialmente ordenadas (falta só a última); critério 4 com imagem de apoio
@@ -124,7 +132,7 @@
 
 ## Unit 8: Bloco 8 — Extensão: a árvore no mundo real e no maker (9 min)
 
-**Compreender:** Actividade de extensão que liga a palavra 'árvore' ao ambiente natural e a um desafio criativo maker. O aluno pode desenhar, escrever ou construir, consoante o percurso.
+**Compreender:** Atividade de extensão que liga a palavra 'árvore' ao ambiente natural e a um desafio criativo maker. O aluno pode desenhar, escrever ou construir, consoante o percurso.
 
 **Constraint:** A extensão deve manter ligação à palavra 'árvore' — não é tempo livre, é expressão com intenção
 **Assessment:** O aluno produz algo (desenho, texto ou construção) que inclui 'árvore' de forma reconhecível e partilha com a turma
