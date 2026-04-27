@@ -49,13 +49,26 @@ Não usar para páginas HTML estáticas simples sem fluxo pedagógico/interativo
 
 O orquestrador não deve “fazer tudo sozinho”. Cada fase usa uma identidade/prompt próprio e, quando possível, um subagente diferente:
 
-| Fase | Subagente Codex recomendado | Identidade | Output |
-|---|---|---|---|
-| Architect | `architect` | `identities/architect.md` | `<slug>-docspec.json` |
-| Designer | `designer` | `identities/designer.md` | `<slug>-design-spec.json` |
-| Builder | `executor` | `identities/builder.md` | `<slug>.html` |
-| Proofreader | `writer` | `identities/proofreader.md` | `<slug>-proofread-vN.json` |
-| Evaluator | `verifier` (ou `vision` se houver screenshots) | `identities/evaluator.md` | `<slug>-evaluation-vN.json` / repair ticket |
+### Política de esforço/modelo
+
+Não gastar sempre `gpt-5.5` com reasoning `high`. A skill privilegia **qualidade por artefactos + QA**, não esforço máximo em todas as fases.
+
+Regra prática:
+
+- **Página padrão** (1 aula, tema conhecido, sem risco elevado): usar subagentes `default` com `reasoning_effort: medium` para Architect, Designer, Proofreader e Evaluator; Builder pode usar `executor` (`medium`).
+- **Página simples/variante repetível** (M28P, página de treino, adaptação curta): usar `reasoning_effort: low|medium` e manter fases sequenciais por artefactos; escalar só se o QA falhar.
+- **Página sensível/complexa** (religião/cultura, segurança, acessibilidade difícil, maker complexo, muitas disciplinas, falha repetida de QA): começar em `medium` e escalar apenas a fase problemática para `high`.
+- **Browser/QA visual**: usar `vision`/`verifier` só quando houver screenshots ou problemas visuais reais; caso contrário, `default medium` com evidência de browser é suficiente.
+
+Nota: alguns papéis nativos têm esforço fixo pelo runtime Codex. Se for preciso controlar o esforço, preferir subagente `default` com a identidade da fase no prompt e `reasoning_effort` explícito, em vez de escolher automaticamente um papel fixo `high`.
+
+| Fase | Subagente recomendado por defeito | Escalar quando | Identidade | Output |
+|---|---|---|---|---|
+| Architect | `default` + `reasoning_effort: medium` | tema curricular ambíguo, sensível ou multiárea | `identities/architect.md` | `<slug>-docspec.json` |
+| Designer | `default` + `reasoning_effort: medium` | sistema visual novo, visual QA difícil ou iterações falhadas | `identities/designer.md` | `<slug>-design-spec.json` |
+| Builder | `executor` (`medium`) ou `default medium` | JS complexo/canvas/simulações com bugs | `identities/builder.md` | `<slug>.html` |
+| Proofreader | `default` + `reasoning_effort: low|medium` | texto sensível, jurídico/religioso/cultural ou muitas variantes | `identities/proofreader.md` | `<slug>-proofread-vN.json` |
+| Evaluator | `default` + `reasoning_effort: medium` | QA reprova, há screenshots, layout complexo ou acessibilidade duvidosa | `identities/evaluator.md` | `<slug>-evaluation-vN.json` / repair ticket |
 
 Se subagentes não estiverem disponíveis, manter a separação por artefactos e prompts: executar as fases sequencialmente, sem misturar responsabilidades.
 
@@ -93,11 +106,11 @@ Manifest mínimo:
   "max_iterations": 3,
   "current_iteration": 0,
   "agents": {
-    "architect": "codex architect",
-    "designer": "codex designer",
-    "builder": "codex executor",
-    "proofreader": "codex writer",
-    "evaluator": "codex verifier"
+    "architect": "codex default medium + identities/architect.md",
+    "designer": "codex default medium + identities/designer.md",
+    "builder": "codex executor medium + identities/builder.md",
+    "proofreader": "codex default low|medium + identities/proofreader.md",
+    "evaluator": "codex default medium + identities/evaluator.md"
   },
   "status": "planning|architect|designer|builder|proofreader|evaluator|repair|done|blocked",
   "artifacts": {}
