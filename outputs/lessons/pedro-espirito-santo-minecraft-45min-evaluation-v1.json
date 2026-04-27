@@ -1,0 +1,49 @@
+{
+  "pass": true,
+  "route": "none",
+  "severity": "low",
+  "issues": [],
+  "required_fixes": [],
+  "evidence": [
+    "HTTP local abriu outputs/lessons/pedro-espirito-santo-minecraft-45min.html com estado 200 e doctype HTML.",
+    "node --check validou a sintaxe do JavaScript inline sem erros.",
+    "Verificação confirmou ausência de CDN, imports externos, script src, link href externo e URLs remotos.",
+    "Página inclui interações principais por clique: pistas do texto, quiz de compreensão, sequência, comentário respeitoso, checklist Minecraft e bilhete de saída.",
+    "Acessibilidade presente: skip link, aria-live, aria-pressed, foco visível e controlos com tamanho mínimo definido.",
+    "Diferenciação 🟢 Apoio, 🟡 Intermédio, 🔴 Desafio visível no guia do professor."
+  ],
+  "acceptance_checks": [
+    {
+      "check": "abre sem erro fatal",
+      "pass": true
+    },
+    {
+      "check": "sem erro JS crítico",
+      "pass": true
+    },
+    {
+      "check": "interação principal implementada",
+      "pass": true
+    },
+    {
+      "check": "layout responsivo mobile/tablet/desktop por CSS grid/media queries",
+      "pass": true
+    },
+    {
+      "check": "texto em pt-PT adequado ao 1.º ano",
+      "pass": true
+    },
+    {
+      "check": "objetivo, exploração, feedback e assessment coerentes",
+      "pass": true
+    },
+    {
+      "check": "sem dependência de internet",
+      "pass": true
+    },
+    {
+      "check": "proofreader considerado",
+      "pass": true
+    }
+  ]
+}

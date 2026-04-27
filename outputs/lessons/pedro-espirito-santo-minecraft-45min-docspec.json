@@ -1,0 +1,224 @@
+{
+  "topic": "Texto melhorado: O Pedro recebeu o Espírito Santo — leitura, compreensão e reconstrução no Minecraft Education",
+  "ageRange": "6-7 anos (1.º ano)",
+  "duration": 45,
+  "sourceText": "O Pedro recebeu o Espírito Santo. No domingo à tarde, o Pedro gostou de receber o Espírito Santo na sua casa. Na visita do Espírito Santo vieram seis pessoas. Havia duas saloias, que cantaram e benzeram a casa com água benta. O Senhor Pe. Vítor também esteve na sua casa e fez uma oração.",
+  "objectives": [
+    "Identificar no texto informação essencial: quem, quando, onde, quantas pessoas e o que aconteceu.",
+    "Reconhecer que um texto melhorado fica mais claro quando junta frases completas, nomes próprios, tempos e detalhes verificáveis.",
+    "Recontar oralmente o acontecimento respeitando a sequência do texto do colega.",
+    "Planear em grupo uma representação no Minecraft Education que comunique as ideias principais do texto."
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Oralidade",
+        "descriptor": "Saber escutar para interagir, responder a questões, exprimir opinião, pedir a palavra e falar de forma clara e audível.",
+        "source": "~/.openclaw/workspace/vault/documentos-oficiais/aprendizagens-essenciais/portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura/Escrita",
+        "descriptor": "Desenvolver a compreensão de textos, escrever pequenos textos, rever e melhorar texto próprio ou de colega com apoio.",
+        "source": "~/.openclaw/workspace/vault/documentos-oficiais/aprendizagens-essenciais/portugues-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Estudo do Meio",
+        "year": "1.º ano",
+        "domain": "Sociedade / Tecnologia",
+        "descriptor": "Valorizar situações do dia a dia e do contexto local; comunicar ideias por diferentes linguagens e usar TIC na apresentação de trabalhos.",
+        "source": "~/.openclaw/workspace/vault/documentos-oficiais/aprendizagens-essenciais/estudo-do-meio-1-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-B: Informação e comunicação",
+      "PA-D: Pensamento crítico e pensamento criativo",
+      "PA-E: Relacionamento interpessoal",
+      "PA-F: Desenvolvimento pessoal e autonomia",
+      "PA-H: Sensibilidade estética e artística",
+      "PA-I: Saber científico, técnico e tecnológico"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "Trabalho curricular comparticipado",
+      "Projecto cooperativo",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "Mapa de missões do grupo",
+      "Bilhete de saída: uma coisa que o texto diz e uma coisa que o grupo vai construir",
+      "Galeria/visita guiada Minecraft"
+    ],
+    "socialOrganization": "Turma lê e relembra o texto; pares resolvem as missões digitais; grupos de 3-4 planeiam e constroem uma cena no Minecraft; cada grupo comunica a sua escolha à turma."
+  },
+  "materials": [
+    "Computador/tablet com a página PageCraft",
+    "Quadro interactivo ou projector",
+    "Minecraft Education com mundo plano preparado",
+    "Cartão de funções: leitor, construtor, guardião do texto, porta-voz",
+    "Auscultadores opcionais"
+  ],
+  "sessionFlow": "5 min acolhimento e leitura do texto; 10 min detetives do texto; 8 min sequência e clareza; 17 min planeamento/construção Minecraft; 5 min comunicação e bilhete de saída.",
+  "units": [
+    {
+      "summary": "Ler o texto melhorado como memória de turma.",
+      "duration": 5,
+      "textDescription": "O texto do colega é apresentado como produção valorizada e melhorada pela turma, mantendo respeito pela experiência familiar/religiosa.",
+      "interaction": {
+        "state": [
+          {
+            "name": "leitura_guiada",
+            "type": "toggle",
+            "options": [
+              "Escutar",
+              "Ler em eco"
+            ],
+            "default": "Escutar"
+          }
+        ],
+        "render": "Cartão grande com o texto, palavras-chave destacáveis e modo eco para leitura em grupo.",
+        "transition": "Seleccionar palavras-chave ou modo de leitura muda o destaque visual.",
+        "constraint": "Um texto fica mais fácil de compreender quando sabemos de quem fala, quando aconteceu e onde aconteceu.",
+        "assessment": "A criança aponta pelo menos uma palavra-chave do texto e diz o que ela ajuda a saber."
+      },
+      "differentiation": {
+        "support": "Adulto lê em voz alta e a criança escolhe entre dois cartões visuais.",
+        "core": "Criança acompanha a leitura e identifica uma informação no texto.",
+        "challenge": "Criança explica por que razão essa informação ajuda o leitor."
+      }
+    },
+    {
+      "summary": "Encontrar informação essencial no texto.",
+      "duration": 10,
+      "textDescription": "As crianças fazem correspondência entre perguntas simples e excertos do texto.",
+      "interaction": {
+        "state": [
+          {
+            "name": "pares_pergunta_resposta",
+            "type": "matching",
+            "options": [
+              "Quem?",
+              "Quando?",
+              "Onde?",
+              "Quantas pessoas?",
+              "O que fizeram?"
+            ]
+          }
+        ],
+        "render": "Cartões pergunta/resposta com feedback visual; alternativa por clique sem arrastar.",
+        "transition": "Clicar numa pergunta e depois num cartão de resposta cria um par; o sistema confirma e conta pistas.",
+        "constraint": "Cada pergunta importante tem uma pista no texto; não precisamos inventar para responder.",
+        "assessment": "A criança forma 4 pares correctos e justifica oralmente um deles."
+      },
+      "differentiation": {
+        "support": "Três pares com pictogramas e leitura pelo adulto.",
+        "core": "Cinco pares com excertos curtos.",
+        "challenge": "Criar uma pergunta nova que também tenha resposta no texto."
+      }
+    },
+    {
+      "summary": "Recontar respeitando a sequência.",
+      "duration": 8,
+      "textDescription": "Ordenar acontecimentos ajuda a recontar com clareza.",
+      "interaction": {
+        "state": [
+          {
+            "name": "ordem_acontecimentos",
+            "type": "sorting",
+            "options": [
+              "Domingo à tarde",
+              "Recebeu o Espírito Santo em casa",
+              "Vieram seis pessoas",
+              "Duas saloias cantaram e benzeram a casa",
+              "O Senhor Pe. Vítor fez uma oração"
+            ]
+          }
+        ],
+        "render": "Linha do tempo simples com cartões grandes e numeração automática.",
+        "transition": "Mover/clicar cartões para a linha do tempo; confirmar revela feedback e frase de recontagem.",
+        "constraint": "O recontar fica claro quando mantém a ordem das ideias do texto.",
+        "assessment": "A criança ordena pelo menos 4 acontecimentos e reconta em frase oral."
+      },
+      "differentiation": {
+        "support": "Usar só 3 cartões principais.",
+        "core": "Usar 5 cartões.",
+        "challenge": "Acrescentar uma frase de ligação: depois, também, no fim."
+      }
+    },
+    {
+      "summary": "Transformar a compreensão em plano Minecraft.",
+      "duration": 17,
+      "textDescription": "O Minecraft é usado para comunicar o texto, não para brincar sem objectivo: cada construção deve representar uma pista textual.",
+      "interaction": {
+        "state": [
+          {
+            "name": "plano_minecraft",
+            "type": "quiz",
+            "options": [
+              "Casa do Pedro",
+              "6 visitantes",
+              "2 saloias",
+              "Espaço de oração",
+              "Legenda/placa"
+            ]
+          }
+        ],
+        "render": "Checklist cooperativa com contador de evidências: texto → bloco/elemento → legenda.",
+        "transition": "Clicar em cada evidência activa uma missão e desbloqueia uma frase de orientação para construir no Minecraft.",
+        "constraint": "Uma boa construção comunica o texto quando cada elemento tem uma razão ligada a uma frase.",
+        "assessment": "Grupo apresenta 3 elementos do mundo Minecraft e aponta a frase do texto que lhes deu origem."
+      },
+      "maker": {
+        "type": "minecraft",
+        "challenge": "Em grupos de 3-4, construir uma pequena cena respeitosa da visita do Espírito Santo à casa do Pedro: casa, seis visitantes, duas saloias, zona de oração e pelo menos três placas com palavras do texto.",
+        "materials": [
+          "Minecraft Education",
+          "mundo plano preparado",
+          "contas da escola",
+          "cartão de funções do grupo"
+        ],
+        "groupSize": "3-4",
+        "connection": "A checklist da página transforma pistas do texto em elementos de construção; cada grupo só constrói elementos que consegue justificar com o texto.",
+        "mem_module": "Projecto cooperativo + circuitos de comunicação",
+        "communication": "Screenshot ou visita guiada: cada grupo diz “Construímos ___ porque no texto diz ___”."
+      },
+      "differentiation": {
+        "support": "Modelo de casa já iniciado; grupo escolhe e coloca placas/pessoas.",
+        "core": "Construir a cena com 5 evidências obrigatórias.",
+        "challenge": "Adicionar percurso de visita com setas e uma placa de boas-vindas escrita pelo grupo."
+      }
+    },
+    {
+      "summary": "Comunicar e verificar aprendizagem.",
+      "duration": 5,
+      "textDescription": "A turma fecha com observação formativa e compromisso de melhoria.",
+      "interaction": {
+        "state": [
+          {
+            "name": "bilhete_saida",
+            "type": "quiz",
+            "options": [
+              "Sei uma pista do texto",
+              "Sei explicar uma construção",
+              "Preciso de ajuda numa parte"
+            ]
+          }
+        ],
+        "render": "Bilhete de saída digital com três botões e caixa curta para frase oral/escrita do professor.",
+        "transition": "Escolha regista estado; feedback sugere próximo passo.",
+        "constraint": "Aprendemos melhor quando conseguimos mostrar onde está a evidência no texto.",
+        "assessment": "Cada criança/grupo comunica uma evidência textual e um elemento construído."
+      },
+      "differentiation": {
+        "support": "Responder apontando ou escolhendo pictograma.",
+        "core": "Dizer uma frase completa.",
+        "challenge": "Sugerir uma melhoria respeitosa para o texto ou para a construção."
+      }
+    }
+  ]
+}
