@@ -1,0 +1,39 @@
+{
+  "palette": {
+    "bg": "#FFF8EA",
+    "surface": "#FFFFFF",
+    "primary": "#7C3AED",
+    "secondary": "#0F766E",
+    "accent": "#F59E0B",
+    "soft": "#EDE9FE",
+    "success": "#15803D",
+    "warning": "#B45309",
+    "text": "#1F2937"
+  },
+  "typography": {
+    "fontFamily": "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+    "baseSizePx": 20,
+    "headingSizePx": 34,
+    "lineHeight": 1.45
+  },
+  "layout": {
+    "maxWidthPx": 1120,
+    "structure": "Hero + texto original + 4 missões em cartões + painel Minecraft + bilhete de saída",
+    "responsive": "1 coluna em telemóvel/tablet pequeno; 2 colunas em desktop; botões 48px+."
+  },
+  "components": {
+    "textCard": "cartão creme com realces clicáveis para palavras-chave",
+    "matchingCards": "botões grandes com estados selecionado/correto/incorreto",
+    "timeline": "cartões clicáveis com setas e ordem actual",
+    "minecraftChecklist": "checklist por evidência textual, contador de progresso e guião de comunicação",
+    "teacherPanel": "painel colapsável para tempo, diferenciação e funções"
+  },
+  "accessibility": {
+    "skipLink": true,
+    "focus": "outline grosso violeta",
+    "dragAlternative": "todas as tarefas funcionam por clique, sem drag obrigatório",
+    "ariaLive": "feedback e progresso anunciados",
+    "contrast": "AA sobre fundos claros"
+  },
+  "tone": "caloroso, respeitoso e culturalmente sensível; sem caricaturar saloias nem ritual religioso"
+}
