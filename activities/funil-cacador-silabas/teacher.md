@@ -1,26 +1,25 @@
-# M28P · Palavra 21 — Funil · Caça às sílabas
+# M28P · Palavra 21 — Funil · Mapa sonoro
 
 **Ano:** 1.º ano (6-7 anos)  
-**Duração:** 35 minutos  
+**Duração:** 30 minutos  
 **Modalidade:** atividade digital PageCraft, self-contained
 
 ## Objetivos
 
-- Consolidar a palavra **Funil** no Método das 28 Palavras.
-- Ligar reconhecimento global, consciência silábica e leitura com sentido.
+- Consolidar a palavra **Funil** sem repetir a página principal.
+- Trabalhar uma microcompetência específica: som, sílaba, frase ou sentido.
 - Observar evidências de leitura/escrita sem avaliação punitiva.
 
 ## Sílabas trabalhadas
 
 `fu`, `nil`
 
-## Fluxo sugerido
+## Fluxo de 30 minutos
 
-1. Ler a palavra em coro e individualmente.
-2. Realizar a exploração digital em pares ou pequeno grupo.
-3. Pedir que uma criança explique a estratégia usada.
-4. Registar no caderno uma palavra/frase descoberta.
-5. Partilhar no circuito de comunicação da turma.
+1. **5 min — Ativação:** ler a palavra em coro e lembrar a página principal.
+2. **10 min — Missão digital:** resolver o desafio desta página.
+3. **10 min — Construção/ordenação:** confirmar a descoberta na interação principal.
+4. **5 min — Comunicação:** explicar a estratégia a pares ou à turma.
 
 ## Diferenciação
 
@@ -30,4 +29,4 @@
 
 ## Evidência observável
 
-A atividade está concluída quando a criança consegue explicar, por gesto ou fala, como descobriu a palavra/frase e realizar a interação principal sem erro crítico.
+A atividade está concluída quando a criança explica, por gesto ou fala, como descobriu a resposta e realiza a interação principal sem erro crítico.

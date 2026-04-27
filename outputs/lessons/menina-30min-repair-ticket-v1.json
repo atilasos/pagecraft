@@ -1,0 +1,37 @@
+{
+  "iteration": 1,
+  "from": "pagecraft-proofreader",
+  "route": "builder",
+  "severity": "medium",
+  "scope": "Aplicar correcções textuais e uma correcção estrutural mínima sem regredir intenção pedagógica.",
+  "fixes": [
+    {"id": 1, "type": "ortografia AO90", "where": "header strong (linha ~665)", "from": "Objectivos da aula", "to": "Objetivos da aula"},
+    {"id": 2, "type": "ortografia AO90", "where": ".diff-master aria-label (linha ~675)", "from": "Selector de diferenciação geral", "to": "Seletor de diferenciação geral"},
+    {"id": 3, "type": "ortografia AO90", "where": ".curricular li (linha ~1032)", "from": "respectivos", "to": "respetivos"},
+    {"id": 4, "type": "ortografia AO90", "where": ".curricular li (linha ~1035)", "from": "correctamente", "to": "corretamente"},
+    {"id": 5, "type": "pt-PT idiomático", "where": "JS setFb em u2 verify (linha ~1530)", "from": "Lembra o som: me-ni-na. Tenta outra vez.", "to": "Lembra-te do som: me-ni-na. Tenta outra vez."},
+    {"id": 6, "type": "consistência estrutural", "where": ".stars no topo da mini-avaliação", "fix": "Alinhar a barra de estrelas com 4 itens (não 3). Cria 4 elementos de estrela, ligados aos 4 assess-items por ordem (reconhecer, segmentar, recombinar, usar). aria-label de cada estrela: 'Progresso item N de 4'."},
+    {"id": 7, "type": "registo pedagógico", "where": ".assess-item[data-assess-id=recombinar] .assess-q (linha ~1006)", "from": "Formei a palavra \"mina\" e descobri uma pseudo-palavra.", "to": "Formei a palavra \"mina\" e descobri uma palavra inventada."},
+    {"id": 8, "type": "registo pedagógico", "where": "JS u3 feedback (linha ~1602)", "from": "(é pseudo-palavra)", "to": "(é uma palavra inventada)"},
+    {"id": 9, "type": "registo pedagógico", "where": "u4 feedback (linha ~1656)", "from": "Quase! Pensa: artigo + sujeito + verbo + ponto. Tenta outra vez.", "to": "Quase! Pensa na ordem: começa por \"A\", depois quem (menina), depois o que faz (se brinca, se sorri, se vê...) e termina com ponto."},
+    {"id": 10, "type": "clareza", "where": "u3 challenge hint (linha ~875)", "from": "Descobre 3 palavras reais em até 3 minutos. Inclui sílaba extra \"ma\".", "to": "Descobre 3 palavras reais em até 3 minutos. Há uma sílaba extra: \"ma\"."},
+    {"id": 11, "type": "alinhamento com DocSpec", "where": "u3 standard hint", "fix": "Acrescentar à instrução do nível 🟡 Intermédio: 'Tenta descobrir pelo menos a palavra mina com o teu par.'"},
+    {"id": 12, "type": "pt-PT idiomático", "where": "u1 hint challenge (linha ~727)", "from": "Diz em voz alta porque escolheste \"menina\" e não \"menino\".", "to": "Diz em voz alta porque é que escolheste \"menina\" e não \"menino\"."},
+    {"id": 13, "type": "alinhamento com DocSpec — diferenciação 🟢 apoio u1", "where": "u1 support hint", "fix": "Quando o nível ativo for 🟢 Apoio na Unit 1, ao entrar na unit reproduzir automaticamente uma vez a sequência sonora /menina/ (3 tons me-ni-na) e mostrar nota visível: '🔊 Estás a ouvir /menina/'. Manter botão 'Ouvir' para repetir."},
+    {"id": 14, "type": "acessibilidade", "where": ".stars (linha ~974)", "fix": "Cada estrela com aria-label coerente com o item correspondente, ex.: 'Reconhecer · por completar' / 'Reconhecer · concluído'. Atualizar live ao concluir cada item."}
+  ],
+  "do_not": [
+    "Não alterar a paleta nem os syllableColors.",
+    "Não alterar a estrutura SRTC-A das units.",
+    "Não introduzir CDN, fontes remotas, frameworks ou bibliotecas externas.",
+    "Não reduzir a mini-avaliação a 3 itens — alinhar visual a 4."
+  ],
+  "acceptance_checks": [
+    "Todas as 4 ocorrências AO90 corrigidas.",
+    "Mini-avaliação visual com 4 estrelas, sincronizadas com os 4 itens.",
+    "'pseudo-palavra' substituído por 'palavra inventada' em todos os locais.",
+    "Áudio /menina/ reproduzido automaticamente uma vez ao entrar em Unit 1 com 🟢 Apoio ativo.",
+    "Mensagem de erro da Unit 4 reescrita sem 'artigo'/'sujeito'/'verbo'.",
+    "Sem novos erros de consola; HTML continua self-contained."
+  ]
+}

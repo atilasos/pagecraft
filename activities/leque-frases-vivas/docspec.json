@@ -1,11 +1,11 @@
 {
-  "topic": "M28P · Palavra 7 — Leque · Frases vivas",
+  "topic": "M28P · Palavra 7 — Leque · O que acontece?",
   "ageRange": "6-7 anos (1.º ano)",
-  "duration": 35,
+  "duration": 30,
   "objectives": [
-    "Reconhecer 'Leque' em contexto de frase simples",
-    "Ordenar palavras para construir uma frase com sentido",
-    "Ler a frase a pares, respeitando a sequência oral"
+    "Ler 'Leque' em contexto de frase",
+    "Resolver uma missão de sentido sem repetir a página principal",
+    "Ordenar e ler uma frase curta a pares"
   ],
   "curriculum": {
     "ae": [
@@ -73,17 +73,18 @@
   ],
   "units": [
     {
-      "summary": "Completar uma frase com Leque",
-      "textDescription": "O aluno escolhe a palavra que torna a frase coerente com a imagem/contexto.",
-      "duration": 15,
+      "summary": "O que acontece?: missão de sentido",
+      "textDescription": "Lê a frase e descobre a ação.",
+      "duration": 10,
       "interaction": {
         "state": {
-          "targetWord": "Leque"
+          "sentence": "O leque faz vento devagar.",
+          "mission": "action"
         },
-        "render": "frase lacunar e opções de palavra",
-        "transition": "seleção dá feedback sem punição",
-        "constraint": "a palavra precisa de fazer sentido na frase",
-        "assessment": "o aluno completa a frase corretamente"
+        "render": "frase, imagem e escolhas",
+        "transition": "seleção correta dá feedback",
+        "constraint": "a palavra e a frase precisam de combinar para fazer sentido",
+        "assessment": "o aluno resolve a missão de leitura"
       },
       "differentiation": {
         "support": "ler com adulto",
@@ -92,24 +93,49 @@
       }
     },
     {
-      "summary": "Ordenar frase viva",
-      "textDescription": "O aluno ordena os cartões para formar: O leque faz vento devagar.",
-      "duration": 20,
+      "summary": "Frase baralhada",
+      "textDescription": "O aluno ordena os cartões da frase.",
+      "duration": 12,
       "interaction": {
         "state": {
-          "sentence": "O leque faz vento devagar."
+          "tokens": [
+            "O",
+            "leque",
+            "faz",
+            "vento",
+            "devagar"
+          ]
         },
-        "render": "cartões de palavras e tabuleiro de frase",
+        "render": "cartões de palavras e tabuleiro",
         "transition": "cada palavra correta entra na frase",
-        "constraint": "a frase tem uma ordem que permite leitura com sentido",
+        "constraint": "a ordem das palavras permite leitura com sentido",
         "assessment": "o aluno ordena e lê a frase"
       },
       "differentiation": {
         "support": "modelo oral",
         "standard": "ordenação autónoma",
-        "challenge": "substituir uma palavra mantendo sentido"
+        "challenge": "trocar uma palavra mantendo sentido"
+      }
+    },
+    {
+      "summary": "Leitura a pares",
+      "textDescription": "O aluno lê e comunica a frase.",
+      "duration": 8,
+      "interaction": {
+        "state": {
+          "pairReading": true
+        },
+        "render": "instruções de comunicação",
+        "transition": "leitura em voz alta",
+        "constraint": "ler para outro exige frase estável",
+        "assessment": "o aluno lê a frase a pares"
+      },
+      "differentiation": {
+        "support": "eco do adulto",
+        "standard": "leitura a pares",
+        "challenge": "nova frase"
       }
     }
   ],
-  "sessionFlow": "Ativação oral breve → exploração digital autónoma/pares → leitura em voz alta → registo no caderno → comunicação curta à turma."
+  "sessionFlow": "5 min ativação oral → 10 min missão digital → 10 min construção/ordenação → 5 min comunicação e registo."
 }

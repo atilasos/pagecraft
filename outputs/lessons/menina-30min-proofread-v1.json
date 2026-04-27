@@ -1,0 +1,126 @@
+{
+  "pass": false,
+  "severity": "medium",
+  "issues": [
+    {
+      "type": "orthography",
+      "severity": "high",
+      "location": "header.hero .objectives strong (linha 665)",
+      "original": "Objectivos da aula",
+      "suggestion": "Objetivos da aula",
+      "reason": "Forma pré-AO90. No Acordo Ortográfico de 1990 o c mudo cai antes de t (objectivos -> objetivos)."
+    },
+    {
+      "type": "orthography",
+      "severity": "high",
+      "location": ".diff-master[role=region] aria-label (linha 675)",
+      "original": "Selector de diferenciação geral",
+      "suggestion": "Seletor de diferenciação geral",
+      "reason": "AO90: o c mudo cai antes de t (selector -> seletor). Texto exposto a leitores de ecrã."
+    },
+    {
+      "type": "orthography",
+      "severity": "high",
+      "location": ".curricular ul li (linha 1032)",
+      "original": "Pronunciar segmentos fónicos a partir dos respectivos grafemas e dígrafos, incluindo os casos que dependem de diferentes posições dos fonemas ou grafemas na palavra.",
+      "suggestion": "Pronunciar segmentos fónicos a partir dos respetivos grafemas e dígrafos, incluindo os casos que dependem de diferentes posições dos fonemas ou grafemas na palavra.",
+      "reason": "AO90: respectivos -> respetivos (queda do c mudo antes de t)."
+    },
+    {
+      "type": "orthography",
+      "severity": "high",
+      "location": ".curricular ul li (linha 1035)",
+      "original": "Escrever palavras e frases simples, respeitando as regras de correspondência fonema-grafema e utilizando correctamente as marcas do género e do número.",
+      "suggestion": "Escrever palavras e frases simples, respeitando as regras de correspondência fonema-grafema e utilizando corretamente as marcas do género e do número.",
+      "reason": "AO90: correctamente -> corretamente (queda do c mudo antes de t)."
+    },
+    {
+      "type": "ptpt-usage",
+      "severity": "medium",
+      "location": "JS setFb em u2 verify (linha 1530)",
+      "original": "Quase! Lembra o som: me-ni-na. Tenta outra vez.",
+      "suggestion": "Quase! Lembra-te do som: me-ni-na. Tenta outra vez.",
+      "reason": "Em pt-PT o verbo 'lembrar' usa-se com pronome reflexo e preposição 'de' (lembrar-se de). 'Lembra o som' é construção pt-BR."
+    },
+    {
+      "type": "consistency",
+      "severity": "high",
+      "location": ".mini-assess (linhas 981-1024) vs estrelas .stars (linhas 974-978) e DocSpec mini-avaliação",
+      "original": "4 itens de auto-avaliação (reconhecer, segmentar, recombinar, usar) com apenas 3 estrelas no topo; o DocSpec especifica 3 micro-tarefas.",
+      "suggestion": "Alinhar com o DocSpec: ou reduzir a 3 itens (reconhecer, segmentar, usar) ou acrescentar uma 4.ª estrela e atualizar a indicação 'Barra com 3 estrelas'.",
+      "reason": "Inconsistência estrutural entre HTML (4 itens) e DocSpec (3 micro-tarefas) confunde o aluno e impede a leitura clara do progresso."
+    },
+    {
+      "type": "pedagogical",
+      "severity": "medium",
+      "location": ".assess-item[data-assess-id=recombinar] .assess-q (linha 1006)",
+      "original": "Formei a palavra \"mina\" e descobri uma pseudo-palavra.",
+      "suggestion": "Formei a palavra \"mina\" e descobri uma palavra inventada.",
+      "reason": "'Pseudo-palavra' é metalinguagem de adultos; para 6-7 anos é mais claro 'palavra inventada' ou 'palavra que não existe', mantendo o conceito do DocSpec."
+    },
+    {
+      "type": "orthography",
+      "severity": "low",
+      "location": "JS u3 feedback (linha 1602) e hint adulta",
+      "original": "👍 Certo! \"' + word + '\" não é uma palavra real (é pseudo-palavra).",
+      "suggestion": "👍 Certo! \"' + word + '\" não é uma palavra real (é uma palavra inventada).",
+      "reason": "Coerência com a sugestão anterior e com o registo da faixa etária; 'pseudo-palavra' é demasiado técnico para o aluno."
+    },
+    {
+      "type": "pedagogical",
+      "severity": "medium",
+      "location": "u4 feedback (linha 1656)",
+      "original": "Quase! Pensa: artigo + sujeito + verbo + ponto. Tenta outra vez.",
+      "suggestion": "Quase! Pensa na ordem: começa por \"A\", depois quem (menina), depois o que faz (sorri) e termina em ponto. Tenta outra vez.",
+      "reason": "Os termos 'artigo' e 'sujeito' são metalinguagem que ainda não foi introduzida no 1.º ano de forma sistemática; convém parafrasear em linguagem concreta."
+    },
+    {
+      "type": "consistency",
+      "severity": "low",
+      "location": "u3 challenge hint (linha 875)",
+      "original": "Descobre 3 palavras reais em até 3 minutos. Inclui sílaba extra \"ma\".",
+      "suggestion": "Descobre 3 palavras reais em até 3 minutos. Há uma sílaba extra: \"ma\".",
+      "reason": "'Inclui sílaba extra' é elíptico; a reescrita é mais clara para 6-7 anos e mantém a informação."
+    },
+    {
+      "type": "consistency",
+      "severity": "low",
+      "location": "DocSpec vs HTML — Unit 3 differentiation 'standard'",
+      "original": "DocSpec: 'deve descobrir e classificar mina por iniciativa própria com o par'. HTML standard hint (linha 851): 'Experimenta combinações. Quando achas que é palavra real, carrega \"É palavra\".'",
+      "suggestion": "Acrescentar pista de objetivo: 'Tenta descobrir pelo menos a palavra mina com o teu par.'",
+      "reason": "A instrução actual não comunica o alvo mínimo (mina) previsto pelo DocSpec, podendo deixar o aluno sem foco."
+    },
+    {
+      "type": "ptpt-usage",
+      "severity": "low",
+      "location": "u1 hint challenge (linha 727)",
+      "original": "Diz em voz alta porque escolheste \"menina\" e não \"menino\".",
+      "suggestion": "Diz em voz alta porque é que escolheste \"menina\" e não \"menino\".",
+      "reason": "Em pt-PT oral é mais natural 'porque é que' nas interrogativas indiretas. Aceitável como está, mas mais próximo do registo falado da faixa etária com a sugestão."
+    },
+    {
+      "type": "consistency",
+      "severity": "low",
+      "location": "DocSpec Unit 1 differentiation 'support' (2 opções menina vs. boneca + áudio prévio) vs HTML linha 707-712",
+      "original": "Nível apoio com 2 cartões (menina, boneca) sem qualquer áudio automático antes da escolha nem seta a apontar para a palavra na frase.",
+      "suggestion": "Adicionar nota/affordance que reproduza automaticamente '/menina/' ao entrar no nível apoio, conforme DocSpec ('áudio de menina tocado antes da escolha').",
+      "reason": "DocSpec prevê apoio explícito por áudio prévio que não está implementado; afecta a diferenciação 🟢."
+    },
+    {
+      "type": "consistency",
+      "severity": "low",
+      "location": "Stars label (linha 974)",
+      "original": "<div class=\"stars mt-lg\" aria-label=\"Progresso da mini-avaliação\">",
+      "suggestion": "Manter o aria-label, mas garantir que cada estrela tem aria-label coerente com a tarefa (\"Reconhecer\", \"Segmentar\", \"Frase\") em vez de \"Tarefa 1/2/3\" genéricos.",
+      "reason": "Melhora orientação para o aluno e leitor de ecrã, alinhando com as 3 competências treinadas."
+    }
+  ],
+  "summary": "O HTML está globalmente correto e adequado a 6-7 anos, mas contém 4 ocorrências pré-AO90 (Objectivos, Selector, respectivos, correctamente) que devem ser atualizadas. Há uma inconsistência estrutural relevante entre as 3 estrelas de progresso e os 4 itens da mini-avaliação (DocSpec prevê 3). Identificam-se ainda 1 brasileirismo ('Lembra o som') e algumas opções de microcopy demasiado técnicas para a faixa etária ('pseudo-palavra', 'artigo + sujeito + verbo').",
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90: FAIL",
+    "Registo consistente: OK",
+    "Adequação à faixa etária: OK",
+    "Instruções claras e seguíveis: OK",
+    "Alinhamento com objectivos: FAIL"
+  ]
+}

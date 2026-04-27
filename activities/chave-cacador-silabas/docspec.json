@@ -1,11 +1,11 @@
 {
-  "topic": "M28P · Palavra 12 — Chave · Caça às sílabas",
+  "topic": "M28P · Palavra 12 — Chave · Sílaba final",
   "ageRange": "6 anos (1.º ano do 1.º CEB)",
-  "duration": 35,
+  "duration": 30,
   "objectives": [
-    "Segmentar a palavra 'Chave' em sílabas e reconstruí-la pela ordem correta",
-    "Associar som, gesto e bloco escrito numa sequência observável",
-    "Verbalizar a estratégia usada para descobrir a palavra"
+    "Investigar uma característica sonora específica da palavra 'Chave'",
+    "Reconstruir 'Chave' a partir das sílabas cha-ve",
+    "Verbalizar a estratégia usada sem receber a regra pronta"
   ],
   "curriculum": {
     "ae": [
@@ -58,48 +58,68 @@
   ],
   "units": [
     {
-      "summary": "Caça às sílabas de Chave",
-      "textDescription": "O aluno toca nas sílabas de Chave, escuta a sequência e reconstrói a palavra.",
-      "duration": 20,
+      "summary": "Sílaba final: investigação sonora",
+      "textDescription": "Descobre como a palavra acaba.",
+      "duration": 10,
       "interaction": {
         "state": {
           "syllables": [
             "cha",
             "ve"
-          ]
+          ],
+          "mission": "last"
         },
-        "render": "blocos silábicos coloridos e espaços de construção",
-        "transition": "tocar na sílaba certa preenche o próximo espaço",
-        "constraint": "a palavra só fica legível quando as sílabas estão na ordem sonora correta",
-        "assessment": "o aluno ordena as sílabas e identifica o número de partes"
+        "render": "palavra em destaque, sílabas coloridas e missão curta",
+        "transition": "a escolha certa ativa feedback formativo",
+        "constraint": "a palavra tem partes sonoras estáveis que podem ser identificadas",
+        "assessment": "o aluno resolve a missão sonora e justifica"
       },
       "differentiation": {
-        "support": "ler sílabas em voz alta com ajuda",
-        "standard": "ordenar autonomamente",
-        "challenge": "escrever a palavra sem modelo"
+        "support": "dizer a palavra com o adulto",
+        "standard": "resolver a missão autonomamente",
+        "challenge": "comparar com outra palavra M28P"
       }
     },
     {
-      "summary": "Contagem silábica com palmas",
-      "textDescription": "O aluno confirma quantas partes sonoras ouviu.",
-      "duration": 15,
+      "summary": "Construção da palavra",
+      "textDescription": "O aluno confirma a descoberta ordenando as sílabas.",
+      "duration": 12,
       "interaction": {
         "state": {
-          "count": 2
+          "target": "Chave"
         },
-        "render": "botões com números",
-        "transition": "seleção do número dá feedback",
-        "constraint": "cada palma corresponde a uma parte sonora",
-        "assessment": "o aluno escolhe a contagem correta e explica"
+        "render": "slots e blocos silábicos",
+        "transition": "cada sílaba correta ocupa o próximo espaço",
+        "constraint": "a ordem das sílabas muda a leitura",
+        "assessment": "o aluno constrói a palavra pela ordem correta"
       },
       "differentiation": {
-        "support": "palmas acompanhadas",
-        "standard": "contagem autónoma",
-        "challenge": "comparar com outra palavra M28P"
+        "support": "modelo oral",
+        "standard": "ordenação autónoma",
+        "challenge": "escrever sem modelo"
+      }
+    },
+    {
+      "summary": "Comunicação curta",
+      "textDescription": "O aluno explica a descoberta a pares.",
+      "duration": 8,
+      "interaction": {
+        "state": {
+          "share": true
+        },
+        "render": "nota para professor e evidência",
+        "transition": "oralização da estratégia",
+        "constraint": "explicar ajuda a estabilizar a descoberta",
+        "assessment": "o aluno verbaliza a estratégia"
+      },
+      "differentiation": {
+        "support": "frase-modelo",
+        "standard": "explicação livre",
+        "challenge": "novo exemplo"
       }
     }
   ],
-  "sessionFlow": "Ativação oral breve → exploração digital autónoma/pares → leitura em voz alta → registo no caderno → comunicação curta à turma.",
+  "sessionFlow": "5 min ativação oral → 10 min missão digital → 10 min construção/ordenação → 5 min comunicação e registo.",
   "m28pMetadata": {
     "wordOrder": 12,
     "word": "chave",

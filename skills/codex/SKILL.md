@@ -15,11 +15,10 @@ Ao invocar esta skill, o pedido do utilizador autoriza o uso de **Codex native s
 ## Fontes de verdade
 
 1. Pedido explícito do utilizador/professor, desde que não viole acessibilidade/segurança.
-2. Regras técnicas do repo: `CLAUDE.md`.
-3. Pedagogia canónica do vault: `~/.openclaw/workspace/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md`.
-4. Fontes oficiais no vault: `~/.openclaw/workspace/vault/documentos-oficiais/`.
-5. Recursos desta skill: `identities/`, `references/`, `assets/`, `scripts/`.
-6. Skill OpenClaw original (`skills/openclaw/`) como referência histórica se houver dúvida.
+2. Pedagogia canónica do vault: `~/.openclaw/workspace/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md`.
+3. Fontes oficiais no vault: `~/.openclaw/workspace/vault/documentos-oficiais/`.
+4. Recursos desta skill: `identities/`, `references/`, `assets/`, `scripts/`.
+5. Skill OpenClaw original (`skills/openclaw/`) como referência histórica se houver dúvida.
 
 ## Quando usar
 

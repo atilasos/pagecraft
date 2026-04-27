@@ -1,0 +1,133 @@
+{
+  "palette": {
+    "bg": "#FFF8F0",
+    "surface": "#FFFFFF",
+    "primary": "#E05FA0",
+    "accent": "#F59E0B",
+    "text": "#1E1B18"
+  },
+  "syllableColors": {
+    "me": "#E05FA0",
+    "ni": "#7C3AED",
+    "na": "#059669",
+    "mi": "#2563EB",
+    "ma": "#0891B2"
+  },
+  "typography": {
+    "fontFamily": "'Nunito', 'Comic Sans MS', 'Chalkboard SE', sans-serif",
+    "scale": "kids",
+    "baseSizePx": 20,
+    "headingSizePx": 32,
+    "syllableSizePx": 40,
+    "syllableSizeRangePx": [36, 48],
+    "wordDisplaySizePx": 48,
+    "weights": [400, 700, 800],
+    "lineHeight": 1.4,
+    "letterSpacingHeading": "0.02em"
+  },
+  "layout": {
+    "borderRadius": 16,
+    "spacing": "comfortable",
+    "maxWidthPx": 960,
+    "padding": "1.5rem",
+    "cardGap": "1rem",
+    "sectionGap": "2rem",
+    "unitsLayout": "vertical-stacked-with-sticky-progress",
+    "progressBar": "topo: 4 marcadores (1-2-3-4) com tempo (4'/9'/9'/8'), unit activa pulsa em primary"
+  },
+  "components": {
+    "buttons": "pill, padding 0.75rem 2rem, font-weight 700, sombra leve rgba(0,0,0,0.08), hover escala 1.05 + sombra mais forte, active escala 0.97, min-height 48px, min-width 48px",
+    "buttonPrimary": "bg primary #E05FA0, texto branco, ícone opcional à esquerda",
+    "buttonSecondary": "bg surface, borda 2px primary, texto primary",
+    "buttonAccent": "bg accent #F59E0B, texto #1E1B18 (contraste AA)",
+    "cards": "surface, borda 2px solid primary, border-radius 16px, sombra rgba(0,0,0,0.08) 0 4px 12px, padding 1.25rem",
+    "wordCard": "card maior (min 140x100px), imagem opcional no topo, palavra centrada em 32px peso 800, hover escala 1.03, estado-correcto borda verde #22c55e 4px + glow, estado-incorrecto borda âmbar 4px",
+    "syllable_blocks": "cada sílaba num bloco colorido (ver syllableColors), font-size 40px (range 36-48), font-weight 800, padding 0.5rem 1.25rem, border-radius 12px, texto branco, sombra interna leve, draggable cursor grab, active cursor grabbing, escala 1.1 ao arrastar",
+    "syllable_target_slots": "caixas tracejadas 2px dashed primary 60% alpha, min 80x60px, fundo bg, snap suave ao soltar",
+    "badges": "pill, accent bg #F59E0B, texto #1E1B18, font-weight 700, padding 0.25rem 0.75rem, font-size 14px",
+    "feedback_correct": "bg #f0fdf4, borda #22c55e 2px, ícone ✓ verde 24px, mensagem em pt-PT (ex: 'Boa! É mesmo a menina!'), animação pulse 0.3s",
+    "feedback_incorrect": "bg #fffbeb, borda #F59E0B 2px, ícone ✗ âmbar 24px, mensagem encorajadora pt-PT (ex: 'Quase! Tenta outra vez.'), shake leve 0.2s",
+    "word_display": "palavra em minúsculas (alfabetização inicial), font-size 48px, font-weight 800, color primary #E05FA0, letter-spacing 0.05em, sílabas separadas visualmente quando segmentadas",
+    "audioButton": "circulo 56px, bg accent, ícone alto-falante branco 28px, hover bounce, aria-label 'Ouvir'",
+    "starsBar": "3 estrelas SVG 32px, vazias cinza claro, preenchidas verde #22c55e (correcto) ou âmbar #F59E0B (parcial), animação fill 0.4s",
+    "imageFrame": "border-radius 20px, overflow hidden, sombra suave, fundo #FFF8F0 com padding 0.5rem",
+    "phraseLine": "linha pontilhada baseline, 4 slots tipo 'caderno', cada slot min-width 80px, palavra arrastada acomoda-se centrada"
+  },
+  "differentiationIndicators": {
+    "support": {
+      "emoji": "🟢",
+      "label": "Com ajuda",
+      "color": "#22c55e",
+      "bgTint": "#f0fdf4"
+    },
+    "standard": {
+      "emoji": "🟡",
+      "label": "Objetivo",
+      "color": "#F59E0B",
+      "bgTint": "#fffbeb"
+    },
+    "challenge": {
+      "emoji": "🔴",
+      "label": "Desafio",
+      "color": "#ef4444",
+      "bgTint": "#fef2f2"
+    }
+  },
+  "unitVisuals": {
+    "unit1": {
+      "title": "1. A menina sorri",
+      "icon": "👧",
+      "primaryAction": "escolher cartão-palavra",
+      "highlightWord": "menina destacada com sílabas coloridas dentro da micro-frase",
+      "layoutHint": "ilustração à esquerda (40%), micro-frase + 3 cartões à direita (60%)"
+    },
+    "unit2": {
+      "title": "2. Bater palmas e ordenar",
+      "icon": "👏",
+      "primaryAction": "palmas → ordenar blocos coloridos",
+      "highlightWord": "menina grande no topo, cada sílaba acende com a sua cor",
+      "layoutHint": "modo palmas em topo full-width; modo ordenar com 3 slots horizontais centrais e bancada de blocos por baixo"
+    },
+    "unit3": {
+      "title": "3. Inventar palavras novas",
+      "icon": "🧩",
+      "primaryAction": "arrastar sílabas e classificar",
+      "highlightWord": "palavra formada em tempo real (40px), lida em áudio ao soltar",
+      "layoutHint": "bancada de sílabas no topo (4-5 blocos), zona de construção 2-3 slots ao centro, lista 'já descobri:' à direita"
+    },
+    "unit4": {
+      "title": "4. A frase e as 3 estrelas",
+      "icon": "⭐",
+      "primaryAction": "ordenar palavras → mini-avaliação",
+      "highlightWord": "menina como cartão-palavra colorido entre A / sorri / .",
+      "layoutHint": "fase 1: linha de frase + 4 cartões baralhados; fase 2: card central por micro-tarefa + barra de estrelas no topo"
+    }
+  },
+  "motion": {
+    "transitions": "subtle",
+    "durationMs": 200,
+    "easing": "cubic-bezier(0.4, 0, 0.2, 1)",
+    "dragFeedback": "escala 1.1 + sombra mais forte durante drag, snap suave 150ms ao soltar",
+    "correctFeedback": "pulse verde 0.3s + confetti leve 6 partículas",
+    "incorrectFeedback": "shake horizontal 4px 0.2s + flash âmbar borda",
+    "syllableHighlight": "fade-in cor + escala 1.05 0.25s, áudio sincronizado",
+    "starFill": "scale 0 → 1 com bounce 0.4s",
+    "respectsReducedMotion": true
+  },
+  "accessibility": {
+    "contrast": "WCAG-AA",
+    "contrastNotes": "primary #E05FA0 sobre branco = 3.4:1 (uso só em texto ≥18px peso 700, ou em blocos com texto branco onde contrasto é 4.6:1); accent #F59E0B sobre branco para áreas grandes apenas; texto corpo sempre #1E1B18 sobre #FFF8F0 = 14.2:1",
+    "focusRing": true,
+    "focusStyle": "outline 3px solid #E05FA0, outline-offset 2px, border-radius mantido",
+    "minTouchTarget": "48px",
+    "ariaLabels": true,
+    "audioFirst": "todas as palavras e sílabas têm botão/auto-áudio em pt-PT",
+    "keyboardSupport": "tab navega cartões e sílabas; espaço/enter activa; setas movem dentro de slots; tecla R limpa zona",
+    "screenReaderHints": "anunciar 'Sílaba me, rosa' ao focar bloco; anunciar progresso 'Tarefa 2 de 3' na avaliação"
+  },
+  "iconography": {
+    "style": "emoji nativos do sistema (sem CDN), tamanho 32-48px, complementam mas não substituem texto",
+    "set": ["👧", "👏", "🧩", "⭐", "🔊", "✓", "✗", "🟢", "🟡", "🔴"]
+  },
+  "notes": "Design para 'menina-30min' (M28P #1, sessão 30 min, 1.º ano). Reutiliza paleta e syllableColors da página 'menina' do catálogo para coerência visual com a palavra-âncora. fontUrl REMOVIDO — só fontes locais/sistema com fallback Comic Sans MS / Chalkboard SE; o Builder não deve injectar Google Fonts. Adicionadas 'mi' (azul #2563EB) e 'ma' (turquesa #0891B2) para a Unit 3 (recombinação) — ambas mantêm contraste AA com texto branco. wordDisplay em minúsculas porque o aluno do 1.º ano lê primeiro minúsculas (M28P). Indicadores 🟢/🟡/🔴 cobrem differentiation support/standard/challenge da DocSpec. unitVisuals dá pistas concretas de layout para o Builder cobrir as 4 units (4'/9'/9'/8'). Touch targets 48px e focus ring 3px primary garantidos. Motion respeita prefers-reduced-motion."
+}

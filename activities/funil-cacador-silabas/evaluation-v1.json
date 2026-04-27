@@ -13,22 +13,19 @@
   "issues": [],
   "required_fixes": [],
   "evidence": [
-    "HTML self-contained com CSS/JS inline e lang=\"pt-PT\".",
-    "Design-spec das variantes sem fontUrl/URLs remotos; fontes apenas locais/fallback.",
-    "Controlos interativos com variável --touch:48px e botões com min-width/min-height.",
-    "Skip link, focus-visible, aria-live/status e fluxo por clique/teclado presentes.",
-    "Palavras longas com overflow-wrap e fonte responsiva para evitar extravasar no cartão.",
-    "Catálogo contém 28 palavras base e 56 variantes; links HTTP validados.",
-    "Amostras renderizadas por Playwright screenshot via HTTP."
+    "Página definida para 30 minutos em meta/docspec/teacher.",
+    "Atividade evita repetir a página principal ao focar uma microcompetência específica.",
+    "HTML self-contained com CSS/JS inline e lang=pt-PT.",
+    "Design-spec sem URLs remotos/fontUrl.",
+    "Touch target 48px, skip link, foco visível e aria-live/status presentes."
   ],
   "acceptance_checks": [
-    "abre sem erro fatal: verificado por amostragem browser e HTTP link check",
-    "interação principal: verificada por inspeção estrutural em todas e visualmente por amostragem",
-    "layout tablet/desktop: verificado visualmente por amostragem",
-    "nível intermédio presente: OK",
-    "regra/constraint descoberta pela interação: OK",
-    "sem dependência de internet: OK"
+    "funcionalidade principal presente",
+    "diferenciação 🟢🟡🔴 presente",
+    "sem dependência de internet",
+    "sem termos ingleses visíveis de avaliação",
+    "pronta para validação no catálogo"
   ],
   "evaluatedAt": "2026-04-27T00:00:00Z",
-  "method": "quality pass: static all-pages QA + HTTP validation + Playwright screenshot sampling"
+  "method": "sequential word-by-word evaluation plus static QA"
 }

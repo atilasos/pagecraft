@@ -1,0 +1,38 @@
+{
+  "slug": "menina-30min",
+  "topic": "Método das 28 Palavras — Palavra 1: Menina (sessão de 30 min)",
+  "year": "1.º ano (6-7 anos)",
+  "duration": 30,
+  "maker": "none",
+  "max_iterations": 3,
+  "current_iteration": 1,
+  "agents": {
+    "architect": "pagecraft-architect (via general-purpose + identity injection)",
+    "designer": "pagecraft-designer (via general-purpose + identity injection)",
+    "builder": "pagecraft-builder (via general-purpose + identity injection)",
+    "proofreader": "pagecraft-proofreader (via general-purpose + identity injection)",
+    "evaluator": "pagecraft-evaluator (orchestrator-driven QA + general-purpose for verdict)"
+  },
+  "status": "done",
+  "verdict": {
+    "pass": true,
+    "route": "none",
+    "severity": "low",
+    "scores": {"factual_accuracy": 5, "constraint_alignment": 5, "differentiation_quality": 5, "ux_accessibility": 4, "visual_design": 4, "technical_quality": 5},
+    "critical_count": 0,
+    "issues_count": 0,
+    "suggestions_count": 2
+  },
+  "artifacts": {
+    "docspec": "outputs/lessons/menina-30min-docspec.json",
+    "design_spec": "outputs/lessons/menina-30min-design-spec.json",
+    "builder_prompt": "outputs/lessons/menina-30min-builder-prompt.md",
+    "html": "outputs/lessons/menina-30min.html",
+    "teacher_md": "outputs/lessons/menina-30min.md",
+    "proofread_v1": "outputs/lessons/menina-30min-proofread-v1.json",
+    "repair_ticket_v1": "outputs/lessons/menina-30min-repair-ticket-v1.json",
+    "evaluation_evidence": "outputs/lessons/menina-30min-evaluation-evidence.md",
+    "evaluation_v1": "outputs/lessons/menina-30min-evaluation-v1.json"
+  },
+  "notes": "Página standalone de 30 min para a palavra 'menina'. Reutiliza syllableColors (me=#E05FA0, ni=#7C3AED, na=#059669) da palavra 'menina' já no catálogo. Não interfere com activities/menina*. Subagentes Claude Code (skills/claude/agents/pagecraft-*) instalados em .claude/agents/, mas só ficam invocáveis em nova sessão; nesta sessão usou-se fallback general-purpose com identidade injectada — fluxo idêntico, separação de responsabilidades preservada."
+}

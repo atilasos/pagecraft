@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menina · 30 min · Método das 28 Palavras</title>
+  <style>
+    :root {
+      --bg: #FFF8F0;
+      --surface: #FFFFFF;
+      --primary: #E05FA0;
+      --primary-dark: #9F2868;
+      --accent: #F59E0B;
+      --text: #1E1B18;
+      --ok: #22C55E;
+      --warn: #F59E0B;
+      --bad: #EF4444;
+      --support: #22C55E;
+      --standard: #F59E0B;
+      --challenge: #EF4444;
+      --syll-me: #E05FA0;
+      --syll-ni: #7C3AED;
+      --syll-na: #059669;
+      --syll-mi: #2563EB;
+      --syll-ma: #0891B2;
+      --radius: 16px;
+      --shadow: 0 6px 16px rgba(0,0,0,0.08);
+      --shadow-lg: 0 10px 28px rgba(0,0,0,0.14);
+      --touch: 48px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: 'Nunito', 'Comic Sans MS', 'Chalkboard SE', system-ui, sans-serif;
+      background: radial-gradient(circle at top right, #FFE3F2, var(--bg) 40%);
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1.45;
+      min-height: 100vh;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      background: var(--primary);
+      color: #fff;
+      padding: 0.6rem 1rem;
+      border-radius: 0 0 var(--radius) 0;
+      font-weight: 800;
+      z-index: 9999;
+    }
+    .skip-link:focus { left: 0; }
+
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 1.2rem;
+    }
+
+    h1, h2, h3, h4 { margin: 0.2rem 0 0.7rem; line-height: 1.2; letter-spacing: 0.02em; }
+    h1 { font-size: clamp(1.8rem, 3.6vw, 2.4rem); font-weight: 800; }
+    h2 { font-size: clamp(1.4rem, 2.8vw, 1.85rem); color: var(--primary-dark); font-weight: 800; }
+    h3 { font-size: clamp(1.1rem, 2.2vw, 1.35rem); font-weight: 700; }
+
+    p { margin: 0.4rem 0 0.7rem; }
+
+    /* Header */
+    header.hero {
+      background: linear-gradient(135deg, var(--primary) 0%, #C026D3 50%, var(--accent) 100%);
+      color: #fff;
+      border-radius: 22px;
+      padding: 1.4rem 1.4rem 1.6rem;
+      margin-bottom: 1.2rem;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+    header.hero::before {
+      content: '';
+      position: absolute;
+      right: -40px; top: -40px;
+      width: 220px; height: 220px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    header.hero::after {
+      content: '';
+      position: absolute;
+      left: -30px; bottom: -50px;
+      width: 160px; height: 160px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero h1 { color: #fff; }
+    .hero .tagline { font-size: 1.05rem; opacity: 0.95; }
+    .meta {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin: 0.7rem 0 0.9rem;
+      position: relative;
+      z-index: 1;
+    }
+    .badge {
+      background: rgba(255,255,255,0.22);
+      border: 1px solid rgba(255,255,255,0.6);
+      border-radius: 999px;
+      padding: 0.32rem 0.85rem;
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+    .objectives {
+      background: rgba(255,255,255,0.16);
+      border-radius: 12px;
+      padding: 0.85rem 1rem 0.85rem 2rem;
+      margin-top: 0.6rem;
+      position: relative;
+      z-index: 1;
+    }
+    .objectives strong { display: block; margin-bottom: 0.35rem; font-size: 1.05rem; }
+    .objectives li { margin-bottom: 0.25rem; font-size: 0.96rem; }
+
+    /* Diff selector */
+    .diff-master {
+      background: var(--surface);
+      border: 2px solid var(--primary);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 0.9rem 1rem;
+      margin-bottom: 1.2rem;
+      position: sticky;
+      top: 0.5rem;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+    .diff-master .lbl { font-weight: 800; color: var(--primary-dark); }
+    .diff-master .tabs { margin: 0; }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.7rem;
+    }
+    .tab {
+      border: 2px solid #C8C0BA;
+      background: #fff;
+      border-radius: 999px;
+      min-height: var(--touch);
+      min-width: var(--touch);
+      padding: 0.5rem 1rem;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+      font-family: inherit;
+      color: var(--text);
+    }
+    .tab:hover { transform: translateY(-1px); }
+    .tab.active[data-level="support"] { background: #ECFDF3; border-color: var(--support); color: #14532D; }
+    .tab.active[data-level="standard"] { background: #FFFBEB; border-color: var(--standard); color: #78350F; }
+    .tab.active[data-level="challenge"] { background: #FEF2F2; border-color: var(--challenge); color: #7F1D1D; }
+
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border: 2px solid var(--primary);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.1rem;
+      margin-bottom: 1.2rem;
+    }
+    .card h2 .icon { font-size: 1.4em; margin-right: 0.3rem; }
+    .card .duration {
+      background: #FFF1F8;
+      color: var(--primary-dark);
+      border: 1px solid #F8C8DC;
+      padding: 0.18rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-left: 0.35rem;
+      vertical-align: middle;
+    }
+
+    /* Level content */
+    .level { display: none; }
+    .level.active { display: block; animation: fadeIn 220ms ease; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Buttons */
+    .btn {
+      border: 2px solid var(--primary-dark);
+      background: var(--primary);
+      color: #fff;
+      min-height: var(--touch);
+      min-width: var(--touch);
+      padding: 0.6rem 1.1rem;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(224,95,160,0.25);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      touch-action: manipulation;
+      font-family: inherit;
+    }
+    .btn:hover { transform: scale(1.04); box-shadow: 0 8px 14px rgba(224,95,160,0.34); }
+    .btn:active { transform: scale(0.97); }
+    .btn.alt { background: #fff; color: var(--primary-dark); }
+    .btn.accent { background: var(--accent); color: var(--text); border-color: #B45309; box-shadow: 0 4px 10px rgba(245,158,11,0.28); }
+    .btn.ok { background: var(--ok); border-color: #14532D; box-shadow: 0 4px 10px rgba(34,197,94,0.28); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .audio-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      border: 2px solid #B45309;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(245,158,11,0.3);
+      transition: transform 0.18s ease;
+      touch-action: manipulation;
+    }
+    .audio-btn:hover { transform: scale(1.1); }
+    .audio-btn:active { transform: scale(0.95); }
+
+    /* Unit 1 — Apresentação */
+    .word-hero {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 1rem;
+      align-items: center;
+    }
+    @media (max-width: 720px) { .word-hero { grid-template-columns: 1fr; } }
+
+    .image-frame {
+      background: linear-gradient(180deg, #C2E7FF 0 50%, #B2F2BB 50%);
+      border-radius: 20px;
+      padding: 0.6rem;
+      min-height: 180px;
+      display: grid;
+      place-items: center;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    .image-frame .emoji {
+      font-size: clamp(4rem, 12vw, 7rem);
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.18));
+      line-height: 1;
+    }
+    .word-display {
+      font-size: clamp(2.4rem, 6vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      color: var(--primary);
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .word-display.lower { text-transform: none; }
+    .micro-phrase {
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
+      text-align: center;
+      margin: 0.4rem 0 0.7rem;
+    }
+    .story-word {
+      padding: 0.06rem 0.32rem;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .story-word.highlight { background: #FFE4F3; border-color: var(--primary); color: var(--primary-dark); }
+
+    .word-quiz {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin: 0.7rem 0;
+    }
+    .word-card {
+      border: 2px solid #B6AAA3;
+      background: #fff;
+      border-radius: 14px;
+      padding: 0.85rem 1.1rem;
+      min-height: 64px;
+      min-width: 130px;
+      font-weight: 800;
+      font-size: 1.15rem;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+      font-family: inherit;
+      color: var(--text);
+    }
+    .word-card:hover { transform: scale(1.04); border-color: var(--primary); }
+    .word-card.correct { border-color: var(--ok); border-width: 4px; background: #F0FDF4; transform: scale(1.06); box-shadow: 0 0 0 4px rgba(34,197,94,0.15); }
+    .word-card.wrong { border-color: var(--warn); border-width: 4px; background: #FFFBEB; animation: shake 0.2s ease; }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
+    }
+
+    /* Feedback */
+    .feedback {
+      margin-top: 0.5rem;
+      padding: 0.55rem 0.8rem;
+      border-radius: 12px;
+      font-weight: 700;
+      min-height: 2.4rem;
+    }
+    .feedback.ok { background: #F0FDF4; color: #166534; border: 2px solid var(--ok); animation: pulse 0.3s ease; }
+    .feedback.warn { background: #FFFBEB; color: #92400E; border: 2px solid var(--warn); }
+    @keyframes pulse {
+      0% { transform: scale(0.98); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+
+    /* Syllables */
+    .syll-word {
+      display: flex;
+      justify-content: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin: 0.6rem 0;
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+    .syll {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2.2ch;
+      padding: 0.18rem 0.55rem;
+      border-radius: 12px;
+      color: #fff;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+      transition: transform 0.25s ease, outline-color 0.25s ease;
+    }
+    .syll.me { background: var(--syll-me); }
+    .syll.ni { background: var(--syll-ni); }
+    .syll.na { background: var(--syll-na); }
+    .syll.mi { background: var(--syll-mi); }
+    .syll.ma { background: var(--syll-ma); }
+    .syll.flat { background: #6B7280; }
+    .syll.active { transform: scale(1.12); outline: 4px solid #FDE68A; }
+
+    /* Drag & drop */
+    .drag-area {
+      border: 2px dashed #A78BFA;
+      border-radius: 14px;
+      padding: 0.7rem;
+      margin: 0.6rem 0;
+      background: #FAF5FF;
+    }
+    .token-bank, .slot-row {
+      display: flex;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+      align-items: center;
+      min-height: 72px;
+      padding: 0.3rem;
+      justify-content: center;
+    }
+    .slot {
+      min-height: 64px;
+      min-width: 96px;
+      border: 2px dashed #9CA3AF;
+      border-radius: 12px;
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.25rem;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .slot.over { border-color: var(--ok); background: #ECFDF5; }
+    .slot.filled { border-style: solid; }
+
+    .token {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: #fff;
+      border-radius: 14px;
+      padding: 0.45rem 1rem;
+      min-width: 76px;
+      min-height: var(--touch);
+      border: 0;
+      touch-action: none;
+      cursor: grab;
+      user-select: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      font-family: inherit;
+      letter-spacing: 0.04em;
+    }
+    .token[data-syl="me"] { background: var(--syll-me); }
+    .token[data-syl="ni"] { background: var(--syll-ni); }
+    .token[data-syl="na"] { background: var(--syll-na); }
+    .token[data-syl="mi"] { background: var(--syll-mi); }
+    .token[data-syl="ma"] { background: var(--syll-ma); }
+    .token[data-syl="no"] { background: #DC2626; }
+    .token.word-tok { background: #2563EB; font-size: 1.15rem; min-width: auto; padding: 0.55rem 0.95rem; }
+    .token.word-tok[data-syl="menina"] { background: linear-gradient(135deg, var(--syll-me), var(--syll-ni), var(--syll-na)); }
+    .token:hover { transform: translateY(-2px) scale(1.04); box-shadow: 0 8px 16px rgba(0,0,0,0.22); }
+    .token:focus-visible { outline: 3px solid #FDE68A; outline-offset: 3px; }
+    .token.dragging { transform: scale(1.12); cursor: grabbing; box-shadow: 0 12px 26px rgba(0,0,0,0.28); z-index: 999; }
+    .token.selected { outline: 3px dashed #FDE68A; outline-offset: 3px; transform: scale(1.06); }
+
+    .token-bank.over { outline: 3px solid #C4B5FD; border-radius: 12px; }
+
+    /* Word display formed */
+    .formed-display {
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      color: var(--primary);
+      text-align: center;
+      min-height: 2em;
+      text-transform: lowercase;
+      margin: 0.3rem 0;
+    }
+
+    /* Discoveries list */
+    .discoveries {
+      background: #F0FDF4;
+      border: 2px solid var(--ok);
+      border-radius: 12px;
+      padding: 0.7rem 0.9rem;
+      margin-top: 0.6rem;
+    }
+    .discoveries strong { color: #14532D; }
+    .discoveries .item {
+      display: inline-block;
+      background: #fff;
+      border: 2px solid var(--ok);
+      border-radius: 999px;
+      padding: 0.25rem 0.7rem;
+      margin: 0.2rem 0.3rem 0.2rem 0;
+      font-weight: 800;
+      animation: pop 0.4s ease;
+    }
+    @keyframes pop {
+      0% { transform: scale(0.5); opacity: 0; }
+      60% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Phrase line (Unit 4) */
+    .phrase-line {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      padding: 0.6rem 0.4rem 0.7rem;
+      border-bottom: 3px dotted #A78BFA;
+      min-height: 80px;
+      margin: 0.5rem 0;
+    }
+    .phrase-slot {
+      min-height: 56px;
+      min-width: 90px;
+      border: 2px dashed #9CA3AF;
+      border-radius: 12px;
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.3rem 0.5rem;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .phrase-slot.over { border-color: var(--ok); background: #ECFDF5; }
+
+    /* Mini-assessment */
+    .mini-assess {
+      background: #FFF7ED;
+      border: 2px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+      margin-top: 1rem;
+    }
+    .mini-assess h3 { color: #B45309; }
+
+    .assess-item {
+      background: #fff;
+      border: 2px solid #FDBA74;
+      border-radius: 12px;
+      padding: 0.7rem 0.9rem;
+      margin: 0.6rem 0;
+    }
+    .assess-q {
+      font-weight: 700;
+      margin-bottom: 0.45rem;
+    }
+    .scale-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+    .scale-btn {
+      flex: 1 1 auto;
+      min-width: 130px;
+      min-height: var(--touch);
+      border: 2px solid #FDBA74;
+      background: #fff;
+      color: var(--text);
+      border-radius: 12px;
+      padding: 0.45rem 0.6rem;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+      touch-action: manipulation;
+    }
+    .scale-btn:hover { transform: translateY(-1px); }
+    .scale-btn.selected {
+      background: var(--accent);
+      color: var(--text);
+      border-color: #B45309;
+      box-shadow: 0 4px 10px rgba(245,158,11,0.32);
+    }
+
+    /* Curriculum footer */
+    .curricular {
+      background: #F3E8FF;
+      border: 2px solid #7C3AED;
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+      margin-top: 1.1rem;
+    }
+    .curricular h3 { color: #5B21B6; margin-bottom: 0.4rem; }
+    .curricular ul { margin: 0.3rem 0 0.6rem 1.2rem; }
+    .curricular li { margin-bottom: 0.25rem; font-size: 0.96rem; }
+
+    .pagecraft-footer {
+      text-align: center;
+      margin: 1rem 0 0.6rem;
+      font-weight: 700;
+      color: #6B21A8;
+      font-size: 0.95rem;
+    }
+
+    /* Confetti */
+    canvas#confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* Hands animation */
+    .hands {
+      font-size: 2.4rem;
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+    .hands.clap { animation: clap 0.3s ease; }
+    @keyframes clap {
+      0% { transform: scale(1) rotate(-12deg); }
+      50% { transform: scale(1.25) rotate(0deg); }
+      100% { transform: scale(1) rotate(12deg); }
+    }
+
+    /* Stars */
+    .stars {
+      display: flex;
+      gap: 0.45rem;
+      font-size: 2rem;
+      justify-content: center;
+      margin: 0.4rem 0;
+    }
+    .star {
+      filter: grayscale(1);
+      opacity: 0.45;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease, opacity 0.3s ease;
+    }
+    .star.on {
+      filter: grayscale(0);
+      opacity: 1;
+      transform: scale(1.2);
+    }
+
+    /* Focus */
+    :focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 2px;
+      border-radius: 6px;
+    }
+
+    /* Responsive */
+    @media (max-width: 720px) {
+      body { font-size: 17px; }
+      .wrap { padding: 0.7rem; }
+      .word-quiz { flex-direction: column; }
+      .word-card { width: 100%; }
+      .slot-row, .token-bank { flex-direction: column; align-items: stretch; }
+      .slot { min-width: auto; width: 100%; }
+      .token { min-width: auto; }
+      .diff-master { position: static; }
+    }
+    @media (min-width: 1440px) {
+      .wrap { max-width: 1280px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    .row { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; }
+    .row.center { justify-content: center; }
+    .gap-sm { gap: 0.4rem; }
+    .mt { margin-top: 0.7rem; }
+    .mt-lg { margin-top: 1.1rem; }
+    .hint { color: #6B21A8; font-size: 0.92rem; font-style: italic; }
+    .visually-hidden {
+      position: absolute !important; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0);
+      white-space: nowrap; border: 0;
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar para o conteúdo</a>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <div class="wrap" id="main">
+    <header class="hero" aria-label="Cabeçalho da aula">
+      <h1>Menina · 30 min</h1>
+      <p class="tagline">Método das 28 Palavras — Palavra 1</p>
+      <div class="meta">
+        <span class="badge">1.º ano (6-7 anos)</span>
+        <span class="badge">30 minutos</span>
+        <span class="badge">Português · Leitura e escrita</span>
+      </div>
+      <div class="objectives">
+        <strong>Objetivos da aula</strong>
+        <ul>
+          <li>Reconhecer globalmente a palavra "menina" associando-a à imagem e ao som.</li>
+          <li>Segmentar "menina" em <em>me-ni-na</em> e reconstruí-la a partir de sílabas desordenadas.</li>
+          <li>Recombinar sílabas (me, ni, na, mi) para formar palavras novas (ex.: mina).</li>
+          <li>Construir uma frase simples utilizando "menina".</li>
+        </ul>
+      </div>
+    </header>
+
+    <div class="diff-master" role="region" aria-label="Seletor de diferenciação geral">
+      <span class="lbl">Nível desta aula:</span>
+      <div class="tabs" role="tablist" aria-label="Diferenciação global">
+        <button class="tab" data-master-level="support" role="tab" aria-selected="false">🟢 Apoio</button>
+        <button class="tab active" data-master-level="standard" role="tab" aria-selected="true">🟡 Intermédio</button>
+        <button class="tab" data-master-level="challenge" role="tab" aria-selected="false">🔴 Desafio</button>
+      </div>
+      <span class="hint">Troca quando precisares — o trabalho já feito não se perde.</span>
+    </div>
+
+    <!-- UNIT 1 — Apresentação global -->
+    <section class="card" id="u1" aria-labelledby="u1-h">
+      <h2 id="u1-h"><span class="icon">👧</span>1. A menina sorri <span class="duration">4 min</span></h2>
+      <p>Olha bem a imagem, ouve a palavra e descobre o cartão certo.</p>
+
+      <div class="word-hero">
+        <div class="image-frame" aria-hidden="true">
+          <div class="emoji">👧</div>
+        </div>
+        <div>
+          <div class="word-display lower" aria-label="Palavra menina">
+            <span class="syll me">me</span><span class="syll ni">ni</span><span class="syll na">na</span>
+          </div>
+          <p class="micro-phrase">A <span class="story-word highlight">menina</span> sorri.</p>
+          <div class="row center">
+            <button class="audio-btn" id="u1-listen" aria-label="Ouvir a palavra menina por sílabas">🔊</button>
+            <button class="btn alt" id="u1-listen-phrase" aria-label="Ouvir a frase">Ouvir frase</button>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="mt-lg">Qual é a palavra "menina"?</h3>
+      <div class="level active" data-unit="u1" data-level="support">
+        <p class="hint" id="u1-support-audio-note" aria-live="polite">🔊 Estás a ouvir /menina/</p>
+        <div class="word-quiz" role="group" aria-label="Escolhe a palavra menina, nível apoio">
+          <button class="word-card" data-u1-word="menina" data-u1-level="support">menina</button>
+          <button class="word-card" data-u1-word="boneca" data-u1-level="support">boneca</button>
+        </div>
+      </div>
+      <div class="level" data-unit="u1" data-level="standard">
+        <div class="word-quiz" role="group" aria-label="Escolhe a palavra menina, nível intermédio">
+          <button class="word-card" data-u1-word="menina" data-u1-level="standard">menina</button>
+          <button class="word-card" data-u1-word="boneca" data-u1-level="standard">boneca</button>
+          <button class="word-card" data-u1-word="janela" data-u1-level="standard">janela</button>
+        </div>
+      </div>
+      <div class="level" data-unit="u1" data-level="challenge">
+        <div class="word-quiz" role="group" aria-label="Escolhe a palavra menina, nível desafio">
+          <button class="word-card" data-u1-word="menina" data-u1-level="challenge">menina</button>
+          <button class="word-card" data-u1-word="boneca" data-u1-level="challenge">boneca</button>
+          <button class="word-card" data-u1-word="janela" data-u1-level="challenge">janela</button>
+          <button class="word-card" data-u1-word="menino" data-u1-level="challenge">menino</button>
+        </div>
+        <p class="hint">Diz em voz alta porque é que escolheste "menina" e não "menino".</p>
+      </div>
+      <div class="feedback" id="u1-fb" role="status" aria-live="polite"></div>
+    </section>
+
+    <!-- UNIT 2 — Descoberta das sílabas -->
+    <section class="card" id="u2" aria-labelledby="u2-h">
+      <h2 id="u2-h"><span class="icon">👏</span>2. Bater palmas e ordenar <span class="duration">9 min</span></h2>
+      <p>Bate palmas com cada parte. Depois, arrasta as sílabas para formar "menina".</p>
+
+      <div class="row center mt">
+        <span class="hands" id="u2-hands" aria-hidden="true">👏</span>
+        <span aria-live="polite"><strong id="u2-claps">0</strong>/3 palmas</span>
+        <button class="btn" id="u2-clap-btn" aria-label="Bater palma">Bater palma</button>
+        <button class="btn alt" id="u2-reset-clap" aria-label="Repor palmas">Repor</button>
+      </div>
+
+      <div class="syll-word" id="u2-syll-display" aria-label="Sílabas de menina">
+        <span class="syll me" data-syll-pos="0">me</span>
+        <span class="syll ni" data-syll-pos="1">ni</span>
+        <span class="syll na" data-syll-pos="2">na</span>
+      </div>
+
+      <h3 class="mt-lg">Ordena as sílabas</h3>
+
+      <!-- SUPPORT: 'me' fixed -->
+      <div class="level active" data-unit="u2" data-level="support">
+        <div class="drag-area" data-drag-id="u2s">
+          <div class="token-bank" data-bank aria-label="Sílabas para arrastar (apoio)">
+            <button class="token" data-syl="ni" role="button" tabindex="0" aria-label="Sílaba ni, violeta. Pressiona Enter para selecionar.">ni</button>
+            <button class="token" data-syl="na" role="button" tabindex="0" aria-label="Sílaba na, verde. Pressiona Enter para selecionar.">na</button>
+          </div>
+          <div class="slot-row" aria-label="Posições da palavra">
+            <div class="slot filled" data-slot="0" aria-label="Posição 1, fixa: me">
+              <button class="token" data-syl="me" data-fixed="true" tabindex="-1" aria-disabled="true">me</button>
+            </div>
+            <div class="slot" data-slot="1" aria-label="Posição 2 vazia"></div>
+            <div class="slot" data-slot="2" aria-label="Posição 3 vazia"></div>
+          </div>
+        </div>
+        <div class="formed-display" data-formed-for="u2s">me _ _</div>
+        <div class="row gap-sm">
+          <button class="btn" data-u2-check="u2s">Verificar</button>
+          <button class="btn alt" data-u2-reset="u2s">Repor</button>
+          <button class="btn accent" data-u2-applause aria-label="Aplaudir com palmas">👏 Palmas</button>
+        </div>
+      </div>
+
+      <!-- STANDARD: 3 syllables shuffled -->
+      <div class="level" data-unit="u2" data-level="standard">
+        <div class="drag-area" data-drag-id="u2m">
+          <div class="token-bank" data-bank aria-label="Sílabas para arrastar (intermédio)">
+            <button class="token" data-syl="na" role="button" tabindex="0" aria-label="Sílaba na, verde.">na</button>
+            <button class="token" data-syl="me" role="button" tabindex="0" aria-label="Sílaba me, rosa.">me</button>
+            <button class="token" data-syl="ni" role="button" tabindex="0" aria-label="Sílaba ni, violeta.">ni</button>
+          </div>
+          <div class="slot-row">
+            <div class="slot" data-slot="0" aria-label="Posição 1"></div>
+            <div class="slot" data-slot="1" aria-label="Posição 2"></div>
+            <div class="slot" data-slot="2" aria-label="Posição 3"></div>
+          </div>
+        </div>
+        <div class="formed-display" data-formed-for="u2m">_ _ _</div>
+        <div class="row gap-sm">
+          <button class="btn" data-u2-check="u2m">Verificar</button>
+          <button class="btn alt" data-u2-reset="u2m">Repor</button>
+        </div>
+      </div>
+
+      <!-- CHALLENGE: black, distractor -->
+      <div class="level" data-unit="u2" data-level="challenge">
+        <p class="hint">As sílabas estão a preto. Há um bloco intruso ("no") que tens de descartar. Diz em voz alta: "menina tem três sílabas: me, ni, na".</p>
+        <div class="drag-area" data-drag-id="u2d">
+          <div class="token-bank" data-bank aria-label="Sílabas para arrastar (desafio)">
+            <button class="token" data-syl="na" style="background:#374151" role="button" tabindex="0" aria-label="Sílaba na.">na</button>
+            <button class="token" data-syl="me" style="background:#374151" role="button" tabindex="0" aria-label="Sílaba me.">me</button>
+            <button class="token" data-syl="ni" style="background:#374151" role="button" tabindex="0" aria-label="Sílaba ni.">ni</button>
+            <button class="token" data-syl="no" style="background:#374151" role="button" tabindex="0" aria-label="Sílaba no, intrusa.">no</button>
+          </div>
+          <div class="slot-row">
+            <div class="slot" data-slot="0" aria-label="Posição 1"></div>
+            <div class="slot" data-slot="1" aria-label="Posição 2"></div>
+            <div class="slot" data-slot="2" aria-label="Posição 3"></div>
+          </div>
+        </div>
+        <div class="formed-display" data-formed-for="u2d">_ _ _</div>
+        <div class="row gap-sm">
+          <button class="btn" data-u2-check="u2d">Verificar</button>
+          <button class="btn alt" data-u2-reset="u2d">Repor</button>
+        </div>
+      </div>
+
+      <div class="feedback" id="u2-fb" role="status" aria-live="polite"></div>
+    </section>
+
+    <!-- UNIT 3 — Recombinação silábica -->
+    <section class="card" id="u3" aria-labelledby="u3-h">
+      <h2 id="u3-h"><span class="icon">🧩</span>3. Inventar palavras novas <span class="duration">9 min</span></h2>
+      <p>Escolhe sílabas, junta-as na bandeja e descobre se formam uma palavra real.</p>
+
+      <!-- SUPPORT -->
+      <div class="level" data-unit="u3" data-level="support">
+        <p class="hint">Tenta formar a palavra <strong>mina</strong> (poço). Junta <span class="syll mi" style="font-size:1rem; padding:0.1rem 0.4rem">mi</span> + <span class="syll na" style="font-size:1rem; padding:0.1rem 0.4rem">na</span>.</p>
+        <div class="drag-area" data-drag-id="u3s">
+          <div class="token-bank" data-bank>
+            <button class="token" data-syl="me" role="button" tabindex="0" aria-label="Sílaba me, rosa.">me</button>
+            <button class="token" data-syl="na" role="button" tabindex="0" aria-label="Sílaba na, verde.">na</button>
+            <button class="token" data-syl="mi" role="button" tabindex="0" aria-label="Sílaba mi, azul.">mi</button>
+          </div>
+          <div class="slot-row">
+            <div class="slot" data-slot="0"></div>
+            <div class="slot" data-slot="1"></div>
+          </div>
+        </div>
+        <div class="formed-display" data-formed-for="u3s">_ _</div>
+        <div class="row gap-sm center">
+          <button class="btn ok" data-u3-classify="u3s" data-choice="real">É palavra ✓</button>
+          <button class="btn alt" data-u3-classify="u3s" data-choice="fake">Não é palavra ✗</button>
+          <button class="btn alt" data-u3-reset="u3s">Limpar</button>
+        </div>
+      </div>
+
+      <!-- STANDARD -->
+      <div class="level active" data-unit="u3" data-level="standard">
+        <p class="hint">Experimenta combinações. Quando achas que é palavra real, carrega "É palavra". Tenta descobrir pelo menos a palavra <strong>mina</strong> com o teu par.</p>
+        <div class="drag-area" data-drag-id="u3m">
+          <div class="token-bank" data-bank>
+            <button class="token" data-syl="me" role="button" tabindex="0" aria-label="Sílaba me, rosa.">me</button>
+            <button class="token" data-syl="ni" role="button" tabindex="0" aria-label="Sílaba ni, violeta.">ni</button>
+            <button class="token" data-syl="na" role="button" tabindex="0" aria-label="Sílaba na, verde.">na</button>
+            <button class="token" data-syl="mi" role="button" tabindex="0" aria-label="Sílaba mi, azul.">mi</button>
+          </div>
+          <div class="slot-row">
+            <div class="slot" data-slot="0"></div>
+            <div class="slot" data-slot="1"></div>
+            <div class="slot" data-slot="2"></div>
+          </div>
+        </div>
+        <div class="formed-display" data-formed-for="u3m">_ _</div>
+        <div class="row gap-sm center">
+          <button class="btn ok" data-u3-classify="u3m" data-choice="real">É palavra ✓</button>
+          <button class="btn alt" data-u3-classify="u3m" data-choice="fake">Não é palavra ✗</button>
+          <button class="btn alt" data-u3-reset="u3m">Limpar</button>
+        </div>
+      </div>
+
+      <!-- CHALLENGE -->
+      <div class="level" data-unit="u3" data-level="challenge">
+        <p class="hint">Descobre <strong>3 palavras reais</strong> em até 3 minutos. Há uma sílaba extra: "ma".</p>
+        <div class="drag-area" data-drag-id="u3d">
+          <div class="token-bank" data-bank>
+            <button class="token" data-syl="me" role="button" tabindex="0">me</button>
+            <button class="token" data-syl="ni" role="button" tabindex="0">ni</button>
+            <button class="token" data-syl="na" role="button" tabindex="0">na</button>
+            <button class="token" data-syl="mi" role="button" tabindex="0">mi</button>
+            <button class="token" data-syl="ma" role="button" tabindex="0">ma</button>
+          </div>
+          <div class="slot-row">
+            <div class="slot" data-slot="0"></div>
+            <div class="slot" data-slot="1"></div>
+            <div class="slot" data-slot="2"></div>
+          </div>
+        </div>
+        <div class="formed-display" data-formed-for="u3d">_ _</div>
+        <div class="row gap-sm center">
+          <button class="btn ok" data-u3-classify="u3d" data-choice="real">É palavra ✓</button>
+          <button class="btn alt" data-u3-classify="u3d" data-choice="fake">Não é palavra ✗</button>
+          <button class="btn alt" data-u3-reset="u3d">Limpar</button>
+        </div>
+        <label for="u3d-write" class="hint mt">Escreve as palavras descobertas:</label>
+        <input id="u3d-write" type="text" placeholder="ex.: mina, mama, nana" aria-label="Palavras descobertas" style="width:100%; min-height:48px; border:2px solid #B6AAA3; border-radius:12px; padding:0.55rem; font-family:inherit; font-size:1rem;" />
+      </div>
+
+      <div class="discoveries" id="u3-discoveries" aria-live="polite">
+        <strong>✨ Já descobri:</strong>
+        <div class="items" id="u3-items"><span class="hint">(ainda nenhuma)</span></div>
+      </div>
+
+      <div class="feedback" id="u3-fb" role="status" aria-live="polite"></div>
+    </section>
+
+    <!-- UNIT 4 — Frase + mini-avaliação -->
+    <section class="card" id="u4" aria-labelledby="u4-h">
+      <h2 id="u4-h"><span class="icon">⭐</span>4. A frase e as estrelas <span class="duration">8 min</span></h2>
+      <p>Constrói a frase, depois faz a mini-avaliação.</p>
+
+      <h3>Constrói a frase</h3>
+
+      <!-- SUPPORT: A and . pre-placed -->
+      <div class="level" data-unit="u4" data-level="support">
+        <p class="hint">"A" e "." já estão. Coloca <strong>menina</strong> e <strong>sorri</strong>.</p>
+        <div class="drag-area" data-drag-id="u4s">
+          <div class="token-bank" data-bank>
+            <button class="token word-tok" data-syl="menina" role="button" tabindex="0" aria-label="Palavra menina">menina</button>
+            <button class="token word-tok" data-syl="sorri" role="button" tabindex="0" aria-label="Palavra sorri">sorri</button>
+          </div>
+          <div class="phrase-line">
+            <div class="phrase-slot filled"><button class="token word-tok" data-syl="A" data-fixed="true" tabindex="-1" aria-disabled="true">A</button></div>
+            <div class="phrase-slot" data-slot="1"></div>
+            <div class="phrase-slot" data-slot="2"></div>
+            <div class="phrase-slot filled"><button class="token word-tok" data-syl="." data-fixed="true" tabindex="-1" aria-disabled="true">.</button></div>
+          </div>
+        </div>
+        <div class="formed-display" data-formed-for="u4s">A _ _ .</div>
+        <div class="row gap-sm">
+          <button class="btn" data-u4-check="u4s">Verificar frase</button>
+          <button class="btn alt" data-u4-reset="u4s">Repor</button>
+        </div>
+      </div>
+
+      <!-- STANDARD: 4 elements -->
+      <div class="level active" data-unit="u4" data-level="standard">
+        <p class="hint">Coloca os 4 elementos pela ordem certa.</p>
+        <div class="drag-area" data-drag-id="u4m">
+          <div class="token-bank" data-bank>
+            <button class="token word-tok" data-syl="menina" role="button" tabindex="0">menina</button>
+            <button class="token word-tok" data-syl="A" role="button" tabindex="0">A</button>
+            <button class="token word-tok" data-syl="sorri" role="button" tabindex="0">sorri</button>
+            <button class="token word-tok" data-syl="." role="button" tabindex="0">.</button>
+          </div>
+          <div class="phrase-line">
+            <div class="phrase-slot" data-slot="0"></div>
+            <div class="phrase-slot" data-slot="1"></div>
+            <div class="phrase-slot" data-slot="2"></div>
+            <div class="phrase-slot" data-slot="3"></div>
+          </div>
+        </div>
+        <div class="formed-display" data-formed-for="u4m">_ _ _ _</div>
+        <div class="row gap-sm">
+          <button class="btn" data-u4-check="u4m">Verificar frase</button>
+          <button class="btn alt" data-u4-reset="u4m">Repor</button>
+        </div>
+      </div>
+
+      <!-- CHALLENGE: free phrase -->
+      <div class="level" data-unit="u4" data-level="challenge">
+        <p class="hint">Inventa uma frase própria com a palavra "menina". Por exemplo: <em>"A menina canta uma canção."</em></p>
+        <label for="u4d-text" class="visually-hidden">Frase com a palavra menina</label>
+        <input id="u4d-text" type="text" placeholder="A menina ..." aria-label="Escreve a tua frase com menina" style="width:100%; min-height:56px; border:2px solid var(--primary); border-radius:12px; padding:0.65rem; font-family:inherit; font-size:1.1rem;" />
+        <div class="row gap-sm mt">
+          <button class="btn" id="u4d-check">Verificar a minha frase</button>
+        </div>
+      </div>
+
+      <div class="feedback" id="u4-fb" role="status" aria-live="polite"></div>
+
+      <!-- Stars -->
+      <div class="stars mt-lg" aria-label="Progresso da mini-avaliação">
+        <span class="star" id="star-1" data-descriptor="Reconhecer" aria-label="Reconhecer · por completar">⭐</span>
+        <span class="star" id="star-2" data-descriptor="Segmentar" aria-label="Segmentar · por completar">⭐</span>
+        <span class="star" id="star-3" data-descriptor="Recombinar" aria-label="Recombinar · por completar">⭐</span>
+        <span class="star" id="star-4" data-descriptor="Usar" aria-label="Usar · por completar">⭐</span>
+      </div>
+
+      <!-- Mini-avaliação -->
+      <div class="mini-assess" aria-labelledby="ma-h">
+        <h3 id="ma-h">📝 Mini-avaliação</h3>
+        <p class="hint">Marca como te sentiste em cada tarefa.</p>
+
+        <div class="assess-item" data-assess-id="reconhecer">
+          <div class="assess-q">1. Reconheci a palavra "menina" entre outras.</div>
+          <div class="scale-row" role="group" aria-label="Escala tarefa 1">
+            <button class="scale-btn" data-assess="reconhecer" data-val="0">⬜ Ainda não consigo</button>
+            <button class="scale-btn" data-assess="reconhecer" data-val="1">⬜ Com ajuda</button>
+            <button class="scale-btn" data-assess="reconhecer" data-val="2">⬜ Sozinho/a</button>
+            <button class="scale-btn" data-assess="reconhecer" data-val="3">⬜ Ajudo colegas</button>
+          </div>
+        </div>
+
+        <div class="assess-item" data-assess-id="segmentar">
+          <div class="assess-q">2. Bati 3 palmas e disse que "menina" tem 3 sílabas: me, ni, na.</div>
+          <div class="scale-row" role="group" aria-label="Escala tarefa 2">
+            <button class="scale-btn" data-assess="segmentar" data-val="0">⬜ Ainda não consigo</button>
+            <button class="scale-btn" data-assess="segmentar" data-val="1">⬜ Com ajuda</button>
+            <button class="scale-btn" data-assess="segmentar" data-val="2">⬜ Sozinho/a</button>
+            <button class="scale-btn" data-assess="segmentar" data-val="3">⬜ Ajudo colegas</button>
+          </div>
+        </div>
+
+        <div class="assess-item" data-assess-id="recombinar">
+          <div class="assess-q">3. Formei a palavra "mina" e descobri uma palavra inventada.</div>
+          <div class="scale-row" role="group" aria-label="Escala tarefa 3">
+            <button class="scale-btn" data-assess="recombinar" data-val="0">⬜ Ainda não consigo</button>
+            <button class="scale-btn" data-assess="recombinar" data-val="1">⬜ Com ajuda</button>
+            <button class="scale-btn" data-assess="recombinar" data-val="2">⬜ Sozinho/a</button>
+            <button class="scale-btn" data-assess="recombinar" data-val="3">⬜ Ajudo colegas</button>
+          </div>
+        </div>
+
+        <div class="assess-item" data-assess-id="usar">
+          <div class="assess-q">4. Construí a frase "A menina sorri." e li-a em voz alta.</div>
+          <div class="scale-row" role="group" aria-label="Escala tarefa 4">
+            <button class="scale-btn" data-assess="usar" data-val="0">⬜ Ainda não consigo</button>
+            <button class="scale-btn" data-assess="usar" data-val="1">⬜ Com ajuda</button>
+            <button class="scale-btn" data-assess="usar" data-val="2">⬜ Sozinho/a</button>
+            <button class="scale-btn" data-assess="usar" data-val="3">⬜ Ajudo colegas</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Curriculum footer -->
+    <section class="curricular" aria-labelledby="cf-h">
+      <h3 id="cf-h">📚 Referências curriculares</h3>
+      <strong>Aprendizagens Essenciais (Português, 1.º ano)</strong>
+      <ul>
+        <li>Pronunciar segmentos fónicos a partir dos respetivos grafemas e dígrafos, incluindo os casos que dependem de diferentes posições dos fonemas ou grafemas na palavra.</li>
+        <li>Reconhecer palavras globalmente, associando a forma escrita à forma oral e ao significado, integrando-as progressivamente num léxico visual alargado.</li>
+        <li>Fazer a correspondência entre letra/dígrafo e fonema/som; ler sílabas e palavras constituídas por essas correspondências.</li>
+        <li>Escrever palavras e frases simples, respeitando as regras de correspondência fonema-grafema e utilizando corretamente as marcas do género e do número.</li>
+      </ul>
+      <strong>Perfil do Aluno</strong>
+      <ul>
+        <li>PA-A: Linguagens e textos</li>
+        <li>PA-F: Desenvolvimento pessoal e autonomia</li>
+        <li>PA-C: Raciocínio e resolução de problemas</li>
+        <li>PA-E: Relacionamento interpessoal</li>
+      </ul>
+    </section>
+
+    <p class="pagecraft-footer">Gerado por PageCraft 🛠️ · M28P · Palavra Menina · 30 min</p>
+  </div>
+
+  <script>
+    'use strict';
+
+    // ===== AUDIO (Web Audio API, lazy init) =====
+    let audioCtx = null;
+    function ensureAudio() {
+      if (!audioCtx) {
+        try {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        } catch (e) { audioCtx = null; }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    }
+    function tone(freq, duration, when, type) {
+      const ctx = ensureAudio();
+      if (!ctx) return;
+      const t0 = (when != null ? when : ctx.currentTime);
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type || 'sine';
+      osc.frequency.setValueAtTime(freq, t0);
+      gain.gain.setValueAtTime(0, t0);
+      gain.gain.linearRampToValueAtTime(0.15, t0 + 0.02);
+      gain.gain.linearRampToValueAtTime(0.0001, t0 + duration);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(t0);
+      osc.stop(t0 + duration + 0.05);
+    }
+    function chord(freqs, duration) {
+      const ctx = ensureAudio();
+      if (!ctx) return;
+      freqs.forEach(f => tone(f, duration, ctx.currentTime, 'sine'));
+    }
+    // Syllable freq map
+    const SYL_FREQ = { me: 440, ni: 523.25, na: 587.33, mi: 659.25, ma: 698.46, no: 392 };
+    function playSyllable(s) {
+      const f = SYL_FREQ[s];
+      if (f) tone(f, 0.22, null, 'sine');
+    }
+    function playWordSequence(syllables, gap) {
+      const ctx = ensureAudio();
+      if (!ctx) return;
+      let t = ctx.currentTime;
+      const dur = 0.22;
+      const g = gap || 0.08;
+      syllables.forEach(s => {
+        const f = SYL_FREQ[s] || 440;
+        tone(f, dur, t, 'sine');
+        t += dur + g;
+      });
+    }
+    function correctSound() {
+      const ctx = ensureAudio();
+      if (!ctx) return;
+      const t = ctx.currentTime;
+      tone(523.25, 0.15, t, 'sine');
+      tone(659.25, 0.15, t + 0.12, 'sine');
+      tone(783.99, 0.22, t + 0.24, 'sine');
+    }
+    function wrongSound() {
+      tone(220, 0.18, null, 'triangle');
+    }
+    function applauseSound() {
+      const ctx = ensureAudio();
+      if (!ctx) return;
+      let t = ctx.currentTime;
+      for (let i = 0; i < 6; i++) {
+        const f = 200 + Math.random() * 600;
+        tone(f, 0.06, t + i * 0.08, 'square');
+      }
+    }
+
+    // ===== CONFETTI =====
+    const canvas = document.getElementById('confetti');
+    const cctx = canvas.getContext('2d');
+    let confetti = [];
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    const COLORS = ['#E05FA0','#7C3AED','#059669','#2563EB','#F59E0B','#22C55E','#0891B2'];
+    function spawnConfetti(count) {
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) return;
+      const n = count || 28;
+      for (let i = 0; i < n; i++) {
+        confetti.push({
+          x: window.innerWidth / 2 + (Math.random() - 0.5) * 240,
+          y: window.innerHeight / 2 - 60,
+          vx: (Math.random() - 0.5) * 8,
+          vy: -Math.random() * 8 - 4,
+          g: 0.28,
+          r: 4 + Math.random() * 5,
+          c: COLORS[Math.floor(Math.random() * COLORS.length)],
+          rot: Math.random() * Math.PI,
+          vr: (Math.random() - 0.5) * 0.3,
+          life: 90 + Math.random() * 30
+        });
+      }
+      if (!confettiAnimating) animateConfetti();
+    }
+    let confettiAnimating = false;
+    function animateConfetti() {
+      confettiAnimating = true;
+      cctx.clearRect(0,0,canvas.width,canvas.height);
+      confetti = confetti.filter(p => p.life > 0);
+      for (const p of confetti) {
+        p.vy += p.g;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.rot += p.vr;
+        p.life--;
+        cctx.save();
+        cctx.translate(p.x, p.y);
+        cctx.rotate(p.rot);
+        cctx.fillStyle = p.c;
+        cctx.fillRect(-p.r, -p.r/2, p.r*2, p.r);
+        cctx.restore();
+      }
+      if (confetti.length) requestAnimationFrame(animateConfetti);
+      else { cctx.clearRect(0,0,canvas.width,canvas.height); confettiAnimating = false; }
+    }
+
+    // ===== HELPERS =====
+    function setFb(el, msg, kind) {
+      if (!el) return;
+      el.textContent = msg || '';
+      el.className = 'feedback' + (kind ? ' ' + kind : '');
+    }
+    function announce(el, msg) { if (el) el.textContent = msg; }
+
+    // ===== MASTER DIFF SELECTOR =====
+    const masterTabs = document.querySelectorAll('.diff-master .tab[data-master-level]');
+    masterTabs.forEach(tab => {
+      tab.addEventListener('click', () => setMasterLevel(tab.dataset.masterLevel));
+    });
+    function setMasterLevel(level) {
+      masterTabs.forEach(t => {
+        const active = t.dataset.masterLevel === level;
+        t.classList.toggle('active', active);
+        t.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      // Toggle level content per unit
+      ['u1','u2','u3','u4'].forEach(unit => {
+        document.querySelectorAll('.level[data-unit="' + unit + '"]').forEach(div => {
+          div.classList.toggle('active', div.dataset.level === level);
+        });
+      });
+      maybePlayU1SupportAudio(level);
+    }
+
+    // ===== U1 SUPPORT: auto-play /menina/ once when entering Unit 1 with 🟢 Apoio =====
+    let u1SupportAudioPlayed = false;
+    function maybePlayU1SupportAudio(level) {
+      if (level !== 'support') return;
+      if (u1SupportAudioPlayed) return;
+      u1SupportAudioPlayed = true;
+      // small delay so it triggers after the level becomes visible
+      setTimeout(() => {
+        try { playWordSequence(['me','ni','na'], 0.08); } catch (e) {}
+      }, 250);
+    }
+    // Trigger once on load if support is the initial active level
+    document.addEventListener('DOMContentLoaded', () => {
+      const activeMaster = document.querySelector('.diff-master .tab.active[data-master-level]');
+      if (activeMaster && activeMaster.dataset.masterLevel === 'support') {
+        maybePlayU1SupportAudio('support');
+      }
+    });
+
+    // ===== UNIT 1: Word recognition =====
+    const u1Fb = document.getElementById('u1-fb');
+    let u1Tries = {};
+    document.querySelectorAll('[data-u1-word]').forEach(card => {
+      card.addEventListener('click', () => {
+        const word = card.dataset.u1Word;
+        const lvl = card.dataset.u1Level;
+        u1Tries[lvl] = (u1Tries[lvl] || 0) + 1;
+        if (word === 'menina') {
+          card.classList.add('correct');
+          card.classList.remove('wrong');
+          setFb(u1Fb, '🎉 Boa! É mesmo a "menina"! Repete em voz alta: me-ni-na.', 'ok');
+          correctSound();
+          setTimeout(() => playWordSequence(['me','ni','na'], 0.06), 350);
+          spawnConfetti(20);
+          markStar(1);
+        } else {
+          card.classList.add('wrong');
+          setFb(u1Fb, 'Quase! Olha bem para a imagem. Tenta outra vez.', 'warn');
+          wrongSound();
+          setTimeout(() => card.classList.remove('wrong'), 600);
+        }
+      });
+    });
+
+    // u1 listen buttons
+    document.getElementById('u1-listen').addEventListener('click', () => {
+      playWordSequence(['me','ni','na'], 0.08);
+      const sylls = document.querySelectorAll('#u1 .syll');
+      sylls.forEach(s => s.classList.remove('active'));
+      let i = 0;
+      const tick = () => {
+        if (i > 0) sylls[i-1].classList.remove('active');
+        if (i < sylls.length) {
+          sylls[i].classList.add('active');
+          i++;
+          setTimeout(tick, 280);
+        }
+      };
+      tick();
+    });
+    document.getElementById('u1-listen-phrase').addEventListener('click', () => {
+      // "A menina sorri." melodic line
+      playWordSequence(['me','me','ni','na','me','na'], 0.06);
+    });
+
+    // ===== UNIT 2: Claps + sort =====
+    let u2Claps = 0;
+    const u2ClapsEl = document.getElementById('u2-claps');
+    const u2HandsEl = document.getElementById('u2-hands');
+    const u2Sylls = ['me','ni','na'];
+    const u2Display = document.getElementById('u2-syll-display');
+    function highlightSyll(idx) {
+      u2Display.querySelectorAll('.syll').forEach(s => s.classList.remove('active'));
+      const target = u2Display.querySelector('[data-syll-pos="' + idx + '"]');
+      if (target) target.classList.add('active');
+    }
+    document.getElementById('u2-clap-btn').addEventListener('click', () => {
+      if (u2Claps >= 3) {
+        setFb(document.getElementById('u2-fb'), '🎉 Bateste 3 palmas! "menina" tem 3 sílabas. Agora ordena os blocos.', 'ok');
+        return;
+      }
+      u2Claps++;
+      u2ClapsEl.textContent = u2Claps;
+      u2HandsEl.classList.remove('clap');
+      void u2HandsEl.offsetWidth;
+      u2HandsEl.classList.add('clap');
+      const syl = u2Sylls[u2Claps - 1];
+      highlightSyll(u2Claps - 1);
+      playSyllable(syl);
+      if (u2Claps === 3) {
+        setTimeout(() => {
+          setFb(document.getElementById('u2-fb'), '👏 3 palmas! "menina" tem 3 sílabas: me-ni-na. Agora ordena.', 'ok');
+          markStar(2);
+        }, 350);
+      }
+    });
+    document.getElementById('u2-reset-clap').addEventListener('click', () => {
+      u2Claps = 0;
+      u2ClapsEl.textContent = '0';
+      highlightSyll(-1);
+      setFb(document.getElementById('u2-fb'), '');
+    });
+
+    document.querySelectorAll('[data-u2-applause]').forEach(b => {
+      b.addEventListener('click', () => {
+        applauseSound();
+        u2HandsEl.classList.remove('clap');
+        void u2HandsEl.offsetWidth;
+        u2HandsEl.classList.add('clap');
+      });
+    });
+
+    // ===== DRAG & DROP CORE =====
+    // Generic drag-and-drop with touch + mouse + keyboard.
+    // tokens with data-syl, slots with data-slot inside .drag-area[data-drag-id].
+    let selected = null; // keyboard / click-to-place selected token
+    function getArea(id) { return document.querySelector('.drag-area[data-drag-id="' + id + '"]'); }
+    function setupDragArea(area) {
+      const tokens = area.querySelectorAll('.token');
+      tokens.forEach(setupToken);
+      const slots = area.querySelectorAll('.slot, .phrase-slot');
+      slots.forEach(slot => {
+        slot.addEventListener('dragover', e => { e.preventDefault(); slot.classList.add('over'); });
+        slot.addEventListener('dragleave', () => slot.classList.remove('over'));
+        slot.addEventListener('drop', e => {
+          e.preventDefault();
+          slot.classList.remove('over');
+          const sy = e.dataTransfer.getData('text/syl');
+          const tokId = e.dataTransfer.getData('text/tokid');
+          const tok = document.getElementById(tokId);
+          if (!tok || tok.dataset.fixed === 'true') return;
+          placeTokenInSlot(tok, slot, area);
+        });
+        slot.addEventListener('click', () => {
+          if (selected && selected.area === area) {
+            placeTokenInSlot(selected.tok, slot, area);
+            clearSelection();
+          }
+        });
+      });
+      const bank = area.querySelector('.token-bank');
+      if (bank) {
+        bank.addEventListener('dragover', e => { e.preventDefault(); bank.classList.add('over'); });
+        bank.addEventListener('dragleave', () => bank.classList.remove('over'));
+        bank.addEventListener('drop', e => {
+          e.preventDefault();
+          bank.classList.remove('over');
+          const tokId = e.dataTransfer.getData('text/tokid');
+          const tok = document.getElementById(tokId);
+          if (!tok || tok.dataset.fixed === 'true') return;
+          bank.appendChild(tok);
+          updateFormed(area);
+        });
+        bank.addEventListener('click', e => {
+          if (selected && selected.area === area && e.target === bank) {
+            bank.appendChild(selected.tok);
+            updateFormed(area);
+            clearSelection();
+          }
+        });
+      }
+    }
+
+    function ensureTokenId(tok) {
+      if (!tok.id) tok.id = 'tok-' + Math.random().toString(36).slice(2, 9);
+      return tok.id;
+    }
+
+    function setupToken(tok) {
+      if (tok.dataset.fixed === 'true') return;
+      ensureTokenId(tok);
+      tok.setAttribute('draggable', 'true');
+      tok.addEventListener('dragstart', e => {
+        tok.classList.add('dragging');
+        e.dataTransfer.setData('text/syl', tok.dataset.syl);
+        e.dataTransfer.setData('text/tokid', tok.id);
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      tok.addEventListener('dragend', () => tok.classList.remove('dragging'));
+
+      // Touch
+      let touchOffset = { x: 0, y: 0 };
+      let originalParent = null;
+      tok.addEventListener('touchstart', e => {
+        if (tok.dataset.fixed === 'true') return;
+        const t = e.touches[0];
+        const rect = tok.getBoundingClientRect();
+        touchOffset = { x: t.clientX - rect.left, y: t.clientY - rect.top };
+        originalParent = tok.parentElement;
+        tok.classList.add('dragging');
+        tok.style.position = 'fixed';
+        tok.style.left = (t.clientX - touchOffset.x) + 'px';
+        tok.style.top = (t.clientY - touchOffset.y) + 'px';
+        tok.style.zIndex = '999';
+      }, { passive: true });
+      tok.addEventListener('touchmove', e => {
+        if (!tok.classList.contains('dragging')) return;
+        const t = e.touches[0];
+        tok.style.left = (t.clientX - touchOffset.x) + 'px';
+        tok.style.top = (t.clientY - touchOffset.y) + 'px';
+        // highlight slot under finger
+        document.querySelectorAll('.slot.over, .phrase-slot.over').forEach(s => s.classList.remove('over'));
+        const el = document.elementFromPoint(t.clientX, t.clientY);
+        const slotUnder = el && (el.closest('.slot') || el.closest('.phrase-slot'));
+        if (slotUnder) slotUnder.classList.add('over');
+        e.preventDefault();
+      }, { passive: false });
+      tok.addEventListener('touchend', e => {
+        if (!tok.classList.contains('dragging')) return;
+        tok.classList.remove('dragging');
+        tok.style.position = '';
+        tok.style.left = '';
+        tok.style.top = '';
+        tok.style.zIndex = '';
+        const t = e.changedTouches[0];
+        const el = document.elementFromPoint(t.clientX, t.clientY);
+        document.querySelectorAll('.slot.over, .phrase-slot.over').forEach(s => s.classList.remove('over'));
+        const slot = el && (el.closest('.slot') || el.closest('.phrase-slot'));
+        const area = tok.closest('.drag-area') || originalParent.closest('.drag-area');
+        if (slot && area && area.contains(slot)) {
+          placeTokenInSlot(tok, slot, area);
+        } else {
+          // back to original parent
+          if (originalParent) originalParent.appendChild(tok);
+          if (area) updateFormed(area);
+        }
+      });
+
+      // Click to select / place
+      tok.addEventListener('click', e => {
+        if (tok.dataset.fixed === 'true') return;
+        const area = tok.closest('.drag-area');
+        if (selected && selected.tok === tok) {
+          clearSelection();
+          return;
+        }
+        clearSelection();
+        selected = { tok, area };
+        tok.classList.add('selected');
+      });
+
+      // Keyboard
+      tok.addEventListener('keydown', e => {
+        if (tok.dataset.fixed === 'true') return;
+        const area = tok.closest('.drag-area');
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (selected && selected.tok === tok) { clearSelection(); return; }
+          clearSelection();
+          selected = { tok, area };
+          tok.classList.add('selected');
+          // announce
+          const fb = area.closest('section').querySelector('.feedback');
+          setFb(fb, 'Sílaba "' + tok.dataset.syl + '" selecionada. Usa Tab para a posição e Enter para colocar.', 'warn');
+        } else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+          e.preventDefault();
+          // move within current container
+          const parent = tok.parentElement;
+          if (parent.classList.contains('token-bank')) {
+            const sibs = Array.from(parent.querySelectorAll('.token'));
+            const i = sibs.indexOf(tok);
+            const ni = e.key === 'ArrowRight' ? Math.min(sibs.length-1, i+1) : Math.max(0, i-1);
+            if (ni !== i) parent.insertBefore(tok, sibs[ni + (e.key === 'ArrowRight' ? 1 : 0)] || null);
+          }
+        } else if (e.key === 'Escape') {
+          clearSelection();
+        }
+      });
+
+      // Slot keyboard receive (focus a slot then Enter to place selected)
+    }
+
+    function clearSelection() {
+      document.querySelectorAll('.token.selected').forEach(t => t.classList.remove('selected'));
+      selected = null;
+    }
+
+    function placeTokenInSlot(tok, slot, area) {
+      // If slot has a non-fixed token, swap back to bank
+      const existing = slot.querySelector('.token');
+      const bank = area.querySelector('.token-bank');
+      if (existing && existing !== tok) {
+        if (existing.dataset.fixed === 'true') return; // can't displace fixed
+        if (bank) bank.appendChild(existing);
+      }
+      slot.appendChild(tok);
+      updateFormed(area);
+    }
+
+    function updateFormed(area) {
+      const id = area.dataset.dragId;
+      const slots = area.querySelectorAll('.slot, .phrase-slot');
+      const parts = [];
+      slots.forEach(s => {
+        const tok = s.querySelector('.token');
+        parts.push(tok ? tok.dataset.syl : '_');
+      });
+      const display = document.querySelector('[data-formed-for="' + id + '"]');
+      if (display) {
+        const sep = id.startsWith('u4') ? ' ' : '';
+        display.textContent = parts.join(sep);
+      }
+    }
+
+    document.querySelectorAll('.drag-area').forEach(setupDragArea);
+
+    // Make slots accept Enter when focused
+    document.querySelectorAll('.slot, .phrase-slot').forEach(slot => {
+      slot.setAttribute('tabindex', '0');
+      slot.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (selected) {
+            const area = slot.closest('.drag-area');
+            if (selected.area === area) {
+              placeTokenInSlot(selected.tok, slot, area);
+              clearSelection();
+            }
+          }
+        }
+      });
+    });
+
+    // ===== UNIT 2 verify =====
+    const u2Fb = document.getElementById('u2-fb');
+    document.querySelectorAll('[data-u2-check]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.u2Check;
+        const area = getArea(id);
+        const slots = area.querySelectorAll('.slot');
+        const seq = Array.from(slots).map(s => {
+          const t = s.querySelector('.token');
+          return t ? t.dataset.syl : null;
+        });
+        const target = ['me','ni','na'];
+        if (seq.length === 3 && seq[0] === target[0] && seq[1] === target[1] && seq[2] === target[2]) {
+          setFb(u2Fb, '🎉 Perfeito! "menina" = me + ni + na.', 'ok');
+          correctSound();
+          setTimeout(() => playWordSequence(['me','ni','na'], 0.06), 350);
+          spawnConfetti(36);
+          markStar(2);
+          // Glow on slots
+          slots.forEach(s => {
+            s.style.borderColor = 'var(--ok)';
+            s.style.background = '#ECFDF5';
+          });
+        } else if (seq.includes(null)) {
+          setFb(u2Fb, 'Faltam blocos. Coloca todas as sílabas.', 'warn');
+          wrongSound();
+        } else {
+          setFb(u2Fb, 'Quase! Lembra-te do som: me-ni-na. Tenta outra vez.', 'warn');
+          wrongSound();
+        }
+      });
+    });
+    document.querySelectorAll('[data-u2-reset]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.u2Reset;
+        resetArea(id);
+        setFb(u2Fb, '');
+      });
+    });
+
+    function resetArea(id) {
+      const area = getArea(id);
+      const bank = area.querySelector('.token-bank');
+      area.querySelectorAll('.slot, .phrase-slot').forEach(s => {
+        const tok = s.querySelector('.token');
+        if (tok && tok.dataset.fixed !== 'true') bank.appendChild(tok);
+        s.style.borderColor = '';
+        s.style.background = '';
+      });
+      updateFormed(area);
+    }
+
+    // ===== UNIT 3: classify combinations =====
+    const REAL_WORDS = new Set([
+      'mina', 'mama', 'nana', 'mana', 'mami', 'menina', 'mim'
+    ]);
+    const PSEUDO_WORDS = new Set([
+      'nime','nani','meni','nimi','mema','nema','meme','nina','nine','mone','mema'
+    ]);
+    const u3Discoveries = new Set();
+    const u3Items = document.getElementById('u3-items');
+    const u3Fb = document.getElementById('u3-fb');
+    const u3Targets = { real: 0, fake: 0 };
+
+    function isReal(w) {
+      if (REAL_WORDS.has(w)) return true;
+      // also accept "menina" if formed
+      return false;
+    }
+
+    document.querySelectorAll('[data-u3-classify]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.u3Classify;
+        const choice = btn.dataset.choice;
+        const area = getArea(id);
+        const slots = area.querySelectorAll('.slot');
+        const parts = Array.from(slots).map(s => {
+          const t = s.querySelector('.token');
+          return t ? t.dataset.syl : '';
+        }).filter(Boolean);
+        if (parts.length < 2) {
+          setFb(u3Fb, 'Coloca pelo menos 2 sílabas para formar uma palavra.', 'warn');
+          wrongSound();
+          return;
+        }
+        const word = parts.join('');
+        const real = isReal(word);
+        playWordSequence(parts, 0.05);
+        const correct = (choice === 'real' && real) || (choice === 'fake' && !real);
+        if (correct) {
+          if (real) {
+            if (!u3Discoveries.has(word)) {
+              u3Discoveries.add(word);
+              addDiscovery(word);
+              u3Targets.real++;
+            }
+            setFb(u3Fb, '🎉 Boa! "' + word + '" é mesmo uma palavra real!', 'ok');
+          } else {
+            u3Targets.fake++;
+            setFb(u3Fb, '👍 Certo! "' + word + '" não é uma palavra real (é uma palavra inventada).', 'ok');
+          }
+          correctSound();
+          spawnConfetti(real ? 24 : 12);
+          if (u3Targets.real >= 1 && u3Targets.fake >= 1) markStar(3);
+        } else {
+          if (real) {
+            setFb(u3Fb, 'Hmm... "' + word + '" é mesmo uma palavra real! Pensa outra vez.', 'warn');
+          } else {
+            setFb(u3Fb, '"' + word + '" não é uma palavra real. Tenta outra combinação.', 'warn');
+          }
+          wrongSound();
+        }
+      });
+    });
+
+    function addDiscovery(word) {
+      if (u3Items.querySelector('.hint')) u3Items.innerHTML = '';
+      const span = document.createElement('span');
+      span.className = 'item';
+      span.textContent = '✨ ' + word;
+      u3Items.appendChild(span);
+    }
+
+    document.querySelectorAll('[data-u3-reset]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        resetArea(btn.dataset.u3Reset);
+        setFb(u3Fb, '');
+      });
+    });
+
+    // ===== UNIT 4 verify =====
+    const u4Fb = document.getElementById('u4-fb');
+    document.querySelectorAll('[data-u4-check]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.u4Check;
+        const area = getArea(id);
+        const slots = area.querySelectorAll('.phrase-slot');
+        const seq = Array.from(slots).map(s => {
+          const t = s.querySelector('.token');
+          return t ? t.dataset.syl : null;
+        });
+        const target = ['A','menina','sorri','.'];
+        const ok = seq.length === target.length && seq.every((v, i) => v === target[i]);
+        if (ok) {
+          setFb(u4Fb, '🎉 "A menina sorri." Frase certa! Lê em voz alta.', 'ok');
+          correctSound();
+          spawnConfetti(40);
+          markStar(4);
+          slots.forEach(s => { s.style.borderColor = 'var(--ok)'; s.style.background = '#ECFDF5'; });
+        } else if (seq.includes(null)) {
+          setFb(u4Fb, 'Faltam palavras na frase. Continua.', 'warn');
+          wrongSound();
+        } else {
+          setFb(u4Fb, 'Quase! Pensa na ordem: começa por "A", depois quem (menina), depois o que faz (se brinca, se sorri, se vê...) e termina com ponto.', 'warn');
+          wrongSound();
+        }
+      });
+    });
+    document.querySelectorAll('[data-u4-reset]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        resetArea(btn.dataset.u4Reset);
+        setFb(u4Fb, '');
+      });
+    });
+    const u4dCheck = document.getElementById('u4d-check');
+    if (u4dCheck) {
+      u4dCheck.addEventListener('click', () => {
+        const v = (document.getElementById('u4d-text').value || '').trim().toLowerCase();
+        if (v.includes('menina') && v.length > 6) {
+          setFb(u4Fb, '🎉 Boa! A tua frase tem "menina". Partilha-a com a turma!', 'ok');
+          correctSound();
+          spawnConfetti(36);
+          markStar(4);
+        } else if (!v) {
+          setFb(u4Fb, 'Escreve uma frase com "menina".', 'warn');
+        } else {
+          setFb(u4Fb, 'Hmm, a frase precisa de incluir a palavra "menina".', 'warn');
+          wrongSound();
+        }
+      });
+    }
+
+    // ===== STARS =====
+    const earned = new Set();
+    function markStar(taskNum) {
+      // tasks: 1 = reconhecer (u1), 2 = segmentar (u2), 3 = recombinar (u3), 4 = usar (u4)
+      // 4 estrelas na barra, uma por item da mini-avaliação.
+      let starN = 0;
+      if (taskNum === 1) starN = 1;
+      else if (taskNum === 2) starN = 2;
+      else if (taskNum === 3) starN = 3;
+      else if (taskNum === 4) starN = 4;
+      if (!starN) return;
+      if (earned.has(starN)) return;
+      earned.add(starN);
+      const star = document.getElementById('star-' + starN);
+      if (star) {
+        star.classList.add('on');
+        const desc = star.dataset.descriptor || ('Tarefa ' + starN);
+        star.setAttribute('aria-label', desc + ' · concluído');
+      }
+    }
+
+    // ===== MINI-ASSESS =====
+    document.querySelectorAll('.scale-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.assess;
+        document.querySelectorAll('.scale-btn[data-assess="' + id + '"]').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        try {
+          localStorage.setItem('menina30:assess:' + id, btn.dataset.val);
+        } catch (e) {}
+      });
+    });
+    // Restore
+    try {
+      ['reconhecer','segmentar','recombinar','usar'].forEach(id => {
+        const v = localStorage.getItem('menina30:assess:' + id);
+        if (v != null) {
+          const b = document.querySelector('.scale-btn[data-assess="' + id + '"][data-val="' + v + '"]');
+          if (b) b.classList.add('selected');
+        }
+      });
+    } catch (e) {}
+
+  </script>
+</body>
+</html>

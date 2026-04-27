@@ -1,10 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-PT">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>M28P #6 — Bota · Frases vivas | PageCraft</title>
-  <style>
+<html lang="pt-PT"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>M28P #6 — Bota · Onde está? | PageCraft</title><style>
     :root {
       --bg:#FFF7ED;
       --surface:#FFFFFF;
@@ -29,21 +24,19 @@
     h1 { font-size:clamp(2rem,6vw,3.4rem); }
     h2 { font-size:clamp(1.55rem,4vw,2.15rem); color:color-mix(in srgb,var(--primary) 72%, black); }
     p { margin:.35rem 0 .75rem; }
-    .meta,.pills,.row { display:flex; flex-wrap:wrap; gap:.55rem; align-items:center; }
+    .meta,.row { display:flex; flex-wrap:wrap; gap:.55rem; align-items:center; }
     .pill { border:2px solid rgba(255,255,255,.72); background:rgba(255,255,255,.20); color:inherit; border-radius:999px; padding:.35rem .75rem; font-weight:800; }
     .card { background:var(--surface); border:2px solid var(--primary); border-radius:var(--radius); box-shadow:var(--shadow); padding:1rem; margin:1rem 0; }
     .soft { background:color-mix(in srgb,var(--bg) 72%, white); border-style:dashed; }
     button,.button { min-width:var(--touch); min-height:var(--touch); border:2px solid color-mix(in srgb,var(--primary) 70%, black); background:var(--primary); color:white; border-radius:999px; padding:.65rem 1rem; font:inherit; font-weight:900; cursor:pointer; touch-action:manipulation; box-shadow:0 5px 14px rgba(0,0,0,.12); transition:transform .18s ease, box-shadow .18s ease, background .18s ease; }
     button:hover,.button:hover { transform:scale(1.04); } button:active { transform:scale(.97); }
     button.secondary { background:white; color:color-mix(in srgb,var(--primary) 72%, black); }
-    button.good { background:var(--ok); border-color:#15803d; }
-    button.warn { background:var(--try); border-color:#b45309; }
     :focus-visible { outline:4px solid var(--accent); outline-offset:3px; }
     .tabs { display:flex; flex-wrap:wrap; gap:.5rem; margin:.75rem 0; }
     .tab { background:white; color:var(--text); border-color:#d6cec7; } .tab[aria-selected='true'] { background:var(--primary); color:white; border-color:color-mix(in srgb,var(--primary) 70%, black); }
     .level { display:none; } .level.active { display:block; animation:pop .22s ease; }
     .syllables,.slots,.choices,.word-bank { display:flex; gap:.7rem; flex-wrap:wrap; justify-content:center; margin:1rem 0; }
-    .syllable,.slot,.word-token { border-radius:16px; min-height:58px; min-width:64px; display:inline-grid; place-items:center; padding:.45rem .85rem; font-size:clamp(1.45rem,5vw,2.25rem); font-weight:1000; letter-spacing:.02em; }
+    .syllable,.slot,.word-token { border-radius:16px; min-height:58px; min-width:64px; display:inline-grid; place-items:center; padding:.45rem .85rem; font-size:clamp(1.35rem,4.6vw,2.15rem); font-weight:1000; letter-spacing:.02em; }
     .syllable { color:white; border:3px solid rgba(0,0,0,.10); }
     .slot { background:#fff; border:3px dashed color-mix(in srgb,var(--primary) 60%, white); color:color-mix(in srgb,var(--primary) 65%, black); }
     .slot.filled { border-style:solid; }
@@ -62,91 +55,27 @@
     @keyframes pop { from { opacity:0; transform:translateY(8px) scale(.98); } to { opacity:1; transform:none; } }
     @media (prefers-reduced-motion:reduce) { * { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
     @media (max-width:640px) { body { font-size:18px; } .wrap { width:min(100% - 16px,1040px); } .hero { border-radius:20px; } }
-    </style>
-</head>
-<body>
-<a class="skip-link" href="#main">Ir para o conteúdo</a>
-<div class="wrap">
-  <header class="hero">
-    <div class="meta"><span class="pill">M28P · Palavra 6</span><span class="pill">1.º ano</span><span class="pill">Frases vivas</span></div>
-    <h1>🥾 Bota — Frases vivas</h1>
-    <p>Da palavra à frase: lê, escolhe, ordena e comunica a tua descoberta.</p>
-  </header>
-  <main id="main">
-    <section class="card soft">
-      <h2>Recorda a palavra</h2>
-      <div class="grid"><div><div class="big-emoji" aria-hidden="true">🥾</div></div><div><div class="target-word">Bota</div><div class="syllables" aria-label="Sílabas da palavra"><span class="syllable" style="background:#EA580C">bo</span> <span class="syllable" style="background:#7C3AED">ta</span></div></div></div>
-    </section>
-
-    <section class="card">
-      <h2>1. Completa a frase</h2>
-      <p class="target-word" style="font-size:clamp(1.6rem,5vw,2.6rem); text-transform:none">A _____ salta na poça.</p>
-      <div class="choices"><button class="secondary word-option" data-word="Bota">Bota</button>
-<button class="secondary word-option" data-word="Menina">Menina</button>
-<button class="secondary word-option" data-word="Menino">Menino</button></div>
-      <p id="clozeFeedback" class="feedback idle" role="status">Escolhe a palavra que faz sentido na frase.</p>
-    </section>
-
-    <section class="card">
-      <h2>2. Ordena a frase</h2>
-      <p>Toca nas palavras pela ordem certa. Se te enganares, recomeça.</p>
-      <div class="sentence-board" id="sentenceBoard" aria-live="polite"></div>
-      <div class="word-bank" id="wordBank"><button class="word-token" data-token="bota">bota</button>
+    </style></head>
+<body><a class="skip-link" href="#main">Ir para o conteúdo</a><div class="wrap">
+<header class="hero"><div class="meta"><span class="pill">M28P · Palavra 6</span><span class="pill">1.º ano</span><span class="pill">30 min</span></div><h1>🥾 Bota — Onde está?</h1><p>Lê a frase e descobre onde acontece. Depois ordena a frase e lê a pares.</p></header>
+<main id="main"><section class="card soft"><h2>Recorda sem repetir</h2><div class="grid"><div><div class="big-emoji" aria-hidden="true">🥾</div></div><div><div class="target-word">Bota</div><div class="syllables" aria-label="Sílabas da palavra"><span class="syllable" style="background:#EA580C">bo</span> <span class="syllable" style="background:#7C3AED">ta</span></div></div></div><p>Esta página trabalha a palavra dentro de uma frase, para não repetir a exploração principal.</p></section>
+<section class="card"><h2>1. Missão de leitura</h2><p class='target-word' style='font-size:clamp(1.4rem,4.5vw,2.4rem); text-transform:none'>A bota salta na poça.</p><div class='choices'><button class="secondary sentence-choice" data-answer="na poça">na poça</button>
+<button class="secondary sentence-choice" data-answer="no tapete">no tapete</button>
+<button class="secondary sentence-choice" data-answer="no prato">no prato</button>
+<button class="secondary sentence-choice" data-answer="na sala">na sala</button></div><p id='clozeFeedback' class='feedback idle' role='status'>Onde acontece?</p></section>
+<section class="card"><h2>2. Ordena a frase</h2><p>Toca nas palavras pela ordem certa. Se te enganares, recomeça.</p><div class="sentence-board" id="sentenceBoard" aria-live="polite"></div><div class="word-bank" id="wordBank"><button class="word-token" data-token="bota">bota</button>
 <button class="word-token" data-token="na">na</button>
 <button class="word-token" data-token="A">A</button>
 <button class="word-token" data-token="salta">salta</button>
-<button class="word-token" data-token="poça">poça</button></div>
-      <div class="row" style="justify-content:center"><button id="resetSentence" class="secondary">Recomeçar frase</button></div>
-      <p id="sentenceFeedback" class="feedback idle" role="status">Começa pela primeira palavra da frase.</p>
-    </section>
-
-    <section class="card">
-      <h2>3. Diferenciação</h2>
-      <div class="tabs" role="tablist" aria-label="Níveis de diferenciação">
-        <button class="tab" role="tab" aria-selected="true" data-tab="apoio">🟢 Apoio</button>
-        <button class="tab" role="tab" aria-selected="false" data-tab="objetivo">🟡 Objetivo</button>
-        <button class="tab" role="tab" aria-selected="false" data-tab="desafio">🔴 Desafio</button>
-      </div>
-      <div class="level active" id="apoio"><p>Lê a frase com o adulto e aponta a palavra <strong>Bota</strong>.</p></div>
-      <div class="level" id="objetivo"><p>Ordena a frase e lê-a a um colega.</p></div>
-      <div class="level" id="desafio"><p>Cria uma nova frase com <strong>Bota</strong> e uma palavra já aprendida.</p></div>
-    </section>
-
-    <section class="card teacher">
-      <h2>Nota para o professor</h2>
-      <p><strong>Regra a descobrir:</strong> a palavra ganha sentido quando entra numa frase oralmente legível.</p>
-      <p><strong>Evidência observável:</strong> o aluno completa a frase com Bota, ordena “A bota salta na poça.” e lê a frase a pares.</p>
-    </section>
-  </main>
-  <footer>PageCraft · Método das 28 Palavras · Bota</footer>
-</div>
+<button class="word-token" data-token="poça">poça</button></div><div class="row" style="justify-content:center"><button id="resetSentence" class="secondary">Recomeçar frase</button></div><p id="sentenceFeedback" class="feedback idle" role="status">Começa pela primeira palavra da frase.</p></section>
+<section class="card"><h2>3. Diferenciação</h2><div class="tabs" role="tablist" aria-label="Níveis de diferenciação"><button class="tab" role="tab" aria-selected="true" data-tab="apoio">🟢 Apoio</button><button class="tab" role="tab" aria-selected="false" data-tab="objetivo2">🟡 Objetivo</button><button class="tab" role="tab" aria-selected="false" data-tab="desafio">🔴 Desafio</button></div><div class="level active" id="apoio"><p>Lê a frase com o adulto e aponta a palavra <strong>Bota</strong>.</p></div><div class="level" id="objetivo2"><p>Resolve a missão, ordena a frase e lê-a a um colega.</p></div><div class="level" id="desafio"><p>Cria uma frase nova com <strong>Bota</strong> e muda apenas uma palavra.</p></div></section>
+<section class="card teacher"><h2>Nota para o professor</h2><p><strong>Regra a descobrir:</strong> a palavra ganha sentido quando entra numa frase oralmente legível.</p><p><strong>Evidência observável:</strong> o aluno identifica o contexto/local da frase; depois ordena “A bota salta na poça.”.</p></section></main><footer>PageCraft · Método das 28 Palavras · Bota</footer></div>
 <script>
-const answerWord = "Bota";
-const expected = ["A", "bota", "salta", "na", "poça"];
-let chosen = [];
-function setFeedback(id, msg, ok=false) { const el=document.getElementById(id); el.textContent=msg; el.className='feedback ' + (ok ? 'ok' : ''); }
-document.querySelectorAll('.word-option').forEach(btn=>btn.addEventListener('click',()=>{
-  const ok = btn.dataset.word === answerWord;
-  setFeedback('clozeFeedback', ok ? 'Certo! A frase ficou com sentido.' : 'Lê outra vez. Essa palavra não combina tão bem com a imagem e a frase.', ok);
-}));
-function renderSentence() {
-  document.getElementById('sentenceBoard').innerHTML = chosen.map(t=>'<span class="word-token used">'+t+'</span>').join('');
-  document.querySelectorAll('#wordBank .word-token').forEach(btn=>{ btn.disabled = chosen.includes(btn.dataset.token); btn.classList.toggle('used', chosen.includes(btn.dataset.token)); });
-}
-document.getElementById('wordBank').addEventListener('click', e=>{
-  const btn=e.target.closest('button[data-token]'); if(!btn) return;
-  const need=expected[chosen.length]; const tok=btn.dataset.token;
-  if(tok===need) { chosen.push(tok); renderSentence();
-    if(chosen.length===expected.length) setFeedback('sentenceFeedback','Muito bem! A frase está completa e pode ser lida em voz alta.',true);
-    else setFeedback('sentenceFeedback','Boa! Procura a próxima palavra.');
-  } else setFeedback('sentenceFeedback','Ainda não. Diz a frase devagar e procura a palavra que vem agora.');
-});
-document.getElementById('resetSentence').addEventListener('click',()=>{ chosen=[]; renderSentence(); setFeedback('sentenceFeedback','Começa pela primeira palavra da frase.'); });
-document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{
-  document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected','false')); tab.setAttribute('aria-selected','true');
-  document.querySelectorAll('.level').forEach(l=>l.classList.remove('active')); document.getElementById(tab.dataset.tab).classList.add('active');
-}));
-renderSentence();
-</script>
-</body>
-</html>
+const challengeAnswer="na poça"; const expected=["A", "bota", "salta", "na", "poça"]; let chosen=[];
+function setFeedback(id,msg,ok=false){const el=document.getElementById(id);el.textContent=msg;el.className='feedback '+(ok?'ok':'');}
+document.querySelectorAll('.sentence-choice').forEach(btn=>btn.addEventListener('click',()=>{const ok=btn.dataset.answer===challengeAnswer;setFeedback('clozeFeedback', ok?'Certo! A frase ficou com sentido.':'Lê outra vez e compara com a imagem e a frase.', ok);}));
+function renderSentence(){document.getElementById('sentenceBoard').innerHTML=chosen.map(t=>'<span class="word-token used">'+t+'</span>').join('');document.querySelectorAll('#wordBank .word-token').forEach(btn=>{btn.disabled=chosen.includes(btn.dataset.token);btn.classList.toggle('used',chosen.includes(btn.dataset.token));});}
+document.getElementById('wordBank').addEventListener('click',e=>{const btn=e.target.closest('button[data-token]'); if(!btn)return; const need=expected[chosen.length], tok=btn.dataset.token; if(tok===need){chosen.push(tok);renderSentence(); if(chosen.length===expected.length)setFeedback('sentenceFeedback','Muito bem! A frase está pronta para ler em voz alta.',true); else setFeedback('sentenceFeedback','Boa! Procura a próxima palavra.');} else setFeedback('sentenceFeedback','Ainda não. Diz a frase devagar e procura a palavra que vem agora.');});
+document.getElementById('resetSentence').addEventListener('click',()=>{chosen=[];renderSentence();setFeedback('sentenceFeedback','Começa pela primeira palavra da frase.');});
+document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected','false'));tab.setAttribute('aria-selected','true');document.querySelectorAll('.level').forEach(l=>l.classList.remove('active'));document.getElementById(tab.dataset.tab).classList.add('active');}));renderSentence();
+</script></body></html>
