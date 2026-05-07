@@ -27,7 +27,7 @@ O orquestrador (a sessão principal) coordena, valida artefactos e decide quando
 3. Fontes oficiais no vault: `~/.openclaw/workspace/vault/documentos-oficiais/`.
 4. Recursos desta skill: `identities/`, `references/`, `assets/`, `scripts/`, `agents/`.
 5. `CLAUDE.md` do repo PageCraft (regras técnicas/design).
-6. Skills irmãs (`skills/codex/`, `skills/openclaw/`) como referência histórica se houver dúvida.
+6. Skills irmãs (`skills/codex/`, `skills/openclaw/`) quando existirem no repo, como referência histórica se houver dúvida.
 
 ## Quando usar
 
@@ -70,27 +70,31 @@ Se algum subagente não estiver disponível (ainda não copiado para `.claude/ag
 
 ## Ambiente
 
-Assumir `REPO_ROOT` como a raiz do repo PageCraft. Se necessário:
+Assumir `REPO_ROOT` como a raiz do repo PageCraft em uso (auto-detectada pelos scripts). Caso seja preciso forçar:
 
 ```bash
-REPO_ROOT="/Users/igor/dev/pagecraft"
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 export PAGECRAFT_WORKSPACE="$REPO_ROOT"
 export PAGECRAFT_REPO="$REPO_ROOT"
-export PAGECRAFT_VAULT="$HOME/.openclaw/workspace/vault"
+# Vault é opcional. Definir só se existir uma pasta com pedagogia canónica:
+# export PAGECRAFT_VAULT="$HOME/.openclaw/workspace/vault"
 ```
+
+Os scripts em `skills/claude/scripts/` auto-detectam a raiz quando invocados de dentro do repo, e fazem fallback gracioso quando o vault não existe (a página continua a poder ser gerada, mas sem citações curriculares).
 
 Artefactos de trabalho ficam em `outputs/lessons/`.
 
-## Instalação dos subagentes (uma vez por workspace)
+## Instalação
 
-Antes da primeira utilização, garantir que os ficheiros em `skills/claude/agents/` estão acessíveis ao Claude Code. Se ainda não estiverem em `.claude/agents/` do projeto:
+Ver `README.md` desta pasta para instruções completas. Resumo rápido:
 
 ```bash
-mkdir -p .claude/agents
-cp skills/claude/agents/pagecraft-*.md .claude/agents/
+# A partir da raiz do repo PageCraft:
+bash skills/claude/install.sh           # instalação por projeto (.claude/)
+bash skills/claude/install.sh --user    # instalação global (~/.claude/)
 ```
 
-Não é preciso fazer mais nada: os subagentes ficam imediatamente disponíveis para `Agent(subagent_type="pagecraft-architect", ...)`, etc. O ficheiro frontmatter de cada agente já declara `tools` e `model` quando relevante.
+O script copia a skill para `.claude/skills/pagecraft/` e os subagentes para `.claude/agents/`. Os subagentes ficam imediatamente disponíveis para `Agent(subagent_type="pagecraft-architect", ...)`, etc. Cada agente já declara `tools` e `model` no frontmatter (Architect=opus, Proofreader=haiku, restantes=sonnet).
 
 ## Pipeline obrigatório
 
