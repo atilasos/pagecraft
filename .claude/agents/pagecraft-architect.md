@@ -2,7 +2,7 @@
 name: pagecraft-architect
 description: Especialista em design curricular pt-PT que produz DocSpec-AM JSON para páginas PageCraft. Usar como FASE 1 do pipeline PageCraft, depois de o orquestrador normalizar topic/year/duration/maker. Lê o vault pedagógico e devolve JSON válido em outputs/lessons/<slug>-docspec.json.
 tools: Read, Glob, Grep, Bash, Write
-model: sonnet
+model: opus
 ---
 
 # 🏗️ Identidade: Architect — Especialista em Design Curricular

@@ -1,0 +1,105 @@
+{
+  "slug": "verbos-3-indicativo",
+  "palette": {
+    "bg": "#f5f1e8",
+    "surface": "#fffef9",
+    "primary": "#0d9488",
+    "accent": "#7c3aed",
+    "text": "#1e1b18"
+  },
+  "typography": {
+    "fontFamily": "Nunito, 'Comic Sans MS', Chalkboard, sans-serif",
+    "scale": "kids",
+    "baseSizePx": 18,
+    "headingSizePx": 28,
+    "weights": [400, 700, 800]
+  },
+  "layout": {
+    "borderRadius": 14,
+    "spacing": "comfortable",
+    "maxWidthPx": 960,
+    "padding": "1.5rem"
+  },
+  "components": {
+    "buttons": "rounded-full (border-radius 999px), padding 0.75rem 1.5rem, sombra leve (0 2px 6px rgba(0,0,0,0.15)), hover com escala 1.05 e saturação aumentada, font-weight 700, min-height 48px para touch",
+    "cards": "surface (#fffef9) com borda 2px solid na cor do tempo verbal activo, border-radius 14px, sombra suave (0 2px 8px rgba(0,0,0,0.08)), padding 1rem",
+    "badges": "pill (border-radius 999px), fundo accent (#7c3aed) com texto branco bold; variantes por conjugação — ver conjugationMarkers",
+    "feedback_correct": "fundo verde #22c55e com ícone ✓ branco bold, border-radius 10px",
+    "feedback_incorrect": "fundo âmbar #f59e0b com ícone ✗ branco bold, border-radius 10px",
+    "table_cell": "border-radius 8px, padding 0.5rem 0.75rem, borda 1.5px solid #e5e0d4, fundo surface; célula seleccionada recebe fundo na cor do tempo verbal activo com texto branco",
+    "tooltip": "fundo #1e1b18, texto branco, border-radius 8px, font-size 15px, sombra média, max-width 220px",
+    "progress_bar": "altura 8px, border-radius 999px, fundo #e5e0d4, fill em primary (#0d9488)"
+  },
+  "tenseColors": {
+    "presente": {
+      "color": "#0d9488",
+      "label": "Presente",
+      "description": "verde-esmeralda — acção que acontece agora, viva e activa"
+    },
+    "preterito_perfeito": {
+      "color": "#7c3aed",
+      "label": "Pretérito Perfeito",
+      "description": "violeta — acção concluída e encerrada no passado"
+    },
+    "futuro": {
+      "color": "#ea580c",
+      "label": "Futuro",
+      "description": "laranja-âmbar — acção energética que ainda está por vir"
+    }
+  },
+  "conjugationMarkers": {
+    "primeira_ar": {
+      "borderColor": "#3b82f6",
+      "label": "1.ª conj. (-ar)",
+      "badgeBg": "#eff6ff",
+      "badgeText": "#1d4ed8"
+    },
+    "segunda_er": {
+      "borderColor": "#ec4899",
+      "label": "2.ª conj. (-er)",
+      "badgeBg": "#fdf2f8",
+      "badgeText": "#9d174d"
+    },
+    "terceira_ir": {
+      "borderColor": "#84cc16",
+      "label": "3.ª conj. (-ir)",
+      "badgeBg": "#f7fee7",
+      "badgeText": "#3f6212"
+    }
+  },
+  "morphemeColors": {
+    "radical": {
+      "color": "#2563eb",
+      "decoration": "underline",
+      "description": "azul — parte que não muda nos verbos regulares"
+    },
+    "terminacao": {
+      "color": "#ea580c",
+      "decoration": "underline",
+      "fontWeight": 700,
+      "description": "laranja — terminação que marca o tempo e a pessoa; negrito para reforçar a distinção"
+    }
+  },
+  "motion": {
+    "transitions": "subtle",
+    "durationMs": 200,
+    "fadeIn": "opacity 0→1 em 200ms ease-out",
+    "scaleOnSelect": "transform scale(1.03) em 150ms ease"
+  },
+  "accessibility": {
+    "contrast": "WCAG-AA",
+    "focusRing": true,
+    "minTouchTargetPx": 48,
+    "lang": "pt-PT",
+    "contrastChecks": [
+      { "fg": "#1e1b18", "bg": "#f5f1e8", "ratio": "≥7:1 — texto normal sobre bg" },
+      { "fg": "#ffffff", "bg": "#0d9488", "ratio": "≥4.5:1 — texto branco sobre presente" },
+      { "fg": "#ffffff", "bg": "#7c3aed", "ratio": "≥4.5:1 — texto branco sobre pretérito perfeito" },
+      { "fg": "#ffffff", "bg": "#ea580c", "ratio": "≥4.5:1 — texto branco sobre futuro" },
+      { "fg": "#1d4ed8", "bg": "#eff6ff", "ratio": "≥4.5:1 — badge 1.ª conjugação" },
+      { "fg": "#9d174d", "bg": "#fdf2f8", "ratio": "≥4.5:1 — badge 2.ª conjugação" },
+      { "fg": "#3f6212", "bg": "#f7fee7", "ratio": "≥4.5:1 — badge 3.ª conjugação" }
+    ]
+  },
+  "notes": "Paleta quente baseada no cream (#f5f1e8) das páginas M28P existentes, garantindo continuidade visual no projecto. Cada tempo verbal recebe uma cor semântica estável (presente=verde-esmeralda, pretérito perfeito=violeta, futuro=laranja) usada em botões de toggle, cabeçalhos de coluna, células seleccionadas e badges de identificação — nunca trocada ao longo da página. As três conjugações são marcadas por badges de cor diferente (azul/rosa/lima) com fundo muito claro e texto escuro para WCAG AA, evitando poluição cromática sobre a paleta principal de 5 cores. A distinção radical/terminação segue a codificação azul/laranja especificada no DocSpec (Unit 2), com a terminação em negrito adicional para reforço multi-canal mesmo sem cor."
+}

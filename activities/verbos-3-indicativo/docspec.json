@@ -1,0 +1,243 @@
+{
+  "topic": "Verbos no modo indicativo: presente, pretérito perfeito e futuro",
+  "ageRange": "8-9 anos (3.º ano)",
+  "duration": 30,
+  "objectives": [
+    "Identificar o tempo verbal (presente, pretérito perfeito, futuro do indicativo) de uma forma verbal dada",
+    "Conjugar verbos regulares das três conjugações (-ar, -er, -ir) e irregulares de alta frequência no modo indicativo",
+    "Descobrir as terminações características de cada tempo/pessoa por observação de paradigmas",
+    "Aplicar correctamente os três tempos do indicativo em frases completas"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "3.º ano",
+        "domain": "Gramática",
+        "descriptor": "Conjugar verbos regulares e irregulares no presente, no pretérito perfeito e no futuro do modo indicativo",
+        "source": "portugues-3-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "3.º ano",
+        "domain": "Gramática",
+        "descriptor": "Utilizar apropriadamente os tempos verbais para exprimir anterioridade, posterioridade e simultaneidade",
+        "source": "portugues-3-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "3.º ano",
+        "domain": "Gramática",
+        "descriptor": "Aquisição de conhecimento sobre regras de flexão de verbos regulares e irregulares (ação estratégica de ensino)",
+        "source": "portugues-3-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Português",
+        "year": "3.º ano",
+        "domain": "Gramática",
+        "descriptor": "Descobrir regularidades na formação de palavras (manipulação de constituintes de palavras — aqui aplicada às terminações verbais)",
+        "source": "portugues-3-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-D: Pensamento crítico e pensamento criativo",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Trabalho curricular comparticipado"
+    ],
+    "instruments": ["PIT", "ficha de registo de descobertas"],
+    "socialOrganization": "individual (exploração e prática — 25 min) → registo pessoal no PIT após a sessão"
+  },
+  "materials": [
+    "Tablet ou computador com browser (1 por aluno)",
+    "Quadro interactivo para aquecimento colectivo (opcional)"
+  ],
+  "units": [
+    {
+      "summary": "Aquecimento: o tempo verbal situa a acção no passado, presente ou futuro",
+      "textDescription": "O aluno recebe frases curtas com verbos em destaque e tem de decidir se a acção aconteceu (passado), acontece agora (presente) ou vai acontecer (futuro). O objectivo é activar conhecimento implícito sobre temporalidade antes de nomear os tempos gramaticais. A página usa linguagem do dia-a-dia ('já aconteceu', 'está a acontecer', 'ainda vai acontecer') em vez de metalinguagem imediata.",
+      "interaction": {
+        "state": [
+          {
+            "name": "frase_atual",
+            "type": "quiz",
+            "options": ["Já aconteceu", "Está a acontecer agora", "Ainda vai acontecer"],
+            "default": null
+          },
+          {
+            "name": "indice_frase",
+            "type": "derived",
+            "derivedFrom": "contador interno 0-4"
+          }
+        ],
+        "render": "Uma frase por vez, centrada, com o verbo sublinhado e em cor diferente. Três botões grandes com etiquetas temporais ('Já aconteceu / Está a acontecer agora / Ainda vai acontecer'). Barra de progresso no topo (5 frases). Feedback visual imediato: fundo verde claro (acerto) ou vermelho claro (erro) com a forma verbal revelada. Frases exemplares: 'O João cantou uma música.' / 'A Ana come a sopa.' / 'Nós vamos partir amanhã.' / 'O cão bebeu água.' / 'Eu farei os trabalhos.'",
+        "transition": "Tocar num botão → feedback imediato → após 1,5s avança automaticamente para a frase seguinte",
+        "constraint": "A terminação do verbo e as palavras em redor da frase (ontem, agora, amanhã) são pistas que permitem situar a acção no tempo — sem precisar de decorar nomes técnicos",
+        "assessment": "O aluno responde correctamente a pelo menos 4 das 5 frases, identificando o marcador temporal implícito ou explícito"
+      },
+      "differentiation": {
+        "support": "Frases acompanham ícone visual (relógio com agulhas no passado / presente / futuro) e a frase inclui sempre um marcador explícito ('ontem', 'agora', 'amanhã')",
+        "standard": "Nem todas as frases têm marcador temporal explícito; o aluno deve apoiar-se na forma verbal",
+        "challenge": "Duas frases ambíguas sem marcador temporal: o aluno toca no verbo para ver um tooltip pedindo justificação da escolha ('Como sabes?')"
+      },
+      "duration": 5
+    },
+    {
+      "summary": "Descoberta: as terminações dos verbos regulares mudam de forma previsível conforme o tempo e a pessoa",
+      "textDescription": "O aluno explora um paradigma interactivo de três verbos regulares — cantar (1.ª conjugação), comer (2.ª conjugação), partir (3.ª conjugação) — em tabela. Pode seleccionar qualquer célula (pessoa × tempo) e ver a forma verbal formada. O objectivo é que o aluno, pela manipulação, descubra que as terminações variam sistematicamente: a mesma pessoa no mesmo tempo tem terminações semelhantes dentro da mesma conjugação, e que o radical se mantém inalterado nos regulares. O Constraint é esta regularidade morfológica — nunca enunciada directamente.",
+      "interaction": {
+        "state": [
+          {
+            "name": "verbo_selecionado",
+            "type": "dropdown",
+            "options": ["cantar", "comer", "partir"],
+            "default": "cantar"
+          },
+          {
+            "name": "tempo_selecionado",
+            "type": "toggle",
+            "options": ["Presente", "Pretérito Perfeito", "Futuro"],
+            "default": "Presente"
+          },
+          {
+            "name": "pessoa_selecionada",
+            "type": "sorting",
+            "options": ["eu", "tu", "ele/ela", "nós", "vós", "eles/elas"],
+            "default": "eu"
+          },
+          {
+            "name": "forma_verbal",
+            "type": "derived",
+            "derivedFrom": "conjugação(verbo_selecionado, tempo_selecionado, pessoa_selecionada)"
+          }
+        ],
+        "render": "Tabela 6×3 (pessoas × tempos) com células tocáveis. A célula seleccionada fica destacada (cor primária). A forma verbal aparece grande no centro acima da tabela. Radical sublinhado a azul, terminação sublinhada a laranja — a mesma codificação de cor em todas as células. Quando o aluno troca de verbo, apenas a coluna de terminações muda de texto; o radical muda também mas mantém a cor azul. Minilegenda no canto: 'azul = radical | laranja = terminação'.",
+        "transition": "Tocar célula → forma verbal actualiza instantaneamente com animação de fade; trocar verbo/tempo → tabela toda actualiza mantendo a célula seleccionada",
+        "constraint": "Em verbos regulares, o radical não muda e as terminações de cada pessoa/tempo são fixas dentro da mesma conjugação. Verbos de conjugações diferentes têm terminações distintas, mas internamente consistentes.",
+        "assessment": "O aluno consegue, sem ajuda, dizer a terminação correcta de 3 pessoas diferentes do mesmo tempo para o verbo 'cantar', antes de confirmar na tabela — demonstrado tocando 'Testar-me' que esconde as terminações e pede preenchimento"
+      },
+      "differentiation": {
+        "support": "Tabela reduzida: apenas 3 pessoas (eu, ele/ela, eles/elas) e 2 tempos (presente e pretérito perfeito); cores mais contrastadas; tooltip de ajuda em cada célula com a divisão radical+terminação explicitada em sílabas",
+        "standard": "Tabela completa 6×3 com os três verbos; o aluno compara colunas e regista no PIT a terminação de uma pessoa à sua escolha",
+        "challenge": "Após exploração, o aluno arrasta as terminações soltas (baralhadas) para as células correctas de um paradigma em branco de um novo verbo regular: 'andar' — sem ver a tabela de referência"
+      },
+      "duration": 8
+    },
+    {
+      "summary": "Verbos irregulares de alta frequência: ser, ter, ir, fazer — o radical muda, mas a lógica de tempo mantém-se",
+      "textDescription": "O aluno confronta os mesmos três tempos (presente, pretérito perfeito, futuro) com quatro verbos irregulares de uso quotidiano: ser, ter, ir, fazer. A página mostra dois paradigmas em paralelo: um verbo regular (cantar) e um irregular (à escolha do aluno). O aluno observa que as terminações de tempo são semelhantes em alguns casos mas o radical é imprevisível — daí serem 'irregulares'. O objectivo é que o aluno reconheça as formas sem as decorar sistematicamente nesta sessão, mas comece a distinguir a irregularidade do radical da regularidade da terminação.",
+      "interaction": {
+        "state": [
+          {
+            "name": "irregular_selecionado",
+            "type": "dropdown",
+            "options": ["ser", "ter", "ir", "fazer"],
+            "default": "ser"
+          },
+          {
+            "name": "tempo_comparacao",
+            "type": "toggle",
+            "options": ["Presente", "Pretérito Perfeito", "Futuro"],
+            "default": "Presente"
+          },
+          {
+            "name": "pessoa_comparacao",
+            "type": "derived",
+            "derivedFrom": "fixo em 'eu / tu / ele / nós / eles' para as duas colunas"
+          }
+        ],
+        "render": "Duas colunas lado a lado: esquerda = 'cantar' (regular, cinzento claro), direita = verbo irregular seleccionado (fundo amarelo claro). Radical a azul, terminação a laranja — mesma codificação. Nas formas onde o radical muda radicalmente (ex: 'sou' em vez de 'ser+o'), o radical fica destacado com borda vermelha e um ponto de interrogação tocável que abre: 'Este verbo é irregular — o radical muda! Tens de memorizar esta forma.' Botão de toggle de tempo no topo para comparar os três tempos.",
+        "transition": "Seleccionar irregular → coluna direita actualiza; tocar ponto de interrogação → tooltip explicativo; toggle tempo → ambas as colunas actualizam em simultâneo",
+        "constraint": "Nos verbos irregulares o radical pode mudar completamente dependendo do tempo e da pessoa, mas as terminações de tempo seguem ainda algumas regularidades partilhadas com os verbos regulares (especialmente no futuro)",
+        "assessment": "O aluno toca em 3 formas verbais de 'ir' (uma por tempo: presente, pretérito perfeito, futuro) e diz em voz alta ou escreve se o radical mudou ou não face ao infinitivo — critério: identifica correctamente a irregularidade em pelo menos 2 das 3 formas"
+      },
+      "differentiation": {
+        "support": "Apenas 1 verbo irregular ('ser') com tabela de 3 pessoas (eu/ele/eles) e 2 tempos; as formas irregulares têm ícone de 'surpresa' antes do texto",
+        "standard": "4 verbos irregulares disponíveis; aluno explora pelo menos 2; compara as 3 pessoas de 1 tempo com o regular",
+        "challenge": "O aluno recebe uma frase com lacuna: 'Ontem eu ___ ao mercado.' e deve escolher entre 'fui / fiz / tive' — com justificação do tempo e do verbo correcto; 3 frases deste tipo com irregulares diferentes"
+      },
+      "duration": 7
+    },
+    {
+      "summary": "Prática guiada: conjugar e completar frases com o tempo correcto",
+      "textDescription": "O aluno recebe frases com lacunas que pedem a forma correcta de um verbo dado entre parêntesis. Cada frase inclui um indicador de tempo (marcador adverbial ou contexto narrativo). Esta unit activa a síntese: o aluno deve conjugar (não apenas reconhecer) e escolher o tempo adequado ao contexto. Verbos usados: cantar, comer, partir, ser, ter, ir — garantindo cobertura das três conjugações regulares e dos irregulares.",
+      "interaction": {
+        "state": [
+          {
+            "name": "frase_lacuna",
+            "type": "quiz",
+            "options": [],
+            "default": null
+          },
+          {
+            "name": "resposta_aluno",
+            "type": "drag",
+            "targets": ["lacuna_1", "lacuna_2", "lacuna_3", "lacuna_4", "lacuna_5", "lacuna_6"]
+          },
+          {
+            "name": "banco_formas",
+            "type": "derived",
+            "derivedFrom": "conjunto de 4 opções por frase: 1 correcta + 3 distratores (tempo errado ou pessoa errada)"
+          }
+        ],
+        "render": "Uma frase por vez com lacuna assinalada por '___'. Abaixo da frase, 4 cards tocáveis com formas verbais possíveis — incluem sempre formas do mesmo verbo em tempos diferentes e/ou pessoas diferentes. Após selecção correcta, a lacuna preenche-se a verde e a frase completa é lida. Após erro, a forma errada fica vermelha e o aluno pode tentar novamente. Contador de acertos no topo. Frases: 1) 'Amanhã nós ___ (partir) para as férias.' 2) 'Ontem o Pedro ___ (comer) toda a sopa.' 3) 'Eu já ___ (ser) pequenino, mas agora cresci.' 4) 'A Mariana ___ (cantar) todos os dias.' 5) 'No ano que vem eles ___ (ter) um novo professor.' 6) 'Hoje de manhã eu ___ (ir) ao parque.'",
+        "transition": "Tocar card → lacuna preenche com animação; verde = correcto (avança após 1s); vermelho = incorrecto (card volta ao banco, aluno tenta outra opção)",
+        "constraint": "O marcador temporal da frase (amanhã, ontem, todos os dias, hoje) é a pista que determina qual tempo verbal é adequado — não é possível acertar sem ler o contexto da frase",
+        "assessment": "O aluno completa correctamente pelo menos 5 das 6 frases; em caso de erro, identifica e corrige após 1 nova tentativa"
+      },
+      "differentiation": {
+        "support": "Apenas 4 frases; marcadores temporais sublinhados automaticamente; apenas 3 opções por lacuna (sem distratores de pessoa errada)",
+        "standard": "6 frases, 4 opções, marcadores sem sublinhado; feedback apenas no acerto/erro",
+        "challenge": "6 frases + 2 frases bónus onde o verbo não é dado: o aluno escreve livremente a forma correcta num campo de texto; o sistema valida a resposta contra uma lista de formas aceites"
+      },
+      "duration": 7
+    },
+    {
+      "summary": "Mini-avaliação: identificar tempo + conjugar numa frase nova",
+      "textDescription": "Tarefa de síntese em dois passos: primeiro o aluno identifica o tempo de 4 formas verbais apresentadas isoladamente (matching entre forma e etiqueta de tempo); depois recebe 2 frases para completar de forma autónoma, sem banco de opções — escrevendo a forma directamente. Esta unit serve de evidência de aprendizagem observável para o professor e o aluno.",
+      "interaction": {
+        "state": [
+          {
+            "name": "pares_avaliacao",
+            "type": "matching",
+            "default": null
+          },
+          {
+            "name": "formas_a_identificar",
+            "type": "derived",
+            "derivedFrom": "['cantou', 'partiremos', 'comes', 'fui'] — colunas esquerda; ['Pretérito Perfeito', 'Futuro', 'Presente', 'Pretérito Perfeito (irreg.)'] — coluna direita"
+          },
+          {
+            "name": "frase_livre_1",
+            "type": "canvas",
+            "tools": ["teclado"],
+            "default": ""
+          },
+          {
+            "name": "frase_livre_2",
+            "type": "canvas",
+            "tools": ["teclado"],
+            "default": ""
+          }
+        ],
+        "render": "Fase 1 — Matching: coluna esquerda com 4 formas verbais (cards azuis), coluna direita com 4 etiquetas de tempo (cards cinzentos). Linha tracejada liga quando o aluno toca par a par. Feedback no final: pares correctos ficam verdes, incorrectos ficam vermelhos com a ligação correcta revelada. Fase 2 — após matching, aparecem 2 frases com lacuna e campo de texto livre (teclado virtual ou físico). Botão 'Verificar' valida. Frases: a) 'No verão passado eu ___ (fazer) uma viagem.' b) 'Amanhã a turma ___ (cantar) uma canção.'",
+        "transition": "Fase 1: ligar pares → feedback imediato por par; após 4 pares, botão 'Continuar' activa fase 2. Fase 2: escrever no campo → 'Verificar' → feedback com forma correcta revelada se errado",
+        "constraint": "Identificar um tempo verbal exige reconhecer as terminações características — e conjugar correctamente exige aplicar essas terminações ao sujeito da frase",
+        "assessment": "Critério 1 (identificação): o aluno liga correctamente pelo menos 3 dos 4 pares. Critério 2 (produção): o aluno escreve correctamente pelo menos 1 das 2 formas verbais livres. Evidência registável pelo professor no PIT do aluno."
+      },
+      "differentiation": {
+        "support": "Fase 1 com apenas 3 pares (presente/pretérito perfeito/futuro, verbos regulares); fase 2 com banco de 3 opções em vez de campo livre",
+        "standard": "4 pares + 2 campos livres conforme descrito",
+        "challenge": "4 pares + 2 campos livres + 1 tarefa de escrita: 'Escreve uma frase tua com o verbo IR no futuro e outra com o verbo SER no pretérito perfeito.' — avaliação por critério de adequação do tempo ao contexto criado"
+      },
+      "duration": 3
+    }
+  ],
+  "sessionFlow": "0-5min: Unit 1 — aquecimento com frases e identificação temporal intuitiva (activação do conhecimento implícito, sem metalinguagem) → 5-13min: Unit 2 — exploração da tabela de verbos regulares, descoberta das terminações por cor (Constraint morfológico central) → 13-20min: Unit 3 — confronto regular vs. irregular em paradigma paralelo, reconhecimento das irregularidades do radical → 20-27min: Unit 4 — prática guiada com frases lacunares e banco de formas, consolidação da relação contexto-tempo-forma → 27-30min: Unit 5 — mini-avaliação em dois passos (matching + produção livre), evidência observável de aprendizagem"
+}

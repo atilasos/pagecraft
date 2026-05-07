@@ -1,0 +1,514 @@
+{
+  "pass": false,
+  "severity": "blocker",
+  "issues": [
+    {
+      "id": "P01",
+      "type": "ortografia",
+      "severity": "blocker",
+      "location": "header .meta — texto visível",
+      "original": "Portugues — Gramatica",
+      "suggestion": "Português — Gramática",
+      "reason": "Faltam acentos em dois termos do cabeçalho, visíveis ao aluno no topo da página. AO90 exige 'Português' e 'Gramática'.",
+      "routing": "builder"
+    },
+    {
+      "id": "P02",
+      "type": "ortografia",
+      "severity": "blocker",
+      "location": "header .objectives li — todos os quatro objetivos visíveis",
+      "original": "Reconhecer se um verbo esta no passado, presente ou futuro | Conjugar verbos regulares (-ar, -er, -ir) e irregulares (ser, ter, ir, fazer) | Descobrir as terminacoes de cada tempo e pessoa | Usar os tres tempos do indicativo em frases completas",
+      "suggestion": "Reconhecer se um verbo está no passado, presente ou futuro | Conjugar verbos regulares (-ar, -er, -ir) e irregulares (ser, ter, ir, fazer) | Descobrir as terminações de cada tempo e pessoa | Usar os três tempos do indicativo em frases completas",
+      "reason": "Quatro objetivos da aula apresentados sem acentuação ('esta', 'terminacoes', 'tres'). São o primeiro texto que o aluno lê — o erro é imediato e sistemático.",
+      "routing": "builder"
+    },
+    {
+      "id": "P03",
+      "type": "ortografia",
+      "severity": "blocker",
+      "location": "Sistémico — todas as strings JS e HTML estático (aprox. 80+ ocorrências)",
+      "original": "accao, terminacoes, preterito, conjugacao, celula, Preterito Perfeito, nao, sao, amanha, ferias, musica, cancao, cancoes, manha, agua, proximo, tambem, proprias, proprios, correcto/a, seleccionado, incorrecto, padrao, etc.",
+      "suggestion": "ação, terminações, pretérito, conjugação, célula, Pretérito Perfeito, não, são, amanhã, férias, música, canção, manhã, água, próximo, também, próprias, próprios, correto/a (AO90), selecionado, incorreto, padrão, etc.",
+      "reason": "O HTML foi gerado sistematicamente sem acentuação em todo o texto visível ao aluno (instruções, feedback, legendas, botões). Trata-se de um erro de encoding/geração que afeta toda a página e é incompatível com o requisito AO90.",
+      "routing": "builder"
+    },
+    {
+      "id": "P04",
+      "type": "constraint-leak",
+      "severity": "blocker",
+      "location": "Unit 2 — legenda .legend-chip (apoio e intermédio)",
+      "original": "radical (nao muda) | terminacao (muda)",
+      "suggestion": "Remover o texto parentético '(nao muda)' e '(muda)' das legendas. Manter apenas: 'radical' e 'terminação'. Alternativamente: 'radical' e 'terminação — repara no padrão!'",
+      "reason": "O DocSpec estabelece como Constraint central da Unit 2 que 'a regularidade morfológica nunca [é] enunciada directamente' — deve emergir da interação. A legenda declara explicitamente 'radical (nao muda)' e 'terminacao (muda)', revelando a conclusão antes de o aluno a descobrir.",
+      "routing": "builder"
+    },
+    {
+      "id": "P05",
+      "type": "conjugacao",
+      "severity": "blocker",
+      "location": "CONJUGATIONS JS — cantar/comer/partir/andar, campo Futuro, todas as pessoas com acento obrigatório",
+      "original": "cantar Futuro: ['arei','aras','ara','aremos','areis','arao'] | comer Futuro: ['erei','eras','era','eremos','ereis','erao'] | partir Futuro: ['irei','iras','ira','iremos','ireis','irao']",
+      "suggestion": "cantar Futuro: ['arei','arás','ará','aremos','areis','arão'] | comer Futuro: ['erei','erás','erá','eremos','ereis','erão'] | partir Futuro: ['irei','irás','irá','iremos','ireis','irão']",
+      "reason": "As terminações do futuro do indicativo para 2.ª (tu), 3.ª (ele/ela) e 6.ª (eles/elas) pessoa exigem acento gráfico em português: '-ás', '-á', '-ão'. Estas formas são renderizadas ao aluno nas tabelas da Unit 2 e nas comparações da Unit 3 — um erro de conjugação é crítico numa página sobre verbos.",
+      "routing": "builder"
+    },
+    {
+      "id": "P06",
+      "type": "conjugacao",
+      "severity": "blocker",
+      "location": "IRREGULARS JS — ser/ter/ir/fazer, campo Futuro e Presente, formas com acento obrigatório",
+      "original": "ser Futuro: ['serei','seras','sera','seremos','sereis','serao'] | ter Futuro: ['terei','teras','tera','teremos','tereis','terao'] | ir Futuro: ['irei','iras','ira','iremos','ireis','irao'] | fazer Futuro: ['farei','faras','fara','faremos','fareis','farao'] | ser Presente: ['sou','es','e','somos','sois','sao'] | ir Presente: ['vou','vais','vai','vamos','ides','vao'] | fazer Presente: ['faco','fazes','faz','fazemos','fazeis','fazem']",
+      "suggestion": "ser Futuro: ['serei','serás','será','seremos','sereis','serão'] | ter Futuro: ['terei','terás','terá','teremos','tereis','terão'] | ir Futuro: ['irei','irás','irá','iremos','ireis','irão'] | fazer Futuro: ['farei','farás','fará','faremos','fareis','farão'] | ser Presente: ['sou','és','é','somos','sois','são'] | ir Presente: ['vou','vais','vai','vamos','ides','vão'] | fazer Presente: ['faço','fazes','faz','fazemos','fazeis','fazem']",
+      "reason": "Todas as formas de futuro com 2.ª, 3.ª e 6.ª pessoa, e várias formas de presente dos irregulares, estão sem acentos obrigatórios. 'és', 'é', 'são', 'vão', 'faço', 'serás', 'será', etc. são formas incorretas sem acento e serão exibidas nas tabelas da Unit 3.",
+      "routing": "builder"
+    },
+    {
+      "id": "P07",
+      "type": "conjugacao",
+      "severity": "major",
+      "location": "IRREGULARS JS — ter Presente, 5.ª pessoa (vós) e 6.ª pessoa (eles/elas)",
+      "original": "ter Presente: [..., 'tendes', 'teem']",
+      "suggestion": "ter Presente: [..., 'tendes', 'têm']",
+      "reason": "'teem' não é a forma correta em AO90: a 6.ª pessoa do presente de 'ter' é 'têm' (com acento circunflexo para distinguir de 'tem', 3.ª pessoa). Além disso, 'tendes' (5.ª pessoa, vós) é forma arcaica pouco presente nos manuais de 3.º ano; não é erro, mas pode confundir alunos de 8-9 anos — sinalizar ao Architect se preferível substituir por nota contextual.",
+      "routing": "builder"
+    },
+    {
+      "id": "P08",
+      "type": "conjugacao",
+      "severity": "major",
+      "location": "U4_FREE_FRASES — frase 1 (bonus desafio Unit 4)",
+      "original": "{ before:'No proximo verao a turma', answer:['cantara','cantar a'], hint:'cantar, futuro, ela/a turma: cantara' }",
+      "suggestion": "{ before:'No próximo verão a turma', answer:['cantará'], hint:'cantar, futuro, ela/a turma: cantará' }",
+      "reason": "'cantará' (3.ª pessoa do singular, futuro de cantar) exige acento agudo — 'cantara' sem acento é o pretérito mais-que-perfeito. A resposta aceite 'cantar a' (com espaço) nunca é uma forma verbal — parece erro de geração. O hint também está sem acento.",
+      "routing": "builder"
+    },
+    {
+      "id": "P09",
+      "type": "conjugacao",
+      "severity": "major",
+      "location": "U5_P2_FRASES — frase 2 (Unit 5, fase 2)",
+      "original": "{ before:'Amanha a turma', after:'(cantar) uma cancao.', answers:['cantara','cantará'], hint:'cantar, futuro, ela/a turma: cantara' }",
+      "suggestion": "{ before:'Amanhã a turma', after:'(cantar) uma canção.', answers:['cantará'], hint:'cantar, futuro, ela/a turma: cantará' }",
+      "reason": "'cantara' sem acento é o pretérito mais-que-perfeito, não o futuro — aceitá-lo como resposta correta é um erro de conjugação crítico numa mini-avaliação. A forma correta é 'cantará'. Remover 'cantara' da lista de respostas aceites.",
+      "routing": "builder"
+    },
+    {
+      "id": "P10",
+      "type": "conjugacao",
+      "severity": "major",
+      "location": "U5_S_P2_FRASES — opção no nível Apoio, Unit 5 fase 2",
+      "original": "{ answer:'cantara', options:['cantara','cantou','canta'] }",
+      "suggestion": "{ answer:'cantará', options:['cantará','cantou','canta'] }",
+      "reason": "A resposta correta esperada para o nível Apoio é 'cantara' (sem acento) — mesma confusão futuro/mais-que-perfeito. Deve ser 'cantará'. Este erro aparece num contexto de avaliação onde o sistema valida a resposta do aluno.",
+      "routing": "builder"
+    },
+    {
+      "id": "P11",
+      "type": "conjugacao",
+      "severity": "major",
+      "location": "U4_FRASES_ALL — frase 5, hint e options",
+      "original": "options4: ['terao','tiveram','teem','tera'] | hint: '...ter (futuro): terao.'",
+      "suggestion": "options4: ['terão','tiveram','têm','terá'] | hint: '...ter (futuro): terão.'",
+      "reason": "'terao' e 'tera' estão sem acentos obrigatórios ('terão', 'terá'). 'teem' é forma incorreta — deve ser 'têm'. Estas formas aparecem como opções tocáveis pelo aluno na Unit 4.",
+      "routing": "builder"
+    },
+    {
+      "id": "P12",
+      "type": "ortografia",
+      "severity": "major",
+      "location": "skip-link — .skip-link texto",
+      "original": "Saltar para o conteudo",
+      "suggestion": "Saltar para o conteúdo",
+      "reason": "'conteudo' sem acento. Embora seja link de acessibilidade (não lido visualmente pela maioria dos alunos), é texto público da página e deve respeitar AO90.",
+      "routing": "builder"
+    },
+    {
+      "id": "P13",
+      "type": "ortografia",
+      "severity": "major",
+      "location": "Unit 1 — h2#unit1-title",
+      "original": "Aquecimento — quando acontece a accao?",
+      "suggestion": "Aquecimento — quando acontece a ação?",
+      "reason": "'accao' é grafia pré-AO90. AO90 eliminou o 'c' antes de 'ç' neste caso: a forma correta é 'ação'.",
+      "routing": "builder"
+    },
+    {
+      "id": "P14",
+      "type": "ortografia",
+      "severity": "major",
+      "location": "Unit 2 — h2#unit2-title",
+      "original": "Descoberta — as terminacoes dos verbos regulares",
+      "suggestion": "Descoberta — as terminações dos verbos regulares",
+      "reason": "'terminacoes' sem til — forma correta é 'terminações'. Título de secção, altamente visível.",
+      "routing": "builder"
+    },
+    {
+      "id": "P15",
+      "type": "ortografia",
+      "severity": "major",
+      "location": "Unit 5 — h2#unit5-title",
+      "original": "Mini-avaliacao — identificar e conjugar",
+      "suggestion": "Mini-avaliação — identificar e conjugar",
+      "reason": "'avaliacao' sem til — forma correta é 'avaliação'. AO90.",
+      "routing": "builder"
+    },
+    {
+      "id": "P16",
+      "type": "ortografia",
+      "severity": "major",
+      "location": "Avaliação da aula — h2#aval-title e parágrafo introdutório",
+      "original": "Avaliacao da aula | Para cada item, assinala o que consegues fazer.",
+      "suggestion": "Avaliação da aula | Para cada item, assinala o que consegues fazer.",
+      "reason": "'Avaliacao' sem til. O parágrafo está correto mas o título está errado. AO90.",
+      "routing": "builder"
+    },
+    {
+      "id": "P17",
+      "type": "ortografia",
+      "severity": "major",
+      "location": "Avaliação da aula — itens 2, 3 e 5 (.avaliacao-item)",
+      "original": "Item 2: 'terminacoes dos verbos regulares (-ar, -er, -ir) no presente, preterito perfeito e futuro' | Item 3: 'formas irregulares de ser, ter, ir e fazer nos tres tempos' | Item 5: 'Ligo correctamente a forma verbal ao seu tempo (matching)'",
+      "suggestion": "Item 2: 'terminações dos verbos regulares (-ar, -er, -ir) no presente, pretérito perfeito e futuro' | Item 3: 'formas irregulares de ser, ter, ir e fazer nos três tempos' | Item 5: 'Ligo corretamente a forma verbal ao seu tempo (matching)'",
+      "reason": "Múltiplos erros de acentuação nos itens da auto-avaliação do aluno. 'terminacoes'→'terminações', 'preterito'→'pretérito', 'tres'→'três'. 'correctamente' é forma pré-AO90 — AO90 simplificou para 'corretamente'.",
+      "routing": "builder"
+    },
+    {
+      "id": "P18",
+      "type": "ortografia",
+      "severity": "major",
+      "location": "Curriculum footer — h3 e itens ul (.curriculum-footer)",
+      "original": "Aprendizagens Essenciais — Portugues 3.º ano | preterito perfeito | Aquisicao de conhecimento | formacao de palavras | Perfil do Aluno | Raciocinio e resolucao de problemas | Pensamento critico",
+      "suggestion": "Aprendizagens Essenciais — Português 3.º ano | pretérito perfeito | Aquisição de conhecimento | formação de palavras | Perfil do Aluno | Raciocínio e resolução de problemas | Pensamento crítico",
+      "reason": "O rodapé curricular, lido pelo professor, contém múltiplas palavras sem acentuação obrigatória.",
+      "routing": "builder"
+    },
+    {
+      "id": "P19",
+      "type": "ortografia",
+      "severity": "major",
+      "location": "PageCraft footer — .pagecraft-footer",
+      "original": "Pagina interactiva auto-contida",
+      "suggestion": "Página interativa auto-contida",
+      "reason": "'Pagina' sem acento; 'interactiva' é forma pré-AO90 — AO90 simplifica para 'interativa' (grupo -ct- eliminado).",
+      "routing": "builder"
+    },
+    {
+      "id": "P20",
+      "type": "ortografia",
+      "severity": "major",
+      "location": "U1_FRASES — todas as variantes (support/standard/challenge), texto HTML das frases",
+      "original": "Joao, musica, agua, ferias, cao, trabalhos (sem acento) — 'Joao' e 'cao' sem acento",
+      "suggestion": "João, música, água, férias, cão, trabalhos",
+      "reason": "'Joao' e 'cao' estão sem acentos ('João', 'cão'). As frases são o conteúdo principal da Unit 1 e são lidas directamente pelo aluno.",
+      "routing": "builder"
+    },
+    {
+      "id": "P21",
+      "type": "ortografia",
+      "severity": "major",
+      "location": "U3C_FRASES — hints de feedback (Unit 3, desafio)",
+      "original": "hint: 'O verbo e IR, no preterito perfeito, pessoa eu.' | 'O verbo e FAZER, no preterito perfeito, pessoa ela.' | 'O verbo e TER, no preterito perfeito, pessoa nos.'",
+      "suggestion": "hint: 'O verbo é IR, no pretérito perfeito, pessoa eu.' | 'O verbo é FAZER, no pretérito perfeito, pessoa ela.' | 'O verbo é TER, no pretérito perfeito, pessoa nós.'",
+      "reason": "Os hints de feedback não têm acentos ('e'→'é', 'preterito'→'pretérito', 'nos'→'nós'). Estes textos são lidos pelo aluno após erro — são momentos pedagógicos críticos.",
+      "routing": "builder"
+    },
+    {
+      "id": "P22",
+      "type": "ortografia",
+      "severity": "major",
+      "location": "U4_FRASES_ALL — todos os hints de feedback (Unit 4)",
+      "original": "hint: 'Amanha = futuro. Nos = 1.ª pessoa plural. partir (futuro): partiremos.' | 'Ontem = preterito perfeito. Ele = 3.ª pessoa singular. comer (pret.): comeu.' | 'Ja = passado. Eu = 1.ª pessoa singular. ser (pret.): fui.' | 'Todos os dias = habito = presente. Ela = 3.ª sing. cantar (presente): canta.' | 'No ano que vem = futuro. Eles = 3.ª plural. ter (futuro): terao.' | 'Hoje de manha = passado recente. Eu = 1.ª sing. ir (pret.): fui.'",
+      "suggestion": "hint: 'Amanhã = futuro. Nós = 1.ª pessoa plural. partir (futuro): partiremos.' | 'Ontem = pretérito perfeito. Ele = 3.ª pessoa singular. comer (pret.): comeu.' | 'Já = passado. Eu = 1.ª pessoa singular. ser (pret.): fui.' | 'Todos os dias = hábito = presente. Ela = 3.ª sing. cantar (presente): canta.' | 'No ano que vem = futuro. Eles = 3.ª plural. ter (futuro): terão.' | 'Hoje de manhã = passado recente. Eu = 1.ª sing. ir (pret.): fui.'",
+      "reason": "Todos os hints de feedback da Unit 4 (momentos de aprendizagem explícita após acerto) estão sem acentuação. 'Amanha'→'Amanhã', 'Nos'→'Nós', 'preterito'→'pretérito', 'Ja'→'Já', 'habito'→'hábito', 'terao'→'terão', 'manha'→'manhã'.",
+      "routing": "builder"
+    },
+    {
+      "id": "P23",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "Unit 2 — instrução apoio e intermédio, p.style",
+      "original": "Apoio: 'Toca numa celula da tabela para ver a forma verbal. Repara no que muda e no que fica igual!' | Intermédio: 'Explora toda a tabela. Toca em varias celulas e descobre o padrao das terminacoes!'",
+      "suggestion": "Apoio: 'Toca numa célula da tabela para ver a forma verbal. Repara no que muda e no que fica igual!' | Intermédio: 'Explora toda a tabela. Toca em várias células e descobre o padrão das terminações!'",
+      "reason": "'celula'→'célula', 'varias'→'várias', 'padrao'→'padrão', 'terminacoes'→'terminações'. Instruções lidas pelo aluno no início de cada interação.",
+      "routing": "builder"
+    },
+    {
+      "id": "P24",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "Unit 2 — desafio, parágrafo introdutório",
+      "original": "'Ja exploraste a tabela. Agora consegues preencher o paradigma do verbo andar — sem ajuda?' | 'Clica numa terminacao e depois numa celula para a colocar. Usa o que descobriste sobre os verbos em -ar.'",
+      "suggestion": "'Já exploraste a tabela. Agora consegues preencher o paradigma do verbo andar — sem ajuda?' | 'Clica numa terminação e depois numa célula para a colocar. Usa o que descobriste sobre os verbos em -ar.'",
+      "reason": "'Ja'→'Já', 'terminacao'→'terminação', 'celula'→'célula'. Instruções do nível Desafio.",
+      "routing": "builder"
+    },
+    {
+      "id": "P25",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "Unit 3 — instrução apoio",
+      "original": "'Compara o verbo cantar com o verbo ser. O que e diferente? Toca no ? para saber mais!'",
+      "suggestion": "'Compara o verbo cantar com o verbo ser. O que é diferente? Toca no ? para saber mais!'",
+      "reason": "'e'→'é' (cópula). Instrução visível no nível Apoio da Unit 3.",
+      "routing": "builder"
+    },
+    {
+      "id": "P26",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "Unit 3 — .tooltip-box (texto de tooltip dos marcadores irregulares)",
+      "original": "'Este verbo e irregular — o radical muda! Tens de memorizar esta forma.'",
+      "suggestion": "'Este verbo é irregular — o radical muda! Tens de memorizar esta forma.'",
+      "reason": "'e'→'é'. O tooltip é um momento pedagógico importante ativado quando o aluno clica numa forma irregular.",
+      "routing": "builder"
+    },
+    {
+      "id": "P27",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "Unit 2 — modo Testar-me, parágrafo de instrução",
+      "original": "'Sem ver a tabela — escreve as terminacoes de [verbo] no [tempo]:'",
+      "suggestion": "'Sem ver a tabela — escreve as terminações de [verbo] no [tempo]:'",
+      "reason": "'terminacoes'→'terminações'. Instrução no modo de auto-teste da Unit 2.",
+      "routing": "builder"
+    },
+    {
+      "id": "P28",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "Unit 2 — botão 'Voltar a tabela'",
+      "original": "Voltar a tabela",
+      "suggestion": "Voltar à tabela",
+      "reason": "Contração obrigatória 'a' + 'a' = 'à'. Sem crase, a frase é gramaticalmente incorreta.",
+      "routing": "builder"
+    },
+    {
+      "id": "P29",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "Unit 4 — instrução nível intermédio",
+      "original": "'Le a frase com atencao e escolhe a forma verbal correcta.'",
+      "suggestion": "'Lê a frase com atenção e escolhe a forma verbal correta.'",
+      "reason": "'Le'→'Lê' (imperativo de ler com acento para distinguir de artigo), 'atencao'→'atenção', 'correcta'→'correta' (AO90 eliminou -cc- em 'correcto').",
+      "routing": "builder"
+    },
+    {
+      "id": "P30",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "Unit 4 — instrução nível desafio",
+      "original": "'Completa as 6 frases com as opcoes e depois escreve tu proprio nas 2 frases bonus!'",
+      "suggestion": "'Completa as 6 frases com as opções e depois escreve tu próprio nas 2 frases bónus!'",
+      "reason": "'opcoes'→'opções', 'proprio'→'próprio', 'bonus'→'bónus' (forma aportuguesada usada em Portugal).",
+      "routing": "builder"
+    },
+    {
+      "id": "P31",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "Unit 5 — fase 3 desafio, labels das textareas",
+      "original": "'Frase com IR (futuro):' | 'Frase com SER (preterito perfeito):'",
+      "suggestion": "'Frase com IR (futuro):' | 'Frase com SER (pretérito perfeito):'",
+      "reason": "'preterito'→'pretérito'. Labels visíveis na fase criativa da avaliação.",
+      "routing": "builder"
+    },
+    {
+      "id": "P32",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "Unit 1 — instrução nível apoio",
+      "original": "'Cada frase tem uma pista de tempo (ontem, agora, amanha). Usa o icone do relogio para ajudar!'",
+      "suggestion": "'Cada frase tem uma pista de tempo (ontem, agora, amanhã). Usa o ícone do relógio para ajudar!'",
+      "reason": "'amanha'→'amanhã', 'icone'→'ícone', 'relogio'→'relógio'. Instrução do nível de apoio.",
+      "routing": "builder"
+    },
+    {
+      "id": "P33",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "Unit 1 — instrução nível intermédio",
+      "original": "'Algumas frases nao tem pista de tempo — olha para o verbo!'",
+      "suggestion": "'Algumas frases não têm pista de tempo — olha para o verbo!'",
+      "reason": "'nao'→'não'; 'tem'→'têm' (3.ª pessoa do plural de 'ter', com acento diferenciador).",
+      "routing": "builder"
+    },
+    {
+      "id": "P34",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "Unit 1 — instrução nível desafio",
+      "original": "'Algumas frases sao ambiguas — toca no verbo para ver uma pergunta!'",
+      "suggestion": "'Algumas frases são ambíguas — toca no verbo para ver uma pergunta!'",
+      "reason": "'sao'→'são', 'ambiguas'→'ambíguas'.",
+      "routing": "builder"
+    },
+    {
+      "id": "P35",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "Unit 2 — aria-label da tabela (apoio e intermédio)",
+      "original": "'Tabela de conjugacao — apoio' | 'Tabela de conjugacao — intermedio'",
+      "suggestion": "'Tabela de conjugação — apoio' | 'Tabela de conjugação — intermédio'",
+      "reason": "'conjugacao'→'conjugação', 'intermedio'→'intermédio'. Atributos aria-label são lidos por leitores de ecrã.",
+      "routing": "builder"
+    },
+    {
+      "id": "P36",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "Unit 1 — feedback de erro (JS renderUnit1)",
+      "original": "'Quase! A resposta e: \"[opção]\".'",
+      "suggestion": "'Quase! A resposta é: \"[opção]\".'",
+      "reason": "'e'→'é'. Feedback de erro lido pelo aluno após resposta errada.",
+      "routing": "builder"
+    },
+    {
+      "id": "P37",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "Unit 2 — feedback de acerto (JS checkUnit2Test)",
+      "original": "'Perfeito! Acertaste todas as terminacoes!'",
+      "suggestion": "'Perfeito! Acertaste todas as terminações!'",
+      "reason": "'terminacoes'→'terminações'. Feedback positivo do modo Testar-me.",
+      "routing": "builder"
+    },
+    {
+      "id": "P38",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "Unit 2 — feedback parcial (JS checkUnit2Test)",
+      "original": "'Acertaste [n] de [total]. Tenta as que ficaram erradas.'",
+      "suggestion": "Sem alteração de conteúdo — mas verificar se 'celulas a vermelho' aparece em contextos adjacentes com 'celulas'→'células'.",
+      "reason": "Esta frase específica está correta; nota preventiva para consistência com outras ocorrências de 'célula'.",
+      "routing": "builder"
+    },
+    {
+      "id": "P39",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "Unit 2 — feedback desafio (JS checkUnit2Challenge), feedback parcial",
+      "original": "'[n] de [total] correctas. As celulas a vermelho mostraram a forma correcta.'",
+      "suggestion": "'[n] de [total] corretas. As células a vermelho mostraram a forma correta.'",
+      "reason": "'correctas'→'corretas', 'celulas'→'células', 'correcta'→'correta'. AO90 eliminou -ct- em 'correcto/a'.",
+      "routing": "builder"
+    },
+    {
+      "id": "P40",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "Unit 4 — feedback de erro (JS renderUnit4)",
+      "original": "'Nao e essa. Tenta outra vez!'",
+      "suggestion": "'Não é essa. Tenta outra vez!'",
+      "reason": "'Nao'→'Não', 'e'→'é'. Feedback de erro durante a prática guiada.",
+      "routing": "builder"
+    },
+    {
+      "id": "P41",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "Unit 5 — fase 2 instrução (intermédio e desafio)",
+      "original": "'Escreve a forma verbal correcta em cada frase.' | 'Escreve as formas correctas.'",
+      "suggestion": "'Escreve a forma verbal correta em cada frase.' | 'Escreve as formas corretas.'",
+      "reason": "'correcta/correctas'→'correta/corretas'. AO90.",
+      "routing": "builder"
+    },
+    {
+      "id": "P42",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "Unit 5 — fase 3 desafio, instrução e feedback",
+      "original": "'Escreve uma frase tua com o verbo IR no futuro e outra com o verbo SER no preterito perfeito.' | 'Verifica se usaste o verbo IR no futuro (irei/iras/ira/iremos...) e SER no preterito perfeito (fui/foi/fomos...).'",
+      "suggestion": "'Escreve uma frase tua com o verbo IR no futuro e outra com o verbo SER no pretérito perfeito.' | 'Verifica se usaste o verbo IR no futuro (irei/irás/irá/iremos...) e SER no pretérito perfeito (fui/foi/fomos...).'",
+      "reason": "'preterito'→'pretérito'; no feedback, as formas de futuro mencionadas como exemplo devem também ter acentos ('iras'→'irás', 'ira'→'irá').",
+      "routing": "builder"
+    },
+    {
+      "id": "P43",
+      "type": "pedagogico",
+      "severity": "minor",
+      "location": "Unit 1 — U1_FRASES challenge, frase 3",
+      "original": "hint: 'Como sabes? A palavra \"parte\" pode ser presente ou dar ordens. Qual e o contexto?'",
+      "suggestion": "hint: 'Como sabes? A palavra \"parte\" pode ser presente do indicativo ou imperativo. Qual é o contexto?'",
+      "reason": "A frase 'dar ordens' é coloquial e imprecisa para um contexto de aprendizagem de gramática — mesmo no nível desafio. 'Imperativo' ou 'ordem' são mais precisos. Além disso, falta acento em 'e'→'é'.",
+      "routing": "builder"
+    },
+    {
+      "id": "P44",
+      "type": "coerencia",
+      "severity": "minor",
+      "location": "Unit 5 — U5_PAIRS_FULL, rótulo do 4.º par",
+      "original": "{ form: 'fui', tense: 'Pret. Perf. (irreg.)' }",
+      "suggestion": "{ form: 'fui', tense: 'Pretérito Perfeito (irreg.)' }",
+      "reason": "O rótulo usa abreviatura 'Pret. Perf.' enquanto todos os outros usam 'Pretérito Perfeito' por extenso. Inconsistência de nomenclatura dentro do mesmo exercício de matching, podendo confundir alunos de 8-9 anos.",
+      "routing": "builder"
+    },
+    {
+      "id": "P45",
+      "type": "coerencia",
+      "severity": "minor",
+      "location": "Diff tabs — aria-label em Unit 1 vs. unidades seguintes",
+      "original": "Unit 1: aria-label='Nivel de dificuldade — Unidade 1' (com 'Nivel' sem acento, em todas as unidades)",
+      "suggestion": "aria-label='Nível de dificuldade — Unidade 1' (e análogo para unidades 2-5)",
+      "reason": "'Nivel'→'Nível'. Embora seja um atributo aria, é lido por tecnologias assistivas e deve respeitar AO90.",
+      "routing": "builder"
+    },
+    {
+      "id": "P46",
+      "type": "pedagogico",
+      "severity": "minor",
+      "location": "Unit 2 — botão 'Testar-me' (u2m-test-btn) e modo de teste",
+      "original": "placeholder dos inputs: 'terminacao...'",
+      "suggestion": "placeholder: 'terminação...'",
+      "reason": "'terminacao'→'terminação'. Placeholder dentro dos campos de texto do modo Testar-me.",
+      "routing": "builder"
+    },
+    {
+      "id": "P47",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "U2_PESSOAS_SHORT — PESSOAS e arrays de pessoas visíveis ao aluno",
+      "original": "['eu','tu','ele/ela','nos','vos','eles/elas']",
+      "suggestion": "['eu','tu','ele/ela','nós','vós','eles/elas']",
+      "reason": "'nos'→'nós', 'vos'→'vós'. Pronomes pessoais exibidos na coluna de pessoas nas tabelas de conjugação — visíveis em todas as células da coluna.",
+      "routing": "builder"
+    },
+    {
+      "id": "P48",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "U3_COMPARE_PESSOAS e U3C_FRASES — arrays de pessoas e frases",
+      "original": "['eu','tu','ele/ela','nos','eles/elas'] | 'No mes passado nos [gap] muita sorte no jogo.'",
+      "suggestion": "['eu','tu','ele/ela','nós','eles/elas'] | 'No mês passado nós [gap] muita sorte no jogo.'",
+      "reason": "'nos'→'nós' (pronome), 'mes'→'mês'. Visíveis nas colunas de pessoas da Unit 3 e na frase de desafio.",
+      "routing": "builder"
+    },
+    {
+      "id": "P49",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "U4_FRASES_ALL — frases visíveis ao aluno (before/after)",
+      "original": "'Amanha nos [gap] (partir) de ferias.' | 'Eu ja [gap] (ser) pequenino, mas agora cresci.' | 'No ano que vem eles [gap] (ter) um novo professor.' | 'Hoje de manha eu [gap] (ir) ao parque.'",
+      "suggestion": "'Amanhã nós [gap] (partir) de férias.' | 'Eu já [gap] (ser) pequenino, mas agora cresci.' | 'No ano que vem eles [gap] (ter) um novo professor.' | 'Hoje de manhã eu [gap] (ir) ao parque.'",
+      "reason": "'Amanha'→'Amanhã', 'nos'→'nós', 'ferias'→'férias', 'ja'→'já', 'manha'→'manhã'. Frases exibidas diretamente ao aluno durante a prática guiada.",
+      "routing": "builder"
+    },
+    {
+      "id": "P50",
+      "type": "ortografia",
+      "severity": "minor",
+      "location": "U5_P2_FRASES e U5_S_P2_FRASES — frases da mini-avaliação",
+      "original": "'No verao passado eu [gap] (fazer) uma viagem.' | 'Amanha a turma [gap] (cantar) uma cancao.'",
+      "suggestion": "'No verão passado eu [gap] (fazer) uma viagem.' | 'Amanhã a turma [gap] (cantar) uma canção.'",
+      "reason": "'verao'→'verão', 'Amanha'→'Amanhã', 'cancao'→'canção'. Frases da avaliação final — contexto de maior visibilidade.",
+      "routing": "builder"
+    }
+  ],
+  "summary": "A página tem estrutura pedagógica sólida e conjugações verbais maioritariamente corretas na lógica interna, mas foi gerada sistematicamente sem acentuação em todo o texto visível (HTML e strings JavaScript), tornando-a incompatível com AO90 e com o requisito de correção linguística para alunos de 3.º ano. Existem dois erros de conjugação críticos — 'cantara' (sem acento) aceite como futuro quando é mais-que-perfeito, e as terminações de futuro de todas as conjugações sem acentos obrigatórios ('-ás', '-á', '-ão'). O Constraint da Unit 2 está parcialmente vazado pelas legendas 'radical (nao muda)' e 'terminacao (muda)'.",
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90: FAIL — ausência sistemática de acentuação em todo o texto visível (HTML e JS)",
+    "Registo consistente: OK — registo informal adequado, sem mistura formal/informal",
+    "Adequação à faixa etária: OK — vocabulário e frases de exemplo são adequados a 8-9 anos; a irregularidade de 'vós/tendes' pode ser sinalizada ao Architect",
+    "Instruções claras e seguíveis: OK — estrutura e sequência são claras; problemas são exclusivamente ortográficos",
+    "Alinhamento com objectivos: OK — os cinco objetivos da página estão alinhados com o DocSpec e as AE do 3.º ano"
+  ]
+}

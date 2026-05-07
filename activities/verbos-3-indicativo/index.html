@@ -1,0 +1,2707 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verbos no Indicativo — 3.º Ano | PageCraft</title>
+  <style>
+    /* ===== DESIGN TOKENS ===== */
+    :root {
+      --bg: #f5f1e8;
+      --surface: #fffef9;
+      --primary: #0d9488;
+      --accent: #7c3aed;
+      --text: #1e1b18;
+      --radius: 14px;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
+      /* Tense colours */
+      --presente: #0d9488;
+      --preterito: #7c3aed;
+      --futuro: #ea580c;
+      /* Morpheme colours */
+      --radical-color: #2563eb;
+      --terminacao-color: #ea580c;
+      /* Conjugation badges */
+      --conj1-border: #3b82f6;
+      --conj1-bg: #eff6ff;
+      --conj1-text: #1d4ed8;
+      --conj2-border: #ec4899;
+      --conj2-bg: #fdf2f8;
+      --conj2-text: #9d174d;
+      --conj3-border: #84cc16;
+      --conj3-bg: #f7fee7;
+      --conj3-text: #3f6212;
+      /* Feedback */
+      --correct-bg: #22c55e;
+      --incorrect-bg: #f59e0b;
+      --font: Nunito, 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+    }
+
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 18px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+
+    /* ===== SKIP LINK ===== */
+    .skip-link {
+      position: absolute;
+      top: -999px;
+      left: 1rem;
+      background: var(--primary);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 0 0 8px 8px;
+      font-weight: 700;
+      z-index: 9999;
+      text-decoration: none;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* ===== ARIA LIVE ===== */
+    #aria-announce {
+      position: absolute;
+      width: 1px; height: 1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+    }
+
+    /* ===== LAYOUT ===== */
+    .page-wrapper {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    /* ===== FOCUS RING ===== */
+    :focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    /* ===== HEADER ===== */
+    .page-header {
+      background: linear-gradient(135deg, #0d9488 0%, #7c3aed 100%);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .page-header h1 {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800;
+      margin-bottom: 0.4rem;
+    }
+    .page-header .meta {
+      font-size: 1rem;
+      opacity: 0.9;
+      margin-bottom: 1rem;
+    }
+    .page-header .objectives {
+      text-align: left;
+      background: rgba(255,255,255,0.18);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      font-size: 0.95rem;
+    }
+    .page-header .objectives li {
+      margin-left: 1.2rem;
+      margin-bottom: 0.25rem;
+    }
+
+    /* ===== TENSE COLOUR BADGES (used globally) ===== */
+    .badge-tense {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .badge-presente  { background: var(--presente); }
+    .badge-preterito { background: var(--preterito); }
+    .badge-futuro    { background: var(--futuro); }
+
+    .badge-conj1 { background: var(--conj1-bg); color: var(--conj1-text); border: 1.5px solid var(--conj1-border); border-radius: 999px; padding: 0.15rem 0.65rem; font-size: 0.82rem; font-weight: 700; }
+    .badge-conj2 { background: var(--conj2-bg); color: var(--conj2-text); border: 1.5px solid var(--conj2-border); border-radius: 999px; padding: 0.15rem 0.65rem; font-size: 0.82rem; font-weight: 700; }
+    .badge-conj3 { background: var(--conj3-bg); color: var(--conj3-text); border: 1.5px solid var(--conj3-border); border-radius: 999px; padding: 0.15rem 0.65rem; font-size: 0.82rem; font-weight: 700; }
+
+    /* ===== UNIT SECTIONS ===== */
+    .unit-section {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .unit-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .unit-number {
+      background: var(--primary);
+      color: #fff;
+      font-weight: 800;
+      font-size: 1rem;
+      min-width: 2.2rem;
+      height: 2.2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .unit-header h2 {
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+      font-weight: 800;
+      color: var(--text);
+      flex: 1;
+    }
+    .unit-duration {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 0.2rem;
+    }
+
+    /* ===== DIFFERENTIATION TABS ===== */
+    .diff-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .diff-tab {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.5rem 1.1rem;
+      border-radius: 999px;
+      border: 2px solid #ddd;
+      background: #fff;
+      font-family: var(--font);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 48px;
+      min-width: 48px;
+      touch-action: manipulation;
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+      user-select: none;
+    }
+    .diff-tab:hover { border-color: var(--primary); }
+    .diff-tab.active { border-color: var(--primary); background: var(--primary); color: #fff; }
+    .diff-tab[data-level="support"].active  { background: #16a34a; border-color: #16a34a; }
+    .diff-tab[data-level="standard"].active { background: #ca8a04; border-color: #ca8a04; }
+    .diff-tab[data-level="challenge"].active{ background: #dc2626; border-color: #dc2626; }
+
+    .diff-content { display: none; }
+    .diff-content.active { display: block; }
+
+    /* ===== INTERACTIVE WRAPPER ===== */
+    .interactive-area {
+      background: var(--bg);
+      border: 2px solid #e5e0d4;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    /* ===== BUTTONS (general) ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 999px;
+      border: none;
+      font-family: var(--font);
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 48px;
+      min-width: 48px;
+      touch-action: manipulation;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      user-select: none;
+    }
+    .btn:hover { transform: scale(1.05); }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary  { background: var(--primary); color: #fff; }
+    .btn-violet   { background: var(--preterito); color: #fff; }
+    .btn-orange   { background: var(--futuro); color: #fff; }
+    .btn-neutral  { background: #e5e0d4; color: var(--text); }
+    .btn-sm { padding: 0.45rem 1rem; font-size: 0.9rem; min-height: 48px; }
+
+    /* ===== PROGRESS BAR ===== */
+    .progress-bar-wrap {
+      background: #e5e0d4;
+      border-radius: 999px;
+      height: 10px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 999px;
+      transition: width 0.4s ease;
+    }
+
+    /* ===== SENTENCE CARD (Unit 1 & 4) ===== */
+    .sentence-card {
+      background: var(--surface);
+      border: 2px solid #e5e0d4;
+      border-radius: var(--radius);
+      padding: 1.5rem 2rem;
+      text-align: center;
+      font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+    .verb-highlight {
+      color: var(--primary);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      cursor: help;
+    }
+    .time-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    /* ===== OPTION BUTTONS (Unit 1 & 4) ===== */
+    .option-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .option-btn {
+      padding: 0.85rem 1.4rem;
+      border-radius: 999px;
+      border: 2.5px solid #ddd;
+      background: #fff;
+      font-family: var(--font);
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 52px;
+      min-width: 140px;
+      touch-action: manipulation;
+      transition: transform 0.15s, border-color 0.15s, background 0.15s;
+      user-select: none;
+    }
+    .option-btn:hover { border-color: var(--primary); background: #e6faf8; transform: scale(1.03); }
+    .option-btn.correct  { background: #dcfce7; border-color: #16a34a; color: #15803d; }
+    .option-btn.wrong    { background: #fee2e2; border-color: #dc2626; color: #b91c1c; }
+    .option-btn.disabled { pointer-events: none; opacity: 0.6; }
+
+    /* ===== FEEDBACK STRIP ===== */
+    .feedback-strip {
+      border-radius: 10px;
+      padding: 0.75rem 1.25rem;
+      font-size: 1rem;
+      font-weight: 700;
+      text-align: center;
+      margin-top: 0.75rem;
+      display: none;
+      animation: fadeIn 0.2s ease-out;
+    }
+    .feedback-strip.correct  { background: #22c55e; color: #fff; display: block; }
+    .feedback-strip.wrong    { background: #f59e0b; color: #fff; display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+    /* ===== MORPHEME SPANS ===== */
+    .radical {
+      color: var(--radical-color);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-weight: 700;
+    }
+    .terminacao {
+      color: var(--terminacao-color);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-weight: 800;
+    }
+
+    /* ===== PARADIGM TABLE (Unit 2 & 3) ===== */
+    .paradigm-table-wrap { overflow-x: auto; }
+    .paradigm-table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 360px;
+      font-size: 1rem;
+    }
+    .paradigm-table th {
+      padding: 0.6rem 0.75rem;
+      font-weight: 800;
+      font-size: 0.9rem;
+      text-align: center;
+      color: #fff;
+      border-radius: 6px 6px 0 0;
+    }
+    .paradigm-table th.th-presente   { background: var(--presente); }
+    .paradigm-table th.th-preterito  { background: var(--preterito); }
+    .paradigm-table th.th-futuro     { background: var(--futuro); }
+    .paradigm-table th.th-pessoa     { background: #4b5563; }
+    .paradigm-table td {
+      padding: 0.5rem 0.75rem;
+      border: 1.5px solid #e5e0d4;
+      border-radius: 8px;
+      background: var(--surface);
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      min-width: 90px;
+      font-weight: 600;
+    }
+    .paradigm-table td:hover { background: #e6faf8; transform: scale(1.03); }
+    .paradigm-table td.selected-presente  { background: var(--presente); color: #fff; }
+    .paradigm-table td.selected-preterito { background: var(--preterito); color: #fff; }
+    .paradigm-table td.selected-futuro    { background: var(--futuro); color: #fff; }
+    .paradigm-table td.selected-presente .radical,
+    .paradigm-table td.selected-preterito .radical,
+    .paradigm-table td.selected-futuro .radical { color: #bfdbfe; }
+    .paradigm-table td.selected-presente .terminacao,
+    .paradigm-table td.selected-preterito .terminacao,
+    .paradigm-table td.selected-futuro .terminacao { color: #fde68a; }
+
+    /* ===== BIG FORM DISPLAY ===== */
+    .big-form-display {
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 800;
+      text-align: center;
+      padding: 1rem;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    /* ===== LEGEND CHIP ===== */
+    .legend-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      border: 1.5px solid #e5e0d4;
+      background: var(--surface);
+    }
+    .legend-chip .dot-r { width: 10px; height: 10px; border-radius: 50%; background: var(--radical-color); display: inline-block; }
+    .legend-chip .dot-t { width: 10px; height: 10px; border-radius: 50%; background: var(--terminacao-color); display: inline-block; }
+
+    /* ===== TOGGLE BUTTONS (tense switcher) ===== */
+    .toggle-group {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .toggle-btn {
+      padding: 0.5rem 1.1rem;
+      border-radius: 999px;
+      border: 2px solid #ddd;
+      background: #fff;
+      font-family: var(--font);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 48px;
+      touch-action: manipulation;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .toggle-btn[data-tense="Presente"].active    { background: var(--presente); border-color: var(--presente); color: #fff; }
+    .toggle-btn[data-tense="Preterito"].active   { background: var(--preterito); border-color: var(--preterito); color: #fff; }
+    .toggle-btn[data-tense="Futuro"].active      { background: var(--futuro); border-color: var(--futuro); color: #fff; }
+    .toggle-btn:hover { border-color: var(--primary); }
+
+    /* ===== DROPDOWN ===== */
+    .verb-select {
+      font-family: var(--font);
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 0.6rem 1rem;
+      border-radius: 10px;
+      border: 2px solid #ddd;
+      background: var(--surface);
+      min-height: 48px;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .verb-select:focus { border-color: var(--primary); }
+
+    /* ===== IRREGULAR COMPARISON (Unit 3) ===== */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 560px) { .compare-grid { grid-template-columns: 1fr; } }
+    .compare-col {
+      border-radius: var(--radius);
+      padding: 1rem;
+      border: 2px solid #e5e0d4;
+    }
+    .compare-col.regular   { background: #f1f5f9; }
+    .compare-col.irregular { background: #fffbeb; border-color: #fbbf24; }
+    .compare-col h3 {
+      font-size: 1rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      text-align: center;
+    }
+    .compare-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.4rem 0.5rem;
+      border-radius: 8px;
+      margin-bottom: 0.25rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .compare-row:hover { background: rgba(0,0,0,0.05); }
+    .compare-row .pessoa-label { color: #666; font-size: 0.85rem; font-weight: 700; }
+    .irr-marker {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: #fecaca;
+      border: 1.5px solid #dc2626;
+      color: #dc2626;
+      font-size: 0.75rem;
+      font-weight: 800;
+      cursor: pointer;
+      position: relative;
+    }
+    .tooltip-box {
+      display: none;
+      position: absolute;
+      bottom: 130%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e1b18;
+      color: #fff;
+      border-radius: 8px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.85rem;
+      font-weight: 400;
+      max-width: 220px;
+      white-space: normal;
+      line-height: 1.4;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      pointer-events: none;
+    }
+    .irr-marker:hover .tooltip-box,
+    .irr-marker:focus .tooltip-box { display: block; }
+    .irr-marker-wrap { position: relative; display: inline-flex; }
+
+    /* ===== DRAG / CLICK CARDS (Unit 4 bank) ===== */
+    .form-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 0.75rem;
+      min-height: 52px;
+    }
+    .form-card {
+      padding: 0.6rem 1.1rem;
+      border-radius: 999px;
+      border: 2.5px solid var(--primary);
+      background: var(--surface);
+      font-family: var(--font);
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 48px;
+      min-width: 80px;
+      touch-action: manipulation;
+      transition: transform 0.15s, background 0.15s;
+      user-select: none;
+      text-align: center;
+    }
+    .form-card:hover { background: #e6faf8; transform: scale(1.05); }
+    .form-card.used  { opacity: 0.35; pointer-events: none; }
+    .form-card.wrong-flash { background: #fee2e2; border-color: #dc2626; animation: shake 0.3s ease; }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+
+    .gap-slot {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 110px;
+      height: 38px;
+      border-bottom: 3px solid var(--primary);
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--primary);
+      padding: 0 0.5rem;
+      transition: color 0.2s;
+    }
+    .gap-slot.filled-correct { color: #16a34a; border-color: #16a34a; }
+    .gap-slot.filled-wrong   { color: #dc2626; border-color: #dc2626; }
+
+    /* ===== MATCHING (Unit 5) ===== */
+    .matching-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem 1.5rem;
+      align-items: start;
+    }
+    @media (max-width: 500px) { .matching-grid { grid-template-columns: 1fr; } }
+    .match-col { display: flex; flex-direction: column; gap: 0.5rem; }
+    .match-col h3 { font-size: 0.9rem; font-weight: 800; color: #666; margin-bottom: 0.25rem; }
+    .match-card {
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      border: 2.5px solid #ddd;
+      background: var(--surface);
+      font-family: var(--font);
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 52px;
+      touch-action: manipulation;
+      transition: border-color 0.15s, background 0.15s, transform 0.1s;
+      user-select: none;
+      text-align: center;
+    }
+    .match-card:hover { border-color: var(--primary); background: #e6faf8; transform: scale(1.02); }
+    .match-card.selected { border-color: var(--primary); background: #ccfbf1; }
+    .match-card.matched-correct { border-color: #16a34a; background: #dcfce7; color: #15803d; pointer-events: none; }
+    .match-card.matched-wrong   { border-color: #dc2626; background: #fee2e2; color: #b91c1c; pointer-events: none; }
+    .match-card.form-card-match { border-color: var(--preterito); background: #ede9fe; }
+
+    /* ===== TEXT INPUT (Unit 5 phase 2) ===== */
+    .text-input-wrap { margin-top: 0.75rem; }
+    .text-input {
+      font-family: var(--font);
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 0.65rem 1rem;
+      border-radius: 10px;
+      border: 2.5px solid #ddd;
+      background: var(--surface);
+      width: 100%;
+      max-width: 240px;
+      transition: border-color 0.15s;
+    }
+    .text-input:focus { border-color: var(--primary); }
+    .text-input.correct { border-color: #16a34a; background: #dcfce7; }
+    .text-input.wrong   { border-color: #dc2626; background: #fee2e2; }
+
+    /* ===== SCORE BADGE ===== */
+    .score-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: var(--surface);
+      border: 2px solid #e5e0d4;
+      border-radius: 999px;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
+    /* ===== CONFETTI CANVAS ===== */
+    #confetti-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 9000;
+    }
+
+    /* ===== MINI-AVALIACAO SECTION ===== */
+    .avaliacao-section {
+      background: #fff7ed;
+      border: 2px solid var(--futuro);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .avaliacao-section h2 { color: var(--futuro); font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem; }
+    .avaliacao-item {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #fed7aa;
+      font-size: 1rem;
+    }
+    .avaliacao-item:last-child { border-bottom: none; }
+    .check-scale {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.35rem;
+    }
+    .check-scale label {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .check-scale input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
+
+    /* ===== CURRICULUM FOOTER ===== */
+    .curriculum-footer {
+      background: #ede9fe;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .curriculum-footer h3 { color: var(--preterito); font-size: 1.1rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .curriculum-footer ul { margin-left: 1.25rem; font-size: 0.9rem; margin-bottom: 0.75rem; }
+    .curriculum-footer li { margin-bottom: 0.2rem; }
+
+    /* ===== PAGECRAFT FOOTER ===== */
+    .pagecraft-footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #9ca3af;
+      padding: 1.5rem 1rem;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .page-wrapper { padding: 0.75rem; }
+      .unit-section { padding: 1.25rem; }
+      body { font-size: 17px; }
+    }
+    @media (min-width: 1200px) {
+      body { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Saltar para o conteúdo</a>
+  <div id="aria-announce" role="status" aria-live="polite" aria-atomic="true"></div>
+  <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+  <div class="page-wrapper">
+    <!-- ===== PAGE HEADER ===== -->
+    <header class="page-header" role="banner">
+      <h1>Verbos no Indicativo</h1>
+      <p class="meta">3.º ano &nbsp;|&nbsp; 8–9 anos &nbsp;|&nbsp; 30 minutos &nbsp;|&nbsp; Português — Gramática</p>
+      <div class="objectives" role="note" aria-label="Objectivos da aula">
+        <strong>O que vais aprender:</strong>
+        <ul>
+          <li>Reconhecer se um verbo está no passado, presente ou futuro</li>
+          <li>Conjugar verbos regulares (-ar, -er, -ir) e irregulares (ser, ter, ir, fazer)</li>
+          <li>Descobrir as terminações de cada tempo e pessoa</li>
+          <li>Usar os três tempos do indicativo em frases completas</li>
+        </ul>
+      </div>
+    </header>
+
+    <main id="main-content">
+
+      <!-- ===== UNIT 1 ===== -->
+      <section class="unit-section" data-unit="1" aria-labelledby="unit1-title">
+        <div class="unit-header">
+          <div class="unit-number" aria-hidden="true">1</div>
+          <div>
+            <h2 id="unit1-title">Aquecimento — quando acontece a ação?</h2>
+            <div class="unit-duration">5 minutos</div>
+          </div>
+        </div>
+        <!-- DIFF TABS -->
+        <div class="diff-tabs" role="tablist" aria-label="Nível de dificuldade — Unidade 1">
+          <button class="diff-tab" data-level="support" role="tab" aria-selected="false" aria-controls="u1-support" tabindex="0">
+            <span aria-hidden="true">🟢</span> Apoio
+          </button>
+          <button class="diff-tab active" data-level="standard" role="tab" aria-selected="true" aria-controls="u1-standard" tabindex="0">
+            <span aria-hidden="true">🟡</span> Intermédio
+          </button>
+          <button class="diff-tab" data-level="challenge" role="tab" aria-selected="false" aria-controls="u1-challenge" tabindex="0">
+            <span aria-hidden="true">🔴</span> Desafio
+          </button>
+        </div>
+
+        <!-- APOIO -->
+        <div id="u1-support" class="diff-content" data-level="support" role="tabpanel">
+          <div class="interactive-area" id="u1s-area">
+            <p style="margin-bottom:0.75rem;font-size:0.95rem;color:#555;">
+              Cada frase tem uma pista de tempo (<em>ontem</em>, <em>agora</em>, <em>amanhã</em>). Usa o ícone do relógio para ajudar!
+            </p>
+            <div class="progress-bar-wrap" aria-label="Progresso">
+              <div class="progress-bar-fill" id="u1s-progress" style="width:0%"></div>
+            </div>
+            <div style="text-align:right;margin-bottom:0.5rem;">
+              <span class="score-badge" id="u1s-score" aria-live="polite">0 / 5</span>
+            </div>
+            <div class="sentence-card" id="u1s-card" aria-live="polite"></div>
+            <div class="option-grid" id="u1s-options" role="group" aria-label="Escolhe quando acontece a ação"></div>
+            <div class="feedback-strip" id="u1s-feedback" role="status" aria-live="assertive"></div>
+            <div style="text-align:center;margin-top:1rem;display:none;" id="u1s-done">
+              <p style="font-size:1.2rem;font-weight:800;color:#16a34a;">Muito bem! Terminaste o aquecimento!</p>
+              <button class="btn btn-primary" onclick="resetUnit1('support')">Tentar outra vez</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- INTERMEDIO -->
+        <div id="u1-standard" class="diff-content active" data-level="standard" role="tabpanel">
+          <div class="interactive-area" id="u1m-area">
+            <p style="margin-bottom:0.75rem;font-size:0.95rem;color:#555;">
+              Algumas frases não têm pista de tempo — olha para o verbo!
+            </p>
+            <div class="progress-bar-wrap" aria-label="Progresso">
+              <div class="progress-bar-fill" id="u1m-progress" style="width:0%"></div>
+            </div>
+            <div style="text-align:right;margin-bottom:0.5rem;">
+              <span class="score-badge" id="u1m-score" aria-live="polite">0 / 5</span>
+            </div>
+            <div class="sentence-card" id="u1m-card" aria-live="polite"></div>
+            <div class="option-grid" id="u1m-options" role="group" aria-label="Escolhe quando acontece a ação"></div>
+            <div class="feedback-strip" id="u1m-feedback" role="status" aria-live="assertive"></div>
+            <div style="text-align:center;margin-top:1rem;display:none;" id="u1m-done">
+              <p style="font-size:1.2rem;font-weight:800;color:#16a34a;">Muito bem! Terminaste o aquecimento!</p>
+              <button class="btn btn-primary" onclick="resetUnit1('standard')">Tentar outra vez</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DESAFIO -->
+        <div id="u1-challenge" class="diff-content" data-level="challenge" role="tabpanel">
+          <div class="interactive-area" id="u1c-area">
+            <p style="margin-bottom:0.75rem;font-size:0.95rem;color:#555;">
+              Algumas frases são ambíguas — toca no verbo para ver uma pergunta!
+            </p>
+            <div class="progress-bar-wrap" aria-label="Progresso">
+              <div class="progress-bar-fill" id="u1c-progress" style="width:0%"></div>
+            </div>
+            <div style="text-align:right;margin-bottom:0.5rem;">
+              <span class="score-badge" id="u1c-score" aria-live="polite">0 / 5</span>
+            </div>
+            <div class="sentence-card" id="u1c-card" aria-live="polite"></div>
+            <div class="option-grid" id="u1c-options" role="group" aria-label="Escolhe quando acontece a ação"></div>
+            <div class="feedback-strip" id="u1c-feedback" role="status" aria-live="assertive"></div>
+            <div style="text-align:center;margin-top:1rem;display:none;" id="u1c-done">
+              <p style="font-size:1.2rem;font-weight:800;color:#16a34a;">Excelente! Dominaste o desafio!</p>
+              <button class="btn btn-primary" onclick="resetUnit1('challenge')">Tentar outra vez</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== UNIT 2 ===== -->
+      <section class="unit-section" data-unit="2" aria-labelledby="unit2-title">
+        <div class="unit-header">
+          <div class="unit-number" aria-hidden="true">2</div>
+          <div>
+            <h2 id="unit2-title">Descoberta — as terminações dos verbos regulares</h2>
+            <div class="unit-duration">8 minutos</div>
+          </div>
+        </div>
+        <!-- DIFF TABS -->
+        <div class="diff-tabs" role="tablist" aria-label="Nível de dificuldade — Unidade 2">
+          <button class="diff-tab" data-level="support" role="tab" aria-selected="false" tabindex="0"><span aria-hidden="true">🟢</span> Apoio</button>
+          <button class="diff-tab active" data-level="standard" role="tab" aria-selected="true" tabindex="0"><span aria-hidden="true">🟡</span> Intermédio</button>
+          <button class="diff-tab" data-level="challenge" role="tab" aria-selected="false" tabindex="0"><span aria-hidden="true">🔴</span> Desafio</button>
+        </div>
+
+        <!-- APOIO: tabela reduzida 3 pessoas x 2 tempos -->
+        <div class="diff-content" data-level="support">
+          <div class="interactive-area">
+            <p style="font-size:0.95rem;color:#555;margin-bottom:1rem;">Toca numa célula da tabela para ver a forma verbal. Repara no que muda e no que fica igual!</p>
+            <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;margin-bottom:1rem;">
+              <label for="u2s-verb" style="font-weight:700;">Verbo:</label>
+              <select class="verb-select" id="u2s-verb">
+                <option value="cantar">cantar (-ar)</option>
+                <option value="comer">comer (-er)</option>
+                <option value="partir">partir (-ir)</option>
+              </select>
+              <span class="badge-conj1" id="u2s-badge">1.ª conj. (-ar)</span>
+            </div>
+            <div class="big-form-display" id="u2s-display" aria-live="polite">—</div>
+            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.75rem;">
+              <span class="legend-chip"><span class="dot-r"></span> radical</span>
+              <span class="legend-chip"><span class="dot-t"></span> terminação</span>
+            </div>
+            <div class="paradigm-table-wrap">
+              <table class="paradigm-table" id="u2s-table" aria-label="Tabela de conjugação — apoio">
+                <thead>
+                  <tr>
+                    <th class="th-pessoa">Pessoa</th>
+                    <th class="th-presente" style="background:var(--presente)">Presente</th>
+                    <th class="th-preterito" style="background:var(--preterito)">Pretérito Perfeito</th>
+                  </tr>
+                </thead>
+                <tbody id="u2s-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- INTERMEDIO: tabela completa 6x3 -->
+        <div class="diff-content active" data-level="standard">
+          <div class="interactive-area">
+            <p style="font-size:0.95rem;color:#555;margin-bottom:1rem;">Explora toda a tabela. Toca em várias células e descobre o padrão das terminações!</p>
+            <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;margin-bottom:1rem;">
+              <label for="u2m-verb" style="font-weight:700;">Verbo:</label>
+              <select class="verb-select" id="u2m-verb">
+                <option value="cantar">cantar (-ar)</option>
+                <option value="comer">comer (-er)</option>
+                <option value="partir">partir (-ir)</option>
+              </select>
+              <span class="badge-conj1" id="u2m-badge">1.ª conj. (-ar)</span>
+              <button class="btn btn-sm btn-neutral" id="u2m-test-btn" style="margin-left:auto;">Testar-me</button>
+            </div>
+            <div class="big-form-display" id="u2m-display" aria-live="polite">
+              <span style="color:#aaa;font-size:1.2rem;">Toca numa célula!</span>
+            </div>
+            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.75rem;">
+              <span class="legend-chip"><span class="dot-r"></span> radical</span>
+              <span class="legend-chip"><span class="dot-t"></span> terminação</span>
+            </div>
+            <div class="paradigm-table-wrap">
+              <table class="paradigm-table" id="u2m-table" aria-label="Tabela de conjugação — intermédio">
+                <thead>
+                  <tr>
+                    <th class="th-pessoa">Pessoa</th>
+                    <th class="th-presente">Presente</th>
+                    <th class="th-preterito">Pret. Perfeito</th>
+                    <th class="th-futuro">Futuro</th>
+                  </tr>
+                </thead>
+                <tbody id="u2m-tbody"></tbody>
+              </table>
+            </div>
+            <!-- Test mode overlay -->
+            <div id="u2m-test-area" style="display:none;margin-top:1rem;">
+              <p style="font-weight:700;margin-bottom:0.75rem;">Sem ver a tabela — escreve as terminações de <strong id="u2m-test-verb">cantar</strong> no <strong id="u2m-test-tempo">Presente</strong>:</p>
+              <div id="u2m-test-inputs"></div>
+              <div style="margin-top:0.75rem;display:flex;gap:0.5rem;flex-wrap:wrap;">
+                <button class="btn btn-primary btn-sm" onclick="checkUnit2Test()">Verificar</button>
+                <button class="btn btn-neutral btn-sm" onclick="closeUnit2Test()">Voltar à tabela</button>
+              </div>
+              <div id="u2m-test-feedback" class="feedback-strip" style="margin-top:0.5rem;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DESAFIO: paradigma em branco do verbo "andar" -->
+        <div class="diff-content" data-level="challenge">
+          <div class="interactive-area">
+            <p style="font-size:0.95rem;color:#555;margin-bottom:1rem;">Já exploraste a tabela. Agora consegues preencher o paradigma do verbo <strong>andar</strong> — sem ajuda?</p>
+            <p style="font-size:0.9rem;color:#888;margin-bottom:1rem;">Clica numa terminação e depois numa célula para a colocar. Usa o que descobriste sobre os verbos em <em>-ar</em>.</p>
+            <div style="margin-bottom:1rem;">
+              <strong style="font-size:0.9rem;">Terminações disponíveis:</strong>
+              <div class="form-bank" id="u2c-bank"></div>
+            </div>
+            <div class="paradigm-table-wrap">
+              <table class="paradigm-table" id="u2c-table" aria-label="Paradigma em branco — andar">
+                <thead>
+                  <tr>
+                    <th class="th-pessoa">Pessoa</th>
+                    <th class="th-presente">Presente</th>
+                    <th class="th-preterito">Pret. Perfeito</th>
+                    <th class="th-futuro">Futuro</th>
+                  </tr>
+                </thead>
+                <tbody id="u2c-tbody"></tbody>
+              </table>
+            </div>
+            <div style="margin-top:1rem;display:flex;gap:0.5rem;flex-wrap:wrap;">
+              <button class="btn btn-primary btn-sm" onclick="checkUnit2Challenge()">Verificar</button>
+              <button class="btn btn-neutral btn-sm" onclick="resetUnit2Challenge()">Recomeçar</button>
+            </div>
+            <div id="u2c-feedback" class="feedback-strip" style="margin-top:0.5rem;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== UNIT 3 ===== -->
+      <section class="unit-section" data-unit="3" aria-labelledby="unit3-title">
+        <div class="unit-header">
+          <div class="unit-number" aria-hidden="true">3</div>
+          <div>
+            <h2 id="unit3-title">Verbos irregulares — ser, ter, ir, fazer</h2>
+            <div class="unit-duration">7 minutos</div>
+          </div>
+        </div>
+        <!-- DIFF TABS -->
+        <div class="diff-tabs" role="tablist" aria-label="Nível de dificuldade — Unidade 3">
+          <button class="diff-tab" data-level="support" role="tab" tabindex="0"><span aria-hidden="true">🟢</span> Apoio</button>
+          <button class="diff-tab active" data-level="standard" role="tab" tabindex="0"><span aria-hidden="true">🟡</span> Intermédio</button>
+          <button class="diff-tab" data-level="challenge" role="tab" tabindex="0"><span aria-hidden="true">🔴</span> Desafio</button>
+        </div>
+
+        <!-- APOIO: 1 irregular, 3 pessoas, 2 tempos -->
+        <div class="diff-content" data-level="support">
+          <div class="interactive-area">
+            <p style="font-size:0.95rem;color:#555;margin-bottom:1rem;">Compara o verbo <strong>cantar</strong> com o verbo <strong>ser</strong>. O que é diferente? Toca no <span style="color:#dc2626;font-weight:800;">?</span> para saber mais!</p>
+            <div class="compare-grid" id="u3s-grid">
+              <div class="compare-col regular">
+                <h3>cantar <span class="badge-conj1">regular</span></h3>
+                <div id="u3s-regular-rows"></div>
+              </div>
+              <div class="compare-col irregular">
+                <h3>ser <span style="background:#fef3c7;color:#92400e;border:1.5px solid #fbbf24;border-radius:999px;padding:0.15rem 0.65rem;font-size:0.82rem;font-weight:700;">irregular</span></h3>
+                <div id="u3s-irreg-rows"></div>
+              </div>
+            </div>
+            <div style="margin-top:1rem;display:flex;gap:0.5rem;flex-wrap:wrap;" id="u3s-tempo-btns">
+              <button class="toggle-btn active" data-tense="Presente" onclick="setU3STempo(this,'Presente')">Presente</button>
+              <button class="toggle-btn" data-tense="Preterito" onclick="setU3STempo(this,'Preterito')">Pretérito Perfeito</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- INTERMÉDIO: 4 irregulares, comparação completa -->
+        <div class="diff-content active" data-level="standard">
+          <div class="interactive-area">
+            <p style="font-size:0.95rem;color:#555;margin-bottom:1rem;">Escolhe um verbo irregular e compara com <strong>cantar</strong>. Muda de tempo para ver as diferenças!</p>
+            <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;margin-bottom:1rem;">
+              <label for="u3m-verb" style="font-weight:700;">Irregular:</label>
+              <select class="verb-select" id="u3m-verb">
+                <option value="ser">ser</option>
+                <option value="ter">ter</option>
+                <option value="ir">ir</option>
+                <option value="fazer">fazer</option>
+              </select>
+              <div class="toggle-group" id="u3m-tempo-btns">
+                <button class="toggle-btn active" data-tense="Presente" onclick="setU3MTempo(this,'Presente')">Presente</button>
+                <button class="toggle-btn" data-tense="Preterito" onclick="setU3MTempo(this,'Preterito')">Pret. Perfeito</button>
+                <button class="toggle-btn" data-tense="Futuro" onclick="setU3MTempo(this,'Futuro')">Futuro</button>
+              </div>
+            </div>
+            <div class="compare-grid" id="u3m-grid">
+              <div class="compare-col regular">
+                <h3>cantar <span class="badge-conj1">regular</span></h3>
+                <div id="u3m-regular-rows"></div>
+              </div>
+              <div class="compare-col irregular">
+                <h3 id="u3m-irr-title">ser <span style="background:#fef3c7;color:#92400e;border:1.5px solid #fbbf24;border-radius:999px;padding:0.15rem 0.65rem;font-size:0.82rem;font-weight:700;">irregular</span></h3>
+                <div id="u3m-irreg-rows"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DESAFIO: frases com lacuna, escolher irregular correto -->
+        <div class="diff-content" data-level="challenge">
+          <div class="interactive-area">
+            <p style="font-size:0.95rem;color:#555;margin-bottom:1rem;">Escolhe a forma correta para completar cada frase. Atenção ao tempo e ao verbo!</p>
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" id="u3c-progress" style="width:0%"></div></div>
+            <div style="text-align:right;margin-bottom:0.5rem;"><span class="score-badge" id="u3c-score">0 / 3</span></div>
+            <div class="sentence-card" id="u3c-card" aria-live="polite"></div>
+            <div class="option-grid" id="u3c-options" role="group" aria-label="Escolhe a forma verbal correta"></div>
+            <div class="feedback-strip" id="u3c-feedback" role="status" aria-live="assertive"></div>
+            <div style="text-align:center;margin-top:1rem;display:none;" id="u3c-done">
+              <p style="font-size:1.2rem;font-weight:800;color:#16a34a;">Terminaste o desafio!</p>
+              <button class="btn btn-primary" onclick="resetUnit3Challenge()">Tentar outra vez</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== UNIT 4 ===== -->
+      <section class="unit-section" data-unit="4" aria-labelledby="unit4-title">
+        <div class="unit-header">
+          <div class="unit-number" aria-hidden="true">4</div>
+          <div>
+            <h2 id="unit4-title">Prática — completa as frases</h2>
+            <div class="unit-duration">7 minutos</div>
+          </div>
+        </div>
+        <!-- DIFF TABS -->
+        <div class="diff-tabs" role="tablist" aria-label="Nível de dificuldade — Unidade 4">
+          <button class="diff-tab" data-level="support" role="tab" tabindex="0"><span aria-hidden="true">🟢</span> Apoio</button>
+          <button class="diff-tab active" data-level="standard" role="tab" tabindex="0"><span aria-hidden="true">🟡</span> Intermédio</button>
+          <button class="diff-tab" data-level="challenge" role="tab" tabindex="0"><span aria-hidden="true">🔴</span> Desafio</button>
+        </div>
+
+        <!-- APOIO: 4 frases, 3 opcoes, marcadores sublinhados -->
+        <div class="diff-content" data-level="support">
+          <div class="interactive-area">
+            <p style="font-size:0.95rem;color:#555;margin-bottom:1rem;">Olha para as palavras <u>sublinhadas</u> — são pistas de tempo!</p>
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" id="u4s-progress" style="width:0%"></div></div>
+            <div style="text-align:right;margin-bottom:0.5rem;"><span class="score-badge" id="u4s-score">0 / 4</span></div>
+            <div class="sentence-card" id="u4s-card" style="flex-direction:column;gap:0.5rem;" aria-live="polite"></div>
+            <div class="form-bank" id="u4s-bank" role="group" aria-label="Formas verbais disponíveis"></div>
+            <div class="feedback-strip" id="u4s-feedback" role="status" aria-live="assertive"></div>
+            <div style="text-align:center;margin-top:1rem;display:none;" id="u4s-done">
+              <p style="font-size:1.2rem;font-weight:800;color:#16a34a;">Muito bem! Completaste todas as frases!</p>
+              <button class="btn btn-primary" onclick="resetUnit4('support')">Tentar outra vez</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- INTERMEDIO: 6 frases, 4 opcoes, sem sublinhados -->
+        <div class="diff-content active" data-level="standard">
+          <div class="interactive-area">
+            <p style="font-size:0.95rem;color:#555;margin-bottom:1rem;">Lê a frase com atenção e escolhe a forma verbal correta.</p>
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" id="u4m-progress" style="width:0%"></div></div>
+            <div style="text-align:right;margin-bottom:0.5rem;"><span class="score-badge" id="u4m-score">0 / 6</span></div>
+            <div class="sentence-card" id="u4m-card" style="flex-direction:column;gap:0.5rem;" aria-live="polite"></div>
+            <div class="form-bank" id="u4m-bank" role="group" aria-label="Formas verbais disponíveis"></div>
+            <div class="feedback-strip" id="u4m-feedback" role="status" aria-live="assertive"></div>
+            <div style="text-align:center;margin-top:1rem;display:none;" id="u4m-done">
+              <p style="font-size:1.2rem;font-weight:800;color:#16a34a;">Excelente! Completaste todas as frases!</p>
+              <button class="btn btn-primary" onclick="resetUnit4('standard')">Tentar outra vez</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DESAFIO: 6 frases + 2 bonus de texto livre -->
+        <div class="diff-content" data-level="challenge">
+          <div class="interactive-area">
+            <p style="font-size:0.95rem;color:#555;margin-bottom:1rem;">Completa as 6 frases com as opções e depois escreve tu próprio nas 2 frases bónus!</p>
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" id="u4c-progress" style="width:0%"></div></div>
+            <div style="text-align:right;margin-bottom:0.5rem;"><span class="score-badge" id="u4c-score">0 / 8</span></div>
+            <div class="sentence-card" id="u4c-card" style="flex-direction:column;gap:0.5rem;" aria-live="polite"></div>
+            <div id="u4c-bank-wrap">
+              <div class="form-bank" id="u4c-bank" role="group" aria-label="Formas verbais disponíveis"></div>
+            </div>
+            <div id="u4c-free-wrap" style="display:none;margin-top:0.75rem;">
+              <label style="font-weight:700;font-size:0.95rem;">Escreve a forma correta:</label>
+              <div style="display:flex;align-items:center;gap:0.5rem;margin-top:0.4rem;flex-wrap:wrap;">
+                <input class="text-input" id="u4c-free-input" type="text" placeholder="forma verbal..." autocomplete="off" autocorrect="off" spellcheck="false">
+                <button class="btn btn-primary btn-sm" onclick="submitUnit4Free()">Confirmar</button>
+              </div>
+            </div>
+            <div class="feedback-strip" id="u4c-feedback" role="status" aria-live="assertive"></div>
+            <div style="text-align:center;margin-top:1rem;display:none;" id="u4c-done">
+              <p style="font-size:1.2rem;font-weight:800;color:#16a34a;">Incrível! Completaste o desafio!</p>
+              <button class="btn btn-primary" onclick="resetUnit4('challenge')">Tentar outra vez</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== UNIT 5 ===== -->
+      <section class="unit-section" data-unit="5" aria-labelledby="unit5-title">
+        <div class="unit-header">
+          <div class="unit-number" aria-hidden="true">5</div>
+          <div>
+            <h2 id="unit5-title">Mini-avaliação — identificar e conjugar</h2>
+            <div class="unit-duration">3 minutos</div>
+          </div>
+        </div>
+        <!-- DIFF TABS -->
+        <div class="diff-tabs" role="tablist" aria-label="Nível de dificuldade — Unidade 5">
+          <button class="diff-tab" data-level="support" role="tab" tabindex="0"><span aria-hidden="true">🟢</span> Apoio</button>
+          <button class="diff-tab active" data-level="standard" role="tab" tabindex="0"><span aria-hidden="true">🟡</span> Intermédio</button>
+          <button class="diff-tab" data-level="challenge" role="tab" tabindex="0"><span aria-hidden="true">🔴</span> Desafio</button>
+        </div>
+
+        <!-- APOIO: 3 pares + banco de opcoes em vez de texto livre -->
+        <div class="diff-content" data-level="support">
+          <div class="interactive-area">
+            <p style="font-size:0.95rem;color:#555;margin-bottom:1rem;"><strong>Fase 1:</strong> Liga cada forma verbal ao seu tempo. Clica numa forma e depois no tempo certo.</p>
+            <div id="u5s-match-area">
+              <div class="matching-grid">
+                <div class="match-col">
+                  <h3>Formas verbais</h3>
+                  <div id="u5s-left"></div>
+                </div>
+                <div class="match-col">
+                  <h3>Tempo verbal</h3>
+                  <div id="u5s-right"></div>
+                </div>
+              </div>
+              <div class="feedback-strip" id="u5s-match-fb" style="margin-top:0.75rem;" role="status" aria-live="assertive"></div>
+              <div style="margin-top:0.75rem;display:none;" id="u5s-phase2-btn-wrap">
+                <button class="btn btn-primary" onclick="openU5SPhase2()">Continuar para a Fase 2</button>
+              </div>
+            </div>
+            <div id="u5s-phase2" style="display:none;margin-top:1.25rem;">
+              <p style="font-size:0.95rem;color:#555;margin-bottom:0.75rem;"><strong>Fase 2:</strong> Escolhe a forma correta para completar a frase.</p>
+              <div id="u5s-p2-frases"></div>
+              <div class="feedback-strip" id="u5s-p2-fb" role="status" aria-live="assertive"></div>
+              <div style="display:none;margin-top:1rem;text-align:center;" id="u5s-final">
+                <p style="font-size:1.2rem;font-weight:800;color:#16a34a;">Avaliação concluída!</p>
+                <button class="btn btn-primary" onclick="resetUnit5('support')">Recomeçar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INTERMEDIO: 4 pares + 2 campos livres -->
+        <div class="diff-content active" data-level="standard">
+          <div class="interactive-area">
+            <p style="font-size:0.95rem;color:#555;margin-bottom:1rem;"><strong>Fase 1:</strong> Liga cada forma verbal ao seu tempo verbal. Clica primeiro numa forma (esquerda) e depois no tempo (direita).</p>
+            <div id="u5m-match-area">
+              <div class="matching-grid">
+                <div class="match-col">
+                  <h3>Forma verbal</h3>
+                  <div id="u5m-left"></div>
+                </div>
+                <div class="match-col">
+                  <h3>Tempo verbal</h3>
+                  <div id="u5m-right"></div>
+                </div>
+              </div>
+              <div class="feedback-strip" id="u5m-match-fb" style="margin-top:0.75rem;" role="status" aria-live="assertive"></div>
+              <div style="margin-top:0.75rem;display:none;" id="u5m-phase2-btn-wrap">
+                <button class="btn btn-primary" onclick="openU5MPhase2()">Continuar para a Fase 2</button>
+              </div>
+            </div>
+            <div id="u5m-phase2" style="display:none;margin-top:1.25rem;">
+              <p style="font-size:0.95rem;color:#555;margin-bottom:0.75rem;"><strong>Fase 2:</strong> Escreve a forma verbal correta em cada frase.</p>
+              <div id="u5m-p2-frases"></div>
+              <div style="margin-top:0.75rem;">
+                <button class="btn btn-primary btn-sm" onclick="checkU5MPhase2()">Verificar</button>
+              </div>
+              <div class="feedback-strip" id="u5m-p2-fb" style="margin-top:0.5rem;" role="status" aria-live="assertive"></div>
+              <div style="display:none;margin-top:1rem;text-align:center;" id="u5m-final">
+                <p style="font-size:1.2rem;font-weight:800;color:#16a34a;">Avaliação concluída! Bom trabalho!</p>
+                <button class="btn btn-primary" onclick="resetUnit5('standard')">Recomeçar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DESAFIO: 4 pares + 2 livres + 1 tarefa criativa -->
+        <div class="diff-content" data-level="challenge">
+          <div class="interactive-area">
+            <p style="font-size:0.95rem;color:#555;margin-bottom:1rem;"><strong>Fase 1:</strong> Liga os pares. <strong>Fase 2:</strong> Escreve as formas. <strong>Fase 3:</strong> Cria as tuas próprias frases!</p>
+            <div id="u5c-match-area">
+              <div class="matching-grid">
+                <div class="match-col"><h3>Forma verbal</h3><div id="u5c-left"></div></div>
+                <div class="match-col"><h3>Tempo verbal</h3><div id="u5c-right"></div></div>
+              </div>
+              <div class="feedback-strip" id="u5c-match-fb" style="margin-top:0.75rem;" role="status" aria-live="assertive"></div>
+              <div style="margin-top:0.75rem;display:none;" id="u5c-phase2-btn-wrap">
+                <button class="btn btn-primary" onclick="openU5CPhase2()">Continuar para a Fase 2</button>
+              </div>
+            </div>
+            <div id="u5c-phase2" style="display:none;margin-top:1.25rem;">
+              <p style="font-size:0.95rem;color:#555;margin-bottom:0.75rem;"><strong>Fase 2:</strong> Escreve as formas corretas.</p>
+              <div id="u5c-p2-frases"></div>
+              <div style="margin-top:0.75rem;">
+                <button class="btn btn-primary btn-sm" onclick="checkU5CPhase2()">Verificar</button>
+              </div>
+              <div class="feedback-strip" id="u5c-p2-fb" style="margin-top:0.5rem;"></div>
+              <div id="u5c-phase3" style="display:none;margin-top:1.25rem;">
+                <p style="font-size:0.95rem;color:#555;margin-bottom:0.75rem;"><strong>Fase 3:</strong> Escreve uma frase tua com o verbo IR no futuro e outra com o verbo SER no pretérito perfeito.</p>
+                <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                  <div>
+                    <label style="font-weight:700;font-size:0.9rem;">Frase com IR (futuro):</label>
+                    <textarea id="u5c-frase1" rows="2" style="width:100%;font-family:var(--font);font-size:1rem;border:2px solid #ddd;border-radius:8px;padding:0.5rem;margin-top:0.3rem;resize:vertical;" placeholder="Escreve aqui..."></textarea>
+                  </div>
+                  <div>
+                    <label style="font-weight:700;font-size:0.9rem;">Frase com SER (pretérito perfeito):</label>
+                    <textarea id="u5c-frase2" rows="2" style="width:100%;font-family:var(--font);font-size:1rem;border:2px solid #ddd;border-radius:8px;padding:0.5rem;margin-top:0.3rem;resize:vertical;" placeholder="Escreve aqui..."></textarea>
+                  </div>
+                  <button class="btn btn-primary btn-sm" onclick="submitU5CPhase3()">Submeter</button>
+                  <div class="feedback-strip" id="u5c-p3-fb"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== MINI-AVALIACAO TEACHER ===== -->
+      <section class="avaliacao-section" aria-labelledby="aval-title">
+        <h2 id="aval-title">Avaliação da aula</h2>
+        <p style="font-size:0.95rem;margin-bottom:1rem;">Para cada item, assinala o que consegues fazer.</p>
+        <div class="avaliacao-item">
+          <strong>1.</strong> Identifico se um verbo está no passado, presente ou futuro.
+          <div class="check-scale">
+            <label><input type="checkbox"> Ainda não consigo</label>
+            <label><input type="checkbox"> Com ajuda</label>
+            <label><input type="checkbox"> Sozinho/a</label>
+            <label><input type="checkbox"> Ajudo colegas</label>
+          </div>
+        </div>
+        <div class="avaliacao-item">
+          <strong>2.</strong> Conheço as terminações dos verbos regulares (-ar, -er, -ir) no presente, pretérito perfeito e futuro.
+          <div class="check-scale">
+            <label><input type="checkbox"> Ainda não consigo</label>
+            <label><input type="checkbox"> Com ajuda</label>
+            <label><input type="checkbox"> Sozinho/a</label>
+            <label><input type="checkbox"> Ajudo colegas</label>
+          </div>
+        </div>
+        <div class="avaliacao-item">
+          <strong>3.</strong> Reconheço as formas irregulares de ser, ter, ir e fazer nos três tempos.
+          <div class="check-scale">
+            <label><input type="checkbox"> Ainda não consigo</label>
+            <label><input type="checkbox"> Com ajuda</label>
+            <label><input type="checkbox"> Sozinho/a</label>
+            <label><input type="checkbox"> Ajudo colegas</label>
+          </div>
+        </div>
+        <div class="avaliacao-item">
+          <strong>4.</strong> Completo frases com a forma verbal certa, usando o contexto da frase.
+          <div class="check-scale">
+            <label><input type="checkbox"> Ainda não consigo</label>
+            <label><input type="checkbox"> Com ajuda</label>
+            <label><input type="checkbox"> Sozinho/a</label>
+            <label><input type="checkbox"> Ajudo colegas</label>
+          </div>
+        </div>
+        <div class="avaliacao-item">
+          <strong>5.</strong> Ligo corretamente a forma verbal ao seu tempo (matching).
+          <div class="check-scale">
+            <label><input type="checkbox"> Ainda não consigo</label>
+            <label><input type="checkbox"> Com ajuda</label>
+            <label><input type="checkbox"> Sozinho/a</label>
+            <label><input type="checkbox"> Ajudo colegas</label>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ===== CURRICULUM FOOTER ===== -->
+    <footer class="curriculum-footer" aria-label="Referências curriculares">
+      <h3>Aprendizagens Essenciais — Português 3.º ano</h3>
+      <ul>
+        <li>Conjugar verbos regulares e irregulares no presente, no pretérito perfeito e no futuro do modo indicativo</li>
+        <li>Utilizar apropriadamente os tempos verbais para exprimir anterioridade, posterioridade e simultaneidade</li>
+        <li>Aquisição de conhecimento sobre regras de flexão de verbos regulares e irregulares</li>
+        <li>Descobrir regularidades na formação de palavras (terminações verbais)</li>
+      </ul>
+      <h3>Perfil do Aluno</h3>
+      <ul>
+        <li>PA-A: Linguagens e textos</li>
+        <li>PA-C: Raciocínio e resolução de problemas</li>
+        <li>PA-D: Pensamento crítico e pensamento criativo</li>
+        <li>PA-F: Desenvolvimento pessoal e autonomia</li>
+      </ul>
+    </footer>
+
+    <div class="pagecraft-footer" aria-label="Rodapé">
+      Gerado por <strong>PageCraft</strong> — Página interativa auto-contida &nbsp;|&nbsp; Português 3.º ano &nbsp;|&nbsp; 2026
+    </div>
+  </div><!-- /page-wrapper -->
+
+  <script>
+    'use strict';
+    /* ============================================================
+       GLOBAL STATE
+    ============================================================ */
+    const STATE = {
+      unit1: {
+        level: 'standard',
+        index: 0,
+        score: 0,
+        answered: false,
+        done: false
+      },
+      unit2: {
+        level: 'standard',
+        verbo: 'cantar',
+        tempo: 'Presente',
+        pessoa: 'eu',
+        testMode: false,
+        testAnswers: {}
+      },
+      unit3: {
+        level: 'standard',
+        irregular: 'ser',
+        tempo: 'Presente'
+      },
+      unit4: {
+        level: 'standard',
+        index: 0,
+        score: 0,
+        selected: null,
+        done: false
+      },
+      unit5: {
+        level: 'standard',
+        phase: 1,
+        selectedLeft: null,
+        matched: {},
+        matchScore: 0,
+        prodScore: 0
+      }
+    };
+
+    /* ============================================================
+       AUDIO HELPERS (Web Audio API)
+    ============================================================ */
+    let _audioCtx = null;
+    function getAudioCtx() {
+      if (!_audioCtx) {
+        try { _audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+      }
+      return _audioCtx;
+    }
+    function playTone(freq, dur, type = 'sine', vol = 0.18) {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      try {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(vol, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + dur);
+      } catch(e) {}
+    }
+    function soundCorrect() {
+      playTone(523, 0.12); // C5
+      setTimeout(() => playTone(659, 0.18), 90); // E5
+      setTimeout(() => playTone(784, 0.22), 180); // G5
+    }
+    function soundWrong() {
+      playTone(220, 0.18, 'sawtooth', 0.12);
+      setTimeout(() => playTone(196, 0.18, 'sawtooth', 0.1), 120);
+    }
+    function soundComplete() {
+      [523,659,784,1047].forEach((f, i) => setTimeout(() => playTone(f, 0.22), i * 80));
+    }
+
+    /* ============================================================
+       ARIA ANNOUNCE
+    ============================================================ */
+    function announce(msg) {
+      const el = document.getElementById('aria-announce');
+      if (el) { el.textContent = ''; setTimeout(() => { el.textContent = msg; }, 50); }
+    }
+
+    /* ============================================================
+       CONFETTI
+    ============================================================ */
+    function launchConfetti(duration = 1800) {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const colors = ['#0d9488','#7c3aed','#ea580c','#22c55e','#f59e0b','#3b82f6','#ec4899'];
+      const particles = Array.from({length: 80}, () => ({
+        x: Math.random() * canvas.width,
+        y: -10,
+        vx: (Math.random() - 0.5) * 4,
+        vy: Math.random() * 3 + 2,
+        r: Math.random() * 7 + 4,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        angle: Math.random() * Math.PI * 2,
+        va: (Math.random() - 0.5) * 0.2
+      }));
+      const end = performance.now() + duration;
+      function draw(now) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.x += p.vx; p.y += p.vy; p.angle += p.va;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.angle);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.r/2, -p.r/2, p.r, p.r * 0.5);
+          ctx.restore();
+        });
+        if (now < end) requestAnimationFrame(draw);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      requestAnimationFrame(draw);
+    }
+
+    /* ============================================================
+       DIFFERENTIATION TABS INIT (generic)
+    ============================================================ */
+    function initDiffTabs(unitEl, onSwitch) {
+      const tabs = unitEl.querySelectorAll('.diff-tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const level = tab.dataset.level;
+          unitEl.querySelectorAll('.diff-content').forEach(c => {
+            c.classList.toggle('active', c.dataset.level === level);
+          });
+          if (onSwitch) onSwitch(level);
+        });
+        tab.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tab.click(); }
+        });
+      });
+    }
+
+    /* ============================================================
+       MARK CORRECT / WRONG HELPERS
+    ============================================================ */
+    function markFeedback(el, type) {
+      el.classList.remove('correct', 'wrong');
+      el.classList.add(type);
+    }
+
+    /* ============================================================
+       CONJUGATION DATA
+    ============================================================ */
+    // Regular verbs: [radical, endings by tense/person]
+    const CONJUGATIONS = {
+      cantar: {
+        radical: 'cant',
+        Presente:  ['o','as','a','amos','ais','am'],
+        Preterito: ['ei','aste','ou','amos','astes','aram'],
+        Futuro:    ['arei','arás','ará','aremos','areis','arão']
+      },
+      comer: {
+        radical: 'com',
+        Presente:  ['o','es','e','emos','eis','em'],
+        Preterito: ['i','este','eu','emos','estes','eram'],
+        Futuro:    ['erei','erás','erá','eremos','ereis','erão']
+      },
+      partir: {
+        radical: 'part',
+        Presente:  ['o','es','e','imos','is','em'],
+        Preterito: ['i','iste','iu','imos','istes','iram'],
+        Futuro:    ['irei','irás','irá','iremos','ireis','irão']
+      },
+      andar: {
+        radical: 'and',
+        Presente:  ['o','as','a','amos','ais','am'],
+        Preterito: ['ei','aste','ou','amos','astes','aram'],
+        Futuro:    ['arei','arás','ará','aremos','areis','arão']
+      }
+    };
+    const PESSOAS = ['eu','tu','ele/ela','nós','vós','eles/elas'];
+    const PESSOAS_SHORT = ['eu','tu','ele','nós','eles']; // for irregular compare
+
+    // Irregular verbs full forms [presente, preterito, futuro] x [eu,tu,ele,nos,vos,eles]
+    const IRREGULARS = {
+      ser: {
+        Presente:  ['sou','és','é','somos','sois','são'],
+        Preterito: ['fui','foste','foi','fomos','fostes','foram'],
+        Futuro:    ['serei','serás','será','seremos','sereis','serão']
+      },
+      ter: {
+        Presente:  ['tenho','tens','tem','temos','tendes','têm'],
+        Preterito: ['tive','tiveste','teve','tivemos','tivestes','tiveram'],
+        Futuro:    ['terei','terás','terá','teremos','tereis','terão']
+      },
+      ir: {
+        Presente:  ['vou','vais','vai','vamos','ides','vão'],
+        Preterito: ['fui','foste','foi','fomos','fostes','foram'],
+        Futuro:    ['irei','irás','irá','iremos','ireis','irão']
+      },
+      fazer: {
+        Presente:  ['faço','fazes','faz','fazemos','fazeis','fazem'],
+        Preterito: ['fiz','fizeste','fez','fizemos','fizestes','fizeram'],
+        Futuro:    ['farei','farás','fará','faremos','fareis','farão']
+      }
+    };
+
+    // Helper: build morpheme HTML for a regular verb form
+    function morphemeHTML(verbo, tempo, pessoaIdx) {
+      const d = CONJUGATIONS[verbo];
+      if (!d) return '—';
+      const rad = d.radical;
+      const term = d[tempo][pessoaIdx];
+      return `<span class="radical">${rad}</span><span class="terminacao">${term}</span>`;
+    }
+
+    // Helper: is a form irregular (radical differs from infinitive root)?
+    function isIrregularForm(verb, tempo, idx) {
+      const regularRoot = { ser:'ser', ter:'ten', ir:'i', fazer:'faz' };
+      const form = IRREGULARS[verb][tempo][idx].toLowerCase();
+      const root = regularRoot[verb];
+      if (verb === 'ser') { return !form.startsWith('ser'); }
+      if (verb === 'ter') { return !form.startsWith('ten') && !form.startsWith('ter'); }
+      if (verb === 'ir')  { return !form.startsWith('ir') && form !== 'irá' && form !== 'irei' && form !== 'irás' && form !== 'iremos' && form !== 'ireis' && form !== 'irão'; }
+      if (verb === 'fazer') { return !form.startsWith('faz') && form !== 'farei' && form !== 'farás' && form !== 'fará' && form !== 'faremos' && form !== 'fareis' && form !== 'farão'; }
+      return false;
+    }
+
+    /* ============================================================
+       UNIT INIT STUBS — filled in subsequent edits
+    ============================================================ */
+    /* ============================================================
+       UNIT 1 — Aquecimento
+    ============================================================ */
+    const U1_FRASES = {
+      support: [
+        { html: 'Ontem o <span class="verb-highlight">João</span> <span class="verb-highlight" data-v="cantou">cantou</span> uma música.', verb:'cantou', answer:'past', icon:'🕰️' },
+        { html: 'Agora a Ana <span class="verb-highlight" data-v="come">come</span> a sopa.', verb:'come', answer:'present', icon:'⏰' },
+        { html: 'Amanhã nós vamos <span class="verb-highlight" data-v="partir">partir</span> de férias.', verb:'partir', answer:'future', icon:'⏩' },
+        { html: 'Ontem o cão <span class="verb-highlight" data-v="bebeu">bebeu</span> água.', verb:'bebeu', answer:'past', icon:'🕰️' },
+        { html: 'Amanhã eu <span class="verb-highlight" data-v="farei">farei</span> os trabalhos.', verb:'farei', answer:'future', icon:'⏩' }
+      ],
+      standard: [
+        { html: 'O João <span class="verb-highlight" data-v="cantou">cantou</span> uma música.', verb:'cantou', answer:'past' },
+        { html: 'A Ana <span class="verb-highlight" data-v="come">come</span> a sopa.', verb:'come', answer:'present' },
+        { html: 'Nós vamos <span class="verb-highlight" data-v="partir">partir</span> amanhã.', verb:'partir', answer:'future' },
+        { html: 'O cão <span class="verb-highlight" data-v="bebeu">bebeu</span> água.', verb:'bebeu', answer:'past' },
+        { html: 'Eu <span class="verb-highlight" data-v="farei">farei</span> os trabalhos.', verb:'farei', answer:'future' }
+      ],
+      challenge: [
+        { html: 'O João <span class="verb-highlight" data-v="cantou" data-ambig="true">cantou</span> uma música.', verb:'cantou', answer:'past', ambig:false },
+        { html: 'A Ana <span class="verb-highlight" data-v="come" data-ambig="true">come</span> a sopa.', verb:'come', answer:'present', ambig:false },
+        { html: 'A Maria <span class="verb-highlight" data-v="parte" data-ambig="true">parte</span> o pão.', verb:'parte', answer:'present', ambig:true, hint:'Como sabes? A palavra "parte" pode ser presente do indicativo ou imperativo. Qual é o contexto?' },
+        { html: 'O cão <span class="verb-highlight" data-v="bebeu" data-ambig="true">bebeu</span> água.', verb:'bebeu', answer:'past', ambig:false },
+        { html: 'Eu <span class="verb-highlight" data-v="escrevo" data-ambig="true">escrevo</span> uma carta.', verb:'escrevo', answer:'present', ambig:true, hint:'Como sabes? Não há pista de tempo. O que na terminação te ajuda?' }
+      ]
+    };
+    const U1_OPTIONS = [
+      { label:'Já aconteceu', key:'past', color:'#7c3aed', emoji:'🕰️' },
+      { label:'Está a acontecer agora', key:'present', color:'#0d9488', emoji:'⏰' },
+      { label:'Ainda vai acontecer', key:'future', color:'#ea580c', emoji:'⏩' }
+    ];
+
+    const _u1State = { support:{i:0,score:0,locked:false}, standard:{i:0,score:0,locked:false}, challenge:{i:0,score:0,locked:false} };
+
+    function renderUnit1(lv) {
+      const st = _u1State[lv];
+      const frases = U1_FRASES[lv];
+      const frase = frases[st.i];
+      const prefix = `u1${lv==='support'?'s':lv==='standard'?'m':'c'}`;
+      const card = document.getElementById(`${prefix}-card`);
+      const opts = document.getElementById(`${prefix}-options`);
+      const fb   = document.getElementById(`${prefix}-feedback`);
+      const prog = document.getElementById(`${prefix}-progress`);
+      const score= document.getElementById(`${prefix}-score`);
+      const done = document.getElementById(`${prefix}-done`);
+
+      if (!card) return;
+      fb.className = 'feedback-strip';
+      fb.textContent = '';
+      card.innerHTML = lv === 'support'
+        ? `<span class="time-icon">${frase.icon}</span>${frase.html}`
+        : frase.html;
+
+      // Tooltip for challenge ambiguous verbs
+      if (lv === 'challenge' && frase.ambig && frase.hint) {
+        card.querySelectorAll('[data-ambig]').forEach(el => {
+          el.setAttribute('title', frase.hint);
+          el.setAttribute('tabindex', '0');
+          el.style.cursor = 'help';
+          el.addEventListener('click', () => alert(frase.hint));
+          el.addEventListener('keydown', e => { if(e.key==='Enter') alert(frase.hint); });
+        });
+      }
+
+      opts.innerHTML = '';
+      st.locked = false;
+      U1_OPTIONS.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerHTML = `${opt.emoji} ${opt.label}`;
+        btn.setAttribute('aria-label', opt.label);
+        btn.addEventListener('click', () => {
+          if (st.locked) return;
+          st.locked = true;
+          const correct = opt.key === frase.answer;
+          if (correct) {
+            st.score++;
+            btn.classList.add('correct');
+            fb.textContent = '✓ Correto! ' + (frase.verb ? `"${frase.verb}" é ${opt.label.toLowerCase()}.` : '');
+            fb.className = 'feedback-strip correct';
+            soundCorrect();
+            announce(`Correto! ${opt.label}`);
+          } else {
+            btn.classList.add('wrong');
+            const correctOpt = U1_OPTIONS.find(o => o.key === frase.answer);
+            fb.textContent = `Quase! A resposta é: "${correctOpt.label}".`;
+            fb.className = 'feedback-strip wrong';
+            soundWrong();
+            announce(`Incorreto. A resposta era: ${correctOpt.label}`);
+          }
+          opts.querySelectorAll('.option-btn').forEach(b => b.classList.add('disabled'));
+          score.textContent = `${st.score} / ${frases.length}`;
+          prog.style.width = `${((st.i+1)/frases.length)*100}%`;
+
+          setTimeout(() => {
+            st.i++;
+            if (st.i < frases.length) {
+              renderUnit1(lv);
+            } else {
+              fb.className = 'feedback-strip';
+              done.style.display = 'block';
+              if (st.score >= 4) { soundComplete(); launchConfetti(1500); }
+              announce(`Terminaste! Acertaste ${st.score} de ${frases.length}.`);
+            }
+          }, 1600);
+        });
+        btn.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' ') { e.preventDefault(); btn.click(); } });
+        opts.appendChild(btn);
+      });
+    }
+
+    function resetUnit1(lv) {
+      _u1State[lv] = {i:0, score:0, locked:false};
+      const prefix = `u1${lv==='support'?'s':lv==='standard'?'m':'c'}`;
+      document.getElementById(`${prefix}-done`).style.display = 'none';
+      document.getElementById(`${prefix}-progress`).style.width = '0%';
+      document.getElementById(`${prefix}-score`).textContent = '0 / 5';
+      renderUnit1(lv);
+    }
+
+    function initUnit1() {
+      const sec = document.querySelector('[data-unit="1"]');
+      initDiffTabs(sec, (lv) => { renderUnit1(lv); });
+      // Render all three so they are ready; only standard is visible
+      renderUnit1('support');
+      renderUnit1('standard');
+      renderUnit1('challenge');
+    }
+    /* ============================================================
+       UNIT 2 — Descoberta
+    ============================================================ */
+    const U2_PESSOAS_SHORT = ['eu','tu','ele/ela','nós','vós','eles/elas'];
+    const U2_PESSOAS_APOIO = ['eu','ele/ela','eles/elas'];
+    const U2_APOIO_IDX = [0,2,5]; // indices in full PESSOAS array
+
+    const CONJ_BADGE = { cantar:'badge-conj1', comer:'badge-conj2', partir:'badge-conj3' };
+    const CONJ_LABEL = { cantar:'1.ª conj. (-ar)', comer:'2.ª conj. (-er)', partir:'3.ª conj. (-ir)' };
+
+    // Selected cell tracking per variant
+    const _u2sel = { support: null, standard: null };
+
+    function u2BuildHTML(verbo, tempo, pessoaIdx) {
+      return morphemeHTML(verbo, tempo, pessoaIdx);
+    }
+
+    function u2RenderTable(variant, verbo, tempos, pessoas_arr, persons_idx) {
+      const tbody = document.getElementById(`u2${variant}-tbody`);
+      const display = document.getElementById(`u2${variant}-display`);
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      pessoas_arr.forEach((pessoa, i) => {
+        const pi = persons_idx ? persons_idx[i] : i;
+        const tr = document.createElement('tr');
+        const tdP = document.createElement('td');
+        tdP.textContent = pessoa;
+        tdP.style.fontWeight = '700';
+        tdP.style.cursor = 'default';
+        tdP.style.background = '#f1f5f9';
+        tr.appendChild(tdP);
+        tempos.forEach(tempo => {
+          const td = document.createElement('td');
+          td.dataset.verbo = verbo;
+          td.dataset.tempo = tempo;
+          td.dataset.pi = pi;
+          td.innerHTML = u2BuildHTML(verbo, tempo, pi);
+          const selClass = `selected-${tempo === 'Presente' ? 'presente' : tempo === 'Preterito' ? 'preterito' : 'futuro'}`;
+          td.setAttribute('tabindex', '0');
+          td.setAttribute('role', 'button');
+          td.setAttribute('aria-label', `${pessoa}, ${tempo}: ${CONJUGATIONS[verbo].radical}${CONJUGATIONS[verbo][tempo][pi]}`);
+          const handleSelect = () => {
+            // deselect previous
+            if (_u2sel[variant]) {
+              _u2sel[variant].classList.remove('selected-presente','selected-preterito','selected-futuro');
+            }
+            _u2sel[variant] = td;
+            td.classList.add(selClass);
+            const form = CONJUGATIONS[verbo].radical + CONJUGATIONS[verbo][tempo][pi];
+            if (display) {
+              display.innerHTML = u2BuildHTML(verbo, tempo, pi);
+              display.style.animation = 'none';
+              requestAnimationFrame(() => { display.style.animation = ''; display.className = 'big-form-display'; });
+            }
+            announce(`${pessoa}, ${tempo}: ${form}`);
+          };
+          td.addEventListener('click', handleSelect);
+          td.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){e.preventDefault();handleSelect();} });
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    }
+
+    function u2UpdateBadge(variant, verbo) {
+      const badge = document.getElementById(`u2${variant}-badge`);
+      if (badge) {
+        badge.className = CONJ_BADGE[verbo];
+        badge.textContent = CONJ_LABEL[verbo];
+      }
+    }
+
+    /* SUPPORT variant */
+    function initU2Support() {
+      const sel = document.getElementById('u2s-verb');
+      const render = () => {
+        const v = sel.value;
+        u2UpdateBadge('s', v);
+        u2RenderTable('s', v, ['Presente','Preterito'], U2_PESSOAS_APOIO, U2_APOIO_IDX);
+        _u2sel.support = null;
+        document.getElementById('u2s-display').innerHTML = '—';
+      };
+      sel.addEventListener('change', render);
+      render();
+    }
+
+    /* STANDARD variant */
+    let _u2testMode = false;
+    function initU2Standard() {
+      const sel = document.getElementById('u2m-verb');
+      const render = () => {
+        const v = sel.value;
+        u2UpdateBadge('m', v);
+        u2RenderTable('m', v, ['Presente','Preterito','Futuro'], U2_PESSOAS_SHORT, null);
+        _u2sel.standard = null;
+        const disp = document.getElementById('u2m-display');
+        disp.innerHTML = '<span style="color:#aaa;font-size:1.2rem;">Toca numa célula!</span>';
+      };
+      sel.addEventListener('change', render);
+      document.getElementById('u2m-test-btn').addEventListener('click', () => {
+        const v = sel.value;
+        openUnit2Test(v, 'Presente');
+      });
+      render();
+    }
+
+    function openUnit2Test(verbo, tempo) {
+      _u2testMode = true;
+      document.getElementById('u2m-table').style.opacity = '0.2';
+      document.getElementById('u2m-test-area').style.display = 'block';
+      document.getElementById('u2m-test-verb').textContent = verbo;
+      document.getElementById('u2m-test-tempo').textContent = tempo;
+      const wrap = document.getElementById('u2m-test-inputs');
+      wrap.innerHTML = '';
+      // Ask 3 random persons
+      const idxs = [0,1,2,3,4,5].sort(() => Math.random()-0.5).slice(0,3);
+      wrap._testData = idxs.map(pi => ({
+        pi, correct: CONJUGATIONS[verbo][tempo][pi], verbo, tempo
+      }));
+      wrap._testData.forEach((item, ti) => {
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;';
+        row.innerHTML = `<span style="font-weight:700;min-width:80px;">${U2_PESSOAS_SHORT[item.pi]}</span>
+          <input class="text-input" type="text" id="u2t-inp-${ti}" placeholder="terminação..." autocomplete="off" autocorrect="off" spellcheck="false" style="max-width:160px;">`;
+        wrap.appendChild(row);
+      });
+      document.getElementById('u2m-test-feedback').className = 'feedback-strip';
+    }
+
+    function checkUnit2Test() {
+      const wrap = document.getElementById('u2m-test-inputs');
+      const data = wrap._testData;
+      if (!data) return;
+      let ok = 0;
+      data.forEach((item, ti) => {
+        const inp = document.getElementById(`u2t-inp-${ti}`);
+        const val = inp.value.trim().toLowerCase();
+        const rad = CONJUGATIONS[item.verbo].radical;
+        const correct_term = item.correct;
+        const full = rad + correct_term;
+        if (val === correct_term || val === full) {
+          inp.className = 'text-input correct';
+          ok++;
+        } else {
+          inp.className = 'text-input wrong';
+          inp.placeholder = `correto: ${correct_term}`;
+        }
+      });
+      const fb = document.getElementById('u2m-test-feedback');
+      if (ok === data.length) {
+        fb.textContent = `Perfeito! Acertaste todas as terminações!`;
+        fb.className = 'feedback-strip correct';
+        soundCorrect();
+        launchConfetti(1200);
+        announce('Perfeito!');
+      } else {
+        fb.textContent = `Acertaste ${ok} de ${data.length}. Tenta as que ficaram erradas.`;
+        fb.className = 'feedback-strip wrong';
+        soundWrong();
+        announce(`Acertaste ${ok} de ${data.length}.`);
+      }
+    }
+
+    function closeUnit2Test() {
+      document.getElementById('u2m-table').style.opacity = '1';
+      document.getElementById('u2m-test-area').style.display = 'none';
+    }
+
+    /* CHALLENGE variant */
+    const U2C_TEMPOS = ['Presente','Preterito','Futuro'];
+    let _u2cSelected = null; // selected bank card
+
+    function initU2Challenge() {
+      const bank = document.getElementById('u2c-bank');
+      const tbody = document.getElementById('u2c-tbody');
+      // Build all 18 terminacoes for "andar" (same as cantar, -ar)
+      const allTerms = [];
+      U2C_TEMPOS.forEach(t => {
+        CONJUGATIONS.andar[t].forEach((term, pi) => {
+          allTerms.push({ term, tempo: t, pi });
+        });
+      });
+      // Shuffle
+      const shuffled = allTerms.sort(() => Math.random()-0.5);
+
+      bank.innerHTML = '';
+      shuffled.forEach((item, idx) => {
+        const card = document.createElement('button');
+        card.className = 'form-card';
+        card.textContent = item.term;
+        card.dataset.term = item.term;
+        card.dataset.tempo = item.tempo;
+        card.dataset.pi = item.pi;
+        card.dataset.idx = idx;
+        card.setAttribute('aria-label', `Terminação: ${item.term}`);
+        card.addEventListener('click', () => {
+          if (card.classList.contains('used')) return;
+          bank.querySelectorAll('.form-card').forEach(c => c.style.outline = '');
+          _u2cSelected = card;
+          card.style.outline = '3px solid var(--primary)';
+          announce(`Selecionado: ${item.term}. Agora clica numa célula da tabela.`);
+        });
+        bank.appendChild(card);
+      });
+
+      // Build empty table
+      tbody.innerHTML = '';
+      U2_PESSOAS_SHORT.forEach((pessoa, pi) => {
+        const tr = document.createElement('tr');
+        const tdP = document.createElement('td');
+        tdP.textContent = pessoa;
+        tdP.style.fontWeight='700'; tdP.style.cursor='default'; tdP.style.background='#f1f5f9';
+        tr.appendChild(tdP);
+        U2C_TEMPOS.forEach(tempo => {
+          const td = document.createElement('td');
+          td.dataset.tempo = tempo;
+          td.dataset.pi = pi;
+          td.dataset.filled = '';
+          td.textContent = '___';
+          td.style.color = '#bbb';
+          td.setAttribute('tabindex','0');
+          td.setAttribute('aria-label', `${pessoa} ${tempo}: célula vazia`);
+          const fill = () => {
+            if (!_u2cSelected) { announce('Primeiro seleciona uma terminação no banco.'); return; }
+            td.innerHTML = `<span class="radical">and</span><span class="terminacao">${_u2cSelected.dataset.term}</span>`;
+            td.dataset.filled = _u2cSelected.dataset.term;
+            td.dataset.filledTempo = _u2cSelected.dataset.tempo;
+            td.dataset.filledPi = _u2cSelected.dataset.pi;
+            // mark bank card used
+            _u2cSelected.classList.add('used');
+            _u2cSelected.style.outline = '';
+            _u2cSelected = null;
+            td.style.color = '';
+          };
+          td.addEventListener('click', fill);
+          td.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){e.preventDefault();fill();} });
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    }
+
+    function checkUnit2Challenge() {
+      const tbody = document.getElementById('u2c-tbody');
+      let ok = 0, total = 0;
+      tbody.querySelectorAll('td[data-tempo]').forEach(td => {
+        const tempo = td.dataset.tempo;
+        const pi = parseInt(td.dataset.pi);
+        const filled = td.dataset.filled;
+        const correct = CONJUGATIONS.andar[tempo][pi];
+        total++;
+        if (filled === correct) {
+          ok++;
+          td.style.background = '#dcfce7';
+          td.style.borderColor = '#16a34a';
+        } else {
+          td.style.background = '#fee2e2';
+          td.style.borderColor = '#dc2626';
+          td.innerHTML = `<span class="radical">and</span><span class="terminacao">${correct}</span>`;
+        }
+      });
+      const fb = document.getElementById('u2c-feedback');
+      if (ok === total) {
+        fb.textContent = `Brilhante! Preencheste todas as ${total} células corretamente!`;
+        fb.className = 'feedback-strip correct';
+        soundComplete(); launchConfetti(2000);
+        announce(`Perfeito, ${total} células corretas!`);
+      } else {
+        fb.textContent = `${ok} de ${total} corretas. As células a vermelho mostraram a forma correta.`;
+        fb.className = 'feedback-strip wrong';
+        soundWrong();
+        announce(`${ok} de ${total} corretas.`);
+      }
+    }
+
+    function resetUnit2Challenge() {
+      _u2cSelected = null;
+      initU2Challenge();
+      document.getElementById('u2c-feedback').className = 'feedback-strip';
+    }
+
+    function initUnit2() {
+      const sec = document.querySelector('[data-unit="2"]');
+      initDiffTabs(sec, () => {});
+      initU2Support();
+      initU2Standard();
+      initU2Challenge();
+    }
+    /* ============================================================
+       UNIT 3 — Verbos Irregulares
+    ============================================================ */
+    const U3_COMPARE_PESSOAS = ['eu','tu','ele/ela','nós','eles/elas'];
+    const U3_COMPARE_IDX     = [0, 1, 2, 3, 5]; // indices in full array
+
+    function u3BuildRegularRows(container, verbo, tempo, pessoasArr, pessoasIdx) {
+      container.innerHTML = '';
+      pessoasArr.forEach((p, i) => {
+        const pi = pessoasIdx[i];
+        const rad  = CONJUGATIONS[verbo].radical;
+        const term = CONJUGATIONS[verbo][tempo][pi];
+        const row = document.createElement('div');
+        row.className = 'compare-row';
+        row.innerHTML = `<span class="pessoa-label">${p}</span>
+          <span><span class="radical">${rad}</span><span class="terminacao">${term}</span></span>`;
+        container.appendChild(row);
+      });
+    }
+
+    function u3BuildIrregularRows(container, verbo, tempo, pessoasArr, pessoasIdx) {
+      container.innerHTML = '';
+      const inf = verbo; // infinitive for reference
+      pessoasArr.forEach((p, i) => {
+        const pi = pessoasIdx[i];
+        const form = IRREGULARS[verbo][tempo][pi];
+        const irregular = isIrregularForm(verbo, tempo, pi);
+        const row = document.createElement('div');
+        row.className = 'compare-row';
+        // Show irregular marker if needed
+        const markerHTML = irregular
+          ? `<span class="irr-marker-wrap" style="position:relative;display:inline-flex;">
+               <span class="irr-marker" tabindex="0" role="button" aria-label="Forma irregular — clica para saber mais">?
+                 <span class="tooltip-box">Este verbo é irregular — o radical muda! Tens de memorizar esta forma.</span>
+               </span>
+             </span>`
+          : '';
+        row.innerHTML = `<span class="pessoa-label">${p}</span>
+          <span style="display:flex;align-items:center;gap:0.35rem;">
+            <strong style="${irregular?'border:1.5px solid #dc2626;border-radius:4px;padding:0 3px;color:#dc2626;':''}">${form}</strong>
+            ${markerHTML}
+          </span>`;
+        container.appendChild(row);
+      });
+    }
+
+    /* SUPPORT */
+    let _u3sTempo = 'Presente';
+    function renderU3Support() {
+      u3BuildRegularRows(document.getElementById('u3s-regular-rows'), 'cantar', _u3sTempo, ['eu','ele/ela','eles/elas'], [0,2,5]);
+      u3BuildIrregularRows(document.getElementById('u3s-irreg-rows'), 'ser', _u3sTempo, ['eu','ele/ela','eles/elas'], [0,2,5]);
+    }
+    function setU3STempo(btn, tempo) {
+      document.querySelectorAll('#u3s-tempo-btns .toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      _u3sTempo = tempo;
+      renderU3Support();
+    }
+
+    /* STANDARD */
+    let _u3mTempo = 'Presente';
+    function renderU3Standard() {
+      const verb = document.getElementById('u3m-verb').value;
+      u3BuildRegularRows(document.getElementById('u3m-regular-rows'), 'cantar', _u3mTempo, U3_COMPARE_PESSOAS, U3_COMPARE_IDX);
+      u3BuildIrregularRows(document.getElementById('u3m-irreg-rows'), verb, _u3mTempo, U3_COMPARE_PESSOAS, U3_COMPARE_IDX);
+      const title = document.getElementById('u3m-irr-title');
+      if (title) title.innerHTML = `${verb} <span style="background:#fef3c7;color:#92400e;border:1.5px solid #fbbf24;border-radius:999px;padding:0.15rem 0.65rem;font-size:0.82rem;font-weight:700;">irregular</span>`;
+    }
+    function setU3MTempo(btn, tempo) {
+      document.querySelectorAll('#u3m-tempo-btns .toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      _u3mTempo = tempo;
+      renderU3Standard();
+    }
+
+    /* CHALLENGE */
+    const U3C_FRASES = [
+      { before:'Ontem eu', gap:'', after:'ao mercado.', options:['fui','fiz','tive'], answer:'fui', hint:'O verbo é IR, no pretérito perfeito, pessoa eu.' },
+      { before:'A Maria não', gap:'', after:'os trabalhos de casa.', options:['fez','foi','teve'], answer:'fez', hint:'O verbo é FAZER, no pretérito perfeito, pessoa ela.' },
+      { before:'No mês passado nós', gap:'', after:'muita sorte no jogo.', options:['tivemos','fomos','fizemos'], answer:'tivemos', hint:'O verbo é TER, no pretérito perfeito, pessoa nós.' }
+    ];
+    const _u3cState = { i:0, score:0, locked:false };
+    function renderU3Challenge() {
+      const st = _u3cState;
+      const frase = U3C_FRASES[st.i];
+      const card = document.getElementById('u3c-card');
+      const opts = document.getElementById('u3c-options');
+      const fb   = document.getElementById('u3c-feedback');
+      const prog = document.getElementById('u3c-progress');
+      const score= document.getElementById('u3c-score');
+      const done = document.getElementById('u3c-done');
+      fb.className = 'feedback-strip';
+      card.innerHTML = `${frase.before} <span class="gap-slot">___</span> ${frase.after}`;
+      opts.innerHTML = '';
+      st.locked = false;
+      frase.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => {
+          if (st.locked) return;
+          st.locked = true;
+          const correct = opt === frase.answer;
+          if (correct) {
+            st.score++;
+            btn.classList.add('correct');
+            const slot = card.querySelector('.gap-slot');
+            if (slot) { slot.textContent = opt; slot.classList.add('filled-correct'); }
+            fb.textContent = `✓ Correto! ${frase.hint}`;
+            fb.className = 'feedback-strip correct';
+            soundCorrect();
+          } else {
+            btn.classList.add('wrong');
+            fb.textContent = `Quase! A forma correta é "${frase.answer}". ${frase.hint}`;
+            fb.className = 'feedback-strip wrong';
+            soundWrong();
+          }
+          opts.querySelectorAll('.option-btn').forEach(b => b.classList.add('disabled'));
+          score.textContent = `${st.score} / ${U3C_FRASES.length}`;
+          prog.style.width = `${((st.i+1)/U3C_FRASES.length)*100}%`;
+          setTimeout(() => {
+            st.i++;
+            if (st.i < U3C_FRASES.length) renderU3Challenge();
+            else {
+              fb.className = 'feedback-strip';
+              done.style.display = 'block';
+              if (st.score >= 2) { soundComplete(); launchConfetti(1500); }
+              announce(`Terminaste! Acertaste ${st.score} de ${U3C_FRASES.length}.`);
+            }
+          }, 1800);
+        });
+        opts.appendChild(btn);
+      });
+    }
+    function resetUnit3Challenge() {
+      Object.assign(_u3cState, {i:0,score:0,locked:false});
+      document.getElementById('u3c-done').style.display='none';
+      document.getElementById('u3c-progress').style.width='0%';
+      document.getElementById('u3c-score').textContent='0 / 3';
+      renderU3Challenge();
+    }
+
+    function initUnit3() {
+      const sec = document.querySelector('[data-unit="3"]');
+      initDiffTabs(sec, () => {});
+      renderU3Support();
+      document.getElementById('u3m-verb').addEventListener('change', renderU3Standard);
+      renderU3Standard();
+      renderU3Challenge();
+    }
+    /* ============================================================
+       UNIT 4 — Prática Guiada
+    ============================================================ */
+    const U4_FRASES_ALL = [
+      {
+        before: 'Amanhã nós', gap:'', after: '(partir) de férias.',
+        answer: 'partiremos',
+        options4: ['partiremos','partimos','partem','partireis'],
+        options3: ['partiremos','partimos','partem'],
+        marker: 'Amanhã',
+        hint: 'Amanhã = futuro. Nós = 1.ª pessoa plural. partir (futuro): partiremos.'
+      },
+      {
+        before: 'Ontem o Pedro', gap:'', after: '(comer) toda a sopa.',
+        answer: 'comeu',
+        options4: ['comeu','come','comerá','comemos'],
+        options3: ['comeu','come','comerá'],
+        marker: 'Ontem',
+        hint: 'Ontem = pretérito perfeito. Ele = 3.ª pessoa singular. comer (pret.): comeu.'
+      },
+      {
+        before: 'Eu já', gap:'', after: '(ser) pequenino, mas agora cresci.',
+        answer: 'fui',
+        options4: ['fui','sou','serei','somos'],
+        options3: ['fui','sou','serei'],
+        marker: 'já',
+        hint: 'Já = passado. Eu = 1.ª pessoa singular. ser (pret.): fui.'
+      },
+      {
+        before: 'A Mariana', gap:'', after: '(cantar) todos os dias.',
+        answer: 'canta',
+        options4: ['canta','cantou','cantará','canto'],
+        options3: ['canta','cantou','cantará'],
+        marker: 'todos os dias',
+        hint: 'Todos os dias = hábito = presente. Ela = 3.ª sing. cantar (presente): canta.'
+      },
+      {
+        before: 'No ano que vem eles', gap:'', after: '(ter) um novo professor.',
+        answer: 'terão',
+        options4: ['terão','tiveram','têm','terá'],
+        options3: ['terão','tiveram','têm'],
+        marker: 'no ano que vem',
+        hint: 'No ano que vem = futuro. Eles = 3.ª plural. ter (futuro): terão.'
+      },
+      {
+        before: 'Hoje de manhã eu', gap:'', after: '(ir) ao parque.',
+        answer: 'fui',
+        options4: ['fui','vou','irei','vamos'],
+        options3: ['fui','vou','irei'],
+        marker: 'Hoje de manhã',
+        hint: 'Hoje de manhã = passado recente. Eu = 1.ª sing. ir (pret.): fui.'
+      }
+    ];
+    // 2 bonus frases livres (challenge only)
+    const U4_FREE_FRASES = [
+      { before:'No próximo verão a turma', gap:'', after:'(cantar) uma canção.', answer:['cantará'], hint:'cantar, futuro, ela/a turma: cantará' },
+      { before:'Ontem eu', gap:'', after:'(fazer) os trabalhos.', answer:['fiz'], hint:'fazer, pretérito perfeito, eu: fiz' }
+    ];
+
+    const _u4State = {
+      support:  { i:0, score:0, locked:false },
+      standard: { i:0, score:0, locked:false },
+      challenge:{ i:0, score:0, locked:false, freePhase:false, fi:0 }
+    };
+
+    function renderUnit4(lv) {
+      const st = _u4State[lv];
+      const pref = lv==='support'?'s': lv==='standard'?'m':'c';
+      const frases = lv==='support' ? U4_FRASES_ALL.slice(0,4) : U4_FRASES_ALL;
+      const total  = lv==='challenge' ? frases.length + U4_FREE_FRASES.length : frases.length;
+
+      // Handle challenge free phase
+      if (lv === 'challenge' && st.freePhase) {
+        renderU4Free(st.fi);
+        return;
+      }
+
+      if (st.i >= frases.length) {
+        if (lv === 'challenge') {
+          st.freePhase = true;
+          st.fi = 0;
+          renderU4Free(0);
+        } else {
+          const done = document.getElementById(`u4${pref}-done`);
+          if (done) done.style.display = 'block';
+          if (st.score >= frases.length - 1) { soundComplete(); launchConfetti(1500); }
+          announce(`Terminaste! Acertaste ${st.score} de ${frases.length}.`);
+        }
+        return;
+      }
+
+      const frase = frases[st.i];
+      const card  = document.getElementById(`u4${pref}-card`);
+      const bank  = document.getElementById(`u4${pref}-bank`);
+      const fb    = document.getElementById(`u4${pref}-feedback`);
+      const prog  = document.getElementById(`u4${pref}-progress`);
+      const score = document.getElementById(`u4${pref}-score`);
+      if (!card) return;
+
+      fb.className = 'feedback-strip';
+      st.locked = false;
+
+      // Build sentence HTML
+      const verbLabel = frase.answer; // shown in parens
+      const beforeHTML = lv === 'support'
+        ? frase.before.replace(frase.marker, `<u>${frase.marker}</u>`)
+        : frase.before;
+      card.innerHTML = `<span style="font-size:1rem;color:#666;font-weight:400;">${frase.before.replace(frase.marker,'')} ${lv==='support'?'<u>'+frase.marker+'</u>':frase.marker}</span>
+        <span style="font-size:1.3rem;">${beforeHTML} <span class="gap-slot" id="u4-slot-${pref}">___</span> ${frase.after}</span>`;
+
+      // Rebuild card properly
+      const markerSpan = lv === 'support'
+        ? `<u style="color:#7c3aed;">${frase.marker}</u>`
+        : frase.marker;
+      const sentence = frase.before.includes(frase.marker)
+        ? frase.before.replace(frase.marker, markerSpan) + ` <span class="gap-slot" id="u4-slot-${pref}">___</span> ` + frase.after
+        : `${frase.before} <span class="gap-slot" id="u4-slot-${pref}">___</span> ${frase.after}`;
+      card.innerHTML = `<span style="font-size:clamp(1rem,2.5vw,1.25rem);">${sentence}</span>`;
+
+      bank.innerHTML = '';
+      const opts = lv === 'support' ? frase.options3 : frase.options4;
+      opts.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'form-card';
+        btn.textContent = opt;
+        btn.setAttribute('aria-label', `Forma verbal: ${opt}`);
+        btn.addEventListener('click', () => {
+          if (st.locked) return;
+          st.locked = true;
+          const correct = opt === frase.answer;
+          const slot = document.getElementById(`u4-slot-${pref}`);
+          if (correct) {
+            st.score++;
+            if (slot) { slot.textContent = opt; slot.classList.add('filled-correct'); }
+            btn.classList.add('correct');
+            fb.textContent = `✓ Correto! ${frase.hint}`;
+            fb.className = 'feedback-strip correct';
+            soundCorrect();
+            announce(`Correto: ${opt}`);
+            score.textContent = `${st.score} / ${total}`;
+            prog.style.width = `${((st.i+1)/frases.length)*100}%`;
+            setTimeout(() => { st.i++; renderUnit4(lv); }, 1400);
+          } else {
+            if (slot) slot.classList.add('filled-wrong');
+            btn.classList.add('wrong-flash');
+            fb.textContent = `Não é essa. Tenta outra vez!`;
+            fb.className = 'feedback-strip wrong';
+            soundWrong();
+            announce('Incorreto, tenta de novo.');
+            setTimeout(() => {
+              btn.classList.remove('wrong-flash');
+              if (slot) slot.classList.remove('filled-wrong');
+              st.locked = false;
+              fb.className = 'feedback-strip';
+            }, 700);
+          }
+        });
+        bank.appendChild(btn);
+      });
+    }
+
+    function renderU4Free(fi) {
+      const st = _u4State.challenge;
+      if (fi >= U4_FREE_FRASES.length) {
+        document.getElementById('u4c-done').style.display = 'block';
+        document.getElementById('u4c-bank-wrap').style.display='none';
+        document.getElementById('u4c-free-wrap').style.display='none';
+        if (st.score >= 7) { soundComplete(); launchConfetti(1800); }
+        announce(`Terminaste o desafio! Acertaste ${st.score} de 8.`);
+        return;
+      }
+      const frase = U4_FREE_FRASES[fi];
+      const card  = document.getElementById('u4c-card');
+      const bank  = document.getElementById('u4c-bank-wrap');
+      const freeW = document.getElementById('u4c-free-wrap');
+      const inp   = document.getElementById('u4c-free-input');
+      const fb    = document.getElementById('u4c-feedback');
+      fb.className = 'feedback-strip';
+      bank.style.display = 'none';
+      freeW.style.display = 'block';
+      inp.value = '';
+      inp.className = 'text-input';
+      card.innerHTML = `<span style="font-size:clamp(1rem,2.5vw,1.25rem);">${frase.before} <span class="gap-slot" id="u4c-free-slot">___</span> ${frase.after}</span>`;
+    }
+
+    function submitUnit4Free() {
+      const st = _u4State.challenge;
+      const fi = st.fi;
+      const frase = U4_FREE_FRASES[fi];
+      const inp = document.getElementById('u4c-free-input');
+      const val = inp.value.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+      const correct = frase.answer.some(a => {
+        const norm = a.normalize('NFD').replace(/[̀-ͯ]/g,'');
+        return val === norm;
+      });
+      const slot = document.getElementById('u4c-free-slot');
+      const fb   = document.getElementById('u4c-feedback');
+      const score= document.getElementById('u4c-score');
+      if (correct) {
+        st.score++;
+        inp.className = 'text-input correct';
+        if (slot) { slot.textContent = inp.value.trim(); slot.classList.add('filled-correct'); }
+        fb.textContent = `✓ Correto! ${frase.hint}`;
+        fb.className = 'feedback-strip correct';
+        soundCorrect();
+        score.textContent = `${st.score} / 8`;
+        announce(`Correto!`);
+        setTimeout(() => { st.fi++; renderU4Free(st.fi); }, 1600);
+      } else {
+        inp.className = 'text-input wrong';
+        fb.textContent = `A forma correta é "${frase.answer[0]}". ${frase.hint}`;
+        fb.className = 'feedback-strip wrong';
+        soundWrong();
+        score.textContent = `${st.score} / 8`;
+        if (slot) { slot.textContent = frase.answer[0]; slot.classList.add('filled-wrong'); }
+        announce(`Incorreto. A forma correta é ${frase.answer[0]}.`);
+        setTimeout(() => { st.fi++; renderU4Free(st.fi); }, 2200);
+      }
+    }
+
+    function resetUnit4(lv) {
+      if (lv === 'challenge') {
+        Object.assign(_u4State.challenge, {i:0,score:0,locked:false,freePhase:false,fi:0});
+        document.getElementById('u4c-done').style.display='none';
+        document.getElementById('u4c-progress').style.width='0%';
+        document.getElementById('u4c-score').textContent='0 / 8';
+        document.getElementById('u4c-bank-wrap').style.display='block';
+        document.getElementById('u4c-free-wrap').style.display='none';
+      } else {
+        const pref = lv==='support'?'s':'m';
+        const total = lv==='support'?4:6;
+        Object.assign(_u4State[lv], {i:0,score:0,locked:false});
+        document.getElementById(`u4${pref}-done`).style.display='none';
+        document.getElementById(`u4${pref}-progress`).style.width='0%';
+        document.getElementById(`u4${pref}-score`).textContent=`0 / ${total}`;
+      }
+      renderUnit4(lv);
+    }
+
+    function initUnit4() {
+      const sec = document.querySelector('[data-unit="4"]');
+      initDiffTabs(sec, (lv) => { renderUnit4(lv); });
+      renderUnit4('support');
+      renderUnit4('standard');
+      renderUnit4('challenge');
+    }
+    /* ============================================================
+       UNIT 5 — Mini-Avaliação
+    ============================================================ */
+
+    // Matching pairs data
+    const U5_PAIRS_FULL = [
+      { form: 'cantou',     tense: 'Pretérito Perfeito', color: '#7c3aed' },
+      { form: 'partiremos', tense: 'Futuro',             color: '#ea580c' },
+      { form: 'comes',      tense: 'Presente',           color: '#0d9488' },
+      { form: 'fui',        tense: 'Pretérito Perfeito (irreg.)', color: '#7c3aed' }
+    ];
+    const U5_PAIRS_SUPPORT = U5_PAIRS_FULL.slice(0,3);
+
+    // Phase 2 free-write frases
+    const U5_P2_FRASES = [
+      { before:'No verão passado eu', gap:'', after:'(fazer) uma viagem.', answers:['fiz'], hint:'fazer, pretérito perfeito, eu: fiz' },
+      { before:'Amanhã a turma', gap:'', after:'(cantar) uma canção.', answers:['cantará'], hint:'cantar, futuro, ela/a turma: cantará' }
+    ];
+
+    // Support phase 2 uses options instead of text
+    const U5_S_P2_FRASES = [
+      { before:'No verão passado eu', gap:'', after:'(fazer) uma viagem.', answer:'fiz', options:['fiz','faço','farei'] },
+      { before:'Amanhã a turma', gap:'', after:'(cantar) uma canção.', answer:'cantará', options:['cantará','cantou','canta'] }
+    ];
+
+    /* --- Generic matching engine --- */
+    function buildMatchUI(leftEl, rightEl, pairs) {
+      leftEl.innerHTML = '';
+      rightEl.innerHTML = '';
+      let selectedLeft = null;
+      const matched = {};
+
+      pairs.forEach((pair, i) => {
+        const lCard = document.createElement('button');
+        lCard.className = 'match-card form-card-match';
+        lCard.textContent = pair.form;
+        lCard.dataset.idx = i;
+        lCard.setAttribute('aria-label', `Forma verbal: ${pair.form}`);
+        lCard.addEventListener('click', () => {
+          if (lCard.classList.contains('matched-correct') || lCard.classList.contains('matched-wrong')) return;
+          leftEl.querySelectorAll('.match-card').forEach(c => c.classList.remove('selected'));
+          lCard.classList.add('selected');
+          selectedLeft = i;
+          announce(`Selecionado: ${pair.form}. Agora escolhe o tempo.`);
+        });
+        leftEl.appendChild(lCard);
+      });
+
+      // Shuffle right
+      const shuffled = [...pairs].sort(() => Math.random()-0.5);
+      shuffled.forEach(pair => {
+        const rCard = document.createElement('button');
+        rCard.className = 'match-card';
+        rCard.textContent = pair.tense;
+        rCard.style.borderColor = pair.color;
+        rCard.dataset.tense = pair.tense;
+        rCard.setAttribute('aria-label', `Tempo: ${pair.tense}`);
+        rCard.addEventListener('click', () => {
+          if (selectedLeft === null) { announce('Primeiro seleciona uma forma verbal.'); return; }
+          if (rCard.classList.contains('matched-correct') || rCard.classList.contains('matched-wrong')) return;
+          const lCard = leftEl.querySelector(`.match-card[data-idx="${selectedLeft}"]`);
+          const correctTense = pairs[selectedLeft].tense;
+          const lCardEl = lCard;
+          if (pair.tense === correctTense) {
+            lCardEl.classList.remove('selected');
+            lCardEl.classList.add('matched-correct');
+            rCard.classList.add('matched-correct');
+            matched[selectedLeft] = true;
+            soundCorrect();
+            announce(`Correto! ${pairs[selectedLeft].form} — ${correctTense}`);
+          } else {
+            lCardEl.classList.add('matched-wrong');
+            rCard.classList.add('matched-wrong');
+            setTimeout(() => {
+              lCardEl.classList.remove('matched-wrong','selected');
+              rCard.classList.remove('matched-wrong');
+            }, 900);
+            soundWrong();
+            announce(`Não é esse tempo. Tenta de novo.`);
+          }
+          selectedLeft = null;
+          // Check completion
+          if (Object.keys(matched).length === pairs.length) {
+            return true; // signal complete
+          }
+        });
+        rightEl.appendChild(rCard);
+      });
+      return matched;
+    }
+
+    /* SUPPORT */
+    let _u5sMatched = {};
+    function initU5Support() {
+      const leftEl  = document.getElementById('u5s-left');
+      const rightEl = document.getElementById('u5s-right');
+      _u5sMatched = buildMatchUI(leftEl, rightEl, U5_PAIRS_SUPPORT);
+
+      // Poll for completion
+      const check = setInterval(() => {
+        if (Object.keys(_u5sMatched).length === U5_PAIRS_SUPPORT.length) {
+          clearInterval(check);
+          const fb = document.getElementById('u5s-match-fb');
+          fb.textContent = 'Muito bem! Ligaste todos os pares corretamente!';
+          fb.className = 'feedback-strip correct';
+          document.getElementById('u5s-phase2-btn-wrap').style.display = 'block';
+          soundComplete();
+          announce('Todos os pares ligados corretamente!');
+        }
+      }, 400);
+    }
+
+    function openU5SPhase2() {
+      document.getElementById('u5s-phase2-btn-wrap').style.display='none';
+      document.getElementById('u5s-phase2').style.display='block';
+      const wrap = document.getElementById('u5s-p2-frases');
+      wrap.innerHTML = '';
+      let done = 0;
+      U5_S_P2_FRASES.forEach((frase, fi) => {
+        const div = document.createElement('div');
+        div.style.cssText = 'margin-bottom:1.25rem;';
+        div.innerHTML = `<p style="font-size:1.1rem;font-weight:600;margin-bottom:0.5rem;">${frase.before} <span class="gap-slot" id="u5s-slot-${fi}">___</span> ${frase.after}</p>
+          <div class="option-grid" id="u5s-p2-opts-${fi}" role="group"></div>`;
+        wrap.appendChild(div);
+        const optsEl = document.getElementById(`u5s-p2-opts-${fi}`);
+        frase.options.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.className = 'option-btn';
+          btn.textContent = opt;
+          btn.addEventListener('click', () => {
+            if (btn.classList.contains('disabled')) return;
+            const slot = document.getElementById(`u5s-slot-${fi}`);
+            if (opt === frase.answer) {
+              btn.classList.add('correct');
+              slot.textContent = opt; slot.classList.add('filled-correct');
+              optsEl.querySelectorAll('.option-btn').forEach(b => b.classList.add('disabled'));
+              soundCorrect();
+              done++;
+              if (done === U5_S_P2_FRASES.length) {
+                const fb = document.getElementById('u5s-p2-fb');
+                fb.textContent = 'Excelente! Completaste a avaliação!';
+                fb.className = 'feedback-strip correct';
+                document.getElementById('u5s-final').style.display='block';
+                soundComplete(); launchConfetti(1500);
+                announce('Avaliação concluída!');
+              }
+            } else {
+              btn.classList.add('wrong'); soundWrong();
+              setTimeout(() => btn.classList.remove('wrong'), 600);
+            }
+          });
+          optsEl.appendChild(btn);
+        });
+      });
+    }
+
+    /* STANDARD */
+    let _u5mMatched = {};
+    function initU5Standard() {
+      const leftEl  = document.getElementById('u5m-left');
+      const rightEl = document.getElementById('u5m-right');
+      _u5mMatched = buildMatchUI(leftEl, rightEl, U5_PAIRS_FULL);
+      const check = setInterval(() => {
+        if (Object.keys(_u5mMatched).length === U5_PAIRS_FULL.length) {
+          clearInterval(check);
+          const fb = document.getElementById('u5m-match-fb');
+          fb.textContent = 'Muito bem! Todos os pares corretos!';
+          fb.className = 'feedback-strip correct';
+          document.getElementById('u5m-phase2-btn-wrap').style.display='block';
+          soundComplete();
+        }
+      }, 400);
+    }
+
+    function openU5MPhase2() {
+      document.getElementById('u5m-phase2-btn-wrap').style.display='none';
+      document.getElementById('u5m-phase2').style.display='block';
+      const wrap = document.getElementById('u5m-p2-frases');
+      wrap.innerHTML = '';
+      U5_P2_FRASES.forEach((frase, fi) => {
+        const div = document.createElement('div');
+        div.style.cssText = 'margin-bottom:1.25rem;';
+        div.innerHTML = `<p style="font-size:1.1rem;font-weight:600;margin-bottom:0.5rem;">${frase.before} <span class="gap-slot" id="u5m-slot-${fi}">___</span> ${frase.after}</p>
+          <input class="text-input" id="u5m-inp-${fi}" type="text" placeholder="forma verbal..." autocomplete="off" autocorrect="off" spellcheck="false">`;
+        wrap.appendChild(div);
+      });
+    }
+
+    function checkU5MPhase2() {
+      let ok = 0;
+      U5_P2_FRASES.forEach((frase, fi) => {
+        const inp  = document.getElementById(`u5m-inp-${fi}`);
+        const slot = document.getElementById(`u5m-slot-${fi}`);
+        if (!inp) return;
+        const val = inp.value.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+        const correct = frase.answers.some(a => val === a.normalize('NFD').replace(/[̀-ͯ]/g,''));
+        if (correct) {
+          ok++;
+          inp.className = 'text-input correct';
+          if (slot) { slot.textContent = inp.value.trim(); slot.classList.add('filled-correct'); }
+        } else {
+          inp.className = 'text-input wrong';
+          if (slot) { slot.textContent = frase.answers[0]; slot.classList.add('filled-wrong'); }
+          inp.placeholder = `correto: ${frase.answers[0]}`;
+        }
+      });
+      const fb = document.getElementById('u5m-p2-fb');
+      if (ok >= 1) {
+        fb.textContent = ok === U5_P2_FRASES.length ? 'Perfeito! Ambas as formas corretas!' : `${ok} de ${U5_P2_FRASES.length} corretas. Muito bom!`;
+        fb.className = 'feedback-strip correct';
+        soundCorrect();
+        document.getElementById('u5m-final').style.display='block';
+        if (ok === U5_P2_FRASES.length) { soundComplete(); launchConfetti(1500); }
+        announce(`${ok} de ${U5_P2_FRASES.length} corretas.`);
+      } else {
+        fb.textContent = `Nenhuma correta desta vez. Verifica as formas sublinhadas a vermelho.`;
+        fb.className = 'feedback-strip wrong';
+        soundWrong();
+        announce('Nenhuma correta. Tenta de novo.');
+      }
+    }
+
+    /* CHALLENGE */
+    let _u5cMatched = {};
+    function initU5Challenge() {
+      const leftEl  = document.getElementById('u5c-left');
+      const rightEl = document.getElementById('u5c-right');
+      _u5cMatched = buildMatchUI(leftEl, rightEl, U5_PAIRS_FULL);
+      const check = setInterval(() => {
+        if (Object.keys(_u5cMatched).length === U5_PAIRS_FULL.length) {
+          clearInterval(check);
+          const fb = document.getElementById('u5c-match-fb');
+          fb.textContent = 'Muito bem! Todos os pares corretos!';
+          fb.className = 'feedback-strip correct';
+          document.getElementById('u5c-phase2-btn-wrap').style.display='block';
+          soundComplete();
+        }
+      }, 400);
+    }
+
+    function openU5CPhase2() {
+      document.getElementById('u5c-phase2-btn-wrap').style.display='none';
+      document.getElementById('u5c-phase2').style.display='block';
+      const wrap = document.getElementById('u5c-p2-frases');
+      wrap.innerHTML = '';
+      U5_P2_FRASES.forEach((frase, fi) => {
+        const div = document.createElement('div');
+        div.style.cssText = 'margin-bottom:1.25rem;';
+        div.innerHTML = `<p style="font-size:1.1rem;font-weight:600;margin-bottom:0.5rem;">${frase.before} <span class="gap-slot" id="u5c-slot-${fi}">___</span> ${frase.after}</p>
+          <input class="text-input" id="u5c-inp-${fi}" type="text" placeholder="forma verbal..." autocomplete="off" autocorrect="off" spellcheck="false">`;
+        wrap.appendChild(div);
+      });
+    }
+
+    function checkU5CPhase2() {
+      let ok = 0;
+      U5_P2_FRASES.forEach((frase, fi) => {
+        const inp  = document.getElementById(`u5c-inp-${fi}`);
+        const slot = document.getElementById(`u5c-slot-${fi}`);
+        if (!inp) return;
+        const val = inp.value.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+        const correct = frase.answers.some(a => val === a.normalize('NFD').replace(/[̀-ͯ]/g,''));
+        if (correct) {
+          ok++;
+          inp.className = 'text-input correct';
+          if (slot) { slot.textContent = inp.value.trim(); slot.classList.add('filled-correct'); }
+        } else {
+          inp.className = 'text-input wrong';
+          if (slot) { slot.textContent = frase.answers[0]; slot.classList.add('filled-wrong'); }
+          inp.placeholder = `correto: ${frase.answers[0]}`;
+        }
+      });
+      const fb = document.getElementById('u5c-p2-fb');
+      fb.textContent = ok >= 1 ? `${ok} de ${U5_P2_FRASES.length} corretas!` : 'Verifica as formas a vermelho.';
+      fb.className = ok >= 1 ? 'feedback-strip correct' : 'feedback-strip wrong';
+      if (ok >= 1) soundCorrect(); else soundWrong();
+      setTimeout(() => { document.getElementById('u5c-phase3').style.display='block'; }, 1200);
+      announce(`${ok} de ${U5_P2_FRASES.length} corretas.`);
+    }
+
+    function submitU5CPhase3() {
+      const f1 = document.getElementById('u5c-frase1').value.trim();
+      const f2 = document.getElementById('u5c-frase2').value.trim();
+      const fb = document.getElementById('u5c-p3-fb');
+      if (!f1 || !f2) { fb.textContent = 'Escreve as duas frases antes de submeter!'; fb.className='feedback-strip wrong'; return; }
+      // Check if future IR form appears in frase1 and past SER form in frase2
+      const irFuture = /\b(irei|irás|irá|iremos|ireis|irão)\b/i;
+      const serPret  = /\b(fui|foste|foi|fomos|fostes|foram)\b/i;
+      const ok1 = irFuture.test(f1);
+      const ok2 = serPret.test(f2);
+      if (ok1 && ok2) {
+        fb.textContent = 'Perfeito! Encontrei as formas corretas nas tuas frases! Excelente trabalho!';
+        fb.className='feedback-strip correct';
+        soundComplete(); launchConfetti(2000);
+      } else if (ok1 || ok2) {
+        fb.textContent = `Uma frase está correta! ${!ok1?'Verifica o verbo IR no futuro.':''} ${!ok2?'Verifica o verbo SER no pretérito perfeito.':''}`;
+        fb.className='feedback-strip wrong';
+        soundCorrect();
+      } else {
+        fb.textContent = 'Verifica se usaste o verbo IR no futuro (irei/irás/irá/iremos...) e SER no pretérito perfeito (fui/foi/fomos...).';
+        fb.className='feedback-strip wrong';
+        soundWrong();
+      }
+      announce(fb.textContent);
+    }
+
+    function resetUnit5(lv) {
+      if (lv === 'support') {
+        document.getElementById('u5s-phase2').style.display='none';
+        document.getElementById('u5s-phase2-btn-wrap').style.display='none';
+        document.getElementById('u5s-final').style.display='none';
+        document.getElementById('u5s-match-fb').className='feedback-strip';
+        initU5Support();
+      } else if (lv === 'standard') {
+        document.getElementById('u5m-phase2').style.display='none';
+        document.getElementById('u5m-phase2-btn-wrap').style.display='none';
+        document.getElementById('u5m-final').style.display='none';
+        document.getElementById('u5m-match-fb').className='feedback-strip';
+        initU5Standard();
+      }
+    }
+
+    function initUnit5() {
+      const sec = document.querySelector('[data-unit="5"]');
+      initDiffTabs(sec, () => {});
+      initU5Support();
+      initU5Standard();
+      initU5Challenge();
+    }
+
+    /* ============================================================
+       BOOT
+    ============================================================ */
+    document.addEventListener('DOMContentLoaded', () => {
+      initUnit1();
+      initUnit2();
+      initUnit3();
+      initUnit4();
+      initUnit5();
+    });
+  </script>
+</body>
+</html>
