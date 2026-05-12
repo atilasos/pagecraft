@@ -1,0 +1,174 @@
+{
+  "palette": {
+    "bg": "oklch(0.96 0.018 82)",
+    "surface": "oklch(0.985 0.008 82)",
+    "primary": "oklch(0.45 0.118 145)",
+    "accent": "oklch(0.72 0.145 65)",
+    "ink": "oklch(0.25 0.018 110)"
+  },
+  "functional": {
+    "ok": "oklch(0.55 0.13 150)",
+    "warn": "oklch(0.66 0.14 85)",
+    "focus": "oklch(0.58 0.16 255)",
+    "info": "oklch(0.58 0.115 230)",
+    "disabled": "oklch(0.76 0.012 100)"
+  },
+  "paletteNotes": {
+    "limit": "A identidade usa 5 cores principais: bg, surface, primary, accent e ink.",
+    "theme": "Verde relva e dourado madeira evocam Minecraft sem depender de texturas complexas; neutros quentes reduzem fadiga visual.",
+    "contrast": "Ink sobre bg/surface e texto claro sobre primary devem ser testados em implementação; quando houver dúvida, usar ink em botões accent e surface em botões primary.",
+    "avoid": "Não usar vermelho como erro nem semáforo para níveis; feedback incorreto usa warn com orientação para tentar de novo. Não usar #000 nem #fff puros."
+  },
+  "typography": {
+    "fontFamily": "'Atkinson Hyperlegible', 'Lexend', 'Nunito', 'Comic Sans MS', 'Chalkboard SE', system-ui, sans-serif",
+    "scale": "kids-6-7",
+    "baseSizePx": 22,
+    "headingSizePx": 32,
+    "subheadingSizePx": 26,
+    "smallSizePx": 18,
+    "maxLineCh": 48,
+    "weights": [
+      400,
+      700,
+      800
+    ],
+    "lineHeight": 1.45,
+    "headingLineHeight": 1.15,
+    "italicAllowed": false,
+    "allCapsAllowed": false,
+    "numberStyle": "Frações como 1/2, 2/5 e 4/4 devem aparecer em tamanho grande, com numerador e denominador legíveis; se houver fração empilhada, manter barra grossa e rótulo textual redundante."
+  },
+  "layout": {
+    "maxWidthPx": 1040,
+    "padding": "clamp(1rem, 3vw, 1.5rem)",
+    "spacing": "comfortable",
+    "borderRadius": 16,
+    "cardRadius": 18,
+    "controlRadius": 14,
+    "grid": "Uma coluna em telemóvel/tablet estreito; duas colunas apenas acima de 820px quando a comparação lado-a-lado melhora a compreensão.",
+    "sectionSpacing": "clamp(1.25rem, 4vw, 2rem)",
+    "lineLength": "Blocos de texto até 48ch; instruções em frases curtas e numeradas quando houver mais de uma ação.",
+    "touchFirst": "Controlo principal sempre visível sem hover; alvos mínimos de 48x48px, espaço mínimo de 12px entre ações."
+  },
+  "components": {
+    "pageShell": {
+      "style": "Fundo bg com cartões surface; cabeçalho simples com ícone decorativo de bloco e título em ink. Evitar gradientes e fundos carregados.",
+      "minecraftTreatment": "Usar padrões discretos tipo blocos apenas com CSS local: quadrículas subtis em bg com opacity baixa, nunca por trás de texto pequeno.",
+      "contentOrder": "Começar sempre com objetivo em linguagem infantil, depois exploração, depois desafio/partilha."
+    },
+    "cards": {
+      "style": "Cartões surface com borda 2px em color-mix(in oklch, ink 14%, transparent), radius 18px e sombra suave sem blur pesado.",
+      "states": "Selecionado usa outline primary 3px e pequeno selo textual 'Escolhido'; desativado reduz saturação e mantém texto legível.",
+      "accessibility": "Cartões clicáveis usam button ou role=button, foco visível e aria-pressed quando alternáveis."
+    },
+    "buttons": {
+      "style": "Botões grandes, radius 14px, min-height 52px, padding 0.75rem 1rem, peso 700.",
+      "primary": "Fundo primary, texto surface, borda 2px primary; usar texto curto como 'Ver partes iguais'.",
+      "secondary": "Fundo surface, texto ink, borda 2px primary; adequado para tentar de novo ou trocar representação.",
+      "hoverActive": "Hover apenas com filter: brightness(0.96); active pode usar inset box-shadow, sem scale/transform.",
+      "disabled": "Fundo disabled, texto ink com opacidade mínima 0.75 e aria-disabled explicado por texto."
+    },
+    "fractionBars": {
+      "purpose": "Representar unidade contínua repartida em partes iguais e apoiar comparação de frações unitárias.",
+      "style": "Barra horizontal de altura mínima 64px, borda 3px ink/35, radius 12px, divisórias de 2px ink/35; partes escolhidas em accent ou primary conforme contexto.",
+      "equalParts": "Partes iguais devem ter largura calculada pela mesma fração da unidade; manter a unidade total do mesmo comprimento em comparações.",
+      "labels": "Cada barra inclui rótulo textual acima: '1 de 4 partes iguais'; símbolo grande ao lado: '1/4'. Não depender só da cor.",
+      "comparison": "Para 1/2 vs 1/4, alinhar as barras pela esquerda e mostrar uma régua fina por baixo com marcas comuns; destacar apenas uma parte em cada barra.",
+      "implementationHint": "Builder pode usar CSS grid com repeat(denominador, 1fr) e cells com aria-label; para denominadores até 10, manter divisórias grossas."
+    },
+    "fractionCards": {
+      "style": "Cartões de correspondência com imagem/miniatura no topo, símbolo grande no centro e frase curta em baixo.",
+      "matching": "Ligações corretas usam ok tint, ícone ✓ e microcopy; ligações a rever usam warn tint e pergunta orientadora, não vermelho.",
+      "dragAlternative": "Se drag-and-drop for difícil em touch, oferecer toque em primeiro cartão e toque no par; anunciar seleção por aria-live."
+    },
+    "equalUnequalComparison": {
+      "equalVisual": "Duas partes iguais usam contorno primary e animação opcional de sobreposição linear curta; incluir legenda 'tapam o mesmo espaço'.",
+      "unequalVisual": "Partes desiguais mostram sobras com padrão tracejado warn e texto 'Estas partes não têm o mesmo tamanho'.",
+      "interaction": "Alternador com duas opções: 'partes iguais' e 'partes diferentes'; o símbolo 1/2 só aparece depois da escolha equitativa.",
+      "feedbackPrompt": "Quando incorreto, mostrar: 'Compara os tamanhos. As duas partes tapam o mesmo espaço?'"
+    },
+    "denominatorNumeratorControls": {
+      "dropdown": "Botões-segmento ou select grande para denominador; começar com 2 e 4 destacados e desbloquear restantes com texto 'mais desafios'.",
+      "slider": "Slider touch-friendly com marcas numeradas, min 1, max igual ao denominador visível; se o input técnico permitir até 10, bloquear visualmente valores maiores com mensagem simples.",
+      "vocabulary": "Numerador e denominador devem ter etiquetas com setas: 'número de cima: partes escolhidas' e 'número de baixo: partes iguais no todo'."
+    },
+    "representationArea": {
+      "style": "Zona de desenho/dobragem com fundo quadriculado muito claro, botões 'apagar', 'dobrar', 'pintar' e exemplo ao lado.",
+      "paperFolding": "Usar linhas de dobra grossas e numeradas; não exigir precisão fina de rato.",
+      "canvasFallback": "Se canvas não for acessível, permitir escolher uma grelha pré-feita e pintar partes com botões."
+    },
+    "wholeUnitFrame": {
+      "style": "Moldura de unidade completa como puzzle simples: quando numerador=denominador, a moldura fica preenchida e surge 'é a unidade toda'.",
+      "notComplete": "Enquanto faltam partes, mostrar contador positivo: 'Já reuniste 3 de 4 partes'.",
+      "celebration": "Celebração discreta com brilho estático/curto; sem confetes longos nem bounce."
+    },
+    "differentiationTabs": {
+      "structure": "role=tablist com três tabs: 'Com ajuda', 'A pares', 'Desafio extra'. Cada tab tem aria-selected, aria-controls e painel associado.",
+      "colors": "Usar variações neutras sem semáforo: areia para apoio, céu para standard, madeira para desafio. Nunca verde/amarelo/vermelho como escala.",
+      "copy": "O texto do separador deve explicar o nível; emoji apenas decorativo com aria-hidden ou acompanhado por texto.",
+      "touch": "Tabs podem quebrar em coluna em ecrãs estreitos; cada tab min-height 48px."
+    },
+    "minecraftMakerSection": {
+      "style": "Secção final como 'Galeria das Frações' com cartões de missão, papéis do grupo e checklist visual de 4 paredes.",
+      "visualLanguage": "Usar blocos quadrados simples em CSS para representar paredes de 10 blocos; duas cores contrastantes para unidade e partes escolhidas.",
+      "groupRoles": "Três chips: 'Construtor/a', 'Verificador/a das partes iguais', 'Autor/a das placas'. Chips não usam cores de dificuldade.",
+      "checklist": "Itens grandes: unidade com 10 blocos, partes iguais, partes escolhidas, placa com palavras e símbolo, frase de comunicação.",
+      "alternatives": "Apresentar alternativa papel/cubos no mesmo estilo de missão, não como opção inferior.",
+      "accessibility": "Incluir instruções textuais completas para leitores de ecrã; não depender da estética Minecraft para explicar a tarefa."
+    },
+    "feedbackStates": {
+      "correct": "Usar functional.ok como borda/fundo tint, ícone ✓ decorativo ou aria-label='correto', e microcopy: 'Boa descoberta: as partes são iguais.'.",
+      "needsRevision": "Usar functional.warn como borda/fundo tint, ícone ↻, e microcopy orientador: 'Olha outra vez para o tamanho das partes.'.",
+      "neutralHint": "Usar functional.info para pistas, com texto 'Dica' antes da mensagem.",
+      "ariaLive": "Feedback textual em aria-live='polite'; não substituir apenas por mudança de cor.",
+      "noPenaltyTone": "Tom encorajador: 'tenta comparar', 'aproxima as barras', 'procura partes iguais'."
+    },
+    "badges": {
+      "style": "Pílulas com fundo accent tintado e texto ink, radius 999px, sem gradiente.",
+      "usage": "Usar para 'metade', 'quartos', 'unidade toda', 'Minecraft maker'."
+    },
+    "focusRing": {
+      "style": "Outline 4px solid functional.focus, offset 3px, radius herdado; acrescentar sombra curta em surface para contraste.",
+      "keyboard": "Nunca remover outline; :focus-visible deve ser tão evidente como estado selecionado.",
+      "touch": "Estados pressed/selected também têm texto ou ícone, não só foco."
+    }
+  },
+  "motion": {
+    "transitions": "subtle",
+    "durationMs": 160,
+    "easing": "ease-out",
+    "respectReducedMotion": true,
+    "allowed": [
+      "fade curto para feedback",
+      "preenchimento linear de partes",
+      "realce breve de contorno ao selecionar"
+    ],
+    "avoid": [
+      "bounce",
+      "elastic",
+      "parallax",
+      "confetti contínuo",
+      "transform scale em hover"
+    ],
+    "reducedMotionRule": "Com prefers-reduced-motion: reduce, remover transições não essenciais e mostrar estados finais instantaneamente."
+  },
+  "accessibility": {
+    "contrastBody": "AA",
+    "contrastMicrocopy": "AAA",
+    "focusRing": true,
+    "minTapPx": 48,
+    "soundOptIn": true,
+    "keyboard": "Todas as interações devem funcionar com Tab, Enter, Espaço e setas quando aplicável; ordem segue a leitura visual.",
+    "screenReader": "Imagens de frações têm descrição textual: unidade, denominador e partes escolhidas. Emoji decorativo com aria-hidden; emoji semântico com aria-label e texto redundante.",
+    "colorIndependence": "Cor sempre acompanhada por ícone, texto, padrão ou posição. Partes selecionadas têm rótulo e não só preenchimento colorido.",
+    "language": "Português de Portugal, frases curtas adequadas a 7-8 anos; evitar itálico e all caps.",
+    "errors": "Não usar linguagem de erro punitiva; usar revisão guiada e permitir repetir sem perder progresso."
+  },
+  "cssImplementationGuidance": {
+    "tokens": "Definir variáveis CSS locais para palette, functional, radius, spacing, focus e typography; sem imports remotos.",
+    "offline": "Não depender de CDN, imagens remotas, fontes externas ou bibliotecas visuais; padrões de blocos podem ser feitos com linear-gradient local.",
+    "responsive": "Usar clamp para tamanhos e padding; evitar que barras de frações fiquem abaixo de 280px de largura.",
+    "printOrProjector": "Manter alto contraste em projetor; cards e barras devem continuar legíveis sem sombra."
+  },
+  "notes": "O sistema visual combina calor de sala de aula com referências Minecraft simples: relva, madeira e blocos discretos, mantendo a matemática como foco. A escala tipográfica e os alvos táteis foram aumentados para 2.º ano, com instruções curtas, feedback encorajador e separação clara entre cores de identidade e cores funcionais. As decisões evitam fontes remotas, semáforos de dificuldade e animações intensas, para preservar acessibilidade WCAG AA e implementação self-contained."
+}
