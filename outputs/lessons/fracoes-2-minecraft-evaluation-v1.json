@@ -1,0 +1,36 @@
+{
+  "pass": true,
+  "route": "none",
+  "severity": "low",
+  "scores": {
+    "factual_accuracy": 5,
+    "constraint_alignment": 5,
+    "differentiation_quality": 5,
+    "ux_accessibility": 4,
+    "visual_design": 5,
+    "technical_quality": 5
+  },
+  "issues": [],
+  "required_fixes": [],
+  "evidence": [
+    "DocSpec cruzado: a página implementa 5 unidades correspondentes aos 5 objetivos centrais — partes iguais para 1/2, numerador/denominador, múltiplas representações, numerador igual ao denominador como unidade inteira e comparação de frações unitárias.",
+    "Browser QA confirma html lang='pt-PT', 5 section.unit, 5 tablists, 0 links, 0 externalScripts, canvas presente, secção maker presente e correções textuais do proofread aplicadas.",
+    "Browser QA confirma interações sem erros de consola nem exceções: partes iguais/desiguais, seleção de metade, denominador/numerador, correspondência, dobragem, 4/4 como unidade completa e comparação correta 1/4 vs 1/2 com feedback adequado.",
+    "Inspeção estática confirma correções pedidas no proofread-v1: 'quando uma parte pode representar uma fração', 'quando a fração representa a unidade toda', título da unidade 1 corrigido, etiqueta do numerador corrigida, '5 cubos, 2 pintados' e feedback de comparação corrigido.",
+    "A diferenciação é real e repetida nas unidades através de tablists com três percursos: Com ajuda, A pares e Desafio extra, alinhados com suporte, standard e challenge do DocSpec.",
+    "A missão Maker Minecraft está presente com papéis de grupo, checklist, alternativa em papel/cubos e ligação explícita entre construção física/digital e partes iguais, placas, palavras e símbolos.",
+    "Acessibilidade observada: foco visível definido em CSS, skip link, aria-live para feedback, aria-pressed/aria-selected/aria-controls, labels em controlos, botões com alvos táteis grandes e respeito por prefers-reduced-motion.",
+    "Screenshot 1280x900 mostra hierarquia visual clara, contraste forte, tipografia grande, espaçamento confortável, cartões legíveis e tema Minecraft discreto sem prejudicar a matemática."
+  ],
+  "acceptance_checks": [
+    "Factual accuracy: PASS — conceitos de fração parte-todo, denominador, numerador, unidade inteira e comparação unitária estão corretos para 2.º ano.",
+    "Constraint alignment: PASS — os constraints são descobertos por interação e feedback, não apenas declarados.",
+    "Assessment observability: PASS — há ações observáveis para recusar partes desiguais, montar frações, corresponder representações, completar unidade e comparar frações unitárias.",
+    "Differentiation: PASS — os três níveis existem em cada unidade e têm tarefas distintas, não apenas texto cosmético.",
+    "Maker integration: PASS — missão Minecraft presente e ligada à exploração matemática, com alternativa manipulável.",
+    "Accessibility/UX: PASS — estrutura semântica, estados ARIA, foco, feedback textual e touch targets adequados; sem falhas bloqueantes identificadas.",
+    "Technical: PASS — sem scripts externos, sem links externos, sem erros de consola/exceções na QA, canvas e interações principais funcionais.",
+    "Proofread follow-up: PASS — problemas semânticos e de linguagem reportados em proofread-v1 foram aplicados no HTML."
+  ],
+  "blocked_by": []
+}

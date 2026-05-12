@@ -1,0 +1,312 @@
+{
+  "topic": "Frações: partes iguais de uma unidade",
+  "ageRange": "2.º ano (7-8 anos)",
+  "duration": 45,
+  "objectives": [
+    "Reconhecer a fração como uma quantidade não inteira numa relação parte-todo, quando uma unidade contínua é dividida em partes iguais.",
+    "Distinguir partilhas equitativas e não equitativas, justificando que só há fração quando as partes da unidade têm o mesmo tamanho.",
+    "Representar frações simples por desenhos, dobragens, materiais, palavras e símbolos, usando linguagem inicial de numerador e denominador.",
+    "Comparar frações unitárias em contextos concretos e reconhecer que uma fração com numerador igual ao denominador representa a unidade inteira."
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Matemática",
+        "year": "2.º ano",
+        "domain": "Números — Frações — Significado de fração",
+        "descriptor": "Reconhecer a fração como possibilidade de representar uma quantidade não inteira relativa a uma relação parte-todo, sendo o todo uma unidade contínua, e explicar o significado do numerador e do denominador, no contexto da resolução de problemas.",
+        "source": "~/.openclaw/workspace/vault/documentos-oficiais/aprendizagens-essenciais/matematica-2-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Matemática",
+        "year": "2.º ano",
+        "domain": "Números — Frações — Representações",
+        "descriptor": "Representar uma fração de diversas formas, transitando de forma fluente entre as diferentes representações, recorrendo a materiais manipuláveis, dobragens, esquemas, palavras e símbolos.",
+        "source": "~/.openclaw/workspace/vault/documentos-oficiais/aprendizagens-essenciais/matematica-2-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Matemática",
+        "year": "2.º ano",
+        "domain": "Números — Frações — Relações entre frações",
+        "descriptor": "Reconhecer frações que representam a metade e quartos da unidade, reconhecer que uma fração cujo numerador e denominador são iguais corresponde a uma unidade, e comparar e ordenar frações unitárias recorrendo a representações múltiplas.",
+        "source": "~/.openclaw/workspace/vault/documentos-oficiais/aprendizagens-essenciais/matematica-2-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-B: Informação e comunicação",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-D: Pensamento crítico e pensamento criativo",
+      "PA-E: Relacionamento interpessoal",
+      "PA-F: Desenvolvimento pessoal e autonomia",
+      "PA-I: Saber científico, técnico e tecnológico"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Projecto cooperativo",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação",
+      "Conselho de cooperação educativa"
+    ],
+    "instruments": [
+      "plano de tarefa em pares",
+      "registo de descobertas no caderno ou folha de exploração",
+      "cartão de comunicação do grupo",
+      "diário de turma para uma conclusão e uma dúvida"
+    ],
+    "socialOrganization": "Começa em trabalho comparticipado com a turma, passa para exploração digital em pares, segue para construção cooperativa em grupos de 3 no Minecraft e termina com comunicação breve e conselho de cooperação educativa."
+  },
+  "materials": [
+    "Página PageCraft em computador ou tablet",
+    "Folhas de papel para dobrar",
+    "Tiras ou círculos de frações em papel",
+    "Lápis de cor",
+    "Cubos de encaixe ou cartões retangulares",
+    "Minecraft Education Edition ou mundo Minecraft preparado pelo professor",
+    "Quadro ou projetor para comunicação final"
+  ],
+  "units": [
+    {
+      "summary": "Uma fração nasce de uma unidade inteira dividida em partes iguais.",
+      "textDescription": "A turma parte de uma situação concreta: uma baguete para duas crianças. O aluno observa a unidade inteira, experimenta cortes em partes iguais e não iguais, e constrói a ideia de que cada metade só é 1/2 quando as duas partes têm o mesmo tamanho.",
+      "duration": 8,
+      "interaction": {
+        "state": [
+          {
+            "name": "tipo_de_corte",
+            "type": "toggle",
+            "options": [
+              "partes iguais",
+              "partes diferentes"
+            ],
+            "default": "partes iguais"
+          },
+          {
+            "name": "partes_baguete",
+            "type": "derived",
+            "derivedFrom": "tipo_de_corte define se a baguete aparece dividida em 2 partes do mesmo tamanho ou em 2 partes de tamanhos diferentes"
+          }
+        ],
+        "render": "Mostra uma baguete inteira e, ao lado, a baguete cortada em duas partes. As partes iguais aparecem sobrepostas por contorno quando se comparam; as partes diferentes deixam uma marca visual de sobra/desigualdade. O símbolo 1/2 só aparece depois de o aluno escolher a divisão equitativa.",
+        "transition": "Tocar no alternador muda entre partilha igual e partilha desigual. O aluno toca na parte que acha que pode chamar 'uma metade'; se a divisão não for equitativa, a página pede para comparar os tamanhos antes de tentar de novo.",
+        "constraint": "A mesma unidade só pode ser nomeada por frações quando está repartida em partes iguais; uma de duas partes iguais corresponde a 1/2.",
+        "assessment": "O aluno seleciona a divisão correta da baguete, recusa a divisão desigual e diz ou escreve: 'é 1/2 porque a baguete inteira foi dividida em 2 partes iguais'."
+      },
+      "differentiation": {
+        "support": "Usa apenas a baguete em 2 partes, com contornos grandes e comparação por sobreposição visual; o adulto pode perguntar 'as duas partes tapam o mesmo espaço?'.",
+        "standard": "Compara duas imagens, uma equitativa e outra não equitativa, e justifica oralmente qual representa 1/2.",
+        "challenge": "Desenha uma nova partilha errada e explica a um colega porque não pode ser escrita como 1/2."
+      }
+    },
+    {
+      "summary": "O denominador indica em quantas partes iguais a unidade foi dividida; o numerador indica quantas dessas partes foram tomadas.",
+      "textDescription": "A unidade é dobrada ou repartida primeiro em metades e quartos, depois em 8, 5, 10, 3 e 6 partes iguais. O aluno liga palavras, símbolos e imagens: 1/2, 1/4, 2/5, 'uma de duas partes iguais', 'duas de cinco partes iguais'.",
+      "duration": 10,
+      "interaction": {
+        "state": [
+          {
+            "name": "denominador",
+            "type": "dropdown",
+            "options": [
+              "2",
+              "4",
+              "8",
+              "5",
+              "10",
+              "3",
+              "6"
+            ],
+            "default": "2"
+          },
+          {
+            "name": "numerador",
+            "type": "slider",
+            "range": [
+              1,
+              10
+            ],
+            "step": 1,
+            "default": 1
+          },
+          {
+            "name": "fracao_valida",
+            "type": "derived",
+            "derivedFrom": "numerador <= denominador"
+          }
+        ],
+        "render": "Mostra uma barra, uma pizza e uma folha dobrada virtual com o número de partes definido pelo denominador. As partes escolhidas pelo numerador ficam coloridas. Ao lado aparecem frase curta, símbolo e vocabulário: '2/5 — duas de cinco partes iguais — dois quintos'. O slider do numerador fica limitado visualmente ao denominador escolhido.",
+        "transition": "Escolher o denominador reparte novamente a mesma unidade em partes iguais. Mover o numerador colore mais ou menos partes. A página começa com 2 e 4 destacados, e só depois desbloqueia 8, 5, 10, 3 e 6.",
+        "constraint": "O número de baixo conta todas as partes iguais da unidade; o número de cima conta apenas as partes escolhidas, sem mudar a unidade.",
+        "assessment": "Dada uma imagem com 2 de 5 partes coloridas, o aluno monta 2/5, escolhe a frase 'duas de cinco partes iguais' e identifica oralmente qual é o numerador e qual é o denominador."
+      },
+      "differentiation": {
+        "support": "Trabalha apenas 1/2 e 1/4 com peças grandes e frases com lacunas: '1 de __ partes iguais'.",
+        "standard": "Representa 1/2, 1/4 e 2/5 alternando entre imagem, palavra e símbolo.",
+        "challenge": "Constrói uma representação para 3/6 e explica porque o denominador é 6 mesmo quando só 3 partes estão coloridas."
+      }
+    },
+    {
+      "summary": "A mesma fração pode aparecer em desenhos, dobragens, materiais, palavras e símbolos.",
+      "textDescription": "O aluno transforma uma fração simples entre representações. A ênfase está em partir, dobrar, colorir, construir com materiais e explicar com linguagem própria, sem cálculo abstrato.",
+      "duration": 10,
+      "interaction": {
+        "state": [
+          {
+            "name": "cartoes_imagem",
+            "type": "matching",
+            "options": [
+              "barra 1/2",
+              "folha dobrada em quartos com 1 parte pintada",
+              "5 cubos com 2 destacados"
+            ]
+          },
+          {
+            "name": "cartoes_linguagem",
+            "type": "matching",
+            "options": [
+              "1/2 — uma metade",
+              "1/4 — um quarto",
+              "2/5 — dois quintos"
+            ]
+          },
+          {
+            "name": "desenho_do_aluno",
+            "type": "canvas",
+            "default": "desenho livre de uma unidade repartida em partes iguais"
+          }
+        ],
+        "render": "Apresenta cartões grandes com imagens concretas, cartões com palavras e símbolos, e uma área de desenho simples. As ligações corretas ficam verdes; ligações incorretas pedem nova observação da unidade e das partes.",
+        "transition": "O aluno liga imagem a palavra/símbolo e depois desenha uma representação equivalente. Pode apagar, dobrar virtualmente uma folha e voltar a tentar sem penalização.",
+        "constraint": "Representações diferentes podem falar da mesma relação parte-todo se mantiverem a mesma unidade, o mesmo número de partes iguais e o mesmo número de partes escolhidas.",
+        "assessment": "O aluno liga corretamente três pares de cartões e produz um desenho próprio para 1/2, 1/4 ou 2/5 com partes iguais assinaladas."
+      },
+      "differentiation": {
+        "support": "Recebe cartões com cores correspondentes e só precisa ligar imagem a palavra para 1/2 e 1/4.",
+        "standard": "Liga três representações e desenha uma unidade repartida com partes iguais claramente visíveis.",
+        "challenge": "Cria duas representações diferentes para a mesma fração e explica ao par porque são equivalentes na situação concreta."
+      }
+    },
+    {
+      "summary": "Quando o numerador é igual ao denominador, todas as partes da unidade foram tomadas e obtém-se a unidade inteira.",
+      "textDescription": "O aluno explora casos como 2/2, 4/4, 5/5 e 10/10 em unidades concretas. A página evita cálculo simbólico e mostra que a unidade está completa quando todas as partes iguais estão coloridas ou reunidas.",
+      "duration": 7,
+      "interaction": {
+        "state": [
+          {
+            "name": "denominador_unidade",
+            "type": "dropdown",
+            "options": [
+              "2",
+              "4",
+              "5",
+              "10"
+            ],
+            "default": "4"
+          },
+          {
+            "name": "partes_reunidas",
+            "type": "slider",
+            "range": [
+              0,
+              10
+            ],
+            "step": 1,
+            "default": 1
+          },
+          {
+            "name": "unidade_completa",
+            "type": "derived",
+            "derivedFrom": "partes_reunidas == denominador_unidade"
+          }
+        ],
+        "render": "Mostra uma unidade dividida em partes iguais e uma moldura de 'unidade completa'. À medida que as partes são reunidas, a moldura vai preenchendo. Quando todas as partes estão reunidas, a unidade fica inteira e aparece a equivalência em linguagem infantil: '4/4 é a unidade toda'.",
+        "transition": "Escolher o denominador muda o número de partes iguais. Mover o slider acrescenta ou retira partes reunidas. A página só celebra 'unidade inteira' quando o número de partes reunidas coincide com o número total de partes.",
+        "constraint": "Tomar todas as partes iguais de uma unidade recompõe a unidade; por isso, numerador e denominador iguais indicam a unidade toda.",
+        "assessment": "O aluno completa 4/4 ou 5/5, identifica que já não falta nenhuma parte e escolhe a frase 'é a unidade inteira'."
+      },
+      "differentiation": {
+        "support": "Usa 2/2 e 4/4 com encaixe visual tipo puzzle e feedback imediato quando a unidade fica completa.",
+        "standard": "Reconhece 2/2, 4/4 e 5/5 como unidade e distingue de 1/2 ou 3/4.",
+        "challenge": "Justifica por palavras porque 10/10 é a unidade inteira mesmo tendo mais partes pequenas do que 2/2."
+      }
+    },
+    {
+      "summary": "Frações unitárias podem ser comparadas observando o tamanho de uma parte quando a unidade é a mesma.",
+      "textDescription": "A turma compara 1/2, 1/3, 1/4, 1/5, 1/6, 1/8 e 1/10 em barras do mesmo tamanho. O foco é prático: quanto mais partes iguais fazemos na mesma unidade, menor fica cada parte. A exploração digital prepara uma construção cooperativa no Minecraft.",
+      "duration": 10,
+      "interaction": {
+        "state": [
+          {
+            "name": "fracao_A",
+            "type": "dropdown",
+            "options": [
+              "1/2",
+              "1/3",
+              "1/4",
+              "1/5",
+              "1/6",
+              "1/8",
+              "1/10"
+            ],
+            "default": "1/2"
+          },
+          {
+            "name": "fracao_B",
+            "type": "dropdown",
+            "options": [
+              "1/2",
+              "1/3",
+              "1/4",
+              "1/5",
+              "1/6",
+              "1/8",
+              "1/10"
+            ],
+            "default": "1/4"
+          },
+          {
+            "name": "resposta_comparacao",
+            "type": "quiz",
+            "options": [
+              "A parte A é maior",
+              "A parte B é maior",
+              "São iguais"
+            ],
+            "default": "A parte A é maior"
+          }
+        ],
+        "render": "Mostra duas barras do mesmo comprimento, cada uma dividida no número de partes indicado. Só uma parte de cada barra está colorida. Uma régua visual permite alinhar as partes coloridas para comparar tamanhos.",
+        "transition": "O aluno escolhe duas frações unitárias, observa as barras alinhadas e responde à comparação. O feedback pede uma justificação ligada ao número de partes iguais da mesma unidade.",
+        "constraint": "Na mesma unidade, uma parte de uma divisão em menos partes iguais é maior do que uma parte de uma divisão em mais partes iguais.",
+        "assessment": "O aluno compara corretamente 1/2 com 1/4 e 1/5 com 1/10, e justifica com uma frase do tipo: '1/2 é maior porque a unidade foi partida em menos partes iguais'."
+      },
+      "maker": {
+        "type": "minecraft",
+        "challenge": "Em grupos de 3, construam no Minecraft uma 'Galeria das Frações' com 4 paredes iguais, cada uma com 10 blocos de comprimento. Em cada parede, mostrem uma fração diferente: 1/2, 1/4, 2/5 e uma fração à escolha com denominador até 10. Usem blocos de duas cores para mostrar a unidade, as partes iguais e as partes escolhidas. Incluam uma placa com palavras e símbolo, por exemplo: '2/5 — duas de cinco partes iguais'.",
+        "materials": [
+          "Minecraft Education Edition",
+          "mundo plano ou área delimitada pelo professor",
+          "blocos de duas cores contrastantes",
+          "placas/sinais do Minecraft",
+          "registo da exploração digital para consulta"
+        ],
+        "groupSize": "3",
+        "connection": "O grupo escolhe frações que já comparou e representou na página. A parede de 10 blocos funciona como unidade comum para transpor a exploração digital para uma construção 3D: partir a unidade em partes iguais, colorir as partes tomadas e comparar o tamanho de uma parte.",
+        "communication": "Cada grupo faz uma visita guiada de 1 minuto à sua galeria, mostrando uma representação correta, uma comparação de frações unitárias e uma frase que explique porque as partes têm de ser iguais.",
+        "alternatives": [
+          "Se não houver Minecraft, construir a galeria com papel quadriculado ou cubos de encaixe em grupos de 3.",
+          "Se houver poucos dispositivos, um aluno constrói, outro verifica as partes iguais e outro escreve as placas; depois rodam os papéis.",
+          "Se o tempo for curto, construir apenas duas paredes: 1/2 e 1/4, mantendo a comunicação final."
+        ]
+      },
+      "differentiation": {
+        "support": "Compara apenas 1/2 e 1/4, usando barras sobrepostas e uma parede Minecraft já marcada em 2 ou 4 secções iguais.",
+        "standard": "Compara pares de frações unitárias com denominadores até 10 e constrói no Minecraft paredes com partes iguais e placa correta.",
+        "challenge": "Inclui 1/8 ou 1/10 na galeria e explica por que a parte fica menor quando a mesma unidade é dividida em mais partes iguais."
+      }
+    }
+  ],
+  "sessionFlow": "45 minutos: 0-8 min, ativação comparticipada com a baguete e descoberta de que a partilha tem de ser equitativa; 8-18 min, exploração em pares do denominador e numerador, começando por 2 e 4 e avançando para 8, 5, 10, 3 e 6; 18-28 min, representação múltipla com cartões, desenho, dobragem e materiais; 28-35 min, recomposição da unidade quando numerador e denominador são iguais; 35-45 min, comparação de frações unitárias e arranque cooperativo da Galeria das Frações em Minecraft, com comunicação curta de descobertas e registo de uma conclusão no diário de turma."
+}

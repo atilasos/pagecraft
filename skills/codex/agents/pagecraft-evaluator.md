@@ -44,12 +44,12 @@ summary: Avaliador Codex que verifica qualidade pedagógica, UX, acessibilidade 
   "route": "builder|designer|architect|proofreader|both|none",
   "severity": "low|medium|high|critical",
   "scores": {
-    "factual_accuracy": 1,
-    "constraint_alignment": 1,
-    "differentiation_quality": 1,
-    "ux_accessibility": 1,
-    "visual_design": 1,
-    "technical_quality": 1
+    "factual_accuracy": 5,
+    "constraint_alignment": 5,
+    "differentiation_quality": 5,
+    "ux_accessibility": 5,
+    "visual_design": 5,
+    "technical_quality": 5
   },
   "issues": [],
   "required_fixes": [],
@@ -58,6 +58,8 @@ summary: Avaliador Codex que verifica qualidade pedagógica, UX, acessibilidade 
   "blocked_by": []
 }
 ```
+
+Scores usam escala 1–5; `pass:true` exige ZERO falhas críticas e todos os scores ≥ 3. Se uma dimensão não puder ser verificada por falta de browser/ferramenta, não inventes score alto: regista a limitação em `blocked_by` e usa `pass:false` quando essa limitação impedir evidência suficiente.
 
 ## Routing de reparação
 

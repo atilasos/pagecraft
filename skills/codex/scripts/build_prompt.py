@@ -7,7 +7,9 @@ Usage: python3 build_prompt.py docspec.json > PROMPT.md
        python3 build_prompt.py docspec.json --with-identity > TASK.md
 """
 
-import json, os, sys
+import argparse
+import json
+import os
 from pathlib import Path
 
 SKILL_DIR = Path(__file__).resolve().parent.parent
@@ -15,7 +17,7 @@ IDENTITY_PATH = SKILL_DIR / "identities" / "builder.md"
 
 
 def looks_like_pagecraft_repo(path: Path) -> bool:
-    return (path / "CLAUDE.md").exists() and (path / "activities").is_dir()
+    return (path / "catalog.json").exists() and (path / "activities").is_dir()
 
 
 def resolve_repo_root() -> Path:
@@ -41,17 +43,27 @@ def resolve_repo_root() -> Path:
 PAGECRAFT_REPO = resolve_repo_root()
 
 
-def main():
-    if len(sys.argv) < 2:
-        print(
-            "Usage: python3 build_prompt.py <docspec.json> [--with-identity]",
-            file=sys.stderr,
-        )
-        sys.exit(1)
+def find_repo_rules_file(repo: Path) -> Path | None:
+    for name in ("AGENTS.md", "CLAUDE.md", "README.md"):
+        candidate = repo / name
+        if candidate.exists():
+            return candidate
+    return None
 
-    include_identity = "--with-identity" in sys.argv
-    spec_path = sys.argv[1]
-    spec = json.loads(Path(spec_path).read_text(encoding="utf-8"))
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Gera prompt para o Builder PageCraft a partir de um DocSpec-AM JSON."
+    )
+    parser.add_argument("docspec", help="Caminho para o DocSpec-AM JSON")
+    parser.add_argument(
+        "--with-identity",
+        action="store_true",
+        help="Incluir identities/builder.md no início do prompt",
+    )
+    args = parser.parse_args()
+
+    spec = json.loads(Path(args.docspec).read_text(encoding="utf-8"))
 
     topic = spec.get("topic", "Aula interactiva")
     age = spec.get("ageRange", "6-10 anos")
@@ -133,9 +145,16 @@ Incluir secção visual com fundo verde:
     parts = []
 
     # Optionally prepend identity
-    if include_identity and IDENTITY_PATH.exists():
+    if args.with_identity and IDENTITY_PATH.exists():
         parts.append(IDENTITY_PATH.read_text(encoding="utf-8"))
         parts.append("\n---\n")
+
+    rules_file = find_repo_rules_file(PAGECRAFT_REPO)
+    rules_text = (
+        f"Este projeto tem regras de repo em `{rules_file}`. Lê-as e cumpre-as antes de implementar."
+        if rules_file
+        else "Não foi encontrado AGENTS.md/CLAUDE.md/README.md no repo resolvido; cumpre as regras PageCraft desta skill e do DocSpec/design-spec."
+    )
 
     parts.append(f"""# PageCraft Builder — Gerar página HTML interactiva
 
@@ -198,8 +217,9 @@ Incluir escala: ⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ 
 - Testar mentalmente que a página funciona antes de gravar
 
 ## Design obrigatório (PageCraft)
-Este projeto tem um `CLAUDE.md` em `{PAGECRAFT_REPO / "CLAUDE.md"}` com as regras de design.
-Resumo das regras críticas:
+{rules_text}
+
+Resumo das regras críticas PageCraft:
 - Fonte: 'Nunito', 'Comic Sans MS', 'Chalkboard SE' — nunca Inter/Roboto/Arial
 - Tamanho base body: 20px; sílabas: 36-48px, font-weight 800
 - Touch targets mínimo 48px em todos os eixos

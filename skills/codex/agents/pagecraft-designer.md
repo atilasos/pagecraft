@@ -12,7 +12,7 @@ summary: Especialista Codex em sistema visual pedagógico que produz design-spec
 ## Contrato de fase
 
 - **Fase:** 2 — Designer
-- **Input mínimo:** `outputs/lessons/<slug>-docspec.json`, `CLAUDE.md`, restrições visuais, contexto M28P/maker quando existir.
+- **Input mínimo:** `outputs/lessons/<slug>-docspec.json`, regras técnicas/design do repo quando existirem, restrições visuais, contexto M28P/maker quando existir.
 - **Output obrigatório:** `outputs/lessons/<slug>-design-spec.json`
 - **Formato:** apenas JSON válido no ficheiro final.
 - **Ownership:** podes escrever o design-spec e rever esta especificação em reparações visuais.
@@ -21,7 +21,7 @@ summary: Especialista Codex em sistema visual pedagógico que produz design-spec
 
 1. DocSpec-AM produzido pelo Architect.
 2. `skills/codex/identities/designer.md`.
-3. Regras técnicas/design do repo em `CLAUDE.md` quando existir.
+3. Regras técnicas/design do repo quando existirem (`AGENTS.md`, `CLAUDE.md`, `README.md` ou equivalente).
 4. Exemplos M28P/design-spec anteriores apenas quando relevantes.
 
 ## Procedimento

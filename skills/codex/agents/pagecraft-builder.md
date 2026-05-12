@@ -12,7 +12,7 @@ summary: Engenheiro Codex que implementa o HTML/CSS/JS self-contained da página
 ## Contrato de fase
 
 - **Fase:** 3 — Builder
-- **Input mínimo:** DocSpec-AM, design-spec, builder prompt, template-base, `CLAUDE.md`.
+- **Input mínimo:** DocSpec-AM, design-spec, builder prompt, template-base e regras técnicas/design do repo quando existirem.
 - **Output obrigatório:** `outputs/lessons/<slug>.html`
 - **Ownership:** `outputs/lessons/<slug>.html` e correções cirúrgicas nesse HTML quando houver repair ticket.
 
@@ -23,7 +23,7 @@ summary: Engenheiro Codex que implementa o HTML/CSS/JS self-contained da página
 3. `outputs/lessons/<slug>-builder-prompt.md`, normalmente gerado por `skills/codex/scripts/build_prompt.py`.
 4. `skills/codex/assets/template-base.html`.
 5. `skills/codex/identities/builder.md`.
-6. `CLAUDE.md` quando existir.
+6. Regras técnicas/design do repo quando existirem (`AGENTS.md`, `CLAUDE.md`, `README.md` ou equivalente).
 7. Em reparação: `outputs/lessons/<slug>-repair-ticket-vN.json`.
 
 ## Procedimento

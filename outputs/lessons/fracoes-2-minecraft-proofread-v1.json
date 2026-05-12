@@ -1,0 +1,20 @@
+{
+  "pass": false,
+  "severity": "medium",
+  "issues": [
+    {"type":"semantic","severity":"low","location":"header .objectives li:nth-child(1)","original":"quando uma parte pode chamar-se fração;","suggestion":"quando uma parte pode representar uma fração;","route":"Builder"},
+    {"type":"semantic","severity":"low","location":"header .objectives li:nth-child(4)","original":"quando a fração faz a unidade toda.","suggestion":"quando a fração representa a unidade toda.","route":"Builder"},
+    {"type":"semantic","severity":"low","location":"#u1-title","original":"1. A baguete só tem metade quando as partes são iguais","suggestion":"1. Só há metade quando as partes da baguete são iguais","route":"Builder"},
+    {"type":"grammar","severity":"low","location":"label[for='num']","original":"Numerador: partes escolhidas, 1","suggestion":"Numerador: partes escolhidas: 1","route":"Builder"},
+    {"type":"semantic","severity":"medium","location":"#unidade3 .image-card[data-match='twofifths'] > span:first-child","original":"5 cubos","suggestion":"5 cubos, 2 pintados","route":"Builder"},
+    {"type":"semantic","severity":"medium","location":"script updateU5() feedback correto em #u5Feedback","original":"✓ Boa comparação. Na mesma unidade, a parte com menos partes iguais no todo fica maior: ${a} e ${bv}.","suggestion":"✓ Boa comparação. Na mesma unidade, a fração que divide a unidade em menos partes iguais tem uma parte maior. Aqui, a maior é ${maior}.","route":"Builder"}
+  ],
+  "summary": "Texto maioritariamente adequado; corrigir precisão semântica e feedback da comparação antes da avaliação final.",
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90: FAIL",
+    "Registo consistente: OK",
+    "Adequação à faixa etária: OK",
+    "Instruções claras e seguíveis: FAIL",
+    "Alinhamento com objetivos: FAIL"
+  ]
+}

@@ -176,7 +176,7 @@ Dar ao subagente Designer:
 - `agents/pagecraft-designer.md`;
 - `identities/designer.md`;
 - `outputs/lessons/<slug>-docspec.json`;
-- `CLAUDE.md`;
+- regras técnicas/design do repo quando existirem (`AGENTS.md`, `CLAUDE.md`, `README.md` ou equivalente);
 - contexto visual/M28P relevante, se existir.
 
 Output: `outputs/lessons/<slug>-design-spec.json`.
@@ -204,7 +204,7 @@ Contexto do Builder:
 - `outputs/lessons/<slug>-builder-prompt.md`;
 - `outputs/lessons/<slug>-design-spec.json`;
 - `assets/template-base.html`;
-- `CLAUDE.md`.
+- regras técnicas/design do repo quando existirem (`AGENTS.md`, `CLAUDE.md`, `README.md` ou equivalente).
 
 Output: `outputs/lessons/<slug>.html`, offline, self-contained, com interações reais.
 
@@ -262,12 +262,23 @@ Output esperado:
   "pass": true,
   "route": "builder|designer|architect|proofreader|both|none",
   "severity": "low|medium|high|critical",
+  "scores": {
+    "factual_accuracy": 5,
+    "constraint_alignment": 5,
+    "differentiation_quality": 5,
+    "ux_accessibility": 5,
+    "visual_design": 5,
+    "technical_quality": 5
+  },
   "issues": [],
   "required_fixes": [],
   "evidence": [],
-  "acceptance_checks": []
+  "acceptance_checks": [],
+  "blocked_by": []
 }
 ```
+
+Scores usam escala 1–5; `pass:true` exige ausência de falhas críticas e todos os scores ≥ 3.
 
 ### 8. Loop de reparação
 

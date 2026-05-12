@@ -4,17 +4,20 @@ Gera versão Markdown (professor) a partir do DocSpec-AM JSON.
 Usage: python3 build_markdown.py docspec.json > output.md
 """
 
-import json, sys
+import argparse
+import json
 from datetime import datetime
 from pathlib import Path
 
 
 def main():
-    if len(sys.argv) < 2:
-        print("Usage: python3 build_markdown.py <docspec.json>", file=sys.stderr)
-        sys.exit(1)
+    parser = argparse.ArgumentParser(
+        description="Gera versão Markdown para professor a partir de um DocSpec-AM JSON."
+    )
+    parser.add_argument("docspec", help="Caminho para o DocSpec-AM JSON")
+    args = parser.parse_args()
 
-    spec = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+    spec = json.loads(Path(args.docspec).read_text(encoding="utf-8"))
 
     lines = [
         f"# {spec.get('topic', '')}",

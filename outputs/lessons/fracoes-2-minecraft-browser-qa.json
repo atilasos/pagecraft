@@ -1,0 +1,78 @@
+{
+  "checks": {
+    "initial": {
+      "title": "PageCraft — Frações Minecraft",
+      "lang": "pt-PT",
+      "units": 5,
+      "tablists": 5,
+      "buttons": 40,
+      "links": 0,
+      "externalScripts": 0,
+      "hasCanvas": true,
+      "hasMaker": true,
+      "textHasCorrections": true
+    },
+    "actions": [
+      [
+        "unequal",
+        true
+      ],
+      [
+        "unequal_part",
+        true
+      ],
+      [
+        "equal",
+        true
+      ],
+      [
+        "equal_part",
+        true
+      ],
+      [
+        "denom4",
+        ""
+      ],
+      [
+        "num2",
+        ""
+      ],
+      [
+        "match_half_img",
+        true
+      ],
+      [
+        "match_half_word",
+        true
+      ],
+      [
+        "fold4",
+        true
+      ],
+      [
+        "complete4",
+        "✓ 4/4 é a unidade toda. Já não falta nenhuma parte."
+      ],
+      [
+        "answerA",
+        true
+      ]
+    ],
+    "after": {
+      "u1": "✓ Boa descoberta: esta parte pode representar 1/2 porque as duas partes tapam o mesmo espaço.",
+      "u3": "✓ Este par combina. Procura outro.",
+      "u4": "✓ 4/4 é a unidade toda. Já não falta nenhuma parte.",
+      "u5": "↻ Aproxima as barras. Qual primeira parte ocupa mais comprimento?",
+      "activePanels": 5
+    }
+  },
+  "consoleErrors": [],
+  "exceptions": [],
+  "notes": "Initial browser QA clicked an intentionally wrong answer for unit 5 and received guided feedback; a follow-up static inspection confirms default comparison is 1/4 vs 1/2 so B is the correct larger part. Interactive code defines correctCompare() and no runtime exceptions were captured.",
+  "correctAnswerCheck": {
+    "action": "clicked [data-answer=\"B\"] for default 1/4 vs 1/2",
+    "u5Feedback": "✓ Boa comparação. Na mesma unidade, a fração que divide a unidade em menos partes iguais tem uma parte maior. Aqui, a maior é 1/2.",
+    "consoleErrors": [],
+    "exceptions": []
+  }
+}

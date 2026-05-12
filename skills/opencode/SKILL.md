@@ -36,12 +36,12 @@ Não usar para páginas estáticas simples sem componente pedagógica/interativa
 
 ## Fontes de verdade
 
-1. **Regras técnicas e design do repo:** `CLAUDE.md`.
+1. **Regras técnicas e design do repo:** `AGENTS.md`, `CLAUDE.md`, `README.md` ou equivalente quando existir.
 2. **Pacote operacional PageCraft:** `skills/openclaw/`.
 3. **Conhecimento pedagógico canónico:** `~/.openclaw/workspace/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md`.
 4. **Fontes oficiais no vault:** `~/.openclaw/workspace/vault/documentos-oficiais/`.
 
-Se houver conflito: pedido explícito válido do utilizador → `CLAUDE.md` → vault → identidades/referências de `skills/openclaw/`.
+Se houver conflito: pedido explícito válido do utilizador → regras técnicas/design do repo → vault → identidades/referências de `skills/openclaw/`.
 
 ## Recursos reutilizados da skill PageCraft original
 
@@ -163,7 +163,7 @@ Ler:
 
 - `skills/openclaw/identities/designer.md`
 - `outputs/lessons/<slug>-docspec.json`
-- `CLAUDE.md`
+- regras técnicas/design do repo quando existirem (`AGENTS.md`, `CLAUDE.md`, `README.md` ou equivalente)
 
 Produzir `outputs/lessons/<slug>-design-spec.json`. Para M28P, usar rigorosamente a paleta e `syllableColors` do `design-spec.json` da palavra quando existirem.
 
@@ -184,7 +184,7 @@ Ler:
 - `outputs/lessons/<slug>-builder-prompt.md`
 - `outputs/lessons/<slug>-design-spec.json`
 - `skills/openclaw/assets/template-base.html`
-- `CLAUDE.md`
+- regras técnicas/design do repo quando existirem (`AGENTS.md`, `CLAUDE.md`, `README.md` ou equivalente)
 
 Produzir `outputs/lessons/<slug>.html`. O HTML deve abrir offline e conter CSS/JS inline.
 
@@ -207,7 +207,7 @@ Ler:
 - DocSpec;
 - fontes pedagógicas do vault quando houver dúvida.
 
-Produzir `outputs/lessons/<slug>-proofread-v1.json`. Corrigir problemas textuais no HTML sem regredir a intenção pedagógica.
+Produzir `outputs/lessons/<slug>-proofread-v1.json`. O fluxo normal é relatório/ticket; correções textuais no HTML pertencem ao Builder, com base nas sugestões do Proofreader, sem regredir a intenção pedagógica.
 
 Fronteira: o Proofreader reporta problemas linguísticos/semânticos; mudanças pedagógicas estruturais voltam ao Architect.
 
