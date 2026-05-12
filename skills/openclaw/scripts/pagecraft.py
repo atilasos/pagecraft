@@ -44,8 +44,21 @@ def resolve_workspace() -> Path:
     return Path.home() / ".openclaw" / "workspace"
 
 
+def resolve_vault(workspace: Path) -> Path:
+    override = os.environ.get("PAGECRAFT_VAULT") or os.environ.get("OPENCLAW_VAULT")
+    if override:
+        return Path(override).expanduser().resolve()
+
+    workspace_vault = workspace / "vault"
+    if workspace_vault.exists():
+        return workspace_vault
+
+    default_vault = Path.home() / ".openclaw" / "workspace" / "vault"
+    return default_vault
+
+
 WORKSPACE = resolve_workspace()
-VAULT = WORKSPACE / "vault"
+VAULT = resolve_vault(WORKSPACE)
 AE_DIR = VAULT / "documentos-oficiais" / "aprendizagens-essenciais"
 KB_DIR = VAULT / "Knowledge"
 OUTPUT_DIR = WORKSPACE / "outputs" / "lessons"

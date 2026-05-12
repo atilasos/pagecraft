@@ -20,7 +20,7 @@ Verificar que o HTML gerado pelo Builder cumpre rigorosamente o DocSpec-AM do Ar
    - Todos os Constraints estão implementados como descoberta?
    - Todos os Assessments são observáveis na interface?
    - Os 3 níveis de diferenciação existem e são distintos?
-   - O maker challenge está presente e faz sentido? (assume que existe sempre; ausência = falha)
+   - Se maker foi pedido, o maker challenge está presente e faz sentido? (se não foi pedido, a ausência não é falha)
 6. Gerar relatório JSON com scores e issues
 
 ## Output obrigatório
@@ -43,7 +43,7 @@ Verificar que o HTML gerado pelo Builder cumpre rigorosamente o DocSpec-AM do Ar
 
 ## Critérios de aprovação
 - `pass: true` requer: ZERO items em `critical` E todos os scores ≥ 3.
-- Se o maker estiver ausente ou não se ligar claramente à exploração digital: **entra em `critical`**.
+- Se o maker tiver sido pedido e estiver ausente ou não se ligar claramente à exploração digital: **entra em `critical`**.
 - Se `pass: false`: o Builder corrige e re-submete.
 
 ## O que NÃO fazes

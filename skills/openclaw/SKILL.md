@@ -429,8 +429,9 @@ Cada knowledge unit contém:
 ## References
 
 - `references/ae-index.md` — índice AE 1.º ciclo + Perfil do Aluno
+- `references/age-adaptation.md` — **fonte de verdade** para decisões por faixa etária (tipografia, motricidade, padrões)
 - `references/docspec-schema.md` — schema JSON + exemplo completo
-- `references/interaction-patterns.md` — 8 patterns (slider, drag, matching, etc.)
+- `references/interaction-patterns.md` — patterns (slider, drag, matching, tap-to-cycle, tap-to-place, audio-first…)
 - `references/maker-patterns.md` — 5 recursos maker com templates
 - `references/srtc-examples.md` — exemplos por idade
 - `identities/architect.md` — identidade do Architect

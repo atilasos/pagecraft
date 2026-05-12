@@ -1,6 +1,11 @@
 # Interaction Patterns — PageCraft
 
-Biblioteca de patterns reutilizáveis para interacções pedagógicas. Cada pattern inclui SRTC-A template.
+Biblioteca de patterns reutilizáveis para interações pedagógicas. Cada pattern inclui template SRTC-A.
+
+> **Escolha por idade** (resumo; ver `age-adaptation.md`):
+> - **4–7 anos**: preferir `tap-to-cycle`, `tap-to-place`, `audio-first`, `toggle`, `quiz-inline`. Evitar `drag` e `matching` por linhas em touch.
+> - **8–10 anos**: todos os patterns são viáveis. `slider`, `drag`, `sorting` e `matching` funcionam bem em tablet.
+> - **Sempre**: pelo menos uma alternativa **sem som** e uma alternativa **só por toque** disponível.
 
 ## slider
 
@@ -132,3 +137,73 @@ T: "Tocar/arrastar → desenha; seleccionar ferramenta/cor → muda modo"
 C: "Formas geométricas têm propriedades específicas (lados, ângulos)"
 A: "O aluno desenha um triângulo com 3 lados rectos"
 ```
+
+---
+
+## tap-to-cycle
+
+Avançar por opções com um único toque grande. Substitui o `dropdown` e o `slider` para idades em que a motricidade fina ainda está em formação.
+
+**Quando usar:** crianças 4–7, qualquer escolha entre 2–6 estados discretos, ou qualquer ambiente onde teclado/precisão não estão disponíveis.
+
+```yaml
+S: { var: "estacao", type: "tap-cycle", options: ["Primavera","Verão","Outono","Inverno"], default: "Primavera" }
+R: "Botão grande (≥56px alto) com o nome e um ícone da estação atual; seta visual indica que cicla"
+T: "Tocar botão → próxima opção (com wrap-around) → cena actualiza"
+C: "Cada estação tem características visuais distintas"
+A: "O aluno passa pelas 4 estações e identifica a actual quando pedido"
+```
+
+**Adaptação por idade:**
+- 🟢 Apoio (4–6): 2–3 opções, ícone + cor de fundo redundantes ao texto.
+- 🟡 Intermédio (7–8): 3–4 opções, ícone + texto.
+- 🔴 Desafio (9–10): tipicamente preferir `dropdown` ou `slider` para escolhas finas.
+
+**Acessibilidade:** `aria-label="Mudar estação. Atual: <valor>"`. Anunciar mudança em `aria-live="polite"`.
+
+---
+
+## tap-to-place
+
+Tocar na origem, depois tocar no destino. Substitui `drag` para 4–7 anos em touch.
+
+**Quando usar:** organizar/categorizar/posicionar elementos quando o público é jovem ou o dispositivo é tablet escolar com calibração imperfeita.
+
+```yaml
+S: { var: "classificacao", type: "tap-place", sources: ["maçã","cenoura","pão"], buckets: ["fruta","legume","cereal"] }
+R: "Cards grandes em cima; 'caixas' grandes em baixo; selecção realçada com contorno espesso"
+T: "Tocar source (fica destacado) → tocar bucket → card 'voa' para a caixa com transição curta"
+C: "Cada alimento pertence a uma categoria"
+A: "O aluno coloca os 3 alimentos nas categorias certas"
+```
+
+**Adaptação por idade:**
+- 🟢 Apoio (4–6): 2 categorias, ícones grandes, feedback sonoro/visual em cada acerto.
+- 🟡 Intermédio (7–8): 3 categorias.
+- 🔴 Desafio (9–10): também aceitar `drag` real como alternativa.
+
+**Acessibilidade:** após seleção do source, focar primeira caixa; navegação por setas; `Enter` confirma. `aria-live` anuncia "X colocado em Y".
+
+---
+
+## audio-first
+
+Instrução ou questão entregue por áudio antes de qualquer leitura. Para pré-leitores e leitores em formação.
+
+**Quando usar:** sempre que a faixa etária inclua 4–7 anos, ou quando a leitura não é o objetivo de aprendizagem da unidade.
+
+```yaml
+S: { var: "resposta", type: "audio-quiz", audioRef: "audio:pergunta1", options: ["🐶","🐱","🐰"], correct: 1 }
+R: "Botão grande 🔊 'Ouvir pergunta' (≥56px); opções como cards grandes com emoji semântico"
+T: "Tocar 🔊 → áudio toca → tocar opção → feedback visual + áudio curto de confirmação"
+C: "O aluno consegue responder mesmo sem ler"
+A: "O aluno acerta sem suporte textual"
+```
+
+**Notas de implementação:**
+- O áudio pode ser sintetizado em tempo real (`SpeechSynthesisUtterance` com `lang="pt-PT"`) ou pré-gravado em `data:audio` inline para garantir offline.
+- **Sempre** redundante: texto presente, mesmo se opcional; emoji semântico com `aria-label`.
+- **Som opt-in** continua a aplicar-se: o botão 🔊 é a forma do aluno ligar o áudio.
+- Nunca o som é o único portador de significado.
+
+**Acessibilidade:** botão 🔊 com `aria-label="Ouvir pergunta"`. Após resposta, `aria-live` anuncia o resultado em texto.

@@ -407,6 +407,7 @@ Depois validar `activities/<slug>/`, `catalog.json` e só fazer commit/push se o
 - `references/interaction-patterns.md` — padrões de interação.
 - `references/maker-patterns.md` — padrões maker/MEM.
 - `references/ae-index.md` — índice operacional AE/PA.
+- `references/age-adaptation.md` — fonte de verdade por faixa etária (tipografia, motricidade, patterns).
 - `references/srtc-examples.md` — exemplos por idade.
 - `assets/template-base.html` — base HTML.
 - `scripts/*.py` — geração de prompts, markdown e publicação.

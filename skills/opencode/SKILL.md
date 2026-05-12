@@ -10,6 +10,18 @@ metadata:
 
 Esta skill é a camada OpenCode para gerar páginas PageCraft. Ela **não duplica a pedagogia**: reutiliza scripts, identidades e templates de `skills/openclaw/`, mas a fundamentação pedagógica deve ser consultada no vault.
 
+## Ideia operacional partilhada com a skill Claude
+
+A skill Claude é a referência de fidelidade operacional: orquestrador leve, fases especializadas, artefactos explícitos, QA real e routing de reparação. Em OpenCode, copia-se essa **arquitetura de trabalho**, não as mecânicas específicas do Claude Code nem os requisitos ACP/acpx da skill OpenClaw original.
+
+Contrato obrigatório:
+
+- O orquestrador normaliza input, mantém `todos`, coordena fases, integra artefactos e decide routing.
+- O orquestrador **não faz tudo sozinho**: cada fase deve ser delegada quando houver categoria/agente adequado; quando não houver, a fase é executada isoladamente com a identidade respetiva de `skills/openclaw/identities/`.
+- Cada fase produz um artefacto verificável antes da próxima fase avançar.
+- Reparações voltam à fase dona do problema; não se reescreve a página inteira sem necessidade.
+- `skills/openclaw/` é pacote operacional e referência histórica; esta camada não deve exigir ACP/acpx, `agentId` ou runtime OpenClaw como se fossem capacidades OpenCode.
+
 ## Quando usar
 
 Usa esta skill quando o utilizador pedir:
@@ -56,13 +68,15 @@ Se houver conflito: pedido explícito válido do utilizador → `CLAUDE.md` → 
 ## Convenções OpenCode
 
 - Criar `todos` para qualquer run com 2+ fases.
-- Delegar fases especializadas quando fizer sentido:
-  - Architect / Proofreader → `category="writing"`.
-  - Designer / UI/UX / Builder visual → `category="visual-engineering"` com `frontend-ui-ux` se disponível.
-  - Implementação ou iteração longa → `category="deep"`.
-  - Dúvidas arquiteturais/QA pós-implementação significativa → Oracle.
+- Delegar fases especializadas sempre que houver superfície adequada:
+  - Architect → `category="writing"` com `skills/openclaw/identities/architect.md`.
+  - Designer → `category="visual-engineering"` com `skills/openclaw/identities/designer.md`; usar `frontend-ui-ux` se disponível.
+  - Builder → `category="deep"` ou implementação visual conforme a complexidade, com `skills/openclaw/identities/builder.md`.
+  - Proofreader → `category="writing"` com `skills/openclaw/identities/proofreader.md`.
+  - Evaluator/QA → Oracle, browser/QA lane ou categoria mais adequada, com `skills/openclaw/identities/evaluator.md`.
 - Para browser/QA visual, carregar `/playwright` quando disponível e usar verificação real.
 - Não usar instruções específicas OpenClaw como requisito funcional: ACP/acpx, ações de browser próprias do OpenClaw, `agentId` ou runtime ACP.
+- Se a delegação não estiver disponível, executar a fase isoladamente na sessão atual: carregar só a identidade da fase, produzir só o artefacto dessa fase e registar no iteration log que foi fallback sequencial.
 
 ## Ambiente
 
@@ -91,6 +105,29 @@ Normalizar `topic`, `year`, `duration`, `maker`, constraints e `slug`. Se a run 
 - `outputs/lessons/<slug>-run-manifest.json`
 - `outputs/lessons/<slug>-iteration-log.md`
 
+Manifest recomendado:
+
+```json
+{
+  "slug": "<slug>",
+  "topic": "<tema>",
+  "year": "<ano/faixa>",
+  "duration": 45,
+  "maker": "none|lego|minecraft|3d|robotics|whiteboard|...",
+  "max_iterations": 3,
+  "current_iteration": 0,
+  "phases": {
+    "architect": "writing + skills/openclaw/identities/architect.md",
+    "designer": "visual-engineering + skills/openclaw/identities/designer.md",
+    "builder": "deep/implementation + skills/openclaw/identities/builder.md",
+    "proofreader": "writing + skills/openclaw/identities/proofreader.md",
+    "evaluator": "qa/oracle/browser + skills/openclaw/identities/evaluator.md"
+  },
+  "status": "planning|architect|designer|builder|proofreader|evaluator|repair|done|blocked",
+  "artifacts": {}
+}
+```
+
 ### 1. Carregar pedagogia do vault
 
 Antes do DocSpec, consultar:
@@ -118,6 +155,8 @@ Ler:
 
 Produzir JSON válido em `outputs/lessons/<slug>-docspec.json`.
 
+Fronteira: o Architect não gera HTML, não escolhe detalhes finais de UI e não faz QA visual.
+
 ### 3. Designer — design-spec
 
 Ler:
@@ -127,6 +166,8 @@ Ler:
 - `CLAUDE.md`
 
 Produzir `outputs/lessons/<slug>-design-spec.json`. Para M28P, usar rigorosamente a paleta e `syllableColors` do `design-spec.json` da palavra quando existirem.
+
+Fronteira: o Designer não altera currículo/Constraint e não escreve HTML final.
 
 ### 4. Builder — HTML
 
@@ -147,6 +188,8 @@ Ler:
 
 Produzir `outputs/lessons/<slug>.html`. O HTML deve abrir offline e conter CSS/JS inline.
 
+Fronteira: o Builder implementa DocSpec + design-spec; não redefine objetivos curriculares nem declara conclusão sem Proofreader/Evaluator.
+
 ### 5. Guia do professor
 
 Gerar markdown:
@@ -165,6 +208,8 @@ Ler:
 - fontes pedagógicas do vault quando houver dúvida.
 
 Produzir `outputs/lessons/<slug>-proofread-v1.json`. Corrigir problemas textuais no HTML sem regredir a intenção pedagógica.
+
+Fronteira: o Proofreader reporta problemas linguísticos/semânticos; mudanças pedagógicas estruturais voltam ao Architect.
 
 ### 7. Evaluator / QA real
 
@@ -186,6 +231,23 @@ Se falhar, criar repair ticket e rotear:
 - sistema visual → Designer;
 - HTML/CSS/JS/UX/acessibilidade → Builder;
 - texto → Builder com base no Proofreader.
+
+Output recomendado:
+
+```json
+{
+  "pass": true,
+  "route": "builder|designer|architect|proofreader|both|none",
+  "severity": "low|medium|high|critical",
+  "issues": [],
+  "required_fixes": [],
+  "evidence": [],
+  "acceptance_checks": [],
+  "blocked_by": []
+}
+```
+
+O Evaluator não corrige a página; emite veredicto e ticket de reparação.
 
 ## Done
 

@@ -59,6 +59,15 @@ fi
 
 echo "Installing PageCraft skill ($scope scope) into $CLAUDE_ROOT ..."
 
+# Garantir que o conteúdo partilhado deste harness está alinhado com o canónico
+# em skills/openclaw/. Não-op se já estiver alinhado.
+SYNC_SCRIPT="$SCRIPT_DIR/../sync-from-canonical.sh"
+if [[ -f "$SYNC_SCRIPT" ]]; then
+  bash "$SYNC_SCRIPT" >/dev/null || {
+    echo "warn: falhou sync com canónico; a continuar com conteúdo local" >&2
+  }
+fi
+
 mkdir -p "$SKILL_DEST"
 mkdir -p "$AGENTS_DEST"
 
