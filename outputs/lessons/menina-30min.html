@@ -7,17 +7,17 @@
   <style>
     :root {
       --bg: #FFF8F0;
-      --surface: #FFFFFF;
+      --surface: oklch(0.995 0.005 30);
       --primary: #E05FA0;
       --primary-dark: #9F2868;
       --accent: #F59E0B;
       --text: #1E1B18;
-      --ok: #22C55E;
+      --ok: oklch(0.65 0.16 150);
       --warn: #F59E0B;
-      --bad: #EF4444;
-      --support: #22C55E;
-      --standard: #F59E0B;
-      --challenge: #EF4444;
+      --bad: oklch(0.55 0.13 70);
+      --support: oklch(0.78 0.13 150);
+      --standard: oklch(0.72 0.13 195);
+      --challenge: oklch(0.55 0.14 280);
       --syll-me: #E05FA0;
       --syll-ni: #7C3AED;
       --syll-na: #059669;
@@ -48,7 +48,7 @@
       left: -9999px;
       top: 0;
       background: var(--primary);
-      color: #fff;
+      color: var(--surface);
       padding: 0.6rem 1rem;
       border-radius: 0 0 var(--radius) 0;
       font-weight: 800;
@@ -71,8 +71,8 @@
 
     /* Header */
     header.hero {
-      background: linear-gradient(135deg, var(--primary) 0%, #C026D3 50%, var(--accent) 100%);
-      color: #fff;
+      background: var(--surface); border: 3px solid var(--primary);
+      color: var(--surface);
       border-radius: 22px;
       padding: 1.4rem 1.4rem 1.6rem;
       margin-bottom: 1.2rem;
@@ -98,7 +98,7 @@
       border-radius: 50%;
       pointer-events: none;
     }
-    .hero h1 { color: #fff; }
+    .hero h1 { color: var(--surface); }
     .hero .tagline { font-size: 1.05rem; opacity: 0.95; }
     .meta {
       display: flex;
@@ -155,7 +155,7 @@
     }
     .tab {
       border: 2px solid #C8C0BA;
-      background: #fff;
+      background: var(--surface);
       border-radius: 999px;
       min-height: var(--touch);
       min-width: var(--touch);
@@ -205,7 +205,7 @@
     .btn {
       border: 2px solid var(--primary-dark);
       background: var(--primary);
-      color: #fff;
+      color: var(--surface);
       min-height: var(--touch);
       min-width: var(--touch);
       padding: 0.6rem 1.1rem;
@@ -220,7 +220,7 @@
     }
     .btn:hover { transform: scale(1.04); box-shadow: 0 8px 14px rgba(224,95,160,0.34); }
     .btn:active { transform: scale(0.97); }
-    .btn.alt { background: #fff; color: var(--primary-dark); }
+    .btn.alt { background: var(--surface); color: var(--primary-dark); }
     .btn.accent { background: var(--accent); color: var(--text); border-color: #B45309; box-shadow: 0 4px 10px rgba(245,158,11,0.28); }
     .btn.ok { background: var(--ok); border-color: #14532D; box-shadow: 0 4px 10px rgba(34,197,94,0.28); }
     .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
@@ -230,7 +230,7 @@
       height: 56px;
       border-radius: 50%;
       background: var(--accent);
-      color: #fff;
+      color: var(--surface);
       border: 2px solid #B45309;
       display: inline-flex;
       align-items: center;
@@ -244,7 +244,7 @@
     .audio-btn:hover { transform: scale(1.1); }
     .audio-btn:active { transform: scale(0.95); }
 
-    /* Unit 1 — Apresentação */
+    /* Unit 1: Apresentação */
     .word-hero {
       display: grid;
       grid-template-columns: 1fr 1.3fr;
@@ -299,7 +299,7 @@
     }
     .word-card {
       border: 2px solid #B6AAA3;
-      background: #fff;
+      background: var(--surface);
       border-radius: 14px;
       padding: 0.85rem 1.1rem;
       min-height: 64px;
@@ -355,7 +355,7 @@
       min-width: 2.2ch;
       padding: 0.18rem 0.55rem;
       border-radius: 12px;
-      color: #fff;
+      color: var(--surface);
       box-shadow: 0 3px 8px rgba(0,0,0,0.18);
       transition: transform 0.25s ease, outline-color 0.25s ease;
     }
@@ -389,7 +389,7 @@
       min-width: 96px;
       border: 2px dashed #9CA3AF;
       border-radius: 12px;
-      background: #fff;
+      background: var(--surface);
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -402,7 +402,7 @@
     .token {
       font-size: 1.65rem;
       font-weight: 800;
-      color: #fff;
+      color: var(--surface);
       border-radius: 14px;
       padding: 0.45rem 1rem;
       min-width: 76px;
@@ -454,7 +454,7 @@
     .discoveries strong { color: #14532D; }
     .discoveries .item {
       display: inline-block;
-      background: #fff;
+      background: var(--surface);
       border: 2px solid var(--ok);
       border-radius: 999px;
       padding: 0.25rem 0.7rem;
@@ -485,7 +485,7 @@
       min-width: 90px;
       border: 2px dashed #9CA3AF;
       border-radius: 12px;
-      background: #fff;
+      background: var(--surface);
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -505,7 +505,7 @@
     .mini-assess h3 { color: #B45309; }
 
     .assess-item {
-      background: #fff;
+      background: var(--surface);
       border: 2px solid #FDBA74;
       border-radius: 12px;
       padding: 0.7rem 0.9rem;
@@ -525,7 +525,7 @@
       min-width: 130px;
       min-height: var(--touch);
       border: 2px solid #FDBA74;
-      background: #fff;
+      background: var(--surface);
       color: var(--text);
       border-radius: 12px;
       padding: 0.45rem 0.6rem;
@@ -655,7 +655,7 @@
   <div class="wrap" id="main">
     <header class="hero" aria-label="Cabeçalho da aula">
       <h1>Menina · 30 min</h1>
-      <p class="tagline">Método das 28 Palavras — Palavra 1</p>
+      <p class="tagline">Método das 28 Palavras: Palavra 1</p>
       <div class="meta">
         <span class="badge">1.º ano (6-7 anos)</span>
         <span class="badge">30 minutos</span>
@@ -675,14 +675,14 @@
     <div class="diff-master" role="region" aria-label="Seletor de diferenciação geral">
       <span class="lbl">Nível desta aula:</span>
       <div class="tabs" role="tablist" aria-label="Diferenciação global">
-        <button class="tab" data-master-level="support" role="tab" aria-selected="false">🟢 Apoio</button>
-        <button class="tab active" data-master-level="standard" role="tab" aria-selected="true">🟡 Intermédio</button>
-        <button class="tab" data-master-level="challenge" role="tab" aria-selected="false">🔴 Desafio</button>
+        <button class="tab" data-master-level="support" role="tab" aria-selected="false"><span class="leaf" aria-hidden="true" style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:var(--support);vertical-align:middle;margin-right:.3em"></span>Apoio</button>
+        <button class="tab active" data-master-level="standard" role="tab" aria-selected="true"><span class="leaf" aria-hidden="true" style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:var(--standard);vertical-align:middle;margin-right:.3em"></span>Intermédio</button>
+        <button class="tab" data-master-level="challenge" role="tab" aria-selected="false"><span class="leaf" aria-hidden="true" style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:var(--challenge);vertical-align:middle;margin-right:.3em"></span>Desafio</button>
       </div>
-      <span class="hint">Troca quando precisares — o trabalho já feito não se perde.</span>
+      <span class="hint">Troca quando precisares: o trabalho já feito não se perde.</span>
     </div>
 
-    <!-- UNIT 1 — Apresentação global -->
+    <!-- UNIT 1: Apresentação global -->
     <section class="card" id="u1" aria-labelledby="u1-h">
       <h2 id="u1-h"><span class="icon">👧</span>1. A menina sorri <span class="duration">4 min</span></h2>
       <p>Olha bem a imagem, ouve a palavra e descobre o cartão certo.</p>
@@ -730,7 +730,7 @@
       <div class="feedback" id="u1-fb" role="status" aria-live="polite"></div>
     </section>
 
-    <!-- UNIT 2 — Descoberta das sílabas -->
+    <!-- UNIT 2: Descoberta das sílabas -->
     <section class="card" id="u2" aria-labelledby="u2-h">
       <h2 id="u2-h"><span class="icon">👏</span>2. Bater palmas e ordenar <span class="duration">9 min</span></h2>
       <p>Bate palmas com cada parte. Depois, arrasta as sílabas para formar "menina".</p>
@@ -820,7 +820,7 @@
       <div class="feedback" id="u2-fb" role="status" aria-live="polite"></div>
     </section>
 
-    <!-- UNIT 3 — Recombinação silábica -->
+    <!-- UNIT 3: Recombinação silábica -->
     <section class="card" id="u3" aria-labelledby="u3-h">
       <h2 id="u3-h"><span class="icon">🧩</span>3. Inventar palavras novas <span class="duration">9 min</span></h2>
       <p>Escolhe sílabas, junta-as na bandeja e descobre se formam uma palavra real.</p>
@@ -906,7 +906,7 @@
       <div class="feedback" id="u3-fb" role="status" aria-live="polite"></div>
     </section>
 
-    <!-- UNIT 4 — Frase + mini-avaliação -->
+    <!-- UNIT 4: Frase + mini-avaliação -->
     <section class="card" id="u4" aria-labelledby="u4-h">
       <h2 id="u4-h"><span class="icon">⭐</span>4. A frase e as estrelas <span class="duration">8 min</span></h2>
       <p>Constrói a frase, depois faz a mini-avaliação.</p>
@@ -1199,7 +1199,7 @@
       maybePlayU1SupportAudio(level);
     }
 
-    // ===== U1 SUPPORT: auto-play /menina/ once when entering Unit 1 with 🟢 Apoio =====
+    // ===== U1 SUPPORT: auto-play /menina/ once when entering Unit 1 with <span class="leaf" aria-hidden="true" style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:var(--support);vertical-align:middle;margin-right:.3em"></span>Apoio =====
     let u1SupportAudioPlayed = false;
     function maybePlayU1SupportAudio(level) {
       if (level !== 'support') return;

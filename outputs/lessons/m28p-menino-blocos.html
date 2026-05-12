@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Menino · Mundo de blocos</title>
+<style>
+:root {
+  --bg:        oklch(0.97 0.012 95);
+  --surface:   oklch(0.995 0.006 95);
+  --ink:       oklch(0.24 0.02 60);
+  --ink-soft:  oklch(0.42 0.02 60);
+  --earth:     oklch(0.45 0.07 60);
+  --earth-soft:oklch(0.92 0.03 75);
+  --sky:       oklch(0.94 0.04 240);
+  --primary:   oklch(0.45 0.10 160);
+  --primary-soft: oklch(0.94 0.05 160);
+  --accent:    oklch(0.75 0.13 85);
+  --ok:        oklch(0.55 0.12 150);
+  --ok-tint:   oklch(0.95 0.05 150);
+  --warn:      oklch(0.55 0.12 70);
+  --warn-tint: oklch(0.96 0.06 80);
+  --focus:     oklch(0.65 0.18 255);
+  --radius: 16px;
+  --tap: 48px;
+  --maxw: 1050px;
+  --shadow: 0 1px 2px oklch(0.30 0.05 60 / 0.10), 0 6px 18px oklch(0.30 0.05 60 / 0.10);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: 'Atkinson Hyperlegible','Lexend','Nunito','Comic Sans MS','Chalkboard SE',system-ui,-apple-system,sans-serif;
+  background: linear-gradient(var(--sky) 0 220px, var(--bg) 220px);
+  color: var(--ink);
+  font-size: 22px;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+.skip-link {
+  position: absolute; left: -999px;
+  background: var(--primary); color: var(--primary-soft);
+  padding: .7rem 1rem; border-radius: 0 0 12px 0; z-index: 10;
+  font-weight: 800;
+}
+.skip-link:focus { left: 0; outline: 3px solid var(--focus); outline-offset: 3px; }
+.wrap { max-width: var(--maxw); margin: auto; padding: 1rem; }
+header {
+  background: var(--surface);
+  border: 3px solid var(--earth);
+  border-radius: 22px;
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shadow);
+}
+header p.kicker { margin: 0; color: var(--ink-soft); font-weight: 700; }
+h1 { font-size: clamp(2rem,5vw,3.2rem); margin: .25rem 0 .35rem; color: var(--earth); }
+h2 { font-size: clamp(1.3rem,3vw,1.6rem); margin: 0 0 .5rem; color: var(--earth); }
+.routine {
+  display: grid; grid-template-columns: repeat(5,1fr); gap: .5rem; margin: 1rem 0;
+}
+.step {
+  border: 2px solid oklch(0.65 0.02 60);
+  border-radius: 12px;
+  background: var(--surface);
+  min-height: 56px;
+  padding: .55rem .4rem;
+  font-weight: 800;
+  text-align: center;
+  font-size: .95rem;
+  color: var(--ink);
+}
+.step.active { background: var(--primary-soft); border-color: var(--primary); color: var(--primary); }
+main { display: grid; gap: 1rem; }
+.card {
+  background: var(--surface);
+  border: 2px solid var(--earth-soft);
+  border-radius: 20px;
+  padding: 1.1rem 1.25rem;
+}
+.scene { display: grid; grid-template-columns: 180px 1fr; gap: 1rem; align-items: center; }
+.voxel {
+  font-size: 5rem; display: grid; place-items: center;
+  min-height: 160px; border-radius: 18px;
+  background: repeating-linear-gradient(45deg, oklch(0.88 0.07 150) 0 20px, oklch(0.93 0.05 150) 20px 40px);
+  border: 4px solid var(--primary);
+}
+.voxel .emoji {
+  font-family: 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;
+}
+.word { font-size: clamp(2.4rem,8vw,4.8rem); font-weight: 900; letter-spacing: .05em; }
+.syllable-word span {
+  display: inline-block; margin: .15rem; padding: .25rem .55rem; border-radius: 10px;
+  color: var(--surface); font-weight: 900;
+}
+.controls, .blocks, .choices { display: flex; gap: .6rem; flex-wrap: wrap; align-items: center; }
+.btn, .block, .choice, .level {
+  min-height: var(--tap); min-width: var(--tap);
+  border: 3px solid oklch(0.30 0.02 60);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit; font-size: 1rem; font-weight: 800;
+  padding: .6rem 1rem;
+  cursor: pointer; touch-action: manipulation;
+  transition: filter 160ms ease, background-color 160ms ease, border-color 160ms ease;
+}
+.btn:hover, .block:hover, .choice:hover, .level:hover { filter: brightness(1.04); }
+.btn:active, .block:active, .choice:active, .level:active { filter: brightness(0.94); }
+:focus-visible { outline: 4px solid var(--focus); outline-offset: 3px; }
+.btn.primary { background: var(--primary-soft); border-color: var(--primary); color: var(--primary); }
+.btn.secondary { background: var(--warn-tint); border-color: var(--warn); color: var(--warn); }
+.block {
+  font-size: 1.6rem;
+  box-shadow: 0 4px 0 oklch(0.55 0.02 60 / 0.45);
+  color: var(--surface);
+}
+.target {
+  min-height: 76px; border: 3px dashed var(--primary); border-radius: 14px;
+  background: var(--primary-soft); padding: .7rem; margin: .8rem 0;
+  font-size: 1.7rem; font-weight: 900; color: var(--primary);
+}
+.feedback { min-height: 2rem; font-weight: 800; color: var(--warn); }
+.feedback.ok { color: var(--ok); }
+.levels { display: flex; gap: .5rem; flex-wrap: wrap; }
+.level .leaf {
+  display: inline-block; width: 12px; height: 12px; border-radius: 50%;
+  margin-right: .4rem; vertical-align: middle;
+}
+.level[data-level="support"]   .leaf { background: oklch(0.78 0.13 150); }
+.level[data-level="standard"]  .leaf { background: oklch(0.72 0.13 195); }
+.level[data-level="challenge"] .leaf { background: oklch(0.55 0.14 280); }
+.level[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: var(--surface); }
+.level[aria-pressed="true"] .leaf { outline: 2px solid var(--surface); }
+.phrase { font-size: 1.5rem; font-weight: 800; line-height: 1.4; }
+.teacher { font-size: 1rem; background: oklch(0.97 0.02 260); border-color: oklch(0.78 0.03 260); }
+.teacher ul { margin: .4rem 0 .4rem 1.2rem; }
+@media (max-width: 720px) {
+  .routine { grid-template-columns: 1fr; }
+  .scene { grid-template-columns: 1fr; }
+  .voxel { min-height: 120px; }
+  .wrap { padding: .6rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#conteudo">Saltar para a atividade</a>
+<div class="wrap">
+  <header>
+    <p class="kicker"><strong>Método das 28 Palavras</strong> · Mundo de blocos</p>
+    <h1>Palavra: menino</h1>
+    <p>Constrói a palavra com blocos-sílaba. Sem pressa.</p>
+  </header>
+
+  <nav class="routine" aria-label="Rotina da atividade">
+    <div class="step">Ver palavra</div>
+    <div class="step">Partir em sílabas</div>
+    <div class="step">Construir</div>
+    <div class="step">Ler frase</div>
+    <div class="step">Missão final</div>
+  </nav>
+
+  <main id="conteudo">
+    <section class="card scene" aria-labelledby="ver">
+      <div class="voxel" aria-hidden="true"><span class="emoji">👦</span></div>
+      <div>
+        <h2 id="ver">Ver palavra</h2>
+        <div class="word">menino</div>
+        <p>Olha para a palavra e para a imagem. Depois parte a palavra em blocos.</p>
+        <button class="btn primary" id="showSyll">Partir em sílabas</button>
+      </div>
+    </section>
+
+    <section class="card" id="syllables" hidden>
+      <h2>Partir em sílabas</h2>
+      <p class="syllable-word" id="bigword"></p>
+      <p>A palavra tem 3 blocos: <strong>me-ni-no</strong>.</p>
+    </section>
+
+    <section class="card">
+      <h2>Construir</h2>
+      <div class="levels" role="group" aria-label="Escolher nível">
+        <button class="btn level" data-level="support"   aria-pressed="false"><span class="leaf" aria-hidden="true"></span>Apoio</button>
+        <button class="btn level" data-level="standard"  aria-pressed="true"><span class="leaf" aria-hidden="true"></span>Intermédio</button>
+        <button class="btn level" data-level="challenge" aria-pressed="false"><span class="leaf" aria-hidden="true"></span>Desafio</button>
+      </div>
+      <div class="target" id="target" aria-live="polite" role="status"></div>
+      <div class="blocks" id="blocks"></div>
+      <div class="controls">
+        <button class="btn secondary" id="hint">Pista</button>
+        <button class="btn" id="reset">Recomeçar</button>
+      </div>
+      <p id="feedback" class="feedback" aria-live="polite"></p>
+    </section>
+
+    <section class="card">
+      <h2>Ler frase</h2>
+      <p class="phrase">O menino vê a uva.</p>
+      <button class="btn primary" id="readPhrase">Já li a frase</button>
+    </section>
+
+    <section class="card">
+      <h2>Missão final</h2>
+      <p>Escolhe a palavra que construíste.</p>
+      <div class="choices" id="choices"></div>
+      <p><strong>Desafio:</strong> Reconstruir <em>me-ni-no</em> e reconhecer <em>no</em> como bloco final.</p>
+    </section>
+
+    <section class="card teacher">
+      <h2>Guia rápido do professor</h2>
+      <ul>
+        <li>Observar se reconhece a palavra completa.</li>
+        <li>Registar se reconstrói me-ni-no no nível intermédio.</li>
+        <li>Registar ajudas usadas e sinais de cansaço.</li>
+        <li>Não usar som, pressa nem penalização.</li>
+      </ul>
+      <p id="teacher-note">Registo: ainda sem conclusão.</p>
+    </section>
+  </main>
+</div>
+<script>
+const WORD = "menino";
+const SYLL = ["me", "ni", "no"];
+const PHRASE = "O menino v\u00ea a uva.";
+const OPTIONS = ["menino", "menina", "uva"];
+const BLOCK_HUES = ["oklch(0.62 0.13 255)", "oklch(0.58 0.13 25)", "oklch(0.55 0.13 150)", "oklch(0.55 0.13 295)"];
+let picked = [];
+let level = 'standard';
+let hints = 0;
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+function shuffle(a) { return [...a].sort(() => Math.random() - 0.5); }
+function setFeedback(msg, ok=false) {
+  const f = $('#feedback');
+  f.textContent = msg;
+  f.className = 'feedback' + (ok ? ' ok' : '');
+}
+function hueFor(s) { const i = SYLL.indexOf(s); return BLOCK_HUES[i >= 0 ? i : 0]; }
+function renderWord() {
+  $('#bigword').innerHTML = SYLL.map(s => `<span style="background:${hueFor(s)}">${s}</span>`).join('');
+}
+function renderBlocks() {
+  picked = [];
+  $('#target').textContent = 'Toca nos blocos pela ordem.';
+  let arr = level === 'support' ? SYLL.slice() : shuffle(SYLL);
+  if (level === 'challenge' && WORD === 'menina') arr = shuffle([...SYLL, 'no']);
+  if (level === 'challenge' && WORD === 'menino') arr = shuffle([...SYLL, 'na']);
+  if (level === 'challenge' && WORD === 'sapato') arr = shuffle([...SYLL, 'ta']);
+  const box = $('#blocks');
+  box.innerHTML = '';
+  arr.forEach(s => {
+    const b = document.createElement('button');
+    b.className = 'block';
+    b.textContent = s;
+    b.style.background = hueFor(s);
+    b.addEventListener('click', () => pick(s, b));
+    box.appendChild(b);
+  });
+  setFeedback('Constrói a palavra com calma.');
+}
+function pick(s, b) {
+  picked.push(s);
+  b.disabled = true; b.style.opacity = .55;
+  $('#target').textContent = picked.join('-');
+  if (picked.length === SYLL.length) validate();
+}
+function validate() {
+  const ok = picked.join('') === WORD;
+  if (ok) { setFeedback('Boa construção. Agora lê a frase.', true); setStep(3); }
+  else    { setFeedback('Quase! Tenta de novo com Recomeçar, ou pede uma Pista.'); }
+}
+function resetBuild() { renderBlocks(); setStep(2); }
+function showHint() { hints++; $('#target').textContent = 'Pista: ' + SYLL.join('-'); setFeedback('Olha para a ordem dos blocos.'); }
+function setLevel(l) {
+  level = l;
+  $$('.level').forEach(x => x.setAttribute('aria-pressed', x.dataset.level === l ? 'true' : 'false'));
+  renderBlocks();
+}
+function setStep(n) { $$('.step').forEach((x,i) => x.classList.toggle('active', i === n)); }
+function renderChoices() {
+  const c = $('#choices'); c.innerHTML = '';
+  shuffle(OPTIONS).forEach(o => {
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = o;
+    btn.addEventListener('click', () => {
+      if (o === WORD) {
+        setFeedback('Encontraste! Construíste a palavra ' + WORD + '.', true);
+        setStep(4);
+        $('#teacher-note').textContent = `Registo: nível ${level}, ajudas usadas ${hints}, palavra reconstruída ${picked.join('-')}.`;
+      } else {
+        setFeedback('Quase! Procura a palavra que acabaste de construir.');
+      }
+    });
+    c.appendChild(btn);
+  });
+}
+window.addEventListener('DOMContentLoaded', () => {
+  renderWord(); renderBlocks(); renderChoices(); setStep(0);
+  $('#showSyll').addEventListener('click', () => { setStep(1); $('#syllables').hidden = false; });
+  $('#hint').addEventListener('click', showHint);
+  $('#reset').addEventListener('click', resetBuild);
+  $$('.level').forEach(b => b.addEventListener('click', () => setLevel(b.dataset.level)));
+  $('#readPhrase').addEventListener('click', () => { setStep(3); setFeedback('Lê com calma: ' + PHRASE, true); });
+});
+</script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verbos no Indicativo — 3.º Ano | PageCraft</title>
+  <title>Verbos no Indicativo: 3.º Ano | PageCraft</title>
   <style>
     /* ===== DESIGN TOKENS ===== */
     :root {
@@ -59,7 +59,7 @@
       top: -999px;
       left: 1rem;
       background: var(--primary);
-      color: #fff;
+      color: var(--surface);
       padding: 0.5rem 1rem;
       border-radius: 0 0 8px 8px;
       font-weight: 700;
@@ -92,13 +92,15 @@
 
     /* ===== HEADER ===== */
     .page-header {
-      background: linear-gradient(135deg, #0d9488 0%, #7c3aed 100%);
-      color: #fff;
+      background: var(--surface);
+      border: 3px solid var(--primary);
+      color: var(--text);
       border-radius: var(--radius);
-      padding: 2rem;
+      padding: 1.5rem 1.75rem;
       margin-bottom: 2rem;
-      text-align: center;
+      box-shadow: var(--shadow-sm);
     }
+    .page-header h1 { color: var(--primary); }
     .page-header h1 {
       font-size: clamp(1.6rem, 4vw, 2.4rem);
       font-weight: 800;
@@ -111,7 +113,7 @@
     }
     .page-header .objectives {
       text-align: left;
-      background: rgba(255,255,255,0.18);
+      background: oklch(0.97 0.02 180);
       border-radius: 10px;
       padding: 1rem 1.25rem;
       font-size: 0.95rem;
@@ -130,7 +132,7 @@
       border-radius: 999px;
       font-size: 0.85rem;
       font-weight: 700;
-      color: #fff;
+      color: var(--surface);
     }
     .badge-presente  { background: var(--presente); }
     .badge-preterito { background: var(--preterito); }
@@ -157,7 +159,7 @@
     }
     .unit-number {
       background: var(--primary);
-      color: #fff;
+      color: var(--surface);
       font-weight: 800;
       font-size: 1rem;
       min-width: 2.2rem;
@@ -194,7 +196,7 @@
       padding: 0.5rem 1.1rem;
       border-radius: 999px;
       border: 2px solid #ddd;
-      background: #fff;
+      background: var(--surface);
       font-family: var(--font);
       font-size: 0.95rem;
       font-weight: 700;
@@ -206,10 +208,10 @@
       user-select: none;
     }
     .diff-tab:hover { border-color: var(--primary); }
-    .diff-tab.active { border-color: var(--primary); background: var(--primary); color: #fff; }
-    .diff-tab[data-level="support"].active  { background: #16a34a; border-color: #16a34a; }
-    .diff-tab[data-level="standard"].active { background: #ca8a04; border-color: #ca8a04; }
-    .diff-tab[data-level="challenge"].active{ background: #dc2626; border-color: #dc2626; }
+    .diff-tab.active { border-color: var(--primary); background: var(--primary); color: var(--surface); }
+    .diff-tab[data-level="support"].active  { background: oklch(0.55 0.13 150); border-color: oklch(0.55 0.13 150); }
+    .diff-tab[data-level="standard"].active { background: oklch(0.55 0.13 195); border-color: oklch(0.55 0.13 195); }
+    .diff-tab[data-level="challenge"].active{ background: oklch(0.50 0.14 280); border-color: oklch(0.50 0.14 280); }
 
     .diff-content { display: none; }
     .diff-content.active { display: block; }
@@ -245,9 +247,9 @@
     }
     .btn:hover { transform: scale(1.05); }
     .btn:active { transform: scale(0.97); }
-    .btn-primary  { background: var(--primary); color: #fff; }
-    .btn-violet   { background: var(--preterito); color: #fff; }
-    .btn-orange   { background: var(--futuro); color: #fff; }
+    .btn-primary  { background: var(--primary); color: var(--surface); }
+    .btn-violet   { background: var(--preterito); color: var(--surface); }
+    .btn-orange   { background: var(--futuro); color: var(--surface); }
     .btn-neutral  { background: #e5e0d4; color: var(--text); }
     .btn-sm { padding: 0.45rem 1rem; font-size: 0.9rem; min-height: 48px; }
 
@@ -307,7 +309,7 @@
       padding: 0.85rem 1.4rem;
       border-radius: 999px;
       border: 2.5px solid #ddd;
-      background: #fff;
+      background: var(--surface);
       font-family: var(--font);
       font-size: 1rem;
       font-weight: 700;
@@ -320,7 +322,7 @@
     }
     .option-btn:hover { border-color: var(--primary); background: #e6faf8; transform: scale(1.03); }
     .option-btn.correct  { background: #dcfce7; border-color: #16a34a; color: #15803d; }
-    .option-btn.wrong    { background: #fee2e2; border-color: #dc2626; color: #b91c1c; }
+    .option-btn.wrong    { background: oklch(0.96 0.06 80); border-color: oklch(0.55 0.13 70); color: oklch(0.42 0.13 70); }
     .option-btn.disabled { pointer-events: none; opacity: 0.6; }
 
     /* ===== FEEDBACK STRIP ===== */
@@ -334,8 +336,8 @@
       display: none;
       animation: fadeIn 0.2s ease-out;
     }
-    .feedback-strip.correct  { background: #22c55e; color: #fff; display: block; }
-    .feedback-strip.wrong    { background: #f59e0b; color: #fff; display: block; }
+    .feedback-strip.correct  { background: #22c55e; color: var(--surface); display: block; }
+    .feedback-strip.wrong    { background: #f59e0b; color: var(--surface); display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 
     /* ===== MORPHEME SPANS ===== */
@@ -365,7 +367,7 @@
       font-weight: 800;
       font-size: 0.9rem;
       text-align: center;
-      color: #fff;
+      color: var(--surface);
       border-radius: 6px 6px 0 0;
     }
     .paradigm-table th.th-presente   { background: var(--presente); }
@@ -384,9 +386,9 @@
       font-weight: 600;
     }
     .paradigm-table td:hover { background: #e6faf8; transform: scale(1.03); }
-    .paradigm-table td.selected-presente  { background: var(--presente); color: #fff; }
-    .paradigm-table td.selected-preterito { background: var(--preterito); color: #fff; }
-    .paradigm-table td.selected-futuro    { background: var(--futuro); color: #fff; }
+    .paradigm-table td.selected-presente  { background: var(--presente); color: var(--surface); }
+    .paradigm-table td.selected-preterito { background: var(--preterito); color: var(--surface); }
+    .paradigm-table td.selected-futuro    { background: var(--futuro); color: var(--surface); }
     .paradigm-table td.selected-presente .radical,
     .paradigm-table td.selected-preterito .radical,
     .paradigm-table td.selected-futuro .radical { color: #bfdbfe; }
@@ -433,7 +435,7 @@
       padding: 0.5rem 1.1rem;
       border-radius: 999px;
       border: 2px solid #ddd;
-      background: #fff;
+      background: var(--surface);
       font-family: var(--font);
       font-size: 0.95rem;
       font-weight: 700;
@@ -443,9 +445,9 @@
       transition: all 0.15s;
       user-select: none;
     }
-    .toggle-btn[data-tense="Presente"].active    { background: var(--presente); border-color: var(--presente); color: #fff; }
-    .toggle-btn[data-tense="Preterito"].active   { background: var(--preterito); border-color: var(--preterito); color: #fff; }
-    .toggle-btn[data-tense="Futuro"].active      { background: var(--futuro); border-color: var(--futuro); color: #fff; }
+    .toggle-btn[data-tense="Presente"].active    { background: var(--presente); border-color: var(--presente); color: var(--surface); }
+    .toggle-btn[data-tense="Preterito"].active   { background: var(--preterito); border-color: var(--preterito); color: var(--surface); }
+    .toggle-btn[data-tense="Futuro"].active      { background: var(--futuro); border-color: var(--futuro); color: var(--surface); }
     .toggle-btn:hover { border-color: var(--primary); }
 
     /* ===== DROPDOWN ===== */
@@ -504,8 +506,8 @@
       width: 22px; height: 22px;
       border-radius: 50%;
       background: #fecaca;
-      border: 1.5px solid #dc2626;
-      color: #dc2626;
+      border: 1.5px solid oklch(0.55 0.13 70);
+      color: oklch(0.55 0.13 70);
       font-size: 0.75rem;
       font-weight: 800;
       cursor: pointer;
@@ -518,7 +520,7 @@
       left: 50%;
       transform: translateX(-50%);
       background: #1e1b18;
-      color: #fff;
+      color: var(--surface);
       border-radius: 8px;
       padding: 0.5rem 0.75rem;
       font-size: 0.85rem;
@@ -560,7 +562,7 @@
     }
     .form-card:hover { background: #e6faf8; transform: scale(1.05); }
     .form-card.used  { opacity: 0.35; pointer-events: none; }
-    .form-card.wrong-flash { background: #fee2e2; border-color: #dc2626; animation: shake 0.3s ease; }
+    .form-card.wrong-flash { background: oklch(0.96 0.06 80); border-color: oklch(0.55 0.13 70); animation: shake 0.3s ease; }
     @keyframes shake {
       0%,100% { transform: translateX(0); }
       25% { transform: translateX(-6px); }
@@ -581,7 +583,7 @@
       transition: color 0.2s;
     }
     .gap-slot.filled-correct { color: #16a34a; border-color: #16a34a; }
-    .gap-slot.filled-wrong   { color: #dc2626; border-color: #dc2626; }
+    .gap-slot.filled-wrong   { color: oklch(0.55 0.13 70); border-color: oklch(0.55 0.13 70); }
 
     /* ===== MATCHING (Unit 5) ===== */
     .matching-grid {
@@ -611,7 +613,7 @@
     .match-card:hover { border-color: var(--primary); background: #e6faf8; transform: scale(1.02); }
     .match-card.selected { border-color: var(--primary); background: #ccfbf1; }
     .match-card.matched-correct { border-color: #16a34a; background: #dcfce7; color: #15803d; pointer-events: none; }
-    .match-card.matched-wrong   { border-color: #dc2626; background: #fee2e2; color: #b91c1c; pointer-events: none; }
+    .match-card.matched-wrong   { border-color: oklch(0.55 0.13 70); background: oklch(0.96 0.06 80); color: oklch(0.42 0.13 70); pointer-events: none; }
     .match-card.form-card-match { border-color: var(--preterito); background: #ede9fe; }
 
     /* ===== TEXT INPUT (Unit 5 phase 2) ===== */
@@ -630,7 +632,7 @@
     }
     .text-input:focus { border-color: var(--primary); }
     .text-input.correct { border-color: #16a34a; background: #dcfce7; }
-    .text-input.wrong   { border-color: #dc2626; background: #fee2e2; }
+    .text-input.wrong   { border-color: oklch(0.55 0.13 70); background: oklch(0.96 0.06 80); }
 
     /* ===== SCORE BADGE ===== */
     .score-badge {
@@ -724,7 +726,7 @@
     <!-- ===== PAGE HEADER ===== -->
     <header class="page-header" role="banner">
       <h1>Verbos no Indicativo</h1>
-      <p class="meta">3.º ano &nbsp;|&nbsp; 8–9 anos &nbsp;|&nbsp; 30 minutos &nbsp;|&nbsp; Português — Gramática</p>
+      <p class="meta">3.º ano &nbsp;|&nbsp; 8–9 anos &nbsp;|&nbsp; 30 minutos &nbsp;|&nbsp; Português: Gramática</p>
       <div class="objectives" role="note" aria-label="Objectivos da aula">
         <strong>O que vais aprender:</strong>
         <ul>
@@ -743,20 +745,20 @@
         <div class="unit-header">
           <div class="unit-number" aria-hidden="true">1</div>
           <div>
-            <h2 id="unit1-title">Aquecimento — quando acontece a ação?</h2>
+            <h2 id="unit1-title">Aquecimento: quando acontece a ação?</h2>
             <div class="unit-duration">5 minutos</div>
           </div>
         </div>
         <!-- DIFF TABS -->
-        <div class="diff-tabs" role="tablist" aria-label="Nível de dificuldade — Unidade 1">
+        <div class="diff-tabs" role="tablist" aria-label="Nível de dificuldade: Unidade 1">
           <button class="diff-tab" data-level="support" role="tab" aria-selected="false" aria-controls="u1-support" tabindex="0">
-            <span aria-hidden="true">🟢</span> Apoio
+            <span class="leaf" aria-hidden="true" style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:oklch(0.78 0.13 150);vertical-align:middle;margin-right:.3em"></span>Apoio
           </button>
           <button class="diff-tab active" data-level="standard" role="tab" aria-selected="true" aria-controls="u1-standard" tabindex="0">
-            <span aria-hidden="true">🟡</span> Intermédio
+            <span class="leaf" aria-hidden="true" style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:oklch(0.72 0.13 195);vertical-align:middle;margin-right:.3em"></span>Intermédio
           </button>
           <button class="diff-tab" data-level="challenge" role="tab" aria-selected="false" aria-controls="u1-challenge" tabindex="0">
-            <span aria-hidden="true">🔴</span> Desafio
+            <span class="leaf" aria-hidden="true" style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:oklch(0.55 0.14 280);vertical-align:middle;margin-right:.3em"></span>Desafio
           </button>
         </div>
 
@@ -786,7 +788,7 @@
         <div id="u1-standard" class="diff-content active" data-level="standard" role="tabpanel">
           <div class="interactive-area" id="u1m-area">
             <p style="margin-bottom:0.75rem;font-size:0.95rem;color:#555;">
-              Algumas frases não têm pista de tempo — olha para o verbo!
+              Algumas frases não têm pista de tempo: olha para o verbo!
             </p>
             <div class="progress-bar-wrap" aria-label="Progresso">
               <div class="progress-bar-fill" id="u1m-progress" style="width:0%"></div>
@@ -808,7 +810,7 @@
         <div id="u1-challenge" class="diff-content" data-level="challenge" role="tabpanel">
           <div class="interactive-area" id="u1c-area">
             <p style="margin-bottom:0.75rem;font-size:0.95rem;color:#555;">
-              Algumas frases são ambíguas — toca no verbo para ver uma pergunta!
+              Algumas frases são ambíguas: toca no verbo para ver uma pergunta!
             </p>
             <div class="progress-bar-wrap" aria-label="Progresso">
               <div class="progress-bar-fill" id="u1c-progress" style="width:0%"></div>
@@ -832,15 +834,15 @@
         <div class="unit-header">
           <div class="unit-number" aria-hidden="true">2</div>
           <div>
-            <h2 id="unit2-title">Descoberta — as terminações dos verbos regulares</h2>
+            <h2 id="unit2-title">Descoberta: as terminações dos verbos regulares</h2>
             <div class="unit-duration">8 minutos</div>
           </div>
         </div>
         <!-- DIFF TABS -->
-        <div class="diff-tabs" role="tablist" aria-label="Nível de dificuldade — Unidade 2">
-          <button class="diff-tab" data-level="support" role="tab" aria-selected="false" tabindex="0"><span aria-hidden="true">🟢</span> Apoio</button>
-          <button class="diff-tab active" data-level="standard" role="tab" aria-selected="true" tabindex="0"><span aria-hidden="true">🟡</span> Intermédio</button>
-          <button class="diff-tab" data-level="challenge" role="tab" aria-selected="false" tabindex="0"><span aria-hidden="true">🔴</span> Desafio</button>
+        <div class="diff-tabs" role="tablist" aria-label="Nível de dificuldade: Unidade 2">
+          <button class="diff-tab" data-level="support" role="tab" aria-selected="false" tabindex="0"><span class="leaf" aria-hidden="true" style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:oklch(0.78 0.13 150);vertical-align:middle;margin-right:.3em"></span>Apoio</button>
+          <button class="diff-tab active" data-level="standard" role="tab" aria-selected="true" tabindex="0"><span class="leaf" aria-hidden="true" style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:oklch(0.72 0.13 195);vertical-align:middle;margin-right:.3em"></span>Intermédio</button>
+          <button class="diff-tab" data-level="challenge" role="tab" aria-selected="false" tabindex="0"><span class="leaf" aria-hidden="true" style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:oklch(0.55 0.14 280);vertical-align:middle;margin-right:.3em"></span>Desafio</button>
         </div>
 
         <!-- APOIO: tabela reduzida 3 pessoas x 2 tempos -->
@@ -856,13 +858,13 @@
               </select>
               <span class="badge-conj1" id="u2s-badge">1.ª conj. (-ar)</span>
             </div>
-            <div class="big-form-display" id="u2s-display" aria-live="polite">—</div>
+            <div class="big-form-display" id="u2s-display" aria-live="polite">…</div>
             <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.75rem;">
               <span class="legend-chip"><span class="dot-r"></span> radical</span>
               <span class="legend-chip"><span class="dot-t"></span> terminação</span>
             </div>
             <div class="paradigm-table-wrap">
-              <table class="paradigm-table" id="u2s-table" aria-label="Tabela de conjugação — apoio">
+              <table class="paradigm-table" id="u2s-table" aria-label="Tabela de conjugação: apoio">
                 <thead>
                   <tr>
                     <th class="th-pessoa">Pessoa</th>
@@ -898,7 +900,7 @@
               <span class="legend-chip"><span class="dot-t"></span> terminação</span>
             </div>
             <div class="paradigm-table-wrap">
-              <table class="paradigm-table" id="u2m-table" aria-label="Tabela de conjugação — intermédio">
+              <table class="paradigm-table" id="u2m-table" aria-label="Tabela de conjugação: intermédio">
                 <thead>
                   <tr>
                     <th class="th-pessoa">Pessoa</th>
@@ -912,7 +914,7 @@
             </div>
             <!-- Test mode overlay -->
             <div id="u2m-test-area" style="display:none;margin-top:1rem;">
-              <p style="font-weight:700;margin-bottom:0.75rem;">Sem ver a tabela — escreve as terminações de <strong id="u2m-test-verb">cantar</strong> no <strong id="u2m-test-tempo">Presente</strong>:</p>
+              <p style="font-weight:700;margin-bottom:0.75rem;">Sem ver a tabela: escreve as terminações de <strong id="u2m-test-verb">cantar</strong> no <strong id="u2m-test-tempo">Presente</strong>:</p>
               <div id="u2m-test-inputs"></div>
               <div style="margin-top:0.75rem;display:flex;gap:0.5rem;flex-wrap:wrap;">
                 <button class="btn btn-primary btn-sm" onclick="checkUnit2Test()">Verificar</button>
@@ -926,14 +928,14 @@
         <!-- DESAFIO: paradigma em branco do verbo "andar" -->
         <div class="diff-content" data-level="challenge">
           <div class="interactive-area">
-            <p style="font-size:0.95rem;color:#555;margin-bottom:1rem;">Já exploraste a tabela. Agora consegues preencher o paradigma do verbo <strong>andar</strong> — sem ajuda?</p>
+            <p style="font-size:0.95rem;color:#555;margin-bottom:1rem;">Já exploraste a tabela. Agora consegues preencher o paradigma do verbo <strong>andar</strong>: sem ajuda?</p>
             <p style="font-size:0.9rem;color:#888;margin-bottom:1rem;">Clica numa terminação e depois numa célula para a colocar. Usa o que descobriste sobre os verbos em <em>-ar</em>.</p>
             <div style="margin-bottom:1rem;">
               <strong style="font-size:0.9rem;">Terminações disponíveis:</strong>
               <div class="form-bank" id="u2c-bank"></div>
             </div>
             <div class="paradigm-table-wrap">
-              <table class="paradigm-table" id="u2c-table" aria-label="Paradigma em branco — andar">
+              <table class="paradigm-table" id="u2c-table" aria-label="Paradigma em branco: andar">
                 <thead>
                   <tr>
                     <th class="th-pessoa">Pessoa</th>
@@ -959,21 +961,21 @@
         <div class="unit-header">
           <div class="unit-number" aria-hidden="true">3</div>
           <div>
-            <h2 id="unit3-title">Verbos irregulares — ser, ter, ir, fazer</h2>
+            <h2 id="unit3-title">Verbos irregulares: ser, ter, ir, fazer</h2>
             <div class="unit-duration">7 minutos</div>
           </div>
         </div>
         <!-- DIFF TABS -->
-        <div class="diff-tabs" role="tablist" aria-label="Nível de dificuldade — Unidade 3">
-          <button class="diff-tab" data-level="support" role="tab" tabindex="0"><span aria-hidden="true">🟢</span> Apoio</button>
-          <button class="diff-tab active" data-level="standard" role="tab" tabindex="0"><span aria-hidden="true">🟡</span> Intermédio</button>
-          <button class="diff-tab" data-level="challenge" role="tab" tabindex="0"><span aria-hidden="true">🔴</span> Desafio</button>
+        <div class="diff-tabs" role="tablist" aria-label="Nível de dificuldade: Unidade 3">
+          <button class="diff-tab" data-level="support" role="tab" tabindex="0"><span class="leaf" aria-hidden="true" style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:oklch(0.78 0.13 150);vertical-align:middle;margin-right:.3em"></span>Apoio</button>
+          <button class="diff-tab active" data-level="standard" role="tab" tabindex="0"><span class="leaf" aria-hidden="true" style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:oklch(0.72 0.13 195);vertical-align:middle;margin-right:.3em"></span>Intermédio</button>
+          <button class="diff-tab" data-level="challenge" role="tab" tabindex="0"><span class="leaf" aria-hidden="true" style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:oklch(0.55 0.14 280);vertical-align:middle;margin-right:.3em"></span>Desafio</button>
         </div>
 
         <!-- APOIO: 1 irregular, 3 pessoas, 2 tempos -->
         <div class="diff-content" data-level="support">
           <div class="interactive-area">
-            <p style="font-size:0.95rem;color:#555;margin-bottom:1rem;">Compara o verbo <strong>cantar</strong> com o verbo <strong>ser</strong>. O que é diferente? Toca no <span style="color:#dc2626;font-weight:800;">?</span> para saber mais!</p>
+            <p style="font-size:0.95rem;color:#555;margin-bottom:1rem;">Compara o verbo <strong>cantar</strong> com o verbo <strong>ser</strong>. O que é diferente? Toca no <span style="color:oklch(0.55 0.13 70);font-weight:800;">?</span> para saber mais!</p>
             <div class="compare-grid" id="u3s-grid">
               <div class="compare-col regular">
                 <h3>cantar <span class="badge-conj1">regular</span></h3>
@@ -1044,21 +1046,21 @@
         <div class="unit-header">
           <div class="unit-number" aria-hidden="true">4</div>
           <div>
-            <h2 id="unit4-title">Prática — completa as frases</h2>
+            <h2 id="unit4-title">Prática: completa as frases</h2>
             <div class="unit-duration">7 minutos</div>
           </div>
         </div>
         <!-- DIFF TABS -->
-        <div class="diff-tabs" role="tablist" aria-label="Nível de dificuldade — Unidade 4">
-          <button class="diff-tab" data-level="support" role="tab" tabindex="0"><span aria-hidden="true">🟢</span> Apoio</button>
-          <button class="diff-tab active" data-level="standard" role="tab" tabindex="0"><span aria-hidden="true">🟡</span> Intermédio</button>
-          <button class="diff-tab" data-level="challenge" role="tab" tabindex="0"><span aria-hidden="true">🔴</span> Desafio</button>
+        <div class="diff-tabs" role="tablist" aria-label="Nível de dificuldade: Unidade 4">
+          <button class="diff-tab" data-level="support" role="tab" tabindex="0"><span class="leaf" aria-hidden="true" style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:oklch(0.78 0.13 150);vertical-align:middle;margin-right:.3em"></span>Apoio</button>
+          <button class="diff-tab active" data-level="standard" role="tab" tabindex="0"><span class="leaf" aria-hidden="true" style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:oklch(0.72 0.13 195);vertical-align:middle;margin-right:.3em"></span>Intermédio</button>
+          <button class="diff-tab" data-level="challenge" role="tab" tabindex="0"><span class="leaf" aria-hidden="true" style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:oklch(0.55 0.14 280);vertical-align:middle;margin-right:.3em"></span>Desafio</button>
         </div>
 
         <!-- APOIO: 4 frases, 3 opcoes, marcadores sublinhados -->
         <div class="diff-content" data-level="support">
           <div class="interactive-area">
-            <p style="font-size:0.95rem;color:#555;margin-bottom:1rem;">Olha para as palavras <u>sublinhadas</u> — são pistas de tempo!</p>
+            <p style="font-size:0.95rem;color:#555;margin-bottom:1rem;">Olha para as palavras <u>sublinhadas</u>: são pistas de tempo!</p>
             <div class="progress-bar-wrap"><div class="progress-bar-fill" id="u4s-progress" style="width:0%"></div></div>
             <div style="text-align:right;margin-bottom:0.5rem;"><span class="score-badge" id="u4s-score">0 / 4</span></div>
             <div class="sentence-card" id="u4s-card" style="flex-direction:column;gap:0.5rem;" aria-live="polite"></div>
@@ -1118,15 +1120,15 @@
         <div class="unit-header">
           <div class="unit-number" aria-hidden="true">5</div>
           <div>
-            <h2 id="unit5-title">Mini-avaliação — identificar e conjugar</h2>
+            <h2 id="unit5-title">Mini-avaliação: identificar e conjugar</h2>
             <div class="unit-duration">3 minutos</div>
           </div>
         </div>
         <!-- DIFF TABS -->
-        <div class="diff-tabs" role="tablist" aria-label="Nível de dificuldade — Unidade 5">
-          <button class="diff-tab" data-level="support" role="tab" tabindex="0"><span aria-hidden="true">🟢</span> Apoio</button>
-          <button class="diff-tab active" data-level="standard" role="tab" tabindex="0"><span aria-hidden="true">🟡</span> Intermédio</button>
-          <button class="diff-tab" data-level="challenge" role="tab" tabindex="0"><span aria-hidden="true">🔴</span> Desafio</button>
+        <div class="diff-tabs" role="tablist" aria-label="Nível de dificuldade: Unidade 5">
+          <button class="diff-tab" data-level="support" role="tab" tabindex="0"><span class="leaf" aria-hidden="true" style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:oklch(0.78 0.13 150);vertical-align:middle;margin-right:.3em"></span>Apoio</button>
+          <button class="diff-tab active" data-level="standard" role="tab" tabindex="0"><span class="leaf" aria-hidden="true" style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:oklch(0.72 0.13 195);vertical-align:middle;margin-right:.3em"></span>Intermédio</button>
+          <button class="diff-tab" data-level="challenge" role="tab" tabindex="0"><span class="leaf" aria-hidden="true" style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:oklch(0.55 0.14 280);vertical-align:middle;margin-right:.3em"></span>Desafio</button>
         </div>
 
         <!-- APOIO: 3 pares + banco de opcoes em vez de texto livre -->
@@ -1292,7 +1294,7 @@
 
     <!-- ===== CURRICULUM FOOTER ===== -->
     <footer class="curriculum-footer" aria-label="Referências curriculares">
-      <h3>Aprendizagens Essenciais — Português 3.º ano</h3>
+      <h3>Aprendizagens Essenciais: Português 3.º ano</h3>
       <ul>
         <li>Conjugar verbos regulares e irregulares no presente, no pretérito perfeito e no futuro do modo indicativo</li>
         <li>Utilizar apropriadamente os tempos verbais para exprimir anterioridade, posterioridade e simultaneidade</li>
@@ -1309,7 +1311,7 @@
     </footer>
 
     <div class="pagecraft-footer" aria-label="Rodapé">
-      Gerado por <strong>PageCraft</strong> — Página interativa auto-contida &nbsp;|&nbsp; Português 3.º ano &nbsp;|&nbsp; 2026
+      Gerado por <strong>PageCraft</strong>: Página interativa auto-contida &nbsp;|&nbsp; Português 3.º ano &nbsp;|&nbsp; 2026
     </div>
   </div><!-- /page-wrapper -->
 
@@ -1529,7 +1531,7 @@
     // Helper: build morpheme HTML for a regular verb form
     function morphemeHTML(verbo, tempo, pessoaIdx) {
       const d = CONJUGATIONS[verbo];
-      if (!d) return '—';
+      if (!d) return '…';
       const rad = d.radical;
       const term = d[tempo][pessoaIdx];
       return `<span class="radical">${rad}</span><span class="terminacao">${term}</span>`;
@@ -1548,10 +1550,10 @@
     }
 
     /* ============================================================
-       UNIT INIT STUBS — filled in subsequent edits
+       UNIT INIT STUBS: filled in subsequent edits
     ============================================================ */
     /* ============================================================
-       UNIT 1 — Aquecimento
+       UNIT 1: Aquecimento
     ============================================================ */
     const U1_FRASES = {
       support: [
@@ -1679,7 +1681,7 @@
       renderUnit1('challenge');
     }
     /* ============================================================
-       UNIT 2 — Descoberta
+       UNIT 2: Descoberta
     ============================================================ */
     const U2_PESSOAS_SHORT = ['eu','tu','ele/ela','nós','vós','eles/elas'];
     const U2_PESSOAS_APOIO = ['eu','ele/ela','eles/elas'];
@@ -1758,7 +1760,7 @@
         u2UpdateBadge('s', v);
         u2RenderTable('s', v, ['Presente','Preterito'], U2_PESSOAS_APOIO, U2_APOIO_IDX);
         _u2sel.support = null;
-        document.getElementById('u2s-display').innerHTML = '—';
+        document.getElementById('u2s-display').innerHTML = '…';
       };
       sel.addEventListener('change', render);
       render();
@@ -1934,8 +1936,8 @@
           td.style.background = '#dcfce7';
           td.style.borderColor = '#16a34a';
         } else {
-          td.style.background = '#fee2e2';
-          td.style.borderColor = '#dc2626';
+          td.style.background = 'oklch(0.96 0.06 80)';
+          td.style.borderColor = 'oklch(0.55 0.13 70)';
           td.innerHTML = `<span class="radical">and</span><span class="terminacao">${correct}</span>`;
         }
       });
@@ -1967,7 +1969,7 @@
       initU2Challenge();
     }
     /* ============================================================
-       UNIT 3 — Verbos Irregulares
+       UNIT 3: Verbos Irregulares
     ============================================================ */
     const U3_COMPARE_PESSOAS = ['eu','tu','ele/ela','nós','eles/elas'];
     const U3_COMPARE_IDX     = [0, 1, 2, 3, 5]; // indices in full array
@@ -1998,14 +2000,14 @@
         // Show irregular marker if needed
         const markerHTML = irregular
           ? `<span class="irr-marker-wrap" style="position:relative;display:inline-flex;">
-               <span class="irr-marker" tabindex="0" role="button" aria-label="Forma irregular — clica para saber mais">?
-                 <span class="tooltip-box">Este verbo é irregular — o radical muda! Tens de memorizar esta forma.</span>
+               <span class="irr-marker" tabindex="0" role="button" aria-label="Forma irregular: clica para saber mais">?
+                 <span class="tooltip-box">Este verbo é irregular: o radical muda! Tens de memorizar esta forma.</span>
                </span>
              </span>`
           : '';
         row.innerHTML = `<span class="pessoa-label">${p}</span>
           <span style="display:flex;align-items:center;gap:0.35rem;">
-            <strong style="${irregular?'border:1.5px solid #dc2626;border-radius:4px;padding:0 3px;color:#dc2626;':''}">${form}</strong>
+            <strong style="${irregular?'border:1.5px solid oklch(0.55 0.13 70);border-radius:4px;padding:0 3px;color:oklch(0.55 0.13 70);':''}">${form}</strong>
             ${markerHTML}
           </span>`;
         container.appendChild(row);
@@ -2117,7 +2119,7 @@
       renderU3Challenge();
     }
     /* ============================================================
-       UNIT 4 — Prática Guiada
+       UNIT 4: Prática Guiada
     ============================================================ */
     const U4_FRASES_ALL = [
       {
@@ -2363,7 +2365,7 @@
       renderUnit4('challenge');
     }
     /* ============================================================
-       UNIT 5 — Mini-Avaliação
+       UNIT 5: Mini-Avaliação
     ============================================================ */
 
     // Matching pairs data
@@ -2431,7 +2433,7 @@
             rCard.classList.add('matched-correct');
             matched[selectedLeft] = true;
             soundCorrect();
-            announce(`Correto! ${pairs[selectedLeft].form} — ${correctTense}`);
+            announce(`Correto! ${pairs[selectedLeft].form}: ${correctTense}`);
           } else {
             lCardEl.classList.add('matched-wrong');
             rCard.classList.add('matched-wrong');

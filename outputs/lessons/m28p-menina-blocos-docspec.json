@@ -1,0 +1,102 @@
+{
+  "topic": "M28P — menina no mundo de blocos",
+  "ageRange": "6–8 anos, ajustável",
+  "duration": 20,
+  "objectives": [
+    "Reconhecer globalmente a palavra menina associada a imagem/contexto.",
+    "Segmentar menina nas sílabas me-ni-na.",
+    "Reconstruir menina por clique/toque/teclado em blocos-sílaba.",
+    "Ler uma frase curta e realizar uma mini-avaliação observável."
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "1.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Reconhecer palavras, identificar sílabas, estabelecer correspondências grafema-fonema e ler/escrever palavras e frases simples.",
+        "source": "vault/documentos-oficiais/aprendizagens-essenciais/portugues-1-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-F: Desenvolvimento pessoal e autonomia",
+      "PA-D: Pensamento crítico e pensamento criativo"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "mapa visual da rotina",
+      "registo de ajudas usadas",
+      "ficheiro individual de leitura"
+    ],
+    "socialOrganization": "individual com adulto mediador; opcionalmente par com papéis claros"
+  },
+  "materials": [
+    "browser local",
+    "colunas desligadas por defeito",
+    "cartões físicos opcionais com sílabas"
+  ],
+  "sessionFlow": "Ver palavra → Partir em sílabas → Construir → Ler frase → Missão final.",
+  "constraints": {
+    "sensory": "sem áudio por defeito, sem confetti/flashes/temporizador punitivo",
+    "ip": "não usar termos ou assets oficiais; apenas mundo de blocos original",
+    "maker": "none"
+  },
+  "units": [
+    {
+      "summary": "Treino M28P da palavra menina",
+      "textDescription": "A criança vê menina em contexto, descobre as sílabas me-ni-na, reconstrói a palavra e lê uma frase curta.",
+      "duration": 20,
+      "interaction": {
+        "state": [
+          {
+            "name": "nivel",
+            "type": "choice",
+            "options": [
+              "apoio",
+              "intermedio",
+              "desafio"
+            ]
+          },
+          {
+            "name": "silabasEscolhidas",
+            "type": "sequence",
+            "options": [
+              "me",
+              "ni",
+              "na"
+            ]
+          },
+          {
+            "name": "ajudasUsadas",
+            "type": "counter"
+          },
+          {
+            "name": "avaliacaoFinal",
+            "type": "choice",
+            "options": [
+              "menina",
+              "menino",
+              "uva"
+            ]
+          }
+        ],
+        "render": "rotina visual fixa, cartão-palavra, cenário calmo de blocos, blocos-sílaba grandes, frase e missão final.",
+        "transition": "selecionar nível; tocar/clicar sílabas por ordem; pedir pista; recomeçar; validar; escolher resposta final.",
+        "constraint": "a palavra é construída por sílabas numa ordem estável; o aluno descobre a ordem ao testar blocos e comparar com a palavra completa.",
+        "assessment": "completar nível intermédio, reconstruir me-ni-na, ler/selecionar frase e resolver desafio: Distinguir menina de menino e identificar o bloco final na."
+      },
+      "differentiation": {
+        "support": "sílabas ordenadas, modelo visível e botão de pista.",
+        "standard": "sílabas baralhadas, reconstrução autónoma e leitura da frase.",
+        "challenge": "Distinguir menina de menino e identificar o bloco final na."
+      }
+    }
+  ]
+}

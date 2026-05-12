@@ -1,0 +1,33 @@
+{
+  "pass": true,
+  "route": "none",
+  "severity": "low",
+  "issues": [],
+  "required_fixes": [],
+  "evidence": [
+    "html lang pt-PT",
+    "sem rede/CDN/imports",
+    "sem termo visível/proprietário Minecraft",
+    "sem confetti/áudio",
+    "rótulo Ver palavra",
+    "rótulo Partir em sílabas",
+    "rótulo Construir",
+    "rótulo Ler frase",
+    "rótulo Missão final",
+    "controlos >=48px",
+    "foco visível",
+    "reduced motion",
+    "ARIA live + skip link",
+    "JS parse sem erro",
+    "Chrome headless renderizou DOM principal antes do timeout",
+    "Chrome timeout controlado, stdout=9002"
+  ],
+  "acceptance_checks": {
+    "intermedio_path": "sílabas baralhadas e validação por ordem no JS",
+    "hint_reset": "botões Pista e Recomeçar presentes",
+    "keyboard": "controlos button nativos com foco visível",
+    "offline": "sem URLs/imports; render local via Chrome headless",
+    "responsive": "CSS media query max-width 720px"
+  },
+  "browser": "Google Chrome headless --dump-dom com timeout controlado"
+}
