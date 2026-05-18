@@ -1,0 +1,77 @@
+{
+  "pass": true,
+  "route": "none",
+  "severity": "low",
+  "scores": {
+    "factual_accuracy": 5,
+    "constraint_alignment": 5,
+    "differentiation_quality": 5,
+    "ux_accessibility": 4,
+    "visual_design": 4,
+    "technical_quality": 5
+  },
+  "issues": [],
+  "required_fixes": [],
+  "evidence": [
+    {
+      "source": "outputs/lessons/canva-4ano-browser-evidence.json",
+      "summary": "Chrome headless CDP re-opened updated page, executed login/slide/image/tool interactions, checked console errors, and performed offline/static scans."
+    },
+    {
+      "source": "outputs/lessons/canva-4ano-laboratorio-apresentacao-proofread-v1.json",
+      "summary": "Proofreader pass: pt-PT AO90, age-appropriate wording and Canva objectives verified."
+    },
+    {
+      "source": "outputs/lessons/canva-4ano-laboratorio-apresentacao.html",
+      "summary": "Self-contained HTML with inline CSS/JS, no external network dependencies."
+    }
+  ],
+  "acceptance_checks": [
+    {
+      "check": "self-contained/offline scan",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "lang pt-PT",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "skip link and focus CSS",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "touch target token >=48px",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "required Canva objectives visible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "inline JS syntax",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "Chrome headless opens page",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "main interactions: login, slides, image, tools",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "console without critical errors",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "blocked_by": []
+}

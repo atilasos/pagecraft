@@ -1,0 +1,45 @@
+{
+  "palette": {
+    "bg": "#F0FDFA",
+    "surface": "#FFFFFF",
+    "primary": "#0F766E",
+    "accent": "#F59E0B",
+    "text": "#113331",
+    "soft": "#EEF2FF"
+  },
+  "typography": {
+    "fontFamily": "Atkinson Hyperlegible, Lexend, system-ui, -apple-system, Segoe UI, sans-serif",
+    "scale": "kids-4ano",
+    "baseSizePx": 18,
+    "headingSizePx": 30,
+    "weights": [
+      400,
+      700,
+      800
+    ]
+  },
+  "layout": {
+    "borderRadius": 18,
+    "spacing": "comfortable",
+    "maxWidthPx": 1100,
+    "padding": "1.25rem"
+  },
+  "components": {
+    "missionCards": "cards grandes com min-height 48px e estado selecionado",
+    "preview": "área de protótipo com feedback claro",
+    "tabs": "diferenciação por botões ARIA sem depender apenas de cor",
+    "assessment": "checklist formativa observável"
+  },
+  "motion": {
+    "transitions": "subtle",
+    "durationMs": 180,
+    "reducedMotion": "respeitado"
+  },
+  "accessibility": {
+    "contrast": "WCAG-AA",
+    "focusRing": true,
+    "minTouchTarget": "48px",
+    "keyboard": "todos os cartões acionáveis por Enter/Espaço"
+  },
+  "notes": "Visual oficina cooperativa para 4.º ano; sem dependências externas; adequado a quadro interativo e tablet."
+}

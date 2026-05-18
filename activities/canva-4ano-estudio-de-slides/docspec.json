@@ -1,0 +1,169 @@
+{
+  "topic": "Canva na escola — Estúdio de Slides",
+  "ageRange": "9-10 anos (4.º ano do 1.º CEB)",
+  "duration": 45,
+  "objectives": [
+    "Entrar no Canva com a conta escolar @edu.madeira.gov.pt através da opção Microsoft/conta da escola, sem partilhar a palavra-passe.",
+    "Criar uma apresentação nova a partir de um modelo ou de uma página em branco, escolhendo tema, título e sequência de diapositivos.",
+    "Editar uma imagem para apoiar uma ideia: recortar/enquadrar, ajustar brilho/contraste e escrever uma legenda ou texto alternativo simples.",
+    "Usar funcionalidades úteis para projetos: elementos/ícones, gráficos simples, notas do apresentador, comentários/colaboração e modo de apresentação.",
+    "Descobrir que uma boa apresentação não é “muitos enfeites”: cada elemento deve ajudar o público a compreender o projeto."
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "4.º ano",
+        "domain": "Oralidade / Escrita",
+        "descriptor": "Produzir discursos preparados para apresentação a público restrito; usar a escrita para informar, explicar e defender uma opinião pessoal.",
+        "source": "portugues-4-ano-1-ciclo.md"
+      },
+      {
+        "subject": "Estudo do Meio",
+        "year": "4.º ano",
+        "domain": "Tecnologia / CTSA",
+        "descriptor": "Utilizar as TIC no desenvolvimento de pesquisas e na apresentação de trabalhos; relacionar objetos tecnológicos com a evolução da sociedade.",
+        "source": "estudo-do-meio-4-ano-1-ciclo.md"
+      },
+      {
+        "subject": "TIC",
+        "year": "1.º ciclo",
+        "domain": "Criar e inovar / Colaborar e comunicar",
+        "descriptor": "Criar artefactos digitais criativos para exprimir ideias e conhecimentos; colaborar e partilhar produtos desenvolvidos em espaços preparados pela escola.",
+        "source": "tic-1-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-B: Informação e comunicação",
+      "PA-D: Pensamento crítico e pensamento criativo",
+      "PA-E: Relacionamento interpessoal",
+      "PA-F: Desenvolvimento pessoal e autonomia",
+      "PA-H: Sensibilidade estética e artística",
+      "PA-I: Saber científico, técnico e tecnológico"
+    ],
+    "sources": [
+      "~/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md",
+      "~/vault/documentos-oficiais/aprendizagens-essenciais/portugues-4-ano-1-ciclo.md",
+      "~/vault/documentos-oficiais/aprendizagens-essenciais/estudo-do-meio-4-ano-1-ciclo.md",
+      "~/vault/documentos-oficiais/aprendizagens-essenciais/tic-1-ano-1-ciclo.md",
+      "~/vault/documentos-oficiais/2026-03-03-perfil-dos-alunos-saida-escolaridade-obrigatoria.txt"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "Trabalho curricular por projeto",
+      "Trabalho de Estudo Autónomo (TEA)",
+      "Circuitos de comunicação",
+      "Cooperação em pares e pequenos grupos"
+    ],
+    "instruments": [
+      "lista de verificação da equipa",
+      "plano de projeto",
+      "partilha em conselho de turma"
+    ],
+    "socialOrganization": "pares no computador/tablet → grupo pequeno para decisão de projeto → turma para comunicação final"
+  },
+  "materials": [
+    "Computador ou tablet com browser",
+    "Conta escolar @edu.madeira.gov.pt",
+    "Canva aberto pelo professor ou pela turma quando aplicável",
+    "Quadro interativo/projetor",
+    "Ficha rápida para planear 5 diapositivos (opcional)"
+  ],
+  "sessionFlow": "5 min ativação e segurança; 8 min entrada e regras; 12 min criação da estrutura; 12 min edição de imagem; 6 min ferramentas úteis; 2 min bilhete de saída.",
+  "units": [
+    {
+      "summary": "Entrada segura com conta Microsoft da escola",
+      "duration": 8,
+      "textDescription": "Os alunos ordenam os passos de entrada no Canva, reconhecendo que usam a conta escolar @edu.madeira.gov.pt e que a palavra-passe é pessoal.",
+      "interaction": {
+        "state": [
+          {
+            "name": "ordemLogin",
+            "type": "interactive",
+            "default": "por_iniciar"
+          }
+        ],
+        "render": "Cartões clicáveis com passos de entrada e zona “A minha ordem”.",
+        "transition": "Clique/teclado nos cartões para construir a ordem; botão “Verificar”.",
+        "constraint": "A conta da escola identifica o aluno e protege o trabalho; partilhar palavra-passe nunca é necessário para colaborar.",
+        "assessment": "Aluno ordena os passos e explica uma regra de segurança."
+      },
+      "differentiation": {
+        "support": "🟢 Apoio: usa pistas visuais e trabalha com colega-tutor; pode escolher entre menos cartões.",
+        "standard": "🟡 Intermédio: completa a tarefa principal com feedback e explica a escolha em voz alta.",
+        "challenge": "🔴 Desafio: acrescenta uma justificação, melhora a clareza para o público e ajuda outro grupo sem fazer por ele."
+      }
+    },
+    {
+      "summary": "Criar uma apresentação com começo, meio e fim",
+      "duration": 12,
+      "textDescription": "Os alunos escolhem os diapositivos essenciais para iniciar uma apresentação de projeto: capa, pergunta, descoberta, evidência/imagem e conclusão.",
+      "interaction": {
+        "state": [
+          {
+            "name": "estruturaSlides",
+            "type": "interactive",
+            "default": "por_iniciar"
+          }
+        ],
+        "render": "Cartões de diapositivos e pré-visualização numerada.",
+        "transition": "Seleção por clique; o sistema mostra progresso e feedback.",
+        "constraint": "Uma apresentação clara tem sequência: não começa pelos detalhes nem termina sem uma ideia final.",
+        "assessment": "Aluno monta uma sequência com pelo menos quatro diapositivos e justifica uma escolha."
+      },
+      "differentiation": {
+        "support": "🟢 Apoio: usa pistas visuais e trabalha com colega-tutor; pode escolher entre menos cartões.",
+        "standard": "🟡 Intermédio: completa a tarefa principal com feedback e explica a escolha em voz alta.",
+        "challenge": "🔴 Desafio: acrescenta uma justificação, melhora a clareza para o público e ajuda outro grupo sem fazer por ele."
+      }
+    },
+    {
+      "summary": "Editar uma imagem para explicar melhor",
+      "duration": 12,
+      "textDescription": "Os alunos simulam edição de imagem: enquadrar, ajustar brilho/contraste e escrever legenda/texto alternativo para tornar a informação compreensível.",
+      "interaction": {
+        "state": [
+          {
+            "name": "edicaoImagem",
+            "type": "interactive",
+            "default": "por_iniciar"
+          }
+        ],
+        "render": "Imagem ilustrada local em CSS/SVG, controlos de zoom/brilho/contraste, campo de legenda.",
+        "transition": "Sliders e botões alteram a pré-visualização; guardar valida legenda.",
+        "constraint": "Editar imagem não é só decorar: o enquadramento e a legenda devem tornar a ideia mais clara e respeitar a fonte/contexto.",
+        "assessment": "Aluno melhora a imagem e escreve uma legenda informativa."
+      },
+      "differentiation": {
+        "support": "🟢 Apoio: usa pistas visuais e trabalha com colega-tutor; pode escolher entre menos cartões.",
+        "standard": "🟡 Intermédio: completa a tarefa principal com feedback e explica a escolha em voz alta.",
+        "challenge": "🔴 Desafio: acrescenta uma justificação, melhora a clareza para o público e ajuda outro grupo sem fazer por ele."
+      }
+    },
+    {
+      "summary": "Ferramentas úteis para apresentar projetos",
+      "duration": 10,
+      "textDescription": "Os alunos associam ferramentas do Canva a necessidades de projeto: modelos, elementos, gráficos, comentários, notas do apresentador e modo de apresentação.",
+      "interaction": {
+        "state": [
+          {
+            "name": "ferramentasProjeto",
+            "type": "interactive",
+            "default": "por_iniciar"
+          }
+        ],
+        "render": "Cartões de ferramentas e desafios “Preciso de…”.",
+        "transition": "Matching por clique com feedback imediato.",
+        "constraint": "A melhor ferramenta depende do problema de comunicação; nem todos os elementos decorativos melhoram a apresentação.",
+        "assessment": "Aluno faz correspondências e verbaliza quando usaria uma ferramenta."
+      },
+      "differentiation": {
+        "support": "🟢 Apoio: usa pistas visuais e trabalha com colega-tutor; pode escolher entre menos cartões.",
+        "standard": "🟡 Intermédio: completa a tarefa principal com feedback e explica a escolha em voz alta.",
+        "challenge": "🔴 Desafio: acrescenta uma justificação, melhora a clareza para o público e ajuda outro grupo sem fazer por ele."
+      }
+    }
+  ]
+}

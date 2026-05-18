@@ -1,0 +1,45 @@
+{
+  "palette": {
+    "bg": "#FFF7ED",
+    "surface": "#FFFFFF",
+    "primary": "#C2410C",
+    "accent": "#2563EB",
+    "text": "#2B2118",
+    "soft": "#EEF2FF"
+  },
+  "typography": {
+    "fontFamily": "Atkinson Hyperlegible, Lexend, system-ui, -apple-system, Segoe UI, sans-serif",
+    "scale": "kids-4ano",
+    "baseSizePx": 18,
+    "headingSizePx": 30,
+    "weights": [
+      400,
+      700,
+      800
+    ]
+  },
+  "layout": {
+    "borderRadius": 18,
+    "spacing": "comfortable",
+    "maxWidthPx": 1100,
+    "padding": "1.25rem"
+  },
+  "components": {
+    "missionCards": "cards grandes com min-height 48px e estado selecionado",
+    "preview": "área de protótipo com feedback claro",
+    "tabs": "diferenciação por botões ARIA sem depender apenas de cor",
+    "assessment": "checklist formativa observável"
+  },
+  "motion": {
+    "transitions": "subtle",
+    "durationMs": 180,
+    "reducedMotion": "respeitado"
+  },
+  "accessibility": {
+    "contrast": "WCAG-AA",
+    "focusRing": true,
+    "minTouchTarget": "48px",
+    "keyboard": "todos os cartões acionáveis por Enter/Espaço"
+  },
+  "notes": "Visual laboratório digital para 4.º ano; sem dependências externas; adequado a quadro interativo e tablet."
+}
