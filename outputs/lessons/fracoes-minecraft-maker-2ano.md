@@ -1,7 +1,7 @@
 # Frações no Minecraft Maker
 
-**Ano:** 2.º ano, 7-8 anos  
-**Duração:** 30 minutos  
+**Ano:** 2.º ano, 7-8 anos
+**Duração:** 30 minutos
 **Gerado por:** PageCraft 🛠️ — 2026-05-24
 
 ---

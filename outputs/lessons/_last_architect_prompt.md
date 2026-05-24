@@ -504,84 +504,84 @@ tags:
 
 > Fonte: [1_estudo_do_meio.pdf](https://www.dge.mec.pt/sites/default/files/Curriculo/Aprendizagens_Essenciais/1_ciclo/1_estudo_do_meio.pdf)
 
-APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS 
-JULHO DE 2018 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-1.º ANO | 1.º CICLO DO ENSINO BÁSICO 
-ESTUDO DO MEIO 
-INTRODUÇÃO 
-As Aprendizagens Essenciais (AE) de Estudo do Meio visam desenvolver um conjunto de competências de diferentes áreas do 
-saber, nomeadamente Biologia, Física, Geografia, Geologia, História, Química e Tecnologia. 
-Considerando que o Estudo do Meio tem um vasto objeto de estudo, a sua abordagem alicerça-se em conceitos e métodos das 
-várias disciplinas enunciadas, contribuindo para a compreensão progressiva da Sociedade, da Natureza e da Tecnologia, bem 
-como das inter-relações entre estes domínios. Nesta perspetiva, organizaram-se as presentes AE tendo por base as três áreas 
+APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS
+JULHO DE 2018
+
+
+
+
+
+
+
+
+
+
+1.º ANO | 1.º CICLO DO ENSINO BÁSICO
+ESTUDO DO MEIO
+INTRODUÇÃO
+As Aprendizagens Essenciais (AE) de Estudo do Meio visam desenvolver um conjunto de competências de diferentes áreas do
+saber, nomeadamente Biologia, Física, Geografia, Geologia, História, Química e Tecnologia.
+Considerando que o Estudo do Meio tem um vasto objeto de estudo, a sua abordagem alicerça-se em conceitos e métodos das
+várias disciplinas enunciadas, contribuindo para a compreensão progressiva da Sociedade, da Natureza e da Tecnologia, bem
+como das inter-relações entre estes domínios. Nesta perspetiva, organizaram-se as presentes AE tendo por base as três áreas
 Ciência-Tecnologia-Sociedade (CTS).
 
 ---
 
-APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS 
+APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS
 1.º ANO | 1.º CICLO | ESTUDO DO MEIO
- 
-PÁG. 2 
-O documento AE estrutura-se de acordo com os domínios mencionados, sendo que, em cada um são identificados os 
-conhecimentos a adquirir, as capacidades e as atitudes a desenvolver indispensáveis, relevantes e significativos. Também são 
-indicadas, a título exemplificativo, ações estratégicas de ensino orientadas para as áreas de competências definidas no Perfil 
-dos Alunos à Saída da Escolaridade Obrigatória (PA). 
-Assim, ao longo do 1.º ciclo do ensino básico, o aluno deve: 
-a) Adquirir um conhecimento de si próprio, desenvolvendo atitudes de autoestima e de autoconfiança; 
-b) Valorizar a sua identidade e raízes, respeitando o território e o seu ordenamento, outros povos e outras culturas, 
-reconhecendo a diversidade como fonte de aprendizagem para todos; 
-c) Identificar elementos naturais, sociais e tecnológicos do meio envolvente e suas inter-relações;  
-d) Identificar acontecimentos relacionados com a história pessoal e familiar, local e nacional, localizando-os no espaço e 
-no tempo, utilizando diferentes representações cartográficas e unidades de referência temporal; 
-e) Utilizar processos científicos simples na realização de atividades experimentais; 
-f) Reconhecer o contributo da ciência para o progresso tecnológico e para a melhoria da qualidade de vida; 
-g) Manipular, imaginar, criar ou transformar objetos técnicos simples; 
-h) Mobilizar saberes culturais, científicos e tecnológicos para compreender a realidade e para resolver situações e 
-problemas do quotidiano; 
-i) Assumir atitudes e valores que promovam uma participação cívica de forma responsável, solidária e crítica; 
-j) Utilizar as Tecnologias de Informação e Comunicação no desenvolvimento de pesquisas e na apresentação de trabalhos; 
-k) Comunicar adequadamente as suas ideias, através da utilização de diferentes linguagens (oral, escrita, iconográfica, 
-gráfica, matemática, cartográfica, etc.), fundamentando-as e argumentando face às ideias dos outros. 
-Ao iniciar a escolaridade obrigatória, a criança já vivenciou um conjunto de experiências nos diversos contextos em que esteve 
-inserida. A assunção desta realidade significa que a criança traz para a escola ideias, representações e preconceções 
-referentes ao Meio Social, Natural e à Tecnologia, fruto da interação com os pares ou adultos que com ela convivem e da 
+
+PÁG. 2
+O documento AE estrutura-se de acordo com os domínios mencionados, sendo que, em cada um são identificados os
+conhecimentos a adquirir, as capacidades e as atitudes a desenvolver indispensáveis, relevantes e significativos. Também são
+indicadas, a título exemplificativo, ações estratégicas de ensino orientadas para as áreas de competências definidas no Perfil
+dos Alunos à Saída da Escolaridade Obrigatória (PA).
+Assim, ao longo do 1.º ciclo do ensino básico, o aluno deve:
+a) Adquirir um conhecimento de si próprio, desenvolvendo atitudes de autoestima e de autoconfiança;
+b) Valorizar a sua identidade e raízes, respeitando o território e o seu ordenamento, outros povos e outras culturas,
+reconhecendo a diversidade como fonte de aprendizagem para todos;
+c) Identificar elementos naturais, sociais e tecnológicos do meio envolvente e suas inter-relações;
+d) Identificar acontecimentos relacionados com a história pessoal e familiar, local e nacional, localizando-os no espaço e
+no tempo, utilizando diferentes representações cartográficas e unidades de referência temporal;
+e) Utilizar processos científicos simples na realização de atividades experimentais;
+f) Reconhecer o contributo da ciência para o progresso tecnológico e para a melhoria da qualidade de vida;
+g) Manipular, imaginar, criar ou transformar objetos técnicos simples;
+h) Mobilizar saberes culturais, científicos e tecnológicos para compreender a realidade e para resolver situações e
+problemas do quotidiano;
+i) Assumir atitudes e valores que promovam uma participação cívica de forma responsável, solidária e crítica;
+j) Utilizar as Tecnologias de Informação e Comunicação no desenvolvimento de pesquisas e na apresentação de trabalhos;
+k) Comunicar adequadamente as suas ideias, através da utilização de diferentes linguagens (oral, escrita, iconográfica,
+gráfica, matemática, cartográfica, etc.), fundamentando-as e argumentando face às ideias dos outros.
+Ao iniciar a escolaridade obrigatória, a criança já vivenciou um conjunto de experiências nos diversos contextos em que esteve
+inserida. A assunção desta realidade significa que a criança traz para a escola ideias, representações e preconceções
+referentes ao Meio Social, Natural e à Tecnologia, fruto da interação com os pares ou adultos que com ela convivem e da
 exploração dos espaços, dos objetos e dos materiais, conhecimento que importa aprofundar e estruturar.
 
 ---
 
-APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS 
+APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS
 1.º ANO | 1.º CICLO | ESTUDO DO MEIO
- 
-PÁG. 3 
-A operacionalização das aprendizagens do Estudo do Meio implica a contextualização dos temas a tratar. Para tal, considera-se 
-importante que os professores conheçam os contextos locais, que identifiquem situações a partir das quais possam emergir 
-questões-problema que sirvam de base para as aprendizagens a realizar e considerem as aprendizagens previstas nas áreas de 
-conteúdo “Formação Pessoal e Social” e “Conhecimento do Mundo” das Orientações Curriculares para a Educação Pré-Escolar 
-(ME, 2016), privilegiando-se a consolidação de processos de transição entre a educação pré-escolar e o 1.º ciclo. As AE de 
-Estudo do Meio estão associadas a dinâmicas interdisciplinares pela natureza dos temas e conteúdos abrangidos, pelo que a 
-articulação destes saberes com outros, de outras componentes do currículo, potencia a construção de novas aprendizagens. 
-No processo de ensino, devem ser implementadas as ações estratégicas que melhor promovam o desenvolvimento das AE 
-explicitadas neste documento. Neste sentido, revela-se importante: 
-a) Centrar os processos de ensino nos alunos, enquanto agentes ativos na construção do seu próprio conhecimento; 
-b) Tomar como referência o conhecimento prévio dos alunos, os seus interesses e necessidades, valorizando situações do 
-dia a dia e questões de âmbito local, enquanto instrumentos facilitadores da aprendizagem; 
-c) Privilegiar atividades práticas como parte integrante e fundamental do processo de aprendizagem; 
-d) Promover uma abordagem integradora dos conhecimentos, valorizando a compreensão e a interpretação dos processos 
-naturais, sociais e tecnológicos, numa perspetiva Ciência-Tecnologia-Sociedade-Ambiente (CTSA); 
-e) Valorizar a natureza da Ciência, dando continuidade ao desenvolvimento da metodologia científica nas suas diferentes 
-etapas. 
-A gestão deste documento deve promover uma abordagem interdisciplinar, respeitando os temas e o respetivo 
-desenvolvimento e ter em conta a atualidade dos assuntos, os interesses e as características dos alunos, ou ainda questões de 
+
+PÁG. 3
+A operacionalização das aprendizagens do Estudo do Meio implica a contextualização dos temas a tratar. Para tal, considera-se
+importante que os professores conheçam os contextos locais, que identifiquem situações a partir das quais possam emergir
+questões-problema que sirvam de base para as aprendizagens a realizar e considerem as aprendizagens previstas nas áreas de
+conteúdo “Formação Pessoal e Social” e “Conhecimento do Mundo” das Orientações Curriculares para a Educação Pré-Escolar
+(ME, 2016), privilegiando-se a consolidação de processos de transição entre a educação pré-escolar e o 1.º ciclo. As AE de
+Estudo do Meio estão associadas a dinâmicas interdisciplinares pela natureza dos temas e conteúdos abrangidos, pelo que a
+articulação destes saberes com outros, de outras componentes do currículo, potencia a construção de novas aprendizagens.
+No processo de ensino, devem ser implementadas as ações estratégicas que melhor promovam o desenvolvimento das AE
+explicitadas neste documento. Neste sentido, revela-se importante:
+a) Centrar os processos de ensino nos alunos, enquanto agentes ativos na construção do seu próprio conhecimento;
+b) Tomar como referência o conhecimento prévio dos alunos, os seus interesses e necessidades, valorizando situações do
+dia a dia e questões de âmbito local, enquanto instrumentos facilitadores da aprendizagem;
+c) Privilegiar atividades práticas como parte integrante e fundamental do processo de aprendizagem;
+d) Promover uma abordagem integradora dos conhecimentos, valorizando a compreensão e a interpretação dos processos
+naturais, sociais e tecnológicos, numa perspetiva Ciência-Tecnologia-Sociedade-Ambiente (CTSA);
+e) Valorizar a natureza da Ciência, dando continuidade ao desenvolvimento da metodologia científica nas suas diferentes
+etapas.
+A gestão deste documento deve promover uma abordagem interdisciplinar, respeitando os temas e o respetivo
+desenvolvimento e ter em conta a atualidade dos assuntos, os interesses e as características dos alunos, ou ainda questões de
 âmbito local.
 
 ---
@@ -606,86 +606,86 @@ tags:
 
 > Fonte: [2_estudo_do_meio.pdf](https://www.dge.mec.pt/sites/default/files/Curriculo/Aprendizagens_Essenciais/1_ciclo/2_estudo_do_meio.pdf)
 
-APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS 
-JULHO DE 2018 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-2.º ANO | 1.º CICLO DO ENSINO BÁSICO 
-ESTUDO DO MEIO 
-INTRODUÇÃO 
-As Aprendizagens Essenciais (AE) de Estudo do Meio visam desenvolver um conjunto de competências de diferentes áreas do 
-saber, nomeadamente Biologia, Física, Geografia, Geologia, História, Química e Tecnologia. 
-Considerando que o Estudo do Meio tem um vasto objeto de estudo, a sua abordagem alicerça-se em conceitos e métodos das 
-várias disciplinas enunciadas, contribuindo para a compreensão progressiva da Sociedade, da Natureza e da Tecnologia, bem 
-como das inter-relações entre estes domínios. Nesta perspetiva, organizaram-se as presentes AE tendo por base as três áreas 
+APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS
+JULHO DE 2018
+
+
+
+
+
+
+
+
+
+2.º ANO | 1.º CICLO DO ENSINO BÁSICO
+ESTUDO DO MEIO
+INTRODUÇÃO
+As Aprendizagens Essenciais (AE) de Estudo do Meio visam desenvolver um conjunto de competências de diferentes áreas do
+saber, nomeadamente Biologia, Física, Geografia, Geologia, História, Química e Tecnologia.
+Considerando que o Estudo do Meio tem um vasto objeto de estudo, a sua abordagem alicerça-se em conceitos e métodos das
+várias disciplinas enunciadas, contribuindo para a compreensão progressiva da Sociedade, da Natureza e da Tecnologia, bem
+como das inter-relações entre estes domínios. Nesta perspetiva, organizaram-se as presentes AE tendo por base as três áreas
 Ciência-Tecnologia-Sociedade (CTS).
 
 ---
 
-APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS 
+APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS
 2.º ANO | 1.º CICLO | ESTUDO DO MEIO
- 
-PÁG. 2 
-O documento AE estrutura-se de acordo com os domínios mencionados, sendo que, em cada um são identificados os 
-conhecimentos a adquirir, as capacidades e as atitudes a desenvolver indispensáveis, relevantes e significativos. Também são 
-indicadas, a título exemplificativo, ações estratégicas de ensino orientadas para as áreas de competências definidas no Perfil 
-dos Alunos à Saída da Escolaridade Obrigatória (PA). 
-Assim, ao longo do 1.º ciclo do ensino básico, o aluno deve: 
-a) Adquirir um conhecimento de si próprio, desenvolvendo atitudes de autoestima e de autoconfiança;  
-b) Valorizar a sua identidade e raízes, respeitando o território e o seu ordenamento, outros povos e outras culturas, 
-reconhecendo a diversidade como fonte de aprendizagem para todos; 
-c) Identificar elementos naturais, sociais e tecnológicos do meio envolvente e suas inter-relações;  
-d) Identificar acontecimentos relacionados com a história pessoal e familiar, local e nacional, localizando-os no espaço e 
-no tempo, utilizando diferentes representações cartográficas e unidades de referência temporal; 
-e) Utilizar processos científicos simples na realização de atividades experimentais; 
-f) Reconhecer o contributo da ciência para o progresso tecnológico e para a melhoria da qualidade de vida;  
-g) Manipular, imaginar, criar ou transformar objetos técnicos simples; 
-h) Mobilizar saberes culturais, científicos e tecnológicos para compreender a realidade e para resolver situações e 
-problemas do quotidiano; 
-i) Assumir atitudes e valores que promovam uma participação cívica de forma responsável, solidária e crítica; 
-j) Utilizar as Tecnologias de Informação e Comunicação no desenvolvimento de pesquisas e na apresentação de trabalhos; 
-k) Comunicar adequadamente as suas ideias, através da utilização de diferentes linguagens (oral, escrita, iconográfica, 
+
+PÁG. 2
+O documento AE estrutura-se de acordo com os domínios mencionados, sendo que, em cada um são identificados os
+conhecimentos a adquirir, as capacidades e as atitudes a desenvolver indispensáveis, relevantes e significativos. Também são
+indicadas, a título exemplificativo, ações estratégicas de ensino orientadas para as áreas de competências definidas no Perfil
+dos Alunos à Saída da Escolaridade Obrigatória (PA).
+Assim, ao longo do 1.º ciclo do ensino básico, o aluno deve:
+a) Adquirir um conhecimento de si próprio, desenvolvendo atitudes de autoestima e de autoconfiança;
+b) Valorizar a sua identidade e raízes, respeitando o território e o seu ordenamento, outros povos e outras culturas,
+reconhecendo a diversidade como fonte de aprendizagem para todos;
+c) Identificar elementos naturais, sociais e tecnológicos do meio envolvente e suas inter-relações;
+d) Identificar acontecimentos relacionados com a história pessoal e familiar, local e nacional, localizando-os no espaço e
+no tempo, utilizando diferentes representações cartográficas e unidades de referência temporal;
+e) Utilizar processos científicos simples na realização de atividades experimentais;
+f) Reconhecer o contributo da ciência para o progresso tecnológico e para a melhoria da qualidade de vida;
+g) Manipular, imaginar, criar ou transformar objetos técnicos simples;
+h) Mobilizar saberes culturais, científicos e tecnológicos para compreender a realidade e para resolver situações e
+problemas do quotidiano;
+i) Assumir atitudes e valores que promovam uma participação cívica de forma responsável, solidária e crítica;
+j) Utilizar as Tecnologias de Informação e Comunicação no desenvolvimento de pesquisas e na apresentação de trabalhos;
+k) Comunicar adequadamente as suas ideias, através da utilização de diferentes linguagens (oral, escrita, iconográfica,
 gráfica, matemática, cartográfica,etc.), fundamentando-as e argumentando face às ideias dos outros.
 
 ---
 
-APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS 
+APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS
 2.º ANO | 1.º CICLO | ESTUDO DO MEIO
- 
-PÁG. 3 
-No 2.º ano de escolaridade são trabalhados conteúdos relacionados com o conhecimento de si próprio, dos outros e das 
-instituições, do ambiente natural, do seu território de vivência, do tempo histórico pessoal, dos materiais e objetos e das 
-inter-relações entre espaços. Neste ano de escolaridade optou-se por dar continuidade às temáticas previstas para o 1.º ano, 
-sendo que algumas aprendizagens apresentam um grau de complexidade superior. 
-A operacionalização das aprendizagens do Estudo do Meio implica a contextualização dos temas a tratar. Para tal, considera-se 
-importante que os professores conheçam os contextos locais, e que identifiquem situações a partir das quais possam emergir 
-questões-problema que sirvam de base para as aprendizagens a realizar. As AE de Estudo do Meio estão associadas a dinâmicas 
-interdisciplinares pela natureza dos temas e conteúdos abrangidos, pelo que a articulação destes saberes com outros, de outras 
-componentes do currículo, potencia a construção de novas aprendizagens. 
-No processo de ensino, devem ser implementadas as ações estratégicas que melhor promovam o desenvolvimento das AE 
-explicitadas neste documento. Neste sentido, revela-se importante: 
-a) Centrar os processos de ensino nos alunos, enquanto agentes ativos na construção do seu próprio conhecimento; 
-b) Tomar como referência o conhecimento prévio dos alunos, os seus interesses e necessidades, valorizando situações do 
-dia a dia e questões de âmbito local, enquanto instrumentos facilitadores da aprendizagem; 
-c) Privilegiar atividades práticas como parte integrante e fundamental do processo de aprendizagem; 
-d) Promover uma abordagem integradora dos conhecimentos, valorizando a compreensão e a interpretação dos processos 
-naturais, sociais e tecnológicos, numa perspetiva Ciência-Tecnologia-Sociedade-Ambiente (CTSA); 
-e) Valorizar a natureza da Ciência, dando continuidade ao desenvolvimento da metodologia científica nas suas diferentes 
-etapas.  
-A gestão deste documento deve promover uma abordagem interdisciplinar, respeitando os temas e o respetivo 
-desenvolvimento e ter em conta a atualidade dos assuntos, os interesses e as características dos alunos, ou ainda questões de 
+
+PÁG. 3
+No 2.º ano de escolaridade são trabalhados conteúdos relacionados com o conhecimento de si próprio, dos outros e das
+instituições, do ambiente natural, do seu território de vivência, do tempo histórico pessoal, dos materiais e objetos e das
+inter-relações entre espaços. Neste ano de escolaridade optou-se por dar continuidade às temáticas previstas para o 1.º ano,
+sendo que algumas aprendizagens apresentam um grau de complexidade superior.
+A operacionalização das aprendizagens do Estudo do Meio implica a contextualização dos temas a tratar. Para tal, considera-se
+importante que os professores conheçam os contextos locais, e que identifiquem situações a partir das quais possam emergir
+questões-problema que sirvam de base para as aprendizagens a realizar. As AE de Estudo do Meio estão associadas a dinâmicas
+interdisciplinares pela natureza dos temas e conteúdos abrangidos, pelo que a articulação destes saberes com outros, de outras
+componentes do currículo, potencia a construção de novas aprendizagens.
+No processo de ensino, devem ser implementadas as ações estratégicas que melhor promovam o desenvolvimento das AE
+explicitadas neste documento. Neste sentido, revela-se importante:
+a) Centrar os processos de ensino nos alunos, enquanto agentes ativos na construção do seu próprio conhecimento;
+b) Tomar como referência o conhecimento prévio dos alunos, os seus interesses e necessidades, valorizando situações do
+dia a dia e questões de âmbito local, enquanto instrumentos facilitadores da aprendizagem;
+c) Privilegiar atividades práticas como parte integrante e fundamental do processo de aprendizagem;
+d) Promover uma abordagem integradora dos conhecimentos, valorizando a compreensão e a interpretação dos processos
+naturais, sociais e tecnológicos, numa perspetiva Ciência-Tecnologia-Sociedade-Ambiente (CTSA);
+e) Valorizar a natureza da Ciência, dando continuidade ao desenvolvimento da metodologia científica nas suas diferentes
+etapas.
+A gestão deste documento deve promover uma abordagem interdisciplinar, respeitando os temas e o respetivo
+desenvolvimento e ter em conta a atualidade dos assuntos, os interesses e as características dos alunos, ou ainda questões de
 âmbito local.
 
 ---
 
-APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS 
+APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS
 2.º ANO | 1.º CICLO | ESTUDO DO MEIO
 
 ### estudo-do-meio-3-ano-1-ciclo
@@ -708,87 +708,87 @@ tags:
 
 > Fonte: [3_estudo_do_meio.pdf](https://www.dge.mec.pt/sites/default/files/Curriculo/Aprendizagens_Essenciais/1_ciclo/3_estudo_do_meio.pdf)
 
-APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS 
-JULHO DE 2018 
- 
- 
- 
- 
- 
- 
- 
- 
-3.º ANO | 1.º CICLO DO ENSINO BÁSICO 
-ESTUDO DO MEIO 
-INTRODUÇÃO 
-As Aprendizagens Essenciais (AE) de Estudo do Meio visam desenvolver um conjunto de competências de diferentes áreas do 
-saber, nomeadamente Biologia, Física, Geografia, Geologia, História, Química e Tecnologia. 
-Considerando que o Estudo do Meio tem um vasto objeto de estudo, a sua abordagem alicerça-se em conceitos e métodos das 
-várias disciplinas enunciadas, contribuindo para a compreensão progressiva da Sociedade, da Natureza e da Tecnologia, bem 
-como das inter-relações entre estes domínios. Nesta perspetiva, organizaram-se as presentes AE tendo por base as três áreas 
-Ciência-Tecnologia-Sociedade (CTS). 
-O documento AE estrutura-se de acordo com os domínios mencionados, sendo que, em cada um são identificados os 
+APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS
+JULHO DE 2018
+
+
+
+
+
+
+
+
+3.º ANO | 1.º CICLO DO ENSINO BÁSICO
+ESTUDO DO MEIO
+INTRODUÇÃO
+As Aprendizagens Essenciais (AE) de Estudo do Meio visam desenvolver um conjunto de competências de diferentes áreas do
+saber, nomeadamente Biologia, Física, Geografia, Geologia, História, Química e Tecnologia.
+Considerando que o Estudo do Meio tem um vasto objeto de estudo, a sua abordagem alicerça-se em conceitos e métodos das
+várias disciplinas enunciadas, contribuindo para a compreensão progressiva da Sociedade, da Natureza e da Tecnologia, bem
+como das inter-relações entre estes domínios. Nesta perspetiva, organizaram-se as presentes AE tendo por base as três áreas
+Ciência-Tecnologia-Sociedade (CTS).
+O documento AE estrutura-se de acordo com os domínios mencionados, sendo que, em cada um são identificados os
 conhecimentos a adquirir, as capacidades e as atitudes a desenvolver indispensáveis, relevantes e significativos. Também são
 
 ---
 
-APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS 
+APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS
 3.º ANO | 1.º CICLO | ESTUDO DO MEIO
- 
-PÁG. 2 
-indicadas, a título exemplificativo, ações estratégicas de ensino orientadas para as áreas de competências definidas no Perfil 
-dos Alunos à Saída da Escolaridade Obrigatória (PA). 
-Assim, ao longo do 1.º ciclo do ensino básico, o aluno deve: 
-a) Adquirir um conhecimento de si próprio, desenvolvendo atitudes de autoestima e de autoconfiança;  
-b) Valorizar a sua identidade e raízes, respeitando o território e o seu ordenamento, outros povos e outras culturas, 
-reconhecendo a diversidade como fonte de aprendizagem para todos; 
-c) Identificar elementos naturais, sociais e tecnológicos do meio envolvente e suas inter-relações;  
-d) Identificar acontecimentos relacionados com a história pessoal e familiar, local e nacional, localizando-os no espaço e 
-no tempo, utilizando diferentes representações cartográficas e unidades de referência temporal; 
-e) Utilizar processos científicos simples na realização de atividades experimentais; 
-f) Reconhecer o contributo da ciência para o progresso tecnológico e para a melhoria da qualidade de vida;  
-g) Manipular, imaginar, criar ou transformar objetos técnicos simples; 
-h) Mobilizar saberes culturais, científicos e tecnológicos para compreender a realidade e para resolver situações e 
-problemas do quotidiano; 
-i) Assumir atitudes e valores que promovam uma participação cívica de forma responsável, solidária e crítica; 
-j) Utilizar as Tecnologias de Informação e Comunicação no desenvolvimento de pesquisas e na apresentação de trabalhos; 
-k) Comunicar adequadamente as suas ideias, através da utilização de diferentes linguagens (oral, escrita, iconográfica, 
-gráfica, matemática, cartográfica, etc.), fundamentando-as e argumentando face às ideias dos outros. 
-No 3.º ano de escolaridade dá-se continuidade a algumas das temáticas propostas para os 1.º e 2.º anos, apresentando as 
-aprendizagens um maior grau de complexidade. Houve, também, a preocupação de integrar temas atuais, como as questões 
-ambientais e sociais, a importância dos media e os Direitos da Criança. Neste ano de escolaridade, privilegia-se ainda o 
+
+PÁG. 2
+indicadas, a título exemplificativo, ações estratégicas de ensino orientadas para as áreas de competências definidas no Perfil
+dos Alunos à Saída da Escolaridade Obrigatória (PA).
+Assim, ao longo do 1.º ciclo do ensino básico, o aluno deve:
+a) Adquirir um conhecimento de si próprio, desenvolvendo atitudes de autoestima e de autoconfiança;
+b) Valorizar a sua identidade e raízes, respeitando o território e o seu ordenamento, outros povos e outras culturas,
+reconhecendo a diversidade como fonte de aprendizagem para todos;
+c) Identificar elementos naturais, sociais e tecnológicos do meio envolvente e suas inter-relações;
+d) Identificar acontecimentos relacionados com a história pessoal e familiar, local e nacional, localizando-os no espaço e
+no tempo, utilizando diferentes representações cartográficas e unidades de referência temporal;
+e) Utilizar processos científicos simples na realização de atividades experimentais;
+f) Reconhecer o contributo da ciência para o progresso tecnológico e para a melhoria da qualidade de vida;
+g) Manipular, imaginar, criar ou transformar objetos técnicos simples;
+h) Mobilizar saberes culturais, científicos e tecnológicos para compreender a realidade e para resolver situações e
+problemas do quotidiano;
+i) Assumir atitudes e valores que promovam uma participação cívica de forma responsável, solidária e crítica;
+j) Utilizar as Tecnologias de Informação e Comunicação no desenvolvimento de pesquisas e na apresentação de trabalhos;
+k) Comunicar adequadamente as suas ideias, através da utilização de diferentes linguagens (oral, escrita, iconográfica,
+gráfica, matemática, cartográfica, etc.), fundamentando-as e argumentando face às ideias dos outros.
+No 3.º ano de escolaridade dá-se continuidade a algumas das temáticas propostas para os 1.º e 2.º anos, apresentando as
+aprendizagens um maior grau de complexidade. Houve, também, a preocupação de integrar temas atuais, como as questões
+ambientais e sociais, a importância dos media e os Direitos da Criança. Neste ano de escolaridade, privilegia-se ainda o
 aprofundamento do ensino experimental das ciências e das produções/utilizações tecnológicas.
 
 ---
 
-APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS 
+APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS
 3.º ANO | 1.º CICLO | ESTUDO DO MEIO
- 
-PÁG. 3 
-A operacionalização das aprendizagens do Estudo do Meio implica a contextualização dos temas a tratar. Para tal, considera-se 
-importante que os professores conheçam os contextos locais, e que identifiquem situações a partir das quais possam emergir 
-questões-problema que sirvam de base para as aprendizagens a realizar. As AE de Estudo do Meio estão associadas a dinâmicas 
-interdisciplinares pela natureza dos temas e conteúdos abrangidos, pelo que a articulação destes saberes com outros, de outras 
-componentes do currículo, potencia a construção de novas aprendizagens. 
-No processo de ensino, devem ser implementadas as ações estratégicas que melhor promovam o desenvolvimento das AE 
-explicitadas neste documento. Neste sentido, revela-se importante: 
-a) Centrar os processos de ensino nos alunos, enquanto agentes ativos na construção do seu próprio conhecimento; 
-b) Tomar como referência o conhecimento prévio dos alunos, os seus interesses e necessidades, valorizando situações do 
-dia a dia e questões de âmbito local, enquanto instrumentos facilitadores da aprendizagem; 
-c) Privilegiar atividades práticas como parte integrante e fundamental do processo de aprendizagem; 
-d) Promover uma abordagem integradora dos conhecimentos, valorizando a compreensão e a interpretação dos processos 
-naturais, sociais e tecnológicos, numa perspetiva Ciência-Tecnologia-Sociedade-Ambiente (CTSA); 
-e) Valorizar a natureza da Ciência, dando continuidade ao desenvolvimento da metodologia científica nas suas diferentes 
-etapas.  
-A gestão deste documento deve promover uma abordagem interdisciplinar, respeitando os temas e o respetivo 
-desenvolvimento e ter em conta a atualidade dos assuntos, os interesses e as características dos alunos, ou ainda questões de 
+
+PÁG. 3
+A operacionalização das aprendizagens do Estudo do Meio implica a contextualização dos temas a tratar. Para tal, considera-se
+importante que os professores conheçam os contextos locais, e que identifiquem situações a partir das quais possam emergir
+questões-problema que sirvam de base para as aprendizagens a realizar. As AE de Estudo do Meio estão associadas a dinâmicas
+interdisciplinares pela natureza dos temas e conteúdos abrangidos, pelo que a articulação destes saberes com outros, de outras
+componentes do currículo, potencia a construção de novas aprendizagens.
+No processo de ensino, devem ser implementadas as ações estratégicas que melhor promovam o desenvolvimento das AE
+explicitadas neste documento. Neste sentido, revela-se importante:
+a) Centrar os processos de ensino nos alunos, enquanto agentes ativos na construção do seu próprio conhecimento;
+b) Tomar como referência o conhecimento prévio dos alunos, os seus interesses e necessidades, valorizando situações do
+dia a dia e questões de âmbito local, enquanto instrumentos facilitadores da aprendizagem;
+c) Privilegiar atividades práticas como parte integrante e fundamental do processo de aprendizagem;
+d) Promover uma abordagem integradora dos conhecimentos, valorizando a compreensão e a interpretação dos processos
+naturais, sociais e tecnológicos, numa perspetiva Ciência-Tecnologia-Sociedade-Ambiente (CTSA);
+e) Valorizar a natureza da Ciência, dando continuidade ao desenvolvimento da metodologia científica nas suas diferentes
+etapas.
+A gestão deste documento deve promover uma abordagem interdisciplinar, respeitando os temas e o respetivo
+desenvolvimento e ter em conta a atualidade dos assuntos, os interesses e as características dos alunos, ou ainda questões de
 âmbito local.
 
 ---
 
-APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS 
+APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS
 3.º ANO | 1.º CICLO | ESTUDO DO MEIO
- 
+
 
 ### estudo-do-meio-4-ano-1-ciclo
 ---
@@ -810,87 +810,87 @@ tags:
 
 > Fonte: [4_estudo_do_meio.pdf](https://www.dge.mec.pt/sites/default/files/Curriculo/Aprendizagens_Essenciais/1_ciclo/4_estudo_do_meio.pdf)
 
-APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS 
-JULHO DE 2018 
- 
- 
- 
- 
- 
- 
- 
- 
-4.º ANO | 1.º CICLO DO ENSINO BÁSICO 
-ESTUDO DO MEIO 
-INTRODUÇÃO 
-As Aprendizagens Essenciais (AE) de Estudo do Meio visam desenvolver um conjunto de competências de diferentes áreas do 
-saber, nomeadamente Biologia, Física, Geografia, Geologia, História, Química e Tecnologia. 
-Considerando que o Estudo do Meio tem um vasto objeto de estudo, a sua abordagem alicerça-se em conceitos e métodos das 
-várias disciplinas enunciadas, contribuindo para a compreensão progressiva da Sociedade, da Natureza e da Tecnologia, bem 
-como das inter-relações entre estes domínios. Nesta perspetiva, organizaram-se as presentes AE tendo por base as três áreas 
+APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS
+JULHO DE 2018
+
+
+
+
+
+
+
+
+4.º ANO | 1.º CICLO DO ENSINO BÁSICO
+ESTUDO DO MEIO
+INTRODUÇÃO
+As Aprendizagens Essenciais (AE) de Estudo do Meio visam desenvolver um conjunto de competências de diferentes áreas do
+saber, nomeadamente Biologia, Física, Geografia, Geologia, História, Química e Tecnologia.
+Considerando que o Estudo do Meio tem um vasto objeto de estudo, a sua abordagem alicerça-se em conceitos e métodos das
+várias disciplinas enunciadas, contribuindo para a compreensão progressiva da Sociedade, da Natureza e da Tecnologia, bem
+como das inter-relações entre estes domínios. Nesta perspetiva, organizaram-se as presentes AE tendo por base as três áreas
 Ciência-Tecnologia-Sociedade (CTS).
 
 ---
 
-APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS 
+APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS
 4.º ANO | 1.º CICLO | ESTUDO DO MEIO
- 
-PÁG. 2 
-O documento AE estrutura-se de acordo com os domínios mencionados, sendo que, em cada um são identificados os 
-conhecimentos a adquirir, as capacidades e as atitudes a desenvolver indispensáveis, relevantes e significativos. Também são 
-indicadas, a título exemplificativo, ações estratégicas de ensino orientadas para as áreas de competências definidas no Perfil 
-dos Alunos à Saída da Escolaridade Obrigatória (PA). 
-Assim, ao longo do 1.º ciclo do ensino básico, o aluno deve: 
-a) Adquirir um conhecimento de si próprio, desenvolvendo atitudes de autoestima e de autoconfiança;  
-b) Valorizar a sua identidade e raízes, respeitando o território e o seu ordenamento, outros povos e outras culturas, 
-reconhecendo a diversidade como fonte de aprendizagem para todos; 
-c) Identificar elementos naturais, sociais e tecnológicos analógicos e digitais, do meio envolvente e suas inter-relações;  
-d) Identificar acontecimentos relacionados com a história pessoal e familiar, local e nacional, localizando-os no espaço e 
-no tempo, utilizando diferentes representações cartográficas e unidades de referência temporal; 
-e) Utilizar processos científicos simples na realização de atividades experimentais; 
-f) Reconhecer o contributo da ciência para o progresso tecnológico e para a melhoria da qualidade de vida;  
-g) Manipular, imaginar, criar ou transformar objetos técnicos simples; 
-h) Mobilizar saberes culturais, científicos e tecnológicos para compreender a realidade e para resolver situações e 
-problemas do quotidiano; 
+
+PÁG. 2
+O documento AE estrutura-se de acordo com os domínios mencionados, sendo que, em cada um são identificados os
+conhecimentos a adquirir, as capacidades e as atitudes a desenvolver indispensáveis, relevantes e significativos. Também são
+indicadas, a título exemplificativo, ações estratégicas de ensino orientadas para as áreas de competências definidas no Perfil
+dos Alunos à Saída da Escolaridade Obrigatória (PA).
+Assim, ao longo do 1.º ciclo do ensino básico, o aluno deve:
+a) Adquirir um conhecimento de si próprio, desenvolvendo atitudes de autoestima e de autoconfiança;
+b) Valorizar a sua identidade e raízes, respeitando o território e o seu ordenamento, outros povos e outras culturas,
+reconhecendo a diversidade como fonte de aprendizagem para todos;
+c) Identificar elementos naturais, sociais e tecnológicos analógicos e digitais, do meio envolvente e suas inter-relações;
+d) Identificar acontecimentos relacionados com a história pessoal e familiar, local e nacional, localizando-os no espaço e
+no tempo, utilizando diferentes representações cartográficas e unidades de referência temporal;
+e) Utilizar processos científicos simples na realização de atividades experimentais;
+f) Reconhecer o contributo da ciência para o progresso tecnológico e para a melhoria da qualidade de vida;
+g) Manipular, imaginar, criar ou transformar objetos técnicos simples;
+h) Mobilizar saberes culturais, científicos e tecnológicos para compreender a realidade e para resolver situações e
+problemas do quotidiano;
 i) Assumir atitudes e valores que promovam uma participação cívica de forma responsável, solidária e crítica;
 
 ---
 
-APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS 
+APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS
 4.º ANO | 1.º CICLO | ESTUDO DO MEIO
- 
-PÁG. 3 
-j) Utilizar as Tecnologias de Informação e Comunicação no desenvolvimento de pesquisas e na apresentação de trabalhos; 
-k) Comunicar adequadamente as suas ideias, através da utilização de diferentes linguagens (oral, escrita, iconográfica, 
-gráfica, matemática, cartográfica, etc.), fundamentando-as e argumentando face às ideias dos outros. 
-Neste ano de escolaridade, para além de se dar continuidade a algumas das temáticas trabalhadas no 3.º ano, prioriza-se a 
-abordagem de fenómenos naturais, factos e datas relevantes da História de Portugal e elementos relativos à sua Geografia, o 
-património natural e cultural, diferentes tipos de uso do solo, as migrações, contributos da ciência e da tecnologia que 
-concorrem para a qualidade de vida das populações, bem como para a sustentabilidade.  
-A operacionalização das aprendizagens do Estudo do Meio implica a contextualização dos temas a tratar. Para tal, considera-se 
-importante que os professores conheçam os contextos locais, que identifiquem situações a partir das quais possam emergir 
-questões-problema que sirvam de base para as aprendizagens a realizar. As AE de Estudo do Meio estão associadas a dinâmicas 
-interdisciplinares pela natureza dos temas e conteúdos abrangidos, pelo que a articulação destes saberes com outros, de outras 
-componentes do currículo, potencia a construção de novas aprendizagens. 
-No processo de ensino, devem ser implementadas as ações estratégicas que melhor promovam o desenvolvimento das AE 
-explicitadas neste documento. Neste sentido, revela-se importante: 
-a) Centrar os processos de ensino nos alunos, enquanto agentes ativos na construção do seu próprio conhecimento; 
-b) Tomar como referência o conhecimento prévio dos alunos, os seus interesses e necessidades, valorizando situações do 
-dia a dia e questões de âmbito local, enquanto instrumentos facilitadores da aprendizagem; 
+
+PÁG. 3
+j) Utilizar as Tecnologias de Informação e Comunicação no desenvolvimento de pesquisas e na apresentação de trabalhos;
+k) Comunicar adequadamente as suas ideias, através da utilização de diferentes linguagens (oral, escrita, iconográfica,
+gráfica, matemática, cartográfica, etc.), fundamentando-as e argumentando face às ideias dos outros.
+Neste ano de escolaridade, para além de se dar continuidade a algumas das temáticas trabalhadas no 3.º ano, prioriza-se a
+abordagem de fenómenos naturais, factos e datas relevantes da História de Portugal e elementos relativos à sua Geografia, o
+património natural e cultural, diferentes tipos de uso do solo, as migrações, contributos da ciência e da tecnologia que
+concorrem para a qualidade de vida das populações, bem como para a sustentabilidade.
+A operacionalização das aprendizagens do Estudo do Meio implica a contextualização dos temas a tratar. Para tal, considera-se
+importante que os professores conheçam os contextos locais, que identifiquem situações a partir das quais possam emergir
+questões-problema que sirvam de base para as aprendizagens a realizar. As AE de Estudo do Meio estão associadas a dinâmicas
+interdisciplinares pela natureza dos temas e conteúdos abrangidos, pelo que a articulação destes saberes com outros, de outras
+componentes do currículo, potencia a construção de novas aprendizagens.
+No processo de ensino, devem ser implementadas as ações estratégicas que melhor promovam o desenvolvimento das AE
+explicitadas neste documento. Neste sentido, revela-se importante:
+a) Centrar os processos de ensino nos alunos, enquanto agentes ativos na construção do seu próprio conhecimento;
+b) Tomar como referência o conhecimento prévio dos alunos, os seus interesses e necessidades, valorizando situações do
+dia a dia e questões de âmbito local, enquanto instrumentos facilitadores da aprendizagem;
 c) Privilegiar atividades práticas como parte integrante e fundamental do processo de aprendizagem;
 
 ---
 
-APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS 
+APRENDIZAGENS ESSENCIAIS | ARTICULAÇÃO COM O PERFIL DOS ALUNOS
 4.º ANO | 1.º CICLO | ESTUDO DO MEIO
- 
-PÁG. 4 
-d) Promover uma abordagem integradora dos conhecimentos, valorizando a compreensão e a interpretação dos processos 
-naturais, sociais e tecnológicos, numa perspetiva Ciência-Tecnologia-Sociedade-Ambiente (CTSA); 
-e) Valorizar a natureza da Ciência, dando continuidade ao desenvolvimento da metodologia científica nas suas diferentes 
-etapas.  
-A gestão deste documento deve promover uma abordagem interdisciplinar, respeitando os temas e o respetivo 
-desenvolvimento e ter em conta a atualidade dos assuntos, os interesses e as características dos alunos, ou ainda questões de 
+
+PÁG. 4
+d) Promover uma abordagem integradora dos conhecimentos, valorizando a compreensão e a interpretação dos processos
+naturais, sociais e tecnológicos, numa perspetiva Ciência-Tecnologia-Sociedade-Ambiente (CTSA);
+e) Valorizar a natureza da Ciência, dando continuidade ao desenvolvimento da metodologia científica nas suas diferentes
+etapas.
+A gestão deste documento deve promover uma abordagem interdisciplinar, respeitando os temas e o respetivo
+desenvolvimento e ter em conta a atualidade dos assuntos, os interesses e as características dos alunos, ou ainda questões de
 
 ## Schema DocSpec-AM:
 # DocSpec-AM Schema — PageCraft
