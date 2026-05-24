@@ -1,15 +1,15 @@
 {
   "palette": {
-    "bg": "oklch(0.985 0.018 205)",
-    "surface": "oklch(0.995 0.006 205)",
-    "primary": "oklch(0.52 0.16 220)",
-    "accent": "oklch(0.78 0.15 65)",
-    "ink": "oklch(0.22 0.035 245)"
+    "bg": "oklch(0.975 0.026 205)",
+    "surface": "oklch(0.992 0.008 205)",
+    "primary": "oklch(0.46 0.15 225)",
+    "accent": "oklch(0.74 0.15 67)",
+    "ink": "oklch(0.20 0.04 245)"
   },
   "functional": {
-    "ok": "oklch(0.62 0.15 150)",
-    "warn": "oklch(0.72 0.16 82)",
-    "focus": "oklch(0.58 0.20 255)"
+    "ok": "oklch(0.56 0.14 150)",
+    "warn": "oklch(0.70 0.15 82)",
+    "focus": "oklch(0.54 0.20 255)"
   },
   "typography": {
     "fontFamily": "'Atkinson Hyperlegible', 'Lexend', 'Nunito', 'Comic Sans MS', 'Chalkboard SE', system-ui, -apple-system, sans-serif",
@@ -33,12 +33,13 @@
   },
   "components": {
     "buttons": "pill/radius 16px, min-height 48px, strong focus ring",
-    "cards": "surface cards with soft border and shadow, large click areas",
+    "cards": "surface cards with soft border, explicit dark text color, stronger readable tints, large click areas",
     "badges": "rounded role/tool badges with text labels",
     "feedback_correct": "ok tint + ✓ + discovery microcopy",
     "feedback_incorrect": "warn tint + ↻ + hint; never blame the learner",
-    "tabs": "large differentiation buttons with aria-pressed",
-    "visualGuide": "original inline SVG/CSS mockups of Canva-like workflow, labelled as non-official illustrations"
+    "tabs": "large differentiation buttons with aria-pressed; botanical/neutral symbols instead of traffic-light colours",
+    "visualGuide": "original inline SVG/CSS mockups of Canva-like workflow, labelled as non-official illustrations",
+    "progress": "scaleX transform progress bar, avoiding layout-property animation"
   },
   "motion": {
     "transitions": "subtle",
@@ -47,11 +48,11 @@
     "respectReducedMotion": true
   },
   "accessibility": {
-    "contrastBody": "AA",
-    "contrastMicrocopy": "AAA",
+    "contrastBody": "AA verified by darker ink/primary choices",
+    "contrastMicrocopy": "AAA target for feedback, small labels and controls",
     "focusRing": true,
     "minTapPx": 48,
     "soundOptIn": false
   },
-  "notes": "Paleta azul/âmbar associa tecnologia e criatividade sem usar semáforo para níveis. O layout usa cartões amplos para trabalho em grupo no tablet/quadro. As imagens são ilustrações originais inline para manter a página offline e evitar dependência/licença de capturas externas."
+  "notes": "A paleta foi escurecida ligeiramente no texto, botões e primário para corrigir zonas de baixo contraste em sala de aula e em projeção. Os cartões de papéis passaram a usar grelha interna com ícone decorativo separado, evitando sobreposição de texto. Os níveis de diferenciação deixam de usar metáfora semáforo e a barra de progresso anima por transform, não por largura."
 }
