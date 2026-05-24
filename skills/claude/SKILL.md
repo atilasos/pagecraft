@@ -1,6 +1,6 @@
 ---
 name: pagecraft-claude
-description: "Criar páginas PageCraft em Claude Code: aulas HTML self-contained, interativas, pt-PT, acessíveis e verificadas no browser para crianças 4-10 anos, seguindo o fluxo multi-agente PageCraft (Architect → Designer → Builder → Proofreader → Evaluator) com subagentes dedicados do Claude Code (pagecraft-architect, pagecraft-designer, pagecraft-builder, pagecraft-proofreader, pagecraft-evaluator). Usa o vault pedagógico em ~/.openclaw/workspace/vault, DocSpec/SRTC-A, MEM, Aprendizagens Essenciais, Perfil do Aluno, diferenciação obrigatória e extensões Maker quando pedidas. Usar quando o utilizador pedir uma página/aula PageCraft, explorable explanation, atividade digital com sliders/drag/quiz, M28P, ou atividade maker com componente digital."
+description: "Criar páginas PageCraft em Claude Code: aulas HTML self-contained, interativas, pt-PT, acessíveis e verificadas no browser para crianças 4-10 anos, seguindo o fluxo multi-agente PageCraft (Architect → Designer → Builder → Proofreader → Evaluator) com subagentes dedicados do Claude Code (pagecraft-architect, pagecraft-designer, pagecraft-builder, pagecraft-proofreader, pagecraft-evaluator). Usa o vault pedagógico em ~/vault, DocSpec/SRTC-A, MEM, Aprendizagens Essenciais, Perfil do Aluno, diferenciação obrigatória e extensões Maker quando pedidas. Usar quando o utilizador pedir uma página/aula PageCraft, explorable explanation, atividade digital com sliders/drag/quiz, M28P, ou atividade maker com componente digital."
 metadata:
   author: pagecraft
   version: "0.1.0"
@@ -23,8 +23,8 @@ O orquestrador (a sessão principal) coordena, valida artefactos e decide quando
 ## Fontes de verdade
 
 1. Pedido explícito do utilizador/professor, desde que não viole acessibilidade/segurança.
-2. Pedagogia canónica do vault: `~/.openclaw/workspace/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md`.
-3. Fontes oficiais no vault: `~/.openclaw/workspace/vault/documentos-oficiais/`.
+2. Pedagogia canónica do vault: `~/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md`.
+3. Fontes oficiais no vault: `~/vault/documentos-oficiais/`.
 4. Recursos desta skill: `identities/`, `references/`, `assets/`, `scripts/`, `agents/`.
 5. `CLAUDE.md` do repo PageCraft (regras técnicas/design).
 6. Skills irmãs (`skills/codex/`, `skills/openclaw/`) quando existirem no repo, como referência histórica se houver dúvida.
@@ -77,10 +77,10 @@ REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 export PAGECRAFT_WORKSPACE="$REPO_ROOT"
 export PAGECRAFT_REPO="$REPO_ROOT"
 # Vault é opcional. Definir só se existir uma pasta com pedagogia canónica:
-# export PAGECRAFT_VAULT="$HOME/.openclaw/workspace/vault"
+# export PAGECRAFT_VAULT="$HOME/vault"
 ```
 
-Os scripts em `skills/claude/scripts/` auto-detectam a raiz quando invocados de dentro do repo, e fazem fallback gracioso quando o vault não existe (a página continua a poder ser gerada, mas sem citações curriculares).
+Os scripts em `skills/claude/scripts/` auto-detectam a raiz quando invocados de dentro do repo, e fazem fallback gracioso quando o vault não existe (a página continua a poder ser gerada, mas sem citações curriculares). O fallback legacy `~/.openclaw/workspace/vault` é preservado apenas para instalações antigas; o default recomendado é `~/vault`.
 
 Artefactos de trabalho ficam em `outputs/lessons/`.
 
@@ -132,9 +132,9 @@ Manifest mínimo:
 
 Antes do DocSpec, ler pelo menos:
 
-- `~/.openclaw/workspace/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md`
-- documentos oficiais relevantes em `~/.openclaw/workspace/vault/documentos-oficiais/aprendizagens-essenciais/`
-- Perfil dos Alunos em `~/.openclaw/workspace/vault/documentos-oficiais/`
+- `~/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md`
+- documentos oficiais relevantes em `~/vault/documentos-oficiais/aprendizagens-essenciais/`
+- Perfil dos Alunos em `~/vault/documentos-oficiais/`
 - notas MEM/diferenciação/avaliação quando o tema o exigir.
 
 O Architect deve distinguir evidência do vault de inferências próprias e deve citar ficheiros do vault no campo curricular sempre que útil.
@@ -144,7 +144,7 @@ O Architect deve distinguir evidência do vault de inferências próprias e deve
 Gerar prompt base:
 
 ```bash
-PAGECRAFT_WORKSPACE="$REPO_ROOT" PAGECRAFT_VAULT="$HOME/.openclaw/workspace/vault" \
+PAGECRAFT_WORKSPACE="$REPO_ROOT" PAGECRAFT_VAULT="$HOME/vault" \
 python3 skills/claude/scripts/pagecraft.py \
   --topic "<tema>" --year "<ano>" --duration <min> --architect-only \
   --output-dir outputs/lessons
@@ -162,7 +162,7 @@ Agent(
   - outputs/lessons/_last_architect_prompt.md (prompt base)
   - skills/claude/references/docspec-schema.md (schema)
   - skills/claude/references/ae-index.md (AE/PA)
-  - ~/.openclaw/workspace/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md
+  - ~/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md
 
   Pedido normalizado:
   - topic: <tema>

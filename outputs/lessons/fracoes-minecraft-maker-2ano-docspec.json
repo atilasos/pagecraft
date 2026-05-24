@@ -1,0 +1,67 @@
+{
+  "topic": "Frações no Minecraft Maker",
+  "ageRange": "2.º ano, 7-8 anos",
+  "duration": 30,
+  "objectives": [
+    "Reconhecer metades e quartos como partes iguais de um todo.",
+    "Comparar visualmente 1/2, 1/4, 2/4 e 3/4 em grelhas simples.",
+    "Planear uma construção Minecraft com partes iguais e comunicar a estratégia ao grupo."
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Matemática",
+        "year": "2.º ano",
+        "descriptor": "Reconhecer e representar frações unitárias em contextos familiares, com apoio visual."
+      },
+      {
+        "subject": "TIC",
+        "year": "1.º ciclo",
+        "descriptor": "Usar tecnologias digitais para criar, comunicar e resolver problemas de forma colaborativa."
+      }
+    ],
+    "competencies": ["PA-A Linguagens e textos", "PA-B Informação e comunicação", "PA-C Raciocínio e resolução de problemas", "PA-E Relacionamento interpessoal"]
+  },
+  "mem": {
+    "modules": ["trabalho cooperativo", "comunicação", "avaliação formativa"],
+    "instruments": ["plano de equipa", "registo de descobertas", "comunicação final"]
+  },
+  "sessionFlow": [
+    {"time": 5, "phase": "abrir", "teacher": "Apresenta a grelha como um terreno Minecraft dividido em partes iguais."},
+    {"time": 12, "phase": "explorar", "teacher": "Pares testam metades e quartos na página interactiva."},
+    {"time": 8, "phase": "maker", "teacher": "Equipas desenham ou constroem um canteiro Minecraft com uma fração combinada."},
+    {"time": 5, "phase": "comunicar", "teacher": "Cada equipa mostra a fração e explica como sabe que as partes são iguais."}
+  ],
+  "units": [
+    {
+      "summary": "Dividir o terreno em partes iguais",
+      "duration": 12,
+      "textDescription": "A criança escolhe uma fração e vê uma grelha Minecraft ser preenchida por blocos de minério. O desafio é descobrir que a fração só faz sentido quando as partes têm o mesmo tamanho.",
+      "interaction": {
+        "state": [
+          {"name": "fraction", "type": "string", "values": ["1/2", "1/4", "2/4", "3/4"]},
+          {"name": "selectedBlocks", "type": "number", "range": [1, 12]},
+          {"name": "equalParts", "type": "boolean"}
+        ],
+        "render": "Grelha 4x3 com blocos Minecraft; legenda mostra numerador, denominador e partes coloridas.",
+        "transition": "Ao tocar numa fração, a grelha reorganiza os blocos destacados e actualiza a frase de leitura.",
+        "constraint": "O aluno descobre que 2/4 ocupa o mesmo espaço que 1/2 e que quartos exigem quatro partes iguais.",
+        "assessment": "O aluno consegue apontar para a parte pintada, dizer a fração e justificar que as partes são iguais."
+      },
+      "differentiation": {
+        "support": "Usar apenas 1/2 e 1/4 com grelha já dividida.",
+        "standard": "Comparar 1/2, 1/4, 2/4 e 3/4.",
+        "challenge": "Encontrar duas formas de fazer 1/2 na grelha e explicar a equivalência com 2/4."
+      },
+      "maker": {
+        "type": "minecraft",
+        "challenge": "Construir um canteiro 4x4 em Minecraft Education onde metade ou um quarto tenha um material diferente.",
+        "materials": ["Minecraft Education", "blocos de relva", "blocos de flores", "quadro ou papel quadriculado"],
+        "groupSize": "2-3 alunos",
+        "connection": "A grelha digital prepara a construção maker: cada bloco Minecraft representa uma parte do todo.",
+        "communication": "A equipa comunica: 'O nosso todo tem 16 blocos; pintámos 8, por isso é metade.'",
+        "alternatives": ["papel quadriculado", "cubos de encaixe", "desenho no quadro"]
+      }
+    }
+  ]
+}

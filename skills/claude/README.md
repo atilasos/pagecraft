@@ -20,7 +20,7 @@ A sessão principal (orquestrador) coordena, valida artefactos, despacha repair 
 - **Python 3** disponível no PATH (usado pelos scripts de geração de prompts e markdown).
 - **Repo PageCraft** clonado localmente. A skill assume a estrutura do repo (`outputs/lessons/`, `activities/`, `catalog.json`, `CLAUDE.md`).
 - **Opcional — para QA real no browser:** Chrome com a extensão Claude in Chrome, expondo as tools `mcp__claude-in-chrome__*`.
-- **Opcional — para citações curriculares:** uma pasta vault com pedagogia canónica (default: `~/.openclaw/workspace/vault/`). Se não existir, a página continua a ser gerada, mas o DocSpec não cita Aprendizagens Essenciais nem Perfil do Aluno.
+- **Opcional — para citações curriculares:** uma pasta vault com pedagogia canónica (default: `~/vault/`). Se não existir, a página continua a ser gerada, mas o DocSpec não cita Aprendizagens Essenciais nem Perfil do Aluno.
 
 ## Instalação
 
@@ -94,7 +94,7 @@ skills/claude/
 ## Notas operacionais
 
 - **Limite de output do Builder:** páginas com 5+ unidades excedem 32k tokens num único `Write`. O subagente Builder está instruído a escrever um skeleton primeiro e depois expandir cada unit via `Edit` — não tentar reverter para um único Write.
-- **Vault opcional:** se `~/.openclaw/workspace/vault/` não existir, definir `PAGECRAFT_VAULT` para outra pasta ou simplesmente correr sem ele. O Architect adapta-se.
+- **Vault opcional:** se `~/vault/` não existir, definir `PAGECRAFT_VAULT` para outra pasta ou simplesmente correr sem ele. O Architect adapta-se. Instalações antigas em `~/.openclaw/workspace/vault/` continuam como fallback de compatibilidade.
 - **Browser para Evaluator:** se as tools `mcp__claude-in-chrome__*` não estiverem disponíveis, o Evaluator falha. Nesse caso, executar QA manualmente e descrever as evidências ao orquestrador.
 - **Override de modelo por chamada:** para Builds invulgarmente pesados, passar `model: "opus"` no `Agent` Builder. Para repairs triviais, `model: "haiku"`.
 

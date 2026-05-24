@@ -15,7 +15,7 @@ Rever o HTML gerado pelo Builder e emitir um relatório estruturado com todos os
 ## Inputs esperados
 - `outputs/lessons/<slug>.html` (Builder).
 - `outputs/lessons/<slug>-docspec.json` (Architect).
-- Quando útil, fontes do vault em `~/.openclaw/workspace/vault/`.
+- Quando útil, fontes do vault em `~/vault/`.
 
 ## O que verificas (por ordem de prioridade)
 

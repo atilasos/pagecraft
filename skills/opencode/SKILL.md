@@ -1,6 +1,6 @@
 ---
 name: pagecraft
-description: Gerar páginas PageCraft em OpenCode/Oh My OpenAgents: aulas HTML self-contained, interativas, pt-PT, acessíveis e verificadas no browser. Usa a skill PageCraft original em `skills/openclaw/` como pacote operacional, mas consulta o conhecimento pedagógico canónico no vault `~/.openclaw/workspace/vault`.
+description: Gerar páginas PageCraft em OpenCode/Oh My OpenAgents: aulas HTML self-contained, interativas, pt-PT, acessíveis e verificadas no browser. Usa a skill PageCraft original em `skills/openclaw/` como pacote operacional, mas consulta o conhecimento pedagógico canónico no vault `~/vault`.
 metadata:
   author: pagecraft
   version: "0.2.0"
@@ -38,10 +38,10 @@ Não usar para páginas estáticas simples sem componente pedagógica/interativa
 
 1. **Regras técnicas e design do repo:** `AGENTS.md`, `CLAUDE.md`, `README.md` ou equivalente quando existir.
 2. **Pacote operacional PageCraft:** `skills/openclaw/`.
-3. **Conhecimento pedagógico canónico:** `~/.openclaw/workspace/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md`.
-4. **Fontes oficiais no vault:** `~/.openclaw/workspace/vault/documentos-oficiais/`.
+3. **Conhecimento pedagógico canónico:** `~/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md`.
+4. **Fontes oficiais no vault:** `~/vault/documentos-oficiais/`.
 
-Se houver conflito: pedido explícito válido do utilizador → regras técnicas/design do repo → vault → identidades/referências de `skills/openclaw/`.
+Se houver conflito: pedido explícito válido do utilizador → regras técnicas/design do repo → vault → identidades/referências de `skills/openclaw/`. O fallback legacy `~/.openclaw/workspace/vault` só deve ser usado quando `~/vault` e overrides não existirem.
 
 ## Recursos reutilizados da skill PageCraft original
 
@@ -91,7 +91,7 @@ Ao correr scripts, exportar:
 ```bash
 PAGECRAFT_WORKSPACE="$REPO_ROOT"
 PAGECRAFT_REPO="$REPO_ROOT"
-PAGECRAFT_VAULT="$HOME/.openclaw/workspace/vault"
+PAGECRAFT_VAULT="$HOME/vault"
 ```
 
 Artefactos temporários devem ficar em `outputs/lessons/` dentro do repo, salvo pedido contrário.
@@ -132,8 +132,8 @@ Manifest recomendado:
 
 Antes do DocSpec, consultar:
 
-- `~/.openclaw/workspace/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md`
-- documentos oficiais relevantes em `~/.openclaw/workspace/vault/documentos-oficiais/`
+- `~/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md`
+- documentos oficiais relevantes em `~/vault/documentos-oficiais/`
 - notas MEM/diferenciação/avaliação quando o tema o exigir.
 
 O DocSpec deve citar fontes do vault no campo curricular sempre que possível.
@@ -143,7 +143,7 @@ O DocSpec deve citar fontes do vault no campo curricular sempre que possível.
 Gerar prompt base:
 
 ```bash
-PAGECRAFT_WORKSPACE="$REPO_ROOT" PAGECRAFT_VAULT="$HOME/.openclaw/workspace/vault" \
+PAGECRAFT_WORKSPACE="$REPO_ROOT" PAGECRAFT_VAULT="$HOME/vault" \
 python3 skills/openclaw/scripts/pagecraft.py --topic "<tema>" --year "<ano>" --duration <min> --architect-only
 ```
 

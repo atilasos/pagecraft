@@ -25,7 +25,7 @@ Gerar especificações pedagógicas (DocSpec-AM) que sejam:
 - `topic`, `year/ageRange`, `duration`, `maker`, restrições adicionais.
 - `slug` proposto e caminho de output: `outputs/lessons/<slug>-docspec.json`.
 - Caminho do prompt base gerado pelo `scripts/pagecraft.py --architect-only`: `outputs/lessons/_last_architect_prompt.md`.
-- Caminho da pedagogia canónica: `~/.openclaw/workspace/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md` e `documentos-oficiais/`.
+- Caminho da pedagogia canónica: `~/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md` e `~/vault/documentos-oficiais/`.
 - Schema do DocSpec: `skills/claude/references/docspec-schema.md`.
 
 ## Procedimento

@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Frações no Minecraft Maker</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      --bg: oklch(0.97 0.018 112);
+      --surface: oklch(0.995 0.01 95);
+      --text: oklch(0.22 0.025 130);
+      --muted: oklch(0.43 0.04 130);
+      --primary: oklch(0.48 0.13 145);
+      --secondary: oklch(0.62 0.12 72);
+      --accent: oklch(0.61 0.16 35);
+      --water: oklch(0.67 0.12 230);
+      --stone: oklch(0.76 0.025 110);
+      --soil: oklch(0.53 0.09 63);
+      --line: oklch(0.72 0.045 120);
+      --shadow: 0 18px 40px oklch(0.28 0.04 130 / 0.16);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        linear-gradient(90deg, oklch(0.92 0.025 112) 1px, transparent 1px),
+        linear-gradient(0deg, oklch(0.92 0.025 112) 1px, transparent 1px),
+        var(--bg);
+      background-size: 32px 32px;
+      font-family: Nunito, "Comic Sans MS", "Chalkboard SE", system-ui, sans-serif;
+      font-size: 20px;
+      line-height: 1.45;
+    }
+
+    a.skip-link {
+      position: absolute;
+      left: 16px;
+      top: -80px;
+      z-index: 10;
+      padding: 12px 16px;
+      border-radius: 12px;
+      color: oklch(0.99 0.01 120);
+      background: var(--primary);
+    }
+
+    a.skip-link:focus { top: 16px; }
+
+    button:focus-visible, input:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 28px 0 14px;
+      background: oklch(0.94 0.04 118);
+      border-bottom: 4px solid oklch(0.55 0.1 140);
+    }
+
+    .topline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 18px 0 10px;
+      font-size: clamp(2.1rem, 6vw, 4.4rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .badge, .level-tab, .fraction-button {
+      min-height: 48px;
+      border: 2px solid oklch(0.55 0.08 130);
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 800;
+    }
+
+    .badge {
+      padding: 8px 14px;
+      background: var(--surface);
+    }
+
+    .intro {
+      max-width: 760px;
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--muted);
+    }
+
+    main { padding: 22px 0 40px; }
+
+    .activity {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .board-area, .side-panel, .maker, .assessment {
+      border: 3px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .board-area { padding: 20px; }
+    .side-panel, .maker, .assessment { padding: 18px; }
+
+    h2, h3 {
+      margin: 0 0 12px;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    h2 { font-size: 1.75rem; }
+    h3 { font-size: 1.25rem; }
+
+    .fraction-controls {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(76px, 1fr));
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .fraction-button {
+      cursor: pointer;
+      padding: 10px;
+      color: var(--text);
+      background: oklch(0.96 0.03 105);
+      font-size: 1.15rem;
+      transition: transform 160ms ease-out, background 160ms ease-out;
+    }
+
+    .fraction-button[aria-pressed="true"] {
+      color: oklch(0.99 0.01 120);
+      background: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .minecraft-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(48px, 1fr));
+      gap: 8px;
+      width: min(100%, 560px);
+      margin: 16px auto;
+      padding: 12px;
+      border: 4px solid var(--soil);
+      border-radius: 12px;
+      background: oklch(0.49 0.08 73);
+    }
+
+    .block {
+      aspect-ratio: 1;
+      min-height: 54px;
+      border: 3px solid oklch(0.36 0.05 80);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, oklch(0.76 0.025 110) 0 48%, oklch(0.66 0.025 110) 48% 52%, oklch(0.82 0.025 110) 52% 100%);
+      position: relative;
+      transition: transform 180ms ease-out, background 180ms ease-out;
+    }
+
+    .block.selected {
+      background:
+        linear-gradient(135deg, var(--secondary) 0 48%, oklch(0.53 0.12 72) 48% 52%, oklch(0.76 0.14 82) 52% 100%);
+      transform: scale(1.035);
+    }
+
+    .block.selected::after {
+      content: "";
+      position: absolute;
+      inset: 18%;
+      border-radius: 5px;
+      background: var(--accent);
+      box-shadow: inset 0 0 0 2px oklch(0.84 0.09 54);
+    }
+
+    .readout {
+      min-height: 72px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: oklch(0.92 0.055 142);
+      border: 2px solid oklch(0.54 0.11 145);
+      font-weight: 700;
+    }
+
+    .readout strong { font-size: 1.25em; }
+
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .legend div {
+      min-height: 48px;
+      padding: 10px;
+      border-radius: 12px;
+      background: oklch(0.95 0.025 112);
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .level-tabs {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .level-tab {
+      width: 100%;
+      cursor: pointer;
+      padding: 10px 12px;
+      background: oklch(0.96 0.025 105);
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .level-tab[aria-pressed="true"] {
+      background: var(--water);
+      border-color: oklch(0.45 0.1 230);
+    }
+
+    .level-copy {
+      min-height: 120px;
+      padding: 14px;
+      border-radius: 12px;
+      background: oklch(0.94 0.03 226);
+      border: 2px solid oklch(0.62 0.09 230);
+    }
+
+    .equivalence {
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 12px;
+      background: oklch(0.96 0.04 72);
+      border: 2px solid var(--secondary);
+      font-weight: 700;
+    }
+
+    .maker, .assessment { margin-top: 24px; }
+
+    .maker {
+      background: oklch(0.93 0.055 142);
+    }
+
+    .maker-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .step {
+      min-height: 120px;
+      padding: 14px;
+      border-radius: 12px;
+      background: oklch(0.985 0.012 110);
+      border: 2px solid oklch(0.62 0.08 145);
+    }
+
+    .step span {
+      display: inline-flex;
+      width: 38px;
+      height: 38px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      color: oklch(0.99 0.01 120);
+      background: var(--primary);
+      font-weight: 800;
+    }
+
+    .assessment {
+      background: oklch(0.95 0.055 55);
+    }
+
+    .checklist {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .check {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 10px;
+      border-radius: 10px;
+      background: oklch(0.99 0.015 80);
+    }
+
+    input[type="checkbox"] {
+      width: 24px;
+      height: 24px;
+      margin-top: 3px;
+      accent-color: var(--primary);
+    }
+
+    footer {
+      padding: 20px 0 34px;
+      color: oklch(0.96 0.02 116);
+      background: oklch(0.32 0.055 145);
+    }
+
+    footer p { margin: 6px 0; }
+
+    @media (max-width: 860px) {
+      .activity { grid-template-columns: 1fr; }
+      .maker-steps { grid-template-columns: 1fr; }
+      .fraction-controls { grid-template-columns: repeat(2, 1fr); }
+      .legend { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#atividade">Saltar para a atividade</a>
+  <header>
+    <div class="shell">
+      <div class="topline" aria-label="Metadados da aula">
+        <span class="badge">2.º ano</span>
+        <span class="badge">30 min</span>
+        <span class="badge">Minecraft Maker</span>
+      </div>
+      <h1>Frações no Minecraft Maker</h1>
+      <p class="intro">Escolhe uma fração, observa os blocos do terreno e prepara uma construção onde as partes têm o mesmo tamanho.</p>
+    </div>
+  </header>
+
+  <main id="atividade" class="shell">
+    <section class="activity" aria-labelledby="explorar-title">
+      <div class="board-area">
+        <h2 id="explorar-title">Terreno de blocos iguais</h2>
+        <p>O todo tem 12 blocos. Que parte fica marcada?</p>
+        <div class="fraction-controls" role="group" aria-label="Escolher fração">
+          <button class="fraction-button" type="button" data-fraction="1/2" aria-pressed="true">1/2</button>
+          <button class="fraction-button" type="button" data-fraction="1/4" aria-pressed="false">1/4</button>
+          <button class="fraction-button" type="button" data-fraction="2/4" aria-pressed="false">2/4</button>
+          <button class="fraction-button" type="button" data-fraction="3/4" aria-pressed="false">3/4</button>
+        </div>
+
+        <div class="minecraft-grid" id="grid" aria-label="Grelha Minecraft com 12 blocos" role="img"></div>
+
+        <div class="readout" id="readout" aria-live="polite"></div>
+        <div class="legend" aria-label="Legenda">
+          <div>Todo: 12 blocos</div>
+          <div id="painted">Pintados: 6</div>
+          <div id="parts">Partes iguais: 2</div>
+        </div>
+      </div>
+
+      <aside class="side-panel" aria-labelledby="nivel-title">
+        <h2 id="nivel-title">Escolhe o nível</h2>
+        <div class="level-tabs" role="group" aria-label="Níveis de diferenciação">
+          <button class="level-tab" type="button" data-level="support" aria-pressed="true">Apoio</button>
+          <button class="level-tab" type="button" data-level="standard" aria-pressed="false">Intermédio</button>
+          <button class="level-tab" type="button" data-level="challenge" aria-pressed="false">Desafio</button>
+        </div>
+        <div class="level-copy" id="levelCopy" aria-live="polite"></div>
+        <div class="equivalence" id="equivalence">Procura: 2/4 ocupa o mesmo espaço que 1/2?</div>
+      </aside>
+    </section>
+
+    <section class="maker" aria-labelledby="maker-title">
+      <h2 id="maker-title">Desafio Maker em Minecraft</h2>
+      <p>Em pares ou trios, construam um canteiro 4x4. Escolham uma fração e mudem o material dessa parte.</p>
+      <div class="maker-steps">
+        <div class="step"><span>1</span><strong>Combinar</strong><br>Decidam se vão mostrar metade ou um quarto.</div>
+        <div class="step"><span>2</span><strong>Construir</strong><br>Façam 16 blocos no chão e mudem o material da parte escolhida.</div>
+        <div class="step"><span>3</span><strong>Comunicar</strong><br>Expliquem: todo, parte pintada e como sabem que é igual.</div>
+      </div>
+    </section>
+
+    <section class="assessment" aria-labelledby="avaliacao-title">
+      <h2 id="avaliacao-title">Registo rápido</h2>
+      <div class="checklist">
+        <label class="check"><input type="checkbox"> Consigo dizer qual é o todo.</label>
+        <label class="check"><input type="checkbox"> Consigo mostrar a parte pintada.</label>
+        <label class="check"><input type="checkbox"> Consigo explicar porque as partes são iguais.</label>
+        <label class="check"><input type="checkbox"> Consigo ajudar o grupo a construir a fração no Minecraft.</label>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <p><strong>Currículo:</strong> Matemática, frações unitárias com apoio visual; TIC, criação e comunicação colaborativa.</p>
+      <p><strong>Perfil do Aluno:</strong> linguagens, comunicação, raciocínio e cooperação.</p>
+      <p>Gerado por PageCraft.</p>
+    </div>
+  </footer>
+
+  <script>
+    const grid = document.querySelector("#grid");
+    const readout = document.querySelector("#readout");
+    const painted = document.querySelector("#painted");
+    const parts = document.querySelector("#parts");
+    const equivalence = document.querySelector("#equivalence");
+    const fractionButtons = [...document.querySelectorAll(".fraction-button")];
+    const levelButtons = [...document.querySelectorAll(".level-tab")];
+    const levelCopy = document.querySelector("#levelCopy");
+
+    const fractionData = {
+      "1/2": { count: 6, parts: 2, text: "1/2 lê-se uma metade: 6 de 12 blocos ficam marcados." },
+      "1/4": { count: 3, parts: 4, text: "1/4 lê-se um quarto: 3 de 12 blocos ficam marcados." },
+      "2/4": { count: 6, parts: 4, text: "2/4 lê-se dois quartos: também são 6 de 12 blocos." },
+      "3/4": { count: 9, parts: 4, text: "3/4 lê-se três quartos: 9 de 12 blocos ficam marcados." }
+    };
+
+    const levelText = {
+      support: "Começa por 1/2 e 1/4. Conta os blocos marcados com o dedo: 6 blocos para metade, 3 blocos para um quarto.",
+      standard: "Compara todas as frações. Observa o numerador, o denominador e a quantidade de blocos marcados.",
+      challenge: "Tenta explicar porque 2/4 e 1/2 ocupam a mesma área, mesmo tendo nomes diferentes."
+    };
+
+    function createGrid() {
+      grid.innerHTML = "";
+      for (let i = 0; i < 12; i += 1) {
+        const block = document.createElement("div");
+        block.className = "block";
+        block.setAttribute("aria-hidden", "true");
+        grid.appendChild(block);
+      }
+    }
+
+    function setFraction(value) {
+      const data = fractionData[value];
+      fractionButtons.forEach(button => {
+        button.setAttribute("aria-pressed", String(button.dataset.fraction === value));
+      });
+      [...grid.children].forEach((block, index) => {
+        block.classList.toggle("selected", index < data.count);
+      });
+      readout.innerHTML = `<strong>${value}</strong>: ${data.text}`;
+      painted.textContent = `Pintados: ${data.count}`;
+      parts.textContent = `Partes iguais: ${data.parts}`;
+      equivalence.textContent = value === "2/4"
+        ? "Descoberta: 2/4 pinta a mesma quantidade de blocos que 1/2."
+        : "Procura: 2/4 ocupa o mesmo espaço que 1/2?";
+    }
+
+    function setLevel(value) {
+      levelButtons.forEach(button => {
+        button.setAttribute("aria-pressed", String(button.dataset.level === value));
+      });
+      levelCopy.textContent = levelText[value];
+    }
+
+    fractionButtons.forEach(button => {
+      button.addEventListener("click", () => setFraction(button.dataset.fraction));
+    });
+
+    levelButtons.forEach(button => {
+      button.addEventListener("click", () => setLevel(button.dataset.level));
+    });
+
+    createGrid();
+    setFraction("1/2");
+    setLevel("support");
+  </script>
+</body>
+</html>

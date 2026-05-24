@@ -21,8 +21,8 @@ summary: Especialista Codex em design curricular pt-PT que produz DocSpec-AM JSO
 
 1. Pedido explícito do utilizador/professor.
 2. Prompt base em `outputs/lessons/_last_architect_prompt.md`, normalmente gerado por `skills/codex/scripts/pagecraft.py --architect-only`.
-3. Pedagogia canónica em `~/.openclaw/workspace/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md` quando existir.
-4. Documentos oficiais relevantes em `~/.openclaw/workspace/vault/documentos-oficiais/`.
+3. Pedagogia canónica em `~/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md` quando existir.
+4. Documentos oficiais relevantes em `~/vault/documentos-oficiais/`.
 5. `skills/codex/references/docspec-schema.md` quando precisares do schema completo.
 6. `skills/codex/identities/architect.md` como identidade canónica detalhada.
 

@@ -1,6 +1,6 @@
 ---
 name: pagecraft-codex
-description: "Criar páginas PageCraft no Codex: aulas HTML self-contained, interativas, pt-PT, acessíveis e verificadas no browser para crianças 4-10 anos, seguindo o fluxo multi-agente da skill OpenClaw (Architect → Designer → Builder → Proofreader → Evaluator). Usa o vault pedagógico em ~/.openclaw/workspace/vault, DocSpec/SRTC-A, MEM, Aprendizagens Essenciais, Perfil do Aluno, diferenciação obrigatória e extensões Maker quando pedidas. Usar quando o utilizador pedir uma página/aula PageCraft, explorable explanation, atividade digital com sliders/drag/quiz, M28P, ou atividade maker com componente digital."
+description: "Criar páginas PageCraft no Codex: aulas HTML self-contained, interativas, pt-PT, acessíveis e verificadas no browser para crianças 4-10 anos, seguindo o fluxo multi-agente da skill OpenClaw (Architect → Designer → Builder → Proofreader → Evaluator). Usa o vault pedagógico em ~/vault, DocSpec/SRTC-A, MEM, Aprendizagens Essenciais, Perfil do Aluno, diferenciação obrigatória e extensões Maker quando pedidas. Usar quando o utilizador pedir uma página/aula PageCraft, explorable explanation, atividade digital com sliders/drag/quiz, M28P, ou atividade maker com componente digital."
 metadata:
   author: pagecraft
   version: "0.1.0"
@@ -26,8 +26,8 @@ Regras de fidelidade:
 ## Fontes de verdade
 
 1. Pedido explícito do utilizador/professor, desde que não viole acessibilidade/segurança.
-2. Pedagogia canónica do vault: `~/.openclaw/workspace/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md`.
-3. Fontes oficiais no vault: `~/.openclaw/workspace/vault/documentos-oficiais/`.
+2. Pedagogia canónica do vault: `~/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md`.
+3. Fontes oficiais no vault: `~/vault/documentos-oficiais/`.
 4. Recursos desta skill: `identities/`, `references/`, `assets/`, `scripts/`.
 5. Skill OpenClaw original (`skills/openclaw/`) como referência histórica se houver dúvida.
 
@@ -91,7 +91,7 @@ Assumir `REPO_ROOT` como a raiz do repo PageCraft. Se necessário:
 REPO_ROOT="/Users/igor/dev/pagecraft"
 export PAGECRAFT_WORKSPACE="$REPO_ROOT"
 export PAGECRAFT_REPO="$REPO_ROOT"
-export PAGECRAFT_VAULT="$HOME/.openclaw/workspace/vault"
+export PAGECRAFT_VAULT="$HOME/vault"
 ```
 
 Artefactos de trabalho ficam em `outputs/lessons/`.
@@ -132,9 +132,9 @@ Manifest mínimo:
 
 Antes do DocSpec, ler pelo menos:
 
-- `~/.openclaw/workspace/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md`
-- documentos oficiais relevantes em `~/.openclaw/workspace/vault/documentos-oficiais/aprendizagens-essenciais/`
-- Perfil dos Alunos em `~/.openclaw/workspace/vault/documentos-oficiais/`
+- `~/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md`
+- documentos oficiais relevantes em `~/vault/documentos-oficiais/aprendizagens-essenciais/`
+- Perfil dos Alunos em `~/vault/documentos-oficiais/`
 - notas MEM/diferenciação/avaliação quando o tema o exigir.
 
 O Architect deve distinguir evidência do vault de inferências próprias e deve citar ficheiros do vault no campo curricular sempre que útil.
@@ -144,7 +144,7 @@ O Architect deve distinguir evidência do vault de inferências próprias e deve
 Gerar prompt base:
 
 ```bash
-PAGECRAFT_WORKSPACE="$REPO_ROOT" PAGECRAFT_VAULT="$HOME/.openclaw/workspace/vault" \
+PAGECRAFT_WORKSPACE="$REPO_ROOT" PAGECRAFT_VAULT="$HOME/vault" \
 python3 skills/codex/scripts/pagecraft.py \
   --topic "<tema>" --year "<ano>" --duration <min> --architect-only \
   --output-dir outputs/lessons

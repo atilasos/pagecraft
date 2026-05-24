@@ -1,0 +1,39 @@
+{
+  "palette": {
+    "bg": "oklch(0.97 0.018 112)",
+    "surface": "oklch(0.995 0.01 95)",
+    "primary": "oklch(0.48 0.13 145)",
+    "secondary": "oklch(0.62 0.12 72)",
+    "accent": "oklch(0.61 0.16 35)",
+    "water": "oklch(0.67 0.12 230)",
+    "text": "oklch(0.22 0.025 130)"
+  },
+  "typography": {
+    "fontFamily": "Nunito, Comic Sans MS, Chalkboard SE, system-ui, sans-serif",
+    "scale": "kids",
+    "weights": [500, 700, 800]
+  },
+  "layout": {
+    "radius": 14,
+    "spacing": "comfortable",
+    "maxWidth": 1120
+  },
+  "components": {
+    "buttons": "large rounded controls",
+    "grid": "minecraft 4x3 tiles",
+    "feedback": "inline status strip"
+  },
+  "motion": {
+    "transitions": "subtle"
+  },
+  "accessibility": {
+    "contrast": "AA",
+    "touchTarget": 48
+  },
+  "impeccable": {
+    "register": "product",
+    "colorStrategy": "full-palette",
+    "scene": "alunos de 2.º ano com tablets a preparar uma construção Minecraft em pares",
+    "antiPatternsAvoided": ["gradient-text", "side-stripe-cards", "nested-cards", "hero-metric-template"]
+  }
+}

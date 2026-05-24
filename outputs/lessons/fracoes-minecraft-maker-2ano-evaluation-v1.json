@@ -1,0 +1,29 @@
+{
+  "pass": true,
+  "route": "none",
+  "severity": "low",
+  "issues": [
+    {
+      "type": "runtime-limitation",
+      "severity": "low",
+      "detail": "OpenClaw Browser bloqueou navegação para localhost e file:// por política do gateway; a verificação visual foi feita com Playwright e Chrome local."
+    }
+  ],
+  "required_fixes": [],
+  "evidence": [
+    "HTML abriu via servidor local em http://127.0.0.1:8765/outputs/lessons/fracoes-minecraft-maker-2ano.html usando Playwright.",
+    "Clique em 2/4 marcou 6 blocos e actualizou a leitura para equivalência com 1/2.",
+    "Sem erros de consola após adicionar favicon inline.",
+    "Screenshots guardados para desktop e tablet.",
+    "impeccable detect executou com exit 0 e sem output."
+  ],
+  "acceptance_checks": [
+    "abre sem erro fatal no browser",
+    "sem erros JavaScript críticos",
+    "interacção principal funciona",
+    "layout desktop e tablet legível",
+    "fluxo principal offline e self-contained",
+    "objetivo, exploração, maker e avaliação formativa alinhados"
+  ],
+  "blocked_by": []
+}

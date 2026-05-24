@@ -49,12 +49,19 @@ def resolve_vault(workspace: Path) -> Path:
     if override:
         return Path(override).expanduser().resolve()
 
+    home_vault = Path.home() / "vault"
+    if home_vault.exists():
+        return home_vault
+
     workspace_vault = workspace / "vault"
     if workspace_vault.exists():
         return workspace_vault
 
-    default_vault = Path.home() / ".openclaw" / "workspace" / "vault"
-    return default_vault
+    legacy_vault = Path.home() / ".openclaw" / "workspace" / "vault"
+    if legacy_vault.exists():
+        return legacy_vault
+
+    return home_vault
 
 
 WORKSPACE = resolve_workspace()
