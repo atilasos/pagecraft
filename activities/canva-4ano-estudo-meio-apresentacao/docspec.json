@@ -1,0 +1,228 @@
+{
+  "topic": "Canva + Estudo do Meio — Apresentação em grupo",
+  "ageRange": "9-10 anos (4.º ano do 1.º CEB)",
+  "duration": 45,
+  "objectives": [
+    "Escolher, em grupo, um tema de Estudo do Meio do 4.º ano e transformá-lo numa pergunta de investigação clara.",
+    "Planear uma apresentação curta no Canva com capa, pergunta, 2–3 descobertas com evidências e conclusão.",
+    "Usar ferramentas básicas do Canva — modelos, texto, elementos/imagens, comentários/partilha e modo de apresentação — para comunicar melhor, não apenas para decorar.",
+    "Colaborar com papéis definidos no grupo, respeitando a conta escolar, as fontes de informação e o tempo de palavra dos colegas.",
+    "Preencher uma autoavaliação final que gera um ficheiro Markdown e uma mensagem de email para o professor."
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Estudo do Meio",
+        "year": "4.º ano",
+        "domain": "Sociedade / Natureza / Tecnologia",
+        "descriptor": "Pesquisar e partilhar informação sobre temáticas de interesse do aluno ou relacionadas com os temas em estudo, comunicando aprendizagens com recurso às TIC.",
+        "source": "~/vault/documentos-oficiais/aprendizagens-essenciais/estudo-do-meio-4-ano-1-ciclo.md:193,422,484-485"
+      },
+      {
+        "subject": "Estudo do Meio",
+        "year": "4.º ano",
+        "domain": "Tecnologia / Segurança digital",
+        "descriptor": "Utilizar as tecnologias de informação e comunicação com segurança, respeito e responsabilidade; reconhecer que o conhecimento se constrói colocando questões, levantando hipóteses, comprovando resultados e comunicando-os.",
+        "source": "~/vault/documentos-oficiais/aprendizagens-essenciais/estudo-do-meio-4-ano-1-ciclo.md:465-485"
+      },
+      {
+        "subject": "Português",
+        "year": "4.º ano",
+        "domain": "Oralidade / Escrita",
+        "descriptor": "Planear, produzir e avaliar discursos orais breves, individualmente ou em grupo, e selecionar informação relevante para uma finalidade comunicativa.",
+        "source": "~/vault/documentos-oficiais/aprendizagens-essenciais/portugues-4-ano-1-ciclo.md:194-251"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-B: Informação e comunicação",
+      "PA-D: Pensamento crítico e pensamento criativo",
+      "PA-E: Relacionamento interpessoal",
+      "PA-F: Desenvolvimento pessoal e autonomia",
+      "PA-H: Sensibilidade estética e artística",
+      "PA-I: Saber científico, técnico e tecnológico"
+    ],
+    "sources": [
+      "~/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md",
+      "~/vault/documentos-oficiais/aprendizagens-essenciais/estudo-do-meio-4-ano-1-ciclo.md",
+      "~/vault/documentos-oficiais/aprendizagens-essenciais/portugues-4-ano-1-ciclo.md",
+      "~/vault/documentos-oficiais/2026-03-03-perfil-dos-alunos-saida-escolaridade-obrigatoria.txt",
+      "Canva Learn: Canva for Education / apresentações / colaboração — consultado para orientar ferramentas, sem incorporar recursos remotos no HTML."
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "Trabalho curricular por projeto",
+      "Trabalho de Estudo Autónomo (TEA)",
+      "Circuitos de comunicação",
+      "Cooperação em pequenos grupos",
+      "Conselho/partilha de produções"
+    ],
+    "instruments": [
+      "contrato de equipa",
+      "roteiro de 5 diapositivos",
+      "lista de verificação Canva",
+      "autoavaliação em Markdown"
+    ],
+    "socialOrganization": "grupo de 3–4 alunos no computador/tablet → pares de revisão entre grupos → comunicação breve à turma ou ao professor"
+  },
+  "materials": [
+    "Computador ou tablet com acesso ao Canva e conta escolar, se disponível",
+    "Página PageCraft aberta localmente no browser",
+    "Projetor/quadro para demonstração inicial",
+    "Fontes de consulta já selecionadas pelo professor ou materiais de Estudo do Meio da turma",
+    "Email do professor: prof.igor@edu.madeira.gov.pt"
+  ],
+  "sessionFlow": "5 min missão e segurança; 8 min escolha do tema e pergunta; 10 min roteiro de 5 diapositivos; 12 min construção orientada no Canva; 5 min revisão entre grupos; 5 min autoavaliação Markdown/email.",
+  "units": [
+    {
+      "summary": "Missão, segurança e papéis da equipa",
+      "duration": 5,
+      "textDescription": "Os alunos identificam a missão: criar uma pequena apresentação sobre um tema escolhido de Estudo do Meio e trabalhar com papéis de grupo.",
+      "interaction": {
+        "state": [
+          {
+            "name": "roles",
+            "type": "multi-select",
+            "default": []
+          }
+        ],
+        "render": "Cartões de papéis — coordenador/a, investigador/a, designer, escritor/a, porta-voz — e regras de segurança digital.",
+        "transition": "Clique/teclado seleciona papéis e mostra responsabilidades; checklist desbloqueia a fase seguinte.",
+        "constraint": "A equipa trabalha melhor quando cada aluno tem uma responsabilidade visível e ninguém partilha a palavra-passe.",
+        "assessment": "Grupo escolhe papéis e confirma duas regras de segurança/respeito."
+      },
+      "differentiation": {
+        "support": "escolher 3 papéis essenciais com cartões já explicados por ícones.",
+        "standard": "distribuir papéis e dizer uma responsabilidade de cada um.",
+        "challenge": "acrescentar um papel de revisor/a de fontes e combinar como ajudar outro grupo sem fazer por ele."
+      }
+    },
+    {
+      "summary": "Do tema à pergunta de investigação",
+      "duration": 8,
+      "textDescription": "Os grupos escolhem um tema de Estudo do Meio e transformam o tema numa pergunta que pode ser respondida numa apresentação curta.",
+      "interaction": {
+        "state": [
+          {
+            "name": "theme",
+            "type": "choice",
+            "default": ""
+          },
+          {
+            "name": "question",
+            "type": "text",
+            "default": ""
+          }
+        ],
+        "render": "Galeria de temas possíveis e construtor de pergunta com modelo 'Como/Por que/Que mudanças…?'.",
+        "transition": "Selecionar tema → aparecem pistas; escrever pergunta → feedback de clareza e tamanho.",
+        "constraint": "Um tema fica mais fácil de apresentar quando vira uma pergunta investigável, não apenas um título bonito.",
+        "assessment": "Grupo regista um tema e uma pergunta com pelo menos uma palavra de investigação."
+      },
+      "differentiation": {
+        "support": "escolher entre temas sugeridos e completar uma frase com lacunas.",
+        "standard": "escrever pergunta própria e verificar se cabe em 5 diapositivos.",
+        "challenge": "formular uma pergunta que compare dois aspetos ou peça uma explicação com evidências."
+      }
+    },
+    {
+      "summary": "Roteiro de 5 diapositivos",
+      "duration": 10,
+      "textDescription": "Os alunos organizam a apresentação em cinco diapositivos: capa, pergunta, descoberta 1, descoberta 2/evidência e conclusão/convite ao público.",
+      "interaction": {
+        "state": [
+          {
+            "name": "slidePlan",
+            "type": "sorting",
+            "default": []
+          }
+        ],
+        "render": "Cartões arrastáveis/clicáveis de diapositivos e pré-visualização numerada.",
+        "transition": "Tocar num cartão e depois numa posição; verificar mostra se há começo, meio e fim.",
+        "constraint": "Uma apresentação clara tem uma sequência: pergunta primeiro, evidências no meio e conclusão no fim.",
+        "assessment": "Grupo monta uma sequência de 5 diapositivos e justifica uma escolha."
+      },
+      "differentiation": {
+        "support": "usar modelo de 4 diapositivos com títulos prontos.",
+        "standard": "completar 5 diapositivos com título curto para cada um.",
+        "challenge": "acrescentar uma pergunta para o público ou um dado comparativo no diapositivo de evidência."
+      }
+    },
+    {
+      "summary": "Canva: escolher a ferramenta certa",
+      "duration": 12,
+      "textDescription": "Os grupos consultam cartões visuais inspirados no fluxo do Canva para decidir quando usar modelos, texto, elementos/imagens, comentários, notas e apresentar.",
+      "interaction": {
+        "state": [
+          {
+            "name": "toolMatches",
+            "type": "matching",
+            "default": []
+          }
+        ],
+        "render": "Mini-ecrãs ilustrados e desafios 'Preciso de…' para associar a ferramenta adequada.",
+        "transition": "Clique numa necessidade e depois numa ferramenta; feedback explica a decisão.",
+        "constraint": "No Canva, a ferramenta deve resolver um problema de comunicação; enfeites só ajudam quando tornam a ideia mais clara.",
+        "assessment": "Grupo liga pelo menos quatro necessidades a ferramentas e aplica uma no seu trabalho real."
+      },
+      "differentiation": {
+        "support": "trabalhar com quatro ferramentas principais — Modelo, Texto, Imagem/Elementos, Partilhar.",
+        "standard": "escolher seis ferramentas e justificar uma escolha para o tema.",
+        "challenge": "usar comentários ou notas do apresentador para preparar a comunicação oral."
+      }
+    },
+    {
+      "summary": "Revisão rápida e autoavaliação Markdown",
+      "duration": 10,
+      "textDescription": "Os alunos verificam se a apresentação comunica o tema de Estudo do Meio e preenchem uma autoavaliação que gera ficheiro Markdown/email.",
+      "interaction": {
+        "state": [
+          {
+            "name": "selfAssessment",
+            "type": "form",
+            "default": {}
+          }
+        ],
+        "render": "Checklist de revisão, campos do grupo, tema, contributo e escala de autonomia; pré-visualização Markdown.",
+        "transition": "Preencher formulário → gerar Markdown → copiar, descarregar ficheiro .md ou abrir email para o professor.",
+        "constraint": "A autoavaliação só é útil quando descreve evidências do trabalho e uma próxima melhoria, não apenas 'correu bem'.",
+        "assessment": "Cada grupo gera um Markdown com tema, papéis, evidências, nível de autonomia e próxima melhoria."
+      },
+      "differentiation": {
+        "support": "selecionar frases de evidência já sugeridas e escrever uma melhoria curta.",
+        "standard": "escrever uma evidência própria e uma melhoria realista.",
+        "challenge": "comparar o produto final com o plano inicial e indicar uma decisão de design que ajudou a comunicar melhor."
+      }
+    }
+  ],
+  "language": "pt-PT",
+  "lessonMode": "trabalho de grupo no Canva com página PageCraft offline de apoio e autoavaliação individual",
+  "implementationConstraints": {
+    "canvaBoundary": "A página PageCraft não chama APIs do Canva nem depende da internet; orienta o trabalho que os grupos fazem no Canva quando disponível.",
+    "exportRequirement": "A unidade final gera localmente um texto Markdown descarregável/copíavel e um rascunho mailto: para prof.igor@edu.madeira.gov.pt, sem envio automático.",
+    "imageBoundary": "Foram usadas ilustrações inline originais e links para páginas oficiais do Canva; não foram incorporadas imagens remotas para manter o ficheiro self-contained."
+  },
+  "evidence": [
+    {
+      "source": "~/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md:15-23",
+      "supports": "Sequência didática PageCraft, MEM, diferenciação, avaliação formativa observável e SRTC-A."
+    },
+    {
+      "source": "~/vault/documentos-oficiais/aprendizagens-essenciais/estudo-do-meio-4-ano-1-ciclo.md:70-72",
+      "supports": "TIC para pesquisa/apresentação e comunicação de ideias com diferentes linguagens."
+    },
+    {
+      "source": "~/vault/documentos-oficiais/aprendizagens-essenciais/estudo-do-meio-4-ano-1-ciclo.md:193-212,465-485",
+      "supports": "Pesquisa, seleção de informação, uso responsável da tecnologia e apresentações orais com TIC."
+    },
+    {
+      "source": "~/vault/documentos-oficiais/aprendizagens-essenciais/portugues-4-ano-1-ciclo.md:194-251",
+      "supports": "Planeamento, produção e avaliação de discursos orais breves."
+    },
+    {
+      "source": "~/vault/documentos-oficiais/2026-03-03-perfil-dos-alunos-saida-escolaridade-obrigatoria.txt:851-865,999-1063",
+      "supports": "Informação/comunicação e trabalho cooperativo."
+    }
+  ]
+}

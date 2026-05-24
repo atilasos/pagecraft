@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Canva + Estudo do Meio — Apresentação em grupo</title>
+<style>
+:root{
+  --bg:oklch(0.985 0.018 205);--surface:oklch(0.995 0.006 205);--ink:oklch(0.22 0.035 245);--muted:oklch(0.43 0.035 245);
+  --primary:oklch(0.52 0.16 220);--primary-dark:oklch(0.38 0.15 225);--primary-tint:oklch(0.94 0.045 220);
+  --accent:oklch(0.78 0.15 65);--accent-tint:oklch(0.96 0.055 65);--ok:oklch(0.62 0.15 150);--ok-tint:oklch(0.95 0.055 150);
+  --warn:oklch(0.72 0.16 82);--warn-tint:oklch(0.96 0.06 82);--focus:oklch(0.58 0.20 255);--line:oklch(0.88 0.022 220);
+  --rose:oklch(0.95 0.045 15);--violet:oklch(0.95 0.055 300);--leaf:oklch(0.95 0.055 150);--sky:oklch(0.95 0.055 230);
+  --radius:18px;--tap:48px;--maxw:1120px;--shadow:0 8px 22px oklch(0.45 0.04 245 / .12);
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at top left,oklch(0.94 0.06 205),transparent 34rem),var(--bg);color:var(--ink);font-family:'Atkinson Hyperlegible','Lexend','Nunito','Comic Sans MS','Chalkboard SE',system-ui,-apple-system,sans-serif;font-size:20px;line-height:1.55;padding:0 1rem 2rem;overflow-x:hidden;text-rendering:optimizeLegibility}body:before{content:"";position:fixed;inset:0;background-image:linear-gradient(90deg,oklch(0.90 0.03 220 / .3) 1px,transparent 1px),linear-gradient(oklch(0.90 0.03 220 / .3) 1px,transparent 1px);background-size:34px 34px;pointer-events:none;opacity:.3;z-index:-1}.wrap{max-width:var(--maxw);margin:0 auto}.skip{position:absolute;left:.75rem;top:.75rem;transform:translateY(-160%);background:var(--ink);color:var(--surface);padding:.65rem 1rem;border-radius:999px;z-index:20}.skip:focus{transform:none}header{margin:1rem auto 1.2rem;background:var(--surface);border:2px solid var(--primary);border-radius:26px;box-shadow:var(--shadow);padding:clamp(1rem,3vw,1.6rem);display:grid;gap:1rem;grid-template-columns:1fr}h1,h2,h3{line-height:1.18;letter-spacing:-.015em}h1{margin:.2rem 0;font-size:clamp(2rem,5vw,3.35rem);color:var(--primary-dark);max-width:12ch}h2{font-size:clamp(1.55rem,3vw,2.1rem);margin:.2rem 0 .7rem;color:var(--primary-dark)}h3{font-size:1.15rem;margin:.25rem 0 .5rem}.hero-grid{display:grid;grid-template-columns:1fr;gap:1rem}.meta{display:flex;flex-wrap:wrap;gap:.55rem}.pill,.badge{display:inline-flex;align-items:center;gap:.35rem;border-radius:999px;padding:.35rem .75rem;background:var(--primary-tint);border:1px solid var(--line);font-weight:800;color:var(--primary-dark)}.lead{max-width:58ch;font-size:1.08rem}.notice{background:var(--accent-tint);border:2px solid var(--accent);border-radius:var(--radius);padding:.85rem 1rem;max-width:60ch}.nav{overflow:hidden;position:sticky;top:0;z-index:10;background:oklch(0.985 0.018 205 / .92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);margin:0 0 1rem;padding:.65rem 0}.nav-inner{max-width:var(--maxw);margin:auto;display:flex;gap:.5rem;overflow:auto}.nav a{flex:0 0 auto;min-height:var(--tap);display:inline-flex;align-items:center;text-decoration:none;color:var(--primary-dark);font-weight:800;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:.45rem .85rem}.nav a:hover{filter:brightness(.98)}main{display:grid;gap:1rem}.unit,.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:clamp(1rem,2.4vw,1.35rem);box-shadow:var(--shadow)}.unit-title{display:flex;align-items:flex-start;gap:.75rem}.num{flex:0 0 auto;display:grid;place-items:center;width:2.15rem;height:2.15rem;border-radius:50%;background:var(--primary);color:var(--surface);font-weight:900}.grid{display:grid;gap:.8rem}.cols{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.75rem}.card,button.card{min-height:var(--tap);background:oklch(0.985 0.012 220);border:2px solid var(--line);border-radius:16px;padding:.85rem;text-align:left;color:var(--ink);font:inherit;cursor:pointer}.card strong{display:block}.card[aria-pressed="true"],.card.selected{border-color:var(--primary);background:var(--primary-tint);box-shadow:0 0 0 4px oklch(0.70 0.14 220 / .18)}button,.btn{min-height:var(--tap);border:0;border-radius:999px;background:var(--primary);color:var(--surface);font:inherit;font-weight:900;padding:.65rem 1rem;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:.35rem}button.secondary,.btn.secondary{background:var(--accent-tint);color:var(--ink);border:2px solid var(--accent)}button.ghost{background:var(--surface);color:var(--primary-dark);border:2px solid var(--line)}button:disabled{opacity:.55;cursor:not-allowed}:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:10px}input,textarea,select{width:100%;min-height:var(--tap);border:2px solid var(--line);border-radius:14px;padding:.7rem .8rem;background:var(--surface);color:var(--ink);font:inherit}textarea{min-height:5rem}.feedback{border-radius:16px;padding:.8rem 1rem;margin:.75rem 0;background:var(--warn-tint);border:2px solid var(--warn);font-weight:700}.feedback.ok{background:var(--ok-tint);border-color:var(--ok)}.progress{height:14px;background:oklch(0.91 0.02 220);border-radius:999px;overflow:hidden;border:1px solid var(--line)}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--primary),var(--ok));transition:width .2s ease-out}.diff{display:flex;flex-wrap:wrap;gap:.5rem;margin:.75rem 0}.diff button{background:var(--surface);color:var(--ink);border:2px solid var(--line);font-size:.95rem}.diff button[aria-pressed="true"]{background:var(--violet);border-color:var(--primary)}.diff-box{background:var(--violet);border:1px solid var(--line);border-radius:14px;padding:.75rem}.roles .card:nth-child(1){background:var(--sky)}.roles .card:nth-child(2){background:var(--leaf)}.roles .card:nth-child(3){background:var(--violet)}.roles .card:nth-child(4){background:var(--rose)}.roles .card:nth-child(5){background:var(--accent-tint)}.slides-board{display:grid;gap:.75rem;grid-template-columns:1fr}.slots{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:.6rem}.slot{display:block;width:100%;text-align:left;min-height:8rem;background:oklch(0.97 0.018 220);border:2px dashed var(--primary);border-radius:16px;padding:.6rem}.slot .small{font-size:.82rem;color:var(--muted);font-weight:800}.slot.filled{border-style:solid;background:var(--primary-tint)}.tool-area{display:grid;grid-template-columns:1fr;gap:1rem}.need-list,.tool-list{display:grid;gap:.6rem}.need,.tool{background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:.8rem;min-height:var(--tap);cursor:pointer}.need.selected,.tool.selected{border-color:var(--primary);background:var(--primary-tint)}.need.done,.tool.done{border-color:var(--ok);background:var(--ok-tint)}.mockups{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.7rem}.mock{background:linear-gradient(180deg,oklch(0.98 0.012 210),oklch(0.94 0.03 220));border:1px solid var(--line);border-radius:18px;padding:.7rem;box-shadow:0 4px 12px oklch(0.45 0.04 245 / .08)}.mock-screen{height:120px;border-radius:14px;background:var(--surface);border:2px solid var(--line);display:grid;grid-template-columns:42px 1fr;overflow:hidden;margin-bottom:.45rem}.side{background:oklch(0.92 0.04 220);padding:.3rem;display:grid;gap:.25rem}.dot{height:14px;border-radius:999px;background:var(--primary)}.canvas{padding:.5rem;display:grid;gap:.35rem}.shape{border-radius:10px;background:var(--accent-tint);border:1px solid var(--accent)}.shape.h{height:20px}.shape.m{height:42px}.shape.s{height:14px;width:70%}.svg-scene{width:100%;height:auto;display:block;border-radius:18px;border:2px solid var(--line);background:var(--sky)}.checklist{display:grid;gap:.45rem}.check{display:flex;gap:.55rem;align-items:flex-start;padding:.55rem;border-radius:12px;background:oklch(0.98 0.01 220);border:1px solid var(--line)}.check input{width:1.4rem;height:1.4rem;min-height:0;margin-top:.15rem}.radio-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:.45rem}.radio-card{border:2px solid var(--line);border-radius:14px;padding:.55rem;background:var(--surface)}.radio-card input{width:1.15rem;min-height:0;margin-right:.35rem}pre{white-space:pre-wrap;word-break:break-word;background:oklch(0.22 0.035 245);color:oklch(0.97 0.01 220);padding:1rem;border-radius:16px;max-height:26rem;overflow:auto;font-size:.85rem}.footer{background:var(--primary-dark);color:var(--surface);border-radius:var(--radius);padding:1rem;margin-top:1rem}.footer a{color:var(--surface)}.small{font-size:.88rem;color:var(--muted)}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}@media(max-width:520px){.slots{grid-template-columns:1fr}.slot{overflow-wrap:anywhere}.nav-inner{max-width:100%}}@media(min-width:820px){.hero-grid{grid-template-columns:1.05fr .95fr;align-items:center}.tool-area{grid-template-columns:1fr 1fr}.slides-board{grid-template-columns:1fr 1.35fr}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo">Saltar para a aula</a>
+<header class="wrap">
+  <div class="hero-grid">
+    <div>
+      <div class="meta"><span class="pill">4.º ano</span><span class="pill">45 min</span><span class="pill">Grupos 3–4</span><span class="pill">Canva + Estudo do Meio</span></div>
+      <h1>Missão Canva: Estudo do Meio em 5 diapositivos</h1>
+      <p class="lead">Escolhe um tema de Estudo do Meio, transforma-o numa pergunta e cria no Canva uma apresentação curta para ensinar os colegas.</p>
+      <p class="notice"><strong>Importante:</strong> os desenhos desta página são guias visuais originais inspirados no fluxo de trabalho do Canva. A página funciona sem internet; o trabalho final é feito no Canva aberto pela turma. Se houver ligação à internet, consulta também as páginas oficiais do Canva indicadas na etapa 4.</p>
+    </div>
+    <svg class="svg-scene" viewBox="0 0 620 380" role="img" aria-label="Grupo de alunos a planear uma apresentação no Canva">
+      <rect x="25" y="24" width="570" height="330" rx="28" fill="oklch(0.995 0.006 205)" stroke="oklch(0.52 0.16 220)" stroke-width="8"/>
+      <rect x="65" y="66" width="290" height="190" rx="20" fill="oklch(0.94 0.045 220)"/>
+      <rect x="95" y="94" width="180" height="26" rx="13" fill="oklch(0.52 0.16 220)"/>
+      <rect x="95" y="140" width="220" height="72" rx="15" fill="oklch(0.78 0.15 65)"/>
+      <circle cx="425" cy="122" r="46" fill="oklch(0.72 0.12 150)"/><circle cx="500" cy="168" r="42" fill="oklch(0.79 0.12 25)"/><circle cx="430" cy="242" r="44" fill="oklch(0.74 0.10 295)"/>
+      <rect x="145" y="286" width="330" height="30" rx="15" fill="oklch(0.95 0.055 150)"/><text x="310" y="307" text-anchor="middle" font-size="22" fill="oklch(0.22 0.035 245)" font-weight="800">pergunta → evidências → conclusão</text>
+    </svg>
+  </div>
+</header>
+<nav class="nav" aria-label="Etapas da aula"><div class="nav-inner">
+  <a href="#missao">1 Missão</a><a href="#tema">2 Tema</a><a href="#roteiro">3 Roteiro</a><a href="#canva">4 Canva</a><a href="#auto">5 Autoavaliação</a>
+</div></nav>
+<main id="conteudo" class="wrap">
+  <section class="panel" aria-labelledby="objetivos">
+    <h2 id="objetivos">O que vais conseguir fazer</h2>
+    <div class="cards">
+      <div class="card"><strong>Investigar</strong> Escolher um tema e uma pergunta clara.</div>
+      <div class="card"><strong>Planear</strong> Organizar 5 diapositivos com começo, meio e fim.</div>
+      <div class="card"><strong>Desenhar no Canva</strong> Usar ferramentas para explicar melhor.</div>
+      <div class="card"><strong>Avaliar</strong> Gerar um ficheiro Markdown para enviar ao professor.</div>
+    </div>
+  </section>
+
+  <section class="unit" id="missao" aria-labelledby="missao-titulo">
+    <div class="unit-title"><span class="num">1</span><div><h2 id="missao-titulo">Missão, segurança e papéis da equipa</h2><p>Seleciona os papéis do grupo. Um aluno pode ter mais do que um papel, mas todos devem participar.</p></div></div>
+    <div class="diff" data-diff="missao"><button aria-pressed="true" data-level="support">🟢 Apoio</button><button aria-pressed="false" data-level="standard">🟡 Intermédio</button><button aria-pressed="false" data-level="challenge">🔴 Desafio</button></div>
+    <div class="diff-box" id="missao-diff">Escolhe 3 papéis essenciais com ajuda dos ícones.</div>
+    <div class="cards roles" id="roleCards" aria-label="Papéis de grupo"></div>
+    <div class="checklist" aria-label="Regras de segurança">
+      <label class="check"><input type="checkbox" id="safe1"> Entramos com a conta escolar sem partilhar a palavra-passe.</label>
+      <label class="check"><input type="checkbox" id="safe2"> Usamos imagens/textos com respeito e escrevemos pelas nossas palavras.</label>
+    </div>
+    <div class="feedback" id="roleFeedback" aria-live="polite">Seleciona papéis e confirma as regras.</div>
+  </section>
+
+  <section class="unit" id="tema" aria-labelledby="tema-titulo">
+    <div class="unit-title"><span class="num">2</span><div><h2 id="tema-titulo">Do tema à pergunta de investigação</h2><p>O tema é escolhido pelo grupo. A página ajuda a transformar o tema numa pergunta investigável.</p></div></div>
+    <div class="cards" id="themeCards"></div>
+    <label for="customTheme"><strong>Ou escreve outro tema de Estudo do Meio</strong></label>
+    <input id="customTheme" placeholder="Ex.: levadas da Madeira, 25 de Abril, Sistema Solar...">
+    <label for="question"><strong>A pergunta do grupo</strong></label>
+    <textarea id="question" placeholder="Como...? Por que...? Que mudanças...? Quais são as consequências...?"></textarea>
+    <button id="checkQuestion" class="secondary">Verificar pergunta</button>
+    <div class="feedback" id="questionFeedback" aria-live="polite">Escolhe um tema e escreve uma pergunta.</div>
+  </section>
+
+  <section class="unit" id="roteiro" aria-labelledby="roteiro-titulo">
+    <div class="unit-title"><span class="num">3</span><div><h2 id="roteiro-titulo">Roteiro de 5 diapositivos</h2><p>Toca num cartão e depois numa posição. No Canva, cria uma página para cada parte.</p></div></div>
+    <div class="slides-board">
+      <div><h3>Cartões disponíveis</h3><div class="cards" id="slideCards"></div></div>
+      <div><h3>A minha sequência</h3><div class="slots" id="slideSlots"></div><button id="checkSlides">Verificar roteiro</button></div>
+    </div>
+    <div class="feedback" id="slideFeedback" aria-live="polite">Monta uma sequência com capa, pergunta, evidências e conclusão.</div>
+  </section>
+
+  <section class="unit" id="canva" aria-labelledby="canva-titulo">
+    <div class="unit-title"><span class="num">4</span><div><h2 id="canva-titulo">Canva: escolher a ferramenta certa</h2><p>Observa os mini-ecrãs e liga cada necessidade à ferramenta que ajuda a comunicar melhor.</p></div></div>
+    <div class="notice"><strong>Guias oficiais, se houver internet:</strong> <a href="https://www.canva.com/learn/how-to-use-canva-for-education/" target="_blank" rel="noopener">Canva Educação</a> · <a href="https://www.canva.com/learn/an-easy-guide-to-creating-a-presentation-in-canva/" target="_blank" rel="noopener">criar apresentações</a> · <a href="https://www.canva.com/education/students/" target="_blank" rel="noopener">Canva para estudantes</a>.</div>
+    <div class="mockups" aria-label="Guias visuais do Canva">
+      <div class="mock"><div class="mock-screen"><div class="side"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><div class="canvas"><div class="shape h"></div><div class="shape m"></div><div class="shape s"></div></div></div><strong>Modelos</strong><span class="small">Começar com uma estrutura.</span></div>
+      <div class="mock"><div class="mock-screen"><div class="side"><span class="dot"></span><span class="dot"></span></div><div class="canvas"><div class="shape s"></div><div class="shape s"></div><div class="shape h"></div></div></div><strong>Texto</strong><span class="small">Título curto e legível.</span></div>
+      <div class="mock"><div class="mock-screen"><div class="side"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><div class="canvas"><div class="shape m"></div><div class="shape m" style="width:65%"></div></div></div><strong>Elementos/imagens</strong><span class="small">Ícones e imagens com legenda.</span></div>
+      <div class="mock"><div class="mock-screen"><div class="side"><span class="dot"></span></div><div class="canvas"><div class="shape h"></div><div class="shape s"></div><div class="shape s"></div></div></div><strong>Partilhar</strong><span class="small">Trabalhar em grupo e comentar.</span></div>
+    </div>
+    <div class="tool-area">
+      <div><h3>Preciso de...</h3><div class="need-list" id="needs"></div></div>
+      <div><h3>Ferramenta Canva</h3><div class="tool-list" id="tools"></div></div>
+    </div>
+    <div class="progress" aria-label="Progresso das ligações"><div class="bar" id="matchBar"></div></div>
+    <div class="feedback" id="toolFeedback" aria-live="polite">Escolhe uma necessidade e depois a ferramenta mais útil.</div>
+  </section>
+
+  <section class="unit" id="auto" aria-labelledby="auto-titulo">
+    <div class="unit-title"><span class="num">5</span><div><h2 id="auto-titulo">Autoavaliação final: gerar Markdown</h2><p>Preenche no fim da aula. Depois podes descarregar o ficheiro Markdown, copiar o texto ou abrir um email para o professor.</p></div></div>
+    <div class="grid cols">
+      <div>
+        <label for="studentName"><strong>Nome do aluno/a</strong></label><input id="studentName" placeholder="O teu nome">
+        <label for="groupName"><strong>Nome do grupo</strong></label><input id="groupName" placeholder="Ex.: Grupo dos Cientistas">
+        <label for="students"><strong>Elementos do grupo</strong></label><textarea id="students" placeholder="Nomes dos elementos do grupo"></textarea>
+        <label for="finalTopic"><strong>Tema escolhido</strong></label><input id="finalTopic" placeholder="Tema de Estudo do Meio">
+        <label for="finalQuestion"><strong>Pergunta investigável</strong></label><textarea id="finalQuestion" placeholder="A nossa pergunta foi..."></textarea>
+        <label for="evidence"><strong>Uma evidência do nosso trabalho</strong></label><textarea id="evidence" placeholder="Ex.: Usámos duas fontes, criámos 5 diapositivos, escrevemos legendas..."></textarea>
+        <label for="improvement"><strong>Próxima melhoria</strong></label><textarea id="improvement" placeholder="Se tivéssemos mais tempo, iríamos..."></textarea>
+      </div>
+      <div>
+        <fieldset class="panel" style="box-shadow:none"><legend><strong>Como trabalhámos?</strong></legend><div class="radio-row" id="levels"></div></fieldset>
+        <div class="checklist">
+          <label class="check"><input type="checkbox" id="c1"> A apresentação tem pergunta, evidências e conclusão.</label>
+          <label class="check"><input type="checkbox" id="c2"> As imagens/elementos ajudam a explicar o tema.</label>
+          <label class="check"><input type="checkbox" id="c3"> Todos no grupo contribuíram.</label>
+          <label class="check"><input type="checkbox" id="c4"> Preparámos como vamos apresentar à turma/professor.</label>
+        </div>
+        <button id="generateMd">Gerar Markdown</button>
+        <button id="copyMd" class="secondary">Copiar texto</button>
+        <button id="downloadMd" class="secondary">Descarregar .md</button>
+        <a id="emailLink" class="btn secondary" href="mailto:prof.igor@edu.madeira.gov.pt">Abrir email</a>
+        <div class="feedback" id="mdFeedback" aria-live="polite">O Markdown aparece aqui depois de gerar.</div>
+      </div>
+    </div>
+    <h3>Pré-visualização Markdown</h3>
+    <pre id="mdPreview" tabindex="0">Ainda não foi gerado.</pre>
+  </section>
+
+  <section class="footer" aria-labelledby="curriculo">
+    <h2 id="curriculo" style="color:inherit">Referências curriculares</h2>
+    <p><strong>Estudo do Meio 4.º ano:</strong> pesquisa, seleção e partilha de informação; apresentações com recurso às TIC; uso seguro, respeitador e responsável da tecnologia.</p>
+    <p><strong>Português 4.º ano:</strong> planear, produzir e avaliar discursos orais breves; selecionar informação relevante e comunicar a público restrito.</p>
+    <p><strong>Perfil dos Alunos:</strong> Linguagens e textos; Informação e comunicação; Pensamento crítico e criativo; Relacionamento interpessoal; Autonomia; Saber científico, técnico e tecnológico.</p>
+    <p>Gerado por PageCraft 🛠️ — página offline e self-contained.</p>
+  </section>
+</main>
+<script>
+const $=s=>document.querySelector(s);const $$=s=>Array.from(document.querySelectorAll(s));
+const roles=[['coord','🧭','Coordenador/a','Cuida do tempo e confirma o próximo passo.'],['invest','🔎','Investigador/a','Procura e escolhe informação útil.'],['design','🎨','Designer','Escolhe modelo, cores, imagens e legibilidade.'],['write','✍️','Escritor/a','Transforma ideias em frases curtas.'],['speak','🎤','Porta-voz','Prepara como apresentar à turma/professor.']];
+const themes=['História de Portugal','Sistema Solar','Relevo e rios de Portugal','Património da Madeira','Ambiente e consumo','Tecnologia no passado e presente','Saúde e segurança','Migrações e União Europeia'];
+const slideTypes=[['capa','Capa','Tema + grupo + imagem simples'],['pergunta','Pergunta','A pergunta que guia a apresentação'],['desc1','Descoberta 1','Primeira resposta com frase curta'],['evid','Evidência','Imagem, mapa, dado ou exemplo com legenda'],['conc','Conclusão','O que aprendemos + pergunta ao público'],['extra','Extra decorativo','Só entra se ajudar a explicar']];
+const correctOrder=['capa','pergunta','desc1','evid','conc'];
+const needs=[['estrutura','organizar a apresentação sem começar do zero'],['titulo','escrever um título grande e claro'],['visual','mostrar uma ideia com ícone, imagem ou mapa'],['grupo','trabalhar em equipa e deixar comentários'],['fala','lembrar o que dizer ao apresentar'],['mostrar','apresentar no ecrã ou projetor']];
+const tools=[['modelo','Modelos'],['texto','Texto'],['elementos','Elementos / Imagens'],['partilhar','Partilhar / Comentários'],['notas','Notas do apresentador'],['apresentar','Apresentar']];
+const match={estrutura:'modelo',titulo:'texto',visual:'elementos',grupo:'partilhar',fala:'notas',mostrar:'apresentar'};
+const diffTexts={missao:{support:'Escolhe 3 papéis essenciais com ajuda dos ícones.',standard:'Distribui papéis e diz uma responsabilidade de cada um.',challenge:'Acrescenta revisor/a de fontes e combina como ajudar outro grupo sem fazer por ele.'}};
+let selectedRoles=new Set(), selectedTheme='', selectedSlide=null, slidePlan=[null,null,null,null,null], selectedNeed=null, doneMatches=new Set();
+function saveToAuto(){ $('#finalTopic').value = $('#customTheme').value || selectedTheme || $('#finalTopic').value; $('#finalQuestion').value = $('#question').value || $('#finalQuestion').value; }
+function renderRoles(){const box=$('#roleCards');box.innerHTML='';roles.forEach(([id,icon,name,desc])=>{const b=document.createElement('button');b.className='card';b.type='button';b.setAttribute('aria-pressed',selectedRoles.has(id));b.innerHTML=`<strong>${icon} ${name}</strong><span>${desc}</span>`;b.onclick=()=>{selectedRoles.has(id)?selectedRoles.delete(id):selectedRoles.add(id);renderRoles();updateRoles();};box.appendChild(b);});}
+function updateRoles(){let ok=selectedRoles.size>=3 && $('#safe1').checked && $('#safe2').checked;$('#roleFeedback').className='feedback '+(ok?'ok':'');$('#roleFeedback').textContent=ok?'✓ A equipa tem papéis e regras. Já podem começar no Canva com segurança.':'Seleciona pelo menos 3 papéis e confirma as duas regras.';}
+function renderThemes(){const box=$('#themeCards');themes.forEach(t=>{const b=document.createElement('button');b.type='button';b.className='card';b.textContent=t;b.onclick=()=>{selectedTheme=t;$('#customTheme').value=t;$$('#themeCards .card').forEach(c=>c.classList.remove('selected'));b.classList.add('selected');saveToAuto();};box.appendChild(b);});}
+function checkQuestion(){const q=$('#question').value.trim();const theme=$('#customTheme').value.trim()||selectedTheme;const starters=['como','por que','porque','quais','que ','de que','qual'];const hasStarter=starters.some(s=>q.toLowerCase().startsWith(s));const good=theme.length>2 && q.length>=18 && q.includes('?') && hasStarter;$('#questionFeedback').className='feedback '+(good?'ok':'');$('#questionFeedback').textContent=good?'✓ Boa pergunta: dá para investigar e cabe numa apresentação curta.':'Quase! Escolhe tema e escreve uma pergunta com Como/Por que/Que/Quais, terminando com ?';saveToAuto();}
+function renderSlides(){const cards=$('#slideCards');cards.innerHTML='';slideTypes.forEach(([id,name,desc])=>{const b=document.createElement('button');b.type='button';b.className='card'+(selectedSlide===id?' selected':'');b.innerHTML=`<strong>${name}</strong><span>${desc}</span>`;b.onclick=()=>{selectedSlide=id;renderSlides();};cards.appendChild(b);});const slots=$('#slideSlots');slots.innerHTML='';for(let i=0;i<5;i++){const div=document.createElement('button');div.type='button';div.className='slot '+(slidePlan[i]?'filled':'');let item=slideTypes.find(x=>x[0]===slidePlan[i]);div.innerHTML=`<span class="small">Diapositivo ${i+1}</span><br><strong>${item?item[1]:'Tocar para colocar'}</strong><br><span>${item?item[2]:'Escolhe um cartão à esquerda.'}</span>`;div.onclick=()=>{if(selectedSlide){slidePlan[i]=selectedSlide;selectedSlide=null;renderSlides();}};slots.appendChild(div);}}
+function checkSlides(){const good=correctOrder.every((id,i)=>slidePlan[i]===id);const filled=slidePlan.filter(Boolean).length;$('#slideFeedback').className='feedback '+(good?'ok':'');$('#slideFeedback').textContent=good?'✓ Sequência clara: pergunta primeiro, evidências no meio e conclusão no fim.':'Tens '+filled+'/5 posições. Procura esta ordem: Capa → Pergunta → Descoberta → Evidência → Conclusão.';}
+function renderTools(){const n=$('#needs'),t=$('#tools');n.innerHTML='';t.innerHTML='';needs.forEach(([id,text])=>{const b=document.createElement('button');b.type='button';b.className='need '+(selectedNeed===id?'selected ':'')+(doneMatches.has(id)?'done':'');b.textContent='Preciso de '+text;b.onclick=()=>{if(!doneMatches.has(id)){selectedNeed=id;renderTools();}};n.appendChild(b);});tools.forEach(([id,name])=>{const b=document.createElement('button');b.type='button';b.className='tool';b.textContent=name;b.onclick=()=>tryMatch(id,name);t.appendChild(b);});$('#matchBar').style.width=(doneMatches.size/needs.length*100)+'%';}
+function tryMatch(toolId,name){if(!selectedNeed){$('#toolFeedback').className='feedback';$('#toolFeedback').textContent='Primeiro escolhe uma necessidade.';return;} if(match[selectedNeed]===toolId){doneMatches.add(selectedNeed);const needText=needs.find(x=>x[0]===selectedNeed)[1];$('#toolFeedback').className='feedback ok';$('#toolFeedback').textContent='✓ A ferramenta '+name+' ajuda a '+needText+'. Escolha certa para comunicar melhor!';selectedNeed=null;}else{$('#toolFeedback').className='feedback';$('#toolFeedback').textContent='Quase! Pergunta: esta ferramenta resolve a necessidade ou só enfeita? Tenta outra ligação.';}renderTools();}
+function renderLevels(){const levels=[['Ainda não consigo','Preciso de muita ajuda'],['Com ajuda','Consigo se a equipa orientar'],['Sozinho/a','Contribuí com autonomia'],['Ajudo colegas','Também ajudei outro grupo']];$('#levels').innerHTML=levels.map((l,i)=>`<label class="radio-card"><input type="radio" name="level" value="${l[0]}" ${i===1?'checked':''}> <strong>${l[0]}</strong><br><span class="small">${l[1]}</span></label>`).join('');}
+function clean(v){return (v||'').trim() || '—';}
+function makeMarkdown(){const checks=[['c1','Tem pergunta, evidências e conclusão'],['c2','Imagens/elementos explicam o tema'],['c3','Todos contribuíram'],['c4','Preparámos a apresentação oral']].map(([id,txt])=>`- ${$('#'+id).checked?'[x]':'[ ]'} ${txt}`).join('\n');const level=(document.querySelector('input[name="level"]:checked')||{}).value||'—';const roleNames=[...selectedRoles].map(id=>roles.find(r=>r[0]===id)?.[2]).filter(Boolean).join(', ')||'—';const today=new Date().toLocaleDateString('pt-PT');return `# Autoavaliação individual — Apresentação Canva\n\n**Data:** ${today}\n**Professor:** prof.igor@edu.madeira.gov.pt\n\n## Grupo\n\n- **Aluno/a:** ${clean($('#studentName').value)}\n- **Nome do grupo:** ${clean($('#groupName').value)}\n- **Elementos do grupo:** ${clean($('#students').value)}\n- **Papéis usados:** ${roleNames}\n\n## Projeto de Estudo do Meio\n\n- **Tema:** ${clean($('#finalTopic').value || $('#customTheme').value)}\n- **Pergunta investigável:** ${clean($('#finalQuestion').value || $('#question').value)}\n\n## Checklist\n\n${checks}\n\n## Como trabalhámos\n\n- **Nível de autonomia:** ${level}\n- **Evidência do nosso trabalho:** ${clean($('#evidence').value)}\n- **Próxima melhoria:** ${clean($('#improvement').value)}\n\n## Mensagem final\n\nAprendemos que uma apresentação no Canva fica melhor quando cada ferramenta ajuda o público a compreender o tema.\n`;}
+function generateMd(){saveToAuto();const md=makeMarkdown();$('#mdPreview').textContent=md;$('#mdFeedback').className='feedback ok';$('#mdFeedback').textContent='✓ Markdown gerado. Podes descarregar, copiar ou abrir um email.';const subject=encodeURIComponent('Autoavaliação Canva — '+clean($('#studentName').value || $('#groupName').value));const body=encodeURIComponent(md.slice(0,1800));$('#emailLink').href=`mailto:prof.igor@edu.madeira.gov.pt?subject=${subject}&body=${body}`;}
+async function copyMd(){const md=$('#mdPreview').textContent;if(!md || md.includes('Ainda não')) generateMd();try{await navigator.clipboard.writeText($('#mdPreview').textContent);$('#mdFeedback').textContent='✓ Texto copiado. Cola-o no email se for necessário.';}catch(e){$('#mdFeedback').textContent='Não consegui copiar automaticamente. Seleciona o texto da pré-visualização e copia.';}}
+function downloadMd(){const md=$('#mdPreview').textContent;if(!md || md.includes('Ainda não')) generateMd();const name=(clean($('#studentName').value || $('#groupName').value).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'grupo')+'-autoavaliacao-canva.md';const blob=new Blob([$('#mdPreview').textContent],{type:'text/markdown;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),800);$('#mdFeedback').textContent='✓ Ficheiro Markdown descarregado: '+name;}
+function initDiff(){document.querySelectorAll('.diff').forEach(group=>{group.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;group.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');const key=group.dataset.diff;$('#'+key+'-diff').textContent=diffTexts[key][b.dataset.level];});});}
+renderRoles();renderThemes();renderSlides();renderTools();renderLevels();initDiff();$('#safe1').onchange=updateRoles;$('#safe2').onchange=updateRoles;$('#checkQuestion').onclick=checkQuestion;$('#question').addEventListener('input',saveToAuto);$('#customTheme').addEventListener('input',saveToAuto);$('#checkSlides').onclick=checkSlides;$('#generateMd').onclick=generateMd;$('#copyMd').onclick=copyMd;$('#downloadMd').onclick=downloadMd;
+</script>
+</body>
+</html>

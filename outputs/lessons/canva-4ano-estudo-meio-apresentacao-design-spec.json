@@ -1,0 +1,57 @@
+{
+  "palette": {
+    "bg": "oklch(0.985 0.018 205)",
+    "surface": "oklch(0.995 0.006 205)",
+    "primary": "oklch(0.52 0.16 220)",
+    "accent": "oklch(0.78 0.15 65)",
+    "ink": "oklch(0.22 0.035 245)"
+  },
+  "functional": {
+    "ok": "oklch(0.62 0.15 150)",
+    "warn": "oklch(0.72 0.16 82)",
+    "focus": "oklch(0.58 0.20 255)"
+  },
+  "typography": {
+    "fontFamily": "'Atkinson Hyperlegible', 'Lexend', 'Nunito', 'Comic Sans MS', 'Chalkboard SE', system-ui, -apple-system, sans-serif",
+    "scale": "kids-8-10",
+    "baseSizePx": 20,
+    "headingSizePx": 30,
+    "maxLineCh": 55,
+    "weights": [
+      400,
+      700,
+      800
+    ],
+    "italicAllowed": false,
+    "allCapsAllowed": false
+  },
+  "layout": {
+    "borderRadius": 18,
+    "spacing": "comfortable",
+    "maxWidthPx": 1120,
+    "padding": "1rem clamp(1rem, 2vw, 1.5rem)"
+  },
+  "components": {
+    "buttons": "pill/radius 16px, min-height 48px, strong focus ring",
+    "cards": "surface cards with soft border and shadow, large click areas",
+    "badges": "rounded role/tool badges with text labels",
+    "feedback_correct": "ok tint + ✓ + discovery microcopy",
+    "feedback_incorrect": "warn tint + ↻ + hint; never blame the learner",
+    "tabs": "large differentiation buttons with aria-pressed",
+    "visualGuide": "original inline SVG/CSS mockups of Canva-like workflow, labelled as non-official illustrations"
+  },
+  "motion": {
+    "transitions": "subtle",
+    "durationMs": 180,
+    "easing": "ease-out",
+    "respectReducedMotion": true
+  },
+  "accessibility": {
+    "contrastBody": "AA",
+    "contrastMicrocopy": "AAA",
+    "focusRing": true,
+    "minTapPx": 48,
+    "soundOptIn": false
+  },
+  "notes": "Paleta azul/âmbar associa tecnologia e criatividade sem usar semáforo para níveis. O layout usa cartões amplos para trabalho em grupo no tablet/quadro. As imagens são ilustrações originais inline para manter a página offline e evitar dependência/licença de capturas externas."
+}

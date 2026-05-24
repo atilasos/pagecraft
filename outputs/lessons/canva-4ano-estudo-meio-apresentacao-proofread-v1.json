@@ -1,0 +1,28 @@
+{
+  "pass": true,
+  "language": "pt-PT AO90",
+  "reviewed_files": [
+    "outputs/lessons/canva-4ano-estudo-meio-apresentacao.html",
+    "outputs/lessons/canva-4ano-estudo-meio-apresentacao.md",
+    "outputs/lessons/canva-4ano-estudo-meio-apresentacao-docspec.json"
+  ],
+  "issues_found": [
+    {
+      "severity": "low",
+      "type": "grammar",
+      "detail": "Feedback de ferramenta dizia 'Modelos ajuda'.",
+      "fix": "Alterado para 'A ferramenta Modelos ajuda...'."
+    },
+    {
+      "severity": "low",
+      "type": "assessment clarity",
+      "detail": "Autoavaliação podia parecer apenas de grupo.",
+      "fix": "Adicionado campo 'Nome do aluno/a' e título 'Autoavaliação individual'."
+    }
+  ],
+  "remaining_risks": [
+    "A página orienta o uso do Canva, mas não consegue garantir disponibilidade da conta escolar/Canva na sala.",
+    "As ilustrações são originais e não capturas oficiais para manter o HTML offline/self-contained; foram incluídos links oficiais opcionais."
+  ],
+  "notes": "Texto adequado a 9-10 anos, tratamento por tu, feedback não punitivo e instruções curtas. Não foram encontrados erros críticos de pt-PT após correções."
+}
