@@ -27,7 +27,7 @@ O orquestrador (a sessão principal) coordena, valida artefactos e decide quando
 3. Fontes oficiais no vault: `~/vault/documentos-oficiais/`.
 4. Recursos desta skill: `identities/`, `references/`, `assets/`, `scripts/`, `agents/`.
 5. `CLAUDE.md` do repo PageCraft (regras técnicas/design).
-6. Skills irmãs (`skills/codex/`, `skills/openclaw/`) quando existirem no repo, como referência histórica se houver dúvida.
+6. Skills irmãs (`skills/codex/`) e o pipeline em código do Studio (`server/pipeline/`) como referência se houver dúvida.
 
 ## Quando usar
 

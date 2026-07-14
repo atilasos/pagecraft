@@ -1,6 +1,6 @@
 """Publicação de uma atividade PageCraft aprovada no catálogo do repo.
 
-Port de skills/openclaw/scripts/publish_to_catalog.py sem a parte de
+Port de skills/shared/scripts/publish_to_catalog.py (histórico) sem a parte de
 git commit/push (isso era responsabilidade do script antigo).
 """
 

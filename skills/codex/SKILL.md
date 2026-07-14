@@ -8,7 +8,7 @@ metadata:
 
 # PageCraft para Codex
 
-Esta skill adapta a skill OpenClaw `skills/openclaw/` para o Codex. O objetivo é produzir páginas pedagógicas PageCraft com o mesmo rigor: **papéis especializados, artefactos explícitos, QA real e iteração até qualidade suficiente**.
+Esta skill adapta o pipeline PageCraft (fonte canónica em `server/pipeline/prompts/`) para o Codex. O objetivo é produzir páginas pedagógicas PageCraft com o mesmo rigor: **papéis especializados, artefactos explícitos, QA real e iteração até qualidade suficiente**.
 
 Ao invocar esta skill, o pedido do utilizador autoriza o uso de **Codex native subagents** para as fases especializadas abaixo. O orquestrador continua responsável pela integração e pela verificação final.
 
@@ -29,7 +29,7 @@ Regras de fidelidade:
 2. Pedagogia canónica do vault: `~/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md`.
 3. Fontes oficiais no vault: `~/vault/documentos-oficiais/`.
 4. Recursos desta skill: `identities/`, `references/`, `assets/`, `scripts/`.
-5. Skill OpenClaw original (`skills/openclaw/`) como referência histórica se houver dúvida.
+5. O pipeline em código do PageCraft Studio (`server/pipeline/`) como referência de comportamento se houver dúvida.
 
 ## Quando usar
 
