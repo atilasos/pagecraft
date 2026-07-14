@@ -11,6 +11,58 @@ const state = {
 };
 
 const $ = (id) => document.getElementById(id);
+const SAVED_KEY = "pagecraft_student";
+
+function saveIdentity() {
+  try {
+    localStorage.setItem(
+      SAVED_KEY,
+      JSON.stringify({
+        sessionId: state.session.id,
+        token: state.token,
+        studentId: state.studentId,
+        displayName: state.displayName,
+      })
+    );
+  } catch (e) { /* modo privado sem storage: segue sem persistência */ }
+}
+
+function clearIdentity() {
+  try { localStorage.removeItem(SAVED_KEY); } catch (e) {}
+}
+
+/* reentrada automática: se este dispositivo já tem identidade nesta aula,
+   valida-a no servidor e volta direto à atividade */
+async function tryResume() {
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem(SAVED_KEY) || "null"); } catch (e) {}
+  if (!saved?.sessionId || !saved?.token) return false;
+  try {
+    const resp = await fetch(
+      `/api/sessions/${saved.sessionId}/me?student_token=${encodeURIComponent(saved.token)}`
+    );
+    if (!resp.ok) {
+      clearIdentity();
+      return false;
+    }
+    const me = await resp.json();
+    if (me.session.status !== "live") {
+      clearIdentity();
+      return false;
+    }
+    state.session = me.session;
+    state.studentId = me.student_id;
+    state.token = saved.token;
+    state.displayName = me.display_name;
+    startActivity();
+    showMessage(`Bem-vinda de volta, ${me.display_name}!`, "feedback-ok");
+    return true;
+  } catch (e) {
+    return false; // sem rede: fica no ecrã do código
+  }
+}
+
+tryResume();
 
 /* ---- passo 1: código ---- */
 
@@ -64,6 +116,7 @@ async function claim(student) {
   state.studentId = data.student_id;
   state.token = data.student_token;
   state.displayName = data.display_name;
+  saveIdentity();
   startActivity();
 }
 
@@ -178,6 +231,7 @@ function connectStream() {
   es.addEventListener("session_closed", () => {
     $("freeze-overlay").hidden = true;
     showMessage("A aula terminou. Bom trabalho!", "feedback-ok");
+    clearIdentity();
     es.close();
   });
 }

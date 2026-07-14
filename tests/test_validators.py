@@ -68,6 +68,21 @@ def test_bracket_fetch_fails():
     assert not validate_activity_html(bad).passed
 
 
+def test_unit_anchors_required_when_expected():
+    report = validate_activity_html(GOOD, expected_units=2)
+    assert not report.passed
+    assert any("u1" in e and "u2" in e for e in report.errors)
+
+
+def test_unit_anchors_satisfied():
+    ok = GOOD.replace(
+        '<main aria-live="polite">',
+        '<main aria-live="polite"><section id="u1">a</section><div data-unit="u2">b</div>',
+    )
+    report = validate_activity_html(ok, expected_units=2)
+    assert report.passed, report.errors
+
+
 def test_data_url_allowed():
     ok = GOOD.replace("</style>", "body{background:url(data:image/png;base64,AAA)}</style>")
     report = validate_activity_html(ok)
