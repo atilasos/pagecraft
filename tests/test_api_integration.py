@@ -207,6 +207,56 @@ async def test_activities_get_restrictive_csp(client):
     assert "connect-src 'none'" in csp
 
 
+async def test_student_resume_via_me(client):
+    cls = (await client.post("/api/classes", json={"name": "1.º D", "year": 1, "students": ["Maria"]})).json()
+    session = (
+        await client.post(
+            "/api/sessions", json={"class_id": cls["id"], "activity_slug": "demo", "activity_title": "T"}
+        )
+    ).json()
+    student_id = next(iter(session["roster"]))
+    claim = (
+        await client.post(f"/api/sessions/{session['id']}/claim", json={"student_id": student_id})
+    ).json()
+
+    # retoma válida: devolve identidade + sessão pública sem tokens
+    resp = await client.get(
+        f"/api/sessions/{session['id']}/me", params={"student_token": claim["student_token"]}
+    )
+    assert resp.status_code == 200
+    me = resp.json()
+    assert me["display_name"] == "Maria"
+    assert '"token"' not in resp.text
+    assert me["session"]["status"] == "live"
+
+    # token errado → 401
+    resp = await client.get(f"/api/sessions/{session['id']}/me", params={"student_token": "x"})
+    assert resp.status_code == 401
+
+    # depois de fechada, a retoma reporta o estado (o cliente limpa e volta ao código)
+    await client.post(f"/api/sessions/{session['id']}/close")
+    resp = await client.get(
+        f"/api/sessions/{session['id']}/me", params={"student_token": claim["student_token"]}
+    )
+    assert resp.status_code == 200
+    assert resp.json()["session"]["status"] == "closed"
+
+
+async def test_class_report_endpoint(client):
+    cls = (await client.post("/api/classes", json={"name": "4.º E", "year": 4, "students": ["Pedro"]})).json()
+    resp = await client.get(f"/api/classes/{cls['id']}/report")
+    assert resp.status_code == 200
+    report = resp.json()
+    assert report["class_name"] == "4.º E"
+    assert report["students"][0]["display_name"] == "Pedro"
+    md = await client.get(f"/api/classes/{cls['id']}/report", params={"format": "md"})
+    assert md.status_code == 200
+    assert "Registo de trabalho" in md.text
+    # exige token de professor
+    resp = await client.get(f"/api/classes/{cls['id']}/report", headers={"x-teacher-token": ""})
+    assert resp.status_code == 401
+
+
 async def test_session_control_events(client):
     cls = (await client.post("/api/classes", json={"name": "3.º C", "year": 3, "students": ["Inês", "Duarte"]})).json()
     session = (

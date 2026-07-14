@@ -106,6 +106,29 @@ async def list_classes(request: Request):
     return await _svc(request).list_classes()
 
 
+@router.get("/classes/{class_id}/report", dependencies=[teacher_only])
+async def class_report(class_id: str, request: Request):
+    from fastapi.responses import PlainTextResponse
+
+    from ..classroom.reports import build_class_report, report_to_markdown
+
+    svc = _svc(request)
+    cls = await svc.get_class(class_id)
+    if not cls:
+        raise HTTPException(404, "turma não encontrada")
+    sessions = await svc.list_sessions()
+    report = await build_class_report(
+        request.app.state.storage,
+        cls,
+        sessions,
+        date_from=request.query_params.get("from", ""),
+        date_to=request.query_params.get("to", ""),
+    )
+    if request.query_params.get("format") == "md":
+        return PlainTextResponse(report_to_markdown(report), media_type="text/markdown; charset=utf-8")
+    return report
+
+
 @router.put("/classes/{class_id}/students", dependencies=[teacher_only])
 async def update_students(class_id: str, body: ClassRequest, request: Request):
     cls = await _svc(request).update_class_students(class_id, body.students)
@@ -152,6 +175,24 @@ async def join_by_code(join_code: str, request: Request):
     if not session:
         raise HTTPException(404, "não há nenhuma aula com esse código")
     return _public_session(session)
+
+
+@router.get("/sessions/{session_id}/me")
+async def whoami(session_id: str, request: Request):
+    """Retoma de sessão do aluno: valida o token guardado no dispositivo e
+    devolve a identidade + estado público da sessão (sem tokens de terceiros)."""
+    svc = _svc(request)
+    token = request.query_params.get("student_token", "")
+    student_id = await svc.student_for_token(session_id, token, require_live=False)
+    if not student_id:
+        raise HTTPException(401, "token inválido")
+    session = await svc.get_session(session_id)
+    entry = session["roster"][student_id]
+    return {
+        "student_id": student_id,
+        "display_name": entry["display_name"],
+        "session": _public_session(session),
+    }
 
 
 @router.post("/sessions/{session_id}/claim")

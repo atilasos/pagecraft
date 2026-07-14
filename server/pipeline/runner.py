@@ -297,7 +297,9 @@ class PipelineRunner:
             html = built["html"]
             await self._write_artifact(job, "html", ".html", html)
 
-            validation = validate_activity_html(html).as_dict()
+            validation = validate_activity_html(
+                html, expected_units=len(docspec.get("units") or [])
+            ).as_dict()
             await self._emit(job, "validation", validation)
 
             proofread = await self._phase(job, "proofreader", *self.prompts.proofreader(docspec, html))

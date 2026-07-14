@@ -14,7 +14,9 @@ GOOD_HTML = (
     '<meta name="viewport" content="width=device-width, initial-scale=1">'
     "<style>:focus-visible{outline:3px solid blue} "
     "@media (prefers-reduced-motion: reduce){*{animation:none}}</style></head>"
-    '<body><main aria-live="polite">' + ("conteúdo pedagógico " * 200) + "</main></body></html>"
+    '<body><main aria-live="polite"><section id="u1">'
+    + ("conteúdo pedagógico " * 200)
+    + "</section></main></body></html>"
 )
 
 DOCSPEC = {

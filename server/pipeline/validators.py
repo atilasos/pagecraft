@@ -43,9 +43,23 @@ FETCH_CALL = re.compile(
 )
 
 
-def validate_activity_html(html: str) -> ValidationReport:
+def validate_activity_html(html: str, expected_units: int = 0) -> ValidationReport:
     report = ValidationReport()
     lower = html.lower()
+
+    # âncoras de unidade: o «chamar a atenção» do professor aponta para uN;
+    # cada unidade do docspec tem de existir como id="uN" ou data-unit="uN"
+    missing = [
+        f"u{i}"
+        for i in range(1, expected_units + 1)
+        if not re.search(rf"""(?:id|data-unit)\s*=\s*["']u{i}["']""", html)
+    ]
+    if missing:
+        report.error(
+            "faltam âncoras de unidade para o professor chamar a atenção: "
+            + ", ".join(missing)
+            + ' (usa id="uN" ou data-unit="uN" no contentor de cada unidade, pela ordem do docspec)'
+        )
 
     if "<!doctype html" not in lower:
         report.error("falta <!doctype html>")

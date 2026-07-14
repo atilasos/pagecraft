@@ -51,10 +51,53 @@ async function loadClasses() {
         .map((c) => `<li><strong>${esc(c.name)}</strong> <span class="muted">· ${esc(c.year)}.º ano · ${c.students.length} alunos</span></li>`)
         .join("")}</ul>`
     : "Ainda não há turmas — cria a primeira em baixo.";
-  $("launch-class").innerHTML = classes
+  const options = classes
     .map((c) => `<option value="${esc(c.id)}">${esc(c.name)}</option>`)
     .join("");
+  $("launch-class").innerHTML = options;
+  $("report-class").innerHTML = options;
 }
+
+/* ---------- relatório para avaliação cooperada ---------- */
+
+$("report-btn").addEventListener("click", async () => {
+  const classId = $("report-class").value;
+  if (!classId) return;
+  const params = new URLSearchParams();
+  if ($("report-from").value) params.set("from", $("report-from").value);
+  if ($("report-to").value) params.set("to", $("report-to").value);
+  const resp = await tfetch(`/api/classes/${classId}/report?${params}`);
+  const out = $("report-out");
+  if (!resp.ok) {
+    out.innerHTML = '<p class="feedback-warn">Não foi possível gerar o registo.</p>';
+    return;
+  }
+  const report = await resp.json();
+  const token = await teacherToken();
+  params.set("format", "md");
+  params.set("teacher_token", token);
+  const mdLink = $("report-md");
+  mdLink.href = `/api/classes/${classId}/report?${params}`;
+  mdLink.download = `registo-${report.class_name}.md`;
+  mdLink.hidden = false;
+
+  const head = `
+    <tr><th>Aluno</th><th>Aulas</th><th>Tent.</th><th>Certas</th><th>Desc.</th>
+    <th>Ajuda</th><th>Feedback</th><th>Partilhas</th><th>PIT</th></tr>`;
+  const rows = report.students
+    .map(
+      (s) => `<tr><td>${esc(s.display_name)}</td><td>${s.sessions}</td><td>${s.attempt}</td>
+        <td>${s.correct}</td><td>${s.discovery}</td><td>${s.help_needed}</td>
+        <td>${s.feedback_request}</td><td>${s.share_requested}</td>
+        <td>${s.pit_done}/${s.pit_total}</td></tr>`
+    )
+    .join("");
+  const sessions = report.sessions.length
+    ? `<p class="muted" style="margin-top:0.75rem">${report.sessions.length} sessões no período.</p>`
+    : '<p class="muted" style="margin-top:0.75rem">Sem sessões no período escolhido.</p>';
+  out.innerHTML = `<div class="card" style="margin-top:0.75rem; overflow-x:auto">
+    <table>${head}${rows}</table>${sessions}</div>`;
+});
 
 $("class-form").addEventListener("submit", async (ev) => {
   ev.preventDefault();
