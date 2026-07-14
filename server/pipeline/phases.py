@@ -27,6 +27,7 @@ class PromptLibrary:
         self.interaction_patterns = _read(refs / "interaction-patterns.md")
         self.maker_patterns = _read(refs / "maker-patterns.md")
         self.srtc_examples = _read(refs / "srtc-examples.md")
+        self.bridge_contract = _read(refs / "bridge-contract.md")
         self.template_base = _read(self.dir / "template-base.html")
 
     # ---- fases ----
@@ -96,6 +97,7 @@ class PromptLibrary:
             f"# Template base (usa como esqueleto: estrutura, tokens CSS, bridge de telemetria)\n\n"
             f"```html\n{self.template_base}\n```",
             f"# Padrões de interação\n\n{self.interaction_patterns}",
+            f"# Telemetria PageCraftBridge (obrigatório instrumentar)\n\n{self.bridge_contract}",
             f"# Adaptação à idade\n\n{self.age_adaptation}",
         ]
         if repair_ticket:

@@ -21,6 +21,7 @@ SHARED=(
   "identities/proofreader.md"
   "identities/evaluator.md"
   "references/ae-index.md"
+  "references/bridge-contract.md"
   "references/age-adaptation.md"
   "references/docspec-schema.md"
   "references/interaction-patterns.md"

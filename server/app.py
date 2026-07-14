@@ -61,6 +61,21 @@ def create_app() -> FastAPI:
             "wiki": wiki.available,
         }
 
+    @app.get("/api/meta")
+    async def meta():
+        import json as _json
+
+        catalog = {}
+        if config.catalog_path.exists():
+            catalog = _json.loads(config.catalog_path.read_text("utf-8"))
+        return {
+            "subjects": ["Português", "Matemática", "Estudo do Meio", "Educação Física", "Inglês"],
+            "ae_subjects": ae.list_subjects(),
+            "years": [1, 2, 3, 4],
+            "makers": ["minecraft", "lego", "3d-print", "robotics", "whiteboard", "unplugged"],
+            "activities": catalog.get("items", []),
+        }
+
     from .api import jobs
 
     app.include_router(jobs.router)

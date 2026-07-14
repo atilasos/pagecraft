@@ -36,6 +36,14 @@ class CodexProvider(AIProvider):
         workdir: str | None = None,
     ) -> Any:
         full_prompt = f"{system}\n\n---\n\n{prompt}" if system else prompt
+        if schema is not None:
+            # Nota: --output-schema exige schemas "strict" (additionalProperties
+            # false, tudo required), incompatível com o DocSpec permissivo.
+            # Em vez disso o schema segue no prompt e a validação é local.
+            full_prompt += (
+                "\n\n---\n\nFORMATO OBRIGATÓRIO: responde APENAS com JSON válido contra este "
+                f"JSON Schema, sem texto antes nem depois:\n\n```json\n{json.dumps(schema, ensure_ascii=False)}\n```"
+            )
         with tempfile.TemporaryDirectory(prefix="pagecraft-codex-") as tmp:
             tmp_path = Path(tmp)
             out_file = tmp_path / "last-message.txt"
@@ -53,10 +61,6 @@ class CodexProvider(AIProvider):
             ]
             if self.model:
                 cmd += ["-m", self.model]
-            if schema is not None:
-                schema_file = tmp_path / "schema.json"
-                schema_file.write_text(json.dumps(schema, ensure_ascii=False), "utf-8")
-                cmd += ["--output-schema", str(schema_file)]
             cmd.append("-")
 
             proc = await asyncio.create_subprocess_exec(

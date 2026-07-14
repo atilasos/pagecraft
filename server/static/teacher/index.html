@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PageCraft Studio — Professor</title>
+<link rel="stylesheet" href="/studio.css">
+</head>
+<body>
+<main>
+  <h1>Estúdio do Professor</h1>
+  <p class="muted"><a href="/">← início</a> · <a href="/teacher/class.html">turmas e sessões</a></p>
+
+  <section class="card" aria-labelledby="nova-atividade">
+    <h2 id="nova-atividade" style="margin-top:0">Criar nova atividade</h2>
+    <form id="job-form">
+      <label for="topic">Tema</label>
+      <input id="topic" name="topic" required minlength="3" placeholder="ex.: Dobros e metades com jogos de pares">
+      <div class="row">
+        <div>
+          <label for="subject">Disciplina</label>
+          <select id="subject" name="subject" required></select>
+        </div>
+        <div>
+          <label for="year">Ano</label>
+          <select id="year" name="year" required></select>
+        </div>
+        <div>
+          <label for="duration">Duração (min)</label>
+          <input id="duration" name="duration" type="number" min="15" max="50" value="30">
+        </div>
+        <div>
+          <label for="maker">Desafio maker</label>
+          <select id="maker" name="maker">
+            <option value="">— sem maker —</option>
+          </select>
+        </div>
+      </div>
+      <p style="margin-top:1rem">
+        <button type="submit" id="submit-btn">Gerar atividade</button>
+        <span class="muted" id="form-status" role="status"></span>
+      </p>
+      <p class="muted">A geração usa a wiki (princípios MEM) e as Aprendizagens Essenciais oficiais.
+      Demora vários minutos; podes acompanhar o progresso abaixo.</p>
+    </form>
+  </section>
+
+  <section aria-labelledby="jobs-title">
+    <h2 id="jobs-title">Gerações</h2>
+    <div id="jobs"></div>
+  </section>
+
+  <section aria-labelledby="catalog-title">
+    <h2 id="catalog-title">Catálogo publicado</h2>
+    <div class="card"><ul class="plain" id="catalog"></ul></div>
+  </section>
+</main>
+<script src="/teacher/app.js"></script>
+</body>
+</html>
