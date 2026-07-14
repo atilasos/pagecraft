@@ -97,3 +97,33 @@ class AEClient:
             return "", ""
         citation = f"AE {doc.subject} {year}.º ano (DGE). Fonte: {doc.source_url or doc.path}"
         return doc.body[:max_chars], citation
+
+    async def context_or_fallback(self, subject: str, year: int) -> tuple[str, str]:
+        """Documento local; se não existir, fallback à página oficial da DGE."""
+        if self.available:
+            excerpt, citation = self.context_for(subject, year)
+            if excerpt:
+                return excerpt, citation
+        return await web_fallback(subject, year)
+
+
+DGE_AE_INDEX = "https://www.dge.mec.pt/aprendizagens-essenciais-ensino-basico"
+
+
+async def web_fallback(subject: str, year: int, timeout_s: int = 15) -> tuple[str, str]:
+    """Fallback quando não há documento AE local: vai à página oficial da DGE
+    e devolve (excerto textual da página, citação com URL). Nunca lança —
+    devolve ("", citação genérica) se a rede falhar."""
+    citation = f"AE {subject} {year}.º ano — verificar na DGE: {DGE_AE_INDEX}"
+    try:
+        import httpx
+
+        async with httpx.AsyncClient(timeout=timeout_s, follow_redirects=True) as client:
+            resp = await client.get(DGE_AE_INDEX)
+        if resp.status_code == 200:
+            text = re.sub(r"<[^>]+>", " ", resp.text)
+            text = re.sub(r"\s+", " ", text)
+            return text[:4000], citation
+    except Exception:
+        pass
+    return "", citation

@@ -1,0 +1,158 @@
+import asyncio
+import json
+
+import httpx
+import pytest
+
+from server import app as app_module
+
+
+class InstantFeedbackProvider:
+    name = "fake"
+
+    async def complete(self, prompt, *, schema=None, system=None, timeout_s=20, workdir=None):
+        return {"feedback": "Boa! Já viste que a metade de 8 é 4."}
+
+
+@pytest.fixture
+async def client(tmp_path, monkeypatch):
+    monkeypatch.setenv("PAGECRAFT_DATA_DIR", str(tmp_path / "data"))
+    app = app_module.create_app()
+    async with app.router.lifespan_context(app):
+        app.state.feedback.provider = InstantFeedbackProvider()
+        transport = httpx.ASGITransport(app=app)
+        async with httpx.AsyncClient(transport=transport, base_url="http://test") as c:
+            c.app = app
+            yield c
+
+
+async def test_full_classroom_flow(client):
+    # professor cria turma e sessão
+    resp = await client.post(
+        "/api/classes", json={"name": "2.º B", "year": 2, "students": ["Rita", "Tomás"]}
+    )
+    assert resp.status_code == 200
+    cls = resp.json()
+
+    resp = await client.post(
+        "/api/sessions",
+        json={"class_id": cls["id"], "activity_slug": "demo", "activity_title": "Dobros"},
+    )
+    session = resp.json()
+    assert session["join_code"]
+
+    # aluno entra por código (sem tokens expostos)
+    resp = await client.get(f"/api/join/{session['join_code']}")
+    public = resp.json()
+    assert "roster" in public
+    assert all("token" not in s for s in public["roster"])
+
+    # reclama identidade; segunda vez conflito
+    student = public["roster"][0]
+    resp = await client.post(
+        f"/api/sessions/{session['id']}/claim", json={"student_id": student["student_id"]}
+    )
+    assert resp.status_code == 200
+    claim = resp.json()
+    resp = await client.post(
+        f"/api/sessions/{session['id']}/claim", json={"student_id": student["student_id"]}
+    )
+    assert resp.status_code == 409
+
+    # eventos: attempt + feedback_request (dispara IA fake)
+    events = [
+        {"event_id": "a1", "type": "attempt", "unit_id": "u1", "payload": {"correct": False}},
+        {
+            "event_id": "a2",
+            "type": "feedback_request",
+            "unit_id": "u1",
+            "payload": {"question": "metade de 8?", "answer": "6", "expected": "4"},
+        },
+    ]
+    resp = await client.post(
+        f"/api/sessions/{session['id']}/events",
+        json={"student_token": claim["student_token"], "events": events},
+    )
+    assert resp.status_code == 200
+    assert resp.json()["accepted"] == ["a1", "a2"]
+
+    # token errado → 401
+    resp = await client.post(
+        f"/api/sessions/{session['id']}/events",
+        json={"student_token": "invalido", "events": events},
+    )
+    assert resp.status_code == 401
+
+    # o feedback IA chega ao log de eventos da sessão
+    storage = client.app.state.storage
+    path = storage.path("sessions", session["id"], "events.jsonl")
+
+    async def wait_feedback():
+        while True:
+            for r in await storage.read_jsonl(path):
+                if r["type"] == "ai_feedback":
+                    return r
+            await asyncio.sleep(0.02)
+
+    record = await asyncio.wait_for(wait_feedback(), timeout=5)
+    assert "metade" in record["payload"]["text"]
+
+    # PIT do aluno
+    resp = await client.post(
+        f"/api/sessions/{session['id']}/pit",
+        json={"student_token": claim["student_token"], "text": "Acabar os dobros", "status": "doing"},
+    )
+    assert resp.status_code == 200
+
+    # fechar sessão
+    resp = await client.post(f"/api/sessions/{session['id']}/close")
+    assert resp.json()["status"] == "closed"
+
+
+async def test_student_stream_filters_events(client):
+    resp = await client.post("/api/classes", json={"name": "1.º C", "year": 1, "students": ["Zé", "Mia"]})
+    cls = resp.json()
+    resp = await client.post(
+        "/api/sessions", json={"class_id": cls["id"], "activity_slug": "demo", "activity_title": "Sílabas"}
+    )
+    session = resp.json()
+    public = (await client.get(f"/api/join/{session['join_code']}")).json()
+    s1, s2 = public["roster"][0], public["roster"][1]
+    c1 = (await client.post(f"/api/sessions/{session['id']}/claim", json={"student_id": s1["student_id"]})).json()
+    c2 = (await client.post(f"/api/sessions/{session['id']}/claim", json={"student_id": s2["student_id"]})).json()
+
+    # mensagem dirigida só ao aluno 2
+    await client.post(
+        f"/api/sessions/{session['id']}/message",
+        json={"text": "Boa, Mia!", "student_id": s2["student_id"]},
+    )
+    await client.post(f"/api/sessions/{session['id']}/close")
+
+    async def collect(token):
+        types = []
+        async with client.stream(
+            "GET",
+            f"/api/sessions/{session['id']}/stream",
+            params={"role": "student", "student_token": token},
+        ) as resp:
+            async for line in resp.aiter_lines():
+                if line.startswith("data: "):
+                    types.append(json.loads(line[6:])["type"])
+                if types and types[-1] == "session_closed":
+                    break
+        return types
+
+    types1 = await asyncio.wait_for(collect(c1["student_token"]), timeout=5)
+    types2 = await asyncio.wait_for(collect(c2["student_token"]), timeout=5)
+    assert "teacher_message" not in types1  # dirigida à Mia, o Zé não vê
+    assert "teacher_message" in types2
+    # eventos de outros alunos (joined) nunca chegam a alunos
+    assert "joined" not in types1 and "joined" not in types2
+
+
+async def test_health_and_meta(client):
+    health = (await client.get("/api/health")).json()
+    assert health["status"] == "ok"
+    meta = (await client.get("/api/meta")).json()
+    assert meta["years"] == [1, 2, 3, 4]
+    assert "Matemática" in meta["subjects"]

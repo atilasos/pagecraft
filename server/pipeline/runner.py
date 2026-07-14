@@ -207,11 +207,7 @@ class PipelineRunner:
         await self._save(job)
 
         # contexto de conhecimento (uma vez por job)
-        ae_excerpt, ae_citation = "", ""
-        if self.ae.available:
-            ae_excerpt, ae_citation = await asyncio.to_thread(
-                self.ae.context_for, job["subject"], job["year"]
-            )
+        ae_excerpt, ae_citation = await self.ae.context_or_fallback(job["subject"], job["year"])
         mem_context = ""
         if self.wiki.available:
             try:

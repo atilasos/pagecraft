@@ -99,6 +99,9 @@ class NoKnowledge:
     def context_for(self, subject, year):
         return "", ""
 
+    async def context_or_fallback(self, subject, year):
+        return "", ""
+
 
 @pytest.fixture
 def env(tmp_path):
