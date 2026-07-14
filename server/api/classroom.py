@@ -200,8 +200,13 @@ async def session_control(session_id: str, body: ControlRequest, request: Reques
     """Controlo de sala: chamar a atenção para uma parte (highlight, para todos
     ou para um aluno) e congelar/descongelar os ecrãs para olharem para o quadro."""
     svc = _svc(request)
-    if not await svc.get_session(session_id):
+    session = await svc.get_session(session_id)
+    if not session:
         raise HTTPException(404, "sessão não encontrada")
+    if session.get("status") != "live":
+        raise HTTPException(409, "a sessão já não está ativa")
+    if body.student_id and body.student_id not in session.get("roster", {}):
+        raise HTTPException(404, "esse aluno não pertence à sessão")
     if body.action == "highlight":
         record = await svc.emit_teacher_event(
             session_id,

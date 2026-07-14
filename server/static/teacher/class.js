@@ -29,6 +29,7 @@ const EVENT_TEXT = {
   pit_updated: (e) => `plano: ${e.payload.text} → ${e.payload.status}`,
   teacher_message: (e) => `mensagem enviada: ${e.payload.text}`,
   teacher_highlight: (e) => `atenção chamada para ${e.payload.unit_label || e.payload.unit_id || "a atividade"}`,
+  identity_released: () => "identidade libertada pelo professor",
   freeze_screens: () => "ecrãs congelados: olhem para o quadro",
   unfreeze_screens: () => "ecrãs libertados",
   session_closed: () => "sessão terminada",
@@ -116,6 +117,12 @@ function renderPicker() {
     }
     return true;
   });
+  // seleção escondida pelos filtros deixa de ser lançável
+  if (pickerState.selected && !matches.some((a) => a.slug === pickerState.selected.slug)) {
+    pickerState.selected = null;
+    $("launch-btn").disabled = true;
+    $("launch-hint").textContent = "Escolhe uma atividade ao lado.";
+  }
   if (!matches.length) {
     list.innerHTML = '<p class="muted">Nenhuma atividade corresponde aos filtros.</p>';
     return;
@@ -232,7 +239,7 @@ async function loadUnits(slug) {
 
 async function sendHighlight(unitId, label) {
   if (!session) return;
-  await tfetch(`/api/sessions/${session.id}/control`, {
+  const resp = await tfetch(`/api/sessions/${session.id}/control`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
@@ -242,7 +249,7 @@ async function sendHighlight(unitId, label) {
       student_id: highlightTarget,
     }),
   });
-  setHighlightTarget(null); // depois de chamar, volta a "todos"
+  if (resp.ok) setHighlightTarget(null); // depois de chamar, volta a "todos"
 }
 
 function setHighlightTarget(studentId) {
@@ -287,6 +294,25 @@ function handleEvent(type, record, es) {
     if (type === "discovery") st.discoveries += 1;
     if (type === "help_needed" || type === "feedback_timeout") st.help = true;
     if (type === "attempt" || type === "discovery" || type === "ai_feedback") st.help = false;
+    if (type === "identity_released") {
+      // outro dispositivo pode reclamar esta identidade: não herdar histórico
+      st.joined = false;
+      st.help = false;
+      st.currentUnit = null;
+      st.attempts = 0;
+      st.correct = 0;
+      st.discoveries = 0;
+      st.events = [];
+      if (messageTarget === record.student_id) {
+        messageTarget = null;
+        $("msg-target").textContent = "para a turma";
+      }
+      if (highlightTarget === record.student_id) setHighlightTarget(null);
+      if (drawerStudent === record.student_id) {
+        $("drawer").classList.remove("open");
+        drawerStudent = null;
+      }
+    }
     blip(record.student_id, type);
   }
   if (type === "freeze_screens") reflectFreeze(true);

@@ -269,6 +269,10 @@ async def test_activities_catalog_and_units(client):
         assert units["units"][0]["id"] == "u1"
     resp = await client.get("/api/activities/nao-existe/units")
     assert resp.status_code == 404
+    # path traversal rejeitado
+    for bad in ("..", "%2e%2e", "a..b", "UPPER", "a/b"):
+        resp = await client.get(f"/api/activities/{bad}/units")
+        assert resp.status_code == 404, bad
 
 
 async def test_health_and_meta(client):

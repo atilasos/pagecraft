@@ -71,7 +71,8 @@
   const es = new EventSource(await teacherStreamUrl(`/api/sessions/${sessionId}/stream`));
   es.addEventListener("teacher_highlight", (ev) => {
     const data = JSON.parse(ev.data);
-    // o destaque também brilha no quadro, para toda a turma ver o mesmo
+    // só destaques para toda a turma; os dirigidos a um aluno são privados
+    if (data.student_id) return;
     board.contentWindow?.postMessage(
       { pagecraft: 1, type: "highlight", unitId: data.payload?.unit_id },
       "*"

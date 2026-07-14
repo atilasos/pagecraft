@@ -2052,5 +2052,46 @@
       renderMaker();
     });
   </script>
+
+<style data-pagecraft-bridge-lite>
+.pagecraft-attention {
+  animation: pagecraft-attention-pulse 1.2s ease-out 4;
+  outline: 4px solid oklch(0.78 0.13 85);
+  outline-offset: 4px;
+}
+@keyframes pagecraft-attention-pulse {
+  0%   { box-shadow: 0 0 0 0 oklch(0.78 0.13 85 / 0.55); }
+  70%  { box-shadow: 0 0 0 18px oklch(0.78 0.13 85 / 0); }
+  100% { box-shadow: 0 0 0 0 oklch(0.78 0.13 85 / 0); }
+}
+@media (prefers-reduced-motion: reduce) { .pagecraft-attention { animation: none; } }
+</style>
+<script data-pagecraft-bridge-lite>
+/* pagecraft-bridge-lite: recetor de «chamar a atenção» (injetado na publicação) */
+(function () {
+  window.addEventListener('message', function (ev) {
+    var d = ev.data;
+    if (!d || d.pagecraft !== 1 || d.type !== 'highlight') return;
+    var el = null;
+    if (d.unitId) {
+      el = document.getElementById(d.unitId) ||
+           document.querySelector('[data-unit="' + d.unitId + '"]');
+      if (!el) {
+        /* heurística para páginas antigas: uN aponta para a N-ésima secção */
+        var n = parseInt(String(d.unitId).replace(/^u/, ''), 10);
+        var sections = document.querySelectorAll('main section');
+        if (!sections.length) sections = document.querySelectorAll('section, .knowledge-unit, .card');
+        if (n >= 1 && n <= sections.length) el = sections[n - 1];
+      }
+    }
+    if (!el) el = document.querySelector('main') || document.body;
+    try { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
+    el.classList.remove('pagecraft-attention');
+    void el.offsetWidth;
+    el.classList.add('pagecraft-attention');
+    setTimeout(function () { el.classList.remove('pagecraft-attention'); }, 6000);
+  });
+})();
+</script>
 </body>
 </html>

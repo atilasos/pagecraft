@@ -74,7 +74,10 @@ def publish_activity(
     dst.mkdir(parents=True, exist_ok=True)
 
     html_path = Path(html_path)
-    shutil.copy2(html_path, dst / "index.html")
+    from .bridge_snippet import ensure_bridge_lite
+
+    html = ensure_bridge_lite(html_path.read_text(encoding="utf-8"))
+    (dst / "index.html").write_text(html, encoding="utf-8")
     (dst / "teacher.md").write_text(teacher_md, encoding="utf-8")
     _save_json(dst / "docspec.json", docspec)
     if design_spec is not None:

@@ -44,15 +44,27 @@ def _subject_from_docspec(docspec: dict | None) -> str:
     return ""
 
 
+SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,79}$")
+
+
 def _parse_year(value) -> int | None:
     """Normaliza o ano de escolaridade a partir dos formatos históricos:
     3, "3", "3.º ano", "1.º ano (6-7 anos)", "9-10 anos (4.º ano do 1.º CEB)".
-    Idades soltas ("6-8 anos, ajustável") ficam sem ano."""
+    Idades soltas ("6-8 anos" — 'anos' não conta) ficam sem ano."""
     if isinstance(value, int):
         return value if 1 <= value <= 4 else None
     text = str(value or "")
-    match = re.search(r"([1-4])\s*\.?\s*º?\s*ano", text) or re.fullmatch(r"\s*([1-4])\s*", text)
+    match = re.search(r"([1-4])\s*\.?\s*º?\s*ano(?!s)", text) or re.fullmatch(r"\s*([1-4])\s*", text)
     return int(match.group(1)) if match else None
+
+
+def _year_from_docspec(docspec: dict | None) -> int | None:
+    if not docspec:
+        return None
+    ae = (docspec.get("curriculum") or {}).get("ae") or []
+    if ae and isinstance(ae, list):
+        return _parse_year(ae[0].get("year"))
+    return None
 
 
 def list_activities(activities_dir: Path) -> list[dict]:
@@ -63,14 +75,16 @@ def list_activities(activities_dir: Path) -> list[dict]:
         meta = _read_json_cached(meta_path)
         if not meta:
             continue
-        subject = meta.get("subject") or _subject_from_docspec(
-            _read_json_cached(meta_path.parent / "docspec.json")
-        )
+        docspec = _read_json_cached(meta_path.parent / "docspec.json")
+        subject = meta.get("subject") or _subject_from_docspec(docspec)
+        # ano: o curriculum do docspec é a fonte mais fiável; meta como fallback
+        year = _year_from_docspec(docspec) or _parse_year(meta.get("year"))
         items.append(
             {
-                "slug": meta.get("slug", meta_path.parent.name),
+                # o nome do diretório é a verdade (o slug do meta pode divergir)
+                "slug": meta_path.parent.name,
                 "title": meta.get("title", meta_path.parent.name),
-                "year": _parse_year(meta.get("year")),
+                "year": year,
                 "yearLabel": str(meta.get("year") or ""),
                 "ageRange": meta.get("ageRange", ""),
                 "duration": meta.get("duration"),
@@ -98,7 +112,13 @@ async def activity_units(slug: str, request: Request):
     """Estrutura da atividade para o controlo «chamar a atenção»: uma entrada
     por unidade, com o id estável do bridge (u1, u2, …)."""
     config = request.app.state.config
-    docspec = _read_json_cached(config.activities_dir / slug / "docspec.json")
+    if not SLUG_RE.match(slug):
+        raise HTTPException(404, "atividade não encontrada")
+    activities_root = config.activities_dir.resolve()
+    docspec_path = (activities_root / slug / "docspec.json").resolve()
+    if not docspec_path.is_relative_to(activities_root):
+        raise HTTPException(404, "atividade não encontrada")
+    docspec = _read_json_cached(docspec_path)
     if docspec is None:
         raise HTTPException(404, "atividade sem docspec")
     units = []

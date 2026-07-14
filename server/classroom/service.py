@@ -191,7 +191,10 @@ class ClassroomService:
             entry["token"] = None
             entry["claimed_at"] = None
             await self.storage.write_json(self._session_path(session_id), session)
-            return True
+        await self.events_log(session_id).append(
+            {"type": "identity_released", "student_id": student_id, "payload": {}}
+        )
+        return True
 
     async def student_for_token(
         self, session_id: str, token: str, *, require_live: bool = True
