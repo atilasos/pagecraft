@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PageCraft — Aluno</title>
+<link rel="stylesheet" href="/studio.css">
+<style>
+  /* modo aluno: tipografia maior, alvos maiores */
+  body { font-size: 20px; }
+  button { min-height: 56px; }
+  .identity-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.75rem; }
+  .identity-grid button { width: 100%; }
+  .identity-grid button[disabled] { text-decoration: line-through; }
+  #activity-frame { width: 100%; min-height: 70vh; border: 2px solid var(--border); border-radius: var(--r-lg); background: white; }
+  #code-input { text-transform: uppercase; letter-spacing: 0.3em; font-size: 1.5rem; text-align: center; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
+  #messages { position: sticky; bottom: 0.5rem; }
+  #freeze-overlay {
+    position: fixed; inset: 0; z-index: 50;
+    background: oklch(0.22 0.02 260 / 0.88);
+    display: flex; align-items: center; justify-content: center;
+    animation: freeze-in 200ms ease-out;
+  }
+  #freeze-overlay[hidden] { display: none; }
+  .freeze-card {
+    background: var(--surface); border-radius: var(--r-lg);
+    padding: 2rem 3rem; text-align: center; max-width: 26rem;
+    border: 3px solid var(--warn);
+  }
+  .freeze-card p { font-size: 1.5rem; font-weight: 800; margin: 0.5rem 0 0; }
+  .freeze-card .freeze-sub { font-size: 1.05rem; font-weight: 400; color: var(--ink-soft); }
+  .freeze-emoji { font-size: 3rem; }
+  @keyframes freeze-in { from { opacity: 0 } to { opacity: 1 } }
+  @media (prefers-reduced-motion: reduce) { #freeze-overlay { animation: none; } }
+</style>
+</head>
+<body>
+<main>
+  <section id="step-code" class="card">
+    <h1>Entrar na aula</h1>
+    <p>Escreve o código que o professor mostrou:</p>
+    <form id="code-form">
+      <input id="code-input" autocomplete="off" maxlength="6" minlength="6" required
+             aria-label="Código da aula" placeholder="ABC123">
+      <p style="margin-top:1rem"><button type="submit">Entrar</button>
+      <span class="muted" id="code-status" role="status"></span></p>
+    </form>
+  </section>
+
+  <section id="step-identity" class="card" hidden>
+    <h1>Quem és tu?</h1>
+    <p id="session-title" class="muted"></p>
+    <div class="identity-grid" id="identities"></div>
+    <p class="muted" id="claim-status" role="status"></p>
+  </section>
+
+  <section id="step-activity" hidden>
+    <div class="topbar card" style="padding:0.75rem 1rem">
+      <strong id="student-name"></strong>
+      <span class="muted" id="activity-title"></span>
+      <span>
+        <button class="ghost" id="help-btn" type="button">Preciso de ajuda 🙋</button>
+        <button class="ghost" id="pit-btn" type="button">O meu plano 📋</button>
+      </span>
+    </div>
+    <div id="pit-panel" class="card" hidden>
+      <h2 style="margin-top:0">O meu plano de trabalho</h2>
+      <ul class="plain" id="pit-list"></ul>
+      <form id="pit-form">
+        <label for="pit-text">O que vou fazer:</label>
+        <input id="pit-text" maxlength="280" required>
+        <p style="margin-top:0.75rem"><button type="submit">Acrescentar</button></p>
+      </form>
+    </div>
+    <!-- sandbox sem allow-same-origin: a atividade gerada corre em origem
+         opaca, sem acesso ao DOM/API do site; só comunica por postMessage -->
+    <iframe id="activity-frame" title="Atividade" sandbox="allow-scripts"></iframe>
+    <div id="messages" aria-live="polite"></div>
+  </section>
+
+  <!-- Congelamento: o professor pede a atenção de todos para o quadro -->
+  <div id="freeze-overlay" hidden role="alertdialog" aria-modal="true" aria-label="Olha para o quadro">
+    <div class="freeze-card">
+      <span class="freeze-emoji" aria-hidden="true">👀</span>
+      <p>Olha para o quadro!</p>
+      <p class="freeze-sub">O professor quer mostrar uma coisa a toda a turma.</p>
+    </div>
+  </div>
+</main>
+<script src="/student/app.js"></script>
+</body>
+</html>

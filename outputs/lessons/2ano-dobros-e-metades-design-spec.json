@@ -1,0 +1,77 @@
+{
+  "palette": {
+    "bg": "oklch(0.97 0.008 88)",
+    "surface": "oklch(0.99 0.006 88)",
+    "primary": "oklch(0.46 0.14 274)",
+    "accent": "oklch(0.76 0.13 58)",
+    "ink": "oklch(0.24 0.025 274)"
+  },
+  "functional": {
+    "ok": "oklch(0.46 0.12 150)",
+    "warn": "oklch(0.55 0.13 85)",
+    "focus": "oklch(0.50 0.17 255)"
+  },
+  "typography": {
+    "fontFamily": "'Atkinson Hyperlegible', 'Lexend', 'Nunito', 'Comic Sans MS', 'Chalkboard SE', system-ui, -apple-system, sans-serif",
+    "scale": "kids-6-7",
+    "baseSizePx": 22,
+    "headingSizePx": 32,
+    "microcopySizePx": 18,
+    "maxLineCh": 50,
+    "weights": [
+      400,
+      700,
+      800
+    ],
+    "italicAllowed": false,
+    "allCapsAllowed": false
+  },
+  "layout": {
+    "borderRadius": 14,
+    "radius": 14,
+    "spacing": "comfortable",
+    "maxWidthPx": 960,
+    "maxWidth": 960,
+    "padding": "1.25rem",
+    "decisionsPerScreen": "1–2"
+  },
+  "components": {
+    "buttons": "pill ou radius 10px, min-height 56px, texto e ícone redundantes, hover via filter:brightness, sem scale/transform",
+    "cards": "surface com borda 2px em ink com baixa opacidade, sombra muito subtil e sem stripe lateral",
+    "badges": "pill, accent bg e ink contrastante; texto explícito, sem gradient-text",
+    "sliders": "snapping obrigatório em números inteiros, thumb de pelo menos 48px, marcas numeradas e pontos visuais; nunca depender apenas da posição",
+    "dropdowns": "apresentar como botão grande de seleção, min-height 56px, valor atual sempre visível",
+    "dragAndPlace": "preferir tap-to-place como alternativa principal ao arrastamento; recipientes e elementos com alvos de pelo menos 56px",
+    "matching": "seleção por dois toques com contorno, seta e texto; não depender de linhas finas nem apenas da cor",
+    "buttons_audio": "controlo visível com texto «Ouvir» e ícone semântico com aria-label; áudio começa desligado",
+    "feedback_correct": "tint clara derivada de ok + ícone ✓ + microcopy que descreve a descoberta; nunca depender apenas da cor",
+    "feedback_incorrect": "tint clara derivada de warn + ícone ↻ + sugestão curta para tentar novamente; nunca usar vermelho-erro",
+    "tabs": "role=tablist e aria-selected; estados diferenciados por texto, contorno e padrões, com matizes violeta, azul e cobre sem metáfora traffic-light",
+    "difficultyLevels": "Apoio, Base e Desafio usam respetivamente símbolos broto, folha e árvore, nomes escritos e padrões distintos; os matizes decorativos são lilás, azul-petróleo e cobre, sem verde/amarelo/vermelho funcional",
+    "numberCards": "números grandes, peso 800, coleções de pontos organizadas e expressão numérica sempre complementar à representação visual",
+    "emoji": "emoji decorativo usa aria-hidden=\"true\"; emoji semântico inclui aria-label e texto redundante"
+  },
+  "motion": {
+    "transitions": "subtle",
+    "durationMs": 160,
+    "stateDurationMaxMs": 280,
+    "easing": "ease-out",
+    "respectReducedMotion": true,
+    "properties": "usar apenas opacity e transform; sem bounce, elastic ou animação de propriedades de layout"
+  },
+  "accessibility": {
+    "contrast": "AA",
+    "contrastBody": "AA",
+    "contrastMicrocopy": "AAA",
+    "focusRing": true,
+    "focusRingStyle": "3px solid focus com offset de 3px",
+    "minTapPx": 56,
+    "sliderThumbMinPx": 48,
+    "soundOptIn": true,
+    "soundVolumeMax": 0.05,
+    "speechLocale": "pt-PT",
+    "redundantChannels": "informação importante em texto e ícone, pontos ou áudio opcional",
+    "colorNeverSoleCue": true
+  },
+  "notes": "A escala kids-6-7 adota corpo de 22px, alvos de 56px e linhas até 50ch por a atividade incluir alunos de 7 anos e exigir leitura inicial. O violeta profundo cria uma identidade matemática calma, enquanto o âmbar suave destaca ações sem colidir com as cores funcionais de confirmação, nova tentativa e foco. Pontos, números, padrões, ícones e texto permanecem redundantes para apoiar contagem, motricidade e daltonismo."
+}

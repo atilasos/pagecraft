@@ -1,0 +1,103 @@
+{
+  "pass": false,
+  "route": "builder",
+  "severity": "high",
+  "scores": {
+    "factual_accuracy": 5,
+    "constraint_alignment": 4,
+    "differentiation_quality": 2,
+    "ux_accessibility": 3,
+    "visual_design": 4,
+    "technical_quality": 3
+  },
+  "issues": [
+    {
+      "type": "pedagogical",
+      "severity": "high",
+      "location": "#u2, nível Apoio, recordDouble(), updateU2()",
+      "description": "O nível Apoio limita a exploração a 1–5, mas só são registados números entre 6 e 10. O progresso permanece em 0 de 5 e o critério é impossível de alcançar."
+    },
+    {
+      "type": "pedagogical",
+      "severity": "high",
+      "location": "#u3, nível Apoio, updateU3()",
+      "description": "O nível Apoio oculta totais superiores a 10, mas exige uma partilha superior a 10. O critério de conclusão é impossível neste nível."
+    },
+    {
+      "type": "assessment",
+      "severity": "high",
+      "location": "state e applyLevel() nas etapas 1–3",
+      "description": "Os registos de progresso são partilhados entre níveis. Resultados obtidos no Intermédio ou Desafio podem fazer aparecer progresso noutro nível sem que as tarefas desse nível tenham sido realizadas."
+    },
+    {
+      "type": "differentiation",
+      "severity": "medium",
+      "location": "#u1, nível Desafio, updateU1()",
+      "description": "As duas representações são apresentadas, mas state.reps não integra o cálculo de met. O critério pode ser alcançado sem completar o desenho ou os grupos e a adição exigidos pelo Desafio."
+    },
+    {
+      "type": "differentiation",
+      "severity": "medium",
+      "location": "#u2 .inverse-task",
+      "description": "O Desafio pede apenas a seleção do número inicial. Não oferece a separação visual em duas filas nem recolhe uma justificação, como exige o DocSpec-AM."
+    },
+    {
+      "type": "pedagogical",
+      "severity": "medium",
+      "location": ".assessment li:nth-child(3)",
+      "description": "A conversa final verifica 14 e 7, mas não solicita explicitamente que o aluno explique como dobrar e tomar a metade se confirmam ou desfazem mutuamente."
+    },
+    {
+      "type": "ux",
+      "severity": "medium",
+      "location": "#u4 .activation e #u4-panel-standard",
+      "description": "As expressões «a mesma relação nos dois sentidos» e «nos dois modos» são abstratas para alunos de 7–8 anos e não explicitam as ações dobro e metade."
+    },
+    {
+      "type": "accessibility",
+      "severity": "medium",
+      "location": ".bucket e renderShare()",
+      "description": "Os recipientes com role=\"button\" passam a conter botões de elementos, criando controlos interativos aninhados. Além disso, renderShare() recria todos os botões após cada ação, causando perda provável do foco de teclado."
+    },
+    {
+      "type": "language",
+      "severity": "low",
+      "location": "#checkRepresentations, #representationFeedback e #ruleFeedback",
+      "description": "«Controlos» é linguagem técnica para a faixa etária e «diferem apenas em um» deve ser reformulado como «diferem por uma unidade»."
+    }
+  ],
+  "critical": [],
+  "required_fixes": [
+    "Tornar o registo e o critério da etapa 2 dependentes do nível: no Apoio, contabilizar propostas entre 1 e 5.",
+    "Adaptar o critério da etapa 3 ao Apoio, aceitando três partilhas até 10 e incluindo uma quantidade de 10.",
+    "Separar ou reinicializar o progresso das etapas 1–3 quando o nível muda.",
+    "Exigir state.reps para concluir o nível Desafio da etapa 1.",
+    "No Desafio da etapa 2, mostrar ou permitir construir duas filas iguais e recolher uma justificação observável.",
+    "Acrescentar à conversa final um pedido explícito de explicação da relação inversa.",
+    "Substituir as instruções abstratas da etapa 4 por ações concretas de encontrar o dobro e depois a metade.",
+    "Remover os controlos interativos aninhados nos recipientes e preservar ou restaurar o foco após atualizar a partilha."
+  ],
+  "acceptance_checks": [
+    "No Apoio da etapa 2, cinco respostas distintas entre 1 e 5 atualizam o progresso e permitem concluir o critério adequado.",
+    "No Apoio da etapa 3, é possível concluir o critério usando apenas totais até 10.",
+    "Mudar de nível não reutiliza resultados incompatíveis obtidos noutro nível.",
+    "O Desafio da etapa 1 não fica concluído sem validar as duas representações.",
+    "O Desafio da etapa 2 torna observável a separação do total em duas filas iguais e a justificação do aluno.",
+    "A avaliação final pede e regista uma explicação da relação inversa.",
+    "A partilha completa pode ser operada por teclado sem controlos aninhados nem perda desorientadora de foco.",
+    "O relatório determinista continua sem erros ou avisos após as correções."
+  ],
+  "suggestions": [
+    "Substituir «controlos» por «grupos» nas instruções dirigidas aos alunos.",
+    "Reformular «diferem apenas em um» como «diferem por uma unidade»."
+  ],
+  "evidence": [
+    "Análise estática integral do HTML, CSS e JavaScript fornecidos.",
+    "Relatório determinista: passed=true, sem erros nem avisos.",
+    "Proofread: pass=false, severidade high, confirmando as contradições dos níveis Apoio e lacunas na avaliação da relação inversa.",
+    "Não foi pedido maker challenge; a sua ausência não foi considerada falha."
+  ],
+  "blocked_by": [
+    "Browser indisponível: consola, árvore de acessibilidade, layout renderizado, responsividade e interações em execução não puderam ser verificados diretamente."
+  ]
+}

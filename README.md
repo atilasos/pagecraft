@@ -111,6 +111,29 @@ python3 skills/openclaw/scripts/publish_to_catalog.py \
 
 O script copia os artefactos para `activities/<slug>/`, gera/atualiza `meta.json` e `catalog.json`, e respeita `createdAt` quando o *slug* já existe.
 
+## PageCraft Studio — servidor do professor
+
+O `server/` transforma o pipeline num **site local de geração de conteúdos**: o professor cria atividades a partir de um formulário, o servidor orquestra os cinco papéis com IA real, os alunos ligam-se pela rede da sala e o professor acompanha tudo em tempo real.
+
+```bash
+uv sync                          # instala dependências
+uv run uvicorn server.app:app --host 0.0.0.0 --port 8777
+# abrir http://localhost:8777 (professor) — os alunos usam http://<ip-do-professor>:8777/student/
+```
+
+O que o Studio faz:
+
+1. **Geração com IA** — o pipeline (Architect → Designer → Builder → Proofreader → Evaluator, com loop de reparação) corre em código (`server/pipeline/`), chamando o **Codex CLI** (subscrição ChatGPT, provider por defeito) ou a **API Anthropic** (`ANTHROPIC_API_KEY`). Cada fase valida o output contra JSON Schema (`server/pipeline/schemas/`).
+2. **Fundamentação pedagógica** — o Architect recebe excertos reais da wiki do professor (instrumentos MEM: PIT, TEA, Conselho, Circuitos, Avaliação Cooperada…) via `wiki_tool.py` do vault e o documento oficial das **Aprendizagens Essenciais** da disciplina/ano (com citação da fonte DGE no docspec); se não houver documento local, há *fallback* à página da DGE.
+3. **Sessões de aula** — o professor cria turmas (só nomes próprios), lança uma sessão e dita o código de 6 letras; cada aluno escolhe a sua identidade e trabalha na atividade embebida.
+4. **Tempo real** — as atividades emitem eventos (`PageCraftBridge`, postMessage puro, sem rede: o HTML continua *self-contained* e offline); a página do aluno reenvia-os ao servidor e o dashboard do professor mostra tentativas, descobertas, pedidos de ajuda e o PIT de cada aluno via SSE (com *replay* após reconexão).
+5. **Feedback IA em tempo útil** — respostas abertas geram pedidos de feedback formativo (âmbar, nunca punitivo, ≤2 frases) com fila, cache por resposta e *timeout* de 20 s com mensagem de recurso; o professor vê os pedidos que expiraram.
+6. **Publicação** — quando o Evaluator dá *pass*, a atividade fica em revisão; ao aprovar, entra em `activities/` + `catalog.json` como sempre.
+
+Configuração por `server/config.toml` ou variáveis `PAGECRAFT_*` (ex.: `PAGECRAFT_VAULT_PATH`, `PAGECRAFT_GENERATION_PROVIDER=codex|anthropic`, `PAGECRAFT_FEEDBACK_PROVIDER=auto|codex|anthropic`). Dados de sala em `server/data/` (JSON/JSONL, sem base de dados, *git-ignored*). Testes: `uv run pytest`.
+
+Para expor o servidor fora da rede local, usar um Cloudflare Tunnel (ver skill `cloudflare-tunnel`) — decisão do professor, nunca automática.
+
 ## Princípios não negociáveis
 
 - HTML *self-contained* (CSS + JS *inline*), sem CDN, sem fontes remotas, sem dependências externas.

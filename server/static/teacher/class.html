@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PageCraft Studio — Aula ao vivo</title>
+<link rel="stylesheet" href="/studio.css">
+</head>
+<body>
+<main>
+  <header class="notebook-head">
+    <div class="brand">
+      <p class="eyebrow">PageCraft Studio</p>
+      <h1>Aula ao vivo<span class="accent-dot">.</span></h1>
+    </div>
+    <nav class="tabs-folder" aria-label="Secções">
+      <a href="/teacher/">Preparar</a>
+      <a href="/teacher/class.html" aria-current="page">Aula ao vivo</a>
+    </nav>
+  </header>
+
+  <!-- ===== régua da aula (aparece quando há sessão) ===== -->
+  <div class="ruler" id="ruler" hidden>
+    <div class="session-name">
+      <p class="eyebrow" style="margin-bottom:0.1rem">Sessão</p>
+      <strong id="live-title"></strong>
+    </div>
+    <div>
+      <p class="eyebrow" style="margin-bottom:0.25rem">Código · <span id="live-url"></span></p>
+      <div class="type-blocks" id="live-code" aria-label="Código de entrada"></div>
+    </div>
+    <div>
+      <p class="eyebrow" style="margin-bottom:0.35rem">Turma</p>
+      <div class="class-pulse" id="class-pulse" aria-label="Atividade da turma"></div>
+    </div>
+    <span class="spacer"></span>
+    <button type="button" class="freeze-switch" id="freeze-btn" aria-pressed="false">
+      <span class="knob" aria-hidden="true">👀</span>
+      <span id="freeze-label">Olhem para o quadro</span>
+    </button>
+    <a id="present-link" class="ghost" style="text-decoration:none; border:2px solid var(--primary); border-radius:10px; padding:0.55rem 1rem; font-weight:700; color:var(--primary-deep)" target="_blank" rel="noopener">Projetar ▸</a>
+    <button type="button" class="quiet" id="close-btn">Terminar sessão</button>
+  </div>
+
+  <div class="desk" id="prep-desk">
+    <section aria-labelledby="launch-title">
+      <p class="eyebrow" id="launch-title">Lançar sessão</p>
+      <h2>Que trabalho vamos partilhar?</h2>
+      <div class="row" style="grid-template-columns: minmax(160px, 240px) 1fr;">
+        <div>
+          <label for="launch-class">Turma</label>
+          <select id="launch-class"></select>
+          <p style="margin-top:0.9rem"><button id="launch-btn" type="button" disabled>Lançar sessão</button></p>
+          <p class="muted" id="launch-hint">Escolhe uma atividade ao lado.</p>
+        </div>
+        <div>
+          <label for="picker-search">Atividade</label>
+          <div class="picker-filters">
+            <input type="search" id="picker-search" placeholder="procurar por título ou tema…" aria-label="Procurar atividade">
+            <span id="picker-years" role="group" aria-label="Filtrar por ano"></span>
+            <span id="picker-subjects" role="group" aria-label="Filtrar por disciplina"></span>
+          </div>
+          <div id="picker-list" style="max-height:320px; overflow-y:auto"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sheet" aria-labelledby="classes-title" style="margin-top:2rem">
+      <p class="eyebrow" id="classes-title">Turmas</p>
+      <div id="classes-list" class="muted"></div>
+      <details style="margin-top:0.5rem">
+        <summary style="cursor:pointer; font-weight:700; color:var(--primary-deep)">Criar nova turma</summary>
+        <form id="class-form">
+          <div class="row">
+            <div>
+              <label for="class-name">Nome da turma</label>
+              <input id="class-name" required placeholder="3.º A">
+            </div>
+            <div>
+              <label for="class-year">Ano</label>
+              <select id="class-year">
+                <option value="1">1.º</option><option value="2">2.º</option>
+                <option value="3" selected>3.º</option><option value="4">4.º</option>
+              </select>
+            </div>
+          </div>
+          <label for="class-students">Alunos (um nome próprio por linha, sem apelidos)</label>
+          <textarea id="class-students" rows="4" placeholder="Ana&#10;Bruno&#10;Carla"></textarea>
+          <p style="margin-top:0.75rem"><button type="submit" class="ghost">Criar turma</button></p>
+        </form>
+      </details>
+    </section>
+  </div>
+
+  <!-- ===== sessão ao vivo ===== -->
+  <div id="live" hidden>
+    <div class="live-grid">
+      <section aria-labelledby="students-title">
+        <p class="eyebrow" id="students-title">Cadernetas</p>
+        <div class="students-grid" id="students"></div>
+        <div class="card" style="margin-top:1rem">
+          <p class="eyebrow">Mensagem <span id="msg-target">para a turma</span></p>
+          <div class="row" style="grid-template-columns: 1fr auto; align-items:end">
+            <input id="msg-text" maxlength="400" placeholder="ex.: daqui a 5 minutos partilhamos"
+                   aria-label="Texto da mensagem">
+            <button class="ghost" id="msg-btn" type="button">Enviar</button>
+          </div>
+        </div>
+      </section>
+      <section aria-labelledby="board-title">
+        <div class="card">
+          <p class="eyebrow" id="board-title">Chamar a atenção</p>
+          <p class="muted" style="margin-top:0">Clica numa parte do trabalho: ela brilha no ecrã
+            <strong id="highlight-target-label">de todos</strong>.</p>
+          <ul class="plain" id="units-list"><li class="muted">sem estrutura disponível</li></ul>
+        </div>
+        <div class="card" style="margin-top:1rem">
+          <p class="eyebrow">Registo da aula</p>
+          <ul class="plain" id="timeline" aria-live="polite"></ul>
+          <p style="margin:0.75rem 0 0"><a id="export-link" download>Exportar registo (JSON)</a></p>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- painel de detalhe do aluno -->
+  <aside class="drawer" id="drawer" aria-label="Detalhe do aluno">
+    <div class="close-row">
+      <h2 id="drawer-name" style="margin:0"></h2>
+      <button type="button" class="quiet" id="drawer-close">fechar ✕</button>
+    </div>
+    <p class="muted" id="drawer-now"></p>
+    <div id="drawer-counts" style="display:flex; gap:0.4rem; flex-wrap:wrap; margin:0.5rem 0 1rem"></div>
+    <p style="display:flex; gap:0.5rem; flex-wrap:wrap">
+      <button type="button" class="ghost" id="drawer-msg">Enviar mensagem</button>
+      <button type="button" class="ghost" id="drawer-highlight">Chamar a atenção só dele</button>
+      <button type="button" class="quiet" id="drawer-release">Libertar identidade</button>
+    </p>
+    <p class="eyebrow">Percurso nesta aula</p>
+    <ul class="plain" id="drawer-events"></ul>
+  </aside>
+</main>
+<script src="/teacher/common.js"></script>
+<script src="/teacher/class.js"></script>
+</body>
+</html>

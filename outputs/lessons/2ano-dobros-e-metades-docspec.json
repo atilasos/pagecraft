@@ -1,0 +1,264 @@
+{
+  "topic": "Dobros e metades",
+  "ageRange": "7-8 anos (2.º ano)",
+  "duration": 25,
+  "objectives": [
+    "Representar o dobro de uma quantidade como duas quantidades iguais e como adição de parcelas iguais",
+    "Determinar dobros de números naturais até ao dobro de 10",
+    "Determinar a metade de quantidades pares até 20 por partilha equitativa",
+    "Explicar e verificar a relação inversa entre o dobro e a metade"
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Matemática",
+        "year": "2.º ano",
+        "domain": "Números",
+        "descriptor": "Compreender e automatizar os dobros de números até ao dobro de 10.",
+        "source": "AE Matemática 2.º ano (DGE). Fonte: https://www.dge.mec.pt/sites/default/files/Curriculo/Aprendizagens_Essenciais/1_ciclo/ae_mat_2.o_ano.pdf"
+      },
+      {
+        "subject": "Matemática",
+        "year": "2.º ano",
+        "domain": "Números",
+        "descriptor": "Reconhecer frações que representam uma metade e quartos da unidade, no contexto de problemas de partilha equitativa.",
+        "source": "AE Matemática 2.º ano (DGE). Fonte: https://www.dge.mec.pt/sites/default/files/Curriculo/Aprendizagens_Essenciais/1_ciclo/ae_mat_2.o_ano.pdf"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-E: Relacionamento interpessoal",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "Mapa coletivo de registo de estratégias",
+      "Registo individual de autoavaliação: Já faço / Preciso de ajuda"
+    ],
+    "socialOrganization": "turma (problema inicial e explicitação de estratégias) → individual com interajuda em pares → pares (verificação e preparação da comunicação) → turma (comunicação e síntese)"
+  },
+  "materials": [
+    "Tablet ou computador com browser, preferencialmente um por par",
+    "Quadro interativo ou projetor",
+    "Até 20 tampas, fichas ou cubos por par para apoio manipulável opcional"
+  ],
+  "units": [
+    {
+      "summary": "O dobro forma-se juntando duas quantidades iguais.",
+      "textDescription": "Apresentar uma situação concreta com dois pratos que precisam de receber a mesma quantidade de frutos. O aluno relaciona as duas coleções iguais com uma adição de parcelas iguais, usando frases curtas, números grandes e instruções acompanhadas por ícones.",
+      "interaction": {
+        "state": [
+          {
+            "name": "quantidadePorPrato",
+            "type": "slider",
+            "range": [
+              1,
+              5
+            ],
+            "step": 1,
+            "default": 2,
+            "unit": "frutos"
+          },
+          {
+            "name": "total",
+            "type": "derived",
+            "derivedFrom": "quantidadePorPrato + quantidadePorPrato"
+          },
+          {
+            "name": "previsao",
+            "type": "quiz",
+            "options": [
+              "2",
+              "4",
+              "6",
+              "8",
+              "10"
+            ]
+          }
+        ],
+        "render": "Dois pratos grandes, identificados com o mesmo símbolo, mostram sempre igual número de frutos. Por baixo surgem duas parcelas visuais e o espaço para o total. O controlo tem posições fixas, alvo amplo e indicação por número e pontos; o áudio é opcional.",
+        "transition": "O aluno escolhe a quantidade de um prato, prevê o total e confirma. A mesma quantidade aparece simultaneamente no segundo prato; depois, as duas coleções aproximam-se e a expressão numérica é completada. Uma previsão diferente recebe a mensagem «Quase! Conta os dois pratos.» e permite nova tentativa.",
+        "constraint": "Invariante interno, não apresentado ao aluno: uma quantidade só é o dobro de outra quando resulta da junção de duas quantidades iguais.",
+        "assessment": "Perante três valores entre 1 e 5, o aluno seleciona o total correto em pelo menos duas situações e aponta ou verbaliza que os dois pratos têm a mesma quantidade."
+      },
+      "differentiation": {
+        "support": "Usar apenas quantidades de 1 a 3, com pontos organizados como no dominó, contagem oral opcional e fichas físicas para reproduzir os dois pratos.",
+        "standard": "Usar quantidades de 1 a 5, prever o total e completar oralmente a frase «O dobro de __ é __».",
+        "challenge": "Ocultar a contagem total e pedir duas representações para o mesmo dobro: desenho dos grupos e adição de parcelas iguais."
+      },
+      "duration": 5
+    },
+    {
+      "summary": "Os dobros até ao dobro de 10 seguem uma regularidade.",
+      "textDescription": "Levar o aluno a construir progressivamente os dobros de 1 a 10 e a reconhecer que, quando a quantidade inicial aumenta uma unidade, o dobro aumenta duas. A regularidade deve emergir da comparação das representações, sem ser antecipada no enunciado.",
+      "interaction": {
+        "state": [
+          {
+            "name": "numero",
+            "type": "slider",
+            "range": [
+              1,
+              10
+            ],
+            "step": 1,
+            "default": 4,
+            "unit": "elementos em cada grupo"
+          },
+          {
+            "name": "dobro",
+            "type": "derived",
+            "derivedFrom": "2 * numero"
+          },
+          {
+            "name": "mostrarExpressao",
+            "type": "toggle",
+            "options": [
+              "Coleções",
+              "Coleções e números"
+            ],
+            "default": "Coleções"
+          },
+          {
+            "name": "resposta",
+            "type": "quiz",
+            "options": [
+              "8",
+              "10",
+              "12",
+              "14",
+              "16",
+              "18",
+              "20"
+            ]
+          }
+        ],
+        "render": "Duas filas alinhadas de pontos mostram o número escolhido. Uma faixa de histórico mantém visíveis os três últimos dobros construídos, com cartões de número, pontos e expressão. Texto com pelo menos 22 px, controlos com encaixe em números inteiros e alvos de pelo menos 56 px.",
+        "transition": "Ao mover o controlo uma posição, acrescenta-se um ponto a cada fila. O aluno escolhe o dobro antes de revelar a expressão; ao confirmar, o cartão entra no histórico. O modo «Coleções e números» acrescenta a expressão n + n = 2n sem retirar a representação visual.",
+        "constraint": "Invariante interno, não apresentado ao aluno: acrescentar uma unidade à quantidade inicial acrescenta uma unidade a cada um dos dois grupos e, portanto, aumenta o dobro em duas unidades.",
+        "assessment": "O aluno determina corretamente quatro de cinco dobros propostos entre 6 e 10 e descreve ao par, por palavras, gestos ou apontando no histórico, o que muda de um dobro para o seguinte."
+      },
+      "differentiation": {
+        "support": "Limitar a exploração aos dobros de 1 a 5, manter as duas filas visíveis e permitir contar os pontos ou reproduzi-los com fichas.",
+        "standard": "Explorar os dobros de 1 a 10, prever antes de revelar e registar no mapa os dobros que já consegue determinar.",
+        "challenge": "Apresentar um total par até 20 e pedir o número que foi duplicado, justificando pela separação em duas filas iguais."
+      },
+      "duration": 7
+    },
+    {
+      "summary": "A metade obtém-se repartindo uma quantidade em duas partes iguais.",
+      "textDescription": "Apresentar quantidades pares até 20 para repartir equitativamente entre duas personagens. O aluno deve distinguir uma partilha em dois grupos de uma partilha justa, verificando que ambos recebem o mesmo número de elementos.",
+      "interaction": {
+        "state": [
+          {
+            "name": "total",
+            "type": "dropdown",
+            "options": [
+              "4",
+              "6",
+              "8",
+              "10",
+              "12",
+              "14",
+              "16",
+              "18",
+              "20"
+            ],
+            "default": "8",
+            "unit": "elementos"
+          },
+          {
+            "name": "distribuicao",
+            "type": "drag"
+          },
+          {
+            "name": "quantidadeA",
+            "type": "derived",
+            "derivedFrom": "número de elementos colocados no recipiente A"
+          },
+          {
+            "name": "quantidadeB",
+            "type": "derived",
+            "derivedFrom": "número de elementos colocados no recipiente B"
+          },
+          {
+            "name": "metade",
+            "type": "derived",
+            "derivedFrom": "quantidadeA === quantidadeB && quantidadeA + quantidadeB === total ? quantidadeA : null"
+          }
+        ],
+        "render": "Uma coleção central e dois recipientes grandes, identificados por personagem, nome e padrão visual. Cada elemento pode ser colocado por toque alternado ou arrastamento. Contadores numéricos e pontos mostram quanto recebeu cada personagem, sem depender apenas da cor.",
+        "transition": "Cada toque ou arrastamento move um elemento para um recipiente. A verificação só se ativa quando todos os elementos forem distribuídos. Se as quantidades diferirem, surge «Quase! Como podes tornar a partilha justa?» com opção para mover elementos; quando ficam iguais, aparece «Encontraste duas partes iguais.»",
+        "constraint": "Invariante interno, não apresentado ao aluno: a metade de uma quantidade par é a quantidade de cada grupo quando todos os elementos são repartidos por dois grupos iguais.",
+        "assessment": "O aluno reparte corretamente três quantidades pares, incluindo uma superior a 10, e completa oralmente ou seleciona a frase «Metade de __ é __» em pelo menos duas delas."
+      },
+      "differentiation": {
+        "support": "Usar totais até 10, distribuição alternada automática após cada toque e contadores sempre visíveis; disponibilizar fichas físicas para repetir a partilha.",
+        "standard": "Usar totais pares até 20, distribuir livremente e corrigir a partilha até obter dois grupos iguais.",
+        "challenge": "Ocultar os contadores durante a distribuição e pedir uma previsão da metade antes de repartir, confirmando-a depois com os grupos."
+      },
+      "duration": 7
+    },
+    {
+      "summary": "Dobrar e tomar a metade são ações inversas.",
+      "textDescription": "Consolidar a ligação entre as duas ideias: se o dobro de um número é determinado e esse total é repartido em duas partes iguais, regressa-se ao número inicial. A síntese é construída pelos pares e comunicada à turma.",
+      "interaction": {
+        "state": [
+          {
+            "name": "paresDobroMetade",
+            "type": "matching",
+            "options": [
+              "3 ↔ 6",
+              "4 ↔ 8",
+              "5 ↔ 10",
+              "6 ↔ 12",
+              "7 ↔ 14",
+              "8 ↔ 16",
+              "9 ↔ 18",
+              "10 ↔ 20"
+            ]
+          },
+          {
+            "name": "modo",
+            "type": "toggle",
+            "options": [
+              "Dobro",
+              "Metade"
+            ],
+            "default": "Dobro"
+          },
+          {
+            "name": "paresCorretos",
+            "type": "derived",
+            "derivedFrom": "número de associações que satisfazem maior = 2 * menor"
+          },
+          {
+            "name": "autoavaliacao",
+            "type": "quiz",
+            "options": [
+              "Já faço sozinho",
+              "Consigo com ajuda",
+              "Quero praticar mais"
+            ]
+          }
+        ],
+        "render": "Cartões grandes apresentam números e pequenas coleções de pontos. Cada associação pode ser feita tocando primeiro num cartão e depois no seu par. O modo escolhido altera apenas a pergunta e a direção da seta, mantendo os mesmos cartões.",
+        "transition": "O par associa números no modo «Dobro» e muda para «Metade» para verificar a relação na direção contrária. Uma associação que não respeite a relação regressa ao lugar com a mensagem «Experimenta comparar as duas quantidades.» No final, cada aluno seleciona o seu registo de autoavaliação.",
+        "constraint": "Invariante interno, não apresentado ao aluno: duplicar uma quantidade e depois repartir o resultado em duas partes iguais devolve a quantidade inicial; dobro e metade desfazem-se mutuamente nos casos explorados.",
+        "assessment": "O par completa corretamente quatro associações, verifica pelo menos duas nos dois modos e um dos alunos comunica à turma uma frase do tipo «O dobro de 7 é 14, por isso metade de 14 é 7», enquanto o colega confirma com a representação visual."
+      },
+      "differentiation": {
+        "support": "Disponibilizar quatro pares até 10, manter as coleções de pontos visíveis e fornecer o início da frase de comunicação.",
+        "standard": "Associar quatro pares até 20, verificar nos dois modos e justificar uma associação à turma.",
+        "challenge": "Resolver um cartão sem apoio visual, criar uma nova relação dobro-metade e desafiar outro par a verificá-la."
+      },
+      "duration": 6
+    }
+  ],
+  "sessionFlow": "0-5 min: Unit 1, problema coletivo dos dois pratos e recolha de estratégias → 5-12 min: Unit 2, exploração individual dos dobros com interajuda em pares → 12-19 min: Unit 3, partilhas equitativas em pares e registo das descobertas → 19-25 min: Unit 4, associações inversas, comunicação breve à turma e autoavaliação. Total: 25 minutos."
+}

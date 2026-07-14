@@ -321,6 +321,60 @@
       margin-top: 1.5rem;
       padding: 0.75rem;
     }
+
+    /* Feedback formativo (usado por PageCraftFeedback.show) */
+    .feedback-correct {
+      background: var(--ok-tint);
+      border: 2px solid var(--ok);
+      color: oklch(0.30 0.10 150);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      font-weight: 700;
+      margin: 0.75rem 0;
+    }
+    .feedback-try-again {
+      background: var(--warn-tint);
+      border: 2px solid var(--warn);
+      color: oklch(0.35 0.08 60);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      font-weight: 700;
+      margin: 0.75rem 0;
+    }
+
+    /* Botão "preciso de ajuda" — discreto mas sempre acessível */
+    .help-button {
+      background: var(--surface);
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    /* «Chamar a atenção»: o professor faz brilhar uma unidade no ecrã do aluno */
+    .pagecraft-attention {
+      animation: pagecraft-attention-pulse 1.2s ease-out 4;
+      outline: 4px solid var(--accent);
+      outline-offset: 4px;
+      border-radius: var(--radius);
+    }
+    @keyframes pagecraft-attention-pulse {
+      0%   { box-shadow: 0 0 0 0 oklch(0.78 0.13 85 / 0.55); }
+      70%  { box-shadow: 0 0 0 18px oklch(0.78 0.13 85 / 0); }
+      100% { box-shadow: 0 0 0 0 oklch(0.78 0.13 85 / 0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pagecraft-attention { animation: none; }
+    }
+
+    /* Caixa de feedback do assistente (chega por postMessage; nunca punitivo) */
+    .ai-feedback {
+      display: none;
+      background: var(--tint-warm);
+      border: 2px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin: 0.75rem 0;
+    }
+    .ai-feedback[data-shown="true"] { display: block; }
   </style>
 </head>
 <body>
@@ -367,15 +421,109 @@
       });
     })();
 
-    /* Descoberta anunciada (aria-live). */
-    function showDiscovery(elementId, message) {
+    /* PageCraftBridge — telemetria opcional por postMessage.
+       A atividade continua 100% offline e self-contained: emite às cegas
+       para window.parent (se existir) e NUNCA usa rede (fetch/XHR/WebSocket
+       são proibidos). Quando aberta diretamente, os eventos não têm ouvinte
+       e nada acontece. Contrato: {pagecraft: 1, type, unitId, payload, ts}. */
+    window.PageCraftBridge = (function () {
+      var embedded = (function () {
+        try { return window.parent && window.parent !== window; } catch (e) { return false; }
+      })();
+      function emit(type, unitId, payload) {
+        if (!embedded) return;
+        try {
+          window.parent.postMessage({
+            pagecraft: 1,
+            type: type,
+            unitId: unitId || null,
+            payload: payload || {},
+            ts: Date.now()
+          }, '*');
+        } catch (e) { /* nunca quebrar a atividade por causa da telemetria */ }
+      }
+      /* presença: heartbeat de 30s enquanto a página está visível */
+      if (embedded) {
+        emit('activity_loaded', null, { title: document.title });
+        setInterval(function () {
+          if (!document.hidden) emit('heartbeat', null, {});
+        }, 30000);
+      }
+      return {
+        emit: emit,
+        unitStarted: function (unitId) { emit('unit_started', unitId, {}); },
+        attempt: function (unitId, correct, detail) {
+          emit('attempt', unitId, { correct: !!correct, detail: detail || '' });
+        },
+        discovery: function (unitId, message) { emit('discovery', unitId, { message: message || '' }); },
+        assessment: function (unitId, result, detail) {
+          emit('assessment_result', unitId, { result: result, detail: detail || '' });
+        },
+        askForFeedback: function (unitId, question, answer, expected) {
+          emit('feedback_request', unitId, { question: question, answer: answer, expected: expected || '' });
+        },
+        helpNeeded: function (unitId, note) { emit('help_needed', unitId, { note: note || '' }); },
+        share: function (unitId, what) { emit('share_requested', unitId, { what: what || '' }); }
+      };
+    })();
+
+    /* Ouvir o embutidor (chega por postMessage): feedback do assistente e
+       «chamar a atenção» do professor para uma unidade. */
+    window.addEventListener('message', function (ev) {
+      var d = ev.data;
+      if (!d || d.pagecraft !== 1) return;
+      if (d.type === 'ai_feedback') {
+        var box = document.getElementById(d.targetId || 'pagecraft-feedback');
+        if (!box) return;
+        box.textContent = d.payload && d.payload.text ? d.payload.text : '';
+        box.setAttribute('data-shown', 'true');
+        return;
+      }
+      if (d.type === 'highlight' && d.unitId) {
+        var el = document.getElementById(d.unitId) ||
+                 document.querySelector('[data-unit="' + d.unitId + '"]');
+        if (!el) return;
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.remove('pagecraft-attention');
+        void el.offsetWidth; /* reinicia a animação se repetido */
+        el.classList.add('pagecraft-attention');
+        setTimeout(function () { el.classList.remove('pagecraft-attention'); }, 6000);
+      }
+    });
+
+    /* Descoberta anunciada (aria-live) + telemetria. */
+    function showDiscovery(elementId, message, unitId) {
       var el = document.getElementById(elementId);
       if (!el) return;
       el.setAttribute('role', 'status');
       el.setAttribute('aria-live', 'polite');
       el.textContent = message;
       el.setAttribute('data-shown', 'true');
+      if (window.PageCraftBridge) PageCraftBridge.discovery(unitId || elementId, message);
     }
+
+    /* Feedback formativo âmbar/verde para quizzes e verificações.
+       Uso: PageCraftFeedback.show(containerEl, correto, mensagem, unitId) */
+    window.PageCraftFeedback = (function () {
+      function show(container, correct, message, unitId) {
+        if (typeof container === 'string') container = document.getElementById(container);
+        if (!container) return;
+        container.classList.remove('feedback-correct', 'feedback-try-again');
+        container.classList.add(correct ? 'feedback-correct' : 'feedback-try-again');
+        container.setAttribute('role', 'status');
+        container.setAttribute('aria-live', 'polite');
+        container.innerHTML = '';
+        var icon = document.createElement('span');
+        icon.className = 'emoji';
+        icon.setAttribute('aria-hidden', 'true');
+        icon.textContent = correct ? '✓ ' : '↻ ';
+        container.appendChild(icon);
+        container.appendChild(document.createTextNode(message));
+        container.style.display = 'block';
+        if (window.PageCraftBridge) PageCraftBridge.attempt(unitId || null, correct, message);
+      }
+      return { show: show };
+    })();
 
     /* Áudio opt-in: respeita a sala de aula. Liga apenas quando o aluno carrega. */
     window.PageCraftAudio = (function () {

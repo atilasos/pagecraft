@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pagecraft.local/schemas/design-spec.schema.json",
+  "title": "PageCraft Design Spec",
+  "description": "Sistema visual gerado pelo Designer para guiar o Builder",
+  "type": "object",
+  "required": ["palette"],
+  "additionalProperties": true,
+  "properties": {
+    "palette": {
+      "type": "object",
+      "description": "Paleta de cores principal (valores CSS, ex: '#1a2b3c')",
+      "additionalProperties": true,
+      "properties": {
+        "bg": { "type": "string", "description": "Fundo da página" },
+        "surface": { "type": "string", "description": "Superfícies (cartões, painéis)" },
+        "primary": { "type": "string", "description": "Cor primária de interação" },
+        "accent": { "type": "string", "description": "Cor de destaque" },
+        "ink": { "type": "string", "description": "Cor de texto principal" }
+      }
+    },
+    "functional": {
+      "type": "object",
+      "description": "Cores funcionais de feedback",
+      "additionalProperties": true,
+      "properties": {
+        "ok": { "type": "string", "description": "Sucesso/correto" },
+        "warn": { "type": "string", "description": "Aviso/erro recuperável" },
+        "focus": { "type": "string", "description": "Anel de foco/seleção" }
+      }
+    },
+    "typography": {
+      "type": "object",
+      "description": "Sistema tipográfico",
+      "additionalProperties": true,
+      "properties": {
+        "fontFamily": { "type": "string" },
+        "scale": { "type": "string", "description": "Escala tipográfica (ex: base|kids|xl)" },
+        "weights": {
+          "type": "array",
+          "items": { "type": "integer" }
+        }
+      }
+    },
+    "layout": {
+      "type": "object",
+      "description": "Regras de layout",
+      "additionalProperties": true,
+      "properties": {
+        "radius": { "type": "number", "description": "Raio de canto em px" },
+        "spacing": { "type": "string", "description": "Densidade (ex: comfortable|compact)" },
+        "maxWidth": { "type": "number", "description": "Largura máxima do conteúdo em px" }
+      }
+    },
+    "components": {
+      "type": "object",
+      "description": "Estilos por componente (ex: buttons: rounded|pill, cards: elevated|flat)",
+      "additionalProperties": true
+    },
+    "motion": {
+      "type": "object",
+      "description": "Animações e transições",
+      "additionalProperties": true,
+      "properties": {
+        "transitions": { "type": "string", "description": "ex: subtle|none" }
+      }
+    },
+    "accessibility": {
+      "type": "object",
+      "description": "Requisitos de acessibilidade",
+      "additionalProperties": true,
+      "properties": {
+        "contrast": { "type": "string", "description": "Nível de contraste alvo (ex: AA)" }
+      }
+    },
+    "notes": {
+      "type": "string",
+      "description": "Decisões de estilo curtas"
+    }
+  }
+}
