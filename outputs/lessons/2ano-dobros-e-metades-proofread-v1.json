@@ -1,0 +1,126 @@
+{
+  "pass": false,
+  "severity": "high",
+  "issues": [
+    {
+      "type": "grammar",
+      "severity": "medium",
+      "location": "#u1 .activation",
+      "original": "Se os pratos têm o mesmo, quantos frutos há ao todo?",
+      "suggestion": "Se os pratos têm a mesma quantidade, quantos frutos há ao todo?",
+      "reason": "A expressão «têm o mesmo» está incompleta e pode dificultar a compreensão."
+    },
+    {
+      "type": "semantic",
+      "severity": "medium",
+      "location": "#u1 .diff-content[data-level='challenge']",
+      "original": "Prevê e explica com dois grupos iguais.",
+      "suggestion": "Prevê o total e explica como usaste dois grupos iguais.",
+      "reason": "A instrução não indica claramente o que deve ser previsto e explicado."
+    },
+    {
+      "type": "semantic",
+      "severity": "low",
+      "location": "#plateNext",
+      "original": "Experimentar outro",
+      "suggestion": "Experimentar outro número",
+      "reason": "O referente de «outro» não é explícito."
+    },
+    {
+      "type": "semantic",
+      "severity": "medium",
+      "location": "#plateFeedback — resposta incorreta",
+      "original": "Quase! Conta os dois pratos. Cada um tem 2.",
+      "suggestion": "Quase! Conta os frutos dos dois pratos. Cada prato tem 2 frutos.",
+      "reason": "«Conta os dois pratos» pode ser interpretado como contar os recipientes, e não os frutos."
+    },
+    {
+      "type": "pedagogical",
+      "severity": "medium",
+      "location": "#u2 .diff-content[data-level='challenge']",
+      "original": "Descobre também qual foi o número duplicado.",
+      "suggestion": "Descobre também de que número calculaste o dobro.",
+      "reason": "«Número duplicado» é pouco preciso no contexto da aprendizagem dos dobros."
+    },
+    {
+      "type": "semantic",
+      "severity": "low",
+      "location": "#doubleHistory",
+      "original": "Ainda sem registo / Explora um dobro / E confirma",
+      "suggestion": "Ainda não há registos. / Calcula um dobro. / Depois, confirma a resposta.",
+      "reason": "Os fragmentos distribuídos por cartões não formam instruções autónomas suficientemente claras."
+    },
+    {
+      "type": "pedagogical",
+      "severity": "high",
+      "location": "#u3 .instruction p e #u3 .diff-content[data-level='support']",
+      "original": "Toca num elemento. Depois, toca num recipiente. / Usa totais até 10. Cada toque alterna os recipientes.",
+      "suggestion": "Instrução geral: «Toca num elemento. Depois, toca no recipiente onde o queres colocar.» Apoio: «Toca num elemento. Ele será colocado automaticamente, alternando entre os dois recipientes.»",
+      "reason": "No nível Apoio, tocar no elemento já o coloca automaticamente. A instrução geral pede um segundo toque desnecessário e pode confundir crianças de 7–8 anos."
+    },
+    {
+      "type": "grammar",
+      "severity": "low",
+      "location": "#matchFeedback — par correto",
+      "original": "Encontraste uma relação de dobro e metade.",
+      "suggestion": "Encontraste uma relação entre o dobro e a metade.",
+      "reason": "A construção com «entre» é mais natural e precisa em português europeu."
+    },
+    {
+      "type": "semantic",
+      "severity": "medium",
+      "location": "#matchFeedback — conclusão de um modo",
+      "original": "Encontraste os 4 pares. Agora verifica no outro modo.",
+      "suggestion": "Encontraste os 4 pares. Verifica também a relação no outro modo, se ainda não o fizeste.",
+      "reason": "A mensagem também surge quando o outro modo já foi concluído."
+    },
+    {
+      "type": "pedagogical",
+      "severity": "medium",
+      "location": "#u4 .self-check h3",
+      "original": "Como te sentes agora?",
+      "suggestion": "Como te sentes em relação a esta atividade?",
+      "reason": "A pergunta original é demasiado abrangente para respostas centradas na autonomia durante a atividade."
+    },
+    {
+      "type": "pedagogical",
+      "severity": "low",
+      "location": ".assessment li:nth-child(1)",
+      "original": "Mostra dois grupos iguais e diz o dobro.",
+      "suggestion": "Mostra dois grupos iguais e diz qual é o dobro dessa quantidade.",
+      "reason": "A formulação revista explicita o que o aluno deve identificar."
+    },
+    {
+      "type": "pedagogical",
+      "severity": "high",
+      "location": ".assessment li:nth-child(3)",
+      "original": "Completa: «O dobro de 7 é 14, por isso metade de 14 é 7.»",
+      "suggestion": "Completa: «O dobro de 7 é __, por isso metade de 14 é __.»",
+      "reason": "A frase apresentada já está completa, pelo que não permite observar a resposta do aluno."
+    },
+    {
+      "type": "semantic",
+      "severity": "medium",
+      "location": ".curriculum p:nth-of-type(2)",
+      "original": "Organização: turma → individual com interajuda → pares → comunicação à turma.",
+      "suggestion": "Organização: turma → trabalho individual → interajuda a pares → comunicação à turma.",
+      "reason": "«Individual com interajuda» combina duas modalidades de trabalho sem esclarecer quando ocorre a colaboração."
+    },
+    {
+      "type": "pedagogical",
+      "severity": "medium",
+      "location": ".curriculum p:nth-of-type(3)",
+      "original": "Aprendizagens Essenciais: dobros até ao dobro de 10 e metade em situações de partilha equitativa, Matemática, 2.º ano.",
+      "suggestion": "Aprendizagens Essenciais: dobros de números naturais até ao dobro de 10 e metades de quantidades pares até 20, em situações de partilha equitativa — Matemática, 2.º ano.",
+      "reason": "A formulação original não explicita o limite de 20 definido no DocSpec e usa «metade» de forma pouco precisa."
+    }
+  ],
+  "summary": "O texto está globalmente adequado ao português europeu e à faixa etária, mas contém instruções ambíguas e uma contradição relevante no nível Apoio da partilha. A conversa final também apresenta como exercício de completamento uma frase já preenchida, comprometendo a observação de uma das aprendizagens.",
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90: FAIL",
+    "Registo consistente: OK",
+    "Adequação à faixa etária: FAIL",
+    "Instruções claras e seguíveis: FAIL",
+    "Alinhamento com objetivos: FAIL"
+  ]
+}

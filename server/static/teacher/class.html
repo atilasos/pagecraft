@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PageCraft Studio — Turmas e sessões</title>
+<link rel="stylesheet" href="/studio.css">
+<style>
+  .join-code { font-size: 2.5rem; font-weight: 800; letter-spacing: 0.3em; color: var(--primary); text-align: center; }
+  .students-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 0.75rem; }
+  .student-card { border: 1px solid var(--border); border-radius: var(--r-md); padding: 0.75rem 1rem; background: var(--surface); }
+  .student-card.help { border-color: var(--warn); background: var(--warn-tint); }
+  .student-card h3 { margin: 0 0 0.25rem; font-size: 1.05rem; }
+  .student-card .last { font-size: 0.9rem; color: var(--ink-soft); }
+  .counts { font-size: 0.9rem; }
+  #timeline { max-height: 320px; overflow-y: auto; }
+  #timeline li { font-size: 0.95rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Turmas e sessões</h1>
+  <p class="muted"><a href="/teacher/">← estúdio</a></p>
+
+  <section class="card" id="classes-card">
+    <h2 style="margin-top:0">Turmas</h2>
+    <div id="classes-list"></div>
+    <form id="class-form">
+      <div class="row">
+        <div>
+          <label for="class-name">Nome da turma</label>
+          <input id="class-name" required placeholder="3.º A">
+        </div>
+        <div>
+          <label for="class-year">Ano</label>
+          <select id="class-year">
+            <option value="1">1.º</option><option value="2">2.º</option>
+            <option value="3" selected>3.º</option><option value="4">4.º</option>
+          </select>
+        </div>
+      </div>
+      <label for="class-students">Alunos (um nome próprio por linha, sem apelidos)</label>
+      <textarea id="class-students" rows="4" placeholder="Ana&#10;Bruno&#10;Carla"></textarea>
+      <p style="margin-top:0.75rem"><button type="submit">Criar turma</button></p>
+    </form>
+  </section>
+
+  <section class="card" id="launch-card">
+    <h2 style="margin-top:0">Lançar sessão de aula</h2>
+    <div class="row">
+      <div>
+        <label for="launch-class">Turma</label>
+        <select id="launch-class"></select>
+      </div>
+      <div>
+        <label for="launch-activity">Atividade</label>
+        <select id="launch-activity"></select>
+      </div>
+    </div>
+    <p style="margin-top:1rem"><button id="launch-btn" type="button">Lançar sessão</button></p>
+  </section>
+
+  <section id="live" hidden>
+    <div class="card">
+      <h2 style="margin-top:0" id="live-title"></h2>
+      <p>Os alunos entram em <strong id="live-url"></strong> com o código:</p>
+      <p class="join-code" id="live-code"></p>
+      <div class="row" style="align-items:end">
+        <div>
+          <label for="msg-text">Mensagem <span class="muted" id="msg-target">(para a turma)</span></label>
+          <input id="msg-text" maxlength="400" placeholder="Ex.: daqui a 5 minutos vamos partilhar">
+        </div>
+        <div><button class="ghost" id="msg-btn" type="button">Enviar</button></div>
+      </div>
+      <p>
+        <button class="ghost" id="close-btn" type="button">Terminar sessão</button>
+        <a id="export-link" class="ghost" style="padding:0.7rem 1rem; border:2px solid var(--primary); border-radius:10px; text-decoration:none; display:inline-block" download>Exportar registo</a>
+      </p>
+    </div>
+    <div class="card">
+      <h2 style="margin-top:0">Alunos</h2>
+      <div class="students-grid" id="students"></div>
+    </div>
+    <div class="card">
+      <h2 style="margin-top:0">Circuito de comunicação e registo</h2>
+      <ul class="plain" id="timeline" aria-live="polite"></ul>
+    </div>
+  </section>
+</main>
+<script src="/teacher/class.js"></script>
+</body>
+</html>

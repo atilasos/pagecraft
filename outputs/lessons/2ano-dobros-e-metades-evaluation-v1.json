@@ -1,0 +1,125 @@
+{
+  "pass": false,
+  "route": "builder",
+  "severity": "critical",
+  "scores": {
+    "factual_accuracy": 5,
+    "constraint_alignment": 3,
+    "differentiation_quality": 2,
+    "ux_accessibility": 2,
+    "visual_design": 4,
+    "technical_quality": 4
+  },
+  "issues": [
+    {
+      "type": "assessment",
+      "severity": "critical",
+      "location": ".assessment li:nth-child(3)",
+      "description": "O pedido «Completa» apresenta a frase já preenchida. Assim, não produz uma resposta observável sobre a relação inversa entre dobro e metade."
+    },
+    {
+      "type": "assessment",
+      "severity": "high",
+      "location": "#u1, #u2, #u3 e #u4",
+      "description": "A interface não acompanha os critérios quantitativos do DocSpec: três valores na etapa 1, quatro de cinco dobros na etapa 2, três partilhas incluindo uma superior a 10 e verificações nos dois modos na etapa 4. Existem eventos e algum estado interno, mas não há registo ou síntese observável para aluno/professor."
+    },
+    {
+      "type": "differentiation",
+      "severity": "high",
+      "location": "#u1 .diff-content[data-level='challenge']",
+      "description": "O Desafio muda apenas a instrução. Não oculta a contagem total nem permite construir as duas representações pedidas: desenho dos grupos e adição de parcelas iguais."
+    },
+    {
+      "type": "differentiation",
+      "severity": "high",
+      "location": "#u2 .diff-content[data-level='challenge']",
+      "description": "O Desafio não apresenta um total par para o aluno descobrir qual número foi duplicado. Mantém o mesmo slider e a mesma pergunta direta do nível intermédio."
+    },
+    {
+      "type": "differentiation",
+      "severity": "high",
+      "location": "#u4 .diff-content[data-level='challenge']",
+      "description": "Ocultar alguns pontos não implementa o desafio definido: resolver sem apoio visual, criar uma nova relação dobro-metade e propô-la a outro par."
+    },
+    {
+      "type": "interaction",
+      "severity": "high",
+      "location": "#u4",
+      "description": "Ao mudar de modo, buildMatch() apaga as associações visíveis. verifiedModes é atualizado internamente, mas não existe conclusão que confirme que o aluno verificou a mesma relação nos dois sentidos."
+    },
+    {
+      "type": "instruction",
+      "severity": "high",
+      "location": "#u3 .instruction e nível Apoio",
+      "description": "A instrução manda tocar num elemento e depois num recipiente, mas no nível Apoio o primeiro toque já coloca automaticamente o elemento. O segundo passo torna-se falso e confuso."
+    },
+    {
+      "type": "feedback",
+      "severity": "medium",
+      "location": "#plateFeedback",
+      "description": "«Conta os dois pratos» pode levar a contar os recipientes em vez dos frutos."
+    },
+    {
+      "type": "feedback",
+      "severity": "medium",
+      "location": "#matchFeedback",
+      "description": "Depois de completar um modo, a mensagem manda sempre verificar o outro, mesmo quando os dois modos já foram concluídos."
+    },
+    {
+      "type": "accessibility",
+      "severity": "medium",
+      "location": ".diff-tabs e .diff-content",
+      "description": "Os botões usam role='tab', mas os painéis não têm role='tabpanel' nem ligações aria-controls/aria-labelledby. A navegação por teclado existe, porém a relação semântica está incompleta."
+    },
+    {
+      "type": "copy",
+      "severity": "medium",
+      "location": "#u1 .activation, níveis de desafio e controlos",
+      "description": "Há formulações ambíguas ou incompletas, incluindo «têm o mesmo», «Prevê e explica», «número duplicado» e «Experimentar outro». O proofread falhou gramática, adequação etária, clareza e alinhamento."
+    },
+    {
+      "type": "curriculum_alignment",
+      "severity": "medium",
+      "location": ".curriculum",
+      "description": "A síntese das Aprendizagens Essenciais omite explicitamente as quantidades pares até 20 e descreve a organização social de forma ambígua."
+    }
+  ],
+  "critical": [
+    "A conversa final fornece a resposta completa no exercício que deveria observar a relação inversa.",
+    "Os critérios de desempenho definidos nos quatro assessments não são acompanhados nem apresentados de forma observável na interface."
+  ],
+  "required_fixes": [
+    "Transformar a frase final num exercício com lacunas ou escolhas efetivas, sem revelar as respostas.",
+    "Registar tentativas e apresentar evidência observável de cumprimento dos critérios quantitativos de cada etapa.",
+    "Implementar funcionalmente os desafios das etapas 1, 2 e 4, em vez de alterar apenas texto ou visibilidade.",
+    "Preservar e apresentar a verificação da etapa 4 nos dois modos, incluindo uma conclusão específica quando ambos estiverem completos.",
+    "Adaptar a instrução da partilha ao nível selecionado.",
+    "Corrigir todos os problemas de clareza e precisão identificados pelo proofread.",
+    "Completar a semântica ARIA dos separadores e respetivos painéis."
+  ],
+  "acceptance_checks": [
+    "A conversa final exige uma resposta não revelada e permite observar os dois valores corretos.",
+    "A interface mostra progresso para 2 de 3 previsões, 4 de 5 dobros, 3 partilhas com uma superior a 10 e 4 associações com pelo menos 2 verificadas nos dois modos.",
+    "O Desafio da etapa 1 permite duas representações e oculta o total antes da resposta.",
+    "O Desafio da etapa 2 parte de um total par e recolhe o número que foi duplicado.",
+    "O Desafio da etapa 4 permite criar e verificar uma nova relação.",
+    "No nível Apoio da etapa 3, a instrução explica que o toque distribui automaticamente e alternadamente.",
+    "Os separadores expõem relações tab/tabpanel válidas e continuam operáveis por teclado.",
+    "O proofread passa sem problemas de severidade alta ou média.",
+    "A consola permanece sem erros durante todas as interações."
+  ],
+  "suggestions": [
+    "Substituir «Como te sentes agora?» por uma pergunta explicitamente ligada à autonomia nesta atividade.",
+    "Reformular os cartões vazios do histórico como instruções autónomas.",
+    "Explicitar na área do professor o limite de quantidades pares até 20."
+  ],
+  "evidence": [
+    "Análise estática integral do HTML, CSS e JavaScript fornecidos.",
+    "Relatório determinista fornecido: passed=true, sem erros nem avisos.",
+    "Proofread fornecido: pass=false, severidade high e cinco verificações de aceitação falhadas.",
+    "Foram inspecionados os fluxos implementados para seleção de níveis, previsões, histórico, partilha, matching, áudio e autoavaliação."
+  ],
+  "blocked_by": [
+    "Não havia browser disponível; consola, árvore de acessibilidade, comportamento responsive e interações reais não puderam ser verificados em execução."
+  ]
+}

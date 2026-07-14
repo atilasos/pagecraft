@@ -39,6 +39,9 @@ def create_app() -> FastAPI:
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
+        from .classroom import ClassroomService
+        from .classroom.feedback import FeedbackService
+
         app.state.config = config
         app.state.storage = storage
         app.state.hub = hub
@@ -47,8 +50,13 @@ def create_app() -> FastAPI:
         app.state.runner = PipelineRunner(
             config, storage, hub, build_generation_provider(config), wiki, ae
         )
-        app.state.feedback_provider = build_feedback_provider(config)
+        app.state.classroom = ClassroomService(config, storage, hub)
+        app.state.feedback = FeedbackService(
+            config, storage, app.state.classroom, build_feedback_provider(config)
+        )
+        app.state.feedback.start()
         yield
+        await app.state.feedback.stop()
 
     app = FastAPI(title="PageCraft Studio", lifespan=lifespan)
 
@@ -76,9 +84,11 @@ def create_app() -> FastAPI:
             "activities": catalog.get("items", []),
         }
 
+    from .api import classroom as classroom_api
     from .api import jobs
 
     app.include_router(jobs.router)
+    app.include_router(classroom_api.router)
 
     config.outputs_dir.mkdir(parents=True, exist_ok=True)
     app.mount("/outputs", StaticFiles(directory=config.outputs_dir), name="outputs")
