@@ -78,7 +78,7 @@ function startActivity() {
   listenToBridge();
   connectStream();
   setInterval(flushOutbox, 2000);
-  queueEvent("joined", null, {});
+  // nota: o evento "joined" é emitido pelo servidor no claim; não repetir aqui
 }
 
 /* eventos da atividade (PageCraftBridge → postMessage) */

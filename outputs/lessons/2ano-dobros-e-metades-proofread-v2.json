@@ -1,0 +1,118 @@
+{
+  "pass": false,
+  "severity": "high",
+  "issues": [
+    {
+      "type": "pedagogical",
+      "severity": "medium",
+      "location": "#u1 .instruction p",
+      "original": "Move o controlo. Depois, prevê o total.",
+      "suggestion": "Desliza o marcador. Depois, prevê o total.",
+      "reason": "«Controlo» é pouco concreto para crianças de 7-8 anos; «marcador» identifica melhor o elemento que devem mover."
+    },
+    {
+      "type": "semantic",
+      "severity": "low",
+      "location": "#u1 .plates .plate strong",
+      "original": "Prato com símbolo ● / Prato com símbolo ●",
+      "suggestion": "Prato da esquerda · símbolo ● / Prato da direita · símbolo ●",
+      "reason": "Os dois títulos são idênticos e não permitem distinguir verbalmente os pratos."
+    },
+    {
+      "type": "semantic",
+      "severity": "medium",
+      "location": "#u2-panel-challenge",
+      "original": "Vê um total par. Descobre de que número calculaste o dobro.",
+      "suggestion": "Observa um total par. Descobre de que número é o dobro.",
+      "reason": "A formulação original pressupõe que o aluno já calculou o dobro, o que não corresponde à tarefa inversa apresentada."
+    },
+    {
+      "type": "grammar",
+      "severity": "low",
+      "location": "#regularity .rule-option[data-rule='2']",
+      "original": "Aumenta 2",
+      "suggestion": "Aumenta em 2",
+      "reason": "Neste sentido matemático, o verbo «aumentar» deve ser construído com a preposição «em»."
+    },
+    {
+      "type": "grammar",
+      "severity": "low",
+      "location": "#ruleFeedback — feedback correto",
+      "original": "Ao juntar um ponto a cada fila, o total aumenta dois.",
+      "suggestion": "Ao acrescentar um ponto a cada fila, o total aumenta em dois.",
+      "reason": "Falta a preposição «em»; «acrescentar» também mantém a terminologia usada na pergunta inicial."
+    },
+    {
+      "type": "semantic",
+      "severity": "high",
+      "location": "#representationFeedback — feedback correto",
+      "original": "Representaste o mesmo dobro com um desenho e uma adição.",
+      "suggestion": "A adição está correta. Confirma com um colega se o desenho mostra dois grupos iguais.",
+      "reason": "A página apenas deteta se houve algum traço no desenho, não se este representa corretamente dois grupos iguais. O feedback confirma uma aprendizagem que não foi verificada."
+    },
+    {
+      "type": "semantic",
+      "severity": "medium",
+      "location": "#u4-panel-standard",
+      "original": "Liga quatro pares até 20. Verifica pelo menos dois nos dois modos.",
+      "suggestion": "Liga quatro pares com números até 20. Verifica pelo menos dois pares nos dois modos.",
+      "reason": "O referente de «dois» não está explícito e «pares até 20» pode ser interpretado como números pares."
+    },
+    {
+      "type": "pedagogical",
+      "severity": "low",
+      "location": "#matchFeedback — feedback de erro",
+      "original": "Experimenta comparar as duas quantidades. Uma deve ser duas vezes a outra.",
+      "suggestion": "Compara as duas quantidades. Uma deve ser o dobro da outra.",
+      "reason": "A sugestão usa diretamente o conceito trabalhado e é mais clara para esta faixa etária."
+    },
+    {
+      "type": "grammar",
+      "severity": "medium",
+      "location": "#offerPair",
+      "original": "Propusemos ao outro par",
+      "suggestion": "Já propus ao outro par",
+      "reason": "A primeira pessoa do plural quebra o registo, pois toda a atividade se dirige ao aluno na segunda pessoa do singular."
+    },
+    {
+      "type": "semantic",
+      "severity": "medium",
+      "location": ".assessment li:nth-child(1)",
+      "original": "Mostra dois grupos iguais e diz qual é o dobro dessa quantidade.",
+      "suggestion": "Mostra dois grupos com a mesma quantidade e diz qual é o dobro da quantidade de um grupo.",
+      "reason": "«Dessa quantidade» tem um referente ambíguo: pode indicar a quantidade de um grupo ou o total dos dois."
+    },
+    {
+      "type": "semantic",
+      "severity": "high",
+      "location": "#finalFeedback — feedback correto",
+      "original": "Completaste e explicaste a relação nos dois sentidos.",
+      "suggestion": "Completaste corretamente a relação nos dois sentidos.",
+      "reason": "O sistema verifica apenas os dois números introduzidos e não consegue confirmar que o aluno explicou a relação."
+    },
+    {
+      "type": "semantic",
+      "severity": "medium",
+      "location": ".teacher p:first-of-type",
+      "original": "Registo observável: cada etapa apresenta o número de tentativas, respostas corretas e critérios ainda por cumprir.",
+      "suggestion": "Registo observável: cada etapa apresenta os valores explorados, as respostas corretas e os critérios ainda por cumprir.",
+      "reason": "Nem todas as etapas contabilizam o número total de tentativas; algumas registam apenas valores distintos ou tarefas concluídas."
+    },
+    {
+      "type": "ptpt-usage",
+      "severity": "low",
+      "location": "footer.footer",
+      "original": "PageCraft · atividade offline e sem dependências externas",
+      "suggestion": "PageCraft · atividade sem ligação à Internet e sem dependências externas",
+      "reason": "«Offline» é um anglicismo dispensável, com equivalente natural em português europeu."
+    }
+  ],
+  "summary": "O texto está globalmente adequado ao 2.º ano e alinhado com os objetivos de aprendizagem, mas contém algumas instruções ambíguas e inconsistências de registo. Dois feedbacks confirmam aprendizagens que a página não consegue observar, pelo que devem ser corrigidos antes da aprovação.",
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90: FAIL",
+    "Registo consistente: FAIL",
+    "Adequação à faixa etária: FAIL",
+    "Instruções claras e seguíveis: FAIL",
+    "Alinhamento com objectivos: OK"
+  ]
+}
