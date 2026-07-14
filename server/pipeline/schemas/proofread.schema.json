@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pagecraft.local/schemas/proofread.schema.json",
+  "title": "PageCraft Proofread Report",
+  "description": "Relatório do Proofreader pt-PT AO90 sobre a página construída",
+  "type": "object",
+  "required": ["pass", "issues", "summary"],
+  "additionalProperties": true,
+  "properties": {
+    "pass": {
+      "type": "boolean",
+      "description": "true se a página passa a revisão linguística/pedagógica"
+    },
+    "severity": {
+      "type": "string",
+      "description": "Severidade agregada do relatório",
+      "enum": ["low", "medium", "high", "critical"]
+    },
+    "issues": {
+      "type": "array",
+      "description": "Problemas encontrados",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["orthography", "grammar", "semantic", "pedagogical", "ptpt-usage"]
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["low", "medium", "high", "critical"]
+          },
+          "location": {
+            "type": "string",
+            "description": "Selector, unit, snippet ou secção"
+          },
+          "original": {
+            "type": "string",
+            "description": "Texto original"
+          },
+          "suggestion": {
+            "type": "string",
+            "description": "Texto revisto"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Justificação curta"
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "string",
+      "description": "Síntese curta"
+    },
+    "acceptance_checks": {
+      "type": "array",
+      "description": "Verificações que a correção deve satisfazer",
+      "items": { "type": "string" }
+    }
+  }
+}

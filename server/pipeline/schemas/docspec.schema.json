@@ -1,0 +1,263 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pagecraft.local/schemas/docspec.schema.json",
+  "title": "DocSpec-AM",
+  "description": "PageCraft Document Specification with Assessment + Maker",
+  "type": "object",
+  "required": ["topic", "ageRange", "duration", "objectives", "curriculum", "units"],
+  "additionalProperties": true,
+  "properties": {
+    "topic": {
+      "type": "string",
+      "description": "Tópico da aula"
+    },
+    "ageRange": {
+      "type": "string",
+      "description": "Faixa etária alvo (ex: '8-9 anos', 'pré-escolar', '3.º ano')"
+    },
+    "duration": {
+      "type": "integer",
+      "description": "Duração em minutos (15-50)",
+      "minimum": 15,
+      "maximum": 50
+    },
+    "objectives": {
+      "type": "array",
+      "description": "Objectivos de aprendizagem (2-4)",
+      "items": { "type": "string" },
+      "minItems": 2,
+      "maxItems": 4
+    },
+    "curriculum": { "$ref": "#/$defs/CurriculumRef" },
+    "memAlignment": { "$ref": "#/$defs/MEMAlignment" },
+    "materials": {
+      "type": "array",
+      "description": "Materiais necessários (digitais + físicos)",
+      "items": { "type": "string" }
+    },
+    "units": {
+      "type": "array",
+      "description": "Knowledge units ordenadas",
+      "items": { "$ref": "#/$defs/KnowledgeUnit" },
+      "minItems": 1
+    },
+    "sessionFlow": {
+      "type": "string",
+      "description": "Descrição do fluxo da sessão: como as units se encadeiam no tempo"
+    }
+  },
+  "$defs": {
+    "CurriculumRef": {
+      "type": "object",
+      "description": "Referências curriculares",
+      "required": ["ae", "competencies"],
+      "additionalProperties": true,
+      "properties": {
+        "ae": {
+          "type": "array",
+          "description": "Aprendizagens Essenciais referenciadas (disciplina + ano + descritor)",
+          "items": {
+            "type": "object",
+            "required": ["subject", "year", "descriptor"],
+            "additionalProperties": true,
+            "properties": {
+              "subject": { "type": "string", "description": "Disciplina (ex: 'Estudo do Meio')" },
+              "year": { "type": "string", "description": "Ano (ex: '3.º ano')" },
+              "domain": { "type": "string", "description": "Domínio (ex: 'Natureza')" },
+              "descriptor": { "type": "string", "description": "Descritor específico das AE" },
+              "source": { "type": "string", "description": "Ficheiro fonte no vault" }
+            }
+          }
+        },
+        "competencies": {
+          "type": "array",
+          "description": "Áreas de competência do Perfil do Aluno trabalhadas",
+          "items": {
+            "type": "string",
+            "enum": [
+              "PA-A: Linguagens e textos",
+              "PA-B: Informação e comunicação",
+              "PA-C: Raciocínio e resolução de problemas",
+              "PA-D: Pensamento crítico e pensamento criativo",
+              "PA-E: Relacionamento interpessoal",
+              "PA-F: Desenvolvimento pessoal e autonomia",
+              "PA-G: Bem-estar, saúde e ambiente",
+              "PA-H: Sensibilidade estética e artística",
+              "PA-I: Saber científico, técnico e tecnológico",
+              "PA-J: Consciência e domínio do corpo"
+            ]
+          }
+        }
+      }
+    },
+    "MEMAlignment": {
+      "type": "object",
+      "description": "Alinhamento com os módulos do Modelo Pedagógico MEM",
+      "additionalProperties": true,
+      "properties": {
+        "modules": {
+          "type": "array",
+          "description": "Módulos MEM envolvidos na sessão",
+          "items": {
+            "type": "string",
+            "enum": [
+              "TEA (Trabalho de Estudo Autónomo)",
+              "Projecto cooperativo",
+              "Trabalho curricular comparticipado",
+              "Circuitos de comunicação",
+              "Conselho de cooperação educativa"
+            ]
+          }
+        },
+        "instruments": {
+          "type": "array",
+          "description": "Instrumentos de pilotagem MEM usados (PIT, mapa de tarefas, diário de turma...)",
+          "items": { "type": "string" }
+        },
+        "socialOrganization": {
+          "type": "string",
+          "description": "Como o trabalho se organiza socialmente (individual → pares → grupo → turma)"
+        }
+      }
+    },
+    "KnowledgeUnit": {
+      "type": "object",
+      "required": ["summary", "textDescription", "interaction", "differentiation"],
+      "additionalProperties": true,
+      "properties": {
+        "summary": {
+          "type": "string",
+          "description": "Conceito coberto (1 frase)"
+        },
+        "textDescription": {
+          "type": "string",
+          "description": "Guia para geração de texto: o que o aluno deve compreender"
+        },
+        "interaction": { "$ref": "#/$defs/SRTCA" },
+        "maker": { "$ref": "#/$defs/MakerChallenge" },
+        "differentiation": { "$ref": "#/$defs/Differentiation" },
+        "duration": {
+          "type": "integer",
+          "description": "Duração estimada desta unit em minutos"
+        }
+      }
+    },
+    "SRTCA": {
+      "type": "object",
+      "required": ["state", "render", "transition", "constraint", "assessment"],
+      "additionalProperties": true,
+      "properties": {
+        "state": {
+          "type": "array",
+          "description": "Variáveis da visualização",
+          "items": { "$ref": "#/$defs/StateVar" }
+        },
+        "render": {
+          "type": "string",
+          "description": "Como o estado se mapeia para elementos visuais"
+        },
+        "transition": {
+          "type": "string",
+          "description": "Como acções do utilizador modificam o estado"
+        },
+        "constraint": {
+          "type": "string",
+          "description": "Invariante pedagógico — o que o aluno deve descobrir"
+        },
+        "assessment": {
+          "type": "string",
+          "description": "O que o aluno deve demonstrar; critério observável"
+        }
+      }
+    },
+    "StateVar": {
+      "type": "object",
+      "required": ["name", "type"],
+      "additionalProperties": true,
+      "properties": {
+        "name": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": ["slider", "dropdown", "drag", "toggle", "quiz", "sorting", "matching", "canvas", "derived"]
+        },
+        "range": {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "step": { "type": "number" },
+        "default": {},
+        "options": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "unit": {
+          "type": "string",
+          "description": "Unidade de medida (ex: 'cm', '°C', 'blocos')"
+        },
+        "derivedFrom": {
+          "type": "string",
+          "description": "Fórmula ou expressão (ex: '2 * pi * raio')"
+        }
+      }
+    },
+    "MakerChallenge": {
+      "type": "object",
+      "description": "Extensão maker — liga o digital ao mundo tangível (opcional)",
+      "required": ["type", "challenge", "connection"],
+      "additionalProperties": true,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["minecraft", "lego", "3d-print", "robotics", "whiteboard", "unplugged"],
+          "description": "Recurso maker a utilizar"
+        },
+        "challenge": {
+          "type": "string",
+          "description": "Descrição do desafio em linguagem acessível"
+        },
+        "materials": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "groupSize": {
+          "type": "string",
+          "description": "Tamanho do grupo (ex: '2', '2-3', '3-4', 'turma')"
+        },
+        "connection": {
+          "type": "string",
+          "description": "Como o desafio maker se liga à exploração digital"
+        },
+        "communication": {
+          "type": "string",
+          "description": "Como o grupo comunica/partilha o resultado (circuito MEM)"
+        },
+        "alternatives": {
+          "type": "array",
+          "description": "Alternativas se o recurso principal não estiver disponível",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "Differentiation": {
+      "type": "object",
+      "required": ["support", "standard", "challenge"],
+      "additionalProperties": true,
+      "properties": {
+        "support": {
+          "type": "string",
+          "description": "🟢 Apoio — versão simplificada (menos variáveis, mais guia visual)"
+        },
+        "standard": {
+          "type": "string",
+          "description": "🟡 Intermédio — objectivo esperado"
+        },
+        "challenge": {
+          "type": "string",
+          "description": "🔴 Desafio — extensão (mais variáveis, raciocínio abstracto)"
+        }
+      }
+    }
+  }
+}

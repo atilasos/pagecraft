@@ -1,0 +1,104 @@
+"""Exportação da versão professor (Markdown) a partir de um DocSpec-AM.
+
+Port de skills/openclaw/scripts/build_markdown.py como função pura.
+"""
+
+from __future__ import annotations
+
+from datetime import datetime
+
+
+def docspec_to_markdown(docspec: dict) -> str:
+    """Gera a versão Markdown (professor) a partir de um DocSpec-AM dict."""
+    spec = docspec
+    today = datetime.now().strftime("%Y-%m-%d")
+
+    lines = [
+        f"# {spec.get('topic', '')}",
+        "",
+        f"**Ano:** {spec.get('ageRange', '')}  ",
+        f"**Duração:** {spec.get('duration', '')} minutos  ",
+        f"**Gerado por:** PageCraft 🛠️ — {today}",
+        "",
+        "---",
+        "",
+        "## Objetivos de aprendizagem",
+        "",
+    ]
+    for obj in spec.get("objectives", []):
+        lines.append(f"- {obj}")
+
+    lines.extend(["", "## Materiais", ""])
+    for m in spec.get("materials", []):
+        lines.append(f"- {m}")
+
+    mem = spec.get("memAlignment", {})
+    if mem:
+        lines.extend(["", "## Alinhamento MEM", ""])
+        for mod in mem.get("modules", []):
+            lines.append(f"- {mod}")
+        org = mem.get("socialOrganization", "")
+        if org:
+            lines.append(f"- **Organização social:** {org}")
+
+    flow = spec.get("sessionFlow", "")
+    if flow:
+        lines.extend(["", "## Fluxo da sessão", "", flow])
+
+    for i, u in enumerate(spec.get("units", []), 1):
+        inter = u.get("interaction", {})
+        diff = u.get("differentiation", {})
+        maker = u.get("maker")
+        lines.extend(
+            [
+                "",
+                f"## Unit {i}: {u.get('summary', '')} ({u.get('duration', '?')} min)",
+                "",
+                f"**Compreender:** {u.get('textDescription', '')}",
+                "",
+                f"**Constraint:** {inter.get('constraint', '')}",
+                f"**Assessment:** {inter.get('assessment', '')}",
+                "",
+                "**Diferenciação:**",
+                f"- 🟢 Apoio: {diff.get('support', '')}",
+                f"- 🟡 Intermédio: {diff.get('standard', '')}",
+                f"- 🔴 Desafio: {diff.get('challenge', '')}",
+            ]
+        )
+        if maker:
+            lines.extend(
+                [
+                    "",
+                    f"### 🛠️ Maker — {maker.get('type', '').title()}",
+                    f"- **Desafio:** {maker.get('challenge', '')}",
+                    f"- **Grupo:** {maker.get('groupSize', '')}",
+                    f"- **Ligação:** {maker.get('connection', '')}",
+                    f"- **Comunicação:** {maker.get('communication', '')}",
+                ]
+            )
+            alts = maker.get("alternatives", [])
+            if alts:
+                lines.append(f"- **Alternativas:** {'; '.join(alts)}")
+
+    curriculum = spec.get("curriculum", {})
+    if curriculum:
+        lines.extend(
+            [
+                "",
+                "---",
+                "",
+                "## Referências curriculares",
+                "",
+                "### Aprendizagens Essenciais",
+            ]
+        )
+        for ae in curriculum.get("ae", []):
+            lines.append(
+                f"- **{ae.get('subject', '')} ({ae.get('year', '')}):** {ae.get('descriptor', '')}"
+            )
+        lines.extend(["", "### Perfil do Aluno"])
+        for c in curriculum.get("competencies", []):
+            lines.append(f"- {c}")
+
+    lines.extend(["", "---", f"*Gerado por PageCraft 🛠️ — {today}*"])
+    return "\n".join(lines) + "\n"

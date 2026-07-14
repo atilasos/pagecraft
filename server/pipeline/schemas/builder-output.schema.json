@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pagecraft.local/schemas/builder-output.schema.json",
+  "title": "PageCraft Builder Output",
+  "description": "Página HTML self-contained gerada pelo Builder",
+  "type": "object",
+  "required": ["html"],
+  "additionalProperties": false,
+  "properties": {
+    "html": {
+      "type": "string",
+      "description": "Documento HTML completo e self-contained (CSS+JS inline)",
+      "minLength": 500
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notas curtas do Builder sobre decisões de implementação"
+    }
+  }
+}
