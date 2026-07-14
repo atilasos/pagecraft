@@ -27,17 +27,17 @@ async function loadMeta() {
     meta.makers.map((m) => `<option value="${m}">${m}</option>`).join("");
   const catalog = document.getElementById("catalog");
   catalog.innerHTML = (meta.activities || [])
-    .slice()
-    .reverse()
     .map(
       (a) =>
         `<li><a href="/activities/${encodeURIComponent(a.slug)}/" target="_blank" rel="noopener">${esc(a.title || a.slug)}</a>
+         <span class="pill subject">${esc(a.subject || "—")}</span>
          <span class="muted">· ${a.year ? esc(a.year) + ".º ano · " : ""}${esc(a.duration || "?")} min</span></li>`
     )
     .join("") || '<li class="muted">Ainda não há atividades publicadas.</li>';
 }
 
 function jobCard(job) {
+  document.getElementById("jobs-empty")?.remove();
   let el = document.getElementById(`job-${job.id}`);
   if (!el) {
     el = document.createElement("div");

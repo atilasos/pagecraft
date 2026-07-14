@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PageCraft — Projeção</title>
+<link rel="stylesheet" href="/studio.css">
+<style>
+  /* projeção: contraste alto, zero ruído, tudo grande para o fundo da sala */
+  body { display: flex; flex-direction: column; height: 100vh; margin: 0; }
+  .present-bar {
+    display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+    padding: 0.75rem 1.25rem;
+    background: var(--surface); border-bottom: 2px solid var(--border);
+  }
+  .present-bar .type-blocks span { width: 3rem; height: 3.6rem; font-size: 2rem; }
+  .present-bar .join-hint { font-size: 1.25rem; font-weight: 700; }
+  .present-bar .join-hint .muted { display: block; font-size: 0.95rem; font-weight: 400; }
+  #board { flex: 1; border: none; width: 100%; background: white; }
+  .present-bar .spacer { flex: 1; }
+</style>
+</head>
+<body>
+  <div class="present-bar">
+    <div class="join-hint">
+      <span id="present-title">Projeção</span>
+      <span class="muted" id="join-url"></span>
+    </div>
+    <div class="type-blocks" id="join-code" aria-label="Código de entrada"></div>
+    <span class="spacer"></span>
+    <button type="button" class="freeze-switch" id="freeze-btn" aria-pressed="false">
+      <span class="knob" aria-hidden="true">👀</span>
+      <span id="freeze-label">Olhem para o quadro</span>
+    </button>
+  </div>
+  <iframe id="board" title="Atividade projetada" sandbox="allow-scripts"></iframe>
+<script src="/teacher/common.js"></script>
+<script>
+(async function () {
+  const sessionId = new URLSearchParams(location.search).get("session");
+  if (!sessionId) {
+    document.querySelector(".present-bar").insertAdjacentHTML(
+      "beforeend", '<p class="feedback-warn">Falta o identificador da sessão.</p>');
+    return;
+  }
+  const resp = await tfetch(`/api/sessions/${sessionId}`);
+  if (!resp.ok) return;
+  const session = await resp.json();
+  document.getElementById("present-title").textContent =
+    `${session.class_name} · ${session.activity_title}`;
+  document.getElementById("join-url").textContent = `${location.host}/student/`;
+  const codeEl = document.getElementById("join-code");
+  [...session.join_code].forEach((ch) => {
+    const b = document.createElement("span");
+    b.textContent = ch;
+    codeEl.appendChild(b);
+  });
+  const board = document.getElementById("board");
+  board.src = `/activities/${encodeURIComponent(session.activity_slug)}/`;
+
+  let frozen = false;
+  const freezeBtn = document.getElementById("freeze-btn");
+  freezeBtn.addEventListener("click", async () => {
+    await tfetch(`/api/sessions/${sessionId}/control`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ action: frozen ? "unfreeze" : "freeze" }),
+    });
+  });
+
+  const es = new EventSource(await teacherStreamUrl(`/api/sessions/${sessionId}/stream`));
+  es.addEventListener("teacher_highlight", (ev) => {
+    const data = JSON.parse(ev.data);
+    // o destaque também brilha no quadro, para toda a turma ver o mesmo
+    board.contentWindow?.postMessage(
+      { pagecraft: 1, type: "highlight", unitId: data.payload?.unit_id },
+      "*"
+    );
+  });
+  es.addEventListener("freeze_screens", () => {
+    frozen = true;
+    freezeBtn.setAttribute("aria-pressed", "true");
+    document.getElementById("freeze-label").textContent = "Libertar os ecrãs";
+  });
+  es.addEventListener("unfreeze_screens", () => {
+    frozen = false;
+    freezeBtn.setAttribute("aria-pressed", "false");
+    document.getElementById("freeze-label").textContent = "Olhem para o quadro";
+  });
+  es.addEventListener("session_closed", () => es.close());
+})();
+</script>
+</body>
+</html>

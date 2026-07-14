@@ -8,6 +8,7 @@ a cada pedido.
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, Request
@@ -43,6 +44,17 @@ def _subject_from_docspec(docspec: dict | None) -> str:
     return ""
 
 
+def _parse_year(value) -> int | None:
+    """Normaliza o ano de escolaridade a partir dos formatos históricos:
+    3, "3", "3.º ano", "1.º ano (6-7 anos)", "9-10 anos (4.º ano do 1.º CEB)".
+    Idades soltas ("6-8 anos, ajustável") ficam sem ano."""
+    if isinstance(value, int):
+        return value if 1 <= value <= 4 else None
+    text = str(value or "")
+    match = re.search(r"([1-4])\s*\.?\s*º?\s*ano", text) or re.fullmatch(r"\s*([1-4])\s*", text)
+    return int(match.group(1)) if match else None
+
+
 def list_activities(activities_dir: Path) -> list[dict]:
     items = []
     if not activities_dir.is_dir():
@@ -58,7 +70,8 @@ def list_activities(activities_dir: Path) -> list[dict]:
             {
                 "slug": meta.get("slug", meta_path.parent.name),
                 "title": meta.get("title", meta_path.parent.name),
-                "year": meta.get("year"),
+                "year": _parse_year(meta.get("year")),
+                "yearLabel": str(meta.get("year") or ""),
                 "ageRange": meta.get("ageRange", ""),
                 "duration": meta.get("duration"),
                 "subject": subject,
