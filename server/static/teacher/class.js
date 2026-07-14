@@ -22,14 +22,16 @@ const EVENT_TEXT = {
 };
 
 async function loadClasses() {
-  const classes = await (await fetch("/api/classes")).json();
+  const resp = await tfetch("/api/classes");
+  if (!resp.ok) return;
+  const classes = await resp.json();
   $("classes-list").innerHTML = classes.length
     ? `<ul class="plain">${classes
-        .map((c) => `<li><strong>${c.name}</strong> <span class="muted">· ${c.year}.º ano · ${c.students.length} alunos</span></li>`)
+        .map((c) => `<li><strong>${esc(c.name)}</strong> <span class="muted">· ${esc(c.year)}.º ano · ${c.students.length} alunos</span></li>`)
         .join("")}</ul>`
     : '<p class="muted">Ainda não há turmas.</p>';
   $("launch-class").innerHTML = classes
-    .map((c) => `<option value="${c.id}">${c.name}</option>`)
+    .map((c) => `<option value="${esc(c.id)}">${esc(c.name)}</option>`)
     .join("");
 }
 
@@ -38,13 +40,13 @@ async function loadActivities() {
   $("launch-activity").innerHTML = (meta.activities || [])
     .slice()
     .reverse()
-    .map((a) => `<option value="${a.slug}">${a.title || a.slug}</option>`)
+    .map((a) => `<option value="${esc(a.slug)}">${esc(a.title || a.slug)}</option>`)
     .join("");
 }
 
 $("class-form").addEventListener("submit", async (ev) => {
   ev.preventDefault();
-  await fetch("/api/classes", {
+  await tfetch("/api/classes", {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
@@ -59,7 +61,7 @@ $("class-form").addEventListener("submit", async (ev) => {
 
 $("launch-btn").addEventListener("click", async () => {
   const select = $("launch-activity");
-  const resp = await fetch("/api/sessions", {
+  const resp = await tfetch("/api/sessions", {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
@@ -72,13 +74,14 @@ $("launch-btn").addEventListener("click", async () => {
   startLive(await resp.json());
 });
 
-function startLive(s) {
+async function startLive(s) {
   session = s;
   $("live").hidden = false;
   $("live-title").textContent = `${s.class_name} · ${s.activity_title}`;
   $("live-code").textContent = s.join_code;
-  $("live-url").textContent = `${location.origin}/student/`;
-  $("export-link").href = `/api/sessions/${s.id}`;
+  $("live-url").textContent = `${location.host}/student/`;
+  const token = await teacherToken();
+  $("export-link").href = `/api/sessions/${s.id}?teacher_token=${encodeURIComponent(token)}`;
   $("export-link").download = `sessao-${s.id}.json`;
   students.clear();
   Object.entries(s.roster).forEach(([id, e]) => {
@@ -88,7 +91,7 @@ function startLive(s) {
     });
   });
   renderStudents();
-  const es = new EventSource(`/api/sessions/${s.id}/stream`);
+  const es = new EventSource(await teacherStreamUrl(`/api/sessions/${s.id}/stream`));
   es.onmessage = () => {};
   Object.keys(EVENT_TEXT).forEach((type) => {
     es.addEventListener(type, (ev) => handleEvent(type, JSON.parse(ev.data), es));
@@ -126,13 +129,14 @@ function renderStudents() {
     const card = document.createElement("div");
     card.className = "student-card" + (st.help ? " help" : "");
     card.innerHTML = `
-      <h3>${st.name} ${st.joined ? "" : '<span class="muted">(fora)</span>'}</h3>
+      <h3>${esc(st.name)} ${st.joined ? "" : '<span class="muted">(fora)</span>'}</h3>
       <div class="counts">
         <span class="pill ok">${st.correct}✓</span>
         <span class="pill">${st.attempts} tentativas</span>
         <span class="pill ok">${st.discoveries} descobertas</span>
       </div>
-      <p class="last">${st.lastText}</p>`;
+      <p class="last"></p>`;
+    card.querySelector(".last").textContent = st.lastText;
     const actions = document.createElement("p");
     const msgBtn = document.createElement("button");
     msgBtn.className = "ghost";
@@ -143,7 +147,7 @@ function renderStudents() {
     freeBtn.textContent = "libertar";
     freeBtn.title = "libertar identidade (se o aluno trocou de dispositivo)";
     freeBtn.addEventListener("click", async () => {
-      await fetch(`/api/sessions/${session.id}/release/${id}`, { method: "POST" });
+      await tfetch(`/api/sessions/${session.id}/release/${id}`, { method: "POST" });
     });
     actions.append(msgBtn, document.createTextNode(" "), freeBtn);
     card.appendChild(actions);
@@ -162,7 +166,7 @@ function sendMessage(studentId, name) {
 $("msg-btn").addEventListener("click", async () => {
   const text = $("msg-text").value.trim();
   if (!text || !session) return;
-  await fetch(`/api/sessions/${session.id}/message`, {
+  await tfetch(`/api/sessions/${session.id}/message`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ text, student_id: messageTarget }),
@@ -172,13 +176,15 @@ $("msg-btn").addEventListener("click", async () => {
 });
 $("close-btn").addEventListener("click", async () => {
   if (!session) return;
-  await fetch(`/api/sessions/${session.id}/close`, { method: "POST" });
+  await tfetch(`/api/sessions/${session.id}/close`, { method: "POST" });
 });
 
 (async function init() {
   await Promise.all([loadClasses(), loadActivities()]);
   // retomar sessão live existente, se houver
-  const sessions = await (await fetch("/api/sessions")).json();
+  const resp = await tfetch("/api/sessions");
+  if (!resp.ok) return;
+  const sessions = await resp.json();
   const live = sessions.find((s) => s.status === "live");
   if (live) startLive(live);
 })();

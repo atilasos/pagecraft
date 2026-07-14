@@ -1,3 +1,5 @@
+import asyncio
+
 import pytest
 
 from server.classroom.service import ClassroomService
@@ -85,6 +87,30 @@ async def test_pit_upsert(svc):
     assert updated["status"] == "done"
     fresh = await svc.get_session(session["id"])
     assert len(fresh["pit_items"]) == 1
+
+
+async def test_concurrent_claims_only_one_wins(svc):
+    session = await _session(svc)
+    student_id = next(iter(session["roster"]))
+    results = await asyncio.gather(
+        *(svc.claim_identity(session["id"], student_id) for _ in range(8))
+    )
+    wins = [r for r in results if r]
+    assert len(wins) == 1
+    # o token que ficou persistido é o do vencedor
+    assert await svc.student_for_token(session["id"], wins[0]["student_token"]) == student_id
+
+
+async def test_token_invalid_after_close_for_mutations(svc):
+    session = await _session(svc)
+    student_id = next(iter(session["roster"]))
+    claim = await svc.claim_identity(session["id"], student_id)
+    await svc.close_session(session["id"])
+    assert await svc.student_for_token(session["id"], claim["student_token"]) is None
+    assert (
+        await svc.student_for_token(session["id"], claim["student_token"], require_live=False)
+        == student_id
+    )
 
 
 async def test_close_session(svc):

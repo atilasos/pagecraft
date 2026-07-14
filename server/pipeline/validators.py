@@ -28,11 +28,19 @@ class ValidationReport:
         return {"passed": self.passed, "errors": self.errors, "warnings": self.warnings}
 
 
+# Nota: esta validação é sinal para o repair loop, não fronteira de segurança.
+# A fronteira real é o sandbox do iframe (origem opaca) + CSP connect-src 'none'
+# aplicada pelo servidor a /activities e /outputs.
 EXTERNAL_REF = re.compile(
-    r"""(?:src|href)\s*=\s*["'](?:https?:)?//""", re.IGNORECASE
+    r"""(?:src|href|action)\s*=\s*["'](?:https?:)?//""", re.IGNORECASE
 )
-EXTERNAL_IMPORT = re.compile(r"""@import\s+(?:url\()?["']?https?://""", re.IGNORECASE)
-FETCH_CALL = re.compile(r"""\b(?:fetch|XMLHttpRequest|WebSocket|EventSource)\s*\(""")
+# qualquer <script src>/<link href>: self-contained exige inline, mesmo local
+LOCAL_SCRIPT_OR_LINK = re.compile(r"""<\s*(?:script[^>]+src|link[^>]+href)\s*=""", re.IGNORECASE)
+EXTERNAL_IMPORT = re.compile(r"""@import\b|url\(\s*["']?\s*(?:https?:)?//""", re.IGNORECASE)
+FETCH_CALL = re.compile(
+    r"""\b(?:fetch|XMLHttpRequest|WebSocket|EventSource|importScripts)\s*\(|"""
+    r"""\bnavigator\s*\.\s*sendBeacon|\[\s*["'](?:fetch|XMLHttpRequest)["']\s*\]"""
+)
 
 
 def validate_activity_html(html: str) -> ValidationReport:
@@ -47,9 +55,11 @@ def validate_activity_html(html: str) -> ValidationReport:
         report.error("falta meta viewport")
 
     if EXTERNAL_REF.search(html):
-        report.error("referência externa (src/href para http(s)://) — a atividade tem de ser self-contained")
+        report.error("referência externa (src/href/action para http(s)://) — a atividade tem de ser self-contained")
+    if LOCAL_SCRIPT_OR_LINK.search(html):
+        report.error("<script src> ou <link href> — CSS e JS têm de ser inline")
     if EXTERNAL_IMPORT.search(html):
-        report.error("@import remoto no CSS")
+        report.error("@import ou url() para recurso remoto no CSS")
     if "fonts.googleapis" in lower or "cdn." in lower or "unpkg.com" in lower or "jsdelivr" in lower:
         report.error("dependência de CDN/fontes remotas")
     if FETCH_CALL.search(html):

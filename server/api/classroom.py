@@ -4,11 +4,14 @@ from __future__ import annotations
 
 import json
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
+from ..security import require_teacher
+
 router = APIRouter(prefix="/api", tags=["classroom"])
+teacher_only = Depends(require_teacher)
 
 STUDENT_VISIBLE_TYPES = {"ai_feedback", "teacher_message", "session_closed", "pit_updated"}
 
@@ -65,20 +68,30 @@ def _public_session(session: dict) -> dict:
     }
 
 
+def _teacher_session(session: dict) -> dict:
+    """Para o professor: tudo menos os tokens dos alunos (nunca saem do servidor)."""
+    out = dict(session)
+    out["roster"] = {
+        sid: {k: v for k, v in entry.items() if k != "token"} | {"taken": bool(entry.get("token"))}
+        for sid, entry in session["roster"].items()
+    }
+    return out
+
+
 # ---- turmas ----
 
 
-@router.post("/classes")
+@router.post("/classes", dependencies=[teacher_only])
 async def create_class(body: ClassRequest, request: Request):
     return await _svc(request).create_class(body.name, body.year, body.students)
 
 
-@router.get("/classes")
+@router.get("/classes", dependencies=[teacher_only])
 async def list_classes(request: Request):
     return await _svc(request).list_classes()
 
 
-@router.put("/classes/{class_id}/students")
+@router.put("/classes/{class_id}/students", dependencies=[teacher_only])
 async def update_students(class_id: str, body: ClassRequest, request: Request):
     cls = await _svc(request).update_class_students(class_id, body.students)
     if not cls:
@@ -89,33 +102,33 @@ async def update_students(class_id: str, body: ClassRequest, request: Request):
 # ---- sessões ----
 
 
-@router.post("/sessions")
+@router.post("/sessions", dependencies=[teacher_only])
 async def create_session(body: SessionRequest, request: Request):
     session = await _svc(request).create_session(body.class_id, body.activity_slug, body.activity_title)
     if not session:
         raise HTTPException(404, "turma não encontrada")
-    return session
+    return _teacher_session(session)
 
 
-@router.get("/sessions")
+@router.get("/sessions", dependencies=[teacher_only])
 async def list_sessions(request: Request):
-    return await _svc(request).list_sessions()
+    return [_teacher_session(s) for s in await _svc(request).list_sessions()]
 
 
-@router.get("/sessions/{session_id}")
+@router.get("/sessions/{session_id}", dependencies=[teacher_only])
 async def get_session(session_id: str, request: Request):
     session = await _svc(request).get_session(session_id)
     if not session:
         raise HTTPException(404, "sessão não encontrada")
-    return session
+    return _teacher_session(session)
 
 
-@router.post("/sessions/{session_id}/close")
+@router.post("/sessions/{session_id}/close", dependencies=[teacher_only])
 async def close_session(session_id: str, request: Request):
     session = await _svc(request).close_session(session_id)
     if not session:
         raise HTTPException(404, "sessão não encontrada")
-    return session
+    return _teacher_session(session)
 
 
 @router.get("/join/{join_code}")
@@ -134,7 +147,7 @@ async def claim(session_id: str, body: ClaimRequest, request: Request):
     return result
 
 
-@router.post("/sessions/{session_id}/release/{student_id}")
+@router.post("/sessions/{session_id}/release/{student_id}", dependencies=[teacher_only])
 async def release(session_id: str, student_id: str, request: Request):
     ok = await _svc(request).release_identity(session_id, student_id)
     if not ok:
@@ -159,7 +172,7 @@ async def post_events(session_id: str, body: EventsRequest, request: Request):
     return {"accepted": [r["event_id"] for r in accepted]}
 
 
-@router.post("/sessions/{session_id}/message")
+@router.post("/sessions/{session_id}/message", dependencies=[teacher_only])
 async def teacher_message(session_id: str, body: TeacherMessageRequest, request: Request):
     record = await _svc(request).emit_teacher_event(
         session_id, "teacher_message", {"text": body.text}, student_id=body.student_id
@@ -186,13 +199,19 @@ async def stream_session(session_id: str, request: Request):
     if not session:
         raise HTTPException(404, "sessão não encontrada")
 
-    role = request.query_params.get("role", "teacher")
+    role = request.query_params.get("role", "")
     student_id = None
-    if role == "student":
+    token = ""
+    if role == "teacher":
+        require_teacher(request)
+    elif role == "student":
         token = request.query_params.get("student_token", "")
-        student_id = await svc.student_for_token(session_id, token)
+        # permitir ligação numa sessão já fechada (para ver o histórico próprio)
+        student_id = await svc.student_for_token(session_id, token, require_live=False)
         if not student_id:
             raise HTTPException(401, "token inválido")
+    else:
+        raise HTTPException(400, "role tem de ser teacher ou student")
 
     last_id = request.headers.get("last-event-id") or request.query_params.get("after", "0")
     try:
@@ -212,6 +231,12 @@ async def stream_session(session_id: str, request: Request):
 
     async def gen():
         async for record in log.subscribe(after_seq):
+            if role == "student":
+                # revalidar a cada entrega: se o professor libertou a
+                # identidade, o stream antigo morre em vez de vazar eventos
+                current = await svc.student_for_token(session_id, token, require_live=False)
+                if current != student_id:
+                    break
             if not visible(record):
                 continue
             yield (

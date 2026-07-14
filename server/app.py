@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.staticfiles import StaticFiles
 
 from .config import load_config
@@ -41,12 +41,14 @@ def create_app() -> FastAPI:
     async def lifespan(app: FastAPI):
         from .classroom import ClassroomService
         from .classroom.feedback import FeedbackService
+        from .security import load_or_create_teacher_token
 
         app.state.config = config
         app.state.storage = storage
         app.state.hub = hub
         app.state.wiki = wiki
         app.state.ae = ae
+        app.state.teacher_token = load_or_create_teacher_token(config.data_dir)
         app.state.runner = PipelineRunner(
             config, storage, hub, build_generation_provider(config), wiki, ae
         )
@@ -55,10 +57,36 @@ def create_app() -> FastAPI:
             config, storage, app.state.classroom, build_feedback_provider(config)
         )
         app.state.feedback.start()
+        await app.state.runner.start()
         yield
         await app.state.feedback.stop()
+        await app.state.runner.stop()
 
     app = FastAPI(title="PageCraft Studio", lifespan=lifespan)
+
+    ACTIVITY_CSP = (
+        "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; "
+        "img-src data:; media-src data:; font-src data:; connect-src 'none'; "
+        "form-action 'none'; base-uri 'none'"
+    )
+
+    @app.middleware("http")
+    async def activity_csp(request, call_next):
+        response = await call_next(request)
+        # defesa em profundidade: mesmo que uma atividade gerada tente usar
+        # rede, o browser bloqueia (o invariante offline deixa de depender
+        # só da validação estática)
+        if request.url.path.startswith(("/activities/", "/outputs/")):
+            response.headers["content-security-policy"] = ACTIVITY_CSP
+        return response
+
+    @app.get("/api/teacher-token")
+    async def teacher_token(request: Request):
+        from .security import is_loopback_direct
+
+        if not is_loopback_direct(request):
+            raise HTTPException(403, "só disponível na máquina do professor")
+        return {"token": app.state.teacher_token}
 
     @app.get("/api/health")
     async def health():

@@ -7,9 +7,10 @@ criado quando o aluno reclama a sua identidade no arranque da aula.
 
 from __future__ import annotations
 
-import random
-import string
+import asyncio
+import secrets
 import uuid
+from collections import defaultdict
 
 from ..config import Config
 from ..events import EventHub, utcnow
@@ -32,7 +33,7 @@ STUDENT_EVENT_TYPES = {
 def _join_code() -> str:
     # sem 0/O/1/I para ditar em voz alta sem ambiguidade
     alphabet = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ"
-    return "".join(random.choice(alphabet) for _ in range(6))
+    return "".join(secrets.choice(alphabet) for _ in range(6))
 
 
 class ClassroomService:
@@ -41,6 +42,9 @@ class ClassroomService:
         self.storage = storage
         self.hub = hub
         self._seen_event_ids: dict[str, set[str]] = {}
+        # lock por sessão: torna atómicas as transações read-modify-write
+        # (claim/release/PIT/close); um só processo, chega um asyncio.Lock
+        self._session_locks: dict[str, asyncio.Lock] = defaultdict(asyncio.Lock)
 
     # ---- turmas ----
 
@@ -146,12 +150,13 @@ class ClassroomService:
         return out
 
     async def close_session(self, session_id: str) -> dict | None:
-        session = await self.get_session(session_id)
-        if not session:
-            return None
-        session["status"] = "closed"
-        session["closed_at"] = utcnow()
-        await self.storage.write_json(self._session_path(session_id), session)
+        async with self._session_locks[session_id]:
+            session = await self.get_session(session_id)
+            if not session:
+                return None
+            session["status"] = "closed"
+            session["closed_at"] = utcnow()
+            await self.storage.write_json(self._session_path(session_id), session)
         await self.events_log(session_id).append({"type": "session_closed", "student_id": None, "payload": {}})
         return session
 
@@ -159,38 +164,46 @@ class ClassroomService:
 
     async def claim_identity(self, session_id: str, student_id: str) -> dict | None:
         """Aluno escolhe quem é. Devolve token; None se já reclamado/inválido."""
-        session = await self.get_session(session_id)
-        if not session or session["status"] != "live":
-            return None
-        entry = session["roster"].get(student_id)
-        if entry is None or entry.get("token"):
-            return None
-        token = uuid.uuid4().hex
-        entry["token"] = token
-        entry["claimed_at"] = utcnow()
-        await self.storage.write_json(self._session_path(session_id), session)
+        async with self._session_locks[session_id]:
+            session = await self.get_session(session_id)
+            if not session or session["status"] != "live":
+                return None
+            entry = session["roster"].get(student_id)
+            if entry is None or entry.get("token"):
+                return None
+            token = uuid.uuid4().hex
+            entry["token"] = token
+            entry["claimed_at"] = utcnow()
+            await self.storage.write_json(self._session_path(session_id), session)
         await self.events_log(session_id).append(
             {"type": "joined", "student_id": student_id, "payload": {"display_name": entry["display_name"]}}
         )
         return {"student_token": token, "student_id": student_id, "display_name": entry["display_name"]}
 
     async def release_identity(self, session_id: str, student_id: str) -> bool:
-        session = await self.get_session(session_id)
-        if not session:
-            return False
-        entry = session["roster"].get(student_id)
-        if not entry:
-            return False
-        entry["token"] = None
-        entry["claimed_at"] = None
-        await self.storage.write_json(self._session_path(session_id), session)
-        return True
+        async with self._session_locks[session_id]:
+            session = await self.get_session(session_id)
+            if not session:
+                return False
+            entry = session["roster"].get(student_id)
+            if not entry:
+                return False
+            entry["token"] = None
+            entry["claimed_at"] = None
+            await self.storage.write_json(self._session_path(session_id), session)
+            return True
 
-    async def student_for_token(self, session_id: str, token: str) -> str | None:
+    async def student_for_token(
+        self, session_id: str, token: str, *, require_live: bool = True
+    ) -> str | None:
+        """Valida o token do aluno. Por omissão exige sessão viva — tokens
+        deixam de servir para mutações depois do fecho ou do release."""
         if not token:
             return None
         session = await self.get_session(session_id)
         if not session:
+            return None
+        if require_live and session.get("status") != "live":
             return None
         for student_id, entry in session["roster"].items():
             if entry.get("token") == token:
@@ -242,22 +255,23 @@ class ClassroomService:
     async def upsert_pit_item(
         self, session_id: str, student_id: str, text: str, status: str, item_id: str | None = None
     ) -> dict | None:
-        session = await self.get_session(session_id)
-        if not session:
-            return None
-        if status not in ("planned", "doing", "done", "to_share"):
-            return None
-        item = None
-        if item_id:
-            item = next(
-                (i for i in session["pit_items"] if i["id"] == item_id and i["student_id"] == student_id),
-                None,
-            )
-        if item is None:
-            item = {"id": uuid.uuid4().hex[:8], "student_id": student_id}
-            session["pit_items"].append(item)
-        item.update({"text": text.strip()[:280], "status": status, "updated_at": utcnow()})
-        await self.storage.write_json(self._session_path(session_id), session)
+        async with self._session_locks[session_id]:
+            session = await self.get_session(session_id)
+            if not session:
+                return None
+            if status not in ("planned", "doing", "done", "to_share"):
+                return None
+            item = None
+            if item_id:
+                item = next(
+                    (i for i in session["pit_items"] if i["id"] == item_id and i["student_id"] == student_id),
+                    None,
+                )
+            if item is None:
+                item = {"id": uuid.uuid4().hex[:8], "student_id": student_id}
+                session["pit_items"].append(item)
+            item.update({"text": text.strip()[:280], "status": status, "updated_at": utcnow()})
+            await self.storage.write_json(self._session_path(session_id), session)
         await self.events_log(session_id).append(
             {"type": "pit_updated", "student_id": student_id, "payload": dict(item)}
         )

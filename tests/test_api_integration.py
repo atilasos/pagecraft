@@ -21,7 +21,11 @@ async def client(tmp_path, monkeypatch):
     async with app.router.lifespan_context(app):
         app.state.feedback.provider = InstantFeedbackProvider()
         transport = httpx.ASGITransport(app=app)
-        async with httpx.AsyncClient(transport=transport, base_url="http://test") as c:
+        async with httpx.AsyncClient(
+            transport=transport,
+            base_url="http://test",
+            headers={"x-teacher-token": app.state.teacher_token},
+        ) as c:
             c.app = app
             yield c
 
@@ -148,6 +152,59 @@ async def test_student_stream_filters_events(client):
     assert "teacher_message" in types2
     # eventos de outros alunos (joined) nunca chegam a alunos
     assert "joined" not in types1 and "joined" not in types2
+
+
+async def test_teacher_routes_require_token(client):
+    # cliente "aluno": sem header de professor
+    naked = {"x-teacher-token": ""}
+    for method, url in [
+        ("GET", "/api/sessions"),
+        ("GET", "/api/classes"),
+        ("GET", "/api/jobs"),
+    ]:
+        resp = await client.request(method, url, headers=naked)
+        assert resp.status_code == 401, url
+    resp = await client.post(
+        "/api/classes", json={"name": "X", "year": 1, "students": []}, headers=naked
+    )
+    assert resp.status_code == 401
+
+
+async def test_sessions_never_expose_student_tokens(client):
+    cls = (await client.post("/api/classes", json={"name": "4.º D", "year": 4, "students": ["Nuno"]})).json()
+    session = (
+        await client.post(
+            "/api/sessions", json={"class_id": cls["id"], "activity_slug": "demo", "activity_title": "T"}
+        )
+    ).json()
+    await client.post(
+        f"/api/sessions/{session['id']}/claim",
+        json={"student_id": next(iter(session["roster"]))},
+    )
+    for url in (f"/api/sessions/{session['id']}", "/api/sessions"):
+        body = (await client.get(url)).text
+        assert '"token"' not in body, url
+
+
+async def test_stream_rejects_missing_role(client):
+    cls = (await client.post("/api/classes", json={"name": "X", "year": 1, "students": ["A"]})).json()
+    session = (
+        await client.post(
+            "/api/sessions", json={"class_id": cls["id"], "activity_slug": "demo", "activity_title": "T"}
+        )
+    ).json()
+    resp = await client.get(f"/api/sessions/{session['id']}/stream", headers={"x-teacher-token": ""})
+    assert resp.status_code == 400
+    resp = await client.get(
+        f"/api/sessions/{session['id']}/stream", params={"role": "teacher"}, headers={"x-teacher-token": ""}
+    )
+    assert resp.status_code == 401
+
+
+async def test_activities_get_restrictive_csp(client):
+    resp = await client.get("/activities/")
+    csp = resp.headers.get("content-security-policy", "")
+    assert "connect-src 'none'" in csp
 
 
 async def test_health_and_meta(client):

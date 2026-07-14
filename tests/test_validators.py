@@ -41,3 +41,34 @@ def test_post_message_allowed():
     ok = GOOD.replace("<body>", "<body><script>parent.postMessage({pagecraft:1},'*')</script>")
     report = validate_activity_html(ok)
     assert report.passed, report.errors
+
+
+def test_local_script_src_fails():
+    bad = GOOD.replace("<body>", '<body><script src="/api/sessions"></script>')
+    assert not validate_activity_html(bad).passed
+
+
+def test_css_remote_url_fails():
+    bad = GOOD.replace("</style>", "body{background:url(https://x.pt/a.png)}</style>")
+    assert not validate_activity_html(bad).passed
+
+
+def test_send_beacon_fails():
+    bad = GOOD.replace("<body>", "<body><script>navigator.sendBeacon('/x')</script>")
+    assert not validate_activity_html(bad).passed
+
+
+def test_form_action_external_fails():
+    bad = GOOD.replace("<body>", '<body><form action="https://mau.pt/roubo">')
+    assert not validate_activity_html(bad).passed
+
+
+def test_bracket_fetch_fails():
+    bad = GOOD.replace("<body>", "<body><script>window[\"fetch\"]('/x')</script>")
+    assert not validate_activity_html(bad).passed
+
+
+def test_data_url_allowed():
+    ok = GOOD.replace("</style>", "body{background:url(data:image/png;base64,AAA)}</style>")
+    report = validate_activity_html(ok)
+    assert report.passed, report.errors

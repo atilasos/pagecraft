@@ -83,11 +83,26 @@ function startActivity() {
 
 /* eventos da atividade (PageCraftBridge → postMessage) */
 function listenToBridge() {
+  const frame = $("activity-frame");
   window.addEventListener("message", (ev) => {
+    // aceitar apenas mensagens vindas do iframe da atividade
+    if (!frame.contentWindow || ev.source !== frame.contentWindow) return;
     const d = ev.data;
     if (!d || d.pagecraft !== 1 || !d.type) return;
-    queueEvent(d.type, d.unitId || null, d.payload || {});
+    queueEvent(d.type, d.unitId || null, sanitizePayload(d.payload));
   });
+}
+
+function sanitizePayload(payload) {
+  // payloads vêm de código gerado: só primitivos curtos, sem objetos fundos
+  const out = {};
+  if (payload && typeof payload === "object") {
+    for (const [k, v] of Object.entries(payload).slice(0, 8)) {
+      if (typeof v === "string") out[k] = v.slice(0, 500);
+      else if (typeof v === "number" || typeof v === "boolean") out[k] = v;
+    }
+  }
+  return out;
 }
 
 function queueEvent(type, unitId, payload) {

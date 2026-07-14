@@ -4,11 +4,14 @@ from __future__ import annotations
 
 import json
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
-router = APIRouter(prefix="/api/jobs", tags=["jobs"])
+from ..security import require_teacher
+
+# geração consome a subscrição codex/API: tudo aqui é só para o professor
+router = APIRouter(prefix="/api/jobs", tags=["jobs"], dependencies=[Depends(require_teacher)])
 
 
 class JobRequest(BaseModel):
@@ -52,9 +55,10 @@ async def get_job(job_id: str, request: Request):
 
 @router.post("/{job_id}/approve")
 async def approve_job(job_id: str, request: Request):
-    job = await _runner(request).approve(job_id)
+    override = request.query_params.get("override") == "true"
+    job = await _runner(request).approve(job_id, override=override)
     if not job:
-        raise HTTPException(409, "job não está a aguardar revisão")
+        raise HTTPException(409, "job não está num estado publicável")
     return job
 
 

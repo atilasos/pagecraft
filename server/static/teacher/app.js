@@ -31,8 +31,8 @@ async function loadMeta() {
     .reverse()
     .map(
       (a) =>
-        `<li><a href="/activities/${a.slug}/" target="_blank" rel="noopener">${a.title || a.slug}</a>
-         <span class="muted">· ${a.year ? a.year + ".º ano · " : ""}${a.duration || "?"} min</span></li>`
+        `<li><a href="/activities/${encodeURIComponent(a.slug)}/" target="_blank" rel="noopener">${esc(a.title || a.slug)}</a>
+         <span class="muted">· ${a.year ? esc(a.year) + ".º ano · " : ""}${esc(a.duration || "?")} min</span></li>`
     )
     .join("") || '<li class="muted">Ainda não há atividades publicadas.</li>';
 }
@@ -54,23 +54,25 @@ function jobCard(job) {
   }[job.status] || `<span class="pill">${PHASE_LABELS[job.current_phase] || job.status}</span>`;
 
   const running = !["done", "failed", "awaiting_review"].includes(job.status);
+  const canOverride = job.status === "failed" && job.artifacts && job.artifacts.html;
   el.innerHTML = `
-    <strong>${job.topic}</strong> <span class="muted">· ${job.subject} · ${job.year}.º ano · ${job.duration} min</span>
-    <p>${statusPill} ${job.iteration > 1 ? `<span class="pill">iteração ${job.iteration}</span>` : ""}</p>
+    <strong>${esc(job.topic)}</strong> <span class="muted">· ${esc(job.subject)} · ${esc(job.year)}.º ano · ${esc(job.duration)} min</span>
+    <p>${statusPill} ${job.iteration > 1 ? `<span class="pill">iteração ${esc(job.iteration)}</span>` : ""}</p>
     ${running ? `<progress max="5" value="${phaseIdx + 1}"></progress>` : ""}
-    <p class="muted" id="job-${job.id}-log" aria-live="polite"></p>
+    <p class="muted" id="job-${esc(job.id)}-log" aria-live="polite"></p>
     <p>
-      ${job.artifacts && job.artifacts.html ? `<a href="/outputs/${job.slug}.html" target="_blank" rel="noopener">pré-visualizar</a> · ` : ""}
-      ${job.status === "awaiting_review" ? `<button data-approve="${job.id}">Aprovar e publicar</button>` : ""}
-      ${job.status === "done" ? `<a href="/activities/${job.slug}/" target="_blank" rel="noopener">abrir atividade publicada</a>` : ""}
-      ${job.status === "failed" ? `<span class="feedback-warn">${job.error || "erro desconhecido"}</span>` : ""}
+      ${job.artifacts && job.artifacts.html ? `<a href="/outputs/${encodeURIComponent(job.slug)}.html" target="_blank" rel="noopener">pré-visualizar</a> · ` : ""}
+      ${job.status === "awaiting_review" ? `<button data-approve="${esc(job.id)}">Aprovar e publicar</button>` : ""}
+      ${canOverride ? `<button class="ghost" data-approve="${esc(job.id)}" data-override="true">Publicar mesmo assim (decisão do professor)</button>` : ""}
+      ${job.status === "done" ? `<a href="/activities/${encodeURIComponent(job.slug)}/" target="_blank" rel="noopener">abrir atividade publicada</a>` : ""}
+      ${job.status === "failed" ? `<span class="feedback-warn">${esc(job.error || "erro desconhecido")}</span>` : ""}
     </p>`;
 }
 
-function watchJob(job) {
+async function watchJob(job) {
   jobCard(job);
   if (["done", "failed"].includes(job.status) || streams.has(job.id)) return;
-  const es = new EventSource(`/api/jobs/${job.id}/stream`);
+  const es = new EventSource(await teacherStreamUrl(`/api/jobs/${job.id}/stream`));
   streams.set(job.id, es);
   es.onmessage = () => {};
   ["job_created", "knowledge_ready", "phase_started", "phase_done", "phase_retry", "validation", "repair", "resumed_artifact", "awaiting_review", "done", "failed"].forEach((type) => {
@@ -78,7 +80,7 @@ function watchJob(job) {
       const data = JSON.parse(ev.data);
       const logEl = document.getElementById(`job-${job.id}-log`);
       if (logEl) logEl.textContent = describeEvent(type, data);
-      const fresh = await (await fetch(`/api/jobs/${job.id}`)).json();
+      const fresh = await (await tfetch(`/api/jobs/${job.id}`)).json();
       jobCard(fresh);
       if (["done", "failed"].includes(type)) {
         es.close();
@@ -135,7 +137,7 @@ document.getElementById("job-form").addEventListener("submit", async (ev) => {
       duration: Number(form.duration.value),
       maker: form.maker.value || null,
     };
-    const resp = await fetch("/api/jobs", {
+    const resp = await tfetch("/api/jobs", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(body),
@@ -154,8 +156,11 @@ document.getElementById("job-form").addEventListener("submit", async (ev) => {
 document.addEventListener("click", async (ev) => {
   const id = ev.target?.dataset?.approve;
   if (!id) return;
+  const override = ev.target?.dataset?.override === "true";
   ev.target.disabled = true;
-  const resp = await fetch(`/api/jobs/${id}/approve`, { method: "POST" });
+  const resp = await tfetch(`/api/jobs/${id}/approve${override ? "?override=true" : ""}`, {
+    method: "POST",
+  });
   if (resp.ok) {
     jobCard(await resp.json());
     loadMeta();
@@ -164,6 +169,8 @@ document.addEventListener("click", async (ev) => {
 
 (async function init() {
   await loadMeta();
-  const jobs = await (await fetch("/api/jobs")).json();
+  const resp = await tfetch("/api/jobs");
+  if (!resp.ok) return;
+  const jobs = await resp.json();
   jobs.slice(0, 10).reverse().forEach(watchJob);
 })();

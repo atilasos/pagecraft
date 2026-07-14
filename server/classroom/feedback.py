@@ -9,8 +9,10 @@ não punitiva e o professor vê o pedido pendente no dashboard. O feedback IA
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import re
 import unicodedata
+from collections import Counter
 
 from ..config import Config
 from ..events import utcnow
@@ -68,7 +70,8 @@ class FeedbackService:
         self._queue: asyncio.Queue[dict] = asyncio.Queue()
         self._workers: list[asyncio.Task] = []
         self._caches: dict[str, dict] = {}
-        self._in_flight: set[tuple[str, str]] = set()
+        self._pending: Counter[tuple[str, str]] = Counter()
+        self.max_pending_per_student = 3
 
     def start(self) -> None:
         while len([w for w in self._workers if not w.done()]) < self.n_workers:
@@ -77,6 +80,8 @@ class FeedbackService:
     async def stop(self) -> None:
         for w in self._workers:
             w.cancel()
+        await asyncio.gather(*self._workers, return_exceptions=True)
+        self._workers.clear()
 
     async def _cache(self, session_id: str) -> dict:
         if session_id not in self._caches:
@@ -88,18 +93,39 @@ class FeedbackService:
         path = self.storage.path("sessions", session_id, "feedback-cache.json")
         await self.storage.write_json(path, self._caches.get(session_id, {}))
 
+    @staticmethod
+    def _cache_key(unit_id: str | None, payload: dict) -> str:
+        # inclui pergunta e resposta esperada: a mesma resposta a perguntas
+        # diferentes da mesma unidade não pode partilhar feedback
+        semantic = "|".join(
+            (
+                str(unit_id),
+                _normalize(str(payload.get("question", ""))),
+                _normalize(str(payload.get("expected", ""))),
+                _normalize(str(payload.get("answer", ""))),
+            )
+        )
+        return hashlib.sha256(semantic.encode("utf-8")).hexdigest()[:32]
+
     async def request(self, session_id: str, student_id: str, unit_id: str | None, payload: dict) -> None:
         """Chamado quando chega um evento feedback_request; nunca bloqueia."""
-        key = (session_id, student_id)
-        if key in self._in_flight:
-            return  # 1 pedido em voo por aluno
         cache = await self._cache(session_id)
-        cache_key = f"{unit_id}|{_normalize(str(payload.get('answer', '')))}"
+        cache_key = self._cache_key(unit_id, payload)
         cached = cache.get(cache_key)
         if cached:
             await self._deliver(session_id, student_id, unit_id, cached, source="cache")
             return
-        self._in_flight.add(key)
+        key = (session_id, student_id)
+        if self._pending[key] >= self.max_pending_per_student:
+            # não descartar em silêncio: o professor fica a saber
+            await self.classroom.emit_teacher_event(
+                session_id,
+                "feedback_dropped",
+                {"unit_id": unit_id, "reason": "demasiados pedidos seguidos"},
+                student_id=student_id,
+            )
+            return
+        self._pending[key] += 1
         await self._queue.put(
             {
                 "session_id": session_id,
@@ -118,6 +144,8 @@ class FeedbackService:
             key = (item["session_id"], item["student_id"])
             try:
                 await self._process(item)
+            except asyncio.CancelledError:
+                raise
             except Exception as exc:  # noqa: BLE001 — worker nunca morre
                 await self.classroom.emit_teacher_event(
                     item["session_id"],
@@ -126,7 +154,9 @@ class FeedbackService:
                     student_id=item["student_id"],
                 )
             finally:
-                self._in_flight.discard(key)
+                self._pending[key] -= 1
+                if self._pending[key] <= 0:
+                    del self._pending[key]
 
     async def _process(self, item: dict) -> None:
         payload = item["payload"]

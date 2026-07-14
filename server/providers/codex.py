@@ -75,12 +75,15 @@ class CodexProvider(AIProvider):
                     proc.communicate(full_prompt.encode("utf-8")), timeout=timeout_s
                 )
             except asyncio.TimeoutError:
-                self._kill(proc)
+                await self._kill_and_reap(proc)
                 raise ProviderTimeout(f"codex exec excedeu {timeout_s}s")
+            except asyncio.CancelledError:
+                # shutdown/cancelamento: não deixar o codex (e descendentes) órfãos
+                await self._kill_and_reap(proc)
+                raise
 
             if self.events_dir is not None:
-                self.events_dir.mkdir(parents=True, exist_ok=True)
-                (self.events_dir / "codex-stdout.log").write_bytes(stdout or b"")
+                await asyncio.to_thread(self._dump_events, stdout or b"")
 
             if proc.returncode != 0:
                 raise ProviderFailure(
@@ -88,7 +91,7 @@ class CodexProvider(AIProvider):
                     detail=(stderr or b"").decode("utf-8", "replace")[-2000:],
                 )
             try:
-                text = out_file.read_text("utf-8")
+                text = await asyncio.to_thread(out_file.read_text, "utf-8")
             except FileNotFoundError:
                 raise ProviderFailure(
                     "codex exec não produziu mensagem final",
@@ -98,8 +101,12 @@ class CodexProvider(AIProvider):
                 return text
             return parse_and_validate(text, schema)
 
+    def _dump_events(self, stdout: bytes) -> None:
+        self.events_dir.mkdir(parents=True, exist_ok=True)
+        (self.events_dir / "codex-stdout.log").write_bytes(stdout)
+
     @staticmethod
-    def _kill(proc: asyncio.subprocess.Process) -> None:
+    async def _kill_and_reap(proc: asyncio.subprocess.Process) -> None:
         try:
             os.killpg(os.getpgid(proc.pid), 9)
         except (ProcessLookupError, PermissionError):
@@ -107,3 +114,7 @@ class CodexProvider(AIProvider):
                 proc.kill()
             except ProcessLookupError:
                 pass
+        try:
+            await asyncio.wait_for(proc.wait(), timeout=5)
+        except asyncio.TimeoutError:
+            pass

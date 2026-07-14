@@ -107,6 +107,26 @@ class PipelineRunner:
         if self._worker is None or self._worker.done():
             self._worker = asyncio.create_task(self._work_loop())
 
+    async def start(self) -> None:
+        """Recupera jobs interrompidos por um restart e liga o worker."""
+        requeued = 0
+        for job in await self.list_jobs():
+            status = job.get("status", "")
+            if status == "queued" or status.startswith("running") or status == "publishing":
+                await self._queue.put(job["id"])
+                requeued += 1
+        if requeued:
+            self.ensure_worker()
+
+    async def stop(self) -> None:
+        if self._worker is not None:
+            self._worker.cancel()
+            try:
+                await self._worker
+            except (asyncio.CancelledError, Exception):
+                pass
+            self._worker = None
+
     async def get_job(self, job_id: str) -> dict | None:
         return await self.storage.read_json(self._job_path(job_id))
 
@@ -122,11 +142,20 @@ class PipelineRunner:
         jobs.sort(key=lambda j: j.get("created_at", ""), reverse=True)
         return jobs
 
-    async def approve(self, job_id: str) -> dict | None:
+    async def approve(self, job_id: str, *, override: bool = False) -> dict | None:
+        """Publica um job em revisão. Com override=True, o professor pode
+        publicar um job que falhou a avaliação (o Evaluator aconselha; a
+        decisão final é do professor), desde que exista HTML gerado."""
         job = await self.get_job(job_id)
-        if not job or job["status"] != "awaiting_review":
+        if not job:
+            return None
+        publishable = job["status"] == "awaiting_review" or (
+            override and job["status"] == "failed" and job["artifacts"].get("html")
+        )
+        if not publishable:
             return None
         job["status"] = "publishing"
+        job["published_with_override"] = override and job.get("error") is not None
         await self._save(job)
         await self._publish(job)
         return job
@@ -168,7 +197,10 @@ class PipelineRunner:
             if not job:
                 continue
             try:
-                await self._run_job(job)
+                if job["status"] == "publishing" and job["artifacts"].get("html"):
+                    await self._publish(job)
+                else:
+                    await self._run_job(job)
             except Exception as exc:  # nunca matar o worker
                 job = await self.get_job(job_id) or job
                 job["status"] = "failed"

@@ -56,7 +56,9 @@
         <p style="margin-top:0.75rem"><button type="submit">Acrescentar</button></p>
       </form>
     </div>
-    <iframe id="activity-frame" title="Atividade"></iframe>
+    <!-- sandbox sem allow-same-origin: a atividade gerada corre em origem
+         opaca, sem acesso ao DOM/API do site; só comunica por postMessage -->
+    <iframe id="activity-frame" title="Atividade" sandbox="allow-scripts"></iframe>
     <div id="messages" aria-live="polite"></div>
   </section>
 </main>

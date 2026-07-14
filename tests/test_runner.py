@@ -188,6 +188,53 @@ async def test_pipeline_fails_after_max_iterations(env):
     assert job["iteration"] == 3
 
 
+async def test_start_requeues_interrupted_jobs(env):
+    config, storage, hub = env
+    provider = FakeProvider([EVAL_OK])
+    runner = PipelineRunner(config, storage, hub, provider, NoKnowledge(), NoKnowledge())
+    # simular job interrompido a meio (persistido como running_builder)
+    import uuid
+
+    from server.events import utcnow
+
+    job = {
+        "id": uuid.uuid4().hex[:12],
+        "slug": "3ano-interrompido",
+        "topic": "Interrompido",
+        "subject": "Matemática",
+        "year": 3,
+        "duration": 30,
+        "maker": None,
+        "auto_publish": False,
+        "provider": "fake",
+        "status": "running_builder",
+        "current_phase": "builder",
+        "iteration": 1,
+        "max_iterations": 3,
+        "artifacts": {},
+        "error": None,
+        "created_at": utcnow(),
+        "updated_at": utcnow(),
+    }
+    await storage.write_json(storage.path("jobs", job["id"], "job.json"), job)
+    await runner.start()
+    fresh = await _wait_status(runner, job["id"], {"awaiting_review", "failed"})
+    assert fresh["status"] == "awaiting_review"
+    await runner.stop()
+
+
+async def test_failed_job_can_publish_with_override(env):
+    config, storage, hub = env
+    provider = FakeProvider([EVAL_FAIL, EVAL_FAIL, EVAL_FAIL])
+    runner = PipelineRunner(config, storage, hub, provider, NoKnowledge(), NoKnowledge())
+    job = await runner.create_job(topic="Difícil", subject="Matemática", year=3, duration=30)
+    job = await _wait_status(runner, job["id"], {"failed"}, timeout=10)
+    assert await runner.approve(job["id"]) is None  # sem override não publica
+    published = await runner.approve(job["id"], override=True)
+    assert published["status"] == "done"
+    assert (config.activities_dir / published["slug"] / "index.html").exists()
+
+
 async def test_approve_publishes(env):
     config, storage, hub = env
     provider = FakeProvider([EVAL_OK])

@@ -1,0 +1,70 @@
+{
+  "pass": false,
+  "severity": "high",
+  "issues": [
+    {
+      "type": "pedagogical",
+      "severity": "high",
+      "location": "#u2, nível Apoio, #u2Stat",
+      "original": "Explora de 1 a 5. / Dobros propostos entre 6 e 10: 0 de 5.",
+      "suggestion": "Explora os números de 1 a 5. / Dobros propostos entre 1 e 5: 0 de 5.",
+      "reason": "No nível Apoio, o aluno só pode selecionar números até 5, mas o registo exige números entre 6 e 10. O texto e o critério de conclusão devem ser adaptados ao nível."
+    },
+    {
+      "type": "pedagogical",
+      "severity": "high",
+      "location": "#u3, nível Apoio, #u3Stat",
+      "original": "Falta uma quantidade superior a 10.",
+      "suggestion": "Falta explorar uma quantidade de 10.",
+      "reason": "No nível Apoio, as quantidades superiores a 10 não estão disponíveis, pelo que o critério indicado é impossível de cumprir. O critério de conclusão também deve respeitar o intervalo deste nível."
+    },
+    {
+      "type": "pedagogical",
+      "severity": "medium",
+      "location": ".assessment li:nth-child(3)",
+      "original": "Completa: «O dobro de 7 é [...], por isso metade de 14 é [...].»",
+      "suggestion": "Completa: «O dobro de 7 é [...], por isso metade de 14 é [...].» Depois, explica como o dobro e a metade se confirmam um ao outro.",
+      "reason": "A tarefa verifica os resultados, mas não solicita explicitamente a explicação da relação inversa prevista nos objetivos."
+    },
+    {
+      "type": "semantic",
+      "severity": "medium",
+      "location": "#u4 .activation",
+      "original": "Experimenta a mesma relação nos dois sentidos.",
+      "suggestion": "Liga um número ao seu dobro. Depois, começa pelo dobro e encontra a metade.",
+      "reason": "A expressão «a mesma relação nos dois sentidos» é abstrata para alunos de 7-8 anos. A reformulação explicita as duas ações."
+    },
+    {
+      "type": "pedagogical",
+      "severity": "medium",
+      "location": "#u4-panel-standard",
+      "original": "Liga quatro pares com números até 20. Verifica pelo menos dois pares nos dois modos.",
+      "suggestion": "Liga quatro pares com números até 20. Verifica pelo menos dois pares: primeiro como dobro e depois como metade.",
+      "reason": "A palavra «modos» depende da terminologia da interface e não esclarece o que o aluno deve fazer."
+    },
+    {
+      "type": "semantic",
+      "severity": "low",
+      "location": "#checkRepresentations e #representationFeedback",
+      "original": "Verificar os controlos e a adição / Os controlos mostram dois grupos iguais / Ajusta os controlos",
+      "suggestion": "Verificar os grupos e a adição / Os grupos mostram duas quantidades iguais / Ajusta os grupos",
+      "reason": "«Controlos» é uma designação técnica e vaga para esta faixa etária. Os elementos visíveis estão identificados como grupos."
+    },
+    {
+      "type": "ptpt-usage",
+      "severity": "low",
+      "location": "#ruleFeedback",
+      "original": "Compara cartões cujos números iniciais diferem apenas em um.",
+      "suggestion": "Compara cartões cujos números iniciais diferem apenas por uma unidade.",
+      "reason": "«Diferem por uma unidade» é a formulação mais natural e precisa em português europeu."
+    }
+  ],
+  "summary": "O texto apresenta, em geral, boa correção ortográfica e um registo adequado ao 2.º ano. Contudo, os critérios dos níveis de Apoio nas etapas 2 e 3 contradizem os valores disponíveis, e a avaliação final não solicita explicitamente a explicação da relação inversa entre dobro e metade.",
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90: OK",
+    "Registo consistente: FAIL",
+    "Adequação à faixa etária: FAIL",
+    "Instruções claras e seguíveis: FAIL",
+    "Alinhamento com objectivos: FAIL"
+  ]
+}
