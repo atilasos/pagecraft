@@ -158,7 +158,25 @@ function connectStream() {
       renderPit();
     }
   });
+  es.addEventListener("teacher_highlight", (ev) => {
+    const data = JSON.parse(ev.data);
+    const { unit_id: unitId, unit_label: label } = data.payload || {};
+    // dentro da atividade: brilho âmbar na unidade (se suportado)
+    $("activity-frame").contentWindow?.postMessage(
+      { pagecraft: 1, type: "highlight", unitId },
+      "*"
+    );
+    // fallback sempre visível, mesmo em atividades sem suporte
+    showMessage(`👀 Olha para: ${label || unitId || "a atividade"}`, "feedback-warn");
+  });
+  es.addEventListener("freeze_screens", () => {
+    $("freeze-overlay").hidden = false;
+  });
+  es.addEventListener("unfreeze_screens", () => {
+    $("freeze-overlay").hidden = true;
+  });
   es.addEventListener("session_closed", () => {
+    $("freeze-overlay").hidden = true;
     showMessage("A aula terminou. Bom trabalho!", "feedback-ok");
     es.close();
   });

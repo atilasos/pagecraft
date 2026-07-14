@@ -349,6 +349,22 @@
       border: 2px solid var(--primary);
     }
 
+    /* «Chamar a atenção»: o professor faz brilhar uma unidade no ecrã do aluno */
+    .pagecraft-attention {
+      animation: pagecraft-attention-pulse 1.2s ease-out 4;
+      outline: 4px solid var(--accent);
+      outline-offset: 4px;
+      border-radius: var(--radius);
+    }
+    @keyframes pagecraft-attention-pulse {
+      0%   { box-shadow: 0 0 0 0 oklch(0.78 0.13 85 / 0.55); }
+      70%  { box-shadow: 0 0 0 18px oklch(0.78 0.13 85 / 0); }
+      100% { box-shadow: 0 0 0 0 oklch(0.78 0.13 85 / 0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pagecraft-attention { animation: none; }
+    }
+
     /* Caixa de feedback do assistente (chega por postMessage; nunca punitivo) */
     .ai-feedback {
       display: none;
@@ -451,14 +467,28 @@
       };
     })();
 
-    /* Ouvir feedback do professor/assistente (chega por postMessage do embutidor). */
+    /* Ouvir o embutidor (chega por postMessage): feedback do assistente e
+       «chamar a atenção» do professor para uma unidade. */
     window.addEventListener('message', function (ev) {
       var d = ev.data;
-      if (!d || d.pagecraft !== 1 || d.type !== 'ai_feedback') return;
-      var box = document.getElementById(d.targetId || 'pagecraft-feedback');
-      if (!box) return;
-      box.textContent = d.payload && d.payload.text ? d.payload.text : '';
-      box.setAttribute('data-shown', 'true');
+      if (!d || d.pagecraft !== 1) return;
+      if (d.type === 'ai_feedback') {
+        var box = document.getElementById(d.targetId || 'pagecraft-feedback');
+        if (!box) return;
+        box.textContent = d.payload && d.payload.text ? d.payload.text : '';
+        box.setAttribute('data-shown', 'true');
+        return;
+      }
+      if (d.type === 'highlight' && d.unitId) {
+        var el = document.getElementById(d.unitId) ||
+                 document.querySelector('[data-unit="' + d.unitId + '"]');
+        if (!el) return;
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.remove('pagecraft-attention');
+        void el.offsetWidth; /* reinicia a animação se repetido */
+        el.classList.add('pagecraft-attention');
+        setTimeout(function () { el.classList.remove('pagecraft-attention'); }, 6000);
+      }
     });
 
     /* Descoberta anunciada (aria-live) + telemetria. */

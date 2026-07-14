@@ -16,6 +16,23 @@
   #code-input { text-transform: uppercase; letter-spacing: 0.3em; font-size: 1.5rem; text-align: center; }
   .topbar { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
   #messages { position: sticky; bottom: 0.5rem; }
+  #freeze-overlay {
+    position: fixed; inset: 0; z-index: 50;
+    background: oklch(0.22 0.02 260 / 0.88);
+    display: flex; align-items: center; justify-content: center;
+    animation: freeze-in 200ms ease-out;
+  }
+  #freeze-overlay[hidden] { display: none; }
+  .freeze-card {
+    background: var(--surface); border-radius: var(--r-lg);
+    padding: 2rem 3rem; text-align: center; max-width: 26rem;
+    border: 3px solid var(--warn);
+  }
+  .freeze-card p { font-size: 1.5rem; font-weight: 800; margin: 0.5rem 0 0; }
+  .freeze-card .freeze-sub { font-size: 1.05rem; font-weight: 400; color: var(--ink-soft); }
+  .freeze-emoji { font-size: 3rem; }
+  @keyframes freeze-in { from { opacity: 0 } to { opacity: 1 } }
+  @media (prefers-reduced-motion: reduce) { #freeze-overlay { animation: none; } }
 </style>
 </head>
 <body>
@@ -61,6 +78,15 @@
     <iframe id="activity-frame" title="Atividade" sandbox="allow-scripts"></iframe>
     <div id="messages" aria-live="polite"></div>
   </section>
+
+  <!-- Congelamento: o professor pede a atenção de todos para o quadro -->
+  <div id="freeze-overlay" hidden role="alertdialog" aria-modal="true" aria-label="Olha para o quadro">
+    <div class="freeze-card">
+      <span class="freeze-emoji" aria-hidden="true">👀</span>
+      <p>Olha para o quadro!</p>
+      <p class="freeze-sub">O professor quer mostrar uma coisa a toda a turma.</p>
+    </div>
+  </div>
 </main>
 <script src="/student/app.js"></script>
 </body>

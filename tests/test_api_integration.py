@@ -207,6 +207,70 @@ async def test_activities_get_restrictive_csp(client):
     assert "connect-src 'none'" in csp
 
 
+async def test_session_control_events(client):
+    cls = (await client.post("/api/classes", json={"name": "3.º C", "year": 3, "students": ["Inês", "Duarte"]})).json()
+    session = (
+        await client.post(
+            "/api/sessions", json={"class_id": cls["id"], "activity_slug": "demo", "activity_title": "T"}
+        )
+    ).json()
+    public = (await client.get(f"/api/join/{session['join_code']}")).json()
+    s1, s2 = public["roster"]
+    c1 = (await client.post(f"/api/sessions/{session['id']}/claim", json={"student_id": s1["student_id"]})).json()
+    c2 = (await client.post(f"/api/sessions/{session['id']}/claim", json={"student_id": s2["student_id"]})).json()
+
+    # highlight dirigido só ao aluno 2; freeze para todos
+    resp = await client.post(
+        f"/api/sessions/{session['id']}/control",
+        json={"action": "highlight", "unit_id": "u2", "unit_label": "Missão de leitura", "student_id": s2["student_id"]},
+    )
+    assert resp.status_code == 200
+    assert (await client.post(f"/api/sessions/{session['id']}/control", json={"action": "freeze"})).status_code == 200
+    assert (await client.post(f"/api/sessions/{session['id']}/control", json={"action": "unfreeze"})).status_code == 200
+    # sem token de professor → 401; ação inválida → 422
+    resp = await client.post(
+        f"/api/sessions/{session['id']}/control", json={"action": "freeze"}, headers={"x-teacher-token": ""}
+    )
+    assert resp.status_code == 401
+    resp = await client.post(f"/api/sessions/{session['id']}/control", json={"action": "explodir"})
+    assert resp.status_code == 422
+
+    await client.post(f"/api/sessions/{session['id']}/close")
+
+    async def collect(token):
+        types = []
+        async with client.stream(
+            "GET",
+            f"/api/sessions/{session['id']}/stream",
+            params={"role": "student", "student_token": token},
+        ) as resp:
+            async for line in resp.aiter_lines():
+                if line.startswith("data: "):
+                    types.append(json.loads(line[6:])["type"])
+                if types and types[-1] == "session_closed":
+                    break
+        return types
+
+    types1 = await asyncio.wait_for(collect(c1["student_token"]), timeout=5)
+    types2 = await asyncio.wait_for(collect(c2["student_token"]), timeout=5)
+    assert "freeze_screens" in types1 and "unfreeze_screens" in types1
+    assert "teacher_highlight" not in types1  # era dirigido ao aluno 2
+    assert "teacher_highlight" in types2
+
+
+async def test_activities_catalog_and_units(client):
+    data = (await client.get("/api/activities")).json()
+    assert "items" in data and "subjects" in data and "years" in data
+    if data["items"]:
+        item = data["items"][0]
+        assert {"slug", "title", "subject", "year", "tags"} <= set(item)
+        units = (await client.get(f"/api/activities/{item['slug']}/units")).json()
+        assert units["units"], "atividade publicada deve ter unidades do docspec"
+        assert units["units"][0]["id"] == "u1"
+    resp = await client.get("/api/activities/nao-existe/units")
+    assert resp.status_code == 404
+
+
 async def test_health_and_meta(client):
     health = (await client.get("/api/health")).json()
     assert health["status"] == "ok"

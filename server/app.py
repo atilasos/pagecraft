@@ -99,24 +99,23 @@ def create_app() -> FastAPI:
 
     @app.get("/api/meta")
     async def meta():
-        import json as _json
+        from .api.catalog import list_activities
 
-        catalog = {}
-        if config.catalog_path.exists():
-            catalog = _json.loads(config.catalog_path.read_text("utf-8"))
         return {
             "subjects": ["Português", "Matemática", "Estudo do Meio", "Educação Física", "Inglês"],
             "ae_subjects": ae.list_subjects(),
             "years": [1, 2, 3, 4],
             "makers": ["minecraft", "lego", "3d-print", "robotics", "whiteboard", "unplugged"],
-            "activities": catalog.get("items", []),
+            "activities": list_activities(config.activities_dir),
         }
 
+    from .api import catalog as catalog_api
     from .api import classroom as classroom_api
     from .api import jobs
 
     app.include_router(jobs.router)
     app.include_router(classroom_api.router)
+    app.include_router(catalog_api.router)
 
     config.outputs_dir.mkdir(parents=True, exist_ok=True)
     app.mount("/outputs", StaticFiles(directory=config.outputs_dir), name="outputs")

@@ -13,7 +13,15 @@ from ..security import require_teacher
 router = APIRouter(prefix="/api", tags=["classroom"])
 teacher_only = Depends(require_teacher)
 
-STUDENT_VISIBLE_TYPES = {"ai_feedback", "teacher_message", "session_closed", "pit_updated"}
+STUDENT_VISIBLE_TYPES = {
+    "ai_feedback",
+    "teacher_message",
+    "session_closed",
+    "pit_updated",
+    "teacher_highlight",
+    "freeze_screens",
+    "unfreeze_screens",
+}
 
 
 class ClassRequest(BaseModel):
@@ -46,6 +54,13 @@ class PitRequest(BaseModel):
 
 class TeacherMessageRequest(BaseModel):
     text: str = Field(min_length=1, max_length=400)
+    student_id: str | None = None
+
+
+class ControlRequest(BaseModel):
+    action: str = Field(pattern="^(highlight|freeze|unfreeze)$")
+    unit_id: str | None = Field(default=None, max_length=40)
+    unit_label: str | None = Field(default=None, max_length=200)
     student_id: str | None = None
 
 
@@ -177,6 +192,27 @@ async def teacher_message(session_id: str, body: TeacherMessageRequest, request:
     record = await _svc(request).emit_teacher_event(
         session_id, "teacher_message", {"text": body.text}, student_id=body.student_id
     )
+    return record
+
+
+@router.post("/sessions/{session_id}/control", dependencies=[teacher_only])
+async def session_control(session_id: str, body: ControlRequest, request: Request):
+    """Controlo de sala: chamar a atenção para uma parte (highlight, para todos
+    ou para um aluno) e congelar/descongelar os ecrãs para olharem para o quadro."""
+    svc = _svc(request)
+    if not await svc.get_session(session_id):
+        raise HTTPException(404, "sessão não encontrada")
+    if body.action == "highlight":
+        record = await svc.emit_teacher_event(
+            session_id,
+            "teacher_highlight",
+            {"unit_id": body.unit_id, "unit_label": body.unit_label or ""},
+            student_id=body.student_id,
+        )
+    elif body.action == "freeze":
+        record = await svc.emit_teacher_event(session_id, "freeze_screens", {})
+    else:
+        record = await svc.emit_teacher_event(session_id, "unfreeze_screens", {})
     return record
 
 

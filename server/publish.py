@@ -96,6 +96,8 @@ def publish_activity(
     created = existing_meta.get("createdAt") or _now_iso()
     updated = _now_iso()
 
+    ae_refs = (docspec.get("curriculum") or {}).get("ae") or []
+    subject = str(ae_refs[0].get("subject", "")) if ae_refs else ""
     meta = {
         "slug": slug,
         "title": title,
@@ -103,6 +105,7 @@ def publish_activity(
         "ageRange": age_range,
         "duration": duration,
         "topic": topic,
+        "subject": subject,
         "maker": maker,
         "createdAt": created,
         "updatedAt": updated,
