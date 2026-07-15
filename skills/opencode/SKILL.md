@@ -1,6 +1,6 @@
 ---
 name: pagecraft
-description: Gerar páginas PageCraft em OpenCode/Oh My OpenAgents: aulas HTML self-contained, interativas, pt-PT, acessíveis e verificadas no browser. Usa a skill PageCraft original em `skills/openclaw/` como pacote operacional, mas consulta o conhecimento pedagógico canónico no vault `~/vault`.
+description: Gerar páginas PageCraft em OpenCode/Oh My OpenAgents: aulas HTML self-contained, interativas, pt-PT, acessíveis e verificadas no browser. Usa a variante `skills/claude/` (sincronizada das fontes canónicas) como pacote operacional, mas consulta o conhecimento pedagógico canónico no vault `~/vault`.
 metadata:
   author: pagecraft
   version: "0.2.0"
@@ -8,7 +8,7 @@ metadata:
 
 # PageCraft para OpenCode / Oh My OpenAgents
 
-Esta skill é a camada OpenCode para gerar páginas PageCraft. Ela **não duplica a pedagogia**: reutiliza scripts, identidades e templates de `skills/openclaw/`, mas a fundamentação pedagógica deve ser consultada no vault.
+Esta skill é a camada OpenCode para gerar páginas PageCraft. Ela **não duplica a pedagogia**: reutiliza scripts, identidades e templates de `skills/claude/`, mas a fundamentação pedagógica deve ser consultada no vault.
 
 ## Ideia operacional partilhada com a skill Claude
 
@@ -17,10 +17,10 @@ A skill Claude é a referência de fidelidade operacional: orquestrador leve, fa
 Contrato obrigatório:
 
 - O orquestrador normaliza input, mantém `todos`, coordena fases, integra artefactos e decide routing.
-- O orquestrador **não faz tudo sozinho**: cada fase deve ser delegada quando houver categoria/agente adequado; quando não houver, a fase é executada isoladamente com a identidade respetiva de `skills/openclaw/identities/`.
+- O orquestrador **não faz tudo sozinho**: cada fase deve ser delegada quando houver categoria/agente adequado; quando não houver, a fase é executada isoladamente com a identidade respetiva de `skills/claude/identities/`.
 - Cada fase produz um artefacto verificável antes da próxima fase avançar.
 - Reparações voltam à fase dona do problema; não se reescreve a página inteira sem necessidade.
-- `skills/openclaw/` é pacote operacional e referência histórica; esta camada não deve exigir ACP/acpx, `agentId` ou runtime OpenClaw como se fossem capacidades OpenCode.
+- `skills/claude/` é o pacote operacional (sincronizado de `server/pipeline/prompts/` e `skills/shared/scripts/`); esta camada não deve exigir ACP/acpx, `agentId` ou runtime OpenClaw como se fossem capacidades OpenCode.
 
 ## Quando usar
 
@@ -37,23 +37,23 @@ Não usar para páginas estáticas simples sem componente pedagógica/interativa
 ## Fontes de verdade
 
 1. **Regras técnicas e design do repo:** `AGENTS.md`, `CLAUDE.md`, `README.md` ou equivalente quando existir.
-2. **Pacote operacional PageCraft:** `skills/openclaw/`.
+2. **Pacote operacional PageCraft:** `skills/claude/`.
 3. **Conhecimento pedagógico canónico:** `~/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md`.
 4. **Fontes oficiais no vault:** `~/vault/documentos-oficiais/`.
 
-Se houver conflito: pedido explícito válido do utilizador → regras técnicas/design do repo → vault → identidades/referências de `skills/openclaw/`. O fallback legacy `~/.openclaw/workspace/vault` só deve ser usado quando `~/vault` e overrides não existirem.
+Se houver conflito: pedido explícito válido do utilizador → regras técnicas/design do repo → vault → identidades/referências de `skills/claude/`. O fallback legacy `~/.openclaw/workspace/vault` só deve ser usado quando `~/vault` e overrides não existirem.
 
 ## Recursos reutilizados da skill PageCraft original
 
-- `skills/openclaw/SKILL.md` — pipeline original e critérios.
-- `skills/openclaw/identities/architect.md` — DocSpec/arquitetura pedagógica.
-- `skills/openclaw/identities/designer.md` — design-spec.
-- `skills/openclaw/identities/builder.md` — HTML/CSS/JS.
-- `skills/openclaw/identities/proofreader.md` — revisão pt-PT AO90.
-- `skills/openclaw/identities/evaluator.md` — avaliação final.
-- `skills/openclaw/scripts/*.py` — geração de prompts, markdown e publicação.
-- `skills/openclaw/assets/template-base.html` — base HTML.
-- `skills/openclaw/references/*.md` — referências operacionais; usar como apoio, não como substituto do vault.
+- `skills/claude/SKILL.md` — pipeline original e critérios.
+- `skills/claude/identities/architect.md` — DocSpec/arquitetura pedagógica.
+- `skills/claude/identities/designer.md` — design-spec.
+- `skills/claude/identities/builder.md` — HTML/CSS/JS.
+- `skills/claude/identities/proofreader.md` — revisão pt-PT AO90.
+- `skills/claude/identities/evaluator.md` — avaliação final.
+- `skills/claude/scripts/*.py` — geração de prompts, markdown e publicação.
+- `skills/claude/assets/template-base.html` — base HTML.
+- `skills/claude/references/*.md` — referências operacionais; usar como apoio, não como substituto do vault.
 
 ## Regras absolutas
 
@@ -69,11 +69,11 @@ Se houver conflito: pedido explícito válido do utilizador → regras técnicas
 
 - Criar `todos` para qualquer run com 2+ fases.
 - Delegar fases especializadas sempre que houver superfície adequada:
-  - Architect → `category="writing"` com `skills/openclaw/identities/architect.md`.
-  - Designer → `category="visual-engineering"` com `skills/openclaw/identities/designer.md`; usar `frontend-ui-ux` se disponível.
-  - Builder → `category="deep"` ou implementação visual conforme a complexidade, com `skills/openclaw/identities/builder.md`.
-  - Proofreader → `category="writing"` com `skills/openclaw/identities/proofreader.md`.
-  - Evaluator/QA → Oracle, browser/QA lane ou categoria mais adequada, com `skills/openclaw/identities/evaluator.md`.
+  - Architect → `category="writing"` com `skills/claude/identities/architect.md`.
+  - Designer → `category="visual-engineering"` com `skills/claude/identities/designer.md`; usar `frontend-ui-ux` se disponível.
+  - Builder → `category="deep"` ou implementação visual conforme a complexidade, com `skills/claude/identities/builder.md`.
+  - Proofreader → `category="writing"` com `skills/claude/identities/proofreader.md`.
+  - Evaluator/QA → Oracle, browser/QA lane ou categoria mais adequada, com `skills/claude/identities/evaluator.md`.
 - Para browser/QA visual, carregar `/playwright` quando disponível e usar verificação real.
 - Não usar instruções específicas OpenClaw como requisito funcional: ACP/acpx, ações de browser próprias do OpenClaw, `agentId` ou runtime ACP.
 - Se a delegação não estiver disponível, executar a fase isoladamente na sessão atual: carregar só a identidade da fase, produzir só o artefacto dessa fase e registar no iteration log que foi fallback sequencial.
@@ -117,11 +117,11 @@ Manifest recomendado:
   "max_iterations": 3,
   "current_iteration": 0,
   "phases": {
-    "architect": "writing + skills/openclaw/identities/architect.md",
-    "designer": "visual-engineering + skills/openclaw/identities/designer.md",
-    "builder": "deep/implementation + skills/openclaw/identities/builder.md",
-    "proofreader": "writing + skills/openclaw/identities/proofreader.md",
-    "evaluator": "qa/oracle/browser + skills/openclaw/identities/evaluator.md"
+    "architect": "writing + skills/claude/identities/architect.md",
+    "designer": "visual-engineering + skills/claude/identities/designer.md",
+    "builder": "deep/implementation + skills/claude/identities/builder.md",
+    "proofreader": "writing + skills/claude/identities/proofreader.md",
+    "evaluator": "qa/oracle/browser + skills/claude/identities/evaluator.md"
   },
   "status": "planning|architect|designer|builder|proofreader|evaluator|repair|done|blocked",
   "artifacts": {}
@@ -144,12 +144,12 @@ Gerar prompt base:
 
 ```bash
 PAGECRAFT_WORKSPACE="$REPO_ROOT" PAGECRAFT_VAULT="$HOME/vault" \
-python3 skills/openclaw/scripts/pagecraft.py --topic "<tema>" --year "<ano>" --duration <min> --architect-only
+python3 skills/claude/scripts/pagecraft.py --topic "<tema>" --year "<ano>" --duration <min> --architect-only
 ```
 
 Ler:
 
-- `skills/openclaw/identities/architect.md`
+- `skills/claude/identities/architect.md`
 - `outputs/lessons/_last_architect_prompt.md`
 - nota pedagógica PageCraft no vault.
 
@@ -161,7 +161,7 @@ Fronteira: o Architect não gera HTML, não escolhe detalhes finais de UI e não
 
 Ler:
 
-- `skills/openclaw/identities/designer.md`
+- `skills/claude/identities/designer.md`
 - `outputs/lessons/<slug>-docspec.json`
 - regras técnicas/design do repo quando existirem (`AGENTS.md`, `CLAUDE.md`, `README.md` ou equivalente)
 
@@ -174,16 +174,16 @@ Fronteira: o Designer não altera currículo/Constraint e não escreve HTML fina
 Gerar prompt base:
 
 ```bash
-PAGECRAFT_REPO="$REPO_ROOT" python3 skills/openclaw/scripts/build_prompt.py \
+PAGECRAFT_REPO="$REPO_ROOT" python3 skills/claude/scripts/build_prompt.py \
   outputs/lessons/<slug>-docspec.json > outputs/lessons/<slug>-builder-prompt.md
 ```
 
 Ler:
 
-- `skills/openclaw/identities/builder.md`
+- `skills/claude/identities/builder.md`
 - `outputs/lessons/<slug>-builder-prompt.md`
 - `outputs/lessons/<slug>-design-spec.json`
-- `skills/openclaw/assets/template-base.html`
+- `skills/claude/assets/template-base.html`
 - regras técnicas/design do repo quando existirem (`AGENTS.md`, `CLAUDE.md`, `README.md` ou equivalente)
 
 Produzir `outputs/lessons/<slug>.html`. O HTML deve abrir offline e conter CSS/JS inline.
@@ -195,14 +195,14 @@ Fronteira: o Builder implementa DocSpec + design-spec; não redefine objetivos c
 Gerar markdown:
 
 ```bash
-python3 skills/openclaw/scripts/build_markdown.py outputs/lessons/<slug>-docspec.json > outputs/lessons/<slug>.md
+python3 skills/claude/scripts/build_markdown.py outputs/lessons/<slug>-docspec.json > outputs/lessons/<slug>.md
 ```
 
 ### 6. Proofreader pt-PT AO90
 
 Ler:
 
-- `skills/openclaw/identities/proofreader.md`
+- `skills/claude/identities/proofreader.md`
 - HTML final;
 - DocSpec;
 - fontes pedagógicas do vault quando houver dúvida.
@@ -265,7 +265,7 @@ Uma página PageCraft está pronta apenas quando existem:
 Só publicar com pedido explícito do utilizador.
 
 ```bash
-PAGECRAFT_REPO="$REPO_ROOT" python3 skills/openclaw/scripts/publish_to_catalog.py \
+PAGECRAFT_REPO="$REPO_ROOT" python3 skills/claude/scripts/publish_to_catalog.py \
   --slug <slug> \
   --html outputs/lessons/<slug>.html \
   --md outputs/lessons/<slug>.md \

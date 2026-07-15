@@ -13,11 +13,11 @@ O repositório tem duas metades:
 
 ## Quem é o público
 
-Crianças do 1.º ciclo (6–10 anos), com tolerância para pré-escolar (4–5). O sistema de design força mínimos concretos por faixa etária (tipografia ≥18/20/22/24 px, áreas tocáveis ≥48/56/64 px, frases curtas, *feedback* nunca punitivo, *opt-in* de áudio, contraste WCAG AA e AAA em microcopy crítico). A fonte de verdade é [`skills/openclaw/references/age-adaptation.md`](skills/openclaw/references/age-adaptation.md).
+Crianças do 1.º ciclo (6–10 anos), com tolerância para pré-escolar (4–5). O sistema de design força mínimos concretos por faixa etária (tipografia ≥18/20/22/24 px, áreas tocáveis ≥48/56/64 px, frases curtas, *feedback* nunca punitivo, *opt-in* de áudio, contraste WCAG AA e AAA em microcopy crítico). A fonte de verdade é [`server/pipeline/prompts/references/age-adaptation.md`](server/pipeline/prompts/references/age-adaptation.md).
 
 ## Pipeline de produção
 
-Cada atividade passa por cinco papéis especializados, cada um com identidade própria em `skills/openclaw/identities/`:
+Cada atividade passa por cinco papéis especializados, cada um com identidade própria em `server/pipeline/prompts/` (identities dos cinco papéis):
 
 ```
 Tópico + ano + duração + [maker]
@@ -29,7 +29,7 @@ Tópico + ano + duração + [maker]
   → loop de reparação até passar ou esgotar iterações
 ```
 
-O *spec* completo está em [`skills/openclaw/SKILL.md`](skills/openclaw/SKILL.md). Cada *run* deixa artefactos em `outputs/lessons/<slug>-*` (`docspec`, `design-spec`, `proofread`, `evaluation`, `iteration-log`, `run-manifest`).
+O *spec* operacional para agentes CLI está em [`skills/claude/SKILL.md`](skills/claude/SKILL.md) (variante Codex em [`skills/codex/SKILL.md`](skills/codex/SKILL.md)); o PageCraft Studio corre o mesmo pipeline em código (`server/pipeline/`). Cada *run* deixa artefactos em `outputs/lessons/<slug>-*` (`docspec`, `design-spec`, `proofread`, `evaluation`, `iteration-log`, `run-manifest`).
 
 ## Estrutura
 
@@ -52,17 +52,15 @@ pagecraft/
     <slug>-evaluation-vN.json
     <slug>-iteration-log.md
     <slug>-run-manifest.json
+  server/                # PageCraft Studio (servidor do professor)
+    pipeline/prompts/    # FONTE CANÓNICA: identities, references, template-base
+    ...
   skills/
-    openclaw/            # fonte canónica da skill
-      SKILL.md
-      identities/        # prompts dos agentes
-      references/        # docspec-schema, age-adaptation, patterns, AE
-      assets/template-base.html
-      scripts/           # build_prompt, build_markdown, pagecraft, publish
+    shared/scripts/      # fonte canónica dos scripts CLI (build_prompt, publish, …)
     claude/              # variante para Claude Code (consome o canónico)
     codex/               # variante para Codex
     opencode/            # shim
-    sync-from-canonical.sh   # propaga o canónico para os harnesses
+    sync-from-canonical.sh   # propaga as fontes canónicas para os harnesses
   scripts/               # utilitários do catálogo
   ATTRIBUTION.md
   LICENSE
@@ -86,7 +84,7 @@ Depois, dentro de uma sessão Claude Code, invocar:
 /pagecraft cria uma página de 30 minutos para o 3.º ano sobre verbos no indicativo
 ```
 
-O `install.sh` corre primeiro `skills/sync-from-canonical.sh` para garantir que o *harness* recebe o conteúdo canónico do `openclaw/`.
+O `install.sh` corre primeiro `skills/sync-from-canonical.sh` para garantir que o *harness* recebe o conteúdo das fontes canónicas (`server/pipeline/prompts/` para prompts e template; `skills/shared/scripts/` para scripts).
 
 Para verificar *drift* entre canónico e *harnesses* (útil em CI):
 
@@ -99,7 +97,7 @@ bash skills/sync-from-canonical.sh --check
 Quando o Evaluator dá *pass* sem itens *critical*, o *orchestrator* publica via:
 
 ```bash
-python3 skills/openclaw/scripts/publish_to_catalog.py \
+python3 skills/shared/scripts/publish_to_catalog.py \
   --slug <slug> \
   --html outputs/lessons/<slug>.html \
   --md outputs/lessons/<slug>.md \
@@ -144,7 +142,7 @@ Para expor o servidor fora da rede local, usar um Cloudflare Tunnel (ver skill `
 - Áudio *opt-in*, nunca canal único de significado.
 - Acessibilidade: `:focus-visible`, ARIA correto, `prefers-reduced-motion`, contraste AA/AAA.
 
-Detalhe operacional em [`skills/openclaw/identities/builder.md`](skills/openclaw/identities/builder.md) e [`skills/openclaw/identities/designer.md`](skills/openclaw/identities/designer.md).
+Detalhe operacional em [`server/pipeline/prompts/builder.md`](server/pipeline/prompts/builder.md) e [`server/pipeline/prompts/designer.md`](server/pipeline/prompts/designer.md).
 
 ## Licença
 

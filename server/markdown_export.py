@@ -1,6 +1,6 @@
 """Exportação da versão professor (Markdown) a partir de um DocSpec-AM.
 
-Port de skills/openclaw/scripts/build_markdown.py como função pura.
+Port de skills/shared/scripts/build_markdown.py (histórico) como função pura.
 """
 
 from __future__ import annotations
