@@ -1,0 +1,145 @@
+{
+  "schema": "pagecraft.programmatic-validation.v1",
+  "created_at": "2026-05-24T18:04:08",
+  "repo": "/Users/igor/dev/pagecraft",
+  "slug": "pagecraft-isolated-smoke",
+  "artifact_pass": false,
+  "pass": false,
+  "checks": [
+    {
+      "id": "required_artifacts_present",
+      "pass": false,
+      "detail": "Missing required artifacts.",
+      "evidence": {
+        "missing": [
+          "docspec",
+          "design-spec",
+          "proofread-v1",
+          "html"
+        ],
+        "required": [
+          "docspec",
+          "design-spec",
+          "proofread-v1",
+          "html"
+        ]
+      }
+    },
+    {
+      "id": "json_artifacts_parse",
+      "pass": true,
+      "detail": "JSON artifacts parse.",
+      "evidence": {
+        "errors": {},
+        "parsed": [
+          "isolated_pipeline",
+          "run_manifest"
+        ]
+      }
+    },
+    {
+      "id": "docspec_contract",
+      "pass": false,
+      "detail": "DocSpec is not a JSON object."
+    },
+    {
+      "id": "design_spec_contract",
+      "pass": false,
+      "detail": "Design spec is not a JSON object."
+    },
+    {
+      "id": "proofread_contract",
+      "pass": false,
+      "detail": "Proofread report is not a JSON object."
+    },
+    {
+      "id": "html_static_contract",
+      "pass": false,
+      "detail": "HTML artifact is missing."
+    },
+    {
+      "id": "runtime_closure_contract",
+      "pass": false,
+      "detail": "Runtime closure reports ACP blockers.",
+      "evidence": {
+        "failures": [
+          "run_manifest.runtime_result is not successful"
+        ],
+        "runtime_result": "pending",
+        "failure_class": null,
+        "publish_status": "not_published"
+      }
+    },
+    {
+      "id": "isolated_pipeline_contract",
+      "pass": true,
+      "detail": "Isolated pipeline manifest defines confined phase contracts.",
+      "evidence": {
+        "failures": [],
+        "phase_ids": [
+          "architect",
+          "designer",
+          "builder",
+          "proofreader",
+          "evaluator"
+        ]
+      }
+    }
+  ],
+  "blockers": [
+    {
+      "id": "required_artifacts_present",
+      "detail": "Missing required artifacts.",
+      "evidence": {
+        "missing": [
+          "docspec",
+          "design-spec",
+          "proofread-v1",
+          "html"
+        ],
+        "required": [
+          "docspec",
+          "design-spec",
+          "proofread-v1",
+          "html"
+        ]
+      }
+    },
+    {
+      "id": "docspec_contract",
+      "detail": "DocSpec is not a JSON object.",
+      "evidence": {}
+    },
+    {
+      "id": "design_spec_contract",
+      "detail": "Design spec is not a JSON object.",
+      "evidence": {}
+    },
+    {
+      "id": "proofread_contract",
+      "detail": "Proofread report is not a JSON object.",
+      "evidence": {}
+    },
+    {
+      "id": "html_static_contract",
+      "detail": "HTML artifact is missing.",
+      "evidence": {}
+    },
+    {
+      "id": "runtime_closure_contract",
+      "detail": "Runtime closure reports ACP blockers.",
+      "evidence": {
+        "failures": [
+          "run_manifest.runtime_result is not successful"
+        ],
+        "runtime_result": "pending",
+        "failure_class": null,
+        "publish_status": "not_published"
+      }
+    }
+  ],
+  "artifact_paths": {
+    "run_manifest": "/Users/igor/dev/pagecraft/outputs/lessons/pagecraft-isolated-smoke-run-manifest.json",
+    "isolated_pipeline": "/Users/igor/dev/pagecraft/outputs/lessons/pagecraft-isolated-smoke-isolated-pipeline.json"
+  }
+}

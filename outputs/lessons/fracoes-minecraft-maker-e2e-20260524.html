@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Frações com maker Minecraft</title>
+  <style>
+    :root {
+      --bg: #F7F1E3;
+      --surface: #FFF9EA;
+      --ink: #24332A;
+      --muted: #5A675E;
+      --grass: #65A843;
+      --wood: #A66A3F;
+      --stone: #7B8386;
+      --diamond: #35BFD4;
+      --gold: #F2C94C;
+      --error: #C94C4C;
+      --success: #2F8F5B;
+      --focus: #1A73B8;
+      --line: #3D4A41;
+      --shadow: rgba(36, 51, 42, .14);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background:
+        linear-gradient(90deg, rgba(36,51,42,.04) 1px, transparent 1px),
+        linear-gradient(rgba(36,51,42,.04) 1px, transparent 1px),
+        var(--bg);
+      background-size: 28px 28px;
+      color: var(--ink);
+      font-family: ui-rounded, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      line-height: 1.45;
+    }
+
+    a.skip-link {
+      position: absolute;
+      left: 1rem;
+      top: .75rem;
+      z-index: 5;
+      transform: translateY(-140%);
+      background: var(--ink);
+      color: white;
+      padding: .75rem 1rem;
+      border-radius: .5rem;
+    }
+
+    a.skip-link:focus { transform: translateY(0); }
+
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 4px;
+    }
+
+    header {
+      padding: 1.25rem clamp(1rem, 4vw, 3rem) 1rem;
+      border-bottom: 4px solid rgba(36, 51, 42, .16);
+      background: rgba(255, 249, 234, .86);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1rem;
+      max-width: 1180px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.7rem, 2.2vw, 2.4rem);
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: .35rem 0 0;
+      max-width: 56rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .badge {
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      padding: .55rem .8rem;
+      border: 2px solid var(--line);
+      background: var(--gold);
+      box-shadow: 4px 4px 0 var(--line);
+      font-weight: 800;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 1rem clamp(1rem, 4vw, 3rem) 3rem;
+    }
+
+    .nav {
+      display: flex;
+      gap: .6rem;
+      flex-wrap: wrap;
+      margin: .7rem 0 1.4rem;
+    }
+
+    .nav a,
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    .nav a,
+    button {
+      min-height: 48px;
+      border: 2px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
+      box-shadow: 3px 3px 0 var(--line);
+      padding: .55rem .85rem;
+      border-radius: .35rem;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    button:hover,
+    .nav a:hover { transform: translate(-1px, -1px); }
+
+    button:active,
+    .nav a:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--line); }
+
+    button[aria-pressed="true"],
+    .active {
+      background: var(--gold);
+    }
+
+    section {
+      margin: 1.25rem 0 2rem;
+      padding: clamp(1rem, 3vw, 1.4rem);
+      background: rgba(255, 249, 234, .88);
+      border: 3px solid var(--line);
+      box-shadow: 7px 7px 0 rgba(36, 51, 42, .2);
+    }
+
+    h2 {
+      margin: 0 0 .35rem;
+      font-size: clamp(1.25rem, 2vw, 1.5rem);
+    }
+
+    h3 {
+      margin: 0 0 .45rem;
+      font-size: 1.08rem;
+    }
+
+    .section-lead {
+      margin: 0 0 1rem;
+      color: var(--muted);
+      max-width: 64rem;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(18rem, .7fr);
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 2px solid var(--line);
+      padding: 1rem;
+      box-shadow: 4px 4px 0 var(--shadow);
+    }
+
+    .grid-wrap {
+      width: min(100%, 560px);
+      margin: 0 auto;
+      aspect-ratio: 1;
+      display: grid;
+      gap: .42rem;
+      padding: .55rem;
+      background: #D8CBA6;
+      border: 3px solid var(--line);
+    }
+
+    .block {
+      min-width: 48px;
+      min-height: 48px;
+      border: 2px solid var(--line);
+      color: var(--ink);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      box-shadow: inset 0 0 0 3px rgba(255,255,255,.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .block::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.25) 0 18%, transparent 18% 100%),
+        repeating-linear-gradient(0deg, rgba(36,51,42,.12) 0 2px, transparent 2px 9px);
+      pointer-events: none;
+    }
+
+    .grass { background: var(--grass); }
+    .wood { background: var(--wood); }
+    .stone { background: var(--stone); }
+    .diamond { background: var(--diamond); }
+    .gold { background: var(--gold); }
+
+    .block.selected {
+      border-color: #6D4C00;
+      box-shadow: 0 0 0 4px var(--gold), inset 0 0 0 3px rgba(255,255,255,.35);
+      transform: translateY(-2px);
+    }
+
+    .controls {
+      display: flex;
+      gap: .55rem;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: .75rem 0;
+    }
+
+    .feedback {
+      min-height: 4.8rem;
+      padding: .8rem;
+      border: 2px solid var(--line);
+      background: #FFFDF5;
+      color: var(--ink);
+    }
+
+    .feedback.success {
+      border-color: var(--success);
+      background: #EAF8EF;
+    }
+
+    .feedback.error {
+      border-color: var(--error);
+      background: #FFF0ED;
+    }
+
+    .countline {
+      display: grid;
+      gap: .45rem;
+      margin: .7rem 0;
+    }
+
+    .meter {
+      min-height: 48px;
+      border: 2px solid var(--line);
+      display: flex;
+      align-items: center;
+      padding: .35rem;
+      background: #F0E4C8;
+      gap: .25rem;
+      flex-wrap: wrap;
+    }
+
+    .pip {
+      width: 28px;
+      height: 28px;
+      border: 2px solid var(--line);
+      background: var(--gold);
+    }
+
+    .fraction-cards,
+    .materials,
+    .totals {
+      display: flex;
+      gap: .6rem;
+      overflow-x: auto;
+      padding-bottom: .25rem;
+    }
+
+    .fraction-card {
+      min-width: 92px;
+      display: grid;
+      gap: .35rem;
+      place-items: center;
+    }
+
+    .fraction-symbol {
+      font-size: 1.3rem;
+      font-weight: 900;
+    }
+
+    .mini-icon {
+      width: 54px;
+      height: 34px;
+      display: grid;
+      gap: 2px;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .mini-icon span {
+      border: 1px solid var(--line);
+      background: #E7DBC0;
+    }
+
+    .maker-area {
+      min-height: 142px;
+      display: grid;
+      grid-template-columns: repeat(var(--maker-total, 6), minmax(48px, 1fr));
+      gap: .45rem;
+      align-items: center;
+      padding: .7rem;
+      background: #D8CBA6;
+      border: 3px solid var(--line);
+      overflow-x: auto;
+    }
+
+    .maker-block {
+      aspect-ratio: 1;
+      width: 100%;
+      min-width: 48px;
+      max-width: 76px;
+    }
+
+    .record {
+      display: grid;
+      gap: .45rem;
+      margin-top: .8rem;
+    }
+
+    .record input,
+    .record textarea {
+      width: 100%;
+      min-height: 48px;
+      border: 2px solid var(--line);
+      background: white;
+      color: var(--ink);
+      padding: .65rem;
+      border-radius: .25rem;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    article.challenge {
+      background: var(--surface);
+      border: 2px solid var(--line);
+      padding: .85rem;
+      box-shadow: 4px 4px 0 var(--shadow);
+    }
+
+    .build-preview {
+      display: grid;
+      gap: .35rem;
+      min-height: 92px;
+      margin: .55rem 0;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(36px, 1fr));
+      gap: .3rem;
+    }
+
+    .small-block {
+      min-height: 42px;
+      border: 2px solid var(--line);
+    }
+
+    .answer-row {
+      display: flex;
+      gap: .45rem;
+      flex-wrap: wrap;
+    }
+
+    .fix-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(48px, 1fr));
+      gap: .35rem;
+      margin-top: .6rem;
+    }
+
+    .fix-grid .block {
+      aspect-ratio: 1;
+      width: 100%;
+    }
+
+    details {
+      margin-top: .9rem;
+      border: 2px solid var(--line);
+      background: #FFFDF5;
+      padding: .7rem;
+    }
+
+    summary {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .levels {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .65rem;
+      margin-top: .6rem;
+    }
+
+    .level {
+      border-left: 6px solid var(--gold);
+      padding: .55rem .65rem;
+      background: #FFF7DC;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 880px) {
+      .two-col,
+      .gallery,
+      .levels {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      main { padding-inline: .8rem; }
+      section { padding: .8rem; }
+      .grid-wrap { gap: .28rem; padding: .4rem; }
+      .block { min-width: 48px; min-height: 48px; }
+      .row { grid-template-columns: repeat(3, minmax(44px, 1fr)); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Saltar para a atividade</a>
+  <header>
+    <div class="topbar">
+      <div>
+        <h1>Frações com maker Minecraft</h1>
+        <p class="subtitle">Constrói com blocos, conta o todo e investiga quando uma parte pode valer o mesmo que outra.</p>
+      </div>
+      <div class="badge" aria-label="2.º ano, 45 minutos">2.º ano · 45 min</div>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <nav class="nav" aria-label="Zonas da aula">
+      <a href="#aldeia">Aldeia</a>
+      <a href="#oficina">Oficina</a>
+      <a href="#galeria">Galeria</a>
+    </nav>
+
+    <section id="aldeia" aria-labelledby="aldeia-titulo">
+      <h2 id="aldeia-titulo">Aldeia dos blocos iguais</h2>
+      <p class="section-lead">Marca uma zona do terreno. Depois compara a tua escolha com o resto do terreno e prepara uma explicação curta.</p>
+      <div class="two-col">
+        <div>
+          <div id="terrainGrid" class="grid-wrap" role="grid" aria-label="Terreno de blocos selecionáveis"></div>
+          <div class="controls" aria-label="Modos da grelha">
+            <button type="button" data-grid-size="2">Apoio 2×2</button>
+            <button type="button" data-grid-size="4" aria-pressed="true">Intermédio 4×4</button>
+            <button type="button" id="clearGrid">Limpar</button>
+            <button type="button" id="checkGrid">Comparar seleção</button>
+          </div>
+        </div>
+        <aside class="panel" aria-label="Observação do terreno">
+          <h3>Observa antes de decidir</h3>
+          <div class="countline">
+            <strong>Blocos marcados: <span id="selectedCount">0</span></strong>
+            <div id="selectionMeter" class="meter" aria-hidden="true"></div>
+          </div>
+          <p id="gridFeedback" class="feedback" aria-live="polite">Toca em alguns blocos. Ainda não há resposta pronta: primeiro vamos ver o que a tua escolha mostra.</p>
+          <label class="record">Registo oral ou escrito
+            <textarea id="gridNote" rows="2" placeholder="Eu reparei que..."></textarea>
+          </label>
+        </aside>
+      </div>
+      <details>
+        <summary>Diferenciação</summary>
+        <div class="levels">
+          <div class="level"><strong>Apoio:</strong> usa a grelha 2×2 e procura duas zonas que possas comparar.</div>
+          <div class="level"><strong>Intermédio:</strong> usa a grelha 4×4 e testa uma divisão em duas ou quatro zonas.</div>
+          <div class="level"><strong>Desafio:</strong> encontra duas formas diferentes de mostrar a mesma parte do terreno.</div>
+        </div>
+      </details>
+    </section>
+
+    <section id="oficina" aria-labelledby="oficina-titulo">
+      <h2 id="oficina-titulo">Oficina maker de frações</h2>
+      <p class="section-lead">Escolhe uma carta, muda blocos para diamante e verifica se a tua construção faz sentido. A bancada não preenche a solução por ti.</p>
+
+      <div class="panel">
+        <h3>Cartas de fração</h3>
+        <div class="fraction-cards" role="group" aria-label="Escolher carta de fração">
+          <button class="fraction-card" type="button" data-denominator="2" aria-pressed="true">
+            <span class="fraction-symbol">1/2</span>
+            <span class="mini-icon" aria-hidden="true"><span class="gold"></span><span></span><span class="gold"></span><span></span></span>
+          </button>
+          <button class="fraction-card" type="button" data-denominator="3" aria-pressed="false">
+            <span class="fraction-symbol">1/3</span>
+            <span class="mini-icon" aria-hidden="true"><span class="gold"></span><span></span><span></span><span></span></span>
+          </button>
+          <button class="fraction-card" type="button" data-denominator="4" aria-pressed="false">
+            <span class="fraction-symbol">1/4</span>
+            <span class="mini-icon" aria-hidden="true"><span class="gold"></span><span></span><span></span><span></span></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="two-col" style="margin-top:1rem">
+        <div>
+          <div class="controls totals" role="group" aria-label="Escolher total de blocos">
+            <button type="button" data-total="6" aria-pressed="true">6 blocos</button>
+            <button type="button" data-total="8">8 blocos</button>
+            <button type="button" data-total="12">12 blocos</button>
+          </div>
+          <div id="makerArea" class="maker-area" aria-label="Área de construção maker"></div>
+          <div class="controls materials" role="group" aria-label="Materiais">
+            <button type="button" data-material="grass">Relva</button>
+            <button type="button" data-material="wood">Madeira</button>
+            <button type="button" data-material="stone">Pedra</button>
+            <button type="button" data-material="diamond" aria-pressed="true">Diamante especial</button>
+          </div>
+        </div>
+        <aside class="panel">
+          <h3>Testa e compara</h3>
+          <p><strong>Diamantes:</strong> <span id="specialCount">0</span> em <span id="totalCount">6</span></p>
+          <p id="makerFeedback" class="feedback" aria-live="polite">Escolhe blocos especiais e carrega em verificar. A primeira pista será para contares e comparares.</p>
+          <button type="button" id="checkMaker">Verificar construção</button>
+          <div class="record">
+            <label>Usei <input id="recordSpecial" inputmode="numeric" aria-label="Número de blocos especiais"></label>
+            <label>em <input id="recordTotal" inputmode="numeric" aria-label="Número de blocos ao todo"></label>
+            <label>isso mostra <input id="recordFraction" aria-label="Fração representada"></label>
+          </div>
+        </aside>
+      </div>
+      <details>
+        <summary>Diferenciação</summary>
+        <div class="levels">
+          <div class="level"><strong>Apoio:</strong> começa com 4 ou 8 blocos e usa só metade ou quartos.</div>
+          <div class="level"><strong>Intermédio:</strong> escolhe 6, 8 ou 12 blocos e representa a carta escolhida.</div>
+          <div class="level"><strong>Desafio:</strong> faz a mesma carta com outro total e compara as duas construções.</div>
+        </div>
+      </details>
+    </section>
+
+    <section id="galeria" aria-labelledby="galeria-titulo">
+      <h2 id="galeria-titulo">Galeria e mini-desafio</h2>
+      <p class="section-lead">Visita as construções, confirma o todo e conta as partes antes de responder. Uma construção precisa de reparação.</p>
+      <div class="gallery">
+        <article class="challenge" data-answer="1/2">
+          <h3>Ponte</h3>
+          <div class="build-preview" aria-hidden="true">
+            <div class="row"><span class="small-block diamond"></span><span class="small-block diamond"></span><span class="small-block wood"></span><span class="small-block wood"></span></div>
+          </div>
+          <p>Observa 4 blocos da ponte e decide que carta combina com os blocos de diamante.</p>
+          <div class="answer-row"></div>
+          <p class="feedback" aria-live="polite">Escolhe uma carta e depois confirma a tua contagem.</p>
+        </article>
+        <article class="challenge" data-answer="1/2">
+          <h3>Muro</h3>
+          <div class="build-preview" aria-hidden="true">
+            <div class="row"><span class="small-block wood"></span><span class="small-block wood"></span><span class="small-block wood"></span><span class="small-block stone"></span><span class="small-block stone"></span><span class="small-block stone"></span></div>
+          </div>
+          <p>Conta 6 blocos do muro e compara a zona de madeira com a zona de pedra.</p>
+          <div class="answer-row"></div>
+          <p class="feedback" aria-live="polite">Escolhe uma carta e diz como comparaste.</p>
+        </article>
+        <article class="challenge" data-answer="repair">
+          <h3>Canteiro para reparar</h3>
+          <div class="build-preview" aria-hidden="true">
+            <div class="row"><span class="small-block grass"></span><span class="small-block grass"></span><span class="small-block diamond"></span><span class="small-block stone"></span></div>
+            <div class="row"><span class="small-block grass"></span><span class="small-block diamond"></span><span class="small-block stone"></span><span class="small-block stone"></span></div>
+          </div>
+          <p>Este canteiro parece uma fração. Observa, testa e tenta corrigi-lo para mostrar metade.</p>
+          <div class="answer-row"></div>
+          <div id="fixGrid" class="fix-grid" aria-label="Canteiro tocável para correção"></div>
+          <p class="feedback" aria-live="polite">Marca blocos no canteiro. A tua reparação deve deixar uma pista que possas explicar.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      const materials = ["grass", "wood", "stone", "grass", "stone", "wood", "grass", "stone", "wood", "grass", "stone", "wood", "grass", "wood", "stone", "grass"];
+      const terrainGrid = document.getElementById("terrainGrid");
+      const selectedCount = document.getElementById("selectedCount");
+      const selectionMeter = document.getElementById("selectionMeter");
+      const gridFeedback = document.getElementById("gridFeedback");
+      let gridSize = 4;
+      let selected = new Set();
+
+      function setPressed(buttons, active) {
+        buttons.forEach((button) => button.setAttribute("aria-pressed", button === active ? "true" : "false"));
+      }
+
+      function updateMeter(count) {
+        selectionMeter.innerHTML = "";
+        for (let i = 0; i < count; i += 1) {
+          const pip = document.createElement("span");
+          pip.className = "pip";
+          selectionMeter.appendChild(pip);
+        }
+      }
+
+      function renderGrid() {
+        terrainGrid.style.gridTemplateColumns = `repeat(${gridSize}, minmax(48px, 1fr))`;
+        terrainGrid.innerHTML = "";
+        selected = new Set();
+        const total = gridSize * gridSize;
+        for (let i = 0; i < total; i += 1) {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = `block ${materials[i % materials.length]}`;
+          button.setAttribute("role", "gridcell");
+          button.setAttribute("aria-pressed", "false");
+          button.setAttribute("aria-label", `Bloco ${i + 1} de ${total}`);
+          button.textContent = "";
+          button.addEventListener("click", () => {
+            if (selected.has(i)) {
+              selected.delete(i);
+              button.classList.remove("selected");
+              button.setAttribute("aria-pressed", "false");
+            } else {
+              selected.add(i);
+              button.classList.add("selected");
+              button.setAttribute("aria-pressed", "true");
+            }
+            selectedCount.textContent = String(selected.size);
+            updateMeter(selected.size);
+            gridFeedback.className = "feedback";
+            gridFeedback.textContent = "Agora compara a zona marcada com o terreno todo. Que contagem consegues observar?";
+          });
+          terrainGrid.appendChild(button);
+        }
+        selectedCount.textContent = "0";
+        updateMeter(0);
+        gridFeedback.className = "feedback";
+        gridFeedback.textContent = "Toca em alguns blocos. Ainda não há resposta pronta: primeiro vamos ver o que a tua escolha mostra.";
+      }
+
+      document.querySelectorAll("[data-grid-size]").forEach((button) => {
+        button.addEventListener("click", () => {
+          gridSize = Number(button.dataset.gridSize);
+          setPressed(Array.from(document.querySelectorAll("[data-grid-size]")), button);
+          renderGrid();
+        });
+      });
+
+      document.getElementById("clearGrid").addEventListener("click", renderGrid);
+
+      document.getElementById("checkGrid").addEventListener("click", () => {
+        const total = gridSize * gridSize;
+        const count = selected.size;
+        gridFeedback.className = "feedback";
+        if (count === 0) {
+          gridFeedback.textContent = "Marca uma zona primeiro. Depois vamos comparar contagens.";
+          return;
+        }
+        if (count === total) {
+          gridFeedback.textContent = "Marcaste o terreno todo. Experimenta deixar uma parte por marcar para poderes comparar.";
+          return;
+        }
+        if (total % count === 0) {
+          const groups = total / count;
+          gridFeedback.className = "feedback success";
+          gridFeedback.textContent = `A tua zona tem ${count} blocos e cabe ${groups} vezes no terreno. Depois desta comparação, já podes explicar: cada grupo fica com a mesma contagem.`;
+        } else {
+          gridFeedback.className = "feedback error";
+          gridFeedback.textContent = "Ainda há algo para investigar. Conta a zona marcada e tenta formar grupos que se repitam sem sobrar blocos.";
+        }
+      });
+
+      const makerArea = document.getElementById("makerArea");
+      const specialCount = document.getElementById("specialCount");
+      const totalCount = document.getElementById("totalCount");
+      const makerFeedback = document.getElementById("makerFeedback");
+      let maker = { total: 6, denominator: 2, material: "diamond", specials: new Set(), attempts: 0 };
+
+      function renderMaker() {
+        makerArea.style.setProperty("--maker-total", maker.total);
+        makerArea.innerHTML = "";
+        maker.specials = new Set();
+        maker.attempts = 0;
+        for (let i = 0; i < maker.total; i += 1) {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "block maker-block wood";
+          button.setAttribute("aria-pressed", "false");
+          button.setAttribute("aria-label", `Bloco maker ${i + 1} de ${maker.total}`);
+          button.addEventListener("click", () => {
+            if (maker.specials.has(i)) {
+              maker.specials.delete(i);
+              button.className = "block maker-block wood";
+              button.setAttribute("aria-pressed", "false");
+            } else {
+              maker.specials.add(i);
+              button.className = `block maker-block ${maker.material} selected`;
+              button.setAttribute("aria-pressed", "true");
+            }
+            maker.attempts = 0;
+            specialCount.textContent = String(maker.specials.size);
+            makerFeedback.className = "feedback";
+            makerFeedback.textContent = "Boa pista visual. Antes de verificar, conta o todo e os blocos especiais.";
+          });
+          makerArea.appendChild(button);
+        }
+        specialCount.textContent = "0";
+        totalCount.textContent = String(maker.total);
+        document.getElementById("recordTotal").value = String(maker.total);
+        document.getElementById("recordSpecial").value = "";
+        document.getElementById("recordFraction").value = "";
+        makerFeedback.className = "feedback";
+        makerFeedback.textContent = "Escolhe blocos especiais e carrega em verificar. A primeira pista será para contares e comparares.";
+      }
+
+      document.querySelectorAll("[data-denominator]").forEach((button) => {
+        button.addEventListener("click", () => {
+          maker.denominator = Number(button.dataset.denominator);
+          maker.attempts = 0;
+          setPressed(Array.from(document.querySelectorAll("[data-denominator]")), button);
+          makerFeedback.className = "feedback";
+          makerFeedback.textContent = `Carta ${button.textContent.trim()} escolhida. Experimenta uma quantidade de diamantes antes de pedir confirmação.`;
+        });
+      });
+
+      document.querySelectorAll("[data-total]").forEach((button) => {
+        button.addEventListener("click", () => {
+          maker.total = Number(button.dataset.total);
+          setPressed(Array.from(document.querySelectorAll("[data-total]")), button);
+          renderMaker();
+        });
+      });
+
+      document.querySelectorAll("[data-material]").forEach((button) => {
+        button.addEventListener("click", () => {
+          maker.material = button.dataset.material;
+          setPressed(Array.from(document.querySelectorAll("[data-material]")), button);
+        });
+      });
+
+      document.getElementById("checkMaker").addEventListener("click", () => {
+        maker.attempts += 1;
+        const targetWorks = maker.total % maker.denominator === 0;
+        const target = maker.total / maker.denominator;
+        const count = maker.specials.size;
+        makerFeedback.className = "feedback";
+        if (!targetWorks) {
+          makerFeedback.className = "feedback error";
+          makerFeedback.textContent = "Este total deixa uma parte por resolver com esta carta. Experimenta outro total e observa se a construção fica mais fácil de agrupar.";
+          return;
+        }
+        if (count === target) {
+          makerFeedback.className = "feedback success";
+          makerFeedback.textContent = `Confirmaste com a construção: ${count} blocos especiais em ${maker.total} blocos ao todo mostram 1/${maker.denominator}. Regista a tua descoberta.`;
+          document.getElementById("recordSpecial").value = String(count);
+          document.getElementById("recordFraction").value = `1/${maker.denominator}`;
+          return;
+        }
+        if (maker.attempts === 1) {
+          makerFeedback.className = "feedback error";
+          makerFeedback.textContent = "Ainda não confirma. Conta o todo, separa-o em grupos comparáveis e vê quantos blocos especiais caberiam num desses grupos.";
+        } else {
+          makerFeedback.className = "feedback error";
+          makerFeedback.textContent = `Depois de testares de novo, compara com um grupo de ${target} blocos. Ajusta os diamantes e volta a verificar.`;
+        }
+      });
+
+      function addGalleryButtons(article) {
+        const row = article.querySelector(".answer-row");
+        ["1/2", "1/3", "1/4"].forEach((label) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.textContent = label;
+          button.addEventListener("click", () => {
+            const feedback = article.querySelector(".feedback");
+            const answer = article.dataset.answer;
+            feedback.className = "feedback";
+            if (answer === "repair") {
+              feedback.textContent = "Antes da carta, usa o canteiro tocável. Marca uma reparação e compara a tua seleção com o todo.";
+              return;
+            }
+            if (label === answer) {
+              feedback.className = "feedback success";
+              feedback.textContent = `Resposta confirmada. Agora diz o todo, a parte observada e como fizeste a comparação.`;
+            } else {
+              feedback.className = "feedback error";
+              feedback.textContent = "Revê a contagem no desenho. Que blocos estás a comparar com o todo?";
+            }
+          });
+          row.appendChild(button);
+        });
+      }
+
+      document.querySelectorAll("article.challenge").forEach(addGalleryButtons);
+
+      const fixGrid = document.getElementById("fixGrid");
+      const repairSet = new Set();
+      for (let i = 0; i < 8; i += 1) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `block ${i % 3 === 0 ? "grass" : "stone"}`;
+        button.setAttribute("aria-pressed", "false");
+        button.setAttribute("aria-label", `Bloco de reparação ${i + 1} de 8`);
+        button.addEventListener("click", () => {
+          const feedback = fixGrid.parentElement.querySelector(".feedback");
+          if (repairSet.has(i)) {
+            repairSet.delete(i);
+            button.classList.remove("selected", "diamond");
+            button.classList.add(i % 3 === 0 ? "grass" : "stone");
+            button.setAttribute("aria-pressed", "false");
+          } else {
+            repairSet.add(i);
+            button.className = "block diamond selected";
+            button.setAttribute("aria-pressed", "true");
+          }
+          feedback.className = "feedback";
+          if (repairSet.size === 4) {
+            feedback.className = "feedback success";
+            feedback.textContent = "A tua reparação marcou 4 de 8 blocos. Depois de testar, podes explicar por que isso mostra metade.";
+          } else {
+            feedback.textContent = `Marcaste ${repairSet.size} de 8 blocos. Continua a comparar a tua marca com o canteiro todo.`;
+          }
+        });
+        fixGrid.appendChild(button);
+      }
+
+      renderGrid();
+      renderMaker();
+    }());
+  </script>
+</body>
+</html>

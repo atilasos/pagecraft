@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "source": "impeccable detect",
+  "status": "applied",
+  "route": "Designer -> Builder",
+  "issues": [
+    {
+      "id": "single-font",
+      "severity": "medium",
+      "detail": "A pagina usava apenas a variavel tipografica global, reduzindo a distincao entre titulo e corpo.",
+      "fix": "Aplicada uma pilha local distinta para h1/h2, mantendo fallbacks offline."
+    },
+    {
+      "id": "flat-type-hierarchy",
+      "severity": "medium",
+      "detail": "Os tamanhos 18, 19, 22, 25 e 32 px criavam hierarquia pouco marcada.",
+      "fix": "Aumentado h1 para 40 px, h2 para 28 px e h1 mobile para 34 px; design-spec atualizado."
+    }
+  ],
+  "filesChanged": [
+    "outputs/lessons/fracoes-minecraft-maker-2ano-e2e.html",
+    "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-design-spec.json"
+  ]
+}

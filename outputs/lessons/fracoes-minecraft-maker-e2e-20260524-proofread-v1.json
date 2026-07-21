@@ -1,0 +1,28 @@
+{
+  "pass": true,
+  "severity": "low",
+  "issues": [
+    {
+      "type": "pedagogical_clarity",
+      "severity": "low",
+      "location": "#checkGrid feedback positivo",
+      "original": "A tua zona tem ${count} blocos e cabe ${groups} vezes no terreno. Depois desta comparação, já podes explicar: cada grupo fica com a mesma contagem.",
+      "reason": "A confirmação surge apenas depois de a criança marcar blocos e pedir comparação, por isso já não revela a regra cedo demais. Ainda assim, a frase baseia-se sobretudo na contagem; seria mais forte se pedisse ou mostrasse a formação visual dos grupos antes de generalizar.",
+      "suggestion": "Após confirmar a contagem, pedir que a criança mostre ou descreva os grupos comparáveis antes de dizer que cada grupo fica com a mesma contagem."
+    },
+    {
+      "type": "pedagogical_clarity",
+      "severity": "low",
+      "location": "#galeria article[data-answer='repair'] p",
+      "original": "Este canteiro parece uma fração. Observa, testa e tenta corrigi-lo para mostrar metade.",
+      "reason": "A frase dá o alvo 'metade', mas não revela a causa do erro nem a reparação. Continua a exigir observação, teste e marcação antes da confirmação.",
+      "suggestion": "Se se quiser aumentar a descoberta, trocar 'para mostrar metade' por uma pergunta como 'para que carta poderia funcionar?'."
+    }
+  ],
+  "recommendations": [
+    "Verificação explícita do blocker: no HTML reconstruído, a regra das partes iguais, a resposta e a equivalência não são apresentadas no enunciado inicial nem no feedback inicial; surgem apenas após marcação, comparação, verificação ou reparação.",
+    "O texto está globalmente em pt-PT/AO90 e é adequado a 2.º ano: frases curtas, verbos de ação, vocabulário concreto e feedback orientador.",
+    "Manter a descoberta por manipulação: tocar em blocos, contar o todo, comparar zonas e justificar antes de qualquer confirmação formal.",
+    "Não publicar no catálogo nesta fase."
+  ]
+}

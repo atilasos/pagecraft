@@ -1,0 +1,30 @@
+{
+  "schema": "pagecraft.run-manifest.v1",
+  "mode": "isolated-artifact-pipeline",
+  "created_at": "2026-05-24T18:10:32",
+  "slug": "fracoes-minecraft-isolated-e2e-v2",
+  "runtime_result": "success",
+  "publish_status": "not_published",
+  "phases": {
+    "architect": "completed",
+    "designer": "completed",
+    "builder": "completed",
+    "proofreader": "completed",
+    "evaluator": "completed"
+  },
+  "failure_class": null,
+  "closed_at": "2026-05-24T18:49:00",
+  "repair_attempts": [
+    {
+      "slug": "fracoes-minecraft-isolated-e2e-v2",
+      "attempt": 1,
+      "route": "fresh_builder",
+      "failure_class": "proofread_blocker",
+      "repair_ticket": "outputs/lessons/fracoes-minecraft-isolated-e2e-v2-repair-ticket-v1.json",
+      "clarification_note": "outputs/lessons/fracoes-minecraft-isolated-e2e-v2-builder-clarification-v1.md",
+      "task_file": "outputs/lessons/fracoes-minecraft-isolated-e2e-v2-phase-builder-repair-v1-task.md",
+      "status": "completed"
+    }
+  ],
+  "status": "done"
+}

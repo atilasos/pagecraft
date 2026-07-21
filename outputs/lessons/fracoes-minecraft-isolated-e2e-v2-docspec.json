@@ -1,0 +1,162 @@
+{
+  "topic": "Fracções equivalentes com Minecraft",
+  "duration": 35,
+  "year": "2.º ano",
+  "objectives": [
+    "Reconhecer que a mesma quantidade pode ser representada por fracções diferentes quando as partes têm tamanhos equivalentes.",
+    "Comparar construções em grelha para identificar pares de fracções equivalentes.",
+    "Explicar oralmente, com apoio visual, porque duas representações mostram a mesma parte do todo."
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "disciplina": "Matemática",
+        "descritor": "Representar, comparar e discutir partes iguais de um todo em situações concretas, usando linguagem matemática adequada à idade."
+      },
+      {
+        "disciplina": "Matemática",
+        "descritor": "Explorar relações entre representações diferentes da mesma quantidade, justificando escolhas com exemplos visuais."
+      }
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      {
+        "name": "Trabalho cooperativo",
+        "alignment": "As crianças observam construções, propõem equivalências e discutem as suas justificações com um par antes da partilha."
+      },
+      {
+        "name": "Comunicação matemática",
+        "alignment": "A aula valoriza explicações curtas, gestos, desenho e linguagem oral para tornar visível o raciocínio."
+      },
+      {
+        "name": "Avaliação formativa",
+        "alignment": "O professor recolhe evidências através das escolhas, justificações e produções das crianças durante a exploração."
+      }
+    ]
+  },
+  "units": [
+    {
+      "summary": "Entrada no mundo de blocos",
+      "textDescription": "A turma observa uma pequena parede Minecraft feita de blocos iguais. Metade da parede está destacada com uma cor. A pergunta inicial é: que parte da parede está iluminada?",
+      "duration": 5,
+      "interaction": {
+        "state": {
+          "wall": {
+            "rows": 2,
+            "columns": 4,
+            "highlightedBlocks": 4
+          },
+          "studentChoice": null,
+          "teacherPrompt": "Que parte vês iluminada? Como sabes?"
+        },
+        "render": "Mostrar uma grelha de 2 por 4 com quatro blocos destacados, estilo Minecraft, e três cartões de resposta com representações visuais simples.",
+        "transition": "Quando a criança escolhe uma resposta ou aponta para os blocos, a interface pede uma justificação oral curta antes de revelar outra forma de dividir a mesma parede.",
+        "constraint": "A criança deve contar blocos e comparar áreas destacadas; a necessidade de partes iguais emerge quando tenta justificar porque a zona iluminada representa uma parte da parede.",
+        "assessment": "A criança aponta para os blocos destacados e diz uma frase como: 'São 4 de 8 blocos' ou 'é metade porque tem tantos blocos pintados como por pintar'."
+      },
+      "differentiation": {
+        "support": "Usar contagem acompanhada pelo professor e destacar cada bloco à medida que é contado.",
+        "standard": "Escolher a fracção correspondente e explicar a escolha com a grelha visível.",
+        "challenge": "Propor outra forma de pintar metade da parede mantendo o mesmo número de blocos destacados."
+      }
+    },
+    {
+      "summary": "A mesma parede com divisões diferentes",
+      "textDescription": "A parede é reorganizada em divisões visuais maiores e menores. As crianças comparam 1/2, 2/4 e 4/8 como formas diferentes de mostrar a mesma quantidade iluminada.",
+      "duration": 10,
+      "interaction": {
+        "state": {
+          "representations": [
+            {
+              "label": "1/2",
+              "parts": 2,
+              "highlightedParts": 1
+            },
+            {
+              "label": "2/4",
+              "parts": 4,
+              "highlightedParts": 2
+            },
+            {
+              "label": "4/8",
+              "parts": 8,
+              "highlightedParts": 4
+            }
+          ],
+          "matchedPairs": [],
+          "currentPrompt": "Quais mostram a mesma quantidade de parede iluminada?"
+        },
+        "render": "Apresentar três paredes do mesmo tamanho, cada uma com uma divisão visual diferente, mantendo a área iluminada igual.",
+        "transition": "Quando a criança junta duas representações, as paredes sobrepõem-se por momentos para permitir comparar a área iluminada; se a área coincidir, surge uma pergunta de explicação.",
+        "constraint": "A criança descobre que a etiqueta muda quando mudam as divisões, mas a quantidade iluminada pode permanecer igual; a equivalência nasce da comparação visual, não de uma regra dada.",
+        "assessment": "A criança junta dois cartões equivalentes e explica oralmente ou com desenho que ambos iluminam a mesma quantidade da parede."
+      },
+      "differentiation": {
+        "support": "Reduzir para duas representações de cada vez e usar sobreposição com transparência.",
+        "standard": "Comparar as três representações e formar pares equivalentes com justificação.",
+        "challenge": "Antecipar uma nova representação equivalente antes de a ver, por exemplo 3/6."
+      }
+    },
+    {
+      "summary": "Construir equivalências com blocos",
+      "textDescription": "Cada criança constrói uma mini-ponte em grelha. Primeiro escolhe uma fracção-alvo e depois pinta blocos para criar uma representação equivalente.",
+      "duration": 12,
+      "interaction": {
+        "state": {
+          "targetFraction": "1/2",
+          "gridOptions": [
+            {
+              "rows": 1,
+              "columns": 2
+            },
+            {
+              "rows": 2,
+              "columns": 4
+            },
+            {
+              "rows": 3,
+              "columns": 6
+            }
+          ],
+          "paintedBlocks": [],
+          "attempts": 0
+        },
+        "render": "Disponibilizar uma grelha de blocos, uma fracção-alvo e uma ferramenta de pintura para marcar blocos da ponte.",
+        "transition": "Depois de pintar, a criança carrega em comparar; a interface mostra lado a lado a fracção-alvo e a construção criada, pedindo que procure se ocupam a mesma parte.",
+        "constraint": "A criança tem de ajustar a pintura até a parte marcada ocupar a mesma proporção do todo; a relação entre numerador e denominador é inferida pela manipulação.",
+        "assessment": "A criança produz uma ponte pintada que representa uma fracção equivalente e descreve o que manteve igual apesar de haver mais blocos."
+      },
+      "differentiation": {
+        "support": "Oferecer uma grelha já meio pintada para a criança completar por simetria.",
+        "standard": "Criar uma representação equivalente a partir de uma grelha vazia.",
+        "challenge": "Criar duas representações equivalentes diferentes para a mesma fracção-alvo."
+      }
+    },
+    {
+      "summary": "Partilha e mini-avaliação",
+      "textDescription": "As crianças escolhem uma construção e apresentam-na como se fosse uma placa de Minecraft: fracção escolhida, fracção equivalente e justificação.",
+      "duration": 8,
+      "interaction": {
+        "state": {
+          "selectedBuild": null,
+          "sentenceFrames": [
+            "Eu pintei ... de ... blocos.",
+            "É igual a ... porque ...",
+            "Vejo a mesma quantidade quando ..."
+          ],
+          "teacherObservationNotes": []
+        },
+        "render": "Mostrar a construção final da criança com espaço para escolher duas etiquetas de fracção e gravar ou escrever uma justificação curta.",
+        "transition": "Quando a criança confirma a sua placa, a construção fica pronta para partilha em par ou em pequeno grupo.",
+        "constraint": "A criança revê a própria construção para verificar se as etiquetas escolhidas dizem a mesma quantidade; a coerência é descoberta pela necessidade de defender a placa perante outro colega.",
+        "assessment": "A criança entrega uma placa com a construção, duas fracções equivalentes e uma justificação oral, escrita ou desenhada observável pelo professor."
+      },
+      "differentiation": {
+        "support": "Usar molduras de frase e permitir resposta oral com apontar para a construção.",
+        "standard": "Registar duas fracções equivalentes e uma justificação curta.",
+        "challenge": "Identificar uma construção de outro colega e propor uma etiqueta equivalente adicional."
+      }
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "slug": "fracoes-minecraft-isolated-e2e-v2",
+  "role": "Designer",
+  "visualIntent": {
+    "theme": "Frações equivalentes com Minecraft",
+    "summary": "Interface de blocos em grelha onde paredes e pontes do mesmo tamanho mostram 1/2, 2/4 e 4/8 como áreas equivalentes.",
+    "minecraftSpecificity": [
+      "Usar blocos quadrados com textura pixelada subtil para parede, ponte e cartões.",
+      "Representar a parte iluminada como blocos de ouro ou glowstone e a parte não pintada como pedra clara.",
+      "Usar uma placa final em estilo madeira para a partilha da fração escolhida, fração equivalente e justificação."
+    ]
+  },
+  "layout": {
+    "global": "Uma área principal de construção ocupa o centro e recebe maior peso visual; controlos e cartões ficam abaixo ou numa coluna lateral consoante a largura.",
+    "unitFlow": [
+      {
+        "unit": "Entrada no mundo de blocos",
+        "layout": "Parede 2x4 grande, com 4 blocos destacados, três cartões de resposta e prompt curto do professor."
+      },
+      {
+        "unit": "A mesma parede com divisões diferentes",
+        "layout": "Três paredes do mesmo tamanho em linha no desktop e em carrossel/empilhamento no mobile, com comparação por sobreposição visual."
+      },
+      {
+        "unit": "Construir equivalências com blocos",
+        "layout": "Grelha de pintura grande, fração-alvo fixa e botão Comparar; ferramentas de pintar/apagar com ícones."
+      },
+      {
+        "unit": "Partilha e mini-avaliação",
+        "layout": "Construção final à esquerda/topo e placa de madeira com etiquetas de fração e molduras de frase à direita/baixo."
+      }
+    ],
+    "spacing": "Espaçamento generoso entre blocos interativos para toque; secções sem cartões dentro de cartões.",
+    "gridRules": "Todos os blocos devem manter proporção 1:1 e a parede deve conservar o mesmo tamanho visual quando muda de 1/2 para 2/4 ou 4/8."
+  },
+  "responsive": {
+    "desktop": "Usar duas colunas quando houver comparação: construção principal com 60-70% da largura e painel de ações com 30-40%.",
+    "tablet": "Priorizar toque: blocos mínimos de 48px, cartões em duas colunas e prompts visíveis sem scroll excessivo.",
+    "mobile": "Empilhar construção, frações e ações; manter blocos mínimos de 38px quando possível e permitir comparação uma parede de cada vez.",
+    "orientation": "Em tablet horizontal, permitir três paredes lado a lado; em vertical, usar cartões empilhados com a construção sempre antes do texto."
+  },
+  "colors": {
+    "background": "#F5F7EC",
+    "surface": "#FFFFFF",
+    "stoneBlock": "#B8C0B1",
+    "stoneBlockDark": "#8E9889",
+    "grass": "#4F8A3B",
+    "dirt": "#8B5A34",
+    "wood": "#A66A3F",
+    "highlightBlock": "#F3C94A",
+    "highlightBlockDark": "#C99A1E",
+    "waterAccent": "#3D8BBF",
+    "success": "#2F7D4A",
+    "tryAgain": "#A45A2A",
+    "focus": "#1E5AA8",
+    "text": "#1F2A1F",
+    "mutedText": "#4B5A4B"
+  },
+  "contrast": {
+    "requirement": "Texto normal deve cumprir WCAG AA com contraste mínimo 4.5:1; texto grande e etiquetas de fração devem cumprir pelo menos 3:1.",
+    "blockLabels": "Etiquetas sobre blocos destacados devem usar texto escuro em fundo claro ou etiqueta exterior para evitar baixo contraste.",
+    "stateContrast": "Não depender apenas da cor para distinguir selecionado, correto ou a rever; combinar cor com contorno, ícone e texto curto."
+  },
+  "typography": {
+    "family": "Sistema sans-serif local, com números tabulares quando disponível.",
+    "scale": {
+      "title": "28-34px desktop, 24-28px tablet/mobile",
+      "fractionLabel": "26-32px com peso 700",
+      "body": "18-20px para leitura autónoma no 2.º ano",
+      "button": "18px mínimo"
+    },
+    "rules": "Frases curtas, sem texto comprimido; frações devem usar forma 1/2, 2/4, 4/8 junto da representação visual."
+  },
+  "accessibility": {
+    "language": "pt-PT",
+    "keyboard": "Todos os cartões, blocos pintáveis, botões e etiquetas selecionáveis devem ser acessíveis por teclado com foco visível.",
+    "screenReader": "Cada grelha deve ter nome acessível, dimensão e estado, por exemplo: 'parede com 4 de 8 blocos iluminados'.",
+    "motor": "Alvos de toque mínimos de 44x44px; botões de pintar/apagar separados e fáceis de desfazer.",
+    "cognitive": "Mostrar no máximo três escolhas principais por ecrã; feedback curto e específico; manter a construção visível enquanto a criança responde.",
+    "motion": "Animações de sobreposição e celebração devem ser breves e respeitar prefers-reduced-motion."
+  },
+  "feedbackStates": {
+    "idle": "Blocos com relevo suave e instrução curta: 'Que parte está iluminada?'",
+    "hoverFocus": "Contorno azul forte, elevação discreta e etiqueta do bloco/cartão.",
+    "selected": "Contorno duplo e pequeno marcador no canto, sem alterar o tamanho do bloco.",
+    "painting": "Bloco muda para ouro/glowstone com sombreamento pixelado e contador visual atualizado.",
+    "compareEquivalent": "As áreas iluminadas alinham-se por sobreposição; mensagem: 'Mostram a mesma quantidade.'",
+    "compareReview": "Área divergente fica tracejada; mensagem: 'Conta os blocos iluminados e tenta ajustar.'",
+    "success": "Realce verde no contorno da construção e avanço para explicar.",
+    "error": "Usar tom terra/laranja e orientação concreta; evitar vermelho dominante ou linguagem punitiva."
+  },
+  "interactionDesign": {
+    "countingSupport": "Ao tocar num bloco, destacar a ordem de contagem e mostrar '4 de 8 blocos' perto da parede.",
+    "matchingSupport": "Na comparação 1/2, 2/4 e 4/8, permitir arrastar ou selecionar pares; depois animar a sobreposição das áreas.",
+    "paintingTool": "Ferramenta simples com modos pintar e apagar, botão comparar e opção de limpar a grelha.",
+    "explanationSupport": "Molduras de frase da placa final devem aparecer como botões/linhas selecionáveis: 'Eu pintei ... de ... blocos.'"
+  },
+  "ageAppropriateness": {
+    "year": "2.º ano",
+    "tone": "Concreto, visual e manipulável, com leitura curta e apoio oral.",
+    "avoid": [
+      "Regras algébricas de equivalência antes da exploração visual.",
+      "Muitos símbolos matemáticos no mesmo ecrã.",
+      "Texturas fortes que dificultem a contagem dos blocos."
+    ]
+  },
+  "implementationNotes": {
+    "assets": "Usar CSS para padrões pixelados simples; não depender de imagens externas ou internet.",
+    "consistency": "A mesma quantidade deve ocupar sempre a mesma área visual, mesmo quando o número de divisões muda.",
+    "teacherUse": "Reservar espaço discreto para prompts orais e notas de observação na mini-avaliação."
+  }
+}

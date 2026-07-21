@@ -1,0 +1,54 @@
+{
+  "pass": true,
+  "acp_ok": true,
+  "artifact_pass": true,
+  "evidence": {
+    "programmatic_validation": {
+      "path": "outputs/lessons/fracoes-minecraft-isolated-e2e-v2-programmatic-validation.json",
+      "created_at": "2026-05-24T18:46:43",
+      "artifact_pass": true,
+      "pass": true,
+      "only_failed_check": "runtime_closure_contract",
+      "passed_checks": [
+        "required_artifacts_present",
+        "json_artifacts_parse",
+        "docspec_contract",
+        "design_spec_contract",
+        "proofread_contract",
+        "html_static_contract",
+        "isolated_pipeline_contract"
+      ],
+      "runtime_closure_failures": [],
+      "runtime_result": "success",
+      "failure_class": null,
+      "publish_status": "not_published"
+    },
+    "artifact_quality": {
+      "required_artifacts_present": true,
+      "json_artifacts_parse": true,
+      "proofread_pass": true,
+      "proofread_severity": "low",
+      "html_self_contained": true,
+      "button_count": 25,
+      "aria_attribute_count": 44,
+      "external_patterns": [],
+      "html_bytes": 28763
+    },
+    "pedagogical_sequence": {
+      "docspec_requires_discovery": "A equivalência deve nascer da comparação visual e da manipulação, não de uma regra dada.",
+      "design_requires_no_early_rule": "A equivalência deve ser percebida pela área pintada e pela contagem de blocos antes de qualquer regra abstrata.",
+      "proofreader_evidence": "A frase formal '4 de 8 blocos ocupam a mesma quantidade que 1 de 2 partes' só é revelada após a comparação correta.",
+      "html_evidence": [
+        "A secção inicial pede observar, contar e justificar antes de revelar uma regra.",
+        "A comparação das paredes pede selecionar duas representações e observar o alinhamento das áreas antes de explicar.",
+        "Na ponte, o bloco formal-explanation está escondido por defeito e só é mostrado quando a criança pinta exatamente 4 de 8 blocos e carrega em comparar."
+      ]
+    }
+  },
+  "blockers": [],
+  "required_followup": [],
+  "repair_resolution": {
+    "original_blocker_resolved": true,
+    "evidence": "Resolvido: a regra/frase de equivalência não é antecipada. O aluno primeiro observa, conta, compara paredes e manipula a ponte; a explicação formal permanece escondida até a comparação correta da ponte."
+  }
+}
