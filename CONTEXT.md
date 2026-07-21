@@ -11,7 +11,7 @@ Um dos três patamares de exigência presentes em toda a atividade: **Broto** (A
 _Avoid_: dificuldade fácil/média/difícil, verde/amarelo/vermelho
 
 **Perfil de diferenciação**:
-O nível por defeito que o professor define para cada aluno na turma. Na sessão, o tablet do aluno abre automaticamente no nível do seu perfil; a criança pode mudar de nível livremente e a mudança fica registada como evento — evidência, nunca bloqueio nem juízo.
+O nível por defeito que o professor define para cada aluno, **por área disciplinar** (Português, Matemática, Estudo do Meio…). Na sessão, o tablet do aluno abre automaticamente no nível do seu perfil para a área da atividade; a criança pode mudar de nível livremente e a mudança fica registada como evento — evidência, nunca bloqueio nem juízo.
 _Avoid_: nível fixo, tracking
 
 ### Sala
