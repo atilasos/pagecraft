@@ -27,6 +27,14 @@ _Avoid_: agendamento, calendário
 **Sessão de aula**:
 Instância viva de uma atividade para uma turma, com código de entrada e roster; termina fechada mas os eventos persistem para relatório.
 
+**Triagem de atenção**:
+Ordenação viva da turma no painel do professor por necessidade: pedidos de ajuda, tentativas falhadas acumuladas e inatividade sobem; quem está a fluir desce. Substitui a lista uniforme; o objetivo é «2 segundos de olhar, saber a quem ir».
+_Avoid_: ranking, leaderboard
+
+**Momento de comunicação**:
+Projeção do estado real do trabalho de um aluno no quadro interativo, lançada pelo professor a partir do drawer («Mostrar no quadro»), para a criança apresentar aos colegas. Prática MEM; mostra o trabalho tal como está, sem a criança refazer nada.
+_Avoid_: partilha de ecrã, screencast
+
 **Evidência**:
 Registo observável do trabalho da criança (tentativas, descobertas, pedidos de ajuda, mudanças de nível), agregado sem juízos automáticos como matéria-prima para o conselho de cooperação.
 _Avoid_: nota, score, classificação
