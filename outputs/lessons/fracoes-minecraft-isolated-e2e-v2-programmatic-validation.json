@@ -1,0 +1,116 @@
+{
+  "schema": "pagecraft.programmatic-validation.v1",
+  "created_at": "2026-05-24T18:48:56",
+  "repo": "/Users/igor/dev/pagecraft",
+  "slug": "fracoes-minecraft-isolated-e2e-v2",
+  "artifact_pass": true,
+  "pass": true,
+  "checks": [
+    {
+      "id": "required_artifacts_present",
+      "pass": true,
+      "detail": "Required artifacts exist.",
+      "evidence": {
+        "missing": [],
+        "required": [
+          "docspec",
+          "design-spec",
+          "proofread-v1",
+          "html"
+        ]
+      }
+    },
+    {
+      "id": "json_artifacts_parse",
+      "pass": true,
+      "detail": "JSON artifacts parse.",
+      "evidence": {
+        "errors": {},
+        "parsed": [
+          "design-spec",
+          "docspec",
+          "evaluation",
+          "isolated_pipeline",
+          "proofread-v1",
+          "run_manifest"
+        ]
+      }
+    },
+    {
+      "id": "docspec_contract",
+      "pass": true,
+      "detail": "DocSpec matches the minimum PageCraft contract.",
+      "evidence": {
+        "failures": []
+      }
+    },
+    {
+      "id": "design_spec_contract",
+      "pass": true,
+      "detail": "Design spec references accessibility and responsive behaviour.",
+      "evidence": {
+        "has_accessibility": true,
+        "has_responsive": true
+      }
+    },
+    {
+      "id": "proofread_contract",
+      "pass": true,
+      "detail": "Proofread report is acceptable.",
+      "evidence": {
+        "pass": true,
+        "severity": "low"
+      }
+    },
+    {
+      "id": "html_static_contract",
+      "pass": true,
+      "detail": "HTML is self-contained and exposes at least one accessible interaction.",
+      "evidence": {
+        "failures": [],
+        "button_count": 25,
+        "aria_attribute_count": 44,
+        "external_patterns": [],
+        "bytes": 28763
+      }
+    },
+    {
+      "id": "runtime_closure_contract",
+      "pass": true,
+      "detail": "Runtime closure does not report ACP blockers.",
+      "evidence": {
+        "failures": [],
+        "evaluation_pass": true,
+        "evaluation_acp_ok": true,
+        "runtime_result": "success",
+        "failure_class": null,
+        "publish_status": "not_published"
+      }
+    },
+    {
+      "id": "isolated_pipeline_contract",
+      "pass": true,
+      "detail": "Isolated pipeline manifest defines confined phase contracts.",
+      "evidence": {
+        "failures": [],
+        "phase_ids": [
+          "architect",
+          "designer",
+          "builder",
+          "proofreader",
+          "evaluator"
+        ]
+      }
+    }
+  ],
+  "blockers": [],
+  "artifact_paths": {
+    "docspec": "/Users/igor/dev/pagecraft/outputs/lessons/fracoes-minecraft-isolated-e2e-v2-docspec.json",
+    "design-spec": "/Users/igor/dev/pagecraft/outputs/lessons/fracoes-minecraft-isolated-e2e-v2-design-spec.json",
+    "proofread-v1": "/Users/igor/dev/pagecraft/outputs/lessons/fracoes-minecraft-isolated-e2e-v2-proofread-v1.json",
+    "html": "/Users/igor/dev/pagecraft/outputs/lessons/fracoes-minecraft-isolated-e2e-v2.html",
+    "evaluation": "/Users/igor/dev/pagecraft/outputs/lessons/fracoes-minecraft-isolated-e2e-v2-evaluation-v1.json",
+    "run_manifest": "/Users/igor/dev/pagecraft/outputs/lessons/fracoes-minecraft-isolated-e2e-v2-run-manifest.json",
+    "isolated_pipeline": "/Users/igor/dev/pagecraft/outputs/lessons/fracoes-minecraft-isolated-e2e-v2-isolated-pipeline.json"
+  }
+}

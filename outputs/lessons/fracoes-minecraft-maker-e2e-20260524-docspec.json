@@ -1,0 +1,124 @@
+{
+  "topic": "Frações com maker Minecraft",
+  "duration": 45,
+  "objectives": [
+    "Reconhecer a fração como uma parte de um todo dividido em partes iguais.",
+    "Representar metades, terços e quartos em construções de blocos inspiradas no Minecraft.",
+    "Comparar representações simples de frações através de observação, construção e explicação oral.",
+    "Registar uma solução maker que mostre a relação entre partes pintadas e total de partes iguais."
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "disciplina": "Matemática",
+        "descritor": "Reconhecer e representar frações unitárias em contextos familiares, associando-as a partes iguais de uma unidade."
+      },
+      {
+        "disciplina": "Matemática",
+        "descritor": "Comunicar raciocínios matemáticos usando linguagem adequada, desenhos, materiais manipuláveis e registos simples."
+      },
+      {
+        "disciplina": "Estudo do Meio",
+        "descritor": "Planear e construir objetos simples, testando escolhas e explicando melhorias a partir da observação."
+      }
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      {
+        "nome": "Plano individual de trabalho",
+        "descricao": "Cada criança escolhe uma construção de blocos e regista o que já consegue fazer, o que testou e o que quer melhorar."
+      },
+      {
+        "nome": "Comunicações",
+        "descricao": "As crianças apresentam a sua construção fracionária ao grupo, explicando o todo, as partes iguais e a fração representada."
+      },
+      {
+        "nome": "Trabalho de projeto",
+        "descricao": "A turma investiga como criar padrões de blocos que mantenham partes iguais, ajustando a construção após feedback dos pares."
+      }
+    ]
+  },
+  "units": [
+    {
+      "summary": "Aldeia dos blocos iguais",
+      "textDescription": "A turma observa uma grelha de blocos inspirada no Minecraft e descobre que só se pode falar de frações quando o terreno está dividido em partes com o mesmo tamanho.",
+      "duration": 10,
+      "interaction": {
+        "state": {
+          "grid": "terreno 4x4 com zonas selecionáveis",
+          "selectedBlocks": [],
+          "partitionMode": "linhas, colunas ou regiões propostas pela criança",
+          "teacherPrompt": "O que tem de acontecer aos blocos para uma parte valer o mesmo que outra?"
+        },
+        "render": "Mostra um terreno quadrado de blocos com cores de madeira, relva e pedra; ao tocar, a criança destaca grupos e vê apenas contagens, sem fórmula antecipada.",
+        "transition": "Quando a criança forma grupos com a mesma quantidade de blocos, a interface passa para uma vista que permite nomear cada grupo como uma parte do terreno.",
+        "constraint": "A criança testa agrupamentos e percebe, por tentativa e comparação visual, que grupos com tamanhos diferentes deixam de representar partes iguais do mesmo todo.",
+        "assessment": "A criança aponta dois grupos do terreno e diz se podem ser usados numa fração, justificando com a quantidade de blocos em cada grupo."
+      },
+      "differentiation": {
+        "support": "Usar uma grelha 2x2, com cores já alternadas, e pedir apenas para encontrar duas metades iguais.",
+        "standard": "Usar uma grelha 4x4 e pedir que a criança crie duas ou quatro partes iguais.",
+        "challenge": "Pedir que a criança encontre duas divisões diferentes do mesmo terreno que representem a mesma fração."
+      }
+    },
+    {
+      "summary": "Oficina maker de frações",
+      "textDescription": "As crianças constroem um objeto simples, como uma ponte, muro ou canteiro, escolhendo uma fração de blocos especiais para mostrar metade, um terço ou um quarto.",
+      "duration": 20,
+      "interaction": {
+        "state": {
+          "buildArea": "linha ou retângulo de blocos editável",
+          "totalBlocks": 6,
+          "specialBlocks": 0,
+          "fractionCards": [
+            "1/2",
+            "1/3",
+            "1/4"
+          ],
+          "materials": [
+            "relva",
+            "madeira",
+            "pedra",
+            "diamante"
+          ]
+        },
+        "render": "Apresenta uma bancada maker com blocos grandes para tocar; a criança troca materiais e vê a construção atualizar-se em tempo real.",
+        "transition": "Ao escolher uma carta de fração, a bancada não preenche a resposta: convida a criança a experimentar quantos blocos especiais precisa para que a carta faça sentido.",
+        "constraint": "A criança descobre que o número total de blocos tem de permitir partes iguais para a fração escolhida, porque algumas tentativas deixam blocos sem par ou sem grupo completo.",
+        "assessment": "A criança produz uma construção e completa oralmente ou por registo: 'Usei __ blocos especiais em __ blocos ao todo; isso mostra __'."
+      },
+      "differentiation": {
+        "support": "Fornecer totais compatíveis já preparados, como 4 blocos para metade ou quartos, e cartões com pictogramas.",
+        "standard": "Permitir escolher entre 6, 8 ou 12 blocos e representar a fração indicada.",
+        "challenge": "Pedir uma construção com a mesma fração usando outro total de blocos e comparar as duas soluções."
+      }
+    },
+    {
+      "summary": "Galeria e mini-desafio",
+      "textDescription": "A turma visita construções feitas por colegas, identifica a fração representada e corrige uma construção com partes que parecem iguais mas não são.",
+      "duration": 15,
+      "interaction": {
+        "state": {
+          "galleryItems": [
+            "ponte com 2 de 4 blocos de diamante",
+            "muro com 3 de 6 blocos de madeira",
+            "canteiro com grupos desiguais"
+          ],
+          "currentGuess": null,
+          "feedbackMode": "pergunta orientadora",
+          "reflectionNote": ""
+        },
+        "render": "Mostra três construções em cartões grandes, com botões de escolha de fração e uma zona de desenho simples para corrigir a construção problemática.",
+        "transition": "Depois de cada escolha, o feedback pede que a criança confirme o todo e conte as partes antes de avançar para a construção seguinte.",
+        "constraint": "A criança encontra a construção que não respeita partes iguais ao comparar os grupos, sem receber a regra escrita antes da tentativa.",
+        "assessment": "A criança escolhe uma construção, identifica a fração e corrige ou explica em voz alta uma construção que não funciona como fração."
+      },
+      "differentiation": {
+        "support": "Reduzir para duas construções e oferecer contadores visuais sobre cada bloco.",
+        "standard": "Identificar a fração em três construções e corrigir uma delas.",
+        "challenge": "Criar uma pergunta para um colega resolver, incluindo uma construção correta e uma armadilha com partes desiguais."
+      }
+    }
+  ]
+}

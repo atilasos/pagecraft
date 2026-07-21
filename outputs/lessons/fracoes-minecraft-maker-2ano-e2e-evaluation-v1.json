@@ -1,0 +1,84 @@
+{
+  "pass": false,
+  "acp_ok": false,
+  "score": {
+    "factual": 4,
+    "alignment": 4,
+    "accessibility": 4,
+    "differentiation": 4,
+    "technical": 4,
+    "workflow": 2
+  },
+  "evidence": {
+    "json_validation": {
+      "pass": true,
+      "files": [
+        "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-docspec.json",
+        "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-design-spec.json",
+        "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-proofread-v1.json",
+        "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-repair-ticket-v1.json"
+      ]
+    },
+    "html_static_checks": {
+      "pass": true,
+      "doctype": true,
+      "inline_style": true,
+      "inline_script": true,
+      "mentions_fractions": true,
+      "mentions_minecraft": true,
+      "has_buttons": true,
+      "has_aria": true,
+      "bytes": 15837
+    },
+    "browser_check": {
+      "pass": true,
+      "tool": "Playwright with local Google Chrome executable",
+      "title": "Frações equivalentes na parcela Minecraft",
+      "h1": "Que parte da parcela fica plantada?",
+      "buttons": 9,
+      "clicked_first_button": true,
+      "body_changed_after_click": true,
+      "console_errors": [],
+      "screenshot": "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-playwright.png"
+    },
+    "impeccable": {
+      "pass": true,
+      "command": "npx --yes impeccable detect outputs/lessons/fracoes-minecraft-maker-2ano-e2e.html",
+      "stdout": "",
+      "repair_ticket": "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-repair-ticket-v1.json"
+    },
+    "proofreader": {
+      "pass": true,
+      "file": "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-proofread-v1.json"
+    },
+    "markdown": {
+      "pass": true,
+      "command": "python3 /Users/igor/.openclaw/workspace/skills/pagecraft-openclaw/scripts/build_markdown.py outputs/lessons/fracoes-minecraft-maker-2ano-e2e-docspec.json"
+    }
+  },
+  "issues": [
+    "A pagina gerada e utilizavel e passa as verificacoes locais principais.",
+    "A run ACP de ponta a ponta nao fechou sozinha: falhou quando tentou executar uma accao que exigia prompt de permissao em modo nao-interactivo.",
+    "O ficheiro de avaliacao e o manifesto tiveram de ser fechados pelo orchestrator depois da falha ACP."
+  ],
+  "critical": [
+    "Para considerar a skill totalmente pronta, o fluxo ACP precisa de uma configuracao sem prompts interactivos para comandos esperados, ou de uma politica clara que limite as fases ACP a escrita de artefactos sem comandos privilegiados."
+  ],
+  "limitations": [
+    "Playwright estava instalado, mas o browser Chromium interno nao estava. A verificacao usou /Applications/Google Chrome.app/Contents/MacOS/Google Chrome.",
+    "Nao foi feita publicacao no catalogo.",
+    "A avaliacao final nao foi produzida autonomamente pelo agente ACP."
+  ],
+  "files": [
+    "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-docspec.json",
+    "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-design-brief.md",
+    "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-design-spec.json",
+    "outputs/lessons/fracoes-minecraft-maker-2ano-e2e.html",
+    "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-proofread-v1.json",
+    "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-repair-ticket-v1.json",
+    "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-evaluation-v1.json",
+    "outputs/lessons/fracoes-minecraft-maker-2ano-e2e.md",
+    "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-playwright.png"
+  ],
+  "decision": "A pagina passa como artefacto local experimental, mas a run da skill nao passa como end-to-end ACP autonomo."
+}
