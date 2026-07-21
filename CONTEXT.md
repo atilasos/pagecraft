@@ -14,6 +14,10 @@ _Avoid_: dificuldade fácil/média/difícil, verde/amarelo/vermelho
 O nível por defeito que o professor define para cada aluno, **por área disciplinar** (Português, Matemática, Estudo do Meio…). Na sessão, o tablet do aluno abre automaticamente no nível do seu perfil para a área da atividade; a criança pode mudar de nível livremente e a mudança fica registada como evento — evidência, nunca bloqueio nem juízo. Sem perfil preenchido, o defeito é Árvore jovem.
 _Avoid_: nível fixo, tracking
 
+**Convite de nível**:
+Sugestão de mudança de nível que o professor envia ao tablet de um aluno durante a sessão. Aparece como convite calmo que a criança aceita com um toque ou ignora; nunca é troca forçada. Convite e resposta ficam registados como evidência.
+_Avoid_: mudança forçada, override
+
 ### Sala
 
 **Sessão de aula**:
