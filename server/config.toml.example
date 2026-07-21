@@ -1,0 +1,19 @@
+# PageCraft Studio — configuração local de exemplo
+# Copia para server/config.toml e ajusta apenas o necessário.
+# Variáveis PAGECRAFT_* têm precedência sobre estes valores.
+
+vault_path = "~/obsidian-vault"
+wiki_api_url = "http://127.0.0.1:8765"
+
+host = "127.0.0.1"
+port = 8777
+
+generation_provider = "codex"
+feedback_provider = "auto"
+codex_bin = "codex"
+anthropic_model = "claude-haiku-4-5-20251001"
+
+generation_timeout_s = 300
+builder_timeout_s = 900
+feedback_timeout_s = 20
+max_iterations = 3

@@ -24,7 +24,8 @@ class Config:
     activities_dir: Path = REPO_ROOT / "activities"
     catalog_path: Path = REPO_ROOT / "catalog.json"
     prompts_dir: Path = SERVER_ROOT / "pipeline" / "prompts"
-    vault_path: Path = Path.home() / "vault"
+    vault_path: Path = Path.home() / "obsidian-vault"
+    wiki_api_url: str = "http://127.0.0.1:8765"
     host: str = "127.0.0.1"
     port: int = 8777
     # provider de geração (pipeline completo) e de feedback (respostas rápidas)

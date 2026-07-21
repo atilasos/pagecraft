@@ -4,53 +4,33 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PageCraft Studio</title>
-<style>
-  :root {
-    --bg: oklch(0.985 0.005 250);
-    --surface: oklch(0.995 0.003 250);
-    --ink: oklch(0.220 0.020 260);
-    --ink-soft: oklch(0.400 0.020 260);
-    --primary: oklch(0.620 0.120 255);
-    --primary-ink: oklch(0.980 0.010 255);
-    --border: oklch(0.880 0.010 260);
-    --focus: oklch(0.700 0.200 255);
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: "Atkinson Hyperlegible", Lexend, Nunito, system-ui, -apple-system, sans-serif;
-    background: var(--bg);
-    color: var(--ink);
-    font-size: 18px;
-    line-height: 1.55;
-  }
-  main { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem; }
-  h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; letter-spacing: -0.01em; }
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
-  a.card {
-    display: block; background: var(--surface); border: 1px solid var(--border);
-    border-radius: 14px; padding: 1.25rem 1.5rem; text-decoration: none; color: var(--ink);
-    box-shadow: 0 1px 2px oklch(0.2 0.02 260 / 0.06), 0 4px 14px oklch(0.2 0.02 260 / 0.05);
-  }
-  a.card:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
-  a.card h2 { margin: 0 0 0.4rem; font-size: 1.15rem; font-weight: 800; color: var(--primary); }
-  a.card p { margin: 0; color: var(--ink-soft); font-size: 1rem; }
-</style>
+<link rel="stylesheet" href="/studio.css">
 </head>
-<body>
-<main>
-  <h1>PageCraft Studio</h1>
-  <p>Servidor local do professor: geração de atividades, sessões de aula e acompanhamento em tempo real.</p>
-  <div class="cards">
-    <a class="card" href="/teacher/">
-      <h2>Professor</h2>
-      <p>Criar atividades, lançar sessões e acompanhar a turma.</p>
+<body class="home-page">
+<a class="skip-link" href="#main-content">Saltar para as escolhas</a>
+<main id="main-content">
+  <header class="home-head">
+    <p class="eyebrow">PageCraft Studio</p>
+    <h1>A aula começa aqui.</h1>
+    <p class="home-intro">Escolhe o teu ponto de entrada. O professor prepara e acompanha o trabalho; o aluno entra com o código mostrado na sala.</p>
+  </header>
+
+  <nav class="audience-choices" aria-label="Entrar no PageCraft Studio">
+    <a class="audience-card teacher-entry" href="/teacher/">
+      <span class="entry-kicker">Professor</span>
+      <h2>Preparar a aula</h2>
+      <p>Cria atividades, lança uma sessão e acompanha o percurso da turma em tempo real.</p>
+      <span class="entry-action">Abrir o ficheiro do professor</span>
     </a>
-    <a class="card" href="/student/">
-      <h2>Aluno</h2>
-      <p>Entrar numa sessão com o código da turma.</p>
+    <a class="audience-card student-entry" href="/student/">
+      <span class="entry-kicker">Aluno</span>
+      <h2>Entrar na aula</h2>
+      <p>Usa o código da turma, escolhe o teu nome e começa a explorar a atividade.</p>
+      <span class="entry-action">Escrever o código da aula</span>
     </a>
-  </div>
+  </nav>
+
+  <p class="home-note">O Studio corre localmente e não precisa de serviços externos para abrir estas áreas.</p>
 </main>
 </body>
 </html>

@@ -34,7 +34,7 @@ def create_app() -> FastAPI:
     config = load_config()
     storage = Storage(config.data_dir)
     hub = EventHub(storage)
-    wiki = WikiClient(config.vault_path)
+    wiki = WikiClient(config.vault_path, api_url=config.wiki_api_url)
     ae = AEClient(config.vault_path)
 
     @asynccontextmanager
@@ -94,7 +94,7 @@ def create_app() -> FastAPI:
             "status": "ok",
             "app": "pagecraft-studio",
             "vault": ae.available,
-            "wiki": wiki.available,
+            "wiki": await wiki.probe(),
         }
 
     @app.get("/api/meta")

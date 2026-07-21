@@ -6,218 +6,417 @@
   <title>PageCraft — Visualizador</title>
   <script src="./assets/vendor/marked.min.js"></script>
   <style>
+    /* ============ O Ficheiro da Biblioteca — folha de requisição ============ */
     :root {
-      --bg: #f5f7fb;
-      --card: #fff;
-      --text: #1f2937;
-      --muted: #6b7280;
-      --line: #dbe3ef;
-      --brand: #2563eb;
-      --brand2: #1d4ed8;
-      --chip: #eef4ff;
-      --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      --desk:        oklch(0.935 0.022 88);   /* tampo/fundo, manila esbatido */
+      --paper:       oklch(0.985 0.008 95);   /* folha branco-quente */
+      --paper-deep:  oklch(0.965 0.012 92);
+      --ink:         oklch(0.25 0.02 75);     /* tinta quase-preta, quente */
+      --ink-soft:    oklch(0.46 0.018 75);
+      --muted:       oklch(0.46 0.018 75);    /* alias usado pelo render JS */
+      --line:        oklch(0.875 0.018 85);
+      --stamp:       oklch(0.46 0.085 195);   /* carimbo teal — único acento */
+      --stamp-deep:  oklch(0.40 0.085 195);
+      --stamp-wash:  oklch(0.46 0.085 195 / 0.10);
+      --manila:      oklch(0.93 0.045 90);
+      --manila-deep: oklch(0.885 0.055 88);
+      --terra:       oklch(0.40 0.055 60);    /* tom terra para avisos */
+      --hole-shadow: oklch(0.30 0.02 75 / 0.22);
+      --radius: 14px;
+      --font: Lexend, "Atkinson Hyperlegible", Nunito, system-ui, sans-serif;
+      --mono: ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace;
       --prose-max: 52rem;
     }
     * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
     body {
       margin: 0;
-      font-family: Inter, system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      font-family: var(--font);
+      background: var(--desk);
+      color: var(--ink);
+      font-size: 16px;
       line-height: 1.5;
     }
-    .wrap { max-width: 1100px; margin: 0 auto; padding: 24px; }
+    :focus-visible { outline: 3px solid var(--stamp); outline-offset: 3px; border-radius: 6px; }
+    a { color: var(--stamp-deep); }
+    .skip-link {
+      position: fixed; top: 8px; left: 8px; z-index: 1000;
+      min-height: 44px; display: inline-flex; align-items: center;
+      padding: 8px 12px; border: 1px solid var(--stamp-deep); border-radius: 10px;
+      background: var(--paper); color: var(--stamp-deep);
+      font-size: 0.875rem; font-weight: 700; text-decoration: none;
+      transform: translateY(calc(-100% - 16px));
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .cap {
+      font-size: 12px; font-weight: 600; letter-spacing: .09em;
+      text-transform: uppercase; color: var(--ink-soft);
+    }
+    .num, .tabnum { font-variant-numeric: tabular-nums; }
+
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 26px clamp(12px, 4vw, 32px) 40px; }
+
+    /* separador manila por cima da folha */
+    .sheet-tab {
+      display: inline-flex; align-items: baseline; gap: 10px;
+      background: var(--manila);
+      border: 1px solid var(--manila-deep); border-bottom: 0;
+      border-radius: 10px 10px 0 0;
+      padding: 7px 16px 6px; margin-left: 14px;
+      font-size: 12px; font-weight: 700; letter-spacing: .09em;
+      text-transform: uppercase; color: var(--ink);
+    }
+
+    /* ---------- a folha (ficha de requisição) ---------- */
+    .sheet {
+      position: relative;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 1px 2px oklch(0.3 0.02 75 / 0.07), 0 6px 18px oklch(0.3 0.02 75 / 0.05);
+    }
+
     header.top {
       display: flex;
       flex-wrap: wrap;
       align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 24px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--line);
+      gap: 14px 24px;
+      padding: 22px 28px 18px;
+      border-bottom: 1px dashed var(--line);
     }
-    header.top h1 { margin: 0; font-size: clamp(1.35rem, 3vw, 1.75rem); }
+    .head-id { min-width: 0; flex: 1 1 320px; }
+    .head-id .cap { display: block; margin-bottom: 4px; }
+    header.top h1 {
+      margin: 0;
+      font-size: clamp(1.3rem, 3vw, 1.7rem);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+    }
+    /* carimbo da vista */
     .badge {
       display: inline-block;
-      margin-top: 8px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      background: var(--chip);
-      color: var(--brand2);
+      margin-top: 10px;
+      padding: 5px 12px 4px;
+      border: 2px solid var(--stamp);
+      border-radius: 8px;
+      box-shadow: inset 0 0 0 1.5px var(--paper), inset 0 0 0 2.5px oklch(0.46 0.085 195 / 0.55);
+      color: var(--stamp-deep);
+      font-size: 12px; font-weight: 700;
+      letter-spacing: .13em; text-transform: uppercase;
+      transform: rotate(-2.5deg);
+      opacity: .88;
+      user-select: none;
     }
-    .nav { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .badge:empty { display: none; }
+
+    .nav { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-left: auto; }
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       text-decoration: none;
-      background: var(--brand);
-      color: #fff;
-      padding: 12px 16px;
-      border-radius: 12px;
+      background: var(--stamp);
+      color: var(--paper);
+      border: 1px solid var(--stamp-deep);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font: inherit;
       font-weight: 600;
-      font-size: 0.9rem;
-      border: none;
+      font-size: 14px;
       cursor: pointer;
       min-height: 48px;
-      transition: filter 0.15s, transform 0.1s;
+      min-width: 48px;
     }
-    .btn:hover { filter: brightness(1.06); }
-    .btn:active { transform: scale(0.97); }
+    .btn:hover { background: var(--stamp-deep); }
     .btn.secondary {
-      background: #fff;
-      color: var(--brand2);
+      background: var(--paper);
+      color: var(--stamp-deep);
       border: 1px solid var(--line);
+      border-bottom-color: var(--manila-deep);
     }
-    .btn.secondary:hover { background: #f8fafc; }
+    .btn.secondary:hover { background: var(--stamp-wash); border-color: var(--stamp); }
+
+    main.panel { padding: 26px 28px 32px; min-height: 180px; }
+    #loading { color: var(--ink-soft); margin: 0; }
+
+    /* furos de arquivo à esquerda (desktop) */
+    @media (min-width: 760px) {
+      .sheet::before {
+        content: "";
+        position: absolute;
+        left: 17px; top: 28px; bottom: 28px;
+        width: 14px;
+        pointer-events: none;
+        background:
+          radial-gradient(circle at 50% calc(50% + 1.2px), var(--desk) 5.4px, transparent 6.4px),
+          radial-gradient(circle at 50% 50%, var(--hole-shadow) 5.8px, transparent 6.8px);
+        background-size: 14px 58px;
+        background-repeat: repeat-y;
+        background-position: 0 0;
+      }
+      header.top { padding-left: 56px; }
+      main.panel { padding-left: 56px; }
+    }
+
+    /* ---------- estado de erro: nota da bibliotecária ---------- */
     .error {
-      padding: 20px;
-      border-radius: 16px;
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      color: #991b1b;
+      max-width: 46rem;
+      padding: 20px 22px;
+      border-radius: var(--radius);
+      background: var(--manila);
+      border: 1px dashed var(--manila-deep);
+      color: var(--terra);
+      line-height: 1.55;
     }
-    .panel {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 24px 28px;
-      box-shadow: var(--shadow);
+    .error::before {
+      content: "Nota do ficheiro";
+      display: block;
+      margin-bottom: 6px;
+      font-size: 12px; font-weight: 700;
+      letter-spacing: .09em; text-transform: uppercase;
+      color: var(--terra);
+      opacity: .8;
     }
-    /* Markdown prose */
+
+    /* ---------- prosa de markdown (guia do professor) ---------- */
     .prose {
       max-width: var(--prose-max);
-      font-size: 1.02rem;
+      font-size: 16px;
+      line-height: 1.6;
     }
-    .prose h1 { font-size: 1.75rem; margin: 1.2em 0 0.5em; line-height: 1.2; }
-    .prose h2 { font-size: 1.35rem; margin: 1.4em 0 0.5em; color: #111827; border-bottom: 1px solid var(--line); padding-bottom: 0.35em; }
-    .prose h3 { font-size: 1.12rem; margin: 1.2em 0 0.4em; }
-    .prose p { margin: 0.65em 0; color: #374151; }
+    .prose > :first-child { margin-top: 0; }
+    .prose h1 {
+      font-size: 1.65rem; font-weight: 700;
+      letter-spacing: -0.025em; line-height: 1.2;
+      margin: 1.2em 0 0.5em;
+    }
+    .prose h2 {
+      font-size: 1.25rem; font-weight: 700;
+      letter-spacing: -0.015em;
+      margin: 1.5em 0 0.5em;
+      padding-bottom: 0.3em;
+      border-bottom: 1px solid var(--line);
+    }
+    .prose h3 { font-size: 1.05rem; font-weight: 700; margin: 1.25em 0 0.4em; }
+    .prose h4 {
+      font-size: 1rem; font-weight: 700; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--ink-soft);
+      margin: 1.4em 0 0.4em;
+    }
+    .prose p { margin: 0.65em 0; }
     .prose ul, .prose ol { margin: 0.65em 0; padding-left: 1.4em; }
     .prose li { margin: 0.35em 0; }
-    .prose hr { border: none; border-top: 1px solid var(--line); margin: 1.5em 0; }
+    .prose li::marker { color: var(--stamp); }
+    .prose ol { font-variant-numeric: tabular-nums; }
+    .prose hr { border: none; border-top: 1px dashed var(--line); margin: 1.6em 0; }
+    .prose strong { color: var(--ink); font-weight: 700; }
+    .prose a { text-underline-offset: 3px; text-decoration-color: oklch(0.46 0.085 195 / 0.45); }
+    .prose a:hover { text-decoration-color: var(--stamp); }
     .prose code {
-      background: #f3f4f6;
+      font-family: var(--mono);
+      background: var(--manila);
+      color: var(--ink);
       padding: 0.15em 0.45em;
       border-radius: 6px;
-      font-size: 0.9em;
+      font-size: 0.88em;
     }
     .prose pre {
-      background: #1e293b;
-      color: #e2e8f0;
-      padding: 16px;
+      background: var(--manila);
+      border: 1px solid var(--manila-deep);
+      color: var(--ink);
+      padding: 14px 16px;
       border-radius: 12px;
       overflow-x: auto;
-      font-size: 0.88rem;
+      font-size: 0.86rem;
     }
-    .prose pre code { background: transparent; padding: 0; color: inherit; }
-    .prose strong { color: #111827; }
+    .prose pre code { background: transparent; padding: 0; }
     .prose blockquote {
       margin: 1em 0;
-      padding-left: 1em;
-      border-left: 4px solid var(--brand);
-      color: var(--muted);
+      padding: 0.8em 1em;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--stamp-wash);
+      color: var(--ink-soft);
     }
-    /* DocSpec */
-    .ds-section { margin-bottom: 2rem; }
+    .table-region {
+      max-width: 100%;
+      overflow-x: auto;
+      margin: 0.8em 0;
+      border-radius: 10px;
+    }
+    .prose table {
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      font-variant-numeric: tabular-nums;
+      margin: 0;
+      max-width: 100%;
+    }
+    .prose th, .prose td {
+      border-bottom: 1px solid var(--line);
+      padding: 8px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .prose th {
+      font-size: 13px; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--ink-soft);
+      background: var(--paper-deep);
+      border-bottom: 1.5px solid var(--manila-deep);
+    }
+
+    /* ---------- DocSpec ---------- */
+    .ds-section { margin-bottom: 2.1rem; }
     .ds-section:last-child { margin-bottom: 0; }
     .ds-section h2 {
-      font-size: 1.15rem;
+      display: flex; align-items: baseline; gap: 12px;
       margin: 0 0 12px;
-      color: var(--brand2);
+      font-size: 1rem; font-weight: 700;
+      letter-spacing: .09em; text-transform: uppercase;
+      color: var(--stamp-deep);
     }
-    .ds-kv { display: grid; gap: 8px 20px; grid-template-columns: auto 1fr; font-size: 0.95rem; align-items: baseline; }
-    .ds-kv dt { color: var(--muted); font-weight: 500; }
-    .ds-kv dd { margin: 0; }
+    .ds-section h2::after {
+      content: ""; flex: 1 1 20px; height: 1px;
+      background: var(--line); transform: translateY(-3px);
+    }
+    .ds-kv {
+      display: grid; gap: 8px 20px; grid-template-columns: auto 1fr;
+      font-size: 0.95rem; align-items: baseline; margin: 0;
+    }
+    .ds-kv dt {
+      color: var(--ink-soft); font-weight: 600;
+      font-size: 13px; letter-spacing: .08em; text-transform: uppercase;
+    }
+    .ds-kv dd { margin: 0; font-variant-numeric: tabular-nums; }
     .ds-list { margin: 0; padding-left: 1.25rem; }
     .ds-list li { margin: 0.4em 0; }
+    .ds-list li::marker { color: var(--stamp); }
     table.ds-table {
       width: 100%;
       border-collapse: collapse;
       font-size: 0.9rem;
+      font-variant-numeric: tabular-nums;
     }
     table.ds-table th, table.ds-table td {
-      border: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
       padding: 10px 12px;
       text-align: left;
       vertical-align: top;
     }
-    table.ds-table th { background: #f8fafc; font-weight: 600; }
+    table.ds-table th {
+      font-size: 13px; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--ink-soft);
+      background: var(--paper-deep);
+      border-bottom: 1.5px solid var(--manila-deep);
+    }
+    table.ds-table tr:last-child td { border-bottom: 1px solid var(--manila-deep); }
+
     .unit-card {
       border: 1px solid var(--line);
-      border-radius: 14px;
+      border-radius: var(--radius);
       padding: 16px 18px;
       margin-bottom: 14px;
-      background: #fafbfc;
+      background: var(--paper-deep);
+      box-shadow: 0 1px 2px oklch(0.3 0.02 75 / 0.05);
     }
-    .unit-card h3 { margin: 0 0 10px; font-size: 1.05rem; }
-    .unit-meta { font-size: 0.85rem; color: var(--muted); margin-bottom: 10px; }
+    .unit-card h3 {
+      margin: 0 0 8px; font-size: 1.02rem; font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .unit-card h4 { color: var(--ink-soft); letter-spacing: .06em; text-transform: uppercase; }
+    .unit-meta {
+      font-size: 13px; font-weight: 600; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--ink-soft);
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 10px;
+    }
+    .dl-block { margin: 0; }
     .dl-block dt {
-      font-weight: 600;
-      font-size: 0.82rem;
+      font-weight: 700;
+      font-size: 13px;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
-      color: var(--muted);
+      letter-spacing: .08em;
+      color: var(--ink-soft);
       margin-top: 12px;
     }
     .dl-block dt:first-child { margin-top: 0; }
     .dl-block dd { margin: 4px 0 0; white-space: pre-wrap; }
     .json-snippet {
+      font-family: var(--mono);
       margin: 8px 0 0;
-      padding: 12px;
-      background: #1e293b;
-      color: #cbd5e1;
+      padding: 10px 12px;
+      background: var(--manila);
+      border: 1px solid var(--manila-deep);
+      color: var(--ink);
       border-radius: 10px;
-      font-size: 0.78rem;
+      font-size: 0.8125rem;
       overflow-x: auto;
       white-space: pre-wrap;
       word-break: break-word;
+      font-variant-numeric: tabular-nums;
     }
     .flow-box {
       padding: 14px 16px;
-      background: #f8fafc;
+      background: var(--paper-deep);
       border-radius: 12px;
-      border: 1px solid var(--line);
+      border: 1px dashed var(--manila-deep);
       font-size: 0.95rem;
       line-height: 1.55;
+      white-space: pre-line;
     }
-    /* Mobile */
+
+    /* ---------- responsivo ---------- */
     @media (max-width: 599px) {
-      .wrap { padding: 16px 12px; }
-      header.top { gap: 12px; }
-      .panel { padding: 18px 16px; border-radius: 14px; }
-      .ds-kv { grid-template-columns: 1fr; gap: 4px 0; }
-      .ds-kv dt { margin-top: 8px; }
-      table.ds-table { font-size: 0.82rem; }
+      .wrap { padding: 16px 10px 28px; }
+      header.top { padding: 16px 16px 14px; gap: 12px; }
+      main.panel { padding: 18px 16px 24px; }
+      .nav { margin-left: 0; width: 100%; }
+      .nav .btn { flex: 1 1 auto; }
+      .sheet-tab { margin-left: 10px; padding: 6px 12px 5px; }
+      .ds-kv { grid-template-columns: 1fr; gap: 2px 0; }
+      .ds-kv dt { margin-top: 10px; }
+      table.ds-table { font-size: 0.875rem; }
       table.ds-table th, table.ds-table td { padding: 8px; }
     }
-    /* Interactive whiteboard / large touch */
+
+    /* quadro interativo / toque grande */
+    @media (pointer: coarse) {
+      .skip-link,
+      .btn { min-height: 56px; font-size: 1rem; }
+      .btn { padding: 14px 24px; }
+    }
     @media (min-width: 1200px) and (pointer: coarse) {
-      .btn { min-height: 56px; padding: 14px 22px; font-size: 1rem; }
       .prose { font-size: 1.12rem; }
-      .prose h2 { font-size: 1.5rem; }
+      .prose h2 { font-size: 1.45rem; }
       .unit-card { padding: 20px 24px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
     }
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Saltar para o conteúdo principal</a>
   <div class="wrap">
-    <header class="top">
-      <div>
-        <h1 id="pageTitle">PageCraft</h1>
-        <span id="viewBadge" class="badge"></span>
-      </div>
-      <nav class="nav">
-        <a class="btn secondary" href="./index.html">Catálogo</a>
-        <a id="openActivity" class="btn" href="#" style="display:none">Abrir atividade</a>
-      </nav>
-    </header>
-    <main id="main" class="panel">
-      <p id="loading">A carregar…</p>
-    </main>
+    <div class="sheet-tab">Ficha de requisição</div>
+    <div class="sheet">
+      <header class="top">
+        <div class="head-id">
+          <span class="cap">PageCraft · Ficheiro de atividades</span>
+          <h1 id="pageTitle">PageCraft</h1>
+          <span id="viewBadge" class="badge"></span>
+        </div>
+        <nav class="nav">
+          <a class="btn secondary" href="./index.html">Catálogo</a>
+          <a id="openActivity" class="btn" href="#" style="display:none">Abrir atividade</a>
+        </nav>
+      </header>
+      <main id="main-content" class="panel" tabindex="-1">
+        <p id="loading">A carregar…</p>
+      </main>
+    </div>
   </div>
 
   <script>
@@ -228,6 +427,24 @@
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;');
+    }
+
+    function makeTablesScrollable(root) {
+      const tables = root.querySelectorAll('table');
+      tables.forEach((table, index) => {
+        if (table.parentElement && table.parentElement.classList.contains('table-region')) return;
+        const wrapper = document.createElement('div');
+        const section = table.closest('section, article');
+        const heading = section && section.querySelector('h1, h2, h3, h4');
+        const caption = table.querySelector('caption');
+        const context = (caption && caption.textContent.trim()) || (heading && heading.textContent.trim());
+        wrapper.className = 'table-region';
+        wrapper.tabIndex = 0;
+        wrapper.setAttribute('role', 'region');
+        wrapper.setAttribute('aria-label', context ? 'Tabela — ' + context : 'Tabela ' + (index + 1));
+        table.parentNode.insertBefore(wrapper, table);
+        wrapper.appendChild(table);
+      });
     }
 
     function parseQuery() {
@@ -308,7 +525,7 @@
         if (u.textDescription) unitsHtml += '<p>' + esc(u.textDescription) + '</p>';
         if (u.interaction) unitsHtml += renderInteraction(u.interaction);
         if (u.differentiation) {
-          unitsHtml += '<h4 style="margin:14px 0 6px;font-size:0.95rem">Diferenciação</h4>' + renderDifferentiation(u.differentiation);
+          unitsHtml += '<h4 style="margin:14px 0 6px;font-size:1rem">Diferenciação</h4>' + renderDifferentiation(u.differentiation);
         }
         unitsHtml += '</article>';
       });
@@ -342,7 +559,7 @@
       );
     }
 
-    const main = document.getElementById('main');
+    const main = document.getElementById('main-content');
     const pageTitle = document.getElementById('pageTitle');
     const viewBadge = document.getElementById('viewBadge');
     const openActivity = document.getElementById('openActivity');
@@ -380,14 +597,14 @@
 
         const actUrl = (item && item.url) || './activities/' + slug + '/';
         openActivity.href = actUrl;
-        openActivity.style.display = 'inline-block';
+        openActivity.style.display = 'inline-flex';
 
         const path =
           view === 'teacher' ? './activities/' + slug + '/teacher.md' : './activities/' + slug + '/docspec.json';
 
         try {
           const fr = await fetch(path);
-          if (!fr.ok) throw new Error('Não foi possível carregar o ficheiro (' + fr.status + ').');
+          if (!fr.ok) throw new Error('Não foi possível carregar o ficheiro (' + fr.status + '). Confirme que a atividade existe no catálogo e volte a tentar a partir da página inicial.');
           const payload = view === 'teacher' ? await fr.text() : await fr.json();
           if (view === 'teacher') {
             const html = marked.parse(payload, { breaks: true });
@@ -395,6 +612,7 @@
           } else {
             main.innerHTML = renderDocSpec(payload);
           }
+          makeTablesScrollable(main);
         } catch (e) {
           showError(e.message || 'Erro ao carregar o conteúdo.');
         }

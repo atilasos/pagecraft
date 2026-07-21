@@ -43,6 +43,7 @@ class PromptLibrary:
         ae_excerpt: str,
         ae_citation: str,
         mem_context: str,
+        wiki_topic_context: str = "",
     ) -> tuple[str, str]:
         maker_line = f"Inclui um desafio maker do tipo: {maker}." if maker else "Sem componente maker."
         parts = [
@@ -69,6 +70,12 @@ class PromptLibrary:
             parts.append(
                 "# Princípios e instrumentos MEM (da wiki do professor — fundamenta memAlignment nisto)\n\n"
                 + mem_context
+            )
+        if wiki_topic_context:
+            parts.append(
+                "# Páginas da wiki do professor relacionadas com o tema "
+                "(conhecimento já estabilizado — usa apenas o que for relevante para esta atividade)\n\n"
+                + wiki_topic_context
             )
         return self.identities["architect"], "\n\n---\n\n".join(parts)
 

@@ -28,7 +28,7 @@ A voz é próxima e portuguesa, trata a criança por tu e evita teatralidade vaz
 - Interface punitiva de quiz: vermelho de erro, sons automáticos, mensagens como “Errado”.
 - Paleta semáforo para níveis de dificuldade. Verde, amarelo e vermelho não podem codificar Apoio, Intermédio e Desafio.
 - Páginas dependentes de internet, CDNs, Google Fonts, frameworks ou assets remotos.
-- UI de catálogo “dashboard azul Inter” como identidade principal. Pode existir no catálogo atual, mas não deve governar as atividades infantis.
+- UI de catálogo «dashboard azul Inter» como identidade principal. O catálogo usa a direção aprovada «O Ficheiro da Biblioteca Escolar»: papel, tinta, carimbos e separadores, nunca cromos de SaaS.
 - Glassmorphism decorativo, gradient text, side-stripe borders e modais como primeira solução.
 - Texto pequeno, itálico em corpo, ALL CAPS em instruções, linhas longas e alvos de toque inferiores aos mínimos por idade.
 
@@ -39,6 +39,7 @@ A voz é próxima e portuguesa, trata a criança por tu e evita teatralidade vaz
 3. **Feedback é convite.** O erro é âmbar, concreto e reparável; nunca vermelho, humilhante ou sonoro por defeito.
 4. **Coerência com variação.** O sistema usa uma gramática visual comum, mas cada atividade pode ter uma cor de identidade ligada ao tema.
 5. **Offline é identidade.** Self-contained, sem fontes remotas e sem dependências externas não é só requisito técnico; é uma promessa de fiabilidade para a sala.
+6. **O catálogo é um ficheiro, não uma montra.** Agrupa famílias pedagógicas antes de listar páginas individuais; privilegia pesquisa, filtros e leitura rápida sobre a repetição de cartões. A materialidade de biblioteca escolar dá calor à densidade operacional.
 
 ## Accessibility & Inclusion
 

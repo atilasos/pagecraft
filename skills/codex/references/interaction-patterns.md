@@ -22,9 +22,9 @@ A: "O aluno ajusta o slider para fazer o carro chegar em exactamente 10 segundos
 ```
 
 **Adaptação por idade:**
-- 🟢 Apoio (4-6): range pequeno [1,5], feedback visual exagerado (cores, sons)
-- 🟡 Intermédio (7-8): range médio, label numérico visível
-- 🔴 Desafio (9-10): range largo, cálculo mental envolvido
+- **Broto — Apoio (4–6):** range pequeno [1,5], feedback visual reforçado (cor + texto, com som opcional)
+- **Árvore jovem — Intermédio (7–8):** range médio, label numérico visível
+- **Árvore robusta — Desafio (9–10):** range largo, cálculo mental envolvido
 
 ---
 
@@ -84,10 +84,10 @@ Pergunta integrada no fluxo da exploração.
 
 ```yaml
 S: { var: "resposta", type: "quiz", question: "Quantas patas tem o insecto?", options: [4,6,8], correct: 6 }
-R: "Pergunta aparece após exploração; feedback visual imediato (✓/✗ com cor)"
-T: "Seleccionar opção → feedback instantâneo → explicação breve se errado"
-C: "Insectos têm sempre 6 patas"
-A: "O aluno responde correctamente ou lê a explicação e corrige"
+R: "Pergunta aparece após exploração; feedback imediato com texto e ícone: ✓ «Encontraste» ou ↻ «Quase, tenta novamente»"
+T: "Selecionar opção → celebrar a descoberta ou convidar a tentar novamente → mostrar uma pista breve"
+C: "Insetos têm sempre 6 patas"
+A: "O aluno encontra a resposta ou usa a pista para tentar novamente"
 ```
 
 ---
@@ -117,7 +117,7 @@ Correspondência entre pares (ligar).
 ```yaml
 S: { var: "pares", type: "matching", left: ["🐶","🐱","🐰"], right: ["ladra","mia","salta"], correct: [[0,0],[1,1],[2,2]] }
 R: "Duas colunas; linhas desenhadas quando o aluno liga pares"
-T: "Clicar item esquerdo → clicar item direito → linha aparece; reset se errado"
+T: "Clicar item esquerdo → clicar item direito → linha fica se corresponder; caso contrário, ↻ «Quase, tenta novamente»"
 C: "Cada animal tem um comportamento característico"
 A: "O aluno liga correctamente os 3 pares"
 ```
@@ -148,16 +148,16 @@ Avançar por opções com um único toque grande. Substitui o `dropdown` e o `sl
 
 ```yaml
 S: { var: "estacao", type: "tap-cycle", options: ["Primavera","Verão","Outono","Inverno"], default: "Primavera" }
-R: "Botão grande (≥56px alto) com o nome e um ícone da estação atual; seta visual indica que cicla"
+R: "Botão grande (≥64px alto para 4–5; ≥56px para 6–7) com o nome e um ícone da estação atual; seta visual indica que cicla"
 T: "Tocar botão → próxima opção (com wrap-around) → cena actualiza"
 C: "Cada estação tem características visuais distintas"
 A: "O aluno passa pelas 4 estações e identifica a actual quando pedido"
 ```
 
 **Adaptação por idade:**
-- 🟢 Apoio (4–6): 2–3 opções, ícone + cor de fundo redundantes ao texto.
-- 🟡 Intermédio (7–8): 3–4 opções, ícone + texto.
-- 🔴 Desafio (9–10): tipicamente preferir `dropdown` ou `slider` para escolhas finas.
+- **Broto — Apoio (4–6):** 2–3 opções, ícone + cor de fundo redundantes ao texto.
+- **Árvore jovem — Intermédio (7–8):** 3–4 opções, ícone + texto.
+- **Árvore robusta — Desafio (9–10):** tipicamente preferir `dropdown` ou `slider` para escolhas finas.
 
 **Acessibilidade:** `aria-label="Mudar estação. Atual: <valor>"`. Anunciar mudança em `aria-live="polite"`.
 
@@ -178,9 +178,9 @@ A: "O aluno coloca os 3 alimentos nas categorias certas"
 ```
 
 **Adaptação por idade:**
-- 🟢 Apoio (4–6): 2 categorias, ícones grandes, feedback sonoro/visual em cada acerto.
-- 🟡 Intermédio (7–8): 3 categorias.
-- 🔴 Desafio (9–10): também aceitar `drag` real como alternativa.
+- **Broto — Apoio (4–6):** 2 categorias, ícones grandes, feedback visual e som opcional em cada descoberta.
+- **Árvore jovem — Intermédio (7–8):** 3 categorias.
+- **Árvore robusta — Desafio (9–10):** também aceitar `drag` real como alternativa.
 
 **Acessibilidade:** após seleção do source, focar primeira caixa; navegação por setas; `Enter` confirma. `aria-live` anuncia "X colocado em Y".
 
@@ -194,7 +194,7 @@ Instrução ou questão entregue por áudio antes de qualquer leitura. Para pré
 
 ```yaml
 S: { var: "resposta", type: "audio-quiz", audioRef: "audio:pergunta1", options: ["🐶","🐱","🐰"], correct: 1 }
-R: "Botão grande 🔊 'Ouvir pergunta' (≥56px); opções como cards grandes com emoji semântico"
+R: "Botão grande 🔊 'Ouvir pergunta' (≥64px para 4–5; ≥56px para 6–7); opções como cards grandes com emoji semântico"
 T: "Tocar 🔊 → áudio toca → tocar opção → feedback visual + áudio curto de confirmação"
 C: "O aluno consegue responder mesmo sem ler"
 A: "O aluno acerta sem suporte textual"

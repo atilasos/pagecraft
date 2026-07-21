@@ -3,373 +3,966 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
   <title>Método das 28 Palavras — PageCraft</title>
   <style>
     :root {
-      --bg: #faf5ff;
-      --card: #fff;
-      --text: #1e1b4b;
-      --muted: #6b7280;
-      --line: #e9e5f5;
-      --brand: #7c3aed;
-      --brand-light: #ede9fe;
-      --brand-dark: #5b21b6;
-      --student: #059669;
-      --student-bg: #ecfdf5;
-      --teacher: #7c3aed;
-      --teacher-bg: #f5f3ff;
-      --disabled: #d1d5db;
-      --disabled-bg: #f3f4f6;
-      --shadow: 0 4px 20px rgba(91, 33, 182, 0.08);
-      --radius: 16px;
+      --desk: oklch(0.935 0.022 88);
+      --paper: oklch(0.985 0.008 95);
+      --paper-deep: oklch(0.965 0.012 92);
+      --ink: oklch(0.25 0.02 75);
+      --ink-soft: oklch(0.46 0.018 75);
+      --line: oklch(0.875 0.018 85);
+      --stamp: oklch(0.46 0.085 195);
+      --stamp-deep: oklch(0.40 0.085 195);
+      --stamp-wash: oklch(0.46 0.085 195 / 0.1);
+      --manila: oklch(0.93 0.045 90);
+      --manila-deep: oklch(0.885 0.055 88);
+      --manila-faded: oklch(0.95 0.025 90);
+      --hole-shadow: oklch(0.30 0.02 75 / 0.22);
+      --desk-shadow: oklch(0.30 0.02 75 / 0.1);
+      --paper-glow: oklch(1 0 0 / 0.5);
       --touch: 48px;
-    }
-    * { box-sizing: border-box; margin: 0; }
-    body {
-      font-family: "Inter", system-ui, -apple-system, sans-serif;
-      background: linear-gradient(180deg, #ede9fe 0%, var(--bg) 28%);
-      color: var(--text);
-      min-height: 100vh;
-    }
-    .wrap {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 24px 20px 48px;
+      --radius: 14px;
+      --font: Lexend, "Atkinson Hyperlegible", system-ui, sans-serif;
     }
 
-    /* Header */
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
     }
-    .back {
+
+    * {
+      margin: 0;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      background:
+        linear-gradient(90deg, transparent 49.8%, oklch(0.86 0.025 87 / 0.28) 50%, transparent 50.2%),
+        var(--desk);
+      color: var(--ink);
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.45;
+    }
+
+    a,
+    summary {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    a {
+      color: var(--stamp-deep);
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--stamp);
+      outline-offset: 3px;
+      border-radius: 7px;
+    }
+
+    .skip-link {
+      position: fixed;
+      top: 8px;
+      left: 8px;
+      z-index: 1000;
+      min-height: 44px;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      padding: 8px 12px;
+      border: 1px solid var(--stamp-deep);
+      border-radius: 10px;
+      background: var(--paper);
+      color: var(--stamp-deep);
+      font-size: 0.875rem;
+      font-weight: 700;
       text-decoration: none;
-      color: var(--brand);
-      font-weight: 600;
-      font-size: 0.92rem;
-      padding: 10px 16px;
-      border-radius: 12px;
-      background: var(--brand-light);
-      min-height: var(--touch);
-      transition: background 0.15s;
-    }
-    .back:hover { background: #ddd6fe; }
-    .header h1 {
-      font-size: clamp(1.4rem, 3.5vw, 2rem);
-      letter-spacing: -0.02em;
-      flex: 1;
+      transform: translateY(calc(-100% - 16px));
     }
 
-    /* Progress */
-    .progress-wrap {
-      margin-bottom: 28px;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 16px 20px;
-      box-shadow: var(--shadow);
+    .skip-link:focus {
+      transform: translateY(0);
     }
-    .progress-info {
+
+    .topbar {
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 1px 0 var(--paper-glow);
+    }
+
+    .topbar-inner {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      padding: 16px clamp(14px, 4vw, 40px);
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
-      font-size: 0.92rem;
-      color: var(--muted);
-    }
-    .progress-info strong { color: var(--text); }
-    .progress-bar {
-      height: 8px;
-      background: var(--line);
-      border-radius: 999px;
-      overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--brand), #a78bfa);
-      border-radius: 999px;
-      transition: width 0.4s ease;
+      gap: 18px;
     }
 
-    /* Grid */
-    .grid {
+    .back-link {
+      min-height: var(--touch);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--paper-deep);
+      color: var(--stamp-deep);
+      font-size: 0.88rem;
+      font-weight: 650;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .back-link:hover {
+      border-color: var(--stamp);
+      background: var(--stamp-wash);
+    }
+
+    .back-arrow {
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .title-group {
+      min-width: 0;
+    }
+
+    .eyebrow,
+    .drawer-kicker,
+    .card-meta,
+    .variant-label {
+      color: var(--ink-soft);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin-top: 2px;
+      font-size: clamp(1.45rem, 4vw, 2rem);
+      font-weight: 750;
+      letter-spacing: -0.035em;
+      line-height: 1.08;
+    }
+
+    main {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      padding: 24px clamp(14px, 4vw, 40px) 44px;
+    }
+
+    .method-intro {
+      position: relative;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 16px;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px 28px;
+      align-items: center;
+      margin-bottom: 26px;
+      padding: 22px 24px;
+      border: 1px solid var(--manila-deep);
+      border-radius: 14px;
+      background: var(--manila);
+      box-shadow: 0 4px 12px var(--desk-shadow);
     }
 
-    /* Card */
+    .method-intro::before {
+      content: "";
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      width: 90px;
+      height: 11px;
+      border: 1.5px solid var(--ink-soft);
+      border-radius: 5px;
+      background: var(--paper);
+      transform: translateX(-50%);
+    }
+
+    .intro-copy {
+      padding-top: 7px;
+    }
+
+    .intro-copy h2 {
+      margin-top: 4px;
+      font-size: clamp(1.1rem, 2.5vw, 1.38rem);
+      letter-spacing: -0.02em;
+    }
+
+    .intro-copy p:last-child {
+      max-width: 64ch;
+      margin-top: 5px;
+      color: var(--ink-soft);
+    }
+
+    .stamp {
+      width: 78px;
+      height: 78px;
+      border: 2px solid var(--stamp);
+      border-radius: 50%;
+      color: var(--stamp);
+      display: grid;
+      place-items: center;
+      align-content: center;
+      gap: 2px;
+      position: relative;
+      text-align: center;
+      text-transform: uppercase;
+      transform: rotate(-5deg);
+      opacity: 0.86;
+      user-select: none;
+    }
+
+    .stamp::before {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      border: 1px solid var(--stamp);
+      border-radius: 50%;
+      opacity: 0.7;
+    }
+
+    .stamp-small {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+    }
+
+    .stamp-year {
+      font-size: 0.88rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      line-height: 1;
+    }
+
+    .availability {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: auto minmax(120px, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding-top: 14px;
+      border-top: 1px solid var(--manila-deep);
+      color: var(--ink-soft);
+      font-size: 0.82rem;
+    }
+
+    .availability strong {
+      color: var(--ink);
+    }
+
+    .progress-track {
+      height: 9px;
+      overflow: hidden;
+      border: 1px solid var(--manila-deep);
+      border-radius: 999px;
+      background: var(--paper-deep);
+    }
+
+    .progress-fill {
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--stamp);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 300ms ease;
+    }
+
+    .progress-percent {
+      min-width: 3.2em;
+      color: var(--stamp-deep);
+      font-variant-numeric: tabular-nums;
+      font-weight: 750;
+      text-align: right;
+    }
+
+    .drawer-section {
+      position: relative;
+      padding-top: 31px;
+    }
+
+    .drawer-tab {
+      position: absolute;
+      top: 0;
+      left: 14px;
+      min-height: 32px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 15px 7px;
+      border: 1px solid var(--manila-deep);
+      border-bottom: 0;
+      border-radius: 10px 10px 0 0;
+      background: var(--manila);
+    }
+
+    .drawer-tab h2 {
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .drawer-tab span {
+      color: var(--ink-soft);
+      font-size: 0.8125rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .drawer-body {
+      padding: 18px;
+      border: 1px solid var(--manila-deep);
+      border-radius: 0 14px 14px 14px;
+      background: oklch(0.915 0.035 88);
+      box-shadow: inset 0 2px 5px var(--desk-shadow), 0 5px 14px var(--desk-shadow);
+    }
+
+    .word-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 13px;
+      list-style: none;
+      padding: 0;
+    }
+
     .word-card {
-      background: var(--card);
-      border: 2px solid var(--line);
-      border-radius: var(--radius);
-      padding: 20px 16px;
+      min-width: 0;
+      position: relative;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      text-align: center;
-      transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
-      box-shadow: var(--shadow);
+      padding: 15px 14px 14px 40px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: 0 1px 3px var(--desk-shadow);
     }
+
+    .word-card::before,
+    .word-card::after {
+      content: "";
+      position: absolute;
+      left: 13px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--desk);
+      box-shadow: inset 0 1.5px 2.5px var(--hole-shadow);
+    }
+
+    .word-card::before {
+      top: 17px;
+    }
+
+    .word-card::after {
+      top: 43px;
+    }
+
+    .word-card.available {
+      border-top-color: var(--stamp);
+    }
+
     .word-card.available:hover {
-      border-color: var(--brand);
-      box-shadow: 0 8px 30px rgba(91, 33, 182, 0.14);
+      border-color: var(--stamp);
+      box-shadow: 0 5px 13px var(--desk-shadow);
       transform: translateY(-2px);
     }
-    .word-card.disabled {
-      background: var(--disabled-bg);
-      border-color: var(--disabled);
-      opacity: 0.55;
+
+    .word-card.unavailable,
+    .word-card.loading {
+      border-color: var(--manila-deep);
+      background: var(--manila-faded);
+      box-shadow: none;
     }
-    .word-num {
+
+    .card-heading {
+      display: flex;
+      align-items: baseline;
+      gap: 9px;
+      min-width: 0;
+      padding-bottom: 11px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .word-number {
+      color: var(--stamp-deep);
+      font-size: 0.8125rem;
+      font-variant-numeric: tabular-nums;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .unavailable .word-number,
+    .loading .word-number {
+      color: var(--ink-soft);
+    }
+
+    .word-name {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      font-size: 1.08rem;
+      font-weight: 750;
+      letter-spacing: -0.018em;
+      line-height: 1.18;
+    }
+
+    .card-meta {
+      margin: 9px 0 11px;
+      font-size: 0.8125rem;
+      line-height: 1.35;
+    }
+
+    .card-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+      margin-top: auto;
+    }
+
+    .action-main,
+    .action-secondary,
+    .variant-link {
+      min-height: var(--touch);
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: var(--brand-light);
-      color: var(--brand);
-      font-weight: 700;
-      font-size: 0.95rem;
-      margin-bottom: 10px;
-    }
-    .disabled .word-num {
-      background: #e5e7eb;
-      color: var(--disabled);
-    }
-    .word-name {
-      font-size: clamp(1.3rem, 2.5vw, 1.6rem);
-      font-weight: 700;
-      margin-bottom: 14px;
-      line-height: 1.2;
-    }
-    .disabled .word-name { color: var(--disabled); }
-
-    .word-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      width: 100%;
-      margin-top: auto;
-    }
-    .btn-open {
-      display: block;
-      text-decoration: none;
-      padding: 12px 16px;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      text-align: center;
-      background: var(--student);
-      color: #fff;
-      min-height: var(--touch);
-      transition: filter 0.15s, transform 0.1s;
-    }
-    .btn-open:hover { filter: brightness(1.08); }
-    .btn-open:active { transform: scale(0.97); }
-    .teacher-links {
-      display: flex;
-      gap: 6px;
-    }
-    .btn-sm {
-      flex: 1;
-      display: block;
-      text-decoration: none;
-      padding: 8px 10px;
       border-radius: 10px;
-      font-size: 0.78rem;
-      font-weight: 600;
+      font-weight: 700;
       text-align: center;
-      min-height: 36px;
-      line-height: 1.4;
-      transition: background 0.15s;
+      text-decoration: none;
     }
-    .btn-teacher {
-      background: var(--teacher-bg);
-      color: var(--teacher);
-    }
-    .btn-teacher:hover { background: #ede9fe; }
-    .btn-spec {
-      background: #f8fafc;
-      color: var(--muted);
-      border: 1px solid var(--line);
-    }
-    .btn-spec:hover { background: #f1f5f9; }
 
+    .action-main {
+      grid-column: 1 / -1;
+      padding: 8px 13px;
+      border: 1px solid var(--stamp-deep);
+      background: var(--stamp);
+      color: var(--paper);
+      font-size: 0.88rem;
+    }
+
+    .action-main:hover {
+      background: var(--stamp-deep);
+    }
+
+    .action-secondary {
+      padding: 7px 9px;
+      border: 1px solid var(--line);
+      background: var(--paper-deep);
+      color: var(--stamp-deep);
+      font-size: 0.875rem;
+      text-decoration: underline;
+      text-decoration-color: oklch(0.46 0.085 195 / 0.4);
+      text-underline-offset: 3px;
+    }
+
+    .action-secondary:hover,
+    .variant-link:hover,
+    .variants summary:hover {
+      border-color: var(--stamp);
+      background: var(--stamp-wash);
+    }
+
+    .variants {
+      margin-top: 9px;
+      border-top: 1px dashed var(--line);
+    }
+
+    .variants summary {
+      min-height: var(--touch);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 4px;
+      padding: 7px 8px;
+      border-radius: 10px;
+      color: var(--stamp-deep);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 750;
+      list-style: none;
+    }
+
+    .variants summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .variants summary::before {
+      content: "▸";
+      font-size: 0.75rem;
+      transition: transform 150ms ease;
+    }
+
+    .variants[open] summary::before {
+      transform: rotate(90deg);
+    }
 
     .variant-list {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-top: 4px;
+      display: grid;
+      gap: 7px;
+      padding: 2px 0 0;
+      list-style: none;
     }
-    .variant-link {
-      display: block;
-      text-decoration: none;
-      padding: 9px 10px;
+
+    .variant-item {
+      padding: 10px;
+      border: 1px dashed var(--stamp);
       border-radius: 10px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--brand-dark);
-      background: var(--brand-light);
-      border: 1px solid #ddd6fe;
-      min-height: 40px;
-    }
-    .variant-link:hover { background: #ddd6fe; }
-    .variant-label {
-      font-size: 0.72rem;
-      color: var(--muted);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-      margin-top: 4px;
+      background: var(--paper-deep);
     }
 
-    .disabled .word-actions { display: none; }
-    .disabled-label {
-      font-size: 0.82rem;
-      color: var(--disabled);
-      font-style: italic;
+    .variant-title {
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .variant-meta {
+      margin-top: 3px;
+      color: var(--ink-soft);
+      font-size: 0.8125rem;
+      font-weight: 650;
+    }
+
+    .variant-actions {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .variant-link {
+      padding: 7px 8px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--stamp-deep);
+      font-size: 0.875rem;
+      line-height: 1.25;
+    }
+
+    .variant-link:first-child {
+      border-color: var(--stamp-deep);
+      background: var(--stamp);
+      color: var(--paper);
+    }
+
+    .variant-link:first-child:hover {
+      background: var(--stamp-deep);
+    }
+
+    .pending-message {
+      min-height: var(--touch);
+      display: flex;
+      align-items: center;
       margin-top: auto;
+      padding-top: 14px;
+      color: var(--ink-soft);
+      font-size: 0.82rem;
+      font-style: normal;
+      font-weight: 650;
     }
 
-    /* Responsive: Tablet portrait */
-    @media (max-width: 899px) {
-      .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
-      .word-card { padding: 16px 12px; }
+    .load-error {
+      margin: 0 0 14px;
+      padding: 12px 14px;
+      border: 1px dashed var(--stamp);
+      border-radius: 10px;
+      background: var(--paper);
+      color: var(--ink-soft);
+      text-align: center;
     }
-    /* Mobile */
-    @media (max-width: 599px) {
-      .wrap { padding: 16px 12px 36px; }
-      .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-      .word-card { padding: 14px 10px; }
-      .word-name { font-size: 1.15rem; }
-      .btn-open { padding: 10px 12px; font-size: 0.88rem; }
-      .teacher-links { flex-direction: column; }
-      .header { gap: 10px; }
+
+    .page-footer {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      padding: 0 clamp(14px, 4vw, 40px) 28px;
+      color: var(--ink-soft);
+      font-size: 0.75rem;
+      text-align: center;
     }
-    /* Interactive whiteboard / large touch */
-    @media (min-width: 1200px) and (pointer: coarse) {
-      .grid { grid-template-columns: repeat(5, 1fr); gap: 20px; }
-      .word-card { padding: 28px 20px; }
-      .word-name { font-size: 1.8rem; }
-      .btn-open { padding: 16px 20px; font-size: 1.1rem; min-height: 56px; }
-      .back { padding: 14px 22px; font-size: 1rem; }
+
+    [hidden] {
+      display: none !important;
     }
-    /* Large desktop */
-    @media (min-width: 1200px) and (pointer: fine) {
-      .grid { grid-template-columns: repeat(5, 1fr); }
+
+    @media (max-width: 960px) {
+      .word-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .word-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 520px) {
+      .topbar-inner {
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .back-link {
+        width: var(--touch);
+        flex: 0 0 var(--touch);
+        justify-content: center;
+        padding: 0;
+      }
+
+      .back-label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
+      main {
+        padding-top: 16px;
+      }
+
+      .method-intro {
+        grid-template-columns: minmax(0, 1fr) 66px;
+        gap: 14px;
+        padding: 19px 15px 16px;
+      }
+
+      .method-intro::before {
+        left: 58%;
+        width: 70px;
+      }
+
+      .stamp {
+        width: 64px;
+        height: 64px;
+      }
+
+      .stamp-year {
+        font-size: 0.76rem;
+      }
+
+      .availability {
+        grid-template-columns: 1fr auto;
+      }
+
+      .progress-track {
+        grid-column: 1 / -1;
+        grid-row: 2;
+      }
+
+      .word-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .drawer-body {
+        padding: 10px;
+      }
+
+      .word-card {
+        padding-right: 12px;
+      }
+    }
+
+    @media (pointer: coarse) {
+      :root {
+        --touch: 56px;
+      }
+
+      .skip-link,
+      .back-link,
+      .action-main,
+      .action-secondary,
+      .variant-link,
+      .variants summary {
+        min-height: 56px;
+        font-size: 1rem;
+      }
+    }
+
+    @media (min-width: 1180px) and (pointer: coarse) {
+      .word-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .word-card {
+        padding-top: 19px;
+        padding-bottom: 18px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="header">
-      <a class="back" href="./index.html">&#8592; Catálogo</a>
-      <h1>Método das 28 Palavras</h1>
-    </div>
-
-    <div class="progress-wrap">
-      <div class="progress-info">
-        <span><strong id="countAvail">0</strong> de 28 palavras disponíveis</span>
-        <span id="percent">0%</span>
-      </div>
-      <div class="progress-bar">
-        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+  <a class="skip-link" href="#main-content">Saltar para o conteúdo principal</a>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="back-link" href="./index.html" aria-label="Voltar ao catálogo">
+        <span class="back-arrow" aria-hidden="true">←</span>
+        <span class="back-label">Catálogo</span>
+      </a>
+      <div class="title-group">
+        <p class="eyebrow">PageCraft · Ficheiro da biblioteca</p>
+        <h1>Método das 28 Palavras</h1>
       </div>
     </div>
+  </header>
 
-    <section id="grid" class="grid"></section>
-  </div>
+  <main id="main-content" tabindex="-1">
+    <section class="method-intro" aria-labelledby="intro-title">
+      <div class="intro-copy">
+        <p class="drawer-kicker">Gaveta de leitura e escrita</p>
+        <h2 id="intro-title">Uma palavra de cada vez</h2>
+        <p>Abre a ficha principal, consulta o guia ou explora as páginas variantes de cada palavra.</p>
+      </div>
+      <div class="stamp" role="img" aria-label="Carimbo: primeiro ano">
+        <span class="stamp-small">Método</span>
+        <span class="stamp-year">1.º ano</span>
+      </div>
+      <div class="availability" aria-live="polite">
+        <span><strong id="countAvail">—</strong> de 28 palavras disponíveis</span>
+        <div
+          class="progress-track"
+          id="progressTrack"
+          role="progressbar"
+          aria-label="Palavras disponíveis"
+          aria-valuemin="0"
+          aria-valuemax="28"
+          aria-valuenow="0"
+        >
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <span class="progress-percent" id="percent">—</span>
+      </div>
+    </section>
+
+    <p class="load-error" id="loadError" role="alert" hidden>Não foi possível consultar o ficheiro agora. Tenta novamente dentro de momentos.</p>
+
+    <section class="drawer-section" aria-labelledby="drawer-title">
+      <div class="drawer-tab">
+        <h2 id="drawer-title">Fichas do método</h2>
+        <span>1–28</span>
+      </div>
+      <div class="drawer-body">
+        <ol class="word-grid" id="grid" aria-busy="true"></ol>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-footer">PageCraft — oficina de atividades do 1.º ciclo</footer>
 
   <script>
-    const ALL_WORDS = [
-      'Menina', 'Menino', 'Uva', 'Dedo', 'Sapato', 'Bota', 'Leque',
-      'Casa', 'Janela', 'Telhado', 'Escada', 'Chave', 'Galinha', 'Ovo',
-      'Rato', 'Cenoura', 'Girafa', 'Palhaço', 'Zebra', 'Bandeira',
-      'Funil', 'Árvore', 'Quadro', 'Passarinho', 'Peixe',
-      'Cigarra', 'Fogueira', 'Flor'
-    ];
+    (function () {
+      'use strict';
 
-    const grid = document.getElementById('grid');
-    const countEl = document.getElementById('countAvail');
-    const percentEl = document.getElementById('percent');
-    const fillEl = document.getElementById('progressFill');
+      const ALL_WORDS = [
+        'Menina', 'Menino', 'Uva', 'Dedo', 'Sapato', 'Bota', 'Leque',
+        'Casa', 'Janela', 'Telhado', 'Escada', 'Chave', 'Galinha', 'Ovo',
+        'Rato', 'Cenoura', 'Girafa', 'Palhaço', 'Zebra', 'Bandeira',
+        'Funil', 'Árvore', 'Quadro', 'Passarinho', 'Peixe',
+        'Cigarra', 'Fogueira', 'Flor'
+      ];
 
-    function esc(s) {
-      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-    }
+      function slugifyWord(value) {
+        return String(value || '')
+          .normalize('NFD')
+          .replace(/[̀-ͯ]/g, '')
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-|-$/g, '');
+      }
 
-    function viewerUrl(slug, view) {
-      return './viewer.html?slug=' + encodeURIComponent(slug) + '&view=' + encodeURIComponent(view);
-    }
+      const WORD_ORDERS = new Map(ALL_WORDS.map(function (word, index) {
+        return [slugifyWord(word), index + 1];
+      }));
 
-    fetch('./catalog.json')
-      .then(r => r.json())
-      .then(data => {
-        const m28p = {};
-        (data.items || []).forEach(it => {
-          if (it.order && (it.tags || []).some(t => t.toLowerCase() === 'm28p')) {
-            if (!m28p[it.order]) m28p[it.order] = [];
-            m28p[it.order].push(it);
-          }
+      const grid = document.getElementById('grid');
+      const countEl = document.getElementById('countAvail');
+      const percentEl = document.getElementById('percent');
+      const fillEl = document.getElementById('progressFill');
+      const progressEl = document.getElementById('progressTrack');
+      const errorEl = document.getElementById('loadError');
+
+      function esc(value) {
+        return String(value).replace(/[&<>\"]/g, function (character) {
+          return {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '\"': '&quot;'
+          }[character];
         });
-        Object.values(m28p).forEach(list => list.sort((a, b) => (a.variantIndex || 0) - (b.variantIndex || 0) || a.slug.localeCompare(b.slug)));
+      }
 
-        const available = Object.keys(m28p).length;
-        countEl.textContent = available;
-        const pct = Math.min(100, Math.round((available / 28) * 100));
-        percentEl.textContent = pct + '%';
-        fillEl.style.width = pct + '%';
+      function viewerUrl(slug, view) {
+        return './viewer.html?slug=' + encodeURIComponent(slug) + '&view=' + encodeURIComponent(view);
+      }
 
-        grid.innerHTML = ALL_WORDS.map((word, i) => {
-          const num = i + 1;
-          const list = m28p[num] || [];
-          const it = list.find(x => !x.variantOf) || list[0];
-          const variants = list.filter(x => x.slug !== it.slug);
-          if (it) {
-            const variantLinks = variants.length ? (
-              '<div class="variant-label">Mais páginas</div>' +
-              '<div class="variant-list">' + variants.map(v =>
-                '<a class="variant-link" href="' + esc(v.url) + '">' + esc(v.variantTitle || v.title.split('·').pop().trim()) + '</a>'
-              ).join('') + '</div>'
-            ) : '';
-            return (
-              '<article class="word-card available">' +
-              '<span class="word-num">' + num + '</span>' +
-              '<span class="word-name">' + esc(word) + '</span>' +
-              '<div class="word-actions">' +
-              '<a class="btn-open" href="' + esc(it.url) + '">Abrir principal</a>' +
-              '<div class="teacher-links">' +
-              '<a class="btn-sm btn-teacher" href="' + esc(viewerUrl(it.slug, 'teacher')) + '">Guia</a>' +
-              '<a class="btn-sm btn-spec" href="' + esc(viewerUrl(it.slug, 'docspec')) + '">DocSpec</a>' +
+      function variantName(item) {
+        if (item.variantTitle) return item.variantTitle;
+        const tags = (item.tags || []).map(slugifyWord);
+        if (tags.includes('mundo-de-blocos')) return 'Mundo de blocos';
+        if (tags.includes('sessao-30min')) return 'Sessão de 30 min';
+        const parts = String(item.title || item.slug).split('·');
+        return parts[parts.length - 1].trim();
+      }
+
+      function variantListHtml(variants) {
+        if (!variants.length) return '';
+
+        const label = variants.length === 1 ? '1 variante' : variants.length + ' variantes';
+        return (
+          '<details class="variants">' +
+            '<summary>' + esc(label) + '</summary>' +
+            '<ul class="variant-list">' +
+              variants.map(function (variant) {
+                const age = variant.ageRange || variant.year || 'Faixa etária ajustável';
+                const duration = variant.duration ? variant.duration + ' min' : 'Duração ajustável';
+                return (
+                  '<li class="variant-item">' +
+                    '<div class="variant-title">' + esc(variantName(variant)) + '</div>' +
+                    '<div class="variant-meta">' + esc(age) + ' · ' + esc(duration) + '</div>' +
+                    '<div class="variant-actions">' +
+                      '<a class="variant-link" href="' + esc(variant.url) + '">Abrir</a>' +
+                      '<a class="variant-link" href="' + esc(viewerUrl(variant.slug, 'teacher')) + '">Guia</a>' +
+                      '<a class="variant-link" href="' + esc(viewerUrl(variant.slug, 'docspec')) + '">DocSpec</a>' +
+                    '</div>' +
+                  '</li>'
+                );
+              }).join('') +
+            '</ul>' +
+          '</details>'
+        );
+      }
+
+      function cardHtml(word, index, groups, state) {
+        const number = index + 1;
+        const items = groups[number] || [];
+        const canonicalSlug = slugifyWord(word);
+        const primary = items.find(function (item) { return item.slug === canonicalSlug; }) ||
+          items.find(function (item) { return !item.variantOf; }) || items[0];
+        const numberLabel = String(number).padStart(2, '0');
+
+        if (primary) {
+          const variants = items.filter(function (item) { return item.slug !== primary.slug; });
+          return (
+            '<li class="word-card available">' +
+              '<div class="card-heading">' +
+                '<span class="word-number" aria-label="Palavra ' + number + '">N.º ' + numberLabel + '</span>' +
+                '<h3 class="word-name">' + esc(word) + '</h3>' +
               '</div>' +
-              variantLinks +
+              '<p class="card-meta">Palavra ' + number + ' de 28 · 1.º ano</p>' +
+              '<div class="card-actions">' +
+                '<a class="action-main" href="' + esc(primary.url) + '">Abrir principal</a>' +
+                '<a class="action-secondary" href="' + esc(viewerUrl(primary.slug, 'teacher')) + '">Guia</a>' +
+                '<a class="action-secondary" href="' + esc(viewerUrl(primary.slug, 'docspec')) + '">DocSpec</a>' +
               '</div>' +
-              '</article>'
-            );
-          } else {
-            return (
-              '<article class="word-card disabled">' +
-              '<span class="word-num">' + num + '</span>' +
-              '<span class="word-name">' + esc(word) + '</span>' +
-              '<span class="disabled-label">Em breve</span>' +
-              '</article>'
-            );
-          }
+              variantListHtml(variants) +
+            '</li>'
+          );
+        }
+
+        const isLoading = state === 'loading';
+        const stateClass = isLoading ? 'loading' : 'unavailable';
+        const message = isLoading
+          ? 'A consultar o ficheiro…'
+          : (state === 'error' ? 'Esta ficha não está disponível agora.' : 'Esta ficha chega em breve.');
+        return (
+          '<li class="word-card ' + stateClass + '" aria-disabled="true">' +
+            '<div class="card-heading">' +
+              '<span class="word-number" aria-label="Palavra ' + number + '">N.º ' + numberLabel + '</span>' +
+              '<h3 class="word-name">' + esc(word) + '</h3>' +
+            '</div>' +
+            '<p class="card-meta">Palavra ' + number + ' de 28 · 1.º ano</p>' +
+            '<p class="pending-message">' + message + '</p>' +
+          '</li>'
+        );
+      }
+
+      function render(groups, state) {
+        grid.innerHTML = ALL_WORDS.map(function (word, index) {
+          return cardHtml(word, index, groups, state);
         }).join('');
-      })
-      .catch(() => {
-        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--muted)">Não foi possível carregar as palavras.</div>';
-      });
+      }
+
+      function updateProgress(available) {
+        const percent = Math.min(100, Math.round((available / ALL_WORDS.length) * 100));
+        countEl.textContent = available;
+        percentEl.textContent = percent + '%';
+        fillEl.style.transform = 'scaleX(' + (percent / 100) + ')';
+        progressEl.setAttribute('aria-valuenow', String(available));
+        progressEl.setAttribute('aria-valuetext', available + ' de 28 palavras disponíveis');
+      }
+
+      render({}, 'loading');
+
+      fetch('./catalog.json')
+        .then(function (response) {
+          if (!response.ok) throw new Error('Falha ao carregar o catálogo');
+          return response.json();
+        })
+        .then(function (data) {
+          const groups = {};
+          const items = Array.isArray(data.items) ? data.items : [];
+
+          items.forEach(function (item) {
+            let order = Number(item.order);
+            const tags = (item.tags || []).map(slugifyWord);
+            const isM28p = tags.includes('m28p');
+
+            if (!isM28p) return;
+            if (!Number.isInteger(order) || order < 1 || order > 28) {
+              const legacySlug = slugifyWord(item.slug).replace(/^m28p-/, '');
+              const matchedWord = Array.from(WORD_ORDERS.keys()).find(function (wordSlug) {
+                return tags.includes(wordSlug) || legacySlug === wordSlug || legacySlug.startsWith(wordSlug + '-');
+              });
+              order = matchedWord ? WORD_ORDERS.get(matchedWord) : NaN;
+            }
+            if (!Number.isInteger(order) || order < 1 || order > 28) return;
+            if (!groups[order]) groups[order] = [];
+            groups[order].push(item);
+          });
+
+          Object.keys(groups).forEach(function (order) {
+            groups[order].sort(function (a, b) {
+              return (Number(a.variantIndex) || 0) - (Number(b.variantIndex) || 0) ||
+                String(a.slug).localeCompare(String(b.slug), 'pt');
+            });
+          });
+
+          updateProgress(Object.keys(groups).length);
+          render(groups, 'ready');
+          grid.setAttribute('aria-busy', 'false');
+        })
+        .catch(function () {
+          updateProgress(0);
+          render({}, 'error');
+          errorEl.hidden = false;
+          grid.setAttribute('aria-busy', 'false');
+        });
+    }());
   </script>
 </body>
 </html>

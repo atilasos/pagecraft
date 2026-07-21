@@ -109,6 +109,8 @@ PageCraft deve parecer uma atividade pousada na mesa da sala: limpa, táctil, pr
 
 O sistema visual é de produto, não de campanha. A identidade não deve competir com o objetivo pedagógico. Cada atividade pode ter uma cor de tema, mas a gramática mantém-se: fundo claro tintado, superfície quase branca tintada, tinta escura azulada, foco azul, sucesso verde funcional e tentativa âmbar. A variação vive no `primary` e no `accent`, nunca em padrões aleatórios.
 
+**Direção do catálogo: «O Ficheiro da Biblioteca Escolar».** O catálogo público e as páginas de apoio do professor usam a materialidade de um ficheiro escolar: papel branco-quente, tinta quase preta, um único acento verde-azulado de carimbo, separadores manila, fichas com furos de arquivo e dados em numerais tabulares. Esta gramática dá densidade e velocidade ao professor sem regressar ao dashboard SaaS; as atividades infantis continuam a seguir «O Tapete de Exploração da Sala».
+
 Rejeita explicitamente SaaS educativo genérico, paleta semáforo para níveis de dificuldade, vermelho de erro, fontes remotas, glassmorphism decorativo, gradient text, side-stripe borders e modais como primeira solução. Se a interface parece uma landing page de IA com cartões repetidos, falhou.
 
 **Key Characteristics:**
@@ -166,7 +168,8 @@ A tipografia privilegia leitores em formação. A pilha normativa é `Atkinson H
 - **Body**: corpo base para 8–10 anos (`20px`, linha 1.55).
 - **Young Body**: corpo para 6–7 anos (`22px`, linha 1.6).
 - **Pre-reader Body**: corpo para 4–5 anos (`24px`, com instruções em canais redundantes).
-- **Microcopy**: nunca abaixo de `16px`; microcopy crítico deve manter contraste AAA.
+- **Microcopy infantil**: nunca abaixo de `16px`; microcopy crítico deve manter contraste AAA.
+- **Shell do professor**: corpo base de `16px`, ações de `14–16px`, metadados funcionais de `13px` e small caps decorativas de `12px` no mínimo. Esta escala adulta só se aplica ao catálogo, viewer e Studio; quando projetados ou usados com apontador coarse, ações sobem para `16px` e alvos para `56px`.
 
 ### Rules
 
@@ -203,7 +206,7 @@ A elevação PageCraft é baixa, estrutural e tátil. Cards e zonas interativas 
 
 ### Cards / Containers
 
-- **Corner Style:** raio principal `14px`; cards de catálogo legados podem usar `16px`, mas atividades novas devem alinhar em `14px` salvo motivo pedagógico.
+- **Corner Style:** raio principal `14px` em atividades, catálogo e páginas do professor; variações exigem motivo funcional ou pedagógico.
 - **Background:** `surface` para unidades, `activity-surface` para zonas interativas, tints funcionais para feedback.
 - **Shadow Strategy:** sombra baixa e borda visível. Não usar side-stripe borders.
 - **Internal Padding:** `1.25rem 1.5rem` em desktop; reduzir para `1rem` em mobile sem comprimir alvos.
@@ -227,7 +230,7 @@ Mensagem de descoberta usa `ok-tint`, borda `ok`, texto escuro e `aria-live="pol
 
 ### Differentiation Tabs
 
-Apoio, Intermédio e Desafio existem sempre quando a atividade inclui diferenciação. A interface pode mostrar os símbolos 🟢, 🟡 e 🔴 no texto do nível se forem parte do vocabulário pedagógico, mas a camada visual não pode transformar estes níveis em semáforo emocional. Usar broto, árvore jovem e árvore robusta, ou três hues afastados sem conotação de erro.
+Apoio, Intermédio e Desafio existem sempre quando a atividade inclui diferenciação. A interface usa labels explícitas e marcadores botânicos — Broto/Apoio, Árvore jovem/Intermédio e Árvore robusta/Desafio — ou símbolos neutros equivalentes. Não usar 🟢, 🟡 e 🔴 nestes níveis: mesmo acompanhados por texto, reintroduzem a leitura de semáforo emocional que o sistema rejeita.
 
 ### Audio Toggle
 

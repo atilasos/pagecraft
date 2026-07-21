@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PageCraft — O Mosaico Lúdico</title>
+<style>
+/* ============================================================
+   PROTO 5 — «O Mosaico Lúdico»
+   Azulejos grandes e táteis para o quadro interativo.
+   ============================================================ */
+:root{
+  /* grout & tinta */
+  --grout:        oklch(0.965 0.013 85);
+  --grout-fundo:  oklch(0.94 0.016 85);
+  --branco:       oklch(0.995 0.004 90);
+  --ink:          oklch(0.28 0.035 255);
+  --ink-suave:    oklch(0.45 0.03 255);
+  --foco:         oklch(0.45 0.17 255);
+  --r: 14px;
+
+  /* pastéis de área (croma controlado) + tom fundo de cada área */
+  --azul:    oklch(0.87 0.055 235); --azul-f:    oklch(0.38 0.10 245);
+  --menta:   oklch(0.89 0.055 165); --menta-f:   oklch(0.37 0.08 170);
+  --pessego: oklch(0.89 0.060 55);  --pessego-f: oklch(0.42 0.10 45);
+  --milho:   oklch(0.92 0.080 95);  --milho-f:   oklch(0.43 0.09 85);
+  --lilas:   oklch(0.88 0.055 300); --lilas-f:   oklch(0.40 0.10 300);
+  --rosa:    oklch(0.87 0.050 15);  --rosa-f:    oklch(0.42 0.10 15);
+
+  --toque:   Nunito, "Chalkboard SE", "Comic Sans MS", Lexend, system-ui, sans-serif;
+  --apoio:   "Atkinson Hyperlegible", Lexend, system-ui, sans-serif;
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+@media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+
+body{
+  background:var(--grout);
+  color:var(--ink);
+  font-family:var(--apoio);
+  font-size:16px;
+  line-height:1.45;
+}
+
+.sr-only{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}
+
+:focus-visible{
+  outline:5px solid var(--foco);
+  outline-offset:3px;
+  border-radius:6px;
+}
+
+.pagina{
+  max-width:1180px;
+  margin:0 auto;
+  padding:clamp(14px, 3vw, 34px);
+}
+
+.saltar{
+  position:absolute; left:-9999px; top:10px;
+  background:var(--ink); color:var(--branco);
+  padding:14px 20px; border-radius:var(--r);
+  font-family:var(--toque); font-weight:800; text-decoration:none;
+}
+.saltar:focus-visible{ left:12px; z-index:10; }
+
+/* ---------- cabeçalho ---------- */
+.topo{
+  display:flex; flex-wrap:wrap; align-items:center; gap:14px 24px;
+  margin-bottom:20px;
+}
+.marca{ display:flex; align-items:center; gap:14px; }
+.marca-mosaico{
+  display:grid; grid-template-columns:1fr 1fr; gap:3px;
+  width:46px; height:46px; flex:none;
+}
+.marca-mosaico i{
+  border-radius:5px;
+  box-shadow: inset 0 0 0 1.5px oklch(1 0 0 / .55);
+}
+.marca-mosaico i:nth-child(1){ background:var(--azul); }
+.marca-mosaico i:nth-child(2){ background:var(--milho); }
+.marca-mosaico i:nth-child(3){ background:var(--rosa); }
+.marca-mosaico i:nth-child(4){ background:var(--menta); }
+.marca strong{
+  font-family:var(--toque); font-weight:900; font-size:1.7rem;
+  letter-spacing:-0.01em; display:block; line-height:1.05;
+}
+.marca small{ color:var(--ink-suave); font-size:.95rem; }
+.dica{
+  color:var(--ink-suave); font-size:1rem;
+  margin-left:auto;
+}
+@media (max-width:640px){ .dica{ margin-left:0; } }
+
+/* ---------- pesquisa gigante ---------- */
+.procura{
+  position:relative;
+  margin-bottom:16px;
+}
+.procura svg{
+  position:absolute; left:22px; top:50%; translate:0 -50%;
+  width:30px; height:30px; pointer-events:none;
+  color:var(--ink-suave);
+}
+#q{
+  width:100%;
+  min-height:72px;
+  padding:8px 24px 8px 66px;
+  border:3px solid var(--ink);
+  border-radius:var(--r);
+  background:var(--branco);
+  font-family:var(--toque); font-weight:800; font-size:1.3rem;
+  color:var(--ink);
+}
+#q::placeholder{ color:oklch(0.62 0.02 255); font-weight:700; }
+#q::-webkit-search-cancel-button{ transform:scale(1.6); }
+
+/* ---------- chips de área ---------- */
+.areas{
+  display:flex; flex-wrap:wrap; gap:10px;
+  margin-bottom:30px;
+}
+.chip{
+  min-height:64px;
+  padding:8px 20px;
+  border-radius:var(--r);
+  border:2.5px solid color-mix(in oklch, var(--chip-f, var(--ink)) 45%, transparent);
+  background:var(--chip, var(--branco));
+  color:var(--ink);
+  font-family:var(--toque); font-weight:800; font-size:1.02rem;
+  display:inline-flex; align-items:center; gap:8px;
+  cursor:pointer;
+}
+.chip small{
+  font-family:var(--apoio); font-weight:400; font-size:.85rem;
+  color:var(--ink-suave);
+}
+.chip[aria-pressed="true"]{
+  background:var(--chip-f, var(--ink));
+  border-color:var(--chip-f, var(--ink));
+  color:var(--branco);
+}
+.chip[aria-pressed="true"] small{ color:oklch(1 0 0 / .8); }
+
+/* cores por área */
+.area-m28p   { --tile:var(--azul);    --tile-f:var(--azul-f); }
+.area-mat    { --tile:var(--milho);   --tile-f:var(--milho-f); }
+.area-pt     { --tile:var(--pessego); --tile-f:var(--pessego-f); }
+.area-canva  { --tile:var(--lilas);   --tile-f:var(--lilas-f); }
+.area-digital{ --tile:var(--menta);   --tile-f:var(--menta-f); }
+.area-mem    { --tile:var(--rosa);    --tile-f:var(--rosa-f); }
+.chip.area-m28p, .chip.area-mat, .chip.area-pt,
+.chip.area-canva, .chip.area-digital, .chip.area-mem{
+  --chip:var(--tile); --chip-f:var(--tile-f);
+}
+
+/* ---------- secções ---------- */
+section{ margin-bottom:42px; }
+.sec-cab{ margin-bottom:14px; }
+.sec-cab h2{
+  font-family:var(--toque); font-weight:900; font-size:1.55rem;
+  letter-spacing:-0.01em;
+}
+.sec-cab p{ color:var(--ink-suave); font-size:.98rem; }
+
+/* ---------- mosaico ---------- */
+.mosaico{
+  list-style:none;
+  display:grid;
+  gap:11px;
+  grid-template-columns:repeat(auto-fill, minmax(148px, 1fr));
+}
+.mosaico-2x{
+  grid-template-columns:repeat(auto-fill, minmax(250px, 1fr));
+}
+.tile{ position:relative; min-width:0; }
+.tile.aberto{ grid-column:1 / -1; }
+.tile[hidden]{ display:none; }
+
+/* face do azulejo (botão) */
+.tile-face{
+  position:relative;
+  width:100%;
+  min-height:64px;
+  aspect-ratio:1 / 1;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:2px;
+  border:none;
+  border-radius:var(--r);
+  background-color:var(--tile);
+  /* vidrado cerâmico: brilho opaco no canto, não é vidro */
+  background-image:radial-gradient(130% 100% at 18% 10%,
+                    oklch(1 0 0 / .42), oklch(1 0 0 / 0) 44%);
+  box-shadow:
+    0 3px 0 color-mix(in oklch, var(--tile-f) 30%, transparent),
+    0 8px 16px oklch(0.3 0.02 260 / .07);
+  color:var(--ink);
+  font-family:var(--toque);
+  cursor:pointer;
+  text-align:center;
+  padding:12px;
+}
+.tile-face:hover{
+  background-color:color-mix(in oklch, var(--tile) 86%, var(--tile-f));
+}
+/* filete de cercadura — o traço do azulejo português, com contenção */
+.tile-face::after{
+  content:"";
+  position:absolute; inset:7px;
+  border:1.5px solid color-mix(in oklch, var(--tile-f) 32%, transparent);
+  border-radius:9px;
+  pointer-events:none;
+}
+
+.inicial{
+  font-size:clamp(3rem, 6.5vw, 4.4rem);
+  font-weight:900;
+  line-height:1;
+  color:var(--tile-f);
+}
+.palavra{
+  font-size:1.12rem; font-weight:800;
+  overflow-wrap:anywhere;
+}
+
+/* azulejo de número de porta */
+.num{
+  position:absolute; top:10px; right:10px;
+  min-width:34px; height:34px;
+  padding:0 5px;
+  display:grid; place-items:center;
+  background:var(--branco);
+  border:2px solid var(--tile-f);
+  border-radius:6px;
+  box-shadow:inset 0 0 0 2.5px var(--branco),
+             inset 0 0 0 3.5px color-mix(in oklch, var(--tile-f) 55%, transparent);
+  font-family:var(--toque); font-weight:800; font-size:.95rem;
+  color:var(--tile-f);
+  z-index:1;
+}
+
+/* face quando o azulejo está aberto: vira barra de título */
+.tile.aberto .tile-face{
+  aspect-ratio:auto;
+  flex-direction:row; justify-content:flex-start;
+  gap:14px;
+  min-height:72px;
+  padding:10px 64px 10px 20px;
+  text-align:left;
+  border-radius:var(--r) var(--r) 0 0;
+  box-shadow:none;
+}
+.tile.aberto .inicial{ font-size:2.3rem; }
+.tile.aberto .num{ top:50%; translate:0 -50%; }
+.fechar-x{
+  display:none;
+  position:absolute; right:56px; top:50%; translate:0 -50%;
+  font-weight:900; font-size:1.3rem; color:var(--tile-f);
+}
+.tile.aberto .fechar-x{ display:block; }
+.tile.aberto .num{ right:10px; }
+
+/* painel expandido (o verso do azulejo) */
+.painel{
+  background:var(--branco);
+  border:2.5px solid color-mix(in oklch, var(--tile-f) 40%, transparent);
+  border-top:none;
+  border-radius:0 0 var(--r) var(--r);
+  padding:14px;
+  display:grid; gap:10px;
+  transform-origin:top center;
+}
+.painel[hidden]{ display:none; }
+@media (prefers-reduced-motion: no-preference){
+  .tile.aberto .painel{ animation:virar .38s cubic-bezier(.2,.7,.3,1); }
+  @keyframes virar{
+    from{ transform:perspective(900px) rotateX(-65deg); }
+    to  { transform:none; }
+  }
+}
+
+.linha{
+  display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px;
+  padding:10px 12px;
+  border-radius:var(--r);
+  background:color-mix(in oklch, var(--tile) 30%, var(--branco));
+}
+.linha.principal{
+  background:color-mix(in oklch, var(--tile) 62%, var(--branco));
+}
+.linha-info{ flex:1 1 200px; min-width:0; }
+.linha-info strong{
+  display:block;
+  font-family:var(--toque); font-weight:800; font-size:1.08rem;
+}
+.linha-info span{ color:var(--ink-suave); font-size:.92rem; }
+.linha-acoes{ display:flex; flex-wrap:wrap; gap:10px; }
+
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-height:64px; min-width:64px;
+  padding:10px 24px;
+  border-radius:var(--r);
+  font-family:var(--toque); font-weight:800; font-size:1.05rem;
+  text-decoration:none;
+  border:2.5px solid var(--tile-f);
+}
+.btn.cheio{ background:var(--tile-f); color:var(--branco); }
+.btn.cheio:hover{ background:color-mix(in oklch, var(--tile-f) 86%, black); }
+.btn.contorno{ background:var(--branco); color:var(--tile-f); }
+.btn.contorno:hover{ background:color-mix(in oklch, var(--tile) 40%, var(--branco)); }
+
+/* ---------- azulejos 2x («Outras oficinas») ---------- */
+.tile-2x .tile-face{
+  aspect-ratio:auto;
+  min-height:176px;
+  flex-direction:row; align-items:center; justify-content:flex-start;
+  gap:16px;
+  padding:18px 18px 18px 20px;
+  text-align:left;
+}
+.glifo{
+  flex:none;
+  width:76px; height:76px;
+  display:grid; place-items:center;
+  font-size:2.6rem; font-weight:900; line-height:1;
+  color:var(--tile-f);
+  background:oklch(1 0 0 / .5);
+  border:1.5px solid color-mix(in oklch, var(--tile-f) 35%, transparent);
+  border-radius:12px;
+}
+.tile-2x .tile-info{ min-width:0; }
+.area-nome{
+  display:block;
+  font-family:var(--apoio); font-size:.78rem; font-weight:400;
+  letter-spacing:.08em; text-transform:uppercase;
+  color:var(--tile-f);
+  margin-bottom:3px;
+}
+.titulo-curto{
+  display:block;
+  font-family:var(--toque); font-weight:800; font-size:1.18rem; line-height:1.25;
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.tile-meta{
+  display:block;
+  color:var(--ink-suave); font-size:.9rem; margin-top:5px;
+  font-family:var(--apoio); font-weight:400;
+}
+.tile-2x.aberto .tile-face{ min-height:88px; }
+.tile-2x.aberto .titulo-curto{ -webkit-line-clamp:2; }
+.tile-2x .num{ display:none; }
+
+/* ---------- estado vazio ---------- */
+#vazio{
+  background:var(--branco);
+  border:2.5px dashed color-mix(in oklch, var(--ink-suave) 45%, transparent);
+  border-radius:var(--r);
+  padding:40px 24px;
+  text-align:center;
+  display:grid; gap:14px; justify-items:center;
+}
+#vazio[hidden]{ display:none; }
+#vazio .inicial-vazio{
+  font-family:var(--toque); font-weight:900; font-size:3.4rem;
+  color:var(--azul-f); line-height:1;
+}
+#vazio p{ font-size:1.1rem; max-width:44ch; }
+#vazio p b{ font-family:var(--toque); }
+#mostrar-tudo{
+  min-height:64px; padding:10px 28px;
+  border:2.5px solid var(--azul-f); border-radius:var(--r);
+  background:var(--azul-f); color:var(--branco);
+  font-family:var(--toque); font-weight:800; font-size:1.05rem;
+  cursor:pointer;
+}
+
+/* ---------- rodapé ---------- */
+footer{
+  margin-top:26px;
+  padding:22px 4px 8px;
+  border-top:1.5px solid color-mix(in oklch, var(--ink-suave) 30%, transparent);
+  color:var(--ink-suave);
+  font-size:.92rem;
+  display:flex; flex-wrap:wrap; gap:6px 18px;
+}
+
+@media (max-width:420px){
+  .mosaico{ grid-template-columns:repeat(2, 1fr); gap:9px; }
+  .mosaico-2x{ grid-template-columns:1fr; }
+  .inicial{ font-size:2.7rem; }
+  .linha-acoes{ width:100%; }
+  .linha-acoes .btn{ flex:1; }
+}
+</style>
+</head>
+<body>
+<a class="saltar" href="#sec-m28p">Saltar para as 28 palavras</a>
+<div class="pagina">
+
+  <header class="topo">
+    <div class="marca">
+      <span class="marca-mosaico" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <div>
+        <strong>PageCraft</strong>
+        <small>as oficinas da nossa sala</small>
+      </div>
+    </div>
+    <p class="dica">Toca num azulejo para veres as oficinas lá dentro.</p>
+  </header>
+
+  <div class="procura">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true">
+      <circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.5" y1="15.5" x2="21" y2="21"/>
+    </svg>
+    <label class="sr-only" for="q">Procurar uma palavra ou oficina</label>
+    <input id="q" type="search" autocomplete="off"
+           placeholder="Que palavra procuras? Ex.: casa, frações, canva…">
+  </div>
+
+  <nav class="areas" aria-label="Áreas da sala" id="areas"></nav>
+
+  <main>
+    <section id="sec-m28p" aria-labelledby="h-m28p">
+      <header class="sec-cab">
+        <h2 id="h-m28p">As 28 palavras</h2>
+        <p id="m28p-sub"></p>
+      </header>
+      <ul class="mosaico" id="mosaico-palavras"></ul>
+    </section>
+
+    <section id="sec-outras" aria-labelledby="h-outras">
+      <header class="sec-cab">
+        <h2 id="h-outras">Outras oficinas</h2>
+        <p id="outras-sub"></p>
+      </header>
+      <ul class="mosaico mosaico-2x" id="mosaico-outras"></ul>
+    </section>
+
+    <div id="vazio" hidden>
+      <span class="inicial-vazio" aria-hidden="true">ah…</span>
+      <p>Nenhum azulejo combina com <b id="vazio-termo"></b>.
+         Experimenta <b>«casa»</b>, <b>«frações»</b> ou <b>«canva»</b> — ou volta a ver o mosaico todo.</p>
+      <button id="mostrar-tudo" type="button">Mostrar o mosaico todo</button>
+    </div>
+  </main>
+
+  <footer id="rodape"></footer>
+</div>
+
+<script src="./catalog-data.js"></script>
+<script>
+(function(){
+  "use strict";
+  const CAT = window.CATALOG || [];
+  const norm = s => String(s).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+  const esc  = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+  /* ---------- modelo: agrupar M28P por palavra ---------- */
+  const m28pTodos = CAT.filter(a => (a.tags||[]).includes("m28p"));
+  const restantes = CAT.filter(a => !(a.tags||[]).includes("m28p"));
+
+  const principais = m28pTodos.filter(a => !a.slug.includes("-") && /Palavra \d+/.test(a.title));
+  const palavras = principais.map(m => ({
+    palavra: m.slug,
+    num: +(m.title.match(/Palavra (\d+)/)||[0,0])[1],
+    rotulo: ((m.title.match(/—\s*(.+)$/)||[])[1] || m.slug).trim(),
+    principal: m,
+    variantes: []
+  })).sort((a,b) => a.num - b.num);
+
+  const orfaos = [];
+  m28pTodos.forEach(a => {
+    if (palavras.some(w => w.palavra === a.slug)) return;
+    const w = palavras.find(w =>
+      a.slug.startsWith(w.palavra + "-") ||
+      a.slug.includes("-" + w.palavra + "-") ||
+      a.slug.endsWith("-" + w.palavra));
+    if (w) w.variantes.push(a); else orfaos.push(a);
+  });
+  palavras.forEach(w => w.variantes.sort((a,b) => {
+    const peso = s => s.includes("cacador") ? 0 : s.includes("frases") ? 1 : 2;
+    return peso(a.slug) - peso(b.slug) || a.slug.localeCompare(b.slug);
+  }));
+
+  function rotuloVariante(a){
+    const partes = a.title.split("·");
+    if (partes.length >= 3) return partes[partes.length-1].trim();
+    if (a.slug.endsWith("-blocos")) return "Mundo de blocos";
+    if (/30min/.test(a.slug)) return "Sessão de 30 min";
+    return a.title;
+  }
+
+  /* ---------- modelo: áreas das outras oficinas ---------- */
+  const AREAS = {
+    mat:     { nome:"Matemática",   glifo:"×" },
+    pt:      { nome:"Português",    glifo:"✎" },
+    canva:   { nome:"Canva",        glifo:"✂" },
+    digital: { nome:"Digital",      glifo:"?" },
+    mem:     { nome:"Projetos MEM", glifo:"✱" }
+  };
+  const ORDEM_AREAS = ["mat","pt","canva","digital","mem"];
+
+  function areaDe(a){
+    const t = (a.tags||[]).map(norm), tt = norm(a.title);
+    if (t.some(x => x.includes("canva"))) return "canva";
+    if (t.some(x => /matematic|fracoes|dobro|classificacao/.test(x)) || /matemat|fracoes|dobro/.test(tt)) return "mat";
+    if (t.some(x => /literacia-digital|motor-de-busca|prompts/.test(x) || x === "ia")) return "digital";
+    if (t.some(x => /portugues|leitura|escrita|verbos/.test(x)) || /verbos|texto/.test(tt)) return "pt";
+    if (t.some(x => /mem|projeto/.test(x))) return "mem";
+    return "pt";
+  }
+
+  function anoCurto(y){ return String(y).split("(")[0].trim(); }
+
+  function tituloCurto(t){
+    let s = t
+      .replace(/^Canva na escola\s*—\s*/i, "")
+      .replace(/^Canva \+ Estudo do Meio\s*—\s*/i, "Estudo do Meio — ")
+      .replace(/^Texto melhorado:\s*/i, "");
+    if (s.length > 44 && s.includes(" — ")) s = s.split(" — ")[0];
+    if (s.length > 60 && s.includes(":"))   s = s.split(":")[0];
+    return s.trim();
+  }
+
+  const outras = restantes.concat(orfaos)
+    .map(a => ({ act:a, area: areaDe(a) }))
+    .sort((x,y) => ORDEM_AREAS.indexOf(x.area) - ORDEM_AREAS.indexOf(y.area)
+                   || x.act.title.localeCompare(y.act.title, "pt"));
+
+  /* ---------- render ---------- */
+  const guiaDe = url => url + "#guia-do-professor";
+
+  function linhaHTML(nome, meta, act, principal){
+    return `<div class="linha${principal ? " principal" : ""}">
+      <div class="linha-info">
+        <strong>${esc(nome)}</strong>
+        <span>${esc(meta)}</span>
+      </div>
+      <div class="linha-acoes">
+        <a class="btn cheio" href="${esc(act.url)}">Abrir</a>
+        <a class="btn contorno" href="${esc(guiaDe(act.url))}">Guia do professor</a>
+      </div>
+    </div>`;
+  }
+
+  const ulPalavras = document.getElementById("mosaico-palavras");
+  ulPalavras.innerHTML = palavras.map(w => {
+    const rot = w.rotulo.toLowerCase();
+    const painelId = "painel-" + w.palavra;
+    const linhas =
+      linhaHTML("Atividade principal",
+        `${anoCurto(w.principal.year)} · ${w.principal.duration} min`, w.principal, true) +
+      w.variantes.map(v =>
+        linhaHTML(rotuloVariante(v), `${anoCurto(v.year)} · ${v.duration} min`, v, false)).join("");
+    return `<li class="tile area-m28p" data-tipo="palavra">
+      <button class="tile-face" type="button" aria-expanded="false" aria-controls="${painelId}">
+        <span class="num" aria-hidden="true">${w.num}</span>
+        <span class="sr-only">Palavra ${w.num}:</span>
+        <span class="inicial" aria-hidden="true">${esc(rot.charAt(0))}</span>
+        <span class="palavra">${esc(rot)}</span>
+        <span class="fechar-x" aria-hidden="true">✕</span>
+      </button>
+      <div class="painel" id="${painelId}" role="region"
+           aria-label="Oficinas da palavra ${esc(rot)}" hidden>${linhas}</div>
+    </li>`;
+  }).join("");
+
+  const ulOutras = document.getElementById("mosaico-outras");
+  ulOutras.innerHTML = outras.map((o, i) => {
+    const a = o.act, area = AREAS[o.area];
+    const painelId = "painel-outra-" + i;
+    return `<li class="tile tile-2x area-${o.area}" data-tipo="outra">
+      <button class="tile-face" type="button" aria-expanded="false" aria-controls="${painelId}">
+        <span class="glifo" aria-hidden="true">${area.glifo}</span>
+        <span class="tile-info">
+          <span class="area-nome">${esc(area.nome)}</span>
+          <span class="titulo-curto">${esc(tituloCurto(a.title))}</span>
+          <span class="tile-meta">${esc(anoCurto(a.year))} · ${a.duration} min</span>
+        </span>
+        <span class="fechar-x" aria-hidden="true">✕</span>
+      </button>
+      <div class="painel" id="${painelId}" role="region" aria-label="${esc(a.title)}" hidden>
+        ${linhaHTML(a.title, `${esc(a.year)} · ${a.duration} min`, a, true)}
+      </div>
+    </li>`;
+  }).join("");
+
+  /* ---------- chips de área ---------- */
+  const chips = [
+    { id:"tudo",  nome:"Tudo",        classe:"",             n: CAT.length },
+    { id:"m28p",  nome:"28 Palavras", classe:"area-m28p",    n: m28pTodos.length },
+    ...ORDEM_AREAS.map(id => ({
+      id, nome:AREAS[id].nome, classe:"area-"+id,
+      n: outras.filter(o => o.area === id).length
+    }))
+  ];
+  const navAreas = document.getElementById("areas");
+  navAreas.innerHTML = chips.map(c =>
+    `<button type="button" class="chip ${c.classe}" data-area="${c.id}"
+             aria-pressed="${c.id === "tudo"}">${esc(c.nome)} <small>${c.n}</small></button>`
+  ).join("");
+
+  /* ---------- textos com contagens reais ---------- */
+  const nVar = palavras.reduce((s,w) => s + w.variantes.length, 0);
+  document.getElementById("m28p-sub").textContent =
+    `Método das 28 Palavras · ${palavras.length} palavras, ${palavras.length + nVar} oficinas de leitura e escrita`;
+  document.getElementById("outras-sub").textContent =
+    `${outras.length} atividades de matemática, português, Canva, digital e projetos MEM`;
+  document.getElementById("rodape").innerHTML =
+    `<span>${CAT.length} atividades nesta sala</span>` +
+    `<span>${palavras.length} palavras do método</span>` +
+    `<span>PageCraft · o tapete de exploração da sala</span>`;
+
+  /* ---------- índice de pesquisa ---------- */
+  const tiles = [];
+  ulPalavras.querySelectorAll(".tile").forEach((el, i) => {
+    const w = palavras[i];
+    tiles.push({
+      el, area:"m28p",
+      hay: norm([
+        w.rotulo, "palavra " + w.num, w.num,
+        w.principal.title, (w.principal.tags||[]).join(" "),
+        ...w.variantes.map(v => rotuloVariante(v) + " " + v.title + " " + (v.tags||[]).join(" "))
+      ].join(" "))
+    });
+  });
+  ulOutras.querySelectorAll(".tile").forEach((el, i) => {
+    const o = outras[i];
+    tiles.push({
+      el, area:o.area,
+      hay: norm([o.act.title, (o.act.tags||[]).join(" "), o.act.year, AREAS[o.area].nome].join(" "))
+    });
+  });
+
+  /* ---------- abrir / fechar azulejos ---------- */
+  function fechar(tile){
+    tile.classList.remove("aberto");
+    tile.querySelector(".tile-face").setAttribute("aria-expanded","false");
+    tile.querySelector(".painel").hidden = true;
+  }
+  function fecharTodos(){ document.querySelectorAll(".tile.aberto").forEach(fechar); }
+
+  document.querySelectorAll(".tile-face").forEach(face => {
+    face.addEventListener("click", () => {
+      const tile = face.closest(".tile");
+      const aberto = tile.classList.contains("aberto");
+      fecharTodos();
+      if (!aberto){
+        tile.classList.add("aberto");
+        face.setAttribute("aria-expanded","true");
+        tile.querySelector(".painel").hidden = false;
+      }
+    });
+  });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") fecharTodos(); });
+
+  /* ---------- pesquisa + filtro ---------- */
+  const q = document.getElementById("q");
+  const secM28P = document.getElementById("sec-m28p");
+  const secOutras = document.getElementById("sec-outras");
+  const vazio = document.getElementById("vazio");
+  const vazioTermo = document.getElementById("vazio-termo");
+  let areaAtiva = "tudo";
+
+  function aplicar(){
+    const termo = norm(q.value.trim());
+    let visM28P = 0, visOutras = 0;
+    tiles.forEach(t => {
+      const okArea = areaAtiva === "tudo" || areaAtiva === t.area;
+      const okTermo = !termo || t.hay.includes(termo);
+      const mostrar = okArea && okTermo;
+      t.el.hidden = !mostrar;
+      if (!mostrar && t.el.classList.contains("aberto")) fechar(t.el);
+      if (mostrar) (t.area === "m28p" ? visM28P++ : visOutras++);
+    });
+    secM28P.hidden = visM28P === 0;
+    secOutras.hidden = visOutras === 0;
+    const nada = visM28P + visOutras === 0;
+    vazio.hidden = !nada;
+    if (nada) vazioTermo.textContent = q.value.trim() ? "«" + q.value.trim() + "»" : "este filtro";
+  }
+
+  q.addEventListener("input", aplicar);
+
+  navAreas.addEventListener("click", e => {
+    const chip = e.target.closest(".chip");
+    if (!chip) return;
+    areaAtiva = chip.dataset.area;
+    navAreas.querySelectorAll(".chip").forEach(c =>
+      c.setAttribute("aria-pressed", String(c === chip)));
+    aplicar();
+  });
+
+  document.getElementById("mostrar-tudo").addEventListener("click", () => {
+    q.value = "";
+    areaAtiva = "tudo";
+    navAreas.querySelectorAll(".chip").forEach(c =>
+      c.setAttribute("aria-pressed", String(c.dataset.area === "tudo")));
+    aplicar();
+    q.focus();
+  });
+
+  aplicar();
+})();
+</script>
+</body>
+</html>

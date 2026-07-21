@@ -241,15 +241,27 @@ class PipelineRunner:
         # contexto de conhecimento (uma vez por job)
         ae_excerpt, ae_citation = await self.ae.context_or_fallback(job["subject"], job["year"])
         mem_context = ""
-        if self.wiki.available:
+        wiki_topic_context = ""
+        if await self.wiki.probe():
             try:
                 mem_context = await self.wiki.mem_context()
             except (RuntimeError, TimeoutError):
                 mem_context = ""
+            try:
+                wiki_topic_context = await self.wiki.topic_context(
+                    job["topic"], job["subject"]
+                )
+            except (RuntimeError, TimeoutError):
+                wiki_topic_context = ""
         await self._emit(
             job,
             "knowledge_ready",
-            {"ae_found": bool(ae_excerpt), "ae_citation": ae_citation, "mem_pages": bool(mem_context)},
+            {
+                "ae_found": bool(ae_excerpt),
+                "ae_citation": ae_citation,
+                "mem_pages": bool(mem_context),
+                "wiki_topic_pages": bool(wiki_topic_context),
+            },
         )
 
         artifacts = job["artifacts"]
@@ -269,6 +281,7 @@ class PipelineRunner:
                     ae_excerpt=ae_excerpt,
                     ae_citation=ae_citation,
                     mem_context=mem_context,
+                    wiki_topic_context=wiki_topic_context,
                 ),
             )
             await self._write_artifact(job, "docspec", "-docspec.json", docspec)

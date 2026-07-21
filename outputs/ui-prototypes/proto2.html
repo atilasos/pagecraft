@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PageCraft — O Caderno do Professor</title>
+<style>
+/* ==========================================================
+   PROTO 2 — «O Caderno do Professor»
+   Papel reciclado cinza-azulado, tinta de esferográfica,
+   margem vermelho-terroso, verde-caderno nos estados ativos.
+   ========================================================== */
+:root{
+  --mesa:         oklch(0.87 0.016 242);           /* tampo da mesa, atrás da folha */
+  --papel:        oklch(0.945 0.010 235);          /* papel reciclado frio */
+  --papel-2:      oklch(0.965 0.008 235);          /* etiqueta / campos */
+  --pauta:        oklch(0.885 0.014 235);          /* linhas horizontais da pauta */
+  --tinta:        oklch(0.30 0.060 262);           /* esferográfica azul-escura */
+  --tinta-suave:  oklch(0.42 0.048 260);
+  --tinta-agua:   oklch(0.30 0.060 262 / 0.14);
+  --terra:        oklch(0.46 0.105 33);            /* vermelho-terroso (margem, notas) */
+  --terra-linha:  oklch(0.60 0.095 33 / 0.55);
+  --verde:        oklch(0.42 0.095 152);           /* verde-caderno: estados ativos */
+  --verde-claro:  oklch(0.915 0.038 152);
+  --verde-foco:   oklch(0.52 0.14 152);
+  --branco:       oklch(0.985 0.004 235);
+
+  --f-corpo:  "Atkinson Hyperlegible", "Nunito", system-ui, sans-serif;
+  --f-rotulo: "Lexend", "Atkinson Hyperlegible", system-ui, sans-serif;
+  --f-mao:    "Chalkboard SE", "Comic Sans MS", "Segoe Print", cursive;
+
+  --raio: 14px;
+  --margem-esq: 5.25rem;   /* largura da margem do caderno */
+  --linha: 2rem;           /* passo da pauta */
+}
+
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  margin:0;
+  font-family:var(--f-corpo);
+  font-size:1rem;
+  line-height:1.5;
+  color:var(--tinta);
+  background:
+    radial-gradient(120% 90% at 50% 0%, oklch(0.90 0.014 242), transparent 70%),
+    var(--mesa);
+}
+
+a{ color:inherit; }
+button{ font:inherit; color:inherit; }
+
+:focus-visible{
+  outline:3px solid var(--verde-foco);
+  outline-offset:2px;
+  border-radius:6px;
+}
+
+/* ---------- estrutura: folha + separadores de dossiê ---------- */
+.caderno{
+  max-width:66rem;
+  margin:1.5rem auto 3rem;
+  padding:0 1rem;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:start;
+}
+
+.folha{
+  position:relative;
+  background:
+    /* linha de margem vertical, vermelho-terroso */
+    linear-gradient(to right,
+      transparent calc(var(--margem-esq) - 2px),
+      var(--terra-linha) calc(var(--margem-esq) - 2px),
+      var(--terra-linha) calc(var(--margem-esq) - 1px),
+      transparent calc(var(--margem-esq) - 1px)),
+    /* pauta horizontal subtil */
+    repeating-linear-gradient(to bottom,
+      transparent 0,
+      transparent calc(var(--linha) - 1px),
+      var(--pauta) calc(var(--linha) - 1px),
+      var(--pauta) var(--linha)),
+    var(--papel);
+  border:1px solid oklch(0.82 0.018 240);
+  border-radius:4px var(--raio) var(--raio) 4px;
+  box-shadow:
+    0 1px 0 oklch(0.99 0 0 / 0.6) inset,
+    0 10px 24px oklch(0.35 0.03 250 / 0.14),
+    0 2px 6px oklch(0.35 0.03 250 / 0.10);
+  padding:2rem 2.25rem 2.5rem calc(var(--margem-esq) + 1.5rem);
+  min-width:0;
+}
+
+/* furos de arquivo na margem */
+.furos{ position:absolute; left:1.35rem; top:0; bottom:0; width:1.1rem; pointer-events:none; }
+.furos i{
+  position:absolute; left:0; width:1.05rem; height:1.05rem; border-radius:50%;
+  background:var(--mesa);
+  box-shadow:inset 0 1px 3px oklch(0.30 0.03 250 / 0.45), 0 1px 0 oklch(0.99 0 0 / 0.55);
+}
+.furos i:nth-child(1){ top:16%; }
+.furos i:nth-child(2){ top:50%; }
+.furos i:nth-child(3){ top:84%; }
+
+/* ---------- separadores de dossiê (filtros reais) ---------- */
+.separadores{
+  position:sticky; top:1rem;
+  display:flex; flex-direction:column; gap:.5rem;
+  padding:1.25rem 0 0 0;
+  margin-left:-1px;
+}
+.separadores button{
+  writing-mode:vertical-rl;
+  min-height:6.5rem; min-width:48px;
+  padding:.9rem .55rem;
+  border:1px solid oklch(0.80 0.02 240);
+  border-left:none;
+  border-radius:0 var(--raio) var(--raio) 0;
+  background:oklch(0.925 0.012 238);
+  color:var(--tinta-suave);
+  font-family:var(--f-rotulo);
+  font-size:.72rem; font-weight:600;
+  text-transform:uppercase; letter-spacing:.14em;
+  cursor:pointer;
+  box-shadow:2px 2px 5px oklch(0.35 0.03 250 / 0.10);
+  transition:background .15s ease, color .15s ease, transform .15s ease;
+}
+.separadores button:hover{ background:var(--papel-2); color:var(--tinta); }
+.separadores button[aria-pressed="true"]{
+  background:var(--verde);
+  border-color:var(--verde);
+  color:var(--branco);
+  transform:translateX(3px);
+}
+
+/* ---------- cabeçalho: etiqueta escolar + pesquisa ---------- */
+.cabecalho{ position:relative; margin-bottom:2rem; }
+.etiqueta{
+  background:var(--papel-2);
+  border:1px solid var(--tinta-suave);
+  border-radius:var(--raio);
+  box-shadow:0 0 0 4px var(--papel-2), 0 0 0 5px var(--tinta-agua);
+  padding:1.1rem 1.4rem 1.2rem;
+  max-width:34rem;
+  transform:rotate(-0.4deg);
+}
+.etiqueta .rotulo{
+  font-family:var(--f-rotulo);
+  font-size:.68rem; font-weight:600;
+  text-transform:uppercase; letter-spacing:.18em;
+  color:var(--terra);
+  margin:0 0 .25rem;
+}
+.etiqueta h1{
+  margin:0;
+  font-size:clamp(1.7rem, 4vw, 2.3rem);
+  line-height:1.1;
+  letter-spacing:-0.01em;
+  font-weight:800;
+}
+.etiqueta h1 small{
+  display:block;
+  font-size:.55em; font-weight:400;
+  color:var(--tinta-suave);
+  letter-spacing:0;
+  margin-top:.2rem;
+}
+.etiqueta .linha-pontos{
+  margin:.8rem 0 0;
+  padding-top:.55rem;
+  border-top:1px dotted var(--tinta-suave);
+  font-size:.85rem;
+  color:var(--tinta-suave);
+}
+
+.pesquisa{ margin-top:1.5rem; max-width:34rem; }
+.pesquisa label{
+  display:block;
+  font-family:var(--f-rotulo);
+  font-size:.68rem; font-weight:600;
+  text-transform:uppercase; letter-spacing:.16em;
+  color:var(--tinta-suave);
+  margin-bottom:.35rem;
+}
+.pesquisa .campo{ position:relative; display:flex; align-items:center; }
+.pesquisa input{
+  width:100%;
+  min-height:48px;
+  padding:.5rem 2.8rem .5rem .75rem;
+  font:inherit; font-size:1.05rem;
+  color:var(--tinta);
+  background:transparent;
+  border:none;
+  border-bottom:2px dashed var(--tinta-suave);
+  border-radius:6px 6px 0 0;
+}
+.pesquisa input::placeholder{ color:oklch(0.55 0.03 255); }
+.pesquisa input::-webkit-search-cancel-button,
+.pesquisa input::-webkit-search-decoration{ -webkit-appearance:none; appearance:none; }
+.pesquisa input:focus-visible{ outline-offset:4px; }
+.pesquisa .limpar{
+  position:absolute; right:0;
+  width:48px; height:48px;
+  border:none; background:none; cursor:pointer;
+  font-size:1.2rem; color:var(--tinta-suave);
+  border-radius:50%;
+  display:none;
+}
+.pesquisa .limpar:hover{ color:var(--terra); }
+.pesquisa.tem-texto .limpar{ display:block; }
+
+.estado-procura{
+  font-size:.85rem; color:var(--tinta-suave);
+  min-height:1.3rem; margin:.4rem 0 0;
+}
+
+/* ---------- notas manuscritas na margem ---------- */
+.nota-margem{
+  position:absolute;
+  left:calc(-1 * var(--margem-esq) - 0.6rem);
+  width:calc(var(--margem-esq) - 1.4rem);
+  font-family:var(--f-mao);
+  font-size:.72rem; line-height:1.25;
+  color:var(--terra);
+  transform:rotate(-2.5deg);
+  text-align:center;
+  pointer-events:none;
+}
+.nota-margem.lapis{ color:var(--tinta-suave); transform:rotate(1.5deg); }
+
+.anota-novo{
+  font-family:var(--f-mao);
+  font-size:.72rem;
+  color:var(--terra);
+  transform:rotate(-3deg);
+  display:inline-block;
+  margin-left:.5rem;
+  vertical-align:middle;
+}
+
+/* ---------- carimbos de secção ---------- */
+.carimbo{
+  display:inline-block;
+  font-family:var(--f-rotulo);
+  font-size:.78rem; font-weight:600;
+  text-transform:uppercase; letter-spacing:.17em;
+  color:var(--tinta-suave);
+  border:1.5px solid currentColor;
+  border-radius:8px;
+  padding:.45rem .9rem;
+  transform:rotate(-0.8deg);
+  margin:0 0 .4rem;
+}
+section{ position:relative; margin-top:2.5rem; }
+section > .descricao{
+  margin:.3rem 0 1.2rem;
+  font-size:.92rem;
+  color:var(--tinta-suave);
+  max-width:38rem;
+}
+
+/* ---------- índice M28P: 28 linhas numeradas ---------- */
+.indice{ list-style:none; margin:0; padding:0; }
+.indice > li{ border-bottom:1px dotted oklch(0.78 0.02 240); }
+
+details.palavra > summary{
+  list-style:none;
+  cursor:pointer;
+  display:grid;
+  grid-template-columns:2.4ch minmax(0,auto) auto 1fr auto;
+  align-items:baseline;
+  column-gap:.6rem;
+  min-height:48px;
+  padding:.55rem .25rem;
+  border-radius:8px;
+}
+details.palavra > summary::-webkit-details-marker{ display:none; }
+details.palavra > summary:hover{ background:var(--tinta-agua); }
+
+.n-palavra{
+  font-family:var(--f-rotulo);
+  font-size:.85rem; font-weight:600;
+  color:var(--tinta-suave);
+  text-align:right;
+}
+.nome-palavra{
+  font-weight:800;
+  font-size:1.08rem;
+  letter-spacing:.01em;
+}
+details.palavra[open] .nome-palavra{ color:var(--verde); }
+.conta-fichas{
+  font-size:.78rem;
+  color:var(--tinta-suave);
+  white-space:nowrap;
+}
+.leader{
+  border-bottom:2px dotted oklch(0.70 0.025 245);
+  transform:translateY(-4px);
+  min-width:1.5rem;
+}
+.pg{
+  font-family:var(--f-rotulo);
+  font-size:.82rem; font-weight:600;
+  color:var(--tinta-suave);
+  white-space:nowrap;
+}
+details.palavra[open] .pg{ color:var(--verde); }
+
+.fichas{
+  margin:.2rem 0 .9rem 2.9ch;
+  padding:.2rem 0 .2rem 1rem;
+  border-left:2px dotted var(--terra-linha);
+  display:grid;
+  gap:.35rem;
+}
+.ficha{
+  display:flex; flex-wrap:wrap; align-items:center; gap:.35rem .8rem;
+  padding:.45rem .6rem;
+  border-radius:10px;
+  min-height:48px;
+}
+.ficha.principal{ background:var(--verde-claro); }
+.ficha:not(.principal):hover{ background:var(--tinta-agua); }
+.ficha .titulo-ficha{ font-weight:600; font-size:.95rem; flex:1 1 12rem; min-width:0; }
+.ficha .titulo-ficha .tipo{
+  display:block; font-weight:400; font-size:.78rem; color:var(--tinta-suave);
+}
+.ficha.principal .titulo-ficha .tipo{ color:oklch(0.38 0.07 152); }
+.ficha .meta{ font-size:.8rem; color:var(--tinta-suave); white-space:nowrap; }
+.ficha .acoes{ display:flex; gap:.45rem; margin-left:auto; }
+
+/* ---------- botões ---------- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-height:48px; min-width:48px;
+  padding:.4rem 1rem;
+  border-radius:var(--raio);
+  font-family:var(--f-rotulo);
+  font-size:.82rem; font-weight:600;
+  letter-spacing:.03em;
+  text-decoration:none;
+  border:1.5px solid var(--tinta);
+  transition:background .15s ease, color .15s ease;
+}
+.btn-abrir{ background:var(--tinta); color:var(--branco); }
+.btn-abrir:hover{ background:var(--verde); border-color:var(--verde); }
+.btn-guia{ background:transparent; color:var(--tinta); }
+.btn-guia:hover{ background:var(--tinta-agua); }
+
+/* ---------- páginas soltas (outras atividades) ---------- */
+.soltas{ display:grid; grid-template-columns:repeat(auto-fill, minmax(17rem, 1fr)); gap:1rem; }
+.cartao{
+  position:relative;
+  background:var(--papel-2);
+  border:1px solid oklch(0.82 0.02 240);
+  border-radius:var(--raio);
+  padding:1rem 1.1rem 1.1rem;
+  box-shadow:0 2px 5px oklch(0.35 0.03 250 / 0.08);
+  display:flex; flex-direction:column; gap:.5rem;
+}
+.cartao .selo{
+  align-self:flex-start;
+  font-family:var(--f-rotulo);
+  font-size:.62rem; font-weight:600;
+  text-transform:uppercase; letter-spacing:.15em;
+  color:var(--terra);
+  border:1px solid var(--terra-linha);
+  border-radius:6px;
+  padding:.2rem .5rem;
+  transform:rotate(-1.2deg);
+}
+.cartao h3{ margin:0; font-size:1.02rem; line-height:1.3; font-weight:800; }
+.cartao .meta{ font-size:.82rem; color:var(--tinta-suave); }
+.cartao .acoes{ margin-top:auto; display:flex; gap:.5rem; flex-wrap:wrap; padding-top:.4rem; }
+
+/* clipe de papel decorativo no primeiro cartão de cada fila — não: manter sóbrio */
+
+/* ---------- estado vazio ---------- */
+.vazio{
+  margin-top:2.5rem;
+  text-align:center;
+  padding:2.5rem 1rem;
+  border:2px dashed oklch(0.78 0.02 240);
+  border-radius:var(--raio);
+}
+.vazio p{ margin:.3rem 0; }
+.vazio .mao{ font-family:var(--f-mao); color:var(--terra); font-size:.95rem; transform:rotate(-2deg); display:inline-block; }
+.vazio button{
+  margin-top:.8rem;
+  min-height:48px; padding:.4rem 1.2rem;
+  border-radius:var(--raio);
+  border:1.5px solid var(--verde);
+  background:var(--verde); color:var(--branco);
+  font-family:var(--f-rotulo); font-weight:600; font-size:.85rem;
+  cursor:pointer;
+}
+.vazio button:hover{ background:var(--verde-foco); border-color:var(--verde-foco); }
+
+/* ---------- rodapé ---------- */
+footer{
+  margin-top:3rem;
+  padding-top:1rem;
+  border-top:1px solid var(--pauta);
+  font-size:.85rem;
+  color:var(--tinta-suave);
+  display:flex; flex-wrap:wrap; gap:.3rem 1.5rem;
+  justify-content:space-between;
+}
+footer .mao{ font-family:var(--f-mao); color:var(--terra); font-size:.8rem; }
+
+[hidden]{ display:none !important; }
+
+/* ---------- responsivo ---------- */
+@media (max-width: 860px){
+  :root{ --margem-esq: 3.4rem; }
+  .folha{ padding:1.4rem 1.1rem 1.8rem calc(var(--margem-esq) + 0.9rem); }
+  .nota-margem{ display:none; }
+  .furos{ left:.85rem; width:.9rem; }
+  .furos i{ width:.85rem; height:.85rem; }
+}
+@media (max-width: 720px){
+  .caderno{ grid-template-columns:1fr; margin-top:.75rem; padding:0 .6rem; }
+  .separadores{
+    order:-1;
+    position:sticky; top:0; z-index:5;
+    flex-direction:row; gap:.4rem;
+    overflow-x:auto;
+    padding:.6rem .2rem;
+    background:var(--mesa);
+    margin-left:0;
+  }
+  .separadores button{
+    writing-mode:horizontal-tb;
+    min-height:48px; min-width:auto;
+    padding:.5rem .9rem;
+    border-left:1px solid oklch(0.80 0.02 240);
+    border-radius:var(--raio);
+    flex:0 0 auto;
+  }
+  .separadores button[aria-pressed="true"]{ transform:none; }
+  .folha{ border-radius:var(--raio); }
+}
+@media (max-width: 480px){
+  :root{ --margem-esq: 1.6rem; }
+  .folha{
+    padding:1.2rem .9rem 1.5rem calc(var(--margem-esq) + 0.7rem);
+    background:
+      linear-gradient(to right,
+        transparent calc(var(--margem-esq) - 2px),
+        var(--terra-linha) calc(var(--margem-esq) - 2px),
+        var(--terra-linha) calc(var(--margem-esq) - 1px),
+        transparent calc(var(--margem-esq) - 1px)),
+      var(--papel); /* pauta desativada em ecrãs pequenos: menos ruído */
+  }
+  .furos{ display:none; }
+  details.palavra > summary{ grid-template-columns:2.4ch minmax(0,1fr) auto; }
+  .conta-fichas{ display:none; }
+  .leader{ display:none; }
+  .fichas{ margin-left:0; }
+  .ficha .acoes{ width:100%; margin-left:0; }
+  .ficha .acoes .btn{ flex:1; }
+}
+
+/* ---------- movimento reduzido ---------- */
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  *, *::before, *::after{ transition:none !important; animation:none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="caderno">
+  <main class="folha">
+    <div class="furos" aria-hidden="true"><i></i><i></i><i></i></div>
+
+    <header class="cabecalho">
+      <p class="nota-margem lapis" style="top:0.4rem">ano letivo 2025/26</p>
+      <div class="etiqueta">
+        <p class="rotulo">Caderno de planificação</p>
+        <h1>PageCraft
+          <small>Catálogo de atividades interativas · 1.º ciclo</small>
+        </h1>
+        <p class="linha-pontos">Nome: <strong>a professora / o professor</strong> · Sala: <strong>a tua</strong></p>
+      </div>
+
+      <div class="pesquisa" id="zonaPesquisa">
+        <label for="campoPesquisa">Procurar no caderno</label>
+        <div class="campo">
+          <input type="search" id="campoPesquisa" autocomplete="off"
+                 placeholder="Escreve uma palavra: casa, frações, Canva…">
+          <button type="button" class="limpar" id="btnLimpar" aria-label="Limpar procura">✕</button>
+        </div>
+        <p class="estado-procura" id="estadoProcura" role="status" aria-live="polite"></p>
+      </div>
+    </header>
+
+    <section id="seccaoM28P" aria-labelledby="tituloM28P">
+      <p class="nota-margem" id="notaM28P" style="top:0.2rem"></p>
+      <h2 class="carimbo" id="tituloM28P">Índice · Método das 28 Palavras</h2>
+      <p class="descricao">Cada palavra tem a atividade principal e as suas variantes.
+        Toca numa linha para abrir; o número à direita é a duração, em minutos.</p>
+      <ol class="indice" id="indiceM28P"></ol>
+    </section>
+
+    <section id="seccaoSoltas" aria-labelledby="tituloSoltas">
+      <p class="nota-margem" id="notaSoltas" style="top:0.2rem"></p>
+      <h2 class="carimbo" id="tituloSoltas">Páginas soltas</h2>
+      <p class="descricao">Matemática, projetos, Canva e mundo digital — o que vive fora das 28 palavras.</p>
+      <div class="soltas" id="listaSoltas"></div>
+    </section>
+
+    <div class="vazio" id="estadoVazio" hidden>
+      <p><strong>Não encontrámos nada nesta página do caderno.</strong></p>
+      <p>Experimenta outra palavra ou muda de separador.</p>
+      <p class="mao">dica: «casa», «frações» ou «Canva»</p>
+      <br>
+      <button type="button" id="btnRecomecar">Limpar e ver tudo</button>
+    </div>
+
+    <footer id="rodape"></footer>
+  </main>
+
+  <nav class="separadores" aria-label="Separadores do dossiê">
+    <button type="button" data-tab="tudo" aria-pressed="true">Tudo</button>
+    <button type="button" data-tab="palavras" aria-pressed="false">Palavras</button>
+    <button type="button" data-tab="numeros" aria-pressed="false">Números</button>
+    <button type="button" data-tab="projetos" aria-pressed="false">Projetos</button>
+    <button type="button" data-tab="digital" aria-pressed="false">Digital</button>
+  </nav>
+</div>
+
+<script src="./catalog-data.js"></script>
+<script>
+(function(){
+  "use strict";
+  const CAT = Array.isArray(window.CATALOG) ? window.CATALOG : [];
+
+  /* ---------- utilitários ---------- */
+  const norm = s => String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+  const el = (tag, cls, html) => {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (html !== undefined) n.innerHTML = html;
+    return n;
+  };
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+  /* ---------- agrupamento M28P real ---------- */
+  const m28 = CAT.filter(a => (a.tags||[]).includes("m28p"));
+  const outras = CAT.filter(a => !(a.tags||[]).includes("m28p"));
+
+  // atividade principal: slug é a própria palavra (sem hífenes)
+  const grupos = new Map();
+  m28.filter(a => /^[a-z]+$/.test(a.slug)).forEach(a => {
+    const m = a.title.match(/Palavra\s+(\d+)/i);
+    grupos.set(a.slug, {
+      word: a.slug,
+      num: m ? +m[1] : 99,
+      nome: (a.title.split("—")[1] || a.slug).split("·")[0].trim(),
+      main: a,
+      variantes: []
+    });
+  });
+
+  const orfas = [];
+  m28.filter(a => !grupos.has(a.slug)).forEach(a => {
+    const slug = a.slug;
+    let dono = null;
+    for (const w of grupos.keys()){
+      if (slug.startsWith(w + "-") || slug.includes("-" + w + "-") || slug.endsWith("-" + w)){ dono = w; break; }
+    }
+    if (dono) grupos.get(dono).variantes.push(a);
+    else orfas.push(a); // segurança: nunca perder atividades
+  });
+
+  const listaGrupos = [...grupos.values()].sort((x,y) => x.num - y.num);
+
+  /* ---------- categorias das páginas soltas ---------- */
+  function categorias(a){
+    const t = norm((a.tags||[]).join(" ") + " " + a.slug + " " + a.title);
+    const s = new Set();
+    if (/matem|frac|dobro|classifica|numero/.test(t)) s.add("numeros");
+    if (/projet|\bmem\b|canva/.test(t)) s.add("projetos");
+    if (/canva|\btic\b|literacia-digital|\bia\b|prompt|motor-de-busca/.test(t)) s.add("digital");
+    if (/portugues|leitura|escrita|verbo|silaba|m28p/.test(t)) s.add("palavras");
+    if (!s.size) s.add("projetos");
+    return s;
+  }
+
+  const dataNova = /2026/;
+
+  /* ---------- render: índice M28P ---------- */
+  const indice = document.getElementById("indiceM28P");
+
+  function fichaHTML(a, principal){
+    const tipo = principal
+      ? "Atividade principal"
+      : (a.title.includes("·") ? a.title.split("·").pop().trim() : a.title);
+    const rotulo = principal ? esc(a.title) : esc(tipo);
+    return `
+      <div class="ficha${principal ? " principal" : ""}" data-search="${esc(norm(a.title+" "+(a.tags||[]).join(" ")+" "+a.slug))}">
+        <span class="titulo-ficha">${principal ? esc(tipo) : rotulo}
+          <span class="tipo">${principal ? esc(a.year) : esc(a.year)}</span>
+        </span>
+        <span class="meta">${a.duration} min</span>
+        <span class="acoes">
+          <a class="btn btn-abrir" href="${esc(a.url)}">Abrir</a>
+          <a class="btn btn-guia" href="${esc(a.url)}guia/">Guia do professor</a>
+        </span>
+      </div>`;
+  }
+
+  listaGrupos.forEach(g => {
+    const total = 1 + g.variantes.length;
+    const li = document.createElement("li");
+    const cab = norm(g.num + " palavra" + g.num + " " + g.nome + " " + g.main.title);
+    const tudo = norm([g.main, ...g.variantes].map(a => a.title + " " + (a.tags||[]).join(" ") + " " + a.slug).join(" "));
+    li.innerHTML = `
+      <details class="palavra" data-head="${esc(cab)}" data-search="${esc(tudo)}">
+        <summary aria-label="Palavra ${g.num}, ${esc(g.nome)}: ${total} fichas, atividade principal de ${g.main.duration} minutos">
+          <span class="n-palavra">${g.num}.</span>
+          <span class="nome-palavra">${esc(g.nome.toLowerCase())}</span>
+          <span class="conta-fichas">· ${total} ${total === 1 ? "ficha" : "fichas"}</span>
+          <span class="leader" aria-hidden="true"></span>
+          <span class="pg" title="Duração da atividade principal: ${g.main.duration} minutos">${g.main.duration}</span>
+        </summary>
+        <div class="fichas">
+          ${fichaHTML(g.main, true)}
+          ${g.variantes.map(v => fichaHTML(v, false)).join("")}
+        </div>
+      </details>`;
+    indice.appendChild(li);
+  });
+
+  /* ---------- render: páginas soltas ---------- */
+  const listaSoltas = document.getElementById("listaSoltas");
+  const rotulosCat = { numeros:"Números", projetos:"Projetos", digital:"Digital", palavras:"Palavras" };
+
+  const soltasTodas = [...outras, ...orfas];
+  soltasTodas.forEach(a => {
+    const cats = categorias(a);
+    const selo = rotulosCat[[...cats][0]] || "Projetos";
+    const card = el("article", "cartao");
+    card.dataset.cats = [...cats].join(" ");
+    card.dataset.search = norm(a.title + " " + (a.tags||[]).join(" ") + " " + a.slug + " " + a.year);
+    card.innerHTML = `
+      <span class="selo">${esc(selo)}</span>
+      <h3>${esc(a.title)}${dataNova.test(a.slug) ? '<span class="anota-novo" aria-label="novidade">novo!</span>' : ""}</h3>
+      <p class="meta">${esc(a.year)} · ${a.duration} min</p>
+      <div class="acoes">
+        <a class="btn btn-abrir" href="${esc(a.url)}">Abrir</a>
+        <a class="btn btn-guia" href="${esc(a.url)}guia/">Guia do professor</a>
+      </div>`;
+    listaSoltas.appendChild(card);
+  });
+
+  /* ---------- notas de margem e rodapé (contagens reais) ---------- */
+  const nFichasM28 = m28.length;
+  document.getElementById("notaM28P").textContent =
+    listaGrupos.length + " palavras, " + nFichasM28 + " fichas";
+  document.getElementById("notaSoltas").textContent =
+    soltasTodas.length + " páginas soltas";
+  document.getElementById("rodape").innerHTML =
+    "<span>Este caderno guarda <strong>" + CAT.length + " atividades</strong>: " +
+    listaGrupos.length + " palavras do M28P (" + nFichasM28 + " fichas) e " +
+    soltasTodas.length + " páginas soltas.</span>" +
+    '<span class="mao">escrito à mão pelo pipeline PageCraft ✎</span>';
+
+  /* ---------- filtros reais: separador + pesquisa ---------- */
+  const estado = { tab: "tudo", q: "" };
+  const secM28P = document.getElementById("seccaoM28P");
+  const secSoltas = document.getElementById("seccaoSoltas");
+  const vazio = document.getElementById("estadoVazio");
+  const estadoProcura = document.getElementById("estadoProcura");
+  const zona = document.getElementById("zonaPesquisa");
+  const campo = document.getElementById("campoPesquisa");
+  const detalhes = [...indice.querySelectorAll("details.palavra")];
+  const cartoes = [...listaSoltas.querySelectorAll(".cartao")];
+  const botoesTab = [...document.querySelectorAll(".separadores button")];
+
+  function aplicar(){
+    const q = norm(estado.q.trim());
+    const mostraM28 = estado.tab === "tudo" || estado.tab === "palavras";
+
+    let visPalavras = 0, visFichas = 0;
+    detalhes.forEach(d => {
+      const bate = mostraM28 && (!q || d.dataset.search.includes(q));
+      d.parentElement.hidden = !bate;
+      if (!bate){
+        if (d.dataset.auto){ d.open = false; delete d.dataset.auto; }
+        return;
+      }
+      visPalavras++;
+      const cabBate = !q || d.dataset.head.includes(q);
+      d.querySelectorAll(".ficha").forEach(f => {
+        const mostrar = cabBate || f.classList.contains("principal") || f.dataset.search.includes(q);
+        f.hidden = !mostrar;
+        if (mostrar) visFichas++;
+      });
+      if (q && !d.open){ d.open = true; d.dataset.auto = "1"; }
+      if (!q && d.dataset.auto){ d.open = false; delete d.dataset.auto; }
+    });
+    secM28P.hidden = !mostraM28 || visPalavras === 0;
+
+    let visSoltas = 0;
+    cartoes.forEach(c => {
+      const noTab = estado.tab === "tudo" || c.dataset.cats.split(" ").includes(estado.tab);
+      const bate = noTab && (!q || c.dataset.search.includes(q));
+      c.hidden = !bate;
+      if (bate) visSoltas++;
+    });
+    secSoltas.hidden = visSoltas === 0;
+
+    vazio.hidden = !(secM28P.hidden && secSoltas.hidden);
+
+    zona.classList.toggle("tem-texto", estado.q.length > 0);
+    if (!q){ estadoProcura.textContent = ""; }
+    else {
+      const partes = [];
+      if (mostraM28 && visPalavras > 0)
+        partes.push(visPalavras + (visPalavras === 1 ? " palavra" : " palavras"));
+      if (visSoltas > 0)
+        partes.push(visSoltas + (visSoltas === 1 ? " página solta" : " páginas soltas"));
+      estadoProcura.textContent = partes.length ? "A mostrar " + partes.join(" e ") + "." : "";
+    }
+  }
+
+  botoesTab.forEach(b => b.addEventListener("click", () => {
+    estado.tab = b.dataset.tab;
+    botoesTab.forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    aplicar();
+  }));
+
+  campo.addEventListener("input", () => { estado.q = campo.value; aplicar(); });
+  document.getElementById("btnLimpar").addEventListener("click", () => {
+    campo.value = ""; estado.q = ""; aplicar(); campo.focus();
+  });
+  document.getElementById("btnRecomecar").addEventListener("click", () => {
+    campo.value = ""; estado.q = ""; estado.tab = "tudo";
+    botoesTab.forEach(x => x.setAttribute("aria-pressed", String(x.dataset.tab === "tudo")));
+    aplicar();
+    campo.focus();
+  });
+
+  aplicar();
+})();
+</script>
+</body>
+</html>
