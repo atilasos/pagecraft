@@ -20,6 +20,10 @@ _Avoid_: mudança forçada, override
 
 ### Sala
 
+**Plano de aula**:
+Fila ordenada e leve de atividades que o professor prepara para uma turma antes da aula (ex.: na véspera, de casa). Na sala, «Começar» lança a atividade seguinte como sessão, com projeção e código. Sem calendários nem horários.
+_Avoid_: agendamento, calendário
+
 **Sessão de aula**:
 Instância viva de uma atividade para uma turma, com código de entrada e roster; termina fechada mas os eventos persistem para relatório.
 
