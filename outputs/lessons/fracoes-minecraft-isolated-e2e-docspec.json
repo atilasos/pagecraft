@@ -1,0 +1,234 @@
+{
+  "phase": "Architect",
+  "slug": "fracoes-minecraft-isolated-e2e",
+  "topic": "Frações equivalentes com Minecraft",
+  "year": "2.º ano",
+  "duration_minutes": 35,
+  "source_of_truth": {
+    "used": "PageCraft Isolated Phase Task supplied on 2026-05-24 18:07 GMT+1",
+    "prior_artifacts_used": false,
+    "future_artifacts_read": false
+  },
+  "output_contract": {
+    "required_write": "outputs/lessons/fracoes-minecraft-isolated-e2e-docspec.json",
+    "catalog_publish": false
+  },
+  "lesson_intent": {
+    "big_idea": "Frações equivalentes podem representar a mesma parte de um todo, mesmo quando o todo está dividido em números diferentes de partes iguais.",
+    "student_goal": "Reconhecer e construir frações equivalentes simples usando blocos inspirados no Minecraft.",
+    "teacher_goal": "Conduzir uma exploração curta, visual e manipulável que ajude alunos do 2.º ano a comparar metades, quartos e oitavos."
+  },
+  "learning_objectives": [
+    "Identificar a parte pintada de uma barra ou grelha dividida em partes iguais.",
+    "Comparar representações visuais de 1/2, 2/4 e 4/8.",
+    "Construir uma representação equivalente a uma fração dada.",
+    "Explicar oralmente que duas frações são equivalentes quando cobrem a mesma quantidade do todo."
+  ],
+  "success_criteria": [
+    "O aluno seleciona corretamente imagens que mostram a mesma quantidade.",
+    "O aluno constrói 2/4 como equivalente a 1/2 numa barra de blocos.",
+    "O aluno reconhece que 4/8 ocupa a mesma área que 1/2 quando o todo tem o mesmo tamanho.",
+    "O aluno usa linguagem simples como 'é a mesma parte' ou 'ocupa o mesmo espaço'."
+  ],
+  "misconceptions_to_address": [
+    {
+      "misconception": "Pensar que uma fração com números maiores é sempre maior.",
+      "response": "Mostrar o mesmo retângulo dividido em 2, 4 e 8 partes, destacando que a área coberta pode ser igual."
+    },
+    {
+      "misconception": "Comparar frações de todos com tamanhos diferentes.",
+      "response": "Manter sempre o mesmo tamanho de barra ou grelha antes de comparar."
+    },
+    {
+      "misconception": "Contar blocos pintados sem considerar o total de partes.",
+      "response": "Pedir sempre: 'Quantas partes tem o todo?' e depois 'Quantas estão pintadas?'."
+    }
+  ],
+  "page_spec": {
+    "language": "pt-PT",
+    "format": "single self-contained interactive HTML lesson",
+    "audience": "alunos do 2.º ano e professor em sala",
+    "tone": "claro, concreto e lúdico, sem depender de texto longo",
+    "minecraft_inspiration": {
+      "allowed": "blocos quadrados, relva, pedra, madeira, inventário visual e grelhas de construção",
+      "avoid": "marcas, logótipos, personagens protegidas ou referências oficiais"
+    }
+  },
+  "lesson_flow": [
+    {
+      "stage": "Abertura",
+      "duration_minutes": 5,
+      "purpose": "Ativar a ideia de metade com uma barra de blocos.",
+      "interaction": "O professor mostra uma barra de 8 blocos e pergunta que parte fica coberta se forem pintados 4 blocos.",
+      "screen": "Cena inicial com uma barra horizontal de blocos e controlo para alternar entre 1/2 e 4/8."
+    },
+    {
+      "stage": "Exploração guiada",
+      "duration_minutes": 10,
+      "purpose": "Comparar 1/2, 2/4 e 4/8 no mesmo todo.",
+      "interaction": "Os alunos observam três barras iguais, cada uma dividida de forma diferente, e arrastam etiquetas para as barras.",
+      "screen": "Três filas de blocos com a mesma largura visual; etiquetas arrastáveis: 1/2, 2/4, 4/8."
+    },
+    {
+      "stage": "Construção",
+      "duration_minutes": 10,
+      "purpose": "Construir frações equivalentes manipulando blocos.",
+      "interaction": "O aluno recebe uma fração alvo e clica em blocos para pintar uma quantidade equivalente.",
+      "screen": "Área de construção com grelha, fração alvo, contador de blocos pintados e feedback imediato."
+    },
+    {
+      "stage": "Desafio rápido",
+      "duration_minutes": 6,
+      "purpose": "Consolidar a identificação de equivalências.",
+      "interaction": "O aluno escolhe quais das três opções mostram a mesma parte que a fração alvo.",
+      "screen": "Cartões de resposta com barras de blocos; seleção por clique ou teclado."
+    },
+    {
+      "stage": "Fecho",
+      "duration_minutes": 4,
+      "purpose": "Verbalizar a regra conceptual.",
+      "interaction": "A turma completa oralmente a frase: 'Frações equivalentes mostram...'.",
+      "screen": "Resumo visual com 1/2 = 2/4 = 4/8 e uma frase curta de síntese."
+    }
+  ],
+  "interactive_components": [
+    {
+      "id": "equivalence-toggle",
+      "type": "segmented-control",
+      "required_states": [
+        "1/2",
+        "2/4",
+        "4/8"
+      ],
+      "behavior": "Atualiza a mesma barra para mostrar divisões diferentes mantendo a mesma área pintada.",
+      "feedback": "Realça que a parte pintada continua com a mesma largura."
+    },
+    {
+      "id": "label-match",
+      "type": "drag-and-drop-with-click-fallback",
+      "items": [
+        "1/2",
+        "2/4",
+        "4/8"
+      ],
+      "behavior": "Permite associar cada etiqueta à barra correta.",
+      "feedback": "Confirma com cor e texto curto; em erro, indica para contar total e parte pintada."
+    },
+    {
+      "id": "block-builder",
+      "type": "clickable-grid",
+      "behavior": "Permite pintar e apagar blocos para construir uma fração equivalente ao alvo.",
+      "targets": [
+        {
+          "target": "1/2",
+          "accepted_equivalents": [
+            "2/4",
+            "4/8"
+          ]
+        },
+        {
+          "target": "2/4",
+          "accepted_equivalents": [
+            "1/2",
+            "4/8"
+          ]
+        }
+      ],
+      "feedback": "Mostra 'mesma parte' quando a construção é equivalente e 'tenta ajustar os blocos pintados' quando não é."
+    },
+    {
+      "id": "quick-check",
+      "type": "multiple-choice",
+      "behavior": "Apresenta 3 cartões visuais e aceita uma ou mais respostas corretas.",
+      "feedback": "Feedback imediato com breve justificação visual."
+    }
+  ],
+  "visual_design": {
+    "layout": "interface de aula em ecrã único com secções empilhadas e navegação simples por etapas",
+    "style": "blocos quadrados, grelhas nítidas, alto contraste e textura leve inspirada em construção",
+    "palette": {
+      "grass": "#3FA34D",
+      "dirt": "#8B5A2B",
+      "stone": "#8A8F98",
+      "wood": "#C58A3D",
+      "sky": "#BFE7FF",
+      "ink": "#1F2933",
+      "paper": "#F8FAFC",
+      "accent": "#2563EB"
+    },
+    "typography": "letra grande e legível, sem blocos extensos de texto",
+    "responsive_requirements": [
+      "Funcionar em quadro interativo, computador e tablet.",
+      "Manter barras de comparação com a mesma largura visual.",
+      "Evitar sobreposição de texto em botões e cartões.",
+      "Garantir alvos de toque com pelo menos 44 por 44 px."
+    ]
+  },
+  "accessibility": {
+    "keyboard": [
+      "Todos os controlos são acessíveis por teclado.",
+      "Arrastar tem alternativa por clique: selecionar etiqueta e selecionar destino."
+    ],
+    "screen_reader": [
+      "Cada barra anuncia a fração representada e a quantidade de blocos pintados.",
+      "Feedback é comunicado em região aria-live."
+    ],
+    "visual": [
+      "Não depender apenas da cor para distinguir correto e incorreto.",
+      "Usar padrões ou ícones simples além da cor.",
+      "Contraste suficiente entre blocos pintados, blocos vazios e texto."
+    ],
+    "cognitive": [
+      "Instruções curtas por etapa.",
+      "Uma ação principal visível de cada vez.",
+      "Feedback concreto ligado à contagem de partes."
+    ]
+  },
+  "assessment": {
+    "formative_checks": [
+      "Associação correta de etiquetas no componente label-match.",
+      "Construção de uma equivalência válida no block-builder.",
+      "Resposta correta no quick-check."
+    ],
+    "teacher_observation_prompts": [
+      "O aluno compara sempre o mesmo todo?",
+      "O aluno conta total e parte pintada?",
+      "O aluno consegue explicar que a parte coberta é a mesma?"
+    ],
+    "exit_prompt": "Desenha ou escolhe uma fração que seja equivalente a 1/2."
+  },
+  "copy_bank": {
+    "headings": {
+      "main": "Frações equivalentes com blocos",
+      "opening": "A mesma parte, com blocos diferentes",
+      "guided": "Compara as barras",
+      "builder": "Constrói uma fração equivalente",
+      "challenge": "Qual mostra a mesma parte?",
+      "closing": "Ideia final"
+    },
+    "instructions": [
+      "Conta primeiro todas as partes iguais.",
+      "Agora conta as partes pintadas.",
+      "Procura outra barra que ocupe a mesma quantidade.",
+      "Pinta blocos até mostrares a mesma parte do todo."
+    ],
+    "feedback": {
+      "correct": "Sim. Ocupa a mesma parte do todo.",
+      "incorrect": "Ainda não. Compara o tamanho da parte pintada.",
+      "hint": "O todo tem de ter o mesmo tamanho para a comparação ser justa."
+    },
+    "summary_sentence": "Frações equivalentes mostram a mesma parte do mesmo todo."
+  },
+  "implementation_notes_for_later_phases": [
+    "Criar uma página HTML autocontida, sem dependências remotas obrigatórias.",
+    "Usar elementos semânticos e botões reais para interações.",
+    "Representar frações com barras de blocos de largura constante.",
+    "Guardar estado apenas no cliente; não é necessário backend.",
+    "Não publicar no catálogo durante esta fase."
+  ],
+  "blocked": false,
+  "blockers": [],
+  "writes_declared": [
+    "outputs/lessons/fracoes-minecraft-isolated-e2e-docspec.json"
+  ]
+}

@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Missão de frações com Minecraft</title>
+  <style>
+    :root {
+      --bg: #F5F7EC;
+      --surface: #FFFFFF;
+      --stone: #B8C0B1;
+      --stone-dark: #8E9889;
+      --grass: #4F8A3B;
+      --dirt: #8B5A34;
+      --wood: #A66A3F;
+      --gold: #F3C94A;
+      --gold-dark: #C99A1E;
+      --water: #3D8BBF;
+      --success: #2F7D4A;
+      --review: #A45A2A;
+      --focus: #1E5AA8;
+      --text: #1F2A1F;
+      --muted: #4B5A4B;
+      --line: #D8DECF;
+      --shadow: 0 10px 24px rgba(31, 42, 31, .14);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        linear-gradient(90deg, rgba(79,138,59,.08) 1px, transparent 1px),
+        linear-gradient(rgba(79,138,59,.08) 1px, transparent 1px),
+        var(--bg);
+      background-size: 28px 28px;
+      font-size: 18px;
+      line-height: 1.45;
+    }
+
+    .skip {
+      position: absolute;
+      left: 1rem;
+      top: -4rem;
+      z-index: 20;
+      padding: .75rem 1rem;
+      color: #fff;
+      background: var(--focus);
+      border-radius: .35rem;
+    }
+    .skip:focus { top: 1rem; }
+
+    header {
+      padding: 1.1rem clamp(1rem, 4vw, 3rem);
+      background: linear-gradient(180deg, #EAF1DD, #F5F7EC);
+      border-bottom: 4px solid var(--grass);
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      max-width: 1180px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(1.55rem, 3vw, 2.1rem);
+      letter-spacing: 0;
+    }
+    .meta {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .meta span {
+      border: 2px solid var(--line);
+      background: var(--surface);
+      padding: .35rem .6rem;
+      border-radius: .35rem;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: clamp(1rem, 3vw, 2rem);
+    }
+    section {
+      padding: clamp(1rem, 3vw, 1.6rem) 0;
+      border-bottom: 2px solid rgba(79,138,59,.18);
+    }
+    h2 {
+      margin: 0 0 .4rem;
+      font-size: clamp(1.35rem, 2.4vw, 1.8rem);
+      letter-spacing: 0;
+    }
+    p { margin: .3rem 0 .8rem; }
+    .lead { max-width: 760px; color: var(--muted); }
+
+    .workbench {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(280px, .9fr);
+      gap: clamp(1rem, 3vw, 1.5rem);
+      align-items: start;
+      margin-top: 1rem;
+    }
+    .panel {
+      background: rgba(255,255,255,.92);
+      border: 3px solid var(--line);
+      border-radius: .45rem;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+    }
+    .panel h3 {
+      margin: 0 0 .6rem;
+      font-size: 1.1rem;
+    }
+
+    button, select, textarea {
+      font: inherit;
+    }
+    button, .choice, .fraction-card, .block {
+      -webkit-tap-highlight-color: transparent;
+    }
+    button {
+      min-height: 48px;
+      min-width: 48px;
+      border: 3px solid var(--text);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: .35rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 0 rgba(31,42,31,.22);
+    }
+    button:hover { transform: translateY(-1px); }
+    button:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(31,42,31,.22); }
+    button:focus-visible, select:focus-visible, textarea:focus-visible, .block:focus-visible {
+      outline: 4px solid var(--focus);
+      outline-offset: 3px;
+    }
+    .primary { background: var(--grass); color: #fff; border-color: #244C1F; }
+    .secondary { background: #F7E6B1; }
+    .tool-on { background: var(--water); color: #fff; border-color: #184B70; }
+    .danger { background: #F3D3B9; border-color: var(--review); }
+
+    .button-row {
+      display: flex;
+      gap: .65rem;
+      flex-wrap: wrap;
+      margin-top: .8rem;
+    }
+
+    .wall, .paint-grid {
+      display: grid;
+      gap: 6px;
+      width: min(100%, 520px);
+      margin: 0 auto;
+      padding: 8px;
+      background: #6D4B32;
+      border: 5px solid var(--dirt);
+      box-shadow: inset 0 0 0 4px rgba(255,255,255,.18), var(--shadow);
+    }
+    .wall[data-cols="2"] { grid-template-columns: repeat(2, 1fr); max-width: 420px; }
+    .wall[data-cols="4"] { grid-template-columns: repeat(4, 1fr); }
+    .wall[data-cols="6"] { grid-template-columns: repeat(6, 1fr); }
+    .wall[data-cols="8"], .paint-grid { grid-template-columns: repeat(8, 1fr); }
+    .block {
+      aspect-ratio: 1;
+      min-width: 38px;
+      border: 3px solid var(--stone-dark);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.28) 0 25%, transparent 25% 50%, rgba(0,0,0,.08) 50% 75%, transparent 75%),
+        var(--stone);
+      background-size: 16px 16px;
+      position: relative;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: var(--text);
+      user-select: none;
+    }
+    .block.lit, .block.painted {
+      border-color: var(--gold-dark);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.45) 0 25%, transparent 25% 50%, rgba(122,83,10,.16) 50% 75%, transparent 75%),
+        var(--gold);
+      background-size: 14px 14px;
+    }
+    .block.marked::after {
+      content: attr(data-count);
+      position: absolute;
+      right: 4px;
+      bottom: 3px;
+      min-width: 1.35em;
+      text-align: center;
+      color: #fff;
+      background: var(--focus);
+      border-radius: 999px;
+      font-size: .85rem;
+      line-height: 1.35;
+    }
+
+    .choices, .fraction-list, .label-grid {
+      display: grid;
+      gap: .7rem;
+      margin-top: .8rem;
+    }
+    .choices { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .choice, .fraction-card {
+      width: 100%;
+      min-height: 64px;
+      padding: .75rem;
+      text-align: left;
+      background: var(--surface);
+      border: 3px solid var(--line);
+      border-radius: .45rem;
+      box-shadow: 0 4px 0 rgba(31,42,31,.12);
+    }
+    .choice[aria-pressed="true"], .fraction-card[aria-pressed="true"] {
+      border-color: var(--focus);
+      box-shadow: 0 0 0 4px rgba(30,90,168,.18), 0 4px 0 rgba(31,42,31,.12);
+    }
+    .fraction {
+      display: inline-block;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      margin-right: .35rem;
+    }
+
+    .status {
+      margin-top: .85rem;
+      padding: .75rem;
+      border-left: 6px solid var(--water);
+      background: #E7F2F8;
+      font-weight: 700;
+    }
+    .status.success { border-color: var(--success); background: #E5F2E9; }
+    .status.review { border-color: var(--review); background: #F7E8DC; }
+    .hidden { display: none !important; }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .9rem;
+    }
+    .fraction-card {
+      cursor: pointer;
+      min-height: 100%;
+    }
+    .mini-wall {
+      display: grid;
+      gap: 4px;
+      margin: .5rem 0;
+      padding: 5px;
+      background: #6D4B32;
+      border: 3px solid var(--dirt);
+    }
+    .mini-wall.cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .mini-wall.cols-4 { grid-template-columns: repeat(4, 1fr); }
+    .mini-wall.cols-8 { grid-template-columns: repeat(8, 1fr); }
+    .mini-wall span {
+      aspect-ratio: 1;
+      min-width: 18px;
+      background: var(--stone);
+      border: 2px solid var(--stone-dark);
+    }
+    .mini-wall span.lit { background: var(--gold); border-color: var(--gold-dark); }
+    .overlay-stage {
+      min-height: 96px;
+      margin-top: .9rem;
+      padding: .75rem;
+      border: 3px dashed var(--water);
+      background: #E7F2F8;
+      display: grid;
+      align-items: center;
+      gap: .5rem;
+    }
+    .bar {
+      height: 24px;
+      border: 2px solid var(--text);
+      background: linear-gradient(90deg, var(--gold) 0 50%, var(--stone) 50% 100%);
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,.35);
+    }
+
+    .counter {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: .3rem .65rem;
+      background: #FFF5C9;
+      border: 3px solid var(--gold-dark);
+      border-radius: .35rem;
+      font-weight: 900;
+    }
+    .teacher-notes {
+      width: 100%;
+      min-height: 96px;
+      resize: vertical;
+      border: 3px solid var(--line);
+      border-radius: .35rem;
+      padding: .7rem;
+      color: var(--text);
+      background: #fff;
+    }
+
+    .wood-sign {
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.13), transparent 32%, rgba(0,0,0,.08) 68%, transparent),
+        var(--wood);
+      color: #1F140B;
+      border: 5px solid #734522;
+      border-radius: .35rem;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+    }
+    .wood-sign label {
+      display: block;
+      font-weight: 900;
+      margin: .7rem 0 .25rem;
+    }
+    select, textarea {
+      width: 100%;
+      min-height: 48px;
+      border: 3px solid #734522;
+      border-radius: .25rem;
+      padding: .45rem;
+      background: #FFF8DA;
+      color: var(--text);
+    }
+    .sentence {
+      display: block;
+      width: 100%;
+      margin-top: .45rem;
+      text-align: left;
+      background: #FFF8DA;
+      border-color: #734522;
+    }
+
+    .evidence {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .75rem;
+      margin-top: .9rem;
+    }
+    .evidence div {
+      border: 3px solid var(--line);
+      background: var(--surface);
+      border-radius: .4rem;
+      padding: .7rem;
+    }
+    .evidence strong { display: block; }
+
+    @media (max-width: 900px) {
+      .workbench, .comparison-grid, .evidence {
+        grid-template-columns: 1fr;
+      }
+      .choices { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 520px) {
+      body { font-size: 17px; }
+      main { padding: .8rem; }
+      .panel { padding: .8rem; }
+      .wall, .paint-grid { gap: 4px; padding: 5px; }
+      .block { min-width: 0; border-width: 2px; }
+      button { width: 100%; }
+      .button-row { display: grid; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#conteudo">Saltar para a atividade</a>
+  <header>
+    <div class="topbar">
+      <h1>Missão de frações com Minecraft</h1>
+      <div class="meta" aria-label="Dados da aula">
+        <span>2.º ano</span>
+        <span>35 min</span>
+        <span>Matemática</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <section aria-labelledby="missao-titulo">
+      <h2 id="missao-titulo">Missão de blocos</h2>
+      <p class="lead">Observa, conta, pinta e compara. A turma decide o que se mantém igual olhando para as construções.</p>
+      <div class="evidence" aria-label="Diferenciação">
+        <div><strong>Apoio</strong> Conta os blocos com marcação visual e usa frases incompletas.</div>
+        <div><strong>Intermédio</strong> Escolhe, compara e explica com a grelha visível.</div>
+        <div><strong>Desafio</strong> Cria outra construção que mostre a mesma parte do todo.</div>
+      </div>
+    </section>
+
+    <section aria-labelledby="entrada-titulo">
+      <h2 id="entrada-titulo">1. Entrada no mundo de blocos</h2>
+      <p class="lead">Que parte vês iluminada? Conta os blocos e prepara uma justificação curta.</p>
+      <div class="workbench">
+        <div class="panel">
+          <div class="wall" data-cols="4" role="img" aria-label="Parede com 2 linhas e 4 colunas; 4 de 8 blocos estão iluminados">
+            <button class="block lit" type="button" data-count="" aria-label="Bloco iluminado 1"></button>
+            <button class="block lit" type="button" data-count="" aria-label="Bloco iluminado 2"></button>
+            <button class="block" type="button" data-count="" aria-label="Bloco sem luz 3"></button>
+            <button class="block" type="button" data-count="" aria-label="Bloco sem luz 4"></button>
+            <button class="block lit" type="button" data-count="" aria-label="Bloco iluminado 5"></button>
+            <button class="block lit" type="button" data-count="" aria-label="Bloco iluminado 6"></button>
+            <button class="block" type="button" data-count="" aria-label="Bloco sem luz 7"></button>
+            <button class="block" type="button" data-count="" aria-label="Bloco sem luz 8"></button>
+          </div>
+          <div class="button-row">
+            <button id="count-lit" class="secondary" type="button">Contar iluminados</button>
+            <span class="counter" id="count-result" aria-live="polite">Ainda não contei.</span>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Escolhe uma resposta visual</h3>
+          <div class="choices" role="group" aria-label="Respostas para a parte iluminada">
+            <button class="choice" type="button" data-answer="1/2" aria-pressed="false"><span class="fraction">1/2</span><br>Uma de duas partes iguais</button>
+            <button class="choice" type="button" data-answer="2/4" aria-pressed="false"><span class="fraction">2/4</span><br>Duas de quatro partes iguais</button>
+            <button class="choice" type="button" data-answer="4/8" aria-pressed="false"><span class="fraction">4/8</span><br>Quatro de oito blocos</button>
+          </div>
+          <div id="entry-feedback" class="status" aria-live="polite">Primeiro observa a parede. Depois escolhe a resposta que consegues defender.</div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="comparar-titulo">
+      <h2 id="comparar-titulo">2. A mesma parede com divisões diferentes</h2>
+      <p class="lead">Escolhe duas paredes e compara a parte iluminada. A área deve ser observada antes da frase final aparecer.</p>
+      <div class="comparison-grid" role="group" aria-label="Paredes para comparação">
+        <button class="fraction-card" type="button" data-card="1/2" aria-pressed="false">
+          <span class="fraction">1/2</span>
+          <div class="mini-wall cols-2" aria-hidden="true"><span class="lit"></span><span></span></div>
+          Uma divisão em duas partes.
+        </button>
+        <button class="fraction-card" type="button" data-card="2/4" aria-pressed="false">
+          <span class="fraction">2/4</span>
+          <div class="mini-wall cols-4" aria-hidden="true"><span class="lit"></span><span class="lit"></span><span></span><span></span></div>
+          Quatro partes mais pequenas.
+        </button>
+        <button class="fraction-card" type="button" data-card="4/8" aria-pressed="false">
+          <span class="fraction">4/8</span>
+          <div class="mini-wall cols-8" aria-hidden="true"><span class="lit"></span><span class="lit"></span><span class="lit"></span><span class="lit"></span><span></span><span></span><span></span><span></span></div>
+          Oito blocos iguais.
+        </button>
+      </div>
+      <div class="overlay-stage" aria-live="polite">
+        <div id="overlay-label">Seleciona duas paredes para as comparar.</div>
+        <div id="overlay-bars" class="hidden">
+          <div class="bar" aria-hidden="true"></div>
+          <div class="bar" aria-hidden="true"></div>
+        </div>
+      </div>
+      <div class="button-row">
+        <button id="compare-cards" class="primary" type="button">Comparar paredes</button>
+        <button id="clear-cards" type="button">Limpar escolhas</button>
+      </div>
+      <div id="compare-feedback" class="status" aria-live="polite">Observa onde começa e termina a parte iluminada em cada parede.</div>
+    </section>
+
+    <section aria-labelledby="construir-titulo">
+      <h2 id="construir-titulo">3. Construir uma ponte</h2>
+      <p class="lead">Alvo visual: ocupa a mesma quantidade que a parede partida em duas partes. Pinta, compara e ajusta se for preciso.</p>
+      <div class="workbench">
+        <div class="panel">
+          <div id="paint-grid" class="paint-grid" role="group" aria-label="Ponte com 2 linhas e 4 colunas para pintar blocos"></div>
+          <div class="button-row" role="group" aria-label="Ferramentas de pintura">
+            <button id="paint-mode" class="tool-on" type="button" aria-pressed="true">Pintar</button>
+            <button id="erase-mode" type="button" aria-pressed="false">Apagar</button>
+            <button id="clear-grid" class="danger" type="button">Limpar</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Comparação</h3>
+          <p>Depois de pintar, carrega em comparar. O feedback ajuda-te a observar a ponte, sem dar a resposta antes da tentativa.</p>
+          <div class="button-row">
+            <button id="compare-paint" class="primary" type="button">Comparar construção</button>
+          </div>
+          <div id="paint-feedback" class="status" aria-live="polite">Ainda não há tentativa. Pinta alguns blocos da ponte.</div>
+          <div id="formal-explanation" class="status success hidden" aria-live="polite">
+            Agora já testaste: 4 de 8 blocos ocupam a mesma quantidade que 1 de 2 partes. Por isso, 4/8 e 1/2 podem representar a mesma parte do todo.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="placa-titulo">
+      <h2 id="placa-titulo">4. Placa de partilha</h2>
+      <p class="lead">Regista uma construção para partilhar com um par. Escolhe duas etiquetas diferentes e prepara a tua justificação.</p>
+      <div class="workbench">
+        <div class="panel">
+          <div class="wall" data-cols="4" role="img" aria-label="Construção final da ponte, atualizada depois da pintura" id="final-preview"></div>
+          <div id="final-summary" class="status">A tua ponte aparece aqui depois de pintares.</div>
+        </div>
+        <div class="wood-sign">
+          <label for="label-one">Primeira etiqueta</label>
+          <select id="label-one">
+            <option value="1/2">1/2</option>
+            <option value="2/4">2/4</option>
+            <option value="4/8">4/8</option>
+          </select>
+          <label for="label-two">Etiqueta para comparar</label>
+          <select id="label-two">
+            <option value="4/8">4/8</option>
+            <option value="2/4">2/4</option>
+            <option value="1/2">1/2</option>
+          </select>
+          <label>Molduras de frase</label>
+          <button class="sentence" type="button" data-sentence="Eu pintei ... de ... blocos.">Eu pintei ... de ... blocos.</button>
+          <button class="sentence" type="button" data-sentence="É igual a ... porque ...">É igual a ... porque ...</button>
+          <button class="sentence" type="button" data-sentence="Vejo a mesma quantidade quando ...">Vejo a mesma quantidade quando ...</button>
+          <label for="justification">Justificação curta</label>
+          <textarea id="justification" placeholder="Escreve ou dita ao professor."></textarea>
+          <div class="button-row">
+            <button id="confirm-sign" class="primary" type="button">Confirmar placa</button>
+          </div>
+          <div id="sign-feedback" class="status" aria-live="polite">A placa ainda não foi confirmada.</div>
+        </div>
+      </div>
+      <div class="panel" style="margin-top:1rem">
+        <h3>Notas de observação do professor</h3>
+        <textarea class="teacher-notes" aria-label="Notas de observação do professor" placeholder="Registar escolhas, contagem, comparação e explicação oral."></textarea>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const $ = (selector, root = document) => root.querySelector(selector);
+    const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+
+    const countButton = $('#count-lit');
+    const countResult = $('#count-result');
+    const entryFeedback = $('#entry-feedback');
+    let counted = false;
+    let entryChoice = null;
+
+    countButton.addEventListener('click', () => {
+      counted = true;
+      $$('.wall .block.lit').slice(0, 4).forEach((block, index) => {
+        block.classList.add('marked');
+        block.dataset.count = String(index + 1);
+      });
+      countResult.textContent = 'Contaste 4 blocos iluminados em 8.';
+      entryFeedback.textContent = 'Agora escolhe uma resposta e prepara a tua frase: como sabes?';
+      entryFeedback.className = 'status';
+    });
+
+    $$('.choice').forEach((button) => {
+      button.addEventListener('click', () => {
+        entryChoice = button.dataset.answer;
+        $$('.choice').forEach((item) => item.setAttribute('aria-pressed', 'false'));
+        button.setAttribute('aria-pressed', 'true');
+        if (!counted) {
+          entryFeedback.textContent = 'Boa escolha para investigar. Conta os blocos iluminados para a conseguires defender.';
+          entryFeedback.className = 'status review';
+          return;
+        }
+        entryFeedback.textContent = 'Usa a parede para justificar: aponta para os blocos iluminados e para os blocos sem luz.';
+        entryFeedback.className = 'status success';
+      });
+    });
+
+    const selectedCards = [];
+    const compareFeedback = $('#compare-feedback');
+    const overlayLabel = $('#overlay-label');
+    const overlayBars = $('#overlay-bars');
+
+    $$('.fraction-card').forEach((card) => {
+      card.addEventListener('click', () => {
+        const label = card.dataset.card;
+        const index = selectedCards.indexOf(label);
+        if (index >= 0) {
+          selectedCards.splice(index, 1);
+          card.setAttribute('aria-pressed', 'false');
+        } else if (selectedCards.length < 2) {
+          selectedCards.push(label);
+          card.setAttribute('aria-pressed', 'true');
+        }
+        overlayBars.classList.add('hidden');
+        overlayLabel.textContent = selectedCards.length < 2
+          ? 'Escolhe mais uma parede para comparar.'
+          : 'Pronto para comparar as duas partes iluminadas.';
+        compareFeedback.textContent = 'Repara se a zona iluminada chega ao mesmo ponto da parede.';
+        compareFeedback.className = 'status';
+      });
+    });
+
+    $('#compare-cards').addEventListener('click', () => {
+      if (selectedCards.length !== 2) {
+        compareFeedback.textContent = 'Seleciona duas paredes antes de comparar.';
+        compareFeedback.className = 'status review';
+        return;
+      }
+      overlayBars.classList.remove('hidden');
+      overlayLabel.textContent = selectedCards.join(' e ') + ': as barras ajudam a ver a área iluminada.';
+      compareFeedback.textContent = 'As zonas iluminadas alinham-se. Explica ao teu par o que observaste antes de usar uma regra.';
+      compareFeedback.className = 'status success';
+    });
+
+    $('#clear-cards').addEventListener('click', () => {
+      selectedCards.length = 0;
+      $$('.fraction-card').forEach((card) => card.setAttribute('aria-pressed', 'false'));
+      overlayBars.classList.add('hidden');
+      overlayLabel.textContent = 'Seleciona duas paredes para as comparar.';
+      compareFeedback.textContent = 'Observa onde começa e termina a parte iluminada em cada parede.';
+      compareFeedback.className = 'status';
+    });
+
+    const paintGrid = $('#paint-grid');
+    const finalPreview = $('#final-preview');
+    let mode = 'paint';
+    let attempts = 0;
+
+    function buildPaintGrid() {
+      paintGrid.innerHTML = '';
+      finalPreview.innerHTML = '';
+      for (let i = 0; i < 8; i += 1) {
+        const block = document.createElement('button');
+        block.type = 'button';
+        block.className = 'block';
+        block.dataset.index = String(i);
+        block.setAttribute('aria-pressed', 'false');
+        block.setAttribute('aria-label', 'Bloco ' + (i + 1) + ' por pintar');
+        block.addEventListener('click', () => togglePaint(block));
+        paintGrid.appendChild(block);
+
+        const preview = document.createElement('span');
+        preview.className = 'block';
+        preview.setAttribute('aria-hidden', 'true');
+        finalPreview.appendChild(preview);
+      }
+    }
+
+    function togglePaint(block) {
+      const painted = mode === 'paint';
+      block.classList.toggle('painted', painted);
+      block.setAttribute('aria-pressed', painted ? 'true' : 'false');
+      block.setAttribute('aria-label', 'Bloco ' + (Number(block.dataset.index) + 1) + (painted ? ' pintado' : ' por pintar'));
+      updatePreview();
+    }
+
+    function updatePreview() {
+      const blocks = $$('.block', paintGrid);
+      const previews = $$('.block', finalPreview);
+      let total = 0;
+      blocks.forEach((block, index) => {
+        const painted = block.classList.contains('painted');
+        previews[index].classList.toggle('painted', painted);
+        if (painted) total += 1;
+      });
+      $('#final-summary').textContent = total
+        ? 'A tua ponte tem ' + total + ' de 8 blocos pintados.'
+        : 'A tua ponte aparece aqui depois de pintares.';
+    }
+
+    $('#paint-mode').addEventListener('click', () => {
+      mode = 'paint';
+      $('#paint-mode').classList.add('tool-on');
+      $('#erase-mode').classList.remove('tool-on');
+      $('#paint-mode').setAttribute('aria-pressed', 'true');
+      $('#erase-mode').setAttribute('aria-pressed', 'false');
+    });
+    $('#erase-mode').addEventListener('click', () => {
+      mode = 'erase';
+      $('#erase-mode').classList.add('tool-on');
+      $('#paint-mode').classList.remove('tool-on');
+      $('#erase-mode').setAttribute('aria-pressed', 'true');
+      $('#paint-mode').setAttribute('aria-pressed', 'false');
+    });
+    $('#clear-grid').addEventListener('click', () => {
+      $$('.block', paintGrid).forEach((block) => {
+        block.classList.remove('painted');
+        block.setAttribute('aria-pressed', 'false');
+      });
+      attempts = 0;
+      updatePreview();
+      $('#paint-feedback').textContent = 'Ponte limpa. Pinta de novo e compara.';
+      $('#paint-feedback').className = 'status';
+      $('#formal-explanation').classList.add('hidden');
+    });
+
+    $('#compare-paint').addEventListener('click', () => {
+      attempts += 1;
+      const painted = $$('.block.painted', paintGrid).length;
+      const feedback = $('#paint-feedback');
+      if (painted === 0) {
+        feedback.textContent = 'Ainda não há blocos pintados para comparar.';
+        feedback.className = 'status review';
+        $('#formal-explanation').classList.add('hidden');
+      } else if (painted < 4) {
+        feedback.textContent = 'A parte pintada parece menor. Pinta mais um pouco e volta a comparar.';
+        feedback.className = 'status review';
+        $('#formal-explanation').classList.add('hidden');
+      } else if (painted > 4) {
+        feedback.textContent = 'A parte pintada parece maior. Apaga alguns blocos e testa outra vez.';
+        feedback.className = 'status review';
+        $('#formal-explanation').classList.add('hidden');
+      } else {
+        feedback.textContent = 'A tua ponte ocupa a mesma quantidade que a parede-alvo. Agora já podes explicar a descoberta.';
+        feedback.className = 'status success';
+        $('#formal-explanation').classList.remove('hidden');
+      }
+      updatePreview();
+    });
+
+    $$('.sentence').forEach((button) => {
+      button.addEventListener('click', () => {
+        const textarea = $('#justification');
+        textarea.value = textarea.value ? textarea.value + '\n' + button.dataset.sentence : button.dataset.sentence;
+        textarea.focus();
+      });
+    });
+
+    $('#confirm-sign').addEventListener('click', () => {
+      const one = $('#label-one').value;
+      const two = $('#label-two').value;
+      const painted = $$('.block.painted', paintGrid).length;
+      const text = $('#justification').value.trim();
+      const signFeedback = $('#sign-feedback');
+      if (one === two) {
+        signFeedback.textContent = 'Escolhe duas etiquetas diferentes para a placa.';
+        signFeedback.className = 'status review';
+      } else if (painted === 0) {
+        signFeedback.textContent = 'Pinta uma ponte antes de confirmar a placa.';
+        signFeedback.className = 'status review';
+      } else if (!text) {
+        signFeedback.textContent = 'Acrescenta uma frase, escrita ou ditada, para ficar evidência da tua explicação.';
+        signFeedback.className = 'status review';
+      } else {
+        signFeedback.textContent = 'Placa pronta para partilha: mostra a ponte, as duas etiquetas e a tua justificação.';
+        signFeedback.className = 'status success';
+      }
+    });
+
+    buildPaintGrid();
+  </script>
+</body>
+</html>

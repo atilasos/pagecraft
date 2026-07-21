@@ -1,0 +1,70 @@
+{
+  "palette": {
+    "bg": "oklch(0.976 0.018 118)",
+    "surface": "oklch(0.992 0.008 105)",
+    "primary": "oklch(0.45 0.13 145)",
+    "accent": "oklch(0.61 0.12 72)",
+    "ink": "oklch(0.22 0.025 135)"
+  },
+  "functional": {
+    "ok": "oklch(0.64 0.15 150)",
+    "warn": "oklch(0.73 0.13 82)",
+    "focus": "oklch(0.62 0.18 255)"
+  },
+  "typography": {
+    "fontFamily": "'Atkinson Hyperlegible', 'Lexend', 'Nunito', 'Comic Sans MS', 'Chalkboard SE', system-ui, sans-serif",
+    "scale": "kids-6-7",
+    "baseSizePx": 22,
+    "headingSizePx": 40,
+    "maxLineCh": 50,
+    "weights": [
+      400,
+      700,
+      800
+    ],
+    "italicAllowed": false,
+    "allCapsAllowed": false
+  },
+  "layout": {
+    "borderRadius": 14,
+    "spacing": "comfortable",
+    "maxWidthPx": 1120,
+    "padding": "1.25rem"
+  },
+  "components": {
+    "buttons": "rounded 10px or pill, min-height 56px for age band, hover via filter brightness, no transform scaling",
+    "cards": "surface or activity-surface with 1px border, low shadow, no coloured side stripes and no nested cards",
+    "badges": "pill labels with text and shape markers, no colour-only meaning",
+    "feedback_correct": "soft ok tint, check icon and concrete microcopy",
+    "feedback_incorrect": "soft warn tint, retry icon and a specific hint, never punitive red",
+    "tabs": "role=tablist, aria-selected, neutral botanical labels for Apoio, Intermedio and Desafio, not traffic-light colours",
+    "grid": "stable 4x4 square grid, chunky block tiles, selected tiles use primary terrain fill and visible pattern"
+  },
+  "motion": {
+    "transitions": "subtle",
+    "durationMs": 160,
+    "easing": "ease-out",
+    "respectReducedMotion": true
+  },
+  "accessibility": {
+    "contrastBody": "AA",
+    "contrastMicrocopy": "AAA",
+    "focusRing": true,
+    "minTapPx": 56,
+    "soundOptIn": false
+  },
+  "impeccable": {
+    "register": "product",
+    "colorStrategy": "full-palette",
+    "scene": "Pares de criancas de 7-8 anos usam tablets numa sala com luz natural, enquanto a professora circula e pede que expliquem a descoberta com palavras suas.",
+    "antiPatternsAvoided": [
+      "gradient-text",
+      "side-stripe-cards",
+      "nested-cards",
+      "glassmorphism",
+      "hero-metric-template",
+      "remote-assets"
+    ]
+  },
+    "notes": "A paleta aproxima-se de relva e madeira sem depender de assets Minecraft. O tamanho base de 22px, h1 de 40px e alvos de 56px respeitam leitores de 7-8 anos e reforcam a hierarquia visual. A equivalencia fica na interacao e no feedback progressivo, nao no titulo inicial."
+}

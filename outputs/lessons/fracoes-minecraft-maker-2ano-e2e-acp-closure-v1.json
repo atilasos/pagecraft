@@ -1,0 +1,101 @@
+{
+  "acp_closure_ok": true,
+  "pass": false,
+  "reviewed_files": [
+    "/Users/igor/.openclaw/workspace/skills/pagecraft-openclaw/SKILL.md",
+    "/Users/igor/.openclaw/workspace/skills/pagecraft-openclaw/references/impeccable-pagecraft.md",
+    "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-docspec.json",
+    "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-design-brief.md",
+    "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-design-spec.json",
+    "outputs/lessons/fracoes-minecraft-maker-2ano-e2e.html",
+    "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-proofread-v1.json",
+    "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-repair-ticket-v1.json",
+    "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-evaluation-v1.json",
+    "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-run-manifest.json",
+    "outputs/lessons/fracoes-minecraft-maker-2ano-e2e.md"
+  ],
+  "evidence": {
+    "closure_date": "2026-05-24",
+    "slug": "fracoes-minecraft-maker-2ano-e2e",
+    "skill_rule": "A skill pagecraft-openclaw exige que falhas ACP criticas nao tenham fallback manual silencioso; devem ser registadas como bloqueio.",
+    "impeccable_reference": "A referencia impeccable-pagecraft foi revista; a run existente inclui design-brief, design-spec, ticket de reparacao de typography/hierarchy e evidencia de impeccable detect com pass.",
+    "artifact_presence": {
+      "pass": true,
+      "files_checked": 9,
+      "total_bytes": 40255
+    },
+    "json_validation": {
+      "pass": true,
+      "method": "python3 -m json.tool",
+      "validated_files": [
+        "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-docspec.json",
+        "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-design-spec.json",
+        "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-proofread-v1.json",
+        "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-repair-ticket-v1.json",
+        "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-evaluation-v1.json",
+        "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-run-manifest.json"
+      ]
+    },
+    "existing_evaluation": {
+      "file": "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-evaluation-v1.json",
+      "pass": false,
+      "acp_ok": false,
+      "local_artifact_result": "The generated page is reported as usable and passes local JSON, static HTML, browser, proofreader, markdown and impeccable checks.",
+      "browser_check": {
+        "pass": true,
+        "title": "Fracoes equivalentes na parcela Minecraft",
+        "h1": "Que parte da parcela fica plantada?",
+        "buttons": 9,
+        "interaction_changed_body": true,
+        "console_errors": []
+      },
+      "decision": "A pagina passa como artefacto local experimental, mas a run da skill nao passa como end-to-end ACP autonomo."
+    },
+    "run_manifest": {
+      "file": "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-run-manifest.json",
+      "runtime_primary": "OpenClaw ACP",
+      "runtime_agent": "codex",
+      "runtime_result": "partial_failure",
+      "failure_class": "permission_prompt_unavailable_non_interactive",
+      "publish_status": "skipped",
+      "evaluator_status": "completed_by_parent_after_acp_failure",
+      "conclusion": "Local artefact generation and browser verification passed, but the OpenClaw ACP end-to-end run is not yet autonomous because a non-interactive permission prompt can stop the evaluator/manifest closure."
+    },
+    "pedagogical_and_design_alignment": {
+      "docspec": "Includes 2.º ano age band, 30 minute session, fractions objectives, MEM alignment, Minecraft maker connection, observable assessment and three differentiation levels.",
+      "proofreader": "Pass true with low severity and no issues.",
+      "design": "Design brief and spec follow PageCraft/Impeccable integration: product register, self-contained UI, accessible controls, responsive layout, no remote assets or modal-first pattern."
+    },
+    "html_static_inspection": {
+      "doctype": true,
+      "inline_style": true,
+      "inline_script": true,
+      "has_buttons": true,
+      "has_aria": true,
+      "external_resource_mentions_found": false
+    },
+    "git_status_note": "Existing slug artifacts are untracked in the worktree; outputs/lessons/_last_architect_prompt.md was already modified and was not touched for this closure."
+  },
+  "blockers": [
+    {
+      "id": "runtime-acp-permission-prompt",
+      "severity": "critical",
+      "description": "The OpenClaw ACP end-to-end run did not close autonomously because a command path required an interactive permission prompt in a non-interactive context.",
+      "evidence_files": [
+        "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-run-manifest.json",
+        "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-evaluation-v1.json"
+      ],
+      "impact": "The existing page can be accepted only as a local experimental artifact; the pagecraft-openclaw skill run cannot be marked as a passing autonomous ACP run."
+    },
+    {
+      "id": "parent-closed-evaluator",
+      "severity": "major",
+      "description": "The evaluator and manifest closure were completed by the parent/orchestrator after ACP failure, not by a fully autonomous ACP evaluator phase.",
+      "evidence_files": [
+        "outputs/lessons/fracoes-minecraft-maker-2ano-e2e-run-manifest.json"
+      ],
+      "impact": "This violates the intended ACP specialization flow for a clean end-to-end validation."
+    }
+  ],
+  "recommendation": "Keep the existing page and artifacts as a useful experimental PageCraft output, but do not mark pagecraft-openclaw as ACP-validated yet. Fix the ACP runtime permission policy or constrain verifier commands so the evaluator can run non-interactively, then repeat only the ACP closure/evaluator path before publishing."
+}

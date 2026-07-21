@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "topic": "Fracoes equivalentes com parcelas de Minecraft",
+  "ageRange": "2.º ano, 7-8 anos",
+  "duration": 30,
+  "objectives": [
+    "Reconhecer que uma fracao representa partes iguais de um todo.",
+    "Comparar visualmente 1/2 e 2/4 numa parcela quadriculada.",
+    "Construir ou planear uma parcela Minecraft e comunicar a equivalencia observada."
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Matematica",
+        "year": "2.º ano",
+        "domain": "Numeros",
+        "descriptor": "Reconhecer e representar metades e quartos em contextos familiares, usando representacoes visuais.",
+        "source": "referencia PageCraft AE 1.º ciclo"
+      },
+      {
+        "subject": "TIC",
+        "year": "1.º ciclo",
+        "domain": "Criar e inovar",
+        "descriptor": "Usar ferramentas digitais para explorar ideias, criar produtos simples e comunicar solucoes em grupo.",
+        "source": "referencia PageCraft AE TIC 1.º ciclo"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-B: Informação e comunicação",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-E: Relacionamento interpessoal",
+      "PA-I: Saber científico, técnico e tecnológico"
+    ]
+  },
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Projecto cooperativo",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "plano de equipa",
+      "registo de descobertas",
+      "comunicacao final"
+    ],
+    "socialOrganization": "pares exploram a pagina, pequenos grupos planeiam a parcela Minecraft e a turma escuta duas comunicacoes curtas"
+  },
+  "materials": [
+    "computador ou tablet por par",
+    "quadro interativo opcional",
+    "Minecraft Education ou papel quadriculado",
+    "lapis de cor ou blocos de encaixe como alternativa"
+  ],
+  "units": [
+    {
+      "summary": "Descobrir quando duas parcelas pintadas ocupam o mesmo espaco.",
+      "textDescription": "A crianca observa uma parcela Minecraft dividida em partes iguais, escolhe uma fracao e compara a area pintada. A regra de equivalencia surge quando 1/2 e 2/4 preenchem o mesmo numero de blocos.",
+      "interaction": {
+        "state": [
+          {
+            "name": "nivel",
+            "type": "dropdown",
+            "options": [
+              "apoio",
+              "intermedio",
+              "desafio"
+            ],
+            "default": "intermedio"
+          },
+          {
+            "name": "fracaoEscolhida",
+            "type": "quiz",
+            "options": [
+              "1/4",
+              "1/2",
+              "2/4",
+              "3/4"
+            ],
+            "default": "1/2"
+          },
+          {
+            "name": "blocosPintados",
+            "type": "derived",
+            "derivedFrom": "fracaoEscolhida aplicada a grelha 4x4"
+          },
+          {
+            "name": "parComparado",
+            "type": "derived",
+            "derivedFrom": "1/2 e 2/4 ocupam 8 de 16 blocos"
+          }
+        ],
+        "render": "Grelha 4x4 inspirada em parcelas Minecraft, com blocos pintados, contador de blocos e frase de leitura da fracao.",
+        "transition": "Ao tocar num nivel ou numa fracao, a grelha altera os blocos pintados, atualiza o contador e mostra feedback imediato. No desafio, a crianca escolhe a fracao que ocupa o mesmo espaco.",
+        "constraint": "Fracoes com nomes diferentes podem ser equivalentes quando pintam a mesma parte do todo dividido em partes iguais.",
+        "assessment": "O aluno seleciona 1/2 e 2/4, observa que ambas pintam 8 de 16 blocos e explica oralmente ao par que ocupam a mesma parte da parcela."
+      },
+      "maker": {
+        "type": "minecraft",
+        "challenge": "Em pares, construir uma parcela 4x4: metade com um material e depois a mesma metade dividida em quatro zonas iguais.",
+        "materials": [
+          "Minecraft Education",
+          "blocos de relva",
+          "blocos de madeira",
+          "blocos de flores",
+          "papel quadriculado como alternativa"
+        ],
+        "groupSize": "2-3",
+        "connection": "A pagina digital usa a mesma grelha 4x4 que a construcao maker. Cada bloco digital corresponde a um bloco da parcela.",
+        "communication": "Cada grupo mostra a parcela e diz: 'Pintámos 8 de 16 blocos. Isso pode ser 1/2 ou 2/4.'",
+        "alternatives": [
+          "desenhar a parcela em papel quadriculado",
+          "usar cubos de encaixe",
+          "marcar uma grelha no quadro"
+        ]
+      },
+      "differentiation": {
+        "support": "Comparar apenas 1/2 e 2/4, com contador visivel e sugestao passo a passo.",
+        "standard": "Comparar 1/4, 1/2, 2/4 e 3/4, verbalizando quantos blocos ficam pintados.",
+        "challenge": "Encontrar uma fracao com nome diferente que pinte o mesmo espaco e justificar a equivalencia ao par."
+      },
+      "duration": 20
+    },
+    {
+      "summary": "Planear e comunicar uma parcela equivalente.",
+      "textDescription": "Depois da exploracao, o grupo passa para Minecraft ou papel quadriculado, constrói uma parcela 4x4 e prepara uma comunicacao curta sobre a equivalencia encontrada.",
+      "interaction": {
+        "state": [
+          {
+            "name": "planoMaker",
+            "type": "quiz",
+            "options": [
+              "desenhar",
+              "construir",
+              "explicar"
+            ],
+            "default": "desenhar"
+          },
+          {
+            "name": "fraseComunicacao",
+            "type": "derived",
+            "derivedFrom": "todo, blocos pintados e fracao escolhida"
+          }
+        ],
+        "render": "Cartao de missao maker com tres passos curtos e frase-modelo para comunicacao ao grupo.",
+        "transition": "A crianca marca mentalmente os passos: primeiro planear, depois construir, por fim explicar.",
+        "constraint": "A comunicacao deve referir o todo e a parte pintada, nao apenas o nome da fracao.",
+        "assessment": "O grupo apresenta uma parcela 4x4 e identifica o todo, a parte pintada e a equivalencia 1/2 = 2/4."
+      },
+      "maker": {
+        "type": "minecraft",
+        "challenge": "Transformar a descoberta digital numa pequena construcao Minecraft ou num desenho quadriculado.",
+        "materials": [
+          "Minecraft Education",
+          "papel quadriculado",
+          "lapis"
+        ],
+        "groupSize": "2-3",
+        "connection": "A construcao repete a grelha digital para consolidar a relacao entre area e fracao.",
+        "communication": "Partilha em circuito MEM: cada grupo apresenta uma frase curta e responde a uma pergunta da turma.",
+        "alternatives": [
+          "cubos de encaixe",
+          "cartolina quadriculada"
+        ]
+      },
+      "differentiation": {
+        "support": "Usar uma parcela ja desenhada com 16 quadrados.",
+        "standard": "Escolher os materiais e marcar 8 de 16 blocos.",
+        "challenge": "Mostrar duas organizacoes diferentes para os mesmos 8 blocos e discutir se continuam a representar metade."
+      },
+      "duration": 10
+    }
+  ],
+  "sessionFlow": "5 min para abrir a pergunta com a parcela Minecraft; 12 min para pares explorarem a grelha digital; 8 min para planear ou construir a parcela 4x4; 5 min para comunicacao MEM com a frase do grupo. Total: 30 min."
+}

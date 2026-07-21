@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Frações equivalentes na parcela Minecraft</title>
+  <style>
+    :root {
+      --bg: oklch(0.976 0.018 118);
+      --surface: oklch(0.992 0.008 105);
+      --activity: oklch(0.965 0.026 126);
+      --ink: oklch(0.22 0.025 135);
+      --ink-soft: oklch(0.39 0.024 135);
+      --primary: oklch(0.45 0.13 145);
+      --primary-soft: oklch(0.88 0.07 145);
+      --accent: oklch(0.61 0.12 72);
+      --wood: oklch(0.72 0.08 78);
+      --ok: oklch(0.64 0.15 150);
+      --ok-tint: oklch(0.94 0.055 150);
+      --warn: oklch(0.73 0.13 82);
+      --warn-tint: oklch(0.95 0.06 82);
+      --focus: oklch(0.62 0.18 255);
+      --border: oklch(0.84 0.025 125);
+      --tile: oklch(0.79 0.055 105);
+      --tile-alt: oklch(0.72 0.052 100);
+      --radius: 14px;
+      --font: "Atkinson Hyperlegible", "Lexend", "Nunito", "Comic Sans MS", "Chalkboard SE", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font);
+      font-size: 22px;
+      line-height: 1.55;
+    }
+
+    main {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 34px;
+    }
+
+    header {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .kicker {
+      color: var(--ink-soft);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1 {
+      max-width: 17ch;
+      font-family: "Chalkboard SE", "Comic Sans MS", var(--font);
+      font-size: 40px;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      font-family: "Chalkboard SE", "Comic Sans MS", var(--font);
+      font-size: 28px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      font-size: 22px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    p { max-width: 50ch; }
+
+    button {
+      min-height: 56px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 16px;
+      background: var(--surface);
+      color: var(--ink);
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background-color 160ms ease-out, border-color 160ms ease-out, filter 160ms ease-out;
+    }
+
+    button:hover { filter: brightness(1.03); }
+
+    button:focus-visible, [role="tab"]:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 1px 2px oklch(0.2 0.02 130 / 0.05), 0 8px 22px oklch(0.2 0.02 130 / 0.06);
+      padding: 20px;
+    }
+
+    .activity-panel {
+      background: var(--activity);
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .tab {
+      min-height: 52px;
+      border-radius: 999px;
+      font-size: 18px;
+      color: var(--ink);
+    }
+
+    .tab[aria-selected="true"] {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: oklch(0.98 0.01 135);
+    }
+
+    .level-note {
+      margin-top: 14px;
+      color: var(--ink-soft);
+      font-size: 19px;
+    }
+
+    .fraction-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin: 16px 0 12px;
+    }
+
+    .fraction-button {
+      background: oklch(0.98 0.011 105);
+      font-size: 24px;
+    }
+
+    .fraction-button[aria-pressed="true"] {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: oklch(0.98 0.01 135);
+    }
+
+    .fraction-button[disabled] {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
+    .plot-shell {
+      display: grid;
+      gap: 14px;
+    }
+
+    .plot-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .counter {
+      display: inline-flex;
+      align-items: center;
+      min-height: 48px;
+      border-radius: 999px;
+      background: oklch(0.96 0.035 82);
+      padding: 8px 14px;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      width: min(100%, 440px);
+      aspect-ratio: 1;
+      padding: 10px;
+      border-radius: 18px;
+      background: oklch(0.42 0.06 95);
+      border: 4px solid oklch(0.34 0.055 80);
+    }
+
+    .tile {
+      border: 2px solid oklch(0.42 0.055 95);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, transparent 0 48%, oklch(0.68 0.05 100 / 0.45) 49% 52%, transparent 53%),
+        var(--tile);
+      box-shadow: inset 0 -5px 0 oklch(0.42 0.045 105 / 0.22);
+    }
+
+    .tile:nth-child(2n) { background-color: var(--tile-alt); }
+
+    .tile.selected {
+      background:
+        linear-gradient(135deg, transparent 0 46%, oklch(0.72 0.12 72 / 0.5) 47% 54%, transparent 55%),
+        var(--primary);
+      border-color: oklch(0.33 0.105 145);
+      box-shadow: inset 0 -5px 0 oklch(0.24 0.08 145 / 0.30);
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 18px;
+      color: var(--ink-soft);
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .swatch {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 2px solid var(--border);
+      background: var(--tile);
+    }
+
+    .swatch.selected { background: var(--primary); }
+
+    .feedback {
+      margin-top: 16px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 15px 16px;
+      background: var(--warn-tint);
+      font-weight: 700;
+    }
+
+    .feedback.good {
+      background: var(--ok-tint);
+      border-color: oklch(0.78 0.08 150);
+    }
+
+    .challenge-box {
+      display: none;
+      margin-top: 16px;
+      padding: 16px;
+      background: oklch(0.955 0.03 145);
+      border: 1px solid oklch(0.78 0.055 145);
+      border-radius: var(--radius);
+    }
+
+    .challenge-box.active {
+      display: grid;
+      gap: 12px;
+    }
+
+    .maker {
+      margin-top: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .steps {
+      display: grid;
+      gap: 10px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .steps li {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .step-number {
+      display: inline-grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--wood);
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    .reset {
+      margin-top: 14px;
+      background: var(--primary);
+      border-color: var(--primary);
+      color: oklch(0.98 0.01 135);
+    }
+
+    footer {
+      margin-top: 18px;
+      color: var(--ink-soft);
+      font-size: 17px;
+    }
+
+    @media (max-width: 880px) {
+      main { width: min(100% - 24px, 720px); }
+      .layout { grid-template-columns: 1fr; }
+      .fraction-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid { margin: 0 auto; }
+    }
+
+    @media (max-width: 520px) {
+      body { font-size: 21px; }
+      h1 { font-size: 34px; }
+      .panel { padding: 16px; }
+      .fraction-row { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="kicker">2.º ano, Matemática maker, 30 min</p>
+      <h1>Que parte da parcela fica plantada?</h1>
+      <p>Toca numa fração. Olha para os blocos pintados e conta o espaço que ocupam.</p>
+    </header>
+
+    <section class="layout" aria-label="Exploração de frações equivalentes">
+      <div class="panel activity-panel">
+        <h2>Escolhe o teu caminho</h2>
+        <div class="tabs" role="tablist" aria-label="Nível da atividade">
+          <button class="tab" id="tab-support" role="tab" aria-selected="false" data-level="support">Broto, apoio</button>
+          <button class="tab" id="tab-standard" role="tab" aria-selected="true" data-level="standard">Folha, intermédio</button>
+          <button class="tab" id="tab-challenge" role="tab" aria-selected="false" data-level="challenge">Árvore, desafio</button>
+        </div>
+        <p class="level-note" id="level-note">Compara quatro frações e repara no número de blocos pintados.</p>
+
+        <div class="fraction-row" aria-label="Frações para testar">
+          <button class="fraction-button" data-fraction="1/4" aria-pressed="false">1/4</button>
+          <button class="fraction-button" data-fraction="1/2" aria-pressed="true">1/2</button>
+          <button class="fraction-button" data-fraction="2/4" aria-pressed="false">2/4</button>
+          <button class="fraction-button" data-fraction="3/4" aria-pressed="false">3/4</button>
+        </div>
+
+        <div class="feedback" id="feedback" aria-live="polite">
+          Tenta 1/2 e depois 2/4. Conta os blocos antes de dizer a tua ideia.
+        </div>
+
+        <div class="challenge-box" id="challenge-box">
+          <h3>Desafio rápido</h3>
+          <p>A parcela mostra metade. Que outra fração pinta o mesmo espaço?</p>
+          <button id="challenge-answer" type="button">Responder: 2/4</button>
+        </div>
+
+        <button class="reset" id="reset" type="button">Recomeçar a exploração</button>
+      </div>
+
+      <div class="panel plot-shell" aria-label="Parcela Minecraft 4 por 4">
+        <div class="plot-header">
+          <h2>Parcela 4 x 4</h2>
+          <span class="counter" id="counter">8 de 16 blocos</span>
+        </div>
+        <div class="grid" id="grid" aria-label="Grelha com 16 blocos; 8 estão pintados"></div>
+        <div class="legend" aria-label="Legenda da grelha">
+          <span><span class="swatch selected" aria-hidden="true"></span>Parte plantada</span>
+          <span><span class="swatch" aria-hidden="true"></span>Parte livre</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel maker" aria-label="Missão maker">
+      <h2>Missão Minecraft em pares</h2>
+      <ol class="steps">
+        <li><span class="step-number">1</span><span>Faz uma parcela 4 x 4 em Minecraft ou em papel quadriculado.</span></li>
+        <li><span class="step-number">2</span><span>Planta 8 blocos. Depois divide esses 8 blocos em duas zonas iguais.</span></li>
+        <li><span class="step-number">3</span><span>Diz ao grupo: “Pintámos 8 de 16 blocos. Pode ser 1/2 ou 2/4.”</span></li>
+      </ol>
+    </section>
+
+    <footer>
+      Atividade offline, sem recursos externos. O professor observa a contagem, a comparação e a explicação oral.
+    </footer>
+  </main>
+
+  <script>
+    const fractions = {
+      "1/4": { blocks: 4, label: "1/4 pinta 4 de 16 blocos.", equivalent: false },
+      "1/2": { blocks: 8, label: "1/2 pinta 8 de 16 blocos. Guarda este número.", equivalent: true },
+      "2/4": { blocks: 8, label: "2/4 também pinta 8 de 16 blocos. Ocupa o mesmo espaço que 1/2.", equivalent: true },
+      "3/4": { blocks: 12, label: "3/4 pinta 12 de 16 blocos. É mais do que metade.", equivalent: false }
+    };
+
+    const levelText = {
+      support: "Compara só 1/2 e 2/4. O contador ajuda a ver se a parte é igual.",
+      standard: "Compara quatro frações e repara no número de blocos pintados.",
+      challenge: "Procura uma fração com outro nome que pinte o mesmo espaço que 1/2."
+    };
+
+    const grid = document.querySelector("#grid");
+    const counter = document.querySelector("#counter");
+    const feedback = document.querySelector("#feedback");
+    const levelNote = document.querySelector("#level-note");
+    const challengeBox = document.querySelector("#challenge-box");
+    const fractionButtons = [...document.querySelectorAll(".fraction-button")];
+    const tabs = [...document.querySelectorAll('[role="tab"]')];
+    let currentFraction = "1/2";
+    let currentLevel = "standard";
+    let visitedHalf = false;
+    let visitedTwoQuarters = false;
+
+    function buildGrid() {
+      grid.innerHTML = "";
+      for (let i = 0; i < 16; i += 1) {
+        const tile = document.createElement("div");
+        tile.className = "tile";
+        tile.setAttribute("aria-hidden", "true");
+        grid.appendChild(tile);
+      }
+    }
+
+    function setFraction(fraction) {
+      currentFraction = fraction;
+      const data = fractions[fraction];
+      [...grid.children].forEach((tile, index) => {
+        tile.classList.toggle("selected", index < data.blocks);
+      });
+      counter.textContent = `${data.blocks} de 16 blocos`;
+      grid.setAttribute("aria-label", `Grelha com 16 blocos; ${data.blocks} estão pintados`);
+      fractionButtons.forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.fraction === fraction));
+      });
+
+      if (fraction === "1/2") visitedHalf = true;
+      if (fraction === "2/4") visitedTwoQuarters = true;
+
+      if (visitedHalf && visitedTwoQuarters && data.equivalent) {
+        feedback.classList.add("good");
+        feedback.textContent = `Boa descoberta: ${data.label} As duas frações ocupam a mesma parte da parcela.`;
+      } else {
+        feedback.classList.remove("good");
+        feedback.textContent = data.label;
+      }
+    }
+
+    function setLevel(level) {
+      currentLevel = level;
+      tabs.forEach((tab) => {
+        tab.setAttribute("aria-selected", String(tab.dataset.level === level));
+      });
+      levelNote.textContent = levelText[level];
+      challengeBox.classList.toggle("active", level === "challenge");
+      fractionButtons.forEach((button) => {
+        const limited = level === "support" && !["1/2", "2/4"].includes(button.dataset.fraction);
+        button.disabled = limited;
+        if (limited) button.setAttribute("aria-disabled", "true");
+        else button.removeAttribute("aria-disabled");
+      });
+      if (level === "support" && !["1/2", "2/4"].includes(currentFraction)) {
+        setFraction("1/2");
+      }
+    }
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => setLevel(tab.dataset.level));
+      tab.addEventListener("keydown", (event) => {
+        if (!["ArrowRight", "ArrowLeft"].includes(event.key)) return;
+        event.preventDefault();
+        const direction = event.key === "ArrowRight" ? 1 : -1;
+        const next = (index + direction + tabs.length) % tabs.length;
+        tabs[next].focus();
+        setLevel(tabs[next].dataset.level);
+      });
+    });
+
+    fractionButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        if (!button.disabled) setFraction(button.dataset.fraction);
+      });
+    });
+
+    document.querySelector("#challenge-answer").addEventListener("click", () => {
+      visitedHalf = true;
+      setFraction("2/4");
+      feedback.classList.add("good");
+      feedback.textContent = "Sim: 2/4 pinta 8 de 16 blocos, tal como 1/2. Explica isso ao teu par.";
+    });
+
+    document.querySelector("#reset").addEventListener("click", () => {
+      visitedHalf = false;
+      visitedTwoQuarters = false;
+      setLevel("standard");
+      setFraction("1/2");
+      feedback.classList.remove("good");
+      feedback.textContent = "Tenta 1/2 e depois 2/4. Conta os blocos antes de dizer a tua ideia.";
+    });
+
+    buildGrid();
+    setLevel(currentLevel);
+    setFraction(currentFraction);
+  </script>
+</body>
+</html>

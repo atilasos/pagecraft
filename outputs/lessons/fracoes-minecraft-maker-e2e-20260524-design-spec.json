@@ -1,0 +1,105 @@
+{
+  "slug": "fracoes-minecraft-maker-e2e-20260524",
+  "title": "Frações com maker Minecraft",
+  "designIntent": "Uma oficina de construção por blocos onde a criança investiga metades, terços e quartos através de terrenos, pontes, muros e canteiros. O visual deve remeter para Minecraft sem copiar interface de jogo: blocos pixelados, materiais reconhecíveis, grelhas claras e feedback matemático centrado em partes iguais.",
+  "audience": {
+    "year": "2.º ano",
+    "ageApproach": "Leitura curta, controlos grandes, uma decisão principal por ecrã e vocabulário concreto: todo, partes iguais, blocos especiais, metade, terço e quarto."
+  },
+  "layout": {
+    "structure": [
+      {
+        "unit": "Aldeia dos blocos iguais",
+        "role": "Exploração inicial",
+        "layout": "Grelha 4x4 dominante no centro, painel lateral curto com contador de blocos selecionados e pergunta orientadora. Em modo apoio, a grelha muda para 2x2."
+      },
+      {
+        "unit": "Oficina maker de frações",
+        "role": "Construção principal",
+        "layout": "Bancada horizontal com cartas de fração no topo, área de construção ao centro e paleta de materiais em baixo. A construção deve atualizar ao toque sem mudar de tamanho."
+      },
+      {
+        "unit": "Galeria e mini-desafio",
+        "role": "Consolidação e avaliação breve",
+        "layout": "Três cartões de construções em grelha responsiva, cada um com botões 1/2, 1/3 e 1/4. A construção problemática inclui área de correção simples com blocos tocáveis."
+      }
+    ],
+    "spacing": "Ritmo arejado com margens generosas entre zonas interativas; nenhum cartão deve depender de texto longo para ser compreendido.",
+    "touchTargets": "Todos os blocos, cartas, botões e materiais devem ter pelo menos 48x48 px."
+  },
+  "responsive": {
+    "desktop": "Usar duas colunas nas unidades de exploração: interação grande à esquerda e orientação curta à direita.",
+    "tablet": "Manter a interação no topo e colocar controlos em faixas horizontais abaixo, adequadas a toque.",
+    "mobile": "Empilhar tudo numa coluna; grelhas e construções ocupam a largura disponível; cartas de fração usam scroll horizontal curto se necessário.",
+    "constraints": "A área de blocos deve preservar proporções por aspect-ratio para evitar saltos de layout quando o feedback muda."
+  },
+  "colors": {
+    "background": "#F7F1E3",
+    "surface": "#FFF9EA",
+    "ink": "#24332A",
+    "mutedInk": "#5A675E",
+    "grass": "#65A843",
+    "wood": "#A66A3F",
+    "stone": "#7B8386",
+    "diamond": "#35BFD4",
+    "gold": "#F2C94C",
+    "error": "#C94C4C",
+    "success": "#2F8F5B",
+    "focus": "#1A73B8",
+    "usage": "Relva e madeira para elementos de base, diamante para blocos especiais, ouro para seleção ativa, vermelho apenas para erro ou partes desiguais. O fundo quente deve ser neutro para não competir com as grelhas."
+  },
+  "contrast": {
+    "requirement": "Texto e controlos devem cumprir contraste mínimo WCAG AA. Evitar texto branco sobre relva, madeira ou diamante; usar texto escuro em superfícies claras e contornos escuros em blocos coloridos.",
+    "blockReadability": "Cada bloco selecionado precisa de dupla indicação: cor ou textura mais contorno, para não depender apenas da cor."
+  },
+  "typography": {
+    "family": "Sistema local sem fontes externas, com preferência por ui-rounded, system-ui, Arial ou sans-serif.",
+    "scale": {
+      "pageTitle": "clamp(1.7rem, 2.2vw, 2.4rem)",
+      "sectionTitle": "1.25rem a 1.5rem",
+      "body": "1rem a 1.125rem",
+      "button": "1rem"
+    },
+    "tone": "Frases curtas em português europeu; evitar jargão e símbolos antes da criança observar a contagem."
+  },
+  "accessibility": {
+    "language": "html lang deve ser pt-PT no HTML final.",
+    "keyboard": "Todas as ações de tocar blocos, escolher cartas, mudar materiais e responder ao mini-desafio devem funcionar por teclado.",
+    "aria": "Grelhas de blocos devem anunciar total, blocos selecionados e estado da tentativa; feedback deve usar região aria-live polite.",
+    "focus": "Foco visível em azul forte com outline de 3 px e offset suficiente.",
+    "dragAlternative": "Se existir drag/drop visual, deve haver alternativa por clique ou botões de adicionar/remover.",
+    "reducedMotion": "Animações pixeladas ou saltos de bloco devem ser subtis e respeitar prefers-reduced-motion."
+  },
+  "feedbackStates": {
+    "idle": "Mensagem curta que convida a observar o todo antes de escolher partes.",
+    "selected": "Blocos escolhidos recebem contorno dourado, pequena elevação visual e contador atualizado.",
+    "validEqualParts": "Estado verde com pergunta de consolidação: 'Como sabes que as partes têm o mesmo tamanho?'",
+    "invalidUnequalParts": "Estado vermelho moderado, sem punição, com orientação: 'Conta os blocos de cada parte. Têm todos a mesma quantidade?'",
+    "fractionCardActive": "Carta 1/2, 1/3 ou 1/4 fica destacada a ouro e mostra pictograma simples do todo dividido.",
+    "galleryAnswer": "Depois da resposta, pedir confirmação do todo e das partes antes de revelar se está correto.",
+    "completion": "Fecho com frase de registo: 'Usei __ blocos especiais em __ blocos ao todo; isso mostra __.'"
+  },
+  "interactionDesign": {
+    "grid": "Blocos quadrados com textura simples: relva com topo verde, madeira com linhas, pedra com pontos e diamante com brilho geométrico. A textura deve ajudar a distinguir materiais sem poluir a contagem.",
+    "fractions": "Cartas grandes para 1/2, 1/3 e 1/4, cada uma com mini-ícone de blocos divididos em partes iguais.",
+    "makerArea": "Construções possíveis: ponte, muro e canteiro. A forma pode mudar, mas a contagem total e os blocos especiais devem estar sempre visíveis.",
+    "assessment": "Mini-desafio com comparação visual, não apenas escolha abstrata. A construção errada deve parecer plausível para provocar discussão sobre partes desiguais."
+  },
+  "visualTone": {
+    "keywords": [
+      "lúdico",
+      "quente",
+      "pixelado",
+      "manual",
+      "claro",
+      "matemático"
+    ],
+    "avoid": [
+      "interface corporativa",
+      "texto excessivo",
+      "efeitos escuros de videojogo",
+      "dependência exclusiva de cor",
+      "cartões decorativos sem função"
+    ]
+  }
+}

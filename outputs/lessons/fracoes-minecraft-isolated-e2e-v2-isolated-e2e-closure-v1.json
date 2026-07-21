@@ -1,0 +1,22 @@
+{
+  "schema": "pagecraft.isolated-e2e-closure.v1",
+  "created_at": "2026-05-24T18:23:03",
+  "slug": "fracoes-minecraft-isolated-e2e-v2",
+  "pass": false,
+  "artifact_pass": false,
+  "acp_isolated_phases_completed": true,
+  "publish_status": "not_published",
+  "failure_class": "proofread_blocker",
+  "summary": "Pipeline isolado executou todas as fases, mas falhou corretamente porque o Proofreader bloqueou publicação com severidade medium.",
+  "evidence": {
+    "docspec": "outputs/lessons/fracoes-minecraft-isolated-e2e-v2-docspec.json",
+    "design_spec": "outputs/lessons/fracoes-minecraft-isolated-e2e-v2-design-spec.json",
+    "html": "outputs/lessons/fracoes-minecraft-isolated-e2e-v2.html",
+    "proofread": "outputs/lessons/fracoes-minecraft-isolated-e2e-v2-proofread-v1.json",
+    "evaluation": "outputs/lessons/fracoes-minecraft-isolated-e2e-v2-evaluation-v1.json",
+    "programmatic_validation": "outputs/lessons/fracoes-minecraft-isolated-e2e-v2-programmatic-validation.json",
+    "browser_screenshot": "outputs/lessons/fracoes-minecraft-isolated-e2e-v2-browser-smoke.png"
+  },
+  "next_repair_target": "builder",
+  "repair_reason": "Remover ou reformular instruções que revelam cedo demais a quantidade exata a pintar, preservando descoberta da equivalência."
+}
