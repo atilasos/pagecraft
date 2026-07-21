@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PageCraft — O Quadro de Giz</title>
+<style>
+/* ============================================================
+   PROTÓTIPO 3 — «O Quadro de Giz»
+   Ardósia verde profunda de sala de aula; folhas de papel
+   afixadas com fita-cola; giz pastel com parcimónia.
+   ============================================================ */
+
+:root{
+  /* Quadro */
+  --ardosia:        oklch(0.31 0.038 168);   /* verde-ardósia profundo */
+  --ardosia-funda:  oklch(0.26 0.034 170);
+  --giz:            oklch(0.93 0.016 95);    /* branco-giz quente */
+  --giz-suave:      oklch(0.93 0.016 95 / .72);
+  --giz-apagado:    oklch(0.93 0.016 95 / .34);
+  --giz-rosa:       oklch(0.86 0.055 20);
+  --giz-amarelo:    oklch(0.90 0.085 95);
+  --giz-azul:       oklch(0.86 0.045 230);
+
+  /* Madeira da moldura */
+  --madeira:        oklch(0.47 0.062 58);
+  --madeira-clara:  oklch(0.54 0.066 62);
+  --madeira-escura: oklch(0.38 0.055 52);
+
+  /* Folhas de papel */
+  --papel:          oklch(0.965 0.017 95);
+  --papel-linha:    oklch(0.84 0.03 230 / .38);
+  --tinta:          oklch(0.30 0.03 170);    /* tinta verde-escura, quente */
+  --tinta-suave:    oklch(0.42 0.028 170);
+  --tinta-rosa:     oklch(0.42 0.11 15);
+  --tinta-azul:     oklch(0.38 0.07 240);
+
+  --raio: 14px;
+  --fonte-ui:   Lexend, "Atkinson Hyperlegible", Nunito, system-ui, sans-serif;
+  --fonte-giz:  "Chalkboard SE", "Comic Sans MS", cursive;
+  --sombra-folha: 0 2px 4px oklch(0 0 0 / .28), 0 10px 22px oklch(0 0 0 / .3);
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+
+html{ scroll-behavior:smooth; }
+
+body{
+  font-family:var(--fonte-ui);
+  color:var(--giz);
+  background:
+    radial-gradient(58rem 30rem at 18% 6%,  oklch(1 0 0 / .028), transparent 60%),
+    radial-gradient(46rem 26rem at 84% 38%, oklch(1 0 0 / .022), transparent 55%),
+    radial-gradient(60rem 34rem at 40% 96%, oklch(0 0 0 / .16),  transparent 60%),
+    var(--ardosia);
+  min-height:100vh;
+  line-height:1.5;
+}
+
+:focus-visible{
+  outline:3px solid var(--giz-amarelo);
+  outline-offset:3px;
+  border-radius:6px;
+}
+
+/* ---------- Moldura de madeira (header) ---------- */
+header{
+  background:
+    repeating-linear-gradient(92deg, oklch(0 0 0 / 0) 0 3.2rem, oklch(0 0 0 / .07) 3.2rem 3.35rem),
+    linear-gradient(var(--madeira-clara), var(--madeira));
+  border-bottom:4px solid var(--madeira-escura);
+  box-shadow:0 3px 10px oklch(0 0 0 / .35);
+  padding:.65rem clamp(1rem, 4vw, 2.2rem);
+  display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;
+}
+.marca{ display:flex; align-items:baseline; gap:.6rem; }
+.marca strong{
+  font-size:1.3rem; font-weight:700; letter-spacing:.01em;
+  color:oklch(0.975 0.012 92);
+  text-shadow:0 1px 0 oklch(0 0 0 / .35);
+}
+.marca span{
+  font-size:.82rem; color:oklch(0.93 0.02 90 / .92);
+  text-shadow:0 1px 0 oklch(0 0 0 / .3);
+}
+.marca .pin{
+  width:.55rem; height:.55rem; border-radius:50%;
+  background:var(--giz-amarelo); align-self:center;
+  box-shadow:0 1px 2px oklch(0 0 0 / .4);
+}
+header .apagador{
+  font-size:.78rem; color:oklch(0.95 0.015 92);
+  background:oklch(0 0 0 / .18);
+  border-radius:8px; padding:.3rem .7rem;
+  text-shadow:0 1px 0 oklch(0 0 0 / .25);
+}
+
+/* ---------- Hero mínimo ---------- */
+.hero{
+  max-width:64rem; margin:0 auto;
+  padding:clamp(1.8rem, 5vw, 3rem) clamp(1rem, 4vw, 2rem) .8rem;
+  text-align:center;
+}
+.hero h1{
+  font-family:var(--fonte-giz);
+  font-weight:400;
+  font-size:clamp(1.5rem, 4.2vw, 2.3rem);
+  color:var(--giz);
+  rotate:-.6deg;
+  text-shadow:
+    0 0 1px oklch(0.93 0.016 95 / .6),
+    1px 1px 0 oklch(0.93 0.016 95 / .14),
+    0 0 14px oklch(0.93 0.016 95 / .12);
+}
+.hero p.mote{
+  margin-top:.35rem; font-size:.95rem; color:var(--giz-suave);
+}
+
+.procura{
+  margin:1.4rem auto 0; max-width:34rem; position:relative;
+}
+.procura svg{
+  position:absolute; left:1rem; top:50%; translate:0 -50%;
+  width:1.25rem; height:1.25rem; stroke:var(--giz-suave); pointer-events:none;
+}
+.procura input{
+  width:100%; min-height:56px;
+  font:inherit; font-size:1.05rem;
+  color:var(--giz);
+  background:oklch(0 0 0 / .14);
+  border:2px solid var(--giz-apagado);
+  border-radius:var(--raio);
+  padding:.6rem 3rem .6rem 2.9rem;
+}
+.procura input::placeholder{ color:oklch(0.93 0.016 95 / .6); }
+.procura input::-webkit-search-cancel-button,
+.procura input::-webkit-search-decoration{ -webkit-appearance:none; appearance:none; }
+.procura input:focus{ border-color:var(--giz-amarelo); }
+.procura .limpar{
+  position:absolute; right:.35rem; top:50%; translate:0 -50%;
+  min-width:48px; min-height:48px;
+  background:none; border:0; cursor:pointer;
+  color:var(--giz-suave); font-size:1.3rem; font-family:var(--fonte-giz);
+  border-radius:10px;
+}
+.procura .limpar:hover{ color:var(--giz); }
+.procura .limpar[hidden]{ display:none; }
+
+/* ---------- Filtros (escritos a giz) ---------- */
+.filtros{
+  display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center;
+  margin:1.2rem auto 0; padding:0 1rem; max-width:52rem;
+  list-style:none;
+}
+.filtros button{
+  font-family:var(--fonte-giz); font-size:.98rem;
+  color:var(--giz-suave);
+  background:none; cursor:pointer;
+  border:1.5px dashed var(--giz-apagado);
+  border-radius:var(--raio);
+  min-height:48px; padding:.35rem 1.05rem;
+}
+.filtros button:hover{ color:var(--giz); border-color:var(--giz-suave); }
+.filtros button[aria-pressed="true"]{
+  color:var(--giz-amarelo);
+  border:2px solid var(--giz-amarelo);
+  text-shadow:0 0 8px oklch(0.90 0.085 95 / .3);
+}
+
+/* ---------- Secções ---------- */
+main{
+  max-width:72rem; margin:0 auto;
+  padding:1.6rem clamp(1rem, 4vw, 2rem) 3rem;
+}
+.titulo-seccao{
+  font-family:var(--fonte-giz); font-weight:400;
+  font-size:clamp(1.3rem, 3vw, 1.7rem);
+  color:var(--giz);
+  rotate:-.4deg;
+  margin:2.2rem 0 .2rem;
+  text-shadow:
+    0 0 1px oklch(0.93 0.016 95 / .55),
+    1px 1px 0 oklch(0.93 0.016 95 / .12);
+}
+.titulo-seccao .risco{
+  display:block; width:5.5rem; height:3px; margin-top:.3rem;
+  border-radius:3px; background:var(--giz-rosa); opacity:.75;
+}
+.nota-seccao{ color:var(--giz-suave); font-size:.92rem; margin-bottom:1.2rem; }
+
+/* ---------- A grelha das 28 palavras ---------- */
+.quadro-palavras{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(9.5rem, 1fr));
+  gap:.35rem .6rem;
+  align-items:start;
+}
+button.palavra{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:.15rem;
+  min-height:64px; width:100%;
+  padding:.5rem .4rem;
+  background:none; border:0; cursor:pointer;
+  border-radius:var(--raio);
+  color:var(--giz);
+  transition:opacity .35s ease, filter .35s ease, background-color .2s ease;
+}
+button.palavra:hover{ background:oklch(1 0 0 / .055); }
+button.palavra .num{
+  font-size:.66rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--giz-azul); opacity:.85;
+}
+button.palavra .p{
+  position:relative;
+  font-family:var(--fonte-giz);
+  font-size:clamp(1.15rem, 2.4vw, 1.45rem);
+  text-shadow:0 0 1px oklch(0.93 0.016 95 / .5), 0 0 10px oklch(0.93 0.016 95 / .1);
+}
+button.palavra .p::after{
+  content:""; position:absolute; left:1%; right:1%; bottom:-4px; height:3px;
+  border-radius:3px; background:var(--giz);
+  opacity:.85;
+  transform:scaleX(0); transform-origin:left;
+  transition:transform .3s ease;
+}
+button.palavra:hover .p::after,
+button.palavra:focus-visible .p::after{ transform:scaleX(1); }
+button.palavra:nth-of-type(3n) .p::after{ background:var(--giz-rosa); }
+button.palavra:nth-of-type(3n+1) .p::after{ background:var(--giz-azul); }
+button.palavra:nth-of-type(5n) .p::after{ background:var(--giz-amarelo); }
+button.palavra:nth-of-type(2n){ rotate:.5deg; }
+button.palavra:nth-of-type(3n){ rotate:-.55deg; }
+button.palavra[aria-expanded="true"] .p::after{
+  transform:scaleX(1); background:var(--giz-amarelo);
+}
+button.palavra[aria-expanded="true"]{ background:oklch(1 0 0 / .07); }
+
+/* giz esbatido (não corresponde à pesquisa) */
+button.palavra.apagada{
+  opacity:.15; filter:blur(.7px);
+  pointer-events:none;
+}
+
+/* ---------- Painel inline (folhas afixadas) ---------- */
+.painel{
+  grid-column:1 / -1;
+  border:2px dashed var(--giz-apagado);
+  border-radius:var(--raio);
+  background:oklch(0.27 0.034 170 / .72);
+  padding:1.1rem clamp(.8rem, 2.5vw, 1.4rem) 1.4rem;
+  margin:.6rem 0 1rem;
+}
+@media (prefers-reduced-motion: no-preference){
+  .painel{ opacity:0; translate:0 -6px; transition:opacity .3s ease, translate .3s ease; }
+  .painel.aberto{ opacity:1; translate:0 0; }
+}
+.painel-topo{
+  display:flex; align-items:baseline; gap:.8rem; flex-wrap:wrap;
+  margin-bottom:1.3rem;
+}
+.painel-topo h3{
+  font-family:var(--fonte-giz); font-weight:400;
+  font-size:1.5rem; color:var(--giz);
+  text-shadow:0 0 1px oklch(0.93 0.016 95 / .5);
+}
+.painel-topo .sub{ font-size:.85rem; color:var(--giz-suave); }
+.painel-topo .fechar{
+  margin-left:auto;
+  min-width:48px; min-height:48px;
+  background:none; cursor:pointer;
+  border:1.5px solid var(--giz-apagado);
+  border-radius:50%;
+  color:var(--giz); font-family:var(--fonte-giz); font-size:1.15rem;
+  align-self:center;
+}
+.painel-topo .fechar:hover{ border-color:var(--giz); }
+
+/* ---------- Folhas de papel ---------- */
+.folhas{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(15rem, 1fr));
+  gap:1.5rem 1.3rem;
+  padding-top:.7rem; /* espaço para a fita-cola */
+}
+.folha{
+  position:relative;
+  background:
+    repeating-linear-gradient(to bottom, transparent 0 1.65rem, var(--papel-linha) 1.65rem calc(1.65rem + 1px)),
+    var(--papel);
+  color:var(--tinta);
+  border-radius:var(--raio);
+  padding:1.15rem 1rem 1rem;
+  box-shadow:var(--sombra-folha);
+  display:flex; flex-direction:column; gap:.45rem;
+}
+.folha::before{ /* fita-cola */
+  content:"";
+  position:absolute; top:-.65rem; left:50%;
+  width:5.2rem; height:1.35rem;
+  translate:-50% 0; rotate:-2deg;
+  background:oklch(0.97 0.02 95 / .5);
+  border-left:1px dashed oklch(1 0 0 / .5);
+  border-right:1px dashed oklch(1 0 0 / .5);
+  box-shadow:0 1px 3px oklch(0 0 0 / .18);
+}
+.folha:nth-child(2n){ rotate:.5deg; }
+.folha:nth-child(2n)::before{ rotate:2.5deg; }
+.folha:nth-child(3n){ rotate:-.5deg; }
+.folha h4{
+  font-size:1.02rem; font-weight:600; line-height:1.3;
+  color:var(--tinta);
+}
+.folha .meta{
+  font-size:.82rem; color:var(--tinta-suave);
+  display:flex; flex-wrap:wrap; gap:.25rem .5rem; align-items:center;
+}
+.folha .meta .sep{ opacity:.5; }
+.etiqueta{
+  align-self:flex-start;
+  font-size:.72rem; font-weight:600; letter-spacing:.04em;
+  padding:.18rem .6rem; border-radius:8px;
+}
+.etiqueta.principal{ background:oklch(0.90 0.05 15); color:var(--tinta-rosa); }
+.etiqueta.maker{ background:oklch(0.90 0.04 235); color:var(--tinta-azul); }
+.folha .acoes{
+  margin-top:auto; padding-top:.5rem;
+  display:flex; flex-wrap:wrap; gap:.5rem;
+}
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-height:48px; padding:.35rem 1rem;
+  border-radius:var(--raio);
+  font:inherit; font-size:.9rem; font-weight:600;
+  text-decoration:none; cursor:pointer;
+}
+.btn-abrir{
+  background:oklch(0.36 0.05 165); color:oklch(0.97 0.012 95);
+  border:2px solid transparent;
+}
+.btn-abrir:hover{ background:oklch(0.31 0.048 165); }
+.btn-guia{
+  background:transparent; color:var(--tinta);
+  border:2px solid oklch(0.36 0.05 165 / .45);
+}
+.btn-guia:hover{ border-color:oklch(0.36 0.05 165); }
+.folha :focus-visible{ outline-color:oklch(0.52 0.12 95); }
+
+/* ---------- Na mesa do professor ---------- */
+.mesa{
+  background:
+    repeating-linear-gradient(88deg, oklch(0 0 0 / 0) 0 4rem, oklch(0 0 0 / .06) 4rem 4.2rem),
+    linear-gradient(var(--madeira-clara), var(--madeira) 55%, var(--madeira-escura));
+  border-radius:var(--raio);
+  padding:1.8rem clamp(1rem, 3vw, 1.6rem) 1.6rem;
+  box-shadow:inset 0 2px 6px oklch(1 0 0 / .12), 0 10px 24px oklch(0 0 0 / .3);
+}
+
+/* ---------- Estados vazios ---------- */
+.vazio{
+  grid-column:1 / -1;
+  text-align:center;
+  border:2px dashed var(--giz-apagado);
+  border-radius:var(--raio);
+  padding:2rem 1rem;
+  color:var(--giz-suave);
+}
+.vazio .giz-grande{
+  font-family:var(--fonte-giz); font-size:1.3rem; color:var(--giz);
+  display:block; margin-bottom:.4rem; rotate:-.5deg;
+}
+.vazio button{
+  margin-top:1rem;
+  font:inherit; font-family:var(--fonte-giz); font-size:.95rem;
+  color:var(--giz-amarelo);
+  background:none; border:2px solid var(--giz-amarelo);
+  border-radius:var(--raio);
+  min-height:48px; padding:.4rem 1.2rem; cursor:pointer;
+}
+.mesa .vazio{ border-color:oklch(0.97 0.02 92 / .4); color:oklch(0.97 0.015 92); }
+.mesa .vazio .giz-grande{ color:oklch(0.985 0.012 92); }
+[hidden]{ display:none !important; }
+
+/* ---------- Rodapé (calha do giz) ---------- */
+footer{
+  background:linear-gradient(var(--madeira), var(--madeira-escura));
+  border-top:3px solid var(--madeira-escura);
+  padding:.8rem clamp(1rem, 4vw, 2.2rem);
+  font-size:.82rem;
+  color:oklch(0.95 0.015 92);
+  text-shadow:0 1px 0 oklch(0 0 0 / .3);
+  display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap;
+}
+footer .gizinhos{ display:inline-flex; gap:.35rem; align-items:center; }
+footer .gizinhos i{
+  width:1.6rem; height:.38rem; border-radius:3px; display:inline-block;
+  box-shadow:0 1px 2px oklch(0 0 0 / .35);
+}
+footer .gizinhos i:nth-child(1){ background:var(--giz); }
+footer .gizinhos i:nth-child(2){ background:var(--giz-rosa); }
+footer .gizinhos i:nth-child(3){ background:var(--giz-amarelo); rotate:3deg; }
+footer .gizinhos i:nth-child(4){ background:var(--giz-azul); }
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 560px){
+  .quadro-palavras{ grid-template-columns:repeat(auto-fill, minmax(7.6rem, 1fr)); }
+  .folhas{ grid-template-columns:1fr; }
+  .painel-topo h3{ font-size:1.3rem; }
+}
+
+/* ---------- Movimento reduzido ---------- */
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  *, *::before, *::after{
+    transition:none !important;
+    animation:none !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <p class="marca">
+    <span class="pin" aria-hidden="true"></span>
+    <strong>PageCraft</strong>
+    <span>catálogo de atividades · 1.º ciclo</span>
+  </p>
+  <p class="apagador" id="contagem-topo"></p>
+</header>
+
+<section class="hero" aria-label="Pesquisa">
+  <h1>O que vamos aprender hoje?</h1>
+  <p class="mote">Toca numa palavra do quadro ou procura uma atividade.</p>
+
+  <div class="procura">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+      <circle cx="10.5" cy="10.5" r="6.5"></circle>
+      <line x1="15.5" y1="15.5" x2="21" y2="21"></line>
+    </svg>
+    <input id="pesquisa" type="search" autocomplete="off"
+           placeholder="Procurar palavra ou atividade…"
+           aria-label="Procurar palavra ou atividade">
+    <button class="limpar" id="btn-limpar" hidden aria-label="Limpar pesquisa">×</button>
+  </div>
+
+  <ul class="filtros" id="filtros" aria-label="Filtrar por área">
+    <li><button data-chip="tudo" aria-pressed="true">Tudo</button></li>
+    <li><button data-chip="leitura" aria-pressed="false">Leitura e escrita</button></li>
+    <li><button data-chip="mat" aria-pressed="false">Matemática</button></li>
+    <li><button data-chip="digital" aria-pressed="false">Projetos e digital</button></li>
+  </ul>
+</section>
+
+<main>
+  <section aria-labelledby="t-m28p">
+    <h2 class="titulo-seccao" id="t-m28p">As 28 palavras<span class="risco" aria-hidden="true"></span></h2>
+    <p class="nota-seccao">Método das 28 Palavras — toca numa palavra para abrir as folhas da atividade e das variantes.</p>
+    <div class="quadro-palavras" id="quadro"></div>
+  </section>
+
+  <section aria-labelledby="t-mesa">
+    <h2 class="titulo-seccao" id="t-mesa">Na mesa do professor<span class="risco" aria-hidden="true"></span></h2>
+    <p class="nota-seccao">As outras atividades, fora do método — matemática, Canva, projetos e mundo digital.</p>
+    <div class="mesa">
+      <div class="folhas" id="mesa-folhas"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p id="contagem-rodape"></p>
+  <p class="gizinhos" aria-hidden="true"><i></i><i></i><i></i><i></i></p>
+</footer>
+
+<script src="./catalog-data.js"></script>
+<script>
+(function(){
+  "use strict";
+  var CATALOG = window.CATALOG || [];
+
+  /* ---------- utilidades ---------- */
+  function norm(s){
+    return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+  function textoDe(a){
+    return norm(a.title + " " + a.slug + " " + (a.tags || []).join(" "));
+  }
+  function temTag(a, lista){
+    var tags = (a.tags || []).map(norm);
+    return lista.some(function(t){ return tags.indexOf(norm(t)) !== -1; });
+  }
+  var motionOK = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- agrupamento M28P ---------- */
+  var m28 = CATALOG.filter(function(a){ return (a.tags || []).indexOf("m28p") !== -1; });
+  var resto = CATALOG.filter(function(a){ return (a.tags || []).indexOf("m28p") === -1; });
+
+  // 1) atividades principais: slug igual à palavra
+  var grupos = {};           // chave: palavra normalizada
+  m28.forEach(function(a){
+    var m = a.title.match(/Palavra (\d+) — ([^·]+)/);
+    if (m && norm(a.slug) === norm(m[2].trim())){
+      grupos[norm(a.slug)] = {
+        chave: norm(a.slug),
+        palavra: m[2].trim(),
+        num: parseInt(m[1], 10),
+        principal: a,
+        variantes: []
+      };
+    }
+  });
+
+  // 2) restantes M28P: a palavra é o segmento do slug que corresponde a um grupo
+  m28.forEach(function(a){
+    if (grupos[norm(a.slug)] && grupos[norm(a.slug)].principal === a) return;
+    var seg = a.slug.split("-").find(function(s){ return grupos[norm(s)]; });
+    if (seg){ grupos[norm(seg)].variantes.push(a); }
+  });
+
+  var listaGrupos = Object.keys(grupos).map(function(k){ return grupos[k]; })
+    .sort(function(x, y){ return x.num - y.num; });
+
+  function rotuloVariante(a){
+    var partes = a.title.split("·");
+    if (partes.length >= 3) return partes[partes.length - 1].trim();
+    if (a.slug.indexOf("blocos") !== -1) return "No mundo de blocos";
+    if (a.slug.indexOf("30min") !== -1) return "Sessão de 30 minutos";
+    return a.title;
+  }
+
+  /* ---------- filtros por área ---------- */
+  var CHIPS = {
+    tudo: function(){ return true; },
+    leitura: function(a){
+      return temTag(a, ["m28p", "portugues", "leitura", "escrita", "texto-melhorado"]) ||
+             norm(a.slug).indexOf("verbos") !== -1;
+    },
+    mat: function(a){
+      return temTag(a, ["matematica", "fracoes", "dobro", "classificacao", "numeros"]);
+    },
+    digital: function(a){
+      return temTag(a, ["canva", "tic", "ia", "literacia-digital", "motor-de-busca",
+                        "prompts", "mem", "projeto", "projetos", "conta-escolar"]);
+    }
+  };
+  var chipAtivo = "tudo";
+  var termo = "";
+
+  /* ---------- construção das folhas de papel ---------- */
+  function metaHTML(a){
+    var bits = ['<span>' + a.year + "</span>",
+                '<span class="sep" aria-hidden="true">·</span>',
+                "<span>" + a.duration + " min</span>"];
+    return '<p class="meta">' + bits.join("") + "</p>";
+  }
+  function makerHTML(a){
+    if (a.maker === "minecraft")  return '<span class="etiqueta maker">Minecraft</span>';
+    if (a.maker === "whiteboard") return '<span class="etiqueta maker">Quadro interativo</span>';
+    if (temTag(a, ["canva"]))     return '<span class="etiqueta maker">Canva</span>';
+    return "";
+  }
+  function acoesHTML(a){
+    return '<p class="acoes">' +
+      '<a class="btn btn-abrir" href="' + a.url + '">Abrir</a>' +
+      '<a class="btn btn-guia" href="' + a.url + '#guia">Guia do professor</a>' +
+      "</p>";
+  }
+  function folhaHTML(a, opts){
+    opts = opts || {};
+    var h = '<article class="folha">';
+    if (opts.principal) h += '<span class="etiqueta principal">Atividade principal</span>';
+    h += makerHTML(a);
+    h += "<h4>" + (opts.titulo || a.title) + "</h4>";
+    h += metaHTML(a);
+    h += acoesHTML(a);
+    h += "</article>";
+    return h;
+  }
+
+  /* ---------- grelha das 28 palavras ---------- */
+  var quadro = document.getElementById("quadro");
+  listaGrupos.forEach(function(g){
+    var b = document.createElement("button");
+    b.className = "palavra";
+    b.type = "button";
+    b.dataset.chave = g.chave;
+    b.setAttribute("aria-expanded", "false");
+    b.setAttribute("aria-controls", "painel-palavra");
+    b.innerHTML = '<span class="num">palavra ' + g.num + '</span>' +
+                  '<span class="p">' + g.palavra.toLowerCase() + "</span>";
+    b.addEventListener("click", function(){ alternarPainel(b, g); });
+    quadro.appendChild(b);
+  });
+
+  var vazioQuadro = document.createElement("div");
+  vazioQuadro.className = "vazio";
+  vazioQuadro.hidden = true;
+  vazioQuadro.innerHTML =
+    '<span class="giz-grande">O quadro ficou apagado…</span>' +
+    "Nenhuma palavra corresponde a esta procura ou filtro. Experimenta outro termo." +
+    '<br><button type="button" id="repor-quadro">Voltar a escrever as 28 palavras</button>';
+  quadro.appendChild(vazioQuadro);
+
+  /* ---------- painel inline ---------- */
+  var painel = document.createElement("div");
+  painel.className = "painel";
+  painel.id = "painel-palavra";
+  painel.setAttribute("role", "region");
+  painel.hidden = true;
+  var botaoAberto = null;
+
+  function fecharPainel(devolverFoco){
+    if (!botaoAberto) return;
+    var b = botaoAberto;
+    botaoAberto = null;
+    b.setAttribute("aria-expanded", "false");
+    painel.classList.remove("aberto");
+    painel.hidden = true;
+    if (painel.parentNode) painel.parentNode.removeChild(painel);
+    if (devolverFoco) b.focus();
+  }
+
+  function posicionarPainel(btn){
+    if (painel.parentNode) painel.parentNode.removeChild(painel);
+    var botoes = quadro.querySelectorAll("button.palavra");
+    var topo = btn.offsetTop, ultimo = btn;
+    botoes.forEach(function(b){ if (b.offsetTop === topo) ultimo = b; });
+    ultimo.after(painel);
+  }
+
+  function alternarPainel(btn, g){
+    if (botaoAberto === btn){ fecharPainel(false); return; }
+    if (botaoAberto) botaoAberto.setAttribute("aria-expanded", "false");
+    botaoAberto = btn;
+    btn.setAttribute("aria-expanded", "true");
+    painel.setAttribute("aria-label", "Folhas da palavra " + g.palavra);
+
+    var h = '<div class="painel-topo">' +
+      "<h3>" + g.palavra + "</h3>" +
+      '<span class="sub">Palavra ' + g.num + " do método · " +
+        (1 + g.variantes.length) + " folha" + (g.variantes.length ? "s" : "") + "</span>" +
+      '<button type="button" class="fechar" aria-label="Fechar as folhas de ' + g.palavra + '">✕</button>' +
+      "</div>" +
+      '<div class="folhas">';
+    h += folhaHTML(g.principal, { principal:true, titulo:"Palavra " + g.num + " — " + g.palavra });
+    g.variantes.forEach(function(v){
+      h += folhaHTML(v, { titulo: rotuloVariante(v) });
+    });
+    h += "</div>";
+    painel.innerHTML = h;
+    painel.querySelector(".fechar").addEventListener("click", function(){ fecharPainel(true); });
+
+    posicionarPainel(btn);
+    painel.hidden = false;
+    painel.classList.remove("aberto");
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){ painel.classList.add("aberto"); });
+    });
+    painel.scrollIntoView({ block:"nearest", behavior: motionOK ? "smooth" : "auto" });
+  }
+
+  document.addEventListener("keydown", function(ev){
+    if (ev.key === "Escape" && botaoAberto) fecharPainel(true);
+  });
+
+  var temporizador = null;
+  window.addEventListener("resize", function(){
+    if (!botaoAberto) return;
+    clearTimeout(temporizador);
+    temporizador = setTimeout(function(){
+      if (botaoAberto) posicionarPainel(botaoAberto);
+    }, 120);
+  });
+
+  /* ---------- mesa do professor ---------- */
+  var mesa = document.getElementById("mesa-folhas");
+  var cartoesMesa = [];
+  resto.forEach(function(a){
+    var div = document.createElement("div");
+    div.innerHTML = folhaHTML(a);
+    var el = div.firstChild;
+    el.dataset.slug = a.slug;
+    mesa.appendChild(el);
+    cartoesMesa.push({ el: el, a: a });
+  });
+
+  var vazioMesa = document.createElement("div");
+  vazioMesa.className = "vazio";
+  vazioMesa.hidden = true;
+  vazioMesa.innerHTML =
+    '<span class="giz-grande">A mesa está arrumada.</span>' +
+    "Nenhuma atividade da mesa corresponde a esta procura.";
+  mesa.appendChild(vazioMesa);
+
+  /* ---------- pesquisa + filtros ---------- */
+  var campo = document.getElementById("pesquisa");
+  var btnLimpar = document.getElementById("btn-limpar");
+
+  function grupoCorresponde(g, q){
+    if (!q) return true;
+    if (norm(g.palavra).indexOf(q) !== -1) return true;
+    var todos = [g.principal].concat(g.variantes);
+    return todos.some(function(a){ return textoDe(a).indexOf(q) !== -1; });
+  }
+  function grupoPassaChip(g){
+    var f = CHIPS[chipAtivo];
+    var todos = [g.principal].concat(g.variantes);
+    return todos.some(f);
+  }
+
+  function aplicarFiltros(){
+    var q = norm(termo.trim());
+    var visiveisQuadro = 0;
+
+    quadro.querySelectorAll("button.palavra").forEach(function(b){
+      var g = grupos[b.dataset.chave];
+      var ok = grupoPassaChip(g) && grupoCorresponde(g, q);
+      b.classList.toggle("apagada", !ok);
+      b.disabled = !ok;
+      if (ok) visiveisQuadro++;
+      if (!ok && botaoAberto === b) fecharPainel(false);
+    });
+    vazioQuadro.hidden = visiveisQuadro > 0;
+
+    var visiveisMesa = 0;
+    cartoesMesa.forEach(function(c){
+      var ok = CHIPS[chipAtivo](c.a) && (!q || textoDe(c.a).indexOf(q) !== -1);
+      c.el.hidden = !ok;
+      if (ok) visiveisMesa++;
+    });
+    vazioMesa.hidden = visiveisMesa > 0;
+
+    btnLimpar.hidden = termo.trim() === "";
+  }
+
+  campo.addEventListener("input", function(){
+    termo = campo.value;
+    aplicarFiltros();
+  });
+  btnLimpar.addEventListener("click", function(){
+    campo.value = ""; termo = "";
+    aplicarFiltros(); campo.focus();
+  });
+  document.getElementById("repor-quadro").addEventListener("click", function(){
+    campo.value = ""; termo = "";
+    chipAtivo = "tudo";
+    document.querySelectorAll("#filtros button").forEach(function(b){
+      b.setAttribute("aria-pressed", String(b.dataset.chip === "tudo"));
+    });
+    aplicarFiltros(); campo.focus();
+  });
+
+  document.querySelectorAll("#filtros button").forEach(function(b){
+    b.addEventListener("click", function(){
+      chipAtivo = b.dataset.chip;
+      document.querySelectorAll("#filtros button").forEach(function(x){
+        x.setAttribute("aria-pressed", String(x === b));
+      });
+      aplicarFiltros();
+    });
+  });
+
+  /* ---------- contagens reais ---------- */
+  var nVar = listaGrupos.reduce(function(s, g){ return s + g.variantes.length; }, 0);
+  document.getElementById("contagem-topo").textContent =
+    CATALOG.length + " atividades no quadro";
+  document.getElementById("contagem-rodape").textContent =
+    "PageCraft · " + CATALOG.length + " atividades · " + listaGrupos.length +
+    " palavras do método (" + (listaGrupos.length + nVar) + " folhas) · " +
+    resto.length + " na mesa do professor";
+
+  aplicarFiltros();
+})();
+</script>
+</body>
+</html>

@@ -12,6 +12,9 @@ const state = {
 
 const $ = (id) => document.getElementById(id);
 const SAVED_KEY = "pagecraft_student";
+let bridgeHandler = null;
+let stream = null;
+let flushTimer = null;
 
 function saveIdentity() {
   try {
@@ -123,6 +126,7 @@ async function claim(student) {
 /* ---- passo 3: atividade ---- */
 
 function startActivity() {
+  stopActivityConnections();
   $("step-identity").hidden = true;
   $("step-activity").hidden = false;
   $("student-name").textContent = state.displayName;
@@ -130,20 +134,30 @@ function startActivity() {
   $("activity-frame").src = `/activities/${state.session.activity_slug}/`;
   listenToBridge();
   connectStream();
-  setInterval(flushOutbox, 2000);
+  flushTimer = setInterval(flushOutbox, 2000);
   // nota: o evento "joined" é emitido pelo servidor no claim; não repetir aqui
+}
+
+function stopActivityConnections() {
+  if (bridgeHandler) window.removeEventListener("message", bridgeHandler);
+  if (stream) stream.close();
+  if (flushTimer) clearInterval(flushTimer);
+  bridgeHandler = null;
+  stream = null;
+  flushTimer = null;
 }
 
 /* eventos da atividade (PageCraftBridge → postMessage) */
 function listenToBridge() {
   const frame = $("activity-frame");
-  window.addEventListener("message", (ev) => {
+  bridgeHandler = (ev) => {
     // aceitar apenas mensagens vindas do iframe da atividade
     if (!frame.contentWindow || ev.source !== frame.contentWindow) return;
     const d = ev.data;
     if (!d || d.pagecraft !== 1 || !d.type) return;
     queueEvent(d.type, d.unitId || null, sanitizePayload(d.payload));
-  });
+  };
+  window.addEventListener("message", bridgeHandler);
 }
 
 function sanitizePayload(payload) {
@@ -191,6 +205,7 @@ function connectStream() {
   const es = new EventSource(
     `/api/sessions/${state.session.id}/stream?role=student&student_token=${state.token}`
   );
+  stream = es;
   es.addEventListener("ai_feedback", (ev) => {
     const data = JSON.parse(ev.data);
     showMessage(data.payload.text, "feedback-warn");
@@ -232,9 +247,21 @@ function connectStream() {
     $("freeze-overlay").hidden = true;
     showMessage("A aula terminou. Bom trabalho!", "feedback-ok");
     clearIdentity();
-    es.close();
+    stopActivityConnections();
   });
 }
+
+window.addEventListener("pagehide", stopActivityConnections);
+
+// restauro via back-forward cache: o iframe mantém o estado da atividade,
+// mas as ligações (bridge, SSE, outbox) foram fechadas no pagehide
+window.addEventListener("pageshow", (ev) => {
+  if (!ev.persisted || $("step-activity").hidden || !state.session) return;
+  stopActivityConnections();
+  listenToBridge();
+  connectStream();
+  flushTimer = setInterval(flushOutbox, 2000);
+});
 
 function showMessage(text, cls) {
   const box = document.createElement("div");

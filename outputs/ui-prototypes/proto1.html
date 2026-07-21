@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PageCraft — O Tapete da Sala</title>
+<style>
+/* ============================================================
+   PROTO 1 — «O Tapete da Sala»
+   A página é o tapete de exploração de uma sala MEM:
+   quatro cantinhos de cor, serenos, sobre areia quente.
+   ============================================================ */
+
+:root{
+  /* — paleta (OKLCH) — */
+  --areia:        oklch(0.965 0.018 84);   /* fundo: areia quente clara */
+  --areia-funda:  oklch(0.935 0.026 82);   /* o próprio tapete, um tom abaixo */
+  --tinta:        oklch(0.26 0.022 55);    /* castanho-escuro quase preto */
+  --tinta-suave:  oklch(0.42 0.025 55);    /* legendas e metas */
+
+  --teal-zona:    oklch(0.90 0.045 192);   /* cantinho das palavras */
+  --teal-fundo:   oklch(0.945 0.026 192);
+  --teal-forte:   oklch(0.44 0.072 196);   /* ação primária, AA sobre branco */
+
+  --coral-zona:   oklch(0.905 0.05 38);    /* cantinho dos números */
+  --coral-fundo:  oklch(0.95 0.028 38);
+  --coral-forte:  oklch(0.50 0.105 34);
+
+  --palha-zona:   oklch(0.928 0.062 96);   /* cantinho dos projetos */
+  --palha-fundo:  oklch(0.955 0.035 96);
+  --palha-forte:  oklch(0.47 0.075 78);
+
+  --lilas-zona:   oklch(0.90 0.042 300);   /* cantinho do digital */
+  --lilas-fundo:  oklch(0.948 0.024 300);
+  --lilas-forte:  oklch(0.45 0.08 302);
+
+  --papel:        oklch(0.985 0.008 88);   /* cartões, como folhas na mesa */
+  --fio:          oklch(0.86 0.02 80);     /* costuras e linhas finas */
+
+  /* — tipografia — */
+  --f-display: Nunito, system-ui, sans-serif;
+  --f-corpo: "Atkinson Hyperlegible", Lexend, system-ui, sans-serif;
+  --f-giz: "Chalkboard SE", "Comic Sans MS", cursive; /* só legendas do mapa */
+
+  --raio: 14px;
+}
+
+*{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+
+body{
+  margin: 0;
+  background: var(--areia);
+  color: var(--tinta);
+  font-family: var(--f-corpo);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+
+a{ color: inherit; }
+
+:focus-visible{
+  outline: 3px solid var(--teal-forte);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.pagina{ max-width: 1100px; margin: 0 auto; padding: 0 clamp(14px, 3vw, 32px); }
+
+/* ---------- cabeçalho ---------- */
+header.topo{
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 20px;
+  padding: 26px 0 6px;
+}
+.marca{
+  font-family: var(--f-display);
+  font-weight: 900;
+  font-size: clamp(1.6rem, 3.4vw, 2.1rem);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.marca .craft{ color: var(--teal-forte); }
+.lema{
+  margin: 0; color: var(--tinta-suave); font-size: 0.98rem;
+}
+
+/* ---------- pesquisa ---------- */
+.procura{
+  margin: 14px 0 26px;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px;
+}
+.procura label{
+  font-family: var(--f-display); font-weight: 800; font-size: 1rem;
+}
+.campo{
+  flex: 1 1 300px;
+  position: relative;
+}
+.campo input{
+  width: 100%;
+  min-height: 52px;
+  padding: 10px 18px 10px 46px;
+  font: inherit; color: var(--tinta);
+  background: var(--papel);
+  border: 2px solid var(--fio);
+  border-radius: 26px 22px 26px 22px;
+}
+.campo input::placeholder{ color: var(--tinta-suave); opacity: .8; }
+.campo input:focus-visible{ outline-offset: 1px; }
+.campo .lupa{
+  position: absolute; left: 16px; top: 50%; translate: 0 -50%;
+  width: 18px; height: 18px; pointer-events: none;
+}
+.campo .lupa::before{
+  content:""; position:absolute; inset: 0 4px 4px 0;
+  border: 2.5px solid var(--tinta-suave); border-radius: 50%;
+}
+.campo .lupa::after{
+  content:""; position:absolute; right: 0; bottom: 0;
+  width: 7px; height: 2.5px; background: var(--tinta-suave);
+  border-radius: 2px; rotate: 45deg; translate: -1px -2px;
+}
+.resultado-vivo{
+  color: var(--tinta-suave); font-size: 0.92rem; min-width: 12ch;
+}
+
+/* ---------- o tapete (hero) ---------- */
+.tapete{
+  position: relative;
+  background: var(--areia-funda);
+  border: 3px dashed oklch(0.62 0.045 70 / 0.55); /* costura do tapete */
+  border-radius: 40px 64px 44px 58px;
+  padding: clamp(18px, 3.5vw, 34px);
+  padding-top: clamp(38px, 5vw, 50px);
+  margin-bottom: 44px;
+}
+.tapete .titulo-mapa{
+  position: absolute; top: -2px; left: clamp(20px, 5vw, 44px);
+  translate: 0 -55%; rotate: -2deg;
+  font-family: var(--f-giz);
+  font-size: 1.02rem;
+  color: var(--tinta-suave);
+  background: var(--areia);
+  padding: 2px 12px;
+}
+
+.mapa{
+  display: grid;
+  grid-template-columns: 5fr 4fr 3.2fr;
+  grid-template-areas:
+    "palavras numeros digital"
+    "palavras projetos projetos";
+  gap: clamp(12px, 2vw, 20px);
+}
+
+.cantinho{
+  display: flex; flex-direction: column; justify-content: flex-end;
+  gap: 2px;
+  min-height: 128px;
+  padding: 18px 20px 16px;
+  text-decoration: none;
+  border: 2px solid transparent;
+  animation: pousar .55s ease-out backwards;
+}
+.cantinho:hover{ border-color: oklch(0.4 0.03 60 / .25); }
+
+/* cada cantinho tem a sua forma — arredondada, assimétrica, cosida à mão */
+.cantinho.palavras{
+  grid-area: palavras;
+  background: var(--teal-zona);
+  border-radius: 78px 34px 88px 30px;
+  min-height: 240px;
+  animation-delay: .05s;
+}
+.cantinho.numeros{
+  grid-area: numeros;
+  background: var(--coral-zona);
+  border-radius: 30px 72px 30px 64px;
+  animation-delay: .15s;
+}
+.cantinho.digital{
+  grid-area: digital;
+  background: var(--lilas-zona);
+  border-radius: 56px 30px 60px 34px;
+  animation-delay: .25s;
+}
+.cantinho.projetos{
+  grid-area: projetos;
+  background: var(--palha-zona);
+  border-radius: 34px 60px 28px 84px;
+  animation-delay: .35s;
+}
+
+@keyframes pousar{
+  from{ opacity: 0; translate: 0 14px; }
+  to{ opacity: 1; translate: 0 0; }
+}
+
+.cantinho .legenda{
+  font-family: var(--f-giz);
+  font-size: 0.95rem;
+  color: var(--tinta-suave);
+  rotate: -1.5deg;
+  margin-bottom: auto;      /* legenda em cima, nome em baixo, como numa planta */
+  max-width: 22ch;
+}
+.cantinho.numeros .legenda,
+.cantinho.projetos .legenda{ rotate: 1.2deg; }
+
+.cantinho .nome{
+  font-family: var(--f-display);
+  font-weight: 900;
+  font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+  line-height: 1.15;
+  color: var(--tinta);
+}
+.cantinho.palavras .nome{ font-size: clamp(1.4rem, 3vw, 1.9rem); }
+.cantinho .conta{
+  font-size: 0.9rem; color: var(--tinta-suave);
+}
+
+/* almofadas: pequenos assentos desenhados no cantinho grande */
+.almofadas{ display: flex; gap: 7px; margin: 10px 0 14px; }
+.almofadas i{
+  width: 15px; height: 12px;
+  background: oklch(0.99 0.005 90 / .75);
+  border-radius: 45% 55% 50% 50% / 60% 60% 40% 40%;
+}
+.almofadas i:nth-child(2n){ rotate: 8deg; }
+.almofadas i:nth-child(3n){ rotate: -6deg; width: 13px; }
+
+/* ---------- secções (as esteiras de cada cantinho) ---------- */
+section.zona{
+  border-radius: 30px 46px 34px 42px;
+  padding: clamp(18px, 3vw, 30px);
+  margin-bottom: 34px;
+  scroll-margin-top: 18px;
+}
+#cantinho-palavras{ background: var(--teal-fundo); }
+#cantinho-numeros{ background: var(--coral-fundo); border-radius: 44px 30px 40px 34px; }
+#cantinho-projetos{ background: var(--palha-fundo); border-radius: 32px 44px 30px 46px; }
+#cantinho-digital{ background: var(--lilas-fundo); border-radius: 46px 32px 44px 30px; }
+
+.zona-cabeca{ display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; margin-bottom: 4px; }
+.zona-cabeca h2{
+  font-family: var(--f-display); font-weight: 900;
+  font-size: clamp(1.3rem, 2.6vw, 1.65rem);
+  margin: 0;
+}
+.zona-cabeca .sub{ color: var(--tinta-suave); font-size: 0.95rem; margin: 0; }
+.zona-nota{ color: var(--tinta-suave); font-size: 0.95rem; margin: 2px 0 18px; max-width: 62ch; }
+
+/* ---------- cartões de palavra (M28P) ---------- */
+.palavras-grelha{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr));
+  gap: 16px;
+}
+.carta-palavra{
+  background: var(--papel);
+  border: 1.5px solid var(--fio);
+  border-radius: 26px 32px 24px 34px;
+  padding: 16px 16px 14px;
+  display: flex; flex-direction: column; gap: 10px;
+  transition: translate .16s ease, box-shadow .16s ease;
+}
+.carta-palavra:nth-child(2n){ border-radius: 32px 24px 34px 26px; }
+.carta-palavra:nth-child(3n){ border-radius: 24px 30px 26px 30px; }
+.carta-palavra:hover{
+  translate: 0 -3px;
+  box-shadow: 0 6px 14px oklch(0.4 0.03 60 / .10);
+}
+
+.carta-topo{ display: flex; align-items: center; gap: 10px; }
+.num-palavra{
+  flex: none;
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  font-family: var(--f-display); font-weight: 900; font-size: 0.95rem;
+  color: var(--papel);
+  background: var(--teal-forte);
+  border-radius: 48% 52% 55% 45% / 52% 46% 54% 48%;
+}
+.carta-topo h3{
+  margin: 0;
+  font-family: var(--f-display); font-weight: 800;
+  font-size: 1.25rem; line-height: 1.1;
+  text-transform: capitalize;
+}
+.carta-meta{ color: var(--tinta-suave); font-size: 0.88rem; }
+
+.carta-acoes{ display: flex; flex-wrap: wrap; gap: 8px; }
+.btn{
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 48px; padding: 8px 20px;
+  font-family: var(--f-display); font-weight: 800; font-size: 0.98rem;
+  text-decoration: none;
+  border-radius: var(--raio);
+  border: 2px solid transparent;
+  transition: translate .16s ease;
+}
+.btn:hover{ translate: 0 -1px; }
+.btn-abrir{ background: var(--teal-forte); color: oklch(0.99 0.005 90); }
+.btn-guia{
+  background: transparent; color: var(--tinta);
+  border-color: var(--fio);
+}
+.btn-guia:hover{ border-color: var(--tinta-suave); }
+#cantinho-numeros .btn-abrir{ background: var(--coral-forte); }
+#cantinho-projetos .btn-abrir{ background: var(--palha-forte); }
+#cantinho-digital .btn-abrir{ background: var(--lilas-forte); }
+
+/* pedrinhas: as variantes dentro do cartão da palavra */
+.pedrinhas{ margin-top: 2px; }
+.pedrinhas .rotulo{
+  display: block;
+  font-size: 0.8rem; color: var(--tinta-suave);
+  margin-bottom: 6px;
+}
+.pedrinhas ul{ list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; }
+.pedra{ display: inline-flex; }
+.pedra a{
+  display: inline-flex; align-items: center; gap: 7px;
+  min-height: 48px; padding: 6px 15px;
+  font-size: 0.9rem; line-height: 1.25;
+  text-decoration: none;
+  background: oklch(0.93 0.035 100);
+  border: 1.5px solid oklch(0.84 0.04 95);
+  border-radius: 18px 22px 16px 24px;
+  transition: translate .16s ease, background .16s ease;
+}
+.pedra:nth-child(2n) a{ border-radius: 22px 16px 24px 18px; background: oklch(0.935 0.03 88); }
+.pedra:nth-child(3n) a{ border-radius: 16px 20px 20px 16px; }
+.pedra a:hover{ translate: 0 -2px; background: oklch(0.955 0.03 100); }
+.pedra .dur{ color: var(--tinta-suave); font-size: 0.8rem; }
+
+/* linha «mais língua» dentro do cantinho das palavras */
+.mais-lingua{ margin-top: 22px; }
+.mais-lingua h3{
+  font-family: var(--f-display); font-weight: 800; font-size: 1.05rem;
+  margin: 0 0 10px;
+}
+
+/* ---------- cartões das outras zonas ---------- */
+.outras-grelha{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(290px, 100%), 1fr));
+  gap: 16px;
+}
+.carta-atividade{
+  background: var(--papel);
+  border: 1.5px solid var(--fio);
+  border-radius: 24px 30px 22px 32px;
+  padding: 16px 16px 14px;
+  display: flex; flex-direction: column; gap: 10px;
+  transition: translate .16s ease, box-shadow .16s ease;
+}
+.carta-atividade:nth-child(2n){ border-radius: 30px 22px 32px 24px; }
+.carta-atividade:hover{
+  translate: 0 -3px;
+  box-shadow: 0 6px 14px oklch(0.4 0.03 60 / .10);
+}
+.carta-atividade h3{
+  margin: 0;
+  font-family: var(--f-display); font-weight: 800;
+  font-size: 1.08rem; line-height: 1.3;
+}
+.carta-atividade .carta-acoes{ margin-top: auto; }
+
+/* ---------- estado vazio ---------- */
+.vazio{
+  text-align: center;
+  padding: 46px 20px 52px;
+  background: var(--areia-funda);
+  border: 3px dashed oklch(0.62 0.045 70 / 0.5);
+  border-radius: 50px 36px 54px 38px;
+  margin-bottom: 34px;
+}
+.vazio .giz{
+  font-family: var(--f-giz); font-size: 1.15rem;
+  color: var(--tinta-suave); rotate: -1deg; display: inline-block;
+  margin-bottom: 8px;
+}
+.vazio p{ margin: 6px auto 18px; max-width: 46ch; }
+.vazio button{
+  font: inherit; font-family: var(--f-display); font-weight: 800;
+  min-height: 48px; padding: 8px 22px;
+  color: oklch(0.99 0.005 90); background: var(--teal-forte);
+  border: none; border-radius: var(--raio); cursor: pointer;
+}
+
+/* ---------- rodapé ---------- */
+footer{
+  padding: 8px 0 40px;
+  color: var(--tinta-suave);
+  font-size: 0.92rem;
+  text-align: center;
+}
+footer .costura{
+  border: none;
+  border-top: 3px dashed oklch(0.62 0.045 70 / 0.4);
+  margin: 0 auto 18px; max-width: 240px;
+}
+
+/* ---------- responsivo ---------- */
+@media (max-width: 780px){
+  .mapa{
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "palavras palavras"
+      "numeros digital"
+      "projetos projetos";
+  }
+  .cantinho.palavras{ min-height: 170px; }
+}
+@media (max-width: 460px){
+  .mapa{
+    grid-template-columns: 1fr;
+    grid-template-areas: "palavras" "numeros" "projetos" "digital";
+  }
+  .cantinho{ min-height: 110px; }
+  .cantinho.palavras{ min-height: 150px; }
+  .carta-acoes .btn{ flex: 1 1 auto; }
+}
+
+/* ---------- movimento reduzido ---------- */
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior: auto; }
+  .cantinho{ animation: none; }
+  .carta-palavra, .carta-atividade, .btn, .pedra a{ transition: none; }
+  .carta-palavra:hover, .carta-atividade:hover, .btn:hover, .pedra a:hover{ translate: 0 0; }
+}
+</style>
+</head>
+<body>
+<div class="pagina">
+
+  <header class="topo">
+    <h1 class="marca">Page<span class="craft">Craft</span></h1>
+    <p class="lema">as atividades da nossa sala, arrumadas por cantinhos</p>
+  </header>
+
+  <div class="procura" role="search">
+    <label for="pesquisa">Procura uma atividade</label>
+    <div class="campo">
+      <span class="lupa" aria-hidden="true"></span>
+      <input id="pesquisa" type="search"
+             placeholder="casa, frações, Canva, sílaba intrusa…"
+             autocomplete="off">
+    </div>
+    <p class="resultado-vivo" id="contagem-viva" aria-live="polite"></p>
+  </div>
+
+  <nav class="tapete" aria-label="Mapa dos cantinhos da sala">
+    <span class="titulo-mapa" aria-hidden="true">a planta da nossa sala</span>
+    <div class="mapa">
+      <a class="cantinho palavras" href="#cantinho-palavras">
+        <span class="legenda" aria-hidden="true">aqui aprendemos a ler, palavra a palavra</span>
+        <span class="almofadas" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="nome">Cantinho das Palavras</span>
+        <span class="conta" id="conta-palavras"></span>
+      </a>
+      <a class="cantinho numeros" href="#cantinho-numeros">
+        <span class="legenda" aria-hidden="true">contar, repartir, descobrir</span>
+        <span class="nome">Cantinho dos Números</span>
+        <span class="conta" id="conta-numeros"></span>
+      </a>
+      <a class="cantinho digital" href="#cantinho-digital">
+        <span class="legenda" aria-hidden="true">ecrãs com cabeça</span>
+        <span class="nome">Cantinho do Digital</span>
+        <span class="conta" id="conta-digital"></span>
+      </a>
+      <a class="cantinho projetos" href="#cantinho-projetos">
+        <span class="legenda" aria-hidden="true">o que vamos construir juntos?</span>
+        <span class="nome">Cantinho dos Projetos</span>
+        <span class="conta" id="conta-projetos"></span>
+      </a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="zona" id="cantinho-palavras" aria-labelledby="t-palavras">
+      <div class="zona-cabeca">
+        <h2 id="t-palavras">Cantinho das Palavras</h2>
+        <p class="sub">Método das 28 Palavras · 1.º ano</p>
+      </div>
+      <p class="zona-nota">Cada cartão é uma palavra do método: abre a atividade principal ou escolhe uma pedrinha para variar o treino.</p>
+      <div class="palavras-grelha" id="grelha-m28p"></div>
+      <div class="mais-lingua" id="mais-lingua" hidden>
+        <h3>E mais língua, fora do método</h3>
+        <div class="outras-grelha" id="grelha-lingua"></div>
+      </div>
+    </section>
+
+    <section class="zona" id="cantinho-numeros" aria-labelledby="t-numeros">
+      <div class="zona-cabeca">
+        <h2 id="t-numeros">Cantinho dos Números</h2>
+        <p class="sub">matemática com blocos e mãos na massa</p>
+      </div>
+      <div class="outras-grelha" id="grelha-numeros"></div>
+    </section>
+
+    <section class="zona" id="cantinho-projetos" aria-labelledby="t-projetos">
+      <div class="zona-cabeca">
+        <h2 id="t-projetos">Cantinho dos Projetos</h2>
+        <p class="sub">trabalho de projeto à maneira do MEM</p>
+      </div>
+      <div class="outras-grelha" id="grelha-projetos"></div>
+    </section>
+
+    <section class="zona" id="cantinho-digital" aria-labelledby="t-digital">
+      <div class="zona-cabeca">
+        <h2 id="t-digital">Cantinho do Digital</h2>
+        <p class="sub">Canva, pesquisa e literacia digital</p>
+      </div>
+      <div class="outras-grelha" id="grelha-digital"></div>
+    </section>
+
+    <div class="vazio" id="estado-vazio" hidden>
+      <span class="giz">hmm… esse cantinho ainda está por inventar</span>
+      <p>Não encontrámos nenhuma atividade para <strong id="vazio-termo"></strong>. Experimenta outra palavra, ou espreita os cantinhos no tapete lá em cima.</p>
+      <button type="button" id="limpar-pesquisa">Mostrar tudo outra vez</button>
+    </div>
+  </main>
+
+  <footer>
+    <hr class="costura">
+    <p id="rodape-contagem"></p>
+  </footer>
+</div>
+
+<script src="./catalog-data.js"></script>
+<script>
+(function(){
+  "use strict";
+  var CAT = (window.CATALOG || []).slice();
+
+  /* ---------- utilidades ---------- */
+  function norm(s){
+    return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+    });
+  }
+  function guiaUrl(a){ return a.url + "guia/"; }
+  function dur(a){ return a.duration + " min"; }
+
+  /* ---------- agrupar M28P por palavra ---------- */
+  var m28p = CAT.filter(function(a){ return a.tags.indexOf("m28p") !== -1; });
+  var outras = CAT.filter(function(a){ return a.tags.indexOf("m28p") === -1; });
+
+  function palavraDe(a){
+    return a.slug.replace(/^m28p-/, "").split("-")[0];
+  }
+
+  var grupos = {};
+  m28p.forEach(function(a){
+    if (/^[a-z]+$/.test(a.slug)) {          // atividade principal: slug = palavra
+      var numTag = a.tags.filter(function(t){ return /^palavra\d+$/.test(t); })[0] || "";
+      grupos[a.slug] = grupos[a.slug] || { variantes: [] };
+      grupos[a.slug].principal = a;
+      grupos[a.slug].numero = parseInt(numTag.replace("palavra", ""), 10) || 0;
+      /* palavra com acentos vem do título («… — Árvore»), não do slug */
+      var bonita = a.title.indexOf("—") !== -1 ? a.title.split("—")[1].trim() : a.slug;
+      grupos[a.slug].palavra = bonita;
+      grupos[a.slug].chave = a.slug;
+    }
+  });
+  m28p.forEach(function(a){
+    if (!/^[a-z]+$/.test(a.slug)) {
+      var p = palavraDe(a);
+      if (grupos[p]) { grupos[p].variantes.push(a); }
+    }
+  });
+  var listaGrupos = Object.keys(grupos).map(function(k){ return grupos[k]; })
+    .sort(function(x, y){ return x.numero - y.numero; });
+
+  function rotuloVariante(a){
+    if (a.title.indexOf("·") !== -1) {
+      var partes = a.title.split("·");
+      return partes[partes.length - 1].trim();
+    }
+    if (/-blocos$/.test(a.slug)) { return "Mundo de blocos"; }
+    if (/30min/.test(a.slug)) { return "Sessão de 30 min"; }
+    return a.title;
+  }
+
+  /* ---------- distribuir as restantes pelos cantinhos ---------- */
+  function zonaDe(a){
+    var t = a.tags.join(" ");
+    if (/matem/.test(t)) { return "numeros"; }
+    if (/canva|\btic\b|literacia-digital|\bia\b|motor-de-busca/.test(t)) { return "digital"; }
+    if (/mem|projeto/.test(t)) { return "projetos"; }
+    return "lingua";
+  }
+  var zonas = { numeros: [], projetos: [], digital: [], lingua: [] };
+  outras.forEach(function(a){ zonas[zonaDe(a)].push(a); });
+
+  /* ---------- render ---------- */
+  function cartaPalavra(g){
+    var a = g.principal;
+    var pedras = g.variantes.map(function(v){
+      var rot = rotuloVariante(v);
+      return '<li class="pedra">' +
+        '<a href="' + esc(v.url) + '" aria-label="Abrir ' + esc(rot) + ' — ' + esc(g.palavra) + ', ' + v.duration + ' minutos">' +
+          esc(rot) + ' <span class="dur">' + v.duration + ' min</span>' +
+        '</a></li>';
+    }).join("");
+    return '<article class="carta-palavra" data-busca="' +
+        esc(norm(g.palavra + " " + a.title + " " + a.tags.join(" ") + " " +
+          g.variantes.map(function(v){ return v.title + " " + v.tags.join(" "); }).join(" "))) + '">' +
+      '<div class="carta-topo">' +
+        '<span class="num-palavra" aria-hidden="true">' + g.numero + '</span>' +
+        '<div><h3>' + esc(g.palavra.toLowerCase()) + '</h3>' +
+        '<div class="carta-meta">Palavra ' + g.numero + ' · ' + esc(a.year) + ' · ' + dur(a) + '</div></div>' +
+      '</div>' +
+      '<div class="carta-acoes">' +
+        '<a class="btn btn-abrir" href="' + esc(a.url) + '">Abrir</a>' +
+        '<a class="btn btn-guia" href="' + esc(guiaUrl(a)) + '">Guia do professor</a>' +
+      '</div>' +
+      (pedras ?
+        '<div class="pedrinhas"><span class="rotulo">Pedrinhas para variar (' + g.variantes.length + ')</span>' +
+        '<ul>' + pedras + '</ul></div>' : '') +
+      '</article>';
+  }
+
+  function cartaAtividade(a){
+    return '<article class="carta-atividade" data-busca="' +
+        esc(norm(a.title + " " + a.tags.join(" ") + " " + a.slug)) + '">' +
+      '<h3>' + esc(a.title) + '</h3>' +
+      '<div class="carta-meta">' + esc(a.year) + ' · ' + dur(a) + '</div>' +
+      '<div class="carta-acoes">' +
+        '<a class="btn btn-abrir" href="' + esc(a.url) + '">Abrir</a>' +
+        '<a class="btn btn-guia" href="' + esc(guiaUrl(a)) + '">Guia do professor</a>' +
+      '</div></article>';
+  }
+
+  document.getElementById("grelha-m28p").innerHTML = listaGrupos.map(cartaPalavra).join("");
+  document.getElementById("grelha-numeros").innerHTML = zonas.numeros.map(cartaAtividade).join("");
+  document.getElementById("grelha-projetos").innerHTML = zonas.projetos.map(cartaAtividade).join("");
+  document.getElementById("grelha-digital").innerHTML = zonas.digital.map(cartaAtividade).join("");
+  if (zonas.lingua.length) {
+    document.getElementById("mais-lingua").hidden = false;
+    document.getElementById("grelha-lingua").innerHTML = zonas.lingua.map(cartaAtividade).join("");
+  }
+
+  /* contagens reais no mapa e no rodapé */
+  var nPalavras = m28p.length + zonas.lingua.length;
+  document.getElementById("conta-palavras").textContent =
+    listaGrupos.length + " palavras · " + nPalavras + " atividades";
+  document.getElementById("conta-numeros").textContent = zonas.numeros.length + " atividades";
+  document.getElementById("conta-projetos").textContent = zonas.projetos.length + " atividades";
+  document.getElementById("conta-digital").textContent = zonas.digital.length + " atividades";
+  document.getElementById("rodape-contagem").textContent =
+    CAT.length + " atividades na sala · " + m28p.length + " do Método das 28 Palavras · feitas à mão, para abrir e usar";
+
+  /* ---------- pesquisa em tempo real ---------- */
+  var input = document.getElementById("pesquisa");
+  var vivo = document.getElementById("contagem-viva");
+  var vazio = document.getElementById("estado-vazio");
+  var vazioTermo = document.getElementById("vazio-termo");
+  var cartas = Array.prototype.slice.call(document.querySelectorAll("[data-busca]"));
+  var seccoes = Array.prototype.slice.call(document.querySelectorAll("section.zona"));
+
+  function filtrar(){
+    var q = norm(input.value.trim());
+    var visiveis = 0;
+    cartas.forEach(function(c){
+      var mostra = !q || c.getAttribute("data-busca").indexOf(q) !== -1;
+      c.hidden = !mostra;
+      if (mostra) { visiveis++; }
+    });
+    seccoes.forEach(function(s){
+      var alguma = s.querySelector("[data-busca]:not([hidden])");
+      s.hidden = !alguma;
+      var maisLingua = s.querySelector("#mais-lingua");
+      if (maisLingua) {
+        maisLingua.hidden = !maisLingua.querySelector("[data-busca]:not([hidden])");
+      }
+    });
+    vazio.hidden = !(q && visiveis === 0);
+    if (q && visiveis === 0) { vazioTermo.textContent = "«" + input.value.trim() + "»"; }
+    vivo.textContent = q ? (visiveis === 1 ? "1 resultado" : visiveis + " resultados") : "";
+  }
+
+  input.addEventListener("input", filtrar);
+  document.getElementById("limpar-pesquisa").addEventListener("click", function(){
+    input.value = "";
+    filtrar();
+    input.focus();
+  });
+})();
+</script>
+</body>
+</html>

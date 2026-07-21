@@ -95,7 +95,13 @@ class FakeProvider:
 class NoKnowledge:
     available = False
 
+    async def probe(self):
+        return False
+
     async def mem_context(self):
+        return ""
+
+    async def topic_context(self, topic, subject=""):
         return ""
 
     def context_for(self, subject, year):

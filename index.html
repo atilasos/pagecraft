@@ -1,390 +1,881 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-PT">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PageCraft</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PageCraft — atividades para a sala de aula</title>
   <style>
     :root {
-      --bg: #eef2f9;
-      --card: #fff;
-      --text: #111827;
-      --muted: #64748b;
-      --line: #e2e8f0;
-      --brand: #2563eb;
-      --brand-dark: #1d4ed8;
-      --student: #059669;
-      --student-bg: #ecfdf5;
-      --teacher: #7c3aed;
-      --teacher-bg: #f5f3ff;
-      --shadow: 0 4px 20px rgba(15, 23, 42, 0.07);
-      --radius: 16px;
+      --desk: oklch(0.935 0.022 88);
+      --paper: oklch(0.985 0.008 95);
+      --paper-deep: oklch(0.965 0.012 92);
+      --ink: oklch(0.25 0.02 75);
+      --ink-soft: oklch(0.46 0.018 75);
+      --line: oklch(0.875 0.018 85);
+      --stamp: oklch(0.46 0.085 195);
+      --stamp-deep: oklch(0.40 0.085 195);
+      --stamp-wash: oklch(0.46 0.085 195 / 0.1);
+      --stamp-tint: oklch(0.91 0.035 195);
+      --manila: oklch(0.93 0.045 90);
+      --manila-deep: oklch(0.885 0.055 88);
+      --shadow: oklch(0.28 0.02 72 / 0.1);
+      --radius: 14px;
       --touch: 48px;
-    }
-    * { box-sizing: border-box; margin: 0; }
-    body {
-      font-family: "Inter", system-ui, -apple-system, sans-serif;
-      background: linear-gradient(180deg, #e8eef8 0%, var(--bg) 28%);
-      color: var(--text);
-      min-height: 100vh;
-    }
-    .wrap {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 24px 20px 48px;
+      --font: Lexend, "Atkinson Hyperlegible", Nunito, "Comic Sans MS", "Chalkboard SE", system-ui, sans-serif;
     }
 
-    /* Hero */
-    .hero {
-      margin-bottom: 28px;
-      text-align: center;
-      padding: 28px 20px 20px;
-    }
-    .hero h1 {
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
-      letter-spacing: -0.02em;
-      margin-bottom: 8px;
-    }
-    .hero .lead {
-      font-size: 1.05rem;
-      color: var(--muted);
-      max-width: 36rem;
-      margin: 0 auto;
+    * { box-sizing: border-box; }
+    html { color-scheme: light; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      background: var(--desk);
+      color: var(--ink);
+      font-family: var(--font);
+      font-size: 16px;
       line-height: 1.5;
     }
-
-    /* M28P Banner */
-    .m28p-banner {
-      background: linear-gradient(135deg, #ede9fe 0%, #faf5ff 50%, #f5f3ff 100%);
-      border: 2px solid #ddd6fe;
-      border-radius: var(--radius);
-      padding: 24px;
-      margin-bottom: 32px;
-      box-shadow: var(--shadow);
-      display: flex;
-      gap: 24px;
+    button, input { font: inherit; }
+    button { color: inherit; cursor: pointer; }
+    a { color: var(--stamp-deep); }
+    [hidden] { display: none !important; }
+    :focus-visible {
+      outline: 3px solid var(--stamp);
+      outline-offset: 3px;
+      border-radius: 6px;
+    }
+    .skip-link {
+      position: fixed;
+      top: 8px;
+      left: 8px;
+      z-index: 1000;
+      min-height: 44px;
+      display: inline-flex;
       align-items: center;
-      transition: border-color 0.15s, box-shadow 0.15s;
-      cursor: pointer;
+      padding: 8px 12px;
+      border: 1px solid var(--stamp-deep);
+      border-radius: 10px;
+      background: var(--paper);
+      color: var(--stamp-deep);
+      font-size: 0.875rem;
+      font-weight: 700;
       text-decoration: none;
-      color: inherit;
+      transform: translateY(calc(-100% - 16px));
     }
-    .m28p-banner:hover {
-      border-color: #a78bfa;
-      box-shadow: 0 8px 30px rgba(124, 58, 237, 0.12);
+    .skip-link:focus { transform: translateY(0); }
+    .cap {
+      color: var(--ink-soft);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
     }
-    .m28p-info { flex: 1; }
-    .m28p-info h2 {
-      font-size: clamp(1.2rem, 2.5vw, 1.5rem);
-      color: #5b21b6;
-      margin-bottom: 6px;
+    .num { font-variant-numeric: tabular-nums; }
+
+    .top {
+      display: flex;
+      align-items: end;
+      flex-wrap: wrap;
+      gap: 18px 32px;
+      padding: 20px clamp(16px, 4vw, 40px) 18px;
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
     }
-    .m28p-info p {
-      font-size: 0.92rem;
-      color: var(--muted);
-      margin-bottom: 12px;
-      line-height: 1.45;
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(1.7rem, 4vw, 2.25rem);
+      line-height: 1;
+      letter-spacing: -0.04em;
     }
-    .m28p-progress {
+    .brand-dot { color: var(--stamp); }
+    .brand p { margin: 5px 0 0; }
+    .searchbox {
+      flex: 1 1 280px;
+      max-width: 500px;
+      margin-left: auto;
+    }
+    .searchbox label { display: block; margin-bottom: 5px; }
+    .searchbox input {
+      width: 100%;
+      min-height: var(--touch);
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-bottom: 2px solid var(--ink-soft);
+      border-radius: 10px 10px 4px 4px;
+      background: var(--paper-deep);
+      color: var(--ink);
+      font-size: 1rem;
+    }
+    .searchbox input::placeholder { color: var(--ink-soft); opacity: 0.82; }
+    .searchbox input:focus-visible { border-bottom-color: var(--stamp); outline-offset: 0; }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 228px minmax(0, 1fr);
+      align-items: start;
+      gap: 24px;
+      width: min(1240px, 100%);
+      margin: 0 auto;
+      padding: 22px clamp(16px, 4vw, 40px) 32px;
+    }
+    .rail {
+      position: sticky;
+      top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .filter-set > .cap { display: block; margin: 0 2px 8px; }
+    .drawers, .years, .cards, .variants {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .drawers { display: flex; flex-direction: column; gap: 6px; }
+    .drawer {
+      position: relative;
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 0.85rem;
-      color: #5b21b6;
-      font-weight: 600;
-    }
-    .m28p-bar {
-      flex: 1;
-      max-width: 180px;
-      height: 6px;
-      background: #ddd6fe;
-      border-radius: 999px;
-      overflow: hidden;
-    }
-    .m28p-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #7c3aed, #a78bfa);
-      border-radius: 999px;
-      transition: width 0.4s;
-    }
-    .m28p-preview {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .m28p-pill {
-      background: #fff;
-      border: 1px solid #ddd6fe;
-      border-radius: 999px;
-      padding: 6px 14px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: #5b21b6;
-      white-space: nowrap;
-    }
-    .m28p-more {
-      background: #f5f3ff;
-      color: #7c3aed;
-      border-color: #c4b5fd;
-    }
-
-    /* Section titles */
-    .section-title {
-      font-size: 1.1rem;
-      color: var(--muted);
-      font-weight: 600;
-      margin-bottom: 14px;
-      padding-left: 2px;
-    }
-
-    /* Search */
-    .search-wrap {
-      margin-bottom: 20px;
-    }
-    .search-wrap input {
       width: 100%;
-      padding: 13px 16px;
+      min-height: var(--touch);
+      padding: 8px 11px 8px 13px;
+      border: 1px solid var(--manila-deep);
+      border-radius: 10px;
+      background: var(--manila);
+      text-align: left;
+    }
+    .drawer::before {
+      width: 18px;
+      height: 7px;
+      flex: none;
+      content: "";
+      border: 1.5px solid var(--ink-soft);
+      border-radius: 4px;
+      background: var(--paper);
+    }
+    .drawer-label { font-size: 0.875rem; font-weight: 600; }
+    .drawer-count {
+      margin-left: auto;
+      color: var(--ink-soft);
+      font-size: 0.8125rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .drawer[aria-pressed="true"] {
+      border-color: var(--stamp);
+      background: var(--paper);
+      box-shadow: inset 0 0 0 1px var(--stamp);
+      color: var(--stamp-deep);
+    }
+    .drawer[aria-pressed="true"]::before { border-color: var(--stamp); }
+    .drawer[aria-pressed="true"] .drawer-count { color: var(--stamp-deep); }
+    .drawer:disabled, .year-chip:disabled { cursor: wait; opacity: 0.62; }
+    .filter-scroll-hint {
+      display: none;
+      margin: 5px 2px 0;
+      color: var(--ink-soft);
+      font-size: 0.8125rem;
+      font-weight: 650;
+    }
+    .filter-scroll-hint span { color: var(--stamp-deep); }
+    .years { display: flex; flex-wrap: wrap; gap: 6px; }
+    .year-chip {
+      min-width: var(--touch);
+      min-height: var(--touch);
+      padding: 6px 9px;
       border: 1px solid var(--line);
-      border-radius: 14px;
-      background: var(--card);
-      font: inherit;
-      color: var(--text);
-      font-size: 0.95rem;
+      border-radius: 10px;
+      background: var(--paper);
+      font-size: 0.875rem;
+      font-weight: 600;
     }
-    .search-wrap input:focus {
-      outline: 2px solid rgba(37, 99, 235, 0.35);
-      outline-offset: 1px;
+    .year-chip[aria-pressed="true"] {
+      border-color: var(--stamp);
+      background: var(--stamp);
+      color: var(--paper);
     }
+    .collection-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: var(--touch);
+      padding: 9px 12px;
+      border: 1px dashed var(--stamp);
+      border-radius: 10px;
+      background: var(--stamp-tint);
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-align: center;
+      text-decoration: none;
+    }
+    .collection-link:hover { background: var(--paper); }
 
-    /* Grid */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 16px;
+    .archive { display: flex; min-width: 0; flex-direction: column; gap: 26px; }
+    .state {
+      padding: 30px 24px;
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      color: var(--ink-soft);
+      text-align: center;
     }
+    .state strong { display: block; color: var(--ink); font-size: 1rem; }
+    .state p { max-width: 48ch; margin: 5px auto 0; }
+    .loading-mark {
+      width: 34px;
+      height: 34px;
+      margin: 0 auto 12px;
+      border: 4px solid var(--line);
+      border-top-color: var(--stamp);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Card */
+    .section-tab {
+      display: inline-flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+      margin-left: 10px;
+      padding: 7px 15px 6px;
+      border: 1px solid var(--manila-deep);
+      border-bottom: 0;
+      border-radius: 10px 10px 0 0;
+      background: var(--manila);
+    }
+    .section-tab h2 {
+      margin: 0;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .section-tab span { font-size: 0.8125rem; letter-spacing: 0.04em; text-transform: none; }
+    .cards { display: flex; flex-direction: column; gap: 8px; }
+
     .card {
-      background: var(--card);
+      position: relative;
+      padding: 11px 14px 11px 46px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: var(--shadow);
+      background: var(--paper);
+      box-shadow: 0 1px 3px var(--shadow);
+    }
+    .card::before, .card::after {
+      position: absolute;
+      left: 15px;
+      width: 13px;
+      height: 13px;
+      content: "";
+      border-radius: 50%;
+      background: var(--desk);
+      box-shadow: inset 0 2px 3px var(--shadow);
+    }
+    .card::before { top: 15px; }
+    .card::after { top: 43px; }
+    .card-row {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto auto;
+      align-items: center;
+      gap: 7px 16px;
+    }
+    .ordinal {
+      min-width: 46px;
+      color: var(--ink-soft);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    .card-title { min-width: 0; }
+    .card-title h3 {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+      overflow-wrap: anywhere;
+    }
+    .meta {
       display: flex;
-      flex-direction: column;
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
-    .card:hover {
-      border-color: #cbd5e1;
-      box-shadow: 0 8px 30px rgba(15, 23, 42, 0.1);
-    }
-    .card h3 {
-      font-size: 1.08rem;
-      margin-bottom: 8px;
-      line-height: 1.3;
-    }
-    .card-meta {
-      display: flex;
-      gap: 8px;
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-bottom: 16px;
-    }
-    .card-actions {
-      margin-top: auto;
-      display: flex;
-      gap: 8px;
       flex-wrap: wrap;
+      gap: 2px 12px;
+      margin-top: 4px;
+      color: var(--ink-soft);
+      font-size: 0.8125rem;
+      font-weight: 650;
+      letter-spacing: 0.055em;
+      text-transform: uppercase;
     }
-    .btn {
+    .stamp {
+      position: relative;
+      display: grid;
+      width: 58px;
+      height: 58px;
+      flex: none;
+      place-content: center;
+      border: 2px solid var(--stamp);
+      border-radius: 50%;
+      color: var(--stamp);
+      text-align: center;
+      text-transform: uppercase;
+      transform: rotate(var(--tilt, -3deg));
+      opacity: 0.86;
+      user-select: none;
+    }
+    .stamp::before {
+      position: absolute;
+      inset: 4px;
+      content: "";
+      border: 1px solid var(--stamp);
+      border-radius: 50%;
+      opacity: 0.65;
+    }
+    .stamp-small { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; }
+    .stamp-main { font-size: 0.75rem; font-weight: 800; line-height: 1; }
+    .actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 6px; }
+    .action, .variant-toggle {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      text-decoration: none;
-      padding: 11px 16px;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 0.88rem;
-      border: 1px solid transparent;
+      min-width: var(--touch);
       min-height: var(--touch);
-      transition: filter 0.15s, transform 0.1s;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      font-weight: 700;
     }
-    .btn:active { transform: scale(0.97); }
-    .btn.student {
-      background: var(--student);
-      color: #fff;
-      flex: 1;
-      min-width: 120px;
+    .action { text-decoration: none; }
+    .action-open {
+      border: 1px solid var(--stamp-deep);
+      background: var(--stamp);
+      color: var(--paper);
     }
-    .btn.student:hover { filter: brightness(1.06); }
-    .btn.teacher {
-      background: var(--teacher-bg);
-      color: var(--teacher);
-      border-color: #ddd6fe;
+    .action-open:hover { background: var(--stamp-deep); }
+    .action-secondary {
+      border: 1px solid var(--line);
+      background: var(--paper-deep);
+      color: var(--stamp-deep);
     }
-    .btn.teacher:hover { background: #ede9fe; }
-    .btn.spec {
-      background: #fff;
-      color: var(--brand-dark);
-      border-color: var(--line);
+    .action-secondary:hover { border-color: var(--stamp); background: var(--stamp-wash); }
+    .variant-toggle {
+      gap: 7px;
+      border: 1px dashed var(--stamp);
+      background: var(--paper);
+      color: var(--stamp-deep);
     }
-    .btn.spec:hover { background: #f8fafc; border-color: #cbd5e1; }
+    .variant-toggle:hover { background: var(--stamp-wash); }
+    .chevron { font-size: 0.75rem; transition: transform 150ms ease; }
+    .variant-toggle[aria-expanded="true"] .chevron { transform: rotate(90deg); }
+    .variants {
+      display: flex;
+      flex-direction: column;
+      margin-top: 9px;
+      padding-top: 4px;
+      border-top: 1px dashed var(--line);
+    }
+    .variant {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 7px 14px;
+      padding: 6px 0 6px 42px;
+      animation: reveal 150ms ease both;
+    }
+    .variant + .variant { border-top: 1px dotted var(--line); }
+    .variant::before {
+      position: absolute;
+      top: 50%;
+      left: 17px;
+      width: 14px;
+      height: 14px;
+      content: "";
+      border-bottom: 1.5px solid var(--line);
+      border-left: 1.5px solid var(--line);
+      border-radius: 0 0 0 6px;
+      transform: translateY(-90%);
+    }
+    @keyframes reveal { from { opacity: 0; } to { opacity: 1; } }
+    .variant-title { min-width: 0; font-size: 1rem; font-weight: 650; overflow-wrap: anywhere; }
+    .variant-meta { margin-top: 2px; color: var(--ink-soft); font-size: 0.8125rem; }
+    .variant .action { padding-inline: 10px; font-size: 0.875rem; }
 
-    .empty {
-      padding: 32px;
-      border: 2px dashed var(--line);
-      border-radius: var(--radius);
-      color: var(--muted);
-      background: var(--card);
-      text-align: center;
-      grid-column: 1 / -1;
+    .footer {
+      display: flex;
+      width: min(1240px, 100%);
+      margin: 0 auto;
+      padding: 16px clamp(16px, 4vw, 40px) 28px;
+      border-top: 1px solid var(--line);
+      color: var(--ink-soft);
+      flex-wrap: wrap;
+      gap: 4px 18px;
+      font-size: 0.8125rem;
     }
+    #resultStatus { font-size: 0.8125rem; }
 
-    /* Responsive: Tablet */
-    @media (max-width: 899px) {
-      .m28p-banner { flex-direction: column; }
-      .m28p-preview { display: none; }
-      .grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+    @media (max-width: 900px) {
+      .shell { grid-template-columns: 1fr; gap: 18px; padding-top: 14px; }
+      .rail { position: static; gap: 11px; }
+      .drawers { flex-direction: row; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+      .filter-scroll-hint { display: block; }
+      .drawer { width: auto; flex: none; white-space: nowrap; }
+      .drawer-count { margin-left: 4px; }
+      .collection-link { width: fit-content; }
+      .card-row { grid-template-columns: minmax(0, 1fr) auto; }
+      .ordinal { grid-column: 1 / -1; min-width: 0; }
+      .card-title { grid-column: 1; }
+      .stamp { grid-column: 2; grid-row: 1; width: 54px; height: 54px; }
+      .card-row > .actions { grid-column: 1 / -1; justify-content: flex-start; }
     }
-    /* Mobile */
-    @media (max-width: 599px) {
-      .wrap { padding: 16px 12px 36px; }
-      .hero { padding: 20px 12px 16px; }
-      .m28p-banner { padding: 18px 16px; }
-      .grid { grid-template-columns: 1fr; }
-      .card-actions { flex-direction: column; }
-      .btn { width: 100%; }
+    @media (max-width: 560px) {
+      .top { align-items: start; padding: 17px 14px 15px; }
+      .searchbox { max-width: none; margin-left: 0; }
+      .shell { padding-inline: 12px; }
+      .card { padding: 11px 11px 11px 36px; }
+      .card::before, .card::after { left: 11px; width: 11px; height: 11px; }
+      .variant { grid-template-columns: 1fr; padding-left: 30px; }
+      .variant::before { left: 8px; }
+      .variant .actions { justify-content: flex-start; }
     }
-    /* Interactive whiteboard / large touch */
-    @media (min-width: 1200px) and (pointer: coarse) {
-      .btn { min-height: 56px; font-size: 1rem; padding: 14px 20px; }
-      .card h3 { font-size: 1.2rem; }
-      .m28p-banner { padding: 32px; }
-      .m28p-info h2 { font-size: 1.6rem; }
-      .m28p-pill { padding: 8px 18px; font-size: 0.92rem; }
+    @media (max-width: 390px) {
+      .brand h1 { font-size: 1.65rem; }
+      .section-tab { margin-left: 6px; padding-inline: 10px; }
+      .card-row { column-gap: 8px; }
+      .stamp { width: 58px; height: 58px; }
+      .card-row > .actions, .variant .actions { display: grid; grid-template-columns: 1fr; width: 100%; }
+      .action, .variant-toggle { width: 100%; }
+    }
+    @media (pointer: coarse) {
+      :root { --touch: 56px; }
+      .skip-link,
+      .drawer,
+      .year-chip,
+      .collection-link,
+      .action,
+      .variant-toggle {
+        min-height: 56px;
+        font-size: 1rem;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <section class="hero">
-      <h1>PageCraft</h1>
-      <p class="lead">Atividades interativas para a sala de aula</p>
-    </section>
-
-    <a class="m28p-banner" id="m28pBanner" href="./m28p.html">
-      <div class="m28p-info">
-        <h2>Método das 28 Palavras</h2>
-        <p>Atividades de leitura e escrita para o 1.º ano — segmentação silábica, recombinação e leitura global.</p>
-        <div class="m28p-progress">
-          <span id="m28pCount">0 de 28 palavras</span>
-          <div class="m28p-bar">
-            <div class="m28p-fill" id="m28pFill" style="width: 0%"></div>
-          </div>
-        </div>
-      </div>
-      <div class="m28p-preview" id="m28pPreview"></div>
-    </a>
-
-    <div class="section-title" id="othersTitle" style="display:none">Outras atividades</div>
-
-    <div class="search-wrap" id="searchWrap" style="display:none">
-      <input id="search" type="search" placeholder="Pesquisar atividades…" autocomplete="off">
+  <a class="skip-link" href="#main-content">Saltar para o conteúdo principal</a>
+  <header class="top">
+    <div class="brand">
+      <h1>PageCraft<span class="brand-dot">.</span></h1>
+      <p class="cap">Ficheiro de atividades · 1.º ciclo</p>
     </div>
+    <div class="searchbox">
+      <label class="cap" for="search">Pesquisar no ficheiro</label>
+      <input id="search" type="search" autocomplete="off" placeholder="Palavra, tema ou etiqueta… ex.: árvore, frações, Canva" disabled>
+    </div>
+  </header>
 
-    <section id="grid" class="grid"></section>
+  <div class="shell">
+    <nav class="rail" aria-label="Filtros do ficheiro">
+      <div class="filter-set">
+        <span class="cap">Gavetas</span>
+        <ul class="drawers" id="categoryFilters">
+          <li><button class="drawer" type="button" disabled><span class="drawer-label">Todos</span><span class="drawer-count">—</span></button></li>
+        </ul>
+        <p class="filter-scroll-hint" id="categoryScrollHint" hidden><span aria-hidden="true">↔</span> Desliza para ver mais gavetas</p>
+      </div>
+      <div class="filter-set">
+        <span class="cap">Ano de escolaridade</span>
+        <ul class="years" id="yearFilters"></ul>
+      </div>
+      <a class="collection-link" href="./m28p.html">Ver a coleção M28P</a>
+    </nav>
+
+    <main class="archive" id="main-content" tabindex="-1">
+      <div class="state" id="loadingState" role="status">
+        <div class="loading-mark" aria-hidden="true"></div>
+        <strong>A abrir as gavetas…</strong>
+        <p>Estamos a carregar o catálogo de atividades.</p>
+      </div>
+
+      <section id="m28pSection" hidden>
+        <div class="section-tab">
+          <h2>Método das 28 Palavras</h2>
+          <span class="cap num" id="m28pCount"></span>
+        </div>
+        <ul class="cards" id="m28pList"></ul>
+      </section>
+
+      <section id="generalSection" hidden>
+        <div class="section-tab">
+          <h2>Estante geral</h2>
+          <span class="cap num" id="generalCount"></span>
+        </div>
+        <ul class="cards" id="generalList"></ul>
+      </section>
+
+      <div class="state" id="emptyState" hidden>
+        <strong id="emptyTitle">Nenhuma ficha encontrada.</strong>
+        <p id="emptyText">Experimenta outra pesquisa, gaveta ou ano de escolaridade.</p>
+        <button class="action action-secondary" id="clearFilters" type="button">Limpar pesquisa e filtros</button>
+      </div>
+      <p class="cap num" id="resultStatus" role="status" aria-live="polite"></p>
+    </main>
   </div>
 
+  <footer class="footer" id="footer">PageCraft — oficina de atividades do 1.º ciclo</footer>
+
   <script>
-    const grid = document.getElementById('grid');
-    const search = document.getElementById('search');
-    const searchWrap = document.getElementById('searchWrap');
-    const othersTitle = document.getElementById('othersTitle');
-    const m28pCountEl = document.getElementById('m28pCount');
-    const m28pFillEl = document.getElementById('m28pFill');
-    const m28pPreview = document.getElementById('m28pPreview');
-    let others = [];
+    (() => {
+      "use strict";
 
-    function esc(s) {
-      if (s == null) return '';
-      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-    }
+      const search = document.getElementById("search");
+      const categoryFilters = document.getElementById("categoryFilters");
+      const categoryScrollHint = document.getElementById("categoryScrollHint");
+      const yearFilters = document.getElementById("yearFilters");
+      const loadingState = document.getElementById("loadingState");
+      const emptyState = document.getElementById("emptyState");
+      const emptyTitle = document.getElementById("emptyTitle");
+      const emptyText = document.getElementById("emptyText");
+      const clearFilters = document.getElementById("clearFilters");
+      const resultStatus = document.getElementById("resultStatus");
+      const m28pSection = document.getElementById("m28pSection");
+      const generalSection = document.getElementById("generalSection");
+      const m28pList = document.getElementById("m28pList");
+      const generalList = document.getElementById("generalList");
+      const m28pCount = document.getElementById("m28pCount");
+      const generalCount = document.getElementById("generalCount");
+      const footer = document.getElementById("footer");
 
-    function viewerUrl(slug, view) {
-      return './viewer.html?slug=' + encodeURIComponent(slug) + '&view=' + encodeURIComponent(view);
-    }
+      const state = { category: "todos", year: "todos", expanded: new Map(), model: null };
 
-    function renderOthers() {
-      const q = search.value.trim().toLowerCase();
-      const filtered = others.filter(it => {
-        if (!q) return true;
-        const hay = [it.title, it.topic, it.year, (it.tags || []).join(' ')].join(' ').toLowerCase();
-        return hay.includes(q);
-      });
-      if (!filtered.length) {
-        grid.innerHTML = '<div class="empty">Nenhuma atividade encontrada.</div>';
-        return;
-      }
-      grid.innerHTML = filtered.map(it => {
-        const slug = it.slug || '';
-        return (
-          '<article class="card">' +
-          '<h3>' + esc(it.title) + '</h3>' +
-          '<div class="card-meta">' +
-          '<span>' + esc(it.year || '—') + '</span>' +
-          '<span>·</span>' +
-          '<span>' + (it.duration ? esc(String(it.duration)) + ' min' : '—') + '</span>' +
-          (it.maker && it.maker !== 'none' ? '<span>·</span><span>Maker: ' + esc(it.maker) + '</span>' : '') +
-          '</div>' +
-          '<div class="card-actions">' +
-          '<a class="btn student" href="' + esc(it.url) + '">Abrir atividade</a>' +
-          '<a class="btn teacher" href="' + esc(viewerUrl(slug, 'teacher')) + '">Guia</a>' +
-          '<a class="btn spec" href="' + esc(viewerUrl(slug, 'docspec')) + '">DocSpec</a>' +
-          '</div>' +
-          '</article>'
-        );
-      }).join('');
-    }
+      const esc = value => String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;"
+      })[character]);
 
-    fetch('./catalog.json')
-      .then(r => r.json())
-      .then(data => {
-        const items = data.items || [];
-        const isM28P = it => it.order && (it.tags || []).some(t => t.toLowerCase() === 'm28p');
-        const m28pItems = items.filter(isM28P);
-        others = items.filter(it => !isM28P(it));
+      const norm = value => String(value ?? "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLocaleLowerCase("pt-PT");
 
-        // M28P banner info: count unique words, not page variants.
-        const byOrder = new Map();
-        m28pItems.forEach(it => {
-          const current = byOrder.get(it.order);
-          if (!current || (!it.variantOf && current.variantOf)) byOrder.set(it.order, it);
-        });
-        const count = byOrder.size;
-        m28pCountEl.textContent = count + ' de 28 palavras';
-        m28pFillEl.style.width = Math.min(100, Math.round((count / 28) * 100)) + '%';
+      const hasTag = (item, tag) => (item.tags || []).some(value => norm(value) === norm(tag));
+      const isM28P = item => hasTag(item, "m28p");
+      const viewerUrl = (slug, view) => "./viewer.html?slug=" + encodeURIComponent(slug || "") + "&view=" + encodeURIComponent(view);
 
-        // Preview pills (first 6 base words)
-        const sorted = [...byOrder.values()].sort((a, b) => a.order - b.order);
-        const preview = sorted.slice(0, 6);
-        const remaining = count - preview.length;
-        m28pPreview.innerHTML = preview.map(it => {
-          const word = it.title.split('—').pop().trim().split('·')[0].trim();
-          return '<span class="m28p-pill">' + esc(word) + '</span>';
-        }).join('') + (remaining > 0 ? '<span class="m28p-pill m28p-more">+' + remaining + '</span>' : '');
-
-        // Others
-        if (others.length) {
-          othersTitle.style.display = '';
-          searchWrap.style.display = '';
-          renderOthers();
+      function itemYears(item) {
+        const source = [item.year, item.ageRange, ...(item.tags || [])].join(" ");
+        const explicit = new Set();
+        for (const match of source.matchAll(/([1-4])\s*(?:\.\s*º|º|o)?\s*[-.]?\s*ano/gi)) explicit.add(Number(match[1]));
+        if (explicit.size) return explicit;
+        const ages = /(\d+)\s*[–-]\s*(\d+)\s*anos/i.exec(source);
+        if (ages) {
+          const years = new Set();
+          for (let age = Number(ages[1]); age <= Number(ages[2]); age += 1) {
+            if (age >= 6 && age <= 9) years.add(age - 5);
+          }
+          return years;
         }
-      })
-      .catch(() => {
-        grid.innerHTML = '<div class="empty">Não foi possível carregar o catálogo.</div>';
+        return new Set();
+      }
+
+      function itemCategory(item) {
+        const text = norm([item.title, item.slug, ...(item.tags || [])].join(" "));
+        if (/matemat|frac|dobro|classifica/.test(text)) return "matematica";
+        if (/canva|\btic\b|literacia-digital|motor-de-busca|\bprompts?\b|\bia\b/.test(text)) return "digital";
+        if (/\bmem\b|projet/.test(text)) return "projetos";
+        return "palavras";
+      }
+
+      function itemSearch(item) {
+        return norm([
+          item.title, item.slug, item.year, item.ageRange, item.variantTitle,
+          item.maker, ...(item.tags || [])
+        ].join(" "));
+      }
+
+      function wordName(item) {
+        const title = String(item.title || "");
+        const match = /—\s*([^·:]+)(?:\s*·|$)/.exec(title);
+        if (match) return match[1].trim();
+        return title || item.slug || "Palavra";
+      }
+
+      function variantName(item, base) {
+        if (item.variantTitle) return String(item.variantTitle);
+        if (hasTag(item, "mundo-de-blocos")) return "Mundo de blocos";
+        if (hasTag(item, "sessao-30min")) return "Sessão de 30 min";
+        const title = String(item.title || "");
+        const dotted = title.split("·");
+        if (dotted.length > 2) return dotted.at(-1).trim();
+        return title.replace(new RegExp("^.*?" + String(base.title || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"), "").replace(/^[\s·:—-]+/, "") || title;
+      }
+
+      function prepare(rawItems) {
+        const items = rawItems.map((raw, index) => {
+          const item = { ...raw };
+          item.tags = Array.isArray(raw.tags) ? raw.tags : [];
+          item._index = index;
+          item._years = itemYears(item);
+          item._search = itemSearch(item);
+          return item;
+        });
+        const m28pItems = items.filter(isM28P);
+        const general = items.filter(item => !isM28P(item));
+        general.forEach(item => { item._category = itemCategory(item); });
+
+        const groupsByOrder = new Map();
+        const groupsBySlug = new Map();
+        m28pItems.filter(item => Number.isInteger(Number(item.order))).forEach(item => {
+          const order = Number(item.order);
+          if (!groupsByOrder.has(order)) groupsByOrder.set(order, { order, base: null, variants: [] });
+          const group = groupsByOrder.get(order);
+          if (!item.variantOf && !group.base) group.base = item;
+        });
+        groupsByOrder.forEach(group => {
+          if (!group.base) {
+            group.base = m28pItems.find(item => Number(item.order) === group.order) || null;
+          }
+          if (group.base) groupsBySlug.set(group.base.slug, group);
+        });
+
+        m28pItems.forEach(item => {
+          if (item === groupsByOrder.get(Number(item.order))?.base) return;
+          let group = item.variantOf ? groupsBySlug.get(item.variantOf) : groupsByOrder.get(Number(item.order));
+          if (!group) {
+            const tags = new Set(item.tags.map(norm));
+            const legacySlug = norm(item.slug).replace(/^m28p-/, "");
+            group = [...groupsByOrder.values()].find(candidate => {
+              if (!candidate.base) return false;
+              const baseSlug = norm(candidate.base.slug);
+              return tags.has(baseSlug) || legacySlug === baseSlug || legacySlug.startsWith(baseSlug + "-");
+            });
+          }
+          if (group) group.variants.push(item);
+        });
+
+        const groups = [...groupsByOrder.values()].filter(group => group.base).sort((a, b) => a.order - b.order);
+        groups.forEach(group => {
+          group.name = wordName(group.base);
+          group.variants.sort((a, b) => {
+            const ai = Number.isFinite(Number(a.variantIndex)) ? Number(a.variantIndex) : 99;
+            const bi = Number.isFinite(Number(b.variantIndex)) ? Number(b.variantIndex) : 99;
+            return ai - bi || String(a.title).localeCompare(String(b.title), "pt-PT");
+          });
+          group.variants.forEach(item => { item._variantName = variantName(item, group.base); });
+          group.items = [group.base, ...group.variants];
+          group._search = norm([group.name, "palavra " + group.order, ...group.items.map(item => item._search)].join(" "));
+        });
+        return { items, m28pItems, general, groups };
+      }
+
+      function matchesYear(item) {
+        return state.year === "todos" || item._years.has(Number(state.year));
+      }
+
+      function matchedGroup(group, query) {
+        const groupQuery = !query || norm(group.name + " palavra " + group.order).includes(query);
+        const matchedItems = group.items.filter(item => matchesYear(item) && (groupQuery || item._search.includes(query)));
+        if (!matchedItems.length) return null;
+        return {
+          group,
+          baseMatches: matchedItems.includes(group.base),
+          variants: group.variants.filter(item => matchedItems.includes(item)),
+          autoExpand: Boolean(query && !groupQuery) || !matchedItems.includes(group.base)
+        };
+      }
+
+      function stampHtml(item, seed) {
+        const years = [...item._years].sort();
+        const label = years.length === 1 ? years[0] + ".º ano" : "1.º CEB";
+        const tilt = ((Number(seed) * 37) % 9) - 4;
+        return '<div class="stamp" style="--tilt:' + tilt + 'deg" role="img" aria-label="Carimbo: ' + esc(label) + '">' +
+          '<span class="stamp-small">PageCraft</span><span class="stamp-main">' + esc(label) + '</span></div>';
+      }
+
+      function actionsHtml(item) {
+        return '<div class="actions">' +
+          '<a class="action action-open" href="' + esc(item.url) + '">Abrir</a>' +
+          '<a class="action action-secondary" href="' + esc(viewerUrl(item.slug, "teacher")) + '">Guia</a>' +
+          '<a class="action action-secondary" href="' + esc(viewerUrl(item.slug, "docspec")) + '">DocSpec</a>' +
+          '</div>';
+      }
+
+      function variantHtml(item) {
+        return '<li class="variant">' +
+          '<div class="variant-title">' + esc(item._variantName) +
+            '<div class="variant-meta">' + esc(item.ageRange || item.year || "Faixa etária ajustável") + ' · ' +
+              (item.duration ? esc(item.duration) + ' min' : 'Duração ajustável') + '</div></div>' +
+          actionsHtml(item) + '</li>';
+      }
+
+      function groupHtml(match) {
+        const { group, variants } = match;
+        const id = "variants-" + group.order;
+        const stored = state.expanded.get(group.order);
+        const open = stored === undefined ? match.autoExpand : stored;
+        const shownActivities = Number(match.baseMatches) + variants.length;
+        const variantLabel = variants.length === group.variants.length
+          ? variants.length + (variants.length === 1 ? " variante" : " variantes")
+          : variants.length + " de " + group.variants.length + " variantes";
+        return '<li class="card">' +
+          '<div class="card-row">' +
+            '<span class="ordinal">N.º ' + String(group.order).padStart(2, "0") + '</span>' +
+            '<div class="card-title"><h3>' + esc(group.name) + '</h3><div class="meta">' +
+              '<span>Palavra ' + group.order + ' de 28</span><span>' + shownActivities + (shownActivities === 1 ? ' atividade' : ' atividades') + '</span>' +
+              '<span>' + esc(group.base.ageRange || group.base.year || "Faixa etária ajustável") + '</span></div></div>' +
+            stampHtml(group.base, group.order) +
+            '<div class="actions">' +
+              (variants.length ? '<button class="variant-toggle" type="button" data-group="' + group.order + '" aria-expanded="' + open + '" aria-controls="' + id + '"><span class="chevron" aria-hidden="true">▸</span>' + esc(variantLabel) + '</button>' : '') +
+              (match.baseMatches ? actionsHtml(group.base).replace(/^<div class="actions">|<\/div>$/g, "") : '') +
+            '</div>' +
+          '</div>' +
+          (variants.length ? '<ul class="variants" id="' + id + '"' + (open ? '' : ' hidden') + '>' + variants.map(variantHtml).join("") + '</ul>' : '') +
+          '</li>';
+      }
+
+      const CATEGORY_LABELS = {
+        todos: "Todos",
+        palavras: "Palavras",
+        matematica: "Matemática",
+        projetos: "Projetos",
+        digital: "Digital"
+      };
+
+      function generalHtml(item) {
+        const label = CATEGORY_LABELS[item._category] || "Palavras";
+        return '<li class="card"><div class="card-row">' +
+          '<span class="ordinal cap">' + esc(label) + '</span>' +
+          '<div class="card-title"><h3>' + esc(item.title || "Atividade sem título") + '</h3><div class="meta">' +
+            '<span>' + esc(item.ageRange || item.year || "Faixa etária ajustável") + '</span>' +
+            '<span>' + (item.duration ? esc(item.duration) + ' min' : 'Duração ajustável') + '</span>' +
+            (item.maker && item.maker !== "none" ? '<span>Maker: ' + esc(item.maker) + '</span>' : '') +
+          '</div></div>' + stampHtml(item, item._index + 31) + actionsHtml(item) + '</div></li>';
+      }
+
+      function categoryCounts(model) {
+        const counts = { todos: model.groups.length + model.general.length, palavras: model.groups.length };
+        ["matematica", "projetos", "digital"].forEach(category => { counts[category] = 0; });
+        model.general.forEach(item => { counts[item._category] = (counts[item._category] || 0) + 1; });
+        counts.palavras += model.general.filter(item => item._category === "palavras").length;
+        return counts;
+      }
+
+      function updateCategoryScrollHint() {
+        const tabletLayout = window.matchMedia("(max-width: 900px)").matches;
+        categoryScrollHint.hidden = !tabletLayout || categoryFilters.scrollWidth <= categoryFilters.clientWidth + 1;
+      }
+
+      function renderFilters() {
+        const counts = categoryCounts(state.model);
+        categoryFilters.innerHTML = Object.entries(CATEGORY_LABELS).map(([id, label]) =>
+          '<li><button class="drawer" type="button" data-category="' + id + '" aria-pressed="' + (state.category === id) + '">' +
+          '<span class="drawer-label">' + esc(label) + '</span><span class="drawer-count">' + (counts[id] || 0) + '</span></button></li>'
+        ).join("");
+        const years = [["todos", "Todos"], ["1", "1.º"], ["2", "2.º"], ["3", "3.º"], ["4", "4.º"]];
+        yearFilters.innerHTML = years.map(([id, label]) =>
+          '<li><button class="year-chip" type="button" data-year="' + id + '" aria-pressed="' + (state.year === id) + '">' + label + '</button></li>'
+        ).join("");
+        requestAnimationFrame(updateCategoryScrollHint);
+      }
+
+      function render() {
+        const model = state.model;
+        const query = norm(search.value.trim());
+        const showWords = state.category === "todos" || state.category === "palavras";
+        const groups = showWords ? model.groups.map(group => matchedGroup(group, query)).filter(Boolean) : [];
+        const general = model.general.filter(item => {
+          if (state.category !== "todos" && item._category !== state.category) return false;
+          return matchesYear(item) && (!query || item._search.includes(query));
+        }).sort((a, b) => a._category.localeCompare(b._category, "pt-PT") || String(a.title).localeCompare(String(b.title), "pt-PT"));
+
+        const matchedActivities = groups.reduce((sum, match) => sum + Number(match.baseMatches) + match.variants.length, 0) + general.length;
+        const cardTotal = groups.length + general.length;
+        m28pList.innerHTML = groups.map(groupHtml).join("");
+        generalList.innerHTML = general.map(generalHtml).join("");
+        m28pSection.hidden = groups.length === 0;
+        generalSection.hidden = general.length === 0;
+        m28pCount.textContent = groups.length + (groups.length === 1 ? " ficha" : " fichas") + " · " +
+          groups.reduce((sum, match) => sum + Number(match.baseMatches) + match.variants.length, 0) + " atividades";
+        generalCount.textContent = general.length + (general.length === 1 ? " ficha" : " fichas");
+        emptyState.hidden = cardTotal !== 0;
+        emptyTitle.textContent = model.items.length ? "Nenhuma ficha encontrada." : "O catálogo ainda está vazio.";
+        emptyText.textContent = model.items.length
+          ? "Experimenta outra pesquisa, gaveta ou ano de escolaridade."
+          : "Quando houver atividades, as fichas aparecerão aqui.";
+        resultStatus.textContent = cardTotal
+          ? cardTotal + (cardTotal === 1 ? " ficha visível" : " fichas visíveis") + " · " + matchedActivities + (matchedActivities === 1 ? " atividade" : " atividades")
+          : "Sem resultados";
+        renderFilters();
+      }
+
+      categoryFilters.addEventListener("click", event => {
+        const button = event.target.closest("[data-category]");
+        if (!button) return;
+        state.category = button.dataset.category;
+        state.expanded.clear();
+        render();
+        categoryFilters.querySelector('[data-category="' + state.category + '"]')?.focus();
       });
 
-    search.addEventListener('input', renderOthers);
+      yearFilters.addEventListener("click", event => {
+        const button = event.target.closest("[data-year]");
+        if (!button) return;
+        state.year = button.dataset.year;
+        state.expanded.clear();
+        render();
+        yearFilters.querySelector('[data-year="' + state.year + '"]')?.focus();
+      });
+
+      m28pList.addEventListener("click", event => {
+        const button = event.target.closest("[data-group]");
+        if (!button) return;
+        const order = Number(button.dataset.group);
+        const open = button.getAttribute("aria-expanded") !== "true";
+        state.expanded.set(order, open);
+        button.setAttribute("aria-expanded", String(open));
+        const list = document.getElementById(button.getAttribute("aria-controls"));
+        if (list) list.hidden = !open;
+      });
+
+      search.addEventListener("input", () => {
+        state.expanded.clear();
+        render();
+      });
+
+      window.addEventListener("resize", updateCategoryScrollHint);
+
+      clearFilters.addEventListener("click", () => {
+        search.value = "";
+        state.category = "todos";
+        state.year = "todos";
+        state.expanded.clear();
+        search.focus();
+        render();
+      });
+
+      fetch('./catalog.json')
+        .then(response => {
+          if (!response.ok) throw new Error("HTTP " + response.status);
+          return response.json();
+        })
+        .then(data => {
+          const rawItems = Array.isArray(data.items) ? data.items : [];
+          state.model = prepare(rawItems);
+          loadingState.hidden = true;
+          search.disabled = false;
+          footer.innerHTML = '<span>' + state.model.items.length + ' atividades arquivadas</span>' +
+            '<span>' + state.model.m28pItems.length + ' M28P em ' + state.model.groups.length + ' fichas</span>' +
+            '<span>' + state.model.general.length + ' na estante geral</span>' +
+            '<span>PageCraft — oficina de atividades do 1.º ciclo</span>';
+          render();
+        })
+        .catch(error => {
+          loadingState.innerHTML = '<strong>Não foi possível abrir o catálogo.</strong>' +
+            '<p>Atualiza a página para voltar a tentar. Detalhe: ' + esc(error.message || "erro de carregamento") + '</p>';
+          loadingState.setAttribute("role", "alert");
+          resultStatus.textContent = "Falha ao carregar o catálogo";
+        });
+    })();
   </script>
 </body>
 </html>

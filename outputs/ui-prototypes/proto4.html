@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PageCraft — Ficheiro de Atividades</title>
+<style>
+  /* ============ O Ficheiro da Biblioteca Escolar ============ */
+  :root{
+    --desk:        oklch(0.935 0.022 88);   /* tampo/fundo, manila esbatido */
+    --paper:       oklch(0.985 0.008 95);   /* ficha de papel branco-quente */
+    --paper-deep:  oklch(0.965 0.012 92);
+    --ink:         oklch(0.25 0.02 75);     /* tinta quase-preta, quente */
+    --ink-soft:    oklch(0.46 0.018 75);
+    --line:        oklch(0.875 0.018 85);
+    --stamp:       oklch(0.46 0.085 195);   /* carimbo verde-azulado — único acento */
+    --stamp-deep:  oklch(0.40 0.085 195);
+    --stamp-wash:  oklch(0.46 0.085 195 / 0.10);
+    --manila:      oklch(0.93 0.045 90);    /* separadores de gaveta */
+    --manila-deep: oklch(0.885 0.055 88);
+    --hole-shadow: oklch(0.30 0.02 75 / 0.22);
+    --radius: 14px;
+    --font: Lexend, "Atkinson Hyperlegible", Nunito, system-ui, sans-serif;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0 }
+  html{ -webkit-text-size-adjust:100% }
+  body{
+    font-family:var(--font);
+    background:var(--desk);
+    color:var(--ink);
+    font-size:15px;
+    line-height:1.45;
+    min-height:100vh;
+  }
+  :focus-visible{ outline:2.5px solid var(--stamp); outline-offset:2px; border-radius:6px }
+  a{ color:var(--stamp-deep) }
+  button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer }
+
+  /* rótulos em caps pequenas */
+  .cap{
+    font-size:10.5px; font-weight:600; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--ink-soft);
+  }
+  .num{ font-variant-numeric:tabular-nums }
+
+  /* ---------- cabeçalho ---------- */
+  header.top{
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+    padding:20px clamp(16px,4vw,40px) 18px;
+    display:flex; flex-wrap:wrap; gap:16px 32px; align-items:flex-end;
+  }
+  .brand h1{
+    font-size:clamp(26px,4vw,34px); font-weight:700;
+    letter-spacing:-0.035em; line-height:1.05;
+  }
+  .brand h1 .dot{ color:var(--stamp) }
+  .brand p{ margin-top:3px }
+  .searchbox{ flex:1 1 260px; max-width:460px; margin-left:auto }
+  .searchbox label{ display:block; margin-bottom:5px }
+  .searchbox input{
+    width:100%; min-height:48px;
+    font:inherit; font-size:16px; color:var(--ink);
+    background:var(--paper-deep);
+    border:1px solid var(--line); border-bottom:2px solid var(--ink-soft);
+    border-radius:10px 10px 4px 4px;
+    padding:10px 14px;
+  }
+  .searchbox input::placeholder{ color:var(--ink-soft); opacity:.75 }
+  .searchbox input:focus-visible{ outline-offset:0; border-bottom-color:var(--stamp) }
+
+  /* ---------- corpo: rail + arquivo ---------- */
+  .shell{
+    display:grid; grid-template-columns:228px minmax(0,1fr);
+    gap:24px; align-items:start;
+    padding:22px clamp(16px,4vw,40px) 30px;
+    max-width:1240px; margin:0 auto;
+  }
+
+  /* rail de gavetas */
+  nav.rail{ position:sticky; top:16px; display:flex; flex-direction:column; gap:18px }
+  .drawer-set > .cap{ display:block; margin:0 2px 8px }
+  .drawers{ display:flex; flex-direction:column; gap:6px; list-style:none }
+  .drawer{
+    width:100%; min-height:48px;
+    display:flex; align-items:center; gap:10px;
+    background:var(--manila);
+    border:1px solid var(--manila-deep);
+    border-radius:10px;
+    padding:8px 12px 8px 14px;
+    text-align:left; font-weight:500; font-size:14px;
+    position:relative;
+  }
+  /* puxador da gaveta */
+  .drawer::before{
+    content:""; width:18px; height:7px; flex:none;
+    border:1.5px solid var(--ink-soft); border-radius:4px;
+    background:var(--paper);
+  }
+  .drawer .count{
+    margin-left:auto; font-size:12px; color:var(--ink-soft);
+    font-variant-numeric:tabular-nums;
+  }
+  .drawer[aria-pressed="true"]{
+    background:var(--paper);
+    border-color:var(--stamp);
+    box-shadow:0 0 0 1px var(--stamp) inset;
+    color:var(--stamp-deep); font-weight:600;
+  }
+  .drawer[aria-pressed="true"]::before{ border-color:var(--stamp) }
+  .drawer[aria-pressed="true"] .count{ color:var(--stamp-deep) }
+
+  .years{ display:flex; flex-wrap:wrap; gap:6px; list-style:none }
+  .year-chip{
+    min-width:48px; min-height:48px;
+    border:1px solid var(--line); border-radius:10px;
+    background:var(--paper); font-size:13px; font-weight:500;
+    font-variant-numeric:tabular-nums;
+    padding:6px 10px;
+  }
+  .year-chip[aria-pressed="true"]{
+    background:var(--stamp); border-color:var(--stamp);
+    color:var(--paper); font-weight:600;
+  }
+
+  /* ---------- arquivo (lista principal) ---------- */
+  main.arquivo{ display:flex; flex-direction:column; gap:26px; min-width:0 }
+
+  .seccao > .tab{
+    display:inline-flex; align-items:baseline; gap:10px;
+    background:var(--manila);
+    border:1px solid var(--manila-deep); border-bottom:0;
+    border-radius:10px 10px 0 0;
+    padding:7px 16px 6px; margin-left:10px;
+  }
+  .seccao > .tab h2{ font-size:12px; font-weight:700; letter-spacing:.09em; text-transform:uppercase }
+  .seccao > .tab .cap{ font-weight:500; letter-spacing:.05em; text-transform:none; font-size:11.5px }
+
+  .fichas{ list-style:none; display:flex; flex-direction:column; gap:8px }
+
+  /* ficha de requisição */
+  .ficha{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:0 1px 2px oklch(0.3 0.02 75 / 0.07);
+    position:relative;
+    padding:10px 14px 10px 46px;
+  }
+  /* furos de arquivo */
+  .ficha::before, .ficha::after{
+    content:""; position:absolute; left:15px;
+    width:13px; height:13px; border-radius:50%;
+    background:var(--desk);
+    box-shadow:inset 0 1.5px 2.5px var(--hole-shadow);
+  }
+  .ficha::before{ top:14px }
+  .ficha::after{ top:41px }
+
+  .ficha-linha{
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr) auto auto;
+    gap:6px 16px; align-items:center;
+  }
+  .ficha .ordinal{
+    font-size:13px; color:var(--ink-soft); font-weight:500;
+    font-variant-numeric:tabular-nums;
+    min-width:44px;
+  }
+  .ficha .titulo{ min-width:0 }
+  .ficha .titulo h3{
+    font-size:16.5px; font-weight:700; letter-spacing:-0.015em; line-height:1.2;
+  }
+  .ficha .meta{
+    display:flex; flex-wrap:wrap; gap:2px 14px; margin-top:3px;
+    font-size:10.5px; font-weight:600; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--ink-soft);
+    font-variant-numeric:tabular-nums;
+  }
+  .ficha .meta .sep{ color:var(--line) }
+
+  /* carimbo da biblioteca */
+  .stamp{
+    width:58px; height:58px; flex:none;
+    border:2px solid var(--stamp); border-radius:50%;
+    color:var(--stamp);
+    display:grid; place-items:center; align-content:center; gap:1px;
+    text-align:center; text-transform:uppercase;
+    opacity:.82;
+    transform:rotate(var(--tilt,-6deg));
+    position:relative;
+    user-select:none;
+  }
+  .stamp::before{
+    content:""; position:absolute; inset:4px;
+    border:1px solid var(--stamp); border-radius:50%; opacity:.65;
+  }
+  .stamp .mini{ font-size:6.5px; letter-spacing:.14em; font-weight:600; opacity:.85 }
+  .stamp .ano{ font-size:11.5px; font-weight:700; letter-spacing:.03em; line-height:1;
+               font-variant-numeric:tabular-nums }
+
+  /* ações */
+  .acoes{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; justify-content:flex-end }
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    min-height:48px; min-width:48px;
+    padding:8px 18px; border-radius:12px;
+    font-size:14px; font-weight:600; text-decoration:none;
+    background:var(--stamp); color:var(--paper);
+    border:1px solid var(--stamp-deep);
+  }
+  .btn:hover{ background:var(--stamp-deep) }
+  .btn-guia{
+    display:inline-flex; align-items:center; justify-content:center;
+    min-height:48px; padding:8px 12px; border-radius:12px;
+    font-size:13.5px; font-weight:500; color:var(--stamp-deep);
+    text-decoration:underline; text-underline-offset:3px;
+    text-decoration-color:oklch(0.46 0.085 195 / 0.45);
+  }
+  .btn-guia:hover{ background:var(--stamp-wash); text-decoration-color:var(--stamp) }
+
+  /* variantes M28P */
+  .toggle-var{
+    display:inline-flex; align-items:center; gap:6px;
+    min-height:48px; padding:6px 12px; border-radius:12px;
+    font-size:13px; font-weight:600; color:var(--stamp-deep);
+    border:1px dashed var(--stamp);
+    background:transparent;
+    font-variant-numeric:tabular-nums;
+  }
+  .toggle-var:hover{ background:var(--stamp-wash) }
+  .toggle-var .seta{ transition:transform 150ms ease; font-size:11px }
+  .toggle-var[aria-expanded="true"] .seta{ transform:rotate(90deg) }
+
+  .variantes{
+    list-style:none;
+    margin-top:8px; padding-top:4px;
+    border-top:1px dashed var(--line);
+    display:flex; flex-direction:column;
+  }
+  .variantes[hidden]{ display:none }
+  .variante{
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr) auto;
+    gap:4px 14px; align-items:center;
+    padding:4px 0 4px 44px;
+    position:relative;
+    animation:aparecer 150ms ease both;
+  }
+  @keyframes aparecer{ from{ opacity:0 } to{ opacity:1 } }
+  .variante + .variante{ border-top:1px dotted var(--line) }
+  .variante::before{
+    content:""; position:absolute; left:18px; top:50%;
+    width:14px; height:14px;
+    border-left:1.5px solid var(--line); border-bottom:1.5px solid var(--line);
+    border-radius:0 0 0 6px;
+    transform:translateY(-90%);
+  }
+  .variante .v-titulo{ font-size:14.5px; font-weight:500; min-width:0 }
+  .variante .v-meta{
+    font-size:10.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--ink-soft); font-variant-numeric:tabular-nums; margin-top:1px;
+  }
+  .variante .acoes .btn{ min-height:48px; padding:6px 14px; font-size:13px }
+
+  /* estado vazio */
+  .vazio{
+    background:var(--paper); border:1px dashed var(--line);
+    border-radius:var(--radius);
+    padding:34px 24px; text-align:center; color:var(--ink-soft);
+  }
+  .vazio .stamp{ margin:0 auto 14px; --tilt:7deg }
+  .vazio strong{ color:var(--ink); font-weight:600 }
+  .vazio p{ max-width:44ch; margin:4px auto 0 }
+
+  footer.pe{
+    border-top:1px solid var(--line);
+    padding:16px clamp(16px,4vw,40px) 26px;
+    color:var(--ink-soft); font-size:12.5px;
+    display:flex; flex-wrap:wrap; gap:4px 18px;
+    font-variant-numeric:tabular-nums;
+    max-width:1240px; margin:0 auto;
+  }
+
+  [hidden]{ display:none !important }
+
+  /* ---------- responsivo ---------- */
+  @media (max-width:820px){
+    .shell{ grid-template-columns:1fr; gap:16px; padding-top:14px }
+    nav.rail{ position:static; gap:10px }
+    .drawers{ flex-direction:row; overflow-x:auto; padding-bottom:4px;
+              scrollbar-width:thin }
+    .drawer{ width:auto; flex:none; white-space:nowrap; padding-right:14px }
+    .drawer .count{ margin-left:8px }
+    .ficha-linha{ grid-template-columns:minmax(0,1fr) auto }
+    .ficha .ordinal{ grid-column:1 / -1; min-width:0 }
+    .ficha .titulo{ grid-column:1 }
+    .stamp{ grid-row:1; grid-column:2; width:52px; height:52px }
+    .acoes{ grid-column:1 / -1; justify-content:flex-start }
+    .variante{ grid-template-columns:minmax(0,1fr); padding-left:36px }
+    .variante .acoes{ justify-content:flex-start }
+  }
+  @media (max-width:420px){
+    .ficha{ padding-left:36px }
+    .ficha::before,.ficha::after{ left:11px; width:11px; height:11px }
+    .searchbox{ max-width:none }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{ animation:none !important; transition:none !important }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <h1>PageCraft<span class="dot">.</span></h1>
+    <p class="cap">Ficheiro de atividades · 1.º ciclo</p>
+  </div>
+  <div class="searchbox">
+    <label class="cap" for="pesquisa">Pesquisar no ficheiro</label>
+    <input id="pesquisa" type="search" autocomplete="off"
+           placeholder="Palavra, tema ou etiqueta… ex.: árvore, frações, canva">
+  </div>
+</header>
+
+<div class="shell">
+
+  <nav class="rail" aria-label="Gavetas do ficheiro">
+    <div class="drawer-set">
+      <span class="cap">Gavetas</span>
+      <ul class="drawers" id="gavetas"></ul>
+    </div>
+    <div class="drawer-set">
+      <span class="cap">Ano de escolaridade</span>
+      <ul class="years" id="anos"></ul>
+    </div>
+  </nav>
+
+  <main class="arquivo">
+    <section class="seccao" id="sec-m28p">
+      <div class="tab">
+        <h2>Método das 28 Palavras</h2>
+        <span class="cap num" id="conta-m28p"></span>
+      </div>
+      <ul class="fichas" id="lista-m28p"></ul>
+    </section>
+
+    <section class="seccao" id="sec-geral">
+      <div class="tab">
+        <h2>Estante geral</h2>
+        <span class="cap num" id="conta-geral"></span>
+      </div>
+      <ul class="fichas" id="lista-geral"></ul>
+    </section>
+
+    <div class="vazio" id="vazio" hidden>
+      <div class="stamp" aria-hidden="true">
+        <span class="mini">PageCraft</span>
+        <span class="ano">Vazio</span>
+      </div>
+      <strong>Nenhuma ficha nesta gaveta.</strong>
+      <p>Experimenta outra palavra na pesquisa, ou abre a gaveta «Todas as fichas» para veres o arquivo completo.</p>
+    </div>
+  </main>
+</div>
+
+<footer class="pe" id="rodape"></footer>
+
+<script src="./catalog-data.js"></script>
+<script>
+(function(){
+  "use strict";
+  var CAT = window.CATALOG || [];
+
+  /* ---------- utilitários ---------- */
+  function norm(s){
+    return String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+  }
+  function esc(s){
+    return String(s).replace(/[&<>"]/g,function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];
+    });
+  }
+  function anoDe(item){
+    var m = /([1-4])\s*\.\s*º\s*ano/i.exec(item.year);
+    return m ? +m[1] : null;
+  }
+  function categoria(item){
+    if (item.tags.indexOf("m28p") !== -1) return "m28p";
+    var t = item.tags.map(norm).join(" ");
+    if (/matemat|frac|dobro|classifica/.test(t)) return "mat";
+    if (/canva|\btic\b|literacia-digital|motor-de-busca|prompts/.test(t)) return "dig";
+    if (/\bmem\b|projeto/.test(t)) return "proj";
+    return "outros";
+  }
+  function rotuloVariante(it){
+    if (it.title.indexOf("·") !== -1){
+      var partes = it.title.split("·");
+      return partes[partes.length-1].trim();
+    }
+    var par = /\(([^)]+)\)/.exec(it.title);
+    if (par) return par[1].charAt(0).toUpperCase() + par[1].slice(1);
+    if (it.title.indexOf("—") !== -1){
+      var s = it.title.split("—").pop().trim();
+      return s.charAt(0).toUpperCase() + s.slice(1);
+    }
+    return it.title;
+  }
+  function stampHtml(anoNum, anoTexto, tilt){
+    var linha = anoNum ? (anoNum + ".º ANO") : "1.º CEB";
+    return '<div class="stamp" style="--tilt:' + tilt + 'deg" role="img" ' +
+           'aria-label="Carimbo: ' + esc(anoNum ? anoNum + '.º ano' : anoTexto) + '">' +
+           '<span class="mini">PageCraft</span>' +
+           '<span class="ano">' + esc(linha) + '</span></div>';
+  }
+  function tilt(seed){ return ((seed * 37) % 9) - 4.5; } /* -4.5º a +3.5º, determinístico */
+
+  /* ---------- modelo ---------- */
+  var itens = CAT.map(function(it, i){
+    return {
+      slug: it.slug, title: it.title, year: it.year, duration: it.duration,
+      maker: it.maker, tags: it.tags || [], url: it.url,
+      cat: categoria(it), anoNum: anoDe(it), idx: i,
+      busca: norm(it.title + " " + it.slug + " " + (it.tags||[]).join(" ") + " " + it.year)
+    };
+  });
+
+  var m28pItens = itens.filter(function(i){ return i.cat === "m28p"; });
+  var gerais    = itens.filter(function(i){ return i.cat !== "m28p"; });
+
+  /* palavras principais: slug sem hífen */
+  var grupos = {};
+  m28pItens.forEach(function(it){
+    if (it.slug.indexOf("-") === -1){
+      var num = /Palavra\s+(\d+)/i.exec(it.title);
+      var nome = it.title.indexOf("—") !== -1
+        ? it.title.split("—").pop().trim() : it.slug;
+      grupos[it.slug] = {
+        palavra: it.slug, nome: nome,
+        num: num ? +num[1] : 999,
+        principal: it, variantes: []
+      };
+    }
+  });
+  var soltas = [];
+  m28pItens.forEach(function(it){
+    if (it.slug.indexOf("-") === -1) return;
+    var base = it.slug.replace(/^m28p-/, "").split("-")[0];
+    if (grupos[base]){
+      it.rotulo = rotuloVariante(it);
+      grupos[base].variantes.push(it);
+    } else {
+      soltas.push(it); /* salvaguarda: variante sem palavra-mãe */
+    }
+  });
+  var listaGrupos = Object.keys(grupos).map(function(k){ return grupos[k]; })
+    .sort(function(a,b){ return a.num - b.num; });
+  listaGrupos.forEach(function(g){
+    g.busca = norm(g.nome + " palavra " + g.num + " " + g.principal.busca +
+                   " " + g.variantes.map(function(v){ return v.rotulo; }).join(" "));
+  });
+
+  /* ---------- estado ---------- */
+  var gaveta = "todos";
+  var ano = "all";
+  var abertas = {}; /* palavra -> true */
+
+  var GAVETAS = [
+    { id:"todos", nome:"Todas as fichas", conta: itens.length },
+    { id:"m28p",  nome:"Palavras M28P",   conta: m28pItens.length },
+    { id:"mat",   nome:"Matemática",      conta: gerais.filter(function(i){return i.cat==="mat";}).length },
+    { id:"proj",  nome:"Projetos",        conta: gerais.filter(function(i){return i.cat==="proj";}).length },
+    { id:"dig",   nome:"Digital",         conta: gerais.filter(function(i){return i.cat==="dig";}).length }
+  ];
+  var ANOS = [
+    { id:"all", nome:"Todos" },
+    { id:"1", nome:"1.º" }, { id:"2", nome:"2.º" },
+    { id:"3", nome:"3.º" }, { id:"4", nome:"4.º" }
+  ];
+
+  /* ---------- render dos controlos ---------- */
+  var elGavetas = document.getElementById("gavetas");
+  elGavetas.innerHTML = GAVETAS.map(function(g){
+    return '<li><button type="button" class="drawer" data-gaveta="' + g.id + '" ' +
+      'aria-pressed="' + (g.id===gaveta) + '">' + esc(g.nome) +
+      '<span class="count">' + g.conta + '</span></button></li>';
+  }).join("");
+
+  var elAnos = document.getElementById("anos");
+  elAnos.innerHTML = ANOS.map(function(a){
+    return '<li><button type="button" class="year-chip" data-ano="' + a.id + '" ' +
+      'aria-pressed="' + (a.id===ano) + '">' + esc(a.nome) + '</button></li>';
+  }).join("");
+
+  elGavetas.addEventListener("click", function(e){
+    var b = e.target.closest("[data-gaveta]"); if(!b) return;
+    gaveta = b.getAttribute("data-gaveta");
+    elGavetas.querySelectorAll(".drawer").forEach(function(x){
+      x.setAttribute("aria-pressed", String(x===b));
+    });
+    render();
+  });
+  elAnos.addEventListener("click", function(e){
+    var b = e.target.closest("[data-ano]"); if(!b) return;
+    ano = b.getAttribute("data-ano");
+    elAnos.querySelectorAll(".year-chip").forEach(function(x){
+      x.setAttribute("aria-pressed", String(x===b));
+    });
+    render();
+  });
+
+  var campo = document.getElementById("pesquisa");
+  campo.addEventListener("input", render);
+
+  /* ---------- fragmentos de ficha ---------- */
+  function acoesHtml(it, compacto){
+    return '<div class="acoes">' +
+      '<a class="btn" href="' + esc(it.url) + '">Abrir</a>' +
+      '<a class="btn-guia" href="' + esc(it.url) + 'guia/">Guia do professor</a>' +
+      '</div>';
+  }
+
+  function fichaGrupo(g, visiveis, expandida){
+    var v = g.variantes.length;
+    var idVar = "vars-" + g.palavra;
+    var html =
+      '<li class="ficha" data-palavra="' + g.palavra + '">' +
+        '<div class="ficha-linha">' +
+          '<span class="ordinal num" aria-hidden="true">N.º ' +
+            String(g.num).padStart(2,"0") + '</span>' +
+          '<div class="titulo">' +
+            '<h3>' + esc(g.nome) + '</h3>' +
+            '<div class="meta">' +
+              '<span>Palavra ' + g.num + ' de 28</span><span class="sep">|</span>' +
+              '<span>' + g.principal.duration + ' min</span><span class="sep">|</span>' +
+              '<span>Leitura · Escrita</span>' +
+            '</div>' +
+          '</div>' +
+          stampHtml(g.principal.anoNum, g.principal.year, tilt(g.num)) +
+          '<div class="acoes">' +
+            (v ? '<button type="button" class="toggle-var" data-toggle="' + g.palavra + '" ' +
+                 'aria-expanded="' + expandida + '" aria-controls="' + idVar + '">' +
+                 '<span class="seta" aria-hidden="true">▸</span>' + v +
+                 (v===1 ? ' variante' : ' variantes') + '</button>' : '') +
+            '<a class="btn" href="' + esc(g.principal.url) + '">Abrir</a>' +
+            '<a class="btn-guia" href="' + esc(g.principal.url) + 'guia/">Guia do professor</a>' +
+          '</div>' +
+        '</div>';
+    if (v){
+      html += '<ul class="variantes" id="' + idVar + '"' + (expandida ? '' : ' hidden') + '>' +
+        visiveis.map(function(vr){
+          return '<li class="variante">' +
+            '<div class="v-titulo">' + esc(vr.rotulo) +
+              '<div class="v-meta"><span>' + vr.duration + ' min</span></div>' +
+            '</div>' +
+            acoesHtml(vr) +
+          '</li>';
+        }).join("") + '</ul>';
+    }
+    return html + '</li>';
+  }
+
+  var NOME_CAT = { mat:"Matemática", proj:"Projetos", dig:"Digital", outros:"Português" };
+  function fichaSimples(it){
+    return '<li class="ficha">' +
+      '<div class="ficha-linha">' +
+        '<span class="ordinal cap">' + esc(NOME_CAT[it.cat] || "") + '</span>' +
+        '<div class="titulo">' +
+          '<h3>' + esc(it.title) + '</h3>' +
+          '<div class="meta">' +
+            '<span>' + esc(it.year) + '</span><span class="sep">|</span>' +
+            '<span>' + it.duration + ' min</span>' +
+            (it.maker && it.maker !== "none"
+              ? '<span class="sep">|</span><span>Maker: ' + esc(it.maker) + '</span>' : '') +
+          '</div>' +
+        '</div>' +
+        stampHtml(it.anoNum, it.year, tilt(it.idx)) +
+        acoesHtml(it) +
+      '</div></li>';
+  }
+
+  /* ---------- render principal ---------- */
+  var secM = document.getElementById("sec-m28p");
+  var secG = document.getElementById("sec-geral");
+  var listaM = document.getElementById("lista-m28p");
+  var listaG = document.getElementById("lista-geral");
+  var contaM = document.getElementById("conta-m28p");
+  var contaG = document.getElementById("conta-geral");
+  var vazio  = document.getElementById("vazio");
+
+  function render(){
+    var q = norm(campo.value.trim());
+    var mostraM = (gaveta === "todos" || gaveta === "m28p");
+    var mostraG = (gaveta !== "m28p");
+
+    var htmlM = "", nPalavras = 0, nVariantes = 0;
+    if (mostraM){
+      listaGrupos.forEach(function(g){
+        var anoOkPrincipal = (ano === "all" || g.principal.anoNum === +ano);
+        var grupoBate = !q || g.busca.indexOf(q) !== -1;
+        var principalBate = !q ||
+          norm(g.nome + " palavra " + g.num + " " + g.principal.busca).indexOf(q) !== -1;
+        var visiveis = g.variantes.filter(function(v){
+          var anoOk = (ano === "all" || v.anoNum === +ano);
+          var bate = !q || principalBate || norm(v.rotulo + " " + v.busca).indexOf(q) !== -1;
+          return anoOk && bate;
+        });
+        var mostraPrincipal = anoOkPrincipal && grupoBate;
+        if (!mostraPrincipal && !visiveis.length) return;
+        var expandida = !!abertas[g.palavra] ||
+          (!!q && !principalBate && visiveis.length > 0);
+        nPalavras++; nVariantes += visiveis.length;
+        htmlM += fichaGrupo(g, visiveis, expandida);
+      });
+      soltas.forEach(function(it){
+        var anoOk = (ano === "all" || it.anoNum === +ano);
+        var bate = !q || it.busca.indexOf(q) !== -1;
+        if (anoOk && bate){ htmlM += fichaSimples(it); nVariantes++; }
+      });
+    }
+
+    var geraisVis = [];
+    if (mostraG){
+      geraisVis = gerais.filter(function(it){
+        if (gaveta !== "todos" && it.cat !== gaveta) return false;
+        if (ano !== "all" && it.anoNum !== +ano) return false;
+        if (q && it.busca.indexOf(q) === -1) return false;
+        return true;
+      }).sort(function(a,b){
+        if (a.cat !== b.cat) return a.cat < b.cat ? -1 : 1;
+        return a.title.localeCompare(b.title, "pt");
+      });
+    }
+
+    secM.hidden = !mostraM || !htmlM;
+    listaM.innerHTML = htmlM;
+    contaM.textContent = nPalavras + (nPalavras===1 ? " palavra" : " palavras") +
+      " · " + nVariantes + (nVariantes===1 ? " variante" : " variantes");
+
+    secG.hidden = !mostraG || !geraisVis.length;
+    listaG.innerHTML = geraisVis.map(fichaSimples).join("");
+    contaG.textContent = geraisVis.length +
+      (geraisVis.length===1 ? " ficha" : " fichas");
+
+    vazio.hidden = !(secM.hidden && secG.hidden);
+  }
+
+  /* expansão inline das variantes */
+  document.getElementById("lista-m28p").addEventListener("click", function(e){
+    var b = e.target.closest("[data-toggle]"); if(!b) return;
+    var palavra = b.getAttribute("data-toggle");
+    abertas[palavra] = !abertas[palavra];
+    var lista = document.getElementById("vars-" + palavra);
+    b.setAttribute("aria-expanded", String(!!abertas[palavra]));
+    if (lista) lista.hidden = !abertas[palavra];
+  });
+
+  /* rodapé com contagem real */
+  document.getElementById("rodape").innerHTML =
+    '<span>' + itens.length + ' fichas arquivadas</span>' +
+    '<span>' + listaGrupos.length + ' palavras do método</span>' +
+    '<span>' + m28pItens.length + ' atividades M28P · ' + gerais.length +
+      ' na estante geral</span>' +
+    '<span>PageCraft — oficina de atividades do 1.º ciclo</span>';
+
+  render();
+})();
+</script>
+</body>
+</html>
