@@ -1,5 +1,6 @@
 import pytest
 
+from server.classroom.errors import SessionClosedError, StudentNotInRosterError
 from server.classroom.service import ClassroomService
 from server.config import Config
 from server.events import EventHub
@@ -46,3 +47,79 @@ async def test_loading_repairs_a_close_recorded_before_the_state_write(svc, monk
     assert (
         await restarted.storage.read_json(restarted._session_path(session["id"]))
     )["status"] == "closed"
+
+
+async def test_module_refuses_commands_after_the_session_is_closed(svc):
+    session = await _session(svc)
+    student_id = next(iter(session["roster"]))
+    await svc.close_session(session["id"])
+
+    with pytest.raises(SessionClosedError):
+        await svc.send_teacher_message(session["id"], "Terminámos")
+    with pytest.raises(SessionClosedError):
+        await svc.ingest_events(
+            session["id"],
+            student_id,
+            [{"event_id": "late", "type": "attempt", "payload": {}}],
+        )
+
+
+async def test_module_refuses_a_message_to_someone_outside_the_roster(svc):
+    session = await _session(svc)
+
+    with pytest.raises(StudentNotInRosterError):
+        await svc.send_teacher_message(session["id"], "Olá", student_id="intruso")
+
+
+async def test_loading_rebuilds_pit_items_from_the_log(svc, monkeypatch):
+    session = await _session(svc)
+    student_id = next(iter(session["roster"]))
+    original_write = svc.storage.write_json
+
+    async def fail_state_write(path, data):
+        if path == svc._session_path(session["id"]):
+            raise OSError("estado PIT não persistido")
+        await original_write(path, data)
+
+    monkeypatch.setattr(svc.storage, "write_json", fail_state_write)
+
+    with pytest.raises(OSError, match="estado PIT"):
+        await svc.upsert_pit_item(
+            session["id"], student_id, "Ler as frações", "planned"
+        )
+
+    monkeypatch.setattr(svc.storage, "write_json", original_write)
+    restarted = ClassroomService(svc.config, svc.storage, EventHub(svc.storage))
+    repaired = await restarted.get_session(session["id"])
+
+    assert [
+        (item["student_id"], item["text"], item["status"])
+        for item in repaired["pit_items"]
+    ] == [(student_id, "Ler as frações", "planned")]
+
+
+async def test_loading_applies_a_recorded_release_to_the_protected_token(svc, monkeypatch):
+    session = await _session(svc)
+    student_id = next(iter(session["roster"]))
+    claim = await svc.claim_identity(session["id"], student_id)
+    original_write = svc.storage.write_json
+
+    async def fail_state_write(path, data):
+        if path == svc._session_path(session["id"]):
+            raise OSError("token ainda persistido")
+        await original_write(path, data)
+
+    monkeypatch.setattr(svc.storage, "write_json", fail_state_write)
+
+    with pytest.raises(OSError, match="token ainda"):
+        await svc.release_identity(session["id"], student_id)
+
+    monkeypatch.setattr(svc.storage, "write_json", original_write)
+    restarted = ClassroomService(svc.config, svc.storage, EventHub(svc.storage))
+
+    assert (
+        await restarted.student_for_token(
+            session["id"], claim["student_token"], require_live=False
+        )
+        is None
+    )

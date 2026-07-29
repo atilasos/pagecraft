@@ -15,6 +15,11 @@ from collections import defaultdict
 from ..config import Config
 from ..events import EventHub, utcnow
 from ..storage import Storage
+from .errors import (
+    SessionClosedError,
+    SessionNotFoundError,
+    StudentNotInRosterError,
+)
 from .event_types import SESSION_EVENT_TYPES
 
 
@@ -94,6 +99,8 @@ class ClassroomService:
         if not session:
             return None
         events = await self.events_log(session_id).replay()
+        changed = False
+
         closed = next(
             (event for event in reversed(events) if event.get("type") == "session_closed"),
             None,
@@ -106,7 +113,51 @@ class ClassroomService:
         ):
             session["status"] = expected_status
             session["closed_at"] = expected_closed_at
+            changed = True
+
+        pit_items: dict[str, dict] = {}
+        last_identity_event: dict[str, str] = {}
+        for event in events:
+            event_type = event.get("type")
+            student_id = event.get("student_id")
+            if student_id and event_type in ("joined", "identity_released"):
+                last_identity_event[str(student_id)] = str(event_type)
+            if event_type != "pit_updated":
+                continue
+            item = dict(event.get("payload") or {})
+            item_id = item.get("id")
+            if not item_id:
+                continue
+            item["student_id"] = str(student_id or item.get("student_id") or "")
+            pit_items[str(item_id)] = item
+        expected_pit_items = list(pit_items.values())
+        if session.get("pit_items") != expected_pit_items:
+            session["pit_items"] = expected_pit_items
+            changed = True
+
+        for student_id, last_event in last_identity_event.items():
+            if last_event != "identity_released":
+                continue
+            entry = session.get("roster", {}).get(student_id)
+            if entry and (entry.get("token") is not None or entry.get("claimed_at") is not None):
+                entry["token"] = None
+                entry["claimed_at"] = None
+                changed = True
+
+        if changed:
             await self.storage.write_json(self._session_path(session_id), session)
+        return session
+
+    async def _require_writable_unlocked(
+        self, session_id: str, student_id: str | None = None
+    ) -> dict:
+        session = await self._load_session_unlocked(session_id)
+        if not session:
+            raise SessionNotFoundError("sessão não encontrada")
+        if session.get("status") != "live":
+            raise SessionClosedError("a sessão já não está ativa")
+        if student_id is not None and student_id not in session.get("roster", {}):
+            raise StudentNotInRosterError("esse aluno não pertence à sessão")
         return session
 
     async def create_session(self, class_id: str, activity_slug: str, activity_title: str) -> dict | None:
@@ -160,9 +211,7 @@ class ClassroomService:
 
     async def close_session(self, session_id: str) -> dict | None:
         async with self._session_locks[session_id]:
-            session = await self._load_session_unlocked(session_id)
-            if not session:
-                return None
+            session = await self._require_writable_unlocked(session_id)
             record = await self._append_event_unlocked(
                 session_id, "session_closed", {}, author="session"
             )
@@ -176,43 +225,38 @@ class ClassroomService:
     async def claim_identity(self, session_id: str, student_id: str) -> dict | None:
         """Aluno escolhe quem é. Devolve token; None se já reclamado/inválido."""
         async with self._session_locks[session_id]:
-            session = await self.get_session(session_id)
-            if not session or session["status"] != "live":
-                return None
-            entry = session["roster"].get(student_id)
-            if entry is None or entry.get("token"):
+            session = await self._require_writable_unlocked(session_id, student_id)
+            entry = session["roster"][student_id]
+            if entry.get("token"):
                 return None
             token = uuid.uuid4().hex
+            claimed_at = utcnow()
+            await self._append_event_unlocked(
+                session_id,
+                "joined",
+                {"display_name": entry["display_name"]},
+                author="session",
+                student_id=student_id,
+            )
             entry["token"] = token
-            entry["claimed_at"] = utcnow()
+            entry["claimed_at"] = claimed_at
             await self.storage.write_json(self._session_path(session_id), session)
-        await self.emit_event(
-            session_id,
-            "joined",
-            {"display_name": entry["display_name"]},
-            author="session",
-            student_id=student_id,
-        )
         return {"student_token": token, "student_id": student_id, "display_name": entry["display_name"]}
 
     async def release_identity(self, session_id: str, student_id: str) -> bool:
         async with self._session_locks[session_id]:
-            session = await self.get_session(session_id)
-            if not session:
-                return False
-            entry = session["roster"].get(student_id)
-            if not entry:
-                return False
+            session = await self._require_writable_unlocked(session_id, student_id)
+            entry = session["roster"][student_id]
+            await self._append_event_unlocked(
+                session_id,
+                "identity_released",
+                {},
+                author="teacher",
+                student_id=student_id,
+            )
             entry["token"] = None
             entry["claimed_at"] = None
             await self.storage.write_json(self._session_path(session_id), session)
-        await self.emit_event(
-            session_id,
-            "identity_released",
-            {},
-            author="teacher",
-            student_id=student_id,
-        )
         return True
 
     async def student_for_token(
@@ -222,14 +266,15 @@ class ClassroomService:
         deixam de servir para mutações depois do fecho ou do release."""
         if not token:
             return None
-        session = await self.get_session(session_id)
-        if not session:
-            return None
-        if require_live and session.get("status") != "live":
-            return None
-        for student_id, entry in session["roster"].items():
-            if entry.get("token") == token:
-                return student_id
+        async with self._session_locks[session_id]:
+            session = await self._load_session_unlocked(session_id)
+            if not session:
+                return None
+            if require_live and session.get("status") != "live":
+                return None
+            for student_id, entry in session["roster"].items():
+                if entry.get("token") == token:
+                    return student_id
         return None
 
     # ---- eventos ----
@@ -246,27 +291,67 @@ class ClassroomService:
 
     async def ingest_events(self, session_id: str, student_id: str, events: list[dict]) -> list[dict]:
         """Aceita lote de eventos do aluno (at-least-once, dedup por event_id)."""
-        seen = await self._seen(session_id)
-        accepted = []
-        log = self.events_log(session_id)
-        activity_types = {entry.name for entry in SESSION_EVENT_TYPES.by_author("activity")}
-        for ev in events[:20]:
-            event_id = str(ev.get("event_id") or uuid.uuid4().hex)
-            ev_type = str(ev.get("type", ""))
-            if event_id in seen or ev_type not in activity_types:
-                continue
-            seen.add(event_id)
-            record = await log.append(
-                {
-                    "event_id": event_id,
-                    "type": ev_type,
-                    "student_id": student_id,
-                    "unit_id": ev.get("unit_id"),
-                    "payload": ev.get("payload") or {},
-                }
+        async with self._session_locks[session_id]:
+            await self._require_writable_unlocked(session_id, student_id)
+            seen = await self._seen(session_id)
+            accepted = []
+            log = self.events_log(session_id)
+            activity_types = {
+                entry.name for entry in SESSION_EVENT_TYPES.by_author("activity")
+            }
+            for ev in events[:20]:
+                event_id = str(ev.get("event_id") or uuid.uuid4().hex)
+                ev_type = str(ev.get("type", ""))
+                if event_id in seen or ev_type not in activity_types:
+                    continue
+                seen.add(event_id)
+                record = await log.append(
+                    {
+                        "event_id": event_id,
+                        "type": ev_type,
+                        "student_id": student_id,
+                        "unit_id": ev.get("unit_id"),
+                        "payload": ev.get("payload") or {},
+                    }
+                )
+                accepted.append(record)
+            return accepted
+
+    async def send_teacher_message(
+        self, session_id: str, text: str, *, student_id: str | None = None
+    ) -> dict:
+        return await self.emit_event(
+            session_id,
+            "teacher_message",
+            {"text": text},
+            author="teacher",
+            student_id=student_id,
+        )
+
+    async def control_session(
+        self,
+        session_id: str,
+        action: str,
+        *,
+        student_id: str | None = None,
+        unit_id: str | None = None,
+        unit_label: str = "",
+    ) -> dict:
+        if action == "highlight":
+            return await self.emit_event(
+                session_id,
+                "teacher_highlight",
+                {"unit_id": unit_id, "unit_label": unit_label},
+                author="teacher",
+                student_id=student_id,
             )
-            accepted.append(record)
-        return accepted
+        type_ = {"freeze": "freeze_screens", "unfreeze": "unfreeze_screens"}[action]
+        return await self.emit_event(
+            session_id,
+            type_,
+            {},
+            author="teacher",
+        )
 
     async def emit_event(
         self,
@@ -277,13 +362,15 @@ class ClassroomService:
         author: str,
         student_id: str | None = None,
     ) -> dict:
-        return await self._append_event_unlocked(
-            session_id,
-            type_,
-            payload,
-            author=author,
-            student_id=student_id,
-        )
+        async with self._session_locks[session_id]:
+            await self._require_writable_unlocked(session_id, student_id)
+            return await self._append_event_unlocked(
+                session_id,
+                type_,
+                payload,
+                author=author,
+                student_id=student_id,
+            )
 
     async def _append_event_unlocked(
         self,
@@ -309,9 +396,7 @@ class ClassroomService:
         self, session_id: str, student_id: str, text: str, status: str, item_id: str | None = None
     ) -> dict | None:
         async with self._session_locks[session_id]:
-            session = await self.get_session(session_id)
-            if not session:
-                return None
+            session = await self._require_writable_unlocked(session_id, student_id)
             if status not in ("planned", "doing", "done", "to_share"):
                 return None
             item = None
@@ -324,12 +409,12 @@ class ClassroomService:
                 item = {"id": uuid.uuid4().hex[:8], "student_id": student_id}
                 session["pit_items"].append(item)
             item.update({"text": text.strip()[:280], "status": status, "updated_at": utcnow()})
+            await self._append_event_unlocked(
+                session_id,
+                "pit_updated",
+                dict(item),
+                author="student",
+                student_id=student_id,
+            )
             await self.storage.write_json(self._session_path(session_id), session)
-        await self.emit_event(
-            session_id,
-            "pit_updated",
-            dict(item),
-            author="student",
-            student_id=student_id,
-        )
         return item
