@@ -95,6 +95,45 @@ async def test_teacher_stream_starts_with_current_snapshot_without_replaying_log
     assert "token" not in response.text.lower()
 
 
+async def test_student_snapshot_contains_only_own_state_and_no_class_totals(client):
+    session = await _session(client, students=("Ana", "Bia"))
+    ana_id, bia_id = session["roster"]
+    claim = (
+        await client.post(
+            f"/api/sessions/{session['id']}/claim",
+            json={"student_id": ana_id},
+        )
+    ).json()
+    await client.app.state.classroom.emit_event(
+        session["id"],
+        "attempt",
+        {"correct": True},
+        author="activity",
+        student_id=bia_id,
+    )
+    await client.post(f"/api/sessions/{session['id']}/close")
+
+    response = await client.get(
+        f"/api/sessions/{session['id']}/stream",
+        params={
+            "role": "student",
+            "student_token": claim["student_token"],
+        },
+        headers={"x-teacher-token": ""},
+    )
+
+    frames = _sse_frames(response.text)
+    assert [frame["event"] for frame in frames] == [
+        "session_state_snapshot"
+    ]
+    snapshot = frames[0]["data"]
+    assert set(snapshot["students"]) == {ana_id}
+    assert snapshot["students"][ana_id]["numbers"]["correct_attempts"] == 0
+    assert "numbers" not in snapshot
+    assert bia_id not in response.text
+    assert "token" not in response.text.lower()
+
+
 async def test_child_history_is_complete_for_teacher_and_role_authorized_for_student(client):
     session = await _session(client, students=("Ana", "Bia"))
     ana_id, bia_id = session["roster"]
