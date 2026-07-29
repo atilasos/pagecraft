@@ -56,6 +56,48 @@ async def test_report_aggregates_per_student_and_session(env):
     assert report["sessions"][0]["participants"] == 1
 
 
+async def test_report_counts_only_types_declared_as_evidence(env):
+    storage, svc = env
+    cls = await svc.create_class("3.º B", 3, ["Leonor"])
+    session = await _session_with_activity(svc, cls, "Frações")
+    student_id = next(iter(session["roster"]))
+    await svc.claim_identity(session["id"], student_id)
+    await svc.ingest_events(
+        session["id"],
+        student_id,
+        [
+            {"event_id": "u1", "type": "unit_started", "payload": {}},
+            {
+                "event_id": "a1",
+                "type": "assessment_result",
+                "payload": {"result": "compreendeu"},
+            },
+        ],
+    )
+    await svc.emit_event(
+        session["id"],
+        "teacher_message",
+        {"text": "Continua"},
+        author="teacher",
+        student_id=student_id,
+    )
+    await svc.emit_event(
+        session["id"],
+        "feedback_error",
+        {"error": "indisponível"},
+        author="assistant",
+        student_id=student_id,
+    )
+
+    report = await build_class_report(storage, cls, await svc.list_sessions())
+    student = report["students"][0]
+
+    assert student["unit_started"] == 1
+    assert student["assessment_result"] == 1
+    assert "teacher_message" not in student
+    assert "feedback_error" not in student
+
+
 async def test_report_date_filter_excludes_sessions(env):
     storage, svc = env
     cls = await svc.create_class("1.º C", 1, ["Zé"])

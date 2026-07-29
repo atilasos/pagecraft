@@ -9,21 +9,13 @@ para o conselho de cooperação, não uma classificação.
 from __future__ import annotations
 
 from ..storage import Storage
-
-COUNTED_TYPES = (
-    "attempt",
-    "discovery",
-    "help_needed",
-    "feedback_request",
-    "share_requested",
-    "assessment_result",
-)
+from .event_types import SESSION_EVENT_TYPES
 
 
-def _blank_student(name: str) -> dict:
+def _blank_student(name: str, evidence_types: set[str]) -> dict:
     row = {"display_name": name, "sessions": 0, "correct": 0, "pit_total": 0, "pit_done": 0}
-    for t in COUNTED_TYPES:
-        row[t] = 0
+    for event_type in evidence_types:
+        row[event_type] = 0
     return row
 
 
@@ -35,8 +27,12 @@ async def build_class_report(
     date_to: str = "",
 ) -> dict:
     """Relatório agregado. `date_from`/`date_to` são prefixos ISO (ex.: 2026-07)."""
+    evidence_types = {
+        event_type.name for event_type in SESSION_EVENT_TYPES.evidence()
+    }
     students: dict[str, dict] = {
-        s["id"]: _blank_student(s["display_name"]) for s in class_data["students"]
+        s["id"]: _blank_student(s["display_name"], evidence_types)
+        for s in class_data["students"]
     }
     session_rows: list[dict] = []
 
@@ -71,8 +67,9 @@ async def build_class_report(
                 participants.add(sid)
             if st is None:
                 continue
-            if ev_type in COUNTED_TYPES:
-                st[ev_type] += 1
+            if ev_type not in evidence_types:
+                continue
+            st[ev_type] += 1
             if ev_type == "attempt":
                 row["attempts"] += 1
                 if (ev.get("payload") or {}).get("correct"):
