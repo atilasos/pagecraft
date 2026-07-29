@@ -356,6 +356,8 @@ async def stream_session(session_id: str, request: Request):
     token = ""
     if role == "teacher":
         require_teacher(request)
+    elif role == "projection":
+        require_teacher(request)
     elif role == "student":
         token = request.query_params.get("student_token", "")
         # permitir ligação numa sessão já fechada (para ver o histórico próprio)
@@ -363,7 +365,9 @@ async def stream_session(session_id: str, request: Request):
         if not student_id:
             raise HTTPException(401, "token inválido")
     else:
-        raise HTTPException(400, "role tem de ser teacher ou student")
+        raise HTTPException(
+            400, "role tem de ser teacher, projection ou student"
+        )
 
     visible_types = {
         event_type.name
@@ -380,6 +384,8 @@ async def stream_session(session_id: str, request: Request):
         if role == "teacher":
             return True
         target = record.get("student_id")
+        if role == "projection":
+            return target is None
         return target is None or target == student_id
 
     async def gen():
@@ -423,10 +429,19 @@ async def stream_session(session_id: str, request: Request):
                             return
                     events.append(record)
                     if visible(record):
+                        visible_record = (
+                            {
+                                key: value
+                                for key, value in record.items()
+                                if key != "student_id"
+                            }
+                            if role == "projection"
+                            else record
+                        )
                         yield (
                             f"id: {record['seq']}\n"
                             f"event: {record['type']}\n"
-                            f"data: {json.dumps(record, ensure_ascii=False)}\n\n"
+                            f"data: {json.dumps(visible_record, ensure_ascii=False)}\n\n"
                         )
                     current_state = session_state_snapshot(
                         events,
