@@ -6,17 +6,15 @@ const state = {
   studentId: null,
   token: null,
   displayName: null,
-  outbox: [],
   studentState: null,
   sessionState: null,
 };
 
 const $ = (id) => document.getElementById(id);
 const SAVED_KEY = "pagecraft_student";
-let bridgeHandler = null;
-let stream = null;
-let streamRequest = 0;
-let flushTimer = null;
+const OUTBOX_LIMIT = 200;
+const OUTBOX_BATCH_SIZE = 20;
+const FLUSH_INTERVAL_MS = 2000;
 
 function saveIdentity() {
   try {
@@ -128,7 +126,7 @@ async function claim(student) {
 /* ---- passo 3: atividade ---- */
 
 function startActivity() {
-  stopActivityConnections();
+  studentTransport.stop({ discardQueue: true });
   state.studentState = null;
   state.sessionState = null;
   $("freeze-overlay").hidden = true;
@@ -137,33 +135,8 @@ function startActivity() {
   $("student-name").textContent = state.displayName;
   $("activity-title").textContent = state.session.activity_title;
   $("activity-frame").src = `/activities/${state.session.activity_slug}/`;
-  listenToBridge();
-  connectStream();
-  flushTimer = setInterval(flushOutbox, 2000);
+  studentTransport.start();
   // nota: o evento "joined" é emitido pelo servidor no claim; não repetir aqui
-}
-
-function stopActivityConnections() {
-  streamRequest += 1;
-  if (bridgeHandler) window.removeEventListener("message", bridgeHandler);
-  if (stream) stream.close();
-  if (flushTimer) clearInterval(flushTimer);
-  bridgeHandler = null;
-  stream = null;
-  flushTimer = null;
-}
-
-/* eventos da atividade (PageCraftBridge → postMessage) */
-function listenToBridge() {
-  const frame = $("activity-frame");
-  bridgeHandler = (ev) => {
-    // aceitar apenas mensagens vindas do iframe da atividade
-    if (!frame.contentWindow || ev.source !== frame.contentWindow) return;
-    const d = ev.data;
-    if (!d || d.pagecraft !== 1 || !d.type) return;
-    queueEvent(d.type, d.unitId || null, sanitizePayload(d.payload));
-  };
-  window.addEventListener("message", bridgeHandler);
 }
 
 function sanitizePayload(payload) {
@@ -176,34 +149,6 @@ function sanitizePayload(payload) {
     }
   }
   return out;
-}
-
-function queueEvent(type, unitId, payload) {
-  state.outbox.push({
-    event_id: crypto.randomUUID(),
-    type,
-    unit_id: unitId,
-    payload,
-    ts: new Date().toISOString(),
-  });
-}
-
-async function flushOutbox() {
-  if (!state.outbox.length || !state.token) return;
-  const batch = state.outbox.slice(0, 20);
-  try {
-    const resp = await fetch(`/api/sessions/${state.session.id}/events`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ student_token: state.token, events: batch }),
-    });
-    if (resp.ok) {
-      const ids = new Set(batch.map((e) => e.event_id));
-      state.outbox = state.outbox.filter((e) => !ids.has(e.event_id));
-    }
-  } catch (err) {
-    /* fica na outbox; tentamos outra vez no próximo flush (at-least-once) */
-  }
 }
 
 /* SSE: feedback IA, mensagens do professor, PIT */
@@ -298,7 +243,7 @@ function acceptSessionState(session) {
   if (session.closed === true && !wasClosed) {
     showMessage("A aula terminou. Bom trabalho!", "feedback-ok");
     clearIdentity();
-    stopActivityConnections();
+    studentTransport.stop({ discardQueue: true });
   }
 }
 
@@ -320,40 +265,122 @@ function dispatchStateFrame(type, rawData) {
   }
 }
 
-async function connectStream() {
-  const request = ++streamRequest;
-  const sessionId = state.session.id;
-  const token = state.token;
-  const eventTypes = await loadStudentEventTypes();
-  if (request !== streamRequest) return;
-  const es = new EventSource(
-    `/api/sessions/${sessionId}/stream?role=student&student_token=${token}`
-  );
-  stream = es;
-  [
-    "session_state_snapshot",
-    "student_state_changed",
-    "session_state_changed",
-  ].forEach((type) => {
-    es.addEventListener(type, (ev) => dispatchStateFrame(type, ev.data));
-  });
-  eventTypes.forEach((declaration) => {
-    es.addEventListener(declaration.name, (ev) => {
-      dispatchStudentEvent(declaration, ev.data);
+const studentTransport = createStudentTransport();
+
+function createStudentTransport() {
+  const outbox = [];
+  let bridgeHandler = null;
+  let stream = null;
+  let generation = 0;
+  let flushTimer = null;
+  let flushing = false;
+
+  function stop({ discardQueue = false } = {}) {
+    generation += 1;
+    if (bridgeHandler) window.removeEventListener("message", bridgeHandler);
+    if (stream) stream.close();
+    if (flushTimer) clearInterval(flushTimer);
+    bridgeHandler = null;
+    stream = null;
+    flushTimer = null;
+    if (discardQueue) outbox.length = 0;
+  }
+
+  function enqueue(type, unitId, payload) {
+    if (outbox.length >= OUTBOX_LIMIT) return false;
+    outbox.push({
+      event_id: crypto.randomUUID(),
+      type,
+      unit_id: unitId,
+      payload,
+      ts: new Date().toISOString(),
     });
-  });
+    return true;
+  }
+
+  function listenToBridge() {
+    const frame = $("activity-frame");
+    bridgeHandler = (ev) => {
+      // aceitar apenas mensagens vindas do iframe da atividade
+      if (!frame.contentWindow || ev.source !== frame.contentWindow) return;
+      const data = ev.data;
+      if (!data || data.pagecraft !== 1 || !data.type) return;
+      enqueue(
+        data.type,
+        data.unitId || null,
+        sanitizePayload(data.payload)
+      );
+    };
+    window.addEventListener("message", bridgeHandler);
+  }
+
+  async function flush() {
+    if (flushing || !outbox.length || !state.token) return;
+    flushing = true;
+    const batch = outbox.slice(0, OUTBOX_BATCH_SIZE);
+    try {
+      const resp = await fetch(`/api/sessions/${state.session.id}/events`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ student_token: state.token, events: batch }),
+      });
+      if (resp.ok) {
+        const ids = new Set(batch.map((event) => event.event_id));
+        for (let index = outbox.length - 1; index >= 0; index -= 1) {
+          if (ids.has(outbox[index].event_id)) outbox.splice(index, 1);
+        }
+      }
+    } catch (error) {
+      /* fica na fila; tentamos outra vez no próximo flush (at-least-once) */
+    } finally {
+      flushing = false;
+    }
+  }
+
+  async function connect(request, sessionId, token) {
+    const eventTypes = await loadStudentEventTypes();
+    if (request !== generation) return;
+    const eventStream = new EventSource(
+      `/api/sessions/${sessionId}/stream?role=student&student_token=${token}`
+    );
+    stream = eventStream;
+    [
+      "session_state_snapshot",
+      "student_state_changed",
+      "session_state_changed",
+    ].forEach((type) => {
+      eventStream.addEventListener(
+        type,
+        (ev) => dispatchStateFrame(type, ev.data)
+      );
+    });
+    eventTypes.forEach((declaration) => {
+      eventStream.addEventListener(declaration.name, (ev) => {
+        dispatchStudentEvent(declaration, ev.data);
+      });
+    });
+  }
+
+  function start() {
+    stop();
+    const request = ++generation;
+    const sessionId = state.session.id;
+    const token = state.token;
+    listenToBridge();
+    flushTimer = setInterval(flush, FLUSH_INTERVAL_MS);
+    connect(request, sessionId, token);
+  }
+
+  return { enqueue, flush, start, stop };
 }
 
-window.addEventListener("pagehide", stopActivityConnections);
+window.addEventListener("pagehide", () => studentTransport.stop());
 
 // restauro via back-forward cache: o iframe mantém o estado da atividade,
-// mas as ligações (bridge, SSE, outbox) foram fechadas no pagehide
+// mas as ligações (bridge, SSE, fila) foram fechadas no pagehide
 window.addEventListener("pageshow", (ev) => {
   if (!ev.persisted || $("step-activity").hidden || !state.session) return;
-  stopActivityConnections();
-  listenToBridge();
-  connectStream();
-  flushTimer = setInterval(flushOutbox, 2000);
+  studentTransport.start();
 });
 
 function showMessage(text, cls) {
@@ -367,7 +394,7 @@ function showMessage(text, cls) {
 /* ---- ajuda + PIT ---- */
 
 $("help-btn").addEventListener("click", () => {
-  queueEvent("help_needed", null, { note: "botão de ajuda" });
+  studentTransport.enqueue("help_needed", null, { note: "botão de ajuda" });
   showMessage("O professor já sabe que precisas de ajuda.", "feedback-ok");
 });
 
