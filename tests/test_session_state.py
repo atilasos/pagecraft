@@ -160,3 +160,57 @@ def test_roster_student_without_events_uses_session_start_as_time_anchor():
     assert state["students"]["beatriz"]["triage"]["band"] == "Sem sinal"
     assert state["students"]["beatriz"]["triage"]["wait_seconds"] == 90
     assert state["students"]["beatriz"]["numbers"]["evidence"]["attempt"] == 0
+
+
+def test_each_declared_kind_of_work_resets_the_stopped_clock():
+    work_events = {
+        "attempt": {"correct": True},
+        "discovery": {},
+        "unit_started": {},
+        "pit_updated": {"id": "p1", "status": "planned"},
+        "feedback_request": {},
+    }
+
+    for event_type, payload in work_events.items():
+        state = reduce_session(
+            [
+                event("joined", 0),
+                event(event_type, 3, payload=payload),
+                event("heartbeat", 5),
+            ],
+            now=NOW,
+        )
+
+        assert state["students"]["ana"]["triage"]["band"] == "A fluir"
+
+
+def test_evidence_outside_the_work_vocabulary_does_not_hide_a_stopped_child():
+    state = reduce_session(
+        [
+            event("joined", 0),
+            event("assessment_result", 3),
+            event("heartbeat", 3),
+        ],
+        now=datetime(2026, 7, 29, 10, 3, tzinfo=timezone.utc),
+    )
+
+    student = state["students"]["ana"]
+    assert student["numbers"]["evidence"]["assessment_result"] == 1
+    assert student["triage"]["band"] == "Precisa de ti"
+    assert student["triage"]["reason"] == "Parado"
+
+
+def test_explicit_help_does_not_restart_an_older_wait_in_the_same_band():
+    state = reduce_session(
+        [
+            event("joined", 0),
+            event("help_needed", 3),
+            event("heartbeat", 4),
+        ],
+        now=datetime(2026, 7, 29, 10, 4, tzinfo=timezone.utc),
+    )
+
+    triage = state["students"]["ana"]["triage"]
+    assert triage["band"] == "Precisa de ti"
+    assert triage["explicit_help"] is True
+    assert triage["wait_seconds"] == 240
