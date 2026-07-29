@@ -135,6 +135,10 @@ function startActivity() {
   $("student-name").textContent = state.displayName;
   $("activity-title").textContent = state.session.activity_title;
   $("activity-frame").src = `/activities/${state.session.activity_slug}/`;
+  $("help-btn").disabled = false;
+  $("pit-form").querySelectorAll("button, input").forEach((element) => {
+    element.disabled = false;
+  });
   studentTransport.start();
   // nota: o evento "joined" é emitido pelo servidor no claim; não repetir aqui
 }
@@ -242,9 +246,38 @@ function acceptSessionState(session) {
   $("freeze-overlay").hidden = session.frozen !== true;
   if (session.closed === true && !wasClosed) {
     showMessage("A aula terminou. Bom trabalho!", "feedback-ok");
-    clearIdentity();
-    studentTransport.stop({ discardQueue: true });
+    finishStudentSession();
   }
+}
+
+function finishStudentSession() {
+  studentTransport.stop({ discardQueue: true });
+  clearIdentity();
+  state.token = null;
+  $("freeze-overlay").hidden = true;
+  $("help-btn").disabled = true;
+  $("pit-form").querySelectorAll("button, input").forEach((element) => {
+    element.disabled = true;
+  });
+}
+
+function invalidateStudentIdentity() {
+  studentTransport.stop({ discardQueue: true });
+  clearIdentity();
+  state.studentId = null;
+  state.token = null;
+  state.displayName = null;
+  state.studentState = null;
+  state.sessionState = null;
+  $("freeze-overlay").hidden = true;
+  $("pit-panel").hidden = true;
+  renderPit();
+  $("activity-frame").src = "about:blank";
+  $("step-activity").hidden = true;
+  $("step-identity").hidden = true;
+  $("step-code").hidden = false;
+  $("code-status").textContent =
+    "A tua identidade deixou de estar disponível. Volta a entrar.";
 }
 
 function dispatchStateFrame(type, rawData) {
@@ -274,6 +307,8 @@ function createStudentTransport() {
   let generation = 0;
   let flushTimer = null;
   let flushing = false;
+  let validatingIdentity = false;
+  const requests = new Set();
 
   function stop({ discardQueue = false } = {}) {
     generation += 1;
@@ -283,11 +318,13 @@ function createStudentTransport() {
     bridgeHandler = null;
     stream = null;
     flushTimer = null;
+    requests.forEach((controller) => controller.abort());
+    requests.clear();
     if (discardQueue) outbox.length = 0;
   }
 
   function enqueue(type, unitId, payload) {
-    if (outbox.length >= OUTBOX_LIMIT) return false;
+    if (!state.token || outbox.length >= OUTBOX_LIMIT) return false;
     outbox.push({
       event_id: crypto.randomUUID(),
       type,
@@ -314,17 +351,39 @@ function createStudentTransport() {
     window.addEventListener("message", bridgeHandler);
   }
 
+  async function post(path, body) {
+    if (!state.token) return null;
+    const controller = new AbortController();
+    requests.add(controller);
+    try {
+      const resp = await fetch(path, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ ...body, student_token: state.token }),
+        signal: controller.signal,
+      });
+      if (resp.status === 401) {
+        invalidateStudentIdentity();
+        return null;
+      }
+      return resp;
+    } catch (error) {
+      return null;
+    } finally {
+      requests.delete(controller);
+    }
+  }
+
   async function flush() {
     if (flushing || !outbox.length || !state.token) return;
     flushing = true;
     const batch = outbox.slice(0, OUTBOX_BATCH_SIZE);
     try {
-      const resp = await fetch(`/api/sessions/${state.session.id}/events`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ student_token: state.token, events: batch }),
-      });
-      if (resp.ok) {
+      const resp = await post(
+        `/api/sessions/${state.session.id}/events`,
+        { events: batch }
+      );
+      if (resp?.ok) {
         const ids = new Set(batch.map((event) => event.event_id));
         for (let index = outbox.length - 1; index >= 0; index -= 1) {
           if (ids.has(outbox[index].event_id)) outbox.splice(index, 1);
@@ -337,13 +396,36 @@ function createStudentTransport() {
     }
   }
 
+  async function validateIdentity(request, sessionId, token) {
+    if (validatingIdentity || request !== generation) return;
+    validatingIdentity = true;
+    const controller = new AbortController();
+    requests.add(controller);
+    try {
+      const resp = await fetch(
+        `/api/sessions/${sessionId}/me?student_token=${encodeURIComponent(token)}`,
+        { signal: controller.signal }
+      );
+      if (request !== generation) return;
+      if (resp.status === 401) invalidateStudentIdentity();
+    } catch (error) {
+      // Uma falha de rede é transitória; o EventSource continua a reconectar.
+    } finally {
+      requests.delete(controller);
+      validatingIdentity = false;
+    }
+  }
+
   async function connect(request, sessionId, token) {
     const eventTypes = await loadStudentEventTypes();
     if (request !== generation) return;
     const eventStream = new EventSource(
-      `/api/sessions/${sessionId}/stream?role=student&student_token=${token}`
+      `/api/sessions/${sessionId}/stream?role=student&student_token=${encodeURIComponent(token)}`
     );
     stream = eventStream;
+    eventStream.addEventListener("error", () => {
+      validateIdentity(request, sessionId, token);
+    });
     [
       "session_state_snapshot",
       "student_state_changed",
@@ -371,7 +453,7 @@ function createStudentTransport() {
     connect(request, sessionId, token);
   }
 
-  return { enqueue, flush, start, stop };
+  return { enqueue, flush, post, start, stop };
 }
 
 window.addEventListener("pagehide", () => studentTransport.stop());
@@ -406,12 +488,11 @@ $("pit-form").addEventListener("submit", async (ev) => {
   ev.preventDefault();
   const text = $("pit-text").value.trim();
   if (!text) return;
-  const resp = await fetch(`/api/sessions/${state.session.id}/pit`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ student_token: state.token, text }),
-  });
-  if (resp.ok) {
+  const resp = await studentTransport.post(
+    `/api/sessions/${state.session.id}/pit`,
+    { text }
+  );
+  if (resp?.ok) {
     const item = await resp.json();
     acceptPitItem(item);
     $("pit-text").value = "";
@@ -452,15 +533,11 @@ function renderPit() {
     btn.style.minHeight = "48px";
     btn.textContent = PIT_LABELS[item.status] || item.status;
     btn.addEventListener("click", async () => {
-      const resp = await fetch(
+      const resp = await studentTransport.post(
         `/api/sessions/${state.session.id}/pit/${encodeURIComponent(item.id)}/advance`,
-        {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ student_token: state.token }),
-        }
+        {}
       );
-      if (resp.ok) {
+      if (resp?.ok) {
         acceptPitItem(await resp.json());
       }
     });
