@@ -168,6 +168,44 @@ async def test_feedback_request_from_another_authorized_path_delivers_feedback(e
     await fb.stop()
 
 
+async def test_feedback_persisted_before_start_is_delivered_once_across_restart(env):
+    config, storage, _, classroom = env
+    provider = GoodProvider()
+    session, student_id = await _session_with_student(classroom)
+    await _register_feedback(
+        classroom,
+        session["id"],
+        student_id,
+        "feedback-before-start",
+        {"question": "2+3?", "answer": "5", "expected": "5"},
+    )
+
+    first = FeedbackService(config, storage, classroom, provider)
+    first.start()
+    await _wait_event(storage, session["id"], "ai_feedback")
+    await first.stop()
+
+    restarted_hub = EventHub(storage)
+    restarted_classroom = ClassroomService(config, storage, restarted_hub)
+    restarted = FeedbackService(
+        config,
+        storage,
+        restarted_classroom,
+        provider,
+    )
+    restarted.start()
+    await asyncio.sleep(0.1)
+
+    events = await storage.read_jsonl(
+        storage.path("sessions", session["id"], "events.jsonl")
+    )
+    responses = [event for event in events if event["type"] == "ai_feedback"]
+    assert len(responses) == 1
+    assert responses[0]["student_id"] == student_id
+    assert provider.calls == 1
+    await restarted.stop()
+
+
 async def test_feedback_cache_hit(env):
     config, storage, hub, classroom = env
     provider = GoodProvider()
