@@ -38,8 +38,10 @@ async def test_report_aggregates_per_student_and_session(env):
             {"event_id": "e4", "type": "help_needed", "payload": {}},
         ],
     )
-    await svc.upsert_pit_item(session["id"], ana_id, "Ler texto", "done")
-    await svc.upsert_pit_item(session["id"], ana_id, "Escrever frase", "planned")
+    item = await svc.create_pit_item(session["id"], ana_id, "Ler texto")
+    await svc.advance_pit_item(session["id"], ana_id, item["id"])
+    await svc.advance_pit_item(session["id"], ana_id, item["id"])
+    await svc.create_pit_item(session["id"], ana_id, "Escrever frase")
     await svc.close_session(session["id"])
 
     report = await build_class_report(storage, cls, await svc.list_sessions())
@@ -134,7 +136,9 @@ async def test_report_keeps_progress_across_a_default_identity_release(env):
             {"event_id": "discovery", "type": "discovery", "payload": {}},
         ],
     )
-    await svc.upsert_pit_item(session["id"], student_id, "Explicar", "done")
+    item = await svc.create_pit_item(session["id"], student_id, "Explicar")
+    await svc.advance_pit_item(session["id"], student_id, item["id"])
+    await svc.advance_pit_item(session["id"], student_id, item["id"])
     await svc.emit_event(
         session["id"],
         "identity_released",
@@ -172,7 +176,9 @@ async def test_report_obeys_an_explicit_progress_reset_frontier(env):
             {"event_id": "discovery", "type": "discovery", "payload": {}},
         ],
     )
-    await svc.upsert_pit_item(session["id"], student_id, "Antigo", "done")
+    item = await svc.create_pit_item(session["id"], student_id, "Antigo")
+    await svc.advance_pit_item(session["id"], student_id, item["id"])
+    await svc.advance_pit_item(session["id"], student_id, item["id"])
     await svc.emit_event(
         session["id"],
         "identity_released",
@@ -185,7 +191,7 @@ async def test_report_obeys_an_explicit_progress_reset_frontier(env):
         student_id,
         [{"event_id": "new", "type": "attempt", "payload": {"correct": False}}],
     )
-    await svc.upsert_pit_item(session["id"], student_id, "Novo", "planned")
+    await svc.create_pit_item(session["id"], student_id, "Novo")
 
     report = await build_class_report(storage, cls, await svc.list_sessions())
     student = report["students"][0]
