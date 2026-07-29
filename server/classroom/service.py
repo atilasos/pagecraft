@@ -89,6 +89,26 @@ class ClassroomService:
     def events_log(self, session_id: str):
         return self.hub.log_for("sessions", session_id, "events.jsonl")
 
+    async def _load_session_unlocked(self, session_id: str) -> dict | None:
+        session = await self.storage.read_json(self._session_path(session_id))
+        if not session:
+            return None
+        events = await self.events_log(session_id).replay()
+        closed = next(
+            (event for event in reversed(events) if event.get("type") == "session_closed"),
+            None,
+        )
+        expected_status = "closed" if closed else "live"
+        expected_closed_at = closed.get("ts") if closed else None
+        if (
+            session.get("status") != expected_status
+            or session.get("closed_at") != expected_closed_at
+        ):
+            session["status"] = expected_status
+            session["closed_at"] = expected_closed_at
+            await self.storage.write_json(self._session_path(session_id), session)
+        return session
+
     async def create_session(self, class_id: str, activity_slug: str, activity_title: str) -> dict | None:
         cls = await self.get_class(class_id)
         if not cls:
@@ -113,7 +133,8 @@ class ClassroomService:
         return session
 
     async def get_session(self, session_id: str) -> dict | None:
-        return await self.storage.read_json(self._session_path(session_id))
+        async with self._session_locks[session_id]:
+            return await self._load_session_unlocked(session_id)
 
     async def find_by_code(self, join_code: str) -> dict | None:
         sessions_dir = self.storage.root / "sessions"
@@ -139,13 +160,15 @@ class ClassroomService:
 
     async def close_session(self, session_id: str) -> dict | None:
         async with self._session_locks[session_id]:
-            session = await self.get_session(session_id)
+            session = await self._load_session_unlocked(session_id)
             if not session:
                 return None
+            record = await self._append_event_unlocked(
+                session_id, "session_closed", {}, author="session"
+            )
             session["status"] = "closed"
-            session["closed_at"] = utcnow()
+            session["closed_at"] = record["ts"]
             await self.storage.write_json(self._session_path(session_id), session)
-        await self.emit_event(session_id, "session_closed", {}, author="session")
         return session
 
     # ---- identidade do aluno ----
@@ -246,6 +269,23 @@ class ClassroomService:
         return accepted
 
     async def emit_event(
+        self,
+        session_id: str,
+        type_: str,
+        payload: dict,
+        *,
+        author: str,
+        student_id: str | None = None,
+    ) -> dict:
+        return await self._append_event_unlocked(
+            session_id,
+            type_,
+            payload,
+            author=author,
+            student_id=student_id,
+        )
+
+    async def _append_event_unlocked(
         self,
         session_id: str,
         type_: str,
