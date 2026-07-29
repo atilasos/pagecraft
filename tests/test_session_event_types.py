@@ -49,6 +49,18 @@ def test_internal_and_bridge_names_remain_distinct():
     assert highlight.bridge_name == "highlight"
 
 
+def test_identity_release_declares_the_explicit_reset_decision():
+    release = SESSION_EVENT_TYPES.get("identity_released")
+
+    assert release is not None
+    assert release.payload_fields == {
+        "reset_progress": (
+            "Repõe números, Evidência e Plano individual de trabalho quando verdadeiro; "
+            "por omissão mantém o progresso."
+        )
+    }
+
+
 def _entry(**changes):
     fields = {
         "name": "example",

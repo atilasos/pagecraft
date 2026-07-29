@@ -252,7 +252,12 @@ SESSION_EVENT_TYPES = SessionEventRegistry(
         _event(
             "identity_released",
             "teacher",
-            payload={},
+            payload={
+                "reset_progress": (
+                    "Repõe números, Evidência e Plano individual de trabalho quando verdadeiro; "
+                    "por omissão mantém o progresso."
+                )
+            },
         ),
         _event(
             "pit_updated",
