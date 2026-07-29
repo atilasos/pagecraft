@@ -74,3 +74,13 @@ def changed_student_frames(previous: Mapping, current: Mapping) -> list[dict]:
         for student_id, student in after.items()
         if before.get(student_id) != student
     ]
+
+
+def changed_session_frame(
+    previous: Mapping, current: Mapping
+) -> dict | None:
+    """Produz o delta global quando o controlo ou ciclo de vida mudou."""
+    session = current.get("session", {})
+    if previous.get("session") == session:
+        return None
+    return {"session": session}

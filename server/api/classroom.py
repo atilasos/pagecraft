@@ -17,7 +17,11 @@ from ..classroom.errors import (
     StudentNotInRosterError,
 )
 from ..classroom.event_types import SESSION_EVENT_TYPES
-from ..classroom.live_state import changed_student_frames, session_state_snapshot
+from ..classroom.live_state import (
+    changed_session_frame,
+    changed_student_frames,
+    session_state_snapshot,
+)
 from ..events import utcnow
 from ..security import require_teacher
 
@@ -415,6 +419,12 @@ async def stream_session(session_id: str, request: Request):
                 role=role,
                 student_id=student_id,
             )
+            session_delta = changed_session_frame(state, current_state)
+            if session_delta is not None:
+                yield (
+                    "event: session_state_changed\n"
+                    f"data: {json.dumps(session_delta, ensure_ascii=False)}\n\n"
+                )
             for delta in changed_student_frames(state, current_state):
                 yield (
                     "event: student_state_changed\n"
