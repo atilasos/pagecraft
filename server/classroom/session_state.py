@@ -8,6 +8,9 @@ from datetime import datetime, timezone
 from .event_types import SESSION_EVENT_TYPES
 
 _PRESENCE_AUTHORS = frozenset({"activity", "student"})
+_WORK_EVENT_TYPES = frozenset(
+    {"attempt", "discovery", "unit_started", "pit_updated", "feedback_request"}
+)
 
 
 def _instant(value: object) -> datetime | None:
@@ -64,6 +67,7 @@ def reduce_session(
             {
                 "numbers": _blank_numbers(evidence_types),
                 "_last_presence": None,
+                "_last_work": None,
                 "_explicit_help": False,
             },
         )
@@ -82,6 +86,10 @@ def reduce_session(
             student["_explicit_help"] = True
         if event_type == "joined":
             participants.add(str(student_id))
+            if student["_last_work"] is None:
+                student["_last_work"] = instant
+        elif event_type in _WORK_EVENT_TYPES and instant is not None:
+            student["_last_work"] = instant
         if event_type not in student["numbers"]["evidence"]:
             continue
         student["numbers"]["evidence"][event_type] += 1
@@ -94,12 +102,18 @@ def reduce_session(
         for event_type, count in student["numbers"]["evidence"].items():
             numbers["evidence"][event_type] += count
         numbers["correct_attempts"] += student["numbers"]["correct_attempts"]
-        wait_seconds = _elapsed_seconds(now_instant, student.pop("_last_presence"))
+        presence_wait = _elapsed_seconds(now_instant, student.pop("_last_presence"))
+        work_wait = _elapsed_seconds(now_instant, student.pop("_last_work"))
         explicit_help = student.pop("_explicit_help")
-        if wait_seconds >= 90:
+        if presence_wait >= 90:
             band, reason = "Sem sinal", "Sem presença"
+            wait_seconds = presence_wait
+        elif work_wait >= 180:
+            band, reason = "Precisa de ti", "Parado"
+            wait_seconds = work_wait
         else:
             band, reason = "A fluir", "A trabalhar"
+            wait_seconds = work_wait
         student["triage"] = {
             "band": band,
             "reason": reason,

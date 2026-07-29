@@ -55,3 +55,22 @@ def test_no_presence_for_ninety_seconds_has_highest_precedence():
         "wait_seconds": 90,
         "explicit_help": True,
     }
+
+
+def test_presence_does_not_count_as_work_and_stopped_starts_at_three_minutes():
+    events = [
+        event("joined", 0),
+        event("heartbeat", 3),
+    ]
+
+    state = reduce_session(
+        events,
+        now=datetime(2026, 7, 29, 10, 3, tzinfo=timezone.utc),
+    )
+
+    assert state["students"]["ana"]["triage"] == {
+        "band": "Precisa de ti",
+        "reason": "Parado",
+        "wait_seconds": 180,
+        "explicit_help": False,
+    }
