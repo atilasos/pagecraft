@@ -11,6 +11,7 @@ let messageTarget = null; // null = turma
 let highlightTarget = null; // null = todos
 let drawerStudent = null;
 let frozen = false;
+const STATE_EVENT_TYPES = new Set(["heartbeat"]);
 
 const EVENT_TEXT = {
   joined: () => "entrou na aula",
@@ -250,11 +251,44 @@ async function startLive(s) {
   renderStudents();
   loadUnits(s.activity_slug);
 
+  const eventTypes = await loadPanelEventTypes();
   const es = new EventSource(await teacherStreamUrl(`/api/sessions/${s.id}/stream`));
   es.onmessage = () => {};
-  Object.keys(EVENT_TEXT).forEach((type) => {
-    es.addEventListener(type, (ev) => handleEvent(type, JSON.parse(ev.data), es));
+  eventTypes.forEach((type) => {
+    es.addEventListener(type, (ev) => {
+      try {
+        const data = JSON.parse(ev.data);
+        if (!data || typeof data !== "object" || Array.isArray(data)) return;
+        handleEvent(type, { ...data, type }, es);
+      } catch (error) {
+        // Um acontecimento incompreensível não pode interromper os seguintes.
+      }
+    });
   });
+}
+
+async function loadPanelEventTypes() {
+  try {
+    const resp = await fetch("/api/session-event-types");
+    if (!resp.ok) return [];
+    const declaration = await resp.json();
+    if (!Array.isArray(declaration?.types)) return [];
+    return [
+      ...new Set(
+        declaration.types
+          .filter(
+            (entry) =>
+              entry &&
+              typeof entry.name === "string" &&
+              /^[a-z][a-z0-9_]*$/.test(entry.name) &&
+              (entry.timeline === true || STATE_EVENT_TYPES.has(entry.name))
+          )
+          .map((entry) => entry.name)
+      ),
+    ];
+  } catch (error) {
+    return [];
+  }
 }
 
 async function loadUnits(slug) {
