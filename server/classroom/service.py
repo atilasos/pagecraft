@@ -187,12 +187,42 @@ class ClassroomService:
         async with self._session_locks[session_id]:
             return await self._load_session_unlocked(session_id)
 
+    def project_session(self, session: dict, *, role: str) -> dict:
+        """Produz a forma transportável da sessão sem expor tokens."""
+        if role == "student":
+            return {
+                "id": session["id"],
+                "class_name": session["class_name"],
+                "activity_slug": session["activity_slug"],
+                "activity_title": session["activity_title"],
+                "status": session["status"],
+                "roster": [
+                    {
+                        "student_id": student_id,
+                        "display_name": entry["display_name"],
+                        "taken": bool(entry.get("token")),
+                    }
+                    for student_id, entry in session["roster"].items()
+                ],
+            }
+        if role == "teacher":
+            projection = {key: value for key, value in session.items() if key != "roster"}
+            projection["roster"] = {
+                student_id: {
+                    key: value for key, value in entry.items() if key != "token"
+                }
+                | {"taken": bool(entry.get("token"))}
+                for student_id, entry in session["roster"].items()
+            }
+            return projection
+        raise ValueError(f"papel desconhecido: {role}")
+
     async def find_by_code(self, join_code: str) -> dict | None:
         sessions_dir = self.storage.root / "sessions"
         if not sessions_dir.is_dir():
             return None
         for path in sessions_dir.glob("*/session.json"):
-            data = await self.storage.read_json(path)
+            data = await self.get_session(path.parent.name)
             if data and data.get("join_code") == join_code.upper() and data.get("status") == "live":
                 return data
         return None
@@ -203,7 +233,7 @@ class ClassroomService:
             return []
         out = []
         for path in sorted(sessions_dir.glob("*/session.json")):
-            data = await self.storage.read_json(path)
+            data = await self.get_session(path.parent.name)
             if data:
                 out.append(data)
         out.sort(key=lambda s: s.get("started_at", ""), reverse=True)

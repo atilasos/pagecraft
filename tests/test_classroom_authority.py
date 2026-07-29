@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 from server.classroom.errors import SessionClosedError, StudentNotInRosterError
@@ -123,3 +125,22 @@ async def test_loading_applies_a_recorded_release_to_the_protected_token(svc, mo
         )
         is None
     )
+
+
+async def test_session_projections_are_role_specific_and_never_include_tokens(svc):
+    session = await _session(svc)
+    student_id = next(iter(session["roster"]))
+    claim = await svc.claim_identity(session["id"], student_id)
+    session = await svc.get_session(session["id"])
+
+    teacher = svc.project_session(session, role="teacher")
+    student = svc.project_session(session, role="student")
+
+    assert teacher["roster"][student_id]["taken"] is True
+    assert student["roster"][0] == {
+        "student_id": student_id,
+        "display_name": "Ana",
+        "taken": True,
+    }
+    assert claim["student_token"] not in json.dumps([teacher, student])
+    assert '"token"' not in json.dumps([teacher, student])
