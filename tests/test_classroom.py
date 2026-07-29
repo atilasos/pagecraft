@@ -118,16 +118,39 @@ async def test_internal_emission_obeys_the_declared_author(svc):
         )
 
 
-async def test_pit_upsert(svc):
+async def test_pit_creation_and_advancement_follow_the_server_owned_cycle(svc):
     session = await _session(svc)
     student_id = next(iter(session["roster"]))
-    item = await svc.upsert_pit_item(session["id"], student_id, "Ler o texto das frações", "planned")
+    item = await svc.create_pit_item(
+        session["id"], student_id, "Ler o texto das frações"
+    )
+
     assert item["status"] == "planned"
-    updated = await svc.upsert_pit_item(session["id"], student_id, item["text"], "done", item["id"])
-    assert updated["id"] == item["id"]
-    assert updated["status"] == "done"
+    statuses = []
+    for _ in range(4):
+        item = await svc.advance_pit_item(session["id"], student_id, item["id"])
+        statuses.append(item["status"])
+
+    assert statuses == ["doing", "done", "to_share", "done"]
     fresh = await svc.get_session(session["id"])
-    assert len(fresh["pit_items"]) == 1
+    assert fresh["pit_items"] == [item]
+
+    events = await svc.events_log(session["id"]).replay()
+    transitions = [
+        (
+            record["payload"]["previous_status"],
+            record["payload"]["status"],
+        )
+        for record in events
+        if record["type"] == "pit_updated"
+    ]
+    assert transitions == [
+        (None, "planned"),
+        ("planned", "doing"),
+        ("doing", "done"),
+        ("done", "to_share"),
+        ("to_share", "done"),
+    ]
 
 
 async def test_concurrent_claims_only_one_wins(svc):

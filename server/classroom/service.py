@@ -16,6 +16,7 @@ from ..config import Config
 from ..events import EventHub, utcnow
 from ..storage import Storage
 from .errors import (
+    InvalidPitItemError,
     SessionClosedError,
     SessionNotFoundError,
     StudentNotInRosterError,
@@ -128,6 +129,7 @@ class ClassroomService:
             item_id = item.get("id")
             if not item_id:
                 continue
+            item.pop("previous_status", None)
             item["student_id"] = str(student_id or item.get("student_id") or "")
             pit_items[str(item_id)] = item
         expected_pit_items = list(pit_items.values())
@@ -422,27 +424,60 @@ class ClassroomService:
 
     # ---- PIT-lite ----
 
-    async def upsert_pit_item(
-        self, session_id: str, student_id: str, text: str, status: str, item_id: str | None = None
-    ) -> dict | None:
+    async def create_pit_item(
+        self, session_id: str, student_id: str, text: str
+    ) -> dict:
         async with self._session_locks[session_id]:
             session = await self._require_writable_unlocked(session_id, student_id)
-            if status not in ("planned", "doing", "done", "to_share"):
-                return None
-            item = None
-            if item_id:
-                item = next(
-                    (i for i in session["pit_items"] if i["id"] == item_id and i["student_id"] == student_id),
-                    None,
-                )
-            if item is None:
-                item = {"id": uuid.uuid4().hex[:8], "student_id": student_id}
-                session["pit_items"].append(item)
-            item.update({"text": text.strip()[:280], "status": status, "updated_at": utcnow()})
+            clean_text = text.strip()[:280]
+            if not clean_text:
+                raise InvalidPitItemError("o item do plano precisa de texto")
+            item = {
+                "id": uuid.uuid4().hex[:8],
+                "student_id": student_id,
+                "text": clean_text,
+                "status": "planned",
+                "updated_at": utcnow(),
+            }
+            session["pit_items"].append(item)
             await self._append_event_unlocked(
                 session_id,
                 "pit_updated",
-                dict(item),
+                {**item, "previous_status": None},
+                author="student",
+                student_id=student_id,
+            )
+            await self.storage.write_json(self._session_path(session_id), session)
+        return item
+
+    async def advance_pit_item(
+        self, session_id: str, student_id: str, item_id: str
+    ) -> dict:
+        async with self._session_locks[session_id]:
+            session = await self._require_writable_unlocked(session_id, student_id)
+            item = next(
+                (
+                    candidate
+                    for candidate in session["pit_items"]
+                    if candidate["id"] == item_id
+                ),
+                None,
+            )
+            if item is None or item.get("student_id") != student_id:
+                raise InvalidPitItemError("item do plano não encontrado")
+
+            previous_status = item["status"]
+            item["status"] = {
+                "planned": "doing",
+                "doing": "done",
+                "done": "to_share",
+                "to_share": "done",
+            }[previous_status]
+            item["updated_at"] = utcnow()
+            await self._append_event_unlocked(
+                session_id,
+                "pit_updated",
+                {**item, "previous_status": previous_status},
                 author="student",
                 student_id=student_id,
             )
