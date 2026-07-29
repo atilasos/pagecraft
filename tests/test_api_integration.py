@@ -7,6 +7,31 @@ import pytest
 from server import app as app_module
 
 
+_STATE_FRAMES = {
+    "session_state_snapshot",
+    "session_state_changed",
+    "student_state_changed",
+}
+
+
+async def _collect_raw_stream_types(client, session_id, params):
+    types = []
+    async with client.stream(
+        "GET",
+        f"/api/sessions/{session_id}/stream",
+        params=params,
+    ) as response:
+        async for line in response.aiter_lines():
+            if not line.startswith("event: "):
+                continue
+            event_type = line[7:]
+            if event_type not in _STATE_FRAMES:
+                types.append(event_type)
+            if event_type == "session_closed":
+                break
+    return types
+
+
 class InstantFeedbackProvider:
     name = "fake"
 
@@ -151,29 +176,32 @@ async def test_student_stream_filters_events(client):
     c1 = (await client.post(f"/api/sessions/{session['id']}/claim", json={"student_id": s1["student_id"]})).json()
     c2 = (await client.post(f"/api/sessions/{session['id']}/claim", json={"student_id": s2["student_id"]})).json()
 
-    # mensagem dirigida só ao aluno 2
+    stream1 = asyncio.create_task(
+        _collect_raw_stream_types(
+            client,
+            session["id"],
+            {"role": "student", "student_token": c1["student_token"]},
+        )
+    )
+    stream2 = asyncio.create_task(
+        _collect_raw_stream_types(
+            client,
+            session["id"],
+            {"role": "student", "student_token": c2["student_token"]},
+        )
+    )
+    await asyncio.sleep(0.01)
+
+    # mensagem dirigida só ao aluno 2, já com ambos os streams vivos
     await client.post(
         f"/api/sessions/{session['id']}/message",
         json={"text": "Boa, Mia!", "student_id": s2["student_id"]},
     )
     await client.post(f"/api/sessions/{session['id']}/close")
 
-    async def collect(token):
-        types = []
-        async with client.stream(
-            "GET",
-            f"/api/sessions/{session['id']}/stream",
-            params={"role": "student", "student_token": token},
-        ) as resp:
-            async for line in resp.aiter_lines():
-                if line.startswith("data: "):
-                    types.append(json.loads(line[6:])["type"])
-                if types and types[-1] == "session_closed":
-                    break
-        return types
-
-    types1 = await asyncio.wait_for(collect(c1["student_token"]), timeout=5)
-    types2 = await asyncio.wait_for(collect(c2["student_token"]), timeout=5)
+    types1, types2 = await asyncio.wait_for(
+        asyncio.gather(stream1, stream2), timeout=5
+    )
     assert "teacher_message" not in types1  # dirigida à Mia, o Zé não vê
     assert "teacher_message" in types2
     # eventos de outros alunos (joined) nunca chegam a alunos
@@ -204,6 +232,23 @@ async def test_stream_applies_declared_visibility_for_each_role(client):
             json={"student_id": student_id},
         )
     ).json()
+    teacher_stream = asyncio.create_task(
+        _collect_raw_stream_types(
+            client, session["id"], {"role": "teacher"}
+        )
+    )
+    student_stream = asyncio.create_task(
+        _collect_raw_stream_types(
+            client,
+            session["id"],
+            {
+                "role": "student",
+                "student_token": claim["student_token"],
+            },
+        )
+    )
+    await asyncio.sleep(0.01)
+
     await client.app.state.classroom.emit_event(
         session["id"],
         "feedback_error",
@@ -213,32 +258,8 @@ async def test_stream_applies_declared_visibility_for_each_role(client):
     )
     await client.post(f"/api/sessions/{session['id']}/close")
 
-    async def collect(params):
-        types = []
-        async with client.stream(
-            "GET",
-            f"/api/sessions/{session['id']}/stream",
-            params=params,
-        ) as response:
-            async for line in response.aiter_lines():
-                if line.startswith("data: "):
-                    types.append(json.loads(line[6:])["type"])
-                if types and types[-1] == "session_closed":
-                    break
-        return types
-
-    teacher_types = await asyncio.wait_for(
-        collect({"role": "teacher"}),
-        timeout=5,
-    )
-    student_types = await asyncio.wait_for(
-        collect(
-            {
-                "role": "student",
-                "student_token": claim["student_token"],
-            }
-        ),
-        timeout=5,
+    teacher_types, student_types = await asyncio.wait_for(
+        asyncio.gather(teacher_stream, student_stream), timeout=5
     )
 
     assert "feedback_error" in teacher_types
@@ -457,6 +478,22 @@ async def test_session_control_events(client):
     c1 = (await client.post(f"/api/sessions/{session['id']}/claim", json={"student_id": s1["student_id"]})).json()
     c2 = (await client.post(f"/api/sessions/{session['id']}/claim", json={"student_id": s2["student_id"]})).json()
 
+    stream1 = asyncio.create_task(
+        _collect_raw_stream_types(
+            client,
+            session["id"],
+            {"role": "student", "student_token": c1["student_token"]},
+        )
+    )
+    stream2 = asyncio.create_task(
+        _collect_raw_stream_types(
+            client,
+            session["id"],
+            {"role": "student", "student_token": c2["student_token"]},
+        )
+    )
+    await asyncio.sleep(0.01)
+
     # highlight dirigido só ao aluno 2; freeze para todos
     resp = await client.post(
         f"/api/sessions/{session['id']}/control",
@@ -475,22 +512,9 @@ async def test_session_control_events(client):
 
     await client.post(f"/api/sessions/{session['id']}/close")
 
-    async def collect(token):
-        types = []
-        async with client.stream(
-            "GET",
-            f"/api/sessions/{session['id']}/stream",
-            params={"role": "student", "student_token": token},
-        ) as resp:
-            async for line in resp.aiter_lines():
-                if line.startswith("data: "):
-                    types.append(json.loads(line[6:])["type"])
-                if types and types[-1] == "session_closed":
-                    break
-        return types
-
-    types1 = await asyncio.wait_for(collect(c1["student_token"]), timeout=5)
-    types2 = await asyncio.wait_for(collect(c2["student_token"]), timeout=5)
+    types1, types2 = await asyncio.wait_for(
+        asyncio.gather(stream1, stream2), timeout=5
+    )
     assert "freeze_screens" in types1 and "unfreeze_screens" in types1
     assert "teacher_highlight" not in types1  # era dirigido ao aluno 2
     assert "teacher_highlight" in types2
