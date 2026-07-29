@@ -17,6 +17,8 @@ from ..classroom.errors import (
     StudentNotInRosterError,
 )
 from ..classroom.event_types import SESSION_EVENT_TYPES
+from ..classroom.live_state import session_state_snapshot
+from ..events import utcnow
 from ..security import require_teacher
 
 router = APIRouter(prefix="/api", tags=["classroom"])
@@ -323,13 +325,9 @@ async def stream_session(session_id: str, request: Request):
     visible_types = {
         event_type.name for event_type in SESSION_EVENT_TYPES.visible_to(role)
     }
-    last_id = request.headers.get("last-event-id") or request.query_params.get("after", "0")
-    try:
-        after_seq = int(last_id)
-    except ValueError:
-        after_seq = 0
-
     log = svc.events_log(session_id)
+    events = await log.replay()
+    frontier = max((int(record.get("seq", 0)) for record in events), default=0)
 
     def visible(record: dict) -> bool:
         if record.get("type") not in visible_types:
@@ -340,7 +338,22 @@ async def stream_session(session_id: str, request: Request):
         return target is None or target == student_id
 
     async def gen():
-        async for record in log.subscribe(after_seq):
+        snapshot = session_state_snapshot(
+            events,
+            session,
+            now=utcnow(),
+            role=role,
+            student_id=student_id,
+        )
+        yield (
+            f"id: {frontier}\n"
+            "event: session_state_snapshot\n"
+            f"data: {json.dumps(snapshot, ensure_ascii=False)}\n\n"
+        )
+        if snapshot["session"]["closed"]:
+            return
+
+        async for record in log.subscribe(frontier):
             if role == "student":
                 # revalidar a cada entrega: se o professor libertou a
                 # identidade, o stream antigo morre em vez de vazar eventos
