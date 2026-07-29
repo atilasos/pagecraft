@@ -351,7 +351,7 @@ $("pit-form").addEventListener("submit", async (ev) => {
   const resp = await fetch(`/api/sessions/${state.session.id}/pit`, {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ student_token: state.token, text, status: "planned" }),
+    body: JSON.stringify({ student_token: state.token, text }),
   });
   if (resp.ok) {
     const item = await resp.json();
@@ -362,7 +362,6 @@ $("pit-form").addEventListener("submit", async (ev) => {
 });
 
 const PIT_LABELS = { planned: "por fazer", doing: "a fazer", done: "feito", to_share: "para partilhar" };
-const PIT_NEXT = { planned: "doing", doing: "done", done: "to_share", to_share: "planned" };
 
 function renderPit() {
   const list = $("pit-list");
@@ -374,16 +373,14 @@ function renderPit() {
     btn.style.minHeight = "48px";
     btn.textContent = PIT_LABELS[item.status] || item.status;
     btn.addEventListener("click", async () => {
-      const resp = await fetch(`/api/sessions/${state.session.id}/pit`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          student_token: state.token,
-          text: item.text,
-          status: PIT_NEXT[item.status] || "planned",
-          item_id: item.id,
-        }),
-      });
+      const resp = await fetch(
+        `/api/sessions/${state.session.id}/pit/${encodeURIComponent(item.id)}/advance`,
+        {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ student_token: state.token }),
+        }
+      );
       if (resp.ok) {
         const updated = await resp.json();
         state.pitItems[updated.id] = updated;
