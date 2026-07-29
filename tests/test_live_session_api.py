@@ -1,3 +1,4 @@
+import asyncio
 import json
 
 import httpx
@@ -167,3 +168,64 @@ async def test_child_history_is_complete_for_teacher_and_role_authorized_for_stu
     assert "Bia" not in teacher.text
     assert "token" not in teacher.text.lower()
     assert "token" not in student.text.lower()
+
+
+async def test_live_stream_keeps_raw_timeline_and_emits_only_changed_children(client):
+    session = await _session(client, students=("Ana", "Bia"))
+    ana_id, bia_id = session["roster"]
+    await client.post(
+        f"/api/sessions/{session['id']}/claim",
+        json={"student_id": ana_id},
+    )
+    await client.post(
+        f"/api/sessions/{session['id']}/claim",
+        json={"student_id": bia_id},
+    )
+
+    async def produce():
+        await asyncio.sleep(0.01)
+        await client.app.state.classroom.emit_event(
+            session["id"],
+            "attempt",
+            {"correct": True},
+            author="activity",
+            student_id=ana_id,
+        )
+        await client.app.state.classroom.emit_event(
+            session["id"],
+            "heartbeat",
+            {},
+            author="activity",
+            student_id=bia_id,
+        )
+        await client.post(
+            f"/api/sessions/{session['id']}/message",
+            json={"text": "Continua", "student_id": ana_id},
+        )
+        await client.post(f"/api/sessions/{session['id']}/close")
+
+    producer = asyncio.create_task(produce())
+    response = await client.get(
+        f"/api/sessions/{session['id']}/stream",
+        params={"role": "teacher"},
+    )
+    await producer
+
+    frames = _sse_frames(response.text)
+    events = [frame["event"] for frame in frames]
+    assert events == [
+        "session_state_snapshot",
+        "attempt",
+        "student_state_changed",
+        "teacher_message",
+        "session_closed",
+    ]
+    delta = next(
+        frame["data"]
+        for frame in frames
+        if frame["event"] == "student_state_changed"
+    )
+    assert delta["student_id"] == ana_id
+    assert delta["student"]["numbers"]["correct_attempts"] == 1
+    assert bia_id not in json.dumps(delta)
+    assert "heartbeat" not in events
