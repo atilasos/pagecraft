@@ -147,6 +147,45 @@ def test_plan_numbers_come_from_the_latest_state_of_each_item():
     assert state["numbers"]["pit_done"] == 2
 
 
+def test_plan_replays_the_complete_sequence_and_the_final_step_back():
+    transitions = [
+        (None, "planned"),
+        ("planned", "doing"),
+        ("doing", "done"),
+        ("done", "to_share"),
+        ("to_share", "done"),
+    ]
+    events = [
+        event(
+            "pit_updated",
+            minute,
+            payload={
+                "id": "p1",
+                "student_id": "ana",
+                "text": "Preparar a leitura",
+                "previous_status": previous_status,
+                "status": status,
+                "updated_at": f"2026-07-29T10:{minute:02d}:00+00:00",
+            },
+        )
+        for minute, (previous_status, status) in enumerate(transitions)
+    ]
+
+    state = reduce_session(events, now=NOW)
+
+    assert state["students"]["ana"]["pit_items"] == [
+        {
+            "id": "p1",
+            "student_id": "ana",
+            "text": "Preparar a leitura",
+            "status": "done",
+            "updated_at": "2026-07-29T10:04:00+00:00",
+        }
+    ]
+    assert state["students"]["ana"]["numbers"]["pit_total"] == 1
+    assert state["students"]["ana"]["numbers"]["pit_done"] == 1
+
+
 def test_roster_student_without_events_uses_session_start_as_time_anchor():
     state = reduce_session(
         [],
