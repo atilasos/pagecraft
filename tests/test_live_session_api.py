@@ -134,6 +134,78 @@ async def test_student_snapshot_contains_only_own_state_and_no_class_totals(clie
     assert "token" not in response.text.lower()
 
 
+async def test_projection_stream_contains_only_shared_state_and_global_events(client):
+    session = await _session(client, students=("Ana", "Bia"))
+    ana_id = next(iter(session["roster"]))
+    await client.post(
+        f"/api/sessions/{session['id']}/claim",
+        json={"student_id": ana_id},
+    )
+
+    async def produce():
+        await asyncio.sleep(0.01)
+        await client.app.state.classroom.emit_event(
+            session["id"],
+            "attempt",
+            {"correct": False, "detail": "resposta privada"},
+            author="activity",
+            student_id=ana_id,
+        )
+        await client.post(
+            f"/api/sessions/{session['id']}/control",
+            json={
+                "action": "highlight",
+                "unit_id": "privada",
+                "student_id": ana_id,
+            },
+        )
+        await client.post(
+            f"/api/sessions/{session['id']}/control",
+            json={"action": "highlight", "unit_id": "global"},
+        )
+        await client.post(
+            f"/api/sessions/{session['id']}/control",
+            json={"action": "freeze"},
+        )
+        await client.post(
+            f"/api/sessions/{session['id']}/control",
+            json={"action": "unfreeze"},
+        )
+        await client.post(f"/api/sessions/{session['id']}/close")
+
+    producer = asyncio.create_task(produce())
+    response = await client.get(
+        f"/api/sessions/{session['id']}/stream",
+        params={"role": "projection"},
+    )
+    await producer
+
+    assert response.status_code == 200
+    frames = _sse_frames(response.text)
+    assert [frame["event"] for frame in frames] == [
+        "session_state_snapshot",
+        "teacher_highlight",
+        "freeze_screens",
+        "session_state_changed",
+        "unfreeze_screens",
+        "session_state_changed",
+        "session_closed",
+        "session_state_changed",
+    ]
+    assert frames[0]["data"] == {
+        "session": {"status": "live", "closed": False, "frozen": False}
+    }
+    assert frames[1]["data"]["payload"]["unit_id"] == "global"
+    assert frames[-1]["data"] == {
+        "session": {"status": "closed", "closed": True, "frozen": False}
+    }
+    assert "student_id" not in response.text
+    assert ana_id not in response.text
+    assert "resposta privada" not in response.text
+    assert "privada" not in response.text
+    assert "token" not in response.text.lower()
+
+
 async def test_child_history_is_complete_for_teacher_and_role_authorized_for_student(client):
     session = await _session(client, students=("Ana", "Bia"))
     ana_id, bia_id = session["roster"]
