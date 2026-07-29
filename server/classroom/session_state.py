@@ -107,6 +107,16 @@ def reduce_session(
         event_type = event.get("type")
         declaration = SESSION_EVENT_TYPES.get(str(event_type))
         instant = _instant(event.get("ts"))
+        if (
+            event_type == "identity_released"
+            and (event.get("payload") or {}).get("reset_progress") is True
+        ):
+            student["numbers"] = _blank_numbers(evidence_types)
+            student["_last_work"] = instant
+            student["_help_since"] = None
+            student["_consecutive_failures"] = 0
+            student["_failures_since"] = None
+            student["_pit_items"].clear()
         if instant is not None and (
             event_type == "joined"
             or (

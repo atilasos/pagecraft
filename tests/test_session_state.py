@@ -214,3 +214,51 @@ def test_explicit_help_does_not_restart_an_older_wait_in_the_same_band():
     assert triage["band"] == "Precisa de ti"
     assert triage["explicit_help"] is True
     assert triage["wait_seconds"] == 240
+
+
+def test_releasing_an_identity_keeps_progress_by_default():
+    events = [
+        event("joined", 0),
+        event("attempt", 1, payload={"correct": True}),
+        event("discovery", 2),
+        event("pit_updated", 2, payload={"id": "p1", "status": "done"}),
+        event("identity_released", 3),
+        event("joined", 4),
+        event("attempt", 4, payload={"correct": False}),
+    ]
+
+    student = reduce_session(events, now=NOW)["students"]["ana"]
+
+    assert student["numbers"]["evidence"]["attempt"] == 2
+    assert student["numbers"]["evidence"]["discovery"] == 1
+    assert student["numbers"]["correct_attempts"] == 1
+    assert student["numbers"]["pit_total"] == 1
+    assert student["numbers"]["pit_done"] == 1
+
+
+def test_explicit_reset_is_a_frontier_for_all_numbers_and_plan_items():
+    events = [
+        event("joined", 0),
+        event("attempt", 1, payload={"correct": True}),
+        event("discovery", 2),
+        event("pit_updated", 2, payload={"id": "old", "status": "done"}),
+        event("identity_released", 3, payload={"reset_progress": True}),
+        event("joined", 4),
+        event("attempt", 4, payload={"correct": False}),
+        event("pit_updated", 4, payload={"id": "new", "status": "planned"}),
+    ]
+
+    state = reduce_session(events, now=NOW)
+    student = state["students"]["ana"]
+
+    assert student["numbers"]["evidence"]["attempt"] == 1
+    assert student["numbers"]["evidence"]["discovery"] == 0
+    assert student["numbers"]["evidence"]["pit_updated"] == 1
+    assert student["numbers"]["correct_attempts"] == 0
+    assert student["numbers"]["pit_total"] == 1
+    assert student["numbers"]["pit_done"] == 0
+    assert state["numbers"] == {
+        **student["numbers"],
+        "participants": 1,
+    }
+    assert len(events) == 8
