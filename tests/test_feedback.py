@@ -29,6 +29,24 @@ class SlowProvider:
         raise ProviderTimeout("demorou demasiado")
 
 
+class BlockingProvider:
+    name = "fake"
+
+    def __init__(self):
+        self.calls = 0
+        self.started = asyncio.Event()
+        self.cancelled = asyncio.Event()
+
+    async def complete(self, prompt, *, schema=None, system=None, timeout_s=20, workdir=None):
+        self.calls += 1
+        self.started.set()
+        try:
+            await asyncio.Future()
+        except asyncio.CancelledError:
+            self.cancelled.set()
+            raise
+
+
 @pytest.fixture
 def env(tmp_path):
     config = Config(data_dir=tmp_path, feedback_timeout_s=1)
@@ -193,3 +211,53 @@ async def test_feedback_timeout_fallback(env):
     timeout_alert = await _wait_event(storage, session["id"], "feedback_timeout")
     assert timeout_alert["student_id"] == student_id
     await fb.stop()
+
+
+async def test_feedback_excess_is_registered_as_dropped(env):
+    config, storage, hub, classroom = env
+    provider = BlockingProvider()
+    fb = FeedbackService(config, storage, classroom, provider)
+    session, student_id = await _session_with_student(classroom)
+    fb.start()
+
+    for number in range(4):
+        await _register_feedback(
+            classroom,
+            session["id"],
+            student_id,
+            f"feedback-excess-{number}",
+            {"question": f"pergunta {number}", "answer": "resposta"},
+        )
+
+    dropped = await _wait_event(
+        storage,
+        session["id"],
+        "feedback_dropped",
+    )
+    assert dropped["student_id"] == student_id
+    assert dropped["payload"] == {
+        "unit_id": "u1",
+        "reason": "demasiados pedidos seguidos",
+    }
+    await fb.stop()
+
+
+async def test_feedback_stop_cancels_active_provider(env):
+    config, storage, hub, classroom = env
+    provider = BlockingProvider()
+    fb = FeedbackService(config, storage, classroom, provider, workers=1)
+    session, student_id = await _session_with_student(classroom)
+    fb.start()
+    await _register_feedback(
+        classroom,
+        session["id"],
+        student_id,
+        "feedback-blocked",
+        {"question": "q", "answer": "a"},
+    )
+    await asyncio.wait_for(provider.started.wait(), timeout=1)
+
+    await fb.stop()
+
+    await asyncio.wait_for(provider.cancelled.wait(), timeout=1)
+    assert provider.calls == 1
