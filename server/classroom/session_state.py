@@ -154,7 +154,14 @@ def reduce_session(
             item_id = payload.get("id")
             status = payload.get("status")
             if item_id and status:
-                student["_pit_items"][str(item_id)] = str(status)
+                item = dict(payload)
+                item.pop("previous_status", None)
+                item["id"] = str(item_id)
+                item["student_id"] = str(
+                    student_id or item.get("student_id") or ""
+                )
+                item["status"] = str(status)
+                student["_pit_items"][str(item_id)] = item
         if event_type not in student["numbers"]["evidence"]:
             continue
         student["numbers"]["evidence"][event_type] += 1
@@ -164,10 +171,11 @@ def reduce_session(
     numbers = _blank_numbers(evidence_types)
     numbers["participants"] = len(participants)
     for student in students.values():
-        pit_items = student.pop("_pit_items")
+        pit_items = list(student.pop("_pit_items").values())
+        student["pit_items"] = pit_items
         student["numbers"]["pit_total"] = len(pit_items)
         student["numbers"]["pit_done"] = sum(
-            status in {"done", "to_share"} for status in pit_items.values()
+            item["status"] in {"done", "to_share"} for item in pit_items
         )
         for event_type, count in student["numbers"]["evidence"].items():
             numbers["evidence"][event_type] += count
