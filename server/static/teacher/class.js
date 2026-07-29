@@ -36,6 +36,13 @@ const EVENT_TEXT = {
   session_closed: () => "sessão terminada",
 };
 
+const TRIAGE_BANDS = [
+  { name: "Sem sinal", listId: "band-no-signal", countId: "band-no-signal-count" },
+  { name: "Precisa de ti", listId: "band-needs-you", countId: "band-needs-you-count" },
+  { name: "A tropeçar", listId: "band-stumbling", countId: "band-stumbling-count" },
+  { name: "A fluir", listId: "band-flowing", countId: "band-flowing-count" },
+];
+
 function readableEventType(type) {
   return type.replace(/_/g, " ");
 }
@@ -287,9 +294,12 @@ function applyStudentState(delta) {
     typeof delta.student !== "object" ||
     Array.isArray(delta.student)
   ) return;
+  const previousBand = triageBand(students.get(delta.student_id)).name;
   students.set(delta.student_id, delta.student);
-  renderStudents();
-  renderPulse();
+  placeStudentCard(delta.student_id);
+  updateBandCount(previousBand);
+  updateBandCount(triageBand(delta.student).name);
+  updatePulseStudent(delta.student_id);
   if (drawerStudent === delta.student_id) fillDrawer(delta.student_id);
 }
 
@@ -447,43 +457,151 @@ function blip(studentId, type) {
 
 function renderPulse() {
   const el = $("class-pulse");
-  el.innerHTML = "";
+  el.querySelectorAll(".dot").forEach((dot) => {
+    if (!students.has(dot.dataset.studentId)) dot.remove();
+  });
   students.forEach((st, id) => {
-    const dot = document.createElement("span");
-    dot.className =
-      "dot" +
-      (st.triage?.explicit_help ? " help" : st.participated ? " on" : "");
-    dot.id = `dot-${id}`;
-    dot.title = st.display_name || id;
-    el.appendChild(dot);
+    updatePulseStudent(id);
   });
 }
 
-function renderStudents() {
-  const grid = $("students");
-  grid.innerHTML = "";
-  students.forEach((st, id) => {
-    const numbers = st.numbers || {};
-    const evidence = numbers.evidence || {};
+function updatePulseStudent(studentId) {
+  const st = students.get(studentId);
+  if (!st) return;
+  let dot = document.getElementById(`dot-${studentId}`);
+  if (!dot) {
+    dot = document.createElement("span");
+    dot.id = `dot-${studentId}`;
+    dot.dataset.studentId = studentId;
+    $("class-pulse").appendChild(dot);
+  }
+  dot.className =
+    "dot" +
+    (st.triage?.explicit_help
+      ? " help"
+      : st.participated && st.triage?.band !== "Sem sinal"
+        ? " on"
+        : "");
+  dot.title = st.display_name || studentId;
+}
+
+function triageBand(student) {
+  return (
+    TRIAGE_BANDS.find((band) => band.name === student?.triage?.band) ||
+    TRIAGE_BANDS[TRIAGE_BANDS.length - 1]
+  );
+}
+
+function waitSeconds(student) {
+  const value = Number(student?.triage?.wait_seconds);
+  return Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+}
+
+function compareStudents([leftId, left], [rightId, right]) {
+  return (
+    waitSeconds(right) - waitSeconds(left) ||
+    String(left.display_name || leftId).localeCompare(
+      String(right.display_name || rightId),
+      "pt-PT"
+    )
+  );
+}
+
+function studentsInBand(bandName) {
+  return [...students.entries()]
+    .filter(([, student]) => triageBand(student).name === bandName)
+    .sort(compareStudents);
+}
+
+function formatWait(seconds) {
+  const total = Math.max(0, Math.floor(Number(seconds) || 0));
+  if (total < 60) return `${total} s`;
+  const minutes = Math.floor(total / 60);
+  if (minutes < 60) return `${minutes} min`;
+  const hours = Math.floor(minutes / 60);
+  const remainder = minutes % 60;
+  return remainder ? `${hours} h ${remainder} min` : `${hours} h`;
+}
+
+function createStudentCard(studentId) {
     const card = document.createElement("button");
     card.type = "button";
-    card.className =
-      "student-card" +
-      (st.triage?.explicit_help ? " help" : "") +
-      (st.participated ? " on" : " away");
-    card.id = `student-${id}`;
+    card.id = `student-${studentId}`;
+    card.dataset.studentId = studentId;
     card.innerHTML = `
-      <h3><span class="presence" aria-hidden="true"></span>${esc(st.display_name || id)}</h3>
+      <h3><span class="presence" aria-hidden="true"></span><span class="student-name"></span></h3>
       <div class="counts">
-        <span class="pill ok">${numbers.correct_attempts || 0}✓</span>
-        <span class="pill">${evidence.attempt || 0} tent.</span>
-        <span class="pill ok">${evidence.discovery || 0} desc.</span>
+        <span class="pill ok correct-count"></span>
+        <span class="pill attempt-count"></span>
+        <span class="pill ok discovery-count"></span>
+        <span class="pill warn help-badge" hidden>🙋 Pediu ajuda</span>
       </div>
       <p class="last"></p>`;
-    card.querySelector(".last").textContent =
-      `${st.triage?.reason || "Sem estado"} · ${st.triage?.wait_seconds || 0} s`;
-    card.addEventListener("click", () => openDrawer(id));
-    grid.appendChild(card);
+    card.addEventListener("click", () => openDrawer(studentId));
+    return card;
+}
+
+function updateStudentCard(studentId) {
+  const st = students.get(studentId);
+  if (!st) return null;
+  const numbers = st.numbers || {};
+  const evidence = numbers.evidence || {};
+  let card = document.getElementById(`student-${studentId}`);
+  if (!card) card = createStudentCard(studentId);
+  card.className =
+    "student-card" +
+    (st.triage?.explicit_help ? " help" : "") +
+    (st.participated && st.triage?.band !== "Sem sinal" ? " on" : " away");
+  card.querySelector(".student-name").textContent = st.display_name || studentId;
+  card.querySelector(".correct-count").textContent = `${numbers.correct_attempts || 0}✓`;
+  card.querySelector(".attempt-count").textContent = `${evidence.attempt || 0} tent.`;
+  card.querySelector(".discovery-count").textContent = `${evidence.discovery || 0} desc.`;
+  card.querySelector(".help-badge").hidden = st.triage?.explicit_help !== true;
+  card.querySelector(".last").textContent =
+    `${st.triage?.reason || "Sem estado"} · espera ${formatWait(st.triage?.wait_seconds)}`;
+  return card;
+}
+
+function placeStudentCard(studentId) {
+  const st = students.get(studentId);
+  if (!st) return;
+  const band = triageBand(st);
+  const list = $(band.listId);
+  const ordered = studentsInBand(band.name);
+  const index = ordered.findIndex(([id]) => id === studentId);
+  const nextId = ordered[index + 1]?.[0];
+  const nextCard = nextId ? document.getElementById(`student-${nextId}`) : null;
+  const card = updateStudentCard(studentId);
+  const hadFocus = document.activeElement === card;
+  if (card.parentElement !== list || card.nextElementSibling !== nextCard) {
+    list.insertBefore(card, nextCard);
+  }
+  if (hadFocus && document.activeElement !== card) card.focus();
+}
+
+function updateBandCount(bandName) {
+  const band = TRIAGE_BANDS.find((candidate) => candidate.name === bandName);
+  if (!band) return;
+  $(band.countId).textContent = studentsInBand(band.name).length;
+}
+
+function renderStudents() {
+  document.querySelectorAll(".student-card[data-student-id]").forEach((card) => {
+    if (!students.has(card.dataset.studentId)) card.remove();
+  });
+  students.forEach((student, studentId) => updateStudentCard(studentId));
+  TRIAGE_BANDS.forEach((band) => {
+    const list = $(band.listId);
+    let cursor = list.firstElementChild;
+    studentsInBand(band.name).forEach(([studentId]) => {
+      const card = document.getElementById(`student-${studentId}`);
+      if (card === cursor) {
+        cursor = cursor.nextElementSibling;
+      } else {
+        list.insertBefore(card, cursor);
+      }
+    });
+    updateBandCount(band.name);
   });
 }
 

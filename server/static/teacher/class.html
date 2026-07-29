@@ -110,8 +110,25 @@
   <div id="live" hidden>
     <div class="live-grid">
       <section aria-labelledby="students-title">
-        <p class="eyebrow" id="students-title">Cadernetas</p>
-        <div class="students-grid" id="students"></div>
+        <p class="eyebrow" id="students-title">Triagem de atenção</p>
+        <div class="triage-board" id="students">
+          <section class="triage-band" aria-labelledby="band-no-signal-title">
+            <h3 id="band-no-signal-title">Sem sinal <span id="band-no-signal-count">0</span></h3>
+            <div class="students-grid" id="band-no-signal"></div>
+          </section>
+          <section class="triage-band" aria-labelledby="band-needs-you-title">
+            <h3 id="band-needs-you-title">Precisa de ti <span id="band-needs-you-count">0</span></h3>
+            <div class="students-grid" id="band-needs-you"></div>
+          </section>
+          <section class="triage-band" aria-labelledby="band-stumbling-title">
+            <h3 id="band-stumbling-title">A tropeçar <span id="band-stumbling-count">0</span></h3>
+            <div class="students-grid" id="band-stumbling"></div>
+          </section>
+          <section class="triage-band" aria-labelledby="band-flowing-title">
+            <h3 id="band-flowing-title">A fluir <span id="band-flowing-count">0</span></h3>
+            <div class="students-grid" id="band-flowing"></div>
+          </section>
+        </div>
         <div class="card spaced-card">
           <p class="eyebrow">Mensagem <span id="msg-target">para a turma</span></p>
           <div class="row message-row">
