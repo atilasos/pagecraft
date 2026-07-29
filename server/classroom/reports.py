@@ -12,7 +12,7 @@ from ..storage import Storage
 from .event_types import SESSION_EVENT_TYPES
 
 
-def _blank_student(name: str, evidence_types: set[str]) -> dict:
+def _blank_student(name: str, evidence_types: tuple[str, ...]) -> dict:
     row = {"display_name": name, "sessions": 0, "correct": 0, "pit_total": 0, "pit_done": 0}
     for event_type in evidence_types:
         row[event_type] = 0
@@ -27,9 +27,9 @@ async def build_class_report(
     date_to: str = "",
 ) -> dict:
     """Relatório agregado. `date_from`/`date_to` são prefixos ISO (ex.: 2026-07)."""
-    evidence_types = {
+    evidence_types = tuple(
         event_type.name for event_type in SESSION_EVENT_TYPES.evidence()
-    }
+    )
     students: dict[str, dict] = {
         s["id"]: _blank_student(s["display_name"], evidence_types)
         for s in class_data["students"]
