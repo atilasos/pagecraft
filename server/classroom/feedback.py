@@ -118,10 +118,11 @@ class FeedbackService:
         key = (session_id, student_id)
         if self._pending[key] >= self.max_pending_per_student:
             # não descartar em silêncio: o professor fica a saber
-            await self.classroom.emit_teacher_event(
+            await self.classroom.emit_event(
                 session_id,
                 "feedback_dropped",
                 {"unit_id": unit_id, "reason": "demasiados pedidos seguidos"},
+                author="assistant",
                 student_id=student_id,
             )
             return
@@ -147,10 +148,11 @@ class FeedbackService:
             except asyncio.CancelledError:
                 raise
             except Exception as exc:  # noqa: BLE001 — worker nunca morre
-                await self.classroom.emit_teacher_event(
+                await self.classroom.emit_event(
                     item["session_id"],
                     "feedback_error",
                     {"error": str(exc), "unit_id": item["unit_id"]},
+                    author="assistant",
                     student_id=item["student_id"],
                 )
             finally:
@@ -184,17 +186,19 @@ class FeedbackService:
             await self._deliver(
                 item["session_id"], item["student_id"], item["unit_id"], TIMEOUT_MESSAGE, source="timeout"
             )
-            await self.classroom.emit_teacher_event(
+            await self.classroom.emit_event(
                 item["session_id"],
                 "feedback_timeout",
                 {"unit_id": item["unit_id"], "error": str(exc), "payload": payload},
+                author="assistant",
                 student_id=item["student_id"],
             )
 
     async def _deliver(self, session_id: str, student_id: str, unit_id: str | None, text: str, source: str) -> None:
-        await self.classroom.emit_teacher_event(
+        await self.classroom.emit_event(
             session_id,
             "ai_feedback",
             {"text": text, "unit_id": unit_id, "source": source},
+            author="assistant",
             student_id=student_id,
         )

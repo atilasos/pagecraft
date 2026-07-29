@@ -94,6 +94,30 @@ async def test_events_have_monotonic_seq_with_join(svc):
     assert accepted[0]["seq"] == 2
 
 
+async def test_internal_emission_rejects_an_undeclared_type(svc):
+    session = await _session(svc)
+
+    with pytest.raises(ValueError, match="não declarado"):
+        await svc.emit_event(
+            session["id"],
+            "tipo_desconhecido",
+            {},
+            author="teacher",
+        )
+
+
+async def test_internal_emission_obeys_the_declared_author(svc):
+    session = await _session(svc)
+
+    with pytest.raises(ValueError, match="não pode emitir"):
+        await svc.emit_event(
+            session["id"],
+            "teacher_message",
+            {"text": "Olá"},
+            author="assistant",
+        )
+
+
 async def test_pit_upsert(svc):
     session = await _session(svc)
     student_id = next(iter(session["roster"]))

@@ -145,7 +145,7 @@ class ClassroomService:
             session["status"] = "closed"
             session["closed_at"] = utcnow()
             await self.storage.write_json(self._session_path(session_id), session)
-        await self.events_log(session_id).append({"type": "session_closed", "student_id": None, "payload": {}})
+        await self.emit_event(session_id, "session_closed", {}, author="session")
         return session
 
     # ---- identidade do aluno ----
@@ -163,8 +163,12 @@ class ClassroomService:
             entry["token"] = token
             entry["claimed_at"] = utcnow()
             await self.storage.write_json(self._session_path(session_id), session)
-        await self.events_log(session_id).append(
-            {"type": "joined", "student_id": student_id, "payload": {"display_name": entry["display_name"]}}
+        await self.emit_event(
+            session_id,
+            "joined",
+            {"display_name": entry["display_name"]},
+            author="session",
+            student_id=student_id,
         )
         return {"student_token": token, "student_id": student_id, "display_name": entry["display_name"]}
 
@@ -179,8 +183,12 @@ class ClassroomService:
             entry["token"] = None
             entry["claimed_at"] = None
             await self.storage.write_json(self._session_path(session_id), session)
-        await self.events_log(session_id).append(
-            {"type": "identity_released", "student_id": student_id, "payload": {}}
+        await self.emit_event(
+            session_id,
+            "identity_released",
+            {},
+            author="teacher",
+            student_id=student_id,
         )
         return True
 
@@ -237,7 +245,20 @@ class ClassroomService:
             accepted.append(record)
         return accepted
 
-    async def emit_teacher_event(self, session_id: str, type_: str, payload: dict, student_id: str | None = None) -> dict:
+    async def emit_event(
+        self,
+        session_id: str,
+        type_: str,
+        payload: dict,
+        *,
+        author: str,
+        student_id: str | None = None,
+    ) -> dict:
+        event_type = SESSION_EVENT_TYPES.get(type_)
+        if event_type is None:
+            raise ValueError(f"tipo de Acontecimento de sessão não declarado: {type_}")
+        if author not in event_type.authors:
+            raise ValueError(f"{author} não pode emitir o Acontecimento de sessão {type_}")
         return await self.events_log(session_id).append(
             {"type": type_, "student_id": student_id, "payload": payload}
         )
@@ -264,7 +285,11 @@ class ClassroomService:
                 session["pit_items"].append(item)
             item.update({"text": text.strip()[:280], "status": status, "updated_at": utcnow()})
             await self.storage.write_json(self._session_path(session_id), session)
-        await self.events_log(session_id).append(
-            {"type": "pit_updated", "student_id": student_id, "payload": dict(item)}
+        await self.emit_event(
+            session_id,
+            "pit_updated",
+            dict(item),
+            author="student",
+            student_id=student_id,
         )
         return item

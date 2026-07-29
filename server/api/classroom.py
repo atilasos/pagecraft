@@ -237,8 +237,12 @@ async def post_events(session_id: str, body: EventsRequest, request: Request):
 
 @router.post("/sessions/{session_id}/message", dependencies=[teacher_only])
 async def teacher_message(session_id: str, body: TeacherMessageRequest, request: Request):
-    record = await _svc(request).emit_teacher_event(
-        session_id, "teacher_message", {"text": body.text}, student_id=body.student_id
+    record = await _svc(request).emit_event(
+        session_id,
+        "teacher_message",
+        {"text": body.text},
+        author="teacher",
+        student_id=body.student_id,
     )
     return record
 
@@ -256,16 +260,21 @@ async def session_control(session_id: str, body: ControlRequest, request: Reques
     if body.student_id and body.student_id not in session.get("roster", {}):
         raise HTTPException(404, "esse aluno não pertence à sessão")
     if body.action == "highlight":
-        record = await svc.emit_teacher_event(
+        record = await svc.emit_event(
             session_id,
             "teacher_highlight",
             {"unit_id": body.unit_id, "unit_label": body.unit_label or ""},
+            author="teacher",
             student_id=body.student_id,
         )
     elif body.action == "freeze":
-        record = await svc.emit_teacher_event(session_id, "freeze_screens", {})
+        record = await svc.emit_event(
+            session_id, "freeze_screens", {}, author="teacher"
+        )
     else:
-        record = await svc.emit_teacher_event(session_id, "unfreeze_screens", {})
+        record = await svc.emit_event(
+            session_id, "unfreeze_screens", {}, author="teacher"
+        )
     return record
 
 
