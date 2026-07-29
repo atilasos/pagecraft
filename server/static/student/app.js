@@ -14,6 +14,7 @@ const $ = (id) => document.getElementById(id);
 const SAVED_KEY = "pagecraft_student";
 let bridgeHandler = null;
 let stream = null;
+let streamRequest = 0;
 let flushTimer = null;
 
 function saveIdentity() {
@@ -139,6 +140,7 @@ function startActivity() {
 }
 
 function stopActivityConnections() {
+  streamRequest += 1;
   if (bridgeHandler) window.removeEventListener("message", bridgeHandler);
   if (stream) stream.close();
   if (flushTimer) clearInterval(flushTimer);
@@ -204,11 +206,7 @@ async function flushOutbox() {
 const STUDENT_EVENT_HANDLERS = {
   ai_feedback(data) {
     showMessage(data.payload.text, "feedback-warn");
-    // reencaminha para a atividade (caixa .ai-feedback)
-    $("activity-frame").contentWindow?.postMessage(
-      { pagecraft: 1, type: "ai_feedback", payload: { text: data.payload.text } },
-      "*"
-    );
+    return { payload: { text: data.payload.text } };
   },
   teacher_message(data) {
     showMessage(`Professor: ${data.payload.text}`, "feedback-ok");
@@ -219,13 +217,9 @@ const STUDENT_EVENT_HANDLERS = {
   },
   teacher_highlight(data) {
     const { unit_id: unitId, unit_label: label } = data.payload || {};
-    // dentro da atividade: brilho âmbar na unidade (se suportado)
-    $("activity-frame").contentWindow?.postMessage(
-      { pagecraft: 1, type: "highlight", unitId },
-      "*"
-    );
     // fallback sempre visível, mesmo em atividades sem suporte
     showMessage(`👀 Olha para: ${label || unitId || "a atividade"}`, "feedback-warn");
+    return { unitId };
   },
   freeze_screens() {
     $("freeze-overlay").hidden = false;
@@ -241,25 +235,81 @@ const STUDENT_EVENT_HANDLERS = {
   },
 };
 
-function dispatchStudentEvent(type, rawData) {
+const FALLBACK_STUDENT_EVENT_TYPES = Object.keys(STUDENT_EVENT_HANDLERS).map((name) => ({
+  name,
+  bridge_name: name === "ai_feedback" ? "ai_feedback" : name === "teacher_highlight" ? "highlight" : null,
+}));
+
+async function loadStudentEventTypes() {
+  try {
+    const resp = await fetch("/api/session-event-types");
+    if (!resp.ok) return FALLBACK_STUDENT_EVENT_TYPES;
+    const declaration = await resp.json();
+    if (!Array.isArray(declaration?.types)) return FALLBACK_STUDENT_EVENT_TYPES;
+    const seen = new Set();
+    return declaration.types
+      .filter((entry) => {
+        if (
+          !entry ||
+          entry.student_visible !== true ||
+          typeof entry.name !== "string" ||
+          !/^[a-z][a-z0-9_]*$/.test(entry.name) ||
+          seen.has(entry.name)
+        ) {
+          return false;
+        }
+        seen.add(entry.name);
+        return true;
+      })
+      .map((entry) => {
+        return {
+          name: entry.name,
+          bridge_name:
+            typeof entry.bridge_name === "string" &&
+            /^[a-z][a-z0-9_]*$/.test(entry.bridge_name)
+              ? entry.bridge_name
+              : null,
+        };
+      });
+  } catch (error) {
+    return FALLBACK_STUDENT_EVENT_TYPES;
+  }
+}
+
+function dispatchStudentEvent(declaration, rawData) {
   try {
     const data = JSON.parse(rawData);
     if (!data || typeof data !== "object" || Array.isArray(data)) return;
     const target = data.student_id;
     if (target != null && target !== state.studentId) return;
-    STUDENT_EVENT_HANDLERS[type]?.(data);
+    const handler = STUDENT_EVENT_HANDLERS[declaration.name];
+    if (!handler) return;
+    const bridgePayload = handler(data);
+    if (declaration.bridge_name && bridgePayload) {
+      $("activity-frame").contentWindow?.postMessage(
+        { pagecraft: 1, type: declaration.bridge_name, ...bridgePayload },
+        "*"
+      );
+    }
   } catch (error) {
     // Um acontecimento incompreensível não pode interromper os seguintes.
   }
 }
 
-function connectStream() {
+async function connectStream() {
+  const request = ++streamRequest;
+  const sessionId = state.session.id;
+  const token = state.token;
+  const eventTypes = await loadStudentEventTypes();
+  if (request !== streamRequest) return;
   const es = new EventSource(
-    `/api/sessions/${state.session.id}/stream?role=student&student_token=${state.token}`
+    `/api/sessions/${sessionId}/stream?role=student&student_token=${token}`
   );
   stream = es;
-  Object.keys(STUDENT_EVENT_HANDLERS).forEach((type) => {
-    es.addEventListener(type, (ev) => dispatchStudentEvent(type, ev.data));
+  eventTypes.forEach((declaration) => {
+    es.addEventListener(declaration.name, (ev) => {
+      dispatchStudentEvent(declaration, ev.data);
+    });
   });
 }
 
