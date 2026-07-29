@@ -68,7 +68,7 @@ def reduce_session(
                 "numbers": _blank_numbers(evidence_types),
                 "_last_presence": None,
                 "_last_work": None,
-                "_explicit_help": False,
+                "_help_since": None,
             },
         )
         event_type = event.get("type")
@@ -83,13 +83,16 @@ def reduce_session(
         ):
             student["_last_presence"] = instant
         if event_type == "help_needed":
-            student["_explicit_help"] = True
+            student["_help_since"] = instant
         if event_type == "joined":
             participants.add(str(student_id))
             if student["_last_work"] is None:
                 student["_last_work"] = instant
         elif event_type in _WORK_EVENT_TYPES and instant is not None:
             student["_last_work"] = instant
+            student["_help_since"] = None
+        elif event_type == "ai_feedback":
+            student["_help_since"] = None
         if event_type not in student["numbers"]["evidence"]:
             continue
         student["numbers"]["evidence"][event_type] += 1
@@ -104,10 +107,15 @@ def reduce_session(
         numbers["correct_attempts"] += student["numbers"]["correct_attempts"]
         presence_wait = _elapsed_seconds(now_instant, student.pop("_last_presence"))
         work_wait = _elapsed_seconds(now_instant, student.pop("_last_work"))
-        explicit_help = student.pop("_explicit_help")
+        help_since = student.pop("_help_since")
+        explicit_help = help_since is not None
+        help_wait = _elapsed_seconds(now_instant, help_since)
         if presence_wait >= 90:
             band, reason = "Sem sinal", "Sem presença"
             wait_seconds = presence_wait
+        elif explicit_help:
+            band, reason = "Precisa de ti", "Pediu ajuda"
+            wait_seconds = max(help_wait, work_wait if work_wait >= 180 else 0)
         elif work_wait >= 180:
             band, reason = "Precisa de ti", "Parado"
             wait_seconds = work_wait

@@ -74,3 +74,19 @@ def test_presence_does_not_count_as_work_and_stopped_starts_at_three_minutes():
         "wait_seconds": 180,
         "explicit_help": False,
     }
+
+
+def test_explicit_help_is_visible_without_a_numeric_priority():
+    state = reduce_session(
+        [event("joined", 0), event("help_needed", 1)],
+        now=datetime(2026, 7, 29, 10, 2, tzinfo=timezone.utc),
+    )
+
+    assert state["students"]["ana"]["triage"] == {
+        "band": "Precisa de ti",
+        "reason": "Pediu ajuda",
+        "wait_seconds": 60,
+        "explicit_help": True,
+    }
+    assert "score" not in state["students"]["ana"]
+    assert "priority" not in state["students"]["ana"]["triage"]
