@@ -1,5 +1,6 @@
 import asyncio
 import json
+from datetime import datetime, timedelta
 
 import httpx
 import pytest
@@ -234,3 +235,110 @@ async def test_live_stream_keeps_raw_timeline_and_emits_only_changed_children(cl
     assert session_delta == {
         "session": {"status": "closed", "closed": True, "frozen": False}
     }
+
+
+async def test_controlled_ticks_publish_stopped_and_no_signal_without_new_work(client):
+    session = await _session(client)
+    student_id = next(iter(session["roster"]))
+    claim = (
+        await client.post(
+        f"/api/sessions/{session['id']}/claim",
+        json={"student_id": student_id},
+        )
+    ).json()
+    svc = client.app.state.classroom
+    records = await svc.events_log(session["id"]).replay()
+    joined_at = datetime.fromisoformat(records[-1]["ts"])
+    clock = {"now": joined_at.isoformat()}
+    svc._clock = lambda: clock["now"]
+
+    teacher_stream = asyncio.create_task(
+        client.get(
+            f"/api/sessions/{session['id']}/stream",
+            params={"role": "teacher"},
+        )
+    )
+    student_stream = asyncio.create_task(
+        client.get(
+            f"/api/sessions/{session['id']}/stream",
+            params={
+                "role": "student",
+                "student_token": claim["student_token"],
+            },
+            headers={"x-teacher-token": ""},
+        )
+    )
+    await asyncio.sleep(0.01)
+    assert svc.live_session_ids() == (session["id"],)
+
+    recent_presence = joined_at + timedelta(seconds=179)
+    await svc.events_log(session["id"]).append(
+        {
+            "type": "heartbeat",
+            "student_id": student_id,
+            "payload": {},
+            "ts": recent_presence.isoformat(),
+        }
+    )
+    await asyncio.sleep(0.01)
+    stopped_at = joined_at + timedelta(seconds=180)
+    clock["now"] = stopped_at.isoformat()
+    svc.tick_session(session["id"], now=clock["now"])
+    await asyncio.sleep(0.01)
+    no_signal_at = joined_at + timedelta(seconds=270)
+    clock["now"] = no_signal_at.isoformat()
+    svc.tick_session(session["id"], now=clock["now"])
+    await asyncio.sleep(0.01)
+    await client.post(f"/api/sessions/{session['id']}/close")
+    responses = await asyncio.gather(teacher_stream, student_stream)
+
+    for response in responses:
+        frames = _sse_frames(response.text)
+        deltas = [
+            frame["data"]["student"]["triage"]
+            for frame in frames
+            if frame["event"] == "student_state_changed"
+        ]
+        assert [(delta["band"], delta["reason"]) for delta in deltas] == [
+        ("Precisa de ti", "Parado"),
+        ("Sem sinal", "Sem presença"),
+        ]
+        assert "heartbeat" not in [frame["event"] for frame in frames]
+    assert svc.live_session_ids() == ()
+
+
+async def test_recorded_close_terminates_stream_when_session_write_fails_and_reconciles(
+    client, monkeypatch
+):
+    session = await _session(client)
+    svc = client.app.state.classroom
+    stream = asyncio.create_task(
+        client.get(
+            f"/api/sessions/{session['id']}/stream",
+            params={"role": "teacher"},
+        )
+    )
+    await asyncio.sleep(0.01)
+    assert svc.live_session_ids() == (session["id"],)
+
+    original_write = svc.storage.write_json
+
+    async def fail_session_write(path, data):
+        if path == svc._session_path(session["id"]):
+            raise OSError("falha depois do registo")
+        return await original_write(path, data)
+
+    monkeypatch.setattr(svc.storage, "write_json", fail_session_write)
+    close = await client.post(f"/api/sessions/{session['id']}/close")
+    response = await stream
+
+    assert close.status_code == 500
+    assert [frame["event"] for frame in _sse_frames(response.text)][-2:] == [
+        "session_closed",
+        "session_state_changed",
+    ]
+    assert svc.live_session_ids() == ()
+
+    monkeypatch.setattr(svc.storage, "write_json", original_write)
+    reconciled = await svc.get_session(session["id"])
+    assert reconciled["status"] == "closed"
