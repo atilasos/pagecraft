@@ -55,27 +55,87 @@
     });
   });
 
+  const PROJECTION_EVENT_HANDLERS = {
+    teacher_highlight(data) {
+      return { unitId: data.payload?.unit_id };
+    },
+    freeze_screens() {
+      frozen = true;
+      freezeBtn.setAttribute("aria-pressed", "true");
+      document.getElementById("freeze-label").textContent = "Libertar os ecrãs";
+    },
+    unfreeze_screens() {
+      frozen = false;
+      freezeBtn.setAttribute("aria-pressed", "false");
+      document.getElementById("freeze-label").textContent = "Olhem para o quadro";
+    },
+    session_closed(_data, stream) {
+      stream.close();
+    },
+  };
+
+  async function loadProjectionEventTypes() {
+    try {
+      const response = await fetch("/api/session-event-types");
+      if (!response.ok) return [];
+      const declaration = await response.json();
+      if (!Array.isArray(declaration?.types)) return [];
+      const seen = new Set();
+      return declaration.types
+        .filter((entry) => {
+          if (
+            !entry ||
+            typeof entry.name !== "string" ||
+            !/^[a-z][a-z0-9_]*$/.test(entry.name) ||
+            seen.has(entry.name)
+          ) {
+            return false;
+          }
+          seen.add(entry.name);
+          return true;
+        })
+        .map((entry) => ({
+          name: entry.name,
+          bridge_name:
+            typeof entry.bridge_name === "string" &&
+            /^[a-z][a-z0-9_]*$/.test(entry.bridge_name)
+              ? entry.bridge_name
+              : null,
+        }));
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function dispatchProjectionEvent(declaration, rawData, stream) {
+    try {
+      const data = JSON.parse(rawData);
+      if (!data || typeof data !== "object" || Array.isArray(data)) return;
+      // A projeção é coletiva: qualquer acontecimento dirigido é privado.
+      if (data.student_id != null) return;
+      const handler = Object.hasOwn(PROJECTION_EVENT_HANDLERS, declaration.name)
+        ? PROJECTION_EVENT_HANDLERS[declaration.name]
+        : null;
+      if (!handler) return;
+      const bridgePayload = handler(data, stream);
+      if (declaration.bridge_name && bridgePayload) {
+        board.contentWindow?.postMessage(
+          { pagecraft: 1, type: declaration.bridge_name, ...bridgePayload },
+          "*"
+        );
+      }
+    } catch (error) {
+      // Um acontecimento incompreensível não pode interromper os seguintes.
+    }
+  }
+
+  const eventTypes = await loadProjectionEventTypes();
   const es = new EventSource(await teacherStreamUrl(`/api/sessions/${sessionId}/stream`));
-  es.addEventListener("teacher_highlight", (ev) => {
-    const data = JSON.parse(ev.data);
-    // só destaques para toda a turma; os dirigidos a um aluno são privados
-    if (data.student_id) return;
-    board.contentWindow?.postMessage(
-      { pagecraft: 1, type: "highlight", unitId: data.payload?.unit_id },
-      "*"
-    );
+  eventTypes.forEach((declaration) => {
+    es.addEventListener(declaration.name, (ev) => {
+      dispatchProjectionEvent(declaration, ev.data, es);
+    });
   });
-  es.addEventListener("freeze_screens", () => {
-    frozen = true;
-    freezeBtn.setAttribute("aria-pressed", "true");
-    document.getElementById("freeze-label").textContent = "Libertar os ecrãs";
-  });
-  es.addEventListener("unfreeze_screens", () => {
-    frozen = false;
-    freezeBtn.setAttribute("aria-pressed", "false");
-    document.getElementById("freeze-label").textContent = "Olhem para o quadro";
-  });
-  es.addEventListener("session_closed", () => es.close());
 })();
 </script>
 </body>
