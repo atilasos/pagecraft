@@ -116,3 +116,31 @@ def test_three_consecutive_failures_stumble_until_a_correct_attempt():
         "explicit_help": False,
     }
     assert recovered["students"]["ana"]["triage"]["band"] == "A fluir"
+
+
+def test_plan_numbers_come_from_the_latest_state_of_each_item():
+    events = [
+        event("joined", 0),
+        event(
+            "pit_updated",
+            1,
+            payload={"id": "p1", "status": "planned"},
+        ),
+        event(
+            "pit_updated",
+            2,
+            payload={"id": "p1", "status": "done"},
+        ),
+        event(
+            "pit_updated",
+            3,
+            payload={"id": "p2", "status": "to_share"},
+        ),
+    ]
+
+    state = reduce_session(events, now=NOW)
+
+    assert state["students"]["ana"]["numbers"]["pit_total"] == 2
+    assert state["students"]["ana"]["numbers"]["pit_done"] == 2
+    assert state["numbers"]["pit_total"] == 2
+    assert state["numbers"]["pit_done"] == 2
