@@ -118,3 +118,80 @@ async def test_report_markdown_renders(env):
     assert "Registo de trabalho — 2.º B" in md
     assert "| Rita |" in md
     assert "Dobros" in md
+
+
+async def test_report_keeps_progress_across_a_default_identity_release(env):
+    storage, svc = env
+    cls = await svc.create_class("3.º C", 3, ["Rui"])
+    session = await _session_with_activity(svc, cls, "Frações")
+    student_id = next(iter(session["roster"]))
+    await svc.claim_identity(session["id"], student_id)
+    await svc.ingest_events(
+        session["id"],
+        student_id,
+        [
+            {"event_id": "old", "type": "attempt", "payload": {"correct": True}},
+            {"event_id": "discovery", "type": "discovery", "payload": {}},
+        ],
+    )
+    await svc.upsert_pit_item(session["id"], student_id, "Explicar", "done")
+    await svc.emit_event(
+        session["id"],
+        "identity_released",
+        {},
+        author="teacher",
+        student_id=student_id,
+    )
+    await svc.ingest_events(
+        session["id"],
+        student_id,
+        [{"event_id": "new", "type": "attempt", "payload": {"correct": False}}],
+    )
+
+    report = await build_class_report(storage, cls, await svc.list_sessions())
+    student = report["students"][0]
+
+    assert student["attempt"] == 2
+    assert student["correct"] == 1
+    assert student["discovery"] == 1
+    assert student["pit_total"] == 1
+    assert student["pit_done"] == 1
+
+
+async def test_report_obeys_an_explicit_progress_reset_frontier(env):
+    storage, svc = env
+    cls = await svc.create_class("3.º D", 3, ["Eva"])
+    session = await _session_with_activity(svc, cls, "Frações")
+    student_id = next(iter(session["roster"]))
+    await svc.claim_identity(session["id"], student_id)
+    await svc.ingest_events(
+        session["id"],
+        student_id,
+        [
+            {"event_id": "old", "type": "attempt", "payload": {"correct": True}},
+            {"event_id": "discovery", "type": "discovery", "payload": {}},
+        ],
+    )
+    await svc.upsert_pit_item(session["id"], student_id, "Antigo", "done")
+    await svc.emit_event(
+        session["id"],
+        "identity_released",
+        {"reset_progress": True},
+        author="teacher",
+        student_id=student_id,
+    )
+    await svc.ingest_events(
+        session["id"],
+        student_id,
+        [{"event_id": "new", "type": "attempt", "payload": {"correct": False}}],
+    )
+    await svc.upsert_pit_item(session["id"], student_id, "Novo", "planned")
+
+    report = await build_class_report(storage, cls, await svc.list_sessions())
+    student = report["students"][0]
+
+    assert student["attempt"] == 1
+    assert student["correct"] == 0
+    assert student["discovery"] == 0
+    assert student["pit_total"] == 1
+    assert student["pit_done"] == 0
