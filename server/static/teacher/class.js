@@ -2,16 +2,15 @@
    cadernetas de alunos com detalhe, chamar a atenção e congelar ecrãs. */
 
 const $ = (id) => document.getElementById(id);
-const students = new Map(); // id → {name, joined, attempts, correct, discoveries, help, lastText, currentUnit, events[]}
+const students = new Map(); // id → projeção viva emitida pelo servidor
 let session = null;
+let liveSessionState = { status: "live", closed: false, frozen: false };
 let units = [];
 let activities = [];
 let pickerState = { search: "", year: null, subject: null, selected: null };
 let messageTarget = null; // null = turma
 let highlightTarget = null; // null = todos
 let drawerStudent = null;
-let frozen = false;
-const STATE_EVENT_TYPES = new Set(["heartbeat"]);
 
 const EVENT_TEXT = {
   joined: () => "entrou na aula",
@@ -240,13 +239,6 @@ async function startLive(s) {
   $("export-link").download = `sessao-${s.id}.json`;
 
   students.clear();
-  Object.entries(s.roster).forEach(([id, e]) => {
-    students.set(id, {
-      name: e.display_name, joined: false, attempts: 0, correct: 0,
-      discoveries: 0, help: false, lastText: "ainda não entrou",
-      currentUnit: null, events: [],
-    });
-  });
   renderPulse();
   renderStudents();
   loadUnits(s.activity_slug);
@@ -254,17 +246,59 @@ async function startLive(s) {
   const eventTypes = await loadPanelEventTypes();
   const es = new EventSource(await teacherStreamUrl(`/api/sessions/${s.id}/stream`));
   es.onmessage = () => {};
+  addJsonListener(es, "session_state_snapshot", (data) => applySnapshot(data, es));
+  addJsonListener(es, "student_state_changed", applyStudentState);
+  addJsonListener(es, "session_state_changed", (data) => applySessionState(data, es));
   eventTypes.forEach((type) => {
-    es.addEventListener(type, (ev) => {
-      try {
-        const data = JSON.parse(ev.data);
-        if (!data || typeof data !== "object" || Array.isArray(data)) return;
-        handleEvent(type, { ...data, type }, es);
-      } catch (error) {
-        // Um acontecimento incompreensível não pode interromper os seguintes.
-      }
-    });
+    addJsonListener(es, type, (data) => handleEvent(type, { ...data, type }));
   });
+}
+
+function addJsonListener(es, type, listener) {
+  es.addEventListener(type, (ev) => {
+    try {
+      const data = JSON.parse(ev.data);
+      if (!data || typeof data !== "object" || Array.isArray(data)) return;
+      listener(data);
+    } catch (error) {
+      // Um frame incompreensível não pode interromper os seguintes.
+    }
+  });
+}
+
+function applySnapshot(snapshot, es) {
+  if (!snapshot.students || typeof snapshot.students !== "object" || Array.isArray(snapshot.students)) return;
+  students.clear();
+  Object.entries(snapshot.students).forEach(([studentId, student]) => {
+    if (student && typeof student === "object" && !Array.isArray(student)) {
+      students.set(studentId, student);
+    }
+  });
+  renderStudents();
+  renderPulse();
+  applySessionState(snapshot, es);
+  if (drawerStudent) fillDrawer(drawerStudent);
+}
+
+function applyStudentState(delta) {
+  if (
+    typeof delta.student_id !== "string" ||
+    !delta.student ||
+    typeof delta.student !== "object" ||
+    Array.isArray(delta.student)
+  ) return;
+  students.set(delta.student_id, delta.student);
+  renderStudents();
+  renderPulse();
+  if (drawerStudent === delta.student_id) fillDrawer(delta.student_id);
+}
+
+function applySessionState(delta, es) {
+  const next = delta.session;
+  if (!next || typeof next !== "object" || Array.isArray(next)) return;
+  liveSessionState = { ...next };
+  reflectFreeze(next.frozen === true);
+  if (next.closed === true) es.close();
 }
 
 async function loadPanelEventTypes() {
@@ -281,7 +315,7 @@ async function loadPanelEventTypes() {
               entry &&
               typeof entry.name === "string" &&
               /^[a-z][a-z0-9_]*$/.test(entry.name) &&
-              (entry.timeline === true || STATE_EVENT_TYPES.has(entry.name))
+              entry.timeline === true
           )
           .map((entry) => entry.name)
       ),
@@ -293,7 +327,7 @@ async function loadPanelEventTypes() {
 }
 
 function fallbackPanelEventTypes() {
-  return [...new Set([...Object.keys(EVENT_TEXT), ...STATE_EVENT_TYPES])];
+  return Object.keys(EVENT_TEXT).filter((type) => type !== "heartbeat");
 }
 
 async function loadUnits(slug) {
@@ -346,13 +380,13 @@ async function sendHighlight(unitId, label) {
 function setHighlightTarget(studentId) {
   highlightTarget = studentId;
   $("highlight-target-label").textContent = studentId
-    ? `de ${students.get(studentId)?.name || "?"}`
+    ? `de ${students.get(studentId)?.display_name || "?"}`
     : "de todos";
 }
 
 $("freeze-btn").addEventListener("click", async () => {
   if (!session) return;
-  const action = frozen ? "unfreeze" : "freeze";
+  const action = liveSessionState.frozen ? "unfreeze" : "freeze";
   await tfetch(`/api/sessions/${session.id}/control`, {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -362,68 +396,32 @@ $("freeze-btn").addEventListener("click", async () => {
 });
 
 function reflectFreeze(state) {
-  frozen = state;
   $("freeze-btn").setAttribute("aria-pressed", String(state));
   $("freeze-label").textContent = state ? "Libertar os ecrãs" : "Olhem para o quadro";
 }
 
 /* ---------- eventos ---------- */
 
-function handleEvent(type, record, es) {
+function handleEvent(type, record) {
   const st = record.student_id ? students.get(record.student_id) : null;
   const text = eventText(type, record);
-  if (st) {
-    st.events.push(record);
-    if (st.events.length > 300) st.events.shift();
-    if (text) st.lastText = text;
-    if (type === "joined" || type === "activity_loaded" || type === "heartbeat") st.joined = true;
-    if (type === "unit_started") st.currentUnit = record.unit_id || record.payload?.unit_id;
-    if (type === "attempt") {
-      st.attempts += 1;
-      if (record.payload?.correct) st.correct += 1;
-    }
-    if (type === "discovery") st.discoveries += 1;
-    if (type === "help_needed" || type === "feedback_timeout") st.help = true;
-    if (type === "attempt" || type === "discovery" || type === "ai_feedback") st.help = false;
-    if (type === "identity_released") {
-      // outro dispositivo pode reclamar esta identidade: não herdar histórico
-      st.joined = false;
-      st.help = false;
-      st.currentUnit = null;
-      st.attempts = 0;
-      st.correct = 0;
-      st.discoveries = 0;
-      st.events = [];
-      if (messageTarget === record.student_id) {
-        messageTarget = null;
-        $("msg-target").textContent = "para a turma";
-      }
-      if (highlightTarget === record.student_id) setHighlightTarget(null);
-      if (drawerStudent === record.student_id) {
-        $("drawer").classList.remove("open");
-        drawerStudent = null;
-      }
-    }
-    blip(record.student_id, type);
-  }
-  if (type === "freeze_screens") reflectFreeze(true);
-  if (type === "unfreeze_screens") reflectFreeze(false);
-  if (type !== "heartbeat" && text) {
+  if (st) blip(record.student_id, type);
+  if (text) {
     const li = document.createElement("li");
     const t = document.createElement("span");
     t.className = "t";
     t.textContent = new Date(record.ts).toLocaleTimeString("pt-PT", { hour: "2-digit", minute: "2-digit" });
     const body = document.createElement("span");
-    body.textContent = `${st ? st.name + " · " : ""}${text}`;
+    body.textContent = `${st ? st.display_name + " · " : ""}${text}`;
     li.append(t, body);
     $("timeline").prepend(li);
   }
-  renderStudents();
-  renderPulse();
-  if (drawerStudent && record.student_id === drawerStudent) fillDrawer(drawerStudent);
-  if (type === "session_closed") {
-    reflectFreeze(false);
-    es.close();
+  if (type === "identity_released") {
+    if (messageTarget === record.student_id) {
+      messageTarget = null;
+      $("msg-target").textContent = "para a turma";
+    }
+    if (highlightTarget === record.student_id) setHighlightTarget(null);
   }
 }
 
@@ -452,9 +450,11 @@ function renderPulse() {
   el.innerHTML = "";
   students.forEach((st, id) => {
     const dot = document.createElement("span");
-    dot.className = "dot" + (st.help ? " help" : st.joined ? " on" : "");
+    dot.className =
+      "dot" +
+      (st.triage?.explicit_help ? " help" : st.participated ? " on" : "");
     dot.id = `dot-${id}`;
-    dot.title = st.name;
+    dot.title = st.display_name || id;
     el.appendChild(dot);
   });
 }
@@ -463,22 +463,25 @@ function renderStudents() {
   const grid = $("students");
   grid.innerHTML = "";
   students.forEach((st, id) => {
+    const numbers = st.numbers || {};
+    const evidence = numbers.evidence || {};
     const card = document.createElement("button");
     card.type = "button";
     card.className =
-      "student-card" + (st.help ? " help" : "") + (st.joined ? " on" : " away");
+      "student-card" +
+      (st.triage?.explicit_help ? " help" : "") +
+      (st.participated ? " on" : " away");
     card.id = `student-${id}`;
     card.innerHTML = `
-      <h3><span class="presence" aria-hidden="true"></span>${esc(st.name)}</h3>
+      <h3><span class="presence" aria-hidden="true"></span>${esc(st.display_name || id)}</h3>
       <div class="counts">
-        <span class="pill ok">${st.correct}✓</span>
-        <span class="pill">${st.attempts} tent.</span>
-        <span class="pill ok">${st.discoveries} desc.</span>
+        <span class="pill ok">${numbers.correct_attempts || 0}✓</span>
+        <span class="pill">${evidence.attempt || 0} tent.</span>
+        <span class="pill ok">${evidence.discovery || 0} desc.</span>
       </div>
       <p class="last"></p>`;
-    card.querySelector(".last").textContent = st.currentUnit
-      ? `${unitLabel(st.currentUnit)} · ${st.lastText}`
-      : st.lastText;
+    card.querySelector(".last").textContent =
+      `${st.triage?.reason || "Sem estado"} · ${st.triage?.wait_seconds || 0} s`;
     card.addEventListener("click", () => openDrawer(id));
     grid.appendChild(card);
   });
@@ -495,28 +498,16 @@ function openDrawer(studentId) {
 function fillDrawer(studentId) {
   const st = students.get(studentId);
   if (!st) return;
-  $("drawer-name").textContent = st.name;
-  $("drawer-now").textContent = st.joined
-    ? st.currentUnit
-      ? `Agora em ${unitLabel(st.currentUnit)}`
-      : "Na atividade"
-    : "Ainda não entrou";
+  const numbers = st.numbers || {};
+  const evidence = numbers.evidence || {};
+  $("drawer-name").textContent = st.display_name || studentId;
+  $("drawer-now").textContent =
+    `${st.triage?.band || "Sem estado"} · ${st.triage?.reason || ""}`;
   $("drawer-counts").innerHTML = `
-    <span class="pill ok">${st.correct} certas</span>
-    <span class="pill">${st.attempts} tentativas</span>
-    <span class="pill ok">${st.discoveries} descobertas</span>
-    ${st.help ? '<span class="pill warn">precisa de ajuda</span>' : ""}`;
-  const list = $("drawer-events");
-  list.innerHTML = "";
-  [...st.events].reverse().slice(0, 40).forEach((record) => {
-    const text = eventText(record.type, record);
-    if (!text) return;
-    const li = document.createElement("li");
-    const when = new Date(record.ts).toLocaleTimeString("pt-PT", { hour: "2-digit", minute: "2-digit" });
-    li.textContent = `${when} · ${text}`;
-    list.appendChild(li);
-  });
-  if (!list.children.length) list.innerHTML = '<li class="muted">ainda sem atividade</li>';
+    <span class="pill ok">${numbers.correct_attempts || 0} certas</span>
+    <span class="pill">${evidence.attempt || 0} tentativas</span>
+    <span class="pill ok">${evidence.discovery || 0} descobertas</span>
+    ${st.triage?.explicit_help ? '<span class="pill warn">pediu ajuda</span>' : ""}`;
 }
 
 $("drawer-close").addEventListener("click", () => {
@@ -526,7 +517,7 @@ $("drawer-close").addEventListener("click", () => {
 $("drawer-msg").addEventListener("click", () => {
   const st = students.get(drawerStudent);
   messageTarget = drawerStudent;
-  $("msg-target").textContent = st ? `para ${st.name}` : "para a turma";
+  $("msg-target").textContent = st ? `para ${st.display_name}` : "para a turma";
   $("drawer").classList.remove("open");
   drawerStudent = null;
   $("msg-text").focus();
