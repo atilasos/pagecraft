@@ -17,7 +17,7 @@ from ..classroom.errors import (
     StudentNotInRosterError,
 )
 from ..classroom.event_types import SESSION_EVENT_TYPES
-from ..classroom.live_state import session_state_snapshot
+from ..classroom.live_state import changed_student_frames, session_state_snapshot
 from ..events import utcnow
 from ..security import require_teacher
 
@@ -362,7 +362,9 @@ async def stream_session(session_id: str, request: Request):
         raise HTTPException(400, "role tem de ser teacher ou student")
 
     visible_types = {
-        event_type.name for event_type in SESSION_EVENT_TYPES.visible_to(role)
+        event_type.name
+        for event_type in SESSION_EVENT_TYPES.visible_to(role)
+        if event_type.in_timeline
     }
     log = svc.events_log(session_id)
     events = await log.replay()
@@ -377,7 +379,7 @@ async def stream_session(session_id: str, request: Request):
         return target is None or target == student_id
 
     async def gen():
-        snapshot = session_state_snapshot(
+        state = session_state_snapshot(
             events,
             session,
             now=utcnow(),
@@ -387,9 +389,9 @@ async def stream_session(session_id: str, request: Request):
         yield (
             f"id: {frontier}\n"
             "event: session_state_snapshot\n"
-            f"data: {json.dumps(snapshot, ensure_ascii=False)}\n\n"
+            f"data: {json.dumps(state, ensure_ascii=False)}\n\n"
         )
-        if snapshot["session"]["closed"]:
+        if state["session"]["closed"]:
             return
 
         async for record in log.subscribe(frontier):
@@ -399,13 +401,26 @@ async def stream_session(session_id: str, request: Request):
                 current = await svc.student_for_token(session_id, token, require_live=False)
                 if current != student_id:
                     break
-            if not visible(record):
-                continue
-            yield (
-                f"id: {record['seq']}\n"
-                f"event: {record['type']}\n"
-                f"data: {json.dumps(record, ensure_ascii=False)}\n\n"
+            events.append(record)
+            if visible(record):
+                yield (
+                    f"id: {record['seq']}\n"
+                    f"event: {record['type']}\n"
+                    f"data: {json.dumps(record, ensure_ascii=False)}\n\n"
+                )
+            current_state = session_state_snapshot(
+                events,
+                session,
+                now=utcnow(),
+                role=role,
+                student_id=student_id,
             )
+            for delta in changed_student_frames(state, current_state):
+                yield (
+                    "event: student_state_changed\n"
+                    f"data: {json.dumps(delta, ensure_ascii=False)}\n\n"
+                )
+            state = current_state
             if record.get("type") == "session_closed":
                 break
 

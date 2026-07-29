@@ -63,3 +63,14 @@ def session_state_snapshot(
     if role == "teacher":
         snapshot["numbers"] = state["numbers"]
     return snapshot
+
+
+def changed_student_frames(previous: Mapping, current: Mapping) -> list[dict]:
+    """Compara duas projeções autorizadas sem expor alunos fora delas."""
+    before = previous.get("students", {})
+    after = current.get("students", {})
+    return [
+        {"student_id": student_id, "student": student}
+        for student_id, student in after.items()
+        if before.get(student_id) != student
+    ]
