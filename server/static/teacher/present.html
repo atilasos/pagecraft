@@ -74,12 +74,19 @@
     },
   };
 
+  const FALLBACK_PROJECTION_EVENT_TYPES = Object.keys(PROJECTION_EVENT_HANDLERS).map(
+    (name) => ({
+      name,
+      bridge_name: name === "teacher_highlight" ? "highlight" : null,
+    })
+  );
+
   async function loadProjectionEventTypes() {
     try {
       const response = await fetch("/api/session-event-types");
-      if (!response.ok) return [];
+      if (!response.ok) return FALLBACK_PROJECTION_EVENT_TYPES;
       const declaration = await response.json();
-      if (!Array.isArray(declaration?.types)) return [];
+      if (!Array.isArray(declaration?.types)) return FALLBACK_PROJECTION_EVENT_TYPES;
       const seen = new Set();
       return declaration.types
         .filter((entry) => {
@@ -103,7 +110,7 @@
               : null,
         }));
     } catch (error) {
-      return [];
+      return FALLBACK_PROJECTION_EVENT_TYPES;
     }
   }
 
