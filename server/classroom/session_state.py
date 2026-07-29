@@ -51,6 +51,7 @@ def _blank_student(
 ) -> dict:
     student = {
         "numbers": _blank_numbers(evidence_types),
+        "participated": False,
         "_last_presence": anchor,
         "_last_work": anchor,
         "_help_since": None,
@@ -118,6 +119,7 @@ def reduce_session(
             student["_help_since"] = instant
         if event_type == "joined":
             participants.add(str(student_id))
+            student["participated"] = True
             display_name = (event.get("payload") or {}).get("display_name")
             if display_name and "display_name" not in student:
                 student["display_name"] = str(display_name)

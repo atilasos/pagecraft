@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from ..storage import Storage
 from .event_types import SESSION_EVENT_TYPES
+from .session_state import reduce_session
 
 
 def _blank_student(name: str, evidence_types: tuple[str, ...]) -> dict:
@@ -48,49 +49,42 @@ async def build_class_report(
         events = await storage.read_jsonl(
             storage.path("sessions", session["id"], "events.jsonl")
         )
-        participants: set[str] = set()
+        reduction_now = (
+            session.get("closed_at")
+            or (events[-1].get("ts") if events else None)
+            or started
+            or "1970-01-01T00:00:00+00:00"
+        )
+        state = reduce_session(
+            events,
+            now=reduction_now,
+            roster=session.get("roster", {}),
+            started_at=started or None,
+        )
+        numbers = state["numbers"]
         row = {
             "session_id": session["id"],
             "activity_title": session.get("activity_title", ""),
             "started_at": started,
             "status": session.get("status", ""),
-            "participants": 0,
-            "attempts": 0,
-            "discoveries": 0,
-            "help_needed": 0,
+            "participants": numbers["participants"],
+            "attempts": numbers["evidence"]["attempt"],
+            "discoveries": numbers["evidence"]["discovery"],
+            "help_needed": numbers["evidence"]["help_needed"],
         }
-        for ev in events:
-            sid = ev.get("student_id")
-            ev_type = ev.get("type", "")
-            st = students.get(sid) if sid else None
-            if st is not None and ev_type == "joined":
-                participants.add(sid)
+        for student_id, student_state in state["students"].items():
+            st = students.get(student_id)
             if st is None:
                 continue
-            if ev_type not in evidence_types:
-                continue
-            st[ev_type] += 1
-            if ev_type == "attempt":
-                row["attempts"] += 1
-                if (ev.get("payload") or {}).get("correct"):
-                    st["correct"] += 1
-            elif ev_type == "discovery":
-                row["discoveries"] += 1
-            elif ev_type == "help_needed":
-                row["help_needed"] += 1
-
-        for sid in participants:
-            students[sid]["sessions"] += 1
-        row["participants"] = len(participants)
+            student_numbers = student_state["numbers"]
+            if student_state["participated"]:
+                st["sessions"] += 1
+            for event_type, count in student_numbers["evidence"].items():
+                st[event_type] += count
+            st["correct"] += student_numbers["correct_attempts"]
+            st["pit_total"] += student_numbers["pit_total"]
+            st["pit_done"] += student_numbers["pit_done"]
         session_rows.append(row)
-
-        for item in session.get("pit_items", []):
-            st = students.get(item.get("student_id"))
-            if st is None:
-                continue
-            st["pit_total"] += 1
-            if item.get("status") in ("done", "to_share"):
-                st["pit_done"] += 1
 
     session_rows.sort(key=lambda r: r["started_at"])
     return {

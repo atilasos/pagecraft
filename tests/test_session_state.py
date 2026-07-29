@@ -29,6 +29,7 @@ def test_reduction_is_deterministic_and_counts_declared_evidence():
     assert first == second
     assert first["students"]["ana"]["numbers"]["evidence"]["attempt"] == 1
     assert first["students"]["ana"]["numbers"]["evidence"]["discovery"] == 1
+    assert first["students"]["ana"]["participated"] is True
     assert "teacher_message" not in first["students"]["ana"]["numbers"]["evidence"]
     assert first["numbers"]["evidence"]["attempt"] == 1
     assert first["numbers"]["correct_attempts"] == 1
@@ -155,6 +156,7 @@ def test_roster_student_without_events_uses_session_start_as_time_anchor():
     )
 
     assert state["students"]["beatriz"]["display_name"] == "Beatriz"
+    assert state["students"]["beatriz"]["participated"] is False
     assert state["students"]["beatriz"]["triage"]["band"] == "Sem sinal"
     assert state["students"]["beatriz"]["triage"]["wait_seconds"] == 90
     assert state["students"]["beatriz"]["numbers"]["evidence"]["attempt"] == 0
