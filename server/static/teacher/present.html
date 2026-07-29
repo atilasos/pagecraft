@@ -202,7 +202,9 @@
   }
 
   const eventTypes = await loadProjectionEventTypes();
-  const es = new EventSource(await teacherStreamUrl(`/api/sessions/${sessionId}/stream`));
+  const es = new EventSource(
+    await teacherStreamUrl(`/api/sessions/${sessionId}/stream`, "projection")
+  );
   es.addEventListener("session_state_snapshot", (ev) => {
     applyProjectedSessionState(ev.data, es);
   });

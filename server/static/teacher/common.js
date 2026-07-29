@@ -34,8 +34,8 @@ async function tfetch(url, opts = {}) {
   return resp;
 }
 
-async function teacherStreamUrl(path) {
+async function teacherStreamUrl(path, role = "teacher") {
   const token = await teacherToken();
   const sep = path.includes("?") ? "&" : "?";
-  return `${path}${sep}role=teacher&teacher_token=${encodeURIComponent(token)}`;
+  return `${path}${sep}role=${encodeURIComponent(role)}&teacher_token=${encodeURIComponent(token)}`;
 }
