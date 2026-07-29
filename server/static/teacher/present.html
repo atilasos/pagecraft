@@ -15,9 +15,9 @@
     </div>
     <div class="type-blocks" id="join-code" aria-label="Código de entrada"></div>
     <span class="spacer"></span>
-    <button type="button" class="freeze-switch" id="freeze-btn" aria-pressed="false">
+    <button type="button" class="freeze-switch" id="freeze-btn" aria-pressed="false" disabled>
       <span class="knob" aria-hidden="true">👀</span>
-      <span id="freeze-label">Olhem para o quadro</span>
+      <span id="freeze-label">A sincronizar…</span>
     </button>
   </header>
   <iframe id="board" title="Atividade projetada" sandbox="allow-scripts" tabindex="-1"></iframe>
@@ -45,33 +45,98 @@
   const board = document.getElementById("board");
   board.src = `/activities/${encodeURIComponent(session.activity_slug)}/`;
 
-  let frozen = false;
+  let projectedSessionState = null;
+  let freezeRequestPending = false;
   const freezeBtn = document.getElementById("freeze-btn");
   freezeBtn.addEventListener("click", async () => {
-    await tfetch(`/api/sessions/${sessionId}/control`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ action: frozen ? "unfreeze" : "freeze" }),
-    });
+    if (
+      !projectedSessionState ||
+      projectedSessionState.status !== "live" ||
+      projectedSessionState.closed ||
+      freezeRequestPending
+    ) {
+      return;
+    }
+    const stateUsedForAction = projectedSessionState;
+    freezeRequestPending = true;
+    renderProjectedSessionState();
+    try {
+      const response = await tfetch(`/api/sessions/${sessionId}/control`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          action: stateUsedForAction.frozen ? "unfreeze" : "freeze",
+        }),
+      });
+      if (!response.ok && projectedSessionState === stateUsedForAction) {
+        freezeRequestPending = false;
+        renderProjectedSessionState();
+      }
+    } catch (error) {
+      if (projectedSessionState === stateUsedForAction) {
+        freezeRequestPending = false;
+        renderProjectedSessionState();
+      }
+    }
   });
+
+  function renderProjectedSessionState() {
+    const state = projectedSessionState;
+    if (!state) {
+      freezeBtn.disabled = true;
+      freezeBtn.setAttribute("aria-pressed", "false");
+      document.getElementById("freeze-label").textContent = "A sincronizar…";
+      return;
+    }
+    freezeBtn.setAttribute("aria-pressed", String(state.frozen));
+    if (state.closed) {
+      freezeBtn.disabled = true;
+      document.getElementById("freeze-label").textContent = "Sessão terminada";
+      return;
+    }
+    if (state.status !== "live") {
+      freezeBtn.disabled = true;
+      document.getElementById("freeze-label").textContent = "Sessão indisponível";
+      return;
+    }
+    freezeBtn.disabled = freezeRequestPending;
+    document.getElementById("freeze-label").textContent =
+      state.frozen ? "Libertar os ecrãs" : "Olhem para o quadro";
+  }
+
+  function applyProjectedSessionState(rawData, stream) {
+    try {
+      const data = JSON.parse(rawData);
+      const state = data?.session;
+      if (
+        !state ||
+        typeof state !== "object" ||
+        Array.isArray(state) ||
+        typeof state.status !== "string" ||
+        typeof state.frozen !== "boolean"
+      ) {
+        return;
+      }
+      projectedSessionState = {
+        status: state.status,
+        closed: state.closed === true || state.status === "closed",
+        frozen: state.frozen,
+      };
+      freezeRequestPending = false;
+      renderProjectedSessionState();
+      if (projectedSessionState.closed) stream.close();
+    } catch (error) {
+      // Um instantâneo incompreensível mantém o controlo bloqueado.
+    }
+  }
 
   const PROJECTION_EVENT_HANDLERS = {
     teacher_highlight(data) {
       return { unitId: data.payload?.unit_id };
     },
-    freeze_screens() {
-      frozen = true;
-      freezeBtn.setAttribute("aria-pressed", "true");
-      document.getElementById("freeze-label").textContent = "Libertar os ecrãs";
-    },
-    unfreeze_screens() {
-      frozen = false;
-      freezeBtn.setAttribute("aria-pressed", "false");
-      document.getElementById("freeze-label").textContent = "Olhem para o quadro";
-    },
-    session_closed(_data, stream) {
-      stream.close();
-    },
+    freeze_screens() {},
+    unfreeze_screens() {},
+    session_closed() {},
   };
 
   const FALLBACK_PROJECTION_EVENT_TYPES = Object.keys(PROJECTION_EVENT_HANDLERS).map(
@@ -138,6 +203,17 @@
 
   const eventTypes = await loadProjectionEventTypes();
   const es = new EventSource(await teacherStreamUrl(`/api/sessions/${sessionId}/stream`));
+  es.addEventListener("session_state_snapshot", (ev) => {
+    applyProjectedSessionState(ev.data, es);
+  });
+  es.addEventListener("session_state_changed", (ev) => {
+    applyProjectedSessionState(ev.data, es);
+  });
+  es.addEventListener("error", () => {
+    projectedSessionState = null;
+    freezeRequestPending = false;
+    renderProjectedSessionState();
+  });
   eventTypes.forEach((declaration) => {
     es.addEventListener(declaration.name, (ev) => {
       dispatchProjectionEvent(declaration, ev.data, es);
