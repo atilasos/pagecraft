@@ -90,3 +90,29 @@ def test_explicit_help_is_visible_without_a_numeric_priority():
     }
     assert "score" not in state["students"]["ana"]
     assert "priority" not in state["students"]["ana"]["triage"]
+
+
+def test_three_consecutive_failures_stumble_until_a_correct_attempt():
+    failures = [
+        event("joined", 0),
+        event("attempt", 0, payload={"correct": False}),
+        event("attempt", 1, payload={"correct": False}),
+        event("attempt", 2, payload={"correct": False}),
+    ]
+
+    stumbling = reduce_session(
+        failures,
+        now=datetime(2026, 7, 29, 10, 2, tzinfo=timezone.utc),
+    )
+    recovered = reduce_session(
+        [*failures, event("attempt", 3, payload={"correct": True})],
+        now=datetime(2026, 7, 29, 10, 3, tzinfo=timezone.utc),
+    )
+
+    assert stumbling["students"]["ana"]["triage"] == {
+        "band": "A tropeçar",
+        "reason": "Três falhas consecutivas",
+        "wait_seconds": 120,
+        "explicit_help": False,
+    }
+    assert recovered["students"]["ana"]["triage"]["band"] == "A fluir"

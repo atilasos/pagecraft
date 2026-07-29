@@ -69,6 +69,8 @@ def reduce_session(
                 "_last_presence": None,
                 "_last_work": None,
                 "_help_since": None,
+                "_consecutive_failures": 0,
+                "_failures_since": None,
             },
         )
         event_type = event.get("type")
@@ -93,6 +95,15 @@ def reduce_session(
             student["_help_since"] = None
         elif event_type == "ai_feedback":
             student["_help_since"] = None
+        if event_type == "attempt":
+            correct = (event.get("payload") or {}).get("correct")
+            if correct is True:
+                student["_consecutive_failures"] = 0
+                student["_failures_since"] = None
+            elif correct is False:
+                if student["_consecutive_failures"] == 0:
+                    student["_failures_since"] = instant
+                student["_consecutive_failures"] += 1
         if event_type not in student["numbers"]["evidence"]:
             continue
         student["numbers"]["evidence"][event_type] += 1
@@ -110,6 +121,10 @@ def reduce_session(
         help_since = student.pop("_help_since")
         explicit_help = help_since is not None
         help_wait = _elapsed_seconds(now_instant, help_since)
+        consecutive_failures = student.pop("_consecutive_failures")
+        failures_wait = _elapsed_seconds(
+            now_instant, student.pop("_failures_since")
+        )
         if presence_wait >= 90:
             band, reason = "Sem sinal", "Sem presença"
             wait_seconds = presence_wait
@@ -119,6 +134,9 @@ def reduce_session(
         elif work_wait >= 180:
             band, reason = "Precisa de ti", "Parado"
             wait_seconds = work_wait
+        elif consecutive_failures >= 3:
+            band, reason = "A tropeçar", "Três falhas consecutivas"
+            wait_seconds = failures_wait
         else:
             band, reason = "A fluir", "A trabalhar"
             wait_seconds = work_wait
