@@ -106,12 +106,33 @@ async def test_full_classroom_flow(client):
     assert "metade" in record["payload"]["text"]
     assert client.app.state.feedback.provider.calls == 1
 
-    # PIT do aluno
+    # o cliente não pode escolher o estado inicial
     resp = await client.post(
         f"/api/sessions/{session['id']}/pit",
         json={"student_token": claim["student_token"], "text": "Acabar os dobros", "status": "doing"},
     )
+    assert resp.status_code == 422
+
+    # o servidor cria em "por fazer" e decide cada transição, incluindo o
+    # recuo seguro de "para partilhar" para "feito"
+    resp = await client.post(
+        f"/api/sessions/{session['id']}/pit",
+        json={"student_token": claim["student_token"], "text": "Acabar os dobros"},
+    )
     assert resp.status_code == 200
+    item = resp.json()
+    assert item["status"] == "planned"
+
+    statuses = []
+    for _ in range(4):
+        resp = await client.post(
+            f"/api/sessions/{session['id']}/pit/{item['id']}/advance",
+            json={"student_token": claim["student_token"]},
+        )
+        assert resp.status_code == 200
+        item = resp.json()
+        statuses.append(item["status"])
+    assert statuses == ["doing", "done", "to_share", "done"]
 
     # fechar sessão
     resp = await client.post(f"/api/sessions/{session['id']}/close")
