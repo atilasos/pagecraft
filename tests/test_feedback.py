@@ -29,6 +29,13 @@ class SlowProvider:
         raise ProviderTimeout("demorou demasiado")
 
 
+class BrokenProvider:
+    name = "fake"
+
+    async def complete(self, prompt, *, schema=None, system=None, timeout_s=20, workdir=None):
+        raise RuntimeError("provider indisponível")
+
+
 class BlockingProvider:
     name = "fake"
 
@@ -104,6 +111,7 @@ async def test_feedback_delivered(env):
     provider = GoodProvider()
     fb = FeedbackService(config, storage, classroom, provider)
     session, student_id = await _session_with_student(classroom)
+    fb.start()
     fb.start()
     await _register_feedback(
         classroom,
@@ -210,6 +218,28 @@ async def test_feedback_timeout_fallback(env):
     assert record["payload"]["source"] == "timeout"
     timeout_alert = await _wait_event(storage, session["id"], "feedback_timeout")
     assert timeout_alert["student_id"] == student_id
+    await fb.stop()
+
+
+async def test_feedback_failure_is_registered(env):
+    config, storage, hub, classroom = env
+    fb = FeedbackService(config, storage, classroom, BrokenProvider())
+    session, student_id = await _session_with_student(classroom)
+    fb.start()
+    await _register_feedback(
+        classroom,
+        session["id"],
+        student_id,
+        "feedback-error",
+        {"question": "q", "answer": "y"},
+    )
+
+    error = await _wait_event(storage, session["id"], "feedback_error")
+    assert error["student_id"] == student_id
+    assert error["payload"] == {
+        "error": "provider indisponível",
+        "unit_id": "u1",
+    }
     await fb.stop()
 
 
