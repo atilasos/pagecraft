@@ -392,6 +392,59 @@ async def test_class_report_endpoint(client):
     assert resp.status_code == 401
 
 
+async def test_release_http_defaults_to_keep_and_accepts_an_explicit_reset(client):
+    cls = (
+        await client.post(
+            "/api/classes",
+            json={"name": "3.º F", "year": 3, "students": ["Ana", "Bia"]},
+        )
+    ).json()
+    session = (
+        await client.post(
+            "/api/sessions",
+            json={
+                "class_id": cls["id"],
+                "activity_slug": "demo",
+                "activity_title": "Frações",
+            },
+        )
+    ).json()
+    claims = {}
+    for student_id in session["roster"]:
+        claims[student_id] = (
+            await client.post(
+                f"/api/sessions/{session['id']}/claim",
+                json={"student_id": student_id},
+            )
+        ).json()
+        await client.post(
+            f"/api/sessions/{session['id']}/events",
+            json={
+                "student_token": claims[student_id]["student_token"],
+                "events": [
+                    {
+                        "event_id": f"attempt-{student_id}",
+                        "type": "attempt",
+                        "payload": {"correct": True},
+                    }
+                ],
+            },
+        )
+    ana_id, bia_id = session["roster"]
+    kept = await client.post(f"/api/sessions/{session['id']}/release/{ana_id}")
+    reset = await client.post(
+        f"/api/sessions/{session['id']}/release/{bia_id}",
+        json={"reset_progress": True},
+    )
+
+    assert kept.status_code == 200
+    assert reset.status_code == 200
+    report = (await client.get(f"/api/classes/{cls['id']}/report")).json()
+    students = {student["display_name"]: student for student in report["students"]}
+    assert students["Ana"]["attempt"] == 1
+    assert students["Bia"]["attempt"] == 0
+
+
 async def test_session_control_events(client):
     cls = (await client.post("/api/classes", json={"name": "3.º C", "year": 3, "students": ["Inês", "Duarte"]})).json()
     session = (

@@ -39,6 +39,10 @@ class ClaimRequest(BaseModel):
     student_id: str
 
 
+class ReleaseRequest(BaseModel):
+    reset_progress: bool = False
+
+
 class EventsRequest(BaseModel):
     student_token: str
     events: list[dict] = Field(max_length=20)
@@ -199,8 +203,19 @@ async def claim(session_id: str, body: ClaimRequest, request: Request):
 
 
 @router.post("/sessions/{session_id}/release/{student_id}", dependencies=[teacher_only])
-async def release(session_id: str, student_id: str, request: Request):
-    await _domain(_svc(request).release_identity(session_id, student_id))
+async def release(
+    session_id: str,
+    student_id: str,
+    request: Request,
+    body: ReleaseRequest | None = None,
+):
+    await _domain(
+        _svc(request).release_identity(
+            session_id,
+            student_id,
+            reset_progress=body.reset_progress if body else False,
+        )
+    )
     return {"ok": True}
 
 
