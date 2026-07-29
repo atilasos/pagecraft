@@ -1,8 +1,7 @@
 """Vocabulário único dos Acontecimentos de sessão.
 
-Este módulo descreve o contrato público de cada tipo sem impor ainda o seu
-uso aos consumidores existentes. A ingestão, os streams e os relatórios
-continuam temporariamente com as listas legadas durante a migração.
+Este módulo descreve o contrato público consultado pela ingestão, emissão,
+visibilidade dos streams e relatórios da Sessão de aula.
 """
 
 from __future__ import annotations
