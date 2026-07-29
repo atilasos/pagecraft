@@ -301,6 +301,45 @@ async def advance_pit_item(
     )
 
 
+@router.get("/sessions/{session_id}/students/{student_id}/history")
+async def student_history(
+    session_id: str,
+    student_id: str,
+    request: Request,
+):
+    """Devolve o registo completo da criança, projetado para o papel."""
+    svc = _svc(request)
+    session = await svc.get_session(session_id)
+    if not session or student_id not in session.get("roster", {}):
+        raise HTTPException(404, "criança ou sessão não encontrada")
+
+    role = request.query_params.get("role", "")
+    if role == "teacher":
+        require_teacher(request)
+    elif role == "student":
+        token = request.query_params.get("student_token", "")
+        token_student = await svc.student_for_token(
+            session_id, token, require_live=False
+        )
+        if not token_student:
+            raise HTTPException(401, "token inválido")
+        if token_student != student_id:
+            raise HTTPException(403, "uma criança só pode consultar o seu histórico")
+    else:
+        raise HTTPException(400, "role tem de ser teacher ou student")
+
+    visible_types = {
+        event_type.name for event_type in SESSION_EVENT_TYPES.visible_to(role)
+    }
+    events = [
+        record
+        for record in await svc.events_log(session_id).replay()
+        if record.get("student_id") == student_id
+        and record.get("type") in visible_types
+    ]
+    return {"student_id": student_id, "events": events}
+
+
 @router.get("/sessions/{session_id}/stream")
 async def stream_session(session_id: str, request: Request):
     svc = _svc(request)
