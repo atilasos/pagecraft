@@ -201,33 +201,23 @@ async function flushOutbox() {
 }
 
 /* SSE: feedback IA, mensagens do professor, PIT */
-function connectStream() {
-  const es = new EventSource(
-    `/api/sessions/${state.session.id}/stream?role=student&student_token=${state.token}`
-  );
-  stream = es;
-  es.addEventListener("ai_feedback", (ev) => {
-    const data = JSON.parse(ev.data);
+const STUDENT_EVENT_HANDLERS = {
+  ai_feedback(data) {
     showMessage(data.payload.text, "feedback-warn");
     // reencaminha para a atividade (caixa .ai-feedback)
     $("activity-frame").contentWindow?.postMessage(
       { pagecraft: 1, type: "ai_feedback", payload: { text: data.payload.text } },
       "*"
     );
-  });
-  es.addEventListener("teacher_message", (ev) => {
-    const data = JSON.parse(ev.data);
+  },
+  teacher_message(data) {
     showMessage(`Professor: ${data.payload.text}`, "feedback-ok");
-  });
-  es.addEventListener("pit_updated", (ev) => {
-    const data = JSON.parse(ev.data);
-    if (data.student_id === state.studentId) {
-      state.pitItems[data.payload.id] = data.payload;
-      renderPit();
-    }
-  });
-  es.addEventListener("teacher_highlight", (ev) => {
-    const data = JSON.parse(ev.data);
+  },
+  pit_updated(data) {
+    state.pitItems[data.payload.id] = data.payload;
+    renderPit();
+  },
+  teacher_highlight(data) {
     const { unit_id: unitId, unit_label: label } = data.payload || {};
     // dentro da atividade: brilho âmbar na unidade (se suportado)
     $("activity-frame").contentWindow?.postMessage(
@@ -236,18 +226,40 @@ function connectStream() {
     );
     // fallback sempre visível, mesmo em atividades sem suporte
     showMessage(`👀 Olha para: ${label || unitId || "a atividade"}`, "feedback-warn");
-  });
-  es.addEventListener("freeze_screens", () => {
+  },
+  freeze_screens() {
     $("freeze-overlay").hidden = false;
-  });
-  es.addEventListener("unfreeze_screens", () => {
+  },
+  unfreeze_screens() {
     $("freeze-overlay").hidden = true;
-  });
-  es.addEventListener("session_closed", () => {
+  },
+  session_closed() {
     $("freeze-overlay").hidden = true;
     showMessage("A aula terminou. Bom trabalho!", "feedback-ok");
     clearIdentity();
     stopActivityConnections();
+  },
+};
+
+function dispatchStudentEvent(type, rawData) {
+  try {
+    const data = JSON.parse(rawData);
+    if (!data || typeof data !== "object" || Array.isArray(data)) return;
+    const target = data.student_id;
+    if (target != null && target !== state.studentId) return;
+    STUDENT_EVENT_HANDLERS[type]?.(data);
+  } catch (error) {
+    // Um acontecimento incompreensível não pode interromper os seguintes.
+  }
+}
+
+function connectStream() {
+  const es = new EventSource(
+    `/api/sessions/${state.session.id}/stream?role=student&student_token=${state.token}`
+  );
+  stream = es;
+  Object.keys(STUDENT_EVENT_HANDLERS).forEach((type) => {
+    es.addEventListener(type, (ev) => dispatchStudentEvent(type, ev.data));
   });
 }
 
