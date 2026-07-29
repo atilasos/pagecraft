@@ -29,7 +29,8 @@ Instância viva de uma atividade para uma turma, com código de entrada e roster
 
 **Triagem de atenção**:
 Ordenação viva da turma no painel do professor por necessidade: pedidos de ajuda, tentativas falhadas acumuladas e inatividade sobem; quem está a fluir desce. Substitui a lista uniforme; o objetivo é «2 segundos de olhar, saber a quem ir».
-_Avoid_: ranking, leaderboard
+O que é ordenado são **necessidades, não crianças** — a triagem diz a quem ir primeiro, nunca quem é melhor, e nunca produz um número por criança. Estar parado é uma necessidade tão real como levantar a mão: pode ser falta de ajuda ou perda de foco, e em qualquer dos casos essa criança não está a avançar. Quem pede ajuda tem alguma prioridade por o ter pedido, não por valer mais.
+_Avoid_: ranking, leaderboard, pontuação por criança
 
 **Momento de comunicação**:
 Projeção do estado real do trabalho de um aluno no quadro interativo, lançada pelo professor a partir do drawer («Mostrar no quadro»), para a criança apresentar aos colegas. Prática MEM; mostra o trabalho tal como está, sem a criança refazer nada.
