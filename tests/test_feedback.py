@@ -59,12 +59,41 @@ async def _wait_event(storage, session_id, type_, timeout=3.0):
     return await asyncio.wait_for(poll(), timeout)
 
 
+async def _register_feedback(
+    classroom,
+    session_id,
+    student_id,
+    event_id,
+    payload,
+    unit_id="u1",
+):
+    return await classroom.ingest_events(
+        session_id,
+        student_id,
+        [
+            {
+                "event_id": event_id,
+                "type": "feedback_request",
+                "unit_id": unit_id,
+                "payload": payload,
+            }
+        ],
+    )
+
+
 async def test_feedback_delivered(env):
     config, storage, hub, classroom = env
     provider = GoodProvider()
     fb = FeedbackService(config, storage, classroom, provider)
     session, student_id = await _session_with_student(classroom)
-    await fb.request(session["id"], student_id, "u1", {"question": "2+2?", "answer": "4", "expected": "4"})
+    fb.start()
+    await _register_feedback(
+        classroom,
+        session["id"],
+        student_id,
+        "feedback-delivered",
+        {"question": "2+2?", "answer": "4", "expected": "4"},
+    )
     record = await _wait_event(storage, session["id"], "ai_feedback")
     assert record["student_id"] == student_id
     assert "Percebeste" in record["payload"]["text"]
@@ -72,28 +101,23 @@ async def test_feedback_delivered(env):
     await fb.stop()
 
 
-async def test_feedback_request_registered_delivers_feedback(env):
+async def test_feedback_request_from_another_authorized_path_delivers_feedback(env):
     config, storage, hub, classroom = env
     provider = GoodProvider()
     fb = FeedbackService(config, storage, classroom, provider)
     session, student_id = await _session_with_student(classroom)
     fb.start()
 
-    await classroom.ingest_events(
+    await classroom.emit_event(
         session["id"],
-        student_id,
-        [
-            {
-                "event_id": "feedback-1",
-                "type": "feedback_request",
-                "unit_id": "u1",
-                "payload": {
-                    "question": "2+2?",
-                    "answer": "4",
-                    "expected": "4",
-                },
-            }
-        ],
+        "feedback_request",
+        {
+            "question": "2+2?",
+            "answer": "4",
+            "expected": "4",
+        },
+        author="activity",
+        student_id=student_id,
     )
 
     record = await _wait_event(storage, session["id"], "ai_feedback")
@@ -108,10 +132,23 @@ async def test_feedback_cache_hit(env):
     provider = GoodProvider()
     fb = FeedbackService(config, storage, classroom, provider)
     session, student_id = await _session_with_student(classroom)
-    await fb.request(session["id"], student_id, "u1", {"question": "q", "answer": "quatro"})
+    fb.start()
+    await _register_feedback(
+        classroom,
+        session["id"],
+        student_id,
+        "feedback-cache-1",
+        {"question": "q", "answer": "quatro"},
+    )
     await _wait_event(storage, session["id"], "ai_feedback")
     # mesma resposta (normalizada) → cache, sem nova chamada
-    await fb.request(session["id"], student_id, "u1", {"question": "q", "answer": "  QUATRO "})
+    await _register_feedback(
+        classroom,
+        session["id"],
+        student_id,
+        "feedback-cache-2",
+        {"question": "q", "answer": "  QUATRO "},
+    )
     await asyncio.sleep(0.1)
     events = await storage.read_jsonl(storage.path("sessions", session["id"], "events.jsonl"))
     ai = [e for e in events if e["type"] == "ai_feedback"]
@@ -125,7 +162,14 @@ async def test_feedback_banned_words_replaced(env):
     config, storage, hub, classroom = env
     fb = FeedbackService(config, storage, classroom, GoodProvider("Está errado, tenta outra vez."))
     session, student_id = await _session_with_student(classroom)
-    await fb.request(session["id"], student_id, "u1", {"question": "q", "answer": "x"})
+    fb.start()
+    await _register_feedback(
+        classroom,
+        session["id"],
+        student_id,
+        "feedback-banned",
+        {"question": "q", "answer": "x"},
+    )
     record = await _wait_event(storage, session["id"], "ai_feedback")
     assert "errado" not in record["payload"]["text"].lower()
     await fb.stop()
@@ -135,7 +179,14 @@ async def test_feedback_timeout_fallback(env):
     config, storage, hub, classroom = env
     fb = FeedbackService(config, storage, classroom, SlowProvider())
     session, student_id = await _session_with_student(classroom)
-    await fb.request(session["id"], student_id, "u1", {"question": "q", "answer": "y"})
+    fb.start()
+    await _register_feedback(
+        classroom,
+        session["id"],
+        student_id,
+        "feedback-timeout",
+        {"question": "q", "answer": "y"},
+    )
     record = await _wait_event(storage, session["id"], "ai_feedback")
     assert record["payload"]["text"] == TIMEOUT_MESSAGE
     assert record["payload"]["source"] == "timeout"
