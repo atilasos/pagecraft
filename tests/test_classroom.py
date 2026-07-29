@@ -67,6 +67,23 @@ async def test_ingest_dedup_and_type_filter(svc):
     assert again == []
 
 
+async def test_ingest_accepts_only_types_declared_for_the_activity(svc):
+    session = await _session(svc)
+    student_id = next(iter(session["roster"]))
+
+    accepted = await svc.ingest_events(
+        session["id"],
+        student_id,
+        [
+            {"event_id": "activity", "type": "unit_started", "payload": {}},
+            {"event_id": "lifecycle", "type": "joined", "payload": {}},
+            {"event_id": "student", "type": "pit_updated", "payload": {}},
+        ],
+    )
+
+    assert [record["event_id"] for record in accepted] == ["activity"]
+
+
 async def test_events_have_monotonic_seq_with_join(svc):
     session = await _session(svc)
     ids = list(session["roster"])

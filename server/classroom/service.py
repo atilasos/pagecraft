@@ -15,19 +15,7 @@ from collections import defaultdict
 from ..config import Config
 from ..events import EventHub, utcnow
 from ..storage import Storage
-
-STUDENT_EVENT_TYPES = {
-    "joined",
-    "activity_loaded",
-    "heartbeat",
-    "unit_started",
-    "attempt",
-    "discovery",
-    "assessment_result",
-    "feedback_request",
-    "help_needed",
-    "share_requested",
-}
+from .event_types import SESSION_EVENT_TYPES
 
 
 def _join_code() -> str:
@@ -230,10 +218,11 @@ class ClassroomService:
         seen = await self._seen(session_id)
         accepted = []
         log = self.events_log(session_id)
+        activity_types = {entry.name for entry in SESSION_EVENT_TYPES.by_author("activity")}
         for ev in events[:20]:
             event_id = str(ev.get("event_id") or uuid.uuid4().hex)
             ev_type = str(ev.get("type", ""))
-            if event_id in seen or ev_type not in STUDENT_EVENT_TYPES:
+            if event_id in seen or ev_type not in activity_types:
                 continue
             seen.add(event_id)
             record = await log.append(
