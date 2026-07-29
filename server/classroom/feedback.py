@@ -18,6 +18,7 @@ from ..config import Config
 from ..events import EventSubscription, utcnow
 from ..providers import AIProvider, ProviderError
 from ..storage import Storage
+from .errors import SessionClosedError
 from .service import ClassroomService
 
 FEEDBACK_SCHEMA = {
@@ -178,14 +179,20 @@ class FeedbackService:
                 await self._process(item)
             except asyncio.CancelledError:
                 raise
+            except SessionClosedError:
+                # A resposta terminou depois do fecho: o registo já é imutável.
+                pass
             except Exception as exc:  # noqa: BLE001 — worker nunca morre
-                await self.classroom.emit_event(
-                    item["session_id"],
-                    "feedback_error",
-                    {"error": str(exc), "unit_id": item["unit_id"]},
-                    author="assistant",
-                    student_id=item["student_id"],
-                )
+                try:
+                    await self.classroom.emit_event(
+                        item["session_id"],
+                        "feedback_error",
+                        {"error": str(exc), "unit_id": item["unit_id"]},
+                        author="assistant",
+                        student_id=item["student_id"],
+                    )
+                except SessionClosedError:
+                    pass
             finally:
                 self._pending[key] -= 1
                 if self._pending[key] <= 0:

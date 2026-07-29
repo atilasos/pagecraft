@@ -54,6 +54,21 @@ class BlockingProvider:
             raise
 
 
+class PausingProvider:
+    name = "fake"
+
+    def __init__(self):
+        self.calls = 0
+        self.started = asyncio.Event()
+        self.release = asyncio.Event()
+
+    async def complete(self, prompt, *, schema=None, system=None, timeout_s=20, workdir=None):
+        self.calls += 1
+        self.started.set()
+        await self.release.wait()
+        return {"feedback": "Boa! Continua assim."}
+
+
 @pytest.fixture
 def env(tmp_path):
     config = Config(data_dir=tmp_path, feedback_timeout_s=1)
@@ -291,3 +306,35 @@ async def test_feedback_stop_cancels_active_provider(env):
 
     await asyncio.wait_for(provider.cancelled.wait(), timeout=1)
     assert provider.calls == 1
+
+
+async def test_feedback_worker_survives_session_closing_during_response(env):
+    config, storage, hub, classroom = env
+    provider = PausingProvider()
+    fb = FeedbackService(config, storage, classroom, provider, workers=1)
+    first_session, first_student_id = await _session_with_student(classroom)
+    fb.start()
+    await _register_feedback(
+        classroom,
+        first_session["id"],
+        first_student_id,
+        "feedback-before-close",
+        {"question": "q", "answer": "a"},
+    )
+    await asyncio.wait_for(provider.started.wait(), timeout=1)
+    await classroom.close_session(first_session["id"])
+    provider.release.set()
+
+    second_session, second_student_id = await _session_with_student(classroom)
+    await _register_feedback(
+        classroom,
+        second_session["id"],
+        second_student_id,
+        "feedback-after-close",
+        {"question": "outra", "answer": "resposta"},
+    )
+
+    feedback = await _wait_event(storage, second_session["id"], "ai_feedback")
+    assert feedback["student_id"] == second_student_id
+    assert provider.calls == 2
+    await fb.stop()
