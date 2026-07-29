@@ -470,6 +470,7 @@ th { background: var(--paper-deep); font-family: var(--font-type); font-size: 0.
 }
 .students-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 0.75rem; }
 .student-card {
+  display: block;
   width: 100%;
   min-height: 0;
   padding: 0.78rem 0.9rem;
@@ -751,7 +752,7 @@ th { background: var(--paper-deep); font-family: var(--font-type); font-size: 0.
   .live-grid { grid-template-columns: 3fr 2fr; align-items: start; }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 899px) {
   main { padding: 1rem 0.9rem 3rem; }
   .notebook-head { align-items: stretch; flex-direction: column; gap: 0.75rem; }
   .tabs-folder { width: 100%; }
