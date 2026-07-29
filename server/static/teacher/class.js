@@ -17,23 +17,32 @@ const EVENT_TEXT = {
   activity_loaded: () => "abriu a atividade",
   heartbeat: () => "",
   unit_started: (e) => `começou ${unitLabel(e.payload?.unit_id || e.unit_id)}`,
-  attempt: (e) => (e.payload.correct ? "acertou uma tentativa ✓" : "fez uma tentativa"),
-  discovery: (e) => `descobriu: ${e.payload.message || ""}`,
-  assessment_result: (e) => `avaliação: ${e.payload.result || ""}`,
-  feedback_request: (e) => `pediu feedback: «${(e.payload.answer || "").slice(0, 60)}»`,
+  attempt: (e) => (e.payload?.correct ? "acertou uma tentativa ✓" : "fez uma tentativa"),
+  discovery: (e) => `descobriu: ${e.payload?.message || ""}`,
+  assessment_result: (e) => `avaliação: ${e.payload?.result || ""}`,
+  feedback_request: (e) => `pediu feedback: «${(e.payload?.answer || "").slice(0, 60)}»`,
   help_needed: () => "pediu ajuda 🙋",
-  share_requested: (e) => `quer partilhar: ${e.payload.what || ""}`,
-  ai_feedback: (e) => `assistente respondeu: «${(e.payload.text || "").slice(0, 80)}»`,
+  share_requested: (e) => `quer partilhar: ${e.payload?.what || ""}`,
+  ai_feedback: (e) => `assistente respondeu: «${(e.payload?.text || "").slice(0, 80)}»`,
   feedback_timeout: () => "feedback IA demorou — vê a resposta manualmente",
   feedback_dropped: () => "pedidos de feedback a mais — um foi ignorado",
-  pit_updated: (e) => `plano: ${e.payload.text} → ${e.payload.status}`,
-  teacher_message: (e) => `mensagem enviada: ${e.payload.text}`,
-  teacher_highlight: (e) => `atenção chamada para ${e.payload.unit_label || e.payload.unit_id || "a atividade"}`,
+  feedback_error: (e) => `erro no feedback IA: ${e.payload?.error || "falha sem detalhe"}`,
+  pit_updated: (e) => `plano: ${e.payload?.text || ""} → ${e.payload?.status || ""}`,
+  teacher_message: (e) => `mensagem enviada: ${e.payload?.text || ""}`,
+  teacher_highlight: (e) => `atenção chamada para ${e.payload?.unit_label || e.payload?.unit_id || "a atividade"}`,
   identity_released: () => "identidade libertada pelo professor",
   freeze_screens: () => "ecrãs congelados: olhem para o quadro",
   unfreeze_screens: () => "ecrãs libertados",
   session_closed: () => "sessão terminada",
 };
+
+function readableEventType(type) {
+  return type.replace(/_/g, " ");
+}
+
+function eventText(type, record) {
+  return (EVENT_TEXT[type] || (() => readableEventType(type)))(record);
+}
 
 function unitLabel(unitId) {
   const u = units.find((u) => u.id === unitId);
@@ -323,7 +332,7 @@ function reflectFreeze(state) {
 
 function handleEvent(type, record, es) {
   const st = record.student_id ? students.get(record.student_id) : null;
-  const text = (EVENT_TEXT[type] || (() => type))(record);
+  const text = eventText(type, record);
   if (st) {
     st.events.push(record);
     if (st.events.length > 300) st.events.shift();
@@ -332,7 +341,7 @@ function handleEvent(type, record, es) {
     if (type === "unit_started") st.currentUnit = record.unit_id || record.payload?.unit_id;
     if (type === "attempt") {
       st.attempts += 1;
-      if (record.payload.correct) st.correct += 1;
+      if (record.payload?.correct) st.correct += 1;
     }
     if (type === "discovery") st.discoveries += 1;
     if (type === "help_needed" || type === "feedback_timeout") st.help = true;
@@ -461,7 +470,7 @@ function fillDrawer(studentId) {
   const list = $("drawer-events");
   list.innerHTML = "";
   [...st.events].reverse().slice(0, 40).forEach((record) => {
-    const text = (EVENT_TEXT[record.type] || (() => record.type))(record);
+    const text = eventText(record.type, record);
     if (!text) return;
     const li = document.createElement("li");
     const when = new Date(record.ts).toLocaleTimeString("pt-PT", { hour: "2-digit", minute: "2-digit" });
