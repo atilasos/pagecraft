@@ -22,6 +22,7 @@ from .errors import (
     StudentNotInRosterError,
 )
 from .event_types import SESSION_EVENT_TYPES
+from .live_state import LiveSessionTicks
 
 
 def _join_code() -> str:
@@ -31,7 +32,15 @@ def _join_code() -> str:
 
 
 class ClassroomService:
-    def __init__(self, config: Config, storage: Storage, hub: EventHub):
+    def __init__(
+        self,
+        config: Config,
+        storage: Storage,
+        hub: EventHub,
+        *,
+        clock=utcnow,
+        tick_interval_seconds: float = 30,
+    ):
         self.config = config
         self.storage = storage
         self.hub = hub
@@ -39,6 +48,25 @@ class ClassroomService:
         # lock por sessão: torna atómicas as transações read-modify-write
         # (claim/release/PIT/close); um só processo, chega um asyncio.Lock
         self._session_locks: dict[str, asyncio.Lock] = defaultdict(asyncio.Lock)
+        self._clock = clock
+        self.live_ticks = LiveSessionTicks(
+            lambda: self._clock(),
+            interval_seconds=tick_interval_seconds,
+        )
+
+    def now(self):
+        return self._clock()
+
+    def tick_session(self, session_id: str, *, now=None) -> None:
+        """Publica um tique controlado; útil também para testes do protocolo."""
+        self.live_ticks.publish(session_id, now=now)
+
+    def live_session_ids(self) -> tuple[str, ...]:
+        """Sessões com streams vivos, cada uma servida por um só tique."""
+        return self.live_ticks.session_ids()
+
+    async def stop(self) -> None:
+        await self.live_ticks.stop()
 
     # ---- turmas ----
 

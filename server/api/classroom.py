@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
 
 from fastapi import APIRouter, Depends, HTTPException, Request
@@ -22,7 +23,6 @@ from ..classroom.live_state import (
     changed_student_frames,
     session_state_snapshot,
 )
-from ..events import utcnow
 from ..security import require_teacher
 
 router = APIRouter(prefix="/api", tags=["classroom"])
@@ -386,7 +386,7 @@ async def stream_session(session_id: str, request: Request):
         state = session_state_snapshot(
             events,
             session,
-            now=utcnow(),
+            now=svc.now(),
             role=role,
             student_id=student_id,
         )
@@ -398,40 +398,84 @@ async def stream_session(session_id: str, request: Request):
         if state["session"]["closed"]:
             return
 
-        async for record in log.subscribe(frontier):
-            if role == "student":
-                # revalidar a cada entrega: se o professor libertou a
-                # identidade, o stream antigo morre em vez de vazar eventos
-                current = await svc.student_for_token(session_id, token, require_live=False)
-                if current != student_id:
-                    break
-            events.append(record)
-            if visible(record):
-                yield (
-                    f"id: {record['seq']}\n"
-                    f"event: {record['type']}\n"
-                    f"data: {json.dumps(record, ensure_ascii=False)}\n\n"
+        raw_records = log.subscribe(frontier)
+        ticks = svc.live_ticks.subscribe(session_id)
+        record_task = asyncio.create_task(anext(raw_records))
+        tick_task = asyncio.create_task(anext(ticks))
+        try:
+            while True:
+                done, _ = await asyncio.wait(
+                    {record_task, tick_task},
+                    return_when=asyncio.FIRST_COMPLETED,
                 )
-            current_state = session_state_snapshot(
-                events,
-                session,
-                now=utcnow(),
-                role=role,
-                student_id=student_id,
-            )
-            session_delta = changed_session_frame(state, current_state)
-            if session_delta is not None:
-                yield (
-                    "event: session_state_changed\n"
-                    f"data: {json.dumps(session_delta, ensure_ascii=False)}\n\n"
-                )
-            for delta in changed_student_frames(state, current_state):
-                yield (
-                    "event: student_state_changed\n"
-                    f"data: {json.dumps(delta, ensure_ascii=False)}\n\n"
-                )
-            state = current_state
-            if record.get("type") == "session_closed":
-                break
+
+                if record_task in done:
+                    try:
+                        record = record_task.result()
+                    except StopAsyncIteration:
+                        return
+                    if role == "student":
+                        # Se a identidade foi libertada, o stream antigo morre.
+                        current = await svc.student_for_token(
+                            session_id, token, require_live=False
+                        )
+                        if current != student_id:
+                            return
+                    events.append(record)
+                    if visible(record):
+                        yield (
+                            f"id: {record['seq']}\n"
+                            f"event: {record['type']}\n"
+                            f"data: {json.dumps(record, ensure_ascii=False)}\n\n"
+                        )
+                    current_state = session_state_snapshot(
+                        events,
+                        session,
+                        now=svc.now(),
+                        role=role,
+                        student_id=student_id,
+                    )
+                    session_delta = changed_session_frame(state, current_state)
+                    if session_delta is not None:
+                        yield (
+                            "event: session_state_changed\n"
+                            f"data: {json.dumps(session_delta, ensure_ascii=False)}\n\n"
+                        )
+                    for delta in changed_student_frames(state, current_state):
+                        yield (
+                            "event: student_state_changed\n"
+                            f"data: {json.dumps(delta, ensure_ascii=False)}\n\n"
+                        )
+                    state = current_state
+                    if record.get("type") == "session_closed":
+                        return
+                    record_task = asyncio.create_task(anext(raw_records))
+
+                if tick_task in done:
+                    try:
+                        tick_now = tick_task.result()
+                    except StopAsyncIteration:
+                        return
+                    current_state = session_state_snapshot(
+                        events,
+                        session,
+                        now=tick_now,
+                        role=role,
+                        student_id=student_id,
+                    )
+                    for delta in changed_student_frames(state, current_state):
+                        yield (
+                            "event: student_state_changed\n"
+                            f"data: {json.dumps(delta, ensure_ascii=False)}\n\n"
+                        )
+                    state = current_state
+                    tick_task = asyncio.create_task(anext(ticks))
+        finally:
+            ticks.close()
+            for task in (record_task, tick_task):
+                if not task.done():
+                    task.cancel()
+            await asyncio.gather(record_task, tick_task, return_exceptions=True)
+            await raw_records.aclose()
 
     return StreamingResponse(gen(), media_type="text/event-stream")

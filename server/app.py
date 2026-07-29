@@ -59,6 +59,7 @@ def create_app() -> FastAPI:
         app.state.feedback.start()
         await app.state.runner.start()
         yield
+        await app.state.classroom.stop()
         await app.state.feedback.stop()
         await app.state.runner.stop()
 
