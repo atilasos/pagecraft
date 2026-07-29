@@ -32,3 +32,26 @@ def test_reduction_is_deterministic_and_counts_declared_evidence():
     assert "teacher_message" not in first["students"]["ana"]["numbers"]["evidence"]
     assert first["numbers"]["evidence"]["attempt"] == 1
     assert first["numbers"]["correct_attempts"] == 1
+
+
+def test_no_presence_for_ninety_seconds_has_highest_precedence():
+    events = [
+        event("joined", 0),
+        event("attempt", 0, payload={"correct": False}),
+        event("attempt", 0, payload={"correct": False}),
+        event("attempt", 0, payload={"correct": False}),
+        event("help_needed", 0),
+    ]
+
+    state = reduce_session(
+        events,
+        now=datetime(2026, 7, 29, 10, 1, 30, tzinfo=timezone.utc),
+    )
+    triage = state["students"]["ana"]["triage"]
+
+    assert triage == {
+        "band": "Sem sinal",
+        "reason": "Sem presença",
+        "wait_seconds": 90,
+        "explicit_help": True,
+    }
