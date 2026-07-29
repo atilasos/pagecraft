@@ -219,6 +219,7 @@ async def test_live_stream_keeps_raw_timeline_and_emits_only_changed_children(cl
         "student_state_changed",
         "teacher_message",
         "session_closed",
+        "session_state_changed",
     ]
     delta = next(
         frame["data"]
@@ -229,3 +230,7 @@ async def test_live_stream_keeps_raw_timeline_and_emits_only_changed_children(cl
     assert delta["student"]["numbers"]["correct_attempts"] == 1
     assert bia_id not in json.dumps(delta)
     assert "heartbeat" not in events
+    session_delta = frames[-1]["data"]
+    assert session_delta == {
+        "session": {"status": "closed", "closed": True, "frozen": False}
+    }
