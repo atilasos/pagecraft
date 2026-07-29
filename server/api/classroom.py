@@ -8,6 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
+from ..classroom.event_types import SESSION_EVENT_TYPES
 from ..security import require_teacher
 
 router = APIRouter(prefix="/api", tags=["classroom"])
@@ -212,6 +213,12 @@ async def release(session_id: str, student_id: str, request: Request):
 
 
 # ---- eventos ----
+
+
+@router.get("/session-event-types")
+async def session_event_types():
+    """Declaração pública e estática do vocabulário da Sessão de aula."""
+    return {"version": 1, "types": SESSION_EVENT_TYPES.declaration()}
 
 
 @router.post("/sessions/{session_id}/events")

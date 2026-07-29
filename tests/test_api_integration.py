@@ -331,3 +331,20 @@ async def test_health_and_meta(client):
     meta = (await client.get("/api/meta")).json()
     assert meta["years"] == [1, 2, 3, 4]
     assert "Matemática" in meta["subjects"]
+
+
+async def test_session_event_declaration_is_public_and_contains_no_session_data(client):
+    response = await client.get(
+        "/api/session-event-types", headers={"x-teacher-token": ""}
+    )
+
+    assert response.status_code == 200
+    declaration = response.json()
+    assert set(declaration) == {"version", "types"}
+    highlight = next(
+        item for item in declaration["types"] if item["name"] == "teacher_highlight"
+    )
+    assert highlight["bridge_name"] == "highlight"
+    assert highlight["payload"]["unit_id"]
+    assert "token" not in response.text.lower()
+    assert "session_id" not in response.text.lower()
