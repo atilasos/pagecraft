@@ -35,6 +35,10 @@ _Avoid_: ranking, leaderboard
 Projeção do estado real do trabalho de um aluno no quadro interativo, lançada pelo professor a partir do drawer («Mostrar no quadro»), para a criança apresentar aos colegas. Prática MEM; mostra o trabalho tal como está, sem a criança refazer nada.
 _Avoid_: partilha de ecrã, screencast
 
+**Acontecimento de sessão**:
+Tudo o que fica registado no decurso de uma sessão de aula, qualquer que seja o autor: o trabalho da criança, os atos do professor (mensagem, convite de nível, congelar ecrãs), as respostas do assistente e o ciclo de vida da própria sessão. É o vocabulário único da sala — cada tipo declara num só sítio quem o pode emitir, quem o pode ver e se conta como **Evidência**.
+_Avoid_: evento (genérico demais), telemetria
+
 **Evidência**:
-Registo observável do trabalho da criança (tentativas, descobertas, pedidos de ajuda, mudanças de nível), agregado sem juízos automáticos como matéria-prima para o conselho de cooperação.
+Os acontecimentos de sessão que registam o trabalho observável da criança (tentativas, descobertas, pedidos de ajuda, mudanças de nível), agregados sem juízos automáticos como matéria-prima para o conselho de cooperação. Nem todo o acontecimento de sessão é evidência: um congelar de ecrãs ou uma falha do assistente ficam registados, mas não são trabalho da criança.
 _Avoid_: nota, score, classificação
