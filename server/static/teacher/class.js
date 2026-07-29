@@ -270,10 +270,10 @@ async function startLive(s) {
 async function loadPanelEventTypes() {
   try {
     const resp = await fetch("/api/session-event-types");
-    if (!resp.ok) return [];
+    if (!resp.ok) return fallbackPanelEventTypes();
     const declaration = await resp.json();
-    if (!Array.isArray(declaration?.types)) return [];
-    return [
+    if (!Array.isArray(declaration?.types)) return fallbackPanelEventTypes();
+    const declaredTypes = [
       ...new Set(
         declaration.types
           .filter(
@@ -286,9 +286,14 @@ async function loadPanelEventTypes() {
           .map((entry) => entry.name)
       ),
     ];
+    return declaredTypes.length ? declaredTypes : fallbackPanelEventTypes();
   } catch (error) {
-    return [];
+    return fallbackPanelEventTypes();
   }
+}
+
+function fallbackPanelEventTypes() {
+  return [...new Set([...Object.keys(EVENT_TEXT), ...STATE_EVENT_TYPES])];
 }
 
 async function loadUnits(slug) {
