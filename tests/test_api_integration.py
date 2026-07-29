@@ -10,7 +10,11 @@ from server import app as app_module
 class InstantFeedbackProvider:
     name = "fake"
 
+    def __init__(self):
+        self.calls = 0
+
     async def complete(self, prompt, *, schema=None, system=None, timeout_s=20, workdir=None):
+        self.calls += 1
         return {"feedback": "Boa! Já viste que a metade de 8 é 4."}
 
 
@@ -100,6 +104,7 @@ async def test_full_classroom_flow(client):
 
     record = await asyncio.wait_for(wait_feedback(), timeout=5)
     assert "metade" in record["payload"]["text"]
+    assert client.app.state.feedback.provider.calls == 1
 
     # PIT do aluno
     resp = await client.post(

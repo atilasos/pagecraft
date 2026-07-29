@@ -220,10 +220,6 @@ async def post_events(session_id: str, body: EventsRequest, request: Request):
     if not student_id:
         raise HTTPException(401, "token inválido")
     accepted = await _domain(svc.ingest_events(session_id, student_id, body.events))
-    feedback = request.app.state.feedback
-    for record in accepted:
-        if record["type"] == "feedback_request":
-            await feedback.request(session_id, student_id, record.get("unit_id"), record.get("payload", {}))
     return {"accepted": [r["event_id"] for r in accepted]}
 
 
