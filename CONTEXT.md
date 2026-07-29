@@ -24,6 +24,10 @@ _Avoid_: mudança forçada, override
 Fila ordenada e leve de atividades que o professor prepara para uma turma antes da aula (ex.: na véspera, de casa). Na sala, «Começar» lança a atividade seguinte como sessão, com projeção e código. Sem calendários nem horários.
 _Avoid_: agendamento, calendário
 
+**Plano individual de trabalho**:
+A lista do que cada criança se propõe fazer na sessão, escrita por ela no seu tablet. Prática MEM. Cada item passa por **por fazer → a fazer → feito → para partilhar**, e a criança avança-o com um toque; do último estado, tocar recua um passo, para um toque distraído nunca apagar trabalho de uma vez. «Para partilhar» é o que a criança quer levar ao conselho de cooperação. Não confundir com o **Plano de aula**, que é do professor e é uma fila de atividades.
+_Avoid_: tarefas, checklist, to-do
+
 **Sessão de aula**:
 Instância viva de uma atividade para uma turma, com código de entrada e roster; termina fechada mas os eventos persistem para relatório.
 
