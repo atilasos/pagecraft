@@ -2,7 +2,11 @@ import json
 
 import pytest
 
-from server.classroom.errors import SessionClosedError, StudentNotInRosterError
+from server.classroom.errors import (
+    InvalidPitItemError,
+    SessionClosedError,
+    StudentNotInRosterError,
+)
 from server.classroom.service import ClassroomService
 from server.config import Config
 from server.events import EventHub
@@ -86,9 +90,7 @@ async def test_loading_rebuilds_pit_items_from_the_log(svc, monkeypatch):
     monkeypatch.setattr(svc.storage, "write_json", fail_state_write)
 
     with pytest.raises(OSError, match="estado PIT"):
-        await svc.upsert_pit_item(
-            session["id"], student_id, "Ler as frações", "planned"
-        )
+        await svc.create_pit_item(session["id"], student_id, "Ler as frações")
 
     monkeypatch.setattr(svc.storage, "write_json", original_write)
     restarted = ClassroomService(svc.config, svc.storage, EventHub(svc.storage))
@@ -98,6 +100,38 @@ async def test_loading_rebuilds_pit_items_from_the_log(svc, monkeypatch):
         (item["student_id"], item["text"], item["status"])
         for item in repaired["pit_items"]
     ] == [(student_id, "Ler as frações", "planned")]
+
+
+async def test_plan_refuses_an_unknown_item_and_another_students_item(svc):
+    session = await _session(svc)
+    ana_id, bruno_id = session["roster"]
+    item = await svc.create_pit_item(session["id"], ana_id, "Ler as frações")
+
+    with pytest.raises(InvalidPitItemError, match="não encontrado"):
+        await svc.advance_pit_item(session["id"], ana_id, "inexistente")
+    with pytest.raises(InvalidPitItemError, match="não encontrado"):
+        await svc.advance_pit_item(session["id"], bruno_id, item["id"])
+
+
+async def test_plan_refuses_a_student_outside_the_roster(svc):
+    session = await _session(svc)
+
+    with pytest.raises(StudentNotInRosterError):
+        await svc.create_pit_item(session["id"], "intruso", "Ler as frações")
+    with pytest.raises(StudentNotInRosterError):
+        await svc.advance_pit_item(session["id"], "intruso", "inexistente")
+
+
+async def test_plan_refuses_creation_and_advancement_after_close(svc):
+    session = await _session(svc)
+    student_id = next(iter(session["roster"]))
+    item = await svc.create_pit_item(session["id"], student_id, "Ler as frações")
+    await svc.close_session(session["id"])
+
+    with pytest.raises(SessionClosedError):
+        await svc.create_pit_item(session["id"], student_id, "Escrever a resposta")
+    with pytest.raises(SessionClosedError):
+        await svc.advance_pit_item(session["id"], student_id, item["id"])
 
 
 async def test_loading_applies_a_recorded_release_to_the_protected_token(svc, monkeypatch):
