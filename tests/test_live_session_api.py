@@ -91,3 +91,79 @@ async def test_teacher_stream_starts_with_current_snapshot_without_replaying_log
     assert snapshot["students"][student_id]["pit_items"] == []
     assert snapshot["numbers"]["correct_attempts"] == 1
     assert "token" not in response.text.lower()
+
+
+async def test_child_history_is_complete_for_teacher_and_role_authorized_for_student(client):
+    session = await _session(client, students=("Ana", "Bia"))
+    ana_id, bia_id = session["roster"]
+    ana_claim = (
+        await client.post(
+            f"/api/sessions/{session['id']}/claim",
+            json={"student_id": ana_id},
+        )
+    ).json()
+    bia_claim = (
+        await client.post(
+            f"/api/sessions/{session['id']}/claim",
+            json={"student_id": bia_id},
+        )
+    ).json()
+    await client.app.state.classroom.emit_event(
+        session["id"],
+        "heartbeat",
+        {},
+        author="activity",
+        student_id=ana_id,
+    )
+    await client.app.state.classroom.emit_event(
+        session["id"],
+        "attempt",
+        {"correct": True},
+        author="activity",
+        student_id=ana_id,
+    )
+    await client.post(
+        f"/api/sessions/{session['id']}/message",
+        json={"text": "Só para a Ana", "student_id": ana_id},
+    )
+    await client.post(
+        f"/api/sessions/{session['id']}/message",
+        json={"text": "Só para a Bia", "student_id": bia_id},
+    )
+
+    teacher = await client.get(
+        f"/api/sessions/{session['id']}/students/{ana_id}/history",
+        params={"role": "teacher"},
+    )
+    student = await client.get(
+        f"/api/sessions/{session['id']}/students/{ana_id}/history",
+        params={
+            "role": "student",
+            "student_token": ana_claim["student_token"],
+        },
+        headers={"x-teacher-token": ""},
+    )
+    forbidden = await client.get(
+        f"/api/sessions/{session['id']}/students/{ana_id}/history",
+        params={
+            "role": "student",
+            "student_token": bia_claim["student_token"],
+        },
+        headers={"x-teacher-token": ""},
+    )
+
+    assert teacher.status_code == 200
+    assert [record["type"] for record in teacher.json()["events"]] == [
+        "joined",
+        "heartbeat",
+        "attempt",
+        "teacher_message",
+    ]
+    assert student.status_code == 200
+    assert [record["type"] for record in student.json()["events"]] == [
+        "teacher_message",
+    ]
+    assert forbidden.status_code == 403
+    assert "Bia" not in teacher.text
+    assert "token" not in teacher.text.lower()
+    assert "token" not in student.text.lower()
