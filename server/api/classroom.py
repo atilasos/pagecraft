@@ -14,16 +14,6 @@ from ..security import require_teacher
 router = APIRouter(prefix="/api", tags=["classroom"])
 teacher_only = Depends(require_teacher)
 
-STUDENT_VISIBLE_TYPES = {
-    "ai_feedback",
-    "teacher_message",
-    "session_closed",
-    "pit_updated",
-    "teacher_highlight",
-    "freeze_screens",
-    "unfreeze_screens",
-}
-
 
 class ClassRequest(BaseModel):
     name: str = Field(min_length=1, max_length=80)
@@ -311,6 +301,9 @@ async def stream_session(session_id: str, request: Request):
     else:
         raise HTTPException(400, "role tem de ser teacher ou student")
 
+    visible_types = {
+        event_type.name for event_type in SESSION_EVENT_TYPES.visible_to(role)
+    }
     last_id = request.headers.get("last-event-id") or request.query_params.get("after", "0")
     try:
         after_seq = int(last_id)
@@ -320,10 +313,10 @@ async def stream_session(session_id: str, request: Request):
     log = svc.events_log(session_id)
 
     def visible(record: dict) -> bool:
+        if record.get("type") not in visible_types:
+            return False
         if role == "teacher":
             return True
-        if record.get("type") not in STUDENT_VISIBLE_TYPES:
-            return False
         target = record.get("student_id")
         return target is None or target == student_id
 

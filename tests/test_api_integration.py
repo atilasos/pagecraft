@@ -154,6 +154,115 @@ async def test_student_stream_filters_events(client):
     assert "joined" not in types1 and "joined" not in types2
 
 
+async def test_stream_applies_declared_visibility_for_each_role(client):
+    cls = (
+        await client.post(
+            "/api/classes",
+            json={"name": "2.º A", "year": 2, "students": ["Lia"]},
+        )
+    ).json()
+    session = (
+        await client.post(
+            "/api/sessions",
+            json={
+                "class_id": cls["id"],
+                "activity_slug": "demo",
+                "activity_title": "Dobros",
+            },
+        )
+    ).json()
+    student_id = next(iter(session["roster"]))
+    claim = (
+        await client.post(
+            f"/api/sessions/{session['id']}/claim",
+            json={"student_id": student_id},
+        )
+    ).json()
+    await client.app.state.classroom.emit_event(
+        session["id"],
+        "feedback_error",
+        {"error": "falha de teste"},
+        author="assistant",
+        student_id=student_id,
+    )
+    await client.post(f"/api/sessions/{session['id']}/close")
+
+    async def collect(params):
+        types = []
+        async with client.stream(
+            "GET",
+            f"/api/sessions/{session['id']}/stream",
+            params=params,
+        ) as response:
+            async for line in response.aiter_lines():
+                if line.startswith("data: "):
+                    types.append(json.loads(line[6:])["type"])
+                if types and types[-1] == "session_closed":
+                    break
+        return types
+
+    teacher_types = await asyncio.wait_for(
+        collect({"role": "teacher"}),
+        timeout=5,
+    )
+    student_types = await asyncio.wait_for(
+        collect(
+            {
+                "role": "student",
+                "student_token": claim["student_token"],
+            }
+        ),
+        timeout=5,
+    )
+
+    assert "feedback_error" in teacher_types
+    assert "feedback_error" not in student_types
+
+
+async def test_public_event_ingestion_silently_discards_unknown_types(client):
+    cls = (
+        await client.post(
+            "/api/classes",
+            json={"name": "1.º A", "year": 1, "students": ["Eva"]},
+        )
+    ).json()
+    session = (
+        await client.post(
+            "/api/sessions",
+            json={
+                "class_id": cls["id"],
+                "activity_slug": "demo",
+                "activity_title": "Letras",
+            },
+        )
+    ).json()
+    student_id = next(iter(session["roster"]))
+    claim = (
+        await client.post(
+            f"/api/sessions/{session['id']}/claim",
+            json={"student_id": student_id},
+        )
+    ).json()
+
+    response = await client.post(
+        f"/api/sessions/{session['id']}/events",
+        json={
+            "student_token": claim["student_token"],
+            "events": [
+                {
+                    "event_id": "unknown",
+                    "type": "tipo_desconhecido",
+                    "payload": {},
+                }
+            ],
+        },
+        headers={"x-teacher-token": ""},
+    )
+
+    assert response.status_code == 200
+    assert response.json() == {"accepted": []}
+
+
 async def test_teacher_routes_require_token(client):
     # cliente "aluno": sem header de professor
     naked = {"x-teacher-token": ""}
