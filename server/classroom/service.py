@@ -275,14 +275,20 @@ class ClassroomService:
             await self.storage.write_json(self._session_path(session_id), session)
         return {"student_token": token, "student_id": student_id, "display_name": entry["display_name"]}
 
-    async def release_identity(self, session_id: str, student_id: str) -> bool:
+    async def release_identity(
+        self,
+        session_id: str,
+        student_id: str,
+        *,
+        reset_progress: bool = False,
+    ) -> bool:
         async with self._session_locks[session_id]:
             session = await self._require_writable_unlocked(session_id, student_id)
             entry = session["roster"][student_id]
             await self._append_event_unlocked(
                 session_id,
                 "identity_released",
-                {},
+                {"reset_progress": reset_progress},
                 author="teacher",
                 student_id=student_id,
             )
