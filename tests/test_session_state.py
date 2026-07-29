@@ -144,3 +144,17 @@ def test_plan_numbers_come_from_the_latest_state_of_each_item():
     assert state["students"]["ana"]["numbers"]["pit_done"] == 2
     assert state["numbers"]["pit_total"] == 2
     assert state["numbers"]["pit_done"] == 2
+
+
+def test_roster_student_without_events_uses_session_start_as_time_anchor():
+    state = reduce_session(
+        [],
+        roster={"beatriz": {"display_name": "Beatriz"}},
+        started_at="2026-07-29T10:00:00+00:00",
+        now=datetime(2026, 7, 29, 10, 1, 30, tzinfo=timezone.utc),
+    )
+
+    assert state["students"]["beatriz"]["display_name"] == "Beatriz"
+    assert state["students"]["beatriz"]["triage"]["band"] == "Sem sinal"
+    assert state["students"]["beatriz"]["triage"]["wait_seconds"] == 90
+    assert state["students"]["beatriz"]["numbers"]["evidence"]["attempt"] == 0

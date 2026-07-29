@@ -43,19 +43,56 @@ def _blank_numbers(evidence_types: tuple[str, ...]) -> dict:
     }
 
 
+def _blank_student(
+    evidence_types: tuple[str, ...],
+    *,
+    anchor: datetime | None = None,
+    display_name: str | None = None,
+) -> dict:
+    student = {
+        "numbers": _blank_numbers(evidence_types),
+        "_last_presence": anchor,
+        "_last_work": anchor,
+        "_help_since": None,
+        "_consecutive_failures": 0,
+        "_failures_since": None,
+        "_pit_items": {},
+    }
+    if display_name is not None:
+        student["display_name"] = display_name
+    return student
+
+
 def reduce_session(
     events: Iterable[Mapping],
     *,
-    now: datetime,
+    now: datetime | str,
+    roster: Mapping[str, object] | Iterable[str] = (),
+    started_at: datetime | str | None = None,
 ) -> dict:
     """Produz sempre o mesmo estado para a mesma sequência e o mesmo instante."""
     now_instant = _instant(now)
     if now_instant is None:
         raise ValueError("now tem de ser um instante válido")
+    start_instant = _instant(started_at)
     evidence_types = tuple(
         event_type.name for event_type in SESSION_EVENT_TYPES.evidence()
     )
     students: dict[str, dict] = {}
+    roster_entries = roster.items() if isinstance(roster, Mapping) else (
+        (student_id, None) for student_id in roster
+    )
+    for student_id, entry in roster_entries:
+        display_name = None
+        if isinstance(entry, Mapping):
+            display_name = entry.get("display_name")
+        elif isinstance(entry, str):
+            display_name = entry
+        students[str(student_id)] = _blank_student(
+            evidence_types,
+            anchor=start_instant,
+            display_name=str(display_name) if display_name is not None else None,
+        )
     participants: set[str] = set()
 
     for event in events:
@@ -64,15 +101,7 @@ def reduce_session(
             continue
         student = students.setdefault(
             str(student_id),
-            {
-                "numbers": _blank_numbers(evidence_types),
-                "_last_presence": None,
-                "_last_work": None,
-                "_help_since": None,
-                "_consecutive_failures": 0,
-                "_failures_since": None,
-                "_pit_items": {},
-            },
+            _blank_student(evidence_types, anchor=start_instant),
         )
         event_type = event.get("type")
         declaration = SESSION_EVENT_TYPES.get(str(event_type))
@@ -89,6 +118,9 @@ def reduce_session(
             student["_help_since"] = instant
         if event_type == "joined":
             participants.add(str(student_id))
+            display_name = (event.get("payload") or {}).get("display_name")
+            if display_name and "display_name" not in student:
+                student["display_name"] = str(display_name)
             if student["_last_work"] is None:
                 student["_last_work"] = instant
         elif event_type in _WORK_EVENT_TYPES and instant is not None:
