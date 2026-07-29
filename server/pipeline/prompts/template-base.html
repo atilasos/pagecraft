@@ -442,6 +442,7 @@
           }, '*');
         } catch (e) { /* nunca quebrar a atividade por causa da telemetria */ }
       }
+      /* BEGIN GENERATED SESSION EVENT EMITTERS — do not edit by hand. */
       /* presença: heartbeat de 30s enquanto a página está visível */
       if (embedded) {
         emit('activity_loaded', null, { title: document.title });
@@ -452,19 +453,14 @@
       return {
         emit: emit,
         unitStarted: function (unitId) { emit('unit_started', unitId, {}); },
-        attempt: function (unitId, correct, detail) {
-          emit('attempt', unitId, { correct: !!correct, detail: detail || '' });
-        },
+        attempt: function (unitId, correct, detail) { emit('attempt', unitId, { correct: !!correct, detail: detail || '' }); },
         discovery: function (unitId, message) { emit('discovery', unitId, { message: message || '' }); },
-        assessment: function (unitId, result, detail) {
-          emit('assessment_result', unitId, { result: result, detail: detail || '' });
-        },
-        askForFeedback: function (unitId, question, answer, expected) {
-          emit('feedback_request', unitId, { question: question, answer: answer, expected: expected || '' });
-        },
+        assessment: function (unitId, result, detail) { emit('assessment_result', unitId, { result: result, detail: detail || '' }); },
+        askForFeedback: function (unitId, question, answer, expected) { emit('feedback_request', unitId, { question: question, answer: answer, expected: expected || '' }); },
         helpNeeded: function (unitId, note) { emit('help_needed', unitId, { note: note || '' }); },
         share: function (unitId, what) { emit('share_requested', unitId, { what: what || '' }); }
       };
+      /* END GENERATED SESSION EVENT EMITTERS */
     })();
 
     /* Ouvir o embutidor (chega por postMessage): feedback do assistente e
