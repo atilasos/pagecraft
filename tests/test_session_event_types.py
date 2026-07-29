@@ -61,6 +61,14 @@ def test_identity_release_declares_the_explicit_reset_decision():
     }
 
 
+def test_plan_update_declares_both_sides_of_the_transition():
+    update = SESSION_EVENT_TYPES.get("pit_updated")
+
+    assert update is not None
+    assert "previous_status" in update.payload_fields
+    assert "status" in update.payload_fields
+
+
 def _entry(**changes):
     fields = {
         "name": "example",

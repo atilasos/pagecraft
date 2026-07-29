@@ -268,6 +268,9 @@ SESSION_EVENT_TYPES = SessionEventRegistry(
                 "id": "Identificador estável do item do Plano individual de trabalho.",
                 "student_id": "Identificador da criança autora do item.",
                 "text": "Formulação do trabalho proposta pela criança.",
+                "previous_status": (
+                    "Estado anterior do item, ou nulo quando o item é criado."
+                ),
                 "status": "Estado atual do item no plano.",
                 "updated_at": "Instante da alteração, em formato ISO 8601.",
             },
