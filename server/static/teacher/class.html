@@ -165,8 +165,13 @@
     <p class="drawer-actions">
       <button type="button" class="ghost" id="drawer-msg">Enviar mensagem</button>
       <button type="button" class="ghost" id="drawer-highlight">Chamar a atenção só dele</button>
-      <button type="button" class="quiet" id="drawer-release">Libertar identidade</button>
     </p>
+    <fieldset class="release-options">
+      <legend>Ao libertar a identidade</legend>
+      <label><input type="radio" name="release-progress" id="drawer-keep" checked> Manter progresso</label>
+      <label><input type="radio" name="release-progress" id="drawer-reset"> Repor progresso</label>
+      <button type="button" class="quiet" id="drawer-release">Libertar identidade</button>
+    </fieldset>
     <p class="eyebrow">Percurso nesta aula</p>
     <ul class="plain" id="drawer-events"></ul>
   </aside>

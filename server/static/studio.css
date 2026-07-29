@@ -517,6 +517,19 @@ th { background: var(--paper-deep); font-family: var(--font-type); font-size: 0.
 .drawer.open { transform: translateX(0); }
 .drawer .close-row { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
 .drawer ul.plain li { font-size: 0.9rem; }
+.release-options {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  margin: 0 0 1.1rem;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+.release-options legend { padding: 0 0.3rem; color: var(--ink-soft); font-size: 0.82rem; font-weight: 800; }
+.release-options label { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.88rem; }
+.release-options button { margin-left: auto; }
 
 .picker-filters { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin: 0.75rem 0; }
 .picker-filters input[type="search"] { max-width: 260px; min-height: 44px; }

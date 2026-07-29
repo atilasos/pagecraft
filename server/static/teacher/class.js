@@ -610,7 +610,10 @@ function renderStudents() {
 function openDrawer(studentId) {
   drawerStudent = studentId;
   fillDrawer(studentId);
+  $("drawer-keep").checked = true;
+  $("drawer-events").innerHTML = '<li class="muted">a carregar percurso…</li>';
   $("drawer").classList.add("open");
+  loadDrawerHistory(studentId);
 }
 
 function fillDrawer(studentId) {
@@ -626,6 +629,50 @@ function fillDrawer(studentId) {
     <span class="pill">${evidence.attempt || 0} tentativas</span>
     <span class="pill ok">${evidence.discovery || 0} descobertas</span>
     ${st.triage?.explicit_help ? '<span class="pill warn">pediu ajuda</span>' : ""}`;
+}
+
+async function loadDrawerHistory(studentId) {
+  const list = $("drawer-events");
+  try {
+    const resp = await tfetch(
+      `/api/sessions/${encodeURIComponent(session.id)}/students/${encodeURIComponent(studentId)}/history?role=teacher`
+    );
+    if (drawerStudent !== studentId) return;
+    if (!resp.ok) {
+      list.innerHTML = '<li class="muted">não foi possível carregar o percurso</li>';
+      return;
+    }
+    const data = await resp.json();
+    if (!Array.isArray(data?.events)) {
+      list.innerHTML = '<li class="muted">percurso incompreensível</li>';
+      return;
+    }
+    renderDrawerHistory(data.events);
+  } catch (error) {
+    if (drawerStudent === studentId) {
+      list.innerHTML = '<li class="muted">não foi possível carregar o percurso</li>';
+    }
+  }
+}
+
+function renderDrawerHistory(events) {
+  const list = $("drawer-events");
+  list.innerHTML = "";
+  [...events].reverse().forEach((record) => {
+    if (!record || typeof record !== "object" || typeof record.type !== "string") return;
+    const text = eventText(record.type, record);
+    if (!text) return;
+    const li = document.createElement("li");
+    const when = new Date(record.ts).toLocaleTimeString("pt-PT", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    li.textContent = `${when} · ${text}`;
+    list.appendChild(li);
+  });
+  if (!list.children.length) {
+    list.innerHTML = '<li class="muted">ainda sem atividade</li>';
+  }
 }
 
 $("drawer-close").addEventListener("click", () => {
@@ -647,9 +694,16 @@ $("drawer-highlight").addEventListener("click", () => {
 });
 $("drawer-release").addEventListener("click", async () => {
   if (!session || !drawerStudent) return;
-  await tfetch(`/api/sessions/${session.id}/release/${drawerStudent}`, { method: "POST" });
-  $("drawer").classList.remove("open");
-  drawerStudent = null;
+  const studentId = drawerStudent;
+  const resp = await tfetch(`/api/sessions/${session.id}/release/${studentId}`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ reset_progress: $("drawer-reset").checked }),
+  });
+  if (resp.ok && drawerStudent === studentId) {
+    $("drawer").classList.remove("open");
+    drawerStudent = null;
+  }
 });
 
 /* ---------- mensagens / fecho ---------- */
