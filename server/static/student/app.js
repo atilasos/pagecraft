@@ -7,7 +7,8 @@ const state = {
   token: null,
   displayName: null,
   outbox: [],
-  pitItems: {},
+  studentState: null,
+  sessionState: null,
 };
 
 const $ = (id) => document.getElementById(id);
@@ -128,6 +129,9 @@ async function claim(student) {
 
 function startActivity() {
   stopActivityConnections();
+  state.studentState = null;
+  state.sessionState = null;
+  $("freeze-overlay").hidden = true;
   $("step-identity").hidden = true;
   $("step-activity").hidden = false;
   $("student-name").textContent = state.displayName;
@@ -211,27 +215,11 @@ const STUDENT_EVENT_HANDLERS = {
   teacher_message(data) {
     showMessage(`Professor: ${data.payload.text}`, "feedback-ok");
   },
-  pit_updated(data) {
-    state.pitItems[data.payload.id] = data.payload;
-    renderPit();
-  },
   teacher_highlight(data) {
     const { unit_id: unitId, unit_label: label } = data.payload || {};
     // fallback sempre visível, mesmo em atividades sem suporte
     showMessage(`👀 Olha para: ${label || unitId || "a atividade"}`, "feedback-warn");
     return { unitId };
-  },
-  freeze_screens() {
-    $("freeze-overlay").hidden = false;
-  },
-  unfreeze_screens() {
-    $("freeze-overlay").hidden = true;
-  },
-  session_closed() {
-    $("freeze-overlay").hidden = true;
-    showMessage("A aula terminou. Bom trabalho!", "feedback-ok");
-    clearIdentity();
-    stopActivityConnections();
   },
 };
 
@@ -296,6 +284,42 @@ function dispatchStudentEvent(declaration, rawData) {
   }
 }
 
+function acceptStudentState(student) {
+  if (!student || typeof student !== "object" || Array.isArray(student)) return;
+  state.studentState = student;
+  renderPit();
+}
+
+function acceptSessionState(session) {
+  if (!session || typeof session !== "object" || Array.isArray(session)) return;
+  const wasClosed = state.sessionState?.closed === true;
+  state.sessionState = session;
+  $("freeze-overlay").hidden = session.frozen !== true;
+  if (session.closed === true && !wasClosed) {
+    showMessage("A aula terminou. Bom trabalho!", "feedback-ok");
+    clearIdentity();
+    stopActivityConnections();
+  }
+}
+
+function dispatchStateFrame(type, rawData) {
+  try {
+    const data = JSON.parse(rawData);
+    if (!data || typeof data !== "object" || Array.isArray(data)) return;
+    if (type === "session_state_snapshot") {
+      acceptStudentState(data.students?.[state.studentId]);
+      acceptSessionState(data.session);
+    } else if (type === "student_state_changed") {
+      if (data.student_id !== state.studentId) return;
+      acceptStudentState(data.student);
+    } else if (type === "session_state_changed") {
+      acceptSessionState(data.session);
+    }
+  } catch (error) {
+    // Frames incompletos não substituem a última projeção válida.
+  }
+}
+
 async function connectStream() {
   const request = ++streamRequest;
   const sessionId = state.session.id;
@@ -306,6 +330,13 @@ async function connectStream() {
     `/api/sessions/${sessionId}/stream?role=student&student_token=${token}`
   );
   stream = es;
+  [
+    "session_state_snapshot",
+    "student_state_changed",
+    "session_state_changed",
+  ].forEach((type) => {
+    es.addEventListener(type, (ev) => dispatchStateFrame(type, ev.data));
+  });
   eventTypes.forEach((declaration) => {
     es.addEventListener(declaration.name, (ev) => {
       dispatchStudentEvent(declaration, ev.data);
@@ -355,18 +386,39 @@ $("pit-form").addEventListener("submit", async (ev) => {
   });
   if (resp.ok) {
     const item = await resp.json();
-    state.pitItems[item.id] = item;
+    acceptPitItem(item);
     $("pit-text").value = "";
-    renderPit();
   }
 });
 
 const PIT_LABELS = { planned: "por fazer", doing: "a fazer", done: "feito", to_share: "para partilhar" };
 
+function acceptPitItem(item) {
+  if (!item || typeof item !== "object" || Array.isArray(item) || !item.id) return;
+  const current = Array.isArray(state.studentState?.pit_items)
+    ? state.studentState.pit_items
+    : [];
+  let replaced = false;
+  const pitItems = current.map((candidate) => {
+    if (candidate.id !== item.id) return candidate;
+    replaced = true;
+    return item;
+  });
+  if (!replaced) pitItems.push(item);
+  state.studentState = {
+    ...(state.studentState || {}),
+    pit_items: pitItems,
+  };
+  renderPit();
+}
+
 function renderPit() {
   const list = $("pit-list");
   list.innerHTML = "";
-  Object.values(state.pitItems).forEach((item) => {
+  const pitItems = Array.isArray(state.studentState?.pit_items)
+    ? state.studentState.pit_items
+    : [];
+  pitItems.forEach((item) => {
     const li = document.createElement("li");
     const btn = document.createElement("button");
     btn.className = "ghost";
@@ -382,9 +434,7 @@ function renderPit() {
         }
       );
       if (resp.ok) {
-        const updated = await resp.json();
-        state.pitItems[updated.id] = updated;
-        renderPit();
+        acceptPitItem(await resp.json());
       }
     });
     li.append(btn, document.createTextNode(" " + item.text));
