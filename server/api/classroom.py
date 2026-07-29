@@ -6,7 +6,7 @@ import json
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from ..classroom.errors import (
     ClassroomError,
@@ -48,11 +48,17 @@ class EventsRequest(BaseModel):
     events: list[dict] = Field(max_length=20)
 
 
-class PitRequest(BaseModel):
+class CreatePitItemRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     student_token: str
     text: str = Field(min_length=1, max_length=280)
-    status: str = "planned"
-    item_id: str | None = None
+
+
+class AdvancePitItemRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    student_token: str
 
 
 class TeacherMessageRequest(BaseModel):
@@ -265,19 +271,32 @@ async def session_control(session_id: str, body: ControlRequest, request: Reques
 
 
 @router.post("/sessions/{session_id}/pit")
-async def pit(session_id: str, body: PitRequest, request: Request):
+async def create_pit_item(
+    session_id: str, body: CreatePitItemRequest, request: Request
+):
     svc = _svc(request)
     student_id = await svc.student_for_token(session_id, body.student_token)
     if not student_id:
         raise HTTPException(401, "token inválido")
-    item = await _domain(
-        svc.upsert_pit_item(
-            session_id, student_id, body.text, body.status, body.item_id
-        )
+    return await _domain(
+        svc.create_pit_item(session_id, student_id, body.text)
     )
-    if not item:
-        raise HTTPException(400, "item PIT inválido")
-    return item
+
+
+@router.post("/sessions/{session_id}/pit/{item_id}/advance")
+async def advance_pit_item(
+    session_id: str,
+    item_id: str,
+    body: AdvancePitItemRequest,
+    request: Request,
+):
+    svc = _svc(request)
+    student_id = await svc.student_for_token(session_id, body.student_token)
+    if not student_id:
+        raise HTTPException(401, "token inválido")
+    return await _domain(
+        svc.advance_pit_item(session_id, student_id, item_id)
+    )
 
 
 @router.get("/sessions/{session_id}/stream")
