@@ -72,6 +72,37 @@ async def test_feedback_delivered(env):
     await fb.stop()
 
 
+async def test_feedback_request_registered_delivers_feedback(env):
+    config, storage, hub, classroom = env
+    provider = GoodProvider()
+    fb = FeedbackService(config, storage, classroom, provider)
+    session, student_id = await _session_with_student(classroom)
+    fb.start()
+
+    await classroom.ingest_events(
+        session["id"],
+        student_id,
+        [
+            {
+                "event_id": "feedback-1",
+                "type": "feedback_request",
+                "unit_id": "u1",
+                "payload": {
+                    "question": "2+2?",
+                    "answer": "4",
+                    "expected": "4",
+                },
+            }
+        ],
+    )
+
+    record = await _wait_event(storage, session["id"], "ai_feedback")
+    assert record["student_id"] == student_id
+    assert record["payload"]["source"] == "ai"
+    assert provider.calls == 1
+    await fb.stop()
+
+
 async def test_feedback_cache_hit(env):
     config, storage, hub, classroom = env
     provider = GoodProvider()

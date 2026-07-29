@@ -15,7 +15,7 @@ import unicodedata
 from collections import Counter
 
 from ..config import Config
-from ..events import utcnow
+from ..events import EventSubscription, utcnow
 from ..providers import AIProvider, ProviderError
 from ..storage import Storage
 from .service import ClassroomService
@@ -69,19 +69,50 @@ class FeedbackService:
         self.n_workers = workers
         self._queue: asyncio.Queue[dict] = asyncio.Queue()
         self._workers: list[asyncio.Task] = []
+        self._subscription: EventSubscription | None = None
+        self._subscriber: asyncio.Task | None = None
         self._caches: dict[str, dict] = {}
         self._pending: Counter[tuple[str, str]] = Counter()
         self.max_pending_per_student = 3
 
     def start(self) -> None:
+        if self._subscriber is None or self._subscriber.done():
+            self._subscription = self.classroom.hub.subscribe("sessions")
+            self._subscriber = asyncio.create_task(
+                self._listen(self._subscription)
+            )
         while len([w for w in self._workers if not w.done()]) < self.n_workers:
             self._workers.append(asyncio.create_task(self._worker()))
 
     async def stop(self) -> None:
+        if self._subscription is not None:
+            self._subscription.close()
+            self._subscription = None
+        if self._subscriber is not None:
+            self._subscriber.cancel()
+            await asyncio.gather(self._subscriber, return_exceptions=True)
+            self._subscriber = None
         for w in self._workers:
             w.cancel()
         await asyncio.gather(*self._workers, return_exceptions=True)
         self._workers.clear()
+        self._queue = asyncio.Queue()
+        self._pending.clear()
+
+    async def _listen(self, subscription: EventSubscription) -> None:
+        async for channel, record in subscription:
+            if (
+                len(channel) == 3
+                and channel[2] == "events.jsonl"
+                and record.get("type") == "feedback_request"
+                and record.get("student_id")
+            ):
+                await self.request(
+                    channel[1],
+                    record["student_id"],
+                    record.get("unit_id"),
+                    record.get("payload") or {},
+                )
 
     async def _cache(self, session_id: str) -> dict:
         if session_id not in self._caches:
