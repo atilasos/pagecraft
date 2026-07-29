@@ -72,8 +72,10 @@ class FeedbackService:
         self._workers: list[asyncio.Task] = []
         self._subscription: EventSubscription | None = None
         self._subscriber: asyncio.Task | None = None
+        self._recovery: asyncio.Task | None = None
         self._caches: dict[str, dict] = {}
         self._pending: Counter[tuple[str, str]] = Counter()
+        self._scheduled: set[tuple[str, int]] = set()
         self.max_pending_per_student = 3
 
     def start(self) -> None:
@@ -82,6 +84,8 @@ class FeedbackService:
             self._subscriber = asyncio.create_task(
                 self._listen(self._subscription)
             )
+        if self._recovery is None or self._recovery.done():
+            self._recovery = asyncio.create_task(self._recover())
         while len([w for w in self._workers if not w.done()]) < self.n_workers:
             self._workers.append(asyncio.create_task(self._worker()))
 
@@ -93,12 +97,17 @@ class FeedbackService:
             self._subscriber.cancel()
             await asyncio.gather(self._subscriber, return_exceptions=True)
             self._subscriber = None
+        if self._recovery is not None:
+            self._recovery.cancel()
+            await asyncio.gather(self._recovery, return_exceptions=True)
+            self._recovery = None
         for w in self._workers:
             w.cancel()
         await asyncio.gather(*self._workers, return_exceptions=True)
         self._workers.clear()
         self._queue = asyncio.Queue()
         self._pending.clear()
+        self._scheduled.clear()
 
     async def _listen(self, subscription: EventSubscription) -> None:
         async for channel, record in subscription:
@@ -108,12 +117,73 @@ class FeedbackService:
                 and record.get("type") == "feedback_request"
                 and record.get("student_id")
             ):
-                await self.request(
-                    channel[1],
-                    record["student_id"],
-                    record.get("unit_id"),
-                    record.get("payload") or {},
-                )
+                await self._schedule_record(channel[1], record)
+
+    async def _recover(self) -> None:
+        sessions_dir = self.storage.root / "sessions"
+        if not sessions_dir.is_dir():
+            return
+        for path in sorted(sessions_dir.glob("*/events.jsonl")):
+            records = await self.storage.read_jsonl(path)
+            if any(record.get("type") == "session_closed" for record in records):
+                continue
+            for record in self._unprocessed_requests(records):
+                await self._schedule_record(path.parent.name, record)
+
+    @staticmethod
+    def _unprocessed_requests(records: list[dict]) -> list[dict]:
+        requests = [
+            record
+            for record in records
+            if record.get("type") == "feedback_request"
+            and record.get("student_id")
+            and record.get("seq") is not None
+        ]
+        handled = {
+            int(record["caused_by_seq"])
+            for record in records
+            if record.get("type")
+            in {"ai_feedback", "feedback_error", "feedback_dropped"}
+            and record.get("caused_by_seq") is not None
+        }
+
+        # Compatibilidade com respostas gravadas antes de existir causalidade
+        # explícita: consome, por aluno/unidade, um pedido por desfecho legado.
+        legacy_outcomes = Counter(
+            (
+                str(record.get("student_id")),
+                (record.get("payload") or {}).get("unit_id"),
+            )
+            for record in records
+            if record.get("type")
+            in {"ai_feedback", "feedback_error", "feedback_dropped"}
+            and record.get("caused_by_seq") is None
+        )
+        pending = []
+        for record in requests:
+            seq = int(record["seq"])
+            if seq in handled:
+                continue
+            key = (str(record["student_id"]), record.get("unit_id"))
+            if legacy_outcomes[key]:
+                legacy_outcomes[key] -= 1
+                continue
+            pending.append(record)
+        return pending
+
+    async def _schedule_record(self, session_id: str, record: dict) -> None:
+        request_seq = int(record["seq"])
+        key = (session_id, request_seq)
+        if key in self._scheduled:
+            return
+        self._scheduled.add(key)
+        await self.request(
+            session_id,
+            record["student_id"],
+            record.get("unit_id"),
+            record.get("payload") or {},
+            request_seq=request_seq,
+        )
 
     async def _cache(self, session_id: str) -> dict:
         if session_id not in self._caches:
@@ -139,13 +209,28 @@ class FeedbackService:
         )
         return hashlib.sha256(semantic.encode("utf-8")).hexdigest()[:32]
 
-    async def request(self, session_id: str, student_id: str, unit_id: str | None, payload: dict) -> None:
+    async def request(
+        self,
+        session_id: str,
+        student_id: str,
+        unit_id: str | None,
+        payload: dict,
+        *,
+        request_seq: int | None = None,
+    ) -> None:
         """Chamado quando chega um evento feedback_request; nunca bloqueia."""
         cache = await self._cache(session_id)
         cache_key = self._cache_key(unit_id, payload)
         cached = cache.get(cache_key)
         if cached:
-            await self._deliver(session_id, student_id, unit_id, cached, source="cache")
+            await self._deliver(
+                session_id,
+                student_id,
+                unit_id,
+                cached,
+                source="cache",
+                request_seq=request_seq,
+            )
             return
         key = (session_id, student_id)
         if self._pending[key] >= self.max_pending_per_student:
@@ -156,6 +241,7 @@ class FeedbackService:
                 {"unit_id": unit_id, "reason": "demasiados pedidos seguidos"},
                 author="assistant",
                 student_id=student_id,
+                caused_by_seq=request_seq,
             )
             return
         self._pending[key] += 1
@@ -166,6 +252,7 @@ class FeedbackService:
                 "unit_id": unit_id,
                 "payload": payload,
                 "cache_key": cache_key,
+                "request_seq": request_seq,
                 "queued_at": utcnow(),
             }
         )
@@ -190,6 +277,7 @@ class FeedbackService:
                         {"error": str(exc), "unit_id": item["unit_id"]},
                         author="assistant",
                         student_id=item["student_id"],
+                        caused_by_seq=item["request_seq"],
                     )
                 except SessionClosedError:
                     pass
@@ -219,10 +307,22 @@ class FeedbackService:
             cache = await self._cache(item["session_id"])
             cache[item["cache_key"]] = text
             await self._save_cache(item["session_id"])
-            await self._deliver(item["session_id"], item["student_id"], item["unit_id"], text, source="ai")
+            await self._deliver(
+                item["session_id"],
+                item["student_id"],
+                item["unit_id"],
+                text,
+                source="ai",
+                request_seq=item["request_seq"],
+            )
         except ProviderError as exc:
             await self._deliver(
-                item["session_id"], item["student_id"], item["unit_id"], TIMEOUT_MESSAGE, source="timeout"
+                item["session_id"],
+                item["student_id"],
+                item["unit_id"],
+                TIMEOUT_MESSAGE,
+                source="timeout",
+                request_seq=item["request_seq"],
             )
             await self.classroom.emit_event(
                 item["session_id"],
@@ -230,13 +330,24 @@ class FeedbackService:
                 {"unit_id": item["unit_id"], "error": str(exc), "payload": payload},
                 author="assistant",
                 student_id=item["student_id"],
+                caused_by_seq=item["request_seq"],
             )
 
-    async def _deliver(self, session_id: str, student_id: str, unit_id: str | None, text: str, source: str) -> None:
+    async def _deliver(
+        self,
+        session_id: str,
+        student_id: str,
+        unit_id: str | None,
+        text: str,
+        source: str,
+        *,
+        request_seq: int | None,
+    ) -> None:
         await self.classroom.emit_event(
             session_id,
             "ai_feedback",
             {"text": text, "unit_id": unit_id, "source": source},
             author="assistant",
             student_id=student_id,
+            caused_by_seq=request_seq,
         )

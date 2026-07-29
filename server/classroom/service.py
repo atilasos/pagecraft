@@ -427,6 +427,7 @@ class ClassroomService:
         *,
         author: str,
         student_id: str | None = None,
+        caused_by_seq: int | None = None,
     ) -> dict:
         async with self._session_locks[session_id]:
             await self._require_writable_unlocked(session_id, student_id)
@@ -436,6 +437,7 @@ class ClassroomService:
                 payload,
                 author=author,
                 student_id=student_id,
+                caused_by_seq=caused_by_seq,
             )
 
     async def _append_event_unlocked(
@@ -446,15 +448,17 @@ class ClassroomService:
         *,
         author: str,
         student_id: str | None = None,
+        caused_by_seq: int | None = None,
     ) -> dict:
         event_type = SESSION_EVENT_TYPES.get(type_)
         if event_type is None:
             raise ValueError(f"tipo de Acontecimento de sessão não declarado: {type_}")
         if author not in event_type.authors:
             raise ValueError(f"{author} não pode emitir o Acontecimento de sessão {type_}")
-        return await self.events_log(session_id).append(
-            {"type": type_, "student_id": student_id, "payload": payload}
-        )
+        record = {"type": type_, "student_id": student_id, "payload": payload}
+        if caused_by_seq is not None:
+            record["caused_by_seq"] = caused_by_seq
+        return await self.events_log(session_id).append(record)
 
     # ---- PIT-lite ----
 
