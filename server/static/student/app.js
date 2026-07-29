@@ -130,6 +130,7 @@ function startActivity() {
   state.studentState = null;
   state.sessionState = null;
   $("freeze-overlay").hidden = true;
+  $("step-code").hidden = true;
   $("step-identity").hidden = true;
   $("step-activity").hidden = false;
   $("student-name").textContent = state.displayName;
