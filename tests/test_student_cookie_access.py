@@ -169,3 +169,20 @@ async def test_own_history_survives_close_until_local_midnight(classroom_http):
         f"/api/sessions/{session['id']}/students/{ana_id}/history"
     )
     assert expired.status_code == 401
+
+
+async def test_student_cookie_is_forbidden_on_another_session(classroom_http):
+    _, teacher, student, _ = classroom_http
+    own_session = await create_session(teacher, students=("Ana",))
+    other_session = await create_session(teacher, students=("Carla",))
+    ana_id = next(iter(own_session["roster"]))
+    assert (
+        await student.post(
+            f"/api/sessions/{own_session['id']}/claim",
+            json={"student_id": ana_id},
+        )
+    ).status_code == 200
+
+    crossed = await student.get(f"/api/sessions/{other_session['id']}/me")
+
+    assert crossed.status_code == 403

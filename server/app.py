@@ -14,6 +14,7 @@ from fastapi.staticfiles import StaticFiles
 from .access import (
     RATE_LIMIT_DETAIL,
     RequestRateLimiter,
+    Role,
     RoutePolicy,
     TrustChannel,
     access_policy,
@@ -139,6 +140,19 @@ def create_app(
         )
         bootstraps_teacher = route_bootstraps_teacher(route)
         request.state.access = access
+        requested_session_id = child_scope.get("path_params", {}).get(
+            "session_id"
+        )
+        if (
+            RoutePolicy.PUBLIC not in policy
+            and access.role is Role.STUDENT
+            and requested_session_id
+            and access.student_session_id != requested_session_id
+        ):
+            return JSONResponse(
+                {"detail": "este Aluno pertence a outra sessão"},
+                status_code=403,
+            )
         rate_limit_operation = route_rate_limit(route)
         if (
             rate_limit_operation
