@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import time
 from collections.abc import Callable, Iterable
 from contextlib import asynccontextmanager
 
@@ -10,6 +11,8 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from .access import (
+    RATE_LIMIT_DETAIL,
+    RequestRateLimiter,
     RoutePolicy,
     TrustChannel,
     access_policy,
@@ -21,6 +24,7 @@ from .access import (
     resolve_access,
     route_bootstraps_teacher,
     route_policy,
+    route_rate_limit,
     teacher_loopback_bootstrap,
     validate_route_policies,
 )
@@ -50,6 +54,7 @@ def build_feedback_provider(config):
 def create_app(
     *,
     route_extensions: Iterable[Callable[[FastAPI], None]] = (),
+    rate_limit_clock: Callable[[], float] = time.monotonic,
 ) -> FastAPI:
     config = load_config()
     storage = Storage(config.data_dir)
@@ -87,6 +92,7 @@ def create_app(
         title="PageCraft Studio",
         lifespan=lifespan,
     )
+    app.state.access_rate_limiter = RequestRateLimiter(rate_limit_clock)
     for framework_route in app.routes:
         declare_route_policy(framework_route, RoutePolicy.TEACHER)
 
@@ -124,6 +130,18 @@ def create_app(
         )
         bootstraps_teacher = route_bootstraps_teacher(route)
         request.state.access = access
+        rate_limit_operation = route_rate_limit(route)
+        if (
+            rate_limit_operation
+            and not app.state.access_rate_limiter.allows(
+                rate_limit_operation,
+                access.client_ip,
+            )
+        ):
+            return JSONResponse(
+                {"detail": RATE_LIMIT_DETAIL},
+                status_code=429,
+            )
         if not policy_allows(
             policy,
             access,

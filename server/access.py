@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hmac
+from collections import deque
 from collections.abc import Callable, Iterable, Iterator, MutableMapping
 from dataclasses import dataclass
 from enum import StrEnum
@@ -34,8 +35,10 @@ class RoutePolicy(StrEnum):
 
 _POLICY_ATTRIBUTE = "__pagecraft_access_policy__"
 _TEACHER_BOOTSTRAP_ATTRIBUTE = "__pagecraft_teacher_loopback_bootstrap__"
+_RATE_LIMIT_ATTRIBUTE = "__pagecraft_access_rate_limit__"
 _PROXY_HEADERS = ("x-forwarded-for", "x-real-ip", "forwarded", "cf-connecting-ip")
 TEACHER_COOKIE_NAME = "pagecraft_teacher_session"
+RATE_LIMIT_DETAIL = "muitas tentativas — espera um bocadinho"
 
 
 @dataclass(frozen=True)
@@ -47,6 +50,33 @@ class AccessContext:
     student_token: str = ""
 
 
+class RequestRateLimiter:
+    """Janela deslizante in-process, isolada por operação e IP resolvido."""
+
+    def __init__(
+        self,
+        clock: Callable[[], float],
+        *,
+        limit: int = 20,
+        window_seconds: float = 60,
+    ):
+        self._clock = clock
+        self._limit = limit
+        self._window_seconds = window_seconds
+        self._attempts: dict[tuple[str, str], deque[float]] = {}
+
+    def allows(self, operation: str, client_ip: str) -> bool:
+        now = self._clock()
+        attempts = self._attempts.setdefault((operation, client_ip), deque())
+        cutoff = now - self._window_seconds
+        while attempts and attempts[0] <= cutoff:
+            attempts.popleft()
+        if len(attempts) >= self._limit:
+            return False
+        attempts.append(now)
+        return True
+
+
 def access_policy(policy: RoutePolicy, *additional: RoutePolicy):
     """Declara a política no endpoint antes de o router o registar."""
 
@@ -56,6 +86,16 @@ def access_policy(policy: RoutePolicy, *additional: RoutePolicy):
 
     def decorate(endpoint: Callable) -> Callable:
         setattr(endpoint, _POLICY_ATTRIBUTE, policies)
+        return endpoint
+
+    return decorate
+
+
+def rate_limited(operation: str):
+    """Declara um orçamento de pedidos por IP para uma rota pública."""
+
+    def decorate(endpoint: Callable) -> Callable:
+        setattr(endpoint, _RATE_LIMIT_ATTRIBUTE, operation)
         return endpoint
 
     return decorate
@@ -95,6 +135,17 @@ def route_policy(route: BaseRoute) -> frozenset[RoutePolicy] | None:
     declared = getattr(route, _POLICY_ATTRIBUTE, None)
     if declared is None:
         declared = getattr(getattr(route, "endpoint", None), _POLICY_ATTRIBUTE, None)
+    return declared
+
+
+def route_rate_limit(route: BaseRoute) -> str | None:
+    declared = getattr(route, _RATE_LIMIT_ATTRIBUTE, None)
+    if declared is None:
+        declared = getattr(
+            getattr(route, "endpoint", None),
+            _RATE_LIMIT_ATTRIBUTE,
+            None,
+        )
     return declared
 
 

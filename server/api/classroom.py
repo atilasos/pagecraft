@@ -9,7 +9,7 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, ConfigDict, Field
 
-from ..access import Role, RoutePolicy, access_policy
+from ..access import Role, RoutePolicy, access_policy, rate_limited
 from ..classroom.errors import (
     ClassroomError,
     InvalidPitItemError,
@@ -186,6 +186,7 @@ async def close_session(session_id: str, request: Request):
 
 @router.get("/join/{join_code}")
 @access_policy(RoutePolicy.PUBLIC)
+@rate_limited("join")
 async def join_by_code(join_code: str, request: Request):
     svc = _svc(request)
     session = await svc.find_by_code(join_code)
