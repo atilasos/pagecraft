@@ -33,15 +33,11 @@ async def _collect_raw_stream_types(client, session_id, params):
     return types
 
 
-class InstantFeedbackProvider:
-    name = "fake"
+from fakes import FakeProvider
 
-    def __init__(self):
-        self.calls = 0
 
-    async def complete(self, prompt, *, schema=None, system=None, timeout_s=20, workdir=None):
-        self.calls += 1
-        return {"feedback": "Boa! Já viste que a metade de 8 é 4."}
+def instant_feedback_provider():
+    return FakeProvider(default={"feedback": "Boa! Já viste que a metade de 8 é 4."})
 
 
 @pytest.fixture
@@ -49,7 +45,7 @@ async def client(tmp_path, monkeypatch):
     monkeypatch.setenv("PAGECRAFT_DATA_DIR", str(tmp_path / "data"))
     app = app_module.create_app()
     async with app.router.lifespan_context(app):
-        app.state.feedback.provider = InstantFeedbackProvider()
+        app.state.feedback.provider = instant_feedback_provider()
         transport = httpx.ASGITransport(app=app)
         async with httpx.AsyncClient(
             transport=transport,
@@ -130,7 +126,7 @@ async def test_full_classroom_flow(client):
 
     record = await asyncio.wait_for(wait_feedback(), timeout=5)
     assert "metade" in record["payload"]["text"]
-    assert client.app.state.feedback.provider.calls == 1
+    assert len(client.app.state.feedback.provider.calls) == 1
 
     # o cliente não pode escolher o estado inicial
     resp = await client.post(

@@ -8,6 +8,8 @@ from server.events import EventHub
 from server.pipeline.runner import PipelineRunner, slugify
 from server.storage import Storage
 
+from fakes import FakeProvider
+
 GOOD_HTML = (
     "<!doctype html>\n"
     '<html lang="pt-PT"><head><meta charset="utf-8">'
@@ -28,13 +30,13 @@ DOCSPEC = {
         "ae": [
             {
                 "subject": "Matemática",
-                "year": 3,
+                "year": "3.º ano",
                 "domain": "Números",
                 "descriptor": "Reconhecer frações unitárias",
                 "source": "AE Matemática 3.º ano (DGE)",
             }
         ],
-        "competencies": ["PA-A"],
+        "competencies": ["PA-C: Raciocínio e resolução de problemas"],
     },
     "memAlignment": {"modules": [], "instruments": [], "socialOrganization": "pares"},
     "units": [
@@ -58,38 +60,25 @@ DOCSPEC = {
 DESIGN = {"palette": {"bg": "oklch(0.98 0 250)", "surface": "#fff", "primary": "blue", "accent": "amber", "ink": "#222"}}
 
 PROOF_OK = {"pass": True, "issues": [], "summary": "sem problemas"}
-EVAL_OK = {"pass": True, "severity": "none", "issues": []}
-EVAL_FAIL = {"pass": False, "severity": "major", "issues": ["botões pequenos"], "route": "builder"}
+EVAL_OK = {"pass": True, "severity": "low", "issues": []}
+EVAL_FAIL = {"pass": False, "severity": "high", "issues": ["botões pequenos"], "route": "builder"}
+
+BUILT_OK = {"html": GOOD_HTML, "notes": ""}
 
 
-class FakeProvider:
-    name = "fake"
+def pipeline_responses(*evaluations, built=BUILT_OK):
+    """Respostas na ordem do pipeline: architect, designer e depois uma
+    ronda builder→proofreader→evaluator por cada avaliação dada."""
+    responses = [DOCSPEC, DESIGN]
+    for evaluation in evaluations:
+        responses += [built, PROOF_OK, evaluation]
+    return responses
 
-    def __init__(self, evaluations):
-        self.evaluations = list(evaluations)
-        self.calls = []
 
-    async def complete(self, prompt, *, schema=None, system=None, timeout_s=300, attempts=1, on_retry=None):
-        phase = self._phase_from(system)
-        self.calls.append(phase)
-        if phase == "architect":
-            return DOCSPEC
-        if phase == "designer":
-            return DESIGN
-        if phase == "builder":
-            return {"html": GOOD_HTML, "notes": ""}
-        if phase == "proofreader":
-            return PROOF_OK
-        if phase == "evaluator":
-            return self.evaluations.pop(0)
-        raise AssertionError(f"fase desconhecida: {phase}")
-
-    @staticmethod
-    def _phase_from(system):
-        for name in ("Architect", "Designer", "Builder", "Proofreader", "Evaluator"):
-            if f"Identidade: {name}" in (system or ""):
-                return name.lower()
-        return "?"
+def phases_called(runner, provider):
+    """Sequência de fases pedidas ao provider, inferida pelo schema."""
+    by_schema = {id(schema): phase for phase, schema in runner.schemas.items()}
+    return [by_schema[id(call["schema"])] for call in provider.calls]
 
 
 class NoKnowledge:
@@ -155,14 +144,14 @@ async def test_slugify():
 
 async def test_pipeline_happy_path_auto_publish(env):
     config, storage, hub = env
-    provider = FakeProvider([EVAL_OK])
+    provider = FakeProvider(pipeline_responses(EVAL_OK))
     runner = PipelineRunner(config, storage, hub, provider, NoKnowledge(), NoKnowledge())
     job = await runner.create_job(
         topic="Frações", subject="Matemática", year=3, duration=30, auto_publish=True
     )
     job = await _wait_status(runner, job["id"], {"done", "failed"})
     assert job["status"] == "done", job.get("error")
-    assert provider.calls == ["architect", "designer", "builder", "proofreader", "evaluator"]
+    assert phases_called(runner, provider) == ["architect", "designer", "builder", "proofreader", "evaluator"]
     slug = job["slug"]
     assert (config.activities_dir / slug / "index.html").exists()
     assert (config.activities_dir / slug / "teacher.md").exists()
@@ -175,20 +164,20 @@ async def test_pipeline_happy_path_auto_publish(env):
 
 async def test_pipeline_repair_loop_then_pass(env):
     config, storage, hub = env
-    provider = FakeProvider([EVAL_FAIL, EVAL_OK])
+    provider = FakeProvider(pipeline_responses(EVAL_FAIL, EVAL_OK))
     runner = PipelineRunner(config, storage, hub, provider, NoKnowledge(), NoKnowledge())
     job = await runner.create_job(topic="Frações", subject="Matemática", year=3, duration=30)
     job = await _wait_status(runner, job["id"], {"awaiting_review", "done", "failed"})
     assert job["status"] == "awaiting_review"
     assert job["iteration"] == 2
-    assert provider.calls.count("builder") == 2
+    assert phases_called(runner, provider).count("builder") == 2
     events = await storage.read_jsonl(storage.path("jobs", job["id"], "events.jsonl"))
     assert any(e["type"] == "repair" for e in events)
 
 
 async def test_pipeline_fails_after_max_iterations(env):
     config, storage, hub = env
-    provider = FakeProvider([EVAL_FAIL, EVAL_FAIL, EVAL_FAIL])
+    provider = FakeProvider(pipeline_responses(EVAL_FAIL, EVAL_FAIL, EVAL_FAIL))
     runner = PipelineRunner(config, storage, hub, provider, NoKnowledge(), NoKnowledge())
     job = await runner.create_job(topic="Frações", subject="Matemática", year=3, duration=30)
     job = await _wait_status(runner, job["id"], {"failed"}, timeout=10)
@@ -198,7 +187,7 @@ async def test_pipeline_fails_after_max_iterations(env):
 
 async def test_start_requeues_interrupted_jobs(env):
     config, storage, hub = env
-    provider = FakeProvider([EVAL_OK])
+    provider = FakeProvider(pipeline_responses(EVAL_OK))
     runner = PipelineRunner(config, storage, hub, provider, NoKnowledge(), NoKnowledge())
     # simular job interrompido a meio (persistido como running_builder)
     import uuid
@@ -233,7 +222,7 @@ async def test_start_requeues_interrupted_jobs(env):
 
 async def test_failed_job_can_publish_with_override(env):
     config, storage, hub = env
-    provider = FakeProvider([EVAL_FAIL, EVAL_FAIL, EVAL_FAIL])
+    provider = FakeProvider(pipeline_responses(EVAL_FAIL, EVAL_FAIL, EVAL_FAIL))
     runner = PipelineRunner(config, storage, hub, provider, NoKnowledge(), NoKnowledge())
     job = await runner.create_job(topic="Difícil", subject="Matemática", year=3, duration=30)
     job = await _wait_status(runner, job["id"], {"failed"}, timeout=10)
@@ -245,7 +234,7 @@ async def test_failed_job_can_publish_with_override(env):
 
 async def test_approve_publishes(env):
     config, storage, hub = env
-    provider = FakeProvider([EVAL_OK])
+    provider = FakeProvider(pipeline_responses(EVAL_OK))
     runner = PipelineRunner(config, storage, hub, provider, NoKnowledge(), NoKnowledge())
     job = await runner.create_job(topic="Sílabas", subject="Português", year=1, duration=20)
     job = await _wait_status(runner, job["id"], {"awaiting_review"})

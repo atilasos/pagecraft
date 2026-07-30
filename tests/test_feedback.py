@@ -2,6 +2,7 @@ import asyncio
 
 import pytest
 
+from fakes import FakeProvider
 from server.classroom.feedback import TIMEOUT_MESSAGE, FeedbackService
 from server.classroom.service import ClassroomService
 from server.config import Config
@@ -10,30 +11,8 @@ from server.providers import ProviderTimeout
 from server.storage import Storage
 
 
-class GoodProvider:
-    name = "fake"
-
-    def __init__(self, text="Boa! Percebeste que as metades são iguais."):
-        self.text = text
-        self.calls = 0
-
-    async def complete(self, prompt, *, schema=None, system=None, timeout_s=20, workdir=None):
-        self.calls += 1
-        return {"feedback": self.text}
-
-
-class SlowProvider:
-    name = "fake"
-
-    async def complete(self, prompt, *, schema=None, system=None, timeout_s=20, workdir=None):
-        raise ProviderTimeout("demorou demasiado")
-
-
-class BrokenProvider:
-    name = "fake"
-
-    async def complete(self, prompt, *, schema=None, system=None, timeout_s=20, workdir=None):
-        raise RuntimeError("provider indisponível")
+def good_provider(text="Boa! Percebeste que as metades são iguais."):
+    return FakeProvider(default={"feedback": text})
 
 
 class BlockingProvider:
@@ -44,7 +23,7 @@ class BlockingProvider:
         self.started = asyncio.Event()
         self.cancelled = asyncio.Event()
 
-    async def complete(self, prompt, *, schema=None, system=None, timeout_s=20, workdir=None):
+    async def complete(self, prompt, *, schema=None, system=None, timeout_s=20):
         self.calls += 1
         self.started.set()
         try:
@@ -62,7 +41,7 @@ class PausingProvider:
         self.started = asyncio.Event()
         self.release = asyncio.Event()
 
-    async def complete(self, prompt, *, schema=None, system=None, timeout_s=20, workdir=None):
+    async def complete(self, prompt, *, schema=None, system=None, timeout_s=20):
         self.calls += 1
         self.started.set()
         await self.release.wait()
@@ -123,7 +102,7 @@ async def _register_feedback(
 
 async def test_feedback_delivered(env):
     config, storage, hub, classroom = env
-    provider = GoodProvider()
+    provider = good_provider()
     fb = FeedbackService(config, storage, classroom, provider)
     session, student_id = await _session_with_student(classroom)
     fb.start()
@@ -144,7 +123,7 @@ async def test_feedback_delivered(env):
 
 async def test_feedback_request_from_another_authorized_path_delivers_feedback(env):
     config, storage, hub, classroom = env
-    provider = GoodProvider()
+    provider = good_provider()
     fb = FeedbackService(config, storage, classroom, provider)
     session, student_id = await _session_with_student(classroom)
     fb.start()
@@ -164,13 +143,13 @@ async def test_feedback_request_from_another_authorized_path_delivers_feedback(e
     record = await _wait_event(storage, session["id"], "ai_feedback")
     assert record["student_id"] == student_id
     assert record["payload"]["source"] == "ai"
-    assert provider.calls == 1
+    assert len(provider.calls) == 1
     await fb.stop()
 
 
 async def test_feedback_persisted_before_start_is_delivered_once_across_restart(env):
     config, storage, _, classroom = env
-    provider = GoodProvider()
+    provider = good_provider()
     session, student_id = await _session_with_student(classroom)
     await _register_feedback(
         classroom,
@@ -202,13 +181,13 @@ async def test_feedback_persisted_before_start_is_delivered_once_across_restart(
     responses = [event for event in events if event["type"] == "ai_feedback"]
     assert len(responses) == 1
     assert responses[0]["student_id"] == student_id
-    assert provider.calls == 1
+    assert len(provider.calls) == 1
     await restarted.stop()
 
 
 async def test_feedback_cache_hit(env):
     config, storage, hub, classroom = env
-    provider = GoodProvider()
+    provider = good_provider()
     fb = FeedbackService(config, storage, classroom, provider)
     session, student_id = await _session_with_student(classroom)
     fb.start()
@@ -233,13 +212,13 @@ async def test_feedback_cache_hit(env):
     ai = [e for e in events if e["type"] == "ai_feedback"]
     assert len(ai) == 2
     assert ai[1]["payload"]["source"] == "cache"
-    assert provider.calls == 1
+    assert len(provider.calls) == 1
     await fb.stop()
 
 
 async def test_feedback_banned_words_replaced(env):
     config, storage, hub, classroom = env
-    fb = FeedbackService(config, storage, classroom, GoodProvider("Está errado, tenta outra vez."))
+    fb = FeedbackService(config, storage, classroom, good_provider("Está errado, tenta outra vez."))
     session, student_id = await _session_with_student(classroom)
     fb.start()
     await _register_feedback(
@@ -256,7 +235,7 @@ async def test_feedback_banned_words_replaced(env):
 
 async def test_feedback_timeout_fallback(env):
     config, storage, hub, classroom = env
-    fb = FeedbackService(config, storage, classroom, SlowProvider())
+    fb = FeedbackService(config, storage, classroom, FakeProvider([ProviderTimeout("demorou demasiado")]))
     session, student_id = await _session_with_student(classroom)
     fb.start()
     await _register_feedback(
@@ -276,7 +255,7 @@ async def test_feedback_timeout_fallback(env):
 
 async def test_feedback_failure_is_registered(env):
     config, storage, hub, classroom = env
-    fb = FeedbackService(config, storage, classroom, BrokenProvider())
+    fb = FeedbackService(config, storage, classroom, FakeProvider([RuntimeError("provider indisponível")]))
     session, student_id = await _session_with_student(classroom)
     fb.start()
     await _register_feedback(
