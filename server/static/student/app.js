@@ -4,7 +4,6 @@
 const state = {
   session: null,
   studentId: null,
-  token: null,
   displayName: null,
   studentState: null,
   sessionState: null,
@@ -22,7 +21,6 @@ function saveIdentity() {
       SAVED_KEY,
       JSON.stringify({
         sessionId: state.session.id,
-        token: state.token,
         studentId: state.studentId,
         displayName: state.displayName,
       })
@@ -39,23 +37,16 @@ function clearIdentity() {
 async function tryResume() {
   let saved = null;
   try { saved = JSON.parse(localStorage.getItem(SAVED_KEY) || "null"); } catch (e) {}
-  if (!saved?.sessionId || !saved?.token) return false;
+  if (!saved?.sessionId) return false;
   try {
-    const resp = await fetch(
-      `/api/sessions/${saved.sessionId}/me?student_token=${encodeURIComponent(saved.token)}`
-    );
+    const resp = await fetch(`/api/sessions/${saved.sessionId}/me`);
     if (!resp.ok) {
       clearIdentity();
       return false;
     }
     const me = await resp.json();
-    if (me.session.status !== "live") {
-      clearIdentity();
-      return false;
-    }
     state.session = me.session;
     state.studentId = me.student_id;
-    state.token = saved.token;
     state.displayName = me.display_name;
     startActivity();
     showMessage(`Bem-vinda de volta, ${me.display_name}!`, "feedback-ok");
@@ -117,7 +108,6 @@ async function claim(student) {
   }
   const data = await resp.json();
   state.studentId = data.student_id;
-  state.token = data.student_token;
   state.displayName = data.display_name;
   saveIdentity();
   startActivity();
@@ -253,8 +243,6 @@ function acceptSessionState(session) {
 
 function finishStudentSession() {
   studentTransport.stop({ discardQueue: true });
-  clearIdentity();
-  state.token = null;
   $("freeze-overlay").hidden = true;
   $("help-btn").disabled = true;
   $("pit-form").querySelectorAll("button, input").forEach((element) => {
@@ -266,7 +254,6 @@ function invalidateStudentIdentity() {
   studentTransport.stop({ discardQueue: true });
   clearIdentity();
   state.studentId = null;
-  state.token = null;
   state.displayName = null;
   state.studentState = null;
   state.sessionState = null;
@@ -325,7 +312,7 @@ function createStudentTransport() {
   }
 
   function enqueue(type, unitId, payload) {
-    if (!state.token || outbox.length >= OUTBOX_LIMIT) return false;
+    if (!state.studentId || outbox.length >= OUTBOX_LIMIT) return false;
     outbox.push({
       event_id: crypto.randomUUID(),
       type,
@@ -353,14 +340,14 @@ function createStudentTransport() {
   }
 
   async function post(path, body) {
-    if (!state.token) return null;
+    if (!state.studentId) return null;
     const controller = new AbortController();
     requests.add(controller);
     try {
       const resp = await fetch(path, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ ...body, student_token: state.token }),
+        body: JSON.stringify(body),
         signal: controller.signal,
       });
       if (resp.status === 401) {
@@ -376,7 +363,7 @@ function createStudentTransport() {
   }
 
   async function flush() {
-    if (flushing || !outbox.length || !state.token) return;
+    if (flushing || !outbox.length || !state.studentId) return;
     flushing = true;
     const batch = outbox.slice(0, OUTBOX_BATCH_SIZE);
     try {
@@ -397,16 +384,15 @@ function createStudentTransport() {
     }
   }
 
-  async function validateIdentity(request, sessionId, token) {
+  async function validateIdentity(request, sessionId) {
     if (validatingIdentity || request !== generation) return;
     validatingIdentity = true;
     const controller = new AbortController();
     requests.add(controller);
     try {
-      const resp = await fetch(
-        `/api/sessions/${sessionId}/me?student_token=${encodeURIComponent(token)}`,
-        { signal: controller.signal }
-      );
+      const resp = await fetch(`/api/sessions/${sessionId}/me`, {
+        signal: controller.signal,
+      });
       if (request !== generation) return;
       if (resp.status === 401) invalidateStudentIdentity();
     } catch (error) {
@@ -417,15 +403,13 @@ function createStudentTransport() {
     }
   }
 
-  async function connect(request, sessionId, token) {
+  async function connect(request, sessionId) {
     const eventTypes = await loadStudentEventTypes();
     if (request !== generation) return;
-    const eventStream = new EventSource(
-      `/api/sessions/${sessionId}/stream?role=student&student_token=${encodeURIComponent(token)}`
-    );
+    const eventStream = new EventSource(`/api/sessions/${sessionId}/stream`);
     stream = eventStream;
     eventStream.addEventListener("error", () => {
-      validateIdentity(request, sessionId, token);
+      validateIdentity(request, sessionId);
     });
     [
       "session_state_snapshot",
@@ -448,10 +432,9 @@ function createStudentTransport() {
     stop();
     const request = ++generation;
     const sessionId = state.session.id;
-    const token = state.token;
     listenToBridge();
     flushTimer = setInterval(flush, FLUSH_INTERVAL_MS);
-    connect(request, sessionId, token);
+    connect(request, sessionId);
   }
 
   return { enqueue, flush, post, start, stop };
