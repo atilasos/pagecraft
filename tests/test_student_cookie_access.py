@@ -92,6 +92,41 @@ async def test_claim_issues_httponly_cookie_and_me_accepts_only_that_cookie(
     assert legacy.status_code == 401
 
 
+async def test_default_school_timezone_keeps_dst_transitions(
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("PAGECRAFT_DATA_DIR", str(tmp_path / "data"))
+    monkeypatch.setenv("TZ", "Europe/Lisbon")
+    clock = MutableClock(
+        datetime(2026, 3, 28, 23, 30, tzinfo=timezone.utc)
+    )
+    app = app_module.create_app(classroom_clock=clock)
+    async with app.router.lifespan_context(app):
+        transport = httpx.ASGITransport(app=app, raise_app_exceptions=False)
+        async with (
+            httpx.AsyncClient(
+                transport=transport,
+                base_url="http://test",
+            ) as teacher,
+            httpx.AsyncClient(
+                transport=transport,
+                base_url="http://test",
+            ) as student,
+        ):
+            assert (await teacher.get("/teacher/")).status_code == 200
+            session = await create_session(teacher)
+            student_id = next(iter(session["roster"]))
+            claim = await student.post(
+                f"/api/sessions/{session['id']}/claim",
+                json={"student_id": student_id},
+            )
+
+    set_cookie = claim.headers["set-cookie"]
+    assert "expires=Sun, 29 Mar 2026 00:00:00 GMT" in set_cookie
+    assert "Max-Age=1800" in set_cookie
+
+
 async def test_cookie_authenticates_events_and_pit_without_a_secret_body(
     classroom_http,
 ):

@@ -9,10 +9,13 @@ from __future__ import annotations
 
 import asyncio
 import hmac
+import os
 import secrets
 import uuid
 from collections import defaultdict
 from datetime import datetime, time, timedelta, timezone, tzinfo
+from pathlib import Path
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from ..config import Config
 from ..events import EventHub, utcnow
@@ -28,6 +31,40 @@ from .live_state import LiveSessionTicks
 
 
 _SESSION_MAX_AGE = timedelta(hours=8)
+
+
+def _system_local_timezone() -> tzinfo:
+    """Obtém o fuso local com regras DST, sem dependências externas."""
+
+    candidates = [os.environ.get("TZ", "")]
+    timezone_file = Path("/etc/timezone")
+    try:
+        candidates.append(timezone_file.read_text("utf-8").strip())
+    except OSError:
+        pass
+
+    localtime_file = Path("/etc/localtime")
+    try:
+        resolved = localtime_file.resolve()
+        if "zoneinfo" in resolved.parts:
+            index = resolved.parts.index("zoneinfo")
+            candidates.append("/".join(resolved.parts[index + 1 :]))
+    except OSError:
+        pass
+
+    for name in candidates:
+        if not name or name.startswith(("/", ":")):
+            continue
+        try:
+            return ZoneInfo(name)
+        except (ValueError, ZoneInfoNotFoundError):
+            continue
+
+    try:
+        with localtime_file.open("rb") as localtime:
+            return ZoneInfo.from_file(localtime)
+    except (OSError, ValueError):
+        return datetime.now().astimezone().tzinfo or timezone.utc
 
 
 def _join_code() -> str:
@@ -55,9 +92,7 @@ class ClassroomService:
         # (claim/release/PIT/close); um só processo, chega um asyncio.Lock
         self._session_locks: dict[str, asyncio.Lock] = defaultdict(asyncio.Lock)
         self._clock = clock
-        self._school_timezone = (
-            school_timezone or datetime.now().astimezone().tzinfo or timezone.utc
-        )
+        self._school_timezone = school_timezone or _system_local_timezone()
         self.live_ticks = LiveSessionTicks(
             lambda: self._clock(),
             interval_seconds=tick_interval_seconds,
