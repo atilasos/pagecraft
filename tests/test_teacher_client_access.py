@@ -11,7 +11,6 @@ def test_teacher_client_keeps_the_credential_out_of_javascript_and_urls():
             TEACHER_STATIC / "common.js",
             TEACHER_STATIC / "app.js",
             TEACHER_STATIC / "class.js",
-            TEACHER_STATIC / "present.html",
         )
     )
 
@@ -21,3 +20,18 @@ def test_teacher_client_keeps_the_credential_out_of_javascript_and_urls():
     assert "x-teacher-token" not in javascript
     assert "teacher_token" not in javascript
     assert "localStorage" not in javascript
+
+
+def test_teacher_panel_manages_board_pairing_without_teacher_credentials():
+    html = (TEACHER_STATIC / "class.html").read_text("utf-8")
+    javascript = (TEACHER_STATIC / "class.js").read_text("utf-8")
+
+    assert 'id="board-pairing-form"' in html
+    assert 'id="board-pairing-code"' in html
+    assert 'id="board-unpair"' in html
+    assert 'tfetch("/api/board/pairing")' in javascript
+    assert 'tfetch("/api/board/pairings/confirm"' in javascript
+    assert 'method: "DELETE"' in javascript
+    assert "present.html?session" not in javascript
+    assert "?role=teacher" not in javascript
+    assert not (TEACHER_STATIC / "present.html").exists()

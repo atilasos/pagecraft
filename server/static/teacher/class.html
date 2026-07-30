@@ -39,9 +39,31 @@
       <span class="knob" aria-hidden="true">👀</span>
       <span id="freeze-label">Olhem para o quadro</span>
     </button>
-    <a id="present-link" class="button-link ghost" target="_blank" rel="noopener">Projetar ▸</a>
     <button type="button" class="quiet" id="close-btn">Terminar sessão</button>
   </div>
+
+  <section class="sheet board-pairing-panel" aria-labelledby="board-pairing-title">
+    <p class="eyebrow">Equipamento da sala</p>
+    <h2 id="board-pairing-title">Emparelhamento do quadro</h2>
+    <p class="muted" id="board-pairing-status" role="status">
+      A consultar o estado do quadro…
+    </p>
+    <form id="board-pairing-form" class="board-pairing-form" hidden>
+      <div>
+        <label for="board-pairing-code">Código mostrado no quadro</label>
+        <input id="board-pairing-code" required maxlength="8"
+               autocomplete="off" autocapitalize="characters"
+               placeholder="ABCD" aria-describedby="board-pairing-hint">
+        <p class="muted" id="board-pairing-hint">
+          Abre o favorito <strong>/board/</strong> no PC do quadro e copia o código.
+        </p>
+      </div>
+      <button type="submit">Confirmar código</button>
+    </form>
+    <button type="button" class="quiet" id="board-unpair" hidden>
+      Desemparelhar quadro
+    </button>
+  </section>
 
   <div class="desk" id="prep-desk">
     <section aria-labelledby="launch-title">

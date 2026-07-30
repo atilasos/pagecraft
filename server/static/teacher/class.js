@@ -74,6 +74,79 @@ async function loadClasses() {
   $("report-class").innerHTML = options;
 }
 
+/* ---------- Emparelhamento do quadro ---------- */
+
+function renderBoardPairing(state) {
+  const paired = state?.paired === true;
+  $("board-pairing-form").hidden = paired;
+  $("board-unpair").hidden = !paired;
+  if (!paired) {
+    $("board-pairing-status").textContent =
+      "Ainda não há um quadro emparelhado com este Studio.";
+    return;
+  }
+  const expiresAt = Date.parse(state.expires_at);
+  const validity = Number.isFinite(expiresAt)
+    ? ` Credencial válida até ${new Date(expiresAt).toLocaleDateString("pt-PT")}.`
+    : "";
+  $("board-pairing-status").textContent = `Quadro emparelhado.${validity}`;
+}
+
+async function loadBoardPairing() {
+  const response = await tfetch("/api/board/pairing");
+  if (!response.ok) {
+    $("board-pairing-status").textContent =
+      "Não foi possível consultar o emparelhamento do quadro.";
+    return;
+  }
+  renderBoardPairing(await response.json());
+}
+
+$("board-pairing-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const code = $("board-pairing-code").value.trim().toUpperCase();
+  if (!code) return;
+  const button = event.currentTarget.querySelector('button[type="submit"]');
+  button.disabled = true;
+  $("board-pairing-status").textContent = "A confirmar o código…";
+  try {
+    const response = await tfetch("/api/board/pairings/confirm", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ code }),
+    });
+    if (!response.ok) {
+      let detail = "Código inválido ou expirado.";
+      try {
+        detail = (await response.json()).detail || detail;
+      } catch (error) {
+        // Mantém a mensagem calma quando a resposta não traz JSON.
+      }
+      $("board-pairing-status").textContent = detail;
+      return;
+    }
+    $("board-pairing-code").value = "";
+    await loadBoardPairing();
+  } finally {
+    button.disabled = false;
+  }
+});
+
+$("board-unpair").addEventListener("click", async () => {
+  if (!window.confirm("Desemparelhar este quadro? Terá de voltar a confirmar um código.")) {
+    return;
+  }
+  $("board-unpair").disabled = true;
+  const response = await tfetch("/api/board/pairing", { method: "DELETE" });
+  $("board-unpair").disabled = false;
+  if (!response.ok) {
+    $("board-pairing-status").textContent =
+      "Não foi possível desemparelhar o quadro.";
+    return;
+  }
+  renderBoardPairing({ paired: false });
+});
+
 /* ---------- relatório para avaliação cooperada ---------- */
 
 $("report-btn").addEventListener("click", async () => {
@@ -238,7 +311,6 @@ async function startLive(s) {
     b.textContent = ch;
     $("live-code").appendChild(b);
   });
-  $("present-link").href = `/teacher/present.html?session=${encodeURIComponent(s.id)}`;
   $("export-link").href = `/api/sessions/${s.id}`;
   $("export-link").download = `sessao-${s.id}.json`;
 
@@ -248,9 +320,7 @@ async function startLive(s) {
   loadUnits(s.activity_slug);
 
   const eventTypes = await loadPanelEventTypes();
-  const es = new EventSource(
-    `/api/sessions/${s.id}/stream?role=teacher`
-  );
+  const es = new EventSource(`/api/sessions/${s.id}/stream`);
   es.onmessage = () => {};
   addJsonListener(es, "session_state_snapshot", (data) => applySnapshot(data, es));
   addJsonListener(es, "student_state_changed", applyStudentState);
@@ -634,7 +704,7 @@ async function loadDrawerHistory(studentId) {
   const list = $("drawer-events");
   try {
     const resp = await tfetch(
-      `/api/sessions/${encodeURIComponent(session.id)}/students/${encodeURIComponent(studentId)}/history?role=teacher`
+      `/api/sessions/${encodeURIComponent(session.id)}/students/${encodeURIComponent(studentId)}/history`
     );
     if (drawerStudent !== studentId) return;
     if (!resp.ok) {
@@ -729,7 +799,7 @@ $("close-btn").addEventListener("click", async () => {
 /* ---------- arranque ---------- */
 
 (async function init() {
-  await Promise.all([loadClasses(), loadActivities()]);
+  await Promise.all([loadClasses(), loadActivities(), loadBoardPairing()]);
   const resp = await tfetch("/api/sessions");
   if (!resp.ok) return;
   const sessions = await resp.json();

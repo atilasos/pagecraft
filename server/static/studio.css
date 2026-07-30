@@ -294,6 +294,31 @@ button:disabled { cursor: default; filter: none; opacity: 0.52; }
 .picker-list-scroll { max-height: 320px; overflow-y: auto; }
 .details-create { margin-top: 0.5rem; }
 .details-summary { cursor: pointer; color: var(--stamp-deep); font-weight: 800; }
+.board-pairing-panel {
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--manila-deep);
+  border-radius: var(--radius);
+  background: var(--manila);
+  box-shadow: var(--shadow-low);
+}
+.board-pairing-panel h2 { margin-bottom: 0.35rem; }
+.board-pairing-panel > .muted { margin: 0.2rem 0 0.65rem; }
+.board-pairing-form {
+  display: grid;
+  grid-template-columns: minmax(220px, 360px) auto;
+  align-items: end;
+  gap: 0.75rem;
+}
+.board-pairing-form[hidden] { display: none; }
+.board-pairing-form label { margin-top: 0.35rem; }
+.board-pairing-form .muted { margin: 0.25rem 0 0; }
+#board-pairing-code {
+  font-family: var(--font-type);
+  font-size: 1.15rem;
+  font-weight: 850;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
 .drawer-title { margin: 0; }
 .drawer-counts { display: flex; gap: 0.4rem; flex-wrap: wrap; margin: 0.5rem 0 1rem; }
 .drawer-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
@@ -730,10 +755,48 @@ th { background: var(--paper-deep); font-family: var(--font-type); font-size: 0.
 
 @keyframes freeze-in { from { opacity: 0; } to { opacity: 1; } }
 
-/* Projection: teacher materiality, maximum classroom legibility */
+/* Quadro: leitura coletiva passiva, máxima legibilidade na sala */
 
-.present-page { display: flex; height: 100vh; flex-direction: column; }
-.present-bar {
+.board-page { min-height: 100vh; }
+.board-empty-state[hidden],
+.board-live[hidden] { display: none; }
+.board-empty-state {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 2rem;
+  text-align: center;
+}
+.board-empty-state h1 {
+  max-width: 18ch;
+  margin: 0;
+  font-family: var(--font-file);
+  font-size: clamp(2.25rem, 6vw, 4.5rem);
+  line-height: 1.05;
+}
+.board-empty-state .accent-dot { color: var(--stamp); }
+.board-empty-state > p:not(.eyebrow) { font-size: 1.2rem; }
+.board-pairing-code {
+  justify-content: center;
+  margin: 1.5rem 0 0.75rem;
+  gap: 0.55rem;
+}
+.board-pairing-code span {
+  width: clamp(3rem, 8vw, 5.25rem);
+  height: clamp(3.8rem, 10vw, 6.5rem);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+}
+.board-live {
+  display: flex;
+  width: 100%;
+  max-width: none;
+  height: 100vh;
+  flex-direction: column;
+  padding: 0;
+}
+.board-bar {
   display: flex;
   align-items: center;
   gap: 1.25rem;
@@ -742,10 +805,9 @@ th { background: var(--paper-deep); font-family: var(--font-type); font-size: 0.
   border-bottom: 2px solid var(--manila-deep);
   background: var(--manila);
 }
-.present-bar .type-blocks span { width: 3rem; height: 3.6rem; font-size: 2rem; }
-.present-bar .join-hint { font-family: var(--font-file); font-size: 1.25rem; font-weight: 700; }
-.present-bar .join-hint .muted { display: block; font-family: var(--font-body); font-size: 0.95rem; font-weight: 400; }
-.present-bar .spacer { flex: 1; }
+.board-bar .eyebrow { margin-bottom: 0.1rem; }
+.board-bar strong { font-family: var(--font-file); font-size: 1.25rem; }
+.board-bar .spacer { flex: 1; }
 #board { width: 100%; flex: 1; border: 0; background: var(--paper); }
 
 @media (min-width: 900px) {
@@ -767,10 +829,11 @@ th { background: var(--paper-deep); font-family: var(--font-type); font-size: 0.
   .picker-filters > * { max-width: none; flex: 1 1 180px; }
   .picker-filters input[type="search"],
   .report-class-filter { max-width: none; }
+  .board-pairing-form { grid-template-columns: 1fr; align-items: stretch; }
   .audience-choices { grid-template-columns: 1fr; }
   .audience-card { min-height: 220px; }
-  .present-bar { gap: 0.75rem; padding: 0.65rem 0.8rem; }
-  .present-bar .spacer { display: none; }
+  .board-bar { gap: 0.75rem; padding: 0.65rem 0.8rem; }
+  .board-bar .spacer { display: none; }
 }
 
 @media (max-width: 420px) {
@@ -792,8 +855,7 @@ th { background: var(--paper-deep); font-family: var(--font-type); font-size: 0.
   .student-page .topbar > * { width: 100%; }
   .identity-grid { grid-template-columns: 1fr; }
   .freeze-card { padding: 1.5rem 1rem; }
-  .present-bar .type-blocks span { width: 2.25rem; height: 2.8rem; font-size: 1.4rem; }
-  .present-bar .freeze-switch { width: 100%; }
+  .board-bar { align-items: flex-start; flex-direction: column; }
 }
 
 @media (prefers-reduced-motion: reduce) {
