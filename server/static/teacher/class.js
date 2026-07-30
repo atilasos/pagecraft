@@ -76,6 +76,9 @@ async function loadClasses() {
 
 /* ---------- Emparelhamento do quadro ---------- */
 
+const BOARD_PAIRING_POLL_INTERVAL_MS = 750;
+const BOARD_PAIRING_POLL_ATTEMPTS = 20;
+
 function renderBoardPairing(state) {
   const paired = state?.paired === true;
   $("board-pairing-form").hidden = paired;
@@ -102,6 +105,37 @@ async function loadBoardPairing() {
   renderBoardPairing(await response.json());
 }
 
+async function waitForBoardPairing(
+  remainingAttempts = BOARD_PAIRING_POLL_ATTEMPTS
+) {
+  try {
+    const response = await tfetch("/api/board/pairing");
+    if (!response.ok) {
+      throw new Error("estado do emparelhamento indisponível");
+    }
+    const state = await response.json();
+    if (state?.paired === true) {
+      $("board-pairing-code").value = "";
+      renderBoardPairing(state);
+      return;
+    }
+    if (remainingAttempts <= 1) {
+      $("board-pairing-form").hidden = false;
+      $("board-pairing-status").textContent =
+        "Confirmação aceite, mas o Quadro ainda não a recolheu. Confirma novamente o código mostrado.";
+      return;
+    }
+    await new Promise((resolve) => {
+      window.setTimeout(resolve, BOARD_PAIRING_POLL_INTERVAL_MS);
+    });
+    await waitForBoardPairing(remainingAttempts - 1);
+  } catch (error) {
+    $("board-pairing-form").hidden = false;
+    $("board-pairing-status").textContent =
+      "Confirmação aceite, mas não foi possível consultar o Quadro. Tenta novamente.";
+  }
+}
+
 $("board-pairing-form").addEventListener("submit", async (event) => {
   event.preventDefault();
   const code = $("board-pairing-code").value.trim().toUpperCase();
@@ -125,8 +159,10 @@ $("board-pairing-form").addEventListener("submit", async (event) => {
       $("board-pairing-status").textContent = detail;
       return;
     }
-    $("board-pairing-code").value = "";
-    await loadBoardPairing();
+    $("board-pairing-form").hidden = true;
+    $("board-pairing-status").textContent =
+      "Confirmação aceite. À espera que o Quadro a recolha…";
+    await waitForBoardPairing();
   } finally {
     button.disabled = false;
   }

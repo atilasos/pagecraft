@@ -32,6 +32,9 @@ def test_teacher_panel_manages_board_pairing_without_teacher_credentials():
     assert 'tfetch("/api/board/pairing")' in javascript
     assert 'tfetch("/api/board/pairings/confirm"' in javascript
     assert 'method: "DELETE"' in javascript
+    assert "Confirmação aceite. À espera que o Quadro a recolha…" in javascript
+    assert "waitForBoardPairing()" in javascript
+    assert "window.setTimeout(resolve, BOARD_PAIRING_POLL_INTERVAL_MS)" in javascript
     assert "present.html?session" not in javascript
     assert "?role=teacher" not in javascript
     assert not (TEACHER_STATIC / "present.html").exists()
