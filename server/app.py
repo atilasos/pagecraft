@@ -68,6 +68,7 @@ def create_app(
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
+        from .board_pairing import BoardPairings
         from .classroom import ClassroomService
         from .classroom.feedback import FeedbackService
         from .security import load_or_create_teacher_token
@@ -78,6 +79,10 @@ def create_app(
         app.state.wiki = wiki
         app.state.ae = ae
         app.state.teacher_token = load_or_create_teacher_token(config.data_dir)
+        app.state.board_pairings = BoardPairings(
+            storage,
+            clock=classroom_clock,
+        )
         app.state.runner = PipelineRunner(
             config, storage, hub, build_generation_provider(config), wiki, ae
         )
@@ -215,10 +220,12 @@ def create_app(
         }
 
     from .api import catalog as catalog_api
+    from .api import board as board_api
     from .api import classroom as classroom_api
     from .api import jobs
 
     app.include_router(jobs.router)
+    app.include_router(board_api.router)
     app.include_router(classroom_api.router)
     app.include_router(catalog_api.router)
 

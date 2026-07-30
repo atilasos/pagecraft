@@ -45,6 +45,7 @@ _RATE_LIMIT_ATTRIBUTE = "__pagecraft_access_rate_limit__"
 _PROXY_HEADERS = ("x-forwarded-for", "x-real-ip", "forwarded", "cf-connecting-ip")
 TEACHER_COOKIE_NAME = "pagecraft_teacher_session"
 STUDENT_COOKIE_NAME = "pagecraft_student_session"
+BOARD_COOKIE_NAME = "pagecraft_board_session"
 RATE_LIMIT_DETAIL = "muitas tentativas — espera um bocadinho"
 
 
@@ -56,6 +57,7 @@ class AccessContext:
     student_id: str | None = None
     student_session_id: str | None = None
     student_credential: str = ""
+    board_credential: str = ""
 
 
 class RequestRateLimiter:
@@ -239,6 +241,20 @@ async def resolve_access(request: Request, path_params: dict) -> AccessContext:
                 student_credential=student_credential,
             )
 
+    board_credential = request.cookies.get(BOARD_COOKIE_NAME, "")
+    board_pairings = getattr(request.app.state, "board_pairings", None)
+    if (
+        board_credential
+        and board_pairings is not None
+        and await board_pairings.resolve(board_credential)
+    ):
+        return AccessContext(
+            Role.BOARD,
+            channel,
+            client_ip,
+            board_credential=board_credential,
+        )
+
     return AccessContext(None, channel, client_ip)
 
 
@@ -307,5 +323,35 @@ def issue_student_cookie(
         ),
         httponly=True,
         samesite="strict",
+        path="/",
+    )
+
+
+def issue_board_cookie(
+    response: Response,
+    credential: str,
+    issued_at: datetime,
+    expires_at: datetime,
+    *,
+    secure: bool,
+) -> None:
+    """Emite a credencial duradoura do Quadro sem a expor ao JavaScript."""
+
+    response.set_cookie(
+        BOARD_COOKIE_NAME,
+        credential,
+        expires=expires_at.astimezone(timezone.utc),
+        max_age=max(
+            0,
+            int(
+                (
+                    expires_at.astimezone(timezone.utc)
+                    - issued_at.astimezone(timezone.utc)
+                ).total_seconds()
+            ),
+        ),
+        httponly=True,
+        samesite="strict",
+        secure=secure,
         path="/",
     )
