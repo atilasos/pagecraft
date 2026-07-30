@@ -52,3 +52,9 @@ _Avoid_: evento (genérico demais), telemetria
 **Evidência**:
 Os acontecimentos de sessão que registam o trabalho observável da criança (tentativas, descobertas, pedidos de ajuda, mudanças de nível), agregados sem juízos automáticos como matéria-prima para o conselho de cooperação. Nem todo o acontecimento de sessão é evidência: um congelar de ecrãs ou uma falha do assistente ficam registados, mas não são trabalho da criança.
 _Avoid_: nota, score, classificação
+
+### Atividades
+
+**Catálogo**:
+O índice de todas as atividades publicadas, com o que é preciso para as encontrar e agrupar — título, ano, duração, etiquetas, ordem no método. É **derivado**: cada atividade declara o que é sobre si própria, e o catálogo é reconstruído a partir dessas declarações. Nunca se escreve nele diretamente; o que lá não estiver não se corrige lá.
+_Avoid_: base de dados, registo de atividades
