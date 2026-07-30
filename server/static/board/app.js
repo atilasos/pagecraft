@@ -41,6 +41,7 @@ function showPairingCode(code) {
 
 async function createPairing() {
   stopLiveSession();
+  board.removeAttribute("src");
   clearTimer(pairingTimer);
   clearTimer(sessionTimer);
   show(pairing);
