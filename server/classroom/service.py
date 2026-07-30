@@ -8,10 +8,11 @@ criado quando o aluno reclama a sua identidade no arranque da aula.
 from __future__ import annotations
 
 import asyncio
+import hmac
 import secrets
 import uuid
 from collections import defaultdict
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, time, timedelta, timezone, tzinfo
 
 from ..config import Config
 from ..events import EventHub, utcnow
@@ -43,6 +44,7 @@ class ClassroomService:
         hub: EventHub,
         *,
         clock=utcnow,
+        school_timezone: tzinfo | None = None,
         tick_interval_seconds: float = 30,
     ):
         self.config = config
@@ -53,6 +55,9 @@ class ClassroomService:
         # (claim/release/PIT/close); um só processo, chega um asyncio.Lock
         self._session_locks: dict[str, asyncio.Lock] = defaultdict(asyncio.Lock)
         self._clock = clock
+        self._school_timezone = (
+            school_timezone or datetime.now().astimezone().tzinfo or timezone.utc
+        )
         self.live_ticks = LiveSessionTicks(
             lambda: self._clock(),
             interval_seconds=tick_interval_seconds,
@@ -60,6 +65,28 @@ class ClassroomService:
 
     def now(self):
         return self._clock()
+
+    def _now_as_datetime(self) -> datetime:
+        value = self.now()
+        if isinstance(value, datetime):
+            instant = value
+        else:
+            instant = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        if instant.tzinfo is None:
+            instant = instant.replace(tzinfo=timezone.utc)
+        return instant
+
+    def _student_credential_expires_at(self) -> str:
+        """Meia-noite seguinte no fuso escolar, persistida como instante UTC."""
+
+        local_now = self._now_as_datetime().astimezone(self._school_timezone)
+        next_day = local_now.date() + timedelta(days=1)
+        local_midnight = datetime.combine(
+            next_day,
+            time.min,
+            tzinfo=self._school_timezone,
+        )
+        return local_midnight.astimezone(timezone.utc).isoformat()
 
     def tick_session(self, session_id: str, *, now=None) -> None:
         """Publica um tique controlado; útil também para testes do protocolo."""
@@ -176,6 +203,7 @@ class ClassroomService:
             if entry and (entry.get("token") is not None or entry.get("claimed_at") is not None):
                 entry["token"] = None
                 entry["claimed_at"] = None
+                entry["credential_expires_at"] = None
                 changed = True
 
         if closed is None and self._session_has_expired(session):
@@ -229,7 +257,12 @@ class ClassroomService:
             "started_at": self.now(),
             "closed_at": None,
             "roster": {
-                s["id"]: {"display_name": s["display_name"], "token": None, "claimed_at": None}
+                s["id"]: {
+                    "display_name": s["display_name"],
+                    "token": None,
+                    "claimed_at": None,
+                    "credential_expires_at": None,
+                }
                 for s in cls["students"]
             },
             "pit_items": [],
@@ -321,7 +354,8 @@ class ClassroomService:
             if entry.get("token"):
                 return None
             token = uuid.uuid4().hex
-            claimed_at = utcnow()
+            claimed_at = self.now()
+            expires_at = self._student_credential_expires_at()
             await self._append_event_unlocked(
                 session_id,
                 "joined",
@@ -331,8 +365,15 @@ class ClassroomService:
             )
             entry["token"] = token
             entry["claimed_at"] = claimed_at
+            entry["credential_expires_at"] = expires_at
             await self.storage.write_json(self._session_path(session_id), session)
-        return {"student_token": token, "student_id": student_id, "display_name": entry["display_name"]}
+        return {
+            "student_token": token,
+            "student_id": student_id,
+            "display_name": entry["display_name"],
+            "claimed_at": claimed_at,
+            "credential_expires_at": expires_at,
+        }
 
     async def release_identity(
         self,
@@ -353,6 +394,7 @@ class ClassroomService:
             )
             entry["token"] = None
             entry["claimed_at"] = None
+            entry["credential_expires_at"] = None
             await self.storage.write_json(self._session_path(session_id), session)
         return True
 
@@ -370,7 +412,20 @@ class ClassroomService:
             if require_live and session.get("status") != "live":
                 return None
             for student_id, entry in session["roster"].items():
-                if entry.get("token") == token:
+                expires_at = entry.get("credential_expires_at")
+                if not expires_at:
+                    continue
+                try:
+                    expires = datetime.fromisoformat(
+                        str(expires_at).replace("Z", "+00:00")
+                    )
+                    if expires.tzinfo is None:
+                        expires = expires.replace(tzinfo=timezone.utc)
+                except (TypeError, ValueError):
+                    continue
+                if self._now_as_datetime() >= expires.astimezone(timezone.utc):
+                    continue
+                if hmac.compare_digest(str(entry.get("token") or ""), token):
                     return student_id
         return None
 

@@ -6,6 +6,7 @@ import hmac
 from collections import deque
 from collections.abc import Callable, Iterable, Iterator, MutableMapping
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from enum import StrEnum
 from typing import Any
 
@@ -43,6 +44,7 @@ _TEACHER_BOOTSTRAP_ATTRIBUTE = "__pagecraft_teacher_loopback_bootstrap__"
 _RATE_LIMIT_ATTRIBUTE = "__pagecraft_access_rate_limit__"
 _PROXY_HEADERS = ("x-forwarded-for", "x-real-ip", "forwarded", "cf-connecting-ip")
 TEACHER_COOKIE_NAME = "pagecraft_teacher_session"
+STUDENT_COOKIE_NAME = "pagecraft_student_session"
 RATE_LIMIT_DETAIL = "muitas tentativas — espera um bocadinho"
 
 
@@ -52,7 +54,8 @@ class AccessContext:
     channel: TrustChannel
     client_ip: str
     student_id: str | None = None
-    student_token: str = ""
+    student_session_id: str | None = None
+    student_credential: str = ""
 
 
 class RequestRateLimiter:
@@ -208,17 +211,6 @@ def _trust_channel(request: Request) -> tuple[TrustChannel, str]:
     return TrustChannel.LAN, socket_ip
 
 
-async def _student_token(request: Request) -> str:
-    token = request.query_params.get("student_token", "")
-    if token or request.method not in {"POST", "PUT", "PATCH"}:
-        return token
-    try:
-        body = await request.json()
-    except (ValueError, RuntimeError):
-        return ""
-    return str(body.get("student_token", "")) if isinstance(body, dict) else ""
-
-
 async def resolve_access(request: Request, path_params: dict) -> AccessContext:
     """Resolve Papel e canal uma única vez, antes de executar o handler."""
 
@@ -228,13 +220,13 @@ async def resolve_access(request: Request, path_params: dict) -> AccessContext:
     if teacher_token and expected and hmac.compare_digest(teacher_token, expected):
         return AccessContext(Role.TEACHER, channel, client_ip)
 
-    student_token = await _student_token(request)
-    session_id = path_params.get("session_id", "")
+    student_cookie = request.cookies.get(STUDENT_COOKIE_NAME, "")
+    student_session_id, separator, student_credential = student_cookie.partition(".")
     classroom = getattr(request.app.state, "classroom", None)
-    if student_token and session_id and classroom is not None:
+    if separator and student_session_id and student_credential and classroom is not None:
         student_id = await classroom.student_for_token(
-            session_id,
-            student_token,
+            student_session_id,
+            student_credential,
             require_live=False,
         )
         if student_id:
@@ -243,7 +235,8 @@ async def resolve_access(request: Request, path_params: dict) -> AccessContext:
                 channel,
                 client_ip,
                 student_id=student_id,
-                student_token=student_token,
+                student_session_id=student_session_id,
+                student_credential=student_credential,
             )
 
     return AccessContext(None, channel, client_ip)
@@ -274,6 +267,44 @@ def issue_teacher_cookie(response: Response, credential: str) -> None:
     response.set_cookie(
         TEACHER_COOKIE_NAME,
         credential,
+        httponly=True,
+        samesite="strict",
+        path="/",
+    )
+
+
+def issue_student_cookie(
+    response: Response,
+    session_id: str,
+    credential: str,
+    issued_at: str | datetime,
+    expires_at: str,
+) -> None:
+    """Emite o Papel Aluno da sessão até à meia-noite local seguinte."""
+
+    expires = datetime.fromisoformat(expires_at.replace("Z", "+00:00"))
+    if expires.tzinfo is None:
+        expires = expires.replace(tzinfo=timezone.utc)
+    issued = (
+        issued_at
+        if isinstance(issued_at, datetime)
+        else datetime.fromisoformat(str(issued_at).replace("Z", "+00:00"))
+    )
+    if issued.tzinfo is None:
+        issued = issued.replace(tzinfo=timezone.utc)
+    response.set_cookie(
+        STUDENT_COOKIE_NAME,
+        f"{session_id}.{credential}",
+        expires=expires.astimezone(timezone.utc),
+        max_age=max(
+            0,
+            int(
+                (
+                    expires.astimezone(timezone.utc)
+                    - issued.astimezone(timezone.utc)
+                ).total_seconds()
+            ),
+        ),
         httponly=True,
         samesite="strict",
         path="/",

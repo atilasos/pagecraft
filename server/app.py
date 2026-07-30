@@ -5,6 +5,7 @@ from __future__ import annotations
 import time
 from collections.abc import Callable, Iterable
 from contextlib import asynccontextmanager
+from datetime import tzinfo
 
 from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse, JSONResponse
@@ -29,7 +30,7 @@ from .access import (
     validate_route_policies,
 )
 from .config import load_config
-from .events import EventHub
+from .events import EventHub, utcnow
 from .knowledge import AEClient, WikiClient
 from .pipeline.runner import PipelineRunner
 from .providers import AnthropicProvider, CodexProvider
@@ -55,6 +56,8 @@ def create_app(
     *,
     route_extensions: Iterable[Callable[[FastAPI], None]] = (),
     rate_limit_clock: Callable[[], float] = time.monotonic,
+    classroom_clock: Callable[[], str] = utcnow,
+    school_timezone: tzinfo | None = None,
 ) -> FastAPI:
     config = load_config()
     storage = Storage(config.data_dir)
@@ -77,7 +80,13 @@ def create_app(
         app.state.runner = PipelineRunner(
             config, storage, hub, build_generation_provider(config), wiki, ae
         )
-        app.state.classroom = ClassroomService(config, storage, hub)
+        app.state.classroom = ClassroomService(
+            config,
+            storage,
+            hub,
+            clock=classroom_clock,
+            school_timezone=school_timezone,
+        )
         app.state.feedback = FeedbackService(
             config, storage, app.state.classroom, build_feedback_provider(config)
         )

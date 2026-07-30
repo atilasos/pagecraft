@@ -5,7 +5,7 @@ from __future__ import annotations
 import asyncio
 import json
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, Response
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -14,6 +14,7 @@ from ..access import (
     Role,
     RoutePolicy,
     access_policy,
+    issue_student_cookie,
     rate_limited,
 )
 from ..classroom.errors import (
@@ -220,13 +221,28 @@ async def whoami(session_id: str, request: Request):
 @router.post("/sessions/{session_id}/claim")
 @access_policy(RoutePolicy.PUBLIC)
 @rate_limited(RateLimitOperation.CLAIM)
-async def claim(session_id: str, body: ClaimRequest, request: Request):
+async def claim(
+    session_id: str,
+    body: ClaimRequest,
+    request: Request,
+    response: Response,
+):
     result = await _domain(
         _svc(request).claim_identity(session_id, body.student_id)
     )
     if not result:
         raise HTTPException(409, "esse nome já foi escolhido (pede ao professor para libertar)")
-    return result
+    issue_student_cookie(
+        response,
+        session_id,
+        result["student_token"],
+        result["claimed_at"],
+        result["credential_expires_at"],
+    )
+    return {
+        "student_id": result["student_id"],
+        "display_name": result["display_name"],
+    }
 
 
 @router.post("/sessions/{session_id}/release/{student_id}")
