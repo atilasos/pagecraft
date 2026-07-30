@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Revisão de arquitetura — PageCraft</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+      mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose", flowchart: { curve: "basis" } });
+    </script>
+    <style>
+      .seam { stroke-dasharray: 5 4; }
+      .deep { background: linear-gradient(135deg, #0f172a, #1e293b); }
+      .hatch {
+        background-image: repeating-linear-gradient(45deg, #f1f5f9, #f1f5f9 6px, #e2e8f0 6px, #e2e8f0 12px);
+      }
+      .schem { font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; }
+      pre.mermaid { text-align: center; }
+    </style>
+  </head>
+  <body class="bg-stone-50 text-slate-900 font-sans antialiased">
+    <main class="max-w-5xl mx-auto px-6 py-12 space-y-14">
+
+      <!-- ══════════ HEADER ══════════ -->
+      <header class="border-b border-stone-300 pb-8">
+        <p class="schem text-slate-500">Revisão de arquitetura</p>
+        <h1 class="font-serif text-5xl mt-2 tracking-tight">PageCraft</h1>
+        <p class="text-slate-600 mt-3 text-sm">29 de julho de 2026 · <span class="font-mono">main @ 0ae8a19</span> · 3231 linhas de Python no servidor, 2260 de estáticos, 1654 de testes</p>
+
+        <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-5 border-2 border-slate-800 rounded-sm inline-block"></span>
+            <span class="text-slate-600">módulo</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg width="28" height="20"><line x1="2" y1="10" x2="26" y2="10" stroke="#64748b" stroke-width="2" class="seam"/></svg>
+            <span class="text-slate-600">costura</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg width="28" height="20"><line x1="2" y1="10" x2="22" y2="10" stroke="#dc2626" stroke-width="2"/><path d="M22 6 L27 10 L22 14 Z" fill="#dc2626"/></svg>
+            <span class="text-slate-600">fuga</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-5 deep rounded-sm inline-block"></span>
+            <span class="text-slate-600">módulo profundo</span>
+          </div>
+        </div>
+
+        <div class="mt-8 grid md:grid-cols-3 gap-4">
+          <div class="rounded-lg bg-white border border-stone-200 p-4">
+            <p class="font-mono text-3xl text-slate-900">11</p>
+            <p class="text-xs text-slate-600 mt-1">sítios que conhecem a forma dos eventos</p>
+          </div>
+          <div class="rounded-lg bg-white border border-stone-200 p-4">
+            <p class="font-mono text-3xl text-slate-900">4</p>
+            <p class="text-xs text-slate-600 mt-1">escritores independentes de <span class="font-mono">catalog.json</span></p>
+          </div>
+          <div class="rounded-lg bg-white border border-stone-200 p-4">
+            <p class="font-mono text-3xl text-slate-900">0</p>
+            <p class="text-xs text-slate-600 mt-1">testes sobre 2260 linhas de cliente</p>
+          </div>
+        </div>
+      </header>
+
+      <!-- ══════════ CANDIDATOS ══════════ -->
+      <section id="candidates" class="space-y-16">
+
+        <!-- ─────── 1 ─────── -->
+        <article id="c1" class="scroll-mt-8">
+          <div class="flex items-baseline gap-3 flex-wrap">
+            <span class="schem text-slate-400 font-mono">01</span>
+            <h2 class="font-serif text-3xl tracking-tight">Aprofundar a Sessão de aula</h2>
+          </div>
+          <div class="flex gap-2 mt-3 flex-wrap">
+            <span class="px-2.5 py-1 rounded-full bg-emerald-600 text-white text-xs font-medium">Strong</span>
+            <span class="px-2.5 py-1 rounded-full bg-slate-200 text-slate-700 text-xs">in-process</span>
+          </div>
+          <p class="font-mono text-xs text-slate-600 mt-3 leading-relaxed">
+            server/classroom/service.py · server/api/classroom.py · server/classroom/feedback.py · server/classroom/reports.py
+          </p>
+
+          <!-- diagrama: cross-section / massa -->
+          <div class="grid md:grid-cols-2 gap-4 mt-6">
+            <div class="rounded-lg border border-stone-200 bg-white p-5">
+              <p class="schem text-slate-500 mb-4">Antes — regras acima da costura</p>
+              <div class="space-y-1">
+                <div class="border-2 border-red-500 rounded-t-md bg-red-50 p-3" style="min-height:190px">
+                  <p class="schem text-red-700">api/classroom.py — camada HTTP</p>
+                  <ul class="text-[11px] text-red-900 mt-2 space-y-1 leading-snug">
+                    <li>· sessão fechada não aceita mutações <span class="font-mono text-red-500">:220 :268</span></li>
+                    <li>· feedback_request dispara feedback IA <span class="font-mono text-red-500">:224</span></li>
+                    <li>· redação do token do aluno <span class="font-mono text-red-500">:71-93</span></li>
+                    <li>· visibilidade de eventos por papel <span class="font-mono text-red-500">:16-24 :306</span></li>
+                    <li>· revalidação de identidade no stream <span class="font-mono text-red-500">:317</span></li>
+                    <li>· limites 20 / 280 duplicados <span class="font-mono text-red-500">:45 :50</span></li>
+                  </ul>
+                </div>
+                <svg width="100%" height="18"><line x1="0" y1="9" x2="100%" y2="9" stroke="#64748b" stroke-width="2" class="seam"/></svg>
+                <div class="border-2 border-slate-300 rounded-b-md bg-stone-100 p-3">
+                  <p class="schem text-slate-500">ClassroomService</p>
+                  <p class="text-[11px] text-slate-600 mt-1">repositório de dicts com locks — 14 métodos, sem invariantes de estado</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-lg border border-stone-200 bg-white p-5">
+              <p class="schem text-slate-500 mb-4">Depois — costura no agregado</p>
+              <div class="space-y-1">
+                <div class="border-2 border-slate-300 rounded-t-md bg-stone-100 p-3">
+                  <p class="schem text-slate-500">api/classroom.py</p>
+                  <p class="text-[11px] text-slate-600 mt-1">traduz HTTP · devolve a projeção que o módulo produziu</p>
+                </div>
+                <svg width="100%" height="18"><line x1="0" y1="9" x2="100%" y2="9" stroke="#059669" stroke-width="2" class="seam"/></svg>
+                <div class="deep rounded-b-md p-3 text-stone-200" style="min-height:190px">
+                  <p class="schem text-emerald-300">Sessão de aula</p>
+                  <p class="text-[11px] mt-2 leading-snug text-stone-300">registar_evidência · convidar_nível · projetar_no_quadro · encerrar · vista(papel)</p>
+                  <div class="mt-3 pt-3 border-t border-slate-700 text-[10px] text-slate-400 leading-snug">
+                    estado + transições · atomicidade evento/estado · redação por papel · disparo de feedback · dedup · locks
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6 mt-6">
+            <div>
+              <p class="schem text-slate-500">Problema</p>
+              <p class="text-sm text-slate-800 mt-1">As regras da Sessão de aula vivem nos handlers HTTP; chamar o serviço diretamente escreve numa sessão fechada — e é o que dois testes já fazem.</p>
+              <p class="schem text-slate-500 mt-4">Solução</p>
+              <p class="text-sm text-slate-800 mt-1">Um módulo <em>Sessão de aula</em> que aceita comandos e devolve a vista já redigida para cada papel; o HTTP deixa de decidir.</p>
+            </div>
+            <div>
+              <p class="schem text-slate-500">Ganhos</p>
+              <ul class="text-sm text-slate-800 mt-1 space-y-1">
+                <li>· Localidade: um sítio decide legalidade</li>
+                <li>· Estado e evento tornam-se atómicos</li>
+                <li>· Redação do token deixa de ser manual</li>
+                <li>· Testes deixam de precisar de HTTP</li>
+                <li>· Triagem de atenção ganha casa</li>
+                <li>· Alavancagem: 4 chamadores, uma interface</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mt-4 rounded-md bg-red-50 border border-red-200 p-3 text-xs text-red-900">
+            <span class="font-semibold">Fuga concreta:</span> em <span class="font-mono">close_session</span>, <span class="font-mono">claim_identity</span> e <span class="font-mono">upsert_pit_item</span> o append ao log acontece <em>fora</em> do lock da sessão — uma falha entre a escrita e o append deixa <span class="font-mono">session.json</span> em <span class="font-mono">closed</span> sem <span class="font-mono">session_closed</span> no log, e o stream SSE nunca termina.
+          </div>
+        </article>
+
+        <!-- ─────── 2 ─────── -->
+        <article id="c2" class="scroll-mt-8">
+          <div class="flex items-baseline gap-3 flex-wrap">
+            <span class="schem text-slate-400 font-mono">02</span>
+            <h2 class="font-serif text-3xl tracking-tight">Um vocabulário de Evidência, não onze</h2>
+          </div>
+          <div class="flex gap-2 mt-3 flex-wrap">
+            <span class="px-2.5 py-1 rounded-full bg-emerald-600 text-white text-xs font-medium">Strong</span>
+            <span class="px-2.5 py-1 rounded-full bg-slate-200 text-slate-700 text-xs">in-process</span>
+          </div>
+          <p class="font-mono text-xs text-slate-600 mt-3 leading-relaxed">
+            classroom/service.py:19 · api/classroom.py:16 · classroom/reports.py:14 · classroom/feedback.py · static/teacher/class.js:15 · static/student/app.js:209 · static/teacher/present.html:59 · pipeline/prompts/template-base.html:429 · bridge_snippet.py:27 · prompts/references/bridge-contract.md
+          </p>
+
+          <div class="grid md:grid-cols-2 gap-4 mt-6">
+            <div class="rounded-lg border border-stone-200 bg-white p-4">
+              <p class="schem text-slate-500 mb-2">Antes — um tipo novo toca em 6 a 8 sítios</p>
+              <pre class="mermaid">
+flowchart LR
+  N["tipo novo de evidência"]
+  N --> A["template-base.html<br/>emissor"]
+  N --> B["bridge-contract.md<br/>contrato do Builder"]
+  N --> C["service.py<br/>STUDENT_EVENT_TYPES"]
+  N --> D["api/classroom.py<br/>STUDENT_VISIBLE_TYPES"]
+  N --> E["reports.py<br/>COUNTED_TYPES"]
+  N --> F["class.js<br/>EVENT_TEXT"]
+  N --> G["student/app.js<br/>handlers"]
+  classDef site fill:#fff,stroke:#dc2626,stroke-width:1.5px,color:#7f1d1d;
+  classDef src fill:#0f172a,stroke:#0f172a,color:#fff;
+  class A,B,C,D,E,F,G site
+  class N src
+              </pre>
+            </div>
+            <div class="rounded-lg border border-stone-200 bg-white p-4">
+              <p class="schem text-slate-500 mb-2">Depois — uma declaração, consumidores derivados</p>
+              <pre class="mermaid">
+flowchart LR
+  N["tipo novo de evidência"] --> R["Vocabulário de Evidência<br/>emite · vê · conta · rótulo"]
+  R --> S["ingestão"]
+  R --> V["visibilidade por papel"]
+  R --> C["relatório"]
+  R --> J["rótulos do cliente"]
+  R --> D["contrato do Builder"]
+  classDef reg fill:#0f172a,stroke:#0f172a,color:#fff,stroke-width:2px;
+  classDef out fill:#ecfdf5,stroke:#059669,color:#065f46;
+  class R,N reg
+  class S,V,C,J,D out
+              </pre>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6 mt-6">
+            <div>
+              <p class="schem text-slate-500">Problema</p>
+              <p class="text-sm text-slate-800 mt-1">O vocabulário de Evidência está partido em cinco listas Python e cinco listas JavaScript que ninguém reconcilia.</p>
+              <p class="schem text-slate-500 mt-4">Solução</p>
+              <p class="text-sm text-slate-800 mt-1">Um módulo que declara cada tipo com as suas propriedades — quem emite, quem vê, se conta no relatório, que rótulo tem — e serve todos os consumidores, incluindo o cliente.</p>
+            </div>
+            <div>
+              <p class="schem text-slate-500">Ganhos</p>
+              <ul class="text-sm text-slate-800 mt-1 space-y-1">
+                <li>· Um tipo novo, um sítio</li>
+                <li>· Privacidade deixa de ser omissão</li>
+                <li>· Colunas do relatório param de partir</li>
+                <li>· Localidade: dez listas viram uma</li>
+                <li>· Testável sem HTTP nem browser</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mt-4 rounded-md bg-red-50 border border-red-200 p-3 text-xs text-red-900">
+            <span class="font-semibold">O acoplamento já falhou:</span> <span class="font-mono">feedback_error</span> é emitido em <span class="font-mono">feedback.py:147</span> mas não existe em <span class="font-mono">EVENT_TEXT</span> — e <span class="font-mono">class.js:246</span> só subscreve as chaves dessa tabela. Também não está em <span class="font-mono">STUDENT_VISIBLE_TYPES</span>. Uma falha do provider de feedback é invisível para o professor <em>e</em> para o aluno.
+          </div>
+        </article>
+
+        <!-- ─────── 3 ─────── -->
+        <article id="c3" class="scroll-mt-8">
+          <div class="flex items-baseline gap-3 flex-wrap">
+            <span class="schem text-slate-400 font-mono">03</span>
+            <h2 class="font-serif text-3xl tracking-tight">Dar uma interface ao Catálogo</h2>
+          </div>
+          <div class="flex gap-2 mt-3 flex-wrap">
+            <span class="px-2.5 py-1 rounded-full bg-emerald-600 text-white text-xs font-medium">Strong</span>
+            <span class="px-2.5 py-1 rounded-full bg-slate-200 text-slate-700 text-xs">local-substitutable</span>
+          </div>
+          <p class="font-mono text-xs text-slate-600 mt-3 leading-relaxed">
+            catalog.json · server/publish.py:126 · skills/{shared,claude,codex}/scripts/publish_to_catalog.py · scripts/generate_m28p_variants.py:479 · scripts/repair_m28p_main_pages.py:146 · index.html · viewer.html · m28p.html · server/api/catalog.py
+          </p>
+
+          <!-- hand-built: massa de interface -->
+          <div class="grid md:grid-cols-2 gap-4 mt-6">
+            <div class="rounded-lg border border-stone-200 bg-white p-5">
+              <p class="schem text-slate-500 mb-4">Antes — quatro escritores, zero interface</p>
+              <div class="relative" style="height:250px">
+                <div class="grid grid-cols-2 gap-2 text-[10px]">
+                  <div class="border border-red-400 bg-red-50 rounded p-2 text-red-900">publish.py<br/><span class="text-red-500">ordena por slug</span></div>
+                  <div class="border border-red-400 bg-red-50 rounded p-2 text-red-900">publish_to_catalog.py<br/><span class="text-red-500">×3 cópias byte-a-byte</span></div>
+                  <div class="border border-red-400 bg-red-50 rounded p-2 text-red-900">generate_m28p_variants.py<br/><span class="text-red-500">ordena por order</span></div>
+                  <div class="border border-red-400 bg-red-50 rounded p-2 text-red-900">repair_m28p_main_pages.py<br/><span class="text-red-500">patch cirúrgico</span></div>
+                </div>
+                <svg width="100%" height="46" class="mt-1">
+                  <line x1="12%" y1="0" x2="50%" y2="40" stroke="#dc2626" stroke-width="1.5"/>
+                  <line x1="38%" y1="0" x2="50%" y2="40" stroke="#dc2626" stroke-width="1.5"/>
+                  <line x1="62%" y1="0" x2="50%" y2="40" stroke="#dc2626" stroke-width="1.5"/>
+                  <line x1="88%" y1="0" x2="50%" y2="40" stroke="#dc2626" stroke-width="1.5"/>
+                  <path d="M46 40 L54 40 L50 46 Z" fill="#dc2626" transform="translate(0,0)"/>
+                </svg>
+                <div class="border-2 border-slate-800 rounded bg-stone-100 p-2 text-center">
+                  <p class="font-mono text-xs">catalog.json</p>
+                  <p class="text-[10px] text-slate-500">74 KB · 103 itens · 36 commits</p>
+                </div>
+                <div class="hatch rounded mt-2 p-2 text-[10px] text-slate-700 text-center">
+                  6 leitores indexam o JSON em bruto — index.html · viewer.html · m28p.html · audit · generate · protótipos
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-lg border border-stone-200 bg-white p-5">
+              <p class="schem text-slate-500 mb-4">Depois — uma costura de escrita</p>
+              <div class="relative" style="height:250px">
+                <div class="grid grid-cols-2 gap-2 text-[10px]">
+                  <div class="border border-slate-300 bg-stone-50 rounded p-2 text-slate-600">publish.py</div>
+                  <div class="border border-slate-300 bg-stone-50 rounded p-2 text-slate-600">skills/*</div>
+                  <div class="border border-slate-300 bg-stone-50 rounded p-2 text-slate-600">generate_m28p</div>
+                  <div class="border border-slate-300 bg-stone-50 rounded p-2 text-slate-600">repair_m28p</div>
+                </div>
+                <svg width="100%" height="46" class="mt-1">
+                  <line x1="12%" y1="0" x2="50%" y2="38" stroke="#94a3b8" stroke-width="1.5"/>
+                  <line x1="38%" y1="0" x2="50%" y2="38" stroke="#94a3b8" stroke-width="1.5"/>
+                  <line x1="62%" y1="0" x2="50%" y2="38" stroke="#94a3b8" stroke-width="1.5"/>
+                  <line x1="88%" y1="0" x2="50%" y2="38" stroke="#94a3b8" stroke-width="1.5"/>
+                </svg>
+                <div class="deep rounded p-3 text-center text-stone-200">
+                  <p class="schem text-emerald-300">Catálogo</p>
+                  <p class="text-[10px] mt-1 text-stone-300">upsert · listar · ordem canónica · preserva campos desconhecidos · escrita atómica</p>
+                </div>
+                <svg width="100%" height="22"><line x1="50%" y1="0" x2="50%" y2="14" stroke="#059669" stroke-width="2" class="seam"/></svg>
+                <div class="border-2 border-slate-800 rounded bg-stone-100 p-2 text-center">
+                  <p class="font-mono text-xs">catalog.json</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6 mt-6">
+            <div>
+              <p class="schem text-slate-500">Problema</p>
+              <p class="text-sm text-slate-800 mt-1">Quatro escritores implementam o mesmo formato de forma divergente, e o mais recente não conhece metade das chaves que o ficheiro real tem.</p>
+              <p class="schem text-slate-500 mt-4">Solução</p>
+              <p class="text-sm text-slate-800 mt-1">Um módulo Catálogo que faz upsert preservando campos desconhecidos, fixa uma ordem canónica e escreve atomicamente; os quatro escritores passam a chamá-lo.</p>
+            </div>
+            <div>
+              <p class="schem text-slate-500">Ganhos</p>
+              <ul class="text-sm text-slate-800 mt-1 space-y-1">
+                <li>· Republicar deixa de apagar campos</li>
+                <li>· Uma ordem, um diff pequeno</li>
+                <li>· Três cópias desaparecem</li>
+                <li>· Localidade: o formato vive num sítio</li>
+                <li>· Testável com um catálogo real</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mt-4 rounded-md bg-red-50 border border-red-200 p-3 text-xs text-red-900">
+            <span class="font-semibold">Perda de dados demonstrável:</span> 56 dos 103 itens têm <span class="font-mono">variantOf</span>/<span class="font-mono">variantIndex</span>/<span class="font-mono">variantTitle</span> e 84 têm <span class="font-mono">order</span>. O literal de item em <span class="font-mono">publish.py:129-141</span> não conhece nenhuma dessas chaves e <span class="font-mono">:144</span> substitui o item inteiro — republicar uma variante pelo Studio apaga o agrupamento de que <span class="font-mono">index.html:665</span> depende. A fixture de <span class="font-mono">test_publish.py:26</span> usa <span class="font-mono">items: []</span>, por isso não pode apanhar isto.
+          </div>
+        </article>
+
+        <!-- ─────── 4 ─────── -->
+        <article id="c4" class="scroll-mt-8">
+          <div class="flex items-baseline gap-3 flex-wrap">
+            <span class="schem text-slate-400 font-mono">04</span>
+            <h2 class="font-serif text-3xl tracking-tight">A Fase como módulo, o runner como plano</h2>
+          </div>
+          <div class="flex gap-2 mt-3 flex-wrap">
+            <span class="px-2.5 py-1 rounded-full bg-amber-500 text-white text-xs font-medium">Worth exploring</span>
+            <span class="px-2.5 py-1 rounded-full bg-slate-200 text-slate-700 text-xs">in-process</span>
+          </div>
+          <p class="font-mono text-xs text-slate-600 mt-3 leading-relaxed">
+            server/pipeline/runner.py · server/pipeline/phases.py · server/pipeline/validators.py · server/api/jobs.py
+          </p>
+
+          <!-- cross-section -->
+          <div class="grid md:grid-cols-2 gap-4 mt-6">
+            <div class="rounded-lg border border-stone-200 bg-white p-5">
+              <p class="schem text-slate-500 mb-4">Antes — uma fase definida em três sítios</p>
+              <div class="space-y-1.5">
+                <div class="h-11 border-l-4 border-red-400 bg-red-50 flex items-center px-3 text-[11px] text-red-900">identidade e prompt <span class="font-mono ml-auto text-red-500">phases.py</span></div>
+                <div class="h-11 border-l-4 border-red-400 bg-red-50 flex items-center px-3 text-[11px] text-red-900">schema de validação <span class="font-mono ml-auto text-red-500">runner.py:58</span></div>
+                <div class="h-11 border-l-4 border-red-400 bg-red-50 flex items-center px-3 text-[11px] text-red-900">timeout <span class="font-mono ml-auto text-red-500">runner.py:213</span></div>
+                <div class="h-11 border-l-4 border-red-400 bg-red-50 flex items-center px-3 text-[11px] text-red-900">retry + edição do prompt <span class="font-mono ml-auto text-red-500">runner.py:219</span></div>
+                <div class="h-11 border-l-4 border-red-400 bg-red-50 flex items-center px-3 text-[11px] text-red-900">dump do prompt em disco <span class="font-mono ml-auto text-red-500">runner.py:215</span></div>
+                <div class="mt-3 border-2 border-slate-800 bg-stone-100 p-3 text-[11px]">
+                  <span class="font-mono">runner.py</span> — 404 linhas, 10 responsabilidades: fila, worker, I/O, SSE, conhecimento, repair loop, publicação
+                </div>
+              </div>
+            </div>
+            <div class="rounded-lg border border-stone-200 bg-white p-5">
+              <p class="schem text-slate-500 mb-4">Depois — a fase sabe correr-se</p>
+              <div class="space-y-1.5">
+                <div class="deep rounded p-3 text-stone-200" style="min-height:150px">
+                  <p class="schem text-emerald-300">Fase</p>
+                  <p class="text-[11px] mt-2 text-stone-300">correr(contexto) → resultado validado</p>
+                  <div class="mt-3 pt-3 border-t border-slate-700 text-[10px] text-slate-400 leading-snug">
+                    identidade · prompt · schema · timeout · retry tipado · dump
+                  </div>
+                </div>
+                <svg width="100%" height="18"><line x1="0" y1="9" x2="100%" y2="9" stroke="#059669" stroke-width="2" class="seam"/></svg>
+                <div class="border-2 border-slate-300 bg-stone-50 p-3 text-[11px] text-slate-700">
+                  <span class="font-mono">runner.py</span> — encadeia fases, decide passa/repara, emite progresso
+                </div>
+                <div class="hatch rounded p-2 text-[10px] text-slate-600 mt-1">a decisão passa/repara fica pura: 4 linhas testáveis sem <span class="font-mono">await</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6 mt-6">
+            <div>
+              <p class="schem text-slate-500">Problema</p>
+              <p class="text-sm text-slate-800 mt-1">Uma fase não existe como módulo — está espalhada por três ficheiros, e o runner acumula dez responsabilidades à sua volta.</p>
+              <p class="schem text-slate-500 mt-4">Solução</p>
+              <p class="text-sm text-slate-800 mt-1">Cada fase torna-se um módulo que sabe o seu prompt, schema, timeout e política de retry; o runner passa a ser só o plano e a decisão de reparação.</p>
+            </div>
+            <div>
+              <p class="schem text-slate-500">Ganhos</p>
+              <ul class="text-sm text-slate-800 mt-1 space-y-1">
+                <li>· Fase nova: um sítio</li>
+                <li>· Retry deixa de ser codex-shaped</li>
+                <li>· Decisão passa/repara vira função pura</li>
+                <li>· Testes param de ler cabeçalhos markdown</li>
+                <li>· Localidade: 404 linhas desdobradas</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mt-4 rounded-md bg-amber-50 border border-amber-300 p-3 text-xs text-amber-900">
+            <span class="font-semibold">Sinal de costura em falta:</span> <span class="font-mono">test_runner.py:87</span> descobre em que fase está a fazer <span class="font-mono">"Identidade: {name}" in system</span> — a suite depende do H1 dos ficheiros de prompt. E o <span class="font-mono">FakeProvider</span> devolve sempre HTML válido, por isso o ramo <span class="font-mono">validação falhou → repair ticket</span> nunca é exercido.
+          </div>
+        </article>
+
+        <!-- ─────── 5 ─────── -->
+        <article id="c5" class="scroll-mt-8">
+          <div class="flex items-baseline gap-3 flex-wrap">
+            <span class="schem text-slate-400 font-mono">05</span>
+            <h2 class="font-serif text-3xl tracking-tight">Reformar a costura do provider</h2>
+          </div>
+          <div class="flex gap-2 mt-3 flex-wrap">
+            <span class="px-2.5 py-1 rounded-full bg-amber-500 text-white text-xs font-medium">Worth exploring</span>
+            <span class="px-2.5 py-1 rounded-full bg-slate-200 text-slate-700 text-xs">ports &amp; adapters</span>
+          </div>
+          <p class="font-mono text-xs text-slate-600 mt-3 leading-relaxed">
+            server/providers/base.py · server/providers/codex.py · server/providers/anthropic.py · server/app.py:18-30 · server/pipeline/runner.py:211-235
+          </p>
+
+          <!-- massa: interface vs implementação -->
+          <div class="grid md:grid-cols-2 gap-4 mt-6">
+            <div class="rounded-lg border border-stone-200 bg-white p-5">
+              <p class="schem text-slate-500 mb-4">Antes — a interface tem a forma do Codex</p>
+              <div class="flex gap-4 items-end" style="height:230px">
+                <div class="flex-1">
+                  <div class="border-2 border-red-400 bg-red-50 rounded-t p-2 text-[10px] text-red-900" style="height:118px">
+                    <p class="schem text-red-700">interface</p>
+                    <p class="mt-1 leading-snug">complete(system, prompt, schema, timeout_s, <span class="line-through">workdir</span>)</p>
+                    <p class="mt-1 text-red-600">+ available() — fora da interface</p>
+                    <p class="mt-1 text-red-600">+ retry textual no chamador</p>
+                  </div>
+                  <div class="border-2 border-t-0 border-slate-300 bg-stone-100 rounded-b p-2 text-[10px]" style="height:74px">
+                    <p class="schem text-slate-500">implementação</p>
+                    <p class="text-slate-600 mt-1">subprocesso · killpg · exit code</p>
+                  </div>
+                  <p class="text-center text-[10px] text-slate-500 mt-1 font-mono">codex.py · 0 testes</p>
+                </div>
+                <div class="flex-1">
+                  <div class="border-2 border-red-400 bg-red-50 rounded-t p-2 text-[10px] text-red-900" style="height:118px">
+                    <p class="schem text-red-700">interface</p>
+                    <p class="mt-1 leading-snug">recebe <span class="font-mono">workdir</span> e ignora-o</p>
+                    <p class="mt-1 text-red-600">timeout_s = timeout HTTP</p>
+                    <p class="mt-1 text-red-600">revalida schema à parte</p>
+                  </div>
+                  <div class="border-2 border-t-0 border-slate-300 bg-stone-100 rounded-b p-2 text-[10px]" style="height:74px">
+                    <p class="schem text-slate-500">implementação</p>
+                    <p class="text-slate-600 mt-1">HTTP · tool_use forçado</p>
+                  </div>
+                  <p class="text-center text-[10px] text-slate-500 mt-1 font-mono">anthropic.py · 0 testes</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-lg border border-stone-200 bg-white p-5">
+              <p class="schem text-slate-500 mb-4">Depois — dois adaptadores simétricos</p>
+              <div class="flex gap-4 items-end" style="height:230px">
+                <div class="flex-1">
+                  <div class="deep rounded-t p-2 text-[10px] text-stone-200" style="height:56px">
+                    <p class="schem text-emerald-300">interface</p>
+                    <p class="mt-1 text-stone-300">gerar(pedido) → objeto válido</p>
+                  </div>
+                  <div class="border-2 border-t-0 border-slate-300 bg-stone-100 rounded-b p-2 text-[10px]" style="height:136px">
+                    <p class="schem text-slate-500">implementação</p>
+                    <p class="text-slate-600 mt-1 leading-snug">subprocesso · killpg · exit code · schema no prompt · erros tipados</p>
+                  </div>
+                  <p class="text-center text-[10px] text-slate-500 mt-1 font-mono">adaptador Codex</p>
+                </div>
+                <div class="flex-1">
+                  <div class="deep rounded-t p-2 text-[10px] text-stone-200" style="height:56px">
+                    <p class="schem text-emerald-300">interface</p>
+                    <p class="mt-1 text-stone-300">gerar(pedido) → objeto válido</p>
+                  </div>
+                  <div class="border-2 border-t-0 border-slate-300 bg-stone-100 rounded-b p-2 text-[10px]" style="height:136px">
+                    <p class="schem text-slate-500">implementação</p>
+                    <p class="text-slate-600 mt-1 leading-snug">HTTP · tool_use · erros tipados</p>
+                  </div>
+                  <p class="text-center text-[10px] text-slate-500 mt-1 font-mono">adaptador Anthropic</p>
+                </div>
+              </div>
+              <p class="text-[10px] text-slate-600 mt-2">um terceiro adaptador em memória torna o pipeline testável ponta-a-ponta</p>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6 mt-6">
+            <div>
+              <p class="schem text-slate-500">Problema</p>
+              <p class="text-sm text-slate-800 mt-1">Há dois adaptadores, mas a interface foi moldada a um: <span class="font-mono">workdir</span> é morto, <span class="font-mono">available</span> ficou de fora e o retry corrige prompts de texto.</p>
+              <p class="schem text-slate-500 mt-4">Solução</p>
+              <p class="text-sm text-slate-800 mt-1">Estreitar a interface a «gera um objeto conforme a este schema», mover a política de retry e o capability check para dentro dela, e usar a taxonomia de erros que já existe.</p>
+            </div>
+            <div>
+              <p class="schem text-slate-500">Ganhos</p>
+              <ul class="text-sm text-slate-800 mt-1 space-y-1">
+                <li>· Parâmetro morto desaparece</li>
+                <li>· Timeout passa a significar o mesmo</li>
+                <li>· Validação num sítio, não dois</li>
+                <li>· Adaptador falso torna testes determinísticos</li>
+                <li>· Alavancagem: 213 linhas ganham testes</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- ─────── 6 ─────── -->
+        <article id="c6" class="scroll-mt-8">
+          <div class="flex items-baseline gap-3 flex-wrap">
+            <span class="schem text-slate-400 font-mono">06</span>
+            <h2 class="font-serif text-3xl tracking-tight">Separar a ligação à sessão do desenho do ecrã</h2>
+          </div>
+          <div class="flex gap-2 mt-3 flex-wrap">
+            <span class="px-2.5 py-1 rounded-full bg-emerald-600 text-white text-xs font-medium">Strong</span>
+            <span class="px-2.5 py-1 rounded-full bg-slate-200 text-slate-700 text-xs">local-substitutable</span>
+          </div>
+          <p class="font-mono text-xs text-slate-600 mt-3 leading-relaxed">
+            server/static/teacher/class.js · server/static/student/app.js · server/static/teacher/present.html · server/static/teacher/common.js
+          </p>
+
+          <!-- call-graph collapse -->
+          <div class="grid md:grid-cols-2 gap-4 mt-6">
+            <div class="rounded-lg border border-stone-200 bg-white p-5">
+              <p class="schem text-slate-500 mb-4">Antes — <span class="font-mono">handleEvent</span> faz oito coisas</p>
+              <div class="border-2 border-red-400 rounded bg-red-50 p-3 space-y-1.5" style="min-height:250px">
+                <p class="font-mono text-[11px] text-red-900">handleEvent() — class.js:324-380</p>
+                <div class="bg-white border border-red-300 rounded px-2 py-1 text-[10px] text-red-900">reduz estado de domínio · :327</div>
+                <div class="bg-white border border-red-300 rounded px-2 py-1 text-[10px] text-red-900">repõe estado de UI global · :349</div>
+                <div class="bg-white border border-red-300 rounded px-2 py-1 text-[10px] text-red-900">anima · :359</div>
+                <div class="bg-white border border-red-300 rounded px-2 py-1 text-[10px] text-red-900">espelha congelamento · :361</div>
+                <div class="bg-white border border-red-300 rounded px-2 py-1 text-[10px] text-red-900">constrói item de timeline · :363</div>
+                <div class="bg-white border border-red-300 rounded px-2 py-1 text-[10px] text-red-900">re-render total da grelha · :373</div>
+                <div class="bg-white border border-red-300 rounded px-2 py-1 text-[10px] text-red-900">refresca o drawer · :375</div>
+                <div class="bg-white border border-red-300 rounded px-2 py-1 text-[10px] text-red-900">fecha o transporte · :376</div>
+              </div>
+              <p class="text-[10px] text-slate-500 mt-2">9 variáveis globais mutáveis · <span class="font-mono">new EventSource</span> inline · nada exportado</p>
+            </div>
+
+            <div class="rounded-lg border border-stone-200 bg-white p-5">
+              <p class="schem text-slate-500 mb-4">Depois — reduzir, depois desenhar</p>
+              <div class="space-y-2" style="min-height:250px">
+                <div class="deep rounded p-3 text-stone-200">
+                  <p class="schem text-emerald-300">Estado da sessão — função pura</p>
+                  <p class="text-[10px] mt-1 text-stone-300">(estado, evidência) → estado · inclui triagem de atenção</p>
+                </div>
+                <svg width="100%" height="16"><line x1="0" y1="8" x2="100%" y2="8" stroke="#059669" stroke-width="2" class="seam"/></svg>
+                <div class="border-2 border-slate-300 rounded bg-stone-50 p-3">
+                  <p class="schem text-slate-500">Ligação à sessão</p>
+                  <p class="text-[10px] text-slate-600 mt-1">transporte injetável · retoma por <span class="font-mono">Last-Event-ID</span> · outbox</p>
+                </div>
+                <div class="border-2 border-slate-300 rounded bg-stone-50 p-3">
+                  <p class="schem text-slate-500">Vistas</p>
+                  <p class="text-[10px] text-slate-600 mt-1">grelha · drawer · projeção — leem o estado, não os eventos</p>
+                </div>
+                <div class="hatch rounded p-2 text-[10px] text-slate-700 text-center">o reducer e a triagem passam a ter testes</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6 mt-6">
+            <div>
+              <p class="schem text-slate-500">Problema</p>
+              <p class="text-sm text-slate-800 mt-1">2260 linhas de cliente sem um único teste, porque o estado da sessão, o transporte e o DOM estão soldados em funções globais.</p>
+              <p class="schem text-slate-500 mt-4">Solução</p>
+              <p class="text-sm text-slate-800 mt-1">Extrair o estado da sessão como redução pura de Evidência, com o transporte atrás de uma costura; as vistas passam a ler estado.</p>
+            </div>
+            <div>
+              <p class="schem text-slate-500">Ganhos</p>
+              <ul class="text-sm text-slate-800 mt-1 space-y-1">
+                <li>· Triagem de atenção ganha um sítio</li>
+                <li>· Reducer testável sem browser</li>
+                <li>· Professor e aluno partilham a redução</li>
+                <li>· Re-render deixa de roubar o foco</li>
+                <li>· Localidade: 5 espelhos de congelamento viram um</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mt-4 rounded-md bg-red-50 border border-red-200 p-3 text-xs text-red-900">
+            <span class="font-semibold">Custo já visível em sala:</span> a grelha é reconstruída em <em>todos</em> os eventos, incluindo os heartbeats de 30 s — e os cards são <span class="font-mono">&lt;button&gt;</span>, por isso o foco de teclado perde-se de meio em meio minuto. E cada retoma do tablet do aluno faz replay do log inteiro, ressuscitando todos os <span class="font-mono">teacher_message</span> da aula como toasts novos.
+          </div>
+        </article>
+
+        <!-- ─────── 7 ─────── -->
+        <article id="c7" class="scroll-mt-8">
+          <div class="flex items-baseline gap-3 flex-wrap">
+            <span class="schem text-slate-400 font-mono">07</span>
+            <h2 class="font-serif text-3xl tracking-tight">Um módulo de acesso, com negação por omissão</h2>
+          </div>
+          <div class="flex gap-2 mt-3 flex-wrap">
+            <span class="px-2.5 py-1 rounded-full bg-amber-500 text-white text-xs font-medium">Worth exploring</span>
+            <span class="px-2.5 py-1 rounded-full bg-slate-200 text-slate-700 text-xs">in-process</span>
+          </div>
+          <p class="font-mono text-xs text-slate-600 mt-3 leading-relaxed">
+            server/security.py · server/app.py:83-89 · server/api/classroom.py · server/api/jobs.py · server/static/teacher/common.js
+          </p>
+
+          <div class="grid md:grid-cols-2 gap-4 mt-6">
+            <div class="rounded-lg border border-stone-200 bg-white p-4">
+              <p class="schem text-slate-500 mb-2">Antes — quatro pontos de aplicação, default aberto</p>
+              <pre class="mermaid">
+flowchart TB
+  R["pedido"] --> A["dependência no router<br/>jobs.py"]
+  R --> B["dependência por rota<br/>×11 em classroom.py"]
+  R --> C["chamada imperativa<br/>dentro do SSE"]
+  R --> D["is_loopback_direct<br/>app.py:83"]
+  R --> E["rota sem marcador<br/>= pública"]
+  A --> H["compare_digest"]
+  B --> H
+  C --> H
+  D -.regra diferente.-> H
+  classDef leak fill:#fef2f2,stroke:#dc2626,color:#7f1d1d;
+  classDef core fill:#0f172a,stroke:#0f172a,color:#fff;
+  class D,E leak
+  class H core
+              </pre>
+            </div>
+            <div class="rounded-lg border border-stone-200 bg-white p-4">
+              <p class="schem text-slate-500 mb-2">Depois — uma costura, papel explícito</p>
+              <pre class="mermaid">
+flowchart TB
+  R["pedido"] --> G["Acesso<br/>quem chama · que papel · que canal"]
+  G --> P["professor"]
+  G --> S["aluno da sessão"]
+  G --> N["negado por omissão"]
+  P --> V["vista do papel"]
+  S --> V
+  classDef core fill:#0f172a,stroke:#0f172a,color:#fff,stroke-width:2px;
+  classDef ok fill:#ecfdf5,stroke:#059669,color:#065f46;
+  class G core
+  class P,S,N,V ok
+              </pre>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6 mt-6">
+            <div>
+              <p class="schem text-slate-500">Problema</p>
+              <p class="text-sm text-slate-800 mt-1">Não existe objeto «quem está a chamar»: cada handler decide, e uma rota nova é pública por esquecimento.</p>
+              <p class="schem text-slate-500 mt-4">Solução</p>
+              <p class="text-sm text-slate-800 mt-1">Um módulo Acesso que resolve papel e canal de confiança uma vez por pedido, com negação por omissão e emissão de token com validade.</p>
+            </div>
+            <div>
+              <p class="schem text-slate-500">Ganhos</p>
+              <ul class="text-sm text-slate-800 mt-1 space-y-1">
+                <li>· Rota nova nasce fechada</li>
+                <li>· Professor e aluno, um vocabulário</li>
+                <li>· Token sai da query string</li>
+                <li>· Expiração e revogação ganham casa</li>
+                <li>· Desbloqueia o ADR-0001</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mt-4 rounded-md bg-amber-50 border border-amber-300 p-3 text-xs text-amber-900">
+            <span class="font-semibold">Alinha com o ADR-0001, não o contraria.</span> O que parte atrás do túnel é só o <em>bootstrap</em>: <span class="font-mono">security.py:39-43</span> recusa qualquer pedido com cabeçalhos de proxy (incluindo <span class="font-mono">cf-connecting-ip</span>), logo <span class="font-mono">/api/teacher-token</span> devolve sempre 403 e o cliente nunca obtém token. A verificação em si já é bearer-style e é compatível. O ADR pede exatamente este redesenho — e as mitigações que exige (expiração de sessões, rate limiting no join) não têm hoje sítio onde viver.
+          </div>
+        </article>
+
+      </section>
+
+      <!-- ══════════ TOP ══════════ -->
+      <section id="top-recommendation" class="border-t border-stone-300 pt-10">
+        <p class="schem text-slate-500">Por onde começar</p>
+        <div class="mt-4 rounded-xl deep p-8 text-stone-100">
+          <h2 class="font-serif text-3xl tracking-tight text-white">
+            <a href="#c2" class="hover:underline decoration-emerald-400 decoration-2 underline-offset-4">02 · Um vocabulário de Evidência, não onze</a>
+          </h2>
+          <p class="mt-4 text-stone-300 leading-relaxed max-w-3xl">
+            É o candidato mais barato com o maior alcance: nenhuma reescrita, apenas uma declaração que os dez consumidores passam a ler. Fecha já um defeito real — <span class="font-mono text-emerald-300">feedback_error</span> não chega a ninguém — e, sobretudo, é o pré-requisito dos outros dois candidatos fortes: a <a href="#c1" class="text-emerald-300 hover:underline">Sessão de aula</a> precisa de saber que evidência é legal e quem a pode ver, e a <a href="#c6" class="text-emerald-300 hover:underline">redução no cliente</a> precisa do mesmo vocabulário para o professor e o aluno concordarem.
+          </p>
+          <p class="mt-4 text-stone-400 text-sm max-w-3xl">
+            Depois dele, <a href="#c1" class="text-emerald-300 hover:underline">01</a> — porque é onde a Triagem de atenção e o Convite de nível, já definidos no <span class="font-mono">CONTEXT.md</span>, ainda não têm código de servidor onde aterrar.
+          </p>
+        </div>
+      </section>
+
+      <footer class="text-xs text-slate-500 pt-6 border-t border-stone-200">
+        Vocabulário de arquitetura: módulo · interface · implementação · profundidade · costura · adaptador · alavancagem · localidade. Vocabulário de domínio: <span class="font-mono">CONTEXT.md</span>.
+      </footer>
+    </main>
+  </body>
+</html>
