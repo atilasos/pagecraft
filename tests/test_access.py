@@ -74,6 +74,26 @@ async def test_loopback_bootstrap_issues_httponly_cookie_and_authenticates_teach
     assert response.status_code == 200
 
 
+async def test_non_loopback_channel_without_cookie_cannot_bootstrap_or_act_as_teacher(
+    app_client,
+):
+    transport = httpx.ASGITransport(
+        app=app_client.app,
+        raise_app_exceptions=False,
+        client=("127.0.0.1", 41000),
+    )
+    async with httpx.AsyncClient(
+        transport=transport,
+        base_url="https://studio.example",
+        headers={"cf-connecting-ip": "203.0.113.17"},
+    ) as tunnel_client:
+        bootstrap = await tunnel_client.get("/api/teacher-bootstrap")
+        protected = await tunnel_client.get("/api/meta")
+
+    assert bootstrap.status_code == 403
+    assert protected.status_code == 401
+
+
 async def test_access_resolves_the_role_and_trust_channel_once_per_request(
     tmp_path,
     monkeypatch,
@@ -93,6 +113,19 @@ async def test_access_resolves_the_role_and_trust_channel_once_per_request(
 
     app = app_module.create_app(route_extensions=[add_access_probe])
     async with app.router.lifespan_context(app):
+        loopback_transport = httpx.ASGITransport(
+            app=app,
+            raise_app_exceptions=False,
+            client=("127.0.0.1", 41000),
+        )
+        async with httpx.AsyncClient(
+            transport=loopback_transport,
+            base_url="http://studio.example",
+        ) as loopback_client:
+            bootstrap = await loopback_client.get("/api/teacher-bootstrap")
+            teacher_cookies = httpx.Cookies(loopback_client.cookies)
+        assert bootstrap.status_code == 204
+
         tunnel_transport = httpx.ASGITransport(
             app=app,
             raise_app_exceptions=False,
@@ -100,14 +133,12 @@ async def test_access_resolves_the_role_and_trust_channel_once_per_request(
         )
         async with httpx.AsyncClient(
             transport=tunnel_transport,
-            base_url="https://studio.example",
+            base_url="http://studio.example",
+            cookies=teacher_cookies,
         ) as tunnel_client:
             tunnel_response = await tunnel_client.get(
                 "/api/access-probe",
-                headers={
-                    "x-teacher-token": app.state.teacher_token,
-                    "cf-connecting-ip": "203.0.113.17",
-                },
+                headers={"cf-connecting-ip": "203.0.113.17"},
             )
         lan_transport = httpx.ASGITransport(
             app=app,
@@ -116,14 +147,12 @@ async def test_access_resolves_the_role_and_trust_channel_once_per_request(
         )
         async with httpx.AsyncClient(
             transport=lan_transport,
-            base_url="http://pagecraft.local",
+            base_url="http://studio.example",
+            cookies=teacher_cookies,
         ) as lan_client:
             lan_response = await lan_client.get(
                 "/api/access-probe",
-                headers={
-                    "x-teacher-token": app.state.teacher_token,
-                    "cf-connecting-ip": "198.51.100.31",
-                },
+                headers={"cf-connecting-ip": "198.51.100.31"},
             )
 
     assert tunnel_response.status_code == 200
@@ -141,12 +170,12 @@ async def test_access_resolves_the_role_and_trust_channel_once_per_request(
 
 
 async def test_a_teacher_is_forbidden_from_a_student_route(app_client):
-    teacher = {"x-teacher-token": app_client.app.state.teacher_token}
+    bootstrap = await app_client.get("/api/teacher-bootstrap")
+    assert bootstrap.status_code == 204
     created_class = (
         await app_client.post(
             "/api/classes",
             json={"name": "2.º A", "year": 2, "students": ["Lia"]},
-            headers=teacher,
         )
     ).json()
     session = (
@@ -157,7 +186,6 @@ async def test_a_teacher_is_forbidden_from_a_student_route(app_client):
                 "activity_slug": "demo",
                 "activity_title": "Dobros",
             },
-            headers=teacher,
         )
     ).json()
     student_id = next(iter(session["roster"]))
@@ -171,11 +199,11 @@ async def test_a_teacher_is_forbidden_from_a_student_route(app_client):
     student_response = await app_client.get(
         f"/api/sessions/{session['id']}/me",
         params={"student_token": claim["student_token"]},
+        headers={"cookie": ""},
     )
     response = await app_client.get(
         f"/api/sessions/{session['id']}/me",
         params={"student_token": claim["student_token"]},
-        headers=teacher,
     )
 
     assert student_response.status_code == 200
