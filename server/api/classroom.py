@@ -245,7 +245,7 @@ async def release(
 @router.get("/session-event-types")
 @access_policy(RoutePolicy.TEACHER)
 async def session_event_types():
-    """Declaração pública e estática do vocabulário da Sessão de aula."""
+    """Declaração estática do vocabulário da Sessão de aula para o Professor."""
     return {"version": 1, "types": SESSION_EVENT_TYPES.declaration()}
 
 
