@@ -194,6 +194,8 @@ async def test_board_stream_derives_its_collective_view_from_the_cookie(
 
     assert response.status_code == 200
     assert "event: session_state_snapshot" in response.text
+    assert '"name": "teacher_highlight"' in response.text
+    assert '"bridge_name": "highlight"' in response.text
     assert '"students"' not in response.text
     assert '"unit_id": "global"' in response.text
     assert "privada" not in response.text

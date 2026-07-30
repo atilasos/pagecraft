@@ -402,6 +402,18 @@ async def stream_session(session_id: str, request: Request):
         for event_type in SESSION_EVENT_TYPES.visible_to(role)
         if event_type.in_timeline
     }
+    board_event_types = (
+        [
+            {
+                "name": event_type.name,
+                "bridge_name": event_type.bridge_name,
+            }
+            for event_type in SESSION_EVENT_TYPES.visible_to("board")
+            if event_type.in_timeline
+        ]
+        if role == "board"
+        else None
+    )
     log = svc.events_log(session_id)
     events = await log.replay()
     frontier = max((int(record.get("seq", 0)) for record in events), default=0)
@@ -447,6 +459,8 @@ async def stream_session(session_id: str, request: Request):
             role=role,
             student_id=student_id,
         )
+        if board_event_types is not None:
+            state["event_types"] = board_event_types
         yield (
             f"id: {frontier}\n"
             "event: session_state_snapshot\n"
