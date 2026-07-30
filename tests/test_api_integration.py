@@ -1,5 +1,6 @@
 import asyncio
 import json
+from datetime import datetime, timedelta
 
 import httpx
 import pytest
@@ -162,6 +163,38 @@ async def test_full_classroom_flow(client):
     # fechar sessão
     resp = await client.post(f"/api/sessions/{session['id']}/close")
     assert resp.json()["status"] == "closed"
+
+
+async def test_join_rejects_a_session_open_for_more_than_eight_hours(client):
+    cls = (
+        await client.post(
+            "/api/classes",
+            json={"name": "3.º B", "year": 3, "students": ["Rui"]},
+        )
+    ).json()
+    session = (
+        await client.post(
+            "/api/sessions",
+            json={
+                "class_id": cls["id"],
+                "activity_slug": "demo",
+                "activity_title": "Frações",
+            },
+        )
+    ).json()
+    expired_at = datetime.fromisoformat(session["started_at"]) + timedelta(
+        hours=8, seconds=1
+    )
+    client.app.state.classroom._clock = lambda: expired_at.isoformat()
+
+    response = await client.get(f"/api/join/{session['join_code']}")
+    persisted = await client.get(f"/api/sessions/{session['id']}")
+    events = await client.app.state.classroom.events_log(session["id"]).replay()
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "não há nenhuma aula com esse código"
+    assert persisted.json()["status"] == "closed"
+    assert events[-1]["type"] == "session_closed"
 
 
 async def test_student_stream_filters_events(client):
