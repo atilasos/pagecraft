@@ -95,7 +95,7 @@ async def test_claim_issues_httponly_cookie_and_me_accepts_only_that_cookie(
 async def test_cookie_authenticates_events_and_pit_without_a_secret_body(
     classroom_http,
 ):
-    _, teacher, student, _ = classroom_http
+    app, teacher, student, _ = classroom_http
     session = await create_session(teacher, students=("Ana",))
     ana_id = next(iter(session["roster"]))
     assert (
@@ -266,3 +266,73 @@ async def test_release_revokes_the_old_cookie_and_live_stream(classroom_http):
         assert (
             await replacement.get(f"/api/sessions/{session['id']}/me")
         ).status_code == 200
+
+
+async def test_stream_revalidates_after_replay_before_its_first_snapshot(
+    classroom_http,
+    monkeypatch,
+):
+    app, teacher, student, _ = classroom_http
+    session = await create_session(teacher, students=("Ana",))
+    ana_id = next(iter(session["roster"]))
+    assert (
+        await student.post(
+            f"/api/sessions/{session['id']}/claim",
+            json={"student_id": ana_id},
+        )
+    ).status_code == 200
+
+    log = app.state.classroom.events_log(session["id"])
+    original_replay = log.replay
+    handler_reached_replay = asyncio.Event()
+    continue_replay = asyncio.Event()
+    replay_calls = 0
+
+    async def coordinate_release_after_access(after_seq=0):
+        nonlocal replay_calls
+        replay_calls += 1
+        if replay_calls == 3:
+            handler_reached_replay.set()
+            await continue_replay.wait()
+        return await original_replay(after_seq)
+
+    monkeypatch.setattr(log, "replay", coordinate_release_after_access)
+    stream = asyncio.create_task(
+        student.get(f"/api/sessions/{session['id']}/stream")
+    )
+    await asyncio.wait_for(handler_reached_replay.wait(), timeout=1)
+    released = await teacher.post(
+        f"/api/sessions/{session['id']}/release/{ana_id}"
+    )
+    continue_replay.set()
+    response = await asyncio.wait_for(stream, timeout=1)
+
+    assert released.status_code == 200
+    assert response.status_code == 401
+
+
+async def test_open_stream_expires_on_the_first_tick_of_the_next_day(
+    classroom_http,
+):
+    app, teacher, student, clock = classroom_http
+    session = await create_session(teacher, students=("Ana",))
+    ana_id = next(iter(session["roster"]))
+    assert (
+        await student.post(
+            f"/api/sessions/{session['id']}/claim",
+            json={"student_id": ana_id},
+        )
+    ).status_code == 200
+
+    stream = asyncio.create_task(
+        student.get(f"/api/sessions/{session['id']}/stream")
+    )
+    await asyncio.sleep(0.01)
+    clock.instant = datetime(2026, 7, 30, 23, 0, tzinfo=timezone.utc)
+    app.state.classroom.tick_session(
+        session["id"],
+        now=clock.instant.isoformat(),
+    )
+    response = await asyncio.wait_for(stream, timeout=1)
+
+    assert response.status_code == 200

@@ -399,6 +399,19 @@ async def stream_session(session_id: str, request: Request):
     events = await log.replay()
     frontier = max((int(record.get("seq", 0)) for record in events), default=0)
 
+    async def student_credential_is_current() -> bool:
+        if role != "student":
+            return True
+        current = await svc.student_for_token(
+            session_id,
+            credential,
+            require_live=False,
+        )
+        return current == student_id
+
+    if not await student_credential_is_current():
+        raise HTTPException(401, "a identidade do Aluno já não é válida")
+
     def visible(record: dict) -> bool:
         if record.get("type") not in visible_types:
             return False
@@ -441,13 +454,8 @@ async def stream_session(session_id: str, request: Request):
                         record = record_task.result()
                     except StopAsyncIteration:
                         return
-                    if role == "student":
-                        # Se a identidade foi libertada, o stream antigo morre.
-                        current = await svc.student_for_token(
-                            session_id, credential, require_live=False
-                        )
-                        if current != student_id:
-                            return
+                    if not await student_credential_is_current():
+                        return
                     events.append(record)
                     if visible(record):
                         visible_record = (
@@ -491,6 +499,8 @@ async def stream_session(session_id: str, request: Request):
                     try:
                         tick_now = tick_task.result()
                     except StopAsyncIteration:
+                        return
+                    if not await student_credential_is_current():
                         return
                     current_state = session_state_snapshot(
                         events,
