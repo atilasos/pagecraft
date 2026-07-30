@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from copy import deepcopy
 from html import escape
 from html.parser import HTMLParser
@@ -23,6 +24,11 @@ ACTIVITIES = ROOT / "activities"
 CATALOG = ROOT / "catalog.json"
 NOW = "2026-04-27T00:00:00Z"
 DURATION = 30
+
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from server.publish import regenerate_catalog
 
 WORD_DATA: dict[str, dict[str, str]] = {
     "menina": {"emoji": "👧", "sentence": "A menina sorri no recreio.", "place": "no recreio", "action": "sorri", "object": "uma fita"},
@@ -475,35 +481,6 @@ def validate_activity_dir(d: Path) -> list[str]:
     return errors
 
 
-def build_catalog() -> None:
-    items = []
-    for meta_path in ACTIVITIES.glob("*/meta.json"):
-        meta = load_json(meta_path)
-        items.append({
-            "slug": meta["slug"],
-            "title": meta.get("title", meta["slug"]),
-            "year": meta.get("year"),
-            "ageRange": meta.get("ageRange"),
-            "duration": meta.get("duration"),
-            "maker": meta.get("maker", "none"),
-            **({"order": meta["order"]} if meta.get("order") else {}),
-            **({"variantOf": meta["variantOf"]} if meta.get("variantOf") else {}),
-            **({"variantIndex": meta["variantIndex"]} if meta.get("variantIndex") is not None else {}),
-            **({"variantTitle": meta["variantTitle"]} if meta.get("variantTitle") else {}),
-            "tags": meta.get("tags", []),
-            "createdAt": meta.get("createdAt"),
-            "url": f"./activities/{meta['slug']}/",
-            "teacherUrl": f"./activities/{meta['slug']}/teacher.md",
-            "docspecUrl": f"./activities/{meta['slug']}/docspec.json",
-        })
-    def key(it: dict[str, Any]):
-        if "m28p" in [t.lower() for t in it.get("tags", [])] and it.get("order"):
-            return (0, int(it["order"]), int(it.get("variantIndex", 0)), it["slug"])
-        return (1, it["slug"])
-    items.sort(key=key)
-    dump_json(CATALOG, {"generatedAt": NOW, "count": len(items), "items": items})
-
-
 def main() -> None:
     catalog = load_json(CATALOG)
     base_items = [i for i in catalog["items"] if "m28p" in [t.lower() for t in i.get("tags", [])] and i.get("order") and not i.get("variantOf")]
@@ -524,7 +501,7 @@ def main() -> None:
             ("cacador-silabas", a_mode["title"], 1, a_mode, html_variant_a(base_meta, design, word, order)),
             ("frases-vivas", b_mode["title"], 2, b_mode, html_variant_b(base_meta, design, word, order, all_words)),
         ]
-        word_errors = []
+        word_errors: list[str] = []
         for vslug, vtitle, vidx, mode, html in variants:
             meta = variant_meta(base_meta, word, vslug, vtitle, vidx)
             out = ACTIVITIES / meta["slug"]
@@ -542,7 +519,7 @@ def main() -> None:
             raise SystemExit("\n".join(word_errors))
         processed.append(base_meta["slug"])
         print(f"✓ Palavra {order:02d} {word}: 2 páginas revistas para {DURATION} min")
-    build_catalog()
+    regenerate_catalog(ROOT)
     print(f"Done: {len(processed)} palavras processadas sequencialmente; {len(processed)*2} variantes atualizadas.")
 
 

@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 """Deterministically repair canonical M28P main pages after audit."""
 from __future__ import annotations
-import json, re, unicodedata
+import json, re, sys, unicodedata
 from pathlib import Path
 from datetime import datetime, timezone
 
 ROOT=Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from server.publish import regenerate_catalog
+
 REPORT_DIR=ROOT/'.omx'/'reports'; REPORT_DIR.mkdir(parents=True, exist_ok=True)
 CANONICAL_DISPLAY=['menina','menino','uva','dedo','sapato','bota','leque','casa','janela','telhado','escada','chave','galinha','ovo','rato','cenoura','girafa','palhaço','zebra','bandeira','funil','árvore','quadro','passarinho','peixe','cigarra','fogueira','flor']
 GENERALIZATION={'menino','uva','dedo','casa','telhado','escada','galinha','ovo','rato'}
@@ -142,13 +147,6 @@ def repair_json_text(p:Path, manifest_page:dict, action='json_text_ao90_offline'
     write(p,s)
     manifest_page['actions'].append({'file':str(p.relative_to(ROOT)),'action':action,'before_snippet':before,'after_snippet':read(p)[:300]})
 
-def update_catalog(manifest):
-    p=ROOT/'catalog.json'; cat=json.loads(read(p)); before=None
-    for it in cat.get('items',[]):
-        if it.get('slug')=='leque': before=it.get('duration'); it['duration']=45
-    write(p,json.dumps(cat,ensure_ascii=False,indent=2)+'\n')
-    manifest['catalog_action']={'file':'catalog.json','action':'leque_duration_45','before':before,'after':45}
-
 def create_proof(d:Path, slug:str, word:str):
     proof={
       'pass':True,
@@ -167,7 +165,6 @@ def create_proof(d:Path, slug:str, word:str):
 
 def main():
     manifest={'createdAt':datetime.now(timezone.utc).isoformat(),'canonical':[c['slug'] for c in CANONICAL],'targeted':{'generalization':sorted(GENERALIZATION),'graphophonemic':sorted(GRAPHOPHONEMIC)},'pages':[]}
-    update_catalog(manifest)
     for c in CANONICAL:
         slug=c['slug']; word=c['word']; d=ROOT/'activities'/slug
         page={'slug':slug,'word':word,'actions':[]}
@@ -181,6 +178,8 @@ def main():
         create_proof(d,slug,word)
         page['after_evidence']={'teacher_principle':'Princípio M28P — evitar uso puramente visual','html_prompt':'Descobrir para além da palavra','proofread':'proofread-v1.json pass true'}
         manifest['pages'].append(page)
+    catalog=regenerate_catalog(ROOT)
+    manifest['catalog_action']={'file':'catalog.json','action':'regenerate_from_activity_metadata','count':catalog['count']}
     write(REPORT_DIR/'m28p-repair-manifest.json',json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
     print(json.dumps({'repaired_pages':len(manifest['pages']),'manifest':'.omx/reports/m28p-repair-manifest.json'},ensure_ascii=False,indent=2))
 if __name__=='__main__': main()
