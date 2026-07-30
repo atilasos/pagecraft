@@ -435,6 +435,11 @@ async def stream_session(session_id: str, request: Request):
         return target is None or target == student_id
 
     async def gen():
+        board_revocations = (
+            request.app.state.board_pairings.subscribe_revocations()
+            if role == "board"
+            else None
+        )
         state = session_state_snapshot(
             events,
             session,
@@ -454,12 +459,23 @@ async def stream_session(session_id: str, request: Request):
         ticks = svc.live_ticks.subscribe(session_id)
         record_task = asyncio.create_task(anext(raw_records))
         tick_task = asyncio.create_task(anext(ticks))
+        revocation_task = (
+            asyncio.create_task(anext(board_revocations))
+            if board_revocations is not None
+            else None
+        )
         try:
             while True:
+                pending_tasks = {record_task, tick_task}
+                if revocation_task is not None:
+                    pending_tasks.add(revocation_task)
                 done, _ = await asyncio.wait(
-                    {record_task, tick_task},
+                    pending_tasks,
                     return_when=asyncio.FIRST_COMPLETED,
                 )
+
+                if revocation_task is not None and revocation_task in done:
+                    return
 
                 if record_task in done:
                     try:
@@ -530,10 +546,17 @@ async def stream_session(session_id: str, request: Request):
                     tick_task = asyncio.create_task(anext(ticks))
         finally:
             ticks.close()
-            for task in (record_task, tick_task):
+            if board_revocations is not None:
+                board_revocations.close()
+            tasks = tuple(
+                task
+                for task in (record_task, tick_task, revocation_task)
+                if task is not None
+            )
+            for task in tasks:
                 if not task.done():
                     task.cancel()
-            await asyncio.gather(record_task, tick_task, return_exceptions=True)
+            await asyncio.gather(*tasks, return_exceptions=True)
             await raw_records.aclose()
 
     return StreamingResponse(gen(), media_type="text/event-stream")

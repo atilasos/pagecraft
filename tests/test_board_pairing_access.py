@@ -171,10 +171,11 @@ async def test_board_stream_derives_its_collective_view_from_the_cookie(
     stream = asyncio.create_task(
         board.get(f"/api/sessions/{session['id']}/stream")
     )
-    for _ in range(100):
+    for _ in range(200):
         if session["id"] in app.state.classroom.live_session_ids():
             break
-        await asyncio.sleep(0)
+        await asyncio.sleep(0.001)
+    assert session["id"] in app.state.classroom.live_session_ids()
 
     await teacher.post(
         f"/api/sessions/{session['id']}/control",
@@ -197,3 +198,49 @@ async def test_board_stream_derives_its_collective_view_from_the_cookie(
     assert '"unit_id": "global"' in response.text
     assert "privada" not in response.text
     assert student_id not in response.text
+
+
+async def test_unpairing_immediately_closes_an_open_board_stream(board_http):
+    app, teacher, board, _ = board_http
+    await _pair(teacher, board)
+    created_class = (
+        await teacher.post(
+            "/api/classes",
+            json={"name": "2.º A", "year": 2, "students": ["Lia"]},
+        )
+    ).json()
+    session = (
+        await teacher.post(
+            "/api/sessions",
+            json={
+                "class_id": created_class["id"],
+                "activity_slug": "demo",
+                "activity_title": "Dobros",
+            },
+        )
+    ).json()
+
+    stream = asyncio.create_task(
+        board.get(f"/api/sessions/{session['id']}/stream")
+    )
+    for _ in range(200):
+        if session["id"] in app.state.classroom.live_session_ids():
+            break
+        await asyncio.sleep(0.001)
+    assert session["id"] in app.state.classroom.live_session_ids()
+
+    state_before = await teacher.get("/api/board/pairing")
+    revoked = await teacher.delete("/api/board/pairing")
+    response = await asyncio.wait_for(stream, timeout=1)
+    state_after = await teacher.get("/api/board/pairing")
+    old_cookie = await board.get("/api/board/session")
+
+    assert state_before.json() == {
+        "paired": True,
+        "expires_at": "2026-08-27T09:00:00+00:00",
+    }
+    assert revoked.status_code == 204
+    assert response.status_code == 200
+    assert "event: session_state_snapshot" in response.text
+    assert state_after.json() == {"paired": False, "expires_at": None}
+    assert old_cookie.status_code == 401

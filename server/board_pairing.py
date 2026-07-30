@@ -17,6 +17,26 @@ BOARD_CREDENTIAL_TTL = timedelta(days=28)
 _CODE_ALPHABET = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ"
 
 
+class BoardRevocationSubscription:
+    def __init__(self, pairings: BoardPairings, queue: asyncio.Queue):
+        self._pairings = pairings
+        self._queue = queue
+        self._closed = False
+
+    def __aiter__(self):
+        return self
+
+    async def __anext__(self):
+        await self._queue.get()
+        raise StopAsyncIteration
+
+    def close(self) -> None:
+        if self._closed:
+            return
+        self._closed = True
+        self._pairings.unsubscribe_revocations(self._queue)
+
+
 @dataclass
 class _Challenge:
     pairing_id: str
@@ -32,6 +52,7 @@ class BoardPairings:
         self._storage = storage
         self._clock = clock
         self._challenges: dict[str, _Challenge] = {}
+        self._revocation_subscribers: set[asyncio.Queue] = set()
         self._lock = asyncio.Lock()
 
     def _now(self) -> datetime:
@@ -116,6 +137,7 @@ class BoardPairings:
                     "expires_at": expires_at.isoformat(),
                 },
             )
+            self._signal_revocation()
             del self._challenges[pairing_id]
             return {
                 "credential": credential,
@@ -171,3 +193,18 @@ class BoardPairings:
                     "expires_at": None,
                 },
             )
+            self._signal_revocation()
+
+    def subscribe_revocations(self) -> BoardRevocationSubscription:
+        queue: asyncio.Queue = asyncio.Queue(maxsize=1)
+        self._revocation_subscribers.add(queue)
+        return BoardRevocationSubscription(self, queue)
+
+    def unsubscribe_revocations(self, queue: asyncio.Queue) -> None:
+        self._revocation_subscribers.discard(queue)
+
+    def _signal_revocation(self) -> None:
+        subscribers = tuple(self._revocation_subscribers)
+        self._revocation_subscribers.clear()
+        for queue in subscribers:
+            queue.put_nowait(None)
