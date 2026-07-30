@@ -6,6 +6,7 @@ import httpx
 import pytest
 
 from server import app as app_module
+from server.access import STUDENT_COOKIE_NAME
 
 
 _STATE_FRAMES = {
@@ -15,13 +16,24 @@ _STATE_FRAMES = {
 }
 
 
-async def _collect_raw_stream_types(client, session_id, params):
+def _student_cookie(response):
+    credential = response.cookies.get(STUDENT_COOKIE_NAME)
+    assert credential
+    return {"cookie": f"{STUDENT_COOKIE_NAME}={credential}"}
+
+
+async def _collect_raw_stream_types(
+    client,
+    session_id,
+    params,
+    student_headers=None,
+):
     types = []
     async with client.stream(
         "GET",
         f"/api/sessions/{session_id}/stream",
         params=params,
-        headers={"cookie": ""} if params.get("role") == "student" else None,
+        headers=student_headers,
     ) as response:
         async for line in response.aiter_lines():
             if not line.startswith("event: "):
@@ -85,7 +97,7 @@ async def test_full_classroom_flow(client):
         f"/api/sessions/{session['id']}/claim", json={"student_id": student["student_id"]}
     )
     assert resp.status_code == 200
-    claim = resp.json()
+    student_headers = _student_cookie(resp)
     resp = await client.post(
         f"/api/sessions/{session['id']}/claim", json={"student_id": student["student_id"]}
     )
@@ -103,17 +115,19 @@ async def test_full_classroom_flow(client):
     ]
     resp = await client.post(
         f"/api/sessions/{session['id']}/events",
-        json={"student_token": claim["student_token"], "events": events},
-        headers={"cookie": ""},
+        json={"events": events},
+        headers=student_headers,
     )
     assert resp.status_code == 200
     assert resp.json()["accepted"] == ["a1", "a2"]
 
-    # token errado → 401
+    # cookie errado → 401
     resp = await client.post(
         f"/api/sessions/{session['id']}/events",
-        json={"student_token": "invalido", "events": events},
-        headers={"cookie": ""},
+        json={"events": events},
+        headers={
+            "cookie": f"{STUDENT_COOKIE_NAME}={session['id']}.invalido"
+        },
     )
     assert resp.status_code == 401
 
@@ -135,8 +149,8 @@ async def test_full_classroom_flow(client):
     # o cliente não pode escolher o estado inicial
     resp = await client.post(
         f"/api/sessions/{session['id']}/pit",
-        json={"student_token": claim["student_token"], "text": "Acabar os dobros", "status": "doing"},
-        headers={"cookie": ""},
+        json={"text": "Acabar os dobros", "status": "doing"},
+        headers=student_headers,
     )
     assert resp.status_code == 422
 
@@ -144,8 +158,8 @@ async def test_full_classroom_flow(client):
     # recuo seguro de "para partilhar" para "feito"
     resp = await client.post(
         f"/api/sessions/{session['id']}/pit",
-        json={"student_token": claim["student_token"], "text": "Acabar os dobros"},
-        headers={"cookie": ""},
+        json={"text": "Acabar os dobros"},
+        headers=student_headers,
     )
     assert resp.status_code == 200
     item = resp.json()
@@ -155,8 +169,8 @@ async def test_full_classroom_flow(client):
     for _ in range(4):
         resp = await client.post(
             f"/api/sessions/{session['id']}/pit/{item['id']}/advance",
-            json={"student_token": claim["student_token"]},
-            headers={"cookie": ""},
+            json={},
+            headers=student_headers,
         )
         assert resp.status_code == 200
         item = resp.json()
@@ -209,21 +223,33 @@ async def test_student_stream_filters_events(client):
     session = resp.json()
     public = (await client.get(f"/api/join/{session['join_code']}")).json()
     s1, s2 = public["roster"][0], public["roster"][1]
-    c1 = (await client.post(f"/api/sessions/{session['id']}/claim", json={"student_id": s1["student_id"]})).json()
-    c2 = (await client.post(f"/api/sessions/{session['id']}/claim", json={"student_id": s2["student_id"]})).json()
+    c1 = _student_cookie(
+        await client.post(
+            f"/api/sessions/{session['id']}/claim",
+            json={"student_id": s1["student_id"]},
+        )
+    )
+    c2 = _student_cookie(
+        await client.post(
+            f"/api/sessions/{session['id']}/claim",
+            json={"student_id": s2["student_id"]},
+        )
+    )
 
     stream1 = asyncio.create_task(
         _collect_raw_stream_types(
             client,
             session["id"],
-            {"role": "student", "student_token": c1["student_token"]},
+            {},
+            c1,
         )
     )
     stream2 = asyncio.create_task(
         _collect_raw_stream_types(
             client,
             session["id"],
-            {"role": "student", "student_token": c2["student_token"]},
+            {},
+            c2,
         )
     )
     await asyncio.sleep(0.01)
@@ -262,12 +288,12 @@ async def test_stream_applies_declared_visibility_for_each_role(client):
         )
     ).json()
     student_id = next(iter(session["roster"]))
-    claim = (
+    student_headers = _student_cookie(
         await client.post(
             f"/api/sessions/{session['id']}/claim",
             json={"student_id": student_id},
         )
-    ).json()
+    )
     teacher_stream = asyncio.create_task(
         _collect_raw_stream_types(
             client, session["id"], {"role": "teacher"}
@@ -277,10 +303,8 @@ async def test_stream_applies_declared_visibility_for_each_role(client):
         _collect_raw_stream_types(
             client,
             session["id"],
-            {
-                "role": "student",
-                "student_token": claim["student_token"],
-            },
+            {},
+            student_headers,
         )
     )
     await asyncio.sleep(0.01)
@@ -320,17 +344,16 @@ async def test_public_event_ingestion_silently_discards_unknown_types(client):
         )
     ).json()
     student_id = next(iter(session["roster"]))
-    claim = (
+    student_headers = _student_cookie(
         await client.post(
             f"/api/sessions/{session['id']}/claim",
             json={"student_id": student_id},
         )
-    ).json()
+    )
 
     response = await client.post(
         f"/api/sessions/{session['id']}/events",
         json={
-            "student_token": claim["student_token"],
             "events": [
                 {
                     "event_id": "unknown",
@@ -339,7 +362,7 @@ async def test_public_event_ingestion_silently_discards_unknown_types(client):
                 }
             ],
         },
-        headers={"cookie": ""},
+        headers=student_headers,
     )
 
     assert response.status_code == 200
@@ -412,15 +435,17 @@ async def test_student_resume_via_me(client):
         )
     ).json()
     student_id = next(iter(session["roster"]))
-    claim = (
-        await client.post(f"/api/sessions/{session['id']}/claim", json={"student_id": student_id})
-    ).json()
+    student_headers = _student_cookie(
+        await client.post(
+            f"/api/sessions/{session['id']}/claim",
+            json={"student_id": student_id},
+        )
+    )
 
     # retoma válida: devolve identidade + sessão pública sem tokens
     resp = await client.get(
         f"/api/sessions/{session['id']}/me",
-        params={"student_token": claim["student_token"]},
-        headers={"cookie": ""},
+        headers=student_headers,
     )
     assert resp.status_code == 200
     me = resp.json()
@@ -428,20 +453,18 @@ async def test_student_resume_via_me(client):
     assert '"token"' not in resp.text
     assert me["session"]["status"] == "live"
 
-    # token errado → 401
+    # cookie errado → 401
     resp = await client.get(
         f"/api/sessions/{session['id']}/me",
-        params={"student_token": "x"},
-        headers={"cookie": ""},
+        headers={"cookie": f"{STUDENT_COOKIE_NAME}={session['id']}.x"},
     )
     assert resp.status_code == 401
 
-    # depois de fechada, a retoma reporta o estado (o cliente limpa e volta ao código)
+    # depois de fechada, a retoma continua disponível para rever o histórico
     await client.post(f"/api/sessions/{session['id']}/close")
     resp = await client.get(
         f"/api/sessions/{session['id']}/me",
-        params={"student_token": claim["student_token"]},
-        headers={"cookie": ""},
+        headers=student_headers,
     )
     assert resp.status_code == 200
     assert resp.json()["session"]["status"] == "closed"
@@ -482,18 +505,17 @@ async def test_release_http_defaults_to_keep_and_accepts_an_explicit_reset(clien
             },
         )
     ).json()
-    claims = {}
+    student_cookies = {}
     for student_id in session["roster"]:
-        claims[student_id] = (
+        student_cookies[student_id] = _student_cookie(
             await client.post(
                 f"/api/sessions/{session['id']}/claim",
                 json={"student_id": student_id},
             )
-        ).json()
+        )
         await client.post(
             f"/api/sessions/{session['id']}/events",
             json={
-                "student_token": claims[student_id]["student_token"],
                 "events": [
                     {
                         "event_id": f"attempt-{student_id}",
@@ -502,7 +524,7 @@ async def test_release_http_defaults_to_keep_and_accepts_an_explicit_reset(clien
                     }
                 ],
             },
-            headers={"cookie": ""},
+            headers=student_cookies[student_id],
         )
     ana_id, bia_id = session["roster"]
     kept = await client.post(f"/api/sessions/{session['id']}/release/{ana_id}")
@@ -528,21 +550,33 @@ async def test_session_control_events(client):
     ).json()
     public = (await client.get(f"/api/join/{session['join_code']}")).json()
     s1, s2 = public["roster"]
-    c1 = (await client.post(f"/api/sessions/{session['id']}/claim", json={"student_id": s1["student_id"]})).json()
-    c2 = (await client.post(f"/api/sessions/{session['id']}/claim", json={"student_id": s2["student_id"]})).json()
+    c1 = _student_cookie(
+        await client.post(
+            f"/api/sessions/{session['id']}/claim",
+            json={"student_id": s1["student_id"]},
+        )
+    )
+    c2 = _student_cookie(
+        await client.post(
+            f"/api/sessions/{session['id']}/claim",
+            json={"student_id": s2["student_id"]},
+        )
+    )
 
     stream1 = asyncio.create_task(
         _collect_raw_stream_types(
             client,
             session["id"],
-            {"role": "student", "student_token": c1["student_token"]},
+            {},
+            c1,
         )
     )
     stream2 = asyncio.create_task(
         _collect_raw_stream_types(
             client,
             session["id"],
-            {"role": "student", "student_token": c2["student_token"]},
+            {},
+            c2,
         )
     )
     await asyncio.sleep(0.01)

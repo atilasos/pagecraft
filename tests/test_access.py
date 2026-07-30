@@ -5,7 +5,7 @@ from starlette.responses import JSONResponse
 from starlette.routing import Route
 
 from server import app as app_module
-from server.access import RoutePolicy, access_policy
+from server.access import STUDENT_COOKIE_NAME, RoutePolicy, access_policy
 
 
 def test_app_refuses_to_start_with_a_route_without_an_access_policy():
@@ -264,21 +264,18 @@ async def test_a_teacher_is_forbidden_from_a_student_route(app_client):
         )
     ).json()
     student_id = next(iter(session["roster"]))
-    claim = (
-        await app_client.post(
-            f"/api/sessions/{session['id']}/claim",
-            json={"student_id": student_id},
-        )
-    ).json()
+    claim = await app_client.post(
+        f"/api/sessions/{session['id']}/claim",
+        json={"student_id": student_id},
+    )
+    student_cookie = claim.cookies.get(STUDENT_COOKIE_NAME)
 
     student_response = await app_client.get(
         f"/api/sessions/{session['id']}/me",
-        params={"student_token": claim["student_token"]},
-        headers={"cookie": ""},
+        headers={"cookie": f"{STUDENT_COOKIE_NAME}={student_cookie}"},
     )
     response = await app_client.get(
         f"/api/sessions/{session['id']}/me",
-        params={"student_token": claim["student_token"]},
     )
 
     assert student_response.status_code == 200
