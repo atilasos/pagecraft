@@ -20,7 +20,7 @@ async def client(tmp_path, monkeypatch):
         ) as http:
             bootstrap = await http.get("/api/teacher-bootstrap")
             assert bootstrap.status_code == 204
-            http.app = app
+            setattr(http, "app", app)
             yield http
 
 

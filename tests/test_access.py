@@ -31,7 +31,7 @@ async def app_client(tmp_path, monkeypatch):
             transport=transport,
             base_url="http://test",
         ) as client:
-            client.app = app
+            setattr(client, "app", app)
             yield client
 
 
