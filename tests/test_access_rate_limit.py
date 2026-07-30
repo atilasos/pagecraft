@@ -68,3 +68,27 @@ async def test_twenty_first_join_in_the_same_minute_and_ip_is_limited(
 
     assert [response.status_code for response in responses[:20]] == [200] * 20
     assert responses[20].status_code == 429
+
+
+async def test_claim_has_its_own_twenty_request_budget_per_ip(
+    rate_limit_app,
+):
+    app, _, session = rate_limit_app
+    student_id = next(iter(session["roster"]))
+    async with tunnel_client(app, "203.0.113.17") as student:
+        joins = [
+            await student.get(f"/api/join/{session['join_code']}")
+            for _ in range(20)
+        ]
+        claims = [
+            await student.post(
+                f"/api/sessions/{session['id']}/claim",
+                json={"student_id": student_id},
+            )
+            for _ in range(21)
+        ]
+
+    assert [response.status_code for response in joins] == [200] * 20
+    assert claims[0].status_code == 200
+    assert [response.status_code for response in claims[1:20]] == [409] * 19
+    assert claims[20].status_code == 429

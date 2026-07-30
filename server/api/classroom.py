@@ -213,6 +213,7 @@ async def whoami(session_id: str, request: Request):
 
 @router.post("/sessions/{session_id}/claim")
 @access_policy(RoutePolicy.PUBLIC)
+@rate_limited("claim")
 async def claim(session_id: str, body: ClaimRequest, request: Request):
     result = await _domain(
         _svc(request).claim_identity(session_id, body.student_id)
