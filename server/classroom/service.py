@@ -311,6 +311,18 @@ class ClassroomService:
 
     def project_session(self, session: dict, *, role: str) -> dict:
         """Produz a forma transportável da sessão sem expor tokens."""
+        if role == "board":
+            return {
+                key: session[key]
+                for key in (
+                    "id",
+                    "class_name",
+                    "activity_slug",
+                    "activity_title",
+                    "status",
+                    "started_at",
+                )
+            }
         if role == "student":
             return {
                 "id": session["id"],
