@@ -150,7 +150,7 @@ def create_app(
             and access.student_session_id != requested_session_id
         ):
             return JSONResponse(
-                {"detail": "este Aluno pertence a outra sessão"},
+                {"detail": "este Aluno da sessão pertence a outra sessão"},
                 status_code=403,
             )
         rate_limit_operation = route_rate_limit(route)

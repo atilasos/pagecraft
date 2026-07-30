@@ -410,7 +410,10 @@ async def stream_session(session_id: str, request: Request):
         return current == student_id
 
     if not await student_credential_is_current():
-        raise HTTPException(401, "a identidade do Aluno já não é válida")
+        raise HTTPException(
+            401,
+            "a identidade do Aluno da sessão já não é válida",
+        )
 
     def visible(record: dict) -> bool:
         if record.get("type") not in visible_types:
