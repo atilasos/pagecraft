@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import hmac
-from collections.abc import Callable, Iterable, Iterator
+from collections.abc import Callable, Iterable, Iterator, MutableMapping
 from dataclasses import dataclass
 from enum import StrEnum
+from typing import Any
 
 from fastapi import Request
 from starlette.routing import Match
@@ -92,16 +93,17 @@ def validate_route_policies(routes: Iterable[BaseRoute]) -> None:
     name = getattr(route, "name", None) or getattr(
         getattr(route, "endpoint", None), "__name__", "<sem nome>"
     )
+    path = getattr(route, "path", "<sem caminho>")
     raise RuntimeError(
-        f"rota sem política de Acesso: {methods} {route.path} ({name})"
+        f"rota sem política de Acesso: {methods} {path} ({name})"
     )
 
 
 def match_route(
     request: Request,
     routes: Iterable[BaseRoute],
-) -> tuple[BaseRoute | None, dict]:
-    partial: tuple[BaseRoute, dict] | None = None
+) -> tuple[BaseRoute | None, MutableMapping[str, Any]]:
+    partial: tuple[BaseRoute, MutableMapping[str, Any]] | None = None
     for route in iter_effective_routes(routes):
         match, child_scope = route.matches(request.scope)
         if match is Match.FULL:
