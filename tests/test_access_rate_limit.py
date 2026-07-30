@@ -68,6 +68,9 @@ async def test_twenty_first_join_in_the_same_minute_and_ip_is_limited(
 
     assert [response.status_code for response in responses[:20]] == [200] * 20
     assert responses[20].status_code == 429
+    assert responses[20].json() == {
+        "detail": "muitas tentativas — espera um bocadinho"
+    }
 
 
 async def test_claim_has_its_own_twenty_request_budget_per_ip(
@@ -92,6 +95,9 @@ async def test_claim_has_its_own_twenty_request_budget_per_ip(
     assert claims[0].status_code == 200
     assert [response.status_code for response in claims[1:20]] == [409] * 19
     assert claims[20].status_code == 429
+    assert claims[20].json() == {
+        "detail": "muitas tentativas — espera um bocadinho"
+    }
 
 
 async def test_tunnel_uses_cloudflare_ip_and_keeps_ips_independent(
