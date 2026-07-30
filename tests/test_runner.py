@@ -5,7 +5,7 @@ import pytest
 
 from server.config import Config
 from server.events import EventHub
-from server.pipeline.runner import PipelineRunner, slugify
+from server.pipeline.runner import PipelineRunner, decide_repair, slugify
 from server.storage import Storage
 
 from fakes import FakeProvider
@@ -140,6 +140,31 @@ async def _wait_status(runner, job_id, statuses, timeout=5.0):
 
 async def test_slugify():
     assert slugify("Frações e Décimas!") == "fracoes-e-decimas"
+
+
+VALIDATION_OK = {"passed": True, "errors": [], "warnings": []}
+VALIDATION_BAD = {"passed": False, "errors": ["falta <!doctype html>"], "warnings": []}
+
+
+def test_decide_repair_passes_when_everything_passes():
+    assert decide_repair(VALIDATION_OK, PROOF_OK, EVAL_OK) is None
+
+
+def test_decide_repair_on_evaluator_fail():
+    ticket = decide_repair(VALIDATION_OK, PROOF_OK, EVAL_FAIL)
+    assert ticket["route"] == "builder"
+    assert ticket["issues"] == ["botões pequenos"]
+
+
+def test_decide_repair_on_validation_fail_even_with_evaluator_pass():
+    ticket = decide_repair(VALIDATION_BAD, PROOF_OK, EVAL_OK)
+    assert ticket["validation_errors"] == ["falta <!doctype html>"]
+
+
+def test_decide_repair_on_proofread_fail():
+    proof_bad = {"pass": False, "issues": ["'errado' é punitivo"], "summary": ""}
+    ticket = decide_repair(VALIDATION_OK, proof_bad, EVAL_OK)
+    assert ticket["proofread_issues"] == ["'errado' é punitivo"]
 
 
 async def test_pipeline_happy_path_auto_publish(env):

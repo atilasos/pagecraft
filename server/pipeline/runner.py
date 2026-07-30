@@ -30,6 +30,22 @@ def slugify(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", text).strip("-")[:60]
 
 
+def decide_repair(validation: dict, proofread: dict, evaluation: dict) -> dict | None:
+    """Decisão passa/repara de uma iteração: None se passou; caso
+    contrário, o ticket de reparação para a volta seguinte."""
+    eval_pass = bool(evaluation.get("pass")) and validation["passed"]
+    proof_ok = bool(proofread.get("pass", True))
+    if eval_pass and proof_ok:
+        return None
+    return {
+        "route": evaluation.get("route", "builder"),
+        "validation_errors": validation["errors"],
+        "critical": evaluation.get("critical", []),
+        "issues": evaluation.get("issues", []),
+        "proofread_issues": proofread.get("issues", []),
+    }
+
+
 class PipelineRunner:
     def __init__(
         self,
@@ -275,19 +291,11 @@ class PipelineRunner:
             evaluation = await self._phase(job, "evaluator", docspec, html, validation, proofread)
             await self._write_artifact(job, "evaluation", f"-evaluation-v{job['iteration']}.json", evaluation)
 
-            eval_pass = bool(evaluation.get("pass")) and validation["passed"]
-            proof_ok = bool(proofread.get("pass", True))
-            if eval_pass and proof_ok:
+            repair_ticket = decide_repair(validation, proofread, evaluation)
+            if repair_ticket is None:
                 break
 
             previous_html = html
-            repair_ticket = {
-                "route": evaluation.get("route", "builder"),
-                "validation_errors": validation["errors"],
-                "critical": evaluation.get("critical", []),
-                "issues": evaluation.get("issues", []),
-                "proofread_issues": proofread.get("issues", []),
-            }
             await self._emit(job, "repair", {"iteration": job["iteration"], "ticket": repair_ticket})
         else:
             job["status"] = "failed"
