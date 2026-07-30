@@ -72,7 +72,7 @@ function jobCard(job) {
 async function watchJob(job) {
   jobCard(job);
   if (["done", "failed"].includes(job.status) || streams.has(job.id)) return;
-  const es = await teacherEventSource(`/api/jobs/${job.id}/stream`);
+  const es = new EventSource(`/api/jobs/${job.id}/stream`);
   streams.set(job.id, es);
   es.onmessage = () => {};
   ["job_created", "knowledge_ready", "phase_started", "phase_done", "phase_retry", "validation", "repair", "resumed_artifact", "awaiting_review", "done", "failed"].forEach((type) => {

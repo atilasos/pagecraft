@@ -248,7 +248,7 @@ async function startLive(s) {
   loadUnits(s.activity_slug);
 
   const eventTypes = await loadPanelEventTypes();
-  const es = await teacherEventSource(
+  const es = new EventSource(
     `/api/sessions/${s.id}/stream?role=teacher`
   );
   es.onmessage = () => {};

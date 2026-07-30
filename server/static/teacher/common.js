@@ -17,7 +17,3 @@ async function tfetch(url, opts = {}) {
   }
   return resp;
 }
-
-async function teacherEventSource(path) {
-  return new EventSource(path);
-}

@@ -202,7 +202,7 @@
   }
 
   const eventTypes = await loadProjectionEventTypes();
-  const es = await teacherEventSource(
+  const es = new EventSource(
     `/api/sessions/${sessionId}/stream?role=projection`
   );
   es.addEventListener("session_state_snapshot", (ev) => {
