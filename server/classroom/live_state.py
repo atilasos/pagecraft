@@ -6,7 +6,7 @@ Estes frames são projeções do registo e nunca são Acontecimentos persistidos
 from __future__ import annotations
 
 import asyncio
-from collections.abc import Iterable, Mapping
+from collections.abc import Awaitable, Iterable, Mapping
 from datetime import datetime
 from typing import Callable
 
@@ -52,7 +52,7 @@ class LiveSessionTicks:
         clock: Callable[[], datetime | str],
         *,
         interval_seconds: float = 30,
-        sleep: Callable[[float], object] = asyncio.sleep,
+        sleep: Callable[[float], Awaitable[object]] = asyncio.sleep,
     ):
         self._clock = clock
         self._interval_seconds = interval_seconds
