@@ -1,4 +1,5 @@
 import asyncio
+import json
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
@@ -129,6 +130,27 @@ async def test_cookie_authenticates_events_and_pit_without_a_secret_body(
     )
 
     assert advanced.status_code == 200
+
+
+async def test_student_http_contract_has_no_legacy_token_field(classroom_http):
+    _, teacher, student, _ = classroom_http
+    session = await create_session(teacher, students=("Ana",))
+    ana_id = next(iter(session["roster"]))
+    assert (
+        await student.post(
+            f"/api/sessions/{session['id']}/claim",
+            json={"student_id": ana_id},
+        )
+    ).status_code == 200
+
+    legacy_body = await student.post(
+        f"/api/sessions/{session['id']}/events",
+        json={"student_token": "segredo", "events": []},
+    )
+    openapi = await teacher.get("/openapi.json")
+
+    assert legacy_body.status_code == 422
+    assert "student_token" not in json.dumps(openapi.json())
 
 
 async def test_own_history_survives_close_until_local_midnight(classroom_http):
