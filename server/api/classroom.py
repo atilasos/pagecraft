@@ -56,21 +56,15 @@ class ReleaseRequest(BaseModel):
 
 
 class EventsRequest(BaseModel):
-    student_token: str
+    model_config = ConfigDict(extra="forbid")
+
     events: list[dict] = Field(max_length=20)
 
 
 class CreatePitItemRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    student_token: str
     text: str = Field(min_length=1, max_length=280)
-
-
-class AdvancePitItemRequest(BaseModel):
-    model_config = ConfigDict(extra="forbid")
-
-    student_token: str
 
 
 class TeacherMessageRequest(BaseModel):
@@ -327,7 +321,6 @@ async def create_pit_item(
 async def advance_pit_item(
     session_id: str,
     item_id: str,
-    body: AdvancePitItemRequest,
     request: Request,
 ):
     svc = _svc(request)
@@ -389,7 +382,7 @@ async def stream_session(session_id: str, request: Request):
             raise HTTPException(403, "este Papel não pode usar esta vista")
         role = "student"
         student_id = access.student_id
-        token = access.student_token
+        token = access.student_credential
     else:
         raise AssertionError("o middleware de Acesso deixou passar um pedido sem Papel")
 

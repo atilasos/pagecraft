@@ -88,3 +88,43 @@ async def test_claim_issues_httponly_cookie_and_me_accepts_only_that_cookie(
     assert resumed.status_code == 200
     assert resumed.json()["display_name"] == "Ana"
     assert legacy.status_code == 401
+
+
+async def test_cookie_authenticates_events_and_pit_without_a_secret_body(
+    classroom_http,
+):
+    _, teacher, student, _ = classroom_http
+    session = await create_session(teacher, students=("Ana",))
+    ana_id = next(iter(session["roster"]))
+    assert (
+        await student.post(
+            f"/api/sessions/{session['id']}/claim",
+            json={"student_id": ana_id},
+        )
+    ).status_code == 200
+
+    events = await student.post(
+        f"/api/sessions/{session['id']}/events",
+        json={
+            "events": [
+                {
+                    "event_id": "tentativa-ana",
+                    "type": "attempt",
+                    "payload": {"correct": True},
+                }
+            ]
+        },
+    )
+    pit = await student.post(
+        f"/api/sessions/{session['id']}/pit",
+        json={"text": "Explicar as frações"},
+    )
+    assert events.status_code == 200
+    assert pit.status_code == 200
+
+    advanced = await student.post(
+        f"/api/sessions/{session['id']}/pit/{pit.json()['id']}/advance",
+        json={},
+    )
+
+    assert advanced.status_code == 200
