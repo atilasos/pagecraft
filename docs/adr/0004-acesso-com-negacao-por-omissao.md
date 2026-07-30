@@ -1,0 +1,27 @@
+# Acesso com negação por omissão: papéis por cookie, bootstrap por loopback, quadro emparelhado
+
+Todo o pedido ao Studio passa por um módulo único de Acesso que resolve, uma vez por pedido, quem chama (Papel: Professor, Aluno da sessão ou Quadro), por que canal de confiança chegou (loopback direto, túnel Cloudflare ou LAN) e se a rota o admite. Cada rota declara explicitamente a sua política — um dos três papéis ou `público` — e o servidor **recusa-se a arrancar** se encontrar uma rota sem política; um middleware de negação em runtime fica por baixo como rede. A credencial viaja num **cookie `HttpOnly` de sessão**, transporte único para fetch e SSE: nasce no *claim* do aluno, no Emparelhamento do quadro e no bootstrap por loopback do professor; a query string e o `localStorage` deixam de transportar tokens. Decidido em 2026-07-30, em sessão de grilling sobre o candidato 07 da revisão de arquitetura; concretiza o redesenho de autenticação que o [ADR-0001](0001-aula-ao-vivo-por-tunel-cloudflare.md) deixou como requisito pendente.
+
+Peças da decisão:
+
+- **Bootstrap do professor continua preso ao loopback**: o painel vive no browser do portátil onde o servidor corre; estar sentado à máquina do servidor é a prova de identidade, sem password. O que muda é que o loopback passa a emitir o cookie em vez de entregar o token ao JavaScript.
+- **O Quadro é um papel próprio, não o professor**: o PC do quadro interativo chega via túnel e é uma máquina onde as crianças tocam — não pode ter a credencial do professor. Nasce por Emparelhamento do quadro (código curto mostrado no quadro, confirmado no painel), com validade de semanas e «Desemparelhar quadro» como revogação.
+- **Validades**: cookie do professor renova-se por loopback; do Quadro dura semanas; do Aluno da sessão dura **até ao fim do dia escolar** (não só até ao fecho da sessão, para a criança poder rever o próprio histórico no conselho); «Libertar identidade» revoga de imediato. Sessões esquecidas abertas fecham-se sozinhas ao fim de ~8 h e o código de 6 letras só aceita entradas com a sessão viva.
+- **Rate limiting em `join`/`claim`** (~20/min por IP, 429 calmo), in-process, com o IP resolvido pelo canal de confiança: atrás do túnel vale `cf-connecting-ip` (posto por Cloudflare, passa de veneno a identidade); na LAN vale o IP do socket e headers de proxy são ignorados.
+- **Superfície pública mínima**: `GET /join/{code}`, `POST /claim`, shell estático do aluno, `/api/health` — e `/activities/`+`/outputs/`, porque as páginas de atividade são conteúdo público por identidade e gatá-las só acrescentaria um modo de falha no arranque da aula. Catálogo servido pelo Studio, `/api/meta` e `/session-event-types` fecham a Professor.
+
+## Considered Options
+
+- **Manter higiene in-process sem resolver o túnel** — rejeitado: criaria a casa (expiração, revogação, rate limiting) e deixá-la-ia vazia; o arranque da aula via `estudio.infantinho.xyz` continuaria partido e voltaríamos a mexer no mesmo módulo semanas depois.
+- **Bearer header em tudo, com exceção de query string para o SSE** — rejeitado: mantém dois transportes e a fuga de tokens por URL (histórico do browser, logs de proxy, agora com um túnel pelo meio). O cookie dá um transporte único que o JavaScript nem consegue ler.
+- **O quadro entra como aluno com o código da sessão, em papel de projeção** — rejeitado: qualquer criança com o código da aula poderia abrir a vista do quadro no seu PC durante um Momento de comunicação, que projeta o trabalho de uma criança específica para a sala, não para todos os ecrãs.
+- **Negação por omissão só por middleware em runtime** — rejeitado como mecanismo principal: uma rota esquecida só se revelaria como 401 misterioso em plena aula. A verificação no arranque falha cedo, no portátil, com o nome da rota; o middleware fica como defesa em profundidade.
+- **Fechar `/activities/` a papéis autenticados** — rejeitado: não há lá dados de crianças, são as mesmas páginas publicadas abertamente no catálogo público; a barreira do Studio protege sessões e roster, não conteúdo.
+
+## Consequences
+
+- Rota nova nasce fechada por construção: sem política declarada, o servidor não arranca. O preço é todo o acesso passar por um módulo só — um erro no Acesso afeta todas as rotas, e é por isso que o módulo tem de ser testável sem browser.
+- O claim de um aluno fica preso àquele browser/PC: limpar cookies significa voltar a escolher o nome, com o professor a libertar em caso de conflito — o mesmo comportamento que já existia com `localStorage`.
+- `common.js` deixa de guardar `pagecraft_teacher_token` no `localStorage` e `/api/teacher-token` deixa de devolver o token ao JavaScript; qualquer código cliente que dependa do token explícito tem de migrar para o cookie.
+- O plano B em LAN (ADR-0001) continua a funcionar: o canal de confiança LAN ignora headers de proxy e o bootstrap por loopback não depende da internet. O que a LAN não tem é o subdomínio estável — como já estava assumido.
+- Reverter para tokens em query string obrigaria a reabrir os três clientes (painel, aluno, quadro) e a reintroduzir a exceção do SSE; reverter a negação por omissão é apagar a verificação de arranque — fácil de fazer, mas visível num diff de uma linha.
