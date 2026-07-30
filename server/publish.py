@@ -9,6 +9,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from .bridge_snippet import ensure_bridge_lite
+
 
 def _now_iso() -> str:
     return (
@@ -150,8 +152,6 @@ def publish_activity(
     dst.mkdir(parents=True, exist_ok=True)
 
     html_path = Path(html_path)
-    from .bridge_snippet import ensure_bridge_lite
-
     html = ensure_bridge_lite(html_path.read_text(encoding="utf-8"))
     (dst / "index.html").write_text(html, encoding="utf-8")
     (dst / "teacher.md").write_text(teacher_md, encoding="utf-8")
