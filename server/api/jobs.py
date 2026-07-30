@@ -4,14 +4,14 @@ from __future__ import annotations
 
 import json
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
-from ..security import require_teacher
+from ..access import RoutePolicy, access_policy
 
 # geração consome a subscrição codex/API: tudo aqui é só para o professor
-router = APIRouter(prefix="/api/jobs", tags=["jobs"], dependencies=[Depends(require_teacher)])
+router = APIRouter(prefix="/api/jobs", tags=["jobs"])
 
 
 class JobRequest(BaseModel):
@@ -28,6 +28,7 @@ def _runner(request: Request):
 
 
 @router.post("")
+@access_policy(RoutePolicy.TEACHER)
 async def create_job(body: JobRequest, request: Request):
     job = await _runner(request).create_job(
         topic=body.topic,
@@ -41,11 +42,13 @@ async def create_job(body: JobRequest, request: Request):
 
 
 @router.get("")
+@access_policy(RoutePolicy.TEACHER)
 async def list_jobs(request: Request):
     return await _runner(request).list_jobs()
 
 
 @router.get("/{job_id}")
+@access_policy(RoutePolicy.TEACHER)
 async def get_job(job_id: str, request: Request):
     job = await _runner(request).get_job(job_id)
     if not job:
@@ -54,6 +57,7 @@ async def get_job(job_id: str, request: Request):
 
 
 @router.post("/{job_id}/approve")
+@access_policy(RoutePolicy.TEACHER)
 async def approve_job(job_id: str, request: Request):
     override = request.query_params.get("override") == "true"
     job = await _runner(request).approve(job_id, override=override)
@@ -63,6 +67,7 @@ async def approve_job(job_id: str, request: Request):
 
 
 @router.get("/{job_id}/stream")
+@access_policy(RoutePolicy.TEACHER)
 async def stream_job(job_id: str, request: Request):
     runner = _runner(request)
     job = await runner.get_job(job_id)

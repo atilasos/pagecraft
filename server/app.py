@@ -2,11 +2,19 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable, Iterable
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.staticfiles import StaticFiles
 
+from .access import (
+    RoutePolicy,
+    access_policy,
+    declare_framework_routes,
+    declare_route_policy,
+    validate_route_policies,
+)
 from .config import load_config
 from .events import EventHub
 from .knowledge import AEClient, WikiClient
@@ -30,7 +38,10 @@ def build_feedback_provider(config):
     return anthropic if anthropic.available else CodexProvider(codex_bin=config.codex_bin)
 
 
-def create_app() -> FastAPI:
+def create_app(
+    *,
+    route_extensions: Iterable[Callable[[FastAPI], None]] = (),
+) -> FastAPI:
     config = load_config()
     storage = Storage(config.data_dir)
     hub = EventHub(storage)
@@ -82,6 +93,7 @@ def create_app() -> FastAPI:
         return response
 
     @app.get("/api/teacher-token")
+    @access_policy(RoutePolicy.PUBLIC)
     async def teacher_token(request: Request):
         from .security import is_loopback_direct
 
@@ -90,6 +102,7 @@ def create_app() -> FastAPI:
         return {"token": app.state.teacher_token}
 
     @app.get("/api/health")
+    @access_policy(RoutePolicy.PUBLIC)
     async def health():
         return {
             "status": "ok",
@@ -99,6 +112,7 @@ def create_app() -> FastAPI:
         }
 
     @app.get("/api/meta")
+    @access_policy(RoutePolicy.TEACHER)
     async def meta():
         from .api.catalog import list_activities
 
@@ -120,16 +134,24 @@ def create_app() -> FastAPI:
 
     config.outputs_dir.mkdir(parents=True, exist_ok=True)
     app.mount("/outputs", StaticFiles(directory=config.outputs_dir), name="outputs")
+    declare_route_policy(app.routes[-1], RoutePolicy.PUBLIC)
     app.mount(
         "/activities",
         StaticFiles(directory=config.activities_dir, html=True),
         name="activities",
     )
+    declare_route_policy(app.routes[-1], RoutePolicy.PUBLIC)
     app.mount(
         "/",
         StaticFiles(directory=config.repo_root / "server" / "static", html=True),
         name="static",
     )
+    declare_route_policy(app.routes[-1], RoutePolicy.PUBLIC)
+
+    declare_framework_routes(app)
+    for extend_routes in route_extensions:
+        extend_routes(app)
+    validate_route_policies(app.routes)
     return app
 
 

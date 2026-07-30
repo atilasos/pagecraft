@@ -13,6 +13,8 @@ from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, Request
 
+from ..access import RoutePolicy, access_policy
+
 router = APIRouter(prefix="/api", tags=["catalog"])
 
 _cache: dict[str, tuple[float, dict]] = {}
@@ -99,6 +101,7 @@ def list_activities(activities_dir: Path) -> list[dict]:
 
 
 @router.get("/activities")
+@access_policy(RoutePolicy.TEACHER)
 async def activities(request: Request):
     config = request.app.state.config
     items = list_activities(config.activities_dir)
@@ -108,6 +111,7 @@ async def activities(request: Request):
 
 
 @router.get("/activities/{slug}/units")
+@access_policy(RoutePolicy.TEACHER)
 async def activity_units(slug: str, request: Request):
     """Estrutura da atividade para o controlo «chamar a atenção»: uma entrada
     por unidade, com o id estável do bridge (u1, u2, …)."""

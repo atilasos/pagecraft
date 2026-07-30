@@ -5,10 +5,11 @@ from __future__ import annotations
 import asyncio
 import json
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, ConfigDict, Field
 
+from ..access import RoutePolicy, access_policy
 from ..classroom.errors import (
     ClassroomError,
     InvalidPitItemError,
@@ -23,10 +24,8 @@ from ..classroom.live_state import (
     changed_student_frames,
     session_state_snapshot,
 )
-from ..security import require_teacher
 
 router = APIRouter(prefix="/api", tags=["classroom"])
-teacher_only = Depends(require_teacher)
 
 
 class ClassRequest(BaseModel):
@@ -99,17 +98,20 @@ async def _domain(command):
 # ---- turmas ----
 
 
-@router.post("/classes", dependencies=[teacher_only])
+@router.post("/classes")
+@access_policy(RoutePolicy.TEACHER)
 async def create_class(body: ClassRequest, request: Request):
     return await _svc(request).create_class(body.name, body.year, body.students)
 
 
-@router.get("/classes", dependencies=[teacher_only])
+@router.get("/classes")
+@access_policy(RoutePolicy.TEACHER)
 async def list_classes(request: Request):
     return await _svc(request).list_classes()
 
 
-@router.get("/classes/{class_id}/report", dependencies=[teacher_only])
+@router.get("/classes/{class_id}/report")
+@access_policy(RoutePolicy.TEACHER)
 async def class_report(class_id: str, request: Request):
     from fastapi.responses import PlainTextResponse
 
@@ -132,7 +134,8 @@ async def class_report(class_id: str, request: Request):
     return report
 
 
-@router.put("/classes/{class_id}/students", dependencies=[teacher_only])
+@router.put("/classes/{class_id}/students")
+@access_policy(RoutePolicy.TEACHER)
 async def update_students(class_id: str, body: ClassRequest, request: Request):
     cls = await _svc(request).update_class_students(class_id, body.students)
     if not cls:
@@ -143,7 +146,8 @@ async def update_students(class_id: str, body: ClassRequest, request: Request):
 # ---- sessões ----
 
 
-@router.post("/sessions", dependencies=[teacher_only])
+@router.post("/sessions")
+@access_policy(RoutePolicy.TEACHER)
 async def create_session(body: SessionRequest, request: Request):
     svc = _svc(request)
     session = await svc.create_session(body.class_id, body.activity_slug, body.activity_title)
@@ -152,7 +156,8 @@ async def create_session(body: SessionRequest, request: Request):
     return svc.project_session(session, role="teacher")
 
 
-@router.get("/sessions", dependencies=[teacher_only])
+@router.get("/sessions")
+@access_policy(RoutePolicy.TEACHER)
 async def list_sessions(request: Request):
     svc = _svc(request)
     return [
@@ -161,7 +166,8 @@ async def list_sessions(request: Request):
     ]
 
 
-@router.get("/sessions/{session_id}", dependencies=[teacher_only])
+@router.get("/sessions/{session_id}")
+@access_policy(RoutePolicy.TEACHER)
 async def get_session(session_id: str, request: Request):
     svc = _svc(request)
     session = await svc.get_session(session_id)
@@ -170,7 +176,8 @@ async def get_session(session_id: str, request: Request):
     return svc.project_session(session, role="teacher")
 
 
-@router.post("/sessions/{session_id}/close", dependencies=[teacher_only])
+@router.post("/sessions/{session_id}/close")
+@access_policy(RoutePolicy.TEACHER)
 async def close_session(session_id: str, request: Request):
     svc = _svc(request)
     session = await _domain(svc.close_session(session_id))
@@ -178,6 +185,7 @@ async def close_session(session_id: str, request: Request):
 
 
 @router.get("/join/{join_code}")
+@access_policy(RoutePolicy.PUBLIC)
 async def join_by_code(join_code: str, request: Request):
     svc = _svc(request)
     session = await svc.find_by_code(join_code)
@@ -187,6 +195,7 @@ async def join_by_code(join_code: str, request: Request):
 
 
 @router.get("/sessions/{session_id}/me")
+@access_policy(RoutePolicy.STUDENT)
 async def whoami(session_id: str, request: Request):
     """Retoma de sessão do aluno: valida o token guardado no dispositivo e
     devolve a identidade + estado público da sessão (sem tokens de terceiros)."""
@@ -205,6 +214,7 @@ async def whoami(session_id: str, request: Request):
 
 
 @router.post("/sessions/{session_id}/claim")
+@access_policy(RoutePolicy.PUBLIC)
 async def claim(session_id: str, body: ClaimRequest, request: Request):
     result = await _domain(
         _svc(request).claim_identity(session_id, body.student_id)
@@ -214,7 +224,8 @@ async def claim(session_id: str, body: ClaimRequest, request: Request):
     return result
 
 
-@router.post("/sessions/{session_id}/release/{student_id}", dependencies=[teacher_only])
+@router.post("/sessions/{session_id}/release/{student_id}")
+@access_policy(RoutePolicy.TEACHER)
 async def release(
     session_id: str,
     student_id: str,
@@ -235,12 +246,14 @@ async def release(
 
 
 @router.get("/session-event-types")
+@access_policy(RoutePolicy.TEACHER)
 async def session_event_types():
     """Declaração pública e estática do vocabulário da Sessão de aula."""
     return {"version": 1, "types": SESSION_EVENT_TYPES.declaration()}
 
 
 @router.post("/sessions/{session_id}/events")
+@access_policy(RoutePolicy.STUDENT)
 async def post_events(session_id: str, body: EventsRequest, request: Request):
     svc = _svc(request)
     student_id = await svc.student_for_token(session_id, body.student_token)
@@ -250,7 +263,8 @@ async def post_events(session_id: str, body: EventsRequest, request: Request):
     return {"accepted": [r["event_id"] for r in accepted]}
 
 
-@router.post("/sessions/{session_id}/message", dependencies=[teacher_only])
+@router.post("/sessions/{session_id}/message")
+@access_policy(RoutePolicy.TEACHER)
 async def teacher_message(session_id: str, body: TeacherMessageRequest, request: Request):
     return await _domain(
         _svc(request).send_teacher_message(
@@ -261,7 +275,8 @@ async def teacher_message(session_id: str, body: TeacherMessageRequest, request:
     )
 
 
-@router.post("/sessions/{session_id}/control", dependencies=[teacher_only])
+@router.post("/sessions/{session_id}/control")
+@access_policy(RoutePolicy.TEACHER)
 async def session_control(session_id: str, body: ControlRequest, request: Request):
     """Controlo de sala: chamar a atenção para uma parte (highlight, para todos
     ou para um aluno) e congelar/descongelar os ecrãs para olharem para o quadro."""
@@ -277,6 +292,7 @@ async def session_control(session_id: str, body: ControlRequest, request: Reques
 
 
 @router.post("/sessions/{session_id}/pit")
+@access_policy(RoutePolicy.STUDENT)
 async def create_pit_item(
     session_id: str, body: CreatePitItemRequest, request: Request
 ):
@@ -290,6 +306,7 @@ async def create_pit_item(
 
 
 @router.post("/sessions/{session_id}/pit/{item_id}/advance")
+@access_policy(RoutePolicy.STUDENT)
 async def advance_pit_item(
     session_id: str,
     item_id: str,
@@ -306,6 +323,7 @@ async def advance_pit_item(
 
 
 @router.get("/sessions/{session_id}/students/{student_id}/history")
+@access_policy(RoutePolicy.TEACHER_OR_STUDENT)
 async def student_history(
     session_id: str,
     student_id: str,
@@ -345,6 +363,7 @@ async def student_history(
 
 
 @router.get("/sessions/{session_id}/stream")
+@access_policy(RoutePolicy.TEACHER_OR_STUDENT)
 async def stream_session(session_id: str, request: Request):
     svc = _svc(request)
     session = await svc.get_session(session_id)
