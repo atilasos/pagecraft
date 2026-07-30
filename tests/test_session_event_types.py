@@ -30,6 +30,12 @@ def test_registry_can_be_queried_without_knowing_its_representation():
         "unfreeze_screens",
     }
     assert "feedback_error" in _names(SESSION_EVENT_TYPES.visible_to("teacher"))
+    assert _names(SESSION_EVENT_TYPES.visible_to("board")) == {
+        "freeze_screens",
+        "session_closed",
+        "teacher_highlight",
+        "unfreeze_screens",
+    }
 
     assert {
         "attempt",
@@ -47,6 +53,8 @@ def test_internal_and_bridge_names_remain_distinct():
     assert highlight is not None
     assert highlight.name == "teacher_highlight"
     assert highlight.bridge_name == "highlight"
+    assert highlight.board_visible is True
+    assert "projection_visible" not in SESSION_EVENT_TYPES.declaration()[0]
 
 
 def test_identity_release_declares_the_explicit_reset_decision():

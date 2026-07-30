@@ -143,7 +143,7 @@ def session_state_snapshot(
     student_id: str | None = None,
 ) -> dict:
     """Projeta o estado autorizado no instante pedido."""
-    if role == "projection":
+    if role == "board":
         return {"session": _session_projection(events, session)}
 
     state = reduce_session(

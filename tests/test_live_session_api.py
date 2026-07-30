@@ -138,7 +138,7 @@ async def test_student_snapshot_contains_only_own_state_and_no_class_totals(clie
     assert "token" not in response.text.lower()
 
 
-async def test_projection_stream_contains_only_shared_state_and_global_events(client):
+async def test_board_stream_contains_only_shared_state_and_global_events(client):
     session = await _session(client, students=("Ana", "Bia"))
     ana_id = next(iter(session["roster"]))
     await client.post(
@@ -177,12 +177,30 @@ async def test_projection_stream_contains_only_shared_state_and_global_events(cl
         )
         await client.post(f"/api/sessions/{session['id']}/close")
 
-    producer = asyncio.create_task(produce())
-    response = await client.get(
-        f"/api/sessions/{session['id']}/stream",
-        params={"role": "projection"},
+    transport = httpx.ASGITransport(
+        app=client.app,
+        raise_app_exceptions=False,
     )
-    await producer
+    async with httpx.AsyncClient(
+        transport=transport,
+        base_url="http://board.test",
+    ) as board:
+        challenge = (await board.post("/api/board/pairings")).json()
+        await client.post(
+            "/api/board/pairings/confirm",
+            json={"code": challenge["code"]},
+        )
+        completed = await board.post(
+            "/api/board/pairings/complete",
+            json={"pairing_id": challenge["pairing_id"]},
+        )
+        assert completed.status_code == 200
+
+        producer = asyncio.create_task(produce())
+        response = await board.get(
+            f"/api/sessions/{session['id']}/stream",
+        )
+        await producer
 
     assert response.status_code == 200
     frames = _sse_frames(response.text)

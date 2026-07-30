@@ -261,6 +261,12 @@ def create_app(
     )
     declare_route_policy(app.routes[-1], RoutePolicy.PUBLIC)
     app.mount(
+        "/board",
+        StaticFiles(directory=static_dir / "board", html=True),
+        name="board-static",
+    )
+    declare_route_policy(app.routes[-1], RoutePolicy.PUBLIC)
+    app.mount(
         "/teacher",
         StaticFiles(
             directory=static_dir / "teacher",

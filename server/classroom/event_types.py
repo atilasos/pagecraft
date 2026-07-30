@@ -12,7 +12,7 @@ from typing import Iterable, Mapping
 
 
 EVENT_AUTHORS = frozenset({"activity", "student", "teacher", "assistant", "session"})
-EVENT_ROLES = frozenset({"teacher", "student", "projection"})
+EVENT_ROLES = frozenset({"teacher", "student", "board"})
 _EVIDENCE_AUTHORS = frozenset({"activity", "student"})
 _NAME = re.compile(r"^[a-z][a-z0-9_]*$")
 
@@ -28,7 +28,7 @@ class SessionEventType:
     in_timeline: bool
     bridge_name: str | None
     payload_fields: Mapping[str, str]
-    projection_visible: bool = False
+    board_visible: bool = False
 
     def __post_init__(self) -> None:
         if not isinstance(self.name, str) or not _NAME.fullmatch(self.name):
@@ -41,7 +41,7 @@ class SessionEventType:
             isinstance(flag, bool)
             for flag in (
                 self.student_visible,
-                self.projection_visible,
+                self.board_visible,
                 self.is_evidence,
                 self.in_timeline,
             )
@@ -73,7 +73,7 @@ class SessionEventType:
             "name": self.name,
             "authors": sorted(self.authors),
             "student_visible": self.student_visible,
-            "projection_visible": self.projection_visible,
+            "board_visible": self.board_visible,
             "evidence": self.is_evidence,
             "timeline": self.in_timeline,
             "bridge_name": self.bridge_name,
@@ -109,9 +109,9 @@ class SessionEventRegistry:
             raise ValueError(f"papel desconhecido: {role}")
         if role == "teacher":
             return self._entries
-        if role == "projection":
+        if role == "board":
             return tuple(
-                entry for entry in self._entries if entry.projection_visible
+                entry for entry in self._entries if entry.board_visible
             )
         return tuple(entry for entry in self._entries if entry.student_visible)
 
@@ -133,7 +133,7 @@ def _event(
     evidence: bool = False,
     timeline: bool = True,
     bridge_name: str | None = None,
-    projection_visible: bool = False,
+    board_visible: bool = False,
     payload: Mapping[str, str] | None = None,
 ) -> SessionEventType:
     return SessionEventType(
@@ -144,7 +144,7 @@ def _event(
         in_timeline=timeline,
         bridge_name=bridge_name,
         payload_fields=payload or {},
-        projection_visible=projection_visible,
+        board_visible=board_visible,
     )
 
 
@@ -255,7 +255,7 @@ SESSION_EVENT_TYPES = SessionEventRegistry(
             "teacher",
             student_visible=True,
             bridge_name="highlight",
-            projection_visible=True,
+            board_visible=True,
             payload={
                 "unit_id": "Unidade para a qual o professor chama a atenção.",
                 "unit_label": "Nome legível da unidade apresentado à criança.",
@@ -265,13 +265,13 @@ SESSION_EVENT_TYPES = SessionEventRegistry(
             "freeze_screens",
             "teacher",
             student_visible=True,
-            projection_visible=True,
+            board_visible=True,
         ),
         _event(
             "unfreeze_screens",
             "teacher",
             student_visible=True,
-            projection_visible=True,
+            board_visible=True,
         ),
         _event(
             "identity_released",
@@ -303,7 +303,7 @@ SESSION_EVENT_TYPES = SessionEventRegistry(
             "session_closed",
             "session",
             student_visible=True,
-            projection_visible=True,
+            board_visible=True,
         ),
     )
 )

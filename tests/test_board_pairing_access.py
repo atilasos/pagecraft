@@ -1,3 +1,4 @@
+import asyncio
 from datetime import datetime, timezone
 
 import httpx
@@ -142,3 +143,57 @@ async def test_board_sees_only_the_live_collective_session_and_cannot_act(
     assert teacher_action.status_code == 403
     assert student_action.status_code == 403
     assert closed.status_code == 204
+
+
+async def test_board_stream_derives_its_collective_view_from_the_cookie(
+    board_http,
+):
+    app, teacher, board, _ = board_http
+    await _pair(teacher, board)
+    created_class = (
+        await teacher.post(
+            "/api/classes",
+            json={"name": "2.º A", "year": 2, "students": ["Lia"]},
+        )
+    ).json()
+    session = (
+        await teacher.post(
+            "/api/sessions",
+            json={
+                "class_id": created_class["id"],
+                "activity_slug": "demo",
+                "activity_title": "Dobros",
+            },
+        )
+    ).json()
+    student_id = next(iter(session["roster"]))
+
+    stream = asyncio.create_task(
+        board.get(f"/api/sessions/{session['id']}/stream")
+    )
+    for _ in range(100):
+        if session["id"] in app.state.classroom.live_session_ids():
+            break
+        await asyncio.sleep(0)
+
+    await teacher.post(
+        f"/api/sessions/{session['id']}/control",
+        json={
+            "action": "highlight",
+            "unit_id": "privada",
+            "student_id": student_id,
+        },
+    )
+    await teacher.post(
+        f"/api/sessions/{session['id']}/control",
+        json={"action": "highlight", "unit_id": "global"},
+    )
+    await teacher.post(f"/api/sessions/{session['id']}/close")
+    response = await asyncio.wait_for(stream, timeout=2)
+
+    assert response.status_code == 200
+    assert "event: session_state_snapshot" in response.text
+    assert '"students"' not in response.text
+    assert '"unit_id": "global"' in response.text
+    assert "privada" not in response.text
+    assert student_id not in response.text

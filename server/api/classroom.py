@@ -366,7 +366,7 @@ async def student_history(
 
 
 @router.get("/sessions/{session_id}/stream")
-@access_policy(RoutePolicy.TEACHER, RoutePolicy.STUDENT)
+@access_policy(RoutePolicy.TEACHER, RoutePolicy.STUDENT, RoutePolicy.BOARD)
 async def stream_session(session_id: str, request: Request):
     svc = _svc(request)
     session = await svc.get_session(session_id)
@@ -378,15 +378,22 @@ async def stream_session(session_id: str, request: Request):
     student_id = None
     credential = ""
     if access.role is Role.TEACHER:
-        if requested_role not in {"teacher", "projection"}:
-            raise HTTPException(400, "role tem de ser teacher ou projection")
-        role = requested_role
+        if requested_role not in {"", "teacher"}:
+            raise HTTPException(403, "este Papel não pode usar esta vista")
+        role = "teacher"
     elif access.role is Role.STUDENT:
         if requested_role not in {"", "student"}:
             raise HTTPException(403, "este Papel não pode usar esta vista")
         role = "student"
         student_id = access.student_id
         credential = access.student_credential
+    elif access.role is Role.BOARD:
+        if requested_role not in {"", "board"}:
+            raise HTTPException(403, "este Papel não pode usar esta vista")
+        if session.get("status") != "live":
+            raise HTTPException(404, "sessão viva não encontrada")
+        role = "board"
+        credential = access.board_credential
     else:
         raise AssertionError("o middleware de Acesso deixou passar um pedido sem Papel")
 
@@ -399,20 +406,22 @@ async def stream_session(session_id: str, request: Request):
     events = await log.replay()
     frontier = max((int(record.get("seq", 0)) for record in events), default=0)
 
-    async def student_credential_is_current() -> bool:
-        if role != "student":
-            return True
-        current = await svc.student_for_token(
-            session_id,
-            credential,
-            require_live=False,
-        )
-        return current == student_id
+    async def credential_is_current() -> bool:
+        if role == "student":
+            current = await svc.student_for_token(
+                session_id,
+                credential,
+                require_live=False,
+            )
+            return current == student_id
+        if role == "board":
+            return await request.app.state.board_pairings.resolve(credential)
+        return True
 
-    if not await student_credential_is_current():
+    if not await credential_is_current():
         raise HTTPException(
             401,
-            "a identidade do Aluno da sessão já não é válida",
+            "a credencial já não é válida",
         )
 
     def visible(record: dict) -> bool:
@@ -421,7 +430,7 @@ async def stream_session(session_id: str, request: Request):
         if role == "teacher":
             return True
         target = record.get("student_id")
-        if role == "projection":
+        if role == "board":
             return target is None
         return target is None or target == student_id
 
@@ -457,7 +466,7 @@ async def stream_session(session_id: str, request: Request):
                         record = record_task.result()
                     except StopAsyncIteration:
                         return
-                    if not await student_credential_is_current():
+                    if not await credential_is_current():
                         return
                     events.append(record)
                     if visible(record):
@@ -467,7 +476,7 @@ async def stream_session(session_id: str, request: Request):
                                 for key, value in record.items()
                                 if key != "student_id"
                             }
-                            if role == "projection"
+                            if role == "board"
                             else record
                         )
                         yield (
@@ -503,7 +512,7 @@ async def stream_session(session_id: str, request: Request):
                         tick_now = tick_task.result()
                     except StopAsyncIteration:
                         return
-                    if not await student_credential_is_current():
+                    if not await credential_is_current():
                         return
                     current_state = session_state_snapshot(
                         events,
