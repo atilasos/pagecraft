@@ -244,3 +244,137 @@ async def test_unpairing_immediately_closes_an_open_board_stream(board_http):
     assert "event: session_state_snapshot" in response.text
     assert state_after.json() == {"paired": False, "expires_at": None}
     assert old_cookie.status_code == 401
+
+
+async def test_board_credential_survives_restart_then_expires_server_side(
+    tmp_path,
+    monkeypatch,
+):
+    data_dir = tmp_path / "data"
+    monkeypatch.setenv("PAGECRAFT_DATA_DIR", str(data_dir))
+    clock = {"now": datetime(2026, 7, 30, 9, 0, tzinfo=timezone.utc)}
+
+    app = app_module.create_app(classroom_clock=lambda: clock["now"].isoformat())
+    async with app.router.lifespan_context(app):
+        transport = httpx.ASGITransport(
+            app=app,
+            raise_app_exceptions=False,
+            client=("127.0.0.1", 41000),
+        )
+        async with (
+            httpx.AsyncClient(
+                transport=transport,
+                base_url="http://studio.test",
+            ) as teacher,
+            httpx.AsyncClient(
+                transport=transport,
+                base_url="http://board.test",
+            ) as board,
+        ):
+            await teacher.get("/teacher/")
+            await _pair(teacher, board)
+            board_credential = board.cookies.get(BOARD_COOKIE_NAME)
+            assert board_credential
+            created_class = (
+                await teacher.post(
+                    "/api/classes",
+                    json={
+                        "name": "2.º A",
+                        "year": 2,
+                        "students": ["Lia"],
+                    },
+                )
+            ).json()
+            await teacher.post(
+                "/api/sessions",
+                json={
+                    "class_id": created_class["id"],
+                    "activity_slug": "demo",
+                    "activity_title": "Dobros",
+                },
+            )
+
+    persisted = (data_dir / "board-pairing.json").read_text("utf-8")
+    assert board_credential not in persisted
+    assert '"credential_digest"' in persisted
+
+    restarted = app_module.create_app(
+        classroom_clock=lambda: clock["now"].isoformat()
+    )
+    async with restarted.router.lifespan_context(restarted):
+        transport = httpx.ASGITransport(
+            app=restarted,
+            raise_app_exceptions=False,
+            client=("10.0.0.20", 41000),
+        )
+        async with httpx.AsyncClient(
+            transport=transport,
+            base_url="http://board.test",
+            headers={
+                "cookie": f"{BOARD_COOKIE_NAME}={board_credential}",
+            },
+        ) as board:
+            restored = await board.get("/api/board/session")
+            clock["now"] = datetime(
+                2026,
+                8,
+                27,
+                9,
+                0,
+                tzinfo=timezone.utc,
+            )
+            expired = await board.get("/api/board/session")
+
+    assert restored.status_code == 200
+    assert restored.json()["activity_slug"] == "demo"
+    assert expired.status_code == 401
+
+
+async def test_board_cookie_omits_secure_on_the_http_lan_fallback(board_http):
+    app, teacher, _, _ = board_http
+    transport = httpx.ASGITransport(
+        app=app,
+        raise_app_exceptions=False,
+        client=("10.0.0.20", 41000),
+    )
+    async with httpx.AsyncClient(
+        transport=transport,
+        base_url="http://board.local",
+    ) as board:
+        challenge = (await board.post("/api/board/pairings")).json()
+        await teacher.post(
+            "/api/board/pairings/confirm",
+            json={"code": challenge["code"]},
+        )
+        completed = await board.post(
+            "/api/board/pairings/complete",
+            json={"pairing_id": challenge["pairing_id"]},
+        )
+
+    assert completed.status_code == 200
+    assert "Secure" not in completed.headers["set-cookie"]
+
+
+async def test_short_pairing_challenge_expires_after_five_minutes(board_http):
+    _, teacher, board, clock = board_http
+    challenge = (await board.post("/api/board/pairings")).json()
+    clock["now"] = datetime(
+        2026,
+        7,
+        30,
+        9,
+        5,
+        tzinfo=timezone.utc,
+    )
+
+    confirmation = await teacher.post(
+        "/api/board/pairings/confirm",
+        json={"code": challenge["code"]},
+    )
+    completion = await board.post(
+        "/api/board/pairings/complete",
+        json={"pairing_id": challenge["pairing_id"]},
+    )
+
+    assert confirmation.status_code == 404
+    assert completion.status_code == 404
