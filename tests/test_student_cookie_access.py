@@ -128,3 +128,44 @@ async def test_cookie_authenticates_events_and_pit_without_a_secret_body(
     )
 
     assert advanced.status_code == 200
+
+
+async def test_own_history_survives_close_until_local_midnight(classroom_http):
+    _, teacher, student, clock = classroom_http
+    session = await create_session(teacher, students=("Ana", "Bia"))
+    ana_id, bia_id = session["roster"]
+    assert (
+        await student.post(
+            f"/api/sessions/{session['id']}/claim",
+            json={"student_id": ana_id},
+        )
+    ).status_code == 200
+
+    assert (
+        await student.get(
+            f"/api/sessions/{session['id']}/students/{ana_id}/history"
+        )
+    ).status_code == 200
+    assert (
+        await student.get(
+            f"/api/sessions/{session['id']}/students/{bia_id}/history"
+        )
+    ).status_code == 403
+    assert (
+        await teacher.post(f"/api/sessions/{session['id']}/close")
+    ).status_code == 200
+
+    clock.instant = datetime(2026, 7, 30, 22, 59, tzinfo=timezone.utc)
+    history = await student.get(
+        f"/api/sessions/{session['id']}/students/{ana_id}/history"
+    )
+    resumed = await student.get(f"/api/sessions/{session['id']}/me")
+    assert history.status_code == 200
+    assert resumed.status_code == 200
+    assert resumed.json()["session"]["status"] == "closed"
+
+    clock.instant = datetime(2026, 7, 30, 23, 0, tzinfo=timezone.utc)
+    expired = await student.get(
+        f"/api/sessions/{session['id']}/students/{ana_id}/history"
+    )
+    assert expired.status_code == 401
