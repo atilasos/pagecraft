@@ -88,14 +88,7 @@ async def revoke_pairing(request: Request):
 @access_policy(RoutePolicy.BOARD)
 async def current_session(request: Request):
     classroom = request.app.state.classroom
-    session = next(
-        (
-            candidate
-            for candidate in await classroom.list_sessions()
-            if candidate.get("status") == "live"
-        ),
-        None,
-    )
+    session = await classroom.current_board_session()
     if session is None:
         return Response(status_code=204)
-    return classroom.project_session(session, role="board")
+    return session

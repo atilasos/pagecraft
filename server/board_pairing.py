@@ -148,8 +148,24 @@ class BoardPairings:
     async def resolve(self, credential: str) -> bool:
         if not credential:
             return False
-        state = await self._storage.read_json(self._state_path(), {})
+        state, expires_at = await self._active_state()
         digest = str(state.get("credential_digest") or "")
+        return (
+            expires_at is not None
+            and bool(digest)
+            and hmac.compare_digest(digest, self._digest(credential))
+        )
+
+    async def state(self) -> dict:
+        state, expires_at = await self._active_state()
+        paired = expires_at is not None and bool(state.get("credential_digest"))
+        return {
+            "paired": paired,
+            "expires_at": state.get("expires_at") if paired else None,
+        }
+
+    async def _active_state(self) -> tuple[dict, datetime | None]:
+        state = await self._storage.read_json(self._state_path(), {})
         try:
             expires_at = datetime.fromisoformat(
                 str(state["expires_at"]).replace("Z", "+00:00")
@@ -157,31 +173,10 @@ class BoardPairings:
             if expires_at.tzinfo is None:
                 expires_at = expires_at.replace(tzinfo=timezone.utc)
         except (KeyError, TypeError, ValueError):
-            return False
-        return (
-            self._now() < expires_at.astimezone(timezone.utc)
-            and bool(digest)
-            and hmac.compare_digest(digest, self._digest(credential))
-        )
-
-    async def state(self) -> dict:
-        state = await self._storage.read_json(self._state_path(), {})
-        expires_at = state.get("expires_at")
-        paired = False
-        if state.get("credential_digest") and expires_at:
-            try:
-                expiry = datetime.fromisoformat(
-                    str(expires_at).replace("Z", "+00:00")
-                )
-                if expiry.tzinfo is None:
-                    expiry = expiry.replace(tzinfo=timezone.utc)
-                paired = self._now() < expiry.astimezone(timezone.utc)
-            except (TypeError, ValueError):
-                pass
-        return {
-            "paired": paired,
-            "expires_at": expires_at if paired else None,
-        }
+            return state, None
+        if self._now() >= expires_at.astimezone(timezone.utc):
+            return state, None
+        return state, expires_at
 
     async def revoke(self) -> None:
         async with self._lock:

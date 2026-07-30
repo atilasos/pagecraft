@@ -373,6 +373,23 @@ class ClassroomService:
         out.sort(key=lambda s: s.get("started_at", ""), reverse=True)
         return out
 
+    async def current_board_session(self) -> dict | None:
+        """Projeta a Sessão de aula viva mais recente para o Quadro."""
+
+        session = next(
+            (
+                candidate
+                for candidate in await self.list_sessions()
+                if candidate.get("status") == "live"
+            ),
+            None,
+        )
+        return (
+            self.project_session(session, role="board")
+            if session is not None
+            else None
+        )
+
     async def close_session(self, session_id: str) -> dict | None:
         async with self._session_locks[session_id]:
             session = await self._require_writable_unlocked(session_id)
