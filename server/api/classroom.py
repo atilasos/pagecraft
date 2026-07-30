@@ -9,7 +9,13 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, ConfigDict, Field
 
-from ..access import Role, RoutePolicy, access_policy, rate_limited
+from ..access import (
+    RateLimitOperation,
+    Role,
+    RoutePolicy,
+    access_policy,
+    rate_limited,
+)
 from ..classroom.errors import (
     ClassroomError,
     InvalidPitItemError,
@@ -186,7 +192,7 @@ async def close_session(session_id: str, request: Request):
 
 @router.get("/join/{join_code}")
 @access_policy(RoutePolicy.PUBLIC)
-@rate_limited("join")
+@rate_limited(RateLimitOperation.JOIN)
 async def join_by_code(join_code: str, request: Request):
     svc = _svc(request)
     session = await svc.find_by_code(join_code)
@@ -213,7 +219,7 @@ async def whoami(session_id: str, request: Request):
 
 @router.post("/sessions/{session_id}/claim")
 @access_policy(RoutePolicy.PUBLIC)
-@rate_limited("claim")
+@rate_limited(RateLimitOperation.CLAIM)
 async def claim(session_id: str, body: ClaimRequest, request: Request):
     result = await _domain(
         _svc(request).claim_identity(session_id, body.student_id)

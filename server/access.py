@@ -33,6 +33,11 @@ class RoutePolicy(StrEnum):
     BOARD = Role.BOARD
 
 
+class RateLimitOperation(StrEnum):
+    JOIN = "join"
+    CLAIM = "claim"
+
+
 _POLICY_ATTRIBUTE = "__pagecraft_access_policy__"
 _TEACHER_BOOTSTRAP_ATTRIBUTE = "__pagecraft_teacher_loopback_bootstrap__"
 _RATE_LIMIT_ATTRIBUTE = "__pagecraft_access_rate_limit__"
@@ -63,9 +68,12 @@ class RequestRateLimiter:
         self._clock = clock
         self._limit = limit
         self._window_seconds = window_seconds
-        self._attempts: dict[tuple[str, str], deque[float]] = {}
+        self._attempts: dict[
+            tuple[RateLimitOperation, str],
+            deque[float],
+        ] = {}
 
-    def allows(self, operation: str, client_ip: str) -> bool:
+    def allows(self, operation: RateLimitOperation, client_ip: str) -> bool:
         now = self._clock()
         attempts = self._attempts.setdefault((operation, client_ip), deque())
         cutoff = now - self._window_seconds
@@ -91,7 +99,7 @@ def access_policy(policy: RoutePolicy, *additional: RoutePolicy):
     return decorate
 
 
-def rate_limited(operation: str):
+def rate_limited(operation: RateLimitOperation):
     """Declara um orçamento de pedidos por IP para uma rota pública."""
 
     def decorate(endpoint: Callable) -> Callable:
@@ -138,7 +146,7 @@ def route_policy(route: BaseRoute) -> frozenset[RoutePolicy] | None:
     return declared
 
 
-def route_rate_limit(route: BaseRoute) -> str | None:
+def route_rate_limit(route: BaseRoute) -> RateLimitOperation | None:
     declared = getattr(route, _RATE_LIMIT_ATTRIBUTE, None)
     if declared is None:
         declared = getattr(
