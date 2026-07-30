@@ -100,6 +100,28 @@ async def test_claim_has_its_own_twenty_request_budget_per_ip(
     }
 
 
+async def test_claim_budget_keeps_ips_independent(
+    rate_limit_app,
+):
+    app, _, session = rate_limit_app
+    path = f"/api/sessions/{session['id']}/claim"
+    body = {"student_id": "identidade-inexistente"}
+    async with (
+        tunnel_client(app, "203.0.113.17") as first_student,
+        tunnel_client(app, "198.51.100.31") as second_student,
+    ):
+        first_twenty = [
+            await first_student.post(path, json=body)
+            for _ in range(20)
+        ]
+        independent = await second_student.post(path, json=body)
+        limited = await first_student.post(path, json=body)
+
+    assert [response.status_code for response in first_twenty] == [404] * 20
+    assert independent.status_code == 404
+    assert limited.status_code == 429
+
+
 async def test_tunnel_uses_cloudflare_ip_and_keeps_ips_independent(
     rate_limit_app,
 ):
