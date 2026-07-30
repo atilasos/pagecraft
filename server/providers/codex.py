@@ -15,7 +15,7 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
-from .base import AIProvider, ProviderFailure, ProviderTimeout, parse_and_validate
+from .base import AIProvider, ProviderFailure, ProviderTimeout
 
 
 class CodexProvider(AIProvider):
@@ -26,14 +26,13 @@ class CodexProvider(AIProvider):
         self.model = model
         self.events_dir = events_dir
 
-    async def complete(
+    async def _complete_once(
         self,
         prompt: str,
         *,
-        schema: dict[str, Any] | None = None,
-        system: str | None = None,
-        timeout_s: int = 300,
-        workdir: str | None = None,
+        system: str | None,
+        timeout_s: int,
+        schema: dict[str, Any] | None,
     ) -> Any:
         full_prompt = f"{system}\n\n---\n\n{prompt}" if system else prompt
         if schema is not None:
@@ -51,7 +50,7 @@ class CodexProvider(AIProvider):
                 self.codex_bin,
                 "exec",
                 "-C",
-                workdir or tmp,
+                tmp,
                 "--sandbox",
                 "read-only",
                 "--ephemeral",
@@ -91,15 +90,12 @@ class CodexProvider(AIProvider):
                     detail=(stderr or b"").decode("utf-8", "replace")[-2000:],
                 )
             try:
-                text = await asyncio.to_thread(out_file.read_text, "utf-8")
+                return await asyncio.to_thread(out_file.read_text, "utf-8")
             except FileNotFoundError:
                 raise ProviderFailure(
                     "codex exec não produziu mensagem final",
                     detail=(stderr or b"").decode("utf-8", "replace")[-2000:],
                 )
-            if schema is None:
-                return text
-            return parse_and_validate(text, schema)
 
     def _dump_events(self, stdout: bytes) -> None:
         self.events_dir.mkdir(parents=True, exist_ok=True)

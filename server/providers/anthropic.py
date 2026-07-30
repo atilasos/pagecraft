@@ -12,7 +12,7 @@ from typing import Any
 
 import httpx
 
-from .base import AIProvider, ProviderFailure, ProviderTimeout, SchemaError, parse_and_validate
+from .base import AIProvider, ProviderFailure, ProviderTimeout, SchemaError
 
 API_URL = "https://api.anthropic.com/v1/messages"
 API_VERSION = "2023-06-01"
@@ -30,14 +30,13 @@ class AnthropicProvider(AIProvider):
     def available(self) -> bool:
         return bool(self.api_key)
 
-    async def complete(
+    async def _complete_once(
         self,
         prompt: str,
         *,
-        schema: dict[str, Any] | None = None,
-        system: str | None = None,
-        timeout_s: int = 300,
-        workdir: str | None = None,
+        system: str | None,
+        timeout_s: int,
+        schema: dict[str, Any] | None,
     ) -> Any:
         if not self.api_key:
             raise ProviderFailure("ANTHROPIC_API_KEY não definida")
@@ -80,12 +79,6 @@ class AnthropicProvider(AIProvider):
         if schema is not None:
             for block in content:
                 if block.get("type") == "tool_use" and block.get("name") == "emit_result":
-                    import jsonschema
-
-                    try:
-                        jsonschema.validate(block["input"], schema)
-                    except jsonschema.ValidationError as exc:
-                        raise SchemaError(f"JSON não cumpre o schema: {exc.message}") from exc
                     return block["input"]
             raise SchemaError("resposta sem bloco tool_use estruturado", detail=str(content)[:2000])
 
