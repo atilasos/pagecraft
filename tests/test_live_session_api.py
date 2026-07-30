@@ -6,6 +6,7 @@ import httpx
 import pytest
 
 from server import app as app_module
+from server.access import STUDENT_COOKIE_NAME
 
 
 @pytest.fixture
@@ -56,6 +57,12 @@ def _sse_frames(body):
     return frames
 
 
+def _student_cookie(response):
+    credential = response.cookies.get(STUDENT_COOKIE_NAME)
+    assert credential
+    return {"cookie": f"{STUDENT_COOKIE_NAME}={credential}"}
+
+
 async def test_teacher_stream_starts_with_current_snapshot_without_replaying_log(client):
     session = await _session(client)
     student_id = next(iter(session["roster"]))
@@ -99,12 +106,12 @@ async def test_teacher_stream_starts_with_current_snapshot_without_replaying_log
 async def test_student_snapshot_contains_only_own_state_and_no_class_totals(client):
     session = await _session(client, students=("Ana", "Bia"))
     ana_id, bia_id = session["roster"]
-    claim = (
+    student_headers = _student_cookie(
         await client.post(
             f"/api/sessions/{session['id']}/claim",
             json={"student_id": ana_id},
         )
-    ).json()
+    )
     await client.app.state.classroom.emit_event(
         session["id"],
         "attempt",
@@ -116,11 +123,7 @@ async def test_student_snapshot_contains_only_own_state_and_no_class_totals(clie
 
     response = await client.get(
         f"/api/sessions/{session['id']}/stream",
-        params={
-            "role": "student",
-            "student_token": claim["student_token"],
-        },
-        headers={"cookie": ""},
+        headers=student_headers,
     )
 
     frames = _sse_frames(response.text)
@@ -210,18 +213,18 @@ async def test_projection_stream_contains_only_shared_state_and_global_events(cl
 async def test_child_history_is_complete_for_teacher_and_role_authorized_for_student(client):
     session = await _session(client, students=("Ana", "Bia"))
     ana_id, bia_id = session["roster"]
-    ana_claim = (
+    ana_cookie = _student_cookie(
         await client.post(
             f"/api/sessions/{session['id']}/claim",
             json={"student_id": ana_id},
         )
-    ).json()
-    bia_claim = (
+    )
+    bia_cookie = _student_cookie(
         await client.post(
             f"/api/sessions/{session['id']}/claim",
             json={"student_id": bia_id},
         )
-    ).json()
+    )
     await client.app.state.classroom.emit_event(
         session["id"],
         "heartbeat",
@@ -251,19 +254,11 @@ async def test_child_history_is_complete_for_teacher_and_role_authorized_for_stu
     )
     student = await client.get(
         f"/api/sessions/{session['id']}/students/{ana_id}/history",
-        params={
-            "role": "student",
-            "student_token": ana_claim["student_token"],
-        },
-        headers={"cookie": ""},
+        headers=ana_cookie,
     )
     forbidden = await client.get(
         f"/api/sessions/{session['id']}/students/{ana_id}/history",
-        params={
-            "role": "student",
-            "student_token": bia_claim["student_token"],
-        },
-        headers={"cookie": ""},
+        headers=bia_cookie,
     )
 
     assert teacher.status_code == 200
@@ -352,12 +347,12 @@ async def test_live_stream_keeps_raw_timeline_and_emits_only_changed_children(cl
 async def test_controlled_ticks_publish_stopped_and_no_signal_without_new_work(client):
     session = await _session(client)
     student_id = next(iter(session["roster"]))
-    claim = (
+    student_headers = _student_cookie(
         await client.post(
         f"/api/sessions/{session['id']}/claim",
         json={"student_id": student_id},
         )
-    ).json()
+    )
     svc = client.app.state.classroom
     records = await svc.events_log(session["id"]).replay()
     joined_at = datetime.fromisoformat(records[-1]["ts"])
@@ -373,11 +368,7 @@ async def test_controlled_ticks_publish_stopped_and_no_signal_without_new_work(c
     student_stream = asyncio.create_task(
         client.get(
             f"/api/sessions/{session['id']}/stream",
-            params={
-                "role": "student",
-                "student_token": claim["student_token"],
-            },
-            headers={"cookie": ""},
+            headers=student_headers,
         )
     )
     await asyncio.sleep(0.01)
