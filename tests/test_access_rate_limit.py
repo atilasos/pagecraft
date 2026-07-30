@@ -140,3 +140,20 @@ async def test_lan_uses_socket_ip_and_ignores_proxy_headers(
 
     assert [response.status_code for response in first_twenty] == [200] * 20
     assert forged_new_ip.status_code == 429
+
+
+async def test_join_budget_recovers_after_the_sliding_minute(
+    rate_limit_app,
+):
+    app, clock, session = rate_limit_app
+    path = f"/api/join/{session['join_code']}"
+    async with tunnel_client(app, "203.0.113.17") as student:
+        first_twenty = [await student.get(path) for _ in range(20)]
+        clock["now"] = 59.0
+        still_limited = await student.get(path)
+        clock["now"] = 60.0
+        recovered = await student.get(path)
+
+    assert [response.status_code for response in first_twenty] == [200] * 20
+    assert still_limited.status_code == 429
+    assert recovered.status_code == 200
