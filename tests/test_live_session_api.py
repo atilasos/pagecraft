@@ -17,8 +17,9 @@ async def client(tmp_path, monkeypatch):
         async with httpx.AsyncClient(
             transport=transport,
             base_url="http://test",
-            headers={"x-teacher-token": app.state.teacher_token},
         ) as http:
+            bootstrap = await http.get("/api/teacher-bootstrap")
+            assert bootstrap.status_code == 204
             http.app = app
             yield http
 
@@ -119,7 +120,7 @@ async def test_student_snapshot_contains_only_own_state_and_no_class_totals(clie
             "role": "student",
             "student_token": claim["student_token"],
         },
-        headers={"x-teacher-token": ""},
+        headers={"cookie": ""},
     )
 
     frames = _sse_frames(response.text)
@@ -254,7 +255,7 @@ async def test_child_history_is_complete_for_teacher_and_role_authorized_for_stu
             "role": "student",
             "student_token": ana_claim["student_token"],
         },
-        headers={"x-teacher-token": ""},
+        headers={"cookie": ""},
     )
     forbidden = await client.get(
         f"/api/sessions/{session['id']}/students/{ana_id}/history",
@@ -262,7 +263,7 @@ async def test_child_history_is_complete_for_teacher_and_role_authorized_for_stu
             "role": "student",
             "student_token": bia_claim["student_token"],
         },
-        headers={"x-teacher-token": ""},
+        headers={"cookie": ""},
     )
 
     assert teacher.status_code == 200
@@ -376,7 +377,7 @@ async def test_controlled_ticks_publish_stopped_and_no_signal_without_new_work(c
                 "role": "student",
                 "student_token": claim["student_token"],
             },
-            headers={"x-teacher-token": ""},
+            headers={"cookie": ""},
         )
     )
     await asyncio.sleep(0.01)

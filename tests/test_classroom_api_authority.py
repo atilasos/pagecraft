@@ -13,8 +13,9 @@ async def client(tmp_path, monkeypatch):
         async with httpx.AsyncClient(
             transport=transport,
             base_url="http://test",
-            headers={"x-teacher-token": app.state.teacher_token},
         ) as http:
+            bootstrap = await http.get("/api/teacher-bootstrap")
+            assert bootstrap.status_code == 204
             yield http
 
 
