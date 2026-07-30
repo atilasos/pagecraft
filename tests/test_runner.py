@@ -175,6 +175,24 @@ async def test_pipeline_repair_loop_then_pass(env):
     assert any(e["type"] == "repair" for e in events)
 
 
+async def test_pipeline_repairs_when_deterministic_validation_fails(env):
+    """O repair loop dispara mesmo com o Evaluator a aprovar, quando a
+    validação determinista chumba o HTML (ramo nunca antes exercido)."""
+    config, storage, hub = env
+    bad_build = {"html": "<html><body>" + "conteúdo " * 80 + "</body></html>", "notes": ""}
+    provider = FakeProvider(
+        [DOCSPEC, DESIGN, bad_build, PROOF_OK, EVAL_OK, BUILT_OK, PROOF_OK, EVAL_OK]
+    )
+    runner = PipelineRunner(config, storage, hub, provider, NoKnowledge(), NoKnowledge())
+    job = await runner.create_job(topic="Frações", subject="Matemática", year=3, duration=30)
+    job = await _wait_status(runner, job["id"], {"awaiting_review", "failed"})
+    assert job["status"] == "awaiting_review"
+    assert job["iteration"] == 2
+    events = await storage.read_jsonl(storage.path("jobs", job["id"], "events.jsonl"))
+    repair = next(e for e in events if e["type"] == "repair")
+    assert repair["payload"]["ticket"]["validation_errors"], "o ticket leva os erros deterministas"
+
+
 async def test_pipeline_fails_after_max_iterations(env):
     config, storage, hub = env
     provider = FakeProvider(pipeline_responses(EVAL_FAIL, EVAL_FAIL, EVAL_FAIL))
