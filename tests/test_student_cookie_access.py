@@ -1,3 +1,4 @@
+import asyncio
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
@@ -186,3 +187,43 @@ async def test_student_cookie_is_forbidden_on_another_session(classroom_http):
     crossed = await student.get(f"/api/sessions/{other_session['id']}/me")
 
     assert crossed.status_code == 403
+
+
+async def test_release_revokes_the_old_cookie_and_live_stream(classroom_http):
+    app, teacher, student, _ = classroom_http
+    session = await create_session(teacher, students=("Ana",))
+    ana_id = next(iter(session["roster"]))
+    assert (
+        await student.post(
+            f"/api/sessions/{session['id']}/claim",
+            json={"student_id": ana_id},
+        )
+    ).status_code == 200
+
+    old_stream = asyncio.create_task(
+        student.get(f"/api/sessions/{session['id']}/stream")
+    )
+    await asyncio.sleep(0.01)
+    released = await teacher.post(
+        f"/api/sessions/{session['id']}/release/{ana_id}"
+    )
+    stream_response = await asyncio.wait_for(old_stream, timeout=2)
+
+    assert released.status_code == 200
+    assert stream_response.status_code == 200
+    assert (
+        await student.get(f"/api/sessions/{session['id']}/me")
+    ).status_code == 401
+
+    async with httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=app),
+        base_url="http://test",
+    ) as replacement:
+        reclaimed = await replacement.post(
+            f"/api/sessions/{session['id']}/claim",
+            json={"student_id": ana_id},
+        )
+        assert reclaimed.status_code == 200
+        assert (
+            await replacement.get(f"/api/sessions/{session['id']}/me")
+        ).status_code == 200
