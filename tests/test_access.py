@@ -94,6 +94,56 @@ async def test_non_loopback_channel_without_cookie_cannot_bootstrap_or_act_as_te
     assert protected.status_code == 401
 
 
+async def test_teacher_cookie_authenticates_sse_without_a_credential_in_the_url(
+    app_client,
+):
+    await app_client.get("/api/teacher-bootstrap")
+    created_class = (
+        await app_client.post(
+            "/api/classes",
+            json={"name": "2.º A", "year": 2, "students": ["Lia"]},
+        )
+    ).json()
+    session = (
+        await app_client.post(
+            "/api/sessions",
+            json={
+                "class_id": created_class["id"],
+                "activity_slug": "demo",
+                "activity_title": "Dobros",
+            },
+        )
+    ).json()
+    await app_client.post(f"/api/sessions/{session['id']}/close")
+
+    response = await app_client.get(
+        f"/api/sessions/{session['id']}/stream",
+        params={"role": "teacher"},
+    )
+
+    assert response.status_code == 200
+    assert "event: session_state_snapshot" in response.text
+    assert "teacher_token" not in str(response.request.url)
+
+
+async def test_legacy_teacher_token_transports_no_longer_authenticate(app_client):
+    token = app_client.app.state.teacher_token
+
+    header_response = await app_client.get(
+        "/api/meta",
+        headers={"x-teacher-token": token},
+    )
+    query_response = await app_client.get(
+        "/api/meta",
+        params={"teacher_token": token},
+    )
+    delivery_response = await app_client.get("/api/teacher-token")
+
+    assert header_response.status_code == 401
+    assert query_response.status_code == 401
+    assert delivery_response.status_code == 404
+
+
 async def test_access_resolves_the_role_and_trust_channel_once_per_request(
     tmp_path,
     monkeypatch,
