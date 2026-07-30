@@ -45,6 +45,11 @@
         <p class="button-line"><button type="submit">Acrescentar</button></p>
       </form>
     </div>
+    <div id="history-panel" class="card" hidden>
+      <h2 class="panel-title">O meu histórico</h2>
+      <p class="muted">O trabalho que ficou registado nesta aula.</p>
+      <ul class="plain" id="history-list"></ul>
+    </div>
     <!-- sandbox sem allow-same-origin: a atividade gerada corre em origem
          opaca, sem acesso ao DOM/API do site; só comunica por postMessage -->
     <iframe id="activity-frame" title="Atividade" sandbox="allow-scripts"></iframe>

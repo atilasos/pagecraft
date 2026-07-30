@@ -270,6 +270,7 @@ async def test_child_history_is_complete_for_teacher_and_role_authorized_for_stu
     ]
     assert student.status_code == 200
     assert [record["type"] for record in student.json()["events"]] == [
+        "attempt",
         "teacher_message",
     ]
     assert forbidden.status_code == 403

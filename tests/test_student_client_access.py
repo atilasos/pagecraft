@@ -8,6 +8,13 @@ STUDENT_JAVASCRIPT = (
     / "student"
     / "app.js"
 )
+STUDENT_HTML = (
+    Path(__file__).parent.parent
+    / "server"
+    / "static"
+    / "student"
+    / "index.html"
+)
 
 
 def test_student_client_shows_http_detail_on_join_and_claim_errors():
@@ -38,3 +45,16 @@ def test_student_client_keeps_only_non_secret_identity_metadata():
         "        studentId: state.studentId,\n"
         "        displayName: state.displayName,"
     ) in javascript
+
+
+def test_student_client_loads_own_history_after_the_session_closes():
+    javascript = STUDENT_JAVASCRIPT.read_text("utf-8")
+    html = STUDENT_HTML.read_text("utf-8")
+
+    assert "loadOwnHistory();" in javascript
+    assert (
+        "/students/${state.studentId}/history`"
+        in javascript
+    )
+    assert 'id="history-panel"' in html
+    assert 'id="history-list"' in html

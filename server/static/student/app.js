@@ -123,6 +123,7 @@ function startActivity() {
   $("step-code").hidden = true;
   $("step-identity").hidden = true;
   $("step-activity").hidden = false;
+  $("history-panel").hidden = true;
   $("student-name").textContent = state.displayName;
   $("activity-title").textContent = state.session.activity_title;
   $("activity-frame").src = `/activities/${state.session.activity_slug}/`;
@@ -248,6 +249,7 @@ function finishStudentSession() {
   $("pit-form").querySelectorAll("button, input").forEach((element) => {
     element.disabled = true;
   });
+  loadOwnHistory();
 }
 
 function invalidateStudentIdentity() {
@@ -259,6 +261,8 @@ function invalidateStudentIdentity() {
   state.sessionState = null;
   $("freeze-overlay").hidden = true;
   $("pit-panel").hidden = true;
+  $("history-panel").hidden = true;
+  $("history-list").innerHTML = "";
   renderPit();
   $("activity-frame").src = "about:blank";
   $("step-activity").hidden = true;
@@ -455,6 +459,65 @@ function showMessage(text, cls) {
   box.textContent = text;
   $("messages").appendChild(box);
   setTimeout(() => box.remove(), 15000);
+}
+
+const HISTORY_LABELS = {
+  unit_started: "Comecei uma parte",
+  attempt: "Fiz uma tentativa",
+  discovery: "Fiz uma descoberta",
+  assessment_result: "Registei um resultado",
+  feedback_request: "Pedi feedback",
+  help_needed: "Pedi ajuda",
+  share_requested: "Escolhi para partilhar",
+  ai_feedback: "Recebi feedback",
+  teacher_message: "Recebi uma mensagem",
+  teacher_highlight: "O professor chamou a atenção",
+  pit_updated: "Atualizei o meu plano",
+};
+
+function describeHistoryEvent(event) {
+  const payload = event?.payload || {};
+  const detail =
+    payload.message ||
+    payload.text ||
+    payload.detail ||
+    payload.note ||
+    payload.what ||
+    "";
+  const label = HISTORY_LABELS[event?.type] || "Trabalho registado";
+  return detail ? `${label}: ${detail}` : label;
+}
+
+async function loadOwnHistory() {
+  if (!state.session?.id || !state.studentId) return;
+  try {
+    const resp = await fetch(
+      `/api/sessions/${state.session.id}/students/${state.studentId}/history`
+    );
+    if (resp.status === 401) {
+      invalidateStudentIdentity();
+      return;
+    }
+    if (!resp.ok) return;
+    const history = await resp.json();
+    const list = $("history-list");
+    list.innerHTML = "";
+    const events = Array.isArray(history?.events) ? history.events : [];
+    if (!events.length) {
+      const empty = document.createElement("li");
+      empty.textContent = "Ainda não há trabalho registado.";
+      list.appendChild(empty);
+    } else {
+      events.forEach((event) => {
+        const item = document.createElement("li");
+        item.textContent = describeHistoryEvent(event);
+        list.appendChild(item);
+      });
+    }
+    $("history-panel").hidden = false;
+  } catch (error) {
+    // O histórico continua disponível quando a ligação regressar.
+  }
 }
 
 /* ---- ajuda + PIT ---- */

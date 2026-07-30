@@ -175,6 +175,20 @@ async def test_own_history_survives_close_until_local_midnight(classroom_http):
         )
     ).status_code == 403
     assert (
+        await student.post(
+            f"/api/sessions/{session['id']}/events",
+            json={
+                "events": [
+                    {
+                        "event_id": "descoberta-ana",
+                        "type": "discovery",
+                        "payload": {"message": "Descobri uma equivalência."},
+                    }
+                ]
+            },
+        )
+    ).status_code == 200
+    assert (
         await teacher.post(f"/api/sessions/{session['id']}/close")
     ).status_code == 200
 
@@ -184,6 +198,9 @@ async def test_own_history_survives_close_until_local_midnight(classroom_http):
     )
     resumed = await student.get(f"/api/sessions/{session['id']}/me")
     assert history.status_code == 200
+    assert [event["type"] for event in history.json()["events"]] == [
+        "discovery"
+    ]
     assert resumed.status_code == 200
     assert resumed.json()["session"]["status"] == "closed"
 

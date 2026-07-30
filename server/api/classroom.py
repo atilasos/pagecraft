@@ -352,6 +352,10 @@ async def student_history(
     visible_types = {
         event_type.name for event_type in SESSION_EVENT_TYPES.visible_to(role)
     }
+    if access.role is Role.STUDENT:
+        visible_types.update(
+            event_type.name for event_type in SESSION_EVENT_TYPES.evidence()
+        )
     events = [
         record
         for record in await svc.events_log(session_id).replay()
