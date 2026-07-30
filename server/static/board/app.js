@@ -148,19 +148,17 @@ function startLiveSession(session) {
   stopLiveSession();
   currentSessionId = session.id;
   stream = new EventSource(`/api/sessions/${session.id}/stream`);
+  const activeStream = stream;
   stream.addEventListener("session_state_snapshot", (event) => {
-    applySessionState(event.data);
+    const snapshot = parseObject(event.data);
+    if (!snapshot) return;
+    registerCollectiveEventListeners(activeStream, snapshot.event_types);
+    applySessionState(snapshot);
   });
   stream.addEventListener("session_state_changed", (event) => {
-    applySessionState(event.data);
+    const delta = parseObject(event.data);
+    if (delta) applySessionState(delta);
   });
-  ["teacher_highlight", "freeze_screens", "unfreeze_screens", "session_closed"].forEach(
-    (type) => {
-      stream.addEventListener(type, (event) => {
-        dispatchCollectiveEvent(type, event.data);
-      });
-    }
-  );
   stream.addEventListener("error", () => {
     stopLiveSession();
     show(waiting);
@@ -178,41 +176,67 @@ function parseObject(rawData) {
   }
 }
 
-function applySessionState(rawData) {
-  const data = parseObject(rawData);
-  const state = data?.session;
+function registerCollectiveEventListeners(activeStream, declarations) {
+  if (!Array.isArray(declarations)) return;
+  const registeredNames = new Set();
+  declarations.forEach((declaration) => {
+    if (
+      !declaration ||
+      typeof declaration.name !== "string" ||
+      !/^[a-z][a-z0-9_]*$/.test(declaration.name) ||
+      registeredNames.has(declaration.name)
+    ) {
+      return;
+    }
+    const bridgeName =
+      typeof declaration.bridge_name === "string" &&
+      /^[a-z][a-z0-9_]*$/.test(declaration.bridge_name)
+        ? declaration.bridge_name
+        : null;
+    const safeDeclaration = {
+      name: declaration.name,
+      bridge_name: bridgeName,
+    };
+    registeredNames.add(safeDeclaration.name);
+    activeStream.addEventListener(safeDeclaration.name, (event) => {
+      dispatchCollectiveEvent(safeDeclaration, event.data);
+    });
+  });
+}
+
+function finishLiveSession(message) {
+  stopLiveSession();
+  board.removeAttribute("src");
+  show(waiting);
+  waitingStatus.textContent = message;
+  sessionTimer = later(checkSession, 1500);
+}
+
+function applySessionState(data) {
+  const state = data.session;
   if (!state || typeof state !== "object" || Array.isArray(state)) return;
   if (state.closed === true || state.status === "closed") {
-    stopLiveSession();
-    board.removeAttribute("src");
-    show(waiting);
-    waitingStatus.textContent = "Sessão terminada. A aguardar a próxima aula.";
-    sessionTimer = later(checkSession, 1500);
+    finishLiveSession("Sessão terminada. A aguardar a próxima aula.");
   }
 }
 
-function dispatchCollectiveEvent(type, rawData) {
+function dispatchCollectiveEvent(declaration, rawData) {
   const data = parseObject(rawData);
   if (!data) return;
   if (data.student_id != null) return;
-  if (type === "session_closed") {
-    stopLiveSession();
-    board.removeAttribute("src");
-    show(waiting);
-    waitingStatus.textContent = "Sessão terminada. A aguardar a próxima aula.";
-    sessionTimer = later(checkSession, 1500);
+  if (declaration.name === "session_closed") {
+    finishLiveSession("Sessão terminada. A aguardar a próxima aula.");
     return;
   }
-  if (type === "teacher_highlight") {
-    board.contentWindow?.postMessage(
-      {
-        pagecraft: 1,
-        type: "highlight",
-        unitId: data.payload?.unit_id,
-      },
-      "*"
-    );
+  if (!declaration.bridge_name) return;
+  const message = {
+    pagecraft: 1,
+    type: declaration.bridge_name,
+  };
+  if (Object.hasOwn(data.payload || {}, "unit_id")) {
+    message.unitId = data.payload.unit_id;
   }
+  board.contentWindow?.postMessage(message, "*");
 }
 
 function stopLiveSession() {

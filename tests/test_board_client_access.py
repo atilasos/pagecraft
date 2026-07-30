@@ -26,6 +26,10 @@ def test_board_client_streams_only_collective_state_without_role_credentials():
     assert "new EventSource(`/api/sessions/${session.id}/stream`)" in javascript
     assert "if (data.student_id != null) return;" in javascript
     assert "board.contentWindow?.postMessage" in javascript
+    assert "registerCollectiveEventListeners(activeStream, snapshot.event_types)" in javascript
+    assert "type: declaration.bridge_name" in javascript
+    assert '["teacher_highlight", "freeze_screens"' not in javascript
+    assert 'type: "highlight"' not in javascript
     assert "common.js" not in client
     assert "localStorage" not in client
     assert "teacher_token" not in client
