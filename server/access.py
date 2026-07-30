@@ -30,10 +30,10 @@ class RoutePolicy(StrEnum):
     TEACHER = Role.TEACHER
     STUDENT = Role.STUDENT
     BOARD = Role.BOARD
-    TEACHER_BOOTSTRAP = "teacher_loopback_bootstrap"
 
 
 _POLICY_ATTRIBUTE = "__pagecraft_access_policy__"
+_TEACHER_BOOTSTRAP_ATTRIBUTE = "__pagecraft_teacher_loopback_bootstrap__"
 _PROXY_HEADERS = ("x-forwarded-for", "x-real-ip", "forwarded", "cf-connecting-ip")
 TEACHER_COOKIE_NAME = "pagecraft_teacher_session"
 
@@ -65,6 +65,30 @@ def declare_route_policy(route: BaseRoute, policy: RoutePolicy) -> None:
     """Declara a política de uma rota sem endpoint, como um ``Mount``."""
 
     setattr(route, _POLICY_ATTRIBUTE, frozenset((policy,)))
+
+
+def teacher_loopback_bootstrap(endpoint: Callable) -> Callable:
+    """Declara que loopback direto pode criar o Papel Professor nesta rota."""
+
+    setattr(endpoint, _TEACHER_BOOTSTRAP_ATTRIBUTE, True)
+    return endpoint
+
+
+def declare_teacher_loopback_bootstrap(route: BaseRoute) -> None:
+    """Declara o bootstrap numa rota sem endpoint, como um ``Mount``."""
+
+    setattr(route, _TEACHER_BOOTSTRAP_ATTRIBUTE, True)
+
+
+def route_bootstraps_teacher(route: BaseRoute) -> bool:
+    declared = getattr(route, _TEACHER_BOOTSTRAP_ATTRIBUTE, None)
+    if declared is None:
+        declared = getattr(
+            getattr(route, "endpoint", None),
+            _TEACHER_BOOTSTRAP_ATTRIBUTE,
+            False,
+        )
+    return bool(declared)
 
 
 def route_policy(route: BaseRoute) -> frozenset[RoutePolicy] | None:
@@ -169,10 +193,12 @@ async def resolve_access(request: Request, path_params: dict) -> AccessContext:
 def policy_allows(
     policy: frozenset[RoutePolicy],
     access: AccessContext,
+    *,
+    teacher_bootstrap: bool = False,
 ) -> bool:
     if RoutePolicy.PUBLIC in policy:
         return True
-    if RoutePolicy.TEACHER_BOOTSTRAP in policy:
+    if teacher_bootstrap:
         return (
             access.role is Role.TEACHER
             or access.channel is TrustChannel.LOOPBACK

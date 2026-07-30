@@ -13,12 +13,15 @@ from .access import (
     RoutePolicy,
     TrustChannel,
     access_policy,
+    declare_teacher_loopback_bootstrap,
     declare_route_policy,
     issue_teacher_cookie,
     match_route,
     policy_allows,
     resolve_access,
+    route_bootstraps_teacher,
     route_policy,
+    teacher_loopback_bootstrap,
     validate_route_policies,
 )
 from .config import load_config
@@ -117,8 +120,17 @@ def create_app(
             request,
             child_scope.get("path_params", {}),
         )
+        bootstraps_teacher = (
+            route_bootstraps_teacher(route)
+            if route is not None
+            else False
+        )
         request.state.access = access
-        if not policy_allows(policy, access):
+        if not policy_allows(
+            policy,
+            access,
+            teacher_bootstrap=bootstraps_teacher,
+        ):
             status = 401 if access.role is None else 403
             detail = (
                 "este pedido precisa de um Papel"
@@ -128,14 +140,15 @@ def create_app(
             return JSONResponse({"detail": detail}, status_code=status)
         response = await call_next(request)
         if (
-            RoutePolicy.TEACHER_BOOTSTRAP in policy
+            bootstraps_teacher
             and access.channel is TrustChannel.LOOPBACK
         ):
             issue_teacher_cookie(response, app.state.teacher_token)
         return response
 
     @app.get("/api/teacher-bootstrap", status_code=204)
-    @access_policy(RoutePolicy.TEACHER_BOOTSTRAP)
+    @access_policy(RoutePolicy.TEACHER)
+    @teacher_loopback_bootstrap
     async def teacher_bootstrap():
         pass
 
@@ -190,10 +203,8 @@ def create_app(
         ),
         name="teacher-static",
     )
-    declare_route_policy(
-        app.routes[-1],
-        RoutePolicy.TEACHER_BOOTSTRAP,
-    )
+    declare_route_policy(app.routes[-1], RoutePolicy.TEACHER)
+    declare_teacher_loopback_bootstrap(app.routes[-1])
     app.mount(
         "/",
         StaticFiles(directory=config.repo_root / "server" / "static", html=True),
