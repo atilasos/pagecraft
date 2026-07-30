@@ -6,7 +6,7 @@ from collections.abc import Callable, Iterable
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from .access import (
@@ -109,7 +109,9 @@ def create_app(
     @app.middleware("http")
     async def enforce_access(request: Request, call_next):
         route, child_scope = match_route(request, app.routes)
-        policy = route_policy(route) if route is not None else None
+        if route is None:
+            return await call_next(request)
+        policy = route_policy(route)
         if policy is None:
             return JSONResponse(
                 {"detail": "rota sem política de Acesso"},
@@ -120,11 +122,7 @@ def create_app(
             request,
             child_scope.get("path_params", {}),
         )
-        bootstraps_teacher = (
-            route_bootstraps_teacher(route)
-            if route is not None
-            else False
-        )
+        bootstraps_teacher = route_bootstraps_teacher(route)
         request.state.access = access
         if not policy_allows(
             policy,
@@ -186,6 +184,19 @@ def create_app(
     for extend_routes in route_extensions:
         extend_routes(app)
 
+    static_dir = config.repo_root / "server" / "static"
+
+    @app.get("/")
+    @app.get("/index.html")
+    @access_policy(RoutePolicy.PUBLIC)
+    async def studio_home():
+        return FileResponse(static_dir / "index.html")
+
+    @app.get("/studio.css")
+    @access_policy(RoutePolicy.PUBLIC)
+    async def studio_styles():
+        return FileResponse(static_dir / "studio.css")
+
     config.outputs_dir.mkdir(parents=True, exist_ok=True)
     app.mount("/outputs", StaticFiles(directory=config.outputs_dir), name="outputs")
     declare_route_policy(app.routes[-1], RoutePolicy.PUBLIC)
@@ -196,21 +207,21 @@ def create_app(
     )
     declare_route_policy(app.routes[-1], RoutePolicy.PUBLIC)
     app.mount(
+        "/student",
+        StaticFiles(directory=static_dir / "student", html=True),
+        name="student-static",
+    )
+    declare_route_policy(app.routes[-1], RoutePolicy.PUBLIC)
+    app.mount(
         "/teacher",
         StaticFiles(
-            directory=config.repo_root / "server" / "static" / "teacher",
+            directory=static_dir / "teacher",
             html=True,
         ),
         name="teacher-static",
     )
     declare_route_policy(app.routes[-1], RoutePolicy.TEACHER)
     declare_teacher_loopback_bootstrap(app.routes[-1])
-    app.mount(
-        "/",
-        StaticFiles(directory=config.repo_root / "server" / "static", html=True),
-        name="static",
-    )
-    declare_route_policy(app.routes[-1], RoutePolicy.PUBLIC)
 
     validate_route_policies(app.routes)
     return app

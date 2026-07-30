@@ -98,6 +98,27 @@ async def test_non_loopback_channel_without_cookie_cannot_bootstrap_or_act_as_te
     assert protected.status_code == 401
 
 
+async def test_public_static_mount_cannot_traverse_into_the_teacher_panel(
+    app_client,
+):
+    transport = httpx.ASGITransport(
+        app=app_client.app,
+        raise_app_exceptions=False,
+        client=("127.0.0.1", 41000),
+    )
+    async with httpx.AsyncClient(
+        transport=transport,
+        base_url="https://studio.example",
+        headers={"cf-connecting-ip": "203.0.113.17"},
+    ) as tunnel_client:
+        response = await tunnel_client.get(
+            "/student/%2e%2e/teacher/index.html"
+        )
+
+    assert response.status_code != 200
+    assert "O ficheiro do professor" not in response.text
+
+
 async def test_teacher_cookie_authenticates_sse_without_a_credential_in_the_url(
     app_client,
 ):
