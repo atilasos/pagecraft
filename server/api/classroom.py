@@ -229,7 +229,7 @@ async def claim(
     issue_student_cookie(
         response,
         session_id,
-        result["student_token"],
+        result["student_credential"],
         result["claimed_at"],
         result["credential_expires_at"],
     )

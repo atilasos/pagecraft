@@ -34,7 +34,7 @@ async def test_claim_identity_once(svc):
     session = await _session(svc)
     student_id = next(iter(session["roster"]))
     claim = await svc.claim_identity(session["id"], student_id)
-    assert claim and claim["student_token"]
+    assert claim and claim["student_credential"]
     # segunda tentativa com a mesma identidade falha
     assert await svc.claim_identity(session["id"], student_id) is None
     # release liberta
@@ -46,7 +46,10 @@ async def test_token_lookup(svc):
     session = await _session(svc)
     student_id = next(iter(session["roster"]))
     claim = await svc.claim_identity(session["id"], student_id)
-    assert await svc.student_for_token(session["id"], claim["student_token"]) == student_id
+    assert (
+        await svc.student_for_token(session["id"], claim["student_credential"])
+        == student_id
+    )
     assert await svc.student_for_token(session["id"], "tokeninventado") is None
 
 
@@ -163,7 +166,12 @@ async def test_concurrent_claims_only_one_wins(svc):
     wins = [r for r in results if r]
     assert len(wins) == 1
     # o token que ficou persistido é o do vencedor
-    assert await svc.student_for_token(session["id"], wins[0]["student_token"]) == student_id
+    assert (
+        await svc.student_for_token(
+            session["id"], wins[0]["student_credential"]
+        )
+        == student_id
+    )
 
 
 async def test_token_invalid_after_close_for_mutations(svc):
@@ -171,9 +179,18 @@ async def test_token_invalid_after_close_for_mutations(svc):
     student_id = next(iter(session["roster"]))
     claim = await svc.claim_identity(session["id"], student_id)
     await svc.close_session(session["id"])
-    assert await svc.student_for_token(session["id"], claim["student_token"]) is None
     assert (
-        await svc.student_for_token(session["id"], claim["student_token"], require_live=False)
+        await svc.student_for_token(
+            session["id"], claim["student_credential"]
+        )
+        is None
+    )
+    assert (
+        await svc.student_for_token(
+            session["id"],
+            claim["student_credential"],
+            require_live=False,
+        )
         == student_id
     )
 

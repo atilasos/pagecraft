@@ -368,7 +368,7 @@ class ClassroomService:
             entry["credential_expires_at"] = expires_at
             await self.storage.write_json(self._session_path(session_id), session)
         return {
-            "student_token": token,
+            "student_credential": token,
             "student_id": student_id,
             "display_name": entry["display_name"],
             "claimed_at": claimed_at,

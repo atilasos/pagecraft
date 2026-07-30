@@ -155,7 +155,7 @@ async def test_loading_applies_a_recorded_release_to_the_protected_token(svc, mo
 
     assert (
         await restarted.student_for_token(
-            session["id"], claim["student_token"], require_live=False
+            session["id"], claim["student_credential"], require_live=False
         )
         is None
     )
@@ -176,5 +176,5 @@ async def test_session_projections_are_role_specific_and_never_include_tokens(sv
         "display_name": "Ana",
         "taken": True,
     }
-    assert claim["student_token"] not in json.dumps([teacher, student])
+    assert claim["student_credential"] not in json.dumps([teacher, student])
     assert '"token"' not in json.dumps([teacher, student])
