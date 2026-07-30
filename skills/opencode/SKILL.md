@@ -273,4 +273,8 @@ PAGECRAFT_REPO="$REPO_ROOT" python3 skills/claude/scripts/publish_to_catalog.py 
   --design-spec outputs/lessons/<slug>-design-spec.json
 ```
 
-Depois validar `activities/<slug>/`, `catalog.json` e só fazer commit/push se o utilizador pedir explicitamente.
+Omitir etiquetas preserva as que já estiverem declaradas. O comando usa o módulo
+de publicação do repositório, garante o recetor da Sessão de aula e regenera o
+`catalog.json` derivado. Depois validar `activities/<slug>/` e `catalog.json`;
+quando houver commit, ambos seguem juntos. Só fazer commit/push se o utilizador
+pedir explicitamente.

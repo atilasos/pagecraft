@@ -37,7 +37,7 @@ O *spec* operacional para agentes CLI está em [`skills/claude/SKILL.md`](skills
 pagecraft/
   index.html             # landing do catálogo público
   viewer.html            # visualizador genérico de atividade
-  catalog.json           # índice das atividades publicadas
+  catalog.json           # índice derivado dos meta.json publicados
   activities/<slug>/     # cada atividade publicada
     index.html
     teacher.md
@@ -107,7 +107,16 @@ python3 skills/shared/scripts/publish_to_catalog.py \
   --tags "tag1,tag2"
 ```
 
-O script copia os artefactos para `activities/<slug>/`, gera/atualiza `meta.json` e `catalog.json`, e respeita `createdAt` quando o *slug* já existe.
+O comando resolve o repositório indicado e entrega os artefactos ao mesmo ato de
+publicação usado pelo Studio. Esse ato garante o recetor da Sessão de aula, funde
+no `meta.json` apenas os valores fornecidos e preserva o restante — incluindo
+`createdAt`, etiquetas, ordem e agrupamento de variantes. Omitir `--tags` preserva
+as etiquetas existentes.
+
+O `catalog.json` é um índice derivado: é regenerado a partir de todos os
+`activities/*/meta.json`, por ordem de *slug*, e substituído atomicamente. Nunca
+se corrige diretamente; corrige-se o `meta.json` da Atividade e regenera-se. O
+índice regenerado acompanha sempre os artefactos da Atividade no mesmo commit.
 
 ## PageCraft Studio — servidor do professor
 
@@ -126,7 +135,7 @@ O que o Studio faz:
 3. **Sessões de aula** — o professor cria turmas (só nomes próprios), lança uma sessão e dita o código de 6 letras; cada aluno escolhe a sua identidade e trabalha na atividade embebida.
 4. **Tempo real** — as atividades emitem eventos (`PageCraftBridge`, postMessage puro, sem rede: o HTML continua *self-contained* e offline); a página do aluno reenvia-os ao servidor e o dashboard do professor mostra tentativas, descobertas, pedidos de ajuda e o PIT de cada aluno via SSE (com *replay* após reconexão).
 5. **Feedback IA em tempo útil** — respostas abertas geram pedidos de feedback formativo (âmbar, nunca punitivo, ≤2 frases) com fila, cache por resposta e *timeout* de 20 s com mensagem de recurso; o professor vê os pedidos que expiraram.
-6. **Publicação** — quando o Evaluator dá *pass*, a atividade fica em revisão; ao aprovar, entra em `activities/` + `catalog.json` como sempre.
+6. **Publicação** — quando o Evaluator dá *pass*, a atividade fica em revisão; ao aprovar, o Studio executa o ato único de publicação e regenera o Catálogo derivado.
 
 Configuração por `server/config.toml` (começar por copiar [`server/config.toml.example`](server/config.toml.example)) ou variáveis `PAGECRAFT_*` (ex.: `PAGECRAFT_VAULT_PATH`, `PAGECRAFT_GENERATION_PROVIDER=codex|anthropic`, `PAGECRAFT_FEEDBACK_PROVIDER=auto|codex|anthropic`). Dados de sala em `server/data/` (JSON/JSONL, sem base de dados, *git-ignored*). Testes: `uv run pytest`.
 

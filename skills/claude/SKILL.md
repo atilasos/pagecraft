@@ -393,7 +393,11 @@ PAGECRAFT_REPO="$REPO_ROOT" python3 skills/claude/scripts/publish_to_catalog.py 
   --tags "tag1,tag2"
 ```
 
-Depois validar `activities/<slug>/`, `catalog.json` e só fazer commit/push se o utilizador pedir explicitamente.
+`--maker` e `--tags` são opcionais; omitir `--tags` preserva as etiquetas já
+declaradas. O comando usa o módulo de publicação do repositório, garante o
+recetor da Sessão de aula e regenera o `catalog.json` derivado. Depois validar
+`activities/<slug>/` e `catalog.json`; quando houver commit, ambos seguem juntos.
+Só fazer commit/push se o utilizador pedir explicitamente.
 
 ## Recursos incluídos
 
