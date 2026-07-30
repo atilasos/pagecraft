@@ -1,8 +1,13 @@
 import json
+import shutil
+from pathlib import Path
 
 import pytest
 
-from server.publish import publish_activity
+from server.publish import build_catalog, publish_activity, regenerate_catalog
+
+
+ROOT = Path(__file__).parent.parent
 
 DOCSPEC = {
     "topic": "Estados físicos da água",
@@ -92,6 +97,109 @@ def test_republish_preserves_created_at(repo, html_file):
     assert catalog["count"] == 1  # substitui, não duplica
     assert catalog["items"][0]["createdAt"] == "2026-01-01T00:00:00Z"
     assert meta1["slug"] == meta2["slug"] == "estados-agua"
+
+
+def test_republish_real_activity_preserves_rich_metadata_and_complete_disk_state(
+    tmp_path, html_file
+):
+    source = ROOT / "activities" / "arvore-cacador-silabas"
+    repo = tmp_path / "pagecraft"
+    activity = repo / "activities" / source.name
+    shutil.copytree(source, activity)
+    (repo / "catalog.json").write_text(
+        json.dumps({"generatedAt": None, "count": 0, "items": []}),
+        encoding="utf-8",
+    )
+    before = json.loads((activity / "meta.json").read_text(encoding="utf-8"))
+
+    meta = publish_activity(
+        repo,
+        source.name,
+        html_file,
+        DOCSPEC,
+        TEACHER_MD,
+        None,
+    )
+
+    for field in (
+        "createdAt",
+        "tags",
+        "order",
+        "variantOf",
+        "variantIndex",
+        "variantTitle",
+    ):
+        assert meta[field] == before[field]
+    assert meta["title"] == DOCSPEC["topic"]
+    assert meta["duration"] == DOCSPEC["duration"]
+    assert meta["paths"] == before["paths"]
+    assert (activity / "design-spec.json").exists()
+    assert "pagecraft-bridge-lite" in (activity / "index.html").read_text(
+        encoding="utf-8"
+    )
+
+    catalog = json.loads((repo / "catalog.json").read_text(encoding="utf-8"))
+    assert catalog["count"] == 1
+    assert [item["slug"] for item in catalog["items"]] == [source.name]
+    assert catalog["items"][0]["tags"] == before["tags"]
+    assert catalog["items"][0]["variantOf"] == before["variantOf"]
+
+
+def test_explicit_republish_values_replace_existing_metadata(tmp_path, html_file):
+    source = ROOT / "activities" / "arvore-cacador-silabas"
+    repo = tmp_path / "pagecraft"
+    shutil.copytree(source, repo / "activities" / source.name)
+
+    meta = publish_activity(
+        repo,
+        source.name,
+        html_file,
+        DOCSPEC,
+        TEACHER_MD,
+        None,
+        maker="lego",
+        tags=["revista", "lego"],
+    )
+
+    assert meta["maker"] == "lego"
+    assert meta["tags"] == ["revista", "lego"]
+
+
+def test_regenerate_catalog_includes_only_metadata_and_removes_deleted_activity(
+    tmp_path,
+):
+    repo = tmp_path / "pagecraft"
+    activities = repo / "activities"
+    shutil.copytree(
+        ROOT / "activities" / "arvore-cacador-silabas",
+        activities / "zeta",
+    )
+    shutil.copytree(
+        ROOT / "activities" / "bota-cacador-silabas",
+        activities / "alpha",
+    )
+    (activities / "sem-metadados").mkdir()
+
+    first = regenerate_catalog(repo)
+
+    assert [item["slug"] for item in first["items"]] == [
+        "arvore-cacador-silabas",
+        "bota-cacador-silabas",
+    ]
+    (activities / "zeta" / "meta.json").unlink()
+
+    second = regenerate_catalog(repo)
+
+    assert [item["slug"] for item in second["items"]] == [
+        "bota-cacador-silabas"
+    ]
+    assert json.loads((repo / "catalog.json").read_text(encoding="utf-8")) == second
+
+
+def test_committed_catalog_matches_activity_metadata():
+    committed = json.loads((ROOT / "catalog.json").read_text(encoding="utf-8"))
+
+    assert committed == build_catalog(ROOT)
 
 
 def test_publish_without_title_falls_back_to_html_title(repo, html_file):
