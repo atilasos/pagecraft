@@ -41,6 +41,18 @@ _Avoid_: ranking, leaderboard, pontuação por criança
 Criança com o tablet aberto que não produz trabalho há algum tempo. Só conta como trabalho o que é trabalho — tentar, descobrir, começar uma unidade, mexer no plano, pedir feedback. Um tablet aberto e pousado não é trabalho, e é justamente essa a criança que a triagem tem de encontrar.
 _Avoid_: inativo, ausente
 
+**Papel**:
+Quem está a chamar numa sessão de aula: **Professor**, **Aluno da sessão** ou **Quadro**. Todo o pedido ao Studio se resolve para um papel ou é negado; dentro de uma sessão não há chamador anónimo. Cada papel vê e emite apenas o que o vocabulário de acontecimentos lhe reconhece.
+_Avoid_: user, conta, login
+
+**Quadro**:
+O papel do ecrã partilhado da sala: o quadro interativo emparelhado, que mostra o estado coletivo da sessão e recebe os Momentos de comunicação. Vê apenas o que é da turma inteira — nunca o trabalho individual que não foi levado ao quadro — e não emite nada. Distinto do Professor: é uma máquina onde as crianças tocam.
+_Avoid_: projeção (como papel), segundo ecrã
+
+**Emparelhamento do quadro**:
+O ato, feito uma vez em muito tempo, de o professor reconhecer o PC do quadro a partir do painel, através de um código curto mostrado no ecrã do quadro. É assim que o papel Quadro nasce; «Desemparelhar quadro» é como morre.
+_Avoid_: login do quadro
+
 **Momento de comunicação**:
 Projeção do estado real do trabalho de um aluno no quadro interativo, lançada pelo professor a partir do drawer («Mostrar no quadro»), para a criança apresentar aos colegas. Prática MEM; mostra o trabalho tal como está, sem a criança refazer nada.
 _Avoid_: partilha de ecrã, screencast
