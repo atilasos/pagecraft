@@ -1,4 +1,5 @@
 import asyncio
+from datetime import datetime, timedelta, timezone
 
 import pytest
 
@@ -182,3 +183,33 @@ async def test_close_session(svc):
     closed = await svc.close_session(session["id"])
     assert closed["status"] == "closed"
     assert await svc.find_by_code(session["join_code"]) is None
+
+
+async def test_open_session_closes_automatically_after_eight_hours(tmp_path):
+    now = datetime(2026, 7, 30, 8, tzinfo=timezone.utc)
+    clock = {"now": now}
+    config = Config(data_dir=tmp_path)
+    storage = Storage(config.data_dir)
+    svc = ClassroomService(
+        config,
+        storage,
+        EventHub(storage),
+        clock=lambda: clock["now"].isoformat(),
+    )
+    session = await _session(svc)
+    student_id = next(iter(session["roster"]))
+    await svc.ingest_events(
+        session["id"],
+        student_id,
+        [{"event_id": "work", "type": "attempt", "payload": {"correct": True}}],
+    )
+
+    clock["now"] = now + timedelta(hours=8, seconds=1)
+    expired = await svc.get_session(session["id"])
+
+    assert expired["status"] == "closed"
+    assert expired["closed_at"] == clock["now"].isoformat()
+    assert [event["type"] for event in await svc.events_log(session["id"]).replay()] == [
+        "attempt",
+        "session_closed",
+    ]

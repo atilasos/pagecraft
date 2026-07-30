@@ -11,6 +11,7 @@ import asyncio
 import secrets
 import uuid
 from collections import defaultdict
+from datetime import datetime, timedelta, timezone
 
 from ..config import Config
 from ..events import EventHub, utcnow
@@ -23,6 +24,9 @@ from .errors import (
 )
 from .event_types import SESSION_EVENT_TYPES
 from .live_state import LiveSessionTicks
+
+
+_SESSION_MAX_AGE = timedelta(hours=8)
 
 
 def _join_code() -> str:
@@ -174,9 +178,29 @@ class ClassroomService:
                 entry["claimed_at"] = None
                 changed = True
 
+        if closed is None and self._session_has_expired(session):
+            await self._close_session_unlocked(session_id, session)
+            return session
+
         if changed:
             await self.storage.write_json(self._session_path(session_id), session)
         return session
+
+    def _session_has_expired(self, session: dict) -> bool:
+        try:
+            started_at = datetime.fromisoformat(
+                str(session["started_at"]).replace("Z", "+00:00")
+            )
+            now = datetime.fromisoformat(str(self.now()).replace("Z", "+00:00"))
+        except (KeyError, TypeError, ValueError):
+            return False
+        if started_at.tzinfo is None:
+            started_at = started_at.replace(tzinfo=timezone.utc)
+        if now.tzinfo is None:
+            now = now.replace(tzinfo=timezone.utc)
+        return now.astimezone(timezone.utc) - started_at.astimezone(timezone.utc) >= (
+            _SESSION_MAX_AGE
+        )
 
     async def _require_writable_unlocked(
         self, session_id: str, student_id: str | None = None
@@ -202,7 +226,7 @@ class ClassroomService:
             "activity_title": activity_title,
             "status": "live",
             "join_code": _join_code(),
-            "started_at": utcnow(),
+            "started_at": self.now(),
             "closed_at": None,
             "roster": {
                 s["id"]: {"display_name": s["display_name"], "token": None, "claimed_at": None}
@@ -272,13 +296,20 @@ class ClassroomService:
     async def close_session(self, session_id: str) -> dict | None:
         async with self._session_locks[session_id]:
             session = await self._require_writable_unlocked(session_id)
-            record = await self._append_event_unlocked(
-                session_id, "session_closed", {}, author="session"
-            )
-            session["status"] = "closed"
-            session["closed_at"] = record["ts"]
-            await self.storage.write_json(self._session_path(session_id), session)
+            await self._close_session_unlocked(session_id, session)
         return session
+
+    async def _close_session_unlocked(self, session_id: str, session: dict) -> None:
+        record = await self._append_event_unlocked(
+            session_id,
+            "session_closed",
+            {},
+            author="session",
+            ts=self.now(),
+        )
+        session["status"] = "closed"
+        session["closed_at"] = record["ts"]
+        await self.storage.write_json(self._session_path(session_id), session)
 
     # ---- identidade do aluno ----
 
@@ -449,6 +480,7 @@ class ClassroomService:
         author: str,
         student_id: str | None = None,
         caused_by_seq: int | None = None,
+        ts: str | None = None,
     ) -> dict:
         event_type = SESSION_EVENT_TYPES.get(type_)
         if event_type is None:
@@ -458,6 +490,8 @@ class ClassroomService:
         record = {"type": type_, "student_id": student_id, "payload": payload}
         if caused_by_seq is not None:
             record["caused_by_seq"] = caused_by_seq
+        if ts is not None:
+            record["ts"] = ts
         return await self.events_log(session_id).append(record)
 
     # ---- PIT-lite ----
