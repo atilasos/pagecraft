@@ -110,3 +110,33 @@ async def test_tunnel_uses_cloudflare_ip_and_keeps_ips_independent(
     assert [response.status_code for response in first_twenty] == [200] * 20
     assert independent.status_code == 200
     assert limited.status_code == 429
+
+
+async def test_lan_uses_socket_ip_and_ignores_proxy_headers(
+    rate_limit_app,
+):
+    app, _, session = rate_limit_app
+    transport = httpx.ASGITransport(
+        app=app,
+        raise_app_exceptions=False,
+        client=("10.0.0.9", 41000),
+    )
+    path = f"/api/join/{session['join_code']}"
+    async with httpx.AsyncClient(
+        transport=transport,
+        base_url="http://studio.lan",
+    ) as student:
+        first_twenty = [
+            await student.get(
+                path,
+                headers={"cf-connecting-ip": "203.0.113.17"},
+            )
+            for _ in range(20)
+        ]
+        forged_new_ip = await student.get(
+            path,
+            headers={"cf-connecting-ip": "198.51.100.31"},
+        )
+
+    assert [response.status_code for response in first_twenty] == [200] * 20
+    assert forged_new_ip.status_code == 429
