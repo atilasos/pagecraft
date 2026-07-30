@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PageCraft — Quadro</title>
+<link rel="stylesheet" href="/studio.css">
+</head>
+<body class="board-page">
+  <main id="pairing" class="board-empty-state" hidden>
+    <p class="eyebrow">PageCraft · Quadro</p>
+    <h1>Emparelhar este quadro<span class="accent-dot">.</span></h1>
+    <p>Introduz este código no painel do professor.</p>
+    <div class="type-blocks board-pairing-code" id="pairing-code"
+         aria-label="Código de emparelhamento"></div>
+    <p class="muted" id="pairing-status" role="status">A preparar o código…</p>
+  </main>
+
+  <main id="waiting" class="board-empty-state" hidden>
+    <p class="eyebrow">PageCraft · Quadro emparelhado</p>
+    <h1>Pronto para a próxima aula<span class="accent-dot">.</span></h1>
+    <p class="muted" id="waiting-status" role="status">
+      A aguardar que o professor comece uma sessão.
+    </p>
+  </main>
+
+  <main id="live" class="board-live" hidden>
+    <header class="board-bar">
+      <div>
+        <p class="eyebrow">Quadro da turma</p>
+        <strong id="session-title"></strong>
+      </div>
+      <span class="spacer"></span>
+      <span class="pill ok" id="session-status" role="status">Aula em curso</span>
+    </header>
+    <iframe id="board" title="Atividade no quadro" sandbox="allow-scripts"
+            tabindex="-1"></iframe>
+  </main>
+
+  <script src="/board/app.js"></script>
+</body>
+</html>
