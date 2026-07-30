@@ -89,9 +89,7 @@ $("report-btn").addEventListener("click", async () => {
     return;
   }
   const report = await resp.json();
-  const token = await teacherToken();
   params.set("format", "md");
-  params.set("teacher_token", token);
   const mdLink = $("report-md");
   mdLink.href = `/api/classes/${classId}/report?${params}`;
   mdLink.download = `registo-${report.class_name}.md`;
@@ -133,7 +131,7 @@ $("class-form").addEventListener("submit", async (ev) => {
 /* ---------- picker de atividades ---------- */
 
 async function loadActivities() {
-  const data = await (await fetch("/api/activities")).json();
+  const data = await (await tfetch("/api/activities")).json();
   activities = data.items || [];
   renderFilterChips("picker-years", data.years, "year", (y) => `${y}.º ano`);
   renderFilterChips("picker-subjects", data.subjects, "subject", (s) => s);
@@ -241,8 +239,7 @@ async function startLive(s) {
     $("live-code").appendChild(b);
   });
   $("present-link").href = `/teacher/present.html?session=${encodeURIComponent(s.id)}`;
-  const token = await teacherToken();
-  $("export-link").href = `/api/sessions/${s.id}?teacher_token=${encodeURIComponent(token)}`;
+  $("export-link").href = `/api/sessions/${s.id}`;
   $("export-link").download = `sessao-${s.id}.json`;
 
   students.clear();
@@ -251,7 +248,9 @@ async function startLive(s) {
   loadUnits(s.activity_slug);
 
   const eventTypes = await loadPanelEventTypes();
-  const es = new EventSource(await teacherStreamUrl(`/api/sessions/${s.id}/stream`));
+  const es = await teacherEventSource(
+    `/api/sessions/${s.id}/stream?role=teacher`
+  );
   es.onmessage = () => {};
   addJsonListener(es, "session_state_snapshot", (data) => applySnapshot(data, es));
   addJsonListener(es, "student_state_changed", applyStudentState);
@@ -313,7 +312,7 @@ function applySessionState(delta, es) {
 
 async function loadPanelEventTypes() {
   try {
-    const resp = await fetch("/api/session-event-types");
+    const resp = await tfetch("/api/session-event-types");
     if (!resp.ok) return fallbackPanelEventTypes();
     const declaration = await resp.json();
     if (!Array.isArray(declaration?.types)) return fallbackPanelEventTypes();

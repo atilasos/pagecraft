@@ -13,7 +13,7 @@ const jobsEl = document.getElementById("jobs");
 const streams = new Map();
 
 async function loadMeta() {
-  const meta = await (await fetch("/api/meta")).json();
+  const meta = await (await tfetch("/api/meta")).json();
   const subject = document.getElementById("subject");
   subject.innerHTML = meta.subjects
     .map((s) => `<option value="${s}">${s}</option>`)
@@ -72,7 +72,7 @@ function jobCard(job) {
 async function watchJob(job) {
   jobCard(job);
   if (["done", "failed"].includes(job.status) || streams.has(job.id)) return;
-  const es = new EventSource(await teacherStreamUrl(`/api/jobs/${job.id}/stream`));
+  const es = await teacherEventSource(`/api/jobs/${job.id}/stream`);
   streams.set(job.id, es);
   es.onmessage = () => {};
   ["job_created", "knowledge_ready", "phase_started", "phase_done", "phase_retry", "validation", "repair", "resumed_artifact", "awaiting_review", "done", "failed"].forEach((type) => {

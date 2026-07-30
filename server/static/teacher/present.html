@@ -148,7 +148,7 @@
 
   async function loadProjectionEventTypes() {
     try {
-      const response = await fetch("/api/session-event-types");
+      const response = await tfetch("/api/session-event-types");
       if (!response.ok) return FALLBACK_PROJECTION_EVENT_TYPES;
       const declaration = await response.json();
       if (!Array.isArray(declaration?.types)) return FALLBACK_PROJECTION_EVENT_TYPES;
@@ -202,8 +202,8 @@
   }
 
   const eventTypes = await loadProjectionEventTypes();
-  const es = new EventSource(
-    await teacherStreamUrl(`/api/sessions/${sessionId}/stream`, "projection")
+  const es = await teacherEventSource(
+    `/api/sessions/${sessionId}/stream?role=projection`
   );
   es.addEventListener("session_state_snapshot", (ev) => {
     applyProjectedSessionState(ev.data, es);
