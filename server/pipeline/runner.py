@@ -9,7 +9,6 @@ formato histórico em outputs/lessons/<slug>-*. Progresso via EventLog
 from __future__ import annotations
 
 import asyncio
-import json
 import re
 import unicodedata
 import uuid
@@ -21,20 +20,14 @@ from ..events import EventHub, utcnow
 from ..knowledge import AEClient, WikiClient
 from ..providers import AIProvider
 from ..storage import Storage
-from .phases import PromptLibrary
+from .phases import build_phases
 from .validators import validate_activity_html
-
-PHASES = ("architect", "designer", "builder", "proofreader", "evaluator")
 
 
 def slugify(text: str) -> str:
     text = unicodedata.normalize("NFKD", text.lower())
     text = "".join(c for c in text if not unicodedata.combining(c))
     return re.sub(r"[^a-z0-9]+", "-", text).strip("-")[:60]
-
-
-def _load_schema(schemas_dir: Path, name: str) -> dict:
-    return json.loads((schemas_dir / f"{name}.schema.json").read_text("utf-8"))
 
 
 class PipelineRunner:
@@ -53,15 +46,7 @@ class PipelineRunner:
         self.provider = provider
         self.wiki = wiki
         self.ae = ae
-        self.prompts = PromptLibrary(config.prompts_dir)
-        schemas_dir = Path(__file__).parent / "schemas"
-        self.schemas = {
-            "architect": _load_schema(schemas_dir, "docspec"),
-            "designer": _load_schema(schemas_dir, "design-spec"),
-            "builder": _load_schema(schemas_dir, "builder-output"),
-            "proofreader": _load_schema(schemas_dir, "proofread"),
-            "evaluator": _load_schema(schemas_dir, "evaluation"),
-        }
+        self.phases = build_phases(config)
         self._queue: asyncio.Queue[str] = asyncio.Queue()
         self._worker: asyncio.Task | None = None
 
@@ -208,19 +193,6 @@ class PipelineRunner:
                 await self._save(job)
                 await self._emit(job, "failed", {"error": job["error"]})
 
-    async def _call_phase(self, job: dict, phase: str, system: str, prompt: str) -> Any:
-        timeout = self.config.builder_timeout_s if phase == "builder" else self.config.generation_timeout_s
-        schema = self.schemas[phase]
-        prompt_path = self.storage.path("jobs", job["id"], f"{phase}-v{job['iteration']}-prompt.md")
-        await asyncio.to_thread(prompt_path.write_text, f"# system\n\n{system}\n\n# prompt\n\n{prompt}", "utf-8")
-
-        async def on_retry(attempt: int, error: Exception) -> None:
-            await self._emit(job, "phase_retry", {"phase": phase, "attempt": attempt, "error": str(error)})
-
-        return await self.provider.complete(
-            prompt, schema=schema, system=system, timeout_s=timeout, attempts=2, on_retry=on_retry
-        )
-
     async def _run_job(self, job: dict) -> None:
         job["status"] = "running"
         await self._save(job)
@@ -259,24 +231,22 @@ class PipelineRunner:
             docspec = await self._phase(
                 job,
                 "architect",
-                *self.prompts.architect(
-                    topic=job["topic"],
-                    subject=job["subject"],
-                    year=job["year"],
-                    duration=job["duration"],
-                    maker=job["maker"],
-                    ae_excerpt=ae_excerpt,
-                    ae_citation=ae_citation,
-                    mem_context=mem_context,
-                    wiki_topic_context=wiki_topic_context,
-                ),
+                topic=job["topic"],
+                subject=job["subject"],
+                year=job["year"],
+                duration=job["duration"],
+                maker=job["maker"],
+                ae_excerpt=ae_excerpt,
+                ae_citation=ae_citation,
+                mem_context=mem_context,
+                wiki_topic_context=wiki_topic_context,
             )
             await self._write_artifact(job, "docspec", "-docspec.json", docspec)
 
         # designer
         design_spec = await self._maybe_resume(job, "design_spec")
         if design_spec is None:
-            design_spec = await self._phase(job, "designer", *self.prompts.designer(docspec))
+            design_spec = await self._phase(job, "designer", docspec)
             await self._write_artifact(job, "design_spec", "-design-spec.json", design_spec)
 
         # builder + repair loop
@@ -288,11 +258,8 @@ class PipelineRunner:
             await self._save(job)
 
             built = await self._phase(
-                job,
-                "builder",
-                *self.prompts.builder(
-                    docspec, design_spec, repair_ticket=repair_ticket, previous_html=previous_html
-                ),
+                job, "builder", docspec, design_spec,
+                repair_ticket=repair_ticket, previous_html=previous_html,
             )
             html = built["html"]
             await self._write_artifact(job, "html", ".html", html)
@@ -302,12 +269,10 @@ class PipelineRunner:
             ).as_dict()
             await self._emit(job, "validation", validation)
 
-            proofread = await self._phase(job, "proofreader", *self.prompts.proofreader(docspec, html))
+            proofread = await self._phase(job, "proofreader", docspec, html)
             await self._write_artifact(job, "proofread", f"-proofread-v{job['iteration']}.json", proofread)
 
-            evaluation = await self._phase(
-                job, "evaluator", *self.prompts.evaluator(docspec, html, validation, proofread)
-            )
+            evaluation = await self._phase(job, "evaluator", docspec, html, validation, proofread)
             await self._write_artifact(job, "evaluation", f"-evaluation-v{job['iteration']}.json", evaluation)
 
             eval_pass = bool(evaluation.get("pass")) and validation["passed"]
@@ -346,13 +311,26 @@ class PipelineRunner:
             await self._save(job)
             await self._emit(job, "awaiting_review", {"preview": f"/outputs/{job['slug']}.html"})
 
-    async def _phase(self, job: dict, phase: str, system: str, prompt: str) -> Any:
-        job["current_phase"] = phase
-        job["status"] = f"running_{phase}"
+    async def _phase(self, job: dict, phase_name: str, *args, **kwargs) -> Any:
+        phase = self.phases[phase_name]
+        job["current_phase"] = phase.name
+        job["status"] = f"running_{phase.name}"
         await self._save(job)
-        await self._emit(job, "phase_started", {"phase": phase, "iteration": job["iteration"]})
-        result = await self._call_phase(job, phase, system, prompt)
-        await self._emit(job, "phase_done", {"phase": phase, "iteration": job["iteration"]})
+        await self._emit(job, "phase_started", {"phase": phase.name, "iteration": job["iteration"]})
+
+        async def on_retry(attempt: int, error: Exception) -> None:
+            await self._emit(
+                job, "phase_retry", {"phase": phase.name, "attempt": attempt, "error": str(error)}
+            )
+
+        async def prompt_sink(system: str, prompt: str) -> None:
+            path = self.storage.path("jobs", job["id"], f"{phase.name}-v{job['iteration']}-prompt.md")
+            await asyncio.to_thread(path.write_text, f"# system\n\n{system}\n\n# prompt\n\n{prompt}", "utf-8")
+
+        result = await phase.run(
+            self.provider, *args, on_retry=on_retry, prompt_sink=prompt_sink, **kwargs
+        )
+        await self._emit(job, "phase_done", {"phase": phase.name, "iteration": job["iteration"]})
         return result
 
     async def _maybe_resume(self, job: dict, key: str) -> Any | None:

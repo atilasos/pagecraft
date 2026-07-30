@@ -77,7 +77,7 @@ def pipeline_responses(*evaluations, built=BUILT_OK):
 
 def phases_called(runner, provider):
     """Sequência de fases pedidas ao provider, inferida pelo schema."""
-    by_schema = {id(schema): phase for phase, schema in runner.schemas.items()}
+    by_schema = {id(phase.schema): name for name, phase in runner.phases.items()}
     return [by_schema[id(call["schema"])] for call in provider.calls]
 
 

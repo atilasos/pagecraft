@@ -1,17 +1,68 @@
-"""Montagem de prompts por fase do pipeline.
+"""As fases do pipeline como módulos.
 
-Cada fase junta: identidade (system prompt) + referências relevantes +
-artefactos das fases anteriores + contexto de conhecimento (AE + MEM).
+Cada `Phase` junta tudo o que a define — identidade (system prompt),
+construção do prompt, schema de validação, timeout e política de retry —
+e sabe correr-se contra um provider. O runner limita-se a encadear fases
+e a decidir passa/repara.
 """
 
 from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Any
 
 
 def _read(path: Path) -> str:
     return path.read_text("utf-8")
+
+
+class Phase:
+    """Uma fase do pipeline: correr(provider, contexto) → resultado validado."""
+
+    def __init__(self, name: str, *, schema: dict, timeout_s: int, build_prompt, attempts: int = 2):
+        self.name = name
+        self.schema = schema
+        self.timeout_s = timeout_s
+        self.build_prompt = build_prompt
+        self.attempts = attempts
+
+    async def run(self, provider, *args, on_retry=None, prompt_sink=None, **kwargs) -> Any:
+        """`prompt_sink(system, prompt)` recebe o prompt montado (p. ex.
+        para o dump em disco); `on_retry` segue para o provider."""
+        system, prompt = self.build_prompt(*args, **kwargs)
+        if prompt_sink is not None:
+            await prompt_sink(system, prompt)
+        return await provider.complete(
+            prompt,
+            schema=self.schema,
+            system=system,
+            timeout_s=self.timeout_s,
+            attempts=self.attempts,
+            on_retry=on_retry,
+        )
+
+
+def build_phases(config) -> dict[str, Phase]:
+    """Constrói as cinco fases a partir da configuração (ordem do pipeline)."""
+    prompts = PromptLibrary(config.prompts_dir)
+    schemas_dir = Path(__file__).parent / "schemas"
+
+    def schema(name: str) -> dict:
+        return json.loads((schemas_dir / f"{name}.schema.json").read_text("utf-8"))
+
+    generation = config.generation_timeout_s
+    spec = [
+        ("architect", "docspec", generation, prompts.architect),
+        ("designer", "design-spec", generation, prompts.designer),
+        ("builder", "builder-output", config.builder_timeout_s, prompts.builder),
+        ("proofreader", "proofread", generation, prompts.proofreader),
+        ("evaluator", "evaluation", generation, prompts.evaluator),
+    ]
+    return {
+        name: Phase(name, schema=schema(schema_name), timeout_s=timeout, build_prompt=build)
+        for name, schema_name, timeout, build in spec
+    }
 
 
 class PromptLibrary:
