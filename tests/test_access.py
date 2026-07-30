@@ -50,20 +50,22 @@ async def test_only_the_declared_public_surface_answers_without_a_role(app_clien
         "/api/activities",
         "/api/meta",
         "/api/session-event-types",
+        "/docs",
+        "/openapi.json",
+        "/redoc",
     ):
         response = await app_client.get(path)
         assert response.status_code == 401, path
 
 
-async def test_loopback_bootstrap_issues_httponly_cookie_and_authenticates_teacher(
+async def test_opening_teacher_panel_on_loopback_issues_httponly_cookie(
     app_client,
 ):
-    bootstrap = await app_client.get("/api/teacher-bootstrap")
+    panel = await app_client.get("/teacher/")
 
-    assert bootstrap.status_code == 204
-    assert bootstrap.content == b""
-    assert "token" not in bootstrap.text.lower()
-    cookie = bootstrap.headers["set-cookie"]
+    assert panel.status_code == 200
+    assert "PageCraft Studio" in panel.text
+    cookie = panel.headers["set-cookie"]
     assert cookie.startswith("pagecraft_teacher_session=")
     assert "HttpOnly" in cookie
     assert "SameSite=strict" in cookie
@@ -88,16 +90,18 @@ async def test_non_loopback_channel_without_cookie_cannot_bootstrap_or_act_as_te
         headers={"cf-connecting-ip": "203.0.113.17"},
     ) as tunnel_client:
         bootstrap = await tunnel_client.get("/api/teacher-bootstrap")
+        teacher_shell = await tunnel_client.get("/teacher/")
         protected = await tunnel_client.get("/api/meta")
 
-    assert bootstrap.status_code == 403
+    assert bootstrap.status_code == 401
+    assert teacher_shell.status_code == 401
     assert protected.status_code == 401
 
 
 async def test_teacher_cookie_authenticates_sse_without_a_credential_in_the_url(
     app_client,
 ):
-    await app_client.get("/api/teacher-bootstrap")
+    await app_client.get("/teacher/")
     created_class = (
         await app_client.post(
             "/api/classes",
@@ -172,9 +176,9 @@ async def test_access_resolves_the_role_and_trust_channel_once_per_request(
             transport=loopback_transport,
             base_url="http://studio.example",
         ) as loopback_client:
-            bootstrap = await loopback_client.get("/api/teacher-bootstrap")
+            panel = await loopback_client.get("/teacher/")
             teacher_cookies = httpx.Cookies(loopback_client.cookies)
-        assert bootstrap.status_code == 204
+        assert panel.status_code == 200
 
         tunnel_transport = httpx.ASGITransport(
             app=app,
@@ -220,8 +224,8 @@ async def test_access_resolves_the_role_and_trust_channel_once_per_request(
 
 
 async def test_a_teacher_is_forbidden_from_a_student_route(app_client):
-    bootstrap = await app_client.get("/api/teacher-bootstrap")
-    assert bootstrap.status_code == 204
+    panel = await app_client.get("/teacher/")
+    assert panel.status_code == 200
     created_class = (
         await app_client.post(
             "/api/classes",

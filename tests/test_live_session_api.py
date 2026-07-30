@@ -18,8 +18,8 @@ async def client(tmp_path, monkeypatch):
             transport=transport,
             base_url="http://test",
         ) as http:
-            bootstrap = await http.get("/api/teacher-bootstrap")
-            assert bootstrap.status_code == 204
+            panel = await http.get("/teacher/")
+            assert panel.status_code == 200
             setattr(http, "app", app)
             yield http
 

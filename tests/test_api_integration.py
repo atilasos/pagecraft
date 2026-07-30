@@ -52,8 +52,8 @@ async def client(tmp_path, monkeypatch):
             transport=transport,
             base_url="http://test",
         ) as c:
-            bootstrap = await c.get("/api/teacher-bootstrap")
-            assert bootstrap.status_code == 204
+            panel = await c.get("/teacher/")
+            assert panel.status_code == 200
             setattr(c, "app", app)
             yield c
 

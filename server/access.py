@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from enum import StrEnum
 from typing import Any
 
-from fastapi import Request
+from fastapi import Request, Response
 from starlette.routing import Match
 from starlette.routing import BaseRoute
 
@@ -30,6 +30,7 @@ class RoutePolicy(StrEnum):
     TEACHER = Role.TEACHER
     STUDENT = Role.STUDENT
     BOARD = Role.BOARD
+    TEACHER_BOOTSTRAP = "teacher_loopback_bootstrap"
 
 
 _POLICY_ATTRIBUTE = "__pagecraft_access_policy__"
@@ -167,8 +168,28 @@ async def resolve_access(request: Request, path_params: dict) -> AccessContext:
 
 def policy_allows(
     policy: frozenset[RoutePolicy],
-    role: Role | None,
+    access: AccessContext,
 ) -> bool:
     if RoutePolicy.PUBLIC in policy:
         return True
-    return role is not None and RoutePolicy(role.value) in policy
+    if RoutePolicy.TEACHER_BOOTSTRAP in policy:
+        return (
+            access.role is Role.TEACHER
+            or access.channel is TrustChannel.LOOPBACK
+        )
+    return (
+        access.role is not None
+        and RoutePolicy(access.role.value) in policy
+    )
+
+
+def issue_teacher_cookie(response: Response, credential: str) -> None:
+    """Emite a credencial sem a expor ao handler nem ao JavaScript."""
+
+    response.set_cookie(
+        TEACHER_COOKIE_NAME,
+        credential,
+        httponly=True,
+        samesite="strict",
+        path="/",
+    )

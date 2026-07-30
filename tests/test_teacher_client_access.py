@@ -15,7 +15,7 @@ def test_teacher_client_keeps_the_credential_out_of_javascript_and_urls():
         )
     )
 
-    assert "/api/teacher-bootstrap" in javascript
+    assert "/api/teacher-bootstrap" not in javascript
     assert "pagecraft_teacher_token" not in javascript
     assert "/api/teacher-token" not in javascript
     assert "x-teacher-token" not in javascript
