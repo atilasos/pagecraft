@@ -372,7 +372,7 @@ async def stream_session(session_id: str, request: Request):
     access = request.state.access
     requested_role = request.query_params.get("role", "")
     student_id = None
-    token = ""
+    credential = ""
     if access.role is Role.TEACHER:
         if requested_role not in {"teacher", "projection"}:
             raise HTTPException(400, "role tem de ser teacher ou projection")
@@ -382,7 +382,7 @@ async def stream_session(session_id: str, request: Request):
             raise HTTPException(403, "este Papel não pode usar esta vista")
         role = "student"
         student_id = access.student_id
-        token = access.student_credential
+        credential = access.student_credential
     else:
         raise AssertionError("o middleware de Acesso deixou passar um pedido sem Papel")
 
@@ -440,7 +440,7 @@ async def stream_session(session_id: str, request: Request):
                     if role == "student":
                         # Se a identidade foi libertada, o stream antigo morre.
                         current = await svc.student_for_token(
-                            session_id, token, require_live=False
+                            session_id, credential, require_live=False
                         )
                         if current != student_id:
                             return
