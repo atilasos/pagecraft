@@ -69,7 +69,7 @@ class FakeProvider:
         self.evaluations = list(evaluations)
         self.calls = []
 
-    async def complete(self, prompt, *, schema=None, system=None, timeout_s=300, workdir=None):
+    async def complete(self, prompt, *, schema=None, system=None, timeout_s=300, attempts=1, on_retry=None):
         phase = self._phase_from(system)
         self.calls.append(phase)
         if phase == "architect":

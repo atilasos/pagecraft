@@ -19,7 +19,7 @@ from typing import Any
 from ..config import Config
 from ..events import EventHub, utcnow
 from ..knowledge import AEClient, WikiClient
-from ..providers import AIProvider, ProviderError, SchemaError
+from ..providers import AIProvider
 from ..storage import Storage
 from .phases import PromptLibrary
 from .validators import validate_activity_html
@@ -209,30 +209,17 @@ class PipelineRunner:
                 await self._emit(job, "failed", {"error": job["error"]})
 
     async def _call_phase(self, job: dict, phase: str, system: str, prompt: str) -> Any:
-        """Chama o provider com retry: 1 retry direto, depois erro."""
         timeout = self.config.builder_timeout_s if phase == "builder" else self.config.generation_timeout_s
         schema = self.schemas[phase]
         prompt_path = self.storage.path("jobs", job["id"], f"{phase}-v{job['iteration']}-prompt.md")
         await asyncio.to_thread(prompt_path.write_text, f"# system\n\n{system}\n\n# prompt\n\n{prompt}", "utf-8")
 
-        last_error: Exception | None = None
-        for attempt in (1, 2):
-            try:
-                return await self.provider.complete(
-                    prompt, schema=schema, system=system, timeout_s=timeout
-                )
-            except SchemaError as exc:
-                last_error = exc
-                prompt = (
-                    prompt
-                    + "\n\n---\n\nATENÇÃO: a tua resposta anterior não cumpriu o schema JSON "
-                    + f"({exc}). Responde APENAS com JSON válido contra o schema."
-                )
-                await self._emit(job, "phase_retry", {"phase": phase, "attempt": attempt, "error": str(exc)})
-            except ProviderError as exc:
-                last_error = exc
-                await self._emit(job, "phase_retry", {"phase": phase, "attempt": attempt, "error": str(exc)})
-        raise last_error or RuntimeError("falha desconhecida")
+        async def on_retry(attempt: int, error: Exception) -> None:
+            await self._emit(job, "phase_retry", {"phase": phase, "attempt": attempt, "error": str(error)})
+
+        return await self.provider.complete(
+            prompt, schema=schema, system=system, timeout_s=timeout, attempts=2, on_retry=on_retry
+        )
 
     async def _run_job(self, job: dict) -> None:
         job["status"] = "running"
