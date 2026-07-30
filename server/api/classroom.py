@@ -374,22 +374,15 @@ async def stream_session(session_id: str, request: Request):
         raise HTTPException(404, "sessão não encontrada")
 
     access = request.state.access
-    requested_role = request.query_params.get("role", "")
     student_id = None
     credential = ""
     if access.role is Role.TEACHER:
-        if requested_role not in {"", "teacher"}:
-            raise HTTPException(403, "este Papel não pode usar esta vista")
         role = "teacher"
     elif access.role is Role.STUDENT:
-        if requested_role not in {"", "student"}:
-            raise HTTPException(403, "este Papel não pode usar esta vista")
         role = "student"
         student_id = access.student_id
         credential = access.student_credential
     elif access.role is Role.BOARD:
-        if requested_role not in {"", "board"}:
-            raise HTTPException(403, "este Papel não pode usar esta vista")
         if session.get("status") != "live":
             raise HTTPException(404, "sessão viva não encontrada")
         role = "board"
@@ -452,6 +445,10 @@ async def stream_session(session_id: str, request: Request):
             if role == "board"
             else None
         )
+        if not await credential_is_current():
+            if board_revocations is not None:
+                board_revocations.close()
+            return
         state = session_state_snapshot(
             events,
             session,

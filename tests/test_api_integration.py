@@ -415,7 +415,6 @@ async def test_stream_rejects_missing_role(client):
     assert resp.status_code == 401
     resp = await client.get(
         f"/api/sessions/{session['id']}/stream",
-        params={"role": "teacher"},
         headers={"cookie": ""},
     )
     assert resp.status_code == 401

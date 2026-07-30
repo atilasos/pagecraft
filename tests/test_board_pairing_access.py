@@ -248,6 +248,61 @@ async def test_unpairing_immediately_closes_an_open_board_stream(board_http):
     assert old_cookie.status_code == 401
 
 
+async def test_board_stream_revalidates_if_revoked_after_request_access(
+    board_http,
+    monkeypatch,
+):
+    app, teacher, board, _ = board_http
+    await _pair(teacher, board)
+    created_class = (
+        await teacher.post(
+            "/api/classes",
+            json={"name": "2.º A", "year": 2, "students": ["Lia"]},
+        )
+    ).json()
+    session = (
+        await teacher.post(
+            "/api/sessions",
+            json={
+                "class_id": created_class["id"],
+                "activity_slug": "demo",
+                "activity_title": "Dobros",
+            },
+        )
+    ).json()
+
+    request_access_resolved = asyncio.Event()
+    let_request_continue = asyncio.Event()
+    original_resolve = app.state.board_pairings.resolve
+    calls = 0
+
+    async def pause_after_first_resolution(credential):
+        nonlocal calls
+        calls += 1
+        resolved = await original_resolve(credential)
+        if calls == 2:
+            request_access_resolved.set()
+            await let_request_continue.wait()
+        return resolved
+
+    monkeypatch.setattr(
+        app.state.board_pairings,
+        "resolve",
+        pause_after_first_resolution,
+    )
+    stream = asyncio.create_task(
+        board.get(f"/api/sessions/{session['id']}/stream")
+    )
+    await asyncio.wait_for(request_access_resolved.wait(), timeout=1)
+    revoked = await teacher.delete("/api/board/pairing")
+    let_request_continue.set()
+    response = await asyncio.wait_for(stream, timeout=1)
+
+    assert revoked.status_code == 204
+    assert response.status_code == 200
+    assert "event: session_state_snapshot" not in response.text
+
+
 async def test_board_credential_survives_restart_then_expires_server_side(
     tmp_path,
     monkeypatch,

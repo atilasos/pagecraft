@@ -85,7 +85,6 @@ async def test_teacher_stream_starts_with_current_snapshot_without_replaying_log
 
     response = await client.get(
         f"/api/sessions/{session['id']}/stream",
-        params={"role": "teacher"},
     )
 
     assert response.status_code == 200
@@ -215,7 +214,13 @@ async def test_board_stream_contains_only_shared_state_and_global_events(client)
         "session_state_changed",
     ]
     assert frames[0]["data"] == {
-        "session": {"status": "live", "closed": False, "frozen": False}
+        "session": {"status": "live", "closed": False, "frozen": False},
+        "event_types": [
+            {"name": "teacher_highlight", "bridge_name": "highlight"},
+            {"name": "freeze_screens", "bridge_name": None},
+            {"name": "unfreeze_screens", "bridge_name": None},
+            {"name": "session_closed", "bridge_name": None},
+        ],
     }
     assert frames[1]["data"]["payload"]["unit_id"] == "global"
     assert frames[-1]["data"] == {
@@ -268,7 +273,6 @@ async def test_child_history_is_complete_for_teacher_and_role_authorized_for_stu
 
     teacher = await client.get(
         f"/api/sessions/{session['id']}/students/{ana_id}/history",
-        params={"role": "teacher"},
     )
     student = await client.get(
         f"/api/sessions/{session['id']}/students/{ana_id}/history",
@@ -334,7 +338,6 @@ async def test_live_stream_keeps_raw_timeline_and_emits_only_changed_children(cl
     producer = asyncio.create_task(produce())
     response = await client.get(
         f"/api/sessions/{session['id']}/stream",
-        params={"role": "teacher"},
     )
     await producer
 
@@ -381,7 +384,6 @@ async def test_controlled_ticks_publish_stopped_and_no_signal_without_new_work(c
     teacher_stream = asyncio.create_task(
         client.get(
             f"/api/sessions/{session['id']}/stream",
-            params={"role": "teacher"},
         )
     )
     student_stream = asyncio.create_task(
@@ -437,7 +439,6 @@ async def test_recorded_close_terminates_stream_when_session_write_fails_and_rec
     stream = asyncio.create_task(
         client.get(
             f"/api/sessions/{session['id']}/stream",
-            params={"role": "teacher"},
         )
     )
     await asyncio.sleep(0.01)

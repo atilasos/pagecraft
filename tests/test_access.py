@@ -143,7 +143,6 @@ async def test_teacher_cookie_authenticates_sse_without_a_credential_in_the_url(
 
     response = await app_client.get(
         f"/api/sessions/{session['id']}/stream",
-        params={"role": "teacher"},
     )
 
     assert response.status_code == 200
