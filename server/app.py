@@ -5,12 +5,13 @@ from __future__ import annotations
 from collections.abc import Callable, Iterable
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from .access import (
     RoutePolicy,
+    TEACHER_COOKIE_NAME,
     TrustChannel,
     access_policy,
     declare_route_policy,
@@ -128,12 +129,18 @@ def create_app(
             return JSONResponse({"detail": detail}, status_code=status)
         return await call_next(request)
 
-    @app.get("/api/teacher-token")
+    @app.get("/api/teacher-bootstrap", status_code=204)
     @access_policy(RoutePolicy.PUBLIC)
-    async def teacher_token(request: Request):
+    async def teacher_bootstrap(request: Request, response: Response):
         if request.state.access.channel is not TrustChannel.LOOPBACK:
             raise HTTPException(403, "só disponível na máquina do professor")
-        return {"token": app.state.teacher_token}
+        response.set_cookie(
+            TEACHER_COOKIE_NAME,
+            app.state.teacher_token,
+            httponly=True,
+            samesite="strict",
+            path="/",
+        )
 
     @app.get("/api/health")
     @access_policy(RoutePolicy.PUBLIC)

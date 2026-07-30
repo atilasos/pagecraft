@@ -55,6 +55,25 @@ async def test_only_the_declared_public_surface_answers_without_a_role(app_clien
         assert response.status_code == 401, path
 
 
+async def test_loopback_bootstrap_issues_httponly_cookie_and_authenticates_teacher(
+    app_client,
+):
+    bootstrap = await app_client.get("/api/teacher-bootstrap")
+
+    assert bootstrap.status_code == 204
+    assert bootstrap.content == b""
+    assert "token" not in bootstrap.text.lower()
+    cookie = bootstrap.headers["set-cookie"]
+    assert cookie.startswith("pagecraft_teacher_session=")
+    assert "HttpOnly" in cookie
+    assert "SameSite=strict" in cookie
+    assert "Path=/" in cookie
+
+    response = await app_client.get("/api/meta")
+
+    assert response.status_code == 200
+
+
 async def test_access_resolves_the_role_and_trust_channel_once_per_request(
     tmp_path,
     monkeypatch,

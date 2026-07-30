@@ -34,6 +34,7 @@ class RoutePolicy(StrEnum):
 
 _POLICY_ATTRIBUTE = "__pagecraft_access_policy__"
 _PROXY_HEADERS = ("x-forwarded-for", "x-real-ip", "forwarded", "cf-connecting-ip")
+TEACHER_COOKIE_NAME = "pagecraft_teacher_session"
 
 
 @dataclass(frozen=True)
@@ -139,9 +140,7 @@ async def resolve_access(request: Request, path_params: dict) -> AccessContext:
 
     channel, client_ip = _trust_channel(request)
     expected = getattr(request.app.state, "teacher_token", "")
-    teacher_token = request.headers.get("x-teacher-token") or request.query_params.get(
-        "teacher_token", ""
-    )
+    teacher_token = request.cookies.get(TEACHER_COOKIE_NAME, "")
     if teacher_token and expected and hmac.compare_digest(teacher_token, expected):
         return AccessContext(Role.TEACHER, channel, client_ip)
 
