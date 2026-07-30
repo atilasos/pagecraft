@@ -9,7 +9,7 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, ConfigDict, Field
 
-from ..access import RoutePolicy, access_policy
+from ..access import Role, RoutePolicy, access_policy
 from ..classroom.errors import (
     ClassroomError,
     InvalidPitItemError,
@@ -200,10 +200,7 @@ async def whoami(session_id: str, request: Request):
     """Retoma de sessão do aluno: valida o token guardado no dispositivo e
     devolve a identidade + estado público da sessão (sem tokens de terceiros)."""
     svc = _svc(request)
-    token = request.query_params.get("student_token", "")
-    student_id = await svc.student_for_token(session_id, token, require_live=False)
-    if not student_id:
-        raise HTTPException(401, "token inválido")
+    student_id = request.state.access.student_id
     session = await svc.get_session(session_id)
     entry = session["roster"][student_id]
     return {
@@ -256,9 +253,7 @@ async def session_event_types():
 @access_policy(RoutePolicy.STUDENT)
 async def post_events(session_id: str, body: EventsRequest, request: Request):
     svc = _svc(request)
-    student_id = await svc.student_for_token(session_id, body.student_token)
-    if not student_id:
-        raise HTTPException(401, "token inválido")
+    student_id = request.state.access.student_id
     accepted = await _domain(svc.ingest_events(session_id, student_id, body.events))
     return {"accepted": [r["event_id"] for r in accepted]}
 
@@ -297,9 +292,7 @@ async def create_pit_item(
     session_id: str, body: CreatePitItemRequest, request: Request
 ):
     svc = _svc(request)
-    student_id = await svc.student_for_token(session_id, body.student_token)
-    if not student_id:
-        raise HTTPException(401, "token inválido")
+    student_id = request.state.access.student_id
     return await _domain(
         svc.create_pit_item(session_id, student_id, body.text)
     )
@@ -314,16 +307,14 @@ async def advance_pit_item(
     request: Request,
 ):
     svc = _svc(request)
-    student_id = await svc.student_for_token(session_id, body.student_token)
-    if not student_id:
-        raise HTTPException(401, "token inválido")
+    student_id = request.state.access.student_id
     return await _domain(
         svc.advance_pit_item(session_id, student_id, item_id)
     )
 
 
 @router.get("/sessions/{session_id}/students/{student_id}/history")
-@access_policy(RoutePolicy.TEACHER_OR_STUDENT)
+@access_policy(RoutePolicy.TEACHER, RoutePolicy.STUDENT)
 async def student_history(
     session_id: str,
     student_id: str,
@@ -335,20 +326,11 @@ async def student_history(
     if not session or student_id not in session.get("roster", {}):
         raise HTTPException(404, "criança ou sessão não encontrada")
 
-    role = request.query_params.get("role", "")
-    if role == "teacher":
-        require_teacher(request)
-    elif role == "student":
-        token = request.query_params.get("student_token", "")
-        token_student = await svc.student_for_token(
-            session_id, token, require_live=False
-        )
-        if not token_student:
-            raise HTTPException(401, "token inválido")
-        if token_student != student_id:
+    access = request.state.access
+    role = access.role.value
+    if access.role is Role.STUDENT:
+        if access.student_id != student_id:
             raise HTTPException(403, "uma criança só pode consultar o seu histórico")
-    else:
-        raise HTTPException(400, "role tem de ser teacher ou student")
 
     visible_types = {
         event_type.name for event_type in SESSION_EVENT_TYPES.visible_to(role)
@@ -363,30 +345,29 @@ async def student_history(
 
 
 @router.get("/sessions/{session_id}/stream")
-@access_policy(RoutePolicy.TEACHER_OR_STUDENT)
+@access_policy(RoutePolicy.TEACHER, RoutePolicy.STUDENT)
 async def stream_session(session_id: str, request: Request):
     svc = _svc(request)
     session = await svc.get_session(session_id)
     if not session:
         raise HTTPException(404, "sessão não encontrada")
 
-    role = request.query_params.get("role", "")
+    access = request.state.access
+    requested_role = request.query_params.get("role", "")
     student_id = None
     token = ""
-    if role == "teacher":
-        require_teacher(request)
-    elif role == "projection":
-        require_teacher(request)
-    elif role == "student":
-        token = request.query_params.get("student_token", "")
-        # permitir ligação numa sessão já fechada (para ver o histórico próprio)
-        student_id = await svc.student_for_token(session_id, token, require_live=False)
-        if not student_id:
-            raise HTTPException(401, "token inválido")
+    if access.role is Role.TEACHER:
+        if requested_role not in {"teacher", "projection"}:
+            raise HTTPException(400, "role tem de ser teacher ou projection")
+        role = requested_role
+    elif access.role is Role.STUDENT:
+        if requested_role not in {"", "student"}:
+            raise HTTPException(403, "este Papel não pode usar esta vista")
+        role = "student"
+        student_id = access.student_id
+        token = access.student_token
     else:
-        raise HTTPException(
-            400, "role tem de ser teacher, projection ou student"
-        )
+        raise AssertionError("o middleware de Acesso deixou passar um pedido sem Papel")
 
     visible_types = {
         event_type.name

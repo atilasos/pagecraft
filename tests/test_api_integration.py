@@ -21,6 +21,7 @@ async def _collect_raw_stream_types(client, session_id, params):
         "GET",
         f"/api/sessions/{session_id}/stream",
         params=params,
+        headers={"x-teacher-token": ""} if params.get("role") == "student" else None,
     ) as response:
         async for line in response.aiter_lines():
             if not line.startswith("event: "):
@@ -102,6 +103,7 @@ async def test_full_classroom_flow(client):
     resp = await client.post(
         f"/api/sessions/{session['id']}/events",
         json={"student_token": claim["student_token"], "events": events},
+        headers={"x-teacher-token": ""},
     )
     assert resp.status_code == 200
     assert resp.json()["accepted"] == ["a1", "a2"]
@@ -110,6 +112,7 @@ async def test_full_classroom_flow(client):
     resp = await client.post(
         f"/api/sessions/{session['id']}/events",
         json={"student_token": "invalido", "events": events},
+        headers={"x-teacher-token": ""},
     )
     assert resp.status_code == 401
 
@@ -132,6 +135,7 @@ async def test_full_classroom_flow(client):
     resp = await client.post(
         f"/api/sessions/{session['id']}/pit",
         json={"student_token": claim["student_token"], "text": "Acabar os dobros", "status": "doing"},
+        headers={"x-teacher-token": ""},
     )
     assert resp.status_code == 422
 
@@ -140,6 +144,7 @@ async def test_full_classroom_flow(client):
     resp = await client.post(
         f"/api/sessions/{session['id']}/pit",
         json={"student_token": claim["student_token"], "text": "Acabar os dobros"},
+        headers={"x-teacher-token": ""},
     )
     assert resp.status_code == 200
     item = resp.json()
@@ -150,6 +155,7 @@ async def test_full_classroom_flow(client):
         resp = await client.post(
             f"/api/sessions/{session['id']}/pit/{item['id']}/advance",
             json={"student_token": claim["student_token"]},
+            headers={"x-teacher-token": ""},
         )
         assert resp.status_code == 200
         item = resp.json()
@@ -379,7 +385,7 @@ async def test_stream_rejects_missing_role(client):
         )
     ).json()
     resp = await client.get(f"/api/sessions/{session['id']}/stream", headers={"x-teacher-token": ""})
-    assert resp.status_code == 400
+    assert resp.status_code == 401
     resp = await client.get(
         f"/api/sessions/{session['id']}/stream", params={"role": "teacher"}, headers={"x-teacher-token": ""}
     )
@@ -406,7 +412,9 @@ async def test_student_resume_via_me(client):
 
     # retoma válida: devolve identidade + sessão pública sem tokens
     resp = await client.get(
-        f"/api/sessions/{session['id']}/me", params={"student_token": claim["student_token"]}
+        f"/api/sessions/{session['id']}/me",
+        params={"student_token": claim["student_token"]},
+        headers={"x-teacher-token": ""},
     )
     assert resp.status_code == 200
     me = resp.json()
@@ -415,13 +423,19 @@ async def test_student_resume_via_me(client):
     assert me["session"]["status"] == "live"
 
     # token errado → 401
-    resp = await client.get(f"/api/sessions/{session['id']}/me", params={"student_token": "x"})
+    resp = await client.get(
+        f"/api/sessions/{session['id']}/me",
+        params={"student_token": "x"},
+        headers={"x-teacher-token": ""},
+    )
     assert resp.status_code == 401
 
     # depois de fechada, a retoma reporta o estado (o cliente limpa e volta ao código)
     await client.post(f"/api/sessions/{session['id']}/close")
     resp = await client.get(
-        f"/api/sessions/{session['id']}/me", params={"student_token": claim["student_token"]}
+        f"/api/sessions/{session['id']}/me",
+        params={"student_token": claim["student_token"]},
+        headers={"x-teacher-token": ""},
     )
     assert resp.status_code == 200
     assert resp.json()["session"]["status"] == "closed"
@@ -479,6 +493,7 @@ async def test_release_http_defaults_to_keep_and_accepts_an_explicit_reset(clien
                     }
                 ],
             },
+            headers={"x-teacher-token": ""},
         )
     ana_id, bia_id = session["roster"]
     kept = await client.post(f"/api/sessions/{session['id']}/release/{ana_id}")
@@ -574,10 +589,8 @@ async def test_health_and_meta(client):
     assert "Matemática" in meta["subjects"]
 
 
-async def test_session_event_declaration_is_public_and_contains_no_session_data(client):
-    response = await client.get(
-        "/api/session-event-types", headers={"x-teacher-token": ""}
-    )
+async def test_teacher_can_read_session_event_declaration_without_session_data(client):
+    response = await client.get("/api/session-event-types")
 
     assert response.status_code == 200
     declaration = response.json()

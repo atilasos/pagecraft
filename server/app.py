@@ -6,13 +6,18 @@ from collections.abc import Callable, Iterable
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from .access import (
     RoutePolicy,
+    TrustChannel,
     access_policy,
-    declare_framework_routes,
     declare_route_policy,
+    match_route,
+    policy_allows,
+    resolve_access,
+    route_policy,
     validate_route_policies,
 )
 from .config import load_config
@@ -74,7 +79,13 @@ def create_app(
         await app.state.feedback.stop()
         await app.state.runner.stop()
 
-    app = FastAPI(title="PageCraft Studio", lifespan=lifespan)
+    app = FastAPI(
+        title="PageCraft Studio",
+        lifespan=lifespan,
+        openapi_url=None,
+        docs_url=None,
+        redoc_url=None,
+    )
 
     ACTIVITY_CSP = (
         "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; "
@@ -92,12 +103,35 @@ def create_app(
             response.headers["content-security-policy"] = ACTIVITY_CSP
         return response
 
+    @app.middleware("http")
+    async def enforce_access(request: Request, call_next):
+        route, child_scope = match_route(request, app.routes)
+        policy = route_policy(route) if route is not None else None
+        if policy is None:
+            return JSONResponse(
+                {"detail": "rota sem política de Acesso"},
+                status_code=403,
+            )
+
+        access = await resolve_access(
+            request,
+            child_scope.get("path_params", {}),
+        )
+        request.state.access = access
+        if not policy_allows(policy, access.role):
+            status = 401 if access.role is None else 403
+            detail = (
+                "este pedido precisa de um Papel"
+                if status == 401
+                else "este Papel não pode usar esta rota"
+            )
+            return JSONResponse({"detail": detail}, status_code=status)
+        return await call_next(request)
+
     @app.get("/api/teacher-token")
     @access_policy(RoutePolicy.PUBLIC)
     async def teacher_token(request: Request):
-        from .security import is_loopback_direct
-
-        if not is_loopback_direct(request):
+        if request.state.access.channel is not TrustChannel.LOOPBACK:
             raise HTTPException(403, "só disponível na máquina do professor")
         return {"token": app.state.teacher_token}
 
@@ -132,6 +166,9 @@ def create_app(
     app.include_router(classroom_api.router)
     app.include_router(catalog_api.router)
 
+    for extend_routes in route_extensions:
+        extend_routes(app)
+
     config.outputs_dir.mkdir(parents=True, exist_ok=True)
     app.mount("/outputs", StaticFiles(directory=config.outputs_dir), name="outputs")
     declare_route_policy(app.routes[-1], RoutePolicy.PUBLIC)
@@ -148,9 +185,6 @@ def create_app(
     )
     declare_route_policy(app.routes[-1], RoutePolicy.PUBLIC)
 
-    declare_framework_routes(app)
-    for extend_routes in route_extensions:
-        extend_routes(app)
     validate_route_policies(app.routes)
     return app
 
