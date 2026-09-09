@@ -143,7 +143,7 @@ async def content(code: Code, request: Request):
 
 @router.post('/api/learning/activities/{code}/start', status_code=201)
 @access_policy(RoutePolicy.PUBLIC)
-@rate_limited(RateLimitOperation.CLAIM)
+@rate_limited(RateLimitOperation.ACTIVITY_START)
 async def start(code: Code, data: StartInput, request: Request, response: Response):
     svc = request.app.state.learning
     activity = await visible_activity(request, code)

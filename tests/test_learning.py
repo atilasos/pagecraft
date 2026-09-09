@@ -124,3 +124,30 @@ async def test_validation_preview_exclusion_expired_cookie(learning_clients):
     stored['expires_at'] = (datetime.now(timezone.utc) - timedelta(seconds=1)).isoformat()
     await app.state.storage.write_json(path, stored)
     assert (await teacher.get('/api/learning/me')).status_code == 401
+
+
+async def test_whole_class_can_enter_from_same_school_ip_and_cross_origin_is_rejected(learning_clients):
+    app, teacher, pupil = learning_clients
+    activity, _ = await register(teacher)
+    for n in range(30):
+        await start(pupil, activity['code'], name=f'Aluno {n}')
+    response = await teacher.post('/api/teacher-pairing', headers={'Origin': 'https://unrelated.example'})
+    assert response.status_code == 403
+
+
+async def test_teacher_notes_are_private_and_preferences_survive_reload(learning_clients):
+    app, teacher, pupil = learning_clients
+    activity, _ = await register(teacher)
+    attempt = await start(pupil, activity['code'])
+    await pupil.post('/api/learning/me/events', json={'events': [
+        {'id': 'lang', 'type': 'language_changed', 'payload': {'language': 'en'}},
+        {'id': 'level', 'type': 'level_changed', 'payload': {'level': 'challenge'}},
+    ]})
+    await teacher.patch(f"/api/learning/reports/{attempt['id']}", json={
+        'name': 'Ana', 'teacher_note': 'Observação privada', 'group': '4A'})
+    current = (await pupil.get('/api/learning/me')).json()
+    assert current['language'] == 'en' and current['level'] == 'challenge'
+    assert 'teacher_note' not in current
+    report = (await teacher.get('/api/learning/reports')).json()[0]
+    assert report['teacher_note'] == 'Observação privada'
+    assert report['evidence'][1]['text'] == ['Apoio: Árvore robusta']

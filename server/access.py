@@ -39,6 +39,7 @@ class RoutePolicy(StrEnum):
 class RateLimitOperation(StrEnum):
     JOIN = "join"
     CLAIM = "claim"
+    ACTIVITY_START = "activity_start"
 
 
 _POLICY_ATTRIBUTE = "__pagecraft_access_policy__"
@@ -87,7 +88,9 @@ class RequestRateLimiter:
         cutoff = now - self._window_seconds
         while attempts and attempts[0] <= cutoff:
             attempts.popleft()
-        if len(attempts) >= self._limit:
+        # A turma pode entrar através do mesmo IP público da escola.
+        limit = max(self._limit, 60) if operation is RateLimitOperation.ACTIVITY_START else self._limit
+        if len(attempts) >= limit:
             return False
         attempts.append(now)
         return True
