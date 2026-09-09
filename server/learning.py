@@ -165,12 +165,15 @@ class Learning:
     async def reports(self):
         directory = self.storage.root / "learning" / "realizations"
         records = [await self.storage.read_json(p) for p in directory.glob('*.json')]
-        return sorted((self.public_attempt(r) for r in records if not r['preview']),
+        return sorted((self.public_attempt(r, teacher=True) for r in records if not r['preview']),
                       key=lambda r: r['started_at'], reverse=True)
 
     @staticmethod
-    def public_attempt(attempt):
-        return {k: v for k, v in attempt.items() if k not in {'credential_hash', 'expires_at'}}
+    def public_attempt(attempt, *, teacher=False):
+        hidden = {"credential_hash", "expires_at"}
+        if not teacher:
+            hidden.add("teacher_note")
+        return {k: v for k, v in attempt.items() if k not in hidden}
 
     def create_pairing(self):
         code = ''.join(secrets.choice(ALPHABET) for _ in range(12))

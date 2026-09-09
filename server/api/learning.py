@@ -30,6 +30,7 @@ class Criterion(BaseModel):
 class ActivityInput(BaseModel):
     slug: Slug
     title: Short
+    title_en: str = Field(default="", max_length=120)
     year: int = Field(ge=1, le=4)
     duration: int = Field(ge=5, le=180)
     group: str = Field(default='', max_length=80)
