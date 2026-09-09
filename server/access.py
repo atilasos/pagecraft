@@ -19,6 +19,7 @@ class Role(StrEnum):
     TEACHER = "teacher"
     STUDENT = "student"
     BOARD = "board"
+    LEARNER = "learner"
 
 
 class TrustChannel(StrEnum):
@@ -32,6 +33,7 @@ class RoutePolicy(StrEnum):
     TEACHER = Role.TEACHER
     STUDENT = Role.STUDENT
     BOARD = Role.BOARD
+    LEARNER = Role.LEARNER
 
 
 class RateLimitOperation(StrEnum):
@@ -58,6 +60,7 @@ class AccessContext:
     student_session_id: str | None = None
     student_credential: str = ""
     board_credential: str = ""
+    realization_id: str | None = None
 
 
 class RequestRateLimiter:
@@ -222,6 +225,13 @@ async def resolve_access(request: Request, path_params: dict) -> AccessContext:
     if teacher_token and expected and hmac.compare_digest(teacher_token, expected):
         return AccessContext(Role.TEACHER, channel, client_ip)
 
+    from .learning import LEARNING_COOKIE
+    learning = getattr(request.app.state, "learning", None)
+    if learning is not None and request.cookies.get(LEARNING_COOKIE):
+        realization_id = await learning.resolve(request.cookies[LEARNING_COOKIE])
+        if realization_id and request.url.path.startswith('/api/learning/me'):
+            return AccessContext(Role.LEARNER, channel, client_ip, realization_id=realization_id)
+
     student_cookie = request.cookies.get(STUDENT_COOKIE_NAME, "")
     student_session_id, separator, student_credential = student_cookie.partition(".")
     classroom = getattr(request.app.state, "classroom", None)
@@ -277,7 +287,7 @@ def policy_allows(
     )
 
 
-def issue_teacher_cookie(response: Response, credential: str) -> None:
+def issue_teacher_cookie(response: Response, credential: str, *, secure: bool = False) -> None:
     """Emite a credencial sem a expor ao handler nem ao JavaScript."""
 
     response.set_cookie(
@@ -286,6 +296,7 @@ def issue_teacher_cookie(response: Response, credential: str) -> None:
         httponly=True,
         samesite="strict",
         path="/",
+        secure=secure,
     )
 
 

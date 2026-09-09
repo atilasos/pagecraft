@@ -79,6 +79,8 @@ def create_app(
         app.state.wiki = wiki
         app.state.ae = ae
         app.state.teacher_token = load_or_create_teacher_token(config.data_dir)
+        from .learning import Learning
+        app.state.learning = Learning(storage, config)
         app.state.board_pairings = BoardPairings(
             storage,
             clock=classroom_clock,
@@ -129,6 +131,12 @@ def create_app(
 
     @app.middleware("http")
     async def enforce_access(request: Request, call_next):
+        learning_request = request.url.path.startswith(('/api/learning/', '/api/teacher-'))
+        if learning_request and request.method not in {'GET', 'HEAD', 'OPTIONS'}:
+            from urllib.parse import urlsplit
+            origin = request.headers.get('origin')
+            if origin and urlsplit(origin).netloc != request.headers.get('host'):
+                return JSONResponse({'detail': 'Origem não autorizada.'}, status_code=403)
         route, child_scope = match_route(request, app.routes)
         if route is None:
             return await call_next(request)
@@ -183,6 +191,8 @@ def create_app(
             )
             return JSONResponse({"detail": detail}, status_code=status)
         response = await call_next(request)
+        if learning_request or RoutePolicy.TEACHER in policy:
+            response.headers['Cache-Control'] = 'no-store'
         if (
             bootstraps_teacher
             and access.channel is TrustChannel.LOOPBACK
@@ -223,11 +233,13 @@ def create_app(
     from .api import board as board_api
     from .api import classroom as classroom_api
     from .api import jobs
+    from .api import learning as learning_api
 
     app.include_router(jobs.router)
     app.include_router(board_api.router)
     app.include_router(classroom_api.router)
     app.include_router(catalog_api.router)
+    app.include_router(learning_api.router)
 
     for extend_routes in route_extensions:
         extend_routes(app)
@@ -276,6 +288,21 @@ def create_app(
     )
     declare_route_policy(app.routes[-1], RoutePolicy.TEACHER)
     declare_teacher_loopback_bootstrap(app.routes[-1])
+
+    app.mount('/learning-assets', StaticFiles(directory=static_dir / 'learning'), name='learning-static')
+    declare_route_policy(app.routes[-1], RoutePolicy.PUBLIC)
+
+    @app.get('/login')
+    @access_policy(RoutePolicy.PUBLIC)
+    async def learning_login():
+        return FileResponse(static_dir / 'learning' / 'login.html')
+
+    @app.get('/{code}')
+    @access_policy(RoutePolicy.PUBLIC)
+    async def permanent_activity(code: str, request: Request):
+        from .api.learning import visible_activity
+        await visible_activity(request, code)
+        return FileResponse(static_dir / 'learning' / 'activity.html')
 
     validate_route_policies(app.routes)
     return app
