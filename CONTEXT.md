@@ -67,6 +67,20 @@ _Avoid_: nota, score, classificação
 
 ### Atividades
 
+**Realização da atividade**:
+O trabalho de uma criança numa atividade, em aula ou em casa, com as evidências produzidas e a sua reflexão final. Voltar ao mesmo endereço pode iniciar outra realização; escrever o mesmo nome não dá acesso a trabalhos anteriores.
+_Avoid_: tentativa (já designa uma interação), conta de aluno
+
+**Autoavaliação da realização**:
+A reflexão da criança sobre critérios conhecidos durante a atividade, a ajuda recebida e o trabalho que quer fazer a seguir. É a voz do aluno, distinta da evidência observada e da interpretação do professor.
+_Avoid_: nota, classificação automática
+
+**Endereço permanente da atividade**:
+O endereço reutilizável que permite abrir a mesma atividade ao longo do tempo. É distinto do código temporário de uma Sessão de aula.
+
+**Rascunho de atividade**:
+Uma atividade preparada e testada para revisão do professor, ainda indisponível para os alunos. A aprovação do professor permite publicá-la.
+
 **Catálogo**:
 O índice de todas as atividades publicadas, com o que é preciso para as encontrar e agrupar — título, ano, duração, etiquetas, ordem no método. É **derivado**: cada atividade declara o que é sobre si própria, e o catálogo é reconstruído a partir dessas declarações. Nunca se escreve nele diretamente; o que lá não estiver não se corrige lá.
 _Avoid_: base de dados, registo de atividades
