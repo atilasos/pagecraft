@@ -11,10 +11,10 @@ const copy = {
     classroom: "Na aula",
     home: "Em casa",
     start: "Começar",
-    support: "Apoio para refletir",
-    broto: "Broto · Com mais apoio",
-    young: "Árvore jovem · Passo a passo",
-    robust: "Árvore robusta · Explicar e justificar",
+    support: "Apoio",
+    broto: "Broto · Apoio",
+    young: "Árvore jovem",
+    robust: "Árvore robusta",
     reflect: "Autoavaliar e terminar",
     yourvoice: "A tua reflexão",
     reflection: "O que descobriste?",
@@ -54,10 +54,10 @@ const copy = {
     classroom: "At school",
     home: "At home",
     start: "Start",
-    support: "Support for reflection",
-    broto: "Sprout · More support",
-    young: "Young tree · Step by step",
-    robust: "Strong tree · Explain and justify",
+    support: "Support",
+    broto: "Sprout",
+    young: "Young tree",
+    robust: "Strong tree",
     reflect: "Reflect and finish",
     yourvoice: "Your reflection",
     reflection: "What did you discover?",
@@ -150,6 +150,11 @@ function sendPreferences() {
 }
 function translate() {
   document.documentElement.lang = lang === "pt" ? "pt-PT" : "en";
+  if (activity)
+    document.title =
+      (lang === "en" && activity.title_en
+        ? activity.title_en
+        : activity.title) + " · PageCraft";
   document
     .querySelectorAll("[data-i18n]")
     .forEach((el) => (el.textContent = t(el.dataset.i18n)));
@@ -181,6 +186,7 @@ async function flush() {
     while (queue.length) {
       const batch = queue.slice(0, 100);
       await api("/api/learning/me/events", "POST", { events: batch });
+      attempt.events.push(...batch);
       queue.splice(0, batch.length);
       persist();
     }
@@ -332,7 +338,18 @@ $("level").onchange = () => {
   record("level_changed", { level: $("level").value });
   sendPreferences();
 };
-$("lesson").onload = sendPreferences;
+$("lesson").onload = () => {
+  if (attempt)
+    $("lesson").contentWindow.postMessage(
+      {
+        pagecraft: 1,
+        type: "learning_restore",
+        payload: { events: [...attempt.events, ...queue] },
+      },
+      "*",
+    );
+  sendPreferences();
+};
 $("reflect").onclick = openReflection;
 $("back").onclick = () => {
   captureReflection();
@@ -409,7 +426,7 @@ window.addEventListener("message", (e) => {
     "level_changed",
   ];
   if (allowed.includes(type) && JSON.stringify(payload).length <= 4096)
-    record(type, payload, String(unitId).slice(0, 80));
+    record(type, payload, String(unitId || "").slice(0, 80));
 });
 window.addEventListener("online", () => flush().catch(() => {}));
 window.addEventListener("beforeunload", (e) => {
