@@ -45,7 +45,7 @@ A ponte usa `postMessage`; consulta [integração com realizações](references/
 
 Rascunhos ficam em `drafts/`, fora das pastas públicas. Regista o rascunho com `scripts/activity.py register <slug> --metadata <ficheiro>`; o servidor reserva um código estável de seis caracteres. Entrega ao professor a ligação de pré-visualização, os objetivos, os critérios e a evidência de testes. Confirma que a API pública recusa o rascunho.
 
-A revisão do professor é necessária **para cada atividade**. A autorização de instalar esta skill, arrancar o serviço ou criar o túnel não aprova a atividade. Depois da aprovação, usa `scripts/activity.py publish <CODIGO> --approved`; o servidor reutiliza `server.publish.publish_activity`, injeta a ponte, regenera o catálogo e disponibiliza o endereço permanente. Não escreve diretamente no catálogo.
+A revisão do professor é necessária **para cada atividade**. A autorização de instalar esta skill, arrancar o serviço ou criar o túnel não aprova a atividade. Depois da aprovação, usa `scripts/activity.py publish <CODIGO> --approved`; o servidor reutiliza `server.publish.publish_activity`, injeta a ponte, regenera o catálogo e disponibiliza o endereço permanente. Não escreve diretamente no catálogo. Para rever conteúdo já publicado, usa um novo slug de versão e novo rascunho; preserva a versão que os alunos já realizaram.
 
 O hostname estável serve todas as atividades; não cria um túnel por atividade. Para instalar, alterar ou reparar a publicação, usa `cloudflare-publish` em `/home/proteu/.codex/skills/cloudflare-publish/SKILL.md`. Verifica a origem e as rotas, preserva os serviços partilhados e executa apenas alterações autorizadas. O servidor e o conector precisam de continuar ativos.
 

@@ -24,6 +24,8 @@ Por defeito, `languages` contém apenas `pt`. Os identificadores dos critérios 
 
 Emite os acontecimentos canónicos `activity_loaded`, `unit_started`, `attempt`, `discovery`, `assessment_result`, `help_needed` e `share_requested`. O envelope é `{pagecraft:1,type,unitId,payload}`. Os resultados descrevem o que foi observado na página, não o domínio presumido de uma competência.
 
+Ao carregar o iframe, o host envia `learning_restore` com `payload.events`, os registos da realização atual. Recupera os campos e a etapa pelos teus acontecimentos, validando os valores conhecidos, sem emitir novos registos durante a recuperação. Guarda alterações de texto na ponte ao sair do campo e ao mudar de etapa.
+
 O host pode enviar `{pagecraft:1,type:"learning_preferences",payload:{language:"pt"|"en",level:"support"|"intermediate"|"challenge"}}`. Aceita apenas mensagens de `window.parent`. Aplica as preferências sem voltar a emiti-las: evita ciclos entre host e atividade.
 
 Quando a criança muda de língua/apoio na atividade, emite `language_changed` com `{language}` ou `level_changed` com `{level}`. O botão final emite `{pagecraft:1,type:"open_reflection"}`. O host apresenta os critérios e guarda a autoavaliação. Se o HTML abrir autonomamente, oferece reflexão local sem afirmar envio ao professor.

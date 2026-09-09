@@ -3,9 +3,9 @@
 import argparse
 import http.cookiejar
 import json
-import os
 import urllib.error
 import urllib.request
+import urllib.parse
 
 
 def main():
