@@ -53,4 +53,4 @@ Cumpre os commits incrementais do repositório. Push, mensagens ou envio de rela
 
 ## Entrega
 
-Entrega a pré-visualização ou o URL publicado conforme o estado real, os ficheiros produzidos, os testes executados e quaisquer limitações. Para consultar resultados: `/teacher/activities.html`. Para autorizar outro dispositivo do professor, usa o emparelhamento iniciado no computador local; nunca revela credenciais no chat.
+Entrega a pré-visualização ou o URL publicado conforme o estado real, os ficheiros produzidos, os testes executados e quaisquer limitações. Para consultar resultados: `/teacher/activities.html`. A entrada remota do professor é `https://estudio.infantinho.xyz/teacher/activities.html`, protegida por Cloudflare Access com código enviado ao e-mail autorizado. Não uses o antigo emparelhamento. Os alunos usam `https://pagecraft.infantinho.xyz/<CODIGO>`; nunca lhes entregues o hostname privado. O helper de automação continua a usar apenas o bootstrap local; nunca revela credenciais no chat.

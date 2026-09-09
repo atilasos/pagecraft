@@ -14,7 +14,10 @@ Na área do professor, filtra por nome, turma, atividade e datas. Cada registo s
 
 O trabalho em aplicações externas, como o Canva, precisa de observação do professor ou de uma declaração do aluno. O PageCraft não observa automaticamente o que acontece noutra aplicação.
 
-Para usar outro computador ou telemóvel, no computador do servidor escolhe **Autorizar outro dispositivo**. Abre [Entrada do professor](https://pagecraft.infantinho.xyz/login) no outro dispositivo e escreve o código. Expira em dez minutos, só pode ser usado uma vez e deve ficar contigo. A autorização remota não permite gerar novos códigos; estes nascem no computador local. Usa **Sair** num dispositivo partilhado.
+Para entrar de qualquer computador ou telemóvel, abre [Entrada do professor](https://estudio.infantinho.xyz/teacher/activities.html). Escreve **atila.sos@gmail.com**, pede o código e introduz o código recebido por e-mail. A sessão Access dura até 24 horas. Usa **Sair** num dispositivo partilhado; o botão termina a sessão Cloudflare Access. Os antigos códigos de emparelhamento deixaram de autenticar.
+
+A entrada pública `/login` encaminha para esse endereço privado. Os alunos continuam em `pagecraft.infantinho.xyz`; os endereços das atividades e da entrada em sessões usam esse hostname público. O servidor valida a assinatura, emissor, audiência, validade e e-mail do token Access. Um header de e-mail ou um cookie antigo não dá acesso remoto. O acesso direto nesta máquina mantém o bootstrap local necessário ao Codex/OpenClaw.
+
 
 ## Operação nesta máquina
 
@@ -24,6 +27,7 @@ Para usar outro computador ou telemóvel, no computador do servidor escolhe **Au
 - Origem: `http://127.0.0.1:8777`, com proxy headers do Uvicorn desativados para preservar a resolução de Acesso.
 - Conector existente: `pagecraft-studio-tunnel.service`, com as rotas `estudio.infantinho.xyz` e `pagecraft.infantinho.xyz`. O túnel de OPM/Sebenta não foi alterado.
 - O serviço do utilizador está habilitado e `Linger=yes`, pelo que arranca com o computador sem depender de login gráfico. A máquina e a ligação à internet precisam de continuar disponíveis.
+- Configuração Access do serviço: `~/.config/pagecraft/access.env`, carregada por systemd. O token de administração Cloudflare fica separado, fora do serviço.
 - Dados privados: `server/data/learning/`. Inclui este diretório nos teus backups, fora de Git e do catálogo público. Não publiques os ficheiros de dados nem o token do professor.
 - Sem internet, a página já aberta permite continuar as interações locais. A fila de acontecimentos é reenviada ao recuperar a ligação. A confirmação de gravação só aparece depois da resposta do servidor; evita fechar a aba enquanto indicar trabalho por guardar. Acesso inicial, sincronização e Canva requerem rede.
 
@@ -36,3 +40,11 @@ O estado anterior do túnel e o identificador do DNS criado ficam em `~/.local/s
 Para parar o novo serviço: `systemctl --user disable --now pagecraft.service`. Não pares os conectores partilhados. Não desatives `linger` sem verificar os outros serviços do utilizador.
 
 API usada: [configuração do túnel](https://developers.cloudflare.com/api/resources/zero_trust/subresources/tunnels/subresources/cloudflared/subresources/configurations/methods/update/) e [registos DNS](https://developers.cloudflare.com/api/resources/dns/subresources/records/methods/create/).
+
+## Operar a proteção do professor
+
+`scripts/configure-teacher-access.py` verifica a aplicação exclusiva de `estudio.infantinho.xyz`, o fornecedor One-time PIN existente e a política de um único e-mail. Com `--apply`, cria a aplicação se ausente e escreve a configuração local; não altera políticas de outros serviços. Após uma alteração local testada, reinicia `pagecraft.service`.
+
+O recibo `~/.local/state/pagecraft-deploy/teacher-access.json` identifica a aplicação criada. Para retirar esta publicação privada, retira primeiro a exposição da rota `estudio.infantinho.xyz`, preservando a rota pública, e só depois remove a aplicação Access exclusiva. Não remova o fornecedor de identidade partilhado. Reativar o antigo emparelhamento exigiria uma decisão explícita de autenticação.
+
+Decisão: [ADR-0006](adr/0006-professor-com-cloudflare-access.md). Provas: [entrada por e-mail](verification/pagecraft-access-email.md).
