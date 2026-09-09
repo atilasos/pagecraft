@@ -11,6 +11,7 @@ import os
 import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import get_type_hints
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SERVER_ROOT = Path(__file__).resolve().parent
@@ -56,15 +57,15 @@ def load_config(config_path: Path | None = None) -> Config:
             raw = tomllib.load(fh)
 
     kwargs: dict = {}
+    types = get_type_hints(Config)
     for name, f in Config.__dataclass_fields__.items():
         if name == "extra":
             continue
         env_key = f"PAGECRAFT_{name.upper()}"
         if env_key in os.environ:
-            kwargs[name] = _coerce(os.environ[env_key], f.type if isinstance(f.type, type) else type(f.default))
+            kwargs[name] = _coerce(os.environ[env_key], types[name])
         elif name in raw:
-            default = getattr(Config, name, None)
-            target = type(default) if default is not None else str
+            target = types[name]
             kwargs[name] = _coerce(str(raw[name]), target) if target in (int, Path) else raw[name]
 
     known = set(Config.__dataclass_fields__)
