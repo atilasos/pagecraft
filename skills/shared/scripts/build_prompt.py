@@ -115,9 +115,9 @@ def main():
 
 ### Diferenciação (implementar como tabs seleccionáveis)
 
-- 🟢 **Apoio:** {diff.get("support", "")}
-- 🟡 **Intermédio:** {diff.get("standard", "")}
-- 🔴 **Desafio:** {diff.get("challenge", "")}
+- **Broto — Apoio:** {diff.get("support", "")}
+- **Árvore jovem — Intermédio:** {diff.get("standard", "")}
+- **Árvore robusta — Desafio:** {diff.get("challenge", "")}
 {maker_text}""")
 
     # Curriculum footer
@@ -168,7 +168,7 @@ Gera um ficheiro `page.html` com uma página de aula interactiva completa, self-
 
 ## Estrutura da página
 
-1. **Header** com gradiente colorido, título, metadados (ano, duração), objectivos
+1. **Header** com hierarquia visual clara, título, metadados (ano, duração), objectivos
 2. **Units interactivas** (ver especificações abaixo)
 3. **Secção Maker** (🛠️) com desafios maker em cards verdes
 4. **Mini-avaliação** (📝) com 4-5 itens observáveis, fundo laranja
@@ -195,13 +195,13 @@ Incluir escala: ⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ 
 1. **HTML5 + CSS3 + JavaScript vanilla** — ZERO dependências externas, ZERO CDNs
 2. **Self-contained** — TODO o CSS e JS inline no ficheiro HTML
 3. **Responsive** — funcionar em tablet (768px) e quadro interactivo (1920px)
-4. **Touch-friendly** — áreas clicáveis mínimo 44x44px, suporte touch events + mouse
+4. **Touch-friendly** — áreas clicáveis mínimo 48x48px, suporte touch events + mouse
 5. **Acessibilidade** — aria-labels, contraste WCAG AA, font-size mínimo 16px
 6. **Cores vivas** — amigáveis para crianças, feedback visual claro
 7. **Animações** — CSS transitions + requestAnimationFrame para partículas/canvas
-8. **Diferenciação** — 3 níveis como tabs/botões (🟢 Apoio, 🟡 Intermédio, 🔴 Desafio)
+8. **Diferenciação** — 3 níveis como tabs/botões (Broto — Apoio, Árvore jovem — Intermédio, Árvore robusta — Desafio; sem paleta semáforo)
 9. **Constraint** — NÃO revelar directamente; a interacção leva à descoberta
-10. **Feedback** — visual+sonoro quando o aluno descobre algo (confetti, cor, mensagem)
+10. **Feedback** — local, específico e calmo quando o aluno descobre algo; som apenas opcional
 11. **Drag-and-drop** — funcional com touch events E mouse events
 12. **Offline** — funcionar sem internet
 13. **Linguagem** — pt-PT (AO90), frases curtas, adequada a {age}
