@@ -155,6 +155,11 @@ def create_app(
         )
         bootstraps_teacher = route_bootstraps_teacher(route)
         request.state.access = access
+        if (access.role is Role.TEACHER and config.teacher_origin
+            and access.channel is not TrustChannel.LOOPBACK
+            and request.method not in {"GET", "HEAD", "OPTIONS"}
+            and request.headers.get("origin") not in {None, config.teacher_origin}):
+            return JSONResponse({"detail": "Origem não autorizada."}, status_code=403)
         requested_session_id = child_scope.get("path_params", {}).get(
             "session_id"
         )
@@ -256,7 +261,9 @@ def create_app(
     @app.get("/")
     @app.get("/index.html")
     @access_policy(RoutePolicy.PUBLIC)
-    async def studio_home():
+    async def studio_home(request: Request):
+        if config.teacher_origin and request.url.hostname == app.state.cloudflare_access.hostname:
+            return RedirectResponse("/teacher/activities.html", status_code=303, headers={"Cache-Control": "no-store"})
         return FileResponse(static_dir / "index.html")
 
     @app.get("/studio.css")
@@ -298,6 +305,12 @@ def create_app(
 
     app.mount('/learning-assets', StaticFiles(directory=static_dir / 'learning'), name='learning-static')
     declare_route_policy(app.routes[-1], RoutePolicy.PUBLIC)
+
+    @app.get('/api/access-info')
+    @access_policy(RoutePolicy.PUBLIC)
+    async def access_info():
+        return {'public_origin': config.public_origin,
+                'teacher_origin': config.teacher_origin}
 
     @app.get('/login')
     @access_policy(RoutePolicy.PUBLIC)

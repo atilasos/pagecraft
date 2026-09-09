@@ -26,6 +26,7 @@ ExecStart={json.dumps(str(python))} -m uvicorn server.app:app --host 127.0.0.1 -
 Environment={json.dumps('PATH='+path)}
 Environment=PAGECRAFT_PORT=8777
 Environment={json.dumps('PAGECRAFT_CODEX_BIN='+codex)}
+EnvironmentFile=-{str(Path.home()/".config/pagecraft/access.env").replace("%", "%%")}
 UMask=0077
 Restart=on-failure
 RestartSec=5

@@ -4,6 +4,7 @@
 const $ = (id) => document.getElementById(id);
 const students = new Map(); // id → projeção viva emitida pelo servidor
 let session = null;
+let publicOrigin = location.origin;
 let liveSessionState = { status: "live", closed: false, frozen: false };
 let units = [];
 let activities = [];
@@ -340,7 +341,7 @@ async function startLive(s) {
   $("live").hidden = false;
   $("ruler").hidden = false;
   $("live-title").textContent = `${s.class_name} · ${s.activity_title}`;
-  $("live-url").textContent = `${location.host}/student/`;
+  $("live-url").textContent = `${publicOrigin}/student/`;
   $("live-code").innerHTML = "";
   [...s.join_code].forEach((ch) => {
     const b = document.createElement("span");
@@ -835,6 +836,8 @@ $("close-btn").addEventListener("click", async () => {
 /* ---------- arranque ---------- */
 
 (async function init() {
+  const info = await fetch("/api/access-info").then((r) => r.json());
+  publicOrigin = info.public_origin || location.origin;
   await Promise.all([loadClasses(), loadActivities(), loadBoardPairing()]);
   const resp = await tfetch("/api/sessions");
   if (!resp.ok) return;

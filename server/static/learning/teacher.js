@@ -1,6 +1,7 @@
 "use strict";
 const $ = (id) => document.getElementById(id);
 let reports = [];
+let publicOrigin = location.origin;
 const eventLabels = {
   activity_loaded: "Abriu a atividade",
   unit_started: "Começou uma etapa",
@@ -61,7 +62,7 @@ async function loadActivities() {
       a.published ? "Abrir atividade" : "Pré-visualizar",
       "button",
     );
-    link.href = "/" + a.code;
+    link.href = (a.published ? publicOrigin : "") + "/" + a.code;
     link.target = "_blank";
     link.rel = "noopener";
     card.append(
@@ -69,7 +70,7 @@ async function loadActivities() {
       el(
         "p",
         (a.published ? "Endereço: " : "Endereço reservado: ") +
-          location.origin +
+          publicOrigin +
           "/" +
           a.code,
         "muted",
@@ -234,25 +235,12 @@ for (const id of [
   $(id).addEventListener("input", render);
 $("refresh").onclick = () =>
   loadReports().catch((e) => status(e.message, true));
-$("pair").onclick = async () => {
-  try {
-    const result = await api("/api/teacher-pairing", "POST");
-    $("pair-code").textContent = result.code;
-    $("pairing").hidden = false;
-    setTimeout(() => {
-      $("pair-code").textContent = "Código expirado.";
-    }, 600000);
-  } catch (e) {
-    status(e.message, true);
-  }
-};
-$("logout").onclick = async () => {
-  await api("/api/teacher-logout", "POST");
-  location.href = "/login";
-};
+$("logout").onclick = () => { location.href = "/logout"; };
 (async () => {
   try {
     await api("/api/teacher-bootstrap");
+    const info = await api("/api/access-info");
+    publicOrigin = info.public_origin || location.origin;
     await loadActivities();
     await loadReports();
   } catch (e) {
