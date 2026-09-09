@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import re
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, HTTPException, Request, Response
@@ -199,18 +200,20 @@ async def reports(request: Request):
 @access_policy(RoutePolicy.TEACHER)
 async def annotate(identifier: Identifier, data: Annotation, request: Request):
     result = await request.app.state.learning.annotate(identifier, data.model_dump())
-    return request.app.state.learning.public_attempt(result)
+    return request.app.state.learning.public_attempt(result, teacher=True)
 
 
 def report_markdown(attempt):
     def safe(value):
-        return str(value).replace('<', '&lt;').replace('>', '&gt;').replace('\r', '').replace('\n', '\n    ')
+        return re.sub(r'([\\`*_{}\[\]()!#|])', r'\\\1', str(value)).replace('<', '&lt;').replace('>', '&gt;').replace('\r', '').replace('\n', '\n    ')
     lines = [f"# Registo de trabalho — {safe(attempt['title'])}",
              f"Aluno: {safe(attempt['name'])}", f"Turma: {safe(attempt['group'])}",
              f"Início: {attempt['started_at']}", f"Contexto: {attempt['mode']}",
              f"Fim: {attempt['completed_at'] or 'em curso'}", '', '## Evidências no PageCraft']
+    from ..learning_reports import describe_evidence
     for event in attempt['events']:
-        lines.append(f"- {event['received_at']} · {event['type']} · {safe(json.dumps(event['payload'], ensure_ascii=False))}")
+        for description in describe_evidence(event):
+            lines.append(f"- {event['received_at']} · {safe(description)}")
     lines += ['', '## Autoavaliação do aluno']
     assessment = attempt['assessment']
     if assessment:

@@ -146,14 +146,11 @@ function render() {
     evidence.append(
       el("summary", `Evidências no PageCraft (${r.events.length})`),
     );
-    for (const event of r.events) {
-      evidence.append(
-        el(
-          "p",
-          `${eventLabels[event.type] || event.type} · ${event.unitId || ""}`,
-        ),
-        el("pre", JSON.stringify(event.payload, null, 2)),
-      );
+    for (const event of r.evidence || []) {
+      evidence.append(el("p", eventLabels[event.type] || "Trabalho registado"));
+      const list = el("ul");
+      for (const line of event.text) list.append(el("li", line));
+      evidence.append(list);
     }
     card.append(evidence, el("h3", "A voz do aluno"));
     if (r.assessment) {

@@ -51,6 +51,10 @@ class Learning:
             activities = await self.activities()
             existing = next((a for a in activities.values() if a['slug'] == data['slug']), None)
             if existing:
+                if not existing['published']:
+                    existing.update(data)
+                    activities[existing['code']] = existing
+                    await self.storage.write_json(self.storage.path("learning", "activities.json"), activities)
                 return existing
             code = "".join(secrets.choice(ALPHABET) for _ in range(6))
             while code in activities:
@@ -139,6 +143,11 @@ class Learning:
             if len(attempt['events']) + len(new) > 5000:
                 raise HTTPException(409, "Limite de registos atingido; termina a realização.")
             attempt['events'].extend(new)
+            for event in new:
+                if event['type'] == 'language_changed' and event['payload'].get('language') in {'pt', 'en'}:
+                    attempt['language'] = event['payload']['language']
+                if event['type'] == 'level_changed' and event['payload'].get('level') in {'support', 'intermediate', 'challenge'}:
+                    attempt['level'] = event['payload']['level']
             await self.storage.write_json(self.storage.path("learning", "realizations", f"{identifier}.json"), attempt)
             return len(new)
 
@@ -151,6 +160,8 @@ class Learning:
             if set(assessment['answers']) - criterion_ids:
                 raise HTTPException(422, "Critério desconhecido.")
             attempt['assessment'] = assessment
+            attempt['language'] = assessment['language']
+            attempt['level'] = assessment['level']
             attempt['completed_at'] = utcnow()
             await self.storage.write_json(self.storage.path("learning", "realizations", f"{identifier}.json"), attempt)
             return attempt
@@ -173,7 +184,11 @@ class Learning:
         hidden = {"credential_hash", "expires_at"}
         if not teacher:
             hidden.add("teacher_note")
-        return {k: v for k, v in attempt.items() if k not in hidden}
+        result = {k: v for k, v in attempt.items() if k not in hidden}
+        if teacher:
+            from .learning_reports import describe_evidence
+            result['evidence'] = [dict(type=e['type'], at=e['received_at'], text=describe_evidence(e)) for e in attempt['events']]
+        return result
 
     def create_pairing(self):
         code = ''.join(secrets.choice(ALPHABET) for _ in range(12))
