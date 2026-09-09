@@ -1,0 +1,49 @@
+{
+  "slug": "canva-agua-4ano",
+  "status": "ready_for_teacher_review",
+  "published": false,
+  "code": "ZBEVB2",
+  "review_url": "http://127.0.0.1:8777/ZBEVB2",
+  "reserved_public_url": "https://pagecraft.infantinho.xyz/ZBEVB2",
+  "review_access": "Abrir primeiro /teacher/activities.html no computador local; acesso remoto por emparelhamento.",
+  "phases": {
+    "sources": {
+      "status": "complete",
+      "artifact": "drafts/canva-agua-4ano-sources.md"
+    },
+    "architect": {
+      "status": "complete",
+      "artifact": "drafts/canva-agua-4ano-docspec.json"
+    },
+    "designer": {
+      "status": "complete",
+      "artifact": "drafts/canva-agua-4ano-design-spec.json"
+    },
+    "builder": {
+      "status": "complete",
+      "artifact": "drafts/canva-agua-4ano.html"
+    },
+    "proofreader": {
+      "status": "complete",
+      "artifact": "drafts/canva-agua-4ano-proofread.json"
+    },
+    "evaluator": {
+      "status": "complete",
+      "artifact": "drafts/canva-agua-4ano-evaluation.json"
+    }
+  },
+  "teacher_guide": "drafts/canva-agua-4ano.md",
+  "metadata": "drafts/canva-agua-4ano-activity.json",
+  "verification": "docs/verification/pagecraft-permanente.md",
+  "screenshots": [
+    "/home/proteu/agent-browser-hub/screenshots/pagecraft-pilot-final.png",
+    "/home/proteu/agent-browser-hub/screenshots/pagecraft-pilot-reflection.png"
+  ],
+  "limitations": [
+    "Sem execução com alunos ou edição real no Canva.",
+    "Sem ensaio em telefone estreito, leitor de ecrã ou vozes PT/EN.",
+    "Sem captura explícita de consola durante o percurso.",
+    "Descoberta da skill no OpenClaw verificada; execução delegada OpenClaw→Codex não ensaiada."
+  ],
+  "next_step": "Professor revê a pré-visualização e usa Aprovar e publicar quando aprovar o piloto."
+}

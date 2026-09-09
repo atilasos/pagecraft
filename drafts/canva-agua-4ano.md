@@ -51,7 +51,7 @@ Os critérios são iguais nos três percursos; muda o apoio à realização e à
 | Organizo quatro diapositivos que os colegas conseguem ler. | I organise four slides that classmates can read. | Quatro funções no plano, escolhas de legibilidade e apresentação Canva observada pelo professor. |
 | Uso uma sugestão para melhorar e escolho um próximo passo. | I use a suggestion to improve and choose a next step. | Sugestão recebida, revisão escolhida e próximo passo referido pela criança. |
 
-Para cada critério: «Consegui com autonomia / I managed independently», «Consegui com ajuda / I managed with help», «Quero continuar a praticar / I want to keep practising», «Ainda não experimentei / I have not tried it yet». As respostas são opcionais e não geram uma nota.
+Para cada critério: «Consegui com autonomia / I managed on my own», «Consegui com ajuda / I managed with help», «Quero praticar mais / I want more practice», «Prefiro não responder / I prefer not to answer». As respostas são opcionais e não geram uma nota.
 
 No endereço permanente, a reflexão reúne as escolhas por critério e dois campos opcionais: estratégia usada e próximo passo. Os enunciados variam com o ano e o apoio escolhido; a criança pode incluir uma conquista ou dificuldade na descrição da estratégia. Não há campos separados para conquista e ajuda nesta versão integrada.
 
