@@ -27,7 +27,6 @@ class Learning:
         self.config = config
         self.catalog_lock = asyncio.Lock()
         self.locks: dict[str, asyncio.Lock] = {}
-        self.pairing: tuple[str, datetime] | None = None
 
     def lock(self, key):
         return self.locks.setdefault(key, asyncio.Lock())
@@ -190,20 +189,3 @@ class Learning:
             result['evidence'] = [dict(type=e['type'], at=e['received_at'], text=describe_evidence(e)) for e in attempt['events']]
         return result
 
-    def create_pairing(self):
-        code = ''.join(secrets.choice(ALPHABET) for _ in range(12))
-        self.pairing = (hashlib.sha256(code.encode()).hexdigest(), datetime.now(timezone.utc) + timedelta(minutes=10))
-        return code
-
-    def consume_pairing(self, code):
-        if self.pairing is None:
-            return False
-        digest, expiry = self.pairing
-        if expiry <= datetime.now(timezone.utc):
-            self.pairing = None
-            return False
-        candidate = hashlib.sha256(code.replace(' ', '').upper().encode()).hexdigest()
-        if not hmac.compare_digest(digest, candidate):
-            return False
-        self.pairing = None
-        return True

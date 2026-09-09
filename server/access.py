@@ -223,9 +223,13 @@ async def resolve_access(request: Request, path_params: dict) -> AccessContext:
     """Resolve Papel e canal uma única vez, antes de executar o handler."""
 
     channel, client_ip = _trust_channel(request)
+    cloudflare = getattr(request.app.state, "cloudflare_access", None)
+    if channel is TrustChannel.CLOUDFLARE and cloudflare and await cloudflare.authenticates(request):
+        return AccessContext(Role.TEACHER, channel, client_ip)
+
     expected = getattr(request.app.state, "teacher_token", "")
     teacher_token = request.cookies.get(TEACHER_COOKIE_NAME, "")
-    if teacher_token and expected and hmac.compare_digest(teacher_token, expected):
+    if channel is TrustChannel.LOOPBACK and teacher_token and expected and hmac.compare_digest(teacher_token, expected):
         return AccessContext(Role.TEACHER, channel, client_ip)
 
     from .learning import LEARNING_COOKIE

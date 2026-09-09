@@ -95,20 +95,11 @@ async def test_events_retry_finish_and_teacher_interpretation_remain_distinct(le
     assert 'credential_hash' not in report.text
 
 
-async def test_teacher_pairing_one_use_loopback_only_and_expiry(learning_clients):
+async def test_old_teacher_pairing_is_retired(learning_clients):
     app, teacher, pupil = learning_clients
-    code = (await teacher.post('/api/teacher-pairing')).json()['code']
-    assert (await pupil.post('/api/teacher-pairing')).status_code == 401
-    assert (await pupil.post('/api/teacher-login', json={'code': 'WRONG'})).status_code == 401
-    assert (await pupil.post('/api/teacher-login', json={'code': code})).status_code == 204
-    assert (await pupil.get('/api/learning/reports')).status_code == 200
-    assert (await pupil.post('/api/teacher-pairing')).status_code == 403
-    assert (await pupil.post('/api/teacher-login', json={'code': code})).status_code == 401
-    await pupil.post('/api/teacher-logout')
+    assert (await teacher.post('/api/teacher-pairing')).status_code == 410
+    assert (await pupil.post('/api/teacher-login', json={'code': 'OLD-CODE'})).status_code == 410
     assert (await pupil.get('/api/learning/reports')).status_code == 401
-    code = (await teacher.post('/api/teacher-pairing')).json()['code']
-    app.state.learning.pairing = (app.state.learning.pairing[0], datetime.now(timezone.utc) - timedelta(seconds=1))
-    assert (await pupil.post('/api/teacher-login', json={'code': code})).status_code == 401
 
 
 async def test_validation_preview_exclusion_expired_cookie(learning_clients):

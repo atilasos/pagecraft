@@ -8,7 +8,7 @@ from contextlib import asynccontextmanager
 from datetime import tzinfo
 
 from fastapi import FastAPI, Request
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from .access import (
@@ -73,6 +73,8 @@ def create_app(
         from .classroom.feedback import FeedbackService
         from .security import load_or_create_teacher_token
 
+        from .cloudflare_access import CloudflareAccess
+        app.state.cloudflare_access = CloudflareAccess(config)
         app.state.config = config
         app.state.storage = storage
         app.state.hub = hub
@@ -183,6 +185,11 @@ def create_app(
             access,
             teacher_bootstrap=bootstraps_teacher,
         ):
+            if (config.teacher_origin and request.method == "GET"
+                and request.url.path.startswith("/teacher")
+                and request.url.hostname != app.state.cloudflare_access.hostname):
+                return RedirectResponse(config.teacher_origin + request.url.path, status_code=303,
+                                        headers={"Cache-Control": "no-store"})
             status = 401 if access.role is None else 403
             detail = (
                 "este pedido precisa de um Papel"
@@ -294,8 +301,19 @@ def create_app(
 
     @app.get('/login')
     @access_policy(RoutePolicy.PUBLIC)
-    async def learning_login():
-        return FileResponse(static_dir / 'learning' / 'login.html')
+    async def learning_login(request: Request):
+        target = config.teacher_origin + "/teacher/activities.html" if config.teacher_origin else "/teacher/activities.html"
+        return RedirectResponse(target, status_code=303, headers={"Cache-Control": "no-store"})
+
+    @app.get("/logout")
+    @access_policy(RoutePolicy.PUBLIC)
+    async def learning_logout(request: Request):
+        from .access import TEACHER_COOKIE_NAME
+        remote = request.state.access.channel is not TrustChannel.LOOPBACK
+        target = config.teacher_origin + "/cdn-cgi/access/logout" if remote and config.teacher_origin else "/"
+        response = RedirectResponse(target, status_code=303, headers={"Cache-Control": "no-store"})
+        response.delete_cookie(TEACHER_COOKIE_NAME, path="/")
+        return response
 
     @app.get('/{code}')
     @access_policy(RoutePolicy.PUBLIC)

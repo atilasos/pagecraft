@@ -37,6 +37,10 @@ class Config:
     generation_timeout_s: int = 300
     builder_timeout_s: int = 900
     feedback_timeout_s: int = 20
+    teacher_origin: str = ""
+    access_team_domain: str = ""
+    access_aud: str = ""
+    access_email: str = ""
     max_iterations: int = 3
     extra: dict = field(default_factory=dict)
 

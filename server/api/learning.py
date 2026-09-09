@@ -10,7 +10,7 @@ from fastapi.responses import FileResponse, PlainTextResponse
 from pydantic import BaseModel, Field, field_validator
 
 from ..access import (RateLimitOperation, Role, RoutePolicy, TrustChannel, access_policy,
-                      rate_limited, issue_teacher_cookie)
+                      rate_limited)
 from ..learning import LEARNING_COOKIE
 
 router = APIRouter()
@@ -92,10 +92,6 @@ class Annotation(BaseModel):
     name: Short
     group: str = Field(default='', max_length=80)
     teacher_note: str = Field(default='', max_length=5000)
-
-
-class PairingInput(BaseModel):
-    code: str = Field(min_length=1, max_length=30)
 
 
 async def visible_activity(request, code):
@@ -239,20 +235,14 @@ async def download(identifier: Identifier, request: Request):
 
 @router.post('/api/teacher-pairing')
 @access_policy(RoutePolicy.TEACHER)
-async def pairing(request: Request):
-    if request.state.access.channel is not TrustChannel.LOOPBACK:
-        raise HTTPException(403, 'Autoriza o dispositivo a partir do computador do PageCraft.')
-    return {'code': request.app.state.learning.create_pairing(), 'expires_in': 600}
+async def pairing():
+    raise HTTPException(410, 'O acesso remoto passou a usar código por e-mail no Cloudflare Access.')
 
 
-@router.post('/api/teacher-login', status_code=204)
+@router.post('/api/teacher-login')
 @access_policy(RoutePolicy.PUBLIC)
-@rate_limited(RateLimitOperation.JOIN)
-async def teacher_login(data: PairingInput, request: Request, response: Response):
-    if not request.app.state.learning.consume_pairing(data.code):
-        raise HTTPException(401, 'Código inválido ou expirado.')
-    issue_teacher_cookie(response, request.app.state.teacher_token,
-                         secure=request.state.access.channel is TrustChannel.CLOUDFLARE)
+async def teacher_login():
+    raise HTTPException(410, 'Entra pela área do professor com o teu e-mail.')
 
 
 @router.post('/api/teacher-logout', status_code=204)
