@@ -1,1 +1,67 @@
-<!doctype html><html lang="pt-PT"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Atividades e progressos · PageCraft</title><link rel="stylesheet" href="/learning-assets/common.css"><script defer src="/learning-assets/teacher.js"></script></head><body><a href="#main" class="skip">Saltar para o conteúdo</a><header><a href="/teacher/">PageCraft · Professor</a><div class="row"><a class="button" href="/teacher/">Sessões de aula</a><button id="pair">Autorizar outro dispositivo</button><button id="logout">Sair</button></div></header><main id="main"><p class="eyebrow">Preparar · Observar · Acompanhar</p><h1>Atividades e progressos</h1><p id="status" class="status" role="status" aria-live="polite"></p><section id="pairing" class="card" hidden><h2>Autorizar um dispositivo teu</h2><p>Abre <a href="/login">a entrada do professor</a> nesse dispositivo e escreve este código. Vale dez minutos e só pode ser usado uma vez.</p><strong id="pair-code"></strong></section><section><h2>Atividades</h2><div id="activities" class="grid"></div></section><section><h2>Registos de trabalho</h2><p class="muted">Os nomes são escritos pelos alunos. Podes corrigir o nome e a turma de cada registo para reunir o trabalho da mesma criança. A reflexão do aluno permanece distinta da tua observação.</p><div class="card"><div class="row"><label>Aluno<input id="filter-name" placeholder="Pesquisar nome"></label><label>Turma<input id="filter-group" placeholder="Todas as turmas"></label><label>Atividade<select id="filter-activity"><option value="">Todas</option></select></label><label>Desde<input type="date" id="filter-from"></label><label>Até<input type="date" id="filter-to"></label><button id="refresh">Atualizar</button></div><p id="summary" class="muted"></p></div><div id="reports"></div></section></main></body></html>
+<!doctype html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Atividades e progressos · PageCraft</title>
+    <link rel="stylesheet" href="/learning-assets/common.css" />
+    <script defer src="/learning-assets/teacher.js"></script>
+  </head>
+  <body>
+    <a href="#main" class="skip">Saltar para o conteúdo</a>
+    <header>
+      <a href="/teacher/">PageCraft · Professor</a>
+      <div class="row">
+        <a class="button" href="/teacher/">Sessões de aula</a
+        ><button id="pair">Autorizar outro dispositivo</button
+        ><button id="logout">Sair</button>
+      </div>
+    </header>
+    <main id="main">
+      <p class="eyebrow">Preparar · Observar · Acompanhar</p>
+      <h1>Atividades e progressos</h1>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <section id="pairing" class="card" hidden>
+        <h2>Autorizar um dispositivo teu</h2>
+        <p>
+          Abre <a href="/login">a entrada do professor</a> nesse dispositivo e
+          escreve este código. Vale dez minutos e só pode ser usado uma vez.
+        </p>
+        <strong id="pair-code"></strong>
+      </section>
+      <section>
+        <h2>Atividades</h2>
+        <div id="activities" class="grid"></div>
+      </section>
+      <section>
+        <h2>Registos de trabalho</h2>
+        <p class="muted">
+          Os nomes são escritos pelos alunos. Podes corrigir o nome e a turma de
+          cada registo para reunir o trabalho da mesma criança. A reflexão do
+          aluno permanece distinta da tua observação.
+        </p>
+        <div class="card">
+          <div class="row">
+            <label
+              >Aluno<input
+                id="filter-name"
+                placeholder="Pesquisar nome" /></label
+            ><label
+              >Turma<input
+                id="filter-group"
+                placeholder="Todas as turmas" /></label
+            ><label
+              >Atividade<select id="filter-activity">
+                <option value="">Todas</option>
+              </select></label
+            ><label>Desde<input type="date" id="filter-from" /></label
+            ><label>Até<input type="date" id="filter-to" /></label
+            ><button id="refresh">Atualizar</button>
+          </div>
+          <p id="summary" class="muted"></p>
+        </div>
+        <div id="reports"></div>
+      </section>
+    </main>
+  </body>
+</html>
