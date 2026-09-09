@@ -1,0 +1,116 @@
+{
+  "palette": {
+    "bg": "oklch(0.975 0.009 85)",
+    "surface": "oklch(0.994 0.005 85)",
+    "primary": "oklch(0.405 0.06 195)",
+    "accent": "oklch(0.86 0.075 75)",
+    "ink": "oklch(0.26 0.009 195)"
+  },
+  "functional": {
+    "ok": "oklch(0.40 0.07 150)",
+    "warn": "oklch(0.43 0.075 75)",
+    "focus": "oklch(0.40 0.13 255)"
+  },
+  "fallbackColors": {
+    "bg": "#F7F4ED",
+    "surface": "#FCFBF7",
+    "primary": "#17575B",
+    "accent": "#EED3A3",
+    "ink": "#202827",
+    "ok": "#275937",
+    "warn": "#785017",
+    "focus": "#254F9C"
+  },
+  "typography": {
+    "fontFamily": "'Atkinson Hyperlegible', 'Lexend', 'Nunito', 'Comic Sans MS', 'Chalkboard SE', system-ui, sans-serif",
+    "scale": "kids-8-10",
+    "baseSizePx": 20,
+    "headingSizePx": 32,
+    "heroSizePx": 44,
+    "minimumUiSizePx": 20,
+    "maxLineCh": 55,
+    "weights": [
+      400,
+      700,
+      800
+    ],
+    "lineHeight": 1.5,
+    "italicAllowed": false,
+    "allCapsAllowed": false,
+    "notes": "Fontes locais apenas. Títulos curtos, corpo largo e sem itálico. Aos 320px reduzir o título principal para 32px, mantendo o corpo a 20px."
+  },
+  "layout": {
+    "radius": 20,
+    "borderRadius": 20,
+    "spacing": "comfortable",
+    "maxWidth": 1120,
+    "maxWidthPx": 1120,
+    "padding": "clamp(1rem, 3vw, 2rem)",
+    "spacingScalePx": [
+      8,
+      12,
+      16,
+      24,
+      32,
+      48
+    ],
+    "structure": "Cabeçalho compacto com identidade Água na escola, seletor de língua e apoio. Introdução com ilustração água/planta em SVG inline e pergunta curricular. Navegação para cinco etapas; uma etapa principal visível de cada vez, com título, tempo indicativo e ação clara. Critérios num disclosure sempre disponível. Rodapé da etapa com Anterior e Seguinte.",
+    "responsive": "A partir de 850px, comparação e controlos em duas colunas 3:2; planeador em duas colunas, quatro cartões numerados. Abaixo de 850px, uma coluna em ordem de leitura; navegação quebra linhas, nunca exige arrastar. Sem largura mínima rígida, elementos flex usam min-width:0. Sem scroll horizontal a 320px e sem rodapé fixo que tape campos.",
+    "notes": "Espaço ajuda a reconhecer a sequência da aula. O aspeto é de caderno de projeto cuidado, com superfícies claras, traços de água e poucos detalhes botânicos, sem confetti ou painéis de pontuação."
+  },
+  "components": {
+    "identity": {
+      "title": "Água na escola / Water at school",
+      "art": "SVG inline de uma gota que rega uma planta, traços arredondados e áreas vazias; máximo 180px no início e sem repetir em cada secção. SVG decorativo aria-hidden=true; título textual contém o significado.",
+      "badges": "4.º ano · 45 min e o objetivo em texto normal. Não usar selos ou logótipo Canva, que não são necessários."
+    },
+    "buttons": "Min-height 48px e min-width 48px; padding 12px 20px; radius 12px; texto 20px/700. Primário: surface sobre primary; secundário: ink sobre surface com contorno primary. Hover discreto de luminosidade; sem transform. Desativado mantém rótulo e explica a indisponibilidade quando necessário.",
+    "cards": "Surface sobre fundo creme; contorno sólido de 1px com mistura de ink a 20% e surface; raio 20px; espaço interior 24px. Sem faixa lateral, gradientes ou sombras pesadas. Títulos com número e função, não apenas ícone.",
+    "navigation": "Cinco botões com número, verbo e duração: Explorar 5 min, Experimentar 10 min, Criar 20 min, Partilhar 5 min, Refletir 5 min. Labels EN equivalentes. Usar nav com aria-label, aria-current=step no atual e secções com heading associado; não simular tabs sem teclado correspondente. Duração é orientação, nunca contagem regressiva.",
+    "languageSelector": "Select nativo com rótulo Língua / Language; Português e English escritos por extenso, sem bandeiras. Mudança atualiza lang do documento, rótulos, instruções, feedback e opções; preserva valores estáveis dos controlos e todo o texto do aluno. Foco permanece no seletor.",
+    "supportSelector": "Select ou radios nativos com ícones SVG decorativos de crescimento vegetal, todos na mesma tinta e com igual peso visual: Broto · Apoio / Sprout · Support; Árvore jovem · Intermédio / Young tree · Core; Árvore robusta · Desafio / Strong tree · Challenge. Não usar cores de sucesso/aviso nem comunicar hierarquia de valor. Intermédio por defeito. Alterar apoio modifica instruções/ajudas sem apagar respostas.",
+    "criteria": "Disclosure Critérios do nosso trabalho / Our working criteria, com três critérios idênticos em todas as etapas e apoios. Próximo da introdução da etapa, nunca como classificação ou percentagem.",
+    "scenarioCards": "Três cartões selecionáveis como radio group: torneira, rega, outra ideia. Cada cartão tem SVG simples, frase e indicador de seleção textual/contorno. Após escolha mostrar o exemplo e a distinção observado/imaginado. Feedback coloca uma pergunta que convida a comparar consequências.",
+    "slideExperiment": {
+      "layout": "Uma miniatura Antes e um palco Depois editável, com rótulos fora da imagem. Palco 16:10, área de texto à esquerda e desenho de torneira à direita. Em ecrã estreito empilhar as versões; não reduzir toda a interface para caber.",
+      "controls": "Radio groups nativos Texto curto/Texto longo e Contraste suave/Contraste forte, range Tamanho da letra 18–40 com output do valor. Campo Leio melhor porque… por baixo. Os controlos e instruções nunca adotam o contraste difícil.",
+      "simulation": "Contraste baixo e texto 18px são permitidos apenas dentro do exemplo deliberadamente difícil. Disponibilizar a mesma mensagem legível num disclosure Texto do exemplo; não obrigar a ler a simulação para operar. Para Broto, oferecer dois presets sem remover as alternativas por teclado. A altura do palco expande se necessário; mensagens nunca ficam cortadas.",
+      "feedback": "Mostrar mudanças de configuração sem declarar automaticamente qual versão é correta. Convidar a explicar como tamanho, quantidade e contraste se relacionam. Preservar um antes estável até Reiniciar comparação explícito."
+    },
+    "canvaHandoff": "Bloco compacto após a comparação, com três operações: título, imagem/forma e ordem. Link Abrir Canva noutra aba / Open Canva in another tab com indicação textual de nova aba. Explicar dependência de internet e observação limitada do PageCraft; sem reproduzir a interface Canva ou introduzir nomes de botões não verificados.",
+    "planner": "Quatro cartões 1. Problema, 2. Exemplo, 3. Proposta, 4. Convite, com rótulo visível, pergunta e textarea de pelo menos 4 linhas. Inícios de frase são sugestões externas ao campo, não respostas predefinidas. Apoio mostra banco de palavras e inícios; desafio mostra pergunta sobre verificação sem acrescentar diapositivos. Select Canva/Papel identifica o suporte real.",
+    "peerFeedback": "Dois campos largos, uma sugestão recebida e decisão de revisão. Em casa acrescentar orientação para guardar a partilha para a aula, sem bloquear a reflexão.",
+    "reflection": "Três cartões de critério; cada um com fieldset/legend e quatro radios textuais opcionais, todos com a mesma cor neutra. Ilustrações SVG de pessoa, duas pessoas, prática e página em branco podem acompanhar rótulos, sem significar sucesso/fracasso por cor. Nenhuma opção pré-selecionada. Disponibilizar Limpar escolha. Três campos finais conquista, ajuda e próximo passo; inícios de frase ou pedido de evidência variam pelo apoio.",
+    "saveStatus": "Área role=status junto do botão final. Distinguir Guardado neste dispositivo, A enviar, Guardado no PageCraft e Não foi possível enviar, tenta novamente. Só mostrar o estado Guardado no PageCraft depois da confirmação do servidor. Offline mantém o trabalho e permite tentar de novo; rascunho autónomo não afirma entrega ao professor.",
+    "feedback": "Mensagens curtas, concretas, não punitivas. Para tentativa/revisão, warn como tinta em fundo accent muito claro e rótulo textual. Para confirmação real, ok como tinta e verbo concreto. Nunca usar cor sozinha nem associar feedback à escolha de apoio."
+  },
+  "motion": {
+    "transitions": "subtle",
+    "durationMs": 160,
+    "easing": "ease-out",
+    "respectReducedMotion": true,
+    "notes": "Apenas cor, contorno e opacidade; sem entrada animada de texto, saltos, confetti ou scroll animado obrigatório. prefers-reduced-motion elimina transições."
+  },
+  "accessibility": {
+    "contrast": "WCAG-AA",
+    "contrastBody": "AA ≥4.5:1",
+    "contrastMicrocopy": "AAA ≥7:1",
+    "focusRing": true,
+    "focusStyle": "Anel focus sólido de 3px, afastado 3px; fundo surface entre anel e botão escuro quando necessário.",
+    "minTapPx": 48,
+    "soundOptIn": true,
+    "keyboard": "Todos os controlos nativos; Tab em ordem visual, setas em radio/select/range; mudança de etapa coloca foco no título com tabindex=-1. Não prender foco. Labels persistentes e nenhum placeholder como único rótulo.",
+    "forms": "Fieldset/legend para opções; label/for para cada campo; textarea sem contagem punitiva. Apresentar erros de ligação fora dos campos, manter valores escritos.",
+    "language": "Atualizar document.documentElement.lang e labels ARIA ao mudar língua. Texto produzido pelo aluno fica intacto, sem tradução inferida. PT/EN devem ocupar espaço sem truncatura.",
+    "readingSupport": "Áudio só como botão opt-in, com texto sempre disponível; mostrar indisponibilidade sem bloquear se não houver voz local compatível. Não prometer áudio offline. Usar ilustrações inline redundantes com rótulos.",
+    "simulationException": "O exemplo de diapositivo difícil é o único local com contraste ou tamanho deliberadamente inadequado; fornecer equivalente textual legível e manter todos os controlos conformes.",
+    "verification": [
+      "Percorrer só com teclado a 320px e em desktop.",
+      "Zoom 200% e 400% sem perder controlos ou texto.",
+      "Trocar PT/EN e apoio depois de escrever nos quatro cartões; respostas intactas.",
+      "Testar prefers-reduced-motion e navegação com foco visível.",
+      "Verificar contraste efetivo das combinações renderizadas, incluindo estados hover/focus."
+    ]
+  },
+  "notes": "O creme quente, o verde-azulado e os desenhos discretos de água dão continuidade visual sem competir com a produção das crianças. O centro da experiência é experimentar uma mensagem e planear quatro ideias próprias; reflexão e critérios usam a mesma linguagem visual e mantêm os apoios como escolhas reversíveis."
+}
