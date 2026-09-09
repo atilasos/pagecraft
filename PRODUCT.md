@@ -8,11 +8,13 @@ product
 
 PageCraft serve dois grupos no mesmo ecossistema. O utilizador final é a criança do 1.º ciclo, sobretudo 6–10 anos, com tolerância para pré-escolar 4–5, a usar atividades digitais em tablet, computador de sala ou quadro interativo. O adulto utilizador é o professor ou criador de atividades, que precisa de páginas fiáveis, acessíveis, em pt-PT, prontas para aula e fáceis de publicar no catálogo.
 
-As crianças estão em contexto de aprendizagem acompanhado. Precisam de instruções curtas, toque confortável, feedback encorajador e tarefas que deixam descobrir o conceito pela interação. Os professores precisam de confiança pedagógica: diferenciação, alinhamento curricular, materiais offline e evidência de que a atividade foi revista.
+As crianças trabalham em aula ou continuam em casa, com o acompanhamento do professor através dos registos e da autoavaliação. Precisam de instruções curtas, toque confortável, feedback encorajador e tarefas que deixam descobrir o conceito pela interação. Os professores precisam de confiança pedagógica: diferenciação, alinhamento curricular, materiais offline e evidência de que a atividade foi revista. O português europeu é a língua por defeito; quando o professor pede inglês, a atividade oferece PT/EN com seletor individual.
 
 ## Product Purpose
 
 PageCraft cria, publica e cataloga atividades HTML interativas, self-contained, para o 1.º ciclo. Cada atividade é uma aula explorável: um único ficheiro HTML com CSS e JS inline, sem dependências externas, desenhado para funcionar offline, em tablet e em quadro interativo.
+
+O alojamento permanente acrescenta um endereço por atividade e realizações separadas com evidências, autoavaliação e acompanhamento privado do professor. A sincronização desses registos requer ligação ao servidor; tarefas em aplicações externas podem também precisar de internet. Cada atividade é revista pelo professor antes da publicação.
 
 O produto existe para transformar temas curriculares em experiências pequenas, táteis e verificadas, usando um pipeline multi-agente com papéis separados: Architect, Designer, Builder, Proofreader e Evaluator. Sucesso significa que uma criança consegue explorar, errar sem punição, tentar de novo, descobrir o invariante pedagógico e deixar evidência observável para o professor.
 

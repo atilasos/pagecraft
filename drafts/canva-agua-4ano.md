@@ -53,7 +53,9 @@ Os critérios são iguais nos três percursos; muda o apoio à realização e à
 
 Para cada critério: «Consegui com autonomia / I managed independently», «Consegui com ajuda / I managed with help», «Quero continuar a praticar / I want to keep practising», «Ainda não experimentei / I have not tried it yet». As respostas são opcionais e não geram uma nota.
 
-Perguntas finais: «O que consegui fazer? Mostra um exemplo. / What did I manage to do? Give an example.»; «Onde precisei de ajuda? / Where did I need help?»; «O que quero experimentar a seguir? / What do I want to try next?».
+No endereço permanente, a reflexão reúne as escolhas por critério e dois campos opcionais: estratégia usada e próximo passo. Os enunciados variam com o ano e o apoio escolhido; a criança pode incluir uma conquista ou dificuldade na descrição da estratégia. Não há campos separados para conquista e ajuda nesta versão integrada.
+
+No HTML autónomo, as perguntas finais são: «O que consegui fazer? Mostra um exemplo. / What did I manage to do? Give an example.»; «Onde precisei de ajuda? / Where did I need help?»; «O que quero experimentar a seguir? / What do I want to try next?». Esta diferença face ao formulário integrado está registada na avaliação do piloto.
 
 O relatório separa as interações e produções no PageCraft, o autorrelato da criança e a observação/interpretação do professor. Preencher o plano ou declarar que concluiu não prova edição no Canva. O professor pode registar, por exemplo: «Rever uma frase com o colega para que explique como a proposta ajuda» ou «Experimentar tamanho e contraste antes de acrescentar imagens». A decisão seguinte é acordada com a criança, não inferida como diagnóstico automático.
 
