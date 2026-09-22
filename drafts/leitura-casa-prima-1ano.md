@@ -15,3 +15,7 @@ A criança pode mudar de apoio e saltar etapas. Broto mantém modelo e duas pala
 
 ## Avaliação
 As tentativas digitais não demonstram fluência oral. O professor observa a leitura, o uso de pistas e a explicação; a ponte regista escolhas e sequência. A reflexão é voz da criança, não nota. A comunicação/desenho em papel não é monitorizada automaticamente. O rascunho fica privado; só a aprovação específica permite publicação.
+
+## Pré-visualização e verificação
+
+Rascunho **KCQ857**, não publicado. [Abrir para revisão](https://estudio.infantinho.xyz/KCQ857). Acesso privado do professor via Cloudflare Access. Interações, três apoios, teclado, ecrãs 390/768/1280 px, recuperação e reflexão verificados em Chromium através do Agent Browser Hub. Registos de teste são pré-visualização, excluídos dos relatórios dos alunos. API pública de metadados e conteúdo devolveu 404. Sem áudio gravado; o adulto lê. Aprovação específica necessária antes de disponibilizar aos alunos.
