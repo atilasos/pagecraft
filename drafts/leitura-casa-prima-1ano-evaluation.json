@@ -1,0 +1,59 @@
+{
+  "pass": true,
+  "route": "none",
+  "severity": "low",
+  "scores": {
+    "factual_accuracy": 5,
+    "constraint_alignment": 5,
+    "differentiation_quality": 4,
+    "ux_accessibility": 4,
+    "visual_design": 4,
+    "technical_quality": 5
+  },
+  "issues": [],
+  "required_fixes": [],
+  "evidence": [
+    "Destino incorreto e correto com feedback",
+    "Encontrar palavras, retry e progressão",
+    "Intermédio:7cartões ordenados e verificados",
+    "Broto:3blocos,undo,testado",
+    "Desafio:modelo oculto e recuperável",
+    "Teclado Enter coloca cartão",
+    "Recarregar restaura etapa3/apoio/desafio/cartão",
+    "1280/768/390px sem overflow;botões≥48px;screenshots",
+    "Partilhar e abrir reflexão no host",
+    "Reflexão opcional guardada; relatório inclui escolhas, estratégia e próximo passo; preview excluído lista alunos",
+    "http://127.0.0.1:8777/api/learning/activities/KCQ857 →404 sem autenticação",
+    "https://pagecraft.infantinho.xyz/api/learning/activities/KCQ857 →403 sem autenticação",
+    "https://pagecraft.infantinho.xyz/api/learning/activities/KCQ857/content →403 sem autenticação",
+    "Preview remoto: ver estado observado; sem login humano realizado",
+    "Navegação Chromium nas duas APIs públicas:404 Atividade não encontrada.",
+    "Preview remoto no browser: formulário Sign in Cloudflare Access; login humano não efetuado.",
+    "Reflexão local fora do host e seleção de apoio por setas:pass.",
+    "Inspeção visual screenshot desktop1280 e telemóvel390; contraste texto escuro/fundo claro e foco4px."
+  ],
+  "console_errors": [],
+  "acceptance_checks": [
+    "Frase exata e instruções curtas; sem escrita obrigatória.",
+    "Três critérios apresentados antes do trabalho e retomados na reflexão.",
+    "Três apoios alteráveis sem classificação.",
+    "Dados de teste marcados preview e excluídos lista de relatórios alunos.",
+    "Sem publicação; published=false."
+  ],
+  "blocked_by": [],
+  "limitations": [
+    "Leitura oral/desenho não são observados automaticamente; requer adulto.",
+    "Sem voz gravada: adulto lê instruções.",
+    "Não testado com crianças reais nem leitor de ecrã.",
+    "Acesso remoto verificado até Cloudflare Access; não concluído login de Igor.",
+    "Português apenas conforme pedido; troca de língua não aplicável."
+  ],
+  "screenshots": [
+    "drafts/leitura-casa-prima-1ano-preview.png",
+    "drafts/leitura-casa-prima-1ano-qa-1280.png",
+    "drafts/leitura-casa-prima-1ano-qa-768.png",
+    "drafts/leitura-casa-prima-1ano-qa-390.png"
+  ],
+  "report_evidence": "drafts/leitura-casa-prima-1ano-qa-report.md",
+  "activity_code": "KCQ857"
+}
