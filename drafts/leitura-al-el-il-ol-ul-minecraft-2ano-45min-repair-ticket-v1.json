@@ -1,0 +1,32 @@
+{
+  "pass": false,
+  "route": "builder",
+  "severity": "medium",
+  "issues": [
+    {
+      "id": "report-noise",
+      "severity": "medium",
+      "evidence": "Relatório descarregado com 126 eventos gerou 4581 linhas; snapshots state/picks/checked/marked/etc repetem dados técnicos pouco legíveis para o professor.",
+      "required_fix": "Reduzir eventos de restauro a representação compacta sem perder estado; expor evidência pedagógica legível separadamente. Repetir percurso novo, reload e download."
+    },
+    {
+      "id": "duplicate-reflection",
+      "severity": "low",
+      "evidence": "Estratégia e próximo passo preenchidos na etapa 6 são guardados como evidência, mas o formulário do host abre esses campos vazios.",
+      "required_fix": "No modo embedded, pedir estratégia e próximo passo apenas no formulário canónico; manter alternativa no autónomo."
+    }
+  ],
+  "verified_so_far": [
+    "Cinco palavras e erro/revisão",
+    "Três apoios e alto/mala",
+    "Frase e plano de placas",
+    "Restauro após reload",
+    "Reflexão guardada e download200",
+    "Preview excluído dos relatórios alunos",
+    "Seis etapas em390px/768px sem overflow nem alvos inferiores56px",
+    "Fallback local guardado/restaurado",
+    "Interação sem rede depois de carregada",
+    "Foco3px e teclaEspaço"
+  ],
+  "blocked_by": []
+}
