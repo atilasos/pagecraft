@@ -1,7 +1,7 @@
 {
   "slug": "leitura-al-el-il-ol-ul-minecraft-2ano-45min",
   "date": "2026-09-26",
-  "status": "building",
+  "status": "testing",
   "published": false,
   "request": {
     "topic": "Caso de leitura al, el, il, ol, ul",
@@ -12,9 +12,9 @@
   "phases": {
     "architect": "complete",
     "designer": "complete",
-    "builder": "in_progress",
-    "proofreader": "waiting_for_html",
-    "evaluator": "waiting_for_html"
+    "builder": "complete",
+    "proofreader": "in_progress",
+    "evaluator": "in_progress"
   },
   "artifacts": [
     "drafts/leitura-al-el-il-ol-ul-minecraft-2ano-45min-activity.json",
@@ -22,11 +22,20 @@
     "drafts/leitura-al-el-il-ol-ul-minecraft-2ano-45min-design-spec.json",
     "drafts/leitura-al-el-il-ol-ul-minecraft-2ano-45min-docspec.json",
     "drafts/leitura-al-el-il-ol-ul-minecraft-2ano-45min-sources.md",
+    "drafts/leitura-al-el-il-ol-ul-minecraft-2ano-45min.html",
     "drafts/leitura-al-el-il-ol-ul-minecraft-2ano-45min.md"
   ],
   "preview_access_check": {
     "local_service": "HTTP 200 /api/health",
     "remote_teacher_entry": "Cloudflare Access sign-in observed using agent-browser-hub research; no login requested"
   },
-  "review_required": "Aprovação explícita do professor para esta atividade antes de publicar."
+  "review_required": "Aprovação explícita do professor para esta atividade antes de publicar.",
+  "code": "5T298X",
+  "preview_url": "https://estudio.infantinho.xyz/5T298X",
+  "local_preview_url": "http://127.0.0.1:8777/5T298X",
+  "teacher_url": "https://estudio.infantinho.xyz/teacher/activities.html",
+  "public_draft_access": {
+    "local_metadata": 404,
+    "local_content": 404
+  }
 }
