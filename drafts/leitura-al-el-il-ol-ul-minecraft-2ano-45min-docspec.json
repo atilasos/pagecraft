@@ -1,0 +1,404 @@
+{
+  "slug": "leitura-al-el-il-ol-ul-minecraft-2ano-45min",
+  "title": "Oficina das palavras com l",
+  "topic": "Caso de leitura al, el, il, ol, ul com construção legendada no Minecraft Education",
+  "ageRange": "7–8 anos (2.º ano)",
+  "year": 2,
+  "duration": 45,
+  "languages": [
+    "pt"
+  ],
+  "objectives": [
+    "Localizar al, el, il, ol e ul em palavras e comparar a posição do l.",
+    "Ler palavras e mensagens curtas, relacionando a escrita com o significado.",
+    "Produzir e rever em pares duas placas para uma construção no Minecraft Education.",
+    "Explicar uma escolha e identificar a ajuda recebida ou um próximo passo."
+  ],
+  "criteria": [
+    {
+      "id": "localizar",
+      "pt": "Encontro al, el, il, ol ou ul nas palavras."
+    },
+    {
+      "id": "ler-usar",
+      "pt": "Leio as palavras e uso-as numa mensagem que faz sentido."
+    },
+    {
+      "id": "rever-partilhar",
+      "pt": "Revejo uma placa com o meu par e explico uma escolha."
+    }
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Português",
+        "year": "2.º ano",
+        "domain": "Leitura e Escrita",
+        "descriptor": "Paráfrase: ler articulando de modo adequado ao sentido; escrever atendendo à posição dos grafemas e rever pequenos textos com os colegas.",
+        "source": "https://curriculonacional.dge.mec.pt/organizacao-curricular/portugues-2o-ano"
+      },
+      {
+        "subject": "Português",
+        "year": "2.º ano",
+        "domain": "Gramática — ações estratégicas",
+        "descriptor": "Paráfrase: desenvolver a consciência fonológica por meio da manipulação e reconstrução de palavras.",
+        "source": "https://curriculonacional.dge.mec.pt/organizacao-curricular/portugues-2o-ano"
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-E: Relacionamento interpessoal",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ],
+    "status": "Página primária DGE consultada em 2026-09-26; escolha do caso de leitura e aplicação Minecraft são propostas didáticas. Não se invoca a proposta curricular de 2026 como homologada."
+  },
+  "memAlignment": {
+    "modules": [
+      "Trabalho curricular comparticipado",
+      "Projecto cooperativo",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "Critérios conhecidos antes da tarefa",
+      "Registo de tentativa e revisão",
+      "Autoavaliação por critérios"
+    ],
+    "socialOrganization": "Turma → exploração individual acompanhada → pares com alternância → comunicação curta à turma."
+  },
+  "materials": [
+    "PageCraft aberto num dispositivo por aluno ou par; no caso de trabalho a pares, o registo identifica quem interage.",
+    "Minecraft Education instalado e acesso/licença previamente confirmados; mundo criativo simples já aberto por par.",
+    "Blocos de construção e placas/quadros de texto disponíveis; professor demonstra apenas o necessário.",
+    "Quadro ou projeção; papel e lápis como alternativa se a aplicação falhar."
+  ],
+  "units": [
+    {
+      "id": "arranque",
+      "summary": "Descobrir para que precisamos de ler e conhecer os critérios.",
+      "duration": 5,
+      "textDescription": "Um colega vai visitar a nossa pequena construção. Precisamos de palavras e placas que o ajudem a perceber o que fizemos. O professor apresenta os critérios; não explica ainda uma regra de l.",
+      "interaction": {
+        "state": [
+          {
+            "name": "apoio",
+            "type": "dropdown",
+            "options": [
+              "Broto — Apoio",
+              "Árvore jovem — Intermédio",
+              "Árvore robusta — Desafio"
+            ],
+            "default": "Árvore jovem — Intermédio"
+          },
+          {
+            "name": "palavraInicial",
+            "type": "quiz",
+            "options": [
+              "sal",
+              "mel",
+              "funil",
+              "sol",
+              "azul"
+            ]
+          }
+        ],
+        "render": "Critérios em linguagem de aluno e cinco palavras nucleares disponíveis.",
+        "transition": "Escolher apoio livremente; escolher uma palavra e tentar lê-la a um colega.",
+        "constraint": "A palavra escrita transmite significado a outra pessoa; a escolha de apoio pode mudar.",
+        "assessment": "Página regista escolha e apoio; professor escuta uma leitura inicial sem classificação automática."
+      },
+      "differentiation": {
+        "support": "Professor/par lê as instruções e oferece sal/sol para apontar.",
+        "standard": "Aluno escolhe entre as cinco palavras e tenta explicar uma.",
+        "challenge": "Aluno propõe uma palavra e explica como uma placa ajuda um visitante."
+      }
+    },
+    {
+      "id": "oficina",
+      "summary": "Experimentar as sequências al, el, il, ol e ul em palavras com significado.",
+      "duration": 12,
+      "textDescription": "Completar s__→sal, m__→mel, fun__→funil, s__→sol, az__→azul a partir de pistas de significado; distinguir as duas pistas de s__. Ler a palavra inteira. Destaque é de letras, não de sílabas. Extensão compara al-to e ma-la.",
+      "interaction": {
+        "state": [
+          {
+            "name": "item",
+            "type": "dropdown",
+            "options": [
+              "sal",
+              "mel",
+              "funil",
+              "sol",
+              "azul"
+            ],
+            "default": "sal"
+          },
+          {
+            "name": "sequencia",
+            "type": "quiz",
+            "options": [
+              "al",
+              "el",
+              "il",
+              "ol",
+              "ul"
+            ]
+          },
+          {
+            "name": "tentativas",
+            "type": "derived",
+            "derivedFrom": "histórico de escolhas e revisões"
+          },
+          {
+            "name": "comparacao",
+            "type": "quiz",
+            "options": [
+              "alto",
+              "mala"
+            ]
+          }
+        ],
+        "render": "Bancada com uma palavra incompleta, pista visual/textual de significado, peças al/el/il/ol/ul e pré-visualização do resultado. A palavra inteira permanece legível após verificar.",
+        "transition": "Tocar uma peça ou usar teclado coloca-a no espaço; verificar devolve pista útil; trocar permite rever. Avançar é livre, incluindo deixar por responder. Após tentativa, opção de destacar as duas letras estudadas; desafio compara posição do l em alto/mala.",
+        "constraint": "Trocar a vogal antes de l muda a palavra possível e o seu sentido. Nos exemplos, l termina uma sílaba; as sequências destacadas não são sempre sílabas completas.",
+        "assessment": "Observável digital: sequência escolhida por palavra, revisão e resposta à comparação; professor observa leitura oral. Passar por todas as cinco sequências sem obrigar acerto para avançar."
+      },
+      "differentiation": {
+        "support": "Duas peças por item, ilustração e pista de significado; professor/par pode modelar a palavra inteira. Continua a encontrar as cinco sequências.",
+        "standard": "Cinco peças; pista curta sem palavra completa; verificar e rever as cinco palavras.",
+        "challenge": "Cinco peças, pista apenas textual; explicar a diferença entre alto (al-to) e mala (ma-la), com campo de justificação opcional."
+      },
+      "wordBank": [
+        {
+          "word": "sal",
+          "prefix": "s",
+          "target": "al",
+          "clue": "Põe-se um pouco na sopa.",
+          "syllables": [
+            "sal"
+          ]
+        },
+        {
+          "word": "mel",
+          "prefix": "m",
+          "target": "el",
+          "clue": "É doce e vem do trabalho das abelhas.",
+          "syllables": [
+            "mel"
+          ]
+        },
+        {
+          "word": "funil",
+          "prefix": "fun",
+          "target": "il",
+          "clue": "Ajuda a deitar um líquido numa garrafa.",
+          "syllables": [
+            "fu",
+            "nil"
+          ]
+        },
+        {
+          "word": "sol",
+          "prefix": "s",
+          "target": "ol",
+          "clue": "Ilumina o céu durante o dia.",
+          "syllables": [
+            "sol"
+          ]
+        },
+        {
+          "word": "azul",
+          "prefix": "az",
+          "target": "ul",
+          "clue": "É o nome de uma cor.",
+          "syllables": [
+            "a",
+            "zul"
+          ]
+        }
+      ],
+      "linguisticGuardrail": "Não escrever fu-n-il nem a-z-ul; não chamar sílabas às cinco peças em todas as palavras. Não ensinar que todo l depois de vogal é este caso."
+    },
+    {
+      "id": "mensagens",
+      "summary": "Ler para escolher uma construção e preparar placas compreensíveis.",
+      "duration": 8,
+      "textDescription": "Ler uma pequena mensagem e reconstruí-la por seleção de palavras: O sol é azul. A seguir, planear duas placas com duas palavras distintas do banco; fantasia é permitida se a construção representar a mensagem. Um sol azul é fácil de representar; sal, mel e funil podem ser pequenas representações de blocos, sem exigir itens específicos do jogo.",
+      "interaction": {
+        "state": [
+          {
+            "name": "ordem",
+            "type": "sorting"
+          },
+          {
+            "name": "placa1",
+            "type": "quiz"
+          },
+          {
+            "name": "placa2",
+            "type": "quiz"
+          },
+          {
+            "name": "plano",
+            "type": "dropdown",
+            "options": [
+              "sol e azul",
+              "sal e mel",
+              "outra ideia com palavras do banco"
+            ]
+          }
+        ],
+        "render": "Palavras móveis por toque/teclado, frase montada e dois campos de preparação das placas. Plano sempre editável.",
+        "transition": "Escolher palavras coloca-as na frase; retirar por toque; verificar compara a ordem. Escrever ou escolher modelos para duas placas guarda um plano, que será levado ao Minecraft.",
+        "constraint": "Uma mensagem depende da ordem das palavras e deve corresponder ao que o visitante vai ver.",
+        "assessment": "Página regista frase ordenada e textos das placas; interpretação de escrita aberta fica ao professor, sem falsos acertos por conter palavra-chave."
+      },
+      "differentiation": {
+        "support": "Quatro palavras O/sol/é/azul. Modelo selecionável sol/azul para duas placas; professor lê e aluno aponta o correspondente.",
+        "standard": "Ordenar O sol é azul. Preparar duas placas com banco de palavras; uma pode ser frase curta.",
+        "challenge": "Acrescentar um detalhe e justificar a ligação das placas à construção; revisão entre pares sem validação automática de texto livre."
+      }
+    },
+    {
+      "id": "transicao",
+      "summary": "Levar o plano para o Minecraft e combinar turnos.",
+      "duration": 2,
+      "textDescription": "Abrir o mundo já preparado. Um aluno começa a construir e o outro lê o plano e confere as placas; trocar aos seis minutos. Guardar os textos planeados na página antes de mudar de aplicação.",
+      "interaction": {
+        "state": [
+          {
+            "name": "pronto",
+            "type": "toggle",
+            "options": [
+              "Vou preparar",
+              "Já tenho o plano"
+            ]
+          },
+          {
+            "name": "papeis",
+            "type": "dropdown",
+            "options": [
+              "Começo a construir",
+              "Começo a ler e conferir"
+            ]
+          }
+        ],
+        "render": "Resumo legível do plano e instrução única de abertura do mundo.",
+        "transition": "Consultar plano e combinar papéis com o par.",
+        "constraint": "Um plano escrito continua a servir fora da página.",
+        "assessment": "Regista apenas intenção declarada; não comprova abertura do Minecraft."
+      },
+      "differentiation": {
+        "support": "Professor ajuda a abrir o mundo e relê duas palavras do plano.",
+        "standard": "Par abre o mundo preparado e decide papéis.",
+        "challenge": "Par antecipa um detalhe da construção que ajude o visitante a interpretar a placa."
+      }
+    },
+    {
+      "id": "minecraft",
+      "summary": "Construir para que outro colega leia e reconheça as palavras.",
+      "duration": 13,
+      "textDescription": "Construção pequena em modo criativo, com duas placas correspondentes ao que se vê. Não pedir cinco construções. Trocar funções ao fim de seis minutos; usar o último minuto para mostrar e reler. O foco é leitura e comunicação, não domínio técnico do jogo.",
+      "interaction": {
+        "state": [
+          {
+            "name": "relatoAluno",
+            "type": "quiz"
+          },
+          {
+            "name": "palavrasUsadas",
+            "type": "quiz"
+          },
+          {
+            "name": "ajudaRecebida",
+            "type": "quiz"
+          }
+        ],
+        "render": "Instrução externa e plano na página; no retorno, campos opcionais de autorrelato claramente nomeados. Nenhuma falsa pré-visualização ou validação do mundo.",
+        "transition": "Construir na aplicação externa, colocar duas placas e reler com o par. No retorno, aluno pode registar palavras usadas e o que reviu.",
+        "constraint": "As palavras escolhidas comunicam ao visitante o significado de uma construção; reler permite detetar uma placa que não corresponde.",
+        "assessment": "Professor observa duas placas, correspondência construção/texto, leitura em voz alta e alternância. A página regista apenas o autorrelato do aluno; não declara tarefa Minecraft verificada."
+      },
+      "differentiation": {
+        "support": "Representar um sol com blocos azuis e completar duas placas-modelo: sol e azul; par/professor apoia escrita e leitura.",
+        "standard": "Escolher duas palavras do banco, representar uma pequena cena e escrever duas placas; pelo menos uma contém uma mensagem curta.",
+        "challenge": "Criar uma frase própria e explicar a escolha de duas palavras de casos diferentes; convidar colega a sugerir uma revisão."
+      },
+      "maker": {
+        "type": "minecraft",
+        "challenge": "Com o teu par, faz uma pequena construção e coloca duas placas com palavras que estudaste. O colega deve conseguir ler e perceber o que construíram. Troquem de tarefa a meio.",
+        "materials": [
+          "Mundo criativo preparado",
+          "Blocos",
+          "Placas ou quadros de texto"
+        ],
+        "groupSize": "2",
+        "connection": "Usa o plano e as palavras exploradas na oficina para comunicar com um visitante real.",
+        "communication": "Cada par lê as duas placas ao par vizinho; dois pares podem partilhar uma escolha com a turma no fecho.",
+        "alternatives": [
+          "Se Minecraft falhar, desenhar a construção e escrever duas placas em papel; registar que foi usada a alternativa, sem dizer que houve trabalho no Minecraft."
+        ]
+      }
+    },
+    {
+      "id": "reflexao",
+      "summary": "Partilhar uma escolha e decidir o que praticar a seguir.",
+      "duration": 5,
+      "textDescription": "Dois minutos para leitura das placas entre pares e um ou dois exemplos à turma; três minutos para autoavaliação. Retomar os três critérios apresentados no início e admitir ainda não sei/preciso de ajuda/sem resposta.",
+      "interaction": {
+        "state": [
+          {
+            "name": "criterios",
+            "type": "quiz"
+          },
+          {
+            "name": "ajuda",
+            "type": "quiz"
+          },
+          {
+            "name": "estrategia",
+            "type": "quiz"
+          },
+          {
+            "name": "proximoPasso",
+            "type": "quiz"
+          }
+        ],
+        "render": "Três critérios com opções Ainda quero praticar / Consegui com ajuda / Consegui sozinho(a) / Quero mostrar como fiz, sem cor de classificação. Campos opcionais de estratégia, ajuda e próximo passo.",
+        "transition": "Escolher, alterar ou deixar critérios por responder; enviar reflexão à ponte do host. Confirmar envio sem confundir com persistência comprovada pelo servidor.",
+        "constraint": "A reflexão útil liga um critério a uma ação e orienta a próxima tentativa.",
+        "assessment": "Autorrelato separado da evidência digital e da observação do professor; nunca inferir avaliação oral a partir de cliques."
+      },
+      "differentiation": {
+        "support": "Ícones com texto e leitura humana das opções; escolher ajuda ou apontar uma palavra a praticar.",
+        "standard": "Descrever uma estratégia: li outra vez, comparei letras, pedi ajuda; escolher próximo passo.",
+        "challenge": "Explicar e justificar com um exemplo da placa revista; propor como transferir a estratégia para palavra nova."
+      }
+    }
+  ],
+  "sessionFlow": "0–5 arranque e critérios; 5–17 oficina; 17–25 mensagens e plano; 25–27 transição; 27–40 Minecraft (troca aos 33); 40–45 partilha e autoavaliação. Os 45 minutos são a soma das seis unidades; este fluxo não acrescenta tempo.",
+  "assessmentPolicy": {
+    "observedDigital": [
+      "Escolhas e revisões de sequências",
+      "Ordenação da frase",
+      "Escrita do plano",
+      "Mudanças de apoio"
+    ],
+    "studentVoice": [
+      "Autorrelato Minecraft",
+      "Autoavaliação dos três critérios",
+      "Ajuda, estratégia e próximo passo"
+    ],
+    "teacherObservation": [
+      "Leitura oral e articulação",
+      "Correspondência real das placas à construção",
+      "Revisão e cooperação no Minecraft"
+    ],
+    "limits": "Sem microfone, análise de voz, ligação Minecraft, pontuação ou classificação de criança. Não confundir autorrelato com observação."
+  },
+  "implementationRequirements": [
+    "HTML autocontido PT-PT sem rede; corpo >=22px e controlos >=56px para a faixa etária; foco visível, rótulos, teclado e toque.",
+    "Apoios mudam livremente e não apagam respostas; sem paleta semáforo.",
+    "Evidências e reflexão por postMessage segundo contrato canónico; HTML sem API ou credenciais.",
+    "Não bloquear navegação por respostas em falta; botões e pistas não revelam solução antes da tentativa exceto ajuda solicitada/modelação em Broto.",
+    "Estratégia de revisão: leitura humana em pares disponível sem depender de síntese de voz."
+  ]
+}
