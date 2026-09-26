@@ -72,7 +72,7 @@ O leitor/confere lê o plano e ajuda a comparar texto e construção; o construt
 | Voz do aluno | O que diz ter feito no Minecraft; ajuda, estratégia e autoavaliação por critérios. | Conversar sobre a estratégia e escolher uma palavra a praticar. |
 | Observação do professor | Leitura oral, placas reais e correspondência, cooperação e revisão no Minecraft. | Apoiar leitura e escrita ou propor nova aplicação. |
 
-A criança pode escolher «Ainda quero praticar», «Consegui com ajuda», «Consegui sozinho(a)» ou «Quero mostrar como fiz», e deixar itens em branco. Não se calcula uma nota. O relato de uma construção é autorrelato, não validação do mundo Minecraft. A observação humana fica separada dos registos da página.
+A criança pode escolher «Ainda quero praticar», «Consegui com ajuda», «Consegui sozinho(a)» ou «Prefiro não responder», e deixar itens em branco. Não se calcula uma nota. O relato de uma construção é autorrelato, não validação do mundo Minecraft. A observação humana fica separada dos registos da página.
 
 ## Fontes e estado da revisão
 
