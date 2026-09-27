@@ -1,46 +1,14 @@
 {
-  "pass": false,
-  "severity": "high",
-  "issues": [
-    {
-      "type": "semantic",
-      "severity": "high",
-      "location": "#shareStatus, resposta ao botão #shareButton na etapa 4, quando a página é aberta isoladamente",
-      "original": "Pedido de partilha registado nesta atividade. Mostra o trabalho ao professor.",
-      "suggestion": "Fora do PageCraft: «Mostra o trabalho ao professor e diz que gostarias de o partilhar.» Dentro do PageCraft, após registo efetivo: «Pedido de partilha registado. Mostra o trabalho ao professor.»",
-      "reason": "Na página isolada, a ponte de registo não envia nem guarda o pedido de partilha; a mensagem atual afirma que houve um registo que não ocorreu."
-    },
-    {
-      "type": "pedagogical",
-      "severity": "medium",
-      "location": "Feedback de #trialResult na etapa 2",
-      "original": "A personagem parou antes do rio: ainda não há tabuleiro. O que mudas agora? / A personagem parou antes da outra margem. Compara onde estão os apoios na vista de cima. / A personagem atravessou neste modelo! Que mudança faria a travessia deixar de funcionar?",
-      "suggestion": "Neste modelo, a personagem não conseguiria começar a travessia: falta o tabuleiro. O que mudas agora? / Neste modelo, a personagem não conseguiria chegar à outra margem. Compara a posição dos apoios na vista de cima. / Neste modelo, a personagem conseguiria atravessar! Que mudança impediria a travessia?",
-      "reason": "O teste apresenta um resultado textual, sem mostrar uma personagem a deslocar-se. A formulação proposta distingue o resultado previsto de uma ação que a criança observou."
-    },
-    {
-      "type": "semantic",
-      "severity": "low",
-      "location": "hints.challenge[1], apoio Árvore robusta na etapa 2",
-      "original": "Depois de uma travessia conseguida, muda apenas uma variável. Em que vista se vê melhor a diferença? Restaura a ponte.",
-      "suggestion": "Depois de uma travessia conseguida, muda apenas uma coisa: a posição, a altura ou o tabuleiro. Em que vista se vê melhor a diferença? Volta à ponte anterior.",
-      "reason": "«Variável» e «restaura» são termos abstratos para esta primeira experiência; as opções concretas coincidem com os controlos disponíveis."
-    },
-    {
-      "type": "semantic",
-      "severity": "low",
-      "location": "#u3 .card, aviso junto à ligação Tinkercad",
-      "original": "Precisas de internet e do acesso preparado pelo professor. Não cries uma conta pessoal por indicação desta página.",
-      "suggestion": "Precisas de internet e do acesso preparado pelo professor. Usa esse acesso; não cries uma conta pessoal.",
-      "reason": "«Por indicação desta página» é pouco natural e torna menos direta a instrução para a criança."
-    }
-  ],
-  "summary": "O texto usa português europeu adequado aos 3.º e 4.º anos e mantém os três critérios e os três apoios coerentes com o DocSpec. A revisão reprova a mensagem de partilha na página isolada, que declara um registo inexistente; as restantes sugestões tornam o feedback e as instruções mais precisos.",
+  "pass": true,
+  "severity": "low",
+  "issues": [],
+  "summary": "As quatro correções pedidas foram aplicadas. A mensagem de partilha distingue a página isolada do PageCraft, o feedback descreve o resultado previsto pelo modelo, e os apoios e o aviso de acesso usam linguagem clara para os 3.º e 4.º anos. Não encontrei novos problemas no texto alterado.",
   "acceptance_checks": [
     "Ortografia e gramática pt-PT AO90: OK",
     "Registo consistente: OK",
-    "Adequação à faixa etária: corrigir os dois termos abstratos do apoio Desafio",
-    "Instruções claras e seguíveis: rever o aviso da conta pessoal",
-    "Alinhamento com objetivos e evidência: corrigir a confirmação de partilha e distinguir o teste textual de uma travessia observada"
+    "Adequação à faixa etária: OK",
+    "Instruções claras e seguíveis: OK",
+    "Alinhamento com objetivos e evidência: OK",
+    "Quatro problemas do relatório anterior corrigidos: OK"
   ]
 }
