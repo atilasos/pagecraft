@@ -26,6 +26,8 @@ const copy = {
     thanks: "Obrigado por partilhares!",
     teacherSees:
       "O teu professor pode agora ler o teu trabalho e a tua reflexão.",
+    teacherSeesPreview:
+      "Esta foi uma pré-visualização. O ensaio ficou guardado, mas não entra nos relatórios dos alunos.",
     again: "Começar uma nova realização",
     alone: "Consegui com autonomia",
     help: "Consegui com ajuda",
@@ -67,6 +69,8 @@ const copy = {
     saved: "Saved",
     thanks: "Thank you for sharing!",
     teacherSees: "Your teacher can now read your work and reflection.",
+    teacherSeesPreview:
+      "This was a preview. The trial was saved, but it will not appear in pupil reports.",
     again: "Start a new attempt",
     alone: "I managed on my own",
     help: "I managed with help",
@@ -302,6 +306,11 @@ function openReflection() {
 function showDone() {
   for (const id of ["entry", "work", "reflection"]) $(id).hidden = true;
   $("done").hidden = false;
+  const teacherMessage = $("done-teacher-sees");
+  teacherMessage.dataset.i18n = attempt.preview
+    ? "teacherSeesPreview"
+    : "teacherSees";
+  teacherMessage.textContent = t(teacherMessage.dataset.i18n);
   $("done-next").textContent = attempt.assessment?.next_step || "";
   status(attempt.preview ? t("preview") : t("synced"));
 }
