@@ -1,0 +1,100 @@
+{
+  "palette": {
+    "bg": "oklch(0.9648 0.0127 86.8)",
+    "surface": "oklch(0.9914 0.0098 87.5)",
+    "primary": "oklch(0.4244 0.0611 226.4)",
+    "accent": "oklch(0.7567 0.0940 70.9)",
+    "ink": "oklch(0.3008 0.0228 235.5)"
+  },
+  "functional": {
+    "ok": "oklch(0.4393 0.0661 167.6)",
+    "warn": "oklch(0.4300 0.0745 66.9)",
+    "focus": "oklch(0.4377 0.1299 259.4)"
+  },
+  "fallbackColors": {
+    "bg": "#F7F3EA",
+    "surface": "#FFFCF5",
+    "primary": "#245568",
+    "accent": "#D6A66C",
+    "ink": "#233038",
+    "ok": "#285E4B",
+    "warn": "#6B471E",
+    "focus": "#214F98"
+  },
+  "typography": {
+    "fontFamily": "'Atkinson Hyperlegible', 'Lexend', 'Nunito', 'Comic Sans MS', 'Chalkboard SE', system-ui, sans-serif",
+    "scale": "kids-8-10",
+    "baseSizePx": 20,
+    "headingSizePx": 32,
+    "heroSizePx": 40,
+    "minimumUiSizePx": 20,
+    "maxLineCh": 55,
+    "weights": [400, 700, 800],
+    "lineHeight": 1.5,
+    "italicAllowed": false,
+    "allCapsAllowed": false,
+    "notes": "Usar só fontes disponíveis no dispositivo, sem importações. Frases de instrução curtas e títulos de uma ou duas linhas; nunca reduzir o corpo para encaixar mais conteúdo."
+  },
+  "layout": {
+    "radius": 16,
+    "borderRadius": 16,
+    "spacing": "comfortable",
+    "maxWidth": 1080,
+    "maxWidthPx": 1080,
+    "padding": "clamp(1rem, 3vw, 2rem)",
+    "spacingScalePx": [8, 12, 16, 24, 32, 48],
+    "structure": "Cabeçalho curto com título, 3.º e 4.º anos, duração indicativa e escolha de apoio. Quatro etapas em sequência: Imaginar 5 min, Experimentar 10 min, Construir 22 min, Rever 8 min. Uma etapa principal por vez, critérios visíveis antes da primeira exploração e acessíveis em todas as etapas. Botões Anterior e Seguinte sem cronómetro obrigatório.",
+    "responsive": "A 900px ou mais, palco de simulação à esquerda e controlos à direita; cada área mantém largura confortável. A 768px, palco sobre controlos e cartões em duas colunas só quando ambos conservarem texto legível. A 390px, uma coluna em ordem de leitura: seletor de vistas, palco, controlos, feedback e navegação; elementos usam min-width:0, sem rolagem horizontal nem barra fixa que esconda ações. Palco mantém uma largura fluida, expande verticalmente para rótulos e nunca encolhe os controlos abaixo de 48px."
+  },
+  "components": {
+    "identity": "Aspeto de caderno de projeto: papel creme, tinta azul ardósia e apontamentos terracota. Um desenho SVG inline, simples, de margens, rio e tabuleiro junto ao título; texto adjacente transmite a ideia, SVG decorativo aria-hidden=true. Sem logótipos ou imitação do editor Tinkercad.",
+    "buttons": "Altura e largura mínimas de 48px, texto de 20px, cantos de 12px e estado selecionado por contorno forte, fundo e rótulo textual. Botão principal em primary com texto surface; secundário em surface com texto primary e contorno. Hover discreto sem escala nem movimento.",
+    "cards": "Superfície clara, contorno de 1–2px, raio 16px, espaço interior mínimo 20px. Sem faixas laterais, gradientes decorativos, sombras pesadas ou cartões repetidos sem função.",
+    "navigation": "Navegação por quatro botões com número, verbo e tempo indicativo; usar nav e aria-current=step, não simular tablist. Ao avançar, colocar foco no título da etapa. Permitir regressar sem apagar configuração, texto ou apoio escolhido. O tempo não bloqueia ações.",
+    "supportSelector": "Select ou radio group com as opções por extenso: Broto — Apoio, Árvore jovem — Intermédio, Árvore robusta — Desafio. Três desenhos botânicos de mesmo tamanho, mesma tinta e peso visual; não usar verde, amarelo e vermelho nem as cores funcionais para codificar níveis. A mudança é reversível e preserva respostas e configuração.",
+    "criteria": "Mostrar os três critérios do DocSpec juntos antes da exploração, com título 'O que vamos procurar'. Repetir os mesmos enunciados na reflexão. Uma lista numerada legível, sem marcas de aprovação antecipada, pontos ou classificação.",
+    "recipientAndPrediction": "Dois cartões de destinatário com desenho inline e radio nativo; o nome é sempre texto. Previsão opcional por seleção de peças e campo livre. Deixar espaço para rever a previsão no fim. As imagens apoiam a escolha, sem esconder opções a quem usa teclado.",
+    "bridgeSimulation": {
+      "views": "Um modelo e duas vistas alternáveis por botões 'De lado' e 'De cima', com aria-pressed ou radio group. A configuração mantém-se na troca. O palco identifica sempre margem esquerda, rio, margem direita, apoio esquerdo, apoio direito e tabuleiro por texto ou legenda fora do desenho. Um indicador textual mostra quais vistas já foram consultadas, sem assinalar consulta externa.",
+      "sideView": "SVG inline plano: bases das margens, apoios em alturas de 1–3 blocos e tabuleiro quando colocado. Mostrar claramente alturas diferentes e o ponto onde a personagem pára no teste. Não sugerir realismo estrutural ou segurança de uma ponte verdadeira.",
+      "topView": "SVG inline do mesmo estado visto de cima: duas margens, intervalo e posição longitudinal das peças. Manter nomes e cores consistentes com a vista lateral. Não usar a cor como único sinal de contacto; mostrar contornos e rótulos.",
+      "controls": "Para cada apoio, grupo com rótulo persistente, posições Margem/Rio/Afastado e altura 1/2/3 blocos; controlos nativos por botões ou radios, teclado e toque. Toggle textual Colocar/Retirar tabuleiro. Evitar depender de arrastar; se houver arrasto, oferecer os mesmos ajustes por clique e teclado. Broto pode mostrar uma peça de cada vez e alturas sugeridas sem retirar acesso às restantes.",
+      "trial": "Botão 'Testar travessia' e painel role=status. Mostrar onde a personagem parou ou que atravessou segundo as regras do modelo, seguido de pergunta para a próxima tentativa. Manter a configuração e permitir alterar uma variável ou voltar à configuração anterior. Uma tentativa com sucesso na simulação é descrita como sucesso neste modelo, nunca como prova de construção ou segurança real.",
+      "visualState": "Cores do terreno, água e peças são discretas e estáveis entre vistas; resultado inclui texto e símbolo. Sucesso usa ok apenas como cor funcional e resultado concreto; revisão usa warn e convite específico, sem vermelho, 'errado' ou som automático."
+    },
+    "externalTask": "Bloco de plano com três peças nomeadas e lista curta: cria, move, muda a vista, compara. Link textual para Tinkercad em nova aba, acompanhado de 'Precisas de internet e do acesso preparado pelo professor'. Campo de modo Tinkercad/Papel e blocos. Texto fixo 'Esta página não vê o teu desenho no Tinkercad'; não usar marcas visuais de concluído por abrir o link ou preencher campos.",
+    "peerReview": "Campos opcionais distintos para o que a criança viu, a sugestão do colega e a alteração descrita. Os rótulos identificam respostas da criança. Botão de partilha voluntária independente da gravação. Apresentar o professor como quem pode confirmar a construção externa.",
+    "reflection": "Três fieldsets, um por critério, cada qual com quatro opções sem pré-seleção: Consegui sozinho, Consegui com ajuda, Quero praticar, Prefiro não responder. Opções com mesma tinta e peso; disponibilidade de limpar escolha. Campos opcionais para estratégia e próximo passo. Broto oferece escolha visual e inícios de frase; Intermédio pede uma estratégia; Desafio pede uma justificação com exemplo. Nunca transformar apoio em nota.",
+    "recording": "Estado de gravação em texto junto à ação final: guardado localmente, a enviar, recebido pelo PageCraft ou falha recuperável. Só afirmar receção após confirmação do host. Distinguir visualmente acontecimentos da simulação, relato e autoavaliação da criança, sem sugerir que a página observou o Tinkercad.",
+    "feedback": "Frases curtas que descrevem o efeito: 'A personagem parou antes da outra margem. O que mudas agora?' ou 'Compara as alturas na vista de lado'. Cor, símbolo e texto em conjunto. Não revelar a solução antes da primeira tentativa."
+  },
+  "motion": {
+    "transitions": "subtle",
+    "durationMs": 160,
+    "easing": "ease-out",
+    "respectReducedMotion": true,
+    "notes": "Transições apenas de contorno, cor ou opacidade para mudança de estado. A troca de vistas é imediata; sem bounce, confetti, scroll obrigatório ou animação que torne difícil comparar as duas vistas."
+  },
+  "accessibility": {
+    "contrast": "WCAG-AA",
+    "contrastBody": "AA ≥4.5:1",
+    "contrastMicrocopy": "AAA ≥7:1 quando crítica",
+    "checkedFallbackPairs": "ink/bg 12.22:1; ink/surface 13.21:1; surface/primary 7.96:1; ink/accent 6.14:1; ok/surface 7.34:1; warn/surface 8.05:1; focus/surface 7.77:1. Medidos nas cores hexadecimais de reserva; confirmar pares OKLCH e estados finais no browser.",
+    "focusRing": true,
+    "focusStyle": "Anel focus-visible sólido de 3px na cor focus, afastado 3px; preservar contorno mesmo sobre botão escuro.",
+    "minTapPx": 48,
+    "keyboard": "Ordem de Tab igual à ordem visual; setas em radios/ranges; Enter ou Espaço em botões. Todas as alterações do modelo disponíveis sem arrastar. Nenhum foco preso; após troca de etapa, foco no título; após teste, painel de resultado anunciado sem retirar o foco do botão.",
+    "forms": "Cada grupo usa fieldset e legend; cada controlo tem label visível, sem placeholder como único rótulo. Áreas de texto podem ficar vazias. Não apagar conteúdo em mudanças de vista, apoio ou etapa.",
+    "soundOptIn": true,
+    "audio": "Nenhum som automático. Leitura oral pelo professor é possível; se houver botão de leitura, é opt-in e o texto permanece integralmente visível.",
+    "illustrations": "SVGs decorativos com aria-hidden=true; informação relevante do desenho também em legenda e estado textual. Emojis, se usados, têm texto adjacente ou aria-label adequado.",
+    "verification": [
+      "Conferir 390px, 768px e desktop sem rolagem horizontal, sobreposição ou redução do corpo abaixo de 20px.",
+      "Percorrer todas as opções e o teste com teclado, sem usar rato ou arrasto.",
+      "Trocar de vista, etapa e apoio após alterar peças e escrever; o estado deve persistir.",
+      "Conferir foco visível, anúncio do resultado e prefers-reduced-motion.",
+      "Verificar contraste efetivo das cores OKLCH, incluindo estados selecionado, hover e feedback."
+    ]
+  },
+  "notes": "O papel quente e a tinta azul ardósia dão uma identidade de projeto de construção; o acento terracota marca elementos de orientação sem virar código de desempenho. As duas vistas concentram a atenção na relação entre posição, altura e continuidade, enquanto a tarefa externa e os relatos mantêm uma apresentação própria para não confundir observação com descrição."
+}
