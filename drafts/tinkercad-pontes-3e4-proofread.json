@@ -1,24 +1,15 @@
 {
   "pass": true,
   "severity": "low",
-  "issues": [
-    {
-      "type": "semantic",
-      "severity": "low",
-      "location": "#brotoPanel button[data-broto-position=away], etapa 2",
-      "original": "Afastado",
-      "suggestion": "Afastado da margem",
-      "reason": "A imagem do botão está oculta aos leitores de ecrã. O nome completo esclarece de que lugar o apoio fica afastado e coincide com a opção do seletor abaixo."
-    }
-  ],
-  "summary": "O novo painel Broto tem instruções, botões e estados em português europeu claro e adequado à idade. Há um ajuste lexical de baixa severidade no botão «Afastado», cujo ícone não é anunciado a leitores de ecrã; os controlos completos abaixo mantêm a alternativa acessível.",
+  "issues": [],
+  "summary": "O novo painel Broto tem instruções, botões e estados em português europeu claro e adequado à idade. O botão «Afastado da margem» está agora explícito para leitores de ecrã e coerente com o seletor completo. A revisão textual está aprovada.",
   "acceptance_checks": [
     "Ortografia e gramática pt-PT AO90: OK",
     "Registo consistente: OK",
     "Adequação à faixa etária: OK",
-    "Instruções claras e seguíveis: OK; melhorar o nome do botão Afastado",
+    "Instruções claras e seguíveis: OK",
     "Alinhamento com objetivos e evidência: OK",
     "Quatro problemas do relatório anterior corrigidos: OK",
-    "Texto novo do painel Broto: OK, com um ajuste lexical recomendado"
+    "Texto novo do painel Broto: OK"
   ]
 }
