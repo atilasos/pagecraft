@@ -1,6 +1,6 @@
 {
   "slug": "tinkercad-pontes-3e4",
-  "status": "draft_needs_integrated_verification",
+  "status": "ready_for_teacher_review",
   "published": false,
   "code": "52XFA9",
   "review_url": "http://127.0.0.1:8777/52XFA9",
@@ -11,14 +11,14 @@
     "designer": {"status": "complete", "artifact": "drafts/tinkercad-pontes-3e4-design-spec.json"},
     "builder": {"status": "complete", "artifact": "drafts/tinkercad-pontes-3e4.html"},
     "proofreader": {"status": "pass", "artifact": "drafts/tinkercad-pontes-3e4-proofread.json"},
-    "evaluator": {"status": "blocked_on_integrated_test", "artifact": "drafts/tinkercad-pontes-3e4-evaluation.json"}
+    "evaluator": {"status": "pass", "artifact": "drafts/tinkercad-pontes-3e4-evaluation.json"}
   },
   "teacher_guide": "drafts/tinkercad-pontes-3e4.md",
   "metadata": "drafts/tinkercad-pontes-3e4-activity.json",
   "verification": {
     "schema": "DocSpec, design, proofread, evaluation e metadata validados em 2026-09-27.",
     "javascript": "node --check passou em 2026-09-27.",
-    "browser": "Simulação, vistas, três apoios, teclado e reflexão isolada testados com Agent Browser Hub; ver avaliação.",
+    "browser": "Simulação, vistas, três apoios, teclado, reflexão, gravação integrada e exclusão do ensaio dos relatórios testados com Agent Browser Hub; layout inspecionado em iframes de 390 e 768 px; ver avaliação.",
     "public_draft_access": "GET anónimo a /api/learning/activities/52XFA9 e /content devolveu 404."
   },
   "screenshots": [
@@ -26,13 +26,16 @@
     "/home/proteu/agent-browser-hub/screenshots/tinkercad-top-view.png",
     "/home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-full.png",
     "/home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-keyboard-change.png",
-    "/home/proteu/agent-browser-hub/screenshots/tinkercad-restored.png"
+    "/home/proteu/agent-browser-hub/screenshots/tinkercad-restored.png",
+    "/home/proteu/agent-browser-hub/screenshots/tinkercad-host-report-exclusion.png",
+    "/home/proteu/agent-browser-hub/screenshots/tinkercad-viewport-390-sim-controls.png",
+    "/home/proteu/agent-browser-hub/screenshots/tinkercad-viewport-768-sim-controls.png"
   ],
   "limitations": [
-    "O Agent Browser Hub exigiu confirmação humana para «Começar»; a realização integrada, a autoavaliação no host e a gravação dos eventos preview ainda não foram ensaiadas.",
-    "O Hub não expôs mudança de viewport; não houve ensaio em larguras reais de telemóvel e tablet.",
+    "A cópia corrigida do ecrã final do host foi verificada no código, sem nova captura em browser após a correção.",
+    "O teste de 390/768 px usou iframes de largura fixa; não reproduziu teclado virtual nem gestos físicos em dispositivos reais.",
     "Não houve construção observada no Tinkercad com alunos ou acesso de turma.",
     "O catálogo aceita um único ano: o rascunho foi registado como 3.º ano, com 3.º e 4.º anos explícitos no título e no conteúdo."
   ],
-  "next_step": "Se o professor autorizar a realização local de teste, verificar a ponte integrada e atualizar a avaliação. Depois, o professor revê a atividade; publicação exige aprovação específica."
+  "next_step": "O professor revê a pré-visualização e decide se aprova esta atividade específica. Publicação exige aprovação própria."
 }
