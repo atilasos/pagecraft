@@ -1,0 +1,88 @@
+{
+  "slug": "leitura-al-el-il-ol-ul-minecraft-2ano-45min",
+  "source": "drafts/leitura-al-el-il-ol-ul-minecraft-2ano-45min-docspec.json",
+  "palette": {
+    "bg": "oklch(0.9505 0.009 70)",
+    "surface": "oklch(0.9740 0.007 70)",
+    "primary": "oklch(0.4387 0.0805 50.81)",
+    "accent": "oklch(0.8426 0.0666 71.95)",
+    "ink": "oklch(0.2895 0.009 70)"
+  },
+  "functional": {
+    "ok": "oklch(0.4390 0.0568 159.33)",
+    "warn": "oklch(0.4708 0.0895 78.55)",
+    "focus": "oklch(0.4298 0.1127 264.59)"
+  },
+  "fallbackHex": {
+    "bg": "#f3eee8",
+    "surface": "#faf6f1",
+    "primary": "#754426",
+    "accent": "#e7c59c",
+    "ink": "#2e2a26",
+    "ok": "#355c47",
+    "warn": "#765413",
+    "focus": "#304c8d"
+  },
+  "typography": {
+    "fontFamily": "'Atkinson Hyperlegible', 'Lexend', 'Nunito', 'Comic Sans MS', 'Chalkboard SE', system-ui, sans-serif",
+    "scale": "kids-6-7",
+    "baseSizePx": 22,
+    "headingSizePx": 34,
+    "wordSizePx": 42,
+    "maxLineCh": 48,
+    "lineHeight": 1.5,
+    "weights": [
+      400,
+      700,
+      800
+    ],
+    "italicAllowed": false,
+    "allCapsAllowed": false,
+    "notes": "Fontes apenas se instaladas. O corpo de 22 px apoia leitores de 7 e 8 anos; palavras para manipular ganham tamanho sem separar artificialmente as sílabas."
+  },
+  "layout": {
+    "borderRadius": 12,
+    "spacing": "comfortable",
+    "maxWidthPx": 1060,
+    "padding": "clamp(1rem, 3vw, 2rem)",
+    "gapPx": 16,
+    "structure": "Cabeçalho curto, seis etapas com duração, seletor de apoio e uma bancada ativa. Critérios apresentados no arranque e consultáveis depois. Navegação anterior/seguinte fora da zona das respostas.",
+    "responsive": "Uma coluna até 760 px; depois bancada e apoio podem ocupar duas colunas. Peças repartem-se por linhas sem scroll horizontal. Navegação quebra em duas linhas se necessário.",
+    "notes": "A oficina centra a atenção numa palavra ou mensagem de cada vez. A numeração representa o percurso e nunca uma pontuação."
+  },
+  "components": {
+    "buttons": "Mínimo 56 × 56 px, padding 12 px 18 px, raio 10 px, borda visível. Primário surface sobre primary; secundário ink sobre surface. Hover altera borda, sem scale. Seleção tem borda espessa e indicação textual ou aria-pressed.",
+    "navigation": "Seis botões de etapa com número, nome e duração; etapa atual com aria-current=step. Texto Etapa n de 6. Anterior/seguinte permitem avançar sem resposta; mover foco para o título quando se muda de etapa.",
+    "support": "Seletor nativo com label O meu apoio, altura mínima 56 px. Nomes completos Broto — Apoio, Árvore jovem — Intermédio, Árvore robusta — Desafio. Mesma aparência neutra nos três; instrução curta de apoio muda sem apagar respostas.",
+    "criteria": "Lista de três critérios com identificadores estáveis. Texto completo no arranque e na reflexão, sem estrelas, notas ou barra de desempenho.",
+    "workbench": "Superfície de papel com contorno de tinta, palavra incompleta grande e peças retangulares al/el/il/ol/ul. Escrever a palavra resultante numa linha contínua, sem hífen nem espaçamento de falsa sílaba. Destacar as duas letras apenas após tentativa ou ajuda pedida; sublinhado acompanha o destaque.",
+    "clues": "Pista textual sempre visível. Em Broto, pequena ilustração local ou SVG inline do sal, mel, funil, sol ou cor azul; ícone decorativo aria-hidden quando repete a pista. Nenhuma imagem remota. A pista visual tem significado, não revela a palavra escrita.",
+    "messageBuilder": "Peças de palavras com botões reais. Tocar ou premir Enter/Espaço acrescenta; tocar na peça colocada retira. Mostrar frase montada numa linha que quebra naturalmente. Instrução explica ambas as ações; nunca exigir arrastar.",
+    "plan": "Duas áreas com label Placa 1 e Placa 2, texto 22 px e modelos selecionáveis quando há apoio. Campos abertos não recebem marca automática de correto. Resumo em forma de placas legíveis acompanha a transição.",
+    "minecraft": "Pequena construção decorativa feita em CSS ou SVG inline, sem copiar interface do jogo. Lista curta: construir, colocar duas placas, trocar tarefas aos seis minutos e reler. Mostrar claramente que o trabalho acontece no Minecraft Education. Campo de regresso chama-se O que conto sobre o meu trabalho e não valida a construção.",
+    "feedback_correct": "Texto em ink sobre surface/accent, ícone de confirmação em ok e mensagem concreta sobre a palavra. A cor só reforça a descoberta.",
+    "feedback_incorrect": "Texto em ink sobre surface, ícone de nova tentativa em warn, pista de significado e convite a trocar a peça. Sem vermelho, animação punitiva ou som automático.",
+    "selfAssessment": "Um fieldset por critério com legend. Opções de escolha com labels completos, min-height 56 px e indicação de seleção. Sem resposta é permitido e existe forma de limpar a escolha. Mesma aparência neutra em todas as opções; os três apoios alteram apenas a ajuda para refletir.",
+    "status": "Mensagem persistente legível para entrega da reflexão. Distinguir reflexão enviada à página e gravação confirmada quando existir confirmação real. Feedback breve com role=status e aria-live=polite, sem deslocar o foco."
+  },
+  "motion": {
+    "transitions": "subtle",
+    "durationMs": 140,
+    "easing": "ease-out",
+    "respectReducedMotion": true,
+    "notes": "Apenas mudanças de borda e fundo; sem confetes, bounce ou contagens animadas."
+  },
+  "accessibility": {
+    "contrastBody": "AA",
+    "contrastMicrocopy": "AAA",
+    "focusRing": true,
+    "focusStyle": "Contorno de 3 px focus, offset 3 px; sobre botão primary usar separação clara surface entre botão e anel.",
+    "minTapPx": 56,
+    "soundOptIn": true,
+    "keyboard": "Todas as peças e controlos são elementos nativos; ordem de tabulação acompanha a leitura. Labels associados aos campos; resumo e feedback têm nomes claros.",
+    "textPairings": "Usar ink para todo o texto explicativo e estados sobre bg, surface ou accent. A cor warn serve ícones/bordas, nunca microcopy crítico. Primary com texto surface é reservado a ações.",
+    "icons": "Ícones nunca são a única instrução; emoji decorativo recebe aria-hidden e ícone sem texto exige nome acessível.",
+    "viewport": "Verificar a 390 px e 768 px, zoom 200%, teclado e mudança livre de apoio. O visual não pode impedir deixar respostas por dar."
+  },
+  "notes": "Papel quente, tinta castanha e peças de madeira ligam a leitura à construção de placas. As cinco sequências mantêm a mesma cor para a criança comparar as letras; os apoios nunca codificam valor ou desempenho. A página prepara e recolhe o relato do trabalho no Minecraft sem fingir observar o jogo."
+}
