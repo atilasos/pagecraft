@@ -1,37 +1,21 @@
 {
   "pass": false,
   "route": "builder",
-  "severity": "medium",
+  "severity": "low",
   "scores": {
     "factual_accuracy": 4,
     "constraint_alignment": 4,
-    "differentiation_quality": 2,
+    "differentiation_quality": 4,
     "ux_accessibility": 4,
     "visual_design": 4,
-    "technical_quality": 3
+    "technical_quality": 4
   },
-  "issues": [
-    {
-      "type": "differentiation",
-      "severity": "medium",
-      "location": "u2, Broto — Apoio",
-      "description": "A mudança para Broto altera apenas o texto de ajuda. O controlo continua a apresentar posições só por texto e alturas de 1, 2 e 3 blocos, apesar de o DocSpec pedir posições ilustradas e escolhas prontas de 1 ou 2 blocos para este apoio."
-    },
-    {
-      "type": "event_tracking",
-      "severity": "medium",
-      "location": "Inicialização de drafts/tinkercad-pontes-3e4.html",
-      "description": "No modo integrado, a primeira etapa é apresentada com goto(state.step, false, false) e só é emitido activity_loaded. unit_started(u1) não é emitido até haver navegação; a visita inicial à unidade pode não constar do histórico do professor."
-    }
-  ],
-  "required_fixes": [
-    "Implementar em Broto escolhas visuais para posições e opções de altura 1 ou 2 blocos, preservando a configuração ao trocar de apoio.",
-    "Emitir unit_started para a unidade inicialmente apresentada no modo integrado, sem duplicar eventos ao restaurar o histórico."
-  ],
+  "issues": [],
+  "required_fixes": [],
   "acceptance_checks": [
-    "Broto oferece posições com indicação visual e alturas prontas de 1 ou 2 blocos; Árvore jovem e Árvore robusta preservam os seus percursos distintos.",
-    "O primeiro carregamento integrado regista unit_started(u1); restauração e navegação não criam eventos duplicados indevidos.",
-    "Percurso integrado completo: entrar com nome de teste, realizar a simulação, abrir a autoavaliação e confirmar que evidência observada e respostas da criança aparecem separadas no relatório do professor.",
+    "Após autorização para «Começar» no preview local, verificar que o iframe envia unit_started(u1) na realização inicial e que os eventos seguintes não são duplicados pela recuperação.",
+    "Na realização preview, testar tentativa falhada e conseguida, vistas, mudança de apoio e autoavaliação; confirmar que o host guardou eventos observados e respostas originais separadamente.",
+    "Confirmar que a realização preview permanece excluída dos relatórios privados do professor, conforme skills/codex/references/learning.md.",
     "Verificar ecrãs de telemóvel, tablet e desktop em browser com controlo de viewport."
   ],
   "evidence": [
@@ -39,18 +23,24 @@
     "Teste sem tabuleiro: feedback de falha indicou a peça em falta, sem classificar a criança. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-failed-trial.png.",
     "Após colocar tabuleiro e mudar o apoio direito para margem e 2 blocos, o teste indicou travessia conseguida no modelo. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-passed-trial.png.",
     "A vista superior mostrou tabuleiro e apoios, e o texto de vistas consultadas passou a indicar lado e cima. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-top-view.png.",
-    "Os três apoios foram selecionados. Broto e Árvore robusta alteraram as instruções, sem alterar os controlos. Screenshots: /home/proteu/agent-browser-hub/screenshots/tinkercad-support-full.png e /home/proteu/agent-browser-hub/screenshots/tinkercad-challenge-full.png.",
     "No modo papel/blocos, o plano de peças e o aviso sobre observação externa ficaram disponíveis. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-build-full.png.",
     "A reflexão isolada permitiu selecionar 'Consegui com ajuda', limpar uma escolha, escrever estratégia e próximo passo; os textos e a escolha reapareceram após nova navegação na mesma aba. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-restored.png.",
     "Tab apresentou o atalho 'Ir para a atividade' com foco visível. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-keyboard-tab.png.",
     "abh --json test http://localhost:8788/drafts/tinkercad-pontes-3e4.html devolveu console_errors=[], browser_errors=[] e pending_requests=[].",
-    "Inspeção do código confirmou botões e seletores com mínimos CSS de 48 px, descrição textual da cena SVG e media queries a 800 e 600 px."
+    "Inspeção do código confirmou botões e seletores com mínimos CSS de 48 px, descrição textual da cena SVG e media queries a 800 e 600 px.",
+    "2026-09-27, reensaio após 116c8f3 e c6e8070: Broto apresentou cartões visuais para margem, rio e afastado da margem, botões de 1 e 2 blocos, e seleção explícita do apoio ativo. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-full.png.",
+    "No Broto, selecionar apoio direito, posição na margem e 2 blocos atualizou a cena e os seletores completos. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-changed.png.",
+    "Troca Broto → Árvore jovem → Broto preservou posição/altura do apoio direito e voltou a mostrar o mesmo apoio ativo. Screenshots: /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-intermediate.png e /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-return.png.",
+    "Tab mostrou foco visível no novo botão Apoio direito; Enter ativou-o e, com Tab e Enter, mudou a posição para No rio. Screenshots: /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-keyboard.png e /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-keyboard-change.png.",
+    "Inspeção estática após 116c8f3: se learning_restore não contém unit_started, a página emite o evento da unidade inicial; um fallback após 3 s cobre ausência de resposta. O comportamento integrado não foi observado no browser.",
+    "abh --json test do HTML corrigido devolveu console_errors=[], browser_errors=[] e pending_requests=[]."
   ],
   "blocked_by": [
-    "O formulário «Começar» em http://localhost:8777/52XFA9 devolveu requires_confirmation no Agent Browser Hub; a confirmação humana para submeter estava pendente. Não foi possível testar gravação integrada, autoavaliação do host ou relatório privado.",
+    "O formulário «Começar» em http://localhost:8777/52XFA9 exige confirmação humana no Agent Browser Hub, ainda pendente. A gravação dos eventos da realização preview e a autoavaliação integrada não foram testadas; por isso a avaliação mantém pass=false.",
     "As ferramentas disponíveis do Agent Browser Hub não expuseram alteração de viewport; telemóvel e tablet não foram testados em tamanhos reais.",
-    "O acesso Tinkercad da turma não estava disponível nesta avaliação; a construção externa não foi observada."
+    "O acesso Tinkercad da turma não estava disponível nesta avaliação; a construção externa não foi observada. Isso corresponde ao limite declarado pela atividade."
   ],
   "critical": [],
-  "suggestions": []
+  "suggestions": [],
+  "preview_reporting": "Realizações preview de rascunhos são excluídas dos relatórios do professor por contrato; o teste integrado deve confirmar esse comportamento, não exigir que o ensaio apareça como trabalho de aluno."
 }
