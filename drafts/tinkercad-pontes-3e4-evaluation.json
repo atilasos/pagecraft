@@ -1,6 +1,5 @@
 {
-  "pass": false,
-  "route": "builder",
+  "pass": true,
   "severity": "low",
   "scores": {
     "factual_accuracy": 4,
@@ -13,10 +12,11 @@
   "issues": [],
   "required_fixes": [],
   "acceptance_checks": [
-    "Após autorização para «Começar» no preview local, verificar que o iframe envia unit_started(u1) na realização inicial e que os eventos seguintes não são duplicados pela recuperação.",
-    "Na realização preview, testar tentativa falhada e conseguida, vistas, mudança de apoio e autoavaliação; confirmar que o host guardou eventos observados e respostas originais separadamente.",
-    "Confirmar que a realização preview permanece excluída dos relatórios privados do professor, conforme skills/codex/references/learning.md.",
-    "Verificar ecrãs de telemóvel, tablet e desktop em browser com controlo de viewport."
+    "PASS: tentativa falhada e conseguida, vista superior, mudanças de peças e três apoios no browser.",
+    "PASS: controlos Broto ilustrados e acessíveis por Tab/Enter; trocar de apoio preserva a configuração.",
+    "PASS: realização preview integrada guardou unit_started(u1–u4), tentativas, vistas, plano, relatos e autoavaliação separados; o dashboard excluiu o ensaio dos relatórios.",
+    "PASS: atividade isolada em iframes de largura interna 390 px e 768 px apresentou navegação, simulação e controlos legíveis sem corte horizontal interno.",
+    "PASS por inspeção de código: 4c95bde alterou a mensagem final do preview para explicar a exclusão dos relatórios; o novo texto não foi reaberto no browser."
   ],
   "evidence": [
     "2026-09-27: Agent Browser Hub, perfil temporary, abriu o rascunho isolado em http://localhost:8788/drafts/tinkercad-pontes-3e4.html. Sessão fechada no fim.",
@@ -33,14 +33,22 @@
     "Troca Broto → Árvore jovem → Broto preservou posição/altura do apoio direito e voltou a mostrar o mesmo apoio ativo. Screenshots: /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-intermediate.png e /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-return.png.",
     "Tab mostrou foco visível no novo botão Apoio direito; Enter ativou-o e, com Tab e Enter, mudou a posição para No rio. Screenshots: /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-keyboard.png e /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-keyboard-change.png.",
     "Inspeção estática após 116c8f3: se learning_restore não contém unit_started, a página emite o evento da unidade inicial; um fallback após 3 s cobre ausência de resposta. O comportamento integrado não foi observado no browser.",
-    "abh --json test do HTML corrigido devolveu console_errors=[], browser_errors=[] e pending_requests=[]."
+    "abh --json test do HTML corrigido devolveu console_errors=[], browser_errors=[] e pending_requests=[].",
+    "2026-09-27, teste integrado no Agent Browser Hub, perfil temporary: com autorização do professor, o clique «Começar» com confirmed=true criou uma realização fictícia no preview local http://localhost:8777/52XFA9 e abriu o iframe. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-host-preview-start.png.",
+    "Inspeção de metadados da realização preview guardada no servidor, sem expor credenciais: preview=true, completed=true, 30 eventos; activity_loaded, unit_started(u1–u4), tentativas u2 falhada e conseguida, simulation_view=top, plano u3, work_mode=paper e três relatos u4. Os resultados previstos apareceram na UI. Screenshots: /home/proteu/agent-browser-hub/screenshots/tinkercad-host-failed.png, /home/proteu/agent-browser-hub/screenshots/tinkercad-host-passed.png e /home/proteu/agent-browser-hub/screenshots/tinkercad-host-top-view.png.",
+    "A autoavaliação do host guardou c1=help, c2=alone, c3=practising, estratégia e próximo passo originais; o ecrã final apresentou «GUARDADO» e o próximo passo. Screenshots: /home/proteu/agent-browser-hub/screenshots/tinkercad-host-reflection.png e /home/proteu/agent-browser-hub/screenshots/tinkercad-host-finished.png.",
+    "No dashboard do professor, a pesquisa pelo nome fictício devolveu «0 realizações · 0 terminadas» e «Os ensaios de rascunhos ficam fora dos relatórios»; assim, a exclusão do preview foi confirmada na interface. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-host-report-exclusion.png.",
+    "A primeira visita integrada emitiu unit_started(u1) uma vez; a vista superior foi ativada com Tab/Enter e registada. Os eventos observados, a voz da criança e a autoavaliação permaneceram em campos distintos da realização preview.",
+    "Após a sessão integrada, 4c95bde corrigiu a cópia final do host: showDone seleciona teacherSeesPreview quando attempt.preview=true; PT diz que o ensaio foi guardado mas não entra nos relatórios dos alunos. Inspeção estática do diff; a screenshot de conclusão anterior documenta a cópia antiga.",
+    "Teste responsive no Agent Browser Hub com harness temporário de iframes internos de 390 px e 768 px, removido depois: abertura, navegação e simulação/controles legíveis, sem corte horizontal interno observável. Screenshots: /home/proteu/agent-browser-hub/screenshots/tinkercad-viewport-390-start.png, /home/proteu/agent-browser-hub/screenshots/tinkercad-viewport-390-sim-controls.png, /home/proteu/agent-browser-hub/screenshots/tinkercad-viewport-390-reflect.png, /home/proteu/agent-browser-hub/screenshots/tinkercad-viewport-768-start.png e /home/proteu/agent-browser-hub/screenshots/tinkercad-viewport-768-sim-controls.png."
   ],
-  "blocked_by": [
-    "O formulário «Começar» em http://localhost:8777/52XFA9 exige confirmação humana no Agent Browser Hub, ainda pendente. A gravação dos eventos da realização preview e a autoavaliação integrada não foram testadas; por isso a avaliação mantém pass=false.",
-    "As ferramentas disponíveis do Agent Browser Hub não expuseram alteração de viewport; telemóvel e tablet não foram testados em tamanhos reais.",
-    "O acesso Tinkercad da turma não estava disponível nesta avaliação; a construção externa não foi observada. Isso corresponde ao limite declarado pela atividade."
-  ],
+  "blocked_by": [],
   "critical": [],
   "suggestions": [],
-  "preview_reporting": "Realizações preview de rascunhos são excluídas dos relatórios do professor por contrato; o teste integrado deve confirmar esse comportamento, não exigir que o ensaio apareça como trabalho de aluno."
+  "preview_reporting": "Confirmado no host e no dashboard: a realização fictícia do rascunho foi guardada com preview=true e não entrou nos relatórios dos alunos.",
+  "limitations": [
+    "O ecrã final após 4c95bde foi verificado no código, mas não reaberto no browser: a sessão temporary da realização concluída já tinha sido fechada e o respetivo cookie apagado. Não se criou uma segunda realização.",
+    "A atividade não observa o Tinkercad externo. O acesso da turma e a construção real não foram testados nesta avaliação.",
+    "O teste de 390/768 px usou iframes de largura fixa no Browser Hub; não reproduziu barras do browser, teclado virtual nem gestos físicos de um dispositivo móvel."
+  ]
 }
