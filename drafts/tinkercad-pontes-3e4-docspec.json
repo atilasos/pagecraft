@@ -1,0 +1,166 @@
+{
+  "topic": "Introdução ao desenho 3D no Tinkercad: uma ponte entre duas margens",
+  "slug": "tinkercad-pontes-3e4",
+  "ageRange": "3.º e 4.º anos (8–10 anos)",
+  "duration": 45,
+  "languages": ["pt-PT"],
+  "title": "Primeira ponte no Tinkercad",
+  "objectives": [
+    "Experimentar posições e alturas de peças numa simulação e explicar como o tabuleiro liga duas margens no modelo proposto.",
+    "Criar no Tinkercad uma ponte simples com dois apoios e um tabuleiro, usando formas básicas, deslocação e mudança de vista.",
+    "Rever o modelo a partir de uma vista lateral e de uma vista superior, com uma sugestão de um colega.",
+    "Descrever o que conseguiu fazer, a ajuda recebida e um próximo passo, sem confundir a simulação com a construção externa."
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "TIC — Orientações Curriculares para o 1.º ciclo",
+        "year": "1.º ciclo; concretização para 3.º e 4.º anos",
+        "domain": "Criar e Inovar",
+        "descriptor": "Usar ferramentas digitais para planear e criar uma solução para um problema próximo, produzindo um artefacto digital criativo (paráfrase das OC, pp. 8–9).",
+        "source": "/home/proteu/obsidian-vault/documentos-oficiais/aprendizagens-essenciais/tic-1-ano-1-ciclo.md"
+      },
+      {
+        "subject": "TIC — Orientações Curriculares para o 1.º ciclo",
+        "year": "1.º ciclo; concretização para 3.º e 4.º anos",
+        "domain": "Criar e Inovar",
+        "descriptor": "Explorar orientação e noções espaciais ao mover objetos virtuais em interação com um cenário (paráfrase das OC, p. 9).",
+        "source": "/home/proteu/obsidian-vault/documentos-oficiais/aprendizagens-essenciais/tic-1-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-D: Pensamento crítico e pensamento criativo",
+      "PA-E: Relacionamento interpessoal",
+      "PA-F: Desenvolvimento pessoal e autonomia",
+      "PA-I: Saber científico, técnico e tecnológico"
+    ],
+    "note": "As OC de TIC são de ciclo; a progressão para 3.º e 4.º anos é decisão do professor. As formulações acima são paráfrases, não descritores exclusivos desses anos. A proposta de revisão de 2026 citada na Sebenta não foi usada como referencial homologado."
+  },
+  "memAlignment": {
+    "modules": ["Trabalho curricular comparticipado", "Circuitos de comunicação"],
+    "instruments": ["Critérios discutidos antes da construção", "Registo da primeira ideia e da revisão", "Autoavaliação e próximo passo"],
+    "socialOrganization": "Turma escolhe destinatário e compreende os critérios; pares exploram e constroem com alternância de papéis; um par mostra a outro uma vista e recebe uma sugestão; cada criança regista a sua reflexão. Uma ou duas partilhas em plenário podem continuar noutra aula."
+  },
+  "materials": [
+    "Computador ou tablet com navegador, preferencialmente um dispositivo por par",
+    "Página PageCraft autocontida, utilizável sem rede para simulação e plano",
+    "Ligação à internet e acesso Tinkercad Classroom preparados pelo professor, com código e alcunhas fornecidos pelo professor quando aplicável",
+    "Papel, lápis e blocos ou cartões retangulares para alternativa sem acesso ao Tinkercad"
+  ],
+  "teacherPreparation": [
+    "Preparar e testar o acesso gerido pela escola/professor ao Tinkercad antes da aula; verificar consentimentos aplicáveis. Não pedir às crianças que criem contas pessoais ou publiquem desenhos.",
+    "Abrir o editor de desenho 3D e confirmar que a turma consegue inserir formas básicas, deslocá-las e mudar a vista; os nomes e posições dos comandos podem variar.",
+    "Definir com a turma para quem é a ponte imaginada, por exemplo pessoas a pé ou uma pequena personagem. É um desafio de modelação, sem ensaio real de resistência ou segurança."
+  ],
+  "criteriaBeforeWork": [
+    {"id": "c1", "childText": "Ponho um apoio em cada margem e ligo-os com o tabuleiro.", "evidence": "Simulação: posições finais e mudanças feitas; Tinkercad: observação do professor ou mostra da criança."},
+    {"id": "c2", "childText": "Vejo a ponte de lado e de cima para encontrar algo a melhorar.", "evidence": "Simulação: vistas abertas; Tinkercad: observação do professor e relato da criança."},
+    {"id": "c3", "childText": "Explico uma escolha e uso uma sugestão para rever a ponte.", "evidence": "Explicação e revisão registadas pela criança; o professor pode confirmar a alteração no desenho externo."}
+  ],
+  "units": [
+    {
+      "id": "u1",
+      "summary": "Definir uma travessia para um destinatário e conhecer os critérios antes de construir.",
+      "textDescription": "Apresentar duas margens e um rio imaginado. A turma escolhe um destinatário; o aluno prevê de que peças poderá precisar. Mostrar os três critérios antes da exploração, sem declarar a posição correta das peças. A ponte é um modelo digital, não uma ponte segura para pessoas reais.",
+      "duration": 5,
+      "interaction": {
+        "state": [
+          {"name": "destinatario", "type": "dropdown", "default": "peoes", "options": ["peoes", "personagem"]},
+          {"name": "previsao", "type": "canvas", "default": ""},
+          {"name": "criteriosVistos", "type": "derived", "derivedFrom": "A criança abre o painel com c1, c2 e c3 antes de avançar"}
+        ],
+        "render": "Paisagem plana com duas margens identificadas; cartões de destinatário e espaço opcional 'Acho que preciso de…'. Os três critérios aparecem juntos, legíveis e acessíveis antes do botão de exploração.",
+        "transition": "Escolher destinatário e registar previsão; abrir critérios; avançar para experimentar peças. A previsão pode ser revista mais tarde.",
+        "constraint": "A utilidade da ponte depende de ligar os lados para o destinatário escolhido; escolher formas bonitas por si só não resolve a travessia.",
+        "assessment": "Registar o destinatário escolhido, a previsão se existir e a abertura dos critérios; não interpretar a previsão em branco como insucesso."
+      },
+      "differentiation": {
+        "support": "Broto — Apoio: duas imagens de destinatário e escolha por toque; o professor ou colega lê os critérios em voz alta; previsão por seleção de peças desenhadas.",
+        "standard": "Árvore jovem — Intermédio: escolher destinatário, antecipar peças e ler os três critérios com o par.",
+        "challenge": "Árvore robusta — Desafio: além da previsão, explicar que dificuldade o destinatário teria se o tabuleiro terminasse antes da margem."
+      }
+    },
+    {
+      "id": "u2",
+      "summary": "Experimentar apoios, altura e tabuleiro, comparando vista lateral e superior.",
+      "textDescription": "Simulação local em grelha simples: margens nas extremidades, intervalo central sem terreno, dois apoios e um tabuleiro. A criança testa posições e alturas, vê o percurso de uma personagem e revê a ideia. O feedback descreve o efeito observado e convida a outra tentativa; não revela a configuração ótima antes da exploração. A regra vale para este modelo didático, não para todas as pontes reais.",
+      "duration": 10,
+      "interaction": {
+        "state": [
+          {"name": "apoioEsquerdoPosicao", "type": "dropdown", "default": "margem", "options": ["margem", "rio", "afastado"]},
+          {"name": "apoioDireitoPosicao", "type": "dropdown", "default": "rio", "options": ["margem", "rio", "afastado"]},
+          {"name": "apoioEsquerdoAltura", "type": "slider", "range": [1, 3], "step": 1, "default": 2, "unit": "blocos"},
+          {"name": "apoioDireitoAltura", "type": "slider", "range": [1, 3], "step": 1, "default": 1, "unit": "blocos"},
+          {"name": "tabuleiro", "type": "toggle", "default": "ausente", "options": ["ausente", "colocado"]},
+          {"name": "vista", "type": "toggle", "default": "lateral", "options": ["lateral", "superior"]},
+          {"name": "testeTravessia", "type": "derived", "derivedFrom": "No modelo: tabuleiro presente, um apoio em cada margem e superfícies dos apoios à mesma altura; devolver efeito observável, sem juízo da criança"}
+        ],
+        "render": "Duas vistas da mesma configuração. A vista lateral torna visíveis apoios, alturas e continuidade do tabuleiro; a superior mostra se o tabuleiro chega aos dois lados. Peças e controlos têm rótulos textuais, toque e teclado; qualquer gesto de arrastar tem alternativa por clique/teclas. 'Testar travessia' mostra o ponto onde a personagem pára ou atravessa neste modelo.",
+        "transition": "Mover cada apoio ou alterar a sua altura, colocar/remover tabuleiro, mudar vista e testar. Guardar sequência de alterações e resultados. Após uma falha, permitir voltar ao estado anterior ou alterar apenas uma peça. Feedback como 'A personagem parou antes da outra margem. O que mudares agora?' e 'As duas extremidades ficaram a alturas diferentes; compara de lado'.",
+        "constraint": "Neste modelo, o tabuleiro só oferece uma travessia contínua quando alcança dois apoios colocados nas margens e à mesma altura. Uma vista isolada pode esconder um problema que a outra revela.",
+        "assessment": "Registar configuração e resultado de pelo menos uma tentativa, revisão após o feedback e consulta às duas vistas. Sucesso da simulação significa apenas que a configuração satisfaz as regras desta simulação."
+      },
+      "differentiation": {
+        "support": "Broto — Apoio: controlar uma peça de cada vez com posições ilustradas; alturas prontas de 1 ou 2 blocos; feedback oral pelo professor ou texto curto com ícone. Pode testar e mudar de apoio sem perder o trabalho.",
+        "standard": "Árvore jovem — Intermédio: ajustar duas posições e alturas, testar, comparar as duas vistas e corrigir uma diferença identificada.",
+        "challenge": "Árvore robusta — Desafio: partir de uma configuração que passa no teste, alterar uma variável para a fazer falhar e explicar em que vista a falha é mais evidente; depois restaurar a travessia."
+      }
+    },
+    {
+      "id": "u3",
+      "summary": "Transferir a descoberta para a construção de uma ponte simples no Tinkercad.",
+      "textDescription": "Em pares, o aluno usa o acesso Tinkercad preparado pelo professor. Cria dois apoios com formas básicas e um tabuleiro retangular, move/redimensiona as peças e muda a vista. Um colega edita e outro verifica; trocam de papéis a meio. A página oferece plano e perguntas de verificação, mas não observa ações no editor externo. Sem acesso, construir um plano no PageCraft e um modelo com papel/blocos; assinalar que a parte Tinkercad ficou por realizar.",
+      "duration": 22,
+      "interaction": {
+        "state": [
+          {"name": "planoPecas", "type": "canvas", "default": {"apoioEsquerdo": "", "apoioDireito": "", "tabuleiro": ""}},
+          {"name": "modoTrabalho", "type": "dropdown", "default": "tinkercad", "options": ["tinkercad", "papel_blocos"]},
+          {"name": "verificacaoDeclarada", "type": "canvas", "default": ""},
+          {"name": "sugestaoColega", "type": "canvas", "default": ""},
+          {"name": "revisaoDescrita", "type": "canvas", "default": ""}
+        ],
+        "render": "Plano curto com três peças nomeadas, cartão 'No Tinkercad: cria, move, muda a vista, compara', ligação externa em nova aba e nota de internet/acesso. Campos de texto opcionais: 'O que viste de lado e de cima?', 'Que sugestão recebeste?', 'O que mudaste?'. Mostrar claramente 'Descrição tua; o PageCraft não vê o Tinkercad'.",
+        "transition": "Registar plano; abrir Tinkercad; construir em pares e trocar papéis após cerca de 11 minutos; regressar à página para descrever vista, sugestão e revisão. Se o acesso falhar, escolher modo papel/blocos e continuar. Nenhum clique nesta unidade confirma automaticamente a criação externa.",
+        "constraint": "A ponte digital tem volume e posição: peças que parecem ligadas de uma vista podem estar separadas ou desalinhadas quando se muda a vista.",
+        "assessment": "Guardar plano e texto como produção e relato do aluno, rotulados como tal. O professor verifica no Tinkercad se há dois apoios e tabuleiro, se a criança consegue mudar a vista e se ocorreu uma revisão. O PageCraft não atribui 'construído' nem 'verificado' por preencher campos."
+      },
+      "differentiation": {
+        "support": "Broto — Apoio: três cartões de peça, indicação visual de onde começar e frase 'Vi de lado…'; colega ou professor pode ajudar nos comandos, com participação da criança na colocação de ao menos uma forma.",
+        "standard": "Árvore jovem — Intermédio: criar as três formas, ajustar posições/tamanho e comparar duas vistas antes de uma revisão.",
+        "challenge": "Árvore robusta — Desafio: acrescentar uma guarda ou entrada apenas depois das três peças base; explicar como a peça extra ajuda o destinatário e verificar se continua alinhada nas duas vistas."
+      },
+      "externalTool": {
+        "name": "Tinkercad",
+        "url": "https://www.tinkercad.com/",
+        "access": "Acesso gerido e preparado pelo professor; internet necessária; não solicitar criação de conta pessoal ao aluno.",
+        "observationBoundary": "A página PageCraft não observa o editor, o desenho, a mudança de vista nem a gravação no Tinkercad."
+      }
+    },
+    {
+      "id": "u4",
+      "summary": "Partilhar uma revisão e refletir sobre os três critérios.",
+      "textDescription": "Cada par mostra a outro par uma vista e recebe uma pergunta ou sugestão concreta. A criança pode escolher levar o trabalho ao momento de comunicação. Autoavaliação opcional critério a critério, distinguindo o que conseguiu com ajuda, a estratégia usada e o próximo passo. O professor cruza relato com observação, sem converter nível de apoio em nota.",
+      "duration": 8,
+      "interaction": {
+        "state": [
+          {"name": "partilhaEscolhida", "type": "toggle", "default": "nao", "options": ["nao", "sim"]},
+          {"name": "autoavaliacaoCriterios", "type": "canvas", "default": {}},
+          {"name": "estrategia", "type": "canvas", "default": ""},
+          {"name": "proximoPasso", "type": "canvas", "default": ""}
+        ],
+        "render": "Reapresentar c1–c3 com linguagem da abertura, cada um com 'Consegui sozinho', 'Consegui com ajuda', 'Quero praticar' e 'Prefiro não responder'. Perguntas opcionais: 'Como descobriste ou corrigiste uma peça?' e 'O que tentarias a seguir?'. Botão de partilha voluntária.",
+        "transition": "Mostrar trabalho ao par, ouvir uma sugestão, escolher se quer partilhar e responder a qualquer parte da autoavaliação. Permitir voltar atrás e mudar respostas. A passagem final não exige todos os campos.",
+        "constraint": "Rever uma peça ou explicar um próximo passo exige comparar o que se pretendia com o que se vê; a primeira versão não é obrigatoriamente a última.",
+        "assessment": "Guardar respostas originais do aluno separadas dos acontecimentos observados na simulação. Partilha e relato não demonstram, por si sós, a construção externa; o professor acrescenta a sua observação no relatório privado."
+      },
+      "differentiation": {
+        "support": "Broto — Apoio: escolher com cartões visuais e leitura oral pelo professor; apontar uma peça que mudou; respostas escritas opcionais.",
+        "standard": "Árvore jovem — Intermédio: descrever uma estratégia usada e uma sugestão aplicada ou por aplicar.",
+        "challenge": "Árvore robusta — Desafio: justificar com exemplo por que a mudança de vista ou a sugestão melhorou o modelo e propor um teste seguinte."
+      }
+    }
+  ],
+  "sessionFlow": "0–5 min: destinatário, previsão e critérios (u1); 5–15 min: simulação com tentativas e duas vistas (u2); 15–37 min: plano breve e construção Tinkercad em pares, com troca de papéis por volta dos 26 min e alternativa de papel/blocos se o acesso falhar (u3); 37–45 min: mostra a outro par, sugestão, revisão ou próximo passo e autoavaliação opcional (u4).",
+  "recordingBoundary": "A ponte postMessage comunica apenas acontecimentos da atividade PageCraft. Configurações e tentativas da simulação são evidência observada pela página; texto sobre o Tinkercad e autoavaliação são voz do aluno; observações da construção externa pertencem ao professor. Nome escrito identifica a realização, sem dar acesso a históricos."
+}
