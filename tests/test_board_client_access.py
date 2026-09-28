@@ -23,7 +23,7 @@ def test_board_client_streams_only_collective_state_without_role_credentials():
     javascript = (BOARD_STATIC / "app.js").read_text("utf-8")
     client = f"{html}\n{javascript}"
 
-    assert "new EventSource(`/api/sessions/${session.id}/stream`)" in javascript
+    assert "new EventSource(`/api/board/sessions/${session.id}/stream`)" in javascript
     assert "if (data.student_id != null) return;" in javascript
     assert "board.contentWindow?.postMessage" in javascript
     assert "registerCollectiveEventListeners(activeStream, snapshot.event_types)" in javascript

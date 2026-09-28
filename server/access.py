@@ -219,10 +219,17 @@ def _trust_channel(request: Request) -> tuple[TrustChannel, str]:
     return TrustChannel.LAN, socket_ip
 
 
-async def resolve_access(request: Request, path_params: dict) -> AccessContext:
+async def resolve_access(
+    request: Request, policy: frozenset[RoutePolicy]
+) -> AccessContext:
     """Resolve Papel e canal uma única vez, antes de executar o handler."""
 
     channel, client_ip = _trust_channel(request)
+    # O browser do quadro pode ter também uma sessão de professor ou aluno.
+    # Estas rotas usam só a identidade emparelhada, incluindo o stream vivo.
+    if policy == {RoutePolicy.BOARD}:
+        return await _resolve_board_access(request, channel, client_ip)
+
     cloudflare = getattr(request.app.state, "cloudflare_access", None)
     if channel is TrustChannel.CLOUDFLARE and cloudflare and await cloudflare.authenticates(request):
         return AccessContext(Role.TEACHER, channel, client_ip)
@@ -258,6 +265,12 @@ async def resolve_access(request: Request, path_params: dict) -> AccessContext:
                 student_credential=student_credential,
             )
 
+    return await _resolve_board_access(request, channel, client_ip)
+
+
+async def _resolve_board_access(
+    request: Request, channel: TrustChannel, client_ip: str
+) -> AccessContext:
     board_credential = request.cookies.get(BOARD_COOKIE_NAME, "")
     board_pairings = getattr(request.app.state, "board_pairings", None)
     if (

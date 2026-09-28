@@ -149,10 +149,7 @@ def create_app(
                 status_code=403,
             )
 
-        access = await resolve_access(
-            request,
-            child_scope.get("path_params", {}),
-        )
+        access = await resolve_access(request, policy)
         bootstraps_teacher = route_bootstraps_teacher(route)
         request.state.access = access
         if (access.role is Role.TEACHER and config.teacher_origin

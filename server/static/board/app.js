@@ -147,7 +147,7 @@ function startLiveSession(session) {
 
   stopLiveSession();
   currentSessionId = session.id;
-  stream = new EventSource(`/api/sessions/${session.id}/stream`);
+  stream = new EventSource(`/api/board/sessions/${session.id}/stream`);
   const activeStream = stream;
   stream.addEventListener("session_state_snapshot", (event) => {
     const snapshot = parseObject(event.data);

@@ -366,7 +366,7 @@ async def student_history(
 
 
 @router.get("/sessions/{session_id}/stream")
-@access_policy(RoutePolicy.TEACHER, RoutePolicy.STUDENT, RoutePolicy.BOARD)
+@access_policy(RoutePolicy.TEACHER, RoutePolicy.STUDENT)
 async def stream_session(session_id: str, request: Request):
     svc = _svc(request)
     session = await svc.get_session(session_id)

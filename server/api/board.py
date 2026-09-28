@@ -10,6 +10,7 @@ from ..access import (
     access_policy,
     issue_board_cookie,
 )
+from .classroom import stream_session
 
 
 router = APIRouter(prefix="/api/board", tags=["board"])
@@ -92,3 +93,9 @@ async def current_session(request: Request):
     if session is None:
         return Response(status_code=204)
     return session
+
+
+@router.get("/sessions/{session_id}/stream")
+@access_policy(RoutePolicy.BOARD)
+async def stream_board_session(session_id: str, request: Request):
+    return await stream_session(session_id, request)
