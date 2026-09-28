@@ -15,4 +15,18 @@
 - Permitir identificar todos os participantes quando trabalham a pares ou em grupo num dispositivo. O campo atual «Turma» não representa os membros de um grupo.
 - Depois de experimentar o protótipo, definir como aplicar as melhorias às atividades existentes e à geração de novas atividades.
 
-Este registo contém as decisões da conversa; o protótipo e o seu aspeto visual ainda não foram validados pelo professor.
+## Protótipo para revisão
+
+A branch `prototype/fracoes-visuais`, commit `f905b2b`, conserva o ensaio e as instruções em `activities/fracoes-2-minecraft/PROTOTYPE.md`. O worktree está em `/home/proteu/.t3/worktrees/pagecraft/prototype-fracoes-visuais`. O protótipo usa a rota da atividade com `?variant=A`, `B` ou `C`, mantendo as respostas em memória ao trocar de disposição.
+
+- [A — Mesa de exploração](http://127.0.0.1:18778/activities/fracoes-2-minecraft/?variant=A)
+- [B — Banda desenhada](http://127.0.0.1:18778/activities/fracoes-2-minecraft/?variant=B)
+- [C — Oficina de blocos](http://127.0.0.1:18778/activities/fracoes-2-minecraft/?variant=C)
+
+O servidor local de revisão está na unidade transitória `pagecraft-fracoes-prototype.service`, sem publicação externa. Para o fechar: `systemctl --user stop pagecraft-fracoes-prototype.service`. O README do protótipo explica como voltar a servi-lo.
+
+Verificado em browser real: respostas obrigatórias, avanço mesmo com erros, pistas visuais, correção, bloqueio de saltos, declaração do trabalho externo e troca de versões. Percorridos os três passos das três versões em larguras de 1280, 768 e 390 px, sem erros JavaScript nem transbordamento horizontal.
+
+Capturas: [A](/home/proteu/agent-browser-hub/screenshots/fracoes-prototype-A.png), [B](/home/proteu/agent-browser-hub/screenshots/fracoes-prototype-B.png), [C](/home/proteu/agent-browser-hub/screenshots/fracoes-prototype-C.png) e [telemóvel](/home/proteu/agent-browser-hub/screenshots/fracoes-prototype-mobile.png).
+
+A escolha da disposição pelo professor continua pendente. O ensaio contém três passos representativos; a atividade completa, a diferenciação e a identificação de grupos serão tratadas na especificação posterior.
