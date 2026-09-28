@@ -67,6 +67,10 @@ _Avoid_: nota, score, classificação
 
 ### Atividades
 
+**Página respondida**:
+Uma página em que a criança respondeu a todos os pedidos obrigatórios, mesmo que existam erros. As respostas recebem feedback automático que permite corrigi-las; o acerto não é condição para avançar.
+_Avoid_: página aprovada, página certa
+
 **Realização da atividade**:
 O trabalho de uma criança numa atividade, em aula ou em casa, com as evidências produzidas e a sua reflexão final. Voltar ao mesmo endereço pode iniciar outra realização; escrever o mesmo nome não dá acesso a trabalhos anteriores.
 _Avoid_: tentativa (já designa uma interação), conta de aluno
