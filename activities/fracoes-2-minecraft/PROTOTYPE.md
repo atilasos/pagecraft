@@ -16,7 +16,7 @@ python3 -m http.server 18778 --bind 127.0.0.1
 - [B — Banda desenhada](http://127.0.0.1:18778/activities/fracoes-2-minecraft/?variant=B): vinhetas «Imagina», «Experimenta» e «Repara».
 - [C — Oficina de blocos](http://127.0.0.1:18778/activities/fracoes-2-minecraft/?variant=C): percurso vertical e bancada de trabalho.
 
-Também podes abrir `index.html` diretamente. A barra inferior permite mudar de versão sem perder as respostas. As setas do teclado fazem o mesmo fora dos campos de edição. Recarregar repõe as respostas; o URL conserva a versão. «Ver estado» mostra o estado do ensaio ao professor. A barra só aparece em localhost ou num ficheiro local.
+Também podes abrir `index.html` diretamente. A barra inferior permite mudar de versão sem perder as respostas. As setas do teclado fazem o mesmo fora dos campos de edição. Recarregar repõe as respostas; o URL conserva a versão. «Ver estado» mostra o estado do ensaio ao professor. A barra aparece em localhost, num ficheiro local ou nos endereços temporários `*.trycloudflare.com` usados para revisão remota. Para publicar um ensaio temporário, copiar apenas `index.html` para uma pasta isolada e servir essa pasta; nunca expor a raiz do repositório.
 
 ## Percurso e decisões aplicadas
 

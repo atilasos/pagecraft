@@ -70,7 +70,7 @@ else if(target.hasAttribute('data-review')){state.finished=false;state.step=0;he
 else if(target.hasAttribute('data-restart')){state=initial();heading=true}
 const selector=target.hasAttribute('data-next')?'[data-next]':target.hasAttribute('data-verify')?'[data-verify]':target.dataset.block!==undefined?`[data-block="${target.dataset.block}"]`:target.dataset.cut!==undefined?`[data-cut="${target.dataset.cut}"]`:target.dataset.answer?`[data-answer="${target.dataset.answer}"]`:target.dataset.count?`[data-count="${target.dataset.count}"]`:'[data-declare]';render(heading);if(!heading)app.querySelector(selector)?.focus({preventScroll:true});});
 function switchVariant(delta){variant=variants[(variants.indexOf(variant)+delta+3)%3];const url=new URL(location.href);url.searchParams.set('variant',variant);history.replaceState(null,'',url);render()}
-const reviewMode=location.protocol==='file:'||['localhost','127.0.0.1','[::1]'].includes(location.hostname);
+const reviewMode=location.protocol==='file:'||['localhost','127.0.0.1','[::1]'].includes(location.hostname)||location.hostname.endsWith('.trycloudflare.com');
 if(reviewMode){document.getElementById('switcher').classList.remove('hidden');document.getElementById('variant-prev').onclick=()=>switchVariant(-1);document.getElementById('variant-next').onclick=()=>switchVariant(1);document.getElementById('reset').onclick=()=>{state=initial();render(true)};document.addEventListener('keydown',e=>{if(e.key!=='ArrowLeft'&&e.key!=='ArrowRight')return;if(e.target.closest('input,textarea,select,[contenteditable]'))return;e.preventDefault();switchVariant(e.key==='ArrowRight'?1:-1)})}
 render();
 </script>
