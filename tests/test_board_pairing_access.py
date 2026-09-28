@@ -97,6 +97,19 @@ async def _pair(teacher, board):
     assert completed.status_code == 200
 
 
+async def test_pairing_a_browser_previously_used_by_the_teacher_keeps_board_access(
+    board_http,
+):
+    _, teacher, _, _ = board_http
+    await _pair(teacher, teacher)
+
+    waiting = await teacher.get("/api/board/session")
+
+    assert waiting.status_code == 204
+    # The teacher panel must keep working in another tab of the same browser.
+    assert (await teacher.get("/api/meta")).status_code == 200
+
+
 async def test_board_sees_only_the_live_collective_session_and_cannot_act(
     board_http,
 ):
