@@ -1,3 +1,4 @@
+import asyncio
 import time
 from types import SimpleNamespace
 
@@ -45,6 +46,77 @@ async def test_signed_teacher_gets_panel_api_and_no_reusable_local_cookie(access
         logout = await client.get('/logout')
         assert logout.status_code == 303
         assert logout.headers['location'] == 'https://studio.example/cdn-cgi/access/logout'
+
+
+async def test_paired_board_keeps_collective_access_with_signed_teacher_identity(access_app):
+    app, key = access_app
+    transport = httpx.ASGITransport(app=app)
+    headers = {
+        'cf-connecting-ip': '203.0.113.1',
+        'cf-access-jwt-assertion': sign(key),
+    }
+    async with (
+        httpx.AsyncClient(transport=transport, base_url='https://studio.example',
+                          headers=headers) as teacher,
+        httpx.AsyncClient(transport=transport, base_url='https://studio.example',
+                          headers=headers) as board,
+    ):
+        challenge = (await board.post('/api/board/pairings')).json()
+        confirmation = await teacher.post('/api/board/pairings/confirm',
+                                           json={'code': challenge['code']})
+        assert confirmation.status_code == 200
+        completed = await board.post('/api/board/pairings/complete',
+                                     json={'pairing_id': challenge['pairing_id']})
+        assert completed.status_code == 200
+        assert (await board.get('/api/board/session')).status_code == 204
+
+        classroom = (await teacher.post('/api/classes', json={
+            'name': 'Turma de teste', 'year': 2, 'students': ['Lia'],
+        })).json()
+        session = (await teacher.post('/api/sessions', json={
+            'class_id': classroom['id'], 'activity_slug': 'demo',
+            'activity_title': 'Dobros',
+        })).json()
+        student_id = next(iter(session['roster']))
+        live = await board.get('/api/board/session')
+        assert live.status_code == 200
+        assert live.json()['id'] == session['id']
+
+        stream = asyncio.create_task(
+            board.get(f"/api/board/sessions/{session['id']}/stream")
+        )
+        try:
+            for _ in range(200):
+                if session['id'] in app.state.classroom.live_session_ids():
+                    break
+                await asyncio.sleep(0.001)
+            assert session['id'] in app.state.classroom.live_session_ids()
+            await teacher.post(f"/api/sessions/{session['id']}/control", json={
+                'action': 'highlight', 'unit_id': 'privada', 'student_id': student_id,
+            })
+            await teacher.post(f"/api/sessions/{session['id']}/control", json={
+                'action': 'highlight', 'unit_id': 'global',
+            })
+            await teacher.post(f"/api/sessions/{session['id']}/close")
+            response = await asyncio.wait_for(stream, timeout=2)
+        finally:
+            if not stream.done():
+                stream.cancel()
+                await asyncio.gather(stream, return_exceptions=True)
+        assert response.status_code == 200
+        assert 'event: session_state_snapshot' in response.text
+        assert 'global' in response.text
+        assert 'privada' not in response.text
+        assert student_id not in response.text
+        assert '"students"' not in response.text
+
+        # O login remoto mantém o painel, mas não substitui o emparelhamento.
+        assert (await teacher.get('/api/learning/reports')).status_code == 200
+        await teacher.delete('/api/board/pairing')
+        assert (await board.get('/api/board/session')).status_code == 401
+        assert (
+            await board.get(f"/api/board/sessions/{session['id']}/stream")
+        ).status_code == 401
 
 
 @pytest.mark.parametrize('claims', [
