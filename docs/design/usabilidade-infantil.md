@@ -7,10 +7,8 @@
 - Dar feedback automático e permitir corrigir as respostas erradas.
 - Reduzir explicações textuais e aumentar as pistas visuais, tornando mais claro o que fazer em cada página.
 
-## Próximas decisões pedagógicas
-
-- Como orientar uma resposta errada: começar por uma pista visual ou mostrar logo a solução explicada.
-- Como confirmar os pedidos realizados fora da página, como construir no Minecraft ou discutir com um colega. A página não observa diretamente essas ações.
+- Perante uma resposta errada, começar por uma pista visual, permitindo tentar novamente; a primeira ajuda não revela logo a solução.
+- Nos pedidos realizados fora da página, a criança confirma «Já fizemos» e responde a uma pergunta curta sobre a construção. Esta confirmação é declarada pela criança, não uma verificação automática do trabalho no Minecraft.
 
 ## Trabalho relacionado ainda pendente
 
