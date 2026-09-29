@@ -22,7 +22,7 @@
 <p class="draft">Rascunho em revisão · Frações com Minecraft</p>
 <p id="presentation" class="draft demonstration" hidden>Demonstração · As respostas não ficam registadas.</p>
 <div class="wrap">
-<header><p class="eyebrow">Uma metade para cada um</p><h1>Vamos descobrir as frações.</h1></header>
+<header><p class="eyebrow">Frações com Minecraft</p><h1>Vamos descobrir as frações.</h1></header>
 <div class="toolbar"><label for="level">Nível de diferenciação</label><select id="level"><option value="support">Com pistas</option><option value="intermediate" selected>Passo a passo</option><option value="challenge">Mais desafios</option></select></div>
 <main id="activity" tabindex="-1"></main>
 <button id="help" class="help">Preciso de ajuda</button>
@@ -184,8 +184,14 @@
   function remaining() {
     if (completedPages()[state.page]) return 'Respondeste. Podes corrigir ou continuar.';
     if (state.page === 5) return state.whole.confirmed ? 'Falta responder sobre a unidade inteira.' : 'Falta confirmar a composição e responder.';
-    if (state.page === 6) return `Faltam ${state.comparisons.filter(value => value === null).length} comparações.`;
-    if (state.page === 3) return `Faltam ${state.matches.filter(value => value === null).length} associações.`;
+    if (state.page === 6) {
+      const missing = state.comparisons.filter(value => value === null).length;
+      return missing === 1 ? 'Falta 1 comparação.' : `Faltam ${missing} comparações.`;
+    }
+    if (state.page === 3) {
+      const missing = state.matches.filter(value => value === null).length;
+      return missing === 1 ? 'Falta 1 associação.' : `Faltam ${missing} associações.`;
+    }
     if (state.page === 4) return 'Falta confirmar a grelha.';
     if (state.page === 2) return 'Falta confirmar a representação.';
     if (state.page === 0) return state.cut === null ? 'Falta escolher o corte e responder.' : 'Falta responder: ficaram duas metades?';
