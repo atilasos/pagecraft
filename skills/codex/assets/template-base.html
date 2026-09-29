@@ -157,10 +157,10 @@
       border-color: var(--primary);
       color: var(--primary-ink);
     }
-    .diff-tab .leaf { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
-    .diff-tab[data-level="support"]   .leaf { background: oklch(0.78 0.13 150); } /* broto */
-    .diff-tab[data-level="standard"]  .leaf { background: oklch(0.72 0.13 195); } /* árvore jovem */
-    .diff-tab[data-level="challenge"] .leaf { background: oklch(0.55 0.14 280); } /* árvore robusta */
+    .diff-tab .level-marker { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+    .diff-tab[data-level="support"]   .level-marker { background: oklch(0.78 0.13 150); } /* Com pistas */
+    .diff-tab[data-level="standard"]  .level-marker { background: oklch(0.72 0.13 195); } /* Passo a passo */
+    .diff-tab[data-level="challenge"] .level-marker { background: oklch(0.55 0.14 280); } /* Mais desafios */
     .diff-content { display: none; }
     .diff-content[data-active="true"] { display: block; }
 

@@ -59,7 +59,7 @@ Se nenhuma das três principais estiver disponível, **Comic Sans MS é aceitáv
 
 - Usar **OKLCH**, com chroma reduzido perto dos extremos de lightness.
 - **Identidade**: 4–5 *hues*. **Funcional**: `ok` (verde 150°), `warn` (âmbar 85°), `focus` (azul 255°).
-- **Proibido**: usar `verde/amarelo/vermelho` como níveis de dificuldade — colide com feedback de acerto/erro e ativa carga emocional de "errado". Use três *hues* distintos sem semântica de semáforo (template usa broto/jovem/robusta).
+- **Proibido**: usar `verde/amarelo/vermelho` como níveis de dificuldade — colide com feedback de acerto/erro e ativa carga emocional de "errado". Use três *hues* distintos sem semântica de semáforo (template usa Com pistas / Passo a passo / Mais desafios).
 
 ## Movimento
 

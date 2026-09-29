@@ -22,9 +22,9 @@ A: "O aluno ajusta o slider para fazer o carro chegar em exactamente 10 segundos
 ```
 
 **Adaptação por idade:**
-- **Broto — Apoio (4–6):** range pequeno [1,5], feedback visual reforçado (cor + texto, com som opcional)
-- **Árvore jovem — Intermédio (7–8):** range médio, label numérico visível
-- **Árvore robusta — Desafio (9–10):** range largo, cálculo mental envolvido
+- **Com pistas — Apoio (4–6):** range pequeno [1,5], feedback visual reforçado (cor + texto, com som opcional)
+- **Passo a passo — Intermédio (7–8):** range médio, label numérico visível
+- **Mais desafios — Desafio (9–10):** range largo, cálculo mental envolvido
 
 ---
 
@@ -155,9 +155,9 @@ A: "O aluno passa pelas 4 estações e identifica a actual quando pedido"
 ```
 
 **Adaptação por idade:**
-- **Broto — Apoio (4–6):** 2–3 opções, ícone + cor de fundo redundantes ao texto.
-- **Árvore jovem — Intermédio (7–8):** 3–4 opções, ícone + texto.
-- **Árvore robusta — Desafio (9–10):** tipicamente preferir `dropdown` ou `slider` para escolhas finas.
+- **Com pistas — Apoio (4–6):** 2–3 opções, ícone + cor de fundo redundantes ao texto.
+- **Passo a passo — Intermédio (7–8):** 3–4 opções, ícone + texto.
+- **Mais desafios — Desafio (9–10):** tipicamente preferir `dropdown` ou `slider` para escolhas finas.
 
 **Acessibilidade:** `aria-label="Mudar estação. Atual: <valor>"`. Anunciar mudança em `aria-live="polite"`.
 
@@ -178,9 +178,9 @@ A: "O aluno coloca os 3 alimentos nas categorias certas"
 ```
 
 **Adaptação por idade:**
-- **Broto — Apoio (4–6):** 2 categorias, ícones grandes, feedback visual e som opcional em cada descoberta.
-- **Árvore jovem — Intermédio (7–8):** 3 categorias.
-- **Árvore robusta — Desafio (9–10):** também aceitar `drag` real como alternativa.
+- **Com pistas — Apoio (4–6):** 2 categorias, ícones grandes, feedback visual e som opcional em cada descoberta.
+- **Passo a passo — Intermédio (7–8):** 3 categorias.
+- **Mais desafios — Desafio (9–10):** também aceitar `drag` real como alternativa.
 
 **Acessibilidade:** após seleção do source, focar primeira caixa; navegação por setas; `Enter` confirma. `aria-live` anuncia "X colocado em Y".
 

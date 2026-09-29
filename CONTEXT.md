@@ -7,11 +7,11 @@ Atividades HTML interativas, self-contained, para crianças do 1.º ciclo (6–1
 ### Diferenciação
 
 **Nível de diferenciação**:
-Um dos três patamares de exigência presentes em toda a atividade: **Broto** (Apoio), **Árvore jovem** (Intermédio) e **Árvore robusta** (Desafio). Nunca codificado com paleta semáforo.
+Um dos três patamares de exigência presentes em toda a atividade: **Com pistas** (Apoio), **Passo a passo** (Intermédio) e **Mais desafios** (Desafio). Os nomes descrevem o tipo de trabalho, não classificam a criança. Usar estes nomes nas interfaces e nas novas atividades, com marcadores neutros, sem metáforas de crescimento vegetal nem paleta semáforo. Os identificadores internos mantêm-se para preservar os registos existentes.
 _Avoid_: dificuldade fácil/média/difícil, verde/amarelo/vermelho
 
 **Perfil de diferenciação**:
-O nível por defeito que o professor define para cada aluno, **por área disciplinar** (Português, Matemática, Estudo do Meio…). Na sessão, o tablet do aluno abre automaticamente no nível do seu perfil para a área da atividade; a criança pode mudar de nível livremente e a mudança fica registada como evento — evidência, nunca bloqueio nem juízo. Sem perfil preenchido, o defeito é Árvore jovem.
+O nível por defeito que o professor define para cada aluno, **por área disciplinar** (Português, Matemática, Estudo do Meio…). Na sessão, o tablet do aluno abre automaticamente no nível do seu perfil para a área da atividade; a criança pode mudar de nível livremente e a mudança fica registada como evento — evidência, nunca bloqueio nem juízo. Sem perfil preenchido, o defeito é Passo a passo.
 _Avoid_: nível fixo, tracking
 
 **Convite de nível**:

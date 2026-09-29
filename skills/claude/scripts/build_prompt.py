@@ -115,9 +115,9 @@ def main():
 
 ### Diferenciação (implementar como tabs seleccionáveis)
 
-- **Broto — Apoio:** {diff.get("support", "")}
-- **Árvore jovem — Intermédio:** {diff.get("standard", "")}
-- **Árvore robusta — Desafio:** {diff.get("challenge", "")}
+- **Com pistas — Apoio:** {diff.get("support", "")}
+- **Passo a passo — Intermédio:** {diff.get("standard", "")}
+- **Mais desafios — Desafio:** {diff.get("challenge", "")}
 {maker_text}""")
 
     # Curriculum footer
@@ -199,7 +199,7 @@ Incluir escala: ⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ 
 5. **Acessibilidade** — aria-labels, contraste WCAG AA, font-size mínimo 16px
 6. **Cores vivas** — amigáveis para crianças, feedback visual claro
 7. **Animações** — CSS transitions + requestAnimationFrame para partículas/canvas
-8. **Diferenciação** — 3 níveis como tabs/botões (Broto — Apoio, Árvore jovem — Intermédio, Árvore robusta — Desafio; sem paleta semáforo)
+8. **Diferenciação** — 3 níveis como tabs/botões (Com pistas — Apoio, Passo a passo — Intermédio, Mais desafios — Desafio; sem paleta semáforo)
 9. **Constraint** — NÃO revelar directamente; a interacção leva à descoberta
 10. **Feedback** — local, específico e calmo quando o aluno descobre algo; som apenas opcional
 11. **Drag-and-drop** — funcional com touch events E mouse events

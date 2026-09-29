@@ -11,7 +11,7 @@ Produz uma atividade que o professor possa usar e avaliar com a turma. A fonte d
 
 O professor indica tema, ano e duração. Usa português europeu por defeito. Só inclui inglês se o professor o pedir; nesse caso, cria uma versão PT/EN completa com seletor para cada aluno, incluindo instruções, feedback, acessibilidade e autoavaliação. O relatório do professor mantém os critérios em português e preserva as respostas originais do aluno.
 
-Consulta `AGENTS.md`, `PRODUCT.md` e `CONTEXT.md` do repositório. O pedido atual do professor prevalece sobre orientações antigas. Os níveis são **Broto — Apoio**, **Árvore jovem — Intermédio** e **Árvore robusta — Desafio**, sem paleta semáforo.
+Consulta `AGENTS.md`, `PRODUCT.md` e `CONTEXT.md` do repositório. O pedido atual do professor prevalece sobre orientações antigas. Os níveis são **Com pistas — Apoio**, **Passo a passo — Intermédio** e **Mais desafios — Desafio**, sem paleta semáforo.
 
 Antes de conceber a atividade, usa a skill `sebenta-wiki`, instalada em `/home/proteu/.codex/skills/sebenta-wiki/SKILL.md`. Confirma a API, pesquisa e lê integralmente poucas páginas sobre:
 
