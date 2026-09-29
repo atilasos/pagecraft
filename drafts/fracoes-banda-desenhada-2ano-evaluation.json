@@ -1,0 +1,273 @@
+{
+  "status": "complete",
+  "phase": "evaluator",
+  "reviewed_on": "2026-09-29",
+  "reference_commit": "0fc20cf9441679f9060665c72d5f6e1979cdb7f0",
+  "scope": "Avaliação técnica e pedagógica para revisão do professor. Combina verificações estáticas e inspeção de capturas feitas por este agente com resultados de execução comunicados pelo orquestrador, que conduziu o browser do Agent Browser Hub. Não autoriza publicação para alunos.",
+  "route": "none",
+  "severity": "low",
+  "scores": {
+    "factual_accuracy": 5,
+    "constraint_alignment": 4,
+    "differentiation_quality": 4,
+    "ux_accessibility": 4,
+    "visual_design": 4,
+    "technical_quality": 4
+  },
+  "artifacts": [
+    {
+      "path": "drafts/fracoes-banda-desenhada-2ano.html",
+      "sha256": "5e6f12d34837f6df0eb23ebb619ebfa1fec7668156563c8409164676eb98d0b3"
+    },
+    {
+      "path": "drafts/fracoes-banda-desenhada-2ano.md",
+      "sha256": "5e7535b50a308711c63a6457bfd9991342ca1ffea7129e659dfc9bb1c3f62b9c"
+    },
+    {
+      "path": "drafts/fracoes-banda-desenhada-2ano-docspec.json",
+      "sha256": "ef7b986df74465b096d7c02042a4de9b7424b70b71ee6467e55726abb407bffe"
+    },
+    {
+      "path": "drafts/fracoes-banda-desenhada-2ano-design-spec.json",
+      "sha256": "d576a964e85b86552ec2b239aa435c9fbf2e0adf56be5ca4afe7181c56bf42c8"
+    },
+    {
+      "path": "drafts/fracoes-banda-desenhada-2ano-proofread.json",
+      "sha256": "01f2b332940ba2bd9081dbe0ef8c7db35d334347c8d1f05ef8f8c4c054cb8fef"
+    },
+    {
+      "path": "drafts/fracoes-banda-desenhada-2ano-registration.json",
+      "sha256": "658f390aacf4c91774d46fc7a84cf49f1c03c5c5fda65f5e0d83425cfd5ff541"
+    }
+  ],
+  "issues": [],
+  "required_fixes": [],
+  "evidence": [
+    {
+      "id": "static-schemas",
+      "kind": "executed_static_check",
+      "result": "passed",
+      "detail": "DocSpec e design-spec validados com jsonschema.Draft202012Validator contra os schemas canónicos do repositório."
+    },
+    {
+      "id": "static-alignment",
+      "kind": "executed_static_check",
+      "result": "passed",
+      "detail": "Duração de 45 minutos e soma de unidades confirmadas; seis critérios iguais no registo e DocSpec; requires_completion true nos dois."
+    },
+    {
+      "id": "static-proofreader",
+      "kind": "executed_static_check",
+      "result": "passed",
+      "detail": "Proofread aprovado, sem achados pendentes; hashes dos quatro ficheiros revistos correspondem aos artefactos atuais."
+    },
+    {
+      "id": "static-arithmetic",
+      "kind": "executed_static_check",
+      "result": "passed",
+      "detail": "Os quatro alvos dividem a unidade em grupos inteiros e iguais. Fórmula SVG lida e exemplo de 1/4 inspecionado nas capturas finais.",
+      "examples": [
+        {
+          "fraction": "1/2",
+          "whole": 20,
+          "groups": 2,
+          "blocks_per_group": 10,
+          "painted": 10
+        },
+        {
+          "fraction": "1/4",
+          "whole": 20,
+          "groups": 4,
+          "blocks_per_group": 5,
+          "painted": 5
+        },
+        {
+          "fraction": "2/5",
+          "whole": 20,
+          "groups": 5,
+          "blocks_per_group": 4,
+          "painted": 8
+        },
+        {
+          "fraction": "1/10",
+          "whole": 20,
+          "groups": 10,
+          "blocks_per_group": 2,
+          "painted": 2
+        }
+      ]
+    },
+    {
+      "id": "static-offline",
+      "kind": "executed_static_check",
+      "result": "passed",
+      "detail": "Não há imports remotos de scripts ou folhas de estilo. HTML usa SVG/CSS/JS inline e ponte postMessage; revisão estática, sem captura de rede."
+    },
+    {
+      "id": "static-pedagogy",
+      "kind": "source_review",
+      "result": "reviewed",
+      "detail": "Cinco unidades digitais com manipulação e resposta explícita, construção externa com declaração e pergunta, diferenciação por tarefas e reflexão facultativa. Alterar fração ou material limpa declaração e resposta. Não há classificação automática do desenho nem inspeção de Minecraft."
+    },
+    {
+      "id": "static-curriculum",
+      "kind": "source_review",
+      "result": "reviewed",
+      "detail": "Fontes oficiais e limites registados em sources.md. Comparação não unitária identificada como extensão; 20 blocos contíguos representam unidade contínua; TIC usa OC do ciclo."
+    },
+    {
+      "id": "test-source-final",
+      "kind": "test_source_review",
+      "result": "reviewed_not_executed_by_evaluator",
+      "path": "tests/browser/test_fraction_minecraft.py",
+      "detail": "Cobertura prevista de pedidos vazios/parciais/errados, mudança de material e alvo, quatro frações, três níveis e larguras 390/768/1280, reflexão local e do anfitrião, carregamento bloqueado, desenho longo e demonstração sem acontecimentos."
+    },
+    {
+      "id": "test-source-existing",
+      "kind": "test_source_review",
+      "result": "reviewed_not_executed_by_evaluator",
+      "paths": [
+        "tests/browser/test_fraction_units.py",
+        "tests/browser/test_fraction_studio.py",
+        "tests/browser/conftest.py"
+      ],
+      "detail": "Explorações nos três níveis, restauro, evidência no professor e Quadro. Fixture liga por CDP ao browser do Agent Browser Hub com contexto isolado. Commit 0fc20cf relido: resposta após reload usa foco e Enter, com verificações de foco, aria-pressed e avanço; os restantes percursos mantêm cliques."
+    },
+    {
+      "id": "test-source-isolation",
+      "kind": "test_source_review",
+      "result": "reviewed_not_executed_by_evaluator",
+      "path": "tests/test_fraction_draft_registration.py",
+      "detail": "Testes previstos para rascunho privado, recusa pública, ensaios excluídos dos relatórios, publicação em diretórios temporários e preservação do HTML/trabalhos anteriores."
+    },
+    {
+      "id": "suite-interim",
+      "kind": "historical_orchestrator_report",
+      "result": "superseded_by_final_suite",
+      "detail": "O orquestrador comunicou 290 testes aprovados e uma falha; retoma isolada com 20/20 aprovações, seguida de uma falha em 17 repetições. A investigação indica um clique que não chega ao iframe. Estes dados são intermédios; este agente não executou a suite nem concluiu a causa. A suite final posterior aprovou os 291 testes, com a verificação específica de retoma por teclado."
+    },
+    {
+      "id": "restore-input-investigation",
+      "kind": "orchestrator_report_and_commit_review",
+      "result": "documented_input_limitation",
+      "commit": "0fc20cf9441679f9060665c72d5f6e1979cdb7f0",
+      "detail": "O orquestrador relatou eventos pointerdown/up/click no pai com alvo iframe e nenhum evento correspondente no filho; snapshot e restauro estavam corretos. Após trocar apenas esta resposta de teste por foco e Enter, os três testes Studio passaram em 7,55 s. O diff do teste foi relido por este agente. A suite completa posterior aprovou 291 testes. Não se conclui a causa profunda do input nem se afirma correção de um defeito no produto."
+    },
+    {
+      "id": "suite-final",
+      "kind": "execution_report_from_orchestrator",
+      "result": "passed",
+      "command": "PAGECRAFT_TEST_CDP=http://127.0.0.1:9330 uv run --with playwright pytest -q",
+      "passed": 291,
+      "failed": 0,
+      "duration_seconds": 79.37,
+      "environment": "Agent Browser Hub, sessão fracoes-minecraft-41, perfil research; contextos isolados e Studio com dados descartáveis.",
+      "detail": "O orquestrador executou a suite completa e comunicou o resultado. O Evaluator leu os testes e não os voltou a executar."
+    },
+    {
+      "id": "remote-html",
+      "kind": "execution_report_from_orchestrator",
+      "result": "passed",
+      "url": "https://graham-collaboration-exemption-contacting.trycloudflare.com/pao/",
+      "http_status": 200,
+      "bytes": 44201,
+      "sha256": "5e6f12d34837f6df0eb23ebb619ebfa1fec7668156563c8409164676eb98d0b3",
+      "detail": "Resposta HTTPS idêntica ao HTML local. Pré-visualização numa cópia isolada; não é publicação da revisão no catálogo nem implantação do Studio."
+    },
+    {
+      "id": "remote-browser",
+      "kind": "browser_report_from_orchestrator",
+      "result": "passed",
+      "session": "fracoes-minecraft-41",
+      "profile": "research",
+      "detail": "O orquestrador verificou no Hub a construção de 1/4, resposta errada 2 seguida de correção 5, Já fizemos, reflexão facultativa e mensagem de respostas locais. Relatou zero pageerror e ausência de transbordamento. A sessão é fechada pelo orquestrador."
+    },
+    {
+      "id": "visual-inspection",
+      "kind": "screenshots_inspected_by_evaluator",
+      "result": "passed",
+      "detail": "Capturas abertas com view_image. A 1280px, Imagina/Experimenta/Repara ocupam três colunas, com unidade de quatro filas de cinco e uma fila pintada. A 390px, preservam a ordem em coluna; a captura mostra Já fizemos e 5 blocos selecionados e feedback Um quarto são 5 blocos. Não se observam controlos sobrepostos; a navegação e os painéis criam uma página vertical longa. As capturas são de demonstração e não provam, por si, bloqueio de progressão nem gravação."
+    }
+  ],
+  "acceptance_checks": [
+    {
+      "check": "Precisão matemática e coerência dos documentos",
+      "status": "static_pass"
+    },
+    {
+      "check": "Ausência de falhas críticas na consola",
+      "status": "passed_from_final_evidence",
+      "evidence": "remote-browser; zero pageerror no percurso remoto relatado, sem alegar auditoria universal da consola"
+    },
+    {
+      "check": "Percurso completo nos três apoios",
+      "status": "passed_from_final_evidence",
+      "evidence": "suite-final e testes identificados em evidence"
+    },
+    {
+      "check": "Reflexão no anfitrião e persistência sem duplicação",
+      "status": "passed_from_final_evidence",
+      "evidence": "suite-final e testes identificados em evidence"
+    },
+    {
+      "check": "Retoma por teclado e limite do input automatizado documentado",
+      "status": "passed_from_final_evidence",
+      "evidence": "suite-final e restore-input-investigation; limite CDP preservado"
+    },
+    {
+      "check": "Teclado, toque e larguras 390/768/1280",
+      "status": "passed_from_final_evidence",
+      "evidence": "suite-final e testes identificados em evidence"
+    },
+    {
+      "check": "Rascunho privado e preservação da atividade anterior",
+      "status": "passed_from_final_evidence",
+      "evidence": "suite-final e testes identificados em evidence"
+    },
+    {
+      "check": "Inspeção visual das capturas finais",
+      "status": "passed_from_final_evidence",
+      "evidence": "visual-inspection"
+    }
+  ],
+  "blocked_by": [],
+  "limitations": [
+    "Execução da suite e interação no Hub realizadas pelo orquestrador. Este agente realizou análise estática, leitura dos testes e inspeção visual das duas capturas; a proveniência fica identificada em cada evidência.",
+    "Foi observada uma limitação de input automatizado por coordenadas após recarregar o iframe. A retoma é exercitada por teclado nesse passo, com foco e estado verificados; isto não demonstra que a causa profunda da intermitência de cliques foi resolvida.",
+    "A pré-visualização HTTPS é uma cópia isolada. O Studio, a publicação e a preservação de trabalhos foram ensaiados com dados descartáveis; esta revisão não foi publicada para alunos nem implantada no Studio de produção.",
+    "Não houve ensaio com uma turma. O professor precisa de observar o ritmo, a autonomia e a utilidade das pistas; a avaliação técnica não equivale à sua aprovação para publicar.",
+    "Não há identificação dos membros do par nem observação automática de Minecraft ou da construção física. Já fizemos é declaração da criança.",
+    "Não foi realizada auditoria com leitor de ecrã. As capturas são de demonstração; a evidência de bloqueio, retoma e gravação provém da suite.",
+    "A página móvel exige deslocamento vertical, incluindo a navegação por dez passos. Mantém a ordem e os controlos separados nas capturas revistas."
+  ],
+  "screenshots": [
+    {
+      "path": "/home/proteu/agent-browser-hub/screenshots/fracoes-minecraft-final-desktop.png",
+      "viewport_width": 1280,
+      "sha256": "5083333deb10026541a4e997758573c32a46ba511675338ebae96d56c68749e3",
+      "inspected": true,
+      "mode": "presentation",
+      "page": "Construção de 1/4"
+    },
+    {
+      "path": "/home/proteu/agent-browser-hub/screenshots/fracoes-minecraft-final-mobile.png",
+      "viewport_width": 390,
+      "sha256": "6c45ee2545435e9ef424dd27ed83420a0afe876a6ddc78158208edee700a3984",
+      "inspected": true,
+      "mode": "presentation",
+      "page": "Construção de 1/4"
+    }
+  ],
+  "final_verdict": "passed_for_teacher_review",
+  "pass": true,
+  "score_rationale": {
+    "factual_accuracy": "Os quatro alvos têm grupos inteiros e iguais e valores corretos; a captura de 1/4 mostra cinco blocos em vinte. Fontes e limites curriculares documentados.",
+    "constraint_alignment": "A criança manipula, confirma e recebe pistas; presença e acerto são distintos. A construção aplica a relação parte-todo, mas permanece declarada e não observada pela aplicação.",
+    "differentiation_quality": "Há tarefas e listas distintas nos três apoios, mudança livre e preservação das respostas independentes. A adequação à turma não foi ensaiada com crianças.",
+    "ux_accessibility": "Suite final aprovada cobre teclado, foco, controlos e larguras previstas. Capturas mostram ordem de leitura preservada e controlos separados; a página móvel exige deslocamento vertical e não foi auditada com leitor de ecrã.",
+    "visual_design": "Desktop mantém três vinhetas e telemóvel uma coluna; hierarquia, modelo de grupos e seleção numérica são visíveis. A navegação ocupa bastante altura no telemóvel, sem impedir o percurso.",
+    "technical_quality": "291 testes aprovados, reflexão no anfitrião sem duplicação e publicação ensaiada em isolamento. A limitação de clique automatizado pós-reload permanece explicitamente documentada, sem alegação de causa profunda resolvida."
+  },
+  "critical": [],
+  "suggestions": []
+}
