@@ -180,7 +180,7 @@
       "result": "passed",
       "session": "fracoes-minecraft-41",
       "profile": "research",
-      "detail": "O orquestrador verificou no Hub a construção de 1/4, resposta errada 2 seguida de correção 5, Já fizemos, reflexão facultativa e mensagem de respostas locais. Relatou zero pageerror e ausência de transbordamento. A sessão é fechada pelo orquestrador."
+      "detail": "O orquestrador verificou no Hub a construção de 1/4, resposta errada 2 seguida de correção 5, Já fizemos, reflexão facultativa e mensagem de respostas locais. Relatou zero pageerror e ausência de transbordamento. A sessão é fechada pelo orquestrador. Verificação pública adicional sem presentation: percorreu as cinco explorações por interações reais, confirmou construção bloqueada inicialmente e após resposta errada 2, desbloqueio só com Já fizemos, avanço e reflexão facultativa concluída. Zero pageerror nesse percurso adicional. Sessão Hub fechada pelo orquestrador e capturas preservadas."
     },
     {
       "id": "visual-inspection",
@@ -202,7 +202,7 @@
     {
       "check": "Percurso completo nos três apoios",
       "status": "passed_from_final_evidence",
-      "evidence": "suite-final e testes identificados em evidence"
+      "evidence": "suite-final nos três níveis e remote-browser no percurso autónomo completo"
     },
     {
       "check": "Reflexão no anfitrião e persistência sem duplicação",
@@ -269,5 +269,12 @@
     "technical_quality": "291 testes aprovados, reflexão no anfitrião sem duplicação e publicação ensaiada em isolamento. A limitação de clique automatizado pós-reload permanece explicitamente documentada, sem alegação de causa profunda resolvida."
   },
   "critical": [],
-  "suggestions": []
+  "suggestions": [],
+  "browser_session": {
+    "name": "fracoes-minecraft-41",
+    "profile": "research",
+    "status": "closed",
+    "closed_by": "orchestrator",
+    "evidence": "Fecho comunicado pelo orquestrador após o percurso público autónomo."
+  }
 }
