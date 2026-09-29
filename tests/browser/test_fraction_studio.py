@@ -30,6 +30,16 @@ def test_teacher_receives_attempt_and_board_is_only_demonstration(page, studio_o
         assert len(attempts) == 1
         assert attempts[0]['payload']['correct'] is False
         assert attempts[0]['unit_id'] == 'u1'
+        # Switch to the actual registered draft, which has no public activity file.
+        import json
+        from pathlib import Path
+        registration = json.loads((Path(__file__).resolve().parents[2] / 'drafts/fracoes-banda-desenhada-2ano-registration.json').read_text())
+        draft = teacher.post('/api/learning/activities', json=registration)
+        draft.raise_for_status()
+        teacher.post(f"/api/sessions/{session['id']}/close").raise_for_status()
+        draft_session = teacher.post('/api/sessions', json={'class_id':classroom['id'], 'activity_slug':registration['slug'], 'activity_title':registration['title']})
+        draft_session.raise_for_status()
+        assert teacher.get('/activities/' + registration['slug'] + '/').status_code == 404
         # Pair this browser to the same isolated class and exercise the real board host.
         challenge = page.request.post(studio_origin + '/api/board/pairings').json()
         teacher.post('/api/board/pairings/confirm', json={'code':challenge['code']}).raise_for_status()
@@ -43,4 +53,4 @@ def test_teacher_receives_attempt_and_board_is_only_demonstration(page, studio_o
         board.get_by_role('button', name='3. Rever', exact=True).click()
         history = teacher.get(f"/api/sessions/{session['id']}/students/{student_id}/history").json()['events']
         assert len([e for e in history if e['type'] == 'attempt']) == 1
-        teacher.post(f"/api/sessions/{session['id']}/close").raise_for_status()
+        teacher.post(f"/api/sessions/{draft_session.json()['id']}/close").raise_for_status()

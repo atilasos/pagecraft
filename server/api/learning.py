@@ -13,6 +13,11 @@ from ..access import (RateLimitOperation, Role, RoutePolicy, TrustChannel, acces
                       rate_limited)
 from ..learning import LEARNING_COOKIE
 
+ACTIVITY_CONTENT_HEADERS = {
+        'Content-Security-Policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; media-src data:; font-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'",
+        'Cache-Control': 'no-store',
+    }
+
 router = APIRouter()
 Slug = Annotated[str, Field(pattern=r'^[a-z0-9][a-z0-9-]{0,100}$')]
 Code = Annotated[str, Field(pattern=r'^[A-Za-z2-9]{6}$')]
@@ -131,10 +136,7 @@ async def activity(code: Code, request: Request):
 @access_policy(RoutePolicy.PUBLIC)
 async def content(code: Code, request: Request):
     activity = await visible_activity(request, code)
-    return FileResponse(request.app.state.learning.content_path(activity), headers={
-        'Content-Security-Policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; media-src data:; font-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'",
-        'Cache-Control': 'no-store',
-    })
+    return FileResponse(request.app.state.learning.content_path(activity), headers=ACTIVITY_CONTENT_HEADERS)
 
 
 @router.post('/api/learning/activities/{code}/start', status_code=201)
