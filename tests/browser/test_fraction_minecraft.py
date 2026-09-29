@@ -37,3 +37,19 @@ def test_construction_requires_both_declaration_and_answer(page, lesson_origin):
     expect(page.get_by_role('heading', name='Como foi o teu trabalho?')).to_be_visible()
     page.get_by_role('button', name='9. Construir', exact=True).click()
     expect(page.get_by_role('button', name='5 blocos', exact=True)).to_have_attribute('aria-pressed','true')
+
+
+def test_standalone_reflection_is_optional_and_does_not_claim_sending(page, lesson_origin):
+    page.goto(lesson_origin)
+    finish_exploration(page)
+    page.get_by_role('button', name='Já fizemos', exact=True).click()
+    page.get_by_role('button', name='2 blocos', exact=True).click()
+    page.get_by_role('button', name='Seguinte', exact=True).click()
+    page.get_by_role('button', name='Refletir sobre o meu trabalho').click()
+    group = page.get_by_role('group', name='Represento uma fração numa unidade de 20 blocos.', exact=True)
+    group.get_by_role('button', name='Com ajuda', exact=True).click()
+    page.get_by_label('O que te ajudou?').fill('Contar os grupos')
+    page.get_by_role('button', name='Terminar a reflexão', exact=True).click()
+    expect(page.get_by_role('heading', name='Terminaste a reflexão.')).to_be_visible()
+    expect(page.get_by_text('As respostas ficam apenas nesta página.', exact=True)).to_be_visible()
+    assert page.get_by_role('button', name='Terminar a reflexão', exact=True).count() == 0

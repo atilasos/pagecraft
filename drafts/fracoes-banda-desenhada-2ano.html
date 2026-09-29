@@ -13,6 +13,7 @@
 .whole-frame{border:3px solid var(--ink);padding:6px;background:var(--paper)}.whole-frame .paint-grid{margin:0}.equal-units{border-left:3px solid var(--ink);padding-left:4px}.equal-units .fraction{margin:8px 0 18px}
 .feedback[data-correct="false"]{background:#fff0cd;border-left-color:#a46719}
 .build-model{width:100%;max-width:300px;display:block;margin:20px auto}.built{display:block;width:100%;margin-top:20px}
+.local-reflection{max-width:760px;margin:30px auto}.local-reflection legend{font-size:20px}.local-reflection label{display:block;margin-top:20px}.local-reflection textarea{font:inherit;width:100%;border:2px solid var(--ink);border-radius:10px;padding:12px;background:var(--paper)}textarea:focus-visible{outline:4px solid var(--focus);outline-offset:4px}.local-reflection button{margin-top:8px}.criteria-preview{max-width:760px;margin:15px auto;font-size:17px}.criteria-preview summary{padding:15px;min-height:56px;cursor:pointer}
 @media(max-width:420px){.paint-grid[style="--columns:5"]{grid-template-columns:1fr}}
 @media(max-width:960px){.panels{grid-template-columns:1fr}.panel-title{margin-bottom:12px}.friends{margin:12px 0}.story{margin:12px 0;text-align:center}.wrap{padding:16px}.bread{max-width:400px}.bottom{align-items:center}.advance{flex:1}.toolbar select{max-width:100%}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
@@ -25,6 +26,7 @@
 <div class="wrap">
 <header><p class="eyebrow">Frações com Minecraft</p><h1>Vamos descobrir as frações.</h1></header>
 <div class="toolbar"><label for="level">Nível de diferenciação</label><select id="level"><option value="support">Com pistas</option><option value="intermediate" selected>Passo a passo</option><option value="challenge">Mais desafios</option></select></div>
+<details class="criteria-preview"><summary>O que vamos aprender</summary><ul id="criteria-preview"></ul></details>
 <main id="activity" tabindex="-1"></main>
 <button id="help" class="help">Preciso de ajuda</button>
 <p id="pagecraft-feedback" class="ai-feedback" role="status"></p>
@@ -156,7 +158,7 @@
     const width = 300/columns, height = 240/rows;
     return `<svg class="build-model" viewBox="0 0 300 240" role="img" aria-label="${blocks} de 20 blocos pintados, ${d} grupos iguais">${Array.from({length:d},(_,group) => {
       const x = group%columns*width, y = Math.floor(group/columns)*height;
-      return `<g aria-label="Grupo ${group+1} de ${d}">${Array.from({length:20/d},(_,block) => `<rect data-block="${group*n+block}" x="${x+block%(5/columns)*60}" y="${y+Math.floor(block/(5/columns))*60}" width="60" height="60" fill="${group<n ? '#315e4d' : '#fffdf6'}" stroke="#9d9e89" stroke-width="1"/>`).join('')}<rect x="${x+2}" y="${y+2}" width="${width-4}" height="${height-4}" fill="none" stroke="#243c35" stroke-width="3"/></g>`;
+      return `<g aria-label="Grupo ${group+1} de ${d}">${Array.from({length:20/d},(_,block) => `<rect data-block="${group*(20/d)+block}" x="${x+block%(5/columns)*60}" y="${y+Math.floor(block/(5/columns))*60}" width="60" height="60" fill="${group<n ? '#315e4d' : '#fffdf6'}" stroke="#9d9e89" stroke-width="1"/>`).join('')}<rect x="${x+2}" y="${y+2}" width="${width-4}" height="${height-4}" fill="none" stroke="#243c35" stroke-width="3"/></g>`;
     }).join('')}</svg>`;
   }
   function makerPage() {
@@ -166,9 +168,15 @@
     return panels('Um constrói. O outro confere. Depois troquem.', `<h2>Pinta ${work.target} dos 20 blocos.</h2>${choices}${buildModel(work.target)}<p class="prompt">Constrói uma superfície inteira: 5 por 4.</p><div class="choices" role="group" aria-label="Material">${[['minecraft','Minecraft'],['paper','Papel ou cubos']].map(([value,label]) => `<button data-material="${value}" aria-pressed="${work.material === value}">${label}</button>`).join('')}</div><p class="prompt">${work.material === 'minecraft' ? 'Usa duas cores de blocos.' : 'Usa 20 quadrículas ou 20 cubos juntos.'}</p><button class="built" data-built="toggle" aria-pressed="${work.done}">Já fizemos</button>`,
       `<h2>Quantos blocos pintaram?</h2><div class="choices">${[2,5,8,10].map(value => `<button data-blocks="${value}" aria-pressed="${work.answer === value}">${value} blocos</button>`).join('')}</div>${feedback(hint,work.answer === task.blocks)}`);
   }
+  const criteria = [{"id": "partes-iguais", "pt": "Reconheço duas partes com o mesmo tamanho."}, {"id": "metades", "pt": "Distingo uma metade de uma parte desigual."}, {"id": "representar", "pt": "Represento frações com partes iguais."}, {"id": "inteiro", "pt": "Reconheço uma unidade inteira."}, {"id": "comparar", "pt": "Comparo frações da mesma unidade."}, {"id": "construir", "pt": "Represento uma fração numa unidade de 20 blocos."}];
+  const selfLabels = {alone:'Sozinho',help:'Com ajuda',practising:'Quero praticar',skip:'Prefiro não responder'};
+  const reflection = {open:false,finished:false,answers:{},strategy:'',next:'',submitted:null};
   function reflectionPage() {
-    return `<section class="summary"><h2>Como foi o teu trabalho?</h2><p>Pensa no que descobriste e na ajuda que recebeste.</p><button data-reflect="open">Refletir sobre o meu trabalho</button><p id="reflection-note" role="status"></p></section>`;
+    if (reflection.finished) return `<section class="summary"><h2>Terminaste a reflexão.</h2><p>${window.parent === window || presentation ? 'As respostas ficam apenas nesta página.' : 'As tuas escolhas seguem no registo desta sessão.'}</p><button data-selfreview="open">Rever as minhas escolhas</button></section>`;
+    if (!reflection.open || learningHost) return `<section class="summary"><h2>Como foi o teu trabalho?</h2><p>Pensa no que descobriste e na ajuda que recebeste.</p><button data-reflect="open">Refletir sobre o meu trabalho</button><p id="reflection-note" role="status"></p></section>`;
+    return `<section class="local-reflection"><h2>Como foi o teu trabalho?</h2><p>Podes deixar escolhas por responder.</p>${criteria.map(c => `<fieldset class="match"><legend>${c.pt}</legend><div class="choices">${Object.entries(selfLabels).map(([value,label]) => `<button data-self="${c.id}" data-value="${value}" aria-pressed="${(reflection.answers[c.id] || 'skip') === value}">${label}</button>`).join('')}</div></fieldset>`).join('')}<label for="local-strategy">O que te ajudou?</label><textarea id="local-strategy" maxlength="160" rows="2"></textarea><label for="local-next">O que queres experimentar a seguir?</label><textarea id="local-next" maxlength="160" rows="2"></textarea><button class="primary" data-selfdone="finish">Terminar a reflexão</button><p>${window.parent === window || presentation ? 'As respostas ficam apenas nesta página.' : 'A reflexão conta o que tu pensas do teu trabalho.'}</p></section>`;
   }
+
   function bread(cut) {
     const line = cut === null ? '' : `<path d="M${12 + 296 * cut} 6V102" stroke="#fffdf6" stroke-width="9"/><path d="M${12 + 296 * cut} 6V102" stroke="#735031" stroke-width="2" stroke-dasharray="5 5"/>`;
     return `<svg class="bread" viewBox="0 0 320 104" role="img" aria-label="${cut === null ? 'Pão inteiro' : cut === .5 ? 'Duas partes do mesmo tamanho' : 'Duas partes de tamanhos diferentes'}"><path d="M28 12H292V20H306V34H312V76H302V90H286V96H34V90H18V78H8V34H16V20H28Z" fill="#dca458" stroke="#906035" stroke-width="4"/><path d="M36 24H280V32H295V40H25V32H36Z" fill="#f6d49a"/><g stroke="#f7d8a5" stroke-width="9"><path d="M60 45L48 69M108 45L96 69M156 45L144 69M204 45L192 69M252 45L240 69"/></g>${line}</svg>`;
@@ -239,6 +247,10 @@
     const content = state.page === lastPage() ? reflectionPage() : state.page === 7 ? '<section class="summary"><h2>Exploraste as cinco unidades.</h2><p>Podes voltar às respostas e corrigir.</p><p>Vamos construir uma fração com 20 blocos.</p><button data-page="0">Voltar às respostas</button> <button class="primary" data-page="8">Ir construir</button></section>' : `<section id="${unitId()}" aria-label="${unitNames[unitId()]}">${state.page === 0 ? firstPage() : state.page === 1 ? secondPage() : state.page === 2 ? symbolPage() : state.page === 3 ? associationPage() : state.page === 4 ? gridPage() : state.page === 5 ? wholePage() : state.page === 6 ? comparePage() : makerPage()}<footer class="bottom"><button data-page="${state.page - 1}" ${state.page === 0 ? 'disabled' : ''}>Voltar</button><div class="advance"><p class="remaining" role="status">${remaining()}</p><button class="primary" data-page="${state.page+1}" ${canOpen(state.page+1) ? '' : 'disabled'}>Seguinte</button></div></footer></section>`;
     const drawingOpen = activity.querySelector('.drawing')?.open;
     activity.innerHTML = nav + content;
+    if (document.getElementById('local-strategy')) {
+      document.getElementById('local-strategy').value = reflection.strategy;
+      document.getElementById('local-next').value = reflection.next;
+    }
     if (drawingOpen && activity.querySelector('.drawing')) activity.querySelector('.drawing').open = true;
   }
   function navigate(page) {
@@ -292,9 +304,20 @@
       emit('attempt', {correct:Number(value) === builds[state.maker.target].blocks,detail:`Construção ${state.maker.target} de 20 blocos: respondeu ${value} blocos pintados. Trabalho externo declarado, não observado.`});
     }
     if (action === 'reflect') {
-      if (learningHost) emit('open_reflection');
-      else document.getElementById('reflection-note').textContent = 'Conta ao colega o que descobriste.';
-      return;
+      if (learningHost) { emit('open_reflection'); return; }
+      reflection.open = true;
+    }
+    if (action === 'self') reflection.answers[value] = button.dataset.value;
+    if (action === 'selfreview') reflection.finished = false;
+    if (action === 'selfdone') {
+      const submitted = JSON.stringify([reflection.answers,reflection.strategy,reflection.next]);
+      if (submitted !== reflection.submitted) {
+        for (const c of criteria) emit('assessment_result', {result:'Autoavaliação declarada',detail:`${c.pt} ${selfLabels[reflection.answers[c.id] || 'skip']}.`});
+        if (reflection.strategy) emit('assessment_result', {result:'Voz da criança: ajuda',detail:reflection.strategy});
+        if (reflection.next) emit('assessment_result', {result:'Voz da criança: próximo passo',detail:reflection.next});
+        reflection.submitted = submitted;
+      }
+      reflection.finished = true;
     }
     if (action === 'cell') {
       const work = state[button.dataset.grid], cell = Number(value);
@@ -343,7 +366,11 @@
     }
     render();
     saveWork();
-    activity.querySelector(`[data-${action}="${value}"]${['match','pair'].includes(action) ? `[data-value="${button.dataset.value}"]` : ''}`)?.focus({preventScroll:true});
+    activity.querySelector(`[data-${action}="${value}"]${['match','pair','self'].includes(action) ? `[data-value="${button.dataset.value}"]` : ''}`)?.focus({preventScroll:true});
+  });
+  activity.addEventListener('input', event => {
+    if (event.target.id === 'local-strategy') reflection.strategy = event.target.value.slice(0,160);
+    if (event.target.id === 'local-next') reflection.next = event.target.value.slice(0,160);
   });
   let drawingPointer = null;
   let pen = {x:150,y:90};
@@ -404,6 +431,7 @@
     emit('help_needed', {note:'Preciso de ajuda nesta página de frações.'});
     document.getElementById('pagecraft-feedback').textContent = presentation ? 'Na demonstração, experimenta comparar os tamanhos.' : window.parent === window ? 'Pede ao professor para olhar contigo para as partes.' : 'Pediste ajuda ao professor.';
   });
+  document.getElementById('criteria-preview').innerHTML = criteria.map(c => `<li>${c.pt}</li>`).join('');
   render();
   emit('activity_loaded', {title:document.title});
   emit('unit_started');
