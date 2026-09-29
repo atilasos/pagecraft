@@ -39,3 +39,40 @@ def test_levels_correction_and_all_navigation_paths(page, lesson_origin):
         assert page.get_by_role('button', name='3. Rever', exact=True).is_disabled()
         page.get_by_role('button', name='Não', exact=True).click()
         assert page.get_by_role('button', name='3. Rever', exact=True).is_enabled()
+
+
+def test_bridge_reports_answers_but_presentation_does_not(page, lesson_origin):
+    page.set_content('<iframe title="Atividade"></iframe><pre id="events"></pre>')
+    page.evaluate('''url => {
+        window.received = [];
+        addEventListener('message', event => {
+            if (event.source === document.querySelector('iframe').contentWindow && event.data?.pagecraft === 1) {
+                received.push(event.data);
+                document.querySelector('#events').textContent = JSON.stringify(received);
+            }
+        });
+        document.querySelector('iframe').src = url;
+    }''', lesson_origin)
+    lesson = page.frame_locator('iframe')
+    lesson.get_by_role('button', name='Cortar à esquerda', exact=True).click()
+    lesson.get_by_role('button', name='Sim', exact=True).click()
+    page.wait_for_function("received.some(e => e.type === 'attempt')")
+    attempts = page.evaluate("received.filter(e => e.type === 'attempt')")
+    assert [(e['unitId'], e['payload']['correct']) for e in attempts] == [('u1', False)]
+    lesson.get_by_role('button', name='Não', exact=True).click()
+    page.wait_for_function("received.filter(e => e.type === 'attempt').length === 2")
+    assert page.evaluate("received.filter(e => e.type === 'attempt')[1].payload.correct") is True
+    lesson.get_by_role('button', name='Seguinte', exact=True).click()
+    lesson.get_by_role('button', name='1. Partilhar', exact=True).click()
+    assert page.evaluate("received.filter(e => e.type === 'attempt').length") == 2
+    # Existing host preference contract; a profile changes the lesson level.
+    page.evaluate("document.querySelector('iframe').contentWindow.postMessage({pagecraft:1,type:'learning_preferences',payload:{level:'challenge'}}, '*')")
+    from playwright.sync_api import expect
+    expect(lesson.get_by_label('Nível de diferenciação')).to_have_value('challenge')
+    page.evaluate("url => document.querySelector('iframe').src = url", lesson_origin + '?presentation=1')
+    expect(lesson.get_by_text('Demonstração · As respostas não ficam registadas.')).to_be_visible()
+    page.evaluate('received.length = 0')
+    lesson.get_by_role('button', name='2. Comparar', exact=True).click()
+    lesson.get_by_role('button', name='Partilha B', exact=True).click()
+    lesson.get_by_role('button', name='3. Rever', exact=True).click()
+    assert page.evaluate('received.length') == 0

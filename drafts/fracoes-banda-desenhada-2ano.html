@@ -15,15 +15,25 @@
 <body>
 <a class="skip" href="#activity">Saltar para a atividade</a>
 <p class="draft">Rascunho em revisão · Unidade 1 de Frações com Minecraft</p>
+<p id="presentation" class="draft demonstration" hidden>Demonstração · As respostas não ficam registadas.</p>
 <div class="wrap">
 <header><p class="eyebrow">Uma metade para cada um</p><h1>Vamos partilhar o pão.</h1></header>
 <div class="toolbar"><label for="level">Nível de diferenciação</label><select id="level"><option value="support">Broto</option><option value="intermediate" selected>Árvore jovem</option><option value="challenge">Árvore robusta</option></select></div>
 <main id="activity" tabindex="-1"></main>
+<button id="help" class="help">Preciso de ajuda</button>
+<p id="pagecraft-feedback" class="ai-feedback" role="status"></p>
 </div>
 <script>
 (() => {
   'use strict';
   const activity = document.getElementById('activity');
+  // Presentation is a local UI mode, never a role or an access credential.
+  const presentation = new URL(location.href).searchParams.get('presentation') === '1';
+  document.getElementById('presentation').hidden = !presentation;
+  function emit(type, payload = {}) {
+    if (presentation || window.parent === window) return;
+    window.parent.postMessage({pagecraft:1, type, unitId:'u1', payload, ts:Date.now()}, '*');
+  }
   const state = { page: 0, level: 'intermediate', cut: null, answer: null, comparison: null, inventedCut: null, reason: null };
   function bread(cut) {
     const line = cut === null ? '' : `<path d="M${12 + 296 * cut} 6V102" stroke="#fffdf6" stroke-width="9"/><path d="M${12 + 296 * cut} 6V102" stroke="#735031" stroke-width="2" stroke-dasharray="5 5"/>`;
@@ -40,7 +50,7 @@
       state.level === 'challenge' ? state.inventedCut !== null && state.reason !== null : state.comparison !== null];
   }
   function canOpen(page) {
-    return completedPages().slice(0, page).every(Boolean);
+    return presentation || completedPages().slice(0, page).every(Boolean);
   }
   function feedback(content) {
     return content ? `<div class="feedback" role="status">${content}</div>` : '';
@@ -87,7 +97,7 @@
     activity.focus({preventScroll:true});
     activity.scrollIntoView({block:'start'});
   }
-  function changeLevel(level) {
+  function changeLevel(level, notifyHost = false) {
     if (!['support','intermediate','challenge'].includes(level) || state.level === level) return;
     const changesQuestion = (state.level === 'challenge') !== (level === 'challenge');
     state.level = level;
@@ -97,8 +107,9 @@
       if (state.page === 2) state.page = 1;
     }
     render();
+    if (notifyHost) emit('level_changed', {level});
   }
-  document.getElementById('level').addEventListener('change', event => changeLevel(event.target.value));
+  document.getElementById('level').addEventListener('change', event => changeLevel(event.target.value, true));
   activity.addEventListener('click', event => {
     const button = event.target.closest('button');
     if (!button || button.disabled) return;
@@ -109,13 +120,43 @@
       if (state.page === 0) { state.cut = Number(value); state.answer = null; }
       else { state.inventedCut = Number(value); state.reason = null; }
     }
-    if (action === 'answer') state.answer = value;
-    if (action === 'comparison') state.comparison = value;
-    if (action === 'reason') state.reason = value;
+    if (action === 'answer') {
+      state.answer = value;
+      emit('attempt', {correct:value === (state.cut === .5 ? 'yes' : 'no'), detail:`Partilha: corte ${state.cut*100}%; resposta ${value === 'yes' ? 'sim' : 'não'}.`});
+    }
+    if (action === 'comparison') {
+      state.comparison = value;
+      emit('attempt', {correct:value === 'A', detail:`Comparação: escolheu a partilha ${value}.`});
+    }
+    if (action === 'reason') {
+      state.reason = value;
+      emit('attempt', {correct:state.inventedCut !== .5 && value === 'sizes', detail:`Partilha inventada: corte ${state.inventedCut*100}%; explicação: ${button.textContent}`});
+    }
     render();
     activity.querySelector(`[data-${action}="${value}"]`)?.focus({preventScroll:true});
   });
+  window.addEventListener('message', event => {
+    if (event.source !== window.parent || window.parent === window) return;
+    const d = event.data;
+    if (!d || d.pagecraft !== 1) return;
+    if (d.type === 'learning_preferences') changeLevel(d.payload?.level);
+    if (d.type === 'highlight' && d.unitId === 'u1') {
+      navigate(0);
+      activity.classList.add('pagecraft-attention');
+      setTimeout(() => activity.classList.remove('pagecraft-attention'), 6000);
+    }
+    if (d.type === 'ai_feedback' && typeof d.payload?.text === 'string') {
+      document.getElementById('pagecraft-feedback').textContent = d.payload.text;
+    }
+  });
+  document.getElementById('help').addEventListener('click', () => {
+    emit('help_needed', {note:'Preciso de ajuda para comparar as partes do pão.'});
+    document.getElementById('pagecraft-feedback').textContent = presentation ? 'Na demonstração, experimenta comparar os tamanhos.' : window.parent === window ? 'Pede ao professor para olhar contigo para as partes.' : 'Pediste ajuda ao professor.';
+  });
   render();
+  emit('activity_loaded', {title:document.title});
+  emit('unit_started');
+  setInterval(() => emit('heartbeat'), 15000);
 })();
 </script>
 </body>
