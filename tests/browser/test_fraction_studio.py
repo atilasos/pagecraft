@@ -91,7 +91,14 @@ def test_reopening_realization_restores_work_without_inventing_attempts(page, st
     page.reload()
     expect(lesson.get_by_role('button', name='Cortar à direita', exact=True)).to_have_attribute('aria-pressed','true')
     assert lesson.get_by_role('button', name='Seguinte', exact=True).is_disabled()
-    lesson.get_by_role('button', name='Não', exact=True).click()
+    # Exercise keyboard input after reload: CDP coordinate clicks can hit the
+    # outer iframe instead of the restored button in this browser harness.
+    answer = lesson.get_by_role('button', name='Não', exact=True)
+    answer.focus()
+    expect(answer).to_be_focused()
+    answer.press('Enter')
+    expect(answer).to_have_attribute('aria-pressed', 'true')
+    expect(lesson.get_by_role('button', name='Seguinte', exact=True)).to_be_enabled()
     lesson.get_by_role('button', name='Seguinte', exact=True).click()
     expect(lesson.get_by_role('button', name='Partilha B', exact=True)).to_have_attribute('aria-pressed','true')
     assert page.request.get(studio_origin + '/api/learning/reports').json() == []
