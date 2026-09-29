@@ -55,7 +55,7 @@ def test_teacher_receives_attempt_and_board_is_only_demonstration(page, studio_o
         expect(board.get_by_text('Demonstração · As respostas não ficam registadas.')).to_be_visible()
         board.get_by_role('button', name='2. Comparar', exact=True).click()
         board.get_by_role('button', name='Partilha B', exact=True).click()
-        board.get_by_role('button', name='3. Rever', exact=True).click()
+        board.get_by_role('button', name='3. Pintar', exact=True).click()
         history = teacher.get(f"/api/sessions/{session['id']}/students/{student_id}/history").json()['events']
         assert len([e for e in history if e['type'] == 'attempt']) == 1
         teacher.post(f"/api/sessions/{draft_session.json()['id']}/close").raise_for_status()

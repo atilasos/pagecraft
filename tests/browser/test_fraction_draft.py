@@ -20,7 +20,7 @@ def test_levels_correction_and_all_navigation_paths(page, lesson_origin):
     for choice in ['support', 'intermediate', 'challenge']:
         page.goto(lesson_origin)
         level.select_option(choice)
-        assert page.get_by_role('button', name='3. Rever', exact=True).is_disabled()
+        assert page.get_by_role('button', name='3. Pintar', exact=True).is_disabled()
         assert page.get_by_role('button', name='2. Inventar' if choice == 'challenge' else '2. Comparar', exact=True).is_disabled()
         page.get_by_role('button', name='Cortar ao meio', exact=True).click()
         page.get_by_role('button', name='Sim', exact=True).click()
@@ -31,14 +31,14 @@ def test_levels_correction_and_all_navigation_paths(page, lesson_origin):
         else:
             page.get_by_role('button', name='Partilha B', exact=True).click()
         page.get_by_role('button', name='Seguinte', exact=True).click()
-        assert page.get_by_role('heading', name='Respondeste à unidade do pão.').is_visible()
+        assert page.get_by_role('heading', name={'support':'Pinta 1/2.', 'intermediate':'Pinta 1/4.', 'challenge':'Pinta 2/5.'}[choice]).is_visible()
         page.get_by_role('button', name='1. Partilhar', exact=True).click()
         assert page.get_by_role('button', name='Sim', exact=True).get_attribute('aria-pressed') == 'true'
         page.get_by_role('button', name='Cortar à esquerda', exact=True).click()
         assert page.get_by_role('button', name='Seguinte', exact=True).is_disabled()
-        assert page.get_by_role('button', name='3. Rever', exact=True).is_disabled()
+        assert page.get_by_role('button', name='3. Pintar', exact=True).is_disabled()
         page.get_by_role('button', name='Não', exact=True).click()
-        assert page.get_by_role('button', name='3. Rever', exact=True).is_enabled()
+        assert page.get_by_role('button', name='3. Pintar', exact=True).is_enabled()
 
 
 def test_bridge_reports_answers_but_presentation_does_not(page, lesson_origin):
@@ -74,7 +74,7 @@ def test_bridge_reports_answers_but_presentation_does_not(page, lesson_origin):
     page.evaluate('received.length = 0')
     lesson.get_by_role('button', name='2. Comparar', exact=True).click()
     lesson.get_by_role('button', name='Partilha B', exact=True).click()
-    lesson.get_by_role('button', name='3. Rever', exact=True).click()
+    lesson.get_by_role('button', name='3. Pintar', exact=True).click()
     assert page.evaluate('received.length') == 0
 
 
