@@ -1,6 +1,8 @@
-# Usabilidade infantil: decisões para o protótipo
+# Usabilidade infantil: decisões para a atividade
 
 ## Confirmado pelo professor
+
+- Em 29/09/2026, o professor escolheu a opção **B, Banda desenhada**, depois de experimentar os exemplos remotos. Esta disposição passa a ser a referência para a atividade completa de Frações com Minecraft, do 2.º ano.
 
 - Primeiro protótipo: Frações com Minecraft, 2.º ano. A unidade inicial da [atividade de frações](../../activities/fracoes-2-minecraft/index.html) permite explorar uma baguete dividida em partes iguais ou diferentes.
 - A criança precisa de responder a todos os pedidos obrigatórios antes de avançar. O critério é uma **Página respondida**, conforme [CONTEXT.md](../../CONTEXT.md), e não acertar em todas as respostas.
@@ -29,7 +31,15 @@ Verificado em browser real: respostas obrigatórias, avanço mesmo com erros, pi
 
 Capturas: [A](/home/proteu/agent-browser-hub/screenshots/fracoes-prototype-A.png), [B](/home/proteu/agent-browser-hub/screenshots/fracoes-prototype-B.png), [C](/home/proteu/agent-browser-hub/screenshots/fracoes-prototype-C.png) e [telemóvel](/home/proteu/agent-browser-hub/screenshots/fracoes-prototype-mobile.png).
 
-A escolha da disposição pelo professor continua pendente. O ensaio contém três passos representativos; a atividade completa, a diferenciação e a identificação de grupos serão tratadas na especificação posterior.
+A escolha da disposição está concluída: opção B. O ensaio contém três passos representativos; a atividade completa, a diferenciação e a identificação de grupos continuam por implementar.
+
+## Aplicação da opção B
+
+Usar a sequência visual do protótipo: «Imagina» apresenta a situação, «Experimenta» contém a ação da criança e «Repara» reúne a pergunta e o feedback. Manter as vinhetas lado a lado quando há espaço e pela mesma ordem vertical nos ecrãs estreitos. As instruções devem ser curtas e estar junto do objeto ou botão a que se referem.
+
+O avanço depende de todas as respostas obrigatórias da página, mesmo com erros. O feedback começa por uma pista visual e permite corrigir. Nos passos realizados no Minecraft, pedir «Já fizemos» e uma resposta curta sobre a construção. Preservar a possibilidade de voltar às respostas.
+
+A implementação deve conservar o percurso completo e a diferenciação da atividade existente. O protótipo na branch separada é a referência visual; a barra de comparação e o estado de diagnóstico pertencem apenas ao ensaio. A preferência do professor estabelece a direção visual; a facilidade de uso pelas crianças ainda precisa de ser observada em aula.
 
 ## Revisão remota temporária
 
