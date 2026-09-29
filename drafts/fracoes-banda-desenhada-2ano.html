@@ -71,7 +71,7 @@
   function unitId() { return pageUnits[state.page]; }
   function lastPage() { return 9; }
   function saveWork() {
-    if (learningHost) emit('activity_state', {activity:'fracoes-banda-desenhada-2ano', version:2, state:structuredClone(state)});
+    if (learningHost) emit('activity_state', {activity:'fracoes-banda-desenhada-2ano', version:2, readyForReflection:completedPages().every(Boolean), state:structuredClone(state)});
   }
   function restoreWork(events) {
     if (presentation || !Array.isArray(events)) return;
@@ -285,6 +285,7 @@
     render();
     if (notifyHost) emit('level_changed', {level});
     saveWork();
+    return true;
   }
   document.getElementById('level').addEventListener('change', event => changeLevel(event.target.value, true));
   activity.addEventListener('click', event => {
@@ -417,7 +418,7 @@
     const d = event.data;
     if (!d || d.pagecraft !== 1) return;
     if (d.type === 'learning_restore') restoreWork(d.payload?.events);
-    if (d.type === 'learning_preferences') { learningHost = true; changeLevel(d.payload?.level); }
+    if (d.type === 'learning_preferences') { learningHost = true; if (!changeLevel(d.payload?.level)) saveWork(); }
     if (d.type === 'highlight' && Object.hasOwn(unitNames,d.unitId)) {
       navigate(pageUnits.indexOf(d.unitId));
       activity.classList.add('pagecraft-attention');
@@ -433,7 +434,7 @@
   });
   document.getElementById('criteria-preview').innerHTML = criteria.map(c => `<li>${c.pt}</li>`).join('');
   render();
-  emit('activity_loaded', {title:document.title});
+  emit('activity_loaded', {title:document.title,requiresCompletion:true});
   emit('unit_started');
   setInterval(() => emit('heartbeat'), 15000);
 })();

@@ -89,6 +89,8 @@ const copy = {
     preview: "Preview: these records are not included in pupil reports.",
   },
 };
+let reflectionReady = true;
+let requiresCompletion = false;
 let lang = "pt",
   activity,
   attempt,
@@ -216,6 +218,9 @@ async function flush() {
   }
 }
 function showWork() {
+  requiresCompletion = false;
+  reflectionReady = true;
+  $("reflect").disabled = false;
   for (const id of ["entry", "reflection", "done"]) $(id).hidden = true;
   $("work").hidden = false;
   $("leave").hidden = false;
@@ -307,7 +312,7 @@ function renderReflection() {
   $("next-step").value = reflectionDraft.next_step;
 }
 function openReflection() {
-  if (!attempt || attempt.completed_at) return;
+  if (!reflectionReady || !attempt || attempt.completed_at) return;
   $("work").hidden = true;
   $("reflection").hidden = false;
   renderReflection();
@@ -415,6 +420,15 @@ $("again").onclick = leave;
 window.addEventListener("message", (e) => {
   if (e.source !== $("lesson").contentWindow || e.data?.pagecraft !== 1) return;
   const { type, payload = {}, unitId = "" } = e.data;
+  if (type === "activity_loaded") {
+    requiresCompletion = payload.requiresCompletion === true;
+    reflectionReady = !requiresCompletion;
+    $("reflect").disabled = !reflectionReady;
+  }
+  if (type === "activity_state" && requiresCompletion) {
+    reflectionReady = payload.readyForReflection === true;
+    $("reflect").disabled = !reflectionReady;
+  }
   if (type === "open_reflection") {
     openReflection();
     return;
