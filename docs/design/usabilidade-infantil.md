@@ -33,7 +33,7 @@ Verificado em browser real: respostas obrigatórias, avanço mesmo com erros, pi
 
 Capturas: [A](/home/proteu/agent-browser-hub/screenshots/fracoes-prototype-A.png), [B](/home/proteu/agent-browser-hub/screenshots/fracoes-prototype-B.png), [C](/home/proteu/agent-browser-hub/screenshots/fracoes-prototype-C.png) e [telemóvel](/home/proteu/agent-browser-hub/screenshots/fracoes-prototype-mobile.png).
 
-A escolha da disposição está concluída: opção B. O ensaio contém três passos representativos; a atividade completa, a diferenciação e a identificação de grupos continuam por implementar.
+A escolha da disposição está concluída: opção B. O ensaio original contém três passos representativos. Em 29/09/2026, a atividade completa e a diferenciação ficaram implementadas no novo rascunho; a identificação dos participantes de grupos permanece por definir e implementar.
 
 ## Aplicação da opção B
 
@@ -72,4 +72,4 @@ Verificação externa: HTTPS 200 nas três variantes, conteúdo idêntico ao HTM
 
 ## Preparação da implementação
 
-Em 29/09/2026 ficaram preparadas a [especificação da atividade completa](fracoes-banda-desenhada-spec.md) e as [três etapas propostas](fracoes-banda-desenhada-etapas.md). O professor confirmou esta divisão para Frações com Minecraft, ressalvando a revisão caso a caso nas outras atividades. Publicados no GitHub: [especificação #38](https://github.com/atilasos/pagecraft/issues/38) e tickets [#39](https://github.com/atilasos/pagecraft/issues/39), [#40](https://github.com/atilasos/pagecraft/issues/40) e [#41](https://github.com/atilasos/pagecraft/issues/41), com dependências nativas 39 → 40 → 41. A primeira unidade está implementada num novo rascunho privado; a atividade completa continua em preparação nos tickets #40 e #41. [Verificação e links da primeira unidade](../verification/issue-39-fracoes.md).
+Em 29/09/2026 ficaram preparadas a [especificação da atividade completa](fracoes-banda-desenhada-spec.md) e as [três etapas propostas](fracoes-banda-desenhada-etapas.md). O professor confirmou esta divisão para Frações com Minecraft, ressalvando a revisão caso a caso nas outras atividades. Publicados no GitHub: [especificação #38](https://github.com/atilasos/pagecraft/issues/38) e tickets [#39](https://github.com/atilasos/pagecraft/issues/39), [#40](https://github.com/atilasos/pagecraft/issues/40) e [#41](https://github.com/atilasos/pagecraft/issues/41), com dependências nativas 39 → 40 → 41. As três etapas foram concluídas e os quatro tickets estão fechados. O rascunho completo inclui as cinco explorações, construção com 20 blocos e reflexão; 291 testes passaram. [Verificação final](../verification/issue-41-fracoes.md). A [pré-visualização temporária completa](https://graham-collaboration-exemption-contacting.trycloudflare.com/pao/) é uma cópia estática pública, com reflexão local. A integração com o Studio foi ensaiada em instâncias descartáveis; a revisão não foi implantada em produção nem publicada para alunos.
