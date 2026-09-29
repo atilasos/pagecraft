@@ -111,7 +111,7 @@
     return state.drawing.map(p => `${p.start ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
   }
   function drawingMarkup() {
-    return `<details class="drawing"><summary>Desenho livre (opcional)</summary><p class="hint-caption">Desenha com o dedo. No teclado, usa as setas e Espaço para traçar.</p><svg id="sketch" viewBox="0 0 300 180" role="img" tabindex="0" aria-label="Desenho livre, sem avaliação"><path d="${drawingPath()}" stroke="#315e4d" stroke-width="4" stroke-linecap="round" fill="none"/><circle id="pen" cx="150" cy="90" r="5" fill="#195ba0"/></svg><button data-clear="drawing">Limpar desenho</button><p>Mostra o desenho ao colega.</p></details>`;
+    return `<details class="drawing"><summary>Desenho livre (opcional)</summary><p class="hint-caption">Desenha com o dedo. No teclado, usa as setas e Espaço para traçar.</p><svg id="sketch" viewBox="0 0 300 180" role="img" tabindex="0" aria-label="Desenho livre, sem avaliação"><path d="${drawingPath()}" stroke="#315e4d" stroke-width="4" stroke-linecap="round" fill="none"/><circle id="pen" cx="${pen.x}" cy="${pen.y}" r="5" fill="#195ba0"/></svg><button data-clear="drawing">Limpar desenho</button><p>Mostra o desenho ao colega.</p></details>`;
   }
   function gridPage() {
     const [n,d] = gridTargets[state.level], work = state.grid;
@@ -195,7 +195,9 @@
   function render() {
     const nav = `<nav class="steps" aria-label="Páginas da atividade">${['1. Partilhar',state.level === 'challenge' ? '2. Inventar' : '2. Comparar','3. Pintar','4. Associar','5. Grelha','6. Completar','7. Comparar','8. Rever'].map((label,page) => `<button data-page="${page}" ${state.page === page ? 'aria-current="step"' : ''} ${canOpen(page) ? '' : 'disabled'}>${label}</button>`).join('')}</nav>`;
     const content = state.page === lastPage() ? '<section class="summary"><h2>Exploraste as cinco unidades.</h2><p>Podes voltar às respostas e corrigir.</p><p>A construção no Minecraft e a reflexão final estão em preparação.</p><button data-page="0">Voltar às respostas</button></section>' : `<section id="${unitId()}" aria-label="${unitNames[unitId()]}">${state.page === 0 ? firstPage() : state.page === 1 ? secondPage() : state.page === 2 ? symbolPage() : state.page === 3 ? associationPage() : state.page === 4 ? gridPage() : state.page === 5 ? wholePage() : comparePage()}<footer class="bottom"><button data-page="${state.page - 1}" ${state.page === 0 ? 'disabled' : ''}>Voltar</button><div class="advance"><p class="remaining" role="status">${remaining()}</p><button class="primary" data-page="${state.page+1}" ${canOpen(state.page+1) ? '' : 'disabled'}>Seguinte</button></div></footer></section>`;
+    const drawingOpen = activity.querySelector('.drawing')?.open;
     activity.innerHTML = nav + content;
+    if (drawingOpen && activity.querySelector('.drawing')) activity.querySelector('.drawing').open = true;
   }
   function navigate(page) {
     if (page < 0 || page > lastPage() || !canOpen(page)) return;

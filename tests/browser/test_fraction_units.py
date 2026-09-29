@@ -264,6 +264,10 @@ def test_touch_controls_and_known_fraction_geometry(page, lesson_origin):
         sketch = touch.get_by_role('img', name='Desenho livre, sem avaliação')
         sketch.tap()
         assert sketch.locator('path').get_attribute('d')
+        touch.get_by_role('button', name='Limpar desenho').tap()
+        expect(sketch).to_be_visible()
+        assert sketch.locator('path').get_attribute('d') == ''
+        assert touch.get_by_role('button', name='Limpar desenho').evaluate('(el) => el === document.activeElement')
     finally:
         context.close()
 
