@@ -1,6 +1,6 @@
 # Etapas de Frações em banda desenhada
 
-Divisão da [especificação](fracoes-banda-desenhada-spec.md) aceite pelo professor em 29/09/2026 para esta atividade. Nas restantes atividades, rever a divisão caso a caso. A primeira etapa está implementada e verificada; as etapas 2 e 3 permanecem por implementar. Publicados a [especificação #38](https://github.com/atilasos/pagecraft/issues/38) e três tickets no GitHub, com a etiqueta `ready-for-agent`. Dependências nativas verificadas: #40 depende de #39; #41 depende de #40. Depois de fechar #39, o próximo ticket disponível é #40. Cada ticket referencia o protótipo `prototype/fracoes-visuais`, commit `58331ac`, variante B.
+Divisão da [especificação](fracoes-banda-desenhada-spec.md) aceite pelo professor em 29/09/2026 para esta atividade. Nas restantes atividades, rever a divisão caso a caso. As etapas 1 e 2 estão implementadas e verificadas; a etapa 3 permanece por implementar. Publicados a [especificação #38](https://github.com/atilasos/pagecraft/issues/38) e três tickets no GitHub, com a etiqueta `ready-for-agent`. Dependências nativas verificadas: #40 depende de #39; #41 depende de #40. Com #39 e #40 concluídos, o próximo ticket disponível é #41. Cada ticket referencia o protótipo `prototype/fracoes-visuais`, commit `58331ac`, variante B.
 
 ## 1. Partilhar o pão num rascunho com progressão por respostas
 
@@ -22,20 +22,20 @@ Divisão da [especificação](fracoes-banda-desenhada-spec.md) aceite pelo profe
 
 ## 2. Completar a exploração das cinco unidades
 
-[Ticket #40](https://github.com/atilasos/pagecraft/issues/40).
+[Ticket #40](https://github.com/atilasos/pagecraft/issues/40). Implementado. [Verificação](../verification/issue-40-fracoes.md).
 
 **Bloqueado por:** etapa 1, que estabelece o rascunho e as regras de navegação e integração.
 
 **Entrega:** a criança percorre partes e símbolos, associações, unidade inteira e comparação, além da partilha do pão, com pedidos explícitos e pistas visuais nos três níveis.
 
-- [ ] Implementar os pedidos observáveis da especificação para as quatro unidades restantes, com uma lista finita de desafios por nível.
-- [ ] Tratar valores iniciais como exemplos; contar uma representação apenas depois de a criança responder ou a confirmar.
-- [ ] Conservar associações erradas como respostas, permitir corrigi-las e não exigir acertos para mudar de página.
-- [ ] Confirmar uma representação na grelha; manter desenho livre como forma de expressão sem o classificar automaticamente.
-- [ ] Invalidar respostas dependentes quando a criança muda a representação, os operandos ou o nível, conservando o restante trabalho.
-- [ ] Manter a unidade constante nas comparações e representar corretamente todos os exemplos.
-- [ ] Registar tentativas e correções, sem duplicar acontecimentos quando apenas se redesenha a página.
-- [ ] Percorrer os cinco temas em todos os níveis no browser, com respostas em falta e erradas; verificar teclado, toque, foco e larguras de 390, 768 e 1280 px.
+- [x] Implementar os pedidos observáveis da especificação para as quatro unidades restantes, com uma lista finita de desafios por nível.
+- [x] Tratar valores iniciais como exemplos; contar uma representação apenas depois de a criança responder ou a confirmar.
+- [x] Conservar associações erradas como respostas, permitir corrigi-las e não exigir acertos para mudar de página.
+- [x] Confirmar uma representação na grelha; manter desenho livre como forma de expressão sem o classificar automaticamente.
+- [x] Invalidar respostas dependentes quando a criança muda a representação, os operandos ou o nível, conservando o restante trabalho.
+- [x] Manter a unidade constante nas comparações e representar corretamente todos os exemplos.
+- [x] Registar tentativas e correções, sem duplicar acontecimentos quando apenas se redesenha a página.
+- [x] Percorrer os cinco temas em todos os níveis no browser, com respostas em falta e erradas; verificar teclado, toque, foco e larguras de 390, 768 e 1280 px.
 
 ## 3. Concluir no Minecraft e preparar a revisão da atividade completa
 
