@@ -17,6 +17,7 @@ const EVENT_TEXT = {
   joined: () => "entrou na aula",
   activity_loaded: () => "abriu a atividade",
   heartbeat: () => "",
+  level_changed: (e) => `escolheu ${({support:"Broto", intermediate:"Árvore jovem", challenge:"Árvore robusta"})[e.payload?.level] || "outro nível"}`,
   unit_started: (e) => `começou ${unitLabel(e.payload?.unit_id || e.unit_id)}`,
   attempt: (e) => (e.payload?.correct ? "acertou uma tentativa ✓" : "fez uma tentativa"),
   discovery: (e) => `descobriu: ${e.payload?.message || ""}`,

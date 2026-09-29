@@ -163,6 +163,12 @@ SESSION_EVENT_TYPES = SessionEventRegistry(
         _event("heartbeat", "activity", timeline=False),
         _event("unit_started", "activity", evidence=True),
         _event(
+            "level_changed",
+            "activity",
+            evidence=True,
+            payload={"level": "Nível de diferenciação escolhido: support, intermediate ou challenge."},
+        ),
+        _event(
             "attempt",
             "activity",
             evidence=True,

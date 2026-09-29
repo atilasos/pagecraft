@@ -463,6 +463,7 @@ function showMessage(text, cls) {
 
 const HISTORY_LABELS = {
   unit_started: "Comecei uma parte",
+  level_changed: "Mudei de nível de diferenciação",
   attempt: "Fiz uma tentativa",
   discovery: "Fiz uma descoberta",
   assessment_result: "Registei um resultado",

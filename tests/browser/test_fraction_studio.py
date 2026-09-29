@@ -30,6 +30,11 @@ def test_teacher_receives_attempt_and_board_is_only_demonstration(page, studio_o
         assert len(attempts) == 1
         assert attempts[0]['payload']['correct'] is False
         assert attempts[0]['unit_id'] == 'u1'
+        with page.expect_response(lambda r: r.url.endswith('/events') and r.request.method == 'POST', timeout=6000):
+            lesson.get_by_label('Nível de diferenciação').select_option('challenge')
+        history = teacher.get(f"/api/sessions/{session['id']}/students/{student_id}/history").json()['events']
+        changes = [e for e in history if e['type'] == 'level_changed']
+        assert [e['payload']['level'] for e in changes] == ['challenge']
         # Switch to the actual registered draft, which has no public activity file.
         import json
         from pathlib import Path

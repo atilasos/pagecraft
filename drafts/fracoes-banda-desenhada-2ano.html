@@ -108,7 +108,7 @@
       if (state.page === 2) state.page = 1;
     }
     render();
-    if (notifyHost && learningHost) emit('level_changed', {level});
+    if (notifyHost) emit('level_changed', {level});
   }
   document.getElementById('level').addEventListener('change', event => changeLevel(event.target.value, true));
   activity.addEventListener('click', event => {

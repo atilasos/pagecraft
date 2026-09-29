@@ -19,6 +19,7 @@ O **nome interno** é o identificador canónico no servidor. O **nome na ponte**
 | `activity_loaded` | `activity_loaded` | automático pelo template | `title` — Título apresentado pela atividade carregada. |
 | `heartbeat` | `heartbeat` | automático pelo template | — |
 | `unit_started` | `unit_started` | `PageCraftBridge.unitStarted(unitId)` | — |
+| `level_changed` | `level_changed` | `PageCraftBridge.levelChanged(unitId, level)` | `level` — Nível de diferenciação escolhido: support, intermediate ou challenge. |
 | `attempt` | `attempt` | `PageCraftBridge.attempt(unitId, correct, detail)` | `correct` — Indica se a tentativa corresponde à resposta esperada.<br>`detail` — Descrição curta e opcional da tentativa observada. |
 | `discovery` | `discovery` | `PageCraftBridge.discovery(unitId, message)` | `message` — Descrição curta da descoberta feita pela criança. |
 | `assessment_result` | `assessment_result` | `PageCraftBridge.assessment(unitId, result, detail)` | `result` — Resultado observável do item de avaliação.<br>`detail` — Contexto curto e opcional sobre o resultado. |

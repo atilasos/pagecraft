@@ -453,6 +453,7 @@
       return {
         emit: emit,
         unitStarted: function (unitId) { emit('unit_started', unitId, {}); },
+        levelChanged: function (unitId, level) { emit('level_changed', unitId, { level: level }); },
         attempt: function (unitId, correct, detail) { emit('attempt', unitId, { correct: !!correct, detail: detail || '' }); },
         discovery: function (unitId, message) { emit('discovery', unitId, { message: message || '' }); },
         assessment: function (unitId, result, detail) { emit('assessment_result', unitId, { result: result, detail: detail || '' }); },
