@@ -133,7 +133,7 @@ def test_five_units_at_each_level_and_width(page, lesson_origin, level, width):
         page.get_by_role('button', name=label, exact=True).click()
         assert page.evaluate('document.documentElement.scrollWidth <= document.documentElement.clientWidth')
         dimensions = page.locator('.scene button').evaluate_all('(buttons) => buttons.map(b => ({w:b.getBoundingClientRect().width,h:b.getBoundingClientRect().height}))')
-        assert all(d['w'] >= 48 and d['h'] >= 48 for d in dimensions)
+        assert all(d['w'] >= 56 and d['h'] >= 56 for d in dimensions)
         panels = page.locator('.panel').evaluate_all('(panels) => panels.map(p => ({x:p.getBoundingClientRect().x,y:p.getBoundingClientRect().y}))')
         assert panels[0]['y'] < panels[1]['y'] < panels[2]['y'] if width < 820 else panels[0]['x'] < panels[1]['x'] < panels[2]['x']
     # Known equality 1/2 = 1/2 or 2/4 = 1/2, with identical whole widths.
@@ -266,3 +266,19 @@ def test_touch_controls_and_known_fraction_geometry(page, lesson_origin):
         assert sketch.locator('path').get_attribute('d')
     finally:
         context.close()
+
+
+def test_same_comparison_survives_a_different_position_in_next_level(page, lesson_origin):
+    page.goto(lesson_origin)
+    finish_representations(page)
+    page.get_by_role('button', name='Confirmar composição').click()
+    page.get_by_role('button', name='Não', exact=True).click()
+    page.get_by_role('button', name='Seguinte', exact=True).click()
+    page.get_by_role('group', name='Comparação 2 de 2', exact=True).get_by_role('button', name='Iguais', exact=True).click()
+    page.get_by_role('button', name='1. Partilhar', exact=True).click()
+    finish_representations(page, 'challenge')
+    page.get_by_role('button', name='Confirmar composição').click()
+    page.get_by_role('button', name='Não', exact=True).click()
+    page.get_by_role('button', name='Seguinte', exact=True).click()
+    expect(page.get_by_role('group', name='Comparação 3 de 3', exact=True).get_by_role('button', name='Iguais', exact=True)).to_have_attribute('aria-pressed','true')
+    assert page.get_by_role('button', name='Seguinte', exact=True).is_disabled()
