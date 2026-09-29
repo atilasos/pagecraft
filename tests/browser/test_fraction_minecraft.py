@@ -175,3 +175,15 @@ def test_changing_fraction_invalidates_construction_and_all_examples_are_exact(p
         assert page.get_by_role('button', name='10. Refletir', exact=True).is_enabled()
     page.get_by_role('button', name='1. Partilhar', exact=True).click()
     expect(page.get_by_role('button', name='Sim', exact=True)).to_have_attribute('aria-pressed','true')
+
+
+def test_reflection_is_locked_while_the_lesson_is_loading(page, studio_origin):
+    pending = []
+    page.route('**/api/learning/activities/*/content', lambda route: pending.append(route))
+    lesson = start_preview(page, studio_origin)
+    expect(page.locator('#work')).to_be_visible()
+    expect(page.get_by_role('button', name='Autoavaliar e terminar', exact=True)).to_be_disabled()
+    assert pending
+    pending[0].continue_()
+    expect(lesson.get_by_role('button', name='Cortar ao meio', exact=True)).to_be_visible()
+    assert page.get_by_role('button', name='Autoavaliar e terminar', exact=True).is_disabled()

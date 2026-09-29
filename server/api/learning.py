@@ -34,6 +34,7 @@ class Criterion(BaseModel):
 
 
 class ActivityInput(BaseModel):
+    requires_completion: bool = False
     slug: Slug
     title: Short
     title_en: str = Field(default="", max_length=120)

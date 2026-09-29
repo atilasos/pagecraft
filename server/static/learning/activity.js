@@ -218,9 +218,9 @@ async function flush() {
   }
 }
 function showWork() {
-  requiresCompletion = false;
-  reflectionReady = true;
-  $("reflect").disabled = false;
+  requiresCompletion = activity.requires_completion === true;
+  reflectionReady = !requiresCompletion;
+  $("reflect").disabled = !reflectionReady;
   for (const id of ["entry", "reflection", "done"]) $(id).hidden = true;
   $("work").hidden = false;
   $("leave").hidden = false;
@@ -317,6 +317,9 @@ function openReflection() {
   $("reflection").hidden = false;
   renderReflection();
   $("reflection").scrollIntoView({ behavior: "smooth" });
+  const heading = $("reflection").querySelector("h2");
+  heading.tabIndex = -1;
+  heading.focus({ preventScroll: true });
 }
 function showDone() {
   for (const id of ["entry", "work", "reflection"]) $(id).hidden = true;
@@ -383,6 +386,7 @@ $("back").onclick = () => {
 $("finish-form").oninput = captureReflection;
 $("finish-form").onsubmit = async (e) => {
   e.preventDefault();
+  if (!reflectionReady || !attempt || attempt.completed_at) return;
   captureReflection();
   e.submitter.disabled = true;
   try {
@@ -420,14 +424,14 @@ $("again").onclick = leave;
 window.addEventListener("message", (e) => {
   if (e.source !== $("lesson").contentWindow || e.data?.pagecraft !== 1) return;
   const { type, payload = {}, unitId = "" } = e.data;
-  if (type === "activity_loaded") {
-    requiresCompletion = payload.requiresCompletion === true;
-    reflectionReady = !requiresCompletion;
-    $("reflect").disabled = !reflectionReady;
-  }
   if (type === "activity_state" && requiresCompletion) {
     reflectionReady = payload.readyForReflection === true;
     $("reflect").disabled = !reflectionReady;
+    if (!reflectionReady && !$("reflection").hidden) {
+      captureReflection();
+      $("reflection").hidden = true;
+      $("work").hidden = false;
+    }
   }
   if (type === "open_reflection") {
     openReflection();
