@@ -17,13 +17,14 @@
 <p class="draft">Rascunho em revisão · Unidade 1 de Frações com Minecraft</p>
 <div class="wrap">
 <header><p class="eyebrow">Uma metade para cada um</p><h1>Vamos partilhar o pão.</h1></header>
+<div class="toolbar"><label for="level">Nível de diferenciação</label><select id="level"><option value="support">Broto</option><option value="intermediate" selected>Árvore jovem</option><option value="challenge">Árvore robusta</option></select></div>
 <main id="activity" tabindex="-1"></main>
 </div>
 <script>
 (() => {
   'use strict';
   const activity = document.getElementById('activity');
-  const state = { page: 0, cut: null, answer: null };
+  const state = { page: 0, level: 'intermediate', cut: null, answer: null, comparison: null, inventedCut: null, reason: null };
   function bread(cut) {
     const line = cut === null ? '' : `<path d="M${12 + 296 * cut} 6V102" stroke="#fffdf6" stroke-width="9"/><path d="M${12 + 296 * cut} 6V102" stroke="#735031" stroke-width="2" stroke-dasharray="5 5"/>`;
     return `<svg class="bread" viewBox="0 0 320 104" role="img" aria-label="${cut === null ? 'Pão inteiro' : cut === .5 ? 'Duas partes do mesmo tamanho' : 'Duas partes de tamanhos diferentes'}"><path d="M28 12H292V20H306V34H312V76H302V90H286V96H34V90H18V78H8V34H16V20H28Z" fill="#dca458" stroke="#906035" stroke-width="4"/><path d="M36 24H280V32H295V40H25V32H36Z" fill="#f6d49a"/><g stroke="#f7d8a5" stroke-width="9"><path d="M60 45L48 69M108 45L96 69M156 45L144 69M204 45L192 69M252 45L240 69"/></g>${line}</svg>`;
@@ -34,31 +35,85 @@
   function comparisonHint(cut) {
     return `<strong>Compara os tamanhos.</strong><span>Encosta as partes pelo mesmo lado.</span><div class="bars" role="img" aria-label="As partes alinhadas para comparar os tamanhos"><span style="--size:${cut*100}%"></span><span style="--size:${(1-cut)*100}%"></span></div>`;
   }
-  function answered() { return state.cut !== null && state.answer !== null; }
-  function feedback() {
-    if (state.answer === null) return '';
-    const correct = state.answer === (state.cut === .5 ? 'yes' : 'no');
-    return `<div class="feedback" role="status">${correct ? '<strong>Reparaste nos tamanhos.</strong>' + (state.cut === .5 ? 'Duas partes iguais formam metades.' : 'Estas partes têm tamanhos diferentes.') : comparisonHint(state.cut)}</div>`;
+  function completedPages() {
+    return [state.cut !== null && state.answer !== null,
+      state.level === 'challenge' ? state.inventedCut !== null && state.reason !== null : state.comparison !== null];
+  }
+  function canOpen(page) {
+    return completedPages().slice(0, page).every(Boolean);
+  }
+  function feedback(content) {
+    return content ? `<div class="feedback" role="status">${content}</div>` : '';
+  }
+  function cutFeedback(cut, answer) {
+    if (answer === null) return '';
+    const correct = answer === (cut === .5 ? 'yes' : 'no');
+    return correct ? '<strong>Reparaste nos tamanhos.</strong>' + (cut === .5 ? 'Duas partes iguais formam metades.' : 'Estas partes têm tamanhos diferentes.') : comparisonHint(cut);
+  }
+  function panels(story, material, question) {
+    return `<div class="panels"><section class="panel"><div class="panel-title"><span class="number">1</span>Imagina</div><div class="friends" aria-hidden="true"><div class="friend"><i class="face"></i>Tu</div><div class="friend"><i class="face"></i>Colega</div></div><p class="story">${story}</p></section><section class="panel"><div class="panel-title"><span class="number">2</span>Experimenta</div><div class="scene">${material}</div></section><section class="panel"><div class="panel-title"><span class="number">3</span>Repara</div>${question}</section></div>`;
+  }
+  function firstPage() {
+    const help = state.level === 'support' && state.cut !== null ? `<div class="feedback">${comparisonHint(state.cut)}</div>` : '';
+    return panels('Um pão para dois colegas.', `${bread(state.cut)}${cuts(state.cut)}<p class="prompt">Toca onde queres cortar.</p>${help}`,
+      `<h2>Ficaram duas metades?</h2><div class="choices"><button data-answer="yes" aria-pressed="${state.answer === 'yes'}" ${state.cut === null ? 'disabled' : ''}>Sim</button><button data-answer="no" aria-pressed="${state.answer === 'no'}" ${state.cut === null ? 'disabled' : ''}>Não</button></div>${feedback(cutFeedback(state.cut,state.answer))}`);
+  }
+  function secondPage() {
+    if (state.level === 'challenge') {
+      const hint = state.reason === null ? '' : state.inventedCut !== .5 && state.reason === 'sizes' ? '<strong>As partes têm tamanhos diferentes.</strong>Explica ao colega o que mudarias.' : comparisonHint(state.inventedCut);
+      return panels('Inventa uma partilha que não forme metades.', `${bread(state.inventedCut)}${cuts(state.inventedCut)}<p class="prompt">Escolhe outro corte.</p>`,
+        `<h2>Porque não são metades?</h2><div class="why">${[['sizes','As partes têm tamanhos diferentes.'],['colour','O pão tem outra cor.'],['small','O pão é pequeno.']].map(([value,label]) => `<button data-reason="${value}" aria-pressed="${state.reason === value}" ${state.inventedCut === null ? 'disabled' : ''}>${label}</button>`).join('')}</div>${feedback(hint)}`);
+    }
+    const hint = state.comparison === null ? '' : state.comparison === 'A' ? '<strong>Encontraste duas metades.</strong>As partes têm o mesmo tamanho.' : comparisonHint(.25);
+    const help = state.level === 'support' ? '<p class="hint-caption">Encosta as partes: devem ocupar o mesmo espaço.</p>' : '<p class="prompt">Conta ao colega o que observaste.</p>';
+    return panels('Observa duas maneiras de partilhar.', `<div class="comparison">${[['A',.5],['B',.25]].map(([name,cut]) => `<button aria-label="Partilha ${name}" data-comparison="${name}" aria-pressed="${state.comparison === name}"><span class="picture-label">${name}</span>${bread(cut)}</button>`).join('')}</div>${help}`,
+      `<h2>Qual partilha mostra metades?</h2><p>Toca na partilha que escolheste.</p>${feedback(hint)}`);
+  }
+  function remaining() {
+    if (completedPages()[state.page]) return 'Respondeste. Podes corrigir ou continuar.';
+    if (state.page === 0) return state.cut === null ? 'Falta escolher o corte e responder.' : 'Falta responder: ficaram duas metades?';
+    if (state.level !== 'challenge') return 'Falta escolher uma partilha.';
+    return state.inventedCut === null ? 'Falta inventar o corte e responder.' : 'Falta escolher uma explicação.';
   }
   function render() {
-    if (state.page === 1) {
-      activity.innerHTML = '<section class="summary"><h2>Qual partilha mostra metades?</h2><button data-back>Voltar</button></section>';
-      return;
-    }
-    activity.innerHTML = `<section id="u1" aria-label="Partilhar o pão"><div class="panels"><section class="panel"><div class="panel-title"><span class="number">1</span>Imagina</div><div class="friends" aria-hidden="true"><div class="friend"><i class="face"></i>Tu</div><div class="friend"><i class="face"></i>Colega</div></div><p class="story">Um pão para dois colegas.</p></section><section class="panel"><div class="panel-title"><span class="number">2</span>Experimenta</div><div class="scene">${bread(state.cut)}${cuts(state.cut)}<p class="prompt">Toca onde queres cortar.</p></div></section><section class="panel"><div class="panel-title"><span class="number">3</span>Repara</div><h2>Ficaram duas metades?</h2><div class="choices"><button data-answer="yes" aria-pressed="${state.answer === 'yes'}" ${state.cut === null ? 'disabled' : ''}>Sim</button><button data-answer="no" aria-pressed="${state.answer === 'no'}" ${state.cut === null ? 'disabled' : ''}>Não</button></div>${feedback()}</section></div><footer class="bottom"><span>1 / 2</span><div class="advance"><p class="remaining" role="status">${answered() ? 'Respondeste. Podes corrigir ou continuar.' : state.cut === null ? 'Falta escolher o corte e responder.' : 'Falta responder: ficaram duas metades?'}</p><button class="primary" data-next ${answered() ? '' : 'disabled'}>Seguinte</button></div></footer></section>`;
+    const nav = `<nav class="steps" aria-label="Páginas da unidade">${['1. Partilhar',state.level === 'challenge' ? '2. Inventar' : '2. Comparar','3. Rever'].map((label,page) => `<button data-page="${page}" ${state.page === page ? 'aria-current="step"' : ''} ${canOpen(page) ? '' : 'disabled'}>${label}</button>`).join('')}</nav>`;
+    const content = state.page === 2 ? '<section class="summary"><h2>Respondeste à unidade do pão.</h2><p>Podes voltar às respostas e corrigir.</p><p>Esta revisão termina aqui. As restantes unidades e o Minecraft estão em preparação.</p><button data-page="0">Voltar às respostas</button></section>' : `<section id="u1" aria-label="Partilhar o pão">${state.page === 0 ? firstPage() : secondPage()}<footer class="bottom"><button data-page="${state.page - 1}" ${state.page === 0 ? 'disabled' : ''}>Voltar</button><div class="advance"><p class="remaining" role="status">${remaining()}</p><button class="primary" data-page="${state.page+1}" ${canOpen(state.page+1) ? '' : 'disabled'}>Seguinte</button></div></footer></section>`;
+    activity.innerHTML = nav + content;
   }
+  function navigate(page) {
+    if (page < 0 || page > 2 || !canOpen(page)) return;
+    state.page = page;
+    render();
+    activity.focus({preventScroll:true});
+    activity.scrollIntoView({block:'start'});
+  }
+  function changeLevel(level) {
+    if (!['support','intermediate','challenge'].includes(level) || state.level === level) return;
+    const changesQuestion = (state.level === 'challenge') !== (level === 'challenge');
+    state.level = level;
+    document.getElementById('level').value = level;
+    if (changesQuestion) {
+      state.comparison = null; state.inventedCut = null; state.reason = null;
+      if (state.page === 2) state.page = 1;
+    }
+    render();
+  }
+  document.getElementById('level').addEventListener('change', event => changeLevel(event.target.value));
   activity.addEventListener('click', event => {
     const button = event.target.closest('button');
     if (!button || button.disabled) return;
-    if (button.dataset.cut) { state.cut = Number(button.dataset.cut); state.answer = null; }
-    if (button.dataset.answer) state.answer = button.dataset.answer;
-    if (button.hasAttribute('data-next') && answered()) state.page = 1;
-    if (button.hasAttribute('data-back')) state.page = 0;
-    const label = button.getAttribute('aria-label');
-    const answer = button.dataset.answer;
+    if (button.dataset.page !== undefined) { navigate(Number(button.dataset.page)); return; }
+    const action = Object.keys(button.dataset)[0];
+    const value = button.dataset[action];
+    if (action === 'cut') {
+      if (state.page === 0) { state.cut = Number(value); state.answer = null; }
+      else { state.inventedCut = Number(value); state.reason = null; }
+    }
+    if (action === 'answer') state.answer = value;
+    if (action === 'comparison') state.comparison = value;
+    if (action === 'reason') state.reason = value;
     render();
-    const focus = label ? activity.querySelector(`[aria-label="${label}"]`) : answer ? activity.querySelector(`[data-answer="${answer}"]`) : activity;
-    focus?.focus({preventScroll:true});
+    activity.querySelector(`[data-${action}="${value}"]`)?.focus({preventScroll:true});
   });
   render();
 })();
