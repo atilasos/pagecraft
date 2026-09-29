@@ -1,0 +1,73 @@
+{
+  "docspec": "drafts/fracoes-banda-desenhada-2ano-docspec.json",
+  "reference": "docs/design/fracoes-banda-desenhada-spec.md; variante B aprovada do protótipo 58331ac; continuidade do HTML dos tickets #39 e #40.",
+  "palette": {
+    "bg": "#f6eddf",
+    "surface": "#fffdf6",
+    "primary": "#315e4d",
+    "accent": "#f7ce67",
+    "ink": "#243c35"
+  },
+  "functional": {
+    "ok": "#315e4d",
+    "warn": "#a46719",
+    "focus": "#195ba0"
+  },
+  "typography": {
+    "fontFamily": "system-ui, sans-serif",
+    "scale": "kids-6-7",
+    "baseSizePx": 22,
+    "headingSizePx": 25,
+    "maxLineCh": 55,
+    "weights": [
+      400,
+      700,
+      800
+    ],
+    "italicAllowed": false,
+    "allCapsInstructionsAllowed": false
+  },
+  "layout": {
+    "radius": 12,
+    "spacing": "comfortable",
+    "maxWidth": 1200,
+    "padding": "24px; 16px em ecrãs estreitos",
+    "panels": "Imagina, Experimenta, Repara, em colunas .65fr 1.3fr 1fr; uma coluna até 960px, mantendo a ordem.",
+    "navigation": "Passos numerados com estado atual; Voltar e Seguinte junto da indicação do que falta. Revisão das cinco unidades antes da construção, reflexão no fim."
+  },
+  "components": {
+    "levels": "Seletor com Com pistas, Passo a passo e Mais desafios. Mesma semântica visual neutra nos três; nenhuma cor classifica a criança.",
+    "buttons": "Altura mínima 56px, contorno de 2px, texto e estado aria-pressed quando aplicável. Alvos nunca abaixo dos 48px da especificação aceite.",
+    "panels": "Papel claro, contorno escuro de 3px, cantos irregulares já presentes na variante B; títulos numerados sem seletor de protótipos.",
+    "criteria": "Critérios em linguagem da criança antes do trabalho e retomados na reflexão; desenho livre e explicações orais opcionais.",
+    "required": "Indicar pedidos em falta em texto próximo do avanço. Página respondida permite corrigir ou continuar. Aplicar a mesma regra à navegação e ao botão Seguinte.",
+    "feedback": "Pista visual junto da pergunta, com texto específico; âmbar para resposta a rever, sem vermelho punitivo e sem sons automáticos.",
+    "fractions": "SVG inline com título/rótulo acessível, partes de igual tamanho; barras comparadas têm o mesmo comprimento total.",
+    "minecraft": "Unidade de 20 blocos contíguos, em cinco colunas e quatro linhas. O SVG distingue limites dos grupos e blocos pintados. Grupos de 1/2 e 1/4 organizados por linhas; de 2/5 e 1/10 por colunas e subdivisões iguais. O desenho representa sempre 20 blocos.",
+    "modelHint": "Pista de grupos iguais, sem substituir a resposta explícita. 1/2: dois grupos de dez, um pintado; 1/4: quatro grupos de cinco, um pintado; 2/5: cinco grupos de quatro, dois pintados; 1/10: dez grupos de dois, um pintado.",
+    "makerControls": "Material Minecraft ou Papel ou cubos; fração fixa por nível, com quatro escolhas no Mais desafios; Já fizemos e resposta numérica 2, 5, 8 ou 10 em controlos distintos.",
+    "cooperation": "Instrução curta e próxima da construção: um constrói, outro verifica, depois trocam. Não apresentar perfis de grupo ou nomes fictícios.",
+    "reflection": "Na realização, botão abre a Autoavaliação do anfitrião. Autonomamente, opções facultativas por critério, estratégia e próximo passo, sem nota nem afirmação de envio. Na sessão ao vivo, identificar voz do aluno se registada.",
+    "presentation": "Aviso legível de demonstração com navegação livre; sem inventar respostas nem registos."
+  },
+  "motion": {
+    "transitions": "none",
+    "respectReducedMotion": true
+  },
+  "accessibility": {
+    "contrast": "WCAG AA em texto; AAA como alvo na microcopy crítica",
+    "focusRing": "4px #195ba0, offset 4px, em botões, seletor, resumo e desenho",
+    "minTapPx": 56,
+    "keyboard": "Todos os pedidos por botões/seletor nativos; desenho livre também por setas e Espaço. Foco visível e ligação para saltar para a atividade.",
+    "status": "Mensagens de resposta e pedidos em falta com role=status; informação nunca só por cor.",
+    "svg": "Rótulos distinguem unidade, grupos e parte pintada. Ilustrações de colegas são decorativas.",
+    "responsiveValidation": [
+      390,
+      768,
+      1280
+    ],
+    "soundOptIn": true
+  },
+  "offline": "SVG, CSS e JS inline sem fontes ou recursos de rede. Minecraft e gravação no anfitrião têm as suas condições de ligação próprias.",
+  "notes": "Preserva a direção visual B aprovada e a paleta existente. A unidade comum de 20 blocos permite grupos inteiros nos quatro alvos; a geometria explica a fração. Esta especificação define requisitos e não substitui a verificação do HTML no browser."
+}
