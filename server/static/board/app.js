@@ -141,7 +141,8 @@ function startLiveSession(session) {
   sessionTitle.textContent = `${session.class_name} · ${session.activity_title}`;
   sessionStatus.textContent = "Aula em curso";
 
-  const activityUrl = `/activities/${encodeURIComponent(session.activity_slug)}/`;
+  // Presentation changes lesson navigation only; board access stays on its existing policy.
+  const activityUrl = `/activities/${encodeURIComponent(session.activity_slug)}/?presentation=1`;
   if (board.getAttribute("src") !== activityUrl) board.src = activityUrl;
   if (currentSessionId === session.id && stream) return;
 

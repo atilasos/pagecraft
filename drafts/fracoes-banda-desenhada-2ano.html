@@ -28,6 +28,7 @@
   'use strict';
   const activity = document.getElementById('activity');
   // Presentation is a local UI mode, never a role or an access credential.
+  let learningHost = false;
   const presentation = new URL(location.href).searchParams.get('presentation') === '1';
   document.getElementById('presentation').hidden = !presentation;
   function emit(type, payload = {}) {
@@ -107,7 +108,7 @@
       if (state.page === 2) state.page = 1;
     }
     render();
-    if (notifyHost) emit('level_changed', {level});
+    if (notifyHost && learningHost) emit('level_changed', {level});
   }
   document.getElementById('level').addEventListener('change', event => changeLevel(event.target.value, true));
   activity.addEventListener('click', event => {
@@ -139,7 +140,7 @@
     if (event.source !== window.parent || window.parent === window) return;
     const d = event.data;
     if (!d || d.pagecraft !== 1) return;
-    if (d.type === 'learning_preferences') changeLevel(d.payload?.level);
+    if (d.type === 'learning_preferences') { learningHost = true; changeLevel(d.payload?.level); }
     if (d.type === 'highlight' && d.unitId === 'u1') {
       navigate(0);
       activity.classList.add('pagecraft-attention');
