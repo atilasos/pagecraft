@@ -1,24 +1,24 @@
 # Etapas de Frações em banda desenhada
 
-Divisão da [especificação](fracoes-banda-desenhada-spec.md) aceite pelo professor em 29/09/2026 para esta atividade. Nas restantes atividades, rever a divisão caso a caso. O trabalho ainda não está implementado. Publicados a [especificação #38](https://github.com/atilasos/pagecraft/issues/38) e três tickets no GitHub, com a etiqueta `ready-for-agent`. Dependências nativas verificadas: #40 depende de #39; #41 depende de #40. O primeiro ticket disponível é #39. Cada ticket referencia o protótipo `prototype/fracoes-visuais`, commit `58331ac`, variante B.
+Divisão da [especificação](fracoes-banda-desenhada-spec.md) aceite pelo professor em 29/09/2026 para esta atividade. Nas restantes atividades, rever a divisão caso a caso. A primeira etapa está implementada e verificada; as etapas 2 e 3 permanecem por implementar. Publicados a [especificação #38](https://github.com/atilasos/pagecraft/issues/38) e três tickets no GitHub, com a etiqueta `ready-for-agent`. Dependências nativas verificadas: #40 depende de #39; #41 depende de #40. Depois de fechar #39, o próximo ticket disponível é #40. Cada ticket referencia o protótipo `prototype/fracoes-visuais`, commit `58331ac`, variante B.
 
 ## 1. Partilhar o pão num rascunho com progressão por respostas
 
-[Ticket #39](https://github.com/atilasos/pagecraft/issues/39).
+[Ticket #39](https://github.com/atilasos/pagecraft/issues/39). Implementado. [Verificação](../verification/issue-39-fracoes.md).
 
 **Bloqueado por:** nenhum.
 
 **Entrega:** um novo rascunho que o professor pode abrir e no qual a criança percorre a primeira unidade completa, em banda desenhada. Serve de percurso inicial demonstrável para validar a integração antes de estender às outras unidades.
 
-- [ ] Conservar o conteúdo publicado e preparar a revisão com novo identificador, seguindo o fluxo de rascunhos existente.
-- [ ] Apresentar Imagina, Experimenta e Repara, adaptados a tablet, telemóvel e teclado.
-- [ ] Oferecer a primeira unidade nos três Níveis de diferenciação, com Árvore jovem por defeito na ausência de perfil.
-- [ ] Pedir a escolha do corte e a resposta sobre as metades; impedir avanço com resposta parcial e permitir avanço com erro.
-- [ ] Dar uma pista visual, permitir corrigir e conservar as respostas ao voltar. Alterar o corte invalida a resposta dependente.
-- [ ] Aplicar a mesma regra de Página respondida aos botões e à navegação entre páginas.
-- [ ] Registar a tentativa real pelo contrato existente da ponte, preservando a distinção entre responder e acertar. Verificar em sessão de teste que o professor recebe a evidência.
-- [ ] Permitir demonstração por professor ou Quadro sem inventar respostas da criança; o rascunho parcial mostra claramente que é uma revisão em curso.
-- [ ] Acrescentar testes de comportamento que falhem antes da implementação e passem com o percurso acima, incluindo as interações no browser do Hub.
+- [x] Conservar o conteúdo publicado e preparar a revisão com novo identificador, seguindo o fluxo de rascunhos existente.
+- [x] Apresentar Imagina, Experimenta e Repara, adaptados a tablet, telemóvel e teclado.
+- [x] Oferecer a primeira unidade nos três Níveis de diferenciação, com Árvore jovem por defeito na ausência de perfil.
+- [x] Pedir a escolha do corte e a resposta sobre as metades; impedir avanço com resposta parcial e permitir avanço com erro.
+- [x] Dar uma pista visual, permitir corrigir e conservar as respostas ao voltar. Alterar o corte invalida a resposta dependente.
+- [x] Aplicar a mesma regra de Página respondida aos botões e à navegação entre páginas.
+- [x] Registar a tentativa real pelo contrato existente da ponte, preservando a distinção entre responder e acertar. Verificar em sessão de teste que o professor recebe a evidência.
+- [x] Permitir demonstração por professor ou Quadro sem inventar respostas da criança; o rascunho parcial mostra claramente que é uma revisão em curso.
+- [x] Acrescentar testes de comportamento que falhem antes da implementação e passem com o percurso acima, incluindo as interações no browser do Hub.
 
 ## 2. Completar a exploração das cinco unidades
 
