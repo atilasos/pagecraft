@@ -62,3 +62,48 @@ def test_associations_keep_wrong_answers_and_grid_requires_confirmation(page, le
     assert page.get_by_role('button', name='Parte 1', exact=True).get_attribute('aria-pressed') == 'true'
     page.get_by_role('button', name='Parte 2', exact=True).click()
     assert page.get_by_role('button', name='Seguinte', exact=True).is_disabled()
+
+
+def finish_representations(page, level='intermediate'):
+    finish_bread(page, level)
+    page.get_by_role('button', name='Confirmar representação').click()
+    page.get_by_role('button', name='Seguinte', exact=True).click()
+    count = 3 if level == 'challenge' else 2
+    for i in range(count):
+        page.get_by_role('group', name=f'Associação {i+1} de {count}', exact=True).get_by_role('button', name='1/4', exact=True).click()
+    page.get_by_role('button', name='Seguinte', exact=True).click()
+    page.get_by_role('button', name='Confirmar grelha', exact=True).click()
+    page.get_by_role('button', name='Seguinte', exact=True).click()
+
+
+def test_whole_requires_composition_and_answer_and_comparisons_accept_errors(page, lesson_origin):
+    page.goto(lesson_origin)
+    finish_representations(page)
+    expect(page.get_by_role('heading', name='Completa a unidade.')).to_be_visible()
+    next_button = page.get_by_role('button', name='Seguinte', exact=True)
+    assert page.get_by_role('button', name='Sim', exact=True).is_disabled()
+    page.get_by_role('button', name='Confirmar composição').click()
+    assert next_button.is_disabled()
+    page.get_by_role('button', name='Sim', exact=True).click()
+    assert next_button.is_enabled()
+    expect(page.get_by_text('Olha para os espaços livres.', exact=True)).to_be_visible()
+    page.get_by_role('button', name='Parte 1', exact=True).click()
+    assert next_button.is_disabled()
+    assert page.get_by_role('button', name='Sim', exact=True).is_disabled()
+    page.get_by_role('button', name='Confirmar composição').click()
+    page.get_by_role('button', name='Não', exact=True).click()
+    next_button.click()
+    expect(page.get_by_role('heading', name='Qual tem mais pintado?')).to_be_visible()
+    first = page.get_by_role('group', name='Comparação 1 de 2', exact=True)
+    second = page.get_by_role('group', name='Comparação 2 de 2', exact=True)
+    first.get_by_role('button', name='A', exact=True).click()
+    assert next_button.is_disabled()
+    second.get_by_role('button', name='B', exact=True).click()
+    assert next_button.is_enabled()
+    expect(first.get_by_text('Alinha as partes pintadas.', exact=True)).to_be_visible()
+    next_button.click()
+    expect(page.get_by_role('heading', name='Exploraste as cinco unidades.')).to_be_visible()
+    page.get_by_role('button', name='6. Completar', exact=True).click()
+    page.get_by_role('button', name='Parte 2', exact=True).click()
+    assert page.get_by_role('button', name='8. Rever', exact=True).is_disabled()
+    assert page.get_by_role('button', name='7. Comparar', exact=True).is_disabled()
