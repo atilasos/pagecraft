@@ -113,7 +113,7 @@ import pytest
 
 
 @pytest.mark.parametrize('level', ['support', 'intermediate', 'challenge'])
-@pytest.mark.parametrize('width', [390, 768, 1280])
+@pytest.mark.parametrize('width', [390, 768, 900, 1280])
 def test_five_units_at_each_level_and_width(page, lesson_origin, level, width):
     errors = []
     page.on('pageerror', lambda error: errors.append(str(error)))
@@ -135,7 +135,7 @@ def test_five_units_at_each_level_and_width(page, lesson_origin, level, width):
         dimensions = page.locator('.scene button').evaluate_all('(buttons) => buttons.map(b => ({w:b.getBoundingClientRect().width,h:b.getBoundingClientRect().height}))')
         assert all(d['w'] >= 56 and d['h'] >= 56 for d in dimensions)
         panels = page.locator('.panel').evaluate_all('(panels) => panels.map(p => ({x:p.getBoundingClientRect().x,y:p.getBoundingClientRect().y}))')
-        assert panels[0]['y'] < panels[1]['y'] < panels[2]['y'] if width < 820 else panels[0]['x'] < panels[1]['x'] < panels[2]['x']
+        assert panels[0]['y'] < panels[1]['y'] < panels[2]['y'] if width <= 960 else panels[0]['x'] < panels[1]['x'] < panels[2]['x']
     # Known equality 1/2 = 1/2 or 2/4 = 1/2, with identical whole widths.
     group = page.get_by_role('group', name=f'Comparação {count} de {count}', exact=True)
     group.get_by_role('button', name='Iguais', exact=True).click()
