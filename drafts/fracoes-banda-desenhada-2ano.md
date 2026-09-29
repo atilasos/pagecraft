@@ -65,7 +65,7 @@ Já fizemos é uma declaração da criança. O PageCraft não inspeciona o mundo
 
 ## Autoavaliação e evidências
 
-No contexto de uma Realização da atividade, o botão final abre a Autoavaliação existente através de `open_reflection`. O anfitrião apresenta os mesmos critérios, guarda a reflexão e trata da conclusão. O HTML não cria uma segunda conclusão nem converte tentativas em nota.
+No contexto de uma Realização da atividade, o botão final abre a Autoavaliação existente através de `open_reflection`. O anfitrião apresenta os mesmos critérios, guarda a reflexão e trata da conclusão. O HTML não cria uma segunda conclusão nem converte tentativas em nota. O registo inclui `requires_completion: true`: o botão do Studio espera pelos pedidos respondidos desde o início do carregamento. A prontidão segue no campo `readyForReflection` dos pontos de restauro e volta a ser calculada quando há alterações.
 
 Aberta diretamente, a atividade oferece reflexão local facultativa, com escolhas por critério, estratégia e próximo passo. Não afirma que enviou respostas ao professor. Na Sessão de aula, um eventual registo da reflexão identifica-se como voz do aluno. Manter essa voz distinta das tentativas observadas e da interpretação do professor. A criança pode conversar, receber ajuda ou deixar respostas de reflexão por dar.
 
@@ -73,7 +73,7 @@ Cada resposta ou confirmação nas explorações emite uma tentativa da unidade 
 
 ## Retoma e demonstração
 
-Na Realização da atividade, `activity_state` e `learning_restore` recuperam página, manipulações e respostas através do anfitrião. Os pontos de restauro não são tentativas nem Evidências e ficam fora dos relatórios. O rascunho valida o estado recebido. Uma pergunta invalidada continua por responder depois de recarregar.
+Na Realização da atividade, `activity_state` e `learning_restore` recuperam página, manipulações e respostas através do anfitrião. Os pontos de restauro não são tentativas nem Evidências e ficam fora dos relatórios. O rascunho valida o estado recebido. O desenho usa até 1000 pontos; a versão 3 compacta-os em coordenadas inteiras para manter cada registo dentro dos 4096 bytes da ponte. As versões anteriores continuam legíveis. Uma pergunta invalidada continua por responder depois de recarregar.
 
 Na página direta ou numa Sessão de aula, o trabalho local conserva-se em memória enquanto a página está aberta; os acontecimentos enviados ao Studio seguem a persistência existente. Não prometer recuperação das manipulações ao recarregar nesses contextos.
 
