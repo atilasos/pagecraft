@@ -4,7 +4,7 @@
   "phase": "proofreader",
   "reviewed_on": "2026-09-29",
   "method": "Leitura estática dos textos, labels, feedback e estados declarados no HTML; confronto com guia, DocSpec e design-spec. Sem browser e sem testes de interação nesta fase.",
-  "reference_commit": "b76b194",
+  "reference_commit": "af7e7ff07bdae87ec4abf9c7fcaf65c7a9ad3c7c",
   "artifacts": [
     {
       "path": "drafts/fracoes-banda-desenhada-2ano.html",
@@ -12,18 +12,18 @@
     },
     {
       "path": "drafts/fracoes-banda-desenhada-2ano.md",
-      "sha256": "fbbda6b22ee2b578f8de127063187b5d66b8290bf5f51e485753b20b20171493"
+      "sha256": "5e7535b50a308711c63a6457bfd9991342ca1ffea7129e659dfc9bb1c3f62b9c"
     },
     {
       "path": "drafts/fracoes-banda-desenhada-2ano-docspec.json",
-      "sha256": "804cb84e7f69e85c7d19f8e62e5973fc83416fcab1f12f8b2abe8f01e588aa95"
+      "sha256": "ef7b986df74465b096d7c02042a4de9b7424b70b71ee6467e55726abb407bffe"
     },
     {
       "path": "drafts/fracoes-banda-desenhada-2ano-design-spec.json",
       "sha256": "d576a964e85b86552ec2b239aa435c9fbf2e0adf56be5ca4afe7181c56bf42c8"
     }
   ],
-  "summary": "Revisão linguística aprovada após confirmar os três ajustes de precisão e alinhamento documental. Português europeu, exemplos matemáticos, critérios e reflexão são coerentes; esta fase não substitui a avaliação no browser nem a revisão do professor.",
+  "summary": "Revisão linguística aprovada, sem novos achados nos artefactos de af7e7ff. As notas técnicas de conclusão e compactação são claras e não acrescentam exigências à criança. Esta aprovação abrange apenas linguagem e coerência documental; a avaliação funcional final continua pendente.",
   "acceptance_checks": [
     "Ortografia e gramática pt-PT AO90: OK; sem erros bloqueantes identificados.",
     "Registo consistente: OK; instruções dirigidas à criança e papéis cooperativos claros.",
@@ -36,11 +36,13 @@
     "Reflexão da realização: OK na leitura do código; open_reflection usa o anfitrião existente.",
     "Voz do aluno: OK na leitura dos textos dos acontecimentos; autoavaliação e declaração externa identificadas.",
     "Guia e especificações: OK após alinhamento documental P01.",
-    "Currículo: OK dentro dos limites documentados; comparação não unitária identificada como extensão e TIC como OC do ciclo."
+    "Currículo: OK dentro dos limites documentados; comparação não unitária identificada como extensão e TIC como OC do ciclo.",
+    "Notas técnicas do guia e DocSpec: OK na revisão textual; requires_completion, prontidão e compactação descritos como mecanismos do anfitrião e da ponte."
   ],
   "known_followup": {
-    "bodyFont": "Confirmados no código final: corpo 22px e legendas da reflexão local 22px, de acordo com a especificação.",
-    "browser": "Não executado pelo Proofreader; layout, toque, foco e gravação dependem do Evaluator."
+    "bodyFont": "Confirmados no código de af7e7ff: corpo, critérios, legendas e escolhas da reflexão local com 22px. O foco acrescentado não altera as instruções.",
+    "browser": "Não executado pelo Proofreader; layout, toque, foco e gravação dependem do Evaluator.",
+    "functionalEvaluation": "Pendente, fora desta fase. O orquestrador informou que investiga uma falha intermitente de retoma na suite; este relatório não certifica a resolução nem a avaliação final."
   },
   "changes_applied": [
     "P01: DocSpec descreve modelo sempre visível, rótulos da reflexão local e campos livres opcionais de 160 caracteres.",
@@ -89,5 +91,5 @@
     }
   ],
   "issues": [],
-  "revision_note": "Revisão inicial sobre b76b194; releitura final dos artefactos identificados pelos SHA-256 acima, incluindo correções posteriores."
+  "revision_note": "Releitura das alterações finais até af7e7ff, confrontadas com os artefactos integrais revistos anteriormente. Os SHA-256 correspondem exatamente aos quatro ficheiros desse commit."
 }
