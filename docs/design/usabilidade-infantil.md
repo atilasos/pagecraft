@@ -67,3 +67,7 @@ systemctl --user stop pagecraft-fracoes-preview-origin.service
 ```
 
 Verificação externa: HTTPS 200 nas três variantes, conteúdo idêntico ao HTML exportado, e 404 em `/AGENTS.md`, `/.git` e `/server/data/`. No browser do Agent Browser Hub, percorridos os três passos em cada versão; confirmados bloqueio por falta de respostas, pistas e avanço com erros, confirmação obrigatória do Minecraft e conservação das respostas ao trocar de versão. Zero erros JavaScript.
+
+## Preparação da implementação
+
+Em 29/09/2026 ficaram preparadas a [especificação da atividade completa](fracoes-banda-desenhada-spec.md) e as [três etapas propostas](fracoes-banda-desenhada-etapas.md). Falta confirmar a cobertura dos testes e a divisão antes de publicar os tickets no GitHub. O código da atividade completa ainda não foi alterado.
