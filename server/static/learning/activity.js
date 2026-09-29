@@ -177,8 +177,18 @@ function translate() {
   if (!$("reflection").hidden) renderReflection();
   sendPreferences();
 }
+function applyPendingPreference({ type, payload = {} }) {
+  if (type === "level_changed" && ["support", "intermediate", "challenge"].includes(payload.level)) {
+    attempt.level = payload.level;
+  }
+  if (type === "language_changed" && activity.languages.includes(payload.language)) {
+    attempt.language = payload.language;
+    lang = payload.language;
+  }
+}
 function record(type, payload = {}, unitId = "") {
   if (!attempt || attempt.completed_at) return;
+  applyPendingPreference({ type, payload });
   queue.push({ id: crypto.randomUUID(), type, payload, unitId });
   persist();
   flush().catch(() => {});
@@ -462,6 +472,8 @@ setInterval(() => flush().catch(() => {}), 5000);
         queue = JSON.parse(
           sessionStorage.getItem("pc-queue:" + attempt.id) || "[]",
         );
+        // Pending choices are newer than the server snapshot used for restore.
+        queue.forEach(applyPendingPreference);
         reflectionDraft =
           JSON.parse(
             sessionStorage.getItem("pc-reflection:" + attempt.id) || "null",

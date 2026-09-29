@@ -95,3 +95,33 @@ def test_reopening_realization_restores_work_without_inventing_attempts(page, st
     lesson.get_by_role('button', name='Seguinte', exact=True).click()
     expect(lesson.get_by_role('button', name='Partilha B', exact=True)).to_have_attribute('aria-pressed','true')
     assert page.request.get(studio_origin + '/api/learning/reports').json() == []
+
+
+def test_pending_level_change_survives_reload_before_sync(page, studio_origin):
+    import json
+    from pathlib import Path
+    from playwright.sync_api import expect
+    registration = json.loads((Path(__file__).resolve().parents[2] / 'drafts/fracoes-banda-desenhada-2ano-registration.json').read_text())
+    page.request.get(studio_origin + '/api/teacher-bootstrap')
+    draft = page.request.post(studio_origin + '/api/learning/activities', data=registration).json()
+    # Each check owns a fresh realization, even when another preview exists.
+    page.request.post(studio_origin + '/api/learning/me/leave')
+    page.goto(studio_origin + '/' + draft['code'])
+    page.get_by_label('Como te chamas?').fill('Retoma com rede em falta')
+    page.get_by_role('button', name='Começar', exact=True).click()
+    lesson = page.frame_locator('#lesson')
+    page.route('**/api/learning/me/events', lambda route: route.fulfill(status=503, json={'detail':'Ensaio: gravação temporariamente indisponível'}))
+    lesson.get_by_role('button', name='Cortar ao meio', exact=True).click()
+    lesson.get_by_role('button', name='Sim', exact=True).click()
+    lesson.get_by_role('button', name='Seguinte', exact=True).click()
+    lesson.get_by_label('Nível de diferenciação').select_option('challenge')
+    lesson.get_by_role('button', name='Cortar à direita', exact=True).click()
+    with page.expect_response(lambda r: r.url.endswith('/api/learning/me/events') and r.status == 503):
+        lesson.get_by_role('button', name='As partes têm tamanhos diferentes.', exact=True).click()
+    page.on('dialog', lambda dialog: dialog.accept())
+    page.reload()
+    expect(lesson.get_by_label('Nível de diferenciação')).to_have_value('challenge')
+    expect(lesson.get_by_role('button', name='As partes têm tamanhos diferentes.', exact=True)).to_have_attribute('aria-pressed', 'true')
+    expect(lesson.get_by_role('button', name='Seguinte', exact=True)).to_be_enabled()
+    page.unroute('**/api/learning/me/events')
+    page.evaluate("dispatchEvent(new Event('online'))")
