@@ -286,3 +286,34 @@ def test_same_comparison_survives_a_different_position_in_next_level(page, lesso
     page.get_by_role('button', name='Seguinte', exact=True).click()
     expect(page.get_by_role('group', name='Comparação 3 de 3', exact=True).get_by_role('button', name='Iguais', exact=True)).to_have_attribute('aria-pressed','true')
     assert page.get_by_role('button', name='Seguinte', exact=True).is_disabled()
+
+
+def test_teacher_history_receives_five_units_in_live_session(page, studio_origin):
+    import httpx
+    import time
+    with httpx.Client(base_url=studio_origin) as teacher:
+        teacher.get('/api/teacher-bootstrap').raise_for_status()
+        classroom = teacher.post('/api/classes', json={'name':'Cinco unidades ao vivo','year':2,'students':['Aluno de ensaio']}).json()
+        session = teacher.post('/api/sessions', json={'class_id':classroom['id'],'activity_slug':'fraction-test','activity_title':'Explorar as frações'}).json()
+        student_id = next(iter(session['roster']))
+        page.goto(studio_origin + '/student/')
+        page.locator('#code-input').fill(session['join_code'])
+        page.get_by_role('button', name='Entrar', exact=True).click()
+        page.get_by_role('button', name='Aluno de ensaio', exact=True).click()
+        lesson = page.frame_locator('#activity-frame')
+        finish_representations(lesson)
+        lesson.get_by_role('button', name='Confirmar composição').click()
+        lesson.get_by_role('button', name='Não', exact=True).click()
+        lesson.get_by_role('button', name='Seguinte', exact=True).click()
+        for i in range(2):
+            lesson.get_by_role('group', name=f'Comparação {i+1} de 2', exact=True).get_by_role('button', name='Iguais', exact=True).click()
+        for _ in range(30):
+            history = teacher.get(f"/api/sessions/{session['id']}/students/{student_id}/history").json()['events']
+            attempts = [e for e in history if e['type'] == 'attempt']
+            if len(attempts) == 10:
+                break
+            time.sleep(.2)
+        assert len(attempts) == 10
+        assert set(e['unit_id'] for e in attempts) == {'u1','u2','u3','u4','u5'}
+        assert [e['payload']['correct'] for e in attempts if e['unit_id'] == 'u5'] == [False,True]
+        teacher.post(f"/api/sessions/{session['id']}/close").raise_for_status()
