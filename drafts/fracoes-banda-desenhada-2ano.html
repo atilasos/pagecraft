@@ -71,7 +71,7 @@
   function unitId() { return pageUnits[state.page]; }
   function lastPage() { return 9; }
   function saveWork() {
-    if (learningHost) emit('activity_state', {activity:'fracoes-banda-desenhada-2ano', version:2, readyForReflection:completedPages().every(Boolean), state:structuredClone(state)});
+    if (learningHost) emit('activity_state', {activity:'fracoes-banda-desenhada-2ano', version:3, readyForReflection:completedPages().every(Boolean), state:{...state,drawing:encodeDrawing()}});
   }
   function restoreWork(events) {
     if (presentation || !Array.isArray(events)) return;
@@ -85,7 +85,7 @@
     state.symbol = validGrid(symbol, targets[state.level][1]) ? {cells:[...symbol.cells],confirmed:symbol.confirmed} : {cells:[],confirmed:false};
     state.matches = associations[state.level].map((_,i) => ['1/2','1/4','3/4','2/5'].includes(saved.matches?.[i]) ? saved.matches[i] : null);
     state.grid = validGrid(saved.grid, gridTargets[state.level][1]) ? {cells:[...saved.grid.cells],confirmed:saved.grid.confirmed} : {cells:[],confirmed:false};
-    state.drawing = Array.isArray(saved.drawing) && saved.drawing.length <= 1000 && saved.drawing.every(p => p && Number.isFinite(p.x) && p.x >= 0 && p.x <= 300 && Number.isFinite(p.y) && p.y >= 0 && p.y <= 180 && typeof p.start === 'boolean') ? saved.drawing : [];
+    state.drawing = decodeDrawing(saved.drawing);
     state.whole = validGrid(saved.whole, wholeParts[state.level]) ? {cells:[...saved.whole.cells],confirmed:saved.whole.confirmed,answer:saved.whole.confirmed && ['yes','no'].includes(saved.whole.answer) ? saved.whole.answer : null} : {cells:[],confirmed:false,answer:null};
     state.comparisons = comparisonPairs[state.level].map((_,i) => ['A','B','equal'].includes(saved.comparisons?.[i]) ? saved.comparisons[i] : null);
     const maker = saved.maker;
@@ -123,6 +123,27 @@
       const answer = state.matches[i], correct = answer === `${n}/${d}`;
       return `<fieldset class="match"><legend>Associação ${i+1} de ${items.length}</legend>${word ? `<h2>${word}</h2>` : fraction(n,d)}${state.level === 'support' && word ? fraction(n,d) : ''}<div class="choices">${options.map(option => `<button data-match="${i}" data-value="${option}" aria-pressed="${answer === option}">${option}</button>`).join('')}</div>${feedback(answer === null ? '' : `<strong>${correct ? 'Ligaste as representações.' : 'Olha para as partes pintadas.'}</strong>${fraction(n,d)}<span>${n} em ${d} partes iguais.</span>`, correct)}</fieldset>`;
     }).join(''), '<h2>Que fração combina?</h2><p>Escolhe um símbolo em cada cartão.</p>');
+  }
+  // Three ASCII characters per point keep all 1000 points inside the bridge's
+  // 4096-byte checkpoint limit. Coordinates use whole SVG units (300 by 180).
+  const drawingAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+  function encodeDrawing() {
+    return state.drawing.map(p => {
+      const value = (p.start ? 131072 : 0) + Math.round(p.x)*256 + Math.round(p.y);
+      return drawingAlphabet[value>>12] + drawingAlphabet[value>>6&63] + drawingAlphabet[value&63];
+    }).join('');
+  }
+  function decodeDrawing(saved) {
+    let points = saved;
+    if (typeof saved === 'string') {
+      if (saved.length > 3000 || saved.length%3 || /[^A-Za-z0-9_-]/.test(saved)) return [];
+      points = [];
+      for (let i=0;i<saved.length;i+=3) {
+        const value = drawingAlphabet.indexOf(saved[i])*4096 + drawingAlphabet.indexOf(saved[i+1])*64 + drawingAlphabet.indexOf(saved[i+2]);
+        points.push({x:value>>8&511,y:value&255,start:!!(value&131072)});
+      }
+    }
+    return Array.isArray(points) && points.length <= 1000 && points.every(p => p && Number.isFinite(p.x) && p.x >= 0 && p.x <= 300 && Number.isFinite(p.y) && p.y >= 0 && p.y <= 180 && typeof p.start === 'boolean') ? points : [];
   }
   function drawingPath() {
     return state.drawing.map(p => `${p.start ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
@@ -377,7 +398,7 @@
   let pen = {x:150,y:90};
   function drawPoint(point, start) {
     if (state.drawing.length >= 1000) return;
-    state.drawing.push({...point,start});
+    state.drawing.push({x:Math.round(point.x),y:Math.round(point.y),start});
     document.querySelector('#sketch path')?.setAttribute('d', drawingPath());
   }
   function pointerPoint(event, svg) {
@@ -390,7 +411,7 @@
     event.preventDefault(); svg.focus(); svg.setPointerCapture(event.pointerId);
     drawingPointer = event.pointerId;
     const point = pointerPoint(event,svg);
-    drawPoint(point,true); drawPoint({...point,x:point.x === 300 ? 299.9 : point.x+.1},false);
+    drawPoint(point,true); drawPoint({...point,x:point.x >= 300 ? 299 : point.x+1},false);
   });
   activity.addEventListener('pointermove', event => {
     if (event.pointerId !== drawingPointer) return;
@@ -410,7 +431,7 @@
     }
     if (event.key === ' ') {
       event.preventDefault();
-      drawPoint(pen,true); drawPoint({x:pen.x === 300 ? 299.9 : pen.x+.1,y:pen.y},false); saveWork();
+      drawPoint(pen,true); drawPoint({x:pen.x >= 300 ? 299 : pen.x+1,y:pen.y},false); saveWork();
     }
   });
   window.addEventListener('message', event => {
