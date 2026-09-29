@@ -211,7 +211,7 @@
     state.whole = {cells:[],confirmed:false,answer:null};
     state.comparisons = comparisonPairs[level].map(() => null);
     state.symbol = {cells:[],confirmed:false};
-    state.matches = associations[level].map(() => null);
+    state.matches = associations[level].map((item,i) => JSON.stringify(item) === JSON.stringify(associations[state.level][i]) ? state.matches[i] : null);
     if (String(gridTargets[state.level]) !== String(gridTargets[level])) state.grid = {cells:[],confirmed:false};
     state.level = level;
     document.getElementById('level').value = level;
@@ -296,7 +296,8 @@
     if (!svg) return;
     event.preventDefault(); svg.focus(); svg.setPointerCapture(event.pointerId);
     drawingPointer = event.pointerId;
-    drawPoint(pointerPoint(event,svg),true);
+    const point = pointerPoint(event,svg);
+    drawPoint(point,true); drawPoint({...point,x:point.x === 300 ? 299.9 : point.x+.1},false);
   });
   activity.addEventListener('pointermove', event => {
     if (event.pointerId !== drawingPointer) return;
