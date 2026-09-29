@@ -51,14 +51,17 @@ def test_standalone_reflection_is_optional_and_does_not_claim_sending(page, less
     page.get_by_label('O que te ajudou?').fill('Contar os grupos')
     page.get_by_role('button', name='Terminar a reflexão', exact=True).click()
     expect(page.get_by_role('heading', name='Terminaste a reflexão.')).to_be_visible()
+    assert page.get_by_role('heading', name='Terminaste a reflexão.').evaluate('(el) => el === document.activeElement')
     expect(page.get_by_text('As respostas ficam apenas nesta página.', exact=True)).to_be_visible()
     assert page.get_by_role('button', name='Terminar a reflexão', exact=True).count() == 0
 
 
-def start_preview(page, studio_origin):
+def start_preview(page, studio_origin, *, requires_completion=True):
     import json
     from pathlib import Path
     registration = json.loads((Path(__file__).resolve().parents[2] / 'drafts/fracoes-banda-desenhada-2ano-registration.json').read_text())
+    if not requires_completion:
+        registration.pop('requires_completion',None)
     page.request.get(studio_origin + '/api/teacher-bootstrap')
     page.request.post(studio_origin + '/api/learning/me/leave')
     draft = page.request.post(studio_origin + '/api/learning/activities', data=registration).json()
@@ -187,3 +190,11 @@ def test_reflection_is_locked_while_the_lesson_is_loading(page, studio_origin):
     pending[0].continue_()
     expect(lesson.get_by_role('button', name='Cortar ao meio', exact=True)).to_be_visible()
     assert page.get_by_role('button', name='Autoavaliar e terminar', exact=True).is_disabled()
+
+
+def test_legacy_activities_keep_the_existing_reflection_flow(page, studio_origin):
+    start_preview(page, studio_origin, requires_completion=False)
+    button = page.get_by_role('button', name='Autoavaliar e terminar', exact=True)
+    expect(button).to_be_enabled()
+    button.click()
+    expect(page.locator('#reflection')).to_be_visible()
