@@ -1,0 +1,84 @@
+{
+  "pass": true,
+  "severity": "low",
+  "phase": "proofreader",
+  "reviewed_on": "2026-09-29",
+  "method": "Leitura estática dos textos, labels, feedback e estados declarados no HTML; confronto com guia, DocSpec e design-spec. Sem browser e sem testes de interação nesta fase.",
+  "reference_commit": "b76b194",
+  "artifacts": [
+    {
+      "path": "drafts/fracoes-banda-desenhada-2ano.html",
+      "sha256": "7fccd19bbcd59e86c969038dabd5f257b342a1d1b31319e5c483c6273bad7b24"
+    },
+    {
+      "path": "drafts/fracoes-banda-desenhada-2ano.md",
+      "sha256": "fbbda6b22ee2b578f8de127063187b5d66b8290bf5f51e485753b20b20171493"
+    },
+    {
+      "path": "drafts/fracoes-banda-desenhada-2ano-docspec.json",
+      "sha256": "752674dbfadd29b8dfc8a6acdcebf4869185720aebb0ab3eafdafa8011d34b88"
+    },
+    {
+      "path": "drafts/fracoes-banda-desenhada-2ano-design-spec.json",
+      "sha256": "d576a964e85b86552ec2b239aa435c9fbf2e0adf56be5ca4afe7181c56bf42c8"
+    }
+  ],
+  "issues": [
+    {
+      "id": "P01",
+      "type": "consistency",
+      "severity": "low",
+      "blocking": false,
+      "status": "suggested",
+      "location": "drafts/fracoes-banda-desenhada-2ano-docspec.json, units u6/u7, interaction.state",
+      "original": "modelHint: toggle, default false; criteriaChoices: Consigo sozinho / Consigo com ajuda / Quero praticar mais",
+      "suggestion": "Descrever o modelo como sempre visível, sem toggle modelHint; alinhar as opções de reflexão local com Sozinho / Com ajuda / Quero praticar / Prefiro não responder. Indicar que estratégia e próximo passo aceitam texto livre facultativo.",
+      "reason": "O HTML não oferece um botão para ativar o modelo e usa rótulos mais curtos na reflexão. Ajustar o documento mantém a especificação fiel ao comportamento sem alterar a atividade.",
+      "owner": "Architect"
+    },
+    {
+      "id": "P02",
+      "type": "pedagogical",
+      "severity": "low",
+      "blocking": false,
+      "status": "suggested",
+      "location": "drafts/fracoes-banda-desenhada-2ano.html, makerPage, u6 .prompt",
+      "original": "Constrói uma superfície inteira: 5 por 4.",
+      "suggestion": "Constrói 4 filas de 5 blocos.",
+      "reason": "A instrução indica uma ação concreta e permite contar os 20 blocos sem interpretar a expressão de dimensões. Mantém a geometria aprovada de cinco colunas e quatro linhas.",
+      "owner": "Builder"
+    },
+    {
+      "id": "P03",
+      "type": "semantic",
+      "severity": "low",
+      "blocking": false,
+      "status": "suggested",
+      "location": "drafts/fracoes-banda-desenhada-2ano.html, makerPage, u6 Repara h2",
+      "original": "Quantos blocos pintaram?",
+      "suggestion": "Quantos blocos deves pintar?",
+      "reason": "A resposta esperada é calculada a partir da fração proposta. Esta redação distingue essa pergunta de um relato da construção real, que a página não observa.",
+      "owner": "Builder"
+    }
+  ],
+  "summary": "Os textos usam português europeu e os exemplos de frações são coerentes com a unidade de 20 blocos. A revisão linguística passa com três sugestões pequenas de precisão e alinhamento documental, ainda não aplicadas neste relatório. A fase não substitui a avaliação no browser nem a revisão do professor.",
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90: OK; sem erros bloqueantes identificados.",
+    "Registo consistente: OK; instruções dirigidas à criança e papéis cooperativos claros.",
+    "Adequação à faixa etária: OK; sugestão P02 torna a instrução de construção mais concreta.",
+    "Instruções claras e seguíveis: OK; pedidos Já fizemos e número de blocos são distintos.",
+    "Alinhamento com objetivos: OK; 1/2=10, 1/4=5, 2/5=8 e 1/10=2 numa unidade de 20.",
+    "Duração e percurso: OK; guia e DocSpec totalizam 45 minutos, cinco explorações, construção e reflexão.",
+    "Critérios e nomes de apoio: OK; seis critérios iguais entre HTML/DocSpec/guia; Com pistas, Passo a passo e Mais desafios.",
+    "Reflexão local: OK; escolhas facultativas, ausência de nota e aviso de respostas locais no modo autónomo.",
+    "Reflexão da realização: OK na leitura do código; open_reflection usa o anfitrião existente.",
+    "Voz do aluno: OK na leitura dos textos dos acontecimentos; autoavaliação e declaração externa identificadas.",
+    "Guia e especificações: OK com ajuste documental sugerido P01.",
+    "Currículo: OK dentro dos limites documentados; comparação não unitária identificada como extensão e TIC como OC do ciclo."
+  ],
+  "known_followup": {
+    "bodyFont": "HTML revisto usa 21px e design-spec pede 22px. O orquestrador informou que ajustará para 22px; não se certifica essa alteração neste relatório.",
+    "browser": "Não executado pelo Proofreader; layout, toque, foco e gravação dependem do Evaluator."
+  },
+  "changes_applied": []
+}
