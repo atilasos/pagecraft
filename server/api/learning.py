@@ -69,7 +69,8 @@ class StartInput(BaseModel):
 class Event(BaseModel):
     id: Annotated[str, Field(min_length=1, max_length=80)]
     type: Literal['activity_loaded', 'unit_started', 'attempt', 'discovery',
-                  'assessment_result', 'help_needed', 'share_requested', 'language_changed', 'level_changed']
+                  'assessment_result', 'help_needed', 'share_requested', 'language_changed', 'level_changed',
+                  'activity_state']
     unitId: str = Field(default='', max_length=80)
     payload: dict = Field(default_factory=dict)
 

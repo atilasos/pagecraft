@@ -186,6 +186,8 @@ class Learning:
         result = {k: v for k, v in attempt.items() if k not in hidden}
         if teacher:
             from .learning_reports import describe_evidence
-            result['evidence'] = [dict(type=e['type'], at=e['received_at'], text=describe_evidence(e)) for e in attempt['events']]
+            # Restoration checkpoints are private work state, not learning evidence.
+            result['events'] = [e for e in attempt['events'] if e['type'] != 'activity_state']
+            result['evidence'] = [dict(type=e['type'], at=e['received_at'], text=describe_evidence(e)) for e in result['events']]
         return result
 

@@ -142,3 +142,20 @@ async def test_teacher_notes_are_private_and_preferences_survive_reload(learning
     report = (await teacher.get('/api/learning/reports')).json()[0]
     assert report['teacher_note'] == 'Observação privada'
     assert report['evidence'][1]['text'] == ['Apoio: Árvore robusta']
+
+
+async def test_saved_activity_state_restores_without_becoming_evidence(learning_clients):
+    _, teacher, pupil = learning_clients
+    activity, _ = await register(teacher)
+    await start(pupil, activity['code'])
+    checkpoint = {'id':'state-1', 'type':'activity_state', 'unitId':'u1',
+                  'payload':{'activity':'fraction-test', 'version':1, 'state':{'answer':None}}}
+    attempt = {'id':'answer-1', 'type':'attempt', 'unitId':'u1', 'payload':{'correct':False}}
+    response = await pupil.post('/api/learning/me/events', json={'events':[checkpoint, attempt]})
+    assert response.status_code == 200
+    assert response.json()['accepted'] == 2
+    restored = (await pupil.get('/api/learning/me')).json()['events']
+    assert [event['type'] for event in restored] == ['activity_state', 'attempt']
+    report = (await teacher.get('/api/learning/reports')).json()[0]
+    assert [event['type'] for event in report['events']] == ['attempt']
+    assert [event['type'] for event in report['evidence']] == ['attempt']

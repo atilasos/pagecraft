@@ -425,6 +425,7 @@ window.addEventListener("message", (e) => {
     $("level").value = payload.level;
   const allowed = [
     "activity_loaded",
+    "activity_state",
     "unit_started",
     "attempt",
     "discovery",

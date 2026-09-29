@@ -59,3 +59,39 @@ def test_teacher_receives_attempt_and_board_is_only_demonstration(page, studio_o
         history = teacher.get(f"/api/sessions/{session['id']}/students/{student_id}/history").json()['events']
         assert len([e for e in history if e['type'] == 'attempt']) == 1
         teacher.post(f"/api/sessions/{draft_session.json()['id']}/close").raise_for_status()
+
+
+def test_reopening_realization_restores_work_without_inventing_attempts(page, studio_origin):
+    import json
+    from pathlib import Path
+    from playwright.sync_api import expect
+    registration = json.loads((Path(__file__).resolve().parents[2] / 'drafts/fracoes-banda-desenhada-2ano-registration.json').read_text())
+    page.request.get(studio_origin + '/api/teacher-bootstrap')
+    draft = page.request.post(studio_origin + '/api/learning/activities', data=registration).json()
+    page.goto(studio_origin + '/' + draft['code'])
+    page.get_by_label('Como te chamas?').fill('Revisão de retoma')
+    page.get_by_role('button', name='Começar', exact=True).click()
+    lesson = page.frame_locator('#lesson')
+    lesson.get_by_role('button', name='Cortar ao meio', exact=True).click()
+    lesson.get_by_role('button', name='Sim', exact=True).click()
+    lesson.get_by_role('button', name='Seguinte', exact=True).click()
+    lesson.get_by_role('button', name='Partilha B', exact=True).click()
+    lesson.get_by_role('button', name='1. Partilhar', exact=True).click()
+    lesson.get_by_role('button', name='Cortar à direita', exact=True).click()
+    import time
+    for _ in range(30):
+        events = page.request.get(studio_origin + '/api/learning/me').json()['events']
+        snapshots = [event for event in events if event['type'] == 'activity_state']
+        if snapshots and snapshots[-1]['payload']['state']['cut'] == .75 and snapshots[-1]['payload']['state']['answer'] is None:
+            break
+        time.sleep(.1)
+    else:
+        raise AssertionError('The last unanswered cut was not saved')
+    assert len([event for event in events if event['type'] == 'attempt']) == 2
+    page.reload()
+    expect(lesson.get_by_role('button', name='Cortar à direita', exact=True)).to_have_attribute('aria-pressed','true')
+    assert lesson.get_by_role('button', name='Seguinte', exact=True).is_disabled()
+    lesson.get_by_role('button', name='Não', exact=True).click()
+    lesson.get_by_role('button', name='Seguinte', exact=True).click()
+    expect(lesson.get_by_role('button', name='Partilha B', exact=True)).to_have_attribute('aria-pressed','true')
+    assert page.request.get(studio_origin + '/api/learning/reports').json() == []

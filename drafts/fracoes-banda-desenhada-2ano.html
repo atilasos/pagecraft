@@ -36,6 +36,23 @@
     window.parent.postMessage({pagecraft:1, type, unitId:'u1', payload, ts:Date.now()}, '*');
   }
   const state = { page: 0, level: 'intermediate', cut: null, answer: null, comparison: null, inventedCut: null, reason: null };
+  function saveWork() {
+    if (learningHost) emit('activity_state', {activity:'fracoes-banda-desenhada-2ano', version:1, state:{...state}});
+  }
+  function restoreWork(events) {
+    if (presentation || !Array.isArray(events)) return;
+    const saved = events.filter(e => e?.type === 'activity_state' && e.payload?.activity === 'fracoes-banda-desenhada-2ano' && e.payload?.version === 1).at(-1)?.payload.state;
+    if (!saved || ![0,1,2].includes(saved.page) || !['support','intermediate','challenge'].includes(saved.level) ||
+        ![null,.25,.5,.75].includes(saved.cut) || ![null,'yes','no'].includes(saved.answer) ||
+        ![null,'A','B'].includes(saved.comparison) || ![null,.25,.5,.75].includes(saved.inventedCut) ||
+        ![null,'sizes','colour','small'].includes(saved.reason)) return;
+    for (const key of Object.keys(state)) state[key] = saved[key];
+    if (state.cut === null) state.answer = null;
+    if (state.inventedCut === null) state.reason = null;
+    while (!canOpen(state.page)) state.page--;
+    document.getElementById('level').value = state.level;
+    render();
+  }
   function bread(cut) {
     const line = cut === null ? '' : `<path d="M${12 + 296 * cut} 6V102" stroke="#fffdf6" stroke-width="9"/><path d="M${12 + 296 * cut} 6V102" stroke="#735031" stroke-width="2" stroke-dasharray="5 5"/>`;
     return `<svg class="bread" viewBox="0 0 320 104" role="img" aria-label="${cut === null ? 'Pão inteiro' : cut === .5 ? 'Duas partes do mesmo tamanho' : 'Duas partes de tamanhos diferentes'}"><path d="M28 12H292V20H306V34H312V76H302V90H286V96H34V90H18V78H8V34H16V20H28Z" fill="#dca458" stroke="#906035" stroke-width="4"/><path d="M36 24H280V32H295V40H25V32H36Z" fill="#f6d49a"/><g stroke="#f7d8a5" stroke-width="9"><path d="M60 45L48 69M108 45L96 69M156 45L144 69M204 45L192 69M252 45L240 69"/></g>${line}</svg>`;
@@ -56,9 +73,11 @@
   function feedback(content) {
     return content ? `<div class="feedback" role="status">${content}</div>` : '';
   }
+  function breadAnswerCorrect(cut, answer) { return answer === (cut === .5 ? 'yes' : 'no'); }
+  function inventedAnswerCorrect() { return state.inventedCut !== .5 && state.reason === 'sizes'; }
   function cutFeedback(cut, answer) {
     if (answer === null) return '';
-    const correct = answer === (cut === .5 ? 'yes' : 'no');
+    const correct = breadAnswerCorrect(cut, answer);
     return correct ? '<strong>Reparaste nos tamanhos.</strong>' + (cut === .5 ? 'Duas partes iguais formam metades.' : 'Estas partes têm tamanhos diferentes.') : comparisonHint(cut);
   }
   function panels(story, material, question) {
@@ -71,7 +90,7 @@
   }
   function secondPage() {
     if (state.level === 'challenge') {
-      const hint = state.reason === null ? '' : state.inventedCut !== .5 && state.reason === 'sizes' ? '<strong>As partes têm tamanhos diferentes.</strong>Explica ao colega o que mudarias.' : comparisonHint(state.inventedCut);
+      const hint = state.reason === null ? '' : inventedAnswerCorrect() ? '<strong>As partes têm tamanhos diferentes.</strong>Explica ao colega o que mudarias.' : comparisonHint(state.inventedCut);
       return panels('Inventa uma partilha que não forme metades.', `${bread(state.inventedCut)}${cuts(state.inventedCut)}<p class="prompt">Escolhe outro corte.</p>`,
         `<h2>Porque não são metades?</h2><div class="why">${[['sizes','As partes têm tamanhos diferentes.'],['colour','O pão tem outra cor.'],['small','O pão é pequeno.']].map(([value,label]) => `<button data-reason="${value}" aria-pressed="${state.reason === value}" ${state.inventedCut === null ? 'disabled' : ''}>${label}</button>`).join('')}</div>${feedback(hint)}`);
     }
@@ -95,6 +114,7 @@
     if (page < 0 || page > 2 || !canOpen(page)) return;
     state.page = page;
     render();
+    saveWork();
     activity.focus({preventScroll:true});
     activity.scrollIntoView({block:'start'});
   }
@@ -109,6 +129,7 @@
     }
     render();
     if (notifyHost) emit('level_changed', {level});
+    saveWork();
   }
   document.getElementById('level').addEventListener('change', event => changeLevel(event.target.value, true));
   activity.addEventListener('click', event => {
@@ -123,7 +144,7 @@
     }
     if (action === 'answer') {
       state.answer = value;
-      emit('attempt', {correct:value === (state.cut === .5 ? 'yes' : 'no'), detail:`Partilha: corte ${state.cut*100}%; resposta ${value === 'yes' ? 'sim' : 'não'}.`});
+      emit('attempt', {correct:breadAnswerCorrect(state.cut, value), detail:`Partilha: corte ${state.cut*100}%; resposta ${value === 'yes' ? 'sim' : 'não'}.`});
     }
     if (action === 'comparison') {
       state.comparison = value;
@@ -131,15 +152,17 @@
     }
     if (action === 'reason') {
       state.reason = value;
-      emit('attempt', {correct:state.inventedCut !== .5 && value === 'sizes', detail:`Partilha inventada: corte ${state.inventedCut*100}%; explicação: ${button.textContent}`});
+      emit('attempt', {correct:inventedAnswerCorrect(), detail:`Partilha inventada: corte ${state.inventedCut*100}%; explicação: ${button.textContent}`});
     }
     render();
+    saveWork();
     activity.querySelector(`[data-${action}="${value}"]`)?.focus({preventScroll:true});
   });
   window.addEventListener('message', event => {
     if (event.source !== window.parent || window.parent === window) return;
     const d = event.data;
     if (!d || d.pagecraft !== 1) return;
+    if (d.type === 'learning_restore') restoreWork(d.payload?.events);
     if (d.type === 'learning_preferences') { learningHost = true; changeLevel(d.payload?.level); }
     if (d.type === 'highlight' && d.unitId === 'u1') {
       navigate(0);
