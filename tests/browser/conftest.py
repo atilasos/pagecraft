@@ -41,10 +41,15 @@ def page():
     from playwright.sync_api import sync_playwright
     with sync_playwright() as playwright:
         browser = playwright.chromium.connect_over_cdp(cdp)
-        page = browser.contexts[0].new_page()
+        # Separate cookies/storage: a teacher preview must not authenticate the
+        # next test's student requests as the teacher. The browser stays in Hub.
+        context = browser.new_context()
+        page = context.new_page()
         page.set_default_timeout(3000)
-        yield page
-        page.close()
+        try:
+            yield page
+        finally:
+            context.close()
 
 
 @pytest.fixture(scope='module')
