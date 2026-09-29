@@ -83,6 +83,7 @@ def test_studio_reflection_waits_for_complete_work_and_finishes_once(page, studi
     lesson.get_by_role('button', name='Seguinte', exact=True).click()
     lesson.get_by_role('button', name='Refletir sobre o meu trabalho').click()
     expect(page.locator('#reflection')).to_be_visible()
+    assert page.locator('#reflection h1').evaluate('(el) => el === document.activeElement')
     page.get_by_role('group', name='Represento uma fração numa unidade de 20 blocos.', exact=True).get_by_role('radio', name='Consegui com ajuda', exact=True).check()
     page.get_by_role('button', name='Guardar e terminar', exact=True).click()
     expect(page.locator('#done')).to_be_visible()
@@ -198,3 +199,21 @@ def test_legacy_activities_keep_the_existing_reflection_flow(page, studio_origin
     expect(button).to_be_enabled()
     button.click()
     expect(page.locator('#reflection')).to_be_visible()
+
+
+def test_demonstration_can_complete_construction_and_reflection_without_events(page, lesson_origin):
+    page.set_content('<iframe title="Demonstração"></iframe>')
+    page.evaluate('''url => {
+        window.received = [];
+        addEventListener('message', e => { if (e.data?.pagecraft === 1) received.push(e.data); });
+        document.querySelector('iframe').src = url;
+    }''',lesson_origin + '?presentation=1')
+    lesson = page.frame_locator('iframe')
+    lesson.get_by_role('button', name='9. Construir', exact=True).click()
+    lesson.get_by_role('button', name='Já fizemos', exact=True).click()
+    lesson.get_by_role('button', name='2 blocos', exact=True).click()
+    lesson.get_by_role('button', name='10. Refletir', exact=True).click()
+    lesson.get_by_role('button', name='Refletir sobre o meu trabalho').click()
+    lesson.get_by_role('button', name='Terminar a reflexão').click()
+    expect(lesson.get_by_role('heading', name='Terminaste a reflexão.')).to_be_visible()
+    assert page.evaluate('received') == []

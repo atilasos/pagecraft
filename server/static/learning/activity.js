@@ -317,7 +317,7 @@ function openReflection() {
   $("reflection").hidden = false;
   renderReflection();
   $("reflection").scrollIntoView({ behavior: "smooth" });
-  const heading = $("reflection").querySelector("h2");
+  const heading = $("reflection").querySelector("h1");
   heading.tabIndex = -1;
   heading.focus({ preventScroll: true });
 }
