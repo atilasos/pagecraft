@@ -12,6 +12,7 @@
 .match{border:2px solid var(--line);border-radius:12px;margin:0 0 18px;padding:12px;min-width:0}.match legend{font-size:16px}.match .choices button{font-size:18px;padding:8px}.drawing{margin-top:24px;font-size:16px}.drawing summary{min-height:56px;padding:12px;cursor:pointer}.drawing svg{width:100%;background:var(--paper);border:2px solid var(--ink);touch-action:none}.drawing svg:focus-visible,summary:focus-visible{outline:4px solid var(--focus);outline-offset:4px}
 .whole-frame{border:3px solid var(--ink);padding:6px;background:var(--paper)}.whole-frame .paint-grid{margin:0}.equal-units{border-left:3px solid var(--ink);padding-left:4px}.equal-units .fraction{margin:8px 0 18px}
 .feedback[data-correct="false"]{background:#fff0cd;border-left-color:#a46719}
+.build-model{width:100%;max-width:300px;display:block;margin:20px auto}.built{display:block;width:100%;margin-top:20px}
 @media(max-width:420px){.paint-grid[style="--columns:5"]{grid-template-columns:1fr}}
 @media(max-width:960px){.panels{grid-template-columns:1fr}.panel-title{margin-bottom:12px}.friends{margin:12px 0}.story{margin:12px 0;text-align:center}.wrap{padding:16px}.bread{max-width:400px}.bottom{align-items:center}.advance{flex:1}.toolbar select{max-width:100%}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
@@ -40,7 +41,7 @@
     if (presentation || window.parent === window) return;
     window.parent.postMessage({pagecraft:1, type, unitId:unitId(), payload, ts:Date.now()}, '*');
   }
-  const state = { page: 0, level: 'intermediate', cut: null, answer: null, comparison: null, inventedCut: null, reason: null, symbol: {cells:[], confirmed:false}, matches:[null,null], grid:{cells:[],confirmed:false}, drawing:[], whole:{cells:[],confirmed:false,answer:null}, comparisons:[null,null] };
+  const state = { page: 0, level: 'intermediate', cut: null, answer: null, comparison: null, inventedCut: null, reason: null, symbol: {cells:[], confirmed:false}, matches:[null,null], grid:{cells:[],confirmed:false}, drawing:[], whole:{cells:[],confirmed:false,answer:null}, comparisons:[null,null], maker:initialMaker('intermediate') };
   const targets = {support:[1,2], intermediate:[1,4], challenge:[2,5]};
   const associations = {
     support:[{n:1,d:2},{n:1,d:4,word:'um quarto'}],
@@ -54,16 +55,25 @@
     intermediate:[[[1,4],[1,2]],[[2,4],[1,2]]],
     challenge:[[[2,5],[1,2]],[[3,4],[2,4]],[[2,4],[1,2]]]
   };
-  const pageUnits = ['u1','u1','u2','u3','u3','u4','u5','u5'];
-  const unitNames = {u1:'Partilhar o pão',u2:'Partes e símbolo',u3:'Representações',u4:'Unidade inteira',u5:'Comparação'};
+  const builds = {
+    '1/2':{n:1,d:2,blocks:10,result:'Uma metade são 10 blocos.'},
+    '1/4':{n:1,d:4,blocks:5,result:'Um quarto são 5 blocos.'},
+    '2/5':{n:2,d:5,blocks:8,result:'Dois quintos são 8 blocos.'},
+    '1/10':{n:1,d:10,blocks:2,result:'Um décimo são 2 blocos.'}
+  };
+  function initialMaker(level) {
+    return {target:level === 'support' ? '1/2' : level === 'intermediate' ? '1/4' : '2/5', material:'minecraft', done:false, answer:null};
+  }
+  const pageUnits = ['u1','u1','u2','u3','u3','u4','u5','u5','u6','u7'];
+  const unitNames = {u1:'Partilhar o pão',u2:'Partes e símbolo',u3:'Representações',u4:'Unidade inteira',u5:'Comparação',u6:'Construção',u7:'Reflexão'};
   function unitId() { return pageUnits[state.page]; }
-  function lastPage() { return 7; }
+  function lastPage() { return 9; }
   function saveWork() {
     if (learningHost) emit('activity_state', {activity:'fracoes-banda-desenhada-2ano', version:2, state:structuredClone(state)});
   }
   function restoreWork(events) {
     if (presentation || !Array.isArray(events)) return;
-    const saved = events.filter(e => e?.type === 'activity_state' && e.payload?.activity === 'fracoes-banda-desenhada-2ano' && [1,2].includes(e.payload?.version)).at(-1)?.payload.state;
+    const saved = events.filter(e => e?.type === 'activity_state' && e.payload?.activity === 'fracoes-banda-desenhada-2ano' && [1,2,3].includes(e.payload?.version)).at(-1)?.payload.state;
     if (!saved || !Number.isInteger(saved.page) || saved.page < 0 || saved.page > lastPage() || !['support','intermediate','challenge'].includes(saved.level) ||
         ![null,.25,.5,.75].includes(saved.cut) || ![null,'yes','no'].includes(saved.answer) ||
         ![null,'A','B'].includes(saved.comparison) || ![null,.25,.5,.75].includes(saved.inventedCut) ||
@@ -76,6 +86,11 @@
     state.drawing = Array.isArray(saved.drawing) && saved.drawing.length <= 1000 && saved.drawing.every(p => p && Number.isFinite(p.x) && p.x >= 0 && p.x <= 300 && Number.isFinite(p.y) && p.y >= 0 && p.y <= 180 && typeof p.start === 'boolean') ? saved.drawing : [];
     state.whole = validGrid(saved.whole, wholeParts[state.level]) ? {cells:[...saved.whole.cells],confirmed:saved.whole.confirmed,answer:saved.whole.confirmed && ['yes','no'].includes(saved.whole.answer) ? saved.whole.answer : null} : {cells:[],confirmed:false,answer:null};
     state.comparisons = comparisonPairs[state.level].map((_,i) => ['A','B','equal'].includes(saved.comparisons?.[i]) ? saved.comparisons[i] : null);
+    const maker = saved.maker;
+    state.maker = initialMaker(state.level);
+    if (maker && Object.hasOwn(builds,maker.target) && (state.level === 'challenge' || maker.target === state.maker.target) && ['minecraft','paper'].includes(maker.material) && typeof maker.done === 'boolean' && [null,2,5,8,10].includes(maker.answer)) {
+      state.maker = {target:maker.target,material:maker.material,done:maker.done,answer:maker.answer};
+    }
     if (state.cut === null) state.answer = null;
     if (state.inventedCut === null) state.reason = null;
     while (!canOpen(state.page)) state.page--;
@@ -135,6 +150,25 @@
       return `<fieldset class="match"><legend>Comparação ${i+1} de ${pairs.length}</legend><div class="equal-units">${pair.map(([n,d],j) => `<div><b>${j===0?'A':'B'} · ${n}/${d}</b>${fraction(n,d)}</div>`).join('')}</div><div class="choices">${[['A','A'],['B','B'],['equal','Iguais']].map(([value,label]) => `<button data-pair="${i}" data-value="${value}" aria-pressed="${answer === value}">${label}</button>`).join('')}</div>${feedback(answer === null ? '' : `<strong>${answer === comparisonAnswer(pair) ? 'Comparaste a parte pintada.' : 'Alinha as partes pintadas.'}</strong><div class="equal-units">${pair.map(([n,d]) => fraction(n,d)).join('')}</div>`, answer === comparisonAnswer(pair))}</fieldset>`;
     }).join('')}`, `<h2>Compara cada par.</h2><p>Toca em A, B ou Iguais.</p>${state.level === 'support' ? '<p>Começa pelo mesmo lado de cada barra.</p>' : ''}`);
   }
+  function buildModel(target) {
+    const {n,d,blocks} = builds[target];
+    const columns = d >= 5 ? 5 : 1, rows = d/columns;
+    const width = 300/columns, height = 240/rows;
+    return `<svg class="build-model" viewBox="0 0 300 240" role="img" aria-label="${blocks} de 20 blocos pintados, ${d} grupos iguais">${Array.from({length:d},(_,group) => {
+      const x = group%columns*width, y = Math.floor(group/columns)*height;
+      return `<g aria-label="Grupo ${group+1} de ${d}">${Array.from({length:20/d},(_,block) => `<rect data-block="${group*n+block}" x="${x+block%(5/columns)*60}" y="${y+Math.floor(block/(5/columns))*60}" width="60" height="60" fill="${group<n ? '#315e4d' : '#fffdf6'}" stroke="#9d9e89" stroke-width="1"/>`).join('')}<rect x="${x+2}" y="${y+2}" width="${width-4}" height="${height-4}" fill="none" stroke="#243c35" stroke-width="3"/></g>`;
+    }).join('')}</svg>`;
+  }
+  function makerPage() {
+    const work = state.maker, task = builds[work.target];
+    const hint = work.answer === null ? '' : `<strong>${work.answer === task.blocks ? task.result : 'Conta os blocos de cada grupo.'}</strong>${buildModel(work.target)}<p>${task.d} grupos de ${20/task.d}. Pinta ${task.n} grupo${task.n===1?'':'s'}.</p>`;
+    const choices = state.level === 'challenge' ? `<div class="choices" role="group" aria-label="Fração para construir">${Object.keys(builds).map(target => `<button data-target="${target}" aria-pressed="${work.target === target}">${target}</button>`).join('')}</div>` : '';
+    return panels('Um constrói. O outro confere. Depois troquem.', `<h2>Pinta ${work.target} dos 20 blocos.</h2>${choices}${buildModel(work.target)}<p class="prompt">Constrói uma superfície inteira: 5 por 4.</p><div class="choices" role="group" aria-label="Material">${[['minecraft','Minecraft'],['paper','Papel ou cubos']].map(([value,label]) => `<button data-material="${value}" aria-pressed="${work.material === value}">${label}</button>`).join('')}</div><p class="prompt">${work.material === 'minecraft' ? 'Usa duas cores de blocos.' : 'Usa 20 quadrículas ou 20 cubos juntos.'}</p><button class="built" data-built="toggle" aria-pressed="${work.done}">Já fizemos</button>`,
+      `<h2>Quantos blocos pintaram?</h2><div class="choices">${[2,5,8,10].map(value => `<button data-blocks="${value}" aria-pressed="${work.answer === value}">${value} blocos</button>`).join('')}</div>${feedback(hint,work.answer === task.blocks)}`);
+  }
+  function reflectionPage() {
+    return `<section class="summary"><h2>Como foi o teu trabalho?</h2><p>Pensa no que descobriste e na ajuda que recebeste.</p><button data-reflect="open">Refletir sobre o meu trabalho</button><p id="reflection-note" role="status"></p></section>`;
+  }
   function bread(cut) {
     const line = cut === null ? '' : `<path d="M${12 + 296 * cut} 6V102" stroke="#fffdf6" stroke-width="9"/><path d="M${12 + 296 * cut} 6V102" stroke="#735031" stroke-width="2" stroke-dasharray="5 5"/>`;
     return `<svg class="bread" viewBox="0 0 320 104" role="img" aria-label="${cut === null ? 'Pão inteiro' : cut === .5 ? 'Duas partes do mesmo tamanho' : 'Duas partes de tamanhos diferentes'}"><path d="M28 12H292V20H306V34H312V76H302V90H286V96H34V90H18V78H8V34H16V20H28Z" fill="#dca458" stroke="#906035" stroke-width="4"/><path d="M36 24H280V32H295V40H25V32H36Z" fill="#f6d49a"/><g stroke="#f7d8a5" stroke-width="9"><path d="M60 45L48 69M108 45L96 69M156 45L144 69M204 45L192 69M252 45L240 69"/></g>${line}</svg>`;
@@ -147,7 +181,7 @@
   }
   function completedPages() {
     return [state.cut !== null && state.answer !== null,
-      state.level === 'challenge' ? state.inventedCut !== null && state.reason !== null : state.comparison !== null, state.symbol.confirmed, state.matches.every(value => value !== null), state.grid.confirmed, state.whole.confirmed && state.whole.answer !== null, state.comparisons.every(value => value !== null)];
+      state.level === 'challenge' ? state.inventedCut !== null && state.reason !== null : state.comparison !== null, state.symbol.confirmed, state.matches.every(value => value !== null), state.grid.confirmed, state.whole.confirmed && state.whole.answer !== null, state.comparisons.every(value => value !== null), true, state.maker.done && state.maker.answer !== null];
   }
   function canOpen(page) {
     return presentation || completedPages().slice(0, page).every(Boolean);
@@ -183,6 +217,8 @@
   }
   function remaining() {
     if (completedPages()[state.page]) return 'Respondeste. Podes corrigir ou continuar.';
+    if (state.page === 8) return !state.maker.done ? 'Falta confirmar «Já fizemos»' + (state.maker.answer === null ? ' e responder.' : '.') : 'Falta responder sobre os blocos pintados.';
+    if (state.page === 7) return 'Segue para a construção.';
     if (state.page === 5) return state.whole.confirmed ? 'Falta responder sobre a unidade inteira.' : 'Falta confirmar a composição e responder.';
     if (state.page === 6) {
       const missing = state.comparisons.filter(value => value === null).length;
@@ -199,8 +235,8 @@
     return state.inventedCut === null ? 'Falta inventar o corte e responder.' : 'Falta escolher uma explicação.';
   }
   function render() {
-    const nav = `<nav class="steps" aria-label="Páginas da atividade">${['1. Partilhar',state.level === 'challenge' ? '2. Inventar' : '2. Comparar','3. Pintar','4. Associar','5. Grelha','6. Completar','7. Comparar','8. Rever'].map((label,page) => `<button data-page="${page}" ${state.page === page ? 'aria-current="step"' : ''} ${canOpen(page) ? '' : 'disabled'}>${label}</button>`).join('')}</nav>`;
-    const content = state.page === lastPage() ? '<section class="summary"><h2>Exploraste as cinco unidades.</h2><p>Podes voltar às respostas e corrigir.</p><p>A construção no Minecraft e a reflexão final estão em preparação.</p><button data-page="0">Voltar às respostas</button></section>' : `<section id="${unitId()}" aria-label="${unitNames[unitId()]}">${state.page === 0 ? firstPage() : state.page === 1 ? secondPage() : state.page === 2 ? symbolPage() : state.page === 3 ? associationPage() : state.page === 4 ? gridPage() : state.page === 5 ? wholePage() : comparePage()}<footer class="bottom"><button data-page="${state.page - 1}" ${state.page === 0 ? 'disabled' : ''}>Voltar</button><div class="advance"><p class="remaining" role="status">${remaining()}</p><button class="primary" data-page="${state.page+1}" ${canOpen(state.page+1) ? '' : 'disabled'}>Seguinte</button></div></footer></section>`;
+    const nav = `<nav class="steps" aria-label="Páginas da atividade">${['1. Partilhar',state.level === 'challenge' ? '2. Inventar' : '2. Comparar','3. Pintar','4. Associar','5. Grelha','6. Completar','7. Comparar','8. Rever','9. Construir','10. Refletir'].map((label,page) => `<button data-page="${page}" ${state.page === page ? 'aria-current="step"' : ''} ${canOpen(page) ? '' : 'disabled'}>${label}</button>`).join('')}</nav>`;
+    const content = state.page === lastPage() ? reflectionPage() : state.page === 7 ? '<section class="summary"><h2>Exploraste as cinco unidades.</h2><p>Podes voltar às respostas e corrigir.</p><p>Vamos construir uma fração com 20 blocos.</p><button data-page="0">Voltar às respostas</button> <button class="primary" data-page="8">Ir construir</button></section>' : `<section id="${unitId()}" aria-label="${unitNames[unitId()]}">${state.page === 0 ? firstPage() : state.page === 1 ? secondPage() : state.page === 2 ? symbolPage() : state.page === 3 ? associationPage() : state.page === 4 ? gridPage() : state.page === 5 ? wholePage() : state.page === 6 ? comparePage() : makerPage()}<footer class="bottom"><button data-page="${state.page - 1}" ${state.page === 0 ? 'disabled' : ''}>Voltar</button><div class="advance"><p class="remaining" role="status">${remaining()}</p><button class="primary" data-page="${state.page+1}" ${canOpen(state.page+1) ? '' : 'disabled'}>Seguinte</button></div></footer></section>`;
     const drawingOpen = activity.querySelector('.drawing')?.open;
     activity.innerHTML = nav + content;
     if (drawingOpen && activity.querySelector('.drawing')) activity.querySelector('.drawing').open = true;
@@ -226,6 +262,7 @@
     state.symbol = {cells:[],confirmed:false};
     state.matches = associations[level].map((item,i) => JSON.stringify(item) === JSON.stringify(associations[state.level][i]) ? state.matches[i] : null);
     if (String(gridTargets[state.level]) !== String(gridTargets[level])) state.grid = {cells:[],confirmed:false};
+    if (level !== 'challenge' && state.maker.target !== initialMaker(level).target) state.maker = {...initialMaker(level),material:state.maker.material};
     state.level = level;
     document.getElementById('level').value = level;
     if (changesQuestion) {
@@ -244,6 +281,21 @@
     if (button.dataset.page !== undefined) { navigate(Number(button.dataset.page)); return; }
     const action = Object.keys(button.dataset)[0];
     const value = button.dataset[action];
+    if (action === 'target' && state.maker.target !== value) state.maker = {...state.maker,target:value,done:false,answer:null};
+    if (action === 'material' && state.maker.material !== value) state.maker = {...state.maker,material:value,done:false,answer:null};
+    if (action === 'built') {
+      state.maker.done = !state.maker.done;
+      emit('discovery', {message:`Construção declarada pela criança: ${state.maker.done ? 'já fizemos' : 'ainda por terminar'}; ${state.maker.target}, ${state.maker.material === 'minecraft' ? 'Minecraft' : 'papel ou cubos'}.`});
+    }
+    if (action === 'blocks') {
+      state.maker.answer = Number(value);
+      emit('attempt', {correct:Number(value) === builds[state.maker.target].blocks,detail:`Construção ${state.maker.target} de 20 blocos: respondeu ${value} blocos pintados. Trabalho externo declarado, não observado.`});
+    }
+    if (action === 'reflect') {
+      if (learningHost) emit('open_reflection');
+      else document.getElementById('reflection-note').textContent = 'Conta ao colega o que descobriste.';
+      return;
+    }
     if (action === 'cell') {
       const work = state[button.dataset.grid], cell = Number(value);
       work.cells = work.cells.includes(cell) ? work.cells.filter(n => n !== cell) : [...work.cells,cell];
