@@ -350,14 +350,9 @@
               "8",
               "10"
             ]
-          },
-          {
-            "name": "modelHint",
-            "type": "toggle",
-            "default": false
           }
         ],
-        "render": "SVG de 20 blocos iguais numa unidade contínua. Pista mostra grupos do mesmo tamanho e os grupos escolhidos. Mostrar a fração, o material, os papéis e a pergunta sobre blocos pintados.",
+        "render": "Modelo SVG sempre visível, com 20 blocos iguais numa unidade contínua. Mostra grupos do mesmo tamanho e os grupos escolhidos. Mostrar a fração, o material, os papéis e a pergunta sobre os blocos que devem pintar.",
         "transition": "Escolher material e, no desafio, fração. A criança constrói fora da página, declara Já fizemos e escolhe 2, 5, 8 ou 10. Exigir ambas as respostas, mesmo quando o número está errado. Alterar material ou fração invalida ambas; alterar nível só invalida se mudar o desafio. Reabrir conserva o trabalho da realização.",
         "constraint": "Os 20 blocos formam a unidade; dividir pelo denominador dá grupos iguais e escolher o numerador desses grupos dá a parte pedida. Não arredondar blocos.",
         "assessment": "Registar separadamente declaração de realização e resposta numérica. O número esperado é 10 para 1/2, 5 para 1/4, 8 para 2/5 e 2 para 1/10. A aplicação observa a resposta, não o mundo Minecraft."
@@ -401,20 +396,30 @@
             "type": "quiz",
             "default": [],
             "options": [
-              "Consigo sozinho",
-              "Consigo com ajuda",
-              "Quero praticar mais"
-            ]
+              "Sozinho",
+              "Com ajuda",
+              "Quero praticar",
+              "Prefiro não responder"
+            ],
+            "scope": "Reflexão local; o anfitrião de realizações mantém o seu formulário e os seus rótulos próprios."
           },
           {
             "name": "strategy",
             "type": "quiz",
-            "default": null
+            "default": "",
+            "inputKind": "text",
+            "maxLength": 160,
+            "required": false,
+            "description": "Campo de texto livre facultativo na reflexão local."
           },
           {
             "name": "nextStep",
             "type": "quiz",
-            "default": null
+            "default": "",
+            "inputKind": "text",
+            "maxLength": 160,
+            "required": false,
+            "description": "Campo de texto livre facultativo na reflexão local."
           }
         ],
         "render": "Página final com acesso à Autoavaliação da realização no anfitrião; sem anfitrião, reflexão local com critérios e escolhas opcionais.",
