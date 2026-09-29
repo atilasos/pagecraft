@@ -1,6 +1,6 @@
 # Frações em banda desenhada
 
-Estado: divisão e cobertura de testes aceites pelo professor em 29/09/2026 para esta atividade. Preparada para publicação no GitHub.
+Estado: divisão e cobertura de testes aceites pelo professor em 29/09/2026 para esta atividade. Publicada na [especificação #38](https://github.com/atilasos/pagecraft/issues/38).
 
 ## Problema
 

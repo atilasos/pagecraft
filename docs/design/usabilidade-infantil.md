@@ -72,4 +72,4 @@ Verificação externa: HTTPS 200 nas três variantes, conteúdo idêntico ao HTM
 
 ## Preparação da implementação
 
-Em 29/09/2026 ficaram preparadas a [especificação da atividade completa](fracoes-banda-desenhada-spec.md) e as [três etapas propostas](fracoes-banda-desenhada-etapas.md). O professor confirmou esta divisão para Frações com Minecraft, ressalvando a revisão caso a caso nas outras atividades. A especificação e os tickets seguem para publicação no GitHub. O código da atividade completa ainda não foi alterado.
+Em 29/09/2026 ficaram preparadas a [especificação da atividade completa](fracoes-banda-desenhada-spec.md) e as [três etapas propostas](fracoes-banda-desenhada-etapas.md). O professor confirmou esta divisão para Frações com Minecraft, ressalvando a revisão caso a caso nas outras atividades. Publicados no GitHub: [especificação #38](https://github.com/atilasos/pagecraft/issues/38) e tickets [#39](https://github.com/atilasos/pagecraft/issues/39), [#40](https://github.com/atilasos/pagecraft/issues/40) e [#41](https://github.com/atilasos/pagecraft/issues/41), com dependências nativas 39 → 40 → 41. O código da atividade completa ainda não foi alterado.

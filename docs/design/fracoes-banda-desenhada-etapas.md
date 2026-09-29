@@ -1,8 +1,10 @@
 # Etapas de Frações em banda desenhada
 
-Divisão da [especificação](fracoes-banda-desenhada-spec.md) aceite pelo professor em 29/09/2026 para esta atividade. Nas restantes atividades, rever a divisão caso a caso. O trabalho ainda não está implementado. Publicar uma especificação e três tickets no GitHub, com a etiqueta `ready-for-agent` e dependências nativas. Cada ticket referencia o protótipo `prototype/fracoes-visuais`, commit `58331ac`, variante B.
+Divisão da [especificação](fracoes-banda-desenhada-spec.md) aceite pelo professor em 29/09/2026 para esta atividade. Nas restantes atividades, rever a divisão caso a caso. O trabalho ainda não está implementado. Publicados a [especificação #38](https://github.com/atilasos/pagecraft/issues/38) e três tickets no GitHub, com a etiqueta `ready-for-agent`. Dependências nativas verificadas: #40 depende de #39; #41 depende de #40. O primeiro ticket disponível é #39. Cada ticket referencia o protótipo `prototype/fracoes-visuais`, commit `58331ac`, variante B.
 
 ## 1. Partilhar o pão num rascunho com progressão por respostas
+
+[Ticket #39](https://github.com/atilasos/pagecraft/issues/39).
 
 **Bloqueado por:** nenhum.
 
@@ -20,6 +22,8 @@ Divisão da [especificação](fracoes-banda-desenhada-spec.md) aceite pelo profe
 
 ## 2. Completar a exploração das cinco unidades
 
+[Ticket #40](https://github.com/atilasos/pagecraft/issues/40).
+
 **Bloqueado por:** etapa 1, que estabelece o rascunho e as regras de navegação e integração.
 
 **Entrega:** a criança percorre partes e símbolos, associações, unidade inteira e comparação, além da partilha do pão, com pedidos explícitos e pistas visuais nos três níveis.
@@ -34,6 +38,8 @@ Divisão da [especificação](fracoes-banda-desenhada-spec.md) aceite pelo profe
 - [ ] Percorrer os cinco temas em todos os níveis no browser, com respostas em falta e erradas; verificar teclado, toque, foco e larguras de 390, 768 e 1280 px.
 
 ## 3. Concluir no Minecraft e preparar a revisão da atividade completa
+
+[Ticket #41](https://github.com/atilasos/pagecraft/issues/41).
 
 **Bloqueado por:** etapa 2, porque esta entrega verifica e encerra o percurso completo das cinco unidades até à reflexão final.
 
