@@ -47,7 +47,7 @@ Preparar uma revisão completa de Frações com Minecraft, do 2.º ano, em banda
 - Dividir o percurso em páginas curtas, preservando as cinco ideias curriculares da atividade, o trabalho Minecraft e a reflexão final. Uma unidade pode ocupar mais de uma página quando contém vários pedidos.
 - Dispor as vinhetas lado a lado onde houver espaço; em ecrãs estreitos, conservar a ordem Imagina, Experimenta, Repara numa coluna.
 - Usar instruções curtas, controlos de pelo menos 48 px, foco visível, rótulos acessíveis e feedback que não dependa só da cor.
-- Manter Broto, Árvore jovem e Árvore robusta, com Árvore jovem por defeito quando não existe Perfil de diferenciação. Mudar de nível continua livre e invalida apenas respostas cujo desafio mudou; não apaga trabalho de outras páginas.
+- Manter Com pistas, Passo a passo e Mais desafios, com Passo a passo por defeito quando não existe Perfil de diferenciação. Mudar de nível continua livre e invalida apenas respostas cujo desafio mudou; não apaga trabalho de outras páginas.
 - Não exigir que a criança escreva explicações longas para concluir. Desenho livre e explicação oral são oportunidades de expressão; o avanço usa respostas observáveis na página.
 
 ### Página respondida

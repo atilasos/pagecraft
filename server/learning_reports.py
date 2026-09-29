@@ -13,8 +13,8 @@ LABELS = {
     'what': 'Trabalho para partilhar', 'title': 'Atividade',
 }
 VALUES = {
-    'pt': 'Português', 'en': 'Inglês', 'support': 'Broto',
-    'intermediate': 'Árvore jovem', 'challenge': 'Árvore robusta',
+    'pt': 'Português', 'en': 'Inglês', 'support': 'Com pistas',
+    'intermediate': 'Passo a passo', 'challenge': 'Mais desafios',
     'short': 'Curto', 'long': 'Longo', 'soft': 'Suave', 'strong': 'Forte',
     'tap': 'Torneira a pingar', 'garden': 'Rega do recreio', 'own': 'Outra ideia',
     'canva': 'Canva', 'paper': 'Papel', 'seen': 'Observado', 'imagined': 'Imaginado',

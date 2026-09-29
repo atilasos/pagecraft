@@ -5,10 +5,10 @@ Rascunho da unidade inicial, preparado para o ticket #39. É uma revisão parcia
 ## Percurso
 
 1. A criança corta o pão e responde se ficaram duas metades. Só depois de responder pode avançar, mesmo que se engane. Alterar o corte exige responder outra vez.
-2. Em Broto e Árvore jovem, escolhe entre duas partilhas. Broto mostra apoio para alinhar as partes desde o início. Em Árvore robusta, inventa um corte desigual e escolhe uma explicação. O avanço exige a resposta, não o acerto.
+2. Em Com pistas e Passo a passo, escolhe entre duas partilhas. Com pistas mostra apoio para alinhar as partes desde o início. Em Mais desafios, inventa um corte desigual e escolhe uma explicação. O avanço exige a resposta, não o acerto.
 3. O ecrã de revisão permite regressar ao trabalho. No contexto de uma Realização da atividade, reabrir ou recarregar recupera a página, os cortes e as respostas guardados, incluindo uma pergunta que voltou a ficar por responder. Aberta diretamente ou numa Sessão de aula, a página mantém as manipulações em memória enquanto está aberta. As tentativas enviadas ao Studio seguem a persistência existente.
 
-Os três níveis permanecem disponíveis à criança. O nível inicial é Árvore jovem; o contrato `learning_preferences` aplica o nível recebido do contexto de realização. O cliente de sessões ao vivo atual não fornece Perfis de diferenciação; aí mantém-se o nível por defeito e a escolha local. As mudanças de nível são registadas tanto em realizações como nas sessões ao vivo.
+Os três níveis permanecem disponíveis à criança. O nível inicial é Passo a passo; o contrato `learning_preferences` aplica o nível recebido do contexto de realização. O cliente de sessões ao vivo atual não fornece Perfis de diferenciação; aí mantém-se o nível por defeito e a escolha local. As mudanças de nível são registadas tanto em realizações como nas sessões ao vivo.
 
 ## Rever
 

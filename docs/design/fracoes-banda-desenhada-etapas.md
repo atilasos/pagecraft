@@ -12,7 +12,7 @@ Divisão da [especificação](fracoes-banda-desenhada-spec.md) aceite pelo profe
 
 - [x] Conservar o conteúdo publicado e preparar a revisão com novo identificador, seguindo o fluxo de rascunhos existente.
 - [x] Apresentar Imagina, Experimenta e Repara, adaptados a tablet, telemóvel e teclado.
-- [x] Oferecer a primeira unidade nos três Níveis de diferenciação, com Árvore jovem por defeito na ausência de perfil.
+- [x] Oferecer a primeira unidade nos três Níveis de diferenciação, com Passo a passo por defeito na ausência de perfil.
 - [x] Pedir a escolha do corte e a resposta sobre as metades; impedir avanço com resposta parcial e permitir avanço com erro.
 - [x] Dar uma pista visual, permitir corrigir e conservar as respostas ao voltar. Alterar o corte invalida a resposta dependente.
 - [x] Aplicar a mesma regra de Página respondida aos botões e à navegação entre páginas.
