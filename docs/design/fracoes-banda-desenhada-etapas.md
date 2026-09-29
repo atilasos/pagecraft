@@ -1,6 +1,6 @@
 # Etapas de Frações em banda desenhada
 
-Divisão da [especificação](fracoes-banda-desenhada-spec.md) aceite pelo professor em 29/09/2026 para esta atividade. Nas restantes atividades, rever a divisão caso a caso. As etapas 1 e 2 estão implementadas e verificadas; a etapa 3 permanece por implementar. Publicados a [especificação #38](https://github.com/atilasos/pagecraft/issues/38) e três tickets no GitHub, com a etiqueta `ready-for-agent`. Dependências nativas verificadas: #40 depende de #39; #41 depende de #40. Com #39 e #40 concluídos, o próximo ticket disponível é #41. Cada ticket referencia o protótipo `prototype/fracoes-visuais`, commit `58331ac`, variante B.
+Divisão da [especificação](fracoes-banda-desenhada-spec.md) aceite pelo professor em 29/09/2026 para esta atividade. Nas restantes atividades, rever a divisão caso a caso. As três etapas estão implementadas e verificadas; o rascunho completo está pronto para revisão do professor. Publicados a [especificação #38](https://github.com/atilasos/pagecraft/issues/38) e três tickets no GitHub, com a etiqueta `ready-for-agent`. Dependências nativas verificadas: #40 depende de #39; #41 depende de #40. A conclusão das três etapas não publica a revisão para alunos. Cada ticket referencia o protótipo `prototype/fracoes-visuais`, commit `58331ac`, variante B.
 
 ## 1. Partilhar o pão num rascunho com progressão por respostas
 
@@ -39,20 +39,20 @@ Divisão da [especificação](fracoes-banda-desenhada-spec.md) aceite pelo profe
 
 ## 3. Concluir no Minecraft e preparar a revisão da atividade completa
 
-[Ticket #41](https://github.com/atilasos/pagecraft/issues/41).
+[Ticket #41](https://github.com/atilasos/pagecraft/issues/41). Implementado. [Verificação](../verification/issue-41-fracoes.md).
 
 **Bloqueado por:** etapa 2, porque esta entrega verifica e encerra o percurso completo das cinco unidades até à reflexão final.
 
 **Entrega:** a criança passa da exploração digital à construção externa, confirma o trabalho e conclui a reflexão; o professor recebe um rascunho completo e um guia coerente para revisão.
 
-- [ ] Representar os exemplos Minecraft com uma unidade comum de 20 blocos, incluindo 1/4 com cinco blocos, sem arredondamentos matematicamente errados.
-- [ ] Pedir «Já fizemos» e uma resposta curta sobre a construção; exigir ambos para avançar, mantendo o avanço com erros e as pistas visuais.
-- [ ] Conservar a alternativa com papel ou cubos e os papéis cooperativos, sem fingir que já existe identificação dos membros do grupo.
-- [ ] Integrar a Autoavaliação da realização pelo fluxo existente, sem classificação automática nem conclusão duplicada.
-- [ ] Alinhar especificação pedagógica, apresentação, metadados e guia com o percurso revisto e os três níveis.
-- [ ] Validar o percurso completo no contexto de realização e de demonstração, conservando os nomes da ponte e o isolamento dos relatórios de alunos.
-- [ ] Demonstrar que a atividade publicada anteriormente e os seus trabalhos permanecem intactos; preparar a revisão final pelo professor antes de publicar para alunos.
-- [ ] Registar as verificações executadas e disponibilizar uma pré-visualização remota da revisão, no âmbito já pedido pelo professor.
+- [x] Representar os exemplos Minecraft com uma unidade comum de 20 blocos, incluindo 1/4 com cinco blocos, sem arredondamentos matematicamente errados.
+- [x] Pedir «Já fizemos» e uma resposta curta sobre a construção; exigir ambos para avançar, mantendo o avanço com erros e as pistas visuais.
+- [x] Conservar a alternativa com papel ou cubos e os papéis cooperativos, sem fingir que já existe identificação dos membros do grupo.
+- [x] Integrar a Autoavaliação da realização pelo fluxo existente, sem classificação automática nem conclusão duplicada.
+- [x] Alinhar especificação pedagógica, apresentação, metadados e guia com o percurso revisto e os três níveis.
+- [x] Validar o percurso completo no contexto de realização e de demonstração, conservando os nomes da ponte e o isolamento dos relatórios de alunos.
+- [x] Demonstrar que a atividade publicada anteriormente e os seus trabalhos permanecem intactos; preparar a revisão final pelo professor antes de publicar para alunos.
+- [x] Registar as verificações executadas e disponibilizar uma pré-visualização remota da revisão, no âmbito já pedido pelo professor.
 
 ## Decisão do professor
 
