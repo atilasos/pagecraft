@@ -49,3 +49,46 @@ async def test_fraction_revision_registers_as_private_preview(tmp_path, monkeypa
             assert preview.json()['preview'] is True
             assert (await teacher.get('/api/learning/reports')).json() == []
     assert (ROOT / 'activities/fracoes-2-minecraft/index.html').read_bytes() == original
+
+
+async def test_complete_revision_can_publish_in_isolation_without_changing_old_work(tmp_path, monkeypatch):
+    import shutil
+    import jsonschema
+    slug = 'fracoes-banda-desenhada-2ano'
+    root = tmp_path / 'repo'
+    (root / 'drafts').mkdir(parents=True)
+    shutil.copytree(ROOT / 'server/static', root / 'server/static')
+    shutil.copytree(ROOT / 'activities/fracoes-2-minecraft', root / 'activities/fracoes-2-minecraft')
+    for suffix in ['.html','.md','-docspec.json','-design-spec.json']:
+        shutil.copyfile(ROOT / 'drafts' / (slug+suffix),root / 'drafts' / (slug+suffix))
+    spec = json.loads((ROOT / 'drafts' / (slug+'-docspec.json')).read_text())
+    design = json.loads((ROOT / 'drafts' / (slug+'-design-spec.json')).read_text())
+    jsonschema.validate(spec,json.loads((ROOT / 'server/pipeline/schemas/docspec.schema.json').read_text()))
+    jsonschema.validate(design,json.loads((ROOT / 'server/pipeline/schemas/design-spec.schema.json').read_text()))
+    assert sum(unit['duration'] for unit in spec['units']) == spec['duration'] == 45
+    registration = json.loads((ROOT / 'drafts' / (slug+'-registration.json')).read_text())
+    assert registration['criteria'] == spec['criteria']
+    for key,path in [('PAGECRAFT_REPO_ROOT',root),('PAGECRAFT_DATA_DIR',root/'data'),('PAGECRAFT_ACTIVITIES_DIR',root/'activities'),('PAGECRAFT_CATALOG_PATH',root/'catalog.json')]:
+        monkeypatch.setenv(key,str(path))
+    app = create_app()
+    async with app.router.lifespan_context(app):
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app),base_url='http://test') as teacher:
+            await teacher.get('/api/teacher-bootstrap')
+            old = (await teacher.post('/api/learning/activities',json={**registration,'slug':'fracoes-2-minecraft','requires_completion':False})).json()
+            assert (await teacher.post(f"/api/learning/activities/{old['code']}/publish")).status_code == 200
+            async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app,client=('192.0.2.44',1234)),base_url='http://test') as pupil:
+                previous = (await pupil.post(f"/api/learning/activities/{old['code']}/start",json={'name':'Trabalho anterior'})).json()
+                response = await pupil.post('/api/learning/me/events',json={'events':[{'id':'old-answer','type':'attempt','unitId':'u1','payload':{'correct':False}}]})
+                assert response.status_code == 200
+                original = (await pupil.get(f"/api/learning/activities/{old['code']}/content")).text
+                draft = (await teacher.post('/api/learning/activities',json=registration)).json()
+                assert (await pupil.get(f"/api/learning/activities/{draft['code']}/content")).status_code == 404
+                published = await teacher.post(f"/api/learning/activities/{draft['code']}/publish")
+                assert published.status_code == 200, published.text
+                assert published.json()['code'] == draft['code']
+                assert published.json()['requires_completion'] is True
+                assert (await pupil.get(f"/api/learning/activities/{draft['code']}/content")).status_code == 200
+                assert (await pupil.get(f"/api/learning/activities/{old['code']}/content")).text == original
+                restored = (await pupil.get('/api/learning/me')).json()
+                assert restored['id'] == previous['id']
+                assert restored['events'][0]['payload']['correct'] is False
