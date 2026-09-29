@@ -2,6 +2,8 @@
 
 ## Confirmado pelo professor
 
+- A divisão aprovada aplica-se a esta atividade. Nas restantes, rever caso a caso o número e o conteúdo das páginas, os pedidos obrigatórios e as etapas de implementação, de acordo com os objetivos e as interações. A banda desenhada e o percurso das frações não são um molde obrigatório para todas as atividades.
+
 - Em 29/09/2026, o professor escolheu a opção **B, Banda desenhada**, depois de experimentar os exemplos remotos. Esta disposição passa a ser a referência para a atividade completa de Frações com Minecraft, do 2.º ano.
 
 - Primeiro protótipo: Frações com Minecraft, 2.º ano. A unidade inicial da [atividade de frações](../../activities/fracoes-2-minecraft/index.html) permite explorar uma baguete dividida em partes iguais ou diferentes.
@@ -70,4 +72,4 @@ Verificação externa: HTTPS 200 nas três variantes, conteúdo idêntico ao HTM
 
 ## Preparação da implementação
 
-Em 29/09/2026 ficaram preparadas a [especificação da atividade completa](fracoes-banda-desenhada-spec.md) e as [três etapas propostas](fracoes-banda-desenhada-etapas.md). Falta confirmar a cobertura dos testes e a divisão antes de publicar os tickets no GitHub. O código da atividade completa ainda não foi alterado.
+Em 29/09/2026 ficaram preparadas a [especificação da atividade completa](fracoes-banda-desenhada-spec.md) e as [três etapas propostas](fracoes-banda-desenhada-etapas.md). O professor confirmou esta divisão para Frações com Minecraft, ressalvando a revisão caso a caso nas outras atividades. A especificação e os tickets seguem para publicação no GitHub. O código da atividade completa ainda não foi alterado.

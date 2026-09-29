@@ -1,6 +1,6 @@
 # Frações em banda desenhada
 
-Estado: proposta preparada em 29/09/2026 para confirmar a cobertura dos testes e a divisão do trabalho antes de publicar no GitHub.
+Estado: divisão e cobertura de testes aceites pelo professor em 29/09/2026 para esta atividade. Preparada para publicação no GitHub.
 
 ## Problema
 
@@ -40,6 +40,8 @@ Preparar uma revisão completa de Frações com Minecraft, do 2.º ano, em banda
 ## Decisões de implementação
 
 ### Conteúdo e apresentação
+
+- Esta divisão é específica de Frações com Minecraft. Nas outras atividades, rever caso a caso os objetivos, as páginas, os pedidos obrigatórios e as etapas de implementação. A opção B não impõe um número fixo de páginas nem uma disposição universal.
 
 - Usar a opção B como referência visual e conservar o protótipo na branch separada. A implementação final não inclui o seletor A/B/C nem o estado de diagnóstico.
 - Dividir o percurso em páginas curtas, preservando as cinco ideias curriculares da atividade, o trabalho Minecraft e a reflexão final. Uma unidade pode ocupar mais de uma página quando contém vários pedidos.
@@ -86,9 +88,9 @@ As associações da terceira unidade ficam registadas mesmo quando erradas. Exig
 - Distinguir o percurso do aluno da exploração pelo professor ou Quadro. A demonstração pode abrir páginas; isso não atribui respostas a alunos. Esta distinção não amplia as permissões do papel Quadro.
 - O modo de revisão continua excluído dos relatórios de alunos. A publicação usa o fluxo existente e o Catálogo continua derivado dos metadados.
 
-## Testes propostos
+## Decisões de teste
 
-A confirmação pedida ao professor é sobre os resultados a verificar, não sobre a escolha de bibliotecas.
+A cobertura descrita foi aceite para esta atividade. Nas outras, escolher os percursos e casos de teste de acordo com as respetivas interações.
 
 - Testar principalmente o comportamento público no browser: abrir o rascunho, manipular, responder, receber feedback e navegar. Evitar testes que apenas repetem a estrutura do código ou comparam HTML como texto.
 - Cobrir página vazia, resposta parcial, resposta errada completa, correção, regresso e mudança do objeto ou nível. Verificar todos os caminhos de avanço e as respostas dependentes.

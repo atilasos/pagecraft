@@ -1,6 +1,6 @@
-# Etapas propostas para Frações em banda desenhada
+# Etapas de Frações em banda desenhada
 
-Proposta de divisão da [especificação](fracoes-banda-desenhada-spec.md), preparada para revisão do professor. Estas etapas ainda não são tickets publicados nem trabalho implementado. Após confirmação, publicar uma especificação e três tickets no GitHub, com a etiqueta `ready-for-agent` e dependências nativas. Cada ticket referencia o protótipo `prototype/fracoes-visuais`, commit `58331ac`, variante B.
+Divisão da [especificação](fracoes-banda-desenhada-spec.md) aceite pelo professor em 29/09/2026 para esta atividade. Nas restantes atividades, rever a divisão caso a caso. O trabalho ainda não está implementado. Publicar uma especificação e três tickets no GitHub, com a etiqueta `ready-for-agent` e dependências nativas. Cada ticket referencia o protótipo `prototype/fracoes-visuais`, commit `58331ac`, variante B.
 
 ## 1. Partilhar o pão num rascunho com progressão por respostas
 
@@ -48,8 +48,8 @@ Proposta de divisão da [especificação](fracoes-banda-desenhada-spec.md), prep
 - [ ] Demonstrar que a atividade publicada anteriormente e os seus trabalhos permanecem intactos; preparar a revisão final pelo professor antes de publicar para alunos.
 - [ ] Registar as verificações executadas e disponibilizar uma pré-visualização remota da revisão, no âmbito já pedido pelo professor.
 
-## Revisão proposta
+## Decisão do professor
 
-Confirmar se três entregas têm a dimensão adequada, se as dependências 1 → 2 → 3 refletem a ordem pretendida e se a cobertura por percursos reais de aluno, professor e quadro corresponde ao que o professor quer verificar. Podem juntar-se ou dividir-se etapas antes de criar os tickets.
+Confirmadas as três entregas, as dependências 1 → 2 → 3 e a cobertura por percursos reais de aluno, professor e quadro para esta atividade. A ressalva do professor é rever a divisão caso a caso nas outras atividades, tanto no percurso pedagógico como nas etapas de implementação.
 
 A identificação de grupos e a aplicação das regras às restantes atividades continuam registadas nas decisões gerais. Não dependem da aprovação desta divisão para continuarem a ser problemas a resolver.
