@@ -76,3 +76,30 @@ def test_bridge_reports_answers_but_presentation_does_not(page, lesson_origin):
     lesson.get_by_role('button', name='Partilha B', exact=True).click()
     lesson.get_by_role('button', name='3. Rever', exact=True).click()
     assert page.evaluate('received.length') == 0
+
+
+def test_responsive_keyboard_and_level_change_keeps_independent_answers(page, lesson_origin):
+    errors = []
+    page.on('pageerror', lambda error: errors.append(str(error)))
+    for width in [390, 768, 1280]:
+        page.set_viewport_size({'width':width, 'height':900})
+        page.goto(lesson_origin)
+        for level in ['support', 'intermediate', 'challenge']:
+            page.get_by_label('Nível de diferenciação').select_option(level)
+            page.get_by_role('button', name='1. Partilhar', exact=True).click()
+            button = page.get_by_role('button', name='Cortar ao meio', exact=True)
+            button.focus()
+            page.keyboard.press('Enter')
+            assert button.evaluate('(el) => el === document.activeElement')
+            page.get_by_role('button', name='Sim', exact=True).click()
+            assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
+            page.get_by_role('button', name='Seguinte', exact=True).click()
+            assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
+        page.get_by_role('button', name='Cortar ao meio', exact=True).click()
+        page.get_by_role('button', name='As partes têm tamanhos diferentes.', exact=True).click()
+        page.get_by_role('button', name='Seguinte', exact=True).click()
+        page.get_by_label('Nível de diferenciação').select_option('intermediate')
+        assert page.get_by_role('button', name='Seguinte', exact=True).is_disabled()
+        page.get_by_role('button', name='1. Partilhar', exact=True).click()
+        assert page.get_by_role('button', name='Sim', exact=True).get_attribute('aria-pressed') == 'true'
+    assert errors == []
