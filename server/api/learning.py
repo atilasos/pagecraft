@@ -12,6 +12,7 @@ from pydantic import BaseModel, Field, field_validator
 from ..access import (RateLimitOperation, Role, RoutePolicy, TrustChannel, access_policy,
                       rate_limited)
 from ..learning import LEARNING_COOKIE
+from ..criteria import Criterion
 
 ACTIVITY_CONTENT_HEADERS = {
         'Content-Security-Policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; media-src data:; font-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'",
@@ -27,10 +28,6 @@ Level = Literal['support', 'intermediate', 'challenge']
 Language = Literal['pt', 'en']
 
 
-class Criterion(BaseModel):
-    id: Annotated[str, Field(pattern=r'^[a-z0-9_-]{1,40}$')]
-    pt: Annotated[str, Field(min_length=1, max_length=300)]
-    en: Annotated[str, Field(max_length=300)] = ''
 
 
 class ActivityInput(BaseModel):

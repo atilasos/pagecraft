@@ -58,10 +58,13 @@ async def session_reflection_criteria(app, slug: str) -> dict:
     path = (await session_activity_path(app, slug)).parent / 'docspec.json'
     if not path.is_file():
         return {'criteria': []}
-    from ..api.learning import Criterion
+    from ..criteria import Criterion
     from pydantic import ValidationError
     try:
-        declared = json.loads(path.read_text('utf-8')).get('criteria', [])
+        document = json.loads(path.read_text('utf-8'))
+        if not isinstance(document, dict) or not isinstance(document.get('criteria', []), list):
+            return {'criteria': []}
+        declared = document.get('criteria', [])
         criteria = [Criterion.model_validate(criterion).model_dump() for criterion in declared]
         if len(criteria) > 8 or len({c['id'] for c in criteria}) != len(criteria):
             return {'criteria': []}
