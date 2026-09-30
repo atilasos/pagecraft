@@ -48,7 +48,7 @@ def test_children_take_turns_and_teacher_reads_individual_reflections(page, stud
         teacher_page.request.get(studio_origin+'/api/teacher-bootstrap')
         teacher_page.reload()
         teacher_page.get_by_role('button', name='Retomar', exact=True).first.click()
-        teacher_page.locator('#work-groups').get_by_role('button', name='Ana', exact=True).click()
+        teacher_page.locator('#work-groups').get_by_role('button', name='Ver percurso de Ana', exact=True).click()
         expect(teacher_page.locator('#drawer-events')).to_contain_text('Reflexão individual')
         expect(teacher_page.locator('#drawer-events')).to_contain_text('Consegui com autonomia')
         expect(teacher_page.locator('#drawer-events')).to_contain_text('Comparei os blocos.')

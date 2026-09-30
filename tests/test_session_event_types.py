@@ -22,6 +22,7 @@ def test_registry_can_be_queried_without_knowing_its_representation():
 
     assert _names(SESSION_EVENT_TYPES.visible_to("student")) == {
         "ai_feedback",
+        "individual_reflection",
         "freeze_screens",
         "pit_updated",
         "session_closed",
