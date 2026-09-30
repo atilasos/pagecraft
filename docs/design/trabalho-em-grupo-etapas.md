@@ -1,6 +1,6 @@
 # Etapas de trabalho em grupo
 
-Estado: divisão e cobertura aprovadas pelo professor em 30/09/2026. Publicados os tickets [#43](https://github.com/atilasos/pagecraft/issues/43), [#44](https://github.com/atilasos/pagecraft/issues/44) e [#45](https://github.com/atilasos/pagecraft/issues/45), associados à [especificação #42](https://github.com/atilasos/pagecraft/issues/42). Etapa 1 implementada e verificada no ramo; ver [evidência da entrega #43](../verification/issue-43-grupos.md). Reflexão individual e alterações de composição continuam pendentes. As dependências nativas foram verificadas: #44 depende de #43; #45 depende de #43 e #44. A próxima etapa é #44. A [especificação](trabalho-em-grupo-spec.md) consolida as decisões confirmadas. Esta divisão é própria do trabalho em grupo e abrange entregas completas que o professor pode experimentar.
+Estado: divisão e cobertura aprovadas pelo professor em 30/09/2026. Publicados os tickets [#43](https://github.com/atilasos/pagecraft/issues/43), [#44](https://github.com/atilasos/pagecraft/issues/44) e [#45](https://github.com/atilasos/pagecraft/issues/45), associados à [especificação #42](https://github.com/atilasos/pagecraft/issues/42). Etapa 1 implementada e verificada no ramo; ver [evidência da entrega #43](../verification/issue-43-grupos.md). Etapa 2 implementada e verificada; ver [evidência da reflexão individual #44](../verification/issue-44-reflexoes.md). Alterações de composição continuam pendentes. As dependências nativas foram verificadas: #44 depende de #43; #45 depende de #43 e #44. A próxima etapa é #45. A [especificação](trabalho-em-grupo-spec.md) consolida as decisões confirmadas. Esta divisão é própria do trabalho em grupo e abrange entregas completas que o professor pode experimentar.
 
 ## 1. Entrar e trabalhar em conjunto
 
@@ -21,23 +21,23 @@ Estado: divisão e cobertura aprovadas pelo professor em 30/09/2026. Publicados 
 
 ## 2. Fazer e consultar a reflexão individual
 
-[Ticket #44](https://github.com/atilasos/pagecraft/issues/44). `ready-for-agent`; dependência #43 concluída.
+[Ticket #44](https://github.com/atilasos/pagecraft/issues/44). Implementado e verificado.
 
 **Dependência concluída:** etapa 1, que estabelece a autoria conjunta e os participantes autorizados no dispositivo.
 
 **Entrega:** os membros do grupo fazem a autoavaliação à vez no mesmo computador. O professor consulta a produção comum e a reflexão individual de cada criança.
 
-- [ ] Mostrar claramente a criança cuja reflexão está aberta.
-- [ ] Usar os critérios da atividade; reflexão facultativa, com possibilidade de omissão.
-- [ ] Guardar e rever as reflexões sem substituir a dos colegas ou duplicar envios.
-- [ ] Validar o participante no servidor e recusar atribuição a crianças de outros grupos.
-- [ ] Integrar com as atividades existentes sem atribuir automaticamente reflexão conjunta a todos.
-- [ ] Históricos e relatórios distinguem autoria conjunta e voz individual.
-- [ ] Testes com reflexões diferentes, omissão, revisão e repetição do envio.
+- [x] Mostrar claramente a criança cuja reflexão está aberta.
+- [x] Usar os critérios da atividade; reflexão facultativa, com possibilidade de omissão.
+- [x] Guardar e rever as reflexões sem substituir a dos colegas ou duplicar envios.
+- [x] Validar o participante no servidor e recusar atribuição a crianças de outros grupos.
+- [x] Integrar com as atividades existentes sem atribuir automaticamente reflexão conjunta a todos.
+- [x] Históricos e relatórios distinguem autoria conjunta e voz individual.
+- [x] Testes com reflexões diferentes, omissão, revisão e repetição do envio.
 
 ## 3. Corrigir participantes durante a aula e verificar o percurso completo
 
-[Ticket #45](https://github.com/atilasos/pagecraft/issues/45). `ready-for-agent`, bloqueado por #44; #43 concluído.
+[Ticket #45](https://github.com/atilasos/pagecraft/issues/45). `ready-for-agent`; dependências #43 e #44 concluídas.
 
 **Bloqueado por:** etapas 1 e 2, pois alterações de composição precisam de preservar tanto respostas como reflexões.
 
