@@ -1,6 +1,6 @@
-# Etapas propostas para trabalho em grupo
+# Etapas de trabalho em grupo
 
-Estado: proposta para revisão em 30/09/2026. Ainda sem tickets publicados e sem implementação funcional. A [especificação](trabalho-em-grupo-spec.md) consolida as decisões confirmadas. Esta divisão é própria do trabalho em grupo e abrange entregas completas que o professor pode experimentar.
+Estado: divisão e cobertura aprovadas pelo professor em 30/09/2026. Tickets em preparação, sem implementação funcional. A [especificação](trabalho-em-grupo-spec.md) consolida as decisões confirmadas. Esta divisão é própria do trabalho em grupo e abrange entregas completas que o professor pode experimentar.
 
 ## 1. Entrar e trabalhar em conjunto
 
@@ -46,6 +46,6 @@ Estado: proposta para revisão em 30/09/2026. Ainda sem tickets publicados e sem
 - [ ] Registar evidência de testes e rever código contra normas e especificação.
 - [ ] Entregar demonstração remota com dados descartáveis, sem expor dados reais da turma.
 
-## Cobertura proposta
+## Cobertura aprovada
 
-Testar os percursos reais de aluno e professor no browser e confirmar reservas, autoria e relatórios pelas interfaces HTTP já existentes. Exercitar comportamentos observáveis em vez de comparar estruturas internas. A publicação dos tickets aguarda a validação desta divisão e cobertura.
+Testar os percursos reais de aluno e professor no browser e confirmar reservas, autoria e relatórios pelas interfaces HTTP já existentes. Exercitar comportamentos observáveis em vez de comparar estruturas internas. O professor confirmou esta divisão e cobertura.

@@ -1,6 +1,6 @@
 # Trabalho a pares e em grupo
 
-Estado em 30/09/2026: regras do percurso confirmadas; especificação e etapas preparadas para revisão, antes da implementação. Continuação do pedido do professor sobre atividades cooperativas em que atualmente só consegue entrar um aluno.
+Estado em 30/09/2026: regras do percurso, cobertura e etapas confirmadas, antes da implementação. Continuação do pedido do professor sobre atividades cooperativas em que atualmente só consegue entrar um aluno.
 
 ## Pedido confirmado
 
@@ -19,7 +19,7 @@ A revisão de Frações está concluída como rascunho para revisão do professo
 
 ## Preparação da implementação
 
-As decisões pedagógicas desta ronda estão confirmadas. A [especificação](trabalho-em-grupo-spec.md) e as [etapas propostas](trabalho-em-grupo-etapas.md) consolidam o percurso. Falta validar a divisão em entregas e a cobertura pelos percursos reais de aluno e professor, antes de publicar os tickets.
+As decisões pedagógicas desta ronda estão confirmadas. A [especificação](trabalho-em-grupo-spec.md) e as [etapas](trabalho-em-grupo-etapas.md) consolidam o percurso. O professor aprovou a divisão em três entregas e a cobertura pelos percursos reais de aluno e professor. Segue-se a publicação dos tickets com as dependências aprovadas.
 
 ## Comportamento atual verificado
 

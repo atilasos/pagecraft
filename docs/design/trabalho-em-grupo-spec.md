@@ -1,6 +1,6 @@
 # Trabalho conjunto e reflexão individual nas sessões de aula
 
-Estado: regras pedagógicas confirmadas pelo professor em 30/09/2026; proposta de cobertura e etapas em revisão. Esta especificação dá continuidade ao pedido de identificar todos os participantes de um computador partilhado.
+Estado: regras pedagógicas, cobertura e etapas confirmadas pelo professor em 30/09/2026. Esta especificação dá continuidade ao pedido de identificar todos os participantes de um computador partilhado.
 
 ## Problema
 
@@ -80,7 +80,7 @@ Depois de começar, só o professor altera os participantes. As respostas conser
 - Nas áreas do professor, permitir reconhecer membros e consultar o trabalho comum, mostrando a autoria conjunta e a reflexão de cada participante.
 - Aplicar o mesmo modelo de identidade às atividades da sessão sem impor a divisão de páginas ou a apresentação de Frações às outras atividades.
 
-## Decisões de teste propostas
+## Decisões de teste
 
 Validar principalmente o comportamento observado pelas crianças e pelo professor. Usar os percursos de entrada, atividade, reflexão e acompanhamento no browser, apoiados pelas interfaces HTTP existentes para confirmar autoria, reservas e persistência. As fronteiras de testes já exercitadas para reservas concorrentes, cookies, libertação de identidade, históricos, triagem e relatórios são o precedente; evitar persistência paralela ou testes que apenas repitam detalhes internos.
 
@@ -94,7 +94,7 @@ Validar principalmente o comportamento observado pelas crianças e pelo professo
 - Conservar os casos individuais e históricos anteriores, as permissões do Quadro e os nomes existentes na ponte.
 - Experimentar por teclado e toque em computador, tablet e telemóvel. A integração final usa sessões e dados descartáveis, com revisão remota temporária no âmbito já autorizado.
 
-Esta cobertura e a divisão em entregas aguardam a revisão do professor; não foram executados testes da funcionalidade ainda inexistente.
+O professor confirmou esta cobertura e a divisão em três entregas. Não foram executados testes da funcionalidade ainda inexistente.
 
 ## Fora deste recorte
 
