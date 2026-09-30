@@ -395,13 +395,14 @@ function createStudentTransport() {
   }
 
   function renderPendingWork() {
-    const previous = outbox.filter(event => state.workGroup && event.composition_version !== state.workGroup.composition_version);
+    const previous = outbox.filter(event => state.workGroup && event.composition_version !== state.workGroup.composition_version && HISTORY_LABELS[event.type]);
     const panel = $("pending-group-work");
     panel.hidden = !previous.length;
     $("pending-group-list").replaceChildren();
-    for (const event of previous) {
+    const captions = new Set(previous.map(event => `${event.work_group_name || 'Grupo anterior'} · ${HISTORY_LABELS[event.type]}${event.payload?.detail ? ': '+event.payload.detail : ''}`));
+    for (const caption of captions) {
       const item = document.createElement('li');
-      item.textContent = `${event.work_group_name || 'Grupo anterior'} · ${HISTORY_LABELS[event.type] || 'Trabalho'}${event.payload?.detail ? ': '+event.payload.detail : ''}`;
+      item.textContent = caption;
       $("pending-group-list").append(item);
     }
   }
