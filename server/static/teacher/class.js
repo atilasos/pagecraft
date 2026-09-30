@@ -786,7 +786,9 @@ function renderDrawerHistory(events) {
       hour: "2-digit",
       minute: "2-digit",
     });
-    const joint = record.work_group_id ? "Trabalho conjunto · " : "";
+    const group = workGroups.get(record.work_group_id);
+    const authors = group?.display_name || (record.participant_ids || []).map(id => students.get(id)?.display_name || id).join(" + ");
+    const joint = record.work_group_id ? `Trabalho conjunto · ${authors} · ` : "";
     li.textContent = `${when} · ${joint}${text}`;
     list.appendChild(li);
   });
