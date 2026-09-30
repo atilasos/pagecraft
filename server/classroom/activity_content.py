@@ -15,8 +15,16 @@ async def session_activity_path(app, slug: str):
     return path
 
 
-GROUP_LEVEL_ADAPTER = '''<script data-pagecraft-group-level>
+GROUP_LEVEL_ADAPTER = """<script data-pagecraft-group-level>
 (() => {
+  const aliases = {support:'support', apoio:'support', intermediate:'intermediate', standard:'intermediate', middle:'intermediate', intermedio:'intermediate', medio:'intermediate', challenge:'challenge', desafio:'challenge'};
+  const controls = 'button[data-level], .diff-tabs button[data-show]';
+  const controlLevel = button => aliases[button.dataset.level || button.dataset.show?.split('-').at(-1)];
+  document.addEventListener('click', event => {
+    const button = event.target.closest(controls);
+    const level = button && controlLevel(button);
+    if (level) window.parent.postMessage({pagecraft:1, type:'level_changed', payload:{level}}, '*');
+  });
   window.addEventListener('message', event => {
     if (event.source !== window.parent || event.data?.pagecraft !== 1 || event.data.type !== 'work_group_preferences') return;
     const level = event.data.payload?.level;
@@ -26,15 +34,13 @@ GROUP_LEVEL_ADAPTER = '''<script data-pagecraft-group-level>
       if (select.value !== level) { select.value = level; select.dispatchEvent(new Event('change', {bubbles:true})); }
       return;
     }
-    const aliases = {support:'support', apoio:'support', intermediate:'intermediate', standard:'intermediate', middle:'intermediate', intermedio:'intermediate', medio:'intermediate', challenge:'challenge', desafio:'challenge'};
-    document.querySelectorAll('button[data-level], .diff-tabs button[data-show]').forEach(button => {
-      const target = button.dataset.level || button.dataset.show?.split('-').at(-1);
+    document.querySelectorAll(controls).forEach(button => {
       const selected = button.getAttribute('aria-selected') === 'true' || button.classList.contains('active');
-      if (aliases[target] === level && !selected) button.click();
+      if (controlLevel(button) === level && !selected) button.click();
     });
   });
 })();
-</script>'''
+</script>"""
 
 
 def with_group_level_adapter(html: str) -> str:

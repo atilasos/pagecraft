@@ -392,6 +392,7 @@ function createStudentTransport() {
         if (["support", "intermediate", "challenge"].includes(data.payload?.level)) {
           state.workGroup.level = data.payload.level;
           $("group-level").value = data.payload.level;
+          sendGroupPreferences();
         }
       }
       enqueue(
