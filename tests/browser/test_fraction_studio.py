@@ -14,6 +14,7 @@ def test_teacher_receives_attempt_and_board_is_only_demonstration(page, studio_o
         page.locator('#code-input').fill(session['join_code'])
         page.get_by_role('button', name='Entrar', exact=True).click()
         page.get_by_role('button', name='Aluno de teste', exact=True).click()
+        page.get_by_role('button', name='Começar', exact=True).click()
         lesson = page.frame_locator('#activity-frame')
         lesson.get_by_role('button', name='Cortar à esquerda', exact=True).click()
         with page.expect_response(lambda r: r.url.endswith('/events') and r.request.method == 'POST') as saved:

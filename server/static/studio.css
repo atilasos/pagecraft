@@ -862,3 +862,9 @@ th { background: var(--paper-deep); font-family: var(--font-type); font-size: 0.
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; scroll-behavior: auto !important; transition: none !important; }
 }
+
+.work-modes {display:flex; gap:12px; flex-wrap:wrap; margin:16px 0;}
+.work-modes [aria-pressed="true"], .identity-grid [aria-pressed="true"] {background:#285448; color:white; border:3px solid #152e27;}
+#confirm-participants {margin-top:20px; min-height:56px;}
+#entry-group-level select, #group-level {min-height:48px; max-width:100%;}
+.work-group-card {padding:16px; border:2px solid #285448; border-radius:12px; margin:12px 0;}

@@ -2,6 +2,7 @@
    cadernetas de alunos com detalhe, chamar a atenção e congelar ecrãs. */
 
 const $ = (id) => document.getElementById(id);
+const workGroups = new Map();
 const students = new Map(); // id → projeção viva emitida pelo servidor
 let session = null;
 let publicOrigin = location.origin;
@@ -220,8 +221,10 @@ $("report-btn").addEventListener("click", async () => {
   const sessions = report.sessions.length
     ? `<p class="muted" style="margin-top:0.75rem">${report.sessions.length} sessões no período.</p>`
     : '<p class="muted" style="margin-top:0.75rem">Sem sessões no período escolhido.</p>';
+  const groupRows = (report.groups || []).map(group => `<tr><td>${esc(group.display_name)}</td><td>${group.attempt}</td><td>${group.discovery}</td><td>${group.help_needed}</td></tr>`).join("");
+  const groupTable = groupRows ? `<h3>Trabalho conjunto</h3><p>As respostas pertencem ao grupo. A reflexão pertence a cada criança.</p><table><tr><th>Participantes</th><th>Tentativas conjuntas</th><th>Descobertas</th><th>Ajuda</th></tr>${groupRows}</table>` : "";
   out.innerHTML = `<div class="card" style="margin-top:0.75rem; overflow-x:auto">
-    <table>${head}${rows}</table>${sessions}</div>`;
+    <table>${head}${rows}</table>${groupTable}${sessions}</div>`;
 });
 
 $("class-form").addEventListener("submit", async (ev) => {
@@ -353,6 +356,8 @@ async function startLive(s) {
   $("export-link").download = `sessao-${s.id}.json`;
 
   students.clear();
+  workGroups.clear();
+  renderWorkGroups();
   renderPulse();
   renderStudents();
   loadUnits(s.activity_slug);
@@ -362,6 +367,7 @@ async function startLive(s) {
   es.onmessage = () => {};
   addJsonListener(es, "session_state_snapshot", (data) => applySnapshot(data, es));
   addJsonListener(es, "student_state_changed", applyStudentState);
+  addJsonListener(es, "work_group_state_changed", applyWorkGroupState);
   addJsonListener(es, "session_state_changed", (data) => applySessionState(data, es));
   eventTypes.forEach((type) => {
     addJsonListener(es, type, (data) => handleEvent(type, { ...data, type }));
@@ -382,6 +388,9 @@ function addJsonListener(es, type, listener) {
 
 function applySnapshot(snapshot, es) {
   if (!snapshot.students || typeof snapshot.students !== "object" || Array.isArray(snapshot.students)) return;
+  workGroups.clear();
+  Object.entries(snapshot.groups || {}).forEach(([id, group]) => workGroups.set(id, group));
+  renderWorkGroups();
   students.clear();
   Object.entries(snapshot.students).forEach(([studentId, student]) => {
     if (student && typeof student === "object" && !Array.isArray(student)) {
@@ -529,7 +538,8 @@ function handleEvent(type, record) {
     t.className = "t";
     t.textContent = new Date(record.ts).toLocaleTimeString("pt-PT", { hour: "2-digit", minute: "2-digit" });
     const body = document.createElement("span");
-    body.textContent = `${st ? st.display_name + " · " : ""}${text}`;
+    const joint = record.work_group_id ? workGroups.get(record.work_group_id)?.display_name || record.payload?.display_name : null;
+    body.textContent = `${joint ? "Trabalho conjunto · " + joint + " · " : st ? st.display_name + " · " : ""}${text}`;
     li.append(t, body);
     $("timeline").prepend(li);
   }
@@ -643,7 +653,7 @@ function createStudentCard(studentId) {
         <span class="pill ok discovery-count"></span>
         <span class="pill warn help-badge" hidden>🙋 Pediu ajuda</span>
       </div>
-      <p class="last"></p>`;
+      <p class="joint-label" hidden></p><p class="last"></p>`;
     card.addEventListener("click", () => openDrawer(studentId));
     return card;
 }
@@ -660,6 +670,8 @@ function updateStudentCard(studentId) {
     (st.triage?.explicit_help ? " help" : "") +
     (st.participated && st.triage?.band !== "Sem sinal" ? " on" : " away");
   card.querySelector(".student-name").textContent = st.display_name || studentId;
+  card.querySelector(".joint-label").hidden = !st.shared_work?.length;
+  card.querySelector(".joint-label").textContent = (st.shared_work || []).map(work => `Trabalho conjunto: ${work.display_name}`).join("; ");
   card.querySelector(".correct-count").textContent = `${numbers.correct_attempts || 0}✓`;
   card.querySelector(".attempt-count").textContent = `${evidence.attempt || 0} tent.`;
   card.querySelector(".discovery-count").textContent = `${evidence.discovery || 0} desc.`;
@@ -774,7 +786,8 @@ function renderDrawerHistory(events) {
       hour: "2-digit",
       minute: "2-digit",
     });
-    li.textContent = `${when} · ${text}`;
+    const joint = record.work_group_id ? "Trabalho conjunto · " : "";
+    li.textContent = `${when} · ${joint}${text}`;
     list.appendChild(li);
   });
   if (!list.children.length) {
@@ -846,3 +859,31 @@ $("close-btn").addEventListener("click", async () => {
   const live = sessions.find((s) => s.status === "live");
   if (live) startLive(live);
 })();
+
+function applyWorkGroupState(delta) {
+  if (!delta.group || typeof delta.work_group_id !== "string") return;
+  workGroups.set(delta.work_group_id, delta.group);
+  renderWorkGroups();
+}
+
+function renderWorkGroups() {
+  const container = $("work-groups");
+  container.replaceChildren();
+  $("work-groups-section").hidden = workGroups.size === 0;
+  const levelNames = {support:"Com pistas", intermediate:"Passo a passo", challenge:"Mais desafios"};
+  for (const group of workGroups.values()) {
+    const card = document.createElement("article");
+    card.className = "work-group-card";
+    const heading = document.createElement("h3"); heading.textContent = group.display_name;
+    const detail = document.createElement("p");
+    detail.textContent = `${group.numbers?.evidence?.attempt || 0} tentativas conjuntas · ${levelNames[group.level] || "Passo a passo"} · ${group.active ? group.triage?.reason || "A trabalhar" : "Dispositivo libertado"}`;
+    card.append(heading, detail);
+    for (const member of group.members || []) {
+      const button = document.createElement("button"); button.type = "button";
+      button.textContent = `Ver percurso de ${member.display_name}`;
+      button.addEventListener("click", () => openDrawer(member.student_id));
+      card.appendChild(button);
+    }
+    container.appendChild(card);
+  }
+}
