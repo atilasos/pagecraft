@@ -36,6 +36,7 @@ async def build_class_report(
         for s in class_data["students"]
     }
     session_rows: list[dict] = []
+    group_rows: list[dict] = []
 
     for session in sessions:
         if session.get("class_id") != class_data["id"]:
@@ -61,6 +62,14 @@ async def build_class_report(
             roster=session.get("roster", {}),
             started_at=started or None,
         )
+        for group in state.get("groups", {}).values():
+            group_rows.append({
+                "session_id": session["id"], "work_group_id": group["id"],
+                "display_name": group["display_name"],
+                "members": [member["display_name"] for member in group["members"]],
+                "participant_ids": group["participant_ids"],
+                **group["numbers"]["evidence"],
+            })
         numbers = state["numbers"]
         row = {
             "session_id": session["id"],
@@ -94,6 +103,7 @@ async def build_class_report(
         "date_from": date_from,
         "date_to": date_to,
         "sessions": session_rows,
+        "groups": group_rows,
         "students": sorted(students.values(), key=lambda s: s["display_name"]),
     }
 
@@ -119,6 +129,10 @@ def report_to_markdown(report: dict) -> str:
             f"| {s['discovery']} | {s['help_needed']} | {s['feedback_request']} "
             f"| {s['share_requested']} | {s['pit_done']}/{s['pit_total']} |"
         )
+    if report.get("groups"):
+        lines += ["", "## Trabalho conjunto", "", "As respostas pertencem ao grupo; não demonstram por si só o desempenho individual.", "", "| Participantes | Tentativas conjuntas | Descobertas | Pedidos de ajuda |", "|---|---|---|---|"]
+        for group in report["groups"]:
+            lines.append(f"| {group['display_name']} | {group['attempt']} | {group['discovery']} | {group['help_needed']} |")
     lines += ["", "## Por sessão", ""]
     if not report["sessions"]:
         lines.append("_Sem sessões no período._")

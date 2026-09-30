@@ -295,7 +295,10 @@ async def session_event_types():
 async def post_events(session_id: str, body: EventsRequest, request: Request):
     svc = _svc(request)
     student_id = request.state.access.student_id
-    accepted = await _domain(svc.ingest_events(session_id, student_id, body.events))
+    if request.state.access.work_group_id:
+        accepted = await _domain(svc.ingest_work_group_events(session_id, request.state.access.work_group_id, body.events))
+    else:
+        accepted = await _domain(svc.ingest_events(session_id, student_id, body.events))
     return {"accepted": [r["event_id"] for r in accepted]}
 
 
@@ -334,6 +337,8 @@ async def create_pit_item(
 ):
     svc = _svc(request)
     student_id = request.state.access.student_id
+    if request.state.access.work_group_id:
+        raise HTTPException(403, "O plano individual precisa de uma identidade individual.")
     return await _domain(
         svc.create_pit_item(session_id, student_id, body.text)
     )
@@ -348,6 +353,8 @@ async def advance_pit_item(
 ):
     svc = _svc(request)
     student_id = request.state.access.student_id
+    if request.state.access.work_group_id:
+        raise HTTPException(403, "O plano individual precisa de uma identidade individual.")
     return await _domain(
         svc.advance_pit_item(session_id, student_id, item_id)
     )
@@ -382,10 +389,21 @@ async def student_history(
     events = [
         record
         for record in await svc.events_log(session_id).replay()
-        if record.get("student_id") == student_id
+        if (record.get("student_id") == student_id or access.role is Role.TEACHER and student_id in record.get("participant_ids", []))
         and record.get("type") in visible_types
     ]
     return {"student_id": student_id, "events": events}
+
+
+@router.get("/sessions/{session_id}/groups/me/history")
+@access_policy(RoutePolicy.STUDENT)
+async def work_group_history(session_id: str, request: Request):
+    group_id = request.state.access.work_group_id
+    if group_id is None:
+        raise HTTPException(403, "este dispositivo não representa um grupo")
+    visible = {entry.name for entry in SESSION_EVENT_TYPES.evidence()} | {entry.name for entry in SESSION_EVENT_TYPES.visible_to("student")}
+    records = await _svc(request).events_log(session_id).replay()
+    return {"work_group_id": group_id, "events": [record for record in records if record.get("work_group_id") == group_id and record.get("type") in visible]}
 
 
 @router.get("/sessions/{session_id}/stream")

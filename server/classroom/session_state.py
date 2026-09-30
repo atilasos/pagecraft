@@ -72,6 +72,7 @@ def reduce_session(
     started_at: datetime | str | None = None,
 ) -> dict:
     """Produz sempre o mesmo estado para a mesma sequência e o mesmo instante."""
+    events = list(events)
     now_instant = _instant(now)
     if now_instant is None:
         raise ValueError("now tem de ser um instante válido")
@@ -94,9 +95,35 @@ def reduce_session(
             anchor=start_instant,
             display_name=str(display_name) if display_name is not None else None,
         )
+    groups = {}
+    group_ids = {str(event["work_group_id"]) for event in events if event.get("work_group_id")}
+    # Reduce the joint production once; its counts never become individual results.
+    for group_id in group_ids:
+        records = [event for event in events if event.get("work_group_id") == group_id]
+        joined = next((event for event in records if event.get("type") == "work_group_joined"), None)
+        if joined is None:
+            continue
+        description = joined["payload"]
+        projected = [
+            {key: value for key, value in event.items() if key not in {"work_group_id", "participant_ids"}}
+            | {"student_id": group_id, "type": "joined" if event.get("type") == "work_group_joined" else "identity_released" if event.get("type") == "work_group_released" else event.get("type")}
+            for event in records
+        ]
+        group = reduce_session(projected, now=now, roster={group_id: {"display_name": description["display_name"]}}, started_at=started_at)["students"][group_id]
+        group.update({"id": group_id, "participant_ids": joined["participant_ids"], "members": description["members"], "level": description["level"], "active": not any(e.get("type") == "work_group_released" for e in records)})
+        for event in records:
+            if event.get("type") == "level_changed" and (event.get("payload") or {}).get("level") in {"support", "intermediate", "challenge"}:
+                group["level"] = event["payload"]["level"]
+        groups[group_id] = group
+
     participants: set[str] = set()
 
     for event in events:
+        if event.get("type") == "work_group_joined":
+            for sid in event.get("participant_ids", []):
+                if sid in students:
+                    students[sid]["participated"] = True
+                    participants.add(sid)
         student_id = event.get("student_id")
         if not student_id:
             continue
@@ -213,4 +240,16 @@ def reduce_session(
             "explicit_help": explicit_help,
         }
 
-    return {"students": students, "numbers": numbers}
+    for group in groups.values():
+        for event_type, count in group["numbers"]["evidence"].items():
+            numbers["evidence"][event_type] += count
+        numbers["correct_attempts"] += group["numbers"]["correct_attempts"]
+        for sid in group["participant_ids"]:
+            if sid in students:
+                students[sid].setdefault("shared_work", []).append({"work_group_id": group["id"], "display_name": group["display_name"]})
+                if group["active"]:
+                    students[sid]["triage"] = group["triage"]
+    result = {"students": students, "numbers": numbers}
+    if groups:
+        result["groups"] = groups
+    return result

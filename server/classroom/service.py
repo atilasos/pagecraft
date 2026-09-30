@@ -232,6 +232,21 @@ class ClassroomService:
             session["pit_items"] = expected_pit_items
             changed = True
 
+        for event in events:
+            group = session.get("work_groups", {}).get(event.get("work_group_id"))
+            if not group:
+                continue
+            if event.get("type") == "work_group_released" and group.get("token"):
+                group["token"] = None
+                for sid in group["participant_ids"]:
+                    session["roster"][sid].pop("work_group_id", None)
+                changed = True
+            if event.get("type") == "level_changed":
+                level = (event.get("payload") or {}).get("level")
+                if level in {"support", "intermediate", "challenge"} and group["level"] != level:
+                    group["level"] = level
+                    changed = True
+
         for student_id, last_event in last_identity_event.items():
             if last_event != "identity_released":
                 continue
@@ -503,6 +518,17 @@ class ClassroomService:
         async with self._session_locks[session_id]:
             session = await self._require_writable_unlocked(session_id, student_id)
             entry = session["roster"][student_id]
+            if entry.get("work_group_id"):
+                group = session["work_groups"][entry["work_group_id"]]
+                await self.events_log(session_id).append({
+                    "type": "work_group_released", "work_group_id": group["id"],
+                    "participant_ids": list(group["participant_ids"]), "payload": {"reset_progress": reset_progress},
+                })
+                group["token"] = None
+                for sid in group["participant_ids"]:
+                    session["roster"][sid].pop("work_group_id", None)
+                await self.storage.write_json(self._session_path(session_id), session)
+                return True
             await self._append_event_unlocked(
                 session_id,
                 "identity_released",
@@ -585,6 +611,33 @@ class ClassroomService:
                     }
                 )
                 accepted.append(record)
+            return accepted
+
+    async def ingest_work_group_events(self, session_id: str, group_id: str, events: list[dict]) -> list[dict]:
+        async with self._session_locks[session_id]:
+            session = await self._require_writable_unlocked(session_id)
+            group = session.get("work_groups", {}).get(group_id)
+            if not group or not group.get("token"):
+                raise InvalidSessionEventError("O grupo já não está disponível.")
+            seen = await self._seen(session_id)
+            activity_types = {entry.name for entry in SESSION_EVENT_TYPES.by_author("activity")} - {"assessment_result"}
+            accepted = []
+            for ev in events[:20]:
+                event_id = str(ev.get("event_id") or uuid.uuid4().hex)
+                ev_type = str(ev.get("type", ""))
+                if event_id in seen or ev_type not in activity_types:
+                    continue
+                seen.add(event_id)
+                payload = ev.get("payload") or {}
+                record = await self.events_log(session_id).append({
+                    "event_id": event_id, "type": ev_type,
+                    "work_group_id": group_id, "participant_ids": list(group["participant_ids"]),
+                    "unit_id": ev.get("unit_id"), "payload": payload,
+                })
+                if ev_type == "level_changed" and payload.get("level") in {"support", "intermediate", "challenge"}:
+                    group["level"] = payload["level"]
+                accepted.append(record)
+            await self.storage.write_json(self._session_path(session_id), session)
             return accepted
 
     async def send_teacher_message(
