@@ -5,7 +5,7 @@ const groupReflection = (() => {
   const icons = {alone:'✓', help:'🤝', practising:'↻', skip:'○'};
   let context = null, current = null, criteria = [], saved = {}, drafts = {}, generation = 0, sending = false;
   const endpoint = () => `/api/sessions/${context.session}/groups/me/reflections`;
-  const key = () => `pc-group-reflections:${context.session}:${context.group.id}`;
+  const key = () => `pc-group-reflections:${context.session}:${context.group.device_id}`;
   const status = text => { element('reflection-status').textContent = text; };
 
   function persist() {
@@ -20,6 +20,7 @@ const groupReflection = (() => {
     element('reflection-form').hidden = true;
     element('activity-frame').hidden = false;
     element('group-reflect-btn').hidden = true;
+    element('pending-group-reflections').hidden = true;
   }
 
   async function mount() {
@@ -28,6 +29,7 @@ const groupReflection = (() => {
     context = {session:state.session.id, group:state.workGroup};
     try { drafts = JSON.parse(sessionStorage.getItem(key()) || '{}'); } catch { drafts = {}; }
     element('group-reflect-btn').hidden = false;
+    renderPendingReflections();
   }
 
   async function read() {
@@ -41,6 +43,16 @@ const groupReflection = (() => {
     criteria = data.criteria;
     saved = data.reflections;
     return true;
+  }
+
+  function isOldDraft(draft) {
+    return !!draft && (draft.composition_version || draft.pending?.composition_version || 1) !== context.group.composition_version;
+  }
+
+  function renderPendingReflections() {
+    const old = Object.values(drafts).filter(isOldDraft);
+    element('pending-group-reflections').hidden = !old.length;
+    element('pending-group-reflections').textContent = old.length ? 'Há reflexões por guardar da composição anterior: '+old.map(d=>`${d.owner_name || 'um colega'} · ${d.group_caption || 'grupo anterior'}`).join('; ')+'. Pede ajuda ao professor.' : '';
   }
 
   function participants() {
@@ -67,10 +79,14 @@ const groupReflection = (() => {
       answers[input.name] = input.value;
     });
     drafts[current] = {
+      composition_version: drafts[current]?.composition_version ?? context.group.composition_version,
+      group_caption: drafts[current]?.group_caption || context.group.display_name,
+      owner_name: context.group.members.find(member=>member.student_id===current).display_name,
       expected_revision: drafts[current]?.expected_revision ?? saved[current]?.payload.revision ?? 0,
       answers, strategy:element('reflection-strategy').value, next_step:element('reflection-next').value,
     };
     persist();
+    renderPendingReflections();
     participants();
   }
 
@@ -111,9 +127,9 @@ const groupReflection = (() => {
     });
     element('reflection-strategy').value = voice.strategy || '';
     element('reflection-next').value = voice.next_step || '';
-    element('reflection-reload').hidden = true;
-    status(draft?.pending ? 'Há uma reflexão por guardar. Carrega em guardar para tentar novamente.' : '');
-    lockForm(!!draft?.pending);
+    element('reflection-reload').hidden = !isOldDraft(draft);
+    status(isOldDraft(draft) ? 'O professor alterou os participantes. Revê a versão guardada antes de responder no novo grupo.' : draft?.pending ? 'Há uma reflexão por guardar. Carrega em guardar para tentar novamente.' : '');
+    lockForm(!!draft?.pending || isOldDraft(draft));
     participants();
     element('reflection-child').focus();
   }
@@ -121,7 +137,7 @@ const groupReflection = (() => {
   function lockForm(pending) {
     element('reflection-form').querySelectorAll('input, textarea').forEach(input => { input.disabled = sending || pending; });
     element('reflection-skip').disabled = sending || pending;
-    element('reflection-save').disabled = sending;
+    element('reflection-save').disabled = sending || isOldDraft(drafts[current]);
     element('reflection-reload').disabled = sending;
     element('reflection-back').disabled = sending;
   }
@@ -142,12 +158,12 @@ const groupReflection = (() => {
   }
 
   async function save(skipped = false) {
-    if (!context || !current || sending) return;
+    if (!context || !current || sending || isOldDraft(drafts[current])) return;
     if (!drafts[current]?.pending) {
       capture();
       const draft = drafts[current];
       draft.pending = {
-        student_id:current, event_id:crypto.randomUUID(), expected_revision:draft.expected_revision,
+        student_id:current, event_id:crypto.randomUUID(), expected_revision:draft.expected_revision, composition_version:context.group.composition_version,
         answers:skipped ? {} : draft.answers, strategy:skipped ? '' : draft.strategy,
         next_step:skipped ? '' : draft.next_step, skipped,
       };
@@ -162,12 +178,13 @@ const groupReflection = (() => {
       if (!response.ok) {
         if ([400,404,409,422].includes(response.status)) element('reflection-reload').hidden = false;
         const error = await response.json();
-        throw new Error(error.detail || 'Não foi possível guardar. Tenta novamente.');
+        if (version !== generation) return;
+        throw new Error(error.detail?.message || error.detail || 'Não foi possível guardar. Tenta novamente.');
       }
       const record = await response.json();
       if (version !== generation) return;
       saved[studentId] = record;
-      delete drafts[studentId]; persist();
+      delete drafts[studentId]; persist(); renderPendingReflections();
       current = null; element('reflection-form').hidden = true;
       status('Reflexão guardada. Agora pode responder outro colega.');
       element('reflection-heading').focus();
@@ -191,7 +208,7 @@ const groupReflection = (() => {
     const studentId = current;
     try {
       if (!await read()) return;
-      delete drafts[studentId]; persist(); openChild(studentId);
+      delete drafts[studentId]; persist(); renderPendingReflections(); openChild(studentId);
     } catch (error) { status(error.message); }
   };
   return {mount, reset, open};

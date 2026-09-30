@@ -131,3 +131,42 @@ def test_late_response_cannot_close_another_groups_reflection(page, studio_origi
         expect(page.get_by_role('heading', name='A reflexão de Lara', exact=True)).to_be_visible()
         expect(page.get_by_label('O que te ajudou?')).to_have_value('O meu novo rascunho.')
         assert page.request.get(studio_origin+path+'/groups/me/reflections').json()['reflections'] == {}
+
+
+def test_teacher_change_keeps_pending_answer_with_old_authors(page, studio_origin):
+    from playwright.sync_api import expect
+    with httpx.Client(base_url=studio_origin) as teacher:
+        teacher.get('/api/teacher-bootstrap')
+        cls=teacher.post('/api/classes',json={'name':'Composição','year':2,'students':['Ana','Bruno','Carla']}).json()
+        session=teacher.post('/api/sessions',json={'class_id':cls['id'],'activity_slug':'fraction-test'}).json()
+        ids=list(session['roster']);path='/api/sessions/'+session['id']
+        page.goto(studio_origin+'/student/')
+        page.get_by_label('Código da aula').fill(session['join_code'])
+        page.get_by_role('button',name='Entrar',exact=True).click()
+        page.get_by_role('button',name='A pares',exact=True).click()
+        for name in ['Ana','Bruno']:page.get_by_role('button',name=name,exact=True).click()
+        page.get_by_role('button',name='Começar',exact=True).click()
+        page.route('**/events',lambda route:route.fulfill(status=503,body='{}'))
+        lesson=page.frame_locator('#activity-frame')
+        lesson.get_by_role('button',name='Cortar à esquerda',exact=True).click()
+        lesson.get_by_role('button',name='Sim',exact=True).click()
+        group=page.request.get(studio_origin+path+'/me').json()['work_group']
+        teacher.patch(path+f"/groups/{group['id']}/participants",json={'participant_ids':[ids[0],ids[2]],'mode':'pair'}).raise_for_status()
+        expect(page.locator('#student-name')).to_have_text('Ana + Carla',timeout=10000)
+        expect(page.locator('#pending-group-work')).to_contain_text('Ana + Bruno')
+        page.unroute('**/events')
+        page.reload()
+        expect(page.locator('#student-name')).to_have_text('Ana + Carla')
+        expect(page.locator('#pending-group-work')).to_contain_text('Ana + Bruno')
+        lesson.get_by_role('button',name='Cortar ao meio',exact=True).click()
+        lesson.get_by_role('button',name='Sim',exact=True).click()
+        import time
+        for _ in range(30):
+            history=teacher.get(path+f'/students/{ids[2]}/history').json()['events']
+            attempts=[e for e in history if e['type']=='attempt']
+            if attempts:break
+            time.sleep(.2)
+        assert len(attempts)==1 and attempts[0]['payload']['correct'] is True
+        assert attempts[0]['participant_ids']==[ids[0],ids[2]]
+        old_history=teacher.get(path+f'/students/{ids[1]}/history').json()['events']
+        assert not any(e['type']=='attempt' for e in old_history)

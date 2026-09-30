@@ -174,6 +174,7 @@ function startActivity() {
   $("activity-title").textContent = state.session.activity_title;
   $("activity-frame").src = `/api/sessions/${state.session.id}/content`;
   $("group-level-label").hidden = !state.workGroup;
+  $("group-level").disabled = false;
   if (state.workGroup) $("group-level").value = state.workGroup.level;
   $("pit-btn").hidden = !!state.workGroup;
   $("help-btn").disabled = false;
@@ -349,6 +350,7 @@ const studentTransport = createStudentTransport();
 
 function createStudentTransport() {
   const outbox = [];
+  let queueKey = null;
   let bridgeHandler = null;
   let stream = null;
   let generation = 0;
@@ -367,7 +369,8 @@ function createStudentTransport() {
     flushTimer = null;
     requests.forEach((controller) => controller.abort());
     requests.clear();
-    if (discardQueue) outbox.length = 0;
+    persistQueue();
+    if (discardQueue) { outbox.length = 0; queueKey = null; }
   }
 
   function enqueue(type, unitId, payload) {
@@ -378,8 +381,28 @@ function createStudentTransport() {
       unit_id: unitId,
       payload,
       ts: new Date().toISOString(),
+      ...(state.workGroup ? {composition_version:state.workGroup.composition_version, work_group_name:state.workGroup.display_name} : {}),
     });
+    persistQueue();
+    renderPendingWork();
     return true;
+  }
+
+  function persistQueue() {
+    if (!queueKey) return;
+    try { sessionStorage.setItem(queueKey, JSON.stringify(outbox)); } catch {}
+  }
+
+  function renderPendingWork() {
+    const previous = outbox.filter(event => state.workGroup && event.composition_version !== state.workGroup.composition_version);
+    const panel = $("pending-group-work");
+    panel.hidden = !previous.length;
+    $("pending-group-list").replaceChildren();
+    for (const event of previous) {
+      const item = document.createElement('li');
+      item.textContent = `${event.work_group_name || 'Grupo anterior'} · ${HISTORY_LABELS[event.type] || 'Trabalho'}${event.payload?.detail ? ': '+event.payload.detail : ''}`;
+      $("pending-group-list").append(item);
+    }
   }
 
   function listenToBridge() {
@@ -437,13 +460,23 @@ function createStudentTransport() {
   async function flush() {
     if (flushing || !outbox.length || !hasIdentity()) return;
     flushing = true;
-    const batch = outbox.slice(0, OUTBOX_BATCH_SIZE);
+    const batch = outbox.filter(event => !event.composition_conflict).slice(0, OUTBOX_BATCH_SIZE);
+    if (!batch.length) { flushing = false; return; }
+    const request = generation;
     try {
       const resp = await post(
         `/api/sessions/${state.session.id}/events`,
         { events: batch }
       );
-      if (resp?.ok) {
+      if (resp?.status === 409) {
+        const error = await resp.json();
+        if (request !== generation) return;
+        if (error.detail?.code === 'composition_changed') {
+          const conflicts = new Set(error.detail.event_ids);
+          outbox.forEach(event => { if (conflicts.has(event.event_id)) event.composition_conflict = true; });
+          acceptComposition(error.detail.work_group);
+        }
+      } else if (resp?.ok) {
         const ids = new Set(batch.map((event) => event.event_id));
         for (let index = outbox.length - 1; index >= 0; index -= 1) {
           if (ids.has(outbox[index].event_id)) outbox.splice(index, 1);
@@ -452,6 +485,8 @@ function createStudentTransport() {
     } catch (error) {
       /* fica na fila; tentamos outra vez no próximo flush (at-least-once) */
     } finally {
+      persistQueue();
+      renderPendingWork();
       flushing = false;
     }
   }
@@ -467,6 +502,11 @@ function createStudentTransport() {
       });
       if (request !== generation) return;
       if (resp.status === 401) invalidateStudentIdentity();
+      else if (resp.ok) {
+        const identity = await resp.json();
+        if (request !== generation) return;
+        if (identity.work_group) acceptComposition(identity.work_group);
+      }
     } catch (error) {
       // Uma falha de rede é transitória; o EventSource continua a reconectar.
     } finally {
@@ -505,6 +545,12 @@ function createStudentTransport() {
     stop();
     const request = ++generation;
     const sessionId = state.session.id;
+    const nextKey = state.workGroup ? `pc-group-outbox:${sessionId}:${state.workGroup.device_id}` : null;
+    if (nextKey !== queueKey) {
+      outbox.length = 0; queueKey = nextKey;
+      try { outbox.push(...JSON.parse(sessionStorage.getItem(queueKey) || '[]')); } catch {}
+    }
+    renderPendingWork();
     listenToBridge();
     flushTimer = setInterval(flush, FLUSH_INTERVAL_MS);
     connect(request, sessionId);
@@ -512,7 +558,7 @@ function createStudentTransport() {
 
   return {
     enqueue, flush, post, start, stop,
-    pendingLevel: () => outbox.findLast(event => event.type === "level_changed")?.payload.level,
+    pendingLevel: () => outbox.findLast(event => event.type === "level_changed" && !event.composition_conflict && event.composition_version === state.workGroup?.composition_version)?.payload.level,
   };
 }
 
@@ -557,7 +603,7 @@ function describeHistoryEvent(event) {
     payload.note ||
     payload.what ||
     "";
-  const label = (event?.work_group_id ? "Trabalho conjunto · " : "") + (HISTORY_LABELS[event?.type] || "Trabalho registado");
+  const label = (event?.work_group_id ? `Trabalho conjunto · ${event.work_group_name || ""} · ` : "") + (HISTORY_LABELS[event?.type] || "Trabalho registado");
   return detail ? `${label}: ${detail}` : label;
 }
 
@@ -670,6 +716,18 @@ function sendGroupPreferences() {
   if (!state.workGroup) return;
   $("activity-frame").contentWindow?.postMessage({pagecraft:1, type:"work_group_preferences", payload:{level:state.workGroup.level}}, '*');
   $("activity-frame").contentWindow?.postMessage({pagecraft:1, type:"learning_preferences", payload:{level:state.workGroup.level}}, '*');
+}
+
+function acceptComposition(group) {
+  if (!state.workGroup || group.device_id !== state.workGroup.device_id || group.composition_version <= state.workGroup.composition_version) return;
+  state.workGroup = group;
+  state.displayName = group.display_name;
+  $("student-name").textContent = group.display_name;
+  $("group-level").value = group.level;
+  saveIdentity();
+  groupReflection.mount();
+  showMessage(`O professor alterou os participantes: ${group.display_name}. O trabalho anterior mantém os seus autores.`, "feedback-warn");
+  studentTransport.start();
 }
 
 function acceptGroupState(group) {
