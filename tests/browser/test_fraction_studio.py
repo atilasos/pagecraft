@@ -212,3 +212,27 @@ def test_pending_group_level_is_not_replaced_by_an_older_live_projection(page, s
         with page.expect_response(lambda r: r.url.endswith('/events') and r.ok, timeout=6000):
             page.evaluate("dispatchEvent(new Event('online'))")
         assert page.request.get(studio_origin + path + '/me').json()['work_group']['level'] == 'challenge'
+
+
+def test_individual_entry_opens_the_registered_draft_without_publishing(page, studio_origin):
+    import json
+    from pathlib import Path
+    from playwright.sync_api import expect
+    registration = json.loads((Path(__file__).resolve().parents[2] / 'drafts/fracoes-banda-desenhada-2ano-registration.json').read_text())
+    with httpx.Client(base_url=studio_origin) as teacher:
+        teacher.get('/api/teacher-bootstrap')
+        teacher.post('/api/learning/activities', json=registration).raise_for_status()
+        classroom = teacher.post('/api/classes', json={
+            'name':'Entrada individual', 'year':2, 'students':['Ana']
+        }).json()
+        session = teacher.post('/api/sessions', json={
+            'class_id':classroom['id'], 'activity_slug':registration['slug']
+        }).json()
+        assert teacher.get('/activities/' + registration['slug'] + '/').status_code == 404
+        page.goto(studio_origin + '/student/')
+        page.get_by_label('Código da aula').fill(session['join_code'])
+        page.get_by_role('button', name='Entrar', exact=True).click()
+        page.get_by_role('button', name='Ana', exact=True).click()
+        page.get_by_role('button', name='Começar', exact=True).click()
+        expect(page.frame_locator('#activity-frame').get_by_role('heading', name='Vamos descobrir as frações.')).to_be_visible()
+        expect(page.locator('#group-level-label')).not_to_be_visible()

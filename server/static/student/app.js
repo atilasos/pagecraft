@@ -171,7 +171,7 @@ function startActivity() {
   $("history-panel").hidden = true;
   $("student-name").textContent = state.displayName;
   $("activity-title").textContent = state.session.activity_title;
-  $("activity-frame").src = state.workGroup ? `/api/sessions/${state.session.id}/content` : `/activities/${state.session.activity_slug}/`;
+  $("activity-frame").src = `/api/sessions/${state.session.id}/content`;
   $("group-level-label").hidden = !state.workGroup;
   if (state.workGroup) $("group-level").value = state.workGroup.level;
   $("pit-btn").hidden = !!state.workGroup;
