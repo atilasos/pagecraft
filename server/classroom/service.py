@@ -685,9 +685,18 @@ class ClassroomService:
         author: str,
         student_id: str | None = None,
         caused_by_seq: int | None = None,
+        work_group_id: str | None = None,
     ) -> dict:
         async with self._session_locks[session_id]:
-            await self._require_writable_unlocked(session_id, student_id)
+            session = await self._require_writable_unlocked(session_id, student_id)
+            participant_ids = None
+            if work_group_id is not None:
+                if student_id is not None:
+                    raise ValueError('a autoria é individual ou conjunta')
+                group = session.get('work_groups', {}).get(work_group_id)
+                if group is None:
+                    raise InvalidSessionEventError('grupo não pertence à sessão')
+                participant_ids = list(group['participant_ids'])
             return await self._append_event_unlocked(
                 session_id,
                 type_,
@@ -695,6 +704,8 @@ class ClassroomService:
                 author=author,
                 student_id=student_id,
                 caused_by_seq=caused_by_seq,
+                work_group_id=work_group_id,
+                participant_ids=participant_ids,
             )
 
     async def _append_event_unlocked(
@@ -707,6 +718,8 @@ class ClassroomService:
         student_id: str | None = None,
         caused_by_seq: int | None = None,
         ts: str | None = None,
+        work_group_id: str | None = None,
+        participant_ids: list[str] | None = None,
     ) -> dict:
         event_type = SESSION_EVENT_TYPES.get(type_)
         if event_type is None:
@@ -714,6 +727,9 @@ class ClassroomService:
         if author not in event_type.authors:
             raise ValueError(f"{author} não pode emitir o Acontecimento de sessão {type_}")
         record = {"type": type_, "student_id": student_id, "payload": payload}
+        if work_group_id is not None:
+            record['work_group_id'] = work_group_id
+            record['participant_ids'] = participant_ids
         if caused_by_seq is not None:
             record["caused_by_seq"] = caused_by_seq
         if ts is not None:
