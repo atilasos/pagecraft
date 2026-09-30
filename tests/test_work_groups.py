@@ -217,3 +217,37 @@ async def test_group_member_reflection_has_individual_authorship(classroom):
         assert not voice[0].get('work_group_id')
         peer = (await teacher.get(path+f'/students/{ids[1]}/history')).json()['events']
         assert not any(e['type']=='individual_reflection' for e in peer)
+
+
+async def test_reflection_revision_retry_and_omission_preserve_each_child(classroom):
+    transport, teacher, cls, session = classroom
+    ids = list(session['roster']); path = f"/api/sessions/{session['id']}"
+    async with httpx.AsyncClient(transport=transport, base_url='http://test') as group:
+        await group.post(path+'/groups/claim', json={'participant_ids':ids[:3], 'mode':'group'})
+        first = {'student_id':ids[0], 'event_id':'ana-1', 'expected_revision':0, 'strategy':'Usei blocos.'}
+        for data in [first, {'student_id':ids[1], 'event_id':'bruno-1', 'expected_revision':0, 'strategy':'Pedi ajuda.'},
+                     {'student_id':ids[2], 'event_id':'carla-1', 'expected_revision':0, 'skipped':True}]:
+            assert (await group.post(path+'/groups/me/reflections', json=data)).status_code == 200
+        revised = {**first, 'event_id':'ana-2', 'expected_revision':1, 'strategy':'Comparei partes iguais.'}
+        assert (await group.post(path+'/groups/me/reflections', json=revised)).status_code == 200
+        assert (await group.post(path+'/groups/me/reflections', json=first)).status_code == 200
+        assert (await group.post(path+'/groups/me/reflections', json=revised)).status_code == 200
+        stale = {**first, 'event_id':'ana-stale', 'strategy':'Resposta antiga.'}
+        assert (await group.post(path+'/groups/me/reflections', json=stale)).status_code == 409
+        collision = {**first, 'strategy':'Outra resposta com o mesmo envio.'}
+        assert (await group.post(path+'/groups/me/reflections', json=collision)).status_code == 409
+        latest = (await group.get(path+'/groups/me/reflections')).json()['reflections']
+        assert latest[ids[0]]['payload']['strategy'] == 'Comparei partes iguais.'
+        assert latest[ids[1]]['payload']['strategy'] == 'Pedi ajuda.'
+        assert latest[ids[2]]['payload']['skipped'] is True
+        for sid, revisions in [(ids[0],2), (ids[1],1), (ids[2],1)]:
+            history = (await teacher.get(path+f'/students/{sid}/history')).json()['events']
+            assert len([e for e in history if e['type']=='individual_reflection']) == revisions
+        report = (await teacher.get(f"/api/classes/{cls['id']}/report")).json()
+        assert len(report['reflections']) == 3
+        assert [r['payload']['strategy'] for r in report['reflections']] == ['Comparei partes iguais.', 'Pedi ajuda.', '']
+        assert all(row['correct'] == 0 and row['assessment_result'] == 0 for row in report['students'])
+        md = (await teacher.get(f"/api/classes/{cls['id']}/report?format=md")).text
+        assert 'Reflexões individuais' in md
+        assert 'Ana' in md and 'Comparei partes iguais.' in md
+        assert 'Carla' in md and 'Preferiu não responder' in md

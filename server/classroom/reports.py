@@ -11,6 +11,7 @@ from __future__ import annotations
 from ..storage import Storage
 from .event_types import SESSION_EVENT_TYPES
 from .session_state import reduce_session
+from .reflections import latest_reflections, REFLECTION_LABELS
 
 
 def _blank_student(name: str, evidence_types: tuple[str, ...]) -> dict:
@@ -37,6 +38,7 @@ async def build_class_report(
     }
     session_rows: list[dict] = []
     group_rows: list[dict] = []
+    reflection_rows: list[dict] = []
 
     for session in sessions:
         if session.get("class_id") != class_data["id"]:
@@ -50,6 +52,12 @@ async def build_class_report(
         events = await storage.read_jsonl(
             storage.path("sessions", session["id"], "events.jsonl")
         )
+        for reflection in latest_reflections(events):
+            reflection_rows.append({
+                **reflection, "session_id": session["id"],
+                "activity_title": session.get("activity_title", ""),
+                "display_name": session["roster"][reflection["student_id"]]["display_name"],
+            })
         reduction_now = (
             session.get("closed_at")
             or (events[-1].get("ts") if events else None)
@@ -104,6 +112,7 @@ async def build_class_report(
         "date_to": date_to,
         "sessions": session_rows,
         "groups": group_rows,
+        "reflections": reflection_rows,
         "students": sorted(students.values(), key=lambda s: s["display_name"]),
     }
 
@@ -133,6 +142,22 @@ def report_to_markdown(report: dict) -> str:
         lines += ["", "## Trabalho conjunto", "", "As respostas pertencem ao grupo; não demonstram por si só o desempenho individual.", "", "| Participantes | Tentativas conjuntas | Descobertas | Pedidos de ajuda |", "|---|---|---|---|"]
         for group in report["groups"]:
             lines.append(f"| {group['display_name']} | {group['attempt']} | {group['discovery']} | {group['help_needed']} |")
+    if report.get("reflections"):
+        import re
+        def safe(value):
+            return re.sub(r'([\\`*_{}\[\]()!#|])', r'\\\1', str(value)).replace('<', '&lt;').replace('>', '&gt;')
+        lines += ["", "## Reflexões individuais", "", "Voz de cada criança, distinta das respostas conjuntas e da avaliação do professor."]
+        for reflection in report["reflections"]:
+            voice = reflection["payload"]
+            lines += ["", f"### {safe(reflection['display_name'])} · {safe(reflection['activity_title'])}", ""]
+            if voice["skipped"]:
+                lines.append("Preferiu não responder.")
+                continue
+            for criterion in voice["criteria"]:
+                answer = REFLECTION_LABELS.get(voice["answers"].get(criterion["id"]), "Sem resposta")
+                lines.append(f"- {safe(criterion['pt'])}: {answer}")
+            lines += [f"Estratégia: {safe(voice['strategy']) or 'Sem resposta'}", "",
+                      f"Próximo passo: {safe(voice['next_step']) or 'Sem resposta'}"]
     lines += ["", "## Por sessão", ""]
     if not report["sessions"]:
         lines.append("_Sem sessões no período._")
