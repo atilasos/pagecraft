@@ -251,3 +251,30 @@ async def test_reflection_revision_retry_and_omission_preserve_each_child(classr
         assert 'Reflexões individuais' in md
         assert 'Ana' in md and 'Comparei partes iguais.' in md
         assert 'Carla' in md and 'Preferiu não responder' in md
+
+
+async def test_reflections_reject_foreign_members_and_legacy_joint_attribution(classroom):
+    transport, teacher, cls, session = classroom
+    ids = list(session['roster']); path = f"/api/sessions/{session['id']}"
+    async with httpx.AsyncClient(transport=transport, base_url='http://test') as pair, httpx.AsyncClient(transport=transport, base_url='http://test') as other:
+        await pair.post(path+'/groups/claim', json={'participant_ids':ids[:2], 'mode':'pair'})
+        await other.post(path+'/groups/claim', json={'participant_ids':ids[2:], 'mode':'pair'})
+        foreign = {'student_id':ids[2], 'event_id':'foreign', 'expected_revision':0, 'strategy':'Não sou deste grupo.'}
+        assert (await pair.post(path+'/groups/me/reflections', json=foreign)).status_code == 404
+        own = {**foreign, 'student_id':ids[0], 'event_id':'own'}
+        assert (await pair.post(path+'/groups/me/reflections', json={**own, 'answers':{'invented':'alone'}})).status_code == 400
+        assert (await pair.post(path+'/groups/me/reflections', json={**own, 'answers':{'invented':'excellent'}})).status_code == 422
+        assert (await pair.post(path+'/groups/me/reflections', json=own)).status_code == 200
+        assert (await other.get(path+'/groups/me/reflections')).json()['reflections'] == {}
+        legacy = await pair.post(path+'/events', json={'events':[
+            {'event_id':'old-reflection', 'type':'assessment_result', 'payload':{'result':'Todos conseguem sozinhos'}},
+            {'event_id':'forged-voice', 'type':'individual_reflection', 'student_id':ids[2], 'payload':{}},
+        ]})
+        assert legacy.json()['accepted'] == []
+        await teacher.post(path+'/close')
+        assert (await pair.post(path+'/groups/me/reflections', json={**own, 'event_id':'closed', 'expected_revision':1})).status_code == 409
+        assert len((await pair.get(path+'/groups/me/reflections')).json()['reflections']) == 1
+        # Closed-session stream remains private; the other pair's child voice is absent.
+        stream = (await other.get(path+'/stream')).text
+        assert 'Não sou deste grupo.' not in stream
+        assert ids[0] not in stream
