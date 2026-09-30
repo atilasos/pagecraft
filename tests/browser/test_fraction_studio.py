@@ -133,3 +133,42 @@ def test_pending_level_change_survives_reload_before_sync(page, studio_origin):
     expect(lesson.get_by_role('button', name='Seguinte', exact=True)).to_be_enabled()
     page.unroute('**/api/learning/me/events')
     page.evaluate("dispatchEvent(new Event('online'))")
+
+
+def test_teacher_snapshot_renders_roster_and_shared_authorship(page, studio_origin):
+    from playwright.sync_api import expect
+    # Teacher and shared student use separate authorized browser contexts.
+    page.request.get(studio_origin + '/api/teacher-bootstrap')
+    classroom = page.request.post(studio_origin + '/api/classes', data={
+        'name':'Ensaio conjunto', 'year':2, 'students':['Ana','Bruno','Carla']
+    }).json()
+    session = page.request.post(studio_origin + '/api/sessions', data={
+        'class_id':classroom['id'], 'activity_slug':'fraction-test', 'activity_title':'Frações'
+    }).json()
+    context = page.context.browser.new_context()
+    try:
+        pupil = context.new_page()
+        pupil.goto(studio_origin + '/student/')
+        pupil.get_by_label('Código da aula').fill(session['join_code'])
+        pupil.get_by_role('button', name='Entrar', exact=True).click()
+        pupil.get_by_role('button', name='A pares', exact=True).click()
+        pupil.get_by_role('button', name='Ana', exact=True).click()
+        expect(pupil.get_by_role('button', name='Começar', exact=True)).to_be_disabled()
+        pupil.get_by_role('button', name='Bruno', exact=True).click()
+        pupil.get_by_role('button', name='Começar', exact=True).click()
+        expect(pupil.locator('#student-name')).to_have_text('Ana + Bruno')
+        expect(pupil.locator('#pit-btn')).not_to_be_visible()
+        pupil.get_by_label('Nível do grupo', exact=True).select_option('challenge')
+        expect(pupil.frame_locator('#activity-frame').locator('#level')).to_have_value('challenge')
+        pupil.get_by_role('button', name='Preciso de ajuda 🙋', exact=True).click()
+        page.goto(studio_origin + '/teacher/class.html')
+        expect(page.locator('.student-card')).to_have_count(3)
+        expect(page.locator('#work-groups')).to_contain_text('Ana + Bruno')
+        expect(page.locator('#work-groups')).to_contain_text('Mais desafios')
+        page.get_by_role('button', name='Ver percurso de Ana', exact=True).click()
+        expect(page.locator('#drawer-events')).to_contain_text('Trabalho conjunto · Ana + Bruno')
+        pupil.reload()
+        expect(pupil.locator('#student-name')).to_have_text('Ana + Bruno')
+        expect(pupil.locator('#group-level')).to_have_value('challenge')
+    finally:
+        context.close()

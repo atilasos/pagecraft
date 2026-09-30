@@ -16,6 +16,8 @@ let drawerStudent = null;
 
 const EVENT_TEXT = {
   joined: () => "entrou na aula",
+  work_group_joined: () => "entrou em conjunto",
+  work_group_released: () => "dispositivo do grupo libertado pelo professor",
   activity_loaded: () => "abriu a atividade",
   heartbeat: () => "",
   level_changed: (e) => `escolheu ${({support:"Com pistas", intermediate:"Passo a passo", challenge:"Mais desafios"})[e.payload?.level] || "outro nível"}`,
@@ -708,7 +710,10 @@ function renderStudents() {
   document.querySelectorAll(".student-card[data-student-id]").forEach((card) => {
     if (!students.has(card.dataset.studentId)) card.remove();
   });
-  students.forEach((student, studentId) => updateStudentCard(studentId));
+  students.forEach((student, studentId) => {
+    const card = updateStudentCard(studentId);
+    if (!card.parentElement) $(triageBand(student).listId).appendChild(card);
+  });
   TRIAGE_BANDS.forEach((band) => {
     const list = $(band.listId);
     let cursor = list.firstElementChild;
