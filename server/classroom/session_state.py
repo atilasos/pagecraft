@@ -98,7 +98,7 @@ def reduce_session(
     groups = {}
     group_ids = {str(event["work_group_id"]) for event in events if event.get("work_group_id")}
     # Reduce the joint production once; its counts never become individual results.
-    for group_id in group_ids:
+    for group_id in sorted(group_ids):
         records = [event for event in events if event.get("work_group_id") == group_id]
         joined = next((event for event in records if event.get("type") == "work_group_joined"), None)
         if joined is None:

@@ -26,9 +26,11 @@ GROUP_LEVEL_ADAPTER = '''<script data-pagecraft-group-level>
       if (select.value !== level) { select.value = level; select.dispatchEvent(new Event('change', {bubbles:true})); }
       return;
     }
-    const legacy = level === 'intermediate' ? 'standard' : level;
-    document.querySelectorAll('.tabs .tab[data-level]').forEach(button => {
-      if (button.dataset.level === legacy && button.getAttribute('aria-selected') !== 'true') button.click();
+    const aliases = {support:'support', apoio:'support', intermediate:'intermediate', standard:'intermediate', middle:'intermediate', intermedio:'intermediate', medio:'intermediate', challenge:'challenge', desafio:'challenge'};
+    document.querySelectorAll('button[data-level], .diff-tabs button[data-show]').forEach(button => {
+      const target = button.dataset.level || button.dataset.show?.split('-').at(-1);
+      const selected = button.getAttribute('aria-selected') === 'true' || button.classList.contains('active');
+      if (aliases[target] === level && !selected) button.click();
     });
   });
 })();
