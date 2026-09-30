@@ -887,3 +887,9 @@ th { background: var(--paper-deep); font-family: var(--font-type); font-size: 0.
 .reflection-choices span { font-size: 1.5rem; }
 #group-reflection textarea { width: 100%; box-sizing: border-box; font: inherit; padding: .7rem; }
 @media (max-width: 520px) { .reflection-choices { grid-template-columns: 1fr; } }
+
+#pending-group-work[hidden], #pending-group-reflections[hidden], #group-editor[hidden] { display: none; }
+
+.group-editor-members { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: .5rem; }
+.group-editor-members label { display: flex; align-items: center; gap: .75rem; min-height: 56px; margin: 0; padding: .5rem; }
+.group-editor-members input { width: 1.25rem; height: 1.25rem; flex: 0 0 auto; margin: 0; }

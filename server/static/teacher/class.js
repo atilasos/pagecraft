@@ -17,6 +17,7 @@ let drawerStudent = null;
 const EVENT_TEXT = {
   joined: () => "entrou na aula",
   work_group_joined: () => "entrou em conjunto",
+  work_group_changed: (e) => `participantes alterados: ${e.payload?.display_name || ""}`,
   work_group_released: () => "dispositivo do grupo libertado pelo professor",
   activity_loaded: () => "abriu a atividade",
   heartbeat: () => "",
@@ -354,6 +355,8 @@ $("launch-btn").addEventListener("click", async () => {
 /* ---------- sessão ao vivo ---------- */
 
 async function startLive(s) {
+  editingGroup = null;
+  $("group-editor").hidden = true;
   session = s;
   $("prep-desk").hidden = true;
   $("live").hidden = false;
@@ -897,8 +900,16 @@ function renderWorkGroups() {
     card.className = "work-group-card";
     const heading = document.createElement("h3"); heading.textContent = group.display_name;
     const detail = document.createElement("p");
-    detail.textContent = `${group.numbers?.evidence?.attempt || 0} tentativas conjuntas · ${levelNames[group.level] || "Passo a passo"} · ${group.active ? group.triage?.reason || "A trabalhar" : "Dispositivo libertado"}`;
+    detail.textContent = `${group.numbers?.evidence?.attempt || 0} tentativas conjuntas · ${levelNames[group.level] || "Passo a passo"} · ${group.active ? group.triage?.reason || "A trabalhar" : group.replaced_by ? "Composição anterior" : "Dispositivo libertado"}`;
     card.append(heading, detail);
+    if (group.active && !liveSessionState.closed) {
+      const edit = document.createElement('button'); edit.type = 'button'; edit.className = 'ghost';
+      edit.id = `edit-group-${group.id}`;
+      edit.textContent = 'Alterar participantes';
+      edit.setAttribute('aria-label', `Alterar participantes de ${group.display_name}`);
+      edit.onclick = () => openGroupEditor(group.id);
+      card.append(edit);
+    }
     for (const member of group.members || []) {
       const button = document.createElement("button"); button.type = "button";
       button.textContent = `Ver percurso de ${member.display_name}`;
@@ -908,3 +919,95 @@ function renderWorkGroups() {
     container.appendChild(card);
   }
 }
+
+let editingGroup = null;
+let savingGroup = false;
+
+async function openGroupEditor(groupId) {
+  if (!session || savingGroup) return;
+  const sessionId = session.id;
+  const response = await tfetch(`/api/sessions/${sessionId}`);
+  if (!response.ok) { $("group-edit-feedback").textContent = 'Não foi possível abrir os participantes.'; return; }
+  const current = await response.json();
+  if (session?.id !== sessionId) return;
+  const group = current.work_groups?.[groupId];
+  if (!group || !workGroups.get(groupId)?.active) return;
+  editingGroup = group;
+  $("group-editor-members").replaceChildren();
+  Object.entries(current.roster).forEach(([id, member]) => {
+    const label = document.createElement('label');
+    const input = document.createElement('input');
+    input.type = 'checkbox'; input.value = id; input.checked = group.participant_ids.includes(id);
+    input.disabled = member.taken && !input.checked;
+    input.dataset.unavailable = String(input.disabled);
+    input.addEventListener('change', updateGroupEditor);
+    label.append(input, document.createTextNode(member.display_name+(input.disabled ? ' · noutro dispositivo' : '')));
+    $("group-editor-members").append(label);
+  });
+  $("group-editor-title").textContent = `Alterar participantes de ${group.display_name}`;
+  $("group-editor-status").textContent = '';
+  $("group-editor").hidden = false;
+  updateGroupEditor();
+  $("group-editor-title").focus();
+  $("group-editor").scrollIntoView({block:'nearest'});
+}
+
+function selectedGroupMembers() {
+  return [...$("group-editor-members").querySelectorAll('input:checked')].map(input=>input.value);
+}
+
+function updateGroupEditor() {
+  const count = selectedGroupMembers().length;
+  $("group-editor-save").disabled = savingGroup || count < 2;
+  $("group-editor-summary").textContent = count < 2 ? 'Seleciona pelo menos dois participantes. Para trabalho individual, liberta o dispositivo e volta a entrar com um nome.' : `${count} participantes · ${count === 2 ? 'A pares' : 'Em grupo'}`;
+}
+
+$("group-editor-cancel").onclick = () => {
+  if (savingGroup) return;
+  $("group-editor").hidden = true;
+  document.getElementById(`edit-group-${editingGroup?.id}`)?.focus();
+  editingGroup = null;
+};
+
+$("group-editor-form").onsubmit = async event => {
+  event.preventDefault();
+  if (!session || !editingGroup || savingGroup) return;
+  const sessionId = session.id, groupId = editingGroup.id;
+  const participant_ids = selectedGroupMembers();
+  savingGroup = true;
+  $("group-editor-cancel").disabled = true;
+  $("group-editor-members").querySelectorAll('input').forEach(input => { input.disabled = true; });
+  $("group-editor-save").disabled = true;
+  $("group-editor-status").textContent = 'A guardar…';
+  try {
+    const response = await tfetch(`/api/sessions/${sessionId}/groups/${groupId}/participants`, {
+      method:'PATCH', headers:{'content-type':'application/json'},
+      body:JSON.stringify({participant_ids, mode:participant_ids.length === 2 ? 'pair' : 'group'}),
+    });
+    const data = await response.json();
+    if (session?.id !== sessionId || editingGroup?.id !== groupId) return;
+    if (!response.ok) throw new Error(data.detail || 'Não foi possível guardar os participantes.');
+    const group = data.work_group;
+    if (group.id !== groupId) {
+      const old = workGroups.get(groupId);
+      if (old) { old.active = false; old.replaced_by = group.id; }
+    }
+    workGroups.set(group.id, {...workGroups.get(group.id), ...group, active:true});
+    renderWorkGroups();
+    $("group-editor").hidden = true;
+    $("group-edit-feedback").textContent = 'Participantes alterados. O trabalho anterior mantém os seus autores.';
+    document.getElementById(`edit-group-${group.id}`)?.focus();
+    editingGroup = null;
+  } catch (error) {
+    if (session?.id === sessionId && editingGroup?.id === groupId) {
+      $("group-editor-status").textContent = error.message;
+      $("group-editor-members").querySelectorAll('input').forEach(input => {
+        input.disabled = input.dataset.unavailable === 'true';
+      });
+    }
+  } finally {
+    savingGroup = false;
+    $("group-editor-cancel").disabled = false;
+    updateGroupEditor();
+  }
+};

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PageCraft Studio — Aula ao vivo</title>
-<link rel="stylesheet" href="/studio.css?v=groups-44-2">
+<link rel="stylesheet" href="/studio.css?v=groups-45-1">
 </head>
 <body class="teacher-page">
 <a class="skip-link" href="#main-content">Saltar para o conteúdo</a>
@@ -134,7 +134,19 @@
       <section aria-labelledby="students-title">
         <section id="work-groups-section" hidden aria-labelledby="work-groups-title">
           <h2 id="work-groups-title">Trabalho conjunto</h2>
+          <p id="group-edit-feedback" role="status"></p>
           <div id="work-groups"></div>
+          <section id="group-editor" class="card" hidden aria-labelledby="group-editor-title">
+            <h2 id="group-editor-title" tabindex="-1">Alterar participantes</h2>
+            <form id="group-editor-form">
+              <p>O trabalho já guardado conserva os autores. Seleciona quem vai trabalhar a partir de agora.</p>
+              <fieldset><legend>Participantes neste computador</legend><div id="group-editor-members" class="group-editor-members"></div></fieldset>
+              <p id="group-editor-summary" aria-live="polite"></p>
+              <p id="group-editor-status" role="status"></p>
+              <p class="button-line"><button id="group-editor-save" type="submit">Guardar participantes</button>
+                <button id="group-editor-cancel" class="ghost" type="button">Cancelar</button></p>
+            </form>
+          </section>
         </section>
         <p class="eyebrow" id="students-title">Triagem de atenção</p>
         <div class="triage-board" id="students">
@@ -203,6 +215,6 @@
   </aside>
 </main>
 <script src="/teacher/common.js"></script>
-<script src="/teacher/class.js?v=groups-44-2"></script>
+<script src="/teacher/class.js?v=groups-45-1"></script>
 </body>
 </html>

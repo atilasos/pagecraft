@@ -114,6 +114,7 @@ def reduce_session(
         for event in records:
             if event.get("type") == "level_changed" and (event.get("payload") or {}).get("level") in {"support", "intermediate", "challenge"}:
                 group["level"] = event["payload"]["level"]
+        group["replaced_by"] = next((event["work_group_id"] for event in events if event.get("type") == "work_group_changed" and event["payload"]["previous_work_group_id"] == group_id), None)
         groups[group_id] = group
 
     participants: set[str] = set()
