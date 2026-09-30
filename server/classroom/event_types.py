@@ -155,6 +155,8 @@ SESSION_EVENT_TYPES = SessionEventRegistry(
             "session",
             payload={"display_name": "Nome apresentado pela criança nesta sessão."},
         ),
+        _event("work_group_joined", "session", payload={"display_name": "Participantes do trabalho conjunto."}),
+        _event("work_group_released", "teacher", payload={"reset_progress": "Libertação do dispositivo do grupo."}),
         _event(
             "activity_loaded",
             "activity",

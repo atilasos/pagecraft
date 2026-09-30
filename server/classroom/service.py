@@ -22,6 +22,7 @@ from ..events import EventHub, utcnow
 from ..storage import Storage
 from .errors import (
     InvalidPitItemError,
+    InvalidSessionEventError,
     SessionClosedError,
     SessionNotFoundError,
     StudentNotInRosterError,
@@ -334,20 +335,25 @@ class ClassroomService:
                     {
                         "student_id": student_id,
                         "display_name": entry["display_name"],
-                        "taken": bool(entry.get("token")),
+                        "taken": bool(entry.get("token") or entry.get("work_group_id")),
                     }
                     for student_id, entry in session["roster"].items()
                 ],
             }
         if role == "teacher":
-            projection = {key: value for key, value in session.items() if key != "roster"}
+            projection = {key: value for key, value in session.items() if key not in {"roster", "work_groups"}}
             projection["roster"] = {
                 student_id: {
                     key: value for key, value in entry.items() if key != "token"
                 }
-                | {"taken": bool(entry.get("token"))}
+                | {"taken": bool(entry.get("token") or entry.get("work_group_id"))}
                 for student_id, entry in session["roster"].items()
             }
+            if session.get("work_groups"):
+                projection["work_groups"] = {
+                    group_id: self.project_work_group(group)
+                    for group_id, group in session["work_groups"].items()
+                }
             return projection
         raise ValueError(f"papel desconhecido: {role}")
 
@@ -410,12 +416,60 @@ class ClassroomService:
 
     # ---- identidade do aluno ----
 
+    @staticmethod
+    def project_work_group(group: dict) -> dict:
+        return {key: group[key] for key in ("id", "participant_ids", "members", "display_name", "mode", "level")}
+
+    async def claim_work_group(self, session_id: str, participant_ids: list[str], mode: str, level: str) -> dict | None:
+        async with self._session_locks[session_id]:
+            session = await self._require_writable_unlocked(session_id)
+            if len(set(participant_ids)) != len(participant_ids) or not (
+                mode == "pair" and len(participant_ids) == 2
+                or mode == "group" and len(participant_ids) >= 3
+            ):
+                raise InvalidSessionEventError("Seleciona dois participantes para um par ou três ou mais para um grupo.")
+            if any(sid not in session["roster"] for sid in participant_ids):
+                raise StudentNotInRosterError("esse aluno não pertence à sessão")
+            if any(session["roster"][sid].get("token") or session["roster"][sid].get("work_group_id") for sid in participant_ids):
+                return None
+            group_id = uuid.uuid4().hex[:12]
+            members = [{"student_id": sid, "display_name": session["roster"][sid]["display_name"]} for sid in participant_ids]
+            group = {
+                "id": group_id, "participant_ids": participant_ids, "members": members,
+                "display_name": " + ".join(member["display_name"] for member in members),
+                "mode": mode, "level": level, "token": uuid.uuid4().hex,
+                "claimed_at": self.now(), "credential_expires_at": self._student_credential_expires_at(),
+            }
+            session.setdefault("work_groups", {})[group_id] = group
+            for sid in participant_ids:
+                session["roster"][sid]["work_group_id"] = group_id
+            await self.events_log(session_id).append({
+                "type": "work_group_joined", "work_group_id": group_id,
+                "participant_ids": participant_ids, "payload": self.project_work_group(group),
+            })
+            await self.storage.write_json(self._session_path(session_id), session)
+            return group
+
+    async def work_group_for_token(self, session_id: str, token: str, *, require_live: bool = True) -> str | None:
+        if not token:
+            return None
+        async with self._session_locks[session_id]:
+            session = await self._load_session_unlocked(session_id)
+            if not session or require_live and session.get("status") != "live":
+                return None
+            for group_id, group in session.get("work_groups", {}).items():
+                if not group.get("token") or self._now_as_datetime() >= datetime.fromisoformat(group["credential_expires_at"]):
+                    continue
+                if hmac.compare_digest(group["token"], token):
+                    return group_id
+        return None
+
     async def claim_identity(self, session_id: str, student_id: str) -> dict | None:
         """Aluno escolhe quem é. Devolve token; None se já reclamado/inválido."""
         async with self._session_locks[session_id]:
             session = await self._require_writable_unlocked(session_id, student_id)
             entry = session["roster"][student_id]
-            if entry.get("token"):
+            if entry.get("token") or entry.get("work_group_id"):
                 return None
             token = uuid.uuid4().hex
             claimed_at = self.now()

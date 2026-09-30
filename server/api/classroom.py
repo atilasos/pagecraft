@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+from typing import Literal
 
 from fastapi import APIRouter, HTTPException, Request, Response
 from fastapi.responses import StreamingResponse
@@ -49,6 +50,13 @@ class SessionRequest(BaseModel):
 
 class ClaimRequest(BaseModel):
     student_id: str
+
+
+class GroupClaimRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    participant_ids: list[str] = Field(min_length=2, max_length=40)
+    mode: Literal["pair", "group"]
+    level: Literal["support", "intermediate", "challenge"] = "intermediate"
 
 
 class ReleaseRequest(BaseModel):
@@ -204,6 +212,9 @@ async def whoami(session_id: str, request: Request):
     svc = _svc(request)
     student_id = request.state.access.student_id
     session = await svc.get_session(session_id)
+    if request.state.access.work_group_id:
+        group = session["work_groups"][request.state.access.work_group_id]
+        return {"student_id": None, "work_group": svc.project_work_group(group), "session": svc.project_session(session, role="student")}
     entry = session["roster"][student_id]
     return {
         "student_id": student_id,
@@ -237,6 +248,18 @@ async def claim(
         "student_id": result["student_id"],
         "display_name": result["display_name"],
     }
+
+
+@router.post("/sessions/{session_id}/groups/claim")
+@access_policy(RoutePolicy.PUBLIC)
+@rate_limited(RateLimitOperation.CLAIM)
+async def claim_group(session_id: str, body: GroupClaimRequest, request: Request, response: Response):
+    svc = _svc(request)
+    group = await _domain(svc.claim_work_group(session_id, body.participant_ids, body.mode, body.level))
+    if group is None:
+        raise HTTPException(409, "Um dos nomes já foi escolhido. Revê os participantes ou pede ajuda ao professor.")
+    issue_student_cookie(response, session_id, group["token"], group["claimed_at"], group["credential_expires_at"])
+    return {"work_group": svc.project_work_group(group)}
 
 
 @router.post("/sessions/{session_id}/release/{student_id}")
