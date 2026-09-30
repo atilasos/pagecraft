@@ -503,7 +503,10 @@ function createStudentTransport() {
     connect(request, sessionId);
   }
 
-  return { enqueue, flush, post, start, stop };
+  return {
+    enqueue, flush, post, start, stop,
+    pendingLevel: () => outbox.findLast(event => event.type === "level_changed")?.payload.level,
+  };
 }
 
 window.addEventListener("pagehide", () => studentTransport.stop());
@@ -663,6 +666,8 @@ function sendGroupPreferences() {
 
 function acceptGroupState(group) {
   if (!group) return;
+  const pendingLevel = studentTransport.pendingLevel();
+  if (pendingLevel && pendingLevel !== group.level) return;
   state.workGroup.level = group.level;
   $("group-level").value = group.level;
 }

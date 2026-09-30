@@ -172,3 +172,43 @@ def test_teacher_snapshot_renders_roster_and_shared_authorship(page, studio_orig
         expect(pupil.locator('#group-level')).to_have_value('challenge')
     finally:
         context.close()
+
+
+def test_pending_group_level_is_not_replaced_by_an_older_live_projection(page, studio_origin):
+    from playwright.sync_api import expect
+    with httpx.Client(base_url=studio_origin) as teacher:
+        teacher.get('/api/teacher-bootstrap')
+        classroom = teacher.post('/api/classes', json={
+            'name':'Nível pendente', 'year':2, 'students':['Ana','Bruno']
+        }).json()
+        session = teacher.post('/api/sessions', json={
+            'class_id':classroom['id'], 'activity_slug':'fraction-test'
+        }).json()
+        path = f"/api/sessions/{session['id']}"
+        page.goto(studio_origin + '/student/')
+        page.get_by_label('Código da aula').fill(session['join_code'])
+        page.get_by_role('button', name='Entrar', exact=True).click()
+        page.get_by_role('button', name='A pares', exact=True).click()
+        page.get_by_role('button', name='Ana', exact=True).click()
+        page.get_by_role('button', name='Bruno', exact=True).click()
+        page.get_by_label('Nível de diferenciação do grupo').select_option('support')
+        page.get_by_role('button', name='Começar', exact=True).click()
+        expect(page.frame_locator('#activity-frame').locator('#level')).to_have_value('support')
+        # The real stream remains connected while event delivery is unavailable.
+        page.route('**/events', lambda route: route.fulfill(status=503, json={}))
+        page.evaluate("""path => {
+          window.levelProjections = [];
+          const stream = new EventSource(path + '/stream');
+          stream.addEventListener('work_group_state_changed', event => window.levelProjections.push(JSON.parse(event.data)));
+        }""", path)
+        page.get_by_label('Nível do grupo', exact=True).select_option('challenge')
+        page.request.post(studio_origin + path + '/events', data={
+            'events':[{'event_id':'level-projection-probe','type':'help_needed','payload':{}}]
+        })
+        page.wait_for_function("window.levelProjections.some(delta => delta.group.level === 'support')")
+        expect(page.locator('#group-level')).to_have_value('challenge')
+        expect(page.frame_locator('#activity-frame').locator('#level')).to_have_value('challenge')
+        page.unroute('**/events')
+        with page.expect_response(lambda r: r.url.endswith('/events') and r.ok, timeout=6000):
+            page.evaluate("dispatchEvent(new Event('online'))")
+        assert page.request.get(studio_origin + path + '/me').json()['work_group']['level'] == 'challenge'
