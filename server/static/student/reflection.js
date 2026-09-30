@@ -164,7 +164,9 @@ const groupReflection = (() => {
         const error = await response.json();
         throw new Error(error.detail || 'Não foi possível guardar. Tenta novamente.');
       }
-      saved[studentId] = await response.json();
+      const record = await response.json();
+      if (version !== generation) return;
+      saved[studentId] = record;
       delete drafts[studentId]; persist();
       current = null; element('reflection-form').hidden = true;
       status('Reflexão guardada. Agora pode responder outro colega.');

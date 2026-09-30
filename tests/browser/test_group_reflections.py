@@ -53,3 +53,37 @@ def test_children_take_turns_and_teacher_reads_individual_reflections(page, stud
         expect(teacher_page.locator('#drawer-events')).to_contain_text('Consegui com autonomia')
         expect(teacher_page.locator('#drawer-events')).to_contain_text('Comparei os blocos.')
         teacher_page.close()
+
+
+def test_lost_save_response_retries_once_without_duplicating_reflection(page, studio_origin):
+    from playwright.sync_api import expect
+    with httpx.Client(base_url=studio_origin) as teacher:
+        teacher.get('/api/teacher-bootstrap')
+        cls = teacher.post('/api/classes', json={'name':'Retoma', 'year':2, 'students':['Ana','Bruno']}).json()
+        session = teacher.post('/api/sessions', json={'class_id':cls['id'], 'activity_slug':'fraction-test'}).json()
+        ids = list(session['roster']); path = '/api/sessions/'+session['id']
+        page.goto(studio_origin+'/student/')
+        page.get_by_label('Código da aula').fill(session['join_code'])
+        page.get_by_role('button', name='Entrar', exact=True).click()
+        page.get_by_role('button', name='A pares', exact=True).click()
+        for name in ['Ana','Bruno']:
+            page.get_by_role('button', name=name, exact=True).click()
+        page.get_by_role('button', name='Começar', exact=True).click()
+        page.get_by_role('button', name='A minha reflexão', exact=True).click()
+        page.get_by_role('button', name='Ana · Por responder', exact=True).click()
+        page.get_by_label('O que te ajudou?').fill('Experimentei com blocos.')
+        # The server saves normally; only its response is lost at the network boundary.
+        def lose_response(route):
+            route.fetch()
+            route.abort()
+        page.route('**/groups/me/reflections', lose_response, times=1)
+        page.get_by_role('button', name='Guardar a minha reflexão', exact=True).click()
+        expect(page.locator('#reflection-status')).to_contain_text('Não foi possível guardar')
+        page.reload()
+        page.get_by_role('button', name='A minha reflexão', exact=True).click()
+        page.get_by_role('button', name='Ana · Por guardar', exact=True).click()
+        expect(page.get_by_label('O que te ajudou?')).to_have_value('Experimentei com blocos.')
+        page.get_by_role('button', name='Guardar a minha reflexão', exact=True).click()
+        expect(page.get_by_role('button', name='Ana · Guardada', exact=True)).to_be_visible()
+        history = teacher.get(path+f'/students/{ids[0]}/history').json()['events']
+        assert len([e for e in history if e['type']=='individual_reflection']) == 1
