@@ -145,3 +145,44 @@ async def test_only_the_authorized_device_gets_group_content_with_level_adapter(
         assert 'work_group_preferences' in response.text
         assert "connect-src 'none'" in response.headers['content-security-policy']
         assert (await anonymous.get(path+'/content')).status_code == 401
+
+
+@pytest.mark.parametrize('mode, indices, level, status', [
+    ('pair', [0, 1, 2], 'support', 400),
+    ('group', [0, 1], 'support', 400),
+    ('group', [0, 1, 1], 'support', 400),
+    ('pair', [0, None], 'support', 404),
+    ('pair', [0, 1], 'unknown', 422),
+    ('unknown', [0, 1], 'support', 422),
+])
+async def test_invalid_group_claim_does_not_reserve_any_names(classroom, mode, indices, level, status):
+    transport, teacher, cls, session = classroom
+    ids = list(session['roster'])
+    response = await teacher.post(f"/api/sessions/{session['id']}/groups/claim", json={
+        'participant_ids':[ids[i] if i is not None else 'outside-roster' for i in indices],
+        'mode':mode, 'level':level,
+    })
+    assert response.status_code == status, response.text
+    roster = (await teacher.get('/api/join/' + session['join_code'])).json()['roster']
+    assert not any(student['taken'] for student in roster)
+
+
+async def test_three_members_enter_as_a_group_and_closed_session_rejects_new_work(classroom):
+    transport, teacher, cls, session = classroom
+    ids = list(session['roster'])
+    path = f"/api/sessions/{session['id']}"
+    async with httpx.AsyncClient(transport=transport, base_url='http://test') as device:
+        response = await device.post(path + '/groups/claim', json={
+            'participant_ids':ids[:3], 'mode':'group', 'level':'challenge'
+        })
+        assert response.status_code == 200
+        assert response.json()['work_group']['display_name'] == 'Ana + Bruno + Carla'
+        roster = (await teacher.get('/api/join/' + session['join_code'])).json()['roster']
+        assert [student['taken'] for student in roster] == [True, True, True, False]
+        await teacher.post(path + '/close')
+        response = await device.post(path + '/events', json={'events':[
+            {'event_id':'too-late','type':'attempt','payload':{'correct':True}}
+        ]})
+        assert response.status_code == 409
+        history = (await device.get(path + '/groups/me/history')).json()['events']
+        assert not any(event['type'] == 'attempt' for event in history)
