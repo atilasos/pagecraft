@@ -19,7 +19,7 @@ A revisão de Frações está concluída como rascunho para revisão do professo
 
 ## Preparação da implementação
 
-As decisões pedagógicas desta ronda estão confirmadas. A [especificação](trabalho-em-grupo-spec.md) e as [etapas](trabalho-em-grupo-etapas.md) consolidam o percurso. O professor aprovou a divisão em três entregas e a cobertura pelos percursos reais de aluno e professor. Segue-se a publicação dos tickets com as dependências aprovadas.
+As decisões pedagógicas desta ronda estão confirmadas. A [especificação](trabalho-em-grupo-spec.md) e as [etapas](trabalho-em-grupo-etapas.md) consolidam o percurso. O professor aprovou a divisão em três entregas e a cobertura pelos percursos reais de aluno e professor. Publicados no GitHub: [especificação #42](https://github.com/atilasos/pagecraft/issues/42) e tickets [#43](https://github.com/atilasos/pagecraft/issues/43), [#44](https://github.com/atilasos/pagecraft/issues/44) e [#45](https://github.com/atilasos/pagecraft/issues/45). Todos têm a etiqueta `ready-for-agent`, com relações de sub-issues e dependências nativas verificadas. #43 está disponível para implementação.
 
 ## Comportamento atual verificado
 

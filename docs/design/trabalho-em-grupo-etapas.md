@@ -1,8 +1,10 @@
 # Etapas de trabalho em grupo
 
-Estado: divisão e cobertura aprovadas pelo professor em 30/09/2026. Tickets em preparação, sem implementação funcional. A [especificação](trabalho-em-grupo-spec.md) consolida as decisões confirmadas. Esta divisão é própria do trabalho em grupo e abrange entregas completas que o professor pode experimentar.
+Estado: divisão e cobertura aprovadas pelo professor em 30/09/2026. Publicados os tickets [#43](https://github.com/atilasos/pagecraft/issues/43), [#44](https://github.com/atilasos/pagecraft/issues/44) e [#45](https://github.com/atilasos/pagecraft/issues/45), associados à [especificação #42](https://github.com/atilasos/pagecraft/issues/42). Sem implementação funcional. As dependências nativas foram verificadas: #44 depende de #43; #45 depende de #43 e #44. O primeiro ticket disponível é #43. A [especificação](trabalho-em-grupo-spec.md) consolida as decisões confirmadas. Esta divisão é própria do trabalho em grupo e abrange entregas completas que o professor pode experimentar.
 
 ## 1. Entrar e trabalhar em conjunto
+
+[Ticket #43](https://github.com/atilasos/pagecraft/issues/43). `ready-for-agent`.
 
 **Bloqueado por:** nenhum.
 
@@ -19,6 +21,8 @@ Estado: divisão e cobertura aprovadas pelo professor em 30/09/2026. Tickets em 
 
 ## 2. Fazer e consultar a reflexão individual
 
+[Ticket #44](https://github.com/atilasos/pagecraft/issues/44). `ready-for-agent`, bloqueado por #43.
+
 **Bloqueado por:** etapa 1, que estabelece a autoria conjunta e os participantes autorizados no dispositivo.
 
 **Entrega:** os membros do grupo fazem a autoavaliação à vez no mesmo computador. O professor consulta a produção comum e a reflexão individual de cada criança.
@@ -32,6 +36,8 @@ Estado: divisão e cobertura aprovadas pelo professor em 30/09/2026. Tickets em 
 - [ ] Testes com reflexões diferentes, omissão, revisão e repetição do envio.
 
 ## 3. Corrigir participantes durante a aula e verificar o percurso completo
+
+[Ticket #45](https://github.com/atilasos/pagecraft/issues/45). `ready-for-agent`, bloqueado por #43 e #44.
 
 **Bloqueado por:** etapas 1 e 2, pois alterações de composição precisam de preservar tanto respostas como reflexões.
 

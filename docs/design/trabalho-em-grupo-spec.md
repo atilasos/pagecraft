@@ -1,6 +1,6 @@
 # Trabalho conjunto e reflexão individual nas sessões de aula
 
-Estado: regras pedagógicas, cobertura e etapas confirmadas pelo professor em 30/09/2026. Esta especificação dá continuidade ao pedido de identificar todos os participantes de um computador partilhado.
+Estado: regras pedagógicas, cobertura e etapas confirmadas pelo professor em 30/09/2026. Esta especificação dá continuidade ao pedido de identificar todos os participantes de um computador partilhado. Publicada como [especificação #42](https://github.com/atilasos/pagecraft/issues/42).
 
 ## Problema
 
