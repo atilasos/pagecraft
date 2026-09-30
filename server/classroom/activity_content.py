@@ -1,5 +1,6 @@
 """Read the session activity, including a registered draft, without publishing it."""
 import re
+import json
 
 from .errors import SessionNotFoundError
 
@@ -50,7 +51,20 @@ def with_group_level_adapter(html: str) -> str:
 
 async def session_reflection_criteria(app, slug: str) -> dict:
     registered = next((a for a in (await app.state.learning.activities()).values() if a['slug'] == slug), None)
-    return {
-        'criteria': registered['criteria'] if registered else [],
-        'requires_completion': bool(registered and registered.get('requires_completion')),
-    }
+    if registered:
+        return {'criteria': registered['criteria']}
+    # Older published activities can declare child-facing criteria in their docspec.
+    # Objectives and teacher assessment instructions are not self-assessment criteria.
+    path = (await session_activity_path(app, slug)).parent / 'docspec.json'
+    if not path.is_file():
+        return {'criteria': []}
+    from ..api.learning import Criterion
+    from pydantic import ValidationError
+    try:
+        declared = json.loads(path.read_text('utf-8')).get('criteria', [])
+        criteria = [Criterion.model_validate(criterion).model_dump() for criterion in declared]
+        if len(criteria) > 8 or len({c['id'] for c in criteria}) != len(criteria):
+            return {'criteria': []}
+        return {'criteria': criteria}
+    except (OSError, ValueError, TypeError, ValidationError):
+        return {'criteria': []}

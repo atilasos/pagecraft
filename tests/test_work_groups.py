@@ -278,3 +278,21 @@ async def test_reflections_reject_foreign_members_and_legacy_joint_attribution(c
         stream = (await other.get(path+'/stream')).text
         assert 'Não sou deste grupo.' not in stream
         assert ids[0] not in stream
+
+
+async def test_published_activity_uses_its_declared_reflection_criteria(classroom):
+    transport, teacher, cls, initial = classroom
+    slug = 'leitura-al-el-il-ol-ul-minecraft-2ano-45min'
+    session = (await teacher.post('/api/sessions', json={'class_id':cls['id'], 'activity_slug':slug})).json()
+    ids = list(session['roster']); path = f"/api/sessions/{session['id']}"
+    async with httpx.AsyncClient(transport=transport, base_url='http://test') as pair:
+        await pair.post(path+'/groups/claim', json={'participant_ids':ids[:2], 'mode':'pair'})
+        response = await pair.get(path+'/groups/me/reflections')
+        assert response.status_code == 200
+        assert response.json()['criteria'][0] == {'id':'localizar','pt':'Encontro al, el, il, ol ou ul nas palavras.','en':''}
+        saved = await pair.post(path+'/groups/me/reflections', json={
+            'student_id':ids[0], 'event_id':'reading-reflection', 'expected_revision':0,
+            'answers':{'localizar':'practising'},
+        })
+        assert saved.status_code == 200
+        assert saved.json()['payload']['criteria'] == response.json()['criteria']
