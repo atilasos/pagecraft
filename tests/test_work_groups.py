@@ -377,3 +377,22 @@ async def test_group_changes_are_teacher_only_atomic_and_release_current_members
         assert (await solo.get(path+'/me')).status_code == 200
         history=(await teacher.get(path+f'/students/{ids[3]}/history')).json()['events']
         assert any(e['type']=='work_group_changed' and e['work_group_id']==new['id'] for e in history)
+
+
+async def test_resuming_changed_group_keeps_its_original_work_after_restart(classroom):
+    transport, teacher, cls, session=classroom
+    ids=list(session['roster']);path=f"/api/sessions/{session['id']}"
+    async with httpx.AsyncClient(transport=transport,base_url='http://test') as pair:
+        old=(await pair.post(path+'/groups/claim',json={'participant_ids':ids[:2],'mode':'pair'})).json()['work_group']
+        await pair.post(path+'/events',json={'events':[{'event_id':'original-work','type':'discovery','payload':{'message':'Descobrimos partes iguais.'}}]})
+        new=(await teacher.patch(path+f"/groups/{old['id']}/participants",json={'participant_ids':[ids[0],ids[2]],'mode':'pair'})).json()['work_group']
+        app=create_app()
+        async with app.router.lifespan_context(app):
+            restarted=httpx.ASGITransport(app=app,raise_app_exceptions=False)
+            async with httpx.AsyncClient(transport=restarted,base_url='http://test',cookies=pair.cookies) as resumed:
+                assert (await resumed.get(path+'/me')).json()['work_group']==new
+                history=(await resumed.get(path+'/groups/me/history')).json()['events']
+                original=[e for e in history if e.get('event_id')=='original-work']
+                assert len(original)==1
+                assert original[0]['participant_ids']==ids[:2]
+                assert original[0]['work_group_name']=='Ana + Bruno'

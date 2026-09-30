@@ -480,7 +480,15 @@ async def work_group_history(session_id: str, request: Request):
         raise HTTPException(403, "este dispositivo não representa um grupo")
     visible = {entry.name for entry in SESSION_EVENT_TYPES.evidence()} | {entry.name for entry in SESSION_EVENT_TYPES.visible_to("student")}
     records = await _svc(request).events_log(session_id).replay()
-    return {"work_group_id": group_id, "events": [record for record in records if record.get("work_group_id") == group_id and record.get("type") in visible]}
+    session = await _svc(request).get_session(session_id)
+    groups = session["work_groups"]
+    device_id = groups[group_id]["device_id"]
+    history = []
+    for record in records:
+        group = groups.get(record.get("work_group_id"))
+        if group and group["device_id"] == device_id and record.get("type") in visible:
+            history.append({**record, "work_group_name": group["display_name"]})
+    return {"work_group_id": group_id, "events": history}
 
 
 @router.get("/sessions/{session_id}/stream")
