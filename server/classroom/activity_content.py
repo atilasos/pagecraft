@@ -46,3 +46,11 @@ GROUP_LEVEL_ADAPTER = """<script data-pagecraft-group-level>
 def with_group_level_adapter(html: str) -> str:
     end = html.lower().rfind('</body>')
     return html[:end] + GROUP_LEVEL_ADAPTER + html[end:] if end >= 0 else html + GROUP_LEVEL_ADAPTER
+
+
+async def session_reflection_criteria(app, slug: str) -> dict:
+    registered = next((a for a in (await app.state.learning.activities()).values() if a['slug'] == slug), None)
+    return {
+        'criteria': registered['criteria'] if registered else [],
+        'requires_completion': bool(registered and registered.get('requires_completion')),
+    }

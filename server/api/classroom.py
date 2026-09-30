@@ -60,6 +60,17 @@ class GroupClaimRequest(BaseModel):
     level: Literal["support", "intermediate", "challenge"] = "intermediate"
 
 
+class GroupReflectionRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    student_id: str = Field(min_length=1, max_length=80)
+    event_id: str = Field(min_length=1, max_length=80)
+    expected_revision: int = Field(ge=0)
+    answers: dict[str, Literal["alone", "help", "practising", "skip"]] = Field(default_factory=dict, max_length=8)
+    strategy: str = Field(default="", max_length=1500)
+    next_step: str = Field(default="", max_length=1500)
+    skipped: bool = False
+
+
 class ReleaseRequest(BaseModel):
     reset_progress: bool = False
 
@@ -276,6 +287,38 @@ async def claim_group(session_id: str, body: GroupClaimRequest, request: Request
         raise HTTPException(409, "Um dos nomes já foi escolhido. Revê os participantes ou pede ajuda ao professor.")
     issue_student_cookie(response, session_id, group["token"], group["claimed_at"], group["credential_expires_at"])
     return {"work_group": svc.project_work_group(group)}
+
+
+@router.get("/sessions/{session_id}/groups/me/reflections")
+@access_policy(RoutePolicy.STUDENT)
+async def group_reflections(session_id: str, request: Request):
+    from ..classroom.activity_content import session_reflection_criteria
+    from ..classroom.reflections import latest_reflections
+    group_id = request.state.access.work_group_id
+    if group_id is None:
+        raise HTTPException(403, "Este dispositivo não representa um grupo.")
+    svc = _svc(request)
+    session = await svc.get_session(session_id)
+    group = session["work_groups"][group_id]
+    reflections = {
+        record["student_id"]: record
+        for record in latest_reflections(await svc.events_log(session_id).replay())
+        if record["payload"]["source_work_group_id"] == group_id
+        and record["student_id"] in group["participant_ids"]
+    }
+    return {**await session_reflection_criteria(request.app, session["activity_slug"]), "reflections": reflections}
+
+
+@router.post("/sessions/{session_id}/groups/me/reflections")
+@access_policy(RoutePolicy.STUDENT)
+async def save_group_reflection(session_id: str, body: GroupReflectionRequest, request: Request):
+    from ..classroom.activity_content import session_reflection_criteria
+    group_id = request.state.access.work_group_id
+    if group_id is None:
+        raise HTTPException(403, "Este dispositivo não representa um grupo.")
+    session = await _svc(request).get_session(session_id)
+    criteria = await session_reflection_criteria(request.app, session["activity_slug"])
+    return await _domain(_svc(request).save_group_reflection(session_id, group_id, body.model_dump(), criteria["criteria"]))
 
 
 @router.post("/sessions/{session_id}/release/{student_id}")

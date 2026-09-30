@@ -195,6 +195,20 @@ SESSION_EVENT_TYPES = SessionEventRegistry(
             },
         ),
         _event(
+            "individual_reflection",
+            "student",
+            student_visible=True,
+            payload={
+                "source_work_group_id": "Grupo em que a criança fez a reflexão individual.",
+                "answers": "Autoavaliação facultativa nos critérios conhecidos da atividade.",
+                "criteria": "Critérios apresentados à criança nesta reflexão.",
+                "strategy": "Estratégia descrita pela criança.",
+                "next_step": "Próximo passo proposto pela criança.",
+                "skipped": "A criança preferiu não responder.",
+                "revision": "Versão da reflexão individual guardada.",
+            },
+        ),
+        _event(
             "feedback_request",
             "activity",
             evidence=True,

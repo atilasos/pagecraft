@@ -21,6 +21,7 @@ from ..config import Config
 from ..events import EventHub, utcnow
 from ..storage import Storage
 from .errors import (
+    ClassroomError,
     InvalidPitItemError,
     InvalidSessionEventError,
     SessionClosedError,
@@ -464,6 +465,42 @@ class ClassroomService:
             })
             await self.storage.write_json(self._session_path(session_id), session)
             return group
+
+    async def save_group_reflection(self, session_id: str, group_id: str, data: dict, criteria: list[dict]) -> dict:
+        async with self._session_locks[session_id]:
+            session = await self._require_writable_unlocked(session_id)
+            group = session.get("work_groups", {}).get(group_id)
+            if not group or not group.get("token") or data["student_id"] not in group["participant_ids"]:
+                raise StudentNotInRosterError("Essa criança não pertence ao grupo deste computador.")
+            records = await self.events_log(session_id).replay()
+            voice = {key: data[key] for key in ("answers", "strategy", "next_step", "skipped")}
+            voice["source_work_group_id"] = group_id
+            voice["revision"] = data["expected_revision"] + 1
+            previous = 0
+            for record in records:
+                if record.get("event_id") == data["event_id"]:
+                    if (record.get("type") == "individual_reflection"
+                        and record.get("student_id") == data["student_id"]
+                        and all(record["payload"].get(key) == value for key, value in voice.items())):
+                        return record
+                    raise ClassroomError("Este envio já foi usado para outra resposta.")
+                if (record.get("type") == "individual_reflection"
+                    and record.get("student_id") == data["student_id"]
+                    and record["payload"]["source_work_group_id"] == group_id):
+                    previous = record["payload"]["revision"]
+            if previous != data["expected_revision"]:
+                raise ClassroomError("Há uma reflexão mais recente. Volta a abri-la antes de guardar.")
+            if set(data["answers"]) - {c["id"] for c in criteria}:
+                raise InvalidSessionEventError("Responde apenas aos critérios desta atividade.")
+            if data["skipped"] and (data["answers"] or data["strategy"] or data["next_step"]):
+                raise InvalidSessionEventError("Uma reflexão omitida não inclui respostas.")
+            voice["criteria"] = criteria
+            record = await self.events_log(session_id).append({
+                "event_id": data["event_id"], "type": "individual_reflection",
+                "student_id": data["student_id"], "payload": voice,
+            })
+            (await self._seen(session_id)).add(data["event_id"])
+            return record
 
     async def work_group_for_token(self, session_id: str, token: str, *, require_live: bool = True) -> str | None:
         if not token:

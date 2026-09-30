@@ -186,3 +186,34 @@ async def test_three_members_enter_as_a_group_and_closed_session_rejects_new_wor
         assert response.status_code == 409
         history = (await device.get(path + '/groups/me/history')).json()['events']
         assert not any(event['type'] == 'attempt' for event in history)
+
+
+async def test_group_member_reflection_has_individual_authorship(classroom):
+    transport, teacher, cls, session = classroom
+    ids = list(session['roster'])
+    path = f"/api/sessions/{session['id']}"
+    registered = await teacher.post('/api/learning/activities', json={
+        'slug': 'fracoes-2-minecraft', 'title': 'Frações', 'year': 2, 'duration': 45,
+        'criteria': [{'id': 'iguais', 'pt': 'Reconheço partes iguais.'}],
+    })
+    assert registered.status_code == 201
+    async with httpx.AsyncClient(transport=transport, base_url='http://test') as pair:
+        group = (await pair.post(path+'/groups/claim', json={'participant_ids':ids[:2], 'mode':'pair'})).json()['work_group']
+        available = await pair.get(path+'/groups/me/reflections')
+        assert available.status_code == 200, available.text
+        assert available.json()['criteria'] == [{'id':'iguais', 'pt':'Reconheço partes iguais.', 'en':''}]
+        response = await pair.post(path+'/groups/me/reflections', json={
+            'student_id':ids[0], 'event_id':'ana-reflection', 'expected_revision':0,
+            'answers':{'iguais':'help'}, 'strategy':'Comparei os blocos.',
+        })
+        assert response.status_code == 200, response.text
+        saved = (await pair.get(path+'/groups/me/reflections')).json()['reflections'][ids[0]]
+        assert saved['student_id'] == ids[0]
+        assert saved['payload']['answers'] == {'iguais':'help'}
+        assert saved['payload']['source_work_group_id'] == group['id']
+        history = (await teacher.get(path+f'/students/{ids[0]}/history')).json()['events']
+        voice = [e for e in history if e['type']=='individual_reflection']
+        assert len(voice) == 1
+        assert not voice[0].get('work_group_id')
+        peer = (await teacher.get(path+f'/students/{ids[1]}/history')).json()['events']
+        assert not any(e['type']=='individual_reflection' for e in peer)
