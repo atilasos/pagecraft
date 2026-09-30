@@ -7,7 +7,7 @@ import json
 from typing import Literal
 
 from fastapi import APIRouter, HTTPException, Request, Response
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, HTMLResponse
 from pydantic import BaseModel, ConfigDict, Field
 
 from ..access import (
@@ -249,6 +249,21 @@ async def claim(
         "student_id": result["student_id"],
         "display_name": result["display_name"],
     }
+
+
+@router.get("/sessions/{session_id}/content")
+@access_policy(RoutePolicy.STUDENT)
+async def student_activity_content(session_id: str, request: Request):
+    from ..classroom.activity_content import session_activity_path, with_group_level_adapter
+    from .learning import ACTIVITY_CONTENT_HEADERS
+    session = await _svc(request).get_session(session_id)
+    if session is None:
+        raise HTTPException(404, "sessão não encontrada")
+    path = await _domain(session_activity_path(request.app, session["activity_slug"]))
+    html = path.read_text("utf-8")
+    if request.state.access.work_group_id:
+        html = with_group_level_adapter(html)
+    return HTMLResponse(html, headers=ACTIVITY_CONTENT_HEADERS)
 
 
 @router.post("/sessions/{session_id}/groups/claim")

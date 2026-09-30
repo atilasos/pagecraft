@@ -133,3 +133,15 @@ async def test_group_stream_contains_its_work_without_other_groups(classroom):
         teacher_data=json.loads(next(line[6:] for line in teacher_response.text.splitlines() if line.startswith('data: ')))
         assert len(teacher_data['groups']) == 2
         assert teacher_data['numbers']['evidence']['attempt'] == 1
+
+
+async def test_only_the_authorized_device_gets_group_content_with_level_adapter(classroom):
+    transport, teacher, cls, session=classroom
+    ids=list(session['roster']);path=f"/api/sessions/{session['id']}"
+    async with httpx.AsyncClient(transport=transport,base_url='http://test') as pair, httpx.AsyncClient(transport=transport,base_url='http://test') as anonymous:
+        await pair.post(path+'/groups/claim',json={'participant_ids':ids[:2],'mode':'pair'})
+        response=await pair.get(path+'/content')
+        assert response.status_code == 200
+        assert 'work_group_preferences' in response.text
+        assert "connect-src 'none'" in response.headers['content-security-policy']
+        assert (await anonymous.get(path+'/content')).status_code == 401
