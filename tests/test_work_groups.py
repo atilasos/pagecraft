@@ -296,3 +296,31 @@ async def test_published_activity_uses_its_declared_reflection_criteria(classroo
         })
         assert saved.status_code == 200
         assert saved.json()['payload']['criteria'] == response.json()['criteria']
+
+
+async def test_teacher_changes_group_without_reattributing_previous_work(classroom):
+    transport, teacher, cls, session = classroom
+    ids = list(session['roster']); path = f"/api/sessions/{session['id']}"
+    async with httpx.AsyncClient(transport=transport, base_url='http://test') as pair:
+        old = (await pair.post(path+'/groups/claim', json={'participant_ids':ids[:2], 'mode':'pair'})).json()['work_group']
+        await pair.post(path+'/events',json={'events':[{'event_id':'before-change','type':'attempt','payload':{'correct':True}}]})
+        await pair.post(path+'/groups/me/reflections',json={'student_id':ids[1],'event_id':'bruno-voice','expected_revision':0,'strategy':'Trabalhei com a Ana.'})
+        response = await teacher.patch(path+f"/groups/{old['id']}/participants",json={'participant_ids':[ids[0],ids[2]],'mode':'pair'})
+        assert response.status_code == 200, response.text
+        new = response.json()['work_group']
+        assert new['id'] != old['id']
+        assert new['device_id'] == old['device_id']
+        assert new['composition_version'] == 2
+        assert (await pair.get(path+'/me')).json()['work_group'] == new
+        await pair.post(path+'/events',json={'events':[{'event_id':'after-change','type':'attempt','composition_version':2,'payload':{'correct':False}}]})
+        bruno = (await teacher.get(path+f'/students/{ids[1]}/history')).json()['events']
+        carla = (await teacher.get(path+f'/students/{ids[2]}/history')).json()['events']
+        assert [e['event_id'] for e in bruno if e['type']=='attempt'] == ['before-change']
+        assert [e['event_id'] for e in carla if e['type']=='attempt'] == ['after-change']
+        assert any(e['type']=='individual_reflection' and e['payload']['source_work_group_id']==old['id'] for e in bruno)
+        assert not any(e['type']=='individual_reflection' for e in carla)
+        available = (await teacher.get('/api/join/'+session['join_code'])).json()['roster']
+        assert [r['taken'] for r in available] == [True,False,True,False]
+        report = (await teacher.get(f"/api/classes/{cls['id']}/report")).json()
+        assert sorted((g['display_name'],g['attempt']) for g in report['groups']) == [('Ana + Bruno',1),('Ana + Carla',1)]
+        assert all(r['correct']==0 for r in report['students'])

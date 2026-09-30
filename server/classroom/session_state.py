@@ -100,17 +100,17 @@ def reduce_session(
     # Reduce the joint production once; its counts never become individual results.
     for group_id in sorted(group_ids):
         records = [event for event in events if event.get("work_group_id") == group_id]
-        joined = next((event for event in records if event.get("type") == "work_group_joined"), None)
+        joined = next((event for event in records if event.get("type") in {"work_group_joined", "work_group_changed"}), None)
         if joined is None:
             continue
         description = joined["payload"]
         projected = [
             {key: value for key, value in event.items() if key not in {"work_group_id", "participant_ids"}}
-            | {"student_id": group_id, "type": "joined" if event.get("type") == "work_group_joined" else "identity_released" if event.get("type") == "work_group_released" else event.get("type")}
+            | {"student_id": group_id, "type": "joined" if event.get("type") in {"work_group_joined", "work_group_changed"} else "identity_released" if event.get("type") == "work_group_released" else event.get("type")}
             for event in records
         ]
         group = reduce_session(projected, now=now, roster={group_id: {"display_name": description["display_name"]}}, started_at=started_at)["students"][group_id]
-        group.update({"id": group_id, "participant_ids": joined["participant_ids"], "members": description["members"], "level": description["level"], "active": not any(e.get("type") == "work_group_released" for e in records)})
+        group.update({"id": group_id, "participant_ids": joined["participant_ids"], "members": description["members"], "level": description["level"], "active": not any(e.get("type") == "work_group_released" for e in records) and not any(e.get("type") == "work_group_changed" and e["payload"]["previous_work_group_id"] == group_id for e in events), "device_id": description.get("device_id", group_id), "composition_version": description.get("composition_version", 1)})
         for event in records:
             if event.get("type") == "level_changed" and (event.get("payload") or {}).get("level") in {"support", "intermediate", "challenge"}:
                 group["level"] = event["payload"]["level"]
@@ -119,7 +119,7 @@ def reduce_session(
     participants: set[str] = set()
 
     for event in events:
-        if event.get("type") == "work_group_joined":
+        if event.get("type") in {"work_group_joined", "work_group_changed"}:
             for sid in event.get("participant_ids", []):
                 if sid in students:
                     students[sid]["participated"] = True

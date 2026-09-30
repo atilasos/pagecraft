@@ -233,6 +233,25 @@ class ClassroomService:
             session["pit_items"] = expected_pit_items
             changed = True
 
+        for group in session.get("work_groups", {}).values():
+            group.setdefault("device_id", group["id"])
+            group.setdefault("composition_version", 1)
+        for event in events:
+            if event.get("type") != "work_group_changed":
+                continue
+            public = event["payload"]
+            old = session["work_groups"][public["previous_work_group_id"]]
+            if public["id"] not in session["work_groups"]:
+                new = {**old, **{key:value for key,value in public.items() if key != "previous_work_group_id"}}
+                session["work_groups"][new["id"]] = new
+                old["token"] = None
+                for sid in old["participant_ids"]:
+                    if session["roster"][sid].get("work_group_id") == old["id"]:
+                        session["roster"][sid].pop("work_group_id", None)
+                for sid in new["participant_ids"]:
+                    session["roster"][sid]["work_group_id"] = new["id"]
+                changed = True
+
         for event in events:
             group = session.get("work_groups", {}).get(event.get("work_group_id"))
             if not group:
@@ -434,7 +453,7 @@ class ClassroomService:
 
     @staticmethod
     def project_work_group(group: dict) -> dict:
-        return {key: group[key] for key in ("id", "participant_ids", "members", "display_name", "mode", "level")}
+        return {key: group[key] for key in ("id", "device_id", "composition_version", "participant_ids", "members", "display_name", "mode", "level")}
 
     async def claim_work_group(self, session_id: str, participant_ids: list[str], mode: str, level: str) -> dict | None:
         async with self._session_locks[session_id]:
@@ -451,7 +470,7 @@ class ClassroomService:
             group_id = uuid.uuid4().hex[:12]
             members = [{"student_id": sid, "display_name": session["roster"][sid]["display_name"]} for sid in participant_ids]
             group = {
-                "id": group_id, "participant_ids": participant_ids, "members": members,
+                "id": group_id, "device_id": group_id, "composition_version": 1, "participant_ids": participant_ids, "members": members,
                 "display_name": " + ".join(member["display_name"] for member in members),
                 "mode": mode, "level": level, "token": uuid.uuid4().hex,
                 "claimed_at": self.now(), "credential_expires_at": self._student_credential_expires_at(),
@@ -465,6 +484,45 @@ class ClassroomService:
             })
             await self.storage.write_json(self._session_path(session_id), session)
             return group
+
+    async def change_work_group(self, session_id: str, group_id: str, participant_ids: list[str], mode: str) -> dict:
+        async with self._session_locks[session_id]:
+            session = await self._require_writable_unlocked(session_id)
+            old = session.get("work_groups", {}).get(group_id)
+            if not old or not old.get("token"):
+                raise ClassroomError("Este grupo já foi alterado ou libertado. Atualiza a lista de grupos.")
+            if len(set(participant_ids)) != len(participant_ids) or not (
+                mode == "pair" and len(participant_ids) == 2
+                or mode == "group" and len(participant_ids) >= 3
+            ):
+                raise InvalidSessionEventError("Seleciona dois participantes para um par ou três ou mais para um grupo.")
+            if any(sid not in session["roster"] for sid in participant_ids):
+                raise StudentNotInRosterError("Essa criança não pertence à sessão.")
+            for sid in participant_ids:
+                entry = session["roster"][sid]
+                if entry.get("token") or entry.get("work_group_id") not in (None, group_id):
+                    raise ClassroomError("Um dos nomes está noutro dispositivo. Revê os participantes.")
+            if participant_ids == old["participant_ids"] and mode == old["mode"]:
+                return old
+            new_id = uuid.uuid4().hex[:12]
+            members = [{"student_id": sid, "display_name": session["roster"][sid]["display_name"]} for sid in participant_ids]
+            new = {**old, "id": new_id, "participant_ids": participant_ids, "members": members,
+                   "mode": mode, "display_name": " + ".join(member["display_name"] for member in members),
+                   "composition_version": old["composition_version"] + 1}
+            # One canonical change, recoverable using the existing private device credential.
+            await self.events_log(session_id).append({
+                "type": "work_group_changed", "work_group_id": new_id,
+                "participant_ids": participant_ids,
+                "payload": {**self.project_work_group(new), "previous_work_group_id": group_id},
+            })
+            session["work_groups"][new_id] = new
+            old["token"] = None
+            for sid in old["participant_ids"]:
+                session["roster"][sid].pop("work_group_id", None)
+            for sid in participant_ids:
+                session["roster"][sid]["work_group_id"] = new_id
+            await self.storage.write_json(self._session_path(session_id), session)
+            return new
 
     async def save_group_reflection(self, session_id: str, group_id: str, data: dict, criteria: list[dict]) -> dict:
         async with self._session_locks[session_id]:

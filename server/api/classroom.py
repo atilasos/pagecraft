@@ -60,6 +60,12 @@ class GroupClaimRequest(BaseModel):
     level: Literal["support", "intermediate", "challenge"] = "intermediate"
 
 
+class GroupParticipantsRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    participant_ids: list[str] = Field(min_length=2, max_length=40)
+    mode: Literal["pair", "group"]
+
+
 class GroupReflectionRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
     student_id: str = Field(min_length=1, max_length=80)
@@ -287,6 +293,13 @@ async def claim_group(session_id: str, body: GroupClaimRequest, request: Request
         raise HTTPException(409, "Um dos nomes já foi escolhido. Revê os participantes ou pede ajuda ao professor.")
     issue_student_cookie(response, session_id, group["token"], group["claimed_at"], group["credential_expires_at"])
     return {"work_group": svc.project_work_group(group)}
+
+
+@router.patch("/sessions/{session_id}/groups/{group_id}/participants")
+@access_policy(RoutePolicy.TEACHER)
+async def change_group_participants(session_id: str, group_id: str, body: GroupParticipantsRequest, request: Request):
+    group = await _domain(_svc(request).change_work_group(session_id, group_id, body.participant_ids, body.mode))
+    return {"work_group": _svc(request).project_work_group(group)}
 
 
 @router.get("/sessions/{session_id}/groups/me/reflections")
