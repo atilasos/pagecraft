@@ -94,7 +94,7 @@ Validar principalmente o comportamento observado pelas crianças e pelo professo
 - Conservar os casos individuais e históricos anteriores, as permissões do Quadro e os nomes existentes na ponte.
 - Experimentar por teclado e toque em computador, tablet e telemóvel. A integração final usa sessões e dados descartáveis, com revisão remota temporária no âmbito já autorizado.
 
-O professor confirmou esta cobertura e a divisão em três entregas. Não foram executados testes da funcionalidade ainda inexistente.
+O professor confirmou esta cobertura e a divisão em três entregas. As três etapas estão implementadas e revistas. As [verificações de composição #45](../verification/issue-45-composicao.md) registam testes HTTP e ensaios no browser, com confirmação do toque físico ainda pendente.
 
 ## Fora deste recorte
 
