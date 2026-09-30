@@ -150,9 +150,14 @@ def test_teacher_change_keeps_pending_answer_with_old_authors(page, studio_origi
         lesson=page.frame_locator('#activity-frame')
         lesson.get_by_role('button',name='Cortar à esquerda',exact=True).click()
         lesson.get_by_role('button',name='Sim',exact=True).click()
+        page.locator('#group-level').select_option('challenge')
+        expect(lesson.locator('#level')).to_have_value('challenge')
+        # Fill the old composition's queue through actual controls, never fake events.
+        page.evaluate("() => { for(let i=0;i<200;i++) document.querySelector('#help-btn').click(); }")
         group=page.request.get(studio_origin+path+'/me').json()['work_group']
         teacher.patch(path+f"/groups/{group['id']}/participants",json={'participant_ids':[ids[0],ids[2]],'mode':'pair'}).raise_for_status()
         expect(page.locator('#student-name')).to_have_text('Ana + Carla',timeout=10000)
+        expect(lesson.locator('#level')).to_have_value('intermediate')
         expect(page.locator('#pending-group-work')).to_contain_text('Ana + Bruno')
         page.unroute('**/events')
         page.reload()

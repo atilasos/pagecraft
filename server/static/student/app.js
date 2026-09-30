@@ -374,7 +374,8 @@ function createStudentTransport() {
   }
 
   function enqueue(type, unitId, payload) {
-    if (!hasIdentity() || outbox.length >= OUTBOX_LIMIT) return false;
+    const currentQueue = outbox.filter(event => !state.workGroup || event.composition_version === state.workGroup.composition_version);
+    if (!hasIdentity() || currentQueue.length >= OUTBOX_LIMIT) return false;
     outbox.push({
       event_id: crypto.randomUUID(),
       type,
@@ -724,6 +725,7 @@ function acceptComposition(group) {
   state.displayName = group.display_name;
   $("student-name").textContent = group.display_name;
   $("group-level").value = group.level;
+  sendGroupPreferences();
   saveIdentity();
   groupReflection.mount();
   showMessage(`O professor alterou os participantes: ${group.display_name}. O trabalho anterior mantém os seus autores.`, "feedback-warn");
@@ -734,8 +736,10 @@ function acceptGroupState(group) {
   if (!group) return;
   const pendingLevel = studentTransport.pendingLevel();
   if (pendingLevel && pendingLevel !== group.level) return;
+  const levelChanged = state.workGroup.level !== group.level;
   state.workGroup.level = group.level;
   $("group-level").value = group.level;
+  if (levelChanged) sendGroupPreferences();
 }
 
 $("activity-frame").addEventListener("load", sendGroupPreferences);
