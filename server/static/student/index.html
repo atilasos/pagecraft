@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>PageCraft — Aluno</title>
-<link rel="stylesheet" href="/studio.css?v=groups-43-2">
+<link rel="stylesheet" href="/studio.css?v=groups-44-1">
 </head>
 <body class="student-page">
 <a class="skip-link" href="#main-content">Saltar para entrar na aula</a>
@@ -47,6 +47,7 @@
       </label>
       <span class="student-actions">
         <button class="ghost" id="help-btn" type="button">Preciso de ajuda 🙋</button>
+        <button class="ghost" id="group-reflect-btn" type="button" hidden>A minha reflexão</button>
         <button class="ghost" id="pit-btn" type="button">O meu plano 📋</button>
       </span>
     </div>
@@ -67,6 +68,24 @@
     <!-- sandbox sem allow-same-origin: a atividade gerada corre em origem
          opaca, sem acesso ao DOM/API do site; só comunica por postMessage -->
     <iframe id="activity-frame" title="Atividade" sandbox="allow-scripts"></iframe>
+    <section id="group-reflection" class="card" hidden aria-labelledby="reflection-heading">
+      <h1 id="reflection-heading" tabindex="-1">Cada um à sua vez</h1>
+      <p>Escolhe o teu nome. Podes deixar perguntas por responder.</p>
+      <div id="reflection-members" class="reflection-members" role="group" aria-label="Quem vai refletir?"></div>
+      <form id="reflection-form" hidden>
+        <h2 id="reflection-child" tabindex="-1"></h2>
+        <div id="reflection-criteria"></div>
+        <label for="reflection-strategy">O que te ajudou?</label>
+        <textarea id="reflection-strategy" maxlength="1500" rows="2"></textarea>
+        <label for="reflection-next">O que queres experimentar a seguir?</label>
+        <textarea id="reflection-next" maxlength="1500" rows="2"></textarea>
+        <p class="button-line"><button id="reflection-save" type="submit">Guardar a minha reflexão</button>
+          <button id="reflection-skip" class="ghost" type="button">Prefiro não responder agora</button></p>
+        <button id="reflection-reload" class="ghost" type="button" hidden>Rever versão guardada</button>
+      </form>
+      <p id="reflection-status" role="status" aria-live="polite"></p>
+      <button id="reflection-back" class="ghost" type="button">Voltar à atividade</button>
+    </section>
     <div id="messages" aria-live="polite"></div>
   </section>
 
@@ -79,6 +98,7 @@
     </div>
   </div>
 </main>
-<script src="/student/app.js?v=groups-43-2"></script>
+<script src="/student/reflection.js?v=groups-44-1"></script>
+<script src="/student/app.js?v=groups-44-1"></script>
 </body>
 </html>

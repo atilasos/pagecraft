@@ -870,3 +870,20 @@ th { background: var(--paper-deep); font-family: var(--font-type); font-size: 0.
 .work-group-card {padding:16px; border:2px solid #285448; border-radius:12px; margin:12px 0;}
 
 #group-level-label[hidden], .student-actions [hidden] { display:none; }
+
+/* Group reflection keeps one child's voice visible, with choices large enough to touch. */
+#group-reflect-btn[hidden], #group-reflection[hidden], #reflection-form[hidden],
+#reflection-reload[hidden], #activity-frame[hidden] { display: none; }
+.reflection-members { display: flex; flex-wrap: wrap; gap: .75rem; margin: 1rem 0; }
+.reflection-members button { min-height: 56px; }
+.reflection-members button[aria-pressed="true"] { outline: 3px solid var(--accent, #2767c5); outline-offset: 3px; }
+#reflection-child { padding: 1rem; border-left: .4rem solid #2767c5; background: #edf5ff; }
+#reflection-criteria fieldset { margin: 1.25rem 0; padding: 1rem; border: 2px solid #d7e3ef; border-radius: 1rem; }
+#reflection-criteria legend { font-weight: 700; padding: 0 .4rem; }
+.reflection-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; margin-top: .75rem; }
+.reflection-choices label { display: flex; align-items: center; gap: .65rem; margin: 0; min-height: 64px; padding: .7rem; border: 2px solid #d7e3ef; border-radius: .8rem; cursor: pointer; }
+.reflection-choices label:has(input:checked) { border-color: #2767c5; background: #edf5ff; }
+.reflection-choices input { width: 1.2rem; height: 1.2rem; flex: 0 0 auto; margin: 0; }
+.reflection-choices span { font-size: 1.5rem; }
+#group-reflection textarea { width: 100%; box-sizing: border-box; font: inherit; padding: .7rem; }
+@media (max-width: 520px) { .reflection-choices { grid-template-columns: 1fr; } }

@@ -24,6 +24,7 @@ const EVENT_TEXT = {
   unit_started: (e) => `começou ${unitLabel(e.payload?.unit_id || e.unit_id)}`,
   attempt: (e) => (e.payload?.correct ? "acertou uma tentativa ✓" : "fez uma tentativa"),
   discovery: (e) => `descobriu: ${e.payload?.message || ""}`,
+  individual_reflection: (e) => `Reflexão individual · ${reflectionText(e.payload)}`,
   assessment_result: (e) => `avaliação: ${e.payload?.result || ""}`,
   feedback_request: (e) => `pediu feedback: «${(e.payload?.answer || "").slice(0, 60)}»`,
   help_needed: () => "pediu ajuda 🙋",
@@ -40,6 +41,15 @@ const EVENT_TEXT = {
   unfreeze_screens: () => "ecrãs libertados",
   session_closed: () => "sessão terminada",
 };
+
+function reflectionText(voice) {
+  if (voice.skipped) return 'Preferiu não responder';
+  const labels = {alone:'Consegui com autonomia', help:'Consegui com ajuda', practising:'Quero praticar mais', skip:'Prefiro não responder'};
+  const lines = (voice.criteria || []).map(criterion => `${criterion.pt} ${labels[voice.answers?.[criterion.id]] || 'Sem resposta'}`);
+  if (voice.strategy) lines.push(`O que ajudou: ${voice.strategy}`);
+  if (voice.next_step) lines.push(`Próximo passo: ${voice.next_step}`);
+  return lines.join(' · ') || 'Perguntas deixadas por responder';
+}
 
 const TRIAGE_BANDS = [
   { name: "Sem sinal", listId: "band-no-signal", countId: "band-no-signal-count" },
@@ -225,8 +235,10 @@ $("report-btn").addEventListener("click", async () => {
     : '<p class="muted" style="margin-top:0.75rem">Sem sessões no período escolhido.</p>';
   const groupRows = (report.groups || []).map(group => `<tr><td>${esc(group.display_name)}</td><td>${group.attempt}</td><td>${group.discovery}</td><td>${group.help_needed}</td></tr>`).join("");
   const groupTable = groupRows ? `<h3>Trabalho conjunto</h3><p>As respostas pertencem ao grupo. A reflexão pertence a cada criança.</p><table><tr><th>Participantes</th><th>Tentativas conjuntas</th><th>Descobertas</th><th>Ajuda</th></tr>${groupRows}</table>` : "";
+  const reflections = (report.reflections || []).map(record => `<li><strong>${esc(record.display_name)}</strong> · ${esc(record.activity_title)}<p>${esc(reflectionText(record.payload))}</p></li>`).join('');
+  const reflectionSection = reflections ? `<h3>Reflexões individuais</h3><p>Voz de cada criança, distinta das respostas conjuntas e da avaliação do professor.</p><ul class="plain">${reflections}</ul>` : '';
   out.innerHTML = `<div class="card" style="margin-top:0.75rem; overflow-x:auto">
-    <table>${head}${rows}</table>${groupTable}${sessions}</div>`;
+    <table>${head}${rows}</table>${groupTable}${reflectionSection}${sessions}</div>`;
 });
 
 $("class-form").addEventListener("submit", async (ev) => {
@@ -532,6 +544,7 @@ function reflectFreeze(state) {
 
 function handleEvent(type, record) {
   const st = record.student_id ? students.get(record.student_id) : null;
+  if (type === "individual_reflection" && drawerStudent === record.student_id) loadDrawerHistory(drawerStudent);
   const text = eventText(type, record);
   if (st) blip(record.student_id, type);
   if (text) {
@@ -794,7 +807,8 @@ function renderDrawerHistory(events) {
     const group = workGroups.get(record.work_group_id);
     const authors = group?.display_name || (record.participant_ids || []).map(id => students.get(id)?.display_name || id).join(" + ");
     const joint = record.work_group_id ? `Trabalho conjunto · ${authors} · ` : "";
-    li.textContent = `${when} · ${joint}${text}`;
+    const child = record.type === 'individual_reflection' ? `${students.get(record.student_id)?.display_name || record.student_id} · ` : '';
+    li.textContent = `${when} · ${joint}${child}${text}`;
     list.appendChild(li);
   });
   if (!list.children.length) {

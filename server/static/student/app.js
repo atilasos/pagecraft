@@ -161,6 +161,7 @@ async function claim(student) {
 /* ---- passo 3: atividade ---- */
 
 function startActivity() {
+  groupReflection.mount();
   studentTransport.stop({ discardQueue: true });
   state.studentState = null;
   state.sessionState = null;
@@ -302,6 +303,7 @@ function finishStudentSession() {
 }
 
 function invalidateStudentIdentity() {
+  groupReflection.reset();
   studentTransport.stop({ discardQueue: true });
   clearIdentity();
   state.studentId = null;
@@ -387,6 +389,11 @@ function createStudentTransport() {
       if (!frame.contentWindow || ev.source !== frame.contentWindow) return;
       const data = ev.data;
       if (!data || data.pagecraft !== 1 || !data.type) return;
+      if (state.workGroup && ["open_reflection", "assessment_result"].includes(data.type)) {
+        // Legacy self-assessment is a request to open individual voice, never a group answer.
+        if (data.type === "open_reflection") groupReflection.open();
+        return;
+      }
       if (state.workGroup && data.type === "level_changed") {
         if (data.payload?.level === state.workGroup.level) return;
         if (["support", "intermediate", "challenge"].includes(data.payload?.level)) {
@@ -662,6 +669,7 @@ function renderPit() {
 function sendGroupPreferences() {
   if (!state.workGroup) return;
   $("activity-frame").contentWindow?.postMessage({pagecraft:1, type:"work_group_preferences", payload:{level:state.workGroup.level}}, '*');
+  $("activity-frame").contentWindow?.postMessage({pagecraft:1, type:"learning_preferences", payload:{level:state.workGroup.level}}, '*');
 }
 
 function acceptGroupState(group) {
