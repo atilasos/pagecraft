@@ -71,8 +71,12 @@ _Avoid_: nota, score, classificação
 Uma página em que a criança respondeu a todos os pedidos obrigatórios, mesmo que existam erros. As respostas recebem feedback automático que permite corrigi-las; o acerto não é condição para avançar.
 _Avoid_: página aprovada, página certa
 
+**Grupo de trabalho**:
+Os participantes que realizam uma atividade em conjunto num computador partilhado. Os alunos escolhem os membros; as respostas conjuntas pertencem ao grupo e ficam associadas a todos. Cada participante mantém a sua autoavaliação individual.
+_Avoid_: turma, conta partilhada
+
 **Realização da atividade**:
-O trabalho de uma criança numa atividade, em aula ou em casa, com as evidências produzidas e a sua reflexão final. Voltar ao mesmo endereço pode iniciar outra realização; escrever o mesmo nome não dá acesso a trabalhos anteriores.
+O trabalho individual ou conjunto numa atividade, em aula ou em casa, com as evidências produzidas e a reflexão individual de cada participante. Voltar ao mesmo endereço pode iniciar outra realização; escrever o mesmo nome não dá acesso a trabalhos anteriores.
 _Avoid_: tentativa (já designa uma interação), conta de aluno
 
 **Autoavaliação da realização**:

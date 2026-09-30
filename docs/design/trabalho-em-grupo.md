@@ -8,16 +8,15 @@ As crianças devem poder indicar que trabalham a pares ou em grupo e identificar
 
 A revisão de Frações está concluída como rascunho para revisão do professor; a identificação dos participantes é um trabalho separado, conforme a [especificação](fracoes-banda-desenhada-spec.md).
 
+## Decisões confirmadas
+
+- Os alunos escolhem «Sozinho / A pares / Em grupo» no computador partilhado e selecionam os participantes da turma. O grupo fica visível ao professor.
+- As respostas da atividade constituem trabalho conjunto, associado a todos os participantes e identificado como produção do grupo.
+- Cada criança faz a sua autoavaliação individual. Uma resposta conjunta não é convertida numa demonstração individual de cada participante.
+
 ## Decisões em aberto
 
-Primeira ronda apresentada ao professor:
-
-1. Quem forma o grupo num computador partilhado: os alunos selecionam os participantes da turma ou o professor prepara os grupos?
-2. A reflexão final é individual ou conjunta? Proposta em discussão: respostas da atividade como trabalho conjunto associado aos participantes; autoavaliação de cada criança.
-
-Estas propostas ainda não foram confirmadas. Não implicam atribuir a cada criança uma resposta individual que só foi observada como resposta do grupo.
-
-Depois destas escolhas, definir o âmbito de entrada (sessão de aula e realização por código), mudanças de composição, retoma, diferenciação e apresentação dos registos ao professor. Consultar o comportamento existente antes de perguntar por factos do sistema.
+A segunda ronda define onde disponibilizar primeiro a entrada em grupo, como mudar participantes após começar e como escolher o nível comum quando os perfis individuais diferem. As regras de retoma e conclusão devem respeitar a autoria conjunta e as reflexões individuais confirmadas.
 
 ## Comportamento atual verificado
 
