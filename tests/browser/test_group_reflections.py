@@ -87,3 +87,47 @@ def test_lost_save_response_retries_once_without_duplicating_reflection(page, st
         expect(page.get_by_role('button', name='Ana · Guardada', exact=True)).to_be_visible()
         history = teacher.get(path+f'/students/{ids[0]}/history').json()['events']
         assert len([e for e in history if e['type']=='individual_reflection']) == 1
+
+
+def test_late_response_cannot_close_another_groups_reflection(page, studio_origin):
+    from playwright.sync_api import expect
+    with httpx.Client(base_url=studio_origin) as teacher:
+        teacher.get('/api/teacher-bootstrap')
+        cls = teacher.post('/api/classes', json={'name':'Troca', 'year':2, 'students':['Iris','João','Lara','Mário']}).json()
+        session = teacher.post('/api/sessions', json={'class_id':cls['id'], 'activity_slug':'fraction-test'}).json()
+        ids = list(session['roster']); path = '/api/sessions/'+session['id']
+        page.goto(studio_origin+'/student/')
+        def enter(names):
+            page.get_by_label('Código da aula').fill(session['join_code'])
+            page.get_by_role('button', name='Entrar', exact=True).click()
+            page.get_by_role('button', name='A pares', exact=True).click()
+            for name in names:
+                page.get_by_role('button', name=name, exact=True).click()
+            page.get_by_role('button', name='Começar', exact=True).click()
+            page.get_by_role('button', name='A minha reflexão', exact=True).click()
+            page.get_by_role('button', name=names[0]+' · Por responder', exact=True).click()
+        enter(['Iris','João'])
+        page.get_by_label('O que te ajudou?').fill('Reflexão anterior.')
+        # Delay consumption of a real HTTP response, after the server saves it.
+        page.evaluate('''() => {
+          const fetchActual = window.fetch.bind(window);
+          const bodyGate = new Promise(resolve => window.releaseReflectionBody = resolve);
+          window.fetch = async (...args) => {
+            const response = await fetchActual(...args);
+            if (String(args[0]).endsWith('/groups/me/reflections') && args[1]?.method === 'POST') {
+              const jsonActual = response.json.bind(response);
+              response.json = async () => { const data = await jsonActual(); window.reflectionBodyWaiting = true; await bodyGate; return data; };
+            }
+            return response;
+          };
+        }''')
+        page.get_by_role('button', name='Guardar a minha reflexão', exact=True).click()
+        page.wait_for_function('window.reflectionBodyWaiting === true')
+        teacher.post(path+'/release/'+ids[0], json={}).raise_for_status()
+        expect(page.get_by_label('Código da aula')).to_be_visible(timeout=10000)
+        enter(['Lara','Mário'])
+        page.get_by_label('O que te ajudou?').fill('O meu novo rascunho.')
+        page.evaluate('window.releaseReflectionBody()')
+        expect(page.get_by_role('heading', name='A reflexão de Lara', exact=True)).to_be_visible()
+        expect(page.get_by_label('O que te ajudou?')).to_have_value('O meu novo rascunho.')
+        assert page.request.get(studio_origin+path+'/groups/me/reflections').json()['reflections'] == {}
