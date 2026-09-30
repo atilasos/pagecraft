@@ -352,3 +352,28 @@ async def test_composition_conflict_preserves_unsent_work_and_members_voice(clas
         latest=(await pair.get(path+'/groups/me/reflections')).json()['reflections'][ids[0]]
         assert latest['payload']['revision']==2
         assert latest['payload']['source_work_group_id']==new['id']
+
+
+async def test_group_changes_are_teacher_only_atomic_and_release_current_members(classroom):
+    transport, teacher, cls, session=classroom
+    ids=list(session['roster']);path=f"/api/sessions/{session['id']}"
+    async with httpx.AsyncClient(transport=transport,base_url='http://test') as pair, httpx.AsyncClient(transport=transport,base_url='http://test') as solo:
+        group=(await pair.post(path+'/groups/claim',json={'participant_ids':ids[:2],'mode':'pair'})).json()['work_group']
+        endpoint=path+f"/groups/{group['id']}/participants"
+        assert (await pair.patch(endpoint,json={'participant_ids':[ids[0],ids[2]],'mode':'pair'})).status_code == 403
+        await solo.post(path+'/claim',json={'student_id':ids[2]})
+        for members,mode,status in [([ids[0],ids[2]],'pair',409),([ids[0],ids[0]],'pair',400),([ids[0],'outsider'],'pair',404),([ids[0],ids[1],ids[3]],'pair',400)]:
+            assert (await teacher.patch(endpoint,json={'participant_ids':members,'mode':mode})).status_code == status
+            assert (await pair.get(path+'/me')).json()['work_group'] == group
+        response=await teacher.patch(endpoint,json={'participant_ids':ids[:2]+[ids[3]],'mode':'group'})
+        assert response.status_code == 200
+        new=response.json()['work_group']
+        assert new['mode']=='group'
+        assert (await teacher.patch(endpoint,json={'participant_ids':ids[:2],'mode':'pair'})).status_code == 409
+        assert (await teacher.post(path+f'/release/{ids[3]}',json={})).status_code == 200
+        assert (await pair.get(path+'/me')).status_code == 401
+        taken=(await teacher.get('/api/join/'+session['join_code'])).json()['roster']
+        assert [entry['taken'] for entry in taken]==[False,False,True,False]
+        assert (await solo.get(path+'/me')).status_code == 200
+        history=(await teacher.get(path+f'/students/{ids[3]}/history')).json()['events']
+        assert any(e['type']=='work_group_changed' and e['work_group_id']==new['id'] for e in history)
