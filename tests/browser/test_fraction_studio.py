@@ -196,11 +196,12 @@ def test_pending_group_level_is_not_replaced_by_an_older_live_projection(page, s
         expect(page.frame_locator('#activity-frame').locator('#level')).to_have_value('support')
         # The real stream remains connected while event delivery is unavailable.
         page.route('**/events', lambda route: route.fulfill(status=503, json={}))
-        page.evaluate("""path => {
+        page.evaluate("""path => new Promise(resolve => {
           window.levelProjections = [];
           const stream = new EventSource(path + '/stream');
           stream.addEventListener('work_group_state_changed', event => window.levelProjections.push(JSON.parse(event.data)));
-        }""", path)
+          stream.addEventListener('open', () => resolve(true), {once:true});
+        })""", path)
         page.get_by_label('Nível do grupo', exact=True).select_option('challenge')
         page.request.post(studio_origin + path + '/events', data={
             'events':[{'event_id':'level-projection-probe','type':'help_needed','payload':{}}]
