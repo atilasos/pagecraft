@@ -22,6 +22,7 @@ from ..events import EventHub, utcnow
 from ..storage import Storage
 from .errors import (
     ClassroomError,
+    CompositionChangedError,
     InvalidPitItemError,
     InvalidSessionEventError,
     SessionClosedError,
@@ -544,8 +545,10 @@ class ClassroomService:
                     raise ClassroomError("Este envio já foi usado para outra resposta.")
                 if (record.get("type") == "individual_reflection"
                     and record.get("student_id") == data["student_id"]
-                    and record["payload"]["source_work_group_id"] == group_id):
+                    and session["work_groups"].get(record["payload"]["source_work_group_id"], {}).get("device_id") == group["device_id"]):
                     previous = record["payload"]["revision"]
+            if (data.get("composition_version") or 1) != group["composition_version"]:
+                raise CompositionChangedError([data["event_id"]], self.project_work_group(group))
             if previous != data["expected_revision"]:
                 raise ClassroomError("Há uma reflexão mais recente. Volta a abri-la antes de guardar.")
             if set(data["answers"]) - {c["id"] for c in criteria}:
@@ -716,6 +719,11 @@ class ClassroomService:
                 raise InvalidSessionEventError("O grupo já não está disponível.")
             seen = await self._seen(session_id)
             activity_types = {entry.name for entry in SESSION_EVENT_TYPES.by_author("activity")} - {"assessment_result"}
+            conflicts = [str(ev.get("event_id") or "") for ev in events[:20]
+                         if ev.get("event_id") not in seen and ev.get("type") in activity_types
+                         and ev.get("composition_version", 1) != group["composition_version"]]
+            if conflicts:
+                raise CompositionChangedError(conflicts, self.project_work_group(group))
             accepted = []
             for ev in events[:20]:
                 event_id = str(ev.get("event_id") or uuid.uuid4().hex)

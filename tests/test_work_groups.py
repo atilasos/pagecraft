@@ -324,3 +324,31 @@ async def test_teacher_changes_group_without_reattributing_previous_work(classro
         report = (await teacher.get(f"/api/classes/{cls['id']}/report")).json()
         assert sorted((g['display_name'],g['attempt']) for g in report['groups']) == [('Ana + Bruno',1),('Ana + Carla',1)]
         assert all(r['correct']==0 for r in report['students'])
+
+
+async def test_composition_conflict_preserves_unsent_work_and_members_voice(classroom):
+    transport, teacher, cls, session = classroom
+    ids = list(session['roster']); path = f"/api/sessions/{session['id']}"
+    async with httpx.AsyncClient(transport=transport,base_url='http://test') as pair:
+        old=(await pair.post(path+'/groups/claim',json={'participant_ids':ids[:2],'mode':'pair'})).json()['work_group']
+        await pair.post(path+'/groups/me/reflections',json={'student_id':ids[0],'event_id':'ana-original','expected_revision':0,'strategy':'Com o Bruno.'})
+        accepted={'event_id':'already-saved','type':'attempt','composition_version':1,'payload':{'correct':True}}
+        await pair.post(path+'/events',json={'events':[accepted]})
+        new=(await teacher.patch(path+f"/groups/{old['id']}/participants",json={'participant_ids':[ids[0],ids[2]],'mode':'pair'})).json()['work_group']
+        stale={'event_id':'unsent-old','type':'attempt','composition_version':1,'payload':{'correct':False}}
+        response=await pair.post(path+'/events',json={'events':[accepted,stale]})
+        assert response.status_code == 409, response.text
+        assert response.json()['detail']['code'] == 'composition_changed'
+        assert response.json()['detail']['event_ids'] == ['unsent-old']
+        assert (await pair.post(path+'/events',json={'events':[accepted]})).json()['accepted'] == []
+        history=(await teacher.get(path+f'/students/{ids[2]}/history')).json()['events']
+        assert not any(e.get('event_id')=='unsent-old' for e in history)
+        retained=(await pair.get(path+'/groups/me/reflections')).json()['reflections']
+        assert retained[ids[0]]['payload']['source_work_group_id']==old['id']
+        stale_voice={'student_id':ids[0],'event_id':'old-pending-voice','expected_revision':1,'composition_version':1,'strategy':'Antes de trocar.'}
+        assert (await pair.post(path+'/groups/me/reflections',json=stale_voice)).status_code == 409
+        revised={**stale_voice,'event_id':'ana-current','composition_version':2,'strategy':'Agora com a Carla.'}
+        assert (await pair.post(path+'/groups/me/reflections',json=revised)).status_code == 200
+        latest=(await pair.get(path+'/groups/me/reflections')).json()['reflections'][ids[0]]
+        assert latest['payload']['revision']==2
+        assert latest['payload']['source_work_group_id']==new['id']

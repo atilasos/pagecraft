@@ -20,6 +20,7 @@ from ..access import (
 )
 from ..classroom.errors import (
     ClassroomError,
+    CompositionChangedError,
     InvalidPitItemError,
     InvalidSessionEventError,
     SessionClosedError,
@@ -71,6 +72,7 @@ class GroupReflectionRequest(BaseModel):
     student_id: str = Field(min_length=1, max_length=80)
     event_id: str = Field(min_length=1, max_length=80)
     expected_revision: int = Field(ge=0)
+    composition_version: int | None = Field(default=None, ge=1)
     answers: dict[str, Literal["alone", "help", "practising", "skip"]] = Field(default_factory=dict, max_length=8)
     strategy: str = Field(default="", max_length=1500)
     next_step: str = Field(default="", max_length=1500)
@@ -112,6 +114,9 @@ def _svc(request: Request):
 async def _domain(command):
     try:
         return await command
+    except CompositionChangedError as error:
+        raise HTTPException(409, {"code":"composition_changed", "message":str(error),
+                                  "event_ids":error.event_ids, "work_group":error.group}) from error
     except (SessionNotFoundError, StudentNotInRosterError) as error:
         raise HTTPException(404, str(error)) from error
     except SessionClosedError as error:
@@ -316,7 +321,7 @@ async def group_reflections(session_id: str, request: Request):
     reflections = {
         record["student_id"]: record
         for record in latest_reflections(await svc.events_log(session_id).replay())
-        if record["payload"]["source_work_group_id"] == group_id
+        if session["work_groups"].get(record["payload"]["source_work_group_id"], {}).get("device_id") == group["device_id"]
         and record["student_id"] in group["participant_ids"]
     }
     return {**await session_reflection_criteria(request.app, session["activity_slug"]), "reflections": reflections}
