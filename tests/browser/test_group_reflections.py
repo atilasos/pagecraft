@@ -175,3 +175,37 @@ def test_teacher_change_keeps_pending_answer_with_old_authors(page, studio_origi
         assert attempts[0]['participant_ids']==[ids[0],ids[2]]
         old_history=teacher.get(path+f'/students/{ids[1]}/history').json()['events']
         assert not any(e['type']=='attempt' for e in old_history)
+
+
+def test_reviewing_old_draft_preserves_it_after_new_reflection(page, studio_origin):
+    from playwright.sync_api import expect
+    with httpx.Client(base_url=studio_origin) as teacher:
+        teacher.get('/api/teacher-bootstrap')
+        cls=teacher.post('/api/classes',json={'name':'Rascunhos','year':2,'students':['Ana','Bruno','Carla']}).json()
+        session=teacher.post('/api/sessions',json={'class_id':cls['id'],'activity_slug':'fraction-test'}).json()
+        ids=list(session['roster']);path='/api/sessions/'+session['id']
+        page.goto(studio_origin+'/student/')
+        page.get_by_label('Código da aula').fill(session['join_code'])
+        page.get_by_role('button',name='Entrar',exact=True).click()
+        page.get_by_role('button',name='A pares',exact=True).click()
+        for name in ['Ana','Bruno']:page.get_by_role('button',name=name,exact=True).click()
+        page.get_by_role('button',name='Começar',exact=True).click()
+        page.get_by_role('button',name='A minha reflexão',exact=True).click()
+        page.get_by_role('button',name='Ana · Por responder',exact=True).click()
+        page.get_by_label('O que te ajudou?').fill('O corte feito com Bruno.')
+        group=page.request.get(studio_origin+path+'/me').json()['work_group']
+        teacher.patch(path+f"/groups/{group['id']}/participants",json={'participant_ids':[ids[0],ids[2]],'mode':'pair'}).raise_for_status()
+        expect(page.locator('#student-name')).to_have_text('Ana + Carla',timeout=10000)
+        page.get_by_role('button',name='A minha reflexão',exact=True).click()
+        page.get_by_role('button',name='Ana · Por guardar',exact=True).click()
+        expect(page.get_by_label('O que te ajudou?')).to_have_value('O corte feito com Bruno.')
+        page.get_by_role('button',name='Rever versão guardada',exact=True).click()
+        page.get_by_label('O que te ajudou?').fill('Comparei com Carla.')
+        page.get_by_role('button',name='Guardar a minha reflexão',exact=True).click()
+        expect(page.locator('#reflection-status')).to_contain_text('Reflexão guardada')
+        page.reload()
+        page.locator('#pending-reflection-list summary').click()
+        expect(page.locator('#pending-reflection-list')).to_contain_text('Ana + Bruno')
+        expect(page.locator('#pending-reflection-list')).to_contain_text('O corte feito com Bruno.')
+        voices=[e for e in teacher.get(path+f'/students/{ids[0]}/history').json()['events'] if e['type']=='individual_reflection']
+        assert len(voices)==1 and voices[0]['payload']['strategy']=='Comparei com Carla.'

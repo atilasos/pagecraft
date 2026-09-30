@@ -3,19 +3,19 @@ const groupReflection = (() => {
   const element = id => document.getElementById(id);
   const labels = {alone:'Consegui com autonomia', help:'Consegui com ajuda', practising:'Quero praticar mais', skip:'Prefiro não responder'};
   const icons = {alone:'✓', help:'🤝', practising:'↻', skip:'○'};
-  let context = null, current = null, criteria = [], saved = {}, drafts = {}, generation = 0, sending = false;
+  let context = null, current = null, criteria = [], saved = {}, drafts = {}, archived = [], generation = 0, sending = false;
   const endpoint = () => `/api/sessions/${context.session}/groups/me/reflections`;
   const key = () => `pc-group-reflections:${context.session}:${context.group.device_id}`;
   const status = text => { element('reflection-status').textContent = text; };
 
   function persist() {
-    try { sessionStorage.setItem(key(), JSON.stringify(drafts)); }
+    try { sessionStorage.setItem(key(), JSON.stringify({drafts, archived})); }
     catch { status('Mantém esta página aberta para não perderes a reflexão por guardar.'); }
   }
 
   function reset() {
     generation++;
-    context = null; current = null; criteria = []; saved = {}; drafts = {}; sending = false;
+    context = null; current = null; criteria = []; saved = {}; drafts = {}; archived = []; sending = false;
     element('group-reflection').hidden = true;
     element('reflection-form').hidden = true;
     element('activity-frame').hidden = false;
@@ -27,7 +27,11 @@ const groupReflection = (() => {
     reset();
     if (!state.workGroup) return;
     context = {session:state.session.id, group:state.workGroup};
-    try { drafts = JSON.parse(sessionStorage.getItem(key()) || '{}'); } catch { drafts = {}; }
+    try {
+      const stored = JSON.parse(sessionStorage.getItem(key()) || '{}');
+      drafts = stored.drafts || stored;
+      archived = stored.archived || [];
+    } catch { drafts = {}; archived = []; }
     element('group-reflect-btn').hidden = false;
     renderPendingReflections();
   }
@@ -42,6 +46,7 @@ const groupReflection = (() => {
     if (version !== generation) return false;
     criteria = data.criteria;
     saved = data.reflections;
+    renderPendingReflections();
     return true;
   }
 
@@ -50,9 +55,23 @@ const groupReflection = (() => {
   }
 
   function renderPendingReflections() {
-    const old = Object.values(drafts).filter(isOldDraft);
+    const old = [...archived, ...Object.values(drafts).filter(isOldDraft)];
     element('pending-group-reflections').hidden = !old.length;
-    element('pending-group-reflections').textContent = old.length ? 'Há reflexões por guardar da composição anterior: '+old.map(d=>`${d.owner_name || 'um colega'} · ${d.group_caption || 'grupo anterior'}`).join('; ')+'. Pede ajuda ao professor.' : '';
+    const list = element('pending-reflection-list');
+    list.replaceChildren();
+    old.forEach(draft => {
+      const detail = document.createElement('details');
+      const summary = document.createElement('summary');
+      summary.textContent = `${draft.owner_name || 'Um colega'} · ${draft.group_caption || 'Grupo anterior'} · Reflexão por guardar`;
+      const answer = draft.pending || draft;
+      const text = document.createElement('p');
+      text.textContent = answer.skipped ? 'Preferiu não responder.' : [
+        ...Object.entries(answer.answers || {}).map(([id,value]) => `${criteria.find(c=>c.id===id)?.pt || id}: ${labels[value] || value}`),
+        answer.strategy ? `O que te ajudou? ${answer.strategy}` : '',
+        answer.next_step ? `O que queres experimentar a seguir? ${answer.next_step}` : '',
+      ].filter(Boolean).join(' · ') || 'Sem respostas.';
+      detail.append(summary, text); list.append(detail);
+    });
   }
 
   function participants() {
@@ -208,6 +227,7 @@ const groupReflection = (() => {
     const studentId = current;
     try {
       if (!await read()) return;
+      if (isOldDraft(drafts[studentId])) archived.push(drafts[studentId]);
       delete drafts[studentId]; persist(); renderPendingReflections(); openChild(studentId);
     } catch (error) { status(error.message); }
   };
