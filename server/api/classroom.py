@@ -28,6 +28,7 @@ from ..classroom.errors import (
 )
 from ..classroom.event_types import SESSION_EVENT_TYPES
 from ..classroom.live_state import (
+    changed_group_frames,
     changed_session_frame,
     changed_student_frames,
     session_state_snapshot,
@@ -416,12 +417,17 @@ async def stream_session(session_id: str, request: Request):
 
     access = request.state.access
     student_id = None
+    work_group_id = None
+    group_participants = []
     credential = ""
     if access.role is Role.TEACHER:
         role = "teacher"
     elif access.role is Role.STUDENT:
         role = "student"
         student_id = access.student_id
+        work_group_id = access.work_group_id
+        if work_group_id:
+            group_participants = session["work_groups"][work_group_id]["participant_ids"]
         credential = access.student_credential
     elif access.role is Role.BOARD:
         if session.get("status") != "live":
@@ -454,6 +460,9 @@ async def stream_session(session_id: str, request: Request):
 
     async def credential_is_current() -> bool:
         if role == "student":
+            if work_group_id:
+                current_group = await svc.work_group_for_token(session_id, credential, require_live=False)
+                return current_group == work_group_id
             current = await svc.student_for_token(
                 session_id,
                 credential,
@@ -475,10 +484,13 @@ async def stream_session(session_id: str, request: Request):
             return False
         if role == "teacher":
             return True
+        group_target = record.get("work_group_id")
+        if group_target:
+            return role == "student" and group_target == work_group_id
         target = record.get("student_id")
         if role == "board":
             return target is None
-        return target is None or target == student_id
+        return target is None or target == student_id or target in group_participants
 
     async def gen():
         board_revocations = (
@@ -496,6 +508,7 @@ async def stream_session(session_id: str, request: Request):
             now=svc.now(),
             role=role,
             student_id=student_id,
+            work_group_id=work_group_id,
         )
         if board_event_types is not None:
             state["event_types"] = board_event_types
@@ -558,6 +571,7 @@ async def stream_session(session_id: str, request: Request):
                         now=svc.now(),
                         role=role,
                         student_id=student_id,
+                        work_group_id=work_group_id,
                     )
                     session_delta = changed_session_frame(state, current_state)
                     if session_delta is not None:
@@ -570,6 +584,8 @@ async def stream_session(session_id: str, request: Request):
                             "event: student_state_changed\n"
                             f"data: {json.dumps(delta, ensure_ascii=False)}\n\n"
                         )
+                    for delta in changed_group_frames(state, current_state):
+                        yield ("event: work_group_state_changed\n" f"data: {json.dumps(delta, ensure_ascii=False)}\n\n")
                     state = current_state
                     if record.get("type") == "session_closed":
                         return
@@ -588,12 +604,15 @@ async def stream_session(session_id: str, request: Request):
                         now=tick_now,
                         role=role,
                         student_id=student_id,
+                        work_group_id=work_group_id,
                     )
                     for delta in changed_student_frames(state, current_state):
                         yield (
                             "event: student_state_changed\n"
                             f"data: {json.dumps(delta, ensure_ascii=False)}\n\n"
                         )
+                    for delta in changed_group_frames(state, current_state):
+                        yield ("event: work_group_state_changed\n" f"data: {json.dumps(delta, ensure_ascii=False)}\n\n")
                     state = current_state
                     tick_task = asyncio.create_task(anext(ticks))
         finally:

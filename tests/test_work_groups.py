@@ -109,3 +109,27 @@ async def test_group_level_and_release_do_not_change_individual_profiles(classro
         assert not any(entry['taken'] for entry in roster)
         history=(await teacher.get(path+f'/students/{ids[1]}/history')).json()['events']
         assert len([e for e in history if e['type']=='help_needed']) == 1
+
+
+async def test_group_stream_contains_its_work_without_other_groups(classroom):
+    import json
+    transport, teacher, cls, session=classroom
+    ids=list(session['roster']); path=f"/api/sessions/{session['id']}"
+    async with httpx.AsyncClient(transport=transport,base_url='http://test') as pair, httpx.AsyncClient(transport=transport,base_url='http://test') as other:
+        ours=(await pair.post(path+'/groups/claim',json={'participant_ids':ids[:2],'mode':'pair'})).json()['work_group']
+        theirs=(await other.post(path+'/groups/claim',json={'participant_ids':ids[2:],'mode':'pair'})).json()['work_group']
+        await pair.post(path+'/events',json={'events':[{'event_id':'our-help','type':'help_needed','payload':{}}]})
+        await other.post(path+'/events',json={'events':[{'event_id':'their-answer','type':'attempt','payload':{'correct':True}}]})
+        await teacher.post(path+'/close')
+        response=await pair.get(path+'/stream')
+        assert response.status_code == 200, response.text
+        data=json.loads(next(line[6:] for line in response.text.splitlines() if line.startswith('data: ')))
+        assert data['students'] == {}
+        assert list(data['groups']) == [ours['id']]
+        assert data['groups'][ours['id']]['triage']['explicit_help'] is True
+        assert theirs['id'] not in response.text
+        assert ids[2] not in response.text
+        teacher_response=await teacher.get(path+'/stream')
+        teacher_data=json.loads(next(line[6:] for line in teacher_response.text.splitlines() if line.startswith('data: ')))
+        assert len(teacher_data['groups']) == 2
+        assert teacher_data['numbers']['evidence']['attempt'] == 1
