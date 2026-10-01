@@ -20,15 +20,15 @@
       "artifact": "drafts/tinkercad-pontes-3e4-design-spec.json"
     },
     "builder": {
-      "status": "in_progress",
+      "status": "complete_revision",
       "artifact": "drafts/tinkercad-pontes-3e4.html"
     },
     "proofreader": {
-      "status": "pending_revision",
+      "status": "in_review",
       "artifact": "drafts/tinkercad-pontes-3e4-proofread.json"
     },
     "evaluator": {
-      "status": "preparing",
+      "status": "testing",
       "artifact": "drafts/tinkercad-pontes-3e4-evaluation.json"
     }
   },
@@ -63,7 +63,10 @@
     "Não houve construção observada no Tinkercad com alunos ou acesso de turma.",
     "O catálogo aceita um único ano: o rascunho foi registado como 3.º ano, com 3.º e 4.º anos explícitos no título e no conteúdo."
   ],
-  "verification": {},
+  "verification": {
+    "draft_registration": "2026-10-01: register atualizou o rascunho existente: 52XFA9, published=false, requires_completion=true.",
+    "public_draft_access": "2026-10-01: GET anónimo a /api/learning/activities/52XFA9 e /content devolveu 404 após registo da revisão."
+  },
   "screenshots": [],
   "limitations": []
 }
