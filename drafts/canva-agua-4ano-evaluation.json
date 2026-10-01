@@ -1,0 +1,59 @@
+{
+  "pass": true,
+  "scope": "Piloto preparado para revisão do professor; não equivale a aprovação de publicação nem a validação com alunos.",
+  "severity": "low",
+  "scores": {
+    "factual_accuracy": 4,
+    "constraint_alignment": 4,
+    "differentiation_quality": 4,
+    "ux_accessibility": 3,
+    "visual_design": 3,
+    "technical_quality": 4
+  },
+  "issues": [
+    {
+      "severity": "low",
+      "description": "A reflexão integrada simplifica o DocSpec: usa critérios, estratégia e próximo passo; não apresenta campos separados de conquista e dificuldade. A versão autónoma do HTML tem conquista, ajuda e próximo passo. Os critérios recolhem o autorrelato da realização, mas o guião deve refletir esta diferença.",
+      "evidence": "server/static/learning/activity.js: renderReflection; drafts/canva-agua-4ano.html: reflectionForm; drafts/canva-agua-4ano-design-spec.json: components.reflection",
+      "resolution": "Diferença documentada no guia do professor; simplificação mantida na versão integrada."
+    },
+    {
+      "severity": "low",
+      "description": "O screenshot revisto apresenta navegação e texto legíveis, mas o cabeçalho do alojamento ainda ocupa uma parte significativa da altura disponível. A comparação de diapositivos exige deslocação vertical. Está em curso uma compactação adicional pelo integrador.",
+      "evidence": "/home/proteu/agent-browser-hub/screenshots/pagecraft-pilot-compact.png",
+      "resolution": "Integrador compactou cabeçalho e guardou screenshot final; avaliação em telefone estreito continua pendente."
+    }
+  ],
+  "critical": [],
+  "required_fixes": [],
+  "evidence": [
+    "Inspeção independente dos artefactos pelo Evaluator: Lidos HTML, DocSpec, design-spec, proofread e activity.json; consultado renderReflection do alojamento. Etapas com 5+10+20+5+5 minutos, planeador de quatro diapositivos, comparação interativa com texto/tamanho/contraste e três apoios distintos presentes.",
+    "Inspeção visual independente pelo Evaluator: Imagem pagecraft-pilot-compact.png examinada com view_image. Viewport com cerca de 765 px de largura: navegação por etapas, foco de conteúdo e hierarquia textual coerentes. Não é evidência de um dispositivo com 375 px.",
+    "Teste de browser executado pelo agente integrador via agent-browser-hub e comunicado ao Evaluator: Pré-visualização /ZBEVB2: entrada com nome, seleção EN por teclado traduzindo alojamento e HTML, interação de texto curto na comparação, seleção Broto, reflexão com um critério alone e restantes omitidos, estratégia/próximo passo em inglês. Integrador confirmou JSON privado efetivamente gravado com language=en, level=support e respostas correspondentes. Os registos de pré-visualização ficam excluídos dos relatórios de alunos.",
+    "Teste de recuperação executado pelo integrador e inspeção estática independente: Integrador escreveu «A torneira continua a pingar depois do recreio.», mudou para Testar e recarregou; a etapa e texto foram recuperados. HTML contém restoreLearning, valida escolhas e reconstitui campos a partir de assessment_result, unit_started e preferências.",
+    "Relatório de Proofreader: Revisão textual PT-PT/EN aprovada, sem problemas linguísticos bloqueantes. Não foi tratada como prova de browser ou de resultados pedagógicos.",
+    "Verificação final do integrador: screenshot /home/proteu/agent-browser-hub/screenshots/pagecraft-pilot-final.png inspecionado após compactação; screenshot /home/proteu/agent-browser-hub/screenshots/pagecraft-pilot-reflection.png guardado. A área de atividade continua com deslocação vertical própria.",
+    "Browser final via Hub: regresso à etapa Explorar mostra no textarea a frase previamente guardada «A torneira continua a pingar depois do recreio.». Seleção Árvore robusta por teclado altera a reflexão para «Que estratégia usaste e porque resultou?» e «O que vais melhorar e como saberás que conseguiste?». Sessões fechadas.",
+    "Integração: o guia do professor agora distingue explicitamente os campos do formulário integrado e do HTML autónomo."
+  ],
+  "acceptance_checks": [
+    "Tema água na escola, 4.º ano, introdução ao Canva e duração orientadora de 45 minutos presentes.",
+    "Quatro diapositivos: problema, exemplo, proposta e convite à ação; a criança escreve o plano e cria a apresentação.",
+    "PT/EN incluem instruções, feedback, critérios e autoavaliação; respostas do aluno mantêm o conteúdo original.",
+    "Apoio oferece exemplos prontos, banco de palavras e inícios de frase; Intermédio pede escolhas justificadas; Desafio acrescenta comparação e verificação da proposta.",
+    "A comparação modifica o diapositivo efetivamente; a mensagem pede justificação, sem atribuir domínio conceptual por clique.",
+    "Contraste difícil restrito ao exemplo, com equivalente legível; controlos nativos, labels, fieldset/legend, foco visível e alvos de pelo menos 48 px previstos no CSS.",
+    "Critérios da autoavaliação integrada correspondem aos critérios da atividade; escolhas e campos livres podem ficar sem resposta.",
+    "O texto e as evidências distinguem registos PageCraft de trabalho externo no Canva; não se afirma observação automática da apresentação.",
+    "Modo papel e partilha posterior em aula permitem continuar em caso de falta de acesso Canva ou utilização autónoma."
+  ],
+  "blocked_by": [
+    "Não foi fornecido registo explícito de consola sem erros; não se certifica ausência absoluta de erros de consola.",
+    "Não há prova visual em 320/375 px nem ensaio completo a zoom 200/400%, leitor de ecrã ou voz disponível PT/EN. Estes limites impedem uma declaração de conformidade de acessibilidade completa, mas não a revisão do piloto pelo professor.",
+    "Não houve interação com conta Canva nem aplicação da aula a crianças; execução das operações no Canva e adequação efetiva dos 45 minutos requerem observação do professor."
+  ],
+  "suggestions": [
+    "Antes do uso com a turma, confirmar o acesso Canva preparado pelo professor e verificar uma realização no equipamento escolar.",
+    "Registar no guião a simplificação dos campos finais da reflexão integrada."
+  ]
+}

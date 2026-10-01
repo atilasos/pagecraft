@@ -141,6 +141,7 @@ def session_state_snapshot(
     now: datetime | str,
     role: str,
     student_id: str | None = None,
+    work_group_id: str | None = None,
 ) -> dict:
     """Projeta o estado autorizado no instante pedido."""
     if role == "board":
@@ -154,7 +155,7 @@ def session_state_snapshot(
     )
     students = state["students"]
     if role == "student":
-        if student_id is None:
+        if student_id is None and work_group_id is None:
             raise ValueError("o instantâneo de aluno requer uma identidade")
         students = (
             {student_id: students[student_id]}
@@ -168,6 +169,11 @@ def session_state_snapshot(
         "session": _session_projection(events, session),
         "students": students,
     }
+    groups = state.get("groups", {})
+    if work_group_id:
+        snapshot["groups"] = {work_group_id: groups[work_group_id]} if work_group_id in groups else {}
+    elif role == "teacher" and groups:
+        snapshot["groups"] = groups
     if role == "teacher":
         snapshot["numbers"] = state["numbers"]
     return snapshot
@@ -192,3 +198,11 @@ def changed_session_frame(
     if previous.get("session") == session:
         return None
     return {"session": session}
+
+
+def changed_group_frames(previous: Mapping, current: Mapping) -> list[dict]:
+    return [
+        {"work_group_id": group_id, "group": group}
+        for group_id, group in current.get("groups", {}).items()
+        if previous.get("groups", {}).get(group_id) != group
+    ]

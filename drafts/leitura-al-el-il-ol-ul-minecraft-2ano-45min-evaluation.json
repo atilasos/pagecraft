@@ -1,0 +1,318 @@
+{
+  "pass": true,
+  "route": "none",
+  "severity": "low",
+  "role": "Evaluator",
+  "date": "2026-09-26",
+  "slug": "leitura-al-el-il-ol-ul-minecraft-2ano-45min",
+  "code": "5T298X",
+  "published": false,
+  "html_sha256": "81e778e2509a9991128bd626312d2ba9028da74c54a333d2c156558c710d546a",
+  "independence": "Avaliação por agente distinto do Builder; este agente também produziu o DesignSpec. Não se apresenta como revisão independente do sistema visual.",
+  "scores": {
+    "factual_accuracy": 5,
+    "constraint_alignment": 4,
+    "differentiation_quality": 5,
+    "ux_accessibility": 4,
+    "visual_design": 4,
+    "technical_quality": 5
+  },
+  "issues": [],
+  "critical": [],
+  "required_fixes": [],
+  "blocked_by": [],
+  "resolved_issues": [
+    {
+      "id": "report-noise",
+      "fix_commit": "37cff28",
+      "before": "126 eventos produziram relatório de 4581 linhas com snapshots técnicos repetidos.",
+      "after": "Ensaio final com 74 eventos: 331 linhas, 13808 bytes, rótulos legíveis, sem work_snapshot/checked/marked. Cada registo contém apenas escolhas alteradas. Restauro confirmado."
+    },
+    {
+      "id": "duplicate-reflection",
+      "fix_commit": "37cff28",
+      "before": "Estratégia e próximo passo apareciam na etapa 6 e novamente vazios no host.",
+      "after": "Campos locais ocultos quando integrada; formulário canónico recolhe uma vez. Campos e reflexão continuam disponíveis e restauram no autónomo."
+    }
+  ],
+  "evidence": {
+    "browser": {
+      "provider": "agent-browser-hub MCP",
+      "profile": "research",
+      "session": "pagecraft-leitura-qa",
+      "closed": true,
+      "url": "http://127.0.0.1:8777/5T298X",
+      "methods": "Navegação, estado, cliques, preenchimento, Tab e screenshot pelo MCP. Playwright ligado por CDP ao browser criado pelo Hub para percurso extenso, medições DOM/viewport, reload, screenshot e leitura autenticada do relatório. Não foi lançado browser próprio."
+    },
+    "main_interaction": {
+      "words": [
+        "sal",
+        "mel",
+        "funil",
+        "sol",
+        "azul"
+      ],
+      "retry": "↻ Formaste sol. Volta à pista: Põe-se um pouco na sopa. Experimenta outra peça.",
+      "correct": "✓ Formaste sal. Lê a palavra inteira. Combina com a pista.",
+      "comparison_retry": "↻ Lê al-to e ma-la. Em qual delas o l fica no fim da primeira sílaba?",
+      "comparison_correct": "✓ Em al-to, o l fecha a primeira sílaba. Em ma-la, o l começa a segunda.",
+      "sentence_retry": "↻ Lê e compara com a mensagem. Toca num cartão para o retirar e tenta outra ordem.",
+      "sentence_correct": "✓ A mensagem está em ordem. É um sol azul da nossa construção de fantasia. Lê com o teu par."
+    },
+    "differentiation": {
+      "support": "Duas peças por pista, SVG local e pedido de palavra-modelo; ajuda observada e registada.",
+      "intermediate": "Cinco peças, pista textual e preparação de duas placas.",
+      "challenge": "Cinco peças, contraste alto/mala, justificação e detalhe da construção.",
+      "preserves_responses": true,
+      "host_level_sync": true
+    },
+    "accessibility": {
+      "base_font_px": 22,
+      "minimum_target_px": 56,
+      "focus": {
+        "outline": "rgb(48, 76, 141) solid 3px",
+        "element": "BUTTON",
+        "text": "ol"
+      },
+      "keyboard_space_selection": "ol",
+      "viewports": [
+        [
+          1280,
+          900
+        ],
+        [
+          768,
+          1024
+        ],
+        [
+          390,
+          844
+        ]
+      ],
+      "all_six_stages_390_768": [
+        {
+          "width": 768,
+          "stage": 1,
+          "overflow": false,
+          "small": []
+        },
+        {
+          "width": 768,
+          "stage": 2,
+          "overflow": false,
+          "small": []
+        },
+        {
+          "width": 768,
+          "stage": 3,
+          "overflow": false,
+          "small": []
+        },
+        {
+          "width": 768,
+          "stage": 4,
+          "overflow": false,
+          "small": []
+        },
+        {
+          "width": 768,
+          "stage": 5,
+          "overflow": false,
+          "small": []
+        },
+        {
+          "width": 768,
+          "stage": 6,
+          "overflow": false,
+          "small": []
+        },
+        {
+          "width": 390,
+          "stage": 1,
+          "overflow": false,
+          "small": []
+        },
+        {
+          "width": 390,
+          "stage": 2,
+          "overflow": false,
+          "small": []
+        },
+        {
+          "width": 390,
+          "stage": 3,
+          "overflow": false,
+          "small": []
+        },
+        {
+          "width": 390,
+          "stage": 4,
+          "overflow": false,
+          "small": []
+        },
+        {
+          "width": 390,
+          "stage": 5,
+          "overflow": false,
+          "small": []
+        },
+        {
+          "width": 390,
+          "stage": 6,
+          "overflow": false,
+          "small": []
+        }
+      ],
+      "zoom200": {
+        "scrollWidth": 766,
+        "innerWidth": 768
+      },
+      "contrast_ratio": {
+        "ink_on_background": 12.34,
+        "ink_on_surface": 13.23,
+        "ink_on_accent": 8.72,
+        "surface_on_primary": 7.47
+      },
+      "colors_verified_in_browser": {
+        "ink": "rgb(46, 42, 38)",
+        "background": "rgb(243, 238, 232)",
+        "primary": "rgb(117, 68, 38)"
+      },
+      "host_reflection_label_min_height_px": 48
+    },
+    "restoration_after_repair": {
+      "step": "Etapa 6 de 6",
+      "level": "challenge",
+      "plate1": "O sol é azul.",
+      "plate2": "sol",
+      "sentence": "Osoléazul.",
+      "comparisonReason": "Em al-to, o l fecha a primeira sílaba.",
+      "mode": "not-yet",
+      "ready": true,
+      "revision": "Ensaio de QA: reli a placa.",
+      "last_word": "azul",
+      "last_feedback": "✓ Formaste azul. Lê a palavra inteira. Combina com a pista.",
+      "comparison": "true",
+      "first_word": "sal",
+      "highlight": 1,
+      "model_requested": true,
+      "support_pieces": 2
+    },
+    "standalone": {
+      "saved_status": "Autoavaliação guardada neste separador. Mostra-a ao professor. Nada foi enviado.",
+      "initial_restore": {
+        "step": "Etapa 6 de 6",
+        "strategy": "Comparei al e ol.",
+        "selected": [
+          {
+            "criterion": "0",
+            "value": "help"
+          }
+        ]
+      },
+      "strategy_visible_after_repair": true,
+      "reflection_restored_after_repair": true,
+      "offline_feedback": "✓ Formaste mel. Lê a palavra inteira. Combina com a pista."
+    },
+    "saved_report": {
+      "attempt_id": "16e374019e6112885ca72d766e0ec752",
+      "completed": true,
+      "preview": true,
+      "assessment": {
+        "answers": {
+          "localizar": "help",
+          "ler-usar": "practising",
+          "rever-partilhar": "skip"
+        },
+        "strategy": "Reli a pista e comparei as letras.",
+        "next_step": "Praticar a palavra funil.",
+        "language": "pt",
+        "level": "intermediate"
+      },
+      "event_count": 74,
+      "report_status": 200,
+      "report_lines": 331,
+      "report_bytes": 13808,
+      "payload_max_bytes": 179,
+      "event_types": [
+        "activity_loaded",
+        "assessment_result",
+        "attempt",
+        "discovery",
+        "help_needed",
+        "level_changed",
+        "share_requested",
+        "unit_started"
+      ],
+      "technical_state_terms_absent": true,
+      "excluded_from_student_reports": true
+    },
+    "console_errors": [],
+    "initial_network_errors": [],
+    "standalone_failed_requests": [],
+    "draft_visibility": {
+      "anonymous_api_checks": [
+        {
+          "url": "http://127.0.0.1:8777/api/learning/activities/5T298X",
+          "status": 404
+        },
+        {
+          "url": "http://127.0.0.1:8777/api/learning/activities/5T298X/content",
+          "status": 404
+        },
+        {
+          "url": "https://pagecraft.infantinho.xyz/api/learning/activities/5T298X",
+          "status": 403
+        },
+        {
+          "url": "https://pagecraft.infantinho.xyz/api/learning/activities/5T298X/content",
+          "status": 403
+        }
+      ],
+      "remote_teacher": {
+        "title": "Sign in ・ Cloudflare Access",
+        "access_sign_in": true,
+        "method": "Hub MCP state title observed; authentication not attempted"
+      },
+      "interpretation": "API local recusa o rascunho com404; hostname público remoto recusou com403, sem atribuir a recusa ao backend. Entrada privada exige Cloudflare Access."
+    },
+    "artifacts": [
+      "drafts/leitura-al-el-il-ol-ul-minecraft-2ano-45min-qa-report.md",
+      "drafts/leitura-al-el-il-ol-ul-minecraft-2ano-45min-desktop-final.png",
+      "drafts/leitura-al-el-il-ol-ul-minecraft-2ano-45min-mobile-final.png",
+      "drafts/leitura-al-el-il-ol-ul-minecraft-2ano-45min-standalone-tablet.png",
+      "drafts/leitura-al-el-il-ol-ul-minecraft-2ano-45min-390.png",
+      "drafts/leitura-al-el-il-ol-ul-minecraft-2ano-45min-768.png",
+      "drafts/leitura-al-el-il-ol-ul-minecraft-2ano-45min-repair-ticket-v1.json"
+    ],
+    "proofread": "drafts/leitura-al-el-il-ol-ul-minecraft-2ano-45min-proofread.json"
+  },
+  "acceptance_checks": [
+    "Seis unidades somam45min;Minecraft13min mais transição2min.",
+    "Cinco sequências exploradas em sal/mel/funil/sol/azul, com feedback de significado e revisão.",
+    "Destaque identifica letras, sem falsas divisões fu-n-il/a-z-ul; comparação al-to/ma-la correta.",
+    "Critérios apresentados antes do trabalho e retomados no formulário final.",
+    "Três apoios reais, mutáveis sem apagar escolhas; navegação livre sem obrigar respostas.",
+    "Montagem e retirada de cartões por toque/teclado, frase errada e revisão testadas.",
+    "Plano escrito reaparece na transição; Minecraft pede pequena construção e duas placas com alternância.",
+    "Autorrelato da aplicação externa e observação do professor separados; nenhuma validação automática do mundo.",
+    "Corpo22px, alvos56px, foco3px, seis etapas sem overflow a390px/768px; zoom CSS200% sem overflow.",
+    "Reflexão host guarda ajuda/prática/omissão, estratégia e próximo passo; download autenticado200.",
+    "Restauro por eventos após reload preserva etapas, apoio, palavras, modelos, destaques, frase, placas e autorrelato.",
+    "Reflexão autónoma permite limpar resposta, guarda/restaura no separador e declara que nada foi enviado.",
+    "Dados sintéticos de preview não entram na listagem de relatórios dos alunos; atividade continua não publicada.",
+    "Sem erros JavaScript observados; página já carregada mantém interação com rede desligada."
+  ],
+  "limitations": [
+    "Minecraft Education não foi executado. Professor deve confirmar licença/acesso, preparar mundo criativo e observar leitura, placas e cooperação.",
+    "Sem teste com crianças reais; ritmo de45min depende de mundo já preparado e experiência da turma.",
+    "Entrada privada remota verificada até Cloudflare Access; não foi feita autenticação remota. Preview completo e relatório testados em loopback.",
+    "Sem teste de leitor de ecrã ou equipamento físico; teclado, DOM e viewports foram testados no Chromium do Hub.",
+    "Zoom200% medido por CSS no browser, não por atalho de zoom nativo.",
+    "PT/EN não aplicável; utilizador pediu português. Não existe seletor de inglês nesta atividade.",
+    "A página criada usa alvos de56px. As opções do formulário partilhado do host mediram48px, cumprindo o mínimo geral da skill; este formulário comum não foi alterado nesta atividade."
+  ],
+  "suggestions": [
+    "O relatório preserva cada tentativa e alteração de plano; usar a secção de autoavaliação e as placas escritas para preparar a conversa com o aluno."
+  ]
+}

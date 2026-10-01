@@ -1,0 +1,503 @@
+{
+  "topic": "Frações com Minecraft · Revisão em banda desenhada",
+  "slug": "fracoes-banda-desenhada-2ano",
+  "language": "pt-PT",
+  "ageRange": "2.º ano, 7–8 anos",
+  "duration": 45,
+  "objectives": [
+    "Distinguir partes iguais e desiguais da mesma unidade e reconhecer metades.",
+    "Relacionar imagens, palavras e símbolos de frações e reconhecer a unidade inteira.",
+    "Comparar partes de unidades do mesmo tamanho com representações visuais.",
+    "Representar uma fração numa unidade de 20 blocos e explicar ao colega como se organizaram as partes."
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Matemática",
+        "year": "2.º ano",
+        "domain": "Números: frações",
+        "descriptor": "Relação parte-todo numa unidade contínua; interpretação das partes escolhidas e totais; passagem entre representações; reconhecimento de metades, quartos e unidade inteira.",
+        "source": "documentos-oficiais/aprendizagens-essenciais/matematica-2-ano-1-ciclo.md",
+        "url": "https://www.dge.mec.pt/sites/default/files/Curriculo/Aprendizagens_Essenciais/1_ciclo/ae_mat_2.o_ano.pdf",
+        "pages": "24–25",
+        "formulation": "Síntese dos descritores, sem citação literal."
+      },
+      {
+        "subject": "Matemática",
+        "year": "2.º ano",
+        "domain": "Números: relações entre frações",
+        "descriptor": "Comparação de frações unitárias através de diferentes representações.",
+        "source": "documentos-oficiais/aprendizagens-essenciais/matematica-2-ano-1-ciclo.md",
+        "url": "https://www.dge.mec.pt/sites/default/files/Curriculo/Aprendizagens_Essenciais/1_ciclo/ae_mat_2.o_ano.pdf",
+        "pages": "25–26",
+        "formulation": "Síntese do descritor; comparações não unitárias da atividade são extensão visual."
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-E: Relacionamento interpessoal",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ],
+    "tic": {
+      "documentType": "Orientações Curriculares do 1.º ciclo",
+      "source": "documentos-oficiais/aprendizagens-essenciais/tic-1-ano-1-ciclo.md",
+      "url": "https://www.dge.mec.pt/sites/default/files/Curriculo/Aprendizagens_Essenciais/1_ciclo/oc_1_tic_1.pdf",
+      "pages": "7–8",
+      "connection": "Comunicar estratégias e resolver problemas matemáticos com ferramentas digitais.",
+      "limit": "O ficheiro local tem título de AE do 1.º ano, mas o corpo é OC para todo o ciclo. Não se usa a proposta de 2026 como norma homologada."
+    },
+    "scope": "A unidade é contínua, inclusive na construção de blocos contíguos. O número 20 é uma escolha didática para obter grupos inteiros. Os exemplos de 2/5 têm apoio nas estratégias; a comparação não unitária é extensão para revisão do professor.",
+    "verifiedOn": "2026-09-29"
+  },
+  "memAlignment": {
+    "modules": [
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "Critérios apresentados antes da exploração",
+      "Autoavaliação da realização"
+    ],
+    "socialOrganization": "Exploração individual com conversa a pares; construção em pares, um constrói e outro verifica, depois trocam; partilha orientada pelo professor. Não há identificação técnica do grupo."
+  },
+  "materials": [
+    "Tablet ou computador com a página autocontida",
+    "Minecraft preparado pelo professor ou papel quadriculado/cubos",
+    "20 blocos iguais em duas cores para a construção alternativa"
+  ],
+  "units": [
+    {
+      "id": "u1",
+      "summary": "Partilhar o pão em partes iguais.",
+      "textDescription": "Comparar os tamanhos das duas partes do mesmo pão e distinguir metades de cortes desiguais.",
+      "duration": 8,
+      "interaction": {
+        "state": [
+          {
+            "name": "cut",
+            "type": "quiz",
+            "default": null,
+            "options": [
+              "à esquerda",
+              "ao meio",
+              "à direita"
+            ]
+          },
+          {
+            "name": "answer",
+            "type": "quiz",
+            "default": null,
+            "options": [
+              "Sim",
+              "Não"
+            ]
+          },
+          {
+            "name": "comparison",
+            "type": "quiz",
+            "default": null,
+            "options": [
+              "A",
+              "B"
+            ]
+          },
+          {
+            "name": "inventedCut",
+            "type": "quiz",
+            "default": null,
+            "options": [
+              "à esquerda",
+              "ao meio",
+              "à direita"
+            ]
+          },
+          {
+            "name": "reason",
+            "type": "quiz",
+            "default": null,
+            "options": [
+              "As partes têm tamanhos diferentes.",
+              "O pão tem outra cor.",
+              "O pão é pequeno."
+            ]
+          }
+        ],
+        "render": "Duas páginas em vinhetas. Pão com corte escolhido e barras alinhadas pela mesma origem; duas partilhas na segunda página ou corte inventado em Mais desafios.",
+        "transition": "Escolher um corte permite responder. Alterar o corte limpa apenas a resposta dependente. A segunda página recebe a escolha A/B ou corte e explicação. Respostas erradas permanecem corrigíveis e permitem avançar.",
+        "constraint": "Cada metade ocupa o mesmo espaço que a outra metade da mesma unidade.",
+        "assessment": "Escolher o corte e responder se são metades; depois escolher a partilha ou inventar um corte e selecionar uma explicação. Distinguir presença e acerto."
+      },
+      "differentiation": {
+        "support": "Com pistas: comparar metades com ajuda visual de alinhamento desde o início.",
+        "standard": "Passo a passo: escolher o corte e reconhecer a partilha A entre duas imagens.",
+        "challenge": "Mais desafios: inventar um corte desigual e escolher uma explicação."
+      },
+      "pages": [
+        0,
+        1
+      ],
+      "criteria": [
+        "partes-iguais",
+        "metades"
+      ]
+    },
+    {
+      "id": "u2",
+      "summary": "Relacionar partes pintadas e símbolo.",
+      "textDescription": "Explorar a relação entre partes escolhidas, total de partes iguais e símbolo da fração.",
+      "duration": 5,
+      "interaction": {
+        "state": [
+          {
+            "name": "cells",
+            "type": "toggle",
+            "default": []
+          },
+          {
+            "name": "confirmed",
+            "type": "toggle",
+            "default": false
+          },
+          {
+            "name": "target",
+            "type": "derived",
+            "default": null,
+            "derivedFrom": "support:1/2; intermediate:1/4; challenge:2/5"
+          }
+        ],
+        "render": "Grelha com partes iguais e símbolo pedido; o modelo destaca o total e as partes pintadas.",
+        "transition": "Tocar pinta ou apaga uma parte e invalida a confirmação. Confirmar representação cria resposta mesmo quando está vazia ou incorreta. Mudar o alvo invalida a confirmação.",
+        "constraint": "O denominador corresponde a todas as partes iguais e o numerador às partes escolhidas.",
+        "assessment": "Confirmar explicitamente a representação pedida; a grelha inicial não conta como resposta."
+      },
+      "differentiation": {
+        "support": "Com pistas: pintar 1/2 com modelo visível.",
+        "standard": "Passo a passo: pintar 1/4.",
+        "challenge": "Mais desafios: pintar 2/5."
+      },
+      "pages": [
+        2
+      ],
+      "criteria": [
+        "representar"
+      ]
+    },
+    {
+      "id": "u3",
+      "summary": "Associar imagens, palavras e símbolos e representar na grelha.",
+      "textDescription": "Relacionar formas de representar a mesma fração e comunicar também por desenho.",
+      "duration": 8,
+      "interaction": {
+        "state": [
+          {
+            "name": "matches",
+            "type": "matching",
+            "default": []
+          },
+          {
+            "name": "cells",
+            "type": "toggle",
+            "default": []
+          },
+          {
+            "name": "confirmed",
+            "type": "toggle",
+            "default": false
+          },
+          {
+            "name": "drawing",
+            "type": "canvas",
+            "default": []
+          }
+        ],
+        "render": "Lista finita de associações, com contador dos pedidos em falta; página seguinte com grelha e desenho livre opcional.",
+        "transition": "Cada associação recebe uma escolha, incluindo escolhas erradas. Tocar na grelha invalida apenas a confirmação. Desenhar não classifica nem emite tentativa. Alterar nível conserva pedidos iguais e invalida os alterados.",
+        "constraint": "Imagem, palavras e símbolo podem representar a mesma relação entre partes e unidade.",
+        "assessment": "Responder a todas as associações visíveis e confirmar a grelha. Não exigir uma explicação escrita nem avaliar automaticamente desenho livre."
+      },
+      "differentiation": {
+        "support": "Com pistas: imagem de 1/2 e palavras um quarto, com modelo; grelha 1/2.",
+        "standard": "Passo a passo: imagem de 1/2 e palavras três quartos; grelha 3/4.",
+        "challenge": "Mais desafios: imagens de 2/5 e 3/4 e palavras um quarto; grelha 3/4."
+      },
+      "pages": [
+        3,
+        4
+      ],
+      "criteria": [
+        "representar"
+      ]
+    },
+    {
+      "id": "u4",
+      "summary": "Compor a unidade inteira.",
+      "textDescription": "Observar o que ocupa a moldura e distinguir uma composição parcial da unidade completa.",
+      "duration": 4,
+      "interaction": {
+        "state": [
+          {
+            "name": "cells",
+            "type": "toggle",
+            "default": []
+          },
+          {
+            "name": "confirmed",
+            "type": "toggle",
+            "default": false
+          },
+          {
+            "name": "answer",
+            "type": "quiz",
+            "default": null,
+            "options": [
+              "Sim",
+              "Não"
+            ]
+          }
+        ],
+        "render": "Moldura fixa com partes colocadas e espaços livres; pista visual da ocupação da unidade.",
+        "transition": "Colocar ou retirar partes invalida a confirmação e a resposta. Confirmar composição permite responder se a unidade está inteira. Ambos os pedidos são obrigatórios, independentemente do acerto.",
+        "constraint": "Quando todas as partes iguais ocupam a moldura, recompõem a unidade.",
+        "assessment": "Confirmar a composição e responder se está inteira, em duas ações explícitas."
+      },
+      "differentiation": {
+        "support": "Com pistas: unidade de duas partes, com modelo.",
+        "standard": "Passo a passo: unidade de quatro partes.",
+        "challenge": "Mais desafios: unidade de cinco partes."
+      },
+      "pages": [
+        5
+      ],
+      "criteria": [
+        "inteiro"
+      ]
+    },
+    {
+      "id": "u5",
+      "summary": "Comparar frações de unidades do mesmo tamanho.",
+      "textDescription": "Alinhar representações e comparar a extensão pintada.",
+      "duration": 5,
+      "interaction": {
+        "state": [
+          {
+            "name": "comparisons",
+            "type": "quiz",
+            "default": [],
+            "options": [
+              "A",
+              "B",
+              "Iguais"
+            ]
+          }
+        ],
+        "render": "Barras do mesmo comprimento total, alinhadas pela mesma origem; um cartão por par e lista finita visível.",
+        "transition": "Escolher A, B ou Iguais em cada cartão. Cada resposta recebe feedback e pode ser corrigida. Alterar os pares pelo nível invalida apenas respostas dos pares alterados.",
+        "constraint": "A comparação das partes exige conservar o tamanho da unidade.",
+        "assessment": "Responder a todos os pares apresentados; o avanço depende de responder, não de acertar."
+      },
+      "differentiation": {
+        "support": "Com pistas: 1/2 com 1/4; 1/2 com 1/2.",
+        "standard": "Passo a passo: 1/4 com 1/2; 2/4 com 1/2.",
+        "challenge": "Mais desafios: 2/5 com 1/2; 3/4 com 2/4; 2/4 com 1/2."
+      },
+      "pages": [
+        6
+      ],
+      "criteria": [
+        "comparar"
+      ]
+    },
+    {
+      "id": "u6",
+      "summary": "Construir uma fração numa unidade de 20 blocos.",
+      "textDescription": "Aplicar a relação parte-todo numa superfície de 20 blocos contíguos, no Minecraft ou com papel quadriculado/cubos.",
+      "duration": 10,
+      "interaction": {
+        "state": [
+          {
+            "name": "material",
+            "type": "dropdown",
+            "default": "minecraft",
+            "options": [
+              "Minecraft",
+              "Papel ou cubos"
+            ]
+          },
+          {
+            "name": "target",
+            "type": "dropdown",
+            "default": "1/4",
+            "options": [
+              "1/2",
+              "1/4",
+              "2/5",
+              "1/10"
+            ]
+          },
+          {
+            "name": "done",
+            "type": "toggle",
+            "default": false
+          },
+          {
+            "name": "answer",
+            "type": "quiz",
+            "default": null,
+            "options": [
+              "2",
+              "5",
+              "8",
+              "10"
+            ]
+          }
+        ],
+        "render": "Modelo SVG sempre visível, com 20 blocos iguais numa unidade contínua. Mostra grupos do mesmo tamanho e os grupos escolhidos. Mostrar a fração, o material, os papéis e a pergunta sobre os blocos que devem pintar.",
+        "transition": "Escolher material e, no desafio, fração. A criança constrói fora da página, declara Já fizemos e escolhe 2, 5, 8 ou 10. Exigir ambas as respostas, mesmo quando o número está errado. Alterar material ou fração invalida ambas; alterar nível só invalida se mudar o desafio. Reabrir conserva o trabalho da realização.",
+        "constraint": "Os 20 blocos formam a unidade; dividir pelo denominador dá grupos iguais e escolher o numerador desses grupos dá a parte pedida. Não arredondar blocos.",
+        "assessment": "Registar separadamente declaração de realização e resposta numérica. O número esperado é 10 para 1/2, 5 para 1/4, 8 para 2/5 e 2 para 1/10. A aplicação observa a resposta, não o mundo Minecraft."
+      },
+      "differentiation": {
+        "support": "Com pistas: construir 1/2, com modelo de dois grupos de dez.",
+        "standard": "Passo a passo: construir 1/4; pista de quatro grupos de cinco disponível.",
+        "challenge": "Mais desafios: escolher apenas entre 1/2, 1/4, 2/5 e 1/10 e representar a escolha."
+      },
+      "pages": [
+        8
+      ],
+      "criteria": [
+        "construir"
+      ],
+      "maker": {
+        "type": "minecraft",
+        "challenge": "Construam uma unidade de 20 blocos. Pintem a fração pedida. Um constrói e o outro verifica. Depois troquem.",
+        "materials": [
+          "Minecraft preparado pelo professor",
+          "Papel quadriculado ou 20 cubos iguais de duas cores"
+        ],
+        "groupSize": "2",
+        "connection": "Passar das partes iguais no ecrã para uma superfície construída; contar blocos de cada grupo.",
+        "communication": "Mostrar a construção ao colega ou à turma e explicar como formaram grupos iguais.",
+        "alternatives": [
+          "Construir a mesma unidade com 20 quadrículas contíguas em papel ou 20 cubos iguais."
+        ]
+      },
+      "externalObservation": "Já fizemos é a declaração da criança. Não há inspeção do mundo, identificação técnica do par ou atribuição automática de evidência aos dois membros."
+    },
+    {
+      "id": "u7",
+      "summary": "Refletir sobre os critérios e escolher um próximo passo.",
+      "textDescription": "Retomar os critérios conhecidos, a ajuda recebida e uma estratégia usada, sem nota automática.",
+      "duration": 5,
+      "interaction": {
+        "state": [
+          {
+            "name": "criteriaChoices",
+            "type": "quiz",
+            "default": [],
+            "options": [
+              "Sozinho",
+              "Com ajuda",
+              "Quero praticar",
+              "Prefiro não responder"
+            ],
+            "scope": "Reflexão local; o anfitrião de realizações mantém o seu formulário e os seus rótulos próprios."
+          },
+          {
+            "name": "strategy",
+            "type": "quiz",
+            "default": "",
+            "inputKind": "text",
+            "maxLength": 160,
+            "required": false,
+            "description": "Campo de texto livre facultativo na reflexão local."
+          },
+          {
+            "name": "nextStep",
+            "type": "quiz",
+            "default": "",
+            "inputKind": "text",
+            "maxLength": 160,
+            "required": false,
+            "description": "Campo de texto livre facultativo na reflexão local."
+          }
+        ],
+        "render": "Página final com acesso à Autoavaliação da realização no anfitrião; sem anfitrião, reflexão local com critérios e escolhas opcionais.",
+        "transition": "Na realização, o botão final emite open_reflection e o anfitrião trata da autoavaliação e conclusão. Sem anfitrião, todas as escolhas podem ficar por dar; não afirmar envio. Na sessão ao vivo, identificar eventual registo como voz do aluno.",
+        "constraint": "Reconhecer a ajuda e o que se quer praticar orienta a continuação do trabalho, sem transformar respostas em nota.",
+        "assessment": "A criança pode escolher como trabalhou, descrever uma estratégia ou indicar o próximo passo. As respostas são opcionais e distintas da evidência observada e do parecer do professor."
+      },
+      "differentiation": {
+        "support": "Com pistas: escolher com apoio visual e conversa com o professor.",
+        "standard": "Passo a passo: escolher uma estratégia usada.",
+        "challenge": "Mais desafios: explicar oralmente a estratégia com um exemplo e escolher o próximo passo."
+      },
+      "pages": [
+        9
+      ],
+      "criteria": [
+        "partes-iguais",
+        "metades",
+        "representar",
+        "inteiro",
+        "comparar",
+        "construir"
+      ]
+    }
+  ],
+  "criteria": [
+    {
+      "id": "partes-iguais",
+      "pt": "Reconheço duas partes com o mesmo tamanho."
+    },
+    {
+      "id": "metades",
+      "pt": "Distingo uma metade de uma parte desigual."
+    },
+    {
+      "id": "representar",
+      "pt": "Represento frações com partes iguais."
+    },
+    {
+      "id": "inteiro",
+      "pt": "Reconheço uma unidade inteira."
+    },
+    {
+      "id": "comparar",
+      "pt": "Comparo frações da mesma unidade."
+    },
+    {
+      "id": "construir",
+      "pt": "Represento uma fração numa unidade de 20 blocos."
+    }
+  ],
+  "levels": {
+    "support": "Com pistas",
+    "intermediate": "Passo a passo",
+    "challenge": "Mais desafios",
+    "default": "intermediate"
+  },
+  "sessionFlow": "45 minutos no total: u1 8, u2 5, u3 8, u4 4 e u5 5 incluem a apresentação inicial dos critérios e perfazem 30 minutos; u6 construção cooperativa 10 minutos; u7 reflexão e partilha 5 minutos. Ajustar o ritmo com a turma sem exigir acerto para avançar.",
+  "progression": {
+    "rule": "Cada página declara os pedidos obrigatórios. Só avançar quando todos têm resposta, mesmo com erros; voltar é permitido.",
+    "initialValues": "Valores e exemplos iniciais não são respostas.",
+    "dependencies": "Alterar o objeto invalida as respostas dependentes. Mudar de nível conserva pedidos iguais.",
+    "demonstration": "Navegação livre para professor/Quadro; não emitir respostas, tentativas ou estado de alunos.",
+    "transitionPage": "Página 8, índice 7, retoma as cinco unidades antes de Construir na página 9 e Refletir na página 10."
+  },
+  "integration": {
+    "bridge": "postMessage, nomes existentes preservados; sem API nem credenciais no HTML.",
+    "reflection": "open_reflection na realização; o anfitrião é responsável pela conclusão, sem conclusão duplicada no HTML.",
+    "evidence": "Tentativas e correções reais; declaração externa e voz do aluno identificadas; navegação, redesenho e restauração não são tentativas.",
+    "restore": "activity_state e learning_restore no anfitrião de realizações; validar o estado e não criar eventos durante a restauração.",
+    "limits": "Sessão ao vivo e página autónoma conservam manipulações enquanto abertas; não prometer recuperação do trabalho fora do anfitrião da realização."
+  },
+  "review": {
+    "status": "Rascunho para revisão do professor; não publicado.",
+    "decisionSource": "docs/design/fracoes-banda-desenhada-spec.md",
+    "stageSource": "docs/design/fracoes-banda-desenhada-etapas.md",
+    "sourceRecord": "drafts/fracoes-banda-desenhada-2ano-sources.md",
+    "preserve": "activities/fracoes-2-minecraft e trabalhos anteriores permanecem intactos."
+  },
+  "requires_completion": true
+}

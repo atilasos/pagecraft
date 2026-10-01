@@ -20,6 +20,7 @@ from ..events import EventHub, utcnow
 from ..knowledge import AEClient, WikiClient
 from ..providers import AIProvider
 from ..storage import Storage
+from ..typography import embed_activity_typography
 from .phases import build_phases
 from .validators import validate_activity_html
 
@@ -278,11 +279,12 @@ class PipelineRunner:
                 repair_ticket=repair_ticket, previous_html=previous_html,
             )
             html = built["html"]
-            await self._write_artifact(job, "html", ".html", html)
-
+            # Validate the model content before font bytes can mask a short build.
             validation = validate_activity_html(
                 html, expected_units=len(docspec.get("units") or [])
             ).as_dict()
+            html = embed_activity_typography(html)
+            await self._write_artifact(job, "html", ".html", html)
             await self._emit(job, "validation", validation)
 
             proofread = await self._phase(job, "proofreader", docspec, html)

@@ -19,6 +19,7 @@ class Role(StrEnum):
     TEACHER = "teacher"
     STUDENT = "student"
     BOARD = "board"
+    LEARNER = "learner"
 
 
 class TrustChannel(StrEnum):
@@ -32,11 +33,13 @@ class RoutePolicy(StrEnum):
     TEACHER = Role.TEACHER
     STUDENT = Role.STUDENT
     BOARD = Role.BOARD
+    LEARNER = Role.LEARNER
 
 
 class RateLimitOperation(StrEnum):
     JOIN = "join"
     CLAIM = "claim"
+    ACTIVITY_START = "activity_start"
 
 
 _POLICY_ATTRIBUTE = "__pagecraft_access_policy__"
@@ -56,8 +59,10 @@ class AccessContext:
     client_ip: str
     student_id: str | None = None
     student_session_id: str | None = None
+    work_group_id: str | None = None
     student_credential: str = ""
     board_credential: str = ""
+    realization_id: str | None = None
 
 
 class RequestRateLimiter:
@@ -84,7 +89,9 @@ class RequestRateLimiter:
         cutoff = now - self._window_seconds
         while attempts and attempts[0] <= cutoff:
             attempts.popleft()
-        if len(attempts) >= self._limit:
+        # A turma pode entrar através do mesmo IP público da escola.
+        limit = max(self._limit, 60) if operation is RateLimitOperation.ACTIVITY_START else self._limit
+        if len(attempts) >= limit:
             return False
         attempts.append(now)
         return True
@@ -213,14 +220,32 @@ def _trust_channel(request: Request) -> tuple[TrustChannel, str]:
     return TrustChannel.LAN, socket_ip
 
 
-async def resolve_access(request: Request, path_params: dict) -> AccessContext:
+async def resolve_access(
+    request: Request, policy: frozenset[RoutePolicy]
+) -> AccessContext:
     """Resolve Papel e canal uma única vez, antes de executar o handler."""
 
     channel, client_ip = _trust_channel(request)
+    # O browser do quadro pode ter também uma sessão de professor ou aluno.
+    # Estas rotas usam só a identidade emparelhada, incluindo o stream vivo.
+    if policy == {RoutePolicy.BOARD}:
+        return await _resolve_board_access(request, channel, client_ip)
+
+    cloudflare = getattr(request.app.state, "cloudflare_access", None)
+    if channel is TrustChannel.CLOUDFLARE and cloudflare and await cloudflare.authenticates(request):
+        return AccessContext(Role.TEACHER, channel, client_ip)
+
     expected = getattr(request.app.state, "teacher_token", "")
     teacher_token = request.cookies.get(TEACHER_COOKIE_NAME, "")
-    if teacher_token and expected and hmac.compare_digest(teacher_token, expected):
+    if channel is TrustChannel.LOOPBACK and teacher_token and expected and hmac.compare_digest(teacher_token, expected):
         return AccessContext(Role.TEACHER, channel, client_ip)
+
+    from .learning import LEARNING_COOKIE
+    learning = getattr(request.app.state, "learning", None)
+    if learning is not None and request.cookies.get(LEARNING_COOKIE):
+        realization_id = await learning.resolve(request.cookies[LEARNING_COOKIE])
+        if realization_id and request.url.path.startswith('/api/learning/me'):
+            return AccessContext(Role.LEARNER, channel, client_ip, realization_id=realization_id)
 
     student_cookie = request.cookies.get(STUDENT_COOKIE_NAME, "")
     student_session_id, separator, student_credential = student_cookie.partition(".")
@@ -241,6 +266,19 @@ async def resolve_access(request: Request, path_params: dict) -> AccessContext:
                 student_credential=student_credential,
             )
 
+        group_id = await classroom.work_group_for_token(student_session_id, student_credential, require_live=False)
+        if group_id:
+            return AccessContext(
+                Role.STUDENT, channel, client_ip, work_group_id=group_id,
+                student_session_id=student_session_id, student_credential=student_credential,
+            )
+
+    return await _resolve_board_access(request, channel, client_ip)
+
+
+async def _resolve_board_access(
+    request: Request, channel: TrustChannel, client_ip: str
+) -> AccessContext:
     board_credential = request.cookies.get(BOARD_COOKIE_NAME, "")
     board_pairings = getattr(request.app.state, "board_pairings", None)
     if (
@@ -277,7 +315,7 @@ def policy_allows(
     )
 
 
-def issue_teacher_cookie(response: Response, credential: str) -> None:
+def issue_teacher_cookie(response: Response, credential: str, *, secure: bool = False) -> None:
     """Emite a credencial sem a expor ao handler nem ao JavaScript."""
 
     response.set_cookie(
@@ -286,6 +324,7 @@ def issue_teacher_cookie(response: Response, credential: str) -> None:
         httponly=True,
         samesite="strict",
         path="/",
+        secure=secure,
     )
 
 

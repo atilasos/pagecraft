@@ -197,7 +197,7 @@ async def test_board_stream_contains_only_shared_state_and_global_events(client)
 
         producer = asyncio.create_task(produce())
         response = await board.get(
-            f"/api/sessions/{session['id']}/stream",
+            f"/api/board/sessions/{session['id']}/stream",
         )
         await producer
 

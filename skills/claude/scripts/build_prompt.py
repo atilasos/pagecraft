@@ -61,7 +61,10 @@ def main():
         action="store_true",
         help="Incluir identities/builder.md no início do prompt",
     )
+    parser.add_argument("--output", help="Caminho do HTML que o Builder deve produzir")
     args = parser.parse_args()
+    docspec_path = Path(args.docspec)
+    output = args.output or str(docspec_path.with_name(docspec_path.stem.removesuffix("-docspec") + ".html"))
 
     spec = json.loads(Path(args.docspec).read_text(encoding="utf-8"))
 
@@ -115,9 +118,9 @@ def main():
 
 ### Diferenciação (implementar como tabs seleccionáveis)
 
-- 🟢 **Apoio:** {diff.get("support", "")}
-- 🟡 **Intermédio:** {diff.get("standard", "")}
-- 🔴 **Desafio:** {diff.get("challenge", "")}
+- **Com pistas — Apoio:** {diff.get("support", "")}
+- **Passo a passo — Intermédio:** {diff.get("standard", "")}
+- **Mais desafios — Desafio:** {diff.get("challenge", "")}
 {maker_text}""")
 
     # Curriculum footer
@@ -126,20 +129,6 @@ def main():
         for a in curriculum.get("ae", [])
     )
     comp_items = "\n".join(f"- {c}" for c in curriculum.get("competencies", []))
-
-    # Maker summary
-    maker_units = [u for u in units if u.get("maker")]
-    maker_summary = ""
-    if maker_units:
-        items = "\n".join(
-            f"- **{u['maker']['type'].title()}:** {u['maker']['challenge']}"
-            for u in maker_units
-        )
-        maker_summary = f"""
-## Secção Maker (🛠️ Desafios Maker)
-Incluir secção visual com fundo verde:
-{items}
-"""
 
     # Build prompt
     parts = []
@@ -156,79 +145,39 @@ Incluir secção visual com fundo verde:
         else "Não foi encontrado AGENTS.md/CLAUDE.md/README.md no repo resolvido; cumpre as regras PageCraft desta skill e do DocSpec/design-spec."
     )
 
-    parts.append(f"""# PageCraft Builder — Gerar página HTML interactiva
+    refs = SKILL_DIR / "references"
+    if not refs.is_dir():
+        refs = PAGECRAFT_REPO / "server/pipeline/prompts/references"
+    experience = (refs / "activity-experience.md").read_text(encoding="utf-8")
+    age_rules = (refs / "age-adaptation.md").read_text(encoding="utf-8")
+    parts.append(f"""# PageCraft Builder
 
-## Tarefa
-Gera um ficheiro `page.html` com uma página de aula interactiva completa, self-contained.
+Gera o HTML autocontido em `{output}` a partir deste DocSpec. Segue o design-spec produzido pelo Designer; planeia o percurso conforme as unidades, sem impor uma estrutura fixa.
 
-## Tópico: {topic}
-- Ano: {age}
-- Duração: {duration} minutos
-- Objectivos: {json.dumps(objectives, ensure_ascii=False)}
+Tema: {topic}
+Idade: {age}
+Duração: {duration} minutos
+Objetivos: {json.dumps(objectives, ensure_ascii=False)}
 
-## Estrutura da página
-
-1. **Header** com gradiente colorido, título, metadados (ano, duração), objectivos
-2. **Units interactivas** (ver especificações abaixo)
-3. **Secção Maker** (🛠️) com desafios maker em cards verdes
-4. **Mini-avaliação** (📝) com 4-5 itens observáveis, fundo laranja
-5. **Footer curricular** com AE e Perfil do Aluno, fundo roxo
-6. **Footer** "Gerado por PageCraft 🛠️"
-
-{"".join(units_text)}
-
-{maker_summary}
-
-## Mini-avaliação (📝)
-Gerar 4-5 perguntas/desafios observáveis baseados nos Assessment de cada unit.
-Incluir escala: ⬜ Ainda não consigo · ⬜ Com ajuda · ⬜ Sozinho/a · ⬜ Ajudo colegas
-
-## Referências curriculares (footer)
-### Aprendizagens Essenciais
-{ae_items}
-
-### Perfil do Aluno
-{comp_items}
-
-## Requisitos técnicos OBRIGATÓRIOS
-
-1. **HTML5 + CSS3 + JavaScript vanilla** — ZERO dependências externas, ZERO CDNs
-2. **Self-contained** — TODO o CSS e JS inline no ficheiro HTML
-3. **Responsive** — funcionar em tablet (768px) e quadro interactivo (1920px)
-4. **Touch-friendly** — áreas clicáveis mínimo 44x44px, suporte touch events + mouse
-5. **Acessibilidade** — aria-labels, contraste WCAG AA, font-size mínimo 16px
-6. **Cores vivas** — amigáveis para crianças, feedback visual claro
-7. **Animações** — CSS transitions + requestAnimationFrame para partículas/canvas
-8. **Diferenciação** — 3 níveis como tabs/botões (🟢 Apoio, 🟡 Intermédio, 🔴 Desafio)
-9. **Constraint** — NÃO revelar directamente; a interacção leva à descoberta
-10. **Feedback** — visual+sonoro quando o aluno descobre algo (confetti, cor, mensagem)
-11. **Drag-and-drop** — funcional com touch events E mouse events
-12. **Offline** — funcionar sem internet
-13. **Linguagem** — pt-PT (AO90), frases curtas, adequada a {age}
-
-## Guardar como
-`page.html` — ficheiro único, completo, pronto a abrir no browser.
-
-## IMPORTANTE
-- Usar `template.html` como referência de estilo CSS (se existir no directório)
-- Implementar TODAS as interacções descritas nas specs SRTC-A
-- Cada slider, matching, sorting, toggle deve ser FUNCIONAL, não placeholder
-- Canvas com partículas animadas quando especificado
-- Testar mentalmente que a página funciona antes de gravar
-
-## Design obrigatório (PageCraft)
+## Regras do repositório
 {rules_text}
 
-Resumo das regras críticas PageCraft:
-- Fonte: 'Nunito', 'Comic Sans MS', 'Chalkboard SE' — nunca Inter/Roboto/Arial
-- Tamanho base body: 20px; sílabas: 36-48px, font-weight 800
-- Touch targets mínimo 48px em todos os eixos
-- Cada sílaba com cor própria do design-spec.json (syllableColors)
-- Botões pill, border-radius 16px nos cards, feedback correto/incorreto conforme spec
-- Aplicar a skill de design `anthropics-frontend-design`: página única, identidade visual
-  baseada na paleta da palavra, playful/toy-like, animações de stagger no load
-- Respeitar `prefers-reduced-motion` nas animações
-- Focus ring: outline 3px solid var(--primary), outline-offset 2px
+## Experiência aprovada
+{experience}
+
+## Adaptação à idade
+{age_rules}
+
+## Unidades SRTC-A
+{"".join(units_text)}
+
+## Referências curriculares para o guia do professor
+{ae_items}
+{comp_items}
+
+## Artefacto e verificação
+
+HTML5, CSS e JavaScript inline, sem dependências de rede. Implementa as interações e os estados definidos nas unidades, incluindo alternativa por teclado. Usa o template da skill como referência técnica e conserva os nomes da ponte. O ficheiro deve passar pela incorporação da fonte, Proofreader e Evaluator antes de ser entregue para revisão do professor.
 """)
 
     print("\n".join(parts))

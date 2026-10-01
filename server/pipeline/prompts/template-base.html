@@ -35,8 +35,7 @@
     html, body { margin: 0; padding: 0; }
     html { -webkit-text-size-adjust: 100%; }
     body {
-      font-family: 'Atkinson Hyperlegible', 'Lexend', 'Nunito',
-                   'Comic Sans MS', 'Chalkboard SE', system-ui, -apple-system, sans-serif;
+      font-family: 'Century Gothic', 'Didact Gothic', 'URW Gothic', 'Avant Garde', sans-serif;
       font-size: 20px;              /* base confortável para 8-10; ver .young para 6-7 */
       line-height: 1.55;
       color: var(--ink);
@@ -157,10 +156,10 @@
       border-color: var(--primary);
       color: var(--primary-ink);
     }
-    .diff-tab .leaf { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
-    .diff-tab[data-level="support"]   .leaf { background: oklch(0.78 0.13 150); } /* broto */
-    .diff-tab[data-level="standard"]  .leaf { background: oklch(0.72 0.13 195); } /* árvore jovem */
-    .diff-tab[data-level="challenge"] .leaf { background: oklch(0.55 0.14 280); } /* árvore robusta */
+    .diff-tab .level-marker { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+    .diff-tab[data-level="support"]   .level-marker { background: oklch(0.78 0.13 150); } /* Com pistas */
+    .diff-tab[data-level="standard"]  .level-marker { background: oklch(0.72 0.13 195); } /* Passo a passo */
+    .diff-tab[data-level="challenge"] .level-marker { background: oklch(0.55 0.14 280); } /* Mais desafios */
     .diff-content { display: none; }
     .diff-content[data-active="true"] { display: block; }
 
@@ -453,6 +452,7 @@
       return {
         emit: emit,
         unitStarted: function (unitId) { emit('unit_started', unitId, {}); },
+        levelChanged: function (unitId, level) { emit('level_changed', unitId, { level: level }); },
         attempt: function (unitId, correct, detail) { emit('attempt', unitId, { correct: !!correct, detail: detail || '' }); },
         discovery: function (unitId, message) { emit('discovery', unitId, { message: message || '' }); },
         assessment: function (unitId, result, detail) { emit('assessment_result', unitId, { result: result, detail: detail || '' }); },

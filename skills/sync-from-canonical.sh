@@ -31,6 +31,7 @@ MAPPINGS=(
   "$PROMPTS/references/ae-index.md|references/ae-index.md"
   "$PROMPTS/references/bridge-contract.md|references/bridge-contract.md"
   "$PROMPTS/references/age-adaptation.md|references/age-adaptation.md"
+  "$PROMPTS/references/activity-experience.md|references/activity-experience.md"
   "$PROMPTS/references/docspec-schema.md|references/docspec-schema.md"
   "$PROMPTS/references/interaction-patterns.md|references/interaction-patterns.md"
   "$PROMPTS/references/maker-patterns.md|references/maker-patterns.md"

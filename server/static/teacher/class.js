@@ -2,8 +2,10 @@
    cadernetas de alunos com detalhe, chamar a atenção e congelar ecrãs. */
 
 const $ = (id) => document.getElementById(id);
+const workGroups = new Map();
 const students = new Map(); // id → projeção viva emitida pelo servidor
 let session = null;
+let publicOrigin = location.origin;
 let liveSessionState = { status: "live", closed: false, frozen: false };
 let units = [];
 let activities = [];
@@ -14,11 +16,16 @@ let drawerStudent = null;
 
 const EVENT_TEXT = {
   joined: () => "entrou na aula",
+  work_group_joined: () => "entrou em conjunto",
+  work_group_changed: (e) => `participantes alterados: ${e.payload?.display_name || ""}`,
+  work_group_released: () => "dispositivo do grupo libertado pelo professor",
   activity_loaded: () => "abriu a atividade",
   heartbeat: () => "",
+  level_changed: (e) => `escolheu ${({support:"Com pistas", intermediate:"Passo a passo", challenge:"Mais desafios"})[e.payload?.level] || "outro nível"}`,
   unit_started: (e) => `começou ${unitLabel(e.payload?.unit_id || e.unit_id)}`,
   attempt: (e) => (e.payload?.correct ? "acertou uma tentativa ✓" : "fez uma tentativa"),
   discovery: (e) => `descobriu: ${e.payload?.message || ""}`,
+  individual_reflection: (e) => `Reflexão individual · ${reflectionText(e.payload)}`,
   assessment_result: (e) => `avaliação: ${e.payload?.result || ""}`,
   feedback_request: (e) => `pediu feedback: «${(e.payload?.answer || "").slice(0, 60)}»`,
   help_needed: () => "pediu ajuda 🙋",
@@ -35,6 +42,15 @@ const EVENT_TEXT = {
   unfreeze_screens: () => "ecrãs libertados",
   session_closed: () => "sessão terminada",
 };
+
+function reflectionText(voice) {
+  if (voice.skipped) return 'Preferiu não responder';
+  const labels = {alone:'Consegui com autonomia', help:'Consegui com ajuda', practising:'Quero praticar mais', skip:'Prefiro não responder'};
+  const lines = (voice.criteria || []).map(criterion => `${criterion.pt} ${labels[voice.answers?.[criterion.id]] || 'Sem resposta'}`);
+  if (voice.strategy) lines.push(`O que ajudou: ${voice.strategy}`);
+  if (voice.next_step) lines.push(`Próximo passo: ${voice.next_step}`);
+  return lines.join(' · ') || 'Perguntas deixadas por responder';
+}
 
 const TRIAGE_BANDS = [
   { name: "Sem sinal", listId: "band-no-signal", countId: "band-no-signal-count" },
@@ -218,8 +234,12 @@ $("report-btn").addEventListener("click", async () => {
   const sessions = report.sessions.length
     ? `<p class="muted" style="margin-top:0.75rem">${report.sessions.length} sessões no período.</p>`
     : '<p class="muted" style="margin-top:0.75rem">Sem sessões no período escolhido.</p>';
+  const groupRows = (report.groups || []).map(group => `<tr><td>${esc(group.display_name)}</td><td>${group.attempt}</td><td>${group.discovery}</td><td>${group.help_needed}</td></tr>`).join("");
+  const groupTable = groupRows ? `<h3>Trabalho conjunto</h3><p>As respostas pertencem ao grupo. A reflexão pertence a cada criança.</p><table><tr><th>Participantes</th><th>Tentativas conjuntas</th><th>Descobertas</th><th>Ajuda</th></tr>${groupRows}</table>` : "";
+  const reflections = (report.reflections || []).map(record => `<li><strong>${esc(record.display_name)}</strong> · ${esc(record.activity_title)}<p>${esc(reflectionText(record.payload))}</p></li>`).join('');
+  const reflectionSection = reflections ? `<h3>Reflexões individuais</h3><p>Voz de cada criança, distinta das respostas conjuntas e da avaliação do professor.</p><ul class="plain">${reflections}</ul>` : '';
   out.innerHTML = `<div class="card" style="margin-top:0.75rem; overflow-x:auto">
-    <table>${head}${rows}</table>${sessions}</div>`;
+    <table>${head}${rows}</table>${groupTable}${reflectionSection}${sessions}</div>`;
 });
 
 $("class-form").addEventListener("submit", async (ev) => {
@@ -335,12 +355,14 @@ $("launch-btn").addEventListener("click", async () => {
 /* ---------- sessão ao vivo ---------- */
 
 async function startLive(s) {
+  editingGroup = null;
+  $("group-editor").hidden = true;
   session = s;
   $("prep-desk").hidden = true;
   $("live").hidden = false;
   $("ruler").hidden = false;
   $("live-title").textContent = `${s.class_name} · ${s.activity_title}`;
-  $("live-url").textContent = `${location.host}/student/`;
+  $("live-url").textContent = `${publicOrigin}/student/`;
   $("live-code").innerHTML = "";
   [...s.join_code].forEach((ch) => {
     const b = document.createElement("span");
@@ -351,6 +373,8 @@ async function startLive(s) {
   $("export-link").download = `sessao-${s.id}.json`;
 
   students.clear();
+  workGroups.clear();
+  renderWorkGroups();
   renderPulse();
   renderStudents();
   loadUnits(s.activity_slug);
@@ -360,6 +384,7 @@ async function startLive(s) {
   es.onmessage = () => {};
   addJsonListener(es, "session_state_snapshot", (data) => applySnapshot(data, es));
   addJsonListener(es, "student_state_changed", applyStudentState);
+  addJsonListener(es, "work_group_state_changed", applyWorkGroupState);
   addJsonListener(es, "session_state_changed", (data) => applySessionState(data, es));
   eventTypes.forEach((type) => {
     addJsonListener(es, type, (data) => handleEvent(type, { ...data, type }));
@@ -380,6 +405,9 @@ function addJsonListener(es, type, listener) {
 
 function applySnapshot(snapshot, es) {
   if (!snapshot.students || typeof snapshot.students !== "object" || Array.isArray(snapshot.students)) return;
+  workGroups.clear();
+  Object.entries(snapshot.groups || {}).forEach(([id, group]) => workGroups.set(id, group));
+  renderWorkGroups();
   students.clear();
   Object.entries(snapshot.students).forEach(([studentId, student]) => {
     if (student && typeof student === "object" && !Array.isArray(student)) {
@@ -519,6 +547,7 @@ function reflectFreeze(state) {
 
 function handleEvent(type, record) {
   const st = record.student_id ? students.get(record.student_id) : null;
+  if (type === "individual_reflection" && drawerStudent === record.student_id) loadDrawerHistory(drawerStudent);
   const text = eventText(type, record);
   if (st) blip(record.student_id, type);
   if (text) {
@@ -527,7 +556,8 @@ function handleEvent(type, record) {
     t.className = "t";
     t.textContent = new Date(record.ts).toLocaleTimeString("pt-PT", { hour: "2-digit", minute: "2-digit" });
     const body = document.createElement("span");
-    body.textContent = `${st ? st.display_name + " · " : ""}${text}`;
+    const joint = record.work_group_id ? workGroups.get(record.work_group_id)?.display_name || record.payload?.display_name : null;
+    body.textContent = `${joint ? "Trabalho conjunto · " + joint + " · " : st ? st.display_name + " · " : ""}${text}`;
     li.append(t, body);
     $("timeline").prepend(li);
   }
@@ -641,7 +671,7 @@ function createStudentCard(studentId) {
         <span class="pill ok discovery-count"></span>
         <span class="pill warn help-badge" hidden>🙋 Pediu ajuda</span>
       </div>
-      <p class="last"></p>`;
+      <p class="joint-label" hidden></p><p class="last"></p>`;
     card.addEventListener("click", () => openDrawer(studentId));
     return card;
 }
@@ -658,6 +688,8 @@ function updateStudentCard(studentId) {
     (st.triage?.explicit_help ? " help" : "") +
     (st.participated && st.triage?.band !== "Sem sinal" ? " on" : " away");
   card.querySelector(".student-name").textContent = st.display_name || studentId;
+  card.querySelector(".joint-label").hidden = !st.shared_work?.length;
+  card.querySelector(".joint-label").textContent = (st.shared_work || []).map(work => `Trabalho conjunto: ${work.display_name}`).join("; ");
   card.querySelector(".correct-count").textContent = `${numbers.correct_attempts || 0}✓`;
   card.querySelector(".attempt-count").textContent = `${evidence.attempt || 0} tent.`;
   card.querySelector(".discovery-count").textContent = `${evidence.discovery || 0} desc.`;
@@ -694,7 +726,10 @@ function renderStudents() {
   document.querySelectorAll(".student-card[data-student-id]").forEach((card) => {
     if (!students.has(card.dataset.studentId)) card.remove();
   });
-  students.forEach((student, studentId) => updateStudentCard(studentId));
+  students.forEach((student, studentId) => {
+    const card = updateStudentCard(studentId);
+    if (!card.parentElement) $(triageBand(student).listId).appendChild(card);
+  });
   TRIAGE_BANDS.forEach((band) => {
     const list = $(band.listId);
     let cursor = list.firstElementChild;
@@ -772,7 +807,11 @@ function renderDrawerHistory(events) {
       hour: "2-digit",
       minute: "2-digit",
     });
-    li.textContent = `${when} · ${text}`;
+    const group = workGroups.get(record.work_group_id);
+    const authors = group?.display_name || (record.participant_ids || []).map(id => students.get(id)?.display_name || id).join(" + ");
+    const joint = record.work_group_id ? `Trabalho conjunto · ${authors} · ` : "";
+    const child = record.type === 'individual_reflection' ? `${students.get(record.student_id)?.display_name || record.student_id} · ` : '';
+    li.textContent = `${when} · ${joint}${child}${text}`;
     list.appendChild(li);
   });
   if (!list.children.length) {
@@ -835,6 +874,8 @@ $("close-btn").addEventListener("click", async () => {
 /* ---------- arranque ---------- */
 
 (async function init() {
+  const info = await fetch("/api/access-info").then((r) => r.json());
+  publicOrigin = info.public_origin || location.origin;
   await Promise.all([loadClasses(), loadActivities(), loadBoardPairing()]);
   const resp = await tfetch("/api/sessions");
   if (!resp.ok) return;
@@ -842,3 +883,131 @@ $("close-btn").addEventListener("click", async () => {
   const live = sessions.find((s) => s.status === "live");
   if (live) startLive(live);
 })();
+
+function applyWorkGroupState(delta) {
+  if (!delta.group || typeof delta.work_group_id !== "string") return;
+  workGroups.set(delta.work_group_id, delta.group);
+  renderWorkGroups();
+}
+
+function renderWorkGroups() {
+  const container = $("work-groups");
+  container.replaceChildren();
+  $("work-groups-section").hidden = workGroups.size === 0;
+  const levelNames = {support:"Com pistas", intermediate:"Passo a passo", challenge:"Mais desafios"};
+  for (const group of workGroups.values()) {
+    const card = document.createElement("article");
+    card.className = "work-group-card";
+    const heading = document.createElement("h3"); heading.textContent = group.display_name;
+    const detail = document.createElement("p");
+    detail.textContent = `${group.numbers?.evidence?.attempt || 0} tentativas conjuntas · ${levelNames[group.level] || "Passo a passo"} · ${group.active ? group.triage?.reason || "A trabalhar" : group.replaced_by ? "Composição anterior" : "Dispositivo libertado"}`;
+    card.append(heading, detail);
+    if (group.active && !liveSessionState.closed) {
+      const edit = document.createElement('button'); edit.type = 'button'; edit.className = 'ghost';
+      edit.id = `edit-group-${group.id}`;
+      edit.textContent = 'Alterar participantes';
+      edit.setAttribute('aria-label', `Alterar participantes de ${group.display_name}`);
+      edit.onclick = () => openGroupEditor(group.id);
+      card.append(edit);
+    }
+    for (const member of group.members || []) {
+      const button = document.createElement("button"); button.type = "button";
+      button.textContent = `Ver percurso de ${member.display_name}`;
+      button.addEventListener("click", () => openDrawer(member.student_id));
+      card.appendChild(button);
+    }
+    container.appendChild(card);
+  }
+}
+
+let editingGroup = null;
+let savingGroup = false;
+
+async function openGroupEditor(groupId) {
+  if (!session || savingGroup) return;
+  const sessionId = session.id;
+  const response = await tfetch(`/api/sessions/${sessionId}`);
+  if (!response.ok) { $("group-edit-feedback").textContent = 'Não foi possível abrir os participantes.'; return; }
+  const current = await response.json();
+  if (session?.id !== sessionId) return;
+  const group = current.work_groups?.[groupId];
+  if (!group || !workGroups.get(groupId)?.active) return;
+  editingGroup = group;
+  $("group-editor-members").replaceChildren();
+  Object.entries(current.roster).forEach(([id, member]) => {
+    const label = document.createElement('label');
+    const input = document.createElement('input');
+    input.type = 'checkbox'; input.value = id; input.checked = group.participant_ids.includes(id);
+    input.disabled = member.taken && !input.checked;
+    input.dataset.unavailable = String(input.disabled);
+    input.addEventListener('change', updateGroupEditor);
+    label.append(input, document.createTextNode(member.display_name+(input.disabled ? ' · noutro dispositivo' : '')));
+    $("group-editor-members").append(label);
+  });
+  $("group-editor-title").textContent = `Alterar participantes de ${group.display_name}`;
+  $("group-editor-status").textContent = '';
+  $("group-editor").hidden = false;
+  updateGroupEditor();
+  $("group-editor-title").focus();
+  $("group-editor").scrollIntoView({block:'nearest'});
+}
+
+function selectedGroupMembers() {
+  return [...$("group-editor-members").querySelectorAll('input:checked')].map(input=>input.value);
+}
+
+function updateGroupEditor() {
+  const count = selectedGroupMembers().length;
+  $("group-editor-save").disabled = savingGroup || count < 2;
+  $("group-editor-summary").textContent = count < 2 ? 'Seleciona pelo menos dois participantes. Para trabalho individual, liberta o dispositivo e volta a entrar com um nome.' : `${count} participantes · ${count === 2 ? 'A pares' : 'Em grupo'}`;
+}
+
+$("group-editor-cancel").onclick = () => {
+  if (savingGroup) return;
+  $("group-editor").hidden = true;
+  document.getElementById(`edit-group-${editingGroup?.id}`)?.focus();
+  editingGroup = null;
+};
+
+$("group-editor-form").onsubmit = async event => {
+  event.preventDefault();
+  if (!session || !editingGroup || savingGroup) return;
+  const sessionId = session.id, groupId = editingGroup.id;
+  const participant_ids = selectedGroupMembers();
+  savingGroup = true;
+  $("group-editor-cancel").disabled = true;
+  $("group-editor-members").querySelectorAll('input').forEach(input => { input.disabled = true; });
+  $("group-editor-save").disabled = true;
+  $("group-editor-status").textContent = 'A guardar…';
+  try {
+    const response = await tfetch(`/api/sessions/${sessionId}/groups/${groupId}/participants`, {
+      method:'PATCH', headers:{'content-type':'application/json'},
+      body:JSON.stringify({participant_ids, mode:participant_ids.length === 2 ? 'pair' : 'group'}),
+    });
+    const data = await response.json();
+    if (session?.id !== sessionId || editingGroup?.id !== groupId) return;
+    if (!response.ok) throw new Error(data.detail || 'Não foi possível guardar os participantes.');
+    const group = data.work_group;
+    if (group.id !== groupId) {
+      const old = workGroups.get(groupId);
+      if (old) { old.active = false; old.replaced_by = group.id; }
+    }
+    workGroups.set(group.id, {...workGroups.get(group.id), ...group, active:true});
+    renderWorkGroups();
+    $("group-editor").hidden = true;
+    $("group-edit-feedback").textContent = 'Participantes alterados. O trabalho anterior mantém os seus autores.';
+    document.getElementById(`edit-group-${group.id}`)?.focus();
+    editingGroup = null;
+  } catch (error) {
+    if (session?.id === sessionId && editingGroup?.id === groupId) {
+      $("group-editor-status").textContent = error.message;
+      $("group-editor-members").querySelectorAll('input').forEach(input => {
+        input.disabled = input.dataset.unavailable === 'true';
+      });
+    }
+  } finally {
+    savingGroup = false;
+    $("group-editor-cancel").disabled = false;
+    updateGroupEditor();
+  }
+};

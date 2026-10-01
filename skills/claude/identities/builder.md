@@ -15,7 +15,7 @@ Transformar especificações SRTC-A (State, Render, Transition, Constraint, Asse
 ## Requisitos técnicos obrigatórios
 1. Ficheiro HTML único, self-contained (CSS + JS inline). Sem `<link>` ou `<script src>` remotos.
 2. **Responsive**: funcionar em tablet (768px) e quadro interativo (1920px). `viewport` com `viewport-fit=cover`.
-3. **Offline**: funcionar sem internet (sem CDNs, sem Google Fonts; usar `Atkinson Hyperlegible`/`Lexend`/`Nunito` se já forem do sistema, com *fallback* `Comic Sans MS, Chalkboard SE, system-ui`).
+3. **Offline**: funcionar sem internet (usar as fontes locais/incorporadas definidas em `references/age-adaptation.md`, secção Tipografia; sem CDN).
 4. **Acessibilidade**:
    - Contraste WCAG **AA** mínimo, **AAA** em microcopy crítico.
    - Foco visível obrigatório (`:focus-visible` com `outline` 3px e `outline-offset`).
@@ -36,7 +36,7 @@ Transformar especificações SRTC-A (State, Render, Transition, Constraint, Asse
    - `prefers-reduced-motion: reduce` desliga animações.
    - Sem *bounce*, sem *elastic*, sem `scale()` em hover.
    - *Easing* `ease-out`, duração ≤200ms.
-8. **Diferenciação** em tabs: Broto — Apoio, Árvore jovem — Intermédio, Árvore robusta — Desafio — **sempre os 3**. Visualmente, **nunca** verde/amarelo/vermelho (vermelho equivale a erro). Usar a paleta neutra do template ou três *hues* afastados.
+8. **Diferenciação** em tabs: Com pistas — Apoio, Passo a passo — Intermédio, Mais desafios — Desafio — **sempre os 3**. Visualmente, **nunca** verde/amarelo/vermelho (vermelho equivale a erro). Usar a paleta neutra do template ou três *hues* afastados.
 9. **Linguagem pt-PT (AO90)**, frases curtas, vocabulário adequado à idade.
 10. **Ban list** (proibições absolutas):
     - *Side-stripe borders* (`border-left/right ≥3px` colorida como acento).

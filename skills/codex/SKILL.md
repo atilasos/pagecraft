@@ -1,364 +1,58 @@
 ---
 name: pagecraft-codex
-description: "Criar páginas PageCraft no Codex: aulas HTML self-contained, interativas, pt-PT, acessíveis e verificadas no browser para crianças 4-10 anos, seguindo o fluxo multi-agente da skill OpenClaw (Architect → Designer → Builder → Proofreader → Evaluator). Usa o vault pedagógico em ~/vault, DocSpec/SRTC-A, MEM, Aprendizagens Essenciais, Perfil do Aluno, diferenciação obrigatória e extensões Maker quando pedidas. Usar quando o utilizador pedir uma página/aula PageCraft, explorable explanation, atividade digital com sliders/drag/quiz, M28P, ou atividade maker com componente digital."
-metadata:
-  author: pagecraft
-  version: "0.1.0"
+description: Criar e preparar atividades PageCraft para revisão do professor, com pesquisa na Sebenta, diferenciação, PT/EN quando pedido, autoavaliação e registos de trabalho. Usar no Codex ou através do OpenClaw para aulas interativas do 1.º ciclo e publicação aprovada em pagecraft.infantinho.xyz.
 ---
 
-# PageCraft para Codex
+# PageCraft
 
-Esta skill adapta o pipeline PageCraft (fonte canónica em `server/pipeline/prompts/`) para o Codex. O objetivo é produzir páginas pedagógicas PageCraft com o mesmo rigor: **papéis especializados, artefactos explícitos, QA real e iteração até qualidade suficiente**.
+Produz uma atividade que o professor possa usar e avaliar com a turma. A fonte desta skill vive em `skills/codex/` no repositório PageCraft; a instalação é um link para essa pasta. Usa o checkout PageCraft indicado pelo professor, ou `PAGECRAFT_REPO`; na ausência destes, resolve o repositório pelo destino real desta skill. Nesta instalação: `/home/proteu/pagecraft`.
 
-Ao invocar esta skill, o pedido do utilizador autoriza o uso de **Codex native subagents** para as fases especializadas abaixo. O orquestrador continua responsável pela integração e pela verificação final.
+## Pedido e fontes
 
-## Ideia operacional herdada da skill Claude
+O professor indica tema, ano e duração. Usa português europeu por defeito. Só inclui inglês se o professor o pedir; nesse caso, cria uma versão PT/EN completa com seletor para cada aluno, incluindo instruções, feedback, acessibilidade e autoavaliação. O relatório do professor mantém os critérios em português e preserva as respostas originais do aluno.
 
-A variante Claude funciona melhor porque torna a separação de responsabilidades incontornável: o orquestrador coordena, cada fase tem um agente/prompt próprio, cada fase produz um artefacto verificável, e a avaliação final encaminha reparações para a fase certa. A variante Codex deve seguir essa **arquitetura**, não copiar mecanismos específicos do runtime Claude.
+Consulta `AGENTS.md`, `PRODUCT.md` e `CONTEXT.md` do repositório. O pedido atual do professor prevalece sobre orientações antigas. Antes de planear as páginas, lê [experiência da atividade](references/activity-experience.md) e [adaptação à idade](references/age-adaptation.md). São as regras comuns de pistas visuais, avanço por respostas, diferenciação, frações, tipografia e trabalho conjunto. Transmite-as a todas as fases.
 
-Regras de fidelidade:
+Antes de conceber a atividade, usa a skill `sebenta-wiki`, instalada em `/home/proteu/.codex/skills/sebenta-wiki/SKILL.md`. Confirma a API, pesquisa e lê integralmente poucas páginas sobre:
 
-- O orquestrador **não faz o trabalho dos especialistas**; normaliza input, cria/atualiza manifest, lança fases, integra artefactos, executa verificações e decide routing.
-- Cada fase deve receber o seu prompt dedicado em `skills/codex/agents/pagecraft-*.md` e a identidade canónica em `skills/codex/identities/*.md`.
-- Se não for possível lançar subagentes nativos, manter a mesma separação executando as fases sequencialmente: carregar o prompt da fase, produzir só o artefacto dessa fase, parar e passar ao próximo papel.
-- Reparações são roteadas para a fase dona do problema; não reescrever tudo no orquestrador.
+- a pedagogia PageCraft/MEM e a avaliação formativa ou cooperada;
+- o contexto atual de trabalho do professor, incluindo `TIC no Ensino Básico`;
+- o tema, as aprendizagens e os apoios pertinentes.
 
-## Fontes de verdade
+Distingue síntese da wiki, fonte original e proposta tua. Guarda títulos, caminhos e data de consulta em `drafts/<slug>-sources.md`. Confirma documentos curriculares quando fundamentares alinhamentos; uma proposta curricular não é automaticamente um referencial homologado. Se a API falhar, usa o fallback indicado na skill; se não houver fontes suficientes, explicita a lacuna no rascunho para revisão, sem inventar pesquisa realizada.
 
-1. Pedido explícito do utilizador/professor, desde que não viole acessibilidade/segurança.
-2. Pedagogia canónica do vault: `~/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md`.
-3. Fontes oficiais no vault: `~/vault/documentos-oficiais/`.
-4. Recursos desta skill: `identities/`, `references/`, `assets/`, `scripts/`.
-5. O pipeline em código do PageCraft Studio (`server/pipeline/`) como referência de comportamento se houver dúvida.
+## Papéis e artefactos
 
-## Quando usar
+Usa subagentes Codex para as fases abaixo quando disponíveis. A execução via OpenClaw está descrita em [runtime](references/runtime.md). Mantém papéis e artefactos separados quando o runtime exigir execução sequencial. O orquestrador integra e verifica.
 
-Usa esta skill para:
+1. **Architect:** lê `agents/pagecraft-architect.md`, `identities/architect.md` e as fontes pesquisadas. Cria `drafts/<slug>-docspec.json`, válido contra `server/pipeline/schemas/docspec.schema.json`. Define objetivos observáveis, unidades SRTC-A, duração, critérios compreensíveis e três apoios. Regista os pedidos obrigatórios e a divisão de etapas própria desta atividade. Cria também `drafts/<slug>.md`, guia do professor.
+2. **Designer:** lê `agents/pagecraft-designer.md` e `identities/designer.md`. Produz `drafts/<slug>-design-spec.json` a partir do DocSpec e das duas referências comuns, com representações visuais e estados claros para a idade.
+3. **Builder:** lê `agents/pagecraft-builder.md`, `identities/builder.md` e os dois artefactos. Produz `drafts/<slug>.html`. O HTML é autocontido, CSS/JS inline, sem dependências de rede. Antes da revisão, executa `python3 scripts/embed_gothic_font.py --activity drafts/<slug>.html`, repetindo após cada reparação. Uma tarefa numa aplicação externa pode precisar de internet; distingue isso da página PageCraft e não simules observação do trabalho externo.
+4. **Proofreader:** lê `agents/pagecraft-proofreader.md` e `identities/proofreader.md`. Revê português e, quando pedido, inglês, incluindo estados, instruções e mensagens. Guarda problemas e correções em `drafts/<slug>-proofread.json`.
+5. **Evaluator:** lê `agents/pagecraft-evaluator.md` e `identities/evaluator.md`. Em T3 Code, usa primeiro `preview_status` e `preview_open` e as ferramentas `preview_*`. Nos outros runtimes, usa `agent-browser-hub`, perfil `research` ou `temporary`, e fecha a sessão no final. Testa os percursos da referência de experiência, os três apoios, línguas quando pedidas, teclado, larguras de tablet/telemóvel, autoavaliação e gravação no relatório. Se faltar browser, regista essa limitação; análise estática não demonstra usabilidade. Guarda evidência em `drafts/<slug>-evaluation.json`.
 
-- aulas/páginas PageCraft interativas;
-- explicações exploráveis para crianças 4-10 anos;
-- atividades com slider, drag/drop, matching, sorting, quiz, canvas ou simulação;
-- atividades M28P/leitura-escrita inicial;
-- páginas com diferenciação, MEM, Aprendizagens Essenciais ou maker.
+O orquestrador transmite a cada fase o slug e os caminhos em `drafts/`, incluindo a iteração nos relatórios de reparação. Os scripts legados em `outputs/lessons/` são auxiliares; não mudam estes destinos. Para gerar o prompt auxiliar do Builder, usa `python3 skills/codex/scripts/build_prompt.py drafts/<slug>-docspec.json --with-identity --output drafts/<slug>.html`.
 
-Não usar para páginas HTML estáticas simples sem fluxo pedagógico/interativo.
+Regista o estado e caminhos reais em `drafts/<slug>-run-manifest.json`. Uma reprovação regressa à fase responsável. Não declara testes que não executaste. Se uma falha persistir sem nova evidência, entrega o diagnóstico e o rascunho, não uma atividade supostamente pronta.
 
-## Regras absolutas
+## Atividade e reflexão
 
-- HTML final único e self-contained: CSS+JS inline, sem CDN, imports externos, frameworks ou internet.
-- `<html lang="pt-PT">`; português europeu AO90; linguagem adequada à idade.
-- Touch-first: todos os controlos interativos com mínimo **48×48 px**.
-- Acessibilidade: skip link, foco visível, labels/ARIA, contraste WCAG AA, alternativa a drag/drop por clique/teclado.
-- Diferenciação obrigatória em três níveis: 🟢 Apoio, 🟡 Intermédio, 🔴 Desafio.
-- O **Constraint** é descoberto pela interação; não entregar a regra como resposta pronta ao aluno.
-- Assessment formativo, observável e ligado à interação principal.
-- Maker é opcional, mas quando pedido é cooperativo, ligado ao digital e culmina em comunicação.
-- QA real no browser antes de declarar concluído.
-- Publicação/commit/push só com pedido explícito do utilizador.
+Aplica os mínimos por idade da referência comum, foco visível, contraste legível, labels e alternativa a arrastar por teclado/clique. A interação ajuda a descobrir o conceito e dá feedback útil; não entrega apenas instruções e um questionário desligado da tarefa.
 
-## Papéis especializados Codex
+Apresenta os critérios antes do trabalho. A autoavaliação retoma esses critérios, com linguagem ajustada ao ano e apoios de proficiência: escolher com ajuda visual/oral; descrever uma estratégia; explicar e justificar com exemplos. A criança pode mudar de apoio e deixar perguntas da reflexão por responder. As respostas obrigatórias da exploração seguem a regra de Página respondida. O nível de apoio não produz uma classificação da criança.
 
-O orquestrador não deve “fazer tudo sozinho”. Cada fase usa um prompt de agente em `agents/`, uma identidade canónica em `identities/` e, quando possível, um subagente Codex diferente:
+A ponte usa `postMessage`; consulta [integração com realizações](references/learning.md) e o contrato canónico em `server/pipeline/prompts/references/bridge-contract.md`. O HTML não chama a API nem contém credenciais. O host guarda evidências e a autoavaliação. O nome escrito pelo aluno identifica os registos para o professor, mas não dá acesso a históricos. Mantém evidência observada, voz do aluno e observação do professor separadas.
 
-### Política de esforço/modelo
+## Rever e publicar
 
-Não gastar sempre `gpt-5.5` com reasoning `high`. A skill privilegia **qualidade por artefactos + QA**, não esforço máximo em todas as fases.
+Rascunhos ficam em `drafts/`, fora das pastas públicas. Regista o rascunho com `python3 skills/codex/scripts/activity.py register <slug> --metadata <ficheiro>`; o servidor reserva um código estável de seis caracteres. Entrega ao professor a ligação de pré-visualização, os objetivos, os critérios e a evidência de testes. Confirma que a API pública recusa o rascunho.
 
-Regra prática:
+A revisão do professor é necessária **para cada atividade**. A autorização de instalar esta skill, arrancar o serviço ou criar o túnel não aprova a atividade. Depois da aprovação, usa `python3 skills/codex/scripts/activity.py publish <CODIGO> --approved`; o servidor reutiliza `server.publish.publish_activity`, injeta a ponte, regenera o catálogo e disponibiliza o endereço permanente. Não escreve diretamente no catálogo. Para rever conteúdo já publicado, usa um novo slug de versão e novo rascunho; preserva a versão que os alunos já realizaram.
 
-- **Página padrão** (1 aula, tema conhecido, sem risco elevado): usar subagentes `default` com `reasoning_effort: medium` para Architect, Designer, Proofreader e Evaluator; Builder pode usar `executor` (`medium`).
-- **Página simples/variante repetível** (M28P, página de treino, adaptação curta): usar `reasoning_effort: low|medium` e manter fases sequenciais por artefactos; escalar só se o QA falhar.
-- **Página sensível/complexa** (religião/cultura, segurança, acessibilidade difícil, maker complexo, muitas disciplinas, falha repetida de QA): começar em `medium` e escalar apenas a fase problemática para `high`.
-- **Browser/QA visual**: usar `vision`/`verifier` só quando houver screenshots ou problemas visuais reais; caso contrário, `default medium` com evidência de browser é suficiente.
+O hostname estável serve todas as atividades; não cria um túnel por atividade. Para instalar, alterar ou reparar a publicação, usa `cloudflare-publish` em `/home/proteu/.codex/skills/cloudflare-publish/SKILL.md`. Verifica a origem e as rotas, preserva os serviços partilhados e executa apenas alterações autorizadas. O servidor e o conector precisam de continuar ativos.
 
-Nota: alguns papéis nativos têm esforço fixo pelo runtime Codex. Se for preciso controlar o esforço, preferir subagente `default` com a identidade da fase no prompt e `reasoning_effort` explícito, em vez de escolher automaticamente um papel fixo `high`.
+Cumpre os commits incrementais do repositório. Push, mensagens ou envio de relatórios a terceiros precisam de pedido próprio. Os relatórios desta versão ficam na área privada do professor e podem ser descarregados.
 
-| Fase | Subagente recomendado por defeito | Escalar quando | Prompt de fase | Identidade | Output |
-|---|---|---|---|---|---|
-| Architect | `default` + `reasoning_effort: medium` | tema curricular ambíguo, sensível ou multiárea | `agents/pagecraft-architect.md` | `identities/architect.md` | `<slug>-docspec.json` |
-| Designer | `default` + `reasoning_effort: medium` | sistema visual novo, visual QA difícil ou iterações falhadas | `agents/pagecraft-designer.md` | `identities/designer.md` | `<slug>-design-spec.json` |
-| Builder | `executor` (`medium`) ou `default medium` | JS complexo/canvas/simulações com bugs | `agents/pagecraft-builder.md` | `identities/builder.md` | `<slug>.html` |
-| Proofreader | `default` + `reasoning_effort: low|medium` | texto sensível, jurídico/religioso/cultural ou muitas variantes | `agents/pagecraft-proofreader.md` | `identities/proofreader.md` | `<slug>-proofread-vN.json` |
-| Evaluator | `default` + `reasoning_effort: medium` | QA reprova, há screenshots, layout complexo ou acessibilidade duvidosa | `agents/pagecraft-evaluator.md` | `identities/evaluator.md` | `<slug>-evaluation-vN.json` / repair ticket |
+## Entrega
 
-Se subagentes não estiverem disponíveis, manter a separação por artefactos e prompts: executar as fases sequencialmente, sem misturar responsabilidades. O fallback aceitável é “um agente principal a usar um prompt de fase de cada vez”; o fallback proibido é “o orquestrador improvisa todos os papéis ao mesmo tempo”.
-
-## Ambiente
-
-Assumir `REPO_ROOT` como a raiz do repo PageCraft. Se necessário:
-
-```bash
-REPO_ROOT="/Users/igor/dev/pagecraft"
-export PAGECRAFT_WORKSPACE="$REPO_ROOT"
-export PAGECRAFT_REPO="$REPO_ROOT"
-export PAGECRAFT_VAULT="$HOME/vault"
-```
-
-Artefactos de trabalho ficam em `outputs/lessons/`.
-
-## Pipeline obrigatório
-
-### 0. Orchestrator
-
-Normalizar `topic`, `year`, `duration`, `maker`, restrições e `slug`. Para qualquer run não-trivial, criar:
-
-- `outputs/lessons/<slug>-run-manifest.json`
-- `outputs/lessons/<slug>-iteration-log.md`
-
-Manifest mínimo:
-
-```json
-{
-  "slug": "<slug>",
-  "topic": "<tema>",
-  "year": "<ano/faixa>",
-  "duration": 45,
-  "maker": "none|lego|minecraft|3d|robotics|whiteboard|...",
-  "max_iterations": 3,
-  "current_iteration": 0,
-  "agents": {
-    "architect": "codex default medium + agents/pagecraft-architect.md + identities/architect.md",
-    "designer": "codex default medium + agents/pagecraft-designer.md + identities/designer.md",
-    "builder": "codex executor medium + agents/pagecraft-builder.md + identities/builder.md",
-    "proofreader": "codex default low|medium + agents/pagecraft-proofreader.md + identities/proofreader.md",
-    "evaluator": "codex default medium + agents/pagecraft-evaluator.md + identities/evaluator.md"
-  },
-  "status": "planning|architect|designer|builder|proofreader|evaluator|repair|done|blocked",
-  "artifacts": {}
-}
-```
-
-### 1. Carregar pedagogia do vault
-
-Antes do DocSpec, ler pelo menos:
-
-- `~/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md`
-- documentos oficiais relevantes em `~/vault/documentos-oficiais/aprendizagens-essenciais/`
-- Perfil dos Alunos em `~/vault/documentos-oficiais/`
-- notas MEM/diferenciação/avaliação quando o tema o exigir.
-
-O Architect deve distinguir evidência do vault de inferências próprias e deve citar ficheiros do vault no campo curricular sempre que útil.
-
-### 2. Architect — DocSpec-AM
-
-Gerar prompt base:
-
-```bash
-PAGECRAFT_WORKSPACE="$REPO_ROOT" PAGECRAFT_VAULT="$HOME/vault" \
-python3 skills/codex/scripts/pagecraft.py \
-  --topic "<tema>" --year "<ano>" --duration <min> --architect-only \
-  --output-dir outputs/lessons
-```
-
-Dar ao subagente Architect:
-
-- `agents/pagecraft-architect.md`;
-- `identities/architect.md`;
-- `outputs/lessons/_last_architect_prompt.md`;
-- excertos relevantes do vault;
-- `references/docspec-schema.md`, quando precisar do schema completo.
-
-Output: JSON válido em `outputs/lessons/<slug>-docspec.json`.
-
-Critérios mínimos do DocSpec:
-
-- SRTC-A completo por unidade: State, Render, Transition, Constraint, Assessment;
-- duração das unidades compatível com a duração total;
-- AE/Perfil do Aluno específicos quando existirem;
-- MEM explícito;
-- diferenciação real em três níveis;
-- maker apenas quando pedido ou pedagogicamente justificado e aceite pelo pedido.
-
-### 3. Designer — design-spec
-
-Dar ao subagente Designer:
-
-- `agents/pagecraft-designer.md`;
-- `identities/designer.md`;
-- `outputs/lessons/<slug>-docspec.json`;
-- regras técnicas/design do repo quando existirem (`AGENTS.md`, `CLAUDE.md`, `README.md` ou equivalente);
-- contexto visual/M28P relevante, se existir.
-
-Output: `outputs/lessons/<slug>-design-spec.json`.
-
-O design deve ser infantil, quente, legível, acessível e implementável sem dependências externas. Para M28P, respeitar rigorosamente a paleta e `syllableColors` quando definidos.
-
-### 4. Builder — HTML
-
-Gerar prompt base:
-
-```bash
-PAGECRAFT_REPO="$REPO_ROOT" python3 skills/codex/scripts/build_prompt.py \
-  outputs/lessons/<slug>-docspec.json > outputs/lessons/<slug>-builder-prompt.md
-```
-
-Dar ao subagente Builder (`executor`) ownership apenas de:
-
-- `outputs/lessons/<slug>.html`;
-- correções subsequentes no HTML quando houver repair ticket.
-
-Contexto do Builder:
-
-- `agents/pagecraft-builder.md`;
-- `identities/builder.md`;
-- `outputs/lessons/<slug>-builder-prompt.md`;
-- `outputs/lessons/<slug>-design-spec.json`;
-- `assets/template-base.html`;
-- regras técnicas/design do repo quando existirem (`AGENTS.md`, `CLAUDE.md`, `README.md` ou equivalente).
-
-Output: `outputs/lessons/<slug>.html`, offline, self-contained, com interações reais.
-
-### 5. Guia do professor
-
-Gerar Markdown:
-
-```bash
-python3 skills/codex/scripts/build_markdown.py \
-  outputs/lessons/<slug>-docspec.json > outputs/lessons/<slug>.md
-```
-
-### 6. Proofreader pt-PT AO90
-
-Dar ao subagente Proofreader:
-
-- `agents/pagecraft-proofreader.md`;
-- `identities/proofreader.md`;
-- HTML final;
-- DocSpec;
-- fontes do vault quando houver dúvida.
-
-Output: `outputs/lessons/<slug>-proofread-v1.json`.
-
-Se houver problemas textuais, criar ticket para o Builder corrigir o HTML. Se houver problema pedagógico estrutural, rotear para Architect.
-
-### 7. Evaluator / QA real
-
-Obrigatório antes de concluir. Verificar com browser local (Playwright, browser MCP ou método disponível):
-
-1. página abre sem erro fatal;
-2. consola sem erros críticos;
-3. pelo menos uma interação principal funciona;
-4. layout mobile/tablet/desktop é utilizável;
-5. texto pt-PT adequado à idade;
-6. objetivo, exploração, feedback e assessment estão coerentes;
-7. ficheiro não depende de internet;
-8. resultados do Proofreader foram considerados.
-
-Dar ao Evaluator:
-
-- `agents/pagecraft-evaluator.md`;
-- `identities/evaluator.md`;
-- DocSpec;
-- design-spec;
-- HTML/snapshot/evidência de browser;
-- consola;
-- interação testada;
-- proofread report.
-
-Output esperado:
-
-```json
-{
-  "pass": true,
-  "route": "builder|designer|architect|proofreader|both|none",
-  "severity": "low|medium|high|critical",
-  "scores": {
-    "factual_accuracy": 5,
-    "constraint_alignment": 5,
-    "differentiation_quality": 5,
-    "ux_accessibility": 5,
-    "visual_design": 5,
-    "technical_quality": 5
-  },
-  "issues": [],
-  "required_fixes": [],
-  "evidence": [],
-  "acceptance_checks": [],
-  "blocked_by": []
-}
-```
-
-Scores usam escala 1–5; `pass:true` exige ausência de falhas críticas e todos os scores ≥ 3.
-
-### 8. Loop de reparação
-
-Iterar até `pass:true` sem `critical` ou até `max_iterations = 3`.
-
-Routing:
-
-- implementação/JS/CSS/layout/acessibilidade técnica → Builder;
-- sistema visual/paleta/tipografia/consistência gráfica → Designer → Builder;
-- texto/semântica/pt-PT → Proofreader ticket → Builder;
-- conceção pedagógica/DocSpec/AE/MEM/diferenciação → Architect → Designer/Builder se necessário;
-- múltiplas falhas críticas → Architect primeiro, depois Builder, depois Evaluator.
-
-Cada reprovação gera `outputs/lessons/<slug>-repair-ticket-vN.json` e entrada em `<slug>-iteration-log.md` com `issues → ações → evidência → decisão`.
-
-## Critério de “funcional”
-
-A página só é funcional se:
-
-1. abre sem erro fatal;
-2. não há erro JS crítico;
-3. a interação principal funciona;
-4. conteúdo principal é legível em tablet/desktop;
-5. existe percurso completo para o nível 🟡 Intermédio;
-6. a atividade conduz à descoberta do constraint;
-7. mini-avaliação é observável;
-8. não depende de internet.
-
-Se restarem apenas melhorias não-críticas após 3 iterações, aceitar como versão final e listar riscos/melhorias futuras. Se falhar um mínimo funcional, marcar `blocked` e explicar objetivamente.
-
-## Done
-
-Uma página PageCraft está pronta apenas quando existem:
-
-- `<slug>-docspec.json` válido;
-- `<slug>-design-spec.json` quando houver design dedicado;
-- `<slug>.html` self-contained e testado;
-- `<slug>.md` guia do professor;
-- `<slug>-proofread-vN.json`;
-- `<slug>-evaluation-vN.json` ou evidência equivalente;
-- nenhum erro crítico de consola, acessibilidade, layout, texto ou pedagogia.
-
-## Publicação no catálogo
-
-Só publicar com pedido explícito.
-
-```bash
-PAGECRAFT_REPO="$REPO_ROOT" python3 skills/codex/scripts/publish_to_catalog.py \
-  --slug <slug> \
-  --html outputs/lessons/<slug>.html \
-  --md outputs/lessons/<slug>.md \
-  --docspec outputs/lessons/<slug>-docspec.json \
-  --design-spec outputs/lessons/<slug>-design-spec.json \
-  --maker <maker-ou-none> \
-  --tags "tag1,tag2"
-```
-
-`--maker` e `--tags` são opcionais; omitir `--tags` preserva as etiquetas já
-declaradas. O comando usa o módulo de publicação do repositório, garante o
-recetor da Sessão de aula e regenera o `catalog.json` derivado. Depois validar
-`activities/<slug>/` e `catalog.json`; quando houver commit, ambos seguem juntos.
-Só fazer commit/push se o utilizador pedir explicitamente.
-
-## Recursos incluídos
-
-- `agents/pagecraft-architect.md` — prompt de fase Codex para DocSpec-AM.
-- `agents/pagecraft-designer.md` — prompt de fase Codex para design-spec.
-- `agents/pagecraft-builder.md` — prompt de fase Codex para implementação HTML/CSS/JS.
-- `agents/pagecraft-proofreader.md` — prompt de fase Codex para revisão pt-PT AO90.
-- `agents/pagecraft-evaluator.md` — prompt de fase Codex para QA e routing de reparação.
-- `identities/architect.md` — especialista curricular/DocSpec-AM.
-- `identities/designer.md` — sistema visual pedagógico.
-- `identities/builder.md` — implementação HTML/CSS/JS.
-- `identities/proofreader.md` — revisão pt-PT AO90.
-- `identities/evaluator.md` — QA pedagógico/técnico/visual.
-- `references/docspec-schema.md` — schema JSON completo.
-- `references/interaction-patterns.md` — padrões de interação.
-- `references/maker-patterns.md` — padrões maker/MEM.
-- `references/ae-index.md` — índice operacional AE/PA.
-- `references/age-adaptation.md` — fonte de verdade por faixa etária (tipografia, motricidade, patterns).
-- `references/srtc-examples.md` — exemplos por idade.
-- `assets/template-base.html` — base HTML.
-- `scripts/*.py` — prompts, markdown e publicação.
+Entrega a pré-visualização ou o URL publicado conforme o estado real, os ficheiros produzidos, os testes executados e quaisquer limitações. Para consultar resultados: `/teacher/activities.html`. A entrada remota do professor é `https://estudio.infantinho.xyz/teacher/activities.html`, protegida por Cloudflare Access com código enviado ao e-mail autorizado. Não uses o antigo emparelhamento. Os alunos usam `https://pagecraft.infantinho.xyz/<CODIGO>`; nunca lhes entregues o hostname privado. O helper de automação continua a usar apenas o bootstrap local; nunca revela credenciais no chat.

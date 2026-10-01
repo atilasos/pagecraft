@@ -1,0 +1,54 @@
+{
+  "pass": true,
+  "severity": "low",
+  "scores": {
+    "factual_accuracy": 4,
+    "constraint_alignment": 4,
+    "differentiation_quality": 4,
+    "ux_accessibility": 4,
+    "visual_design": 4,
+    "technical_quality": 4
+  },
+  "issues": [],
+  "required_fixes": [],
+  "acceptance_checks": [
+    "PASS: tentativa falhada e conseguida, vista superior, mudanças de peças e três apoios no browser.",
+    "PASS: controlos Broto ilustrados e acessíveis por Tab/Enter; trocar de apoio preserva a configuração.",
+    "PASS: realização preview integrada guardou unit_started(u1–u4), tentativas, vistas, plano, relatos e autoavaliação separados; o dashboard excluiu o ensaio dos relatórios.",
+    "PASS: atividade isolada em iframes de largura interna 390 px e 768 px apresentou navegação, simulação e controlos legíveis sem corte horizontal interno.",
+    "PASS por inspeção de código: 4c95bde alterou a mensagem final do preview para explicar a exclusão dos relatórios; o novo texto não foi reaberto no browser."
+  ],
+  "evidence": [
+    "2026-09-27: Agent Browser Hub, perfil temporary, abriu o rascunho isolado em http://localhost:8788/drafts/tinkercad-pontes-3e4.html. Sessão fechada no fim.",
+    "Teste sem tabuleiro: feedback de falha indicou a peça em falta, sem classificar a criança. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-failed-trial.png.",
+    "Após colocar tabuleiro e mudar o apoio direito para margem e 2 blocos, o teste indicou travessia conseguida no modelo. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-passed-trial.png.",
+    "A vista superior mostrou tabuleiro e apoios, e o texto de vistas consultadas passou a indicar lado e cima. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-top-view.png.",
+    "No modo papel/blocos, o plano de peças e o aviso sobre observação externa ficaram disponíveis. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-build-full.png.",
+    "A reflexão isolada permitiu selecionar 'Consegui com ajuda', limpar uma escolha, escrever estratégia e próximo passo; os textos e a escolha reapareceram após nova navegação na mesma aba. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-restored.png.",
+    "Tab apresentou o atalho 'Ir para a atividade' com foco visível. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-keyboard-tab.png.",
+    "abh --json test http://localhost:8788/drafts/tinkercad-pontes-3e4.html devolveu console_errors=[], browser_errors=[] e pending_requests=[].",
+    "Inspeção do código confirmou botões e seletores com mínimos CSS de 48 px, descrição textual da cena SVG e media queries a 800 e 600 px.",
+    "2026-09-27, reensaio após 116c8f3 e c6e8070: Broto apresentou cartões visuais para margem, rio e afastado da margem, botões de 1 e 2 blocos, e seleção explícita do apoio ativo. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-full.png.",
+    "No Broto, selecionar apoio direito, posição na margem e 2 blocos atualizou a cena e os seletores completos. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-changed.png.",
+    "Troca Broto → Árvore jovem → Broto preservou posição/altura do apoio direito e voltou a mostrar o mesmo apoio ativo. Screenshots: /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-intermediate.png e /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-return.png.",
+    "Tab mostrou foco visível no novo botão Apoio direito; Enter ativou-o e, com Tab e Enter, mudou a posição para No rio. Screenshots: /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-keyboard.png e /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-keyboard-change.png.",
+    "Inspeção estática após 116c8f3: se learning_restore não contém unit_started, a página emite o evento da unidade inicial; um fallback após 3 s cobre ausência de resposta. A execução integrada foi confirmada no ensaio descrito abaixo.",
+    "abh --json test do HTML corrigido devolveu console_errors=[], browser_errors=[] e pending_requests=[].",
+    "2026-09-27, teste integrado no Agent Browser Hub, perfil temporary: com autorização do professor, o clique «Começar» com confirmed=true criou uma realização fictícia no preview local http://localhost:8777/52XFA9 e abriu o iframe. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-host-preview-start.png.",
+    "Inspeção de metadados da realização preview guardada no servidor, sem expor credenciais: preview=true, completed=true, 30 eventos; activity_loaded, unit_started(u1–u4), tentativas u2 falhada e conseguida, simulation_view=top, plano u3, work_mode=paper e três relatos u4. Os resultados previstos apareceram na UI. Screenshots: /home/proteu/agent-browser-hub/screenshots/tinkercad-host-failed.png, /home/proteu/agent-browser-hub/screenshots/tinkercad-host-passed.png e /home/proteu/agent-browser-hub/screenshots/tinkercad-host-top-view.png.",
+    "A autoavaliação do host guardou c1=help, c2=alone, c3=practising, estratégia e próximo passo originais; o ecrã final apresentou «GUARDADO» e o próximo passo. Screenshots: /home/proteu/agent-browser-hub/screenshots/tinkercad-host-reflection.png e /home/proteu/agent-browser-hub/screenshots/tinkercad-host-finished.png.",
+    "No dashboard do professor, a pesquisa pelo nome fictício devolveu «0 realizações · 0 terminadas» e «Os ensaios de rascunhos ficam fora dos relatórios»; assim, a exclusão do preview foi confirmada na interface. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-host-report-exclusion.png.",
+    "A primeira visita integrada emitiu unit_started(u1) uma vez; a vista superior foi ativada com Tab/Enter e registada. Os eventos observados, a voz da criança e a autoavaliação permaneceram em campos distintos da realização preview.",
+    "Após a sessão integrada, 4c95bde corrigiu a cópia final do host: showDone seleciona teacherSeesPreview quando attempt.preview=true; PT diz que o ensaio foi guardado mas não entra nos relatórios dos alunos. Inspeção estática do diff; a screenshot de conclusão anterior documenta a cópia antiga.",
+    "Teste responsive no Agent Browser Hub com harness temporário de iframes internos de 390 px e 768 px, removido depois: abertura, navegação e simulação/controles legíveis, sem corte horizontal interno observável. Screenshots: /home/proteu/agent-browser-hub/screenshots/tinkercad-viewport-390-start.png, /home/proteu/agent-browser-hub/screenshots/tinkercad-viewport-390-sim-controls.png, /home/proteu/agent-browser-hub/screenshots/tinkercad-viewport-390-reflect.png, /home/proteu/agent-browser-hub/screenshots/tinkercad-viewport-768-start.png e /home/proteu/agent-browser-hub/screenshots/tinkercad-viewport-768-sim-controls.png."
+  ],
+  "blocked_by": [],
+  "critical": [],
+  "suggestions": [],
+  "preview_reporting": "Confirmado no host e no dashboard: a realização fictícia do rascunho foi guardada com preview=true e não entrou nos relatórios dos alunos.",
+  "limitations": [
+    "O ecrã final após 4c95bde foi verificado no código, mas não reaberto no browser: a sessão temporary da realização concluída já tinha sido fechada e o respetivo cookie apagado. Não se criou uma segunda realização.",
+    "A atividade não observa o Tinkercad externo. O acesso da turma e a construção real não foram testados nesta avaliação.",
+    "O teste de 390/768 px usou iframes de largura fixa no Browser Hub; não reproduziu barras do browser, teclado virtual nem gestos físicos de um dispositivo móvel."
+  ]
+}

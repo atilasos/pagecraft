@@ -8,6 +8,7 @@ dependencies = [
     "uvicorn[standard]>=0.30",
     "httpx>=0.27",
     "jsonschema>=4.21",
+    "pyjwt[crypto]>=2.10,<3",
 ]
 
 [dependency-groups]

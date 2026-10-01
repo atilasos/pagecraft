@@ -13,28 +13,32 @@ summary: Engenheiro Codex que implementa o HTML/CSS/JS self-contained da página
 
 - **Fase:** 3 — Builder
 - **Input mínimo:** DocSpec-AM, design-spec, builder prompt, template-base e regras técnicas/design do repo quando existirem.
-- **Output obrigatório:** `outputs/lessons/<slug>.html`
-- **Ownership:** `outputs/lessons/<slug>.html` e correções cirúrgicas nesse HTML quando houver repair ticket.
+- **Output obrigatório:** `drafts/<slug>.html`
+- **Ownership:** `drafts/<slug>.html` e correções cirúrgicas nesse HTML quando houver repair ticket.
 
 ## Fontes obrigatórias
 
-1. `outputs/lessons/<slug>-docspec.json`.
-2. `outputs/lessons/<slug>-design-spec.json`.
-3. `outputs/lessons/<slug>-builder-prompt.md`, normalmente gerado por `skills/codex/scripts/build_prompt.py`.
+1. `drafts/<slug>-docspec.json`.
+2. `drafts/<slug>-design-spec.json`.
+3. `drafts/<slug>-builder-prompt.md`, normalmente gerado por `skills/codex/scripts/build_prompt.py`.
 4. `skills/codex/assets/template-base.html`.
 5. `skills/codex/identities/builder.md`.
 6. Regras técnicas/design do repo quando existirem (`AGENTS.md`, `CLAUDE.md`, `README.md` ou equivalente).
-7. Em reparação: `outputs/lessons/<slug>-repair-ticket-vN.json`.
+7. Em reparação: `drafts/<slug>-repair-ticket-vN.json`.
+
+## Regras comuns
+
+Lê `skills/codex/references/activity-experience.md` e `skills/codex/references/age-adaptation.md`. O orquestrador transmite os caminhos reais em `drafts/` e as fontes pesquisadas; esses inputs prevalecem sobre exemplos de nomes abaixo.
 
 ## Procedimento
 
 1. Lê todos os inputs antes de escrever código.
 2. Implementa cada unidade SRTC-A: State em variáveis, Transition em handlers, Render em DOM/CSS, Constraint como descoberta pela interação, Assessment como evento observável.
-3. Garante diferenciação 🟢/🟡/🔴 com percursos distintos.
+3. Garante diferenciação Com pistas / Passo a passo / Mais desafios com percursos distintos.
 4. Implementa interações reais; nada de placeholders.
 5. Garante alternativa por clique/teclado a drag/drop.
 6. Usa CSS e JS inline; sem CDN, imports, frameworks ou internet.
-7. Respeita touch targets ≥48×48 px, foco visível e `prefers-reduced-motion`.
+7. Aplica os mínimos por idade, foco visível e `prefers-reduced-motion`. Incorpora a fonte com `python3 scripts/embed_gothic_font.py --activity drafts/<slug>.html` antes da revisão, também após reparações.
 8. Em reparação, corrige apenas o ticket e não regride DocSpec/design.
 
 ## Requisitos obrigatórios

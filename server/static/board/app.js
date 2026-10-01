@@ -141,13 +141,14 @@ function startLiveSession(session) {
   sessionTitle.textContent = `${session.class_name} · ${session.activity_title}`;
   sessionStatus.textContent = "Aula em curso";
 
-  const activityUrl = `/activities/${encodeURIComponent(session.activity_slug)}/`;
+  // Presentation changes lesson navigation only; board access stays on its existing policy.
+  const activityUrl = `/api/board/sessions/${encodeURIComponent(session.id)}/content?presentation=1`;
   if (board.getAttribute("src") !== activityUrl) board.src = activityUrl;
   if (currentSessionId === session.id && stream) return;
 
   stopLiveSession();
   currentSessionId = session.id;
-  stream = new EventSource(`/api/sessions/${session.id}/stream`);
+  stream = new EventSource(`/api/board/sessions/${session.id}/stream`);
   const activeStream = stream;
   stream.addEventListener("session_state_snapshot", (event) => {
     const snapshot = parseObject(event.data);

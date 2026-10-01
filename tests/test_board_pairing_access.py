@@ -5,7 +5,7 @@ import httpx
 import pytest
 
 from server import app as app_module
-from server.access import BOARD_COOKIE_NAME
+from server.access import BOARD_COOKIE_NAME, TEACHER_COOKIE_NAME
 
 
 @pytest.fixture
@@ -97,6 +97,26 @@ async def _pair(teacher, board):
     assert completed.status_code == 200
 
 
+async def test_pairing_a_browser_previously_used_by_the_teacher_keeps_board_access(
+    board_http,
+):
+    _, teacher, _, _ = board_http
+    await _pair(teacher, teacher)
+
+    waiting = await teacher.get("/api/board/session")
+
+    assert waiting.status_code == 204
+    # O painel do professor continua a funcionar noutra aba do mesmo browser.
+    assert (await teacher.get("/api/meta")).status_code == 200
+    await teacher.delete("/api/board/pairing")
+    # A sessão de professor não substitui uma credencial de quadro revogada.
+    assert (await teacher.get("/api/board/session")).status_code == 401
+    assert (
+        await teacher.get("/api/board/sessions/unknown/stream")
+    ).status_code == 401
+    assert (await teacher.get("/api/meta")).status_code == 200
+
+
 async def test_board_sees_only_the_live_collective_session_and_cannot_act(
     board_http,
 ):
@@ -145,11 +165,19 @@ async def test_board_sees_only_the_live_collective_session_and_cannot_act(
     assert closed.status_code == 204
 
 
+@pytest.mark.parametrize("teacher_cookie", [False, True])
 async def test_board_stream_derives_its_collective_view_from_the_cookie(
     board_http,
+    teacher_cookie,
 ):
     app, teacher, board, _ = board_http
     await _pair(teacher, board)
+    if teacher_cookie:
+        board.headers.pop("cf-connecting-ip")
+        board.cookies.set(
+            TEACHER_COOKIE_NAME, teacher.cookies.get(TEACHER_COOKIE_NAME)
+        )
+    assert (await board.get("/api/board/session")).status_code == 204
     created_class = (
         await teacher.post(
             "/api/classes",
@@ -169,7 +197,7 @@ async def test_board_stream_derives_its_collective_view_from_the_cookie(
     student_id = next(iter(session["roster"]))
 
     stream = asyncio.create_task(
-        board.get(f"/api/sessions/{session['id']}/stream")
+        board.get(f"/api/board/sessions/{session['id']}/stream")
     )
     for _ in range(200):
         if session["id"] in app.state.classroom.live_session_ids():
@@ -200,6 +228,11 @@ async def test_board_stream_derives_its_collective_view_from_the_cookie(
     assert '"unit_id": "global"' in response.text
     assert "privada" not in response.text
     assert student_id not in response.text
+    if teacher_cookie:
+        # A rota do professor mantém a sua vista no mesmo browser.
+        teacher_view = await board.get(f"/api/sessions/{session['id']}/stream")
+        assert teacher_view.status_code == 200
+        assert student_id in teacher_view.text
 
 
 async def test_unpairing_immediately_closes_an_open_board_stream(board_http):
@@ -223,7 +256,7 @@ async def test_unpairing_immediately_closes_an_open_board_stream(board_http):
     ).json()
 
     stream = asyncio.create_task(
-        board.get(f"/api/sessions/{session['id']}/stream")
+        board.get(f"/api/board/sessions/{session['id']}/stream")
     )
     for _ in range(200):
         if session["id"] in app.state.classroom.live_session_ids():
@@ -291,7 +324,7 @@ async def test_board_stream_revalidates_if_revoked_after_request_access(
         pause_after_first_resolution,
     )
     stream = asyncio.create_task(
-        board.get(f"/api/sessions/{session['id']}/stream")
+        board.get(f"/api/board/sessions/{session['id']}/stream")
     )
     await asyncio.wait_for(request_access_resolved.wait(), timeout=1)
     revoked = await teacher.delete("/api/board/pairing")

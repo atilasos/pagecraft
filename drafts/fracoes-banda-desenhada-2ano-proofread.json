@@ -1,0 +1,95 @@
+{
+  "pass": true,
+  "severity": "low",
+  "phase": "proofreader",
+  "reviewed_on": "2026-09-29",
+  "method": "Leitura estática dos textos, labels, feedback e estados declarados no HTML; confronto com guia, DocSpec e design-spec. Sem browser e sem testes de interação nesta fase.",
+  "reference_commit": "af7e7ff07bdae87ec4abf9c7fcaf65c7a9ad3c7c",
+  "artifacts": [
+    {
+      "path": "drafts/fracoes-banda-desenhada-2ano.html",
+      "sha256": "5e6f12d34837f6df0eb23ebb619ebfa1fec7668156563c8409164676eb98d0b3"
+    },
+    {
+      "path": "drafts/fracoes-banda-desenhada-2ano.md",
+      "sha256": "5e7535b50a308711c63a6457bfd9991342ca1ffea7129e659dfc9bb1c3f62b9c"
+    },
+    {
+      "path": "drafts/fracoes-banda-desenhada-2ano-docspec.json",
+      "sha256": "ef7b986df74465b096d7c02042a4de9b7424b70b71ee6467e55726abb407bffe"
+    },
+    {
+      "path": "drafts/fracoes-banda-desenhada-2ano-design-spec.json",
+      "sha256": "d576a964e85b86552ec2b239aa435c9fbf2e0adf56be5ca4afe7181c56bf42c8"
+    }
+  ],
+  "summary": "Revisão linguística aprovada, sem novos achados nos artefactos de af7e7ff. As notas técnicas de conclusão e compactação são claras e não acrescentam exigências à criança. Esta aprovação abrange apenas linguagem e coerência documental; a avaliação funcional final continua pendente.",
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90: OK; sem erros bloqueantes identificados.",
+    "Registo consistente: OK; instruções dirigidas à criança e papéis cooperativos claros.",
+    "Adequação à faixa etária: OK; correção P02 torna a instrução de construção mais concreta.",
+    "Instruções claras e seguíveis: OK; pedidos Já fizemos e número de blocos são distintos.",
+    "Alinhamento com objetivos: OK; 1/2=10, 1/4=5, 2/5=8 e 1/10=2 numa unidade de 20.",
+    "Duração e percurso: OK; guia e DocSpec totalizam 45 minutos, cinco explorações, construção e reflexão.",
+    "Critérios e nomes de apoio: OK; seis critérios iguais entre HTML/DocSpec/guia; Com pistas, Passo a passo e Mais desafios.",
+    "Reflexão local: OK; escolhas facultativas, ausência de nota e aviso de respostas locais no modo autónomo.",
+    "Reflexão da realização: OK na leitura do código; open_reflection usa o anfitrião existente.",
+    "Voz do aluno: OK na leitura dos textos dos acontecimentos; autoavaliação e declaração externa identificadas.",
+    "Guia e especificações: OK após alinhamento documental P01.",
+    "Currículo: OK dentro dos limites documentados; comparação não unitária identificada como extensão e TIC como OC do ciclo.",
+    "Notas técnicas do guia e DocSpec: OK na revisão textual; requires_completion, prontidão e compactação descritos como mecanismos do anfitrião e da ponte."
+  ],
+  "known_followup": {
+    "bodyFont": "Confirmados no código de af7e7ff: corpo, critérios, legendas e escolhas da reflexão local com 22px. O foco acrescentado não altera as instruções.",
+    "browser": "Não executado pelo Proofreader; layout, toque, foco e gravação dependem do Evaluator.",
+    "functionalEvaluation": "Pendente, fora desta fase. O orquestrador informou que investiga uma falha intermitente de retoma na suite; este relatório não certifica a resolução nem a avaliação final."
+  },
+  "changes_applied": [
+    "P01: DocSpec descreve modelo sempre visível, rótulos da reflexão local e campos livres opcionais de 160 caracteres.",
+    "P02: Builder alterou a instrução para Constrói 4 filas de 5 blocos.",
+    "P03: Builder alterou a pergunta para Quantos blocos deves pintar?."
+  ],
+  "resolved_issues": [
+    {
+      "id": "P01",
+      "type": "consistency",
+      "severity": "low",
+      "blocking": false,
+      "status": "resolved",
+      "location": "drafts/fracoes-banda-desenhada-2ano-docspec.json, units u6/u7, interaction.state",
+      "original": "modelHint: toggle, default false; criteriaChoices: Consigo sozinho / Consigo com ajuda / Quero praticar mais",
+      "suggestion": "Descrever o modelo como sempre visível, sem toggle modelHint; alinhar as opções de reflexão local com Sozinho / Com ajuda / Quero praticar / Prefiro não responder. Indicar que estratégia e próximo passo aceitam texto livre facultativo.",
+      "reason": "O HTML não oferece um botão para ativar o modelo e usa rótulos mais curtos na reflexão. Ajustar o documento mantém a especificação fiel ao comportamento sem alterar a atividade.",
+      "owner": "Architect",
+      "verification": "Confirmado por leitura do ficheiro final após aplicação das correções."
+    },
+    {
+      "id": "P02",
+      "type": "pedagogical",
+      "severity": "low",
+      "blocking": false,
+      "status": "resolved",
+      "location": "drafts/fracoes-banda-desenhada-2ano.html, makerPage, u6 .prompt",
+      "original": "Constrói uma superfície inteira: 5 por 4.",
+      "suggestion": "Constrói 4 filas de 5 blocos.",
+      "reason": "A instrução indica uma ação concreta e permite contar os 20 blocos sem interpretar a expressão de dimensões. Mantém a geometria aprovada de cinco colunas e quatro linhas.",
+      "owner": "Builder",
+      "verification": "Confirmado por leitura do ficheiro final após aplicação das correções."
+    },
+    {
+      "id": "P03",
+      "type": "semantic",
+      "severity": "low",
+      "blocking": false,
+      "status": "resolved",
+      "location": "drafts/fracoes-banda-desenhada-2ano.html, makerPage, u6 Repara h2",
+      "original": "Quantos blocos pintaram?",
+      "suggestion": "Quantos blocos deves pintar?",
+      "reason": "A resposta esperada é calculada a partir da fração proposta. Esta redação distingue essa pergunta de um relato da construção real, que a página não observa.",
+      "owner": "Builder",
+      "verification": "Confirmado por leitura do ficheiro final após aplicação das correções."
+    }
+  ],
+  "issues": [],
+  "revision_note": "Releitura das alterações finais até af7e7ff, confrontadas com os artefactos integrais revistos anteriormente. Os SHA-256 correspondem exatamente aos quatro ficheiros desse commit."
+}

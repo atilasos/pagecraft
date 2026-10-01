@@ -8,7 +8,7 @@ from contextlib import asynccontextmanager
 from datetime import tzinfo
 
 from fastapi import FastAPI, Request
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from .access import (
@@ -73,12 +73,16 @@ def create_app(
         from .classroom.feedback import FeedbackService
         from .security import load_or_create_teacher_token
 
+        from .cloudflare_access import CloudflareAccess
+        app.state.cloudflare_access = CloudflareAccess(config)
         app.state.config = config
         app.state.storage = storage
         app.state.hub = hub
         app.state.wiki = wiki
         app.state.ae = ae
         app.state.teacher_token = load_or_create_teacher_token(config.data_dir)
+        from .learning import Learning
+        app.state.learning = Learning(storage, config)
         app.state.board_pairings = BoardPairings(
             storage,
             clock=classroom_clock,
@@ -129,6 +133,12 @@ def create_app(
 
     @app.middleware("http")
     async def enforce_access(request: Request, call_next):
+        learning_request = request.url.path.startswith(('/api/learning/', '/api/teacher-'))
+        if learning_request and request.method not in {'GET', 'HEAD', 'OPTIONS'}:
+            from urllib.parse import urlsplit
+            origin = request.headers.get('origin')
+            if origin and urlsplit(origin).netloc != request.headers.get('host'):
+                return JSONResponse({'detail': 'Origem não autorizada.'}, status_code=403)
         route, child_scope = match_route(request, app.routes)
         if route is None:
             return await call_next(request)
@@ -139,12 +149,14 @@ def create_app(
                 status_code=403,
             )
 
-        access = await resolve_access(
-            request,
-            child_scope.get("path_params", {}),
-        )
+        access = await resolve_access(request, policy)
         bootstraps_teacher = route_bootstraps_teacher(route)
         request.state.access = access
+        if (access.role is Role.TEACHER and config.teacher_origin
+            and access.channel is not TrustChannel.LOOPBACK
+            and request.method not in {"GET", "HEAD", "OPTIONS"}
+            and request.headers.get("origin") not in {None, config.teacher_origin}):
+            return JSONResponse({"detail": "Origem não autorizada."}, status_code=403)
         requested_session_id = child_scope.get("path_params", {}).get(
             "session_id"
         )
@@ -175,6 +187,11 @@ def create_app(
             access,
             teacher_bootstrap=bootstraps_teacher,
         ):
+            if (config.teacher_origin and request.method == "GET"
+                and request.url.path.startswith("/teacher")
+                and request.url.hostname != app.state.cloudflare_access.hostname):
+                return RedirectResponse(config.teacher_origin + request.url.path, status_code=303,
+                                        headers={"Cache-Control": "no-store"})
             status = 401 if access.role is None else 403
             detail = (
                 "este pedido precisa de um Papel"
@@ -183,6 +200,8 @@ def create_app(
             )
             return JSONResponse({"detail": detail}, status_code=status)
         response = await call_next(request)
+        if learning_request or RoutePolicy.TEACHER in policy:
+            response.headers['Cache-Control'] = 'no-store'
         if (
             bootstraps_teacher
             and access.channel is TrustChannel.LOOPBACK
@@ -223,11 +242,13 @@ def create_app(
     from .api import board as board_api
     from .api import classroom as classroom_api
     from .api import jobs
+    from .api import learning as learning_api
 
     app.include_router(jobs.router)
     app.include_router(board_api.router)
     app.include_router(classroom_api.router)
     app.include_router(catalog_api.router)
+    app.include_router(learning_api.router)
 
     for extend_routes in route_extensions:
         extend_routes(app)
@@ -237,7 +258,9 @@ def create_app(
     @app.get("/")
     @app.get("/index.html")
     @access_policy(RoutePolicy.PUBLIC)
-    async def studio_home():
+    async def studio_home(request: Request):
+        if config.teacher_origin and request.url.hostname == app.state.cloudflare_access.hostname:
+            return RedirectResponse("/teacher/activities.html", status_code=303, headers={"Cache-Control": "no-store"})
         return FileResponse(static_dir / "index.html")
 
     @app.get("/studio.css")
@@ -276,6 +299,38 @@ def create_app(
     )
     declare_route_policy(app.routes[-1], RoutePolicy.TEACHER)
     declare_teacher_loopback_bootstrap(app.routes[-1])
+
+    app.mount('/learning-assets', StaticFiles(directory=static_dir / 'learning'), name='learning-static')
+    declare_route_policy(app.routes[-1], RoutePolicy.PUBLIC)
+
+    @app.get('/api/access-info')
+    @access_policy(RoutePolicy.PUBLIC)
+    async def access_info():
+        return {'public_origin': config.public_origin,
+                'teacher_origin': config.teacher_origin}
+
+    @app.get('/login')
+    @access_policy(RoutePolicy.PUBLIC)
+    async def learning_login(request: Request):
+        target = config.teacher_origin + "/teacher/activities.html" if config.teacher_origin else "/teacher/activities.html"
+        return RedirectResponse(target, status_code=303, headers={"Cache-Control": "no-store"})
+
+    @app.get("/logout")
+    @access_policy(RoutePolicy.PUBLIC)
+    async def learning_logout(request: Request):
+        from .access import TEACHER_COOKIE_NAME
+        remote = request.state.access.channel is not TrustChannel.LOOPBACK
+        target = config.teacher_origin + "/cdn-cgi/access/logout" if remote and config.teacher_origin else "/"
+        response = RedirectResponse(target, status_code=303, headers={"Cache-Control": "no-store"})
+        response.delete_cookie(TEACHER_COOKIE_NAME, path="/")
+        return response
+
+    @app.get('/{code}')
+    @access_policy(RoutePolicy.PUBLIC)
+    async def permanent_activity(code: str, request: Request):
+        from .api.learning import visible_activity
+        await visible_activity(request, code)
+        return FileResponse(static_dir / 'learning' / 'activity.html')
 
     validate_route_policies(app.routes)
     return app

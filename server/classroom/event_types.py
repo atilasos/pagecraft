@@ -155,6 +155,9 @@ SESSION_EVENT_TYPES = SessionEventRegistry(
             "session",
             payload={"display_name": "Nome apresentado pela criança nesta sessão."},
         ),
+        _event("work_group_joined", "session", payload={"display_name": "Participantes do trabalho conjunto."}),
+        _event("work_group_changed", "teacher", payload={"previous_work_group_id": "Composição anterior do mesmo dispositivo.", "members": "Participantes posteriores à alteração."}),
+        _event("work_group_released", "teacher", payload={"reset_progress": "Libertação do dispositivo do grupo."}),
         _event(
             "activity_loaded",
             "activity",
@@ -162,6 +165,12 @@ SESSION_EVENT_TYPES = SessionEventRegistry(
         ),
         _event("heartbeat", "activity", timeline=False),
         _event("unit_started", "activity", evidence=True),
+        _event(
+            "level_changed",
+            "activity",
+            evidence=True,
+            payload={"level": "Nível de diferenciação escolhido: support, intermediate ou challenge."},
+        ),
         _event(
             "attempt",
             "activity",
@@ -184,6 +193,20 @@ SESSION_EVENT_TYPES = SessionEventRegistry(
             payload={
                 "result": "Resultado observável do item de avaliação.",
                 "detail": "Contexto curto e opcional sobre o resultado.",
+            },
+        ),
+        _event(
+            "individual_reflection",
+            "student",
+            student_visible=True,
+            payload={
+                "source_work_group_id": "Grupo em que a criança fez a reflexão individual.",
+                "answers": "Autoavaliação facultativa nos critérios conhecidos da atividade.",
+                "criteria": "Critérios apresentados à criança nesta reflexão.",
+                "strategy": "Estratégia descrita pela criança.",
+                "next_step": "Próximo passo proposto pela criança.",
+                "skipped": "A criança preferiu não responder.",
+                "revision": "Versão da reflexão individual guardada.",
             },
         ),
         _event(

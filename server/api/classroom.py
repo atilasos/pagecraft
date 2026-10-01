@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import asyncio
 import json
+from typing import Literal
 
 from fastapi import APIRouter, HTTPException, Request, Response
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, HTMLResponse
 from pydantic import BaseModel, ConfigDict, Field
 
 from ..access import (
@@ -19,6 +20,7 @@ from ..access import (
 )
 from ..classroom.errors import (
     ClassroomError,
+    CompositionChangedError,
     InvalidPitItemError,
     InvalidSessionEventError,
     SessionClosedError,
@@ -27,6 +29,7 @@ from ..classroom.errors import (
 )
 from ..classroom.event_types import SESSION_EVENT_TYPES
 from ..classroom.live_state import (
+    changed_group_frames,
     changed_session_frame,
     changed_student_frames,
     session_state_snapshot,
@@ -49,6 +52,31 @@ class SessionRequest(BaseModel):
 
 class ClaimRequest(BaseModel):
     student_id: str
+
+
+class GroupClaimRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    participant_ids: list[str] = Field(min_length=2, max_length=40)
+    mode: Literal["pair", "group"]
+    level: Literal["support", "intermediate", "challenge"] = "intermediate"
+
+
+class GroupParticipantsRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    participant_ids: list[str] = Field(min_length=2, max_length=40)
+    mode: Literal["pair", "group"]
+
+
+class GroupReflectionRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    student_id: str = Field(min_length=1, max_length=80)
+    event_id: str = Field(min_length=1, max_length=80)
+    expected_revision: int = Field(ge=0)
+    composition_version: int | None = Field(default=None, ge=1)
+    answers: dict[str, Literal["alone", "help", "practising", "skip"]] = Field(default_factory=dict, max_length=8)
+    strategy: str = Field(default="", max_length=1500)
+    next_step: str = Field(default="", max_length=1500)
+    skipped: bool = False
 
 
 class ReleaseRequest(BaseModel):
@@ -86,6 +114,9 @@ def _svc(request: Request):
 async def _domain(command):
     try:
         return await command
+    except CompositionChangedError as error:
+        raise HTTPException(409, {"code":"composition_changed", "message":str(error),
+                                  "event_ids":error.event_ids, "work_group":error.group}) from error
     except (SessionNotFoundError, StudentNotInRosterError) as error:
         raise HTTPException(404, str(error)) from error
     except SessionClosedError as error:
@@ -204,6 +235,9 @@ async def whoami(session_id: str, request: Request):
     svc = _svc(request)
     student_id = request.state.access.student_id
     session = await svc.get_session(session_id)
+    if request.state.access.work_group_id:
+        group = session["work_groups"][request.state.access.work_group_id]
+        return {"student_id": None, "work_group": svc.project_work_group(group), "session": svc.project_session(session, role="student")}
     entry = session["roster"][student_id]
     return {
         "student_id": student_id,
@@ -239,6 +273,72 @@ async def claim(
     }
 
 
+@router.get("/sessions/{session_id}/content")
+@access_policy(RoutePolicy.STUDENT)
+async def student_activity_content(session_id: str, request: Request):
+    from ..classroom.activity_content import session_activity_path, with_group_level_adapter
+    from .learning import ACTIVITY_CONTENT_HEADERS
+    session = await _svc(request).get_session(session_id)
+    if session is None:
+        raise HTTPException(404, "sessão não encontrada")
+    path = await _domain(session_activity_path(request.app, session["activity_slug"]))
+    html = path.read_text("utf-8")
+    if request.state.access.work_group_id:
+        html = with_group_level_adapter(html)
+    return HTMLResponse(html, headers=ACTIVITY_CONTENT_HEADERS)
+
+
+@router.post("/sessions/{session_id}/groups/claim")
+@access_policy(RoutePolicy.PUBLIC)
+@rate_limited(RateLimitOperation.CLAIM)
+async def claim_group(session_id: str, body: GroupClaimRequest, request: Request, response: Response):
+    svc = _svc(request)
+    group = await _domain(svc.claim_work_group(session_id, body.participant_ids, body.mode, body.level))
+    if group is None:
+        raise HTTPException(409, "Um dos nomes já foi escolhido. Revê os participantes ou pede ajuda ao professor.")
+    issue_student_cookie(response, session_id, group["token"], group["claimed_at"], group["credential_expires_at"])
+    return {"work_group": svc.project_work_group(group)}
+
+
+@router.patch("/sessions/{session_id}/groups/{group_id}/participants")
+@access_policy(RoutePolicy.TEACHER)
+async def change_group_participants(session_id: str, group_id: str, body: GroupParticipantsRequest, request: Request):
+    group = await _domain(_svc(request).change_work_group(session_id, group_id, body.participant_ids, body.mode))
+    return {"work_group": _svc(request).project_work_group(group)}
+
+
+@router.get("/sessions/{session_id}/groups/me/reflections")
+@access_policy(RoutePolicy.STUDENT)
+async def group_reflections(session_id: str, request: Request):
+    from ..classroom.activity_content import session_reflection_criteria
+    from ..classroom.reflections import latest_reflections
+    group_id = request.state.access.work_group_id
+    if group_id is None:
+        raise HTTPException(403, "Este dispositivo não representa um grupo.")
+    svc = _svc(request)
+    session = await svc.get_session(session_id)
+    group = session["work_groups"][group_id]
+    reflections = {
+        record["student_id"]: record
+        for record in latest_reflections(await svc.events_log(session_id).replay())
+        if session["work_groups"].get(record["payload"]["source_work_group_id"], {}).get("device_id") == group["device_id"]
+        and record["student_id"] in group["participant_ids"]
+    }
+    return {**await session_reflection_criteria(request.app, session["activity_slug"]), "reflections": reflections}
+
+
+@router.post("/sessions/{session_id}/groups/me/reflections")
+@access_policy(RoutePolicy.STUDENT)
+async def save_group_reflection(session_id: str, body: GroupReflectionRequest, request: Request):
+    from ..classroom.activity_content import session_reflection_criteria
+    group_id = request.state.access.work_group_id
+    if group_id is None:
+        raise HTTPException(403, "Este dispositivo não representa um grupo.")
+    session = await _svc(request).get_session(session_id)
+    criteria = await session_reflection_criteria(request.app, session["activity_slug"])
+    return await _domain(_svc(request).save_group_reflection(session_id, group_id, body.model_dump(), criteria["criteria"]))
+
+
 @router.post("/sessions/{session_id}/release/{student_id}")
 @access_policy(RoutePolicy.TEACHER)
 async def release(
@@ -272,7 +372,10 @@ async def session_event_types():
 async def post_events(session_id: str, body: EventsRequest, request: Request):
     svc = _svc(request)
     student_id = request.state.access.student_id
-    accepted = await _domain(svc.ingest_events(session_id, student_id, body.events))
+    if request.state.access.work_group_id:
+        accepted = await _domain(svc.ingest_work_group_events(session_id, request.state.access.work_group_id, body.events))
+    else:
+        accepted = await _domain(svc.ingest_events(session_id, student_id, body.events))
     return {"accepted": [r["event_id"] for r in accepted]}
 
 
@@ -311,6 +414,8 @@ async def create_pit_item(
 ):
     svc = _svc(request)
     student_id = request.state.access.student_id
+    if request.state.access.work_group_id:
+        raise HTTPException(403, "O plano individual precisa de uma identidade individual.")
     return await _domain(
         svc.create_pit_item(session_id, student_id, body.text)
     )
@@ -325,6 +430,8 @@ async def advance_pit_item(
 ):
     svc = _svc(request)
     student_id = request.state.access.student_id
+    if request.state.access.work_group_id:
+        raise HTTPException(403, "O plano individual precisa de uma identidade individual.")
     return await _domain(
         svc.advance_pit_item(session_id, student_id, item_id)
     )
@@ -359,14 +466,33 @@ async def student_history(
     events = [
         record
         for record in await svc.events_log(session_id).replay()
-        if record.get("student_id") == student_id
+        if (record.get("student_id") == student_id or access.role is Role.TEACHER and student_id in record.get("participant_ids", []))
         and record.get("type") in visible_types
     ]
     return {"student_id": student_id, "events": events}
 
 
+@router.get("/sessions/{session_id}/groups/me/history")
+@access_policy(RoutePolicy.STUDENT)
+async def work_group_history(session_id: str, request: Request):
+    group_id = request.state.access.work_group_id
+    if group_id is None:
+        raise HTTPException(403, "este dispositivo não representa um grupo")
+    visible = {entry.name for entry in SESSION_EVENT_TYPES.evidence()} | {entry.name for entry in SESSION_EVENT_TYPES.visible_to("student")}
+    records = await _svc(request).events_log(session_id).replay()
+    session = await _svc(request).get_session(session_id)
+    groups = session["work_groups"]
+    device_id = groups[group_id]["device_id"]
+    history = []
+    for record in records:
+        group = groups.get(record.get("work_group_id"))
+        if group and group["device_id"] == device_id and record.get("type") in visible:
+            history.append({**record, "work_group_name": group["display_name"]})
+    return {"work_group_id": group_id, "events": history}
+
+
 @router.get("/sessions/{session_id}/stream")
-@access_policy(RoutePolicy.TEACHER, RoutePolicy.STUDENT, RoutePolicy.BOARD)
+@access_policy(RoutePolicy.TEACHER, RoutePolicy.STUDENT)
 async def stream_session(session_id: str, request: Request):
     svc = _svc(request)
     session = await svc.get_session(session_id)
@@ -375,12 +501,17 @@ async def stream_session(session_id: str, request: Request):
 
     access = request.state.access
     student_id = None
+    work_group_id = None
+    group_participants = []
     credential = ""
     if access.role is Role.TEACHER:
         role = "teacher"
     elif access.role is Role.STUDENT:
         role = "student"
         student_id = access.student_id
+        work_group_id = access.work_group_id
+        if work_group_id:
+            group_participants = session["work_groups"][work_group_id]["participant_ids"]
         credential = access.student_credential
     elif access.role is Role.BOARD:
         if session.get("status") != "live":
@@ -413,6 +544,9 @@ async def stream_session(session_id: str, request: Request):
 
     async def credential_is_current() -> bool:
         if role == "student":
+            if work_group_id:
+                current_group = await svc.work_group_for_token(session_id, credential, require_live=False)
+                return current_group == work_group_id
             current = await svc.student_for_token(
                 session_id,
                 credential,
@@ -434,10 +568,13 @@ async def stream_session(session_id: str, request: Request):
             return False
         if role == "teacher":
             return True
+        group_target = record.get("work_group_id")
+        if group_target:
+            return role == "student" and group_target == work_group_id
         target = record.get("student_id")
         if role == "board":
             return target is None
-        return target is None or target == student_id
+        return target is None or target == student_id or target in group_participants
 
     async def gen():
         board_revocations = (
@@ -455,6 +592,7 @@ async def stream_session(session_id: str, request: Request):
             now=svc.now(),
             role=role,
             student_id=student_id,
+            work_group_id=work_group_id,
         )
         if board_event_types is not None:
             state["event_types"] = board_event_types
@@ -517,6 +655,7 @@ async def stream_session(session_id: str, request: Request):
                         now=svc.now(),
                         role=role,
                         student_id=student_id,
+                        work_group_id=work_group_id,
                     )
                     session_delta = changed_session_frame(state, current_state)
                     if session_delta is not None:
@@ -529,6 +668,8 @@ async def stream_session(session_id: str, request: Request):
                             "event: student_state_changed\n"
                             f"data: {json.dumps(delta, ensure_ascii=False)}\n\n"
                         )
+                    for delta in changed_group_frames(state, current_state):
+                        yield ("event: work_group_state_changed\n" f"data: {json.dumps(delta, ensure_ascii=False)}\n\n")
                     state = current_state
                     if record.get("type") == "session_closed":
                         return
@@ -547,12 +688,15 @@ async def stream_session(session_id: str, request: Request):
                         now=tick_now,
                         role=role,
                         student_id=student_id,
+                        work_group_id=work_group_id,
                     )
                     for delta in changed_student_frames(state, current_state):
                         yield (
                             "event: student_state_changed\n"
                             f"data: {json.dumps(delta, ensure_ascii=False)}\n\n"
                         )
+                    for delta in changed_group_frames(state, current_state):
+                        yield ("event: work_group_state_changed\n" f"data: {json.dumps(delta, ensure_ascii=False)}\n\n")
                     state = current_state
                     tick_task = asyncio.create_task(anext(ticks))
         finally:

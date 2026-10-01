@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>PageCraft — Aluno</title>
-<link rel="stylesheet" href="/studio.css">
+<link rel="stylesheet" href="/studio.css?v=groups-45-1">
 </head>
 <body class="student-page">
 <a class="skip-link" href="#main-content">Saltar para entrar na aula</a>
@@ -21,9 +21,20 @@
   </section>
 
   <section id="step-identity" class="card" hidden>
-    <h1>Quem és tu?</h1>
+    <h1>Como vão trabalhar?</h1>
+    <div class="work-modes" role="group" aria-label="Forma de trabalhar">
+      <button type="button" data-work-mode="alone" aria-pressed="true">Sozinho</button>
+      <button type="button" data-work-mode="pair" aria-pressed="false">A pares</button>
+      <button type="button" data-work-mode="group" aria-pressed="false">Em grupo</button>
+    </div>
+    <p>Seleciona quem vai trabalhar neste computador.</p>
     <p id="session-title" class="muted"></p>
     <div class="identity-grid" id="identities"></div>
+    <p id="selected-participants" aria-live="polite"></p>
+    <div id="entry-group-level" hidden><label for="entry-level">Nível de diferenciação do grupo</label>
+      <select id="entry-level"><option value="support">Com pistas</option><option value="intermediate" selected>Passo a passo</option><option value="challenge">Mais desafios</option></select>
+    </div>
+    <button id="confirm-participants" type="button" disabled>Começar</button>
     <p class="muted" id="claim-status" role="status"></p>
   </section>
 
@@ -31,11 +42,25 @@
     <div class="topbar card">
       <strong id="student-name"></strong>
       <span class="muted" id="activity-title"></span>
+      <label id="group-level-label" hidden>Nível do grupo
+        <select id="group-level"><option value="support">Com pistas</option><option value="intermediate">Passo a passo</option><option value="challenge">Mais desafios</option></select>
+      </label>
       <span class="student-actions">
         <button class="ghost" id="help-btn" type="button">Preciso de ajuda 🙋</button>
+        <button class="ghost" id="group-reflect-btn" type="button" hidden>A minha reflexão</button>
         <button class="ghost" id="pit-btn" type="button">O meu plano 📋</button>
       </span>
     </div>
+    <section id="pending-group-work" class="card" hidden aria-live="polite">
+      <h2>Trabalho do grupo anterior por confirmar</h2>
+      <p>Estas respostas conservam os nomes anteriores. Pede ao professor para as rever contigo.</p>
+      <ul id="pending-group-list"></ul>
+    </section>
+    <section id="pending-group-reflections" class="card" hidden aria-live="polite">
+      <h2>Reflexões anteriores por confirmar</h2>
+      <p>Estas reflexões conservam o nome de quem respondeu. Pede ajuda ao professor para as rever.</p>
+      <div id="pending-reflection-list"></div>
+    </section>
     <div id="pit-panel" class="card" hidden>
       <h2 class="panel-title">O meu plano de trabalho</h2>
       <ul class="plain" id="pit-list"></ul>
@@ -53,6 +78,24 @@
     <!-- sandbox sem allow-same-origin: a atividade gerada corre em origem
          opaca, sem acesso ao DOM/API do site; só comunica por postMessage -->
     <iframe id="activity-frame" title="Atividade" sandbox="allow-scripts"></iframe>
+    <section id="group-reflection" class="card" hidden aria-labelledby="reflection-heading">
+      <h1 id="reflection-heading" tabindex="-1">Cada um à sua vez</h1>
+      <p>Escolhe o teu nome. Podes deixar perguntas por responder.</p>
+      <div id="reflection-members" class="reflection-members" role="group" aria-label="Quem vai refletir?"></div>
+      <form id="reflection-form" hidden>
+        <h2 id="reflection-child" tabindex="-1"></h2>
+        <div id="reflection-criteria"></div>
+        <label for="reflection-strategy">O que te ajudou?</label>
+        <textarea id="reflection-strategy" maxlength="1500" rows="2"></textarea>
+        <label for="reflection-next">O que queres experimentar a seguir?</label>
+        <textarea id="reflection-next" maxlength="1500" rows="2"></textarea>
+        <p class="button-line"><button id="reflection-save" type="submit">Guardar a minha reflexão</button>
+          <button id="reflection-skip" class="ghost" type="button">Prefiro não responder agora</button></p>
+        <button id="reflection-reload" class="ghost" type="button" hidden>Rever versão guardada</button>
+      </form>
+      <p id="reflection-status" role="status" aria-live="polite"></p>
+      <button id="reflection-back" class="ghost" type="button">Voltar à atividade</button>
+    </section>
     <div id="messages" aria-live="polite"></div>
   </section>
 
@@ -65,6 +108,7 @@
     </div>
   </div>
 </main>
-<script src="/student/app.js"></script>
+<script src="/student/reflection.js?v=groups-45-1"></script>
+<script src="/student/app.js?v=groups-45-1"></script>
 </body>
 </html>

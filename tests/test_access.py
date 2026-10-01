@@ -168,7 +168,7 @@ async def test_legacy_teacher_token_transports_no_longer_authenticate(app_client
     assert delivery_response.status_code == 404
 
 
-async def test_access_resolves_the_role_and_trust_channel_once_per_request(
+async def test_local_teacher_cookie_cannot_authenticate_through_tunnel_or_lan(
     tmp_path,
     monkeypatch,
 ):
@@ -229,18 +229,8 @@ async def test_access_resolves_the_role_and_trust_channel_once_per_request(
                 headers={"cf-connecting-ip": "198.51.100.31"},
             )
 
-    assert tunnel_response.status_code == 200
-    assert tunnel_response.json() == {
-        "role": "teacher",
-        "channel": "cloudflare_tunnel",
-        "client_ip": "203.0.113.17",
-    }
-    assert lan_response.status_code == 200
-    assert lan_response.json() == {
-        "role": "teacher",
-        "channel": "lan",
-        "client_ip": "10.0.0.9",
-    }
+    assert tunnel_response.status_code == 401
+    assert lan_response.status_code == 401
 
 
 async def test_a_teacher_is_forbidden_from_a_student_route(app_client):

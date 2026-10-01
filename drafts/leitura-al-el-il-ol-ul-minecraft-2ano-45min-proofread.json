@@ -1,0 +1,91 @@
+{
+  "pass": true,
+  "severity": "low",
+  "issues": [],
+  "role": "Proofreader",
+  "date": "2026-09-26",
+  "language": "pt-PT AO90",
+  "slug": "leitura-al-el-il-ol-ul-minecraft-2ano-45min",
+  "reviewed_files": [
+    "drafts/leitura-al-el-il-ol-ul-minecraft-2ano-45min.html",
+    "drafts/leitura-al-el-il-ol-ul-minecraft-2ano-45min-docspec.json",
+    "drafts/leitura-al-el-il-ol-ul-minecraft-2ano-45min.md",
+    "drafts/leitura-al-el-il-ol-ul-minecraft-2ano-45min-design-spec.json",
+    "drafts/leitura-al-el-il-ol-ul-minecraft-2ano-45min-activity.json"
+  ],
+  "html_sha256": "81e778e2509a9991128bd626312d2ba9028da74c54a333d2c156558c710d546a",
+  "independence": "Revisão do HTML executada por agente distinto do Builder, sem editar a implementação. Este revisor também redigiu o DocSpec e o guia na fase Architect; não se apresenta como revisor independente da arquitetura.",
+  "scope": [
+    "Texto estático de todas as seis etapas, rótulos, placeholders e instruções do professor.",
+    "Texto dinâmico JavaScript: pistas, estados sem resposta, sucesso, nova tentativa, ajuda, comparação, mudança de apoio e reflexão.",
+    "Rigor linguístico dos exemplos e coerência do tempo, critérios e missão Minecraft."
+  ],
+  "summary": "Texto em português europeu adequado ao 2.º ano, com leitura humana disponível e três apoios distintos. Foram corrigidas a terminologia do separador do navegador e uma opção de reflexão incompatível com o host; não restam problemas linguísticos identificados.",
+  "resolved_issues": [
+    {
+      "type": "ptpt-usage",
+      "severity": "low",
+      "location": "HTML: handler #save-local",
+      "original": "Autoavaliação guardada nesta aba. / Não foi possível guardar nesta aba.",
+      "suggestion": "Autoavaliação guardada neste separador. / Não foi possível guardar neste separador.",
+      "reason": "Separador é a designação corrente em português europeu para a aba do navegador.",
+      "status": "Corrigido pelo Builder e confirmado em leitura do ficheiro.",
+      "commit": "c9ce214"
+    },
+    {
+      "type": "consistency",
+      "severity": "low",
+      "location": "DocSpec units.reflexao.interaction.render e guia, autoavaliação",
+      "original": "Quero mostrar como fiz",
+      "suggestion": "Prefiro não responder",
+      "reason": "A reflexão canónica distingue autonomia, ajuda, prática e omissão; partilhar é uma ação separada.",
+      "status": "Corrigido após revisão de integração pelo orquestrador.",
+      "commit": "ab04caa"
+    },
+    {
+      "type": "consistency",
+      "severity": "medium",
+      "location": "Registos do relatório: snapshot/saveField e campos da etapa 6",
+      "original": "Estados técnicos completos e campos de estratégia/próximo passo repetidos na atividade alojada e no host.",
+      "suggestion": "Usar rótulos e valores portugueses nas alterações registadas; pedir estratégia e próximo passo apenas no formulário de reflexão do host quando alojado.",
+      "reason": "A apresentação dos registos deve permitir leitura pelo professor e a criança não deve responder duas vezes à mesma reflexão.",
+      "status": "Reparação do Builder revista incrementalmente quanto a linguagem e coerência.",
+      "commit": "37cff28"
+    }
+  ],
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90: OK",
+    "Registo consistente, tratamento por tu: OK",
+    "Adequação à faixa etária de 7–8 anos, com apoio oral humano: OK",
+    "Instruções, rótulos e feedback claros e seguíveis: OK",
+    "Alinhamento com objetivos, critérios e 45 minutos: OK",
+    "Três apoios com nomes canónicos e tarefas diferenciadas: OK",
+    "As peças al/el/il/ol/ul são sequências de letras, sem falsas divisões silábicas: OK",
+    "funil = fu-nil; azul = a-zul; contraste al-to/ma-la: OK",
+    "Pistas distintas para sal e sol; sol azul apresentado como construção de fantasia: OK",
+    "Textos livres e relatos de Minecraft sem validação automática de leitura ou construção: OK",
+    "Opções de reflexão retomam critérios e permitem deixar respostas por dar: OK",
+    "Mensagens locais de gravação não afirmam envio ao professor: OK",
+    "Versão inglesa: não aplicável, não solicitada",
+    "Revisão incremental dos novos rótulos e valores portugueses do relatório: OK"
+  ],
+  "limitations": [
+    "Revisão por leitura de código e documentos; não foram executados testes de browser por este papel.",
+    "O texto de feedback eventualmente produzido pelo host em execução não integra o HTML estático e requer acompanhamento do professor.",
+    "A compreensão real das instruções, a leitura oral e o trabalho Minecraft só podem ser observados com a turma."
+  ],
+  "previous_html_sha256": "7cb3fdf7960b7fe50dc93f4cd7c6fb0d96c3f6f31e5779730685132cbd476063",
+  "incremental_review": {
+    "commit": "37cff28",
+    "scope": "Apenas diferenças após a revisão inicial: rótulos e valores portugueses dos registos do relatório, indicação da origem da evidência e campos de reflexão locais/host.",
+    "result": "Aprovado, sem novos problemas linguísticos.",
+    "checked": [
+      "Nomes de apoio completos em português nos pedidos de ajuda e tentativas.",
+      "Rótulos Etapa, Palavra escolhida, Pista, Peças experimentadas, Palavras verificadas, Destaques, Modelos pedidos, Comparação de sílabas, Mensagem montada, Plano, Papel, Preparação e Local de trabalho.",
+      "Valores legíveis dos planos, papéis e local declarado; ausência de códigos internos nesses valores.",
+      "Voz do aluno e declaração sobre trabalho externo separadas da interação observada na página.",
+      "Estratégia e próximo passo mantêm texto aprovado no modo local; na página alojada são pedidos na reflexão do host."
+    ],
+    "not_tested": "Não repetiu testes de browser nem verificou tecnicamente a persistência/restauro; essas verificações pertencem ao Evaluator."
+  }
+}
