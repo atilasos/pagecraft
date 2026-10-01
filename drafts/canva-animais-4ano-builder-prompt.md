@@ -604,4 +604,3 @@ Releiam os critérios. Voltem ao plano do grupo. Podem corrigir respostas e prep
 ## Artefacto e verificação
 
 HTML5, CSS e JavaScript inline, sem dependências de rede. Implementa as interações e os estados definidos nas unidades, incluindo alternativa por teclado. Usa o template da skill como referência técnica e conserva os nomes da ponte. O ficheiro deve passar pela incorporação da fonte, Proofreader e Evaluator antes de ser entregue para revisão do professor.
-
