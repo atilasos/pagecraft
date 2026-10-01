@@ -1,0 +1,127 @@
+{
+  "pass": false,
+  "severity": "medium",
+  "iteration": 1,
+  "slug": "canva-animais-4ano",
+  "reviewedFile": "drafts/canva-animais-4ano.html",
+  "reviewedSha256": "eb1d2d00907c6dffee7541f25bc750520a0b56e903f0dc52ecab7d958ffbbb7c",
+  "reviewDate": "2026-10-01",
+  "scope": "Revisão estática de todo o texto HTML, dados e estados JS, comparada com DocSpec e guia docente. Não constitui ensaio no browser.",
+  "issues": [
+    {
+      "id": "ling-01",
+      "type": "pedagogical",
+      "severity": "medium",
+      "location": "DATA.units[*].differentiation e #support-panel",
+      "original": "Três frases iniciadas: Escolhemos… porque os colegas podem…; colega ou professor pode registar a razão ditada. / Professor prepara design em branco; grupo segue captura a captura e dita nota curta. / Confrontar efeito com a sugestão recebida e justificar alternativa se a primeira alteração não ajudar.",
+      "suggestion": "Substituir pelos textos de differentiation_replacements deste relatório.",
+      "reason": "Os painéis mostram orientações para adultos como se fossem instruções infantis. Há uma contagem de três frases sem três exemplos e um percurso de capturas que não existe para o editor.",
+      "status": "pending_builder_repair"
+    },
+    {
+      "id": "ling-02",
+      "type": "semantic",
+      "severity": "medium",
+      "location": "FIELDS.revisionResult e stageContent(), case 5",
+      "original": "Mudámos o quê? Para ajudar os colegas como? / Mudámos… para ajudar os colegas a…",
+      "suggestion": "O que mudámos ou ainda queremos mudar? Como ajuda os colegas? / Mudámos… / Vamos mudar… para ajudar os colegas a…",
+      "reason": "A etapa aceita produção ainda incompleta ou pedido de ajuda. A resposta obrigatória precisa de permitir uma nota verdadeira sobre o que falta.",
+      "status": "pending_builder_repair"
+    },
+    {
+      "id": "ling-03",
+      "type": "semantic",
+      "severity": "medium",
+      "location": "stageContent(), case 7",
+      "original": "O produto e a apresentação ficam preparados. A turma pode ouvir todos os grupos noutra aula.",
+      "suggestion": "Revejam o que já está preparado e o que falta. A turma pode ouvir todos os grupos noutra aula.",
+      "reason": "Avançar significa responder, mesmo com dificuldades. O texto final não pode afirmar conclusão do produto externo a partir desse avanço.",
+      "status": "pending_builder_repair"
+    },
+    {
+      "id": "ling-04",
+      "type": "consistency",
+      "severity": "low",
+      "location": "header > p",
+      "original": "Um Word, um produto escolhido em conjunto e uma história sobre como o fizemos.",
+      "suggestion": "Um Word, um produto escolhido em conjunto e uma explicação de como o fizemos.",
+      "reason": "O objetivo é explicar decisões e alterações, sem pedir uma história adicional.",
+      "status": "pending_builder_repair"
+    },
+    {
+      "id": "ling-05",
+      "type": "semantic",
+      "severity": "medium",
+      "location": "Mensagens de preserve-reflection e participantes locais",
+      "original": "Reflexão preservada neste dispositivo. O colega pode começar a sua vez. / reflexão preservada",
+      "suggestion": "Se o armazenamento confirmar: Reflexão guardada neste separador. O colega pode começar a sua vez. Se falhar: A reflexão está visível, mas não foi possível guardá-la neste separador.",
+      "reason": "persist() ignora falhas de sessionStorage; a mensagem não deve garantir conservação quando não existe confirmação local. Nesta fase a análise é estática, sem afirmar falha reproduzida.",
+      "status": "pending_builder_repair"
+    }
+  ],
+  "differentiation_replacements": {
+    "u1": {
+      "support": "Completem: Escolhemos… porque os colegas podem… . Podem ditar a razão.",
+      "standard": "Comparem dois formatos. Escrevam uma razão com que todos concordem.",
+      "challenge": "Comparem os três formatos. Expliquem por que o escolhido ajuda a turma."
+    },
+    "u2": {
+      "support": "Usem o mapa de zonas ou páginas. Combinem quando trocam o teclado.",
+      "standard": "Façam um esboço. Combinem as tarefas. Cada pessoa explica uma decisão.",
+      "challenge": "Comparem duas organizações. Escolham uma e expliquem porquê. Antecipem uma dificuldade."
+    },
+    "u3": {
+      "support": "Sigam o menu mostrado. Peçam ajuda para os passos do editor.",
+      "standard": "Criem o formato escolhido. Comecem a primeira página seguindo o esboço.",
+      "challenge": "Comparem uma página em branco e um modelo simples. Expliquem a escolha."
+    },
+    "u4": {
+      "support": "Copiem uma frase de cada vez. Confiram um animal e depois o outro.",
+      "standard": "Confiram as dez frases e as imagens. Troquem quem escreve e quem confere.",
+      "challenge": "Experimentem duas ordens para os factos. Escolham uma sem mudar o sentido."
+    },
+    "u5": {
+      "support": "Apontem uma parte. Completem: Aqui podes… . Podem registar um comentário oral.",
+      "standard": "Usem os critérios. Registem uma sugestão e decidam uma ação.",
+      "challenge": "Comparem duas sugestões. Escolham qual fazer primeiro e expliquem porquê."
+    },
+    "u6": {
+      "support": "Comparem uma zona antes e depois. Peçam ajuda para guardar o PDF.",
+      "standard": "Apliquem a sugestão escolhida. Abram o PDF e confiram todas as páginas.",
+      "challenge": "A mudança ajuda a ler? Mostrem um exemplo. Se necessário, tentem outra."
+    },
+    "u7": {
+      "support": "Usem as quatro partes do guião. Mostrem uma página enquanto falam.",
+      "standard": "Preparem as quatro partes. Cronometrem um ensaio de 2–3 minutos.",
+      "challenge": "Expliquem uma decisão com um exemplo. Preparem resposta à pergunta dos colegas."
+    },
+    "u8": {
+      "support": "Escolhe um critério. Se quiseres, conta a alguém como participaste.",
+      "standard": "Conta uma estratégia que usaste. O que queres repetir?",
+      "challenge": "Mostra um exemplo da tua estratégia. O que mudarias no próximo trabalho?"
+    }
+  },
+  "summary": "A estrutura conserva o Word, a escolha de um produto, o plano cooperado, a revisão entre grupos e o ensaio de produto e processo em oito etapas. O português está globalmente adequado; é necessário adaptar os painéis de apoio para voz infantil e corrigir afirmações de conclusão ou conservação não confirmadas. A revisão da integração final dos comandos Canva ainda falta.",
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90: OK; sem erros relevantes identificados no artefacto lido.",
+    "Registo consistente: FAIL; painéis de apoio dirigem-se a adultos.",
+    "Adequação à faixa etária: FAIL; há instruções abstratas e longas nos painéis de apoio.",
+    "Instruções claras e seguíveis: FAIL; resultado de melhoria só admite passado e fecho presume conclusão.",
+    "Alinhamento com objetivos: OK; plano, dez factos, duas imagens, revisão e produto/processo permanecem presentes.",
+    "Duração: OK; unidades 10+15+20, 25+20 e 15+25+5 somam três aulas de 45 minutos.",
+    "Capturas reais: OK quanto à origem declarada; quatro menus reais, passos do editor sem captura. Não se valida percurso totalmente capturado.",
+    "Reflexão facultativa e individual: OK no texto; verificação funcional cabe ao Evaluator."
+  ],
+  "limitations": [
+    "A integração de comandos Canva estava em curso; rever textos novos depois do commit do Builder.",
+    "A falta de capturas do editor é uma limitação do pedido original a comunicar pelo orquestrador; não é solucionada por passos textuais.",
+    "Não foram efetuados testes no browser nesta fase."
+  ],
+  "routing": {
+    "ling-01": "Builder",
+    "ling-02": "Builder",
+    "ling-03": "Builder",
+    "ling-04": "Builder",
+    "ling-05": "Builder/Evaluator"
+  }
+}
