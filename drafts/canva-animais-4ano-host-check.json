@@ -11,8 +11,14 @@
     "eventsPersisted": true,
     "reflectionPersisted": true,
     "downloadContainsEvidenceAndReflection": true,
-    "previewExcludedFromStudentReports": true
+    "previewExcludedFromStudentReports": true,
+    "portugueseLabelsInReport": true
   },
   "scope": "Ensaio HTTP do servidor com dados técnicos; não substitui QA no browser.",
-  "preview": "https://estudio.infantinho.xyz/NBR73J"
+  "preview": "https://estudio.infantinho.xyz/NBR73J",
+  "publicEdge": {
+    "activityPage": 403,
+    "activityApi": 403,
+    "interpretation": "A camada externa devolveu 403. A recusa específica do rascunho foi confirmada na API pública sem autenticação, na origem local (404)."
+  }
 }
