@@ -424,7 +424,7 @@ function createStudentTransport() {
   }
 
   function enqueue(type, unitId, payload) {
-    const currentQueue = outbox.filter(event => !state.workGroup || event.composition_version === state.workGroup.composition_version);
+    const currentQueue = outbox.filter(event => !event.composition_conflict);
     if (!hasIdentity() || currentQueue.length >= OUTBOX_LIMIT) return false;
     outbox.push({
       event_id: crypto.randomUUID(),
@@ -432,7 +432,7 @@ function createStudentTransport() {
       unit_id: unitId,
       payload,
       ts: new Date().toISOString(),
-      ...(state.workGroup ? {composition_version:state.workGroup.composition_version, work_group_name:state.workGroup.display_name} : {}),
+      ...(state.workGroup ? {composition_version:state.workGroup.composition_version, access_version:state.workGroup.access_version, work_group_name:state.workGroup.display_name} : {}),
     });
     persistQueue();
     renderPendingWork();
@@ -445,7 +445,7 @@ function createStudentTransport() {
   }
 
   function renderPendingWork() {
-    const previous = outbox.filter(event => state.workGroup && event.composition_version !== state.workGroup.composition_version && HISTORY_LABELS[event.type]);
+    const previous = outbox.filter(event => event.composition_conflict && HISTORY_LABELS[event.type]);
     const panel = $("pending-group-work");
     panel.hidden = !previous.length;
     $("pending-group-list").replaceChildren();
@@ -606,6 +606,7 @@ function createStudentTransport() {
       outbox.length = 0; queueKey = nextKey;
       try { outbox.push(...JSON.parse(sessionStorage.getItem(queueKey) || '[]')); } catch {}
     }
+    markPreviousComposition();
     renderPendingWork();
     listenToBridge();
     flushTimer = setInterval(flush, FLUSH_INTERVAL_MS);
@@ -623,15 +624,18 @@ function createStudentTransport() {
     return outbox.length === 0;
   }
 
+  function markPreviousComposition() {
+    if (!state.workGroup) return;
+    outbox.forEach(event => {
+      if (event.composition_version !== state.workGroup.composition_version ||
+          (event.access_version || 1) !== state.workGroup.access_version) event.composition_conflict = true;
+    });
+    persistQueue();
+  }
+
   return {
-    enqueue, flush, post, start, stop, savePending,
-    markPreviousComposition() {
-      outbox.forEach(event => {
-        if (event.composition_version !== state.workGroup.composition_version) event.composition_conflict = true;
-      });
-      persistQueue();
-    },
-    pendingLevel: () => outbox.findLast(event => event.type === "level_changed" && !event.composition_conflict && event.composition_version === state.workGroup?.composition_version)?.payload.level,
+    enqueue, flush, post, start, stop, savePending, markPreviousComposition,
+    pendingLevel: () => outbox.findLast(event => event.type === "level_changed" && !event.composition_conflict)?.payload.level,
   };
 }
 
@@ -803,7 +807,9 @@ function sendGroupPreferences() {
 }
 
 function acceptComposition(group) {
-  if (!state.workGroup || group.device_id !== state.workGroup.device_id || group.composition_version <= state.workGroup.composition_version) return;
+  if (!state.workGroup || group.device_id !== state.workGroup.device_id ||
+      (group.composition_version <= state.workGroup.composition_version && group.access_version <= state.workGroup.access_version)) return;
+  const participantsChanged = group.composition_version !== state.workGroup.composition_version;
   state.workGroup = group;
   studentTransport.markPreviousComposition();
   state.displayName = group.display_name;
@@ -812,7 +818,8 @@ function acceptComposition(group) {
   sendGroupPreferences();
   saveIdentity();
   groupReflection.mount();
-  showMessage(`O professor alterou os participantes: ${group.display_name}. O trabalho anterior mantém os seus autores.`, "feedback-warn");
+  showMessage(participantsChanged ? `O professor alterou os participantes: ${group.display_name}. O trabalho anterior mantém os seus autores.` :
+    'A entrada no grupo foi renovada. Os envios antigos ficam separados do trabalho atual.', "feedback-warn");
   studentTransport.start();
 }
 

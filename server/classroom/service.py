@@ -232,6 +232,7 @@ class ClassroomService:
         for group in session.get("work_groups", {}).values():
             group.setdefault("device_id", group["id"])
             group.setdefault("composition_version", 1)
+            group.setdefault("access_version", 1)
         for event in events:
             if event.get("type") != "work_group_changed":
                 continue
@@ -484,7 +485,7 @@ class ClassroomService:
                 entry["resume_reserved"] = bool(entry.get("token") or entry.get("resume_reserved"))
                 entry.update(token=None, claimed_at=None, credential_expires_at=None)
             for group in session.get("work_groups", {}).values():
-                group.update(token=None, access_code=None)
+                group.update(token=None, access_code=None, access_version=group["access_version"] + 1)
             for group in self._current_groups(session):
                 group["access_code"] = _join_code(8)
             session["group_codes_visible"] = bool(self._current_groups(session))
@@ -499,7 +500,7 @@ class ClassroomService:
             group = next((group for group in self._current_groups(session) if group["id"] == group_id), None)
             if not group:
                 raise StudentNotInRosterError("grupo não encontrado")
-            group.update(token=None, access_code=_join_code(8))
+            group.update(token=None, access_code=_join_code(8), access_version=group["access_version"] + 1)
             await self.storage.write_json(self._session_path(session_id), session)
             await self._publish_group_codes_unlocked(session)
             return next(row for row in self.group_codes(session) if row["id"] == group_id)
@@ -537,7 +538,7 @@ class ClassroomService:
 
     @staticmethod
     def project_work_group(group: dict) -> dict:
-        return {key: group[key] for key in ("id", "device_id", "composition_version", "participant_ids", "members", "display_name", "mode", "level")}
+        return {key: group[key] for key in ("id", "device_id", "composition_version", "access_version", "participant_ids", "members", "display_name", "mode", "level")}
 
     async def claim_work_group(self, session_id: str, participant_ids: list[str], mode: str, level: str) -> dict | None:
         async with self._session_locks[session_id]:
@@ -554,7 +555,7 @@ class ClassroomService:
             group_id = uuid.uuid4().hex[:12]
             members = [{"student_id": sid, "display_name": session["roster"][sid]["display_name"]} for sid in participant_ids]
             group = {
-                "id": group_id, "device_id": group_id, "composition_version": 1, "participant_ids": participant_ids, "members": members,
+                "id": group_id, "device_id": group_id, "composition_version": 1, "access_version": 1, "participant_ids": participant_ids, "members": members,
                 "display_name": " + ".join(member["display_name"] for member in members),
                 "mode": mode, "level": level, "token": uuid.uuid4().hex,
                 "claimed_at": self.now(), "credential_expires_at": self._student_credential_expires_at(),
@@ -632,7 +633,8 @@ class ClassroomService:
                     and record.get("student_id") == data["student_id"]
                     and session["work_groups"].get(record["payload"]["source_work_group_id"], {}).get("device_id") == group["device_id"]):
                     previous = record["payload"]["revision"]
-            if (data.get("composition_version") or 1) != group["composition_version"]:
+            if ((data.get("composition_version") or 1) != group["composition_version"]
+                or (data.get("access_version") or 1) != group["access_version"]):
                 raise CompositionChangedError([data["event_id"]], self.project_work_group(group))
             if previous != data["expected_revision"]:
                 raise ClassroomError("Há uma reflexão mais recente. Volta a abri-la antes de guardar.")
@@ -815,7 +817,8 @@ class ClassroomService:
             )]
             conflicts = [str(ev.get("event_id") or "") for ev in events[:20]
                          if ev.get("event_id") not in seen and ev.get("type") in activity_types
-                         and ev.get("composition_version", 1) != group["composition_version"]]
+                         and (ev.get("composition_version", 1) != group["composition_version"]
+                              or ev.get("access_version", 1) != group["access_version"])]
             if conflicts:
                 raise CompositionChangedError(conflicts, self.project_work_group(group))
             accepted = []

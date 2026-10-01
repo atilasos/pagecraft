@@ -193,3 +193,38 @@ async def test_resumed_window_and_unused_codes_expire_at_school_midnight(continu
         assert (await student.post('/api/groups/enter', json={
             'code': resumed['group_codes'][0]['code']
         })).status_code == 200
+
+
+@pytest.mark.parametrize('new_window', [False, True])
+async def test_old_pending_work_cannot_overwrite_work_after_a_new_entry(continuation, new_window):
+    app, transport, teacher, session, clock = continuation
+    path = '/api/sessions/' + session['id']
+    async with httpx.AsyncClient(transport=transport, base_url='http://test') as device:
+        group = (await device.post(path + '/groups/claim', json={
+            'participant_ids': list(session['roster'])[:2], 'mode': 'pair'
+        })).json()['work_group']
+        old_pending = {'event_id': 'old-offline', 'type': 'activity_state',
+                       'composition_version': group['composition_version'],
+                       'access_version': group['access_version'],
+                       'payload': {'state': {'step': 1}}}
+        if new_window:
+            await teacher.post(path + '/close')
+            clock['now'] = datetime(2026, 10, 8, 10, tzinfo=timezone.utc)
+            code = (await teacher.post(path + '/resume')).json()['group_codes'][0]['code']
+        else:
+            code = (await teacher.post(path + f'/groups/{group["id"]}/access-code')).json()['code']
+        current = (await device.post('/api/groups/enter', json={'code': code})).json()['work_group']
+        assert current['device_id'] == group['device_id']
+        assert current['composition_version'] == group['composition_version']
+        assert current['access_version'] > group['access_version']
+        new_work = {**old_pending, 'event_id': 'new-work', 'access_version': current['access_version'],
+                    'payload': {'state': {'step': 3}}}
+        assert (await device.post(path + '/events', json={'events': [new_work]})).json()['accepted'] == ['new-work']
+        rejected = await device.post(path + '/events', json={'events': [old_pending]})
+        assert rejected.status_code == 409
+        assert rejected.json()['detail']['event_ids'] == ['old-offline']
+        # A request from an older host that lacks the generation is stale too.
+        old_pending.pop('access_version')
+        assert (await device.post(path + '/events', json={'events': [old_pending]})).status_code == 409
+        history = (await device.get(path + '/groups/me/history')).json()['events']
+        assert [e['payload']['state']['step'] for e in history if e['type'] == 'activity_state'] == [3]

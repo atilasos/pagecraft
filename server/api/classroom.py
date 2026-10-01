@@ -73,6 +73,7 @@ class GroupReflectionRequest(BaseModel):
     event_id: str = Field(min_length=1, max_length=80)
     expected_revision: int = Field(ge=0)
     composition_version: int | None = Field(default=None, ge=1)
+    access_version: int | None = Field(default=None, ge=1)
     answers: dict[str, Literal["alone", "help", "practising", "skip"]] = Field(default_factory=dict, max_length=8)
     strategy: str = Field(default="", max_length=1500)
     next_step: str = Field(default="", max_length=1500)
