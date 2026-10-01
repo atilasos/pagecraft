@@ -13,8 +13,8 @@
     <h1>Entrar na aula</h1>
     <p>Escreve o código que o professor mostrou:</p>
     <form id="code-form">
-      <input id="code-input" autocomplete="off" maxlength="6" minlength="6" required
-             aria-label="Código da aula" placeholder="ABC123">
+      <input id="code-input" autocomplete="off" maxlength="8" minlength="6" required
+             aria-label="Código da aula ou do grupo" placeholder="ABC123">
       <p class="button-line"><button type="submit">Entrar</button>
       <span class="muted" id="code-status" role="status"></span></p>
     </form>
@@ -43,13 +43,15 @@
       <strong id="student-name"></strong>
       <span class="muted" id="activity-title"></span>
       <label id="group-level-label" hidden>Nível do grupo
-        <select id="group-level"><option value="support">Com pistas</option><option value="intermediate">Passo a passo</option><option value="challenge">Mais desafios</option></select>
+        <select id="group-level" aria-label="Nível do grupo"><option value="support">Com pistas</option><option value="intermediate">Passo a passo</option><option value="challenge">Mais desafios</option></select>
       </label>
       <span class="student-actions">
+        <button class="ghost" id="save-work" type="button">Guardar para continuar</button>
         <button class="ghost" id="help-btn" type="button">Preciso de ajuda 🙋</button>
         <button class="ghost" id="group-reflect-btn" type="button" hidden>A minha reflexão</button>
         <button class="ghost" id="pit-btn" type="button">O meu plano 📋</button>
       </span>
+      <span id="save-work-status" class="muted" role="status" aria-live="polite"></span>
     </div>
     <section id="pending-group-work" class="card" hidden aria-live="polite">
       <h2>Trabalho do grupo anterior por confirmar</h2>
@@ -77,6 +79,10 @@
     </div>
     <!-- sandbox sem allow-same-origin: a atividade gerada corre em origem
          opaca, sem acesso ao DOM/API do site; só comunica por postMessage -->
+    <div id="restore-work" class="card" hidden>
+      <p id="restore-status" role="status">A recuperar o trabalho guardado…</p>
+      <button id="restore-retry" type="button" hidden>Tentar recuperar novamente</button>
+    </div>
     <iframe id="activity-frame" title="Atividade" sandbox="allow-scripts"></iframe>
     <section id="group-reflection" class="card" hidden aria-labelledby="reflection-heading">
       <h1 id="reflection-heading" tabindex="-1">Cada um à sua vez</h1>

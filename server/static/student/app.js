@@ -8,6 +8,8 @@ const state = {
   displayName: null,
   studentState: null,
   sessionState: null,
+  restoringWork: false,
+  restoreGeneration: 0,
 };
 
 let workMode = "alone";
@@ -72,11 +74,23 @@ $("code-form").addEventListener("submit", async (ev) => {
   const status = $("code-status");
   status.textContent = "A procurar a aula…";
   try {
-    const resp = await fetch(`/api/join/${encodeURIComponent(code)}`);
+    const resumingGroup = code.length === 8;
+    const resp = await fetch(resumingGroup ? '/api/groups/enter' : `/api/join/${encodeURIComponent(code)}`,
+      resumingGroup ? {method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({code})} : {});
     if (!resp.ok) throw new Error((await resp.json()).detail || "código não encontrado");
-    state.session = await resp.json();
+    const data = await resp.json();
     status.textContent = "";
-    showIdentityStep();
+    if (resumingGroup) {
+      state.session = data.session;
+      state.studentId = null;
+      state.workGroup = data.work_group;
+      state.displayName = data.work_group.display_name;
+      saveIdentity();
+      startActivity();
+    } else {
+      state.session = data;
+      showIdentityStep();
+    }
   } catch (err) {
     status.textContent = err.message;
   }
@@ -172,6 +186,13 @@ function startActivity() {
   $("history-panel").hidden = true;
   $("student-name").textContent = state.displayName;
   $("activity-title").textContent = state.session.activity_title;
+  state.restoringWork = true;
+  state.restoreGeneration += 1;
+  $("activity-frame").hidden = true;
+  $("restore-work").hidden = false;
+  $("restore-status").textContent = 'A recuperar o trabalho guardado…';
+  $("restore-retry").hidden = true;
+  $("save-work").disabled = true;
   $("activity-frame").src = `/api/sessions/${state.session.id}/content`;
   $("group-level-label").hidden = !state.workGroup;
   $("group-level").disabled = false;
@@ -186,16 +207,43 @@ function startActivity() {
 }
 
 function sanitizePayload(payload) {
-  // payloads vêm de código gerado: só primitivos curtos, sem objetos fundos
-  const out = {};
-  if (payload && typeof payload === "object") {
-    for (const [k, v] of Object.entries(payload).slice(0, 8)) {
-      if (typeof v === "string") out[k] = v.slice(0, 500);
-      else if (typeof v === "number" || typeof v === "boolean") out[k] = v;
-    }
-  }
-  return out;
+  try {
+    if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return {};
+    const json = JSON.stringify(payload);
+    if (new TextEncoder().encode(json).length > 4096) return null;
+    return JSON.parse(json);
+  } catch { return null; }
 }
+
+async function restoreWork() {
+  if (!hasIdentity()) return;
+  const generation = state.restoreGeneration;
+  const sessionId = state.session.id;
+  try {
+    const path = state.workGroup ? 'groups/me/history' : `students/${state.studentId}/history`;
+    const response = await fetch(`/api/sessions/${sessionId}/${path}`);
+    if (generation !== state.restoreGeneration) return;
+    if (response.status === 401) { invalidateStudentIdentity(); return; }
+    if (!response.ok) throw new Error('history');
+    const history = await response.json();
+    if (!Array.isArray(history.events)) throw new Error('history');
+    state.restoringWork = false;
+    $('activity-frame').contentWindow?.postMessage({pagecraft:1, type:'learning_restore',
+      payload:{events:history.events}}, '*');
+    sendGroupPreferences();
+    // Let the activity apply both messages before a child can edit its controls.
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    if (generation !== state.restoreGeneration) return;
+    $('restore-work').hidden = true;
+    $('activity-frame').hidden = false;
+    $('save-work').disabled = false;
+  } catch {
+    if (generation !== state.restoreGeneration) return;
+    $('restore-status').textContent = 'Não foi possível recuperar o trabalho. Tenta novamente.';
+    $('restore-retry').hidden = false;
+  }
+}
+$('restore-retry').addEventListener('click', restoreWork);
 
 /* SSE: feedback IA, mensagens do professor, PIT */
 const STUDENT_EVENT_HANDLERS = {
@@ -297,6 +345,7 @@ function finishStudentSession() {
   $("freeze-overlay").hidden = true;
   $("help-btn").disabled = true;
   $("group-level").disabled = true;
+  $("save-work").disabled = true;
   $("pit-form").querySelectorAll("button, input").forEach((element) => {
     element.disabled = true;
   });
@@ -304,6 +353,7 @@ function finishStudentSession() {
 }
 
 function invalidateStudentIdentity() {
+  state.restoreGeneration += 1;
   groupReflection.reset();
   studentTransport.stop({ discardQueue: true });
   clearIdentity();
@@ -414,7 +464,11 @@ function createStudentTransport() {
       if (!frame.contentWindow || ev.source !== frame.contentWindow) return;
       const data = ev.data;
       if (!data || data.pagecraft !== 1 || !data.type) return;
-      if (state.workGroup && ["open_reflection", "assessment_result"].includes(data.type)) {
+      if (state.restoringWork && ['activity_state', 'unit_started', 'level_changed', 'assessment_result'].includes(data.type)) return;
+      const declaration = data.payload?.detail;
+      const sharedWork = declaration && typeof declaration === 'object' &&
+        declaration.activity === state.session.activity_slug && (declaration.field || declaration.productChanged);
+      if (state.workGroup && (data.type === 'open_reflection' || (data.type === 'assessment_result' && !sharedWork))) {
         // Legacy self-assessment is a request to open individual voice, never a group answer.
         if (data.type === "open_reflection") groupReflection.open();
         return;
@@ -427,11 +481,8 @@ function createStudentTransport() {
           sendGroupPreferences();
         }
       }
-      enqueue(
-        data.type,
-        data.unitId || null,
-        sanitizePayload(data.payload)
-      );
+      const payload = sanitizePayload(data.payload);
+      if (payload !== null) enqueue(data.type, data.unitId || null, payload);
     };
     window.addEventListener("message", bridgeHandler);
   }
@@ -558,8 +609,19 @@ function createStudentTransport() {
     connect(request, sessionId);
   }
 
+  async function savePending() {
+    for (let tries = 0; tries < 100; tries++) {
+      if (flushing) { await new Promise(resolve => setTimeout(resolve, 50)); continue; }
+      const before = outbox.length;
+      if (!before) return true;
+      await flush();
+      if (outbox.length >= before) return false;
+    }
+    return outbox.length === 0;
+  }
+
   return {
-    enqueue, flush, post, start, stop,
+    enqueue, flush, post, start, stop, savePending,
     pendingLevel: () => outbox.findLast(event => event.type === "level_changed" && !event.composition_conflict && event.composition_version === state.workGroup?.composition_version)?.payload.level,
   };
 }
@@ -581,6 +643,17 @@ function showMessage(text, cls) {
   setTimeout(() => box.remove(), 15000);
 }
 
+$('save-work').addEventListener('click', async () => {
+  $('save-work').disabled = true;
+  $('save-work-status').textContent = 'A guardar…';
+  // Leaving the activity commits its focused field through the existing bridge.
+  await new Promise(resolve => setTimeout(resolve, 50));
+  const saved = await studentTransport.savePending();
+  $('save-work-status').textContent = saved ? 'Guardado. Podem continuar na próxima aula.' :
+    'Ainda não foi possível guardar tudo. Mantém esta página aberta e tenta novamente.';
+  $('save-work').disabled = state.sessionState?.closed === true;
+});
+
 const HISTORY_LABELS = {
   unit_started: "Comecei uma parte",
   level_changed: "Mudei de nível de diferenciação",
@@ -601,7 +674,7 @@ function describeHistoryEvent(event) {
   const detail =
     payload.message ||
     payload.text ||
-    payload.detail ||
+    (typeof payload.detail === "object" ? payload.detail.note || payload.detail.value : payload.detail) ||
     payload.note ||
     payload.what ||
     "";
@@ -623,7 +696,7 @@ async function loadOwnHistory() {
     const history = await resp.json();
     const list = $("history-list");
     list.innerHTML = "";
-    const events = Array.isArray(history?.events) ? history.events : [];
+    const events = Array.isArray(history?.events) ? history.events.filter(event => event.type !== "activity_state") : [];
     if (!events.length) {
       const empty = document.createElement("li");
       empty.textContent = "Ainda não há trabalho registado.";
@@ -715,7 +788,7 @@ function renderPit() {
 }
 
 function sendGroupPreferences() {
-  if (!state.workGroup) return;
+  if (!state.workGroup || state.restoringWork) return;
   $("activity-frame").contentWindow?.postMessage({pagecraft:1, type:"work_group_preferences", payload:{level:state.workGroup.level}}, '*');
   $("activity-frame").contentWindow?.postMessage({pagecraft:1, type:"learning_preferences", payload:{level:state.workGroup.level}}, '*');
 }
@@ -743,7 +816,7 @@ function acceptGroupState(group) {
   if (levelChanged) sendGroupPreferences();
 }
 
-$("activity-frame").addEventListener("load", sendGroupPreferences);
+$("activity-frame").addEventListener("load", restoreWork);
 $("group-level").addEventListener("change", () => {
   if (!state.workGroup) return;
   state.workGroup.level = $("group-level").value;

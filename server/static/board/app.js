@@ -216,6 +216,19 @@ function finishLiveSession(message) {
 function applySessionState(data) {
   const state = data.session;
   if (!state || typeof state !== "object" || Array.isArray(state)) return;
+  const showingCodes = state.group_codes_visible === true;
+  document.getElementById('group-codes-panel').hidden = !showingCodes;
+  board.hidden = showingCodes;
+  document.getElementById('group-entry-url').textContent = `${location.origin}/student/`;
+  const grid = document.getElementById('group-codes-grid');
+  grid.replaceChildren();
+  for (const group of state.group_codes || []) {
+    const card = document.createElement('article');
+    const name = document.createElement('h2'); name.textContent = group.display_name;
+    const code = document.createElement('p'); code.className = 'group-access-code';
+    code.textContent = group.code || 'Grupo já entrou';
+    card.append(name, code); grid.append(card);
+  }
   if (state.closed === true || state.status === "closed") {
     finishLiveSession("Sessão terminada. A aguardar a próxima aula.");
   }

@@ -71,6 +71,11 @@ def studio_origin(tmp_path_factory):
     shutil.copyfile(DRAFT, activity / 'index.html')
     for slug in ['bota', 'arvore', 'canva-4ano-estudio-de-slides', 'classificar-objetos-1ano', '2026-03-17-dobro-ate-10', 'dedo']:
         shutil.copytree(DRAFT.parent.parent / 'activities' / slug, root / 'activities' / slug)
+    # The unpublished Canva draft is copied only into this disposable test server.
+    canva = root / 'activities' / 'canva-animais-4ano'
+    canva.mkdir()
+    shutil.copyfile(DRAFT.parent / 'canva-animais-4ano.html', canva / 'index.html')
+    (canva / 'meta.json').write_text('{"title":"Dois animais, três formas de comunicar","year":"4","subject":"TIC"}')
     with socket.socket() as socket_:
         socket_.bind(('127.0.0.1', 0))
         port = socket_.getsockname()[1]
