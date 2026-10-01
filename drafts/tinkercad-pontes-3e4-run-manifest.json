@@ -3,15 +3,16 @@
   "status": "in_revision",
   "published": false,
   "code": "52XFA9",
-  "review_url": "http://127.0.0.1:8777/52XFA9",
+  "review_url": "https://estudio.infantinho.xyz/52XFA9",
   "review_access": "Abrir primeiro a área local /teacher/activities.html ou a área privada do professor em https://estudio.infantinho.xyz/teacher/activities.html; o rascunho não é público.",
   "phases": {
     "sources": {
       "status": "complete",
-      "artifact": "drafts/tinkercad-pontes-3e4-sources.md"
+      "artifact": "drafts/tinkercad-pontes-3e4-sources.md",
+      "consulted": "2026-10-01"
     },
     "architect": {
-      "status": "pending_revision",
+      "status": "complete_revision",
       "artifact": "drafts/tinkercad-pontes-3e4-docspec.json"
     },
     "designer": {
@@ -33,13 +34,20 @@
   },
   "teacher_guide": "drafts/tinkercad-pontes-3e4.md",
   "metadata": "drafts/tinkercad-pontes-3e4-activity.json",
-  "verification": {
+  "next_step": "O professor revê a pré-visualização e decide se aprova esta atividade específica. Publicação exige aprovação própria.",
+  "revision": 2,
+  "revision_date": "2026-10-01",
+  "revision_basis": [
+    "skills/codex/references/activity-experience.md",
+    "skills/codex/references/age-adaptation.md"
+  ],
+  "verification_previous_revision": {
     "schema": "DocSpec, design, proofread, evaluation e metadata validados em 2026-09-27.",
     "javascript": "node --check passou em 2026-09-27.",
     "browser": "Simulação, vistas, três apoios, teclado, reflexão, gravação integrada e exclusão do ensaio dos relatórios testados com Agent Browser Hub; layout inspecionado em iframes de 390 e 768 px; ver avaliação.",
     "public_draft_access": "GET anónimo a /api/learning/activities/52XFA9 e /content devolveu 404."
   },
-  "screenshots": [
+  "screenshots_previous_revision": [
     "/home/proteu/agent-browser-hub/screenshots/tinkercad-passed-trial.png",
     "/home/proteu/agent-browser-hub/screenshots/tinkercad-top-view.png",
     "/home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-full.png",
@@ -49,17 +57,13 @@
     "/home/proteu/agent-browser-hub/screenshots/tinkercad-viewport-390-sim-controls.png",
     "/home/proteu/agent-browser-hub/screenshots/tinkercad-viewport-768-sim-controls.png"
   ],
-  "limitations": [
+  "limitations_previous_revision": [
     "A cópia corrigida do ecrã final do host foi verificada no código, sem nova captura em browser após a correção.",
     "O teste de 390/768 px usou iframes de largura fixa; não reproduziu teclado virtual nem gestos físicos em dispositivos reais.",
     "Não houve construção observada no Tinkercad com alunos ou acesso de turma.",
     "O catálogo aceita um único ano: o rascunho foi registado como 3.º ano, com 3.º e 4.º anos explícitos no título e no conteúdo."
   ],
-  "next_step": "O professor revê a pré-visualização e decide se aprova esta atividade específica. Publicação exige aprovação própria.",
-  "revision": 2,
-  "revision_date": "2026-10-01",
-  "revision_basis": [
-    "skills/codex/references/activity-experience.md",
-    "skills/codex/references/age-adaptation.md"
-  ]
+  "verification": {},
+  "screenshots": [],
+  "limitations": []
 }
