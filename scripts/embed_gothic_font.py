@@ -1,26 +1,14 @@
 """Embed the bundled fallback in the Studio CSS and standalone fraction lesson."""
 from pathlib import Path
-import base64
+import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-FONT = ROOT / 'assets/fonts/didact-gothic'
-START = '/* BEGIN BUNDLED DIDACT GOTHIC */'
-END = '/* END BUNDLED DIDACT GOTHIC */'
+sys.path.insert(0, str(ROOT))
+from server.typography import START, END, bundled_font_css
 
 
 def main():
-    encoded = base64.b64encode((FONT / 'DidactGothic-Regular.woff2').read_bytes()).decode('ascii')
-    license_text = (FONT / 'OFL.txt').read_text().strip()
-    block = f'''{START}
-/* {license_text} */
-@font-face {{
-  font-family: "Didact Gothic";
-  src: url("data:font/woff2;base64,{encoded}") format("woff2");
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}}
-{END}'''
+    block = bundled_font_css()
     for relative in ['server/static/studio.css', 'drafts/fracoes-banda-desenhada-2ano.html']:
         path = ROOT / relative
         content = path.read_text()

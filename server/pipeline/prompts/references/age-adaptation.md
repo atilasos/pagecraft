@@ -48,7 +48,7 @@ Guia operacional para o Architect, Designer e Builder traduzirem **faixa etária
 
 Preferência confirmada pelo professor: `"Century Gothic", "Didact Gothic", "URW Gothic", "Avant Garde", sans-serif`, em texto, títulos e controlos. Century Gothic é usada quando está instalada no dispositivo que abre a página.
 
-Para dispositivos sem Century Gothic, incorporar a Didact Gothic distribuída em `assets/fonts/didact-gothic/` como `@font-face` com data URL. Conservar a licença OFL no artefacto. Usar o ficheiro WOFF2 existente, sem ligações externas ou dependências de rede. O exemplo completo encontra-se no bloco `BUNDLED DIDACT GOTHIC` de `drafts/fracoes-banda-desenhada-2ano.html`.
+Para dispositivos sem Century Gothic, o servidor incorpora automaticamente a Didact Gothic e a licença OFL no HTML antes de o enviar ao Proofreader e ao Evaluator, em cada ronda de construção ou reparação. O Builder deve usar a família acima no CSS e não deve inventar data URLs nem tentar ler ficheiros de fontes: a incorporação é responsabilidade do servidor. O artefacto final inclui o WOFF2 real, sem ligações externas ou dependências de rede.
 
 ## Cor
 
