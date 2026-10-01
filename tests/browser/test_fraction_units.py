@@ -252,7 +252,7 @@ def test_touch_controls_and_known_fraction_geometry(page, lesson_origin):
         touch.get_by_role('button', name='Parte 1', exact=True).tap()
         touch.get_by_role('button', name='Parte 2', exact=True).tap()
         touch.get_by_role('button', name='Confirmar representação').tap()
-        expect(touch.get_by_text('Representaste 2/5.', exact=True)).to_be_visible()
+        expect(touch.locator('.feedback strong').get_by_role('img', name='2/5', exact=True)).to_be_visible()
         # 2/5 of the full 300-unit SVG is 120, made of two equal 60-unit parts.
         drawing = touch.get_by_role('img', name='2 de 5 partes iguais pintadas').last
         rects = drawing.locator('rect').evaluate_all('(items) => items.map(r => ({x:+r.getAttribute("x"),width:+r.getAttribute("width"),fill:r.getAttribute("fill")}))')
@@ -300,6 +300,7 @@ def test_teacher_history_receives_five_units_in_live_session(page, studio_origin
         page.locator('#code-input').fill(session['join_code'])
         page.get_by_role('button', name='Entrar', exact=True).click()
         page.get_by_role('button', name='Aluno de ensaio', exact=True).click()
+        page.get_by_role('button', name='Começar', exact=True).click()
         lesson = page.frame_locator('#activity-frame')
         finish_representations(lesson)
         lesson.get_by_role('button', name='Confirmar composição').click()
