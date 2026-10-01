@@ -227,13 +227,19 @@ async function restoreWork() {
     if (!response.ok) throw new Error('history');
     const history = await response.json();
     if (!Array.isArray(history.events)) throw new Error('history');
-    state.restoringWork = false;
+    const events = studentTransport.restoreEvents(history.events);
+    const pendingLevel = studentTransport.pendingLevel();
+    if (state.workGroup && pendingLevel) {
+      state.workGroup.level = pendingLevel;
+      $('group-level').value = pendingLevel;
+    }
     $('activity-frame').contentWindow?.postMessage({pagecraft:1, type:'learning_restore',
-      payload:{events:history.events}}, '*');
-    sendGroupPreferences();
+      payload:{events}}, '*');
+    sendGroupPreferences({duringRestore:true});
     // Let the activity apply both messages before a child can edit its controls.
     await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
     if (generation !== state.restoreGeneration) return;
+    state.restoringWork = false;
     $('restore-work').hidden = true;
     $('activity-frame').hidden = false;
     $('save-work').disabled = false;
@@ -449,7 +455,11 @@ function createStudentTransport() {
     const panel = $("pending-group-work");
     panel.hidden = !previous.length;
     $("pending-group-list").replaceChildren();
-    const captions = new Set(previous.map(event => `${event.work_group_name || 'Grupo anterior'} · ${HISTORY_LABELS[event.type]}${event.payload?.detail ? ': '+event.payload.detail : ''}`));
+    const captions = new Set(previous.map(event => {
+      const caption = describeHistoryEvent({...event, work_group_id:'pending'});
+      const value = event.payload?.detail?.value;
+      return typeof value === 'string' ? `${caption} · ${value}` : caption;
+    }));
     for (const caption of captions) {
       const item = document.createElement('li');
       item.textContent = caption;
@@ -514,7 +524,7 @@ function createStudentTransport() {
   }
 
   async function flush() {
-    if (flushing || !outbox.length || !hasIdentity()) return;
+    if (flushing || state.restoringWork || !outbox.length || !hasIdentity()) return;
     flushing = true;
     const batch = outbox.filter(event => !event.composition_conflict).slice(0, OUTBOX_BATCH_SIZE);
     if (!batch.length) { flushing = false; return; }
@@ -616,12 +626,12 @@ function createStudentTransport() {
   async function savePending() {
     for (let tries = 0; tries < 100; tries++) {
       if (flushing) { await new Promise(resolve => setTimeout(resolve, 50)); continue; }
-      const before = outbox.length;
+      const before = outbox.filter(event => !event.composition_conflict).length;
       if (!before) return true;
       await flush();
-      if (outbox.length >= before) return false;
+      if (outbox.filter(event => !event.composition_conflict).length >= before) return false;
     }
-    return outbox.length === 0;
+    return outbox.every(event => event.composition_conflict);
   }
 
   function markPreviousComposition() {
@@ -635,6 +645,10 @@ function createStudentTransport() {
 
   return {
     enqueue, flush, post, start, stop, savePending, markPreviousComposition,
+    restoreEvents(history) {
+      const savedIds = new Set(history.map(event => event.event_id));
+      return [...history, ...outbox.filter(event => !event.composition_conflict && !savedIds.has(event.event_id))];
+    },
     pendingLevel: () => outbox.findLast(event => event.type === "level_changed" && !event.composition_conflict)?.payload.level,
   };
 }
@@ -800,8 +814,8 @@ function renderPit() {
   });
 }
 
-function sendGroupPreferences() {
-  if (!state.workGroup || state.restoringWork) return;
+function sendGroupPreferences({duringRestore = false} = {}) {
+  if (!state.workGroup || (state.restoringWork && !duringRestore)) return;
   $("activity-frame").contentWindow?.postMessage({pagecraft:1, type:"work_group_preferences", payload:{level:state.workGroup.level}}, '*');
   $("activity-frame").contentWindow?.postMessage({pagecraft:1, type:"learning_preferences", payload:{level:state.workGroup.level}}, '*');
 }

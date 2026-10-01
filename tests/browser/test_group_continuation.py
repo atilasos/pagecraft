@@ -38,6 +38,12 @@ def test_group_continues_real_saved_work_in_another_browser(page, studio_origin)
         page.route('**/events', lambda route: route.fulfill(status=503, body='{}'))
         page.get_by_role('button', name='Guardar para continuar', exact=True).click()
         expect(page.locator('#save-work-status')).to_contain_text('não foi possível guardar tudo')
+        # Restore unsent work too: reloading before the connection returns must
+        # keep the current declaration and checkpoint, rather than replay old values.
+        page.reload()
+        expect(page.locator('#activity-frame')).to_be_visible(timeout=15000)
+        expect(lesson.locator('#layoutPlan')).to_have_value('Duas zonas, uma por animal.')
+        expect(lesson.locator('.stage-meta')).to_contain_text('Etapa 2 de 8')
         page.unroute('**/events')
         page.get_by_role('button', name='Guardar para continuar', exact=True).click()
         expect(page.locator('#save-work-status')).to_have_text('Guardado. Podem continuar na próxima aula.')
@@ -118,3 +124,61 @@ def test_group_continues_real_saved_work_in_another_browser(page, studio_origin)
             teacher_context.close()
             board_context.close()
             next_context.close()
+
+
+def test_old_browser_preserves_unsent_work_without_replaying_it_after_new_code(page, studio_origin):
+    from playwright.sync_api import expect
+    with httpx.Client(base_url=studio_origin) as teacher:
+        teacher.get('/api/teacher-bootstrap').raise_for_status()
+        classroom = teacher.post('/api/classes', json={
+            'name': 'Fila antiga', 'year': 4, 'students': ['Ana', 'Bruno']
+        }).json()
+        session = teacher.post('/api/sessions', json={
+            'class_id': classroom['id'], 'activity_slug': 'canva-animais-4ano'
+        }).json()
+        path = '/api/sessions/' + session['id']
+        page.goto(studio_origin + '/student/')
+        page.get_by_label('Código da aula').fill(session['join_code'])
+        page.get_by_role('button', name='Entrar', exact=True).click()
+        page.get_by_role('button', name='A pares', exact=True).click()
+        for name in ['Ana', 'Bruno']:
+            page.get_by_role('button', name=name, exact=True).click()
+        page.get_by_role('button', name='Começar', exact=True).click()
+        expect(page.locator('#activity-frame')).to_be_visible(timeout=15000)
+        lesson = page.frame_locator('#activity-frame')
+        lesson.locator('#animals').fill('Trabalho antigo por enviar')
+        page.route('**/events', lambda route: route.fulfill(status=503, body='{}'))
+        page.get_by_role('button', name='Guardar para continuar', exact=True).click()
+        expect(page.locator('#save-work-status')).to_contain_text('não foi possível guardar tudo')
+        group = teacher.get(path).json()['work_groups']
+        group_id = next(iter(group))
+        code = teacher.post(path + f'/groups/{group_id}/access-code').json()['code']
+        with httpx.Client(base_url=studio_origin) as newer:
+            current = newer.post('/api/groups/enter', json={'code': code}).json()['work_group']
+            result = newer.post(path + '/events', json={'events': [{
+                'event_id': 'newer-animals', 'type': 'assessment_result',
+                'composition_version': current['composition_version'], 'access_version': current['access_version'],
+                'payload': {'result': 'Declaração', 'detail': {
+                    'activity': 'canva-animais-4ano', 'field': 'animals',
+                    'value': 'Trabalho novo guardado', 'confirmed': True
+                }}
+            }]})
+            result.raise_for_status()
+        # Return to the original browser with a fresh code; its previous local
+        # queue remains readable, but cannot alter the group's newer answers.
+        code = teacher.post(path + f'/groups/{group_id}/access-code').json()['code']
+        page.unroute('**/events')
+        page.reload()
+        expect(page.locator('#step-code')).to_be_visible()
+        page.get_by_label('Código da aula ou do grupo').fill(code)
+        page.get_by_role('button', name='Entrar', exact=True).click()
+        expect(page.locator('#activity-frame')).to_be_visible(timeout=15000)
+        expect(lesson.locator('#animals')).to_have_value('Trabalho novo guardado')
+        expect(page.locator('#pending-group-work')).to_be_visible()
+        expect(page.locator('#pending-group-list')).to_contain_text('Trabalho antigo por enviar')
+        page.get_by_role('button', name='Guardar para continuar', exact=True).click()
+        expect(page.locator('#save-work-status')).to_contain_text('Guardado.')
+        events = page.request.get(studio_origin + path + '/groups/me/history').json()['events']
+        animals = [event['payload']['detail']['value'] for event in events
+                   if event['type'] == 'assessment_result' and event['payload']['detail'].get('field') == 'animals']
+        assert animals == ['Trabalho novo guardado']
