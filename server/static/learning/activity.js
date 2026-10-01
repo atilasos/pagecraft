@@ -18,6 +18,7 @@ const copy = {
     reflect: "Autoavaliar e terminar",
     yourvoice: "A tua reflexão",
     reflection: "O que descobriste?",
+    reflectionOf: "Reflexão de",
     optional:
       "Podes deixar perguntas por responder. O teu trabalho fica guardado.",
     back: "Voltar à atividade",
@@ -63,6 +64,7 @@ const copy = {
     reflect: "Reflect and finish",
     yourvoice: "Your reflection",
     reflection: "What did you discover?",
+    reflectionOf: "Reflection by",
     optional: "You can leave questions unanswered. Your work will be saved.",
     back: "Back to the activity",
     finish: "Save and finish",
@@ -230,6 +232,7 @@ function showWork() {
   translate();
 }
 function renderReflection() {
+  $("reflection-pupil").textContent = `${t("reflectionOf")} ${attempt.name}.`;
   const level = $("level").value,
     young = activity.year <= 2;
   const prompts =
