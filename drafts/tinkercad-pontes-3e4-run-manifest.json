@@ -1,17 +1,35 @@
 {
   "slug": "tinkercad-pontes-3e4",
-  "status": "ready_for_teacher_review",
+  "status": "in_revision",
   "published": false,
   "code": "52XFA9",
   "review_url": "http://127.0.0.1:8777/52XFA9",
   "review_access": "Abrir primeiro a área local /teacher/activities.html ou a área privada do professor em https://estudio.infantinho.xyz/teacher/activities.html; o rascunho não é público.",
   "phases": {
-    "sources": {"status": "complete", "artifact": "drafts/tinkercad-pontes-3e4-sources.md"},
-    "architect": {"status": "complete", "artifact": "drafts/tinkercad-pontes-3e4-docspec.json"},
-    "designer": {"status": "complete", "artifact": "drafts/tinkercad-pontes-3e4-design-spec.json"},
-    "builder": {"status": "complete", "artifact": "drafts/tinkercad-pontes-3e4.html"},
-    "proofreader": {"status": "pass", "artifact": "drafts/tinkercad-pontes-3e4-proofread.json"},
-    "evaluator": {"status": "pass", "artifact": "drafts/tinkercad-pontes-3e4-evaluation.json"}
+    "sources": {
+      "status": "complete",
+      "artifact": "drafts/tinkercad-pontes-3e4-sources.md"
+    },
+    "architect": {
+      "status": "pending_revision",
+      "artifact": "drafts/tinkercad-pontes-3e4-docspec.json"
+    },
+    "designer": {
+      "status": "pending_revision",
+      "artifact": "drafts/tinkercad-pontes-3e4-design-spec.json"
+    },
+    "builder": {
+      "status": "pending_revision",
+      "artifact": "drafts/tinkercad-pontes-3e4.html"
+    },
+    "proofreader": {
+      "status": "pending_revision",
+      "artifact": "drafts/tinkercad-pontes-3e4-proofread.json"
+    },
+    "evaluator": {
+      "status": "pending_revision",
+      "artifact": "drafts/tinkercad-pontes-3e4-evaluation.json"
+    }
   },
   "teacher_guide": "drafts/tinkercad-pontes-3e4.md",
   "metadata": "drafts/tinkercad-pontes-3e4-activity.json",
@@ -37,5 +55,11 @@
     "Não houve construção observada no Tinkercad com alunos ou acesso de turma.",
     "O catálogo aceita um único ano: o rascunho foi registado como 3.º ano, com 3.º e 4.º anos explícitos no título e no conteúdo."
   ],
-  "next_step": "O professor revê a pré-visualização e decide se aprova esta atividade específica. Publicação exige aprovação própria."
+  "next_step": "O professor revê a pré-visualização e decide se aprova esta atividade específica. Publicação exige aprovação própria.",
+  "revision": 2,
+  "revision_date": "2026-10-01",
+  "revision_basis": [
+    "skills/codex/references/activity-experience.md",
+    "skills/codex/references/age-adaptation.md"
+  ]
 }
