@@ -102,9 +102,41 @@ async def test_codes_are_scoped_consumed_rotated_and_available_only_to_teacher_a
             assert (await device.post('/api/groups/enter', json={'code': code})).status_code == 404
             assert (await device.post('/api/groups/enter', json={'code': refreshed['code']})).status_code == 200
         # Stored work survives a service reload; session expiry still closes the new window.
-        app.state.classroom._seen_event_ids.clear()
+        from server.classroom.service import ClassroomService
+        from server.events import EventHub
+        restarted = ClassroomService(app.state.classroom.config, app.state.storage,
+                                     EventHub(app.state.storage), clock=app.state.classroom._clock)
+        assert (await restarted.get_session(session['id']))['active_since'] == (await teacher.get(path)).json()['active_since']
+        assert len(await restarted.events_log(session['id']).replay()) == len(await app.state.classroom.events_log(session['id']).replay())
         clock['now'] = datetime(2026, 10, 1, 19, tzinfo=timezone.utc)
         assert (await teacher.get(path)).json()['status'] == 'closed'
         async with httpx.AsyncClient(transport=transport, base_url='http://test') as stranger:
             remaining = next(row['code'] for row in rows if row['id'] == theirs['id'])
             assert (await stranger.post('/api/groups/enter', json={'code': remaining})).status_code == 404
+
+
+async def test_projected_codes_follow_group_changes_and_release(continuation):
+    app, transport, teacher, session, clock = continuation
+    path = '/api/sessions/' + session['id']
+    ids = list(session['roster'])
+    async with httpx.AsyncClient(transport=transport, base_url='http://test') as student:
+        group = (await student.post(path + '/groups/claim', json={'participant_ids':ids[:2], 'mode':'pair'})).json()['work_group']
+        await teacher.post(path + '/close')
+        resumed = (await teacher.post(path + '/resume')).json()
+        code = resumed['group_codes'][0]['code']
+        # The teacher can correct an absent participant before anybody enters.
+        changed = await teacher.patch(path + '/groups/' + group['id'] + '/participants',
+                                      json={'participant_ids':[ids[0],ids[2]], 'mode':'pair'})
+        assert changed.status_code == 200
+        current = changed.json()['work_group']
+        from server.classroom.live_state import session_state_snapshot
+        records = await app.state.classroom.events_log(session['id']).replay()
+        board = session_state_snapshot(records, await app.state.classroom.get_session(session['id']),
+                                       now=clock['now'], role='board')
+        assert board['session']['group_codes'] == [{'id':current['id'], 'display_name':'Ana + Carla', 'code':code}]
+        assert 'group_codes' not in session_state_snapshot(records, session, now=clock['now'],
+                                                          role='student', work_group_id=current['id'])['session']
+        assert (await teacher.post(path + '/release/' + ids[0], json={})).status_code == 200
+        records = await app.state.classroom.events_log(session['id']).replay()
+        assert records[-1]['payload']['groups'] == []
+        assert (await student.post('/api/groups/enter', json={'code':code})).status_code == 404

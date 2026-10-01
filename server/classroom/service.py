@@ -564,7 +564,7 @@ class ClassroomService:
         async with self._session_locks[session_id]:
             session = await self._require_writable_unlocked(session_id)
             old = session.get("work_groups", {}).get(group_id)
-            if not old or not old.get("token"):
+            if not old or old not in self._current_groups(session):
                 raise ClassroomError("Este grupo já foi alterado ou libertado. Atualiza a lista de grupos.")
             if len(set(participant_ids)) != len(participant_ids) or not (
                 mode == "pair" and len(participant_ids) == 2
@@ -597,6 +597,8 @@ class ClassroomService:
             for sid in participant_ids:
                 session["roster"][sid]["work_group_id"] = new_id
             await self.storage.write_json(self._session_path(session_id), session)
+            if "group_codes_visible" in session:
+                await self._publish_group_codes_unlocked(session)
             return new
 
     async def save_group_reflection(self, session_id: str, group_id: str, data: dict, criteria: list[dict]) -> dict:
@@ -700,6 +702,8 @@ class ClassroomService:
                 for sid in group["participant_ids"]:
                     session["roster"][sid].pop("work_group_id", None)
                 await self.storage.write_json(self._session_path(session_id), session)
+                if "group_codes_visible" in session:
+                    await self._publish_group_codes_unlocked(session)
                 return True
             await self._append_event_unlocked(
                 session_id,
