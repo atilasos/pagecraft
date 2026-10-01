@@ -1003,3 +1003,6 @@ th { background: var(--paper-deep); font-family: var(--font-type); font-size: 0.
 .group-codes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 1.5rem; }
 .group-codes-grid article { padding: 1.5rem; border: 2px solid currentColor; border-radius: 1rem; }
 .group-codes-grid .group-access-code { font-size: clamp(1.5rem, 3vw, 2.75rem); margin: .5rem 0; }
+
+#new-work-btn[hidden], #show-group-codes[hidden], #group-codes-panel[hidden],
+#restore-work[hidden], #restore-retry[hidden] { display: none; }
