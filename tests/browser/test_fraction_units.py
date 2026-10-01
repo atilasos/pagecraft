@@ -28,7 +28,7 @@ def test_fraction_representation_needs_confirmation_and_allows_correction(page, 
     page.get_by_role('button', name='Parte 1', exact=True).click()
     assert next_button.is_disabled()
     page.get_by_role('button', name='Confirmar representação').click()
-    expect(page.get_by_text('Representaste 1/4.', exact=True)).to_be_visible()
+    expect(page.locator('.feedback strong').get_by_role('img', name='1/4', exact=True)).to_be_visible()
     assert next_button.is_enabled()
     page.get_by_role('button', name='1. Partilhar', exact=True).click()
     page.get_by_role('button', name='3. Pintar', exact=True).click()
