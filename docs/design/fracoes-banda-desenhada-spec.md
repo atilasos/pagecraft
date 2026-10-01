@@ -72,6 +72,14 @@ Preparar uma revisão completa de Frações com Minecraft, do 2.º ano, em banda
 
 As associações da terceira unidade ficam registadas mesmo quando erradas. Exigir apenas associações certas contrariaria a decisão de Página respondida. A lista de desafios de cada nível deve ser finita e visível, sem exigir que a criança adivinhe que exemplos explorar.
 
+### Escrita das frações e tipografia
+
+Ajuste pedido pelo professor em 01/10/2026, depois de experimentar a demonstração no telemóvel:
+
+- Apresentar os símbolos de fração com numerador por cima do denominador e barra horizontal, em instruções, escolhas, comparação, feedback e construção. Conservar os valores internos `n/d` e os rótulos dos controlos para não alterar respostas ou integração.
+- Preferir Century Gothic no dispositivo do leitor. Disponibilizar Didact Gothic incorporada no HTML como alternativa semelhante, incluindo a licença OFL, para manter o funcionamento offline em dispositivos sem Century Gothic.
+- Usar a mesma preferência tipográfica na interface do Studio e nas instruções de criação de atividades.
+
 ### Minecraft e precisão matemática
 
 - A confirmação «Já fizemos» é declarada pela criança. A aplicação não verifica o mundo Minecraft.
