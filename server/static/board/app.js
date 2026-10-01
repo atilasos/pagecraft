@@ -1,3 +1,4 @@
+let publicOrigin = location.origin;
 /* Quadro passivo: o emparelhamento cria o Papel Quadro; depois só lê a
    Sessão de aula e os seus Acontecimentos coletivos. */
 
@@ -219,7 +220,7 @@ function applySessionState(data) {
   const showingCodes = state.group_codes_visible === true;
   document.getElementById('group-codes-panel').hidden = !showingCodes;
   board.hidden = showingCodes;
-  document.getElementById('group-entry-url').textContent = `${location.origin}/student/`;
+  document.getElementById('group-entry-url').textContent = `${publicOrigin}/student/`;
   const grid = document.getElementById('group-codes-grid');
   grid.replaceChildren();
   for (const group of state.group_codes || []) {
@@ -259,4 +260,10 @@ function stopLiveSession() {
   currentSessionId = null;
 }
 
-checkSession();
+(async () => {
+  try {
+    const response = await fetch('/api/access-info');
+    if (response.ok) publicOrigin = (await response.json()).public_origin || location.origin;
+  } catch { /* A origem local continua disponível. */ }
+  checkSession();
+})();

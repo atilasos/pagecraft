@@ -482,7 +482,10 @@ function createStudentTransport() {
         }
       }
       const payload = sanitizePayload(data.payload);
-      if (payload !== null) enqueue(data.type, data.unitId || null, payload);
+      if (payload !== null) {
+        if (['assessment_result', 'attempt', 'level_changed'].includes(data.type)) $('save-work-status').textContent = '';
+        enqueue(data.type, data.unitId || null, payload);
+      }
     };
     window.addEventListener("message", bridgeHandler);
   }
@@ -622,6 +625,12 @@ function createStudentTransport() {
 
   return {
     enqueue, flush, post, start, stop, savePending,
+    markPreviousComposition() {
+      outbox.forEach(event => {
+        if (event.composition_version !== state.workGroup.composition_version) event.composition_conflict = true;
+      });
+      persistQueue();
+    },
     pendingLevel: () => outbox.findLast(event => event.type === "level_changed" && !event.composition_conflict && event.composition_version === state.workGroup?.composition_version)?.payload.level,
   };
 }
@@ -796,6 +805,7 @@ function sendGroupPreferences() {
 function acceptComposition(group) {
   if (!state.workGroup || group.device_id !== state.workGroup.device_id || group.composition_version <= state.workGroup.composition_version) return;
   state.workGroup = group;
+  studentTransport.markPreviousComposition();
   state.displayName = group.display_name;
   $("student-name").textContent = group.display_name;
   $("group-level").value = group.level;

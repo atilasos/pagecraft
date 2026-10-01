@@ -137,6 +137,7 @@ const groupReflection = (() => {
         const label = document.createElement('label');
         const input = document.createElement('input');
         input.type = 'radio'; input.name = criterion.id; input.value = value;
+        input.setAttribute('aria-label', text);
         input.checked = voice.answers?.[criterion.id] === value;
         const icon = document.createElement('span'); icon.textContent = icons[value]; icon.setAttribute('aria-hidden','true');
         label.append(input, icon, document.createTextNode(text));
