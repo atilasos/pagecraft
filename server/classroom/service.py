@@ -294,6 +294,8 @@ class ClassroomService:
             started_at = started_at.replace(tzinfo=timezone.utc)
         if now.tzinfo is None:
             now = now.replace(tzinfo=timezone.utc)
+        if "active_since" in session and now.astimezone(self._school_timezone).date() != started_at.astimezone(self._school_timezone).date():
+            return True
         return now.astimezone(timezone.utc) - started_at.astimezone(timezone.utc) >= (
             _SESSION_MAX_AGE
         )

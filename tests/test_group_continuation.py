@@ -169,3 +169,27 @@ async def test_resume_reserves_individual_names_until_teacher_authorizes_reentry
             assert (await stranger.post(path + '/claim', json={'student_id': ids[0]})).status_code == 200
         assert any(event.get('event_id') == 'private-answer' for event in
                    (await teacher.get(path + f'/students/{ids[0]}/history')).json()['events'])
+
+
+async def test_resumed_window_and_unused_codes_expire_at_school_midnight(continuation):
+    app, transport, teacher, session, clock = continuation
+    from zoneinfo import ZoneInfo
+    app.state.classroom._school_timezone = ZoneInfo('Atlantic/Madeira')
+    path = '/api/sessions/' + session['id']
+    async with httpx.AsyncClient(transport=transport, base_url='http://test') as student:
+        await student.post(path + '/groups/claim', json={
+            'participant_ids': list(session['roster'])[:2], 'mode': 'pair'
+        })
+        await teacher.post(path + '/close')
+        clock['now'] = datetime(2026, 10, 1, 22, tzinfo=timezone.utc)
+        first_code = (await teacher.post(path + '/resume')).json()['group_codes'][0]['code']
+        # Madeira is UTC+1 here: the school day ends before UTC midnight.
+        clock['now'] = datetime(2026, 10, 1, 23, 10, tzinfo=timezone.utc)
+        assert (await student.post('/api/groups/enter', json={'code': first_code})).status_code == 404
+        assert (await teacher.get(path)).json()['status'] == 'closed'
+        resumed = (await teacher.post(path + '/resume')).json()
+        assert resumed['status'] == 'live'
+        assert resumed['group_codes'][0]['code'] != first_code
+        assert (await student.post('/api/groups/enter', json={
+            'code': resumed['group_codes'][0]['code']
+        })).status_code == 200
