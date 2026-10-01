@@ -46,14 +46,9 @@ Guia operacional para o Architect, Designer e Builder traduzirem **faixa etária
 
 ## Tipografia
 
-Ordem preferida (todas devem existir localmente; **nunca** carregar via CDN/Google Fonts):
+Preferência confirmada pelo professor: `"Century Gothic", "Didact Gothic", "URW Gothic", "Avant Garde", sans-serif`, em texto, títulos e controlos. Century Gothic é usada quando está instalada no dispositivo que abre a página.
 
-1. `Atkinson Hyperlegible` — desenhada para baixa visão; ótima para leitores em formação.
-2. `Lexend` — comprovada para reduzir esforço de leitura em crianças.
-3. `Nunito` — arredondada, amigável, ampla cobertura de glifos.
-4. Fallback: `Comic Sans MS, Chalkboard SE, system-ui, -apple-system, sans-serif`.
-
-Se nenhuma das três principais estiver disponível, **Comic Sans MS é aceitável** neste contexto — é desenhada para reconhecimento de letra individual e é confortável para *early readers*.
+Para dispositivos sem Century Gothic, incorporar a Didact Gothic distribuída em `assets/fonts/didact-gothic/` como `@font-face` com data URL. Conservar a licença OFL no artefacto. Usar o ficheiro WOFF2 existente, sem ligações externas ou dependências de rede. O exemplo completo encontra-se no bloco `BUNDLED DIDACT GOTHIC` de `drafts/fracoes-banda-desenhada-2ano.html`.
 
 ## Cor
 
