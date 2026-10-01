@@ -165,3 +165,12 @@ As fontes consultadas estão em [canva-animais-4ano-sources.md](canva-animais-4a
 O alinhamento confirmado refere-se às **Orientações Curriculares para as TIC no 1.º ciclo**, páginas 7–8: comunicar para públicos conhecidos, produzir em conjunto, transformar informação, elaborar planos/processos e apresentar produtos. Não se atribuem AE específicas do 4.º ano a este documento nem se usa a proposta curricular de 2026 como referencial homologado.
 
 Estado: atividade criada com guias e capturas integradas; consultar os relatórios de revisão e avaliação que acompanham o rascunho. Upload/download finais e apresentação em ecrã inteiro não foram executados; menus confirmados. O editor A2 não foi verificado, e os passos comuns são exemplificados numa apresentação. O rascunho requer revisão específica do professor antes da publicação.
+
+
+## Continuar entre aulas no PageCraft Studio
+
+Nos últimos minutos de cada aula, cada grupo usa **Guardar para continuar** na barra do PageCraft e espera **Guardado. Podem continuar na próxima aula.** Conserva também o nome do design e a conta escolar usados no Canva. Se a gravação falhar, mantém a página aberta e tenta novamente antes de o professor terminar a sessão.
+
+Na aula seguinte, o professor abre **Aula ao vivo**, seleciona a mesma turma e atividade e usa **Continuar trabalho**. O quadro emparelhado apresenta um código de oito caracteres por grupo; cada grupo escreve o seu código em `/student/`. Recupera as respostas, o produto escolhido e a etapa em que ficou, mesmo noutro computador. O professor pode usar **Mostrar atividade no quadro** depois da entrada dos grupos.
+
+O código é usado uma vez nessa aula. Para mudar de computador ou entrar novamente sem a identificação guardada, o professor usa **Novo código para este grupo**. **Começar novo trabalho** inicia outro registo. Os códigos do PageCraft recuperam os registos da atividade; no Canva, os alunos voltam à mesma conta e abrem o design em **Projetos**.
