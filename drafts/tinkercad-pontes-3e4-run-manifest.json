@@ -1,6 +1,6 @@
 {
   "slug": "tinkercad-pontes-3e4",
-  "status": "in_revision",
+  "status": "ready_for_teacher_review",
   "published": false,
   "code": "52XFA9",
   "review_url": "https://estudio.infantinho.xyz/52XFA9",
@@ -12,29 +12,31 @@
       "consulted": "2026-10-01"
     },
     "architect": {
-      "status": "complete_revision",
+      "status": "complete",
       "artifact": "drafts/tinkercad-pontes-3e4-docspec.json"
     },
     "designer": {
-      "status": "complete_revision",
+      "status": "complete",
       "artifact": "drafts/tinkercad-pontes-3e4-design-spec.json"
     },
     "builder": {
-      "status": "complete_revision",
+      "status": "complete",
       "artifact": "drafts/tinkercad-pontes-3e4.html"
     },
     "proofreader": {
-      "status": "in_review",
-      "artifact": "drafts/tinkercad-pontes-3e4-proofread.json"
+      "status": "complete",
+      "artifact": "drafts/tinkercad-pontes-3e4-proofread.json",
+      "pass": true
     },
     "evaluator": {
-      "status": "testing",
-      "artifact": "drafts/tinkercad-pontes-3e4-evaluation.json"
+      "status": "complete",
+      "artifact": "drafts/tinkercad-pontes-3e4-evaluation.json",
+      "pass": true
     }
   },
   "teacher_guide": "drafts/tinkercad-pontes-3e4.md",
   "metadata": "drafts/tinkercad-pontes-3e4-activity.json",
-  "next_step": "O professor revê a pré-visualização e decide se aprova esta atividade específica. Publicação exige aprovação própria.",
+  "next_step": "O professor revê https://estudio.infantinho.xyz/52XFA9. A publicação desta atividade requer a sua aprovação.",
   "revision": 2,
   "revision_date": "2026-10-01",
   "revision_basis": [
@@ -65,8 +67,47 @@
   ],
   "verification": {
     "draft_registration": "2026-10-01: register atualizou o rascunho existente: 52XFA9, published=false, requires_completion=true.",
-    "public_draft_access": "2026-10-01: GET anónimo a /api/learning/activities/52XFA9 e /content devolveu 404 após registo da revisão."
+    "public_draft_access": "2026-10-01: GET anónimo a /api/learning/activities/52XFA9 e /content devolveu 404 após registo da revisão.",
+    "schema": "2026-10-01: DocSpec, design, proofread e evaluation validados contra os schemas; metadados aceites pelo servidor.",
+    "javascript": "2026-10-01: node --check passou no JavaScript inline final e no host após as correções.",
+    "font": "Didact Gothic WOFF2 real e licença incorporadas; carregamento confirmado no browser; corpo 20 px.",
+    "browser": "T3 preview: seis pedidos nos três apoios, erro com pista visual e avanço, correção, mudança de apoio/modo, recuperação autónoma e integrada, teclado e 390/768/1280 px; relatório de avaliação revisão 2 PASS.",
+    "preview_reporting": "Dois ensaios preview guardados/concluídos, reflexão facultativa e nome visível; excluídos da API de relatórios e do dashboard."
   },
-  "screenshots": [],
-  "limitations": []
+  "screenshots": [
+    "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-mupl1i7z-c7edbfb0.png",
+    "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-mupl2by0-89093b4f.png",
+    "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-mupl3ttw-c72543ef.png",
+    "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-muplard2-3a79be76.png",
+    "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-muplasp2-31f59531.png",
+    "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-muplatsw-4605820c.png",
+    "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-muplb3ck-2c04e2f2.png",
+    "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-muplb55g-d373bf80.png",
+    "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-muplb6rb-785955a2.png",
+    "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-muplczm4-2363132a.png",
+    "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-mupld0ob-0cfe0d01.png",
+    "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-mupld1jw-29dd57a6.png",
+    "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-mupl8166-d8836ce9.png",
+    "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-mupldq05-d5647137.png",
+    "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-mupleilk-97be0ead.png",
+    "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-muplf6sh-37f17e0d.png"
+  ],
+  "limitations": [
+    "O acesso gerido da turma e o trabalho dentro do Tinkercad não foram ensaiados. A página só guarda declaração da criança sobre a aplicação externa.",
+    "Os viewports são tamanhos CSS do browser de desktop. Não foram usados dispositivos físicos, gestos de toque ou teclado virtual.",
+    "Sem controlo de rede offline no T3 disponível: funcionamento autocontido verificado por análise estática e fonte carregada; não houve ensaio com rede desligada.",
+    "Sessões de aula, participantes de grupo, reflexão individual à vez e demonstração do Quadro não foram executados; o percurso avaliado foi o endereço permanente individual. A atividade deixa autoria e participantes ao host.",
+    "O teste integrado percorreu Passo a passo e mudança para Com pistas; os percursos completos por cada apoio foram ensaiados autonomamente pelo orquestrador.",
+    "Os metadados aceitam um único ano: 3.º; o título e conteúdo indicam 3.º e 4.º anos."
+  ],
+  "completed_review": "2026-10-01",
+  "activity_sha256": "208a066f638ca0188a0d54e3be1f7f8a7821d59bfce65e2c62bd20a1d50a9431",
+  "shared_host_changes": {
+    "reason": "Nome visível na reflexão individual e atualização do asset em cache, identificados no ensaio integrado.",
+    "commits": [
+      "e53daa5",
+      "4f5fd65"
+    ],
+    "verified": "Nome visível confirmado numa segunda realização preview."
+  }
 }
