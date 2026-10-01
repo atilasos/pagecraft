@@ -250,9 +250,9 @@ def build_writer_prompt(docspec: dict) -> str:
 **Constraint:** {unit.get("interaction", {}).get("constraint", "")}
 
 **Differentiation:**
-- 🟢 Apoio: {unit.get("differentiation", {}).get("support", "")}
-- 🟡 Intermédio: {unit.get("differentiation", {}).get("standard", "")}
-- 🔴 Desafio: {unit.get("differentiation", {}).get("challenge", "")}
+- Com pistas — Apoio: {unit.get("differentiation", {}).get("support", "")}
+- Passo a passo — Intermédio: {unit.get("differentiation", {}).get("standard", "")}
+- Mais desafios — Desafio: {unit.get("differentiation", {}).get("challenge", "")}
 """)
 
     maker_sections = []
@@ -340,9 +340,9 @@ def build_builder_prompt(docspec: dict) -> str:
 **Assessment:** {interaction.get("assessment", "")}
 
 **Differentiation:**
-- 🟢 Apoio: {diff.get("support", "")}
-- 🟡 Intermédio: {diff.get("standard", "")}
-- 🔴 Desafio: {diff.get("challenge", "")}
+- Com pistas — Apoio: {diff.get("support", "")}
+- Passo a passo — Intermédio: {diff.get("standard", "")}
+- Mais desafios — Desafio: {diff.get("challenge", "")}
 """)
 
     prompt = f"""# Tarefa: Gerar interacções HTML/CSS/JS para PageCraft
@@ -698,9 +698,9 @@ def build_markdown(topic: str, docspec: dict) -> str:
                 f"- Assessment: {unit.get('interaction', {}).get('assessment', '')}",
                 "",
                 f"**Diferenciação:**",
-                f"- 🟢 Apoio: {unit.get('differentiation', {}).get('support', '')}",
-                f"- 🟡 Intermédio: {unit.get('differentiation', {}).get('standard', '')}",
-                f"- 🔴 Desafio: {unit.get('differentiation', {}).get('challenge', '')}",
+                f"- Com pistas — Apoio: {unit.get('differentiation', {}).get('support', '')}",
+                f"- Passo a passo — Intermédio: {unit.get('differentiation', {}).get('standard', '')}",
+                f"- Mais desafios — Desafio: {unit.get('differentiation', {}).get('challenge', '')}",
             ]
         )
 

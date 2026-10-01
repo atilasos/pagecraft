@@ -244,15 +244,15 @@ Schema JSON para o Document Specification with Assessment + Maker.
       "properties": {
         "support": {
           "type": "string",
-          "description": "🟢 Apoio — versão simplificada (menos variáveis, mais guia visual)"
+          "description": "Com pistas — Apoio — versão simplificada (menos variáveis, mais guia visual)"
         },
         "standard": {
           "type": "string",
-          "description": "🟡 Intermédio — objectivo esperado"
+          "description": "Passo a passo — Intermédio — objectivo esperado"
         },
         "challenge": {
           "type": "string",
-          "description": "🔴 Desafio — extensão (mais variáveis, raciocínio abstracto)"
+          "description": "Mais desafios — Desafio — extensão (mais variáveis, raciocínio abstracto)"
         }
       }
     }

@@ -68,8 +68,9 @@ def build_phases(config) -> dict[str, Phase]:
 class PromptLibrary:
     def __init__(self, prompts_dir: Path):
         self.dir = Path(prompts_dir)
+        experience = _read(self.dir / "references/activity-experience.md")
         self.identities = {
-            name: _read(self.dir / f"{name}.md")
+            name: _read(self.dir / f"{name}.md") + "\n\n" + experience
             for name in ("architect", "designer", "builder", "proofreader", "evaluator")
         }
         refs = self.dir / "references"

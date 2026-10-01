@@ -1,6 +1,6 @@
 # Age Adaptation — PageCraft
 
-Guia operacional para o Architect, Designer e Builder traduzirem **faixa etária** em decisões concretas. Este ficheiro é a fonte de verdade — quando outros ficheiros forem ambíguos, prevalece este.
+Guia operacional para o Architect, Designer e Builder traduzirem **faixa etária** em decisões concretas. Esta é a fonte de verdade dos mínimos por idade e da tipografia. Para conceção das etapas, respostas e reflexão, consultar `activity-experience.md`.
 
 ## Princípios
 
