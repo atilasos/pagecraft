@@ -1,5 +1,5 @@
 :root {
-  font-family: system-ui, sans-serif;
+  font-family: "Century Gothic", "Didact Gothic", "URW Gothic", "Avant Garde", sans-serif;
   color: #223b44;
   background: #f5f3ec;
   font-size: 18px;
@@ -7,6 +7,15 @@
   --ink: #223b44;
   --accent: #166e73;
   --line: #ccd7d2;
+}
+:root:has(body.child-page) {
+  font-size: 22px;
+  --tap: 56px;
+}
+:root:has(body.child-page[data-year="3"]),
+:root:has(body.child-page[data-year="4"]) {
+  font-size: 20px;
+  --tap: 48px;
 }
 * {
   box-sizing: border-box;
@@ -25,8 +34,8 @@ textarea {
 }
 button,
 .button {
-  min-height: 48px;
-  min-width: 48px;
+  min-height: var(--tap, 48px);
+  min-width: var(--tap, 48px);
   padding: 0.6rem 1rem;
   border: 1px solid var(--line);
   border-radius: 12px;
@@ -52,7 +61,7 @@ button:disabled {
 input,
 select,
 textarea {
-  min-height: 48px;
+  min-height: var(--tap, 48px);
   border: 1px solid #879e9e;
   border-radius: 10px;
   padding: 0.6rem;
@@ -150,7 +159,7 @@ fieldset label {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  min-height: 48px;
+  min-height: var(--tap, 48px);
   margin-right: 1rem;
 }
 input[type="radio"] {
@@ -170,7 +179,7 @@ details {
 }
 summary {
   cursor: pointer;
-  min-height: 48px;
+  min-height: var(--tap, 48px);
   padding: 0.7rem;
 }
 pre {

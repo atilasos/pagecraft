@@ -477,6 +477,7 @@ setInterval(() => flush().catch(() => {}), 5000);
 (async () => {
   try {
     activity = await api(`/api/learning/activities/${code}`);
+    document.body.dataset.year = String(activity.year);
     $("title").textContent = activity.title;
     document.title = activity.title + " · PageCraft";
     $("group").value = activity.group || "";

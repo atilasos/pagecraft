@@ -16,7 +16,7 @@ def main():
         args.activity.write_text(embed_activity_typography(args.activity.read_text(encoding='utf-8')), encoding='utf-8')
         return
     block = bundled_font_css()
-    for relative in ['server/static/studio.css', 'drafts/fracoes-banda-desenhada-2ano.html']:
+    for relative in ['server/static/studio.css', 'server/static/learning/fonts.css', 'drafts/fracoes-banda-desenhada-2ano.html']:
         path = ROOT / relative
         content = path.read_text()
         if START in content:
