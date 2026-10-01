@@ -1,0 +1,151 @@
+{
+  "slug": "canva-animais-4ano",
+  "iteration": 2,
+  "date": "2026-10-01",
+  "pass": true,
+  "route": "none",
+  "severity": "low",
+  "reviewedFile": "drafts/canva-animais-4ano.html",
+  "reviewedSha256": "82ab30a1ed28b3004006fcf37a613204ce6f64bef9d6ff38aaf5f50b8e96d9cf",
+  "scores": {
+    "factual_accuracy": 4,
+    "constraint_alignment": 5,
+    "differentiation_quality": 4,
+    "ux_accessibility": 4,
+    "visual_design": 4,
+    "technical_quality": 4
+  },
+  "issues": [],
+  "critical": [],
+  "required_fixes": [],
+  "blocked_by": [],
+  "acceptance_checks": [
+    {
+      "id": "journey-support",
+      "pass": true,
+      "evidence": "Sete etapas respondidas desde zero; duas escolhas erradas com pistas; avanços e futuros bloqueados apenas por campos vazios."
+    },
+    {
+      "id": "journey-intermediate",
+      "pass": true,
+      "evidence": "Sete etapas respondidas desde zero; duas escolhas erradas com pistas; avanços e futuros bloqueados apenas por campos vazios."
+    },
+    {
+      "id": "journey-challenge",
+      "pass": true,
+      "evidence": "Sete etapas respondidas desde zero; duas escolhas erradas com pistas; avanços e futuros bloqueados apenas por campos vazios."
+    },
+    {
+      "id": "responsive",
+      "pass": true,
+      "evidence": "390 e 768 px: oito etapas sem transbordamento ou alvos abaixo de 48 px. Entrada também medida a 1280 px."
+    },
+    {
+      "id": "typography-contrast",
+      "pass": true,
+      "evidence": "Corpo 20 px; fonte incorporada. Contraste medido 11.50:1 tinta/papel e 7.76:1 texto/botão principal."
+    },
+    {
+      "id": "keyboard-zoom",
+      "pass": true,
+      "evidence": "Teclado muda apoio; foco tem contorno de 3 px. Escape fecha a ampliação e devolve foco ao botão."
+    },
+    {
+      "id": "bridge-restore",
+      "pass": true,
+      "evidence": "Iframe recebe eventos, emite estado inicial incompleto; restauro recupera etapa 8 e prontidão sem emitir tentativas; botão emite open_reflection."
+    },
+    {
+      "id": "bridge-payload",
+      "pass": true,
+      "evidence": "Payload máximo observado neste percurso: 286 bytes; inferior a 4096. Resultados e rótulos dos campos em português."
+    },
+    {
+      "id": "offline",
+      "pass": true,
+      "evidence": "Com Network.emulateNetworkConditions offline=true no browser, todas as oito etapas continuam a funcionar; zero recursos remotos ou erros no percurso. Canva não aberto durante este teste."
+    },
+    {
+      "id": "individual-local-reflection",
+      "pass": true,
+      "evidence": "Percurso Hub manual: Aluno A e Aluno B escrevem estratégias distintas; mudar de participante recupera a estratégia correta. Recarregar a atividade restaura etapa e plano."
+    },
+    {
+      "id": "product-change",
+      "pass": true,
+      "evidence": "Percurso Hub manual: cartaz → diapositivos → livro conserva nomes/razão/notas, pede nova confirmação do plano e dos estados dependentes; mapa do livro com seis páginas."
+    },
+    {
+      "id": "proofread",
+      "pass": true,
+      "evidence": "Relatório final do Proofreader pass=true no mesmo hash HTML."
+    },
+    {
+      "id": "real-canva-screenshots",
+      "pass": true,
+      "evidence": "11 capturas reais do Canva e uma ilustração gerada, todas incorporadas. Origem, instruções e limitações discriminadas no manifesto."
+    },
+    {
+      "id": "console",
+      "pass": true,
+      "evidence": "Três percursos finais sem erros JS; abh test anterior sem console_errors/browser_errors/pending_requests."
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "browser-results",
+      "path": "drafts/canva-animais-4ano-qa/browser-checks.json",
+      "scope": "Agent Browser Hub temporary session; adapter/CDP on localhost, with explicit target validation, auditing and lock preserved."
+    },
+    {
+      "kind": "diagnostic-runner",
+      "path": "drafts/canva-animais-4ano-qa/hub_checks.py"
+    },
+    {
+      "kind": "screenshots-final",
+      "paths": [
+        "drafts/canva-animais-4ano-qa/final-390.png",
+        "drafts/canva-animais-4ano-qa/final-768.png",
+        "drafts/canva-animais-4ano-qa/final-1280.png",
+        "drafts/canva-animais-4ano-qa/final-guide-390.png",
+        "drafts/canva-animais-4ano-qa/final-guide-768.png"
+      ]
+    },
+    {
+      "kind": "screenshots-manual-before-final-text-repair",
+      "paths": [
+        "drafts/canva-animais-4ano-qa/amostra-errada.png",
+        "drafts/canva-animais-4ano-qa/correcao.png",
+        "drafts/canva-animais-4ano-qa/reflexao-individual.png",
+        "drafts/canva-animais-4ano-qa/restauro.png",
+        "drafts/canva-animais-4ano-qa/troca-produto.png",
+        "drafts/canva-animais-4ano-qa/livro-mapa.png"
+      ]
+    },
+    {
+      "kind": "server-check-by-orchestrator",
+      "path": "drafts/canva-animais-4ano-host-check.json",
+      "scope": "Ensaio HTTP separado: eventos/reflexão/relatório e API pública de rascunho 404; não substitui browser QA."
+    },
+    {
+      "kind": "proofread",
+      "path": "drafts/canva-animais-4ano-proofread.json"
+    },
+    {
+      "kind": "canva-captures",
+      "path": "drafts/canva-animais-4ano-assets/captures.json"
+    }
+  ],
+  "limitations": [
+    "T3 preview_status e preview_open foram usados primeiro em tab separada. Snapshot falhou duas vezes e o cliente alternava; QA foi executada no Hub pedido pelo utilizador. Nenhuma tab de login ou Canva do utilizador foi navegada por este avaliador.",
+    "MCP/CLI Hub não expõem viewport/evaluate; as medições e a ponte usaram o adapter da sessão temporary existente, com autorização do orquestrador. A sessão foi fechada no fim.",
+    "O iframe de diagnóstico usa allow-scripts e allow-same-origin para automatizar o DOM. O sandbox de origem opaca do host não foi percorrido por este fixture; o ensaio HTTP do servidor é evidência separada.",
+    "Não foram fornecidos os documentos Word dos grupos; não se verificaram factos animais nem produtos externos reais. O registo do Canva é uma declaração do grupo.",
+    "Canva: menus reais observados; upload/download finais e apresentação em ecrã inteiro não executados. Texto/imagem/PDF são exemplificados numa apresentação; editor A4 e páginas observados. Editor de cartaz A2 não verificado, conforme manifesto.",
+    "O ensaio offline começou com HTML já carregado e desligou a rede antes de percorrer oito etapas. A autocontenção foi também confirmada por 12 imagens data URLs e uma fonte WOFF2 incorporada, sem assets remotos. A abertura file:// foi bloqueada pela política do Hub.",
+    "Autoavaliação do host com roster real e momento de comunicação de toda a turma não foram realizados; reflexão local individual e open_reflection foram testados."
+  ],
+  "suggestions": [
+    "Rever com a turma a duração de cada momento: os 135 minutos terminam na preparação e ensaio; as apresentações de todos os grupos podem ocorrer noutra aula."
+  ]
+}
