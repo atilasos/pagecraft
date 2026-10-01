@@ -1,7 +1,7 @@
 {
   "revision": 2,
   "date": "2026-10-01",
-  "reviewed_commit": "819e836",
+  "reviewed_commit": "6de02e0",
   "pass": true,
   "severity": "low",
   "issues": [],
@@ -20,7 +20,10 @@
     "Critérios preservados antes do trabalho e na reflexão facultativa: OK",
     "Modo autónomo descreve gravação nesta aba sem prometer envio ao professor: OK",
     "Texto estático, SVG, ARIA, pistas por apoio e mensagens JavaScript: OK",
-    "Coerência textual com DocSpec, design e duração 5 + 10 + 22 + 8 = 45 minutos: OK"
+    "Coerência textual com DocSpec, design e duração 5 + 10 + 22 + 8 = 45 minutos: OK",
+    "Delta final da pista visual de alturas: OK",
+    "Identificação «Reflexão de [nome]» no host: OK",
+    "Tradução partilhada «Reflection by [name]» preservada: OK"
   ],
   "resolved_issues": [
     {
@@ -42,5 +45,21 @@
       "reason": "Explica a peça da ponte em vocabulário acessível sem jargão."
     }
   ],
-  "scope": "Revisão textual estática do HTML final e alinhamento com os artefactos pedagógicos. Layout, interação, sincronização e recuperação reais pertencem ao relatório do Evaluator; não são declarados como ensaiados aqui."
+  "scope": "Revisão textual estática do HTML final e alinhamento com os artefactos pedagógicos. Layout, interação, sincronização e recuperação reais pertencem ao relatório do Evaluator; não são declarados como ensaiados aqui.",
+  "final_delta_review": {
+    "date": "2026-10-01",
+    "activity_commit": "6de02e0",
+    "host_commits": [
+      "e53daa5",
+      "4f5fd65"
+    ],
+    "pass": true,
+    "scope": "Apenas as alterações posteriores à revisão integral 819e836: mini vista lateral no resultado de alturas diferentes, identificação nominal da reflexão do host e atualização da referência do script.",
+    "findings": [
+      "«De lado: compara as alturas» mantém o pedido curto, concreto e coerente com a pista visual.",
+      "«Reflexão de» seguido do nome identifica claramente a reflexão individual em português europeu.",
+      "«Reflection by» preserva a tradução existente no host partilhado; a atividade permanece apenas em português.",
+      "Sem novos problemas linguísticos, sem alteração de objetivos ou de critérios."
+    ]
+  }
 }
