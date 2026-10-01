@@ -216,6 +216,8 @@ async def test_board_stream_contains_only_shared_state_and_global_events(client)
     assert frames[0]["data"] == {
         "session": {"status": "live", "closed": False, "frozen": False},
         "event_types": [
+            {"name": "session_resumed", "bridge_name": None},
+            {"name": "group_codes_updated", "bridge_name": None},
             {"name": "teacher_highlight", "bridge_name": "highlight"},
             {"name": "freeze_screens", "bridge_name": None},
             {"name": "unfreeze_screens", "bridge_name": None},

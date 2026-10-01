@@ -21,6 +21,8 @@ def test_registry_can_be_queried_without_knowing_its_representation():
     assert "pit_updated" in _names(SESSION_EVENT_TYPES.by_author("student"))
 
     assert _names(SESSION_EVENT_TYPES.visible_to("student")) == {
+        "activity_state",
+        "session_resumed",
         "ai_feedback",
         "individual_reflection",
         "freeze_screens",
@@ -32,6 +34,8 @@ def test_registry_can_be_queried_without_knowing_its_representation():
     }
     assert "feedback_error" in _names(SESSION_EVENT_TYPES.visible_to("teacher"))
     assert _names(SESSION_EVENT_TYPES.visible_to("board")) == {
+        "group_codes_updated",
+        "session_resumed",
         "freeze_screens",
         "session_closed",
         "teacher_highlight",

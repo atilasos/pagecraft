@@ -451,6 +451,7 @@
       }
       return {
         emit: emit,
+        activityState: function (unitId, state) { emit('activity_state', unitId, { state: state }); },
         unitStarted: function (unitId) { emit('unit_started', unitId, {}); },
         levelChanged: function (unitId, level) { emit('level_changed', unitId, { level: level }); },
         attempt: function (unitId, correct, detail) { emit('attempt', unitId, { correct: !!correct, detail: detail || '' }); },

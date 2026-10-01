@@ -31,6 +31,7 @@ from .errors import (
 )
 from .event_types import SESSION_EVENT_TYPES
 from .live_state import LiveSessionTicks
+from .lifecycle import session_lifecycle
 
 
 _SESSION_MAX_AGE = timedelta(hours=8)
@@ -70,10 +71,10 @@ def _system_local_timezone() -> tzinfo:
         return datetime.now().astimezone().tzinfo or timezone.utc
 
 
-def _join_code() -> str:
+def _join_code(length: int = 6) -> str:
     # sem 0/O/1/I para ditar em voz alta sem ambiguidade
     alphabet = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ"
-    return "".join(secrets.choice(alphabet) for _ in range(6))
+    return "".join(secrets.choice(alphabet) for _ in range(length))
 
 
 class ClassroomService:
@@ -199,19 +200,13 @@ class ClassroomService:
         events = await self.events_log(session_id).replay()
         changed = False
 
-        closed = next(
-            (event for event in reversed(events) if event.get("type") == "session_closed"),
-            None,
-        )
-        expected_status = "closed" if closed else "live"
-        expected_closed_at = closed.get("ts") if closed else None
-        if (
-            session.get("status") != expected_status
-            or session.get("closed_at") != expected_closed_at
-        ):
-            session["status"] = expected_status
-            session["closed_at"] = expected_closed_at
-            changed = True
+        lifecycle = session_lifecycle(events, session)
+        for key in ("status", "closed_at", "active_since"):
+            if key == "active_since" and key not in session and not any(event.get("type") == "session_resumed" for event in events):
+                continue
+            if session.get(key) != lifecycle[key]:
+                session[key] = lifecycle[key]
+                changed = True
 
         pit_items: dict[str, dict] = {}
         last_identity_event: dict[str, str] = {}
@@ -278,7 +273,7 @@ class ClassroomService:
                 entry["credential_expires_at"] = None
                 changed = True
 
-        if closed is None and self._session_has_expired(session):
+        if session["status"] == "live" and self._session_has_expired(session):
             await self._close_session_unlocked(session_id, session)
             return session
 
@@ -289,7 +284,7 @@ class ClassroomService:
     def _session_has_expired(self, session: dict) -> bool:
         try:
             started_at = datetime.fromisoformat(
-                str(session["started_at"]).replace("Z", "+00:00")
+                str(session.get("active_since", session["started_at"])).replace("Z", "+00:00")
             )
             now = datetime.fromisoformat(str(self.now()).replace("Z", "+00:00"))
         except (KeyError, TypeError, ValueError):
@@ -349,7 +344,7 @@ class ClassroomService:
     def project_session(self, session: dict, *, role: str) -> dict:
         """Produz a forma transportável da sessão sem expor tokens."""
         if role == "board":
-            return {
+            projection = {
                 key: session[key]
                 for key in (
                     "id",
@@ -360,6 +355,10 @@ class ClassroomService:
                     "started_at",
                 )
             }
+            if "group_codes_visible" in session:
+                projection.update(group_codes=self.group_codes(session),
+                                  group_codes_visible=session["group_codes_visible"])
+            return projection
         if role == "student":
             return {
                 "id": session["id"],
@@ -378,6 +377,7 @@ class ClassroomService:
             }
         if role == "teacher":
             projection = {key: value for key, value in session.items() if key not in {"roster", "work_groups"}}
+            projection["group_codes"] = self.group_codes(session)
             projection["roster"] = {
                 student_id: {
                     key: value for key, value in entry.items() if key != "token"
@@ -412,7 +412,7 @@ class ClassroomService:
             data = await self.get_session(path.parent.name)
             if data:
                 out.append(data)
-        out.sort(key=lambda s: s.get("started_at", ""), reverse=True)
+        out.sort(key=lambda s: s.get("active_since", s.get("started_at", "")), reverse=True)
         return out
 
     async def current_board_session(self) -> dict | None:
@@ -449,6 +449,80 @@ class ClassroomService:
         session["status"] = "closed"
         session["closed_at"] = record["ts"]
         await self.storage.write_json(self._session_path(session_id), session)
+
+    @staticmethod
+    def _current_groups(session: dict) -> list[dict]:
+        current = {entry.get("work_group_id") for entry in session["roster"].values()}
+        return [group for gid, group in session.get("work_groups", {}).items() if gid in current]
+
+    @classmethod
+    def group_codes(cls, session: dict) -> list[dict]:
+        return [{"id": group["id"], "display_name": group["display_name"],
+                 "code": group.get("access_code") if session["status"] == "live" else None}
+                for group in cls._current_groups(session)]
+
+    async def _publish_group_codes_unlocked(self, session: dict) -> None:
+        await self._append_event_unlocked(
+            session["id"], "group_codes_updated",
+            {"groups": self.group_codes(session), "visible": session.get("group_codes_visible", False)},
+            author="session", ts=self.now(),
+        )
+
+    async def resume_session(self, session_id: str) -> dict:
+        async with self._session_locks[session_id]:
+            session = await self._load_session_unlocked(session_id)
+            if not session:
+                raise SessionNotFoundError("sessão não encontrada")
+            if session["status"] == "live":
+                return session
+            session.update(status="live", closed_at=None, active_since=self.now(), join_code=_join_code())
+            for entry in session["roster"].values():
+                entry.update(token=None, claimed_at=None, credential_expires_at=None)
+            for group in session.get("work_groups", {}).values():
+                group.update(token=None, access_code=None)
+            for group in self._current_groups(session):
+                group["access_code"] = _join_code(8)
+            session["group_codes_visible"] = bool(self._current_groups(session))
+            await self.storage.write_json(self._session_path(session_id), session)
+            await self._append_event_unlocked(session_id, "session_resumed", {}, author="session", ts=self.now())
+            await self._publish_group_codes_unlocked(session)
+            return session
+
+    async def renew_group_code(self, session_id: str, group_id: str) -> dict:
+        async with self._session_locks[session_id]:
+            session = await self._require_writable_unlocked(session_id)
+            group = next((group for group in self._current_groups(session) if group["id"] == group_id), None)
+            if not group:
+                raise StudentNotInRosterError("grupo não encontrado")
+            group.update(token=None, access_code=_join_code(8))
+            await self.storage.write_json(self._session_path(session_id), session)
+            await self._publish_group_codes_unlocked(session)
+            return next(row for row in self.group_codes(session) if row["id"] == group_id)
+
+    async def show_group_codes(self, session_id: str, visible: bool) -> dict:
+        async with self._session_locks[session_id]:
+            session = await self._require_writable_unlocked(session_id)
+            session["group_codes_visible"] = visible
+            await self.storage.write_json(self._session_path(session_id), session)
+            await self._publish_group_codes_unlocked(session)
+            return session
+
+    async def enter_group(self, code: str) -> tuple[dict, dict] | None:
+        for candidate in await self.list_sessions():
+            session_id = candidate["id"]
+            async with self._session_locks[session_id]:
+                session = await self._load_session_unlocked(session_id)
+                if not session or session["status"] != "live":
+                    continue
+                for group in self._current_groups(session):
+                    if not group.get("access_code") or not hmac.compare_digest(group["access_code"], code):
+                        continue
+                    group.update(access_code=None, token=uuid.uuid4().hex, claimed_at=self.now(),
+                                 credential_expires_at=self._student_credential_expires_at())
+                    await self.storage.write_json(self._session_path(session_id), session)
+                    await self._publish_group_codes_unlocked(session)
+                    return session, group
+        return None
 
     # ---- identidade do aluno ----
 
@@ -718,7 +792,13 @@ class ClassroomService:
             if not group or not group.get("token"):
                 raise InvalidSessionEventError("O grupo já não está disponível.")
             seen = await self._seen(session_id)
-            activity_types = {entry.name for entry in SESSION_EVENT_TYPES.by_author("activity")} - {"assessment_result"}
+            activity_types = {entry.name for entry in SESSION_EVENT_TYPES.by_author("activity")}
+            # Shared work declarations are saved; legacy joint self-assessment stays refused.
+            events = [ev for ev in events if ev.get("type") != "assessment_result" or (
+                isinstance((ev.get("payload") or {}).get("detail"), dict)
+                and (ev["payload"]["detail"].get("field") or ev["payload"]["detail"].get("productChanged"))
+                and ev["payload"]["detail"].get("activity") == session["activity_slug"]
+            )]
             conflicts = [str(ev.get("event_id") or "") for ev in events[:20]
                          if ev.get("event_id") not in seen and ev.get("type") in activity_types
                          and ev.get("composition_version", 1) != group["composition_version"]]
