@@ -34,7 +34,10 @@
     "labelSizePx": 20,
     "maxLineCh": 55,
     "lineHeight": 1.45,
-    "weights": [400, 700],
+    "weights": [
+      400,
+      700
+    ],
     "italicAllowed": false,
     "allCapsAllowed": false,
     "offlineFont": "O Builder executa scripts/embed_gothic_font.py no HTML antes da revisão e após cada reparação; fonte WOFF2 real incorporada, sem ligações remotas."
@@ -107,25 +110,79 @@
     },
     "feedbackExploration": {
       "object": "Esquema de bloco pouco organizado com texto de 20px; legenda representa uma zona pequena do produto, sem provocar ilegibilidade na atividade.",
-      "choices": ["Está bonito", "Aumentem o texto deste bloco para o lermos"],
+      "choices": [
+        "Está bonito",
+        "Aumentem o texto deste bloco para o lermos"
+      ],
       "hint": "Escolha vaga destaca o bloco e pergunta Que ação pode o grupo fazer aqui? A sugestão concreta liga a zona à alteração."
     }
   },
   "stageLayouts": [
-    {"id":"u1","focus":"Escolher um produto para os colegas","visible":"Critérios, dois nomes de animais e três esquemas de produto.","responsePlacement":"Razão surge após seleção, junto do produto escolhido; campos mantêm-se editáveis."},
-    {"id":"u2","focus":"Pensar um plano comum","visible":"Comparação A/B primeiro; depois mapa do produto escolhido e folha de plano.","responsePlacement":"Organização, alternância e partilha usam labels distintos; separar momentos por títulos curtos, sem esconder requisitos."},
-    {"id":"u3","focus":"Começar no Canva","visible":"Passo atual com captura grande, comando curto e consulta dos outros passos.","responsePlacement":"Declaração de estado e nota aparecem após o guia; não confirmar automaticamente trabalho externo."},
-    {"id":"u4","focus":"Conservar as dez frases","visible":"Mapa do produto e dica do formato; plano anterior pode abrir em detalhes.","responsePlacement":"Estado de produção, conteúdo e nota sobre trabalho ou dificuldade; não usar checklist observado automaticamente."},
-    {"id":"u5","focus":"Escolher uma melhoria concreta","visible":"Exploração curta de duas sugestões; depois Ouvimos / Vamos mudar.","responsePlacement":"Feedback próximo da escolha; sugestão real e decisão num campo cada."},
-    {"id":"u6","focus":"Aplicar e confirmar a alteração","visible":"Sugestão e decisão anteriores em resumo; percurso real de exportação num detalhe.","responsePlacement":"Campos do DocSpec permanecem separados com labels; qualquer estado declarado permite responder."},
-    {"id":"u7","focus":"Ensaiar mostrando como fizemos","visible":"Guião de quatro partes, turnos e recordatório 2–3 minutos.","responsePlacement":"Turnos, estado do ensaio e ajuste ficam junto do guião, em blocos breves."},
-    {"id":"u8","focus":"Retomar critérios e refletir à vez","visible":"Resumo real do plano, sugestão e melhoria; critérios iniciais e convite individual.","responsePlacement":"Sem novas respostas obrigatórias; editar conduz a etapas anteriores; reflexão facultativa."}
+    {
+      "id": "u1",
+      "focus": "Escolher um produto para os colegas",
+      "visible": "Critérios, dois nomes de animais e três esquemas de produto.",
+      "responsePlacement": "Razão surge após seleção, junto do produto escolhido; campos mantêm-se editáveis."
+    },
+    {
+      "id": "u2",
+      "focus": "Pensar um plano comum",
+      "visible": "Comparação A/B primeiro; depois mapa do produto escolhido e folha de plano.",
+      "responsePlacement": "Organização, alternância e partilha usam labels distintos; separar momentos por títulos curtos, sem esconder requisitos."
+    },
+    {
+      "id": "u3",
+      "focus": "Começar no Canva",
+      "visible": "Passo atual com captura grande, comando curto e consulta dos outros passos.",
+      "responsePlacement": "Declaração de estado e nota aparecem após o guia; não confirmar automaticamente trabalho externo."
+    },
+    {
+      "id": "u4",
+      "focus": "Conservar as dez frases",
+      "visible": "Mapa do produto e dica do formato; plano anterior pode abrir em detalhes.",
+      "responsePlacement": "Estado de produção, conteúdo e nota sobre trabalho ou dificuldade; não usar checklist observado automaticamente."
+    },
+    {
+      "id": "u5",
+      "focus": "Escolher uma melhoria concreta",
+      "visible": "Exploração curta de duas sugestões; depois Ouvimos / Vamos mudar.",
+      "responsePlacement": "Feedback próximo da escolha; sugestão real e decisão num campo cada."
+    },
+    {
+      "id": "u6",
+      "focus": "Aplicar e confirmar a alteração",
+      "visible": "Sugestão e decisão anteriores em resumo; percurso real de exportação num detalhe.",
+      "responsePlacement": "Campos do DocSpec permanecem separados com labels; qualquer estado declarado permite responder."
+    },
+    {
+      "id": "u7",
+      "focus": "Ensaiar mostrando como fizemos",
+      "visible": "Guião de quatro partes, turnos e recordatório 2–3 minutos.",
+      "responsePlacement": "Turnos, estado do ensaio e ajuste ficam junto do guião, em blocos breves."
+    },
+    {
+      "id": "u8",
+      "focus": "Retomar critérios e refletir à vez",
+      "visible": "Resumo real do plano, sugestão e melhoria; critérios iniciais e convite individual.",
+      "responsePlacement": "Sem novas respostas obrigatórias; editar conduz a etapas anteriores; reflexão facultativa."
+    }
   ],
   "assets": {
     "directory": "drafts/canva-animais-4ano-assets/",
     "initialIllustration": "cooperar.png",
-    "confirmedScreenshots": ["01-criar-design.png", "02-cartaz.png", "03-apresentacao.png", "04-livro-a4.png"],
-    "pending": "Capturas reais do editor, texto, upload, duplicação e exportação serão transmitidas pelo orquestrador com legendas; ler o manifesto atualizado antes de construir os passos.",
+    "confirmedScreenshots": [
+      "01-criar-design.png",
+      "02-cartaz.png",
+      "03-apresentacao.png",
+      "04-livro-a4.png",
+      "05-texto-e-nome.png",
+      "06-tamanho-texto.png",
+      "07-upload.png",
+      "08-paginas.png",
+      "09-download.png",
+      "10-apresentar.png",
+      "11-livro-paginas.png"
+    ],
     "embedding": "Incorporar todos os assets utilizados como data URLs no HTML. Não referenciar paths externos nem carregar imagens por rede.",
     "truthfulness": "Capturas exemplificam o percurso observado e identificam data/idioma quando necessário. Não desenhar interface Canva fictícia nem usar a ilustração gerada como captura.",
     "privacy": "Excluir dados pessoais e de conta da área visível usada como exemplo; não expor links de partilha ou credenciais."
@@ -135,8 +192,18 @@
     "durationMs": 160,
     "easing": "ease-out",
     "respectReducedMotion": true,
-    "properties": ["opacity", "background-color", "border-color"],
-    "prohibited": ["bounce", "elastic", "autoplay", "animated-layout", "countdown-pressure"]
+    "properties": [
+      "opacity",
+      "background-color",
+      "border-color"
+    ],
+    "prohibited": [
+      "bounce",
+      "elastic",
+      "autoplay",
+      "animated-layout",
+      "countdown-pressure"
+    ]
   },
   "accessibility": {
     "contrastBody": "AA, mínimo 4.5:1; ink no papel e surface no primary",

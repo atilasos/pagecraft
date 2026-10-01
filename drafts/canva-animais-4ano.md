@@ -81,7 +81,7 @@ As capturas reais acompanham as ações na atividade. O menu **Criar um design**
 
 Para o livro, escolher páginas fixas A4 e acrescentar páginas; evitar o formato contínuo Canva Docs nesta sequência.
 
-Nos passos seguintes, a atividade deve mostrar uma captura por ação: nomear o design, inserir/editar texto, carregar as imagens preparadas, acrescentar/duplicar páginas quando necessário e descarregar/mostrar o produto. Os rótulos de editor e exportação só serão apresentados como exatos depois da confirmação no browser. O idioma, a conta ou a atualização do Canva pode mudar a posição de controlos; usar o nome e a captura para orientar a procura.
+A atividade inclui onze capturas reais: menus dos três formatos; nome e Texto; tamanho de letra; Uploads; opções de páginas; PDF; apresentação; editor A4. No editor, os botões observados são **Adicionar um título**, **Adicionar algum texto do corpo**, **Fazer o upload de ficheiros**, **Adicionar página**, **Duplicar página**, **Partilhar** e **Fazer o download**. Na exportação, escolher **PDF** e a opção predefinida **Digital** ou **Impressão**. Nos diapositivos, **Todos os modos de apresentação → Ecrã inteiro**. No A4, o botão **Adicionar página** fica abaixo da folha e o ícone de duplicação por cima. O idioma, a conta ou a atualização do Canva pode mudar a posição de controlos; usar o nome e a captura para orientar a procura.
 
 No fim, seguir o percurso observado para obter uma cópia PDF adequada à decisão do professor. Abrir o PDF para verificar ordem, margens e leitura. No cartaz, confirmar tamanho e orientação de impressão; no livro, verificar todas as páginas; nos diapositivos, ensaiar o modo de apresentação disponível ou usar o PDF no ecrã. Não se exige partilha pública de links.
 
@@ -164,4 +164,4 @@ As fontes consultadas estão em [canva-animais-4ano-sources.md](canva-animais-4a
 
 O alinhamento confirmado refere-se às **Orientações Curriculares para as TIC no 1.º ciclo**, páginas 7–8: comunicar para públicos conhecidos, produzir em conjunto, transformar informação, elaborar planos/processos e apresentar produtos. Não se atribuem AE específicas do 4.º ano a este documento nem se usa a proposta curricular de 2026 como referencial homologado.
 
-Estado desta fase: arquitetura e guia produzidos; capturas do menu de criação confirmadas; restantes passos de editor, ilustração, HTML e testes pertencem às fases seguintes. O rascunho requer revisão específica do professor antes da publicação.
+Estado: atividade criada com guias e capturas integradas; consultar os relatórios de revisão e avaliação que acompanham o rascunho. Upload/download finais e apresentação em ecrã inteiro não foram executados; menus confirmados. O editor A2 não foi verificado, e os passos comuns são exemplificados numa apresentação. O rascunho requer revisão específica do professor antes da publicação.
