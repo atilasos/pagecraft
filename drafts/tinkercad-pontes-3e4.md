@@ -70,4 +70,12 @@ Na autoavaliação, reapresente os três critérios. A criança pode marcar, par
 
 As Orientações Curriculares de TIC para o **1.º ciclo** situam esta proposta em «Criar e Inovar»: planear uma solução digital para um problema próximo e explorar noções espaciais com objetos virtuais. Não há aqui um descritor homologado específico para 3.º ou 4.º ano; a progressão é decisão do professor. A escolha do cenário, a simulação de travessia e os 45 minutos são propostas desta atividade. A interação inicial, os critérios conhecidos e a revisão em pares apoiam a avaliação formativa e a comunicação cooperada descritas na Sebenta.
 
-Fontes e datas de consulta: [tinkercad-pontes-3e4-sources.md](tinkercad-pontes-3e4-sources.md). Especificação estruturada: [tinkercad-pontes-3e4-docspec.json](tinkercad-pontes-3e4-docspec.json). Este ficheiro é um guia de rascunho. O código reservado continua 52XFA9; a atividade só fica pronta para a nova revisão após avaliação desta iteração. Os testes de 2026-09-27 não demonstram os percursos acrescentados agora. A avaliação e o manifesto registam os testes reais da versão atual; publicação exige aprovação do professor.
+Fontes e datas de consulta: [tinkercad-pontes-3e4-sources.md](tinkercad-pontes-3e4-sources.md). Especificação estruturada: [tinkercad-pontes-3e4-docspec.json](tinkercad-pontes-3e4-docspec.json). Este ficheiro é um guia de rascunho. O código reservado continua **52XFA9**. A revisão 2 está preparada para revisão do professor; publicação exige aprovação desta atividade.
+
+## Verificação da revisão 2 — 1 de outubro de 2026
+
+A [pré-visualização privada](https://estudio.infantinho.xyz/52XFA9) mantém a duração de 45 minutos. A revisão linguística e a avaliação passaram. Foram ensaiados os seis pedidos obrigatórios nos três apoios, o avanço com erros, as pistas e correções, a mudança de apoio e modo, a recuperação do trabalho e a reflexão facultativa. As larguras de 390, 768 e 1280 px não apresentaram transbordamento horizontal; a fonte incorporada carregou e os botões medidos tinham pelo menos 52 px de altura.
+
+Dois ensaios fictícios no host confirmaram gravação, recuperação sem duplicar tentativas, nome visível na reflexão e conclusão com respostas de reflexão por dar. Ambos ficaram marcados como pré-visualização e excluídos dos relatórios dos alunos. A API pública recusa o rascunho.
+
+O acesso da turma ao Tinkercad, dispositivos físicos, rede desligada e Sessões de aula com grupos não foram ensaiados nesta revisão. Consulte os percursos, capturas e limites completos no [relatório de avaliação](tinkercad-pontes-3e4-evaluation.json) e a [revisão textual](tinkercad-pontes-3e4-proofread.json).
