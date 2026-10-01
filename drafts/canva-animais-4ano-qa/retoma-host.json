@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-10-01T12:01:24.746760+00:00",
+  "checked_at": "2026-10-01T13:02:28.362860+00:00",
   "activity_sha256": "82ab30a1ed28b3004006fcf37a613204ce6f64bef9d6ff38aaf5f50b8e96d9cf",
   "checks_passed": true,
-  "server_tests": 272,
-  "browser_tests": 18,
+  "server_tests": 276,
+  "browser_tests": 14,
   "checks": [
     "Retoma em data posterior, sem copiar evidências",
     "Outro browser recupera resposta e etapa da oficina Canva real",
@@ -13,7 +13,24 @@
     "Falha de ligação não confirma gravação nem apresenta atividade vazia",
     "Guardar para continuar confirma a gravação após recuperar a ligação",
     "Começar novo trabalho conserva o registo anterior",
-    "Studio ativo e interface pública verificada após atualização"
+    "Studio ativo e interface pública verificada após atualização",
+    "Nomes usados individualmente ficam reservados até autorização do professor",
+    "Códigos da janela retomada expiram à meia-noite no fuso escolar",
+    "Envios de entradas anteriores não substituem trabalho mais recente",
+    "Atualizar a página recupera também respostas atuais ainda por enviar",
+    "Fila antiga mantém as respostas visíveis sem as reenviar com nova credencial"
   ],
-  "board_example": "retoma-quadro.png"
+  "board_example": "retoma-quadro.png",
+  "browser_suites": [
+    "tests/browser/test_group_continuation.py",
+    "tests/browser/test_group_reflections.py",
+    "tests/browser/test_group_levels.py"
+  ],
+  "review": {
+    "standards_remaining": 0,
+    "spec_findings_fixed": 4,
+    "spec_remaining": 0,
+    "reviewed_code_commit": "13e3a84",
+    "test_acknowledgement_commit": "8b042d1"
+  }
 }
