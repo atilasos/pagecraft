@@ -14,7 +14,7 @@
     "focus": "#195ba0"
   },
   "typography": {
-    "fontFamily": "system-ui, sans-serif",
+    "fontFamily": "\"Century Gothic\", \"Didact Gothic\", \"URW Gothic\", \"Avant Garde\", sans-serif",
     "scale": "kids-6-7",
     "baseSizePx": 22,
     "headingSizePx": 25,
@@ -42,7 +42,7 @@
     "criteria": "Critérios em linguagem da criança antes do trabalho e retomados na reflexão; desenho livre e explicações orais opcionais.",
     "required": "Indicar pedidos em falta em texto próximo do avanço. Página respondida permite corrigir ou continuar. Aplicar a mesma regra à navegação e ao botão Seguinte.",
     "feedback": "Pista visual junto da pergunta, com texto específico; âmbar para resposta a rever, sem vermelho punitivo e sem sons automáticos.",
-    "fractions": "SVG inline com título/rótulo acessível, partes de igual tamanho; barras comparadas têm o mesmo comprimento total.",
+    "fractions": "SVG inline com título/rótulo acessível, partes de igual tamanho; barras comparadas têm o mesmo comprimento total. Símbolos numéricos com numerador por cima do denominador e barra horizontal, também nas escolhas, instruções e feedback. Conservar valores internos n/d e rótulos acessíveis.",
     "minecraft": "Unidade de 20 blocos contíguos, em cinco colunas e quatro linhas. O SVG distingue limites dos grupos e blocos pintados. Grupos de 1/2 e 1/4 organizados por linhas; de 2/5 e 1/10 por colunas e subdivisões iguais. O desenho representa sempre 20 blocos.",
     "modelHint": "Pista de grupos iguais, sem substituir a resposta explícita. 1/2: dois grupos de dez, um pintado; 1/4: quatro grupos de cinco, um pintado; 2/5: cinco grupos de quatro, dois pintados; 1/10: dez grupos de dois, um pintado.",
     "makerControls": "Material Minecraft ou Papel ou cubos; fração fixa por nível, com quatro escolhas no Mais desafios; Já fizemos e resposta numérica 2, 5, 8 ou 10 em controlos distintos.",
@@ -68,6 +68,6 @@
     ],
     "soundOptIn": true
   },
-  "offline": "SVG, CSS e JS inline sem fontes ou recursos de rede. Minecraft e gravação no anfitrião têm as suas condições de ligação próprias.",
+  "offline": "SVG, CSS, JS e fonte alternativa Didact Gothic incorporados no HTML; Century Gothic quando instalado no dispositivo. Sem recursos de rede. Minecraft e gravação no anfitrião têm as suas condições de ligação próprias.",
   "notes": "Preserva a direção visual B aprovada e a paleta existente. A unidade comum de 20 blocos permite grupos inteiros nos quatro alvos; a geometria explica a fração. Esta especificação define requisitos e não substitui a verificação do HTML no browser."
 }
