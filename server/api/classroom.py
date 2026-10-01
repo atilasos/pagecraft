@@ -8,7 +8,7 @@ from typing import Literal
 
 from fastapi import APIRouter, HTTPException, Request, Response
 from fastapi.responses import StreamingResponse, HTMLResponse
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from ..access import (
     RateLimitOperation,
@@ -73,6 +73,7 @@ class GroupReflectionRequest(BaseModel):
     event_id: str = Field(min_length=1, max_length=80)
     expected_revision: int = Field(ge=0)
     composition_version: int | None = Field(default=None, ge=1)
+    access_version: int | None = Field(default=None, ge=1)
     answers: dict[str, Literal["alone", "help", "practising", "skip"]] = Field(default_factory=dict, max_length=8)
     strategy: str = Field(default="", max_length=1500)
     next_step: str = Field(default="", max_length=1500)
@@ -87,6 +88,23 @@ class EventsRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     events: list[dict] = Field(max_length=20)
+
+    @field_validator("events")
+    @classmethod
+    def bounded_payloads(cls, events):
+        for event in events:
+            payload = event.get("payload", {})
+            if not isinstance(payload, dict) or len(json.dumps(payload).encode("utf-8")) > 4096:
+                raise ValueError("O registo da atividade deve ser um objeto com até 4096 bytes.")
+        return events
+
+
+class GroupCodeRequest(BaseModel):
+    code: str = Field(pattern="^[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{8}$")
+
+
+class GroupCodesVisibilityRequest(BaseModel):
+    visible: bool
 
 
 class CreatePitItemRequest(BaseModel):
@@ -225,6 +243,39 @@ async def join_by_code(join_code: str, request: Request):
     if not session:
         raise HTTPException(404, "não há nenhuma aula com esse código")
     return svc.project_session(session, role="student")
+
+
+@router.post("/sessions/{session_id}/resume")
+@access_policy(RoutePolicy.TEACHER)
+async def resume_session(session_id: str, request: Request):
+    svc = _svc(request)
+    return svc.project_session(await _domain(svc.resume_session(session_id)), role="teacher")
+
+
+@router.post("/sessions/{session_id}/group-codes")
+@access_policy(RoutePolicy.TEACHER)
+async def show_group_codes(session_id: str, body: GroupCodesVisibilityRequest, request: Request):
+    svc = _svc(request)
+    return svc.project_session(await _domain(svc.show_group_codes(session_id, body.visible)), role="teacher")
+
+
+@router.post("/sessions/{session_id}/groups/{group_id}/access-code")
+@access_policy(RoutePolicy.TEACHER)
+async def renew_group_code(session_id: str, group_id: str, request: Request):
+    return await _domain(_svc(request).renew_group_code(session_id, group_id))
+
+
+@router.post("/groups/enter")
+@access_policy(RoutePolicy.PUBLIC)
+@rate_limited(RateLimitOperation.CLAIM)
+async def enter_group(body: GroupCodeRequest, request: Request, response: Response):
+    svc = _svc(request)
+    result = await svc.enter_group(body.code)
+    if result is None:
+        raise HTTPException(404, "Este código já foi usado ou não está ativo. Pede um novo ao professor.")
+    session, group = result
+    issue_student_cookie(response, session["id"], group["token"], group["claimed_at"], group["credential_expires_at"])
+    return {"work_group": svc.project_work_group(group), "session": svc.project_session(session, role="student")}
 
 
 @router.get("/sessions/{session_id}/me")

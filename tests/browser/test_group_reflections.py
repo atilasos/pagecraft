@@ -32,6 +32,7 @@ def test_children_take_turns_and_teacher_reads_individual_reflections(page, stud
         page.get_by_role('button', name='Guardar a minha reflexão', exact=True).click()
         page.get_by_role('button', name='Carla · Por responder', exact=True).click()
         page.get_by_role('button', name='Prefiro não responder agora', exact=True).click()
+        expect(page.locator('#reflection-status')).to_contain_text('Reflexão guardada.')
         page.reload()
         page.get_by_role('button', name='A minha reflexão', exact=True).click()
         page.get_by_role('button', name='Ana · Guardada', exact=True).click()
@@ -39,6 +40,7 @@ def test_children_take_turns_and_teacher_reads_individual_reflections(page, stud
         expect(page.get_by_label('O que te ajudou?')).to_have_value('Comparei os blocos.')
         page.get_by_label('Consegui com autonomia', exact=True).check()
         page.get_by_role('button', name='Guardar a minha reflexão', exact=True).click()
+        expect(page.locator('#reflection-status')).to_contain_text('Reflexão guardada.')
         for sid, count in [(ids[0],2), (ids[1],1), (ids[2],1)]:
             history = teacher.get(path+f'/students/{sid}/history').json()['events']
             assert len([e for e in history if e['type']=='individual_reflection']) == count
@@ -47,7 +49,7 @@ def test_children_take_turns_and_teacher_reads_individual_reflections(page, stud
         teacher_page.goto(studio_origin+'/teacher/class.html')
         teacher_page.request.get(studio_origin+'/api/teacher-bootstrap')
         teacher_page.reload()
-        teacher_page.get_by_role('button', name='Retomar', exact=True).first.click()
+        expect(teacher_page.locator('#live')).to_be_visible()
         teacher_page.locator('#work-groups').get_by_role('button', name='Ver percurso de Ana', exact=True).click()
         expect(teacher_page.locator('#drawer-events')).to_contain_text('Reflexão individual')
         expect(teacher_page.locator('#drawer-events')).to_contain_text('Consegui com autonomia')

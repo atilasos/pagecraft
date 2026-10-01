@@ -18,6 +18,7 @@ O **nome interno** é o identificador canónico no servidor. O **nome na ponte**
 |---|---|---|---|
 | `activity_loaded` | `activity_loaded` | automático pelo template | `title` — Título apresentado pela atividade carregada. |
 | `heartbeat` | `heartbeat` | automático pelo template | — |
+| `activity_state` | `activity_state` | `PageCraftBridge.activityState(unitId, state)` | `state` — Checkpoint para recuperar a etapa e as escolhas da atividade. |
 | `unit_started` | `unit_started` | `PageCraftBridge.unitStarted(unitId)` | — |
 | `level_changed` | `level_changed` | `PageCraftBridge.levelChanged(unitId, level)` | `level` — Nível de diferenciação escolhido: support, intermediate ou challenge. |
 | `attempt` | `attempt` | `PageCraftBridge.attempt(unitId, correct, detail)` | `correct` — Indica se a tentativa corresponde à resposta esperada.<br>`detail` — Descrição curta e opcional da tentativa observada. |

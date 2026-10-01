@@ -31,6 +31,6 @@ class InvalidSessionEventError(ClassroomError):
 
 class CompositionChangedError(ClassroomError):
     def __init__(self, event_ids: list[str], group: dict):
-        super().__init__("O professor alterou os participantes. Estas respostas mantêm o grupo anterior.")
+        super().__init__("A entrada ou os participantes foram alterados. Estas respostas mantêm o contexto anterior.")
         self.event_ids = event_ids
         self.group = group

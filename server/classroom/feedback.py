@@ -125,7 +125,8 @@ class FeedbackService:
             return
         for path in sorted(sessions_dir.glob("*/events.jsonl")):
             records = await self.storage.read_jsonl(path)
-            if any(record.get("type") == "session_closed" for record in records):
+            from .lifecycle import session_lifecycle
+            if session_lifecycle(records, {})["status"] == "closed":
                 continue
             for record in self._unprocessed_requests(records):
                 await self._schedule_record(path.parent.name, record)

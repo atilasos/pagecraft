@@ -164,6 +164,12 @@ SESSION_EVENT_TYPES = SessionEventRegistry(
             payload={"title": "Título apresentado pela atividade carregada."},
         ),
         _event("heartbeat", "activity", timeline=False),
+        _event("activity_state", "activity", student_visible=True, timeline=False,
+               payload={"state": "Checkpoint para recuperar a etapa e as escolhas da atividade."}),
+        _event("session_resumed", "session", student_visible=True, board_visible=True),
+        _event("group_codes_updated", "session", board_visible=True,
+               payload={"groups": "Códigos de entrada dos grupos, apenas para o professor e o quadro.",
+                        "visible": "Mostra os códigos no quadro em vez da atividade."}),
         _event("unit_started", "activity", evidence=True),
         _event(
             "level_changed",

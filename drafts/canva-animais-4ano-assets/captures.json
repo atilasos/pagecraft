@@ -1,0 +1,109 @@
+{
+  "date": "2026-10-01",
+  "application": "Canva",
+  "language": "pt-PT",
+  "kind": "real-browser-screenshots",
+  "captures": [
+    {
+      "file": "01-criar-design.png",
+      "title": "Criar um design",
+      "instruction": "No início do Canva, clica no botão + (Criar um design). Escreve o formato na pesquisa.",
+      "alt": "Menu Crie um design, com a pesquisa no topo e os formatos Apresentação e Documento A4.",
+      "stage": "start"
+    },
+    {
+      "file": "02-cartaz.png",
+      "product": "poster",
+      "title": "Começar um cartaz",
+      "instruction": "Pesquisa Cartaz. Escolhe Cartaz (A2 vertical) para uma página com duas zonas.",
+      "alt": "Pesquisa Cartaz com a opção Cartaz (A2 vertical) como primeiro resultado.",
+      "stage": "start"
+    },
+    {
+      "file": "03-apresentacao.png",
+      "product": "slides",
+      "title": "Começar diapositivos",
+      "instruction": "Pesquisa Apresentação. Escolhe a primeira opção, Apresentação.",
+      "alt": "Pesquisa Apresentação; primeiro resultado Apresentação, seguido de Apresentação 4:3 e dispositivo móvel.",
+      "stage": "start"
+    },
+    {
+      "file": "04-livro-a4.png",
+      "product": "book",
+      "title": "Começar um livro",
+      "instruction": "Pesquisa Documento A4. Escolhe Documento (A4 (retrato)). Vamos juntar páginas fixas para fazer um livro.",
+      "alt": "Pesquisa Documento A4; terceira opção Documento (A4 (retrato)).",
+      "stage": "start"
+    },
+    {
+      "file": "05-texto-e-nome.png",
+      "title": "Dar nome e inserir texto",
+      "instruction": "No topo, clica no nome do design e escreve um nome que o grupo reconheça. À esquerda, clica em Texto e Adicionar um título. Para as frases, usa Adicionar algum texto do corpo.",
+      "alt": "Editor real do Canva: nome do design no topo e painel Texto com botões para título e texto do corpo.",
+      "stage": "start"
+    },
+    {
+      "file": "06-tamanho-texto.png",
+      "title": "Tornar o texto legível",
+      "instruction": "Seleciona o texto. Na barra superior, altera o tamanho no campo numérico ao lado do tipo de letra. Usa a cor e o alinhamento quando ajudarem a ler. Testa com um colega.",
+      "alt": "Título selecionado no editor; barra com tipo de letra, tamanho 92, cor e alinhamento.",
+      "stage": "create"
+    },
+    {
+      "file": "07-upload.png",
+      "title": "Inserir a ilustração do Word",
+      "instruction": "À esquerda, clica em Uploads e Fazer o upload de ficheiros. Escolhe a imagem preparada. Quando aparecer no painel, clica nela para a inserir. Move-a e redimensiona-a por um canto.",
+      "alt": "Painel Uploads vazio com botão Fazer o upload de ficheiros; a página mostra apenas texto de demonstração.",
+      "stage": "start"
+    },
+    {
+      "file": "08-paginas.png",
+      "title": "Criar e duplicar diapositivos",
+      "instruction": "Para uma página vazia, usa o + Adicionar página junto das miniaturas. Para repetir a organização, abre os três pontos da miniatura: Opções de página. Clica em Duplicar página e substitui o conteúdo da cópia.",
+      "alt": "Menu real de opções da miniatura, com Duplicar página e Adicionar página.",
+      "stage": "create",
+      "product": "slides"
+    },
+    {
+      "file": "09-download.png",
+      "title": "Guardar uma cópia PDF",
+      "instruction": "Clica em Partilhar e Fazer o download. Em Tipo de ficheiro, escolhe PDF. Escolhe Digital para o ecrã, ou Impressão se o professor indicar. Clica em Fazer o download e abre a cópia para conferir.",
+      "alt": "Painel Fazer o download com PDF e opções predefinidas Digital e Impressão.",
+      "stage": "save"
+    },
+    {
+      "file": "10-apresentar.png",
+      "title": "Ensaiar a apresentação",
+      "instruction": "No topo, abre a seta junto de Apresentar: Todos os modos de apresentação. Escolhe Ecrã inteiro. Avança pelas páginas com as setas enquanto cada colega fala. Usa Escape para voltar ao editor.",
+      "alt": "Menu de apresentação com Ecrã inteiro, Vista do apresentador e Apresentar e gravar.",
+      "stage": "present",
+      "product": "slides"
+    },
+    {
+      "file": "11-livro-paginas.png",
+      "title": "Juntar páginas ao livro",
+      "instruction": "No documento A4, usa + Adicionar página abaixo da folha. Para repetir a organização, usa o ícone Duplicar página na barra por cima da folha, perto do caixote. Mantém as seis páginas na ordem do plano e troca o conteúdo das cópias.",
+      "alt": "Editor real A4 vertical na página 2 de 2; barra superior da folha com duplicar e botão Adicionar página abaixo.",
+      "stage": "create",
+      "product": "book"
+    }
+  ],
+  "illustration": {
+    "file": "cooperar.png",
+    "kind": "imagegen-illustration",
+    "alt": "Três crianças discutem um esboço junto de um computador, com um livro e diapositivos sobre a mesa. Ilustração gerada, não é uma captura do Canva."
+  },
+  "confirmedSteps": [
+    {
+      "stage": "create",
+      "title": "Passar as frases do Word",
+      "instruction": "No Word, seleciona uma frase e copia-a. No Canva, insere uma caixa de texto do corpo, seleciona o texto da caixa e cola a frase. Usa Ctrl+C e Ctrl+V no Windows, ou ⌘C e ⌘V no Mac. Conserva os dez factos.",
+      "observed": "Inserção e edição de texto confirmadas com texto de demonstração; documento dos alunos não foi fornecido."
+    }
+  ],
+  "limitations": [
+    "Menus e capturas reais confirmados em 01/10/2026; conta e idioma podem alterar a posição dos botões.",
+    "Upload e download finais de ficheiros e modo de apresentação não executados; menus observados. Adicionar página e duplicar diapositivo executados. Editor A4 e botão de duplicação próprios confirmados; adicionar página executado.",
+    "Passos comuns de texto, imagem e PDF exemplificados numa apresentação; não foi concluído um produto com animais reais, nem verificado o editor de cartaz A2 nesta sessão."
+  ]
+}

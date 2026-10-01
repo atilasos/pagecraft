@@ -51,7 +51,8 @@ const groupReflection = (() => {
   }
 
   function isOldDraft(draft) {
-    return !!draft && (draft.composition_version || draft.pending?.composition_version || 1) !== context.group.composition_version;
+    return !!draft && ((draft.composition_version || draft.pending?.composition_version || 1) !== context.group.composition_version ||
+      (draft.access_version || draft.pending?.access_version || 1) !== context.group.access_version);
   }
 
   function renderPendingReflections() {
@@ -99,6 +100,7 @@ const groupReflection = (() => {
     });
     drafts[current] = {
       composition_version: drafts[current]?.composition_version ?? context.group.composition_version,
+      access_version: drafts[current]?.access_version ?? context.group.access_version,
       group_caption: drafts[current]?.group_caption || context.group.display_name,
       owner_name: context.group.members.find(member=>member.student_id===current).display_name,
       expected_revision: drafts[current]?.expected_revision ?? saved[current]?.payload.revision ?? 0,
@@ -137,6 +139,7 @@ const groupReflection = (() => {
         const label = document.createElement('label');
         const input = document.createElement('input');
         input.type = 'radio'; input.name = criterion.id; input.value = value;
+        input.setAttribute('aria-label', text);
         input.checked = voice.answers?.[criterion.id] === value;
         const icon = document.createElement('span'); icon.textContent = icons[value]; icon.setAttribute('aria-hidden','true');
         label.append(input, icon, document.createTextNode(text));
@@ -147,7 +150,7 @@ const groupReflection = (() => {
     element('reflection-strategy').value = voice.strategy || '';
     element('reflection-next').value = voice.next_step || '';
     element('reflection-reload').hidden = !isOldDraft(draft);
-    status(isOldDraft(draft) ? 'O professor alterou os participantes. Revê a versão guardada antes de responder no novo grupo.' : draft?.pending ? 'Há uma reflexão por guardar. Carrega em guardar para tentar novamente.' : '');
+    status(isOldDraft(draft) ? 'A entrada ou os participantes foram alterados. Revê a versão guardada antes de voltar a responder.' : draft?.pending ? 'Há uma reflexão por guardar. Carrega em guardar para tentar novamente.' : '');
     lockForm(!!draft?.pending || isOldDraft(draft));
     participants();
     element('reflection-child').focus();
@@ -182,7 +185,7 @@ const groupReflection = (() => {
       capture();
       const draft = drafts[current];
       draft.pending = {
-        student_id:current, event_id:crypto.randomUUID(), expected_revision:draft.expected_revision, composition_version:context.group.composition_version,
+        student_id:current, event_id:crypto.randomUUID(), expected_revision:draft.expected_revision, composition_version:context.group.composition_version, access_version:context.group.access_version,
         answers:skipped ? {} : draft.answers, strategy:skipped ? '' : draft.strategy,
         next_step:skipped ? '' : draft.next_step, skipped,
       };

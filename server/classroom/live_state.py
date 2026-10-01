@@ -116,22 +116,19 @@ class LiveSessionTicks:
             await asyncio.gather(*tasks, return_exceptions=True)
 
 
-def _session_projection(events: Iterable[Mapping], session: Mapping) -> dict:
-    frozen = False
-    status = str(session.get("status") or "live")
-    for record in events:
-        event_type = record.get("type")
-        if event_type == "freeze_screens":
-            frozen = True
-        elif event_type == "unfreeze_screens":
-            frozen = False
-        elif event_type == "session_closed":
-            status = "closed"
-    return {
-        "status": status,
-        "closed": status == "closed",
-        "frozen": frozen,
-    }
+def _session_projection(events: Iterable[Mapping], session: Mapping, *, role: str) -> dict:
+    from .lifecycle import session_lifecycle
+    records = list(events)
+    lifecycle = session_lifecycle(records, session)
+    projection = {"status": lifecycle["status"], "closed": lifecycle["status"] == "closed",
+                  "frozen": lifecycle["frozen"]}
+    if role in {"teacher", "board"}:
+        codes = next((record["payload"] for record in reversed(records)
+                      if record.get("type") == "group_codes_updated"), {})
+        if codes:
+            projection.update(group_codes=codes.get("groups", []),
+                              group_codes_visible=codes.get("visible", False) and not projection["closed"])
+    return projection
 
 
 def session_state_snapshot(
@@ -145,7 +142,7 @@ def session_state_snapshot(
 ) -> dict:
     """Projeta o estado autorizado no instante pedido."""
     if role == "board":
-        return {"session": _session_projection(events, session)}
+        return {"session": _session_projection(events, session, role=role)}
 
     state = reduce_session(
         events,
@@ -166,7 +163,7 @@ def session_state_snapshot(
         raise ValueError(f"papel desconhecido: {role}")
 
     snapshot = {
-        "session": _session_projection(events, session),
+        "session": _session_projection(events, session, role=role),
         "students": students,
     }
     groups = state.get("groups", {})

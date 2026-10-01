@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PageCraft Studio — Aula ao vivo</title>
-<link rel="stylesheet" href="/studio.css?v=groups-45-1">
+<link rel="stylesheet" href="/studio.css?v=groups-retoma-1">
 </head>
 <body class="teacher-page">
 <a class="skip-link" href="#main-content">Saltar para o conteúdo</a>
@@ -39,6 +39,7 @@
       <span class="knob" aria-hidden="true">👀</span>
       <span id="freeze-label">Olhem para o quadro</span>
     </button>
+    <button type="button" class="ghost" id="show-group-codes" hidden>Projetar códigos dos grupos</button>
     <button type="button" class="quiet" id="close-btn">Terminar sessão</button>
   </div>
 
@@ -73,7 +74,8 @@
         <div>
           <label for="launch-class">Turma</label>
           <select id="launch-class"></select>
-          <p class="button-line"><button id="launch-btn" type="button" disabled>Lançar sessão</button></p>
+          <p class="button-line"><button id="launch-btn" type="button" disabled>Lançar sessão</button>
+            <button id="new-work-btn" class="ghost" type="button" hidden>Começar novo trabalho</button></p>
           <p class="muted" id="launch-hint">Escolhe uma atividade ao lado.</p>
         </div>
         <div>
@@ -215,6 +217,6 @@
   </aside>
 </main>
 <script src="/teacher/common.js"></script>
-<script src="/teacher/class.js?v=groups-45-1"></script>
+<script src="/teacher/class.js?v=groups-retoma-1"></script>
 </body>
 </html>

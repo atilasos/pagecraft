@@ -29,7 +29,10 @@ A lista do que cada criança se propõe fazer na sessão, escrita por ela no seu
 _Avoid_: tarefas, checklist, to-do
 
 **Sessão de aula**:
-Instância viva de uma atividade para uma turma, com código de entrada e roster; termina fechada mas os eventos persistem para relatório.
+Registo de uma atividade para uma turma, com participantes e acontecimentos persistentes. Cada aula abre uma janela de acesso que pode terminar e ser reativada pelo professor, conservando o trabalho. «Começar novo trabalho» cria outro registo.
+
+**Código do grupo**:
+Código temporário que o professor apresenta para retomar o trabalho guardado de um grupo numa aula ativa. A entrada consome o código e identifica esse computador. O professor pode emitir outro para mudar de dispositivo. Distinto do código de seis caracteres que permite entrar na aula e escolher participantes.
 
 **Triagem de atenção**:
 Ordenação viva da turma no painel do professor por necessidade: pedidos de ajuda, tentativas falhadas acumuladas e inatividade sobem; quem está a fluir desce. Substitui a lista uniforme; o objetivo é «2 segundos de olhar, saber a quem ir».

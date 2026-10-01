@@ -5,6 +5,7 @@ const $ = (id) => document.getElementById(id);
 const workGroups = new Map();
 const students = new Map(); // id → projeção viva emitida pelo servidor
 let session = null;
+let previousSessions = [];
 let publicOrigin = location.origin;
 let liveSessionState = { status: "live", closed: false, frozen: false };
 let units = [];
@@ -309,6 +310,7 @@ function renderPicker() {
     $("launch-btn").disabled = true;
     $("launch-hint").textContent = "Escolhe uma atividade ao lado.";
   }
+  updateLaunchChoice();
   if (!matches.length) {
     list.innerHTML = '<p class="muted">Nenhuma atividade corresponde aos filtros.</p>';
     return;
@@ -337,20 +339,39 @@ function renderPicker() {
   });
 }
 
-$("launch-btn").addEventListener("click", async () => {
-  const a = pickerState.selected;
-  if (!a) return;
-  const resp = await tfetch("/api/sessions", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({
-      class_id: $("launch-class").value,
-      activity_slug: a.slug,
-      activity_title: a.title || a.slug,
-    }),
-  });
-  if (resp.ok) startLive(await resp.json());
-});
+function continuationCandidate() {
+  return previousSessions.find(item => item.class_id === $('launch-class').value &&
+    item.activity_slug === pickerState.selected?.slug);
+}
+
+function updateLaunchChoice() {
+  const previous = continuationCandidate();
+  $('launch-btn').textContent = previous ? 'Continuar trabalho' : 'Lançar sessão';
+  $('launch-btn').disabled = !pickerState.selected || !$('launch-class').value;
+  $('new-work-btn').hidden = !previous;
+  if (previous) $('launch-hint').textContent = 'Recupera os grupos e o trabalho guardado. Cada grupo recebe um código para esta aula.';
+}
+
+async function launchWork(startNew = false) {
+  const activity = pickerState.selected;
+  if (!activity || !$('launch-class').value) return;
+  const previous = !startNew && continuationCandidate();
+  $('launch-btn').disabled = true;
+  $('new-work-btn').disabled = true;
+  try {
+    const response = await tfetch(previous ? `/api/sessions/${previous.id}/resume` : '/api/sessions', {
+      method:'POST', headers:{'content-type':'application/json'},
+      body:JSON.stringify(previous ? {} : {class_id:$('launch-class').value,
+        activity_slug:activity.slug, activity_title:activity.title || activity.slug}),
+    });
+    if (!response.ok) throw new Error('Não foi possível abrir o trabalho. Tenta novamente.');
+    await startLive(await response.json());
+  } catch (error) { $('launch-hint').textContent = error.message; }
+  finally { $('new-work-btn').disabled = false; updateLaunchChoice(); }
+}
+$('launch-class').addEventListener('change', updateLaunchChoice);
+$('launch-btn').addEventListener('click', () => launchWork());
+$('new-work-btn').addEventListener('click', () => launchWork(true));
 
 /* ---------- sessão ao vivo ---------- */
 
@@ -358,6 +379,7 @@ async function startLive(s) {
   editingGroup = null;
   $("group-editor").hidden = true;
   session = s;
+  liveSessionState = {status:s.status, closed:false, frozen:false, group_codes:s.group_codes || [], group_codes_visible:s.group_codes_visible || false};
   $("prep-desk").hidden = true;
   $("live").hidden = false;
   $("ruler").hidden = false;
@@ -441,6 +463,9 @@ function applySessionState(delta, es) {
   if (!next || typeof next !== "object" || Array.isArray(next)) return;
   liveSessionState = { ...next };
   reflectFreeze(next.frozen === true);
+  $('show-group-codes').hidden = workGroups.size === 0;
+  $('show-group-codes').textContent = next.group_codes_visible ? 'Mostrar atividade no quadro' : 'Projetar códigos dos grupos';
+  renderWorkGroups();
   if (next.closed === true) es.close();
 }
 
@@ -880,6 +905,8 @@ $("close-btn").addEventListener("click", async () => {
   const resp = await tfetch("/api/sessions");
   if (!resp.ok) return;
   const sessions = await resp.json();
+  previousSessions = sessions;
+  updateLaunchChoice();
   const live = sessions.find((s) => s.status === "live");
   if (live) startLive(live);
 })();
@@ -903,6 +930,21 @@ function renderWorkGroups() {
     detail.textContent = `${group.numbers?.evidence?.attempt || 0} tentativas conjuntas · ${levelNames[group.level] || "Passo a passo"} · ${group.active ? group.triage?.reason || "A trabalhar" : group.replaced_by ? "Composição anterior" : "Dispositivo libertado"}`;
     card.append(heading, detail);
     if (group.active && !liveSessionState.closed) {
+      const codeRow = (liveSessionState.group_codes || session.group_codes || []).find(row => row.id === group.id);
+      if (codeRow) {
+        const code = document.createElement('p'); code.className = 'group-access-code';
+        code.textContent = codeRow.code || 'Grupo já entrou';
+        card.append(code);
+      }
+      const renew = document.createElement('button'); renew.type = 'button'; renew.className = 'ghost';
+      renew.textContent = 'Novo código para este grupo';
+      renew.setAttribute('aria-label', `Novo código para ${group.display_name}`);
+      renew.onclick = async () => {
+        renew.disabled = true;
+        const response = await tfetch(`/api/sessions/${session.id}/groups/${group.id}/access-code`, {method:'POST'});
+        if (!response.ok) { renew.disabled = false; $('group-edit-feedback').textContent = 'Não foi possível criar o código. Tenta novamente.'; }
+      };
+      card.append(renew);
       const edit = document.createElement('button'); edit.type = 'button'; edit.className = 'ghost';
       edit.id = `edit-group-${group.id}`;
       edit.textContent = 'Alterar participantes';
@@ -1011,3 +1053,12 @@ $("group-editor-form").onsubmit = async event => {
     updateGroupEditor();
   }
 };
+
+$('show-group-codes').addEventListener('click', async () => {
+  if (!session) return;
+  const response = await tfetch(`/api/sessions/${session.id}/group-codes`, {
+    method:'POST', headers:{'content-type':'application/json'},
+    body:JSON.stringify({visible:!liveSessionState.group_codes_visible}),
+  });
+  if (!response.ok) $('group-edit-feedback').textContent = 'Não foi possível atualizar o quadro. Tenta novamente.';
+});
