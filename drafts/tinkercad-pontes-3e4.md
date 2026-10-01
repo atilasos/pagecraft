@@ -2,6 +2,8 @@
 
 Rascunho para revisão do professor · 3.º e 4.º anos · 45 minutos · português europeu
 
+Revisão de 2026-10-01, iteração 2, conforme a experiência comum atual da skill PageCraft.
+
 ## Intenção e preparação
 
 A turma imagina uma travessia entre duas margens para pessoas a pé ou para uma pequena personagem. Primeiro testa uma ponte numa simulação PageCraft; depois constrói no Tinkercad um modelo simples com dois apoios e um tabuleiro. O objetivo é iniciar a manipulação de formas, posição, altura, tamanho e mudança de vista. O modelo digital não testa resistência nem segurança de pontes reais.
@@ -22,29 +24,50 @@ Os critérios orientam a observação e a conversa, sem pontuação automática.
 
 | Tempo | Turma e pares | PageCraft e Tinkercad |
 | --- | --- | --- |
-| 0–5 min | A turma escolhe o destinatário. Cada par prevê as peças necessárias. O professor apresenta e discute os três critérios. | A página mostra margens, destinatário, previsão e critérios. |
-| 5–15 min | Cada criança experimenta colocar dois apoios e um tabuleiro. O par pode discutir por que a personagem pára ou atravessa. | Simulação PageCraft: posições, alturas, vista lateral/superior e teste de travessia. Uma falha dá informação sobre o efeito, não uma resposta pronta. |
-| 15–37 min | O par planeia três peças, entra no Tinkercad com acesso já preparado e constrói. Uma criança edita, a outra verifica; trocam de papéis por volta dos 26 min. Mudam a vista e fazem uma revisão. | O PageCraft guarda o plano e oferece perguntas; o Tinkercad recebe a construção. Se não houver acesso, usar papel/blocos e registar esse modo sem declarar a construção digital concluída. |
-| 37–45 min | Cada par mostra uma vista a outro par, ouve uma sugestão e escolhe uma alteração ou um passo seguinte. Cada criança pode fazer a autoavaliação e pedir partilha na turma. | A página recolhe a descrição e a reflexão; o professor observa o desenho externo. Uma ou duas comunicações à turma podem prosseguir noutra aula. |
+| 0–5 min | A turma escolhe o destinatário. Cada par prevê as peças necessárias. O professor apresenta e discute os três critérios. | A página Imaginar mostra margens, dois destinatários sem pré-seleção, uma previsão por peça ilustrada e critérios. |
+| 5–15 min | Cada criança experimenta colocar dois apoios e um tabuleiro. O par pode discutir por que a personagem pára ou atravessa. | Simulação PageCraft: posições, alturas, vista lateral/superior e teste de travessia. Testar esta ponte confirma a configuração, mesmo se falhar. A pista visual mostra onde reparar; a pergunta sobre vista permite continuar com qualquer resposta. |
+| 15–37 min | O par planeia três peças, entra no Tinkercad com acesso já preparado e constrói. Uma criança edita, a outra verifica; trocam de papéis por volta dos 26 min. Mudam a vista e fazem uma revisão. | A página Construir pede Já fizemos e uma frase sobre a mudança ou próximo passo. Se não houver acesso, usar papel/blocos e declarar esse modo. A ponte pode ficar parcial. |
+| 37–45 min | Cada par mostra uma vista a outro par, ouve uma sugestão e escolhe uma alteração ou um passo seguinte. Cada criança pode fazer a autoavaliação e pedir partilha na turma. | Partilhar e refletir são facultativos, após responder às páginas anteriores. O host guarda a reflexão individual; o professor observa o desenho externo. A comunicação pode continuar noutra aula. |
 
 Na demonstração do Tinkercad, mostre como inserir uma forma, deslocá-la, mudar o tamanho e rodar a vista. Evite depender do nome ou da posição exata dos comandos, que podem mudar. Deixe a disposição das peças para a exploração das crianças. A simulação usa uma regra deliberadamente simples: neste modelo, a travessia aparece quando um apoio está em cada margem, os apoios têm a mesma altura e o tabuleiro os liga. A regra não pretende representar todos os tipos de ponte.
 
+## Respostas e avanço em cada página
+
+A atividade usa quatro páginas próprias do tema. Uma página conta como respondida quando existem todas as suas respostas obrigatórias. O acerto não é condição para avançar. Se faltar uma resposta, Seguinte e saltos para páginas futuras indicam o pedido em falta; a criança pode voltar e corrigir.
+
+| Página | Respostas obrigatórias | O que não é exigido |
+| --- | --- | --- |
+| Imaginar (u1) | Escolher um destinatário; selecionar uma forma que experimentaria primeiro. | Não há resposta certa na previsão; o texto adicional é facultativo. Os valores iniciais não contam como escolhas. |
+| Experimentar (u2) | Premir Testar esta ponte para confirmar a configuração atual; escolher lateral ou superior na pergunta sobre a altura. | Uma ponte sem tabuleiro ou uma travessia falhada contam como resposta intencional. Uma resposta de vista incorreta também permite continuar, com pista visual. |
+| Construir (u3) | Confirmar Já fizemos; escrever uma resposta curta sobre o que fizeram, uma mudança ou próximo passo. | Não se exige ponte concluída ou texto mínimo. O par/professor pode transcrever a descrição oral. Abrir Tinkercad não é resposta. |
+| Partilhar e refletir (u4) | Nenhuma. | A partilha e toda a reflexão são facultativas, após u1–u3 respondidas. |
+
+Depois de testar, mexer numa posição, altura ou tabuleiro pede novo teste: a confirmação anterior descrevia outra configuração. A página conserva as escolhas e tentativas antigas. Mudar só a vista ou o apoio escolhido não invalida a confirmação. Se o par mudar Tinkercad para papel/blocos, ou o inverso, a declaração e a confirmação anteriores ficam no histórico, mas é necessário responder sobre o novo modo.
+
 ## Apoios à escolha da criança
 
-- **Broto — Apoio:** mexer numa peça de cada vez com posições ilustradas, duas alturas prontas, leitura oral dos critérios e inícios de frase. A criança participa na colocação de pelo menos uma forma no editor, mesmo quando recebe ajuda nos comandos.
-- **Árvore jovem — Intermédio:** ajustar apoios e tabuleiro, comparar as duas vistas, construir as três peças no editor e explicar uma correção.
-- **Árvore robusta — Desafio:** fazer a simulação passar e falhar alterando só uma variável, explicar em que vista se nota melhor; no editor, acrescentar uma guarda ou entrada depois da ponte base e justificar a utilidade.
+- **Com pistas:** mexer numa peça de cada vez, com posições ilustradas, marcadores de altura junto dos apoios, leitura oral dos critérios e inícios de frase. As três alturas continuam disponíveis; o par pode comparar primeiro 1 e 2. O colega/professor pode transcrever as palavras da criança.
+- **Passo a passo:** ajustar apoios e tabuleiro, comparar vistas, construir as três peças e explicar uma mudança ou próximo passo com uma frase.
+- **Mais desafios:** convites facultativos para fazer a simulação passar e falhar alterando uma variável, explicar em que vista se nota melhor ou acrescentar uma guarda/entrada no editor e justificar a sua utilidade. O desafio não cria novas condições de avanço.
 
-A criança pode mudar de apoio a qualquer momento. A escolha de apoio e a ajuda recebida são contexto de aprendizagem, nunca uma classificação. Para o 3.º ano, aceite apontar, falar ou completar uma frase; no 4.º ano, convide a justificar a revisão com um exemplo concreto, sem mudar os critérios essenciais.
+Os seis pedidos obrigatórios são os mesmos nos três apoios; as pistas, a organização do trabalho e as extensões mudam. A criança pode trocar de apoio conservando as suas respostas, configuração e etapa. A escolha e a ajuda recebida são contexto de aprendizagem, sem classificação. Para o 3.º ano, aceite apontar, falar e ditar uma frase; no 4.º ano, convide a justificar com um exemplo, mantendo os critérios comuns.
+
+Use texto de pelo menos 20 px, títulos de unidade de 28 px, microtexto de 16 px e alvos de toque de 48 px. A atividade aplica Century Gothic e Didact Gothic incorporada como alternativa, sem fontes remotas. As pistas visuais surgem junto da peça, ação e feedback; o teclado permite todas as manipulações.
+
+## Trabalho em pares
+
+Uma criança constrói e a outra repara nas peças e nas vistas. Trocam a meio da construção. A verificação deve resultar numa sugestão concreta, por exemplo apontar a peça ou a vista que merece nova comparação. Evite que quem verifica apenas observe em silêncio.
+
+Nas Sessões de aula, o host identifica os participantes e a autoria do trabalho conjunto; a reflexão é individual, à vez, com o nome da criança visível. O HTML da atividade não pede nomes de colegas, autentica grupos ou responde por todos. No endereço permanente, a entrada continua individual: o trabalho a pares orientado nesta aula não altera essa entrada.
 
 ## Evidência, reflexão e decisão seguinte
 
-O PageCraft pode registar escolhas, tentativas, correções e vistas usadas **na simulação**. Um campo onde a criança escreve «Construí a ponte» é **relato da criança**; não prova o que aconteceu no Tinkercad. O professor pode observar o desenho no editor e registar separadamente: as três peças, a mudança de vista, a participação de cada criança e uma alteração feita após a sugestão. Não inferir edição ou gravação externa a partir de um clique na página.
+O PageCraft pode registar escolhas, tentativas, correções e vistas usadas **na simulação**. A confirmação Já fizemos e a frase sobre a construção são **relato da criança**, incluindo quando ficou trabalho por fazer; não demonstram automaticamente o que aconteceu no Tinkercad. O professor pode observar o desenho no editor e registar separadamente: as três peças, a mudança de vista, a participação de cada criança e uma alteração feita após a sugestão. Não inferir edição ou gravação externa a partir de um clique na página.
 
-Na autoavaliação, reapresente os três critérios. A criança pode marcar, para cada um, «Consegui sozinho», «Consegui com ajuda», «Quero praticar» ou «Prefiro não responder». Pode ainda dizer que estratégia usou e o que quer tentar a seguir. No Broto, aceita-se escolha visual/oral; na Árvore jovem, uma estratégia descrita; na Árvore robusta, uma justificação com exemplo. Deixar campos vazios é permitido. Use a conversa entre pares e a observação do professor para decidir com a criança o passo seguinte: alinhar uma peça, confirmar outra vista ou continuar o desenho noutra aula.
+Na autoavaliação, reapresente os três critérios. A criança pode marcar, para cada um, «Consegui sozinho», «Consegui com ajuda», «Quero praticar» ou «Prefiro não responder». Pode ainda dizer que estratégia usou e o que quer tentar a seguir. Com pistas, aceita-se escolha visual/oral; em Passo a passo, uma estratégia descrita; em Mais desafios, uma justificação com exemplo. Todas as perguntas de reflexão podem ficar vazias. A reflexão abre depois das páginas respondidas, mesmo com erros. Integrada, usa o formulário do host; em modo autónomo, oferece reflexão local sem prometer envio ao professor. Use a conversa entre pares e a observação do professor para decidir com a criança o passo seguinte: alinhar uma peça, confirmar outra vista ou continuar o desenho noutra aula.
 
 ## Enquadramento e limites
 
 As Orientações Curriculares de TIC para o **1.º ciclo** situam esta proposta em «Criar e Inovar»: planear uma solução digital para um problema próximo e explorar noções espaciais com objetos virtuais. Não há aqui um descritor homologado específico para 3.º ou 4.º ano; a progressão é decisão do professor. A escolha do cenário, a simulação de travessia e os 45 minutos são propostas desta atividade. A interação inicial, os critérios conhecidos e a revisão em pares apoiam a avaliação formativa e a comunicação cooperada descritas na Sebenta.
 
-Fontes e datas de consulta: [tinkercad-pontes-3e4-sources.md](tinkercad-pontes-3e4-sources.md). Especificação estruturada: [tinkercad-pontes-3e4-docspec.json](tinkercad-pontes-3e4-docspec.json). Este ficheiro é um guia de rascunho; o estado de pré-visualização e os testes serão registados após a construção e avaliação da página.
+Fontes e datas de consulta: [tinkercad-pontes-3e4-sources.md](tinkercad-pontes-3e4-sources.md). Especificação estruturada: [tinkercad-pontes-3e4-docspec.json](tinkercad-pontes-3e4-docspec.json). Este ficheiro é um guia de rascunho. O código reservado continua 52XFA9; a atividade só fica pronta para a nova revisão após avaliação desta iteração. Os testes de 2026-09-27 não demonstram os percursos acrescentados agora. A avaliação e o manifesto registam os testes reais da versão atual; publicação exige aprovação do professor.
