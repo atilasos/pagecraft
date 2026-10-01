@@ -13,24 +13,28 @@ summary: Avaliador Codex que verifica qualidade pedagógica, UX, acessibilidade 
 
 - **Fase:** 5 — Evaluator
 - **Input mínimo:** HTML, DocSpec, design-spec, proofread report, URL/caminho local servido.
-- **Output obrigatório:** `outputs/lessons/<slug>-evaluation-vN.json`
-- **Output se falhar:** `outputs/lessons/<slug>-repair-ticket-vN.json`
+- **Output obrigatório:** `drafts/<slug>-evaluation-vN.json`
+- **Output se falhar:** `drafts/<slug>-repair-ticket-vN.json`
 - **Formato:** apenas JSON válido nos ficheiros finais.
 
 ## Fontes obrigatórias
 
-1. `outputs/lessons/<slug>.html`.
-2. `outputs/lessons/<slug>-docspec.json`.
-3. `outputs/lessons/<slug>-design-spec.json`.
-4. `outputs/lessons/<slug>-proofread-vN.json`.
+1. `drafts/<slug>.html`.
+2. `drafts/<slug>-docspec.json`.
+3. `drafts/<slug>-design-spec.json`.
+4. `drafts/<slug>-proofread-vN.json`.
 5. `skills/codex/identities/evaluator.md`.
+
+## Regras comuns
+
+Lê `skills/codex/references/activity-experience.md` e `skills/codex/references/age-adaptation.md`. O orquestrador transmite os caminhos reais em `drafts/` e as fontes pesquisadas; esses inputs prevalecem sobre exemplos de nomes abaixo.
 
 ## Procedimento
 
 1. Confirma que a página abre por ficheiro local ou servidor HTTP local.
-2. Usa browser/Playwright/ferramenta visual disponível quando houver acesso; caso contrário, regista claramente a limitação em `blocked_by` e executa as verificações estáticas possíveis.
+2. Em T3 Code usa o browser colaborativo `preview_*`; nos outros runtimes usa a skill `agent-browser-hub`. Regista ausência de browser em `blocked_by` e limita a conclusão às verificações executadas.
 3. Verifica consola sem erros críticos.
-4. Testa pelo menos uma interação principal e um percurso 🟡 Intermédio.
+4. Percorre os pedidos obrigatórios de cada apoio e as verificações da referência de experiência, incluindo falta de resposta, erro, pista visual, correção, volta e recuperação.
 5. Cruza a implementação com o DocSpec: Constraint descoberto, Assessment observável, diferenciação real, maker ligado ao digital quando pedido.
 6. Verifica layout tablet/desktop, touch targets, foco, contraste e legibilidade.
 7. Considera o relatório do Proofreader.

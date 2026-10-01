@@ -14,10 +14,10 @@
 - Perante uma resposta errada, começar por uma pista visual, permitindo tentar novamente; a primeira ajuda não revela logo a solução.
 - Nos pedidos realizados fora da página, a criança confirma «Já fizemos» e responde a uma pergunta curta sobre a construção. Esta confirmação é declarada pela criança, não uma verificação automática do trabalho no Minecraft.
 
-## Trabalho relacionado ainda pendente
+## Aplicação das decisões
 
-- Permitir identificar todos os participantes quando trabalham a pares ou em grupo num dispositivo. O campo atual «Turma» não representa os membros de um grupo.
-- Depois de experimentar o protótipo, definir como aplicar as melhorias às atividades existentes e à geração de novas atividades.
+- A escolha dos participantes nas Sessões de aula, produção conjunta e reflexão individual está implementada e aceite pelo professor; ver [especificação de grupos](trabalho-em-grupo-spec.md). O campo «Turma» do endereço permanente continua distinto dos participantes.
+- A geração de novas atividades segue a [experiência comum](../../server/pipeline/prompts/references/activity-experience.md). Rever a divisão das restantes atividades caso a caso, preservando as versões já realizadas.
 
 ## Protótipo para revisão
 
@@ -33,7 +33,7 @@ Verificado em browser real: respostas obrigatórias, avanço mesmo com erros, pi
 
 Capturas: [A](/home/proteu/agent-browser-hub/screenshots/fracoes-prototype-A.png), [B](/home/proteu/agent-browser-hub/screenshots/fracoes-prototype-B.png), [C](/home/proteu/agent-browser-hub/screenshots/fracoes-prototype-C.png) e [telemóvel](/home/proteu/agent-browser-hub/screenshots/fracoes-prototype-mobile.png).
 
-A escolha da disposição está concluída: opção B. O ensaio original contém três passos representativos. Em 29/09/2026, a atividade completa e a diferenciação ficaram implementadas no novo rascunho; a identificação dos participantes de grupos permanece por definir e implementar.
+A escolha da disposição está concluída: opção B. O ensaio original contém três passos representativos. Em 29/09/2026, a atividade completa e a diferenciação ficaram implementadas no novo rascunho; em 01/10/2026, o professor confirmou por toque a escolha dos participantes, reflexões individuais e alteração pelo professor, concluindo esse recorte.
 
 ## Aplicação da opção B
 
