@@ -1,6 +1,6 @@
 # Correção de participantes durante a aula, #45
 
-Implementação no ramo `t3code/melhorar-usabilidade-atividades`, verificada em 01/10/2026. Base fixa: `e23e71b335de7cbc650506d34e1c0be689835afc`. A entrega está disponível para experimentar; falta confirmar o toque físico no quadro ou tablet. O ticket permanece aberto por esse critério.
+Implementação no ramo `t3code/melhorar-usabilidade-atividades`, verificada em 01/10/2026. Base fixa: `e23e71b335de7cbc650506d34e1c0be689835afc`. O professor confirmou o ensaio por toque no quadro/tablet: escolha dos participantes, reflexão de cada criança e gravação de uma troca de participantes no professor. O critério de aceitação restante está concluído.
 
 ## Comportamento
 
@@ -72,7 +72,7 @@ Sem violações documentais. Encontrou o bloqueio da fila cheia e a eliminação
 
 Encontrou o bloqueio da fila cheia e a diferença entre o nível confirmado e o nível do iframe. Ambos corrigidos; revisão final sem requisitos de código pendentes ou alargamento de âmbito.
 
-Resultado de código: zero bloqueadores em ambas as frentes. A confirmação do toque permanece pendente.
+Resultado de código: zero bloqueadores em ambas as frentes. O ensaio por toque foi confirmado pelo professor, concluindo a aceitação.
 
 ## Demonstração para o professor
 
@@ -82,4 +82,8 @@ Resultado de código: zero bloqueadores em ambas as frentes. A confirmação do 
 
 Foi preparada uma sessão nova, com seis nomes fictícios disponíveis. A sessão anterior e os seus relatórios conservam a evidência do ensaio. Os endereços dependem dos processos locais e dos túneis temporários ativos.
 
-Para concluir o critério restante, testar com toque a entrada A pares, a escolha dos nomes, os controlos visuais de Frações e a reflexão; no professor, abrir Alterar participantes, trocar um nome e guardar. Confirmar que o quadro permanece na demonstração e que os alvos são confortáveis no equipamento da sala.
+## Confirmação do professor
+
+Na conversa de 01/10/2026, à pergunta sobre escolher os participantes, responder à reflexão de cada criança e guardar uma troca de participantes no professor durante o teste por toque no quadro/tablet, o professor respondeu: «Sim, esses percursos funcionaram».
+
+Esta é evidência do ensaio realizado pelo professor no equipamento, distinta das verificações automatizadas e das interações por DOM descritas acima. Conclui o critério de toque que mantinha #45 aberto e permite concluir a especificação de grupos #42. Não corresponde a uma implantação em produção.

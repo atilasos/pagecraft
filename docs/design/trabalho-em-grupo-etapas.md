@@ -1,6 +1,6 @@
 # Etapas de trabalho em grupo
 
-Estado: divisão e cobertura aprovadas pelo professor em 30/09/2026. Publicados os tickets [#43](https://github.com/atilasos/pagecraft/issues/43), [#44](https://github.com/atilasos/pagecraft/issues/44) e [#45](https://github.com/atilasos/pagecraft/issues/45), associados à [especificação #42](https://github.com/atilasos/pagecraft/issues/42). Etapa 1 implementada e verificada no ramo; ver [evidência da entrega #43](../verification/issue-43-grupos.md). Etapa 2 implementada e verificada; ver [evidência da reflexão individual #44](../verification/issue-44-reflexoes.md). Etapa 3 implementada e revista; ver [evidência da correção de composição #45](../verification/issue-45-composicao.md). Falta confirmar o toque físico no quadro ou tablet. As dependências nativas foram verificadas: #44 depende de #43; #45 depende de #43 e #44. A demonstração remota da etapa #45 está disponível para esse ensaio. A [especificação](trabalho-em-grupo-spec.md) consolida as decisões confirmadas. Esta divisão é própria do trabalho em grupo e abrange entregas completas que o professor pode experimentar.
+Estado: divisão e cobertura aprovadas pelo professor em 30/09/2026. Publicados os tickets [#43](https://github.com/atilasos/pagecraft/issues/43), [#44](https://github.com/atilasos/pagecraft/issues/44) e [#45](https://github.com/atilasos/pagecraft/issues/45), associados à [especificação #42](https://github.com/atilasos/pagecraft/issues/42). Etapa 1 implementada e verificada no ramo; ver [evidência da entrega #43](../verification/issue-43-grupos.md). Etapa 2 implementada e verificada; ver [evidência da reflexão individual #44](../verification/issue-44-reflexoes.md). Etapa 3 implementada e revista; ver [evidência da correção de composição #45](../verification/issue-45-composicao.md). O professor confirmou o ensaio por toque no quadro/tablet em 01/10/2026. As dependências nativas foram verificadas: #44 depende de #43; #45 depende de #43 e #44. A demonstração remota da etapa #45 foi usada no ensaio. A [especificação](trabalho-em-grupo-spec.md) consolida as decisões confirmadas. Esta divisão é própria do trabalho em grupo e abrange entregas completas que o professor pode experimentar.
 
 ## 1. Entrar e trabalhar em conjunto
 
@@ -37,7 +37,7 @@ Estado: divisão e cobertura aprovadas pelo professor em 30/09/2026. Publicados 
 
 ## 3. Corrigir participantes durante a aula e verificar o percurso completo
 
-[Ticket #45](https://github.com/atilasos/pagecraft/issues/45). Implementado e revisto; aberto até à confirmação do toque no equipamento da sala. Dependências #43 e #44 concluídas.
+[Ticket #45](https://github.com/atilasos/pagecraft/issues/45). Implementado, revisto e aceite após a confirmação do toque pelo professor. Dependências #43 e #44 concluídas.
 
 **Dependências concluídas:** etapas 1 e 2, que estabelecem respostas conjuntas e reflexões individuais.
 
@@ -49,7 +49,7 @@ Estado: divisão e cobertura aprovadas pelo professor em 30/09/2026. Publicados 
 - [x] Retoma, revogação, libertação e encerramento coerentes com a composição atual.
 - [x] Validar integralmente aluno, professor, grupos diferentes e Quadro sem respostas atribuídas a alunos.
 - [x] Verificar teclado, larguras de computador/tablet/telemóvel e regressões individuais.
-- [ ] Confirmar toque físico no quadro ou tablet; ferramentas nativas de apontador/redimensionamento tiveram falhas. Demonstração pronta para o ensaio.
+- [x] Confirmar toque físico no quadro/tablet: o professor confirmou seleção de participantes, reflexões individuais e gravação da troca de participantes.
 - [x] Registar evidência de testes e rever código contra normas e especificação.
 - [x] Entregar demonstração remota com dados descartáveis, sem expor dados reais da turma.
 
