@@ -1,54 +1,154 @@
 {
+  "revision": 2,
+  "date": "2026-10-01",
+  "activity": "tinkercad-pontes-3e4",
+  "code": "52XFA9",
+  "reviewed_activity_commit": "6de02e0",
+  "reviewed_host_commit": "4f5fd65",
   "pass": true,
   "severity": "low",
   "scores": {
     "factual_accuracy": 4,
-    "constraint_alignment": 4,
+    "constraint_alignment": 5,
     "differentiation_quality": 4,
     "ux_accessibility": 4,
     "visual_design": 4,
     "technical_quality": 4
   },
   "issues": [],
+  "critical": [],
   "required_fixes": [],
+  "suggestions": [],
+  "blocked_by": [],
+  "summary": "Revisão 2 aprovada para revisão do professor. As respostas obrigatórias, mesmo erradas, permitem avançar; as manipulações exigem confirmação atual. Relatos externos, estado de recuperação e reflexão estão separados. Os ensaios ficaram como preview e fora dos relatórios. A atividade permanece por publicar.",
   "acceptance_checks": [
-    "PASS: tentativa falhada e conseguida, vista superior, mudanças de peças e três apoios no browser.",
-    "PASS: controlos Broto ilustrados e acessíveis por Tab/Enter; trocar de apoio preserva a configuração.",
-    "PASS: realização preview integrada guardou unit_started(u1–u4), tentativas, vistas, plano, relatos e autoavaliação separados; o dashboard excluiu o ensaio dos relatórios.",
-    "PASS: atividade isolada em iframes de largura interna 390 px e 768 px apresentou navegação, simulação e controlos legíveis sem corte horizontal interno.",
-    "PASS por inspeção de código: 4c95bde alterou a mensagem final do preview para explicar a exclusão dos relatórios; o novo texto não foi reaberto no browser."
+    "PASS por apoio: Com pistas, Passo a passo e Mais desafios começam sem destinatário ou previsão selecionados; pedido em falta bloqueia Seguinte e salto futuro.",
+    "PASS por apoio: Testar esta ponte confirma intencionalmente a ausência de tabuleiro; a vista incorreta De cima recebe pista lateral e permite seguir depois do teste.",
+    "PASS: alturas diferentes recebem mini vista lateral antes da frase, mesmo quando a exploração está De cima; corrigir o modelo permite travessia contínua.",
+    "PASS: mudar geometria invalida só a confirmação atual; conserva resposta da vista, relato externo e reflexão anterior. Retestar permite continuar. Mudar só a vista conserva confirmação.",
+    "PASS por apoio: Já fizemos sem relato pede texto; relato sem confirmação não conclui. Texto curto com trabalho parcial e alternativa em papel/blocos são válidos.",
+    "PASS: trocar modo externo pede nova confirmação e relato do modo atual; o registo do modo anterior fica no histórico.",
+    "PASS: mudar apoio conserva escolhas, altura 3, confirmação, pergunta da vista e textos, sem nova tentativa.",
+    "PASS: reload autónomo conserva etapa, altura 3, resposta incorreta, texto, reflexão e tentativas. Reload integrado conserva estado e contagens de attempt/unit_started.",
+    "PASS: host mantém reflexão bloqueada até exploração respondida; depois mostra o nome da criança e aceita terminar com todos os critérios em Prefiro não responder e textos vazios.",
+    "PASS: nos três apoios a 390/768/1280 CSS px, corpo 20 px, Didact Gothic carregada, botões visíveis com altura mínima 52 px, scrollWidth igual à largura e sem sobreposição observada nas capturas inspecionadas.",
+    "PASS: teclado Tab/Space/Enter permite escolhas, construção, confirmação e navegação com foco visível. Radios nativos permitem mudar escolha com setas. Select de apoio funciona por letras c/m/p e Tab.",
+    "PASS: duas realizações fictícias guardadas com preview=true; API de relatórios continua com 2 registos globais e nenhum da atividade, e a pesquisa no dashboard devolve 0 realizações.",
+    "PASS estático: fonte WOFF2 e licença incorporadas, HTML sem assets externos, pedidos de rede ou credenciais; metadados requires_completion=true e atividade não publicada."
   ],
   "evidence": [
-    "2026-09-27: Agent Browser Hub, perfil temporary, abriu o rascunho isolado em http://localhost:8788/drafts/tinkercad-pontes-3e4.html. Sessão fechada no fim.",
-    "Teste sem tabuleiro: feedback de falha indicou a peça em falta, sem classificar a criança. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-failed-trial.png.",
-    "Após colocar tabuleiro e mudar o apoio direito para margem e 2 blocos, o teste indicou travessia conseguida no modelo. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-passed-trial.png.",
-    "A vista superior mostrou tabuleiro e apoios, e o texto de vistas consultadas passou a indicar lado e cima. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-top-view.png.",
-    "No modo papel/blocos, o plano de peças e o aviso sobre observação externa ficaram disponíveis. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-build-full.png.",
-    "A reflexão isolada permitiu selecionar 'Consegui com ajuda', limpar uma escolha, escrever estratégia e próximo passo; os textos e a escolha reapareceram após nova navegação na mesma aba. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-restored.png.",
-    "Tab apresentou o atalho 'Ir para a atividade' com foco visível. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-keyboard-tab.png.",
-    "abh --json test http://localhost:8788/drafts/tinkercad-pontes-3e4.html devolveu console_errors=[], browser_errors=[] e pending_requests=[].",
-    "Inspeção do código confirmou botões e seletores com mínimos CSS de 48 px, descrição textual da cena SVG e media queries a 800 e 600 px.",
-    "2026-09-27, reensaio após 116c8f3 e c6e8070: Broto apresentou cartões visuais para margem, rio e afastado da margem, botões de 1 e 2 blocos, e seleção explícita do apoio ativo. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-full.png.",
-    "No Broto, selecionar apoio direito, posição na margem e 2 blocos atualizou a cena e os seletores completos. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-changed.png.",
-    "Troca Broto → Árvore jovem → Broto preservou posição/altura do apoio direito e voltou a mostrar o mesmo apoio ativo. Screenshots: /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-intermediate.png e /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-return.png.",
-    "Tab mostrou foco visível no novo botão Apoio direito; Enter ativou-o e, com Tab e Enter, mudou a posição para No rio. Screenshots: /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-keyboard.png e /home/proteu/agent-browser-hub/screenshots/tinkercad-broto-retest-keyboard-change.png.",
-    "Inspeção estática após 116c8f3: se learning_restore não contém unit_started, a página emite o evento da unidade inicial; um fallback após 3 s cobre ausência de resposta. A execução integrada foi confirmada no ensaio descrito abaixo.",
-    "abh --json test do HTML corrigido devolveu console_errors=[], browser_errors=[] e pending_requests=[].",
-    "2026-09-27, teste integrado no Agent Browser Hub, perfil temporary: com autorização do professor, o clique «Começar» com confirmed=true criou uma realização fictícia no preview local http://localhost:8777/52XFA9 e abriu o iframe. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-host-preview-start.png.",
-    "Inspeção de metadados da realização preview guardada no servidor, sem expor credenciais: preview=true, completed=true, 30 eventos; activity_loaded, unit_started(u1–u4), tentativas u2 falhada e conseguida, simulation_view=top, plano u3, work_mode=paper e três relatos u4. Os resultados previstos apareceram na UI. Screenshots: /home/proteu/agent-browser-hub/screenshots/tinkercad-host-failed.png, /home/proteu/agent-browser-hub/screenshots/tinkercad-host-passed.png e /home/proteu/agent-browser-hub/screenshots/tinkercad-host-top-view.png.",
-    "A autoavaliação do host guardou c1=help, c2=alone, c3=practising, estratégia e próximo passo originais; o ecrã final apresentou «GUARDADO» e o próximo passo. Screenshots: /home/proteu/agent-browser-hub/screenshots/tinkercad-host-reflection.png e /home/proteu/agent-browser-hub/screenshots/tinkercad-host-finished.png.",
-    "No dashboard do professor, a pesquisa pelo nome fictício devolveu «0 realizações · 0 terminadas» e «Os ensaios de rascunhos ficam fora dos relatórios»; assim, a exclusão do preview foi confirmada na interface. Screenshot: /home/proteu/agent-browser-hub/screenshots/tinkercad-host-report-exclusion.png.",
-    "A primeira visita integrada emitiu unit_started(u1) uma vez; a vista superior foi ativada com Tab/Enter e registada. Os eventos observados, a voz da criança e a autoavaliação permaneceram em campos distintos da realização preview.",
-    "Após a sessão integrada, 4c95bde corrigiu a cópia final do host: showDone seleciona teacherSeesPreview quando attempt.preview=true; PT diz que o ensaio foi guardado mas não entra nos relatórios dos alunos. Inspeção estática do diff; a screenshot de conclusão anterior documenta a cópia antiga.",
-    "Teste responsive no Agent Browser Hub com harness temporário de iframes internos de 390 px e 768 px, removido depois: abertura, navegação e simulação/controles legíveis, sem corte horizontal interno observável. Screenshots: /home/proteu/agent-browser-hub/screenshots/tinkercad-viewport-390-start.png, /home/proteu/agent-browser-hub/screenshots/tinkercad-viewport-390-sim-controls.png, /home/proteu/agent-browser-hub/screenshots/tinkercad-viewport-390-reflect.png, /home/proteu/agent-browser-hub/screenshots/tinkercad-viewport-768-start.png e /home/proteu/agent-browser-hub/screenshots/tinkercad-viewport-768-sim-controls.png."
+    "Evaluator, T3 tab_g, https://estudio.infantinho.xyz/52XFA9: iniciou Ensaio revisão Tinkercad 2026-10-01 na UI. GET /api/learning/me confirmou preview=true, estado inicial incompleto e unit_started(u1) uma vez; botão host de reflexão desativado.",
+    "Evaluator: por teclado real no iframe sandbox, respondeu às escolhas u1, confirmou modelo sem tabuleiro, escolheu De cima na pergunta das alturas e avançou para u3. GET me confirmou 2 attempt, configuração falhada confirmada, resposta top e etapa 2; a pista visual lateral preservou a escolha da criança.",
+    "Evaluator: escolheu papel/blocos, confirmou Já fizemos, digitou relato e saiu do campo. Servidor guardou external_confirmation e external_report com origin=student_declaration. readyForReflection passou true e o host habilitou reflexão.",
+    "Evaluator: selecionou Com pistas pelo seletor host com letra c e Tab; checkpoint preservou configuração, confirmação, resposta e relato. Reload real restaurou etapa 2 e todas as respostas; attempt continuou 2 e unit_started continuou 3, sem tentativas duplicadas.",
+    "Evaluator: no primeiro ensaio, maior payload activity_state observado tinha 440 bytes. GET me e ecrã final confirmaram conclusão preview com c1/c2/c3=skip e strategy/next_step vazios. O dashboard filtrado pelo nome devolveu 0 realizações · 0 terminadas.",
+    "Evaluator: detetou ausência do nome no ecrã de reflexão do host. Correções e53daa5 e 4f5fd65 adicionaram nome e versão do asset. Segundo ensaio fictício completo reabriu reflexão com nome visível no browser, depois terminou também com skip. GET me confirmou preview=true/completed=true; relatórios permaneceram 2 e sem ambos os ensaios.",
+    "Orquestrador, T3 tab_f, conteúdo privado servido autonomamente: executou percursos novos Com pistas e Mais desafios e percurso Passo a passo, com respostas ausentes, erro, pista, avanço, correção, mudança de apoio e recuperação. Interações por foco seguido de teclado; sem preencher o estado diretamente.",
+    "Orquestrador: confirmou no browser bloqueio de salto futuro após alterar altura direita para 3; pergunta top e relato paper conservaram-se. Reload devolveu etapa 1, altura 3, trials=1, relato e autoavaliação local c1=with-help. LocalReflection abriu sem escolhas iniciais e os extras de Mais desafios não bloquearam.",
+    "Orquestrador: confirmou pista visual de alturas no resultado quando a vista atual era top; depois corrigiu para apoios nas margens, altura 2 e tabuleiro presente, obtendo crossed. Corrigiu resposta top para side e mudou a exploração para top sem invalidar confirmação.",
+    "Orquestrador: preview_resize e DOM nos 3 apoios × 3 larguras confirmaram corpo20, fonte carregada, scrollWidth==innerWidth e botões>=52px. Inspeção visual direta de Com pistas390, Mais desafios768 e Passo a passo390/1280; restantes por snapshot e DOM. Evaluator inspecionou também Com pistas390, Passo a passo390 e reflexão com nome.",
+    "Proofreader: relatório revisão 2 pass=true, commit5ea97a8, sem correções textuais pendentes; critérios e duração5+10+22+8 preservados.",
+    "Orquestrador: register atualizou requires_completion=true, published=false com o mesmo código52XFA9. Verificações anónimas posteriores a register devolveram404 em metadados e conteúdo. Sintaxe Node e incorporação real da fonte verificadas após a última reparação.",
+    "Diagnósticos T3: sem erros JavaScript críticos nos percursos. Tab_g registou um401 esperado em GET me depois de limpar a realização anterior e um leave abortado durante a troca; nova entrada, restauro, gravação e conclusão funcionaram. Falhas dos locators iframe e coordenadas fora do viewport foram limitações de automação, registadas na actionTimeline, e superadas com teclado. Não foram contadas como erros da atividade."
   ],
-  "blocked_by": [],
-  "critical": [],
-  "suggestions": [],
-  "preview_reporting": "Confirmado no host e no dashboard: a realização fictícia do rascunho foi guardada com preview=true e não entrou nos relatórios dos alunos.",
+  "browser": {
+    "tool": "T3 Code preview_*",
+    "private_origin": "https://estudio.infantinho.xyz",
+    "standalone_path": "/api/learning/activities/52XFA9/content",
+    "integration_path": "/52XFA9",
+    "physical_devices": false,
+    "viewports_css_px": [
+      390,
+      768,
+      1280
+    ]
+  },
+  "screenshots": [
+    {
+      "label": "Modelo sem tabuleiro confirmado, foco no teste",
+      "path": "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-mupl1i7z-c7edbfb0.png"
+    },
+    {
+      "label": "Resposta De cima e pista lateral",
+      "path": "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-mupl2by0-89093b4f.png"
+    },
+    {
+      "label": "Relato em papel/blocos e reflexão habilitada",
+      "path": "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-mupl3ttw-c72543ef.png"
+    },
+    {
+      "label": "Com pistas a390px",
+      "path": "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-muplard2-3a79be76.png"
+    },
+    {
+      "label": "Com pistas a768px",
+      "path": "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-muplasp2-31f59531.png"
+    },
+    {
+      "label": "Com pistas a1280px",
+      "path": "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-muplatsw-4605820c.png"
+    },
+    {
+      "label": "Mais desafios a390px",
+      "path": "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-muplb3ck-2c04e2f2.png"
+    },
+    {
+      "label": "Mais desafios a768px",
+      "path": "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-muplb55g-d373bf80.png"
+    },
+    {
+      "label": "Mais desafios a1280px",
+      "path": "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-muplb6rb-785955a2.png"
+    },
+    {
+      "label": "Travessia corrigida e controlos a390px",
+      "path": "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-muplczm4-2363132a.png"
+    },
+    {
+      "label": "Travessia corrigida e controlos a768px",
+      "path": "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-mupld0ob-0cfe0d01.png"
+    },
+    {
+      "label": "Travessia corrigida e controlos a1280px",
+      "path": "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-mupld1jw-29dd57a6.png"
+    },
+    {
+      "label": "Pista de alturas em resultado da vista superior",
+      "path": "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-mupl8166-d8836ce9.png"
+    },
+    {
+      "label": "Reflexão do host com nome visível após correção",
+      "path": "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-mupldq05-d5647137.png"
+    },
+    {
+      "label": "Conclusão guardada como preview fora dos relatórios",
+      "path": "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-mupleilk-97be0ead.png"
+    },
+    {
+      "label": "Dashboard sem registos do segundo ensaio",
+      "path": "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-estudio-infantinho-xyz-muplf6sh-37f17e0d.png"
+    }
+  ],
+  "resolved_issues": [
+    {
+      "issue": "Estado inicial apagava recuperação autónoma ou sobrepunha checkpoint integrado anterior.",
+      "resolution": "Leitura de sessionStorage antes de persistir e ignorar checkpoints restorationPending; reload real autónomo e integrado aprovado."
+    },
+    {
+      "issue": "Resultado de alturas diferentes precisava de pista lateral quando a vista atual era superior.",
+      "resolution": "Mini SVG com alturas atuais antes do texto, commit6de02e0, ensaiado no browser."
+    },
+    {
+      "issue": "Nome ausente na reflexão individual do host e asset antigo em cache.",
+      "resolution": "Nome por textContent e versão no src do script, e53daa5/4f5fd65; retestado numa segunda realização preview."
+    }
+  ],
+  "preview_reporting": "Duas realizações fictícias preview concluídas e excluídas da API e dashboard; nenhum aluno real e nenhuma publicação.",
   "limitations": [
-    "O ecrã final após 4c95bde foi verificado no código, mas não reaberto no browser: a sessão temporary da realização concluída já tinha sido fechada e o respetivo cookie apagado. Não se criou uma segunda realização.",
-    "A atividade não observa o Tinkercad externo. O acesso da turma e a construção real não foram testados nesta avaliação.",
-    "O teste de 390/768 px usou iframes de largura fixa no Browser Hub; não reproduziu barras do browser, teclado virtual nem gestos físicos de um dispositivo móvel."
+    "O acesso gerido da turma e o trabalho dentro do Tinkercad não foram ensaiados. A página só guarda declaração da criança sobre a aplicação externa.",
+    "Os viewports são tamanhos CSS do browser de desktop. Não foram usados dispositivos físicos, gestos de toque ou teclado virtual.",
+    "Sem controlo de rede offline no T3 disponível: funcionamento autocontido verificado por análise estática e fonte carregada; não houve ensaio com rede desligada.",
+    "Sessões de aula, participantes de grupo, reflexão individual à vez e demonstração do Quadro não foram executados; o percurso avaliado foi o endereço permanente individual. A atividade deixa autoria e participantes ao host.",
+    "O teste integrado percorreu Passo a passo e mudança para Com pistas; os percursos completos por cada apoio foram ensaiados autonomamente pelo orquestrador."
   ]
 }
