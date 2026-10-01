@@ -23,3 +23,11 @@ python3 scripts/embed_gothic_font.py
 `server/typography.py` packages the actual WOFF2 and license for every pipeline build and repair before AI review and publication. It also supplies the CSS block used by the script, so providers do not need filesystem access to font assets. Model content is validated before packaging to keep the minimum-content check independent of the font payload.
 
 The script updates marked CSS blocks in the Studio stylesheet and the standalone Fractions draft. It includes the complete font license in each artifact. Re-running it with unchanged assets produces identical files.
+
+For a lesson generated outside the Studio pipeline, package it before proofreading and evaluation:
+
+```sh
+python3 scripts/embed_gothic_font.py --activity drafts/<slug>.html
+```
+
+This uses the same font and family preference as the pipeline. Repeated packaging replaces the owned style block.

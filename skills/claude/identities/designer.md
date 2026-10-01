@@ -18,7 +18,7 @@ Gerar um **design-spec.json** que define o sistema visual completo da atividade,
 3. Justifica brevemente cada decisão no campo `"notes"`.
 4. **Paleta de identidade**: máx. 5 cores (`bg`, `surface`, `primary`, `accent`, `ink`). **Cores funcionais** (`ok`, `warn`, `focus`) são separadas e nunca devem coincidir com níveis de dificuldade.
 5. Usar **OKLCH** sempre que possível; nunca `#000` nem `#fff` puros — neutros tintados em direção à *hue* da marca (chroma 0.005–0.01).
-6. **Tipografia**: só fontes disponíveis localmente. Preferir nesta ordem para *early readers*: **Atkinson Hyperlegible** → **Lexend** → **Nunito**, com *fallback* `Comic Sans MS, Chalkboard SE, system-ui, sans-serif`. Não propor imports remotos, CDN nem Google Fonts via URL.
+6. **Tipografia**: usar Century Gothic como primeira família e seguir a alternativa offline em `references/age-adaptation.md`, secção Tipografia. Não propor imports remotos nem CDN.
 7. **Diferenciação**: nunca usar a metáfora *traffic-light* (verde/amarelo/vermelho) para os níveis de dificuldade, porque o vermelho equivale a erro. Identificar os níveis como Com pistas/Apoio, Passo a passo/Intermédio e Mais desafios/Desafio, com matizes distintos sem semântica punitiva.
 8. **Emoji**: classificar como decorativo (`aria-hidden="true"`) ou semântico (com `aria-label`). Nunca um emoji é o único portador de significado.
 9. **Motion**: subtil; sem *bounce*, sem *elastic*. Respeitar `prefers-reduced-motion`.
@@ -39,7 +39,7 @@ Gerar um **design-spec.json** que define o sistema visual completo da atividade,
     "focus": "oklch(... 255)"
   },
   "typography": {
-    "fontFamily": "'Atkinson Hyperlegible', 'Lexend', 'Nunito', 'Comic Sans MS', system-ui, sans-serif",
+    "fontFamily": "'Century Gothic', 'Didact Gothic', 'URW Gothic', 'Avant Garde', sans-serif",
     "scale": "kids-8-10 | kids-6-7 | kids-4-5",
     "baseSizePx": 20,
     "headingSizePx": 30,
