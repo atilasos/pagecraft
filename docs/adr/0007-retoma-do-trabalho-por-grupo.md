@@ -18,4 +18,4 @@ Criar uma realização independente que agregasse várias sessões exigiria tran
 
 ## Limites
 
-O código dá acesso ao trabalho do grupo correspondente, apenas durante a aula ativada pelo professor. Escrever o mesmo nome continua sem conceder acesso a históricos. Uma página antiga que não implemente `learning_restore` conserva as evidências no servidor, mas não recupera automaticamente manipulações do seu HTML. O Canva mantém o seu próprio design e acesso; estes códigos recuperam os registos PageCraft.
+O código dá acesso ao trabalho do grupo correspondente, apenas durante a aula ativada pelo professor. Escrever o mesmo nome continua sem conceder acesso a históricos: os nomes usados individualmente ficam reservados na retoma e só o professor pode libertá-los para autorizar outra entrada. Uma página antiga que não implemente `learning_restore` conserva as evidências no servidor, mas não recupera automaticamente manipulações do seu HTML. O Canva mantém o seu próprio design e acesso; estes códigos recuperam os registos PageCraft.

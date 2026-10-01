@@ -267,10 +267,11 @@ class ClassroomService:
             if last_event != "identity_released":
                 continue
             entry = session.get("roster", {}).get(student_id)
-            if entry and (entry.get("token") is not None or entry.get("claimed_at") is not None):
+            if entry and (entry.get("token") is not None or entry.get("claimed_at") is not None or entry.get("resume_reserved")):
                 entry["token"] = None
                 entry["claimed_at"] = None
                 entry["credential_expires_at"] = None
+                entry["resume_reserved"] = False
                 changed = True
 
         if session["status"] == "live" and self._session_has_expired(session):
@@ -370,7 +371,7 @@ class ClassroomService:
                     {
                         "student_id": student_id,
                         "display_name": entry["display_name"],
-                        "taken": bool(entry.get("token") or entry.get("work_group_id")),
+                        "taken": self._identity_taken(entry),
                     }
                     for student_id, entry in session["roster"].items()
                 ],
@@ -382,7 +383,7 @@ class ClassroomService:
                 student_id: {
                     key: value for key, value in entry.items() if key != "token"
                 }
-                | {"taken": bool(entry.get("token") or entry.get("work_group_id"))}
+                | {"taken": self._identity_taken(entry)}
                 for student_id, entry in session["roster"].items()
             }
             if session.get("work_groups"):
@@ -477,6 +478,8 @@ class ClassroomService:
                 return session
             session.update(status="live", closed_at=None, active_since=self.now(), join_code=_join_code())
             for entry in session["roster"].values():
+                # A public name claim must not inherit an earlier child's private work.
+                entry["resume_reserved"] = bool(entry.get("token") or entry.get("resume_reserved"))
                 entry.update(token=None, claimed_at=None, credential_expires_at=None)
             for group in session.get("work_groups", {}).values():
                 group.update(token=None, access_code=None)
@@ -527,6 +530,10 @@ class ClassroomService:
     # ---- identidade do aluno ----
 
     @staticmethod
+    def _identity_taken(entry: dict) -> bool:
+        return bool(entry.get("token") or entry.get("work_group_id") or entry.get("resume_reserved"))
+
+    @staticmethod
     def project_work_group(group: dict) -> dict:
         return {key: group[key] for key in ("id", "device_id", "composition_version", "participant_ids", "members", "display_name", "mode", "level")}
 
@@ -540,7 +547,7 @@ class ClassroomService:
                 raise InvalidSessionEventError("Seleciona dois participantes para um par ou três ou mais para um grupo.")
             if any(sid not in session["roster"] for sid in participant_ids):
                 raise StudentNotInRosterError("esse aluno não pertence à sessão")
-            if any(session["roster"][sid].get("token") or session["roster"][sid].get("work_group_id") for sid in participant_ids):
+            if any(self._identity_taken(session["roster"][sid]) for sid in participant_ids):
                 return None
             group_id = uuid.uuid4().hex[:12]
             members = [{"student_id": sid, "display_name": session["roster"][sid]["display_name"]} for sid in participant_ids]
@@ -575,7 +582,7 @@ class ClassroomService:
                 raise StudentNotInRosterError("Essa criança não pertence à sessão.")
             for sid in participant_ids:
                 entry = session["roster"][sid]
-                if entry.get("token") or entry.get("work_group_id") not in (None, group_id):
+                if entry.get("token") or entry.get("resume_reserved") or entry.get("work_group_id") not in (None, group_id):
                     raise ClassroomError("Um dos nomes está noutro dispositivo. Revê os participantes.")
             if participant_ids == old["participant_ids"] and mode == old["mode"]:
                 return old
@@ -658,7 +665,7 @@ class ClassroomService:
         async with self._session_locks[session_id]:
             session = await self._require_writable_unlocked(session_id, student_id)
             entry = session["roster"][student_id]
-            if entry.get("token") or entry.get("work_group_id"):
+            if self._identity_taken(entry):
                 return None
             token = uuid.uuid4().hex
             claimed_at = self.now()
@@ -715,6 +722,7 @@ class ClassroomService:
             entry["token"] = None
             entry["claimed_at"] = None
             entry["credential_expires_at"] = None
+            entry["resume_reserved"] = False
             await self.storage.write_json(self._session_path(session_id), session)
         return True
 

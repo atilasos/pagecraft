@@ -140,3 +140,32 @@ async def test_projected_codes_follow_group_changes_and_release(continuation):
         records = await app.state.classroom.events_log(session['id']).replay()
         assert records[-1]['payload']['groups'] == []
         assert (await student.post('/api/groups/enter', json={'code':code})).status_code == 404
+
+
+async def test_resume_reserves_individual_names_until_teacher_authorizes_reentry(continuation):
+    app, transport, teacher, session, clock = continuation
+    path = '/api/sessions/' + session['id']
+    ids = list(session['roster'])
+    async with httpx.AsyncClient(transport=transport, base_url='http://test') as original:
+        assert (await original.post(path + '/claim', json={'student_id': ids[0]})).status_code == 200
+        assert (await original.post(path + '/events', json={'events': [
+            {'event_id': 'private-answer', 'type': 'attempt', 'payload': {'text': 'Só da Ana'}}
+        ]})).status_code == 200
+        await teacher.post(path + '/close')
+        clock['now'] = datetime(2026, 10, 8, 10, tzinfo=timezone.utc)
+        resumed = (await teacher.post(path + '/resume')).json()
+        assert resumed['roster'][ids[0]]['taken']
+        assert (await original.get(path + '/me')).status_code == 401
+        async with httpx.AsyncClient(transport=transport, base_url='http://test') as stranger:
+            roster = (await stranger.get('/api/join/' + resumed['join_code'])).json()['roster']
+            assert next(child for child in roster if child['student_id'] == ids[0])['taken']
+            assert (await stranger.post(path + '/claim', json={'student_id': ids[0]})).status_code == 409
+            assert (await stranger.get(path + f'/students/{ids[0]}/history')).status_code == 401
+            assert (await stranger.post(path + '/groups/claim', json={
+                'participant_ids': ids[:2], 'mode': 'pair'
+            })).status_code == 409
+            # Only the teacher can authorize another device for an individual child.
+            assert (await teacher.post(path + '/release/' + ids[0], json={})).status_code == 200
+            assert (await stranger.post(path + '/claim', json={'student_id': ids[0]})).status_code == 200
+        assert any(event.get('event_id') == 'private-answer' for event in
+                   (await teacher.get(path + f'/students/{ids[0]}/history')).json()['events'])
