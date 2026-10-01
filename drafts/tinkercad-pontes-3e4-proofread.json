@@ -1,15 +1,46 @@
 {
+  "revision": 2,
+  "date": "2026-10-01",
+  "reviewed_commit": "819e836",
   "pass": true,
   "severity": "low",
   "issues": [],
-  "summary": "O novo painel Broto tem instruções, botões e estados em português europeu claro e adequado à idade. O botão «Afastado da margem» está agora explícito para leitores de ecrã e coerente com o seletor completo. A revisão textual está aprovada.",
+  "summary": "O HTML revisto usa português europeu AO90 claro para os 3.º e 4.º anos, incluindo instruções, pistas, estados e rótulos acessíveis. Distingue pedidos por responder de respostas erradas, a simulação do relato sobre o Tinkercad e a reflexão facultativa da exploração obrigatória. As três correções textuais encaminhadas ao Builder foram incorporadas; a revisão linguística está aprovada.",
   "acceptance_checks": [
     "Ortografia e gramática pt-PT AO90: OK",
-    "Registo consistente: OK",
-    "Adequação à faixa etária: OK",
-    "Instruções claras e seguíveis: OK",
-    "Alinhamento com objetivos e evidência: OK",
-    "Quatro problemas do relatório anterior corrigidos: OK",
-    "Texto novo do painel Broto: OK"
-  ]
+    "Tratamento por tu e plural apenas nas ações do par: OK",
+    "Vocabulário concreto e frases adequadas aos 8–10 anos: OK",
+    "Com pistas / Passo a passo / Mais desafios: OK",
+    "Perguntas, instruções e mensagens de falta de resposta distinguem resposta de acerto: OK",
+    "Confirmação «Testar esta ponte» e pedido de novo teste após alteração: OK",
+    "Feedback sobre tabuleiro ausente, posição, alturas e vista convida a rever: OK",
+    "«Já fizemos» e resposta curta admitem trabalho parcial: OK",
+    "Declaração da criança e observação externa diferenciadas: OK",
+    "Alternativa em papel ou blocos e nova declaração após mudar modo: OK",
+    "Critérios preservados antes do trabalho e na reflexão facultativa: OK",
+    "Modo autónomo descreve gravação nesta aba sem prometer envio ao professor: OK",
+    "Texto estático, SVG, ARIA, pistas por apoio e mensagens JavaScript: OK",
+    "Coerência textual com DocSpec, design e duração 5 + 10 + 22 + 8 = 45 minutos: OK"
+  ],
+  "resolved_issues": [
+    {
+      "location": "u2 [data-position=\"away\"]",
+      "original": "Afastado",
+      "revision": "Afastado da margem",
+      "reason": "O lugar fica explícito também para quem não vê o desenho."
+    },
+    {
+      "location": "footer",
+      "original": "O Tinkercad e a gravação no professor precisam de ligação.",
+      "revision": "O Tinkercad e o envio de registos ao professor precisam de ligação.",
+      "reason": "Expressão natural em português europeu e descrição clara da ligação necessária."
+    },
+    {
+      "location": "u3 .challenge-only",
+      "original": "Podes acrescentar uma guarda ou entrada.",
+      "revision": "Podes acrescentar uma proteção nas bordas ou uma entrada.",
+      "reason": "Explica a peça da ponte em vocabulário acessível sem jargão."
+    }
+  ],
+  "scope": "Revisão textual estática do HTML final e alinhamento com os artefactos pedagógicos. Layout, interação, sincronização e recuperação reais pertencem ao relatório do Evaluator; não são declarados como ensaiados aqui."
 }
