@@ -22,18 +22,28 @@
     "focus": "#214F98"
   },
   "typography": {
-    "fontFamily": "'Atkinson Hyperlegible', 'Lexend', 'Nunito', 'Comic Sans MS', 'Chalkboard SE', system-ui, sans-serif",
+    "fontFamily": "'Century Gothic', 'Didact Gothic', 'URW Gothic', 'Avant Garde', sans-serif",
     "scale": "kids-8-10",
     "baseSizePx": 20,
-    "headingSizePx": 32,
+    "headingSizePx": 30,
     "heroSizePx": 40,
     "minimumUiSizePx": 20,
     "maxLineCh": 55,
-    "weights": [400, 700, 800],
+    "weights": [
+      400,
+      700
+    ],
     "lineHeight": 1.5,
     "italicAllowed": false,
     "allCapsAllowed": false,
-    "notes": "Usar só fontes disponíveis no dispositivo, sem importações. Frases de instrução curtas e títulos de uma ou duas linhas; nunca reduzir o corpo para encaixar mais conteúdo."
+    "notes": "Texto, títulos e controlos usam a mesma família. Corpo e instruções ≥20px; 16px só em rodapé não essencial. Frases típicas ≤14 palavras e linhas ≤55ch. A família disponível não dispensa a fonte real incorporada.",
+    "minimumUnitHeadingPx": 28,
+    "microcopySizePx": 16,
+    "fontEmbedding": {
+      "command": "python3 scripts/embed_gothic_font.py --activity drafts/tinkercad-pontes-3e4.html",
+      "timing": "Após construção e cada reparação; antes de Proofreader e Evaluator.",
+      "asset": "Didact Gothic WOFF2 real e licença OFL incorporados pelo script; sem imports, CDN ou fonte simulada."
+    }
   },
   "layout": {
     "radius": 16,
@@ -41,32 +51,152 @@
     "spacing": "comfortable",
     "maxWidth": 1080,
     "maxWidthPx": 1080,
-    "padding": "clamp(1rem, 3vw, 2rem)",
-    "spacingScalePx": [8, 12, 16, 24, 32, 48],
-    "structure": "Cabeçalho curto com título, 3.º e 4.º anos, duração indicativa e escolha de apoio. Quatro etapas em sequência: Imaginar 5 min, Experimentar 10 min, Construir 22 min, Rever 8 min. Uma etapa principal por vez, critérios visíveis antes da primeira exploração e acessíveis em todas as etapas. Botões Anterior e Seguinte sem cronómetro obrigatório.",
-    "responsive": "A 900px ou mais, palco de simulação à esquerda e controlos à direita; cada área mantém largura confortável. A 768px, palco sobre controlos e cartões em duas colunas só quando ambos conservarem texto legível. A 390px, uma coluna em ordem de leitura: seletor de vistas, palco, controlos, feedback e navegação; elementos usam min-width:0, sem rolagem horizontal nem barra fixa que esconda ações. Palco mantém uma largura fluida, expande verticalmente para rótulos e nunca encolhe os controlos abaixo de 48px."
+    "padding": "16px a 390px; 24px a 768px; 32px a 1280px",
+    "spacingScalePx": [
+      8,
+      12,
+      16,
+      24,
+      32,
+      48
+    ],
+    "structure": "Título curto, apoio e quatro etapas: Imaginar 5 min; Experimentar 10 min; Construir 22 min; Partilhar e refletir 8 min. Uma etapa visível, uma ação principal por momento. Critérios completos antes da exploração e num painel reabrível depois. Sem cronómetro nem barras fixas.",
+    "responsive": {
+      "390px": "Conteúdo útil 358px (16px por lado), uma coluna. Apoio em select de largura inteira. Etapas em grelha 2×2 com rótulos, sem scroll horizontal. Duas escolhas de destinatário em coluna; três formas em coluna se rótulo não couber. Palco com viewBox fluido, rótulos essenciais no desenho e legenda HTML ≥20px. Vista → palco → peça ativa → ajustes → teste → feedback → pergunta das vistas → navegação. Ajustes em grelha de até três botões de ≥48px com quebra de texto. Respostas da vista e mini guias externos em coluna. Navegação em duas colunas; mensagem de pedido em falta em linha inteira.",
+      "768px": "Conteúdo útil 720px (24px por lado), palco acima dos controlos. Destinatários e respostas de vista em duas colunas; peças da previsão em três. Etapas 2×2 ou quatro colunas só se todos os rótulos cabem a 20px. Os ajustes da peça ativa têm uma linha para posição e outra para altura. Mini guias em dois painéis por linha no máximo. Campo do relato e feedback ocupam largura inteira.",
+      "1280px": "Área de conteúdo máxima 1080px, centrada. Quatro etapas em linha. Na simulação, palco e feedback visual à esquerda (mínimo 520px), seleção/ajustes à direita (mínimo 320px), intervalo 24px; pergunta das vistas abaixo. Três mini guias lado a lado na construção. Critérios em lista curta, não em cartões repetidos.",
+      "overflow": "min-width:0 nas células; texto e botões podem quebrar linha; SVG mantém proporções. Rótulos pequenos dentro do palco têm equivalente HTML a 20px. Não escalar a página inteira nem reduzir letra para encaixar. Permitir scroll vertical normal sem esconder foco."
+    }
   },
   "components": {
-    "identity": "Aspeto de caderno de projeto: papel creme, tinta azul ardósia e apontamentos terracota. Um desenho SVG inline, simples, de margens, rio e tabuleiro junto ao título; texto adjacente transmite a ideia, SVG decorativo aria-hidden=true. Sem logótipos ou imitação do editor Tinkercad.",
+    "identity": "Papel creme, tinta azul ardósia e acento quente apenas para orientação. Cabeçalho com símbolo pequeno de duas margens, sem ponte resolvida. Desenhos têm função nas escolhas, controlos, falhas e mini guias; sem imitar a UI ou logótipo do Tinkercad.",
     "buttons": "Altura e largura mínimas de 48px, texto de 20px, cantos de 12px e estado selecionado por contorno forte, fundo e rótulo textual. Botão principal em primary com texto surface; secundário em surface com texto primary e contorno. Hover discreto sem escala nem movimento.",
     "cards": "Superfície clara, contorno de 1–2px, raio 16px, espaço interior mínimo 20px. Sem faixas laterais, gradientes decorativos, sombras pesadas ou cartões repetidos sem função.",
-    "navigation": "Navegação por quatro botões com número, verbo e tempo indicativo; usar nav e aria-current=step, não simular tablist. Ao avançar, colocar foco no título da etapa. Permitir regressar sem apagar configuração, texto ou apoio escolhido. O tempo não bloqueia ações.",
-    "supportSelector": "Select ou radio group com as opções por extenso: Broto — Apoio, Árvore jovem — Intermédio, Árvore robusta — Desafio. Três desenhos botânicos de mesmo tamanho, mesma tinta e peso visual; não usar verde, amarelo e vermelho nem as cores funcionais para codificar níveis. A mudança é reversível e preserva respostas e configuração.",
-    "criteria": "Mostrar os três critérios do DocSpec juntos antes da exploração, com título 'O que vamos procurar'. Repetir os mesmos enunciados na reflexão. Uma lista numerada legível, sem marcas de aprovação antecipada, pontos ou classificação.",
-    "recipientAndPrediction": "Dois cartões de destinatário com desenho inline e radio nativo; o nome é sempre texto. Previsão opcional por seleção de peças e campo livre. Deixar espaço para rever a previsão no fim. As imagens apoiam a escolha, sem esconder opções a quem usa teclado.",
-    "bridgeSimulation": {
-      "views": "Um modelo e duas vistas alternáveis por botões 'De lado' e 'De cima', com aria-pressed ou radio group. A configuração mantém-se na troca. O palco identifica sempre margem esquerda, rio, margem direita, apoio esquerdo, apoio direito e tabuleiro por texto ou legenda fora do desenho. Um indicador textual mostra quais vistas já foram consultadas, sem assinalar consulta externa.",
-      "sideView": "SVG inline plano: bases das margens, apoios em alturas de 1–3 blocos e tabuleiro quando colocado. Mostrar claramente alturas diferentes e o ponto onde a personagem pára no teste. Não sugerir realismo estrutural ou segurança de uma ponte verdadeira.",
-      "topView": "SVG inline do mesmo estado visto de cima: duas margens, intervalo e posição longitudinal das peças. Manter nomes e cores consistentes com a vista lateral. Não usar a cor como único sinal de contacto; mostrar contornos e rótulos.",
-      "controls": "Para cada apoio, grupo com rótulo persistente, posições Margem/Rio/Afastado e altura 1/2/3 blocos; controlos nativos por botões ou radios, teclado e toque. Toggle textual Colocar/Retirar tabuleiro. Evitar depender de arrastar; se houver arrasto, oferecer os mesmos ajustes por clique e teclado. Broto pode mostrar uma peça de cada vez e alturas sugeridas sem retirar acesso às restantes.",
-      "trial": "Botão 'Testar travessia' e painel role=status. Mostrar onde a personagem parou ou que atravessou segundo as regras do modelo, seguido de pergunta para a próxima tentativa. Manter a configuração e permitir alterar uma variável ou voltar à configuração anterior. Uma tentativa com sucesso na simulação é descrita como sucesso neste modelo, nunca como prova de construção ou segurança real.",
-      "visualState": "Cores do terreno, água e peças são discretas e estáveis entre vistas; resultado inclui texto e símbolo. Sucesso usa ok apenas como cor funcional e resultado concreto; revisão usa warn e convite específico, sem vermelho, 'errado' ou som automático."
+    "navigation": {
+      "labels": [
+        "1 · Imaginar",
+        "2 · Experimentar",
+        "3 · Construir",
+        "4 · Partilhar e refletir"
+      ],
+      "semantics": "nav com aria-current=step; botões reais. Título da página atual com foco programável. Sem tablist para páginas.",
+      "initial": "Só Imaginar disponível. Etapas futuras mostram número e rótulo com símbolo de espera e aria-disabled=true; não expor outro atalho que salte a sequência.",
+      "completion": "Só respostas determinam Página respondida. Seguinte e qualquer salto futuro exigem todos os pedidos das páginas anteriores e da atual. Acerto, sucesso do modelo, número de tentativas e pistas usadas não participam.",
+      "blocked": "Mensagem visível, ≥20px, imediatamente junto a Seguinte e referenciada por aria-describedby. Mostrar o primeiro pedido em falta com o nome concreto; atualizar a mensagem quando responde. Não depender de hover ou tooltip. Botão bloqueado usa aria-disabled=true e impede ação, mantendo foco para anunciar o motivo.",
+      "answered": "Mostrar Respostas dadas com símbolo textual discreto. Resultado falhado continua respondido e Seguinte fica disponível. Não apresentar selo de sucesso junto à etapa por estar respondida.",
+      "revisit": "Anterior e páginas anteriores permanecem acessíveis. Corrigir conserva trabalho posterior. Ao manipular uma configuração confirmada, u2 fica por confirmar e as etapas futuras exigem novo teste; respostas posteriores conservam-se. Ao regressar a uma etapa, foco no título; nenhum salto automático por escolher ou testar.",
+      "focus": "Trocar etapa só por ação de navegação; foco no título da nova etapa. Se a criança tentar avançar bloqueada, anunciar o pedido em falta e manter foco no controlo. Feedback não rouba foco."
     },
-    "externalTask": "Bloco de plano com três peças nomeadas e lista curta: cria, move, muda a vista, compara. Link textual para Tinkercad em nova aba, acompanhado de 'Precisas de internet e do acesso preparado pelo professor'. Campo de modo Tinkercad/Papel e blocos. Texto fixo 'Esta página não vê o teu desenho no Tinkercad'; não usar marcas visuais de concluído por abrir o link ou preencher campos.",
-    "peerReview": "Campos opcionais distintos para o que a criança viu, a sugestão do colega e a alteração descrita. Os rótulos identificam respostas da criança. Botão de partilha voluntária independente da gravação. Apresentar o professor como quem pode confirmar a construção externa.",
-    "reflection": "Três fieldsets, um por critério, cada qual com quatro opções sem pré-seleção: Consegui sozinho, Consegui com ajuda, Quero praticar, Prefiro não responder. Opções com mesma tinta e peso; disponibilidade de limpar escolha. Campos opcionais para estratégia e próximo passo. Broto oferece escolha visual e inícios de frase; Intermédio pede uma estratégia; Desafio pede uma justificação com exemplo. Nunca transformar apoio em nota.",
-    "recording": "Estado de gravação em texto junto à ação final: guardado localmente, a enviar, recebido pelo PageCraft ou falha recuperável. Só afirmar receção após confirmação do host. Distinguir visualmente acontecimentos da simulação, relato e autoavaliação da criança, sem sugerir que a página observou o Tinkercad.",
-    "feedback": "Frases curtas que descrevem o efeito: 'A personagem parou antes da outra margem. O que mudas agora?' ou 'Compara as alturas na vista de lado'. Cor, símbolo e texto em conjunto. Não revelar a solução antes da primeira tentativa."
+    "supportSelector": {
+      "labels": {
+        "support": "Com pistas",
+        "intermediate": "Passo a passo",
+        "challenge": "Mais desafios"
+      },
+      "default": "Passo a passo, salvo preferência fornecida pelo host.",
+      "presentation": "Select com label Apoio de largura confortável, ≥48px; sem árvores, metáfora vegetal, semáforo ou nota. Todas as opções com mesma tinta e importância.",
+      "effects": "Com pistas mostra setas/contornos e mini guia junto à peça ativa; Passo a passo organiza uma peça e dois grupos de ajustes de cada vez; Mais desafios acrescenta convite facultativo dobrável. Todos conservam as posições e alturas 1–3, os pedidos, respostas, confirmação, textos e etapa. Não emitir tentativa por mudar apoio."
+    },
+    "criteria": "Na primeira página, mostrar O que vamos procurar com os três enunciados completos c1–c3 do DocSpec e três pequenos desenhos: peças/margens, duas vistas, fala+revisão. São critérios, não uma solução desenhada. Não exigir marcar leitura. Nas outras etapas botão Ver critérios; repetir os mesmos textos na reflexão, sem classificação.",
+    "recipientAndPrediction": {
+      "recipient": "Pergunta Para quem é a ponte? seguida de dois cartões radio: Pessoas a pé / Uma pequena personagem. Ilustrações simples com texto adjacente, nenhum selecionado por defeito.",
+      "prediction": "Pergunta Que forma experimentarias primeiro? seguida de três radios com desenho retângulo/cilindro/esfera e rótulos Forma retangular / Cilindro / Esfera. Nenhuma seleção inicial; qualquer escolha responde. Não assinalar uma previsão como certa ou errada.",
+      "cue": "Pista curta junto às peças: Escolhe uma forma para experimentar. Com pistas acrescenta contorno e pequeno dedo/seta para o grupo, sem apontar uma resposta específica. Não mostrar ponte completa.",
+      "selection": "Contorno forte de 3px, indicador radio nativo, fundo discreto e palavra Escolhido. O destaque pertence ao cartão escolhido; uma opção focada tem anel distinto. Teclado e toque equivalentes.",
+      "optional": "Previsão escrita num details com rótulo facultativo; vazio não bloqueia.",
+      "missing": [
+        "Escolhe para quem é a ponte.",
+        "Escolhe uma forma para experimentar."
+      ]
+    },
+    "bridgeSimulation": {
+      "views": "Botões De lado / De cima, aria-pressed e desenho de orientação. Uma configuração partilhada, sem perder confirmação ao mudar vista. Abrir vista não responde à pergunta sobre alturas. Texto adjacente identifica ambas as margens e as peças; sem exigir ler rótulos minúsculos.",
+      "sideView": "SVG plano com apoios feitos de 1–3 blocos visíveis, bases das margens, rio e tabuleiro. Marcadores verticais junto de cada apoio, número de blocos no texto fora do SVG. Pista de falha localizada onde a personagem pára; seleção da peça por contorno também no palco. Não apresentar leis de engenharia ou segurança real.",
+      "topView": "Mesmo modelo de cima, com margens e intervalo; nomes e estilos iguais aos da vista lateral. Mostrar alcance/contacto por geometria e contorno além da cor. Sem alturas escondidas apresentadas como resposta: a pergunta da altura compara representações.",
+      "controls": {
+        "pieceSelection": "Primeiro escolher Apoio esquerdo / Apoio direito / Tabuleiro em botões radio com mini desenho; peça ativa tem contorno no botão e no palco. Mostrar ajustes só da peça ativa para limitar decisões sem retirar opções.",
+        "supportAdjustments": "Grupo Onde fica? com Margem / Rio / Afastado e grupo Altura com 1 bloco / 2 blocos / 3 blocos. Cada escolha ≥48px, com símbolo de margem/água/espaço ou blocos empilhados. Labels persistentes. Setas e marcadores perto do controlo e da peça ativa; sem entregar valores ideais antes do teste.",
+        "deckAdjustment": "Controlo explícito Colocar tabuleiro / Retirar tabuleiro, texto e mini desenho. Ausência é estado visível do modelo; só se torna resposta quando Testar esta ponte confirma intencionalmente.",
+        "input": "Radios/botões nativos, setas/Tab/Enter/Espaço; arrasto dispensável. Manter 1–3 em todos os apoios. Manipulação torna confirmação atual incompleta; vistas e apoio pedagógico não a invalidam."
+      },
+      "trial": {
+        "button": "Testar esta ponte, ≥48px, sempre disponível; confirma a configuração exata atual, mesmo sem tabuleiro e mesmo com travessia falhada.",
+        "initial": "Estado Por testar junto ao botão. Valores iniciais não são resposta; nunca marcar configuração confirmada ao abrir a página.",
+        "confirmed": "Estado Esta configuração foi testada com pequeno símbolo de confirmação neutro. Resultado é apresentado separadamente: a personagem parou ou atravessou neste modelo.",
+        "invalidated": "Após mudar posição, altura ou tabuleiro: Esta ponte mudou. Testa-a de novo. Retirar o resultado atual do palco ou identificá-lo como Teste anterior; nunca desenhar o sucesso anterior como estado da ponte nova. Tentativas anteriores conservam-se no histórico.",
+        "status": "Feedback role=status aria-live=polite. Mostrar primeiro marca visual no ponto relevante, depois uma frase curta. O teste falhado permite Seguinte quando a resposta da vista existe. Botão permanece focado após teste.",
+        "priority": "Quando coexistirem falhas, apresentar uma de cada vez: tabuleiro ausente → posição de apoio → alturas distintas. O próximo teste pode revelar outra. Não misturar um mural de avisos."
+      },
+      "visualState": "Estado de seleção, configuração confirmada e resultado usam símbolos e texto próprios. ok só nos resultados; warn só nas pistas recuperáveis, nunca em apoios pedagógicos. Não confundir responder com conseguir atravessar.",
+      "failureCues": {
+        "noDeck": {
+          "visual": "Tracejar apenas o vazio sobre o rio e pôr personagem parada na extremidade, com pequeno símbolo ↻ junto ao controlo do tabuleiro. Não preencher o vazio com a peça correta.",
+          "text": "A personagem parou junto ao vazio. Que peça queres experimentar?"
+        },
+        "supportPosition": {
+          "visual": "Contornar o apoio fora da margem e o ponto de interrupção; desenhar pequena marca junto ao grupo Onde fica? da peça pertinente. Não deslocar automaticamente nem apontar a opção correta.",
+          "text": "Repara onde ficou este apoio. Experimenta outra posição."
+        },
+        "unequalHeights": {
+          "visual": "Mostrar marcadores verticais junto aos dois apoios e a quebra de altura no contacto. Pequeno traço horizontal de comparação na vista lateral; preservar as alturas da criança.",
+          "text": "Compara as alturas na vista de lado."
+        },
+        "success": {
+          "visual": "Percurso contínuo com personagem na margem oposta e símbolo ✓, sem confetti, nota ou aprovação da criança.",
+          "text": "A personagem atravessou neste modelo. O que mudou?"
+        },
+        "wrongView": {
+          "visual": "Preservar radio De cima selecionado; ao lado, mini vista lateral com apoios do modelo atual e marcadores verticais evidenciados. Não substituir a resposta do aluno nem navegar automaticamente.",
+          "text": "Compara estas alturas na vista de lado."
+        }
+      },
+      "heightQuestion": {
+        "prompt": "Qual vista mostra melhor a altura dos apoios?",
+        "choices": "Dois cartões radio sem seleção inicial, com representações pequenas De lado / De cima. Seleção explícita responde; mudar vista de exploração não seleciona cartão.",
+        "feedback": "Ao escolher De cima, pista wrongView imediata. Ao escolher De lado, destacar marcadores verticais e dizer Nesta vista vemos a altura dos apoios. Uma resposta errada mantém Seguinte disponível após Testar esta ponte.",
+        "missing": [
+          "Testa esta ponte.",
+          "Escolhe uma vista na pergunta das alturas."
+        ]
+      }
+    },
+    "externalTask": {
+      "mode": "Radios Tinkercad / Papel e blocos com rótulo Onde vamos construir?; default Tinkercad do DocSpec, mas não marca trabalho como respondido. Alternativa completa visível quando escolhida, com critérios e pedidos iguais.",
+      "link": "Abrir Tinkercad em nova aba, avisando Precisas do acesso preparado pelo professor. Abrir ligação não confirma nem gera evidência de construção.",
+      "visualGuides": [
+        {
+          "action": "Cria três peças.",
+          "drawing": "Duas formas verticais separadas e um retângulo comprido ainda fora do conjunto. Texto Apoio esquerdo / Apoio direito / Tabuleiro. Desenho genérico de volumes, sem captura, comandos ou UI copiados do Tinkercad."
+        },
+        {
+          "action": "Move e ajusta as peças.",
+          "drawing": "Uma peça fantasma → peça deslocada, seta curta junto ao objeto e puxador genérico de tamanho; legenda Mover / Mudar o tamanho. Demonstra ação sem resolver a posição e altura do modelo."
+        },
+        {
+          "action": "Muda a vista e compara.",
+          "drawing": "O mesmo pequeno volume isolado de lado/de cima, com nomes legíveis; não uma ponte concluída. Ajuda a procurar separação ou desalinhamento."
+        }
+      ],
+      "collaboration": "Linha curta Quem constrói / Quem repara com dois desenhos de mãos/olhos e convite Troquem de papéis a meio. Não pedir nomes nem simular escolha de participantes.",
+      "alternative": "No modo Papel e blocos, mini guia com peças físicas e desenho em papel; mesmas ações cria, move, compara. Relato pode dizer o que ficou por fazer.",
+      "required": "Botão toggle Já fizemos, sem pré-seleção, marcado como confirmação do trabalho descrito. Campo obrigatório O que fizemos? Diz uma mudança ou próximo passo. com label visível e três inícios de frase junto ao campo: Mudámos… / Falta… / Queremos…; não preencher texto automaticamente. Uma palavra não vazia responde; trabalho parcial é válido.",
+      "boundary": "Junto ao botão e campo: É o teu relato. O PageCraft não vê o Tinkercad. No modo papel: É o teu relato sobre o trabalho em papel ou blocos. Confirmação mostra Relato confirmado, nunca Construção verificada.",
+      "modeChange": "Se já havia resposta, trocar modo limpa só Já fizemos e o relato atual desse modo e pede nova confirmação/descrição; relato anterior conservado no histórico. Explicar junto ao campo Mudaste o modo. Conta o que fizeram agora. Não apagar previsão, simulação ou opcionais compatíveis.",
+      "optional": "Plano, sugestão do colega e revisão em secção facultativa para reduzir texto inicial; rótulos distinguem o que diz a criança. Campos guardados ao sair e na navegação.",
+      "missing": [
+        "Confirma o trabalho em Já fizemos.",
+        "Conta o que fizeram ou o próximo passo."
+      ]
+    },
+    "peerReview": "Página final: Mostrar uma vista a outro par e recolher uma sugestão é convite facultativo. Campos já escritos conservados, sem nova exigência. Botão de pedir partilha separado de Refletir; não afirmar que partilha observou a construção.",
+    "reflection": {
+      "integrated": "Só após u1–u3 respondidas, botão Refletir emite open_reflection. O host mostra o nome da criança, troca à vez e preserva colegas. Não duplicar formulário, atribuir respostas nem inventar nomes na atividade.",
+      "standalone": "Reflexão local facultativa, com três critérios idênticos aos iniciais. Opções sem pré-seleção: Consegui sozinho / Consegui com ajuda / Quero praticar; limpar escolha ou deixar por responder. Frase visível Reflexão neste dispositivo. Sem alegar receção do professor.",
+      "supports": "Com pistas: símbolos junto às opções e leitura oral pelo par/professor; Passo a passo: campo facultativo de estratégia; Mais desafios: convite facultativo a justificar com exemplo. Apoio não altera critérios nem torna texto obrigatório.",
+      "readiness": "Qualquer erro respondido permite reflexão. Se nova manipulação torna u2 por confirmar, pedir reteste junto ao controlo Refletir e na navegação; conservar o relato e a reflexão existente."
+    },
+    "recording": "HTML comunica só com postMessage e mostra estado de trabalho local real. Mensagens de sincronização e receção pertencem ao host; só exibir confirmação expressa recebida pelo contrato, nunca deduzir sucesso por postMessage enviado. Em modo autónomo, não afirmar que professor recebeu. Evidência da simulação, relato externo e reflexão têm rótulos próprios; sem API ou credenciais.",
+    "feedback": "Prioridade à pista desenhada perto da peça/ação e uma frase de até 14 palavras. Usar role=status para resultado e falta de resposta. Nenhum texto punitivo, som automático ou solução prévia; erro conta como resposta e pode ser corrigido. Os microtextos de falta de resposta ficam junto à navegação e, quando pertinente, junto ao pedido."
   },
   "motion": {
     "transitions": "subtle",
@@ -83,18 +213,39 @@
     "focusRing": true,
     "focusStyle": "Anel focus-visible sólido de 3px na cor focus, afastado 3px; preservar contorno mesmo sobre botão escuro.",
     "minTapPx": 48,
-    "keyboard": "Ordem de Tab igual à ordem visual; setas em radios/ranges; Enter ou Espaço em botões. Todas as alterações do modelo disponíveis sem arrastar. Nenhum foco preso; após troca de etapa, foco no título; após teste, painel de resultado anunciado sem retirar o foco do botão.",
-    "forms": "Cada grupo usa fieldset e legend; cada controlo tem label visível, sem placeholder como único rótulo. Áreas de texto podem ficar vazias. Não apagar conteúdo em mudanças de vista, apoio ou etapa.",
+    "keyboard": "Tab segue ordem visual; setas em radios, Enter/Espaço nos botões. Manipulação completa por clique/teclado sem arrasto. Foco forte com anel 3px e afastamento 3px; não retirar no feedback ou ao mudar apoio. Após navegação, foco no título. aria-disabled com bloqueio real e motivo acessível; nenhuma armadilha de foco.",
+    "forms": "Fieldset/legend e labels persistentes. Pedidos u1–u3 obrigatórios identificados pela pergunta e estado, nunca apenas por asterisco. Campos facultativos assim identificados; placeholders só como exemplo adicional. Reflexão pode ficar vazia; descrição externa precisa apenas de trim() não vazio.",
     "soundOptIn": true,
     "audio": "Nenhum som automático. Leitura oral pelo professor é possível; se houver botão de leitura, é opt-in e o texto permanece integralmente visível.",
     "illustrations": "SVGs decorativos com aria-hidden=true; informação relevante do desenho também em legenda e estado textual. Emojis, se usados, têm texto adjacente ou aria-label adequado.",
     "verification": [
-      "Conferir 390px, 768px e desktop sem rolagem horizontal, sobreposição ou redução do corpo abaixo de 20px.",
-      "Percorrer todas as opções e o teste com teclado, sem usar rato ou arrasto.",
-      "Trocar de vista, etapa e apoio após alterar peças e escrever; o estado deve persistir.",
-      "Conferir foco visível, anúncio do resultado e prefers-reduced-motion.",
-      "Verificar contraste efetivo das cores OKLCH, incluindo estados selecionado, hover e feedback."
+      "Ensaiar 390px, 768px e 1280px com família efetiva Century Gothic/Didact Gothic, corpo ≥20px e alvos ≥48px; sem transbordamento.",
+      "Por apoio: vazio bloqueia Seguinte/saltos, seleção intencional e teste falhado respondem, vista incorreta deixa seguir com pista visual.",
+      "Por apoio: manipular invalida confirmação; trocar vista não; retestar restabelece avanço. Voltar e corrigir sem apagar restantes respostas.",
+      "Trocar apoio preserva toda a configuração/alturas 1–3 e respostas. Recuperar estado sem tentativas emitidas.",
+      "Declaração externa precisa de Já fizemos e texto; relato parcial/alternativa válido, abrir link não responde e troca de modo pede novo relato.",
+      "Teclado, foco, feedback anunciado e reduced-motion; pistas junto da falha, sem depender só de cor.",
+      "Host de Sessão de aula identifica produção conjunta/reflexão individual; modo autónomo não promete gravação remota. Conferir contrato sem simular autoria."
     ]
   },
-  "notes": "O papel quente e a tinta azul ardósia dão uma identidade de projeto de construção; o acento terracota marca elementos de orientação sem virar código de desempenho. As duas vistas concentram a atenção na relação entre posição, altura e continuidade, enquanto a tarefa externa e os relatos mantêm uma apresentação própria para não confundir observação com descrição."
+  "notes": "A identidade creme/ardósia conserva continuidade com o rascunho. As escolhas desenhadas, a peça ativa e a pista no ponto de falha tornam a ação legível; confirmação e resultado separados permitem avançar com respostas erradas. As quatro etapas conservam o percurso de 45 minutos sem exigir que a construção externa esteja concluída.",
+  "revision": {
+    "date": "2026-10-01",
+    "iteration": 2,
+    "docspec": "drafts/tinkercad-pontes-3e4-docspec.json",
+    "references": [
+      "skills/codex/references/activity-experience.md",
+      "skills/codex/references/age-adaptation.md"
+    ],
+    "scope": "Estados por resposta, apoios, pistas visuais, guias de modelação e tipografia offline."
+  },
+  "statePresentation": {
+    "unanswered": "Sem seleção nos pedidos discretos; Por testar na simulação; Já fizemos desligado e relato vazio. Não inferir intenção de defaults.",
+    "selected": "Contorno, radio e Escolhido; não só cor.",
+    "answeredWithError": "Resposta selecionada/teste confirmado + pista visual de revisão; Seguinte ativo se todos os pedidos presentes.",
+    "manipulationUnconfirmed": "Ponte mudou; novo teste necessário. Resultado anterior identificado como anterior, sem apagar respostaVista.",
+    "restored": "Restaurar seleções, texto, confirmação e etapa sem animações de descoberta nem novas tentativas. Recalcular mensagens/etapas a partir do estado validado.",
+    "supportChanged": "Só pistas e extra facultativo mudam. Nenhuma resposta compatível, configuração ou confirmação desaparece.",
+    "reflectionOptional": "Deixar vazio é permitido; não criar obstáculos na página final."
+  }
 }
