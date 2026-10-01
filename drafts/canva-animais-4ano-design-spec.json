@@ -1,0 +1,162 @@
+{
+  "slug": "canva-animais-4ano",
+  "sourceDocSpec": "drafts/canva-animais-4ano-docspec.json",
+  "direction": "Caderno de uma oficina de autores: papel quente, tinta escura e marcas claras de decisão. O produto do grupo e as suas escolhas ocupam o centro da página.",
+  "palette": {
+    "bg": "oklch(95.8% 0.014 85)",
+    "surface": "oklch(98% 0.008 85)",
+    "primary": "oklch(42% 0.065 170)",
+    "accent": "oklch(84.8% 0.054 75)",
+    "ink": "oklch(31% 0.026 175)"
+  },
+  "fallbackHex": {
+    "bg": "#F5F1E8",
+    "surface": "#FAF8F2",
+    "primary": "#22574F",
+    "accent": "#E6CBA7",
+    "ink": "#253834"
+  },
+  "functional": {
+    "ok": "oklch(39% 0.07 150)",
+    "warn": "oklch(44% 0.07 85)",
+    "focus": "oklch(42% 0.16 255)",
+    "okTint": "oklch(95% 0.018 150)",
+    "warnTint": "oklch(95% 0.032 85)",
+    "focusTint": "oklch(96% 0.015 255)"
+  },
+  "typography": {
+    "fontFamily": "'Century Gothic', 'Didact Gothic', 'URW Gothic', 'Avant Garde', sans-serif",
+    "scale": "kids-8-10",
+    "baseSizePx": 20,
+    "headingSizePx": 32,
+    "openingHeadingSizePx": 40,
+    "microcopySizePx": 16,
+    "labelSizePx": 20,
+    "maxLineCh": 55,
+    "lineHeight": 1.45,
+    "weights": [400, 700],
+    "italicAllowed": false,
+    "allCapsAllowed": false,
+    "offlineFont": "O Builder executa scripts/embed_gothic_font.py no HTML antes da revisão e após cada reparação; fonte WOFF2 real incorporada, sem ligações remotas."
+  },
+  "layout": {
+    "borderRadius": 12,
+    "spacing": "comfortable",
+    "maxWidthPx": 1100,
+    "readingMaxWidthPx": 780,
+    "padding": "clamp(1rem, 3vw, 2rem)",
+    "minimumGapPx": 16,
+    "approach": "Uma folha por etapa, com título, instrução e área de ação. Separadores de aula e uma linha de etapas; os campos surgem junto do objeto sobre o qual se decide.",
+    "desktop": "Cabeçalho baixo com título e apoio; índice horizontal por aula; ação central. Ilustração inicial ao lado do convite, sem ocupar o ecrã inteiro. Guias Canva usam toda a largura da folha.",
+    "tablet": "Mesma ordem de leitura, sem coluna lateral fixa; escolhas em duas ou três colunas apenas quando cada alvo mantém legibilidade.",
+    "mobile": "Uma coluna, diagramas sequenciais e capturas com ampliação. Botões e etiquetas quebram texto; nenhum controlo depende de hover. Índice admite quebra de linha.",
+    "navigation": "Anterior e Seguinte no fim da ação; mostrar o pedido em falta imediatamente antes do botão bloqueado. Índice de etapas distingue atual, respondida e futura por texto e forma, além da cor.",
+    "avoid": [
+      "Dashboard com estatísticas",
+      "Grelha de cartões repetidos com textos longos",
+      "Cabeçalho com gradiente decorativo",
+      "Colunas de instruções técnicas sempre abertas",
+      "Posicionar rodapé fixo sobre campos ou capturas"
+    ]
+  },
+  "components": {
+    "buttons": "Altura mínima 48px, padding confortável, canto 10px. Ação principal usa primary e texto surface; secundária usa superfície e contorno ink. Hover altera luminosidade, sem salto ou escala.",
+    "fields": "Labels persistentes de 20px, nunca só placeholders. Campos de frase com comprimento orientado e textarea com três linhas quando necessário. Bordas contrastantes; exemplos facultativos abaixo do label. Limites do Builder devem permitir explicação concreta.",
+    "productChoice": "Três botões grandes com esquema nativo do formato, nome e uma linha de uso. Radio/aria-pressed visível; seleção acrescenta marca e texto Escolhido. O esquema não contém factos inventados.",
+    "supportSelector": "Três opções visíveis Com pistas / Passo a passo / Mais desafios, com bordas neutras e indicador explícito de seleção. Não usar verde/amarelo/vermelho. Cada opção mantém os campos e respostas; muda exemplos e perguntas orientadoras.",
+    "criteria": "Cinco linhas curtas com um marcador de texto ou ícone redundante, apresentadas antes da escolha. Podem recolher para Critérios do grupo depois da primeira etapa, mas reaparecem na revisão e no fecho.",
+    "sessionIndex": "Separadores Aula 1 / Aula 2 / Aula 3, com nome e 45 min. Etapas numeradas com nomes curtos; futuras bloqueadas enquanto faltar resposta anterior. Não mostrar percentagens ou classificação.",
+    "feedback_correct": "Fundo okTint, ícone ✓ redundante e observação concreta da zona descoberta. Evitar avaliar a criança.",
+    "feedback_incorrect": "Fundo warnTint, ícone ↻ e pista visual na zona a comparar. Nunca bloquear por erro; qualquer escolha explícita satisfaz o campo obrigatório.",
+    "openResponseFeedback": "Confirmação neutra Registámos a vossa ideia. Pergunta orientadora facultativa, sem afirmar que plano, factos ou produto estão corretos.",
+    "externalStatus": "Grupo de escolhas ou select grande com Já fizemos / Ainda estamos a fazer / Precisamos de ajuda, seguido de nota curta. Rótulo Registo do grupo deixa claro que a página recebe a declaração.",
+    "guideDetails": "details/summary acessível com nome de ação, por exemplo Como inserir a imagem. O primeiro comando é visível; capturas e dicas adicionais abrem junto da tarefa. Percurso corresponde ao produto selecionado; Outros produtos é consulta facultativa que conserva estado.",
+    "screenshotFigure": "Imagem real larga, número do passo e legenda curta com nome do botão e ação. Manter imagem inteira para contexto; localização descrita por texto. Não sobrepor círculos gerados que inventem botões. Texto alternativo descreve controlo e localização; abaixo, o mesmo percurso em texto.",
+    "screenshotZoom": "Botão Ampliar captura com alvo 48px. Abrir imagem em região de ampliação ou dialog acessível com fechar, Escape, foco inicial e retorno de foco. Permitir inspeção da resolução original sem tornar o ficheiro externo. Não usar popup para apresentar toda a atividade.",
+    "tips": "Lista curta de três a cinco truques do produto escolhido, dentro de detalhes. Cada truque liga ação a efeito de leitura: duplicar conserva organização; espaço ajuda a ler; manter proporção evita deformação.",
+    "processRecord": "Campos de escrita em folha: Decidimos / Ouvimos / Mudámos / Vamos explicar. O resumo final usa as respostas reais, escapadas como texto, e oferece Voltar à etapa correspondente.",
+    "presentationScript": "Quatro faixas numeradas com frases iniciadas: produto, decisão, melhoria, próximo passo. Turnos de fala num campo separado; cronómetro é orientação textual 2–3 minutos, sem corrida animada.",
+    "reflection": "Critérios retomados e convite facultativo. Integração abre a reflexão individual do host. Em modo autónomo mostra Reflexão neste dispositivo e não promete envio ao professor. Não recolher reflexão de todos como se fosse uma resposta conjunta.",
+    "illustration": "cooperar.png acompanha o convite inicial como ilustração pedagógica gerada. Caption e registo de origem distinguem-na das capturas reais do Canva; não deve substituir qualquer instrução nem ilustração original dos animais."
+  },
+  "nativeRepresentations": {
+    "poster": {
+      "label": "Uma página, duas zonas",
+      "structure": "Retângulo vertical com título comum no topo, dois blocos lado a lado quando cabe, nome de animal, espaço de imagem e cinco linhas identificadas Facto 1 a Facto 5 em cada bloco; rodapé de autores/créditos.",
+      "responsive": "Em largura pequena, representação mantém duas zonas compreensíveis ou empilha blocos com indicação explícita de que pertencem ao mesmo cartaz.",
+      "accessibleText": "Cartaz: título; animal 1 com imagem e cinco factos; animal 2 com imagem e cinco factos; autores."
+    },
+    "slides": {
+      "label": "Seis diapositivos, uma sequência",
+      "structure": "Seis retângulos 16:9 numerados: 1 capa; 2 animal 1, imagem e factos 1–2; 3 animal 1, factos 3–5; 4 animal 2, imagem e factos 1–2; 5 animal 2, factos 3–5; 6 como fizemos/créditos. Numeração e setas ou linhas sugerem ordem, sem depender da cor.",
+      "responsive": "Grelha de três ou duas colunas em ecrã grande; sequência vertical no telemóvel. Texto de cada esquema mantém 20px, ajustando o tamanho do retângulo.",
+      "accessibleText": "Apresentação: capa; duas páginas por animal com cinco factos distribuídos; fecho com processo e créditos."
+    },
+    "book": {
+      "label": "Seis páginas, um pequeno livro",
+      "structure": "Seis páginas verticais numeradas: 1 capa; 2 animal 1, imagem e factos 1–2; 3 animal 1, factos 3–5; 4 animal 2, imagem e factos 1–2; 5 animal 2, factos 3–5; 6 processo/créditos. Mostrar margem interior e número de página como pistas de orientação.",
+      "responsive": "Duas páginas por linha quando cabe; sequência vertical no telemóvel. Não simular flipbook animado.",
+      "accessibleText": "Livro: capa, duas páginas por animal, página final com processo e créditos; ordem de leitura numerada."
+    },
+    "readabilityExploration": {
+      "sameInformation": "As duas amostras usam os mesmos títulos, espaços de imagem e marcadores dos cinco factos. Só variam distribuição, intervalos e alinhamento.",
+      "sampleA": "Duas áreas muito próximas, alinhamento irregular e pouco espaço entre grupos. Manter texto acessível a 20px; a sobrecarga visual resulta da distribuição, nunca de reduzir a fonte do PageCraft.",
+      "sampleB": "Zonas identificadas, espaçamento e alinhamento claros. Não anunciar antes da escolha que esta amostra é melhor.",
+      "feedback": "Se escolhe A, destacar a área onde os blocos se encostam e perguntar Onde começa cada animal? Se escolhe B, apontar espaço e títulos como pistas. Sempre permitir continuar após os restantes campos.",
+      "input": "Botões Escolhemos A / Escolhemos B e campo Qual zona ajuda a ler?; nenhuma resposta depende de arrastar."
+    },
+    "feedbackExploration": {
+      "object": "Esquema de bloco pouco organizado com texto de 20px; legenda representa uma zona pequena do produto, sem provocar ilegibilidade na atividade.",
+      "choices": ["Está bonito", "Aumentem o texto deste bloco para o lermos"],
+      "hint": "Escolha vaga destaca o bloco e pergunta Que ação pode o grupo fazer aqui? A sugestão concreta liga a zona à alteração."
+    }
+  },
+  "stageLayouts": [
+    {"id":"u1","focus":"Escolher um produto para os colegas","visible":"Critérios, dois nomes de animais e três esquemas de produto.","responsePlacement":"Razão surge após seleção, junto do produto escolhido; campos mantêm-se editáveis."},
+    {"id":"u2","focus":"Pensar um plano comum","visible":"Comparação A/B primeiro; depois mapa do produto escolhido e folha de plano.","responsePlacement":"Organização, alternância e partilha usam labels distintos; separar momentos por títulos curtos, sem esconder requisitos."},
+    {"id":"u3","focus":"Começar no Canva","visible":"Passo atual com captura grande, comando curto e consulta dos outros passos.","responsePlacement":"Declaração de estado e nota aparecem após o guia; não confirmar automaticamente trabalho externo."},
+    {"id":"u4","focus":"Conservar as dez frases","visible":"Mapa do produto e dica do formato; plano anterior pode abrir em detalhes.","responsePlacement":"Estado de produção, conteúdo e nota sobre trabalho ou dificuldade; não usar checklist observado automaticamente."},
+    {"id":"u5","focus":"Escolher uma melhoria concreta","visible":"Exploração curta de duas sugestões; depois Ouvimos / Vamos mudar.","responsePlacement":"Feedback próximo da escolha; sugestão real e decisão num campo cada."},
+    {"id":"u6","focus":"Aplicar e confirmar a alteração","visible":"Sugestão e decisão anteriores em resumo; percurso real de exportação num detalhe.","responsePlacement":"Campos do DocSpec permanecem separados com labels; qualquer estado declarado permite responder."},
+    {"id":"u7","focus":"Ensaiar mostrando como fizemos","visible":"Guião de quatro partes, turnos e recordatório 2–3 minutos.","responsePlacement":"Turnos, estado do ensaio e ajuste ficam junto do guião, em blocos breves."},
+    {"id":"u8","focus":"Retomar critérios e refletir à vez","visible":"Resumo real do plano, sugestão e melhoria; critérios iniciais e convite individual.","responsePlacement":"Sem novas respostas obrigatórias; editar conduz a etapas anteriores; reflexão facultativa."}
+  ],
+  "assets": {
+    "directory": "drafts/canva-animais-4ano-assets/",
+    "initialIllustration": "cooperar.png",
+    "confirmedScreenshots": ["01-criar-design.png", "02-cartaz.png", "03-apresentacao.png", "04-livro-a4.png"],
+    "pending": "Capturas reais do editor, texto, upload, duplicação e exportação serão transmitidas pelo orquestrador com legendas; ler o manifesto atualizado antes de construir os passos.",
+    "embedding": "Incorporar todos os assets utilizados como data URLs no HTML. Não referenciar paths externos nem carregar imagens por rede.",
+    "truthfulness": "Capturas exemplificam o percurso observado e identificam data/idioma quando necessário. Não desenhar interface Canva fictícia nem usar a ilustração gerada como captura.",
+    "privacy": "Excluir dados pessoais e de conta da área visível usada como exemplo; não expor links de partilha ou credenciais."
+  },
+  "motion": {
+    "transitions": "subtle",
+    "durationMs": 160,
+    "easing": "ease-out",
+    "respectReducedMotion": true,
+    "properties": ["opacity", "background-color", "border-color"],
+    "prohibited": ["bounce", "elastic", "autoplay", "animated-layout", "countdown-pressure"]
+  },
+  "accessibility": {
+    "contrastBody": "AA, mínimo 4.5:1; ink no papel e surface no primary",
+    "contrastMicrocopy": "AAA, mínimo 7:1 para mensagens críticas; usar ink no papel",
+    "focusRing": true,
+    "focusStyle": "Contorno focus de 3px e offset 3px, visível em todas as superfícies.",
+    "minTapPx": 48,
+    "soundOptIn": true,
+    "keyboard": "Ordem de tabulação igual à leitura, radios e botões nativos, detalhes por teclado, ampliação com fechar e Escape; foco desloca para título ao trocar de etapa.",
+    "screenReader": "Cada campo tem label; seleções anunciam estado; feedback usa aria-live=polite. Esquemas têm descrição textual; decorativos usam aria-hidden. Botões bloqueados mantêm explicação visível associada.",
+    "zoomAndReflow": "Verificar 200% de zoom e 360px sem transbordamento; texto de screenshots tem percurso equivalente legível em texto.",
+    "emoji": "Preferir símbolos nativos simples com texto; se houver emoji decorativo, aria-hidden=true; semântico recebe rótulo explícito."
+  },
+  "statePresentation": {
+    "required": "Pedido por responder mostra label e orientação curta junto da navegação, sem cor punitiva.",
+    "answered": "Etapa marca Respondida, mesmo com escolha errada ou pedido de ajuda; não marca Produto aprovado.",
+    "supportChange": "Troca de apoio atualiza a pista e conserva todos os campos compatíveis, sem apagar plano.",
+    "productChange": "Conservar nomes e respostas comuns. Reconfirmar apenas estrutura/estado dependente do formato conforme DocSpec, com explicação visível dos campos que precisam de nova resposta.",
+    "restore": "Restaurar produto, apoio, etapa e respostas sem animação de vitória nem novas tentativas; recalcular navegação.",
+    "sync": "Guardar localmente pode ter indicação local; dizer Enviado ao professor apenas quando o host confirmar. Capturas e Canva externo nunca constituem observação automática."
+  },
+  "notes": "O caderno privilegia o plano negociado, o produto escolhido e a explicação do processo. O papel quente e a tinta escura mantêm conforto e contraste; diagramas nativos tornam os três formatos comparáveis sem inventar factos. Guias expansíveis e capturas ampliáveis aproximam instruções das ações e preservam o espaço de leitura para os alunos de 9–10 anos."
+}
