@@ -1,6 +1,6 @@
 # SPIKE Prime · Primeiros movimentos
 
-Rascunho para revisão do professor. Proposta de primeira sessão de programação para alunos dos 3.º e 4.º anos que já estão a montar a base motriz. A duração de 45 minutos é provisória. O objetivo é ganhar hábitos de planeamento, teste e melhoria que serão úteis numa competição, ainda não identificada.
+Rascunho para revisão do professor. Proposta de primeira sessão de programação para alunos dos 3.º e 4.º anos que já estão a montar a base motriz. Cada aula dura 45 minutos. O grupo segue a unidade LEGO Education «Prontos para a competição», sem assumir participação numa competição real. O objetivo é ganhar hábitos de planeamento, teste e melhoria.
 
 ## O que as crianças vão fazer
 
@@ -34,7 +34,7 @@ Um computador/tablet e uma base por par ou grupo de três, mais fita adesiva e r
 
 A construção já está em curso; não se inclui uma nova montagem completa nesta sessão. Se a ligação ou a primeira programação consumir mais tempo, termine após repetir os ensaios. A página permite indicar «Fica para a próxima aula» na execução do L. Guardar e retomar é preferível a apressar a descoberta.
 
-Ao observar a régua com três chegadas, perguntar: «Parou sempre perto do mesmo sítio?» e «Esse sítio estava perto do alvo?» Resultados semelhantes podem repetir uma distância errada. Esta diferença entre chegar perto do alvo e repetir o comportamento é útil para a competição, sem exigir vocabulário técnico ou cálculos estatísticos.
+Ao observar a régua com três chegadas, perguntar: «Parou sempre perto do mesmo sítio?» e «Esse sítio estava perto do alvo?» Resultados semelhantes podem repetir uma distância errada. Esta diferença entre chegar perto do alvo e repetir o comportamento é útil para controlar os movimentos da base, sem exigir vocabulário técnico ou cálculos estatísticos.
 
 ## Três apoios, livremente escolhidos
 
@@ -61,7 +61,7 @@ Esta sessão adapta o início de *Acampamento de Treinamento 1: Dirigindo Por A�
 1. **Quadrado — cerca de 20 minutos noutra aula.** Marcar um quadrado pequeno. Planear quatro conjuntos «avançar → virar à direita», testar com velocidade baixa e comparar tanto o lugar final como a direção final com o início. Ajustar um valor de cada vez. Só depois de reconhecer o padrão, trocar os quatro conjuntos pelo bloco «repetir quatro vezes». Com pistas, numerar cantos e trabalhar um conjunto de cada vez; no desafio, justificar que o programa compacto executa o mesmo plano.
 2. **Obstáculos — cerca de 20 minutos noutra aula.** Dois marcadores afastados da borda e um corredor largo. Desenhar caminho, dividir em avanços/viragens, prever espaço para a largura da base e testar. Registar se passou sem tocar e qual o segmento a melhorar. No desafio, propor outro caminho e justificar margem ou quantidade de segmentos. A página conserva plano e resultados como caderno retomável.
 3. **Giroscópio — cerca de 20 minutos, com professor.** O sensor de orientação está no hub. Exemplo do programa LEGO: esperar um segundo → definir guinada como zero → iniciar viragem à direita → esperar guinada maior que 89 → parar motores. Confirmar montagem do hub, sentido e sinal antes do ensaio: se a leitura fica negativa, essa condição não termina. Fazer a verificação inicial manual com motores parados. Usar limite de tempo/paragem de segurança quando disponível; o adulto interrompe se a leitura não aumenta como previsto. Distinguir guinada de graus de motor e testar precisão em vez de a garantir. Com pistas, a criança observa uma demonstração; no desafio, explica o efeito do sinal com o professor.
-4. **Campo da competição.** Depois de confirmar evento e regras, transferir o percurso para o campo, respeitando obstáculos, referências de partida e equipamentos reais.
+4. **Novos percursos.** Aplicar as descobertas a percursos com obstáculos da unidade. Se futuramente decidirem participar numa competição, adaptar o trabalho ao campo e às regras desse evento.
 
 As missões de continuação são facultativas, fora dos 45 minutos do núcleo. Devem estar acessíveis como caderno de unidade, com plano e declarações preservados. Não exigem terminar o quadrado, os obstáculos ou o sensor para concluir ou refletir sobre a primeira sessão.
 

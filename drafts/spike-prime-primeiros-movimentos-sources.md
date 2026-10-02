@@ -1,6 +1,6 @@
 # Fontes — SPIKE Prime: primeiros movimentos
 
-Consulta: 2026-10-02. Pedido: alunos do 3.º e 4.º anos, base motriz em construção, início da programação na próxima aula e preparação para competição.
+Consulta: 2026-10-02. Pedido: alunos do 3.º e 4.º anos, base motriz em construção, início da programação na próxima aula seguindo a unidade LEGO Education «Prontos para a competição».
 
 ## Síntese da Sebenta
 API local verificada; pesquisa por TIC, avaliação e robótica. Páginas lidas integralmente (cópias temporárias de consulta em `/tmp/pagecraft-spike-primeiros-movimentos-research/`; os originais permanecem na Sebenta):
@@ -21,4 +21,4 @@ Estas páginas estão em review/draft; as sínteses não equivalem a fontes ofic
 Missões breves e retomáveis. Primeiro planear, experimentar e comparar; começar com distância e baixa velocidade, trocar papéis no grupo e alterar apenas um parâmetro por teste. Percurso em L antes do quadrado; repetição e giroscópio como continuação orientada pelo professor. Não introduzir cálculo de circunferência nem prometer ângulos exatos por rotações de motor. Os registos do robot são declarações dos alunos, distintas das interações observadas na página e da observação do professor.
 
 ## Pressupostos e lacunas para revisão
-Duração inicialmente estimada em 45 minutos; aguarda resposta do professor. Competição não identificada: nenhum regulamento ou pontuação foi presumido. Portas e tamanho real das rodas carecem de confirmação em aula. Conexão, transferência e funcionamento no robot físico não podem ser verificados sem o equipamento. O browser foi usado para consulta da app, não para observar programação dos alunos.
+Professor confirmou aulas de 45 minutos e esclareceu que seguem a unidade «Prontos para a competição», sem necessariamente preparar uma competição real. Nenhum regulamento ou pontuação foi presumido. Portas e tamanho real das rodas carecem de confirmação em aula. Conexão, transferência e funcionamento no robot físico não podem ser verificados sem o equipamento. O browser foi usado para consulta da app, não para observar programação dos alunos.
