@@ -3,12 +3,12 @@
   "docspec": "drafts/spike-prime-primeiros-movimentos-docspec.json",
   "revision": {
     "date": "2026-10-02",
-    "iteration": 1,
+    "iteration": 2,
     "references": [
       "skills/codex/references/activity-experience.md",
       "skills/codex/references/age-adaptation.md"
     ],
-    "scope": "Sistema visual e estados das cinco micro-missões, sem alterar pedidos ou duração."
+    "scope": "Acrescentar referências reais dos blocos SPIKE conforme pedido do professor; preservar sistema visual, duração, critérios e fluxo."
   },
   "palette": {
     "bg": "oklch(0.9648 0.0086 84.6)",
@@ -78,7 +78,7 @@
     }
   },
   "components": {
-    "identity": "Papel quente e tinta petróleo, com amarelo discreto para a fita da partida e o alvo. Grelha leve apenas no tapete do laboratório. Desenho original simples de base motriz com duas rodas, corpo e seta frontal. Sem logótipo, screenshots, imitação da aplicação SPIKE ou decoração sem função.",
+    "identity": "Papel quente e tinta petróleo, com amarelo discreto para a fita da partida e o alvo. Grelha leve apenas no tapete do laboratório. Desenho original simples de base motriz com duas rodas, corpo e seta frontal. Capturas reais da aplicação SPIKE junto do guia de programação, identificadas como referência e separadas dos controlos didáticos, sem decoração sem função.",
     "buttons": "Botões reais, min-height/min-width48px, corpo20px, radius12px. Principal em primary com texto surface; secundário com contorno primary e texto primary. Hover ligeiro sem escala. Escolha ativa marcada por contorno3px e indicador textual ou radio, além do fundo.",
     "cards": "Superfícies claras com borda1–2px e 20px de espaço interior, sem faixas laterais, gradientes ou sombras pesadas. Blocos do programa e posições têm forma suficientemente diferente dos cartões de resultado para reconhecer a função.",
     "navigation": {
@@ -115,7 +115,7 @@
     },
     "forwardPlan": {
       "drawing": "Tapete original visto de cima, robô na marca inicial com seta frontal, alvo20cm claramente rotulado. Régua0/10/20cm com mesma escala física no SVG. Em Com pistas duas parcelas de10cm. Não desenhar o ponto final da distância escolhida antes de a criança prever e confirmar.",
-      "blocks": "Blocos didáticos grandes de início, motores selecionados, velocidade sugerida30% e mover em frente por espaço da distância. Os campos do plano são labels, sem réplicas exatas de blocos LEGO. Opções10cm/20cm por toque e teclado, sem default. Botão Confirmar plano. Valores das portas transportados com identificação se foi pedida ajuda.",
+      "blocks": "Blocos didáticos grandes de início, motores selecionados, velocidade sugerida30% e mover em frente por espaço da distância. Campos do plano com labels e controlos reais; capturas dos blocos SPIKE3.6.1 pt-BR aparecem como referência separada junto do guia, após previsão/confirmação. Opções10cm/20cm por toque e teclado, sem default. Botão Confirmar plano. Valores das portas transportados com identificação se foi pedida ajuda; os valores da captura permanecem exemplos a adaptar.",
       "prediction": "Pergunta Onde pensas que o robô vai parar? com Antes / No / Depois do alvo e pequenos desenhos redundantes. É previsão do movimento real e não recebe certo/errado automático.",
       "reveal": "Depois da previsão e confirmação do plano, revelar traço ideal da distância escolhida. Label Modelo na página; legenda No robô, vamos testar. Se10cm escolhido, realçar intervalo restante junto à seta; frase curta convida a comparar com o alvo. O erro didático deixa seguir quando os restantes pedidos estiverem respondidos.",
       "realTest": "Bloco separado Na base real: Abrir SPIKE em nova aba, lembrete de recriar programa, partida e velocidade. Estado Já fizemos / Precisamos de ajuda e cinco resultados do DocSpec. Abrir link sozinho não responde; relato explícito e resultado respondem. A página não controla o robô nem prevê resultado garantido."
@@ -170,6 +170,16 @@
         "technicalNote": "Nota do professor em details legível, incluindo confirmar orientação do hub, sinal/sentido, leitura manual antes do ensaio e condição de paragem. Não tratar>89como universal: se a leitura diminuir, o exemplo não termina. Manter a intervenção do professor e a paragem visíveis, sem ciclo de espera automático na página.",
         "controls": "Já fizemos com o professor / Precisamos de ajuda e quatro resultados definidos no DocSpec, incluindo outro sinal e não testámos. Registos são relatos. Em Mais desafios a discussão de sinal/condição é facultativa e acompanhada, sem execução autónoma."
       }
+    },
+    "programmingReferences": {
+      "purpose": "Reconhecer na aplicação os blocos correspondentes ao plano, usando capturas reais autorizadas pelo pedido do professor.",
+      "source": "LEGO Education SPIKE3.6.1, interface pt-BR; ficheiros reais fornecidos pelo orquestrador. Não inventar capturas nem redesenhar imagem como se fosse screenshot.",
+      "placement": "Junto do guia de programação nas missões a que os blocos correspondem. Mostrar depois da previsão e confirmação do plano; no L e quadrado, preservar a exploração antes de mostrar programa de referência.",
+      "figure": "figure com imagem recortada aos blocos relevantes e figcaption em pt-PT. Preservar palavras originais da aplicação dentro da imagem. Legenda curta explica pt-BR; instruções pt-PT mapeiam o bloco para a ação planeada.",
+      "examples": "C+D, percentagem de velocidade, distância por rotação e viragem da captura são exemplos da aplicação/modelo, não parâmetros universais. Nota junto da figura manda conferir portas reais e valores adequados; 0,5rotações de motor não garante90° do robô.",
+      "responsive": "Imagem fluida, altura auto e proporção preservada. Se o texto da captura ficar pequeno em390px, oferecer Ampliar imagem em controlo≥48px e transcrição legível em20px. Ampliação acessível por teclado, sem transbordamento horizontal da página nem foco preso.",
+      "accessibility": "Alt em pt-PT descreve bloco ou sequência real, ordem e valores visíveis como exemplo. Transcrição/instruções externas equivalentes mantêm compreensão com imagens ocultas. Captura não é botão nem substitui labels/controlos da atividade; figcaption útil≥20px.",
+      "offline": "Imagens reais incorporadas no HTML, sem ligação remota nem dependência de rede. A referência é estática e não indica conexão ao hub ou leitura do robô."
     }
   },
   "statePresentation": {
@@ -218,7 +228,8 @@
       "Sequências repetidas aceites como resposta; trajeto reproduz ordem e orientação, erro deixa seguir.",
       "Teclado, foco e reduced-motion; tablet/telemóvel390px/768px/1280px, fonte real incorporada,20px/48px mínimos.",
       "Recuperação sem novas tentativas; relatos externos separados de evidência digital e autoavaliação.",
-      "Host real identifica participantes/reflexão individual e confirma registo; autónomo não promete gravação remota."
+      "Host real identifica participantes/reflexão individual e confirma registo; autónomo não promete gravação remota.",
+      "Capturas SPIKE legíveis em390/768/1280px, legenda pt-PT e original pt-BR explicado; texto alternativo/equivalente, ampliação por teclado e valores identificados como exemplos. Referências não antecipam solução antes da exploração."
     ]
   },
   "notes": "O caderno de equipa usa diagramas grandes e perguntas próximas da ação para apoiar a primeira programação. Os estados distinguem escolha, confirmação, percurso ideal e ensaio declarado. A navegação depende de respostas, preservando espaço para errar, pedir ajuda e rever o plano."

@@ -99,12 +99,20 @@
     "supportChange": "Com pistas/support, Passo a passo/standard no DocSpec e intermediate na ponte, Mais desafios/challenge. Mudar livremente. Conservar respostas comuns e resultados físicos; só invalidar resposta de desafio adicional se deixar de corresponder ao enunciado. Nenhuma mudança apaga ensaios.",
     "progressRecovery": "Restaurar página, escolhas e registos compatíveis sem emitir novas tentativas. Usar host da realização quando disponível e recuperação local em modo autónomo sem prometer guardar no professor.",
     "externalApplication": "Ligação clara para https://spike.legoeducation.com/prime/project em nova aba. PageCraft é autocontido e funciona offline; aplicação, ligação ao hub e sincronização podem exigir recursos/conexão próprios. Não incorporar aplicação por iframe nem simular observação externa.",
-    "blockRepresentations": "Mostrar blocos didáticos com rótulos legíveis, não capturas nem réplicas exatas da interface. A criança usa-os para planear e transfere para a aplicação real. Nomes/posição dos blocos dependem da versão/idioma; professor confirma. Portas do esquema C+D são exemplo, não norma. Selecionar as portas reais dos dois motores.",
+    "blockRepresentations": "Manter os blocos didáticos interativos para planear e acrescentar capturas reais dos blocos LEGO Education SPIKE 3.6.1 em pt-BR junto do guia de programação. Mostrar a referência depois da previsão/confirmação do plano para não antecipar a descoberta, sobretudo a sequência em L e o padrão do quadrado. As capturas ajudam a reconhecer os blocos na aplicação; não são controlos nem executam o robô. Preservar o texto original pt-BR dentro da imagem, com legenda, descrição textual equivalente e texto alternativo em pt-PT. Explicar brevemente que a aplicação capturada usa português do Brasil. Nomes/posição podem variar noutra versão/idioma. As portas e valores vistos na captura são exemplos: escolher as portas reais e os valores confirmados para a base, sem tratar C+D, 30% ou 17,5 cm por rotação como universais. Incorporar as imagens no HTML para manter a página offline.",
     "technicalPrecision": "Velocidade inicial sugerida 30%; ajustar pelo professor. Unidade cm só quando a aplicação permite e está calibrada para as rodas. 17,5 cm por rotação é exemplo do modelo LEGO, não valor universal. Ângulo de rotação de um motor não é ângulo de viragem do robô. Não rotular 0,5 rotações de motor como 90° de viragem garantidos. Viragem pequena deve ser testada; giroscópio apenas explicado na extensão futura.",
     "feedback": "Usar setas, traço do percurso ou destaque de bloco seguido de frase curta. Não dar solução antes da previsão. Mostrar feedback após escolha intencional, sem impedir avanço quando a escolha está errada. Não avaliar automaticamente declarações físicas.",
     "accessibility": "Corpo ≥20px, títulos ≥28px, microcopy ≥16px, alvo ≥48px, linhas ≤55ch, frase típica ≤14 palavras. Century Gothic/Didact Gothic real incorporada. Foco visível; rótulos; manipulação por clique/teclado; apoio nunca só por cor; movimento reduzido; sem sons automáticos. Português europeu; usar 'robô' consistentemente.",
     "bridge": "Apenas postMessage pelo contrato canónico. Tentativas de planejamento e descobertas na página são evidência observada; estados de tarefas externas têm source=self_report; autoavaliação é voz do aluno; interpretação/observação do professor separada. Usar reflexão do host quando integrado; modo autónomo oferece reflexão local facultativa.",
-    "publication": "Rascunho privado até revisão e aprovação específica do professor."
+    "publication": "Rascunho privado até revisão e aprovação específica do professor.",
+    "screenshotReferences": {
+      "purpose": "Pedido expresso do professor: facilitar o reconhecimento dos blocos reais durante a transferência do plano para SPIKE.",
+      "source": "Capturas reais fornecidas pelo orquestrador da aplicação LEGO Education SPIKE 3.6.1, pt-BR.",
+      "presentation": "Referência visual não interativa junto do guia de programação, separada dos controlos do plano. Recorte legível do bloco/programa, sem distorção, com ampliação por botão acessível se necessária. Imagens incorporadas; não carregar assets remotos.",
+      "caption": "Exemplo na aplicação SPIKE. A imagem usa português do Brasil. Confere as portas e valores da tua base.",
+      "accessibility": "Texto alternativo descreve os blocos, a ordem e os valores visíveis, identificando-os como exemplo. Legenda e transcrição/instruções pt-PT ficam disponíveis fora da imagem; nenhum pedido depende de ler texto rasterizado.",
+      "timing": "Após previsão e confirmação do plano correspondente. Referências de L e quadrado não exibem a solução antes da resposta de exploração. Missão do sensor continua acompanhada pelo professor e facultativa."
+    }
   },
   "units": [
     {
@@ -638,6 +646,6 @@
       "https://spike.legoeducation.com/prime/project",
       "https://www.erte.dge.mec.pt/sites/default/files/oc_1_tic_-_vf_03out2018.pdf"
     ],
-    "proposal": "A microprogressão, duração de 45 minutos, sequência em L e andaimes são proposta nossa para 3.º/4.º. Os blocos têm ilustrações originais didáticas; não republicar PDF nem capturas da marca. Relatório detalhado de títulos/caminhos em drafts/spike-prime-primeiros-movimentos-sources.md."
+    "proposal": "A microprogressão, sequência em L e andaimes são proposta nossa para 3.º/4.º; a duração de 45 minutos foi confirmada pelo professor. Os controlos do plano mantêm ilustrações didáticas próprias e o guia inclui capturas reais dos blocos SPIKE 3.6.1 em pt-BR, conforme pedido posterior do professor, com legendas pt-PT, texto alternativo e valores identificados como exemplos. Não republicar o PDF. Relatório detalhado de títulos/caminhos em drafts/spike-prime-primeiros-movimentos-sources.md."
   }
 }
