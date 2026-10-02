@@ -21,8 +21,8 @@
   "reviewed_on": "2026-10-02",
   "iteration": 3,
   "review_scope": "Revisão localizada das adições de capturas reais e nova leitura do texto estático/dinâmico, mantendo a revisão anterior dos apoios, extensões e reflexão.",
-  "html_commit": "43f6bc2e6c6cda14e2ebf92a5c99b08528e99398",
-  "html_sha256": "5bb4adcb61bcf3d809b38ae3d3f74a33cba9d2395658c696645381516a551e2c",
+  "html_commit": "0910f60623ca44ad33e439e293b2878d1e77c705",
+  "html_sha256": "061e8f4b5556be88d23b321a5258892f2c0f645b625eff5cab289d15e6095d68",
   "artifacts_reviewed": [
     "drafts/spike-prime-primeiros-movimentos.html",
     "drafts/spike-prime-primeiros-movimentos-docspec.json",
@@ -46,5 +46,11 @@
     "A inspeção dos PNG programa e viragem conferiu os textos/valores representados; não demonstra legibilidade na página ou num dispositivo.",
     "Não foi ligado nem executado um robô físico.",
     "O professor confirma a versão da aplicação, as portas e as medidas da base antes da aula."
-  ]
+  ],
+  "incremental_review": {
+    "commit": "0910f60623ca44ad33e439e293b2878d1e77c705",
+    "base_html_commit": "43f6bc2e6c6cda14e2ebf92a5c99b08528e99398",
+    "note": "Comparado o diff após reparação de teclado: foi acrescentado apenas o handler JS que percorre as regiões de ampliação e categorias em passos de 80 px. O restante HTML, incluindo todo o texto revisto, é idêntico à revisão v3; cobertura, resultados e limitações mantidos.",
+    "method": "Leitura do diff e comparação byte a byte após retirar a única linha adicionada."
+  }
 }
