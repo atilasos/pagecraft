@@ -1,15 +1,17 @@
 {
   "slug": "spike-prime-primeiros-movimentos",
   "date": "2026-10-02",
-  "status": "architecture_in_progress",
+  "status": "ready_for_teacher_review",
   "language": "pt-PT",
   "years": [
     3,
     4
   ],
   "assumptions": {
-    "first_session_minutes": 45,
-    "competition": "não identificada; preparação geral"
+    "lesson_minutes": 45,
+    "duration_confirmed": true,
+    "unit": "LEGO Education — Prontos para a competição",
+    "competition_participation": "não assumida; professor segue a unidade disponível"
   },
   "publication": "draft_only_pending_teacher_review",
   "paths": {
@@ -19,12 +21,36 @@
     "design": "drafts/spike-prime-primeiros-movimentos-design-spec.json",
     "html": "drafts/spike-prime-primeiros-movimentos.html",
     "proofread": "drafts/spike-prime-primeiros-movimentos-proofread.json",
-    "evaluation": "drafts/spike-prime-primeiros-movimentos-evaluation.json"
+    "evaluation": "drafts/spike-prime-primeiros-movimentos-evaluation.json",
+    "metadata": "drafts/spike-prime-primeiros-movimentos-activity.json",
+    "host_integration": "drafts/spike-prime-primeiros-movimentos-qa/host-integration.json",
+    "registration": "drafts/spike-prime-primeiros-movimentos-qa/registration.json",
+    "browser_checks": "drafts/spike-prime-primeiros-movimentos-qa/browser-checks.json",
+    "mobile_screenshot": "drafts/spike-prime-primeiros-movimentos-qa/mobile-390.png"
   },
   "verification": {
     "robot_physical": "not_available",
-    "browser": "T3 preview tools available",
-    "registration": "not_yet",
-    "public_denial": "not_yet"
+    "browser": "three supports;15 width/stage cases; keyboard; restore; optional missions; self-reflection",
+    "registration": "draft444L7K; teacher entry/content200; identical HTML SHA",
+    "public_denial": "anonymous local and real public browser APIs404; private teacher route guarded by Access",
+    "group_records": "isolated current server8779; two participants; shared checkpoint4; separate reflections persisted and restored",
+    "offline": "no network resource requests; assets embedded; forced offline not performed",
+    "limitations": [
+      "Robot/hub not available for hardware testing.",
+      "Screenshots tablet/desktop and visual focus ring were limited by native preview client; DOM layout and trusted keyboard interactions were tested.",
+      "Session host403 on event-types used fallback; saves and restoration worked."
+    ]
+  },
+  "code": "444L7K",
+  "published": false,
+  "preview_teacher": "https://estudio.infantinho.xyz/444L7K",
+  "preview_local": "http://127.0.0.1:8777/444L7K",
+  "html_sha256": "c6fd72c00648ff5f37cff1e300996cbe2fb8f6af3f3816b3723e725b42cad5d8",
+  "phases": {
+    "architect": "passed schema; duration45 and unit context confirmed",
+    "designer": "completed",
+    "builder": "completed; font embedded; JS syntax and checkpoint checks passed",
+    "proofreader": "PASS iteration2",
+    "evaluator": "PASS iteration1; browser T3"
   }
 }
