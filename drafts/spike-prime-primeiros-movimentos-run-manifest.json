@@ -26,7 +26,11 @@
     "host_integration": "drafts/spike-prime-primeiros-movimentos-qa/host-integration.json",
     "registration": "drafts/spike-prime-primeiros-movimentos-qa/registration.json",
     "browser_checks": "drafts/spike-prime-primeiros-movimentos-qa/browser-checks.json",
-    "mobile_screenshot": "drafts/spike-prime-primeiros-movimentos-qa/mobile-390.png"
+    "mobile_screenshot": "drafts/spike-prime-primeiros-movimentos-qa/mobile-390.png",
+    "captures": "drafts/spike-prime-primeiros-movimentos-assets/captures.json",
+    "screenshot_checks": "drafts/spike-prime-primeiros-movimentos-qa/browser-screenshots.json",
+    "screenshot_integration": "drafts/spike-prime-primeiros-movimentos-qa/screenshots-integration.json",
+    "screenshot_mobile": "drafts/spike-prime-primeiros-movimentos-qa/spike-turn-390.png"
   },
   "verification": {
     "robot_physical": "not_available",
@@ -34,23 +38,47 @@
     "registration": "draft444L7K; teacher entry/content200; identical HTML SHA",
     "public_denial": "anonymous local and real public browser APIs404; private teacher route guarded by Access",
     "group_records": "isolated current server8779; two participants; shared checkpoint4; separate reflections persisted and restored",
-    "offline": "no network resource requests; assets embedded; forced offline not performed",
+    "offline": "8 imagens e fonte incorporadas; sem pedidos de recursos externos no browser; sem emulação de rede desligada",
     "limitations": [
       "Robot/hub not available for hardware testing.",
       "Screenshots tablet/desktop and visual focus ring were limited by native preview client; DOM layout and trusted keyboard interactions were tested.",
       "Session host403 on event-types used fallback; saves and restoration worked."
-    ]
+    ],
+    "screenshots": {
+      "embedded_original_pngs": 8,
+      "source_hashes_match": true,
+      "browser_cases": 63,
+      "outer_widths": [
+        390,
+        768,
+        1280
+      ],
+      "measured_iframe_widths": [
+        360,
+        738,
+        1250
+      ],
+      "keyboard": "Enter e setas trusted; scroll limitado à região; foco preservado",
+      "restore": "apenas activity_state; sem novas tentativas",
+      "teacher_content_matches_final_html": true,
+      "hardware": "não testado; revisão incremental da página"
+    }
   },
   "code": "444L7K",
   "published": false,
   "preview_teacher": "https://estudio.infantinho.xyz/444L7K",
   "preview_local": "http://127.0.0.1:8777/444L7K",
-  "html_sha256": "c6fd72c00648ff5f37cff1e300996cbe2fb8f6af3f3816b3723e725b42cad5d8",
+  "html_sha256": "061e8f4b5556be88d23b321a5258892f2c0f645b625eff5cab289d15e6095d68",
   "phases": {
-    "architect": "passed schema; duration45 and unit context confirmed",
-    "designer": "completed",
-    "builder": "completed; font embedded; JS syntax and checkpoint checks passed",
-    "proofreader": "PASS iteration2",
-    "evaluator": "PASS iteration1; browser T3"
+    "architect": "Capturas previstas; duração e critérios preservados",
+    "designer": "Referências reais junto do guia; ampliação acessível",
+    "builder": "8 PNG originais incorporados; 6 passos e viragem; setas para percorrer ampliação",
+    "proofreader": "PASS iteration3; HTML final revisto",
+    "evaluator": "PASS iteration2; avaliação incremental no browser T3"
+  },
+  "revision": {
+    "iteration": 2,
+    "request": "Capturas reais dos blocos SPIKE para facilitar reconhecimento na aplicação",
+    "date": "2026-10-02"
   }
 }
