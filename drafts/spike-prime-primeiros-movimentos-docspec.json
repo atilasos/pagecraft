@@ -1,0 +1,643 @@
+{
+  "slug": "spike-prime-primeiros-movimentos",
+  "title": "SPIKE Prime · Primeiros movimentos",
+  "topic": "Planear, programar e testar movimentos da base motriz LEGO SPIKE Prime, como início da preparação para competição",
+  "ageRange": "8–10 anos (3.º e 4.º anos)",
+  "duration": 45,
+  "language": "pt-PT",
+  "year": "3.º e 4.º anos",
+  "subject": "TIC / Robótica",
+  "objectives": [
+    "Construir um programa curto de avanço e comparar a previsão com o movimento observado.",
+    "Repetir três ensaios desde a mesma marca, registar o resultado e alterar uma variável de cada vez.",
+    "Ordenar instruções de avanço, viragem e avanço para planear um percurso em L.",
+    "Partilhar uma alteração do programa com evidência e cooperar alternando os papéis."
+  ],
+  "successCriteria": [
+    {
+      "id": "programar",
+      "label": "Planeio os passos e programo um movimento.",
+      "evidence": "Previsão e sequência escolhidas na página; execução física declarada pelo grupo e observação do professor separada."
+    },
+    {
+      "id": "testar",
+      "label": "Testo três vezes a partir da mesma marca.",
+      "evidence": "Três resultados preenchidos ou pedido de ajuda identificado, sem fingir que houve ensaios."
+    },
+    {
+      "id": "melhorar",
+      "label": "Mudo uma coisa e comparo o resultado.",
+      "evidence": "Variável selecionada e observação do grupo antes/depois, sem validação automática do robô."
+    },
+    {
+      "id": "cooperar",
+      "label": "Ouço o colega e explico uma descoberta.",
+      "evidence": "Troca de papéis proposta; comunicação breve e autoavaliação facultativa. Só o professor observa cooperação efetiva."
+    }
+  ],
+  "assumptions": [
+    "Duração de 45 minutos é uma proposta para revisão: o professor não indicou duração.",
+    "A base motriz já está a ser montada; a sessão começa com a base concluída ou revisão breve da montagem.",
+    "Não foi identificada uma competição: a atividade trabalha hábitos gerais de precisão e cooperação, sem regras de prova inventadas.",
+    "O grupo usa programação por blocos de palavras no SPIKE Prime; o professor confirma a versão da aplicação, idioma, conexão e blocos disponíveis antes da aula.",
+    "A unidade LEGO original de 30–45 minutos para 6.º–8.º anos é desdobrada. Quadrado, repetição e giroscópio ficam para sessões posteriores.",
+    "Mais desafios conserva o núcleo da primeira sessão; não introduz giroscópio nem fórmulas de circunferência."
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "TIC — Orientações Curriculares (não AE por ano)",
+        "year": "1.º ciclo; adaptação ao 3.º/4.º anos",
+        "domain": "Criar e Inovar",
+        "descriptor": "Criar algoritmos de baixa complexidade e resolver desafios programando objetos tangíveis; síntese dos objetivos das OC, página 9.",
+        "source": "https://www.erte.dge.mec.pt/sites/default/files/oc_1_tic_-_vf_03out2018.pdf"
+      },
+      {
+        "subject": "TIC — Orientações Curriculares (não AE por ano)",
+        "year": "1.º ciclo; adaptação ao 3.º/4.º anos",
+        "domain": "Criar e Inovar — ações estratégicas",
+        "descriptor": "Explorar orientação, lateralidade e noções espaciais através da movimentação de objetos virtuais ou tangíveis; síntese das ações estratégicas, página 8.",
+        "source": "https://www.erte.dge.mec.pt/sites/default/files/oc_1_tic_-_vf_03out2018.pdf"
+      }
+    ],
+    "competencies": [
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-D: Pensamento crítico e pensamento criativo",
+      "PA-E: Relacionamento interpessoal",
+      "PA-I: Saber científico, técnico e tecnológico"
+    ],
+    "verification": "OC originais de 2018 verificadas pelo orquestrador em 2026-10-02. O campo ae contém OC de ciclo por compatibilidade com o schema; não atribui AE próprias ao 3.º ou 4.º ano. A proposta TIC de março de 2026 não fundamenta obrigações. Medição e orientação são articulações propostas com Matemática, sem atribuir descritores não conferidos."
+  },
+  "memAlignment": {
+    "modules": [
+      "Projecto cooperativo",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "Plano de ensaio com três registos",
+      "Critérios partilhados antes do trabalho",
+      "Comunicação de descoberta e próximo passo"
+    ],
+    "socialOrganization": "Pares ou grupos de três por robô. Papéis: programar, testar e observar/registar; nos pares acumular testar/observar. Trocar a cada ensaio. Os alunos escolhem previsão, apoio e alteração. Partilha final na turma; reflexão individual à vez no host.",
+    "qualification": "A proposta inspira-se na avaliação cooperada da wiki; não promete avaliação cooperada plena sem negociação da planificação e critérios com a turma. O professor pode rever estes critérios com as crianças no início."
+  },
+  "materials": [
+    "Uma base motriz SPIKE Prime concluída por par/grupo",
+    "Hub carregado e dois motores de movimento",
+    "Computador/tablet com aplicação LEGO Education SPIKE e conexão preparada",
+    "Página PageCraft local ou no host",
+    "Régua/fita métrica, fita adesiva para marcas de partida e chegada",
+    "Área livre no chão ou mesa ampla com proteção da borda",
+    "Peça ou marcador como obstáculo para o percurso em L"
+  ],
+  "globalRequirements": {
+    "pageDivision": "Cinco páginas de micro-missão: preparar (8 min), avançar (9), repetir e melhorar (10), virar e combinar (10), partilhar/refletir/arrumar (8). Cada página pode revelar um pedido de cada vez para limitar a duas ou três decisões simultâneas.",
+    "intro": "Mostrar os quatro critérios, o objetivo e os recursos antes da missão. Introdução incorporada na página 1, sem ecrã adicional de instruções extensas.",
+    "completion": "Seguinte e saltos futuros só se desbloqueiam quando todos os pedidos obrigatórios da página têm resposta intencional. Resposta incorreta conta como respondida e dá pista visual imediata; nunca exigir acerto. Permitir regressar e corrigir. Nenhum valor predefinido conta como resposta.",
+    "honestExternalReports": "Para tarefas no SPIKE, pedir estado explícito 'Já fizemos' ou 'Precisamos de ajuda' e resposta curta. Estados e observações são declarações do grupo; a página não controla nem observa o robô. 'Não conseguimos testar' é uma resposta válida de resultado quando foi necessária ajuda. Não inventar resultados nem emitir correct=true em ensaios físicos.",
+    "supportChange": "Com pistas/support, Passo a passo/standard no DocSpec e intermediate na ponte, Mais desafios/challenge. Mudar livremente. Conservar respostas comuns e resultados físicos; só invalidar resposta de desafio adicional se deixar de corresponder ao enunciado. Nenhuma mudança apaga ensaios.",
+    "progressRecovery": "Restaurar página, escolhas e registos compatíveis sem emitir novas tentativas. Usar host da realização quando disponível e recuperação local em modo autónomo sem prometer guardar no professor.",
+    "externalApplication": "Ligação clara para https://spike.legoeducation.com/prime/project em nova aba. PageCraft é autocontido e funciona offline; aplicação, ligação ao hub e sincronização podem exigir recursos/conexão próprios. Não incorporar aplicação por iframe nem simular observação externa.",
+    "blockRepresentations": "Mostrar blocos didáticos com rótulos legíveis, não capturas nem réplicas exatas da interface. A criança usa-os para planear e transfere para a aplicação real. Nomes/posição dos blocos dependem da versão/idioma; professor confirma. Portas do esquema C+D são exemplo, não norma. Selecionar as portas reais dos dois motores.",
+    "technicalPrecision": "Velocidade inicial sugerida 30%; ajustar pelo professor. Unidade cm só quando a aplicação permite e está calibrada para as rodas. 17,5 cm por rotação é exemplo do modelo LEGO, não valor universal. Ângulo de rotação de um motor não é ângulo de viragem do robô. Não rotular 0,5 rotações de motor como 90° de viragem garantidos. Viragem pequena deve ser testada; giroscópio apenas explicado na extensão futura.",
+    "feedback": "Usar setas, traço do percurso ou destaque de bloco seguido de frase curta. Não dar solução antes da previsão. Mostrar feedback após escolha intencional, sem impedir avanço quando a escolha está errada. Não avaliar automaticamente declarações físicas.",
+    "accessibility": "Corpo ≥20px, títulos ≥28px, microcopy ≥16px, alvo ≥48px, linhas ≤55ch, frase típica ≤14 palavras. Century Gothic/Didact Gothic real incorporada. Foco visível; rótulos; manipulação por clique/teclado; apoio nunca só por cor; movimento reduzido; sem sons automáticos. Português europeu; usar 'robô' consistentemente.",
+    "bridge": "Apenas postMessage pelo contrato canónico. Tentativas de planejamento e descobertas na página são evidência observada; estados de tarefas externas têm source=self_report; autoavaliação é voz do aluno; interpretação/observação do professor separada. Usar reflexão do host quando integrado; modo autónomo oferece reflexão local facultativa.",
+    "publication": "Rascunho privado até revisão e aprovação específica do professor."
+  },
+  "units": [
+    {
+      "id": "preparar",
+      "summary": "Ligar programa, motores e condições do ensaio",
+      "duration": 8,
+      "textDescription": "Retomar a base montada e os critérios. Ver a representação simples do hub com portas A–F e dois cabos. Localizar portas reais, escolher papéis e prever o que acontece se o programa selecionar portas diferentes. Segurança e conexão são instruções diretas, não uma regra escondida.",
+      "mandatoryRequests": [
+        {
+          "id": "portas",
+          "prompt": "Em que portas ligaste os dois motores?",
+          "response": "Dois seletores A–F sem valor inicial, com alternativa 'Preciso de ajuda'; confirmar intencionalmente. Não presumir C+D."
+        },
+        {
+          "id": "previsao-portas",
+          "prompt": "E se escolhermos outras portas no programa?",
+          "response": "Escolha: 'Pode não mover as rodas' / 'Move sempre igual'; ambas respondem. Pista visual mostra cabo e porta após a escolha."
+        },
+        {
+          "id": "preparacao-real",
+          "prompt": "Preparem a base e liguem o hub.",
+          "response": "Estado 'Já fizemos' ou 'Precisamos de ajuda', e escolha curta 'Área livre e base pronta' / 'Ainda falta preparar' / 'Ligação precisa de ajuda'."
+        }
+      ],
+      "interaction": {
+        "state": [
+          {
+            "name": "portas",
+            "type": "dropdown",
+            "options": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E",
+              "F",
+              "Preciso de ajuda"
+            ],
+            "default": null
+          },
+          {
+            "name": "previsaoPortas",
+            "type": "quiz",
+            "options": [
+              "Pode não mover as rodas",
+              "Move sempre igual"
+            ],
+            "default": null
+          },
+          {
+            "name": "preparacaoReal",
+            "type": "quiz",
+            "default": null
+          }
+        ],
+        "render": "Esquema original do hub, letras das portas e cabos selecionados; escolha destacada com texto e contorno. Pequeno quadro de critérios e papéis recolhível. Indicação inequívoca de declaração externa.",
+        "transition": "Selecionar portas desenha os cabos; confirmar fixa resposta. Escolher previsão revela pista cabo→porta. Registar estado e observação da preparação conclui a página, mesmo quando se pede ajuda.",
+        "constraint": "O comando só atua nos motores ligados às portas selecionadas; confirmar essa relação no ensaio real, não apresentar uma única dupla universal.",
+        "assessment": "Aluno identifica as portas reais ou pede ajuda de forma explícita; prevê o efeito da correspondência programa/motores. Preparação física é declaração para posterior observação do professor."
+      },
+      "differentiation": {
+        "support": "Hub com letras grandes, realce de um cabo de cada vez e leitura oral pelo adulto/pare. Alternativa pedir ajuda sempre disponível.",
+        "standard": "Localizar e selecionar ambas as portas, comparar esquema com a base e responder à previsão.",
+        "challenge": "Identificar esquerda/direita pela frente do robô e explicar oralmente como conferir a correspondência sem desmontar a base; ajuda explicativa opcional."
+      },
+      "maker": {
+        "type": "robotics",
+        "challenge": "Confere os motores, prepara uma área livre e liga o hub.",
+        "materials": [
+          "Base motriz e aplicação SPIKE"
+        ],
+        "groupSize": "2–3",
+        "connection": "O esquema digital ajuda a localizar ligações reais antes do primeiro programa.",
+        "communication": "Cada colega mostra uma ligação e nomeia o seu papel.",
+        "alternatives": [
+          "Se faltar robô/conexão, usar o esquema e marcar 'Precisamos de ajuda'; não declarar execução física."
+        ]
+      }
+    },
+    {
+      "id": "avancar",
+      "summary": "Prever, escolher blocos e testar um avanço",
+      "duration": 9,
+      "textDescription": "Marcar partida e alvo de 20 cm. Prever avanço de 10 ou 20 cm num tapete didático sem antecipar a solução. Planear início, motores reais, velocidade sugerida 30% e mover em frente por distância; confirmar plano e transferir para aplicação. As medidas da imagem são didáticas, não previsão garantida do robô.",
+      "mandatoryRequests": [
+        {
+          "id": "distancia",
+          "prompt": "O alvo está a 20 cm. Quanto vais pedir?",
+          "response": "Selecionar 10 cm ou 20 cm e confirmar o plano; nenhum preselecionado. 10 cm recebe pista mas permite avanço."
+        },
+        {
+          "id": "previsao-avanco",
+          "prompt": "Onde pensas que o robô vai parar?",
+          "response": "Escolher 'Antes do alvo' / 'No alvo' / 'Depois do alvo'; previsão pessoal sem avaliação automática de exatidão física."
+        },
+        {
+          "id": "avanco-real",
+          "prompt": "Programa na aplicação e faz um ensaio.",
+          "response": "Estado explícito 'Já fizemos' / 'Precisamos de ajuda' e resultado 'Antes do alvo' / 'No alvo' / 'Depois do alvo' / 'Andou para trás' / 'Não conseguimos testar'."
+        }
+      ],
+      "interaction": {
+        "state": [
+          {
+            "name": "distancia",
+            "type": "quiz",
+            "options": [
+              "10 cm",
+              "20 cm"
+            ],
+            "default": null
+          },
+          {
+            "name": "previsaoAvanco",
+            "type": "quiz",
+            "default": null
+          },
+          {
+            "name": "planoConfirmado",
+            "type": "toggle",
+            "default": false
+          },
+          {
+            "name": "resultadoFisico",
+            "type": "quiz",
+            "default": null
+          }
+        ],
+        "render": "Vista de cima do robô, partida e alvo de 20 cm; peças de programa didático com distância selecionada e portas da página anterior. Mostrar duas distâncias comparáveis apenas após previsão/plano, identificadas como modelo na página.",
+        "transition": "Escolher distância altera bloco; confirmar plano responde. Selecionar previsão revela comparação visual. Abrir aplicação preserva estado. Escolha de resultado externo regista declaração, não acerto automático.",
+        "constraint": "Num modelo ideal, uma distância de comando menor termina antes do mesmo alvo. O comportamento real precisa de teste e pode divergir por montagem/configuração.",
+        "assessment": "Aluno escolhe e confirma distância, regista previsão e compara-a com resultado declarado. O professor observa se transferiu blocos e conseguiu mover a base."
+      },
+      "differentiation": {
+        "support": "Setas de partida e chegada, régua visual em dois passos de 10 cm, programa-base com espaços destacados e opções de resultado ilustradas.",
+        "standard": "Escolher a distância, confirmar programa, prever a chegada e registar observação.",
+        "challenge": "Antes do ensaio, explicar oralmente por que escolheu a distância; após ensaio, indicar uma possível causa de diferença com texto facultativo. Não aumentar velocidade nem introduzir fórmula."
+      },
+      "maker": {
+        "type": "robotics",
+        "challenge": "Tenta chegar à marca dos 20 cm.",
+        "materials": [
+          "Base motriz",
+          "Fita adesiva",
+          "Régua"
+        ],
+        "groupSize": "2–3",
+        "connection": "O plano didático é reconstruído no SPIKE; a medida é comparada no chão.",
+        "communication": "Dizer 'Previ… e observei…'.",
+        "alternatives": [
+          "Planear com o desenho, registar falta de ensaio e pedir ajuda; retomar com equipamento."
+        ]
+      }
+    },
+    {
+      "id": "testar",
+      "summary": "Repetir e melhorar um programa com uma alteração controlada",
+      "duration": 10,
+      "textDescription": "Repetir o programa três vezes, reposicionando a base na mesma marca e orientação. Registar cada chegada. Ver os resultados lado a lado, escolher uma única variável para alterar e comparar novo ensaio. Dar sugestões depois dos registos, sem impor hipótese como conclusão. Precisão significa chegar perto do alvo; repetibilidade significa resultados próximos uns dos outros.",
+      "mandatoryRequests": [
+        {
+          "id": "ensaios",
+          "prompt": "Volta à mesma marca. Testa três vezes.",
+          "response": "Três escolhas independentes de resultado: antes/no/depois/para trás/não conseguimos testar. Cada registo tem confirmação explícita; não copiar o primeiro automaticamente."
+        },
+        {
+          "id": "alteracao",
+          "prompt": "Que coisa vão mudar no programa?",
+          "response": "Escolha 'Distância' / 'Velocidade' / 'Sentido'; contraste didático 'Tudo ao mesmo tempo' também é uma resposta válida com pista imediata. As três primeiras oferecem alterar um valor concreto na aplicação."
+        },
+        {
+          "id": "melhoria-real",
+          "prompt": "Faz outro ensaio. O que aconteceu?",
+          "response": "Estado 'Já fizemos' / 'Precisamos de ajuda' e resultado 'Mais perto' / 'Igual' / 'Mais longe' / 'Não conseguimos comparar'. Sem automatic correctness."
+        }
+      ],
+      "interaction": {
+        "state": [
+          {
+            "name": "ensaios",
+            "type": "quiz",
+            "default": [
+              null,
+              null,
+              null
+            ]
+          },
+          {
+            "name": "alteracao",
+            "type": "quiz",
+            "options": [
+              "Distância",
+              "Velocidade",
+              "Sentido",
+              "Tudo ao mesmo tempo"
+            ],
+            "default": null
+          },
+          {
+            "name": "comparacao",
+            "type": "quiz",
+            "default": null
+          }
+        ],
+        "render": "Três marcas de chegada na mesma régua, com legenda de declaração. Um único valor do bloco é realçado quando se escolhe variável. Comparação antes/depois com rótulos textuais; não agregar pontuação ou ranking.",
+        "transition": "Guardar cada resultado produz marca própria; resultados ausentes têm espaço vazio. Após terceira resposta, observar agrupamento. Escolher alteração revela contraste entre um e vários valores; qualquer escolha respondida permite continuar. Registar novo resultado completa página.",
+        "constraint": "Repetir desde a mesma referência permite comparar; mudar uma variável de cada vez ajuda a relacionar a alteração com o resultado. Repetir um erro de distância não garante chegar ao alvo.",
+        "assessment": "Aluno regista três ensaios ou ausência explícita, seleciona uma alteração e compara antes/depois. O professor observa reposicionamento e se a alteração física corresponde ao plano."
+      },
+      "differentiation": {
+        "support": "Resultados ilustrados um de cada vez e lembrete visual da partida; duas escolhas de alteração primeiro: distância ou tudo. Resultados comuns são iguais aos outros apoios. Permitir leitura/registro pelo colega.",
+        "standard": "Três resultados lado a lado, escolha de variável e comparação breve antes/depois.",
+        "challenge": "Medir e anotar cm opcionais dos ensaios; justificar oralmente se três chegadas semelhantes também estavam perto do alvo. Não exigir média, amplitude formal nem fórmulas."
+      },
+      "maker": {
+        "type": "robotics",
+        "challenge": "Repete o avanço e muda apenas uma coisa.",
+        "materials": [
+          "Base motriz",
+          "Marca de partida",
+          "Régua"
+        ],
+        "groupSize": "2–3",
+        "connection": "As observações reais alimentam o registo digital para orientar a próxima alteração.",
+        "communication": "Trocar papéis em cada ensaio e comparar com um colega.",
+        "alternatives": [
+          "Se não houver ensaios, preencher 'Não conseguimos testar' e escolher alteração hipotética, identificada como plano."
+        ]
+      }
+    },
+    {
+      "id": "virar",
+      "summary": "A ordem dos movimentos muda o percurso",
+      "duration": 10,
+      "textDescription": "Desenhar um L simples com duas setas em frente e uma viragem à direita. Usar blocos didáticos para ordenar avançar, virar e avançar. Experimentar o percurso no modelo após confirmar. Transferir para a aplicação com viragem curta testada e ajustada, sem garantir ângulo por rotações de motor. O professor pode deixar a execução física para a aula seguinte se a turma precisar de mais tempo no avanço.",
+      "mandatoryRequests": [
+        {
+          "id": "sequencia",
+          "prompt": "Ordena os três movimentos para seguir o L.",
+          "response": "Selecionar blocos por clique/teclado para três posições e confirmar explicitamente. Uma sequência repetida ou incorreta responde; pista visual mostra trajeto correspondente após confirmação."
+        },
+        {
+          "id": "viragem-real",
+          "prompt": "Experimentem a viragem com o professor.",
+          "response": "Estado 'Já fizemos' / 'Precisamos de ajuda', e observação 'Seguiu o L' / 'Virou pouco' / 'Virou demais' / 'Andou noutro sentido' / 'Fica para a próxima aula'."
+        }
+      ],
+      "interaction": {
+        "state": [
+          {
+            "name": "sequencia",
+            "type": "sorting",
+            "options": [
+              "Avançar",
+              "Virar à direita",
+              "Avançar"
+            ],
+            "default": []
+          },
+          {
+            "name": "sequenciaConfirmada",
+            "type": "toggle",
+            "default": false
+          },
+          {
+            "name": "viragemReal",
+            "type": "quiz",
+            "default": null
+          }
+        ],
+        "render": "Percurso original em L com frente do robô marcada e três posições vazias. Setas e blocos correspondentes; pré-visualização didática traça a sequência só após confirmar, sem indicar solução antes. Resultado real mantém rótulo declaração.",
+        "transition": "Escolher peças preenche posições por clique/teclado; remover e recolocar é reversível. Confirmar produz trajeto didático e feedback imediato: destacar o primeiro segmento diferente. Todas as três posições confirmadas respondem independentemente de acerto. Registro real/futuro completa página.",
+        "constraint": "Executar os mesmos movimentos noutra ordem produz outro percurso; a viragem altera a direção do avanço seguinte.",
+        "assessment": "Aluno confirma três passos e verifica o percurso correspondente; pode reparar a ordem após pista. A execução e precisão física são declaração do grupo ou observação posterior do professor."
+      },
+      "differentiation": {
+        "support": "Primeira posição com pista da seta inicial, dois blocos de avanço diferenciados como 1/2; seleção por toque e guias junto das posições. Pista não preenche resposta.",
+        "standard": "Ordenar os três movimentos, confirmar, comparar percurso e ensaiar L com ajuda do professor.",
+        "challenge": "Escolher opcionalmente L para esquerda, sem alterar a sequência já guardada do L direito; explicar como muda o bloco de viragem e usar uma pausa curta para observar segmentos. O desafio adicional é facultativo e não bloqueia o núcleo."
+      },
+      "maker": {
+        "type": "robotics",
+        "challenge": "Avança, vira e volta a avançar junto das marcas.",
+        "materials": [
+          "Base motriz",
+          "Duas marcas formando L",
+          "Marcador/obstáculo"
+        ],
+        "groupSize": "2–3",
+        "connection": "A ordem explorada no modelo informa os blocos na aplicação; a viragem concreta é calibrada por ensaio.",
+        "communication": "Mostrar ao colega qual o bloco que mudou a direção.",
+        "alternatives": [
+          "Representar o percurso com o dedo e registar 'Fica para a próxima aula'; não apresentar isso como execução do robô."
+        ]
+      }
+    },
+    {
+      "id": "partilhar",
+      "summary": "Comunicar uma descoberta e decidir o próximo passo",
+      "duration": 8,
+      "textDescription": "Partilhar uma mudança e o que aconteceu, ou uma dificuldade concreta. Retomar critérios na reflexão individual facultativa do host. Escolher um próximo passo, alternar a pessoa que reflete e arrumar. Não transformar reflexão em barreira de conclusão.",
+      "mandatoryRequests": [
+        {
+          "id": "comunicacao",
+          "prompt": "O que vais mostrar aos colegas?",
+          "response": "Escolha breve 'O nosso primeiro avanço' / 'Uma alteração e o resultado' / 'O percurso em L' / 'Uma dificuldade para pedir ajuda'; a comunicação oral não é declarada automaticamente como observada."
+        }
+      ],
+      "optionalRequests": [
+        "Autoavaliação individual por critério: 'Com ajuda', 'Estou a experimentar', 'Já consigo explicar', 'Ainda não experimentei'.",
+        "Estratégia: 'O que mudaste e porquê?'",
+        "Próximo passo: 'O que queres experimentar na próxima aula?'",
+        "Ajuda recebida: colega/professor/pistas/outro, sem identificar terceiros por novos dados pessoais."
+      ],
+      "interaction": {
+        "state": [
+          {
+            "name": "comunicacao",
+            "type": "quiz",
+            "default": null
+          },
+          {
+            "name": "reflexao",
+            "type": "derived",
+            "default": {},
+            "derivedFrom": "Voz individual do aluno recolhida pelo host ou formulário local facultativo; não deduzida dos ensaios."
+          }
+        ],
+        "render": "Resumo das escolhas e ensaios reais declarados, sem medalhas ou score. Quatro critérios conhecidos e convite discreto de reflexão individual. Nome do participante visível apenas pela autoria/host; preservar reflexões dos colegas.",
+        "transition": "Escolher o que partilhar responde à página. Concluir não exige autoavaliação. Se integrado, abrir reflexão do host; se autónomo, facultar escolhas locais sem afirmar gravação no professor. Voltar e corrigir mantém os registos.",
+        "constraint": "Uma descoberta partilhável liga uma ação ao resultado; um ensaio que não funcionou também dá informação para planear o próximo passo.",
+        "assessment": "Aluno seleciona produção/dificuldade a comunicar e, se quiser, relaciona alteração e observação. Professor avalia comunicação real e entreajuda; reflexão permanece voz do aluno."
+      },
+      "differentiation": {
+        "support": "Escolher com imagens e ajuda oral; inícios de frase 'Mudei…', 'Aconteceu…'. Nenhuma escrita longa obrigatória.",
+        "standard": "Descrever oralmente uma estratégia e comparar previsão com resultado; reflexão curta facultativa.",
+        "challenge": "Justificar com exemplo dos ensaios e propor uma melhoria com uma variável; texto explicativo opcional."
+      },
+      "maker": {
+        "type": "robotics",
+        "challenge": "Mostra um ensaio e combina o próximo passo.",
+        "groupSize": "2–3 e turma",
+        "connection": "Programa e registos do robô são a produção concreta comunicada à turma.",
+        "communication": "Um minuto por grupo selecionado pelo professor; colega dá uma observação e uma pergunta. Reserva final para arrumar.",
+        "alternatives": [
+          "Comunicar o plano e a dificuldade se não houve ensaio."
+        ]
+      }
+    }
+  ],
+  "sessionFlow": "45 min sem tempo adicional: preparar 8 → avançar 9 → repetir/melhorar 10 → virar/combinar 10 → comunicar, reflexão facultativa e arrumar 8. A introdução ocupa a primeira unidade. Uma sessão com dificuldades de conexão/montagem pode parar após testar; guardar trabalho e assinalar viragem para próxima aula. Não acelerar a primeira programação para terminar tudo.",
+  "optionalExtensions": [
+    {
+      "id": "quadrado",
+      "title": "Próxima missão · Voltar à partida",
+      "estimatedMinutes": 20,
+      "outsideCoreDuration": true,
+      "summary": "Quatro avanços e quatro viragens podem fechar um percurso quadrado.",
+      "instructions": [
+        "Marca um quadrado pequeno no chão.",
+        "Planeia quatro conjuntos: avançar e virar à direita.",
+        "Testa uma volta sem aumentar a velocidade.",
+        "Compara o lugar e a direção finais com a partida.",
+        "Ajusta uma coisa e testa novamente.",
+        "Quando descobrires o padrão, experimenta repetir quatro vezes."
+      ],
+      "requests": [
+        "Escolher quantidade de conjuntos avanço+viragem; pista visual após resposta.",
+        "Confirmar 'Já fizemos' ou 'Precisamos de ajuda' e declarar 'Voltou perto da partida' / 'Ficou afastado' / 'Não testámos'.",
+        "Escolher direção final: 'Como no início' / 'Diferente' / 'Não observámos'."
+      ],
+      "interaction": {
+        "state": [
+          {
+            "name": "repeticoes",
+            "type": "quiz",
+            "options": [
+              "3",
+              "4",
+              "5"
+            ],
+            "default": null
+          },
+          {
+            "name": "resultadoQuadrado",
+            "type": "quiz",
+            "default": null
+          },
+          {
+            "name": "direcaoFinal",
+            "type": "quiz",
+            "default": null
+          }
+        ],
+        "render": "Quadrado de quatro lados e orientação inicial/final com setas; plano didático expandido e, após descoberta, equivalente compacto repetir. Resultados físicos são declarações.",
+        "transition": "Escolher repetições, visualizar percurso após confirmação e guardar declaração real. Extensão pode ficar incompleta sem bloquear conclusão/reflexão do núcleo.",
+        "constraint": "O conjunto avanço+viragem reaparece quatro vezes; retornar ao mesmo lugar e direção exige controlar comprimento e viragens, não apenas contar blocos.",
+        "assessment": "Aluno identifica quatro conjuntos e regista separadamente chegada e direção; professor observa se o programa real corresponde e se corrige uma variável."
+      },
+      "differentiation": {
+        "support": "Quatro cantos numerados, um conjunto por vez, setas marcadas no chão.",
+        "standard": "Planear quatro conjuntos e comparar lugar/direção finais.",
+        "challenge": "Construir programa equivalente com repetir quatro vezes e justificar o padrão; medir diferença à partida, opcional."
+      }
+    },
+    {
+      "id": "obstaculos",
+      "title": "Próxima missão · Passar entre obstáculos",
+      "estimatedMinutes": 20,
+      "outsideCoreDuration": true,
+      "summary": "Um mapa pode ser decomposto em avanços e viragens antes de programar.",
+      "instructions": [
+        "Coloca dois marcadores longe da borda.",
+        "Desenha um percurso que passe entre eles.",
+        "Divide o caminho em avanços e viragens.",
+        "Prevê onde é preciso deixar espaço.",
+        "Programa e testa devagar.",
+        "Muda um segmento e volta a testar."
+      ],
+      "requests": [
+        "Escolher percurso no esquema: 'Pelo meio livre' / 'Sobre um obstáculo'; pista imediata mostra espaço disponível.",
+        "Declarar execução/ajuda e resultado 'Passou sem tocar' / 'Tocou num marcador' / 'Não testámos'.",
+        "Selecionar segmento a alterar: 'Avanço' / 'Primeira viragem' / 'Segunda viragem'."
+      ],
+      "interaction": {
+        "state": [
+          {
+            "name": "percurso",
+            "type": "quiz",
+            "default": null
+          },
+          {
+            "name": "resultadoObstaculos",
+            "type": "quiz",
+            "default": null
+          },
+          {
+            "name": "segmentoAlterado",
+            "type": "quiz",
+            "default": null
+          }
+        ],
+        "render": "Dois obstáculos e corredor livre num esquema original; segmentos do plano com setas. Não simular leitura do campo real.",
+        "transition": "Selecionar percurso confirma plano e revela espaço; registar resultado físico e escolher um segmento de melhoria conserva trabalho retomável.",
+        "constraint": "A passagem depende também do espaço ocupado pela base; um percurso de linha central sem margem pode tocar no obstáculo.",
+        "assessment": "Aluno escolhe caminho livre, identifica um segmento a alterar e comunica comparação; professor confere margem e contacto no campo real."
+      },
+      "differentiation": {
+        "support": "Corredor largo, um marcador de cada vez e três segmentos com setas.",
+        "standard": "Dois marcadores, planear e testar percurso sem contacto.",
+        "challenge": "Propor outro percurso e justificar mais margem ou menos segmentos; sem cronómetro obrigatório."
+      }
+    },
+    {
+      "id": "giroscopio",
+      "title": "Com o professor · Virar usando orientação",
+      "estimatedMinutes": 20,
+      "outsideCoreDuration": true,
+      "summary": "O sensor de orientação do hub permite observar a viragem do robô.",
+      "instructions": [
+        "Faz esta missão com o professor.",
+        "Coloca o robô parado na marca.",
+        "Espera um segundo e define a guinada como zero.",
+        "Inicia uma viragem lenta para a direita.",
+        "Observa o sinal e o valor da guinada.",
+        "Espera pelo valor combinado e para os motores."
+      ],
+      "teacherTechnicalNote": "Exemplo LEGO: guinada=0 → iniciar direita → esperar guinada>89 → parar. Confirmar previamente orientação do hub, sentido e sinal: se valores ficam negativos, a condição >89 nunca será atingida. Verificar leitura com giro manual/parado antes de executar. Programar limite de tempo/paragem de segurança quando a versão permite; adulto deve interromper imediatamente se a leitura não aumenta como esperado. Não deixar ciclo de espera indefinido sem supervisão. O sensor é do hub, não um sensor externo a construir. Ângulo de guinada não equivale a graus de motor.",
+      "requests": [
+        "Escolher que medida observar: 'Orientação do hub' / 'Graus do motor'; feedback com desenho de eixo do hub após escolha.",
+        "Declarar 'Já fizemos com o professor' / 'Precisamos de ajuda' e resultado 'Parou perto de um quarto de volta' / 'Virou pouco ou demais' / 'Leitura com outro sinal' / 'Não testámos'."
+      ],
+      "interaction": {
+        "state": [
+          {
+            "name": "medida",
+            "type": "quiz",
+            "default": null
+          },
+          {
+            "name": "ensaioGuinada",
+            "type": "quiz",
+            "default": null
+          }
+        ],
+        "render": "Seta da orientação da base e medidor didático identificado como exemplo, não leitura conectada; sequência zero→virar→esperar→parar e intervenção do professor visível.",
+        "transition": "Escolher medida revela diferença entre hub/motor; guardar declaração real e dificuldade. Não mostrar medição simulada como leitura do sensor.",
+        "constraint": "A condição de paragem precisa corresponder ao sinal/sentido medido; medir orientação pode ajudar a controlar viragem, mas o exemplo não garante precisão universal.",
+        "assessment": "Aluno distingue orientação do hub de giro do motor e comunica leitura/paragem observadas com o professor."
+      },
+      "differentiation": {
+        "support": "Professor faz demonstração; criança aponta começo e fim e regista resultado com imagens.",
+        "standard": "Construir sequência com professor e comparar ângulo combinado/resultante.",
+        "challenge": "Explicar por que espera>89 não termina com ângulo negativo e propor correção com o professor; não executar sem confirmar segurança."
+      }
+    }
+  ],
+  "futureSessions": [
+    "Rever/calibrar viragem e percurso em L; repetir a partir da mesma orientação.",
+    "Construir quadrado por quatro conjuntos avanço/viragem e descobrir padrão antes do bloco repetir.",
+    "Explorar sensor de orientação do hub (giroscópio/ângulo de guinada) e parar viragem perto de um quarto de volta, com guia do professor.",
+    "Introduzir obstáculos e mapa real da competição depois de confirmar evento, regras, equipamentos e tempos."
+  ],
+  "sources": {
+    "consultedOn": "2026-10-02",
+    "wikiSynthesis": [
+      {
+        "title": "TIC no Ensino Básico",
+        "path": "20_Wiki/TIC no Ensino Básico.md",
+        "snapshot": "/tmp/pagecraft-spike-primeiros-movimentos-research/tic.md"
+      },
+      {
+        "title": "Avaliação Cooperada",
+        "path": "20_Wiki/Avaliação Cooperada.md",
+        "snapshot": "/tmp/pagecraft-spike-primeiros-movimentos-research/avaliacao.md"
+      },
+      {
+        "title": "Pensamento Computacional",
+        "path": "20_Wiki/Pensamento Computacional.md",
+        "snapshot": "/tmp/pagecraft-spike-primeiros-movimentos-research/pensamento.md"
+      },
+      {
+        "title": "PageCraft",
+        "path": "20_Wiki/PageCraft.md",
+        "snapshot": "/tmp/pagecraft-spike-primeiros-movimentos-research/pagecraft.md"
+      }
+    ],
+    "originals": [
+      "PDF fornecido pelo professor: Acampamento de Treinamento 1: Dirigindo Por Aí",
+      "https://education.lego.com/pt-br/lessons/prime-competition-ready/training-camp-1-driving-around/",
+      "https://spike.legoeducation.com/prime/project",
+      "https://www.erte.dge.mec.pt/sites/default/files/oc_1_tic_-_vf_03out2018.pdf"
+    ],
+    "proposal": "A microprogressão, duração de 45 minutos, sequência em L e andaimes são proposta nossa para 3.º/4.º. Os blocos têm ilustrações originais didáticas; não republicar PDF nem capturas da marca. Relatório detalhado de títulos/caminhos em drafts/spike-prime-primeiros-movimentos-sources.md."
+  }
+}
