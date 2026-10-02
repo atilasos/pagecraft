@@ -1631,5 +1631,23 @@
     "preview_snapshot devolveu timeout do cliente em768/1280 e numa tentativa de zoom390; geometrias e interações foram executadas nesses tamanhos.",
     "Ampliação foi focada explicitamente pelo DOM, seguida de teclas trusted; tab em segundo plano não demonstrou :focus-visible pintado nem entrada sequencial pelo Tab na região.",
     "Imagem raster reduzida no telemóvel usa transcrição20px e ampliação para permitir leitura. Nenhum pedido exige ler só a imagem."
-  ]
+  ],
+  "viewport_measurements": [
+    {
+      "outer_window_requested_width_px": 390,
+      "iframe_window_width_px": 375,
+      "activity_document_client_width_px": 360
+    },
+    {
+      "outer_window_requested_width_px": 768,
+      "iframe_window_width_px": 753,
+      "activity_document_client_width_px": 738
+    },
+    {
+      "outer_window_requested_width_px": 1280,
+      "iframe_window_width_px": 1265,
+      "activity_document_client_width_px": 1250
+    }
+  ],
+  "measurement_note": "width nos layouts é window.innerWidth do iframe; viewport é documentElement.clientWidth. As janelas exteriores foram pedidas390/768/1280; o harness e as barras de deslocamento reduzem a largura efetivamente disponível à atividade."
 }

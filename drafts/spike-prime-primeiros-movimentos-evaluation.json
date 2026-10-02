@@ -40,7 +40,7 @@
     },
     {
       "phase": "Evaluator",
-      "summary": "63 ensaios DOM:3apoios×3viewports(390/768/1280)×6passos+viragem, com guia e ampliação abertos. Imagens carregadas, controlos≥48px, legendas20px, sem transbordamento horizontal da página. Captura visual390 guardada; screenshots768/1280 limitadas por timeout do cliente.",
+      "summary": "63 ensaios DOM:3apoios×3janelas exteriores solicitadas(390/768/1280)×6passos+viragem, com guia e ampliação abertos. Larguras interiores efetivas do documento:360/738/1250px (scrollbars do harness); imagens carregadas, controlos≥48px, legendas20px e sem transbordamento. Captura visual da janela390 guardada; screenshots768/1280 limitadas por timeout do cliente.",
       "artifact": "drafts/spike-prime-primeiros-movimentos-qa/spike-turn-390.png"
     },
     {
@@ -76,7 +76,7 @@
       "pass": true
     },
     {
-      "check": "3apoios×390/768/1280: guias/ampliação sem overflow ou controlo<48px",
+      "check": "3apoios×janelas exteriores390/768/1280(documento360/738/1250): guias/ampliação sem overflow ou controlo<48px",
       "pass": true
     },
     {
@@ -111,5 +111,22 @@
     "Não se emulou rede desligada; carregamento/interações não produziram requests externos de recursos.",
     "Persistência host e vozes individuais permanecem evidência da ronda v1, ligada ao SHA anterior; foram preservadas as funções da ponte, sem repetir hardware ou registos nesta ronda."
   ],
-  "publication_status": "draft; revisão e aprovação específica do professor necessária"
+  "publication_status": "draft; revisão e aprovação específica do professor necessária",
+  "viewport_measurements": [
+    {
+      "outer_window_requested_width_px": 390,
+      "iframe_window_width_px": 375,
+      "activity_document_client_width_px": 360
+    },
+    {
+      "outer_window_requested_width_px": 768,
+      "iframe_window_width_px": 753,
+      "activity_document_client_width_px": 738
+    },
+    {
+      "outer_window_requested_width_px": 1280,
+      "iframe_window_width_px": 1265,
+      "activity_document_client_width_px": 1250
+    }
+  ]
 }
