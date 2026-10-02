@@ -1,0 +1,786 @@
+{
+  "checkedOn": "2026-10-02",
+  "browser": "T3 preview_* tab_j",
+  "intermediate": [
+    {
+      "disabled": null,
+      "feedback": "↻ Segue o cabo até à letra. O comando está a escolher essa porta?",
+      "test": "wrong-port-response-allows-next"
+    },
+    {
+      "missing": "Falta responder: Confirma a distância no teu plano.",
+      "step2": "Até à marca dos 20 cm"
+    },
+    {
+      "disabled": null,
+      "feedback": "↻ O traço acaba antes do alvo. Compara a parte que falta. Podes mudar a distância.",
+      "model": "Partida à marca zero. Alvo a 20 centímetros. Modelo ideal: comando 10 centímetros.01020 cmPartidaAlvoModelo na página: 10 cm. No robô, vamos testar.",
+      "test": "10cm-wrong-plan-allows-next"
+    },
+    {
+      "missing": "Falta responder: Confirma o resultado do ensaio 1.",
+      "next": "true",
+      "other": [
+        "",
+        ""
+      ],
+      "test": "selection-needs-explicit-trial-confirmation"
+    },
+    {
+      "chart": "Ensaio 1: Antes do alvo. Ensaio 2: No alvo. Ensaio 3: Não conseguimos testarAlvo123 · Sem ensaioAntesNo alvoDepoisRegistos que o grupo declarou. São categorias, sem distâncias inventadas.",
+      "disabled": null,
+      "feedback": "↻ Vários campos mudam. Qual mudança explica o novo resultado? Experimenta escolher só uma.",
+      "test": "wrong-all-at-once-allows-next"
+    },
+    {
+      "feedback": "↻ Olha para a posição 2 destacada e compara com a seta do percurso. Podes rever os blocos.",
+      "model": "Percurso em L. Passo 1: avançar. Passo 2: avançar. Passo 3: avançar.Objetivo pontilhadoPartidaTrajeto do plano: linha contínuaModelo na página. Passo 1: avançar. Passo 2: avançar. Passo 3: avançar.",
+      "next": null,
+      "test": "repeated-sequence-is-response"
+    },
+    {
+      "missing": "Falta responder: Preenche os três passos e confirma a sequência.",
+      "next": "true",
+      "result": "Fica para a próxima aula",
+      "test": "edited-sequence-invalidates-confirmation"
+    },
+    {
+      "feedback": "✓ O avanço depois da viragem segue uma nova direção.",
+      "model": "Percurso em L. Passo 1: avançar. Passo 2: Virar à direita. Passo 3: avançar.Objetivo pontilhadoPartidaTrajeto do plano: linha contínuaModelo na página. Passo 1: avançar. Passo 2: Virar à direita. Passo 3: avançar.",
+      "test": "correct-L-repaired"
+    }
+  ],
+  "allSupports": [
+    {
+      "checks": [
+        {
+          "missing": "Falta responder: Confirma as portas dos motores.",
+          "still": "Antes de ligar os motores",
+          "test": "blank-blocks-next-and-future",
+          "title": "Antes de ligar os motores"
+        },
+        {
+          "hint": true,
+          "next": null,
+          "test": "wrong-port-allows"
+        },
+        {
+          "missing": "Falta responder: Confirma a distância no teu plano.",
+          "still": "Até à marca dos 20 cm",
+          "test": "blank-blocks-next-and-future",
+          "title": "Até à marca dos 20 cm"
+        },
+        {
+          "next": null,
+          "test": "wrong-distance-allows"
+        },
+        {
+          "next": "true",
+          "physical": "Não conseguimos testar",
+          "test": "edit-distance-invalidates"
+        },
+        {
+          "missing": "Falta responder: Confirma o resultado do ensaio 1.",
+          "still": "Repetir e mudar uma coisa",
+          "test": "blank-blocks-next-and-future",
+          "title": "Repetir e mudar uma coisa"
+        },
+        {
+          "next": null,
+          "summary": "Antes do alvoDepois do alvoNão conseguimos testar",
+          "test": "wrong-change-allows"
+        },
+        {
+          "missing": "Falta responder: Preenche os três passos e confirma a sequência.",
+          "still": "Que caminho faz o teu plano?",
+          "test": "blank-blocks-next-and-future",
+          "title": "Que caminho faz o teu plano?"
+        },
+        {
+          "hint": "↻ Olha para a posição 2 destacada e compara com a seta do percurso. Podes rever os blocos.",
+          "next": null,
+          "test": "repeated-sequence-allows"
+        },
+        {
+          "missing": "Falta responder: Escolhe o que vais mostrar aos colegas.",
+          "still": "Uma descoberta para mostrar",
+          "test": "blank-blocks-next-and-future",
+          "title": "Uma descoberta para mostrar"
+        }
+      ],
+      "final": "A exploração está respondida. A reflexão é facultativa.",
+      "level": "support"
+    },
+    {
+      "checks": [
+        {
+          "missing": "Falta responder: Confirma as portas dos motores.",
+          "still": "Antes de ligar os motores",
+          "test": "blank-blocks-next-and-future",
+          "title": "Antes de ligar os motores"
+        },
+        {
+          "hint": true,
+          "next": null,
+          "test": "wrong-port-allows"
+        },
+        {
+          "missing": "Falta responder: Confirma a distância no teu plano.",
+          "still": "Até à marca dos 20 cm",
+          "test": "blank-blocks-next-and-future",
+          "title": "Até à marca dos 20 cm"
+        },
+        {
+          "next": null,
+          "test": "wrong-distance-allows"
+        },
+        {
+          "next": "true",
+          "physical": "Não conseguimos testar",
+          "test": "edit-distance-invalidates"
+        },
+        {
+          "missing": "Falta responder: Confirma o resultado do ensaio 1.",
+          "still": "Repetir e mudar uma coisa",
+          "test": "blank-blocks-next-and-future",
+          "title": "Repetir e mudar uma coisa"
+        },
+        {
+          "next": null,
+          "summary": "Antes do alvoDepois do alvoNão conseguimos testar",
+          "test": "wrong-change-allows"
+        },
+        {
+          "missing": "Falta responder: Preenche os três passos e confirma a sequência.",
+          "still": "Que caminho faz o teu plano?",
+          "test": "blank-blocks-next-and-future",
+          "title": "Que caminho faz o teu plano?"
+        },
+        {
+          "hint": "↻ Olha para a posição 2 destacada e compara com a seta do percurso. Podes rever os blocos.",
+          "next": null,
+          "test": "repeated-sequence-allows"
+        },
+        {
+          "missing": "Falta responder: Escolhe o que vais mostrar aos colegas.",
+          "still": "Uma descoberta para mostrar",
+          "test": "blank-blocks-next-and-future",
+          "title": "Uma descoberta para mostrar"
+        }
+      ],
+      "final": "A exploração está respondida. A reflexão é facultativa.",
+      "level": "challenge"
+    }
+  ],
+  "extras": [
+    {
+      "squareBefore": "Quadrado com quatro lados. Ainda sem plano.1234Modelo na página. Compara lugar e direção final no robô."
+    },
+    {
+      "model": "Quadrado com quatro lados. Plano escolhido: 3 conjuntos.1234Modelo na página. Compara lugar e direção final no robô.",
+      "squareWrong": "↻ Segue o traço e conta os lados. Onde acaba o teu plano?"
+    },
+    {
+      "obstacleWrong": "↻ O traço passa sobre um marcador. Olha para o espaço livre."
+    },
+    {
+      "gyroWrong": "↻ Olha para a seta curva da base. O giro da roda é outra medida."
+    },
+    {
+      "missing": "A exploração está respondida. A reflexão é facultativa.",
+      "next": null,
+      "test": "incomplete-extensions-do-not-block"
+    },
+    {
+      "after": [
+        "1 · PrepararRespostas dadas",
+        "2 · AvançarRespostas dadas",
+        "3 · TestarRespostas dadas",
+        "4 · VirarRespostas dadas",
+        "5 · PartilharRespostas dadas"
+      ],
+      "before": [
+        "1 · PrepararRespostas dadas",
+        "2 · AvançarRespostas dadas",
+        "3 · TestarRespostas dadas",
+        "4 · VirarRespostas dadas",
+        "5 · PartilharRespostas dadas"
+      ],
+      "gyroPressed": "true",
+      "squarePressed": "true",
+      "test": "switch-support-preserves-extras"
+    },
+    {
+      "confirmed": "Sequência confirmada",
+      "extraModel": "Percurso em L. Passo 1: avançar. Passo 2: Virar à esquerda. Passo 3: avançar.Objetivo pontilhadoPartidaTrajeto do plano: linha contínuaModelo na página. Passo 1: avançar. Passo 2: Virar à esquerda. Passo 3: avançar.",
+      "sequence": [
+        "Avançar 1",
+        "Virar à direita",
+        "Avançar 1"
+      ],
+      "test": "extra-L-preserves-core"
+    }
+  ],
+  "layouts": [
+    {
+      "doc": 360,
+      "font": "\"Century Gothic\", \"Didact Gothic\", \"URW Gothic\", \"Avant Garde\", sans-serif",
+      "fontLoaded": true,
+      "small": [],
+      "smallText": [
+        {
+          "size": "16px",
+          "text": "Caderno de robótica · Aula de 45 minutos"
+        },
+        {
+          "size": "16px",
+          "text": "3.º e 4.º anos · Unidade LEGO «Prontos p"
+        },
+        {
+          "size": "16px",
+          "text": "Podes mudar de apoio.Os teus registos fi"
+        },
+        {
+          "size": "16px",
+          "text": "Missão 1 de 5"
+        },
+        {
+          "size": "16px",
+          "text": "Abre noutra aba. O teu plano fica nesta "
+        },
+        {
+          "size": "16px",
+          "text": "Esta página não observa nem controla o r"
+        }
+      ],
+      "step": 1,
+      "viewport": 360,
+      "width": 375
+    },
+    {
+      "doc": 360,
+      "font": "\"Century Gothic\", \"Didact Gothic\", \"URW Gothic\", \"Avant Garde\", sans-serif",
+      "fontLoaded": true,
+      "small": [],
+      "smallText": [
+        {
+          "size": "16px",
+          "text": "Caderno de robótica · Aula de 45 minutos"
+        },
+        {
+          "size": "16px",
+          "text": "3.º e 4.º anos · Unidade LEGO «Prontos p"
+        },
+        {
+          "size": "16px",
+          "text": "Podes mudar de apoio.Os teus registos fi"
+        },
+        {
+          "size": "16px",
+          "text": "Missão 2 de 5"
+        },
+        {
+          "size": "16px",
+          "text": "Abre noutra aba. O teu plano fica nesta "
+        },
+        {
+          "size": "16px",
+          "text": "Os nomes dos blocos e botões variam com "
+        },
+        {
+          "size": "16px",
+          "text": "Esta página não observa nem controla o r"
+        }
+      ],
+      "step": 2,
+      "viewport": 360,
+      "width": 375
+    },
+    {
+      "doc": 360,
+      "font": "\"Century Gothic\", \"Didact Gothic\", \"URW Gothic\", \"Avant Garde\", sans-serif",
+      "fontLoaded": true,
+      "small": [],
+      "smallText": [
+        {
+          "size": "16px",
+          "text": "Caderno de robótica · Aula de 45 minutos"
+        },
+        {
+          "size": "16px",
+          "text": "3.º e 4.º anos · Unidade LEGO «Prontos p"
+        },
+        {
+          "size": "16px",
+          "text": "Podes mudar de apoio.Os teus registos fi"
+        },
+        {
+          "size": "16px",
+          "text": "Missão 3 de 5"
+        },
+        {
+          "size": "16px",
+          "text": "Esta página não observa nem controla o r"
+        }
+      ],
+      "step": 3,
+      "viewport": 360,
+      "width": 375
+    },
+    {
+      "doc": 360,
+      "font": "\"Century Gothic\", \"Didact Gothic\", \"URW Gothic\", \"Avant Garde\", sans-serif",
+      "fontLoaded": true,
+      "small": [],
+      "smallText": [
+        {
+          "size": "16px",
+          "text": "Caderno de robótica · Aula de 45 minutos"
+        },
+        {
+          "size": "16px",
+          "text": "3.º e 4.º anos · Unidade LEGO «Prontos p"
+        },
+        {
+          "size": "16px",
+          "text": "Podes mudar de apoio.Os teus registos fi"
+        },
+        {
+          "size": "16px",
+          "text": "Missão 4 de 5"
+        },
+        {
+          "size": "16px",
+          "text": "Posição 1 · escolhida"
+        },
+        {
+          "size": "16px",
+          "text": "Posição 2"
+        },
+        {
+          "size": "16px",
+          "text": "Posição 3"
+        },
+        {
+          "size": "16px",
+          "text": "Esta página não observa nem controla o r"
+        }
+      ],
+      "step": 4,
+      "viewport": 360,
+      "width": 375
+    },
+    {
+      "doc": 360,
+      "font": "\"Century Gothic\", \"Didact Gothic\", \"URW Gothic\", \"Avant Garde\", sans-serif",
+      "fontLoaded": true,
+      "small": [],
+      "smallText": [
+        {
+          "size": "16px",
+          "text": "Caderno de robótica · Aula de 45 minutos"
+        },
+        {
+          "size": "16px",
+          "text": "3.º e 4.º anos · Unidade LEGO «Prontos p"
+        },
+        {
+          "size": "16px",
+          "text": "Podes mudar de apoio.Os teus registos fi"
+        },
+        {
+          "size": "16px",
+          "text": "Missão 5 de 5"
+        },
+        {
+          "size": "16px",
+          "text": "Resultados físicos são declarações do gr"
+        },
+        {
+          "size": "16px",
+          "text": "O professor abre a reflexão de cada part"
+        }
+      ],
+      "step": 5,
+      "viewport": 360,
+      "width": 375
+    },
+    {
+      "doc": 738,
+      "small": [],
+      "step": 1,
+      "viewport": 738,
+      "width": 753
+    },
+    {
+      "doc": 738,
+      "small": [],
+      "step": 2,
+      "viewport": 738,
+      "width": 753
+    },
+    {
+      "doc": 738,
+      "small": [],
+      "step": 3,
+      "viewport": 738,
+      "width": 753
+    },
+    {
+      "doc": 738,
+      "small": [],
+      "step": 4,
+      "viewport": 738,
+      "width": 753
+    },
+    {
+      "doc": 738,
+      "small": [],
+      "step": 5,
+      "viewport": 738,
+      "width": 753
+    },
+    {
+      "doc": 1250,
+      "small": [],
+      "step": 1,
+      "viewport": 1250,
+      "width": 1265
+    },
+    {
+      "doc": 1250,
+      "small": [],
+      "step": 2,
+      "viewport": 1250,
+      "width": 1265
+    },
+    {
+      "doc": 1250,
+      "small": [],
+      "step": 3,
+      "viewport": 1250,
+      "width": 1265
+    },
+    {
+      "doc": 1250,
+      "small": [],
+      "step": 4,
+      "viewport": 1250,
+      "width": 1265
+    },
+    {
+      "doc": 1250,
+      "small": [],
+      "step": 5,
+      "viewport": 1250,
+      "width": 1265
+    }
+  ],
+  "restore": [
+    {
+      "events": [
+        "activity_state"
+      ],
+      "missing": "A exploração está respondida. A reflexão é facultativa.",
+      "restored": {
+        "pagecraft": 1,
+        "payload": {
+          "activity": "spike-prime-primeiros-movimentos",
+          "readyForReflection": true,
+          "state": {
+            "level": "challenge",
+            "sequence": [
+              "Avançar 1",
+              "Virar à direita",
+              "Avançar 1"
+            ],
+            "step": 4,
+            "values": {
+              "change": "Distância",
+              "distance": "20",
+              "extraTurn": "Virar à esquerda",
+              "forwardResult": "Não conseguimos testar",
+              "forwardStatus": "Precisamos de ajuda",
+              "gyroMeasure": "Graus do motor",
+              "improveResult": "Não conseguimos comparar",
+              "improveStatus": "Precisamos de ajuda",
+              "left": "Preciso de ajuda",
+              "obstaclePlan": "Sobre um obstáculo",
+              "planConfirmed": true,
+              "portPrediction": "Pode não mover as rodas",
+              "portsConfirmed": true,
+              "prediction": "Depois do alvo",
+              "prepareResult": "Ainda falta preparar",
+              "prepareStatus": "Precisamos de ajuda",
+              "right": "D",
+              "sequenceConfirmed": true,
+              "share": "Uma dificuldade para pedir ajuda",
+              "squareConfirmed": true,
+              "squareCount": "3",
+              "trial1": "Antes do alvo",
+              "trial1Confirmed": true,
+              "trial2": "Depois do alvo",
+              "trial2Confirmed": true,
+              "trial3": "Não conseguimos testar",
+              "trial3Confirmed": true,
+              "turnResult": "Fica para a próxima aula",
+              "turnStatus": "Precisamos de ajuda"
+            }
+          },
+          "version": 1
+        },
+        "ts": 1790962094030,
+        "type": "activity_state",
+        "unitId": "u5"
+      },
+      "step": "Uma descoberta para mostrar",
+      "test": "complete-with-extras"
+    },
+    {
+      "events": [
+        "activity_state"
+      ],
+      "missing": "Falta responder: Confirma o resultado do ensaio 2.",
+      "restored": {
+        "pagecraft": 1,
+        "payload": {
+          "activity": "spike-prime-primeiros-movimentos",
+          "readyForReflection": false,
+          "state": {
+            "level": "challenge",
+            "sequence": [
+              "Avançar 1",
+              "Virar à direita",
+              "Avançar 1"
+            ],
+            "step": 2,
+            "values": {
+              "change": "Distância",
+              "distance": "20",
+              "extraTurn": "Virar à esquerda",
+              "forwardResult": "Não conseguimos testar",
+              "forwardStatus": "Precisamos de ajuda",
+              "gyroMeasure": "Graus do motor",
+              "improveResult": "Não conseguimos comparar",
+              "improveStatus": "Precisamos de ajuda",
+              "left": "Preciso de ajuda",
+              "obstaclePlan": "Sobre um obstáculo",
+              "planConfirmed": true,
+              "portPrediction": "Pode não mover as rodas",
+              "portsConfirmed": true,
+              "prediction": "Depois do alvo",
+              "prepareResult": "Ainda falta preparar",
+              "prepareStatus": "Precisamos de ajuda",
+              "right": "D",
+              "sequenceConfirmed": true,
+              "share": "Uma dificuldade para pedir ajuda",
+              "squareConfirmed": true,
+              "squareCount": "3",
+              "trial1": "Antes do alvo",
+              "trial1Confirmed": true,
+              "trial2Confirmed": false,
+              "trial3": "Não conseguimos testar",
+              "trial3Confirmed": true,
+              "turnResult": "Fica para a próxima aula",
+              "turnStatus": "Precisamos de ajuda"
+            }
+          },
+          "version": 1
+        },
+        "ts": 1790962094113,
+        "type": "activity_state",
+        "unitId": "u3"
+      },
+      "step": "Repetir e mudar uma coisa",
+      "test": "incomplete-clamps-to-missing"
+    },
+    {
+      "events": [
+        "activity_state"
+      ],
+      "missing": "Falta responder: Confirma as portas dos motores.",
+      "restored": {
+        "pagecraft": 1,
+        "payload": {
+          "activity": "spike-prime-primeiros-movimentos",
+          "readyForReflection": false,
+          "state": {
+            "level": "intermediate",
+            "sequence": [
+              null,
+              null,
+              null
+            ],
+            "step": 0,
+            "values": {
+              "planConfirmed": false,
+              "portsConfirmed": false,
+              "right": "D",
+              "sequenceConfirmed": false,
+              "squareConfirmed": false,
+              "trial1Confirmed": false,
+              "trial2Confirmed": false,
+              "trial3Confirmed": false
+            }
+          },
+          "version": 1
+        },
+        "ts": 1790962094197,
+        "type": "activity_state",
+        "unitId": "u1"
+      },
+      "step": "Antes de ligar os motores",
+      "test": "malformed-enums-and-false-confirmations"
+    },
+    {
+      "events": [
+        "activity_state"
+      ],
+      "missing": "A exploração está respondida. A reflexão é facultativa.",
+      "restored": {
+        "pagecraft": 1,
+        "payload": {
+          "activity": "spike-prime-primeiros-movimentos",
+          "readyForReflection": true,
+          "state": {
+            "level": "challenge",
+            "sequence": [
+              "Avançar 1",
+              "Virar à direita",
+              "Avançar 1"
+            ],
+            "step": 4,
+            "values": {
+              "change": "Distância",
+              "distance": "20",
+              "extraTurn": "Virar à esquerda",
+              "forwardResult": "Não conseguimos testar",
+              "forwardStatus": "Precisamos de ajuda",
+              "gyroMeasure": "Graus do motor",
+              "improveResult": "Não conseguimos comparar",
+              "improveStatus": "Precisamos de ajuda",
+              "left": "Preciso de ajuda",
+              "obstaclePlan": "Sobre um obstáculo",
+              "planConfirmed": true,
+              "portPrediction": "Pode não mover as rodas",
+              "portsConfirmed": true,
+              "prediction": "Depois do alvo",
+              "prepareResult": "Ainda falta preparar",
+              "prepareStatus": "Precisamos de ajuda",
+              "right": "D",
+              "sequenceConfirmed": true,
+              "share": "Uma dificuldade para pedir ajuda",
+              "squareConfirmed": true,
+              "squareCount": "3",
+              "trial1": "Antes do alvo",
+              "trial1Confirmed": true,
+              "trial2": "Depois do alvo",
+              "trial2Confirmed": true,
+              "trial3": "Não conseguimos testar",
+              "trial3Confirmed": true,
+              "turnResult": "Fica para a próxima aula",
+              "turnStatus": "Precisamos de ajuda"
+            }
+          },
+          "version": 1
+        },
+        "ts": 1790962094287,
+        "type": "activity_state",
+        "unitId": "u5"
+      },
+      "step": "Uma descoberta para mostrar",
+      "test": "reinstall-complete"
+    }
+  ],
+  "localReflection": {
+    "aCriterion": "Com ajuda",
+    "aStrategy": "Ensaio docente: mudei uma variável.",
+    "mandatoryNext": null,
+    "message": true,
+    "name": "A reflexão de Ensaio docente A",
+    "participantButtons": [
+      "Ensaio docente A",
+      "Ensaio docente B"
+    ],
+    "saved": {
+      "reflections": [
+        {
+          "c0": "Com ajuda",
+          "name": "Ensaio docente A",
+          "strategy": "Ensaio docente: mudei uma variável."
+        },
+        {
+          "c1": "Ainda não experimentei",
+          "name": "Ensaio docente B"
+        }
+      ],
+      "state": {
+        "level": "challenge",
+        "sequence": [
+          "Avançar 1",
+          "Virar à direita",
+          "Avançar 1"
+        ],
+        "step": 4,
+        "values": {
+          "change": "Distância",
+          "distance": "20",
+          "extraTurn": "Virar à esquerda",
+          "forwardResult": "Não conseguimos testar",
+          "forwardStatus": "Precisamos de ajuda",
+          "gyroMeasure": "Graus do motor",
+          "improveResult": "Não conseguimos comparar",
+          "improveStatus": "Precisamos de ajuda",
+          "left": "Preciso de ajuda",
+          "obstaclePlan": "Sobre um obstáculo",
+          "planConfirmed": true,
+          "portPrediction": "Pode não mover as rodas",
+          "portsConfirmed": true,
+          "prediction": "Depois do alvo",
+          "prepareResult": "Ainda falta preparar",
+          "prepareStatus": "Precisamos de ajuda",
+          "right": "D",
+          "sequenceConfirmed": true,
+          "share": "Uma dificuldade para pedir ajuda",
+          "squareConfirmed": true,
+          "squareCount": "3",
+          "trial1": "Antes do alvo",
+          "trial1Confirmed": true,
+          "trial2": "Depois do alvo",
+          "trial2Confirmed": true,
+          "trial3": "Não conseguimos testar",
+          "trial3Confirmed": true,
+          "turnResult": "Fica para a próxima aula",
+          "turnStatus": "Já fizemos"
+        }
+      },
+      "version": 1
+    }
+  },
+  "screenshot390": "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-127-0-0-1-mur8lov9-c0b6eed4.png",
+  "keyboard": {
+    "actions": [
+      "Enter activated sequence token",
+      "Tab moved token0 to token1",
+      "Space activated Já fizemos",
+      "Enter confirmed sequence"
+    ],
+    "trustedKeyEvents": true,
+    "backgroundDocumentHasFocus": false,
+    "paintedFocusRingVerified": false,
+    "cssFocusVisibleRule": "3px solid focus; offset4px"
+  },
+  "selfContained": {
+    "resourcesAfterLoadAndInteractions": [],
+    "networkApisInActivity": false,
+    "bodySizePx": 20,
+    "unitHeadingPx": 30,
+    "didactFontLoaded": true,
+    "forcedOfflineBrowserEmulation": false
+  },
+  "limits": [
+    "Snapshots at768/1280 failed with Preview automation snapshot failed on client; DOM geometry verified at every mission.",
+    "Background document.hasFocus=false prevented visual confirmation of :focus-visible paint despite trusted keyboard interaction.",
+    "No physical SPIKE robot connected; execution/calibration require teacher."
+  ]
+}
