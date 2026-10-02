@@ -1,0 +1,1635 @@
+{
+  "checked_on": "2026-10-02",
+  "scope": "Incremento de capturas SPIKE reais; não repete robô físico ou registos host.",
+  "html_sha256": "061e8f4b5556be88d23b321a5258892f2c0f645b625eff5cab289d15e6095d68",
+  "html_commit": "0910f60623ca44ad33e439e293b2878d1e77c705",
+  "base_evaluation": "drafts/spike-prime-primeiros-movimentos-evaluation-v1.json",
+  "base_sha256": "c6fd72c00648ff5f37cff1e300996cbe2fb8f6af3f3816b3723e725b42cad5d8",
+  "screenshots_visual_html_sha256": "5bb4adcb61bcf3d809b38ae3d3f74a33cba9d2395658c696645381516a551e2c",
+  "final_delta": "Só handler de setas em regiões; não altera CSS, imagens, texto ou layout já ensaiados.",
+  "gating": [
+    {
+      "forwardGuide": false,
+      "images": 0,
+      "missing": "planConfirmed",
+      "next": "true",
+      "turnGuide": false
+    },
+    {
+      "forwardGuide": false,
+      "images": 0,
+      "missing": "prediction",
+      "next": "true",
+      "turnGuide": false
+    },
+    {
+      "forwardGuide": false,
+      "images": 0,
+      "missing": "sequenceConfirmed",
+      "next": "true",
+      "turnGuide": false
+    }
+  ],
+  "images": [
+    {
+      "alt": "Captura real SPIKE: bloco amarelo «quando o programa iniciar».",
+      "caption": "Exemplo na aplicação SPIKE. Confere as portas e valores da tua base.",
+      "captionSize": "20px",
+      "displayed": [
+        222,
+        57.875
+      ],
+      "natural": [
+        372,
+        97
+      ],
+      "sha256": "44d11565e162c7e10499532d42a0f7e76c6ce5e43be8bd857ee2700be6ae944e",
+      "title": "Começar o programa",
+      "transcript": "O bloco diz «quando o programa iniciar». Os outros blocos ficam ligados por baixo."
+    },
+    {
+      "alt": "Captura real SPIKE: definir motores de movimento como C+D, portas de exemplo.",
+      "caption": "Exemplo na aplicação SPIKE. Confere as portas e valores da tua base.",
+      "captionSize": "20px",
+      "displayed": [
+        222,
+        29.234375
+      ],
+      "natural": [
+        577,
+        76
+      ],
+      "sha256": "c19dce755c066b68de2b758726e47f4699d8c5dde03932b1a90be9559d112c63",
+      "title": "Escolher os teus motores",
+      "transcript": "A captura mostra «definir motores de movimento como C+D». C+D são as portas deste exemplo.\n\nNo teu plano: C + D. Se pediste ajuda, confirma as portas com o professor."
+    },
+    {
+      "alt": "Captura real SPIKE: definir velocidade de movimento a 30 por cento, valor de exemplo.",
+      "caption": "Exemplo na aplicação SPIKE. Confere as portas e valores da tua base.",
+      "captionSize": "20px",
+      "displayed": [
+        222,
+        31.359375
+      ],
+      "natural": [
+        545,
+        77
+      ],
+      "sha256": "b900f3b3e5f1b7c4ab710c27be13985c4fe7097e22c1bec4b057223511ce488a",
+      "title": "Começar devagar",
+      "transcript": "A captura mostra «definir velocidade de movimento a 30%». O professor pode ajustar este valor."
+    },
+    {
+      "alt": "Captura real SPIKE: definir uma rotação do motor como 17,5 centímetros de movimento, medida de exemplo.",
+      "caption": "Exemplo na aplicação SPIKE. Confere as portas e valores da tua base.",
+      "captionSize": "20px",
+      "displayed": [
+        222,
+        23.9375
+      ],
+      "natural": [
+        714,
+        77
+      ],
+      "sha256": "f0253cdbf4802d7ff4c9f2b4ae22798ce2dd8bf065be670c89efa5d02c891950",
+      "title": "Ajustar a medida às rodas",
+      "transcript": "A captura mostra uma rotação igual a 17,5 cm. Este exemplo não serve para todas as rodas."
+    },
+    {
+      "alt": "Captura real SPIKE: mover em frente por 20 centímetros, distância de exemplo.",
+      "caption": "Exemplo na aplicação SPIKE. Confere as portas e valores da tua base.",
+      "captionSize": "20px",
+      "displayed": [
+        222,
+        45.140625
+      ],
+      "natural": [
+        472,
+        96
+      ],
+      "sha256": "e375d0fc1a3cb9620049710f059d7a6546965f1fb87197bc1c412fb3505396c5",
+      "title": "Pedir o avanço",
+      "transcript": "A captura mostra «mover» com a seta para a frente, por 20 cm. Usa a distância que escolheste no plano.\n\nNo teu plano: mover em frente por 10 cm."
+    },
+    {
+      "alt": "Programa real de exemplo SPIKE: início, motores C+D, velocidade 30 por cento, medida de 17,5 centímetros por rotação e avanço de 20 centímetros.",
+      "caption": "Exemplo na aplicação SPIKE. Confere as portas e valores da tua base.",
+      "captionSize": "20px",
+      "displayed": [
+        222,
+        131.515625
+      ],
+      "natural": [
+        714,
+        423
+      ],
+      "sha256": "9741e7b664f36e348cc4fd2aa3cd67c20e9c166aca7ae252cf3b5cd50a02cf5c",
+      "title": "Conferir e experimentar",
+      "transcript": "Ordem do exemplo: começar, escolher motores, definir velocidade, ajustar medida e mover. C+D, 30%, 17,5 cm e 20 cm são valores a conferir."
+    },
+    {
+      "alt": "Captura real da coluna de categorias SPIKE, incluindo Eventos e Movimento.",
+      "kind": "categorias",
+      "natural": [
+        67,
+        583
+      ],
+      "sha256": "c89ac2efdf45907617bceb4d329e020adb04dd9456ddb5b429923792de9521d4"
+    },
+    {
+      "alt": "Captura real SPIKE: mover com direita 100 por 0,25 rotações, valores de um exemplo de viragem.",
+      "kind": "virar",
+      "natural": [
+        605,
+        105
+      ],
+      "sha256": "92a4c437966e3fa4d839f86a819453436608e90f9007e09d494180026cbda24d",
+      "transcript": "A captura mostra «mover direita: 100 por 0,25 rotações».\n\n«Direita: 100» indica a direção da viragem, não a velocidade.\n\n0,25 rotações é um exemplo curto. Ajusta com o professor.\n\nEste valor não garante uma viragem de 90° do robô."
+    }
+  ],
+  "layouts": [
+    {
+      "doc": 360,
+      "imageComplete": true,
+      "kind": "forward-1",
+      "level": "support",
+      "natural": [
+        372,
+        97
+      ],
+      "rendered": [
+        222,
+        57.875
+      ],
+      "smallControls": 0,
+      "viewport": 360,
+      "width": 375,
+      "zoomBox": 256,
+      "zoomScrollWidth": 984
+    },
+    {
+      "doc": 360,
+      "imageComplete": true,
+      "kind": "forward-2",
+      "level": "support",
+      "natural": [
+        577,
+        76
+      ],
+      "rendered": [
+        222,
+        29.234375
+      ],
+      "smallControls": 0,
+      "viewport": 360,
+      "width": 375,
+      "zoomBox": 256,
+      "zoomScrollWidth": 984
+    },
+    {
+      "doc": 360,
+      "imageComplete": true,
+      "kind": "forward-3",
+      "level": "support",
+      "natural": [
+        545,
+        77
+      ],
+      "rendered": [
+        222,
+        31.359375
+      ],
+      "smallControls": 0,
+      "viewport": 360,
+      "width": 375,
+      "zoomBox": 256,
+      "zoomScrollWidth": 984
+    },
+    {
+      "doc": 360,
+      "imageComplete": true,
+      "kind": "forward-4",
+      "level": "support",
+      "natural": [
+        714,
+        77
+      ],
+      "rendered": [
+        222,
+        23.9375
+      ],
+      "smallControls": 0,
+      "viewport": 360,
+      "width": 375,
+      "zoomBox": 256,
+      "zoomScrollWidth": 984
+    },
+    {
+      "doc": 360,
+      "imageComplete": true,
+      "kind": "forward-5",
+      "level": "support",
+      "natural": [
+        472,
+        96
+      ],
+      "rendered": [
+        222,
+        45.140625
+      ],
+      "smallControls": 0,
+      "viewport": 360,
+      "width": 375,
+      "zoomBox": 256,
+      "zoomScrollWidth": 984
+    },
+    {
+      "doc": 360,
+      "imageComplete": true,
+      "kind": "forward-6",
+      "level": "support",
+      "natural": [
+        714,
+        423
+      ],
+      "rendered": [
+        222,
+        131.515625
+      ],
+      "smallControls": 0,
+      "viewport": 360,
+      "width": 375,
+      "zoomBox": 256,
+      "zoomScrollWidth": 984
+    },
+    {
+      "doc": 360,
+      "imageComplete": true,
+      "kind": "turn",
+      "level": "support",
+      "natural": [
+        605,
+        105
+      ],
+      "rendered": [
+        222,
+        38.515625
+      ],
+      "smallControls": 0,
+      "viewport": 360,
+      "width": 375,
+      "zoomBox": 256,
+      "zoomScrollWidth": 984
+    },
+    {
+      "doc": 360,
+      "imageComplete": true,
+      "kind": "forward-1",
+      "level": "intermediate",
+      "natural": [
+        372,
+        97
+      ],
+      "rendered": [
+        222,
+        57.875
+      ],
+      "smallControls": 0,
+      "viewport": 360,
+      "width": 375,
+      "zoomBox": 256,
+      "zoomScrollWidth": 984
+    },
+    {
+      "doc": 360,
+      "imageComplete": true,
+      "kind": "forward-2",
+      "level": "intermediate",
+      "natural": [
+        577,
+        76
+      ],
+      "rendered": [
+        222,
+        29.234375
+      ],
+      "smallControls": 0,
+      "viewport": 360,
+      "width": 375,
+      "zoomBox": 256,
+      "zoomScrollWidth": 984
+    },
+    {
+      "doc": 360,
+      "imageComplete": true,
+      "kind": "forward-3",
+      "level": "intermediate",
+      "natural": [
+        545,
+        77
+      ],
+      "rendered": [
+        222,
+        31.359375
+      ],
+      "smallControls": 0,
+      "viewport": 360,
+      "width": 375,
+      "zoomBox": 256,
+      "zoomScrollWidth": 984
+    },
+    {
+      "doc": 360,
+      "imageComplete": true,
+      "kind": "forward-4",
+      "level": "intermediate",
+      "natural": [
+        714,
+        77
+      ],
+      "rendered": [
+        222,
+        23.9375
+      ],
+      "smallControls": 0,
+      "viewport": 360,
+      "width": 375,
+      "zoomBox": 256,
+      "zoomScrollWidth": 984
+    },
+    {
+      "doc": 360,
+      "imageComplete": true,
+      "kind": "forward-5",
+      "level": "intermediate",
+      "natural": [
+        472,
+        96
+      ],
+      "rendered": [
+        222,
+        45.140625
+      ],
+      "smallControls": 0,
+      "viewport": 360,
+      "width": 375,
+      "zoomBox": 256,
+      "zoomScrollWidth": 984
+    },
+    {
+      "doc": 360,
+      "imageComplete": true,
+      "kind": "forward-6",
+      "level": "intermediate",
+      "natural": [
+        714,
+        423
+      ],
+      "rendered": [
+        222,
+        131.515625
+      ],
+      "smallControls": 0,
+      "viewport": 360,
+      "width": 375,
+      "zoomBox": 256,
+      "zoomScrollWidth": 984
+    },
+    {
+      "doc": 360,
+      "imageComplete": true,
+      "kind": "turn",
+      "level": "intermediate",
+      "natural": [
+        605,
+        105
+      ],
+      "rendered": [
+        222,
+        38.515625
+      ],
+      "smallControls": 0,
+      "viewport": 360,
+      "width": 375,
+      "zoomBox": 256,
+      "zoomScrollWidth": 984
+    },
+    {
+      "doc": 360,
+      "imageComplete": true,
+      "kind": "forward-1",
+      "level": "challenge",
+      "natural": [
+        372,
+        97
+      ],
+      "rendered": [
+        222,
+        57.875
+      ],
+      "smallControls": 0,
+      "viewport": 360,
+      "width": 375,
+      "zoomBox": 256,
+      "zoomScrollWidth": 984
+    },
+    {
+      "doc": 360,
+      "imageComplete": true,
+      "kind": "forward-2",
+      "level": "challenge",
+      "natural": [
+        577,
+        76
+      ],
+      "rendered": [
+        222,
+        29.234375
+      ],
+      "smallControls": 0,
+      "viewport": 360,
+      "width": 375,
+      "zoomBox": 256,
+      "zoomScrollWidth": 984
+    },
+    {
+      "doc": 360,
+      "imageComplete": true,
+      "kind": "forward-3",
+      "level": "challenge",
+      "natural": [
+        545,
+        77
+      ],
+      "rendered": [
+        222,
+        31.359375
+      ],
+      "smallControls": 0,
+      "viewport": 360,
+      "width": 375,
+      "zoomBox": 256,
+      "zoomScrollWidth": 984
+    },
+    {
+      "doc": 360,
+      "imageComplete": true,
+      "kind": "forward-4",
+      "level": "challenge",
+      "natural": [
+        714,
+        77
+      ],
+      "rendered": [
+        222,
+        23.9375
+      ],
+      "smallControls": 0,
+      "viewport": 360,
+      "width": 375,
+      "zoomBox": 256,
+      "zoomScrollWidth": 984
+    },
+    {
+      "doc": 360,
+      "imageComplete": true,
+      "kind": "forward-5",
+      "level": "challenge",
+      "natural": [
+        472,
+        96
+      ],
+      "rendered": [
+        222,
+        45.140625
+      ],
+      "smallControls": 0,
+      "viewport": 360,
+      "width": 375,
+      "zoomBox": 256,
+      "zoomScrollWidth": 984
+    },
+    {
+      "doc": 360,
+      "imageComplete": true,
+      "kind": "forward-6",
+      "level": "challenge",
+      "natural": [
+        714,
+        423
+      ],
+      "rendered": [
+        222,
+        131.515625
+      ],
+      "smallControls": 0,
+      "viewport": 360,
+      "width": 375,
+      "zoomBox": 256,
+      "zoomScrollWidth": 984
+    },
+    {
+      "doc": 360,
+      "imageComplete": true,
+      "kind": "turn",
+      "level": "challenge",
+      "natural": [
+        605,
+        105
+      ],
+      "rendered": [
+        222,
+        38.515625
+      ],
+      "smallControls": 0,
+      "viewport": 360,
+      "width": 375,
+      "zoomBox": 256,
+      "zoomScrollWidth": 984
+    },
+    {
+      "doc": 738,
+      "imageComplete": true,
+      "kind": "forward-1",
+      "level": "support",
+      "natural": [
+        372,
+        97
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 738,
+      "width": 753,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 738,
+      "imageComplete": true,
+      "kind": "forward-2",
+      "level": "support",
+      "natural": [
+        577,
+        76
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 738,
+      "width": 753,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 738,
+      "imageComplete": true,
+      "kind": "forward-3",
+      "level": "support",
+      "natural": [
+        545,
+        77
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 738,
+      "width": 753,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 738,
+      "imageComplete": true,
+      "kind": "forward-4",
+      "level": "support",
+      "natural": [
+        714,
+        77
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 738,
+      "width": 753,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 738,
+      "imageComplete": true,
+      "kind": "forward-5",
+      "level": "support",
+      "natural": [
+        472,
+        96
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 738,
+      "width": 753,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 738,
+      "imageComplete": true,
+      "kind": "forward-6",
+      "level": "support",
+      "natural": [
+        714,
+        423
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 738,
+      "width": 753,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 738,
+      "imageComplete": true,
+      "kind": "turn",
+      "level": "support",
+      "natural": [
+        605,
+        105
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 738,
+      "width": 753,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 738,
+      "imageComplete": true,
+      "kind": "forward-1",
+      "level": "intermediate",
+      "natural": [
+        372,
+        97
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 738,
+      "width": 753,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 738,
+      "imageComplete": true,
+      "kind": "forward-2",
+      "level": "intermediate",
+      "natural": [
+        577,
+        76
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 738,
+      "width": 753,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 738,
+      "imageComplete": true,
+      "kind": "forward-3",
+      "level": "intermediate",
+      "natural": [
+        545,
+        77
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 738,
+      "width": 753,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 738,
+      "imageComplete": true,
+      "kind": "forward-4",
+      "level": "intermediate",
+      "natural": [
+        714,
+        77
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 738,
+      "width": 753,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 738,
+      "imageComplete": true,
+      "kind": "forward-5",
+      "level": "intermediate",
+      "natural": [
+        472,
+        96
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 738,
+      "width": 753,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 738,
+      "imageComplete": true,
+      "kind": "forward-6",
+      "level": "intermediate",
+      "natural": [
+        714,
+        423
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 738,
+      "width": 753,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 738,
+      "imageComplete": true,
+      "kind": "turn",
+      "level": "intermediate",
+      "natural": [
+        605,
+        105
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 738,
+      "width": 753,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 738,
+      "imageComplete": true,
+      "kind": "forward-1",
+      "level": "challenge",
+      "natural": [
+        372,
+        97
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 738,
+      "width": 753,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 738,
+      "imageComplete": true,
+      "kind": "forward-2",
+      "level": "challenge",
+      "natural": [
+        577,
+        76
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 738,
+      "width": 753,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 738,
+      "imageComplete": true,
+      "kind": "forward-3",
+      "level": "challenge",
+      "natural": [
+        545,
+        77
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 738,
+      "width": 753,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 738,
+      "imageComplete": true,
+      "kind": "forward-4",
+      "level": "challenge",
+      "natural": [
+        714,
+        77
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 738,
+      "width": 753,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 738,
+      "imageComplete": true,
+      "kind": "forward-5",
+      "level": "challenge",
+      "natural": [
+        472,
+        96
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 738,
+      "width": 753,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 738,
+      "imageComplete": true,
+      "kind": "forward-6",
+      "level": "challenge",
+      "natural": [
+        714,
+        423
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 738,
+      "width": 753,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 738,
+      "imageComplete": true,
+      "kind": "turn",
+      "level": "challenge",
+      "natural": [
+        605,
+        105
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 738,
+      "width": 753,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 1250,
+      "imageComplete": true,
+      "kind": "forward-1",
+      "level": "support",
+      "natural": [
+        372,
+        97
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 1250,
+      "width": 1265,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 1250,
+      "imageComplete": true,
+      "kind": "forward-2",
+      "level": "support",
+      "natural": [
+        577,
+        76
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 1250,
+      "width": 1265,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 1250,
+      "imageComplete": true,
+      "kind": "forward-3",
+      "level": "support",
+      "natural": [
+        545,
+        77
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 1250,
+      "width": 1265,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 1250,
+      "imageComplete": true,
+      "kind": "forward-4",
+      "level": "support",
+      "natural": [
+        714,
+        77
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 1250,
+      "width": 1265,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 1250,
+      "imageComplete": true,
+      "kind": "forward-5",
+      "level": "support",
+      "natural": [
+        472,
+        96
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 1250,
+      "width": 1265,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 1250,
+      "imageComplete": true,
+      "kind": "forward-6",
+      "level": "support",
+      "natural": [
+        714,
+        423
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 1250,
+      "width": 1265,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 1250,
+      "imageComplete": true,
+      "kind": "turn",
+      "level": "support",
+      "natural": [
+        605,
+        105
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 1250,
+      "width": 1265,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 1250,
+      "imageComplete": true,
+      "kind": "forward-1",
+      "level": "intermediate",
+      "natural": [
+        372,
+        97
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 1250,
+      "width": 1265,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 1250,
+      "imageComplete": true,
+      "kind": "forward-2",
+      "level": "intermediate",
+      "natural": [
+        577,
+        76
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 1250,
+      "width": 1265,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 1250,
+      "imageComplete": true,
+      "kind": "forward-3",
+      "level": "intermediate",
+      "natural": [
+        545,
+        77
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 1250,
+      "width": 1265,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 1250,
+      "imageComplete": true,
+      "kind": "forward-4",
+      "level": "intermediate",
+      "natural": [
+        714,
+        77
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 1250,
+      "width": 1265,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 1250,
+      "imageComplete": true,
+      "kind": "forward-5",
+      "level": "intermediate",
+      "natural": [
+        472,
+        96
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 1250,
+      "width": 1265,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 1250,
+      "imageComplete": true,
+      "kind": "forward-6",
+      "level": "intermediate",
+      "natural": [
+        714,
+        423
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 1250,
+      "width": 1265,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 1250,
+      "imageComplete": true,
+      "kind": "turn",
+      "level": "intermediate",
+      "natural": [
+        605,
+        105
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 1250,
+      "width": 1265,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 1250,
+      "imageComplete": true,
+      "kind": "forward-1",
+      "level": "challenge",
+      "natural": [
+        372,
+        97
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 1250,
+      "width": 1265,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 1250,
+      "imageComplete": true,
+      "kind": "forward-2",
+      "level": "challenge",
+      "natural": [
+        577,
+        76
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 1250,
+      "width": 1265,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 1250,
+      "imageComplete": true,
+      "kind": "forward-3",
+      "level": "challenge",
+      "natural": [
+        545,
+        77
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 1250,
+      "width": 1265,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 1250,
+      "imageComplete": true,
+      "kind": "forward-4",
+      "level": "challenge",
+      "natural": [
+        714,
+        77
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 1250,
+      "width": 1265,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 1250,
+      "imageComplete": true,
+      "kind": "forward-5",
+      "level": "challenge",
+      "natural": [
+        472,
+        96
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 1250,
+      "width": 1265,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 1250,
+      "imageComplete": true,
+      "kind": "forward-6",
+      "level": "challenge",
+      "natural": [
+        714,
+        423
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 1250,
+      "width": 1265,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    },
+    {
+      "doc": 1250,
+      "imageComplete": true,
+      "kind": "turn",
+      "level": "challenge",
+      "natural": [
+        605,
+        105
+      ],
+      "rendered": [
+        0,
+        0
+      ],
+      "smallControls": 0,
+      "viewport": 1250,
+      "width": 1265,
+      "zoomBox": 0,
+      "zoomScrollWidth": 0
+    }
+  ],
+  "restore": {
+    "events": [
+      "activity_state"
+    ],
+    "state": {
+      "level": "intermediate",
+      "sequence": [
+        "Avançar 1",
+        "Virar à direita",
+        "Avançar 1"
+      ],
+      "step": 4,
+      "values": {
+        "change": "Tudo ao mesmo tempo",
+        "distance": "10",
+        "forwardResult": "Não conseguimos testar",
+        "forwardStatus": "Precisamos de ajuda",
+        "improveResult": "Não conseguimos comparar",
+        "improveStatus": "Precisamos de ajuda",
+        "left": "C",
+        "planConfirmed": true,
+        "portPrediction": "Move sempre igual",
+        "portsConfirmed": true,
+        "prediction": "Antes do alvo",
+        "prepareResult": "Ligação precisa de ajuda",
+        "prepareStatus": "Precisamos de ajuda",
+        "right": "D",
+        "sequenceConfirmed": true,
+        "share": "Uma dificuldade para pedir ajuda",
+        "squareConfirmed": false,
+        "trial1": "Antes do alvo",
+        "trial1Confirmed": true,
+        "trial2": "No alvo",
+        "trial2Confirmed": true,
+        "trial3": "Não conseguimos testar",
+        "trial3Confirmed": true,
+        "turnResult": "Fica para a próxima aula",
+        "turnStatus": "Precisamos de ajuda"
+      }
+    }
+  },
+  "zoom": [
+    {
+      "clientWidth": 252,
+      "docWidth": 360,
+      "expanded": "true",
+      "focus": "turnStatus-0",
+      "hidden": false,
+      "scrollWidth": 984,
+      "test": "turn-enlarge-keyboard",
+      "viewport": 360
+    },
+    {
+      "scrollLeft": 0,
+      "test": "keyboard-scroll-in-zoom"
+    }
+  ],
+  "final_retest": {
+    "arrowMatrix": [
+      {
+        "after": 80,
+        "focus": "zoom-spike-reference",
+        "level": "support",
+        "max": 747,
+        "pageOverflow": false,
+        "width": 390
+      },
+      {
+        "after": 80,
+        "focus": "zoom-spike-reference",
+        "level": "intermediate",
+        "max": 747,
+        "pageOverflow": false,
+        "width": 390
+      },
+      {
+        "after": 80,
+        "focus": "zoom-spike-reference",
+        "level": "challenge",
+        "max": 747,
+        "pageOverflow": false,
+        "width": 390
+      },
+      {
+        "after": 80,
+        "focus": "zoom-spike-reference",
+        "level": "support",
+        "max": 405,
+        "pageOverflow": false,
+        "width": 768
+      },
+      {
+        "after": 80,
+        "focus": "zoom-spike-reference",
+        "level": "intermediate",
+        "max": 405,
+        "pageOverflow": false,
+        "width": 768
+      },
+      {
+        "after": 80,
+        "focus": "zoom-spike-reference",
+        "level": "challenge",
+        "max": 405,
+        "pageOverflow": false,
+        "width": 768
+      },
+      {
+        "after": 15,
+        "focus": "zoom-spike-reference",
+        "level": "support",
+        "max": 15,
+        "pageOverflow": false,
+        "width": 1280
+      },
+      {
+        "after": 15,
+        "focus": "zoom-spike-reference",
+        "level": "intermediate",
+        "max": 15,
+        "pageOverflow": false,
+        "width": 1280
+      },
+      {
+        "after": 15,
+        "focus": "zoom-spike-reference",
+        "level": "challenge",
+        "max": 15,
+        "pageOverflow": false,
+        "width": 1280
+      }
+    ],
+    "attemptCount": 0,
+    "final": {
+      "categories": {
+        "clientHeight": 378,
+        "focus": "",
+        "pageOverflow": false,
+        "scrollHeight": 1190,
+        "scrollTop": 80
+      },
+      "categoriesAfterUp": 0,
+      "close": {
+        "focus": "enlarge-spike-reference",
+        "hidden": true
+      },
+      "keys": [
+        {
+          "key": "ArrowRight",
+          "trusted": true
+        },
+        {
+          "key": "ArrowLeft",
+          "trusted": true
+        },
+        {
+          "key": "ArrowDown",
+          "trusted": true
+        },
+        {
+          "key": "ArrowDown",
+          "trusted": true
+        },
+        {
+          "key": "ArrowUp",
+          "trusted": true
+        },
+        {
+          "key": "Enter",
+          "trusted": true
+        },
+        {
+          "key": "ArrowRight",
+          "trusted": true
+        },
+        {
+          "key": "ArrowRight",
+          "trusted": true
+        },
+        {
+          "key": "ArrowRight",
+          "trusted": true
+        },
+        {
+          "key": "ArrowRight",
+          "trusted": true
+        },
+        {
+          "key": "ArrowRight",
+          "trusted": true
+        },
+        {
+          "key": "ArrowRight",
+          "trusted": true
+        },
+        {
+          "key": "ArrowRight",
+          "trusted": true
+        },
+        {
+          "key": "ArrowRight",
+          "trusted": true
+        },
+        {
+          "key": "ArrowRight",
+          "trusted": true
+        }
+      ],
+      "restoreEvents": [
+        "activity_state"
+      ],
+      "zoom": {
+        "clientWidth": 237,
+        "doc": 360,
+        "focus": "zoom-spike-reference",
+        "scrollLeft": 80,
+        "scrollWidth": 984,
+        "viewport": 360
+      },
+      "zoomAfterLeftDown": {
+        "focus": "zoom-spike-reference",
+        "scrollLeft": 0,
+        "scrollTop": 80
+      }
+    },
+    "latestCheckpoint": {
+      "pagecraft": 1,
+      "payload": {
+        "activity": "spike-prime-primeiros-movimentos",
+        "readyForReflection": true,
+        "state": {
+          "level": "challenge",
+          "sequence": [
+            "Avançar 1",
+            "Virar à direita",
+            "Avançar 1"
+          ],
+          "step": 1,
+          "values": {
+            "change": "Tudo ao mesmo tempo",
+            "distance": "10",
+            "forwardResult": "Não conseguimos testar",
+            "forwardStatus": "Precisamos de ajuda",
+            "improveResult": "Não conseguimos comparar",
+            "improveStatus": "Precisamos de ajuda",
+            "left": "C",
+            "planConfirmed": true,
+            "portPrediction": "Move sempre igual",
+            "portsConfirmed": true,
+            "prediction": "Antes do alvo",
+            "prepareResult": "Ligação precisa de ajuda",
+            "prepareStatus": "Precisamos de ajuda",
+            "right": "D",
+            "sequenceConfirmed": true,
+            "share": "Uma dificuldade para pedir ajuda",
+            "squareConfirmed": false,
+            "trial1": "Antes do alvo",
+            "trial1Confirmed": true,
+            "trial2": "No alvo",
+            "trial2Confirmed": true,
+            "trial3": "Não conseguimos testar",
+            "trial3Confirmed": true,
+            "turnResult": "Fica para a próxima aula",
+            "turnStatus": "Precisamos de ajuda"
+          }
+        },
+        "version": 1
+      },
+      "ts": 1790964577865,
+      "type": "activity_state",
+      "unitId": "u2"
+    },
+    "resources": []
+  },
+  "screenshots": [
+    {
+      "viewport": 390,
+      "path": "drafts/spike-prime-primeiros-movimentos-qa/spike-turn-390.png",
+      "kind": "Referência real de viragem e transcrição"
+    }
+  ],
+  "limits": [
+    "preview_snapshot devolveu timeout do cliente em768/1280 e numa tentativa de zoom390; geometrias e interações foram executadas nesses tamanhos.",
+    "Ampliação foi focada explicitamente pelo DOM, seguida de teclas trusted; tab em segundo plano não demonstrou :focus-visible pintado nem entrada sequencial pelo Tab na região.",
+    "Imagem raster reduzida no telemóvel usa transcrição20px e ampliação para permitir leitura. Nenhum pedido exige ler só a imagem."
+  ]
+}
