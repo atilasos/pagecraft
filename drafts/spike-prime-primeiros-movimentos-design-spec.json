@@ -1,0 +1,225 @@
+{
+  "slug": "spike-prime-primeiros-movimentos",
+  "docspec": "drafts/spike-prime-primeiros-movimentos-docspec.json",
+  "revision": {
+    "date": "2026-10-02",
+    "iteration": 1,
+    "references": [
+      "skills/codex/references/activity-experience.md",
+      "skills/codex/references/age-adaptation.md"
+    ],
+    "scope": "Sistema visual e estados das cinco micro-missões, sem alterar pedidos ou duração."
+  },
+  "palette": {
+    "bg": "oklch(0.9648 0.0086 84.6)",
+    "surface": "oklch(0.9902 0.0080 98.9)",
+    "primary": "oklch(0.4159 0.0586 222.4)",
+    "accent": "oklch(0.8138 0.1314 86.7)",
+    "ink": "oklch(0.3061 0.0230 240.9)"
+  },
+  "functional": {
+    "ok": "oklch(0.4350 0.0734 154.9)",
+    "warn": "oklch(0.4440 0.0695 83.6)",
+    "focus": "oklch(0.4377 0.1299 259.4)"
+  },
+  "fallbackColors": {
+    "bg": "#F6F3ED",
+    "surface": "#FDFCF6",
+    "primary": "#225363",
+    "accent": "#E7BC53",
+    "ink": "#25313A",
+    "ok": "#2C5D3F",
+    "warn": "#665022",
+    "focus": "#214F98"
+  },
+  "typography": {
+    "fontFamily": "'Century Gothic', 'Didact Gothic', 'URW Gothic', 'Avant Garde', sans-serif",
+    "scale": "kids-8-10",
+    "baseSizePx": 20,
+    "headingSizePx": 30,
+    "heroSizePx": 38,
+    "minimumUnitHeadingPx": 28,
+    "minimumUiSizePx": 20,
+    "microcopySizePx": 16,
+    "maxLineCh": 55,
+    "lineHeight": 1.5,
+    "weights": [
+      400,
+      700
+    ],
+    "italicAllowed": false,
+    "allCapsAllowed": false,
+    "fontEmbedding": {
+      "command": "python3 scripts/embed_gothic_font.py --activity drafts/spike-prime-primeiros-movimentos.html",
+      "timing": "Após construção e cada reparação; antes de revisão.",
+      "asset": "Didact Gothic WOFF2 real com licença OFL incorporados; sem dependências de rede."
+    },
+    "notes": "Perguntas, opções, instruções e motivos de bloqueio têm pelo menos 20px. 16px é reservado a notas não essenciais. Rótulos relevantes dos desenhos têm equivalente HTML legível."
+  },
+  "layout": {
+    "borderRadius": 14,
+    "spacing": "comfortable",
+    "maxWidthPx": 1080,
+    "padding": "16px a 390px; 24px a 768px; 32px a 1280px",
+    "spacingScalePx": [
+      8,
+      12,
+      16,
+      24,
+      32,
+      48
+    ],
+    "structure": "Caderno de equipa: cabeçalho compacto, seletor de apoio, cinco separadores numerados e uma micro-missão visível. Título e ação principal primeiro; laboratório ou desenho junto à pergunta. Pedidos agrupados em passos curtos com revelação progressiva. Critérios completos no início e disponíveis para reabrir. Sem barra fixa que esconda controlos.",
+    "responsive": {
+      "390px": "Uma coluna com 16px laterais. Seletor de apoio de largura inteira. Navegação em duas colunas com rótulos que podem quebrar linha, última etapa na grelha. Diagramas fluidos por viewBox. Blocos, opções e campos em coluna, salvo A–F em duas filas de três botões/portas. Três posições de sequência em coluna numerada. Resultados de ensaios apresentados um de cada vez, com resumo vertical. Anterior/Seguinte lado a lado e pedido em falta ocupa linha inteira.",
+      "768px": "Uma coluna principal com 24px laterais. Diagramas acima dos controlos; duas colunas para escolhas se cada rótulo couber a 20px. Ensaios em três colunas apenas quando controlos mantêm 48px e labels completos; caso contrário em coluna. Separadores em grelha, sem scroll horizontal.",
+      "1280px": "Máximo1080px centrado. Laboratório e controlos em duas colunas: desenho mínimo460px, controlos mínimo320px e intervalo24px. Navegação de cinco etapas só em linha quando todos os rótulos cabem. Registos/relato externo abaixo do laboratório, em toda a largura. Não apresentar as cinco missões simultaneamente.",
+      "overflow": "min-width:0 em filhos de grelha; overflow-wrap nos textos. SVG mantém proporções, sem letra minúscula para caber. Nenhum painel ou modal bloqueia scroll vertical; foco nunca fica escondido."
+    }
+  },
+  "components": {
+    "identity": "Papel quente e tinta petróleo, com amarelo discreto para a fita da partida e o alvo. Grelha leve apenas no tapete do laboratório. Desenho original simples de base motriz com duas rodas, corpo e seta frontal. Sem logótipo, screenshots, imitação da aplicação SPIKE ou decoração sem função.",
+    "buttons": "Botões reais, min-height/min-width48px, corpo20px, radius12px. Principal em primary com texto surface; secundário com contorno primary e texto primary. Hover ligeiro sem escala. Escolha ativa marcada por contorno3px e indicador textual ou radio, além do fundo.",
+    "cards": "Superfícies claras com borda1–2px e 20px de espaço interior, sem faixas laterais, gradientes ou sombras pesadas. Blocos do programa e posições têm forma suficientemente diferente dos cartões de resultado para reconhecer a função.",
+    "navigation": {
+      "labels": [
+        "1 · Preparar",
+        "2 · Avançar",
+        "3 · Testar",
+        "4 · Virar",
+        "5 · Partilhar"
+      ],
+      "semantics": "nav com botões e aria-current=step. Etapas são páginas, sem role=tablist. Título da nova etapa recebe foco programável.",
+      "unanswered": "Seguinte e todos os saltos futuros usam aria-disabled=true e ação impedida; manter acessíveis os motivos. Mostrar junto a Seguinte o primeiro pedido em falta, em20px e ligado por aria-describedby. Nenhuma escolha padrão conta como resposta.",
+      "answered": "Resposta errada com confirmação explícita conta como Página respondida. Mostrar Respostas dadas com símbolo textual discreto; nenhum selo de sucesso por ter respondido. Desbloquear avanço quando todos os pedidos estão respondidos, sem exigir acerto ou ensaio bem-sucedido.",
+      "revisit": "Anterior e etapas anteriores disponíveis. Respostas posteriores conservadas. Editar portas/distância/sequência invalida só a confirmação do plano que mudou, pede nova confirmação e volta a bloquear saltos futuros até responder; os resultados físicos já declarados permanecem como relatos históricos.",
+      "focus": "Navegação por ação explícita, sem avançar automaticamente ao responder. Feedback nunca rouba foco. A tentativa de avançar bloqueada anuncia o pedido em falta e mantém o foco."
+    },
+    "supportSelector": {
+      "labels": {
+        "support": "Com pistas",
+        "intermediate": "Passo a passo",
+        "challenge": "Mais desafios"
+      },
+      "default": "Passo a passo, salvo apoio do host.",
+      "presentation": "Select de pelo menos48px com label Apoio. Todos os nomes com a mesma tinta e valor visual; sem semáforo, medalhas ou classificação. Campo standard do DocSpec corresponde a intermediate na ponte.",
+      "effects": "Com pistas acrescenta contornos, setas junto à ação e revela um registo de cada vez. Passo a passo organiza pedidos e comparação. Mais desafios acrescenta detalhes facultativos para explicar ou medir. Os critérios, pedidos do núcleo, resultados físicos e avanço mantêm-se. Conservar todos os dados compatíveis; trocar apoio não emite tentativa."
+    },
+    "criteria": "No início mostrar os quatro critérios do DocSpec, como lista curta com símbolos simples de programa, três ensaios, alteração única e conversa. São conhecidos antes do trabalho. Botão Ver critérios nas restantes etapas. Repetir os mesmos enunciados na reflexão. Nenhuma marcação de leitura é obrigatória.",
+    "teamRoles": "Guia compacto Programar / Testar / Observar e registar, com convite Troquem de papel em cada ensaio. Nos pares, testar e observar juntos. Trata-se de orientação; não criar participantes, nomes de colegas ou atribuir cooperação observada. O host identifica os membros reais.",
+    "hubPorts": {
+      "diagram": "SVG original de hub com portas A–F e dois cabos até rodas esquerda/direita. Frente do robô marcada com seta e palavra Frente. Letras grandes; nomes motor esquerdo/direito referidos à frente do robô, sem apresentar C+D como regra universal.",
+      "controls": "Dois seletores persistentes Motor esquerdo / Motor direito, vazio inicial Escolhe uma porta, opções A–F e Preciso de ajuda. Botão Confirmar portas. Cabos do esquema refletem a seleção, ainda sem confirmação. A alternativa pedir ajuda tem igual disponibilidade.",
+      "prediction": "Opções Pode não mover as rodas / Move sempre igual, sem seleção inicial. Só após escolha mostrar pista gráfica do cabo ligado a uma porta e o comando numa porta diferente. Não antecipar resposta antes da previsão.",
+      "externalPreparation": "Área distinta Na base real, com radios Já fizemos / Precisamos de ajuda e observação curta conforme DocSpec. Labels persistentes; a preparação fica respondida com ajuda + observação."
+    },
+    "forwardPlan": {
+      "drawing": "Tapete original visto de cima, robô na marca inicial com seta frontal, alvo20cm claramente rotulado. Régua0/10/20cm com mesma escala física no SVG. Em Com pistas duas parcelas de10cm. Não desenhar o ponto final da distância escolhida antes de a criança prever e confirmar.",
+      "blocks": "Blocos didáticos grandes de início, motores selecionados, velocidade sugerida30% e mover em frente por espaço da distância. Os campos do plano são labels, sem réplicas exatas de blocos LEGO. Opções10cm/20cm por toque e teclado, sem default. Botão Confirmar plano. Valores das portas transportados com identificação se foi pedida ajuda.",
+      "prediction": "Pergunta Onde pensas que o robô vai parar? com Antes / No / Depois do alvo e pequenos desenhos redundantes. É previsão do movimento real e não recebe certo/errado automático.",
+      "reveal": "Depois da previsão e confirmação do plano, revelar traço ideal da distância escolhida. Label Modelo na página; legenda No robô, vamos testar. Se10cm escolhido, realçar intervalo restante junto à seta; frase curta convida a comparar com o alvo. O erro didático deixa seguir quando os restantes pedidos estiverem respondidos.",
+      "realTest": "Bloco separado Na base real: Abrir SPIKE em nova aba, lembrete de recriar programa, partida e velocidade. Estado Já fizemos / Precisamos de ajuda e cinco resultados do DocSpec. Abrir link sozinho não responde; relato explícito e resultado respondem. A página não controla o robô nem prevê resultado garantido."
+    },
+    "trialRecorder": {
+      "threeTrials": "Três registos rotulados Ensaio1/2/3. Selecionar resultado sem default, depois Confirmar ensaio. Não copiar resultados. A cada ensaio repetir desenho pequeno da mesma partida e frente, com convite de troca de papel. Com pistas mostra o registo ativo e mantém o resumo dos anteriores acessível.",
+      "arrivalPlot": "Régua comum com alvo e marcas numeradas1/2/3. Resultados antes/no/depois são categorias declaradas, sem lhes atribuir cm exatos. Para trás tem seta de sentido; Não conseguimos testar aparece numa linha Sem ensaio, sem ponto inventado. Legenda Registos que o grupo declarou.",
+      "change": "Opções Distância / Velocidade / Sentido / Tudo ao mesmo tempo. Em Com pistas realçar inicialmente distância e contraste tudo, mas todas as opções e seleções prévias permanecem disponíveis. Após escolha realçar campo correspondente do bloco; contraste tudo mostra vários campos contornados e pista Que mudança explica o resultado? Não exigir acertar para avançar.",
+      "comparison": "Escolha de estado real e Mais perto / Igual / Mais longe / Não conseguimos comparar. Esquema antes/depois rotulado, sem calcular melhoria ou classificá-la como acerto. Mensagem após registo descreve o que foi dito, evitando concluir que a estratégia funcionou.",
+      "challenge": "Medições opcionais emcm, labels e campos numéricos cómodos. Convite facultativo sobre chegadas semelhantes e proximidade ao alvo, sem média ou fórmula. Não usar valores padrão como medição."
+    },
+    "sequenceLab": {
+      "goal": "Tapete com caminho desejado em L pontilhado, partida/fim e seta frontal. O caminho desejado permanece o mesmo após editar. Não colocar sequência resolvida junto do desenho.",
+      "tokens": "Avançar1 / Virar à direita / Avançar2 como botões de peça e três posições vazias numeradas. As etiquetas1/2 distinguem exemplares, sem dar a ordem. Para aceitar sequências repetidas, seleção de movimento pode voltar a preencher outra posição. Blocos têm seta do próprio movimento mais texto, não cor como único significado.",
+      "interaction": "Escolher posição, depois bloco, por clique/toque. Teclado usa Tab e Enter/Espaço; botões Mudar ou Limpar posição junto de cada slot. Não exigir drag. Indicar Posição escolhida por contorno e texto. Todas as três posições precisam de conteúdo intencional e Confirmar sequência, mesmo em sequências erradas.",
+      "preview": "Só ao confirmar mostrar Trajeto do plano como linha sólida sobre o objetivo pontilhado. Robô e seta final mostram posição/orientação. Avançar move na direção atual; virar muda orientação no lugar no modelo. Sequência errada destaca o primeiro segmento que difere com contorno/numeração e dica junto ao bloco. Label Modelo na página e descrição textual do percurso. Confirmação é resposta mesmo se não seguir o L.",
+      "edit": "Modificar posição invalida confirmação e muda label para Plano alterado: confirma de novo. Desenho anterior, se permanecer, é identificado como Trajeto anterior. Resultado físico conserva-se como relato anterior, nunca é recalculado pelo desenho.",
+      "turnPrecision": "A viragem do desenho é um quarto de volta didático. Instrução real pede viragem curta orientada pelo professor e ajuste por ensaio. A nota distingue Viragem do robô de Rotações das rodas com desenhos separados de seta curva do corpo e círculo da roda. Não atribuir90° a0,5rotações de motor. Ângulos só aparecem como representação do objetivo ou extensão futura.",
+      "external": "Estado Já fizemos / Precisamos de ajuda e observação conforme DocSpec, incluindo Fica para a próxima aula. Qualquer declaração explícita responde. O relato não é avaliado automaticamente.",
+      "challenge": "Exploração opcional do L à esquerda usa painel próprio e estado separado, com label Experiência extra. Não sobrescrever a sequência, resposta ou confirmação do L direito e não bloquear núcleo."
+    },
+    "externalReports": {
+      "presentation": "Superfície com label Na base real e ícone simples de robô. Nota O grupo diz o que aconteceu. Distinguir previsão, resultado no modelo e resultado declarado por rótulos em20px, não apenas cor.",
+      "status": "Radios Já fizemos / Precisamos de ajuda sem seleção inicial; labels mostram claramente quando são obrigatórios. Resultado sem default, incluindo ausência de execução, vale como resposta honesta. Contradições não geram invenção de dado nem correção física automática.",
+      "network": "Link SPIKE em nova aba com nota A aplicação pode precisar de internet. PageCraft funciona offline; sincronização só confirmada pelo host. Não colocar app em iframe."
+    },
+    "feedback_correct": "Feedback didático em tom ok, símbolo✓ e frase de descoberta. Refere relação entre comandos/desenho; não classifica desempenho da criança ou robô real.",
+    "feedback_incorrect": "Pista visual junto da parte relevante, tom âmbar escuro warn e símbolo↻, seguida de frase curta útil. Sem vermelho ou som. Todas as respostas intencionais continuam a contar, mesmo incorretas.",
+    "feedback_self_report": "Resumo neutro com ícone de fala e texto O grupo registou…; não apresentar✓ de correção para ensaio ou cooperação.",
+    "shareAndReflection": {
+      "summary": "Mostrar escolhas e ensaios declarados em lista/tabela legível, sem score, medalha ou ranking. Separar Plano na página e O grupo observou na base. Ausência de ensaio aparece explicitamente.",
+      "mandatory": "O que vais mostrar aos colegas? com quatro opções do DocSpec, desenhos curtos e labels completos; sem default. Escolher dificuldade vale como comunicar. A fala oral não é inferida pela escolha.",
+      "reflection": "Facultativa. Quando host integrado, botão de reflexão do host com critérios e participante atual visível. Quando autónomo, campos locais por critério e textos curtos, com label Reflexão neste dispositivo; não afirmar gravação no professor. Com ajuda / Estou a experimentar / Já consigo explicar / Ainda não experimentei, todas neutras. Mudança de apoio oferece inícios de frase ou justificação facultativa, sem apagar respostas.",
+      "finish": "Concluir disponível depois da comunicação, independentemente de reflexão. Se ausência de confirmação de sincronização, não mostrar Guardado no professor. Indicar conclusão da página sem deduzir sucesso físico."
+    },
+    "futureExtensions": {
+      "entry": "Após a comunicação do núcleo, secção Próximas missões com três details fechados por defeito. Cada missão indica20min noutra aula e Facultativa. Abrir, responder ou deixar incompleta não muda o estado de conclusão das cinco páginas. Estado de cada extensão separado e recuperável; erros não bloqueiam o núcleo.",
+      "square": {
+        "title": "Voltar à partida",
+        "diagram": "Quadrado original com quatro cantos numerados, seta inicial e orientação final. Escolhas3/4/5 conjuntos sem default. Trajeto aparece após escolha/confirmar, com segmentos numerados; a diferença na orientação e posição fica visível, não apenas cor. Com pistas revela um conjunto por vez; repetir compacto surge só após descoberta.",
+        "controls": "Escolher conjuntos, confirmar plano, declarar Já fizemos / Precisamos de ajuda e resultado físico, depois direção final como no início/diferente/não observámos, conforme DocSpec. Nenhuma medição inventada. Mais desafios oferece repetir quatro vezes e medição facultativa."
+      },
+      "obstacles": {
+        "title": "Passar entre obstáculos",
+        "diagram": "Dois marcadores numa grelha com robô em escala suficiente para tornar visível a sua largura. Dois percursos selecionáveis Pelo meio livre / Sobre um obstáculo. Após seleção, realçar espaço da base no corredor com contorno e setas, não mostrar antes a solução. Segmentos numerados para escolher Avanço / Primeira viragem / Segunda viragem.",
+        "controls": "Plano escolhido revela pista de espaço. Declaração de execução/ajuda e resultado sem default, sem julgar contacto real. Alteração de segmento destacada no desenho. Em Com pistas corredor largo e um marcador por vez. Outro percurso só extra facultativo de Mais desafios."
+      },
+      "gyro": {
+        "title": "Virar usando orientação",
+        "adultPresence": "Label Com o professor visível antes de instruções e registo. Não apresentar como tarefa autónoma nem iniciar qualquer comando real.",
+        "diagram": "Eixo/seta da orientação da base separado do desenho circular de graus do motor. Escolha Orientação do hub / Graus do motor sem default e pista após escolha. Medidor ilustrativo rotulado Exemplo na página, sem número que pareça leitura conectada. Blocos zero → virar devagar → esperar → parar com labels completos.",
+        "technicalNote": "Nota do professor em details legível, incluindo confirmar orientação do hub, sinal/sentido, leitura manual antes do ensaio e condição de paragem. Não tratar>89como universal: se a leitura diminuir, o exemplo não termina. Manter a intervenção do professor e a paragem visíveis, sem ciclo de espera automático na página.",
+        "controls": "Já fizemos com o professor / Precisamos de ajuda e quatro resultados definidos no DocSpec, incluindo outro sinal e não testámos. Registos são relatos. Em Mais desafios a discussão de sinal/condição é facultativa e acompanhada, sem execução autónoma."
+      }
+    }
+  },
+  "statePresentation": {
+    "empty": "Posições vazias, escolhas sem default, ensaio por responder. Não usar resposta vazia como intenção.",
+    "selected": "Radio/contorno forte e texto, sem confundir seleção com confirmação.",
+    "planConfirmed": "Plano confirmado; mostra modelo e permite comparar. Mesmo incorreto está respondido.",
+    "physicalReported": "Relato do grupo, com estado e resultado; sem garantia ou acerto automático.",
+    "needsHelp": "Precisamos de ajuda permanece resposta válida e visível; ensaios ausentes não recebem marcas de chegada inventadas.",
+    "restored": "Restaurar etapa, seleções, confirmações e relatos compatíveis sem emitir tentativas. Recalcular pedidos em falta, não mostrar animação de descoberta por recuperar.",
+    "supportChanged": "Conservar respostas comuns e registos físicos; só pistas/detalhes opcionais mudam. Invalidar apenas conteúdo extra que deixou de corresponder ao enunciado.",
+    "offline": "Artefacto funciona sem rede; estado da sincronização só vem do host. Não inventar guardado remotamente."
+  },
+  "motion": {
+    "transitions": "subtle",
+    "durationMs": 160,
+    "easing": "ease-out",
+    "respectReducedMotion": true,
+    "diagram": "Traço do percurso pode aparecer por opacity; sem animar layout, sem deslocar foco. Com movimento reduzido, resultado imediato. Sem animação que imite uma medição real."
+  },
+  "accessibility": {
+    "contrastBody": "AA",
+    "contrastMicrocopy": "AAA",
+    "focusRing": true,
+    "focusStyle": "Anel3px focus com offset3px e halo claro para botões escuros. Não remover outline.",
+    "minTapPx": 48,
+    "soundOptIn": true,
+    "contrastEvidence": {
+      "inkOnBg": 12.01,
+      "inkOnSurface": 12.94,
+      "surfaceOnPrimary": 8.22,
+      "inkOnAccent": 7.42,
+      "okOnSurface": 7.44,
+      "warnOnSurface": 7.47,
+      "focusOnSurface": 7.75
+    },
+    "forms": "Fieldset/legend para escolhas, labels persistentes e nomes por ensaio/posição. Disabled explicado por aria-describedby. aria-live=polite para pistas e pedidos em falta, sem anunciar redundância de todo desenho.",
+    "diagrams": "SVG informativo com title/desc, legenda HTML e dados equivalentes em texto. SVG decorativo aria-hidden=true. Orientação e percurso com setas, números, início/fim e descrição. Não exigir distinguir só cores.",
+    "keyboard": "Todo laboratório operável por Tab e Enter/Espaço. Limpar posição é reversível; reiniciar trabalho inteiro pede confirmação curta. Nenhuma informação só em hover.",
+    "audio": "Mudo no início; leitura opcional se implementada. Texto completo fica sempre visível. Não exigir áudio para completar.",
+    "verification": [
+      "Vazio bloqueia Seguinte e todos os saltos futuros; errado confirmado permite avançar por apoio.",
+      "Com pistas, Passo a passo e Mais desafios mantêm registos; medidas/extra opcionais não bloqueiam.",
+      "Portas e sequência respondidas por ajuda ou confirmação intencional; nenhuma opção default conta.",
+      "10cm recebe pista visual após previsão/confirmação; modelo não é previsão garantida da base.",
+      "Ensaios1/2/3 independentes, sem cópia; não ensaio não desenha chegada fictícia.",
+      "Sequências repetidas aceites como resposta; trajeto reproduz ordem e orientação, erro deixa seguir.",
+      "Teclado, foco e reduced-motion; tablet/telemóvel390px/768px/1280px, fonte real incorporada,20px/48px mínimos.",
+      "Recuperação sem novas tentativas; relatos externos separados de evidência digital e autoavaliação.",
+      "Host real identifica participantes/reflexão individual e confirma registo; autónomo não promete gravação remota."
+    ]
+  },
+  "notes": "O caderno de equipa usa diagramas grandes e perguntas próximas da ação para apoiar a primeira programação. Os estados distinguem escolha, confirmação, percurso ideal e ensaio declarado. A navegação depende de respostas, preservando espaço para errar, pedir ajuda e rever o plano."
+}
