@@ -3,7 +3,7 @@
 Consulta: 2026-10-02. Pedido: alunos do 3.º e 4.º anos, base motriz em construção, início da programação na próxima aula e preparação para competição.
 
 ## Síntese da Sebenta
-API local verificada; pesquisa por TIC, avaliação e robótica. Páginas lidas integralmente (cópias de consulta na pasta `spike-prime-primeiros-movimentos-research/`):
+API local verificada; pesquisa por TIC, avaliação e robótica. Páginas lidas integralmente (cópias temporárias de consulta em `/tmp/pagecraft-spike-primeiros-movimentos-research/`; os originais permanecem na Sebenta):
 - **PageCraft** — `20_Wiki/PageCraft.md`: descoberta por interação, diferenciação desde o desenho, evidências formativas; documentação operacional atual do repositório prevalece sobre exemplos antigos.
 - **TIC no Ensino Básico** — `20_Wiki/TIC no Ensino Básico.md`: TIC transversal no 1.º ciclo, projetos e progressão decidida pelo professor; clube de robótica no contexto do professor. A proposta de março de 2026 não foi assumida como norma.
 - **Avaliação Cooperada** — `20_Wiki/Avaliação Cooperada.md`: critérios partilhados, alunos participam no plano e no balanço, comunicação e entreajuda.
