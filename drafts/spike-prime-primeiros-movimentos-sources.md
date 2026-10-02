@@ -1,0 +1,24 @@
+# Fontes — SPIKE Prime: primeiros movimentos
+
+Consulta: 2026-10-02. Pedido: alunos do 3.º e 4.º anos, base motriz em construção, início da programação na próxima aula e preparação para competição.
+
+## Síntese da Sebenta
+API local verificada; pesquisa por TIC, avaliação e robótica. Páginas lidas integralmente (cópias de consulta na pasta `spike-prime-primeiros-movimentos-research/`):
+- **PageCraft** — `20_Wiki/PageCraft.md`: descoberta por interação, diferenciação desde o desenho, evidências formativas; documentação operacional atual do repositório prevalece sobre exemplos antigos.
+- **TIC no Ensino Básico** — `20_Wiki/TIC no Ensino Básico.md`: TIC transversal no 1.º ciclo, projetos e progressão decidida pelo professor; clube de robótica no contexto do professor. A proposta de março de 2026 não foi assumida como norma.
+- **Avaliação Cooperada** — `20_Wiki/Avaliação Cooperada.md`: critérios partilhados, alunos participam no plano e no balanço, comunicação e entreajuda.
+- **Pensamento Computacional** — `20_Wiki/Pensamento Computacional.md`: decompor, planear sequências, testar e corrigir; programação ao serviço da resolução de problemas.
+Estas páginas estão em review/draft; as sínteses não equivalem a fontes oficiais. As fontes brutas bibliográficas aí referidas não foram todas relidas neste trabalho.
+
+## Fontes originais consultadas
+- PDF fornecido pelo professor: **Acampamento de Treinamento 1: Dirigindo Por Aí**, LEGO Education, extraído integralmente com pdftotext; cópia do texto em `/tmp/spike-driving.txt`. Programas ilustrados usam C+D, velocidade 30%/50% e exemplo de 17,5 cm por rotação. Estes valores dependem da montagem; graus do motor não equivalem ao ângulo da base.
+- [Aula oficial LEGO](https://education.lego.com/pt-br/lessons/prime-competition-ready/training-camp-1-driving-around/): progressão de movimentos e percursos; consulta web para confirmar a versão atual.
+- [Aplicação SPIKE Prime](https://spike.legoeducation.com/prime/project): aberta no browser T3; confirmadas categorias de Movimento, Eventos, Controlo e Sensores e existência dos blocos de motores, velocidade, distância, rotação e guinada. A aplicação abriu em inglês e os rótulos do PDF estão em pt-BR; a atividade usa explicações pt-PT e avisa sobre diferenças de idioma/versão. Não foi ligada uma base real.
+- [ERTE — documentos orientadores TIC](https://erte.dge.mec.pt/tic-1o-ceb-documentos-orientadores): verificado o link atual para as OC de 2018.
+- [OC TIC 1.º ciclo, 2018, original PDF](https://www.erte.dge.mec.pt/sites/default/files/oc_1_tic_-_vf_03out2018.pdf), pp. 7–9: comunicação e colaboração; criação de algoritmos simples; programação de objetos tangíveis e orientação espacial. São OC de ciclo, não AE separadas do 3.º/4.º ano. Foram lidos os descritores e ações pertinentes no original.
+
+## Proposta de adaptação desta atividade
+Missões breves e retomáveis. Primeiro planear, experimentar e comparar; começar com distância e baixa velocidade, trocar papéis no grupo e alterar apenas um parâmetro por teste. Percurso em L antes do quadrado; repetição e giroscópio como continuação orientada pelo professor. Não introduzir cálculo de circunferência nem prometer ângulos exatos por rotações de motor. Os registos do robot são declarações dos alunos, distintas das interações observadas na página e da observação do professor.
+
+## Pressupostos e lacunas para revisão
+Duração inicialmente estimada em 45 minutos; aguarda resposta do professor. Competição não identificada: nenhum regulamento ou pontuação foi presumido. Portas e tamanho real das rodas carecem de confirmação em aula. Conexão, transferência e funcionamento no robot físico não podem ser verificados sem o equipamento. O browser foi usado para consulta da app, não para observar programação dos alunos.
