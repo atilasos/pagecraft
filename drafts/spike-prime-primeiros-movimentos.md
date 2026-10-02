@@ -52,7 +52,7 @@ Nas tarefas externas, as crianças escolhem «Já fizemos» ou «Precisamos de a
 
 Observar em particular se o grupo confirmou portas, recolocou a base na mesma partida, alterou uma variável e comparou resultados. Ouvir a comunicação e a entreajuda; não deduzir cooperação apenas a partir de cliques. Feedback de pares: uma observação sobre o trabalho e uma pergunta que ajude o próximo ensaio, sem ranking.
 
-A reflexão é facultativa e individual, à vez, com o nome visível no host. Os mesmos critérios permitem escolher «Com ajuda», «Estou a experimentar», «Já consigo explicar» ou «Ainda não experimentei» e, se quiser, descrever uma estratégia e o próximo passo. Em modo autónomo, a reflexão fica local e não deve anunciar gravação no relatório do professor.
+A reflexão é facultativa e individual, à vez, com o nome visível no host. Na reflexão integrada, os mesmos critérios permitem escolher «Consegui com autonomia», «Consegui com ajuda», «Quero praticar mais» ou «Prefiro não responder». No formulário autónomo, as escolhas são «Com ajuda», «Estou a experimentar», «Já consigo explicar» ou «Ainda não experimentei». A criança pode também descrever uma estratégia e o próximo passo. Em modo autónomo, a reflexão fica local e não deve anunciar gravação no relatório do professor.
 
 ## Continuação da unidade LEGO
 
