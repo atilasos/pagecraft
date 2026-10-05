@@ -1,0 +1,1459 @@
+{
+  "checked_on": "2026-10-05",
+  "html_sha256": "16bec10f3caa8f7f9443e05e7ed3d156b1cda34b72c45b12cb52cd73d77b2ccf",
+  "html_commit": "dfa4ddc20178a1d5548f2e379c87c026d9ed88cd",
+  "scope": "Incremento de qualidade das capturas e seleção de idioma; não repete lógica do núcleo ou registos host/hardware.",
+  "browser": {
+    "provider": "Agent Browser Hub",
+    "session": "spike-captures-quality",
+    "profile": "research",
+    "management": "Sessão existente transferida pelo orquestrador; navegação/interação/screenshots MCP Hub; CDP do mesmo browser para viewport e leitura. Não foi lançado outro browser.",
+    "fallback_reason": "Ferramentas T3 preview_* ausentes do catálogo callable desta fase; orquestrador também recebeu Authentication required.",
+    "closed": true
+  },
+  "runs": [
+    {
+      "errors": [],
+      "runs": [
+        {
+          "outer": 390,
+          "iframe": 390,
+          "document": 375,
+          "images": [
+            {
+              "kind": "inicio",
+              "sha256": "f46e3800f6a21d43e5d741d10af7488055738e9158f990b400b027b0856c50c7",
+              "natural": [
+                680,
+                214
+              ],
+              "alt": "Captura real SPIKE: bloco amarelo «quando o programa iniciar».",
+              "transcript": "O bloco diz «quando o programa iniciar». Os outros blocos ficam ligados por baixo."
+            },
+            {
+              "kind": "motores",
+              "sha256": "990c429a5a11a79c8fe6776f0f886722b0b1d076649a42d8664a714bb320ed7e",
+              "natural": [
+                1057,
+                192
+              ],
+              "alt": "Captura real SPIKE: definir motores de movimento como C+D, portas de exemplo.",
+              "transcript": "A captura mostra «definir motores de movimento como C+D». C+D são as portas deste exemplo.No teu plano: C + D. Se pediste ajuda, confirma as portas com o professor."
+            },
+            {
+              "kind": "velocidade",
+              "sha256": "6543356c509fb13e8dde79037f31003f05469f7253a1888ecd942aa8c1e060ec",
+              "natural": [
+                997,
+                193
+              ],
+              "alt": "Captura real SPIKE: definir velocidade de movimento a 30 por cento, valor de exemplo.",
+              "transcript": "A captura mostra «definir velocidade de movimento a 30%». O professor pode ajustar este valor."
+            },
+            {
+              "kind": "medida",
+              "sha256": "e772d8049285258af29100d99f10981317201a411604e539fc5429188cf60e3a",
+              "natural": [
+                1306,
+                192
+              ],
+              "alt": "Captura real SPIKE: definir uma rotação do motor como 17,5 centímetros de movimento, medida de exemplo.",
+              "transcript": "A captura mostra uma rotação igual a 17,5 cm. Este exemplo não serve para todas as rodas."
+            },
+            {
+              "kind": "avancar",
+              "sha256": "319199d126aebefdef215eb8e6097f7b3ac1d2c6d6d454c5c99c7dd5be0c1267",
+              "natural": [
+                862,
+                193
+              ],
+              "alt": "Captura real SPIKE: mover em frente por 20 centímetros, distância de exemplo.",
+              "transcript": "A captura mostra «mover» com a seta para a frente, por 20 cm. Usa a distância que escolheste no plano.No teu plano: mover em frente por 10 cm."
+            },
+            {
+              "kind": "programa",
+              "sha256": "d0f722b04ba2206a469a22993b500bfc16784acb305806d7b334d341c1af5eff",
+              "natural": [
+                1306,
+                774
+              ],
+              "alt": "Programa real de exemplo SPIKE: início, motores C+D, velocidade 30 por cento, medida de 17,5 centímetros por rotação e avanço de 20 centímetros.",
+              "transcript": "Ordem do exemplo: começar, escolher motores, definir velocidade, ajustar medida e mover. C+D, 30%, 17,5 cm e 20 cm são valores a conferir."
+            },
+            {
+              "kind": "virar",
+              "sha256": "a7afcf9c17c56da2b4c08002f8250aff3b0e4935c8bbd5158dc28eaee4884741",
+              "natural": [
+                1108,
+                192
+              ],
+              "alt": "Captura real SPIKE: mover com direita 100 por 0,25 rotações, valores de um exemplo de viragem.",
+              "transcript": "A captura mostra «mover direita: 100 por 0,25 rotações».«Direita: 100» indica a direção da viragem, não a velocidade.0,25 rotações é um exemplo curto. Ajusta com o professor.Este valor não garante uma viragem de 90° do robô."
+            },
+            {
+              "kind": "categorias",
+              "sha256": "35ccd32db97370325fa6dffd30d4baac6b9f461b0cf5b5120c2f527698a77cb5",
+              "natural": [
+                174,
+                1392
+              ],
+              "alt": "Captura real da coluna de categorias SPIKE, incluindo Eventos e Movimento."
+            }
+          ],
+          "layouts": [
+            {
+              "level": "support",
+              "kind": "step1",
+              "imageComplete": true,
+              "natural": [
+                680,
+                214
+              ],
+              "display": [
+                237,
+                74.578125
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "support",
+              "kind": "step2",
+              "imageComplete": true,
+              "natural": [
+                1057,
+                192
+              ],
+              "display": [
+                237,
+                43.046875
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "support",
+              "kind": "step3",
+              "imageComplete": true,
+              "natural": [
+                997,
+                193
+              ],
+              "display": [
+                237,
+                45.875
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "support",
+              "kind": "step4",
+              "imageComplete": true,
+              "natural": [
+                1306,
+                192
+              ],
+              "display": [
+                237,
+                34.828125
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "support",
+              "kind": "step5",
+              "imageComplete": true,
+              "natural": [
+                862,
+                193
+              ],
+              "display": [
+                237,
+                53.0625
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "support",
+              "kind": "step6",
+              "imageComplete": true,
+              "natural": [
+                1306,
+                774
+              ],
+              "display": [
+                237,
+                140.453125
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "support",
+              "kind": "turn",
+              "imageComplete": true,
+              "natural": [
+                1108,
+                192
+              ],
+              "display": [
+                237,
+                41.0625
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "intermediate",
+              "kind": "step1",
+              "imageComplete": true,
+              "natural": [
+                680,
+                214
+              ],
+              "display": [
+                237,
+                74.578125
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "intermediate",
+              "kind": "step2",
+              "imageComplete": true,
+              "natural": [
+                1057,
+                192
+              ],
+              "display": [
+                237,
+                43.046875
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "intermediate",
+              "kind": "step3",
+              "imageComplete": true,
+              "natural": [
+                997,
+                193
+              ],
+              "display": [
+                237,
+                45.875
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "intermediate",
+              "kind": "step4",
+              "imageComplete": true,
+              "natural": [
+                1306,
+                192
+              ],
+              "display": [
+                237,
+                34.828125
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "intermediate",
+              "kind": "step5",
+              "imageComplete": true,
+              "natural": [
+                862,
+                193
+              ],
+              "display": [
+                237,
+                53.0625
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "intermediate",
+              "kind": "step6",
+              "imageComplete": true,
+              "natural": [
+                1306,
+                774
+              ],
+              "display": [
+                237,
+                140.453125
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "intermediate",
+              "kind": "turn",
+              "imageComplete": true,
+              "natural": [
+                1108,
+                192
+              ],
+              "display": [
+                237,
+                41.0625
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "challenge",
+              "kind": "step1",
+              "imageComplete": true,
+              "natural": [
+                680,
+                214
+              ],
+              "display": [
+                237,
+                74.578125
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "challenge",
+              "kind": "step2",
+              "imageComplete": true,
+              "natural": [
+                1057,
+                192
+              ],
+              "display": [
+                237,
+                43.046875
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "challenge",
+              "kind": "step3",
+              "imageComplete": true,
+              "natural": [
+                997,
+                193
+              ],
+              "display": [
+                237,
+                45.875
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "challenge",
+              "kind": "step4",
+              "imageComplete": true,
+              "natural": [
+                1306,
+                192
+              ],
+              "display": [
+                237,
+                34.828125
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "challenge",
+              "kind": "step5",
+              "imageComplete": true,
+              "natural": [
+                862,
+                193
+              ],
+              "display": [
+                237,
+                53.0625
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "challenge",
+              "kind": "step6",
+              "imageComplete": true,
+              "natural": [
+                1306,
+                774
+              ],
+              "display": [
+                237,
+                140.453125
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "challenge",
+              "kind": "turn",
+              "imageComplete": true,
+              "natural": [
+                1108,
+                192
+              ],
+              "display": [
+                237,
+                41.0625
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            }
+          ]
+        }
+      ],
+      "restoreEvents": [
+        "activity_loaded",
+        "activity_state",
+        "unit_started",
+        "activity_state"
+      ],
+      "resourceRequests": [],
+      "attempts": 0,
+      "font": {
+        "bodyPx": 20,
+        "didactLoaded": true
+      },
+      "ready": true
+    },
+    {
+      "errors": [],
+      "runs": [
+        {
+          "outer": 768,
+          "iframe": 768,
+          "document": 753,
+          "images": [
+            {
+              "kind": "inicio",
+              "sha256": "f46e3800f6a21d43e5d741d10af7488055738e9158f990b400b027b0856c50c7",
+              "natural": [
+                680,
+                214
+              ],
+              "alt": "Captura real SPIKE: bloco amarelo «quando o programa iniciar».",
+              "transcript": "O bloco diz «quando o programa iniciar». Os outros blocos ficam ligados por baixo."
+            },
+            {
+              "kind": "motores",
+              "sha256": "990c429a5a11a79c8fe6776f0f886722b0b1d076649a42d8664a714bb320ed7e",
+              "natural": [
+                1057,
+                192
+              ],
+              "alt": "Captura real SPIKE: definir motores de movimento como C+D, portas de exemplo.",
+              "transcript": "A captura mostra «definir motores de movimento como C+D». C+D são as portas deste exemplo.No teu plano: C + D. Se pediste ajuda, confirma as portas com o professor."
+            },
+            {
+              "kind": "velocidade",
+              "sha256": "6543356c509fb13e8dde79037f31003f05469f7253a1888ecd942aa8c1e060ec",
+              "natural": [
+                997,
+                193
+              ],
+              "alt": "Captura real SPIKE: definir velocidade de movimento a 30 por cento, valor de exemplo.",
+              "transcript": "A captura mostra «definir velocidade de movimento a 30%». O professor pode ajustar este valor."
+            },
+            {
+              "kind": "medida",
+              "sha256": "e772d8049285258af29100d99f10981317201a411604e539fc5429188cf60e3a",
+              "natural": [
+                1306,
+                192
+              ],
+              "alt": "Captura real SPIKE: definir uma rotação do motor como 17,5 centímetros de movimento, medida de exemplo.",
+              "transcript": "A captura mostra uma rotação igual a 17,5 cm. Este exemplo não serve para todas as rodas."
+            },
+            {
+              "kind": "avancar",
+              "sha256": "319199d126aebefdef215eb8e6097f7b3ac1d2c6d6d454c5c99c7dd5be0c1267",
+              "natural": [
+                862,
+                193
+              ],
+              "alt": "Captura real SPIKE: mover em frente por 20 centímetros, distância de exemplo.",
+              "transcript": "A captura mostra «mover» com a seta para a frente, por 20 cm. Usa a distância que escolheste no plano.No teu plano: mover em frente por 10 cm."
+            },
+            {
+              "kind": "programa",
+              "sha256": "d0f722b04ba2206a469a22993b500bfc16784acb305806d7b334d341c1af5eff",
+              "natural": [
+                1306,
+                774
+              ],
+              "alt": "Programa real de exemplo SPIKE: início, motores C+D, velocidade 30 por cento, medida de 17,5 centímetros por rotação e avanço de 20 centímetros.",
+              "transcript": "Ordem do exemplo: começar, escolher motores, definir velocidade, ajustar medida e mover. C+D, 30%, 17,5 cm e 20 cm são valores a conferir."
+            },
+            {
+              "kind": "virar",
+              "sha256": "a7afcf9c17c56da2b4c08002f8250aff3b0e4935c8bbd5158dc28eaee4884741",
+              "natural": [
+                1108,
+                192
+              ],
+              "alt": "Captura real SPIKE: mover com direita 100 por 0,25 rotações, valores de um exemplo de viragem.",
+              "transcript": "A captura mostra «mover direita: 100 por 0,25 rotações».«Direita: 100» indica a direção da viragem, não a velocidade.0,25 rotações é um exemplo curto. Ajusta com o professor.Este valor não garante uma viragem de 90° do robô."
+            },
+            {
+              "kind": "categorias",
+              "sha256": "35ccd32db97370325fa6dffd30d4baac6b9f461b0cf5b5120c2f527698a77cb5",
+              "natural": [
+                174,
+                1392
+              ],
+              "alt": "Captura real da coluna de categorias SPIKE, incluindo Eventos e Movimento."
+            }
+          ],
+          "layouts": [
+            {
+              "level": "support",
+              "kind": "step1",
+              "imageComplete": true,
+              "natural": [
+                680,
+                214
+              ],
+              "display": [
+                579,
+                182.203125
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "support",
+              "kind": "step2",
+              "imageComplete": true,
+              "natural": [
+                1057,
+                192
+              ],
+              "display": [
+                579,
+                105.171875
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "support",
+              "kind": "step3",
+              "imageComplete": true,
+              "natural": [
+                997,
+                193
+              ],
+              "display": [
+                579,
+                112.078125
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "support",
+              "kind": "step4",
+              "imageComplete": true,
+              "natural": [
+                1306,
+                192
+              ],
+              "display": [
+                579,
+                85.109375
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "support",
+              "kind": "step5",
+              "imageComplete": true,
+              "natural": [
+                862,
+                193
+              ],
+              "display": [
+                579,
+                129.625
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "support",
+              "kind": "step6",
+              "imageComplete": true,
+              "natural": [
+                1306,
+                774
+              ],
+              "display": [
+                579,
+                343.140625
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "support",
+              "kind": "turn",
+              "imageComplete": true,
+              "natural": [
+                1108,
+                192
+              ],
+              "display": [
+                579,
+                100.328125
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "intermediate",
+              "kind": "step1",
+              "imageComplete": true,
+              "natural": [
+                680,
+                214
+              ],
+              "display": [
+                579,
+                182.203125
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "intermediate",
+              "kind": "step2",
+              "imageComplete": true,
+              "natural": [
+                1057,
+                192
+              ],
+              "display": [
+                579,
+                105.171875
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "intermediate",
+              "kind": "step3",
+              "imageComplete": true,
+              "natural": [
+                997,
+                193
+              ],
+              "display": [
+                579,
+                112.078125
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "intermediate",
+              "kind": "step4",
+              "imageComplete": true,
+              "natural": [
+                1306,
+                192
+              ],
+              "display": [
+                579,
+                85.109375
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "intermediate",
+              "kind": "step5",
+              "imageComplete": true,
+              "natural": [
+                862,
+                193
+              ],
+              "display": [
+                579,
+                129.625
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "intermediate",
+              "kind": "step6",
+              "imageComplete": true,
+              "natural": [
+                1306,
+                774
+              ],
+              "display": [
+                579,
+                343.140625
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "intermediate",
+              "kind": "turn",
+              "imageComplete": true,
+              "natural": [
+                1108,
+                192
+              ],
+              "display": [
+                579,
+                100.328125
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "challenge",
+              "kind": "step1",
+              "imageComplete": true,
+              "natural": [
+                680,
+                214
+              ],
+              "display": [
+                579,
+                182.203125
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "challenge",
+              "kind": "step2",
+              "imageComplete": true,
+              "natural": [
+                1057,
+                192
+              ],
+              "display": [
+                579,
+                105.171875
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "challenge",
+              "kind": "step3",
+              "imageComplete": true,
+              "natural": [
+                997,
+                193
+              ],
+              "display": [
+                579,
+                112.078125
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "challenge",
+              "kind": "step4",
+              "imageComplete": true,
+              "natural": [
+                1306,
+                192
+              ],
+              "display": [
+                579,
+                85.109375
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "challenge",
+              "kind": "step5",
+              "imageComplete": true,
+              "natural": [
+                862,
+                193
+              ],
+              "display": [
+                579,
+                129.625
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "challenge",
+              "kind": "step6",
+              "imageComplete": true,
+              "natural": [
+                1306,
+                774
+              ],
+              "display": [
+                579,
+                343.140625
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "challenge",
+              "kind": "turn",
+              "imageComplete": true,
+              "natural": [
+                1108,
+                192
+              ],
+              "display": [
+                579,
+                100.328125
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            }
+          ]
+        }
+      ],
+      "restoreEvents": [],
+      "resourceRequests": [],
+      "attempts": 0,
+      "font": {
+        "bodyPx": 20,
+        "didactLoaded": true
+      },
+      "ready": true
+    },
+    {
+      "errors": [],
+      "runs": [
+        {
+          "outer": 1280,
+          "iframe": 1280,
+          "document": 1265,
+          "images": [
+            {
+              "kind": "inicio",
+              "sha256": "f46e3800f6a21d43e5d741d10af7488055738e9158f990b400b027b0856c50c7",
+              "natural": [
+                680,
+                214
+              ],
+              "alt": "Captura real SPIKE: bloco amarelo «quando o programa iniciar».",
+              "transcript": "O bloco diz «quando o programa iniciar». Os outros blocos ficam ligados por baixo."
+            },
+            {
+              "kind": "motores",
+              "sha256": "990c429a5a11a79c8fe6776f0f886722b0b1d076649a42d8664a714bb320ed7e",
+              "natural": [
+                1057,
+                192
+              ],
+              "alt": "Captura real SPIKE: definir motores de movimento como C+D, portas de exemplo.",
+              "transcript": "A captura mostra «definir motores de movimento como C+D». C+D são as portas deste exemplo.No teu plano: C + D. Se pediste ajuda, confirma as portas com o professor."
+            },
+            {
+              "kind": "velocidade",
+              "sha256": "6543356c509fb13e8dde79037f31003f05469f7253a1888ecd942aa8c1e060ec",
+              "natural": [
+                997,
+                193
+              ],
+              "alt": "Captura real SPIKE: definir velocidade de movimento a 30 por cento, valor de exemplo.",
+              "transcript": "A captura mostra «definir velocidade de movimento a 30%». O professor pode ajustar este valor."
+            },
+            {
+              "kind": "medida",
+              "sha256": "e772d8049285258af29100d99f10981317201a411604e539fc5429188cf60e3a",
+              "natural": [
+                1306,
+                192
+              ],
+              "alt": "Captura real SPIKE: definir uma rotação do motor como 17,5 centímetros de movimento, medida de exemplo.",
+              "transcript": "A captura mostra uma rotação igual a 17,5 cm. Este exemplo não serve para todas as rodas."
+            },
+            {
+              "kind": "avancar",
+              "sha256": "319199d126aebefdef215eb8e6097f7b3ac1d2c6d6d454c5c99c7dd5be0c1267",
+              "natural": [
+                862,
+                193
+              ],
+              "alt": "Captura real SPIKE: mover em frente por 20 centímetros, distância de exemplo.",
+              "transcript": "A captura mostra «mover» com a seta para a frente, por 20 cm. Usa a distância que escolheste no plano.No teu plano: mover em frente por 10 cm."
+            },
+            {
+              "kind": "programa",
+              "sha256": "d0f722b04ba2206a469a22993b500bfc16784acb305806d7b334d341c1af5eff",
+              "natural": [
+                1306,
+                774
+              ],
+              "alt": "Programa real de exemplo SPIKE: início, motores C+D, velocidade 30 por cento, medida de 17,5 centímetros por rotação e avanço de 20 centímetros.",
+              "transcript": "Ordem do exemplo: começar, escolher motores, definir velocidade, ajustar medida e mover. C+D, 30%, 17,5 cm e 20 cm são valores a conferir."
+            },
+            {
+              "kind": "virar",
+              "sha256": "a7afcf9c17c56da2b4c08002f8250aff3b0e4935c8bbd5158dc28eaee4884741",
+              "natural": [
+                1108,
+                192
+              ],
+              "alt": "Captura real SPIKE: mover com direita 100 por 0,25 rotações, valores de um exemplo de viragem.",
+              "transcript": "A captura mostra «mover direita: 100 por 0,25 rotações».«Direita: 100» indica a direção da viragem, não a velocidade.0,25 rotações é um exemplo curto. Ajusta com o professor.Este valor não garante uma viragem de 90° do robô."
+            },
+            {
+              "kind": "categorias",
+              "sha256": "35ccd32db97370325fa6dffd30d4baac6b9f461b0cf5b5120c2f527698a77cb5",
+              "natural": [
+                174,
+                1392
+              ],
+              "alt": "Captura real da coluna de categorias SPIKE, incluindo Eventos e Movimento."
+            }
+          ],
+          "layouts": [
+            {
+              "level": "support",
+              "kind": "step1",
+              "imageComplete": true,
+              "natural": [
+                680,
+                214
+              ],
+              "display": [
+                800,
+                251.75
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "support",
+              "kind": "step2",
+              "imageComplete": true,
+              "natural": [
+                1057,
+                192
+              ],
+              "display": [
+                800,
+                145.3125
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "support",
+              "kind": "step3",
+              "imageComplete": true,
+              "natural": [
+                997,
+                193
+              ],
+              "display": [
+                800,
+                154.859375
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "support",
+              "kind": "step4",
+              "imageComplete": true,
+              "natural": [
+                1306,
+                192
+              ],
+              "display": [
+                800,
+                117.609375
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "support",
+              "kind": "step5",
+              "imageComplete": true,
+              "natural": [
+                862,
+                193
+              ],
+              "display": [
+                800,
+                179.109375
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "support",
+              "kind": "step6",
+              "imageComplete": true,
+              "natural": [
+                1306,
+                774
+              ],
+              "display": [
+                800,
+                474.109375
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "support",
+              "kind": "turn",
+              "imageComplete": true,
+              "natural": [
+                1108,
+                192
+              ],
+              "display": [
+                800,
+                138.625
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "intermediate",
+              "kind": "step1",
+              "imageComplete": true,
+              "natural": [
+                680,
+                214
+              ],
+              "display": [
+                800,
+                251.75
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "intermediate",
+              "kind": "step2",
+              "imageComplete": true,
+              "natural": [
+                1057,
+                192
+              ],
+              "display": [
+                800,
+                145.3125
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "intermediate",
+              "kind": "step3",
+              "imageComplete": true,
+              "natural": [
+                997,
+                193
+              ],
+              "display": [
+                800,
+                154.859375
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "intermediate",
+              "kind": "step4",
+              "imageComplete": true,
+              "natural": [
+                1306,
+                192
+              ],
+              "display": [
+                800,
+                117.609375
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "intermediate",
+              "kind": "step5",
+              "imageComplete": true,
+              "natural": [
+                862,
+                193
+              ],
+              "display": [
+                800,
+                179.109375
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "intermediate",
+              "kind": "step6",
+              "imageComplete": true,
+              "natural": [
+                1306,
+                774
+              ],
+              "display": [
+                800,
+                474.109375
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "intermediate",
+              "kind": "turn",
+              "imageComplete": true,
+              "natural": [
+                1108,
+                192
+              ],
+              "display": [
+                800,
+                138.625
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "challenge",
+              "kind": "step1",
+              "imageComplete": true,
+              "natural": [
+                680,
+                214
+              ],
+              "display": [
+                800,
+                251.75
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "challenge",
+              "kind": "step2",
+              "imageComplete": true,
+              "natural": [
+                1057,
+                192
+              ],
+              "display": [
+                800,
+                145.3125
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "challenge",
+              "kind": "step3",
+              "imageComplete": true,
+              "natural": [
+                997,
+                193
+              ],
+              "display": [
+                800,
+                154.859375
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "challenge",
+              "kind": "step4",
+              "imageComplete": true,
+              "natural": [
+                1306,
+                192
+              ],
+              "display": [
+                800,
+                117.609375
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "challenge",
+              "kind": "step5",
+              "imageComplete": true,
+              "natural": [
+                862,
+                193
+              ],
+              "display": [
+                800,
+                179.109375
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "challenge",
+              "kind": "step6",
+              "imageComplete": true,
+              "natural": [
+                1306,
+                774
+              ],
+              "display": [
+                800,
+                474.109375
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            },
+            {
+              "level": "challenge",
+              "kind": "turn",
+              "imageComplete": true,
+              "natural": [
+                1108,
+                192
+              ],
+              "display": [
+                800,
+                138.625
+              ],
+              "pageOverflow": false,
+              "zoomBounded": true,
+              "smallTargets": 0,
+              "captionPx": 20
+            }
+          ]
+        }
+      ],
+      "restoreEvents": [
+        "activity_state"
+      ],
+      "resourceRequests": [],
+      "attempts": 0,
+      "font": {
+        "bodyPx": 20,
+        "didactLoaded": true
+      },
+      "ready": true
+    }
+  ],
+  "keyboard": {
+    "method": "Cliques e teclas reais via MCP Hub, regiões identificadas pelo estado estruturado.",
+    "mobile": {
+      "focusAfterShiftTab": "zoom-spike-reference",
+      "scrollLeftBefore": 0,
+      "scrollLeftAfterArrowRight": 80,
+      "clientWidth": 252,
+      "scrollWidth": 984,
+      "pageOverflow": false
+    },
+    "tablet": {
+      "focus": "zoom-spike-reference",
+      "regionOpen": true,
+      "scrollLeft": 80,
+      "scrollWidth": 984,
+      "clientWidth": 594,
+      "pageOverflow": false
+    },
+    "close": {
+      "focus": "enlarge-spike-reference",
+      "regionOpen": false,
+      "scrollLeft": 0,
+      "scrollWidth": 0,
+      "clientWidth": 0,
+      "pageOverflow": false
+    },
+    "tab_navigation": "Tab saiu da região para Passo anterior; Shift+Tab regressou à região. Abrir ampliação focou a região; Enter no botão fechou sem perder foco.",
+    "focus_ring": "Anel azul visível nas capturas de ampliação móvel e tablet."
+  },
+  "screenshots": [
+    {
+      "path": "drafts/spike-prime-primeiros-movimentos-qa/spike-quality-mobile-390.png",
+      "inspected": true
+    },
+    {
+      "path": "drafts/spike-prime-primeiros-movimentos-qa/spike-quality-mobile-390-zoom.png",
+      "inspected": true
+    },
+    {
+      "path": "drafts/spike-prime-primeiros-movimentos-qa/spike-quality-tablet-768.png",
+      "inspected": true
+    },
+    {
+      "path": "drafts/spike-prime-primeiros-movimentos-qa/spike-quality-tablet-768-zoom.png",
+      "inspected": true
+    },
+    {
+      "path": "drafts/spike-prime-primeiros-movimentos-qa/spike-quality-desktop-1280.png",
+      "inspected": true
+    }
+  ],
+  "visual_findings": [
+    "PNG do programa em tablet mostra cinco blocos com forma completa, cores originais, conetores, rótulos e valores legíveis.",
+    "No móvel, a imagem compacta tem equivalente textual20px; a ampliação mostra texto nítido e permite percorrer toda a imagem dentro da caixa.",
+    "O bloco de viragem local1108×192 conserva a forma inteira, direita100 e0.25rotações, descritos no guia como exemplos.",
+    "As oito imagens foram descodificadas no browser e os hashes coincidem com capturasDPR2 de2026-10-05. Nenhuma imagem foi reamostrada na incorporação."
+  ],
+  "limits": [
+    "Ensaio do artefacto numa janela de Chromium gerido, com viewport emulado; não se usou hardware móvel físico.",
+    "O conteúdo raster reduzido no móvel continua pequeno; transcrição20px e ampliação são os apoios de leitura.",
+    "Não foi ligado um hub nem observado um robô físico."
+  ]
+}
