@@ -1,115 +1,154 @@
 {
   "source": "https://spike.legoeducation.com/prime/project",
-  "captured_at": "2026-10-02",
+  "captured_at": "2026-10-05",
   "version": "3.6.1",
   "language": "pt-BR",
-  "method": "Captura PNG do browser T3; recortes sem alterar desenhos, cores ou texto dos blocos. Programa local de exemplo criado com blocos originais da aplicação.",
+  "language_selection": "Configurações > Idioma > Português (Brasil), selecionado na interface antes de criar projeto de blocos de palavras.",
+  "method": "Capturas PNG lossless do Chromium gerido pelo Agent Browser Hub, sessão research; CDP com viewport1600×1100 e deviceScaleFactor2. Recortes sem reamostragem, filtros ou redesenho. Blocos originais da aplicação, separados para capturar forma completa; programa local de exemplo montado na aplicação.",
   "original": "spike-original.png",
-  "examples": "C+D, 30%, 17.5 cm, 20 cm e viragem direita100 por0.25rotações são valores de exemplo, a confirmar e ajustar com o professor. Não foi ligado um hub.",
-  "images": {
-    "inicio": {
-      "file": "inicio.png",
-      "crop_box": [
-        372,
-        108,
-        744,
-        205
-      ],
-      "width": 372,
-      "height": 97,
-      "sha256": "44d11565e162c7e10499532d42a0f7e76c6ce5e43be8bd857ee2700be6ae944e"
+  "capture_sources": {
+    "blocks": {
+      "file": "spike-blocks-original.png",
+      "width": 3200,
+      "height": 2200,
+      "sha256": "07dc483099ee54adb0553af53d10b85396f6f030d5223ff077d6196a15343b37"
     },
-    "motores": {
-      "file": "motores.png",
-      "crop_box": [
-        372,
-        205,
-        949,
-        281
-      ],
-      "width": 577,
-      "height": 76,
-      "sha256": "c19dce755c066b68de2b758726e47f4699d8c5dde03932b1a90be9559d112c63"
-    },
-    "velocidade": {
-      "file": "velocidade.png",
-      "crop_box": [
-        372,
-        281,
-        917,
-        358
-      ],
-      "width": 545,
-      "height": 77,
-      "sha256": "b900f3b3e5f1b7c4ab710c27be13985c4fe7097e22c1bec4b057223511ce488a"
-    },
-    "medida": {
-      "file": "medida.png",
-      "crop_box": [
-        372,
-        358,
-        1086,
-        435
-      ],
-      "width": 714,
-      "height": 77,
-      "sha256": "f0253cdbf4802d7ff4c9f2b4ae22798ce2dd8bf065be670c89efa5d02c891950"
-    },
-    "avancar": {
-      "file": "avancar.png",
-      "crop_box": [
-        372,
-        435,
-        844,
-        531
-      ],
-      "width": 472,
-      "height": 96,
-      "sha256": "e375d0fc1a3cb9620049710f059d7a6546965f1fb87197bc1c412fb3505396c5"
-    },
-    "programa": {
-      "file": "programa.png",
-      "crop_box": [
-        372,
-        108,
-        1086,
-        531
-      ],
-      "width": 714,
-      "height": 423,
-      "sha256": "9741e7b664f36e348cc4fd2aa3cd67c20e9c166aca7ae252cf3b5cd50a02cf5c"
-    },
-    "virar": {
-      "file": "virar.png",
-      "crop_box": [
-        427,
-        602,
-        1032,
-        707
-      ],
-      "width": 605,
-      "height": 105,
-      "sha256": "92a4c437966e3fa4d839f86a819453436608e90f9007e09d494180026cbda24d"
-    },
-    "categorias": {
-      "file": "categorias.png",
-      "crop_box": [
-        0,
-        48,
-        67,
-        631
-      ],
-      "width": 67,
-      "height": 583,
-      "sha256": "c89ac2efdf45907617bceb4d329e020adb04dd9456ddb5b429923792de9521d4"
+    "program": {
+      "file": "spike-original.png",
+      "width": 3200,
+      "height": 2200,
+      "sha256": "ded8f470c5032c78dbeb45c952875d05310aabb968100a653e33e119138d68a6"
     }
   },
   "viewport": {
-    "width": 1500,
-    "height": 1000
+    "width": 1600,
+    "height": 1100
   },
+  "device_scale_factor": 2,
   "screenshot_dimensions": {
-    "width": 1280,
-    "height": 853
+    "width": 3200,
+    "height": 2200
+  },
+  "previous_capture_manifest": "captures-v1.json",
+  "previous_asset_commit": "ab3ea5a",
+  "examples": "C+D, 30%, 17.5 cm, 20 cm e viragem direita: 100 por 0.25 rotações são valores de exemplo a confirmar e ajustar com o professor. Não foi ligado um hub.",
+  "images": {
+    "inicio": {
+      "file": "inicio.png",
+      "source": "spike-blocks-original.png",
+      "crop_box": [
+        969,
+        358,
+        1649,
+        572
+      ],
+      "width": 680,
+      "height": 214,
+      "original_labels": "quando o programa iniciar",
+      "sha256": "f46e3800f6a21d43e5d741d10af7488055738e9158f990b400b027b0856c50c7"
+    },
+    "motores": {
+      "file": "motores.png",
+      "source": "spike-blocks-original.png",
+      "crop_box": [
+        969,
+        662,
+        2026,
+        854
+      ],
+      "width": 1057,
+      "height": 192,
+      "original_labels": "C+Ddefinir motores de movimento como",
+      "sha256": "990c429a5a11a79c8fe6776f0f886722b0b1d076649a42d8664a714bb320ed7e"
+    },
+    "velocidade": {
+      "file": "velocidade.png",
+      "source": "spike-blocks-original.png",
+      "crop_box": [
+        969,
+        924,
+        1966,
+        1117
+      ],
+      "width": 997,
+      "height": 193,
+      "original_labels": "30definir velocidade de movimento a%",
+      "sha256": "6543356c509fb13e8dde79037f31003f05469f7253a1888ecd942aa8c1e060ec"
+    },
+    "medida": {
+      "file": "medida.png",
+      "source": "spike-blocks-original.png",
+      "crop_box": [
+        969,
+        1187,
+        2275,
+        1379
+      ],
+      "width": 1306,
+      "height": 192,
+      "original_labels": "17.5definir 1 rotação do motor acmde movimento",
+      "sha256": "e772d8049285258af29100d99f10981317201a411604e539fc5429188cf60e3a"
+    },
+    "avancar": {
+      "file": "avancar.png",
+      "source": "spike-blocks-original.png",
+      "crop_box": [
+        969,
+        1449,
+        1831,
+        1642
+      ],
+      "width": 862,
+      "height": 193,
+      "original_labels": "20moverporcm",
+      "sha256": "319199d126aebefdef215eb8e6097f7b3ac1d2c6d6d454c5c99c7dd5be0c1267"
+    },
+    "virar": {
+      "file": "virar.png",
+      "source": "spike-blocks-original.png",
+      "crop_box": [
+        969,
+        1712,
+        2077,
+        1904
+      ],
+      "width": 1108,
+      "height": 192,
+      "original_labels": "direita: 1000.25moverporrotações",
+      "sha256": "a7afcf9c17c56da2b4c08002f8250aff3b0e4935c8bbd5158dc28eaee4884741"
+    },
+    "categorias": {
+      "file": "categorias.png",
+      "source": "spike-blocks-original.png",
+      "crop_box": [
+        0,
+        96,
+        174,
+        1488
+      ],
+      "width": 174,
+      "height": 1392,
+      "original_labels": "MOTORES\nMOVIMENTO\nLUZ\nSOM\nEVENTOS\nCONTROLE\nSENSORES\nOPERADORES\nVARIÁVEIS\nMEUS BLOCOS",
+      "sha256": "35ccd32db97370325fa6dffd30d4baac6b9f461b0cf5b5120c2f527698a77cb5"
+    },
+    "programa": {
+      "file": "programa.png",
+      "source": "spike-original.png",
+      "crop_box": [
+        969,
+        520,
+        2275,
+        1294
+      ],
+      "width": 1306,
+      "height": 774,
+      "original_labels": "quando o programa iniciarC+Ddefinir motores de movimento como30definir velocidade de movimento a%17.5definir 1 rotação do motor acmde movimento20moverporcm",
+      "sha256": "d0f722b04ba2206a469a22993b500bfc16784acb305806d7b334d341c1af5eff"
+    }
+  },
+  "language_evidence": {
+    "screenshot": "spike-language-pt-br.png",
+    "selection_checkmark": true,
+    "sha256": "7c7ed2ddeed90c9af6e84d2abac17898ec92ac9923fb825713b6b66e879d72e5"
   }
 }
