@@ -107,12 +107,26 @@
     "publication": "Rascunho privado até revisão e aprovação específica do professor.",
     "screenshotReferences": {
       "purpose": "Pedido expresso do professor: facilitar o reconhecimento dos blocos reais durante a transferência do plano para SPIKE.",
-      "source": "Capturas reais fornecidas pelo orquestrador da aplicação LEGO Education SPIKE 3.6.1, pt-BR.",
+      "source": "Novas capturas reais da aplicação LEGO Education SPIKE 3.6.1 após selecionar Português (Brasil) nas configurações; produzidas pelo orquestrador no browser real.",
       "presentation": "Referência visual não interativa junto do guia de programação, separada dos controlos do plano. Recorte legível do bloco/programa, sem distorção, com ampliação por botão acessível se necessária. Imagens incorporadas; não carregar assets remotos.",
-      "caption": "Exemplo na aplicação SPIKE. A imagem usa português do Brasil. Confere as portas e valores da tua base.",
+      "caption": "Exemplo real na aplicação SPIKE em Português (Brasil). Confere as portas e valores da tua base.",
       "accessibility": "Texto alternativo descreve os blocos, a ordem e os valores visíveis, identificando-os como exemplo. Legenda e transcrição/instruções pt-PT ficam disponíveis fora da imagem; nenhum pedido depende de ler texto rasterizado.",
-      "timing": "Após previsão e confirmação do plano correspondente. Referências de L e quadrado não exibem a solução antes da resposta de exploração. Missão do sensor continua acompanhada pelo professor e facultativa."
-    }
+      "timing": "Após previsão e confirmação do plano correspondente. Referências de L e quadrado não exibem a solução antes da resposta de exploração. Missão do sensor continua acompanhada pelo professor e facultativa.",
+      "captureRevision": "2026-10-05",
+      "quality": "Capturar novos PNG sem perdas diretamente da renderização do browser com escala efetiva 2×. Os píxeis adicionais vêm da renderização nativa do texto e dos blocos; nunca ampliar ou reamostrar os PNG anteriores. Recortar com margem preservando a silhueta, texto e todos os campos do bloco completos, sem redesenhar fontes, rótulos ou cores.",
+      "coverage": [
+        "1 · Começar o programa",
+        "2 · Escolher os motores",
+        "3 · Definir a velocidade",
+        "4 · Ajustar a medida às rodas",
+        "5 · Pedir o avanço",
+        "6 · Conferir o programa completo",
+        "Referência de viragem com o professor",
+        "Coluna de categorias Eventos e Movimento"
+      ],
+      "languageSetup": "Na aplicação: Configurações → Idioma → Português (Brasil). Os rótulos dos blocos ficam iguais aos das referências."
+    },
+    "applicationLanguage": "Antes de procurar os blocos, abrir a aplicação SPIKE e escolher Configurações → Idioma → Português (Brasil). Usar os blocos com os rótulos originais pt-BR, iguais às capturas. A página, legendas, instruções e explicações permanecem em português europeu."
   },
   "units": [
     {
@@ -647,5 +661,9 @@
       "https://www.erte.dge.mec.pt/sites/default/files/oc_1_tic_-_vf_03out2018.pdf"
     ],
     "proposal": "A microprogressão, sequência em L e andaimes são proposta nossa para 3.º/4.º; a duração de 45 minutos foi confirmada pelo professor. Os controlos do plano mantêm ilustrações didáticas próprias e o guia inclui capturas reais dos blocos SPIKE 3.6.1 em pt-BR, conforme pedido posterior do professor, com legendas pt-PT, texto alternativo e valores identificados como exemplos. Não republicar o PDF. Relatório detalhado de títulos/caminhos em drafts/spike-prime-primeiros-movimentos-sources.md."
+  },
+  "revision": {
+    "date": "2026-10-05",
+    "scope": "Idioma da aplicação SPIKE em português do Brasil e novas capturas nativas de maior resolução; núcleo pedagógico preservado."
   }
 }

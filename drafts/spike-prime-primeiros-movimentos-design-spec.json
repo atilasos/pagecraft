@@ -2,13 +2,13 @@
   "slug": "spike-prime-primeiros-movimentos",
   "docspec": "drafts/spike-prime-primeiros-movimentos-docspec.json",
   "revision": {
-    "date": "2026-10-02",
-    "iteration": 2,
+    "date": "2026-10-05",
+    "iteration": 3,
     "references": [
       "skills/codex/references/activity-experience.md",
       "skills/codex/references/age-adaptation.md"
     ],
-    "scope": "Acrescentar referências reais dos blocos SPIKE conforme pedido do professor; preservar sistema visual, duração, critérios e fluxo."
+    "scope": "Melhorar resolução das capturas SPIKE e explicitar seleção Português (Brasil) na aplicação; preservar seis passos do guia, viragem, três apoios, duração e fluxo."
   },
   "palette": {
     "bg": "oklch(0.9648 0.0086 84.6)",
@@ -173,13 +173,16 @@
     },
     "programmingReferences": {
       "purpose": "Reconhecer na aplicação os blocos correspondentes ao plano, usando capturas reais autorizadas pelo pedido do professor.",
-      "source": "LEGO Education SPIKE3.6.1, interface pt-BR; ficheiros reais fornecidos pelo orquestrador. Não inventar capturas nem redesenhar imagem como se fosse screenshot.",
+      "source": "LEGO Education SPIKE 3.6.1, interface Português (Brasil) selecionada em Configurações → Idioma; novas capturas reais de 2026-10-05 fornecidas pelo orquestrador.",
       "placement": "Junto do guia de programação nas missões a que os blocos correspondem. Mostrar depois da previsão e confirmação do plano; no L e quadrado, preservar a exploração antes de mostrar programa de referência.",
       "figure": "figure com imagem recortada aos blocos relevantes e figcaption em pt-PT. Preservar palavras originais da aplicação dentro da imagem. Legenda curta explica pt-BR; instruções pt-PT mapeiam o bloco para a ação planeada.",
       "examples": "C+D, percentagem de velocidade, distância por rotação e viragem da captura são exemplos da aplicação/modelo, não parâmetros universais. Nota junto da figura manda conferir portas reais e valores adequados; 0,5rotações de motor não garante90° do robô.",
       "responsive": "Imagem fluida, altura auto e proporção preservada. Se o texto da captura ficar pequeno em390px, oferecer Ampliar imagem em controlo≥48px e transcrição legível em20px. Ampliação acessível por teclado, sem transbordamento horizontal da página nem foco preso.",
       "accessibility": "Alt em pt-PT descreve bloco ou sequência real, ordem e valores visíveis como exemplo. Transcrição/instruções externas equivalentes mantêm compreensão com imagens ocultas. Captura não é botão nem substitui labels/controlos da atividade; figcaption útil≥20px.",
-      "offline": "Imagens reais incorporadas no HTML, sem ligação remota nem dependência de rede. A referência é estática e não indica conexão ao hub ou leitura do robô."
+      "offline": "Imagens reais incorporadas no HTML, sem ligação remota nem dependência de rede. A referência é estática e não indica conexão ao hub ou leitura do robô.",
+      "languageSetup": "Mostrar no início do guia: Na aplicação, abre Configurações → Idioma → Português (Brasil). Usar rótulos originais pt-BR nos blocos, sem retraduzir a imagem; explicar e legendar em pt-PT.",
+      "captureQuality": "PNG novos sem perdas, com renderização efetiva 2× no browser real. Não fazer upscaling, reamostragem ou redesenho dos PNG anteriores. Recortes incluem bloco completo, conectores e todos os campos com margem, sem cortar letras/valores. Conservar proporção original na incorporação.",
+      "guideCoverage": "Preservar os seis passos: começar, motores, velocidade, medida por rotação, avanço e programa completo. Conservar referência separada de viragem com professor e coluna de categorias. Não acrescentar respostas obrigatórias nem mudar o fluxo de exploração."
     }
   },
   "statePresentation": {
@@ -229,7 +232,8 @@
       "Teclado, foco e reduced-motion; tablet/telemóvel390px/768px/1280px, fonte real incorporada,20px/48px mínimos.",
       "Recuperação sem novas tentativas; relatos externos separados de evidência digital e autoavaliação.",
       "Host real identifica participantes/reflexão individual e confirma registo; autónomo não promete gravação remota.",
-      "Capturas SPIKE legíveis em390/768/1280px, legenda pt-PT e original pt-BR explicado; texto alternativo/equivalente, ampliação por teclado e valores identificados como exemplos. Referências não antecipam solução antes da exploração."
+      "Capturas SPIKE legíveis em390/768/1280px, legenda pt-PT e original pt-BR explicado; texto alternativo/equivalente, ampliação por teclado e valores identificados como exemplos. Referências não antecipam solução antes da exploração.",
+      "Revisão 2026-10-05: confirmar Português (Brasil) na aplicação, novos PNG renderizados nativamente a2× sem upscaling dos anteriores e recortes com blocos completos; seis passos e viragem preservados com legendas/alt pt-PT."
     ]
   },
   "notes": "O caderno de equipa usa diagramas grandes e perguntas próximas da ação para apoiar a primeira programação. Os estados distinguem escolha, confirmação, percurso ideal e ensaio declarado. A navegação depende de respostas, preservando espaço para errar, pedir ajuda e rever o plano."
