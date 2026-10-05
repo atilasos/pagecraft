@@ -28,9 +28,13 @@
     "browser_checks": "drafts/spike-prime-primeiros-movimentos-qa/browser-checks.json",
     "mobile_screenshot": "drafts/spike-prime-primeiros-movimentos-qa/mobile-390.png",
     "captures": "drafts/spike-prime-primeiros-movimentos-assets/captures.json",
-    "screenshot_checks": "drafts/spike-prime-primeiros-movimentos-qa/browser-screenshots.json",
-    "screenshot_integration": "drafts/spike-prime-primeiros-movimentos-qa/screenshots-integration.json",
-    "screenshot_mobile": "drafts/spike-prime-primeiros-movimentos-qa/spike-turn-390.png"
+    "screenshot_checks": "drafts/spike-prime-primeiros-movimentos-qa/browser-quality.json",
+    "screenshot_integration": "drafts/spike-prime-primeiros-movimentos-qa/quality-integration.json",
+    "screenshot_mobile": "drafts/spike-prime-primeiros-movimentos-qa/spike-quality-mobile-390.png",
+    "previous_screenshot_checks": "drafts/spike-prime-primeiros-movimentos-qa/browser-screenshots.json",
+    "previous_screenshot_integration": "drafts/spike-prime-primeiros-movimentos-qa/screenshots-integration.json",
+    "language_evidence": "drafts/spike-prime-primeiros-movimentos-qa/language-quality.json",
+    "screenshot_tablet": "drafts/spike-prime-primeiros-movimentos-qa/spike-quality-tablet-768-zoom.png"
   },
   "verification": {
     "robot_physical": "not_available",
@@ -40,11 +44,50 @@
     "group_records": "isolated current server8779; two participants; shared checkpoint4; separate reflections persisted and restored",
     "offline": "8 imagens e fonte incorporadas; sem pedidos de recursos externos no browser; sem emulação de rede desligada",
     "limitations": [
+      "Ensaio do artefacto numa janela de Chromium gerido, com viewport emulado; não se usou hardware móvel físico.",
+      "O conteúdo raster reduzido no móvel continua pequeno; transcrição20px e ampliação são os apoios de leitura.",
+      "Não foi ligado um hub nem observado um robô físico."
+    ],
+    "screenshots": {
+      "embedded_original_pngs": 8,
+      "source_hashes_match": true,
+      "source_dimensions": [
+        3200,
+        2200
+      ],
+      "native_scale_factor": 2,
+      "language": "pt-BR",
+      "language_selection_checked": true,
+      "browser_provider": "Agent Browser Hub research",
+      "browser_closed": true,
+      "browser_cases": 63,
+      "outer_widths": [
+        390,
+        768,
+        1280
+      ],
+      "measured_iframe_element_widths": [
+        390,
+        768,
+        1280
+      ],
+      "measured_activity_viewport_widths": [
+        375,
+        753,
+        1265
+      ],
+      "keyboard": "Tab/Shift+Tab, ArrowRight e Enter por MCP Hub; foco conservado; região limitada",
+      "visual_focus_ring_verified": true,
+      "visual_inspection": "móvel, tablet e desktop; imagens compactas e ampliadas",
+      "teacher_content_matches_final_html": true,
+      "hardware": "não testado; revisão incremental das capturas"
+    },
+    "previous_review_limits": [
       "Robot/hub not available for hardware testing.",
       "Screenshots tablet/desktop and visual focus ring were limited by native preview client; DOM layout and trusted keyboard interactions were tested.",
       "Session host403 on event-types used fallback; saves and restoration worked."
     ],
-    "screenshots": {
+    "previous_screenshot_tests": {
       "embedded_original_pngs": 8,
       "source_hashes_match": true,
       "browser_cases": 63,
@@ -67,23 +110,24 @@
         753,
         1265
       ]
-    }
+    },
+    "current_browser_scope": "Incremento de qualidade das capturas e seleção de idioma; não repete lógica do núcleo ou registos host/hardware."
   },
   "code": "444L7K",
   "published": false,
   "preview_teacher": "https://estudio.infantinho.xyz/444L7K",
   "preview_local": "http://127.0.0.1:8777/444L7K",
-  "html_sha256": "061e8f4b5556be88d23b321a5258892f2c0f645b625eff5cab289d15e6095d68",
+  "html_sha256": "16bec10f3caa8f7f9443e05e7ed3d156b1cda34b72c45b12cb52cd73d77b2ccf",
   "phases": {
-    "architect": "Capturas previstas; duração e critérios preservados",
-    "designer": "Referências reais junto do guia; ampliação acessível",
-    "builder": "8 PNG originais incorporados; 6 passos e viragem; setas para percorrer ampliação",
-    "proofreader": "PASS iteration3; HTML final revisto",
-    "evaluator": "PASS iteration2; avaliação incremental no browser T3"
+    "architect": "Idioma pt-BR e captura nativa2× previstos; duração e critérios preservados",
+    "designer": "Recortes completos de blocos reais; transcrição e ampliação preservadas",
+    "builder": "8 PNG novos incorporados; caminho de idioma acrescentado; JS/fonte/hashes verificados",
+    "proofreader": "PASS iteration4; HTML final revisto",
+    "evaluator": "PASS iteration3; revisão incremental no Agent Browser Hub"
   },
   "revision": {
-    "iteration": 2,
-    "request": "Capturas reais dos blocos SPIKE para facilitar reconhecimento na aplicação",
-    "date": "2026-10-02"
+    "iteration": 3,
+    "date": "2026-10-05",
+    "request": "Selecionar português do Brasil na aplicação LEGO e refazer screenshots com mais qualidade"
   }
 }
