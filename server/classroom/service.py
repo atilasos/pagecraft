@@ -355,6 +355,7 @@ class ClassroomService:
                     "class_name",
                     "activity_slug",
                     "activity_title",
+                    "join_code",
                     "status",
                     "started_at",
                 )
