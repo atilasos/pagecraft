@@ -1,6 +1,6 @@
 # Oficina dos pavimentos
 
-Atividade de 30 minutos para o 4.º ano, em português europeu, com trabalho a pares no Minecraft Education. Explora áreas de quadriláteros com foco no quadrado e no retângulo. Rascunho para revisão do professor; os testes de interação e a revisão linguística são fases posteriores.
+Atividade de 30 minutos para o 4.º ano, em português europeu, com trabalho a pares no Minecraft Education. Explora áreas de quadriláteros com foco no quadrado e no retângulo. Rascunho revisto e testado, preparado para revisão do professor. Pré-visualização privada: https://estudio.infantinho.xyz/NGRPUX .
 
 ## Preparar antes da aula
 
@@ -41,3 +41,11 @@ No quadrado 4 × 4, área 16 m² e contorno 16 m têm por coincidência o mesmo 
 [AE de Matemática do 4.º ano, DGE](https://www.dge.mec.pt/sites/default/files/Curriculo/Aprendizagens_Essenciais/1_ciclo/ae_mat_4.o_ano.pdf), pp. 44–45: área do retângulo por contagem organizada, quadrado como caso particular e unidades convencionais; p. 42: quadriláteros. Referencial ligado na [página de homologação](https://www.dge.mec.pt/node/3935). O maker inspira-se na exploração de pavimentos da [atividade oficial Making Homes, Part 2](https://education.minecraft.net/en-us/lessons/making-homes-part-2).
 
 A consulta da Sebenta fundamenta descoberta, comunicação matemática e critérios conhecidos; esta sessão breve inspira-se na avaliação cooperada, sem reproduzir todo o dispositivo MEM. Pesquisa, datas e limites em [fontes](areas-quadrilateros-minecraft-4ano-30min-sources.md). A sequência, os exemplos e as interações são proposta original.
+
+## Verificação e acesso
+
+Revisão linguística aprovada. Testes em browser real: três apoios, avanço por respostas mesmo erradas, correções, teclado, mudança de apoio, layouts de computador/tablet/telemóvel e reflexão autónoma. Ponte postMessage e restauro verificados em iframe, incluindo sandbox de origem opaca. A API local guardou 29 acontecimentos capturados no browser e a autoavaliação de um ensaio sintético; relatório descarregado e ensaio excluído dos resultados dos alunos.
+
+O browser partilhado não alcançou o servidor loopback. A página foi testada por carregamento do HTML no browser e a API foi verificada separadamente; não foi verificado o percurso completo da UI do host de realizações nem a reflexão à vez de grupos em Sessões de aula. Minecraft e utilização com crianças não foram executados.
+
+Pré-visualização: [Oficina dos pavimentos](https://estudio.infantinho.xyz/NGRPUX), protegida pelo acesso do professor. Lista privada: https://estudio.infantinho.xyz/teacher/activities.html . O rascunho não está disponível aos alunos: API anónima local 404, endpoint público remoto 403. A revisão do professor é necessária antes da publicação de cada atividade, conforme a skill PageCraft. Evidência e limitações em `areas-quadrilateros-minecraft-4ano-30min-evaluation.json`.
