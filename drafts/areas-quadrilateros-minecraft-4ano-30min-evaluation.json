@@ -1,0 +1,563 @@
+{
+  "slug": "areas-quadrilateros-minecraft-4ano-30min",
+  "date": "2026-10-08",
+  "pass": true,
+  "route": "none",
+  "severity": "low",
+  "scores": {
+    "factual_accuracy": 5,
+    "constraint_alignment": 5,
+    "differentiation_quality": 4,
+    "ux_accessibility": 4,
+    "visual_design": 4,
+    "technical_quality": 5
+  },
+  "issues": [],
+  "required_fixes": [],
+  "blocked_by": [],
+  "evidence": [
+    "Browser colaborativo T3, Chromium real: ficheiro HTML final carregado por bytes em about:blank; sem dependências de rede.",
+    "Percursos dos três apoios verificados com interações DOM reais. Clique e teclado Enter/ArrowRight verificados pelas ferramentas focadas.",
+    "Ponte testada num iframe de QA e restauro repetido num iframe sandbox allow-scripts de origem opaca.",
+    "API local autenticada por bootstrap loopback; registos capturados no browser submetidos como ensaio preview e reflexão descarregada. Os ensaios não aparecem nos relatórios dos alunos."
+  ],
+  "acceptance_checks": [
+    "Cinco etapas somam30min e sete pedidos obrigatórios; DocSpec válido e critérios metadata coerentes.",
+    "Pedido por responder bloqueia avanço e saltos; respostas erradas completas permitem avançar.",
+    "Pistas visuais, correção e voltar às respostas funcionam.",
+    "Mudança de apoio conserva respostas, confirmação maker e registo.",
+    "Fórmula geral aparece apenas depois da exploração e comparação.",
+    "Declaração Minecraft recebe feedback neutro e não é automaticamente validada.",
+    "Reflexão individual facultativa; modo autónomo conserva critérios e permite respostas em branco.",
+    "Partilha facultativa e discovery emitem acontecimentos canónicos; não criam pedidos obrigatórios.",
+    "Restauro não duplica attempts; mensagens de fonte inválida ignoradas; preferências do host não repetem level_changed.",
+    "Fonte Didact Gothic carregada, corpo20px, cotas18.75px na comparação; foco visível e alvos≥48px.",
+    "Sem transbordamento a1920/768/390px nas cinco etapas; labels de rádio têm alvos grandes.",
+    "Consola final sem erros; aviso de canvas pertence ao instrumento de medição de contraste."
+  ],
+  "interaction_paths": [
+    {
+      "checks": [
+        {
+          "check": "Inicial incompleto",
+          "pass": true
+        },
+        {
+          "check": "Salto futuro bloqueado",
+          "pass": true
+        },
+        {
+          "check": "Erro u1 tem pista e permite avanço",
+          "pass": true
+        },
+        {
+          "check": "Contagem sem fórmula antes da resposta",
+          "pass": true
+        },
+        {
+          "check": "Fila manipulável conserva foco",
+          "pass": true
+        },
+        {
+          "check": "Área sem conta ainda bloqueia",
+          "pass": true
+        },
+        {
+          "check": "Duas respostas erradas permitem avançar",
+          "pass": true
+        },
+        {
+          "check": "Correção conserva resposta12",
+          "pass": true
+        },
+        {
+          "check": "Fórmula geral escondida antes da comparação",
+          "pass": true
+        },
+        {
+          "check": "Comparação errada com pista visual",
+          "pass": true
+        },
+        {
+          "check": "Só declaração não basta para maker",
+          "pass": true
+        },
+        {
+          "check": "Maker errado conserva declaração neutra e permite avanço",
+          "pass": true
+        },
+        {
+          "check": "Conclusão por resposta mesmoerrada",
+          "pass": true
+        },
+        {
+          "check": "Mudança para support conserva trabalho",
+          "pass": true
+        },
+        {
+          "check": "Mudança para intermediate conserva trabalho",
+          "pass": true
+        },
+        {
+          "check": "Mudança para challenge conserva trabalho",
+          "pass": true
+        },
+        {
+          "check": "Reflexão facultativa abre sem respostas prévias",
+          "pass": true
+        },
+        {
+          "check": "Voltar conserva registo externo",
+          "pass": true
+        }
+      ],
+      "level": "support",
+      "saved": {
+        "activity": "areas-quadrilateros-minecraft-4ano-30min",
+        "readyForReflection": true,
+        "state": {
+          "comparison": 1,
+          "extra": 0,
+          "level": "support",
+          "maker": true,
+          "note": "2 filas de 8 blocos: 18 m².",
+          "plant": 0,
+          "reflection": [
+            null,
+            null,
+            null
+          ],
+          "rows": 1,
+          "step": 4,
+          "strategy": 0,
+          "surface": 1,
+          "total": "12"
+        },
+        "version": 1
+      }
+    },
+    {
+      "checks": [
+        {
+          "check": "Inicial incompleto",
+          "pass": true
+        },
+        {
+          "check": "Salto futuro bloqueado",
+          "pass": true
+        },
+        {
+          "check": "Erro u1 tem pista e permite avanço",
+          "pass": true
+        },
+        {
+          "check": "Contagem sem fórmula antes da resposta",
+          "pass": true
+        },
+        {
+          "check": "Fila manipulável conserva foco",
+          "pass": true
+        },
+        {
+          "check": "Área sem conta ainda bloqueia",
+          "pass": true
+        },
+        {
+          "check": "Duas respostas erradas permitem avançar",
+          "pass": true
+        },
+        {
+          "check": "Correção conserva resposta12",
+          "pass": true
+        },
+        {
+          "check": "Fórmula geral escondida antes da comparação",
+          "pass": true
+        },
+        {
+          "check": "Comparação errada com pista visual",
+          "pass": true
+        },
+        {
+          "check": "Só declaração não basta para maker",
+          "pass": true
+        },
+        {
+          "check": "Maker errado conserva declaração neutra e permite avanço",
+          "pass": true
+        },
+        {
+          "check": "Conclusão por resposta mesmoerrada",
+          "pass": true
+        },
+        {
+          "check": "Mudança para support conserva trabalho",
+          "pass": true
+        },
+        {
+          "check": "Mudança para intermediate conserva trabalho",
+          "pass": true
+        },
+        {
+          "check": "Mudança para challenge conserva trabalho",
+          "pass": true
+        },
+        {
+          "check": "Reflexão facultativa abre sem respostas prévias",
+          "pass": true
+        },
+        {
+          "check": "Voltar conserva registo externo",
+          "pass": true
+        }
+      ],
+      "level": "intermediate",
+      "saved": {
+        "activity": "areas-quadrilateros-minecraft-4ano-30min",
+        "readyForReflection": true,
+        "state": {
+          "comparison": 1,
+          "extra": 0,
+          "level": "intermediate",
+          "maker": true,
+          "note": "2 filas de 8 blocos: 18 m².",
+          "plant": 0,
+          "reflection": [
+            null,
+            null,
+            null
+          ],
+          "rows": 1,
+          "step": 4,
+          "strategy": 0,
+          "surface": 1,
+          "total": "12"
+        },
+        "version": 1
+      }
+    },
+    {
+      "checks": [
+        {
+          "check": "Inicial incompleto",
+          "pass": true
+        },
+        {
+          "check": "Salto futuro bloqueado",
+          "pass": true
+        },
+        {
+          "check": "Erro u1 tem pista e permite avanço",
+          "pass": true
+        },
+        {
+          "check": "Contagem sem fórmula antes da resposta",
+          "pass": true
+        },
+        {
+          "check": "Fila manipulável conserva foco",
+          "pass": true
+        },
+        {
+          "check": "Área sem conta ainda bloqueia",
+          "pass": true
+        },
+        {
+          "check": "Duas respostas erradas permitem avançar",
+          "pass": true
+        },
+        {
+          "check": "Correção conserva resposta12",
+          "pass": true
+        },
+        {
+          "check": "Fórmula geral escondida antes da comparação",
+          "pass": true
+        },
+        {
+          "check": "Comparação errada com pista visual",
+          "pass": true
+        },
+        {
+          "check": "Só declaração não basta para maker",
+          "pass": true
+        },
+        {
+          "check": "Maker errado conserva declaração neutra e permite avanço",
+          "pass": true
+        },
+        {
+          "check": "Conclusão por resposta mesmoerrada",
+          "pass": true
+        },
+        {
+          "check": "Extensão24 erro tem feedback",
+          "pass": true
+        },
+        {
+          "check": "Duas plantas24m² reconhecidas",
+          "pass": true
+        },
+        {
+          "check": "Mudança para support conserva trabalho",
+          "pass": true
+        },
+        {
+          "check": "Mudança para intermediate conserva trabalho",
+          "pass": true
+        },
+        {
+          "check": "Mudança para challenge conserva trabalho",
+          "pass": true
+        },
+        {
+          "check": "Reflexão facultativa abre sem respostas prévias",
+          "pass": true
+        },
+        {
+          "check": "Voltar conserva registo externo",
+          "pass": true
+        }
+      ],
+      "level": "challenge",
+      "saved": {
+        "activity": "areas-quadrilateros-minecraft-4ano-30min",
+        "readyForReflection": true,
+        "state": {
+          "comparison": 1,
+          "extra": 3,
+          "level": "challenge",
+          "maker": true,
+          "note": "2 filas de 8 blocos: 18 m².",
+          "plant": 0,
+          "reflection": [
+            null,
+            null,
+            null
+          ],
+          "rows": 1,
+          "step": 4,
+          "strategy": 0,
+          "surface": 1,
+          "total": "12"
+        },
+        "version": 1
+      }
+    }
+  ],
+  "layouts": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "stages": [
+        {
+          "choiceY": 369.7890625,
+          "overflow": 0,
+          "small": [],
+          "step": 1
+        },
+        {
+          "choiceY": 168.4921875,
+          "overflow": 0,
+          "small": [],
+          "step": 2
+        },
+        {
+          "choiceY": 526.4140625,
+          "overflow": 0,
+          "small": [],
+          "step": 3
+        },
+        {
+          "choiceY": 763.6171875,
+          "overflow": 0,
+          "small": [],
+          "step": 4
+        },
+        {
+          "choiceY": 259.2890625,
+          "overflow": 0,
+          "small": [],
+          "step": 5
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "stages": [
+        {
+          "choiceY": 216.6640625,
+          "overflow": 0,
+          "small": [],
+          "step": 1
+        },
+        {
+          "choiceY": 130.5703125,
+          "overflow": 0,
+          "small": [],
+          "step": 2
+        },
+        {
+          "choiceY": 488.4921875,
+          "overflow": 0,
+          "small": [],
+          "step": 3
+        },
+        {
+          "choiceY": 725.6953125,
+          "overflow": 0,
+          "small": [],
+          "step": 4
+        },
+        {
+          "choiceY": 221.3671875,
+          "overflow": 0,
+          "small": [],
+          "step": 5
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "stages": [
+        {
+          "choiceY": 398.6796875,
+          "overflow": 0,
+          "small": [],
+          "step": 1
+        },
+        {
+          "choiceY": 141.0859375,
+          "overflow": 0,
+          "small": [],
+          "step": 2
+        },
+        {
+          "choiceY": 827.9296875,
+          "overflow": 0,
+          "small": [],
+          "step": 3
+        },
+        {
+          "choiceY": 1180.3359375,
+          "overflow": 0,
+          "small": [],
+          "step": 4
+        },
+        {
+          "choiceY": 341.375,
+          "overflow": 0,
+          "small": [],
+          "step": 5
+        }
+      ]
+    }
+  ],
+  "bridge": {
+    "checks": {
+      "badSourceIgnored": true,
+      "localHidden": true,
+      "noAttempts": true,
+      "noLevelEcho": true,
+      "preferences": true,
+      "reflectionEvent": true,
+      "restored": true
+    },
+    "opaque": {
+      "events": [
+        "activity_loaded",
+        "activity_state",
+        "unit_started",
+        "activity_state"
+      ],
+      "initialIncomplete": true,
+      "noDuplicateAttempts": true,
+      "restoredReady": true,
+      "sandbox": "allow-scripts",
+      "step": 4
+    },
+    "final": {
+      "initial_share_blocked": true,
+      "discovery": true,
+      "share": true,
+      "reflection": true,
+      "local_reflection_hidden": true,
+      "max_payload_bytes": 302,
+      "emitted_types": [
+        "activity_loaded",
+        "activity_state",
+        "unit_started",
+        "attempt",
+        "discovery",
+        "assessment_result",
+        "feedback_request",
+        "share_requested",
+        "open_reflection"
+      ]
+    }
+  },
+  "typography": {
+    "bodySize": "20px",
+    "fonts": [
+      {
+        "family": "Didact Gothic",
+        "status": "loaded"
+      }
+    ],
+    "labels": [
+      {
+        "pixels": 18.75,
+        "text": "4 m"
+      },
+      {
+        "pixels": 18.75,
+        "text": "4 m"
+      },
+      {
+        "pixels": 18.75,
+        "text": "8 m"
+      },
+      {
+        "pixels": 18.75,
+        "text": "2 m"
+      }
+    ],
+    "overflow": 0
+  },
+  "contrast_ratios": {
+    "body": 13.74,
+    "paper": 14.83,
+    "primary_button": 8.41,
+    "warning": 13.27,
+    "success": 13.56,
+    "summary": 13.08,
+    "focus": 7.55
+  },
+  "api_report": "drafts/areas-quadrilateros-minecraft-4ano-30min-qa-report.md",
+  "public_draft_access": {
+    "local_metadata": 404,
+    "local_content": 404,
+    "remote_metadata": 403,
+    "remote_content": 403
+  },
+  "resolved_issues": [
+    "u1 ação inicialmente abaixo do ecrã; composição emcolunas torna plantas visíveis no desktop.",
+    "Escolhas/filas perdiam foco ao renderizar; foco conservado pelo identificador do controlo.",
+    "Navegação mobile demasiado extensa; cinco botões numerados e três apoios emlinha.",
+    "Cotas u1 de7.94px foram removidas; não eram necessárias para comparar preenchimento.",
+    "Três correções linguísticas aprovadas pelo Proofreader."
+  ],
+  "screenshots": {
+    "comparison": "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-site-muzbsw1g-cd7d62c0.png",
+    "mobile": "/home/proteu/.t3/userdata/browser-artifacts/browser-screenshot-site-muzblyvx-bd6efa6e.png"
+  },
+  "limitations": [
+    "Minecraft Education não foi executado. Professor deve preparar mundo/acessos e observar pavimentos, contagem e cooperação.",
+    "Não houve ensaio com crianças, dispositivos físicos ou leitor de ecrã.",
+    "Browser T3 remoto não alcança127.0.0.1:8777; QA visual por bytes e verificação API executadas separadamente. Não se afirma teste completo da UI do host de realizações/Sessões de aula nem de autoavaliação sequencial de um grupo.",
+    "Preview remoto do professor observado até Cloudflare Access; autenticação remota não realizada.",
+    "Os mínimos de touch das opções de reflexão foram medidos nos labels, não nos círculos de rádio."
+  ]
+}
