@@ -1,7 +1,7 @@
 {
   "slug": "areas-quadrilateros-minecraft-4ano-30min",
   "date": "2026-10-08",
-  "status": "in_progress",
+  "status": "awaiting_teacher_review",
   "published": false,
   "request": {
     "topic": "áreas dos quadriláteros",
@@ -16,17 +16,24 @@
     "sources": "complete",
     "architect": "complete",
     "designer": "complete",
-    "builder": "in_progress",
-    "proofreader": "pending",
-    "evaluator": "pending"
+    "builder": "complete",
+    "proofreader": "pass",
+    "evaluator": "pass"
   },
   "artifacts": [
-    "drafts/areas-quadrilateros-minecraft-4ano-30min-sources.md",
-    "drafts/areas-quadrilateros-minecraft-4ano-30min-docspec.json",
-    "drafts/areas-quadrilateros-minecraft-4ano-30min.md",
     "drafts/areas-quadrilateros-minecraft-4ano-30min-activity.json",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-builder-prompt.md",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-comparison.png",
     "drafts/areas-quadrilateros-minecraft-4ano-30min-design-spec.json",
-    "drafts/areas-quadrilateros-minecraft-4ano-30min-builder-prompt.md"
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-docspec.json",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-evaluation.json",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-mobile.png",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-proofread.json",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-qa-report.md",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-run-manifest.json",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-sources.md",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min.html",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min.md"
   ],
   "publication_gate": {
     "approved": false,
@@ -34,13 +41,58 @@
     "instruction": "A revisão do professor é necessária para cada atividade."
   },
   "limitations": [
-    "Minecraft Education não executado; pressupõe mundo aberto e alunos familiarizados.",
-    "Browser T3 disponível; ligação ao servidor loopback indisponível no computador do browser (ERR_CONNECTION_REFUSED). Usabilidade será verificada carregando os bytes do HTML no mesmo browser; API local será verificada separadamente."
+    "Minecraft Education não foi executado. Professor deve preparar mundo/acessos e observar pavimentos, contagem e cooperação.",
+    "Não houve ensaio com crianças, dispositivos físicos ou leitor de ecrã.",
+    "Browser T3 remoto não alcança127.0.0.1:8777; QA visual por bytes e verificação API executadas separadamente. Não se afirma teste completo da UI do host de realizações/Sessões de aula nem de autoavaliação sequencial de um grupo.",
+    "Preview remoto do professor observado até Cloudflare Access; autenticação remota não realizada.",
+    "Os mínimos de touch das opções de reflexão foram medidos nos labels, não nos círculos de rádio."
   ],
   "architecture_validation": {
     "json_schema": "pass",
     "units": 5,
     "minutes": 30,
     "metadata_criteria": "match"
+  },
+  "code": "NGRPUX",
+  "preview_url": "https://estudio.infantinho.xyz/NGRPUX",
+  "local_preview_url": "http://127.0.0.1:8777/NGRPUX",
+  "teacher_url": "https://estudio.infantinho.xyz/teacher/activities.html",
+  "html_sha256": "00c0574457773a2bf0320c0935bef5332ca2b4dd47b30058c4e869004e4a4c44",
+  "public_draft_access": {
+    "local_metadata": 404,
+    "local_content": 404,
+    "remote_metadata": 403,
+    "remote_content": 403
+  },
+  "testing": {
+    "browser": "T3 Code Chromium, HTML por bytes; ponte em iframe e sandbox allow-scripts",
+    "paths": "Com pistas, Passo a passo, Mais desafios",
+    "layout_widths": [
+      1920,
+      768,
+      390
+    ],
+    "body_px": 20,
+    "font": "Didact Gothic incorporada e carregada",
+    "focus_keyboard": "Enter em filas e ArrowRight em apoios; foco conservado",
+    "api": {
+      "preview": true,
+      "browser_events_saved": 29,
+      "event_types": [
+        "activity_loaded",
+        "activity_state",
+        "assessment_result",
+        "attempt",
+        "discovery",
+        "share_requested",
+        "unit_started"
+      ],
+      "reflection_saved": true,
+      "report_downloaded": true,
+      "excluded_from_pupil_reports": true,
+      "identifier": "f23def8c78fe94f55f716b7c12be906c"
+    },
+    "evaluation": "drafts/areas-quadrilateros-minecraft-4ano-30min-evaluation.json",
+    "minecraft": "not executed"
   }
 }
