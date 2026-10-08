@@ -10,6 +10,8 @@ const pairingStatus = document.getElementById("pairing-status");
 const waitingStatus = document.getElementById("waiting-status");
 const sessionTitle = document.getElementById("session-title");
 const sessionStatus = document.getElementById("session-status");
+const sessionEntryUrl = document.getElementById("session-entry-url");
+const sessionJoinCode = document.getElementById("session-join-code");
 const board = document.getElementById("board");
 
 let pairingTimer = null;
@@ -141,6 +143,8 @@ function startLiveSession(session) {
   show(live);
   sessionTitle.textContent = `${session.class_name} · ${session.activity_title}`;
   sessionStatus.textContent = "Aula em curso";
+  sessionEntryUrl.textContent = new URL(publicOrigin).host;
+  sessionJoinCode.textContent = session.join_code;
 
   // Presentation changes lesson navigation only; board access stays on its existing policy.
   const activityUrl = `/api/board/sessions/${encodeURIComponent(session.id)}/content?presentation=1`;

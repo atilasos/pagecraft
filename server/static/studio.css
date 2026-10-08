@@ -911,6 +911,27 @@ th { background: var(--paper-deep); font-family: var(--font-type); font-size: 0.
 .board-bar .eyebrow { margin-bottom: 0.1rem; }
 .board-bar strong { font-family: var(--font-file); font-size: 1.25rem; }
 .board-bar .spacer { flex: 1; }
+.board-entry {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
+  min-width: 0;
+}
+.board-entry > div { min-width: 0; }
+.board-bar .board-entry-url {
+  display: block;
+  font-size: clamp(1.5rem, 3vw, 3rem);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.board-bar .board-join-code {
+  display: block;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 1.1;
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+}
 #board { width: 100%; flex: 1; border: 0; background: var(--paper); }
 
 @media (min-width: 900px) {

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PageCraft — Quadro</title>
-<link rel="stylesheet" href="/studio.css">
+<link rel="stylesheet" href="/studio.css?v=board-entry-20261008">
 </head>
 <body class="board-page">
   <main id="pairing" class="board-empty-state" hidden>
@@ -31,6 +31,16 @@
         <strong id="session-title"></strong>
       </div>
       <span class="spacer"></span>
+      <div class="board-entry" aria-label="Entrar na atividade">
+        <div>
+          <p class="eyebrow">Abre</p>
+          <strong id="session-entry-url" class="board-entry-url"></strong>
+        </div>
+        <div>
+          <p class="eyebrow">Código da atividade</p>
+          <strong id="session-join-code" class="board-join-code"></strong>
+        </div>
+      </div>
       <span class="pill ok" id="session-status" role="status">Aula em curso</span>
     </header>
     <section id="group-codes-panel" class="board-group-codes" hidden>
@@ -42,6 +52,6 @@
             tabindex="-1"></iframe>
   </main>
 
-  <script src="/board/app.js"></script>
+  <script src="/board/app.js?v=board-entry-20261008"></script>
 </body>
 </html>
