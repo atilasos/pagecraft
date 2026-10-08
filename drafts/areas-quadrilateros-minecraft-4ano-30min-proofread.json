@@ -2,13 +2,13 @@
   "pass": true,
   "severity": "low",
   "phase": "Proofreader",
-  "review_version": 2,
+  "review_version": 3,
   "language": "pt-PT AO90",
   "reviewed_file": "drafts/areas-quadrilateros-minecraft-4ano-30min.html",
-  "reviewed_sha256": "1d52fac1a0079d0307eab43a37350dbc171c6950be26833b798c46cfddd523b6",
+  "reviewed_sha256": "00c0574457773a2bf0320c0935bef5332ca2b4dd47b30058c4e869004e4a4c44",
   "scope": "Leitura estática de todo o texto HTML e das strings dinâmicas JavaScript, incluindo labels SVG, pistas por apoio, feedback, avanço, contingência maker e reflexão. Conferência com DocSpec e guia do professor. Sem browser ou execução de interação nesta fase.",
   "issues": [],
-  "summary": "Revisão textual aprovada após conferir os três ajustes no HTML final. Texto estático e dinâmico em português europeu, com contagens, unidades, apoios, maker e reflexão coerentes com o DocSpec; não foram executados testes no navegador nesta fase.",
+  "summary": "Revisão textual aprovada no HTML final, incluindo os três novos textos de partilha facultativa. Português europeu, contagens, unidades, apoios, maker e reflexão coerentes com o DocSpec; a revisão mantém âmbito estático, sem testes no navegador nesta fase.",
   "acceptance_checks": [
     "Ortografia e gramática pt-PT AO90: OK",
     "Registo consistente: OK, navegador substitui browser no texto estático e dinâmico",
@@ -22,14 +22,17 @@
     "Reflexão: OK, facultativa, individual e com critérios conhecidos",
     "Guia: OK, duração 3 + 6 + 5 + 11 + 5 = 30 minutos e limites curriculares coerentes; frase inicial sobre fases posteriores deve ser atualizada pelo orquestrador ao integrar a revisão",
     "Avanço: texto aceita etapa respondida com erro; comportamento real cabe ao Evaluator",
-    "Reparações finais: OK, labels da navegação continuam nomeados e nenhum novo texto problemático foi acrescentado nos dois commits"
+    "Reparações finais: OK, labels da navegação continuam nomeados e nenhum novo texto problemático foi acrescentado nos dois commits",
+    "Partilha facultativa: OK, pedido em primeira pessoa, orientação autónoma concreta e confirmação sem alegar publicação ou gravação externa"
   ],
   "limitations": [
     "Revisão de texto e semântica estática. Não verifica layout, foco, registos persistentes ou comportamento real no navegador."
   ],
   "reviewed_commits": [
     "53e510c",
-    "97427e1"
+    "97427e1",
+    "7678767",
+    "d42addd"
   ],
   "resolved_issues": [
     {
