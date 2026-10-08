@@ -14,14 +14,19 @@
   },
   "phases": {
     "sources": "complete",
-    "architect": "in_progress",
-    "designer": "pending",
-    "builder": "pending",
+    "architect": "complete",
+    "designer": "complete",
+    "builder": "in_progress",
     "proofreader": "pending",
     "evaluator": "pending"
   },
   "artifacts": [
-    "drafts/areas-quadrilateros-minecraft-4ano-30min-sources.md"
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-sources.md",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-docspec.json",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min.md",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-activity.json",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-design-spec.json",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-builder-prompt.md"
   ],
   "publication_gate": {
     "approved": false,
@@ -31,5 +36,11 @@
   "limitations": [
     "Minecraft Education não executado; pressupõe mundo aberto e alunos familiarizados.",
     "Browser T3 disponível; ligação ao servidor loopback indisponível no computador do browser (ERR_CONNECTION_REFUSED). Usabilidade será verificada carregando os bytes do HTML no mesmo browser; API local será verificada separadamente."
-  ]
+  ],
+  "architecture_validation": {
+    "json_schema": "pass",
+    "units": 5,
+    "minutes": 30,
+    "metadata_criteria": "match"
+  }
 }
