@@ -1,0 +1,57 @@
+{
+  "pass": false,
+  "severity": "medium",
+  "phase": "Proofreader",
+  "review_version": 1,
+  "language": "pt-PT AO90",
+  "reviewed_file": "drafts/areas-quadrilateros-minecraft-4ano-30min.html",
+  "reviewed_sha256": "6fdc65794e62777b77e1420af0f1d9c9557e18d54cb96fc3a02061f3dd4d7bd5",
+  "scope": "Leitura estática de todo o texto HTML e das strings dinâmicas JavaScript, incluindo labels SVG, pistas por apoio, feedback, avanço, contingência maker e reflexão. Conferência com DocSpec e guia do professor. Sem browser ou execução de interação nesta fase.",
+  "issues": [
+    {
+      "id": "quadrado-lados",
+      "type": "semantic",
+      "severity": "medium",
+      "location": "#summary-u3, última frase",
+      "original": "No quadrado, os dois lados têm a mesma medida.",
+      "suggestion": "No quadrado, os quatro lados têm a mesma medida.",
+      "reason": "A frase sucede ao produto de duas medidas, mas pode sugerir que o quadrado só tem dois lados. Nomear os quatro lados clarifica a propriedade da figura."
+    },
+    {
+      "id": "mundo-preparado",
+      "type": "consistency",
+      "severity": "low",
+      "location": "#u4, primeiro parágrafo",
+      "original": "Abre o mundo plano em Criativo no Minecraft Education.",
+      "suggestion": "Vai ao mundo plano em Criativo no Minecraft Education.",
+      "reason": "O guia prepara o mundo antes dos 30 minutos. O pedido deve encaminhar o par para esse mundo, sem sugerir nova preparação."
+    },
+    {
+      "id": "navegador",
+      "type": "ptpt-usage",
+      "severity": "low",
+      "location": "#local-reflection, primeiro parágrafo; função nav(), string de reflection-note; texto inicial de reflection-note",
+      "original": "Fica apenas neste browser. / A reflexão é facultativa e fica neste browser.",
+      "suggestion": "Fica apenas neste navegador. / A reflexão é facultativa e fica neste navegador.",
+      "reason": "Navegador é claro em português e evita um anglicismo desnecessário. Atualizar as duas frases e qualquer repetição equivalente."
+    }
+  ],
+  "summary": "Português europeu adequado ao 4.º ano e contagens coerentes com os pavimentos. Corrigir a propriedade textual do quadrado e dois pormenores de vocabulário/encaminhamento antes da aprovação da revisão textual.",
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90: OK",
+    "Registo consistente: ajuste de browser para navegador",
+    "Adequação à faixa etária: OK, instruções curtas e tratamento por tu",
+    "Instruções claras e seguíveis: ajuste do encaminhamento para mundo preparado",
+    "Alinhamento com objetivos: OK, após clarificação dos quatro lados do quadrado",
+    "Descoberta antes da fórmula: OK no texto estático e ordem dos estados dinâmicos",
+    "Unidades: OK, lado em m e área em m²; convenção da maquete explícita",
+    "Apoios: OK, Com pistas / Passo a passo / Mais desafios e núcleo comum preservado",
+    "Maker: OK, duas plantas de 16 m² preenchidas numa camada; declaração distinguida de observação",
+    "Reflexão: OK, facultativa, individual e com critérios conhecidos",
+    "Guia: OK, duração 3 + 6 + 5 + 11 + 5 = 30 minutos; contingência e limites curriculares coerentes",
+    "Avanço: texto aceita etapa respondida com erro; comportamento real cabe ao Evaluator"
+  ],
+  "limitations": [
+    "Revisão de texto e semântica estática. Não verifica layout, foco, registos persistentes ou comportamento real no navegador."
+  ]
+}
