@@ -55,6 +55,16 @@ O relatório deve manter **evidência observada**, **voz da criança** e **obser
 
 ## Estado e ficheiros
 
-Especificação: [DocSpec](unidades-dezenas-2ano-30min-docspec.json). Fontes: [registo de consulta](unidades-dezenas-2ano-30min-sources.md). Os ficheiros HTML, design e relatórios de revisão são produzidos nas fases seguintes e o manifest regista os caminhos reais e o estado dos testes.
+[Pré-visualização privada](https://estudio.infantinho.xyz/DQ4GZD), código reservado **DQ4GZD**. Rascunho não publicado; o professor acede através do Cloudflare Access. A atividade ainda requer revisão visual antes de ser considerada pronta para usar.
 
-A validação de schema e a duração de 30 minutos foram confirmadas nesta fase. Testes de interação, teclado, larguras de tablet/telemóvel, autoavaliação e gravação no servidor ainda dependem do HTML e do Evaluator. A pré-visualização é entregue após esse trabalho; a publicação exige aprovação expressa desta atividade pelo professor.
+Ficheiros: [HTML](unidades-dezenas-2ano-30min.html), [DocSpec](unidades-dezenas-2ano-30min-docspec.json), [design](unidades-dezenas-2ano-30min-design-spec.json), [fontes](unidades-dezenas-2ano-30min-sources.md), [revisão linguística](unidades-dezenas-2ano-30min-proofread.json), [avaliação](unidades-dezenas-2ano-30min-evaluation.json), [ensaio integrado](unidades-dezenas-2ano-30min-host-check.json) e [manifest](unidades-dezenas-2ano-30min-run-manifest.json). Os relatórios conservam as iterações e o hash do HTML final.
+
+Foram executados testes reais no browser T3: pedidos vazios, hipóteses erradas, pistas, correção, voltar, troca de apoio, restauro e teclado. No HTML final passaram 82 verificações funcionais e nove medidas adicionais das novas pistas. A ronda inicial mediu 90 estados/larguras em 390, 768 e 1280 px, com corpo de 22 px e alvos mínimos de 56 px. O novo guia de Com pistas destaca a coluna a trabalhar e o próximo lugar vazio; pode mudar de coluna livremente.
+
+No host real, um ensaio privado guardou oito tentativas, uma autoavaliação com perguntas deixadas por responder e a estratégia/proposta da criança. O relatório descarregável conservou evidências, voz do aluno e observação do professor em secções separadas. O ensaio ficou excluído dos relatórios dos alunos. Foi corrigida e revalidada uma falha em que o checkpoint vazio de arranque podia substituir o trabalho anterior. A instrumentação temporária para clicar no iframe ficou apenas no browser; não existe no HTML entregue.
+
+A API anónima recusou o rascunho com 404 na origem; o acesso público foi recusado com 403 no edge. Fontes e recursos estão incorporados; não foram observadas dependências de rede no HTML, mas não se emulou rede desligada. Não foram ensaiados grupos em Sessões de aula nem o Quadro.
+
+**Limitação pendente:** a captura visual do T3 falhou e a pré-visualização permaneceu oculta. As medidas e as ações de teclado não comprovam o aspeto do foco nem usabilidade visual. O Evaluator mantém `pass: false` por este bloqueio do runtime, sem falha conhecida restante no HTML. É necessária uma revisão visual com browser visível antes da aula.
+
+A publicação exige aprovação expressa desta atividade pelo professor. Não foi executado publish nem push.
