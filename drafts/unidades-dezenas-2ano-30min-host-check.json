@@ -1,0 +1,42 @@
+{
+  "activity": "unidades-dezenas-2ano-30min",
+  "code": "DQ4GZD",
+  "checks": [
+    {
+      "check": "rascunho recusado sem sessão de professor",
+      "host": "http://127.0.0.1:8777",
+      "endpoint": "metadata",
+      "status": 404,
+      "pass": true,
+      "scope": "origem: atividade oculta"
+    },
+    {
+      "check": "rascunho recusado sem sessão de professor",
+      "host": "http://127.0.0.1:8777",
+      "endpoint": "content",
+      "status": 404,
+      "pass": true,
+      "scope": "origem: atividade oculta"
+    },
+    {
+      "check": "rascunho recusado sem sessão de professor",
+      "host": "https://pagecraft.infantinho.xyz",
+      "endpoint": "metadata",
+      "status": 403,
+      "pass": true,
+      "scope": "edge público: acesso recusado; regra da atividade confirmada na origem"
+    },
+    {
+      "check": "rascunho recusado sem sessão de professor",
+      "host": "https://pagecraft.infantinho.xyz",
+      "endpoint": "content",
+      "status": 403,
+      "pass": true,
+      "scope": "edge público: acesso recusado; regra da atividade confirmada na origem"
+    },
+    {
+      "check": "registo permanece rascunho e requer exploração",
+      "pass": true
+    }
+  ]
+}
