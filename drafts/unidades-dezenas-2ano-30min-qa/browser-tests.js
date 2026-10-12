@@ -1,0 +1,80 @@
+// Executar como expressão assíncrona via T3 preview_evaluate no harness local.
+(async () => {
+  const frame = document.querySelector('#lesson');
+  const results = [], errors = [];
+  const settle = () => new Promise(resolve => setTimeout(resolve, 30));
+  const doc = () => frame.contentDocument;
+  const click = action => {
+    const el = doc().querySelector('[data-action="' + action + '"]');
+    if (!el) throw new Error('Controlo ausente: ' + action);
+    el.click();
+  };
+  const check = (level, name, pass, detail = '') => results.push({level, name, pass:!!pass, detail});
+  const last = () => [...qaMessages].reverse().find(m => m.type === 'activity_state');
+  const fresh = async level => {
+    qaMessages.length = 0;
+    await new Promise(resolve => {frame.onload = resolve; frame.src = 'activity.html?qa=' + Date.now();});
+    frame.contentWindow.addEventListener('error', e => errors.push(e.message));
+    frame.contentWindow.addEventListener('unhandledrejection', e => errors.push(String(e.reason)));
+    await settle();
+    doc().querySelector('[data-level="' + level + '"]').click();
+    await settle();
+  };
+  for (const level of ['support', 'intermediate', 'challenge']) {
+    await fresh(level);
+    check(level,'initial-incomplete',last().payload.readyForReflection === false);
+    check(level,'sound-opt-in',doc().querySelector('#sound').getAttribute('aria-pressed') === 'false');
+    check(level,'criteria-before-work',doc().querySelectorAll('.criteria li').length === 3 && !doc().body.innerText.includes('10 unidades = 1 dezena'));
+    click('next'); doc().querySelector('[data-step="4"]').click();
+    check(level,'empty-intro-blocks-next-and-future',!!doc().querySelector('[data-action="start"]'));
+    click('start');
+    check(level,'swap-unanswered-blocks',doc().querySelector('[data-action="next"]').getAttribute('aria-disabled') === 'true');
+    doc().querySelector('[data-step="3"]').click();
+    check(level,'swap-future-blocks',doc().querySelector('#u2') !== null);
+    check(level,'initial-frame-differentiation',level === 'challenge' ? !doc().querySelector('.frame') : !!doc().querySelector('.frame'));
+    click('join');
+    check(level,'wrong-group-shows-visual-clue',!!doc().querySelector('.frame') && !!doc().querySelector('.feedback'));
+    click('confirm-group');
+    check(level,'wrong-group-response-unlocks',doc().querySelector('[data-action="next"]').getAttribute('aria-disabled') === 'false');
+    click('next'); click('confirm-split'); click('next'); click('total-5'); click('next');
+    check(level,'all-wrong-swap-reaches-build',!!doc().querySelector('#u3'));
+    check(level,'empty-build-is-unanswered',doc().querySelector('[data-action="next"]').getAttribute('aria-disabled') === 'true');
+    click('target-2');
+    check(level,'future-build-target-blocks',doc().querySelector('.number[aria-label="Número pedido 24"]') !== null);
+    click('confirm-build');
+    check(level,'intentional-empty-build-unlocks',doc().querySelector('[data-action="next"]').getAttribute('aria-disabled') === 'false');
+    check(level,'wrong-build-visual-feedback',doc().querySelector('.feedback .visual-hint') !== null);
+    click('next');
+    for(let i=0;i<3;i++)click('add-t');
+    check(level,'zero-units-before-confirm-is-unanswered',doc().querySelector('[data-action="next"]').getAttribute('aria-disabled') === 'true');
+    click('confirm-build');
+    check(level,'30-with-zero-units-confirmed',doc().querySelector('.feedback.good') !== null && doc().body.innerText.includes('Sem unidades soltas.'));
+    click('add-u');
+    check(level,'editing-invalidates-only-current',doc().querySelector('[data-action="next"]').getAttribute('aria-disabled') === 'true');
+    click('remove-u');click('confirm-build');click('next');click('confirm-build');click('next');
+    check(level,'wrong-builds-reach-comparison',!!doc().querySelector('#u4'));
+    click('greater-24');
+    check(level,'wrong-comparison-visual-hint',!!doc().querySelector('.feedback .visual-hint'));
+    click('next');click('value-4');
+    if(level==='challenge')check(level,'challenge-equivalent-extension',!!doc().querySelector('[data-action="extra-0"]'));
+    click('next');await settle();
+    check(level,'wrong-answers-complete-exploration',last().payload.readyForReflection === true && !!doc().querySelector('#u5'));
+    check(level,'summary-preserves-real-wrong-construction',doc().querySelector('.summary-item [role="img"]').getAttribute('aria-label') === '0 dezenas e 0 unidades');
+    const saved = JSON.parse(JSON.stringify(last()));
+    const beforeChange = JSON.stringify(saved.payload.state.build);
+    doc().querySelector('[data-level="' + (level==='support'?'challenge':'support') + '"]').click();await settle();
+    check(level,'support-preserves-compatible-work',JSON.stringify(last().payload.state.build) === beforeChange && last().payload.readyForReflection === true);
+    click('back');click('value-40');click('back');click('greater-42');await settle();
+    check(level,'back-and-correction-work',last().payload.state.compare.value === 40 && last().payload.state.compare.greater === 42);
+    const restored=JSON.parse(JSON.stringify(last()));
+    await fresh(level);qaMessages.length=0;
+    qaRestore([restored]);await settle();
+    check(level,'restore-retains-step-and-work',last().payload.state.step === restored.payload.state.step && JSON.stringify(last().payload.state.build) === JSON.stringify(restored.payload.state.build));
+    check(level,'restore-emits-no-attempts',qaMessages.every(m=>m.type !== 'attempt' && m.type !== 'assessment_result' && m.type !== 'discovery'));
+    check(level,'compact-state',JSON.stringify(last().payload).length < 4096,JSON.stringify(last().payload).length);
+    const preferenceLevel=level==='intermediate'?'challenge':'intermediate';qaMessages.length=0;qaPreferences(preferenceLevel);await settle();
+    check(level,'host-preference-without-loop',last().payload.state.level === preferenceLevel && qaMessages.every(m=>m.type !== 'level_changed'));
+  }
+  window.qaFunctionalResults={results,errors,failed:results.filter(r=>!r.pass),messagesSample:qaMessages};
+  return qaFunctionalResults;
+})()
