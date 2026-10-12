@@ -37,6 +37,38 @@
     {
       "check": "registo permanece rascunho e requer exploração",
       "pass": true
+    },
+    {
+      "check": "realização de ensaio concluída e guardada no servidor",
+      "pass": true
+    },
+    {
+      "check": "oito tentativas matemáticas reais guardadas",
+      "pass": true
+    },
+    {
+      "check": "autoavaliação facultativa preserva ajuda e critérios sem resposta",
+      "pass": true
+    },
+    {
+      "check": "voz do aluno e próximo passo preservados no relatório descarregável",
+      "pass": true
+    },
+    {
+      "check": "relatório separa evidências, autoavaliação e observação do professor",
+      "pass": true
+    },
+    {
+      "check": "ensaio excluído da lista de relatórios dos alunos",
+      "pass": true
+    },
+    {
+      "check": "reload iframe corrigido preservou três construções, estratégia e oito tentativas",
+      "pass": true,
+      "evidence": "Browser T3 tab_2: checkpoint retomado step4 readytrue, builds2/4 3/0 5/7; attemptsBefore8/after8."
     }
-  ]
+  ],
+  "realization_id": "8adc113fe3e418ee1fb92d996b31f52d",
+  "browser": "T3 Code tab_2",
+  "instrumentation": "Ensaio no host real com iframe sandbox original. Recetor temporário de ações DOM acrescentado apenas via srcdoc no browser, porque frame locator falhou; HTML do repositório não contém instrumentação."
 }
