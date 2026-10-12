@@ -1,0 +1,28 @@
+{
+  "pass": true,
+  "severity": "low",
+  "iteration": 3,
+  "activity": "drafts/unidades-dezenas-2ano-30min.html",
+  "activity_sha256": "fbb536601440febe73ce5ce77ded93d4dac3c1c2eb5e4a148b328b6b5b39bfce",
+  "issues": [],
+  "summary": "As correções das revisões anteriores foram verificadas no HTML final. As perguntas distinguem objetos de quantidade representada, a evidência inicial limita-se à confirmação e as instruções de separação reconhecem o estado com barra, sem agrupamento e após separação. Texto em português europeu AO90, com reflexão facultativa; esta fase fez revisão estática e não avaliou usabilidade no browser.",
+  "resolved_from_iterations": [
+    1,
+    2
+  ],
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90: OK — singular/plural dinâmicos corrigidos",
+    "Registo consistente: OK — tratamento por tu e erro de gravação sem anglicismo",
+    "Adequação à faixa etária: OK — frases predominantemente curtas, vocabulário concreto e feedback sem censura",
+    "Instruções claras e seguíveis: OK — comparação por unidades e separação condicionada ao estado",
+    "Alinhamento com objetivos: OK — agrupamento, composição, zero unidades e valor posicional",
+    "Critérios apresentados antes do trabalho e retomados na reflexão: OK",
+    "Diferenciação Com pistas / Passo a passo / Mais desafios: OK",
+    "Regra da troca só após manipulação: OK — síntese depende de grouped",
+    "Respostas incorretas não são descritas como acertos: OK",
+    "Evidência observada e leitura dos critérios distinguidas: OK",
+    "Reflexão facultativa e limites da gravação local explicitados: OK",
+    "Microcopy, rótulos acessíveis, estados de erro e strings JS revistos estaticamente: OK",
+    "Interação, apresentação visual e gravação no host: NÃO AVALIADAS nesta fase; pertencem ao Evaluator"
+  ]
+}
