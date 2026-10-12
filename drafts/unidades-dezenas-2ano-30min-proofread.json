@@ -1,11 +1,11 @@
 {
   "pass": true,
   "severity": "low",
-  "iteration": 3,
+  "iteration": 4,
   "activity": "drafts/unidades-dezenas-2ano-30min.html",
-  "activity_sha256": "fbb536601440febe73ce5ce77ded93d4dac3c1c2eb5e4a148b328b6b5b39bfce",
+  "activity_sha256": "2118645b886d12e658400dd85bd524c894ec0dbca89e1aaba132605f6d2c1826",
   "issues": [],
-  "summary": "As correções das revisões anteriores foram verificadas no HTML final. As perguntas distinguem objetos de quantidade representada, a evidência inicial limita-se à confirmação e as instruções de separação reconhecem o estado com barra, sem agrupamento e após separação. Texto em português europeu AO90, com reflexão facultativa; esta fase fez revisão estática e não avaliou usabilidade no browser.",
+  "summary": "Revisão linguística aprovada após as reparações técnicas e a diferenciação visual de Com pistas. As novas instruções da moldura e da coluna orientada foram lidas, incluindo seleção incompleta, completa e com excesso; mantêm frases curtas e não antecipam a equivalência da troca. Esta fase fez revisão estática do HTML e diff; não executou testes no browser.",
   "resolved_from_iterations": [
     1,
     2
@@ -23,6 +23,16 @@
     "Evidência observada e leitura dos critérios distinguidas: OK",
     "Reflexão facultativa e limites da gravação local explicitados: OK",
     "Microcopy, rótulos acessíveis, estados de erro e strings JS revistos estaticamente: OK",
-    "Interação, apresentação visual e gravação no host: NÃO AVALIADAS nesta fase; pertencem ao Evaluator"
+    "Interação, apresentação visual e gravação no host: NÃO AVALIADAS nesta fase; pertencem ao Evaluator",
+    "Novas instruções em Com pistas: OK — selecionar coluna, seguir seta, completar lugares e rever excesso",
+    "Concordância da moldura e seleção com um lugar/uma peça: OK",
+    "Novas pistas sem antecipar a regra de dez unidades/uma dezena: OK",
+    "Reparações técnicas de restauro/foco sem alterações ao restante texto aprovado: OK — diff lido"
+  ],
+  "reviewed_changes": [
+    "43b042b — restauro",
+    "26587f4 — foco",
+    "54d5ae4 — pistas visuais",
+    "59050c6 — concordância das pistas"
   ]
 }
