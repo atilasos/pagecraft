@@ -1,0 +1,27 @@
+{
+  "pass": false,
+  "severity": "medium",
+  "iteration": 2,
+  "activity": "drafts/unidades-dezenas-2ano-30min.html",
+  "activity_sha256": "fbb536601440febe73ce5ce77ded93d4dac3c1c2eb5e4a148b328b6b5b39bfce",
+  "issues": [
+    {
+      "type": "semantic",
+      "severity": "medium",
+      "location": "swap(), phase=1 após split válido: t=0, separated=true",
+      "original": "Ainda não há uma barra. Volta e junta peças.",
+      "suggestion": "Observa as peças soltas. Mostra a tua resposta.",
+      "reason": "A mesma ausência de barra ocorre numa hipótese não agrupada e depois de uma separação correta. A instrução precisa de reconhecer o sucesso da separação, sem mandar reconstruir a barra."
+    }
+  ],
+  "summary": "As seis questões da primeira revisão foram corrigidas. A nova instrução para ausência de barra precisa de distinguir o estado após uma separação correta do estado sem agrupamento inicial. Revisão estática, sem testes no browser.",
+  "resolved_from_iteration": 1,
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90: OK",
+    "Registo consistente: OK",
+    "Adequação à faixa etária: OK",
+    "Instruções claras e seguíveis: FAIL — estado após separação correta",
+    "Alinhamento com objetivos e evidência observada: OK",
+    "Reflexão facultativa e limites de gravação local: OK"
+  ]
+}
