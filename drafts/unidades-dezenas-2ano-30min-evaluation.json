@@ -1,0 +1,78 @@
+{
+  "pass": false,
+  "route": "builder",
+  "severity": "medium",
+  "iteration": 2,
+  "checked_on": "2026-10-12",
+  "slug": "unidades-dezenas-2ano-30min",
+  "title": "A oficina dos números",
+  "html_sha256": "2118645b886d12e658400dd85bd524c894ec0dbca89e1aaba132605f6d2c1826",
+  "status": "functional-draft-awaiting-visual-review",
+  "repair_scope": "runtime-only",
+  "route_reason": "O schema exige route quando pass=false; builder é o destinatário operacional da próxima revisão. Não há alteração de HTML obrigatória identificada nesta ronda.",
+  "scores": {
+    "factual_accuracy": 4,
+    "constraint_alignment": 4,
+    "differentiation_quality": 4,
+    "ux_accessibility": 3,
+    "visual_design": 1,
+    "technical_quality": 4
+  },
+  "score_basis": {
+    "visual_design": "Sem inspeção visual:1 indica evidência insuficiente para aprovação, não qualidade visual baixa demonstrada.",
+    "ux_accessibility": "Percursos, teclado, medidas, contraste e labels verificados; aparência do foco e usabilidade visual ainda não observadas."
+  },
+  "issues": [
+    {
+      "type": "runtime-tool",
+      "severity": "medium",
+      "location": "T3 preview_snapshot / preview oculto",
+      "description": "Snapshot falha genericamente com texto/PNG/save, mesmo após preview_open. A tab funciona para navegação, DOM, ações e teclas reais, mas document.hasFocus() é false no host e iframe; não foi possível observar capturas nem contorno de foco."
+    }
+  ],
+  "critical": [],
+  "required_fixes": [
+    "Concluir inspeção visual no browser com preview visível e snapshots operacionais; confirmar foco e percursos em390/768/1280 antes de apresentar a atividade como pronta para usar."
+  ],
+  "resolved_from_iterations": [
+    1
+  ],
+  "resolved_findings": [
+    "Restauro: histórico iniciado prevalece sobre checkpoint inicial vazio do novo iframe; teste do último HTML conserva step4,24/30/57,readytrue e não cria tentativas.",
+    "Foco: CSS contém contorno3px em :focus-visible e :focus dos controlos. A inferência inicial de falha HTML foi corrigida: :focus não coincide porque a tab de automação está oculta e sem foco. Teclado funciona; apresentação visual continua bloqueada.",
+    "Diferenciação: Com pistas tem seta no próximo lugar da moldura e guiaDezenas/Unidades com contorno e marca; Passo a passo omite este guia; Mais desafios oculta moldura inicialmente e inclui representação equivalente facultativa. Respostas/requisitos conservam-se."
+  ],
+  "evidence": [
+    "Evaluator — drafts/unidades-dezenas-2ano-30min-qa/browser-evidence-v2.json:82 verificações funcionais reexecutadas no HTML SHA final, todas passadas e0 erros JS capturados. Fonte do HTML servido confirmada com SHA-256 calculado no browser igual ao ficheiro.",
+    "Evaluator — ronda1 em drafts/unidades-dezenas-2ano-30min-qa/browser-evidence-v1.json: percurso correto de10unidades→1dezena+4unidades→14unidades, construções24/30/57 e extensão1dezena+14unidades=24;11 verificações passadas. Foi executado antes das reparações de texto/apoio/restauro.",
+    "Evaluator — ronda1:90mediçõesDOM reais,3apoios×10estados×larguras390/768/1280, documento375/753/1265px, sem overflow e alvos≥56px; corpo22px/títulos32px/Didact Gothic carregada e barras10células20px. Ronda2:9medidas adicionais do novo guia nos3apoios e larguras, mesmas condições aprovadas.",
+    "Evaluator — último HTML: seta Com pistas avança lugar0→1 ao selecionar; não existe em Passo a passo. Mudar coluna destacada não emite attempt nem modifica representações. Ocultar/revelar apoio conserva pedidos concluídos.",
+    "Evaluator — último HTML: payload restauro com histórico completo seguido do startupblank regressa a step4,readytrue,representações2/4,3/0,5/7;0attempt,assessment_result ou discovery durante restauro.",
+    "Evaluator — teclado realT3: Enter seleciona, Tab eShift+Tab deslocam foco; keydownTab isTrusted=true. :focus não pode ser avaliado numa tab ocultasemfoco. CSS3px/offset3px confirmado.",
+    "Evaluator — contraste por conversão canvas de estilos computados: corpo14.63:1,microcopy15.95:1,botão principal8.23:1,feedbackcorreto7.32:1. Recursos carregados pelo filho:0 entradas externas; rede desligada não emulada.",
+    "Proofreader — drafts/unidades-dezenas-2ano-30min-proofread-v4.json e proofread.json:PASS estático no mesmo SHA final, incluindo novas pistas e estados condicionais de separação.",
+    "Orquestrador — drafts/unidades-dezenas-2ano-30min-host-check.json:12checks passados, incluindo conteúdo anónimo404 na origem/403 noedge, publishedfalse, exploraçãoobrigatória,8tentativas guardadas, reflexão facultativa e relatório descarregável com evidência/voz/observação separadas. Testes foram executados pelo orquestrador em T3tab_2, com recetor DOM temporário só no browser por falha frameLocator;HTML não contém instrumentação.",
+    "Orquestrador — host real após reparação de restauro preservou3construções,estratégia e8tentativas numreload. Esta prova do host antecede o novo guia visual;últimoHTML foi revalidado no harness peloEvaluator."
+  ],
+  "acceptance_checks": [
+    "Responder todos pedidos mesmo incorretamente permite avanço; vazios bloqueiam Seguinte e saltos: verificado nos3apoios no últimoHTML.",
+    "PistasDOM imediatas após erros, correção e retorno preservam trabalho: verificado.",
+    "Representação0/0 só é resposta após confirmação e30com0unidades explícito: verificado.",
+    "Guia realCom pistas, manipulaçãoPasso a passo e extensão facultativaMais desafios: verificado.",
+    "Preferências host não emitem ciclos; apoio conserva construções/extra; restauro histórico+startup sem tentativas: verificado.",
+    "Layouts390/768/1280 e mínimos22px/32px/56px: medições passadas, com escopo por ronda explicado na evidência.",
+    "Reflexão facultativa e gravação/download relatório servidor: verificado pelo orquestrador.",
+    "Inspeção visual, foco visível e usabilidade no browser com screenshot: não verificado, bloqueado pelo runtime."
+  ],
+  "blocked_by": [
+    "T3 preview_snapshot devolve PreviewAutomationExecutionError genérico no client preview-34605abc7377e9e70d12e87cda6cc51f, na tab_3, com includeImagefalse ePNG/save após preview_open.",
+    "Preview permanece visible:false e document.hasFocus()false nohost/iframe; não se verificou aparência do contorno de foco."
+  ],
+  "limitations": [
+    "Sem emulação de rede desligada. Autocontenção e ausência de requests externos confirmadas; sincronização depende do host.",
+    "Medidas e teclado no browser colaborativo, sem tablet ou telemóvel físico e sem observação da turma.",
+    "Não foram executadas Sessões de aula com grupos, alternância de reflexão entre participantes ou Quadro. O percurso real ensaiado é a realização individual; a autoria mantém-se nohost.",
+    "Nenhuma captura visual foi gerada. MedidasDOM não demonstram usabilidade."
+  ],
+  "publication_status": "draft; privado, ainda requer revisão e aprovação específica do professor"
+}
