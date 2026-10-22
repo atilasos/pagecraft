@@ -22,7 +22,10 @@ def test_interrupted_recovery_preserves_realization_pending_work_and_reflection(
     page.get_by_label('Como te chamas?').fill('Ensaio de ligação')
     page.get_by_role('button', name='Começar', exact=True).click()
     lesson = page.frame_locator('#lesson')
-    with page.expect_response(lambda r: r.url.endswith('/me/events') and r.ok):
+    with page.expect_response(lambda r: r.url.endswith('/me/events') and r.ok and any(
+        e['payload'].get('detail', {}).get('value') == 'Golfinho e tartaruga'
+        for e in r.request.post_data_json['events']
+    )):
         lesson.locator('#animals').fill('Golfinho e tartaruga')
         lesson.locator('#animals').press('Tab')
     original = page.request.get(studio_origin + '/api/learning/me').json()
