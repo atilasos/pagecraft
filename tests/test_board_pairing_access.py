@@ -652,3 +652,73 @@ async def test_board_stream_rechecks_when_consumer_resumes(board_http, change_af
         assert session['id'] not in app.state.classroom.live_session_ids()
     finally:
         await frames.aclose()
+
+
+@pytest.mark.parametrize('phase', ['snapshot', 'record', 'heartbeat'])
+async def test_board_stream_rechecks_creation_during_session_read(
+    board_http, monkeypatch, phase,
+):
+    from server.api.classroom import stream_session
+
+    app, teacher, board, clock = board_http
+    await _pair(teacher, board)
+    classroom, session = await _board_lesson(teacher)
+    svc = app.state.classroom
+    request = Request({'type': 'http', 'app': app})
+    request.state.access = SimpleNamespace(
+        role=Role.BOARD, board_credential=board.cookies.get(BOARD_COOKIE_NAME),
+    )
+    response = await stream_session(session['id'], request)
+    frames = response.body_iterator
+    read_started = asyncio.Event()
+    proceed = asyncio.Event()
+    subscribed = asyncio.Event()
+    read_json = svc.storage.read_json
+    subscribe_ticks = svc.live_ticks.subscribe
+
+    async def pause_session_read(path, default=None):
+        data = await read_json(path, default)
+        if path == svc._session_path(session['id']) and not read_started.is_set():
+            read_started.set()
+            await proceed.wait()
+        return data
+
+    def observe_tick_subscription(session_id):
+        subscription = subscribe_ticks(session_id)
+        subscribed.set()
+        return subscription
+
+    pending = None
+    try:
+        if phase != 'snapshot':
+            assert 'event: session_state_snapshot' in await anext(frames)
+        if phase == 'record':
+            control = await teacher.post(
+                f"/api/sessions/{session['id']}/control",
+                json={'action': 'highlight', 'unit_id': 'OLD-A'},
+            )
+            assert control.status_code == 200
+        monkeypatch.setattr(svc.storage, 'read_json', pause_session_read)
+        monkeypatch.setattr(svc.live_ticks, 'subscribe', observe_tick_subscription)
+        pending = asyncio.create_task(anext(frames))
+        if phase == 'heartbeat':
+            await asyncio.wait_for(subscribed.wait(), 1)
+            svc.live_ticks.publish(session['id'])
+        # list_sessions has already enumerated only A. B is created by HTTP
+        # while the selection is suspended inside the actual session.json read.
+        await asyncio.wait_for(read_started.wait(), 1)
+        await _next_board_lesson(teacher, classroom, clock)
+        proceed.set()
+        try:
+            old_frame = await asyncio.wait_for(asyncio.shield(pending), 1)
+        except StopAsyncIteration:
+            pass
+        else:
+            pytest.fail(f'Frame antigo depois de criar B: {old_frame}')
+        assert session['id'] not in svc.live_session_ids()
+    finally:
+        proceed.set()
+        if pending is not None:
+            pending.cancel()
+            await asyncio.gather(pending, return_exceptions=True)
+        await frames.aclose()
