@@ -106,3 +106,5 @@ O resumo posterior deriva dos mesmos registos de qualquer atividade e liga as co
 Executa `uv run pytest tests/test_activity_support.py` e `node --test tests/js/activity_support.test.cjs`. Os exemplos em `tests/fixtures/support-examples.json` verificam planos distintos de Matemática, escrita e Scratch, não a qualidade de aulas completas.
 
 Para inspecionar o componente num browser, gera HTML autocontido com `uv run python scripts/render_support_examples.py --output /tmp/pagecraft-support-examples`. Estes ficheiros de ensaio não publicam atividades nem contactam IA. A avaliação de uma atividade gerada continua a exigir o seu próprio percurso, contexto e fontes.
+
+Para ensaiar a intervenção automática no host, usa `uv run python scripts/render_automatic_support_demo.py --output /tmp/pagecraft-automatic-support` e serve essa pasta apenas em localhost. O cenário simula respostas do fornecedor e falhas; não guarda dados. O procedimento e a evidência estão em `docs/ensaio-apoio-automatico.md`.
