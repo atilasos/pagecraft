@@ -459,6 +459,11 @@
         assessment: function (unitId, result, detail) { emit('assessment_result', unitId, { result: result, detail: detail || '' }); },
         askForFeedback: function (unitId, question, answer, expected) { emit('feedback_request', unitId, { question: question, answer: answer, expected: expected || '' }); },
         helpNeeded: function (unitId, note) { emit('help_needed', unitId, { note: note || '' }); },
+        hintPresented: function (unitId, hintId, text, context) { emit('hint_presented', unitId, { hint_id: hintId, text: text, context: context }); },
+        hintFeedback: function (unitId, hintId, usefulness) { emit('hint_feedback', unitId, { hint_id: hintId, usefulness: usefulness }); },
+        hintListened: function (unitId, hintId) { emit('hint_listened', unitId, { hint_id: hintId }); },
+        workLocation: function (unitId, location) { emit('work_location', unitId, { location: location }); },
+        helpResolved: function (unitId, note) { emit('help_resolved', unitId, { note: note }); },
         share: function (unitId, what) { emit('share_requested', unitId, { what: what || '' }); }
       };
       /* END GENERATED SESSION EVENT EMITTERS */

@@ -26,6 +26,11 @@ O **nome interno** é o identificador canónico no servidor. O **nome na ponte**
 | `assessment_result` | `assessment_result` | `PageCraftBridge.assessment(unitId, result, detail)` | `result` — Resultado observável do item de avaliação.<br>`detail` — Contexto curto e opcional sobre o resultado. |
 | `feedback_request` | `feedback_request` | `PageCraftBridge.askForFeedback(unitId, question, answer, expected)` | `question` — Pergunta ou tarefa apresentada à criança.<br>`answer` — Resposta dada pela criança.<br>`expected` — Resposta de referência indicada pela atividade. |
 | `help_needed` | `help_needed` | `PageCraftBridge.helpNeeded(unitId, note)` | `note` — Contexto curto e opcional sobre o pedido de ajuda. |
+| `hint_presented` | `hint_presented` | `PageCraftBridge.hintPresented(unitId, hintId, text, context)` | `hint_id` — Pista apresentada; não comprova leitura.<br>`text` — Ação mostrada.<br>`context` — Etapa, tentativa, critérios e versão do guião. |
+| `hint_feedback` | `hint_feedback` | `PageCraftBridge.hintFeedback(unitId, hintId, usefulness)` | `hint_id` — Pista a que a declaração se refere.<br>`usefulness` — helped ou not_helped, segundo o grupo. |
+| `hint_listened` | `hint_listened` | `PageCraftBridge.hintListened(unitId, hintId)` | `hint_id` — O grupo pediu a leitura; não comprova que ouviu até ao fim. |
+| `work_location` | `work_location` | `PageCraftBridge.workLocation(unitId, location)` | `location` — Local de trabalho declarado: canva, pagecraft, reading ou discussion. |
+| `help_resolved` | `help_resolved` | `PageCraftBridge.helpResolved(unitId, note)` | `note` — O grupo declarou que já consegue continuar; não comprova intervenção docente. |
 | `share_requested` | `share_requested` | `PageCraftBridge.share(unitId, what)` | `what` — Trabalho que a criança quer levar ao momento de comunicação. |
 
 `unitId` identifica a unidade no envelope e não faz parte de `payload`.
