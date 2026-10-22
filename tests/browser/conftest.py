@@ -85,9 +85,7 @@ def studio_origin(tmp_path_factory):
                PAGECRAFT_ACCESS_TEAM_DOMAIN='', PAGECRAFT_ACCESS_EMAIL='')
     origin = f'http://127.0.0.1:{port}'
     with (root / 'server.log').open('w') as log:
-        process = subprocess.Popen([sys.executable, '-m', 'uvicorn', 'clocked_studio:app',
-                                    '--app-dir', str(Path(__file__).parent),
-                                    '--host', '127.0.0.1', '--port', str(port)],
+        process = subprocess.Popen([sys.executable, '-m', 'uvicorn', 'server.app:app', '--host', '127.0.0.1', '--port', str(port)],
                                    cwd=DRAFT.parent.parent, env=env, stdout=log, stderr=log)
         try:
             for _ in range(100):
