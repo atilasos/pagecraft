@@ -122,3 +122,58 @@ O comando pressupõe dependências já instaladas ou em cache. Preparação inic
 do ambiente: `uv sync`; para preparar a dependência opcional de browser,
 `uv run --with playwright==1.63.0 python -c 'import playwright'`. Os ensaios
 usam o browser aberto pelo Hub, sem instalar ou lançar um browser paralelo.
+
+## Standards das implementações
+
+As revisões independentes identificaram duas violações documentadas, ambas
+corrigidas e novamente revistas sem achados:
+
+- Bilhete: intenções longas precisavam do limite de leitura do `DESIGN.md`.
+  Os textos ficam limitados a 50ch, com ensaio a 320px.
+- Contexto de ajuda: um `student_id` também pode indicar destinatário de uma
+  mensagem docente ou do assistente. A cronologia passou a consultar o autor
+  no vocabulário central e a apresentar o destinatário separadamente.
+
+Catálogo, fila individual, autoria das realizações, Quadro e gerações isoladas
+receberam pareceres Standards sem violações documentadas ou smells acionáveis.
+As cópias canónicas das pistas continuam sincronizadas.
+
+## Spec das implementações
+
+A primeira revisão encontrou cinco problemas de cumprimento dos contratos:
+
+- Quadro: B podia nascer durante uma leitura assíncrona da seleção de A.
+  A revisão da seleção no serviço obriga a repetir a consulta quando criação,
+  retoma ou fecho a invalidam. A reprodução independente deixou de emitir
+  a mensagem antiga depois da mudança.
+- Bilhete: rever só a estratégia apagava a intenção anterior. Vazio mantém
+  o passo guardado, texto novo substitui e retirar exige escolha explícita.
+- Autoria: depois de concluir e expirar a credencial, a referência local
+  impedia começar outra realização. A saída explícita verifica ausência de
+  pendentes e remove apenas a referência do separador. O conflito A/B continua
+  a impedir substituição e os dados incertos são conservados.
+- Histórico de pistas: a retoma perdia os discriminantes de tarefa e revisão.
+  Os novos acontecimentos conservam esses campos sem inventar dados antigos.
+- Histórico de pistas: ouvir uma pista noutro painel mudava a tarefa ativa e
+  cancelava um pedido IA. A consulta é tratada antes da mudança de unidade.
+
+Os três primeiros receberam segunda revisão Spec sem achados. A segunda
+revisão das pistas e do contexto docente e a avaliação final do novo rascunho
+ainda estão em curso neste ponto do registo.
+
+## Integração local
+
+O checkout `review/integracao-melhorias-10-agentes` combina as branches antes
+dos merges no GitHub. As sobreposições na publicação e interface infantil
+foram resolvidas preservando os dois contratos de cada lado. Os PRs dependentes
+expõem essas relações: catálogo antes de gerações; fila antes de bilhete.
+
+A combinação de anos declarados e publicação revista tem regressões próprias
+de repetição idempotente e rejeição de metadados inválidos antes da instalação.
+Os 94 testes focados passaram; o revisor repetiu 134 testes e um percurso completo
+de geração, preview, aprovação e restart, verificando bytes e anos no catálogo/API.
+
+A verificação geral intermédia encontrou uma expectativa antiga no teste do
+cookie, que não admitia a versão da identidade devolvida no claim. Atualizada
+para verificar também a mesma versão na retoma, mantendo a ausência de credencial
+no corpo e os atributos HttpOnly. Os 18 testes de cookie e API relacionados passaram.
