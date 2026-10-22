@@ -189,7 +189,7 @@ sincronização canónica passou.
 A primeira execução conjunta de browser teve 136 aprovações e duas falhas.
 A mudança de composição depois de uma recusa de gravação reproduziu-se
 isoladamente: o marcador de recusa do grupo anterior bloqueava o novo grupo.
-A correção e a revisão desse caso antecedem nova validação do conjunto.
+Esta falha motivou a segunda ronda da fila descrita abaixo.
 A segunda falha, ao abrir a reflexão, não se repetiu isoladamente. A suite
 atravessou a meia-noite escolar, mas isso permanece hipótese, sem prova causal.
 
@@ -214,3 +214,48 @@ No SHA `2623a73`, Standards e Spec tiveram zero achados. O revisor repetiu em
 VM os casos de recusa legada, atual e anterior. O agente executou 19 testes
 de browser e 55 de acesso/autoria, todos aprovados. O [relatório da ronda](2026-10-23-fila-ronda2.md)
 conserva comandos e limites. A branch do bilhete integra esta correção.
+
+## Rascunho das pontes e apoio comum
+
+Os cinco papéis da skill PageCraft foram executados separadamente, com fontes
+da Sebenta e alinhamento curricular explícito. O rascunho conserva previsões
+anteriores aos resultados e duas fichas A/B. A altura direita é a única variável;
+as vistas superiores são iguais e as laterais só aparecem depois de testar.
+Respostas erradas completas permitem avançar. O colega pode declarar que não
+encontrou contraexemplo, sem classificação automática da explicação.
+
+A iteração de browser corrigiu saída do foco do modal, aviso de falta já
+resolvida, primeiro clique de apoio perdido após editar e retoma do foco no
+iframe depois de continuar ou pedir o professor. As correções partilhadas
+estão nas fontes canónicas, espelhos e nova incorporação. O sandbox mantém-se.
+A revisão Spec pediu ainda a personagem visível na lateral, dando referente
+à pista de observação. A figura só aparece após o teste e tem descrição acessível.
+
+A avaliação final tem `pass: true`, sem achados, no HTML com SHA256
+`c4e77ff6fe3ba903a16332361cd759b23d42cc55e244bbaee1dcce30ab2fb1d5`.
+Passaram 23 cenários de Chromium no Hub, incluindo os dois anfitriões reais,
+retoma e figura. O envelope observado chegou a 4092 bytes; o ensaio extremo
+com controlos JSON escapados chegou a 4095, abaixo de 4096. Os textos obrigatórios
+são conservados; a reflexão facultativa pode encolher no limite extremo.
+O [relatório próprio](2026-10-22-pontes-duas-vistas.md) conserva as provas
+vermelhas, reparações, provas verdes e limites. A atividade permanece privada,
+pronta para revisão do professor, sem ensaio com crianças nem publicação.
+
+## Entregas preparadas
+
+| PR | Alteração | Benefício ou contrato protegido |
+|---|---|---|
+| [#56](https://github.com/atilasos/pagecraft/pull/56) | Auditorias, seleção e verificação reproduzível | Decisões e limites rastreáveis |
+| [#57](https://github.com/atilasos/pagecraft/pull/57) | Quadro da sessão atual | Revoga projeção antiga, incluindo streams abertos |
+| [#58](https://github.com/atilasos/pagecraft/pull/58) | Autoria entre separadores | Conserva pendentes sem atribuir trabalho a outra realização |
+| [#59](https://github.com/atilasos/pagecraft/pull/59) | Anos declarados comuns | Descoberta coerente sem inferir escolaridade da idade |
+| [#60](https://github.com/atilasos/pagecraft/pull/60) | Fila individual e recusas por contexto | Trabalho e avisos preservados com autoria correta |
+| [#61](https://github.com/atilasos/pagecraft/pull/61) | Histórico de pistas | Consulta sem consumir pistas nem cancelar ajuda atual |
+| [#62](https://github.com/atilasos/pagecraft/pull/62) | Contexto do pedido de ajuda | Professor vê evidência correlacionada e distingue autor de destinatário |
+| [#63](https://github.com/atilasos/pagecraft/pull/63) | Gerações isoladas e revisão vinculada | Publicação dos bytes efetivamente revistos |
+| [#64](https://github.com/atilasos/pagecraft/pull/64) | Bilhete de regresso | Intenção opcional da criança confirmada pelo servidor |
+| [#65](https://github.com/atilasos/pagecraft/pull/65) | Duas pontes e foco no apoio comum | Investigação com previsões, comparação e contraexemplo, em rascunho privado |
+
+A ordem de merge respeita catálogo antes de gerações, fila antes de bilhete
+e histórico de pistas antes de pontes. A validação final combina as nove frentes
+antes de alterar `main`.
