@@ -254,8 +254,8 @@ $('restore-retry').addEventListener('click', restoreWork);
 /* SSE: feedback IA, mensagens do professor, PIT */
 const STUDENT_EVENT_HANDLERS = {
   ai_feedback(data) {
-    showMessage(data.payload.text, "feedback-warn");
-    return { payload: { text: data.payload.text } };
+    if (!data.payload.request_id) showMessage(data.payload.text, "feedback-warn");
+    return { payload: { ...data.payload } };
   },
   teacher_message(data) {
     showMessage(`Professor: ${data.payload.text}`, "feedback-ok");
