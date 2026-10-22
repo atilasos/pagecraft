@@ -1,6 +1,6 @@
 # Duas pontes, duas vistas
 
-Rascunho privado para revisão do professor. Slug `pontes-duas-vistas`. 3.º e 4.º anos, 8–10 anos, 15 minutos, português europeu. Sem código reservado, registo, publicação ou alterações a atividades existentes.
+Rascunho privado para revisão do professor. Slug `pontes-duas-vistas`. 3.º e 4.º anos, 8–10 anos, 15 minutos, português europeu. Ainda sem registo ou publicação em produção. As atividades existentes não foram alteradas.
 
 ## Intenção e preparação
 
@@ -51,8 +51,8 @@ A reflexão retoma os três critérios e é facultativa em todos os itens. Pode 
 
 ## Entrega para as fases seguintes
 
-O HTML deverá ser autocontido, com fonte Gothic real e licença incorporadas, corpo de 20 px, títulos de 28 px, microtexto de 16 px, alvos de 48 px, foco visível e todas as ações por teclado. A cor não pode ser o único sinal. A fonte segue Century Gothic e Didact Gothic de alternativa. O checkpoint UTF-8 completo deve ter menos de 4096 bytes, incluindo limite dos textos, e recuperar etapa e trabalho sem emitir tentativas duplicadas. Em modo autónomo o rascunho fica nesta aba; no host usa a ponte `postMessage` e o restauro autorizado.
+O HTML é autocontido, com fonte Gothic real e licença incorporadas, corpo de 20 px, títulos de 28 px, microtexto de 16 px, alvos de 48 px, foco visível e ações por teclado. A cor não pode ser o único sinal. A fonte segue Century Gothic e Didact Gothic de alternativa. O checkpoint UTF-8 completo deve ter menos de 4096 bytes, incluindo limite dos textos, e recuperar etapa e trabalho sem emitir tentativas duplicadas. Em modo autónomo o rascunho fica nesta aba; no host usa a ponte `postMessage` e o restauro autorizado.
 
 Artefactos de arquitetura: [DocSpec](pontes-duas-vistas-docspec.json) e [fontes consultadas](pontes-duas-vistas-sources.md). DocSpec validado contra o esquema canónico; quatro unidades, duração 3 + 5 + 4 + 3 = 15 minutos. O alinhamento curricular usa as OC de TIC para o ciclo e não inventa AE de 3.º/4.º ano. A escolha deste modelo e destas interações é proposta da atividade.
 
-Nesta fase não houve HTML, testes de browser nem observação com crianças. Designer, Builder, Proofreader e Evaluator produzem artefactos próprios. Antes de entrega docente, verificar todos os pedidos nos três apoios, avanço com todas as escolhas erradas, teclado, larguras 390/768/1280 px, pistas locais e automáticas, retoma sem duplicação e limite de bytes. O ensaio no host deve usar apenas dados descartáveis e confirmar a fronteira privada, sem registar nem publicar esta atividade em produção. Adequação à turma e tempo real continuam dependentes da revisão e observação do professor.
+As cinco fases produziram artefactos próprios. A avaliação final passou 23 cenários em browser real do Hub, incluindo respostas erradas completas nos três apoios, personagem após testar, teclado, larguras 390/768/1280 px, retoma e foco nos dois anfitriões reais. O checkpoint observado ficou abaixo de 4096 bytes. Os ensaios do Studio usaram apenas dados descartáveis e confirmaram a fronteira privada. A atividade não foi registada nem publicada em produção. O relatório em `docs/reviews/2026-10-22-pontes-duas-vistas.md` e o manifesto registam comandos, provas vermelhas/verdes e limitações. Não houve observação com crianças; a adequação à turma e o tempo real continuam dependentes da revisão e observação do professor.
