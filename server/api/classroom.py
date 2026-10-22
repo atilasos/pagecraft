@@ -28,6 +28,7 @@ from ..classroom.errors import (
     StudentNotInRosterError,
 )
 from ..classroom.event_types import SESSION_EVENT_TYPES
+from ..feedback_context import CONTEXT_EVENT_TYPES
 from ..classroom.live_state import (
     changed_group_frames,
     changed_session_frame,
@@ -94,8 +95,9 @@ class EventsRequest(BaseModel):
     def bounded_payloads(cls, events):
         for event in events:
             payload = event.get("payload", {})
-            if not isinstance(payload, dict) or len(json.dumps(payload).encode("utf-8")) > 4096:
-                raise ValueError("O registo da atividade deve ser um objeto com até 4096 bytes.")
+            limit = 12000 if event.get("type") in CONTEXT_EVENT_TYPES else 4096
+            if not isinstance(payload, dict) or len(json.dumps(payload).encode("utf-8")) > limit:
+                raise ValueError(f"O registo da atividade deve ser um objeto com até {limit} bytes.")
         return events
 
 

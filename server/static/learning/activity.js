@@ -487,7 +487,8 @@ window.addEventListener("message", (e) => {
     "language_changed",
     "level_changed",
   ];
-  if (allowed.includes(type) && JSON.stringify(payload).length <= 4096)
+  const limit = ["hint_presented", "help_needed"].includes(type) ? 12000 : 4096;
+  if (allowed.includes(type) && JSON.stringify(payload).length <= limit)
     record(type, payload, String(unitId || "").slice(0, 80));
 });
 window.addEventListener("online", () => flush().catch(() => {}));

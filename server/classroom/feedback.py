@@ -208,6 +208,8 @@ class FeedbackService:
             return
         key = (session_id, work_group_id or student_id)
         if self._pending[key] >= self.max_pending_per_student:
+            await self._deliver(session_id, student_id, unit_id, TIMEOUT_MESSAGE, source="busy",
+                                request_seq=request_seq, work_group_id=work_group_id, correlation=payload)
             # não descartar em silêncio: o professor fica a saber
             await self.classroom.emit_event(
                 session_id,
@@ -247,6 +249,9 @@ class FeedbackService:
                 pass
             except Exception as exc:  # noqa: BLE001 — worker nunca morre
                 try:
+                    await self._deliver(item["session_id"], item["student_id"], item["unit_id"],
+                                        TIMEOUT_MESSAGE, source="unavailable", request_seq=item["request_seq"],
+                                        work_group_id=item["work_group_id"], correlation=item["payload"])
                     await self.classroom.emit_event(
                         item["session_id"],
                         "feedback_error",

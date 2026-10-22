@@ -7,12 +7,13 @@ from typing import Annotated, Literal
 
 from fastapi import APIRouter, HTTPException, Request, Response
 from fastapi.responses import FileResponse, PlainTextResponse
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, ValidationInfo, field_validator
 
 from ..access import (RateLimitOperation, Role, RoutePolicy, TrustChannel, access_policy,
                       rate_limited)
 from ..learning import LEARNING_COOKIE
 from ..criteria import Criterion
+from ..feedback_context import CONTEXT_EVENT_TYPES
 
 ACTIVITY_CONTENT_HEADERS = {
         'Content-Security-Policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; media-src data:; font-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'",
@@ -75,8 +76,9 @@ class Event(BaseModel):
 
     @field_validator('payload')
     @classmethod
-    def small_payload(cls, value):
-        if len(json.dumps(value)) > 4096:
+    def small_payload(cls, value, info: ValidationInfo):
+        limit = 12000 if info.data.get("type") in CONTEXT_EVENT_TYPES else 4096
+        if len(json.dumps(value)) > limit:
             raise ValueError('Registo demasiado longo.')
         return value
 

@@ -206,11 +206,12 @@ function startActivity() {
   // nota: o evento "joined" é emitido pelo servidor no claim; não repetir aqui
 }
 
-function sanitizePayload(payload) {
+function sanitizePayload(payload, type) {
   try {
     if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return {};
     const json = JSON.stringify(payload);
-    if (new TextEncoder().encode(json).length > 4096) return null;
+    const limit = ["feedback_request", "hint_presented", "help_needed"].includes(type) ? 12000 : 4096;
+    if (new TextEncoder().encode(json).length > limit) return null;
     return JSON.parse(json);
   } catch { return null; }
 }
@@ -491,7 +492,7 @@ function createStudentTransport() {
           sendGroupPreferences();
         }
       }
-      const payload = sanitizePayload(data.payload);
+      const payload = sanitizePayload(data.payload, data.type);
       if (payload !== null) {
         if (['assessment_result', 'attempt', 'level_changed'].includes(data.type)) $('save-work-status').textContent = '';
         enqueue(data.type, data.unitId || null, payload);
@@ -744,8 +745,10 @@ async function loadOwnHistory() {
 /* ---- ajuda + PIT ---- */
 
 $("help-btn").addEventListener("click", () => {
-  studentTransport.enqueue("help_needed", null, { note: "botão de ajuda" });
-  showMessage("O professor já sabe que precisas de ajuda.", "feedback-ok");
+  const help_request_id = crypto.randomUUID();
+  const queued = studentTransport.enqueue("help_needed", null, { note: "botão de ajuda", help_request_id });
+  if (queued) $("activity-frame").contentWindow?.postMessage({pagecraft:1, type:"support_teacher_requested", payload:{help_request_id}}, '*');
+  showMessage(queued ? "Pedido preparado para enviar. Confirma que o trabalho fica guardado; podes também chamar o professor." : "Não foi possível preparar o pedido. Chama o professor.", "feedback-warn");
 });
 
 $("pit-btn").addEventListener("click", () => {

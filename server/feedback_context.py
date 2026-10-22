@@ -6,6 +6,8 @@ import json
 import re
 import unicodedata
 
+CONTEXT_EVENT_TYPES = frozenset({'feedback_request', 'hint_presented', 'help_needed'})
+
 TIMEOUT_MESSAGE = 'Não consegui dar uma pista agora. Continua com o guião ou pede ajuda ao professor.'
 
 SYSTEM_PROMPT = '''És um assistente pedagógico do 1.º ciclo em Portugal.
