@@ -138,3 +138,96 @@ antes da troca.
 
 `git diff --check` passou. O principal pode rever esta branch local antes de
 criar o PR.
+
+## Ronda 2: invalidar seleções durante leituras assíncronas
+
+A revisão Spec do PR #57 encontrou uma corrida ainda presente na base
+`74c92232913c492ff7d6d9c18f6717263d27fcee`. `list_sessions()` enumera os
+ficheiros antes de os ler com `await`. Se B nasce durante a leitura de A,
+B fica fora da enumeração e a revalidação pode continuar a autorizar A.
+As verificações anteriores não cobriam esta janela e não bastavam para
+declarar o problema resolvido.
+
+### Reprodução determinista
+
+O commit `1132318` acrescenta um teste parametrizado que conduz o iterador
+SSE real. A sessão e o emparelhamento são criados por HTTP. O teste suspende
+`storage.read_json(A/session.json)` com dois `asyncio.Event`, depois da
+enumeração, cria B por HTTP e só então liberta a leitura. Não usa sleeps.
+
+```bash
+uv run --project /home/proteu/pagecraft python -m pytest \
+  tests/test_board_pairing_access.py -k creation_during_session_read -q --tb=short
+# Antes da correção: 3 failed, 18 deselected in 1.42s
+```
+
+As falhas mostram um `session_state_snapshot` de A depois de B, um frame
+`teacher_highlight` com `unit_id: OLD-A` depois de B e um timeout no caso
+do heartbeat, pois a ligação antiga continua aberta. O heartbeat usa o
+publicador real, acionado após observar a subscrição, sem esperar pelo relógio.
+
+### Correção no serviço
+
+`ClassroomService` mantém uma revisão da seleção do Quadro. Criação, retoma
+e fecho incrementam essa revisão após persistir a mudança de sessão.
+O fecho automático passa pelo mesmo método de fecho e também a incrementa.
+`current_board_session()` lê a revisão antes de consultar as sessões e
+repete toda a consulta se a revisão tiver mudado durante os `await`.
+Não há `await` entre a comparação final e o retorno da projeção.
+
+Assim, uma criação concluída durante a leitura obriga a enumerar B.
+Retoma e fecho obrigam a reler sessões já processadas nessa consulta.
+A ordenação continua em `list_sessions()`: data de janela mais recente,
+com desempate estável pela ordem crescente dos caminhos, tanto para
+`started_at` como para `active_since`. Não há novos guards nos handlers.
+A revisão é local ao processo, de acordo com o modelo existente do serviço
+e dos locks por sessão; o arranque continua a selecionar a partir do disco.
+
+Os testes adicionais suspendem a leitura da última sessão enumerada e
+retomam ou fecham outra sessão já lida. Também verificam os empates na
+criação e na retoma e a convergência após expiração automática.
+
+### Verificação da ronda 2
+
+Comandos executados no worktree desta branch:
+
+```bash
+uv run --project /home/proteu/pagecraft python -m pytest \
+  tests/test_board_pairing_access.py -q
+# 21 passed in 1.22s
+
+uv run --project /home/proteu/pagecraft python -m pytest \
+  tests/test_classroom.py tests/test_board_pairing_access.py -q
+# 38 passed in 1.42s
+
+uv run --project /home/proteu/pagecraft python -m pytest \
+  tests --ignore=tests/browser -q
+# 352 passed in 10.11s
+
+PAGECRAFT_TEST_CDP=http://127.0.0.1:9331 \
+  uv run --with playwright --project /home/proteu/pagecraft python -m pytest \
+  tests/browser/test_board_session_switch.py -q
+# 2 passed in 38.58s
+```
+
+O browser foi aberto pelo Agent Browser Hub na sessão própria
+`pagecraft-quadro-ronda2`, perfil `temporary`, e fechado no fim. Os testes
+usaram dados descartáveis e confirmaram limpeza de nomes, códigos e iframe,
+redescoberta de B e ausência de erros JavaScript, com evento e com heartbeat
+periódico real. As seis screenshots nos caminhos acima foram atualizadas.
+Mantém-se o limite de 30 segundos até ao próximo heartbeat quando A não
+recebe acontecimentos.
+
+Esta ronda altera apenas o serviço, os testes Python e este relatório.
+Os testes existentes continuam a verificar o acesso de Professor e Aluno
+a A. Não houve alterações a `/outputs` ou ao Momento de comunicação.
+O checkout partilhado não foi editado, e não houve push, novo PR ou merge.
+
+Commits incrementais desta ronda:
+
+- `1132318`: reprodução de snapshot, evento e heartbeat durante a leitura.
+- `e10e92d`: revisão e repetição da seleção após criação, retoma ou fecho.
+- `c674b70`: regressões de retoma, fecho, empates e expiração.
+
+`git diff --check` passou. A branch local fica pronta para o principal
+atualizar o PR #57 e pedir nova revisão independente.
