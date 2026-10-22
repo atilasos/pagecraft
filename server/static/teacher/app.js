@@ -54,16 +54,17 @@ function jobCard(job) {
   }[job.status] || `<span class="pill">${PHASE_LABELS[job.current_phase] || job.status}</span>`;
 
   const running = !["done", "failed", "awaiting_review"].includes(job.status);
-  const canOverride = job.status === "failed" && job.artifacts && job.artifacts.html;
+  const canReview = job.artifact_version === 1 && job.review && job.preview_url;
+  const canOverride = job.status === "failed" && canReview;
   el.innerHTML = `
     <strong>${esc(job.topic)}</strong> <span class="muted">· ${esc(job.subject)} · ${esc(job.year)}.º ano · ${esc(job.duration)} min</span>
     <p>${statusPill} ${job.iteration > 1 ? `<span class="pill">iteração ${esc(job.iteration)}</span>` : ""}</p>
     ${running ? `<progress max="5" value="${phaseIdx + 1}"></progress>` : ""}
     <p class="muted" id="job-${esc(job.id)}-log" aria-live="polite"></p>
     <p>
-      ${job.artifacts && job.artifacts.html ? `<a href="/outputs/${encodeURIComponent(job.slug)}.html" target="_blank" rel="noopener">pré-visualizar</a> · ` : ""}
-      ${job.status === "awaiting_review" ? `<button data-approve="${esc(job.id)}">Aprovar e publicar</button>` : ""}
-      ${canOverride ? `<button class="ghost" data-approve="${esc(job.id)}" data-override="true">Publicar mesmo assim (decisão do professor)</button>` : ""}
+      ${canReview ? `<a href="${esc(job.preview_url)}" target="_blank" rel="noopener">pré-visualizar</a> · ` : ""}
+      ${job.status === "awaiting_review" && canReview ? `<button data-approve="${esc(job.id)}" data-review="${esc(job.review.id)}">Aprovar e publicar</button>` : ""}
+      ${canOverride ? `<button class="ghost" data-approve="${esc(job.id)}" data-review="${esc(job.review.id)}" data-override="true">Publicar mesmo assim (decisão do professor)</button>` : ""}
       ${job.status === "done" ? `<a href="/activities/${encodeURIComponent(job.slug)}/" target="_blank" rel="noopener">abrir atividade publicada</a>` : ""}
       ${job.status === "failed" ? `<span class="feedback-warn">${esc(job.error || "erro desconhecido")}</span>` : ""}
     </p>`;
@@ -160,10 +161,17 @@ document.addEventListener("click", async (ev) => {
   ev.target.disabled = true;
   const resp = await tfetch(`/api/jobs/${id}/approve${override ? "?override=true" : ""}`, {
     method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ review_id: ev.target.dataset.review }),
   });
   if (resp.ok) {
     jobCard(await resp.json());
     loadMeta();
+  } else {
+    const error = await resp.json().catch(() => ({}));
+    const logEl = document.getElementById(`job-${id}-log`);
+    if (logEl) logEl.textContent = error.detail || "Não foi possível publicar esta revisão.";
+    ev.target.disabled = false;
   }
 });
 

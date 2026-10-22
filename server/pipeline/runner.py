@@ -2,13 +2,15 @@
 proofreader → evaluator → repair loop → (aprovação) → publish.
 
 Estado persistido em data/jobs/<id>/job.json após cada fase; artefactos no
-formato histórico em outputs/lessons/<slug>-*. Progresso via EventLog
+outputs/lessons/<job-id>/<slug>-*. Progresso via EventLog
 (data/jobs/<id>/events.jsonl) consumido por SSE.
 """
 
 from __future__ import annotations
 
 import asyncio
+import hashlib
+import json
 import re
 import unicodedata
 import uuid
@@ -24,6 +26,11 @@ from ..typography import embed_activity_typography
 from .phases import build_phases
 from .validators import validate_activity_html
 from ..activity_support import embed_activity_support
+from ..bridge_snippet import ensure_bridge_lite
+
+
+class ReviewConflict(ValueError):
+    """A versão pedida já não corresponde ao conjunto revisto."""
 
 
 def slugify(text: str) -> str:
@@ -67,6 +74,7 @@ class PipelineRunner:
         self.phases = build_phases(config)
         self._queue: asyncio.Queue[str] = asyncio.Queue()
         self._worker: asyncio.Task | None = None
+        self._publication_lock = asyncio.Lock()
 
     # ---- API pública ----
 
@@ -80,9 +88,11 @@ class PipelineRunner:
         maker: str | None = None,
         auto_publish: bool = False,
     ) -> dict:
-        slug = f"{year}ano-{slugify(topic)}"
+        job_id = uuid.uuid4().hex[:12]
+        slug = f"{year}ano-{slugify(topic)}-{job_id}"
         job = {
-            "id": uuid.uuid4().hex[:12],
+            "id": job_id,
+            "artifact_version": 1,
             "slug": slug,
             "topic": topic,
             "subject": subject,
@@ -115,6 +125,17 @@ class PipelineRunner:
         requeued = 0
         for job in await self.list_jobs():
             status = job.get("status", "")
+            if job.get("artifact_version") != 1 and status != "done":
+                if job.get("legacy_blocked"):
+                    continue
+                job["status"] = "failed"
+                job["legacy_blocked"] = True
+                job["error"] = "Job antigo sem artefactos isolados. Cria uma nova geração para rever e publicar."
+                job.pop("review", None)
+                job.pop("preview_url", None)
+                await self._save(job)
+                await self._emit(job, "failed", {"error": job["error"]})
+                continue
             if status == "queued" or status.startswith("running") or status == "publishing":
                 await self._queue.put(job["id"])
                 requeued += 1
@@ -145,22 +166,38 @@ class PipelineRunner:
         jobs.sort(key=lambda j: j.get("created_at", ""), reverse=True)
         return jobs
 
-    async def approve(self, job_id: str, *, override: bool = False) -> dict | None:
+    async def approve(self, job_id: str, *, review_id: str, override: bool = False) -> dict | None:
         """Publica um job em revisão. Com override=True, o professor pode
         publicar um job que falhou a avaliação (o Evaluator aconselha; a
         decisão final é do professor), desde que exista HTML gerado."""
+        async with self._publication_lock:
+            return await self._approve(job_id, review_id=review_id, override=override)
+
+    async def _approve(self, job_id: str, *, review_id: str, override: bool) -> dict | None:
         job = await self.get_job(job_id)
         if not job:
             return None
+        if job["status"] == "done":
+            self._reviewed_artifacts(job, review_id)
+            return job
         publishable = job["status"] == "awaiting_review" or (
             override and job["status"] == "failed" and job["artifacts"].get("html")
         )
         if not publishable:
             return None
+        self._reviewed_artifacts(job, review_id)
+        job["approval"] = {"review_id": review_id, "approved_at": utcnow(), "override": override}
         job["status"] = "publishing"
         job["published_with_override"] = override and job.get("error") is not None
         await self._save(job)
-        await self._publish(job)
+        try:
+            await self._publish(job)
+        except Exception as exc:
+            job["status"] = "failed"
+            job["error"] = f"{type(exc).__name__}: {exc}"
+            await self._save(job)
+            await self._emit(job, "failed", {"error": job["error"]})
+            raise
         return job
 
     # ---- internals ----
@@ -181,8 +218,58 @@ class PipelineRunner:
         )
 
     def _artifact_path(self, job: dict, suffix: str) -> Path:
-        self.config.outputs_dir.mkdir(parents=True, exist_ok=True)
-        return self.config.outputs_dir / f"{job['slug']}{suffix}"
+        directory = self.config.outputs_dir / job["id"]
+        directory.mkdir(parents=True, exist_ok=True)
+        return directory / f"{job['slug']}{suffix}"
+
+    def _artifact_files(self, job: dict) -> dict[str, Path]:
+        if job.get("artifact_version") != 1:
+            raise ReviewConflict("Job antigo sem proveniência segura. Cria uma nova geração.")
+        directory = (self.config.outputs_dir / job["id"]).resolve()
+        files = {p.name: p for p in directory.iterdir() if p.is_file()}
+        if any(path.resolve().parent != directory for path in files.values()):
+            raise ReviewConflict("Artefacto fora do conjunto isolado. Cria uma nova geração.")
+        for path_str in job["artifacts"].values():
+            path = Path(path_str).resolve()
+            if path.parent != directory or path.name not in files:
+                raise ReviewConflict("Artefacto fora do conjunto isolado ou em falta. Cria uma nova geração.")
+        if not {"html", "docspec", "design_spec", "teacher_md", "proofread", "evaluation", "validation"} <= job["artifacts"].keys():
+            raise ReviewConflict("Conjunto de revisão incompleto. Cria uma nova geração.")
+        return files
+
+    @staticmethod
+    def _review_id(job: dict, hashes: dict) -> str:
+        identity = {"job_id": job["id"], "slug": job["slug"], "artifacts": job["artifacts"], "hashes": hashes}
+        return hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
+
+    async def _prepare_review(self, job: dict, docspec: dict) -> None:
+        from ..markdown_export import docspec_to_markdown
+
+        await self._write_artifact(job, "teacher_md", ".md", docspec_to_markdown(docspec))
+        hashes = {name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in self._artifact_files(job).items()}
+        review_id = self._review_id(job, hashes)
+        job["review"] = {"id": review_id, "hashes": hashes, "created_at": utcnow()}
+        job["preview_url"] = f"/api/jobs/{job['id']}/preview?review_id={review_id}"
+
+    def _reviewed_artifacts(self, job: dict, review_id: str) -> dict[str, bytes]:
+        review = job.get("review") or {}
+        if not review_id or review_id != review.get("id"):
+            raise ReviewConflict("Revisão ausente ou desatualizada. Reabre o job antes de aprovar.")
+        try:
+            files = {name: path.read_bytes() for name, path in self._artifact_files(job).items()}
+        except OSError as exc:
+            raise ReviewConflict("Artefactos de revisão em falta. Cria uma nova geração.") from exc
+        hashes = {name: hashlib.sha256(content).hexdigest() for name, content in files.items()}
+        if hashes != review.get("hashes") or self._review_id(job, hashes) != review_id:
+            raise ReviewConflict("Os artefactos mudaram após a revisão. Cria uma nova geração para rever e publicar.")
+        # Publicação consome estes bytes, sem voltar a ler caminhos mutáveis.
+        return {key: files[Path(path).name] for key, path in job["artifacts"].items()}
+
+    async def preview(self, job_id: str, review_id: str) -> bytes | None:
+        job = await self.get_job(job_id)
+        if job is None:
+            return None
+        return self._reviewed_artifacts(job, review_id)["html"]
 
     async def _write_artifact(self, job: dict, key: str, suffix: str, data: Any) -> None:
         path = self._artifact_path(job, suffix)
@@ -201,7 +288,8 @@ class PipelineRunner:
                 continue
             try:
                 if job["status"] == "publishing" and job["artifacts"].get("html"):
-                    await self._publish(job)
+                    async with self._publication_lock:
+                        await self._publish(job)
                 else:
                     await self._run_job(job)
             except Exception as exc:  # nunca matar o worker
@@ -286,8 +374,9 @@ class PipelineRunner:
                 expected_support="support" in docspec
             ).as_dict()
             html = embed_activity_support(html, docspec, job["slug"])
-            html = embed_activity_typography(html)
+            html = ensure_bridge_lite(embed_activity_typography(html))
             await self._write_artifact(job, "html", ".html", html)
+            await self._write_artifact(job, "validation", f"-validation-v{job['iteration']}.json", validation)
             await self._emit(job, "validation", validation)
 
             proofread = await self._phase(job, "proofreader", docspec, html)
@@ -303,26 +392,25 @@ class PipelineRunner:
             previous_html = html
             await self._emit(job, "repair", {"iteration": job["iteration"], "ticket": repair_ticket})
         else:
+            await self._prepare_review(job, docspec)
             job["status"] = "failed"
             job["error"] = "avaliação não passou dentro de max_iterations"
             await self._save(job)
             await self._emit(job, "failed", {"error": job["error"], "last_evaluation": evaluation})
             return
 
-        # markdown do professor
-        from ..markdown_export import docspec_to_markdown
-
-        teacher_md = docspec_to_markdown(docspec)
-        await self._write_artifact(job, "teacher_md", ".md", teacher_md)
+        await self._prepare_review(job, docspec)
 
         if job["auto_publish"]:
+            job["approval"] = {"review_id": job["review"]["id"], "approved_at": utcnow(), "auto": True}
             job["status"] = "publishing"
             await self._save(job)
-            await self._publish(job)
+            async with self._publication_lock:
+                await self._publish(job)
         else:
             job["status"] = "awaiting_review"
             await self._save(job)
-            await self._emit(job, "awaiting_review", {"preview": f"/outputs/{job['slug']}.html"})
+            await self._emit(job, "awaiting_review", {"preview": job["preview_url"], "review_id": job["review"]["id"]})
 
     async def _phase(self, job: dict, phase_name: str, *args, **kwargs) -> Any:
         phase = self.phases[phase_name]
@@ -352,21 +440,20 @@ class PipelineRunner:
         if not path_str:
             return None
         path = Path(path_str)
+        if path.resolve().parent != (self.config.outputs_dir / job["id"]).resolve():
+            raise ReviewConflict("Não é seguro retomar artefactos de outro job.")
         if not path.exists():
             return None
         await self._emit(job, "resumed_artifact", {"artifact": key})
         return await self.storage.read_json(path)
 
     async def _publish(self, job: dict) -> None:
-        from ..markdown_export import docspec_to_markdown
         from ..publish import publish_activity
 
-        docspec = await self.storage.read_json(Path(job["artifacts"]["docspec"]))
-        design_spec = await self.storage.read_json(Path(job["artifacts"].get("design_spec", "")), default=None)
-        teacher_md_path = job["artifacts"].get("teacher_md")
-        teacher_md = (
-            Path(teacher_md_path).read_text("utf-8") if teacher_md_path else docspec_to_markdown(docspec)
-        )
+        files = self._reviewed_artifacts(job, (job.get("approval") or {}).get("review_id", ""))
+        docspec = json.loads(files["docspec"])
+        design_spec = json.loads(files["design_spec"])
+        teacher_md = files["teacher_md"].decode("utf-8")
         meta = await asyncio.to_thread(
             publish_activity,
             self.config.repo_root,
@@ -375,6 +462,9 @@ class PipelineRunner:
             docspec,
             teacher_md,
             design_spec,
+            generation_id=job["id"],
+            review_id=job["approval"]["review_id"],
+            html_content=files["html"].decode("utf-8"),
         )
         job["status"] = "done"
         job["published"] = meta

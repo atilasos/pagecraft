@@ -1,11 +1,13 @@
+import asyncio
 import json
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
 
 from server.config import Config
 from server.events import EventHub
-from server.pipeline.runner import PipelineRunner, decide_repair, slugify
+from server.pipeline.runner import PipelineRunner, ReviewConflict, decide_repair, slugify
 from server.storage import Storage
 
 from fakes import FakeProvider
@@ -188,9 +190,9 @@ async def test_pipeline_happy_path_auto_publish(env):
     assert DOCSPEC["support"]["version"] in (config.activities_dir / slug / "index.html").read_text()
     catalog = json.loads(config.catalog_path.read_text("utf-8"))
     assert any(item["slug"] == slug for item in catalog["items"])
-    # artefactos de staging no formato histórico
-    assert (config.outputs_dir / f"{slug}-docspec.json").exists()
-    assert (config.outputs_dir / f"{slug}-evaluation-v1.json").exists()
+    # Todos os artefactos pertencem ao diretório do job.
+    assert (config.outputs_dir / job["id"] / f"{slug}-docspec.json").exists()
+    assert (config.outputs_dir / job["id"] / f"{slug}-evaluation-v1.json").exists()
 
 
 async def test_pipeline_repair_loop_then_pass(env):
@@ -246,6 +248,7 @@ async def test_start_requeues_interrupted_jobs(env):
     job = {
         "id": uuid.uuid4().hex[:12],
         "slug": "3ano-interrompido",
+        "artifact_version": 1,
         "topic": "Interrompido",
         "subject": "Matemática",
         "year": 3,
@@ -275,8 +278,8 @@ async def test_failed_job_can_publish_with_override(env):
     runner = PipelineRunner(config, storage, hub, provider, NoKnowledge(), NoKnowledge())
     job = await runner.create_job(topic="Difícil", subject="Matemática", year=3, duration=30)
     job = await _wait_status(runner, job["id"], {"failed"}, timeout=10)
-    assert await runner.approve(job["id"]) is None  # sem override não publica
-    published = await runner.approve(job["id"], override=True)
+    assert await runner.approve(job["id"], review_id=job["review"]["id"]) is None  # sem override não publica
+    published = await runner.approve(job["id"], review_id=job["review"]["id"], override=True)
     assert published["status"] == "done"
     assert (config.activities_dir / published["slug"] / "index.html").exists()
 
@@ -287,14 +290,14 @@ async def test_approve_publishes(env):
     runner = PipelineRunner(config, storage, hub, provider, NoKnowledge(), NoKnowledge())
     job = await runner.create_job(topic="Sílabas", subject="Português", year=1, duration=20)
     job = await _wait_status(runner, job["id"], {"awaiting_review"})
-    job = await runner.approve(job["id"])
+    job = await runner.approve(job["id"], review_id=job["review"]["id"])
     assert job["status"] == "done"
     assert (config.activities_dir / job["slug"] / "index.html").exists()
 
 
 async def test_same_topic_failed_job_cannot_replace_approved_job(env):
     config, storage, hub = env
-    config = __import__('dataclasses').replace(config, max_iterations=1)
+    config = replace(config, max_iterations=1)
     html_a = GOOD_HTML.replace('<main ', '<h1>Geração A revista</h1><main ')
     html_b = GOOD_HTML.replace('<main ', '<h1>Geração B falhada</h1><main ')
     provider = FakeProvider(
@@ -308,9 +311,12 @@ async def test_same_topic_failed_job_cannot_replace_approved_job(env):
         reviewed = Path(a['artifacts']['html']).read_bytes()
         b = await runner.create_job(topic='Frações', subject='Matemática', year=3, duration=30)
         b = await _wait_status(runner, b['id'], {'failed'})
-        published = await runner.approve(a['id'])
+        published = await runner.approve(a['id'], review_id=a['review']['id'])
         html = (config.activities_dir / published['slug'] / 'index.html').read_text()
         assert 'Geração A revista' in html and 'Geração B falhada' not in html
         assert Path(a['artifacts']['html']).read_bytes() == reviewed
+        assert (config.activities_dir / published['slug'] / 'index.html').read_bytes() == reviewed
+        assert a['slug'] != b['slug']
+        assert not set(a['artifacts'].values()) & set(b['artifacts'].values())
     finally:
         await runner.stop()
