@@ -108,6 +108,23 @@ test('contexto anterior assinala tarefa, revisão, produto, nível, língua e pa
       assert.match(panel.innerHTML,/Pista anterior:|Previous hint:/);`);
   }
 });
+for(const change of [{task_id:'item-2'},{revision:'r2'}]){
+  test('retoma JSON conserva '+Object.keys(change)[0]+' mesmo com pergunta e resposta iguais',()=>{
+    const run=activity();
+    run(`support.update({task_id:'item-1',revision:'r1',question:'Qual barra é maior?',answer:'A'});
+      support.requestHint();const saved=JSON.parse(JSON.stringify(emitted));
+      support.update(${JSON.stringify(change)});assert.match(panel.innerHTML,/Pista anterior:/);
+      const before=JSON.stringify(emitted);host('learning_restore',{events:saved});
+      assert.match(panel.innerHTML,/Pista anterior:/);
+      assert.equal(saved[0].payload.context.task_id,'item-1');assert.equal(saved[0].payload.context.revision,'r1');
+      assert.equal(JSON.stringify(emitted),before);assert.equal(spoken,0);
+      support.update({task_id:'item-1',revision:'r1'});assert.ok(!panel.innerHTML.includes('Pista anterior:'));
+      delete saved[0].payload.context.task_id;delete saved[0].payload.context.revision;
+      support.update(${JSON.stringify(change)});host('learning_restore',{events:saved});
+      assert.ok(!panel.innerHTML.includes('Pista anterior:'));
+      assert.ok(!Object.hasOwn(saved[0].payload.context,'task_id'));assert.ok(!Object.hasOwn(saved[0].payload.context,'revision'));`);
+  });
+}
 test('versões anteriores são consultáveis sem consumir pistas da versão atual e sem misturar atividades',()=>{
   const run=activity();
   run(`support.requestHint();const first=emitted.at(-1);

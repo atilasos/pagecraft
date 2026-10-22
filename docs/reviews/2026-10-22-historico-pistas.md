@@ -32,12 +32,12 @@ O registo local da pista passa a conservar o mesmo contexto já enviado em
 Uma assinatura local deteta alterações durante o trabalho; na retoma comparam-se
 os campos semânticos disponíveis no contexto guardado. Mudanças de etapa,
 versão, pergunta, resposta, produto, nível, obstáculo, composição ou língua
-assinalam a pista como anterior. Uma revisão ou mudança de `task_id` também é
-detetada enquanto existe a assinatura local.
+assinalam a pista como anterior. As pistas novas guardam também `task_id` e
+revisão, quando disponíveis, para comparar esses discriminantes após retoma.
 
 O contexto de acontecimentos antigos não contém a revisão nem o `task_id`.
-A retoma não inventa esses dados: compara apenas o contexto efetivamente
-guardado. Quando falta todo o contexto, apresenta essa ausência explicitamente.
+A retoma não inventa esses dados nos registos antigos: compara apenas o contexto
+efetivamente guardado. Quando falta todo o contexto, apresenta essa ausência explicitamente.
 As versões anteriores da mesma atividade são consultáveis, mas ficam excluídas
 da seleção de pistas usadas e do contexto enviado à IA da versão atual.
 O filtro de identidade da atividade é conservado.
@@ -148,3 +148,30 @@ acessibilidade não substitui esses ensaios.
 
 A branch fica local para revisão independente pelo agente principal. Não foi
 aberto PR, feito merge ou publicado qualquer conteúdo.
+
+## Ronda 2: discriminantes na retoma
+
+Base desta ronda: `52e65e61f4798fa5d74463699213563fd6369829`, worktree
+e branch acima, limpos à entrada. Revisão Standards r1 sem achados;
+Spec r1 com dois P2 reproduzidos. Relatório integral lido em
+`/tmp/pagecraft-support-spec-r1.md`. Ambos aceites.
+
+O primeiro P2 ocorria com duas tarefas da mesma etapa, pergunta e resposta
+iguais. A assinatura em memória distinguia `task_id` e `revision`, mas esses
+campos não viajavam em `hint_presented.context`. Após JSON e `learning_restore`,
+a comparação semântica perdia a distinção. A correção guarda os valores
+disponíveis no contexto e compara-os quando o registo os contém. Não reconstrói
+discriminantes ausentes em registos antigos nem modifica os objetos recebidos.
+
+```bash
+node --test --test-name-pattern='retoma JSON' tests/js/activity_support.test.cjs
+node --test tests/js/activity_support.test.cjs
+bash skills/sync-from-canonical.sh
+```
+
+Antes de editar o runtime, os dois testes novos falharam na perda da marca
+`Pista anterior`, separadamente para tarefa e revisão. Logs em
+`/tmp/pagecraft-r2-retoma-before.log`. Depois, 29 testes passam, zero falhas,
+em `/tmp/pagecraft-r2-retoma-after.log`. Também verificam persistência dos
+dois campos, retorno ao contexto original, compatibilidade de registos antigos,
+ausência de acontecimentos e ausência de áudio automático. Variantes sincronizadas.

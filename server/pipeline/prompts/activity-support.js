@@ -132,6 +132,7 @@
         duration_minutes:config.duration_minutes,task_description:plan().task_description,interaction:plan().interaction},
       stage:plan().title,stage_objective:plan().objective,criteria:plan().criteria,product:context.product||'',
       participant_count:members,language,obstacle:obstacle().id,question:context.question||obstacle().label[language],
+      task_id:context.task_id,revision:context.revision,
       answer:String(context.answer??'').slice(0,1500),level:context.level||'intermediate',
       observed_difficulties:failures.key===taskKey()?failures.observed:[],
       previous_hints:relevant().slice(-2).map(h=>({text:h.text,usefulness:h.usefulness||'not_reported'})),
@@ -231,7 +232,8 @@
       const original=hint.context;
       const previous=hint.unit_id!==unitId || hint.activity_version!==config.activity_version ||
         (hint.signature ? hint.signature!==signature() : !original ||
-          ['stage','question','answer','product','level','obstacle','participant_count','language'].some(key=>original[key]!==now[key]));
+          ['stage','question','answer','product','level','obstacle','participant_count','language'].some(key=>original[key]!==now[key]) ||
+          ['task_id','revision'].some(key=>Object.hasOwn(original,key) && original[key]!==now[key]));
       const field=(key,value)=>value==null||value===''?'':'<dt>'+esc(t(key))+'</dt><dd>'+esc(value)+'</dd>';
       return '<li><details data-support-disclosure="hint-'+index+'"><summary>'+esc(t('historyHint'))+' '+(index+1)+' · '+esc(original?.stage||hint.unit_id)+'</summary>'+
         (previous?'<p class="pc-support-note">'+esc(t('previousContext'))+'</p>':'')+
