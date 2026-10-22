@@ -94,7 +94,7 @@
     "revisions": "As previsões confirmadas em u1 ficam preservadas como previsões anteriores ao teste. A hipótese inicial conserva-se. A hipótese de u3 e a explicação são revisíveis e invalidam apenas a declaração do colega que confrontava a versão anterior. Conservar a declaração anterior no histórico de evidências, não como resposta à nova hipótese.",
     "noScore": "Sem nota, estrelas, pontuação, avaliação automática de texto aberto ou obrigação de acertar. Hipótese, explicação oral e contraexemplo são declarações. A variável pode receber feedback verificável sem bloquear.",
     "age": "Corpo >=20px, títulos >=28px, microtexto >=16px, linha <=55ch, alvos >=48px. Foco visível, labels, teclado nativo, nada dependente de arrastar. Century Gothic com Didact Gothic real e licença incorporadas pelo script canónico.",
-    "reflection": "Todos os itens facultativos. Retomar os três critérios iniciais e ajuda recebida. Integrado: reflexão individual do host com participante visível. Autónomo: reflexão local sem prometer envio ao professor.",
+    "reflection": "Todos os itens facultativos. Retomar os três critérios iniciais e ajuda recebida. Integrado: reflexão individual do host com participante visível. Autónomo: reflexão local individual com critérios na primeira pessoa, sem prometer envio ao professor nem preservação de respostas de vários participantes.",
     "supportIntegration": "Um aside data-pagecraft-support=uN junto da tarefa em cada etapa. Componente canónico incorporado. Atualizar contexto/revision na edição, manipulação, etapa e apoio, e em pagecraft-support-ready. Não duplicar modal, áudio ou contagem.",
     "attempts": "u3 variável alterada é a questão verificável: task_id u3-variavel. Só confirmar uma escolha não vazia emite attempt com answer/value e boolean correct. Três escolhas erradas distintas e consecutivas podem acionar apoio comum. Repetir a mesma não conta de novo; acerto reinicia. Previsões, hipóteses e contraexemplos não recebem correct inventado."
   },
@@ -143,7 +143,7 @@
             "default": "",
             "options": [
               "Atravessa",
-              "Pára",
+              "Para",
               "Ainda não sei"
             ]
           },
@@ -153,7 +153,7 @@
             "default": "",
             "options": [
               "Atravessa",
-              "Pára",
+              "Para",
               "Ainda não sei"
             ]
           },
@@ -251,7 +251,7 @@
             "default": null
           }
         ],
-        "render": "A mostra apoios nas margens, esquerda 2/direita 2 e tabuleiro. Testar e guardar A revela a travessia. A ação Baixar o apoio direito prepara B com direita 1; Testar e guardar B revela que pára. As duas fichas conservam topo, lado, alturas, previsão e resultado. Controlo próximo do apoio direito assinala a única mudança.",
+        "render": "A mostra apoios nas margens, esquerda 2/direita 2 e tabuleiro. Testar e guardar A revela a travessia. A ação Baixar o apoio direito prepara B com direita 1; Testar e guardar B revela que para. As duas fichas conservam topo, lado, alturas, previsão e resultado. Controlo próximo do apoio direito assinala a única mudança.",
         "transition": "Testar e guardar A; baixar só o apoio direito de 2 para 1; testar e guardar B. Sem escolha de posição ou tabuleiro. Não repetir emissões quando a mesma ficha já foi guardada. Nunca fazer desaparecer A ao mostrar B.",
         "constraint": "A/B têm a mesma projeção superior, mas alturas e resultados diferentes. O resultado deriva do estado do modelo, não da previsão escolhida.",
         "assessment": "Produz dois ensaios escolhidos intencionalmente, com previsões visíveis e resultados distintos, e vê uma única variável alterada."

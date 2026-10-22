@@ -25,7 +25,7 @@ Apresente os critérios antes do trabalho e aceite reformulá-los com a turma:
 
 Troquem quem controla o dispositivo e quem compara antes de u3. Em u4, o destinatário da explicação deve assumir o papel de quem a põe à prova. Pode ser a outra criança do par ou um colega de outro par. O professor ajuda a relacionar a procura com as palavras efetivamente ditas pelo par, evitando um teste desligado da explicação.
 
-Não anuncie a regra antes dos testes. Para o professor: os apoios ficam nas margens, o tabuleiro está presente e a altura esquerda fica em 2. A altura direita é a única variável. Em A 2/2, a personagem atravessa; em B 2/1, pára. Na projeção superior as alturas não aparecem. O resultado é uma regra didática do modelo. Não representa resistência, segurança ou todos os tipos de pontes reais; uma ponte inclinada real não é por isso impossível.
+Não anuncie a regra antes dos testes. Para o professor: os apoios ficam nas margens, o tabuleiro está presente e a altura esquerda fica em 2. A altura direita é a única variável. Em A 2/2, a personagem atravessa; em B 2/1, para. Na projeção superior as alturas não aparecem. O resultado é uma regra didática do modelo. Não representa resistência, segurança ou todos os tipos de pontes reais; uma ponte inclinada real não é por isso impossível.
 
 Um contraexemplo é "um caso que não combina com a explicação". A interface não decide se uma frase livre foi refutada. O colega pode dizer que não encontrou. O professor aprecia a relação entre explicação, exemplo e resultado; não encontrar nos testes feitos não prova uma afirmação universal.
 
@@ -47,7 +47,7 @@ Mudar de apoio conserva etapa, A/B, previsões e explicações compatíveis. O a
 
 São observáveis na simulação as configurações testadas, os resultados, a mudança de altura, a escolha de variável, as revisões e a mudança de apoio. São declarações as hipóteses, a explicação, o relato de contraexemplo e as confirmações de que algo foi explicado em voz alta. Não inferir a qualidade da fala, o entendimento individual ou a participação de cada membro a partir desses cliques.
 
-A reflexão retoma os três critérios e é facultativa em todos os itens. Pode indicar "Sozinho", "Com ajuda", "Quero praticar" ou "Prefiro não responder", e deixar estratégia ou próximo passo em branco. Integrada, a reflexão pertence a cada participante, à vez, com nome visível no host. Em modo autónomo é apenas local e não promete gravação para o professor. A observação e a interpretação do professor ficam separadas dos acontecimentos e da autoavaliação.
+A reflexão retoma os três critérios e é facultativa em todos os itens. Pode indicar "Sozinho", "Com ajuda", "Quero praticar" ou "Prefiro não responder", e deixar estratégia ou próximo passo em branco. Integrada, a reflexão pertence a cada participante, à vez, com nome visível no host. Em modo autónomo é individual e apenas local, com os critérios na primeira pessoa. O conjunto de campos é de uma criança, sem preservar reflexões separadas de vários participantes; cada criança pode também refletir oralmente. Não promete gravação para o professor. A observação e a interpretação do professor ficam separadas dos acontecimentos e da autoavaliação.
 
 ## Entrega para as fases seguintes
 
