@@ -252,3 +252,13 @@ def test_catalog_uses_historical_docspec_only_when_no_meta_declaration(repo):
     assert build_catalog(repo)['items'][0]['years'] == [3, 4]
     (dst / 'meta.json').write_text(json.dumps({'slug': 'historical', 'years': [], 'year': 2}))
     assert build_catalog(repo)['items'][0]['years'] == []
+
+
+def test_republish_preserves_historical_destination_when_only_age_is_supplied(repo, html_file):
+    dst = repo / 'activities' / 'historical'
+    dst.mkdir()
+    (dst / 'meta.json').write_text(json.dumps({'slug': 'historical', 'year': '3.º e 4.º anos'}))
+    meta = publish_activity(repo, 'historical', html_file, {**DOCSPEC, 'ageRange': '8–10 anos'}, TEACHER_MD)
+    assert meta['years'] == [3, 4]
+    changed = publish_activity(repo, 'historical', html_file, {**DOCSPEC, 'years': [2]}, TEACHER_MD)
+    assert changed['years'] == [2]

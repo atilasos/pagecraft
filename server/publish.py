@@ -214,7 +214,7 @@ def publish_activity(
     if "years" in docspec:
         meta["years"] = validate_years(docspec["years"])
     else:
-        meta["years"] = activity_years(meta, docspec)
+        meta["years"] = activity_years(existing_meta, docspec)
 
     # Validar o destino antes de alterar qualquer artefacto publicado.
     html = ensure_bridge_lite(html_path.read_text(encoding="utf-8"))
