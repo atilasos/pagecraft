@@ -295,6 +295,7 @@ async def whoami(session_id: str, request: Request):
     return {
         "student_id": student_id,
         "display_name": entry["display_name"],
+        "identity_version": entry["claimed_at"],
         "session": svc.project_session(session, role="student"),
     }
 
@@ -323,6 +324,7 @@ async def claim(
     return {
         "student_id": result["student_id"],
         "display_name": result["display_name"],
+        "identity_version": result["claimed_at"],
     }
 
 
