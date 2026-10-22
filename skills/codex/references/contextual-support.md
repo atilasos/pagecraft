@@ -82,3 +82,10 @@ Verifica pelo menos um obstáculo de cada unidade: primeira pista visível junto
 Muda a resposta, etapa e produto enquanto um pedido demora. A resposta anterior deve ser ignorada. Confirma também trabalho externo declarado, retorno ao guião e registos na realização ou sessão. Distingue pista apresentada, utilidade declarada e revisão observada. O PageCraft não valida um produto noutra aplicação a partir de uma declaração. Preserva a autoria do grupo e a reflexão de cada participante.
 
 O resumo posterior deriva dos mesmos registos de qualquer atividade e liga as conclusões às fontes. Propostas de melhoria ficam para revisão antes de mudar uma versão usada na turma. Regista como não verificado o que depender de um fornecedor ou browser que não tenha sido exercitado.
+
+
+## Ao alterar o componente comum
+
+Executa `uv run pytest tests/test_activity_support.py` e `node --test tests/js/activity_support.test.cjs`. Os exemplos em `tests/fixtures/support-examples.json` verificam planos distintos de Matemática, escrita e Scratch, não a qualidade de aulas completas.
+
+Para inspecionar o componente num browser, gera HTML autocontido com `uv run python scripts/render_support_examples.py --output /tmp/pagecraft-support-examples`. Estes ficheiros de ensaio não publicam atividades nem contactam IA. A avaliação de uma atividade gerada continua a exigir o seu próprio percurso, contexto e fontes.

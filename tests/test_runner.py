@@ -184,6 +184,8 @@ async def test_pipeline_happy_path_auto_publish(env):
     slug = job["slug"]
     assert (config.activities_dir / slug / "index.html").exists()
     assert (config.activities_dir / slug / "teacher.md").exists()
+    assert "PageCraftSupport.configure(" in (config.activities_dir / slug / "index.html").read_text()
+    assert DOCSPEC["support"]["version"] in (config.activities_dir / slug / "index.html").read_text()
     catalog = json.loads(config.catalog_path.read_text("utf-8"))
     assert any(item["slug"] == slug for item in catalog["items"])
     # artefactos de staging no formato histórico

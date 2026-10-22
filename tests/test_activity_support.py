@@ -62,3 +62,37 @@ def test_cli_embeds_the_plan_in_the_generated_html(tmp_path):
                            '--activity',str(activity),'--docspec',str(spec)],capture_output=True,text=True)
     assert result.returncode==0,result.stderr
     assert 'PageCraftSupport.configure(' in activity.read_text()
+
+
+@pytest.mark.parametrize('spec', EXAMPLES, ids=lambda spec:spec['slug'])
+def test_skill_builder_prompt_preserves_the_requested_support(spec, tmp_path):
+    spec_path=tmp_path/(spec['slug']+'-docspec.json');spec_path.write_text(json.dumps(spec))
+    result=subprocess.run([__import__('sys').executable,str(ROOT/'skills/codex/scripts/build_prompt.py'),str(spec_path)],
+                          cwd=ROOT,capture_output=True,text=True)
+    assert result.returncode==0,result.stderr
+    assert spec['units'][0]['support']['obstacles'][0]['hints'][0]['text']['pt']['individual'] in result.stdout
+    assert spec['support']['version'] in result.stdout
+    assert 'scripts/embed_activity_support.py' in result.stdout
+    assert 'data-pagecraft-support' in result.stdout
+
+
+def test_new_generation_requires_a_plan_but_archived_docspec_remains_valid():
+    from server.config import Config
+    from server.pipeline.phases import build_phases
+    from test_schemas import MINIMAL_DOCSPEC
+    archived=json.loads((ROOT/'server/pipeline/schemas/docspec.schema.json').read_text())
+    from jsonschema import Draft202012Validator
+    Draft202012Validator(archived).validate(MINIMAL_DOCSPEC)
+    schema=build_phases(Config())['architect'].schema
+    with pytest.raises(ValidationError):Draft202012Validator(schema).validate(MINIMAL_DOCSPEC)
+    generated=copy.deepcopy(MINIMAL_DOCSPEC)
+    generated['support']=EXAMPLES[0]['support']
+    generated['units'][0]['support']=EXAMPLES[0]['units'][0]['support']
+    Draft202012Validator(schema).validate(generated)
+
+
+def test_documented_schema_matches_the_schema_used_by_the_compiler():
+    import re
+    documentation=(ROOT/'server/pipeline/prompts/references/docspec-schema.md').read_text()
+    documented=json.loads(re.search(r'```json\n(.*?)\n```',documentation,re.S)[1])
+    assert documented==json.loads((ROOT/'server/pipeline/schemas/docspec.schema.json').read_text())
