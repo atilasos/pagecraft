@@ -11,9 +11,16 @@ function activity(spec=examples[0],twoPanels=false){
   if(twoPanels)config.units.u2=structuredClone(config.units.u1);
   const box=vm.createContext({assert,crypto,console,config,TextEncoder});
   vm.runInContext(`
-    const emitted=[],messages=[],documentEvents={},panelEvents={},utterances=[];let spoken=0;
-    function makePanel(unit,events){return {dataset:{pagecraftSupport:unit},innerHTML:'',classList:{add(){}},setAttribute(){},addEventListener(type,fn){events[type]=fn},
-      querySelector(){return {focus(){},scrollIntoView(){}}}};}
+    const emitted=[],messages=[],documentEvents={},panelEvents={},utterances=[],focusLog=[];let spoken=0;
+    function makePanel(unit,events){return {dataset:{pagecraftSupport:unit},markup:'',generation:0,classList:{add(){}},setAttribute(){},addEventListener(type,fn){events[type]=fn},
+      set innerHTML(value){this.markup=value;this.generation++},get innerHTML(){return this.markup},
+      closest(){return this.hidden||this.inert?this:null},
+      querySelector(selector){
+        if(selector==='.pc-support-action'&&!this.markup.includes('class="pc-support-action"'))return null;
+        const panel=this;
+        return {selector,generation:panel.generation,dataset:{},closest(){return panel},matches(value){return selector===value},
+          focus(){document.activeElement=this;focusLog.push(this)},scrollIntoView(){}};
+      }};}
     const otherEvents={},panel=makePanel('u1',panelEvents),otherPanel=makePanel('u2',otherEvents);
     const document={activeElement:null,body:{},querySelectorAll(){return ${twoPanels?'[panel,otherPanel]':'[panel]'}},
       addEventListener(type,fn){(documentEvents[type]||=[]).push(fn)},
@@ -320,4 +327,54 @@ test('indisponibilidade da voz é comunicada dentro do modal sem o fechar',()=>{
     assert.equal(emitted.at(-1).payload.action,'notice');
     assert.match(emitted.at(-1).payload.text,/não está disponível/);
     assert.equal(emitted.filter(e=>e.type==='hint_acknowledged').length,0);`);
+});
+
+
+test('retoma explícita e professor devolvem foco à ação atual nos três percursos',()=>{
+  for(const route of ['standalone','permanent','studio'])for(const action of ['continue','teacher']){
+    const run=activity();
+    run(`host('learning_preferences',{route:'${route}'});
+      let respond;
+      window.PageCraftSupportModal={open(payload,callback){respond=callback},close(){}};
+      support.requestHint('u1',true);const hint=support.currentHintId();
+      document.activeElement={modal:true};const generation=panel.generation;
+      if('${route}'==='standalone')respond('${action}',hint);
+      else host('support_modal_action',{action:'${action}',hint_id:hint});
+      assert.equal(document.activeElement.selector,'.pc-support-action');
+      assert.equal(document.activeElement.generation,panel.generation);
+      if('${action}'==='teacher'){
+        assert.ok(panel.generation>generation);
+        host('support_teacher_requested',{help_request_id:'teacher-confirmed'});
+        assert.equal(document.activeElement.selector,'.pc-support-action');
+        assert.equal(document.activeElement.generation,panel.generation);
+      }
+      assert.equal(support.currentHintId(),hint);
+      assert.equal(emitted.filter(e=>e.type==='hint_acknowledged').length,1);
+      assert.equal(emitted.filter(e=>e.type==='hint_acknowledged')[0].payload.hint_id,hint);`);
+  }
+});
+
+test('pedir outra pista ou indicar bloqueio mantém o foco no modal novo',()=>{
+  for(const action of ['next','stuck']){
+    const run=activity();
+    run(`host('learning_preferences',{route:'permanent'});
+      support.requestHint('u1',true);const previous=support.currentHintId();
+      document.activeElement={modal:true};const focusCount=focusLog.length;
+      host('support_modal_action',{action:'${action}',hint_id:previous});
+      assert.notEqual(support.currentHintId(),previous);
+      assert.equal(emitted.at(-1).type,'support_modal');assert.equal(emitted.at(-1).payload.action,'open');
+      assert.equal(focusLog.length,focusCount);
+      assert.equal(document.activeElement.modal,true);`);
+  }
+});
+
+test('retoma obsoleta ou painel inativo não recebe foco',()=>{
+  for(const change of ["support.update({revision:'changed'})","panel.hidden=true","panel.inert=true"]){
+    const run=activity();
+    run(`host('learning_preferences',{route:'permanent'});
+      support.requestHint('u1',true);const previous=support.currentHintId();
+      ${change};document.activeElement={unchanged:true};const count=focusLog.length;
+      host('support_modal_action',{action:'continue',hint_id:previous});
+      assert.equal(focusLog.length,count);assert.equal(document.activeElement.unchanged,true);`);
+  }
 });
