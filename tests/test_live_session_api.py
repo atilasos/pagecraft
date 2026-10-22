@@ -485,3 +485,26 @@ async def test_individual_identity_version_survives_reload_but_changes_after_rel
     assert (await client.get(path + '/me', headers=original_cookie)).status_code == 401
     newer = await client.post(path + '/claim', json={'student_id': student_id})
     assert newer.json()['identity_version'] != first['identity_version']
+
+
+async def test_outbox_replay_requires_the_original_individual_identity(client):
+    session = await _session(client, students=('Ana', 'Bruno'))
+    path = f"/api/sessions/{session['id']}"
+    ana, bruno = session['roster']
+    first = await client.post(path + '/claim', json={'student_id': ana})
+    body = {'events': [{'event_id': 'pending-ana', 'type': 'attempt', 'payload': {'correct': True}}],
+            'expected_identity': {'student_id': ana, 'version': first.json()['identity_version']}}
+    original_cookie = _student_cookie(first)
+    other = await client.post(path + '/claim', json={'student_id': bruno})
+    wrong_child = await client.post(path + '/events', json=body, headers=_student_cookie(other))
+    assert wrong_child.status_code == 409
+    assert wrong_child.json()['detail']['code'] == 'identity_changed'
+    await client.post(path + '/release/' + ana)
+    renewed = await client.post(path + '/claim', json={'student_id': ana})
+    wrong_version = await client.post(path + '/events', json=body, headers=_student_cookie(renewed))
+    assert wrong_version.status_code == 409
+    assert wrong_version.json()['detail']['code'] == 'identity_changed'
+    assert (await client.post(path + '/events', json=body, headers=original_cookie)).status_code == 401
+    for sid in (ana, bruno):
+        history = (await client.get(path + f'/students/{sid}/history')).json()['events']
+        assert not any(event.get('event_id') == 'pending-ana' for event in history)

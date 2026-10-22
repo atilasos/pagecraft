@@ -23,6 +23,7 @@ from ..storage import Storage
 from .errors import (
     ClassroomError,
     CompositionChangedError,
+    IdentityChangedError,
     InvalidPitItemError,
     InvalidSessionEventError,
     SessionClosedError,
@@ -774,10 +775,12 @@ class ClassroomService:
             }
         return self._seen_event_ids[session_id]
 
-    async def ingest_events(self, session_id: str, student_id: str, events: list[dict]) -> list[dict]:
+    async def ingest_events(self, session_id: str, student_id: str, events: list[dict], *, identity_version: str | None = None) -> list[dict]:
         """Aceita lote de eventos do aluno (at-least-once, dedup por event_id)."""
         async with self._session_locks[session_id]:
-            await self._require_writable_unlocked(session_id, student_id)
+            session = await self._require_writable_unlocked(session_id, student_id)
+            if identity_version is not None and session['roster'][student_id].get('claimed_at') != identity_version:
+                raise IdentityChangedError('A identidade mudou. O trabalho por enviar conserva a autoria anterior.')
             seen = await self._seen(session_id)
             accepted = []
             log = self.events_log(session_id)

@@ -544,6 +544,7 @@ function createStudentTransport() {
 
   async function post(path, body) {
     if (!hasIdentity()) return null;
+    const request = generation;
     const controller = new AbortController();
     requests.add(controller);
     try {
@@ -553,7 +554,7 @@ function createStudentTransport() {
         body: JSON.stringify(body),
         signal: controller.signal,
       });
-      if (resp.status === 401) {
+      if (resp.status === 401 && request === generation) {
         invalidateStudentIdentity();
         return null;
       }
@@ -572,28 +573,20 @@ function createStudentTransport() {
     if (!batch.length) { flushing = false; return; }
     const request = generation;
     try {
-      // A different claim can replace the shared HttpOnly cookie in another tab.
-      // Check the public identity version before replaying this tab's individual queue.
-      if (!state.workGroup) {
-        const identity = await fetch(`/api/sessions/${state.session.id}/me`);
-        if (request !== generation) return;
-        if (identity.status === 401) { invalidateStudentIdentity(); return; }
-        if (!identity.ok) return;
-        const me = await identity.json();
-        if (request !== generation) return;
-        if (me.student_id !== state.studentId || me.identity_version !== state.identityVersion) {
-          invalidateStudentIdentity();
-          return;
-        }
-      }
       const resp = await post(
         `/api/sessions/${state.session.id}/events`,
-        { events: batch }
+        { events: batch, ...(!state.workGroup ? {
+          expected_identity: {student_id:state.studentId, version:state.identityVersion},
+        } : {}) }
       );
       if (request !== generation) return;
       if (resp?.status === 409) {
         const error = await resp.json();
         if (request !== generation) return;
+        if (error.detail?.code === 'identity_changed') {
+          invalidateStudentIdentity();
+          return;
+        }
         if (error.detail?.code === 'composition_changed') {
           const conflicts = new Set(error.detail.event_ids);
           outbox.forEach(event => { if (conflicts.has(event.event_id)) event.composition_conflict = true; });

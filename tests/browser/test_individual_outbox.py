@@ -104,3 +104,59 @@ def test_overflow_preserves_accepted_work_and_never_claims_everything_saved(page
         expect(page.frame_locator('#activity-frame').locator('#animals')).to_have_value('Primeiro trabalho aceite')
         page.get_by_role('button', name='Guardar para continuar', exact=True).click()
         expect(page.locator('#save-work-status')).to_contain_text('Guardado.')
+
+
+@pytest.mark.parametrize('same_child', [False, True], ids=['other-child', 'new-claim-same-child'])
+def test_reload_never_restores_another_identity_version(page, studio_origin, same_child):
+    with classroom(studio_origin) as (teacher, session, path):
+        enter(page, studio_origin, session)
+        before = page.request.get(studio_origin + path + '/me').json()
+        page.route('**/events', lambda route: route.abort('internetdisconnected'))
+        lesson = page.frame_locator('#activity-frame')
+        lesson.locator('#animals').fill('Só pertence à entrada antiga')
+        lesson.locator('#animals').press('Tab')
+        page.get_by_role('button', name='Guardar para continuar', exact=True).click()
+        expect(page.locator('#save-work-status')).to_contain_text('não foi possível guardar tudo')
+        old_key, old_events = queue_data(page)[0]
+        # Leave the activity before the teacher releases it, as with a closed
+        # tab being reopened. Its SSE must not clear the remembered session.
+        page.goto(studio_origin + '/api/health')
+        teacher.post(path + '/release/' + before['student_id']).raise_for_status()
+        # Release revokes the previous cookie before any new identity is chosen.
+        assert page.request.get(studio_origin + path + '/me').status == 401
+        sid = before['student_id'] if same_child else next(sid for sid in session['roster'] if sid != before['student_id'])
+        claim = page.request.post(studio_origin + path + '/claim', data={'student_id': sid})
+        assert claim.ok
+        assert claim.json()['identity_version'] != before['identity_version']
+        page.unroute('**/events')
+        page.goto(studio_origin + '/student/')
+        expect(page.locator('#activity-frame')).to_be_visible(timeout=15000)
+        expect(lesson.locator('#animals')).to_have_value('')
+        page.get_by_role('button', name='Guardar para continuar', exact=True).click()
+        expect(page.locator('#save-work-status')).to_contain_text('Guardado.')
+        assert dict(queue_data(page))[old_key] == old_events
+        assert len(queue_data(page)) == 2
+        for student_id in session['roster']:
+            events = teacher.get(path + '/students/' + student_id + '/history').json()['events']
+            assert not any(e.get('payload', {}).get('detail', {}).get('value') == 'Só pertence à entrada antiga' for e in events)
+
+
+def test_live_cookie_change_keeps_old_queue_without_sending_as_new_child(page, studio_origin):
+    with classroom(studio_origin) as (teacher, session, path):
+        enter(page, studio_origin, session)
+        original = page.request.get(studio_origin + path + '/me').json()
+        page.route('**/events', lambda route: route.abort('internetdisconnected'))
+        lesson = page.frame_locator('#activity-frame')
+        lesson.locator('#animals').fill('Trabalho de Ana por enviar')
+        lesson.locator('#animals').press('Tab')
+        page.get_by_role('button', name='Guardar para continuar', exact=True).click()
+        expect(page.locator('#save-work-status')).to_contain_text('não foi possível guardar tudo')
+        old_key, old_events = queue_data(page)[0]
+        bruno = next(sid for sid in session['roster'] if sid != original['student_id'])
+        assert page.request.post(studio_origin + path + '/claim', data={'student_id': bruno}).ok
+        page.unroute('**/events')
+        page.get_by_role('button', name='Guardar para continuar', exact=True).click()
+        expect(page.locator('#step-code')).to_be_visible()
+        assert dict(queue_data(page))[old_key] == old_events
+        events = teacher.get(path + '/students/' + bruno + '/history').json()['events']
+        assert not any(e.get('payload', {}).get('detail', {}).get('value') == 'Trabalho de Ana por enviar' for e in events)
