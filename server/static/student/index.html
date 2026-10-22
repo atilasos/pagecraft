@@ -49,10 +49,22 @@
         <button class="ghost" id="save-work" type="button">Guardar para continuar</button>
         <button class="ghost" id="help-btn" type="button">Preciso de ajuda 🙋</button>
         <button class="ghost" id="group-reflect-btn" type="button" hidden>A minha reflexão</button>
+        <button class="ghost" id="return-ticket-btn" type="button" hidden aria-controls="return-ticket" aria-expanded="false">O meu próximo passo</button>
         <button class="ghost" id="pit-btn" type="button">O meu plano 📋</button>
       </span>
       <span id="save-work-status" class="muted" role="status" aria-live="polite"></span>
     </div>
+    <section id="return-ticket" class="card" hidden aria-labelledby="return-ticket-heading">
+      <h2 id="return-ticket-heading" tabindex="-1">O meu próximo passo</h2>
+      <p>Escolhe o teu nome para recordar o que querias experimentar.</p>
+      <div id="return-ticket-members" class="reflection-members" role="group" aria-label="Quem quer recordar o próximo passo?"></div>
+      <div id="return-ticket-intention" hidden aria-live="polite">
+        <h3 id="return-ticket-child"></h3>
+        <p>Da última vez quiseste experimentar…</p>
+        <p id="return-ticket-text" hidden></p>
+      </div>
+      <button id="return-ticket-back" class="ghost" type="button">Voltar ao trabalho</button>
+    </section>
     <section id="pending-group-work" class="card" hidden aria-live="polite">
       <h2>Trabalho do grupo anterior por confirmar</h2>
       <p>Estas respostas conservam os nomes anteriores. Pede ao professor para as rever contigo.</p>
@@ -93,6 +105,10 @@
         <div id="reflection-criteria"></div>
         <label for="reflection-strategy">O que te ajudou?</label>
         <textarea id="reflection-strategy" maxlength="1500" rows="2"></textarea>
+        <div id="reflection-previous" hidden>
+          <p>Da última vez quiseste experimentar…</p>
+          <p id="reflection-previous-step"></p>
+        </div>
         <label for="reflection-next">O que queres experimentar a seguir?</label>
         <textarea id="reflection-next" maxlength="1500" rows="2"></textarea>
         <p class="button-line"><button id="reflection-save" type="submit">Guardar a minha reflexão</button>
@@ -114,7 +130,7 @@
     </div>
   </div>
 </main>
-<script src="/student/reflection.js?v=groups-retoma-2"></script>
+<script src="/student/reflection.js?v=bilhete-regresso-1"></script>
 <script src="/student/support-modal.js?v=1"></script>
 <script src="/student/app.js?v=groups-retoma-2"></script>
 </body>
