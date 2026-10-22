@@ -39,7 +39,7 @@ def open_teacher(page, origin):
 
 
 def open_drawer(page, name):
-    page.locator('#work-groups').get_by_role('button', name=f'Ver percurso de {name}', exact=True).click()
+    page.locator('#work-groups').get_by_role('button', name=f'Ver percurso de {name}', exact=True).first.click()
 
 
 def test_pending_request_shows_own_context_and_correlated_hint_without_resolving(page, studio_origin):
@@ -89,3 +89,88 @@ def test_pending_request_shows_own_context_and_correlated_hint_without_resolving
         expect(context).to_contain_text('pedido pending')
         assert teacher.get(history_url).json() == before
         assert not errors
+
+
+def test_task_ids_bound_answers_and_only_the_matching_request_is_resolved(page, studio_origin):
+    from playwright.sync_api import expect
+    with classroom(studio_origin) as (teacher, pair, other, session, path, ids):
+        post(pair, path,
+             ('right-answer', 'attempt', 'u2', {'task_id': 'layout', 'detail': {'value': 'Duas colunas', 'note': 'Esboço registado'}}),
+             ('wrong-task', 'attempt', 'u2', {'task_id': 'colour', 'detail': 'Outra tarefa na mesma etapa'}),
+             ('wrong-unit', 'attempt', 'u3', {'task_id': 'layout', 'detail': 'Outra etapa com o mesmo ID de tarefa'}),
+             ('legacy-hint', 'hint_presented', 'u2', {'hint_id': 'old', 'text': 'Pista sem ligação ao pedido'}),
+             ('help-layout', 'help_needed', 'u2', {'help_request_id': 'layout-help', 'task_id': 'layout', 'note': 'Organização do cartaz'}),
+             ('help-colour', 'help_needed', 'u2', {'help_request_id': 'colour-help', 'task_id': 'colour', 'note': 'Pedido que vamos resolver'}),
+             ('resolve-colour', 'help_resolved', 'u2', {'help_request_id': 'colour-help'}))
+        open_teacher(page, studio_origin)
+        open_drawer(page, 'Ana')
+        context = page.locator('#drawer-help')
+        expect(context).to_contain_text('Duas colunas')
+        expect(context).to_contain_text('Esboço registado')
+        for text in ['Outra tarefa', 'Outra etapa', 'Pista sem ligação', 'Pedido que vamos resolver']:
+            expect(context).not_to_contain_text(text)
+        expect(context.locator('article')).to_have_count(1)
+        expect(context).to_contain_text('não registado')
+        # A new response or usefulness declaration does not resolve help.
+        post(pair, path, ('later-answer', 'attempt', 'u2', {'task_id': 'layout', 'detail': 'Depois do pedido'}),
+             ('later-feedback', 'hint_feedback', 'u2', {'hint_id': 'old', 'usefulness': 'helped'}))
+        expect(page.locator('#drawer-events')).to_contain_text('Depois do pedido')
+        expect(context).to_contain_text('pedido layout-help')
+        expect(context).not_to_contain_text('Depois do pedido')
+        post(pair, path, ('resolved-layout', 'help_resolved', 'u2', {'help_request_id': 'layout-help'}))
+        expect(context).to_have_text('Sem pedidos de ajuda pendentes neste percurso.')
+        expect(page.locator('#drawer-events')).to_contain_text('declarou que já consegue continuar')
+        # Legacy requests without task/hint IDs keep explicit missing fields.
+        post(pair, path, ('legacy-help', 'help_needed', 'u2', {'note': 'Pedido antigo sem identificadores'}))
+        expect(context).to_contain_text('Pedido antigo sem identificadores')
+        for text in ['Duas colunas', 'Depois do pedido', 'Pista sem ligação']:
+            expect(context).not_to_contain_text(text)
+        post(pair, path, ('legacy-resolved', 'help_resolved', None, {}))
+        expect(context).to_have_text('Sem pedidos de ajuda pendentes neste percurso.')
+
+
+def test_group_composition_and_individual_voice_never_supply_another_requests_context(page, studio_origin):
+    from playwright.sync_api import expect
+    with classroom(studio_origin) as (teacher, pair, other, session, path, ids):
+        post(pair, path,
+             ('old-hint', 'hint_presented', 'u2', {'hint_id': 'reused', 'text': 'Pista de Ana e Bruno'}),
+             ('old-feedback', 'hint_feedback', 'u2', {'hint_id': 'reused', 'usefulness': 'helped'}))
+        group = pair.get(path + '/me').json()['work_group']
+        changed = teacher.patch(path + f'/groups/{group["id"]}/participants', json={
+            'participant_ids': [ids[0], ids[4]], 'mode': 'pair',
+        })
+        changed.raise_for_status()
+        group = changed.json()['work_group']
+        response = pair.post(path + '/events', json={'events': [{
+            'event_id': 'changed-help', 'type': 'help_needed', 'unit_id': 'u2',
+            'composition_version': group['composition_version'], 'access_version': group['access_version'],
+            'payload': {'help_request_id': 'new-group', 'hint_id': 'reused', 'note': 'Ajuda de Ana e Eva'},
+        }]})
+        response.raise_for_status()
+        assert response.json()['accepted'] == ['changed-help']
+        reflection = pair.post(path + '/groups/me/reflections', json={
+            'student_id': ids[0], 'event_id': 'ana-voice', 'composition_version': group['composition_version'],
+            'access_version': group['access_version'], 'expected_revision': 0, 'answers': {},
+            'strategy': 'Eu comparei os desenhos.', 'next_step': 'Quero experimentar outra vez.', 'skipped': False,
+        })
+        reflection.raise_for_status()
+        # Student access still cannot read a member's complete teacher history.
+        assert pair.get(path + f'/students/{ids[0]}/history').status_code == 403
+        open_teacher(page, studio_origin)
+        open_drawer(page, 'Ana')
+        context = page.locator('#drawer-help')
+        expect(context).to_contain_text('Trabalho conjunto · Ana + Eva')
+        expect(context).to_contain_text('Ajuda de Ana e Eva')
+        expect(context).not_to_contain_text('Pista de Ana e Bruno')
+        expect(context).not_to_contain_text('Ajudou, segundo o grupo')
+        expect(context).not_to_contain_text('Eu comparei os desenhos.')
+        history = page.locator('#drawer-events')
+        expect(history).to_contain_text('Trabalho conjunto · Ana + Bruno')
+        voice = history.locator('li').filter(has_text='Reflexão individual')
+        expect(voice).to_contain_text('Trabalho individual · Ana')
+        expect(voice).to_contain_text('Eu comparei os desenhos.')
+        expect(voice).not_to_contain_text('Trabalho conjunto')
+        page.locator('#drawer-close').click()
+        open_drawer(page, 'Eva')
+        expect(page.locator('#drawer-events')).not_to_contain_text('Eu comparei os desenhos.')
+        expect(page.locator('#drawer-events')).not_to_contain_text('Pista de Ana e Bruno')
