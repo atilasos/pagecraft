@@ -51,9 +51,14 @@ def support_configuration(docspec: dict, activity_id: str | None = None) -> dict
                         if text in seen_text[mode]:
                             raise ValueError(f'As pistas de u{i} precisam de abordagens diferentes em {mode}.')
                         seen_text[mode].add(text)
-        units[f'u{i}'] = dict(plan, title=unit['summary'])
+        units[f'u{i}'] = dict(plan, title=unit['summary'],
+            task_description=str(unit.get('textDescription', ''))[:1000],
+            interaction=unit.get('interaction', {}).get('render', '')[:600])
     return {'activity':activity_id or docspec.get('slug') or docspec['topic'], 'activity_version':header['version'],
             'objective':'; '.join(docspec.get('objectives', [])), 'languages':languages,
+            'age_range':docspec.get('ageRange') or 'não indicada',
+            'topic':docspec['topic'], 'duration_minutes':docspec.get('duration'),
+            'automatic_after_failures':header.get('automaticAfterFailures', 3),
             'externalWork':header.get('externalWork'), 'units':units}
 
 

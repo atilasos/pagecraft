@@ -96,3 +96,19 @@ def test_documented_schema_matches_the_schema_used_by_the_compiler():
     documentation=(ROOT/'server/pipeline/prompts/references/docspec-schema.md').read_text()
     documented=json.loads(re.search(r'```json\n(.*?)\n```',documentation,re.S)[1])
     assert documented==json.loads((ROOT/'server/pipeline/schemas/docspec.schema.json').read_text())
+
+
+def test_automatic_help_includes_age_task_and_configurable_observed_failure_threshold():
+    spec=copy.deepcopy(EXAMPLES[0])
+    spec['units'][0]['textDescription']='Comparar a mesma unidade.'
+    spec['units'][0]['interaction']={'render':'Duas barras manipuláveis.'}
+    config=support_configuration(spec)
+    assert config['age_range']=='8-9 anos'
+    assert config['automatic_after_failures']==3
+    assert config['units']['u1']['interaction']=='Duas barras manipuláveis.'
+    assert config['units']['u1']['task_description']=='Comparar a mesma unidade.'
+    for threshold in (0,2,5):
+        spec['support']['automaticAfterFailures']=threshold
+        assert support_configuration(spec)['automatic_after_failures']==threshold
+    spec['support']['automaticAfterFailures']=1
+    with pytest.raises(ValidationError):support_configuration(spec)

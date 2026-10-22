@@ -399,6 +399,18 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
         },
         "externalWork": {
           "$ref": "#/$defs/SupportLabel"
+        },
+        "automaticAfterFailures": {
+          "type": "integer",
+          "enum": [
+            0,
+            2,
+            3,
+            4,
+            5
+          ],
+          "default": 3,
+          "description": "Tentativas incorretas consecutivas e distintas antes de pedir IA; 0 desativa. Apenas confirmações observadas no PageCraft."
         }
       }
     },
