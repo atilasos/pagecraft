@@ -343,6 +343,18 @@ if(embedded&&!PRESENTATION)setInterval(()=>{if(ready&&!document.hidden)emit('hea
       dialog.setAttribute('aria-labelledby','pc-help-title');dialog.setAttribute('aria-describedby','pc-help-text');
       // Retomar exige uma escolha explícita; não existe áudio nem avanço automático.
       dialog.addEventListener('cancel',event=>event.preventDefault());
+      dialog.addEventListener('keydown',event=>{
+        if(event.key!=='Tab')return;
+        const buttons=Array.from(dialog.querySelectorAll('button:not([disabled])'));
+        const first=buttons[0],last=buttons.at(-1);
+        if(!first)return;
+        const active=document.activeElement;
+        if(event.shiftKey && (active===first || active===dialog || !dialog.contains(active))){
+          event.preventDefault();last.focus();
+        }else if(!event.shiftKey && (active===last || active===dialog || !dialog.contains(active))){
+          event.preventDefault();first.focus();
+        }
+      });
       dialog.addEventListener('click',event=>{
         const action=event.target.closest('[data-action]')?.dataset.action;
         if(!['listen','next','stuck','continue','teacher'].includes(action))return;
