@@ -1,25 +1,13 @@
 {
-  "pass": false,
-  "severity": "medium",
+  "pass": true,
+  "severity": "low",
   "linguistic_pass": true,
   "phase": "Proofreader",
   "activity": "pontes-duas-vistas",
   "reviewed_branch": "feat/pontes-duas-vistas",
-  "reviewed_builder_commit": "c5e4e11",
-  "html_sha256": "68adb782b8d7fc022b2b0e1fa4cb3a9beb85430a28c2d00e18d58795a1fe04e5",
-  "issues": [
-    {
-      "type": "semantic",
-      "severity": "medium",
-      "location": "u2, render() → trialCard; DocSpec modelContract.discoveryTiming",
-      "original": "u2 revela a vista lateral e resultados só por teste explícito",
-      "suggestion": "Em u2, revelar a vista lateral de cada ficha apenas depois do respetivo teste explícito, conservando A ao testar B.",
-      "reason": "O HTML chama sideView para A/B antes dos testes na etapa Testar, apesar do contrato de revelação posterior. Reparação de lógica encaminhada para Builder; não foi alterada na revisão textual.",
-      "route": "builder",
-      "status": "open",
-      "evidence": "render() chama trialCard(A,2,state.savedA) e trialCard(B,state.rightHeight,state.savedB). trialCard inclui sideView sempre que onlyTop é false, independentemente de tested."
-    }
-  ],
+  "reviewed_builder_commit": "204ee68",
+  "html_sha256": "7ec9b5d6d66cdb5b3f84b6c83fe204b5ee6a98ca82cdb8f1a8a1cb540a342b4e",
+  "issues": [],
   "repairs": [
     {
       "type": "orthography",
@@ -36,14 +24,14 @@
       "reason": "Distingue autoavaliação individual da produção conjunta; não promete conservar respostas de vários participantes no formulário local."
     }
   ],
-  "summary": "Revisão linguística PT-PT AO90 concluída, com correções textuais cirúrgicas e sem mudanças de lógica. Mantêm-se previsões históricas, hipótese revisível, variável única, contraexemplo do colega e declarações orais sem veredicto automático. A passagem global fica pendente da reparação Builder da revelação lateral e da avaliação real no browser.",
+  "summary": "Revisão linguística e semântica PT-PT AO90 aprovada após a reparação Builder. Laterais e alturas A/B surgem apenas após o respetivo teste; a ficha A mantém-se durante B. Texto, reflexão local individual e declarações sem classificação permanecem conformes. A validação real no browser pertence ao Evaluator e não foi executada nesta fase.",
   "acceptance_checks": [
     "Ortografia e gramática pt-PT AO90: OK após reparação",
     "Registo e adequação ao 3.º/4.º ano: OK na leitura textual",
     "Instruções e três apoios livres: OK na leitura textual",
     "Hipóteses e explicações orais identificadas como declarações: OK na leitura do texto e handlers",
     "Reflexão local individual e facultativa: OK no texto; host e participantes ainda não ensaiados",
-    "Alinhamento com DocSpec: FAIL na revelação lateral pré-teste; route Builder",
+    "Alinhamento com DocSpec: OK após c0cf22c; revelação lateral/alturas condicionada ao teste próprio de cada ficha",
     "DocSpec válido no schema canónico Draft202012: OK",
     "Componente de apoio e Gothic reincorporados pelos scripts canónicos: OK",
     "Testes de browser, teclado, larguras, retoma, limite de bytes e observação com crianças: NÃO EXECUTADOS pelo Proofreader; pertencem ao Evaluator"
@@ -54,5 +42,37 @@
     "Validação jsonschema Draft202012Validator de DocSpec e relatório",
     "node --check /tmp/pagecraft-proofreader-syntax.js"
   ],
-  "boundary": "Só rascunhos pontes-duas-vistas. Sem browser, registo, publicação, alterações a atividades existentes ou prompts comuns."
+  "boundary": "Só rascunhos pontes-duas-vistas. Sem browser, registo, publicação, alterações a atividades existentes ou prompts comuns.",
+  "resolved_issues": [
+    {
+      "type": "semantic",
+      "severity": "medium",
+      "location": "u2, render() → trialCard; DocSpec modelContract.discoveryTiming",
+      "original": "u2 revela a vista lateral e resultados só por teste explícito",
+      "suggestion": "Em u2, revelar a vista lateral de cada ficha apenas depois do respetivo teste explícito, conservando A ao testar B.",
+      "reason": "O HTML chama sideView para A/B antes dos testes na etapa Testar, apesar do contrato de revelação posterior. Reparação de lógica encaminhada para Builder; não foi alterada na revisão textual.",
+      "route": "builder",
+      "status": "resolved",
+      "evidence": "render() chama trialCard(A,2,state.savedA) e trialCard(B,state.rightHeight,state.savedB). trialCard inclui sideView sempre que onlyTop é false, independentemente de tested.",
+      "resolution": {
+        "builder_commit": "c0cf22c",
+        "builder_report_commit": "204ee68",
+        "response": "trialCard inclui sideView e alturas apenas no ramo tested. Antes do teste mostra Testa para revelar a vista de lado.; onlyTop mantém u1 sem lateral nem resultados. As chamadas de render conservam a ficha A quando B é testada.",
+        "verification": "Leitura da versão atual e execução isolada de trialCard em Node para A/B: antes/depois de teste e onlyTop. Sem browser nesta fase."
+      }
+    }
+  ],
+  "reviewed_html_commit": "c0cf22c",
+  "recheck": {
+    "html_sha256_before": "68adb782b8d7fc022b2b0e1fa4cb3a9beb85430a28c2d00e18d58795a1fe04e5",
+    "html_sha256_after": "7ec9b5d6d66cdb5b3f84b6c83fe204b5ee6a98ca82cdb8f1a8a1cb540a342b4e",
+    "scope": "Só relatório atualizado; HTML e outros ficheiros sem alterações pelo Proofreader nesta rechecagem.",
+    "checks": [
+      "AO90 e reflexão local individual preservados",
+      "trialCard antes/depois de tested para A e B: PASS em Node",
+      "onlyTop preserva u1 sem laterais: PASS em Node",
+      "Resultados A atravessa / B para: PASS em Node",
+      "Browser: não executado"
+    ]
+  }
 }
