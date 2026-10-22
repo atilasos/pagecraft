@@ -149,6 +149,8 @@ def main():
     if not refs.is_dir():
         refs = PAGECRAFT_REPO / "server/pipeline/prompts/references"
     experience = (refs / "activity-experience.md").read_text(encoding="utf-8")
+    support_rules = (refs / "contextual-support.md").read_text(encoding="utf-8")
+    support_plan = {"support": spec.get("support"), "units": [u.get("support") for u in units]}
     age_rules = (refs / "age-adaptation.md").read_text(encoding="utf-8")
     parts.append(f"""# PageCraft Builder
 
@@ -167,6 +169,13 @@ Objetivos: {json.dumps(objectives, ensure_ascii=False)}
 
 ## Adaptação à idade
 {age_rules}
+
+## Apoio contextual da atividade
+{support_rules}
+
+```json
+{json.dumps(support_plan, ensure_ascii=False, indent=2)}
+```
 
 ## Unidades SRTC-A
 {"".join(units_text)}

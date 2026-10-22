@@ -32,7 +32,8 @@ Transformar especificações SRTC-A (State, Render, Transition, Constraint, Asse
    - Descoberta: cor verde-suave + ícone ✓ + microcopy «Encontraste…».
    - A rever: cor âmbar-suave + ícone ↻ + microcopy «Quase, tenta novamente» e sugestão concreta. **Nunca vermelho de erro.**
    - Som **opt-in** (botão de ligar áudio visível); nunca som único portador de significado — sempre redundante a visual/texto.
-7. **Motion**:
+7. **Apoio contextual**: usa o plano do DocSpec e o componente comum de `references/contextual-support.md`. Coloca o painel junto da tarefa e atualiza o contexto em cada transição; incorpora o apoio antes da revisão.
+8. **Motion**:
    - `prefers-reduced-motion: reduce` desliga animações.
    - Sem *bounce*, sem *elastic*, sem `scale()` em hover.
    - *Easing* `ease-out`, duração ≤200ms.
