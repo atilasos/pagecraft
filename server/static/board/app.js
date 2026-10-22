@@ -44,7 +44,6 @@ function showPairingCode(code) {
 
 async function createPairing() {
   stopLiveSession();
-  board.removeAttribute("src");
   clearTimer(pairingTimer);
   clearTimer(sessionTimer);
   show(pairing);
@@ -139,7 +138,8 @@ async function checkSession() {
 }
 
 function startLiveSession(session) {
-  clearTimer(sessionTimer);
+  if (currentSessionId === session.id && stream) return;
+  stopLiveSession();
   show(live);
   sessionTitle.textContent = `${session.class_name} · ${session.activity_title}`;
   sessionStatus.textContent = "Aula em curso";
@@ -149,27 +149,24 @@ function startLiveSession(session) {
   // Presentation changes lesson navigation only; board access stays on its existing policy.
   const activityUrl = `/api/board/sessions/${encodeURIComponent(session.id)}/content?presentation=1`;
   if (board.getAttribute("src") !== activityUrl) board.src = activityUrl;
-  if (currentSessionId === session.id && stream) return;
-
-  stopLiveSession();
   currentSessionId = session.id;
   stream = new EventSource(`/api/board/sessions/${session.id}/stream`);
   const activeStream = stream;
   stream.addEventListener("session_state_snapshot", (event) => {
+    if (stream !== activeStream) return;
     const snapshot = parseObject(event.data);
     if (!snapshot) return;
     registerCollectiveEventListeners(activeStream, snapshot.event_types);
     applySessionState(snapshot);
   });
   stream.addEventListener("session_state_changed", (event) => {
+    if (stream !== activeStream) return;
     const delta = parseObject(event.data);
     if (delta) applySessionState(delta);
   });
   stream.addEventListener("error", () => {
-    stopLiveSession();
-    show(waiting);
-    waitingStatus.textContent = "A recuperar a ligação à aula…";
-    sessionTimer = later(checkSession, 1000);
+    if (stream !== activeStream) return;
+    finishLiveSession("A atualizar a sessão no quadro…");
   });
 }
 
@@ -205,6 +202,7 @@ function registerCollectiveEventListeners(activeStream, declarations) {
     };
     registeredNames.add(safeDeclaration.name);
     activeStream.addEventListener(safeDeclaration.name, (event) => {
+      if (stream !== activeStream) return;
       dispatchCollectiveEvent(safeDeclaration, event.data);
     });
   });
@@ -212,7 +210,6 @@ function registerCollectiveEventListeners(activeStream, declarations) {
 
 function finishLiveSession(message) {
   stopLiveSession();
-  board.removeAttribute("src");
   show(waiting);
   waitingStatus.textContent = message;
   sessionTimer = later(checkSession, 1500);
@@ -259,9 +256,19 @@ function dispatchCollectiveEvent(declaration, rawData) {
 }
 
 function stopLiveSession() {
+  clearTimer(sessionTimer);
+  sessionTimer = null;
   if (stream) stream.close();
   stream = null;
   currentSessionId = null;
+  board.removeAttribute("src");
+  board.hidden = false;
+  document.getElementById("group-codes-panel").hidden = true;
+  document.getElementById("group-codes-grid").replaceChildren();
+  sessionTitle.textContent = "";
+  sessionJoinCode.textContent = "";
+  sessionEntryUrl.textContent = "";
+  sessionStatus.textContent = "";
 }
 
 (async () => {
