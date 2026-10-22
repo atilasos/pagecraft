@@ -19,6 +19,11 @@
       groupResolvedNotice:'Registámos que já conseguem continuar, segundo a vossa indicação.',
       helpedNotice:'Registámos que a pista ajudou, segundo a tua indicação.', groupHelpedNotice:'Registámos que a pista ajudou, segundo a vossa indicação.',
       voiceMissing:'A leitura em voz alta não está disponível neste dispositivo.', voiceError:'Não foi possível ler esta pista.',
+      history:'Pistas que já experimentei', groupHistory:'Pistas que já experimentámos', historyHint:'Pista',
+      previousContext:'Pista anterior: o contexto mudou.', savedContext:'Contexto original não registado.',
+      version:'Versão', stage:'Etapa', question:'Pergunta', answer:'Resposta nessa altura', product:'Trabalho',
+      level:'Tipo de ajuda', participants:'Participantes', hintLanguage:'Língua', goal:'Objetivo da etapa', criteria:'Critérios',
+      support:'Com pistas', intermediate:'Passo a passo', challenge:'Mais desafios',
       outside:'Local de trabalho declarado.', observation:'O PageCraft só conhece o que foi feito ou declarado nesta página.',
       returned:'De volta ao guião. Regista o que fizeste ou pede uma pista.'},
     en: {resume:'I will try this', groupResume:'We will try this', pause:'A hint to help you continue', title:'One next step', hint:'I need a hint', groupHint:'We need a hint', obstacle:'Where do you need help?',
@@ -35,6 +40,11 @@
       resolvedNotice:'We recorded that you say you can continue now.', groupResolvedNotice:'We recorded that you say you can continue now.',
       helpedNotice:'We recorded that you say the hint helped.', groupHelpedNotice:'We recorded that you say the hint helped.',
       voiceMissing:'Reading aloud is not available on this device.', voiceError:'This hint could not be read aloud.',
+      history:'Hints I have tried', groupHistory:'Hints we have tried', historyHint:'Hint',
+      previousContext:'Previous hint: the context has changed.', savedContext:'Original context was not recorded.',
+      version:'Version', stage:'Step', question:'Question', answer:'Answer at the time', product:'Work',
+      level:'Kind of help', participants:'Participants', hintLanguage:'Language', goal:'Step objective', criteria:'Criteria',
+      support:'With hints', intermediate:'Step by step', challenge:'More challenges',
       outside:'Declared place of work.', observation:'PageCraft only knows what was done or reported on this page.',
       returned:'Back to the guide. Record what you did or ask for a hint.'}
   };
@@ -99,7 +109,7 @@
   const plan = () => config?.units[unitId];
   const obstacle = () => plan()?.obstacles.find(o=>o.id===context.obstacle) || plan()?.obstacles[0];
   const signature = () => JSON.stringify([unitId,context.task_id,context.answer,context.question,context.product,context.level,context.obstacle,context.revision,context.attempt,members,language]);
-  const relevant = () => history.filter(h=>h.unit_id===unitId && h.obstacle===obstacle().id && h.product===(context.product||'') && h.language===language);
+  const relevant = () => history.filter(h=>h.activity_version===config.activity_version && h.unit_id===unitId && h.obstacle===obstacle().id && h.product===(context.product||'') && h.language===language);
   function emit(type, payload={}, unit=unitId) {
     if(window.parent===window)return;
     window.parent.postMessage({pagecraft:1,type,unitId:unit,payload:{activity:config.activity,activity_version:config.activity_version,...payload},ts:Date.now()},'*');
@@ -139,11 +149,12 @@
   }
   function present(text, source, requestId=null, hintKey=null, automatic=false) {
     const originalContext=requestContext();
-    current={hint_id:id(),unit_id:unitId,obstacle:obstacle().id,product:context.product||'',text,source,
+    current={hint_id:id(),unit_id:unitId,activity_version:config.activity_version,context:originalContext,obstacle:obstacle().id,product:context.product||'',text,source,
       request_id:requestId,hint_key:hintKey,language,automatic,signature:signature(),usefulness:null};
     pending=null;notice='';
     if(!render()){current=null;return;}
     history.push(current);
+    render();
     emit('hint_presented',{hint_id:current.hint_id,hint_key:hintKey,text,source,request_id:requestId,
       obstacle:current.obstacle,product:current.product,language,context:originalContext,presentation:automatic?'modal':'inline'});
     if(automatic)showModal();
@@ -202,20 +213,43 @@
     if(route==='standalone')window.PageCraftSupportModal?.notice(modalHint,text);
     else emit('support_modal',{action:'notice',hint_id:modalHint,text});
   }
-  function listen() {
-    if(!current)return;
-    if(!window.speechSynthesis || typeof SpeechSynthesisUtterance==='undefined'){voiceNotice(t('voiceMissing'));return;}
-    const hintId=current.hint_id, utterance=new SpeechSynthesisUtterance(current.text);
-    utterance.lang=language==='pt'?'pt-PT':'en-GB';
-    utterance.onerror=()=>{if(current?.hint_id===hintId)voiceNotice(t('voiceError'));};
+  function readHint(hint, report=false) {
+    if(!hint)return;
+    const notify=text=>{if(report)voiceNotice(text);else {notice=text;render();}};
+    if(!window.speechSynthesis || typeof SpeechSynthesisUtterance==='undefined'){notify(t('voiceMissing'));return;}
+    const utterance=new SpeechSynthesisUtterance(hint.text);
+    utterance.lang=hint.language==='en'?'en-GB':'pt-PT';
+    utterance.onerror=()=>{if(history.includes(hint))notify(t('voiceError'));};
     window.speechSynthesis.cancel();window.speechSynthesis.speak(utterance);
-    emit('hint_listened',{hint_id:hintId});
+    if(report)emit('hint_listened',{hint_id:hint.hint_id});
+  }
+  function listen(){readHint(current,true);}
+  function historyMarkup(){
+    if(!history.length)return '';
+    const now=requestContext();
+    return '<details class="pc-support-history" data-support-disclosure="history"><summary>'+esc(t('history'))+'</summary><ol>'+history.map((hint,index)=>{
+      const original=hint.context;
+      const previous=hint.unit_id!==unitId || hint.activity_version!==config.activity_version ||
+        (hint.signature ? hint.signature!==signature() : !original ||
+          ['stage','question','answer','product','level','obstacle','participant_count','language'].some(key=>original[key]!==now[key]));
+      const field=(key,value)=>value==null||value===''?'':'<dt>'+esc(t(key))+'</dt><dd>'+esc(value)+'</dd>';
+      return '<li><details data-support-disclosure="hint-'+index+'"><summary>'+esc(t('historyHint'))+' '+(index+1)+' · '+esc(original?.stage||hint.unit_id)+'</summary>'+
+        (previous?'<p class="pc-support-note">'+esc(t('previousContext'))+'</p>':'')+
+        '<dl>'+field('stage',original?.stage||hint.unit_id)+field('version',hint.activity_version)+
+        (original?field('question',original.question)+field('answer',original.answer)+field('product',original.product)+
+          field('level',COPY[language][original.level]||original.level)+field('participants',original.participant_count)+
+          field('hintLanguage',original.language)+field('goal',original.stage_objective)+field('criteria',original.criteria?.join(' · ')):'')+'</dl>'+
+        (!original?'<p class="pc-support-note">'+esc(t('savedContext'))+'</p>':'')+
+        '<p class="pc-support-history-text" lang="'+(hint.language==='en'?'en-GB':'pt-PT')+'">'+esc(hint.text)+'</p>'+
+        '<button type="button" data-support-action="history-listen-'+index+'">'+esc(t('listen'))+' · '+esc(t('historyHint'))+' '+(index+1)+'</button></details></li>';
+    }).join('')+'</ol></details>';
   }
   function render() {
     const panel=panels.get(unitId);
     if(!panel || panel.isConnected===false || !plan())return false;
     const button=(action,label,disabled=false)=>'<button type="button" data-support-action="'+action+'" '+(disabled?'disabled':'')+'>'+esc(label)+'</button>';
     const active=document.activeElement?.closest?.('[data-pagecraft-support]')===panel?document.activeElement.dataset.supportAction:null;
+    const open=Array.from(panel.querySelectorAll?.('[data-support-disclosure][open]')||[],node=>node.dataset.supportDisclosure);
     const settings=(!locked?button('mode',members>1?t('alone'):t('pair')):'')+
       '<label>'+esc(t('obstacle'))+'<select data-support-obstacle>'+plan().obstacles.map(o=>'<option value="'+o.id+'" '+(obstacle().id===o.id?'selected':'')+'>'+esc(o.label[language])+'</option>').join('')+'</select></label>';
     panel.innerHTML='<h3>'+esc(t('title'))+'</h3>'+(current?
@@ -227,7 +261,8 @@
       '<div class="pc-support-controls">'+(location==='pagecraft'?
         (config.externalWork?button('external',t('external')+config.externalWork[language]):'')+button('reading',t(members>1?'discussion':'reading')):
         button('return',t('back')))+(teacherRequest?button('resolved',t('resolved')):'')+'</div>'+
-      '<p class="pc-support-notice" role="status">'+esc(notice)+'</p><p class="pc-support-note">'+esc(t('observation'))+'</p>';
+      historyMarkup()+'<p class="pc-support-notice" role="status">'+esc(notice)+'</p><p class="pc-support-note">'+esc(t('observation'))+'</p>';
+    for(const key of open){const disclosure=panel.querySelector('[data-support-disclosure="'+key+'"]');if(disclosure)disclosure.open=true;}
     if(active)panel.querySelector('[data-support-action="'+active+'"]')?.focus({preventScroll:true});
     return true;
   }
@@ -248,6 +283,7 @@
         if(action==='resolved')resolved();
         if(action==='ai')requestAI();
         if(action==='listen')listen();
+        if(action.startsWith('history-listen-'))readHint(history[Number(action.slice('history-listen-'.length))]);
         if(action==='mode'&&!locked){members=members===1?2:1;invalidate();resetFailures();render();}
         if(action==='external')setLocation(location==='pagecraft'?'external':'pagecraft');
         if(action==='return')setLocation('pagecraft');
@@ -265,7 +301,7 @@
     for(const event of events||[]){
       const p=event.payload||{};
       if(p.activity && p.activity!==config.activity)continue;
-      if(event.type==='hint_presented' && p.activity_version===config.activity_version)history.push({...p,unit_id:event.unit_id||event.unitId,usefulness:null});
+      if(event.type==='hint_presented')history.push({...p,unit_id:event.unit_id||event.unitId,usefulness:null});
       if(event.type==='hint_feedback'){const hint=history.find(h=>h.hint_id===p.hint_id);if(hint)hint.usefulness=p.usefulness;}
       if(event.type==='work_location')location=p.location;
       if(event.type==='help_needed')teacherRequest={request_id:p.help_request_id};

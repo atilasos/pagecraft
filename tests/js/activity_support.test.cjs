@@ -10,17 +10,18 @@ function activity(spec=examples[0]){
     units:Object.fromEntries(spec.units.map((u,i)=>['u'+(i+1),{...u.support,title:u.summary}]))};
   const box=vm.createContext({assert,crypto,console,config,TextEncoder});
   vm.runInContext(`
-    const emitted=[],messages=[],documentEvents={};let spoken=0;
-    const panel={dataset:{pagecraftSupport:'u1'},innerHTML:'',classList:{add(){}},setAttribute(){},addEventListener(){},
+    const emitted=[],messages=[],documentEvents={},panelEvents={},utterances=[];let spoken=0;
+    const panel={dataset:{pagecraftSupport:'u1'},innerHTML:'',classList:{add(){}},setAttribute(){},addEventListener(type,fn){panelEvents[type]=fn},
       querySelector(){return {focus(){},scrollIntoView(){}}}};
     const document={activeElement:null,body:{},querySelectorAll(){return [panel]},
       addEventListener(type,fn){(documentEvents[type]||=[]).push(fn)},
       dispatchEvent(event){for(const fn of documentEvents[event.type]||[])fn(event)}};
-    const window={parent:{postMessage(data){emitted.push(data)}},speechSynthesis:{cancel(){},speak(){spoken++}},
+    const window={parent:{postMessage(data){emitted.push(data)}},speechSynthesis:{cancel(){},speak(value){spoken++;utterances.push(value)}},
       addEventListener(type,fn){if(type==='message')messages.push(fn)}};
     const CustomEvent=class {constructor(type,opts={}){this.type=type;this.detail=opts.detail}};
     const SpeechSynthesisUtterance=class {constructor(text){this.text=text}};
     function host(type,payload,source=window.parent){messages.forEach(fn=>fn({source,data:{pagecraft:1,type,payload}}))}
+    function click(action){panelEvents.click({target:{closest(){return {dataset:{supportAction:action}}}}})}
   `,box);
   vm.runInContext(fs.readFileSync('server/pipeline/prompts/activity-support.js','utf8'),box);
   vm.runInContext(`const support=window.PageCraftSupport;support.configure(config);support.update({unit_id:'u1',answer:'Uma tentativa',level:'intermediate'});`,box);
@@ -63,6 +64,66 @@ test('restaurar o histórico conserva a progressão sem reapresentar uma pista',
 test('alterar uma resposta invalida a ajuda sem chamar o modelo',()=>{
   const run=activity();
   run(`support.requestHint();document.dispatchEvent({type:'input',target:{closest(selector){return selector==='[data-pagecraft-support]'?null:{dataset:{unit:'u1'}}}}});assert.equal(support.currentHintId(),null);assert.equal(emitted.filter(e=>e.type==='feedback_request').length,0);`);
+});
+test('consultar e ouvir pistas depois de editar não consome pistas nem emite acontecimentos',()=>{
+  const run=activity();
+  run(`support.requestHint();const first=emitted.at(-1);support.requestHint();
+    support.update({answer:'Resposta revista'});const before=JSON.stringify(emitted);
+    assert.equal(support.currentHintId(),null);assert.ok(panel.innerHTML.includes('Pistas que já experimentei'));
+    assert.ok(panel.innerHTML.includes(first.payload.text));assert.ok(panel.innerHTML.includes(first.payload.context.answer));
+    assert.ok(panel.innerHTML.includes(first.payload.activity_version));assert.match(panel.innerHTML,/Pista anterior: o contexto mudou/);
+    assert.equal(spoken,0);click('history-listen-0');
+    assert.equal(utterances.at(-1).text,first.payload.text);assert.equal(support.currentHintId(),null);
+    assert.equal(JSON.stringify(emitted),before);support.requestHint();assert.equal(JSON.stringify(emitted),before);
+    assert.match(panel.innerHTML,/professor/);`);
+});
+test('retomar conserva texto, contexto, autoria e língua originais da pista',()=>{
+  const run=activity();
+  run(`host('work_group_preferences',{route:'studio',participant_count:2});host('learning_preferences',{language:'en'});
+    support.requestHint();const first=emitted.at(-1);support.feedback('not_helped');support.requestHint();
+    const saved=emitted.map(e=>({...e,unit_id:e.unitId})),serialized=JSON.stringify(saved);
+    host('learning_preferences',{language:'pt'});support.update({answer:'Nova resposta',product:'Outro trabalho'});
+    const before=JSON.stringify(emitted);host('learning_restore',{events:saved});click('history-listen-0');
+    assert.equal(utterances.at(-1).text,first.payload.text);assert.equal(utterances.at(-1).lang,'en-GB');
+    assert.ok(panel.innerHTML.includes(first.payload.context.stage));assert.ok(panel.innerHTML.includes('lang="en-GB"'));
+    assert.match(panel.innerHTML,/Pista anterior/);assert.equal(support.currentHintId(),null);
+    assert.equal(JSON.stringify(emitted),before);assert.equal(JSON.stringify(saved),serialized);`);
+});
+test('consulta não troca a pista atual nem cancela um pedido IA pendente',()=>{
+  const run=activity();
+  run(`host('learning_preferences',{route:'permanent'});support.requestHint();support.requestHint();
+    const current=support.currentHintId();support.requestAI();const request=emitted.at(-1).payload.request_id;
+    const before=JSON.stringify(emitted);click('history-listen-0');
+    assert.equal(support.currentHintId(),current);assert.equal(JSON.stringify(emitted),before);
+    support.receive({request_id:request,unit_id:'u1',text:'Outra abordagem com IA'});
+    assert.equal(emitted.at(-1).payload.text,'Outra abordagem com IA');`);
+});
+test('contexto anterior assinala tarefa, revisão, produto, nível, língua e participantes',()=>{
+  for(const change of ["support.update({task_id:'outra'})","support.update({revision:'editada'})",
+    "support.update({product:'novo'})","support.update({level:'challenge'})",
+    "host('learning_preferences',{language:'en'})","host('work_group_preferences',{route:'studio',participant_count:2})"]){
+    const run=activity();
+    run(`support.requestHint();assert.ok(!panel.innerHTML.includes('Pista anterior:'));${change};
+      assert.match(panel.innerHTML,/Pista anterior:|Previous hint:/);`);
+  }
+});
+test('versões anteriores são consultáveis sem consumir pistas da versão atual e sem misturar atividades',()=>{
+  const run=activity();
+  run(`support.requestHint();const first=emitted.at(-1);
+    const old={...first,payload:{...first.payload,activity_version:'anterior',text:'Pista da versão anterior'}};
+    const foreign={...first,payload:{...first.payload,activity:'outra',text:'De outra atividade'}};
+    support.restore([old,foreign]);assert.ok(panel.innerHTML.includes('Pista da versão anterior'));
+    assert.ok(!panel.innerHTML.includes('De outra atividade'));assert.match(panel.innerHTML,/Pista anterior/);
+    const count=emitted.length;click('history-listen-0');assert.equal(emitted.length,count);
+    support.requestHint();assert.equal(emitted.at(-1).payload.hint_key,first.payload.hint_key);`);
+});
+test('histórico sem contexto não inventa o original e escapa conteúdo; voz indisponível não emite nada',()=>{
+  const run=activity();
+  run(`support.restore([{type:'hint_presented',unitId:'u1',payload:{activity:config.activity,activity_version:config.activity_version,
+      hint_id:'antiga',language:'pt',text:'<img src=x onerror=alert(1)>',obstacle:'antigo'}}]);
+    assert.match(panel.innerHTML,/Contexto original não registado/);assert.ok(panel.innerHTML.includes('&lt;img'));
+    assert.ok(!panel.innerHTML.includes('<img'));window.speechSynthesis=null;const count=emitted.length;
+    click('history-listen-0');assert.match(panel.innerHTML,/não está disponível/);assert.equal(emitted.length,count);`);
 });
 test('o texto de feedback local não se torna resposta do aluno',()=>{
   const run=activity();
