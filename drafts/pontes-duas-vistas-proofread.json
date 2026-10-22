@@ -5,8 +5,8 @@
   "phase": "Proofreader",
   "activity": "pontes-duas-vistas",
   "reviewed_branch": "feat/pontes-duas-vistas",
-  "reviewed_builder_commit": "a2f078b",
-  "html_sha256": "31a43c671330f80e6e30f51dc6035ef78313f7fb0be634fe71adcf505dbb57ae",
+  "reviewed_builder_commit": "5f6a4ed",
+  "html_sha256": "c4e77ff6fe3ba903a16332361cd759b23d42cc55e244bbaee1dcce30ab2fb1d5",
   "issues": [],
   "repairs": [
     {
@@ -32,7 +32,7 @@
       "commit": "ac66ab7"
     }
   ],
-  "summary": "Revisão final PT-PT AO90 aprovada. A personagem e a descrição acessível da sua posição surgem só após o teste, em coerência com a pista de observação; a concordância de 1 bloco foi corrigida. Mantêm-se a reflexão local individual, as previsões históricas, a hipótese revisível e o avanço sem exigir acerto. O apoio comum final foi reincorporado sem alterações ao bloco de 637b55d; a avaliação real no browser pertence ao Evaluator.",
+  "summary": "Revisão linguística e semântica PT-PT AO90 aprovada, sem novas pendências. A reparação canónica de retoma de foco altera apenas comportamento JavaScript: texto visível, rótulos acessíveis, figura, pistas e configuração mantêm-se iguais à versão aprovada em 1d0cb95. Preserva-se o histórico das correções anteriores. A avaliação real no browser pertence ao Evaluator.",
   "acceptance_checks": [
     "Ortografia e gramática pt-PT AO90: OK após reparação",
     "Registo e adequação ao 3.º/4.º ano: OK na leitura textual",
@@ -43,7 +43,8 @@
     "DocSpec válido no schema canónico Draft202012: OK",
     "Componente de apoio e Gothic reincorporados pelos scripts canónicos: OK",
     "Testes de browser, teclado, larguras, retoma, limite de bytes e observação com crianças: NÃO EXECUTADOS pelo Proofreader; pertencem ao Evaluator",
-    "Reparação P2 e novo texto acessível da personagem: OK; sem pendências linguísticas nesta fase"
+    "Reparação P2 e novo texto acessível da personagem: OK; sem pendências linguísticas nesta fase",
+    "Rechecagem pós-reparação de foco c4c8e6a: texto/aria/figura/pistas preservados; PASS linguístico mantido"
   ],
   "commands": [
     "python3 scripts/embed_activity_support.py --activity drafts/pontes-duas-vistas.html --docspec drafts/pontes-duas-vistas-docspec.json",
@@ -87,27 +88,23 @@
       }
     }
   ],
-  "reviewed_html_commit": "ac66ab7",
+  "reviewed_html_commit": "c4c8e6a",
   "recheck": {
-    "html_sha256_before": "7ec9b5d6d66cdb5b3f84b6c83fe204b5ee6a98ca82cdb8f1a8a1cb540a342b4e",
-    "html_sha256_integrated_before_text_repair": "910ce0ee1ebe0561a6a2c14592e934917966fe6873e237b44e0450727279362a",
-    "html_sha256_after": "31a43c671330f80e6e30f51dc6035ef78313f7fb0be634fe71adcf505dbb57ae",
-    "scope": "Rechecagem final após P2 e integração canónica PR61. Apenas correção textual de concordância no aria-label, scripts canónicos de incorporação e atualização deste relatório.",
+    "html_sha256_before": "31a43c671330f80e6e30f51dc6035ef78313f7fb0be634fe71adcf505dbb57ae",
+    "html_sha256_after": "c4e77ff6fe3ba903a16332361cd759b23d42cc55e244bbaee1dcce30ab2fb1d5",
+    "scope": "Só relatório atualizado após reparação canónica de foco c4c8e6a, documentada em 5f6a4ed. Nenhuma alteração linguística ou editorial nesta ronda.",
     "checks": [
-      "Novas frases de posição da personagem em PT-PT AO90: OK",
-      "Pista Repara/Reparem onde fica a personagem corresponde ao resultado visível: OK na leitura e execução Node",
-      "Figura e descrição de posição só após teste, para alturas 1/2/3: PASS em Node",
-      "Concordância acessível: 1 bloco / 2 blocos / 3 blocos PASS em Node",
-      "Previsões sem personagem e A/B revelados por teste próprio: PASS em Node",
-      "Reflexão local individual preservada: OK na leitura",
-      "Apoio comum final byte a byte igual ao incorporado em 637b55d: PASS",
-      "Reincorporação canónica de apoio idempotente e Gothic presente: PASS",
-      "Sintaxe dos scripts HTML com node --check: PASS",
+      "Texto HTML e rótulos acessíveis preservados: PASS por extração HTMLParser e comparação",
+      "Código próprio da atividade, incluindo figura e aria, anterior ao bloco de apoio: idêntico byte a byte a 1d0cb95",
+      "COPY de mensagens do apoio comum: idêntico a 1d0cb95",
+      "PageCraftSupport.configure com pistas e configuração: idêntico a 1d0cb95",
+      "Diff do bloco comum: apenas helper focusCurrentAction e encaminhamento/preservação de foco",
+      "Hash HTML final confirmado",
       "Schema canónico do relatório: PASS",
-      "Browser: não executado pelo Proofreader"
+      "Browser e retoma de foco: não executados nesta fase; reservados ao Evaluator"
     ]
   },
-  "reviewed_canonical_integration_commit": "637b55d",
+  "reviewed_canonical_integration_commit": "c4c8e6a",
   "recheck_history": [
     {
       "html_sha256_before": "68adb782b8d7fc022b2b0e1fa4cb3a9beb85430a28c2d00e18d58795a1fe04e5",
@@ -119,6 +116,25 @@
         "onlyTop preserva u1 sem laterais: PASS em Node",
         "Resultados A atravessa / B para: PASS em Node",
         "Browser: não executado"
+      ]
+    },
+    {
+      "html_sha256_before": "7ec9b5d6d66cdb5b3f84b6c83fe204b5ee6a98ca82cdb8f1a8a1cb540a342b4e",
+      "html_sha256_integrated_before_text_repair": "910ce0ee1ebe0561a6a2c14592e934917966fe6873e237b44e0450727279362a",
+      "html_sha256_after": "31a43c671330f80e6e30f51dc6035ef78313f7fb0be634fe71adcf505dbb57ae",
+      "scope": "Rechecagem final após P2 e integração canónica PR61. Apenas correção textual de concordância no aria-label, scripts canónicos de incorporação e atualização deste relatório.",
+      "checks": [
+        "Novas frases de posição da personagem em PT-PT AO90: OK",
+        "Pista Repara/Reparem onde fica a personagem corresponde ao resultado visível: OK na leitura e execução Node",
+        "Figura e descrição de posição só após teste, para alturas 1/2/3: PASS em Node",
+        "Concordância acessível: 1 bloco / 2 blocos / 3 blocos PASS em Node",
+        "Previsões sem personagem e A/B revelados por teste próprio: PASS em Node",
+        "Reflexão local individual preservada: OK na leitura",
+        "Apoio comum final byte a byte igual ao incorporado em 637b55d: PASS",
+        "Reincorporação canónica de apoio idempotente e Gothic presente: PASS",
+        "Sintaxe dos scripts HTML com node --check: PASS",
+        "Schema canónico do relatório: PASS",
+        "Browser: não executado pelo Proofreader"
       ]
     }
   ]
