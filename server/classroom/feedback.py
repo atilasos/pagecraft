@@ -1,6 +1,6 @@
 """Feedback IA em tempo útil às respostas dos alunos.
 
-Fila assíncrona com 2 workers, cache por (unidade, resposta normalizada) e
+Fila assíncrona com 2 workers, cache por unidade e contexto integral e
 orçamento de tempo: passado o timeout o aluno recebe uma mensagem pré-escrita
 não punitiva e o professor vê o pedido pendente no dashboard. O feedback IA
 é camada extra: o feedback determinista da atividade continua a mandar.

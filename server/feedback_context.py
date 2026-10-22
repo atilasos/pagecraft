@@ -4,7 +4,6 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-import unicodedata
 
 FEEDBACK_SCHEMA = {
     "type": "object",
@@ -40,10 +39,9 @@ Não afirmes que o professor leu ou viu o pedido. Não uses emojis nem travessõ
 def cache_key(unit_id: str | None, payload: dict) -> str:
     # IDs de transporte não mudam o sentido; todo o restante contexto muda.
     semantic = {k: v for k, v in payload.items() if k != 'request_id'}
-    for key in ('question', 'expected', 'answer'):
-        value = unicodedata.normalize('NFKD', str(semantic.get(key, '')).lower().strip())
-        semantic[key] = re.sub(r'\s+', ' ', ''.join(c for c in value if not unicodedata.combining(c)))
-    raw = json.dumps([unit_id, semantic], sort_keys=True, ensure_ascii=False)
+    # Acentos e maiúsculas podem ser o objeto da tarefa. A versão invalida
+    # entradas antigas que perderam essas distinções na normalização.
+    raw = json.dumps(['feedback-v2', unit_id, semantic], sort_keys=True, ensure_ascii=False)
     return hashlib.sha256(raw.encode()).hexdigest()
 
 

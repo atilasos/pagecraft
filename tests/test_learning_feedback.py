@@ -7,6 +7,33 @@ from test_learning import learning_clients, register, start
 from server.feedback_context import TIMEOUT_MESSAGE
 
 
+@pytest.mark.parametrize('answers', [('avó', 'avô'), ('Lisboa', 'lisboa')])
+async def test_permanent_feedback_cache_keeps_spelling_distinctions(learning_clients, answers):
+    app, teacher, pupil = learning_clients
+    activity, _ = await register(teacher)
+    await start(pupil, activity['code'])
+    hints = ['Lê a palavra em voz alta.', 'Compara a escrita com o exemplo.']
+    provider = FakeProvider([{'feedback': hint} for hint in hints])
+    app.state.learning_feedback.provider = provider
+    for number, answer in enumerate(answers):
+        response = await pupil.post('/api/learning/me/feedback', json={
+            'unit_id': 'u1', 'request_id': f'spelling-{number}',
+            'context': {'question': 'Revê a palavra.', 'answer': answer},
+        })
+        assert response.status_code == 200
+        assert response.json()['text'] == hints[number]
+        assert response.json()['source'] == 'ai'
+    repeated = await pupil.post('/api/learning/me/feedback', json={
+        'unit_id': 'u1', 'request_id': 'spelling-repeat',
+        'context': {'question': 'Revê a palavra.', 'answer': answers[-1]},
+    })
+    assert repeated.status_code == 200
+    assert repeated.json()['text'] == hints[-1]
+    assert repeated.json()['source'] == 'cache'
+    assert repeated.json()['request_id'] == 'spelling-repeat'
+    assert len(provider.calls) == 2
+
+
 async def test_permanent_code_feedback_is_contextual_private_and_idempotent(learning_clients):
     app, teacher, pupil = learning_clients
     activity, _ = await register(teacher)
