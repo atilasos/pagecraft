@@ -43,6 +43,30 @@ def open_drawer(page, name):
     page.locator('#work-groups').get_by_role('button', name=f'Ver percurso de {name}', exact=True).first.click()
 
 
+def test_teacher_actions_keep_the_recipient_separate_from_the_author(page, studio_origin):
+    from playwright.sync_api import expect
+    with classroom(studio_origin) as (teacher, pair, other, session, path, ids):
+        message = teacher.post(path + '/message', json={'student_id': ids[0], 'text': 'Compara as duas zonas.'})
+        message.raise_for_status()
+        highlight = teacher.post(path + '/control', json={'action': 'highlight', 'student_id': ids[0], 'unit_id': 'u2'})
+        highlight.raise_for_status()
+        # The persisted API record stores the recipient, not an author field.
+        assert message.json()['student_id'] == ids[0]
+        assert 'author' not in message.json()
+        declarations = {entry['name']: entry for entry in teacher.get('/api/session-event-types').json()['types']}
+        assert declarations['teacher_message']['authors'] == ['teacher']
+        open_teacher(page, studio_origin)
+        open_drawer(page, 'Ana')
+        history = page.locator('#drawer-events')
+        for text in ['mensagem enviada: Compara as duas zonas.', 'atenção chamada para u2']:
+            row = history.locator('li').filter(has_text=text)
+            expect(row).to_contain_text('Professor · Destinatário: Ana')
+            expect(row).not_to_contain_text('Trabalho individual')
+        joined = history.locator('li').filter(has_text='entrou em conjunto')
+        expect(joined).to_contain_text('Sessão')
+        expect(joined).not_to_contain_text('Trabalho conjunto')
+
+
 def test_pending_request_shows_own_context_and_correlated_hint_without_resolving(page, studio_origin):
     from playwright.sync_api import expect
     errors = []
