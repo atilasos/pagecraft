@@ -78,3 +78,12 @@ O modelo de escrita continua a ser um processo servidor, como no ADR-0005. Os lo
 Os hashes protegem a correspondência entre revisão e artefactos. Não são uma assinatura contra alguém com acesso de escrita ao código e ao estado do servidor. Se um job novo perde os seus ficheiros, o professor cria outra geração. Jobs antigos não recebem uma aprovação por inferência dos caminhos históricos.
 
 O mount público `/outputs`, as atividades entregues e o catálogo real não foram modificados. Não foram chamadas IA real, APIs de publicação remota, PRs ou merge.
+
+## Integração com o contrato de anos
+
+O agente principal integrou `feat/catalog-years-index-api` nesta branch para
+resolver a sobreposição em publicação e testes. A resolução conserva a validação
+de `years` antes da instalação, o snapshot dos bytes revistos e o rename atómico.
+Inclui os testes das duas frentes e duas regressões de interação: anos declarados
+numa geração revista com repetição idempotente e rejeição de anos inválidos antes
+de instalar a atividade. Esta integração é local e segue para revisão do diff.

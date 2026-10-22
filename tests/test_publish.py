@@ -342,3 +342,22 @@ def test_generation_installs_complete_directory_atomically(repo, html_file, monk
     assert not (repo / 'activities/immutable').exists()
     assert not list(repo.glob('.publish-*'))
     assert json.loads((repo / 'catalog.json').read_text())['count'] == 0
+
+
+def test_reviewed_generation_preserves_declared_years_on_retry(repo, html_file):
+    docspec = {**DOCSPEC, 'years': [4, 3, 4]}
+    identity = {'generation_id': 'job-years', 'review_id': 'review-years'}
+    first = publish_activity(repo, 'reviewed-years', html_file, docspec, TEACHER_MD, **identity)
+    catalog = (repo / 'catalog.json').read_bytes()
+    assert first['years'] == [3, 4]
+    assert build_catalog(repo)['items'][0]['years'] == [3, 4]
+    assert publish_activity(repo, 'reviewed-years', html_file, docspec, TEACHER_MD, **identity) == first
+    assert (repo / 'catalog.json').read_bytes() == catalog
+
+
+def test_reviewed_generation_rejects_invalid_years_before_installation(repo, html_file):
+    with pytest.raises(ValueError, match='years'):
+        publish_activity(repo, 'invalid-years', html_file, {**DOCSPEC, 'years': [True]}, TEACHER_MD,
+                         generation_id='job-years', review_id='review-years')
+    assert not (repo / 'activities' / 'invalid-years').exists()
+    assert not list(repo.glob('.publish-*'))
