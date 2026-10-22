@@ -152,14 +152,14 @@ const priorHint=el=>beforeHints.has(el)?beforeHints.get(el):hint();
 document.addEventListener('input',event=>beforeHints.set(event.target,hint()),true);
 function fresh(){return {step:0,level:'intermediate',initialHypothesis:'',predictionA:'',predictionB:'',predictionsConfirmed:false,savedA:false,savedB:false,rightHeight:2,changedVariable:'',variableConfirmed:false,lastConfirmedVariable:'',currentHypothesis:'',explanation:'',explainedOrally:false,hypothesisRevision:0,peerRightHeight:1,peerTest:null,peerConclusion:'',peerComment:'',peerOral:false,peerRevision:null,reflectionChoices:['','',''],reflection:''};}
 let state=fresh();
-function emit(type,unitId,payload){
+function emit(type,unitId,payload,notifySupport=true){
  if(PRESENTATION||!ready||restoring)return;
  const event={pagecraft:1,type,unitId:unitId||null,payload:payload||{},ts:Date.now()};
- document.dispatchEvent(new CustomEvent('pagecraft:activity-event',{detail:{type:event.type,unitId:event.unitId,payload:event.payload}}));
+ if(notifySupport)document.dispatchEvent(new CustomEvent('pagecraft:activity-event',{detail:{type:event.type,unitId:event.unitId,payload:event.payload}}));
  if(embedded)window.parent.postMessage(event,'*');
 }
 // Canonical postMessage helper names; activity_state uses the host completion envelope.
-window.PageCraftBridge={emit,activityState:(u,s)=>emit('activity_state',u,{state:s}),unitStarted:u=>emit('unit_started',u,{}),levelChanged:(u,level)=>emit('level_changed',u,{level}),attempt:(u,correct,detail)=>emit('attempt',u,{correct:!!correct,detail:detail||''}),discovery:(u,message)=>emit('discovery',u,{message}),assessment:(u,result,detail)=>emit('assessment_result',u,{result,detail:detail||''}),askForFeedback:(u,question,answer,expected)=>emit('feedback_request',u,{question,answer,expected:expected||''}),helpNeeded:(u,note)=>emit('help_needed',u,{note:note||''}),hintPresented:(u,hintId,text,context)=>emit('hint_presented',u,{hint_id:hintId,text,context}),hintFeedback:(u,hintId,usefulness)=>emit('hint_feedback',u,{hint_id:hintId,usefulness}),hintAcknowledged:(u,hintId,action)=>emit('hint_acknowledged',u,{hint_id:hintId,action}),hintListened:(u,hintId)=>emit('hint_listened',u,{hint_id:hintId}),workLocation:(u,location,label)=>emit('work_location',u,{location,label}),helpResolved:(u,note)=>emit('help_resolved',u,{note}),share:(u,what)=>emit('share_requested',u,{what})};
+window.PageCraftBridge={emit,activityState:(u,s)=>emit('activity_state',u,{state:s}),unitStarted:u=>emit('unit_started',u,{}),levelChanged:(u,level)=>emit('level_changed',u,{level}),attempt:(u,correct,detail)=>emit('attempt',u,{correct:!!correct,detail:detail||''}),discovery:(u,message)=>emit('discovery',u,{message}),assessment:(u,result,detail,notifySupport=true)=>emit('assessment_result',u,{result,detail:detail||''},notifySupport),askForFeedback:(u,question,answer,expected)=>emit('feedback_request',u,{question,answer,expected:expected||''}),helpNeeded:(u,note)=>emit('help_needed',u,{note:note||''}),hintPresented:(u,hintId,text,context)=>emit('hint_presented',u,{hint_id:hintId,text,context}),hintFeedback:(u,hintId,usefulness)=>emit('hint_feedback',u,{hint_id:hintId,usefulness}),hintAcknowledged:(u,hintId,action)=>emit('hint_acknowledged',u,{hint_id:hintId,action}),hintListened:(u,hintId)=>emit('hint_listened',u,{hint_id:hintId}),workLocation:(u,location,label)=>emit('work_location',u,{location,label}),helpResolved:(u,note)=>emit('help_resolved',u,{note}),share:(u,what)=>emit('share_requested',u,{what})};
 const unit=()=> 'u'+(state.step+1);
 const hint=()=>window.PageCraftSupport?.currentHintId()||null;
 const trim=(v,max)=>typeof v==='string'?Array.from(v).slice(0,max).join(''):'';
@@ -183,8 +183,8 @@ function sendState(){
  emit('activity_state',unit(),payload);
  if(!embedded){try{sessionStorage.setItem(KEY,JSON.stringify(payload));}catch(e){$('storage-status').textContent='O armazenamento desta aba não está disponível. Mantenham esta página aberta.';}}
 }
-function assess(field,value,kind='student_explanation',origin='student_declaration',afterHint=hint(),u=unit(),extra={}){
- PageCraftBridge.assessment(u,'recorded',{activity:SLUG,field,value,kind,origin,after_hint_id:afterHint,...extra});
+function assess(field,value,kind='student_explanation',origin='student_declaration',afterHint=hint(),u=unit(),extra={},notifySupport=true){
+ PageCraftBridge.assessment(u,'recorded',{activity:SLUG,field,value,kind,origin,after_hint_id:afterHint,...extra},notifySupport);
 }
 function context(){
  document.querySelectorAll('[data-pagecraft-support]').forEach(panel=>panel.inert=PRESENTATION||!ready);
@@ -193,11 +193,14 @@ function context(){
 }
 function changed(){revision++;context();sendState();renderNavigation();}
 function remember(field,oldHint){if(!dirty.has(field))dirty.set(field,oldHint);}
-function flush(){for(const [field,h] of dirty){const u=field==='peerComment'?'u4':'u3';assess(field,state[field],field==='peerComment'?'peer_statement':'student_explanation','student_declaration',h,u,{hypothesis_revision:state.hypothesisRevision});}dirty.clear();}
+// Editing already synchronized the support context. Blur records evidence without rebuilding its pointer target.
+function flush(){for(const [field,h] of dirty){const u=field==='peerComment'?'u4':'u3';assess(field,state[field],field==='peerComment'?'peer_statement':'student_explanation','student_declaration',h,u,{hypothesis_revision:state.hypothesisRevision},false);}dirty.clear();}
 function invalidatePeer(){state.peerConclusion='';state.peerRevision=null;}
 function revise(){state.hypothesisRevision=Math.min(Number.MAX_SAFE_INTEGER,state.hypothesisRevision+1);invalidatePeer();}
 function warn(text){$('navigation-status').hidden=false;$('navigation-status').textContent=text;}
 function renderNavigation(){
+ const status=$('navigation-status');
+ if(!status.hidden){const pending=ready?missing(state.step):'A aguardar a recuperação do trabalho pelo anfitrião.';status.textContent=pending;status.hidden=!pending;}
  const reach=reachable();document.querySelectorAll('[data-step]').forEach(b=>{const n=Number(b.dataset.step);b.setAttribute('aria-current',n===state.step?'step':'false');b.setAttribute('aria-disabled',String(!ready||n>reach));b.setAttribute('aria-describedby','navigation-status');});
  $('previous').hidden=state.step===0;$('next').textContent=state.step===3?'Terminar e refletir':'Seguinte';$('next').setAttribute('aria-disabled',String(!ready||!!missing(state.step)));$('next').setAttribute('aria-describedby','navigation-status');
 }
