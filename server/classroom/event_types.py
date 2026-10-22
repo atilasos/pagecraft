@@ -239,7 +239,7 @@ SESSION_EVENT_TYPES = SessionEventRegistry(
                         "usefulness": "helped ou not_helped, segundo o grupo."}),
         _event("hint_acknowledged", "activity", student_visible=True,
                payload={"hint_id": "Pista do modal reconhecida por uma escolha explícita.",
-                        "action": "continue, next ou teacher; não comprova leitura ou compreensão."}),
+                        "action": "continue, next, stuck ou teacher; não comprova leitura ou compreensão."}),
         _event("hint_listened", "activity", student_visible=True,
                payload={"hint_id": "O grupo pediu a leitura; não comprova que ouviu até ao fim."}),
         _event("work_location", "activity", student_visible=True,

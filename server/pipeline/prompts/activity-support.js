@@ -10,6 +10,7 @@
       external:'Estou a trabalhar em ', groupExternal:'Estamos a trabalhar em ',
       resolved:'Já consigo continuar', groupResolved:'Já conseguimos continuar',
       wait:'A preparar uma pista. Podes continuar enquanto esperas.',
+      groupWait:'A preparar uma pista. Podem continuar enquanto esperam.',
       escalate:'Mostra ao professor o que tentaste e onde ficaste preso. Usa «Pedir ajuda ao professor».',
       groupEscalate:'Mostrem ao professor o que tentaram e onde ficaram presos. Usem «Pedir ajuda ao professor».',
       callTeacher:'Chama o professor e mostra esta etapa.',
@@ -52,17 +53,18 @@
     if(!current)return;
     modalHint=current.hint_id;
     const payload={action:'open',hint_id:modalHint,text:current.text,language,title:t('pause'),
-      labels:{listen:t('listen'),next:t('next'),teacher:t('teacher'),continue:t('resume')}};
+      labels:{listen:t('listen'),next:t('next'),stuck:t('stuck'),teacher:t('teacher'),continue:t('resume')}};
     if(route==='standalone')window.PageCraftSupportModal?.open(payload,modalAction);
     else emit('support_modal',payload);
   }
   function modalAction(action,hintId){
     if(!current || hintId!==current.hint_id || hintId!==modalHint)return;
     if(action==='listen'){listen();return;}
-    if(!['continue','next','teacher'].includes(action))return;
+    if(!['continue','next','stuck','teacher'].includes(action))return;
     emit('hint_acknowledged',{hint_id:hintId,action,presentation:'modal'});
     closeModal();
-    if(action==='next'){feedback('not_helped');requestHint(undefined,true);}
+    if(action==='stuck')feedback('not_helped');
+    if(action==='next'||action==='stuck')requestHint(undefined,true);
     if(action==='teacher')help();
   }
   function taskKey(){return JSON.stringify([unitId,context.task_id||context.question,context.product,context.level,context.obstacle,members,language]);}

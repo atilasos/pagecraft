@@ -154,7 +154,7 @@ test('falha do fornecedor usa pistas revistas no modal e permite outra abordagem
     support.receive({request_id:req,unit_id:'u1',source:'unavailable',text:'Falha técnica'});
     assert.equal(emitted.filter(e=>e.type==='hint_presented').at(-1).payload.source,'guide');
     const first=support.currentHintId();
-    host('support_modal_action',{hint_id:first,action:'next'});
+    host('support_modal_action',{hint_id:first,action:'stuck'});
     assert.equal(emitted.filter(e=>e.type==='hint_feedback').at(-1).payload.usefulness,'not_helped');
     assert.notEqual(support.currentHintId(),first);assert.equal(emitted.at(-1).payload.action,'open');
     host('support_modal_action',{hint_id:support.currentHintId(),action:'teacher'});
@@ -175,4 +175,16 @@ test('contexto extenso continua a caber no contrato de eventos sem perder idade 
     support.receive({request_id:p.request_id,unit_id:'u1',text:'🟩'.repeat(200)});
     const hint=emitted.filter(e=>e.type==='hint_presented').at(-1).payload;
     assert.ok(new TextEncoder().encode(JSON.stringify(hint)).length<12000);`);
+});
+
+
+test('pedir outra pista no modal não declara automaticamente falta de utilidade',()=>{
+  const run=activity();
+  run(`host('learning_preferences',{route:'permanent'});config.automatic_after_failures=2;
+    support.recordAttempt({answer:'A',correct:false});support.recordAttempt({answer:'B',correct:false});
+    const req=emitted.find(e=>e.type==='feedback_request').payload.request_id;
+    support.receive({request_id:req,unit_id:'u1',text:'Compara as partes.'});
+    const first=support.currentHintId();host('support_modal_action',{hint_id:first,action:'next'});
+    assert.equal(emitted.filter(e=>e.type==='hint_feedback').length,0);
+    assert.notEqual(support.currentHintId(),first);`);
 });

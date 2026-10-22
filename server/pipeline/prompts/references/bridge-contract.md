@@ -28,7 +28,7 @@ O **nome interno** é o identificador canónico no servidor. O **nome na ponte**
 | `help_needed` | `help_needed` | `PageCraftBridge.helpNeeded(unitId, note)` | `note` — Contexto curto e opcional sobre o pedido de ajuda. |
 | `hint_presented` | `hint_presented` | `PageCraftBridge.hintPresented(unitId, hintId, text, context)` | `hint_id` — Pista apresentada; não comprova leitura.<br>`text` — Ação mostrada.<br>`context` — Etapa, tentativa, critérios e versão do guião. |
 | `hint_feedback` | `hint_feedback` | `PageCraftBridge.hintFeedback(unitId, hintId, usefulness)` | `hint_id` — Pista a que a declaração se refere.<br>`usefulness` — helped ou not_helped, segundo o grupo. |
-| `hint_acknowledged` | `hint_acknowledged` | `PageCraftBridge.hintAcknowledged(unitId, hintId, action)` | `hint_id` — Pista do modal reconhecida por uma escolha explícita.<br>`action` — continue, next ou teacher; não comprova leitura ou compreensão. |
+| `hint_acknowledged` | `hint_acknowledged` | `PageCraftBridge.hintAcknowledged(unitId, hintId, action)` | `hint_id` — Pista do modal reconhecida por uma escolha explícita.<br>`action` — continue, next, stuck ou teacher; não comprova leitura ou compreensão. |
 | `hint_listened` | `hint_listened` | `PageCraftBridge.hintListened(unitId, hintId)` | `hint_id` — O grupo pediu a leitura; não comprova que ouviu até ao fim. |
 | `work_location` | `work_location` | `PageCraftBridge.workLocation(unitId, location, label)` | `location` — Local declarado: external, pagecraft, reading ou discussion.<br>`label` — Nome da aplicação ou contexto externo, quando aplicável. |
 | `help_resolved` | `help_resolved` | `PageCraftBridge.helpResolved(unitId, note)` | `note` — O grupo declarou que já consegue continuar; não comprova intervenção docente. |

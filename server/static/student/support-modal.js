@@ -19,7 +19,7 @@
       dialog.addEventListener('cancel',event=>event.preventDefault());
       dialog.addEventListener('click',event=>{
         const action=event.target.closest('[data-action]')?.dataset.action;
-        if(!['listen','next','continue','teacher'].includes(action))return;
+        if(!['listen','next','stuck','continue','teacher'].includes(action))return;
         const callback=handler,hintId=activeId;
         if(action!=='listen')close();
         callback?.(action,hintId);
@@ -32,7 +32,7 @@
     const title=document.createElement('h2');title.id='pc-help-title';title.textContent=String(payload.title||'Um próximo passo').slice(0,100);
     const text=document.createElement('p');text.id='pc-help-text';text.className='pc-help-text';text.textContent=payload.text.slice(0,400);
     const buttons=document.createElement('div');buttons.className='pc-help-buttons';
-    for(const action of ['listen','next','teacher','continue']){
+    for(const action of ['listen','next','stuck','teacher','continue']){
       const button=document.createElement('button');button.type='button';button.dataset.action=action;
       button.textContent=String(payload.labels?.[action]||action).slice(0,100);buttons.append(button);
     }
