@@ -331,7 +331,7 @@
       opacity: 0.65;
     }
     .stamp-small { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; }
-    .stamp-main { font-size: 0.75rem; font-weight: 800; line-height: 1; }
+    .stamp-main { max-width: 54px; margin-inline: auto; font-size: 0.75rem; font-weight: 800; line-height: 1.1; }
     .actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 6px; }
     .action, .variant-toggle {
       display: inline-flex;
@@ -562,20 +562,9 @@
       const isM28P = item => hasTag(item, "m28p");
       const viewerUrl = (slug, view) => "./viewer.html?slug=" + encodeURIComponent(slug || "") + "&view=" + encodeURIComponent(view);
 
-      function itemYears(item) {
-        const source = [item.year, item.ageRange, ...(item.tags || [])].join(" ");
-        const explicit = new Set();
-        for (const match of source.matchAll(/([1-4])\s*(?:\.\s*º|º|o)?\s*[-.]?\s*ano/gi)) explicit.add(Number(match[1]));
-        if (explicit.size) return explicit;
-        const ages = /(\d+)\s*[–-]\s*(\d+)\s*anos/i.exec(source);
-        if (ages) {
-          const years = new Set();
-          for (let age = Number(ages[1]); age <= Number(ages[2]); age += 1) {
-            if (age >= 6 && age <= 9) years.add(age - 5);
-          }
-          return years;
-        }
-        return new Set();
+      function yearsLabel(years) {
+        if (!years.length) return "Sem ano indicado";
+        return years.map(year => year + ".º").join(" e ") + (years.length === 1 ? " ano" : " anos");
       }
 
       function itemCategory(item) {
@@ -615,7 +604,7 @@
           const item = { ...raw };
           item.tags = Array.isArray(raw.tags) ? raw.tags : [];
           item._index = index;
-          item._years = itemYears(item);
+          item.years = Array.isArray(raw.years) ? raw.years : [];
           item._search = itemSearch(item);
           return item;
         });
@@ -669,7 +658,7 @@
       }
 
       function matchesYear(item) {
-        return state.year === "todos" || item._years.has(Number(state.year));
+        return state.year === "todos" || item.years.includes(Number(state.year));
       }
 
       function matchedGroup(group, query) {
@@ -685,8 +674,7 @@
       }
 
       function stampHtml(item, seed) {
-        const years = [...item._years].sort();
-        const label = years.length === 1 ? years[0] + ".º ano" : "1.º CEB";
+        const label = yearsLabel(item.years);
         const tilt = ((Number(seed) * 37) % 9) - 4;
         return '<div class="stamp" style="--tilt:' + tilt + 'deg" role="img" aria-label="Carimbo: ' + esc(label) + '">' +
           '<span class="stamp-small">PageCraft</span><span class="stamp-main">' + esc(label) + '</span></div>';
@@ -703,7 +691,7 @@
       function variantHtml(item) {
         return '<li class="variant">' +
           '<div class="variant-title">' + esc(item._variantName) +
-            '<div class="variant-meta">' + esc(item.ageRange || item.year || "Faixa etária ajustável") + ' · ' +
+            '<div class="variant-meta">' + esc(yearsLabel(item.years)) + ' · ' +
               (item.duration ? esc(item.duration) + ' min' : 'Duração ajustável') + '</div></div>' +
           actionsHtml(item) + '</li>';
       }
@@ -714,6 +702,9 @@
         const stored = state.expanded.get(group.order);
         const open = stored === undefined ? match.autoExpand : stored;
         const shownActivities = Number(match.baseMatches) + variants.length;
+        const matchedYears = [...new Set([
+          ...(match.baseMatches ? group.base.years : []), ...variants.flatMap(item => item.years)
+        ])].sort((a, b) => a - b);
         const variantLabel = variants.length === group.variants.length
           ? variants.length + (variants.length === 1 ? " variante" : " variantes")
           : variants.length + " de " + group.variants.length + " variantes";
@@ -722,8 +713,8 @@
             '<span class="ordinal">N.º ' + String(group.order).padStart(2, "0") + '</span>' +
             '<div class="card-title"><h3>' + esc(group.name) + '</h3><div class="meta">' +
               '<span>Palavra ' + group.order + ' de 28</span><span>' + shownActivities + (shownActivities === 1 ? ' atividade' : ' atividades') + '</span>' +
-              '<span>' + esc(group.base.ageRange || group.base.year || "Faixa etária ajustável") + '</span></div></div>' +
-            stampHtml(group.base, group.order) +
+              '<span>' + esc(yearsLabel(matchedYears)) + '</span></div></div>' +
+            stampHtml({ years: matchedYears }, group.order) +
             '<div class="actions">' +
               (variants.length ? '<button class="variant-toggle" type="button" data-group="' + group.order + '" aria-expanded="' + open + '" aria-controls="' + id + '"><span class="chevron" aria-hidden="true">▸</span>' + esc(variantLabel) + '</button>' : '') +
               (match.baseMatches ? actionsHtml(group.base).replace(/^<div class="actions">|<\/div>$/g, "") : '') +
@@ -746,7 +737,7 @@
         return '<li class="card"><div class="card-row">' +
           '<span class="ordinal cap">' + esc(label) + '</span>' +
           '<div class="card-title"><h3>' + esc(item.title || "Atividade sem título") + '</h3><div class="meta">' +
-            '<span>' + esc(item.ageRange || item.year || "Faixa etária ajustável") + '</span>' +
+            '<span>' + esc(yearsLabel(item.years)) + '</span>' +
             '<span>' + (item.duration ? esc(item.duration) + ' min' : 'Duração ajustável') + '</span>' +
             (item.maker && item.maker !== "none" ? '<span>Maker: ' + esc(item.maker) + '</span>' : '') +
           '</div></div>' + stampHtml(item, item._index + 31) + actionsHtml(item) + '</div></li>';

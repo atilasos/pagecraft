@@ -12,7 +12,7 @@ def install_publication_module():
     def install(repo: Path) -> None:
         server = repo / "server"
         server.mkdir(parents=True)
-        for name in ("__init__.py", "publish.py", "bridge_snippet.py"):
+        for name in ("__init__.py", "publish.py", "bridge_snippet.py", "catalog_years.py"):
             shutil.copy2(ROOT / "server" / name, server / name)
 
     return install
