@@ -1,4 +1,6 @@
 import asyncio
+import hashlib
+import json
 
 import pytest
 
@@ -65,13 +67,15 @@ async def _session_with_student(classroom):
     return session, student_id
 
 
-async def _wait_event(storage, session_id, type_, timeout=3.0):
+async def _wait_event(storage, session_id, type_, timeout=3.0, *, request_id=None):
     path = storage.path("sessions", session_id, "events.jsonl")
 
     async def poll():
         while True:
             for r in await storage.read_jsonl(path):
-                if r["type"] == type_:
+                if r["type"] == type_ and (
+                    request_id is None or r.get("payload", {}).get("request_id") == request_id
+                ):
                     return r
             await asyncio.sleep(0.02)
 
@@ -196,24 +200,69 @@ async def test_feedback_cache_hit(env):
         session["id"],
         student_id,
         "feedback-cache-1",
-        {"question": "q", "answer": "quatro"},
+        {"question": "q", "answer": "quatro", "request_id": "cache-1"},
     )
     await _wait_event(storage, session["id"], "ai_feedback")
-    # mesma resposta (normalizada) → cache, sem nova chamada
+    # Mesmo contexto com outro ID de transporte → cache, sem nova chamada.
     await _register_feedback(
         classroom,
         session["id"],
         student_id,
         "feedback-cache-2",
-        {"question": "q", "answer": "  QUATRO "},
+        {"question": "q", "answer": "quatro", "request_id": "cache-2"},
     )
     await asyncio.sleep(0.1)
     events = await storage.read_jsonl(storage.path("sessions", session["id"], "events.jsonl"))
     ai = [e for e in events if e["type"] == "ai_feedback"]
     assert len(ai) == 2
     assert ai[1]["payload"]["source"] == "cache"
+    assert ai[1]["payload"]["request_id"] == "cache-2"
     assert len(provider.calls) == 1
     await fb.stop()
+
+
+@pytest.mark.parametrize('answers', [('avó', 'avô'), ('Lisboa', 'lisboa')])
+async def test_feedback_cache_keeps_spelling_distinctions(env, answers):
+    config, storage, _, classroom = env
+    hints = ['Lê a palavra em voz alta.', 'Compara a escrita com o exemplo.']
+    provider = FakeProvider([{'feedback': hint} for hint in hints])
+    fb = FeedbackService(config, storage, classroom, provider)
+    session, student_id = await _session_with_student(classroom)
+    fb.start()
+    try:
+        for number, answer in enumerate(answers):
+            request_id = f'spelling-{number}'
+            await _register_feedback(classroom, session['id'], student_id, request_id, {
+                'question': 'Revê a palavra.', 'answer': answer, 'request_id': request_id,
+            })
+            response = await _wait_event(storage, session['id'], 'ai_feedback', request_id=request_id)
+            assert response['payload']['text'] == hints[number]
+            assert response['payload']['source'] == 'ai'
+        assert len(provider.calls) == 2
+    finally:
+        await fb.stop()
+
+
+async def test_feedback_does_not_reuse_legacy_normalized_cache(env):
+    config, storage, _, classroom = env
+    session, student_id = await _session_with_student(classroom)
+    # A cache antiga de «avó» podia ocupar esta chave normalizada de «avo».
+    payload = {'question': 'q', 'answer': 'avo', 'expected': ''}
+    legacy_key = hashlib.sha256(json.dumps(['u1', payload], sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+    await storage.write_json(storage.path('sessions', session['id'], 'feedback-cache.json'), {
+        legacy_key: 'Lê o acento agudo.',
+    })
+    provider = good_provider('Compara a palavra com o exemplo.')
+    fb = FeedbackService(config, storage, classroom, provider)
+    fb.start()
+    try:
+        await _register_feedback(classroom, session['id'], student_id, 'legacy-cache', payload)
+        response = await _wait_event(storage, session['id'], 'ai_feedback')
+        assert response['payload']['source'] == 'ai'
+        assert response['payload']['text'] == 'Compara a palavra com o exemplo.'
+        assert len(provider.calls) == 1
+    finally:
+        await fb.stop()
 
 
 async def test_feedback_banned_words_replaced(env):
@@ -398,6 +447,13 @@ def test_cache_covers_full_context(change):
                'participant_count': 2, 'previous_hints': [], 'request_id': 'one'}
     assert FeedbackService._cache_key('u1', payload) != FeedbackService._cache_key('u1', payload | change)
     assert FeedbackService._cache_key('u1', payload) == FeedbackService._cache_key('u1', payload | {'request_id': 'two'})
+
+
+@pytest.mark.parametrize('field', ['question', 'expected', 'answer'])
+@pytest.mark.parametrize('values', [('avó', 'avô'), ('Lisboa', 'lisboa'), ('a  b', 'a b')])
+def test_cache_preserves_task_text(field, values):
+    first, second = values
+    assert FeedbackService._cache_key('u1', {field: first}) != FeedbackService._cache_key('u1', {field: second})
 
 
 async def test_context_and_request_correlation_reach_model_and_child(env):
