@@ -51,6 +51,7 @@ async def test_old_mutation_clients_must_declare_the_expected_realization(learni
     app, teacher, pupil = learning_clients
     activity, _ = await register(teacher)
     attempt = await start(pupil, activity['code'])
+    pupil.headers.pop(HEADER)
     before = await app.state.learning.attempt(attempt['id'])
     cookies_before = dict(pupil.cookies)
     response = await pupil.request(method, '/api/learning' + path, json=body)
@@ -75,6 +76,7 @@ async def test_expected_identity_allows_discovery_retry_finish_and_leave(learnin
     activity, _ = await register(teacher)
     attempt = await start(pupil, activity['code'])
     # Only initial discovery may read without the precondition.
+    pupil.headers.pop(HEADER)
     assert (await pupil.get('/api/learning/me')).json()['id'] == attempt['id']
     headers = {HEADER: attempt['id']}
     assert (await pupil.get('/api/learning/me', headers=headers)).json()['id'] == attempt['id']

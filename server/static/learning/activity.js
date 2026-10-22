@@ -47,6 +47,8 @@ const copy = {
       "Não foi possível abrir a atividade. Confirma o endereço ou tenta novamente.",
     newAttempt:
       "Tens trabalho por guardar. Tenta guardar antes de trocar de aluno.",
+    identityConflict:
+      "Foi aberta outra realização neste browser. O trabalho deste separador continua por guardar. Mantém esta página aberta e pede ajuda ao professor para retomar esta realização.",
     readUnavailable: "Este dispositivo não tem leitura em voz alta disponível.",
     preview:
       "Pré-visualização: estes registos não entram nos relatórios dos alunos.",
@@ -95,6 +97,8 @@ const copy = {
       "We could not open this activity. Check the address or try again.",
     newAttempt:
       "Some work still needs saving. Try saving before changing pupil.",
+    identityConflict:
+      "Another attempt was opened in this browser. This tab's work still needs saving. Keep this page open and ask your teacher to help resume this attempt.",
     readUnavailable: "Reading aloud is not available on this device.",
     preview: "Preview: these records are not included in pupil reports.",
   },
@@ -104,29 +108,42 @@ let requiresCompletion = false;
 let lang = "pt",
   activity,
   attempt,
+  identityConflict = false,
   queue = [],
   flushing = null,
   reflectionDraft = { answers: {}, strategy: "", next_step: "" };
 const code = location.pathname.split("/").filter(Boolean).pop().toUpperCase();
 const t = (key) => copy[lang][key];
 function status(message, error = false) {
+  if (identityConflict) {
+    message = t("identityConflict");
+    error = true;
+  }
   $("status").textContent = message;
   $("status").classList.toggle("error", error);
 }
-async function api(path, method = "GET", data) {
+async function api(path, method = "GET", data, expectedId) {
+  const headers = data ? { "Content-Type": "application/json" } : {};
+  if (expectedId) headers["X-PageCraft-Realization"] = expectedId;
   const r = await fetch(path, {
     method,
-    headers: data ? { "Content-Type": "application/json" } : {},
+    headers,
     body: data ? JSON.stringify(data) : undefined,
   });
   if (!r.ok) {
+    const detail = (await r.json().catch(() => ({}))).detail;
+    if (detail?.code === "realization_conflict") {
+      identityConflict = true;
+      status(t("identityConflict"), true);
+    }
     const error = new Error(
-      lang === "en"
+      identityConflict ? t("identityConflict") : lang === "en"
         ? "Could not save. Please try again."
-        : (await r.json().catch(() => ({}))).detail ||
+        : (typeof detail === "string" ? detail : detail?.message) ||
           "Não foi possível guardar. Tenta novamente.",
     );
     error.status = r.status;
+    error.identityConflict = identityConflict;
     throw error;
   }
   return r.status === 204 ? null : r.json();
@@ -134,6 +151,7 @@ async function api(path, method = "GET", data) {
 function persist() {
   if (!attempt) return;
   try {
+    sessionStorage.setItem("pc-realization:" + code, attempt.id);
     sessionStorage.setItem("pc-queue:" + attempt.id, JSON.stringify(queue));
     sessionStorage.setItem(
       "pc-reflection:" + attempt.id,
@@ -214,7 +232,7 @@ async function flush() {
   flushing = (async () => {
     while (queue.length) {
       const batch = queue.slice(0, 100);
-      await api("/api/learning/me/events", "POST", { events: batch });
+      await api("/api/learning/me/events", "POST", { events: batch }, attempt.id);
       attempt.events.push(...batch);
       queue.splice(0, batch.length);
       persist();
@@ -410,7 +428,7 @@ $("finish-form").onsubmit = async (e) => {
       ...reflectionDraft,
       language: lang,
       level: $("level").value,
-    });
+    }, attempt.id);
     sessionStorage.removeItem("pc-queue:" + attempt.id);
     sessionStorage.removeItem("pc-reflection:" + attempt.id);
     showDone();
@@ -423,10 +441,11 @@ $("finish-form").onsubmit = async (e) => {
 async function leave() {
   try {
     await flush();
-    await api("/api/learning/me/leave", "POST");
+    await api("/api/learning/me/leave", "POST", undefined, attempt.id);
     if (attempt) {
       sessionStorage.removeItem("pc-queue:" + attempt.id);
       sessionStorage.removeItem("pc-reflection:" + attempt.id);
+      sessionStorage.removeItem("pc-realization:" + code);
     }
     location.reload();
   } catch {
@@ -443,8 +462,10 @@ async function requestFeedback(payload, unitId) {
     await flush();
     result = await api("/api/learning/me/feedback", "POST", {
       unit_id: unitId, request_id: payload.request_id, context: payload,
-    });
-  } catch {
+    }, owner);
+  } catch (error) {
+    // A conflict must not turn into an apparently delivered hint for this work.
+    if (error.identityConflict) return;
     result = {request_id: payload.request_id, unit_id: unitId, source: "unavailable",
       text: "Não consegui dar uma pista agora. Usa as pistas do guião ou pede ajuda ao professor."};
   }
@@ -516,7 +537,8 @@ async function recoverAttempt() {
   $("recovery-retry").hidden = true;
   status(t("recovering"));
   try {
-    const previous = await api("/api/learning/me");
+    const expectedId = sessionStorage.getItem("pc-realization:" + code);
+    const previous = await api("/api/learning/me", "GET", undefined, expectedId);
     if (previous.code === code) {
       attempt = previous;
       lang = previous.language;
@@ -529,6 +551,7 @@ async function recoverAttempt() {
         JSON.parse(
           sessionStorage.getItem("pc-reflection:" + attempt.id) || "null",
         ) || reflectionDraft;
+      persist();
       status("");
       showWork();
       if (attempt.completed_at) showDone();
@@ -540,7 +563,7 @@ async function recoverAttempt() {
   } catch (error) {
     // Only a missing/expired credential permits a fresh entry. A failed
     // recovery must not invite the child to replace the existing credential.
-    if (error.status === 401) {
+    if (error.status === 401 && !sessionStorage.getItem("pc-realization:" + code)) {
       $("start-form").hidden = false;
       status("");
     } else {

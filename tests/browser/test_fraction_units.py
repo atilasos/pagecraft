@@ -200,7 +200,6 @@ def test_realization_restores_all_units_and_drawing_without_duplicate_attempts(p
     from pathlib import Path
     registration = json.loads((Path(__file__).resolve().parents[2] / 'drafts/fracoes-banda-desenhada-2ano-registration.json').read_text())
     page.request.get(studio_origin + '/api/teacher-bootstrap')
-    page.request.post(studio_origin + '/api/learning/me/leave')
     draft = page.request.post(studio_origin + '/api/learning/activities', data=registration).json()
     page.goto(studio_origin + '/' + draft['code'])
     page.get_by_label('Como te chamas?').fill('Ensaio cinco unidades')
