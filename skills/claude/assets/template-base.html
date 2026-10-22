@@ -466,6 +466,7 @@
         helpNeeded: function (unitId, note) { emit('help_needed', unitId, { note: note || '' }); },
         hintPresented: function (unitId, hintId, text, context) { emit('hint_presented', unitId, { hint_id: hintId, text: text, context: context }); },
         hintFeedback: function (unitId, hintId, usefulness) { emit('hint_feedback', unitId, { hint_id: hintId, usefulness: usefulness }); },
+        hintAcknowledged: function (unitId, hintId, action) { emit('hint_acknowledged', unitId, { hint_id: hintId, action: action }); },
         hintListened: function (unitId, hintId) { emit('hint_listened', unitId, { hint_id: hintId }); },
         workLocation: function (unitId, location, label) { emit('work_location', unitId, { location: location, label: label }); },
         helpResolved: function (unitId, note) { emit('help_resolved', unitId, { note: note }); },

@@ -7,7 +7,7 @@ from collections import defaultdict
 
 def build_support_summary(events):
     """Recebe registos com ref/actor/actor_label/unit_id/type/payload e preserva as fontes."""
-    records = {e['ref']: e for e in events if e['type'] in {'hint_presented', 'hint_feedback', 'hint_listened', 'help_needed', 'help_resolved', 'feedback_request', 'assessment_result', 'work_location'}}
+    records = {e['ref']: e for e in events if e['type'] in {'hint_presented', 'hint_feedback', 'hint_acknowledged', 'hint_listened', 'help_needed', 'help_resolved', 'feedback_request', 'assessment_result', 'work_location'}}
     stages, unhelpful, pending, values = defaultdict(list), defaultdict(list), {}, {}
     hints, feedback, changes = {}, {}, []
     for e in events:
@@ -79,7 +79,8 @@ def build_support_summary(events):
     for proposal in proposals:
         proposal['id'] = hashlib.sha256('|'.join(proposal['evidence']).encode()).hexdigest()[:12]
         proposal['status'] = 'para revisão do professor'
-    limits = ['Apresentação de uma pista, utilidade declarada e revisão de uma resposta são evidências diferentes.',
+    limits = ['Escolher uma ação num modal não comprova leitura ou compreensão da pista.',
+              'Apresentação de uma pista, utilidade declarada e revisão de uma resposta são evidências diferentes.',
               'Não foram observados produtos em aplicações externas. Respostas conjuntas não demonstram compreensão individual.',
               'Menos pedidos de ajuda, isoladamente, não demonstram sucesso.']
     if not hints:

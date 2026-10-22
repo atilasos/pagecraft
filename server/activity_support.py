@@ -68,7 +68,7 @@ def embed_activity_support(html: str, docspec: dict, activity_id: str | None = N
         return html
     if not re.search(r'</body\s*>', html, re.I):
         raise ValueError('Falta </body> para incorporar o apoio.')
-    runtime = (ROOT / 'pipeline/prompts/activity-support.js').read_text()
+    runtime = (ROOT / 'static/student/support-modal.js').read_text() + '\n' + (ROOT / 'pipeline/prompts/activity-support.js').read_text()
     styles = (ROOT / 'pipeline/prompts/activity-support.css').read_text()
     encoded = json.dumps(config, ensure_ascii=False).replace('<', '\\u003c').replace('\u2028','\\u2028').replace('\u2029','\\u2029')
     block = START+f'\n<style>{styles}</style>\n<script>{runtime}\nPageCraftSupport.configure({encoded});</script>\n'+END

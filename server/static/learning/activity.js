@@ -443,6 +443,7 @@ async function requestFeedback(payload, unitId) {
 window.addEventListener("message", (e) => {
   if (e.source !== $("lesson").contentWindow || e.data?.pagecraft !== 1) return;
   const { type, payload = {}, unitId = "" } = e.data;
+  if (type === "support_modal") return;
   if (type === "activity_state" && requiresCompletion) {
     reflectionReady = payload.readyForReflection === true;
     $("reflect").disabled = !reflectionReady;
@@ -475,7 +476,7 @@ window.addEventListener("message", (e) => {
   )
     $("level").value = payload.level;
   const allowed = [
-    "hint_presented", "hint_feedback", "hint_listened", "work_location", "help_resolved",
+    "hint_presented", "hint_feedback", "hint_acknowledged", "hint_listened", "work_location", "help_resolved",
     "activity_loaded",
     "activity_state",
     "unit_started",

@@ -5,6 +5,7 @@ const vm=require('node:vm'), fs=require('node:fs'), crypto=require('node:crypto'
 const examples=JSON.parse(fs.readFileSync('tests/fixtures/support-examples.json','utf8'));
 function activity(spec=examples[0]){
   const config={activity:spec.slug,activity_version:spec.support.version,objective:spec.objectives.join('; '),
+    age_range:spec.ageRange,topic:spec.topic,automatic_after_failures:spec.support.automaticAfterFailures??3,
     languages:spec.support.languages||['pt'],externalWork:spec.support.externalWork||null,
     units:Object.fromEntries(spec.units.map((u,i)=>['u'+(i+1),{...u.support,title:u.summary}]))};
   const box=vm.createContext({assert,crypto,console,config});
@@ -66,4 +67,96 @@ test('alterar uma resposta invalida a ajuda sem chamar o modelo',()=>{
 test('o texto de feedback local não se torna resposta do aluno',()=>{
   const run=activity();
   run(`host('learning_preferences',{route:'permanent'});document.dispatchEvent(new CustomEvent('pagecraft:activity-event',{detail:{type:'attempt',unitId:'u1',payload:{correct:false,detail:'Experimenta comparar as barras'}}}));support.requestAI();assert.equal(emitted.at(-1).payload.answer,'Uma tentativa');`);
+});
+
+test('três tentativas confirmadas distintas pedem IA contextual nos dois percursos',()=>{
+  for(const route of ['studio','permanent']){
+    const run=activity();
+    run(`host('learning_preferences',{route:'${route}'});
+      for(const answer of ['A','B'])support.recordAttempt({answer,correct:false});
+      assert.equal(emitted.filter(e=>e.type==='feedback_request').length,0);
+      support.recordAttempt({answer:'C',correct:false});
+      const request=emitted.find(e=>e.type==='feedback_request').payload;
+      assert.equal(request.trigger,'consecutive_incorrect_attempts');
+      assert.equal(request.age_range,'8-9 anos');assert.equal(request.observed_difficulties.length,3);
+      assert.deepEqual(request.observed_difficulties.map(a=>a.answer),['A','B','C']);
+      assert.equal(request.activity_characteristics.topic,config.topic);
+      assert.equal(emitted.filter(e=>e.type==='support_modal').length,0);
+      support.receive({request_id:request.request_id,unit_id:'u1',text:'Aponta o início das duas barras.'});
+      assert.equal(emitted.at(-1).type,'support_modal');assert.equal(emitted.at(-1).payload.action,'open');
+      assert.equal(emitted.filter(e=>e.type==='hint_presented').at(-1).payload.presentation,'modal');
+      assert.equal(spoken,0);
+      host('support_modal_action',{hint_id:support.currentHintId(),action:'listen'});assert.equal(spoken,1);
+      host('support_modal_action',{hint_id:support.currentHintId(),action:'continue'});
+      assert.equal(emitted.filter(e=>e.type==='hint_acknowledged').length,1);
+      assert.equal(emitted.filter(e=>e.type==='hint_feedback').length,0);
+      assert.equal(emitted.at(-1).payload.action,'close');`);
+  }
+});
+test('limiar configurável, acerto, tarefa nova e cliques repetidos reiniciam ou conservam a contagem',()=>{
+  const run=activity();
+  run(`host('learning_preferences',{route:'permanent'});config.automatic_after_failures=2;
+    support.recordAttempt({correct:false,answer:'A',attempt_id:'one'});
+    support.recordAttempt({correct:false,answer:'A',attempt_id:'two'});
+    support.recordAttempt({correct:false,answer:'B',attempt_id:'one'});
+    assert.equal(emitted.filter(e=>e.type==='feedback_request').length,0);
+    support.recordAttempt({correct:true,answer:'C'});
+    support.recordAttempt({correct:false,answer:'D'});
+    support.update({task_id:'segunda'});
+    support.recordAttempt({correct:false,answer:'E'});
+    assert.equal(emitted.filter(e=>e.type==='feedback_request').length,0);
+    support.recordAttempt({correct:false,answer:'F'});
+    assert.equal(emitted.filter(e=>e.type==='feedback_request').length,1);`);
+});
+test('declarações, autoavaliação, edições e trabalho externo não ativam IA automática',()=>{
+  const run=activity(examples[2]);
+  run(`host('learning_preferences',{route:'permanent'});config.automatic_after_failures=2;
+    for(const value of ['A','B','C']){
+      document.dispatchEvent(new CustomEvent('pagecraft:activity-event',{detail:{type:'assessment_result',unitId:'u1',payload:{result:0,detail:{value}}}}));
+      support.update({answer:value,revision:value});
+    }
+    assert.equal(emitted.filter(e=>e.type==='feedback_request').length,0);
+    support.setLocation('external');
+    for(const answer of ['D','E','F'])support.recordAttempt({correct:false,answer});
+    assert.equal(emitted.filter(e=>e.type==='feedback_request').length,0);
+    support.setLocation('pagecraft');config.automatic_after_failures=0;
+    for(const answer of ['G','H','I'])support.recordAttempt({correct:false,answer});
+    assert.equal(emitted.filter(e=>e.type==='feedback_request').length,0);`);
+});
+test('o evento attempt usa resposta observada e nunca a mensagem de feedback como tentativa',()=>{
+  const run=activity();
+  run(`host('learning_preferences',{route:'permanent'});
+    for(const value of ['A','B','C'])document.dispatchEvent(new CustomEvent('pagecraft:activity-event',{
+      detail:{type:'attempt',unitId:'u1',payload:{correct:false,detail:{value,question:'Qual barra?'}}}}));
+    const p=emitted.find(e=>e.type==='feedback_request').payload;
+    assert.equal(p.answer,'C');assert.equal(p.question,'Qual barra?');
+    assert.deepEqual(p.observed_difficulties.map(a=>a.answer),['A','B','C']);`);
+});
+test('ajuda automática atrasada é ignorada e um modal aberto fecha quando muda a tentativa',()=>{
+  const run=activity();
+  run(`host('learning_preferences',{route:'permanent'});config.automatic_after_failures=2;
+    support.recordAttempt({answer:'A',correct:false});support.recordAttempt({answer:'B',correct:false});
+    const req=emitted.find(e=>e.type==='feedback_request').payload.request_id;
+    support.update({answer:'C'});support.receive({request_id:req,unit_id:'u1',text:'Antiga'});
+    assert.equal(emitted.filter(e=>e.type==='support_modal').length,0);
+    support.recordAttempt({answer:'D',correct:false});support.recordAttempt({answer:'E',correct:false});
+    const req2=emitted.filter(e=>e.type==='feedback_request').at(-1).payload.request_id;
+    support.receive({request_id:req2,unit_id:'u1',text:'Atual'});
+    support.update({answer:'F'});assert.equal(emitted.at(-1).payload.action,'close');
+    host('support_modal_action',{hint_id:'antiga',action:'teacher'});
+    assert.equal(emitted.filter(e=>e.type==='help_needed').length,0);`);
+});
+test('falha do fornecedor usa pistas revistas no modal e permite outra abordagem e professor',()=>{
+  const run=activity();
+  run(`host('learning_preferences',{route:'permanent'});config.automatic_after_failures=2;
+    support.recordAttempt({answer:'A',correct:false});support.recordAttempt({answer:'B',correct:false});
+    const req=emitted.find(e=>e.type==='feedback_request').payload.request_id;
+    support.receive({request_id:req,unit_id:'u1',source:'unavailable',text:'Falha técnica'});
+    assert.equal(emitted.filter(e=>e.type==='hint_presented').at(-1).payload.source,'guide');
+    const first=support.currentHintId();
+    host('support_modal_action',{hint_id:first,action:'next'});
+    assert.equal(emitted.filter(e=>e.type==='hint_feedback').at(-1).payload.usefulness,'not_helped');
+    assert.notEqual(support.currentHintId(),first);assert.equal(emitted.at(-1).payload.action,'open');
+    host('support_modal_action',{hint_id:support.currentHintId(),action:'teacher'});
+    assert.equal(emitted.at(-1).type,'help_needed');`);
 });

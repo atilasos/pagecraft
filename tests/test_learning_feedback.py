@@ -43,7 +43,7 @@ async def test_permanent_feedback_failure_and_event_boundary(learning_clients):
     response = await pupil.post('/api/learning/me/feedback', json=body)
     assert response.json()['text'] == TIMEOUT_MESSAGE
     assert response.json()['source'] == 'unavailable'
-    for type_ in ['hint_presented', 'hint_feedback', 'hint_listened', 'work_location', 'help_resolved']:
+    for type_ in ['hint_presented', 'hint_feedback', 'hint_acknowledged', 'hint_listened', 'work_location', 'help_resolved']:
         result = await pupil.post('/api/learning/me/events', json={'events': [{'id': type_, 'type': type_, 'payload': {}}]})
         assert result.status_code == 200
     forged = await pupil.post('/api/learning/me/events', json={'events': [{'id': 'forged', 'type': 'ai_feedback', 'payload': {}}]})

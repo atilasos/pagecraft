@@ -341,6 +341,7 @@ function acceptSessionState(session) {
   const wasClosed = state.sessionState?.closed === true;
   state.sessionState = session;
   $("freeze-overlay").hidden = session.frozen !== true;
+  if (session.frozen || session.closed) window.PageCraftSupportModal?.close();
   if (session.closed === true && !wasClosed) {
     showMessage("A aula terminou. Bom trabalho!", "feedback-ok");
     finishStudentSession();
@@ -475,6 +476,7 @@ function createStudentTransport() {
       if (!frame.contentWindow || ev.source !== frame.contentWindow) return;
       const data = ev.data;
       if (!data || data.pagecraft !== 1 || !data.type) return;
+      if (data.type === "support_modal") return;
       if (state.restoringWork && ['activity_state', 'unit_started', 'level_changed', 'assessment_result'].includes(data.type)) return;
       const declaration = data.payload?.detail;
       const sharedWork = declaration && typeof declaration === 'object' &&
