@@ -290,3 +290,27 @@ async def test_approve_publishes(env):
     job = await runner.approve(job["id"])
     assert job["status"] == "done"
     assert (config.activities_dir / job["slug"] / "index.html").exists()
+
+
+async def test_same_topic_failed_job_cannot_replace_approved_job(env):
+    config, storage, hub = env
+    config = __import__('dataclasses').replace(config, max_iterations=1)
+    html_a = GOOD_HTML.replace('<main ', '<h1>Geração A revista</h1><main ')
+    html_b = GOOD_HTML.replace('<main ', '<h1>Geração B falhada</h1><main ')
+    provider = FakeProvider(
+        pipeline_responses(EVAL_OK, built={'html': html_a, 'notes': ''})
+        + pipeline_responses(EVAL_FAIL, built={'html': html_b, 'notes': ''})
+    )
+    runner = PipelineRunner(config, storage, hub, provider, NoKnowledge(), NoKnowledge())
+    try:
+        a = await runner.create_job(topic='Frações', subject='Matemática', year=3, duration=30)
+        a = await _wait_status(runner, a['id'], {'awaiting_review'})
+        reviewed = Path(a['artifacts']['html']).read_bytes()
+        b = await runner.create_job(topic='Frações', subject='Matemática', year=3, duration=30)
+        b = await _wait_status(runner, b['id'], {'failed'})
+        published = await runner.approve(a['id'])
+        html = (config.activities_dir / published['slug'] / 'index.html').read_text()
+        assert 'Geração A revista' in html and 'Geração B falhada' not in html
+        assert Path(a['artifacts']['html']).read_bytes() == reviewed
+    finally:
+        await runner.stop()
