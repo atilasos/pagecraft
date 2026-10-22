@@ -1,0 +1,129 @@
+{
+  "slug": "areas-quadrilateros-minecraft-4ano-30min",
+  "title": "Oficina dos pavimentos",
+  "sourceDocSpec": "drafts/areas-quadrilateros-minecraft-4ano-30min-docspec.json",
+  "palette": {
+    "bg": "oklch(0.96 0.009 80)",
+    "surface": "oklch(0.985 0.005 80)",
+    "primary": "oklch(0.40 0.080 180)",
+    "accent": "oklch(0.70 0.095 55)",
+    "ink": "oklch(0.26 0.010 80)"
+  },
+  "functional": {
+    "ok": "oklch(0.39 0.07 150)",
+    "warn": "oklch(0.42 0.08 85)",
+    "focus": "oklch(0.44 0.15 255)"
+  },
+  "typography": {
+    "fontFamily": "'Century Gothic', 'Didact Gothic', 'URW Gothic', 'Avant Garde', sans-serif",
+    "scale": "kids-8-10",
+    "baseSizePx": 20,
+    "headingSizePx": 30,
+    "microcopySizePx": 16,
+    "maxLineCh": 55,
+    "weights": [
+      400,
+      700
+    ],
+    "italicAllowed": false,
+    "allCapsAllowed": false,
+    "offlineFont": "Builder executa scripts/embed_gothic_font.py antes das revisões; sem importações remotas."
+  },
+  "layout": {
+    "borderRadius": 12,
+    "spacing": "comfortable",
+    "maxWidthPx": 1060,
+    "padding": "clamp(1rem, 3vw, 2rem)",
+    "direction": "Mesa de oficina com plantas de pavimentos. Título curto, etapa atual, objeto geométrico amplo, pergunta e controlos junto do objeto.",
+    "header": "Nome Oficina dos pavimentos, linha 4.º ano · 30 min · Minecraft Education e navegação por etapas. Evitar repetir critérios depois do início.",
+    "body": "Uma etapa visível de cada vez. Desenhos sobre papel claro; régua ou cotas só quando ajudam a contar. Sem cartões decorativos repetidos, estatísticas ou decoração de Minecraft.",
+    "navigation": "Anterior e Seguinte em linha inferior, no fluxo normal, sem cobrir a grelha. Botões das cinco etapas têm nome e número; futuras etapas indisponíveis enquanto faltar resposta na atual. Mensagem do pedido em falta junto de Seguinte.",
+    "responsive": {
+      "desktop": "Objeto e pergunta em duas colunas quando forem legíveis. Comparação mostra grelhas lado a lado com escala comum.",
+      "tablet": "Manter grelhas com lados e labels. Controlo de apoio pode quebrar em duas linhas.",
+      "mobile390": "Uma coluna; comparação empilha grelhas, preservando igual tamanho de face. Grelha3×4 e4×4 cabe em largura disponível. Retângulo8×2 passivo pode reduzir faces mantendo relação espacial; nunca criar8 colunas de botões48px. Miniatura1×16 cabe em SVG com viewBox responsivo. Cartão de escolha com miniatura é alvo inteiro ≥48px. Sem texto pequeno nem scroll horizontal no documento."
+    }
+  },
+  "components": {
+    "geometry": "SVG inline ou CSS grid nativo, vista de cima. Faces unitárias quadradas de tamanho igual dentro da mesma comparação. Divisórias contrastantes de2px, nenhum efeito isométrico que esconda células. Labels dos lados em m; área em m² usando sup ou o símbolo². Padrão subtil alternado por fila além da cor. Não revelar totais antes dos pedidos definidos no DocSpec.",
+    "unitFace": "Detalhe de uma face quadrada com indicação lateral1m e interior1m². Explicitar Na nossa maquete. A face e o seu lado têm labels distintos.",
+    "rowInteraction": "Unidade interativa é a fila inteira, com alvo ≥48px de altura e largura adequada. Cada fila é um botão acessível com aria-pressed, label Fila1, quatro faces e pista Toca numa fila. Teclado Enter/Espaço alterna. As células passivas não precisam de alvos próprios. Destaque por preenchimento e borda, nunca só cor.",
+    "numberInput": "Label persistente Área em m², inputmode=numeric, campo vazio inicial. Min-height52px. Sem placeholder como única instrução. m² visível fora do valor; permitir qualquer número respondido e avaliar matematicamente sem impedir avanço.",
+    "choice": "Grupo com nome acessível; botões largos, texto curto, ≥48px. aria-pressed ou rádios nativos com label em toda área. Seleção tem borda3px, ícone e palavra Escolhido. Opções não mudam de ordem.",
+    "buttons": "Min-height48px, radius10px, padding suficiente. Primário primary com texto surface; secundário surface com ink. Não usar scale no hover. Controlo bloqueado comunica disabled e motivo textual.",
+    "supportControl": "Três botões Com pistas, Passo a passo, Mais desafios, em superfície neutra com matizes suaves apenas de identidade. O selecionado tem borda escura e marcador visível. Sem verde/amarelo/vermelho. Valor da ponte intermediate corresponde a standard do DocSpec.",
+    "criteria": "Lista compacta dos três critérios somente na etapa inicial; retomados na reflexão. Cada frase tem no máximo duas linhas em390px. Sem checkbox de critério obrigatório.",
+    "maker": "Folha de construção com miniaturas dos pavimentos, cotas4m/4m e8m/2m, nota Uma camada. Todo preenchido. Papéis Construir e Conferir filas, convite claro para trocar aos5min. Sem temporizador automático obrigatório. Ao regressar, Já fizemos e registo curto juntos. Etiqueta Registo do nosso par. Nenhuma animação que sugira observar o mundo.",
+    "feedback_correct": "Fundo funcional muito claro, texto ink, ícone✓ e frase concreta, por exemplo Contaste as três filas. As faces cobrem12m². Total só após resposta.",
+    "feedback_incorrect": "Pista na grelha, fundo âmbar claro, ink e ícone↻. Mensagem curta para recontar, sem vermelho e sem a palavra Errado. Manter a resposta da criança para corrigir. Não deslocar foco inesperadamente.",
+    "declarationFeedback": "Confirmação neutra em surface: Registaste a vossa contagem. Confere as filas com o teu par. Não usar selo de correto ou afirmar construção verificada.",
+    "summary": "Surge depois dos pedidos da exploração. Desenhar filas×faces/fila e resultado em m²; fórmula geral apenas na etapa comparar, após seleção. Incluir Num retângulo em vez de generalizar a quadriláteros.",
+    "reflection": "Preferir reflexão do host integrado. Autónomo oferece formulário local facultativo com os critérios e os estados Ainda estou a descobrir / Com ajuda / Já consigo explicar. Nome visível se fornecido pelo host. Sem nota global, pontuação ou obrigatoriedade.",
+    "progress": "Mostrar Etapa2de5 e nomes. Página respondida é estado separado de correção. Ícone discreto de resposta com label Respondida; nunca estrela, ranking ou percentagem de acerto.",
+    "optionalChallenge": "Convite pequeno Mais uma planta? depois do pedido obrigatório. Desafio24m² facultativo, claramente separado da conclusão; sem aumentar pedidos obrigatórios."
+  },
+  "stageComposition": [
+    {
+      "id": "pavimento",
+      "object": "Duas plantas iguais4×3, uma só com contorno e outra preenchida; ambas sem total. Detalhe da face unitária.",
+      "mainAction": "Escolher qual cobre todo o pavimento.",
+      "requiredCount": 1
+    },
+    {
+      "id": "filas",
+      "object": "Grelha3×4 com três filas interativas e representação4+4+4 entre opções. Não mostrar multiplicação geral inicialmente.",
+      "mainAction": "Explorar filas; responder área e soma.",
+      "requiredCount": 2
+    },
+    {
+      "id": "comparar",
+      "object": "Quadrado4×4 e retângulo8×2 à mesma escala, com lados. Área inicialmente oculta.",
+      "mainAction": "Comparar áreas; revelar contagens após resposta.",
+      "requiredCount": 1
+    },
+    {
+      "id": "minecraft",
+      "object": "Duas plantas cotadas e instruções de construção numa camada. Checklist breve e troca de papéis.",
+      "mainAction": "Construir no Minecraft; regressar, confirmar e registar.",
+      "requiredCount": 2
+    },
+    {
+      "id": "recombinar",
+      "object": "Referência4×4 e escolhas1×16,3×4,2×6 com miniaturas passivas à mesma escala e botões como alvos.",
+      "mainAction": "Escolher uma nova planta com16m². Comunicar e refletir.",
+      "requiredCount": 1
+    }
+  ],
+  "motion": {
+    "transitions": "subtle",
+    "durationMs": 160,
+    "easing": "ease-out",
+    "respectReducedMotion": true,
+    "properties": [
+      "opacity",
+      "transform"
+    ],
+    "noLayoutAnimation": true,
+    "sound": "Página muda por defeito. Narração só se implementada com controlo opt-in; não necessária à tarefa."
+  },
+  "accessibility": {
+    "contrastBody": "WCAG-AA, ≥4.5:1",
+    "contrastMicrocopy": "WCAG-AAA, ≥7:1 para texto crítico",
+    "focusRing": true,
+    "focusAppearance": "Anel focus3px com offset3px, nunca retirar outline sem alternativa",
+    "minTapPx": 48,
+    "soundOptIn": true,
+    "keyboard": "Todos os controlos, filas e escolhas com Tab, Enter e Espaço. Sem manipulação exclusivamente por arrasto.",
+    "color": "Estado também por borda, marcador, texto e ícone. Rótulos distinguem medidas lineares em m de áreas em m².",
+    "screenReader": "Cada SVG com título descritivo e texto alternativo com dimensões; não anunciar totais ocultos antes da resposta. Feedback aria-live=polite.",
+    "emoji": "Evitar emojis decorativos. Ícones SVG redundantes com texto e aria-hidden=true."
+  },
+  "stateContract": {
+    "incomplete": "Seguinte bloqueado e falta explicitada junto do controlo; futuros passos também bloqueados.",
+    "answered": "Avanço permitido mesmo com erro, mantendo feedback e possibilidade de correção.",
+    "supportChange": "Conservar todas as respostas compatíveis, etapa e conclusão; variar pistas e explicação.",
+    "restore": "Restaurar sem novas tentativas.",
+    "finish": "Só pedidos comuns obrigatórios; desafio e reflexão facultativos. Não afirmar sincronização sem confirmação do host."
+  },
+  "notes": "A oficina usa plantas preenchidas para pôr a superfície no centro do trabalho. Cotas e filas relacionam a imagem com a contagem. Os desenhos passivos escalam no telemóvel; os controlos mantêm alvos grandes."
+}

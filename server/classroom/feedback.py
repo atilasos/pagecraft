@@ -115,7 +115,7 @@ class FeedbackService:
                 len(channel) == 3
                 and channel[2] == "events.jsonl"
                 and record.get("type") == "feedback_request"
-                and record.get("student_id")
+                and (record.get("student_id") or record.get("work_group_id"))
             ):
                 await self._schedule_record(channel[1], record)
 
@@ -125,7 +125,8 @@ class FeedbackService:
             return
         for path in sorted(sessions_dir.glob("*/events.jsonl")):
             records = await self.storage.read_jsonl(path)
-            if any(record.get("type") == "session_closed" for record in records):
+            from .lifecycle import session_lifecycle
+            if session_lifecycle(records, {})["status"] == "closed":
                 continue
             for record in self._unprocessed_requests(records):
                 await self._schedule_record(path.parent.name, record)
@@ -136,7 +137,7 @@ class FeedbackService:
             record
             for record in records
             if record.get("type") == "feedback_request"
-            and record.get("student_id")
+            and (record.get("student_id") or record.get("work_group_id"))
             and record.get("seq") is not None
         ]
         handled = {
@@ -151,7 +152,7 @@ class FeedbackService:
         # explícita: consome, por aluno/unidade, um pedido por desfecho legado.
         legacy_outcomes = Counter(
             (
-                str(record.get("student_id")),
+                str(record.get("work_group_id") or record.get("student_id")),
                 (record.get("payload") or {}).get("unit_id"),
             )
             for record in records
@@ -164,7 +165,7 @@ class FeedbackService:
             seq = int(record["seq"])
             if seq in handled:
                 continue
-            key = (str(record["student_id"]), record.get("unit_id"))
+            key = (str(record.get("work_group_id") or record.get("student_id")), record.get("unit_id"))
             if legacy_outcomes[key]:
                 legacy_outcomes[key] -= 1
                 continue
@@ -179,10 +180,11 @@ class FeedbackService:
         self._scheduled.add(key)
         await self.request(
             session_id,
-            record["student_id"],
+            record.get("student_id"),
             record.get("unit_id"),
             record.get("payload") or {},
             request_seq=request_seq,
+            work_group_id=record.get("work_group_id"),
         )
 
     async def _cache(self, session_id: str) -> dict:
@@ -212,11 +214,12 @@ class FeedbackService:
     async def request(
         self,
         session_id: str,
-        student_id: str,
+        student_id: str | None,
         unit_id: str | None,
         payload: dict,
         *,
         request_seq: int | None = None,
+        work_group_id: str | None = None,
     ) -> None:
         """Chamado quando chega um evento feedback_request; nunca bloqueia."""
         cache = await self._cache(session_id)
@@ -230,9 +233,10 @@ class FeedbackService:
                 cached,
                 source="cache",
                 request_seq=request_seq,
+                work_group_id=work_group_id,
             )
             return
-        key = (session_id, student_id)
+        key = (session_id, work_group_id or student_id)
         if self._pending[key] >= self.max_pending_per_student:
             # não descartar em silêncio: o professor fica a saber
             await self.classroom.emit_event(
@@ -241,6 +245,7 @@ class FeedbackService:
                 {"unit_id": unit_id, "reason": "demasiados pedidos seguidos"},
                 author="assistant",
                 student_id=student_id,
+                work_group_id=work_group_id,
                 caused_by_seq=request_seq,
             )
             return
@@ -249,6 +254,7 @@ class FeedbackService:
             {
                 "session_id": session_id,
                 "student_id": student_id,
+                "work_group_id": work_group_id,
                 "unit_id": unit_id,
                 "payload": payload,
                 "cache_key": cache_key,
@@ -261,7 +267,7 @@ class FeedbackService:
     async def _worker(self) -> None:
         while True:
             item = await self._queue.get()
-            key = (item["session_id"], item["student_id"])
+            key = (item["session_id"], item["work_group_id"] or item["student_id"])
             try:
                 await self._process(item)
             except asyncio.CancelledError:
@@ -277,6 +283,7 @@ class FeedbackService:
                         {"error": str(exc), "unit_id": item["unit_id"]},
                         author="assistant",
                         student_id=item["student_id"],
+                        work_group_id=item["work_group_id"],
                         caused_by_seq=item["request_seq"],
                     )
                 except SessionClosedError:
@@ -314,6 +321,7 @@ class FeedbackService:
                 text,
                 source="ai",
                 request_seq=item["request_seq"],
+                work_group_id=item["work_group_id"],
             )
         except ProviderError as exc:
             await self._deliver(
@@ -323,6 +331,7 @@ class FeedbackService:
                 TIMEOUT_MESSAGE,
                 source="timeout",
                 request_seq=item["request_seq"],
+                work_group_id=item["work_group_id"],
             )
             await self.classroom.emit_event(
                 item["session_id"],
@@ -330,18 +339,20 @@ class FeedbackService:
                 {"unit_id": item["unit_id"], "error": str(exc), "payload": payload},
                 author="assistant",
                 student_id=item["student_id"],
+                work_group_id=item["work_group_id"],
                 caused_by_seq=item["request_seq"],
             )
 
     async def _deliver(
         self,
         session_id: str,
-        student_id: str,
+        student_id: str | None,
         unit_id: str | None,
         text: str,
         source: str,
         *,
         request_seq: int | None,
+        work_group_id: str | None = None,
     ) -> None:
         await self.classroom.emit_event(
             session_id,
@@ -349,5 +360,6 @@ class FeedbackService:
             {"text": text, "unit_id": unit_id, "source": source},
             author="assistant",
             student_id=student_id,
+            work_group_id=work_group_id,
             caused_by_seq=request_seq,
         )

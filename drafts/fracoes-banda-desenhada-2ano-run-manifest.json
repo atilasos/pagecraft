@@ -1,0 +1,52 @@
+{
+  "slug": "fracoes-banda-desenhada-2ano",
+  "date": "2026-09-29",
+  "status": "ready_for_teacher_review",
+  "published": false,
+  "code": null,
+  "preview_url": "https://graham-collaboration-exemption-contacting.trycloudflare.com/pao/",
+  "demonstration_url": "https://graham-collaboration-exemption-contacting.trycloudflare.com/pao/?presentation=1",
+  "preview_kind": "temporary_static_public_copy",
+  "production_registration": "Não executado nesta entrega. Registo, privacidade, realização e publicação ensaiados em instâncias isoladas descartáveis. Metadados preparados para o fluxo existente.",
+  "phases": {
+    "architect": "complete",
+    "designer": "complete",
+    "builder": "complete",
+    "proofreader": "pass",
+    "evaluator": "pass"
+  },
+  "artifacts": [
+    "drafts/fracoes-banda-desenhada-2ano.html",
+    "drafts/fracoes-banda-desenhada-2ano.md",
+    "drafts/fracoes-banda-desenhada-2ano-docspec.json",
+    "drafts/fracoes-banda-desenhada-2ano-design-spec.json",
+    "drafts/fracoes-banda-desenhada-2ano-registration.json",
+    "drafts/fracoes-banda-desenhada-2ano-sources.md",
+    "drafts/fracoes-banda-desenhada-2ano-proofread.json",
+    "drafts/fracoes-banda-desenhada-2ano-evaluation.json",
+    "docs/verification/issue-41-fracoes.md"
+  ],
+  "html_sha256": "5e6f12d34837f6df0eb23ebb619ebfa1fec7668156563c8409164676eb98d0b3",
+  "verification": {
+    "command": "PAGECRAFT_TEST_CDP=http://127.0.0.1:9330 uv run --with playwright pytest -q",
+    "passed": 291,
+    "seconds": 79.37,
+    "public_https_bytes_match": true,
+    "public_pupil_path": "complete",
+    "browser_session": "fracoes-minecraft-41",
+    "browser_closed": true
+  },
+  "screenshots": [
+    "/home/proteu/agent-browser-hub/screenshots/fracoes-minecraft-final-desktop.png",
+    "/home/proteu/agent-browser-hub/screenshots/fracoes-minecraft-final-mobile.png"
+  ],
+  "limitations": [
+    "A pré-visualização pública guarda a reflexão apenas na página; não está ligada ao relatório do professor.",
+    "Integração com Studio verificada localmente, ainda não implantada em produção.",
+    "Identificação dos membros de pares/grupos fora deste recorte.",
+    "A confirmação de Minecraft é declarada; a construção externa não é observada pela aplicação.",
+    "Limitação de clique automatizado após reload descrita na verificação; teste de retoma usa teclado.",
+    "O túnel temporário depende da origem e do conector ativos."
+  ],
+  "review_required": "Revisão do professor antes de publicar esta atividade para alunos; nenhum pedido de publicação definitiva foi executado."
+}

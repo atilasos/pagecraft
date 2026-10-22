@@ -116,22 +116,19 @@ class LiveSessionTicks:
             await asyncio.gather(*tasks, return_exceptions=True)
 
 
-def _session_projection(events: Iterable[Mapping], session: Mapping) -> dict:
-    frozen = False
-    status = str(session.get("status") or "live")
-    for record in events:
-        event_type = record.get("type")
-        if event_type == "freeze_screens":
-            frozen = True
-        elif event_type == "unfreeze_screens":
-            frozen = False
-        elif event_type == "session_closed":
-            status = "closed"
-    return {
-        "status": status,
-        "closed": status == "closed",
-        "frozen": frozen,
-    }
+def _session_projection(events: Iterable[Mapping], session: Mapping, *, role: str) -> dict:
+    from .lifecycle import session_lifecycle
+    records = list(events)
+    lifecycle = session_lifecycle(records, session)
+    projection = {"status": lifecycle["status"], "closed": lifecycle["status"] == "closed",
+                  "frozen": lifecycle["frozen"]}
+    if role in {"teacher", "board"}:
+        codes = next((record["payload"] for record in reversed(records)
+                      if record.get("type") == "group_codes_updated"), {})
+        if codes:
+            projection.update(group_codes=codes.get("groups", []),
+                              group_codes_visible=codes.get("visible", False) and not projection["closed"])
+    return projection
 
 
 def session_state_snapshot(
@@ -141,10 +138,11 @@ def session_state_snapshot(
     now: datetime | str,
     role: str,
     student_id: str | None = None,
+    work_group_id: str | None = None,
 ) -> dict:
     """Projeta o estado autorizado no instante pedido."""
     if role == "board":
-        return {"session": _session_projection(events, session)}
+        return {"session": _session_projection(events, session, role=role)}
 
     state = reduce_session(
         events,
@@ -154,7 +152,7 @@ def session_state_snapshot(
     )
     students = state["students"]
     if role == "student":
-        if student_id is None:
+        if student_id is None and work_group_id is None:
             raise ValueError("o instantâneo de aluno requer uma identidade")
         students = (
             {student_id: students[student_id]}
@@ -165,9 +163,14 @@ def session_state_snapshot(
         raise ValueError(f"papel desconhecido: {role}")
 
     snapshot = {
-        "session": _session_projection(events, session),
+        "session": _session_projection(events, session, role=role),
         "students": students,
     }
+    groups = state.get("groups", {})
+    if work_group_id:
+        snapshot["groups"] = {work_group_id: groups[work_group_id]} if work_group_id in groups else {}
+    elif role == "teacher" and groups:
+        snapshot["groups"] = groups
     if role == "teacher":
         snapshot["numbers"] = state["numbers"]
     return snapshot
@@ -192,3 +195,11 @@ def changed_session_frame(
     if previous.get("session") == session:
         return None
     return {"session": session}
+
+
+def changed_group_frames(previous: Mapping, current: Mapping) -> list[dict]:
+    return [
+        {"work_group_id": group_id, "group": group}
+        for group_id, group in current.get("groups", {}).items()
+        if previous.get("groups", {}).get(group_id) != group
+    ]

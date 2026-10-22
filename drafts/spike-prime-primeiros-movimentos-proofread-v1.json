@@ -1,0 +1,96 @@
+{
+  "pass": false,
+  "severity": "high",
+  "issues": [
+    {
+      "type": "pedagogical",
+      "severity": "high",
+      "location": "HTML, função core(), missão 2; função appLink()",
+      "original": "Recria este plano na aplicação. Testa a partir da marca.",
+      "suggestion": "Na aplicação SPIKE, com o professor: cria um projeto de blocos por palavras. Liga o hub à aplicação. Coloca o bloco de início. Junta os blocos de motores, velocidade e avanço. Usa as portas da tua base, 30% e a distância escolhida. Confere como parar. Coloca a base na partida e executa com o professor. Os nomes dos blocos podem mudar com o idioma ou a versão.",
+      "reason": "Para a primeira programação, recriar um esquema é demasiado implícito; Com pistas nem apresenta esta frase. Falta uma ponte concreta entre o plano e a aplicação real."
+    },
+    {
+      "type": "pedagogical",
+      "severity": "medium",
+      "location": "HTML, missão 1, primeira ocorrência de hub",
+      "original": "Preparem a base e liguem o hub. O que aconteceu?",
+      "suggestion": "O hub é a peça central que controla os motores. Preparem a base e liguem o hub. O que aconteceu?",
+      "reason": "O termo técnico aparece sem explicação numa atividade de iniciação para 8–10 anos."
+    },
+    {
+      "type": "semantic",
+      "severity": "medium",
+      "location": "HTML, core(), missão 3, labels measurement1/2/3",
+      "original": "Ensaio 1 em cm",
+      "suggestion": "Distância desde a partida no ensaio 1 (cm)",
+      "reason": "O rótulo não indica se medir distância percorrida ou desvio do alvo. Aplicar a mesma correção aos ensaios 2 e 3."
+    },
+    {
+      "type": "semantic",
+      "severity": "medium",
+      "location": "HTML, core(), missão 3, improveResult e ENUMS.improveResult",
+      "original": "Faz outro ensaio. O que aconteceu? / Mais perto / Igual / Mais longe",
+      "suggestion": "Faz outro ensaio. Depois da alteração, ficou mais perto do alvo? / Mais perto do alvo / À mesma distância do alvo / Mais longe do alvo",
+      "reason": "A comparação tem de nomear a referência alvo; Igual pode referir-se ao programa ou ao movimento. Podem preservar-se valores internos e adaptar apenas os rótulos visíveis."
+    },
+    {
+      "type": "pedagogical",
+      "severity": "low",
+      "location": "HTML, core(), missão 5, ramo embedded",
+      "original": "O host apresenta a reflexão de cada participante.",
+      "suggestion": "O professor abre a reflexão de cada participante.",
+      "reason": "Host é um detalhe de implementação desnecessário para a criança."
+    },
+    {
+      "type": "semantic",
+      "severity": "low",
+      "location": "HTML, extensions(), missão de orientação",
+      "original": "Guinada é o valor que indica a orientação do hub.",
+      "suggestion": "A guinada indica quanto o hub virou para os lados.",
+      "reason": "A guinada é uma componente da orientação; a frase proposta liga a medida à viragem horizontal que se explora."
+    },
+    {
+      "type": "consistency",
+      "severity": "medium",
+      "location": "Guia do professor, parágrafo A reflexão é facultativa; comparar server/static/learning/activity.js:33",
+      "original": "Os mesmos critérios permitem escolher «Com ajuda», «Estou a experimentar», «Já consigo explicar» ou «Ainda não experimentei»",
+      "suggestion": "Na reflexão do host, os mesmos critérios permitem escolher «Consegui com autonomia», «Consegui com ajuda», «Quero praticar mais» ou «Prefiro não responder». Em modo autónomo, o formulário local oferece «Com ajuda», «Estou a experimentar», «Já consigo explicar» ou «Ainda não experimentei».",
+      "reason": "O guia apresenta rótulos próprios do formulário local como se fossem os da reflexão integrada. O host real usa outros rótulos."
+    }
+  ],
+  "summary": "Texto em português europeu, com critérios conhecidos, feedback acolhedor e distinção explícita entre modelo e relato físico. Falta concretizar os passos da primeira programação na aplicação; alguns rótulos de medida, comparação e reflexão precisam de precisão. Revisão textual estática, sem testes de browser.",
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90: OK",
+    "Registo consistente: OK, com um termo de implementação a simplificar",
+    "Adequação à faixa etária: FAIL — ponte para primeira programação demasiado implícita",
+    "Instruções claras e seguíveis: FAIL — medidas e comparação ambíguas",
+    "Alinhamento com objetivos: OK",
+    "Declarações físicas distintas de observação da página: OK",
+    "Reflexão facultativa: OK",
+    "Rótulos de reflexão integrada coerentes com host real: FAIL no guia"
+  ],
+  "reviewed_on": "2026-10-02",
+  "iteration": 1,
+  "artifacts_reviewed": [
+    "drafts/spike-prime-primeiros-movimentos.html",
+    "drafts/spike-prime-primeiros-movimentos-docspec.json",
+    "drafts/spike-prime-primeiros-movimentos-design-spec.json",
+    "drafts/spike-prime-primeiros-movimentos.md",
+    "server/static/learning/activity.js"
+  ],
+  "coverage": [
+    "Texto HTML estático",
+    "Todas as strings de UI, feedback e labels geradas por JavaScript",
+    "Com pistas, Passo a passo e Mais desafios",
+    "Extensões quadrado, obstáculos e giroscópio",
+    "Mensagens de confirmação, bloqueio e pedidos de ajuda",
+    "Reflexão local e interface integrada",
+    "Mensagens de restauro e preservação do trabalho"
+  ],
+  "limits": [
+    "Não foram executados testes de browser nesta fase.",
+    "Não foi ligado nem executado um robô físico.",
+    "O HTML recebeu pequenas alterações concorrentes do Builder durante a revisão; a segunda iteração deve confirmar o artefacto reparado."
+  ]
+}

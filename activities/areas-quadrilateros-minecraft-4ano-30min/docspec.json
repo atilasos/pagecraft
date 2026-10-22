@@ -1,0 +1,350 @@
+{
+  "slug": "areas-quadrilateros-minecraft-4ano-30min",
+  "title": "Oficina dos pavimentos",
+  "topic": "Áreas dos quadriláteros: quadrado e retângulo com Minecraft Education",
+  "ageRange": "9–10 anos (4.º ano)",
+  "year": 4,
+  "duration": 30,
+  "languages": [
+    "pt"
+  ],
+  "objectives": [
+    "Distinguir a superfície de um pavimento do seu contorno.",
+    "Obter a área do retângulo e do quadrado por contagem organizada em filas, relacionando-a com a multiplicação.",
+    "Construir dois pavimentos preenchidos com a mesma área e comunicar a contagem em m²."
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Matemática",
+        "year": "4.º ano",
+        "domain": "Geometria e Medida — Área",
+        "descriptor": "Reconhecer cm² e m² como unidades convencionais de área; generalizar a expressão de cálculo da área do retângulo e compreender o quadrado como caso particular. Síntese pedagógica do descritor e das ações estratégicas de contagem organizada, não citação literal.",
+        "source": "DGE, AE Matemática 4.º ano homologadas em 2021, pp. 44–45; https://www.dge.mec.pt/sites/default/files/Curriculo/Aprendizagens_Essenciais/1_ciclo/ae_mat_4.o_ano.pdf"
+      },
+      {
+        "subject": "Matemática",
+        "year": "4.º ano",
+        "domain": "Geometria e Medida — Figuras planas",
+        "descriptor": "Enquadrar quadrado e retângulo na classificação dos quadriláteros, reconhecendo o quadrado como caso particular de retângulo. Síntese aplicada à atividade; não se exige classificar toda a família.",
+        "source": "Mesmo documento DGE, p. 42."
+      }
+    ],
+    "competencies": [
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-E: Relacionamento interpessoal",
+      "PA-I: Saber científico, técnico e tecnológico"
+    ],
+    "scope": "Foco curricular em quadrado e retângulo. Sem exigir fórmulas de paralelogramo, losango ou trapézio. A fórmula de multiplicar lados adjacentes não se aplica a qualquer quadrilátero. TIC como recurso transversal; proposta curricular de 2026 não tratada como homologada."
+  },
+  "memAlignment": {
+    "modules": [
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "Critérios conhecidos antes de começar",
+      "Registo curto de contagem do par",
+      "Reflexão individual facultativa"
+    ],
+    "socialOrganization": "Turma apresenta e apropria critérios; pares exploram, constroem e trocam papéis; dois pares comunicam uma estratégia à turma; cada criança pode refletir individualmente. Proposta inspirada na avaliação cooperada, não implementação do dispositivo completo."
+  },
+  "materials": [
+    "Um computador por par com PageCraft e Minecraft Education",
+    "Mundo plano em Criativo já aberto antes da aula, com blocos no inventário",
+    "Quadro/projetor para partilha breve",
+    "Opcional: quadrados de papel ou peças de face quadrada para contingência"
+  ],
+  "criteria": [
+    {
+      "id": "superficie",
+      "pt": "Distingo o pavimento do seu contorno."
+    },
+    {
+      "id": "contar-filas",
+      "pt": "Conto a área por filas e uso m²."
+    },
+    {
+      "id": "construir-explicar",
+      "pt": "Construo com o meu par e explico a contagem."
+    }
+  ],
+  "units": [
+    {
+      "id": "pavimento",
+      "title": "O que vamos cobrir?",
+      "duration": 3,
+      "summary": "A área mede a superfície coberta, não o contorno.",
+      "textDescription": "Ativar: preparar um pavimento para uma oficina. Mostrar critérios antes de responder. Nomear quadrado e retângulo como quadriláteros e indicar que o quadrado também é um retângulo. Nesta maquete, o lado de cada face quadrada mede 1 m; essa face mede 1 m². Não mostrar fórmula. Pedir que o aluno escolha a representação que cobre todo o pavimento.",
+      "interaction": {
+        "state": [
+          {
+            "name": "superficie",
+            "type": "quiz",
+            "default": null,
+            "options": [
+              "Só o contorno",
+              "Todo o pavimento"
+            ]
+          }
+        ],
+        "render": "Duas vistas de cima do mesmo retângulo de 4 por 3: contorno sem preenchimento e pavimento totalmente preenchido. Face unitária com lado 1 m e área 1 m² num detalhe. Critérios visíveis em linguagem da criança.",
+        "transition": "Selecionar uma representação responde ao único pedido. Seleção errada destaca o interior vazio com tracejado e pista: Falta cobrir o centro. Podes experimentar outra opção. Avanço disponível após qualquer escolha; voltar permite corrigir.",
+        "constraint": "Medir área exige cobrir a superfície inteira com unidades iguais, sem buracos nem sobreposições.",
+        "assessment": "A criança escolhe o pavimento preenchido; o professor distingue a escolha da contagem de borda."
+      },
+      "requiredRequests": [
+        {
+          "id": "superficie",
+          "prompt": "Qual mostra todo o pavimento coberto?",
+          "response": "Escolher uma das duas vistas."
+        }
+      ],
+      "differentiation": {
+        "support": "Realçar uma face interior e uma face do contorno; permitir comparar as duas vistas lado a lado.",
+        "standard": "Comparar duas vistas do mesmo pavimento e escolher o que deve ficar coberto.",
+        "challenge": "Após a escolha, perguntar oralmente por que uma borda não chega, mesmo tendo quatro lados."
+      }
+    },
+    {
+      "id": "filas",
+      "title": "Conta de outra maneira",
+      "duration": 6,
+      "summary": "Filas iguais permitem uma contagem organizada da área.",
+      "textDescription": "Explorar um pavimento completo de 3 filas com 4 blocos por fila. Convidar a tocar numa fila para marcar os seus blocos e a repetir noutras filas. Primeiro pedir o total de faces, depois escolher uma conta que representa a contagem. Só após responder a ambos mostrar uma síntese de filas e unidades; não antecipar a regra com a resposta predefinida.",
+      "interaction": {
+        "state": [
+          {
+            "name": "filasMarcadas",
+            "type": "canvas",
+            "default": []
+          },
+          {
+            "name": "totalFaces",
+            "type": "quiz",
+            "default": null,
+            "unit": "m²"
+          },
+          {
+            "name": "estrategia",
+            "type": "quiz",
+            "default": null,
+            "options": [
+              "4 + 4 + 4",
+              "3 + 4",
+              "4 + 3 + 4"
+            ]
+          }
+        ],
+        "render": "Grelha de 3 por 4 preenchida, vista de cima, com linhas divisórias claras. Clicar/tocar numa fila destaca todas as suas quatro faces. Campo numérico vazio com label Área em m². Três contas em botões grandes. Multiplicação geral escondida.",
+        "transition": "Tocar numa fila alterna o destaque, também via teclado. O campo respondido e a conta selecionada são os dois pedidos obrigatórios. A manipulação não exige confirmação. Um total diferente de 12 destaca as três filas para recontar; conta inadequada destaca uma fila e pergunta Quantas vezes aparece esta fila? Não preencher respostas. Após os dois pedidos respondidos, libertar avanço e síntese, mesmo com erros.",
+        "constraint": "O total de faces pode obter-se somando uma vez cada fila de igual tamanho, sem contar nenhuma face duas vezes.",
+        "assessment": "Regista 12 m² e identifica 4 + 4 + 4 como representação das três filas; evidência inclui resposta inicial e correções."
+      },
+      "requiredRequests": [
+        {
+          "id": "totalFaces",
+          "prompt": "Qual é a área deste pavimento?",
+          "response": "Introduzir um número; m² fica junto do campo."
+        },
+        {
+          "id": "estrategia",
+          "prompt": "Que conta acompanha as três filas?",
+          "response": "Escolher uma das três contas."
+        }
+      ],
+      "differentiation": {
+        "support": "Mostrar contadores locais nas filas tocadas, sem total global; usar marcas junto das quatro faces da fila.",
+        "standard": "Destacar filas ao toque; associar a contagem à soma de parcelas iguais.",
+        "challenge": "Ocultar os contadores locais e perguntar oralmente como contar sem tocar em cada face. Depois de responder, propor 3 × 4 como escrita abreviada."
+      }
+    },
+    {
+      "id": "comparar",
+      "title": "Formas diferentes, mesma área?",
+      "duration": 5,
+      "summary": "Um quadrado e um retângulo podem ter a mesma área.",
+      "textDescription": "Comparar pavimentos preenchidos: quadrado de 4 por 4 e retângulo de 2 filas por 8 blocos. Labels de lados em m; grelha unitária sempre visível. Uma escolha de comparação é obrigatória. Após a escolha, revelar com base na grelha as contagens 4 filas × 4 e 2 filas × 8, ambas 16 m². Só então sistematizar: num retângulo, área = comprimento × largura; quadrado é caso particular. Não estender a multiplicação de dois lados a qualquer quadrilátero.",
+      "interaction": {
+        "state": [
+          {
+            "name": "comparacao",
+            "type": "quiz",
+            "default": null,
+            "options": [
+              "O quadrado tem maior área",
+              "Têm a mesma área",
+              "O retângulo tem maior área"
+            ]
+          },
+          {
+            "name": "sinteseVisivel",
+            "type": "derived",
+            "derivedFrom": "comparacao != null"
+          }
+        ],
+        "render": "Duas grelhas preenchidas e à mesma escala: 4 por 4 e 8 por 2. Mostrar as medidas dos lados sem total inicial. Botões de comparação com seleção visível. Após resposta, contagens com filas destacadas e síntese curta; nunca usar tamanho do cartão para representar área.",
+        "transition": "Escolher comparação responde ao único pedido. Se incorreta, destacar filas correspondentes e convidar a contar as duas superfícies. Síntese fica disponível após responder; não anuncia que o erro é acerto. Permitir alterar escolha. Avançar após qualquer resposta.",
+        "constraint": "Mudar a forma ou as dimensões não muda a área se o número total de faces unitárias for conservado.",
+        "assessment": "Seleciona mesma área e explica oralmente 4 × 4 = 16 e 2 × 8 = 16; uso da fórmula só surge depois da exploração."
+      },
+      "requiredRequests": [
+        {
+          "id": "comparacao",
+          "prompt": "Compara a área dos dois pavimentos.",
+          "response": "Escolher maior, igual ou menor através de três frases."
+        }
+      ],
+      "differentiation": {
+        "support": "Pista visual agrupa as faces do quadrado em pares de filas, sem indicar o total antes da escolha.",
+        "standard": "Grelhas inteiras com medidas; contar e comparar usando filas.",
+        "challenge": "Ocultar a numeração local e convidar a justificar sem contar face a face; extensão oral: será que o contorno também fica igual?"
+      }
+    },
+    {
+      "id": "minecraft",
+      "title": "Constrói a oficina",
+      "duration": 11,
+      "summary": "O pavimento construído dá significado à contagem e às unidades de área.",
+      "textDescription": "O mundo Minecraft Education já está aberto em modo Criativo, com zona plana e blocos prontos. Construir dois pavimentos completos e separados, com uma única camada: quadrado 4 por 4 e retângulo 8 por 2. 0–5 min: um constrói quadrado e outro confere filas; aos 5 min trocar papéis para retângulo. Usar materiais ou padrões que tornem as filas legíveis. Não construir paredes nem apenas bordas. Manter regra lado 1 m/face 1 m² como convenção da maquete. No regresso pedir confirmação intencional e uma frase/conta curta sobre o retângulo. O HTML regista a declaração do par; não observa Minecraft. Deixar instruções da etapa visíveis enquanto a aplicação está em uso.",
+      "interaction": {
+        "state": [
+          {
+            "name": "construcaoDeclarada",
+            "type": "toggle",
+            "default": false,
+            "options": [
+              "Por confirmar",
+              "Já fizemos"
+            ]
+          },
+          {
+            "name": "registoMaker",
+            "type": "quiz",
+            "default": ""
+          }
+        ],
+        "render": "Plano de cima dos dois pavimentos, medidas e checklist curta: preencher, uma camada, trocar papéis. Botão Já fizemos e campo curto com exemplo de formato sem resultado: __ filas de __ blocos: __ m². Etiqueta explícita Registo do nosso par.",
+        "transition": "Premir Já fizemos confirma uma ação externa intencional; escrever texto não vazio responde ao segundo pedido. Não validar por presença de palavras-chave nem fingir reconhecer a construção. Feedback neutro: Registaste a vossa contagem. Confere as filas no mundo com o teu par. Só permitir seguinte após confirmação e texto. Resposta matematicamente errada permite seguir. Reabrir etapa conserva confirmação e texto.",
+        "constraint": "Num pavimento preenchido de uma camada, cada face superior é uma unidade de área e a contagem de filas corresponde à superfície construída.",
+        "assessment": "O professor observa os dois pavimentos completos, mede 4 por 4 e 8 por 2 em blocos, verifica ausência de buracos/sobreposições, ouve a contagem do par e observa a troca de papéis. A página conserva apenas declaração e registo escrito."
+      },
+      "requiredRequests": [
+        {
+          "id": "construcaoDeclarada",
+          "prompt": "Confirma quando terminarem os dois pavimentos.",
+          "response": "Botão Já fizemos."
+        },
+        {
+          "id": "registoMaker",
+          "prompt": "Regista a contagem do vosso retângulo.",
+          "response": "Uma conta ou frase curta com filas, blocos por fila e área."
+        }
+      ],
+      "differentiation": {
+        "support": "Planos com marcas da primeira fila; professor pode pré-construir uma fila de cada pavimento. Guia por passos e molde de frase opcional.",
+        "standard": "Planos dimensionados e checklist curta; par decide materiais e constrói ambos os pavimentos.",
+        "challenge": "Mesmos dois pavimentos obrigatórios; justificar também por que uma construção comprida não implica área maior. Se houver tempo, criar outro retângulo de 16 m² sem apagar os dois primeiros."
+      },
+      "maker": {
+        "type": "minecraft",
+        "challenge": "Constrói um quadrado 4 × 4 e um retângulo 8 × 2. Preenche os dois pavimentos, numa camada. Troca de papel com o teu par.",
+        "materials": [
+          "Minecraft Education aberto em Criativo",
+          "Zona plana livre de pelo menos 18 × 10 blocos por par",
+          "Blocos sólidos de duas cores ou materiais distintos"
+        ],
+        "groupSize": "2",
+        "connection": "Transpor a contagem de faces e filas da grelha para dois pavimentos construídos com a mesma área.",
+        "communication": "Um par mostra a vista de cima; ambos explicam como contaram. Professor pode recolher uma captura local, sem upload obrigatório.",
+        "alternatives": [
+          "Falha de Minecraft: usar 32 quadrados de papel ou peças com face quadrada numa folha quadriculada; construir 4 × 4 e 8 × 2 e contar unidades de área. Só nomear m² se mantiver a convenção da maquete."
+        ]
+      }
+    },
+    {
+      "id": "recombinar",
+      "title": "Outra planta para a oficina",
+      "duration": 5,
+      "summary": "A área conserva-se em novas plantas quando o produto das dimensões fica igual.",
+      "textDescription": "Aplicar numa interação de planta: escolher novas dimensões para um pavimento de 16 m² entre 1 × 16, 3 × 4 e 2 × 6, cada opção com miniatura preenchida à mesma escala. O único pedido obrigatório é escolher uma planta. A contagem só aparece após escolher; qualquer escolha liberta conclusão e mostra pista visual apropriada. Cerca de 2 min para resolver, 2 min para comunicar uma estratégia à turma, 1 min para reflexão individual facultativa com critérios iniciais. Não obrigar a construir um terceiro pavimento no Minecraft. Mais desafios pode abrir, facultativamente, pares de dimensões para 24 m², com 4 × 6 e 3 × 8 como soluções. Os dados obrigatórios comuns mantêm-se em todos os apoios.",
+      "interaction": {
+        "state": [
+          {
+            "name": "novaPlanta",
+            "type": "quiz",
+            "default": null,
+            "options": [
+              "1 × 16",
+              "3 × 4",
+              "2 × 6"
+            ]
+          },
+          {
+            "name": "desafio24",
+            "type": "canvas",
+            "default": null
+          },
+          {
+            "name": "reflexao",
+            "type": "quiz",
+            "default": null
+          }
+        ],
+        "render": "Planta original 4 × 4 como referência e três miniaturas proporcionais com dimensões. Após seleção, marcar filas e mostrar total da opção, comparando visualmente com 16 faces. Reflexão facultativa ligada aos três critérios. Extensão 24 m² recolhida separadamente e identificada como opcional.",
+        "transition": "Selecionar qualquer planta responde e liberta conclusão. Erro destaca filas da escolha e da referência: Conta as faces. Precisamos de manter a área. Permitir corrigir e voltar. Extensão opcional e autoavaliação nunca bloqueiam conclusão. Em sessão, host identifica cada criança e gere reflexão individual à vez; autónomo oferece reflexão local sem alegar envio ao professor.",
+        "constraint": "Outro retângulo tem 16 m² se o número de filas multiplicado pelas faces por fila for 16; girar o mesmo retângulo não cria dimensões novas.",
+        "assessment": "Seleciona 1 × 16, confronta com 4 × 4 e 8 × 2 e justifica a área igual; se fizer extensão, apresenta um par de dimensões cujo produto é 24."
+      },
+      "requiredRequests": [
+        {
+          "id": "novaPlanta",
+          "prompt": "Escolhe outra planta com 16 m².",
+          "response": "Selecionar uma das três plantas."
+        }
+      ],
+      "differentiation": {
+        "support": "Mostrar as faces individuais e permitir agrupar por filas; oferecer início de frase para a partilha: Contei...",
+        "standard": "Miniaturas com lados e contagem interativa; par comunica a estratégia em uma frase.",
+        "challenge": "Contagem local escondida até à resposta; extensão facultativa: encontrar duas plantas retangulares diferentes com 24 m² e explicar a relação das dimensões."
+      }
+    }
+  ],
+  "sessionFlow": "0–3 min: superfície e critérios. 3–9 min: contagem por filas. 9–14 min: comparar e sistematizar. 14–25 min: maker Minecraft, troca de papéis aos 19 min. 25–30 min: nova planta, comunicação e reflexão. As unidades somam 30 minutos; a apresentação, comunicação e reflexão estão incluídas, sem somar tempos adicionais.",
+  "experienceContract": {
+    "requiredCompletion": true,
+    "progression": "Cada página exige apenas os pedidos listados; qualquer resposta, mesmo errada, permite avançar. Bloquear seguinte e saltos futuros apenas quando faltam respostas. Mostrar o pedido em falta junto do controlo. Permitir voltar e corrigir.",
+    "supportChange": "support/standard/challenge no DocSpec; ponte usa support/intermediate/challenge. O núcleo, exemplos e pedidos obrigatórios permanecem iguais: conservar todas as respostas ao mudar apoio. Alterar pistas e exigência de explicação, sem apagar trabalho nem criar bloqueios por extensões opcionais.",
+    "recovery": "Guardar respostas, etapa e apoio; restaurar sem emitir novas tentativas e recalcular conclusão a partir dos pedidos obrigatórios.",
+    "feedback": "Feedback imediato para escolhas e números internos; pista visual primeiro e frase curta em âmbar. Minecraft recebe confirmação neutra da declaração, sem avaliação automática do mundo.",
+    "reflection": "Facultativa, retoma os três critérios com opções Ainda estou a descobrir / Com ajuda / Já consigo explicar, sem nota. Em host, individual à vez com nome visível e respostas dos colegas conservadas; autónomo, reflexão local.",
+    "externalEvidence": "Confirmação e conta são declaração do par; professor observa o artefacto Minecraft. Nunca afirmar captura, leitura de mundo, execução de comandos ou validação automática."
+  },
+  "ageRequirements": {
+    "bodyMinPx": 20,
+    "unitTitleMinPx": 28,
+    "microcopyMinPx": 16,
+    "tapTargetMinPx": 48,
+    "lineMaxCh": 55,
+    "font": "Century Gothic, Didact Gothic incorporada, URW Gothic, Avant Garde, sans-serif",
+    "typicalSentenceWordsMax": 14
+  },
+  "sources": {
+    "consulted": "2026-10-08",
+    "summaryFile": "drafts/areas-quadrilateros-minecraft-4ano-30min-sources.md",
+    "wiki": [
+      "20_Wiki/PageCraft.md",
+      "20_Wiki/Avaliação Cooperada.md",
+      "20_Wiki/TIC no Ensino Básico.md",
+      "20_Wiki/Ensino da Matemática.md"
+    ],
+    "originalReference": "DGE AE Matemática 4.º ano verificadas pelo orquestrador. Minecraft Education Making Homes, Part 2 consultado como referência; mundo não executado.",
+    "authoring": "Números, sequência, interação, apoios e desafios são proposta original desta atividade."
+  },
+  "teacherNotes": [
+    "Preparar acessos e mundo antes dos 30 minutos. Requer familiaridade básica com colocar e remover blocos.",
+    "A unidade é a face superior, não o volume do bloco. Usar uma camada evita confundir área com quantidade de camadas.",
+    "No quadrado 4 × 4 o contorno tem 16 m, coincidentemente o mesmo número da área 16 m²; distinguir grandezas e unidades. Retângulo 8 × 2 tem contorno 20 m, sem tornar o cálculo do perímetro pedido obrigatório.",
+    "Construções diagonais em blocos não representam com exatidão lados oblíquos de quadriláteros; não usar escadas para validar fórmulas exatas."
+  ]
+}

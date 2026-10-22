@@ -150,7 +150,7 @@ A paleta é clara, tintada e funcional. PageCraft usa OKLCH como fonte de verdad
 
 ### Named Rules
 
-**The Functional Split Rule.** `ok`, `warn` e `focus` são funções de interface, não cores de dificuldade. Níveis Apoio, Intermédio e Desafio usam marcadores neutros ou botânicos, nunca verde, amarelo e vermelho como semáforo.
+**The Functional Split Rule.** `ok`, `warn` e `focus` são funções de interface, não cores de dificuldade. Níveis Apoio, Intermédio e Desafio usam marcadores neutros, nunca verde, amarelo e vermelho como semáforo.
 
 **The Tinted Neutral Rule.** Fundo, superfície e texto nunca usam branco ou preto puros. A neutralidade PageCraft é sempre levemente tintada para parecer papel, não ecrã clínico.
 
@@ -202,7 +202,7 @@ A elevação PageCraft é baixa, estrutural e tátil. Cards e zonas interativas 
 
 - **Style:** pills com fundo tintado, texto escuro e ícone redundante quando houver semântica.
 - **State:** selecionado usa fundo sólido `primary`; não selecionado usa `surface` + `border`.
-- **Difficulty:** Apoio, Intermédio e Desafio podem usar marcador botânico pequeno, mas a cor não é o único significado.
+- **Difficulty:** Apoio, Intermédio e Desafio podem usar marcador neutro pequeno, mas a cor não é o único significado.
 
 ### Cards / Containers
 
@@ -230,7 +230,7 @@ Mensagem de descoberta usa `ok-tint`, borda `ok`, texto escuro e `aria-live="pol
 
 ### Differentiation Tabs
 
-Apoio, Intermédio e Desafio existem sempre quando a atividade inclui diferenciação. A interface usa labels explícitas e marcadores botânicos — Broto/Apoio, Árvore jovem/Intermédio e Árvore robusta/Desafio — ou símbolos neutros equivalentes. Não usar 🟢, 🟡 e 🔴 nestes níveis: mesmo acompanhados por texto, reintroduzem a leitura de semáforo emocional que o sistema rejeita.
+Apoio, Intermédio e Desafio existem sempre quando a atividade inclui diferenciação. A interface usa labels explícitas e marcadores neutros — Com pistas/Apoio, Passo a passo/Intermédio e Mais desafios/Desafio — ou símbolos neutros equivalentes. Não usar 🟢, 🟡 e 🔴 nestes níveis: mesmo acompanhados por texto, reintroduzem a leitura de semáforo emocional que o sistema rejeita.
 
 ### Audio Toggle
 

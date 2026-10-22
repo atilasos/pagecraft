@@ -1,0 +1,138 @@
+{
+  "pass": true,
+  "route": "none",
+  "severity": "low",
+  "iteration": 3,
+  "checked_on": "2026-10-05",
+  "scope": "Avaliação incremental da qualidade das oito capturas novas, idioma, carregamento e ampliação. Não repete os percursos completos, evidência de alunos no host ou hardware físico das rondas anteriores.",
+  "html_sha256": "16bec10f3caa8f7f9443e05e7ed3d156b1cda34b72c45b12cb52cd73d77b2ccf",
+  "reviewed_commit": "dfa4ddc20178a1d5548f2e379c87c026d9ed88cd",
+  "scores": {
+    "factual_accuracy": 4,
+    "constraint_alignment": 4,
+    "differentiation_quality": 4,
+    "ux_accessibility": 4,
+    "visual_design": 4,
+    "technical_quality": 4
+  },
+  "issues": [],
+  "critical": [],
+  "required_fixes": [],
+  "previous_validation": {
+    "report": "drafts/spike-prime-primeiros-movimentos-evaluation-v2.json",
+    "html_sha256": "061e8f4b5556be88d23b321a5258892f2c0f645b625eff5cab289d15e6095d68",
+    "result": "PASS",
+    "covers": "Lógica de revelação, ponte, restauro,3apoios e teclas; avaliação v1 ligada dentro dessa ronda cobre percursos, reflexão e gravação host. Não se declara reexecução desses ensaios agora."
+  },
+  "browser": {
+    "provider": "Agent Browser Hub",
+    "profile": "research",
+    "session": "spike-captures-quality",
+    "fallback_reason": "T3 preview_* ausentes do catálogo callable desta fase; o orquestrador recebeu Authentication required ao tentar o preview.",
+    "closed": true
+  },
+  "viewport_measurements": [
+    {
+      "outer_requested_width_px": 390,
+      "iframe_inner_width_px": 390,
+      "activity_document_client_width_px": 375
+    },
+    {
+      "outer_requested_width_px": 768,
+      "iframe_inner_width_px": 768,
+      "activity_document_client_width_px": 753
+    },
+    {
+      "outer_requested_width_px": 1280,
+      "iframe_inner_width_px": 1280,
+      "activity_document_client_width_px": 1265
+    }
+  ],
+  "evidence": [
+    {
+      "phase": "Evaluator",
+      "artifact": "drafts/spike-prime-primeiros-movimentos-qa/browser-quality.json",
+      "summary": "8PNG novos carregados e descodificados no Chromium gerido pelo Hub. Hashes do browser iguais aos originais de2026-10-05. Seis passos e viragem carregaram nos3apoios. Dimensões naturais680–1306px para blocos, programa1306×774, categorias174×1392."
+    },
+    {
+      "phase": "Evaluator",
+      "summary": "21verificações de guia/ampliação por janela exterior390/768/1280, total63:3apoios×6passos+viragem. Medidas retiradas do DOM atual após cada render: nenhum transbordamento horizontal da página, caixas de ampliação limitadas, alvos≥48px e legendas20px. Corpo20px e Didact Gothic carregada."
+    },
+    {
+      "phase": "Evaluator",
+      "artifacts": [
+        "drafts/spike-prime-primeiros-movimentos-qa/spike-quality-mobile-390.png",
+        "drafts/spike-prime-primeiros-movimentos-qa/spike-quality-mobile-390-zoom.png",
+        "drafts/spike-prime-primeiros-movimentos-qa/spike-quality-tablet-768.png",
+        "drafts/spike-prime-primeiros-movimentos-qa/spike-quality-tablet-768-zoom.png",
+        "drafts/spike-prime-primeiros-movimentos-qa/spike-quality-desktop-1280.png"
+      ],
+      "summary": "Capturas reais guardadas e inspecionadas: programa completo visível no tablet/desktop, com forma, conetores e rótulos legíveis. Ampliação móvel/tablet mostra texto nítido, contorno de foco azul e deslocamento limitado à região. Original pt-BR preservado; legenda/transcrição pt-PT distingue parâmetros do exemplo e plano da criança."
+    },
+    {
+      "phase": "Evaluator",
+      "summary": "Interação MCP Hub: abrir ampliação foca região; Tab sai para Passo anterior e Shift+Tab regressa. ArrowRight desloca0→80px no móvel e tablet. Shift+Tab e Enter fecham, preservando foco no botão. Sem transbordamento. Foi possível confirmar visualmente o foco nesta ronda."
+    },
+    {
+      "phase": "Evaluator",
+      "summary": "Checkpoint anterior restaurado sem attempt; somente activity_state durante restauro. Navegar passos e ampliar imagens não emitiu attempt. Zero erros observados no ensaio final e zero requests de recursos externos depois do carregamento/interações."
+    },
+    {
+      "phase": "Proofreader",
+      "artifact": "drafts/spike-prime-primeiros-movimentos-proofread.json",
+      "summary": "Revisão4 PASS para o mesmo SHA: novo passo Configurações→Idioma→Português(Brasil), legenda e equivalência textual das8capturas."
+    },
+    {
+      "phase": "Orchestrator",
+      "artifact": "drafts/spike-prime-primeiros-movimentos-qa/quality-integration.json",
+      "summary": "8assets iguais aos originais losslessDPR2; seleção pt-BR comprovada na aplicação. Conteúdo privado200/SHAatual; published=false e conteúdo anónimo404. Não foram repetidos registos físicos ou de alunos."
+    }
+  ],
+  "acceptance_checks": [
+    {
+      "check": "8originais novos carregados, descodificados e SHA iguais",
+      "pass": true
+    },
+    {
+      "check": "6passos e viragem nos3apoios",
+      "pass": true
+    },
+    {
+      "check": "Janelas390/768/1280(documento375/753/1265): sem overflow e alvos48px",
+      "pass": true
+    },
+    {
+      "check": "Corpo/legendas20px e fonte incorporada carregada",
+      "pass": true
+    },
+    {
+      "check": "Inspeção visual móvel/tablet/desktop e ampliação nítida",
+      "pass": true
+    },
+    {
+      "check": "Tab/Shift+Tab, ArrowRight e fechar por Enter; foco azul visível",
+      "pass": true
+    },
+    {
+      "check": "Idiomas, valores de exemplo e transcrições preservados",
+      "pass": true
+    },
+    {
+      "check": "Restauro sem attempt e ausência de requests externos",
+      "pass": true
+    },
+    {
+      "check": "Privado200/SHAatual e draft anónimo404",
+      "pass": true
+    }
+  ],
+  "blocked_by": [],
+  "limitations": [
+    "Viewport emulado no Chromium gerido; não foi usado tablet ou telemóvel físico.",
+    "Na imagem compacta do móvel o texto é pequeno; a transcrição20px e a ampliação permitem ler sem depender desse tamanho raster.",
+    "Não foi ligado um robô/hub. Portas, rodas, unidades e viragem continuam a exigir confirmação do professor.",
+    "Os percursos completos, reflexão individual e persistência no host permanecem evidência histórica das avaliaçõesv1/v2, associada aos respetivos hashes; não foram repetidos nesta revisão de imagens.",
+    "Sem emulação de rede desligada. O HTML atual carregou e operou sem requests de recursos externos."
+  ],
+  "publication_status": "draft; aprovação específica do professor necessária"
+}

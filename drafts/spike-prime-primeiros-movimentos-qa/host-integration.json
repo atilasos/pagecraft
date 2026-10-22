@@ -1,0 +1,129 @@
+{
+  "date": "2026-10-02",
+  "pass": true,
+  "environment": {
+    "service": "isolated current PageCraft server on loopback8779",
+    "data": "/tmp/pagecraft-spike-qa/data",
+    "real_class_data_modified": false,
+    "draft_code": "444L7K",
+    "published": false
+  },
+  "checks": [
+    {
+      "name": "real sandboxed iframe restores completed checkpoint from browser QA",
+      "pass": true,
+      "evidence": "Frame emitted activity_state readyForReflection=true, state.step=4; no attempt emitted during restore"
+    },
+    {
+      "name": "group save acknowledged and server confirms checkpoint for both members",
+      "pass": true,
+      "evidence": "Guardar para continuar → Guardado. Podem continuar na próxima aula.; last step4 in both histories"
+    },
+    {
+      "name": "individual reflection switches voice without copying answers",
+      "pass": true,
+      "evidence": "A has programar=help and strategy; B begins blank, saves only next_step; optional criteria remain unanswered"
+    },
+    {
+      "name": "both voices and shared checkpoint survive reload",
+      "pass": true,
+      "evidence": "Native browser reopens A and B, distinct stored fields; one individual_reflection event per participant in private teacher history"
+    },
+    {
+      "name": "draft denied to anonymous callers locally and publicly",
+      "pass": true,
+      "evidence": {
+        "local_api": {
+          "/api/learning/activities/444L7K": 404,
+          "/api/learning/activities/444L7K/content": 404
+        },
+        "public_native_browser": {
+          "entry": "Atividade não encontrada.",
+          "metadata_http": 404,
+          "content_http": 404
+        }
+      }
+    }
+  ],
+  "participant_evidence": [
+    {
+      "reflections": 1,
+      "reflection": {
+        "answers": {
+          "programar": "help"
+        },
+        "strategy": "Comparei os blocos e voltei à marca.",
+        "next_step": "",
+        "skipped": false,
+        "source_work_group_id": "91473d4bbc58",
+        "revision": 1,
+        "criteria": [
+          {
+            "id": "programar",
+            "pt": "Planeio os passos e programo um movimento.",
+            "en": ""
+          },
+          {
+            "id": "testar",
+            "pt": "Testo três vezes a partir da mesma marca.",
+            "en": ""
+          },
+          {
+            "id": "melhorar",
+            "pt": "Mudo uma coisa e comparo o resultado.",
+            "en": ""
+          },
+          {
+            "id": "cooperar",
+            "pt": "Ouço o colega e explico uma descoberta.",
+            "en": ""
+          }
+        ]
+      },
+      "state_count": 1,
+      "last_step": 4
+    },
+    {
+      "reflections": 1,
+      "reflection": {
+        "answers": {},
+        "strategy": "",
+        "next_step": "Quero testar a partir da mesma marca.",
+        "skipped": false,
+        "source_work_group_id": "91473d4bbc58",
+        "revision": 1,
+        "criteria": [
+          {
+            "id": "programar",
+            "pt": "Planeio os passos e programo um movimento.",
+            "en": ""
+          },
+          {
+            "id": "testar",
+            "pt": "Testo três vezes a partir da mesma marca.",
+            "en": ""
+          },
+          {
+            "id": "melhorar",
+            "pt": "Mudo uma coisa e comparo o resultado.",
+            "en": ""
+          },
+          {
+            "id": "cooperar",
+            "pt": "Ouço o colega e explico uma descoberta.",
+            "en": ""
+          }
+        ]
+      },
+      "state_count": 1,
+      "last_step": 4
+    }
+  ],
+  "limitations": [
+    "No physical LEGO hub was available.",
+    "Shared checkpoint came from interactions in a same-origin QA harness, then was restored through the actual opaque iframe.",
+    "Session host returned403 for /api/session-event-types and used fallback; content, event saving and reflections succeeded.",
+    "Native preview required explicit instant scrolling and asynchronous readiness checks.",
+    "Python HTTP clients hit Cloudflare1010; public denial was verified with the real native browser instead."
+  ]
+}

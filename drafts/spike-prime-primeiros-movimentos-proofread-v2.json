@@ -1,0 +1,42 @@
+{
+  "pass": true,
+  "severity": "low",
+  "issues": [],
+  "summary": "Texto em português europeu AO90, adequado aos 3.º e 4.º anos. Os sete problemas da primeira revisão foram corrigidos: andaime na aplicação real, vocabulário, medidas, comparação, orientação e rótulos de reflexão. A frase integrada também foi ajustada ao comportamento real de abertura da reflexão.",
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90: OK",
+    "Registo consistente: OK",
+    "Adequação à faixa etária: OK",
+    "Instruções claras e seguíveis: OK",
+    "Alinhamento com objetivos: OK",
+    "Com pistas, Passo a passo e Mais desafios: OK na revisão textual",
+    "Declarações físicas distintas de observação da página: OK",
+    "Reflexão facultativa e rótulos integrados coerentes com host real: OK",
+    "Extensões fora do núcleo e orientação com professor: OK"
+  ],
+  "reviewed_on": "2026-10-02",
+  "iteration": 2,
+  "artifacts_reviewed": [
+    "drafts/spike-prime-primeiros-movimentos.html",
+    "drafts/spike-prime-primeiros-movimentos-docspec.json",
+    "drafts/spike-prime-primeiros-movimentos-design-spec.json",
+    "drafts/spike-prime-primeiros-movimentos.md",
+    "server/static/learning/activity.js"
+  ],
+  "coverage": [
+    "Texto HTML estático",
+    "Strings de UI, feedback e labels geradas por JavaScript",
+    "Com pistas, Passo a passo e Mais desafios",
+    "Guia de passos na aplicação SPIKE real",
+    "Extensões quadrado, obstáculos e giroscópio",
+    "Mensagens de confirmação, bloqueio e pedidos de ajuda",
+    "Reflexão local e interface integrada",
+    "Mensagens de restauro e preservação do trabalho"
+  ],
+  "resolved_previous_issues": 7,
+  "limits": [
+    "Revisão textual estática: não foram executados testes de browser nesta fase.",
+    "Não foi ligado nem executado um robô físico.",
+    "O professor confirma a versão da aplicação, as portas e as medidas da base antes da aula."
+  ]
+}

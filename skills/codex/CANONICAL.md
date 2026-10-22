@@ -24,6 +24,8 @@ Ficheiros específicos deste harness (não sincronizados) e que podem ser editad
 
 - `SKILL.md`
 - `README.md`
-- `install.sh` (quando exista)
+- `install.py`
+- `references/learning.md` e `references/runtime.md`
+- `scripts/activity.py`
 - `agents/*.md`
 - `CANONICAL.md` (este ficheiro)

@@ -27,3 +27,10 @@ class InvalidPitItemError(ClassroomError):
 
 class InvalidSessionEventError(ClassroomError):
     pass
+
+
+class CompositionChangedError(ClassroomError):
+    def __init__(self, event_ids: list[str], group: dict):
+        super().__init__("A entrada ou os participantes foram alterados. Estas respostas mantêm o contexto anterior.")
+        self.event_ids = event_ids
+        self.group = group

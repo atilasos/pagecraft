@@ -1,0 +1,140 @@
+{
+  "slug": "canva-animais-4ano",
+  "date": "2026-10-01",
+  "status": "ready-for-teacher-review",
+  "published": false,
+  "teacherApproval": "pending",
+  "code": "NBR73J",
+  "preview": "https://estudio.infantinho.xyz/NBR73J",
+  "duration": {
+    "sessions": 3,
+    "minutesPerSession": 45,
+    "totalMinutes": 135
+  },
+  "htmlSha256": "82ab30a1ed28b3004006fcf37a613204ce6f64bef9d6ff38aaf5f50b8e96d9cf",
+  "artifacts": {
+    "guide": "drafts/canva-animais-4ano.md",
+    "docspec": "drafts/canva-animais-4ano-docspec.json",
+    "design": "drafts/canva-animais-4ano-design-spec.json",
+    "html": "drafts/canva-animais-4ano.html",
+    "sources": "drafts/canva-animais-4ano-sources.md",
+    "captures": "drafts/canva-animais-4ano-assets/captures.json",
+    "proofread": "drafts/canva-animais-4ano-proofread.json",
+    "evaluation": "drafts/canva-animais-4ano-evaluation.json",
+    "metadata": "drafts/canva-animais-4ano-activity.json",
+    "hostCheck": "drafts/canva-animais-4ano-host-check.json",
+    "browserEvidence": "drafts/canva-animais-4ano-qa/browser-checks.json"
+  },
+  "phases": {
+    "architect": "passed-schema-validation",
+    "designer": "complete",
+    "builder": "complete",
+    "proofreader": "passed",
+    "evaluator": "passed",
+    "registration": "registered-private-draft"
+  },
+  "canva": {
+    "realScreenshots": 11,
+    "generatedIllustrations": 1,
+    "manifest": "drafts/canva-animais-4ano-assets/captures.json",
+    "limitations": [
+      "Upload/download finais e modo de apresentação não executados; menus observados.",
+      "Editor A4 próprio observado; passos comuns exemplificados numa apresentação; editor de cartaz A2 não verificado."
+    ]
+  },
+  "verification": {
+    "browser": [
+      {
+        "id": "journey-support",
+        "pass": true,
+        "evidence": "Sete etapas respondidas desde zero; duas escolhas erradas com pistas; avanços e futuros bloqueados apenas por campos vazios."
+      },
+      {
+        "id": "journey-intermediate",
+        "pass": true,
+        "evidence": "Sete etapas respondidas desde zero; duas escolhas erradas com pistas; avanços e futuros bloqueados apenas por campos vazios."
+      },
+      {
+        "id": "journey-challenge",
+        "pass": true,
+        "evidence": "Sete etapas respondidas desde zero; duas escolhas erradas com pistas; avanços e futuros bloqueados apenas por campos vazios."
+      },
+      {
+        "id": "responsive",
+        "pass": true,
+        "evidence": "390 e 768 px: oito etapas sem transbordamento ou alvos abaixo de 48 px. Entrada também medida a 1280 px."
+      },
+      {
+        "id": "typography-contrast",
+        "pass": true,
+        "evidence": "Corpo 20 px; fonte incorporada. Contraste medido 11.50:1 tinta/papel e 7.76:1 texto/botão principal."
+      },
+      {
+        "id": "keyboard-zoom",
+        "pass": true,
+        "evidence": "Teclado muda apoio; foco tem contorno de 3 px. Escape fecha a ampliação e devolve foco ao botão."
+      },
+      {
+        "id": "bridge-restore",
+        "pass": true,
+        "evidence": "Iframe recebe eventos, emite estado inicial incompleto; restauro recupera etapa 8 e prontidão sem emitir tentativas; botão emite open_reflection."
+      },
+      {
+        "id": "bridge-payload",
+        "pass": true,
+        "evidence": "Payload máximo observado neste percurso: 286 bytes; inferior a 4096. Resultados e rótulos dos campos em português."
+      },
+      {
+        "id": "offline",
+        "pass": true,
+        "evidence": "Com Network.emulateNetworkConditions offline=true no browser, todas as oito etapas continuam a funcionar; zero recursos remotos ou erros no percurso. Canva não aberto durante este teste."
+      },
+      {
+        "id": "individual-local-reflection",
+        "pass": true,
+        "evidence": "Percurso Hub manual: Aluno A e Aluno B escrevem estratégias distintas; mudar de participante recupera a estratégia correta. Recarregar a atividade restaura etapa e plano."
+      },
+      {
+        "id": "product-change",
+        "pass": true,
+        "evidence": "Percurso Hub manual: cartaz → diapositivos → livro conserva nomes/razão/notas, pede nova confirmação do plano e dos estados dependentes; mapa do livro com seis páginas."
+      },
+      {
+        "id": "proofread",
+        "pass": true,
+        "evidence": "Relatório final do Proofreader pass=true no mesmo hash HTML."
+      },
+      {
+        "id": "real-canva-screenshots",
+        "pass": true,
+        "evidence": "11 capturas reais do Canva e uma ilustração gerada, todas incorporadas. Origem, instruções e limitações discriminadas no manifesto."
+      },
+      {
+        "id": "console",
+        "pass": true,
+        "evidence": "Três percursos finais sem erros JS; abh test anterior sem console_errors/browser_errors/pending_requests."
+      }
+    ],
+    "server": {
+      "teacherPreview": true,
+      "eventsPersisted": true,
+      "reflectionPersisted": true,
+      "downloadContainsEvidenceAndReflection": true,
+      "previewExcludedFromStudentReports": true,
+      "portugueseLabelsInReport": true,
+      "remoteTeacherPreviewOpenedInT3": true,
+      "remoteOpaqueIframeBridgeInitialEventsStored": true
+    },
+    "publicDraftApi": {
+      "/api/learning/activities/NBR73J": 404,
+      "/api/learning/activities/NBR73J/content": 404
+    },
+    "remotePreview": "Login do professor confirmado no T3/Mac; primeira etapa aberta para revisão e eventos iniciais da ponte guardados.",
+    "hubSession": "closed"
+  },
+  "delivery": {
+    "teacherReviewRequired": true,
+    "studentsHaveNoPublicAccessToDraft": true,
+    "presentation": "Guião e ensaio de 2–3 minutos; comunicação de toda a turma pode ocorrer posteriormente."
+  }
+}

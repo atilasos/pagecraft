@@ -355,3 +355,34 @@ async def test_feedback_worker_survives_session_closing_during_response(env):
     assert feedback["student_id"] == second_student_id
     assert provider.calls == 2
     await fb.stop()
+
+
+async def test_group_feedback_is_targeted_and_recovered_once(env):
+    config, storage, hub, classroom = env
+    cls = await classroom.create_class('2.º B', 2, ['Ana', 'Bruno', 'Carla'])
+    session = await classroom.create_session(cls['id'], 'slug', 'Frações')
+    ids = list(session['roster'])
+    group = await classroom.claim_work_group(session['id'], ids[:2], 'pair', 'support')
+    await classroom.ingest_work_group_events(session['id'], group['id'], [{
+        'event_id': 'group-feedback', 'type': 'feedback_request', 'unit_id': 'u1',
+        'payload': {'question': 'Quantas metades?', 'answer': '2'},
+    }])
+    provider = good_provider()
+    feedback = FeedbackService(config, storage, classroom, provider)
+    feedback.start()
+    try:
+        response = await _wait_event(storage, session['id'], 'ai_feedback', timeout=.5)
+        assert response.get('student_id') is None
+        assert response['work_group_id'] == group['id']
+        assert response['participant_ids'] == ids[:2]
+        assert response['caused_by_seq'] is not None
+    finally:
+        await feedback.stop()
+    feedback.start()
+    try:
+        await asyncio.sleep(.1)
+        history = await storage.read_jsonl(storage.path('sessions', session['id'], 'events.jsonl'))
+        assert len([e for e in history if e['type'] == 'ai_feedback']) == 1
+        assert len(provider.calls) == 1
+    finally:
+        await feedback.stop()

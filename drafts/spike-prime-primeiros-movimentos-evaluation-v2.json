@@ -1,0 +1,132 @@
+{
+  "pass": true,
+  "route": "none",
+  "severity": "low",
+  "iteration": 2,
+  "checked_on": "2026-10-02",
+  "scope": "Avaliação incremental das capturas SPIKE reais. Fluxos do núcleo, reflexão e persistência anteriormente verificados permanecem documentados na avaliação v1; não se declara nova execução desses ensaios nesta ronda.",
+  "html_sha256": "061e8f4b5556be88d23b321a5258892f2c0f645b625eff5cab289d15e6095d68",
+  "reviewed_commit": "0910f60623ca44ad33e439e293b2878d1e77c705",
+  "scores": {
+    "factual_accuracy": 4,
+    "constraint_alignment": 4,
+    "differentiation_quality": 4,
+    "ux_accessibility": 4,
+    "visual_design": 4,
+    "technical_quality": 4
+  },
+  "issues": [],
+  "critical": [],
+  "required_fixes": [],
+  "previous_validation": {
+    "report": "drafts/spike-prime-primeiros-movimentos-evaluation-v1.json",
+    "html_sha256": "c6fd72c00648ff5f37cff1e300996cbe2fb8f6af3f3816b3723e725b42cad5d8",
+    "result": "PASS",
+    "covers": "Percursos completos, critérios,3apoios, ensaios e confirmações, extensões, reflexão individual local/host, gravação e recuperação no servidor. Evidência histórica ligada a essa versão."
+  },
+  "evidence": [
+    {
+      "phase": "Evaluator",
+      "artifact": "drafts/spike-prime-primeiros-movimentos-qa/browser-screenshots.json",
+      "summary": "Oito PNG originais incorporados foram carregados, descodificados e comparados por SHA-256 com os assets da captura SPIKE. Dimensões e proporções preservadas. Sem pedidos externos de recursos."
+    },
+    {
+      "phase": "Evaluator",
+      "summary": "Guias ausentes sem plano confirmado ou previsão na missão2, e sem sequência confirmada na missão4. Confirmar uma resposta errada continua válido e permite ver a referência. Referência de20cm foi distinguida do plano selecionado10cm por texto adaptativo."
+    },
+    {
+      "phase": "Evaluator",
+      "summary": "Seis passos de início/motores/velocidade/medida/avanço/programa, categorias e viragem real com alt/transcrição pt-PT. Original pt-BR preservado e identificado. C+D,30%,17,5cm,20cm e0,25rotações declarados exemplos; viragem não garante90°."
+    },
+    {
+      "phase": "Evaluator",
+      "summary": "63 ensaios DOM:3apoios×3janelas exteriores solicitadas(390/768/1280)×6passos+viragem, com guia e ampliação abertos. Larguras interiores efetivas do documento:360/738/1250px (scrollbars do harness); imagens carregadas, controlos≥48px, legendas20px e sem transbordamento. Captura visual da janela390 guardada; screenshots768/1280 limitadas por timeout do cliente.",
+      "artifact": "drafts/spike-prime-primeiros-movimentos-qa/spike-turn-390.png"
+    },
+    {
+      "phase": "Evaluator",
+      "summary": "Reteste do handler final: ArrowRight trusted na região de ampliação focada produziu scrollLeft80px em390/768 e15px em1280(limite da região), nos3apoios. ArrowLeft regressou a0; ArrowDown/Up percorreram zoom/categorias; foco permaneceu na região. Enter fechou ampliação e preservou foco no botão. As regiões são tabindex0 e limitam o scroll à caixa."
+    },
+    {
+      "phase": "Evaluator",
+      "summary": "Restauro do checkpoint anterior na versão atual emitiu somente activity_state, sem nova tentativa. Respostas, etapa e declarações físicas mantidas. Navegar passos/imagens, ampliar e usar setas não emitiu attempt."
+    },
+    {
+      "phase": "Proofreader",
+      "artifact": "drafts/spike-prime-primeiros-movimentos-proofread.json",
+      "summary": "Revisão textual3 PASS sobre SHA final061e8f4; diff posterior limitado ao handler de teclado."
+    },
+    {
+      "phase": "Orchestrator",
+      "artifact": "drafts/spike-prime-primeiros-movimentos-qa/screenshots-integration.json",
+      "summary": "HTTP privado devolve200 com HTML igual ao SHA final;8assets têm hash original; published=false e conteúdo anónimo404. Não se repetiram registos de alunos/grupos."
+    }
+  ],
+  "acceptance_checks": [
+    {
+      "check": "8imagens originais dataURL carregadas/hash/proporção/alt",
+      "pass": true
+    },
+    {
+      "check": "Revelação após previsão/plano e após sequência confirmada",
+      "pass": true
+    },
+    {
+      "check": "Pt-BR original, legendas/transcrições pt-PT≥20px e parâmetros como exemplos",
+      "pass": true
+    },
+    {
+      "check": "3apoios×janelas exteriores390/768/1280(documento360/738/1250): guias/ampliação sem overflow ou controlo<48px",
+      "pass": true
+    },
+    {
+      "check": "Setas trusted em região focada:3apoios×3larguras",
+      "pass": true,
+      "focus_method": "Foco explícito no DOM seguido de keypress native trusted"
+    },
+    {
+      "check": "Enter abre/fecha; foco preservado; scroll interno limitado",
+      "pass": true
+    },
+    {
+      "check": "Checkpoint prévio recuperado sem tentativas adicionais",
+      "pass": true
+    },
+    {
+      "check": "Imagem e fonte incorporadas, sem requests de recursos",
+      "pass": true
+    },
+    {
+      "check": "HTTP privado/currentSHA e rascunho anónimo404",
+      "pass": true
+    }
+  ],
+  "blocked_by": [],
+  "limitations": [
+    "A inspeção visual do incremento tem captura390. preview_snapshot falhou por timeout do cliente em768/1280 e numa captura de zoom390; as geometrias, carregamento e interações nesses tamanhos foram executadas.",
+    "O tab nativo esteve em segundo plano. Não se confirmou a pintura do anel :focus-visible nem entrada Tab na região. Região focada explicitamente e setas trusted foram testadas; CSS de foco e tabindex0 permanecem presentes.",
+    "A imagem reduzida em390 tem texto pequeno; transcrição20px e ampliação evitam depender da leitura rasterizada. Nenhum pedido obrigatório exige ler somente a captura.",
+    "O ensaio de63layouts e a captura visual foram feitos em5bb4adcb61bcf3d809b38ae3d3f74a33cba9d2395658c696645381516a551e2c. O SHA final061e8f4 acrescentou somente o handler de setas, retestado separadamente; texto/CSS/imagens/layout são idênticos.",
+    "Não foi ligado um robô físico. Calibração, portas e versão/idioma dependem da confirmação do professor.",
+    "Não se emulou rede desligada; carregamento/interações não produziram requests externos de recursos.",
+    "Persistência host e vozes individuais permanecem evidência da ronda v1, ligada ao SHA anterior; foram preservadas as funções da ponte, sem repetir hardware ou registos nesta ronda."
+  ],
+  "publication_status": "draft; revisão e aprovação específica do professor necessária",
+  "viewport_measurements": [
+    {
+      "outer_window_requested_width_px": 390,
+      "iframe_window_width_px": 375,
+      "activity_document_client_width_px": 360
+    },
+    {
+      "outer_window_requested_width_px": 768,
+      "iframe_window_width_px": 753,
+      "activity_document_client_width_px": 738
+    },
+    {
+      "outer_window_requested_width_px": 1280,
+      "iframe_window_width_px": 1265,
+      "activity_document_client_width_px": 1250
+    }
+  ]
+}

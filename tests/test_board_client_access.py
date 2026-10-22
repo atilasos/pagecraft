@@ -11,7 +11,7 @@ def test_board_client_pairs_then_waits_for_a_live_session():
     assert 'id="pairing-code"' in html
     assert 'id="waiting"' in html
     assert 'id="board"' in html
-    assert 'src="/board/app.js"' in html
+    assert 'src="/board/app.js?v=board-entry-20261008"' in html
     assert 'fetch("/api/board/pairings", { method: "POST" })' in javascript
     assert 'fetch("/api/board/pairings/complete"' in javascript
     assert 'fetch("/api/board/session")' in javascript

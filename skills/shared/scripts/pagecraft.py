@@ -141,6 +141,8 @@ def find_ae_files(year_info: dict) -> list[Path]:
 def load_reference(name: str) -> str:
     """Load a reference file content."""
     path = REFS_DIR / name
+    if not path.exists():
+        path = WORKSPACE / "server/pipeline/prompts/references" / name
     if path.exists():
         return path.read_text(encoding="utf-8")
     return ""
@@ -235,7 +237,7 @@ Gera um DocSpec-AM completo em JSON válido para o tópico acima.
 ## Output
 Responde APENAS com o JSON do DocSpec-AM válido. Sem explicações antes ou depois.
 """
-    return prompt
+    return load_reference("activity-experience.md") + "\n\n" + load_reference("age-adaptation.md") + "\n\n" + prompt
 
 
 def build_writer_prompt(docspec: dict) -> str:
@@ -250,9 +252,9 @@ def build_writer_prompt(docspec: dict) -> str:
 **Constraint:** {unit.get("interaction", {}).get("constraint", "")}
 
 **Differentiation:**
-- 🟢 Apoio: {unit.get("differentiation", {}).get("support", "")}
-- 🟡 Intermédio: {unit.get("differentiation", {}).get("standard", "")}
-- 🔴 Desafio: {unit.get("differentiation", {}).get("challenge", "")}
+- Com pistas — Apoio: {unit.get("differentiation", {}).get("support", "")}
+- Passo a passo — Intermédio: {unit.get("differentiation", {}).get("standard", "")}
+- Mais desafios — Desafio: {unit.get("differentiation", {}).get("challenge", "")}
 """)
 
     maker_sections = []
@@ -291,7 +293,7 @@ def build_writer_prompt(docspec: dict) -> str:
 4. NÃO revelar o Constraint directamente — o texto deve guiar a descoberta
 5. Incluir uma frase de activação/pergunta no início de cada unit
 6. Se houver maker, incluir secção "🛠️ Desafio Maker" com instruções claras para os alunos
-7. Incluir secção final de mini-avaliação (3-5 perguntas/desafios observáveis)
+7. Usar os critérios do DocSpec para a reflexão facultativa; os pedidos da exploração pertencem às etapas definidas para esta atividade
 
 ## Output:
 Para cada unit, responde com:
@@ -314,7 +316,7 @@ Inclui também:
 <!-- ASSESSMENT_END -->
 ```
 """
-    return prompt
+    return load_reference("activity-experience.md") + "\n\n" + load_reference("age-adaptation.md") + "\n\n" + prompt
 
 
 def build_builder_prompt(docspec: dict) -> str:
@@ -340,9 +342,9 @@ def build_builder_prompt(docspec: dict) -> str:
 **Assessment:** {interaction.get("assessment", "")}
 
 **Differentiation:**
-- 🟢 Apoio: {diff.get("support", "")}
-- 🟡 Intermédio: {diff.get("standard", "")}
-- 🔴 Desafio: {diff.get("challenge", "")}
+- Com pistas — Apoio: {diff.get("support", "")}
+- Passo a passo — Intermédio: {diff.get("standard", "")}
+- Mais desafios — Desafio: {diff.get("challenge", "")}
 """)
 
     prompt = f"""# Tarefa: Gerar interacções HTML/CSS/JS para PageCraft
@@ -357,13 +359,13 @@ def build_builder_prompt(docspec: dict) -> str:
 1. HTML5 + CSS3 + JavaScript vanilla (sem frameworks/bibliotecas externas)
 2. Self-contained: todo o CSS e JS inline
 3. Responsive: funcionar em tablet (min-width 768px) e quadro interactivo (1920px)
-4. Touch-friendly: áreas clicáveis mínimo 44x44px, suporte touch events
-5. Acessibilidade: aria-labels, contraste adequado, tamanho de fonte mínimo 16px
+4. Touch-friendly: áreas clicáveis nos mínimos por idade da referência comum, com toque e teclado
+5. Acessibilidade: labels, foco, contraste AA e tipografia nos mínimos por idade
 6. Cores vivas e amigáveis para crianças, com feedback visual claro
 7. Animações suaves (CSS transitions/requestAnimationFrame)
 8. Implementar os 3 níveis de diferenciação como tabs ou botões seleccionáveis
 9. O Constraint NÃO deve ser revelado — a interacção deve levar à descoberta
-10. Incluir feedback visual quando o aluno descobre o Constraint (confetti, cor, mensagem)
+10. Dar pista visual imediata e permitir corrigir respostas erradas; avançar por respostas, sem exigir acerto
 
 ## Output:
 Para cada unit, responde com:
@@ -377,7 +379,7 @@ Para cada unit, responde com:
 <!-- INTERACTIVE_N_END -->
 ```
 """
-    return prompt
+    return load_reference("activity-experience.md") + "\n\n" + load_reference("age-adaptation.md") + "\n\n" + prompt
 
 
 def build_evaluator_prompt(docspec: dict, html_content: str) -> str:
@@ -416,7 +418,7 @@ Responde com JSON:
 }}
 ```
 """
-    return prompt
+    return load_reference("activity-experience.md") + "\n\n" + load_reference("age-adaptation.md") + "\n\n" + prompt
 
 
 def build_html_page(
@@ -483,10 +485,10 @@ def build_html_page(
     }}
     * {{ box-sizing: border-box; margin: 0; padding: 0; }}
     body {{
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-family: 'Century Gothic', 'Didact Gothic', 'URW Gothic', 'Avant Garde', sans-serif;
       background: var(--bg);
       color: var(--text);
-      font-size: 18px;
+      font-size: 22px;
       line-height: 1.6;
       padding: 1rem;
       max-width: 1200px;
@@ -609,7 +611,7 @@ def build_html_page(
     }}
     button:hover {{ opacity: 0.9; transform: scale(1.02); }}
     @media (max-width: 768px) {{
-      body {{ font-size: 16px; padding: 0.5rem; }}
+      body {{ font-size: 22px; padding: 0.5rem; }}
       header {{ padding: 1.5rem; }}
       header h1 {{ font-size: 1.5rem; }}
       .knowledge-unit {{ padding: 1rem; }}
@@ -698,9 +700,9 @@ def build_markdown(topic: str, docspec: dict) -> str:
                 f"- Assessment: {unit.get('interaction', {}).get('assessment', '')}",
                 "",
                 f"**Diferenciação:**",
-                f"- 🟢 Apoio: {unit.get('differentiation', {}).get('support', '')}",
-                f"- 🟡 Intermédio: {unit.get('differentiation', {}).get('standard', '')}",
-                f"- 🔴 Desafio: {unit.get('differentiation', {}).get('challenge', '')}",
+                f"- Com pistas — Apoio: {unit.get('differentiation', {}).get('support', '')}",
+                f"- Passo a passo — Intermédio: {unit.get('differentiation', {}).get('standard', '')}",
+                f"- Mais desafios — Desafio: {unit.get('differentiation', {}).get('challenge', '')}",
             ]
         )
 

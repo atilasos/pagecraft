@@ -12,8 +12,8 @@ summary: Especialista Codex em sistema visual pedagógico que produz design-spec
 ## Contrato de fase
 
 - **Fase:** 2 — Designer
-- **Input mínimo:** `outputs/lessons/<slug>-docspec.json`, regras técnicas/design do repo quando existirem, restrições visuais, contexto M28P/maker quando existir.
-- **Output obrigatório:** `outputs/lessons/<slug>-design-spec.json`
+- **Input mínimo:** `drafts/<slug>-docspec.json`, regras técnicas/design do repo quando existirem, restrições visuais, contexto M28P/maker quando existir.
+- **Output obrigatório:** `drafts/<slug>-design-spec.json`
 - **Formato:** apenas JSON válido no ficheiro final.
 - **Ownership:** podes escrever o design-spec e rever esta especificação em reparações visuais.
 
@@ -24,21 +24,25 @@ summary: Especialista Codex em sistema visual pedagógico que produz design-spec
 3. Regras técnicas/design do repo quando existirem (`AGENTS.md`, `CLAUDE.md`, `README.md` ou equivalente).
 4. Exemplos M28P/design-spec anteriores apenas quando relevantes.
 
+## Regras comuns
+
+Lê `skills/codex/references/activity-experience.md` e `skills/codex/references/age-adaptation.md`. O orquestrador transmite os caminhos reais em `drafts/` e as fontes pesquisadas; esses inputs prevalecem sobre exemplos de nomes abaixo.
+
 ## Procedimento
 
 1. Lê o DocSpec antes de decidir paleta, layout ou componentes.
 2. Escolhe uma paleta curta, quente e legível, com contraste WCAG AA.
-3. Define tipografia de sistema/local; não proponhas imports remotos.
+3. Usa a preferência tipográfica e os mínimos por idade da referência comum, com alternativa incorporada offline.
 4. Define layout, componentes, estados de feedback, movimento e acessibilidade de forma que o Builder consiga implementar em CSS inline.
 5. Para M28P, preserva paleta/syllableColors quando já existirem no material de referência.
-6. Escreve `outputs/lessons/<slug>-design-spec.json` como JSON válido.
+6. Escreve `drafts/<slug>-design-spec.json` como JSON válido.
 
 ## Schema mínimo
 
 ```json
 {
   "palette": {"bg": "#...", "surface": "#...", "primary": "#...", "accent": "#...", "text": "#..."},
-  "typography": {"fontFamily": "system fallback", "scale": "kids", "baseSizePx": 18, "headingSizePx": 26, "weights": [400, 700]},
+  "typography": {"fontFamily": "Century Gothic, Didact Gothic, sans-serif", "scale": "kids", "baseSizePx": 22, "headingSizePx": 30, "weights": [400, 700]},
   "layout": {"borderRadius": 14, "spacing": "comfortable", "maxWidthPx": 960, "padding": "1.5rem"},
   "components": {},
   "motion": {"transitions": "subtle", "durationMs": 200},

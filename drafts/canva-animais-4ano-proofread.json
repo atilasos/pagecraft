@@ -1,0 +1,153 @@
+{
+  "pass": true,
+  "severity": "low",
+  "iteration": 2,
+  "slug": "canva-animais-4ano",
+  "reviewedFile": "drafts/canva-animais-4ano.html",
+  "reviewedSha256": "82ab30a1ed28b3004006fcf37a613204ce6f64bef9d6ff38aaf5f50b8e96d9cf",
+  "reviewDate": "2026-10-01",
+  "scope": "Revisão estática de todo o texto HTML, dados e estados JS, comparada com DocSpec e guia docente. Não constitui ensaio no browser.",
+  "issues": [],
+  "differentiation_replacements": {
+    "u1": {
+      "support": "Completem: Escolhemos… porque os colegas podem… . Podem ditar a razão.",
+      "standard": "Comparem dois formatos. Escrevam uma razão com que todos concordem.",
+      "challenge": "Comparem os três formatos. Expliquem por que o escolhido ajuda a turma."
+    },
+    "u2": {
+      "support": "Usem o mapa de zonas ou páginas. Combinem quando trocam o teclado.",
+      "standard": "Façam um esboço. Combinem as tarefas. Cada pessoa explica uma decisão.",
+      "challenge": "Comparem duas organizações. Escolham uma e expliquem porquê. Antecipem uma dificuldade."
+    },
+    "u3": {
+      "support": "Sigam o menu mostrado. Peçam ajuda para os passos do editor.",
+      "standard": "Criem o formato escolhido. Comecem a primeira página seguindo o esboço.",
+      "challenge": "Comparem uma página em branco e um modelo simples. Expliquem a escolha."
+    },
+    "u4": {
+      "support": "Copiem uma frase de cada vez. Confiram um animal e depois o outro.",
+      "standard": "Confiram as dez frases e as imagens. Troquem quem escreve e quem confere.",
+      "challenge": "Experimentem duas ordens para os factos. Escolham uma sem mudar o sentido."
+    },
+    "u5": {
+      "support": "Apontem uma parte. Completem: Aqui podes… . Podem registar um comentário oral.",
+      "standard": "Usem os critérios. Registem uma sugestão e decidam uma ação.",
+      "challenge": "Comparem duas sugestões. Escolham qual fazer primeiro e expliquem porquê."
+    },
+    "u6": {
+      "support": "Comparem uma zona antes e depois. Peçam ajuda para guardar o PDF.",
+      "standard": "Apliquem a sugestão escolhida. Abram o PDF e confiram todas as páginas.",
+      "challenge": "A mudança ajuda a ler? Mostrem um exemplo. Se necessário, tentem outra."
+    },
+    "u7": {
+      "support": "Usem as quatro partes do guião. Mostrem uma página enquanto falam.",
+      "standard": "Preparem as quatro partes. Cronometrem um ensaio de 2–3 minutos.",
+      "challenge": "Expliquem uma decisão com um exemplo. Preparem resposta à pergunta dos colegas."
+    },
+    "u8": {
+      "support": "Escolhe um critério. Se quiseres, conta a alguém como participaste.",
+      "standard": "Conta uma estratégia que usaste. O que queres repetir?",
+      "challenge": "Mostra um exemplo da tua estratégia. O que mudarias no próximo trabalho?"
+    }
+  },
+  "summary": "As cinco correções da primeira leitura estão resolvidas no HTML final: apoios infantis, revisão ainda em curso, conclusão sem presunção, explicação do processo e mensagens de armazenamento condicionadas ao resultado. Os textos das onze capturas e do passo adicional do Word são claros e coincidem com o manifesto; os oito momentos mantêm três aulas de 45 minutos, um produto por grupo e apresentação de produto e processo. A revisão linguística e semântica está aprovada; o ensaio funcional pertence ao relatório do Evaluator.",
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90: OK.",
+    "Registo consistente: OK; voz do grupo nas tarefas e voz individual na reflexão.",
+    "Adequação à faixa etária: OK; painéis de apoio com ações concretas e frases curtas.",
+    "Instruções claras e seguíveis: OK; onze capturas reais e nomes de comandos identificados.",
+    "Alinhamento com objetivos: OK; plano partilhado, dez factos, duas ilustrações, revisão e guião de produto/processo.",
+    "Duração: OK; 10+15+20, 25+20 e 15+25+5 somam três aulas de 45 minutos.",
+    "Diferenciação: OK; matriz 8 × 3 aplicada integralmente.",
+    "Conservação do trabalho externo: OK no texto; conclusão não presume produção acabada e respostas aceitam pedido de ajuda.",
+    "Reflexão facultativa e individual: OK no texto; confirmação local distingue sucesso e falha de gravação.",
+    "Coerência HTML/manifesto: OK; onze capturas com títulos, instruções e alternativas textuais coincidentes.",
+    "Relatório docente: OK no texto; declarações do grupo têm rótulo e nota em português."
+  ],
+  "limitations": [
+    "Revisão estática: não foram efetuados ensaios no browser nesta fase.",
+    "O manifesto documenta menus de upload/download/apresentação; os atos finais de envio, descarga e apresentação não foram executados.",
+    "O editor A2 não foi verificado na sessão Canva; passos comuns são exemplificados numa apresentação. A limitação está no guia docente.",
+    "Não foi recebido o Word dos alunos; a revisão não confirma os factos nem as ilustrações do seu produto."
+  ],
+  "routing": {},
+  "history": [
+    {
+      "iteration": 1,
+      "pass": false,
+      "severity": "medium",
+      "reviewedSha256": "eb1d2d00907c6dffee7541f25bc750520a0b56e903f0dc52ecab7d958ffbbb7c",
+      "issueIds": [
+        "ling-01",
+        "ling-02",
+        "ling-03",
+        "ling-04",
+        "ling-05"
+      ]
+    }
+  ],
+  "resolvedIssues": [
+    {
+      "id": "ling-01",
+      "type": "pedagogical",
+      "severity": "medium",
+      "location": "DATA.units[*].differentiation e #support-panel",
+      "original": "Três frases iniciadas: Escolhemos… porque os colegas podem…; colega ou professor pode registar a razão ditada. / Professor prepara design em branco; grupo segue captura a captura e dita nota curta. / Confrontar efeito com a sugestão recebida e justificar alternativa se a primeira alteração não ajudar.",
+      "suggestion": "Substituir pelos textos de differentiation_replacements deste relatório.",
+      "reason": "Os painéis mostram orientações para adultos como se fossem instruções infantis. Há uma contagem de três frases sem três exemplos e um percurso de capturas que não existe para o editor.",
+      "status": "resolved",
+      "resolutionCommit": "79b539c"
+    },
+    {
+      "id": "ling-02",
+      "type": "semantic",
+      "severity": "medium",
+      "location": "FIELDS.revisionResult e stageContent(), case 5",
+      "original": "Mudámos o quê? Para ajudar os colegas como? / Mudámos… para ajudar os colegas a…",
+      "suggestion": "O que mudámos ou ainda queremos mudar? Como ajuda os colegas? / Mudámos… / Vamos mudar… para ajudar os colegas a…",
+      "reason": "A etapa aceita produção ainda incompleta ou pedido de ajuda. A resposta obrigatória precisa de permitir uma nota verdadeira sobre o que falta.",
+      "status": "resolved",
+      "resolutionCommit": "79b539c"
+    },
+    {
+      "id": "ling-03",
+      "type": "semantic",
+      "severity": "medium",
+      "location": "stageContent(), case 7",
+      "original": "O produto e a apresentação ficam preparados. A turma pode ouvir todos os grupos noutra aula.",
+      "suggestion": "Revejam o que já está preparado e o que falta. A turma pode ouvir todos os grupos noutra aula.",
+      "reason": "Avançar significa responder, mesmo com dificuldades. O texto final não pode afirmar conclusão do produto externo a partir desse avanço.",
+      "status": "resolved",
+      "resolutionCommit": "79b539c"
+    },
+    {
+      "id": "ling-04",
+      "type": "consistency",
+      "severity": "low",
+      "location": "header > p",
+      "original": "Um Word, um produto escolhido em conjunto e uma história sobre como o fizemos.",
+      "suggestion": "Um Word, um produto escolhido em conjunto e uma explicação de como o fizemos.",
+      "reason": "O objetivo é explicar decisões e alterações, sem pedir uma história adicional.",
+      "status": "resolved",
+      "resolutionCommit": "79b539c"
+    },
+    {
+      "id": "ling-05",
+      "type": "semantic",
+      "severity": "medium",
+      "location": "Mensagens de preserve-reflection e participantes locais",
+      "original": "Reflexão preservada neste dispositivo. O colega pode começar a sua vez. / reflexão preservada",
+      "suggestion": "Se o armazenamento confirmar: Reflexão guardada neste separador. O colega pode começar a sua vez. Se falhar: A reflexão está visível, mas não foi possível guardá-la neste separador.",
+      "reason": "persist() ignora falhas de sessionStorage; a mensagem não deve garantir conservação quando não existe confirmação local. Nesta fase a análise é estática, sem afirmar falha reproduzida.",
+      "status": "resolved",
+      "resolutionCommit": "79b539c"
+    }
+  ],
+  "reviewedCommit": "79b539c",
+  "reviewedFiles": [
+    "drafts/canva-animais-4ano.html",
+    "drafts/canva-animais-4ano-docspec.json",
+    "drafts/canva-animais-4ano.md",
+    "drafts/canva-animais-4ano-assets/captures.json"
+  ]
+}

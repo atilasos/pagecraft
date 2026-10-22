@@ -4,10 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>PageCraft · Atividade</title>
+    <link rel="stylesheet" href="/learning-assets/fonts.css" />
     <link rel="stylesheet" href="/learning-assets/common.css" />
-    <script defer src="/learning-assets/activity.js"></script>
+    <script defer src="/learning-assets/activity.js?v=20261001-reflection-name"></script>
   </head>
-  <body>
+  <body class="child-page">
     <a class="skip" href="#main">Saltar para a atividade / Skip to activity</a>
     <header>
       <a href="/" aria-label="PageCraft">PageCraft</a>
@@ -63,14 +64,14 @@
           <label
             ><span data-i18n="support">Apoio para refletir</span
             ><select id="level">
-              <option value="support" data-i18n="broto">
-                Broto · Com mais apoio
+              <option value="support" data-i18n="supportLevel">
+                Com pistas
               </option>
-              <option value="intermediate" data-i18n="young">
-                Árvore jovem · Passo a passo
+              <option value="intermediate" data-i18n="intermediateLevel">
+                Passo a passo
               </option>
-              <option value="challenge" data-i18n="robust">
-                Árvore robusta · Explicar e justificar
+              <option value="challenge" data-i18n="challengeLevel">
+                Mais desafios
               </option>
             </select></label
           ><button id="reflect" data-i18n="reflect">
@@ -87,6 +88,7 @@
       <section id="reflection" class="card narrow" hidden>
         <p class="eyebrow" data-i18n="yourvoice">A tua reflexão</p>
         <h1 data-i18n="reflection">O que descobriste?</h1>
+        <p id="reflection-pupil"></p>
         <p id="scaffold"></p>
         <form id="finish-form">
           <div id="criteria"></div>

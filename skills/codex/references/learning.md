@@ -14,6 +14,7 @@ Guarda `drafts/<slug>-activity.json` para o comando `register`:
   "duration": 45,
   "group": "",
   "languages": ["pt", "en"],
+  "requires_completion": true,
   "criteria": [{"id": "objetivo-1", "pt": "Consigo explicar a minha escolha.", "en": "I can explain my choice."}]
 }
 ```
@@ -33,6 +34,12 @@ Quando a criança muda de língua/apoio na atividade, emite `language_changed` c
 O iframe tem origem opaca. Acede a `sessionStorage` apenas em modo autónomo e com tratamento de indisponibilidade. Não depende de `fetch`, armazenamento de cookies ou APIs do pai.
 
 O host guarda eventos com identificadores únicos, reenvia a fila após falha de rede e só confirma gravação depois da resposta do servidor. Cada realização tem a sua credencial HttpOnly; escrever novamente o mesmo nome inicia outra realização, não recupera a anterior. A troca de aluno limpa o estado local dessa realização.
+
+## Respostas obrigatórias e conclusão
+
+Para novas atividades com exploração obrigatória, registar `requires_completion: true`. Ao carregar, restaurar, responder e mudar de apoio, enviar `{pagecraft:1,type:"activity_state",payload:{activity:"<slug>",version:1,readyForReflection:false,state:{}}}` com o estado real e `readyForReflection` calculado a partir de todas as respostas obrigatórias. A reflexão só fica disponível quando esse valor for `true`, mesmo com respostas erradas. Emitir o estado inicial incompleto antes de a criança poder concluir; restaurar a realização recebida sem duplicar tentativas. Conservar o payload abaixo de 4096 bytes e validar a versão e os valores no restauro. Usar uma representação compacta para desenhos.
+
+Esta mensagem pertence ao protocolo do host de realizações; não inventar um novo acontecimento de Sessão de aula. Na sessão, o host resolve participantes e autoria conjunta e oferece reflexão individual à vez. A atividade não deve emitir a autoavaliação de uma criança em nome dos restantes membros.
 
 ## API
 

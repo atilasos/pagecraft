@@ -12,6 +12,12 @@ from pydantic import BaseModel, Field, field_validator
 from ..access import (RateLimitOperation, Role, RoutePolicy, TrustChannel, access_policy,
                       rate_limited)
 from ..learning import LEARNING_COOKIE
+from ..criteria import Criterion
+
+ACTIVITY_CONTENT_HEADERS = {
+        'Content-Security-Policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; media-src data:; font-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'",
+        'Cache-Control': 'no-store',
+    }
 
 router = APIRouter()
 Slug = Annotated[str, Field(pattern=r'^[a-z0-9][a-z0-9-]{0,100}$')]
@@ -22,13 +28,10 @@ Level = Literal['support', 'intermediate', 'challenge']
 Language = Literal['pt', 'en']
 
 
-class Criterion(BaseModel):
-    id: Annotated[str, Field(pattern=r'^[a-z0-9_-]{1,40}$')]
-    pt: Annotated[str, Field(min_length=1, max_length=300)]
-    en: Annotated[str, Field(max_length=300)] = ''
 
 
 class ActivityInput(BaseModel):
+    requires_completion: bool = False
     slug: Slug
     title: Short
     title_en: str = Field(default="", max_length=120)
@@ -64,7 +67,8 @@ class StartInput(BaseModel):
 class Event(BaseModel):
     id: Annotated[str, Field(min_length=1, max_length=80)]
     type: Literal['activity_loaded', 'unit_started', 'attempt', 'discovery',
-                  'assessment_result', 'help_needed', 'share_requested', 'language_changed', 'level_changed']
+                  'assessment_result', 'help_needed', 'share_requested', 'language_changed', 'level_changed',
+                  'activity_state']
     unitId: str = Field(default='', max_length=80)
     payload: dict = Field(default_factory=dict)
 
@@ -131,10 +135,7 @@ async def activity(code: Code, request: Request):
 @access_policy(RoutePolicy.PUBLIC)
 async def content(code: Code, request: Request):
     activity = await visible_activity(request, code)
-    return FileResponse(request.app.state.learning.content_path(activity), headers={
-        'Content-Security-Policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; media-src data:; font-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'",
-        'Cache-Control': 'no-store',
-    })
+    return FileResponse(request.app.state.learning.content_path(activity), headers=ACTIVITY_CONTENT_HEADERS)
 
 
 @router.post('/api/learning/activities/{code}/start', status_code=201)

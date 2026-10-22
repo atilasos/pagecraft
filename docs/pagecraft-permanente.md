@@ -19,6 +19,14 @@ Para entrar de qualquer computador ou telemóvel, abre [Entrada do professor](ht
 A entrada pública `/login` encaminha para esse endereço privado. Os alunos continuam em `pagecraft.infantinho.xyz`; os endereços das atividades e da entrada em sessões usam esse hostname público. O servidor valida a assinatura, emissor, audiência, validade e e-mail do token Access. Um header de e-mail ou um cookie antigo não dá acesso remoto. O acesso direto nesta máquina mantém o bootstrap local necessário ao Codex/OpenClaw.
 
 
+## Continuar uma atividade entre aulas
+
+Em **Aula ao vivo**, selecionar a mesma turma e atividade apresenta **Continuar trabalho**. O professor retoma os grupos existentes e projeta os seus códigos no quadro emparelhado. Cada grupo introduz o código em `/student/` para recuperar o trabalho, inclusive noutro computador. **Começar novo trabalho** cria um registo separado.
+
+Antes de terminar a aula, os grupos usam **Guardar para continuar** e esperam a confirmação do servidor. Os códigos de grupo são de uso único e valem durante a aula ativa. **Novo código para este grupo** permite mudar de dispositivo; **Mostrar atividade no quadro** encerra a projeção dos códigos. As reflexões individuais mantêm os seus autores.
+
+A atividade deve implementar `learning_restore` para preencher automaticamente o seu HTML com as respostas e etapas guardadas. A oficina «Dois animais, três formas de comunicar» já o implementa. Páginas anteriores conservam o histórico de evidências, mas podem precisar de adaptação para recuperar as suas manipulações locais. O Canva continua a guardar o design na conta em que foi criado.
+
 ## Operação nesta máquina
 
 - Serviço: `systemctl --user status pagecraft.service`.

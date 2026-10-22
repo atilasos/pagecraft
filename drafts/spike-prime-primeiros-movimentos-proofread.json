@@ -1,0 +1,54 @@
+{
+  "pass": true,
+  "severity": "low",
+  "issues": [],
+  "summary": "Revisão incremental aprovada: o novo passo de idioma e a legenda estão em português europeu, com os rótulos reais Configurações → Idioma → Português (Brasil). As oito novas capturas preservam os blocos e valores pt-BR; os textos alternativos e as transcrições existentes continuam equivalentes. O restante texto e a lógica são idênticos à revisão v3.",
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90 do texto novo: OK",
+    "Registo adequado aos 3.º/4.º anos: OK — duas frases curtas e caminho explícito",
+    "Seleção Português (Brasil) antes de procurar os blocos: OK no guia",
+    "Legenda coerente com idioma das capturas: OK",
+    "Texto alternativo e transcrições equivalentes às oito novas capturas: OK",
+    "Nomes originais pt-BR dentro das imagens preservados: OK",
+    "Portas e medidas mantidas como exemplos a confirmar: OK",
+    "Direita: 100 distinta de velocidade; 0,25 rotações sem garantia de 90°: OK, texto preservado",
+    "Seis passos e referência de viragem preservados: OK",
+    "Texto e lógica fora do pedido preservados: OK por comparação do HTML normalizado"
+  ],
+  "reviewed_on": "2026-10-05",
+  "iteration": 4,
+  "review_scope": "Revisão localizada do passo de seleção de idioma, da nova legenda e da equivalência textual das oito capturas de 2026-10-05. Não repete QA de browser nem testes anteriores.",
+  "html_commit": "dfa4ddc20178a1d5548f2e379c87c026d9ed88cd",
+  "html_sha256": "16bec10f3caa8f7f9443e05e7ed3d156b1cda34b72c45b12cb52cd73d77b2ccf",
+  "previous_report": "drafts/spike-prime-primeiros-movimentos-proofread-v3.json",
+  "artifacts_reviewed": [
+    "drafts/spike-prime-primeiros-movimentos.html",
+    "drafts/spike-prime-primeiros-movimentos-docspec.json",
+    "drafts/spike-prime-primeiros-movimentos-design-spec.json",
+    "drafts/spike-prime-primeiros-movimentos.md",
+    "drafts/spike-prime-primeiros-movimentos-assets/captures.json",
+    "drafts/spike-prime-primeiros-movimentos-assets/inicio.png",
+    "drafts/spike-prime-primeiros-movimentos-assets/motores.png",
+    "drafts/spike-prime-primeiros-movimentos-assets/velocidade.png",
+    "drafts/spike-prime-primeiros-movimentos-assets/medida.png",
+    "drafts/spike-prime-primeiros-movimentos-assets/avancar.png",
+    "drafts/spike-prime-primeiros-movimentos-assets/programa.png",
+    "drafts/spike-prime-primeiros-movimentos-assets/virar.png",
+    "drafts/spike-prime-primeiros-movimentos-assets/categorias.png"
+  ],
+  "coverage": [
+    "Novo passo Configurações → Idioma → Português (Brasil)",
+    "Nova legenda do guia SPIKE",
+    "Texto alternativo e transcrições dos seis passos, viragem e categorias",
+    "Correspondência dos oito PNG vistos com os blocos/valores descritos",
+    "Correspondência binária das oito imagens incorporadas com os assets revistos",
+    "Comparação incremental com o HTML aprovado na revisão v3"
+  ],
+  "limits": [
+    "Revisão textual estática e inspeção dos PNG locais; não foram executados testes de browser nesta fase.",
+    "A inspeção dos oito PNG confere conteúdo textual e valores; não demonstra legibilidade da página num dispositivo.",
+    "A seleção e persistência do idioma na aplicação foram verificadas pelo orquestrador, não por esta fase.",
+    "Não foi ligado nem executado um robô físico.",
+    "As conclusões anteriores sobre apoios, reflexão e percursos constam da revisão v3 e não foram novamente testadas nesta revisão incremental."
+  ]
+}

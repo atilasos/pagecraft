@@ -12,12 +12,13 @@ const copy = {
     home: "Em casa",
     start: "Começar",
     support: "Apoio",
-    broto: "Broto · Apoio",
-    young: "Árvore jovem",
-    robust: "Árvore robusta",
+    supportLevel: "Com pistas",
+    intermediateLevel: "Passo a passo",
+    challengeLevel: "Mais desafios",
     reflect: "Autoavaliar e terminar",
     yourvoice: "A tua reflexão",
     reflection: "O que descobriste?",
+    reflectionOf: "Reflexão de",
     optional:
       "Podes deixar perguntas por responder. O teu trabalho fica guardado.",
     back: "Voltar à atividade",
@@ -57,12 +58,13 @@ const copy = {
     home: "At home",
     start: "Start",
     support: "Support",
-    broto: "Sprout",
-    young: "Young tree",
-    robust: "Strong tree",
+    supportLevel: "With hints",
+    intermediateLevel: "Step by step",
+    challengeLevel: "More challenges",
     reflect: "Reflect and finish",
     yourvoice: "Your reflection",
     reflection: "What did you discover?",
+    reflectionOf: "Reflection by",
     optional: "You can leave questions unanswered. Your work will be saved.",
     back: "Back to the activity",
     finish: "Save and finish",
@@ -89,6 +91,8 @@ const copy = {
     preview: "Preview: these records are not included in pupil reports.",
   },
 };
+let reflectionReady = true;
+let requiresCompletion = false;
 let lang = "pt",
   activity,
   attempt,
@@ -177,8 +181,18 @@ function translate() {
   if (!$("reflection").hidden) renderReflection();
   sendPreferences();
 }
+function applyPendingPreference({ type, payload = {} }) {
+  if (type === "level_changed" && ["support", "intermediate", "challenge"].includes(payload.level)) {
+    attempt.level = payload.level;
+  }
+  if (type === "language_changed" && activity.languages.includes(payload.language)) {
+    attempt.language = payload.language;
+    lang = payload.language;
+  }
+}
 function record(type, payload = {}, unitId = "") {
   if (!attempt || attempt.completed_at) return;
+  applyPendingPreference({ type, payload });
   queue.push({ id: crypto.randomUUID(), type, payload, unitId });
   persist();
   flush().catch(() => {});
@@ -206,6 +220,9 @@ async function flush() {
   }
 }
 function showWork() {
+  requiresCompletion = activity.requires_completion === true;
+  reflectionReady = !requiresCompletion;
+  $("reflect").disabled = !reflectionReady;
   for (const id of ["entry", "reflection", "done"]) $(id).hidden = true;
   $("work").hidden = false;
   $("leave").hidden = false;
@@ -215,6 +232,7 @@ function showWork() {
   translate();
 }
 function renderReflection() {
+  $("reflection-pupil").textContent = `${t("reflectionOf")} ${attempt.name}.`;
   const level = $("level").value,
     young = activity.year <= 2;
   const prompts =
@@ -297,11 +315,14 @@ function renderReflection() {
   $("next-step").value = reflectionDraft.next_step;
 }
 function openReflection() {
-  if (!attempt || attempt.completed_at) return;
+  if (!reflectionReady || !attempt || attempt.completed_at) return;
   $("work").hidden = true;
   $("reflection").hidden = false;
   renderReflection();
   $("reflection").scrollIntoView({ behavior: "smooth" });
+  const heading = $("reflection").querySelector("h1");
+  heading.tabIndex = -1;
+  heading.focus({ preventScroll: true });
 }
 function showDone() {
   for (const id of ["entry", "work", "reflection"]) $(id).hidden = true;
@@ -368,6 +389,7 @@ $("back").onclick = () => {
 $("finish-form").oninput = captureReflection;
 $("finish-form").onsubmit = async (e) => {
   e.preventDefault();
+  if (!reflectionReady || !attempt || attempt.completed_at) return;
   captureReflection();
   e.submitter.disabled = true;
   try {
@@ -405,6 +427,15 @@ $("again").onclick = leave;
 window.addEventListener("message", (e) => {
   if (e.source !== $("lesson").contentWindow || e.data?.pagecraft !== 1) return;
   const { type, payload = {}, unitId = "" } = e.data;
+  if (type === "activity_state" && requiresCompletion) {
+    reflectionReady = payload.readyForReflection === true;
+    $("reflect").disabled = !reflectionReady;
+    if (!reflectionReady && !$("reflection").hidden) {
+      captureReflection();
+      $("reflection").hidden = true;
+      $("work").hidden = false;
+    }
+  }
   if (type === "open_reflection") {
     openReflection();
     return;
@@ -425,6 +456,7 @@ window.addEventListener("message", (e) => {
     $("level").value = payload.level;
   const allowed = [
     "activity_loaded",
+    "activity_state",
     "unit_started",
     "attempt",
     "discovery",
@@ -448,6 +480,7 @@ setInterval(() => flush().catch(() => {}), 5000);
 (async () => {
   try {
     activity = await api(`/api/learning/activities/${code}`);
+    document.body.dataset.year = String(activity.year);
     $("title").textContent = activity.title;
     document.title = activity.title + " · PageCraft";
     $("group").value = activity.group || "";
@@ -461,6 +494,8 @@ setInterval(() => flush().catch(() => {}), 5000);
         queue = JSON.parse(
           sessionStorage.getItem("pc-queue:" + attempt.id) || "[]",
         );
+        // Pending choices are newer than the server snapshot used for restore.
+        queue.forEach(applyPendingPreference);
         reflectionDraft =
           JSON.parse(
             sessionStorage.getItem("pc-reflection:" + attempt.id) || "null",

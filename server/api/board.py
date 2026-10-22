@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+
+from fastapi.responses import FileResponse
 from fastapi import APIRouter, HTTPException, Request, Response
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -10,7 +12,9 @@ from ..access import (
     access_policy,
     issue_board_cookie,
 )
-from .classroom import stream_session
+from ..classroom.activity_content import session_activity_path
+from .classroom import stream_session, _domain
+from .learning import ACTIVITY_CONTENT_HEADERS
 
 
 router = APIRouter(prefix="/api/board", tags=["board"])
@@ -99,3 +103,14 @@ async def current_session(request: Request):
 @access_policy(RoutePolicy.BOARD)
 async def stream_board_session(session_id: str, request: Request):
     return await stream_session(session_id, request)
+
+
+@router.get("/sessions/{session_id}/content")
+@access_policy(RoutePolicy.BOARD)
+async def board_activity_content(session_id: str, request: Request):
+    """The paired board may demonstrate only the activity of its current class."""
+    session = await request.app.state.classroom.current_board_session()
+    if session is None or session['id'] != session_id:
+        raise HTTPException(404, 'A sessão já não está no quadro.')
+    path = await _domain(session_activity_path(request.app, session['activity_slug']))
+    return FileResponse(path, headers=ACTIVITY_CONTENT_HEADERS)

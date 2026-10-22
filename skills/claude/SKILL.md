@@ -20,6 +20,10 @@ Ao invocar esta skill, o pedido do utilizador autoriza o uso dos seguintes subag
 
 O orquestrador (a sessão principal) coordena, valida artefactos e decide quando parar — não faz o trabalho dos subagentes.
 
+## Experiência da atividade
+
+Lê `references/activity-experience.md` e `references/age-adaptation.md` na pasta desta skill antes de executar a fase. Aplicam as decisões de conceção, avanço, reflexão, tipografia e mínimos por idade. Antes da revisão do HTML, incorpora a fonte real com `python3 scripts/embed_gothic_font.py --activity <caminho-do-html>`, a partir do repositório PageCraft.
+
 ## Fontes de verdade
 
 1. Pedido explícito do utilizador/professor, desde que não viole acessibilidade/segurança.
@@ -45,9 +49,9 @@ Não usar para páginas HTML estáticas simples sem fluxo pedagógico/interativo
 
 - HTML final único e self-contained: CSS+JS inline, sem CDN, imports externos, frameworks ou internet.
 - `<html lang="pt-PT">`; português europeu AO90; linguagem adequada à idade.
-- Touch-first: todos os controlos interativos com mínimo **48×48 px**.
+- Touch-first: todos os controlos interativos com mínimos por idade definidos na referência comum.
 - Acessibilidade: skip link, foco visível, labels/ARIA, contraste WCAG AA, alternativa a drag/drop por clique/teclado.
-- Diferenciação obrigatória em três níveis: 🟢 Apoio, 🟡 Intermédio, 🔴 Desafio.
+- Diferenciação obrigatória em três níveis: Com pistas — Apoio, Passo a passo — Intermédio, Mais desafios — Desafio.
 - O **Constraint** é descoberto pela interação; não entregar a regra como resposta pronta ao aluno.
 - Assessment formativo, observável e ligado à interação principal.
 - Maker é opcional, mas quando pedido é cooperativo, ligado ao digital e culmina em comunicação.
@@ -359,7 +363,7 @@ A página só é funcional se:
 2. não há erro JS crítico;
 3. a interação principal funciona;
 4. conteúdo principal é legível em tablet/desktop;
-5. existe percurso completo para o nível 🟡 Intermédio;
+5. existe percurso completo para o nível Passo a passo — Intermédio;
 6. a atividade conduz à descoberta do constraint;
 7. mini-avaliação é observável;
 8. não depende de internet.

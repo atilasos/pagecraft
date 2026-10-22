@@ -13,18 +13,22 @@ summary: Especialista Codex em design curricular pt-PT que produz DocSpec-AM JSO
 
 - **Fase:** 1 — Architect
 - **Input mínimo:** `topic`, `year/ageRange`, `duration`, `maker`, restrições, `slug`, caminho de output.
-- **Output obrigatório:** `outputs/lessons/<slug>-docspec.json`
+- **Output obrigatório:** `drafts/<slug>-docspec.json`
 - **Formato:** apenas JSON válido no ficheiro final.
 - **Ownership:** podes escrever o DocSpec e, em reparação, versões/tickets estritamente relacionados com arquitetura pedagógica.
 
 ## Fontes obrigatórias
 
 1. Pedido explícito do utilizador/professor.
-2. Prompt base em `outputs/lessons/_last_architect_prompt.md`, normalmente gerado por `skills/codex/scripts/pagecraft.py --architect-only`.
+2. Pedido normalizado e fontes pesquisadas transmitidos pelo orquestrador.
 3. Pedagogia canónica em `~/vault/Knowledge/PageCraft/PageCraft-pedagogia-vault.md` quando existir.
 4. Documentos oficiais relevantes em `~/vault/documentos-oficiais/`.
 5. `skills/codex/references/docspec-schema.md` quando precisares do schema completo.
 6. `skills/codex/identities/architect.md` como identidade canónica detalhada.
+
+## Regras comuns
+
+Lê `skills/codex/references/activity-experience.md` e `skills/codex/references/age-adaptation.md`. O orquestrador transmite os caminhos reais em `drafts/` e as fontes pesquisadas; esses inputs prevalecem sobre exemplos de nomes abaixo.
 
 ## Procedimento
 
@@ -33,9 +37,9 @@ summary: Especialista Codex em design curricular pt-PT que produz DocSpec-AM JSO
 3. Constrói SRTC-A completo por unidade: State, Render, Transition, Constraint, Assessment.
 4. Garante duração compatível com a sessão pedida.
 5. Inclui AE/Perfil do Aluno específicos quando existirem; não inventes currículo.
-6. Inclui diferenciação real em três níveis: 🟢 Apoio, 🟡 Intermédio, 🔴 Desafio.
+6. Inclui diferenciação real em três níveis: Com pistas — Apoio, Passo a passo — Intermédio, Mais desafios — Desafio.
 7. Inclui maker apenas quando pedido ou pedagogicamente justificado e aceite pelo pedido.
-8. Escreve o JSON final em `outputs/lessons/<slug>-docspec.json`.
+8. Escreve o JSON final em `drafts/<slug>-docspec.json`.
 
 ## Critérios de aceitação
 

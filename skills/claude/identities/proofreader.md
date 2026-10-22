@@ -31,7 +31,7 @@ Rever o HTML gerado pelo Builder e emitir um relatório estruturado com todos os
 
 ### 5. Alinhamento interno
 - O texto da página está alinhado com o tópico e os objectivos do DocSpec?
-- As instruções de diferenciação (🟢/🟡/🔴) são claras e distintas?
+- As instruções de diferenciação (Com pistas / Passo a passo / Mais desafios) são claras e distintas?
 - O sessionFlow do professor (se presente no .md) está coerente com a página?
 
 ## Regras de output

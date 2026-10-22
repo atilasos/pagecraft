@@ -1,0 +1,139 @@
+{
+  "slug": "areas-quadrilateros-minecraft-4ano-30min",
+  "date": "2026-10-08",
+  "status": "published",
+  "published": true,
+  "request": {
+    "topic": "áreas dos quadriláteros",
+    "year": 4,
+    "duration": 30,
+    "maker": "Minecraft Education",
+    "languages": [
+      "pt"
+    ]
+  },
+  "phases": {
+    "sources": "complete",
+    "architect": "complete",
+    "designer": "complete",
+    "builder": "complete",
+    "proofreader": "pass",
+    "evaluator": "pass"
+  },
+  "artifacts": [
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-activity.json",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-builder-prompt.md",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-comparison.png",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-design-spec.json",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-docspec.json",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-evaluation.json",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-mobile.png",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-proofread.json",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-qa-report.md",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-run-manifest.json",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min-sources.md",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min.html",
+    "drafts/areas-quadrilateros-minecraft-4ano-30min.md"
+  ],
+  "publication_gate": {
+    "approved": true,
+    "source": "skills/codex/SKILL.md",
+    "instruction": "A revisão do professor é necessária para cada atividade.",
+    "approval_date": "2026-10-08",
+    "approval_message": "está revisto pode publicar"
+  },
+  "limitations": [
+    "Minecraft Education não foi executado. Professor deve preparar mundo/acessos e observar pavimentos, contagem e cooperação.",
+    "Não houve ensaio com crianças, dispositivos físicos ou leitor de ecrã.",
+    "Browser T3 remoto não alcança127.0.0.1:8777; QA visual por bytes e verificação API executadas separadamente. Não se afirma teste completo da UI do host de realizações/Sessões de aula nem de autoavaliação sequencial de um grupo.",
+    "Preview remoto do professor observado até Cloudflare Access; autenticação remota não realizada.",
+    "Os mínimos de touch das opções de reflexão foram medidos nos labels, não nos círculos de rádio."
+  ],
+  "architecture_validation": {
+    "json_schema": "pass",
+    "units": 5,
+    "minutes": 30,
+    "metadata_criteria": "match"
+  },
+  "code": "NGRPUX",
+  "preview_url": "https://estudio.infantinho.xyz/NGRPUX",
+  "local_preview_url": "http://127.0.0.1:8777/NGRPUX",
+  "teacher_url": "https://estudio.infantinho.xyz/teacher/activities.html",
+  "html_sha256": "00c0574457773a2bf0320c0935bef5332ca2b4dd47b30058c4e869004e4a4c44",
+  "public_draft_access": {
+    "local_metadata": 404,
+    "local_content": 404,
+    "remote_metadata": 403,
+    "remote_content": 403
+  },
+  "testing": {
+    "browser": "T3 Code Chromium, HTML por bytes; ponte em iframe e sandbox allow-scripts",
+    "paths": "Com pistas, Passo a passo, Mais desafios",
+    "layout_widths": [
+      1920,
+      768,
+      390
+    ],
+    "body_px": 20,
+    "font": "Didact Gothic incorporada e carregada",
+    "focus_keyboard": "Enter em filas e ArrowRight em apoios; foco conservado",
+    "api": {
+      "preview": true,
+      "browser_events_saved": 29,
+      "event_types": [
+        "activity_loaded",
+        "activity_state",
+        "assessment_result",
+        "attempt",
+        "discovery",
+        "share_requested",
+        "unit_started"
+      ],
+      "reflection_saved": true,
+      "report_downloaded": true,
+      "excluded_from_pupil_reports": true,
+      "identifier": "f23def8c78fe94f55f716b7c12be906c"
+    },
+    "evaluation": "drafts/areas-quadrilateros-minecraft-4ano-30min-evaluation.json",
+    "minecraft": "not executed"
+  },
+  "url": "https://pagecraft.infantinho.xyz/NGRPUX",
+  "publication": {
+    "verified_at": "2026-10-08T09:35:11.597265+00:00",
+    "method": "skills/codex/scripts/activity.py publish NGRPUX --approved",
+    "public_url": "https://pagecraft.infantinho.xyz/NGRPUX",
+    "local_http": {
+      "entry": 200,
+      "metadata": 200,
+      "content": 200
+    },
+    "https_browser": {
+      "tool": "T3 Code preview",
+      "entry": "Formulário público com nome, turma, contexto e Começar; sem Cloudflare Access.",
+      "metadata_http": 200,
+      "content_http": 200,
+      "title": "Oficina dos pavimentos",
+      "year": 4,
+      "duration": 30,
+      "criteria": 3,
+      "requires_completion": true,
+      "stages": 5,
+      "font_embedded": true,
+      "rendered_content": "Cinco etapas, três apoios e escolhas de pavimento abertas no endpoint público.",
+      "anonymous_me_response": 401,
+      "note": "401 de /api/learning/me esperado antes da entrada de um aluno; não foi criada realização pública de teste."
+    },
+    "published_html_sha256": "896ccbd851a44baecae9fc12022a81556db427bb9b53a071b9b1d5e40b818160",
+    "generated_files": [
+      "activities/areas-quadrilateros-minecraft-4ano-30min/design-spec.json",
+      "activities/areas-quadrilateros-minecraft-4ano-30min/docspec.json",
+      "activities/areas-quadrilateros-minecraft-4ano-30min/index.html",
+      "activities/areas-quadrilateros-minecraft-4ano-30min/meta.json",
+      "activities/areas-quadrilateros-minecraft-4ano-30min/teacher.md",
+      "catalog.json"
+    ],
+    "catalog_preserved_prior_items": true,
+    "catalog_commit_excludes_prior_uncommitted_changes": true,
+    "infrastructure_changes": false
+  }
+}

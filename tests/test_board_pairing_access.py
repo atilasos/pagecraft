@@ -157,6 +157,7 @@ async def test_board_sees_only_the_live_collective_session_and_cannot_act(
         "class_name": "2.º A",
         "activity_slug": "demo",
         "activity_title": "Dobros",
+        "join_code": session["join_code"],
         "status": "live",
         "started_at": "2026-07-30T09:00:00+00:00",
     }

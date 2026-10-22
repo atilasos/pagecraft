@@ -1,0 +1,56 @@
+{
+  "pass": true,
+  "severity": "low",
+  "issues": [],
+  "summary": "Revisão textual aprovada após a inclusão de capturas reais SPIKE. As imagens conservam o original pt-BR; legendas, descrições e seis passos estão em português europeu e identificam portas e medidas como exemplos. A viragem distingue direção de velocidade e não garante 90° por um valor de rotações.",
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90: OK nas explicações externas às capturas",
+    "Registo consistente: OK",
+    "Adequação à faixa etária: OK — seis passos breves, com apoio do professor",
+    "Instruções claras e seguíveis: OK",
+    "Alinhamento com objetivos e pedido de capturas reais: OK",
+    "Original pt-BR preservado nas imagens e explicado: OK",
+    "Texto alternativo e transcrição equivalentes aos blocos: OK na revisão textual",
+    "Portas C+D, velocidade 30%, 17,5 cm por rotação e avanço 20 cm identificados como exemplos: OK",
+    "Valor «direita: 100» distinto de velocidade: OK",
+    "0,25 rotações não apresentado como garantia de viragem de 90°: OK",
+    "Guias condicionados à exploração e confirmação do plano: OK na leitura estática",
+    "Declarações físicas distintas de observação da página: OK",
+    "Reflexão facultativa e rótulos integrados/local distintos: OK"
+  ],
+  "reviewed_on": "2026-10-02",
+  "iteration": 3,
+  "review_scope": "Revisão localizada das adições de capturas reais e nova leitura do texto estático/dinâmico, mantendo a revisão anterior dos apoios, extensões e reflexão.",
+  "html_commit": "0910f60623ca44ad33e439e293b2878d1e77c705",
+  "html_sha256": "061e8f4b5556be88d23b321a5258892f2c0f645b625eff5cab289d15e6095d68",
+  "artifacts_reviewed": [
+    "drafts/spike-prime-primeiros-movimentos.html",
+    "drafts/spike-prime-primeiros-movimentos-docspec.json",
+    "drafts/spike-prime-primeiros-movimentos-design-spec.json",
+    "drafts/spike-prime-primeiros-movimentos.md",
+    "drafts/spike-prime-primeiros-movimentos-assets/captures.json",
+    "drafts/spike-prime-primeiros-movimentos-assets/programa.png",
+    "drafts/spike-prime-primeiros-movimentos-assets/virar.png"
+  ],
+  "coverage": [
+    "Seis passos SPIKE: início, motores, velocidade, medida, avanço e programa completo",
+    "Categorias Eventos e Movimento",
+    "Legendas, texto alternativo, transcrições e ampliação",
+    "Exemplo de viragem na aplicação real",
+    "Adaptação dos valores de motores e distância ao plano escolhido",
+    "Texto dos três apoios, extensões e autoavaliação",
+    "Mensagens de confirmação, bloqueio, ajuda e preservação do trabalho"
+  ],
+  "limits": [
+    "Revisão textual estática; não foram executados testes de browser nesta fase.",
+    "A inspeção dos PNG programa e viragem conferiu os textos/valores representados; não demonstra legibilidade na página ou num dispositivo.",
+    "Não foi ligado nem executado um robô físico.",
+    "O professor confirma a versão da aplicação, as portas e as medidas da base antes da aula."
+  ],
+  "incremental_review": {
+    "commit": "0910f60623ca44ad33e439e293b2878d1e77c705",
+    "base_html_commit": "43f6bc2e6c6cda14e2ebf92a5c99b08528e99398",
+    "note": "Comparado o diff após reparação de teclado: foi acrescentado apenas o handler JS que percorre as regiões de ampliação e categorias em passos de 80 px. O restante HTML, incluindo todo o texto revisto, é idêntico à revisão v3; cobertura, resultados e limitações mantidos.",
+    "method": "Leitura do diff e comparação byte a byte após retirar a única linha adicionada."
+  }
+}

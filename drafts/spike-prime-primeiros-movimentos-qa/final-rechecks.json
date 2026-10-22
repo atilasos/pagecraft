@@ -1,0 +1,31 @@
+{
+  "htmlSha256": "c6fd72c00648ff5f37cff1e300996cbe2fb8f6af3f3816b3723e725b42cad5d8",
+  "checks": [
+    {
+      "confirm": "Confirmar portas",
+      "next": "true",
+      "test": "cleared-port-blocks-future",
+      "title": "Antes de ligar os motores"
+    },
+    {
+      "missing": "Falta responder: Confirma o resultado do ensaio 2.",
+      "next": "true",
+      "test": "cleared-trial-invalidates"
+    },
+    {
+      "active": "choose-trial-1",
+      "test": "trial-selector-preserves-focus"
+    },
+    {
+      "active": "clear-slot-0",
+      "next": "true",
+      "test": "clear-slot-preserves-focus"
+    },
+    {
+      "core": "Sequência confirmada",
+      "leftGoal": "M135 165H210V90",
+      "rightChoiceGoal": "M135 165H210V90",
+      "test": "extra-L-goal-stays-left-for-wrong-answer"
+    }
+  ]
+}

@@ -13,15 +13,19 @@ summary: Revisor Codex pt-PT AO90 que audita texto, semântica e adequação ped
 
 - **Fase:** 4 — Proofreader
 - **Input mínimo:** HTML final, DocSpec, fontes/vault quando necessário.
-- **Output obrigatório:** `outputs/lessons/<slug>-proofread-vN.json`
+- **Output obrigatório:** `drafts/<slug>-proofread-vN.json`
 - **Formato:** apenas JSON válido no ficheiro final.
 
 ## Fontes obrigatórias
 
-1. `outputs/lessons/<slug>.html`.
-2. `outputs/lessons/<slug>-docspec.json`.
+1. `drafts/<slug>.html`.
+2. `drafts/<slug>-docspec.json`.
 3. `skills/codex/identities/proofreader.md`.
 4. Fontes do vault quando houver dúvida curricular/linguística.
+
+## Regras comuns
+
+Lê `skills/codex/references/activity-experience.md` e `skills/codex/references/age-adaptation.md`. Usa os caminhos reais e fontes transmitidos pelo orquestrador.
 
 ## Verificações
 
@@ -29,12 +33,12 @@ summary: Revisor Codex pt-PT AO90 que audita texto, semântica e adequação ped
 2. Registo adequado à idade e ao português europeu.
 3. Clareza de instruções, labels, feedback e microcopy.
 4. Coerência entre texto, interação e DocSpec.
-5. Diferenciação 🟢/🟡/🔴 compreensível.
+5. Diferenciação Com pistas / Passo a passo / Mais desafios compreensível.
 6. Problemas pedagógicos textuais ou semânticos que possam bloquear aprendizagem.
 
 ## Output obrigatório
 
-Escreve `outputs/lessons/<slug>-proofread-vN.json` com:
+Escreve `drafts/<slug>-proofread-vN.json` com:
 
 ```json
 {

@@ -59,6 +59,7 @@ class AccessContext:
     client_ip: str
     student_id: str | None = None
     student_session_id: str | None = None
+    work_group_id: str | None = None
     student_credential: str = ""
     board_credential: str = ""
     realization_id: str | None = None
@@ -263,6 +264,13 @@ async def resolve_access(
                 student_id=student_id,
                 student_session_id=student_session_id,
                 student_credential=student_credential,
+            )
+
+        group_id = await classroom.work_group_for_token(student_session_id, student_credential, require_live=False)
+        if group_id:
+            return AccessContext(
+                Role.STUDENT, channel, client_ip, work_group_id=group_id,
+                student_session_id=student_session_id, student_credential=student_credential,
             )
 
     return await _resolve_board_access(request, channel, client_ip)

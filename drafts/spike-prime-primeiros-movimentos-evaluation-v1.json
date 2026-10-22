@@ -1,0 +1,134 @@
+{
+  "pass": true,
+  "route": "none",
+  "severity": "low",
+  "iteration": 1,
+  "checked_on": "2026-10-02",
+  "html_sha256": "c6fd72c00648ff5f37cff1e300996cbe2fb8f6af3f3816b3723e725b42cad5d8",
+  "reviewed_commit": "b2b93ac8941ce1caa63f9049a649b89d04fcd5a7",
+  "scores": {
+    "factual_accuracy": 4,
+    "constraint_alignment": 4,
+    "differentiation_quality": 4,
+    "ux_accessibility": 4,
+    "visual_design": 4,
+    "technical_quality": 4
+  },
+  "issues": [],
+  "critical": [],
+  "required_fixes": [],
+  "evidence": [
+    {
+      "phase": "Evaluator",
+      "browser": "T3 preview_*; tab_j",
+      "url": "http://127.0.0.1:8780/harness.html",
+      "artifacts": [
+        "drafts/spike-prime-primeiros-movimentos-qa/browser-checks.json",
+        "drafts/spike-prime-primeiros-movimentos-qa/final-rechecks.json",
+        "drafts/spike-prime-primeiros-movimentos-qa/bridge-events.json",
+        "drafts/spike-prime-primeiros-movimentos-qa/completed-checkpoint.json",
+        "drafts/spike-prime-primeiros-movimentos-qa/mobile-390.png"
+      ],
+      "summary": "Percurso completo de cinco missões nos três apoios. Perguntas em falta bloquearam avanço e saltos. Respostas erradas em portas,10cm,tudo ao mesmo tempo e sequência repetida permitiram seguir; pistas visuais e correção funcionaram. Ensaios1/2/3 independentes e confirmação explícita. Alterar/limpar respostas invalida só confirmação correspondente e conserva relatos físicos."
+    },
+    {
+      "phase": "Evaluator",
+      "summary": "Restauro completo com extras emitiu somente activity_state. Restauro incompleto recuou à missão3 e invalidou ensaio2 sem resultado. Valores de enum inválidos, confirmação sem conteúdo e campos desconhecidos foram descartados; etapa recuou à primeira falta."
+    },
+    {
+      "phase": "Evaluator",
+      "summary": "Mais desafios, Com pistas e Passo a passo conservaram respostas compatíveis. L extra não sobrescreveu L direito; objetivo L esquerdo permaneceu igual após escolha errada. Quadrado requer confirmação; extras incompletos e errados não bloquearam conclusão."
+    },
+    {
+      "phase": "Evaluator",
+      "summary": "Quinze medições DOM: cinco missões em viewports390×844,768×1024,1280×800, sem transbordamento horizontal e sem controlos visíveis inferiores a48px. Corpo20px e títulos30px. Didact Gothic incorporada e carregada. Captura390 inspecionada visualmente."
+    },
+    {
+      "phase": "Evaluator",
+      "summary": "preview_press Enter/Space/Tab gerou eventos trusted e ativou edição, confirmação e navegação de foco. Reteste final demonstrou foco conservado em escolher ensaio e limpar posição. O desenho do anel de foco não foi confirmado visualmente no tab em segundo plano; CSS prevê3px com offset4px."
+    },
+    {
+      "phase": "Evaluator",
+      "summary": "Reflexão autónoma facultativa: duas identidades explicitamente de ensaio docente mantiveram respostas próprias; reload recuperou etapa, apoio, relatos e respostas individuais. A UI explicou que os dados locais não foram enviados ao professor."
+    },
+    {
+      "phase": "Evaluator",
+      "summary": "Bridge capturada: tentativas com correct referiram exclusivamente respostas didáticas observadas. Estados/resultados físicos usaram detail.source=self_report e não receberam acerto automático. performance resource entries=[] depois de carregar/interagir; sem APIs de rede ou dependências externas no HTML. Não se emulou desligar a rede."
+    },
+    {
+      "phase": "Proofreader",
+      "artifact": "drafts/spike-prime-primeiros-movimentos-proofread.json",
+      "summary": "Revisão textualv2 PASS, sem problemas pendentes. Guia da aplicação real, vocabulário, centímetros, comparação e supervisão do sensor corrigidos."
+    },
+    {
+      "phase": "Orchestrator",
+      "artifact": "drafts/spike-prime-primeiros-movimentos-qa/host-integration.json",
+      "summary": "Servidor PageCraft isolado real: iframe opaco recuperou checkpoint sem tentativa; Guardar para continuar confirmou gravação nas histórias dos dois membros. Autoavaliações individuais diferentes preservadas e recuperadas no browser e servidor. Rascunho recusado por APIs públicas/locais com404."
+    }
+  ],
+  "acceptance_checks": [
+    {
+      "check": "Com pistas: vazio,erro,pista,correção,volta,conclusão",
+      "pass": true
+    },
+    {
+      "check": "Passo a passo: vazio,erro,pista,correção,volta,conclusão",
+      "pass": true
+    },
+    {
+      "check": "Mais desafios: vazio,erro,pista,correção,volta,conclusão",
+      "pass": true
+    },
+    {
+      "check": "Confirmações intencionais e ensaios separados",
+      "pass": true
+    },
+    {
+      "check": "Mudança de apoio, restauro completo/incompleto/malformed",
+      "pass": true
+    },
+    {
+      "check": "Extras facultativos, separados, persistentes",
+      "pass": true
+    },
+    {
+      "check": "Controlos por teclado e foco conservado",
+      "pass": true,
+      "visual_focus_ring_verified": false
+    },
+    {
+      "check": "390/768/1280 sem overflow;20px/48px;fonte real",
+      "pass": true,
+      "screenshots_verified": [
+        390
+      ]
+    },
+    {
+      "check": "Sem requests de rede da atividade; autonomia de HTML",
+      "pass": true,
+      "forced_offline_emulation": false
+    },
+    {
+      "check": "Autoavaliação individual facultativa autónoma e host",
+      "pass": true
+    },
+    {
+      "check": "Gravação confirmada pelo servidor, não inferida pela atividade",
+      "pass": true
+    },
+    {
+      "check": "Rascunho privado com recusa pública404",
+      "pass": true
+    }
+  ],
+  "blocked_by": [],
+  "limitations": [
+    "Não foi ligado um hub nem executado um robô físico. O professor confirma portas, versão/idioma dos blocos, unidade de distância, rodas e viragem antes de usar com a turma.",
+    "preview_snapshot funcionou numa captura390 e depois falhou com erro do cliente, incluindo nas tentativas768/1280. As medições DOM e interações nessas larguras foram executadas; inspeção visual por screenshot nessas larguras ficou limitada.",
+    "document.hasFocus=false no tab de browser em segundo plano impediu confirmar visualmente o anel :focus-visible. Interação por teclado trusted, ordem/foco conservado e regra CSS foram verificados separadamente.",
+    "Sem emulação de rede desligada. O browser carregou e operou o HTML sem resource requests; fonte, CSS, JavaScript e diagramas são incorporados.",
+    "O checkpoint da QA foi primeiro produzido num iframe same-origin e depois restaurado no iframe opaco real; dados e participantes eram exclusivamente ensaio docente isolado.",
+    "O host devolveu403 em /api/session-event-types e usou fallback; gravação, recuperação e reflexões funcionaram. Isto não veio do HTML da atividade."
+  ],
+  "publication_status": "draft; exige revisão e aprovação específica do professor"
+}
