@@ -200,6 +200,15 @@ $("board-unpair").addEventListener("click", async () => {
   renderBoardPairing({ paired: false });
 });
 
+async function showSupportSummary(sessionId, root = $("session-support-summary")) {
+  root.textContent = "A preparar o resumo…";
+  const response = await tfetch(`/api/sessions/${sessionId}/support-summary`);
+  if (!response.ok) { root.textContent = "Não foi possível ler o resumo."; return; }
+  PageCraftSupportSummary.render(root, await response.json());
+}
+$("live-support-summary-btn").onclick = () => {
+  if (session) showSupportSummary(session.id, $("live-support-summary"));
+};
 /* ---------- relatório para avaliação cooperada ---------- */
 
 $("report-btn").addEventListener("click", async () => {
@@ -241,6 +250,13 @@ $("report-btn").addEventListener("click", async () => {
   const reflectionSection = reflections ? `<h3>Reflexões individuais</h3><p>Voz de cada criança, distinta das respostas conjuntas e da avaliação do professor.</p><ul class="plain">${reflections}</ul>` : '';
   out.innerHTML = `<div class="card" style="margin-top:0.75rem; overflow-x:auto">
     <table>${head}${rows}</table>${groupTable}${reflectionSection}${sessions}</div>`;
+  for (const row of report.sessions) {
+    const button = document.createElement('button');
+    button.className = 'ghost';
+    button.textContent = 'Resumo do apoio · '+row.activity_title+' · '+new Date(row.started_at).toLocaleDateString('pt-PT');
+    button.onclick = () => showSupportSummary(row.session_id);
+    out.append(button);
+  }
 });
 
 $("class-form").addEventListener("submit", async (ev) => {
@@ -893,7 +909,7 @@ $("msg-btn").addEventListener("click", async () => {
 $("close-btn").addEventListener("click", async () => {
   if (!session) return;
   await tfetch(`/api/sessions/${session.id}/close`, { method: "POST" });
-  location.reload(); // estado limpo: régua fora, bancada de lançamento de volta
+  location.href = "/teacher/class.html?support-summary="+encodeURIComponent(session.id);
 });
 
 /* ---------- arranque ---------- */
@@ -909,6 +925,8 @@ $("close-btn").addEventListener("click", async () => {
   updateLaunchChoice();
   const live = sessions.find((s) => s.status === "live");
   if (live) startLive(live);
+  const summarySession = new URLSearchParams(location.search).get("support-summary");
+  if (summarySession) await showSupportSummary(summarySession);
 })();
 
 function applyWorkGroupState(delta) {

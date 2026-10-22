@@ -101,6 +101,7 @@
         <a id="report-md" hidden download>Descarregar para o conselho (Markdown)</a>
       </div>
       <div id="report-out"></div>
+      <div id="session-support-summary"></div>
     </section>
 
     <section class="sheet" aria-labelledby="classes-title">
@@ -188,6 +189,8 @@
         <div class="card spaced-card">
           <p class="eyebrow">Registo da aula</p>
           <ul class="plain" id="timeline" aria-live="polite"></ul>
+          <button type="button" class="ghost" id="live-support-summary-btn">Resumo do apoio nesta aula</button>
+          <div id="live-support-summary"></div>
           <p class="footer-link-row"><a id="export-link" download>Exportar registo (JSON)</a></p>
         </div>
       </section>
@@ -217,6 +220,7 @@
   </aside>
 </main>
 <script src="/teacher/common.js"></script>
+<script src="/learning-assets/support-summary.js"></script>
 <script src="/teacher/class.js?v=groups-retoma-1"></script>
 </body>
 </html>

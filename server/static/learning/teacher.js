@@ -116,6 +116,7 @@ function field(title, value, multi = false) {
   return { label, input };
 }
 function render() {
+  $("support-summary").replaceChildren();
   const name = $("filter-name").value.trim().toLocaleLowerCase("pt"),
     group = $("filter-group").value.trim().toLocaleLowerCase("pt"),
     code = $("filter-activity").value,
@@ -235,6 +236,16 @@ for (const id of [
   $(id).addEventListener("input", render);
 $("refresh").onclick = () =>
   loadReports().catch((e) => status(e.message, true));
+$("support-summary-btn").onclick = async () => {
+  const code = $("filter-activity").value;
+  if (!code) { status("Escolhe uma atividade e as datas da aula para preparar o resumo.", true); return; }
+  const params = new URLSearchParams({code, group:$("filter-group").value, name:$("filter-name").value,
+    date_from:$("filter-from").value, date_to:$("filter-to").value});
+  const root = $("support-summary");
+  root.textContent = "A preparar o resumo…";
+  try { PageCraftSupportSummary.render(root, await api('/api/learning/support-summary?'+params)); }
+  catch(error) {root.textContent = error.message;}
+};
 $("logout").onclick = () => { location.href = "/logout"; };
 (async () => {
   try {

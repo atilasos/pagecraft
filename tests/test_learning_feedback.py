@@ -62,3 +62,24 @@ async def test_feedback_queue_wait_has_a_deadline_and_no_read_claim(learning_cli
     response = await pupil.post('/api/learning/me/feedback', json={'unit_id': 'u1', 'request_id': 'timeout', 'context': {}})
     assert response.json()['source'] == 'unavailable'
     assert 'já viu' not in response.json()['text']
+
+
+async def test_teacher_summary_filters_realizations_and_protects_sources(learning_clients):
+    app, teacher, pupil = learning_clients
+    activity, _ = await register(teacher)
+    for name in ['Ana e Bruno', 'Carla e Diogo']:
+        await start(pupil, activity['code'], name)
+        await pupil.post('/api/learning/me/events', json={'events': [
+            {'id':'hint', 'type':'hint_presented', 'unitId':'u2', 'payload':{'hint_id':'h','text':'Apontem uma zona.'}},
+            {'id':'stuck', 'type':'hint_feedback', 'unitId':'u2', 'payload':{'hint_id':'h','usefulness':'not_helped'}},
+            {'id':'help', 'type':'help_needed', 'unitId':'u2', 'payload':{'note':'Não encontramos o comando'}},
+        ]})
+        await pupil.post('/api/learning/me/leave')
+    path='/api/learning/support-summary?code='+activity['code']
+    summary=(await teacher.get(path)).json()
+    assert summary['counts']['presented'] == 2
+    assert summary['counts']['unresolved'] == 2
+    assert summary['recurring'][0]['count'] == 2
+    assert (await teacher.get(path+'&name=Ana')).json()['counts']['presented'] == 1
+    assert (await teacher.get(path+'&date_from=2099-01-01')).json()['counts']['presented'] == 0
+    assert (await pupil.get(path)).status_code in {401,403}

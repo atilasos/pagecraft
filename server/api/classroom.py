@@ -542,6 +542,16 @@ async def work_group_history(session_id: str, request: Request):
     return {"work_group_id": group_id, "events": history}
 
 
+@router.get("/sessions/{session_id}/support-summary")
+@access_policy(RoutePolicy.TEACHER)
+async def support_summary(session_id: str, request: Request):
+    from ..support_summary import build_support_summary, session_support_events
+    svc = _svc(request)
+    session = await _domain(svc.get_session(session_id))
+    events = await svc.events_log(session_id).replay()
+    return build_support_summary(session_support_events(events, session.get('roster', {})))
+
+
 @router.get("/sessions/{session_id}/stream")
 @access_policy(RoutePolicy.TEACHER, RoutePolicy.STUDENT)
 async def stream_session(session_id: str, request: Request):
