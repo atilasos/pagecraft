@@ -426,7 +426,7 @@ async def test_controlled_ticks_publish_stopped_and_no_signal_without_new_work(c
             if frame["event"] == "student_state_changed"
         ]
         assert [(delta["band"], delta["reason"]) for delta in deltas] == [
-        ("Precisa de ti", "Parado"),
+        ("A fluir", "Sem atividade recente no PageCraft"),
         ("Sem sinal", "Sem presença"),
         ]
         assert "heartbeat" not in [frame["event"] for frame in frames]

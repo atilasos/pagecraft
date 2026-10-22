@@ -16,7 +16,7 @@ GOOD_HTML = (
     '<meta name="viewport" content="width=device-width, initial-scale=1">'
     "<style>:focus-visible{outline:3px solid blue} "
     "@media (prefers-reduced-motion: reduce){*{animation:none}}</style></head>"
-    '<body><main aria-live="polite"><section id="u1">'
+    '<body><main aria-live="polite"><section id="u1"><aside data-pagecraft-support="u1"></aside>'
     + ("conteúdo pedagógico " * 200)
     + "</section></main></body></html>"
 )
@@ -56,6 +56,10 @@ DOCSPEC = {
     ],
     "sessionFlow": "exploração",
 }
+
+_SUPPORT_EXAMPLE = json.loads((Path(__file__).parent / 'fixtures/support-examples.json').read_text())[0]
+DOCSPEC['support'] = _SUPPORT_EXAMPLE['support']
+DOCSPEC['units'][0]['support'] = _SUPPORT_EXAMPLE['units'][0]['support']
 
 DESIGN = {"palette": {"bg": "oklch(0.98 0 250)", "surface": "#fff", "primary": "blue", "accent": "amber", "ink": "#222"}}
 
@@ -180,6 +184,8 @@ async def test_pipeline_happy_path_auto_publish(env):
     slug = job["slug"]
     assert (config.activities_dir / slug / "index.html").exists()
     assert (config.activities_dir / slug / "teacher.md").exists()
+    assert "PageCraftSupport.configure(" in (config.activities_dir / slug / "index.html").read_text()
+    assert DOCSPEC["support"]["version"] in (config.activities_dir / slug / "index.html").read_text()
     catalog = json.loads(config.catalog_path.read_text("utf-8"))
     assert any(item["slug"] == slug for item in catalog["items"])
     # artefactos de staging no formato histórico

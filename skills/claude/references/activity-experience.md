@@ -8,6 +8,10 @@ Planear a divisão de páginas caso a caso, conforme objetivos, interações e a
 
 A ação deve perceber-se ao olhar: mostrar o objeto, o local onde tocar ou colocar e uma pista visual junto da ação. Usar instruções curtas, uma ação principal por momento e texto adicional apenas quando ajuda a criança. Escolher representações do tema e estados visíveis de seleção, evitando longas explicações e decoração sem função. A pista apoia a descoberta sem antecipar a resposta.
 
+## Apoio durante o trabalho
+
+Cada atividade nova tem um plano de apoio no DocSpec, com objetivo e critérios da etapa, obstáculos previsíveis e pistas progressivas escritas para essa tarefa. Segue [apoio contextual](contextual-support.md) na conceção, implementação e revisão. Usa o componente comum para apresentar uma ação por vez junto da tarefa, ouvir por pedido, indicar utilidade, tentar outra abordagem e pedir ajuda ao professor. A edição do trabalho atualiza o contexto e invalida respostas antigas; só confirmações relevantes ou pedidos explícitos oferecem feedback. A aplicação externa, quando existir, vem do pedido da atividade.
+
 ## Respostas e avanço
 
 Uma Página respondida tem resposta a todos os pedidos obrigatórios, mesmo com erros. O acerto não é condição para avançar. Se houver páginas sequenciais, bloquear «Seguinte» e saltos para etapas futuras enquanto faltar uma resposta; indicar junto do controlo o pedido em falta. Permitir voltar e corrigir.

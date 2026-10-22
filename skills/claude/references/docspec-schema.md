@@ -2,15 +2,26 @@
 
 Schema JSON para o Document Specification with Assessment + Maker.
 
+Novas atividades acrescentam um plano `support` específico do pedido e de cada unidade. O schema aceita arquivos antigos sem esse plano; o Architect exige-o nas gerações novas. Os exemplos SRTC-A no fim ilustram a interação e precisam desse plano antes de servirem de base a uma geração nova.
+
 ## Schema
 
 ```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pagecraft.local/schemas/docspec.schema.json",
   "title": "DocSpec-AM",
   "description": "PageCraft Document Specification with Assessment + Maker",
   "type": "object",
-  "required": ["topic", "ageRange", "duration", "objectives", "curriculum", "units"],
+  "required": [
+    "topic",
+    "ageRange",
+    "duration",
+    "objectives",
+    "curriculum",
+    "units"
+  ],
+  "additionalProperties": true,
   "properties": {
     "topic": {
       "type": "string",
@@ -29,46 +40,83 @@ Schema JSON para o Document Specification with Assessment + Maker.
     "objectives": {
       "type": "array",
       "description": "Objectivos de aprendizagem (2-4)",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "minItems": 2,
       "maxItems": 4
     },
-    "curriculum": { "$ref": "#/$defs/CurriculumRef" },
-    "memAlignment": { "$ref": "#/$defs/MEMAlignment" },
+    "curriculum": {
+      "$ref": "#/$defs/CurriculumRef"
+    },
+    "memAlignment": {
+      "$ref": "#/$defs/MEMAlignment"
+    },
     "materials": {
       "type": "array",
       "description": "Materiais necessários (digitais + físicos)",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "units": {
       "type": "array",
       "description": "Knowledge units ordenadas",
-      "items": { "$ref": "#/$defs/KnowledgeUnit" },
+      "items": {
+        "$ref": "#/$defs/KnowledgeUnit"
+      },
       "minItems": 1
     },
     "sessionFlow": {
       "type": "string",
       "description": "Descrição do fluxo da sessão: como as units se encadeiam no tempo"
+    },
+    "support": {
+      "$ref": "#/$defs/ActivitySupport"
     }
   },
   "$defs": {
     "CurriculumRef": {
       "type": "object",
       "description": "Referências curriculares",
-      "required": ["ae", "competencies"],
+      "required": [
+        "ae",
+        "competencies"
+      ],
+      "additionalProperties": true,
       "properties": {
         "ae": {
           "type": "array",
           "description": "Aprendizagens Essenciais referenciadas (disciplina + ano + descritor)",
           "items": {
             "type": "object",
-            "required": ["subject", "year", "descriptor"],
+            "required": [
+              "subject",
+              "year",
+              "descriptor"
+            ],
+            "additionalProperties": true,
             "properties": {
-              "subject": { "type": "string", "description": "Disciplina (ex: 'Estudo do Meio')" },
-              "year": { "type": "string", "description": "Ano (ex: '3.º ano')" },
-              "domain": { "type": "string", "description": "Domínio (ex: 'Natureza')" },
-              "descriptor": { "type": "string", "description": "Descritor específico das AE" },
-              "source": { "type": "string", "description": "Ficheiro fonte no vault" }
+              "subject": {
+                "type": "string",
+                "description": "Disciplina (ex: 'Estudo do Meio')"
+              },
+              "year": {
+                "type": "string",
+                "description": "Ano (ex: '3.º ano')"
+              },
+              "domain": {
+                "type": "string",
+                "description": "Domínio (ex: 'Natureza')"
+              },
+              "descriptor": {
+                "type": "string",
+                "description": "Descritor específico das AE"
+              },
+              "source": {
+                "type": "string",
+                "description": "Ficheiro fonte no vault"
+              }
             }
           }
         },
@@ -96,6 +144,7 @@ Schema JSON para o Document Specification with Assessment + Maker.
     "MEMAlignment": {
       "type": "object",
       "description": "Alinhamento com os módulos do Modelo Pedagógico MEM",
+      "additionalProperties": true,
       "properties": {
         "modules": {
           "type": "array",
@@ -114,7 +163,9 @@ Schema JSON para o Document Specification with Assessment + Maker.
         "instruments": {
           "type": "array",
           "description": "Instrumentos de pilotagem MEM usados (PIT, mapa de tarefas, diário de turma...)",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         },
         "socialOrganization": {
           "type": "string",
@@ -124,7 +175,13 @@ Schema JSON para o Document Specification with Assessment + Maker.
     },
     "KnowledgeUnit": {
       "type": "object",
-      "required": ["summary", "textDescription", "interaction", "differentiation"],
+      "required": [
+        "summary",
+        "textDescription",
+        "interaction",
+        "differentiation"
+      ],
+      "additionalProperties": true,
       "properties": {
         "summary": {
           "type": "string",
@@ -134,23 +191,41 @@ Schema JSON para o Document Specification with Assessment + Maker.
           "type": "string",
           "description": "Guia para geração de texto: o que o aluno deve compreender"
         },
-        "interaction": { "$ref": "#/$defs/SRTCA" },
-        "maker": { "$ref": "#/$defs/MakerChallenge" },
-        "differentiation": { "$ref": "#/$defs/Differentiation" },
+        "interaction": {
+          "$ref": "#/$defs/SRTCA"
+        },
+        "maker": {
+          "$ref": "#/$defs/MakerChallenge"
+        },
+        "differentiation": {
+          "$ref": "#/$defs/Differentiation"
+        },
         "duration": {
           "type": "integer",
           "description": "Duração estimada desta unit em minutos"
+        },
+        "support": {
+          "$ref": "#/$defs/UnitSupport"
         }
       }
     },
     "SRTCA": {
       "type": "object",
-      "required": ["state", "render", "transition", "constraint", "assessment"],
+      "required": [
+        "state",
+        "render",
+        "transition",
+        "constraint",
+        "assessment"
+      ],
+      "additionalProperties": true,
       "properties": {
         "state": {
           "type": "array",
           "description": "Variáveis da visualização",
-          "items": { "$ref": "#/$defs/StateVar" }
+          "items": {
+            "$ref": "#/$defs/StateVar"
+          }
         },
         "render": {
           "type": "string",
@@ -172,24 +247,46 @@ Schema JSON para o Document Specification with Assessment + Maker.
     },
     "StateVar": {
       "type": "object",
-      "required": ["name", "type"],
+      "required": [
+        "name",
+        "type"
+      ],
+      "additionalProperties": true,
       "properties": {
-        "name": { "type": "string" },
+        "name": {
+          "type": "string"
+        },
         "type": {
           "type": "string",
-          "enum": ["slider", "dropdown", "drag", "toggle", "quiz", "sorting", "matching", "canvas", "derived"]
+          "enum": [
+            "slider",
+            "dropdown",
+            "drag",
+            "toggle",
+            "quiz",
+            "sorting",
+            "matching",
+            "canvas",
+            "derived"
+          ]
         },
         "range": {
           "type": "array",
-          "items": { "type": "number" },
+          "items": {
+            "type": "number"
+          },
           "minItems": 2,
           "maxItems": 2
         },
-        "step": { "type": "number" },
+        "step": {
+          "type": "number"
+        },
         "default": {},
         "options": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         },
         "unit": {
           "type": "string",
@@ -204,11 +301,23 @@ Schema JSON para o Document Specification with Assessment + Maker.
     "MakerChallenge": {
       "type": "object",
       "description": "Extensão maker — liga o digital ao mundo tangível (opcional)",
-      "required": ["type", "challenge", "connection"],
+      "required": [
+        "type",
+        "challenge",
+        "connection"
+      ],
+      "additionalProperties": true,
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["minecraft", "lego", "3d-print", "robotics", "whiteboard", "unplugged"],
+          "enum": [
+            "minecraft",
+            "lego",
+            "3d-print",
+            "robotics",
+            "whiteboard",
+            "unplugged"
+          ],
           "description": "Recurso maker a utilizar"
         },
         "challenge": {
@@ -217,7 +326,9 @@ Schema JSON para o Document Specification with Assessment + Maker.
         },
         "materials": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         },
         "groupSize": {
           "type": "string",
@@ -234,13 +345,20 @@ Schema JSON para o Document Specification with Assessment + Maker.
         "alternatives": {
           "type": "array",
           "description": "Alternativas se o recurso principal não estiver disponível",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
     "Differentiation": {
       "type": "object",
-      "required": ["support", "standard", "challenge"],
+      "required": [
+        "support",
+        "standard",
+        "challenge"
+      ],
+      "additionalProperties": true,
       "properties": {
         "support": {
           "type": "string",
@@ -255,8 +373,207 @@ Schema JSON para o Document Specification with Assessment + Maker.
           "description": "Mais desafios — Desafio — extensão (mais variáveis, raciocínio abstracto)"
         }
       }
+    },
+    "ActivitySupport": {
+      "type": "object",
+      "required": [
+        "version"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "pt",
+              "en"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "externalWork": {
+          "$ref": "#/$defs/SupportLabel"
+        },
+        "automaticAfterFailures": {
+          "type": "integer",
+          "enum": [
+            0,
+            2,
+            3,
+            4,
+            5
+          ],
+          "default": 3,
+          "description": "Tentativas incorretas consecutivas e distintas antes de pedir IA; 0 desativa. Apenas confirmações observadas no PageCraft."
+        }
+      }
+    },
+    "SupportLabel": {
+      "type": "object",
+      "required": [
+        "pt"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "pt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "en": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        }
+      }
+    },
+    "SupportHint": {
+      "type": "object",
+      "required": [
+        "id",
+        "text"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "text": {
+          "type": "object",
+          "required": [
+            "pt"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "pt": {
+              "type": "object",
+              "required": [
+                "individual",
+                "group"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "individual": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 400
+                },
+                "group": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 400
+                }
+              }
+            },
+            "en": {
+              "type": "object",
+              "required": [
+                "individual",
+                "group"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "individual": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 400
+                },
+                "group": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 400
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "UnitSupport": {
+      "type": "object",
+      "required": [
+        "objective",
+        "criteria",
+        "obstacles"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "objective": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 400
+        },
+        "criteria": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 250
+          },
+          "minItems": 1,
+          "maxItems": 4
+        },
+        "obstacles": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "label",
+              "hints"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]*$"
+              },
+              "label": {
+                "$ref": "#/$defs/SupportLabel"
+              },
+              "hints": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/SupportHint"
+                },
+                "minItems": 2,
+                "maxItems": 3
+              }
+            }
+          }
+        }
+      }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "support"
+        ]
+      },
+      "then": {
+        "properties": {
+          "units": {
+            "items": {
+              "required": [
+                "support"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
 }
 ```
 

@@ -26,6 +26,12 @@ O **nome interno** é o identificador canónico no servidor. O **nome na ponte**
 | `assessment_result` | `assessment_result` | `PageCraftBridge.assessment(unitId, result, detail)` | `result` — Resultado observável do item de avaliação.<br>`detail` — Contexto curto e opcional sobre o resultado. |
 | `feedback_request` | `feedback_request` | `PageCraftBridge.askForFeedback(unitId, question, answer, expected)` | `question` — Pergunta ou tarefa apresentada à criança.<br>`answer` — Resposta dada pela criança.<br>`expected` — Resposta de referência indicada pela atividade. |
 | `help_needed` | `help_needed` | `PageCraftBridge.helpNeeded(unitId, note)` | `note` — Contexto curto e opcional sobre o pedido de ajuda. |
+| `hint_presented` | `hint_presented` | `PageCraftBridge.hintPresented(unitId, hintId, text, context)` | `hint_id` — Pista apresentada; não comprova leitura.<br>`text` — Ação mostrada.<br>`context` — Etapa, tentativa, critérios e versão do guião. |
+| `hint_feedback` | `hint_feedback` | `PageCraftBridge.hintFeedback(unitId, hintId, usefulness)` | `hint_id` — Pista a que a declaração se refere.<br>`usefulness` — helped ou not_helped, segundo o grupo. |
+| `hint_acknowledged` | `hint_acknowledged` | `PageCraftBridge.hintAcknowledged(unitId, hintId, action)` | `hint_id` — Pista do modal reconhecida por uma escolha explícita.<br>`action` — continue, next, stuck ou teacher; não comprova leitura ou compreensão. |
+| `hint_listened` | `hint_listened` | `PageCraftBridge.hintListened(unitId, hintId)` | `hint_id` — O grupo pediu a leitura; não comprova que ouviu até ao fim. |
+| `work_location` | `work_location` | `PageCraftBridge.workLocation(unitId, location, label)` | `location` — Local declarado: external, pagecraft, reading ou discussion.<br>`label` — Nome da aplicação ou contexto externo, quando aplicável. |
+| `help_resolved` | `help_resolved` | `PageCraftBridge.helpResolved(unitId, note)` | `note` — O grupo declarou que já consegue continuar; não comprova intervenção docente. |
 | `share_requested` | `share_requested` | `PageCraftBridge.share(unitId, what)` | `what` — Trabalho que a criança quer levar ao momento de comunicação. |
 
 `unitId` identifica a unidade no envelope e não faz parte de `payload`.
@@ -43,7 +49,7 @@ O host traduz o acontecimento interno para o envelope da ponte. Pode projetar ap
 
 1. Usa os helpers listados na tabela e `PageCraftFeedback.show(...)` ou `showDiscovery(...)`; esses helpers já emitem os nomes normativos.
 2. Dá `unitId` estável a cada unidade (`u1`, `u2`, … pela ordem do docspec), põe `id="u1"` (ou `data-unit="u1"`) no contentor DOM e chama `PageCraftBridge.unitStarted(unitId)` quando a unidade fica visível ou ativa pela primeira vez.
-3. Em perguntas de texto livre, chama `PageCraftBridge.askForFeedback(unitId, pergunta, respostaDoAluno, respostaEsperada)` e inclui `<div class="ai-feedback" id="pagecraft-feedback"></div>` por baixo.
-4. Inclui um botão «Preciso de ajuda» (`help-button`) por unidade ou global que chama `PageCraftBridge.helpNeeded(unitId)`.
+3. Para atividades novas, usa o plano do DocSpec e o componente comum de `references/contextual-support.md`. Atualiza a tentativa com `PageCraftSupport.update(...)`; pede uma pista só por confirmação relevante ou pedido explícito, com contexto e correlação.
+4. O componente oferece ajuda ao professor e regista pistas apresentadas, utilidade declarada e trabalho externo. Conserva estes registos distintos.
 5. O feedback local imediato continua a mandar; o feedback do assistente é uma camada extra e pode nunca chegar.
 6. Nunca uses rede. A ponte usa exclusivamente `postMessage`.

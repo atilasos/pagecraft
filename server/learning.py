@@ -128,7 +128,7 @@ class Learning:
             return None
         return identifier
 
-    async def record(self, identifier, events):
+    async def record(self, identifier, events, *, assistant=False):
         async with self.lock(identifier):
             attempt = await self.attempt(identifier)
             known = {e['id'] for e in attempt['events']}
@@ -137,7 +137,7 @@ class Learning:
                 if event['id'] not in known:
                     known.add(event['id'])
                     new.append(dict(event, received_at=utcnow()))
-            if new and attempt['completed_at']:
+            if new and attempt['completed_at'] and not assistant:
                 raise HTTPException(409, "Esta realização já terminou.")
             if len(attempt['events']) + len(new) > 5000:
                 raise HTTPException(409, "Limite de registos atingido; termina a realização.")

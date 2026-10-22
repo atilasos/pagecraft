@@ -23,6 +23,10 @@ TARGETS=("$SCRIPT_DIR/claude" "$SCRIPT_DIR/codex")
 # pares "caminho canónico|destino relativo ao harness"
 MAPPINGS=(
   "$PROMPTS/template-base.html|assets/template-base.html"
+  "$PROMPTS/activity-support.js|assets/activity-support.js"
+  "$REPO_ROOT/server/static/student/support-modal.js|assets/support-modal.js"
+  "$PROMPTS/activity-support.css|assets/activity-support.css"
+  "$PROMPTS/references/contextual-support.md|references/contextual-support.md"
   "$PROMPTS/architect.md|identities/architect.md"
   "$PROMPTS/designer.md|identities/designer.md"
   "$PROMPTS/builder.md|identities/builder.md"

@@ -21,6 +21,7 @@ def test_registry_can_be_queried_without_knowing_its_representation():
     assert "pit_updated" in _names(SESSION_EVENT_TYPES.by_author("student"))
 
     assert _names(SESSION_EVENT_TYPES.visible_to("student")) == {
+        "hint_presented", "hint_feedback", "hint_acknowledged", "hint_listened", "work_location", "help_resolved",
         "activity_state",
         "session_resumed",
         "ai_feedback",

@@ -19,7 +19,8 @@ Gerar especificações pedagógicas (DocSpec-AM) que sejam:
 2. Sem texto antes ou depois do JSON.
 3. A duração total das units + sessionFlow deve somar exactamente a duração pedida.
 4. Cada unit tem SRTC-A completo + diferenciação + maker (se aplicável).
-5. Referencia AE específicas (não genéricas) e mapeia competências PA concretas.
+5. Cada atividade nova inclui `support.version` e um plano `units[].support` com obstáculos e pistas progressivas próprios do pedido, conforme `references/contextual-support.md`.
+6. Referencia AE específicas (não genéricas) e mapeia competências PA concretas.
 
 ## O que NÃO fazes
 - Não geras HTML (isso é do Builder).
