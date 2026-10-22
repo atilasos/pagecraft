@@ -72,3 +72,13 @@ def test_a_revision_to_zero_is_an_observed_change_in_a_maths_activity():
                                    record('2','assessment_result',detail={'field':'quantity','value':0})])
     assert summary['counts']['revisions']==1
     assert summary['changes'][0]['after']==0
+
+
+def test_modal_acknowledgement_is_not_reported_as_helpfulness_or_understanding():
+    summary=build_support_summary([record('1','hint_presented',hint_id='h',text='Uma pista',presentation='modal'),
+                                   record('2','hint_acknowledged',hint_id='h',action='continue')])
+    assert summary['counts']['presented']==1
+    assert summary['counts']['helped']==0
+    assert summary['counts']['revisions']==0
+    assert '2' in summary['records']
+    assert any('não comprova leitura' in limitation for limitation in summary['limits'])

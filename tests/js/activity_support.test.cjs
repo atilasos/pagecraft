@@ -8,7 +8,7 @@ function activity(spec=examples[0]){
     age_range:spec.ageRange,topic:spec.topic,automatic_after_failures:spec.support.automaticAfterFailures??3,
     languages:spec.support.languages||['pt'],externalWork:spec.support.externalWork||null,
     units:Object.fromEntries(spec.units.map((u,i)=>['u'+(i+1),{...u.support,title:u.summary}]))};
-  const box=vm.createContext({assert,crypto,console,config});
+  const box=vm.createContext({assert,crypto,console,config,TextEncoder});
   vm.runInContext(`
     const emitted=[],messages=[],documentEvents={};let spoken=0;
     const panel={dataset:{pagecraftSupport:'u1'},innerHTML:'',classList:{add(){}},setAttribute(){},addEventListener(){},
@@ -159,4 +159,20 @@ test('falha do fornecedor usa pistas revistas no modal e permite outra abordagem
     assert.notEqual(support.currentHintId(),first);assert.equal(emitted.at(-1).payload.action,'open');
     host('support_modal_action',{hint_id:support.currentHintId(),action:'teacher'});
     assert.equal(emitted.at(-1).type,'help_needed');`);
+});
+
+
+test('contexto extenso continua a caber no contrato de eventos sem perder idade e correlação',()=>{
+  const run=activity();
+  run(`host('learning_preferences',{route:'permanent'});
+    config.objective='🟩'.repeat(700);config.topic='Tema'.repeat(100);
+    config.units.u1.criteria=Array(4).fill('🟩'.repeat(250));
+    for(let i=0;i<3;i++)support.recordAttempt({correct:false,answer:'🟩'.repeat(1500)+i});
+    const p=emitted.find(e=>e.type==='feedback_request').payload;
+    assert.equal(p.context_truncated,true);assert.equal(p.age_range,'8-9 anos');
+    assert.ok(new TextEncoder().encode(JSON.stringify(p)).length<9000);
+    assert.equal(p.observed_difficulties.length,3);assert.ok(p.request_id);
+    support.receive({request_id:p.request_id,unit_id:'u1',text:'🟩'.repeat(200)});
+    const hint=emitted.filter(e=>e.type==='hint_presented').at(-1).payload;
+    assert.ok(new TextEncoder().encode(JSON.stringify(hint)).length<12000);`);
 });

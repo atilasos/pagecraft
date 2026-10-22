@@ -102,8 +102,20 @@
     if(window.parent===window)return;
     window.parent.postMessage({pagecraft:1,type,unitId:unit,payload:{activity:config.activity,activity_version:config.activity_version,...payload},ts:Date.now()},'*');
   }
+  function boundContext(value){
+    const semantic=['objective','stage','stage_objective','criteria','product','question','answer',
+      'activity_characteristics','observed_difficulties','previous_hints'];
+    const shorten=value=>typeof value==='string'?value.slice(0,Math.max(24,Math.floor(value.length/2))):
+      Array.isArray(value)?value.map(shorten):value && typeof value==='object'?Object.fromEntries(Object.entries(value).map(([k,v])=>[k,shorten(v)])):value;
+    // Reserva espaço para texto da pista e metadados no limite de 12 kB dos hosts.
+    for(let pass=0;pass<8 && new TextEncoder().encode(JSON.stringify(value)).length>8000;pass++){
+      for(const field of semantic)value[field]=shorten(value[field]);
+      value.context_truncated=true;
+    }
+    return value;
+  }
   function requestContext() {
-    return {activity:config.activity,activity_version:config.activity_version,objective:config.objective,
+    return boundContext({activity:config.activity,activity_version:config.activity_version,objective:config.objective,
       age_range:config.age_range||'não indicada',activity_characteristics:{topic:config.topic,
         duration_minutes:config.duration_minutes,task_description:plan().task_description,interaction:plan().interaction},
       stage:plan().title,stage_objective:plan().objective,criteria:plan().criteria,product:context.product||'',
@@ -111,7 +123,7 @@
       answer:String(context.answer??'').slice(0,1500),level:context.level||'intermediate',
       observed_difficulties:failures.key===taskKey()?failures.observed:[],
       previous_hints:relevant().slice(-2).map(h=>({text:h.text,usefulness:h.usefulness||'not_reported'})),
-      observation:'Respostas e ações PageCraft; trabalho externo apenas declarado.'};
+      observation:'Respostas e ações PageCraft; trabalho externo apenas declarado.'});
   }
   function update(next) {
     if(!config || !config.units[next.unit_id||unitId])return;

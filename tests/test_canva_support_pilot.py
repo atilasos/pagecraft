@@ -22,6 +22,8 @@ async def test_studio_code_pair_help_model_and_teacher_summary(learning_clients)
     provider=FakeProvider(default={'feedback':'Apontem no esboço a zona de cada animal.'})
     app.state.feedback.provider=provider
     context={'request_id':'studio-pair-1','activity':registration['slug'],'activity_version':'v1',
+             'age_range':'9-10 anos','trigger':'consecutive_incorrect_attempts',
+             'observed_difficulties':[{'answer':n,'result':'incorrect'} for n in ['A','B','C']],
              'stage':'Planear','objective':'Comunicar aos colegas','participant_count':2,'product':'poster',
              'answer':'Não sabemos organizar','previous_hints':[{'text':'Duas zonas','usefulness':'not_helped'}]}
     payloads=[('hint_presented',{'hint_id':'h1','text':'Duas zonas','activity':registration['slug']}),
@@ -40,6 +42,8 @@ async def test_studio_code_pair_help_model_and_teacher_summary(learning_clients)
     assert result['participant_ids']==ids
     assert result.get('student_id') is None
     assert 'not_helped' in provider.calls[0]['prompt']
+    assert '9-10 anos' in provider.calls[0]['prompt']
+    assert 'consecutive_incorrect_attempts' in provider.calls[0]['prompt']
     path=f"/api/sessions/{session['id']}/support-summary"
     summary=(await teacher.get(path)).json()
     assert summary['counts']['unresolved']==1

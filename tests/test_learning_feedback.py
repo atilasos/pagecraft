@@ -14,6 +14,8 @@ async def test_permanent_code_feedback_is_contextual_private_and_idempotent(lear
     provider = FakeProvider(default={'feedback': 'Afasta-te do ecrã e lê o título.'})
     app.state.learning_feedback.provider = provider
     body = {'unit_id': 'u2', 'request_id': 'revision-2', 'context': {
+        'age_range': '8-9 anos', 'trigger': 'consecutive_incorrect_attempts',
+        'observed_difficulties': [{'answer': n, 'result': 'incorrect'} for n in ['1', '2', '3']],
         'activity_version': 'v1', 'objective': 'Comunicar aos colegas', 'product': 'poster',
         'previous_hints': [{'text': 'Rever o contraste', 'usefulness': 'not_helped'}],
     }}
@@ -22,6 +24,8 @@ async def test_permanent_code_feedback_is_contextual_private_and_idempotent(lear
     assert len(provider.calls) == 1
     assert responses[0].json()['request_id'] == 'revision-2'
     assert 'not_helped' in provider.calls[0]['prompt']
+    assert '8-9 anos' in provider.calls[0]['prompt']
+    assert 'consecutive_incorrect_attempts' in provider.calls[0]['prompt']
     saved = await app.state.learning.attempt(attempt['id'])
     assert [e['type'] for e in saved['events']] == ['feedback_request', 'ai_feedback']
     assert (await pupil.get('/api/learning/reports')).status_code in {401, 403}
