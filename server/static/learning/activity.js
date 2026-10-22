@@ -39,6 +39,10 @@ const copy = {
       "Há trabalho por guardar. Mantém esta página aberta; voltaremos a tentar.",
     synced: "Trabalho guardado.",
     saving: "A guardar…",
+    recovering: "A recuperar o teu trabalho…",
+    recoveryUnavailable:
+      "Não foi possível recuperar o teu trabalho. Tenta novamente antes de começar.",
+    retryRecovery: "Tentar recuperar novamente",
     unavailable:
       "Não foi possível abrir a atividade. Confirma o endereço ou tenta novamente.",
     newAttempt:
@@ -83,6 +87,10 @@ const copy = {
       "Some work still needs saving. Keep this page open; we will try again.",
     synced: "Work saved.",
     saving: "Saving…",
+    recovering: "Recovering your work…",
+    recoveryUnavailable:
+      "We could not recover your work. Please try again before starting.",
+    retryRecovery: "Try recovering again",
     unavailable:
       "We could not open this activity. Check the address or try again.",
     newAttempt:
@@ -111,13 +119,16 @@ async function api(path, method = "GET", data) {
     headers: data ? { "Content-Type": "application/json" } : {},
     body: data ? JSON.stringify(data) : undefined,
   });
-  if (!r.ok)
-    throw new Error(
+  if (!r.ok) {
+    const error = new Error(
       lang === "en"
         ? "Could not save. Please try again."
         : (await r.json().catch(() => ({}))).detail ||
           "Não foi possível guardar. Tenta novamente.",
     );
+    error.status = r.status;
+    throw error;
+  }
   return r.status === 204 ? null : r.json();
 }
 function persist() {
@@ -500,6 +511,45 @@ window.addEventListener("beforeunload", (e) => {
   }
 });
 setInterval(() => flush().catch(() => {}), 5000);
+async function recoverAttempt() {
+  $("start-form").hidden = true;
+  $("recovery-retry").hidden = true;
+  status(t("recovering"));
+  try {
+    const previous = await api("/api/learning/me");
+    if (previous.code === code) {
+      attempt = previous;
+      lang = previous.language;
+      queue = JSON.parse(
+        sessionStorage.getItem("pc-queue:" + attempt.id) || "[]",
+      );
+      // Pending choices are newer than the server snapshot used for restore.
+      queue.forEach(applyPendingPreference);
+      reflectionDraft =
+        JSON.parse(
+          sessionStorage.getItem("pc-reflection:" + attempt.id) || "null",
+        ) || reflectionDraft;
+      status("");
+      showWork();
+      if (attempt.completed_at) showDone();
+      else flush().catch(() => {});
+    } else {
+      $("start-form").hidden = false;
+      status("");
+    }
+  } catch (error) {
+    // Only a missing/expired credential permits a fresh entry. A failed
+    // recovery must not invite the child to replace the existing credential.
+    if (error.status === 401) {
+      $("start-form").hidden = false;
+      status("");
+    } else {
+      status(t("recoveryUnavailable"), true);
+      $("recovery-retry").hidden = false;
+    }
+  }
+}
+$("recovery-retry").onclick = recoverAttempt;
 (async () => {
   try {
     activity = await api(`/api/learning/activities/${code}`);
@@ -509,25 +559,7 @@ setInterval(() => flush().catch(() => {}), 5000);
     $("group").value = activity.group || "";
     $("language-label").hidden = !activity.languages.includes("en");
     $("draft").hidden = activity.published;
-    try {
-      const previous = await api("/api/learning/me");
-      if (previous.code === code) {
-        attempt = previous;
-        lang = previous.language;
-        queue = JSON.parse(
-          sessionStorage.getItem("pc-queue:" + attempt.id) || "[]",
-        );
-        // Pending choices are newer than the server snapshot used for restore.
-        queue.forEach(applyPendingPreference);
-        reflectionDraft =
-          JSON.parse(
-            sessionStorage.getItem("pc-reflection:" + attempt.id) || "null",
-          ) || reflectionDraft;
-        showWork();
-        if (attempt.completed_at) showDone();
-        else flush().catch(() => {});
-      }
-    } catch {}
+    await recoverAttempt();
     translate();
   } catch {
     status(t("unavailable"), true);
