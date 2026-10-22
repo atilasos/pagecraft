@@ -1,23 +1,89 @@
 {
   "slug": "pontes-duas-vistas",
   "title": "Duas pontes, duas vistas",
-  "status": "building-private-draft",
-  "year": [3, 4],
+  "status": "repairing-private-draft",
+  "year": [
+    3,
+    4
+  ],
   "language": "pt",
   "duration": 15,
   "worktree": "/home/proteu/.t3/worktrees/pagecraft/t3-4e77fc67",
   "branch": "feat/pontes-duas-vistas",
   "base": "4c6ba90476a498a03b08fd88dea96c432ba767cd",
-  "production": {"registered": false, "published": false, "code": null},
+  "production": {
+    "registered": false,
+    "published": false,
+    "code": null
+  },
   "review": "Professor revê o rascunho antes de qualquer publicação. Não ensaiado com crianças.",
   "phases": [
-    {"role": "Architect", "agent": "/root/architect", "status": "complete", "artifacts": ["drafts/pontes-duas-vistas-docspec.json", "drafts/pontes-duas-vistas.md", "drafts/pontes-duas-vistas-sources.md"], "commit": "690a087"},
-    {"role": "Designer", "agent": "/root/designer", "status": "complete", "artifacts": ["drafts/pontes-duas-vistas-design-spec.json"], "commit": "3f62d26"},
-    {"role": "Builder", "agent": "/root/builder", "status": "running", "artifacts": ["drafts/pontes-duas-vistas.html", "drafts/pontes-duas-vistas-builder.json"]},
-    {"role": "Proofreader", "status": "pending", "artifacts": ["drafts/pontes-duas-vistas-proofread.json"]},
-    {"role": "Evaluator", "status": "pending", "artifacts": ["drafts/pontes-duas-vistas-evaluation.json"]}
+    {
+      "role": "Architect",
+      "agent": "/root/architect",
+      "status": "complete",
+      "artifacts": [
+        "drafts/pontes-duas-vistas-docspec.json",
+        "drafts/pontes-duas-vistas.md",
+        "drafts/pontes-duas-vistas-sources.md"
+      ],
+      "commit": "690a087"
+    },
+    {
+      "role": "Designer",
+      "agent": "/root/designer",
+      "status": "complete",
+      "artifacts": [
+        "drafts/pontes-duas-vistas-design-spec.json"
+      ],
+      "commit": "3f62d26"
+    },
+    {
+      "role": "Builder",
+      "agent": "/root/builder",
+      "status": "repairing",
+      "artifacts": [
+        "drafts/pontes-duas-vistas.html",
+        "drafts/pontes-duas-vistas-builder.json"
+      ],
+      "commit": "204ee68"
+    },
+    {
+      "role": "Proofreader",
+      "status": "pass",
+      "artifacts": [
+        "drafts/pontes-duas-vistas-proofread.json"
+      ],
+      "agent": "/root/proofreader",
+      "commit": "fdc8914"
+    },
+    {
+      "role": "Evaluator",
+      "status": "fail-visual-repair",
+      "artifacts": [
+        "drafts/pontes-duas-vistas-evaluation.json"
+      ],
+      "agent": "/root/evaluator",
+      "commit": "18c8dd5"
+    }
   ],
   "execution": "Fases delegadas sequencialmente no worktree partilhado, sem agentes adicionais.",
   "baseline": "drafts/pontes-duas-vistas-before.json",
-  "report": "docs/reviews/2026-10-22-pontes-duas-vistas.md"
+  "report": "docs/reviews/2026-10-22-pontes-duas-vistas.md",
+  "red_evidence": {
+    "evaluation": "drafts/pontes-duas-vistas-red-evaluation.json",
+    "tests": "drafts/pontes-duas-vistas-red-tests.txt",
+    "passed": 15,
+    "failed": 5,
+    "causes": [
+      "modal-focus-wrap",
+      "stale-navigation-warning",
+      "support-first-click-lost"
+    ]
+  },
+  "integration_pending": {
+    "branch": "feat/consulta-historico-pistas",
+    "sha": "474e961c65dd40cb89932b0c28a0fdc0e4f02f8f",
+    "action": "merge --no-edit antes da avaliação final e reincorporação canónica"
+  }
 }
