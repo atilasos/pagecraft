@@ -1,11 +1,13 @@
 import asyncio
 from datetime import datetime, timedelta, timezone
+from types import SimpleNamespace
 
 import httpx
 import pytest
 
 from server import app as app_module
-from server.access import BOARD_COOKIE_NAME, TEACHER_COOKIE_NAME
+from server.access import BOARD_COOKIE_NAME, TEACHER_COOKIE_NAME, Role
+from starlette.requests import Request
 
 
 @pytest.fixture
@@ -218,6 +220,8 @@ async def test_board_stream_derives_its_collective_view_from_the_cookie(
         f"/api/sessions/{session['id']}/control",
         json={"action": "highlight", "unit_id": "global"},
     )
+    # Let the collective event reach the consumer before closing access.
+    await asyncio.sleep(.05)
     await teacher.post(f"/api/sessions/{session['id']}/close")
     response = await asyncio.wait_for(stream, timeout=2)
 
@@ -567,3 +571,64 @@ async def test_open_board_stream_stops_after_switch_without_old_frames(board_htt
     finally:
         stream.cancel()
         await asyncio.gather(stream, return_exceptions=True)
+
+
+async def test_board_stream_rechecks_selection_before_snapshot(board_http, monkeypatch):
+    app, teacher, board, clock = board_http
+    await _pair(teacher, board)
+    classroom, session = await _board_lesson(teacher)
+    checked = asyncio.Event()
+    proceed = asyncio.Event()
+    resolve = app.state.board_pairings.resolve
+    calls = 0
+
+    async def pause_after_handler_check(credential):
+        nonlocal calls
+        calls += 1
+        valid = await resolve(credential)
+        if calls == 2:
+            checked.set()
+            await proceed.wait()
+        return valid
+
+    monkeypatch.setattr(app.state.board_pairings, 'resolve', pause_after_handler_check)
+    stream = asyncio.create_task(board.get(f"/api/board/sessions/{session['id']}/stream"))
+    try:
+        await asyncio.wait_for(checked.wait(), 1)
+        await _next_board_lesson(teacher, classroom, clock)
+        proceed.set()
+        response = await asyncio.wait_for(asyncio.shield(stream), .5)
+        assert response.status_code in (200, 401)
+        assert 'session_state_snapshot' not in response.text
+        assert session['id'] not in app.state.classroom.live_session_ids()
+    finally:
+        proceed.set()
+        stream.cancel()
+        await asyncio.gather(stream, return_exceptions=True)
+
+
+async def test_board_stream_rechecks_between_frames_of_one_record(board_http):
+    from server.api.classroom import stream_session
+
+    app, teacher, board, clock = board_http
+    await _pair(teacher, board)
+    classroom, session = await _board_lesson(teacher)
+    # Drive the actual response iterator so consumer backpressure is controlled.
+    # HTTP role resolution and rejection are covered by the tests above.
+    request = Request({'type': 'http', 'app': app})
+    request.state.access = SimpleNamespace(
+        role=Role.BOARD, board_credential=board.cookies.get(BOARD_COOKIE_NAME),
+    )
+    response = await stream_session(session['id'], request)
+    frames = response.body_iterator
+    try:
+        assert 'event: session_state_snapshot' in await anext(frames)
+        await teacher.post(f"/api/sessions/{session['id']}/control", json={'action': 'freeze'})
+        assert 'event: freeze_screens' in await asyncio.wait_for(anext(frames), 1)
+        await _next_board_lesson(teacher, classroom, clock)
+        # The same record also produces a session delta. It must not escape.
+        with pytest.raises(StopAsyncIteration):
+            await asyncio.wait_for(anext(frames), 1)
+        assert session['id'] not in app.state.classroom.live_session_ids()
+    finally:
+        await frames.aclose()

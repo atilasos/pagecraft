@@ -554,6 +554,12 @@ async def support_summary(session_id: str, request: Request):
     return build_support_summary(session_support_events(events, session.get('roster', {})))
 
 
+async def _current_board_session(session_id: str, request: Request) -> dict | None:
+    """Use the same current-session selection for board HTML and SSE."""
+    session = await _svc(request).current_board_session()
+    return session if session is not None and session["id"] == session_id else None
+
+
 @router.get("/sessions/{session_id}/stream")
 @access_policy(RoutePolicy.TEACHER, RoutePolicy.STUDENT)
 async def stream_session(session_id: str, request: Request):
@@ -577,8 +583,8 @@ async def stream_session(session_id: str, request: Request):
             group_participants = session["work_groups"][work_group_id]["participant_ids"]
         credential = access.student_credential
     elif access.role is Role.BOARD:
-        if session.get("status") != "live":
-            raise HTTPException(404, "sessão viva não encontrada")
+        if await _current_board_session(session_id, request) is None:
+            raise HTTPException(404, "A sessão já não está no quadro.")
         role = "board"
         credential = access.board_credential
     else:
@@ -617,7 +623,9 @@ async def stream_session(session_id: str, request: Request):
             )
             return current == student_id
         if role == "board":
-            return await request.app.state.board_pairings.resolve(credential)
+            if not await request.app.state.board_pairings.resolve(credential):
+                return False
+            return await _current_board_session(session_id, request) is not None
         return True
 
     if not await credential_is_current():
@@ -722,16 +730,22 @@ async def stream_session(session_id: str, request: Request):
                     )
                     session_delta = changed_session_frame(state, current_state)
                     if session_delta is not None:
+                        if role == "board" and not await credential_is_current():
+                            return
                         yield (
                             "event: session_state_changed\n"
                             f"data: {json.dumps(session_delta, ensure_ascii=False)}\n\n"
                         )
                     for delta in changed_student_frames(state, current_state):
+                        if role == "board" and not await credential_is_current():
+                            return
                         yield (
                             "event: student_state_changed\n"
                             f"data: {json.dumps(delta, ensure_ascii=False)}\n\n"
                         )
                     for delta in changed_group_frames(state, current_state):
+                        if role == "board" and not await credential_is_current():
+                            return
                         yield ("event: work_group_state_changed\n" f"data: {json.dumps(delta, ensure_ascii=False)}\n\n")
                     state = current_state
                     if record.get("type") == "session_closed":
@@ -754,11 +768,15 @@ async def stream_session(session_id: str, request: Request):
                         work_group_id=work_group_id,
                     )
                     for delta in changed_student_frames(state, current_state):
+                        if role == "board" and not await credential_is_current():
+                            return
                         yield (
                             "event: student_state_changed\n"
                             f"data: {json.dumps(delta, ensure_ascii=False)}\n\n"
                         )
                     for delta in changed_group_frames(state, current_state):
+                        if role == "board" and not await credential_is_current():
+                            return
                         yield ("event: work_group_state_changed\n" f"data: {json.dumps(delta, ensure_ascii=False)}\n\n")
                     state = current_state
                     tick_task = asyncio.create_task(anext(ticks))
