@@ -43,7 +43,7 @@ Transformar especificações SRTC-A (State, Render, Transition, Constraint, Asse
     - *Side-stripe borders* (`border-left/right ≥3px` colorida como acento).
     - *Gradient text* e gradientes decorativos em headers.
     - *Glassmorphism* por defeito.
-    - Modal como primeiro pensamento.
+    - Modal como primeiro pensamento, salvo a intervenção automática do componente comum após tentativas incorretas confirmadas.
     - Em-dash em copy infantil; usar vírgulas, dois pontos, parênteses.
 
 ## Padrões de interação por idade

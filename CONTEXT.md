@@ -37,6 +37,9 @@ Código temporário que o professor apresenta para retomar o trabalho guardado d
 **Triagem de atenção**:
 Ordenação viva da turma no painel do professor por necessidade declarada ou observável: pedidos de ajuda e tentativas falhadas acumuladas. O objetivo é saber a quem ir primeiro, sem transformar ausência de acontecimentos em diagnóstico de dificuldade. «Sem sinal» indica falta de presença técnica; «Precisa de ti» indica pedido explícito; «A tropeçar» indica tentativas falhadas; «A fluir» reúne os restantes percursos, com uma descrição do que se sabe.
 
+**Apoio automático após tentativas**:
+Uma pista contextual oferecida após respostas incorretas consecutivas e distintas na mesma tarefa do PageCraft. A faixa etária e os critérios pertencem à atividade; a dificuldade observada pertence àquelas tentativas, sem criar rótulos pessoais. Uma escolha explícita permite sair do modal e voltar ao trabalho. Reconhecer a mensagem não comprova leitura, compreensão ou utilidade.
+
 **Local de trabalho declarado**:
 O grupo pode indicar que está no Canva, a ler, a discutir com o par ou no PageCraft. Esta declaração explica a ausência de ações digitais, mas não valida trabalho externo. Um pedido de ajuda continua pendente até o grupo declarar que já consegue continuar. Uma pista automática ou uma nova resposta não comprovam resolução.
 

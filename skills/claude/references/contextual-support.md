@@ -6,7 +6,7 @@ Aplica a cada atividade nova, em qualquer área. O pedido do professor define te
 
 Acrescenta `support.version` ao DocSpec e `support` a cada unidade. Usa o schema JSON canónico em `server/pipeline/schemas/docspec.schema.json`.
 
-- Em `support`, indica uma versão do conteúdo e as línguas pedidas. Inclui `externalWork` apenas quando o trabalho decorrer também fora do PageCraft; o valor é o nome dessa aplicação ou contexto.
+- Em `support`, indica uma versão do conteúdo e as línguas pedidas. `automaticAfterFailures` usa três tentativas por defeito, aceita limiares de dois a cinco ou `0` para desativar. A faixa etária vem de `ageRange`, sem inferir características pessoais. Inclui `externalWork` apenas quando o trabalho decorrer também fora do PageCraft; o valor é o nome dessa aplicação ou contexto.
 - Em cada unidade, define `objective`, `criteria` relevantes e `obstacles` previsíveis para aquela tarefa. Escolhe categorias reconhecíveis pelas crianças, próprias do tema e do que estão a fazer.
 - Cada obstáculo tem um `id`, `label` por língua e duas ou três pistas progressivas. A primeira indica uma ação curta. A seguinte propõe outra abordagem, comparação ou pergunta que ajude a distinguir a causa. Cada pista tem `id` e `text.pt.individual`/`text.pt.group`; quando houver inglês, acrescenta os mesmos modos em `text.en`.
 - Escreve as duas formas de tratamento; não confies numa troca automática de verbos. Uma pista mostra um próximo passo sem entregar a solução. A revisão docente da atividade inclui estas pistas.
@@ -15,7 +15,8 @@ Exemplo parcial para uma atividade de escrita:
 
 ```json
 {
-  "support": {"version": "convite-v1", "languages": ["pt"]},
+  "ageRange": "8-9 anos",
+  "support": {"version": "convite-v1", "languages": ["pt"], "automaticAfterFailures": 3},
   "units": [{
     "summary": "Rever o convite",
     "support": {
@@ -64,7 +65,21 @@ O `PageCraftSupport` pode ainda não existir durante a execução inicial do scr
 
 Para associar uma revisão a uma pista, conserva `PageCraftSupport.currentHintId()` antes de alterar a resposta e envia-o em `assessment_result.payload.detail.after_hint_id`. Uma alteração declarada sobre trabalho externo usa `detail.external_change: true`; continua a ser uma declaração. Nas sessões em grupo, os campos conjuntos usam `detail.activity` igual ao slug e `detail.field` estável, conforme o contrato do host.
 
-O pedido ao modelo é explícito ou decorre de uma confirmação relevante com contexto já atualizado. Não o dispares por tecla, por perda de foco ou por tempo sem cliques. As pistas locais continuam disponíveis sem modelo. Não acrescentes um recetor genérico que apresente `ai_feedback` sem conferir `request_id` e contexto; o componente comum faz essa verificação.
+O pedido ao modelo é explícito ou automático após respostas incorretas consecutivas e distintas na mesma tarefa. Atualiza o contexto antes de confirmar uma tentativa. Mantém `task_id` e `question` estáveis para esse pedido; muda-os quando começa outra questão:
+
+```js
+PageCraftBridge.attempt(currentUnitId, correct, {
+  value: recentAnswer,
+  question: currentQuestion,
+  task_id: currentQuestionId
+});
+```
+
+Emite `attempt` apenas depois de confirmar uma resposta relevante com um critério verificável. `correct` é um booleano. Campos vazios, autoavaliação, texto aberto sem critério e declarações de conclusão externa não recebem um veredicto inventado. `detail` pode ter `value`, `question` e `task_id`; uma mensagem de feedback em `detail` nunca é a resposta da criança. Atividades com integração própria podem usar `PageCraftSupport.recordAttempt({unit_id, correct, answer, question, task_id, attempt_id})`; escolhe uma via por confirmação, para evitar duplicação.
+
+O componente conta respostas diferentes, reinicia após acerto ou mudança de tarefa e mantém um intervalo de novas tentativas antes de outro pedido automático. O limiar não bloqueia o avanço. Não o dispares por tecla, por perda de foco ou por tempo sem cliques. As pistas locais continuam disponíveis sem modelo. Não acrescentes um recetor genérico que apresente `ai_feedback` sem conferir `request_id` e contexto; o componente comum faz essa verificação.
+
+O pedido automático inclui faixa etária, características da atividade, etapa, critérios, tentativas incorretas observadas e pistas anteriores. Quando a resposta chega para o contexto ainda atual, o componente apresenta uma única ação num modal de ecrã inteiro. O host cobre também os controlos exteriores ao iframe. Não implementes outro modal no Builder. A leitura só começa ao escolher «Ouvir». A criança escolhe «Vou experimentar», «Outra pista» ou «Pedir ajuda ao professor» para prosseguir. O fecho regista `hint_acknowledged`; não comprova leitura, compreensão ou utilidade. Uma falha do fornecedor usa a próxima pista revista do guião. Sem ligação ao host, a página autónoma mantém pistas locais e o mesmo modal, sem afirmar uma chamada à IA.
 
 Antes do Proofreader e Evaluator, incorpora o plano e o código comum no HTML:
 
@@ -78,6 +93,8 @@ Repete após reparações. O pipeline Studio faz a incorporação automaticament
 ## Evaluator: verificar o apoio próprio da atividade
 
 Verifica pelo menos um obstáculo de cada unidade: primeira pista visível junto da tarefa; outra abordagem após «não ajudou»; encaminhamento ao professor; leitura só ao carregar. Confirma a ligação entre pistas e critérios do DocSpec, incluindo as duas formas de tratamento e as línguas pedidas.
+
+Confirma tentativas diferentes até ao limiar nos dois percursos com código. Confirma o reinício após acerto ou mudança de questão e que cliques repetidos na mesma resposta não contam como novas tentativas. Verifica modal em todo o ecrã, foco no seu interior, retoma explícita, outra pista, professor e ausência de áudio automático.
 
 Muda a resposta, etapa e produto enquanto um pedido demora. A resposta anterior deve ser ignorada. Confirma também trabalho externo declarado, retorno ao guião e registos na realização ou sessão. Distingue pista apresentada, utilidade declarada e revisão observada. O PageCraft não valida um produto noutra aplicação a partir de uma declaração. Preserva a autoria do grupo e a reflexão de cada participante.
 

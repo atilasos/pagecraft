@@ -23,7 +23,7 @@ Distingue síntese da wiki, fonte original e proposta tua. Guarda títulos, cami
 
 ## Apoio próprio de cada atividade
 
-Em cada atividade nova, segue [apoio contextual](references/contextual-support.md). O Architect escreve o plano de pistas por unidade no DocSpec; o Builder liga o contexto da interação ao componente comum e incorpora-o antes da revisão; o Evaluator verifica progressão, visibilidade e registos. O tema e os recursos vêm do pedido do professor.
+Em cada atividade nova, segue [apoio contextual](references/contextual-support.md). O Architect escreve o plano de pistas por unidade no DocSpec; o Builder liga o contexto da interação ao componente comum e incorpora-o antes da revisão; o Evaluator verifica progressão, visibilidade, apoio automático após tentativas incorretas e registos. O modal de apoio exige uma escolha para retomar, com leitura opcional. O tema e os recursos vêm do pedido do professor.
 
 ## Papéis e artefactos
 
