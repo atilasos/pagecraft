@@ -184,4 +184,16 @@ No SHA `e752541`, as duas dimensões tiveram zero achados. As leituras verificar
 resoluções manuais e automáticas, IDs e ordem dos scripts, validação dos anos,
 publicação revista, autoria e destinatários, consulta de pistas e seleção do Quadro.
 O principal executou 526 testes Python e 32 JavaScript, todos aprovados, e a
-sincronização canónica passou. A execução conjunta de browser está em curso.
+sincronização canónica passou.
+
+A primeira execução conjunta de browser teve 136 aprovações e duas falhas.
+A mudança de composição depois de uma recusa de gravação reproduziu-se
+isoladamente: o marcador de recusa do grupo anterior bloqueava o novo grupo.
+A correção e a revisão desse caso antecedem nova validação do conjunto.
+A segunda falha, ao abrir a reflexão, não se repetiu isoladamente. A suite
+atravessou a meia-noite escolar, mas isso permanece hipótese, sem prova causal.
+
+Foi experimentado e retirado um relógio de escola fixado ao período diurno.
+A revisão detetou divergência com os timestamps reais dos acontecimentos,
+que falseava os tempos de espera e inatividade. Os testes finais usam os
+relógios normais; a infraestrutura e a política de expiração ficam inalteradas.
