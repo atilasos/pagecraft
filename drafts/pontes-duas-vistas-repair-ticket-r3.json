@@ -2,58 +2,48 @@
   "phase": "Evaluator",
   "activity": "pontes-duas-vistas",
   "round": 3,
-  "pass": false,
-  "route": "builder",
-  "severity": "high",
-  "issues": [
-    {
-      "id": "real-host-modal-focus-return",
-      "severity": "high",
-      "route": "builder",
-      "summary": "O modal fecha por escolha explícita mas o pipeline real não devolve foco ao trabalho do iframe.",
-      "canonical_integration": "server/pipeline/prompts/activity-support.js present/modalAction; fonte e espelhos, reincorporação do rascunho.",
-      "steps": [
-        "Abrir a página real learning /{code} ou student /student/ em Studio descartável.",
-        "No iframe da atividade pronta, executar PageCraftSupport.requestHint(\"u1\",true), uma pista local revista sem IA.",
-        "Verificar Tab/Shift+Tab e Escape no modal, premir Enter em Vou experimentar.",
-        "Observar document.activeElement do anfitrião e do iframe, sem focar manualmente depois da ação."
-      ],
-      "expected": "Retomar com foco seguro na ação da pista atual dentro do iframe, que present() tinha focado antes do modal.",
-      "actual": "Nos dois anfitriões document.activeElement é BODY tanto no host como no iframe. A .pc-support-action existe e está visível, mas continua inativa após cinco segundos.",
-      "protocol_verified": "requested_hint_id == received_actions[0].hint_id == current_hint_id, e action==continue. Não é o payload artificial da ronda anterior.",
-      "evidence": [
-        "drafts/pontes-duas-vistas-green-real-learning-resume-focus.json",
-        "drafts/pontes-duas-vistas-green-real-student-resume-focus.json",
-        "drafts/pontes-duas-vistas-resume-red-tests.txt"
-      ],
-      "regression_test": "test_real_studio_hosts_load_current_modal_and_resume_keyboard[learning|student]",
-      "required_fix": "Restaurar o foco no percurso real de retoma explícita do componente canónico. Não focar o exterior ao pedir outra pista que volta a abrir modal. Sincronizar espelhos, reincorporar o rascunho final e repetir os 23 testes."
-    }
-  ],
-  "html_sha256_before": "31a43c671330f80e6e30f51dc6035ef78313f7fb0be634fe71adcf505dbb57ae",
-  "tested_commit": "1d0cb9597ecc356ac7f31a8468131f69b4755458",
-  "required_fixes": [
-    "Restaurar o foco no percurso real de retoma explícita do componente canónico. Não focar o exterior ao pedir outra pista que volta a abrir modal. Sincronizar espelhos, reincorporar o rascunho final e repetir os 23 testes."
-  ],
-  "return_to": "Evaluator",
-  "test_file": "tests/browser/test_pontes_duas_vistas.py",
-  "scope": "Fonte canónica do apoio e espelhos/reincorporação final. Não modificar atividades existentes nem publicar.",
-  "tests": {
-    "command": "PAGECRAFT_TEST_CDP=<cdp_url da nova sessão própria> uv run --project /home/proteu/pagecraft --with playwright pytest tests/browser/test_pontes_duas_vistas.py -q --tb=short",
-    "passed": 21,
-    "failed": 2,
+  "status": "resolved",
+  "pass": true,
+  "route": "none",
+  "severity": "low",
+  "issues": [],
+  "required_fixes": [],
+  "original_report": "drafts/pontes-duas-vistas-repair-ticket-r3-red.json",
+  "resolution": {
+    "id": "real-host-modal-focus-return",
+    "status": "resolved",
+    "builder_code_commit": "c4c8e6a",
+    "builder_report_commit": "5f6a4ed",
+    "proofreader_commit": "08091a7",
+    "browser_regressions": "23 passed in 32.25s",
+    "red_log": "drafts/pontes-duas-vistas-resume-red-tests.txt",
+    "red_diagnostics": [
+      "drafts/pontes-duas-vistas-r3-red-real-learning-resume-focus.json",
+      "drafts/pontes-duas-vistas-r3-red-real-student-resume-focus.json"
+    ],
+    "green_diagnostics": [
+      "drafts/pontes-duas-vistas-green-real-learning-resume-focus.json",
+      "drafts/pontes-duas-vistas-green-real-student-resume-focus.json"
+    ],
+    "result": "Nos dois anfitriões, hostIFRAME/filhoDIV.pc-support-action após continue; hint_ids correlacionados e trabalho retomado com Espaço."
+  },
+  "tested_commit": "08091a7edc7957202a447ed84bccd58b989b5ae1",
+  "html_sha256_after": "c4e77ff6fe3ba903a16332361cd759b23d42cc55e244bbaee1dcce30ab2fb1d5",
+  "final_tests": {
+    "command": "PAGECRAFT_TEST_CDP=http://127.0.0.1:9331 uv run --project /home/proteu/pagecraft --with playwright pytest tests/browser/test_pontes_duas_vistas.py -q --tb=short",
+    "cdp_source": "URL atribuído à nova sessão própria e lido em /home/proteu/agent-browser-hub/sessions/pagecraft-pontes-evaluation.json; numa nova execução ler a porta atual.",
+    "passed": 23,
+    "failed": 0,
     "total": 23,
-    "seconds": 41.78,
-    "log": "drafts/pontes-duas-vistas-final-tests.txt",
-    "focused_reproduction": {
-      "passed": 0,
-      "failed": 2,
-      "deselected": 21,
-      "seconds": 12.32,
-      "log": "drafts/pontes-duas-vistas-resume-red-tests.txt"
-    },
-    "without_optional_browser_dependency": {
-      "skipped": 23,
+    "seconds": 32.25,
+    "logs": [
+      "drafts/pontes-duas-vistas-green-tests.txt",
+      "drafts/pontes-duas-vistas-final-tests.txt"
+    ],
+    "collection_verified_previous_round": {
+      "unchanged_test_commit": "b7a0f96",
+      "without_cdp_or_optional_playwright": 23,
+      "result": "skipped",
       "seconds": 1.04,
       "log": "drafts/pontes-duas-vistas-no-browser-tests.txt"
     }
