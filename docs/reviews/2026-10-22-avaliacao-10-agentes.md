@@ -197,3 +197,20 @@ Foi experimentado e retirado um relógio de escola fixado ao período diurno.
 A revisão detetou divergência com os timestamps reais dos acontecimentos,
 que falseava os tempos de espera e inatividade. Os testes finais usam os
 relógios normais; a infraestrutura e a política de expiração ficam inalteradas.
+
+## Segunda ronda da fila de grupos
+
+O marcador global foi substituído por recusas com dispositivo, composição e
+acesso explícitos. As recusas anteriores conservam nomes e data/hora e ficam
+visíveis mesmo depois de esvaziar a fila aceite. A confirmação distingue
+trabalho atual guardado de alterações anteriores que ficaram de fora.
+
+A revisão intermédia encontrou uma atribuição indevida no formato legado:
+os acontecimentos restantes não provam quem fez as alterações recusadas.
+O booleano antigo passa sempre a contexto desconhecido e continua bloqueante
+até revisão explícita. A regressão foi reproduzida no browser antes da correção.
+
+No SHA `2623a73`, Standards e Spec tiveram zero achados. O revisor repetiu em
+VM os casos de recusa legada, atual e anterior. O agente executou 19 testes
+de browser e 55 de acesso/autoria, todos aprovados. O [relatório da ronda](2026-10-23-fila-ronda2.md)
+conserva comandos e limites. A branch do bilhete integra esta correção.
