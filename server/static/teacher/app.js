@@ -31,7 +31,7 @@ async function loadMeta() {
       (a) =>
         `<li><a href="/activities/${encodeURIComponent(a.slug)}/" target="_blank" rel="noopener">${esc(a.title || a.slug)}</a>
          <span class="pill subject">${esc(a.subject || "—")}</span>
-         <span class="muted">· ${a.year ? esc(a.year) + ".º ano · " : ""}${esc(a.duration || "?")} min</span></li>`
+         <span class="muted">· ${esc(catalogYearLabel(a))} · ${esc(a.duration || "?")} min</span></li>`
     )
     .join("") || '<li class="muted">Ainda não há atividades publicadas.</li>';
 }
