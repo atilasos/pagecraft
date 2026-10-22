@@ -1,0 +1,38 @@
+{
+  "pass": true,
+  "severity": "low",
+  "iteration": 4,
+  "activity": "drafts/unidades-dezenas-2ano-30min.html",
+  "activity_sha256": "2118645b886d12e658400dd85bd524c894ec0dbca89e1aaba132605f6d2c1826",
+  "issues": [],
+  "summary": "Revisão linguística aprovada após as reparações técnicas e a diferenciação visual de Com pistas. As novas instruções da moldura e da coluna orientada foram lidas, incluindo seleção incompleta, completa e com excesso; mantêm frases curtas e não antecipam a equivalência da troca. Esta fase fez revisão estática do HTML e diff; não executou testes no browser.",
+  "resolved_from_iterations": [
+    1,
+    2
+  ],
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90: OK — singular/plural dinâmicos corrigidos",
+    "Registo consistente: OK — tratamento por tu e erro de gravação sem anglicismo",
+    "Adequação à faixa etária: OK — frases predominantemente curtas, vocabulário concreto e feedback sem censura",
+    "Instruções claras e seguíveis: OK — comparação por unidades e separação condicionada ao estado",
+    "Alinhamento com objetivos: OK — agrupamento, composição, zero unidades e valor posicional",
+    "Critérios apresentados antes do trabalho e retomados na reflexão: OK",
+    "Diferenciação Com pistas / Passo a passo / Mais desafios: OK",
+    "Regra da troca só após manipulação: OK — síntese depende de grouped",
+    "Respostas incorretas não são descritas como acertos: OK",
+    "Evidência observada e leitura dos critérios distinguidas: OK",
+    "Reflexão facultativa e limites da gravação local explicitados: OK",
+    "Microcopy, rótulos acessíveis, estados de erro e strings JS revistos estaticamente: OK",
+    "Interação, apresentação visual e gravação no host: NÃO AVALIADAS nesta fase; pertencem ao Evaluator",
+    "Novas instruções em Com pistas: OK — selecionar coluna, seguir seta, completar lugares e rever excesso",
+    "Concordância da moldura e seleção com um lugar/uma peça: OK",
+    "Novas pistas sem antecipar a regra de dez unidades/uma dezena: OK",
+    "Reparações técnicas de restauro/foco sem alterações ao restante texto aprovado: OK — diff lido"
+  ],
+  "reviewed_changes": [
+    "43b042b — restauro",
+    "26587f4 — foco",
+    "54d5ae4 — pistas visuais",
+    "59050c6 — concordância das pistas"
+  ]
+}

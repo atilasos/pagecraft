@@ -1,0 +1,27 @@
+{
+  "pass": false,
+  "route": "builder",
+  "severity": "medium",
+  "iteration": 2,
+  "repair_scope": "runtime-only",
+  "issues": [
+    {
+      "type": "runtime-tool",
+      "severity": "medium",
+      "location": "T3 preview_snapshot / preview oculto",
+      "description": "Snapshot falha genericamente com texto/PNG/save, mesmo após preview_open. A tab funciona para navegação, DOM, ações e teclas reais, mas document.hasFocus() é false no host e iframe; não foi possível observar capturas nem contorno de foco."
+    }
+  ],
+  "required_fixes": [
+    "Concluir inspeção visual no browser com preview visível e snapshots operacionais; confirmar foco e percursos em390/768/1280 antes de apresentar a atividade como pronta para usar."
+  ],
+  "acceptance_checks": [
+    "Snapshot real com inspeção visual dos apoios em390/768/1280; foco observável duranteTab/Enter."
+  ],
+  "blocked_by": [
+    "T3 preview_snapshot devolve PreviewAutomationExecutionError genérico no client preview-34605abc7377e9e70d12e87cda6cc51f, na tab_3, com includeImagefalse ePNG/save após preview_open.",
+    "Preview permanece visible:false e document.hasFocus()false nohost/iframe; não se verificou aparência do contorno de foco."
+  ],
+  "implementation_fixes_required": false,
+  "source": "drafts/unidades-dezenas-2ano-30min-evaluation-v2.json"
+}
