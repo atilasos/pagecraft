@@ -23,7 +23,7 @@ function activity(spec=examples[0]){
     function host(type,payload,source=window.parent){messages.forEach(fn=>fn({source,data:{pagecraft:1,type,payload}}))}
     function click(action){panelEvents.click({target:{closest(){return {dataset:{supportAction:action}}}}})}
   `,box);
-  vm.runInContext(fs.readFileSync('server/pipeline/prompts/activity-support.js','utf8'),box);
+  vm.runInContext(fs.readFileSync(process.env.PAGECRAFT_SUPPORT_SOURCE||'server/pipeline/prompts/activity-support.js','utf8'),box);
   vm.runInContext(`const support=window.PageCraftSupport;support.configure(config);support.update({unit_id:'u1',answer:'Uma tentativa',level:'intermediate'});`,box);
   return code=>vm.runInContext(code,box);
 }
@@ -94,6 +94,7 @@ test('consulta não troca a pista atual nem cancela um pedido IA pendente',()=>{
   run(`host('learning_preferences',{route:'permanent'});support.requestHint();support.requestHint();
     const current=support.currentHintId();support.requestAI();const request=emitted.at(-1).payload.request_id;
     const before=JSON.stringify(emitted);click('history-listen-0');
+    assert.equal(utterances.at(-1).text,config.units.u1.obstacles[0].hints[0].text.pt.individual);
     assert.equal(support.currentHintId(),current);assert.equal(JSON.stringify(emitted),before);
     support.receive({request_id:request,unit_id:'u1',text:'Outra abordagem com IA'});
     assert.equal(emitted.at(-1).payload.text,'Outra abordagem com IA');`);

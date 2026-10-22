@@ -219,7 +219,7 @@
     if(!window.speechSynthesis || typeof SpeechSynthesisUtterance==='undefined'){notify(t('voiceMissing'));return;}
     const utterance=new SpeechSynthesisUtterance(hint.text);
     utterance.lang=hint.language==='en'?'en-GB':'pt-PT';
-    utterance.onerror=()=>{if(history.includes(hint))notify(t('voiceError'));};
+    utterance.onerror=()=>{if(report?current===hint:history.includes(hint))notify(t('voiceError'));};
     window.speechSynthesis.cancel();window.speechSynthesis.speak(utterance);
     if(report)emit('hint_listened',{hint_id:hint.hint_id});
   }
