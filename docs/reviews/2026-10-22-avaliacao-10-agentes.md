@@ -259,3 +259,15 @@ pronta para revisão do professor, sem ensaio com crianças nem publicação.
 A ordem de merge respeita catálogo antes de gerações, fila antes de bilhete
 e histórico de pistas antes de pontes. A validação final combina as nove frentes
 antes de alterar `main`.
+
+## Revisão final das nove frentes
+
+No SHA `e105d76`, [Standards](2026-10-23-integracao-standards.md) e
+[Spec](2026-10-23-integracao-spec.md) terminaram com zero achados. As revisões
+confirmaram as duas resoluções de caches dos anfitriões, a retoma cooperativa
+do foco, sandbox intacto, fontes e incorporações exatas e o hash do rascunho
+aprovado pelo Evaluator. A regressão persistente da personagem verifica também
+geometria, posição, descrição acessível e invariância do topo.
+
+A verificação geral repetida passou 527 testes Python, 35 JavaScript e
+sincronização canónica. A suite completa de browser está em execução neste SHA.
