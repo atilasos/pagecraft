@@ -21,6 +21,10 @@ class IdentityAlreadyClaimedError(ClassroomError):
     pass
 
 
+class IdentityChangedError(ClassroomError):
+    pass
+
+
 class InvalidPitItemError(ClassroomError):
     pass
 

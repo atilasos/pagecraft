@@ -21,6 +21,7 @@ from ..access import (
 from ..classroom.errors import (
     ClassroomError,
     CompositionChangedError,
+    IdentityChangedError,
     InvalidPitItemError,
     InvalidSessionEventError,
     SessionClosedError,
@@ -85,10 +86,18 @@ class ReleaseRequest(BaseModel):
     reset_progress: bool = False
 
 
+class IndividualQueueIdentity(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    student_id: str = Field(min_length=1, max_length=80)
+    version: str = Field(min_length=1, max_length=80)
+
+
 class EventsRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     events: list[dict] = Field(max_length=20)
+    expected_identity: IndividualQueueIdentity | None = None
 
     @field_validator("events")
     @classmethod
@@ -137,6 +146,8 @@ async def _domain(command):
     except CompositionChangedError as error:
         raise HTTPException(409, {"code":"composition_changed", "message":str(error),
                                   "event_ids":error.event_ids, "work_group":error.group}) from error
+    except IdentityChangedError as error:
+        raise HTTPException(409, {"code": "identity_changed", "message": str(error)}) from error
     except (SessionNotFoundError, StudentNotInRosterError) as error:
         raise HTTPException(404, str(error)) from error
     except SessionClosedError as error:
@@ -295,6 +306,7 @@ async def whoami(session_id: str, request: Request):
     return {
         "student_id": student_id,
         "display_name": entry["display_name"],
+        "identity_version": entry["claimed_at"],
         "session": svc.project_session(session, role="student"),
     }
 
@@ -323,6 +335,7 @@ async def claim(
     return {
         "student_id": result["student_id"],
         "display_name": result["display_name"],
+        "identity_version": result["claimed_at"],
     }
 
 
@@ -425,10 +438,13 @@ async def session_event_types():
 async def post_events(session_id: str, body: EventsRequest, request: Request):
     svc = _svc(request)
     student_id = request.state.access.student_id
+    if body.expected_identity and (request.state.access.work_group_id or body.expected_identity.student_id != student_id):
+        raise HTTPException(409, {"code": "identity_changed", "message": "A identidade mudou. Volta a entrar."})
     if request.state.access.work_group_id:
         accepted = await _domain(svc.ingest_work_group_events(session_id, request.state.access.work_group_id, body.events))
     else:
-        accepted = await _domain(svc.ingest_events(session_id, student_id, body.events))
+        accepted = await _domain(svc.ingest_events(session_id, student_id, body.events,
+            identity_version=body.expected_identity.version if body.expected_identity else None))
     return {"accepted": [r["event_id"] for r in accepted]}
 
 
