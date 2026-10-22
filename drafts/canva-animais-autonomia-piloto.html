@@ -267,6 +267,8 @@ function showHint(text, source, requestId = null) {
     obstacle, product:currentHint.product, context});
   supportNotice = '';
   renderSupport();
+  const action = $('context-support')?.querySelector('.hint-action');
+  if(action){action.tabIndex=-1;action.focus({preventScroll:true});action.scrollIntoView({block:'center',behavior:'auto'});}
 }
 function hintFeedback(usefulness) {
   if (!currentHint || currentHint.usefulness === usefulness) return;
@@ -345,18 +347,21 @@ function renderSupport() {
   const stuck = plural ? 'Ainda estamos presos' : 'Ainda estou preso';
   const outside = supportLocation !== 'pagecraft';
   const focused = document.activeElement?.closest?.('#context-support') ? document.activeElement.dataset.support || document.activeElement.id : null;
-  panel.innerHTML = '<h3>Um próximo passo</h3>'+
-    '<div class="support-controls"><button data-support="mode" '+(supportModeLocked?'disabled':'')+'>'+(plural?'Trabalho a pares ou em grupo':'Trabalho individual')+'</button></div>'+
+  const settings = '<p class="micro">'+(plural?'Trabalho a pares ou em grupo':'Trabalho individual')+'</p>'+
+    (!supportModeLocked?'<button type="button" data-support="mode">'+(plural?'Mudar para trabalho individual':'Mudar para trabalho a pares')+'</button>':'')+
     '<label for="support-obstacle">'+(plural?'Onde estamos presos?':'Onde estou preso?')+'</label>'+
-    '<select id="support-obstacle">'+Object.entries(OBSTACLES).map(([key,label])=>'<option value="'+key+'" '+(key===obstacle?'selected':'')+'>'+label+'</option>').join('')+'</select>'+
-    '<div class="support-controls"><button data-support="first">'+(plural?'Precisamos de uma pista':'Preciso de uma pista')+'</button>'+
-    '<button data-support="location">'+(outside?'Regressar ao guião':plural?'Estamos a trabalhar no Canva':'Estou a trabalhar no Canva')+'</button>'+
-    '<button data-support="reading">'+(plural?'Estamos a ler ou conversar':'Estou a ler')+'</button></div>'+
-    '<div class="hint-action" role="status" aria-live="polite">'+(currentHint?esc(currentHint.text):'')+'</div>'+
-    (currentHint?'<div class="support-controls"><button data-support="listen">Ouvir</button><button data-support="helped" aria-pressed="'+(currentHint.usefulness==='helped')+'">Esta pista ajudou</button><button data-support="next">Outra pista</button><button data-support="stuck">'+stuck+'</button></div>':'')+
-    '<div class="support-controls"><button data-support="teacher">Pedir ajuda ao professor</button>'+
-    (currentHint?'<button data-support="ai" '+(pendingHint||supportRoute==='standalone'?'disabled':'')+'>Esclarecer com IA</button>':'')+
-    (pendingTeacher?'<button data-support="resolved">'+(plural?'Já conseguimos continuar':'Já consigo continuar')+'</button>':'')+'</div>'+
+    '<select id="support-obstacle">'+Object.entries(OBSTACLES).map(([key,label])=>'<option value="'+key+'" '+(key===obstacle?'selected':'')+'>'+label+'</option>').join('')+'</select>';
+  const help = '<button type="button" data-support="teacher">Pedir ajuda ao professor</button>';
+  panel.innerHTML = '<h3>Um próximo passo</h3>'+
+    (currentHint?'<div class="hint-action" role="status" aria-live="polite">'+esc(currentHint.text)+'</div>'+
+      '<div class="support-controls"><button type="button" data-support="listen">Ouvir</button><button type="button" data-support="next">Outra pista</button></div>'+
+      '<div class="support-controls"><button type="button" data-support="helped" aria-pressed="'+(currentHint.usefulness==='helped')+'">Esta pista ajudou</button><button type="button" data-support="stuck">'+stuck+'</button></div>'+
+      '<div class="support-controls">'+help+'<button type="button" data-support="ai" '+(pendingHint||supportRoute==='standalone'?'disabled':'')+'>Esclarecer com IA</button></div>'+
+      '<details><summary>Mudar o tipo de ajuda</summary>'+settings+'</details>' :
+      settings+'<div class="support-controls"><button type="button" data-support="first">'+(plural?'Precisamos de uma pista':'Preciso de uma pista')+'</button>'+help+'</div>')+
+    '<div class="support-controls"><button type="button" data-support="location">'+(outside?'Regressar ao guião':plural?'Estamos a trabalhar no Canva':'Estou a trabalhar no Canva')+'</button>'+
+    '<button type="button" data-support="reading">'+(plural?'Estamos a ler ou conversar':'Estou a ler')+'</button>'+
+    (pendingTeacher?'<button type="button" data-support="resolved">'+(plural?'Já conseguimos continuar':'Já consigo continuar')+'</button>':'')+'</div>'+
     '<p class="micro" role="status">'+esc(supportNotice)+'</p><p class="micro">'+(outside?'Local de trabalho declarado. ':'')+'O PageCraft não vê o produto no Canva. Ouvir só começa quando carregas no botão.</p>';
   if(focused) { const target=focused==='support-obstacle'?$('support-obstacle'):panel.querySelector('[data-support="'+focused+'"]'); target?.focus({preventScroll:true}); }
   $('support-obstacle').onchange = e => { obstacle=e.target.value; currentHint=null; pendingHint=null; supportNotice=''; renderSupport(); };
