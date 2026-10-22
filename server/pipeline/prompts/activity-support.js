@@ -196,12 +196,18 @@
     emit('work_location',{location:value,label:value==='external'?config.externalWork?.[language]:undefined});
     notice=value==='pagecraft'?t('returned'):t('outside');render();
   }
+  function voiceNotice(text){
+    notice=text;render();
+    if(!modalHint)return;
+    if(route==='standalone')window.PageCraftSupportModal?.notice(modalHint,text);
+    else emit('support_modal',{action:'notice',hint_id:modalHint,text});
+  }
   function listen() {
     if(!current)return;
-    if(!window.speechSynthesis || typeof SpeechSynthesisUtterance==='undefined'){notice=t('voiceMissing');render();return;}
+    if(!window.speechSynthesis || typeof SpeechSynthesisUtterance==='undefined'){voiceNotice(t('voiceMissing'));return;}
     const hintId=current.hint_id, utterance=new SpeechSynthesisUtterance(current.text);
     utterance.lang=language==='pt'?'pt-PT':'en-GB';
-    utterance.onerror=()=>{if(current?.hint_id===hintId){notice=t('voiceError');render();}};
+    utterance.onerror=()=>{if(current?.hint_id===hintId)voiceNotice(t('voiceError'));};
     window.speechSynthesis.cancel();window.speechSynthesis.speak(utterance);
     emit('hint_listened',{hint_id:hintId});
   }

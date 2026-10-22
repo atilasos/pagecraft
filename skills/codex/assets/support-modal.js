@@ -7,6 +7,9 @@
     if(dialog?.open)dialog.close();
     activeId=null;handler=null;
   }
+  function notice(hintId,text){
+    if(hintId===activeId && dialog?.open)dialog.querySelector('.pc-help-status').textContent=String(text).slice(0,250);
+  }
   function open(payload, onAction) {
     if(typeof payload.hint_id!=='string' || typeof payload.text!=='string')return;
     if(!dialog){
@@ -36,11 +39,12 @@
       const button=document.createElement('button');button.type='button';button.dataset.action=action;
       button.textContent=String(payload.labels?.[action]||action).slice(0,100);buttons.append(button);
     }
-    card.append(title,text,buttons);dialog.append(card);
+    const status=document.createElement('p');status.className='pc-help-status';status.setAttribute('role','status');
+    card.append(title,text,buttons,status);dialog.append(card);
     if(!dialog.open)dialog.showModal();
     buttons.querySelector('[data-action=continue]').focus();
   }
-  window.PageCraftSupportModal={open,close};
+  window.PageCraftSupportModal={open,close,notice};
   function attachHost(){
     const frame=document.getElementById('activity-frame')||document.getElementById('lesson');
     if(!frame)return;
@@ -50,6 +54,7 @@
       if(event.source!==frame.contentWindow || event.data?.pagecraft!==1 || event.data.type!=='support_modal')return;
       const p=event.data.payload||{};
       if(p.action==='close'){close(p.hint_id);return;}
+      if(p.action==='notice'){notice(p.hint_id,p.text);return;}
       if(p.action!=='open' || document.getElementById('freeze-overlay')?.hidden===false)return;
       open(p,(action,hintId)=>frame.contentWindow?.postMessage({pagecraft:1,type:'support_modal_action',payload:{hint_id:hintId,action}},'*'));
     });

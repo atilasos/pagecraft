@@ -188,3 +188,17 @@ test('pedir outra pista no modal não declara automaticamente falta de utilidade
     assert.equal(emitted.filter(e=>e.type==='hint_feedback').length,0);
     assert.notEqual(support.currentHintId(),first);`);
 });
+
+
+test('indisponibilidade da voz é comunicada dentro do modal sem o fechar',()=>{
+  const run=activity();
+  run(`host('learning_preferences',{route:'permanent'});config.automatic_after_failures=2;
+    support.recordAttempt({answer:'A',correct:false});support.recordAttempt({answer:'B',correct:false});
+    const req=emitted.find(e=>e.type==='feedback_request').payload.request_id;
+    support.receive({request_id:req,unit_id:'u1',text:'Compara as partes.'});
+    window.speechSynthesis=null;
+    host('support_modal_action',{hint_id:support.currentHintId(),action:'listen'});
+    assert.equal(emitted.at(-1).payload.action,'notice');
+    assert.match(emitted.at(-1).payload.text,/não está disponível/);
+    assert.equal(emitted.filter(e=>e.type==='hint_acknowledged').length,0);`);
+});
