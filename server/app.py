@@ -100,11 +100,16 @@ def create_app(
         app.state.feedback = FeedbackService(
             config, storage, app.state.classroom, build_feedback_provider(config)
         )
+        from .learning_feedback import LearningFeedback
+        app.state.learning_feedback = LearningFeedback(
+            app.state.learning, app.state.feedback.provider, config.feedback_timeout_s
+        )
         app.state.feedback.start()
         await app.state.runner.start()
         yield
         await app.state.classroom.stop()
         await app.state.feedback.stop()
+        await app.state.learning_feedback.stop()
         await app.state.runner.stop()
 
     app = FastAPI(

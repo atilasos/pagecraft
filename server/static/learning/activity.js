@@ -151,7 +151,7 @@ function sendPreferences() {
       {
         pagecraft: 1,
         type: "learning_preferences",
-        payload: { language: lang, level: $("level").value },
+        payload: { language: lang, level: $("level").value, participant_count: 1, route: "permanent" },
       },
       "*",
     );
@@ -424,6 +424,22 @@ async function leave() {
 }
 $("leave").onclick = leave;
 $("again").onclick = leave;
+async function requestFeedback(payload, unitId) {
+  if (!attempt || attempt.completed_at || !payload.request_id) return;
+  const owner = attempt.id;
+  let result;
+  try {
+    await flush();
+    result = await api("/api/learning/me/feedback", "POST", {
+      unit_id: unitId, request_id: payload.request_id, context: payload,
+    });
+  } catch {
+    result = {request_id: payload.request_id, unit_id: unitId, source: "unavailable",
+      text: "Não consegui dar uma pista agora. Usa as pistas do guião ou pede ajuda ao professor."};
+  }
+  if (attempt?.id === owner && !attempt.completed_at)
+    $("lesson").contentWindow?.postMessage({pagecraft: 1, type: "ai_feedback", payload: result}, "*");
+}
 window.addEventListener("message", (e) => {
   if (e.source !== $("lesson").contentWindow || e.data?.pagecraft !== 1) return;
   const { type, payload = {}, unitId = "" } = e.data;
@@ -435,6 +451,10 @@ window.addEventListener("message", (e) => {
       $("reflection").hidden = true;
       $("work").hidden = false;
     }
+  }
+  if (type === "feedback_request") {
+    requestFeedback(payload, unitId);
+    return;
   }
   if (type === "open_reflection") {
     openReflection();
@@ -455,6 +475,7 @@ window.addEventListener("message", (e) => {
   )
     $("level").value = payload.level;
   const allowed = [
+    "hint_presented", "hint_feedback", "hint_listened", "work_location", "help_resolved",
     "activity_loaded",
     "activity_state",
     "unit_started",

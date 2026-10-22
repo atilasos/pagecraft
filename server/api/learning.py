@@ -68,7 +68,8 @@ class Event(BaseModel):
     id: Annotated[str, Field(min_length=1, max_length=80)]
     type: Literal['activity_loaded', 'unit_started', 'attempt', 'discovery',
                   'assessment_result', 'help_needed', 'share_requested', 'language_changed', 'level_changed',
-                  'activity_state']
+                  'activity_state', 'hint_presented', 'hint_feedback', 'hint_listened',
+                  'work_location', 'help_resolved']
     unitId: str = Field(default='', max_length=80)
     payload: dict = Field(default_factory=dict)
 
@@ -82,6 +83,19 @@ class Event(BaseModel):
 
 class EventBatch(BaseModel):
     events: list[Event] = Field(max_length=100)
+
+
+class FeedbackInput(BaseModel):
+    unit_id: str = Field(min_length=1, max_length=80)
+    request_id: str = Field(pattern=r'^[a-zA-Z0-9-]{1,80}$')
+    context: dict
+
+    @field_validator('context')
+    @classmethod
+    def bounded_context(cls, value):
+        if len(json.dumps(value)) > 12000:
+            raise ValueError('Contexto demasiado longo.')
+        return value
 
 
 class Assessment(BaseModel):
@@ -172,6 +186,14 @@ async def me(request: Request):
 async def events(data: EventBatch, request: Request):
     count = await request.app.state.learning.record(await current_id(request), [e.model_dump() for e in data.events])
     return {'accepted': count}
+
+
+@router.post('/api/learning/me/feedback')
+@access_policy(RoutePolicy.LEARNER, RoutePolicy.TEACHER)
+async def feedback(data: FeedbackInput, request: Request):
+    return await request.app.state.learning_feedback.request(
+        await current_id(request), data.unit_id, dict(data.context, request_id=data.request_id),
+    )
 
 
 @router.post('/api/learning/me/finish')
