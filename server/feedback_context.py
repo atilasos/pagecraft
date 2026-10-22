@@ -6,6 +6,17 @@ import json
 import re
 import unicodedata
 
+FEEDBACK_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "feedback": {"type": "string", "maxLength": 400},
+        "encoraja_tentar": {"type": "boolean"},
+    },
+    "required": ["feedback"],
+    "additionalProperties": False,
+}
+BANNED = re.compile(r"\berrado\b|\bwrong\b|\bfalhaste\b|\bmal\b[!.]", re.IGNORECASE)
+
 CONTEXT_EVENT_TYPES = frozenset({'feedback_request', 'hint_presented', 'help_needed'})
 
 TIMEOUT_MESSAGE = 'Não consegui dar uma pista agora. Continua com o guião ou pede ajuda ao professor.'

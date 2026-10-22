@@ -74,6 +74,13 @@ class Event(BaseModel):
     unitId: str = Field(default='', max_length=80)
     payload: dict = Field(default_factory=dict)
 
+    @field_validator('id')
+    @classmethod
+    def client_identifier(cls, value):
+        if value.startswith(('request:', 'feedback:')):
+            raise ValueError('Identificador reservado ao serviço de feedback.')
+        return value
+
     @field_validator('payload')
     @classmethod
     def small_payload(cls, value, info: ValidationInfo):

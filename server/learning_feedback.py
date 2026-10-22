@@ -5,8 +5,7 @@ import asyncio
 
 from fastapi import HTTPException
 
-from .classroom.feedback import BANNED, FEEDBACK_SCHEMA
-from .feedback_context import SYSTEM_PROMPT, TIMEOUT_MESSAGE, cache_key, feedback_prompt
+from .feedback_context import BANNED, FEEDBACK_SCHEMA, SYSTEM_PROMPT, TIMEOUT_MESSAGE, cache_key, feedback_prompt
 
 
 class LearningFeedback:

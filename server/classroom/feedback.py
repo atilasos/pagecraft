@@ -9,28 +9,16 @@ não punitiva e o professor vê o pedido pendente no dashboard. O feedback IA
 from __future__ import annotations
 
 import asyncio
-import re
 from collections import Counter
 
 from ..config import Config
 from ..events import EventSubscription, utcnow
 from ..providers import AIProvider, ProviderError
 from ..storage import Storage
-from ..feedback_context import SYSTEM_PROMPT, TIMEOUT_MESSAGE, cache_key, feedback_prompt
+from ..feedback_context import BANNED, FEEDBACK_SCHEMA, SYSTEM_PROMPT, TIMEOUT_MESSAGE, cache_key, feedback_prompt
 from .errors import SessionClosedError
 from .service import ClassroomService
 
-FEEDBACK_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "feedback": {"type": "string", "maxLength": 400},
-        "encoraja_tentar": {"type": "boolean"},
-    },
-    "required": ["feedback"],
-    "additionalProperties": False,
-}
-
-BANNED = re.compile(r"\berrado\b|\bwrong\b|\bfalhaste\b|\bmal\b[!.]", re.IGNORECASE)
 
 
 class FeedbackService:

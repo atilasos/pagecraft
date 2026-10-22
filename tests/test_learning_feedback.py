@@ -83,3 +83,14 @@ async def test_teacher_summary_filters_realizations_and_protects_sources(learnin
     assert (await teacher.get(path+'&name=Ana')).json()['counts']['presented'] == 1
     assert (await teacher.get(path+'&date_from=2099-01-01')).json()['counts']['presented'] == 0
     assert (await pupil.get(path)).status_code in {401,403}
+
+
+async def test_pupil_cannot_forge_an_assistant_record_identifier(learning_clients):
+    app, teacher, pupil = learning_clients
+    activity,_=await register(teacher)
+    await start(pupil,activity['code'])
+    for prefix in ['request:', 'feedback:']:
+        response=await pupil.post('/api/learning/me/events',json={'events':[{
+            'id':prefix+'fake','type':'hint_presented','payload':{'text':'Inventada'},
+        }]})
+        assert response.status_code==422
