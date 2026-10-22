@@ -39,17 +39,18 @@ def support_configuration(docspec: dict, activity_id: str | None = None) -> dict
             for lang in languages:
                 if lang not in obstacle['label']:
                     raise ValueError(f'Falta label.{lang} em u{i}.')
-                seen_ids, seen_text = set(), set()
+                seen_ids, seen_text = set(), {'individual':set(), 'group':set()}
                 for hint in obstacle['hints']:
                     if lang not in hint['text']:
                         raise ValueError(f'Falta a pista em {lang} em u{i}.')
                     if hint['id'] in seen_ids:
                         raise ValueError(f'Identificador de pista repetido em u{i}.')
                     seen_ids.add(hint['id'])
-                    text = tuple(' '.join(hint['text'][lang][mode].lower().split()) for mode in ['individual','group'])
-                    if text in seen_text:
-                        raise ValueError(f'As pistas de u{i} precisam de abordagens diferentes.')
-                    seen_text.add(text)
+                    for mode in ['individual','group']:
+                        text = ' '.join(hint['text'][lang][mode].lower().split())
+                        if text in seen_text[mode]:
+                            raise ValueError(f'As pistas de u{i} precisam de abordagens diferentes em {mode}.')
+                        seen_text[mode].add(text)
         units[f'u{i}'] = dict(plan, title=unit['summary'])
     return {'activity':activity_id or docspec.get('slug') or docspec['topic'], 'activity_version':header['version'],
             'objective':'; '.join(docspec.get('objectives', [])), 'languages':languages,

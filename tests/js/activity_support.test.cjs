@@ -63,3 +63,7 @@ test('alterar uma resposta invalida a ajuda sem chamar o modelo',()=>{
   const run=activity();
   run(`support.requestHint();document.dispatchEvent({type:'input',target:{closest(selector){return selector==='[data-pagecraft-support]'?null:{dataset:{unit:'u1'}}}}});assert.equal(support.currentHintId(),null);assert.equal(emitted.filter(e=>e.type==='feedback_request').length,0);`);
 });
+test('o texto de feedback local não se torna resposta do aluno',()=>{
+  const run=activity();
+  run(`host('learning_preferences',{route:'permanent'});document.dispatchEvent(new CustomEvent('pagecraft:activity-event',{detail:{type:'attempt',unitId:'u1',payload:{correct:false,detail:'Experimenta comparar as barras'}}}));support.requestAI();assert.equal(emitted.at(-1).payload.answer,'Uma tentativa');`);
+});

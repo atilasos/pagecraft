@@ -12,6 +12,7 @@
       wait:'A preparar uma pista. Podes continuar enquanto esperas.',
       escalate:'Mostra ao professor o que tentaste e onde ficaste preso. Usa «Pedir ajuda ao professor».',
       groupEscalate:'Mostrem ao professor o que tentaram e onde ficaram presos. Usem «Pedir ajuda ao professor».',
+      callTeacher:'Chama o professor e mostra esta etapa.',
       requested:'Pedido preparado para guardar. Confirma a gravação no topo da página. Podes também chamar o professor.',
       resolvedNotice:'Registámos que já consegues continuar, segundo a tua indicação.',
       groupResolvedNotice:'Registámos que já conseguem continuar, segundo a vossa indicação.',
@@ -28,6 +29,7 @@
       wait:'Preparing a hint. You can keep working while you wait.',
       escalate:'Show your teacher what you tried and where you got stuck. Choose “Ask the teacher for help”.',
       groupEscalate:'Show your teacher what you tried and where you got stuck. Choose “Ask the teacher for help”.',
+      callTeacher:'Call your teacher and show this step.',
       requested:'Help request prepared for saving. Check that it is saved at the top of the page. You can also call your teacher.',
       resolvedNotice:'We recorded that you say you can continue now.', groupResolvedNotice:'We recorded that you say you can continue now.',
       helpedNotice:'We recorded that you say the hint helped.', groupHelpedNotice:'We recorded that you say the hint helped.',
@@ -107,7 +109,7 @@
     if(!plan())return;
     teacherRequest ||= {request_id:id()};
     emit('help_needed',{help_request_id:teacherRequest.request_id,note:obstacle().label[language],context:requestContext(),hint_id:current?.hint_id||null});
-    notice=t('requested');render();
+    notice=route==='standalone'?t('callTeacher'):t('requested');render();
   }
   function resolved() {
     emit('help_resolved',{help_request_id:teacherRequest?.request_id,note:t('resolvedNotice')});
@@ -142,8 +144,9 @@
       '<div class="pc-support-controls">'+button('helped',t('helped'))+button('stuck',t('stuck'))+'</div>'+
       '<div class="pc-support-controls">'+button('teacher',t('teacher'))+button('ai',t('ai'),!!pending||route==='standalone')+'</div>'+
       '<details><summary>'+esc(t('settings'))+'</summary>'+settings+'</details>':settings+'<div class="pc-support-controls">'+button('hint',t('hint'))+button('teacher',t('teacher'))+'</div>')+
-      '<div class="pc-support-controls">'+(config.externalWork?button('external',location==='pagecraft'?t('external')+config.externalWork[language]:t('back')):'')+
-      button('reading',location==='pagecraft'?t(members>1?'discussion':'reading'):t('back'))+(teacherRequest?button('resolved',t('resolved')):'')+'</div>'+
+      '<div class="pc-support-controls">'+(location==='pagecraft'?
+        (config.externalWork?button('external',t('external')+config.externalWork[language]):'')+button('reading',t(members>1?'discussion':'reading')):
+        button('return',t('back')))+(teacherRequest?button('resolved',t('resolved')):'')+'</div>'+
       '<p class="pc-support-notice" role="status">'+esc(notice)+'</p><p class="pc-support-note">'+esc(t('observation'))+'</p>';
     if(active)panel.querySelector('[data-support-action="'+active+'"]')?.focus({preventScroll:true});
     return true;
@@ -167,6 +170,7 @@
         if(action==='listen')listen();
         if(action==='mode'&&!locked){members=members===1?2:1;pending=null;current=null;render();}
         if(action==='external')setLocation(location==='pagecraft'?'external':'pagecraft');
+        if(action==='return')setLocation('pagecraft');
         if(action==='reading')setLocation(location==='pagecraft'?(members>1?'discussion':'reading'):'pagecraft');
       });
       panel.addEventListener('change',event=>{
@@ -213,7 +217,9 @@
     if(type==='level_changed')update({unit_id:unit||unitId,level:p.level});
     if(type==='assessment_result'||type==='attempt'){
       const detail=typeof p.detail==='object'?p.detail:null;
-      update({unit_id:unit||unitId,answer:detail?.value??p.detail??p.result??'',question:detail?.note||'',revision:id()});
+      const change={unit_id:unit||unitId,revision:id()};
+      if(type==='assessment_result' && detail && Object.hasOwn(detail,'value')){change.answer=detail.value;change.question=detail.note||context.question;}
+      update(change);
     }
   });
   document.addEventListener('input',event=>{
@@ -222,7 +228,7 @@
     const unit=container?.dataset.unit||container?.id;
     if(config.units[unit])update({unit_id:unit,revision:id()});
   });
-  window.PageCraftSupport={configure(value){config=value;unitId=Object.keys(config.units)[0];context={};mount();render();
+  window.PageCraftSupport={configure(value){config=value;language=config.languages.includes('pt')?'pt':config.languages[0];unitId=Object.keys(config.units)[0];context={};mount();render();
       if(typeof MutationObserver!=='undefined')new MutationObserver(()=>{mount();}).observe(document.body,{childList:true,subtree:true});
       document.dispatchEvent(new CustomEvent('pagecraft-support-ready'));},
     update,restore,receive,requestHint,requestAI,feedback,help,resolved,setLocation,listen,
