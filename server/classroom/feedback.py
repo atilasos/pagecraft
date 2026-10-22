@@ -9,15 +9,14 @@ não punitiva e o professor vê o pedido pendente no dashboard. O feedback IA
 from __future__ import annotations
 
 import asyncio
-import hashlib
 import re
-import unicodedata
 from collections import Counter
 
 from ..config import Config
 from ..events import EventSubscription, utcnow
 from ..providers import AIProvider, ProviderError
 from ..storage import Storage
+from ..feedback_context import SYSTEM_PROMPT, TIMEOUT_MESSAGE, cache_key, feedback_prompt
 from .errors import SessionClosedError
 from .service import ClassroomService
 
@@ -31,27 +30,7 @@ FEEDBACK_SCHEMA = {
     "additionalProperties": False,
 }
 
-SYSTEM_PROMPT = """És um assistente pedagógico numa sala de aula do 1.º ciclo em Portugal (Movimento da Escola Moderna).
-Dás feedback formativo a respostas de crianças de 6-10 anos, em português europeu (AO90).
-Regras absolutas:
-- Máximo 2 frases curtas, vocabulário da idade, tratamento por tu.
-- Nunca digas "errado", "mal", "falhaste" nem uses tom punitivo.
-- Se a resposta está incompleta ou imprecisa: reconhece o que já está bem e dá UMA pista concreta para o próximo passo (nunca a solução).
-- Se a resposta está certa: celebra a descoberta e nomeia o que a criança percebeu.
-- Não uses emojis nem travessões."""
-
 BANNED = re.compile(r"\berrado\b|\bwrong\b|\bfalhaste\b|\bmal\b[!.]", re.IGNORECASE)
-
-TIMEOUT_MESSAGE = (
-    "O assistente está a pensar mais devagar do que tu! "
-    "Continua o teu trabalho, o professor já viu a tua resposta."
-)
-
-
-def _normalize(text: str) -> str:
-    text = unicodedata.normalize("NFKD", text.lower().strip())
-    text = "".join(c for c in text if not unicodedata.combining(c))
-    return re.sub(r"\s+", " ", text)[:200]
 
 
 class FeedbackService:
@@ -199,17 +178,7 @@ class FeedbackService:
 
     @staticmethod
     def _cache_key(unit_id: str | None, payload: dict) -> str:
-        # inclui pergunta e resposta esperada: a mesma resposta a perguntas
-        # diferentes da mesma unidade não pode partilhar feedback
-        semantic = "|".join(
-            (
-                str(unit_id),
-                _normalize(str(payload.get("question", ""))),
-                _normalize(str(payload.get("expected", ""))),
-                _normalize(str(payload.get("answer", ""))),
-            )
-        )
-        return hashlib.sha256(semantic.encode("utf-8")).hexdigest()[:32]
+        return cache_key(unit_id, payload)
 
     async def request(
         self,
@@ -234,6 +203,7 @@ class FeedbackService:
                 source="cache",
                 request_seq=request_seq,
                 work_group_id=work_group_id,
+                correlation=payload,
             )
             return
         key = (session_id, work_group_id or student_id)
@@ -295,12 +265,7 @@ class FeedbackService:
 
     async def _process(self, item: dict) -> None:
         payload = item["payload"]
-        prompt = (
-            f"Pergunta ou tarefa: {payload.get('question', '')}\n"
-            f"Resposta esperada (referência do professor): {payload.get('expected', '(não indicada)')}\n"
-            f"Resposta da criança: {payload.get('answer', '')}\n\n"
-            "Dá o teu feedback formativo."
-        )
+        prompt = feedback_prompt(payload)
         try:
             result = await self.provider.complete(
                 prompt,
@@ -310,7 +275,7 @@ class FeedbackService:
             )
             text = str(result.get("feedback", "")).strip()
             if not text or BANNED.search(text):
-                text = "Boa tentativa! Volta a ler a pergunta com calma e experimenta outra vez."
+                text = TIMEOUT_MESSAGE
             cache = await self._cache(item["session_id"])
             cache[item["cache_key"]] = text
             await self._save_cache(item["session_id"])
@@ -322,6 +287,7 @@ class FeedbackService:
                 source="ai",
                 request_seq=item["request_seq"],
                 work_group_id=item["work_group_id"],
+                correlation=payload,
             )
         except ProviderError as exc:
             await self._deliver(
@@ -332,6 +298,7 @@ class FeedbackService:
                 source="timeout",
                 request_seq=item["request_seq"],
                 work_group_id=item["work_group_id"],
+                correlation=payload,
             )
             await self.classroom.emit_event(
                 item["session_id"],
@@ -353,11 +320,13 @@ class FeedbackService:
         *,
         request_seq: int | None,
         work_group_id: str | None = None,
+        correlation: dict | None = None,
     ) -> None:
         await self.classroom.emit_event(
             session_id,
             "ai_feedback",
-            {"text": text, "unit_id": unit_id, "source": source},
+            {"text": text, "unit_id": unit_id, "source": source,
+             **({"request_id": correlation["request_id"]} if correlation and correlation.get("request_id") else {})},
             author="assistant",
             student_id=student_id,
             work_group_id=work_group_id,

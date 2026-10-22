@@ -386,3 +386,36 @@ async def test_group_feedback_is_targeted_and_recovered_once(env):
         assert len(provider.calls) == 1
     finally:
         await feedback.stop()
+
+
+@pytest.mark.parametrize('change', [
+    {'activity_version': 'v2'}, {'product': 'book'}, {'participant_count': 1},
+    {'previous_hints': ['Não ajudou: aumentar o texto']}, {'stage_objective': 'Guardar'},
+    {'criteria': ['Legibilidade']}, {'answer': 'a' * 210 + 'outro fim'},
+])
+def test_cache_covers_full_context(change):
+    payload = {'answer': 'a' * 210, 'activity_version': 'v1', 'product': 'slides',
+               'participant_count': 2, 'previous_hints': [], 'request_id': 'one'}
+    assert FeedbackService._cache_key('u1', payload) != FeedbackService._cache_key('u1', payload | change)
+    assert FeedbackService._cache_key('u1', payload) == FeedbackService._cache_key('u1', payload | {'request_id': 'two'})
+
+
+async def test_context_and_request_correlation_reach_model_and_child(env):
+    config, storage, _, classroom = env
+    provider = good_provider('Afastem-se do ecrã e leiam o título.')
+    fb = FeedbackService(config, storage, classroom, provider)
+    session, sid = await _session_with_student(classroom)
+    payload = {'question': 'Como rever?', 'answer': 'Não se lê', 'request_id': 'revision-2',
+               'activity_version': 'canva-pilot-v1', 'product': 'poster',
+               'previous_hints': [{'text': 'Rever o contraste', 'usefulness': 'not_helped'}]}
+    fb.start()
+    try:
+        await _register_feedback(classroom, session['id'], sid, 'context', payload)
+        response = await _wait_event(storage, session['id'], 'ai_feedback')
+        assert response['payload']['request_id'] == 'revision-2'
+        assert 'not_helped' in provider.calls[0]['prompt']
+        assert 'poster' in provider.calls[0]['prompt']
+        assert 'Não viste nem validaste o Canva' in provider.calls[0]['system']
+        assert 'professor já viu' not in TIMEOUT_MESSAGE
+    finally:
+        await fb.stop()
