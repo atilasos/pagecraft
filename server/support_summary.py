@@ -13,7 +13,8 @@ def build_support_summary(events):
     for e in events:
         p, actor, unit = e.get('payload') or {}, e['actor'], e.get('unit_id') or 'sem etapa'
         if e['type'] in {'hint_presented', 'feedback_request', 'help_needed'}:
-            stages[unit].append(e)
+            context = p.get('context') if isinstance(p.get('context'), dict) else p
+            stages[(p.get('activity') or context.get('activity') or '', p.get('activity_version') or context.get('activity_version') or '', unit)].append(e)
         if e['type'] == 'hint_presented':
             hints[(actor, p.get('hint_id'))] = e
         elif e['type'] == 'hint_feedback':
@@ -46,14 +47,20 @@ def build_support_summary(events):
             version = (hint['payload'].get('activity_version') if hint else None) or 'versão não indicada'
             unhelpful[(version, text)].append((e, hint))
     recurring = []
-    for unit, rows in stages.items():
+    for (activity, version, unit), rows in stages.items():
         actors = {e['actor'] for e in rows}
         if len(actors) < 2:
             continue
-        title = next(((e['payload'].get('context') or {}).get('stage') or e['payload'].get('stage') for e in rows
-                      if (e['payload'].get('context') or {}).get('stage') or e['payload'].get('stage')), unit)
+        title = unit
+        for row in rows:
+            context = row['payload'].get('context')
+            if not isinstance(context, dict):
+                context = row['payload']
+            if context.get('stage'):
+                title = context['stage']
+                break
         recurring.append({'unit_id': unit, 'text': f'{title}: {len(actors)} grupos ou realizações pediram apoio.',
-                          'count': len(actors), 'evidence': [e['ref'] for e in rows]})
+                          'count': len(actors), 'version': version, 'activity': activity, 'evidence': [e['ref'] for e in rows]})
     recurring.sort(key=lambda row: (-row['count'], row['unit_id']))
     rejected = [{'text': f'«{text}» recebeu indicação de que não ajudou em {len(rows)} percurso(s).',
                  'version': version, 'count': len(rows),

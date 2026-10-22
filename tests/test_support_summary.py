@@ -53,3 +53,15 @@ def test_same_hint_feedback_is_latest_declaration_not_multiple_votes():
     assert result['counts']['helped'] == 1
     assert result['counts']['not_helped'] == 0
     assert not result['unhelpful']
+
+
+def test_versions_are_not_combined_into_a_recurring_problem():
+    events=[record('1','hint_presented',actor='a',hint_id='h1',text='Uma pista',activity_version='v1'),
+            record('2','hint_presented',actor='b',hint_id='h2',text='Uma pista nova',activity_version='v2')]
+    assert not build_support_summary(events)['recurring']
+
+
+def test_legacy_context_cannot_break_the_summary():
+    events=[record('1','help_needed',actor='a',context='contexto antigo'),
+            record('2','help_needed',actor='b',context='contexto antigo')]
+    assert build_support_summary(events)['recurring'][0]['count']==2

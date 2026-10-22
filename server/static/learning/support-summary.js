@@ -17,6 +17,8 @@ window.PageCraftSupportSummary = {
       }
       parent.append(details);
     }
+    const countedSources=Object.keys(summary.records).filter(id=>['hint_presented','hint_feedback','help_needed','help_resolved'].includes(summary.records[id].type));
+    if(countedSources.length)sources(root,countedSources);
     function section(title, rows, empty) {
       root.append(node('h3',title));
       if(!rows.length){root.append(node('p',empty));return;}
