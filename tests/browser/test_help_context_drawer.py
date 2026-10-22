@@ -67,6 +67,30 @@ def test_teacher_actions_keep_the_recipient_separate_from_the_author(page, studi
         expect(joined).not_to_contain_text('Trabalho conjunto')
 
 
+def test_unavailable_vocabulary_keeps_history_without_inventing_or_reusing_authorship(page, studio_origin):
+    from playwright.sync_api import expect
+    with classroom(studio_origin) as (teacher, pair, other, session, path, ids):
+        post(pair, path, ('help', 'help_needed', 'u2', {'note': 'Precisamos de comparar.'}))
+        teacher.post(path + '/message', json={'student_id': ids[0], 'text': 'Olha para as duas zonas.'}).raise_for_status()
+        open_teacher(page, studio_origin)
+        open_drawer(page, 'Ana')
+        history = page.locator('#drawer-events')
+        message = history.locator('li').filter(has_text='mensagem enviada: Olha para as duas zonas.')
+        expect(message).to_contain_text('Professor · Destinatário: Ana')
+        expect(page.locator('#drawer-help')).to_contain_text('Trabalho conjunto · Ana + Bruno')
+        page.route('**/api/session-event-types', lambda route: route.fulfill(status=503, body='{}'))
+        # Re-run the real loader to prove that an earlier declaration is cleared.
+        page.evaluate('loadPanelEventTypes()')
+        page.locator('#drawer-close').click()
+        open_drawer(page, 'Ana')
+        expect(message).to_contain_text('Autor não registado')
+        expect(message).not_to_contain_text('Professor')
+        expect(history).not_to_contain_text('Trabalho individual')
+        expect(history).not_to_contain_text('Trabalho conjunto')
+        expect(page.locator('#drawer-help')).to_contain_text('Autor não registado')
+        expect(page.locator('#drawer-help')).to_contain_text('Precisamos de comparar.')
+
+
 def test_pending_request_shows_own_context_and_correlated_hint_without_resolving(page, studio_origin):
     from playwright.sync_api import expect
     errors = []
