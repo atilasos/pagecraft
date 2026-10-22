@@ -45,7 +45,8 @@ O header nunca seleciona um ficheiro nem concede acesso.
   `sessionStorage`, na chave `pc-realization:<código da atividade>`.
 - Recarregar A com o cookie de B devolve conflito e não carrega os dados de B.
   A fila `pc-queue:<id>` e a reflexão `pc-reflection:<id>` permanecem intactas.
-  Um separador conhecido sem cookie também conserva os pendentes e não oferece nova entrada.
+  Um separador conhecido sem cookie também conserva os pendentes e não oferece nova entrada
+  enquanto houver dados por guardar ou incerteza na leitura do armazenamento.
 - O aviso de conflito em PT e EN permanece visível quando guardar, terminar ou sair falham.
   O cliente não apresenta a conclusão como guardada nem transforma o conflito de feedback
   numa pista de fallback entregue à atividade.
@@ -105,3 +106,76 @@ A correção impede atribuição cruzada e conserva os pendentes no armazenament
 Não acrescenta recuperação de credenciais perdidas nem transfere pendentes de A para B.
 Fechar definitivamente o separador continua sujeito aos limites de `sessionStorage` existentes.
 Não houve ensaio com crianças nem alteração de critérios ou de comportamento pedagógico.
+
+
+## Ronda 2: saída após expirar uma realização concluída
+
+A revisão de especificação encontrou um P2 confirmado. Depois de concluir A,
+`finish` removia a fila e a reflexão locais, mas conservava `pc-realization:<código>`.
+Se o cookie expirasse, recarregar mostrava apenas «Tentar recuperar novamente».
+Sem recarregar, «Começar uma nova realização» chamava `leave`, recebia 401 e também
+não permitia nova entrada. Não havia trabalho pendente que justificasse o bloqueio.
+
+A reprodução usa a interface real para começar, escrever a reflexão e concluir.
+Depois expira o cookie no contexto do browser. Os dois casos falharam antes da
+correção, com 2 falhas e 6 testes excluídos. Após recarregar, faltava o botão de
+nova realização. Sem recarregar, o formulário permanecia oculto depois do clique.
+Os testes de reprodução estão no commit `c989399`, anterior à correção `1f72f55`.
+
+```bash
+PAGECRAFT_TEST_CDP=http://127.0.0.1:9332 uv run --project /home/proteu/pagecraft --with playwright pytest -q tests/browser/test_learning_authorship_ui.py -k completed_realization
+```
+
+A correção distingue credenciais expiradas de conflito de identidade. Em 401,
+um separador conhecido oferece uma escolha explícita para nova realização apenas
+se a fila estiver vazia e a reflexão não contiver respostas ou texto pendentes.
+Uma reflexão vazia persistida é aceite. JSON inválido, estruturas inesperadas e
+falhas de leitura conservam o bloqueio e a possibilidade de tentar recuperar.
+O estado pendente em memória também impede a saída.
+
+Depois de recarregar, a escolha surge junto do botão de recuperação. No ecrã
+concluído, o clique em «Começar uma nova realização» já expressa essa escolha.
+A saída local remove apenas a referência da realização deste separador. Não
+remove filas ou reflexões, não apaga cookies e não chama um `leave` anónimo.
+Criar o novo registo continua a exigir preencher e submeter o formulário.
+Um 409 nunca autoriza esta saída, mesmo que A esteja concluída e sem pendentes.
+O servidor mantém os contratos anteriores, incluindo o `leave` autenticado.
+
+As regressões API verificam a expiração no registo do servidor, tanto para aluno
+como para professor em pré-visualização. Recuperar e sair devolvem 401 sem alterar
+cookies ou o trabalho concluído. Um novo início explícito cria outro identificador
+e conserva o registo anterior.
+
+As regressões de browser cobrem os dois percursos de conclusão e expiração,
+resposta em fila, reflexão em texto ou escolha, corrupção e erros de leitura.
+Também cobrem A concluída com o cookie de B, com e sem recarga. A referência de A
+permanece e B continua autorizado a guardar. Os testes anteriores continuam a
+verificar os quatro caminhos de mutação e a ausência de um falso «Guardado».
+
+Durante a validação, um teste anterior de recuperação capturou o acontecimento
+inicial da atividade em vez da resposta que acabara de escrever. A espera passou
+a selecionar o pedido que contém essa resposta, antes de ler o registo no servidor.
+
+
+### Resultados da ronda 2
+
+- 47 testes API dedicados passaram.
+- 384 testes sem browser passaram.
+- 41 testes de browser passaram, incluindo autoria, recuperação, integração com
+  Studio, retoma de grupos e reflexões individuais dos participantes.
+- `node --check server/static/learning/activity.js` e `git diff --check` passaram.
+
+Comandos executados neste worktree:
+
+```bash
+uv run --project /home/proteu/pagecraft pytest -q tests/test_learning_authorship.py
+uv run --project /home/proteu/pagecraft pytest -q tests --ignore=tests/browser
+PAGECRAFT_TEST_CDP=http://127.0.0.1:9332 uv run --project /home/proteu/pagecraft --with playwright pytest -q tests/browser/test_learning_authorship_ui.py tests/browser/test_learning_recovery.py tests/browser/test_fraction_studio.py tests/browser/test_group_continuation_ui.py tests/browser/test_group_reflections.py
+node --check server/static/learning/activity.js
+git diff --check
+```
+
+O browser pertenceu à sessão Hub `pagecraft-authorship-r2`, perfil `temporary`,
+CDP na porta 9332. A sessão foi fechada depois dos testes. Todos os servidores
+usaram diretórios descartáveis. Nenhum contrato do Studio foi alterado.
+Não houve push, edição do PR, merge ou alterações no checkout `/home/proteu/pagecraft`.
