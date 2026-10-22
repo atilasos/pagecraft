@@ -60,15 +60,30 @@ async def test_old_mutation_clients_must_declare_the_expected_realization(learni
     assert dict(pupil.cookies) == cookies_before
 
 
+@pytest.mark.parametrize('as_teacher', [False, True])
+@pytest.mark.parametrize('credential', ['missing', 'forged', 'expired'])
 @pytest.mark.parametrize('method,path,body', ACTIONS)
-async def test_identifier_alone_never_authenticates(learning_clients, method, path, body):
+async def test_identifier_alone_never_authenticates(learning_clients, method, path, body, credential, as_teacher):
+    from datetime import datetime, timedelta, timezone
+    from server.learning import LEARNING_COOKIE
+
     app, teacher, pupil = learning_clients
     activity, _ = await register(teacher)
-    attempt = await start(pupil, activity['code'])
-    pupil.cookies.clear()
-    response = await pupil.request(method, '/api/learning' + path, json=body,
-                                   headers={HEADER: attempt['id']})
+    client = teacher if as_teacher else pupil
+    attempt = await start(client, activity['code'])
+    before = await app.state.learning.attempt(attempt['id'])
+    if credential in {'missing', 'forged'}:
+        client.cookies.delete(LEARNING_COOKIE)
+        if credential == 'forged':
+            client.cookies.set(LEARNING_COOKIE, attempt['id'] + '.forged')
+    else:
+        before['expires_at'] = (datetime.now(timezone.utc) - timedelta(seconds=1)).isoformat()
+        path_ = app.state.storage.path('learning', 'realizations', attempt['id'] + '.json')
+        await app.state.storage.write_json(path_, before)
+    response = await client.request(method, '/api/learning' + path, json=body,
+                                    headers={HEADER: attempt['id']})
     assert response.status_code == 401
+    assert await app.state.learning.attempt(attempt['id']) == before
 
 
 async def test_expected_identity_allows_discovery_retry_finish_and_leave(learning_clients):
