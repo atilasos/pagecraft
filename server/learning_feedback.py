@@ -25,7 +25,7 @@ class LearningFeedback:
 
     async def request(self, identifier, unit_id, payload):
         key = (identifier, payload['request_id'])
-        # O lock só protege a criação do trabalho; nunca segura a escrita da realização.
+        # A leitura, a criação e a conclusão partilham o lock; o modelo corre fora dele.
         async with self.learning.lock('feedback:' + identifier):
             attempt = await self.learning.attempt(identifier)
             request = next((e for e in attempt['events'] if e['id'] == 'request:' + key[1]), None)
@@ -60,9 +60,11 @@ class LearningFeedback:
                 text, source = TIMEOUT_MESSAGE, 'unavailable'
         result = {'request_id': payload['request_id'], 'unit_id': unit_id, 'text': text, 'source': source}
         # Uma resposta em curso pode terminar depois da autoavaliação. Mantém causalidade no registo.
-        await self.learning.record(identifier, [{
-            'id': 'feedback:' + payload['request_id'], 'type': 'ai_feedback', 'unitId': unit_id, 'payload': result,
-        }], assistant=True)
+        # Uma leitura sem desfecho tem de encontrar a tarefa ainda em curso.
+        async with self.learning.lock('feedback:' + identifier):
+            await self.learning.record(identifier, [{
+                'id': 'feedback:' + payload['request_id'], 'type': 'ai_feedback', 'unitId': unit_id, 'payload': result,
+            }], assistant=True)
         return result
 
     async def _generate(self, payload):

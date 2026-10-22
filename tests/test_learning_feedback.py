@@ -138,6 +138,7 @@ async def test_permanent_code_feedback_is_contextual_private_and_idempotent(lear
     }}
     responses = await asyncio.gather(*(pupil.post('/api/learning/me/feedback', json=body) for _ in range(3)))
     assert all(r.status_code == 200 for r in responses)
+    assert all(r.json() == responses[0].json() for r in responses)
     assert len(provider.calls) == 1
     assert responses[0].json()['request_id'] == 'revision-2'
     assert 'not_helped' in provider.calls[0]['prompt']
@@ -145,6 +146,7 @@ async def test_permanent_code_feedback_is_contextual_private_and_idempotent(lear
     assert 'consecutive_incorrect_attempts' in provider.calls[0]['prompt']
     saved = await app.state.learning.attempt(attempt['id'])
     assert [e['type'] for e in saved['events']] == ['feedback_request', 'ai_feedback']
+    assert saved['events'][-1]['payload'] == responses[0].json()
     assert (await pupil.get('/api/learning/reports')).status_code in {401, 403}
     conflict = await pupil.post('/api/learning/me/feedback', json=body | {'context': {'product': 'book'}})
     assert conflict.status_code == 409
