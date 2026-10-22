@@ -108,6 +108,7 @@ def test_public_tinkercad_in_both_years_and_numeric_year(page, catalog_origin, v
     public_year(page, 3)
     page.locator('#search').fill('Ano numérico')
     assert page.locator('#generalList .card').count() == 1
+    assert page.locator('#generalList .meta').text_content().startswith('3.º ano')
 
 
 def test_public_variant_independent_year_counts_and_unknown(page, catalog_origin):

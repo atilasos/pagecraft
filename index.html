@@ -737,7 +737,7 @@
         return '<li class="card"><div class="card-row">' +
           '<span class="ordinal cap">' + esc(label) + '</span>' +
           '<div class="card-title"><h3>' + esc(item.title || "Atividade sem título") + '</h3><div class="meta">' +
-            '<span>' + esc(item.ageRange || item.year || yearsLabel(item.years)) + '</span>' +
+            '<span>' + esc(yearsLabel(item.years)) + '</span>' +
             '<span>' + (item.duration ? esc(item.duration) + ' min' : 'Duração ajustável') + '</span>' +
             (item.maker && item.maker !== "none" ? '<span>Maker: ' + esc(item.maker) + '</span>' : '') +
           '</div></div>' + stampHtml(item, item._index + 31) + actionsHtml(item) + '</div></li>';
