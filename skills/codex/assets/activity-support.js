@@ -70,8 +70,9 @@
     const originalContext=requestContext();
     current={hint_id:id(),unit_id:unitId,obstacle:obstacle().id,product:context.product||'',text,source,
       request_id:requestId,hint_key:hintKey,language,signature:signature(),usefulness:null};
-    pending=null;notice='';history.push(current);
-    if(!render())return;
+    pending=null;notice='';
+    if(!render()){current=null;return;}
+    history.push(current);
     emit('hint_presented',{hint_id:current.hint_id,hint_key:hintKey,text,source,request_id:requestId,
       obstacle:current.obstacle,product:current.product,language,context:originalContext});
     const action=panels.get(unitId)?.querySelector('.pc-support-action');
@@ -130,7 +131,7 @@
   }
   function render() {
     const panel=panels.get(unitId);
-    if(!panel || !plan())return false;
+    if(!panel || panel.isConnected===false || !plan())return false;
     const button=(action,label,disabled=false)=>'<button type="button" data-support-action="'+action+'" '+(disabled?'disabled':'')+'>'+esc(label)+'</button>';
     const active=document.activeElement?.closest?.('[data-pagecraft-support]')===panel?document.activeElement.dataset.supportAction:null;
     const settings=(!locked?button('mode',members>1?t('alone'):t('pair')):'')+
@@ -172,6 +173,7 @@
         if(!event.target.matches('[data-support-obstacle]'))return;
         update({unit_id:unit,obstacle:event.target.value});pending=null;current=null;render();
       });
+      if(unit===unitId)render();
     });
   }
   function restore(events) {
@@ -224,5 +226,5 @@
       if(typeof MutationObserver!=='undefined')new MutationObserver(()=>{mount();}).observe(document.body,{childList:true,subtree:true});
       document.dispatchEvent(new CustomEvent('pagecraft-support-ready'));},
     update,restore,receive,requestHint,requestAI,feedback,help,resolved,setLocation,listen,
-    currentHintId:()=>current?.hint_id||null};
+    version:()=>config?.activity_version,currentHintId:()=>current?.hint_id||null};
 })();

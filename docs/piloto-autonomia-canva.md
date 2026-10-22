@@ -1,5 +1,7 @@
 # Ensaiar o apoio contextual numa atividade de Canva
 
+O Canva é um caso de validação do apoio comum da skill. A configuração está em `pilots/canva-autonomia/support-plan.json`; o adaptador do guião não contém o motor de pistas.
+
 Esta variante está preparada para revisão do professor. A atividade publicada `canva-animais-4ano` conserva o conteúdo anterior. Não houve publicação ou alteração de dados da turma nesta implementação.
 
 ## Percursos confirmados
@@ -12,7 +14,7 @@ No Studio, as respostas conjuntas continuam a pertencer ao grupo e as reflexões
 
 ## Rever e abrir o piloto
 
-1. Rever as duas pistas de cada etapa e de cada obstáculo em `pilots/canva-autonomia/support.js`. São conteúdo preparado para revisão, sem aprovação docente presumida.
+1. Rever as duas pistas de cada etapa e de cada obstáculo em `pilots/canva-autonomia/support-plan.json`. São conteúdo preparado para revisão, sem aprovação docente presumida.
 2. Reconstruir os ficheiros com `uv run python scripts/build_canva_support_pilot.py`. A variante fica em `drafts/canva-animais-autonomia-piloto.html`, acompanhada de registo, DocSpec e guia.
 3. Abrir o ensaio isolado com `uv run python -m scripts.preview_canva_support_pilot`. O terminal mostra o código Studio e o endereço permanente de revisão. Usa alunos fictícios, uma resposta de IA simulada e armazenamento temporário. O terminal identifica o ensaio. Não chama um modelo externo.
 4. Usar perfis de browser separados para professor e aluno, para não misturar credenciais. Entrar no código Studio, selecionar um par e usar «Precisamos de uma pista». Experimentar «Ainda estamos presos», «Ouvir», «Esclarecer com IA» e «Pedir ajuda ao professor».
@@ -76,7 +78,7 @@ Depois de avaliar o apoio atual, experimentar separadamente: ensaio de um percur
 
 ```sh
 uv run python scripts/build_canva_support_pilot.py --check
-node --test tests/js/canva_support.test.cjs
+node --test tests/js/activity_support.test.cjs
 uv run pytest -q --ignore=tests/browser
 ```
 
@@ -90,3 +92,5 @@ Passaram 299 testes Python e cinco testes JavaScript. No browser real, através 
 Foi também verificada a declaração de trabalho no Canva e o regresso ao guião, a abertura das fontes do resumo e a entrada no rascunho pelo código permanente com devolução de feedback. O ensaio permanente foi uma pré-visualização docente; o acesso de alunos a uma atividade permanente publicada é coberto pelos testes de API. Não foi publicada nenhuma atividade.
 
 A inspeção visual encontrou a pista inicialmente abaixo dos controlos. O cartão foi reorganizado para apresentar a ação primeiro e focá-la na zona visível. O pedido de voz foi exercitado no browser; a qualidade e audibilidade da voz instalada precisam de confirmação no dispositivo da turma. O fornecedor real de IA e a utilização por alunos em aula continuam por validar.
+
+A versão v2 do rascunho usa o mesmo componente e plano DocSpec que qualquer nova atividade gerada. A skill define as pistas a partir do pedido, em vez de copiar o conteúdo Canva. As verificações descritas acima referem-se ao primeiro ensaio local; a generalização tem testes próprios em Matemática, escrita e Scratch.

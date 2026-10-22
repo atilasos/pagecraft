@@ -4,11 +4,6 @@
 :root{--bg:oklch(95.8% .014 85);--paper:oklch(98% .008 85);--ink:oklch(31% .026 175);--primary:oklch(42% .065 170);--accent:oklch(84.8% .054 75);--focus:oklch(42% .16 255);--warn:oklch(95% .032 85);--ok:oklch(95% .018 150);--line:#78857e;--tap:48px}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:20px/1.45 'Century Gothic','Didact Gothic','URW Gothic','Avant Garde',sans-serif}button,input,select,textarea{font:inherit;color:inherit}button,select,input,summary{min-height:48px}button{padding:10px 16px;border:1px solid var(--line);border-radius:10px;background:var(--paper);cursor:pointer;touch-action:manipulation}button:hover{background:#eee8db}button.primary{background:var(--primary);color:var(--paper);border-color:var(--primary)}button:disabled{cursor:default;color:#58645e;background:#e3e1d8;border-style:dashed}button[aria-pressed=true],button[aria-selected=true]{border:2px solid var(--primary);background:#e3ece6;font-weight:bold}button.primary[aria-pressed=true]{color:var(--ink)}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}h1,h2,h3{line-height:1.2;margin:0 0 16px}h1{font-size:clamp(32px,4vw,40px)}h2{font-size:32px}h3{font-size:28px}p,li{max-width:55ch}p{margin:12px 0}a{color:var(--primary)}.wrap{max-width:1100px;margin:auto;padding:clamp(16px,3vw,32px)}header{padding:12px 0 20px;border-bottom:1px solid var(--line)}.eyebrow,.micro{font-size:16px}.eyebrow{margin:0 0 8px}.support{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.support button{flex:1}.index{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0}.session strong{display:block}.session .micro{margin:4px 0 10px}.stages{display:flex;flex-wrap:wrap;gap:8px}.stage-button{min-width:48px;padding:8px 14px}.stage-button[aria-current=step]{background:var(--primary);color:var(--paper);font-weight:bold}.sheet{background:var(--paper);border:1px solid #c6c7b9;border-radius:12px;padding:clamp(16px,3vw,32px);min-height:450px}.stage-meta{display:flex;gap:16px;flex-wrap:wrap;font-size:16px;margin-bottom:12px}.action{font-size:22px;margin:16px 0 24px}.hint{padding:14px 18px;background:#e8ebe4;border-radius:10px;margin:18px 0}.hint p{margin:0}.field{margin:24px 0}.field label,.field legend{display:block;font-size:20px;font-weight:bold;margin-bottom:8px}.field input[type=text],.field textarea,.field select{display:block;width:100%;background:#fffefa;border:1px solid var(--line);padding:12px;border-radius:8px}.field textarea{resize:vertical;min-height:110px}.field select{white-space:normal}.field-note{font-size:16px;margin:7px 0}.choices{display:flex;flex-wrap:wrap;gap:12px}.choices button{flex:1;min-width:min(100%,200px)}.feedback{padding:14px 18px;border-radius:10px;background:var(--warn);margin:16px 0}.feedback.ok{background:var(--ok)}.feedback:empty{display:none}.neutral{font-size:16px}.illustrated{display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,300px);gap:24px;align-items:center}.illustrated figure{margin:0}.illustrated img{width:100%;border-radius:10px}.illustrated figcaption{font-size:16px}.criteria{padding:18px;background:#ece9df;border-radius:10px;margin:20px 0}.criteria ol{padding-left:26px;margin:0}.criteria li{margin:9px 0}.products{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.product{padding:18px;min-width:0;text-align:left}.product strong{display:block;font-size:24px;margin:12px 0 6px}.product span{display:block}.product small{font-size:20px}.sketch{height:150px;display:flex;justify-content:center;align-items:center;gap:6px;background:#f2eede;border-radius:8px}.sketch .mini{border:2px solid var(--ink);border-radius:2px;width:56px;height:94px;padding:8px;display:flex;flex-direction:column;justify-content:space-evenly}.sketch .mini span{height:3px;background:var(--ink)}.sketch.slides .mini{width:74px;height:48px}.sketch.poster .mini{width:96px;height:120px}.sketch.poster .cols{display:flex;gap:10px}.sketch.poster .cols span{height:52px;width:22px;border:1px solid var(--ink);background:transparent}.map{margin:20px 0}.map-pages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.map-page{border:1px solid var(--line);padding:18px;min-height:150px;background:#fffefa}.map-page span{display:block}.map-page strong{display:block;margin-bottom:12px}.map-pages.book .map-page{min-height:240px}.map-poster{border:1px solid var(--line);padding:20px;background:#fffefa}.map-poster .animal-zones{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:20px 0}.animal-block{padding:14px;border:1px solid var(--line)}.animal-block p{margin:8px 0}.image-slot{border:1px dashed var(--line);padding:14px;text-align:center;margin:12px 0}.samples{display:grid;grid-template-columns:1fr 1fr;gap:18px}.sample{border:1px solid var(--line);padding:16px;min-width:0;background:#fffefa}.sample .animal-zones{display:grid;grid-template-columns:1fr 1fr;margin:14px 0}.sample .animal-block{font-size:20px;padding:4px}.sample .animal-block p{line-height:1.3;margin:0;overflow-wrap:anywhere}.sample .image-slot{padding:8px;margin:5px 0}.sample.b .animal-zones{gap:18px}.sample.b .animal-block{padding:10px}.sample.b .animal-block p{margin:10px 0}.sample.a .animal-block:nth-child(2){padding-top:28px}.sample.focus-zone .animal-zones,.feedback-object.highlighted{outline:3px solid #97732d;outline-offset:3px}.sample > button{width:100%;margin-top:14px}.feedback-object{border:1px solid var(--line);padding:16px;max-width:420px;background:#fffefa;margin:20px 0}.feedback-object p{margin:3px 0}details{margin:20px 0;border-top:1px solid #c6c7b9;padding-top:12px}summary{display:flex;align-items:center;cursor:pointer;font-weight:bold;padding:10px 2px;gap:12px}summary:before{content:'+';font-size:24px}[open]>summary:before{content:'−'}.guide{margin:20px 0;padding:20px;background:#edece3;border-radius:10px}.guide h3{margin-bottom:10px}.guide figure{margin:18px 0 12px}.guide img{max-width:100%;display:block;width:100%;border:1px solid var(--line)}.guide figcaption{font-size:16px;margin-top:10px}.guide-actions{display:flex;gap:10px;flex-wrap:wrap}.zoom-region{overflow:auto;max-height:80vh;margin-top:16px;padding:8px;border:1px solid var(--line);background:#f8f6ed}.zoom-region img{width:auto;max-width:none}.zoom-region button{position:sticky;left:0;top:0;margin-bottom:8px;z-index:1;background:var(--paper)}.script{counter-reset:part}.script p{padding:14px 0;border-bottom:1px solid #c6c7b9;margin:0}.script strong{display:block}.saved-quote{overflow-wrap:anywhere;white-space:pre-wrap;padding:14px;background:#eeeade;border-radius:8px}.navigation{margin:24px 0 10px}.nav-buttons{display:flex;justify-content:space-between;gap:14px}.nav-buttons button{flex:1;max-width:300px}.missing{font-size:16px;min-height:24px;margin-bottom:12px}.help-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}.foot{font-size:16px;margin-top:22px}.skip{position:absolute;top:-200px}.skip:focus{top:0;background:var(--paper);padding:12px;z-index:5}.ai-feedback{padding:14px;background:var(--warn);border-radius:10px;margin-top:16px}.ai-feedback:empty{display:none}[hidden]{display:none!important}.local-reflection{margin-top:24px;border-top:1px solid var(--line);padding-top:24px}.participant-row{display:flex;gap:12px;flex-wrap:wrap}.participant-row input{padding:12px;border:1px solid var(--line);border-radius:8px;max-width:100%;min-width:0}.participants{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}.reflection-fields select,.reflection-fields textarea{width:100%}.comparison{display:grid;grid-template-columns:1fr 1fr;gap:18px}.comparison div{padding:14px;border:1px solid var(--line)}.comparison p{margin:8px 0}.comparison .after p{margin:20px 0}
 @media(max-width:800px){.illustrated{grid-template-columns:1fr}.illustrated figure{max-width:300px}.products{grid-template-columns:1fr}.sketch{height:100px}.sketch.poster .mini{height:80px}.product{display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:center}.product .sketch{grid-row:1/4}.product strong{margin:0}.map-pages{grid-template-columns:1fr 1fr}.samples{grid-template-columns:1fr}.index{gap:10px}.session .micro{min-height:45px}.sample .animal-zones{grid-template-columns:1fr 1fr}}@media(max-width:520px){.wrap{padding:16px}.index{grid-template-columns:1fr}.session .micro{min-height:0}.session{padding-bottom:10px;border-bottom:1px solid #c6c7b9}.support{flex-direction:column}.support button{flex:none}.map-pages,.map-poster .animal-zones,.sample .animal-zones,.comparison{grid-template-columns:1fr}.sample.b .animal-zones{gap:16px}.sample.a .animal-block:nth-child(2){padding-top:4px}.product{grid-template-columns:90px 1fr}.sketch .mini{width:32px;height:65px}.sketch.slides .mini{width:37px;height:30px}.sketch.poster .mini{width:65px}.sketch.poster .cols span{width:15px;height:30px}.sketch.poster .cols{gap:5px}.choices{flex-direction:column}.map-pages.book .map-page{min-height:170px}.guide{padding:14px}.guide-actions button{flex:1}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
-
-.context-support{border:2px solid var(--primary);border-radius:12px;padding:20px;margin-top:20px;background:#edf0e7}
-.support-controls{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
-.context-support select{width:100%;max-width:450px;margin:10px 0;padding:10px}
-.hint-action:not(:empty){font-size:23px;padding:18px;background:var(--paper);border-radius:8px;margin:16px 0}
 </style><style id="pagecraft-typography">
 /* BEGIN BUNDLED DIDACT GOTHIC */
 /* Copyright (c) 2009, 2010, 2011 Daniel Johnson (<il.basso.buffo@gmail.com>).
@@ -178,270 +173,50 @@ function setLevel(level,announce=true){if(!LEVELS.includes(level))return;if(!res
 function replaceGuide(stage,direction){const holder=document.querySelector('[data-guide="'+stage+'"]');if(holder)holder.outerHTML=guide(stage);const preferred=document.querySelector('[data-guide-'+direction+'="'+stage+'"]');const fallback=document.querySelector('[data-guide-'+(direction==='next'?'prev':'next')+'="'+stage+'"]');if(preferred&&!preferred.disabled)preferred.focus();else if(fallback&&!fallback.disabled)fallback.focus()}
 function renderParticipants(){if(!$('participants'))return;$('participants').innerHTML=reflections.map((r,i)=>'<button data-person="'+i+'" aria-pressed="'+(i===selectedReflection)+'">'+esc(r.name)+' · '+(i===selectedReflection?'a refletir':'respostas neste separador')+'</button>').join('');if(selectedReflection<0)return;const r=reflections[selectedReflection];$('reflection-fields').innerHTML='<h3>A minha vez: '+esc(r.name)+'</h3><div class="field"><label for="my-criterion">Sobre que critério quero pensar?</label><select id="my-criterion" data-ref="criterion"><option value="">Posso deixar por responder</option>'+DATA.criteria.map(c=>'<option value="'+c.id+'" '+(r.criterion===c.id?'selected':'')+'>'+esc(c.pt)+'</option>').join('')+'</select></div><div class="field"><label for="my-status">Como vivi este trabalho?</label><select id="my-status" data-ref="status"><option value="">Posso deixar por responder</option>'+['Com ajuda','Em parte','Consegui'].map(o=>'<option '+(r.status===o?'selected':'')+'>'+o+'</option>').join('')+'</select></div><div class="field"><label for="my-strategy">'+(state.level==='support'?'Posso contar a alguém o que fiz. Se quiser, escrevo.':state.level==='challenge'?'Que exemplo mostra a minha estratégia? O que mudaria?':'Que estratégia usei? O que quero repetir?')+'</label><textarea id="my-strategy" data-ref="strategy" maxlength="400" rows="3">'+esc(r.strategy||'')+'</textarea></div><button id="preserve-reflection">Guardar a minha reflexão neste dispositivo</button>';document.querySelectorAll('[data-ref]').forEach(el=>el.addEventListener('input',()=>{r[el.dataset.ref]=el.value;persist()}))}
 function restoreEvents(events){if(!Array.isArray(events))return;restoring=true;const incoming={step:0,level:state.level,values:{},invalid:[]};for(const event of events){if(!event||typeof event!=='object')continue;const p=event.payload||{};if(event.type==='assessment_result'&&p.detail&&p.detail.activity===SLUG){const d=p.detail;if(d.field){const v=validateValue(d.field,d.value);if(v!==null){incoming.values[d.field]=v;incoming.invalid=incoming.invalid.filter(k=>k!==d.field);if(d.confirmed===false)incoming.invalid.push(d.field)}}if(d.productChanged&&Array.isArray(d.invalid))incoming.invalid=d.invalid.filter(k=>fieldMap[k])}if(event.type==='activity_state'&&p.activity===SLUG&&p.version===1&&p.state){const s=p.state;if(Number.isInteger(s.step)&&s.step>=0&&s.step<=7)incoming.step=s.step;if(LEVELS.includes(s.level))incoming.level=s.level;if(['poster','slides','book'].includes(s.product))incoming.values.product=s.product;if(Array.isArray(s.invalid))incoming.invalid=s.invalid.filter(i=>Number.isInteger(i)&&FIELDS[i]).map(i=>FIELDS[i][0])}if(event.type==='level_changed'&&LEVELS.includes(p.level))incoming.level=p.level}state=incoming;state.step=Math.min(state.step,reachable());dirty.clear();render();started.add('u'+(state.step+1));restoring=false;sendState()}
-/* Apoio do piloto. Injetado no HTML para continuar self-contained. */
-const SUPPORT_VERSION = 'canva-autonomia-2026-10-22-v1';
-const OBSTACLES = {
-  instruction: 'Perceber a instrução', command: 'Encontrar um comando',
-  ideas: 'Organizar ideias', review: 'Rever o trabalho', save: 'Guardar o produto',
-};
-const STAGE_HINTS = [
-  ['Aponta a quem se destina o produto. Que formato ajuda esses colegas a perceber os dois animais?',
-   'Compara só dois formatos. Qual permite mostrar uma imagem e os factos de cada animal?'],
-  ['Aponta no esboço onde começa cada animal. Há espaço entre as duas zonas?',
-   'Usa dois retângulos em papel, um por animal. Distribui os factos antes de mexer no Canva.'],
-  ['Abre o passo ilustrado «Começar no Canva» desta etapa. Compara o teu ecrã com a captura.',
-   'Confirma primeiro se estás na página inicial ou dentro do editor. Mostra essa diferença ao professor se o passo não corresponder.'],
-  ['Confere só um animal com o Word. Qual é o primeiro facto que ainda falta no produto?',
-   'Aponta cada facto no Word e depois no produto. Marca no papel o que já encontraste, sem alterar as frases.'],
-  ['Aponta uma parte do produto e pede uma sugestão que comece por uma ação.',
-   'Experimenta perguntar: «Que texto custa a ler nesta parte?» Regista a alteração que queres experimentar.'],
-  ['Afasta-te um pouco do ecrã. Consegues ler a mensagem principal? Se não, aumenta primeiro esse texto.',
-   'Mostra só a zona que mudaste. Compara com a sugestão recebida e explica se agora ajuda os colegas a ler.'],
-  ['Escolhe uma decisão do produto. Aponta um exemplo enquanto explicas por que a tomaste.',
-   'Ensaiem uma parte de cada vez: produto, decisão, melhoria e cooperação. Comecem pela parte que ainda custa explicar.'],
-  ['Escolhe um critério e lembra um momento em que participaste. Conta o que fizeste nesse momento.',
-   'Completa com um exemplo teu: «Eu fiz… e da próxima vez quero…». Podes pedir que leiam a pergunta.'],
-];
-const CATEGORY_HINTS = {
-  command: ['Abre o passo ilustrado desta etapa. Procura primeiro o botão assinalado na captura.',
-    'Compara o nome e o ícone da captura com o teu ecrã. Se forem diferentes, chama o professor e aponta onde deixaram de corresponder.'],
-  ideas: ['Aponta no Word uma ideia que queres comunicar. Em que zona do produto vai ficar?',
-    'Faz duas organizações pequenas em papel. Escolhe a que ajuda os colegas a encontrar os dois animais.'],
-  review: ['Afasta-te um pouco do ecrã. Consegues ler a mensagem principal? Se não, aumenta primeiro esse texto.',
-    'Aponta o texto que mais custa a ler. Experimenta mudar só o tamanho e compara antes de continuar.'],
-  save: ['Abre o passo ilustrado «Guardar» do guião. Confirma o formato do teu produto antes de seguir a captura.',
-    'Confirma onde estás: ainda no editor ou já com uma cópia aberta? Mostra essa etapa ao professor se não encontrares a cópia.'],
-};
-const GROUP_COPY = [
-  ['Aponta', 'Apontem'], ['Consegues', 'Conseguem'], ['consegues', 'conseguem'],
-  ['Afasta-te', 'Afastem-se'], ['aumenta', 'aumentem'], ['Abre', 'Abram'],
-  ['Compara', 'Comparem'], ['Confirma', 'Confirmem'], ['Mostra', 'Mostrem'],
-  ['Confere', 'Confiram'], ['Usa', 'Usem'], ['Distribui', 'Distribuam'],
-  ['Escolhe', 'Escolham'], ['Regista', 'Registem'], ['Experimenta', 'Experimentem'],
-  ['Faz', 'Façam'], ['Diz', 'Digam'], ['Conta', 'Contem'], ['Completa', 'Completem'],
-  ['chama', 'chamem'], ['procura', 'procurem'], ['Procura', 'Procurem'],
-  ['pede', 'peçam'], ['Marca', 'Marquem'], ['explica', 'expliquem'], ['lembra', 'lembrem'],
-  ['queres', 'querem'], ['precisas', 'precisam'], ['Podes', 'Podem'], ['podes', 'podem'], ['participaste', 'participaram'], ['vais', 'vão'], ['teu', 'vosso'], ['tua', 'vossa'],
-  ['estás', 'estão'], ['tomaste', 'tomaram'], ['mudaste', 'mudaram'],
-];
-let supportMode = 1, supportModeLocked = false, supportRoute = 'standalone';
-let obstacle = 'instruction', supportHistory = [], currentHint = null, pendingHint = null;
-let supportLocation = 'pagecraft', pendingTeacher = null, supportNotice = '';
+/* Adaptador do guião Canva ao apoio comum; as pistas vivem no DocSpec. */
 const revisionHints = new Map();
-function supportText(text) {
-  if (supportMode === 1 || state.step === 7) return text.replace('Ensaiem', 'Ensaia').replace('Comecem', 'Começa');
-  // Trocas por palavras completas para não alterar outras palavras ou citações.
-  return GROUP_COPY.reduce((result, [single, group]) => result.replace(new RegExp('(?<![\\p{L}])'+single+'(?![\\p{L}])', 'gu'), group), text);
+function syncSupport() {
+  if(!window.PageCraftSupport)return;
+  PageCraftSupport.update({unit_id:'u'+(state.step+1),level:state.level,
+    product:state.values.product||'',question:DATA.units[state.step].title,
+    answer:fieldsFor(state.step).map(f=>f[2]+': '+(state.values[f[0]]||'sem resposta')).join('\n'),
+    attempt:fieldsFor(state.step).map(f=>[f[0],state.values[f[0]]||'',state.invalid.includes(f[0])])});
 }
-function attemptSignature() {
-  return JSON.stringify([state.step, state.level, supportMode, state.values.product,
-    fieldsFor(state.step).map(f => [f[0], state.values[f[0]] || '', state.invalid.includes(f[0])])]);
-}
-function relevantHistory() {
-  return supportHistory.filter(h => h.unit_id === 'u'+(state.step+1) && h.obstacle === obstacle && h.product === (state.values.product || ''));
-}
-function supportContext() {
-  const unit = DATA.units[state.step];
-  const criteriaIds = [['plano'], ['plano','clareza'], ['plano'], ['conteudo'], ['clareza','revisao'], ['clareza','revisao'], ['processo'], ['processo']][state.step];
-  return {
-    activity: SLUG, activity_version: SUPPORT_VERSION, objective: 'Comunicar dois animais, dez factos e duas ilustrações aos colegas.',
-    stage: unit.title, stage_objective: unit.differentiation[state.level === 'intermediate' ? 'standard' : state.level],
-    product: state.values.product || 'a escolher', criteria: DATA.criteria.filter(c => criteriaIds.includes(c.id)).map(c => c.pt),
-    participant_count: state.step === 7 ? 1 : supportMode, obstacle, question: OBSTACLES[obstacle],
-    answer: fieldsFor(state.step).map(f => f[2]+': '+(state.values[f[0]]||'sem resposta').slice(0,80)).join('\n').slice(0,650),
-    previous_hints: relevantHistory().slice(-2).map(h => ({text:h.text.slice(0,200), usefulness:h.usefulness || 'not_reported'})),
-    observation: 'Respostas PageCraft e declarações do grupo; produto Canva não observado.',
-  };
-}
-function supportEvent(type, extra = {}) {
-  emit(type, {activity:SLUG, activity_version:SUPPORT_VERSION, ...extra});
-}
-function showHint(text, source, requestId = null) {
-  pendingHint = null;
-  currentHint = {hint_id:crypto.randomUUID(), unit_id:'u'+(state.step+1), obstacle,
-    product:state.values.product||'', text, source, request_id:requestId,
-    signature:attemptSignature(), usefulness:null};
-  const context = supportContext();
-  supportHistory.push(currentHint);
-  supportEvent('hint_presented', {hint_id:currentHint.hint_id, text, source, request_id:requestId,
-    obstacle, product:currentHint.product, context});
-  supportNotice = '';
-  renderSupport();
-  const action = $('context-support')?.querySelector('.hint-action');
-  if(action){action.tabIndex=-1;action.focus({preventScroll:true});action.scrollIntoView({block:'center',behavior:'auto'});}
-}
-function hintFeedback(usefulness) {
-  if (!currentHint || currentHint.usefulness === usefulness) return;
-  currentHint.usefulness = usefulness;
-  supportEvent('hint_feedback', {hint_id:currentHint.hint_id, usefulness, obstacle});
-  supportNotice = usefulness === 'helped' ? 'Registámos que a pista ajudou, segundo a '+(supportMode===1?'tua':'vossa')+' indicação.' : 'Registámos que esta pista não ajudou.';
-}
-function nextHint() {
-  pendingHint = null;
-  const seen = relevantHistory().filter(h => h.source === 'guide').length;
-  if (seen >= 2) {
-    supportNotice = supportMode === 1 ? 'Mostra ao professor o que tentaste e onde ficaste preso. Usa «Pedir ajuda ao professor».' : 'Mostrem ao professor o que tentaram e onde ficaram presos. Usem «Pedir ajuda ao professor».';
-    renderSupport();
-    return;
-  }
-  const text = obstacle === 'instruction' ? STAGE_HINTS[state.step][seen] : CATEGORY_HINTS[obstacle][seen];
-  showHint(supportText(text), 'guide');
-}
-function requestTeacherHelp() {
-  pendingTeacher ||= {request_id:crypto.randomUUID()};
-  supportEvent('help_needed', {help_request_id:pendingTeacher.request_id, note:(supportMode===1?'Pedido individual':'Pedido do grupo')+': '+OBSTACLES[obstacle],
-    obstacle, context:supportContext(), hint_id:currentHint?.hint_id || null});
-  supportNotice = 'Pedido preparado para guardar. Confirma a gravação no topo da página. Podes também chamar o professor.';
-  renderSupport();
-}
-function requestAIHint() {
-  if (pendingHint || supportRoute === 'standalone') return;
-  flush();
-  const request_id = crypto.randomUUID();
-  pendingHint = {request_id, signature:attemptSignature(), unit_id:'u'+(state.step+1)};
-  supportNotice = 'A preparar uma pista. Podes continuar o trabalho enquanto esperas.';
-  emit('feedback_request', { ...supportContext(), request_id });
-  renderSupport();
-}
-function receiveHint(payload) {
-  if (!pendingHint || payload.request_id !== pendingHint.request_id || payload.unit_id !== pendingHint.unit_id ||
-      pendingHint.signature !== attemptSignature()) return;
-  if (typeof payload.text !== 'string') return;
-  if(relevantHistory().some(h=>h.text.trim()===payload.text.trim())){pendingHint=null;nextHint();return;}
-  showHint(payload.text.slice(0,400), payload.source || 'ai', payload.request_id);
-}
-function invalidateSupport() {
-  pendingHint = null;
-  if (currentHint && currentHint.signature !== attemptSignature()) {
-    currentHint = null;
-    supportNotice = '';
-  }
-  renderSupport();
-}
-function setWorkLocation(location) {
-  supportLocation = location;
-  pendingHint = null;
-  supportEvent('work_location', {location});
-  supportNotice = location === 'pagecraft' ? 'De volta ao guião. Regista o que fizeste ou pede uma pista.' : 'Trabalho fora do guião indicado. Podes regressar quando terminares esta parte.';
-  renderSupport();
-}
-function listenHint() {
-  if (!currentHint) return;
-  if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') {
-    supportNotice = 'A leitura em voz alta não está disponível neste dispositivo.';
-    renderSupport();
-    return;
-  }
-  const utterance = new SpeechSynthesisUtterance(currentHint.text);
-  utterance.lang = 'pt-PT';
-  utterance.onerror = () => { supportNotice = 'Não foi possível ler esta pista neste dispositivo.'; renderSupport(); };
-  speechSynthesis.cancel();
-  speechSynthesis.speak(utterance);
-  supportEvent('hint_listened', {hint_id:currentHint.hint_id});
-}
-function renderSupport() {
-  const panel = $('context-support');
-  if (!panel) return;
-  if (currentHint && currentHint.signature !== attemptSignature()) currentHint = null;
-  const plural = supportMode > 1;
-  const stuck = plural ? 'Ainda estamos presos' : 'Ainda estou preso';
-  const outside = supportLocation !== 'pagecraft';
-  const focused = document.activeElement?.closest?.('#context-support') ? document.activeElement.dataset.support || document.activeElement.id : null;
-  const settings = '<p class="micro">'+(plural?'Trabalho a pares ou em grupo':'Trabalho individual')+'</p>'+
-    (!supportModeLocked?'<button type="button" data-support="mode">'+(plural?'Mudar para trabalho individual':'Mudar para trabalho a pares')+'</button>':'')+
-    '<label for="support-obstacle">'+(plural?'Onde estamos presos?':'Onde estou preso?')+'</label>'+
-    '<select id="support-obstacle">'+Object.entries(OBSTACLES).map(([key,label])=>'<option value="'+key+'" '+(key===obstacle?'selected':'')+'>'+label+'</option>').join('')+'</select>';
-  const help = '<button type="button" data-support="teacher">Pedir ajuda ao professor</button>';
-  panel.innerHTML = '<h3>Um próximo passo</h3>'+
-    (currentHint?'<div class="hint-action" role="status" aria-live="polite">'+esc(currentHint.text)+'</div>'+
-      '<div class="support-controls"><button type="button" data-support="listen">Ouvir</button><button type="button" data-support="next">Outra pista</button></div>'+
-      '<div class="support-controls"><button type="button" data-support="helped" aria-pressed="'+(currentHint.usefulness==='helped')+'">Esta pista ajudou</button><button type="button" data-support="stuck">'+stuck+'</button></div>'+
-      '<div class="support-controls">'+help+'<button type="button" data-support="ai" '+(pendingHint||supportRoute==='standalone'?'disabled':'')+'>Esclarecer com IA</button></div>'+
-      '<details><summary>Mudar o tipo de ajuda</summary>'+settings+'</details>' :
-      settings+'<div class="support-controls"><button type="button" data-support="first">'+(plural?'Precisamos de uma pista':'Preciso de uma pista')+'</button>'+help+'</div>')+
-    '<div class="support-controls"><button type="button" data-support="location">'+(outside?'Regressar ao guião':plural?'Estamos a trabalhar no Canva':'Estou a trabalhar no Canva')+'</button>'+
-    '<button type="button" data-support="reading">'+(plural?'Estamos a ler ou conversar':'Estou a ler')+'</button>'+
-    (pendingTeacher?'<button type="button" data-support="resolved">'+(plural?'Já conseguimos continuar':'Já consigo continuar')+'</button>':'')+'</div>'+
-    '<p class="micro" role="status">'+esc(supportNotice)+'</p><p class="micro">'+(outside?'Local de trabalho declarado. ':'')+'O PageCraft não vê o produto no Canva. Ouvir só começa quando carregas no botão.</p>';
-  if(focused) { const target=focused==='support-obstacle'?$('support-obstacle'):panel.querySelector('[data-support="'+focused+'"]'); target?.focus({preventScroll:true}); }
-  $('support-obstacle').onchange = e => { obstacle=e.target.value; currentHint=null; pendingHint=null; supportNotice=''; renderSupport(); };
-}
-// Conserva as interações do guião e muda apenas o contrato de apoio neste piloto.
+function requestTeacherHelp(){syncSupport();window.PageCraftSupport?.help();}
 const renderLesson = render;
 render = function() {
   renderLesson();
-  const panel = document.createElement('aside');
-  panel.id='context-support'; panel.className='context-support'; panel.setAttribute('aria-label','Ajuda para esta etapa');
+  const panel=document.createElement('aside');
+  panel.dataset.pagecraftSupport='u'+(state.step+1);
   $('pagecraft-feedback').remove();
-  ($('sheet').querySelector('.action') || $('support-panel')).after(panel);
-  renderSupport();
+  ($('sheet').querySelector('.action')||$('support-panel')).after(panel);
+  syncSupport();
 };
 fieldEvent = function(key) {
-  const f=fieldMap[key]; if(!f)return;
+  const f=fieldMap[key];if(!f)return;
   dirty.delete(key);
-  PageCraftBridge.assessment('u'+(f[1]+1),supportMode===1?'Declaração individual':'Declaração do grupo',{activity:SLUG,activity_version:SUPPORT_VERSION,
-    field:key,value:state.values[key]||'',confirmed:!state.invalid.includes(key),note:f[2],
-    after_hint_id:revisionHints.get(key)||currentHint?.hint_id||null});
+  PageCraftBridge.assessment('u'+(f[1]+1),'Declaração do grupo',{
+    activity:SLUG,activity_version:window.PageCraftSupport?.version(),field:key,
+    value:state.values[key]||'',confirmed:!state.invalid.includes(key),note:f[2],
+    external_change:key==='revisionResult',after_hint_id:revisionHints.get(key)||window.PageCraftSupport?.currentHintId()||null});
   revisionHints.delete(key);
+  syncSupport();
 };
-const editLesson = inputValue;
-inputValue = function(...args) {
-  if(currentHint && !revisionHints.has(args[0]))revisionHints.set(args[0],currentHint.hint_id);
-  editLesson(...args); invalidateSupport();
+const editLesson=inputValue;
+inputValue=function(...args){
+  const hintId=window.PageCraftSupport?.currentHintId();
+  if(hintId&&!revisionHints.has(args[0]))revisionHints.set(args[0],hintId);
+  editLesson(...args);syncSupport();
 };
-const goLesson = go;
-go = function(step) {
-  pendingHint=null; currentHint=null; supportNotice='';
-  if ('speechSynthesis' in window) speechSynthesis.cancel();
-  goLesson(step);
-};
-const levelLesson = setLevel;
-setLevel = function(...args) {pendingHint=null;levelLesson(...args);invalidateSupport();};
-const restoreLesson = restoreEvents;
-restoreEvents = function(events) {
-  supportHistory=[]; currentHint=null; pendingHint=null; pendingTeacher=null;
-  for (const event of events || []) {
-    const p=event.payload||{};
-    if(p.activity && p.activity!==SLUG)continue;
-    if(event.type==='hint_presented') supportHistory.push({hint_id:p.hint_id,unit_id:event.unit_id||event.unitId,
-      obstacle:p.obstacle,product:p.product,text:p.text,source:p.source,usefulness:null});
-    if(event.type==='hint_feedback') { const h=supportHistory.find(h=>h.hint_id===p.hint_id); if(h)h.usefulness=p.usefulness; }
-    if(event.type==='work_location')supportLocation=p.location;
-    if(event.type==='help_needed')pendingTeacher={request_id:p.help_request_id};
-    if(event.type==='help_resolved')pendingTeacher=null;
-  }
-  restoreLesson(events);
-  renderSupport();
-};
-window.addEventListener('message', e => {
-  if(e.source!==window.parent || e.data?.pagecraft!==1)return;
-  const p=e.data.payload||{};
-  if(e.data.type==='support_teacher_requested'){pendingTeacher={request_id:p.help_request_id};renderSupport();}
-  if(['learning_preferences','work_group_preferences'].includes(e.data.type)) {
-    if(p.route)supportRoute=p.route;
-    if(p.route==='studio' && Number.isInteger(p.participant_count)) {
-      supportMode=Math.max(1,p.participant_count); supportModeLocked=true; invalidateSupport();
-    }
-    renderSupport();
-  }
-});
-document.addEventListener('click', e => {
-  const action=e.target.closest('[data-support]')?.dataset.support;
-  if(!action)return;
-  if(action==='first'||action==='next')nextHint();
-  if(action==='stuck'){hintFeedback('not_helped');nextHint();}
-  if(action==='helped'){hintFeedback('helped');renderSupport();}
-  if(action==='listen')listenHint();
-  if(action==='teacher')requestTeacherHelp();
-  if(action==='resolved'){const help_request_id=pendingTeacher?.request_id;pendingTeacher=null;supportEvent('help_resolved',{help_request_id,note:'O grupo declara que já consegue continuar.'});supportNotice='Registámos que já conseguem continuar, segundo a vossa indicação.';renderSupport();}
-  if(action==='ai')requestAIHint();
-  if(action==='location')setWorkLocation(supportLocation==='pagecraft'?'canva':'pagecraft');
-  if(action==='reading')setWorkLocation(pluralMode()?'discussion':'reading');
-  if(action==='mode'&&!supportModeLocked){supportMode=supportMode===1?2:1;invalidateSupport();}
-});
-function pluralMode(){return supportMode>1;}
+const goLesson=go;
+go=function(...args){goLesson(...args);syncSupport();};
+const levelLesson=setLevel;
+setLevel=function(...args){levelLesson(...args);syncSupport();};
+const restoreLesson=restoreEvents;
+restoreEvents=function(...args){restoreLesson(...args);syncSupport();};
+document.addEventListener('pagecraft-support-ready',syncSupport);
 
-window.addEventListener('message',e=>{if(!embedded||e.source!==window.parent||!e.data||e.data.pagecraft!==1)return;const d=e.data,p=d.payload||{};if(d.type==='learning_restore')restoreEvents(p.events);else if(d.type==='learning_preferences'&&LEVELS.includes(p.level)){restoring=true;setLevel(p.level,false);restoring=false;sendState()}else if(d.type==='ai_feedback')receiveHint(p);else if(d.type==='highlight'){const n=/^u([1-8])$/.exec(d.unitId||p.unit_id||'');if(n)go(Number(n[1])-1)}});
+window.addEventListener('message',e=>{if(!embedded||e.source!==window.parent||!e.data||e.data.pagecraft!==1)return;const d=e.data,p=d.payload||{};if(d.type==='learning_restore')restoreEvents(p.events);else if(d.type==='learning_preferences'&&LEVELS.includes(p.level)){restoring=true;setLevel(p.level,false);restoring=false;sendState()}else if(d.type==='ai_feedback'){/* O apoio comum confere a tentativa. */}else if(d.type==='highlight'){const n=/^u([1-8])$/.exec(d.unitId||p.unit_id||'');if(n)go(Number(n[1])-1)}});
 document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.disabled)return;if(b.dataset.go!==undefined)go(Number(b.dataset.go));if(b.dataset.level)setLevel(b.dataset.level);if(b.dataset.choice)selectValue(b.dataset.choice,b.dataset.value);if(b.dataset.confirm){state.invalid=state.invalid.filter(k=>k!==b.dataset.confirm);fieldEvent(b.dataset.confirm);render();sendState()}if(b.dataset.guideNext){guideAt[b.dataset.guideNext]++;replaceGuide(b.dataset.guideNext,'next')}if(b.dataset.guidePrev){guideAt[b.dataset.guidePrev]--;replaceGuide(b.dataset.guidePrev,'prev')}if(b.dataset.zoom){const z=$('zoom-'+b.dataset.zoom);z.hidden=false;b.setAttribute('aria-expanded','true');z.querySelector('button').focus()}if(b.dataset.closeZoom){const stage=b.dataset.closeZoom;$('zoom-'+stage).hidden=true;const target=document.querySelector('[data-zoom="'+stage+'"]');target.setAttribute('aria-expanded','false');target.focus()}if(b.id==='reflection'){flush();if(!ready())return;if(embedded){emit('open_reflection');return}$('local-reflection').hidden=false;renderParticipants();$('reflection-name').focus()}if(b.id==='begin-reflection'){const name=$('reflection-name').value.trim();if(!name){$('reflection-message').textContent='Escreve o teu nome para mostrar quem está a refletir.';return}reflections.push({name,criterion:'',status:'',strategy:''});selectedReflection=reflections.length-1;$('reflection-name').value='';renderParticipants();persist()}if(b.dataset.person!==undefined){selectedReflection=Number(b.dataset.person);renderParticipants();persist()}if(b.id==='preserve-reflection'){const stored=persist();$('reflection-message').textContent=stored?'Reflexão guardada neste separador. O colega pode começar a sua vez.':'A reflexão está visível, mas não foi possível guardá-la neste separador.'}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.zoom-region:not([hidden])').forEach(z=>z.querySelector('button').click())}const tab=e.target.closest('[data-level]');if(tab&&['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();let i=LEVELS.indexOf(state.level);i=e.key==='Home'?0:e.key==='End'?2:(i+(e.key==='ArrowRight'?1:2))%3;setLevel(LEVELS[i]);$('tab-'+LEVELS[i]).focus()}});
 $('previous').addEventListener('click',()=>go(state.step-1));$('next').addEventListener('click',()=>go(state.step+1));$('help').addEventListener('click',()=>{requestTeacherHelp()});$('save').addEventListener('click',()=>{flush();const stored=!embedded&&persist();$('save-message').textContent=embedded?'Registo enviado para guardar. A gravação no relatório depende da confirmação do servidor.':stored?'Registo guardado neste separador.':'O registo está visível, mas não foi possível guardá-lo neste separador.'});window.addEventListener('pagehide',flush);
@@ -487,4 +262,243 @@ render();emit('activity_loaded',{title:DATA.title});sendState();if(!embedded){tr
   });
 })();
 </script>
+<!-- pagecraft-support:start -->
+<style>.pc-support{border:2px solid var(--primary,#38624f);border-radius:12px;padding:20px;margin:20px 0;background:var(--surface,#f5f3ea);color:var(--ink,#233c32);font-size:inherit;line-height:1.45}
+.pc-support h3{margin:0 0 12px}.pc-support label{display:block}.pc-support select{display:block;width:100%;max-width:100%;margin:12px 0;padding:10px;font:inherit;min-height:var(--tap,56px)}
+.pc-support-controls{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}.pc-support button{font:inherit;padding:10px 16px;min-height:var(--tap,56px);border:1px solid currentColor;border-radius:8px;cursor:pointer;background:var(--surface,#fffefa);color:inherit;max-width:100%;white-space:normal}
+.pc-support button:disabled{cursor:default;opacity:.65}.pc-support :focus-visible{outline:3px solid var(--focus,#285cc0);outline-offset:3px}.pc-support-action{padding:18px;background:var(--bg,#fffefa);border-radius:8px;font-size:1.1em;max-width:55ch;overflow-wrap:anywhere}.pc-support-notice,.pc-support-note{font-size:1em;max-width:55ch}.pc-support summary{padding:12px 0;min-height:var(--tap,56px);cursor:pointer}.pc-support details{margin:12px 0}
+</style>
+<script>/* Apoio comum PageCraft. O DocSpec fornece o conteúdo de cada atividade. */
+(function () {
+  'use strict';
+  const COPY = {
+    pt: {title:'Um próximo passo', hint:'Preciso de uma pista', groupHint:'Precisamos de uma pista',
+      obstacle:'Onde precisas de ajuda?', groupObstacle:'Onde precisam de ajuda?', listen:'Ouvir', next:'Outra pista',
+      helped:'Esta pista ajudou', stuck:'Ainda estou preso', groupStuck:'Ainda estamos presos', teacher:'Pedir ajuda ao professor',
+      ai:'Esclarecer com IA', settings:'Mudar o tipo de ajuda', alone:'Mudar para trabalho individual', pair:'Mudar para trabalho a pares',
+      back:'Regressar ao guião', reading:'Estou a ler', discussion:'Estamos a ler ou conversar',
+      external:'Estou a trabalhar em ', groupExternal:'Estamos a trabalhar em ',
+      resolved:'Já consigo continuar', groupResolved:'Já conseguimos continuar',
+      wait:'A preparar uma pista. Podes continuar enquanto esperas.',
+      escalate:'Mostra ao professor o que tentaste e onde ficaste preso. Usa «Pedir ajuda ao professor».',
+      groupEscalate:'Mostrem ao professor o que tentaram e onde ficaram presos. Usem «Pedir ajuda ao professor».',
+      requested:'Pedido preparado para guardar. Confirma a gravação no topo da página. Podes também chamar o professor.',
+      resolvedNotice:'Registámos que já consegues continuar, segundo a tua indicação.',
+      groupResolvedNotice:'Registámos que já conseguem continuar, segundo a vossa indicação.',
+      helpedNotice:'Registámos que a pista ajudou, segundo a tua indicação.', groupHelpedNotice:'Registámos que a pista ajudou, segundo a vossa indicação.',
+      voiceMissing:'A leitura em voz alta não está disponível neste dispositivo.', voiceError:'Não foi possível ler esta pista.',
+      outside:'Local de trabalho declarado.', observation:'O PageCraft só conhece o que foi feito ou declarado nesta página.',
+      returned:'De volta ao guião. Regista o que fizeste ou pede uma pista.'},
+    en: {title:'One next step', hint:'I need a hint', groupHint:'We need a hint', obstacle:'Where do you need help?',
+      groupObstacle:'Where do you need help?', listen:'Listen', next:'Another hint', helped:'This hint helped',
+      stuck:'I am still stuck', groupStuck:'We are still stuck', teacher:'Ask the teacher for help', ai:'Clarify with AI',
+      settings:'Change the kind of help', alone:'Switch to individual work', pair:'Switch to working together',
+      back:'Return to the guide', reading:'I am reading', discussion:'We are reading or discussing', external:'I am working in ',
+      groupExternal:'We are working in ', resolved:'I can continue now', groupResolved:'We can continue now',
+      wait:'Preparing a hint. You can keep working while you wait.',
+      escalate:'Show your teacher what you tried and where you got stuck. Choose “Ask the teacher for help”.',
+      groupEscalate:'Show your teacher what you tried and where you got stuck. Choose “Ask the teacher for help”.',
+      requested:'Help request prepared for saving. Check that it is saved at the top of the page. You can also call your teacher.',
+      resolvedNotice:'We recorded that you say you can continue now.', groupResolvedNotice:'We recorded that you say you can continue now.',
+      helpedNotice:'We recorded that you say the hint helped.', groupHelpedNotice:'We recorded that you say the hint helped.',
+      voiceMissing:'Reading aloud is not available on this device.', voiceError:'This hint could not be read aloud.',
+      outside:'Declared place of work.', observation:'PageCraft only knows what was done or reported on this page.',
+      returned:'Back to the guide. Record what you did or ask for a hint.'}
+  };
+  let config, unitId, language='pt', members=1, locked=false, route='standalone';
+  let context={}, history=[], current=null, pending=null, teacherRequest=null, location='pagecraft', notice='';
+  const contexts = new Map(), panels = new Map();
+  const esc = value => String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const id = () => crypto.randomUUID();
+  const t = key => COPY[language][members>1 && COPY[language]['group'+key[0].toUpperCase()+key.slice(1)] ? 'group'+key[0].toUpperCase()+key.slice(1) : key];
+  const plan = () => config?.units[unitId];
+  const obstacle = () => plan()?.obstacles.find(o=>o.id===context.obstacle) || plan()?.obstacles[0];
+  const signature = () => JSON.stringify([unitId,context.answer,context.question,context.product,context.level,context.obstacle,context.revision,context.attempt,members,language]);
+  const relevant = () => history.filter(h=>h.unit_id===unitId && h.obstacle===obstacle().id && h.product===(context.product||'') && h.language===language);
+  function emit(type, payload={}, unit=unitId) {
+    if(window.parent===window)return;
+    window.parent.postMessage({pagecraft:1,type,unitId:unit,payload:{activity:config.activity,activity_version:config.activity_version,...payload},ts:Date.now()},'*');
+  }
+  function requestContext() {
+    return {activity:config.activity,activity_version:config.activity_version,objective:config.objective,
+      stage:plan().title,stage_objective:plan().objective,criteria:plan().criteria,product:context.product||'',
+      participant_count:members,language,obstacle:obstacle().id,question:context.question||obstacle().label[language],
+      answer:String(context.answer||'').slice(0,1500),level:context.level||'intermediate',
+      previous_hints:relevant().slice(-2).map(h=>({text:h.text,usefulness:h.usefulness||'not_reported'})),
+      observation:'Respostas e ações PageCraft; trabalho externo apenas declarado.'};
+  }
+  function update(next) {
+    if(!config || !config.units[next.unit_id||unitId])return;
+    const before=signature(), oldUnit=unitId;
+    unitId=next.unit_id||unitId;
+    context={...(oldUnit===unitId?context:contexts.get(unitId)||{}),...next};
+    contexts.set(unitId,context);
+    if(before!==signature()){pending=null;current=null;notice='';if(window.speechSynthesis)window.speechSynthesis.cancel();}
+    mount();render();
+  }
+  function present(text, source, requestId=null, hintKey=null) {
+    const originalContext=requestContext();
+    current={hint_id:id(),unit_id:unitId,obstacle:obstacle().id,product:context.product||'',text,source,
+      request_id:requestId,hint_key:hintKey,language,signature:signature(),usefulness:null};
+    pending=null;notice='';
+    if(!render()){current=null;return;}
+    history.push(current);
+    emit('hint_presented',{hint_id:current.hint_id,hint_key:hintKey,text,source,request_id:requestId,
+      obstacle:current.obstacle,product:current.product,language,context:originalContext});
+    const action=panels.get(unitId)?.querySelector('.pc-support-action');
+    if(action){action.focus({preventScroll:true});action.scrollIntoView({block:'center',behavior:'auto'});}
+  }
+  function requestHint(unit) {
+    if(unit)update({unit_id:unit});
+    if(!plan())return;
+    pending=null;
+    const used=new Set(relevant().filter(h=>h.source==='guide').map(h=>h.hint_key));
+    const next=obstacle().hints.find(h=>!used.has(h.id));
+    if(!next){notice=t('escalate');render();return;}
+    present(next.text[language][members>1?'group':'individual'],'guide',null,next.id);
+  }
+  function feedback(usefulness) {
+    if(!current || !['helped','not_helped'].includes(usefulness) || current.usefulness===usefulness)return;
+    current.usefulness=usefulness;
+    emit('hint_feedback',{hint_id:current.hint_id,usefulness,obstacle:current.obstacle});
+    notice=usefulness==='helped'?t('helpedNotice'):'';render();
+  }
+  function requestAI() {
+    if(pending || route==='standalone' || !plan())return;
+    pending={request_id:id(),unit_id:unitId,signature:signature()};
+    notice=t('wait');emit('feedback_request',{...requestContext(),request_id:pending.request_id});render();
+  }
+  function receive(payload) {
+    if(!pending || payload.request_id!==pending.request_id || payload.unit_id!==unitId || pending.signature!==signature() || typeof payload.text!=='string')return;
+    if(relevant().some(h=>h.text.trim()===payload.text.trim())){pending=null;requestHint();return;}
+    present(payload.text.slice(0,400),payload.source||'ai',payload.request_id);
+  }
+  function help() {
+    if(!plan())return;
+    teacherRequest ||= {request_id:id()};
+    emit('help_needed',{help_request_id:teacherRequest.request_id,note:obstacle().label[language],context:requestContext(),hint_id:current?.hint_id||null});
+    notice=t('requested');render();
+  }
+  function resolved() {
+    emit('help_resolved',{help_request_id:teacherRequest?.request_id,note:t('resolvedNotice')});
+    teacherRequest=null;notice=t('resolvedNotice');render();
+  }
+  function setLocation(value) {
+    if(!['pagecraft','external','reading','discussion'].includes(value))return;
+    if(value==='external'&&!config.externalWork)return;
+    location=value;pending=null;
+    emit('work_location',{location:value,label:value==='external'?config.externalWork?.[language]:undefined});
+    notice=value==='pagecraft'?t('returned'):t('outside');render();
+  }
+  function listen() {
+    if(!current)return;
+    if(!window.speechSynthesis || typeof SpeechSynthesisUtterance==='undefined'){notice=t('voiceMissing');render();return;}
+    const hintId=current.hint_id, utterance=new SpeechSynthesisUtterance(current.text);
+    utterance.lang=language==='pt'?'pt-PT':'en-GB';
+    utterance.onerror=()=>{if(current?.hint_id===hintId){notice=t('voiceError');render();}};
+    window.speechSynthesis.cancel();window.speechSynthesis.speak(utterance);
+    emit('hint_listened',{hint_id:hintId});
+  }
+  function render() {
+    const panel=panels.get(unitId);
+    if(!panel || panel.isConnected===false || !plan())return false;
+    const button=(action,label,disabled=false)=>'<button type="button" data-support-action="'+action+'" '+(disabled?'disabled':'')+'>'+esc(label)+'</button>';
+    const active=document.activeElement?.closest?.('[data-pagecraft-support]')===panel?document.activeElement.dataset.supportAction:null;
+    const settings=(!locked?button('mode',members>1?t('alone'):t('pair')):'')+
+      '<label>'+esc(t('obstacle'))+'<select data-support-obstacle>'+plan().obstacles.map(o=>'<option value="'+o.id+'" '+(obstacle().id===o.id?'selected':'')+'>'+esc(o.label[language])+'</option>').join('')+'</select></label>';
+    panel.innerHTML='<h3>'+esc(t('title'))+'</h3>'+(current?
+      '<div class="pc-support-action" tabindex="-1" role="status" aria-live="polite">'+esc(current.text)+'</div>'+
+      '<div class="pc-support-controls">'+button('listen',t('listen'))+button('next',t('next'))+'</div>'+
+      '<div class="pc-support-controls">'+button('helped',t('helped'))+button('stuck',t('stuck'))+'</div>'+
+      '<div class="pc-support-controls">'+button('teacher',t('teacher'))+button('ai',t('ai'),!!pending||route==='standalone')+'</div>'+
+      '<details><summary>'+esc(t('settings'))+'</summary>'+settings+'</details>':settings+'<div class="pc-support-controls">'+button('hint',t('hint'))+button('teacher',t('teacher'))+'</div>')+
+      '<div class="pc-support-controls">'+(config.externalWork?button('external',location==='pagecraft'?t('external')+config.externalWork[language]:t('back')):'')+
+      button('reading',location==='pagecraft'?t(members>1?'discussion':'reading'):t('back'))+(teacherRequest?button('resolved',t('resolved')):'')+'</div>'+
+      '<p class="pc-support-notice" role="status">'+esc(notice)+'</p><p class="pc-support-note">'+esc(t('observation'))+'</p>';
+    if(active)panel.querySelector('[data-support-action="'+active+'"]')?.focus({preventScroll:true});
+    return true;
+  }
+  function mount() {
+    document.querySelectorAll('[data-pagecraft-support]').forEach(panel=>{
+      const unit=panel.dataset.pagecraftSupport;
+      if(!config.units[unit] || panels.get(unit)===panel)return;
+      panels.set(unit,panel);panel.classList.add('pc-support');panel.setAttribute('aria-label',COPY[language].title);
+      if(unit!==unitId)panel.innerHTML='<button type="button" data-support-action="hint">'+esc(t('hint'))+'</button>';
+      panel.addEventListener('click',event=>{
+        const action=event.target.closest('[data-support-action]')?.dataset.supportAction;
+        if(!action)return;
+        if(unit!==unitId)update({unit_id:unit});
+        if(action==='hint'||action==='next')requestHint();
+        if(action==='stuck'){feedback('not_helped');requestHint();}
+        if(action==='helped')feedback('helped');
+        if(action==='teacher')help();
+        if(action==='resolved')resolved();
+        if(action==='ai')requestAI();
+        if(action==='listen')listen();
+        if(action==='mode'&&!locked){members=members===1?2:1;pending=null;current=null;render();}
+        if(action==='external')setLocation(location==='pagecraft'?'external':'pagecraft');
+        if(action==='reading')setLocation(location==='pagecraft'?(members>1?'discussion':'reading'):'pagecraft');
+      });
+      panel.addEventListener('change',event=>{
+        if(!event.target.matches('[data-support-obstacle]'))return;
+        update({unit_id:unit,obstacle:event.target.value});pending=null;current=null;render();
+      });
+      if(unit===unitId)render();
+    });
+  }
+  function restore(events) {
+    history=[];current=null;pending=null;teacherRequest=null;
+    for(const event of events||[]){
+      const p=event.payload||{};
+      if(p.activity && p.activity!==config.activity)continue;
+      if(event.type==='hint_presented' && p.activity_version===config.activity_version)history.push({...p,unit_id:event.unit_id||event.unitId,usefulness:null});
+      if(event.type==='hint_feedback'){const hint=history.find(h=>h.hint_id===p.hint_id);if(hint)hint.usefulness=p.usefulness;}
+      if(event.type==='work_location')location=p.location;
+      if(event.type==='help_needed')teacherRequest={request_id:p.help_request_id};
+      if(event.type==='help_resolved')teacherRequest=null;
+    }
+    render();
+  }
+  window.addEventListener('message',event=>{
+    if(event.source!==window.parent || event.data?.pagecraft!==1 || !config)return;
+    const {type,payload:p={}}=event.data;
+    if(type==='ai_feedback')receive(p);
+    if(type==='learning_restore')restore(p.events);
+    if(type==='support_teacher_requested'){teacherRequest={request_id:p.help_request_id};render();}
+    if(type==='learning_preferences'||type==='work_group_preferences'){
+      const before=signature();
+      if(p.route)route=p.route;
+      if(p.route==='studio'&&Number.isInteger(p.participant_count)){members=Math.max(1,p.participant_count);locked=true;}
+      if(config.languages.includes(p.language))language=p.language;
+      if(p.level)context.level=p.level;
+      if(before!==signature()){pending=null;current=null;}
+      render();
+    }
+  });
+  // Ações registadas pela atividade e edições invalidam respostas antigas antes da confirmação.
+  document.addEventListener('pagecraft:activity-event',event=>{
+    if(!config)return;
+    const {type,unitId:unit,payload:p={}}=event.detail;
+    if(type==='unit_started')update({unit_id:unit});
+    if(type==='level_changed')update({unit_id:unit||unitId,level:p.level});
+    if(type==='assessment_result'||type==='attempt'){
+      const detail=typeof p.detail==='object'?p.detail:null;
+      update({unit_id:unit||unitId,answer:detail?.value??p.detail??p.result??'',question:detail?.note||'',revision:id()});
+    }
+  });
+  document.addEventListener('input',event=>{
+    if(!config || event.target.closest('[data-pagecraft-support]'))return;
+    const container=event.target.closest('[data-unit],section[id]');
+    const unit=container?.dataset.unit||container?.id;
+    if(config.units[unit])update({unit_id:unit,revision:id()});
+  });
+  window.PageCraftSupport={configure(value){config=value;unitId=Object.keys(config.units)[0];context={};mount();render();
+      if(typeof MutationObserver!=='undefined')new MutationObserver(()=>{mount();}).observe(document.body,{childList:true,subtree:true});
+      document.dispatchEvent(new CustomEvent('pagecraft-support-ready'));},
+    update,restore,receive,requestHint,requestAI,feedback,help,resolved,setLocation,listen,
+    version:()=>config?.activity_version,currentHintId:()=>current?.hint_id||null};
+})();
+
+PageCraftSupport.configure({"activity": "canva-animais-autonomia-piloto", "activity_version": "canva-autonomia-2026-10-22-v2", "objective": "Negociar um produto e um plano comum, com tarefas alternadas e decisão justificada.; Transformar os dez factos e as duas ilustrações do Word num produto legível para a turma.; Dar e utilizar uma sugestão concreta de outro grupo para rever o produto.; Preparar uma apresentação de 2–3 minutos que mostre o produto e explique decisões e alterações.", "languages": ["pt"], "externalWork": {"pt": "Canva"}, "units": {"u1": {"objective": "Comparem dois formatos. Escrevam uma razão com que todos concordem.", "criteria": ["Escolhemos juntos e seguimos um plano partilhado."], "obstacles": [{"id": "instruction", "label": {"pt": "Perceber a instrução"}, "hints": [{"id": "instruction-1", "text": {"pt": {"individual": "Aponta a quem se destina o produto. Que formato ajuda esses colegas a perceber os dois animais?", "group": "Apontem a quem se destina o produto. Que formato ajuda esses colegas a perceber os dois animais?"}}}, {"id": "instruction-2", "text": {"pt": {"individual": "Compara só dois formatos. Qual permite mostrar uma imagem e os factos de cada animal?", "group": "Comparem só dois formatos. Qual permite mostrar uma imagem e os factos de cada animal?"}}}]}, {"id": "command", "label": {"pt": "Encontrar um comando"}, "hints": [{"id": "command-1", "text": {"pt": {"individual": "Abre o passo ilustrado desta etapa. Procura primeiro o botão assinalado na captura.", "group": "Abram o passo ilustrado desta etapa. Procurem primeiro o botão assinalado na captura."}}}, {"id": "command-2", "text": {"pt": {"individual": "Compara o nome e o ícone da captura com o teu ecrã. Se forem diferentes, chama o professor e aponta onde deixaram de corresponder.", "group": "Comparem o nome e o ícone da captura com o vosso ecrã. Se forem diferentes, chamem o professor e aponta onde deixaram de corresponder."}}}]}, {"id": "ideas", "label": {"pt": "Organizar ideias"}, "hints": [{"id": "ideas-1", "text": {"pt": {"individual": "Aponta no Word uma ideia que queres comunicar. Em que zona do produto vai ficar?", "group": "Apontem no Word uma ideia que querem comunicar. Em que zona do produto vai ficar?"}}}, {"id": "ideas-2", "text": {"pt": {"individual": "Faz duas organizações pequenas em papel. Escolhe a que ajuda os colegas a encontrar os dois animais.", "group": "Façam duas organizações pequenas em papel. Escolham a que ajuda os colegas a encontrar os dois animais."}}}]}, {"id": "review", "label": {"pt": "Rever o trabalho"}, "hints": [{"id": "review-1", "text": {"pt": {"individual": "Afasta-te um pouco do ecrã. Consegues ler a mensagem principal? Se não, aumenta primeiro esse texto.", "group": "Afastem-se um pouco do ecrã. Conseguem ler a mensagem principal? Se não, aumentem primeiro esse texto."}}}, {"id": "review-2", "text": {"pt": {"individual": "Aponta o texto que mais custa a ler. Experimenta mudar só o tamanho e compara antes de continuar.", "group": "Apontem o texto que mais custa a ler. Experimentem mudar só o tamanho e compara antes de continuar."}}}]}, {"id": "save", "label": {"pt": "Guardar o produto"}, "hints": [{"id": "save-1", "text": {"pt": {"individual": "Abre o passo ilustrado «Guardar» do guião. Confirma o formato do teu produto antes de seguir a captura.", "group": "Abram o passo ilustrado «Guardar» do guião. Confirmem o formato do vosso produto antes de seguir a captura."}}}, {"id": "save-2", "text": {"pt": {"individual": "Confirma onde estás: ainda no editor ou já com uma cópia aberta? Mostra essa etapa ao professor se não encontrares a cópia.", "group": "Confirmem onde estão: ainda no editor ou já com uma cópia aberta? Mostrem essa etapa ao professor se não encontrares a cópia."}}}]}], "title": "Escolher um produto para destinatários conhecidos."}, "u2": {"objective": "Façam um esboço. Combinem as tarefas. Cada pessoa explica uma decisão.", "criteria": ["Escolhemos juntos e seguimos um plano partilhado.", "Os colegas conseguem ler e perceber o nosso produto."], "obstacles": [{"id": "instruction", "label": {"pt": "Perceber a instrução"}, "hints": [{"id": "instruction-1", "text": {"pt": {"individual": "Aponta no esboço onde começa cada animal. Há espaço entre as duas zonas?", "group": "Apontem no esboço onde começa cada animal. Há espaço entre as duas zonas?"}}}, {"id": "instruction-2", "text": {"pt": {"individual": "Usa dois retângulos em papel, um por animal. Distribui os factos antes de mexer no Canva.", "group": "Usem dois retângulos em papel, um por animal. Distribuam os factos antes de mexer no Canva."}}}]}, {"id": "command", "label": {"pt": "Encontrar um comando"}, "hints": [{"id": "command-1", "text": {"pt": {"individual": "Abre o passo ilustrado desta etapa. Procura primeiro o botão assinalado na captura.", "group": "Abram o passo ilustrado desta etapa. Procurem primeiro o botão assinalado na captura."}}}, {"id": "command-2", "text": {"pt": {"individual": "Compara o nome e o ícone da captura com o teu ecrã. Se forem diferentes, chama o professor e aponta onde deixaram de corresponder.", "group": "Comparem o nome e o ícone da captura com o vosso ecrã. Se forem diferentes, chamem o professor e aponta onde deixaram de corresponder."}}}]}, {"id": "ideas", "label": {"pt": "Organizar ideias"}, "hints": [{"id": "ideas-1", "text": {"pt": {"individual": "Aponta no Word uma ideia que queres comunicar. Em que zona do produto vai ficar?", "group": "Apontem no Word uma ideia que querem comunicar. Em que zona do produto vai ficar?"}}}, {"id": "ideas-2", "text": {"pt": {"individual": "Faz duas organizações pequenas em papel. Escolhe a que ajuda os colegas a encontrar os dois animais.", "group": "Façam duas organizações pequenas em papel. Escolham a que ajuda os colegas a encontrar os dois animais."}}}]}, {"id": "review", "label": {"pt": "Rever o trabalho"}, "hints": [{"id": "review-1", "text": {"pt": {"individual": "Afasta-te um pouco do ecrã. Consegues ler a mensagem principal? Se não, aumenta primeiro esse texto.", "group": "Afastem-se um pouco do ecrã. Conseguem ler a mensagem principal? Se não, aumentem primeiro esse texto."}}}, {"id": "review-2", "text": {"pt": {"individual": "Aponta o texto que mais custa a ler. Experimenta mudar só o tamanho e compara antes de continuar.", "group": "Apontem o texto que mais custa a ler. Experimentem mudar só o tamanho e compara antes de continuar."}}}]}, {"id": "save", "label": {"pt": "Guardar o produto"}, "hints": [{"id": "save-1", "text": {"pt": {"individual": "Abre o passo ilustrado «Guardar» do guião. Confirma o formato do teu produto antes de seguir a captura.", "group": "Abram o passo ilustrado «Guardar» do guião. Confirmem o formato do vosso produto antes de seguir a captura."}}}, {"id": "save-2", "text": {"pt": {"individual": "Confirma onde estás: ainda no editor ou já com uma cópia aberta? Mostra essa etapa ao professor se não encontrares a cópia.", "group": "Confirmem onde estão: ainda no editor ou já com uma cópia aberta? Mostrem essa etapa ao professor se não encontrares a cópia."}}}]}], "title": "Esboçar a organização e negociar tarefas que se alternam."}, "u3": {"objective": "Criem o formato escolhido. Comecem a primeira página seguindo o esboço.", "criteria": ["Escolhemos juntos e seguimos um plano partilhado."], "obstacles": [{"id": "instruction", "label": {"pt": "Perceber a instrução"}, "hints": [{"id": "instruction-1", "text": {"pt": {"individual": "Abre o passo ilustrado «Começar no Canva» desta etapa. Compara o teu ecrã com a captura.", "group": "Abram o passo ilustrado «Começar no Canva» desta etapa. Comparem o vosso ecrã com a captura."}}}, {"id": "instruction-2", "text": {"pt": {"individual": "Confirma primeiro se estás na página inicial ou dentro do editor. Mostra essa diferença ao professor se o passo não corresponder.", "group": "Confirmem primeiro se estão na página inicial ou dentro do editor. Mostrem essa diferença ao professor se o passo não corresponder."}}}]}, {"id": "command", "label": {"pt": "Encontrar um comando"}, "hints": [{"id": "command-1", "text": {"pt": {"individual": "Abre o passo ilustrado desta etapa. Procura primeiro o botão assinalado na captura.", "group": "Abram o passo ilustrado desta etapa. Procurem primeiro o botão assinalado na captura."}}}, {"id": "command-2", "text": {"pt": {"individual": "Compara o nome e o ícone da captura com o teu ecrã. Se forem diferentes, chama o professor e aponta onde deixaram de corresponder.", "group": "Comparem o nome e o ícone da captura com o vosso ecrã. Se forem diferentes, chamem o professor e aponta onde deixaram de corresponder."}}}]}, {"id": "ideas", "label": {"pt": "Organizar ideias"}, "hints": [{"id": "ideas-1", "text": {"pt": {"individual": "Aponta no Word uma ideia que queres comunicar. Em que zona do produto vai ficar?", "group": "Apontem no Word uma ideia que querem comunicar. Em que zona do produto vai ficar?"}}}, {"id": "ideas-2", "text": {"pt": {"individual": "Faz duas organizações pequenas em papel. Escolhe a que ajuda os colegas a encontrar os dois animais.", "group": "Façam duas organizações pequenas em papel. Escolham a que ajuda os colegas a encontrar os dois animais."}}}]}, {"id": "review", "label": {"pt": "Rever o trabalho"}, "hints": [{"id": "review-1", "text": {"pt": {"individual": "Afasta-te um pouco do ecrã. Consegues ler a mensagem principal? Se não, aumenta primeiro esse texto.", "group": "Afastem-se um pouco do ecrã. Conseguem ler a mensagem principal? Se não, aumentem primeiro esse texto."}}}, {"id": "review-2", "text": {"pt": {"individual": "Aponta o texto que mais custa a ler. Experimenta mudar só o tamanho e compara antes de continuar.", "group": "Apontem o texto que mais custa a ler. Experimentem mudar só o tamanho e compara antes de continuar."}}}]}, {"id": "save", "label": {"pt": "Guardar o produto"}, "hints": [{"id": "save-1", "text": {"pt": {"individual": "Abre o passo ilustrado «Guardar» do guião. Confirma o formato do teu produto antes de seguir a captura.", "group": "Abram o passo ilustrado «Guardar» do guião. Confirmem o formato do vosso produto antes de seguir a captura."}}}, {"id": "save-2", "text": {"pt": {"individual": "Confirma onde estás: ainda no editor ou já com uma cópia aberta? Mostra essa etapa ao professor se não encontrares a cópia.", "group": "Confirmem onde estão: ainda no editor ou já com uma cópia aberta? Mostrem essa etapa ao professor se não encontrares a cópia."}}}]}], "title": "Concretizar a primeira parte do plano com um percurso visual."}, "u4": {"objective": "Confiram as dez frases e as imagens. Troquem quem escreve e quem confere.", "criteria": ["Mostramos os dois animais, os dez factos e as duas ilustrações."], "obstacles": [{"id": "instruction", "label": {"pt": "Perceber a instrução"}, "hints": [{"id": "instruction-1", "text": {"pt": {"individual": "Confere só um animal com o Word. Qual é o primeiro facto que ainda falta no produto?", "group": "Confiram só um animal com o Word. Qual é o primeiro facto que ainda falta no produto?"}}}, {"id": "instruction-2", "text": {"pt": {"individual": "Aponta cada facto no Word e depois no produto. Marca no papel o que já encontraste, sem alterar as frases.", "group": "Apontem cada facto no Word e depois no produto. Marquem no papel o que já encontraste, sem alterar as frases."}}}]}, {"id": "command", "label": {"pt": "Encontrar um comando"}, "hints": [{"id": "command-1", "text": {"pt": {"individual": "Abre o passo ilustrado desta etapa. Procura primeiro o botão assinalado na captura.", "group": "Abram o passo ilustrado desta etapa. Procurem primeiro o botão assinalado na captura."}}}, {"id": "command-2", "text": {"pt": {"individual": "Compara o nome e o ícone da captura com o teu ecrã. Se forem diferentes, chama o professor e aponta onde deixaram de corresponder.", "group": "Comparem o nome e o ícone da captura com o vosso ecrã. Se forem diferentes, chamem o professor e aponta onde deixaram de corresponder."}}}]}, {"id": "ideas", "label": {"pt": "Organizar ideias"}, "hints": [{"id": "ideas-1", "text": {"pt": {"individual": "Aponta no Word uma ideia que queres comunicar. Em que zona do produto vai ficar?", "group": "Apontem no Word uma ideia que querem comunicar. Em que zona do produto vai ficar?"}}}, {"id": "ideas-2", "text": {"pt": {"individual": "Faz duas organizações pequenas em papel. Escolhe a que ajuda os colegas a encontrar os dois animais.", "group": "Façam duas organizações pequenas em papel. Escolham a que ajuda os colegas a encontrar os dois animais."}}}]}, {"id": "review", "label": {"pt": "Rever o trabalho"}, "hints": [{"id": "review-1", "text": {"pt": {"individual": "Afasta-te um pouco do ecrã. Consegues ler a mensagem principal? Se não, aumenta primeiro esse texto.", "group": "Afastem-se um pouco do ecrã. Conseguem ler a mensagem principal? Se não, aumentem primeiro esse texto."}}}, {"id": "review-2", "text": {"pt": {"individual": "Aponta o texto que mais custa a ler. Experimenta mudar só o tamanho e compara antes de continuar.", "group": "Apontem o texto que mais custa a ler. Experimentem mudar só o tamanho e compara antes de continuar."}}}]}, {"id": "save", "label": {"pt": "Guardar o produto"}, "hints": [{"id": "save-1", "text": {"pt": {"individual": "Abre o passo ilustrado «Guardar» do guião. Confirma o formato do teu produto antes de seguir a captura.", "group": "Abram o passo ilustrado «Guardar» do guião. Confirmem o formato do vosso produto antes de seguir a captura."}}}, {"id": "save-2", "text": {"pt": {"individual": "Confirma onde estás: ainda no editor ou já com uma cópia aberta? Mostra essa etapa ao professor se não encontrares a cópia.", "group": "Confirmem onde estão: ainda no editor ou já com uma cópia aberta? Mostrem essa etapa ao professor se não encontrares a cópia."}}}]}], "title": "Transformar o Word preservando conteúdo e cooperando."}, "u5": {"objective": "Usem os critérios. Registem uma sugestão e decidam uma ação.", "criteria": ["Os colegas conseguem ler e perceber o nosso produto.", "Usamos uma sugestão para melhorar o trabalho."], "obstacles": [{"id": "instruction", "label": {"pt": "Perceber a instrução"}, "hints": [{"id": "instruction-1", "text": {"pt": {"individual": "Aponta uma parte do produto e pede uma sugestão que comece por uma ação.", "group": "Apontem uma parte do produto e peçam uma sugestão que comece por uma ação."}}}, {"id": "instruction-2", "text": {"pt": {"individual": "Experimenta perguntar: «Que texto custa a ler nesta parte?» Regista a alteração que queres experimentar.", "group": "Experimentem perguntar: «Que texto custa a ler nesta parte?» Registem a alteração que querem experimentar."}}}]}, {"id": "command", "label": {"pt": "Encontrar um comando"}, "hints": [{"id": "command-1", "text": {"pt": {"individual": "Abre o passo ilustrado desta etapa. Procura primeiro o botão assinalado na captura.", "group": "Abram o passo ilustrado desta etapa. Procurem primeiro o botão assinalado na captura."}}}, {"id": "command-2", "text": {"pt": {"individual": "Compara o nome e o ícone da captura com o teu ecrã. Se forem diferentes, chama o professor e aponta onde deixaram de corresponder.", "group": "Comparem o nome e o ícone da captura com o vosso ecrã. Se forem diferentes, chamem o professor e aponta onde deixaram de corresponder."}}}]}, {"id": "ideas", "label": {"pt": "Organizar ideias"}, "hints": [{"id": "ideas-1", "text": {"pt": {"individual": "Aponta no Word uma ideia que queres comunicar. Em que zona do produto vai ficar?", "group": "Apontem no Word uma ideia que querem comunicar. Em que zona do produto vai ficar?"}}}, {"id": "ideas-2", "text": {"pt": {"individual": "Faz duas organizações pequenas em papel. Escolhe a que ajuda os colegas a encontrar os dois animais.", "group": "Façam duas organizações pequenas em papel. Escolham a que ajuda os colegas a encontrar os dois animais."}}}]}, {"id": "review", "label": {"pt": "Rever o trabalho"}, "hints": [{"id": "review-1", "text": {"pt": {"individual": "Afasta-te um pouco do ecrã. Consegues ler a mensagem principal? Se não, aumenta primeiro esse texto.", "group": "Afastem-se um pouco do ecrã. Conseguem ler a mensagem principal? Se não, aumentem primeiro esse texto."}}}, {"id": "review-2", "text": {"pt": {"individual": "Aponta o texto que mais custa a ler. Experimenta mudar só o tamanho e compara antes de continuar.", "group": "Apontem o texto que mais custa a ler. Experimentem mudar só o tamanho e compara antes de continuar."}}}]}, {"id": "save", "label": {"pt": "Guardar o produto"}, "hints": [{"id": "save-1", "text": {"pt": {"individual": "Abre o passo ilustrado «Guardar» do guião. Confirma o formato do teu produto antes de seguir a captura.", "group": "Abram o passo ilustrado «Guardar» do guião. Confirmem o formato do vosso produto antes de seguir a captura."}}}, {"id": "save-2", "text": {"pt": {"individual": "Confirma onde estás: ainda no editor ou já com uma cópia aberta? Mostra essa etapa ao professor se não encontrares a cópia.", "group": "Confirmem onde estão: ainda no editor ou já com uma cópia aberta? Mostrem essa etapa ao professor se não encontrares a cópia."}}}]}], "title": "Dar feedback concreto e decidir uma revisão."}, "u6": {"objective": "Apliquem a sugestão escolhida. Abram o PDF e confiram todas as páginas.", "criteria": ["Os colegas conseguem ler e perceber o nosso produto.", "Usamos uma sugestão para melhorar o trabalho."], "obstacles": [{"id": "instruction", "label": {"pt": "Perceber a instrução"}, "hints": [{"id": "instruction-1", "text": {"pt": {"individual": "Afasta-te um pouco do ecrã. Consegues ler a mensagem principal? Se não, aumenta primeiro esse texto.", "group": "Afastem-se um pouco do ecrã. Conseguem ler a mensagem principal? Se não, aumentem primeiro esse texto."}}}, {"id": "instruction-2", "text": {"pt": {"individual": "Mostra só a zona que mudaste. Compara com a sugestão recebida e explica se agora ajuda os colegas a ler.", "group": "Mostrem só a zona que mudaram. Comparem com a sugestão recebida e expliquem se agora ajuda os colegas a ler."}}}]}, {"id": "command", "label": {"pt": "Encontrar um comando"}, "hints": [{"id": "command-1", "text": {"pt": {"individual": "Abre o passo ilustrado desta etapa. Procura primeiro o botão assinalado na captura.", "group": "Abram o passo ilustrado desta etapa. Procurem primeiro o botão assinalado na captura."}}}, {"id": "command-2", "text": {"pt": {"individual": "Compara o nome e o ícone da captura com o teu ecrã. Se forem diferentes, chama o professor e aponta onde deixaram de corresponder.", "group": "Comparem o nome e o ícone da captura com o vosso ecrã. Se forem diferentes, chamem o professor e aponta onde deixaram de corresponder."}}}]}, {"id": "ideas", "label": {"pt": "Organizar ideias"}, "hints": [{"id": "ideas-1", "text": {"pt": {"individual": "Aponta no Word uma ideia que queres comunicar. Em que zona do produto vai ficar?", "group": "Apontem no Word uma ideia que querem comunicar. Em que zona do produto vai ficar?"}}}, {"id": "ideas-2", "text": {"pt": {"individual": "Faz duas organizações pequenas em papel. Escolhe a que ajuda os colegas a encontrar os dois animais.", "group": "Façam duas organizações pequenas em papel. Escolham a que ajuda os colegas a encontrar os dois animais."}}}]}, {"id": "review", "label": {"pt": "Rever o trabalho"}, "hints": [{"id": "review-1", "text": {"pt": {"individual": "Afasta-te um pouco do ecrã. Consegues ler a mensagem principal? Se não, aumenta primeiro esse texto.", "group": "Afastem-se um pouco do ecrã. Conseguem ler a mensagem principal? Se não, aumentem primeiro esse texto."}}}, {"id": "review-2", "text": {"pt": {"individual": "Aponta o texto que mais custa a ler. Experimenta mudar só o tamanho e compara antes de continuar.", "group": "Apontem o texto que mais custa a ler. Experimentem mudar só o tamanho e compara antes de continuar."}}}]}, {"id": "save", "label": {"pt": "Guardar o produto"}, "hints": [{"id": "save-1", "text": {"pt": {"individual": "Abre o passo ilustrado «Guardar» do guião. Confirma o formato do teu produto antes de seguir a captura.", "group": "Abram o passo ilustrado «Guardar» do guião. Confirmem o formato do vosso produto antes de seguir a captura."}}}, {"id": "save-2", "text": {"pt": {"individual": "Confirma onde estás: ainda no editor ou já com uma cópia aberta? Mostra essa etapa ao professor se não encontrares a cópia.", "group": "Confirmem onde estão: ainda no editor ou já com uma cópia aberta? Mostrem essa etapa ao professor se não encontrares a cópia."}}}]}], "title": "Aplicar a revisão e preparar uma cópia para mostrar."}, "u7": {"objective": "Preparem as quatro partes. Cronometrem um ensaio de 2–3 minutos.", "criteria": ["Todos participamos e explicamos como fizemos."], "obstacles": [{"id": "instruction", "label": {"pt": "Perceber a instrução"}, "hints": [{"id": "instruction-1", "text": {"pt": {"individual": "Escolhe uma decisão do produto. Aponta um exemplo enquanto explicas por que a tomaste.", "group": "Escolham uma decisão do produto. Apontem um exemplo enquanto explicas por que a tomaram."}}}, {"id": "instruction-2", "text": {"pt": {"individual": "Ensaia uma parte de cada vez: produto, decisão, melhoria e cooperação. Começa pela parte que ainda custa explicar.", "group": "Ensaiem uma parte de cada vez: produto, decisão, melhoria e cooperação. Comecem pela parte que ainda custa explicar."}}}]}, {"id": "command", "label": {"pt": "Encontrar um comando"}, "hints": [{"id": "command-1", "text": {"pt": {"individual": "Abre o passo ilustrado desta etapa. Procura primeiro o botão assinalado na captura.", "group": "Abram o passo ilustrado desta etapa. Procurem primeiro o botão assinalado na captura."}}}, {"id": "command-2", "text": {"pt": {"individual": "Compara o nome e o ícone da captura com o teu ecrã. Se forem diferentes, chama o professor e aponta onde deixaram de corresponder.", "group": "Comparem o nome e o ícone da captura com o vosso ecrã. Se forem diferentes, chamem o professor e aponta onde deixaram de corresponder."}}}]}, {"id": "ideas", "label": {"pt": "Organizar ideias"}, "hints": [{"id": "ideas-1", "text": {"pt": {"individual": "Aponta no Word uma ideia que queres comunicar. Em que zona do produto vai ficar?", "group": "Apontem no Word uma ideia que querem comunicar. Em que zona do produto vai ficar?"}}}, {"id": "ideas-2", "text": {"pt": {"individual": "Faz duas organizações pequenas em papel. Escolhe a que ajuda os colegas a encontrar os dois animais.", "group": "Façam duas organizações pequenas em papel. Escolham a que ajuda os colegas a encontrar os dois animais."}}}]}, {"id": "review", "label": {"pt": "Rever o trabalho"}, "hints": [{"id": "review-1", "text": {"pt": {"individual": "Afasta-te um pouco do ecrã. Consegues ler a mensagem principal? Se não, aumenta primeiro esse texto.", "group": "Afastem-se um pouco do ecrã. Conseguem ler a mensagem principal? Se não, aumentem primeiro esse texto."}}}, {"id": "review-2", "text": {"pt": {"individual": "Aponta o texto que mais custa a ler. Experimenta mudar só o tamanho e compara antes de continuar.", "group": "Apontem o texto que mais custa a ler. Experimentem mudar só o tamanho e compara antes de continuar."}}}]}, {"id": "save", "label": {"pt": "Guardar o produto"}, "hints": [{"id": "save-1", "text": {"pt": {"individual": "Abre o passo ilustrado «Guardar» do guião. Confirma o formato do teu produto antes de seguir a captura.", "group": "Abram o passo ilustrado «Guardar» do guião. Confirmem o formato do vosso produto antes de seguir a captura."}}}, {"id": "save-2", "text": {"pt": {"individual": "Confirma onde estás: ainda no editor ou já com uma cópia aberta? Mostra essa etapa ao professor se não encontrares a cópia.", "group": "Confirmem onde estão: ainda no editor ou já com uma cópia aberta? Mostrem essa etapa ao professor se não encontrares a cópia."}}}]}], "title": "Preparar e ensaiar uma comunicação breve com produto e processo."}, "u8": {"objective": "Conta uma estratégia que usaste. O que queres repetir?", "criteria": ["Todos participamos e explicamos como fizemos."], "obstacles": [{"id": "instruction", "label": {"pt": "Perceber a instrução"}, "hints": [{"id": "instruction-1", "text": {"pt": {"individual": "Escolhe um critério e lembra um momento em que participaste. Conta o que fizeste nesse momento.", "group": "Escolhe um critério e lembra um momento em que participaste. Conta o que fizeste nesse momento."}}}, {"id": "instruction-2", "text": {"pt": {"individual": "Completa com um exemplo teu: «Eu fiz… e da próxima vez quero…». Podes pedir que leiam a pergunta.", "group": "Completa com um exemplo teu: «Eu fiz… e da próxima vez quero…». Podes pedir que leiam a pergunta."}}}]}, {"id": "command", "label": {"pt": "Encontrar um comando"}, "hints": [{"id": "command-1", "text": {"pt": {"individual": "Abre o passo ilustrado desta etapa. Procura primeiro o botão assinalado na captura.", "group": "Abre o passo ilustrado desta etapa. Procura primeiro o botão assinalado na captura."}}}, {"id": "command-2", "text": {"pt": {"individual": "Compara o nome e o ícone da captura com o teu ecrã. Se forem diferentes, chama o professor e aponta onde deixaram de corresponder.", "group": "Compara o nome e o ícone da captura com o teu ecrã. Se forem diferentes, chama o professor e aponta onde deixaram de corresponder."}}}]}, {"id": "ideas", "label": {"pt": "Organizar ideias"}, "hints": [{"id": "ideas-1", "text": {"pt": {"individual": "Aponta no Word uma ideia que queres comunicar. Em que zona do produto vai ficar?", "group": "Aponta no Word uma ideia que queres comunicar. Em que zona do produto vai ficar?"}}}, {"id": "ideas-2", "text": {"pt": {"individual": "Faz duas organizações pequenas em papel. Escolhe a que ajuda os colegas a encontrar os dois animais.", "group": "Faz duas organizações pequenas em papel. Escolhe a que ajuda os colegas a encontrar os dois animais."}}}]}, {"id": "review", "label": {"pt": "Rever o trabalho"}, "hints": [{"id": "review-1", "text": {"pt": {"individual": "Afasta-te um pouco do ecrã. Consegues ler a mensagem principal? Se não, aumenta primeiro esse texto.", "group": "Afasta-te um pouco do ecrã. Consegues ler a mensagem principal? Se não, aumenta primeiro esse texto."}}}, {"id": "review-2", "text": {"pt": {"individual": "Aponta o texto que mais custa a ler. Experimenta mudar só o tamanho e compara antes de continuar.", "group": "Aponta o texto que mais custa a ler. Experimenta mudar só o tamanho e compara antes de continuar."}}}]}, {"id": "save", "label": {"pt": "Guardar o produto"}, "hints": [{"id": "save-1", "text": {"pt": {"individual": "Abre o passo ilustrado «Guardar» do guião. Confirma o formato do teu produto antes de seguir a captura.", "group": "Abre o passo ilustrado «Guardar» do guião. Confirma o formato do teu produto antes de seguir a captura."}}}, {"id": "save-2", "text": {"pt": {"individual": "Confirma onde estás: ainda no editor ou já com uma cópia aberta? Mostra essa etapa ao professor se não encontrares a cópia.", "group": "Confirma onde estás: ainda no editor ou já com uma cópia aberta? Mostra essa etapa ao professor se não encontrares a cópia."}}}]}], "title": "Retomar os critérios e convidar à reflexão individual."}}});</script>
+<!-- pagecraft-support:end -->
 </body></html>
