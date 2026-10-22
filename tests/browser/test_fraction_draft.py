@@ -31,7 +31,10 @@ def test_levels_correction_and_all_navigation_paths(page, lesson_origin):
         else:
             page.get_by_role('button', name='Partilha B', exact=True).click()
         page.get_by_role('button', name='Seguinte', exact=True).click()
-        assert page.get_by_role('heading', name={'support':'Pinta 1/2.', 'intermediate':'Pinta 1/4.', 'challenge':'Pinta 2/5.'}[choice]).is_visible()
+        fraction = {'support':'1/2', 'intermediate':'1/4', 'challenge':'2/5'}[choice]
+        heading = page.get_by_role('heading', name=f'Pinta {fraction} .', exact=True)
+        assert heading.is_visible()
+        assert heading.get_by_role('img', name=fraction, exact=True).is_visible()
         page.get_by_role('button', name='1. Partilhar', exact=True).click()
         assert page.get_by_role('button', name='Sim', exact=True).get_attribute('aria-pressed') == 'true'
         page.get_by_role('button', name='Cortar à esquerda', exact=True).click()
