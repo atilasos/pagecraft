@@ -66,9 +66,9 @@ def main():
                 f"**Assessment:** {inter.get('assessment', '')}",
                 "",
                 "**Diferenciação:**",
-                f"- Com pistas — Apoio: {diff.get('support', '')}",
-                f"- Passo a passo — Intermédio: {diff.get('standard', '')}",
-                f"- Mais desafios — Desafio: {diff.get('challenge', '')}",
+                f"- Com pistas: {diff.get('support', '')}",
+                f"- Passo a passo: {diff.get('standard', '')}",
+                f"- Mais desafios: {diff.get('challenge', '')}",
             ]
         )
         if maker:

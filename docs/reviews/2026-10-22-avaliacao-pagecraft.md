@@ -41,4 +41,38 @@ Cada agente trabalha num worktree e branch isolados, com commits incrementais. A
 
 ## Resultado da seleção
 
-A preencher depois da revisão dos commits e dos testes de integração. Os números anteriores descrevem a base, não a validação das alterações futuras.
+Selecionadas cinco melhorias, todas com problema demonstrado, alteração delimitada e regressão verificável:
+
+- [PR #51](https://github.com/atilasos/pagecraft/pull/51): retirar checkpoints dos relatórios exportados. Preserva a distinção entre estado técnico e trabalho observado, sem apagar o histórico de retoma.
+- [PR #52](https://github.com/atilasos/pagecraft/pull/52): conservar acentos, maiúsculas e espaços no contexto da cache de feedback. O refinamento serializa leitura e conclusão do mesmo pedido, preservando o desfecho integral e evitando chamadas duplicadas.
+- [PR #53](https://github.com/atilasos/pagecraft/pull/53): recuperar a mesma realização após falha de rede/HTTP 503, mantendo respostas pendentes e rascunho da reflexão. A página só oferece nova entrada depois de confirmar ausência de credencial.
+- [PR #54](https://github.com/atilasos/pagecraft/pull/54): usar os nomes neutros dos apoios nos guias novos do Studio e CLI. Conserva os identificadores internos e os artefactos históricos.
+- [PR #55](https://github.com/atilasos/pagecraft/pull/55): entregar a escolha explícita de apoio mesmo nos frames finais da retoma. Inclui expectativas atualizadas para frações verticais acessíveis e correções da recolha dos testes.
+
+O teste de browser da base encontrou três falhas: duas expectativas antigas sobre nomes acessíveis das frações e uma corrida real na escolha de nível. A correção do nível foi reproduzida com o último frame da retoma suspenso; não depende de repetir testes até passarem. A corrida do feedback foi reproduzida com Events, tanto para uma pista válida como para indisponibilidade.
+
+As oportunidades de anos múltiplos e participação nos critérios ficam para desenho posterior. Não foram adicionadas nesta ronda por exigirem decisões próprias de contrato e de participação da turma.
+
+## Standards
+
+Duas rondas de revisão independente, com os diffs fixados contra `480521e`, e depois contra os pontos anteriores aos refinamentos: **0 achados acionáveis**. As revisões verificaram AGENTS, linguagem de domínio, princípios de produto/design e ADRs de acesso, ponte, realizações e continuação. As cópias CLI são distribuição canónica prevista pelo projeto, não duplicação acidental.
+
+## Spec
+
+Duas rondas independentes: **0 achados acionáveis**. Os requisitos de recuperação, cache, evidência, rótulos neutros, livre escolha e idempotência foram considerados implementados, sem desvio de âmbito identificado. As revisões foram sobretudo estáticas; os testes abaixo são a verificação dinâmica do agente principal.
+
+## Validação final conjunta
+
+- `uv run pytest -q --ignore=tests/browser`: **337 aprovados**.
+- `PAGECRAFT_TEST_CDP=<CDP do Hub> uv run --offline --with playwright==1.63.0 pytest tests/browser -q`: **66 aprovados**, em 108,62 s, com dados e servidores descartáveis.
+- `uv run pytest -q`, sem Playwright: **337 aprovados, 30 omitidos**; a ausência da dependência opcional já não impede os testes de servidor.
+- Recolha conjunta com Playwright: **403 testes**; resolvida a colisão entre nomes dos módulos de retoma.
+- `node --test tests/js/activity_support.test.cjs`: **21 aprovados**.
+- Sincronização canónica, `git diff --check` e sintaxe dos dois clientes JavaScript alterados: aprovados.
+- GitGuardian aprovado nos commits dos PRs. A execução de pytest e JavaScript foi local; o repositório não tem um workflow próprio que as execute no GitHub.
+
+A pesquisa e o filtro do catálogo foram verificados num servidor estático local. A pesquisa «Tinkercad» com o filtro do 3.º ano devolveu zero resultados, apesar do destino declarar 3.º e 4.º anos. Captura: `/home/proteu/agent-browser-hub/screenshots/pagecraft-catalogo-tinkercad-3ano.png`.
+
+## Limites da avaliação
+
+Os ensaios técnicos e a revisão da Sebenta não substituem observação em sala nem demonstram a qualidade de cada texto gerado por IA. Mantêm-se os limites de um processo escritor, expiração da credencial em 24 horas e dependência de `sessionStorage` para trabalho ainda não enviado. A cache mais precisa pode aumentar chamadas ao fornecedor. Não houve publicação de atividades, reinício de produção ou alteração de dados reais.
