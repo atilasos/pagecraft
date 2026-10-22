@@ -195,6 +195,52 @@ def test_step_choice_conflict_requires_review_of_the_saved_revision(page, studio
         )
 
 
+@pytest.mark.parametrize('width', [1280, 320])
+def test_long_intentions_fit_the_early_reader_measure(page, studio_origin, width):
+    from playwright.sync_api import expect
+    page.set_viewport_size({'width': width, 'height': 900})
+    text = ('Quero comparar partes iguais com o meu colega. ' * 26 + 'x' * 300)[:1500]
+    with httpx.Client(base_url=studio_origin) as teacher:
+        session = create_session(teacher)
+        enter_pair(page, studio_origin, session['join_code'])
+        page.get_by_role('button', name='A minha reflexão', exact=True).click()
+        page.get_by_role('button', name='Ana · Por responder', exact=True).click()
+        page.get_by_label('O que queres experimentar a seguir?').fill(text)
+        page.get_by_role('button', name='Guardar a minha reflexão', exact=True).click()
+        expect(page.locator('#reflection-status')).to_contain_text('Reflexão guardada.')
+        page.get_by_role('button', name='Voltar à atividade', exact=True).click()
+        page.get_by_role('button', name='O meu próximo passo', exact=True).click()
+        page.locator('#return-ticket').get_by_role('button', name='Ana', exact=True).click()
+
+        def check_measure(selector):
+            paragraph = page.locator(selector)
+            expect(paragraph).to_have_text(text)
+            measure = paragraph.evaluate('''element => {
+              const style = getComputedStyle(element), rect = element.getBoundingClientRect();
+              const ruler = document.createElement('span');
+              ruler.style.cssText = 'display:block;width:50ch';
+              element.append(ruler);
+              const limit = ruler.getBoundingClientRect().width;
+              ruler.remove();
+              return {width:rect.width, limit, right:rect.right, left:rect.left,
+                client:element.clientWidth, scroll:element.scrollWidth,
+                wrap:style.overflowWrap};
+            }''')
+            assert measure['width'] <= measure['limit'] + 1, measure
+            assert 0 <= measure['left'] < measure['right'] <= width, measure
+            assert measure['scroll'] <= measure['client'], measure
+            assert measure['wrap'] == 'break-word', measure
+            assert page.evaluate('document.documentElement.scrollWidth') <= width
+
+        check_measure('#return-ticket-text')
+        screenshot(page, f'bilhete-{width}.png')
+        page.get_by_role('button', name='Voltar ao trabalho', exact=True).click()
+        page.get_by_role('button', name='A minha reflexão', exact=True).click()
+        page.get_by_role('button', name='Ana · Guardada', exact=True).click()
+        check_measure('#reflection-previous-step')
+        screenshot(page, f'reflexao-{width}.png')
+
+
 def test_saved_intentions_are_read_only_and_separate_from_new_step(page, studio_origin):
     from playwright.sync_api import expect
     errors = []
