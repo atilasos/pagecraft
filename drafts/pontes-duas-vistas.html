@@ -322,10 +322,12 @@ render();if(ready){started.add(unit());if(!PRESENTATION){emit('activity_loaded',
 if(embedded&&!PRESENTATION)setInterval(()=>{if(ready&&!document.hidden)emit('heartbeat',null,{});},30000);
 
 </script><!-- pagecraft-support:start -->
-<style>.pc-support{border:2px solid var(--primary,#38624f);border-radius:12px;padding:20px;margin:20px 0;background:var(--surface,#f5f3ea);color:var(--ink,#233c32);font-size:inherit;line-height:1.45}
+<style>.pc-support{border:2px solid var(--primary,#38624f);border-radius:12px;padding:20px;margin:20px 0;background:var(--surface,#f5f3ea);color:var(--ink,#233c32);font-size:inherit;line-height:1.45;overflow-wrap:anywhere}
 .pc-support h3{margin:0 0 12px}.pc-support label{display:block}.pc-support select{display:block;width:100%;max-width:100%;margin:12px 0;padding:10px;font:inherit;min-height:var(--tap,56px)}
 .pc-support-controls{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}.pc-support button{font:inherit;padding:10px 16px;min-height:var(--tap,56px);border:1px solid currentColor;border-radius:8px;cursor:pointer;background:var(--surface,#fffefa);color:inherit;max-width:100%;white-space:normal}
 .pc-support button:disabled{cursor:default;opacity:.65}.pc-support :focus-visible{outline:3px solid var(--focus,#285cc0);outline-offset:3px}.pc-support-action{padding:18px;background:var(--bg,#fffefa);border-radius:8px;font-size:1.1em;max-width:55ch;overflow-wrap:anywhere}.pc-support-notice,.pc-support-note{font-size:1em;max-width:55ch}.pc-support summary{padding:12px 0;min-height:var(--tap,56px);cursor:pointer}.pc-support details{margin:12px 0}
+.pc-support-history{max-width:55ch}.pc-support-history ol{padding-inline-start:1.25em}.pc-support-history li{padding-inline-start:.25em}.pc-support-history summary{box-sizing:border-box;overflow-wrap:anywhere}.pc-support-history dl{margin:12px 0}.pc-support-history dt{font-weight:700}.pc-support-history dd{margin:0 0 10px;overflow-wrap:anywhere}.pc-support-history-text{white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:480px){.pc-support{padding:12px}.pc-support-history ol{padding-inline-start:0;list-style:none}.pc-support-history li{padding-inline-start:0}}
 </style>
 <script>/* Modal comum: o host cobre todo o ecrã; HTML autónomo usa o mesmo componente. */
 (function () {
@@ -424,6 +426,11 @@ if(embedded&&!PRESENTATION)setInterval(()=>{if(ready&&!document.hidden)emit('hea
       groupResolvedNotice:'Registámos que já conseguem continuar, segundo a vossa indicação.',
       helpedNotice:'Registámos que a pista ajudou, segundo a tua indicação.', groupHelpedNotice:'Registámos que a pista ajudou, segundo a vossa indicação.',
       voiceMissing:'A leitura em voz alta não está disponível neste dispositivo.', voiceError:'Não foi possível ler esta pista.',
+      history:'Pistas que já experimentei', groupHistory:'Pistas que já experimentámos', historyHint:'Pista',
+      previousContext:'Pista anterior: o contexto mudou.', savedContext:'Contexto original não registado.',
+      version:'Versão', stage:'Etapa', question:'Pergunta', answer:'Resposta nessa altura', product:'Trabalho',
+      level:'Tipo de ajuda', participants:'Participantes', hintLanguage:'Língua', goal:'Objetivo da etapa', criteria:'Critérios',
+      support:'Com pistas', intermediate:'Passo a passo', challenge:'Mais desafios',
       outside:'Local de trabalho declarado.', observation:'O PageCraft só conhece o que foi feito ou declarado nesta página.',
       returned:'De volta ao guião. Regista o que fizeste ou pede uma pista.'},
     en: {resume:'I will try this', groupResume:'We will try this', pause:'A hint to help you continue', title:'One next step', hint:'I need a hint', groupHint:'We need a hint', obstacle:'Where do you need help?',
@@ -440,6 +447,11 @@ if(embedded&&!PRESENTATION)setInterval(()=>{if(ready&&!document.hidden)emit('hea
       resolvedNotice:'We recorded that you say you can continue now.', groupResolvedNotice:'We recorded that you say you can continue now.',
       helpedNotice:'We recorded that you say the hint helped.', groupHelpedNotice:'We recorded that you say the hint helped.',
       voiceMissing:'Reading aloud is not available on this device.', voiceError:'This hint could not be read aloud.',
+      history:'Hints I have tried', groupHistory:'Hints we have tried', historyHint:'Hint',
+      previousContext:'Previous hint: the context has changed.', savedContext:'Original context was not recorded.',
+      version:'Version', stage:'Step', question:'Question', answer:'Answer at the time', product:'Work',
+      level:'Kind of help', participants:'Participants', hintLanguage:'Language', goal:'Step objective', criteria:'Criteria',
+      support:'With hints', intermediate:'Step by step', challenge:'More challenges',
       outside:'Declared place of work.', observation:'PageCraft only knows what was done or reported on this page.',
       returned:'Back to the guide. Record what you did or ask for a hint.'}
   };
@@ -504,7 +516,7 @@ if(embedded&&!PRESENTATION)setInterval(()=>{if(ready&&!document.hidden)emit('hea
   const plan = () => config?.units[unitId];
   const obstacle = () => plan()?.obstacles.find(o=>o.id===context.obstacle) || plan()?.obstacles[0];
   const signature = () => JSON.stringify([unitId,context.task_id,context.answer,context.question,context.product,context.level,context.obstacle,context.revision,context.attempt,members,language]);
-  const relevant = () => history.filter(h=>h.unit_id===unitId && h.obstacle===obstacle().id && h.product===(context.product||'') && h.language===language);
+  const relevant = () => history.filter(h=>h.activity_version===config.activity_version && h.unit_id===unitId && h.obstacle===obstacle().id && h.product===(context.product||'') && h.language===language);
   function emit(type, payload={}, unit=unitId) {
     if(window.parent===window)return;
     window.parent.postMessage({pagecraft:1,type,unitId:unit,payload:{activity:config.activity,activity_version:config.activity_version,...payload},ts:Date.now()},'*');
@@ -527,6 +539,7 @@ if(embedded&&!PRESENTATION)setInterval(()=>{if(ready&&!document.hidden)emit('hea
         duration_minutes:config.duration_minutes,task_description:plan().task_description,interaction:plan().interaction},
       stage:plan().title,stage_objective:plan().objective,criteria:plan().criteria,product:context.product||'',
       participant_count:members,language,obstacle:obstacle().id,question:context.question||obstacle().label[language],
+      task_id:context.task_id,revision:context.revision,
       answer:String(context.answer??'').slice(0,1500),level:context.level||'intermediate',
       observed_difficulties:failures.key===taskKey()?failures.observed:[],
       previous_hints:relevant().slice(-2).map(h=>({text:h.text,usefulness:h.usefulness||'not_reported'})),
@@ -544,11 +557,12 @@ if(embedded&&!PRESENTATION)setInterval(()=>{if(ready&&!document.hidden)emit('hea
   }
   function present(text, source, requestId=null, hintKey=null, automatic=false) {
     const originalContext=requestContext();
-    current={hint_id:id(),unit_id:unitId,obstacle:obstacle().id,product:context.product||'',text,source,
+    current={hint_id:id(),unit_id:unitId,activity_version:config.activity_version,context:originalContext,obstacle:obstacle().id,product:context.product||'',text,source,
       request_id:requestId,hint_key:hintKey,language,automatic,signature:signature(),usefulness:null};
     pending=null;notice='';
     if(!render()){current=null;return;}
     history.push(current);
+    render();
     emit('hint_presented',{hint_id:current.hint_id,hint_key:hintKey,text,source,request_id:requestId,
       obstacle:current.obstacle,product:current.product,language,context:originalContext,presentation:automatic?'modal':'inline'});
     if(automatic)showModal();
@@ -607,20 +621,44 @@ if(embedded&&!PRESENTATION)setInterval(()=>{if(ready&&!document.hidden)emit('hea
     if(route==='standalone')window.PageCraftSupportModal?.notice(modalHint,text);
     else emit('support_modal',{action:'notice',hint_id:modalHint,text});
   }
-  function listen() {
-    if(!current)return;
-    if(!window.speechSynthesis || typeof SpeechSynthesisUtterance==='undefined'){voiceNotice(t('voiceMissing'));return;}
-    const hintId=current.hint_id, utterance=new SpeechSynthesisUtterance(current.text);
-    utterance.lang=language==='pt'?'pt-PT':'en-GB';
-    utterance.onerror=()=>{if(current?.hint_id===hintId)voiceNotice(t('voiceError'));};
+  function readHint(hint, report=false) {
+    if(!hint)return;
+    const notify=text=>{if(report)voiceNotice(text);else {notice=text;render();}};
+    if(!window.speechSynthesis || typeof SpeechSynthesisUtterance==='undefined'){notify(t('voiceMissing'));return;}
+    const utterance=new SpeechSynthesisUtterance(hint.text);
+    utterance.lang=hint.language==='en'?'en-GB':'pt-PT';
+    utterance.onerror=()=>{if(report?current===hint:history.includes(hint))notify(t('voiceError'));};
     window.speechSynthesis.cancel();window.speechSynthesis.speak(utterance);
-    emit('hint_listened',{hint_id:hintId});
+    if(report)emit('hint_listened',{hint_id:hint.hint_id});
+  }
+  function listen(){readHint(current,true);}
+  function historyMarkup(){
+    if(!history.length)return '';
+    const now=requestContext();
+    return '<details class="pc-support-history" data-support-disclosure="history"><summary>'+esc(t('history'))+'</summary><ol>'+history.map((hint,index)=>{
+      const original=hint.context;
+      const previous=hint.unit_id!==unitId || hint.activity_version!==config.activity_version ||
+        (hint.signature ? hint.signature!==signature() : !original ||
+          ['stage','question','answer','product','level','obstacle','participant_count','language'].some(key=>original[key]!==now[key]) ||
+          ['task_id','revision'].some(key=>Object.hasOwn(original,key) && original[key]!==now[key]));
+      const field=(key,value)=>value==null||value===''?'':'<dt>'+esc(t(key))+'</dt><dd>'+esc(value)+'</dd>';
+      return '<li><details data-support-disclosure="hint-'+index+'"><summary>'+esc(t('historyHint'))+' '+(index+1)+' · '+esc(original?.stage||hint.unit_id)+'</summary>'+
+        (previous?'<p class="pc-support-note">'+esc(t('previousContext'))+'</p>':'')+
+        '<dl>'+field('stage',original?.stage||hint.unit_id)+field('version',hint.activity_version)+
+        (original?field('question',original.question)+field('answer',original.answer)+field('product',original.product)+
+          field('level',COPY[language][original.level]||original.level)+field('participants',original.participant_count)+
+          field('hintLanguage',original.language)+field('goal',original.stage_objective)+field('criteria',original.criteria?.join(' · ')):'')+'</dl>'+
+        (!original?'<p class="pc-support-note">'+esc(t('savedContext'))+'</p>':'')+
+        '<p class="pc-support-history-text" lang="'+(hint.language==='en'?'en-GB':'pt-PT')+'">'+esc(hint.text)+'</p>'+
+        '<button type="button" data-support-action="history-listen-'+index+'" data-support-hint-id="'+esc(hint.hint_id)+'">'+esc(t('listen'))+' · '+esc(t('historyHint'))+' '+(index+1)+'</button></details></li>';
+    }).join('')+'</ol></details>';
   }
   function render() {
     const panel=panels.get(unitId);
     if(!panel || panel.isConnected===false || !plan())return false;
     const button=(action,label,disabled=false)=>'<button type="button" data-support-action="'+action+'" '+(disabled?'disabled':'')+'>'+esc(label)+'</button>';
     const active=document.activeElement?.closest?.('[data-pagecraft-support]')===panel?document.activeElement.dataset.supportAction:null;
+    const open=Array.from(panel.querySelectorAll?.('[data-support-disclosure][open]')||[],node=>node.dataset.supportDisclosure);
     const settings=(!locked?button('mode',members>1?t('alone'):t('pair')):'')+
       '<label>'+esc(t('obstacle'))+'<select data-support-obstacle>'+plan().obstacles.map(o=>'<option value="'+o.id+'" '+(obstacle().id===o.id?'selected':'')+'>'+esc(o.label[language])+'</option>').join('')+'</select></label>';
     panel.innerHTML='<h3>'+esc(t('title'))+'</h3>'+(current?
@@ -632,7 +670,8 @@ if(embedded&&!PRESENTATION)setInterval(()=>{if(ready&&!document.hidden)emit('hea
       '<div class="pc-support-controls">'+(location==='pagecraft'?
         (config.externalWork?button('external',t('external')+config.externalWork[language]):'')+button('reading',t(members>1?'discussion':'reading')):
         button('return',t('back')))+(teacherRequest?button('resolved',t('resolved')):'')+'</div>'+
-      '<p class="pc-support-notice" role="status">'+esc(notice)+'</p><p class="pc-support-note">'+esc(t('observation'))+'</p>';
+      historyMarkup()+'<p class="pc-support-notice" role="status">'+esc(notice)+'</p><p class="pc-support-note">'+esc(t('observation'))+'</p>';
+    for(const key of open){const disclosure=panel.querySelector('[data-support-disclosure="'+key+'"]');if(disclosure)disclosure.open=true;}
     if(active)panel.querySelector('[data-support-action="'+active+'"]')?.focus({preventScroll:true});
     return true;
   }
@@ -643,8 +682,10 @@ if(embedded&&!PRESENTATION)setInterval(()=>{if(ready&&!document.hidden)emit('hea
       panels.set(unit,panel);panel.classList.add('pc-support');panel.setAttribute('aria-label',COPY[language].title);
       if(unit!==unitId)panel.innerHTML='<button type="button" data-support-action="hint">'+esc(t('hint'))+'</button>';
       panel.addEventListener('click',event=>{
-        const action=event.target.closest('[data-support-action]')?.dataset.supportAction;
+        const control=event.target.closest('[data-support-action]');
+        const action=control?.dataset.supportAction;
         if(!action)return;
+        if(action.startsWith('history-listen-')){readHint(history.find(h=>h.hint_id===control.dataset.supportHintId));return;}
         if(unit!==unitId)update({unit_id:unit});
         if(action==='hint'||action==='next')requestHint();
         if(action==='stuck'){feedback('not_helped');requestHint();}
@@ -670,7 +711,7 @@ if(embedded&&!PRESENTATION)setInterval(()=>{if(ready&&!document.hidden)emit('hea
     for(const event of events||[]){
       const p=event.payload||{};
       if(p.activity && p.activity!==config.activity)continue;
-      if(event.type==='hint_presented' && p.activity_version===config.activity_version)history.push({...p,unit_id:event.unit_id||event.unitId,usefulness:null});
+      if(event.type==='hint_presented')history.push({...p,unit_id:event.unit_id||event.unitId,usefulness:null});
       if(event.type==='hint_feedback'){const hint=history.find(h=>h.hint_id===p.hint_id);if(hint)hint.usefulness=p.usefulness;}
       if(event.type==='work_location')location=p.location;
       if(event.type==='help_needed')teacherRequest={request_id:p.help_request_id};
