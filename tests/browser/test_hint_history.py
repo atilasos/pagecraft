@@ -31,16 +31,23 @@ def support_origin():
       button{font:inherit;min-height:56px}body.zoom{zoom:2}</style><body>
       <h1>Comparar as barras</h1><section data-unit="u1">
       <label for="answer">A minha resposta</label><input id="answer">
+      <label for="task">Pergunta</label><select id="task"><option value="item-1">Item 1</option><option value="item-2">Item 2</option></select>
+      <button id="revise" type="button">Rever o trabalho</button>
       <aside data-pagecraft-support="u1"></aside></section>
       <button id="other" type="button">Ir para outra tarefa</button>
       <section data-unit="u2"><aside data-pagecraft-support="u2"></aside></section>
       <script>
       const answer=document.querySelector('#answer');
+      const task=document.querySelector('#task');
       answer.value=localStorage.getItem('answer')||'Uma tentativa';
+      task.value=localStorage.getItem('task_id')||'item-1';
+      let revision=localStorage.getItem('revision')||'r1';
       if(location.search.includes('zoom'))document.body.classList.add('zoom');
-      const context=()=>PageCraftSupport.update({unit_id:'u1',task_id:'barras',question:'Qual barra?',answer:answer.value});
+      const context=()=>PageCraftSupport.update({unit_id:'u1',task_id:task.value,revision,question:'Qual barra?',answer:answer.value});
       document.addEventListener('pagecraft-support-ready',context);
       answer.addEventListener('input',()=>{localStorage.setItem('answer',answer.value);context()});
+      task.onchange=()=>{localStorage.setItem('task_id',task.value);context()};
+      document.querySelector('#revise').onclick=()=>{revision='r2';localStorage.setItem('revision',revision);context()};
       document.querySelector('#other').onclick=()=>PageCraftSupport.update({unit_id:'u2',task_id:'outra',question:'Outra pergunta?'});
       window.readings=[];
       Object.defineProperty(window,'speechSynthesis',{configurable:true,writable:true,value:{cancel(){},speak(u){readings.push({text:u.text,lang:u.lang})}}});
@@ -143,6 +150,67 @@ def test_edit_reload_and_reread_without_events_or_ai(page, support_origin, route
     assert page.evaluate('JSON.stringify(events)') == saved
     assert not errors
     assert all(url.startswith(support_origin) for url in requests)
+
+
+@pytest.mark.parametrize('route', ['permanent', 'studio'])
+@pytest.mark.parametrize('discriminator', ['task_id', 'revision'])
+def test_same_question_and_answer_keep_previous_mark_after_json_reload(page, support_origin, route, discriminator):
+    from playwright.sync_api import expect
+
+    page.goto(support_origin + '?route=' + route)
+    page.wait_for_function('restored')
+    lesson = page.frame_locator('iframe')
+    panel = lesson.locator('[data-pagecraft-support="u1"]')
+    panel.get_by_role('button', name='Preciso de uma pista', exact=True).click()
+    page.wait_for_function('events.length === 1')
+    saved = page.evaluate('JSON.stringify(events)')
+    assert json.loads(saved)[0]['payload']['context'][discriminator] == ('item-1' if discriminator == 'task_id' else 'r1')
+    if discriminator == 'task_id':
+        lesson.get_by_label('Pergunta', exact=True).select_option('item-2')
+    else:
+        lesson.get_by_role('button', name='Rever o trabalho', exact=True).click()
+    expect(panel.locator('.pc-support-history li')).to_contain_text('Pista anterior: o contexto mudou.')
+    page.reload()
+    page.wait_for_function('restored')
+    panel.locator('.pc-support-history > summary').click()
+    panel.locator('.pc-support-history li summary').click()
+    expect(panel.locator('.pc-support-history li')).to_contain_text('Pista anterior: o contexto mudou.')
+    expect(panel.locator('.pc-support-history-text')).to_have_text(FIRST)
+    assert lesson.locator('body').evaluate('readings') == []
+    assert page.evaluate('JSON.stringify(events)') == saved
+
+
+@pytest.mark.parametrize('route', ['permanent', 'studio'])
+def test_history_in_other_visible_panel_preserves_pending_ai(page, support_origin, route, tmp_path):
+    from playwright.sync_api import expect
+
+    page.goto(support_origin + '?route=' + route)
+    page.wait_for_function('restored')
+    lesson = page.frame_locator('iframe')
+    first_panel = lesson.locator('[data-pagecraft-support="u1"]')
+    second_panel = lesson.locator('[data-pagecraft-support="u2"]')
+    first_panel.get_by_role('button', name='Preciso de uma pista', exact=True).click()
+    lesson.get_by_role('button', name='Ir para outra tarefa', exact=True).click()
+    second_panel.get_by_role('button', name='Preciso de uma pista', exact=True).click()
+    current = lesson.locator('body').evaluate('PageCraftSupport.currentHintId()')
+    second_panel.get_by_role('button', name='Esclarecer com IA', exact=True).click()
+    page.wait_for_function("events.some(e=>e.type==='feedback_request')")
+    saved = page.evaluate('JSON.stringify(events)')
+    request = json.loads(saved)[-1]['payload']['request_id']
+    first_panel.locator('.pc-support-history > summary').click()
+    first_panel.locator('.pc-support-history li summary').click()
+    expect(first_panel).to_be_visible()
+    expect(second_panel).to_be_visible()
+    assert lesson.locator('body').evaluate('readings') == []
+    first_panel.get_by_role('button', name='Ouvir · Pista 1', exact=True).click()
+    assert lesson.locator('body').evaluate('readings') == [{'text': FIRST, 'lang': 'pt-PT'}]
+    assert lesson.locator('body').evaluate('PageCraftSupport.currentHintId()') == current
+    assert page.evaluate('JSON.stringify(events)') == saved
+    page.evaluate('''request => document.querySelector('iframe').contentWindow.postMessage({pagecraft:1,
+      type:'ai_feedback',payload:{request_id:request,unit_id:'u2',text:'Pista IA da segunda etapa'}},location.origin)''', request)
+    expect(second_panel.locator('.pc-support-action')).to_have_text('Pista IA da segunda etapa')
+    page.wait_for_function("events.at(-1).type === 'hint_presented' && events.at(-1).unitId === 'u2'")
+    page.screenshot(path=str(tmp_path / f'dois-paineis-{route}.png'), full_page=True)
 
 
 @pytest.mark.parametrize('zoom', [False, True])

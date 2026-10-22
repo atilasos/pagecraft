@@ -150,6 +150,21 @@ for(const change of [{task_id:'item-2'},{revision:'r2'}]){
       assert.ok(!Object.hasOwn(saved[0].payload.context,'task_id'));assert.ok(!Object.hasOwn(saved[0].payload.context,'revision'));`);
   });
 }
+test('retoma JSON conserva escolha de ajuda, obstáculo, língua e composição atuais',()=>{
+  for(const change of ["support.update({level:'challenge'})","support.update({obstacle:'outro'})",
+    "host('learning_preferences',{language:'en'})","host('work_group_preferences',{route:'studio',participant_count:2})"]){
+    const run=activity();
+    run(`host('learning_preferences',{route:'permanent'});
+      config.units.u1.obstacles.push({...JSON.parse(JSON.stringify(config.units.u1.obstacles[0])),id:'outro'});
+      support.requestHint();const saved=JSON.parse(JSON.stringify(emitted));${change};
+      support.requestAI();const selected=emitted.at(-1).payload;
+      host('learning_restore',{events:saved});assert.match(panel.innerHTML,/Pista anterior:|Previous hint:/);
+      support.requestHint();const hint=emitted.at(-1).payload;
+      for(const key of ['level','obstacle','language','participant_count'])assert.equal(hint.context[key],selected[key]);
+      assert.equal(hint.text,config.units.u1.obstacles.find(o=>o.id===selected.obstacle).hints.find(h=>h.id===hint.hint_key).text[selected.language][selected.participant_count>1?'group':'individual']);
+      assert.equal(spoken,0);`);
+  }
+});
 test('versões anteriores são consultáveis sem consumir pistas da versão atual e sem misturar atividades',()=>{
   const run=activity();
   run(`support.requestHint();const first=emitted.at(-1);

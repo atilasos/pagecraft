@@ -201,3 +201,61 @@ Antes da correção, 2 falhas específicas, em
 falhas, em `/tmp/pagecraft-r2-paineis-after.log`. A consulta mantém exatamente
 os acontecimentos, o identificador da pista atual e a aceitação da resposta
 IA de u2. O teste de reordenação confirma identidade do texto lido.
+
+## Ronda 2: validação final
+
+```bash
+git show 52e65e61f4798fa5d74463699213563fd6369829:server/pipeline/prompts/activity-support.js > /tmp/pagecraft-support-r2-base.js
+PAGECRAFT_SUPPORT_SOURCE=/tmp/pagecraft-support-r2-base.js node --test tests/js/activity_support.test.cjs
+node --test tests/js/activity_support.test.cjs
+PAGECRAFT_TEST_CDP=http://127.0.0.1:9331 uv run --project /home/proteu/pagecraft --with playwright pytest -q tests/browser/test_hint_history.py --basetemp=/tmp/pagecraft-historico-r2-browser
+uv run --project /home/proteu/pagecraft pytest -q tests/test_activity_support.py tests/test_support_summary.py tests/test_bridge_artifacts.py tests/test_session_event_types.py tests/test_canva_support_pilot.py tests/test_feedback.py tests/test_learning_feedback.py
+bash skills/sync-from-canonical.sh --check
+git diff --check
+git diff --exit-code 52e65e61f4798fa5d74463699213563fd6369829 -- activities drafts outputs
+```
+
+Com os testes finais e o runtime da base desta ronda, 28 passam e 4 falham
+pelos sintomas esperados: retoma de tarefa, retoma de revisão, pista atual
+perdida entre painéis e leitura da pista errada depois de reordenação.
+Log em `/tmp/pagecraft-r2-base.log`. Com o runtime corrigido, 32 testes JS
+passam, zero falhas, em `/tmp/pagecraft-r2-js-final.log`. A regressão adicional
+confirma que a retoma conserva o nível e obstáculo escolhidos, língua e
+composição atuais, e que a próxima pista usa esses valores.
+
+Os 75 testes Python passam, em `/tmp/pagecraft-r2-python.log`. A sincronização
+canónica e `git diff --check` passam. Nenhuma alteração em atividades,
+rascunhos ou outputs publicados.
+
+No browser, 10 testes passam em 8,69 segundos, em
+`/tmp/pagecraft-r2-browser.log`. A sessão Hub própria
+`pagecraft-historico-ronda2`, perfil `temporary`, foi aberta e fechada por MCP.
+O CDP acima pertenceu exclusivamente a essa sessão. Para repetir, abrir uma
+sessão própria e substituir o endereço CDP. Não foram lançados browsers fora
+do Hub nem usados dados de produção.
+
+Os ensaios novos percorrem `studio` e `permanent`, com dois painéis reais
+montados. O botão do histórico de u1 lê o texto de u1 sem mudar o identificador
+da pista atual de u2, sem acrescentar acontecimentos e sem perder a resposta
+IA pendente de u2. A retoma após recarregamento lê os acontecimentos JSON
+guardados pelo anfitrião e conserva a marca anterior quando muda apenas
+`task_id` ou apenas `revision`, mantendo pergunta e resposta iguais.
+Os quatro ensaios anteriores de edição, teclado, foco, 320 px e zoom também
+continuam a passar. A voz foi substituída para registar texto e língua sem
+produzir áudio; continua a exigir clique explícito. A resposta IA é entregue
+pelo anfitrião descartável, sem chamar um fornecedor.
+
+Capturas dos dois painéis, com a resposta IA aceite em u2:
+
+- `/tmp/pagecraft-historico-r2-browser/test_history_in_other_visible_0/dois-paineis-permanent.png`
+- `/tmp/pagecraft-historico-r2-browser/test_history_in_other_visible_1/dois-paineis-studio.png`
+
+Commits desta ronda:
+
+- `1877c99`: contexto persistente de tarefa/revisão, regressão e prova.
+- `3c1067b`: leitura histórica independente da tarefa ativa e identidade da pista.
+- O commit de validação que inclui esta secção acrescenta os ensaios de browser
+  e a regressão de escolhas, língua e composição.
+
+A branch permanece local, pronta para revisão pelo agente principal.
+Sem PR, push ou merge. Todas as edições foram feitas no worktree atribuído.
