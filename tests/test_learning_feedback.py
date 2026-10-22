@@ -1,10 +1,100 @@
 import asyncio
+from contextlib import asynccontextmanager
 
 import pytest
 
 from fakes import FakeProvider
 from test_learning import learning_clients, register, start
 from server.feedback_context import TIMEOUT_MESSAGE
+
+
+@pytest.mark.parametrize('source, text', [
+    ('ai', 'Compara a escrita com o exemplo.'),
+    ('unavailable', ''),
+])
+async def test_feedback_completion_during_repeated_request_keeps_full_outcome(
+    learning_clients, monkeypatch, source, text,
+):
+    app, teacher, pupil = learning_clients
+    activity, _ = await register(teacher)
+    attempt = await start(pupil, activity['code'])
+    service = app.state.learning_feedback
+    learning = app.state.learning
+    provider = FakeProvider(default={'feedback': text})
+    service.provider = provider
+    service.timeout_s = 10
+    payload = {'request_id': 'same-request', 'answer': 'avó'}
+    provider_started = asyncio.Event()
+    finish_provider = asyncio.Event()
+    snapshot_ready = asyncio.Event()
+    resume_snapshot = asyncio.Event()
+    second = None
+    original_complete = provider._complete_once
+    original_attempt = learning.attempt
+    original_lock = learning.lock
+    original_record = learning.record
+    records = []
+
+    async def controlled_complete(*args, **kwargs):
+        response = await original_complete(*args, **kwargs)
+        provider_started.set()
+        await finish_provider.wait()
+        return response
+
+    async def paused_attempt(identifier):
+        snapshot = await original_attempt(identifier)
+        if asyncio.current_task() is second and not snapshot_ready.is_set():
+            assert [e['type'] for e in snapshot['events']] == ['feedback_request']
+            snapshot_ready.set()
+            await resume_snapshot.wait()
+        return snapshot
+
+    @asynccontextmanager
+    async def observed_lock(key):
+        lock = original_lock(key)
+        if key == 'feedback:' + attempt['id'] and lock.locked() and snapshot_ready.is_set():
+            # No código corrigido, a conclusão espera pelo lock da segunda leitura.
+            resume_snapshot.set()
+        async with lock:
+            yield
+
+    async def observed_record(identifier, events, **kwargs):
+        records.extend(e['type'] for e in events)
+        return await original_record(identifier, events, **kwargs)
+
+    monkeypatch.setattr(provider, '_complete_once', controlled_complete)
+    monkeypatch.setattr(learning, 'attempt', paused_attempt)
+    monkeypatch.setattr(learning, 'lock', observed_lock)
+    monkeypatch.setattr(learning, 'record', observed_record)
+
+    first = asyncio.create_task(service.request(attempt['id'], 'u1', payload))
+    # No código antigo, liberta a leitura só depois de a tarefa terminar e sair de tasks.
+    first.add_done_callback(lambda done: resume_snapshot.set())
+    try:
+        async with asyncio.timeout(5):
+            await provider_started.wait()
+            second = asyncio.create_task(service.request(attempt['id'], 'u1', payload))
+            await snapshot_ready.wait()
+            finish_provider.set()
+            results = await asyncio.gather(first, second)
+    finally:
+        finish_provider.set()
+        resume_snapshot.set()
+        for task in (first, second):
+            if task is not None and not task.done():
+                task.cancel()
+        await asyncio.gather(*(t for t in (first, second) if t is not None), return_exceptions=True)
+
+    saved = await learning.attempt(attempt['id'])
+    assert results[0]['source'] == source
+    assert results[0] == results[1] == saved['events'][-1]['payload']
+    assert len(provider.calls) == 1
+    assert records == ['feedback_request', 'ai_feedback']
+    assert [e['type'] for e in saved['events']] == ['feedback_request', 'ai_feedback']
+    assert not service.tasks
+    assert await service.request(attempt['id'], 'u1', payload) == results[0]
+    assert len(provider.calls) == 1
+    assert records == ['feedback_request', 'ai_feedback']
 
 
 @pytest.mark.parametrize('answers', [('avó', 'avô'), ('Lisboa', 'lisboa')])
