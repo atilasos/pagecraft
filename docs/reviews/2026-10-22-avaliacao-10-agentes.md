@@ -270,4 +270,13 @@ aprovado pelo Evaluator. A regressão persistente da personagem verifica também
 geometria, posição, descrição acessível e invariância do topo.
 
 A verificação geral repetida passou 527 testes Python, 35 JavaScript e
-sincronização canónica. A suite completa de browser está em execução neste SHA.
+sincronização canónica. A suite completa neste SHA teve 166 testes de browser
+aprovados e uma falha em 363,09 segundos. O teste de retoma das frações falhou
+antes da retoma: depois de cortar o pão, a opção de resposta ficou desativada.
+O mesmo teste passou isoladamente em 2,48 segundos. A inicialização e as
+preferências tardias do iframe estão em investigação, sem conclusão causal.
+
+As provas commitadas das pontes são preservadas por defeito nas verificações
+seguintes: a fixture escreve capturas e diagnósticos numa pasta temporária.
+A regeneração no repositório exige a opção explícita documentada no relatório.
+Este ajuste de infraestrutura recebeu Standards e Spec sem achados em `c1d3e2f`.
