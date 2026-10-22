@@ -1,5 +1,5 @@
 import asyncio
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import httpx
 import pytest
@@ -469,3 +469,101 @@ async def test_short_pairing_challenge_expires_after_five_minutes(board_http):
 
     assert confirmation.status_code == 404
     assert completion.status_code == 404
+
+
+async def _board_lesson(teacher):
+    classroom = (await teacher.post('/api/classes', json={
+        'name': 'Quadro descartável', 'year': 2, 'students': ['Ana', 'Bruno', 'Carla'],
+    })).json()
+    session = (await teacher.post('/api/sessions', json={
+        'class_id': classroom['id'], 'activity_slug': 'fracoes-2-minecraft',
+        'activity_title': 'Sessão A',
+    })).json()
+    return classroom, session
+
+
+async def _next_board_lesson(teacher, classroom, clock):
+    clock['now'] += timedelta(minutes=1)
+    response = await teacher.post('/api/sessions', json={
+        'class_id': classroom['id'], 'activity_slug': 'fracoes-2-minecraft',
+        'activity_title': 'Sessão B',
+    })
+    assert response.status_code == 200
+    return response.json()
+
+
+async def _wait_for_board_stream(app, session_id):
+    for _ in range(200):
+        if session_id in app.state.classroom.live_session_ids():
+            return
+        await asyncio.sleep(.001)
+    pytest.fail('O stream não subscreveu o relógio da sessão')
+
+
+async def test_old_board_stream_rejected_like_content_while_students_keep_access(board_http):
+    app, teacher, board, clock = board_http
+    await _pair(teacher, board)
+    classroom, session = await _board_lesson(teacher)
+    path = f"/api/sessions/{session['id']}"
+    transport = httpx.ASGITransport(app=app)
+    async with httpx.AsyncClient(transport=transport, base_url='https://studio.example') as student:
+        assert (await student.post(path + '/claim', json={
+            'student_id': next(iter(session['roster'])),
+        })).status_code == 200
+        # Generate a real eight-character code before B becomes current.
+        ids = list(session['roster'])
+        group = (await teacher.post(path + '/groups/claim', json={
+            'participant_ids': ids[1:], 'mode': 'pair',
+        })).json()['work_group']
+        code_response = await teacher.post(path + f"/groups/{group['id']}/access-code")
+        assert code_response.status_code == 200, code_response.text
+        code = code_response.json()['code']
+        await teacher.post(path + '/group-codes', json={'visible': True})
+        current = await _next_board_lesson(teacher, classroom, clock)
+        assert (await board.get('/api/board/session')).json()['id'] == current['id']
+        assert (await board.get(f"/api/board/sessions/{session['id']}/content")).status_code == 404
+        request = asyncio.create_task(board.get(f"/api/board/sessions/{session['id']}/stream"))
+        # Closing A bounds the reproduction even on the unfixed server.
+        await asyncio.sleep(.05)
+        assert (await student.get(path + '/me')).status_code == 200
+        assert (await teacher.get(path)).json()['status'] == 'live'
+        await teacher.post(path + '/close')
+        response = await asyncio.wait_for(request, 1)
+        assert response.status_code == 404, response.text
+        assert 'session_state_snapshot' not in response.text
+        assert code not in response.text
+        assert 'Ana' not in response.text
+        # Teacher and student SSE remain usable for A after B starts.
+        for client in (teacher, student):
+            own = await client.get(path + '/stream')
+            assert own.status_code == 200
+            assert 'event: session_state_snapshot' in own.text
+
+
+@pytest.mark.parametrize('wake', ['event', 'heartbeat'])
+async def test_open_board_stream_stops_after_switch_without_old_frames(board_http, wake):
+    app, teacher, board, clock = board_http
+    await _pair(teacher, board)
+    classroom, session = await _board_lesson(teacher)
+    stream = asyncio.create_task(board.get(f"/api/board/sessions/{session['id']}/stream"))
+    try:
+        await _wait_for_board_stream(app, session['id'])
+        await _next_board_lesson(teacher, classroom, clock)
+        if wake == 'event':
+            await teacher.post(f"/api/sessions/{session['id']}/control", json={
+                'action': 'highlight', 'unit_id': 'ANTIGA-NAO-PROJETAR',
+            })
+        else:
+            # Same publisher used by the periodic heartbeat; no record in A.
+            app.state.classroom.live_ticks.publish(session['id'])
+        response = await asyncio.wait_for(asyncio.shield(stream), .5)
+        assert response.status_code == 200
+        assert response.text.count('event: session_state_snapshot') == 1
+        assert 'ANTIGA-NAO-PROJETAR' not in response.text
+        assert 'session_state_changed' not in response.text
+        assert 'student_state_changed' not in response.text
+        assert 'work_group_state_changed' not in response.text
+        assert session['id'] not in app.state.classroom.live_session_ids()
+    finally:
+        stream.cancel()
+        await asyncio.gather(stream, return_exceptions=True)
