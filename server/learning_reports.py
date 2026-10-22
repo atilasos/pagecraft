@@ -22,6 +22,9 @@ VALUES = {
 
 
 def describe_evidence(event):
+    # Restoration checkpoints retain unfinished work, not submitted evidence.
+    if event['type'] == 'activity_state':
+        return []
     lines = []
 
     def visit(value, label='', depth=0):

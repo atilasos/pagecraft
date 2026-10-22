@@ -159,3 +159,48 @@ async def test_saved_activity_state_restores_without_becoming_evidence(learning_
     report = (await teacher.get('/api/learning/reports')).json()[0]
     assert [event['type'] for event in report['events']] == ['attempt']
     assert [event['type'] for event in report['evidence']] == ['attempt']
+
+
+@pytest.mark.parametrize('with_attempt', [False, True])
+async def test_download_keeps_checkpoints_out_of_evidence(learning_clients, with_attempt):
+    _, teacher, pupil = learning_clients
+    activity, _ = await register(teacher)
+    realization = await start(pupil, activity['code'])
+    checkpoint = {'id': 'state-1', 'type': 'activity_state', 'unitId': 'u1',
+                  'payload': {'activity': 'restore-only-marker', 'version': 1,
+                              'state': {'answer': 'draft-answer-marker'}}}
+    events = [checkpoint]
+    if with_attempt:
+        events.append({'id': 'answer-1', 'type': 'attempt', 'unitId': 'u1',
+                       'payload': {'correct': False, 'reason': 'Comparei as partes.'}})
+    events.append({**checkpoint, 'id': 'state-2'})
+    saved = await pupil.post('/api/learning/me/events', json={'events': events})
+    assert saved.status_code == 200
+    assert saved.json()['accepted'] == len(events)
+    finished = await pupil.post('/api/learning/me/finish', json={
+        'answers': {'readable': 'help'}, 'strategy': 'Li com o meu colega.',
+        'next_step': 'Voltar a comparar.'})
+    assert finished.status_code == 200
+    annotated = await teacher.patch(f"/api/learning/reports/{realization['id']}", json={
+        'name': 'Ana', 'group': '4A', 'teacher_note': 'Retomar a comparação com material.'})
+    assert annotated.status_code == 200
+
+    report = (await teacher.get('/api/learning/reports')).json()[0]
+    download = await teacher.get(f"/api/learning/reports/{realization['id']}/download")
+    assert download.status_code == 200
+    evidence = download.text.split('## Evidências no PageCraft', 1)[1].split('## Autoavaliação do aluno', 1)[0]
+    assert 'restore-only-marker' not in download.text
+    assert 'draft-answer-marker' not in download.text
+    if with_attempt:
+        assert [event['type'] for event in report['evidence']] == ['attempt']
+        assert 'Resposta esperada: Não' in evidence
+        assert 'Justificação: Comparei as partes.' in evidence
+    else:
+        assert report['evidence'] == []
+        assert evidence.strip() == ''
+    assert 'Consigo ler: Consegui com ajuda' in download.text
+    assert 'Estratégia: Li com o meu colega.' in download.text
+    assert 'Próximo passo proposto pelo aluno: Voltar a comparar.' in download.text
+    assert 'Retomar a comparação com material.' in download.text
+    restored = (await pupil.get('/api/learning/me')).json()['events']
+    assert [event['type'] for event in restored] == [event['type'] for event in events]
