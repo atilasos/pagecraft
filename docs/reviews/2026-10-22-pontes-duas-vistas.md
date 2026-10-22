@@ -63,4 +63,48 @@ A primeira avaliação completa no Hub executou 20 cenários: **15 passaram e ci
 
 Após as reparações, `uv run --project /home/proteu/pagecraft pytest tests/test_pontes_draft.py tests/test_activity_support.py -q`: **14 passaram**. `node --test tests/js/activity_support.test.cjs`: **21 passaram**. `bash skills/sync-from-canonical.sh --check`, `node --check server/static/student/support-modal.js` e `git diff --check` passaram. As atividades já entregues e o catálogo permanecem intactos.
 
-A prova verde de browser e os testes das páginas reais dos dois anfitriões serão acrescentados após o fecho da reavaliação.
+## Integração e revisão da representação
+
+Por instrução do coordenador, foi feito `git merge --no-edit feat/consulta-historico-pistas`, SHA `474e961c65dd40cb89932b0c28a0fdc0e4f02f8f`, sem conflitos, em `b93be60`. O apoio foi reincorporado a partir desse canónico em `637b55d`. O PR65 do coordenador tem essa branch como base; esta implementação não abriu outro PR nem fez push. O worktree de integração não foi alterado.
+
+A revisão Spec independente encontrou a personagem ausente na lateral. `4a6b0f6` acrescenta uma figura decorativa com posição final derivada do teste, descrição acessível e resultado textual redundante. Antes do teste próprio não existe figura. A mantém a personagem na margem direita; B para à esquerda; o colega vê o resultado do caso atual depois de testar e perde a figura ao mudar a altura até voltar a testar. A vista superior permanece byte a byte igual. A regressão persistente verifica circle/path, geometria, transform, descrição acessível, invariância do topo e os casos 1/2/3 do colega, além do texto. A revisão Spec R2 não encontrou pendências.
+
+## Retoma do foco nos anfitriões reais
+
+Os primeiros ensaios com abertura simulada não percorriam a correlação da pista, pelo que a asserção de retorno foi descartada como prova de produto. O teste foi substituído por `PageCraftSupport.requestHint('u1', true)` nos anfitriões reais, usando uma pista revista local sem fornecedor de IA. A prova genuína encontrou **21 passaram / dois falharam**: os identificadores pedido, recebido e atual coincidiam e a ação chegava, mas o foco ficava em BODY após fechar. `drafts/pontes-duas-vistas-resume-red-tests.txt` e o ticket `-repair-ticket-r3.json` conservam essa evidência.
+
+`c4c8e6a` corrige a retoma cooperativa na fonte canónica `server/pipeline/prompts/activity-support.js`. Depois de continuar ou pedir o professor, o componente no iframe foca a ação atual. Outra pista conserva o foco no novo modal; pistas obsoletas e painéis escondidos/inertes não recebem foco. Uma confirmação assíncrona do pedido ao professor conserva o foco já recuperado. Os espelhos e o rascunho foram sincronizados. Não se relaxou o sandbox nem se leu o DOM do iframe a partir do anfitrião.
+
+Com o canónico final integrado: **14 testes Python e 35 JavaScript passaram**, incluindo três regressões da retoma nos percursos autónomo, permanente e Studio. A rechecagem linguística `08091a7` manteve PASS com texto, ARIA, figura e pistas preservados. HTML para a prova final: SHA256 `c4e77ff6fe3ba903a16332361cd759b23d42cc55e244bbaee1dcce30ab2fb1d5`.
+
+## Prova verde final
+
+**23/23 cenários passaram em Chromium real do Hub, 32,25 s**, no commit `08091a7`, com o SHA256 acima. A sessão própria do Evaluator foi `pagecraft-pontes-evaluation`, perfil `temporary`, processo 3274139. A porta 9331 foi atribuída pelo Hub à nova sessão e confirmada no seu registo; não foi reutilizada a sessão de outro agente. As sessões temporárias próprias foram fechadas. A sessão `research` do coordenador não foi utilizada.
+
+Reprodução, depois de abrir uma sessão própria do Hub e obter o seu CDP atual:
+
+```sh
+PAGECRAFT_TEST_CDP=<URL-CDP-da-sessão-própria> uv run --project /home/proteu/pagecraft --with playwright pytest tests/browser/test_pontes_duas_vistas.py -q
+uv run --project /home/proteu/pagecraft pytest tests/test_pontes_draft.py tests/test_activity_support.py -q
+node --test tests/js/activity_support.test.cjs
+bash skills/sync-from-canonical.sh --check
+git diff --check
+```
+
+As fixtures HTTP e Studio do teste são próprias, em loopback e com repositório/dados descartáveis. Não se publica a atividade nem se contacta um fornecedor real de IA. Os dois anfitriões são páginas reais: atividade permanente em pré-visualização privada e `/student/` após turma/sessão/entrada normais. O guião local gera identificadores genuínos e o teste verifica a ação correlacionada, o foco no apoio e a continuação por teclado. Os restantes percursos incluem os três apoios, cada pedido obrigatório, respostas erradas completas, revisão, retoma sem duplicação, modal, resposta tardia ignorada, offline, fonte real, alvos e larguras 390/768/1280.
+
+O envelope máximo observado no browser foi **4092 bytes**. O harness extremo do Builder, com controlos JSON escapados e revisão máxima, mediu **4095 bytes**. Ambos ficam abaixo de 4096. Os textos obrigatórios são preservados; a reflexão opcional pode encolher nesse caso extremo de controlos escapados. A incorporação final corresponde exatamente às fontes canónicas de `activity-support.js`, CSS e `support-modal.js`, à fonte Didact Gothic binária e à licença OFL.
+
+Provas principais, todas com prefixo `drafts/pontes-duas-vistas`:
+
+- `-green-tests.txt`, `-final-tests.txt`, `-evaluation.json`, `-repair-resolution.json`: prova verde e resolução dos achados, preservando as provas vermelhas.
+- `-green-character-ab.png`, `-green-character-peer.png`, `-green-character-evidence.json`: referente visual e invariância das vistas superiores.
+- `-green-real-learning-evidence.json`, `-green-real-student-evidence.json` e respetivos `-resumed.png`: hosts reais, cache v2, teclado e retoma com foco.
+- `-final-embedded-assets.json`, `-browser-metrics.json`: fontes incorporadas e orçamento de checkpoint.
+- `-private-report.txt`: relatório de ensaio descartável com evidência e voz do aluno separadas, excluído dos relatórios de alunos.
+
+O orquestrador repetiu os testes finais: **14 Python e 35 JavaScript passaram**, sincronização canónica sem drift e diff sem erros. A comparação com a base `feat/consulta-historico-pistas` não altera `activities/` nem `catalog.json`.
+
+## Entrega e limites
+
+Rascunho privado pronto para revisão do professor, sem registo ou publicação de produção e sem push por este agente. O coordenador criou o PR65 draft e fará a atualização remota. A revisão humana da adequação à turma continua necessária; não houve ensaio com crianças, dispositivos físicos, leitor de ecrã ou fornecedor de IA real. As provas de hosts usam uma realização individual e um aluno de sessão descartáveis; não comprovam um percurso completo de grupo com múltiplos participantes.

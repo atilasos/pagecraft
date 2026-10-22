@@ -1,7 +1,7 @@
 {
   "slug": "pontes-duas-vistas",
   "title": "Duas pontes, duas vistas",
-  "status": "repairing-private-draft",
+  "status": "private-draft-ready-for-teacher-review",
   "year": [
     3,
     4
@@ -41,12 +41,12 @@
     {
       "role": "Builder",
       "agent": "/root/builder",
-      "status": "repairing",
+      "status": "complete",
       "artifacts": [
         "drafts/pontes-duas-vistas.html",
         "drafts/pontes-duas-vistas-builder.json"
       ],
-      "commit": "204ee68"
+      "commit": "5f6a4ed"
     },
     {
       "role": "Proofreader",
@@ -55,16 +55,18 @@
         "drafts/pontes-duas-vistas-proofread.json"
       ],
       "agent": "/root/proofreader",
-      "commit": "fdc8914"
+      "commit": "08091a7"
     },
     {
       "role": "Evaluator",
-      "status": "fail-visual-repair",
+      "status": "pass",
       "artifacts": [
-        "drafts/pontes-duas-vistas-evaluation.json"
+        "drafts/pontes-duas-vistas-evaluation.json",
+        "drafts/pontes-duas-vistas-repair-resolution.json",
+        "tests/browser/test_pontes_duas_vistas.py"
       ],
       "agent": "/root/evaluator",
-      "commit": "18c8dd5"
+      "commit": "a978619"
     }
   ],
   "execution": "Fases delegadas sequencialmente no worktree partilhado, sem agentes adicionais.",
@@ -81,9 +83,47 @@
       "support-first-click-lost"
     ]
   },
-  "integration_pending": {
-    "branch": "feat/consulta-historico-pistas",
-    "sha": "474e961c65dd40cb89932b0c28a0fdc0e4f02f8f",
-    "action": "merge --no-edit antes da avaliação final e reincorporação canónica"
-  }
+  "integrations": [
+    {
+      "branch": "feat/consulta-historico-pistas",
+      "sha": "474e961c65dd40cb89932b0c28a0fdc0e4f02f8f",
+      "merge_commit": "b93be60",
+      "reembed_commit": "637b55d"
+    }
+  ],
+  "html_sha256": "c4e77ff6fe3ba903a16332361cd759b23d42cc55e244bbaee1dcce30ab2fb1d5",
+  "pull_request": {
+    "url": "https://github.com/atilasos/pagecraft/pull/65",
+    "created_by": "root coordinator",
+    "draft": true,
+    "push_by_implementation_agent": false
+  },
+  "final_validation": {
+    "tested_code_commit": "08091a7",
+    "html_sha256": "c4e77ff6fe3ba903a16332361cd759b23d42cc55e244bbaee1dcce30ab2fb1d5",
+    "browser": {
+      "passed": 23,
+      "failed": 0,
+      "duration_seconds": 32.25,
+      "log": "drafts/pontes-duas-vistas-final-tests.txt",
+      "session": "pagecraft-pontes-evaluation",
+      "profile": "temporary",
+      "session_closed": true
+    },
+    "python_passed": 14,
+    "javascript_passed": 35,
+    "canonical_sync": "passed",
+    "diff_check": "passed",
+    "maximum_browser_checkpoint_bytes": 4092,
+    "maximum_builder_extreme_checkpoint_bytes": 4095,
+    "limit_bytes_exclusive": 4096,
+    "embedded_assets": "drafts/pontes-duas-vistas-final-embedded-assets.json",
+    "published_activities_changed": false
+  },
+  "limitations": [
+    "Sem observação com crianças ou dispositivos físicos e leitor de ecrã.",
+    "Sem fornecedor de IA real; pistas revistas locais e resposta tardia simulada nos testes.",
+    "Hosts reais individuais testados com dados descartáveis; não foi percorrido um grupo real com vários participantes.",
+    "Revisão do professor continua necessária antes de publicar."
+  ]
 }
