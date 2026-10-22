@@ -20,7 +20,16 @@ import pytest
 ROOT = Path(__file__).resolve().parents[2]
 SLUG = 'pontes-duas-vistas'
 DRAFT = ROOT / 'drafts' / (SLUG + '.html')
-PROOF = ROOT / 'drafts'
+PROOF: Path
+
+
+@pytest.fixture(scope='module', autouse=True)
+def proof_directory(tmp_path_factory):
+    """Routine verification must preserve the committed evaluation artefacts."""
+    global PROOF
+    requested = os.environ.get('PAGECRAFT_PONTES_PROOF')
+    PROOF = Path(requested) if requested else tmp_path_factory.mktemp('pontes-proof')
+    PROOF.mkdir(parents=True, exist_ok=True)
 
 
 @pytest.fixture(scope='module')

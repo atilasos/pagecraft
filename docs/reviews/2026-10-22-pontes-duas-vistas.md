@@ -105,6 +105,11 @@ Provas principais, todas com prefixo `drafts/pontes-duas-vistas`:
 
 O orquestrador repetiu os testes finais: **14 Python e 35 JavaScript passaram**, sincronização canónica sem drift e diff sem erros. A comparação com a base `feat/consulta-historico-pistas` não altera `activities/` nem `catalog.json`.
 
+As execuções normais dos testes guardam novas capturas e diagnósticos numa
+pasta temporária do pytest, preservando as provas desta avaliação commitadas.
+Para regenerar deliberadamente as provas no repositório, acrescentar
+`PAGECRAFT_PONTES_PROOF=drafts` ao comando e rever o diff antes de commitar.
+
 ## Entrega e limites
 
 Rascunho privado pronto para revisão do professor, sem registo ou publicação de produção e sem push por este agente. O coordenador criou o PR65 draft e fará a atualização remota. A revisão humana da adequação à turma continua necessária; não houve ensaio com crianças, dispositivos físicos, leitor de ecrã ou fornecedor de IA real. As provas de hosts usam uma realização individual e um aluno de sessão descartáveis; não comprovam um percurso completo de grupo com múltiplos participantes.
