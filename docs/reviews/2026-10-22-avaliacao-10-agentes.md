@@ -157,9 +157,9 @@ A primeira revisão encontrou cinco problemas de cumprimento dos contratos:
 - Histórico de pistas: ouvir uma pista noutro painel mudava a tarefa ativa e
   cancelava um pedido IA. A consulta é tratada antes da mudança de unidade.
 
-Os três primeiros receberam segunda revisão Spec sem achados. A segunda
-revisão das pistas e do contexto docente e a avaliação final do novo rascunho
-ainda estão em curso neste ponto do registo.
+Os cinco problemas receberam segunda revisão Spec sem achados. O revisor
+repetiu os cenários anteriores das pistas com os runtimes dos dois SHAs e
+confirmou a diferença. O novo rascunho continua na sua avaliação própria.
 
 ## Integração local
 
@@ -177,3 +177,11 @@ A verificação geral intermédia encontrou uma expectativa antiga no teste do
 cookie, que não admitia a versão da identidade devolvida no claim. Atualizada
 para verificar também a mesma versão na retoma, mantendo a ausência de credencial
 no corpo e os atributos HttpOnly. Os 18 testes de cookie e API relacionados passaram.
+
+## Revisão independente da integração
+
+No SHA `e752541`, as duas dimensões tiveram zero achados. As leituras verificaram
+resoluções manuais e automáticas, IDs e ordem dos scripts, validação dos anos,
+publicação revista, autoria e destinatários, consulta de pistas e seleção do Quadro.
+O principal executou 526 testes Python e 32 JavaScript, todos aprovados, e a
+sincronização canónica passou. A execução conjunta de browser está em curso.
