@@ -158,7 +158,10 @@ const groupReflection = (() => {
       owner_name: context.group.members.find(member=>member.student_id===current).display_name,
       expected_revision: drafts[current]?.expected_revision ?? saved[current]?.payload.revision ?? 0,
       answers, strategy:element('reflection-strategy').value, next_step:element('reflection-next').value,
+      retained_next_step: drafts[current]?.retained_next_step ?? saved[current]?.payload.next_step ?? '',
+      remove_next_step: element('reflection-remove-step').checked,
     };
+    element('reflection-next').disabled = drafts[current].remove_next_step;
     persist();
     renderPendingReflections();
     participants();
@@ -202,7 +205,10 @@ const groupReflection = (() => {
     });
     element('reflection-strategy').value = voice.strategy || '';
     // A saved intention is a reference, never an answer to the new question.
-    element('reflection-next').value = (draft?.pending || draft)?.next_step || '';
+    element('reflection-next').value = draft?.next_step ?? draft?.pending?.next_step ?? '';
+    const retainedStep = draft?.retained_next_step ?? saved[studentId]?.payload.next_step ?? '';
+    element('reflection-step-choice').hidden = !retainedStep.trim();
+    element('reflection-remove-step').checked = !!draft?.remove_next_step;
     element('reflection-previous-step').textContent = previousSteps[studentId] || '';
     element('reflection-previous').hidden = !previousSteps[studentId];
     element('reflection-reload').hidden = !isOldDraft(draft);
@@ -216,6 +222,7 @@ const groupReflection = (() => {
     element('group-reflect-btn').disabled = sending;
     element('return-ticket-btn').disabled = sending;
     element('reflection-form').querySelectorAll('input, textarea').forEach(input => { input.disabled = sending || pending; });
+    element('reflection-next').disabled = sending || pending || element('reflection-remove-step').checked;
     element('reflection-skip').disabled = sending || pending;
     element('reflection-save').disabled = sending || isOldDraft(drafts[current]);
     element('reflection-reload').disabled = sending;
@@ -252,7 +259,9 @@ const groupReflection = (() => {
       draft.pending = {
         student_id:current, event_id:crypto.randomUUID(), expected_revision:draft.expected_revision, composition_version:context.group.composition_version, access_version:context.group.access_version,
         answers:skipped ? {} : draft.answers, strategy:skipped ? '' : draft.strategy,
-        next_step:skipped ? '' : draft.next_step, skipped,
+        // Empty new text keeps the intention attached to this draft's revision.
+        // Only the explicit withdrawal clears it; retries reuse this exact payload.
+        next_step:skipped || draft.remove_next_step ? '' : draft.next_step.trim() ? draft.next_step : draft.retained_next_step, skipped,
       };
       persist();
     }

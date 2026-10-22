@@ -76,6 +76,125 @@ def test_revising_reflection_preserves_the_saved_step(page, studio_origin, chang
             assert voice['answers'] == {'iguais': 'help'}
 
 
+@pytest.mark.parametrize('choice', ['keep', 'replace', 'remove'])
+def test_step_choice_survives_draft_reload_and_lost_save_response(page, studio_origin, choice):
+    from playwright.sync_api import expect
+    with httpx.Client(base_url=studio_origin) as teacher:
+        session = create_session(teacher)
+        path = '/api/sessions/' + session['id']
+        enter_pair(page, studio_origin, session['join_code'])
+        save_intentions(page)
+        page.get_by_role('button', name='A minha reflexão', exact=True).click()
+        page.get_by_role('button', name='Ana · Guardada', exact=True).click()
+        page.get_by_label('O que te ajudou?').fill('Comparei com o meu colega.')
+        new_text = 'Comparar terços.' if choice == 'replace' else ''
+        expected_step = {'keep': 'Comparar as metades.', 'replace': new_text, 'remove': ''}[choice]
+        next_step = page.get_by_label('O que queres experimentar a seguir?')
+        withdrawal = page.get_by_label('Quero retirar o passo guardado', exact=True)
+        if choice == 'remove':
+            next_step.fill('Texto ainda por decidir.')
+            withdrawal.check()
+            expect(next_step).to_be_disabled()
+            withdrawal.uncheck()
+            expect(next_step).to_be_enabled()
+            expect(next_step).to_have_value('Texto ainda por decidir.')
+        next_step.fill(new_text)
+        if choice == 'remove':
+            withdrawal.check()
+        page.get_by_role('button', name='Bruno · Guardada', exact=True).click()
+        expect(withdrawal).not_to_be_checked()
+        expect(next_step).to_have_value('')
+        page.get_by_role('button', name='Ana · Por guardar', exact=True).click()
+        expect(withdrawal).to_be_checked(checked=choice == 'remove')
+        page.reload()
+        page.get_by_role('button', name='A minha reflexão', exact=True).click()
+        page.get_by_role('button', name='Ana · Por guardar', exact=True).click()
+        expect(next_step).to_have_value(new_text)
+        expect(withdrawal).to_be_checked(checked=choice == 'remove')
+        expect(page.locator('#reflection-previous-step')).to_have_text('Comparar as metades.')
+        lost = []
+
+        def lose_response(route):
+            lost.append(route.request.post_data_json)
+            route.fetch()
+            route.abort()
+
+        page.route('**/groups/me/reflections', lose_response, times=1)
+        page.get_by_role('button', name='Guardar a minha reflexão', exact=True).click()
+        expect(page.locator('#reflection-status')).to_contain_text('Não foi possível guardar')
+        assert lost[0]['next_step'] == expected_step
+        assert lost[0]['expected_revision'] == 1
+        page.reload()
+        page.get_by_role('button', name='A minha reflexão', exact=True).click()
+        page.get_by_role('button', name='Ana · Por guardar', exact=True).click()
+        expect(next_step).to_have_value(new_text)
+        expect(next_step).to_be_disabled()
+        with page.expect_request(lambda request: request.method == 'POST' and request.url.endswith('/groups/me/reflections')) as retried:
+            page.get_by_role('button', name='Guardar a minha reflexão', exact=True).click()
+        expect(page.locator('#reflection-status')).to_contain_text('Reflexão guardada.')
+        assert retried.value.post_data_json == lost[0]
+        history = teacher.get(path + '/students/' + list(session['roster'])[0] + '/history').json()['events']
+        voices = [event['payload'] for event in history if event['type'] == 'individual_reflection']
+        assert [(voice['revision'], voice['next_step']) for voice in voices] == [
+            (1, 'Comparar as metades.'), (2, expected_step)
+        ]
+        page.get_by_role('button', name='Voltar à atividade', exact=True).click()
+        page.get_by_role('button', name='O meu próximo passo', exact=True).click()
+        ticket = page.locator('#return-ticket')
+        if choice == 'remove':
+            expect(ticket.get_by_role('button', name='Ana', exact=True)).to_have_count(0)
+        else:
+            ticket.get_by_role('button', name='Ana', exact=True).click()
+            expect(page.locator('#return-ticket-text')).to_have_text(expected_step)
+
+
+@pytest.mark.parametrize('choice', ['keep', 'replace', 'remove'])
+def test_step_choice_conflict_requires_review_of_the_saved_revision(page, studio_origin, choice):
+    from playwright.sync_api import expect
+    with httpx.Client(base_url=studio_origin) as teacher:
+        session = create_session(teacher)
+        endpoint = studio_origin + '/api/sessions/' + session['id'] + '/groups/me/reflections'
+        student_id = list(session['roster'])[0]
+        enter_pair(page, studio_origin, session['join_code'])
+        save_intentions(page)
+        page.get_by_role('button', name='A minha reflexão', exact=True).click()
+        page.get_by_role('button', name='Ana · Guardada', exact=True).click()
+        page.get_by_label('O que te ajudou?').fill('A minha revisão local.')
+        if choice == 'replace':
+            page.get_by_label('O que queres experimentar a seguir?').fill('O meu novo passo local.')
+        elif choice == 'remove':
+            page.get_by_label('Quero retirar o passo guardado', exact=True).check()
+        # A concurrent, authorized save makes the local draft's revision stale.
+        response = page.request.post(endpoint, data={
+            'student_id': student_id, 'event_id': 'concurrent-step', 'expected_revision': 1,
+            'answers': {}, 'strategy': 'Outra revisão guardada.', 'next_step': 'Experimentar quartos.'
+        })
+        assert response.ok
+        page.reload()
+        page.get_by_role('button', name='A minha reflexão', exact=True).click()
+        page.get_by_role('button', name='Ana · Por guardar', exact=True).click()
+        with page.expect_request(lambda request: request.method == 'POST' and request.url.endswith('/groups/me/reflections')) as sent:
+            page.get_by_role('button', name='Guardar a minha reflexão', exact=True).click()
+        expect(page.get_by_role('button', name='Rever versão guardada', exact=True)).to_be_visible()
+        expect(page.locator('#reflection-status')).not_to_contain_text('A guardar')
+        assert sent.value.post_data_json['expected_revision'] == 1
+        assert sent.value.post_data_json['next_step'] == {
+            'keep': 'Comparar as metades.', 'replace': 'O meu novo passo local.', 'remove': ''
+        }[choice]
+        assert page.request.get(endpoint).json()['reflections'][student_id]['payload']['revision'] == 2
+        page.get_by_role('button', name='Rever versão guardada', exact=True).click()
+        expect(page.get_by_label('O que queres experimentar a seguir?')).to_have_value('')
+        expect(page.get_by_label('Quero retirar o passo guardado', exact=True)).not_to_be_checked()
+        expect(page.locator('#reflection-previous-step')).to_have_text('Experimentar quartos.')
+        page.get_by_label('O que te ajudou?').fill('Revi a versão guardada.')
+        page.get_by_role('button', name='Guardar a minha reflexão', exact=True).click()
+        expect(page.locator('#reflection-status')).to_contain_text('Reflexão guardada.')
+        voice = page.request.get(endpoint).json()['reflections'][student_id]['payload']
+        assert (voice['revision'], voice['next_step'], voice['strategy']) == (
+            3, 'Experimentar quartos.', 'Revi a versão guardada.'
+        )
+
+
 def test_saved_intentions_are_read_only_and_separate_from_new_step(page, studio_origin):
     from playwright.sync_api import expect
     errors = []
@@ -122,13 +241,17 @@ def test_saved_intentions_are_read_only_and_separate_from_new_step(page, studio_
         page.get_by_role('button', name='Ana · Guardada', exact=True).click()
         expect(page.locator('#reflection-previous-step')).to_have_text('Comparar as metades.')
         expect(page.get_by_label('O que queres experimentar a seguir?')).to_have_value('')
+        # A second edit in this opening keeps the CURRENT intention, not the frozen reference.
+        page.get_by_label('O que te ajudou?').fill('Revimos as partes iguais.')
+        page.get_by_role('button', name='Guardar a minha reflexão', exact=True).click()
+        expect(page.locator('#reflection-status')).to_contain_text('Reflexão guardada.')
         page.get_by_role('button', name='Voltar à atividade', exact=True).click()
         page.get_by_role('button', name='A minha reflexão', exact=True).click()
         page.get_by_role('button', name='Ana · Guardada', exact=True).click()
         expect(page.locator('#reflection-previous-step')).to_have_text('Comparar terços.')
         history = teacher.get(path + '/students/' + list(session['roster'])[0] + '/history').json()['events']
         assert [event['payload']['next_step'] for event in history if event['type'] == 'individual_reflection'] == [
-            'Comparar as metades.', 'Comparar terços.'
+            'Comparar as metades.', 'Comparar terços.', 'Comparar terços.'
         ]
         assert not errors
 

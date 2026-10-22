@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>PageCraft — Aluno</title>
-<link rel="stylesheet" href="/studio.css?v=groups-retoma-1">
+<link rel="stylesheet" href="/studio.css?v=bilhete-regresso-2">
 </head>
 <body class="student-page">
 <a class="skip-link" href="#main-content">Saltar para entrar na aula</a>
@@ -110,6 +110,10 @@
           <p id="reflection-previous-step"></p>
         </div>
         <label for="reflection-next">O que queres experimentar a seguir?</label>
+        <div id="reflection-step-choice" hidden>
+          <p id="reflection-next-help">Se não escreveres outro, manténs o passo guardado.</p>
+          <label class="reflection-remove-choice"><input id="reflection-remove-step" type="checkbox">Quero retirar o passo guardado</label>
+        </div>
         <textarea id="reflection-next" maxlength="1500" rows="2"></textarea>
         <p class="button-line"><button id="reflection-save" type="submit">Guardar a minha reflexão</button>
           <button id="reflection-skip" class="ghost" type="button">Prefiro não responder agora</button></p>
@@ -130,7 +134,7 @@
     </div>
   </div>
 </main>
-<script src="/student/reflection.js?v=bilhete-regresso-1"></script>
+<script src="/student/reflection.js?v=bilhete-regresso-2"></script>
 <script src="/student/support-modal.js?v=1"></script>
 <script src="/student/app.js?v=groups-retoma-2"></script>
 </body>
