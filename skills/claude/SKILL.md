@@ -24,6 +24,8 @@ O orquestrador (a sessão principal) coordena, valida artefactos e decide quando
 
 Lê `references/activity-experience.md` e `references/age-adaptation.md` na pasta desta skill antes de executar a fase. Aplicam as decisões de conceção, avanço, reflexão, tipografia e mínimos por idade. Antes da revisão do HTML, incorpora a fonte real com `python3 scripts/embed_gothic_font.py --activity <caminho-do-html>`, a partir do repositório PageCraft.
 
+Para cada atividade nova, lê também [apoio contextual](references/contextual-support.md). O Architect define pistas por unidade no DocSpec, o Builder usa o componente comum e incorpora o plano com `scripts/embed_activity_support.py` antes da revisão, e o Evaluator verifica o apoio durante o percurso. O tema e os recursos são definidos pelo pedido do professor.
+
 ## Fontes de verdade
 
 1. Pedido explícito do utilizador/professor, desde que não viole acessibilidade/segurança.

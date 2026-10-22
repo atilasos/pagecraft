@@ -25,10 +25,11 @@ def test_seed_covers_all_triage_bands_and_orders_needs_by_wait(tmp_path):
     )
 
     assert set(by_band) == {"Sem sinal", "Precisa de ti", "A tropeçar", "A fluir"}
-    assert [student["display_name"] for student in needs] == ["Beatriz", "Carlos"]
+    assert [student["display_name"] for student in needs] == ["Beatriz"]
     assert needs[0]["triage"]["explicit_help"] is True
-    assert needs[1]["triage"]["explicit_help"] is False
-    assert manifest["expected"]["Precisa de ti"] == ["Beatriz", "Carlos"]
+    assert students["carlos01"]["triage"]["reason"] == "Sem atividade recente no PageCraft"
+    assert students["carlos01"]["triage"]["band"] == "A fluir"
+    assert manifest["expected"]["Precisa de ti"] == ["Beatriz"]
     assert len(classroom["students"]) == 6
 
 

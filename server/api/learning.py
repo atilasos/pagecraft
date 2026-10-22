@@ -7,12 +7,13 @@ from typing import Annotated, Literal
 
 from fastapi import APIRouter, HTTPException, Request, Response
 from fastapi.responses import FileResponse, PlainTextResponse
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, ValidationInfo, field_validator
 
 from ..access import (RateLimitOperation, Role, RoutePolicy, TrustChannel, access_policy,
                       rate_limited)
 from ..learning import LEARNING_COOKIE
 from ..criteria import Criterion
+from ..feedback_context import CONTEXT_EVENT_TYPES
 
 ACTIVITY_CONTENT_HEADERS = {
         'Content-Security-Policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; media-src data:; font-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'",
@@ -68,20 +69,42 @@ class Event(BaseModel):
     id: Annotated[str, Field(min_length=1, max_length=80)]
     type: Literal['activity_loaded', 'unit_started', 'attempt', 'discovery',
                   'assessment_result', 'help_needed', 'share_requested', 'language_changed', 'level_changed',
-                  'activity_state']
+                  'activity_state', 'hint_presented', 'hint_feedback', 'hint_acknowledged', 'hint_listened',
+                  'work_location', 'help_resolved']
     unitId: str = Field(default='', max_length=80)
     payload: dict = Field(default_factory=dict)
 
+    @field_validator('id')
+    @classmethod
+    def client_identifier(cls, value):
+        if value.startswith(('request:', 'feedback:')):
+            raise ValueError('Identificador reservado ao serviço de feedback.')
+        return value
+
     @field_validator('payload')
     @classmethod
-    def small_payload(cls, value):
-        if len(json.dumps(value)) > 4096:
+    def small_payload(cls, value, info: ValidationInfo):
+        limit = 12000 if info.data.get("type") in CONTEXT_EVENT_TYPES else 4096
+        if len(json.dumps(value)) > limit:
             raise ValueError('Registo demasiado longo.')
         return value
 
 
 class EventBatch(BaseModel):
     events: list[Event] = Field(max_length=100)
+
+
+class FeedbackInput(BaseModel):
+    unit_id: str = Field(min_length=1, max_length=80)
+    request_id: str = Field(pattern=r'^[a-zA-Z0-9-]{1,80}$')
+    context: dict
+
+    @field_validator('context')
+    @classmethod
+    def bounded_context(cls, value):
+        if len(json.dumps(value)) > 12000:
+            raise ValueError('Contexto demasiado longo.')
+        return value
 
 
 class Assessment(BaseModel):
@@ -174,6 +197,14 @@ async def events(data: EventBatch, request: Request):
     return {'accepted': count}
 
 
+@router.post('/api/learning/me/feedback')
+@access_policy(RoutePolicy.LEARNER, RoutePolicy.TEACHER)
+async def feedback(data: FeedbackInput, request: Request):
+    return await request.app.state.learning_feedback.request(
+        await current_id(request), data.unit_id, dict(data.context, request_id=data.request_id),
+    )
+
+
 @router.post('/api/learning/me/finish')
 @access_policy(RoutePolicy.LEARNER, RoutePolicy.TEACHER)
 async def finish(data: Assessment, request: Request):
@@ -191,6 +222,18 @@ async def leave(response: Response):
 @access_policy(RoutePolicy.TEACHER)
 async def reports(request: Request):
     return await request.app.state.learning.reports()
+
+
+@router.get('/api/learning/support-summary')
+@access_policy(RoutePolicy.TEACHER)
+async def support_summary(request: Request, code: Code, group: str = '', name: str = '', date_from: str = '', date_to: str = ''):
+    from ..support_summary import build_support_summary, realization_support_events
+    attempts = [a for a in await request.app.state.learning.reports()
+                if a['code'] == code.upper() and (not group or group.casefold() in a['group'].casefold())
+                and (not name or name.casefold() in a['name'].casefold())
+                and (not date_from or a['started_at'][:10] >= date_from)
+                and (not date_to or a['started_at'][:10] <= date_to)]
+    return build_support_summary(realization_support_events(attempts))
 
 
 @router.patch('/api/learning/reports/{identifier}')

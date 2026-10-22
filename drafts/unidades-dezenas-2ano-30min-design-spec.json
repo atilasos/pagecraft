@@ -1,0 +1,100 @@
+{
+  "slug": "unidades-dezenas-2ano-30min",
+  "docspec": "drafts/unidades-dezenas-2ano-30min-docspec.json",
+  "title": "A oficina dos números",
+  "references": [
+    "skills/codex/references/activity-experience.md",
+    "skills/codex/references/age-adaptation.md",
+    "PRODUCT.md"
+  ],
+  "palette": {
+    "bg": "oklch(96% 0.009 80)",
+    "surface": "oklch(99% 0.006 80)",
+    "primary": "oklch(42% 0.09 250)",
+    "accent": "oklch(78% 0.09 65)",
+    "ink": "oklch(24% 0.018 70)"
+  },
+  "functional": {
+    "ok": "oklch(42% 0.07 150)",
+    "warn": "oklch(43% 0.08 85)",
+    "focus": "oklch(46% 0.15 255)"
+  },
+  "typography": {
+    "fontFamily": "\"Century Gothic\", \"Didact Gothic\", \"URW Gothic\", \"Avant Garde\", sans-serif",
+    "scale": "kids-6-7",
+    "baseSizePx": 22,
+    "headingSizePx": 32,
+    "targetNumberSizePx": 44,
+    "microcopySizePx": 18,
+    "maxLineCh": 50,
+    "lineHeight": 1.45,
+    "weights": [400, 700],
+    "italicAllowed": false,
+    "allCapsAllowed": false,
+    "fontEmbedding": "Executar scripts/embed_gothic_font.py no HTML antes de revisão e após reparações. Nenhum import remoto."
+  },
+  "layout": {
+    "borderRadius": 14,
+    "spacing": "comfortable",
+    "maxWidthPx": 960,
+    "padding": "24px; 16px abaixo de 600px",
+    "gapPx": 20,
+    "pageStructure": "Cabeçalho curto, apoio, etapa atual, área de manipulação, feedback e navegação. Uma etapa visível; uma pergunta ou construção ativa de cada vez. Sem painéis laterais nem métricas.",
+    "responsive": "Empilhar controlos e representações quando o espaço o pedir. As colunas Dezenas/Unidades podem manter-se lado a lado se cada uma tiver pelo menos 120px. Em 390px os botões quebram linha sem encolher abaixo de 56px; nenhuma rolagem horizontal.",
+    "stageIndicator": "Cinco etapas numeradas com título curto. Atual tem contorno e aria-current; respondida tem marca acompanhada de texto. Etapas futuras não disponíveis mantêm explicação legível.",
+    "navigation": "Voltar e Seguinte junto do pedido em falta. Dentro de Construir, oferecer um alvo de cada vez e acesso claro aos alvos já respondidos. Botão Seguinte só depende das respostas obrigatórias, nunca de acertar."
+  },
+  "representations": {
+    "unit": "Um quadrado de 20px de lado, contorno ink de 2px e preenchimento accent. A unidade visual é sempre igual em barras e cubos soltos.",
+    "ten": "Barra vertical feita de exatamente 10 quadrados de 20px iguais ao cubo, encostados sem lacunas. Mostrar as nove divisões interiores. Cada barra tem largura 20px e altura 200px. Nunca desenhar uma barra indivisa nem contar uma barra como um cubo.",
+    "selectionTarget": "Cada cubo selecionável de 20px fica num botão de pelo menos 56x56px. Seleção acrescenta contorno primary, marca e aria-pressed. Os alvos separados não se sobrepõem.",
+    "groupingFrame": "Dez lugares visuais iguais, organizados em duas linhas de cinco; cada lugar recebe uma cópia visual do cubo selecionado. Moldura não é uma resposta nem preenche automaticamente a seleção. A barra formada conserva as dez células, embora mude a disposição.",
+    "buildColumns": "Cabeçalhos Dezenas e Unidades acompanhados de uma barra e um cubo. Até nove barras verticais cabem com quebra de linha dentro da coluna; cubos soltos usam grelha. Sem total calculado, decomposição certa ou preenchimento-alvo antes da confirmação.",
+    "zero": "Coluna vazia usa contorno tracejado discreto e texto Sem unidades soltas. Confirmar permite declarar zero peças; ausência de toque continua a ser por responder.",
+    "comparison": "24 e 42 têm numeral e representação na mesma área. Barras e cubos alinham pela base para comparar. Destacar o algarismo 4 com contorno e ligação à respetiva coluna; não destacar automaticamente o maior.",
+    "accessibleNames": "Representações estáticas têm rótulo como 2 dezenas e 4 unidades; ilustração interna decorativa é ocultada dos leitores de ecrã. Em construção, o rótulo descreve peças presentes sem revelar a decomposição esperada.",
+    "geometry": "Todas as quantidades desenhadas correspondem ao estado real. Opcionalmente reduzir o quadrado a 18px em 390px, reduzindo também cada célula da barra e cada cubo da mesma representação. Alvos interativos continuam com 56px."
+  },
+  "components": {
+    "buttons": "Altura e largura mínimas 56px, radius 12px, contorno 2px. Principal primary com texto surface; secundário surface com texto ink. Ícone e texto curto. Não usar apenas + ou menos sem rótulo acessível explícito.",
+    "cards": "Uma superfície central com contorno discreto e espaço livre. Sem faixa lateral, gradiente ou decoração sem função.",
+    "supportSelector": "Com pistas, Passo a passo e Mais desafios em botões neutros com o mesmo estilo. Selecionado tem contorno primary, marca e aria-pressed. Quebra de linha permitida. A troca conserva respostas e etapa; extensões facultativas não mudam os requisitos.",
+    "criteria": "No começo, três frases do DocSpec com ícones funcionais juntar/separar, barra/cubo e algarismo. Uma ilustração pequena e botão Começar. Não escrever a regra 10 unidades = 1 dezena antes da exploração.",
+    "grouping": "Mostrar cubos e pista junto da seleção. Aproximar Juntar da moldura; Separar da barra. Manter confirmações explícitas Mostrar o meu grupo e Mostrar peças soltas disponíveis para hipóteses incompletas. Selecionar ou manipular não equivale a responder.",
+    "building": "Número alvo grande e controlos Acrescentar/Retirar junto de cada coluna. Uma construção ativa por vez, seguida de Confirmar construção. Após confirmação, apresentar a relação entre numeral e peças; editar volta a pedir confirmação só daquele alvo.",
+    "choices": "Escolhas são botões grandes com numeral e conjunto representado. Estado escolhido tem contorno, marca e aria-pressed. No comparar, primeiro Qual tem mais peças?, depois Quanto vale o 4 em 42?. Rever escolhas anteriores continua possível.",
+    "feedback_correct": "Tinta ok com símbolo de confirmação, em superfície clara, e frase que explica a descoberta. Mostrar as peças reais ou a troca que conservou a quantidade. Não usar pontuação, medalhas ou classificação.",
+    "feedback_incorrect": "Tinta warn com símbolo de rever e frase concreta curta. A pista visual aparece junto da ação, realçando moldura, peças ou coluna relevante. Nunca vermelho, resposta automática preenchida ou mensagem de censura.",
+    "missingResponse": "Mensagem de 18px junto do avanço identifica o pedido por responder. O erro matemático recebe pista, mas não mantém Seguinte bloqueado depois da resposta.",
+    "summary": "Na partilha mostrar as construções confirmadas reais, incluindo hipóteses a rever. Não substituir o trabalho por respostas esperadas.",
+    "reflection": "Critérios conhecidos, cada um com Consegui, Com ajuda, Quero experimentar mais. Escolhas facultativas com texto e ícone neutro. Em integração, abrir reflexão do host; autonomamente permitir saltar e guardar localmente sem afirmar envio ao professor.",
+    "cooperation": "Convite curto para alternar quem toca e quem explica. Não acrescentar seleção de grupo, participantes ou atribuição de registos ao HTML.",
+    "icons": "Preferir SVG inline simples para cubo, barra, mão, marca e voltar. Ícones redundantes são aria-hidden. Ícone com significado próprio precisa de rótulo; nunca é o único conteúdo de um botão."
+  },
+  "supportPresentation": {
+    "support": "Moldura visível e indicação da ação junto da peça. Na construção, dar foco a uma coluna de cada vez sem ocultar o trabalho. Pistas contam ou alinham peças sem construir a solução.",
+    "intermediate": "Manipulação livre com referência visual disponível e explicação depois da confirmação. Não multiplicar instruções.",
+    "challenge": "Recolher molduras-guia inicialmente. Revelar extensões opcionais separadas e uma pergunta de estratégia curta. Pedidos base e alvos são os mesmos, sem cor que associe o apoio a êxito ou erro."
+  },
+  "motion": {
+    "transitions": "subtle",
+    "durationMs": 160,
+    "easing": "ease-out",
+    "respectReducedMotion": true,
+    "details": "Apenas contorno, cor ou opacidade na seleção e feedback. Sem bounce, animação de layout ou movimento que esconda o resultado da troca."
+  },
+  "accessibility": {
+    "contrastBody": "AA, pelo menos 4.5:1; texto ink nas superfícies claras",
+    "contrastMicrocopy": "AAA, pelo menos 7:1; usar ink para instruções, progresso e pedidos em falta",
+    "focusRing": "3px functional.focus, offset 3px; anel externo preservado também nos selecionados",
+    "minTapPx": 56,
+    "keyboard": "Botões nativos, Tab e Shift+Tab; Enter/Espaço para selecionar cubo, juntar, separar e confirmar. Não exigir arrastar. Mover o foco para título da etapa após avanço; manter o foco na ação durante manipulação.",
+    "status": "Feedback e pedido em falta com role=status e aria-live=polite. Evitar reler todo o tabuleiro após cada seleção.",
+    "blockedNavigation": "Navegação indisponível deve comunicar aria-disabled e o pedido em falta. Guardar a regra em todos os botões de avanço e saltos; não depender de aspeto cinzento.",
+    "soundOptIn": true,
+    "language": "pt-PT",
+    "responsiveValidation": [390, 768, 1280]
+  },
+  "offline": "SVG, CSS, JS e Didact Gothic incorporados num único HTML. Sem recursos remotos. A página não observa peças físicas; gravação no host depende da ponte e confirmação do servidor.",
+  "notes": "As peças segmentadas mostram a quantidade que cada barra conserva. Os espaços Dezenas e Unidades ajudam a ligar posição e quantidade; uma pergunta por momento evita que a criança tenha de interpretar um painel denso. Papel quente, tinta escura e um único azul de ação deixam as peças e as respostas ocupar o centro."
+}

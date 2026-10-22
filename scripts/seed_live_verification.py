@@ -84,12 +84,12 @@ def build_fixture(now: datetime) -> tuple[dict, dict, list[dict], dict]:
         # Sem sinal: a última presença de Alice foi há quatro minutos.
         event(1, now, 400, "joined", "alice001", {"display_name": "Alice"}),
         event(2, now, 240, "heartbeat", "alice001"),
-        # Precisa de ti: Beatriz pediu ajuda e espera mais tempo do que Carlos.
+        # Precisa de ti: Beatriz pediu ajuda explicitamente.
         event(3, now, 400, "joined", "beatriz1", {"display_name": "Beatriz"}),
         event(4, now, 350, "attempt", "beatriz1", {"correct": False}),
         event(5, now, 320, "help_needed", "beatriz1", {"note": "ajuda explícita"}),
         event(6, now, 10, "heartbeat", "beatriz1"),
-        # Precisa de ti: Carlos está parado, sem pedido explícito.
+        # A fluir: Carlos tem presença recente, mas não há trabalho recente no PageCraft.
         event(7, now, 400, "joined", "carlos01", {"display_name": "Carlos"}),
         event(8, now, 240, "discovery", "carlos01", {"message": "último trabalho"}),
         event(9, now, 10, "heartbeat", "carlos01"),
@@ -112,9 +112,9 @@ def build_fixture(now: datetime) -> tuple[dict, dict, list[dict], dict]:
         "tablet_student_id": "fabio001",
         "expected": {
             "Sem sinal": ["Alice", "Fábio"],
-            "Precisa de ti": ["Beatriz", "Carlos"],
+            "Precisa de ti": ["Beatriz"],
             "A tropeçar": ["Diana"],
-            "A fluir": ["Eva"],
+            "A fluir": ["Carlos", "Eva"],
             "explicit_help": "Beatriz",
         },
     }

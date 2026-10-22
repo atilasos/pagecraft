@@ -50,3 +50,8 @@ Verificar que o HTML gerado pelo Builder cumpre rigorosamente o DocSpec-AM do Ar
 - Não geras HTML (isso é do Builder).
 - Não redesenhas o currículo (isso é do Architect).
 - Não fazes "está bom o suficiente" — ou passa ou não passa.
+
+
+## Apoio contextual
+
+Cruza as pistas com `units[].support` do DocSpec e aplica os cenários de `references/contextual-support.md`. Não aproves apoio genérico desligado da tarefa, pistas repetidas ou respostas de outra tentativa. Distingue verificação estática de ensaio em browser.

@@ -1,0 +1,69 @@
+{
+  "pass": false,
+  "route": "builder",
+  "severity": "high",
+  "iteration": 1,
+  "checked_on": "2026-10-12",
+  "slug": "unidades-dezenas-2ano-30min",
+  "status": "repair-and-visual-validation-required",
+  "repair_scope": "Implementação: restauro e foco; ferramenta: inspeção visual.",
+  "scores": {
+    "factual_accuracy": 4,
+    "constraint_alignment": 4,
+    "differentiation_quality": 3,
+    "ux_accessibility": 2,
+    "visual_design": 1,
+    "technical_quality": 2
+  },
+  "score_basis": {
+    "visual_design": "Não avaliado visualmente: score 1 assinala evidência insuficiente, não uma conclusão de desenho inadequado."
+  },
+  "issues": [
+    {
+      "type": "restore",
+      "severity": "high",
+      "location": "learning_restore / validate",
+      "description": "O orquestrador reproduziu no host real perda do estado histórico completo quando o checkpoint inicial vazio do novo iframe vem depois do histórico no payload de restauro. O último estado válido vazio substitui trabalho anterior."
+    },
+    {
+      "type": "focus",
+      "severity": "medium",
+      "location": "CSS :focus-visible",
+      "description": "No browser T3, Tab com isTrusted=true move o foco para cube-1 mas o elemento não coincide com :focus-visible e getComputedStyle(outline) devolve none. As ações funcionam por teclado, mas o foco não ficou confirmado como visível."
+    },
+    {
+      "type": "runtime-tool",
+      "severity": "medium",
+      "location": "T3 preview_snapshot",
+      "description": "A ferramenta de snapshot falha genericamente na tab_3, com texto, PNG/save e depois de preview_open. Impede inspeção visual suficiente para declarar a atividade pronta."
+    }
+  ],
+  "required_fixes": [
+    "Restaurar o checkpoint histórico sem deixar o checkpoint inicial vazio do novo iframe apagá-lo; verificar no host real e no payload histórico+startup vazio.",
+    "Adicionar contorno de foco robusto para controlos e retestar teclado.",
+    "Repetir a revisão visual com T3 snapshot operacional ou outra ferramenta autorizada; não alterar HTML só por falta de screenshot."
+  ],
+  "evidence": [
+    "drafts/unidades-dezenas-2ano-30min-qa/browser-evidence-v1.json: 82 verificações de percursos com respostas incompletas/incorretas nos três apoios passaram;0 erros JavaScript capturados.",
+    "Percurso correto no browser:10cubos→1barra+4cubos→14cubos; barras com10células;24=2dezenas+4unidades;30=3dezenas+0unidades;57=5dezenas+7unidades; extensão1dezena+14unidades aceite.",
+    "90 medidas DOM reais:3apoios×10estados×larguras390/768/1280; documentos375/753/1265px sem overflow; nenhum alvo<56px; corpo22px, título32px, Didact Gothic carregada;0 resource entries externas no filho.",
+    "T3 preview_press: Enter seleciona peças, Tab e Shift+Tab deslocam foco; keydown Tab isTrusted=true; outline none observado.",
+    "Restauro no harness com checkpoint histórico único preservou etapa/trabalho e emitiu apenas activity_state; não cobria o startup checkpoint que a origem real acrescenta. O orquestrador descobriu a falha no ensaio do host."
+  ],
+  "acceptance_checks": [
+    "Vazios bloqueiam Seguinte e saltos; erros respondidos permitem seguir: verificado nos três apoios.",
+    "Construção0/0 exige confirmação;30com0unidades intencionalmente confirmado: verificado.",
+    "Mudança apoio preserva respostas/extensão e preferências host não emitem level_changed: verificado.",
+    "Restauro histórico simples sem tentativas duplicadas: verificado; histórico+startup vazio: falhou no host, requer reparação.",
+    "Móvel/tablet/desktop: medidas sem overflow e alvos mínimos verificados; inspeção visual bloqueada."
+  ],
+  "blocked_by": [
+    "T3 preview_snapshot: PreviewAutomationExecutionError genérico no client preview-34605abc7377e9e70d12e87cda6cc51f. Sem screenshot nem árvore de acessibilidade disponível."
+  ],
+  "limitations": [
+    "Não se desligou a rede no browser; foi verificada ausência de requests externos no filho.",
+    "Testes de teclado no browser colaborativo, sem dispositivo físico.",
+    "Não foram testadas sessões de aula com grupo e reflexão individual de participantes; o host permanente individual é o percurso em teste pelo orquestrador."
+  ],
+  "publication_status": "draft; requer revisão do professor por atividade"
+}

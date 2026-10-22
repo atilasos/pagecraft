@@ -206,11 +206,12 @@ function startActivity() {
   // nota: o evento "joined" é emitido pelo servidor no claim; não repetir aqui
 }
 
-function sanitizePayload(payload) {
+function sanitizePayload(payload, type) {
   try {
     if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return {};
     const json = JSON.stringify(payload);
-    if (new TextEncoder().encode(json).length > 4096) return null;
+    const limit = ["feedback_request", "hint_presented", "help_needed"].includes(type) ? 12000 : 4096;
+    if (new TextEncoder().encode(json).length > limit) return null;
     return JSON.parse(json);
   } catch { return null; }
 }
@@ -254,8 +255,8 @@ $('restore-retry').addEventListener('click', restoreWork);
 /* SSE: feedback IA, mensagens do professor, PIT */
 const STUDENT_EVENT_HANDLERS = {
   ai_feedback(data) {
-    showMessage(data.payload.text, "feedback-warn");
-    return { payload: { text: data.payload.text } };
+    if (!data.payload.request_id) showMessage(data.payload.text, "feedback-warn");
+    return { payload: { ...data.payload } };
   },
   teacher_message(data) {
     showMessage(`Professor: ${data.payload.text}`, "feedback-ok");
@@ -340,6 +341,7 @@ function acceptSessionState(session) {
   const wasClosed = state.sessionState?.closed === true;
   state.sessionState = session;
   $("freeze-overlay").hidden = session.frozen !== true;
+  if (session.frozen || session.closed) window.PageCraftSupportModal?.close();
   if (session.closed === true && !wasClosed) {
     showMessage("A aula terminou. Bom trabalho!", "feedback-ok");
     finishStudentSession();
@@ -474,6 +476,7 @@ function createStudentTransport() {
       if (!frame.contentWindow || ev.source !== frame.contentWindow) return;
       const data = ev.data;
       if (!data || data.pagecraft !== 1 || !data.type) return;
+      if (data.type === "support_modal") return;
       if (state.restoringWork && ['activity_state', 'unit_started', 'level_changed', 'assessment_result'].includes(data.type)) return;
       const declaration = data.payload?.detail;
       const sharedWork = declaration && typeof declaration === 'object' &&
@@ -491,7 +494,7 @@ function createStudentTransport() {
           sendGroupPreferences();
         }
       }
-      const payload = sanitizePayload(data.payload);
+      const payload = sanitizePayload(data.payload, data.type);
       if (payload !== null) {
         if (['assessment_result', 'attempt', 'level_changed'].includes(data.type)) $('save-work-status').textContent = '';
         enqueue(data.type, data.unitId || null, payload);
@@ -744,8 +747,10 @@ async function loadOwnHistory() {
 /* ---- ajuda + PIT ---- */
 
 $("help-btn").addEventListener("click", () => {
-  studentTransport.enqueue("help_needed", null, { note: "botão de ajuda" });
-  showMessage("O professor já sabe que precisas de ajuda.", "feedback-ok");
+  const help_request_id = crypto.randomUUID();
+  const queued = studentTransport.enqueue("help_needed", null, { note: "botão de ajuda", help_request_id });
+  if (queued) $("activity-frame").contentWindow?.postMessage({pagecraft:1, type:"support_teacher_requested", payload:{help_request_id}}, '*');
+  showMessage(queued ? "Pedido preparado para enviar. Confirma que o trabalho fica guardado; podes também chamar o professor." : "Não foi possível preparar o pedido. Chama o professor.", "feedback-warn");
 });
 
 $("pit-btn").addEventListener("click", () => {
@@ -815,9 +820,13 @@ function renderPit() {
 }
 
 function sendGroupPreferences({duringRestore = false} = {}) {
-  if (!state.workGroup || (state.restoringWork && !duringRestore)) return;
-  $("activity-frame").contentWindow?.postMessage({pagecraft:1, type:"work_group_preferences", payload:{level:state.workGroup.level}}, '*');
-  $("activity-frame").contentWindow?.postMessage({pagecraft:1, type:"learning_preferences", payload:{level:state.workGroup.level}}, '*');
+  if (state.restoringWork && !duringRestore) return;
+  if (!state.workGroup) {
+    $("activity-frame").contentWindow?.postMessage({pagecraft:1, type:"work_group_preferences", payload:{participant_count:1, route:"studio"}}, '*');
+    return;
+  }
+  $("activity-frame").contentWindow?.postMessage({pagecraft:1, type:"work_group_preferences", payload:{level:state.workGroup.level, participant_count:state.workGroup.participant_ids.length, route:"studio"}}, '*');
+  $("activity-frame").contentWindow?.postMessage({pagecraft:1, type:"learning_preferences", payload:{level:state.workGroup.level, participant_count:state.workGroup.participant_ids.length, route:"studio"}}, '*');
 }
 
 function acceptComposition(group) {

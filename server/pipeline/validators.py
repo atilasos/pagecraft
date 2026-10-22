@@ -43,7 +43,7 @@ FETCH_CALL = re.compile(
 )
 
 
-def validate_activity_html(html: str, expected_units: int = 0) -> ValidationReport:
+def validate_activity_html(html: str, expected_units: int = 0, *, expected_support: bool = False) -> ValidationReport:
     report = ValidationReport()
     lower = html.lower()
 
@@ -60,6 +60,11 @@ def validate_activity_html(html: str, expected_units: int = 0) -> ValidationRepo
             + ", ".join(missing)
             + ' (usa id="uN" ou data-unit="uN" no contentor de cada unidade, pela ordem do docspec)'
         )
+
+    if expected_support:
+        for i in range(1, expected_units + 1):
+            if not re.search(rf"""data-pagecraft-support\s*=\s*["']u{i}["']""", html):
+                report.error(f'falta o painel de apoio contextual data-pagecraft-support="u{i}" junto da tarefa')
 
     if "<!doctype html" not in lower:
         report.error("falta <!doctype html>")

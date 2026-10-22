@@ -1,0 +1,70 @@
+{
+  "pass": false,
+  "severity": "medium",
+  "iteration": 1,
+  "activity": "drafts/unidades-dezenas-2ano-30min.html",
+  "activity_sha256": "9ad3339f3a4e43ab425bf7e412ae1594102aff2d97d7eaf60a944dd2ad477089",
+  "issues": [
+    {
+      "type": "semantic",
+      "severity": "medium",
+      "location": "compare(), pergunta comparar-maior e feedback da comparação",
+      "original": "Qual tem mais peças?",
+      "suggestion": "Qual representa mais unidades?",
+      "reason": "As duas representações têm seis objetos físicos: duas barras e quatro cubos, ou quatro barras e dois cubos. A pergunta deve comparar a quantidade representada, contando as unidades dos segmentos."
+    },
+    {
+      "type": "semantic",
+      "severity": "medium",
+      "location": "swap(), pedido troca-total",
+      "original": "Quantas peças tens ao todo?",
+      "suggestion": "Quantas unidades tens ao todo?",
+      "reason": "Uma hipótese errada pode deixar uma barra e quatro cubos visíveis. Dizer unidades evita confundir os cinco objetos com a quantidade catorze que representam."
+    },
+    {
+      "type": "semantic",
+      "severity": "medium",
+      "location": "act(start), assessment de u1",
+      "original": "Leu/ouviu os critérios e iniciou.",
+      "suggestion": "Confirmou o início da atividade; leitura dos critérios não verificada.",
+      "reason": "O clique em Começar demonstra confirmação, mas a página não observa se a criança leu ou ouviu os critérios. Não apresentar essa leitura como evidência observada."
+    },
+    {
+      "type": "grammar",
+      "severity": "low",
+      "location": "pieces() aria-label; build() feedback de confirmação; summary() legenda das construções",
+      "original": "1 dezenas e 1 unidades",
+      "suggestion": "1 dezena e 1 unidade",
+      "reason": "Os rótulos dinâmicos devem concordar no singular quando o valor é 1. Aplicar a concordância separadamente a dezenas e unidades nos textos acessíveis e visíveis."
+    },
+    {
+      "type": "semantic",
+      "severity": "medium",
+      "location": "swap(), phase=1 quando grupo confirmado sem formar barra; feedback incorreto de troca-separar",
+      "original": "Toca em Separar junto da barra. / Separa uma barra. Observa as peças que aparecem.",
+      "suggestion": "Sem barra: «Ainda não há uma barra. Volta e junta peças.» Feedback: «Ainda não separaste uma barra. Volta para formar um grupo.»",
+      "reason": "A regra permite confirmar uma hipótese incorreta na primeira fase. Se a criança avança sem barra, a instrução pede uma ação que não existe e precisa de explicar como retomar a exploração."
+    },
+    {
+      "type": "ptpt-usage",
+      "severity": "low",
+      "location": "act(save-local), exceção de sessionStorage",
+      "original": "O browser não permite guardar. As respostas continuam aqui.",
+      "suggestion": "Não foi possível guardar. As respostas continuam aqui.",
+      "reason": "Substituir o anglicismo por uma mensagem curta compreensível no 2.º ano, sem exigir vocabulário técnico."
+    }
+  ],
+  "summary": "O texto está em português europeu e as instruções são curtas. São necessárias correções de quantidade representada, concordância dinâmica e evidência do arranque, além de instruções condicionais quando não existe barra. Esta fase não executou testes no browser.",
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90: FAIL — concordância dinâmica quando o valor é 1",
+    "Registo consistente: FAIL — anglicismo no erro de gravação local",
+    "Adequação à faixa etária: OK — frases predominantemente curtas e tratamento por tu",
+    "Instruções claras e seguíveis: FAIL — quantidade ambígua e Separar sem barra",
+    "Alinhamento com objetivos: FAIL — comparação deve referir quantidade representada; leitura não observada",
+    "Critérios apresentados antes do trabalho: OK",
+    "Diferenciação Com pistas / Passo a passo / Mais desafios: OK",
+    "Regra da troca só depois da manipulação: OK — síntese depende de grouped",
+    "Reflexão facultativa e ausência de promessa de gravação autónoma: OK",
+    "Toda a microcopy e mensagens JS lidas estaticamente: OK; usabilidade/browser não avaliados"
+  ]
+}
