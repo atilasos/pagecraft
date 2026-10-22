@@ -477,14 +477,14 @@ function createStudentTransport() {
 
   function currentScope() {
     return state.workGroup ? {
-      work_group_id:state.workGroup.id,
+      device_id:state.workGroup.device_id,
       composition_version:state.workGroup.composition_version,
       access_version:state.workGroup.access_version,
     } : null;
   }
 
   function sameScope(left, right) {
-    return left?.work_group_id === right?.work_group_id &&
+    return left?.device_id === right?.device_id &&
       left?.composition_version === right?.composition_version && left?.access_version === right?.access_version;
   }
 
@@ -516,6 +516,7 @@ function createStudentTransport() {
     status.textContent = [
       full ? 'A fila está cheia. Espera pela ligação antes de continuar.' : '',
       refusedWork ? 'Algumas alterações ficaram de fora. O trabalho já aceite foi conservado. Volta ao último trabalho aceite e repete essas alterações.' : '',
+      refusals.some(refusal => refusal.context_unknown) ? 'O contexto das alterações recusadas anteriores não ficou registado. Revê este aviso com o professor antes de continuar.' : '',
       storageFailed && outbox.length ? 'Não foi possível conservar a fila neste separador. Mantém esta página aberta até guardar no servidor.' : '',
     ].filter(Boolean).join(' ');
     $('recover-accepted-work').hidden = !refusedWork;
@@ -530,7 +531,9 @@ function createStudentTransport() {
       return typeof value === 'string' ? `${caption} · ${value}` : caption;
     }));
     for (const refusal of refusals.filter(refusal => !isCurrentRefusal(refusal))) {
-      captions.add(`${refusal.work_group_name || 'Grupo anterior'} · composição ${refusal.scope.composition_version} · acesso ${refusal.scope.access_version}: Algumas alterações ficaram de fora e não foram conservadas. Pede ao professor para as rever contigo.`);
+      const date = new Date(refusal.refused_at);
+      const when = Number.isNaN(date.getTime()) ? 'Data não registada' : date.toLocaleString('pt-PT');
+      captions.add(`${refusal.work_group_name || 'Grupo anterior'} · ${when}: Algumas alterações ficaram de fora e não foram conservadas. Pede ao professor para as rever contigo.`);
     }
     for (const caption of captions) {
       const item = document.createElement('li');
@@ -717,19 +720,13 @@ function createStudentTransport() {
           const status = JSON.parse(sessionStorage.getItem(`${queueKey}:status`) || '{}');
           if (status.version === 2) {
             if (!Array.isArray(status.refusals) || status.refusals.some(refusal => !refusal || typeof refusal !== 'object' ||
-                refusal.scope && (typeof refusal.scope.work_group_id !== 'string' ||
+                refusal.scope && (typeof refusal.scope.device_id !== 'string' ||
                   !Number.isInteger(refusal.scope.composition_version) || !Number.isInteger(refusal.scope.access_version)))) throw new Error('refusals');
             refusals = status.refusals;
           } else if (status.refusedWork === true) {
-            // Infer old authors only when every accepted event agrees. An empty
-            // or mixed queue cannot tell us who made the refused edits.
-            const first = outbox[0];
-            const scope = event => ({work_group_id:state.workGroup.id,
-              composition_version:event.composition_version, access_version:event.access_version || 1});
-            const knownGroup = state.workGroup && first && Number.isInteger(first.composition_version) &&
-              outbox.every(event => sameScope(scope(event), scope(first)));
-            refusals.push({scope:knownGroup ? scope(first) : null,
-              work_group_name:knownGroup ? first.work_group_name : null});
+            // Remaining accepted events cannot prove who made refused edits:
+            // newer accepted work may already have drained. Never infer authors.
+            refusals.push({scope:null, context_unknown:true});
           }
         } catch {
           refuseWork();
