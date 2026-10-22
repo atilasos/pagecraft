@@ -3,7 +3,8 @@ from contextlib import contextmanager
 
 import httpx
 import pytest
-from playwright.sync_api import expect
+
+expect = pytest.importorskip('playwright.sync_api').expect
 
 
 @contextmanager
@@ -93,6 +94,7 @@ def test_overflow_preserves_accepted_work_and_never_claims_everything_saved(page
         expect(page.locator('#activity-frame')).to_be_visible(timeout=15000)
         expect(page.locator('#queue-status')).to_contain_text('ficaram de fora')
         expect(page.frame_locator('#activity-frame').locator('#animals')).to_have_value('Primeiro trabalho aceite')
+        page.screenshot(path=f"/tmp/pagecraft-fila-{'grupo' if pair else 'individual'}.png", full_page=True)
         page.unroute('**/events')
         page.get_by_role('button', name='Guardar para continuar', exact=True).click()
         expect(page.locator('#save-work-status')).to_contain_text('não foi possível guardar tudo')
