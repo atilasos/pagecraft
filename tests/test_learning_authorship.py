@@ -104,3 +104,30 @@ async def test_expected_identity_allows_discovery_retry_finish_and_leave(learnin
         assert response.json()['id'] == attempt['id']
     assert (await pupil.post('/api/learning/me/leave', headers=headers)).status_code == 204
     assert (await pupil.get('/api/learning/me', headers=headers)).status_code == 401
+
+
+@pytest.mark.parametrize('as_teacher', [False, True])
+async def test_completed_expired_realization_allows_new_start_without_leaving_or_changing_saved_work(learning_clients, as_teacher):
+    from datetime import datetime, timedelta, timezone
+
+    app, teacher, pupil = learning_clients
+    activity, _ = await register(teacher, published=not as_teacher)
+    client = teacher if as_teacher else pupil
+    first = await start(client, activity['code'], 'Aluno A')
+    response = await client.post('/api/learning/me/finish', json={'strategy': 'Reflexão concluída A'})
+    assert response.status_code == 200
+    before = await app.state.learning.attempt(first['id'])
+    before['expires_at'] = (datetime.now(timezone.utc) - timedelta(seconds=1)).isoformat()
+    path = app.state.storage.path('learning', 'realizations', first['id'] + '.json')
+    await app.state.storage.write_json(path, before)
+    cookies_before = dict(client.cookies)
+    for method, path in [('GET', '/me'), ('POST', '/me/leave')]:
+        response = await client.request(method, '/api/learning' + path)
+        assert response.status_code == 401
+        assert dict(client.cookies) == cookies_before
+        assert await app.state.learning.attempt(first['id']) == before
+    # A new start is an explicit action; leave is never relaxed into an anonymous cookie clear.
+    second = await start(client, activity['code'], 'Aluno B')
+    assert second['id'] != first['id']
+    assert (await client.get('/api/learning/me')).json()['id'] == second['id']
+    assert await app.state.learning.attempt(first['id']) == before

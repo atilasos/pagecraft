@@ -124,3 +124,35 @@ def test_known_tab_without_cookie_keeps_pending_drafts_and_does_not_offer_new_en
     expect(page.locator('#status')).to_contain_text('Não foi possível recuperar o teu trabalho')
     assert page.evaluate('(id) => JSON.parse(sessionStorage.getItem("pc-queue:" + id))', first['id']) == pending
     assert page.evaluate('(id) => JSON.parse(sessionStorage.getItem("pc-reflection:" + id))', first['id'])['strategy'] == 'Reflexão A por guardar'
+
+
+@pytest.mark.parametrize('reload', [True, False], ids=['after-reload', 'without-reload'])
+def test_completed_realization_with_expired_cookie_can_explicitly_start_new_work(page, studio_origin, reload):
+    from playwright.sync_api import expect
+
+    code = open_preview(page, studio_origin)
+    first = start_tab(page, studio_origin, 'Aluno A')
+    page.get_by_role('button', name='Autoavaliar e terminar', exact=True).click()
+    page.locator('#strategy').fill('Reflexão concluída A')
+    page.get_by_role('button', name='Guardar e terminar', exact=True).click()
+    expect(page.locator('#done')).to_be_visible()
+    before = page.request.get(studio_origin + '/api/learning/me').json()
+    assert before['completed_at']
+    assert page.evaluate('(code) => sessionStorage.getItem("pc-realization:" + code)', code) == first['id']
+    assert page.evaluate('(id) => [sessionStorage.getItem("pc-queue:" + id), sessionStorage.getItem("pc-reflection:" + id)]', first['id']) == [None, None]
+    # Expire the browser credential; the server must now reject recovery/leave.
+    cookie = next(c for c in page.context.cookies() if c['name'] == 'pagecraft_realization')
+    page.context.add_cookies([dict(cookie, expires=1)])
+    assert page.request.get(studio_origin + '/api/learning/me').status == 401
+    if reload:
+        page.reload()
+        expect(page.locator('#start-form')).to_be_hidden()
+        expect(page.get_by_role('button', name='Começar uma nova realização', exact=True)).to_be_visible()
+    page.get_by_role('button', name='Começar uma nova realização', exact=True).click()
+    expect(page.locator('#start-form')).to_be_visible()
+    assert page.evaluate('(code) => sessionStorage.getItem("pc-realization:" + code)', code) is None
+    second = start_tab(page, studio_origin, 'Aluno B')
+    assert second['id'] != first['id']
+    saved = page.request.get(studio_origin + '/api/learning/reports/' + first['id'] + '/download').text()
+    assert 'Reflexão concluída A' in saved
+    assert before['completed_at'] in saved
