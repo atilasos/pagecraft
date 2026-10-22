@@ -156,3 +156,115 @@ def test_completed_realization_with_expired_cookie_can_explicitly_start_new_work
     saved = page.request.get(studio_origin + '/api/learning/reports/' + first['id'] + '/download').text()
     assert 'Reflexão concluída A' in saved
     assert before['completed_at'] in saved
+
+
+@pytest.mark.parametrize('stored_queue,stored_reflection,read_failure', [
+    ('[]', '{"answers":{},"strategy":"","next_step":""}', None),
+    ('[{"id":"pending-A","type":"attempt","payload":{"answer":"A"}}]', None, None),
+    ('[]', '{"answers":{},"strategy":"Reflexão pendente A","next_step":""}', None),
+    ('[]', '{"answers":{"compare":"skip"},"strategy":"","next_step":""}', None),
+    ('broken', None, None),
+    ('{}', None, None),
+    ('null', None, None),
+    ('[]', 'broken', None),
+    ('[]', '{}', None),
+    ('[]', 'null', None),
+    ('[]', None, 'pc-queue:'),
+    ('[]', None, 'pc-reflection:'),
+], ids=['empty', 'queued-answer', 'reflection', 'reflection-choice', 'invalid-queue',
+        'object-queue', 'null-queue', 'invalid-reflection', 'object-reflection',
+        'null-reflection', 'queue-read-error', 'reflection-read-error'])
+def test_expired_recovery_only_offers_local_exit_when_storage_proves_no_pending_work(
+    page, studio_origin, stored_queue, stored_reflection, read_failure,
+):
+    from playwright.sync_api import expect
+
+    code = open_preview(page, studio_origin)
+    first = start_tab(page, studio_origin, 'Aluno A')
+    page.evaluate('''({id, queued, reflection}) => {
+      sessionStorage.setItem('pc-queue:' + id, queued);
+      if (reflection === null) sessionStorage.removeItem('pc-reflection:' + id);
+      else sessionStorage.setItem('pc-reflection:' + id, reflection);
+    }''', {'id': first['id'], 'queued': stored_queue, 'reflection': stored_reflection})
+    if read_failure:
+        page.add_init_script("""(() => {
+          const getItem = Storage.prototype.getItem;
+          Storage.prototype.getItem = function(key) {
+            if (key.startsWith(%r)) throw new Error('Storage unavailable');
+            return getItem.call(this, key);
+          };
+        })()""" % read_failure)
+    page.context.clear_cookies(name='pagecraft_realization')
+    page.reload()
+    expect(page.get_by_role('button', name='Tentar recuperar novamente', exact=True)).to_be_visible()
+    expect(page.locator('#start-form')).to_be_hidden()
+    safe = stored_queue == '[]' and stored_reflection == '{"answers":{},"strategy":"","next_step":""}' and not read_failure
+    if safe:
+        expect(page.locator('#recovery-new')).to_be_visible()
+        expect(page.locator('#status')).to_contain_text('Não há trabalho pendente')
+    else:
+        expect(page.locator('#recovery-new')).to_be_hidden()
+        expect(page.locator('#status')).to_contain_text('Não foi possível recuperar o teu trabalho')
+    # Inspect the actual storage without getItem so read-error cases are checked too.
+    state = page.evaluate('(id) => ({...sessionStorage})', first['id'])
+    assert state['pc-realization:' + code] == first['id']
+    assert state['pc-queue:' + first['id']] == stored_queue
+    assert state.get('pc-reflection:' + first['id']) == stored_reflection
+
+
+@pytest.mark.parametrize('reload', [True, False], ids=['after-reload', 'without-reload'])
+def test_completed_tab_with_other_cookie_cannot_offer_or_start_replacement(page, studio_origin, reload):
+    from playwright.sync_api import expect
+
+    code = open_preview(page, studio_origin)
+    first = start_tab(page, studio_origin, 'Aluno A')
+    page.get_by_role('button', name='Autoavaliar e terminar', exact=True).click()
+    page.get_by_role('button', name='Guardar e terminar', exact=True).click()
+    expect(page.locator('#done')).to_be_visible()
+    second_tab = page.context.new_page()
+    second_tab.goto(studio_origin + '/' + code)
+    second_tab.get_by_role('button', name='Começar uma nova realização', exact=True).click()
+    second = start_tab(second_tab, studio_origin, 'Aluno B')
+    before = page.request.get(studio_origin + '/api/learning/me').json()
+    if reload:
+        page.reload()
+    else:
+        page.get_by_role('button', name='Começar uma nova realização', exact=True).click()
+    expect(page.locator('#status')).to_contain_text('outra realização')
+    expect(page.locator('#start-form')).to_be_hidden()
+    expect(page.locator('#recovery-new')).to_be_hidden()
+    assert page.evaluate('(code) => sessionStorage.getItem("pc-realization:" + code)', code) == first['id']
+    assert page.request.get(studio_origin + '/api/learning/me').json() == before
+    with second_tab.expect_response(lambda r: r.url.endswith('/me/events') and r.ok):
+        second_tab.frame_locator('#lesson').locator('#animals').fill('Resposta B')
+        second_tab.frame_locator('#lesson').locator('#animals').press('Tab')
+    assert page.request.get(studio_origin + '/api/learning/me').json()['id'] == second['id']
+
+
+@pytest.mark.parametrize('pending', ['reflection', 'corruption', 'read-error'])
+def test_completed_expired_tab_cannot_leave_when_local_work_is_pending_or_uncertain(page, studio_origin, pending):
+    from playwright.sync_api import expect
+
+    code = open_preview(page, studio_origin)
+    first = start_tab(page, studio_origin, 'Aluno A')
+    page.get_by_role('button', name='Autoavaliar e terminar', exact=True).click()
+    page.get_by_role('button', name='Guardar e terminar', exact=True).click()
+    expect(page.locator('#done')).to_be_visible()
+    reflection = '{"answers":{},"strategy":"Reflexão pendente A","next_step":""}' if pending == 'reflection' else 'broken'
+    page.evaluate('([id, draft]) => sessionStorage.setItem("pc-reflection:" + id, draft)', [first['id'], reflection])
+    if pending == 'read-error':
+        page.evaluate("""() => {
+          const getItem = Storage.prototype.getItem;
+          Storage.prototype.getItem = function(key) {
+            if (key.startsWith('pc-reflection:')) throw new Error('Storage unavailable');
+            return getItem.call(this, key);
+          };
+        }""")
+    page.context.clear_cookies(name='pagecraft_realization')
+    with page.expect_response(lambda r: r.url.endswith('/me/leave') and r.status == 401):
+        page.get_by_role('button', name='Começar uma nova realização', exact=True).click()
+    expect(page.locator('#start-form')).to_be_hidden()
+    expect(page.locator('#status')).to_contain_text('Tens trabalho por guardar')
+    state = page.evaluate('() => ({...sessionStorage})')
+    assert state['pc-realization:' + code] == first['id']
+    assert state['pc-reflection:' + first['id']] == reflection
