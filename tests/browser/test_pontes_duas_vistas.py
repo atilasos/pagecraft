@@ -680,14 +680,17 @@ def test_real_studio_hosts_load_current_modal_and_resume_keyboard(page, pontes_s
             page.screenshot(path=str(PROOF / f'{SLUG}-green-real-{host}-modal.png'), full_page=True)
             dialog.locator('[data-action="continue"]').press('Enter')
             expect(page.locator('dialog[open]')).to_have_count(0)
+            actions = frame.locator('body').evaluate('''async()=>{for(let i=0;i<50;i++){if(modalActions.length)return modalActions;await new Promise(resolve=>setTimeout(resolve,20))}return modalActions}''')
             resumed_focus = {
-                'host':page.evaluate('({tag:document.activeElement.tagName,id:document.activeElement.id})'),
-                'frame':frame.locator('body').evaluate('({tag:document.activeElement.tagName,id:document.activeElement.id})'),
+                'host':page.evaluate('({tag:document.activeElement.tagName,id:document.activeElement.id,html:document.activeElement.outerHTML.slice(0,300),inside_dialog:!!document.activeElement.closest("dialog")})'),
+                'frame':frame.locator('body').evaluate('({tag:document.activeElement.tagName,id:document.activeElement.id,html:document.activeElement.outerHTML.slice(0,300)})'),
+                'genuine_local_guide':True,'requested_hint_id':hint_id,'received_actions':actions,
+                'current_hint_id':frame.locator('body').evaluate('PageCraftSupport.currentHintId()'),
+                'script_urls':[response.url for response in responses],'script_matches_canonical':True,
             }
             (PROOF / f'{SLUG}-green-real-{host}-resume-focus.json').write_text(json.dumps(resumed_focus,indent=2)+'\n')
             page.screenshot(path=str(PROOF / f'{SLUG}-green-real-{host}-resumed.png'), full_page=True)
             expect(frame.locator('[data-pagecraft-support="u1"] .pc-support-action')).to_be_focused()
-            actions = frame.locator('body').evaluate('modalActions')
             assert actions == [{'hint_id':hint_id,'action':'continue'}]
             frame.locator('#initialHypothesis-unsure').focus()
             frame.locator('#initialHypothesis-unsure').press('Space')
@@ -705,3 +708,64 @@ def test_real_studio_hosts_load_current_modal_and_resume_keyboard(page, pontes_s
         finally:
             if session_id:
                 teacher.post(f'/api/sessions/{session_id}/close').raise_for_status()
+
+
+def test_character_svg_reveals_only_tested_outcome_and_preserves_top_views(page, pontes_origin):
+    """Regression for the missing figure: inspect actual SVG geometry, not result text."""
+    from playwright.sync_api import expect
+    page.goto(pontes_origin + '/lesson')
+    initial_tops = page.locator('#predictions-views .top-view').evaluate_all('(els)=>els.map(el=>el.outerHTML)')
+    assert len(initial_tops) == 2 and initial_tops[0] == initial_tops[1]
+    assert page.locator('#u1 .side-view, #u1 .character').count() == 0
+    assert page.locator('.top-view .character').count() == 0
+    predict(page)
+    assert page.locator('#experiment-views .side-view, #experiment-views .character').count() == 0
+
+    def figure(container, outcome):
+        character = container.locator('svg.side-view > g.character')
+        expect(character).to_have_count(1)
+        expect(character).to_have_attribute('data-outcome', outcome)
+        expect(character).to_have_attribute('transform', 'translate(' + ('252' if outcome == 'crossed' else '22') + ' 88)')
+        assert character.locator('circle').count() == 1
+        assert character.locator('path').count() == 1
+        assert character.evaluate('(el)=>{const r=el.getBBox();return r.width>0&&r.height>0}')
+        position = 'na margem direita, depois de atravessar' if outcome == 'crossed' else 'na margem esquerda, antes de atravessar'
+        expect(container.locator('.side-view')).to_have_attribute('role', 'img')
+        assert position in container.locator('.side-view').get_attribute('aria-label')
+        expect(character).to_have_attribute('aria-hidden', 'true')
+        assert container.locator('.top-view').evaluate('(el)=>el.outerHTML') == initial_tops[0]
+        assert container.locator('.top-view .character').count() == 0
+        return character.evaluate('(el)=>el.outerHTML')
+
+    page.locator('#test-a').click()
+    cards = page.locator('#experiment-views article')
+    original_a = figure(cards.nth(0), 'crossed')
+    expect(cards.nth(0)).to_contain_text('A personagem atravessa.')
+    assert cards.nth(1).locator('.character, .side-view').count() == 0
+    page.locator('#lower-right').click()
+    assert cards.nth(1).locator('.character, .side-view').count() == 0
+    page.locator('#test-b').click()
+    assert figure(cards.nth(0), 'crossed') == original_a
+    figure(cards.nth(1), 'stopped')
+    expect(cards.nth(1)).to_contain_text('A personagem para antes de atravessar.')
+    page.screenshot(path=str(PROOF / f'{SLUG}-green-character-ab.png'), full_page=True)
+    page.locator('#next').click()
+    comparison = page.locator('#comparison-views article')
+    assert figure(comparison.nth(0), 'crossed') == original_a
+    figure(comparison.nth(1), 'stopped')
+    explain(page)
+    peer_view = page.locator('#peer-view')
+    assert peer_view.locator('.character').count() == 0
+    observations = []
+    for height in ['1', '2', '3']:
+        choose(page, 'peerRightHeight', height)
+        assert peer_view.locator('.character').count() == 0
+        assert peer_view.locator('.top-view').evaluate('(el)=>el.outerHTML') == initial_tops[0]
+        page.locator('#test-peer').click()
+        outcome = 'crossed' if height == '2' else 'stopped'
+        figure(peer_view, outcome)
+        expect(page.locator('#peer-test-status')).to_contain_text('atravessa.' if height == '2' else 'para antes de atravessar.')
+        assert ('Direita: 1 bloco.' if height == '1' else f'Direita: {height} blocos.') in peer_view.locator('.side-view').get_attribute('aria-label')
+        observations.append({'height':int(height),'outcome':outcome,'translate_x':252 if outcome=='crossed' else 22})
+    page.screenshot(path=str(PROOF / f'{SLUG}-green-character-peer.png'), full_page=True)
+    (PROOF / f'{SLUG}-green-character-evidence.json').write_text(json.dumps({'dom_svg_checked':True,'geometry_nonempty':True,'top_views_identical':True,'top_has_character':False,'unit1_has_side_or_character':False,'revealed_only_after_own_test':True,'a_preserved_after_b':True,'comparison_keeps_a_b':True,'peer_cases':observations,'peer_height_change_hides_character':True,'aria_redundant_position_and_outcome':True},indent=2)+'\n')
