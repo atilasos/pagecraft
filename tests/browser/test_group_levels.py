@@ -82,3 +82,65 @@ def test_reopening_a_non_default_level_does_not_create_new_evidence(page, studio
         page.get_by_role('button', name='Guardar para continuar', exact=True).click()
         expect(page.locator('#save-work-status')).to_contain_text('Guardado.')
         assert evidence() == []
+
+
+def test_level_choice_during_restore_reaches_every_unit_and_survives_reload(page, studio_origin):
+    from playwright.sync_api import expect
+
+    # Hold the final paint of restoration so the group can choose a level
+    # after the initial preferences arrived, while the lesson is still hidden.
+    page.add_init_script('''
+        if (window === window.top) {
+            const paint = window.requestAnimationFrame.bind(window);
+            window.pendingRestorePaints = [];
+            window.requestAnimationFrame = callback => pendingRestorePaints.push(callback);
+            window.finishRestorePaints = () => {
+                window.requestAnimationFrame = paint;
+                pendingRestorePaints.splice(0).forEach(callback => paint(callback));
+            };
+        }
+    ''')
+    with httpx.Client(base_url=studio_origin) as teacher:
+        teacher.get('/api/teacher-bootstrap').raise_for_status()
+        classroom = teacher.post('/api/classes', json={
+            'name': 'Escolha durante a retoma', 'year': 2, 'students': ['Ana', 'Bruno']
+        }).json()
+        session = teacher.post('/api/sessions', json={
+            'class_id': classroom['id'], 'activity_slug': 'dedo'
+        }).json()
+        page.goto(studio_origin + '/student/')
+        page.get_by_label('Código da aula').fill(session['join_code'])
+        page.get_by_role('button', name='Entrar', exact=True).click()
+        page.get_by_role('button', name='A pares', exact=True).click()
+        for name in ['Ana', 'Bruno']:
+            page.get_by_role('button', name=name, exact=True).click()
+        page.get_by_role('button', name='Começar', exact=True).click()
+        page.wait_for_function('pendingRestorePaints.length > 0', polling=10)
+        lesson = page.frame_locator('#activity-frame')
+        chosen = lesson.locator('button[data-level].active')
+        expect(chosen).to_have_count(7)
+        for i in range(7):
+            expect(chosen.nth(i)).to_have_attribute('data-level', 'middle')
+        page.get_by_label('Nível do grupo', exact=True).select_option('challenge')
+        page.evaluate('finishRestorePaints()')
+        expect(page.locator('#activity-frame')).to_be_visible()
+        for i in range(7):
+            expect(chosen.nth(i)).to_have_attribute('data-level', 'challenge')
+        page.get_by_role('button', name='Guardar para continuar', exact=True).click()
+        expect(page.locator('#save-work-status')).to_contain_text('Guardado.')
+        page.reload()
+        page.wait_for_function('pendingRestorePaints.length > 0', polling=10)
+        page.evaluate('finishRestorePaints()')
+        expect(page.locator('#activity-frame')).to_be_visible()
+        expect(page.get_by_label('Nível do grupo', exact=True)).to_have_value('challenge')
+        for i in range(7):
+            expect(chosen.nth(i)).to_have_attribute('data-level', 'challenge')
+        page.get_by_role('button', name='Guardar para continuar', exact=True).click()
+        expect(page.locator('#save-work-status')).to_contain_text('Guardado.')
+        student_id = next(iter(session['roster']))
+        history = teacher.get(f"/api/sessions/{session['id']}/students/{student_id}/history").json()['events']
+        assert [event['payload']['level'] for event in history if event['type'] == 'level_changed'] == ['challenge']
+        for level, native in [('support', 'support'), ('intermediate', 'middle')]:
+            page.get_by_label('Nível do grupo', exact=True).select_option(level)
+            for i in range(7):
+                expect(chosen.nth(i)).to_have_attribute('data-level', native)

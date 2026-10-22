@@ -1,5 +1,7 @@
 """The child answers each request; correctness never gates navigation."""
-from playwright.sync_api import expect
+import pytest
+
+expect = pytest.importorskip("playwright.sync_api").expect
 
 
 def finish_bread(page, level='intermediate'):
@@ -18,7 +20,9 @@ def finish_bread(page, level='intermediate'):
 def test_fraction_representation_needs_confirmation_and_allows_correction(page, lesson_origin):
     page.goto(lesson_origin)
     finish_bread(page)
-    expect(page.get_by_role('heading', name='Pinta 1/4.')).to_be_visible()
+    heading = page.get_by_role('heading', name='Pinta 1/4 .', exact=True)
+    expect(heading).to_be_visible()
+    expect(heading.get_by_role('img', name='1/4', exact=True)).to_be_visible()
     next_button = page.get_by_role('button', name='Seguinte', exact=True)
     assert next_button.is_disabled()
     # A displayed empty grid becomes an answer only when confirmed.

@@ -861,5 +861,6 @@ $("group-level").addEventListener("change", () => {
   if (!state.workGroup) return;
   state.workGroup.level = $("group-level").value;
   studentTransport.enqueue("level_changed", null, {level:state.workGroup.level});
-  sendGroupPreferences();
+  // A escolha explícita também deve chegar durante os frames finais da retoma.
+  sendGroupPreferences({duringRestore:true});
 });

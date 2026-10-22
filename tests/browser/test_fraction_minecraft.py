@@ -1,5 +1,7 @@
 """The final construction is declared; only the on-page answer is assessed."""
-from playwright.sync_api import expect
+import pytest
+
+expect = pytest.importorskip("playwright.sync_api").expect
 from test_fraction_units import finish_representations
 
 
