@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 
 import httpx
+import pytest
 
 
 def enter_pair(page, origin, code):
@@ -39,6 +40,40 @@ def save_intentions(page):
 def screenshot(page, name):
     if directory := os.environ.get('PAGECRAFT_TICKET_PROOF'):
         page.screenshot(path=str(Path(directory) / name), full_page=True)
+
+
+@pytest.mark.parametrize('change', ['strategy', 'criterion'])
+def test_revising_reflection_preserves_the_saved_step(page, studio_origin, change):
+    from playwright.sync_api import expect
+    with httpx.Client(base_url=studio_origin) as teacher:
+        teacher.get('/api/teacher-bootstrap').raise_for_status()
+        teacher.post('/api/learning/activities', json={
+            'slug': 'fraction-test', 'title': 'Frações', 'year': 2, 'duration': 45,
+            'criteria': [{'id': 'iguais', 'pt': 'Reconheço partes iguais.'}]
+        }).raise_for_status()
+        session = create_session(teacher)
+        enter_pair(page, studio_origin, session['join_code'])
+        save_intentions(page)
+        page.get_by_role('button', name='A minha reflexão', exact=True).click()
+        page.get_by_role('button', name='Ana · Guardada', exact=True).click()
+        expect(page.get_by_label('O que queres experimentar a seguir?')).to_have_value('')
+        if change == 'strategy':
+            page.get_by_label('O que te ajudou?').fill('Comparei os blocos.')
+        else:
+            page.get_by_label('Consegui com ajuda', exact=True).check()
+        with page.expect_request(lambda request: request.method == 'POST' and request.url.endswith('/groups/me/reflections')) as sent:
+            page.get_by_role('button', name='Guardar a minha reflexão', exact=True).click()
+        expect(page.locator('#reflection-status')).to_contain_text('Reflexão guardada.')
+        assert sent.value.post_data_json['expected_revision'] == 1
+        assert sent.value.post_data_json['next_step'] == 'Comparar as metades.'
+        records = page.request.get(studio_origin + '/api/sessions/' + session['id'] + '/groups/me/reflections').json()
+        voice = records['reflections'][list(session['roster'])[0]]['payload']
+        assert voice['next_step'] == 'Comparar as metades.'
+        assert voice['revision'] == 2
+        if change == 'strategy':
+            assert voice['strategy'] == 'Comparei os blocos.'
+        else:
+            assert voice['answers'] == {'iguais': 'help'}
 
 
 def test_saved_intentions_are_read_only_and_separate_from_new_step(page, studio_origin):
