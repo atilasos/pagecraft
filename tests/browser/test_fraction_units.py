@@ -1,5 +1,7 @@
 """The child answers each request; correctness never gates navigation."""
-from playwright.sync_api import expect
+import pytest
+
+expect = pytest.importorskip("playwright.sync_api").expect
 
 
 def finish_bread(page, level='intermediate'):
