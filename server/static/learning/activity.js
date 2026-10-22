@@ -43,6 +43,8 @@ const copy = {
     recoveryUnavailable:
       "Não foi possível recuperar o teu trabalho. Tenta novamente antes de começar.",
     retryRecovery: "Tentar recuperar novamente",
+    recoveryExpired:
+      "O acesso a esta realização terminou. Não há trabalho pendente neste separador. Podes começar uma nova realização.",
     unavailable:
       "Não foi possível abrir a atividade. Confirma o endereço ou tenta novamente.",
     newAttempt:
@@ -93,6 +95,8 @@ const copy = {
     recoveryUnavailable:
       "We could not recover your work. Please try again before starting.",
     retryRecovery: "Try recovering again",
+    recoveryExpired:
+      "Access to this attempt has expired. There is no pending work in this tab. You can start a new attempt.",
     unavailable:
       "We could not open this activity. Check the address or try again.",
     newAttempt:
@@ -108,6 +112,7 @@ let requiresCompletion = false;
 let lang = "pt",
   activity,
   attempt,
+  expiredIdentity,
   identityConflict = false,
   queue = [],
   flushing = null,
@@ -438,6 +443,47 @@ $("finish-form").onsubmit = async (e) => {
     e.submitter.disabled = false;
   }
 };
+function emptyReflection(draft) {
+  return draft && typeof draft === "object" && !Array.isArray(draft) &&
+    Object.keys(draft).every((key) => ["answers", "strategy", "next_step"].includes(key)) &&
+    draft.answers && typeof draft.answers === "object" && !Array.isArray(draft.answers) &&
+    Object.keys(draft.answers).length === 0 && draft.strategy === "" && draft.next_step === "";
+}
+function noPendingWork(id) {
+  try {
+    if (queue.length || (attempt && !attempt.completed_at && !emptyReflection(reflectionDraft))) return false;
+    const storedQueue = sessionStorage.getItem("pc-queue:" + id);
+    const pending = storedQueue === null ? [] : JSON.parse(storedQueue);
+    const storedReflection = sessionStorage.getItem("pc-reflection:" + id);
+    return Array.isArray(pending) && pending.length === 0 &&
+      (storedReflection === null || emptyReflection(JSON.parse(storedReflection)));
+  } catch {
+    // Unreadable or malformed storage is not proof that no work is pending.
+    return false;
+  }
+}
+function startLocally(id) {
+  if (identityConflict || !id || !noPendingWork(id)) return false;
+  try {
+    if (sessionStorage.getItem("pc-realization:" + code) !== id) return false;
+    // This explicit choice only forgets this tab's reference. It never clears
+    // a shared cookie, nor removes drafts belonging to any realization.
+    sessionStorage.removeItem("pc-realization:" + code);
+  } catch {
+    return false;
+  }
+  attempt = null;
+  expiredIdentity = null;
+  queue = [];
+  reflectionDraft = { answers: {}, strategy: "", next_step: "" };
+  for (const id of ["work", "reflection", "done", "leave", "recovery-retry", "recovery-new"]) $(id).hidden = true;
+  $("lesson").src = "about:blank";
+  $("entry").hidden = false;
+  $("start-form").hidden = false;
+  $("name").value = "";
+  status("");
+  return true;
+}
 async function leave() {
   try {
     await flush();
@@ -448,7 +494,10 @@ async function leave() {
       sessionStorage.removeItem("pc-realization:" + code);
     }
     location.reload();
-  } catch {
+  } catch (error) {
+    // The pupil already chose to start anew. A 401 permits a local exit only
+    // when every source of pending work can be checked; 409 never permits it.
+    if (error.status === 401 && startLocally(attempt?.id)) return;
     status(t("newAttempt"), true);
   }
 }
@@ -535,6 +584,8 @@ setInterval(() => flush().catch(() => {}), 5000);
 async function recoverAttempt() {
   $("start-form").hidden = true;
   $("recovery-retry").hidden = true;
+  $("recovery-new").hidden = true;
+  expiredIdentity = null;
   status(t("recovering"));
   let expectedId;
   try {
@@ -563,18 +614,27 @@ async function recoverAttempt() {
       status("");
     }
   } catch (error) {
-    // Only a fresh tab with no credential may offer entry. A known tab must
-    // keep its pending work even when the shared credential is gone/expired.
+    // Known tabs need an explicit choice to forget their reference. Pending
+    // or uncertain data must remain recoverable, even after credentials expire.
     if (error.status === 401 && !expectedId) {
       $("start-form").hidden = false;
       status("");
     } else {
-      status(t("recoveryUnavailable"), true);
+      const canStartNew = error.status === 401 && expectedId && !identityConflict && noPendingWork(expectedId);
+      if (canStartNew) expiredIdentity = expectedId;
+      status(t(canStartNew ? "recoveryExpired" : "recoveryUnavailable"), true);
       $("recovery-retry").hidden = false;
+      $("recovery-new").hidden = !canStartNew;
     }
   }
 }
 $("recovery-retry").onclick = recoverAttempt;
+$("recovery-new").onclick = () => {
+  if (!startLocally(expiredIdentity)) {
+    $("recovery-new").hidden = true;
+    status(t("recoveryUnavailable"), true);
+  }
+};
 (async () => {
   try {
     activity = await api(`/api/learning/activities/${code}`);
