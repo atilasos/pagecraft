@@ -1,0 +1,81 @@
+{
+  "slug": "pontes-duas-vistas",
+  "phase": "Builder",
+  "status": "implemented_awaiting_proofreader_evaluator",
+  "date": "2026-10-22",
+  "branch": "feat/pontes-duas-vistas",
+  "htmlCommit": "150dffd",
+  "artifact": "drafts/pontes-duas-vistas.html",
+  "htmlSha256": "389c041b432d8a1aae15a42d077a39c0682ed0ff2d73745602b68c6d302ee1d5",
+  "inputs": [
+    "drafts/pontes-duas-vistas-docspec.json",
+    "drafts/pontes-duas-vistas-design-spec.json",
+    "drafts/pontes-duas-vistas-builder-prompt.md",
+    "server/pipeline/prompts/template-base.html",
+    "server/pipeline/prompts/references/bridge-contract.md"
+  ],
+  "implementation": [
+    "Quatro etapas com pedidos obrigatórios, saltos futuros validados e avanço independente de acerto.",
+    "Previsões A/B e hipótese inicial confirmadas antes de resultados. A 2/2 e B 2/1 conservadas, topo idêntico sem resultado sobreposto e laterais diferentes.",
+    "Hipótese e explicação revisíveis. Colega confronta a versão concreta com altura direita 1/2/3 num teste atual substituível; aceita encontrou/não encontrou e texto ou declaração oral.",
+    "Revisão invalida apreciação anterior do colega, conservando ensaios e comentário. Evidências anteriores continuam no host.",
+    "Três apoios livres com pistas distintas; componente comum incorporado e contexto atualizado. Confirmação verificável u3-variavel só emite attempt depois de fixar o contexto final; hipóteses e textos não recebem veredicto.",
+    "Bridge canónica por postMessage, checkpoint limitado e restauro validado por atividade/versão/valores antes de novos acontecimentos. sessionStorage só autónomo e protegido contra indisponibilidade.",
+    "Reflexão individual no host via open_reflection. Reflexão autónoma facultativa explicitamente local, sem envio. Modo presentation=1 suprime a ponte e torna painéis de apoio inertes.",
+    "Gothic real e licença incorporadas; HTML autocontido, sem scripts externos, links de rede ou chamadas API. Sem alterações a atividades existentes."
+  ],
+  "checks": [
+    {
+      "command": "python3 scripts/embed_activity_support.py --activity drafts/pontes-duas-vistas.html --docspec drafts/pontes-duas-vistas-docspec.json",
+      "result": "passed"
+    },
+    {
+      "command": "python3 scripts/embed_gothic_font.py --activity drafts/pontes-duas-vistas.html",
+      "result": "passed"
+    },
+    {
+      "command": "node --check em cada script inline extraído do HTML final",
+      "result": "passed"
+    },
+    {
+      "command": "node /tmp/check-pontes.cjs",
+      "result": "passed",
+      "note": "Harness temporário das funções reais de estado, não browser. Não é um teste persistente do repositório.",
+      "maxUtf8EnvelopeBytes": 3278,
+      "exclusiveLimit": 4096,
+      "cases": [
+        "pedidos vazios bloqueiam",
+        "respostas completas erradas concluem",
+        "mudança de apoio conserva trabalho",
+        "revisão invalida só apreciação do colega",
+        "topo igual e laterais diferentes",
+        "strings máximas Unicode astral",
+        "activity/version/valores inválidos recusados ou normalizados",
+        "restauro não emite attempt"
+      ]
+    },
+    {
+      "command": "jsonschema.validate DocSpec e design contra os esquemas canónicos",
+      "result": "passed"
+    },
+    {
+      "command": "verificação estrutural do HTML final",
+      "result": "passed",
+      "checks": [
+        "4 asides data-pagecraft-support",
+        "sem script src nem link externo",
+        "CSS e JavaScript inline"
+      ]
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    }
+  ],
+  "notVerifiedInThisPhase": [
+    "Browser real, teclado, larguras 390/768/1280, suporte automático no DOM e integração descartável pertencem ao Evaluator.",
+    "Leitura pedagógica final e AO90 pertencem ao Proofreader.",
+    "Não houve observação de crianças nem publicação ou registo de produção."
+  ],
+  "handoff": "O orquestrador conserva tests/test_pontes_draft.py, docs/reviews e execução das fases seguintes. Este relatório não declara aprovação pedagógica nem browser validado."
+}
