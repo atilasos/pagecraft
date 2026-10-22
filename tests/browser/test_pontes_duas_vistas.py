@@ -35,11 +35,18 @@ window.restore=(events=[])=>{const frame=document.querySelector('iframe').conten
 </script></body></html>'''
             elif path == '/lesson':
                 content = DRAFT.read_bytes()
+            elif path == '/support-modal.js':
+                content = (ROOT / 'server/static/student/support-modal.js').read_bytes()
+            elif path in ['/canonical-learning', '/canonical-student']:
+                frame_id = 'lesson' if path.endswith('learning') else 'activity-frame'
+                content = ('<!doctype html><html><body><button>Controlo exterior</button>'
+                           f'<iframe id="{frame_id}" src="/lesson"></iframe>'
+                           '<script src="/support-modal.js"></script></body></html>').encode()
             else:
                 self.send_error(404)
                 return
             self.send_response(200)
-            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.send_header('Content-Type', ('text/javascript' if path.endswith('.js') else 'text/html') + '; charset=utf-8')
             self.end_headers()
             self.wfile.write(content)
 
@@ -457,11 +464,9 @@ def test_real_private_studio_evidence_reflection_and_download(page, pontes_studi
     expect(lesson.locator('#peer-comment')).to_have_value('Com 1 bloco direito para, apesar de parecer igual de cima.')
     after_reload = page.request.get(pontes_studio + '/api/learning/me').json()['events']
     assert len([e for e in before_reload if e['type'] in ['attempt','assessment_result']]) == len([e for e in after_reload if e['type'] in ['attempt','assessment_result']])
-    lesson.locator('#next').click()
+    lesson.locator('#next').focus()
+    lesson.locator('#next').press('Enter')
     # Host reflection is an optional individual voice with a visible name.
-    reflect = page.get_by_role('button', name='Refletir sobre o meu trabalho')
-    if reflect.count():
-        reflect.click()
     expect(page.locator('#reflection')).to_be_visible()
     expect(page.locator('#reflection')).to_contain_text('Criança de ensaio Pontes')
     page.get_by_role('button', name='Guardar e terminar', exact=True).click()
@@ -582,3 +587,28 @@ def test_support_first_click_after_editing_text(page, pontes_origin):
     panel.locator('[data-support-action="hint"]').click()
     page.screenshot(path=str(PROOF / f'{SLUG}-support-first-click.png'), full_page=True)
     expect(panel.locator('.pc-support-action')).to_be_visible()
+
+
+@pytest.mark.parametrize('host,frame_id', [('learning','lesson'), ('student','activity-frame')])
+def test_canonical_modal_host_adapter_wraps_keyboard(page, pontes_origin, host, frame_id):
+    """Real canonical modal in both iframe adapters; host shell/payload are simulated."""
+    from playwright.sync_api import expect
+    page.goto(pontes_origin + '/canonical-' + host)
+    frame = page.frame_locator('#' + frame_id)
+    expect(frame.locator('#u1')).to_be_visible()
+    frame.locator('body').evaluate('''()=>parent.postMessage({pagecraft:1,type:'support_modal',payload:{action:'open',hint_id:'canonical-keyboard-proof',text:'Compara os apoios nas vistas de lado.',language:'pt',labels:{listen:'Ouvir',next:'Outra pista',stuck:'Ainda estou preso',teacher:'Pedir ajuda ao professor',continue:'Vou experimentar'}}},'*')''')
+    dialog = page.locator('dialog[open]')
+    expect(dialog).to_be_visible()
+    assert dialog.evaluate('(el)=>Math.abs(el.getBoundingClientRect().width-innerWidth)<1')
+    assert page.evaluate('!!document.activeElement.closest("dialog")')
+    page.keyboard.press('Escape')
+    expect(dialog).to_be_visible()
+    dialog.locator('[data-action="continue"]').focus()
+    page.keyboard.press('Tab')
+    forward = page.evaluate('({tag:document.activeElement.tagName,inside:!!document.activeElement.closest("dialog")})')
+    dialog.locator('[data-action="listen"]').focus()
+    page.keyboard.press('Shift+Tab')
+    backward = page.evaluate('({tag:document.activeElement.tagName,inside:!!document.activeElement.closest("dialog")})')
+    (PROOF / f'{SLUG}-canonical-{host}-focus.json').write_text(json.dumps({'host_adapter':host,'frame_id':frame_id,'forward':forward,'backward':backward,'simulated_host_shell_and_payload':True},indent=2)+'\n')
+    page.screenshot(path=str(PROOF / f'{SLUG}-canonical-{host}-focus.png'), full_page=True)
+    assert forward['inside'] and backward['inside']
