@@ -243,7 +243,7 @@
           field('hintLanguage',original.language)+field('goal',original.stage_objective)+field('criteria',original.criteria?.join(' · ')):'')+'</dl>'+
         (!original?'<p class="pc-support-note">'+esc(t('savedContext'))+'</p>':'')+
         '<p class="pc-support-history-text" lang="'+(hint.language==='en'?'en-GB':'pt-PT')+'">'+esc(hint.text)+'</p>'+
-        '<button type="button" data-support-action="history-listen-'+index+'">'+esc(t('listen'))+' · '+esc(t('historyHint'))+' '+(index+1)+'</button></details></li>';
+        '<button type="button" data-support-action="history-listen-'+index+'" data-support-hint-id="'+esc(hint.hint_id)+'">'+esc(t('listen'))+' · '+esc(t('historyHint'))+' '+(index+1)+'</button></details></li>';
     }).join('')+'</ol></details>';
   }
   function render() {
@@ -275,8 +275,10 @@
       panels.set(unit,panel);panel.classList.add('pc-support');panel.setAttribute('aria-label',COPY[language].title);
       if(unit!==unitId)panel.innerHTML='<button type="button" data-support-action="hint">'+esc(t('hint'))+'</button>';
       panel.addEventListener('click',event=>{
-        const action=event.target.closest('[data-support-action]')?.dataset.supportAction;
+        const control=event.target.closest('[data-support-action]');
+        const action=control?.dataset.supportAction;
         if(!action)return;
+        if(action.startsWith('history-listen-')){readHint(history.find(h=>h.hint_id===control.dataset.supportHintId));return;}
         if(unit!==unitId)update({unit_id:unit});
         if(action==='hint'||action==='next')requestHint();
         if(action==='stuck'){feedback('not_helped');requestHint();}
@@ -285,7 +287,6 @@
         if(action==='resolved')resolved();
         if(action==='ai')requestAI();
         if(action==='listen')listen();
-        if(action.startsWith('history-listen-'))readHint(history[Number(action.slice('history-listen-'.length))]);
         if(action==='mode'&&!locked){members=members===1?2:1;invalidate();resetFailures();render();}
         if(action==='external')setLocation(location==='pagecraft'?'external':'pagecraft');
         if(action==='return')setLocation('pagecraft');

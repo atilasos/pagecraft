@@ -3,17 +3,19 @@ const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const vm=require('node:vm'), fs=require('node:fs'), crypto=require('node:crypto');
 const examples=JSON.parse(fs.readFileSync('tests/fixtures/support-examples.json','utf8'));
-function activity(spec=examples[0]){
+function activity(spec=examples[0],twoPanels=false){
   const config={activity:spec.slug,activity_version:spec.support.version,objective:spec.objectives.join('; '),
     age_range:spec.ageRange,topic:spec.topic,automatic_after_failures:spec.support.automaticAfterFailures??3,
     languages:spec.support.languages||['pt'],externalWork:spec.support.externalWork||null,
     units:Object.fromEntries(spec.units.map((u,i)=>['u'+(i+1),{...u.support,title:u.summary}]))};
+  if(twoPanels)config.units.u2=structuredClone(config.units.u1);
   const box=vm.createContext({assert,crypto,console,config,TextEncoder});
   vm.runInContext(`
     const emitted=[],messages=[],documentEvents={},panelEvents={},utterances=[];let spoken=0;
-    const panel={dataset:{pagecraftSupport:'u1'},innerHTML:'',classList:{add(){}},setAttribute(){},addEventListener(type,fn){panelEvents[type]=fn},
-      querySelector(){return {focus(){},scrollIntoView(){}}}};
-    const document={activeElement:null,body:{},querySelectorAll(){return [panel]},
+    function makePanel(unit,events){return {dataset:{pagecraftSupport:unit},innerHTML:'',classList:{add(){}},setAttribute(){},addEventListener(type,fn){events[type]=fn},
+      querySelector(){return {focus(){},scrollIntoView(){}}}};}
+    const otherEvents={},panel=makePanel('u1',panelEvents),otherPanel=makePanel('u2',otherEvents);
+    const document={activeElement:null,body:{},querySelectorAll(){return ${twoPanels?'[panel,otherPanel]':'[panel]'}},
       addEventListener(type,fn){(documentEvents[type]||=[]).push(fn)},
       dispatchEvent(event){for(const fn of documentEvents[event.type]||[])fn(event)}};
     const window={parent:{postMessage(data){emitted.push(data)}},speechSynthesis:{cancel(){},speak(value){spoken++;utterances.push(value)}},
@@ -21,7 +23,11 @@ function activity(spec=examples[0]){
     const CustomEvent=class {constructor(type,opts={}){this.type=type;this.detail=opts.detail}};
     const SpeechSynthesisUtterance=class {constructor(text){this.text=text}};
     function host(type,payload,source=window.parent){messages.forEach(fn=>fn({source,data:{pagecraft:1,type,payload}}))}
-    function click(action){panelEvents.click({target:{closest(){return {dataset:{supportAction:action}}}}})}
+    function click(action,targetPanel=panel){
+      const markup=targetPanel.innerHTML.match(new RegExp('data-support-action="'+action+'"[^>]*'))?.[0]||'';
+      const supportHintId=markup.match(/data-support-hint-id="([^"]*)"/)?.[1];
+      (targetPanel===panel?panelEvents:otherEvents).click({target:{closest(){return {dataset:{supportAction:action,supportHintId}}}}});
+    }
   `,box);
   vm.runInContext(fs.readFileSync(process.env.PAGECRAFT_SUPPORT_SOURCE||'server/pipeline/prompts/activity-support.js','utf8'),box);
   vm.runInContext(`const support=window.PageCraftSupport;support.configure(config);support.update({unit_id:'u1',answer:'Uma tentativa',level:'intermediate'});`,box);
@@ -98,6 +104,25 @@ test('consulta não troca a pista atual nem cancela um pedido IA pendente',()=>{
     assert.equal(support.currentHintId(),current);assert.equal(JSON.stringify(emitted),before);
     support.receive({request_id:request,unit_id:'u1',text:'Outra abordagem com IA'});
     assert.equal(emitted.at(-1).payload.text,'Outra abordagem com IA');`);
+});
+test('ouvir o histórico de outro painel conserva tarefa, pista atual e pedido IA',()=>{
+  const run=activity(examples[0],true);
+  run(`host('learning_preferences',{route:'permanent'});support.requestHint();const first=emitted.at(-1);
+    support.update({unit_id:'u2',answer:'Outra resposta'});support.requestHint();const current=support.currentHintId();
+    support.requestAI();const request=emitted.at(-1).payload.request_id,before=JSON.stringify(emitted);
+    assert.equal(spoken,0);click('history-listen-0',panel);
+    assert.equal(utterances.at(-1).text,first.payload.text);assert.equal(JSON.stringify(emitted),before);
+    assert.equal(support.currentHintId(),current);
+    support.receive({request_id:request,unit_id:'u2',text:'Pista IA da segunda etapa'});
+    assert.equal(emitted.at(-1).payload.text,'Pista IA da segunda etapa');assert.equal(emitted.at(-1).unitId,'u2');`);
+});
+test('um painel anterior lê a pista clicada mesmo após reordenar o histórico na retoma',()=>{
+  const run=activity(examples[0],true);
+  run(`support.requestHint();const first=emitted.at(-1);support.requestHint();
+    const saved=JSON.parse(JSON.stringify(emitted)).reverse();support.update({unit_id:'u2'});
+    host('learning_restore',{events:saved});const before=JSON.stringify(emitted);
+    click('history-listen-0',panel);assert.equal(utterances.at(-1).text,first.payload.text);
+    assert.equal(JSON.stringify(emitted),before);assert.equal(support.currentHintId(),null);`);
 });
 test('contexto anterior assinala tarefa, revisão, produto, nível, língua e participantes',()=>{
   for(const change of ["support.update({task_id:'outra'})","support.update({revision:'editada'})",

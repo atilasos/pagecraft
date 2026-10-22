@@ -175,3 +175,29 @@ Antes de editar o runtime, os dois testes novos falharam na perda da marca
 em `/tmp/pagecraft-r2-retoma-after.log`. Também verificam persistência dos
 dois campos, retorno ao contexto original, compatibilidade de registos antigos,
 ausência de acontecimentos e ausência de áudio automático. Variantes sincronizadas.
+
+## Ronda 2: leitura entre painéis
+
+O segundo P2 foi reproduzido com os dois painéis montados em VM. Depois de
+pedir uma pista em u1, trabalhar e pedir IA em u2, o clique no histórico de u1
+passava por `update({unit_id:unit})`. A invalidação limpava a pista atual e o
+pedido pendente. O teste falhou com `currentHintId()` igual a `null`.
+
+A ação histórica é agora tratada antes da troca de unidade e termina aí.
+O botão conserva o `hint_id` da pista apresentada e procura esse identificador,
+sem depender da posição atual no histórico. Uma segunda reprodução reordenou
+os acontecimentos numa retoma enquanto o painel anterior mantinha o DOM.
+Antes, o botão da primeira pista lia o texto da segunda; depois, lê a pista
+que a criança selecionou. Não foi acrescentado estado nem alterada a API.
+
+```bash
+node --test --test-name-pattern='outro painel|painel anterior' tests/js/activity_support.test.cjs
+node --test tests/js/activity_support.test.cjs
+bash skills/sync-from-canonical.sh
+```
+
+Antes da correção, 2 falhas específicas, em
+`/tmp/pagecraft-r2-paineis-before.log`. Depois, 31 testes JS passam, zero
+falhas, em `/tmp/pagecraft-r2-paineis-after.log`. A consulta mantém exatamente
+os acontecimentos, o identificador da pista atual e a aceitação da resposta
+IA de u2. O teste de reordenação confirma identidade do texto lido.
