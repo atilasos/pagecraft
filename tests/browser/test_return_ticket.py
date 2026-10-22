@@ -43,6 +43,8 @@ def screenshot(page, name):
 
 def test_saved_intentions_are_read_only_and_separate_from_new_step(page, studio_origin):
     from playwright.sync_api import expect
+    errors = []
+    page.on('pageerror', lambda error: errors.append(str(error)))
     with httpx.Client(base_url=studio_origin) as teacher:
         session = create_session(teacher)
         path = '/api/sessions/' + session['id']
@@ -93,6 +95,7 @@ def test_saved_intentions_are_read_only_and_separate_from_new_step(page, studio_
         assert [event['payload']['next_step'] for event in history if event['type'] == 'individual_reflection'] == [
             'Comparar as metades.', 'Comparar terços.'
         ]
+        assert not errors
 
 
 def test_resume_and_composition_change_require_a_fresh_name_choice(page, studio_origin):
@@ -117,6 +120,25 @@ def test_resume_and_composition_change_require_a_fresh_name_choice(page, studio_
             ticket.get_by_role('button', name='Bruno', exact=True).click()
             expect(next_day.locator('#return-ticket-text')).to_have_text('Experimentar quartos.')
             group = next_day.request.get(studio_origin + path + '/me').json()['work_group']
+            next_day.evaluate('''() => {
+              const fetchActual = window.fetch.bind(window);
+              let first = true;
+              const gate = new Promise(resolve => window.releaseOldComposition = resolve);
+              window.fetch = async (...args) => {
+                const response = await fetchActual(...args);
+                if (first && String(args[0]).endsWith('/groups/me/reflections')) {
+                  first = false;
+                  const jsonActual = response.json.bind(response);
+                  response.json = async () => {
+                    const data = await jsonActual(); window.oldCompositionWaiting = true;
+                    await gate; window.oldCompositionReleased = true; return data;
+                  };
+                }
+                return response;
+              };
+            }''')
+            next_day.get_by_role('button', name='A minha reflexão', exact=True).click()
+            next_day.wait_for_function('window.oldCompositionWaiting === true')
             teacher.patch(path + f"/groups/{group['id']}/participants", json={
                 'participant_ids': [ids[0], ids[2]], 'mode': 'pair'
             }).raise_for_status()
@@ -124,6 +146,9 @@ def test_resume_and_composition_change_require_a_fresh_name_choice(page, studio_
             expect(ticket).to_be_hidden()
             expect(next_day.locator('#return-ticket-text')).to_have_text('')
             next_day.get_by_role('button', name='O meu próximo passo', exact=True).click()
+            next_day.evaluate('window.releaseOldComposition()')
+            next_day.wait_for_function('window.oldCompositionReleased === true')
+            expect(ticket).to_be_visible()
             expect(ticket.get_by_role('button', name='Bruno', exact=True)).to_have_count(0)
             expect(ticket.get_by_role('button', name='Carla', exact=True)).to_have_count(0)
             expect(next_day.locator('#return-ticket-text')).to_be_hidden()
@@ -165,3 +190,79 @@ def test_missing_intention_and_read_failure_leave_the_activity_available(page, s
         # A failed optional read must not stop actual activity controls.
         page.frame_locator('#activity-frame').get_by_role('button', name='Cortar ao meio', exact=True).click()
         page.frame_locator('#activity-frame').get_by_role('button', name='Sim', exact=True).click()
+
+
+def test_late_read_and_local_draft_cannot_replace_a_saved_intention(page, studio_origin):
+    from playwright.sync_api import expect
+    with httpx.Client(base_url=studio_origin) as teacher:
+        session = create_session(teacher)
+        enter_pair(page, studio_origin, session['join_code'])
+        save_intentions(page)
+        # Hold the first real server response after reload. Newer reads and saves proceed normally.
+        page.add_init_script('''(() => {
+          const fetchActual = window.fetch.bind(window);
+          let first = true;
+          const bodyGate = new Promise(resolve => window.releaseTicketRead = resolve);
+          window.fetch = async (...args) => {
+            const response = await fetchActual(...args);
+            if (first && String(args[0]).endsWith('/groups/me/reflections') && !args[1]?.method) {
+              first = false;
+              const jsonActual = response.json.bind(response);
+              response.json = async () => {
+                const data = await jsonActual(); window.ticketReadWaiting = true;
+                await bodyGate; window.ticketReadReleased = true; return data;
+              };
+            }
+            return response;
+          };
+        })();''')
+        page.reload()
+        page.wait_for_function('window.ticketReadWaiting === true')
+        expect(page.locator('#activity-frame')).to_be_visible(timeout=15000)
+        page.get_by_role('button', name='A minha reflexão', exact=True).click()
+        page.get_by_role('button', name='Ana · Guardada', exact=True).click()
+        page.get_by_label('O que queres experimentar a seguir?').fill('Testar oitavos.')
+        page.get_by_role('button', name='Guardar a minha reflexão', exact=True).click()
+        expect(page.locator('#reflection-status')).to_contain_text('Reflexão guardada.')
+        page.get_by_role('button', name='Voltar à atividade', exact=True).click()
+        page.get_by_role('button', name='O meu próximo passo', exact=True).click()
+        ticket = page.locator('#return-ticket')
+        ticket.get_by_role('button', name='Ana', exact=True).click()
+        page.evaluate('window.releaseTicketRead()')
+        page.wait_for_function('window.ticketReadReleased === true')
+        expect(ticket).to_be_visible()
+        expect(page.locator('#return-ticket-text')).to_have_text('Testar oitavos.')
+        page.get_by_role('button', name='Voltar ao trabalho', exact=True).click()
+        page.get_by_role('button', name='A minha reflexão', exact=True).click()
+        page.get_by_role('button', name='Ana · Guardada', exact=True).click()
+        expect(page.locator('#reflection-previous-step')).to_have_text('Testar oitavos.')
+        page.get_by_label('O que queres experimentar a seguir?').fill('Ainda só um rascunho.')
+        page.get_by_role('button', name='Voltar à atividade', exact=True).click()
+        page.get_by_role('button', name='O meu próximo passo', exact=True).click()
+        ticket.get_by_role('button', name='Ana', exact=True).click()
+        expect(page.locator('#return-ticket-text')).to_have_text('Testar oitavos.')
+        # Reload keeps the local draft editable, but references only the saved server value.
+        page.reload()
+        page.wait_for_function('window.ticketReadWaiting === true')
+        page.evaluate('window.releaseTicketRead()')
+        page.get_by_role('button', name='O meu próximo passo', exact=True).click()
+        ticket.get_by_role('button', name='Ana', exact=True).click()
+        expect(page.locator('#return-ticket-text')).to_have_text('Testar oitavos.')
+        page.get_by_role('button', name='Voltar ao trabalho', exact=True).click()
+        page.get_by_role('button', name='A minha reflexão', exact=True).click()
+        page.get_by_role('button', name='Ana · Por guardar', exact=True).click()
+        expect(page.locator('#reflection-previous-step')).to_have_text('Testar oitavos.')
+        expect(page.get_by_label('O que queres experimentar a seguir?')).to_have_value('Ainda só um rascunho.')
+        # Reading an intention cannot bypass the separate gate for restoring actual work.
+        page.route('**/groups/me/history', lambda route: route.fulfill(status=503, body='{}'))
+        page.reload()
+        page.wait_for_function('window.ticketReadWaiting === true')
+        page.evaluate('window.releaseTicketRead()')
+        expect(page.locator('#restore-status')).to_contain_text('Não foi possível recuperar')
+        page.get_by_role('button', name='O meu próximo passo', exact=True).click()
+        ticket.get_by_role('button', name='Ana', exact=True).click()
+        expect(page.locator('#return-ticket-text')).to_have_text('Testar oitavos.')
+        expect(page.locator('#activity-frame')).to_be_hidden()
+        page.unroute('**/groups/me/history')
+        page.get_by_role('button', name='Tentar recuperar novamente', exact=True).click()
+        expect(page.locator('#activity-frame')).to_be_visible(timeout=15000)

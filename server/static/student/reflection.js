@@ -4,7 +4,7 @@ const groupReflection = (() => {
   const labels = {alone:'Consegui com autonomia', help:'Consegui com ajuda', practising:'Quero praticar mais', skip:'Prefiro não responder'};
   const icons = {alone:'✓', help:'🤝', practising:'↻', skip:'○'};
   let context = null, current = null, criteria = [], saved = {}, drafts = {}, archived = [], generation = 0, sending = false;
-  let previousSteps = {}, opening = 0;
+  let previousSteps = {}, opening = 0, reading = 0;
   const endpoint = () => `/api/sessions/${context.session}/groups/me/reflections`;
   const key = () => `pc-group-reflections:${context.session}:${context.group.device_id}`;
   const status = text => { element('reflection-status').textContent = text; };
@@ -23,6 +23,9 @@ const groupReflection = (() => {
     element('reflection-form').hidden = true;
     element('activity-frame').hidden = false;
     element('group-reflect-btn').hidden = true;
+    element('group-reflect-btn').disabled = false;
+    element('return-ticket-btn').disabled = false;
+    element('reflection-members').replaceChildren();
     element('pending-group-reflections').hidden = true;
     element('return-ticket-btn').hidden = true;
     closeTicket();
@@ -47,13 +50,13 @@ const groupReflection = (() => {
   }
 
   async function read() {
-    const version = generation;
+    const version = generation, requestRead = ++reading;
     const response = await fetch(endpoint());
-    if (version !== generation) return false;
+    if (version !== generation || requestRead !== reading) return false;
     if (response.status === 401) { invalidateStudentIdentity(); return false; }
     if (!response.ok) throw new Error('Não foi possível abrir as reflexões. Tenta novamente.');
     const data = await response.json();
-    if (version !== generation) return false;
+    if (version !== generation || requestRead !== reading) return false;
     criteria = data.criteria;
     saved = data.reflections;
     renderPendingReflections();
@@ -210,6 +213,8 @@ const groupReflection = (() => {
   }
 
   function lockForm(pending) {
+    element('group-reflect-btn').disabled = sending;
+    element('return-ticket-btn').disabled = sending;
     element('reflection-form').querySelectorAll('input, textarea').forEach(input => { input.disabled = sending || pending; });
     element('reflection-skip').disabled = sending || pending;
     element('reflection-save').disabled = sending || isOldDraft(drafts[current]);
@@ -218,11 +223,12 @@ const groupReflection = (() => {
   }
 
   async function open() {
-    if (!context) return;
+    if (!context || sending) return;
     const requestOpening = ++opening;
     previousSteps = {};
     closeTicket();
     current = null;
+    element('reflection-members').replaceChildren();
     element('reflection-form').hidden = true;
     element('group-reflection').hidden = false;
     element('activity-frame').hidden = true;
@@ -235,7 +241,7 @@ const groupReflection = (() => {
       participants(); status('');
       element('reflection-heading').focus();
       element('group-reflection').scrollIntoView({block:'start'});
-    } catch (error) { status(error.message); }
+    } catch (error) { if (requestOpening === opening) status(error.message); }
   }
 
   async function save(skipped = false) {
@@ -264,6 +270,7 @@ const groupReflection = (() => {
       }
       const record = await response.json();
       if (version !== generation) return;
+      reading++;
       saved[studentId] = record;
       renderTicket();
       delete drafts[studentId]; persist(); renderPendingReflections();
@@ -279,11 +286,12 @@ const groupReflection = (() => {
 
   element('group-reflect-btn').onclick = open;
   element('return-ticket-btn').onclick = () => {
-    if (!context) return;
+    if (!context || sending) return;
     opening++;
+    reading++;
     renderTicket();
     element('group-reflection').hidden = true;
-    element('activity-frame').hidden = false;
+    element('activity-frame').hidden = !!state.restoringWork;
     element('return-ticket').hidden = false;
     element('return-ticket-btn').setAttribute('aria-expanded', 'true');
     element('return-ticket-heading').focus();
@@ -298,6 +306,7 @@ const groupReflection = (() => {
   element('reflection-skip').onclick = () => save(true);
   element('reflection-back').onclick = () => {
     opening++;
+    reading++;
     element('group-reflection').hidden = true;
     element('activity-frame').hidden = false;
     element('group-reflect-btn').focus();
