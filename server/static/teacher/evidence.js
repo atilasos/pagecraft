@@ -101,7 +101,7 @@ window.DrawerEvidence = (() => {
     return text ? `${text}, segundo ${record.work_group_id ? 'o grupo' : 'o aluno'}` : 'não registado';
   }
 
-  function renderHelp(root, events, students) {
+  function renderHelp(root, events, students, unitLabel) {
     root.replaceChildren();
     const entries = pendingHelp(events);
     if (!entries.length) {
@@ -131,7 +131,7 @@ window.DrawerEvidence = (() => {
         fields.append(term, definition);
       }
       field('Nota do pedido', payload(request).note);
-      field('Etapa', ownContext.stage || unit(request));
+      field('Etapa', ownContext.stage || (unit(request) ? unitLabel(unit(request)) : null));
       field('Tarefa', value(request, 'question') || ownContext.activity_characteristics?.task_description || responsePayload.question);
       const answer = value(request, 'answer');
       field('Resposta registada', answer ?? responsePayload.answer ?? object(responsePayload.detail).value,

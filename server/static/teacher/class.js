@@ -842,7 +842,7 @@ async function loadDrawerHistory(studentId) {
       return;
     }
     const events = data.events.filter(record => record && typeof record === 'object' && typeof record.type === 'string');
-    DrawerEvidence.renderHelp($("drawer-help"), events, students);
+    DrawerEvidence.renderHelp($("drawer-help"), events, students, unitLabel);
     renderDrawerHistory(events);
   } catch (error) {
     if (current()) unavailable('Não foi possível carregar o percurso e o contexto.');
