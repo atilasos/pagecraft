@@ -115,3 +115,88 @@ Os ficheiros de produção alterados são apenas `server/static/student/index.ht
 e `server/static/student/reflection.js`. A prova reproduzível está em
 `tests/browser/test_return_ticket.py`. Este relatório completa a entrega para
 revisão independente do agente principal.
+
+## Ronda 2: preservar a intenção ao rever outras respostas
+
+Base desta ronda: `b04926a54d7b395af39240e962126a5ef7894131`, na mesma branch e
+worktree. Os dois achados P2 foram confirmados e corrigidos.
+
+O contrato de revisão descrito acima tinha uma falha: abrir o campo novo vazio
+e guardar só uma alteração da estratégia ou dos critérios enviava `next_step: ''`
+com `expected_revision: 1`. Isso apagava a intenção anterior sem escolha da criança.
+Os dois casos foram reproduzidos no Studio real antes da correção. Resultado:
+`2 failed, 4 deselected in 5.91s`, em
+`/tmp/pagecraft-bilhete-ronda2-proof/antes.txt`. O teste de reprodução está no
+commit `f7c4679`, anterior à correção.
+
+Agora, o campo novo continua vazio quando não há rascunho. A indicação
+"Se não escreveres outro, manténs o passo guardado" explica a conservação.
+Texto novo substitui a intenção. A opção "Quero retirar o passo guardado"
+permite removê-la explicitamente e desativa o campo novo enquanto está marcada.
+Desmarcar recupera a possibilidade de escrever, sem perder o texto em rascunho.
+Só guardar confirma estas escolhas no servidor.
+
+O rascunho local conserva separadamente o texto novo, a intenção correspondente
+à sua revisão e a escolha de retirada. Estes campos locais não são enviados à API.
+O pedido usa o contrato existente e conserva o mesmo payload e `event_id` após
+falha ou reload. Um conflito continua a exigir "Rever versão guardada".
+A referência anterior permanece congelada durante cada abertura. Se a criança
+guardar um passo novo e voltar a alterar a estratégia nessa mesma abertura,
+conserva o passo vigente, mesmo que a referência ainda mostre o anterior.
+
+Foi relida pela API a página integral `Avaliação Cooperada` da Sebenta,
+em `review`, confiança `medium`, atualizada em 09/07/2026. A síntese liga a
+participação na avaliação à participação na planificação. Preservar a intenção
+até uma nova escolha explícita é uma decisão de produto coerente com essa síntese,
+não uma regra de interface prescrita pela fonte.
+
+O segundo achado também foi reproduzido: a 1280 px, o parágrafo ocupava 860 px,
+acima dos 554,19 px correspondentes a `50ch` nessa fonte. Os dois parágrafos,
+`#return-ticket-text` e `#reflection-previous-step`, têm agora
+`max-inline-size: 50ch` e `overflow-wrap: break-word`. O browser verificou textos
+de 1500 caracteres, incluindo um trecho de 300 caracteres sem espaços, a 1280 e
+320 px. Ambos os locais respeitam a medida e a largura disponível, sem scroll
+horizontal. Log anterior: `/tmp/pagecraft-bilhete-ronda2-proof/antes-largura.txt`.
+
+### Comandos e resultados desta ronda
+
+Executar no worktree, com uma sessão própria do Hub e o seu endereço CDP:
+
+```bash
+mkdir -p /tmp/pagecraft-bilhete-ronda2-proof
+PAGECRAFT_TEST_CDP=http://127.0.0.1:9330 PAGECRAFT_TICKET_PROOF=/tmp/pagecraft-bilhete-ronda2-proof uv run --project /home/proteu/pagecraft --with playwright pytest tests/browser/test_return_ticket.py tests/browser/test_group_reflections.py tests/browser/test_group_continuation_ui.py -q
+uv run --project /home/proteu/pagecraft pytest tests/test_group_continuation.py tests/test_work_groups.py -q
+node --check server/static/student/reflection.js
+git diff --check
+```
+
+Substituir `9330` pela porta da sessão nova. A execução foi repartida em duas
+verificações de browser: 19 testes funcionais passaram em 65,89 s; depois da
+correção CSS, os dois testes de largura passaram em 5,07 s. Logs respetivos:
+`/tmp/pagecraft-bilhete-ronda2-proof/funcional.txt` e `depois-largura.txt`.
+Os 28 testes da API passaram em 1,61 s, em `api.txt` no mesmo diretório.
+Sintaxe JavaScript e `git diff --check` passaram.
+
+As regressões novas cobrem alterações só de estratégia e só de critério;
+conservação, substituição e retirada com troca de criança e rascunho após reload;
+resposta de gravação perdida, repetição do payload e ausência de duplicação;
+conflito para cada escolha; e nova revisão durante a mesma referência congelada.
+As verificações existentes de consultas sem acontecimentos, autoria, acesso,
+composição, respostas atrasadas e falha opcional também passaram.
+
+Capturas inspecionadas: `reflexao.png`, `reflexao-320.png` e `bilhete-1280.png`,
+em `/tmp/pagecraft-bilhete-ronda2-proof/`. Existem ainda `bilhete-320.png` e
+`reflexao-1280.png`. A sessão própria `pagecraft-bilhete-ronda2`, perfil
+`temporary`, foi criada e fechada pelo Agent Browser Hub. O fecho confirmou
+`{"ok":true,"closed":"pagecraft-bilhete-ronda2"}`.
+
+Commits desta ronda, antes do registo do relatório:
+
+- `f7c4679`: reproduz perda do passo ao rever reflexão.
+- `0fcb05f`: conserva passo guardado ao rever reflexão.
+- `e4fd27e`: limita bilhete e referência a `50ch`.
+
+Os ficheiros de produção desta ronda são `server/static/student/index.html`,
+`server/static/student/reflection.js` e `server/static/studio.css`. A regressão
+está em `tests/browser/test_return_ticket.py`. `app.js` e o transporte não foram
+alterados. Não foram abertos PRs, feitos merges ou usados agentes adicionais.
