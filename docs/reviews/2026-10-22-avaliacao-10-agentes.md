@@ -107,3 +107,18 @@ para detetar interações que os testes isolados não mostram.
 O rascunho das pontes pode ser integrado no repositório sem se tornar atividade
 publicada. A revisão específica do professor continua a ser necessária antes
 de o disponibilizar aos alunos, conforme a skill PageCraft e o ADR-0005.
+
+## Revisão da avaliação e do comando de verificação
+
+Duas revisões independentes sobre `4c6ba90...3c5befb`:
+
+- Standards: zero violações documentadas. Uma observação operacional pediu
+  execução offline no comando de verificação; acrescentado `--offline` nas
+  duas invocações de uv.
+- Spec: zero achados. Confirmados os dez relatórios, fontes e limites da
+  Sebenta e separação entre seleção e implementação concluída.
+
+O comando pressupõe dependências já instaladas ou em cache. Preparação inicial
+do ambiente: `uv sync`; para preparar a dependência opcional de browser,
+`uv run --with playwright==1.63.0 python -c 'import playwright'`. Os ensaios
+usam o browser aberto pelo Hub, sem instalar ou lançar um browser paralelo.
