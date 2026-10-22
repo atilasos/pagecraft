@@ -3,87 +3,125 @@
   "phase": "Evaluator",
   "activity": "pontes-duas-vistas",
   "route": "builder",
-  "severity": "medium",
+  "severity": "high",
   "reviewed_branch": "feat/pontes-duas-vistas",
-  "reviewed_head": "fb72b730d2beacdef8db18b01c44490a7f868af0",
-  "reviewed_html_commit": "6a03829",
-  "html_sha256": "bd949ef2aec0f20bb6c437c7bcdc95f89ef79356e26567cf681bd9cd9daf0920",
+  "reviewed_head": "1d0cb9597ecc356ac7f31a8468131f69b4755458",
+  "reviewed_html_commit": "ac66ab7",
+  "html_sha256": "31a43c671330f80e6e30f51dc6035ef78313f7fb0be634fe71adcf505dbb57ae",
   "scores": {
     "factual_accuracy": 5,
-    "constraint_alignment": 4,
+    "constraint_alignment": 5,
     "differentiation_quality": 4,
-    "ux_accessibility": 4,
-    "visual_design": 3,
-    "technical_quality": 4
+    "ux_accessibility": 2,
+    "visual_design": 4,
+    "technical_quality": 3
   },
   "issues": [
     {
-      "id": "missing-character-result",
-      "severity": "medium",
+      "id": "real-host-modal-focus-return",
+      "severity": "high",
       "route": "builder",
-      "summary": "A pista manda observar a personagem, mas as vistas laterais não desenham a personagem nem a sua posição.",
-      "source": "/tmp/pagecraft-pontes-spec-r1.md",
-      "affected": [
-        "trialCard/sideView após teste A/B",
-        "peer-view após teste do colega"
+      "summary": "O modal fecha por escolha explícita mas o pipeline real não devolve foco ao trabalho do iframe.",
+      "canonical_integration": "server/pipeline/prompts/activity-support.js present/modalAction; fonte e espelhos, reincorporação do rascunho.",
+      "steps": [
+        "Abrir a página real learning /{code} ou student /student/ em Studio descartável.",
+        "No iframe da atividade pronta, executar PageCraftSupport.requestHint(\"u1\",true), uma pista local revista sem IA.",
+        "Verificar Tab/Shift+Tab e Escape no modal, premir Enter em Vou experimentar.",
+        "Observar document.activeElement do anfitrião e do iframe, sem focar manualmente depois da ação."
       ],
-      "required_fix": "Desenhar a personagem na posição final da lateral, atravessou/parou, só depois do teste respetivo. Preservar todos os SVGs superiores e pré-revelação. Manter texto redundante.",
+      "expected": "Retomar com foco seguro na ação da pista atual dentro do iframe, que present() tinha focado antes do modal.",
+      "actual": "Nos dois anfitriões document.activeElement é BODY tanto no host como no iframe. A .pc-support-action existe e está visível, mas continua inativa após cinco segundos.",
+      "protocol_verified": "requested_hint_id == received_actions[0].hint_id == current_hint_id, e action==continue. Não é o payload artificial da ronda anterior.",
       "evidence": [
-        "drafts/pontes-duas-vistas-after-results.png",
-        "drafts/pontes-duas-vistas-design-spec.json"
-      ]
+        "drafts/pontes-duas-vistas-green-real-learning-resume-focus.json",
+        "drafts/pontes-duas-vistas-green-real-student-resume-focus.json",
+        "drafts/pontes-duas-vistas-resume-red-tests.txt"
+      ],
+      "regression_test": "test_real_studio_hosts_load_current_modal_and_resume_keyboard[learning|student]",
+      "required_fix": "Restaurar o foco no percurso real de retoma explícita do componente canónico. Não focar o exterior ao pedir outra pista que volta a abrir modal. Sincronizar espelhos, reincorporar o rascunho final e repetir os 23 testes."
     }
   ],
   "critical": [],
   "required_fixes": [
-    "Desenhar a personagem na posição final da lateral, atravessou/parou, só depois do teste respetivo. Preservar todos os SVGs superiores e pré-revelação. Manter texto redundante."
+    "Restaurar o foco no percurso real de retoma explícita do componente canónico. Não focar o exterior ao pedir outra pista que volta a abrir modal. Sincronizar espelhos, reincorporar o rascunho final e repetir os 23 testes."
   ],
   "evidence": [
     {
       "kind": "Hub",
       "session": "pagecraft-pontes-evaluation",
       "profile": "temporary",
-      "pid": 3192127,
-      "created_at": "2026-10-23T00:06:29+01:00",
+      "pid": 3242178,
+      "created_at": "2026-10-23T00:16:07+01:00",
       "cdp_url": "http://127.0.0.1:9331",
-      "ownership": "Sessão nova criada pelo Evaluator; a porta foi atribuída de novo pelo Hub, não foi ligada a sessão alheia.",
+      "closed_confirmed": true,
       "operations": [
         "start",
+        "status",
         "navigate",
         "state",
         "screenshot",
         "close"
       ],
-      "closed_confirmed": true,
-      "screenshot": "/home/proteu/agent-browser-hub/screenshots/pontes-duas-vistas-evaluator-green-initial.png"
+      "other_session_untouched": "pagecraft-final-integrated research9330",
+      "screenshot": "/home/proteu/agent-browser-hub/screenshots/pontes-duas-vistas-evaluator-final.png"
     },
     {
       "kind": "regression",
       "red_log": "drafts/pontes-duas-vistas-red-tests.txt",
-      "red_evaluation": "drafts/pontes-duas-vistas-red-evaluation.json",
       "red_proof_commit": "b432cfd",
-      "green_log": "drafts/pontes-duas-vistas-green-tests.txt",
-      "observation": "As três causas antigas estão resolvidas no browser; vinte casos originais passam."
+      "current_log": "drafts/pontes-duas-vistas-final-tests.txt",
+      "observation": "20 regressões anteriores passam; a regressão DOM/SVG nova passa. As duas falhas atuais são a mesma causa de retorno de foco, confirmada com pipeline genuíno."
+    },
+    {
+      "kind": "character",
+      "artifact": "drafts/pontes-duas-vistas-green-character-evidence.json",
+      "screenshots": [
+        "drafts/pontes-duas-vistas-green-character-ab.png",
+        "drafts/pontes-duas-vistas-green-character-peer.png"
+      ],
+      "checks": [
+        "u1 sem lateral/personagem",
+        "u2 sem personagem antes do respetivo teste",
+        "SVG g.character com geometria círculo/path visível e posição crossed252/stopped22",
+        "A preservada após B",
+        "topos outerHTML exatamente iguais e sem personagem",
+        "u3 mantém as figuras",
+        "colega1/2/3 só revela após confirmar e oculta ao mudar altura",
+        "ARIA da lateral descreve posição e resultado redundante"
+      ]
     },
     {
       "kind": "actual_hosts",
-      "results": "Script /student/support-modal.js?v=2 recebido200 e igual ao canónico nos dois hosts; Tab/ShiftTab e Escape passam. Retorno após payload artificial é inconclusivo.",
-      "screenshots": [
-        "drafts/pontes-duas-vistas-green-real-learning-modal.png",
-        "drafts/pontes-duas-vistas-green-real-student-modal.png"
-      ],
-      "focus_diagnostic": [
+      "scripts": "/student/support-modal.js?v=2 recebeu200 e conteúdo igual ao canónico nos dois anfitriões reais.",
+      "local_guide_pipeline": true,
+      "real_ai_provider": false,
+      "diagnostics": [
         "drafts/pontes-duas-vistas-green-real-learning-resume-focus.json",
         "drafts/pontes-duas-vistas-green-real-student-resume-focus.json"
       ],
-      "cache_proof": "Asserções executadas antes da falha de retorno em test_real_studio_hosts_load_current_modal_and_resume_keyboard: response200, URL?v=2, conteúdo igual ao canónico e script DOM único."
+      "observation": "Hint real e callback continue correlacionados; hostBODY/iframeBODY após fechar."
     },
     {
       "kind": "checkpoint",
       "artifact": "drafts/pontes-duas-vistas-browser-metrics.json",
       "browser_maximum_bytes": 4092,
+      "node_builder_extreme_bytes": 4095,
       "limit_exclusive": 4096,
-      "distinction": "O Builder relatou4095 emNode comMAXrevision; o browser deste Evaluator mediu4092. Não são a mesma execução."
+      "distinction": "4092 foi observado no browser nesta ronda;4095 foi relatado pelo Builder em Node comMAXrevision. Não são a mesma execução."
+    },
+    {
+      "kind": "responsive",
+      "widths": [
+        390,
+        768,
+        1280
+      ],
+      "artifacts": [
+        "drafts/pontes-duas-vistas-width-390.png",
+        "drafts/pontes-duas-vistas-width-768.png",
+        "drafts/pontes-duas-vistas-width-1280.png"
+      ],
+      "result": "Sem overflow nas quatro unidades e alvos48px nos controlos/labels observados."
     }
   ],
   "acceptance_checks": [
@@ -157,50 +195,48 @@
     },
     {
       "check": "Script canónico atual e ciclo Tab/ShiftTab/Escape nos anfitriões reais learning e student",
-      "result": "PASS nas partes executadas; retorno do pipeline real ainda não verificado"
+      "result": "PASS; retorno do foco FAIL no pipeline real"
     },
     {
       "check": "Representação da personagem após o teste lateral A/B/colega",
-      "result": "FAIL, reparação P2 pendente"
+      "result": "PASS em DOM/SVG real, geometria/transform/ARIA/revelação/ocultação"
+    },
+    {
+      "check": "Retoma do foco depois de Vou experimentar nos dois anfitriões reais com pista local genuína",
+      "result": "FAIL real-host-modal-focus-return"
     }
   ],
   "blocked_by": [],
   "limitations": [
-    "Sem observação com crianças; adequação e duração dependem de revisão docente.",
-    "Sem IA real, sem publicação ou escrita em produção.",
-    "Dois anfitriões reais verificaram cache, carregamento do script, ciclo de foco e Escape com payload artificial. O retorno completo com pista real está preparado e por executar, não é defeito confirmado.",
-    "Pipeline novo com PageCraftSupport.requestHint(u1,true) preparado para próxima ronda; testes respeitam imports Playwright lazy.",
+    "Sem observação com crianças; adequação e duração dependem da revisão docente.",
+    "Sem IA real, publicação ou escrita em produção. Studio isolado e participantes fictícios.",
+    "A sessão student real foi usada para o modal, não para validar todas as formas de autoria conjunta/reflexão em grupo.",
     "Sem auditoria completa com leitor de ecrã, Safari/Firefox ou dispositivos físicos."
   ],
   "privacy_boundary": "Só draft novo e Studio temporário. Sem produção, publicação, catálogo, atividades existentes ou PR.",
   "final_test_run": {
-    "original_regressions": {
-      "passed": 20,
-      "failed": 0,
-      "seconds": 27.65,
-      "log": "drafts/pontes-duas-vistas-green-tests.txt"
-    },
-    "actual_hosts_simulated_payload": {
+    "command": "PAGECRAFT_TEST_CDP=<cdp_url da nova sessão própria> uv run --project /home/proteu/pagecraft --with playwright pytest tests/browser/test_pontes_duas_vistas.py -q --tb=short",
+    "passed": 21,
+    "failed": 2,
+    "total": 23,
+    "seconds": 41.78,
+    "log": "drafts/pontes-duas-vistas-final-tests.txt",
+    "focused_reproduction": {
       "passed": 0,
       "failed": 2,
-      "seconds": 12.35,
-      "log": "drafts/pontes-duas-vistas-hosts-r2-tests.txt",
-      "limitation": "Asserção de foco de retorno não é prova de defeito: hint_id artificial não passa por PageCraftSupport.showModal/current/modalAction. Não atribuir estas falhas ao produto."
-    },
-    "actual_hosts_genuine_local_guide": {
-      "tests": 2,
-      "status": "prepared_not_run",
-      "test_commit": "13a8e9e",
-      "next": "Reexecutar após Builder visual. Usa PageCraftSupport.requestHint(u1,true) com hint_id real e sem IA."
+      "deselected": 21,
+      "seconds": 12.32,
+      "log": "drafts/pontes-duas-vistas-resume-red-tests.txt"
     },
     "without_optional_browser_dependency": {
-      "skipped": 22,
-      "seconds": 1.02
+      "skipped": 23,
+      "seconds": 1.04,
+      "log": "drafts/pontes-duas-vistas-no-browser-tests.txt"
     }
   },
-  "evaluated_at": "2026-10-22T23:11:40.345637+00:00",
-  "test_commit": "13a8e9e",
-  "next_verification": "Após a personagem, reexecutar as 22 regressões e os testes visuais novos. Confirmar retoma no pipeline de apoio genuíno dos dois anfitriões, sem IA.",
+  "evaluated_at": "2026-10-22T23:19:34.358328+00:00",
+  "test_commit": "b7a0f96",
+  "next_verification": "Reparar retoma do foco no componente canónico e reexecutar 23 casos no Hub, incluindo os dois anfitriões reais e personagem DOM/SVG.",
   "resolved_issues": [
     {
       "id": "modal-focus-wrap",
@@ -231,6 +267,14 @@
       ],
       "browser_regression": "20 passed in 27.65s",
       "evidence": "drafts/pontes-duas-vistas-green-tests.txt"
+    },
+    {
+      "id": "missing-character-result",
+      "status": "resolved",
+      "builder_commit": "4a6b0f6",
+      "proofreader_commit": "1d0cb95",
+      "browser_test": "test_character_svg_reveals_only_tested_outcome_and_preserves_top_views",
+      "evidence": "drafts/pontes-duas-vistas-green-character-evidence.json"
     }
   ]
 }
