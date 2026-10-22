@@ -577,7 +577,7 @@ Apresentar pergunta investigável e critérios sem antecipar a regra. Duas vista
     "default": "",
     "options": [
       "Atravessa",
-      "Pára",
+      "Para",
       "Ainda não sei"
     ]
   },
@@ -587,7 +587,7 @@ Apresentar pergunta investigável e critérios sem antecipar a regra. Duas vista
     "default": "",
     "options": [
       "Atravessa",
-      "Pára",
+      "Para",
       "Ainda não sei"
     ]
   },
@@ -647,7 +647,7 @@ Guardar A com alturas 2/2 e B com 2/1. Revelar vistas laterais e resultados apó
 ]
 ```
 
-**Render:** A mostra apoios nas margens, esquerda 2/direita 2 e tabuleiro. Testar e guardar A revela a travessia. A ação Baixar o apoio direito prepara B com direita 1; Testar e guardar B revela que pára. As duas fichas conservam topo, lado, alturas, previsão e resultado. Controlo próximo do apoio direito assinala a única mudança.
+**Render:** A mostra apoios nas margens, esquerda 2/direita 2 e tabuleiro. Testar e guardar A revela a travessia. A ação Baixar o apoio direito prepara B com direita 1; Testar e guardar B revela que para. As duas fichas conservam topo, lado, alturas, previsão e resultado. Controlo próximo do apoio direito assinala a única mudança.
 
 **Transition:** Testar e guardar A; baixar só o apoio direito de 2 para 1; testar e guardar B. Sem escolha de posição ou tabuleiro. Não repetir emissões quando a mesma ficha já foi guardada. Nunca fazer desaparecer A ao mostrar B.
 
