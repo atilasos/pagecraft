@@ -19,7 +19,7 @@ O drawer apresenta os pedidos pendentes antes das ações e da cronologia, com n
 
 Regras de associação:
 
-- A autoria usa `work_group_id` e os participantes gravados no acontecimento, ou `student_id` para trabalho individual. O grupo atual não substitui a autoria histórica.
+- Nos tipos declarados como emitidos pela atividade ou pelo aluno, a autoria usa `work_group_id` e os participantes gravados, ou `student_id` para trabalho individual. Professor, Assistente e Sessão têm autoria própria, com o destinatário separado nos atos dirigidos. Sem declaração inequívoca, aparece "Autor não registado". O grupo atual não substitui a autoria histórica.
 - A nota, tarefa e resposta do próprio pedido têm prioridade. Uma resposta de outro acontecimento só entra se for anterior ao pedido, da mesma autoria, etapa e `task_id`. Atividade e versão também têm de ser compatíveis.
 - Uma pista exige o `hint_id` indicado no pedido, apresentação anterior, mesma autoria e etapa. Valores de tarefa, atividade ou versão presentes apenas de um lado, ou diferentes, excluem a associação. Não se escolhe a pista mais próxima no tempo.
 - A utilidade exige uma apresentação de pista validada e uma declaração posterior com o mesmo `hint_id`, autoria e âmbito. A apresentação e a declaração conservam referências próprias.
@@ -63,3 +63,51 @@ A comparação adicional `/tmp/pagecraft-drawer-proof.py` abriu o mesmo históri
 As imagens foram inspecionadas. Estes artefactos complementares são locais e temporários; os testes versionados acima são a prova repetível na revisão.
 
 Não foi aberto PR nem feito merge. A branch fica local para revisão independente pelo agente principal.
+
+## Ronda 2: autoria dos acontecimentos
+
+Base desta ronda: `a08aa7e80e1886d63f15ee327ed009dafc70990e`, no mesmo worktree e branch. A revisão de especificação não encontrou desvios. A revisão de standards identificou uma violação P2 reproduzível: `authors()` interpretava `student_id` como autor em todos os acontecimentos. Uma mensagem do professor dirigida a Ana aparecia como "Trabalho individual · Ana".
+
+O teste Node executou `DrawerEvidence.reference()` do ficheiro real com a declaração de `SESSION_EVENT_TYPES`. Antes da correção, `tests/test_drawer_authorship.py` teve **14 falhas e 3 casos aprovados**. O teste de browser também falhou no caminho completo API, histórico e drawer:
+
+```text
+Esperado: Professor · Destinatário: Ana
+Observado: Trabalho individual · Ana · mensagem enviada: Compara as duas zonas.
+```
+
+### Decisão e alteração
+
+`_append_event_unlocked()` valida o argumento `author`, mas não o persiste no acontecimento. A API de mensagens confirma este contrato: guarda `student_id` como destinatário e não devolve um campo `author`. Não se acrescentou persistência nem se inferiu autoria pelo nome do tipo.
+
+O painel já consultava `/api/session-event-types`, mas conservava apenas os nomes dos tipos da cronologia. Agora conserva as declarações completas num `Map`, usado por `reference(record, students, declarations)` no contexto de ajuda e na cronologia. O snapshot SSE contém estado da sessão, dos alunos e dos grupos; a fonte do vocabulário continua a ser a API existente.
+
+`authorship(record, students, declaration)` substitui `authors()`. Uma declaração com um único autor `teacher`, `assistant` ou `session` produz "Professor", "Assistente" ou "Sessão". Os atos do professor e do assistente apresentam o destinatário separadamente, incluindo os participantes históricos do grupo. Uma mensagem docente sem destinatário individual indica "Destinatários: turma", conforme o comando existente.
+
+Os autores declarados `activity` e `student` conservam o trabalho individual ou conjunto. A reflexão individual continua ligada à criança, mesmo quando refere o grupo de origem. A decisão não depende de `evidence`, pois a reflexão e as pistas têm declarações próprias sem essa marca. Declarações ausentes, desconhecidas ou ambíguas produzem "Autor não registado". Recarregar o vocabulário limpa a declaração anterior antes de tentar a consulta.
+
+A mudança repõe a distinção já definida em `CONTEXT.md`, em "Acontecimento de sessão" e "Evidência". Não altera o comportamento pedagógico nem requer nova fundamentação na Sebenta. Os filtros do catálogo, a seleção dos registos pela API e a associação das pistas ficaram intactos. Por isso, os acontecimentos coletivos que a API não inclui no histórico individual continuam fora desse histórico.
+
+### Prova reproduzível após a correção
+
+Sessão própria Agent Browser Hub: `help-context-authorship-r2`, perfil `temporary`, CDP `http://127.0.0.1:9330`, fechada no final. Uma repetição exige abrir outra sessão Hub e substituir este endereço. Todos os dados do Studio foram descartáveis.
+
+```bash
+uv run --project /home/proteu/pagecraft python -m pytest tests/test_drawer_authorship.py -q
+PAGECRAFT_TEST_CDP=http://127.0.0.1:9330 uv run --project /home/proteu/pagecraft --with playwright python -m pytest tests/browser/test_help_context_drawer.py tests/browser/test_group_reflections.py -q --tb=short
+uv run --project /home/proteu/pagecraft python -m pytest tests/test_drawer_authorship.py tests/test_teacher_client_access.py tests/test_work_groups.py tests/test_classroom_api_authority.py tests/test_support_summary.py tests/test_session_event_types.py tests/test_feedback.py -q --tb=short
+node --check server/static/teacher/evidence.js
+node --check server/static/teacher/class.js
+git diff --check
+```
+
+Resultados: **17 casos Node**, **14 testes de browser** e **91 verificações na suite Python**, que inclui os 17 casos Node. Sintaxe e whitespace passaram. A mensagem dirigida e o destaque passaram a mostrar "Professor · Destinatário: Ana" no drawer real. A entrada do grupo passou a mostrar "Sessão".
+
+Os casos Node cobrem mensagem dirigida e coletiva, destaque dirigido e coletivo, feedback do assistente individual e conjunto, acontecimentos de sessão, trabalho individual e conjunto, reflexão individual e declaração insuficiente. O browser verifica ainda o contrato da API e a falha HTTP 503 ao recarregar o vocabulário. Nesse caso, o histórico e a nota pendente continuam visíveis com "Autor não registado", sem autoria anterior reutilizada.
+
+Commits incrementais desta ronda:
+
+- `1c830d3`: reproduz a falha com testes Node e API/browser antes da correção.
+- `ae4322a`: conserva o vocabulário central e distingue autoria de destinatário.
+- `a1dc3c4`: verifica no browser a ausência de declaração e a limpeza da declaração anterior.
+
+Não houve edição no checkout `/home/proteu/pagecraft`, push, PR, merge ou delegação. O ambiente Python instalado nesse checkout foi apenas reutilizado com o comando autorizado na skill de implementação.
