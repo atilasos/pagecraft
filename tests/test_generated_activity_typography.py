@@ -48,7 +48,7 @@ async def test_generated_activity_bundles_the_offline_font_before_review_and_pub
             job = await asyncio.wait_for(wait_review(), timeout=5)
             assert job["status"] == "awaiting_review", job.get("error")
             assert job["iteration"] == 2
-            preview = await teacher.get(f"/outputs/{job['slug']}.html")
+            preview = await teacher.get(job["preview_url"])
             assert preview.status_code == 200
             font_urls = re.findall(r"data:font/woff2;base64,([A-Za-z0-9+/=]+)", preview.text)
             assert len(font_urls) == 1, "a revisão tem de incluir a alternativa offline"
@@ -60,7 +60,7 @@ async def test_generated_activity_bundles_the_offline_font_before_review_and_pub
             # As duas rondas de revisão receberam o artefacto com a fonte real.
             for call in (provider.calls[3], provider.calls[6]):
                 assert font_urls[0] in call["prompt"]
-            approved = await teacher.post(f"/api/jobs/{job_id}/approve")
+            approved = await teacher.post(f"/api/jobs/{job_id}/approve", json={"review_id": job["review"]["id"]})
             assert approved.status_code == 200
             published = await teacher.get(f"/activities/{job['slug']}/")
             assert published.status_code == 200

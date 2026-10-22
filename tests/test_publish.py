@@ -208,3 +208,83 @@ def test_publish_without_title_falls_back_to_html_title(repo, html_file):
     assert meta["title"] == "Estados da água"
     assert meta["maker"] == "none"
     assert meta["tags"] == []
+
+
+def test_generation_cannot_replace_any_existing_slug(repo, html_file):
+    publish_activity(repo, 'same-slug', html_file, DOCSPEC, TEACHER_MD)
+    before = {p.name: p.read_bytes() for p in (repo / 'activities/same-slug').iterdir()}
+    catalog = (repo / 'catalog.json').read_bytes()
+    with pytest.raises(ValueError, match='outra geração'):
+        publish_activity(repo, 'same-slug', html_file, DOCSPEC, TEACHER_MD,
+                         generation_id='job-b', review_id='review-b')
+    assert before == {p.name: p.read_bytes() for p in (repo / 'activities/same-slug').iterdir()}
+    assert catalog == (repo / 'catalog.json').read_bytes()
+
+
+@pytest.mark.parametrize('change', ['job', 'review', 'html', 'docspec', 'teacher', 'design', 'legacy_call'])
+def test_generation_rejects_conflicting_republication(repo, html_file, change):
+    args = dict(generation_id='job-a', review_id='review-a')
+    docspec, teacher, design = DOCSPEC, TEACHER_MD, {'palette': {}}
+    publish_activity(repo, 'immutable', html_file, docspec, teacher, design, **args)
+    activity = repo / 'activities/immutable'
+    before = {p.name: p.read_bytes() for p in activity.iterdir()}
+    catalog = (repo / 'catalog.json').read_bytes()
+    if change == 'job':
+        args['generation_id'] = 'job-b'
+    elif change == 'review':
+        args['review_id'] = 'review-b'
+    elif change == 'html':
+        html_file.write_text('<html>versão B</html>')
+    elif change == 'docspec':
+        docspec = {**docspec, 'topic': 'versão B'}
+    elif change == 'teacher':
+        teacher = 'versão B'
+    elif change == 'design':
+        design = None
+    elif change == 'legacy_call':
+        args = {}
+    with pytest.raises(ValueError):
+        publish_activity(repo, 'immutable', html_file, docspec, teacher, design, **args)
+    assert before == {p.name: p.read_bytes() for p in activity.iterdir()}
+    assert catalog == (repo / 'catalog.json').read_bytes()
+
+
+def test_generation_recovers_crash_before_catalog_update(repo, html_file, monkeypatch):
+    from server import publish
+    args = dict(generation_id='job-a', review_id='review-a')
+    regenerate = publish.regenerate_catalog
+
+    def crash(root):
+        raise RuntimeError('crash entre instalação e catálogo')
+
+    monkeypatch.setattr(publish, 'regenerate_catalog', crash)
+    with pytest.raises(RuntimeError, match='crash'):
+        publish_activity(repo, 'immutable', html_file, DOCSPEC, TEACHER_MD, **args)
+    activity = repo / 'activities/immutable'
+    before = {p.name: p.read_bytes() for p in activity.iterdir()}
+    assert (repo / 'catalog.json').read_text().find('immutable') == -1
+    monkeypatch.setattr(publish, 'regenerate_catalog', regenerate)
+    first = publish_activity(repo, 'immutable', html_file, DOCSPEC, TEACHER_MD, **args)
+    catalog = (repo / 'catalog.json').read_bytes()
+    second = publish_activity(repo, 'immutable', html_file, DOCSPEC, TEACHER_MD, **args)
+    assert first == second
+    assert before == {p.name: p.read_bytes() for p in activity.iterdir()}
+    assert catalog == (repo / 'catalog.json').read_bytes()
+    assert json.loads(catalog)['count'] == 1
+
+
+def test_generation_installs_complete_directory_atomically(repo, html_file, monkeypatch):
+    from server import publish
+
+    def crash(source, destination):
+        assert (Path(source) / 'index.html').exists()
+        assert (Path(source) / 'meta.json').exists()
+        raise OSError('crash antes da instalação')
+
+    monkeypatch.setattr(publish.os, 'rename', crash)
+    with pytest.raises(OSError, match='crash'):
+        publish_activity(repo, 'immutable', html_file, DOCSPEC, TEACHER_MD,
+                         generation_id='job-a', review_id='review-a')
+    assert not (repo / 'activities/immutable').exists()
+    assert not list(repo.glob('.publish-*'))
+    assert json.loads((repo / 'catalog.json').read_text())['count'] == 0
