@@ -1,0 +1,58 @@
+{
+  "pass": false,
+  "severity": "medium",
+  "linguistic_pass": true,
+  "phase": "Proofreader",
+  "activity": "pontes-duas-vistas",
+  "reviewed_branch": "feat/pontes-duas-vistas",
+  "reviewed_builder_commit": "c5e4e11",
+  "html_sha256": "68adb782b8d7fc022b2b0e1fa4cb3a9beb85430a28c2d00e18d58795a1fe04e5",
+  "issues": [
+    {
+      "type": "semantic",
+      "severity": "medium",
+      "location": "u2, render() → trialCard; DocSpec modelContract.discoveryTiming",
+      "original": "u2 revela a vista lateral e resultados só por teste explícito",
+      "suggestion": "Em u2, revelar a vista lateral de cada ficha apenas depois do respetivo teste explícito, conservando A ao testar B.",
+      "reason": "O HTML chama sideView para A/B antes dos testes na etapa Testar, apesar do contrato de revelação posterior. Reparação de lógica encaminhada para Builder; não foi alterada na revisão textual.",
+      "route": "builder",
+      "status": "open",
+      "evidence": "render() chama trialCard(A,2,state.savedA) e trialCard(B,state.rightHeight,state.savedB). trialCard inclui sideView sempre que onlyTop é false, independentemente de tested."
+    }
+  ],
+  "repairs": [
+    {
+      "type": "orthography",
+      "location": "HTML previsões/resultados, DocSpec e guia",
+      "original": "Pára / pára",
+      "replacement": "Para / para",
+      "reason": "Grafia PT-PT AO90."
+    },
+    {
+      "type": "semantic",
+      "location": "#local-reflection h2, descrição e legendas; DocSpec experienceContract.reflection; guia",
+      "original": "Como foi o nosso trabalho?; critérios na primeira pessoa do plural",
+      "replacement": "Como foi o meu trabalho?; critérios na primeira pessoa do singular e indicação de que o registo local é de uma criança",
+      "reason": "Distingue autoavaliação individual da produção conjunta; não promete conservar respostas de vários participantes no formulário local."
+    }
+  ],
+  "summary": "Revisão linguística PT-PT AO90 concluída, com correções textuais cirúrgicas e sem mudanças de lógica. Mantêm-se previsões históricas, hipótese revisível, variável única, contraexemplo do colega e declarações orais sem veredicto automático. A passagem global fica pendente da reparação Builder da revelação lateral e da avaliação real no browser.",
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90: OK após reparação",
+    "Registo e adequação ao 3.º/4.º ano: OK na leitura textual",
+    "Instruções e três apoios livres: OK na leitura textual",
+    "Hipóteses e explicações orais identificadas como declarações: OK na leitura do texto e handlers",
+    "Reflexão local individual e facultativa: OK no texto; host e participantes ainda não ensaiados",
+    "Alinhamento com DocSpec: FAIL na revelação lateral pré-teste; route Builder",
+    "DocSpec válido no schema canónico Draft202012: OK",
+    "Componente de apoio e Gothic reincorporados pelos scripts canónicos: OK",
+    "Testes de browser, teclado, larguras, retoma, limite de bytes e observação com crianças: NÃO EXECUTADOS pelo Proofreader; pertencem ao Evaluator"
+  ],
+  "commands": [
+    "python3 scripts/embed_activity_support.py --activity drafts/pontes-duas-vistas.html --docspec drafts/pontes-duas-vistas-docspec.json",
+    "python3 scripts/embed_gothic_font.py --activity drafts/pontes-duas-vistas.html",
+    "Validação jsonschema Draft202012Validator de DocSpec e relatório",
+    "node --check /tmp/pagecraft-proofreader-syntax.js"
+  ],
+  "boundary": "Só rascunhos pontes-duas-vistas. Sem browser, registo, publicação, alterações a atividades existentes ou prompts comuns."
+}
