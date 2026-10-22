@@ -4,6 +4,7 @@
 const $ = (id) => document.getElementById(id);
 const workGroups = new Map();
 const students = new Map(); // id → projeção viva emitida pelo servidor
+const sessionEventDeclarations = new Map(); // vocabulário central, incluindo autoria
 let session = null;
 let previousSessions = [];
 let publicOrigin = location.origin;
@@ -486,21 +487,19 @@ function applySessionState(delta, es) {
 }
 
 async function loadPanelEventTypes() {
+  sessionEventDeclarations.clear();
   try {
     const resp = await tfetch("/api/session-event-types");
     if (!resp.ok) return fallbackPanelEventTypes();
     const declaration = await resp.json();
     if (!Array.isArray(declaration?.types)) return fallbackPanelEventTypes();
+    const entries = declaration.types.filter(entry => entry && typeof entry.name === "string" &&
+      /^[a-z][a-z0-9_]*$/.test(entry.name));
+    entries.forEach(entry => sessionEventDeclarations.set(entry.name, entry));
     const declaredTypes = [
       ...new Set(
-        declaration.types
-          .filter(
-            (entry) =>
-              entry &&
-              typeof entry.name === "string" &&
-              /^[a-z][a-z0-9_]*$/.test(entry.name) &&
-              entry.timeline === true
-          )
+        entries
+          .filter(entry => entry.timeline === true)
           .map((entry) => entry.name)
       ),
     ];
@@ -842,7 +841,7 @@ async function loadDrawerHistory(studentId) {
       return;
     }
     const events = data.events.filter(record => record && typeof record === 'object' && typeof record.type === 'string');
-    DrawerEvidence.renderHelp($("drawer-help"), events, students, unitLabel);
+    DrawerEvidence.renderHelp($("drawer-help"), events, students, unitLabel, sessionEventDeclarations);
     renderDrawerHistory(events);
   } catch (error) {
     if (current()) unavailable('Não foi possível carregar o percurso e o contexto.');
@@ -857,7 +856,7 @@ function renderDrawerHistory(events) {
     const text = DrawerEvidence.describe(record) ?? eventText(record.type, record);
     if (!text) return;
     const li = document.createElement("li");
-    li.textContent = `${DrawerEvidence.reference(record, students)} · ${text}`;
+    li.textContent = `${DrawerEvidence.reference(record, students, sessionEventDeclarations)} · ${text}`;
     list.appendChild(li);
   });
   if (!list.children.length) {

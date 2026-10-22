@@ -62,18 +62,34 @@ window.DrawerEvidence = (() => {
     return typeof input === 'boolean' ? input ? 'Sim' : 'Não' : String(input);
   }
 
-  function authors(record, students) {
+  const participantNames = (record, students) => (record.participant_ids || [])
+    .map(id => students.get(id)?.display_name || id).join(' + ');
+  const declaredAuthor = declaration => declaration?.authors?.length === 1 ? declaration.authors[0] : null;
+
+  function authorship(record, students, declaration) {
+    const author = declaredAuthor(declaration);
+    const label = {teacher: 'Professor', assistant: 'Assistente', session: 'Sessão'}[author];
+    if (label) return label;
+    if (author !== 'activity' && author !== 'student') return 'Autor não registado';
     if (record.work_group_id) {
-      const names = (record.participant_ids || []).map(id => students.get(id)?.display_name || id).join(' + ');
+      const names = participantNames(record, students);
       return `Trabalho conjunto · ${names || 'autores não registados'}`;
     }
-    return `Trabalho individual · ${students.get(record.student_id)?.display_name || record.student_id || 'autor não registado'}`;
+    return record.student_id ? `Trabalho individual · ${students.get(record.student_id)?.display_name || record.student_id}` :
+      'Autor não registado';
   }
 
-  function reference(record, students) {
+  function reference(record, students, declarations) {
+    const declaration = declarations?.get(record.type);
     const date = new Date(record.ts);
     const parts = [Number.isNaN(date.getTime()) ? 'data não registada' : date.toLocaleString('pt-PT'),
-      `registo #${record.seq ?? record.event_id ?? 'não registado'}`, authors(record, students)];
+      `registo #${record.seq ?? record.event_id ?? 'não registado'}`, authorship(record, students, declaration)];
+    const author = declaredAuthor(declaration);
+    if (author === 'teacher' || author === 'assistant') {
+      if (record.work_group_id) parts.push(`Destinatários: ${participantNames(record, students) || 'não registados'}`);
+      else if (record.student_id) parts.push(`Destinatário: ${students.get(record.student_id)?.display_name || record.student_id}`);
+      else parts.push(author === 'teacher' ? 'Destinatários: turma' : 'Destinatário não registado');
+    }
     if (unit(record)) parts.push(`etapa ${unit(record)}`);
     if (value(record, 'task_id')) parts.push(`tarefa ${value(record, 'task_id')}`);
     if (payload(record).help_request_id) parts.push(`pedido ${payload(record).help_request_id}`);
@@ -101,7 +117,7 @@ window.DrawerEvidence = (() => {
     return text ? `${text}, segundo ${record.work_group_id ? 'o grupo' : 'o aluno'}` : 'não registado';
   }
 
-  function renderHelp(root, events, students, unitLabel) {
+  function renderHelp(root, events, students, unitLabel, declarations) {
     root.replaceChildren();
     const entries = pendingHelp(events);
     if (!entries.length) {
@@ -114,7 +130,7 @@ window.DrawerEvidence = (() => {
       heading.textContent = 'Pedido de ajuda pendente';
       const source = document.createElement('p');
       source.className = 'muted';
-      source.textContent = reference(request, students);
+      source.textContent = reference(request, students, declarations);
       const fields = document.createElement('dl');
       const ownContext = context(request);
       const responsePayload = response ? payload(response) : {};
@@ -125,7 +141,7 @@ window.DrawerEvidence = (() => {
         if (record) {
           const ref = document.createElement('p');
           ref.className = 'muted';
-          ref.textContent = reference(record, students);
+          ref.textContent = reference(record, students, declarations);
           definition.appendChild(ref);
         }
         fields.append(term, definition);
@@ -147,5 +163,5 @@ window.DrawerEvidence = (() => {
     }
   }
 
-  return Object.freeze({renderHelp, describe, authors, reference});
+  return Object.freeze({renderHelp, describe, authorship, reference});
 })();
