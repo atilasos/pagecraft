@@ -1,3 +1,10 @@
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+import pytest
+
 from server.markdown_export import docspec_to_markdown
 
 DOCSPEC = {
@@ -59,7 +66,7 @@ def test_markdown_contains_title_objectives_and_units():
     assert "- Identificar os três estados físicos da água" in md
     assert "## Unit 1: Os três estados da água dependem da temperatura (20 min)" in md
     assert "**Constraint:** A água muda de estado a 0°C e 100°C" in md
-    assert "- 🟢 Apoio: Slider com 3 posições" in md
+    assert "- Com pistas: Slider com 3 posições" in md
     assert "### 🛠️ Maker — Minecraft" in md
     assert "- **Alternativas:** Lego com etiquetas" in md
     assert "**Duração:** 40 minutos" in md
@@ -73,3 +80,31 @@ def test_markdown_minimal_docspec_does_not_crash():
     md = docspec_to_markdown({"topic": "Teste", "units": []})
     assert md.startswith("# Teste")
     assert "## Objetivos de aprendizagem" in md
+
+
+@pytest.mark.parametrize("source", ["studio", "shared", "claude", "codex"])
+def test_markdown_differentiation_uses_neutral_labels(source, tmp_path):
+    if source == "studio":
+        md = docspec_to_markdown(DOCSPEC)
+    else:
+        docspec = tmp_path / "docspec.json"
+        docspec.write_text(json.dumps(DOCSPEC), encoding="utf-8")
+        script = (
+            Path(__file__).resolve().parents[1]
+            / "skills" / source / "scripts" / "build_markdown.py"
+        )
+        result = subprocess.run(
+            [sys.executable, str(script), str(docspec)],
+            check=True,
+            capture_output=True,
+            encoding="utf-8",
+        )
+        md = result.stdout
+
+    differentiation = md.split("**Diferenciação:**\n", 1)[1].split("\n\n", 1)[0]
+    assert differentiation.splitlines() == [
+        "- Com pistas: Slider com 3 posições",
+        "- Passo a passo: Slider contínuo",
+        "- Mais desafios: Gráfico de energia",
+    ]
+    assert not any(marker in md for marker in ("🟢", "🟡", "🔴"))

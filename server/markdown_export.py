@@ -60,9 +60,9 @@ def docspec_to_markdown(docspec: dict) -> str:
                 f"**Assessment:** {inter.get('assessment', '')}",
                 "",
                 "**Diferenciação:**",
-                f"- 🟢 Apoio: {diff.get('support', '')}",
-                f"- 🟡 Intermédio: {diff.get('standard', '')}",
-                f"- 🔴 Desafio: {diff.get('challenge', '')}",
+                f"- Com pistas: {diff.get('support', '')}",
+                f"- Passo a passo: {diff.get('standard', '')}",
+                f"- Mais desafios: {diff.get('challenge', '')}",
             ]
         )
         if maker:
