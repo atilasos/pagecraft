@@ -80,7 +80,6 @@ def test_overflow_preserves_accepted_work_and_never_claims_everything_saved(page
         page.frame_locator('#activity-frame').locator('#animals').fill('Primeiro trabalho aceite')
         page.frame_locator('#activity-frame').locator('#animals').press('Tab')
         # Exercise the real iframe bridge, beyond the 200-event boundary.
-        page.locator('#activity-frame').evaluate("""frame => frame.contentWindow.postMessage({pagecraft:1, type:'test-unused'}, '*')""")
         lesson = page.frames[1]
         lesson.evaluate("""() => {
           for (let i = 0; i < 205; i++) parent.postMessage({pagecraft:1, type:'attempt',

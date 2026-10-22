@@ -4,6 +4,7 @@
 const state = {
   session: null,
   studentId: null,
+  identityVersion: null,
   workGroup: null,
   displayName: null,
   studentState: null,
@@ -54,6 +55,7 @@ async function tryResume() {
     const me = await resp.json();
     state.session = me.session;
     state.studentId = me.student_id;
+    state.identityVersion = me.identity_version || null;
     state.workGroup = me.work_group || null;
     state.displayName = state.workGroup?.display_name || me.display_name;
     startActivity();
@@ -166,6 +168,7 @@ async function claim(student) {
   }
   const data = await resp.json();
   state.studentId = data.student_id || null;
+  state.identityVersion = data.identity_version || null;
   state.workGroup = data.work_group || null;
   state.displayName = state.workGroup?.display_name || data.display_name;
   saveIdentity();
@@ -366,6 +369,7 @@ function invalidateStudentIdentity() {
   studentTransport.stop({ discardQueue: true });
   clearIdentity();
   state.studentId = null;
+  state.identityVersion = null;
   state.workGroup = null;
   state.displayName = null;
   state.studentState = null;
@@ -409,6 +413,8 @@ const studentTransport = createStudentTransport();
 function createStudentTransport() {
   const outbox = [];
   let queueKey = null;
+  let refusedWork = false;
+  let storageFailed = false;
   let bridgeHandler = null;
   let stream = null;
   let generation = 0;
@@ -428,12 +434,21 @@ function createStudentTransport() {
     requests.forEach((controller) => controller.abort());
     requests.clear();
     persistQueue();
-    if (discardQueue) { outbox.length = 0; queueKey = null; }
+    if (discardQueue) {
+      outbox.length = 0;
+      queueKey = null;
+      refusedWork = false;
+      storageFailed = false;
+    }
   }
 
   function enqueue(type, unitId, payload) {
     const currentQueue = outbox.filter(event => !event.composition_conflict);
-    if (!hasIdentity() || currentQueue.length >= OUTBOX_LIMIT) return false;
+    if (!hasIdentity()) return false;
+    if (refusedWork || currentQueue.length >= OUTBOX_LIMIT) {
+      refuseWork();
+      return false;
+    }
     outbox.push({
       event_id: crypto.randomUUID(),
       type,
@@ -443,16 +458,40 @@ function createStudentTransport() {
       ...(state.workGroup ? {composition_version:state.workGroup.composition_version, access_version:state.workGroup.access_version, work_group_name:state.workGroup.display_name} : {}),
     });
     persistQueue();
+    $('save-work-status').textContent = '';
     renderPendingWork();
     return true;
   }
 
   function persistQueue() {
     if (!queueKey) return;
-    try { sessionStorage.setItem(queueKey, JSON.stringify(outbox)); } catch {}
+    try {
+      sessionStorage.setItem(queueKey, JSON.stringify(outbox));
+      sessionStorage.setItem(`${queueKey}:status`, JSON.stringify({refusedWork}));
+      storageFailed = false;
+    } catch {
+      storageFailed = true;
+    }
+  }
+
+  function refuseWork() {
+    refusedWork = true;
+    $('save-work-status').textContent = '';
+    persistQueue();
+    renderPendingWork();
   }
 
   function renderPendingWork() {
+    const full = outbox.filter(event => !event.composition_conflict).length >= OUTBOX_LIMIT;
+    const status = $('queue-status');
+    $('queue-notice').hidden = !(full || refusedWork || storageFailed && outbox.length);
+    status.textContent = [
+      full ? 'A fila está cheia. Espera pela ligação antes de continuar.' : '',
+      refusedWork ? 'Algumas alterações ficaram de fora. O trabalho já aceite foi conservado. Volta ao último trabalho aceite e repete essas alterações.' : '',
+      storageFailed && outbox.length ? 'Não foi possível conservar a fila neste separador. Mantém esta página aberta até guardar no servidor.' : '',
+    ].filter(Boolean).join(' ');
+    $('recover-accepted-work').hidden = !refusedWork;
+    $('recover-accepted-work').disabled = full || storageFailed;
     const previous = outbox.filter(event => event.composition_conflict && HISTORY_LABELS[event.type]);
     const panel = $("pending-group-work");
     panel.hidden = !previous.length;
@@ -498,7 +537,7 @@ function createStudentTransport() {
       if (payload !== null) {
         if (['assessment_result', 'attempt', 'level_changed'].includes(data.type)) $('save-work-status').textContent = '';
         enqueue(data.type, data.unitId || null, payload);
-      }
+      } else refuseWork();
     };
     window.addEventListener("message", bridgeHandler);
   }
@@ -533,10 +572,25 @@ function createStudentTransport() {
     if (!batch.length) { flushing = false; return; }
     const request = generation;
     try {
+      // A different claim can replace the shared HttpOnly cookie in another tab.
+      // Check the public identity version before replaying this tab's individual queue.
+      if (!state.workGroup) {
+        const identity = await fetch(`/api/sessions/${state.session.id}/me`);
+        if (request !== generation) return;
+        if (identity.status === 401) { invalidateStudentIdentity(); return; }
+        if (!identity.ok) return;
+        const me = await identity.json();
+        if (request !== generation) return;
+        if (me.student_id !== state.studentId || me.identity_version !== state.identityVersion) {
+          invalidateStudentIdentity();
+          return;
+        }
+      }
       const resp = await post(
         `/api/sessions/${state.session.id}/events`,
         { events: batch }
       );
+      if (request !== generation) return;
       if (resp?.status === 409) {
         const error = await resp.json();
         if (request !== generation) return;
@@ -554,8 +608,10 @@ function createStudentTransport() {
     } catch (error) {
       /* fica na fila; tentamos outra vez no próximo flush (at-least-once) */
     } finally {
-      persistQueue();
-      renderPendingWork();
+      if (request === generation) {
+        persistQueue();
+        renderPendingWork();
+      }
       flushing = false;
     }
   }
@@ -574,6 +630,10 @@ function createStudentTransport() {
       else if (resp.ok) {
         const identity = await resp.json();
         if (request !== generation) return;
+        if (!state.workGroup && (identity.student_id !== state.studentId || identity.identity_version !== state.identityVersion)) {
+          invalidateStudentIdentity();
+          return;
+        }
         if (identity.work_group) acceptComposition(identity.work_group);
       }
     } catch (error) {
@@ -614,10 +674,27 @@ function createStudentTransport() {
     stop();
     const request = ++generation;
     const sessionId = state.session.id;
-    const nextKey = state.workGroup ? `pc-group-outbox:${sessionId}:${state.workGroup.device_id}` : null;
+    const nextKey = state.workGroup ? `pc-group-outbox:${sessionId}:${state.workGroup.device_id}` :
+      state.identityVersion ? `pc-student-outbox:${sessionId}:${state.studentId}:${state.identityVersion}` : null;
     if (nextKey !== queueKey) {
       outbox.length = 0; queueKey = nextKey;
-      try { outbox.push(...JSON.parse(sessionStorage.getItem(queueKey) || '[]')); } catch {}
+      refusedWork = false;
+      storageFailed = false;
+      if (queueKey) {
+        try {
+          const saved = JSON.parse(sessionStorage.getItem(queueKey) || '[]');
+          if (!Array.isArray(saved)) throw new Error('queue');
+          const ids = new Set();
+          for (const event of saved) {
+            if (!event || typeof event.event_id !== 'string' || typeof event.type !== 'string') throw new Error('event');
+            if (!ids.has(event.event_id)) outbox.push(event);
+            ids.add(event.event_id);
+          }
+          refusedWork = JSON.parse(sessionStorage.getItem(`${queueKey}:status`) || '{}').refusedWork === true;
+        } catch {
+          refuseWork();
+        }
+      }
     }
     markPreviousComposition();
     renderPendingWork();
@@ -627,24 +704,35 @@ function createStudentTransport() {
   }
 
   async function savePending() {
+    const request = generation;
     for (let tries = 0; tries < 100; tries++) {
+      if (request !== generation || !hasIdentity()) return false;
       if (flushing) { await new Promise(resolve => setTimeout(resolve, 50)); continue; }
       const before = outbox.filter(event => !event.composition_conflict).length;
-      if (!before) return true;
+      if (!before) return !refusedWork;
       await flush();
+      if (request !== generation) return false;
       if (outbox.filter(event => !event.composition_conflict).length >= before) return false;
     }
-    return outbox.every(event => event.composition_conflict);
+    return !refusedWork && outbox.every(event => event.composition_conflict);
   }
 
   function markPreviousComposition() {
-    if (!state.workGroup) return;
-    outbox.forEach(event => {
+    if (state.workGroup) outbox.forEach(event => {
       if (event.composition_version !== state.workGroup.composition_version ||
           (event.access_version || 1) !== state.workGroup.access_version) event.composition_conflict = true;
     });
     persistQueue();
   }
+
+  $('recover-accepted-work').addEventListener('click', () => {
+    // Explicitly abandon only the refused edits. Reload replays accepted work in
+    // a fresh iframe, so stale controls cannot silently become accepted evidence.
+    refusedWork = false;
+    persistQueue();
+    if (storageFailed) { refusedWork = true; renderPendingWork(); return; }
+    window.location.reload();
+  });
 
   return {
     enqueue, flush, post, start, stop, savePending, markPreviousComposition,
