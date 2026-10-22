@@ -63,3 +63,17 @@ A cobertura inclui seis atividades com variantes de controlos; não representa t
 O teste controla o agendamento dos frames, sem medir a frequência da corrida em dispositivos reais.
 A revisão das cores semáforo e terminologia antigas de `dedo` fica adiada para alteração própria.
 As mudanças locais de nível continuam a poder reiniciar exercícios em atividades antigas, conforme o comportamento existente.
+
+## Integração da suite pelo agente principal
+
+A execução conjunta revelou dois problemas de recolha já presentes: módulos
+`test_group_continuation` com o mesmo nome em diretórios diferentes e imports
+incondicionais de Playwright apesar de a dependência ser opcional. O teste de
+browser foi renomeado para `test_group_continuation_ui.py`, e os dois módulos
+com imports ao nível do módulo usam `pytest.importorskip`. A recolha conjunta
+com Playwright encontra 403 testes; sem a dependência, os módulos opcionais
+são omitidos e os testes de servidor continuam disponíveis.
+
+A corrida de feedback referida acima foi reproduzida e corrigida separadamente
+no refinamento da branch `fix/feedback-formativo-fiavel` (PR #52), com testes
+sincronizados por Events. A validação final conjunta consta da avaliação geral.
