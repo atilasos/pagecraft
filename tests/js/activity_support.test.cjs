@@ -3,26 +3,33 @@ const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const vm=require('node:vm'), fs=require('node:fs'), crypto=require('node:crypto');
 const examples=JSON.parse(fs.readFileSync('tests/fixtures/support-examples.json','utf8'));
-function activity(spec=examples[0]){
+function activity(spec=examples[0],twoPanels=false){
   const config={activity:spec.slug,activity_version:spec.support.version,objective:spec.objectives.join('; '),
     age_range:spec.ageRange,topic:spec.topic,automatic_after_failures:spec.support.automaticAfterFailures??3,
     languages:spec.support.languages||['pt'],externalWork:spec.support.externalWork||null,
     units:Object.fromEntries(spec.units.map((u,i)=>['u'+(i+1),{...u.support,title:u.summary}]))};
+  if(twoPanels)config.units.u2=structuredClone(config.units.u1);
   const box=vm.createContext({assert,crypto,console,config,TextEncoder});
   vm.runInContext(`
-    const emitted=[],messages=[],documentEvents={};let spoken=0;
-    const panel={dataset:{pagecraftSupport:'u1'},innerHTML:'',classList:{add(){}},setAttribute(){},addEventListener(){},
-      querySelector(){return {focus(){},scrollIntoView(){}}}};
-    const document={activeElement:null,body:{},querySelectorAll(){return [panel]},
+    const emitted=[],messages=[],documentEvents={},panelEvents={},utterances=[];let spoken=0;
+    function makePanel(unit,events){return {dataset:{pagecraftSupport:unit},innerHTML:'',classList:{add(){}},setAttribute(){},addEventListener(type,fn){events[type]=fn},
+      querySelector(){return {focus(){},scrollIntoView(){}}}};}
+    const otherEvents={},panel=makePanel('u1',panelEvents),otherPanel=makePanel('u2',otherEvents);
+    const document={activeElement:null,body:{},querySelectorAll(){return ${twoPanels?'[panel,otherPanel]':'[panel]'}},
       addEventListener(type,fn){(documentEvents[type]||=[]).push(fn)},
       dispatchEvent(event){for(const fn of documentEvents[event.type]||[])fn(event)}};
-    const window={parent:{postMessage(data){emitted.push(data)}},speechSynthesis:{cancel(){},speak(){spoken++}},
+    const window={parent:{postMessage(data){emitted.push(data)}},speechSynthesis:{cancel(){},speak(value){spoken++;utterances.push(value)}},
       addEventListener(type,fn){if(type==='message')messages.push(fn)}};
     const CustomEvent=class {constructor(type,opts={}){this.type=type;this.detail=opts.detail}};
     const SpeechSynthesisUtterance=class {constructor(text){this.text=text}};
     function host(type,payload,source=window.parent){messages.forEach(fn=>fn({source,data:{pagecraft:1,type,payload}}))}
+    function click(action,targetPanel=panel){
+      const markup=targetPanel.innerHTML.match(new RegExp('data-support-action="'+action+'"[^>]*'))?.[0]||'';
+      const supportHintId=markup.match(/data-support-hint-id="([^"]*)"/)?.[1];
+      (targetPanel===panel?panelEvents:otherEvents).click({target:{closest(){return {dataset:{supportAction:action,supportHintId}}}}});
+    }
   `,box);
-  vm.runInContext(fs.readFileSync('server/pipeline/prompts/activity-support.js','utf8'),box);
+  vm.runInContext(fs.readFileSync(process.env.PAGECRAFT_SUPPORT_SOURCE||'server/pipeline/prompts/activity-support.js','utf8'),box);
   vm.runInContext(`const support=window.PageCraftSupport;support.configure(config);support.update({unit_id:'u1',answer:'Uma tentativa',level:'intermediate'});`,box);
   return code=>vm.runInContext(code,box);
 }
@@ -63,6 +70,118 @@ test('restaurar o histórico conserva a progressão sem reapresentar uma pista',
 test('alterar uma resposta invalida a ajuda sem chamar o modelo',()=>{
   const run=activity();
   run(`support.requestHint();document.dispatchEvent({type:'input',target:{closest(selector){return selector==='[data-pagecraft-support]'?null:{dataset:{unit:'u1'}}}}});assert.equal(support.currentHintId(),null);assert.equal(emitted.filter(e=>e.type==='feedback_request').length,0);`);
+});
+test('consultar e ouvir pistas depois de editar não consome pistas nem emite acontecimentos',()=>{
+  const run=activity();
+  run(`support.requestHint();const first=emitted.at(-1);support.requestHint();
+    support.update({answer:'Resposta revista'});const before=JSON.stringify(emitted);
+    assert.equal(support.currentHintId(),null);assert.ok(panel.innerHTML.includes('Pistas que já experimentei'));
+    assert.ok(panel.innerHTML.includes(first.payload.text));assert.ok(panel.innerHTML.includes(first.payload.context.answer));
+    assert.ok(panel.innerHTML.includes(first.payload.activity_version));assert.match(panel.innerHTML,/Pista anterior: o contexto mudou/);
+    assert.equal(spoken,0);click('history-listen-0');
+    assert.equal(utterances.at(-1).text,first.payload.text);assert.equal(support.currentHintId(),null);
+    assert.equal(JSON.stringify(emitted),before);support.requestHint();assert.equal(JSON.stringify(emitted),before);
+    assert.match(panel.innerHTML,/professor/);`);
+});
+test('retomar conserva texto, contexto, autoria e língua originais da pista',()=>{
+  const run=activity();
+  run(`host('work_group_preferences',{route:'studio',participant_count:2});host('learning_preferences',{language:'en'});
+    support.requestHint();const first=emitted.at(-1);support.feedback('not_helped');support.requestHint();
+    const saved=emitted.map(e=>({...e,unit_id:e.unitId})),serialized=JSON.stringify(saved);
+    host('learning_preferences',{language:'pt'});support.update({answer:'Nova resposta',product:'Outro trabalho'});
+    const before=JSON.stringify(emitted);host('learning_restore',{events:saved});click('history-listen-0');
+    assert.equal(utterances.at(-1).text,first.payload.text);assert.equal(utterances.at(-1).lang,'en-GB');
+    assert.ok(panel.innerHTML.includes(first.payload.context.stage));assert.ok(panel.innerHTML.includes('lang="en-GB"'));
+    assert.match(panel.innerHTML,/Pista anterior/);assert.equal(support.currentHintId(),null);
+    assert.equal(JSON.stringify(emitted),before);assert.equal(JSON.stringify(saved),serialized);`);
+});
+test('consulta não troca a pista atual nem cancela um pedido IA pendente',()=>{
+  const run=activity();
+  run(`host('learning_preferences',{route:'permanent'});support.requestHint();support.requestHint();
+    const current=support.currentHintId();support.requestAI();const request=emitted.at(-1).payload.request_id;
+    const before=JSON.stringify(emitted);click('history-listen-0');
+    assert.equal(utterances.at(-1).text,config.units.u1.obstacles[0].hints[0].text.pt.individual);
+    assert.equal(support.currentHintId(),current);assert.equal(JSON.stringify(emitted),before);
+    support.receive({request_id:request,unit_id:'u1',text:'Outra abordagem com IA'});
+    assert.equal(emitted.at(-1).payload.text,'Outra abordagem com IA');`);
+});
+test('ouvir o histórico de outro painel conserva tarefa, pista atual e pedido IA',()=>{
+  const run=activity(examples[0],true);
+  run(`host('learning_preferences',{route:'permanent'});support.requestHint();const first=emitted.at(-1);
+    support.update({unit_id:'u2',answer:'Outra resposta'});support.requestHint();const current=support.currentHintId();
+    support.requestAI();const request=emitted.at(-1).payload.request_id,before=JSON.stringify(emitted);
+    assert.equal(spoken,0);click('history-listen-0',panel);
+    assert.equal(utterances.at(-1).text,first.payload.text);assert.equal(JSON.stringify(emitted),before);
+    assert.equal(support.currentHintId(),current);
+    support.receive({request_id:request,unit_id:'u2',text:'Pista IA da segunda etapa'});
+    assert.equal(emitted.at(-1).payload.text,'Pista IA da segunda etapa');assert.equal(emitted.at(-1).unitId,'u2');`);
+});
+test('um painel anterior lê a pista clicada mesmo após reordenar o histórico na retoma',()=>{
+  const run=activity(examples[0],true);
+  run(`support.requestHint();const first=emitted.at(-1);support.requestHint();
+    const saved=JSON.parse(JSON.stringify(emitted)).reverse();support.update({unit_id:'u2'});
+    host('learning_restore',{events:saved});const before=JSON.stringify(emitted);
+    click('history-listen-0',panel);assert.equal(utterances.at(-1).text,first.payload.text);
+    assert.equal(JSON.stringify(emitted),before);assert.equal(support.currentHintId(),null);`);
+});
+test('contexto anterior assinala tarefa, revisão, produto, nível, língua e participantes',()=>{
+  for(const change of ["support.update({task_id:'outra'})","support.update({revision:'editada'})",
+    "support.update({product:'novo'})","support.update({level:'challenge'})",
+    "host('learning_preferences',{language:'en'})","host('work_group_preferences',{route:'studio',participant_count:2})"]){
+    const run=activity();
+    run(`support.requestHint();assert.ok(!panel.innerHTML.includes('Pista anterior:'));${change};
+      assert.match(panel.innerHTML,/Pista anterior:|Previous hint:/);`);
+  }
+});
+for(const change of [{task_id:'item-2'},{revision:'r2'}]){
+  test('retoma JSON conserva '+Object.keys(change)[0]+' mesmo com pergunta e resposta iguais',()=>{
+    const run=activity();
+    run(`support.update({task_id:'item-1',revision:'r1',question:'Qual barra é maior?',answer:'A'});
+      support.requestHint();const saved=JSON.parse(JSON.stringify(emitted));
+      support.update(${JSON.stringify(change)});assert.match(panel.innerHTML,/Pista anterior:/);
+      const before=JSON.stringify(emitted);host('learning_restore',{events:saved});
+      assert.match(panel.innerHTML,/Pista anterior:/);
+      assert.equal(saved[0].payload.context.task_id,'item-1');assert.equal(saved[0].payload.context.revision,'r1');
+      assert.equal(JSON.stringify(emitted),before);assert.equal(spoken,0);
+      support.update({task_id:'item-1',revision:'r1'});assert.ok(!panel.innerHTML.includes('Pista anterior:'));
+      delete saved[0].payload.context.task_id;delete saved[0].payload.context.revision;
+      support.update(${JSON.stringify(change)});host('learning_restore',{events:saved});
+      assert.ok(!panel.innerHTML.includes('Pista anterior:'));
+      assert.ok(!Object.hasOwn(saved[0].payload.context,'task_id'));assert.ok(!Object.hasOwn(saved[0].payload.context,'revision'));`);
+  });
+}
+test('retoma JSON conserva escolha de ajuda, obstáculo, língua e composição atuais',()=>{
+  for(const change of ["support.update({level:'challenge'})","support.update({obstacle:'outro'})",
+    "host('learning_preferences',{language:'en'})","host('work_group_preferences',{route:'studio',participant_count:2})"]){
+    const run=activity();
+    run(`host('learning_preferences',{route:'permanent'});
+      config.units.u1.obstacles.push({...JSON.parse(JSON.stringify(config.units.u1.obstacles[0])),id:'outro'});
+      support.requestHint();const saved=JSON.parse(JSON.stringify(emitted));${change};
+      support.requestAI();const selected=emitted.at(-1).payload;
+      host('learning_restore',{events:saved});assert.match(panel.innerHTML,/Pista anterior:|Previous hint:/);
+      support.requestHint();const hint=emitted.at(-1).payload;
+      for(const key of ['level','obstacle','language','participant_count'])assert.equal(hint.context[key],selected[key]);
+      assert.equal(hint.text,config.units.u1.obstacles.find(o=>o.id===selected.obstacle).hints.find(h=>h.id===hint.hint_key).text[selected.language][selected.participant_count>1?'group':'individual']);
+      assert.equal(spoken,0);`);
+  }
+});
+test('versões anteriores são consultáveis sem consumir pistas da versão atual e sem misturar atividades',()=>{
+  const run=activity();
+  run(`support.requestHint();const first=emitted.at(-1);
+    const old={...first,payload:{...first.payload,activity_version:'anterior',text:'Pista da versão anterior'}};
+    const foreign={...first,payload:{...first.payload,activity:'outra',text:'De outra atividade'}};
+    support.restore([old,foreign]);assert.ok(panel.innerHTML.includes('Pista da versão anterior'));
+    assert.ok(!panel.innerHTML.includes('De outra atividade'));assert.match(panel.innerHTML,/Pista anterior/);
+    const count=emitted.length;click('history-listen-0');assert.equal(emitted.length,count);
+    support.requestHint();assert.equal(emitted.at(-1).payload.hint_key,first.payload.hint_key);`);
+});
+test('histórico sem contexto não inventa o original e escapa conteúdo; voz indisponível não emite nada',()=>{
+  const run=activity();
+  run(`support.restore([{type:'hint_presented',unitId:'u1',payload:{activity:config.activity,activity_version:config.activity_version,
+      hint_id:'antiga',language:'pt',text:'<img src=x onerror=alert(1)>',obstacle:'antigo'}}]);
+    assert.match(panel.innerHTML,/Contexto original não registado/);assert.ok(panel.innerHTML.includes('&lt;img'));
+    assert.ok(!panel.innerHTML.includes('<img'));window.speechSynthesis=null;const count=emitted.length;
+    click('history-listen-0');assert.match(panel.innerHTML,/não está disponível/);assert.equal(emitted.length,count);`);
 });
 test('o texto de feedback local não se torna resposta do aluno',()=>{
   const run=activity();
