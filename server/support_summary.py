@@ -36,8 +36,8 @@ def build_support_summary(events):
                 changes.append({'text': f"{e['actor_label']}: reviu a resposta «{detail.get('note') or detail['field']}» no PageCraft.",
                                 'kind': 'pagecraft_revision', 'before': previous['payload']['detail']['value'], 'after': value,
                                 'evidence': ([hints[(actor, detail['after_hint_id'])]['ref']] if (actor, detail.get('after_hint_id')) in hints else []) + [previous['ref'], e['ref']]})
-            elif detail['field'] == 'revisionResult' and value:
-                changes.append({'text': f"{e['actor_label']}: declarou uma alteração no produto, sem verificação do Canva.",
+            elif detail.get('external_change') is True and value:
+                changes.append({'text': f"{e['actor_label']}: declarou uma alteração no produto, sem verificação do trabalho externo.",
                                 'kind': 'declared_external_change', 'after': value, 'evidence': [e['ref']]})
             values[key] = e
     for key, e in feedback.items():
@@ -80,7 +80,7 @@ def build_support_summary(events):
         proposal['id'] = hashlib.sha256('|'.join(proposal['evidence']).encode()).hexdigest()[:12]
         proposal['status'] = 'para revisão do professor'
     limits = ['Apresentação de uma pista, utilidade declarada e revisão de uma resposta são evidências diferentes.',
-              'Não foram observados produtos no Canva. Respostas conjuntas não demonstram compreensão individual.',
+              'Não foram observados produtos em aplicações externas. Respostas conjuntas não demonstram compreensão individual.',
               'Menos pedidos de ajuda, isoladamente, não demonstram sucesso.']
     if not hints:
         limits.append('Não há pistas apresentadas nesta seleção. A ausência de registos não prova ausência de trabalho.')

@@ -240,7 +240,7 @@ SESSION_EVENT_TYPES = SessionEventRegistry(
         _event("hint_listened", "activity", student_visible=True,
                payload={"hint_id": "O grupo pediu a leitura; não comprova que ouviu até ao fim."}),
         _event("work_location", "activity", student_visible=True,
-               payload={"location": "Local de trabalho declarado: canva, pagecraft, reading ou discussion."}),
+               payload={"location": "Local declarado: external, pagecraft, reading ou discussion.", "label": "Nome da aplicação ou contexto externo, quando aplicável."}),
         _event("help_resolved", "activity", evidence=True, student_visible=True,
                payload={"note": "O grupo declarou que já consegue continuar; não comprova intervenção docente."}),
         _event(

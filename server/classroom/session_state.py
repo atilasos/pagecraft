@@ -56,6 +56,7 @@ def _blank_student(
         "_last_work": anchor,
         "_help_since": None,
         "_work_location": "pagecraft",
+        "_work_location_label": "",
         "_consecutive_failures": 0,
         "_failures_since": None,
         "_pit_items": {},
@@ -160,8 +161,9 @@ def reduce_session(
             student["_help_since"] = None
         if event_type == "work_location":
             location = (event.get("payload") or {}).get("location")
-            if location in {"canva", "pagecraft", "reading", "discussion"}:
+            if location in {"external", "canva", "pagecraft", "reading", "discussion"}:
                 student["_work_location"] = location
+                student["_work_location_label"] = str((event.get("payload") or {}).get("label") or "outra aplicação")[:120]
         if event_type == "joined":
             participants.add(str(student_id))
             student["participated"] = True
@@ -224,6 +226,7 @@ def reduce_session(
             now_instant, student.pop("_failures_since")
         )
         location = student.pop("_work_location")
+        location_label = student.pop("_work_location_label")
         external = location != "pagecraft"
         student["work_location"] = location
         if presence_wait >= 90 and not external:
@@ -233,7 +236,7 @@ def reduce_session(
             band, reason = "Precisa de ti", "Pediu ajuda"
             wait_seconds = help_wait
         elif external:
-            labels = {"canva": "Canva", "reading": "leitura", "discussion": "conversa com o par"}
+            labels = {"external": location_label, "canva": "Canva", "reading": "leitura", "discussion": "conversa com o par"}
             band, reason = "A fluir", "Trabalho declarado: " + labels[location]
             wait_seconds = 0
         elif consecutive_failures >= 3:

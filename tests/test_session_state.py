@@ -320,3 +320,9 @@ def test_a_hint_or_revision_does_not_resolve_an_explicit_help_request():
     assert reduce_session(records, now=NOW)['students']['ana']['triage']['explicit_help']
     records.append(event('help_resolved', 5, payload={'note': 'Já conseguimos continuar'}))
     assert not reduce_session(records, now=NOW)['students']['ana']['triage']['explicit_help']
+
+
+def test_any_named_external_application_is_declared_work():
+    student=reduce_session([event('joined',0),event('work_location',1,payload={'location':'external','label':'Scratch'})],now=NOW)['students']['ana']
+    assert student['triage']['reason']=='Trabalho declarado: Scratch'
+    assert student['work_location']=='external'

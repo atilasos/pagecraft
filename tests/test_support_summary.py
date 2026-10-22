@@ -37,11 +37,11 @@ def test_help_is_only_resolved_explicitly_and_per_request():
 
 
 def test_missing_data_and_external_declarations_do_not_become_validations():
-    summary=build_support_summary([record('1','assessment_result',detail={'field':'revisionResult','value':'Aumentámos o título'})])
+    summary=build_support_summary([record('1','assessment_result',detail={'field':'revisionResult','value':'Aumentámos o título','external_change':True})])
     assert summary['changes'][0]['kind'] == 'declared_external_change'
     assert summary['counts']['revisions'] == 0
     assert any('Falta indicação' in line for line in summary['limits'])
-    assert any('Canva' in line for line in summary['limits'])
+    assert any('aplicações externas' in line for line in summary['limits'])
     assert not build_support_summary([])['proposals']
 
 

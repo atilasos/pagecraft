@@ -415,7 +415,7 @@ async def test_context_and_request_correlation_reach_model_and_child(env):
         assert response['payload']['request_id'] == 'revision-2'
         assert 'not_helped' in provider.calls[0]['prompt']
         assert 'poster' in provider.calls[0]['prompt']
-        assert 'Não viste nem validaste o Canva' in provider.calls[0]['system']
+        assert 'Não viste nem validaste trabalhos noutras aplicações' in provider.calls[0]['system']
         assert 'professor já viu' not in TIMEOUT_MESSAGE
     finally:
         await fb.stop()
