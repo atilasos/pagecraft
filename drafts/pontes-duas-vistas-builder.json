@@ -1,12 +1,12 @@
 {
   "slug": "pontes-duas-vistas",
   "phase": "Builder",
-  "status": "implemented_awaiting_proofreader_evaluator",
+  "status": "repaired_awaiting_proofreader_recheck_evaluator",
   "date": "2026-10-22",
   "branch": "feat/pontes-duas-vistas",
-  "htmlCommit": "150dffd",
+  "htmlCommit": "c0cf22c",
   "artifact": "drafts/pontes-duas-vistas.html",
-  "htmlSha256": "389c041b432d8a1aae15a42d077a39c0682ed0ff2d73745602b68c6d302ee1d5",
+  "htmlSha256": "7ec9b5d6d66cdb5b3f84b6c83fe204b5ee6a98ca82cdb8f1a8a1cb540a342b4e",
   "inputs": [
     "drafts/pontes-duas-vistas-docspec.json",
     "drafts/pontes-duas-vistas-design-spec.json",
@@ -77,5 +77,23 @@
     "Leitura pedagógica final e AO90 pertencem ao Proofreader.",
     "Não houve observação de crianças nem publicação ou registo de produção."
   ],
-  "handoff": "O orquestrador conserva tests/test_pontes_draft.py, docs/reviews e execução das fases seguintes. Este relatório não declara aprovação pedagógica nem browser validado."
+  "handoff": "O orquestrador conserva tests/test_pontes_draft.py, docs/reviews e execução das fases seguintes. Este relatório não declara aprovação pedagógica nem browser validado.",
+  "repairs": [
+    {
+      "iteration": 1,
+      "source": "drafts/pontes-duas-vistas-proofread.json",
+      "issue": "u2 revelava vista lateral antes do teste explícito",
+      "change": "trialCard revela vista lateral e alturas numéricas só após o teste da própria ficha. Antes apresenta Testa para revelar a vista de lado. A ficha A mantém-se quando B está por testar; u1 continua só superior e u3 conserva ambas após os testes.",
+      "scope": "Só revelação de fichas, sem alterar hipóteses ou percurso; correções AO90 e reflexão individual preservadas.",
+      "htmlCommit": "c0cf22c",
+      "checks": [
+        "node --check de todos os scripts inline do HTML final",
+        "node /tmp/check-pontes.cjs, estado e Unicode continuam a passar, envelope máximo 3278 bytes",
+        "node /tmp/check-pontes-reveal.cjs, lateral e alturas ausentes antes de cada teste e presentes depois; A conservada ao preparar B",
+        "apoio contextual e Gothic reincorporados",
+        "git diff --check"
+      ],
+      "browser": "Não executado nesta fase. Rechecagem Proofreader e Evaluator pendentes."
+    }
+  ]
 }
