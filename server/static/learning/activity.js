@@ -48,7 +48,7 @@ const copy = {
     newAttempt:
       "Tens trabalho por guardar. Tenta guardar antes de trocar de aluno.",
     identityConflict:
-      "Foi aberta outra realização neste browser. O trabalho deste separador continua por guardar. Mantém esta página aberta e pede ajuda ao professor para retomar esta realização.",
+      "Foi aberta outra realização neste browser. O trabalho deste separador continua por guardar. Mantém esta página aberta e pede ajuda ao professor.",
     readUnavailable: "Este dispositivo não tem leitura em voz alta disponível.",
     preview:
       "Pré-visualização: estes registos não entram nos relatórios dos alunos.",
@@ -98,7 +98,7 @@ const copy = {
     newAttempt:
       "Some work still needs saving. Try saving before changing pupil.",
     identityConflict:
-      "Another attempt was opened in this browser. This tab's work still needs saving. Keep this page open and ask your teacher to help resume this attempt.",
+      "Another attempt was opened in this browser. This tab's work still needs saving. Keep this page open and ask your teacher for help.",
     readUnavailable: "Reading aloud is not available on this device.",
     preview: "Preview: these records are not included in pupil reports.",
   },
@@ -536,10 +536,12 @@ async function recoverAttempt() {
   $("start-form").hidden = true;
   $("recovery-retry").hidden = true;
   status(t("recovering"));
+  let expectedId;
   try {
-    const expectedId = sessionStorage.getItem("pc-realization:" + code);
+    expectedId = sessionStorage.getItem("pc-realization:" + code);
     const previous = await api("/api/learning/me", "GET", undefined, expectedId);
     if (previous.code === code) {
+      identityConflict = false;
       attempt = previous;
       lang = previous.language;
       queue = JSON.parse(
@@ -561,9 +563,9 @@ async function recoverAttempt() {
       status("");
     }
   } catch (error) {
-    // Only a missing/expired credential permits a fresh entry. A failed
-    // recovery must not invite the child to replace the existing credential.
-    if (error.status === 401 && !sessionStorage.getItem("pc-realization:" + code)) {
+    // Only a fresh tab with no credential may offer entry. A known tab must
+    // keep its pending work even when the shared credential is gone/expired.
+    if (error.status === 401 && !expectedId) {
       $("start-form").hidden = false;
       status("");
     } else {
