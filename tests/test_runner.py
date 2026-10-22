@@ -328,14 +328,16 @@ async def test_same_topic_failed_job_cannot_replace_approved_job(env, restart):
         await runner.stop()
 
 
+@pytest.mark.parametrize('failed', [False, True])
 @pytest.mark.parametrize('key', ['html', 'docspec', 'design_spec', 'teacher_md', 'validation', 'proofread', 'evaluation', 'old_report', 'extra_file'])
-async def test_review_rejects_any_changed_artifact(env, key):
+async def test_review_rejects_any_changed_artifact(env, key, failed):
     config, storage, hub = env
-    provider = FakeProvider(pipeline_responses(EVAL_FAIL, EVAL_OK))
+    config = replace(config, max_iterations=2)
+    provider = FakeProvider(pipeline_responses(EVAL_FAIL, EVAL_FAIL if failed else EVAL_OK))
     runner = PipelineRunner(config, storage, hub, provider, NoKnowledge(), NoKnowledge())
     try:
         job = await runner.create_job(topic='Frações', subject='Matemática', year=3, duration=30)
-        job = await _wait_status(runner, job['id'], {'awaiting_review'})
+        job = await _wait_status(runner, job['id'], {'awaiting_review', 'failed'})
         review_id = job['review']['id']
         original = await runner.preview(job['id'], review_id)
         assert original == Path(job['artifacts']['html']).read_bytes()
@@ -478,20 +480,24 @@ async def test_legacy_jobs_are_explicitly_blocked_without_touching_shared_files(
     await runner.stop()
 
 
-async def test_restart_never_publishes_without_persisted_approval(env):
+@pytest.mark.parametrize('reason', ['missing_approval', 'changed_artifacts'])
+async def test_restart_never_publishes_uncertain_content(env, reason):
     config, storage, hub = env
     runner = PipelineRunner(config, storage, hub, FakeProvider(pipeline_responses(EVAL_OK)), NoKnowledge(), NoKnowledge())
     job = await runner.create_job(topic='Frações', subject='Matemática', year=3, duration=30)
     job = await _wait_status(runner, job['id'], {'awaiting_review'})
     await runner.stop()
     job['status'] = 'publishing'
+    if reason == 'changed_artifacts':
+        job['approval'] = {'review_id': job['review']['id']}
+        Path(job['artifacts']['docspec']).write_text('{}')
     await runner._save(job)
     restarted = PipelineRunner(config, storage, hub, FakeProvider([]), NoKnowledge(), NoKnowledge())
     try:
         await restarted.start()
         failed = await _wait_status(restarted, job['id'], {'failed', 'done'})
         assert failed['status'] == 'failed'
-        assert 'Revisão ausente' in failed['error']
+        assert ('Revisão ausente' if reason == 'missing_approval' else 'mudaram') in failed['error']
         assert not list(config.activities_dir.iterdir())
     finally:
         await restarted.stop()
@@ -535,3 +541,27 @@ async def test_preview_and_approval_api_require_exact_review_and_teacher(env, mo
             conflict = await client.post(f"/api/jobs/{job['id']}/approve?override=true", json={'review_id': job['review']['id']})
             assert conflict.status_code == 409
             assert not list(config.activities_dir.iterdir())
+
+
+async def test_restart_resumes_only_own_architect_and_designer_artifacts(env, monkeypatch):
+    config, storage, hub = env
+    no_ai = FakeProvider([])
+    runner = PipelineRunner(config, storage, hub, no_ai, NoKnowledge(), NoKnowledge())
+    monkeypatch.setattr(runner, 'ensure_worker', lambda: None)
+    job = await runner.create_job(topic='Frações', subject='Matemática', year=3, duration=30)
+    await runner._write_artifact(job, 'docspec', '-docspec.json', DOCSPEC)
+    await runner._write_artifact(job, 'design_spec', '-design-spec.json', DESIGN)
+    job['status'] = 'running_builder'
+    job['iteration'] = 1
+    await runner._save(job)
+    provider = FakeProvider([BUILT_OK, PROOF_OK, EVAL_OK])
+    restarted = PipelineRunner(config, storage, hub, provider, NoKnowledge(), NoKnowledge())
+    try:
+        await restarted.start()
+        fresh = await _wait_status(restarted, job['id'], {'awaiting_review', 'failed'})
+        assert fresh['status'] == 'awaiting_review', fresh.get('error')
+        assert phases_called(restarted, provider) == ['builder', 'proofreader', 'evaluator']
+        assert fresh['artifacts']['docspec'] == job['artifacts']['docspec']
+        assert json.loads(Path(fresh['artifacts']['docspec']).read_text()) == DOCSPEC
+    finally:
+        await restarted.stop()
