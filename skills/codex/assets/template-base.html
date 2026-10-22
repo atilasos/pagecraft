@@ -378,6 +378,10 @@
 </head>
 <body>
   <!-- {{CONTENT}} -->
+  <!-- Em cada unidade gerada, colocar <aside data-pagecraft-support="uN"></aside>
+       junto da tarefa. O pipeline/CLI incorpora o plano do DocSpec antes da revisão.
+       Nas mudanças de etapa, produto ou tentativa, chamar PageCraftSupport.update(...)
+       quando disponível; ver references/contextual-support.md. -->
 
   <script>
     /* Tabs de diferenciação com ARIA, escopadas ao grupo mais próximo. */
@@ -430,6 +434,7 @@
         try { return window.parent && window.parent !== window; } catch (e) { return false; }
       })();
       function emit(type, unitId, payload) {
+        document.dispatchEvent(new CustomEvent('pagecraft:activity-event', {detail:{type:type,unitId:unitId,payload:payload||{}}}));
         if (!embedded) return;
         try {
           window.parent.postMessage({
@@ -462,7 +467,7 @@
         hintPresented: function (unitId, hintId, text, context) { emit('hint_presented', unitId, { hint_id: hintId, text: text, context: context }); },
         hintFeedback: function (unitId, hintId, usefulness) { emit('hint_feedback', unitId, { hint_id: hintId, usefulness: usefulness }); },
         hintListened: function (unitId, hintId) { emit('hint_listened', unitId, { hint_id: hintId }); },
-        workLocation: function (unitId, location) { emit('work_location', unitId, { location: location }); },
+        workLocation: function (unitId, location, label) { emit('work_location', unitId, { location: location, label: label }); },
         helpResolved: function (unitId, note) { emit('help_resolved', unitId, { note: note }); },
         share: function (unitId, what) { emit('share_requested', unitId, { what: what || '' }); }
       };
@@ -473,8 +478,9 @@
        «chamar a atenção» do professor para uma unidade. */
     window.addEventListener('message', function (ev) {
       var d = ev.data;
-      if (!d || d.pagecraft !== 1) return;
+      if (ev.source !== window.parent || !d || d.pagecraft !== 1) return;
       if (d.type === 'ai_feedback') {
+        if (d.payload && d.payload.request_id) return; // O apoio comum verifica a tentativa atual.
         var box = document.getElementById(d.targetId || 'pagecraft-feedback');
         if (!box) return;
         box.textContent = d.payload && d.payload.text ? d.payload.text : '';

@@ -114,6 +114,7 @@
   }
   function setLocation(value) {
     if(!['pagecraft','external','reading','discussion'].includes(value))return;
+    if(value==='external'&&!config.externalWork)return;
     location=value;pending=null;
     emit('work_location',{location:value,label:value==='external'?config.externalWork?.[language]:undefined});
     notice=value==='pagecraft'?t('returned'):t('outside');render();

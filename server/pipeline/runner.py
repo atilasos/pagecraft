@@ -23,6 +23,7 @@ from ..storage import Storage
 from ..typography import embed_activity_typography
 from .phases import build_phases
 from .validators import validate_activity_html
+from ..activity_support import embed_activity_support
 
 
 def slugify(text: str) -> str:
@@ -281,8 +282,10 @@ class PipelineRunner:
             html = built["html"]
             # Validate the model content before font bytes can mask a short build.
             validation = validate_activity_html(
-                html, expected_units=len(docspec.get("units") or [])
+                html, expected_units=len(docspec.get("units") or []),
+                expected_support="support" in docspec
             ).as_dict()
+            html = embed_activity_support(html, docspec, job["slug"])
             html = embed_activity_typography(html)
             await self._write_artifact(job, "html", ".html", html)
             await self._emit(job, "validation", validation)

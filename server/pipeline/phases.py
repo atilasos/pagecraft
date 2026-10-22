@@ -49,7 +49,12 @@ def build_phases(config) -> dict[str, Phase]:
     schemas_dir = Path(__file__).parent / "schemas"
 
     def schema(name: str) -> dict:
-        return json.loads((schemas_dir / f"{name}.schema.json").read_text("utf-8"))
+        value = json.loads((schemas_dir / f"{name}.schema.json").read_text("utf-8"))
+        if name == 'docspec':
+            # Novas gerações incluem apoio; o schema de arquivo continua a aceitar versões antigas.
+            value['required'].append('support')
+            value['$defs']['KnowledgeUnit']['required'].append('support')
+        return value
 
     generation = config.generation_timeout_s
     spec = [
@@ -74,6 +79,7 @@ class PromptLibrary:
             for name in ("architect", "designer", "builder", "proofreader", "evaluator")
         }
         refs = self.dir / "references"
+        self.contextual_support = _read(refs / "contextual-support.md")
         self.docspec_schema_doc = _read(refs / "docspec-schema.md")
         self.age_adaptation = _read(refs / "age-adaptation.md")
         self.interaction_patterns = _read(refs / "interaction-patterns.md")
@@ -103,6 +109,7 @@ class PromptLibrary:
             f"sobre «{topic}», com duração de {duration} minutos. {maker_line}",
             "Responde apenas com o JSON do DocSpec-AM.",
             f"# Documentação do schema DocSpec-AM\n\n{self.docspec_schema_doc}",
+            f"# Apoio contextual por atividade\n\n{self.contextual_support}",
             f"# Exemplos SRTC-A\n\n{self.srtc_examples}",
             f"# Adaptação à idade\n\n{self.age_adaptation}",
         ]
@@ -155,6 +162,7 @@ class PromptLibrary:
             f"# design-spec\n\n```json\n{json.dumps(design_spec, ensure_ascii=False, indent=2)}\n```",
             f"# Template base (usa como esqueleto: estrutura, tokens CSS, bridge de telemetria)\n\n"
             f"```html\n{self.template_base}\n```",
+            f"# Apoio contextual por atividade\n\n{self.contextual_support}",
             f"# Padrões de interação\n\n{self.interaction_patterns}",
             f"# Telemetria PageCraftBridge (obrigatório instrumentar)\n\n{self.bridge_contract}",
             f"# Adaptação à idade\n\n{self.age_adaptation}",
@@ -186,6 +194,7 @@ class PromptLibrary:
             "acessibilidade?). Considera também o relatório determinista e o proofread. "
             "Responde apenas com o JSON de avaliação.\n\n"
             f"# DocSpec-AM\n\n```json\n{json.dumps(docspec, ensure_ascii=False, indent=2)}\n```\n\n"
+            f"# Apoio contextual\n\n{self.contextual_support}\n\n"
             f"# Relatório determinista (self-contained/offline/a11y)\n\n```json\n{json.dumps(validation, ensure_ascii=False)}\n```\n\n"
             f"# Proofread\n\n```json\n{json.dumps(proofread, ensure_ascii=False)}\n```\n\n"
             f"# HTML da atividade\n\n```html\n{html}\n```"

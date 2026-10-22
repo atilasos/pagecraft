@@ -23,6 +23,8 @@ def support_configuration(docspec: dict, activity_id: str | None = None) -> dict
         Draft202012Validator({'$defs':schema['$defs'], '$ref':'#/$defs/'+definition}).validate(value)
     validate(header, 'ActivitySupport')
     languages = header.get('languages', ['pt'])
+    if header.get('externalWork') and any(lang not in header['externalWork'] for lang in languages):
+        raise ValueError('Falta traduzir o nome do trabalho externo para as línguas pedidas.')
     units = {}
     for i, unit in enumerate(docspec['units'], 1):
         plan = unit.get('support')
