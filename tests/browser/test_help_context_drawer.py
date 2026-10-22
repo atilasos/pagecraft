@@ -2,6 +2,7 @@
 from contextlib import contextmanager
 
 import httpx
+import pytest
 
 
 @contextmanager
@@ -174,3 +175,46 @@ def test_group_composition_and_individual_voice_never_supply_another_requests_co
         open_drawer(page, 'Eva')
         expect(page.locator('#drawer-events')).not_to_contain_text('Eu comparei os desenhos.')
         expect(page.locator('#drawer-events')).not_to_contain_text('Pista de Ana e Bruno')
+
+
+@pytest.mark.parametrize('hint_unit, hint_context', [
+    ('u1', {'task_id': 'layout', 'activity_version': 'v2'}),
+    ('u2', {'task_id': 'colour', 'activity_version': 'v2'}),
+    ('u2', {'task_id': 'layout', 'activity_version': 'v1'}),
+])
+def test_explicit_hint_id_cannot_override_conflicting_stage_task_or_version(page, studio_origin, hint_unit, hint_context):
+    from playwright.sync_api import expect
+    with classroom(studio_origin) as (teacher, pair, other, session, path, ids):
+        post(pair, path,
+             ('stale-hint', 'hint_presented', hint_unit, {'hint_id': 'stale', 'text': 'Pista de outro contexto', 'context': hint_context}),
+             ('stale-feedback', 'hint_feedback', hint_unit, {'hint_id': 'stale', 'usefulness': 'helped'}),
+             ('help', 'help_needed', 'u2', {'help_request_id': 'help', 'hint_id': 'stale', 'note': 'Contexto atual',
+                                         'context': {'task_id': 'layout', 'activity_version': 'v2'}}))
+        open_teacher(page, studio_origin)
+        open_drawer(page, 'Ana')
+        context = page.locator('#drawer-help')
+        expect(context).to_contain_text('Contexto atual')
+        expect(context).to_contain_text('não registado')
+        expect(context).not_to_contain_text('Pista de outro contexto')
+        expect(context).not_to_contain_text('Ajudou, segundo o grupo')
+        expect(page.locator('#drawer-events')).to_contain_text('Pista de outro contexto')
+
+
+def test_individual_help_has_individual_authorship_and_safe_failure_state(page, studio_origin):
+    from playwright.sync_api import expect
+    with classroom(studio_origin) as (teacher, pair, other, session, path, ids), httpx.Client(base_url=studio_origin) as child:
+        child.post(path + '/claim', json={'student_id': ids[4]}).raise_for_status()
+        post(child, path,
+             ('hint', 'hint_presented', 'u1', {'hint_id': 'individual', 'text': 'Experimenta outra peça.'}),
+             ('feedback', 'hint_feedback', 'u1', {'hint_id': 'individual', 'usefulness': 'helped'}),
+             ('help', 'help_needed', 'u1', {'help_request_id': 'eva-help', 'hint_id': 'individual', 'note': 'Ainda preciso de ajuda.'}))
+        open_teacher(page, studio_origin)
+        page.locator('#student-' + ids[4]).click()
+        context = page.locator('#drawer-help')
+        expect(context).to_contain_text('Trabalho individual · Eva')
+        expect(context).to_contain_text('Ajudou, segundo o aluno')
+        page.locator('#drawer-close').click()
+        page.route('**/students/*/history', lambda route: route.fulfill(status=503, body='{}'))
+        open_drawer(page, 'Ana')
+        expect(context).to_have_text('Não foi possível carregar o percurso e o contexto.')
+        expect(context).not_to_contain_text('Ainda preciso de ajuda.')

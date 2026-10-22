@@ -588,7 +588,7 @@ function reflectFreeze(state) {
 
 function handleEvent(type, record) {
   const st = record.student_id ? students.get(record.student_id) : null;
-  if (drawerStudent && (drawerStudent === record.student_id || record.participant_ids?.includes(drawerStudent))) {
+  if (type !== 'heartbeat' && drawerStudent && (drawerStudent === record.student_id || record.participant_ids?.includes(drawerStudent))) {
     loadDrawerHistory(drawerStudent);
   }
   const text = eventText(type, record);

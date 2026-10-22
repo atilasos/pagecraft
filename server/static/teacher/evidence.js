@@ -89,7 +89,7 @@ window.DrawerEvidence = (() => {
       case 'help_resolved': return `declarou que já consegue continuar · ${readable(p.note) || 'nota não registada'}`;
       case 'hint_presented': return `pista apresentada · ${readable(p.text) || 'texto não registado'}`;
       case 'hint_feedback': return usefulness(record);
-      case 'attempt': return `tentativa · ${p.correct ? 'resposta esperada' : 'resposta diferente da esperada'} · ${readable(p.detail) || 'contexto não registado'}`;
+      case 'attempt': return `tentativa · ${p.correct === true ? 'resposta esperada' : p.correct === false ? 'resposta diferente da esperada' : 'resultado não registado'} · ${readable(p.detail) || 'contexto não registado'}`;
       case 'assessment_result': return `avaliação · ${readable(p.result) || 'resultado não registado'} · ${readable(p.detail) || 'contexto não registado'}`;
       case 'feedback_request': return `pediu feedback · Tarefa: ${readable(p.question) || 'não registado'} · Resposta: ${readable(p.answer) || 'não registado'}`;
       default: return null;
@@ -97,7 +97,8 @@ window.DrawerEvidence = (() => {
   }
 
   function usefulness(record) {
-    return ({helped: 'Ajudou, segundo o grupo', not_helped: 'Não ajudou, segundo o grupo'})[payload(record).usefulness] || 'não registado';
+    const text = ({helped: 'Ajudou', not_helped: 'Não ajudou'})[payload(record).usefulness];
+    return text ? `${text}, segundo ${record.work_group_id ? 'o grupo' : 'o aluno'}` : 'não registado';
   }
 
   function renderHelp(root, events, students) {
