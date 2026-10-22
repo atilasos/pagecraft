@@ -10,6 +10,7 @@ SLUG = 'canva-animais-autonomia-piloto'
 def build(*, check=False):
     source = (ROOT / 'activities/canva-animais-4ano/index.html').read_text()
     source = source.replace('canva-animais-4ano', SLUG)
+    source = source.replace('Dois animais, três formas de comunicar', 'Dois animais, três formas de comunicar · Piloto de apoio')
     source = source.replace("else if(d.type==='ai_feedback'&&typeof p.text==='string'&&(!p.unit_id||p.unit_id==='u'+(state.step+1)))$('pagecraft-feedback').textContent=p.text.slice(0,1500);", "else if(d.type==='ai_feedback')receiveHint(p);")
     old = "PageCraftBridge.helpNeeded('u'+(state.step+1),'O grupo pediu ajuda nesta etapa.');$('save-message').textContent=embedded?'Pedido de ajuda enviado. Chama também o professor se precisares.':'Chama o professor e mostra esta etapa.'"
     assert old in source

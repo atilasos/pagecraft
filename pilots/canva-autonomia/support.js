@@ -14,7 +14,7 @@ const STAGE_HINTS = [
   ['Confere só um animal com o Word. Qual é o primeiro facto que ainda falta no produto?',
    'Aponta cada facto no Word e depois no produto. Marca no papel o que já encontraste, sem alterar as frases.'],
   ['Aponta uma parte do produto e pede uma sugestão que comece por uma ação.',
-   'Experimenta perguntar: «Que texto custa a ler nesta parte?» Regista a alteração que querem experimentar.'],
+   'Experimenta perguntar: «Que texto custa a ler nesta parte?» Regista a alteração que queres experimentar.'],
   ['Afasta-te um pouco do ecrã. Consegues ler a mensagem principal? Se não, aumenta primeiro esse texto.',
    'Mostra só a zona que mudaste. Compara com a sugestão recebida e explica se agora ajuda os colegas a ler.'],
   ['Escolhe uma decisão do produto. Aponta um exemplo enquanto explicas por que a tomaste.',
@@ -23,7 +23,6 @@ const STAGE_HINTS = [
    'Completa com um exemplo teu: «Eu fiz… e da próxima vez quero…». Podes pedir que leiam a pergunta.'],
 ];
 const CATEGORY_HINTS = {
-  instruction: [null, 'Diz por palavras tuas só a primeira ação da instrução. Que palavra ainda precisas de esclarecer?'],
   command: ['Abre o passo ilustrado desta etapa. Procura primeiro o botão assinalado na captura.',
     'Compara o nome e o ícone da captura com o teu ecrã. Se forem diferentes, chama o professor e aponta onde deixaram de corresponder.'],
   ideas: ['Aponta no Word uma ideia que queres comunicar. Em que zona do produto vai ficar?',
@@ -42,15 +41,15 @@ const GROUP_COPY = [
   ['Faz', 'Façam'], ['Diz', 'Digam'], ['Conta', 'Contem'], ['Completa', 'Completem'],
   ['chama', 'chamem'], ['procura', 'procurem'], ['Procura', 'Procurem'],
   ['pede', 'peçam'], ['Marca', 'Marquem'], ['explica', 'expliquem'], ['lembra', 'lembrem'],
-  ['queres', 'querem'], ['vais', 'vão'], ['teu', 'vosso'], ['tua', 'vossa'],
+  ['queres', 'querem'], ['precisas', 'precisam'], ['Podes', 'Podem'], ['podes', 'podem'], ['participaste', 'participaram'], ['vais', 'vão'], ['teu', 'vosso'], ['tua', 'vossa'],
   ['estás', 'estão'], ['tomaste', 'tomaram'], ['mudaste', 'mudaram'],
 ];
-let supportMode = 2, supportModeLocked = false, supportRoute = 'standalone';
+let supportMode = 1, supportModeLocked = false, supportRoute = 'standalone';
 let obstacle = 'instruction', supportHistory = [], currentHint = null, pendingHint = null;
 let supportLocation = 'pagecraft', pendingTeacher = null, supportNotice = '';
 const revisionHints = new Map();
 function supportText(text) {
-  if (supportMode === 1) return text.replace('Ensaiem', 'Ensaia').replace('Comecem', 'Começa');
+  if (supportMode === 1 || state.step === 7) return text.replace('Ensaiem', 'Ensaia').replace('Comecem', 'Começa');
   // Trocas por palavras completas para não alterar outras palavras ou citações.
   return GROUP_COPY.reduce((result, [single, group]) => result.replace(new RegExp('(?<![\\p{L}])'+single+'(?![\\p{L}])', 'gu'), group), text);
 }
@@ -68,7 +67,7 @@ function supportContext() {
     activity: SLUG, activity_version: SUPPORT_VERSION, objective: 'Comunicar dois animais, dez factos e duas ilustrações aos colegas.',
     stage: unit.title, stage_objective: unit.differentiation[state.level === 'intermediate' ? 'standard' : state.level],
     product: state.values.product || 'a escolher', criteria: DATA.criteria.filter(c => criteriaIds.includes(c.id)).map(c => c.pt),
-    participant_count: supportMode, obstacle, question: OBSTACLES[obstacle],
+    participant_count: state.step === 7 ? 1 : supportMode, obstacle, question: OBSTACLES[obstacle],
     answer: fieldsFor(state.step).map(f => f[2]+': '+(state.values[f[0]]||'sem resposta').slice(0,80)).join('\n').slice(0,650),
     previous_hints: relevantHistory().slice(-2).map(h => ({text:h.text.slice(0,200), usefulness:h.usefulness || 'not_reported'})),
     observation: 'Respostas PageCraft e declarações do grupo; produto Canva não observado.',
@@ -195,7 +194,7 @@ render = function() {
 fieldEvent = function(key) {
   const f=fieldMap[key]; if(!f)return;
   dirty.delete(key);
-  PageCraftBridge.assessment('u'+(f[1]+1),'Declaração do grupo',{activity:SLUG,activity_version:SUPPORT_VERSION,
+  PageCraftBridge.assessment('u'+(f[1]+1),supportMode===1?'Declaração individual':'Declaração do grupo',{activity:SLUG,activity_version:SUPPORT_VERSION,
     field:key,value:state.values[key]||'',confirmed:!state.invalid.includes(key),note:f[2],
     after_hint_id:revisionHints.get(key)||currentHint?.hint_id||null});
   revisionHints.delete(key);
@@ -211,12 +210,14 @@ go = function(step) {
   if ('speechSynthesis' in window) speechSynthesis.cancel();
   goLesson(step);
 };
+const levelLesson = setLevel;
+setLevel = function(...args) {pendingHint=null;levelLesson(...args);invalidateSupport();};
 const restoreLesson = restoreEvents;
 restoreEvents = function(events) {
   supportHistory=[]; currentHint=null; pendingHint=null; pendingTeacher=null;
   for (const event of events || []) {
     const p=event.payload||{};
-    if(p.activity!==SLUG)continue;
+    if(p.activity && p.activity!==SLUG)continue;
     if(event.type==='hint_presented') supportHistory.push({hint_id:p.hint_id,unit_id:event.unit_id||event.unitId,
       obstacle:p.obstacle,product:p.product,text:p.text,source:p.source,usefulness:null});
     if(event.type==='hint_feedback') { const h=supportHistory.find(h=>h.hint_id===p.hint_id); if(h)h.usefulness=p.usefulness; }
@@ -230,6 +231,7 @@ restoreEvents = function(events) {
 window.addEventListener('message', e => {
   if(e.source!==window.parent || e.data?.pagecraft!==1)return;
   const p=e.data.payload||{};
+  if(e.data.type==='support_teacher_requested'){pendingTeacher={request_id:p.help_request_id};renderSupport();}
   if(['learning_preferences','work_group_preferences'].includes(e.data.type)) {
     if(p.route)supportRoute=p.route;
     if(p.route==='studio' && Number.isInteger(p.participant_count)) {
