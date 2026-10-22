@@ -413,7 +413,7 @@ const studentTransport = createStudentTransport();
 function createStudentTransport() {
   const outbox = [];
   let queueKey = null;
-  let refusedWork = false;
+  let refusals = [];
   let storageFailed = false;
   let bridgeHandler = null;
   let stream = null;
@@ -437,7 +437,7 @@ function createStudentTransport() {
     if (discardQueue) {
       outbox.length = 0;
       queueKey = null;
-      refusedWork = false;
+      refusals = [];
       storageFailed = false;
     }
   }
@@ -445,7 +445,7 @@ function createStudentTransport() {
   function enqueue(type, unitId, payload) {
     const currentQueue = outbox.filter(event => !event.composition_conflict);
     if (!hasIdentity()) return false;
-    if (refusedWork || currentQueue.length >= OUTBOX_LIMIT) {
+    if (hasCurrentRefusal() || currentQueue.length >= OUTBOX_LIMIT) {
       refuseWork();
       return false;
     }
@@ -467,40 +467,74 @@ function createStudentTransport() {
     if (!queueKey) return;
     try {
       sessionStorage.setItem(queueKey, JSON.stringify(outbox));
-      sessionStorage.setItem(`${queueKey}:status`, JSON.stringify({refusedWork}));
+      // Keep the boolean for older clients, which must conservatively warn.
+      sessionStorage.setItem(`${queueKey}:status`, JSON.stringify({version:2, refusals, refusedWork:refusals.length > 0}));
       storageFailed = false;
     } catch {
       storageFailed = true;
     }
   }
 
+  function currentScope() {
+    return state.workGroup ? {
+      device_id:state.workGroup.device_id,
+      composition_version:state.workGroup.composition_version,
+      access_version:state.workGroup.access_version,
+    } : null;
+  }
+
+  function sameScope(left, right) {
+    return left?.device_id === right?.device_id &&
+      left?.composition_version === right?.composition_version && left?.access_version === right?.access_version;
+  }
+
+  function isCurrentRefusal(refusal) {
+    // Legacy statuses without enough context stay blocking until explicit review.
+    return !refusal.scope || sameScope(refusal.scope, currentScope());
+  }
+
+  const hasCurrentRefusal = () => refusals.some(isCurrentRefusal);
+  const hasPreviousRefusals = () => refusals.some(refusal => !isCurrentRefusal(refusal));
+
   function refuseWork() {
-    refusedWork = true;
+    if (!hasCurrentRefusal()) refusals.push({
+      scope:currentScope(),
+      work_group_name:state.workGroup?.display_name || state.displayName,
+      participant_ids:state.workGroup ? [...state.workGroup.participant_ids] : [state.studentId],
+      refused_at:new Date().toISOString(),
+    });
     $('save-work-status').textContent = '';
     persistQueue();
     renderPendingWork();
   }
 
   function renderPendingWork() {
+    const refusedWork = hasCurrentRefusal();
     const full = outbox.filter(event => !event.composition_conflict).length >= OUTBOX_LIMIT;
     const status = $('queue-status');
     $('queue-notice').hidden = !(full || refusedWork || storageFailed && outbox.length);
     status.textContent = [
       full ? 'A fila está cheia. Espera pela ligação antes de continuar.' : '',
       refusedWork ? 'Algumas alterações ficaram de fora. O trabalho já aceite foi conservado. Volta ao último trabalho aceite e repete essas alterações.' : '',
+      refusals.some(refusal => refusal.context_unknown) ? 'O contexto das alterações recusadas anteriores não ficou registado. Revê este aviso com o professor antes de continuar.' : '',
       storageFailed && outbox.length ? 'Não foi possível conservar a fila neste separador. Mantém esta página aberta até guardar no servidor.' : '',
     ].filter(Boolean).join(' ');
     $('recover-accepted-work').hidden = !refusedWork;
     $('recover-accepted-work').disabled = full || storageFailed;
     const previous = outbox.filter(event => event.composition_conflict && HISTORY_LABELS[event.type]);
     const panel = $("pending-group-work");
-    panel.hidden = !previous.length;
+    panel.hidden = !previous.length && !hasPreviousRefusals();
     $("pending-group-list").replaceChildren();
     const captions = new Set(previous.map(event => {
       const caption = describeHistoryEvent({...event, work_group_id:'pending'});
       const value = event.payload?.detail?.value;
       return typeof value === 'string' ? `${caption} · ${value}` : caption;
     }));
+    for (const refusal of refusals.filter(refusal => !isCurrentRefusal(refusal))) {
+      const date = new Date(refusal.refused_at);
+      const when = Number.isNaN(date.getTime()) ? 'Data não registada' : date.toLocaleString('pt-PT');
+      captions.add(`${refusal.work_group_name || 'Grupo anterior'} · ${when}: Algumas alterações ficaram de fora e não foram conservadas. Pede ao professor para as rever contigo.`);
+    }
     for (const caption of captions) {
       const item = document.createElement('li');
       item.textContent = caption;
@@ -671,7 +705,7 @@ function createStudentTransport() {
       state.identityVersion ? `pc-student-outbox:${sessionId}:${state.studentId}:${state.identityVersion}` : null;
     if (nextKey !== queueKey) {
       outbox.length = 0; queueKey = nextKey;
-      refusedWork = false;
+      refusals = [];
       storageFailed = false;
       if (queueKey) {
         try {
@@ -683,7 +717,17 @@ function createStudentTransport() {
             if (!ids.has(event.event_id)) outbox.push(event);
             ids.add(event.event_id);
           }
-          refusedWork = JSON.parse(sessionStorage.getItem(`${queueKey}:status`) || '{}').refusedWork === true;
+          const status = JSON.parse(sessionStorage.getItem(`${queueKey}:status`) || '{}');
+          if (status.version === 2) {
+            if (!Array.isArray(status.refusals) || status.refusals.some(refusal => !refusal || typeof refusal !== 'object' ||
+                refusal.scope && (typeof refusal.scope.device_id !== 'string' ||
+                  !Number.isInteger(refusal.scope.composition_version) || !Number.isInteger(refusal.scope.access_version)))) throw new Error('refusals');
+            refusals = status.refusals;
+          } else if (status.refusedWork === true) {
+            // Remaining accepted events cannot prove who made refused edits:
+            // newer accepted work may already have drained. Never infer authors.
+            refusals.push({scope:null, context_unknown:true});
+          }
         } catch {
           refuseWork();
         }
@@ -702,12 +746,12 @@ function createStudentTransport() {
       if (request !== generation || !hasIdentity()) return false;
       if (flushing) { await new Promise(resolve => setTimeout(resolve, 50)); continue; }
       const before = outbox.filter(event => !event.composition_conflict).length;
-      if (!before) return !refusedWork;
+      if (!before) return !hasCurrentRefusal();
       await flush();
       if (request !== generation) return false;
       if (outbox.filter(event => !event.composition_conflict).length >= before) return false;
     }
-    return !refusedWork && outbox.every(event => event.composition_conflict);
+    return !hasCurrentRefusal() && outbox.every(event => event.composition_conflict);
   }
 
   function markPreviousComposition() {
@@ -721,14 +765,15 @@ function createStudentTransport() {
   $('recover-accepted-work').addEventListener('click', () => {
     // Explicitly abandon only the refused edits. Reload replays accepted work in
     // a fresh iframe, so stale controls cannot silently become accepted evidence.
-    refusedWork = false;
+    const previousRefusals = refusals;
+    refusals = refusals.filter(refusal => !isCurrentRefusal(refusal));
     persistQueue();
-    if (storageFailed) { refusedWork = true; renderPendingWork(); return; }
+    if (storageFailed) { refusals = previousRefusals; renderPendingWork(); return; }
     window.location.reload();
   });
 
   return {
-    enqueue, flush, post, start, stop, savePending, markPreviousComposition,
+    enqueue, flush, post, start, stop, savePending, markPreviousComposition, hasPreviousRefusals,
     restoreEvents(history) {
       const savedIds = new Set(history.map(event => event.event_id));
       return [...history, ...outbox.filter(event => !event.composition_conflict && !savedIds.has(event.event_id))];
@@ -760,8 +805,9 @@ $('save-work').addEventListener('click', async () => {
   // Leaving the activity commits its focused field through the existing bridge.
   await new Promise(resolve => setTimeout(resolve, 50));
   const saved = await studentTransport.savePending();
-  $('save-work-status').textContent = saved ? 'Guardado. Podem continuar na próxima aula.' :
-    'Ainda não foi possível guardar tudo. Mantém esta página aberta e tenta novamente.';
+  $('save-work-status').textContent = saved ? (studentTransport.hasPreviousRefusals() ?
+    'Trabalho atual guardado. Há alterações anteriores que ficaram de fora; pede ao professor para as rever contigo.' :
+    'Guardado. Podem continuar na próxima aula.') : 'Ainda não foi possível guardar tudo. Mantém esta página aberta e tenta novamente.';
   $('save-work').disabled = state.sessionState?.closed === true;
 });
 

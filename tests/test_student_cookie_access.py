@@ -58,7 +58,7 @@ async def create_session(teacher, students=("Ana",)):
 async def test_claim_issues_httponly_cookie_and_me_accepts_only_that_cookie(
     classroom_http,
 ):
-    app, teacher, student, _ = classroom_http
+    app, teacher, student, clock = classroom_http
     session = await create_session(teacher)
     student_id = next(iter(session["roster"]))
 
@@ -68,7 +68,7 @@ async def test_claim_issues_httponly_cookie_and_me_accepts_only_that_cookie(
     )
 
     assert claim.status_code == 200
-    assert claim.json() == {"student_id": student_id, "display_name": "Ana"}
+    assert claim.json() == {"student_id": student_id, "display_name": "Ana", "identity_version": clock()}
     assert "student_token" not in claim.text
     set_cookie = claim.headers["set-cookie"]
     assert set_cookie.startswith(f"{STUDENT_COOKIE_NAME}=")
@@ -89,6 +89,7 @@ async def test_claim_issues_httponly_cookie_and_me_accepts_only_that_cookie(
 
     assert resumed.status_code == 200
     assert resumed.json()["display_name"] == "Ana"
+    assert resumed.json()["identity_version"] == claim.json()["identity_version"]
     assert legacy.status_code == 401
 
 

@@ -161,10 +161,13 @@ def test_teacher_change_keeps_pending_answer_with_old_authors(page, studio_origi
         expect(page.locator('#student-name')).to_have_text('Ana + Carla',timeout=10000)
         expect(lesson.locator('#level')).to_have_value('intermediate')
         expect(page.locator('#pending-group-work')).to_contain_text('Ana + Bruno')
+        expect(page.locator('#pending-group-work')).to_contain_text('alterações ficaram de fora')
+        expect(page.locator('#queue-notice')).to_be_hidden()
         page.unroute('**/events')
         page.reload()
         expect(page.locator('#student-name')).to_have_text('Ana + Carla')
         expect(page.locator('#pending-group-work')).to_contain_text('Ana + Bruno')
+        expect(page.locator('#pending-group-work')).to_contain_text('alterações ficaram de fora')
         lesson.get_by_role('button',name='Cortar ao meio',exact=True).click()
         lesson.get_by_role('button',name='Sim',exact=True).click()
         import time
