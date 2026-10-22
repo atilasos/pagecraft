@@ -1,12 +1,12 @@
 {
   "slug": "pontes-duas-vistas",
   "phase": "Builder",
-  "status": "visual_repair_awaiting_final_integration_and_evaluator",
+  "status": "focus_return_repaired_awaiting_final_real_host_evaluation",
   "date": "2026-10-22",
   "branch": "feat/pontes-duas-vistas",
-  "htmlCommit": "4a6b0f6",
+  "htmlCommit": "c4c8e6a",
   "artifact": "drafts/pontes-duas-vistas.html",
-  "htmlSha256": "e01a2172fdd97db6cae80339f86b4dac3a818c953bdf62ee401a54b434a7c39b",
+  "htmlSha256": "c4e77ff6fe3ba903a16332361cd759b23d42cc55e244bbaee1dcce30ab2fb1d5",
   "inputs": [
     "drafts/pontes-duas-vistas-docspec.json",
     "drafts/pontes-duas-vistas-design-spec.json",
@@ -206,6 +206,62 @@
         "git diff --check: passed"
       ],
       "boundary": "Sem browser. O pai fará merge explícito da melhoria de histórico de pistas, reincorporação canónica final, atualização do hash e nova avaliação real; estes resultados são anteriores a essa integração."
+    },
+    {
+      "iteration": 4,
+      "source": "drafts/pontes-duas-vistas-repair-ticket-r3.json",
+      "htmlCommit": "c4c8e6a",
+      "issue": "real-host-modal-focus-return, pedido local genuíno nos dois anfitriões",
+      "provenCause": "A escolha continue chegava com hint_id correlacionado mas modalAction fechava sem voltar a focar a ação do painel no iframe. present tentava focar o exterior também ao abrir um novo modal.",
+      "change": "Helper canónico focusCurrentAction foca a ação da pista atual após continue ou teacher, verifica painel atual ligado/ativo e ausência de modal aberto. present reutiliza o helper, que não desvia foco quando há modal. render preserva a ação focada se a resposta assíncrona do professor substituir o painel.",
+      "preserved": [
+        "Correlação entre pedido, pista atual e ação; rejeição de ações antigas; validação source do anfitrião; histórico integrado do PR61.",
+        "next/stuck reabrem apenas o novo modal; listen conserva o modal; invalidar contexto não reabre nem foca ajuda obsoleta.",
+        "Sandbox opaco, protocolos e fonte server/static/student/support-modal.js intactos; cache dos dois hosts continua v2.",
+        "Figura lateral e vista superior, estado obrigatório e checkpoint sem alterações de estrutura. Nenhuma atividade existente reescrita."
+      ],
+      "scope": [
+        "server/pipeline/prompts/activity-support.js",
+        "skills/claude/assets/activity-support.js",
+        "skills/codex/assets/activity-support.js",
+        "tests/js/activity_support.test.cjs",
+        "drafts/pontes-duas-vistas.html"
+      ],
+      "checks": [
+        {
+          "command": "node --test --test-name-pattern='retoma explícita|pedir outra pista ou|retoma obsoleta' tests/js/activity_support.test.cjs",
+          "result": "Antes: 2 failed/1 passed. Depois: 3 passed. Casos persistentes verificam três rotas, retorno à geração atual do painel, confirmação assíncrona do professor, next/stuck e rejeição de retoma antiga/painéis inativos."
+        },
+        {
+          "command": "node --test tests/js/activity_support.test.cjs",
+          "result": "35 passed, incluindo as 32 regressões anteriores do apoio/histórico e três novas de foco."
+        },
+        {
+          "command": "uv run --project /home/proteu/pagecraft pytest tests/test_activity_support.py tests/test_pontes_draft.py -q",
+          "result": "14 passed in 0.49s"
+        },
+        {
+          "command": "bash skills/sync-from-canonical.sh e --check",
+          "result": "Só os dois espelhos JS alterados; sem drift depois."
+        },
+        {
+          "command": "python3 scripts/embed_activity_support.py --activity drafts/pontes-duas-vistas.html --docspec drafts/pontes-duas-vistas-docspec.json; python3 scripts/embed_gothic_font.py --activity drafts/pontes-duas-vistas.html",
+          "result": "passed"
+        },
+        {
+          "command": "node --check de todos os scripts inline finais e da fonte canónica",
+          "result": "passed"
+        },
+        {
+          "command": "node /tmp/check-pontes-character.cjs e node /tmp/check-pontes-control.cjs",
+          "result": "passed; personagem e ocultação preservadas; envelope extremo com controlos escapados 4095 bytes, textos obrigatórios preservados e reflexão facultativa pode encolher."
+        },
+        {
+          "command": "git diff --check",
+          "result": "passed"
+        }
+      ],
+      "verificationBoundary": "Sem browser nesta fase Builder. As duas falhas reais persistentes em tests/browser/test_pontes_duas_vistas.py serão reavaliadas pelo Evaluator nos anfitriões learning e student reais, com sandbox opaco, mais modo autónomo e restantes 23 casos. Os testes Node não substituem essa prova."
     }
   ],
   "lastRepairDate": "2026-10-23"
