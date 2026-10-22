@@ -109,6 +109,7 @@ const copy = {
 };
 let reflectionReady = true;
 let requiresCompletion = false;
+let lessonLoaded = false;
 let lang = "pt",
   activity,
   attempt,
@@ -180,7 +181,7 @@ function captureReflection() {
   }
 }
 function sendPreferences() {
-  if (attempt)
+  if (attempt && lessonLoaded)
     $("lesson").contentWindow?.postMessage(
       {
         pagecraft: 1,
@@ -260,7 +261,10 @@ function showWork() {
   for (const id of ["entry", "reflection", "done"]) $(id).hidden = true;
   $("work").hidden = false;
   $("leave").hidden = false;
-  $("lesson").src = `/api/learning/activities/${code}/content`;
+  lessonLoaded = false;
+  // New drafts can defer input until restore and preferences are consumed.
+  // Older activities ignore the fragment and keep their existing behavior.
+  $("lesson").src = `/api/learning/activities/${code}/content#learning`;
   $("level").value = attempt.level;
   $("language").value = lang;
   translate();
@@ -403,6 +407,7 @@ $("level").onchange = () => {
   sendPreferences();
 };
 $("lesson").onload = () => {
+  lessonLoaded = true;
   if (attempt)
     $("lesson").contentWindow.postMessage(
       {

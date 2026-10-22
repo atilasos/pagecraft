@@ -69,11 +69,15 @@ def test_learning_restores_before_accepting_native_input(page, studio_origin, re
     })''')
     messages = lesson.locator('body').evaluate('() => window.heldInitialization.map(d => d.type)')
     assert messages == ['learning_restore', 'learning_preferences']
-    cut = lesson.get_by_role('button', name='Cortar ao meio', exact=True)
-    box = cut.bounding_box()
+    cut = lesson.locator('[data-cut="0.5"]')
+    expect(lesson.locator('#learning-loading')).to_be_visible()
+    expect(cut).to_be_hidden()
+    box = cut.evaluate('(button) => button.getBoundingClientRect().toJSON()')
+    frame_box = page.locator('#lesson').bounding_box()
     # Native input during the retained initialization must not create work
     # which the subsequent restore would silently overwrite.
-    page.mouse.click(box['x'] + box['width']/2, box['y'] + box['height']/2)
+    page.mouse.click(frame_box['x'] + box['x'] + box['width']/2,
+                     frame_box['y'] + box['y'] + box['height']/2)
     expect(cut).to_have_attribute('aria-pressed', 'false')
     lesson.locator('body').evaluate('() => window.releaseInitialization()')
     wait_for_initialization(lesson)
