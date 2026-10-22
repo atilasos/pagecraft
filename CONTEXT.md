@@ -35,14 +35,14 @@ Registo de uma atividade para uma turma, com participantes e acontecimentos pers
 Código temporário que o professor apresenta para retomar o trabalho guardado de um grupo numa aula ativa. A entrada consome o código e identifica esse computador. O professor pode emitir outro para mudar de dispositivo. Distinto do código de seis caracteres que permite entrar na aula e escolher participantes.
 
 **Triagem de atenção**:
-Ordenação viva da turma no painel do professor por necessidade: pedidos de ajuda, tentativas falhadas acumuladas e inatividade sobem; quem está a fluir desce. Substitui a lista uniforme; o objetivo é «2 segundos de olhar, saber a quem ir».
-O que é ordenado são **necessidades, não crianças** — a triagem diz a quem ir primeiro, nunca quem é melhor, e nunca produz um número por criança. Estar parado é uma necessidade tão real como levantar a mão: pode ser falta de ajuda ou perda de foco, e em qualquer dos casos essa criança não está a avançar.
-Quatro faixas, de cima para baixo: **Sem sinal** (o tablet deixou de dar notícias — pode ser problema técnico, e resolve-se depressa se o professor souber), **Precisa de ti** (pediu ajuda ou está parado), **A tropeçar** (tenta e não acerta, sem ter pedido ajuda) e **A fluir**. Dentro de cada faixa ordena-se por quem espera há mais tempo; quem pediu ajuda explicitamente traz um sinal visível, que informa sem alterar a ordem.
-_Avoid_: ranking, leaderboard, pontuação por criança
+Ordenação viva da turma no painel do professor por necessidade declarada ou observável: pedidos de ajuda e tentativas falhadas acumuladas. O objetivo é saber a quem ir primeiro, sem transformar ausência de acontecimentos em diagnóstico de dificuldade. «Sem sinal» indica falta de presença técnica; «Precisa de ti» indica pedido explícito; «A tropeçar» indica tentativas falhadas; «A fluir» reúne os restantes percursos, com uma descrição do que se sabe.
 
-**Parado**:
-Criança com o tablet aberto que não produz trabalho há algum tempo. Só conta como trabalho o que é trabalho — tentar, descobrir, começar uma unidade, mexer no plano, pedir feedback. Um tablet aberto e pousado não é trabalho, e é justamente essa a criança que a triagem tem de encontrar.
-_Avoid_: inativo, ausente
+**Local de trabalho declarado**:
+O grupo pode indicar que está no Canva, a ler, a discutir com o par ou no PageCraft. Esta declaração explica a ausência de ações digitais, mas não valida trabalho externo. Um pedido de ajuda continua pendente até o grupo declarar que já consegue continuar. Uma pista automática ou uma nova resposta não comprovam resolução.
+
+**Sem atividade recente no PageCraft**:
+Não há trabalho reconhecido há três minutos. É uma descrição da observação disponível, sem inferir desatenção ou bloqueio. Respostas de avaliação contam como trabalho. O tempo sem cliques não dispara pistas.
+_Avoid_: parado, desatento, ausente
 
 **Papel**:
 Quem está a chamar numa sessão de aula: **Professor**, **Aluno da sessão** ou **Quadro**. Todo o pedido ao Studio se resolve para um papel ou é negado; dentro de uma sessão não há chamador anónimo. Cada papel vê e emite apenas o que o vocabulário de acontecimentos lhe reconhece.

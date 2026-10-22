@@ -815,9 +815,13 @@ function renderPit() {
 }
 
 function sendGroupPreferences({duringRestore = false} = {}) {
-  if (!state.workGroup || (state.restoringWork && !duringRestore)) return;
-  $("activity-frame").contentWindow?.postMessage({pagecraft:1, type:"work_group_preferences", payload:{level:state.workGroup.level}}, '*');
-  $("activity-frame").contentWindow?.postMessage({pagecraft:1, type:"learning_preferences", payload:{level:state.workGroup.level}}, '*');
+  if (state.restoringWork && !duringRestore) return;
+  if (!state.workGroup) {
+    $("activity-frame").contentWindow?.postMessage({pagecraft:1, type:"work_group_preferences", payload:{participant_count:1, route:"studio"}}, '*');
+    return;
+  }
+  $("activity-frame").contentWindow?.postMessage({pagecraft:1, type:"work_group_preferences", payload:{level:state.workGroup.level, participant_count:state.workGroup.participant_ids.length, route:"studio"}}, '*');
+  $("activity-frame").contentWindow?.postMessage({pagecraft:1, type:"learning_preferences", payload:{level:state.workGroup.level, participant_count:state.workGroup.participant_ids.length, route:"studio"}}, '*');
 }
 
 function acceptComposition(group) {

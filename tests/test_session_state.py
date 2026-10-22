@@ -58,7 +58,7 @@ def test_no_presence_for_ninety_seconds_has_highest_precedence():
     }
 
 
-def test_presence_does_not_count_as_work_and_stopped_starts_at_three_minutes():
+def test_presence_without_work_does_not_imply_difficulty():
     events = [
         event("joined", 0),
         event("heartbeat", 3),
@@ -70,8 +70,8 @@ def test_presence_does_not_count_as_work_and_stopped_starts_at_three_minutes():
     )
 
     assert state["students"]["ana"]["triage"] == {
-        "band": "Precisa de ti",
-        "reason": "Parado",
+        "band": "A fluir",
+        "reason": "Sem atividade recente no PageCraft",
         "wait_seconds": 180,
         "explicit_help": False,
     }
@@ -223,7 +223,7 @@ def test_each_declared_kind_of_work_resets_the_stopped_clock():
         assert state["students"]["ana"]["triage"]["band"] == "A fluir"
 
 
-def test_evidence_outside_the_work_vocabulary_does_not_hide_a_stopped_child():
+def test_assessment_result_counts_as_work():
     state = reduce_session(
         [
             event("joined", 0),
@@ -235,8 +235,8 @@ def test_evidence_outside_the_work_vocabulary_does_not_hide_a_stopped_child():
 
     student = state["students"]["ana"]
     assert student["numbers"]["evidence"]["assessment_result"] == 1
-    assert student["triage"]["band"] == "Precisa de ti"
-    assert student["triage"]["reason"] == "Parado"
+    assert student["triage"]["band"] == "A fluir"
+    assert student["triage"]["reason"] == "A trabalhar"
 
 
 def test_explicit_help_does_not_restart_an_older_wait_in_the_same_band():
@@ -252,7 +252,7 @@ def test_explicit_help_does_not_restart_an_older_wait_in_the_same_band():
     triage = state["students"]["ana"]["triage"]
     assert triage["band"] == "Precisa de ti"
     assert triage["explicit_help"] is True
-    assert triage["wait_seconds"] == 240
+    assert triage["wait_seconds"] == 60
 
 
 def test_releasing_an_identity_keeps_progress_by_default():
@@ -301,3 +301,22 @@ def test_explicit_reset_is_a_frontier_for_all_numbers_and_plan_items():
         "participants": 1,
     }
     assert len(events) == 8
+
+
+def test_canva_reading_and_discussion_are_declared_work_even_without_presence():
+    for location in ['canva', 'reading', 'discussion']:
+        records = [event('joined', 0), event('work_location', 1, payload={'location': location})]
+        student = reduce_session(records, now=NOW)['students']['ana']
+        assert student['triage']['band'] == 'A fluir'
+        assert student['triage']['reason'].startswith('Trabalho declarado: ')
+        assert student['work_location'] == location
+        records.append(event('help_needed', 2))
+        assert reduce_session(records, now=NOW)['students']['ana']['triage']['explicit_help']
+
+
+def test_a_hint_or_revision_does_not_resolve_an_explicit_help_request():
+    records = [event('joined', 0), event('help_needed', 1),
+               event('ai_feedback', 2), event('assessment_result', 3), event('heartbeat', 5)]
+    assert reduce_session(records, now=NOW)['students']['ana']['triage']['explicit_help']
+    records.append(event('help_resolved', 5, payload={'note': 'Já conseguimos continuar'}))
+    assert not reduce_session(records, now=NOW)['students']['ana']['triage']['explicit_help']

@@ -9,7 +9,7 @@ from .event_types import SESSION_EVENT_TYPES
 
 _PRESENCE_AUTHORS = frozenset({"activity", "student"})
 _WORK_EVENT_TYPES = frozenset(
-    {"attempt", "discovery", "unit_started", "pit_updated", "feedback_request"}
+    {"attempt", "discovery", "unit_started", "pit_updated", "feedback_request", "assessment_result", "hint_feedback", "help_resolved"}
 )
 
 
@@ -55,6 +55,7 @@ def _blank_student(
         "_last_presence": anchor,
         "_last_work": anchor,
         "_help_since": None,
+        "_work_location": "pagecraft",
         "_consecutive_failures": 0,
         "_failures_since": None,
         "_pit_items": {},
@@ -154,7 +155,13 @@ def reduce_session(
         ):
             student["_last_presence"] = instant
         if event_type == "help_needed":
-            student["_help_since"] = instant
+            student["_help_since"] = student["_help_since"] or instant
+        if event_type == "help_resolved":
+            student["_help_since"] = None
+        if event_type == "work_location":
+            location = (event.get("payload") or {}).get("location")
+            if location in {"canva", "pagecraft", "reading", "discussion"}:
+                student["_work_location"] = location
         if event_type == "joined":
             participants.add(str(student_id))
             student["participated"] = True
@@ -165,9 +172,6 @@ def reduce_session(
                 student["_last_work"] = instant
         elif event_type in _WORK_EVENT_TYPES and instant is not None:
             student["_last_work"] = instant
-            student["_help_since"] = None
-        elif event_type == "ai_feedback":
-            student["_help_since"] = None
         if event_type == "attempt":
             correct = (event.get("payload") or {}).get("correct")
             if correct is True:
@@ -219,20 +223,24 @@ def reduce_session(
         failures_wait = _elapsed_seconds(
             now_instant, student.pop("_failures_since")
         )
-        if presence_wait >= 90:
+        location = student.pop("_work_location")
+        external = location != "pagecraft"
+        student["work_location"] = location
+        if presence_wait >= 90 and not external:
             band, reason = "Sem sinal", "Sem presença"
             wait_seconds = presence_wait
         elif explicit_help:
             band, reason = "Precisa de ti", "Pediu ajuda"
-            wait_seconds = max(help_wait, work_wait if work_wait >= 180 else 0)
-        elif work_wait >= 180:
-            band, reason = "Precisa de ti", "Parado"
-            wait_seconds = work_wait
+            wait_seconds = help_wait
+        elif external:
+            labels = {"canva": "Canva", "reading": "leitura", "discussion": "conversa com o par"}
+            band, reason = "A fluir", "Trabalho declarado: " + labels[location]
+            wait_seconds = 0
         elif consecutive_failures >= 3:
             band, reason = "A tropeçar", "Três falhas consecutivas"
             wait_seconds = failures_wait
         else:
-            band, reason = "A fluir", "A trabalhar"
+            band, reason = "A fluir", "Sem atividade recente no PageCraft" if work_wait >= 180 else "A trabalhar"
             wait_seconds = work_wait
         student["triage"] = {
             "band": band,
