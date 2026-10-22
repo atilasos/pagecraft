@@ -3,92 +3,50 @@
   "phase": "Evaluator",
   "activity": "pontes-duas-vistas",
   "route": "builder",
-  "severity": "high",
+  "severity": "medium",
   "reviewed_branch": "feat/pontes-duas-vistas",
-  "reviewed_head": "e9b45959a9320f600c82a3cb9f94a46a1ac86147",
-  "reviewed_html_commit": "c0cf22c",
-  "html_sha256": "7ec9b5d6d66cdb5b3f84b6c83fe204b5ee6a98ca82cdb8f1a8a1cb540a342b4e",
+  "reviewed_head": "fb72b730d2beacdef8db18b01c44490a7f868af0",
+  "reviewed_html_commit": "6a03829",
+  "html_sha256": "bd949ef2aec0f20bb6c437c7bcdc95f89ef79356e26567cf681bd9cd9daf0920",
   "scores": {
     "factual_accuracy": 5,
-    "constraint_alignment": 5,
+    "constraint_alignment": 4,
     "differentiation_quality": 4,
-    "ux_accessibility": 2,
-    "visual_design": 4,
-    "technical_quality": 3
+    "ux_accessibility": 4,
+    "visual_design": 3,
+    "technical_quality": 4
   },
   "issues": [
     {
-      "id": "modal-focus-wrap",
-      "route": "builder",
-      "severity": "high",
-      "summary": "Tab a partir do último botão do modal coloca o foco fora do modal.",
-      "steps": [
-        "Avançar até u3.",
-        "Confirmar left, position e deck, três respostas distintas incorretas.",
-        "No modal automático, focar Vou experimentar e premir Tab."
-      ],
-      "actual": "document.activeElement.tagName === BODY e closest(dialog) === null. Escape não fecha o modal.",
-      "expected": "Tab e Shift+Tab mantêm foco nos controlos interiores enquanto o modal exige escolha explícita.",
-      "evidence": [
-        "drafts/pontes-duas-vistas-modal-focus.json",
-        "drafts/pontes-duas-vistas-modal-focus.png",
-        "drafts/pontes-duas-vistas-canonical-learning-focus.json",
-        "drafts/pontes-duas-vistas-canonical-student-focus.json"
-      ],
-      "regression_test": "test_automatic_modal_wraps_tab_inside",
-      "canonical_source": "server/static/student/support-modal.js",
-      "additional_regression_test": "test_canonical_modal_host_adapter_wraps_keyboard[learning-lesson] e [student-activity-frame]"
-    },
-    {
-      "id": "stale-navigation-warning",
-      "route": "builder",
+      "id": "missing-character-result",
       "severity": "medium",
-      "summary": "O aviso de falta permanece visível depois de guardar os dois ensaios.",
-      "steps": [
-        "Em u2, focar Testar e guardar B antes de A e premir Enter.",
-        "Testar A, baixar o apoio direito, testar B."
-      ],
-      "actual": "A/B completos e Seguinte ativo, mas #navigation-status ainda afirma Guardem A e baixem o apoio direito primeiro.",
-      "expected": "O aviso em falta é limpo ou recalculado após a resposta/manipulação que o resolve.",
-      "evidence": [
-        "drafts/pontes-duas-vistas-stale-warning.png",
-        "drafts/pontes-duas-vistas-after-results.png"
-      ],
-      "regression_test": "test_navigation_warning_clears_when_missing_work_is_done"
-    },
-    {
-      "id": "support-first-click-lost",
       "route": "builder",
-      "severity": "medium",
-      "summary": "Primeiro clique numa pista é perdido ao sair de um texto editado.",
-      "steps": [
-        "Em u4, escrever no campo Colega, conta o que procuraste e o que viste.",
-        "Sem sair antes do campo, clicar Preciso de uma pista uma vez."
+      "summary": "A pista manda observar a personagem, mas as vistas laterais não desenham a personagem nem a sua posição.",
+      "source": "/tmp/pagecraft-pontes-spec-r1.md",
+      "affected": [
+        "trialCard/sideView após teste A/B",
+        "peer-view após teste do colega"
       ],
-      "actual": "O painel continua sem .pc-support-action e mantém o botão Preciso de uma pista.",
-      "expected": "A primeira ativação explícita abre a pista contextual e conserva o texto.",
-      "likely_cause": "blur chama flush, que emite assessment_result; o componente comum atualiza o contexto e substitui o botão antes do click. A atividade já atualiza o contexto durante a edição. Causa a confirmar na reparação.",
+      "required_fix": "Desenhar a personagem na posição final da lateral, atravessou/parou, só depois do teste respetivo. Preservar todos os SVGs superiores e pré-revelação. Manter texto redundante.",
       "evidence": [
-        "drafts/pontes-duas-vistas-support-first-click.png"
-      ],
-      "regression_test": "test_support_first_click_after_editing_text"
+        "drafts/pontes-duas-vistas-after-results.png",
+        "drafts/pontes-duas-vistas-design-spec.json"
+      ]
     }
   ],
-  "critical": [
-    "modal-focus-wrap"
-  ],
+  "critical": [],
   "required_fixes": [
-    "Corrigir Tab/Shift+Tab na fonte canónica server/static/student/support-modal.js, sincronizar espelhos com skills/sync-from-canonical.sh, reincorporar o rascunho e atualizar cache dos anfitriões se necessário. Testar modo autónomo e adaptadores learning/lesson e student/activity-frame.",
-    "Limpar ou recalcular avisos de #navigation-status quando muda o trabalho e a condição assinalada deixa de existir. Conservar feedback pedagógico pertinente.",
-    "Conservar a primeira ativação dos controlos de apoio ao sair de um texto editado. Corrigir a integração local de flush/contexto sem duplicar evidência nem alterar o componente comum.",
-    "Reexecutar a suite real no Hub, incluindo os dois testes de regressão, e voltar ao Evaluator."
+    "Desenhar a personagem na posição final da lateral, atravessou/parou, só depois do teste respetivo. Preservar todos os SVGs superiores e pré-revelação. Manter texto redundante."
   ],
   "evidence": [
     {
       "kind": "Hub",
       "session": "pagecraft-pontes-evaluation",
       "profile": "temporary",
-      "cdp_url": "http://127.0.0.1:9333",
+      "pid": 3192127,
+      "created_at": "2026-10-23T00:06:29+01:00",
+      "cdp_url": "http://127.0.0.1:9331",
+      "ownership": "Sessão nova criada pelo Evaluator; a porta foi atribuída de novo pelo Hub, não foi ligada a sessão alheia.",
       "operations": [
         "start",
         "navigate",
@@ -96,45 +54,36 @@
         "screenshot",
         "close"
       ],
-      "initial_screenshot": "/home/proteu/agent-browser-hub/screenshots/pontes-duas-vistas-evaluator-initial.png",
-      "closed_confirmed": true
+      "closed_confirmed": true,
+      "screenshot": "/home/proteu/agent-browser-hub/screenshots/pontes-duas-vistas-evaluator-green-initial.png"
     },
     {
-      "kind": "browser",
-      "command": "PAGECRAFT_TEST_CDP=<CDP da sessão Hub própria> uv run --project /home/proteu/pagecraft --with playwright pytest tests/browser/test_pontes_duas_vistas.py -q --tb=short",
-      "result": "Ver final_test_run; falhas reais preservadas, não marcadas xfail."
+      "kind": "regression",
+      "red_log": "drafts/pontes-duas-vistas-red-tests.txt",
+      "red_evaluation": "drafts/pontes-duas-vistas-red-evaluation.json",
+      "red_proof_commit": "b432cfd",
+      "green_log": "drafts/pontes-duas-vistas-green-tests.txt",
+      "observation": "As três causas antigas estão resolvidas no browser; vinte casos originais passam."
     },
     {
-      "kind": "artifact",
-      "path": "drafts/pontes-duas-vistas-browser-metrics.json",
-      "maximum_observed_checkpoint_envelope_bytes": 4092,
-      "limit_bytes_exclusive": 4096,
-      "unicode": "240+240+160 emojis de quatro bytes, e 240+240+160 caracteres de controlo escapados em JSON com seis bytes, via learning_restore real num iframe de ensaio.",
-      "required_texts_preserved": true,
-      "optional_reflection_shrinks_if_needed": true
+      "kind": "actual_hosts",
+      "results": "Script /student/support-modal.js?v=2 recebido200 e igual ao canónico nos dois hosts; Tab/ShiftTab e Escape passam. Retorno após payload artificial é inconclusivo.",
+      "screenshots": [
+        "drafts/pontes-duas-vistas-green-real-learning-modal.png",
+        "drafts/pontes-duas-vistas-green-real-student-modal.png"
+      ],
+      "focus_diagnostic": [
+        "drafts/pontes-duas-vistas-green-real-learning-resume-focus.json",
+        "drafts/pontes-duas-vistas-green-real-student-resume-focus.json"
+      ],
+      "cache_proof": "Asserções executadas antes da falha de retorno em test_real_studio_hosts_load_current_modal_and_resume_keyboard: response200, URL?v=2, conteúdo igual ao canónico e script DOM único."
     },
     {
-      "kind": "before",
-      "producer": "Agente principal, prova herdada sem nova observação pelo Evaluator",
-      "json": "/tmp/pagecraft-pontes-proof/before.json",
-      "screenshot": "/home/proteu/agent-browser-hub/screenshots/pontes-duas-vistas-before.png",
-      "base": "4c6ba90",
-      "observation": "Atividade existente substitui resultado atual; zero painéis de comparação persistentes."
-    },
-    {
-      "kind": "after",
-      "path": "drafts/pontes-duas-vistas-after-results.png",
-      "observation": "Duas fichas A/B conservadas com previsões históricas, SVG superior idêntico, laterais e resultados distintos."
-    },
-    {
-      "kind": "private-integration",
-      "report": "drafts/pontes-duas-vistas-private-report.txt",
-      "screenshot": "drafts/pontes-duas-vistas-after-studio.png",
-      "observation": "Studio real isolado em tmp, rascunho published=false, retoma após reload sem duplicar assessment/attempt, reflexão individual com nome visível, download com evidências e autoavaliação separadas, preview ausente da lista de relatórios."
-    },
-    {
-      "kind": "test-log",
-      "path": "drafts/pontes-duas-vistas-evaluator-tests.txt"
+      "kind": "checkpoint",
+      "artifact": "drafts/pontes-duas-vistas-browser-metrics.json",
+      "browser_maximum_bytes": 4092,
+      "limit_exclusive": 4096,
+      "distinction": "O Builder relatou4095 emNode comMAXrevision; o browser deste Evaluator mediu4092. Não são a mesma execução."
     }
   ],
   "acceptance_checks": [
@@ -172,7 +121,7 @@
     },
     {
       "check": "Foco do modal após Tab no último botão",
-      "result": "FAIL no modo autónomo e nos dois adaptadores canónicos; Tab de saída dá BODY, Shift+Tab observado permanece interior nos wrappers."
+      "result": "PASS nas 20 regressões após reparação Builder"
     },
     {
       "check": "Contexto atualizado ignora resposta IA tardia após edição e mudança de etapa",
@@ -200,37 +149,88 @@
     },
     {
       "check": "Avisos de falta refletem estado atual após responder",
-      "result": "FAIL stale-navigation-warning"
+      "result": "PASS nas 20 regressões após reparação Builder"
     },
     {
       "check": "Primeiro clique de apoio após escrever sem blur prévio",
-      "result": "FAIL support-first-click-lost"
+      "result": "PASS nas 20 regressões após reparação Builder"
+    },
+    {
+      "check": "Script canónico atual e ciclo Tab/ShiftTab/Escape nos anfitriões reais learning e student",
+      "result": "PASS nas partes executadas; retorno do pipeline real ainda não verificado"
+    },
+    {
+      "check": "Representação da personagem após o teste lateral A/B/colega",
+      "result": "FAIL, reparação P2 pendente"
     }
   ],
   "blocked_by": [],
   "limitations": [
-    "Sem observação com crianças; duração e adequação à turma carecem de revisão docente.",
-    "Sem fornecedor de IA real. Respostas tardias ensaiadas com host simulado; pistas locais e modal real no Chromium.",
-    "Sem ensaio desta atividade em grupos reais de uma Sessão de aula, autoria multiutilizador, quadro ou retomada noutro dispositivo. A integração observada foi realização individual de preview.",
-    "Contraste revisto pela paleta e inspeção visual, sem auditoria completa com leitor de ecrã ou medição de todos os pares de cores.",
-    "Só navegador Chromium do Hub; Safari/Firefox e dispositivos físicos não observados.",
-    "Os testes de foco learning/student executam o JS canónico real em wrappers HTTP locais com os IDs de iframe dos dois anfitriões. Shell/payload são simulados; não equivalem a aula real ou fornecedor de IA."
+    "Sem observação com crianças; adequação e duração dependem de revisão docente.",
+    "Sem IA real, sem publicação ou escrita em produção.",
+    "Dois anfitriões reais verificaram cache, carregamento do script, ciclo de foco e Escape com payload artificial. O retorno completo com pista real está preparado e por executar, não é defeito confirmado.",
+    "Pipeline novo com PageCraftSupport.requestHint(u1,true) preparado para próxima ronda; testes respeitam imports Playwright lazy.",
+    "Sem auditoria completa com leitor de ecrã, Safari/Firefox ou dispositivos físicos."
   ],
   "privacy_boundary": "Só draft novo e Studio temporário. Sem produção, publicação, catálogo, atividades existentes ou PR.",
   "final_test_run": {
-    "tests": 20,
-    "passed": 15,
-    "failed": 5,
-    "duration_seconds": 37.9,
-    "failure_causes": 3,
-    "command": "PAGECRAFT_TEST_CDP=http://127.0.0.1:9333 uv run --project /home/proteu/pagecraft --with playwright pytest tests/browser/test_pontes_duas_vistas.py -q --tb=short",
+    "original_regressions": {
+      "passed": 20,
+      "failed": 0,
+      "seconds": 27.65,
+      "log": "drafts/pontes-duas-vistas-green-tests.txt"
+    },
+    "actual_hosts_simulated_payload": {
+      "passed": 0,
+      "failed": 2,
+      "seconds": 12.35,
+      "log": "drafts/pontes-duas-vistas-hosts-r2-tests.txt",
+      "limitation": "Asserção de foco de retorno não é prova de defeito: hint_id artificial não passa por PageCraftSupport.showModal/current/modalAction. Não atribuir estas falhas ao produto."
+    },
+    "actual_hosts_genuine_local_guide": {
+      "tests": 2,
+      "status": "prepared_not_run",
+      "test_commit": "13a8e9e",
+      "next": "Reexecutar após Builder visual. Usa PageCraftSupport.requestHint(u1,true) com hint_id real e sem IA."
+    },
     "without_optional_browser_dependency": {
-      "command": "env -u PAGECRAFT_TEST_CDP uv run --project /home/proteu/pagecraft pytest tests/browser/test_pontes_duas_vistas.py -q --tb=short",
-      "skipped": 20,
-      "duration_seconds": 1.02
+      "skipped": 22,
+      "seconds": 1.02
     }
   },
-  "evaluated_at": "2026-10-22T23:01:09.179589+00:00",
-  "test_commit": "a7bc30f35e8e0f06a92366c82789931aa3a91b85",
-  "next_verification": "Após Builder, reexecutar suite e exercitar foco também em páginas reais /student/ e /{code} do Studio descartável, não apenas wrappers. Sem publicação nem IA real."
+  "evaluated_at": "2026-10-22T23:11:40.345637+00:00",
+  "test_commit": "13a8e9e",
+  "next_verification": "Após a personagem, reexecutar as 22 regressões e os testes visuais novos. Confirmar retoma no pipeline de apoio genuíno dos dois anfitriões, sem IA.",
+  "resolved_issues": [
+    {
+      "id": "modal-focus-wrap",
+      "status": "resolved",
+      "builder_commits": [
+        "2e90460",
+        "6a03829"
+      ],
+      "browser_regression": "20 passed in 27.65s",
+      "evidence": "drafts/pontes-duas-vistas-green-tests.txt"
+    },
+    {
+      "id": "stale-navigation-warning",
+      "status": "resolved",
+      "builder_commits": [
+        "2e90460",
+        "6a03829"
+      ],
+      "browser_regression": "20 passed in 27.65s",
+      "evidence": "drafts/pontes-duas-vistas-green-tests.txt"
+    },
+    {
+      "id": "support-first-click-lost",
+      "status": "resolved",
+      "builder_commits": [
+        "2e90460",
+        "6a03829"
+      ],
+      "browser_regression": "20 passed in 27.65s",
+      "evidence": "drafts/pontes-duas-vistas-green-tests.txt"
+    }
+  ]
 }

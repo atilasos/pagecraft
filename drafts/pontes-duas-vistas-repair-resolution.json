@@ -1,0 +1,69 @@
+{
+  "phase": "Evaluator",
+  "activity": "pontes-duas-vistas",
+  "round": 2,
+  "pass": false,
+  "route": "builder",
+  "resolved": [
+    {
+      "id": "modal-focus-wrap",
+      "status": "resolved",
+      "builder_commits": [
+        "2e90460",
+        "6a03829"
+      ],
+      "browser_regression": "20 passed in 27.65s",
+      "evidence": "drafts/pontes-duas-vistas-green-tests.txt"
+    },
+    {
+      "id": "stale-navigation-warning",
+      "status": "resolved",
+      "builder_commits": [
+        "2e90460",
+        "6a03829"
+      ],
+      "browser_regression": "20 passed in 27.65s",
+      "evidence": "drafts/pontes-duas-vistas-green-tests.txt"
+    },
+    {
+      "id": "support-first-click-lost",
+      "status": "resolved",
+      "builder_commits": [
+        "2e90460",
+        "6a03829"
+      ],
+      "browser_regression": "20 passed in 27.65s",
+      "evidence": "drafts/pontes-duas-vistas-green-tests.txt"
+    }
+  ],
+  "open_issues": [
+    {
+      "id": "missing-character-result",
+      "severity": "medium",
+      "route": "builder",
+      "summary": "A pista manda observar a personagem, mas as vistas laterais não desenham a personagem nem a sua posição.",
+      "source": "/tmp/pagecraft-pontes-spec-r1.md",
+      "affected": [
+        "trialCard/sideView após teste A/B",
+        "peer-view após teste do colega"
+      ],
+      "required_fix": "Desenhar a personagem na posição final da lateral, atravessou/parou, só depois do teste respetivo. Preservar todos os SVGs superiores e pré-revelação. Manter texto redundante.",
+      "evidence": [
+        "drafts/pontes-duas-vistas-after-results.png",
+        "drafts/pontes-duas-vistas-design-spec.json"
+      ]
+    }
+  ],
+  "harness_findings": [
+    {
+      "summary": "Payload artificial não exercita callback do filho; asserção de retorno ao botão anterior era excessiva.",
+      "actual_hosts_failed": 2,
+      "treated_as_product_bug": false,
+      "replacement_test_commit": "13a8e9e",
+      "status": "Genuine local-guide pipeline prepared, not run."
+    }
+  ],
+  "original_ticket_preserved": "drafts/pontes-duas-vistas-repair-ticket.json",
+  "current_evaluation": "drafts/pontes-duas-vistas-evaluation.json",
+  "next_verification": "Após a personagem, reexecutar as 22 regressões e os testes visuais novos. Confirmar retoma no pipeline de apoio genuíno dos dois anfitriões, sem IA."
+}
