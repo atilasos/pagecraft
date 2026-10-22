@@ -544,19 +544,30 @@ async def test_old_board_stream_rejected_like_content_while_students_keep_access
             assert 'event: session_state_snapshot' in own.text
 
 
-@pytest.mark.parametrize('wake', ['event', 'heartbeat'])
+@pytest.mark.parametrize('wake', ['event', 'private_event', 'group_code', 'heartbeat'])
 async def test_open_board_stream_stops_after_switch_without_old_frames(board_http, wake):
     app, teacher, board, clock = board_http
     await _pair(teacher, board)
     classroom, session = await _board_lesson(teacher)
+    path = f"/api/sessions/{session['id']}"
+    if wake == 'group_code':
+        group = (await teacher.post(path + '/groups/claim', json={
+            'participant_ids': list(session['roster'])[:2], 'mode': 'pair',
+        })).json()['work_group']
     stream = asyncio.create_task(board.get(f"/api/board/sessions/{session['id']}/stream"))
     try:
         await _wait_for_board_stream(app, session['id'])
         await _next_board_lesson(teacher, classroom, clock)
-        if wake == 'event':
-            await teacher.post(f"/api/sessions/{session['id']}/control", json={
-                'action': 'highlight', 'unit_id': 'ANTIGA-NAO-PROJETAR',
-            })
+        new_code = None
+        if wake in {'event', 'private_event'}:
+            control = {'action': 'highlight', 'unit_id': 'ANTIGA-NAO-PROJETAR'}
+            if wake == 'private_event':
+                control['student_id'] = next(iter(session['roster']))
+            assert (await teacher.post(path + '/control', json=control)).status_code == 200
+        elif wake == 'group_code':
+            generated = await teacher.post(path + f"/groups/{group['id']}/access-code")
+            assert generated.status_code == 200
+            new_code = generated.json()['code']
         else:
             # Same publisher used by the periodic heartbeat; no record in A.
             app.state.classroom.live_ticks.publish(session['id'])
@@ -564,6 +575,9 @@ async def test_open_board_stream_stops_after_switch_without_old_frames(board_htt
         assert response.status_code == 200
         assert response.text.count('event: session_state_snapshot') == 1
         assert 'ANTIGA-NAO-PROJETAR' not in response.text
+        if new_code:
+            assert new_code not in response.text
+        assert response.text.count('\nevent: ') == 1
         assert 'session_state_changed' not in response.text
         assert 'student_state_changed' not in response.text
         assert 'work_group_state_changed' not in response.text
