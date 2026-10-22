@@ -65,3 +65,10 @@ def test_legacy_context_cannot_break_the_summary():
     events=[record('1','help_needed',actor='a',context='contexto antigo'),
             record('2','help_needed',actor='b',context='contexto antigo')]
     assert build_support_summary(events)['recurring'][0]['count']==2
+
+
+def test_a_revision_to_zero_is_an_observed_change_in_a_maths_activity():
+    summary=build_support_summary([record('1','assessment_result',detail={'field':'quantity','value':3}),
+                                   record('2','assessment_result',detail={'field':'quantity','value':0})])
+    assert summary['counts']['revisions']==1
+    assert summary['changes'][0]['after']==0

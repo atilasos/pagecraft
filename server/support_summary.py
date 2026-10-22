@@ -32,7 +32,7 @@ def build_support_summary(events):
             key = (actor, detail['field'])
             previous = values.get(key)
             value = detail.get('value')
-            if previous and previous['payload']['detail'].get('value') and value and value != previous['payload']['detail'].get('value'):
+            if previous and previous['payload']['detail'].get('value') not in (None, '') and value is not None and value != previous['payload']['detail'].get('value'):
                 changes.append({'text': f"{e['actor_label']}: reviu a resposta «{detail.get('note') or detail['field']}» no PageCraft.",
                                 'kind': 'pagecraft_revision', 'before': previous['payload']['detail']['value'], 'after': value,
                                 'evidence': ([hints[(actor, detail['after_hint_id'])]['ref']] if (actor, detail.get('after_hint_id')) in hints else []) + [previous['ref'], e['ref']]})

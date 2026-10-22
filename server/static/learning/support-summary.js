@@ -25,8 +25,8 @@ window.PageCraftSupportSummary = {
       const list=node('ul');
       for(const row of rows){
         const item=node('li');item.append(node('p',row.text));
-        if(row.before)item.append(node('p','Antes: '+row.before));
-        if(row.after)item.append(node('p','Depois ou alteração declarada: '+row.after));
+        if(Object.hasOwn(row,'before'))item.append(node('p','Antes: '+row.before));
+        if(Object.hasOwn(row,'after'))item.append(node('p','Depois ou alteração declarada: '+row.after));
         if(row.problem)item.append(node('p','Problema a investigar: '+row.problem));
         sources(item,row.evidence);list.append(item);
       }
