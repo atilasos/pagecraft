@@ -1,12 +1,12 @@
 {
   "slug": "pontes-duas-vistas",
   "phase": "Builder",
-  "status": "repaired_awaiting_evaluator_browser_recheck",
+  "status": "visual_repair_awaiting_final_integration_and_evaluator",
   "date": "2026-10-22",
   "branch": "feat/pontes-duas-vistas",
-  "htmlCommit": "6a03829",
+  "htmlCommit": "4a6b0f6",
   "artifact": "drafts/pontes-duas-vistas.html",
-  "htmlSha256": "bd949ef2aec0f20bb6c437c7bcdc95f89ef79356e26567cf681bd9cd9daf0920",
+  "htmlSha256": "e01a2172fdd97db6cae80339f86b4dac3a818c953bdf62ee401a54b434a7c39b",
   "inputs": [
     "drafts/pontes-duas-vistas-docspec.json",
     "drafts/pontes-duas-vistas-design-spec.json",
@@ -186,6 +186,26 @@
       },
       "verificationBoundary": "Harnesses Node temporários confirmam as causas e as reparações, sem equivaler a browser. O Evaluator reexecutará os testes de regressão persistentes em tests/browser/test_pontes_duas_vistas.py, hosts student/learning reais, adaptadores e modo autónomo no Hub.",
       "scope": "Só fonte canónica do modal, seus dois espelhos, cache dos dois anfitriões, HTML e relatório Builder deste rascunho. Nenhuma atividade existente reescrita. Sem publicação, registo, PR ou browser nesta fase."
+    },
+    {
+      "iteration": 3,
+      "source": "/tmp/pagecraft-pontes-spec-r1.md",
+      "issue": "P2, pista refere personagem que não era desenhada",
+      "htmlCommit": "4a6b0f6",
+      "change": "sideView recebe tested e deriva outcome/posição do estado existente. Personagem lateral não focável na margem direita quando atravessa com altura 2, ou margem esquerda antes da travessia com altura 1/3. aria-label descreve o desfecho; Observámos conserva texto redundante. Sem animação ou novo estado/checkpoint.",
+      "visibility": "u1 sem personagem; u2 por ficha só após o respetivo teste; u3 conserva A/B testados; u4 só no caso atual testado e desaparece ao mudar altura até testar de novo.",
+      "preserved": "Função topView comparada literalmente antes/depois, sem qualquer alteração; nenhuma outra lógica ou fonte canónica alterada nesta reparação.",
+      "checks": [
+        "node /tmp/check-pontes-character.cjs, figura/posição/aria/ocultação após mudar caso: passed",
+        "node --check de todos os scripts inline finais: passed",
+        "apoio comum e Gothic reincorporados",
+        "node /tmp/check-pontes-reveal.cjs: passed",
+        "node /tmp/check-pontes-flush.cjs: passed",
+        "node /tmp/check-pontes-navigation.cjs: passed",
+        "node /tmp/check-pontes-control.cjs: passed, extremo 4095 bytes e textos obrigatórios preservados",
+        "git diff --check: passed"
+      ],
+      "boundary": "Sem browser. O pai fará merge explícito da melhoria de histórico de pistas, reincorporação canónica final, atualização do hash e nova avaliação real; estes resultados são anteriores a essa integração."
     }
   ],
   "lastRepairDate": "2026-10-23"
