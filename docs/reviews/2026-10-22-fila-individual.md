@@ -68,3 +68,12 @@ Os dois testes de excesso de fila voltaram a passar ao gerar as capturas: **2 pa
 `sessionStorage` conserva o trabalho entre reloads no mesmo separador; fechar o separador ou apagar o armazenamento pode eliminá-lo. As filas de versões antigas são conservadas, mas esta proposta não acrescenta uma interface para o professor as importar. O teste corta a rede do transporte de acontecimentos, mantendo disponíveis shell, identidade e histórico para testar a recuperação. Não acrescenta uma shell offline nem permite iniciar a aula sem conseguir validar a identidade.
 
 Os commits são incrementais: `8d79fb1` reproduz a falha, `e301eae` expõe a versão individual, `f4b1006` persiste a fila e mostra recusas, `e24ed22` valida a autoria no envio. O principal fará revisão independente e abrirá o PR. Não foi aberto PR, feito merge ou publicada qualquer atividade nesta tarefa.
+
+## Verificação conjunta
+
+A revisão independente encontrou zero achados nas dimensões Standards e Spec.
+Na execução conjunta, o teste do cookie ainda exigia a resposta anterior do claim,
+sem `identity_version`. O principal atualizou a expectativa e verificou que a
+versão devolvida na retoma coincide com a da entrada, conservando as verificações
+de cookie HttpOnly e ausência de credencial no corpo. O transporte e a política
+de acesso não foram alterados por esta atualização do teste.
