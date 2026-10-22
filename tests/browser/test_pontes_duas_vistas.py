@@ -612,3 +612,96 @@ def test_canonical_modal_host_adapter_wraps_keyboard(page, pontes_origin, host, 
     (PROOF / f'{SLUG}-canonical-{host}-focus.json').write_text(json.dumps({'host_adapter':host,'frame_id':frame_id,'forward':forward,'backward':backward,'simulated_host_shell_and_payload':True},indent=2)+'\n')
     page.screenshot(path=str(PROOF / f'{SLUG}-canonical-{host}-focus.png'), full_page=True)
     assert forward['inside'] and backward['inside']
+
+
+@pytest.mark.parametrize('host', ['learning', 'student'])
+def test_real_studio_hosts_load_current_modal_and_resume_keyboard(page, pontes_studio, host):
+    """Actual host/cookies/cache and child support pipeline; local guide, never AI."""
+    import httpx
+    from playwright.sync_api import expect
+    responses = []
+    errors = []
+    page.on('response', lambda response: responses.append(response) if 'support-modal.js' in response.url else None)
+    page.on('pageerror', lambda error: errors.append(str(error)))
+    spec = json.loads((ROOT / f'drafts/{SLUG}-docspec.json').read_text())
+    registration = {'slug':SLUG,'title':'Duas pontes, duas vistas','year':3,'duration':15,
+                    'languages':['pt'],'criteria':spec['criteria'],'requires_completion':True}
+    session_id = None
+    with httpx.Client(base_url=pontes_studio) as teacher:
+        teacher.get('/api/teacher-bootstrap').raise_for_status()
+        draft_response = teacher.post('/api/learning/activities', json=registration)
+        draft_response.raise_for_status()
+        draft = draft_response.json()
+        assert draft['published'] is False
+        assert teacher.get('/activities/' + SLUG + '/').status_code == 404
+        try:
+            if host == 'learning':
+                assert page.request.get(pontes_studio + '/api/teacher-bootstrap').ok
+                page.goto(pontes_studio + '/' + draft['code'])
+                page.get_by_label('Como te chamas?').fill('Ensaio do foco Learning')
+                page.get_by_role('button', name='Começar', exact=True).click()
+                frame_id = 'lesson'
+            else:
+                classroom_response = teacher.post('/api/classes', json={'name':'Ensaio descartável do foco','year':3,'students':['Aluno de ensaio do foco']})
+                classroom_response.raise_for_status()
+                classroom = classroom_response.json()
+                response = teacher.post('/api/sessions', json={'class_id':classroom['id'],'activity_slug':SLUG,'activity_title':registration['title']})
+                response.raise_for_status()
+                session = response.json()
+                session_id = session['id']
+                page.goto(pontes_studio + '/student/')
+                page.locator('#code-input').fill(session['join_code'])
+                page.get_by_role('button', name='Entrar', exact=True).click()
+                page.get_by_role('button', name='Aluno de ensaio do foco', exact=True).click()
+                page.get_by_role('button', name='Começar', exact=True).click()
+                frame_id = 'activity-frame'
+            frame = page.frame_locator('#' + frame_id)
+            expect(frame.locator('#u1')).to_be_visible()
+            assert responses, 'Real host did not request the canonical modal script'
+            assert all(response.status == 200 and response.url.endswith('/student/support-modal.js?v=2') for response in responses)
+            canonical = (ROOT / 'server/static/student/support-modal.js').read_text()
+            assert responses[-1].text() == canonical
+            assert page.locator('script[src="/student/support-modal.js?v=2"]').count() == 1
+            frame.locator('#save-predictions').focus()
+            expect(frame.locator('#save-predictions')).to_be_focused()
+            hint_id = frame.locator('body').evaluate('''()=>{window.modalActions=[];addEventListener('message',e=>{if(e.source===parent&&e.data?.type==='support_modal_action')modalActions.push(e.data.payload)});PageCraftSupport.requestHint('u1',true);return PageCraftSupport.currentHintId()}''')
+            assert hint_id
+            dialog = page.locator('dialog[open]')
+            expect(dialog).to_be_visible()
+            assert dialog.evaluate('(el)=>Math.abs(el.getBoundingClientRect().width-innerWidth)<1')
+            expect(dialog.locator('[data-action="continue"]')).to_be_focused()
+            dialog.locator('[data-action="continue"]').focus()
+            page.keyboard.press('Tab')
+            expect(dialog.locator('[data-action="listen"]')).to_be_focused()
+            page.keyboard.press('Shift+Tab')
+            expect(dialog.locator('[data-action="continue"]')).to_be_focused()
+            page.keyboard.press('Escape')
+            expect(dialog).to_be_visible()
+            page.screenshot(path=str(PROOF / f'{SLUG}-green-real-{host}-modal.png'), full_page=True)
+            dialog.locator('[data-action="continue"]').press('Enter')
+            expect(page.locator('dialog[open]')).to_have_count(0)
+            resumed_focus = {
+                'host':page.evaluate('({tag:document.activeElement.tagName,id:document.activeElement.id})'),
+                'frame':frame.locator('body').evaluate('({tag:document.activeElement.tagName,id:document.activeElement.id})'),
+            }
+            (PROOF / f'{SLUG}-green-real-{host}-resume-focus.json').write_text(json.dumps(resumed_focus,indent=2)+'\n')
+            page.screenshot(path=str(PROOF / f'{SLUG}-green-real-{host}-resumed.png'), full_page=True)
+            expect(frame.locator('[data-pagecraft-support="u1"] .pc-support-action')).to_be_focused()
+            actions = frame.locator('body').evaluate('modalActions')
+            assert actions == [{'hint_id':hint_id,'action':'continue'}]
+            frame.locator('#initialHypothesis-unsure').focus()
+            frame.locator('#initialHypothesis-unsure').press('Space')
+            expect(frame.locator('#initialHypothesis-unsure')).to_be_checked()
+            assert errors == []
+            page.screenshot(path=str(PROOF / f'{SLUG}-green-real-{host}-resumed.png'), full_page=True)
+            evidence = {'host':host,'actual_host_page':True,'url_path':page.url.removeprefix(pontes_studio),
+                        'frame_id':frame_id,'script_urls':[response.url for response in responses],
+                        'script_matches_canonical':True,'script_version':2,'tab_last_to_first':True,
+                        'shift_tab_first_to_last':True,'escape_keeps_modal_open':True,
+                        'explicit_action':actions[0],'focus_restored_to':'.pc-support-action',
+                        'keyboard_work_resumed':True,'simulated_modal_payload':False,'local_guide_pipeline':True,'real_ai_provider':False,
+                        'production_written':False,'published':False,'page_errors':errors}
+            (PROOF / f'{SLUG}-green-real-{host}-evidence.json').write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n')
+        finally:
+            if session_id:
+                teacher.post(f'/api/sessions/{session_id}/close').raise_for_status()
