@@ -2,6 +2,7 @@
 import json
 from pathlib import Path
 import subprocess
+import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / 'scripts/templates/m28p-tic.html'
@@ -105,7 +106,8 @@ def test_runtime_script_parses():
     assert result.returncode == 0, result.stderr
 
 
-def test_host_restore_preferences_attempts_and_audio_requests_use_real_runtime():
+@pytest.mark.parametrize('initialization', ['preferences_first', 'restore_first', 'studio_individual', 'standalone'])
+def test_host_restore_preferences_attempts_and_audio_requests_use_real_runtime(initialization):
     """Exercita os listeners e checkpoints; não substitui o ensaio visual no browser."""
     source = TEMPLATE.read_text()
     runtime = source.split("<script>\n'use strict';")[1].split('</script>')[0]
@@ -154,7 +156,7 @@ const reflections=['again','help','alone'].map(reflection=>{const e=new Element(
 const document={activeElement:null,getElementById:id=>roots.get(id),createElement:tag=>new Element(tag),
  querySelectorAll:selector=>all.filter(element=>element.isConnected&&matches(element,selector)),
  querySelector:selector=>document.querySelectorAll(selector)[0],addEventListener(){}};
-const window=globalThis;window.parent={};window.addEventListener=(type,fn)=>(listeners[type]||=[]).push(fn);
+const window=globalThis;window.parent=input.initialization==='standalone'?window:{};window.addEventListener=(type,fn)=>(listeners[type]||=[]).push(fn);
 window.matchMedia=()=>({matches:true});
 const setTimeout=()=>0,clearTimeout=()=>{};
 const Audio=class{addEventListener(){}pause(){}play(){return Promise.resolve()}};
@@ -169,10 +171,29 @@ function clickOption(id){all.findLast(element=>element.isConnected&&element.data
 `,ctx);
 vm.runInContext(input.runtime,ctx);
 vm.runInContext(`
-assert.equal(checkpoint(),undefined);
-host('learning_preferences',{level:'support'});assert.equal(checkpoint(),undefined);
-host('learning_restore',{events:[]});
-assert.equal(checkpoint().payload.state.level,'support');
+if(input.initialization==='standalone'){
+ assert.equal(checkpoint().payload.state.level,'intermediate');
+}else{
+ assert.equal(checkpoint(),undefined);
+ assert.equal(get('main').inert,true);assert.equal(get('activity-header').inert,true);
+ assert.equal(get('main').hidden,true);assert.equal(get('initialization-status').hidden,false);
+ if(input.initialization==='preferences_first'){
+  host('learning_preferences',{level:'support'});assert.equal(checkpoint(),undefined);
+  assert.equal(get('main').inert,true);host('learning_restore',{events:[]});
+ }else if(input.initialization==='restore_first'){
+  host('learning_restore',{events:[]});assert.equal(checkpoint(),undefined);assert.equal(get('main').inert,true);
+  host('learning_preferences',{level:'unknown'});assert.equal(get('main').inert,true);
+  host('learning_preferences',{level:'support'});
+ }else{
+  host('learning_restore',{events:[{type:'activity_state',payload:{activity:input.fixture.slug,version:3,state:{version:3,page:-1,level:'challenge'}}}]});
+  assert.equal(checkpoint(),undefined);assert.equal(get('main').inert,true);
+  host('work_group_preferences',{participant_count:1,route:'studio'});
+ }
+ assert.equal(checkpoint().payload.state.level,input.initialization==='studio_individual'?'challenge':'support');
+}
+assert.equal(sent.filter(message=>message.type==='activity_state').length,1);
+assert.equal(get('main').inert,false);assert.equal(get('activity-header').inert,false);
+assert.equal(get('main').hidden,false);assert.equal(get('initialization-status').hidden,true);
 assert.equal(checkpoint().payload.readyForReflection,false);
 get('start').fire('click');get('demo-close').fire('click');
 assert.equal(evidence().length,0);
@@ -194,10 +215,11 @@ get('hear').fire('click');assert.equal(evidence().length,1);
 assert.equal(checkpoint().payload.state.aids.r1.audio_instruction_requested,true);
 assert.equal(checkpoint().payload.state.counts.r1,1);
 get('next').fire('click');assert.equal(checkpoint().payload.state.done,true);
-get('finish-button').fire('click');assert.equal(sent.at(-1).type,'open_reflection');
+get('finish-button').fire('click');
+if(input.initialization!=='standalone')assert.equal(sent.at(-1).type,'open_reflection');
 `,ctx);
 '''
     import re
-    payload = {'runtime': runtime, 'fixture': fixture, 'ids': re.findall(r'\bid="([^"]+)"', source)}
+    payload = {'runtime': runtime, 'fixture': fixture, 'ids': re.findall(r'\bid="([^"]+)"', source), 'initialization': initialization}
     result = subprocess.run(['node', '-e', script], input=json.dumps(payload), capture_output=True, text=True)
     assert result.returncode == 0, result.stderr
