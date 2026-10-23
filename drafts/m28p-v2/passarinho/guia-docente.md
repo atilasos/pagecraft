@@ -1,5 +1,15 @@
 # Passarinho, palavra 24 de 28
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **pinha**, p. 8 (cartoes-sem-modelo). Leitura nova diferida: **malinha**, p. 16 (ler-e-combinar-a-retoma), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 8: pinha, passa; p. 16: malinha, passo. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: p /p/; m /m/; l /l/; i /i/; nh /ɲ/; a átono /ɐ/; tonicidade em li no item diferido. Ensino localizado em menina p. 5, menina p. 6, leque p. 4, galinha p. 6, passarinho p. 4, passarinho p. 6. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
 Proposta de percurso para crianças de 6–7 anos, em quatro sessões de 9, 9, 10 e 9 minutos. As páginas recolhem tentativas, produções e declarações. Concluí-las não comprova domínio da leitura. A revisão final exige observação individual pelo adulto.
 
 ## Preparação e materiais
@@ -33,7 +43,7 @@ O texto de Lia é de leitura acompanhada. Palavras como recreio, rolou, esperou 
 1. **Observar e descobrir a palavra, 9 minutos, páginas 1–4.** Conversa situada e registo de uma frase da criança; reconhecimento com cartão; análise oral com pedrinhas; modelação explícita. Repartição aproximada de 2, 1, 2 e 4 minutos. A divisão oral é `pa-ssa-ri-nho`, quatro sílabas. Não ensinar a translineação através destas peças.
 2. **Juntar partes e experimentar leituras, 9 minutos, páginas 5–8.** Reconstruir a palavra e recombinar ni+nho. Confirmar o corpus da frase. Reservar cerca de quatro minutos para primeira leitura das opções e dos dois cartões. Se os pré-requisitos precisarem de mais ensino, terminar a sessão com apoio e adiar a observação de transferência.
 3. **Compreender e preparar um recado, 10 minutos, páginas 9–12.** Propor leitura da frase, marcar a ajuda recebida, ler o pequeno texto à criança, ouvir reconto e justificação. Destinar cerca de quatro minutos ao recado próprio. Pode continuar em papel numa sessão curta posterior sem acelerar a criança.
-4. **Rever, comunicar e voltar a ler, 9 minutos, páginas 13–16.** Realizar esta quarta sessão 24–48 horas depois da terceira. Usar cerca de seis minutos para revisão de clareza do recado e entrega, e três para leitura das opções sem modelo e dos cartões novos. Assim, a revisão retoma aprendizagens da sessão 2 noutro dia. Não fazer nova modelação do código antes de observar a leitura nas páginas 15–16; se for necessária na revisão do recado, adiá-la para depois dessa observação e registar o ajuste.
+4. **Rever, comunicar e voltar a ler, 9 minutos, páginas 13–16.** Realizar esta quarta sessão 24–48 horas depois da terceira. Usar cerca de seis minutos para revisão de clareza do recado e entrega, e três para leitura das opções sem modelo e dos cartões, distinguindo novidade e retenção. Assim, a revisão retoma aprendizagens da sessão 2 noutro dia. Não fazer nova modelação do código antes de observar a leitura nas páginas 15–16; se for necessária na revisão do recado, adiá-la para depois dessa observação e registar o ajuste.
 
 ## Modelação e observação
 
@@ -63,7 +73,7 @@ Registar data, item, primeira leitura literal, fusão, autocorreção, significa
 | 12–13 | Recado próprio e versão revista; não existe texto correto único. |
 | 14 | Comunicação real, reação e ajuda identificadas; botão é declaração. |
 | 15 | passinho, terceira opção. Ouvir as três opções na retoma diferida. |
-| 16 | Leitura nova de malinha e passo; significado e próximo trabalho combinados. Sem veredicto automático. |
+| 16 | Primeira leitura de malinha e retenção de passo; significado e próximo trabalho combinados. Sem veredicto automático. |
 
 ## Escrita, destinatário e comunicação
 
@@ -75,7 +85,7 @@ Na entrega, escutar o que o destinatário percebeu e guardar uma resposta real, 
 
 ## Retoma nos dias seguintes
 
-Realizar a sessão 4 após 24–48 horas e fazer as páginas 15–16 antes de rever modelos de código. A revisão e a comunicação do recado precedem essas páginas, sem novo ensaio dos itens a observar. Ler passinho entre alternativas é uma retoma; ler malinha e passo em cartões constitui uma nova aplicação das correspondências confirmadas. Registar essas condições separadamente. Depois de ouvir a leitura, pedir uma frase oral para observar significado, sem penalizar desconhecimento lexical como falha de código.
+Realizar a sessão 4 após 24–48 horas e fazer as páginas 15–16 antes de rever modelos de código. A revisão e a comunicação do recado precedem essas páginas, sem novo ensaio dos itens a observar. Ler passinho entre alternativas é uma retoma; malinha é primeira leitura reservada; passo é retenção, pois a grafia já apareceu em instruções anteriores. Registar essas condições separadamente. Depois de ouvir a leitura, pedir uma frase oral para observar significado, sem penalizar desconhecimento lexical como falha de código.
 
 Se a criança separa ss ou nh em dois sons, regressar à modelação das unidades na página 4 e à fusão nas páginas 5–6. Se reconhece pela inicial ou pelo enunciado mas não lê a palavra inteira, apoiar leitura da sequência completa e observar noutro dia um item ainda não modelado. Se mantém decifração mas não explica o sentido, trabalhar vocabulário e compreensão oral separadamente. Se o recado não permite ao leitor perceber o pedido, retomar a revisão com esse leitor em mente.
 

@@ -201,7 +201,7 @@
       "type": "oral",
       "title": "Uma leitura nova",
       "prompt": "Lê o cartão que o adulto te mostrar.",
-      "adultPrompt": "Apresente apenas o cartão T1 indicado no guia, sem imagem nem palavra modelo. Leia só a instrução, não o item. Espere pela tentativa, registe a leitura literal, pausas, junção, autocorreções e ajuda pedida. Peça depois o significado. Se precisar de modelar o item, faça-o após registar a tentativa e marque leitura acompanhada; o botão não comprova leitura autónoma.",
+      "adultPrompt": "Prepare em privado cartões separados com peixinho. Mostre um de cada vez, sem imagens, divisão silábica ou segundo exemplar de comparação. Não leia, não dite nem dê o primeiro som antes da tentativa individual. Registe leitura literal, fusão, autocorreção e ajuda antes de corrigir. Só depois converse sobre o significado. A declaração digital não observa nem valida a descodificação. O item reservado para primeira leitura é peixinho.",
       "hints": [
         {
           "individual": "Percorre a palavra do início ao fim com o dedo.",
@@ -376,7 +376,7 @@
         "janela"
       ],
       "answer": "peixada",
-      "adultPrompt": "Sem retomar antes o cartão modelo, peça a leitura das três opções. Leia só a instrução, não as palavras. Registe a primeira leitura, a ajuda e a explicação. Após a tentativa pode esclarecer vocabulário. Esta escolha sem imagem é uma evidência limitada de reconhecimento e compreensão; complete-a com a observação oral seguinte.",
+      "adultPrompt": "Sem retomar antes o cartão modelo, peça a leitura das três opções. Leia só a instrução, não as palavras. Registe a primeira leitura, a ajuda e a explicação. Após a tentativa pode esclarecer vocabulário. Esta escolha sem imagem é uma evidência limitada de reconhecimento e compreensão; complete-a com a observação oral seguinte. O item reservado nesta página é peixada. Leia apenas a instrução; escute a leitura de todas as opções antes da seleção, sem nomear a resposta nem dar modelo oral. Registe a primeira leitura e a ajuda separadamente do clique.",
       "hints": [
         {
           "individual": "Lê cada opção até ao fim, sem adivinhar pelo início.",
@@ -396,7 +396,7 @@
       "type": "oral",
       "title": "O adulto escuta a leitura",
       "prompt": "Lê os cartões e conta o que te ajudou.",
-      "adultPrompt": "Apresente R1 e R2 do guia, um de cada vez, sem imagens ou outros cartões visíveis. Não leia os itens antes da criança. Registe a primeira tentativa, a fluência da junção e as autocorreções. Peça que explique um significado e identifique uma parte que ajudou. Só depois modele se necessário, registando a mudança para leitura acompanhada. Compare com T1, combine uma retoma e não infira domínio pelo fim das páginas.",
+      "adultPrompt": "Prepare em privado cartões separados com peixe, peixinho. Mostre um de cada vez, sem imagens, divisão silábica ou segundo exemplar de comparação. Não leia, não dite nem dê o primeiro som antes da tentativa individual. Registe leitura literal, fusão, autocorreção e ajuda antes de corrigir. Só depois converse sobre o significado. A declaração digital não observa nem valida a descodificação. Distinga retenção de primeira exposição; não volte a chamar novo a um item já apresentado na coleção.",
       "hints": [
         {
           "individual": "Percorre todas as letras antes de terminares a leitura.",
@@ -409,6 +409,27 @@
       ],
       "criterion": "Mostro ao adulto como leio sem modelo e digo de que apoio preciso.",
       "challenge": "Escolhe com o adulto uma coisa para voltar a praticar."
+    },
+    {
+      "id": "escrever-sem-modelo",
+      "session": 4,
+      "phase": "review",
+      "type": "oral",
+      "title": "Escrever sem copiar",
+      "prompt": "Tenta escrever no papel o que o adulto disser. Depois conta como fizeste.",
+      "adultPrompt": "Realize esta observação depois das leituras. Depois de todas as leituras, oculte todos os cartões, ecrã, cartazes e mensagens. Dite UMA palavra já conhecida, a palavra-chave deste percurso, sem soletrar. A criança representa os sons por escrita emergente em papel ou escolhendo letras móveis. O adulto não escolhe todas as letras. Conserve a primeira tentativa antes de qualquer comparação. Se a criança não conseguir representar os sons mesmo com essas alternativas, registe \"codificação não observada\"; não atribua autonomia à transcrição do adulto.",
+      "criterion": "O adulto conserva a tentativa de codificação da criança, a ajuda e uma decisão de retoma, sem veredicto automático.",
+      "hints": [
+        {
+          "individual": "Pede para ouvir outra vez sem ver a escrita.",
+          "group": "Peçam nova audição e tentem individualmente, sem copiar."
+        },
+        {
+          "individual": "Procura letras para os sons que ouves.",
+          "group": "Cada pessoa escolhe letras para os sons e explica uma escolha."
+        }
+      ],
+      "challenge": "Diz uma parte que queres voltar a praticar."
     }
   ]
 }

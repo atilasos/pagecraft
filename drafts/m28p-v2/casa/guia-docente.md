@@ -1,10 +1,22 @@
 # Casa: percurso 8 de 28
 
-Rascunho de conteúdo para o motor comum. Destina-se sobretudo a crianças de 6–7 anos, com mediação ajustada ao repertório realmente observado. São 16 ecrãs, quatro sessões de 9, 9, 10 e 8 minutos. A quarta sessão ocorre 24–48 horas depois da comunicação. A produção e a observação podem continuar no papel. Completar páginas não certifica leitura, compreensão ou escrita autónomas.
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **capa**, p. 8 (primeira-leitura-nova). Leitura nova diferida: **casada**, p. 15 (leitura-observada-na-retoma), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 15: casada, saca, cana, capa, casa. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: c antes de a /k/; p /p/; s intervocálico /z/; d /d/; a tónico /a/ e átono /ɐ/. Ensino localizado em dedo p. 5, sapato p. 6, casa p. 4, casa p. 5. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
+Depois de todas as leituras da revisão oral, ocultar cartões, ecrã, cartazes e mensagens. Ditar casa à criança para representar sons por escrita emergente em papel ou por escolha de letras móveis. O adulto não escolhe todas as letras. Conservar a primeira tentativa; se impossível, registar "codificação não observada". A transcrição integral pelo adulto não demonstra codificação da criança.
+
+Rascunho de conteúdo para o motor comum. Destina-se sobretudo a crianças de 6–7 anos, com mediação ajustada ao repertório realmente observado. São 16 ecrãs, quatro sessões de 9, 9, 10 e 8 minutos. A quarta sessão ocorre 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A produção e a observação podem continuar no papel. Completar páginas não certifica leitura, compreensão ou escrita autónomas.
 
 ## Preparar com a criança
 
-Tenha cartões casa, ca, sa e na, letras móveis c, a, s, n e p, duas tampas, papel, lápis, blocos ou caixas para construir e o contacto presencial com um colega destinatário. Guarde cinco cartões sem imagens para a revisão: papa, saca, cana, capa e casa. Reserve os itens novos capa e saca até às respetivas transferências, e papa até à revisão diferida. Não os ensaie por escrito nem os use em etiquetas ou materiais visíveis antes da recolha.
+Tenha cartões casa, ca, sa e na, letras móveis c, a, s, n e p, duas tampas, papel, lápis e blocos. Reserve capa para a primeira leitura nas opções do ecrã 8 e casada para o cartão novo da revisão oral do ecrã 15. As restantes leituras dessa revisão são saca, cana, capa e casa, como retenção. Guardar os cartões fora da vista, sem imagens nem segmentação.
 
 Confirme oralmente os sentidos de cana, de proteção de livro, de saco grande e de comida espessa feita com cereais. Pode conversar sobre os conceitos antes das sessões, mas retire objetos e imagens no momento de transferência. Se a palavra saca não fizer parte do vocabulário da criança, explique esse significado oral antes, sem mostrar a escrita. Registe esta preparação. Não confunda desconhecimento lexical com dificuldade de decifração.
 
@@ -18,7 +30,7 @@ A sequência deste projeto começa em menina, menino, uva, dedo, sapato, bota, l
 
 Verifique as sete palavras anteriores em leitura e não apenas por memória de um cartão. As sílabas de referência são me-ni-na, me-ni-no, u-va, de-do, sa-pa-to, bo-ta e le-que. A recombinação deste percurso recupera principalmente na de menina; a transferência recupera p/pa e s inicial de sapato. O facto de uma sílaba estar numa palavra anterior não garante que a criança a reconheça isoladamente ou saiba analisar os seus sons. P e pa são explicitamente recuperados antes da transferência; em papa repetem-se com a vogal final átona já ensinada. A repetição de pa não obriga a pronunciar dois a tónicos iguais.
 
-O corpus escrito ensinado com modelo aqui é casa e cana. Em cana, ca vem de casa e na vem de menina. Capa e saca são itens novos no percurso: a criança tenta lê-los antes de qualquer leitura do adulto. Papa fica reservada para uma transferência nova na sessão diferida, com p e a já ensinados, sem acrescentar correspondências. Se já os tinha ensaiado noutro contexto, registe-os como conhecidos; essa tentativa deixa de constituir evidência de transferência para um item novo. Não invente outros itens sem verificar previamente as suas correspondências.
+O corpus ensinado com modelo é casa e cana. Capa e saca aparecem nas escolhas dos ecrãs 8–9. Casada fica reservada ao ecrã 15: c antes de a /k/, s entre vogais /z/, d /d/, a forte /a/ e a átono /ɐ/ já foram modelados. A mudança de tonicidade não permite colar sílabas com pronúncia fixa. Papa já apareceu em sapato, pelo que não pode ser transferência inédita aqui. A [Infopédia, casada](https://www.infopedia.pt/dicionarios/lingua-portuguesa/casada) regista /kɐˈzadɐ/; após a tentativa pode explicar-se a forma feminina de casado, sem pedir dados familiares.
 
 As escolhas incluem palavras anteriores e combinações ensinadas. O objetivo da leitura nova não é adivinhar pelo significado: peça sempre a leitura das opções antes da escolha semântica. Registe a leitura oral separadamente do resultado digital.
 
@@ -32,7 +44,7 @@ Use a sua voz natural, apontando letras e palavras. A indicação fonética é p
 2. Aponte c antes de a. Modele /k/, breve, e junte-o a /a/ para ca. O nome da letra, cê, não substitui o som. Pode recuperar /k/ em leque, onde se escreve qu antes de e; quadro ainda não foi ensinado e não entra nesta generalização.
 3. Compare os dois a em casa: o inicial tónico é /a/ e o final átono é /ɐ/ no PT-PT de referência. A leitura natural não exige dois a abertos iguais. Respeite variação linguística e não assinale uma pronúncia regional como erro sem a analisar.
 4. Recupere o s inicial de sapato, /s/. Em casa, mostre s entre vogais e modele /z/. Compare a sílaba inicial de sapato /sɐ/ com a final de casa /zɐ/. A mesma escrita sa não garante a mesma realização sonora. A mão da criança na própria garganta pode ajudar a observar vibração, se lhe for confortável; é um recurso, não um teste.
-5. Recupere n /n/ em menina e p /p/ em sapato. Modele cana /ˈkanɐ/ com ca e na. O a final mantém-se átono. Depois, a criança terá oportunidade de usar o que foi ensinado para tentar ler capa /ˈkapɐ/ e saca /ˈsakɐ/. Estas últimas pronúncias são chave docente: não as diga antes das respetivas tentativas. Em saca, s inicial recupera /s/; não se aplica o valor /z/ de casa.
+5. Recupere n /n/ em menina e p /p/ em sapato. Modele cana /ˈkɐnɐ/ com ca e na. O a final mantém-se átono. Depois, a criança terá oportunidade de usar o que foi ensinado para tentar ler capa /ˈkapɐ/ e saca /ˈsakɐ/. Estas últimas pronúncias são chave docente: não as diga antes das respetivas tentativas. Em saca, s inicial recupera /s/; não se aplica o valor /z/ de casa.
 
 Não diga que s tem sempre o mesmo som ou que todas as vogais a se leem da mesma maneira. Não introduza regras para c antes de e/i, g, dígrafos ou outros contextos que este percurso não ensina.
 
@@ -54,9 +66,9 @@ A construção com blocos acontece depois, no tempo combinado. Se a criança pre
 
 ### Sessão 4: voltar a ler noutro dia, 8 minutos
 
-Ecrãs 15–16, 24–48 horas depois da comunicação. Primeiro ocorre a leitura oral observada. Mostre um cartão de cada vez, sem imagem nem divisão silábica. Comece por papa, reservada para esta primeira leitura; depois apresente saca, cana, capa e casa numa ordem registada. Recolha cerca de quatro minutos de leitura e explicação, sem fornecer sons ou palavras antes de cada tentativa. Reserve um minuto para a escolha posterior e três para reensino necessário e combinação do próximo trabalho.
+Ecrãs 15–16, 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. Apresentar primeiro casada, nunca mostrada antes, e depois saca, cana, capa e casa, em cartões separados. Registar leitura literal, fusão, autocorreções e ajuda. Após todas as leituras, ocultar cartões e ecrã e ditar casa para a criança representar os sons em papel ou letras móveis. O adulto não decide todas as letras e conserva a primeira tentativa. Se for impossível, regista codificação não observada. A transcrição adulta da mensagem não substitui esta tentativa.
 
-A escolha depois dos cartões é reconhecimento com exposição prévia na sessão. Não a conte como outra prova independente de leitura. Os quatro cartões já trabalhados verificam retenção. Papa permite observar transferência nova, se não tiver sido ensaiada antes; caso contrário, registe também esse cartão como retenção. Se não houver intervalo, classifique o trabalho como revisão imediata e faça a retoma diferida noutra oportunidade. Não simule uma passagem de dias através de cliques.
+A escolha depois dos cartões é reconhecimento com exposição recente. Casada permite observar primeira leitura diferida; os restantes cartões verificam retenção. Sem intervalo real, registar revisão imediata e retomar noutro dia. O botão não verifica leitura nem codificação.
 
 ## Respostas verificáveis e o que fica por observar
 
@@ -69,9 +81,10 @@ A escolha depois dos cartões é reconhecimento com exposição prévia na sess�
 | 9 | saca, segunda opção | Registar a primeira leitura antes da ajuda e da discussão. |
 | 10 | o leque, terceira opção | Compreensão da frase acompanhada. No desafio, o destino é casa. |
 | 11 | Porque tem lama., primeira opção | Relaciona a bota com a limpeza; explicação oral acrescenta evidência. |
+| 15 | casada, saca, cana, capa e casa | Leitura nova diferida e retenção; depois ditado de casa à criança sem modelo, com tentativa conservada. |
 | 16 | casa, terceira opção | Reconhecimento após a leitura oral dos cartões. |
 
-No ecrã 3, a segmentação esperada é ca-sa. No ecrã 15, o adulto dispõe das leituras casa /ˈkazɐ/, cana /ˈkanɐ/, capa /ˈkapɐ/, saca /ˈsakɐ/ e papa /ˈpapɐ/, ajustadas à variedade da criança. Papa é o único cartão novo da revisão diferida, quando não ensaiado fora do percurso. Os ecrãs orais apenas declaram conversa com adulto. Não gravam nem analisam automaticamente pronúncia, compreensão, entrega ou qualidade da escrita. Os ecrãs de texto aberto não têm uma resposta única nem veredicto automático. As posições corretas variam, mas isso não converte o clique em leitura.
+No ecrã 3, a segmentação esperada é ca-sa. No ecrã 15, casada é a única reserva nova; casa, cana, capa e saca são retenção. Escutar sem ler pela criança. A escrita ditada de casa ocorre com todos os modelos ocultos; recolher a tentativa e a ajuda, sem veredicto automático.
 
 Todas as páginas têm duas ou três pistas próprias, nas formas individual e grupo. A primeira orienta uma ação; a seguinte muda o modo de observar; quando existe terceira, encaminha uma dúvida concreta ao adulto. Em transferência e revisão, as pistas ficam para depois da primeira resposta conforme o contrato. Marque a leitura posterior a qualquer pista ou modelo como apoiada. O acerto não é requisito para avançar, e a ajuda não atribui um rótulo à criança.
 
@@ -108,3 +121,5 @@ O relatório de investigação do repositório documenta a sua própria consulta
 ## Verificação desta entrega
 
 Em 23/10/2026, `python3 -m json.tool drafts/m28p-v2/casa/content.json` terminou sem erros e `python3 scripts/build_m28p_journeys.py --word casa --validate-only` devolveu `validation: passed`, com 16 páginas. Esta última verificação inclui o contrato e a preparação dos artefactos pelo motor em memória, sem os escrever. Foi também revista a ausência de resposta explícita em título, pedido e texto de transferência/revisão. A observação pedagógica aqui descrita é um plano de recolha, não um ensaio com crianças já realizado. Não foram feitos testes de browser, publicação ou integração em main por este agente.
+
+Nota fonológica confirmada na revisão final: em cana, o primeiro a é tónico e central [ɐ], como regista a [Infopédia](https://www.infopedia.pt/dicionarios/lingua-portuguesa/cana). Na página 7, modelar essa realização antes de n e compará-la com o [a] tónico de casa. Não confundir timbre central com vogal necessariamente átona.

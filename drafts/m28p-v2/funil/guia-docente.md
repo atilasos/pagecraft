@@ -1,13 +1,22 @@
 # Trabalhar «funil» com a turma
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **fino**, p. 8 (leitura-sem-modelo). Leitura nova diferida: **fuga**, p. 15 (adulto-escuta-de-novo), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 8: fino, fada; p. 15: funil, fino, fuga. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: f /f/; i /i/ tónico; n /n/; o final /u/; u /u/; g antes de a /g/; a final /ɐ/. Ensino localizado em menina p. 6, menino p. 4, galinha p. 5, funil p. 4, funil p. 5. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
 Prepare quatro sessões de 9, 9, 10 e 9 minutos para crianças em iniciação à leitura, sobretudo dos 6 aos 7 anos. Realize a quarta sessão no dia seguinte, para observar retenção. Ajuste o ritmo à criança e retome noutra ocasião o que faltar. Os 16 ecrãs não são uma prova de domínio.
 
 ## Prepare o material e o destinatário
 
 Reúna um funil, uma garrafa, um copo com pouca água e um tabuleiro. Prepare uma etiqueta com a palavra-base, letras móveis, dois objetos para marcar sílabas, papel e lápis. Use cartões de letra legível, sem imagens. Guarde os conjuntos seguintes até ao momento indicado:
 
-- Conjunto T, ecrã `leitura-sem-modelo`: **fino**, **fada**. São itens novos, não modelados nem mostrados nas escolhas anteriores.
-- Conjunto R, ecrã `adulto-escuta-de-novo`: **funil**, **fino**, **fuga**. O último item é novo nesta sessão. Não mostre esta lista à criança.
+- Conjunto T, ecrã leitura-sem-modelo: fino e fada. Fino é a reserva nova; fada já apareceu em girafa e verifica retenção.
 
 Combine com uma turma vizinha um empréstimo real do material necessário. Se a sala já tiver o material, proponha um convite para uma experiência conjunta. Escolha o destinatário com as crianças e preserve o propósito que decidirem. Entreguem a mensagem em papel ou presencialmente. Se a resposta demorar, registe «aguarda resposta», sem inventar uma comunicação concluída.
 
@@ -17,7 +26,7 @@ Situe esta palavra na posição 21 da sequência local: menina, menino, uva, ded
 
 Confirme o que cada criança consegue ler, sem inferir conhecimento pela passagem pelas páginas anteriores. Recupere la de janela, ta de bota, va de uva e da de escada. Verifique m, n, t, v, d, g com valor /g/ em galinha e as vogais necessárias. Para o item fumo, confirme a fusão de m com o, recuperando m de menina e o de menino. Não antecipe a palavra inteira. Se faltarem estas bases, ensine-as e classifique a tentativa seguinte como apoiada.
 
-Use como corpus candidato a leitura autónoma apenas as palavras-base que a criança já leu e, depois de ensinadas, funil e fila. Reserve fumo, fita e fava para a primeira tentativa de transferência nas opções. Reserve os cartões T e R para os momentos indicados. Depois da primeira exposição, assinale-os como itens já vistos. Se algum já for conhecido da criança, registe esse facto e não o apresente como evidência de novidade.
+Use como corpus candidato apenas o que a criança efetivamente aprendeu. Funil e fila são modelados aqui. Fava já foi apresentada em girafa e a sua escolha verifica retenção; não a declarar inédita. Fumo e fita podem ser primeiras combinações nas opções, mas a reserva controlada é fino no conjunto T. Fuga fica guardada para o conjunto R diferido. Registar contactos externos que retirem a novidade para aquela criança.
 
 Na frase «A menina leva o funil.», confirme previamente A, o e leva ou assuma a sua leitura. A leitura autónoma da palavra menina não garante a leitura de leva. No pequeno texto, leia com a criança segura, garrafa, deita, água, pelo e quaisquer outras palavras ainda não ensinadas. O texto está marcado como leitura acompanhada. Convide a criança a ler as palavras que reconhece sem converter o texto inteiro numa exigência autónoma.
 

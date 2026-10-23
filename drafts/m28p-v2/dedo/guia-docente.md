@@ -1,5 +1,15 @@
 # Dedo: uma marca e um convite
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **nado**, p. 8 (cartao-reservado). Leitura nova diferida: **dada**, p. 15 (voltar-a-ler-com-adulto), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 8: nado; p. 15: dedo, nado, dada. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: n /n/; d /d/; a tónico /a/ e final /ɐ/; o final /u/. Ensino localizado em menina p. 6, dedo p. 5. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
 Rascunho original para revisão do professor. Palavra 4/28, depois de menina, menino e uva, segundo a nova ordem oficial. São 16 ecrãs em quatro sessões de 9, 9, 10 e 9 minutos. A quarta sessão acontece cerca de dois dias depois da terceira. O trabalho de pintura, se houver, decorre fora destes tempos e pode ser substituído por um gesto ou desenho.
 
 O percurso parte de uma experiência contada pela criança e termina num convite entregue a uma pessoa real. Observar a palavra inteira tem lugar no início; a seguir há ensino explícito das correspondências e leitura de combinações que não foram ensaiadas. Reconhecer a forma conhecida, escolher uma alternativa e ler uma palavra nova fornecem evidências diferentes.
@@ -18,7 +28,7 @@ O percurso conserva a passagem da palavra significativa para análise e recombin
 
 ## Preparação e materiais
 
-Prepare papel, lápis, letras móveis d, d, e, o e cartões de, do, da, du, na. Tenha um cartão com dedo para a exploração inicial. Reserve, fora da vista, um cartão com nado para a primeira transferência oral e cartões separados com nado e dedo para a revisão. Não mostre previamente as palavras reservadas nem as use em demonstrações.
+Prepare papel, lápis, letras móveis d, d, e, o e cartões de, do, da, du, na. Tenha um cartão com dedo para a exploração inicial. Reserve, fora da vista, um cartão com nado para a primeira transferência oral e cartões separados com dedo, nado e dada para a revisão. Não mostre previamente as palavras reservadas nem as use em demonstrações.
 
 Combine um destinatário presente ou acessível, por exemplo um colega da turma. Disponibilize papel para a cópia final do convite e um espaço concreto para o encontro. A tinta lavável é facultativa; não se exige contacto com tinta nem destreza manual específica. Gesto, apontar, comunicação aumentativa, seleção de letras ou ditado ao adulto são alternativas possíveis. Registe qual foi usada.
 
@@ -85,7 +95,7 @@ Fazer cerca de dois dias depois. Retomar brevemente a finalidade do convite, sem
 
 13. **dar-a-conhecer**, cerca de 2 minutos. Entregar e escutar o destinatário, ou comentar uma entrega já observada. Se não houver resposta, registar isso e manter a comunicação por concluir. Antes da revisão, retirar convite, modelos e cartazes, fechar páginas anteriores e evitar apontar o título geral do percurso.
 14. **voltar-sem-modelo**, cerca de 1 minuto. O adulto diz dedo uma vez, sem soletrar. Resposta dedo, primeira posição. As opções são os estímulos da tarefa, sem um exemplar adicional para copiar. Este pedido observa reconhecimento de escrita a partir da fala, após intervalo.
-15. **voltar-a-ler-com-adulto**, cerca de 3 minutos. Fechar as opções e mostrar os cartões nado e dedo, um de cada vez. Registar a leitura antes de ajudar. A escolha anterior ativou oralmente dedo; por isso, a sua leitura aqui é consolidação e não evocação totalmente independente. Nado não é pronunciado pelo adulto antes da tentativa. No dia seguinte, antes de abrir a atividade, pode repetir dedo em papel para observar leitura sem essa ativação prévia.
+15. **voltar-a-ler-com-adulto**. Apresentar dedo, nado e dada em cartões separados, sem imagem nem leitura prévia. Dedo e nado são retenção; dada é a primeira leitura diferida reservada, com d e a tónico/final átono ensinados no ecrã 5. Guardar a leitura literal antes de corrigir. Dado continua reservado ao ditado do ecrã 16, que observa codificação e não esta primeira leitura.
 16. **escrever-o-que-ouves**, cerca de 3 minutos. Recolher cartões e ditar dado, sem escrever, soletrar ou segmentar como primeira apresentação. Mostrar um objeto não é necessário. Repetir naturalmente se pedido. Aceitar a tentativa e pedir releitura. A grafia final convencional é dado; uma escrita como dadu pode mostrar a identificação de /u/ sem estabilização da convenção de o final. Registar esse contraste e ensiná-lo depois, sem apagar a primeira tentativa.
 
 A leitura dos cartões não usa uma segunda palavra-modelo, imagem ou ajuda do colega. O adulto prepara os estímulos em privado. Não são necessárias comparações com um gabarito visível. Em grupo, as respostas digitais são conjuntas; o professor recolhe uma tentativa individual reservada se quiser afirmar algo sobre cada criança.

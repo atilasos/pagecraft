@@ -1,5 +1,15 @@
 # Árvore: guia docente do percurso 22
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **arca**, p. 8 (ler-o-invisivel). Leitura nova diferida: **barba**, p. 16 (leitura-observada-diferida), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 16: árvore, barba, ar. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: a tónico /a/; r em coda; c antes de a /k/; b /b/; a final /ɐ/. Ensino localizado em casa p. 4, arvore p. 4. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
 Rascunho para revisão do professor. São 16 ecrãs, em quatro sessões de cerca de nove minutos. A quarta sessão ocorre 24 a 48 horas depois da terceira. Os tempos são propostas: se a modelação ou a escrita pedirem mais atenção, interrompa e retome, sem acelerar para terminar páginas.
 
 O percurso começa numa experiência da criança, passa da palavra inteira à análise oral e à relação entre sons e escrita e regressa à leitura com sentido e à comunicação. Terminar o percurso não demonstra domínio. As escolhas registam seleções; os botões orais declaram que houve conversa. A leitura e a escrita precisam de observação do adulto.

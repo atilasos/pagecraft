@@ -1,10 +1,20 @@
 # Rato, palavra 15 de 28
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **rabo**, p. 8 (ler-sem-etiqueta). Leitura nova diferida: **rapa**, p. 16 (revisao-com-adulto), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 9: rabo; p. 16: rapa, rato, rabo, tapa. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: r inicial forte; b /b/; p /p/; a tónico /a/ e final /ɐ/; o final /u/. Ensino localizado em rato p. 4, rato p. 6. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
 Este percurso parte dos dois sentidos próximos da vida da criança, o animal e o dispositivo. Propõe 16 ecrãs em quatro sessões de 9, 9, 10 e 9 minutos. A quarta sessão decorre no dia seguinte à terceira ou mais tarde, para incluir revisão diferida. Não condensar as quatro sessões numa aula. O tempo é uma previsão; parar para apoiar e retomar depois é preferível a apressar a leitura.
 
 ## Preparação e materiais
 
-Preparar um rato de computador, uma ilustração de um rato animal para a conversa inicial, duas fichas para segmentação oral, cartões de letras e sílabas, papel e lápis para o bilhete. Preparar cartões separados, sem desenhos, com `rapa`, `rato`, `rabo` e `tapa`. Guardá-los fora da vista até à tarefa indicada. Não deixar no quadro as montagens nem os bilhetes durante transferência e revisão. O destinatário do bilhete deve ser um colega real, disponível para responder. Combinar uma procura possível num livro ou junto do computador, sem envolver animais vivos.
+Preparar um rato de computador, ilustração para a conversa inicial, fichas e letras para o ensino, papel e lápis para o bilhete. Reservar rabo nas opções da página 8 e rapa para a primeira leitura diferida na página 16. O cartão da página 9 passa a rabo, como retenção. Guardar cartões e modelos fora da vista durante as verificações. O destinatário é um colega real disponível para responder.
 
 Para crianças de 6–7 anos, o motor comum deve respeitar corpo mínimo de 22 px, alvos de 56 px, foco visível e instruções breves que o adulto pode ler. As atividades com fichas, cartões e bilhete podem decorrer fora do dispositivo. Uma declaração oral apenas regista que houve conversa; não capta pronúncia nem qualidade da leitura. Não é necessário produzir gravações.
 
@@ -14,7 +24,7 @@ A sequência cumulativa anterior é menina, menino, uva, dedo, sapato, bota, leq
 
 Retomam-se sobretudo `pa` de sapato, `ta` de bota, `ca` de casa e os grafemas p, t, b e a. O percurso ensina explicitamente r inicial forte, a ligação `ra`, `to` com o final pronunciado habitualmente [u], a final átono [ɐ], `bo` final [bu], `pa` tónico [pa], `pa` final átono [pɐ], `ta` tónico [ta] e `ta` final átono [tɐ]. Só propor leitura sem ajuda depois de observar que a criança consegue relacionar os sons com estas letras. Se não conseguir, continuar com mediação e identificar a tentativa como apoiada.
 
-O repertório autónomo proposto começa por rato e pela recombinação guiada rata. As primeiras apresentações inteiras de rabo e rapa são tarefas de transferência. Pato e tapa são novas combinações na revisão. Não imprimir estes quatro itens no plano da criança, nem os ensaiar em voz alta imediatamente antes das respetivas primeiras leituras. A familiarização semântica inicial é oral e breve, para não confundir desconhecimento do significado com dificuldade de leitura. No grupo, recolher primeiras tentativas individuais antes de discutir.
+O repertório ensinado inclui rato e rata. Rabo aparece na transferência da página 8 e é retomado no cartão da página 9. Rapa fica guardada até à revisão da página 16. Pato e tapa já apareceram em palavras anteriores e só podem verificar retenção. Rapa usa r inicial forte, p e a tónico/final átono já modelados nas páginas 4 e 6. Só depois da primeira leitura se conversa sobre raspar o fundo de um recipiente.
 
 Instruções, bilhetes que contenham escrita ainda não decifrável, a frase e o pequeno texto são de leitura acompanhada. Na frase, o adulto assume pelo menos leva, de e computador. No texto, assume biblioteca, procura, num, livro, animais, aponta, computador, ri, mostra, dois, decidem, fazer, duas, etiquetas e diferentes, bem como todas as palavras funcionais ainda não disponíveis. Convida a criança a ler menina, menino e rato se essas palavras estiverem disponíveis. Não apresentar o texto inteiro como leitura autónoma. As alternativas de compreensão podem ser lidas pelo adulto; as de transferência e revisão, não.
 
@@ -32,7 +42,7 @@ Os outros padrões do corpus conservam a sua especificidade: s de casa represent
 
 1. **Experiência e descoberta, 9 minutos.** Ecrãs 1–4. Escutar uma experiência com um rato animal, objeto ou personagem; registar uma frase da criança. Distinguir os dois sentidos. Comparar a palavra inteira com modelo, fazer a divisão oral e modelar o código. A comparação com etiqueta mostra reconhecimento com apoio.
 2. **Recombinação e primeira transferência, 9 minutos.** Ecrãs 5–8. Reconstruir rato, modelar as ligações em posições diferentes, montar rata com peças anteriores e ler as alternativas sem modelo. No ecrã 8, pedir leitura antes do clique e registar a primeira tentativa. A pergunta de sentido pode ajudar a escolher, mas não substitui essa observação.
-3. **Leitura, compreensão e autoria, 10 minutos.** Ecrãs 9–12. Apresentar o cartão rapa sem o ler nem o segmentar. Fazer leitura acompanhada da frase e do pequeno texto. Aceitar explicações em linguagem própria. Reservar tempo para cada criança formular uma intenção e escrever a primeira versão do bilhete. Se o tempo não chegar, prolongar o trabalho noutro momento sem saltar a autoria.
+3. **Leitura, compreensão e autoria, 10 minutos.** Ecrãs 9–12. Apresentar o cartão rabo como retenção, sem o ler nem segmentar. Rapa fica guardada até à revisão. Fazer leitura acompanhada da frase e do pequeno texto. Aceitar explicações em linguagem própria. Reservar tempo para cada criança formular uma intenção e escrever a primeira versão do bilhete. Se o tempo não chegar, prolongar o trabalho noutro momento sem saltar a autoria.
 4. **Revisão, comunicação e retoma, 9 minutos.** Ecrãs 13–16, noutro dia. Recuperar o bilhete, reler, melhorar ou justificar a manutenção. Entregar ao destinatário e ouvir o que percebeu. Retirar os bilhetes e modelos. Recolher a leitura das alternativas da revisão e dos cartões individuais. Combinar o próximo passo com a criança. Se a entrega exigir mais tempo, realizar a leitura diferida numa breve continuação, sem a ensaiar antes.
 
 As duas pistas de cada ecrã propõem primeiro uma abordagem e depois uma ação mais apoiada. Nos momentos de leitura nova, registar sempre se a criança já tinha consultado pistas. Com pistas, Passo a passo e Mais desafios descrevem o apoio ou o aprofundamento; não são rótulos de capacidade. O desafio acrescenta explicação, sem mudar a resposta base.
@@ -49,14 +59,14 @@ As duas pistas de cada ecrã propõem primeiro uma abordagem e depois uma ação
 | 6 | Relaciona sons e letras após demonstração; percebe vogais em posições diferentes | Não é teste de autonomia |
 | 7 | ra, ta | Recombinação guiada de rata |
 | 8 | rabo, segunda alternativa | Só observação da leitura permite distinguir descodificação de escolha semântica |
-| 9 | Lê rapa no cartão e liga ao gesto de raspar | Registar ajuda e leitura natural |
+| 9 | rabo, em cartão individual | Retenção da opção vista na página 8, sem alegação de novidade. |
 | 10 | O rato de computador, primeira alternativa | Compreensão de frase em leitura acompanhada |
 | 11 | O menino procurava um animal num livro; a menina apontou o dispositivo; etiquetas diferentes distinguem os sentidos | Aceitar paráfrases sustentadas pelo texto |
 | 12 | Bilhete com intenção própria, destinatário e indicação do que procurar | Escrita aberta, sem modelo final nem veredicto automático |
 | 13 | Versão revista ou manutenção justificada, explicando uma decisão | Comparar com primeira versão e anotar intervenção do adulto |
 | 14 | Entrega real e resposta do destinatário sobre o que compreendeu | O botão não comprova a comunicação |
 | 15 | pato, terceira alternativa | Recolher leitura oral antes da escolha |
-| 16 | Leitura individual de rato, rabo e tapa; explicação da ajuda e próximo passo | Cartões sem imagens nem modelo; conclusão não equivale a domínio |
+| 16 | rapa, rato, rabo e tapa, em cartões individuais | Rapa é a reserva nova diferida; os outros verificam retenção. |
 
 As respostas certas das escolhas ocupam posições 2, 2, 1 e 3. A primeira é comparação com modelo; as outras têm propósitos distintos. Não usar o total de acertos como nota de leitura.
 

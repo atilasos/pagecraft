@@ -1,5 +1,15 @@
 # Menina, palavra 1 de 28
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **mana**, p. 8 (outro-cartao). Leitura nova diferida: **ama**, p. 14 (ler-com-o-adulto-a-ouvir), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 8: mana; p. 14: menina, ama. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: m /m/; n /n/; a central /ɐ/ inicial, tónico e final; i /i/. Ensino localizado em menina p. 5, menina p. 6. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
 Rascunho original de 23/10/2026 para revisão pedagógica. Destina-se sobretudo a crianças de 6–7 anos em iniciação à leitura, com mediação adulta. São 16 ecrãs em quatro sessões de 9, 10, 10 e 8 minutos. O tempo é uma previsão, não uma meta de velocidade ou um prazo de aprendizagem.
 
 Esta é a primeira palavra da sequência oficial adotada pela coleção. Não se pressupõe leitura, repertório de palavras anteriores ou domínio do alfabeto. A posição 14 da coleção é **gema**; ovo pertence ao legado. Este trabalho não modifica nem arquiva atividades antigas.
@@ -78,10 +88,10 @@ Terminar aqui e fechar os modelos. Não fazer os ecrãs de retorno no mesmo mome
 
 ### Sessão 4, voltar noutro dia sem modelo, 8 minutos
 
-Realizar **24 a 48 horas depois da comunicação**, sem reensino imediatamente anterior dos itens. Guardar cartazes, palavras nas mesas e trabalhos com respostas visíveis. A leitura dos pedidos pelo adulto é permitida; a leitura dos itens pelo adulto só acontece depois da tentativa observada e fica registada como apoio.
+Realizar **24 a 48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados**, sem reensino imediatamente anterior dos itens. Guardar cartazes, palavras nas mesas e trabalhos com respostas visíveis. A leitura dos pedidos pelo adulto é permitida; a leitura dos itens pelo adulto só acontece depois da tentativa observada e fica registada como apoio.
 
 13. **voltar-sem-o-cartaz**, cerca de 1 minuto. Opções mina/mima/menina. Resposta esperada **menina**, terceira posição. Não pronunciar o nome procurado no pedido. Registar escolha e eventual leitura separadamente.
-14. **ler-com-o-adulto-a-ouvir**, cerca de 3 minutos. Apresentar **R1: menina** e depois **R2: anima**, em cartões separados e sem outro texto. O primeiro retoma uma unidade antiga; o segundo é transferência nova, a-ni-ma, que não apareceu nos ecrãs anteriores nem nos cartões de treino. Requer apenas a/i/m/n e os valores vocálicos já modelados. Não dizer o novo item antes da leitura nem o treinar durante a preparação da sessão. Aceitar tentativa de fusão e registar a leitura exata. Só depois contextualizar o verbo, por exemplo explicando o sentido de dar ânimo a alguém. Se a criança souber ler a forma mas desconhecer o significado, registar as duas coisas.
+14. **ler-com-o-adulto-a-ouvir**, cerca de 3 minutos. Apresentar R1 menina e R2 ama, um cartão de cada vez. Ama é a reserva nova, com a central e m já modelados. Menina verifica retenção com exposição recente. Só depois da leitura explicar ama como pessoa que cuida de crianças. A [Infopédia, ama](https://www.infopedia.pt/dicionarios/lingua-portuguesa/ama) regista /ˈɐmɐ/. Não mostrar nem dizer o item completo no ensino.
 15. **escrever-sem-copiar**, cerca de 3 minutos. Guardar os cartões. **D1: ditar mana**, naturalmente, sem grafia visível e sem segmentar antes da tentativa. A palavra foi encontrada na sessão 2, mas não mostrada nos ecrãs 13 e 14. Assim, a escrita diferida não sucede à leitura visual imediata do mesmo item. Aceitar papel ou letras móveis quando necessário; conservar a tentativa inicial antes de conversar sobre sons/letras. Espera-se uma tentativa de representação autónoma, não necessariamente grafia convencional. Não há resposta automática certa/errada.
 16. **regressar-a-mensagem**, cerca de 1 minuto. Conversar sobre o convite e a reação do destinatário, incluindo uma resposta ainda pendente. Perguntar que ajuda foi útil e que parte quer voltar a praticar. Guardar a voz do aluno separada da interpretação do professor. Pode usar-se a reflexão facultativa do motor num momento posterior, sem pressão para terminar.
 
@@ -133,3 +143,5 @@ Validações executadas em 23/10/2026: `python3 -m json.tool drafts/m28p-v2/meni
 Não foi executado ensaio no browser nem observação com crianças. A adequação das durações, das pistas, do vocabulário e dos contrastes vocálicos continua sujeita à revisão pedagógica e à experiência em sala.
 
 Na revisão do HTML, confirmar que não há cabeçalho, menu, rodapé ou leitura automática a mostrar ou pronunciar a palavra-alvo durante transferência e revisão. O conteúdo destes ecrãs não revela a chave em título/pedido/texto e remete a preparação adulta para este guia. Confirmar também texto de pelo menos 22 px, alvos de 56 px, foco visível, teclado, funcionamento offline e conservação das respostas. A confirmação técnica do motor não substitui este ensaio real.
+
+Na modelação do ecrã 6, explicitar também o a central [ɐ] tónico antes de m/n nas combinações relevantes. O a central átono final não permite concluir que toda a vogal central é átona. Ensinar esse contraste em unidades parciais, sem antecipar as palavras reservadas.

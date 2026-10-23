@@ -1,5 +1,15 @@
 # Bandeira, palavra 20 de 28
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **banda**, p. 8 (uma-palavra-por-descobrir). Leitura nova diferida: **deito**, p. 15 (ouvir-a-tua-leitura), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 9: beira; p. 15: bandeira, banda, deito. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: b /b/; an nasal antes de d; d /d/; ei como ditongo na variedade local; t /t/; a final /ɐ/; o final /u/. Ensino localizado em bandeira p. 4, bandeira p. 5. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
 Rascunho de conteúdo para crianças de 6–7 anos, com mediação adulta. São 16 ecrãs distribuídos por quatro sessões de 8, 10, 10 e 8 minutos. Reserve a quarta para cerca de dois dias depois da comunicação. Os tempos são propostas; uma escrita em curso pode continuar em papel. A conclusão das páginas não comprova domínio da leitura.
 
 Esta versão segue menina, menino, uva, dedo, sapato, bota, leque, casa, janela, telhado, escada, chave, galinha, gema, rato, cenoura, girafa, palhaço, zebra, bandeira. Gema é a palavra 14; ovo é legado. As palavras 21–28 não são pressupostas.

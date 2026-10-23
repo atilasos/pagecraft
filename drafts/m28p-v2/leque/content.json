@@ -128,16 +128,29 @@
       "session": 2,
       "phase": "transfer",
       "type": "order",
-      "title": "Uma combinação nova",
+      "title": "Recombinar partes conhecidas",
       "prompt": "Ordena as peças. Lê a palavra que formaste.",
-      "pieces": ["que", "to"],
-      "answer": ["to", "que"],
+      "pieces": [
+        "que",
+        "to"
+      ],
+      "answer": [
+        "to",
+        "que"
+      ],
       "adultPrompt": "Não pronuncie o resultado nem mostre um modelo. Recolha a primeira leitura da criança para distinguir montagem de decifração. Depois da tentativa, confirme o significado de toque com um toque suave na mesa. Se o valor aberto de o não estiver disponível, retome a modelação fora da prova e registe leitura apoiada. Só a observação oral permite avaliar a leitura da combinação, pois ordenar duas peças também pode resultar de tentativa.",
       "hints": [
-        {"individual": "Lê cada peça com os sons que experimentaste.", "group": "Cada um lê uma peça com os sons que experimentou."},
-        {"individual": "Aponta as duas letras que ficam juntas no mesmo som.", "group": "Confiram onde duas letras representam o mesmo som."}
+        {
+          "individual": "Lê cada peça com os sons que experimentaste.",
+          "group": "Cada um lê uma peça com os sons que experimentou."
+        },
+        {
+          "individual": "Aponta as duas letras que ficam juntas no mesmo som.",
+          "group": "Confiram onde duas letras representam o mesmo som."
+        }
       ],
-      "challenge": "Explica que parte já conhecias e como leste a nova combinação."
+      "challenge": "Explica que parte já conhecias e como leste a nova combinação.",
+      "criterion": "Recombina unidades já ensinadas e lê a construção; toque já ocorreu numa instrução anterior e não é uma reserva inédita."
     },
     {
       "id": "outra-palavra",
@@ -148,7 +161,7 @@
       "prompt": "Lê. Qual ajuda a ver coisas pequeninas?",
       "options": ["lupa", "pato", "bota"],
       "answer": "lupa",
-      "adultPrompt": "Leia apenas a instrução. Não nomeie as opções nem apresente objetos ou desenhos. Peça que a criança leia antes de escolher e explique o que juntou. Lupa usa lu e pa, partes modeladas, numa palavra ainda não mostrada. Pato e bota retomam p, t, b, o e a do repertório anterior, a confirmar antes. A seleção correta também pode resultar de eliminação; registe separadamente a leitura observada.",
+      "adultPrompt": "Leia apenas a instrução. Não nomeie as opções nem apresente objetos ou desenhos. Peça que a criança leia antes de escolher e explique o que juntou. Lupa usa lu e pa, partes modeladas, numa palavra ainda não mostrada. Pato e bota retomam p, t, b, o e a do repertório anterior, a confirmar antes. A seleção correta também pode resultar de eliminação; registe separadamente a leitura observada. O item reservado nesta página é lupa. Leia apenas a instrução; escute a leitura de todas as opções antes da seleção, sem nomear a resposta nem dar modelo oral. Registe a primeira leitura e a ajuda separadamente do clique.",
       "hints": [
         {"individual": "Percorre cada opção desde a primeira letra.", "group": "Leiam cada opção à vez desde a primeira letra."},
         {"individual": "Junta as partes e pensa no significado do que leste.", "group": "Juntem as partes e expliquem o significado antes de escolher."}
@@ -259,7 +272,7 @@
       "type": "oral",
       "title": "Ler sem uma imagem ao lado",
       "prompt": "Lê o cartão. Explica ao adulto como fizeste.",
-      "adultPrompt": "Prepare em privado um cartão simples com lata, sem imagem, palavra dividida ou segundo exemplar que sirva de modelo. Mostre só esse item de leitura. A palavra ainda não foi apresentada neste percurso; usa la e ta, retomando t e as vogais já modeladas. Aguarde a leitura antes de perguntar pelo significado. Não diga a palavra nem segmente antecipadamente. Registe a primeira leitura literal, autocorreções e apoio posterior. Em grupo, escute cada criança antes da discussão para não tomar repetição do colega como leitura. O botão declara conversa, não avalia pronúncia.",
+      "adultPrompt": "Prepare em privado cartões separados com lata. Mostre um de cada vez, sem imagens, divisão silábica ou segundo exemplar de comparação. Não leia, não dite nem dê o primeiro som antes da tentativa individual. Registe leitura literal, fusão, autocorreção e ajuda antes de corrigir. Só depois converse sobre o significado. A declaração digital não observa nem valida a descodificação. Faça esta revisão 24 a 48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados, sem treino imediato. O item reservado para primeira leitura diferida é lata; os restantes cartões já apresentados verificam retenção.",
       "hints": [
         {"individual": "Percorre o cartão do princípio até ao fim.", "group": "Leiam o cartão em turnos, sem completar a leitura dos colegas."},
         {"individual": "Relaciona os sons com as letras que já experimentaste.", "group": "Cada um explica quais sons relacionou com as letras."}

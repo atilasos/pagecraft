@@ -1,12 +1,24 @@
 # Escada, palavra 11 de 28
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **calada**, p. 9 (cartao-inesperado). Leitura nova diferida: **salada**, p. 16 (leitura-com-testemunha), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 9: calada; p. 16: salada, escada, capa, saca. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: c antes de a /k/; s inicial /s/; l /l/; d /d/; a tónico /a/ e átono /ɐ/. Ensino localizado em casa p. 4, escada p. 6. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
+Depois de todas as leituras da revisão oral, ocultar cartões, ecrã, cartazes e mensagens. Ditar escada à criança para representar sons por escrita emergente em papel ou por escolha de letras móveis. O adulto não escolhe todas as letras. Conservar a primeira tentativa; se impossível, registar "codificação não observada". A transcrição integral pelo adulto não demonstra codificação da criança.
+
 Rascunho de conteúdo para o motor comum. Dezasseis ecrãs, quatro sessões de 9, 10, 10 e 8 minutos. Destina-se à iniciação à leitura, sobretudo aos 6–7 anos, com mediação humana. O adulto lê pedidos e pistas quando necessário. Concluir páginas não demonstra domínio da leitura.
 
 ## Preparação e materiais
 
 Use um cartão com a palavra inteira, um desenho simples de escada para o primeiro reconhecimento, três pedras, cartões es/ca/da e pa/to, papel e lápis. Prepare também os cartões de partes ca/da/pa/sa/la/ta para a modelação. Não é necessário subir escadas nem demonstrar uma situação de risco. Uma criança pode falar de uma escada observada ou desenhada, sem ter de a usar.
 
-Prepare em separado um cartão com **saca** para a transferência oral e cartões com **escada, capa e saca** para a revisão. Escreva-os em minúsculas, sem figuras, divisão silábica ou palavras-modelo ao lado. Não os mostre antecipadamente. **Capa** surge primeiro entre as alternativas da página 8; **lata** surge primeiro na página 15. Não treine estas palavras inteiras antes dessas primeiras leituras. Se já forem conhecidas da criança por outras atividades, registe a ocorrência como releitura, não como generalização nova.
+Prepare um cartão calada para a primeira leitura na página 9 e cartões salada, escada, capa e saca para a revisão na página 16. Salada é a reserva diferida. Capa, saca e lata já foram apresentadas em casa/leque/telhado e verificam retenção. Os cartões têm apenas a palavra em minúsculas, sem imagem, divisão ou duplicado; não dizer os itens antes das tentativas.
 
 Combine logo na primeira conversa qual colega real da turma receberá o recado e reserve tempo para esse colega responder. A proposta é uma troca em papel, sem publicação externa. O recado conta algo sobre uma escada conhecida pelo autor e faz uma pergunta ao destinatário. O autor decide o conteúdo; não há frase para copiar.
 
@@ -15,9 +27,9 @@ Para o HTML gerado pelo motor, aplicar as referências comuns dos 6–7 anos: co
 ## Quatro sessões
 
 1. **Da nossa vida à palavra, 9 minutos, páginas 1–4.** Conversa sobre a experiência, leitura global do cartão, análise oral com pedras e reconstrução de es-ca-da. Distribuição indicativa: 3 + 2 + 2 + 2 minutos. Negociar o destinatário e apresentar os critérios em linguagem de criança.
-2. **Ouvir os sons e combinar, 10 minutos, páginas 5–9.** Modelação som/grafema por adulto, vogais na fala natural, recombinação pa-to, primeira leitura de capa entre alternativas e leitura individual do cartão saca. Distribuição indicativa: 3 + 2 + 1 + 2 + 2 minutos. Se o ensino exigir mais tempo, reduzir repetições e retomar mais tarde; não acelerar a criança para cumprir o relógio.
+2. **Ouvir os sons e combinar, 10 minutos, páginas 5–9.** Manter a modelação e a recombinação cumulativa de pato. A escolha de capa na página 8 verifica retenção. O cartão calada na página 9 recolhe a primeira leitura nova, com c/l/d e valores de a já ensinados. O adulto escuta antes de apoiar; não acelerar a criança para cumprir o tempo.
 3. **Compreender, escrever e comunicar, 10 minutos, páginas 10–14.** Compreensão de frase e pequeno texto acompanhados, recado inicial, releitura com revisão e entrega com resposta do colega. Reservar cerca de 3 minutos para os dois textos, 3 para escrever, 2 para rever e 2 para comunicar. Ditado ao adulto ou uma pergunta curta cabem neste tempo; uma produção mais extensa pode continuar em papel noutra ocasião, sem apagar a versão inicial.
-4. **Retomar noutro dia, 8 minutos, páginas 15–16.** Realizar 24–48 horas depois da comunicação, sem ensaio prévio nem exposição dos cartões. Cerca de 3 minutos para a leitura das opções e escolha, 4 para os cartões individuais com adulto e 1 para combinar o próximo trabalho. Uma dupla alterna quem começa; recolher a primeira leitura individual antes de ouvir a do par.
+4. **Retomar noutro dia, 8 minutos, páginas 15–16.** Realizar 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados, sem ensaio prévio nem exposição dos cartões. Cerca de 3 minutos para a leitura das opções e escolha, 4 para os cartões individuais com adulto e 1 para combinar o próximo trabalho. Uma dupla alterna quem começa; recolher a primeira leitura individual antes de ouvir a do par.
 
 As sessões são propostas ajustáveis à atenção e à observação. Não usar o tempo nem a ausência de cliques como diagnóstico. A reflexão facultativa que o motor acrescenta retoma os critérios, sem transformar conclusão em aprovação.
 
@@ -27,7 +39,7 @@ O ponto de partida é o repertório efetivamente confirmado das dez palavras ant
 
 As recombinações mobilizam ca de casa, sa e pa de sapato, to de sapato, la de janela e ta de bota. A palavra escada acrescenta o início es com s em final de sílaba antes de consoante surda. O percurso retoma d de dedo e modela da. O adulto confirma os valores de p, s inicial, l e t, sem os deduzir dos nomes das letras.
 
-Depois da modelação, o corpus para tentativa autónoma inclui escada e pato, já trabalhados, e as palavras inteiras novas capa e saca na transferência. Lata fica reservada à revisão. São combinações de correspondências ensinadas, não uma lista a decorar. Não dizer os itens para a criança os repetir. Quando precisar de modelação, interromper a observação de leitura independente, ensinar e registar a ajuda.
+Depois da modelação, escada e pato são palavras treinadas; capa, saca e lata são reaparições da coleção. Calada fica reservada para a página 9 e salada para a revisão diferida da página 16. Usam c antes de a /k/, s inicial /s/, l /l/, d /d/, a tónico /a/ e a átono /ɐ/, efetivamente modelados antes. Não apresentar os itens completos no ensino nem deduzir autonomia da conclusão das páginas.
 
 A frase «A escada é alta.» é de leitura acompanhada. A criança pode ler escada; o adulto lê o restante que não esteja confirmado, incluindo é e alta. A compreensão da qualidade alta pode ser observada mesmo com leitura integral pelo adulto, mas nesse caso trata-se de compreensão de texto ouvido.
 
@@ -49,7 +61,7 @@ Na página 5, acompanhe a voz com o dedo sobre es, ca e da. Aponte o s que antec
 
 Na página 6, mostre d e diga a consoante sem acrescentar uma vogal. Una-a a a para modelar da final de escada, com a átono habitualmente [ɐ]. Compare ca tónico, com [a], e da átono; não peça à criança que leia todas as ocorrências de a do mesmo modo. Modele pa, sa e la com a tónico, preparando novas combinações sem mostrar as palavras inteiras reservadas. Retome p, s inicial /s/, l e t com apontamento às letras. Compare sa inicial átono de sapato e la final átono de janela com os cartões de sílabas tónicas. Retome ta final de bota com a reduzido. Modele também ca e pa como finais átonos com [ɐ], sem mostrar uma palavra inteira nova; explicite que a parte forte se ouve na sílaba anterior. Assim, a leitura posterior de saca e capa não exige um valor vocálico final que ficou por ensinar. Esta curta modelação evita tratar as sílabas retiradas das palavras como blocos de pronúncia fixa.
 
-Na página 7, recombine pa + to de sapato para pato. Só depois da tentativa modele a palavra natural, com pa tónico. Pato é treino cumulativo acompanhado. Capa, saca e lata ficam sem modelo prévio da palavra inteira. Não usar TTS para fonemas nem alongar oclusivas com vogais de apoio. Se o adulto tiver de ensinar alguma correspondência omitida na prática anterior, faz esse ensino e assinala que a leitura seguinte já recebeu apoio.
+Na página 7, recombine pa + to para pato como treino acompanhado. Capa e lata nas escolhas são retenção, sem imagem ou leitura prévia. As reservas escritas novas são calada e salada. Depois das leituras da página 16, ocultar os cartões e o ecrã e ditar escada à criança para escrever em papel ou escolher letras móveis. Conservar a primeira tentativa; o adulto não escolhe todas as letras. Se não for possível, registar codificação não observada.
 
 ## Respostas verificáveis e limites
 
@@ -62,13 +74,13 @@ Na página 7, recombine pa + to de sapato para pato. Só depois da tentativa mod
 | 5–6, código | Apontamento e tentativa após modelo | Relação som/grafema e ajuda necessária; sem classificação automática |
 | 7, partes-que-ja-conhecemos | pa → to | Recombinação cumulativa treinada |
 | 8, ler-para-escolher | capa, primeira opção | Leitura oral observada e associação de significado, registadas separadamente |
-| 9, cartao-inesperado | Leitura do cartão saca e explicação de um uso possível | Primeira tentativa de palavra nova sem figura nem modelo oral |
+| 9, cartao-inesperado | Leitura de calada, sem modelo oral | Primeira leitura da reserva cumulativa, com registo da ajuda. |
 | 10, uma-frase-um-pormenor | alta, terceira opção | Informação explícita da frase, ouvida ou lida |
 | 11, uma-razao-no-texto | A escada está molhada., segunda opção | Relação causal entre estado do caminho e pedido de ajuda |
 | 12–13, escrita | Recado com informação e pergunta para um colega; versão revista ou manutenção justificada | Intenção, escrita, releitura e decisão de revisão, com apoios identificados |
 | 14, o-colega-responde | Entrega e resposta real do colega | Comunicação observada pelo adulto, distinta da declaração do botão |
-| 15, voltar-sem-modelo | lata, segunda opção | Primeira leitura dessa combinação e associação de significado na retoma diferida |
-| 16, leitura-com-testemunha | Leitura de escada, capa e saca em cartões separados, com explicação de sentido | Retenção e leitura observada com registo da ajuda |
+| 15, voltar-sem-modelo | lata, segunda opção | Retenção, com exposição anterior em leque/telhado; leitura e escolha separadas. |
+| 16, leitura-com-testemunha | salada, escada, capa e saca | Nova leitura diferida de salada, retenção dos restantes e ditado de escada com tentativa infantil conservada. |
 
 Para saca, aceitar um sentido conhecido da criança, por exemplo saco grande ou forma de sacar, desde que o explique de modo coerente. Não dar essa definição antes da tentativa. Para lata, é suficiente que explique que se pode guardar tinta numa lata. O desenho e o modelo da primeira sessão não acompanham as provas de transferência ou revisão. Não ler as alternativas dessas provas pela criança. O adulto pode ler apenas a instrução geral e, após a primeira resposta, disponibilizar pistas progressivas. Se houver ensino, passa a ser tentativa apoiada.
 
@@ -98,4 +110,4 @@ Lidos neste checkout: AGENTS.md, PRODUCT.md, CONTEXT.md, docs/m28p-contrato-perc
 
 Consulta de leitura pela API da Sebenta em 23/10/2026: «Método das 28 Palavras», caminho 20_Wiki/Método das 28 Palavras.md, estado draft; «Avaliação Cooperada», caminho 20_Wiki/Avaliação Cooperada.md, estado review; «TIC no Ensino Básico», caminho 20_Wiki/TIC no Ensino Básico.md, estado review. São sínteses da wiki, não verificação de fontes históricas ou de estudos primários. A primeira mantém ovo na lista legada; neste trabalho prevalece a sequência atual dada pelo professor, com gema em 14. Aproveitam-se a distinção entre reconhecimento e generalização, a planificação participada e o uso da tecnologia ao serviço de comunicação real. Não se fazem afirmações de superioridade do método nem de homologação curricular com base nessas páginas.
 
-Validação executada: python3 -m json.tool drafts/m28p-v2/escada/content.json e python3 scripts/build_m28p_journeys.py --word escada --validate-only, ambos sem erros. Passaram ainda verificações estáticas de fases, duração das quatro sessões, pistas individual/grupo, permutações das peças, ausência de resposta automática em oral/write e ausência do item correto em title/prompt/text das escolhas de transferência/revisão. A leitura editorial confirmou a novidade dos itens e a cobertura das correspondências. Não foram realizados ensaios de browser nem observação com crianças. A geração de HTML/DocSpec e a integração em main pertencem ao agente principal. Estes ficheiros não publicam atividades, não alteram catálogo e não constituem aprovação pedagógica final.
+A revisão anterior verificava novidade apenas dentro da pasta de escada e não detetou as exposições cumulativas de capa/saca/lata. Essa alegação fica retirada. A nova conferência global usa scripts/audit_m28p_corpus.py e docs/m28p-corpus-reservado.json. A validação técnica e as referências de ensino não certificam descodificação nem aprendizagem; a geração e o ensaio no browser pertencem à coordenação.

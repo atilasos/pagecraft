@@ -1,5 +1,17 @@
 # Telhado, palavra 10 de 28
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **calado**, p. 8 (primeira-leitura-nova). Leitura nova diferida: **pilha**, p. 16 (retoma-com-adulto), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 9: lata, calado; p. 16: pilha, calha, lata, telhado. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: c antes de a /k/; l /l/; d /d/; p /p/; i /i/; lh /ʎ/; a tónico /a/ e átono /ɐ/; o final /u/. Ensino localizado em menina p. 5, sapato p. 4, casa p. 4, telhado p. 4, telhado p. 7. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
+Depois de todas as leituras da revisão oral, ocultar cartões, ecrã, cartazes e mensagens. Ditar telhado à criança para representar sons por escrita emergente em papel ou por escolha de letras móveis. O adulto não escolhe todas as letras. Conservar a primeira tentativa; se impossível, registar "codificação não observada". A transcrição integral pelo adulto não demonstra codificação da criança.
+
 Percurso em quatro sessões de 9, 9, 10 e 9 minutos. A quarta decorre 24 a 72 horas depois da terceira, para recolher revisão diferida. Repartir aproximadamente dois minutos por ecrã e reservar mais tempo para modelação, leitura individual e escrita. Se a criança precisar de mais tempo, interromper e retomar; terminar páginas não comprova domínio.
 
 ## Materiais e preparação
@@ -16,7 +28,7 @@ São novidades explícitas deste percurso o dígrafo `lh`, o contraste `la/lha` 
 
 O corpus ensaiado com modelo é `telhado`, `lado` e `calha`. `lado` recompõe la de janela com do de dedo. `calha` combina ca de casa com lha da palavra nova. Nesta oficina, modelar também o contraste entre a tónico inicial de lado/calha e a átono final de janela/calha. A fusão relaciona consoantes e vogais já ouvidas com os seus valores em contexto. Explicar a função de uma calha depois da leitura modelada.
 
-Reservar `calado` para a primeira transferência no ecrã 8 e `lata` para o cartão inédito do ecrã 9. `calado` reúne ca, la, do; `lata` reúne la, ta. `lapa`, combinação de la e pa, só aparece na revisão do ecrã 15. Não antecipar estes itens numa lista de treino. A frase `O telhado tapa a casa.` permite uma tentativa com padrões cumulativos, incluindo a nova combinação ta + pa. Se faltarem correspondências ou palavras curtas, ler a frase depois da tentativa e assinalar compreensão com apoio.
+Reservar calado para a primeira transferência no ecrã 8. Lata e calado nos cartões do ecrã 9 verificam retenção, pois lata já foi lida em leque. Pilha fica reservada ao ecrã 16, com p/i ensinados antes e lh /ʎ/ e a final reduzido ensinados no ecrã 4. Lapa surge nas opções do ecrã 15. A frase cumulativa continua acompanhada quando necessário; tapa já apareceu antes e não é novidade cumulativa. Manter a mensagem original e ler explicitamente todo o código ainda não ensinado.
 
 As sílabas são partes orais, não peças com pronúncia imutável. A tonicidade pode alterar as vogais de uma combinação. Em particular, não impor às vogais átonas os valores dos nomes das letras. O objetivo da fusão é chegar à palavra natural em português europeu.
 
@@ -38,7 +50,7 @@ O adulto oferece um modelo humano. Não usar TTS para ensinar fonemas. A síntes
 | --- | --- | --- |
 | 1, 9 min | 1–4 | Experiência de abrigo; reconhecimento; segmentação oral; modelação explícita de código. |
 | 2, 9 min | 5–8 | Dígrafo; recomposição; fusão cumulativa; primeira leitura inédita com escolha. |
-| 3, 10 min | 9–12 | Cartão inédito observado; frase; pequeno texto acompanhado; mensagem própria. |
+| 3, 10 min | 9–12 | Retenção em cartões; frase; pequeno texto acompanhado; mensagem própria. |
 | 4, 9 min, noutro dia | 13–16 | Revisão da escrita; entrega ao colega; escolha de revisão; leitura individual com adulto. |
 
 | Ecrã | Resposta ou observação esperada |
@@ -51,14 +63,14 @@ O adulto oferece um modelo humano. Não usar TTS para ensinar fonemas. A síntes
 | 6 | te → lha → do. Pedir fusão após ordenar. |
 | 7 | lado e calha, construídos e lidos com o adulto. |
 | 8 | calado, primeira alternativa. Recolher leitura das três opções antes da escolha. |
-| 9 | Cartões lata e calado, sem os pronunciar antes. A primeira palavra é nova, a segunda é releitura. |
+| 9 | Cartões lata e calado, sem os pronunciar antes. Ambas verificam retenção; lata já apareceu em leque. |
 | 10 | O telhado., terceira alternativa. Pedir justificação na frase. |
 | 11 | Para pedir ajuda com a água que entrou., segunda alternativa. Aceitar explicação oral equivalente. |
 | 12 | Mensagem com descoberta e destinatário escolhido, sem texto obrigatório. |
 | 13 | Releitura da produção e alteração ou decisão justificada de manter. Guardar as duas versões se houver mudança. |
 | 14 | Comunicação real e resposta do destinatário; registar se a entrega ficou pendente. |
 | 15 | lapa, terceira alternativa; duas sílabas la-pa. Observar leitura e segmentação separadamente. |
-| 16 | Leitura dos cartões calha, lata, telhado, explicação de um significado e proposta de retoma. |
+| 16 | Primeira leitura de pilha e retenção de calha, lata e telhado. Depois ocultar cartões e ecrã e ditar telhado para a criança escrever ou escolher letras móveis; conservar a tentativa. |
 
 Nas páginas 8, 9, 15 e 16, o adulto lê apenas a instrução antes da tentativa. Não fornece palavra, sílaba inicial, desenho ou modelo de leitura. Os itens são o material a ler, não um modelo oral a imitar. As pistas, usadas só depois da primeira resposta, tornam a tentativa seguinte apoiada. Numa dupla ou grupo, ouvir cada criança antes de permitir coro ou explicação de pares. A posição correta varia, mas isso não elimina a possibilidade de escolha por exclusão.
 

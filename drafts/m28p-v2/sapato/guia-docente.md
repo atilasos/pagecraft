@@ -1,5 +1,15 @@
 # Sapato: experiência, código e recado
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **pata**, p. 8 (cartao-inedito). Leitura nova diferida: **pipa**, p. 15 (rever-leitura-oral), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 8: pata; p. 15: pata, pipa. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: p /p/; t /t/; a tónico /a/ e final /ɐ/; i /i/. Ensino localizado em menina p. 5, sapato p. 4, sapato p. 6. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
 Percurso 5 de 28, depois de menina, menino, uva e dedo. Rascunho para revisão pedagógica do professor. São 16 ecrãs em quatro sessões: 9, 9, 10 e 8 minutos. A quarta sessão acontece 48 a 72 horas depois da terceira. Os tempos são uma previsão; se a modelação exigir mais tempo, faça uma pausa e retome sem apressar a criança.
 
 ## Decisões pedagógicas propostas
@@ -27,7 +37,7 @@ O ensino de s vale aqui para a posição inicial. Não ensinar uma regra univers
 - Um sapato real ou desenho simples, usado apenas na fase de contexto e reconhecimento; etiqueta sapato em minúsculas.
 - Três pedras ou tampas, papel, lápis, letras móveis s, a, p, t, o, com a duplicado.
 - Cartão reservado pata para a página 8. Não o apresentar, ler ou deixar visível antes dessa página. Apresenta-se só a palavra a decifrar, sem uma segunda cópia que sirva de modelo.
-- Cartões separados pata e tapa para a revisão oral, mantendo tapa reservado até esse dia; papel em branco para a revisão de escrita.
+- Cartões separados pata e pipa para a revisão oral, mantendo pipa reservado até esse dia; papel em branco para a revisão de escrita.
 - Folha ou envelope para fazer chegar o recado e uma grelha simples de observação do professor.
 
 Retire etiquetas, objetos e trabalhos anteriores das tarefas de transferência e revisão. As palavras nas alternativas ou no cartão são os itens a ler; não há resposta demonstrada ao lado, imagem nem palavra pronunciada pelo adulto. Desative qualquer leitura automática das opções nesses momentos. O motor oculta pistas até à primeira tentativa; usar uma pista depois exige registar a ajuda.
@@ -68,10 +78,10 @@ O texto original da página 10 e a frase da página 9 são corpus de leitura aco
 
 ### Sessão 4, páginas 14 a 16, 8 minutos, noutro dia
 
-Abrir 48 a 72 horas depois da comunicação, sem revisão imediata prévia das respostas. Use dois minutos na escolha, três na leitura individual e três na escrita e conversa. Todos os modelos anteriores ficam fora da vista.
+Abrir 48 a 72 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados, sem revisão imediata prévia das respostas. Use dois minutos na escolha, três na leitura individual e três na escrita e conversa. Todos os modelos anteriores ficam fora da vista.
 
 14. Revisão por escolha: sapato, segunda opção. O título e a instrução não dizem a resposta. O adulto lê apenas a instrução e observa a leitura antes do toque.
-15. Revisão oral: apresentar primeiro pata, para observar retenção, e depois tapa, reservada para nova transferência, um cartão de cada vez. Tapa usa ta+pa e os valores tónico e átono de a já modelados. Pedir leitura e explicação, sem imagem, alternativa ou pronúncia prévia. Separar no registo a retenção e a nova combinação. Se a palavra reservada tiver sido entretanto treinada, não descrever a sua leitura como nova transferência. Registar cada criança individualmente.
+15. Revisão oral: apresentar primeiro pata, para observar retenção, e depois pipa, reservada para nova transferência, um cartão de cada vez. Pipa usa p /p/, i /i/ tónico de menina e a final átono já modelado. Depois da tentativa, pode explicar o sentido de barril. Pedir leitura e explicação, sem imagem, alternativa ou pronúncia prévia. Separar no registo a retenção e a nova combinação. Se a palavra reservada tiver sido entretanto treinada, não descrever a sua leitura como nova transferência. Registar cada criança individualmente.
 16. Escrita de memória por ditado: o adulto diz sapato naturalmente. Não segmenta nem mostra letras. Conserva a primeira tentativa e a releitura da criança. O estímulo é oral, não um modelo escrito. A revisão acompanhada acontece só depois de recolher a observação sem modelo.
 
 ## Observação e retorno

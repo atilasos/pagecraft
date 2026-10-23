@@ -1,5 +1,15 @@
 # Gema, palavra 14 de 28
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **gemada**, p. 8 (primeira-leitura-nova). Leitura nova diferida: **gemido**, p. 15 (leitura-observada), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 9: geme, mala; p. 15: gemido, mala, gela, gema, gemada. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: g antes de e /ʒ/; e átono reduzido; m /m/; i /i/ tónico; d /d/; o final /u/; a tónico /a/ e final /ɐ/. Ensino localizado em menina p. 6, dedo p. 5, gema p. 4, gema p. 7. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
 Rascunho de conteúdo para o motor comum. São 16 ecrãs em quatro sessões de 8, 9, 10 e 8 minutos. A quarta sessão realiza-se um ou dois dias depois da terceira, sem revisão do cartão antes da observação inicial. Concluir os ecrãs não comprova domínio da leitura.
 
 A ordem de referência é menina, menino, uva, dedo, sapato, bota, leque, casa, janela, telhado, escada, chave, galinha, gema. Ovo pertence ao contexto oral e ao texto acompanhado; não se presume que tenha sido ensinado como palavra geradora anterior.
@@ -17,7 +27,7 @@ Use o motor comum com os mínimos dos 6–7 anos: corpo de 22 px, alvos de 56 px
 1. **Da conversa à palavra, 8 minutos.** Ecrãs 1–4. Cerca de dois minutos por ecrã: acolher experiência ou pergunta, reconhecer o cartão, segmentar oralmente e receber a primeira modelação do código.
 2. **Juntar e experimentar, 9 minutos.** Ecrãs 5–8. Dois minutos para reconstruir a palavra, dois para a nova combinação, três para modelar as vogais em contexto e dois para a primeira transferência. As palavras novas não são lidas pelo adulto antes da tentativa.
 3. **Compreender e enviar um bilhete, 10 minutos.** Ecrãs 9–13. Um minuto para os cartões, um para a frase, dois para o pequeno texto, três para uma mensagem curta e três para revisão e partilha. O adulto pode escrever por ditado quando a motricidade ou a escrita ainda não permitem produzir a mensagem nesse tempo. Preserve a autoria e registe a modalidade. Se a criança precisar de continuar a escrever, conserve a produção e retome sem a apressar.
-4. **Voltar noutro dia, 8 minutos.** Ecrãs 14–16, um ou dois dias depois da comunicação: dois minutos para a escolha com leitura, quatro para os cartões lidos ao adulto e dois para escrita de memória e conferência posterior. O atraso temporal é parte do plano docente, não um bloqueio do motor.
+4. **Voltar noutro dia, 8 minutos.** Ecrãs 14–16, um ou dois dias depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados: dois minutos para a escolha com leitura, quatro para os cartões lidos ao adulto e dois para escrita de memória e conferência posterior. O atraso temporal é parte do plano docente, não um bloqueio do motor.
 
 ## Repertório e limites de leitura
 
@@ -25,7 +35,7 @@ As treze palavras anteriores constituem um repertório previsto, que deve ser co
 
 As novas relações ensinadas aqui são g antes de e com /ʒ/, a combinação ge-ma e a recombinação ge-la. O som inicial já foi encontrado com j em janela, mas a grafia g é nova neste valor. A comparação com galinha impede a regra falsa de que g tem sempre o mesmo som.
 
-O corpus de leitura sem modelo, depois da modelação e se as relações estiverem disponíveis, é gema, gela, gelada, gemada, geme e mala. As palavras anteriores usadas nas opções são menina e bota. Gelada e gemada surgem pela primeira vez no ecrã 8; geme e mala, nos cartões do ecrã 9. Não preparar estas palavras com imagens, leitura oral ou cópia antes da tentativa. Se a criança as conhecer de outra atividade, registe essa exposição e não as apresente como transferência inédita.
+O corpus de leitura sem modelo, depois da modelação e se as relações estiverem disponíveis, é gema, gela, gelada, gemada, geme e mala. Gemido fica guardado até ao ecrã 15: ge com e átono, mi com i tónico e do final já ensinados. A [Infopédia, gemido](https://www.infopedia.pt/dicionarios/lingua-portuguesa/gemido) confirma a vogal inicial reduzida e i tónico. As palavras anteriores usadas nas opções são menina e bota. Gelada e gemada surgem pela primeira vez no ecrã 8; geme e mala, nos cartões do ecrã 9. Não preparar estas palavras com imagens, leitura oral ou cópia antes da tentativa. Se a criança as conhecer de outra atividade, registe essa exposição e não as apresente como transferência inédita.
 
 «Gela» é um verbo e «geme» também. Depois de escutar a leitura, converse sobre o sentido: a água pode gelar; uma pessoa pode gemer de dor. Não exigir que a criança conheça «gemada» para observar a tentativa de decifração. O ecrã 8 pede o sentido de «gelada» e permite registar separadamente uma necessidade de vocabulário.
 
@@ -65,7 +75,7 @@ Se houver hesitação na transferência, espere pela primeira tentativa. Só dep
 | 12. Bilhete para a turma | Mensagem própria sobre uma descoberta, para o leitor combinado. | Sem texto único nem veredicto automático. |
 | 13. Rever e entregar | Releitura, escuta do colega, decisão de revisão e partilha real. | Registar ações concretas; a declaração não prova entrega. |
 | 14. Retomar sem cartão | gema, segunda opção, com leitura prévia de mala, gema e bota. | Sem imagem nem modelo; o acerto não basta para inferir leitura. |
-| 15. Leitura observada | Cartões mala, gela, gema e gemada, depois explicação de uma palavra. | Distinguir leitura inicial, autocorreção e ajuda posterior. |
+| 15. Leitura observada | Cartões gemido, mala, gela, gema e gemada. Gemido é a reserva diferida; os demais verificam retenção. | Distinguir leitura inicial, autocorreção e ajuda posterior. |
 | 16. Uma palavra no papel | Uma palavra escolhida pela criança, escrita de memória e conferida depois. | Sem resposta única; preservar tentativa e revisão. |
 
 ## Escrita, comunicação e propostas MEM

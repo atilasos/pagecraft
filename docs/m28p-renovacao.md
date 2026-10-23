@@ -2,7 +2,7 @@
 
 A coleção anterior, com 90 atividades, foi arquivada em 23/10/2026. Os conteúdos e os endereços anteriores permanecem para consulta de realizações; os catálogos público e do professor omitem os metadados com `status: archived`. O inventário com os metadados originais está em [arquivo](archives/m28p-2026-10-23.json). `python3 scripts/archive_m28p.py --apply` permite repetir a operação e recuperar uma interrupção sem perder o inventário.
 
-A nova coleção tem 28 percursos e 447 páginas, distribuídas por quatro sessões por palavra. Cada palavra foi atribuída a um agente próprio; o [registo de delegação](../drafts/m28p-v2/delegation.json) conserva os identificadores. A posição 14 é **gema**, conforme a sequência editorial consultada; **ovo** pertence à variante anterior.
+A nova coleção tem 28 percursos e 448 páginas, distribuídas por quatro sessões por palavra. Cada palavra foi atribuída a um agente próprio; o [registo de delegação](../drafts/m28p-v2/delegation.json) conserva os identificadores. A posição 14 é **gema**, conforme a sequência editorial consultada; **ovo** pertence à variante anterior.
 
 ## Consultar os materiais
 
@@ -14,11 +14,16 @@ A nova coleção tem 28 percursos e 447 páginas, distribuídas por quatro sess�
 
 Na Sebenta, as cópias de projeto estão em `30_Projects/PageCraft/28-palavras-2026/`. As versões navegáveis e pesquisáveis pela aplicação estão em `Research/pagecraft/28-palavras-2026/`; a leitura do relatório completo foi confirmada pela API com HTTP 200. A página `20_Wiki/Método das 28 Palavras.md` recebeu uma atualização identificada por data, preservando o registo anterior. Nenhuma fonte em `10_Sources/` foi alterada.
 
+## Controlar os itens novos
+
+O [mapa de 56 reservas](m28p-corpus-reservado.json) identifica uma leitura nova inicial e outra diferida por palavra, com referências ao ensino previsto. A [auditoria do corpus](reviews/2026-10-23-m28p-corpus.md) discrimina retenção e novidade. O auditor conta também os cartões preparados pelo adulto e as palavras nas pistas/instruções; o resultado não comprova ensino efetivo ou autonomia. Uma exposição fora da coleção pode retirar a novidade para aquela criança.
+
 ## Gerar e verificar
 
 Os conteúdos editáveis de cada palavra estão em `drafts/m28p-v2/<palavra>/content.json` e `guia-docente.md`. O [contrato](m28p-contrato-percursos.md) define a estrutura. O HTML, DocSpec, design, metadata e manifesto são derivados:
 
 ```bash
+python3 scripts/audit_m28p_corpus.py
 python3 scripts/build_m28p_journeys.py --all --validate-only
 python3 scripts/build_m28p_journeys.py --all
 uv run --offline pytest --ignore=tests/browser -q

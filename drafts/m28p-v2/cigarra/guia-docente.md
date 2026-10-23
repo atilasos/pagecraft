@@ -1,5 +1,15 @@
 # Cigarra, palavra 26 de 28
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **jarra**, p. 7 (nova-combinacao). Leitura nova diferida: **carro**, p. 14 (cartoes-sem-eco), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 14: carro, garrafa, cigarra, cima, jarra. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: j /ʒ/; c antes de a /k/; rr forte; a tónico /a/ e final /ɐ/; o final /u/. Ensino localizado em sapato p. 4, casa p. 4, janela p. 4, cigarra p. 5. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
 Proposta para crianças de 6–7 anos, com adulto disponível. São 16 ecrãs em quatro sessões de 9, 10, 10 e 9 minutos. A quarta ocorre dois dias depois da terceira. Interromper se necessário; estes tempos organizam o trabalho e não medem a aprendizagem. A sequência nova inclui **gema** na posição 14. **Ovo** é a variante legada e não substitui aqui o ensino de `ge`.
 
 ## Preparação e materiais
@@ -17,9 +27,9 @@ O corpus anterior desta variante é: menina, menino, uva, dedo, sapato, bota, le
 Para esta proposta são necessários `j` /ʒ/, `m` /m/, `f` /f/, `g` /g/ antes de `a`, `c` /k/ antes de `a`, a vogal `i`, os valores tónico e átono de `a` e o r forte inicial. Retomar oralmente `recipiente` e `pata` sem nomear as respostas reservadas. Os distratores também precisam de código ensinado.
 
 - `jarra` combina `j` de janela com o `a` tónico já ensaiado e `rra` de cigarra. A tonicidade muda em relação a `ja` de janela; não mandar conservar uma pronúncia silábica rígida.
-- `cima` combina o novo `ci` com `m` e `a` final já ensinados. `cama`, distrator também novo, usa `ca`, `m` e `a`; a criança deve tentar lê-lo igualmente.
+- `cima` combina o novo `ci` com `m` e `a` final já ensinados. `cama`, distrator já modelado em cenoura, usa `ca`, `m` e `a`; a criança deve tentar lê-lo igualmente.
 - `garra`, reservada para a revisão, combina `ga` e `rra` sem apresentação prévia da palavra inteira.
-- `garrafa`, reservada para o primeiro cartão diferido, junta `ga`, `rra` e `fa`. O primeiro `a` é átono e o segundo é tónico. `fa` recupera a correspondência de girafa/funil, sem antecipar a palavra inteira.
+- Carro é a reserva do primeiro cartão diferido, com ca /ka/, rr forte e o final /u/ já ensinados. Garrafa é retenção da exposição no texto de funil e junta ga, rra e fa. O primeiro `a` é átono e o segundo é tónico. `fa` recupera a correspondência de girafa/funil, sem antecipar a palavra inteira.
 
 Não ensinar previamente estas palavras inteiras como preparação para o teste. Se uma correspondência necessária faltar, ensiná-la e passar a registar prática apoiada; procurar mais tarde outro item adequado ainda não treinado. Se a criança já conhece uma palavra reservada, essa leitura serve de revisão e não de primeira transferência.
 
@@ -42,7 +52,7 @@ A sílaba tónica de cigarra é `ga`. Manter vogais átonas naturais do portugu�
 1. **Escutar e descobrir**, ecrãs 1–4. Relato ou pergunta, reconhecimento com modelo, três batidas orais e modelação de `ci`. Na escolha do cartão, a resposta é `cigarra`, na posição 3. No oral, observar sem veredicto automático.
 2. **Modelar e recombinar**, ecrãs 5–8. Modelação de `rr`, reconstrução `ci → ga → rra`, primeira leitura das opções e transferência. O recipiente é `jarra`, posição 1. A lacuna pede `cima`, posição 2. O adulto escuta todas as opções antes do toque. Classificar uma escolha por exclusão como reconhecimento, não como leitura demonstrada.
 3. **Ler, escrever e comunicar**, ecrãs 9–12. A frase localiza o inseto `Na janela.`, posição 2. No texto, a menina chama o menino `Para escutar o som.`, posição 3; o som vem da árvore. A criança cria um bilhete, revê e entrega. Reservar aproximadamente dois minutos para cada leitura e seis para criação, revisão e conversa com o destinatário. Aceitar uma mensagem breve com sentido.
-4. **Retomar dois dias depois**, ecrãs 13–16. Antes de abrir modelos, ler as opções; a parte da pata é `garra`, posição 1. Depois apresentar primeiro o cartão `garrafa` e, em ordem variável, `cigarra`, `cima` e `jarra`. A criança lê sem eco do adulto. Ordenar `A → jarra → fica → na → janela.` e ler a frase. Por fim, escrever uma pergunta nova ao destinatário, sem copiar o bilhete.
+4. **Retomar dois dias depois**, ecrãs 13–16. Antes de abrir modelos, ler as opções; a parte da pata é `garra`, posição 1. Depois apresentar primeiro o cartão carro, reservado à primeira leitura diferida, e a seguir garrafa, já exposta no texto de funil e, em ordem variável, `cigarra`, `cima` e `jarra`. A criança lê sem eco do adulto. Ordenar `A → jarra → fica → na → janela.` e ler a frase. Por fim, escrever uma pergunta nova ao destinatário, sem copiar o bilhete.
 
 Nas escolhas e ordenações, a resposta automática verifica o item fechado. A escrita e a oralidade não recebem resposta-padrão nem veredicto. O botão oral declara que houve conversa; não regista a voz nem comprova leitura. O desafio mantém o pedido de base e pede explicação ou aplicação, sem acrescentar código desconhecido.
 

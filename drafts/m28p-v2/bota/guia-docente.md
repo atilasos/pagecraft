@@ -1,5 +1,15 @@
 # Bota: uma palavra para preparar uma saída
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **tubo**, p. 8 (ler-sem-desenho). Leitura nova diferida: **baba**, p. 15 (leitura-observada), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 8: tubo; p. 15: tubo, bata, baba. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: t /t/; u /u/; b /b/; o final /u/; a tónico /a/ e final /ɐ/. Ensino localizado em uva p. 5, bota p. 5. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
 Rascunho de conteúdo da palavra 6/28, para crianças em iniciação à leitura, sobretudo dos 6 aos 7 anos. São 16 ecrãs em quatro sessões de 9, 9, 10 e 8 minutos. A quarta sessão realiza-se noutro dia. O professor ajusta o tempo de conversa, escrita e entrega à turma; uma comunicação que precise de mais tempo continua fora do ecrã. Este percurso não demonstra, por si, domínio da leitura.
 
 ## Decisões propostas para articular M28P e MEM

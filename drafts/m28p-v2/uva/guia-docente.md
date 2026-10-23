@@ -1,6 +1,16 @@
 # Uva, palavra 3 de 28
 
-Rascunho de conteúdo para revisão do professor. Dezasseis ecrãs em quatro sessões de 9, 10, 10 e 8 minutos. A quarta sessão realiza-se 48 a 72 horas depois da comunicação. O agente principal gera o HTML com o motor comum; estes dois ficheiros não publicam uma atividade. Ordem adotada: menina, menino, uva. Na coleção oficial, a palavra 14 é gema; a lista com ovo em fontes anteriores é legado.
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **vivo**, p. 8 (ler-um-cartao-novo). Leitura nova diferida: **aviva**, p. 15 (leitura-oral-diferida), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 8: vivo; p. 15: uva, aviva. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: v /v/; i /i/ tónico; o final /u/; a inicial e final átono /ɐ/. Ensino localizado em menina p. 5, menino p. 4, uva p. 5. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
+Rascunho de conteúdo para revisão do professor. Dezasseis ecrãs em quatro sessões de 9, 10, 10 e 8 minutos. A quarta sessão realiza-se 48 a 72 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. O agente principal gera o HTML com o motor comum; estes dois ficheiros não publicam uma atividade. Ordem adotada: menina, menino, uva. Na coleção oficial, a palavra 14 é gema; a lista com ovo em fontes anteriores é legado.
 
 ## Sentido e decisões pedagógicas
 
@@ -32,7 +42,7 @@ Modele a fusão de v com i e com a, apontando as letras à medida que junta os s
 
 A divisão oral é u-va. O u inicial é tónico, e a primeira sílaba tem uma só letra. O a final é átono e ouve-se habitualmente reduzido em português europeu. Não force a abertura de todas as vogais nem um som único para a letra a. O adulto relaciona a vogal final em fala natural com a sua escrita e retoma a diferença face a um a tónico. Não há rr, ss ou divisão para translineação nesta palavra. Não use voz sintética para fonemas.
 
-Viva e vivi usam v, i e a. A combinação inventada vima usa v, i, m e a. Nenhuma exige uma correspondência de palavra posterior da lista. Em viva e vima, preserve a redução da vogal final. Em vivi, as duas letras i têm o som trabalhado. A interpretação de vivi como forma de viver é explorada oralmente só depois da leitura; a criança não precisa de conhecer a conjugação para tentar decifrar.
+O cartão B é vivo, palavra real com i tónico e o final átono já ensinados. O cartão E passa a aviva, palavra real reservada à leitura diferida; a inicial reduzido vem do ensino em menina. A antiga combinação inventada foi retirada deste conjunto. Não mostrar ou dizer os itens antes da tentativa e explicar o significado depois.
 
 ## Corpus e leitura acompanhada
 
@@ -56,7 +66,7 @@ As instruções também são lidas pelo adulto quando necessário. Em transferê
 5. `modelar-o-som-novo`: cerca de 4 minutos. Faça a modelação descrita acima e retome lacunas anteriores. Observe a relação som-grafema e a fusão, sem pontuar a articulação da criança. Pode interromper e retomar se precisar de mais ensino.
 6. `construir-uma-peca`: cerca de 1 minuto. Ordem v, i; leitura esperada vi. O pedido é construção acompanhada, não transferência. Escute a fusão além de verificar a ordem.
 7. `primeira-combinacao-nova`: cerca de 2 minutos. Item A: diga viva naturalmente. Resposta viva, na primeira posição, entre viva, mina e uva. Não a escreva noutra parte nem leia as opções. Registe primeira resposta e estratégia. Trata-se de reconhecimento entre alternativas por ditado; não equivale a uma observação de leitura autónoma.
-8. `ler-um-cartao-novo`: cerca de 3 minutos. Cartão B: vivi. Apresente só a palavra, sem desenho, modelo oral ou silabário. Registe a leitura exata e se a criança junta vi-vi ou os sons. Depois da tentativa, explore um sentido oral como algo que a pessoa viveu. A resposta oral é analisada pelo professor; o botão apenas declara conversa.
+8. `ler-um-cartao-novo`: cerca de 3 minutos. Cartão B: vivo. Apresente só a palavra, sem desenho, modelo oral ou silabário. Registe a leitura exata e se a criança junta vi-vo ou os sons. Depois da tentativa, explore um sentido oral como alguém que está vivo. A resposta oral é analisada pelo professor; o botão apenas declara conversa.
 
 ### Sessão 3, ler, escrever e comunicar, 10 minutos
 
@@ -70,9 +80,9 @@ As instruções também são lidas pelo adulto quando necessário. Em transferê
 
 Realize-a 48 a 72 horas depois da entrega. Abra diretamente a revisão, retire materiais e não releia páginas anteriores antes da primeira tentativa. A aplicação pode manter respostas locais; numa segunda aplicação dos mesmos itens, a observação já não é de uma primeira tentativa. Use nova realização ou papel limpo, sem apagar evidências anteriores.
 
-14. `reconhecer-depois-do-intervalo`: cerca de 2 minutos. Item C: diga uva naturalmente. Resposta uva, na terceira posição. A escrita só aparece entre alternativas. Registe reconhecimento e explicação, sem inferir leitura autónoma.
-15. `leitura-oral-diferida`: cerca de 4 minutos. É o jogo do cartão inventado, acompanhado pelo adulto para observar a fusão do código ensinado. Cartão D: uva, para retenção; cartão E: vima, combinação inventada nova, para generalização. Mostre um de cada vez e não os diga. Explique apenas que uma combinação é inventada e não precisa de significado. Em vima espera-se a fusão coerente de v-i-m-a com a pronúncia natural do a final átono. Registe como a criança leu, incluindo autocorreções. Não exigir uma palavra real em substituição. Se houver modelação depois da tentativa, registe-a e marque outra oportunidade futura com item novo.
-16. `escrever-sem-cartao`: cerca de 2 minutos. Item F: diga viva, depois de retirar todos os cartões. É uma palavra já encontrada, usada agora em escrita por ditado diferida. Preserve a primeira produção e peça que a criança leia o que escreveu. A escrita convencional esperada é viva; escritas emergentes não recebem um veredicto automático. Se precisar, modele depois e combine uma retoma concreta.
+14. `reconhecer-depois-do-intervalo`, cerca de 2 minutos. Dizer uva e observar a escolha, sem ler as opções. É reconhecimento por ditado, não primeira leitura inédita.
+15. `leitura-oral-diferida`, cerca de 4 minutos. Apresentar uva para retenção e aviva para primeira leitura diferida, em cartões separados. Aviva é forma de avivar, por exemplo tornar uma cor mais viva. Requer a inicial reduzido, v/i e a final já modelados. Explicar o sentido depois de recolher a tentativa. Não há pseudopalavra nesta revisão.
+16. `escrever-sem-cartao`, cerca de 2 minutos. Retirar os cartões e ditar viva, sem soletrar. A criança escreve em papel ou escolhe letras móveis; conservar a tentativa antes da comparação. Registar qualquer transcrição pelo adulto separadamente da codificação pela criança.
 
 ## Pistas e diferenciação
 

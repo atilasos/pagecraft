@@ -31,6 +31,8 @@ def test_every_real_journey_accepts_answers_and_restores_without_attempts(page, 
     page.on('pageerror', lambda error: errors.append(str(error)))
     page.add_init_script("window.observed=[]; window.addEventListener('message',e=>{if(e.data?.pagecraft===1)window.observed.push(e.data)});")
     page.goto(f'{journey_origin}/drafts/m28p-v2/{slug}/m28p-v2-{slug}.html')
+    assert page.locator('#prerequisites').count() == 0
+    assert page.locator('#phonology-notes').count() == 0
     page.locator('#start').click()
     for index, item in enumerate(data['pages']):
         assert page.locator('#stage-select').input_value() == str(index)

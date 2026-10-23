@@ -1,5 +1,15 @@
 # Janela: guia docente do percurso 9/28
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **pano**, p. 8 (um-cartao-novo). Leitura nova diferida: **jato**, p. 15 (ouvir-a-leitura-de-hoje), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 8: pano; p. 15: jato, pano, janela. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: p /p/; n /n/; j /ʒ/; t /t/; a tónico /a/; o final /u/. Ensino localizado em sapato p. 4, janela p. 4, janela p. 5. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
 Proposta para crianças de 6–7 anos, ajustada pela observação do professor. São 16 ecrãs em quatro sessões de 8, 9, 10 e 9 minutos. A quarta sessão realiza-se no dia seguinte ou após 48 horas. As durações são referências; interrompa e retome quando a criança precisar. Concluir páginas, escolher uma opção ou declarar uma conversa não demonstra domínio da leitura.
 
 Este agente fornece apenas conteúdo e guia. A geração de HTML/DocSpec, a avaliação do motor e a integração em main pertencem ao agente coordenador. Não houve publicação, alteração de catálogo nem ensaio no browser neste trabalho.
@@ -34,7 +44,7 @@ Retome casa com s intervocálico /z/. Em leque, qu representa /k/ e o u não se 
 A autonomia é uma observação por item, nunca uma propriedade atribuída à lista inteira.
 
 - Leitura ensinada: janela; canela como recombinação modelada; papa como exemplo vocálico; pequenas palavras A/a, é, da.
-- Transferência sem modelo inteiro prévio: panela no ecrã 7, combinando pa com ne/la; pano no cartão do ecrã 8, combinando pa de sapato e no de menino. Não nomeie estas palavras antes dessas tentativas. Em panela, o a inicial é átono e ne é tónico; em pano, pa é tónico e o o final reduz-se. Se for necessário modelar após a tentativa, classifique a releitura como acompanhada. Reserve ainda pato, com pa/to de sapato, para uma transferência nova na revisão diferida; não o modele inteiro antes desse momento.
+- Transferência sem modelo inteiro prévio: panela no ecrã 7, combinando pa com ne/la; pano no cartão do ecrã 8, combinando pa de sapato e no de menino. Não nomeie estas palavras antes dessas tentativas. Em panela, o a inicial é átono e ne é tónico; em pano, pa é tónico e o o final reduz-se. Se for necessário modelar após a tentativa, classifique a releitura como acompanhada. Reserve jato para a revisão diferida. Usa j /ʒ/, a tónico, t e o final /u/ já ensinados. Pato é retenção de sapato/leque e não novidade.
 - Frase potencialmente autónoma após o ensino: «A panela é da menina.» Se o adulto precisar de ler a frase, a escolha informa sobre compreensão de texto ouvido, e isso deve ficar registado.
 - Pequeno texto expressamente acompanhado: «A menina espreita pela janela. O menino mostra um leque no recreio. A menina faz-lhe sinal para entrar.» O adulto lê o texto integral e convida a criança a ler apenas as palavras ao seu alcance. Não pressupor espreita, pela, mostra, recreio ou faz-lhe decifráveis. A compreensão desta história não é uma prova de leitura autónoma.
 - Mensagem própria: o vocabulário depende do que a criança observou. O adulto ajuda nas palavras ainda não ensinadas e identifica essa intervenção. Não se força a criança a escrever apenas com o repertório das palavras-chave.
@@ -58,7 +68,7 @@ As escolhas e a ordenação têm respostas fechadas. Não confundir esses acerto
 - Ecrã 9, uma-frase-com-dono: da menina, primeira opção. A criança pode apontar «da menina» na frase para justificar.
 - Ecrã 10, um-sinal-do-outro-lado: um leque, segunda opção. Na conversa complementar, o sinal destina-se ao menino. Uma resposta sobre o motivo deve ser sustentada no texto, sem exigir palavras exatas.
 - Ecrã 14, voltar-a-ler-sem-modelo: janela, primeira opção. Escolha com observação da leitura, não prova isolada.
-- Ecrã 15, ouvir-a-leitura-de-hoje: cartões separados «pato», «pano», «janela», nesta ordem. A primeira é uma recombinação nova; a segunda retoma um item da sessão 2; a terceira pode beneficiar da exposição na escolha anterior, o que deve ser anotado.
+- Ecrã 15, ouvir-a-leitura-de-hoje: cartões jato, pano e janela. Jato é primeira leitura diferida, pano é retenção e janela teve exposição recente na escolha anterior. Registar cada condição antes de ajudar.
 - Ecrã 16, da-voz-para-o-papel: dite «janela», naturalmente, com cartões e recado ocultos. A grafia convencional é referência para a conversa posterior, sem veredicto automático nem apagamento da tentativa inicial.
 
 Nos ecrãs abertos e orais, registe a produção concreta e o apoio. Não atribua uma resposta automática certa à narrativa, ao recado, à revisão ou à comunicação.

@@ -1,12 +1,22 @@
 # Flor, palavra 28 de 28
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **florir**, p. 8 (cartoes-reservados). Leitura nova diferida: **floreira**, p. 15 (outras-palavras-outro-dia), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 8: florir, fila; p. 15: floreira, fada. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: encontro fl /fl/; o átono /u/; r intervocálico /ɾ/ e final; i /i/; ei como ditongo; a final /ɐ/. Ensino localizado em bandeira p. 5, flor p. 4, flor p. 5. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
 Rascunho de conteúdo para o motor comum. Dezasseis ecrãs, quatro sessões de nove minutos, destinados a crianças em iniciação ou consolidação da leitura, habitualmente dos 6 aos 7 anos. A quarta sessão acontece dois dias depois da terceira, com os materiais anteriores retirados na revisão. As durações são propostas: se a criança precisar de mais tempo, distribua o trabalho por outros momentos. Chegar à última palavra da coleção não demonstra domínio da leitura.
 
 ## Preparação e materiais
 
 Prepare uma flor disponível na sala ou no recreio, ou uma fotografia de uma flor da escola, sem pedir que a criança a colha. Disponibilize o cartão flor, letras móveis f, l, o, r, cartões de partes já ensinadas, papel, lápis e as duas versões do convite. Combine com o titular um lugar e um momento possíveis para a observação com um colega. Se não houver flor acessível, combine a observação da fotografia e diga isso às crianças.
 
-Prepare em separado quatro cartões de reserva, apenas com texto, sem imagem, divisão silábica, cor semântica ou modelo. Não os deixe visíveis antes das páginas indicadas. Não acrescente áudio dos itens. A instrução pode ser lida pelo adulto; os sons são sempre modelados por voz humana nas páginas de ensino.
+Prepare em separado quatro cartões de leitura, com florir e floreira reservados e fila/fada para retenção, apenas com texto, sem imagem, divisão silábica, cor semântica ou modelo. Não os deixe visíveis antes das páginas indicadas. Não acrescente áudio dos itens. A instrução pode ser lida pelo adulto; os sons são sempre modelados por voz humana nas páginas de ensino.
 
 Apresente os critérios à criança e recolha a sua proposta de destinatário e de observação. Nos grupos, cada criança tem uma primeira tentativa própria, recolhida antes de o par falar. Uma resposta conjunta não mostra o que cada participante consegue ler.
 
@@ -16,7 +26,7 @@ Esta versão segue a ordem pedida: menina, menino, uva, dedo, sapato, bota, lequ
 
 O repertório anterior é uma hipótese a confirmar por criança. A montagem cumulativa usa fi, ensinado aqui juntando f de funil ao i tónico de menina, e ta de bota. Funil divide-se oralmente em fu-nil e não contém a sílaba fi. Para os itens inéditos, confirmam-se ainda la de janela, fa de girafa, da de escada, o r intervocálico e o ditongo ei de bandeira. Não basta a criança reconhecer as palavras inteiras: verifique a leitura das partes que serão recombinadas. Se faltarem correspondências, ensine-as e adie a observação sem ajuda.
 
-O corpus de modelação desta palavra é flor, florido e bandeira. Fita é uma montagem guiada, com ordem indicada; não conta como transferência sem modelo. As novas leituras reservadas são flora na escolha, florir e fila nos cartões da sessão 2, floreira e fada na revisão diferida. Estes itens não devem aparecer em exemplos, títulos, prompts, cartazes ou leitura do adulto antes da tentativa. O guia é material docente, não um modelo para a criança.
+O corpus de modelação desta palavra é flor, florido e bandeira. Fita é uma montagem guiada, com ordem indicada; não conta como transferência sem modelo. As reservas novas são florir nos cartões da sessão 2 e floreira na revisão diferida. Flora aparece antes na escolha. Fila é retenção de funil e fada é retenção de girafa; não são inéditas. Estes itens não devem aparecer em exemplos, títulos, prompts, cartazes ou leitura do adulto antes da tentativa. O guia é material docente, não um modelo para a criança.
 
 O corpus autónomo condicional inclui apenas as palavras anteriores e correspondências efetivamente observadas, mais as novas correspondências ensinadas aqui. Ser uma palavra da lista não lhe confere automaticamente esse estatuto. Flora é vocabulário pouco frequente: observe a decifração antes de explicar que designa o conjunto de plantas de um lugar. Explique florir ou floreira depois de observar a leitura, se a criança ainda não conhecer o significado. Desconhecimento do significado não equivale a incapacidade de decifrar.
 
@@ -42,7 +52,7 @@ Na sessão 2, use cerca de três minutos na comparação de flor e florido e na 
 
 Na sessão 3, use cerca de um minuto e meio na frase, dois e meio no pequeno texto, três na primeira escrita e dois na revisão. A criança escreve um convite ao colega que escolheu para observar uma flor, indicando lugar e momento possíveis e identificando o autor. Pode escrever de modo emergente, a par ou ditar ao adulto; discrimine a autoria gráfica e a autoria da mensagem. Não dê um convite para copiar. O par diz o que percebeu e o autor decide se altera algo. Guardam-se a versão inicial e a final, ou a razão para a manter. O adulto prepara a cópia para entregar sem substituir o texto da criança por um modelo.
 
-Na sessão 4, dois dias depois, reserve dois minutos à entrega e resposta do destinatário, um à escolha de revisão, três aos novos cartões e três à nova mensagem. Em outras-palavras-outro-dia, apresente floreira e fada, um de cada vez. Não tinham sido mostradas antes. Floreira articula o encontro /fl/, a vogal átona e ei retomados; fada verifica a recombinação fa/da com a mudança de tonicidade. Observe antes de ensinar. A última escrita é uma mensagem nova ao mesmo colega sobre algo que a criança quer observar; não é cópia do convite. Entregue-a também e combine a observação real com ambos. Se o colega estiver ausente, registe a comunicação como pendente e retome-a quando estiver presente; o adulto não simula a resposta do destinatário.
+Na sessão 4, dois dias depois, reserve dois minutos à entrega e resposta do destinatário, um à escolha de revisão, três aos cartões de revisão e três à nova mensagem. Em outras-palavras-outro-dia, apresente floreira e fada, um de cada vez. Floreira é a reserva nova; fada já foi apresentada em girafa e verifica retenção. Floreira articula o encontro /fl/, a vogal átona e ei retomados; fada verifica a recombinação fa/da com a mudança de tonicidade. Observe antes de ensinar. A última escrita é uma mensagem nova ao mesmo colega sobre algo que a criança quer observar; não é cópia do convite. Entregue-a também e combine a observação real com ambos. Se o colega estiver ausente, registe a comunicação como pendente e retome-a quando estiver presente; o adulto não simula a resposta do destinatário.
 
 ## Respostas verificáveis e evidência humana
 

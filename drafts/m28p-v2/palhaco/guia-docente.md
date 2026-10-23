@@ -1,5 +1,15 @@
 # Palavra 18: palhaço
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **laço**, p. 8 (ler-para-escolher). Leitura nova diferida: **malha**, p. 16 (ler-e-decidir-a-retoma), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 9: palha; p. 16: palhaço, laço, malha. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: l /l/; m /m/; lh /ʎ/; ç antes de o /s/; o final /u/; a tónico /a/ e final /ɐ/. Ensino localizado em menina p. 6, leque p. 4, telhado p. 4, palhaco p. 4. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
 Proposta para revisão do professor. São 16 ecrãs em quatro sessões de 10, 9, 10 e 10 minutos. A quarta sessão acontece pelo menos no dia seguinte à terceira. Completar as páginas não comprova domínio da leitura. O registo oral é uma declaração de conversa, sem reconhecimento de voz ou avaliação automática. A escrita aberta também não recebe veredicto automático.
 
 ## Preparação e materiais

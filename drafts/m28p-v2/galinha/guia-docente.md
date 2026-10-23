@@ -1,5 +1,15 @@
 # Acompanhar o percurso de galinha
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **gato**, p. 8 (primeira-leitura-sem-cartao). Leitura nova diferida: **gata**, p. 16 (ler-a-um-adulto-noutro-dia), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 16: galinha, gato, gata. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: g antes de a /g/; t /t/; a tónico /a/ e final /ɐ/; o final /u/. Ensino localizado em bota p. 5, galinha p. 5. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
 Este rascunho trabalha a palavra 13, galinha, em 16 ecrãs e quatro sessões de 8, 10, 10 e 10 minutos. Usa a sequência nova, com gema na posição 14. Ovo pertence à variante legada e não é pré-requisito. A conclusão das páginas não comprova domínio. Use a leitura ouvida, a escrita e os apoios efetivamente prestados para decidir a continuação.
 
 ## Preparar materiais e destinatário

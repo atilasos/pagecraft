@@ -1,5 +1,15 @@
 # Leque, palavra 7 de 28
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **lupa**, p. 8 (outra-palavra). Leitura nova diferida: **lata**, p. 15 (retomar-leitura-oral), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 15: lata. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: l /l/; u /u/; p /p/; t /t/; a tónico /a/ e final /ɐ/. Ensino localizado em bota p. 5, leque p. 4. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
 Rascunho original para revisão do professor. São 16 ecrãs em quatro sessões de 9 minutos, para iniciação à leitura no 1.º ano, habitualmente aos 6–7 anos. O percurso parte de um objeto experimentado, trabalha palavra inteira, análise oral e código explícito, e termina num convite entregue a um colega. A quarta sessão decorre 24 a 48 horas depois da terceira. O tempo é indicativo; uma criança pode precisar de nova modelação antes de prosseguir.
 
 ## Enquadramento e limites
@@ -43,7 +53,7 @@ Na análise oral, le-que corresponde a dois impulsos silábicos, mesmo quando a 
 
 5. Ecrã 5, cerca de 3 minutos. Modelação de qu e do e final, depois de to com o aberto. A criança aponta, experimenta e explica. Se for demasiado para este tempo, interrompa e retome noutra ocasião.
 6. Ecrã 6, cerca de 1 minuto. Reconstruir le + que. A sequência apresentada é que, le; a esperada é le, que. A palavra foi treinada, por isso esta montagem não é evidência de transferência.
-7. Ecrã 7, cerca de 3 minutos. Juntar to + que e ler toque sem imagem nem palavra-modelo. Ordenar duas peças pode resultar de tentativa; a sequência correta não demonstra decifração. Ouça a leitura antes de confirmar e, só depois, explique o significado com um toque na mesa. Registe o valor dado ao o e a leitura de qu. As peças já foram ensinadas; a combinação inteira é nova.
+7. Ecrã 7, cerca de 3 minutos. Juntar to + que e ler toque sem imagem nem palavra-modelo. Ordenar duas peças pode resultar de tentativa; a sequência correta não demonstra decifração. Ouça a leitura antes de confirmar e, só depois, explique o significado com um toque na mesa. Registe o valor dado ao o e a leitura de qu. As peças já foram ensinadas; toque já apareceu numa instrução em dedo e aqui verifica recombinação/retensão, sem reserva inédita.
 8. Ecrã 8, cerca de 2 minutos. Ler e escolher lupa, posição 1. O adulto lê a instrução, mas não as opções. Peça leitura e explicação antes do clique. Lupa é combinação nova de partes ensinadas; pato e bota são alternativas cumulativas. Se a criança não souber o que é uma lupa, diferencie desconhecimento lexical e dificuldade de leitura; explique depois da primeira tentativa.
 
 ### Sessão 3, compreender e escrever, 9 minutos
@@ -66,7 +76,7 @@ As durações incluem acompanhamento breve, não a construção de um leque comp
 
 ## Corpus e limites da leitura autónoma
 
-O corpus de trabalho explícito inclui leque e as partes le, que, la, lu, pa, to e ta. O corpus de transferência reserva toque e lupa à primeira leitura sem palavra-modelo. A revisão retoma leque e inclui lata e pala, sem os treinar previamente. Se já forem familiares à criança por outro percurso, assinale-o e use a observação como leitura cumulativa; não declare novidade comprovada.
+O corpus de trabalho explícito inclui leque e as partes le, que, la, lu, pa, to e ta. A reserva inicial controlada é lupa. Toque é recombinação de unidades ensinadas, com exposição escrita anterior em instruções. A revisão retoma leque e inclui lata e pala, sem os treinar previamente. Se já forem familiares à criança por outro percurso, assinale-o e use a observação como leitura cumulativa; não declare novidade comprovada.
 
 Os ecrãs 9 e 10 são textos ricos para leitura acompanhada. O adulto lê frase, narrativa, palavras funcionais, formas verbais, pontuação e vocabulário ainda não decifrável. Avó/à, leva, recreio, mostrou, abriu-o, fez, devolveu-o, pessoa e usar não são exigências de leitura autónoma neste percurso. A criança pode localizar menina e leque e colaborar onde tiver conhecimento disponível. A compreensão oral de um texto lido pelo adulto é evidência válida, mas diferente de compreender um texto decifrado de modo autónomo.
 

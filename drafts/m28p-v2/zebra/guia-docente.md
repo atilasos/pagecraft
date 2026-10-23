@@ -1,5 +1,15 @@
 # Zebra, palavra 19 de 28
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **brasa**, p. 9 (primeira-leitura-nova). Leitura nova diferida: **brita**, p. 16 (leitura-observada), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 10: brava; p. 16: brita, zebra, brasa, brava. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: encontro br /bɾ/ sem vogal inserida; s intervocálico /z/; t /t/; i /i/; a tónico /a/ e final /ɐ/. Ensino localizado em menina p. 5, bota p. 5, casa p. 5, zebra p. 6. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
 Percurso de 16 ecrãs para crianças de 6–7 anos, organizado em quatro sessões de 8, 10, 10 e 8 minutos. A quarta sessão ocorre 24 a 72 horas depois da terceira. A duração é uma proposta de gestão da atenção; se faltar tempo para observar uma criança, retome o trabalho sem apressar a leitura para concluir páginas.
 
 Este rascunho fornece conteúdo ao motor comum. Não publica atividades, não altera o catálogo e não certifica aprendizagem por conclusão. Escolhas e ordenações têm critérios fechados; escrita aberta e declarações orais exigem observação humana e não recebem veredicto automático.
@@ -8,7 +18,7 @@ Este rascunho fornece conteúdo ao motor comum. Não publica atividades, não al
 
 Disponibilize um livro com uma zebra, cartão com a palavra inteira, fichas para marcar sílabas, papel, lápis e cartões de palavras guardados fora da vista. Não é necessária experiência de visita ao jardim zoológico. A criança pode recordar um livro, filme ou conversa; se não conhecer o animal, conversem primeiro a partir de uma imagem do livro.
 
-Prepare cartões separados com `brava` para a transferência e com `zebra`, `brasa` e `brava` para a revisão. Os cartões de transferência e revisão têm apenas uma palavra em minúsculas, sem desenho, cor indicadora, divisão silábica ou outra palavra como modelo. Não os mostre antes da tarefa respetiva. Retire também o cartão de reconhecimento e quaisquer legendas que possam servir de resposta.
+Prepare cartões separados com `brava` para a transferência e com `brita`, `zebra`, `brasa` e `brava` para a revisão. Os cartões de transferência e revisão têm apenas uma palavra em minúsculas, sem desenho, cor indicadora, divisão silábica ou outra palavra como modelo. Não os mostre antes da tarefa respetiva. Retire também o cartão de reconhecimento e quaisquer legendas que possam servir de resposta.
 
 Combine um destinatário pelo nome: a pessoa responsável pela biblioteca da turma ou da escola. Essa pessoa deve poder receber uma pergunta real e responder, oralmente ou por escrito. A pergunta parte de uma curiosidade da criança. Combine a entrega em mão no fim da terceira sessão e reserve uma oportunidade posterior para ouvir a resposta. Se a pessoa estiver ausente, registe a entrega como pendente e conclua-a depois; clicar na declaração oral não comprova a entrega.
 
@@ -20,7 +30,7 @@ Antes de começar, observe sobretudo casa, palhaço e uva. A recombinação recu
 
 Verifique oralmente o significado de brasa e brava, sem apresentar a escrita e sem ligar uma figura às futuras opções. Pode conversar sobre calor numa lareira e sobre uma pessoa zangada. Não pressuponha familiaridade com a palavra brasa. A falta de vocabulário oral deve ser distinguida de uma dificuldade para ler a grafia.
 
-Depois do ensino, zebra e braço integram o corpus para tentativa autónoma. Braço é modelado nos ecrãs 6 e 8, pelo que a sua leitura aí não conta como transferência. Brasa aparece pela primeira vez escrita no ecrã 9; brava, num cartão no ecrã 10. São duas recombinações novas a observar antes de ajudar. No ecrã 9, o adulto escuta todas as opções antes de a criança clicar. Em grupo, preserve as tentativas individuais antes de discutir a resposta.
+Depois do ensino, zebra e braço integram o corpus para tentativa autónoma. Braço é modelado nos ecrãs 6 e 8, pelo que a sua leitura aí não conta como transferência. Brita fica reservada à página 16, com br já modelado, i tónico de menina e ta final de bota. Brasa aparece pela primeira vez escrita no ecrã 9; brava, num cartão no ecrã 10. São duas recombinações novas a observar antes de ajudar. No ecrã 9, o adulto escuta todas as opções antes de a criança clicar. Em grupo, preserve as tentativas individuais antes de discutir a resposta.
 
 Na frase “A menina vê a zebra.”, os nomes retomam o corpus. Os artigos e vê podem requerer leitura do adulto ou ensino prévio, a registar. A compreensão obtida após leitura adulta é compreensão oral; não a apresente como decifração autónoma de toda a frase.
 
@@ -42,7 +52,7 @@ Use a própria voz. Não use TTS para ensinar fonemas. Os símbolos fonéticos s
 - Sessão 1, ecrãs 1–4, 8 minutos. Reserve cerca de dois minutos para cada momento: experiência oral, reconhecimento com modelo, explicação da estratégia e segmentação oral. Registe uma frase da criança e uma curiosidade que possa alimentar a pergunta posterior.
 - Sessão 2, ecrãs 5–8, 10 minutos. Dedique cerca de três minutos a cada modelação, dois à reconstrução e dois à recombinação. A escrita acompanha a voz humana. Se a criança acrescentar uma vogal em br, volte a modelar antes de pedir nova montagem.
 - Sessão 3, ecrãs 9–14, 10 minutos. Preveja um minuto para cada transferência, um para a frase, dois para o texto, três para a pergunta e dois para revisão e entrega. O adulto lê o texto rico. A pergunta pode ter apenas uma frase ou ser ditada; preserve o tempo para a criança escolher o que quer comunicar. Registe entrega pendente se for preciso esperar pelo destinatário.
-- Sessão 4, ecrãs 15–16, 8 minutos, após 24 a 72 horas. Sem reler modelos antes, use cerca de dois minutos para as opções, quatro para os três cartões e dois para conversar sobre as estratégias e a mensagem enviada. A autoavaliação facultativa do motor pode apoiar essa conversa. Se o destinatário ainda não respondeu, retomem a resposta quando chegar.
+- Sessão 4, ecrãs 15–16, 8 minutos, após 24 a 72 horas. Sem reler modelos antes, use cerca de dois minutos para as opções, quatro para os quatro cartões e dois para conversar sobre as estratégias e a mensagem enviada. A autoavaliação facultativa do motor pode apoiar essa conversa. Se o destinatário ainda não respondeu, retomem a resposta quando chegar.
 
 As pistas foram escritas por tarefa, em formulações individuais e de grupo. Nas primeiras tentativas de transferência e revisão, mantenha-as ocultas conforme o motor. Uma pista pedida depois da primeira tentativa deve ficar identificada na interpretação docente. Não transforme o uso de pistas em classificação pessoal. Os desafios acrescentam explicação, conservando a resposta de base.
 
@@ -57,7 +67,7 @@ As pistas foram escritas por tarefa, em formulações individuais e de grupo. Na
 
 No ecrã 4, espere oralmente ze-bra, duas sílabas. No ecrã 10, observe a primeira leitura de brava e uma frase coerente com o seu sentido. No ecrã 12, uma resposta sustentada indica que queriam descobrir onde vivia o animal. Aceite palavras diferentes com esse significado e uma referência à última frase. O desafio permite propor consultar outro livro ou perguntar a alguém, sem impor uma formulação única.
 
-A escrita do ecrã 13 não tem frase-modelo nem solução única. No ecrã 14, o colega devolve o que entendeu e o autor decide se revê. No ecrã 16, observe zebra, brasa e brava em cartões isolados. Não dite estas palavras antes da tentativa nem dê confirmação pelo movimento da boca. Respostas orais e abertas permanecem sem veredicto automático.
+A escrita do ecrã 13 não tem frase-modelo nem solução única. No ecrã 14, o colega devolve o que entendeu e o autor decide se revê. No ecrã 16, observe brita, zebra, brasa e brava em cartões isolados. Brita é primeira leitura diferida; depois explicar o material de pedra triturada. A [Infopédia, brita](https://www.infopedia.pt/dicionarios/lingua-portuguesa/brita) regista i tónico e a final reduzido. Não dite estas palavras antes da tentativa nem dê confirmação pelo movimento da boca. Respostas orais e abertas permanecem sem veredicto automático.
 
 ## Observar e decidir a retoma
 

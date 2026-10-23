@@ -1,6 +1,18 @@
 # Peixe, palavra 25 de 28
 
-Rascunho de conteúdo com 15 ecrãs, para o motor comum. Quatro sessões de 9, 9, 10 e 9 minutos. A quarta sessão ocorre 24 a 48 horas depois da terceira, sem mostrar primeiro o cartão modelo. Os tempos são propostas: se a criança precisar de mais tempo, divida a sessão e registe a pausa. Os desafios são facultativos.
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **peixinho**, p. 7 (cartao-sem-ajuda). Leitura nova diferida: **peixada**, p. 14 (voltar-a-ler), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 7: peixinho; p. 15: peixe, peixinho. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: p /p/; ei como ditongo; x /ʃ/; i tónico /i/; nh /ɲ/; d /d/; a tónico /a/ e final /ɐ/; o final /u/. Ensino localizado em menina p. 5, dedo p. 5, galinha p. 6, peixe p. 4. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
+A página 16, escrever-sem-modelo, recolhe uma tentativa breve da escrita de peixe por ditado, com cartões e ecrã ocultos, em papel ou letras móveis. Conservar a tentativa e a ajuda; se o adulto escolher todas as letras, registar codificação não observada. Esta observação completa as 16 páginas e não altera a narrativa nem a mensagem própria.
+
+Rascunho de conteúdo com 16 ecrãs, para o motor comum. Mantêm-se as sessões curtas, com a quarta 24 a 48 horas depois da terceira. A última página acrescenta observação da codificação pela criança, separada da mensagem que pode ser ditada ao adulto. Se for necessário, continuar em papel sem apressar a criança.
 
 O percurso parte da experiência oral, passa pelo reconhecimento global, pela análise e modelação explícita do código e chega à leitura de combinações novas, compreensão, escrita e comunicação. Terminar os ecrãs não comprova domínio. Registe o que cada criança fez, o apoio recebido e as decisões de retoma.
 

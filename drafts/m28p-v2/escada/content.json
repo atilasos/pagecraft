@@ -12,7 +12,7 @@
     "Posição 11 da sequência atual: menina, menino, uva, dedo, sapato, bota, leque, casa, janela e telhado foram apresentados antes. Confirmar o repertório de cada criança; exposição não equivale a leitura autónoma. A palavra 14 será gema; ovo pertence à sequência legada.",
     "Corpus cumulativo de partida: palavras anteriores reconhecidas e sílabas orais me, ni, na, no, u, va, de, do, sa, pa, to, bo, ta, le, que, ca, ja, ne, la, te, lha. Para as recombinações deste percurso mobilizam-se sobretudo ca de casa, sa e pa de sapato, to de sapato, la de janela e ta de bota. Não tratar sílabas isoladas como sons invariáveis.",
     "Antes da transferência, o adulto modela es com s antes de c surdo, c + a como /k/ e d + a, incluindo a átono final. Retoma /p/, /t/, /l/ e /s/ inicial, com a tónico em pa, sa e la e a átono final em ca, pa e ta. São correspondências/realizações explicitamente ensinadas neste percurso, não deduzidas do nome das letras.",
-    "Corpus de tentativa autónoma após essa modelação: escada e pato, já trabalhados; capa e saca, palavras novas na transferência; lata, palavra nova reservada à revisão. Confirmar que estes itens não foram apresentados como palavras inteiras antes da respetiva primeira leitura; caso contrário, registar como releitura e não como generalização.",
+    "Escada, pato, capa, saca e lata são retomadas do corpus anterior, não novidades garantidas. Reservar calada para a primeira leitura no ecrã 9 e salada para a transferência diferida no ecrã 16. Confirmar c /k/, s inicial /s/, l/d e a tónico/átono antes da observação. Se um item reservado já tiver sido ensinado fora da coleção, identificar a leitura como retenção e selecionar outro item com código conhecido.",
     "A frase com alta e o pequeno texto com caixa, está, molhada, pede e ajuda são de leitura acompanhada. Artigos, preposições, flexões e correspondências não confirmadas no repertório são lidos pelo adulto nessas páginas. A criança lê menina e escada se o conseguir; compreender um texto ouvido não prova decifração."
   ],
   "assistedReading": "O adulto lê os pedidos e as pistas quando necessário, sem nomear a alternativa correta. As páginas de compreensão assinalam leitura acompanhada. Em transferência e revisão retira imagens e cartões-modelo, não lê nem segmenta os itens pela criança, não usa TTS e regista o que ouve antes de oferecer ajuda. O guia contém os cartões para as provas orais; mostrá-los escritos, nunca ditá-los. Texto aberto e declaração oral não recebem veredicto automático.",
@@ -241,8 +241,9 @@
         "casa"
       ],
       "answer": "capa",
-      "adultPrompt": "Retire desenhos e modelos. A primeira opção é uma combinação nova de ca e pa, ainda não apresentada como palavra inteira. Peça a leitura das três opções antes da escolha, sem as ler nem segmentar. Registe leitura, autocorreção, ajuda e eventual escolha pelo sentido sem leitura. Só ofereça pistas depois da primeira resposta. A escolha automática observa uma relação de significado entre alternativas, não certifica leitura autónoma.",
-      "challenge": "Explica o sentido da opção que escolheste."
+      "adultPrompt": "Retire desenhos e modelos. Capa já foi apresentada em casa e esta página verifica retenção. Peça a leitura das três opções antes da escolha, sem as ler nem segmentar. Registe leitura, autocorreção, ajuda e escolha pelo sentido separadamente. Só ofereça pistas depois da tentativa.",
+      "challenge": "Explica o sentido da opção que escolheste.",
+      "criterion": "O adulto observa leitura de itens já apresentados e distingue-a da escolha por significado."
     },
     {
       "id": "cartao-inesperado",
@@ -261,7 +262,7 @@
           "group": "Juntem as partes e conversem sobre o sentido depois das leituras individuais."
         }
       ],
-      "adultPrompt": "Prepare fora do ecrã um cartão sem imagem com saca, conforme o guia. Não o leia nem diga sílabas. Apresente-o sem outros modelos e registe a primeira leitura de cada criança e o sentido que lhe atribui. Se precisar de uma pista ou de modelação posterior, registe como leitura apoiada. O botão só declara conversa; não avalia pronúncia. Não use TTS.",
+      "adultPrompt": "Prepare em privado cartões separados com calada. Mostre um de cada vez, sem imagens, divisão silábica ou segundo exemplar de comparação. Não leia, não dite nem dê o primeiro som antes da tentativa individual. Registe leitura literal, fusão, autocorreção e ajuda antes de corrigir. Só depois converse sobre o significado. A declaração digital não observa nem valida a descodificação. O item reservado para primeira leitura é calada.",
       "criterion": "Tento ler uma combinação nova sem ouvir a palavra primeiro.",
       "challenge": "Diz se esta palavra te lembra algum objeto ou uso."
     },
@@ -406,7 +407,7 @@
         "dedo"
       ],
       "answer": "lata",
-      "adultPrompt": "Realize 24 a 48 horas após a comunicação. Retire modelos e imagens. Esta combinação de la e ta ainda não foi apresentada como palavra inteira neste percurso. Não leia opções nem sugira pela entoação. Peça leitura oral de todas e registe antes do clique. Pistas apenas depois da primeira resposta; se intervier, assinale leitura apoiada. Um acerto de escolha não basta para concluir que lê.",
+      "adultPrompt": "Realize 24 a 48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. Retire modelos e imagens. Esta combinação de la e ta ainda não foi apresentada como palavra inteira neste percurso. Não leia opções nem sugira pela entoação. Peça leitura oral de todas e registe antes do clique. Pistas apenas depois da primeira resposta; se intervier, assinale leitura apoiada. Um acerto de escolha não basta para concluir que lê.",
       "challenge": "Explica o que te ajudou a ler sem o cartão antigo."
     },
     {
@@ -415,7 +416,7 @@
       "phase": "review",
       "type": "oral",
       "title": "O adulto escuta a tua leitura",
-      "prompt": "Lê os cartões e conta como fizeste.",
+      "prompt": "Lê os cartões. Depois tenta escrever o que ouvires, sem copiar.",
       "hints": [
         {
           "individual": "Lê primeiro o cartão todo, no teu tempo.",
@@ -426,8 +427,8 @@
           "group": "Se alguém parar, deixem-no indicar onde precisa de juntar outra vez."
         }
       ],
-      "adultPrompt": "Na mesma retoma diferida, apresente individualmente cartões sem imagem com escada, capa e saca, numa ordem diferente para cada criança. As palavras ficam só nos cartões, sem modelo oral ou duplicação no ecrã. Não leia pela criança. Registe resposta literal, autocorreção, ajuda e uma explicação do sentido; o botão apenas declara conversa. Compare com os registos anteriores e combine a retoma com a criança, sem declarar domínio por páginas concluídas.",
-      "criterion": "Volto a tentar ler sem imagem e explico a ajuda de que preciso.",
+      "adultPrompt": "Prepare em privado cartões separados com salada, escada, capa, saca. Mostre um de cada vez, sem imagens, divisão silábica ou segundo exemplar de comparação. Não leia, não dite nem dê o primeiro som antes da tentativa individual. Registe leitura literal, fusão, autocorreção e ajuda antes de corrigir. Só depois converse sobre o significado. A declaração digital não observa nem valida a descodificação. Faça esta revisão 24 a 48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados, sem treino imediato. O item reservado para primeira leitura diferida é salada; os restantes cartões já apresentados verificam retenção. Depois de todas as leituras, oculte todos os cartões, ecrã, cartazes e mensagens. Dite UMA palavra já conhecida, a palavra-chave deste percurso, sem soletrar. A criança representa os sons por escrita emergente em papel ou escolhendo letras móveis. O adulto não escolhe todas as letras. Conserve a primeira tentativa antes de qualquer comparação. Se a criança não conseguir representar os sons mesmo com essas alternativas, registe \"codificação não observada\"; não atribua autonomia à transcrição do adulto.",
+      "criterion": "O adulto regista leitura e tentativa de codificação pela criança sem modelo; identifica ajuda e eventual codificação não observada.",
       "challenge": "Escolhe o que queres voltar a praticar com o adulto."
     }
   ]

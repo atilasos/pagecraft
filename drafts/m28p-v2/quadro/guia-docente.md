@@ -1,5 +1,15 @@
 # Quadro, palavra 23 de 28
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **quadra**, p. 7 (um-lugar-de-jogo). Leitura nova diferida: **quadradinho**, p. 16 (o-adulto-escuta), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 8: quadrada; p. 16: quadradinho, quadro, quadra, dado. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: qu /kw/; encontro dr /dɾ/; a átono /ɐ/; d /d/; i /i/ tónico; nh /ɲ/; o final /u/. Ensino localizado em menina p. 5, dedo p. 5, galinha p. 6, quadro p. 5, quadro p. 6. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
 Rascunho de conteúdo para crianças de 6–7 anos, em quatro sessões de 9, 10, 10 e 10 minutos. A quarta sessão acontece 24–48 horas depois da terceira. Interrompa antes se houver cansaço e retome com o mesmo registo. Concluir ecrãs não demonstra domínio da leitura. A integração, geração de HTML/DocSpec e revisão do motor pertencem ao agente principal.
 
 ## Preparação e materiais
@@ -10,7 +20,7 @@ Prepare cartões sem ilustrações e reserve-os fora da vista até ao momento in
 
 - Para ensino, `leque`, `quadro`, `qua`, `dro`, `dra`, `da`, `do` e `quadrado`. A figura quadrada só acompanha o ensino, nunca a transferência.
 - Cartão B, primeira leitura na página 8: `quadrada`. Não o leia previamente nem apresente a sua grafia no contexto inicial.
-- Conjunto C, revisão diferida na página 16: `quadro`, `quadra`, `dado`. Misture a ordem e mostre apenas um de cada vez. `dado` é uma recombinação ainda não treinada como palavra inteira neste percurso.
+- Conjunto C, revisão diferida na página 16: `quadradinho`, `quadro`, `quadra`, `dado`. Misture a ordem e mostre apenas um de cada vez. `quadradinho` é a reserva nova; `dado` já apareceu em dedo e verifica retenção.
 
 Antes de começar, confirme oralmente o sentido de quadro, incluindo o objeto onde se escreve e uma pintura. Esclareça oralmente que uma quadra pode ser um espaço de jogo; não mostre essa grafia. A criança não deve falhar a pergunta por desconhecer esse uso lexical. Confirme também o significado de forma quadrada apenas pela conversa e manipulação, sem exibir o cartão B.
 
@@ -22,9 +32,9 @@ Retomam-se `qu` de leque, `/d/` de dedo, `/ɾ/` de girafa, a existência de um g
 
 O ensino novo é o valor `/kw/` no início de quadro e a combinação `/dɾ/` em dro e dra. O adulto modela presencialmente, aponta as letras e pede à criança que junte. Em leque, `qu` representa `/k/`, sem `/w/`. Em quadro ouve-se `/w/`; não ensine a regra falsa de que u é sempre mudo. Na sílaba qua, junte `/k/`, `/w/` e a vogal. Em dro e dra há dois sons consonânticos na mesma sílaba, sem vogal entre d e r. `dr` não é dígrafo. Os dígrafos já conhecidos, como nh, lh e ch, não devem ser tratados como duas consoantes pronunciadas separadamente.
 
-Modele quadro como qua-dro, duas sílabas orais. O o final átono soa habitualmente `/u/`. Modele a troca dro/dra, e dra com vogal forte e reduzida. Em quadrado e quadrada a sílaba forte é dra; a primeira vogal pode reduzir-se. Em quadro e quadra a primeira sílaba é forte. Não exigir vogais átonas abertas nem introduzir vogais para desfazer os grupos consonânticos. Retome também da com vogal forte e átona antes de usar a recombinação nova dado na revisão. Os sons são demonstrados pela voz do adulto, nunca ensinados por TTS.
+Modele quadro como qua-dro, duas sílabas orais. O o final átono soa habitualmente `/u/`. Modele a troca dro/dra, e dra com vogal forte e reduzida. Em quadrado e quadrada a sílaba forte é dra; a primeira vogal pode reduzir-se. Em quadro e quadra a primeira sílaba é forte. Não exigir vogais átonas abertas nem introduzir vogais para desfazer os grupos consonânticos. Retome também da com vogal forte e átona antes da retoma de dado, já apresentado em dedo. Os sons são demonstrados pela voz do adulto, nunca ensinados por TTS.
 
-O corpus candidato a leitura própria inclui as palavras anteriores confirmadas, quadro depois de ensinado e quadrado depois da composição acompanhada. Quadra e quadrada são itens novos de transferência. Dado é novo na revisão e combina da e do, explicitamente retomados. Se houve ajuda ou leitura do adulto, registe-a; uma segunda leitura apoiada não substitui a primeira tentativa no registo.
+O corpus candidato a leitura própria inclui as palavras anteriores confirmadas, quadro depois de ensinado e quadrado depois da composição acompanhada. Quadra e quadrada são itens novos de transferência. Quadradinho fica reservado à revisão e recombina qu /kw/, dr, a átono, d, i tónico, nh e o final já ensinados. Dado é retenção da coleção. Se houve ajuda ou leitura do adulto, registe-a; uma segunda leitura apoiada não substitui a primeira tentativa no registo.
 
 A frase e o pequeno texto estão marcados como **leitura acompanhada**. O adulto assume leva, vê, no, há, uma, e, tem e outras partes ainda não ensinadas. A criança lê as palavras-chave que de facto consegue ler, como menina, quadro, casa, árvore e janela. Artigos, contrações, nasalidade e formas verbais não se tornam automaticamente decifráveis por constarem deste texto. Registe compreensão de texto ouvido/acompanhado quando essa foi a condição; não declare leitura autónoma do texto completo.
 
@@ -55,7 +65,7 @@ Na sessão 4, páginas 13–16, 24–48 horas depois, recupere o convite. A cria
 | 12–13 | Convite próprio, destinatário, intenção e local; revisão justificada | Texto aberto sem veredicto automático. |
 | 14 | Entrega e confirmação do sentido pelo destinatário | O botão não comprova a entrega. |
 | 15 | quadro, opção 4 | Reconhecimento sem modelo; não certifica leitura. |
-| 16 | Leitura dos três cartões e escrita de quadra após ditado | Observação adulta; não atribuir acerto automático à declaração. |
+| 16 | Leitura dos quatro cartões e escrita de quadra após ditado | Observação adulta; não atribuir acerto automático à declaração. |
 
 As pistas têm formas individual e de grupo e progridem de atenção à ação para comparação ou reformulação. Em transferência e revisão, só devem surgir depois da primeira resposta. Não mostre a palavra correta numa pista nem forneça um modelo oral antes de recolher a leitura. Mais desafios pede explicação e aplicação, sem mudar a resposta de base.
 

@@ -1,12 +1,22 @@
 # Chave, palavra 12 de 28
 
-Este percurso propõe 16 ecrãs para crianças de 6–7 anos, em quatro sessões de 8, 9, 10 e 8 minutos. A quarta sessão acontece 24 a 48 horas depois da comunicação. O objetivo é observar como a criança passa de uma palavra com sentido para a análise, a recombinação, a leitura de combinações novas e uma mensagem útil. Completar os ecrãs não comprova domínio da leitura.
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **chata**, p. 8 (outro-cartao-sem-modelo). Leitura nova diferida: **chuta**, p. 14 (o-adulto-escuta), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 8: chata; p. 14: chuta, chave, chato, chata. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: ch /ʃ/; t /t/; u /u/; a tónico /a/ e final /ɐ/; fusão nova ch+u sem novo valor de grafema. Ensino localizado em uva p. 5, bota p. 5, chave p. 4, chave p. 6. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
+Este percurso propõe 16 ecrãs para crianças de 6–7 anos, em quatro sessões de 8, 9, 10 e 8 minutos. A quarta sessão acontece 24 a 48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. O objetivo é observar como a criança passa de uma palavra com sentido para a análise, a recombinação, a leitura de combinações novas e uma mensagem útil. Completar os ecrãs não comprova domínio da leitura.
 
 ## Preparar o encontro
 
 Disponibilize uma chave segura da escola, duas peças para marcar sílabas, papel, lápis, um envelope e cartões de letras e sílabas. Combine previamente com uma professora ou assistente operacional a receção de uma mensagem. Não peça uma chave da casa da criança nem informações de acesso à sua habitação. O objeto serve a conversa inicial; retire-o na transferência e na revisão.
 
-Prepare os cartões de ensino `chave`, `cha`, `ve`, `ch`, `sapato`, `pa`, `chapa`, `to`, `bota` e `ta`. Prepare também, fora da vista da criança, um cartão `chata` para o ecrã 8 e os cartões `chave`, `chato` e `chata` para a revisão diferida. Os cartões de observação têm apenas a palavra, sem imagem, cor que identifique partes ou exemplo lido. Não apresente antecipadamente `chato` e `chata` como palavras completas. São palavras novas na leitura, mesmo que a criança já as conheça oralmente.
+Prepare os cartões de ensino `chave`, `cha`, `ve`, `ch`, `sapato`, `pa`, `chapa`, `to`, `bota` e `ta`. Prepare também, fora da vista da criança, um cartão `chata` para o ecrã 8 e os cartões `chuta`, `chave`, `chato` e `chata` para a revisão diferida. Os cartões de observação têm apenas a palavra, sem imagem, cor que identifique partes ou exemplo lido. Não apresente antecipadamente `chato` e `chata` como palavras completas. São palavras novas na leitura, mesmo que a criança já as conheça oralmente.
 
 Abra apenas os ecrãs da sessão combinada. O guia e as indicações nos detalhes para o adulto são preparação docente, não um modelo a projetar à criança durante a observação. Leia as instruções quando necessário. A voz sintética nunca substitui a modelação humana de fonemas.
 
@@ -48,7 +58,7 @@ Na sessão 2, reserve cerca de um minuto para reconstruir a palavra, três para 
 
 Na sessão 3, use cerca de dois minutos para a frase, dois para o texto, três para escrever e três para rever e entregar. Combine um destinatário próximo para que a entrega caiba na sessão. Se exigir deslocação ou espera, guarde a mensagem e registe a entrega como pendente. Não a dê por realizada porque houve um clique. A leitura e a escrita param no tempo previsto; o trabalho pode continuar com acompanhamento.
 
-Na sessão 4, 24 a 48 horas depois, use cerca de dois minutos por ecrã. Retire todos os modelos. Observe a escolha com leitura das opções, os três cartões orais e a escrita sem cópia. Só depois retome a mensagem própria, a resposta recebida e uma decisão para os dias seguintes. A releitura dessa mensagem familiar não é uma prova de leitura de texto novo.
+Na sessão 4, 24 a 48 horas depois, use cerca de dois minutos por ecrã. Retire todos os modelos. Observe a escolha com leitura das opções, os quatro cartões orais e a escrita sem cópia. Só depois retome a mensagem própria, a resposta recebida e uma decisão para os dias seguintes. A releitura dessa mensagem familiar não é uma prova de leitura de texto novo.
 
 As duas ou três pistas de cada ecrã propõem abordagens distintas. Nas tarefas de transferência e revisão, o motor só as revela depois de uma primeira resposta. Registe quando foram usadas. Nas tarefas orais, a confirmação declara que houve conversa; o professor observa a leitura no momento. A diferenciação altera a ajuda e a explicação pedida, mantendo o item e a resposta de base. Em Mais desafios, a criança explica a estratégia, sem ser pressionada a ler mais depressa.
 
@@ -72,7 +82,7 @@ As restantes respostas exigem observação e não têm veredicto automático:
 - Ecrã 10: explicar que o menino vai usar a chave para abrir a sala. Aceitar palavras próprias e pedir a informação do texto que sustenta a resposta.
 - Ecrã 11: mensagem própria com destinatário e intenção reconhecíveis. A extensão não é um critério de qualidade.
 - Ecrã 12: releitura, uma melhoria escolhida pelo autor e entrega efetivamente observada, ou pendente registado. Guardar a resposta real do destinatário.
-- Ecrã 14: leitura individual de chave, chato e chata em nova ordem. Observar a primeira tentativa de cada cartão antes de ensinar ou contrastar terminações.
+- Ecrã 14: leitura individual de chuta, chave, chato e chata; chuta é primeira leitura diferida. Observar a primeira tentativa de cada cartão antes de ensinar ou contrastar terminações.
 - Ecrã 15: tentativa de escrever chave sem cópia. Se a criança escolher outra palavra ou fizer uma aproximação, registar e conversar sobre o nome que quis escrever. Não substituir a produção pela forma convencional.
 - Ecrã 16: releitura da mensagem com apoio identificado e uma retoma combinada. Não existe uma decisão única obrigatória.
 
@@ -96,7 +106,7 @@ Se a criança separar c e h ou acrescentar sons ao dígrafo, volte a uma modela�
 
 Se compreender a história apenas depois de a ouvir, conserve essa evidência de compreensão e continue a ensinar a leitura. Se conseguir ler palavras mas não explicar a finalidade da entrega, releia o pequeno texto e reconstrua oralmente os acontecimentos. Se a escrita não permitir perceber o pedido, retome primeiro a intenção com a criança e use ditado ao adulto ou escrita a par, sem apagar a hipótese original.
 
-Faça uma nova observação breve dois a quatro dias após a sessão 4. Retome `chato` e `chata` sem modelo. Se houver leitura estável, pode ensinar a combinação isolada `ch` + `u` → `chu`, recuperar `ta` de bota e reservar `chuta` como uma combinação completa ainda não modelada. Esclareça o seu sentido depois da tentativa, por exemplo numa conversa sobre futebol. Não usar uma palavra com código não ensinado como prova de dificuldade. A decisão de avançar apoia-se em observações em momentos diferentes, na ajuda necessária e na voz da criança. Não exige rapidez nem resulta do número de páginas concluídas.
+Faça uma nova observação breve dois a quatro dias após a sessão 4. Retome `chato` e `chata` sem modelo. Se houver leitura estável, retome ch /ʃ/, u /u/ de uva e ta final de bota; chuta já foi apresentada na revisão obrigatória e agora verifica retenção. Esclareça o seu sentido depois da tentativa, por exemplo numa conversa sobre futebol. Não usar uma palavra com código não ensinado como prova de dificuldade. A decisão de avançar apoia-se em observações em momentos diferentes, na ajuda necessária e na voz da criança. Não exige rapidez nem resulta do número de páginas concluídas.
 
 ## Limites e validação
 

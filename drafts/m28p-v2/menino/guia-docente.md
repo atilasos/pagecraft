@@ -1,5 +1,15 @@
 # Menino · palavra 2 de 28
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **anima**, p. 7 (combinar-sem-modelo). Leitura nova diferida: **animo**, p. 15 (ler-com-adulto), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 7: anima; p. 15: menino, animo. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: a inicial átono /ɐ/; n /n/; i /i/ tónico; m /m/; a final /ɐ/ e o final /u/. Ensino localizado em menina p. 5, menina p. 6, menino p. 4, menino p. 5. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
 Rascunho original para revisão docente, 6–7 anos, com 16 ecrãs em quatro sessões de 8, 10, 10 e 9 minutos. Os 37 minutos são uma previsão de trabalho acompanhado, distribuído por vários dias. A quarta sessão realiza-se 24–48 horas depois da terceira. Se a modelação exigir mais tempo, interromper e retomar; o tempo previsto não justifica retirar ensino.
 
 A sequência oficial começa por menina, menino e uva. A palavra anterior é um recurso disponível, não uma garantia de que esta criança sabe lê-la. A versão desta coleção tem gema na posição 14. Não se altera nem se reproduz aqui a variante legada com ovo.
@@ -34,7 +44,7 @@ A novidade central é o o átono final, habitualmente /u/, em menino. Comparar m
 
 No ecrã 4, o adulto diz a palavra inteira, aponta cada unidade relevante, mostra a/no e modela o contraste final a/o. No ecrã 5, confirma /m/, /n/ e /i/ sem acrescentar vogais às consoantes. Modela a fusão mi e ni e depois /m/ com a vogal final reduzida de cada palavra, usando ma e mo como terminações átonas. A criança aponta, junta, muda a consoante e explica. O valor átono de a/o não é uma regra para qualquer posição da palavra. Não ensinar fonemas com nomes de letras ou síntese de voz.
 
-As palavras inteiras mimo e mima ficam reservadas aos ecrãs 7 e 8. O adulto pode confirmar previamente que os sentidos fazem parte do vocabulário oral, sem mostrar a grafia, treinar a sequência ou anunciar qual aparecerá. mi usa /m/ e /i/; mo final usa /m/ e o final /u/; ma final usa /m/ e a final /ɐ/. São as mesmas correspondências explicitamente ensaiadas. Ambas as palavras têm a primeira sílaba forte. Não introduzem consoantes ou valores vocálicos novos. Se a criança já as tiver treinado por escrito fora deste percurso, registar que aqui são consolidação e procurar outra verificação de transferência compatível com o repertório efetivo, sem inventar um item mais difícil no momento.
+Mimo e mima já apareceram em menina. A leitura de mima no ecrã 8 verifica retenção e sentido. Reservar anima para o cartão escrito do ecrã 7 e animo para o ecrã 15. São formas do verbo animar, com a inicial átono, i tónico, m/n e a/o finais nos valores ensinados em menina 5–6 e menino 4–5. Animo não é o nome ânimo, que tem outra tonicidade e acento gráfico. Não mostrar, dizer ou segmentar os itens completos antes da leitura. Só depois conversar sobre dar alento a alguém. A [Infopédia, animo](https://www.infopedia.pt/dicionarios/lingua-portuguesa/animo) e o [Priberam, anima](https://dicionario.priberam.org/anima) identificam as formas verbais; não atribuímos à transcrição do infinitivo a verificação da vogal de todas as formas.
 
 As opções da transferência são mima, menino e mimo. Todas usam o código ensinado. As duas opções de reconhecimento inicial são menina/menino; essa tarefa dispõe de modelo e observa discriminação visual, não decifração independente. As alternativas de compreensão são lidas pelo adulto. Não obrigar a criança a decifrar os enunciados para mostrar que consegue resolver a tarefa.
 
@@ -53,7 +63,7 @@ Na frase "O menino mima a menina.", o adulto lê a frase inteira com o dedo e as
 
 5. **Oficina dos sons**, cerca de 3 minutos. Modelação e ensaio de correspondências conforme descrito acima. Se a criança não consegue relacionar som e grafema com apoio, continuar o ensino em vez de tratar a página seguinte como avaliação independente.
 6. **Reconstruir**, cerca de 2 minutos. Dizer menino oralmente. As peças aparecem no, me, ni; a sequência verificável é me, ni, no. A criança lê depois de ordenar. Ordenação correta por memória visual, sem leitura, deve ter esse registo.
-7. **Combinar sem modelo**, cerca de 3 minutos. Ditar oralmente mimo, sem mostrar ou soletrar. As letras aparecem o, m, i, m; a ordem verificável é m, i, m, o. Há duas peças m intencionais. Depois de construir, pedir leitura e significado. A construção ao ditado observa codificação; a leitura posterior só é evidência de síntese se o adulto a observar. Não inferir leitura apenas da ordem certa.
+7. **Combinar sem modelo**, cerca de 3 minutos. Este ecrã passa a oral: entregar um cartão escrito apenas com anima. Não ditar o item, mostrar imagem nem apresentar um segundo exemplar para copiar. Observar a leitura individual antes de ensinar e conversar depois sobre o significado. A codificação por ditado da criança mantém-se no ecrã 16.
 8. **Ler para descobrir**, cerca de 2 minutos. Ler só a pergunta, deixando a criança ler as opções. Resposta esperada: mima, na primeira posição. Pedir leitura e explicação do sentido. Mima designa a ação de dar carinho; mimo nomeia um gesto de carinho. Uma escolha sem leitura ou explicação observa reconhecimento/seleção, não autonomia. Se houver dificuldade lexical, explicar oralmente após a primeira tentativa e registar o apoio.
 
 ### Sessão 3 · compreender e preparar um convite · 10 minutos
@@ -69,7 +79,7 @@ Abrir 24–48 horas depois da sessão 3, sem ensaio imediato das palavras. Mante
 
 13. **Entregar e ouvir**, cerca de 3 minutos. Entregar o convite ao destinatário e recolher uma resposta ou pergunta real. A criança lê o que consegue e o adulto lê o restante. Registar a ajuda. Retirar o convite e todos os cartões de apoio antes da revisão.
 14. **Reconhecer depois**, cerca de 1 minuto. Dizer menino oralmente, uma vez, repetindo apenas se a criança não ouviu. A resposta é menino, segunda posição entre mimo, menino, menina. Não ler as opções. Pedir a leitura da escolha e uma explicação depois de responder. O ditado dá uma referência oral, não um modelo escrito. A escolha isolada não certifica leitura.
-15. **Ler com adulto**, cerca de 3 minutos. Apresentar cartões simples com mima e mimo, um de cada vez, numa ordem que varie entre crianças. A criança lê os próprios itens, sem imagem, palavra de comparação ou repetição prévia do adulto. Não haver escrita no ecrã evita um modelo extra; os cartões são os estímulos a decifrar, não respostas para copiar. Observar cada criança individualmente. Esperar síntese /ˈmimɐ/ e /ˈmimu/ e sentido compatível, aceitando a pronúncia natural. Registar hesitações e ajuda, sem automatizar juízo.
+15. **Ler com adulto**, cerca de 3 minutos. Apresentar animo e menino em cartões separados. Animo é primeira leitura diferida; menino é retenção, com exposição recente no ecrã 14. Não ler previamente nem dar os sons. Registar a tentativa literal, a fusão e as ajudas. Não confundir animo, verbo com i tónico, com ânimo.
 16. **Escrever depois**, cerca de 2 minutos. Guardar os cartões. Ditar menino, sem soletrar. Recolher a primeira escrita sem modelo e perguntar como decidiu as letras. A grafia convencional é menino, mas a produção aberta não recebe veredicto automático. Comparar com a forma convencional em papel só depois da resposta e decidir em conjunto o que retomar.
 
 ## Apoios progressivos e organização do trabalho

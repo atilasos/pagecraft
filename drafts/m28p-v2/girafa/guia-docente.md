@@ -1,5 +1,15 @@
 # Girafa, palavra 17 de 28
 
+## Reservas cumulativas e observação, revisão de 23/10/2026
+
+Primeira leitura reservada: **fava**, p. 7 (uma-combinacao-para-ler). Leitura nova diferida: **fada**, p. 14 (cartoes-noutro-dia), 24–48 horas depois do ensino e das primeiras leituras, sem treino imediato dos itens reservados. A chave é privada do professor; não a projetar, narrar ou pôr nos materiais de treino.
+
+Cartões efetivamente apresentados: p. 14: girafa, fava, fada. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
+
+Correspondências a confirmar antes das tentativas: f /f/; v /v/; d /d/; a tónico /a/ e final /ɐ/. Ensino localizado em uva p. 5, dedo p. 5, girafa p. 4, girafa p. 6. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+
+O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
+
 Rascunho de conteúdo para quatro sessões de 9, 10, 10 e 9 minutos, dirigido sobretudo a crianças de 6–7 anos. A última sessão decorre 24 a 48 horas depois da terceira. O percurso vai da experiência oral à comunicação de uma produção própria, com leitura observada em momentos distintos. Completar páginas não comprova domínio da leitura.
 
 Este trabalho contém apenas `content.json` e este guia. A geração de HTML e DocSpec, a verificação da interface, a avaliação pedagógica final e a integração em main cabem ao agente responsável pelo conjunto. Não foram feitos commits ou testes de browser neste trabalho.
