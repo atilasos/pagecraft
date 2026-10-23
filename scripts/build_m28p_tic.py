@@ -199,6 +199,21 @@ def build_index(words):
         cards.append(f'<section><h2>{word["order"]}. {html.escape(word["label"])}</h2><div class="image">{illustrated(word)["image"]}</div><nav>{links}</nav></section>')
     output='''<!doctype html><html lang="pt-PT"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>28 palavras · revisão TIC</title><style>body{margin:auto;max-width:1200px;padding:24px;font:22px/1.5 "Century Gothic","Didact Gothic",sans-serif;background:#f8faf5;color:#243d48}h1{font-size:38px}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}section{background:white;border:1px solid #b3c6c7;border-radius:24px;padding:20px}.image{height:140px;text-align:center}.image svg{height:100%;width:180px}a{display:flex;min-height:56px;align-items:center;color:#1b5265}a:focus-visible{outline:4px solid #315d9e}p{max-width:65ch}</style><h1>28 palavras nas aulas de TIC</h1><p>168 miniatividades para revisão docente. Seis jogos por palavra, com imagem, áudio incluído e demonstração. Cada jogo dura cerca de cinco minutos e pode ser repetido. Estes rascunhos aguardam a tua aprovação.</p><main>'''+''.join(cards)+'</main></html>'
     (BASE/'index.html').write_text(embed_activity_typography(output))
+    # A página docente resolve os códigos pelo serviço, em vez de publicar
+    # endereços locais de drafts ou guardar um segundo catálogo de códigos.
+    teacher=output[:output.index('<main>')]+'''<p><a href="/teacher/activities.html">Atividades, aprovação e registos</a></p><details><summary>Preparar e escolher o próximo jogo</summary><p>Abre a palavra combinada com o professor titular. Mostra os botões de ouvir, exemplo e continuar uma vez. Usa auscultadores quando possível. Cada jogo pode ser repetido noutra aula; não precisas de fazer todos de seguida.</p><p>Começa por Palavra igual e Procurar palavras; apresenta Ligar pares com as palavras já trabalhadas. Passa a Montar com modelo e A peça que falta, e depois a Montar de memória. Flor usa letras móveis. Os pares da primeira palavra têm um único par.</p><p>A conclusão mostra respostas, incluindo erros. As ajudas usadas ficam nos registos. Reconstruir uma palavra não comprova leitura oral, escrita livre ou fluência. O ensino e a observação com o professor titular continuam fora destes jogos.</p></details><p id="status" role="status">A carregar os rascunhos…</p><main id="collection"></main><script type="application/json" id="words">@@WORDS@@</script><script>
+const words=JSON.parse(document.getElementById('words').textContent);
+const games=@@GAMES@@;
+fetch('/api/learning/activities').then(r=>{if(!r.ok)throw Error('Entra na área do professor para rever.');return r.json()}).then(items=>{
+const bySlug=new Map(items.map(item=>[item.slug,item]));let total=0;
+for(const word of words){const section=document.createElement('section'),title=document.createElement('h2'),picture=document.createElement('div'),nav=document.createElement('nav');title.textContent=word.order+'. '+word.label;picture.className='image';picture.innerHTML=word.image;section.append(title,picture,nav);
+for(const [game,label] of games){const item=bySlug.get('m28p-v3-'+word.slug+'-'+game);if(!item)continue;const link=document.createElement('a');link.textContent=label+' · '+(item.published?'Aprovada':'Rever');link.href='/'+item.code;nav.append(link);total++;}document.getElementById('collection').append(section);}
+document.getElementById('status').textContent=total+' jogos disponíveis para rever. A aprovação de cada jogo faz-se em Atividades e progressos.';
+}).catch(error=>document.getElementById('status').textContent=error.message);
+</script>'''
+    encoded=json.dumps([dict(slug=w['slug'],label=w['label'],order=w['order'],image=illustrated(w)['image']) for w in words],ensure_ascii=False).replace('<','\\u003c')
+    teacher=teacher.replace('@@WORDS@@',encoded).replace('@@GAMES@@',json.dumps([[g,t[0]] for g,t in GAMES.items()],ensure_ascii=False))
+    (ROOT/'server/static/teacher/m28p-tic.html').write_text(embed_activity_typography(teacher))
 
 
 def main():
