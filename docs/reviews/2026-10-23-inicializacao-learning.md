@@ -4,6 +4,13 @@ Investigação na branch `fix/protect-learning-authorship`, worktree
 `/home/proteu/.t3/worktrees/pagecraft/t3-ae3a563b`, a partir de
 `4d240205b0a6386f97cbcae3e93ba7926ff654bc`.
 
+Estado final da continuação: 50 repetições verdes do teste original, 95 testes
+de browser e 384 testes sem browser verdes. A corrida de produto corrigida em
+`cfdbe07` mantém a sua regressão. A falha residual foi reproduzida sem código
+PageCraft e resolvida na automação por entrada nativa observada no iframe.
+As secções iniciais preservam a investigação anterior e os seus resultados;
+a conclusão e os comandos finais estão no fim deste relatório.
+
 ## Falha demonstrada e limite da atribuição
 
 O teste isolado indicado pela raiz passou inicialmente em 2,38 s. Uma repetição
@@ -255,3 +262,41 @@ mesmo nó também pode ser pedida ao pytest com `--keep-duplicates`:
 ```bash
 PAGECRAFT_TEST_CDP=http://127.0.0.1:9330 uv run --offline --project /home/proteu/pagecraft --with playwright==1.63.0 pytest -q --keep-duplicates $(for n in {1..50}; do echo tests/browser/test_fraction_units.py::test_realization_restores_all_units_and_drawing_without_duplicate_attempts; done)
 ```
+
+
+## Validação final e entrega da continuação
+
+A suíte completa de browser passou: 95 testes em 163,96 s. Inclui o teste
+original, as quatro regressões de inicialização e os testes de acesso,
+autoria, recuperação, reflexão, frações standalone e atividades antigas.
+O log é `/tmp/pagecraft-reload-browser-final.log`.
+Os 384 testes sem browser passaram em 11,58 s, registados em
+`/tmp/pagecraft-reload-nonbrowser.log`. `node --check` do anfitrião e
+`git diff --check` passaram.
+
+```bash
+PAGECRAFT_TEST_CDP=http://127.0.0.1:9330 uv run --offline --project /home/proteu/pagecraft --with playwright==1.63.0 pytest -q -o faulthandler_timeout=30 tests/browser
+uv run --offline --project /home/proteu/pagecraft pytest -q tests --ignore=tests/browser
+node --check server/static/learning/activity.js
+git diff --check
+```
+
+A sessão própria desta continuação foi `pagecraft-reload-20261023`, perfil
+`research`, headless, porta 9330 confirmada pelo Hub. `hub_browser_close`
+confirmou `ok=true`. Os processos pytest e servidores descartáveis terminaram;
+não ficou nenhum processo próprio pendente. O servidor preexistente do checkout
+original na porta 8777 não foi usado nem terminado.
+
+Os commits de implementação desta continuação são `e193931`, que corrige a
+acessibilidade da espera e a sua regressão, e `0453ccc`, que acrescenta a
+sincronização de entrada, o reproducer independente e as provas. O rascunho
+continua indisponível para alunos. O único ficheiro de produto alterado nesta
+continuação é `drafts/fracoes-banda-desenhada-2ano.html`, para manter o status
+acessível durante a espera. O anfitrião, a autenticação, a autoria, o sandbox,
+a CSP e as atividades publicadas não foram alterados.
+
+A branch local é `fix/protect-learning-authorship`, no worktree
+`/home/proteu/.t3/worktrees/pagecraft/t3-ae3a563b`. Não houve push, trabalho de PR,
+merge ou edição de outro worktree. A integração permanece responsabilidade
+da raiz. O limite da prova é o Chrome headless por CDP descrito acima; não se
+atribui a este teste uma certificação de rato físico ou browser headed.
