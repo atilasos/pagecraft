@@ -132,3 +132,16 @@ def test_real_host_saves_help_and_restores_completed_draft_without_duplicate_att
     after=page.request.get(studio_origin+'/api/learning/me').json()
     assert len([e for e in after['events'] if e['type']=='attempt'])==4
     assert after['preview'] is True
+    frame.locator('#finish-button').click()
+    expect(page.locator('#reflection')).to_be_visible()
+    expect(page.locator('#strategy')).to_be_hidden()
+    expect(page.locator('#next-step')).to_be_hidden()
+    assert page.locator('#criteria .reflection-icon').count()==4
+    assert page.request.get(studio_origin+'/learning-assets/m28p-reflection.mp3').status==200
+    page.locator('#criteria label').filter(has=page.locator('input[value="help"]')).click()
+    page.get_by_role('button',name='Guardar e terminar',exact=True).click()
+    expect(page.locator('#done')).to_be_visible()
+    finished=page.request.get(studio_origin+'/api/learning/me').json()
+    assert finished['completed_at']
+    assert finished['assessment']['answers']=={'criterio-1':'help'}
+    assert finished['assessment']['strategy']==''
