@@ -82,7 +82,8 @@
     ],
     "timers": false,
     "lives": false,
-    "accuracyGate": false
+    "accuracyGate": false,
+    "supportChangePreservesAllItems": true
   },
   "units": {
     "default": "syllables",
@@ -123,15 +124,15 @@
   "games": [
     {
       "id": "match",
-      "title": "Associa",
-      "instruction": "Toca na palavra.",
+      "title": "Palavra igual",
+      "instruction": "Toca na palavra igual ao modelo.",
       "rounds": 4,
       "srtcAssessment": {
-        "state": "Escolher o cartão da palavra apresentada.",
-        "render": "Imagem nomeada, áudio e cartões.",
+        "state": "Encontrar uma palavra escrita igual ao modelo.",
+        "render": "Palavra-modelo, controlo de áudio e cartões; imagem conforme o apoio.",
         "transition": "Uma escolha mantém-se visível; pode corrigir ou avançar.",
-        "constraint": "A palavra inteira identifica o referente.",
-        "assessment": "Escolha de cartão com apoios registados."
+        "constraint": "A sequência escrita completa coincide com o modelo.",
+        "assessment": "Comparação visual de um cartão com modelo e apoios registados."
       },
       "support": {
         "obstacles": [
@@ -149,13 +150,13 @@
     },
     {
       "id": "pairs",
-      "title": "Pares",
-      "instruction": "Encontra os pares.",
+      "title": "Ligar pares",
+      "instruction": "Toca no desenho. Depois, toca na palavra.",
       "rounds": 4,
       "srtcAssessment": {
         "state": "Relacionar dois cartões do mesmo item.",
         "render": "Cartões grandes; um par na primeira palavra, até três com repertório confirmado.",
-        "transition": "O par escolhido recebe feedback; conservar os pares feitos.",
+        "transition": "Ligar cada desenho a um cartão escrito; confirmar após responder a todos os pares, mesmo com ligações incorretas.",
         "constraint": "Os cartões correspondem ao mesmo item.",
         "assessment": "Pares tentados e completados; não comprova leitura."
       },
@@ -175,8 +176,8 @@
     },
     {
       "id": "hunt",
-      "title": "Procura",
-      "instruction": "Toca na igual.",
+      "title": "Procurar palavras",
+      "instruction": "Procura as palavras iguais ao modelo.",
       "rounds": 4,
       "srtcAssessment": {
         "state": "Encontrar a mesma forma escrita.",
@@ -201,8 +202,8 @@
     },
     {
       "id": "syllables",
-      "title": "Junta",
-      "instruction": "Junta as partes.",
+      "title": "Montar com modelo",
+      "instruction": "Toca nas peças para formar a palavra.",
       "rounds": 4,
       "srtcAssessment": {
         "state": "Reconstruir a palavra com modelo.",
@@ -227,8 +228,8 @@
     },
     {
       "id": "gap",
-      "title": "Completa",
-      "instruction": "Escolhe a parte.",
+      "title": "A peça que falta",
+      "instruction": "Escolhe a peça que falta.",
       "rounds": 4,
       "srtcAssessment": {
         "state": "Completar uma unidade em falta.",
@@ -253,11 +254,11 @@
     },
     {
       "id": "recall",
-      "title": "Tenta sem modelo",
-      "instruction": "Junta as partes.",
+      "title": "Montar de memória",
+      "instruction": "Forma a palavra. Podes ouvir outra vez.",
       "rounds": 4,
       "srtcAssessment": {
-        "state": "Reconstruir sem modelo inicial.",
+        "state": "Reconstruir com modelo oculto por defeito na tarefa; demonstração inicial conta como ajuda.",
         "render": "Imagem, áudio, lugares vazios e peças; modelo recuperável por pedido.",
         "transition": "Construir e confirmar; modelo ou demonstração ficam registados como ajuda.",
         "constraint": "A ordem recompõe a palavra anteriormente apresentada.",
@@ -282,23 +283,23 @@
     {
       "id": "support",
       "label": "Com pistas",
-      "model": "sempre disponível",
-      "visualCue": "Comparação e lugar da ação destacados.",
-      "complexity": "Menos alternativas e pares."
+      "model": "Modelo segmentado; imagens e legendas nos pares.",
+      "visualCue": "Destaque e comparação disponíveis junto da ação.",
+      "complexity": "Conservar todos os itens, opções e pares da ronda."
     },
     {
       "id": "intermediate",
       "label": "Passo a passo",
-      "model": "disponível por pedido ou conforme o jogo",
-      "visualCue": "Indicar a ação seguinte após dificuldade.",
-      "complexity": "Alternativas e unidades da tarefa de base."
+      "model": "Modelo previsto para o jogo, oculto em recall.",
+      "visualCue": "Imagem e áudio disponíveis; pista local após erro.",
+      "complexity": "Conservar todos os itens, opções e pares da ronda."
     },
     {
       "id": "challenge",
       "label": "Mais desafios",
-      "model": "oculto inicialmente quando a operação o permite",
-      "visualCue": "Ajuda continua disponível.",
-      "complexity": "Mais alternativas conhecidas; reconstrução sem modelo inicial."
+      "model": "Modelo conservado em match e hunt; oculto nas outras operações.",
+      "visualCue": "Retirar algumas referências visuais, mantendo ajuda recuperável.",
+      "complexity": "Conservar todos os itens, opções e pares da ronda."
     }
   ],
   "supportRules": {
@@ -311,7 +312,14 @@
     "localVisualFeedback": true,
     "readingSupportModalRequired": false,
     "demoReplayAvailable": true,
-    "demoFillsChildAnswer": false
+    "demoFillsChildAnswer": false,
+    "demoUsesCurrentWordAndUnits": true,
+    "recordHelpPerRound": [
+      "demo_shown",
+      "model_shown",
+      "audio_word_requested",
+      "audio_instruction_requested"
+    ]
   },
   "palette": {
     "bg": "#F7F4ED",
@@ -348,7 +356,7 @@
     "wordCard": "Grafia legível, sem decoração que dê a resposta por posição.",
     "illustration": "Imagem original de referente inequívoco; nenhum emoji como substituto do referente.",
     "audioButton": "Ícone de altifalante e nome acessível; reprodução após gesto.",
-    "demoButton": "Ícone de demonstração e ação visual recuperável.",
+    "demoButton": "Painel com a imagem e unidades da tarefa; mostra a operação e regista a demonstração como ajuda.",
     "feedback": "Forma, destaque e som opcional; sem sinal sonoro punitivo.",
     "nextButton": "Disponível após resposta intencional, mesmo incorreta.",
     "undoButton": "Devolve só a última unidade; nunca apaga a ronda inteira.",
@@ -393,7 +401,8 @@
       "Resposta",
       "Apoio",
       "Pistas ou demonstração utilizadas",
-      "Conclusão"
+      "Conclusão",
+      "Pedidos de áudio, demonstração e modelo vistos por ronda"
     ],
     "doNotInfer": [
       "Leitura oral",
@@ -404,7 +413,8 @@
     ],
     "helpMarksSupportedResponse": true,
     "hostIdentityOwnsParticipant": true,
-    "offlineLocalSaveIsNotServerConfirmation": true
+    "offlineLocalSaveIsNotServerConfirmation": true,
+    "audioRequestDoesNotProveListening": true
   },
   "acceptance": [
     "Validar as 28 palavras e seis jogos por palavra.",

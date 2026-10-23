@@ -22,14 +22,14 @@ Controlos de ouvir, ver demonstração, desfazer e continuar mantêm forma e loc
 
 A coleção organiza 28 palavras, cada uma com seis minijogos de quatro rondas. A duração de três a seis minutos é estimativa para planeamento. Não há cronómetro, perda de vidas nem avanço obrigatório ao fim desse tempo.
 
-1. Associar a palavra ouvida/apresentada à imagem e ao seu cartão.
-2. Encontrar pares de cartões, com referência visível quando necessário.
+1. Encontrar a palavra escrita igual ao modelo, com imagem e áudio disponíveis.
+2. Ligar desenhos aos cartões das palavras, com referência visível quando necessário.
 3. Procurar a palavra igual entre cartões, observando-a de perto.
 4. Reconstruir a palavra com unidades móveis e modelo disponível.
 5. Completar uma unidade em falta, variando a posição da lacuna.
 6. Reconstruir sem modelo inicial, com áudio e possibilidade de recuperar apoio.
 
-As rondas variam posição, ordem das peças ou lacuna. Esta repetição é intencional: permite praticar sem reaprender a interface. Os seis jogos diferem na operação, não apenas nas cores ou no texto da instrução. Não se exige concluir todos numa aula nem bloquear jogos por resultados anteriores.
+As rondas variam posição, ordem das peças ou lacuna. Esta repetição é intencional: permite praticar sem reaprender a interface. Palavra igual trabalha uma escolha por comparação; Procurar palavras pede várias seleções. Ambos praticam igualdade visual. Os restantes jogos trabalham associação imagem/palavra, ordenação, lacuna e reconstrução sem modelo por defeito. Não se exige concluir todos numa aula nem bloquear jogos por resultados anteriores.
 
 ## Progressão e repertório
 
@@ -43,7 +43,7 @@ O áudio da palavra inteira usa PT-PT e preserva a pronúncia natural. Não se a
 
 ## Apoiar sem interromper o jogo
 
-Com pistas, Passo a passo e Mais desafios alteram modelo, número de alternativas e destaque, conservando a tarefa respondida e as peças já colocadas. Os apoios não são notas ou categorias de crianças. Mudar de apoio não cria uma nova tentativa nem reinicia o jogo.
+Com pistas, Passo a passo e Mais desafios alteram a visibilidade da imagem, do modelo, da segmentação e dos destaques, conservando todos os itens, a tarefa respondida e as peças já colocadas. O número de opções e pares varia entre palavras ou rondas, sem mudar ao selecionar outro apoio. Os apoios não são notas ou categorias de crianças. Mudar de apoio não cria uma nova tentativa nem reinicia o jogo.
 
 Uma tentativa incorreta recebe primeiro uma pista visual local: comparar com o modelo, destacar o lugar a rever ou mostrar a próxima ação. Após novas dificuldades oferece demonstração ou apoio maior, sem exigir leitura de um modal. A criança pode corrigir ou continuar com a resposta dada; acerto não é condição de avanço. A seleção continua visível para tornar claro o que respondeu.
 

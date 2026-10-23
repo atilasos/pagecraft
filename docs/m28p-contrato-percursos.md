@@ -40,8 +40,8 @@ Os IDs são fixos. Cada jogo tem quatro rondas; a resposta e o apoio ficam ligad
 
 | ID | Estado e representação | Ação e transição | Restrição descoberta | Evidência observável |
 | --- | --- | --- | --- | --- |
-| `match` | Imagem, palavra e controlo de áudio; escolhas de cartão | Escolher o cartão correspondente, rever ou continuar | Palavra inteira corresponde ao referente apresentado | Cartão escolhido e ajudas vistas |
-| `pairs` | Cartões emparelháveis, referência conforme apoio | Escolher dois cartões; repetir pares sem perder os já feitos | Dois cartões correspondem ao mesmo item | Pares tentados e concluídos, com apoio |
+| `match` | Palavra-modelo, áudio e cartões; imagem conforme apoio | Escolher a palavra igual, rever ou continuar | A sequência escrita completa coincide com o modelo | Comparação visual e ajudas vistas |
+| `pairs` | Desenhos e cartões escritos; referência conforme apoio | Ligar cada desenho a uma palavra e confirmar, mesmo com ligações incorretas | Desenho e palavra correspondem ao mesmo referente | Associações tentadas e concluídas, com apoio |
 | `hunt` | Palavra-modelo e cartões em posições variadas | Tocar na palavra igual; seleção permanece visível | A sequência completa coincide com o modelo | Forma selecionada, comparação visual |
 | `syllables` | Modelo, lugares vazios e unidades móveis | Tocar unidades pela ordem; desfazer e confirmar | As partes têm uma ordem na palavra | Sequência confirmada com modelo |
 | `gap` | Palavra com uma unidade em falta e alternativas | Escolher a unidade; variar lacuna entre rondas | Uma unidade completa aquele lugar | Unidade escolhida para a lacuna |
@@ -51,9 +51,11 @@ As peças e posições variam entre rondas. Repetições de sílaba usam identid
 
 Os distratores escritos usam o repertório atual e anterior que o professor confirmou. No início, menina pode contrastar com os seus fragmentos `me`, `ni` e `na`, apresentados como partes. Não preencher opções com pseudopalavras ou palavras futuras. Pares da primeira palavra podem usar um só par em quatro rondas de posições distintas; depois, acrescentar até três pares do repertório conhecido. Imagens distratoras podem ser apresentadas sem exigir a leitura de nomes novos.
 
+Os nomes finais dos jogos são Palavra igual, Ligar pares, Procurar palavras, Montar com modelo, A peça que falta e Montar de memória, pela ordem dos IDs da tabela. Palavra igual e Procurar palavras são comparação visual; associação com referente é a operação de Ligar pares.
+
 ## Apoios e avanço
 
-Os valores da ponte são `support`, `intermediate` e `challenge`, correspondendo a Com pistas, Passo a passo e Mais desafios. Quando o DocSpec exigir `standard`, mapear para `intermediate` na ponte. Os três apoios ajustam modelo, alternativas e destaque; não mudam a resposta correta nem a grafia-alvo no meio da ronda.
+Os valores da ponte são `support`, `intermediate` e `challenge`, correspondendo a Com pistas, Passo a passo e Mais desafios. Quando o DocSpec exigir `standard`, mapear para `intermediate` na ponte. Os três apoios ajustam a visibilidade de imagem, modelo, segmentação e destaque. Conservam o conjunto de opções, os pares, a resposta correta e a grafia-alvo no meio da ronda. Com pistas mostra modelo segmentado e legendas dos desenhos; Passo a passo apresenta o modelo previsto para o jogo; Mais desafios retira o modelo quando a operação o permite e reduz outras referências visuais. Os jogos de igualdade visual conservam o modelo.
 
 Apoio local tem três passos recuperáveis: observar referência; destacar a relação ou lugar a rever; demonstrar a próxima ação. Não exigir leitura de instruções sobre utilidade da ajuda para regressar à tarefa. Conservar unidades, seleção, pares, ronda e respostas ao mudar de apoio. Não emitir tentativa por mudar apoio, ouvir, ver demonstração ou restaurar.
 
@@ -63,9 +65,9 @@ Avançar depende de responder ao pedido da ronda, mesmo com erro. Ordenação re
 
 Uma ação principal por momento, instrução de duas a seis palavras sempre que possível, controlos estáveis, corpo ≥22 px e alvos ≥56 px. Sem entrada com objetivos em prosa, critérios para ler ou conversa obrigatória. Áudio PT-PT incorporado da palavra e da instrução, iniciado por gesto e repetível. `speechSynthesis` pode ser acessório, mas a disponibilidade de uma voz do sistema não satisfaz este contrato.
 
-A demonstração mostra uma ação observável junto dos controlos reais. Oferecer alternativa por clique e teclado a qualquer arrasto; foco e rótulos acessíveis; redução de movimento; fonte offline. A criança pode sair ou pedir ajuda sem ter de concluir a coleção. A autoavaliação é visual/oral e facultativa.
+A demonstração mostra a operação com a palavra, imagem e unidades da tarefa, num painel recuperável. Em reconstrução, mostra as peças na ordem correta e a palavra completa. Esse contacto é registado como ajuda. Oferecer alternativa por clique e teclado a qualquer arrasto; foco e rótulos acessíveis; redução de movimento; fonte offline. A criança pode sair ou pedir ajuda sem ter de concluir a coleção. A autoavaliação é visual/oral e facultativa.
 
-Guardar jogo, palavra, ronda, resposta, apoio e ajudas. Persistência local não pode misturar tentativas entre participantes ou realizações do host. Recuperar trabalho restaura estado sem novos eventos de tentativa. A conclusão atualiza o host pelo contrato canónico de `postMessage`; o HTML não chama APIs nem leva credenciais. Não se afirma sincronização com o professor sem confirmação do servidor.
+Guardar jogo, palavra, ronda, resposta, apoio e ajudas. O estado identifica demonstração vista, modelo visto e pedidos de áudio da palavra e da instrução; a tentativa conserva esse contexto. Um pedido de áudio regista a ação de pedir, sem comprovar que a criança ouviu ou que a reprodução terminou. Persistência local não pode misturar tentativas entre participantes ou realizações do host. Recuperar trabalho restaura estado sem novos eventos de tentativa. A conclusão atualiza o host pelo contrato canónico de `postMessage`; o HTML não chama APIs nem leva credenciais. Não se afirma sincronização com o professor sem confirmação do servidor.
 
 ## Critérios de aceitação
 

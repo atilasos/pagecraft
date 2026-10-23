@@ -6,7 +6,7 @@ A revisão de 23/10/2026 substitui o desenho v2 por minijogos para crianças dos
 
 São 28 palavras e seis minijogos independentes por palavra, num total de 168 atividades. Cada jogo tem quatro rondas e dura aproximadamente três a seis minutos. A mesma palavra pode ser retomada em vários dias, com jogos e apoios diferentes. O professor confirma o repertório e escolhe o que propor; não há uma sequência anual automática imposta à criança.
 
-As operações são associar, encontrar pares, procurar a igual, reconstruir com modelo, completar e reconstruir sem modelo inicial. Há imagem original, áudio PT-PT incorporado, demonstração recuperável e pistas junto da ação. A entrada não exige ler critérios nem conversar com um adulto. A posição 14 continua a ser gema; flor mantém a sua única sílaba e usa letras móveis nos jogos de reconstrução.
+Os jogos são Palavra igual, Ligar pares, Procurar palavras, Montar com modelo, A peça que falta e Montar de memória. Os dois jogos de igualdade praticam comparação visual; Ligar pares associa desenho e palavra. Os restantes trabalham ordenação com modelo, lacuna e reconstrução sem modelo por defeito. Há imagem original, áudio PT-PT incorporado, demonstração recuperável e pistas junto da ação. Mudar apoio altera referências visuais, conservando os mesmos itens e o trabalho feito. A entrada não exige ler critérios nem conversar com um adulto. A posição 14 continua a ser gema; flor mantém a sua única sílaba e usa letras móveis nos jogos de reconstrução.
 
 - [Princípios revistos](m28p-principios-implementacao.md).
 - [Contrato de dados e interação v3](m28p-contrato-percursos.md).
