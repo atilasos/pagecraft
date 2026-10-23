@@ -1,0 +1,286 @@
+{
+  "slug": "rato",
+  "word": "rato",
+  "order": 15,
+  "syllables": ["ra", "to"],
+  "phonologyNotes": "Divisão oral ra-to. O adulto modela o r inicial forte, respeitando variantes regionais, sem o confundir com o r intervocálico de outras palavras. Em rato, a é tónico e o final soa habitualmente [u] em PT-PT. Não acrescentar uma vogal aos sons consonânticos nem usar TTS para ensinar fonemas. Ao recombinar, voltar à palavra inteira: a posição e a tonicidade podem alterar a realização das vogais. Não apresentar ra, to, ta, pa ou bo como gravações invariáveis.",
+  "prerequisites": [
+    "Percursos anteriores, cuja leitura deve ser confirmada com cada criança: menina, menino, uva, dedo, sapato, bota, leque, casa, janela, telhado, escada, chave, galinha, gema. Gema é a palavra 14; ovo não integra este corpus.",
+    "Retomar sobretudo pa de sapato, ta de bota, ca de casa, as relações p/som, t/som e b/som já trabalhadas. Reconhecer palavras anteriores não garante que estas relações estejam disponíveis para recombinar.",
+    "Ensino explícito neste percurso: r inicial forte em ra, ligação de t a o final pronunciado [u], a final habitualmente [ɐ], b com o final [u] em bo, pa tónico [pa] e pa final átono [pɐ], ta tónico [ta] e ta final átono [tɐ]. O adulto verifica oralmente estas relações antes da transferência.",
+    "Vocabulário oral antes da leitura: rato como animal e como dispositivo, cauda/rabo, rapar/rapa no sentido de raspar o fundo de um recipiente e pato. Conversar sem mostrar a escrita dos itens novos rabo, rapa, pato e tapa.",
+    "Leitura autónoma proposta apenas após modelação e observação: rato, rata e, na primeira apresentação sem modelo, rabo e rapa; na revisão, pato e tapa. Instruções, frase, pequeno texto e alternativas de compreensão são de leitura acompanhada, com palavras conhecidas que a criança pode assumir."
+  ],
+  "assistedReading": "O adulto lê instruções e os textos assinalados como leitura acompanhada, incluindo vocabulário fora do corpus. Nas páginas de transferência e revisão, lê só o pedido: não lê as alternativas nem os cartões pela criança, não aponta a resposta e não apresenta imagens ou modelos. Os cartões indicados em adultPrompt e no guia são preparados pelo adulto e mostrados apenas na tarefa respetiva. A observação oral é registada pelo professor; o botão não comprova leitura.",
+  "objectives": [
+    "Relacionar rato com experiências e reconhecer a palavra inteira antes de a analisar oralmente.",
+    "Relacionar sons e grafemas com modelação do adulto e ler novas combinações sem imagem ou modelo.",
+    "Compreender uma frase e um pequeno texto em leitura acompanhada.",
+    "Escrever, rever e entregar uma mensagem a um colega, retomando a leitura noutro dia."
+  ],
+  "criteria": [
+    "Conto uma experiência e encontro a palavra que trabalhámos.",
+    "Experimento ler uma combinação nova e explico ao adulto como fiz.",
+    "Explico o que compreendi da frase e da história.",
+    "Escrevo para um colega, revejo a mensagem e digo de que ajuda precisei."
+  ],
+  "sessions": [
+    {"title": "Do que falamos quando dizemos rato?", "minutes": 9},
+    {"title": "Juntar partes, experimentar leituras", "minutes": 9},
+    {"title": "Ler com sentido e escrever", "minutes": 10},
+    {"title": "Entregar e voltar a ler noutro dia", "minutes": 9}
+  ],
+  "pages": [
+    {
+      "id": "dois-usos",
+      "session": 1,
+      "phase": "context",
+      "type": "oral",
+      "title": "Já encontraste um?",
+      "prompt": "Conta onde viste ou ouviste falar de um rato.",
+      "text": "Pode ser um animal, uma personagem ou um objeto.",
+      "adultPrompt": "Escute sem exigir experiência com um animal real. Pode mostrar um rato de computador e uma ilustração de um animal nesta fase. Registe uma frase da criança e distingam os dois usos da palavra. Converse sobre cauda/rabo, o gesto de rapar uma tigela e uma ave que nada, sem apresentar por escrito os futuros itens de leitura. Não transformar esta conversa numa lista de respostas para decorar.",
+      "hints": [
+        {"individual": "Lembra-te de uma história ou de um computador.", "group": "Cada pessoa pode lembrar uma história ou um computador."},
+        {"individual": "Conta o que esse rato fazia.", "group": "Escolham uma experiência e contem o que esse rato fazia."}
+      ],
+      "challenge": "Explica como percebeste de que rato se falava."
+    },
+    {
+      "id": "etiqueta-inteira",
+      "session": 1,
+      "phase": "recognition",
+      "type": "choice",
+      "title": "A etiqueta da nossa conversa",
+      "prompt": "Encontra a palavra igual à etiqueta.",
+      "text": "rato",
+      "options": ["bota", "rato", "gema"],
+      "answer": "rato",
+      "adultPrompt": "Leia a etiqueta uma vez, apontando a palavra inteira. Peça a comparação visual. O acerto mostra correspondência com modelo, não leitura autónoma. Retire depois a etiqueta e as imagens da mesa.",
+      "hints": [
+        {"individual": "Olha para a palavra toda antes de escolher.", "group": "Olhem para a palavra toda antes de escolher."},
+        {"individual": "Compara a primeira letra e o fim da etiqueta.", "group": "Comparem a primeira letra e o fim da etiqueta."}
+      ],
+      "challenge": "Mostra uma diferença entre duas etiquetas."
+    },
+    {
+      "id": "passos-na-mesa",
+      "session": 1,
+      "phase": "syllables",
+      "type": "oral",
+      "title": "A palavra em passos",
+      "prompt": "Diz a palavra e marca os seus passos.",
+      "text": "Diz rato naturalmente. Usa uma ficha por sílaba.",
+      "adultPrompt": "Com a palavra escrita tapada, escute a produção natural e peça uma ficha por sílaba oral. Se necessário modele ra-to, duas sílabas, e volte à palavra inteira. Distinga primeira tentativa e repetição apoiada. Não contar letras nem soletrar.",
+      "hints": [
+        {"individual": "Diz a palavra devagar, sem perder o seu sentido.", "group": "Digam a palavra à vez, sem perder o seu sentido."},
+        {"individual": "Move uma ficha a cada impulso da voz.", "group": "Um diz a palavra e outro move as fichas; depois troquem."}
+      ],
+      "challenge": "Consegue o colega juntar os passos que disseste?"
+    },
+    {
+      "id": "adulto-mostra-codigo",
+      "session": 1,
+      "phase": "code",
+      "type": "oral",
+      "title": "O adulto mostra, tu experimentas",
+      "prompt": "Segue as letras enquanto o adulto diz a palavra.",
+      "text": "rato · ra · to",
+      "adultPrompt": "Modele explicitamente: diga rato naturalmente; aponte r ao produzir o som inicial forte, sem dizer erre nem acrescentar vogal; ligue-o a a e forme ra. Aponte t, produza uma oclusão breve sem acrescentar vogal e una a o final, que aqui soa [u]. Junte ra e to e releia a palavra natural. Mostre a correspondência em ambas as direções, som para letra e letra para som. Convide a criança a experimentar, sem exigir repetição de uma variante regional específica do r forte. Não usar TTS para estes sons.",
+      "hints": [
+        {"individual": "Olha para onde o adulto aponta quando começa a falar.", "group": "Observem onde o adulto aponta quando começa a falar."},
+        {"individual": "Experimenta unir os sons e voltar à palavra inteira.", "group": "Experimentem à vez unir os sons e voltar à palavra inteira."}
+      ],
+      "criterion": "Experimento relacionar o som ouvido com a letra apontada, com apoio do adulto."
+    },
+    {
+      "id": "reconstruir-palavra",
+      "session": 2,
+      "phase": "syllables",
+      "type": "order",
+      "title": "As peças trocaram de lugar",
+      "prompt": "Junta as peças para escrever rato.",
+      "pieces": ["to", "ra"],
+      "answer": ["ra", "to"],
+      "adultPrompt": "Diga apenas a palavra inteira. Peça à criança que leia a montagem, para distinguir uma ordem obtida por tentativa de uma recomposição com leitura.",
+      "hints": [
+        {"individual": "Diz a palavra e escuta o seu começo.", "group": "Digam a palavra e escutem o seu começo."},
+        {"individual": "Lê a montagem de uma ponta à outra.", "group": "Um monta e outro lê; decidam se corresponde ao pedido."}
+      ],
+      "challenge": "Explica por que trocaste, ou não trocaste, as peças."
+    },
+    {
+      "id": "sons-que-mudam-de-lugar",
+      "session": 2,
+      "phase": "code",
+      "type": "oral",
+      "title": "Peças antigas, posições novas",
+      "prompt": "Escuta o adulto e experimenta estas ligações.",
+      "text": "bota · sapato · ra · to · ta · pa · bo",
+      "adultPrompt": "Retome ta de bota e pa de sapato apontando as letras. Modele a final átono [ɐ], como em bota, e o final [u], como em rato. Mostre b ligado a o final, bo [bu], sem escrever nem dizer a palavra inteira que será testada depois. Modele pa tónico [pa] e pa final átono [pɐ], bem como ta tónico [ta] e ta final átono [tɐ], explicando oralmente que a voz muda conforme o lugar na palavra. Retome ra com a tónico. Peça ligações som/letra em ordem alternada. Não ensine uma família silábica como sons fixos nem apresente rabo, rapa, pato ou tapa inteiros antes das tarefas novas. Se estas relações não estiverem disponíveis, voltar a modelar e registar a transferência posterior como apoiada.",
+      "hints": [
+        {"individual": "Aponta a letra que corresponde ao som do adulto.", "group": "Apontem à vez a letra que corresponde ao som do adulto."},
+        {"individual": "Une os sons com o adulto e escuta a vogal final.", "group": "Unam os sons com o adulto e comparem a vogal final."}
+      ],
+      "challenge": "Explica por que precisamos de ouvir a palavra inteira."
+    },
+    {
+      "id": "outra-etiqueta",
+      "session": 2,
+      "phase": "code",
+      "type": "order",
+      "title": "Uma nova combinação",
+      "prompt": "Monta rata com uma peça nova no fim.",
+      "pieces": ["ta", "ra"],
+      "answer": ["ra", "ta"],
+      "adultPrompt": "Esta é recombinação guiada, não prova de transferência. Retome ra de rato e ta de bota, diga rata, explique o significado e peça leitura da montagem. Escute a final átono. Compare a mudança no fim da palavra com a anterior, sem antecipar os itens seguintes.",
+      "hints": [
+        {"individual": "Escuta primeiro a palavra que queres montar.", "group": "Escutem primeiro a palavra que querem montar."},
+        {"individual": "Diz cada peça e depois une tudo.", "group": "Um diz as peças e outro une tudo; depois troquem."}
+      ],
+      "challenge": "Diz que parte se manteve na palavra anterior."
+    },
+    {
+      "id": "ler-sem-etiqueta",
+      "session": 2,
+      "phase": "transfer",
+      "type": "choice",
+      "title": "Ler sem modelo",
+      "prompt": "Lê as palavras. Qual nomeia uma parte do animal?",
+      "options": ["bota", "rabo", "gema"],
+      "answer": "rabo",
+      "adultPrompt": "Retire imagens, montagens e etiquetas. Leia só a instrução. Escute primeiro a leitura individual de cada alternativa sem a fazer pela criança; depois deixe escolher. Aceite a referência à cauda como explicação do sentido. Registe leitura, hesitações e ajuda antes do clique. Se for necessário ler uma alternativa, a evidência passa a leitura apoiada.",
+      "hints": [
+        {"individual": "Olha para todas as letras, sem tentar adivinhar.", "group": "Cada pessoa olha para todas as letras antes de ouvirem o colega."},
+        {"individual": "Experimenta juntar as partes e pensar no que leste.", "group": "Leiam à vez, juntem as partes e conversem sobre o sentido."}
+      ],
+      "challenge": "Explica ao adulto como ligaste as letras."
+    },
+    {
+      "id": "cartao-surpresa",
+      "session": 3,
+      "phase": "transfer",
+      "type": "oral",
+      "title": "Um cartão por descobrir",
+      "prompt": "Lê o cartão que o adulto te dá.",
+      "text": "Experimenta ler antes de ouvir outras pessoas.",
+      "adultPrompt": "Apresente um cartão apenas com rapa, sem desenho, divisão silábica ou frase modelo. Não o leia antes da criança. Escute a primeira tentativa e peça que explique o sentido, retomando só depois a conversa sobre raspar o fundo de uma tigela. Registe ligação de ra e pa, leitura natural, ajuda e autocorreção. Num grupo, recolha tentativas individuais antes de uma resposta em coro. O botão apenas declara a conversa.",
+      "hints": [
+        {"individual": "Percorre o cartão com o dedo, da esquerda para a direita.", "group": "Cada pessoa percorre o seu cartão antes de conversar."},
+        {"individual": "Tenta unir as partes e volta a dizer a palavra inteira.", "group": "Tentem unir as partes à vez e voltem à palavra inteira."}
+      ],
+      "criterion": "O adulto escuta a minha primeira leitura de um item não modelado."
+    },
+    {
+      "id": "compreender-frase",
+      "session": 3,
+      "phase": "comprehension",
+      "type": "choice",
+      "title": "Quem faz o quê?",
+      "prompt": "O que a menina leva?",
+      "text": "Leitura acompanhada: A menina leva o rato de computador.",
+      "options": ["O rato de computador.", "Uma bota.", "Uma galinha."],
+      "answer": "O rato de computador.",
+      "adultPrompt": "Leia a frase com a criança, assumindo leva, de e computador e quaisquer outras palavras ainda não disponíveis. A criança pode ler menina e rato se conseguir. Leia as alternativas quando necessário. Peça que indique na frase o que sustenta a escolha. Esta página observa compreensão de uma frase acompanhada, não descodificação autónoma de computador.",
+      "hints": [
+        {"individual": "Volta à frase e procura o que foi levado.", "group": "Voltem à frase e procurem o que foi levado."},
+        {"individual": "Conta a situação por palavras tuas e compara as opções.", "group": "Um conta a situação e os outros comparam com as opções."}
+      ],
+      "challenge": "Como sabes que este rato é um objeto?"
+    },
+    {
+      "id": "problema-na-biblioteca",
+      "session": 3,
+      "phase": "comprehension",
+      "type": "oral",
+      "title": "Uma descoberta na biblioteca",
+      "prompt": "Explica o engano e como os colegas o resolveram.",
+      "text": "Leitura acompanhada: Na biblioteca, o menino procura um rato num livro de animais. A menina aponta para o computador. Ele ri e mostra o livro. Os dois decidem fazer duas etiquetas diferentes.",
+      "adultPrompt": "Leia o pequeno texto em voz natural, com pausas. É leitura acompanhada: biblioteca, procura, num, livro, animais, aponta, computador, ri, mostra, dois, decidem, fazer, duas, etiquetas e diferentes não são repertório autónomo declarado. Convide a criança a ler palavras conhecidas sem interromper o sentido. Pergunte o que cada colega procurava ou mostrava e por que seriam úteis duas etiquetas. Aceite uma explicação apoiada no texto e distinga-a de uma suposição sem apoio. O texto relata um encontro de significados, não uma regra sobre animais reais.",
+      "hints": [
+        {"individual": "Recorda o que havia no livro e junto do computador.", "group": "Recordem o que havia no livro e junto do computador."},
+        {"individual": "Pede ao adulto que releia o fim. Para que servem as etiquetas?", "group": "Peçam ao adulto que releia o fim e discutam a utilidade das etiquetas."}
+      ],
+      "challenge": "Propõe onde colocarias cada etiqueta e explica porquê."
+    },
+    {
+      "id": "bilhete-para-colega",
+      "session": 3,
+      "phase": "writing",
+      "type": "write",
+      "title": "Um convite que vai chegar a alguém",
+      "prompt": "Escreve a um colega um convite para procurar um rato.",
+      "text": "Escolhe um colega real. Explica de que rato falas.",
+      "placeholder": "O teu bilhete e o nome do colega",
+      "adultPrompt": "Combine com a criança um destinatário presente na escola e uma procura possível: num livro ou junto do computador. Não fornecer uma frase para copiar. Aceitar escrita emergente, escrita a par ou ditado ao adulto, distinguindo as partes escritas pela criança. Pergunte o que quer dizer antes de ajudar com correspondências ainda não ensinadas. Guarde a primeira versão para comparação. A escrita é aberta e não tem veredicto automático.",
+      "hints": [
+        {"individual": "Diz primeiro ao adulto a mensagem que queres enviar.", "group": "Digam primeiro a mensagem e combinem quem vai escrevê-la."},
+        {"individual": "Pensa se o colega sabe onde procurar e com quem.", "group": "Pensem se o destinatário sabe onde procurar e com quem."}
+      ],
+      "challenge": "Acrescenta um pormenor que ajude o colega a encontrar-te."
+    },
+    {
+      "id": "rever-bilhete",
+      "session": 4,
+      "phase": "writing",
+      "type": "write",
+      "title": "Antes de entregar",
+      "prompt": "Relê o teu bilhete e escreve a versão para entregar.",
+      "text": "O colega percebe qual é o rato e onde procurar?",
+      "placeholder": "A tua versão revista",
+      "adultPrompt": "No dia seguinte à sessão 3, recupere o bilhete anterior, sem expor cartões de leitura. Peça à criança que o releia como conseguir e explique o que mantém ou muda. O adulto pode reler apenas o ditado ou a escrita ainda não decifrável, indicando essa ajuda. Retome um aspeto de sentido e uma correspondência já ensinada, sem apagar a autoria. Registe primeira versão, alteração e razão dada. Pode manter a versão se a criança justificar que comunica o que pretendia.",
+      "hints": [
+        {"individual": "Lê como se fosses o colega que o vai receber.", "group": "Um faz de destinatário e diz o que compreendeu."},
+        {"individual": "Verifica o nome do colega, o lugar e a palavra que trabalhámos.", "group": "Verifiquem o nome do destinatário, o lugar e a palavra trabalhada."}
+      ],
+      "challenge": "Explica uma decisão que tomaste ao rever."
+    },
+    {
+      "id": "entrega-e-resposta",
+      "session": 4,
+      "phase": "communication",
+      "type": "oral",
+      "title": "O bilhete chega ao colega",
+      "prompt": "Entrega o bilhete e escuta o que o colega percebeu.",
+      "text": "Pergunta onde vai procurar. Explica se precisar.",
+      "adultPrompt": "Assegure a entrega real, em papel ou mostrando a mensagem no dispositivo. Convide o destinatário a dizer que rato procura e onde. Se não compreender, a criança esclarece e pode voltar a rever o bilhete. Registe a resposta do destinatário e a ajuda na comunicação. Antes das páginas seguintes, retire bilhetes, etiquetas e outros modelos de leitura. A comunicação cooperada é uma proposta MEM deste percurso.",
+      "hints": [
+        {"individual": "Dá tempo ao colega para ler ou ouvir a mensagem.", "group": "Deem tempo ao destinatário para ler ou ouvir a mensagem."},
+        {"individual": "Pergunta o que ficou claro e o que falta explicar.", "group": "Perguntem o que ficou claro e o que falta explicar."}
+      ],
+      "challenge": "Conta ao grupo se precisaste de esclarecer alguma coisa."
+    },
+    {
+      "id": "revisao-nova-leitura",
+      "session": 4,
+      "phase": "review",
+      "type": "choice",
+      "title": "Voltar a juntar sem modelo",
+      "prompt": "Lê as palavras. Qual nomeia uma ave que nada?",
+      "options": ["rato", "dedo", "pato"],
+      "answer": "pato",
+      "adultPrompt": "Esta tarefa acontece no dia seguinte à sessão 3 ou mais tarde, sem ensaio dos itens imediatamente antes. Leia apenas a instrução. Escute a leitura das três alternativas antes da escolha e registe sobretudo a primeira tentativa do item novo. Não leia a resposta nem use imagem, exemplo escrito ou segmentação dada pelo adulto. Se a criança depender de ajuda, registe-a e planeie retoma; o acerto por escolha não prova leitura autónoma.",
+      "hints": [
+        {"individual": "Dá atenção às letras do início e do fim.", "group": "Cada pessoa observa o início e o fim antes de ouvir os outros."},
+        {"individual": "Une as partes, diz a palavra inteira e pensa no sentido.", "group": "Leiam à vez, unam as partes e expliquem o sentido."}
+      ],
+      "challenge": "Mostra ao adulto como evitaste adivinhar."
+    },
+    {
+      "id": "revisao-com-adulto",
+      "session": 4,
+      "phase": "review",
+      "type": "oral",
+      "title": "O adulto escuta e combina a retoma",
+      "prompt": "Lê os cartões e conta de que ajuda precisaste.",
+      "text": "Experimenta sozinho primeiro. Depois conversa com o adulto.",
+      "adultPrompt": "Em apresentação individual e sem modelos, mostre cartões apenas com rato, rabo e tapa, um de cada vez, em ordem alternada. Os dois primeiros retomam leituras anteriores; tapa é nova combinação de ta e pa e não deve ter sido escrita antes. Não leia os cartões pela criança. Depois da tentativa, peça uma explicação de sentido e, se necessário, ofereça ajuda identificada como tal. Anote leitura, autocorreção, ajuda e decisão de retoma para dois ou três dias depois. Convide a criança a escolher um objetivo no plano individual. A declaração de conversa e a conclusão das páginas não demonstram domínio.",
+      "hints": [
+        {"individual": "Olha com tempo e experimenta ler cada cartão.", "group": "Cada pessoa experimenta o seu cartão antes da conversa conjunta."},
+        {"individual": "Diz onde hesitaste e pede ajuda nesse ponto.", "group": "Contem onde hesitaram e combinem que ajuda pedir."}
+      ],
+      "criterion": "O adulto regista o que li sem ajuda, o que li com apoio e o próximo passo.",
+      "challenge": "Escolhe o que queres voltar a experimentar noutro dia."
+    }
+  ]
+}
