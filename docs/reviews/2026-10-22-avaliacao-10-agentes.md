@@ -241,7 +241,7 @@ O [relatório próprio](2026-10-22-pontes-duas-vistas.md) conserva as provas
 vermelhas, reparações, provas verdes e limites. A atividade permanece privada,
 pronta para revisão do professor, sem ensaio com crianças nem publicação.
 
-## Entregas preparadas
+## Entregas
 
 | PR | Alteração | Benefício ou contrato protegido |
 |---|---|---|
@@ -257,8 +257,8 @@ pronta para revisão do professor, sem ensaio com crianças nem publicação.
 | [#65](https://github.com/atilasos/pagecraft/pull/65) | Duas pontes e foco no apoio comum | Investigação com previsões, comparação e contraexemplo, em rascunho privado |
 
 A ordem de merge respeita catálogo antes de gerações, fila antes de bilhete
-e histórico de pistas antes de pontes. A validação final combina as nove frentes
-antes de alterar `main`.
+e histórico de pistas e inicialização antes de pontes. A validação final combina
+as nove frentes antes de alterar `main`.
 
 ## Revisão final das nove frentes
 
@@ -314,4 +314,20 @@ comandos, experiências descartadas e limites, e o reproducer fica no repositór
 Standards e Spec terminaram com zero achados em `3addb24` e confirmaram a
 integração em `6cce59b`. A resolução mantém modal `v=2` e o cliente de
 inicialização, com as restantes frentes iguais às já revistas. A suite completa
-está a ser repetida sobre esta versão final.
+foi repetida sobre esta versão final, com o resultado abaixo.
+
+## Validação final
+
+`PAGECRAFT_TEST_CDP=<CDP da sessão própria do Hub> bash scripts/verify_pagecraft.sh`
+terminou com sucesso no SHA `6cce59bf814511acc7af6d35af41a14ff86767f4`:
+
+- 527 testes Python aprovados.
+- 35 testes JavaScript aprovados.
+- 171 testes de browser aprovados em 361,21 segundos.
+- Fontes canónicas e espelhos sem divergências; `git diff --check` aprovado.
+
+A sessão própria `pagecraft-merge-validation`, perfil research, foi fechada
+depois da execução. Os testes preservaram o checkout integrado limpo. As dez
+auditorias, decisões adiadas, reparações e limites permanecem registados; os
+resultados não constituem observação pedagógica com crianças. O rascunho das
+pontes continua privado, sujeito à revisão específica do professor.
