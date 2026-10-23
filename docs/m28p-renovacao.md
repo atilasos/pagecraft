@@ -12,7 +12,7 @@ A nova coleção tem 28 percursos e 447 páginas, distribuídas por quatro sess�
 - [Fontes da Sebenta sobre leitura, escrita e MEM](../drafts/m28p-renovacao-sources.md).
 - Pareceres pedagógicos [1–14](reviews/2026-10-23-m28p-pedagogia-1-14.md) e [15–28](reviews/2026-10-23-m28p-pedagogia-15-28.md), e [revisão técnica](reviews/2026-10-23-m28p-motor.md).
 
-Na Sebenta, as cópias do relatório, dos princípios e das fontes estão em `30_Projects/PageCraft/28-palavras-2026/`. A página `20_Wiki/Método das 28 Palavras.md` recebeu uma atualização identificada por data, preservando o registo anterior. Nenhuma fonte em `10_Sources/` foi alterada.
+Na Sebenta, as cópias de projeto estão em `30_Projects/PageCraft/28-palavras-2026/`. As versões navegáveis e pesquisáveis pela aplicação estão em `Research/pagecraft/28-palavras-2026/`; a leitura do relatório completo foi confirmada pela API com HTTP 200. A página `20_Wiki/Método das 28 Palavras.md` recebeu uma atualização identificada por data, preservando o registo anterior. Nenhuma fonte em `10_Sources/` foi alterada.
 
 ## Gerar e verificar
 
