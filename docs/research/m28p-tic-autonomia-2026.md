@@ -42,7 +42,7 @@ As decisões seguintes são propostas para esta sala de TIC, não conclusões ex
 
 - Uma palavra oferece seis minijogos independentes, com quatro rondas e duração orientadora de três a seis minutos. O professor pode propor apenas um e voltar à mesma palavra noutro dia.
 - A criança entra diretamente numa tarefa visual, com uma ação principal, demonstração recuperável e instrução oral PT-PT incorporada. Não precisa de ler critérios para começar.
-- A diversidade está nas operações: associar, emparelhar, procurar, ordenar com modelo, completar e reconstruir sem modelo inicial. Ações e localização dos controlos permanecem estáveis.
+- A diversidade final inclui comparação de uma forma escrita, procura de várias formas iguais, associação desenho/palavra, ordenação com modelo, lacuna e reconstrução sem modelo por defeito. Ações e localização dos controlos permanecem estáveis.
 - A primeira palavra usa o seu próprio material. O repertório anterior só entra em jogos cumulativos após confirmação do professor; ordem editorial não prova ensino realizado.
 - Em flor, há uma sílaba. Os jogos de reconstrução usam letras móveis explicitamente identificadas como letras; não inventam quatro sílabas.
 - Imagens, áudio e pistas estão junto da ação. Pedir ajuda ao professor é uma saída possível, sem ser o procedimento normal de cada ronda.
