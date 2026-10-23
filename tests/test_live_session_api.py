@@ -137,7 +137,7 @@ async def test_student_snapshot_contains_only_own_state_and_no_class_totals(clie
     assert "token" not in response.text.lower()
 
 
-async def test_board_stream_contains_only_shared_state_and_global_events(client):
+async def test_board_stream_contains_only_shared_state_and_global_events(client, board_frame_received):
     session = await _session(client, students=("Ana", "Bia"))
     ana_id = next(iter(session["roster"]))
     await client.post(
@@ -146,7 +146,7 @@ async def test_board_stream_contains_only_shared_state_and_global_events(client)
     )
 
     async def produce():
-        await asyncio.sleep(0.01)
+        await board_frame_received('session_state_snapshot')
         await client.app.state.classroom.emit_event(
             session["id"],
             "attempt",
@@ -166,14 +166,17 @@ async def test_board_stream_contains_only_shared_state_and_global_events(client)
             f"/api/sessions/{session['id']}/control",
             json={"action": "highlight", "unit_id": "global"},
         )
+        await board_frame_received('teacher_highlight')
         await client.post(
             f"/api/sessions/{session['id']}/control",
             json={"action": "freeze"},
         )
+        await board_frame_received('session_state_changed')
         await client.post(
             f"/api/sessions/{session['id']}/control",
             json={"action": "unfreeze"},
         )
+        await board_frame_received('session_state_changed')
         await client.post(f"/api/sessions/{session['id']}/close")
 
     transport = httpx.ASGITransport(
@@ -210,8 +213,6 @@ async def test_board_stream_contains_only_shared_state_and_global_events(client)
         "session_state_changed",
         "unfreeze_screens",
         "session_state_changed",
-        "session_closed",
-        "session_state_changed",
     ]
     assert frames[0]["data"] == {
         "session": {"status": "live", "closed": False, "frozen": False},
@@ -226,7 +227,7 @@ async def test_board_stream_contains_only_shared_state_and_global_events(client)
     }
     assert frames[1]["data"]["payload"]["unit_id"] == "global"
     assert frames[-1]["data"] == {
-        "session": {"status": "closed", "closed": True, "frozen": False}
+        "session": {"status": "live", "closed": False, "frozen": False}
     }
     assert "student_id" not in response.text
     assert ana_id not in response.text

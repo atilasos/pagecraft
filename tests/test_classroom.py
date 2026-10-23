@@ -30,6 +30,78 @@ async def test_create_class_and_session(svc):
     assert found and found["id"] == session["id"]
 
 
+@pytest.mark.parametrize("change", ["resume", "close"])
+async def test_board_selection_rechecks_lifecycle_during_later_read(
+    svc, monkeypatch, change,
+):
+    clock = {"now": datetime(2026, 10, 22, 9, tzinfo=timezone.utc)}
+    monkeypatch.setattr(svc, "_clock", lambda: clock["now"].isoformat())
+    sessions = [await _session(svc), await _session(svc)]
+    changing, blocking = sorted(sessions, key=lambda session: session["id"])
+    if change == "resume":
+        await svc.close_session(changing["id"])
+    expected_before = blocking if change == "resume" else changing
+    assert (await svc.current_board_session())["id"] == expected_before["id"]
+
+    read_started = asyncio.Event()
+    proceed = asyncio.Event()
+    read_json = svc.storage.read_json
+
+    async def pause_later_session_read(path, default=None):
+        data = await read_json(path, default)
+        if path == svc._session_path(blocking["id"]) and not read_started.is_set():
+            # The changing session has already been read in this enumeration.
+            read_started.set()
+            await proceed.wait()
+        return data
+
+    monkeypatch.setattr(svc.storage, "read_json", pause_later_session_read)
+    selection = asyncio.create_task(svc.current_board_session())
+    try:
+        await asyncio.wait_for(read_started.wait(), 1)
+        clock["now"] += timedelta(minutes=1)
+        if change == "resume":
+            await svc.resume_session(changing["id"])
+        else:
+            await svc.close_session(changing["id"])
+        proceed.set()
+        current = await asyncio.wait_for(asyncio.shield(selection), 1)
+        expected_after = changing if change == "resume" else blocking
+        assert current["id"] == expected_after["id"]
+    finally:
+        proceed.set()
+        selection.cancel()
+        await asyncio.gather(selection, return_exceptions=True)
+
+
+async def test_board_selection_preserves_ties_on_start_and_resume(svc, monkeypatch):
+    clock = {"now": datetime(2026, 10, 22, 9, tzinfo=timezone.utc)}
+    monkeypatch.setattr(svc, "_clock", lambda: clock["now"].isoformat())
+    sessions = [await _session(svc), await _session(svc)]
+    first, second = sorted(sessions, key=lambda session: session["id"])
+    assert (await svc.current_board_session())["id"] == first["id"]
+    for session in sessions:
+        await svc.close_session(session["id"])
+    clock["now"] += timedelta(minutes=1)
+    # Resume in reverse path order; equal active_since keeps the same tie rule.
+    await svc.resume_session(second["id"])
+    await svc.resume_session(first["id"])
+    assert (await svc.current_board_session())["id"] == first["id"]
+
+
+async def test_board_selection_converges_after_automatic_close(svc, monkeypatch):
+    clock = {"now": datetime(2026, 10, 22, 9, tzinfo=timezone.utc)}
+    monkeypatch.setattr(svc, "_clock", lambda: clock["now"].isoformat())
+    expired = await _session(svc)
+    clock["now"] += timedelta(hours=1)
+    current = await _session(svc)
+    clock["now"] += timedelta(hours=7)
+    assert (await svc.current_board_session())["id"] == current["id"]
+    assert (await svc.get_session(expired["id"]))["status"] == "closed"
+    clock["now"] += timedelta(hours=1)
+    assert await svc.current_board_session() is None
+
+
 async def test_claim_identity_once(svc):
     session = await _session(svc)
     student_id = next(iter(session["roster"]))

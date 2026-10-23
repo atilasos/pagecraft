@@ -1,11 +1,13 @@
 import asyncio
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
+from types import SimpleNamespace
 
 import httpx
 import pytest
 
 from server import app as app_module
-from server.access import BOARD_COOKIE_NAME, TEACHER_COOKIE_NAME
+from server.access import BOARD_COOKIE_NAME, TEACHER_COOKIE_NAME, Role
+from starlette.requests import Request
 
 
 @pytest.fixture
@@ -170,6 +172,7 @@ async def test_board_sees_only_the_live_collective_session_and_cannot_act(
 async def test_board_stream_derives_its_collective_view_from_the_cookie(
     board_http,
     teacher_cookie,
+    board_frame_received,
 ):
     app, teacher, board, _ = board_http
     await _pair(teacher, board)
@@ -218,6 +221,7 @@ async def test_board_stream_derives_its_collective_view_from_the_cookie(
         f"/api/sessions/{session['id']}/control",
         json={"action": "highlight", "unit_id": "global"},
     )
+    await board_frame_received('teacher_highlight')
     await teacher.post(f"/api/sessions/{session['id']}/close")
     response = await asyncio.wait_for(stream, timeout=2)
 
@@ -469,3 +473,252 @@ async def test_short_pairing_challenge_expires_after_five_minutes(board_http):
 
     assert confirmation.status_code == 404
     assert completion.status_code == 404
+
+
+async def _board_lesson(teacher):
+    classroom = (await teacher.post('/api/classes', json={
+        'name': 'Quadro descartável', 'year': 2, 'students': ['Ana', 'Bruno', 'Carla'],
+    })).json()
+    session = (await teacher.post('/api/sessions', json={
+        'class_id': classroom['id'], 'activity_slug': 'fracoes-2-minecraft',
+        'activity_title': 'Sessão A',
+    })).json()
+    return classroom, session
+
+
+async def _next_board_lesson(teacher, classroom, clock):
+    clock['now'] += timedelta(minutes=1)
+    response = await teacher.post('/api/sessions', json={
+        'class_id': classroom['id'], 'activity_slug': 'fracoes-2-minecraft',
+        'activity_title': 'Sessão B',
+    })
+    assert response.status_code == 200
+    return response.json()
+
+
+async def _wait_for_board_stream(app, session_id):
+    for _ in range(200):
+        if session_id in app.state.classroom.live_session_ids():
+            return
+        await asyncio.sleep(.001)
+    pytest.fail('O stream não subscreveu o relógio da sessão')
+
+
+async def test_old_board_stream_rejected_like_content_while_students_keep_access(board_http):
+    app, teacher, board, clock = board_http
+    await _pair(teacher, board)
+    classroom, session = await _board_lesson(teacher)
+    path = f"/api/sessions/{session['id']}"
+    transport = httpx.ASGITransport(app=app)
+    async with httpx.AsyncClient(transport=transport, base_url='https://studio.example') as student:
+        assert (await student.post(path + '/claim', json={
+            'student_id': next(iter(session['roster'])),
+        })).status_code == 200
+        # Generate a real eight-character code before B becomes current.
+        ids = list(session['roster'])
+        group = (await teacher.post(path + '/groups/claim', json={
+            'participant_ids': ids[1:], 'mode': 'pair',
+        })).json()['work_group']
+        code_response = await teacher.post(path + f"/groups/{group['id']}/access-code")
+        assert code_response.status_code == 200, code_response.text
+        code = code_response.json()['code']
+        await teacher.post(path + '/group-codes', json={'visible': True})
+        current = await _next_board_lesson(teacher, classroom, clock)
+        assert (await board.get('/api/board/session')).json()['id'] == current['id']
+        assert (await board.get(f"/api/board/sessions/{session['id']}/content")).status_code == 404
+        request = asyncio.create_task(board.get(f"/api/board/sessions/{session['id']}/stream"))
+        # Closing A bounds the reproduction even on the unfixed server.
+        await asyncio.sleep(.05)
+        assert (await student.get(path + '/me')).status_code == 200
+        assert (await teacher.get(path)).json()['status'] == 'live'
+        async with httpx.AsyncClient(transport=transport, base_url='https://studio.example') as returning_group:
+            assert (await returning_group.post('/api/groups/enter', json={'code': code})).status_code == 200
+            assert (await returning_group.get(path + '/me')).status_code == 200
+        await teacher.post(path + '/close')
+        response = await asyncio.wait_for(request, 1)
+        assert response.status_code == 404, response.text
+        assert 'session_state_snapshot' not in response.text
+        assert code not in response.text
+        assert 'Ana' not in response.text
+        # Teacher and student SSE remain usable for A after B starts.
+        for client in (teacher, student):
+            own = await client.get(path + '/stream')
+            assert own.status_code == 200
+            assert 'event: session_state_snapshot' in own.text
+
+
+@pytest.mark.parametrize('wake', ['event', 'private_event', 'group_code', 'heartbeat'])
+async def test_open_board_stream_stops_after_switch_without_old_frames(board_http, wake):
+    app, teacher, board, clock = board_http
+    await _pair(teacher, board)
+    classroom, session = await _board_lesson(teacher)
+    path = f"/api/sessions/{session['id']}"
+    if wake == 'group_code':
+        group = (await teacher.post(path + '/groups/claim', json={
+            'participant_ids': list(session['roster'])[:2], 'mode': 'pair',
+        })).json()['work_group']
+    stream = asyncio.create_task(board.get(f"/api/board/sessions/{session['id']}/stream"))
+    try:
+        await _wait_for_board_stream(app, session['id'])
+        await _next_board_lesson(teacher, classroom, clock)
+        new_code = None
+        if wake in {'event', 'private_event'}:
+            control = {'action': 'highlight', 'unit_id': 'ANTIGA-NAO-PROJETAR'}
+            if wake == 'private_event':
+                control['student_id'] = next(iter(session['roster']))
+            assert (await teacher.post(path + '/control', json=control)).status_code == 200
+        elif wake == 'group_code':
+            generated = await teacher.post(path + f"/groups/{group['id']}/access-code")
+            assert generated.status_code == 200
+            new_code = generated.json()['code']
+        else:
+            # Same publisher used by the periodic heartbeat; no record in A.
+            app.state.classroom.live_ticks.publish(session['id'])
+        response = await asyncio.wait_for(asyncio.shield(stream), .5)
+        assert response.status_code == 200
+        assert response.text.count('event: session_state_snapshot') == 1
+        assert 'ANTIGA-NAO-PROJETAR' not in response.text
+        if new_code:
+            assert new_code not in response.text
+        assert response.text.count('\nevent: ') == 1
+        assert 'session_state_changed' not in response.text
+        assert 'student_state_changed' not in response.text
+        assert 'work_group_state_changed' not in response.text
+        assert session['id'] not in app.state.classroom.live_session_ids()
+    finally:
+        stream.cancel()
+        await asyncio.gather(stream, return_exceptions=True)
+
+
+async def test_board_stream_rechecks_selection_before_snapshot(board_http, monkeypatch):
+    app, teacher, board, clock = board_http
+    await _pair(teacher, board)
+    classroom, session = await _board_lesson(teacher)
+    checked = asyncio.Event()
+    proceed = asyncio.Event()
+    resolve = app.state.board_pairings.resolve
+    calls = 0
+
+    async def pause_after_handler_check(credential):
+        nonlocal calls
+        calls += 1
+        valid = await resolve(credential)
+        if calls == 2:
+            checked.set()
+            await proceed.wait()
+        return valid
+
+    monkeypatch.setattr(app.state.board_pairings, 'resolve', pause_after_handler_check)
+    stream = asyncio.create_task(board.get(f"/api/board/sessions/{session['id']}/stream"))
+    try:
+        await asyncio.wait_for(checked.wait(), 1)
+        await _next_board_lesson(teacher, classroom, clock)
+        proceed.set()
+        response = await asyncio.wait_for(asyncio.shield(stream), .5)
+        assert response.status_code in (200, 401)
+        assert 'session_state_snapshot' not in response.text
+        assert session['id'] not in app.state.classroom.live_session_ids()
+    finally:
+        proceed.set()
+        stream.cancel()
+        await asyncio.gather(stream, return_exceptions=True)
+
+
+@pytest.mark.parametrize('change_after', ['handler', 'record'])
+async def test_board_stream_rechecks_when_consumer_resumes(board_http, change_after):
+    from server.api.classroom import stream_session
+
+    app, teacher, board, clock = board_http
+    await _pair(teacher, board)
+    classroom, session = await _board_lesson(teacher)
+    # Drive the actual response iterator so consumer backpressure is controlled.
+    # HTTP role resolution and rejection are covered by the tests above.
+    request = Request({'type': 'http', 'app': app})
+    request.state.access = SimpleNamespace(
+        role=Role.BOARD, board_credential=board.cookies.get(BOARD_COOKIE_NAME),
+    )
+    response = await stream_session(session['id'], request)
+    frames = response.body_iterator
+    try:
+        if change_after == 'record':
+            assert 'event: session_state_snapshot' in await anext(frames)
+            await teacher.post(f"/api/sessions/{session['id']}/control", json={'action': 'freeze'})
+            assert 'event: freeze_screens' in await asyncio.wait_for(anext(frames), 1)
+        await _next_board_lesson(teacher, classroom, clock)
+        # Neither the initial snapshot nor a second frame of the same record
+        # may escape when the consumer resumes after a session switch.
+        with pytest.raises(StopAsyncIteration):
+            await asyncio.wait_for(anext(frames), 1)
+        assert session['id'] not in app.state.classroom.live_session_ids()
+    finally:
+        await frames.aclose()
+
+
+@pytest.mark.parametrize('phase', ['snapshot', 'record', 'heartbeat'])
+async def test_board_stream_rechecks_creation_during_session_read(
+    board_http, monkeypatch, phase,
+):
+    from server.api.classroom import stream_session
+
+    app, teacher, board, clock = board_http
+    await _pair(teacher, board)
+    classroom, session = await _board_lesson(teacher)
+    svc = app.state.classroom
+    request = Request({'type': 'http', 'app': app})
+    request.state.access = SimpleNamespace(
+        role=Role.BOARD, board_credential=board.cookies.get(BOARD_COOKIE_NAME),
+    )
+    response = await stream_session(session['id'], request)
+    frames = response.body_iterator
+    read_started = asyncio.Event()
+    proceed = asyncio.Event()
+    subscribed = asyncio.Event()
+    read_json = svc.storage.read_json
+    subscribe_ticks = svc.live_ticks.subscribe
+
+    async def pause_session_read(path, default=None):
+        data = await read_json(path, default)
+        if path == svc._session_path(session['id']) and not read_started.is_set():
+            read_started.set()
+            await proceed.wait()
+        return data
+
+    def observe_tick_subscription(session_id):
+        subscription = subscribe_ticks(session_id)
+        subscribed.set()
+        return subscription
+
+    pending = None
+    try:
+        if phase != 'snapshot':
+            assert 'event: session_state_snapshot' in await anext(frames)
+        if phase == 'record':
+            control = await teacher.post(
+                f"/api/sessions/{session['id']}/control",
+                json={'action': 'highlight', 'unit_id': 'OLD-A'},
+            )
+            assert control.status_code == 200
+        monkeypatch.setattr(svc.storage, 'read_json', pause_session_read)
+        monkeypatch.setattr(svc.live_ticks, 'subscribe', observe_tick_subscription)
+        pending = asyncio.create_task(anext(frames))
+        if phase == 'heartbeat':
+            await asyncio.wait_for(subscribed.wait(), 1)
+            svc.live_ticks.publish(session['id'])
+        # list_sessions has already enumerated only A. B is created by HTTP
+        # while the selection is suspended inside the actual session.json read.
+        await asyncio.wait_for(read_started.wait(), 1)
+        await _next_board_lesson(teacher, classroom, clock)
+        proceed.set()
+        try:
+            old_frame = await asyncio.wait_for(asyncio.shield(pending), 1)
+        except StopAsyncIteration:
+            pass
+        else:
+            pytest.fail(f'Frame antigo depois de criar B: {old_frame}')
+        assert session['id'] not in svc.live_session_ids()
+    finally:
+        proceed.set()
+        if pending is not None:
+            pending.cancel()
+            await asyncio.gather(pending, return_exceptions=True)
+        await frames.aclose()
