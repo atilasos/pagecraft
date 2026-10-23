@@ -18,7 +18,7 @@ As instruções são lidas pelo adulto quando necessário. Nas primeiras leitura
 
 O corpus anterior é menina, menino, uva, dedo, sapato, bota, leque, casa, janela, telhado, escada, chave, galinha, gema, rato, cenoura, girafa, palhaço, zebra, bandeira, funil, árvore, quadro, passarinho, peixe e cigarra. Esta lista define uma oportunidade de recuperação, não uma aquisição presumida. Gema ocupa a posição 14; ovo pertence ao legado. Flor é a palavra 28 e não é usada como pré-requisito.
 
-Confirmar por leitura breve ou por registos recentes o f de funil, i de menina, ta de sapato, te de telhado, ra de girafa, rra de cigarra e o ditongo ei de bandeira e peixe. Confirmar também os valores vocálicos necessários. Se não estiverem disponíveis, apoiar primeiro e distinguir essa condição na observação.
+Confirmar por leitura breve ou por registos recentes o f de funil, i de menina, ta de bota, te de telhado, ra de girafa, rra de cigarra e o ditongo ei de bandeira e peixe. Confirmar também os valores vocálicos necessários. Se não estiverem disponíveis, apoiar primeiro e distinguir essa condição na observação.
 
 Durante o ensino, a etiqueta fogueira, fo-guei-ra e feira são trabalhadas com modelo. Feira resulta da fusão de f com ei e da reunião com ra. Fei é uma sílaba, não um grafema a memorizar como bloco opaco. A página 7 é uma recombinação acompanhada, sem alegação de transferência independente.
 
@@ -27,7 +27,7 @@ Reservar os seguintes itens para tentativa autónoma, sem imagem ou modelo da pa
 - Página 8, cartão A: guia. Combina gui explicitamente ensinado com a final /ɐ/. A leitura oral pode ser gui-a; não confundir a ausência de som do u em gu com uma vogal u pronunciada. Depois de observar, esclarecer um sentido, por exemplo uma pessoa que mostra um caminho.
 - Página 9: figueira. Recombina fi, guei e ra. Fi resulta de /f/ com /i/; guei foi modelado; ra foi recuperado. Uma criança pode ler a palavra e ainda não saber que nomeia a árvore dos figos. Registar separadamente leitura e vocabulário.
 - Página 15: guitarra. Recombina gui, ta e rra. O rr representa um só som consonântico, com realização regional possível; não são dois sons /r/. A divisão oral é gui-ta-rra, não uma aplicação da regra de translineação. A palavra completa não é mostrada durante o ensino.
-- Página 16, cartão B: foguete. Recombina fo com o o átono /u/, gue com /g/ e e aberto /ɛ/, e te com e final átono habitualmente /ɨ/. Estas correspondências são ensinadas antes, mas a palavra completa só aparece agora. Cartão C: fogueira, para recuperação da palavra estudada. O cartão B dá evidência de transferência diferida; C dá evidência de recuperação, que é diferente.
+- Página 16, cartão B: foguete. Recombina fo com o o átono /u/, gue com /g/ e e fechado /e/, e te com e final átono habitualmente /ɨ/. Estas correspondências são ensinadas antes, mas a palavra completa só aparece agora. Cartão C: fogueira, para recuperação da palavra estudada. O cartão B dá evidência de transferência diferida; C dá evidência de recuperação, que é diferente.
 
 Chamar autónoma apenas à tentativa efetivamente realizada sem pista ou modelo. Se o professor precisar de ensinar uma correspondência ainda indisponível durante a leitura, registar a primeira tentativa e tratar a seguinte como leitura apoiada. Não inventar uma palavra alternativa só para preservar a aparência de autonomia.
 
@@ -39,7 +39,7 @@ Na página 3, ouvir a criança antes de demonstrar. Uma pedra corresponde a uma 
 
 Na página 4, apontar gu como grupo e produzir /g/ brevemente, sem o transformar no nome da letra nem acrescentar uma vogal. Apontar ei, modelar o ditongo e fundir guei. Em grande parte do português europeu, ei realiza-se aqui próximo de /ɐj/; acolher variantes regionais. Juntar fo-guei-ra e voltar à palavra inteira. O o inicial átono soa habitualmente /u/; o a final reduz-se a /ɐ/. O r intervocálico é /ɾ/. Não ler cada vogal pelo nome da letra.
 
-Contrastar o g /g/ de galinha com o g /ʒ/ de gema e girafa. Mostrar que, nestas combinações antes de e ou i, gu representa /g/ e o u não tem som próprio. Modelar gue com /ɛ/ aberto e gui com /i/, sem antecipar guia, figueira, guitarra ou foguete. Na página 5, retomar o grupo em guei. Na página 6, voltar a comparar ge e gue para a escolha se apoiar em algo que a criança ouviu e viu fazer.
+Contrastar o g /g/ de galinha com o g /ʒ/ de gema e girafa. Mostrar que, nestas combinações antes de e ou i, gu representa /g/ e o u não tem som próprio. Modelar gue com /e/ fechado e gui com /i/, sem antecipar guia, figueira, guitarra ou foguete. Na página 5, retomar o grupo em guei. Na página 6, voltar a comparar ge e gue para a escolha se apoiar em algo que a criança ouviu e viu fazer.
 
 Não generalizar que todo o u depois de g é mudo. Se surgir uma comparação espontânea com outras palavras, escutá-la e verificar o caso com o adulto. Na recuperação de qu, distinguir leque, com /k/ e u sem som próprio, de quadro, com /kw/. Não usar quadro como prova de que todos os grupos com u se comportam da mesma forma.
 

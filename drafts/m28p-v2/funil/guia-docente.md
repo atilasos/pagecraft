@@ -15,7 +15,7 @@ Combine com uma turma vizinha um empréstimo real do material necessário. Se a 
 
 Situe esta palavra na posição 21 da sequência local: menina, menino, uva, dedo, sapato, bota, leque, casa, janela, telhado, escada, chave, galinha, gema, rato, cenoura, girafa, palhaço, zebra, bandeira. Use gema na posição 14. Não recupere ovo como se fosse a palavra dessa posição.
 
-Confirme o que cada criança consegue ler, sem inferir conhecimento pela passagem pelas páginas anteriores. Recupere la de janela, ta de sapato, va de uva e da de escada. Verifique m, n, t, v, d, g com valor /g/ em galinha e as vogais necessárias. Para o item fumo, confirme a fusão de m com o, recuperando m de menina e o de menino. Não antecipe a palavra inteira. Se faltarem estas bases, ensine-as e classifique a tentativa seguinte como apoiada.
+Confirme o que cada criança consegue ler, sem inferir conhecimento pela passagem pelas páginas anteriores. Recupere la de janela, ta de bota, va de uva e da de escada. Verifique m, n, t, v, d, g com valor /g/ em galinha e as vogais necessárias. Para o item fumo, confirme a fusão de m com o, recuperando m de menina e o de menino. Não antecipe a palavra inteira. Se faltarem estas bases, ensine-as e classifique a tentativa seguinte como apoiada.
 
 Use como corpus candidato a leitura autónoma apenas as palavras-base que a criança já leu e, depois de ensinadas, funil e fila. Reserve fumo, fita e fava para a primeira tentativa de transferência nas opções. Reserve os cartões T e R para os momentos indicados. Depois da primeira exposição, assinale-os como itens já vistos. Se algum já for conhecido da criança, registe esse facto e não o apresente como evidência de novidade.
 

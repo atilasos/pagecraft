@@ -30,7 +30,7 @@ O pequeno texto da biblioteca é deliberadamente de leitura acompanhada. Inclui 
 
 1. Diga zebra naturalmente e aponte a palavra inteira. Passe para ze-bra, duas sílabas orais. A tarefa silábica não é contagem de letras nem separação de todos os sons.
 2. Aponte z e modele /z/ sem vogal acrescentada. Compare com o s de casa, que também representa /z/. As grafias diferem; o som observado é o mesmo. Não modele o s de casa como /s/.
-3. Mostre o e tónico aberto /ɛ/ de zebra e o a final átono, habitualmente /ɐ/ em português europeu. Não imponha a pronúncia dos nomes das letras nem ignore variação local legítima.
+3. Mostre o e tónico fechado /e/ de zebra e o a final átono, habitualmente /ɐ/ em português europeu. Não imponha a pronúncia dos nomes das letras nem ignore variação local legítima.
 4. Em bra, acompanhe b e r com os dois sons consonânticos consecutivos /bɾ/. Br é um encontro consonântico, não um dígrafo. Não introduza uma vogal entre as consoantes nem uma terceira batida na palavra.
 5. Modele braço, apontando bra e o a agora tónico /a/. As peças escritas podem recombinar-se, mas a realização das vogais depende da palavra e da posição do acento. Não transporte o a átono de zebra para braço, brasa ou brava.
 6. Recupere ço de palhaço e modele ç /s/ e o o final átono habitualmente /u/ em braço. Contraste com o s /z/ de casa. Na posterior leitura nova de brasa, observe se a criança recupera essa correspondência sem modelo prévio da palavra.
