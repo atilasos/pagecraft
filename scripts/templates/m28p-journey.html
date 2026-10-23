@@ -130,7 +130,8 @@ function renderTask(container,p){
       speechSynthesis.cancel();const voice=new SpeechSynthesisUtterance(p.prompt);voice.lang='pt-PT';speechSynthesis.speak(voice);
     });container.appendChild(listen);container.appendChild(element('p','','small')).id='voice-status';
   }
-  if(p.adultPrompt){const adult=element('details',undefined,'adult');adult.appendChild(element('summary','Com um adulto'));adult.appendChild(element('p',p.adultPrompt));if(p.phase==='code')adult.appendChild(element('p','O adulto modela os sons. A voz automática não ensina fonemas.'));container.appendChild(adult);}
+  if(p.adultPrompt&&!JourneyModel.noHints(p)){const adult=element('details',undefined,'adult');adult.appendChild(element('summary','Com um adulto'));adult.appendChild(element('p',p.adultPrompt));if(p.phase==='code')adult.appendChild(element('p','O adulto modela os sons. A voz automática não ensina fonemas.'));container.appendChild(adult);}
+  if(p.adultPrompt&&JourneyModel.noHints(p))container.appendChild(element('p','O adulto consulta o guia, prepara os cartões e escuta a primeira tentativa.','small'));
   if(p.type==='choice'){
     const choices=element('div',undefined,'choices');choices.setAttribute('role','group');choices.setAttribute('aria-label',p.prompt);
     p.options.forEach(value=>{const choice=button(value,()=>{updateAnswer(value);for(const item of choices.children)item.setAttribute('aria-pressed',String(item===choice));confirm();});choice.setAttribute('aria-pressed',String(state.answers[p.id]===value));choices.appendChild(choice);});container.appendChild(choices);

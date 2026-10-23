@@ -38,6 +38,7 @@ def test_every_real_journey_accepts_answers_and_restores_without_attempts(page, 
         assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
         if item['phase'] in ['transfer', 'review']:
             assert page.locator('#support-panel').is_hidden()
+            assert page.locator('#page-content details.adult').count() == 0
         if item['type'] == 'choice':
             # Uma resposta errada continua a ser uma página respondida.
             wrong = next(value for value in item['options'] if value != item['answer'])
