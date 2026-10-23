@@ -71,6 +71,10 @@ def studio_origin(tmp_path_factory):
         source = DRAFT.parent / ('m28p-v2-gema' + suffix)
         if source.is_file():
             shutil.copyfile(source, root / 'drafts' / source.name)
+    for suffix in ['.html', '-docspec.json', '.md', '-design-spec.json', '-activity.json']:
+        source = DRAFT.parent / ('m28p-v3-menina-match' + suffix)
+        if source.is_file():
+            shutil.copyfile(source, root / 'drafts' / source.name)
     activity = root / 'activities' / 'fraction-test'
     activity.mkdir(parents=True)
     shutil.copyfile(DRAFT, activity / 'index.html')

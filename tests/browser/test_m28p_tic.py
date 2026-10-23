@@ -92,3 +92,43 @@ def test_embedded_mp3_decodes_without_browser_voice(page,tic_origin,word):
     result=page.evaluate('''async()=>{const data=JSON.parse(document.getElementById('m28p-content').textContent); const a=new Audio(data.audio.word);return await new Promise(resolve=>{a.onloadedmetadata=()=>resolve({duration:a.duration,error:null});a.onerror=()=>resolve({error:a.error?.code});setTimeout(()=>resolve({error:'timeout'}),3000);});}''')
     assert result['error'] is None
     assert result['duration']>0
+
+
+def test_real_host_saves_help_and_restores_completed_draft_without_duplicate_attempts(page,studio_origin):
+    metadata=json.loads((ROOT/'drafts/m28p-v3-menina-match-activity.json').read_text())
+    page.request.get(studio_origin+'/api/teacher-bootstrap')
+    response=page.request.post(studio_origin+'/api/learning/activities',data=metadata)
+    assert response.status==201
+    code=response.json()['code']
+    visitor=page.context.browser.new_context()
+    try:
+        assert visitor.request.get(studio_origin+'/api/learning/activities/'+code+'/content').status==404
+    finally:
+        visitor.close()
+    page.goto(studio_origin+'/'+code)
+    page.get_by_label('Como te chamas?').fill('Ensaio TIC descartável')
+    page.get_by_role('button',name='Começar',exact=True).click()
+    frame=page.frame_locator('#lesson')
+    frame.locator('#start').click()
+    frame.locator('#demo-close').click()
+    frame.get_by_role('button',name='Ouvir a palavra',exact=True).click()
+    data=json.loads(frame.locator('#m28p-content').text_content())
+    for item in data['rounds']:
+        for value in item['answer']:
+            frame.locator(f'[data-option="{value}"]').click()
+        frame.locator('#confirm').click()
+        frame.locator('#next').click()
+    from playwright.sync_api import expect
+    expect(page.locator('#reflect')).to_be_enabled()
+    # O host confirma a gravação por GET, sem presumir que postMessage persistiu.
+    page.wait_for_function("async()=>{const r=await fetch('/api/learning/me');const d=await r.json();return d.events.filter(e=>e.type==='attempt').length===4;}")
+    before=page.request.get(studio_origin+'/api/learning/me').json()
+    attempts=[e for e in before['events'] if e['type']=='attempt']
+    assert attempts[0]['payload']['detail']['aids']['audio_word_requested'] is True
+    page.reload()
+    frame=page.frame_locator('#lesson')
+    expect(frame.locator('#finish')).to_be_visible()
+    expect(page.locator('#reflect')).to_be_enabled()
+    after=page.request.get(studio_origin+'/api/learning/me').json()
+    assert len([e for e in after['events'] if e['type']=='attempt'])==4
+    assert after['preview'] is True
