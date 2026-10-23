@@ -670,6 +670,17 @@ $("recovery-new").onclick = () => {
     $("group").value = activity.group || "";
     $("language-label").hidden = !activity.languages.includes("en");
     $("draft").hidden = activity.published;
+    if (activity.archived_at) {
+      translate();
+      status("Este rascunho foi retirado. Escolhe um jogo da coleção atual.");
+      const link = document.createElement("a");
+      link.href = "/teacher/m28p-tic.html";
+      link.className = "button";
+      link.textContent = "28 palavras · jogos para TIC";
+      $("entry").append(link);
+      $("start-form").hidden = true;
+      return;
+    }
     await recoverAttempt();
     translate();
   } catch {
