@@ -1,0 +1,129 @@
+{
+  "slug": "pontes-duas-vistas",
+  "title": "Duas pontes, duas vistas",
+  "status": "private-draft-ready-for-teacher-review",
+  "year": [
+    3,
+    4
+  ],
+  "language": "pt",
+  "duration": 15,
+  "worktree": "/home/proteu/.t3/worktrees/pagecraft/t3-4e77fc67",
+  "branch": "feat/pontes-duas-vistas",
+  "base": "4c6ba90476a498a03b08fd88dea96c432ba767cd",
+  "production": {
+    "registered": false,
+    "published": false,
+    "code": null
+  },
+  "review": "Professor revê o rascunho antes de qualquer publicação. Não ensaiado com crianças.",
+  "phases": [
+    {
+      "role": "Architect",
+      "agent": "/root/architect",
+      "status": "complete",
+      "artifacts": [
+        "drafts/pontes-duas-vistas-docspec.json",
+        "drafts/pontes-duas-vistas.md",
+        "drafts/pontes-duas-vistas-sources.md"
+      ],
+      "commit": "690a087"
+    },
+    {
+      "role": "Designer",
+      "agent": "/root/designer",
+      "status": "complete",
+      "artifacts": [
+        "drafts/pontes-duas-vistas-design-spec.json"
+      ],
+      "commit": "3f62d26"
+    },
+    {
+      "role": "Builder",
+      "agent": "/root/builder",
+      "status": "complete",
+      "artifacts": [
+        "drafts/pontes-duas-vistas.html",
+        "drafts/pontes-duas-vistas-builder.json"
+      ],
+      "commit": "5f6a4ed"
+    },
+    {
+      "role": "Proofreader",
+      "status": "pass",
+      "artifacts": [
+        "drafts/pontes-duas-vistas-proofread.json"
+      ],
+      "agent": "/root/proofreader",
+      "commit": "08091a7"
+    },
+    {
+      "role": "Evaluator",
+      "status": "pass",
+      "artifacts": [
+        "drafts/pontes-duas-vistas-evaluation.json",
+        "drafts/pontes-duas-vistas-repair-resolution.json",
+        "tests/browser/test_pontes_duas_vistas.py"
+      ],
+      "agent": "/root/evaluator",
+      "commit": "a978619"
+    }
+  ],
+  "execution": "Fases delegadas sequencialmente no worktree partilhado, sem agentes adicionais.",
+  "baseline": "drafts/pontes-duas-vistas-before.json",
+  "report": "docs/reviews/2026-10-22-pontes-duas-vistas.md",
+  "red_evidence": {
+    "evaluation": "drafts/pontes-duas-vistas-red-evaluation.json",
+    "tests": "drafts/pontes-duas-vistas-red-tests.txt",
+    "passed": 15,
+    "failed": 5,
+    "causes": [
+      "modal-focus-wrap",
+      "stale-navigation-warning",
+      "support-first-click-lost"
+    ]
+  },
+  "integrations": [
+    {
+      "branch": "feat/consulta-historico-pistas",
+      "sha": "474e961c65dd40cb89932b0c28a0fdc0e4f02f8f",
+      "merge_commit": "b93be60",
+      "reembed_commit": "637b55d"
+    }
+  ],
+  "html_sha256": "c4e77ff6fe3ba903a16332361cd759b23d42cc55e244bbaee1dcce30ab2fb1d5",
+  "pull_request": {
+    "url": "https://github.com/atilasos/pagecraft/pull/65",
+    "created_by": "root coordinator",
+    "draft": true,
+    "push_by_implementation_agent": false
+  },
+  "final_validation": {
+    "tested_code_commit": "08091a7",
+    "html_sha256": "c4e77ff6fe3ba903a16332361cd759b23d42cc55e244bbaee1dcce30ab2fb1d5",
+    "browser": {
+      "passed": 23,
+      "failed": 0,
+      "duration_seconds": 32.25,
+      "log": "drafts/pontes-duas-vistas-final-tests.txt",
+      "session": "pagecraft-pontes-evaluation",
+      "profile": "temporary",
+      "session_closed": true
+    },
+    "python_passed": 14,
+    "javascript_passed": 35,
+    "canonical_sync": "passed",
+    "diff_check": "passed",
+    "maximum_browser_checkpoint_bytes": 4092,
+    "maximum_builder_extreme_checkpoint_bytes": 4095,
+    "limit_bytes_exclusive": 4096,
+    "embedded_assets": "drafts/pontes-duas-vistas-final-embedded-assets.json",
+    "published_activities_changed": false
+  },
+  "limitations": [
+    "Sem observação com crianças ou dispositivos físicos e leitor de ecrã.",
+    "Sem fornecedor de IA real; pistas revistas locais e resposta tardia simulada nos testes.",
+    "Hosts reais individuais testados com dados descartáveis; não foi percorrido um grupo real com vários participantes.",
+    "Revisão do professor continua necessária antes de publicar."
+  ]
+}

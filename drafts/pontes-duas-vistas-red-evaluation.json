@@ -1,0 +1,236 @@
+{
+  "pass": false,
+  "phase": "Evaluator",
+  "activity": "pontes-duas-vistas",
+  "route": "builder",
+  "severity": "high",
+  "reviewed_branch": "feat/pontes-duas-vistas",
+  "reviewed_head": "e9b45959a9320f600c82a3cb9f94a46a1ac86147",
+  "reviewed_html_commit": "c0cf22c",
+  "html_sha256": "7ec9b5d6d66cdb5b3f84b6c83fe204b5ee6a98ca82cdb8f1a8a1cb540a342b4e",
+  "scores": {
+    "factual_accuracy": 5,
+    "constraint_alignment": 5,
+    "differentiation_quality": 4,
+    "ux_accessibility": 2,
+    "visual_design": 4,
+    "technical_quality": 3
+  },
+  "issues": [
+    {
+      "id": "modal-focus-wrap",
+      "route": "builder",
+      "severity": "high",
+      "summary": "Tab a partir do último botão do modal coloca o foco fora do modal.",
+      "steps": [
+        "Avançar até u3.",
+        "Confirmar left, position e deck, três respostas distintas incorretas.",
+        "No modal automático, focar Vou experimentar e premir Tab."
+      ],
+      "actual": "document.activeElement.tagName === BODY e closest(dialog) === null. Escape não fecha o modal.",
+      "expected": "Tab e Shift+Tab mantêm foco nos controlos interiores enquanto o modal exige escolha explícita.",
+      "evidence": [
+        "drafts/pontes-duas-vistas-modal-focus.json",
+        "drafts/pontes-duas-vistas-modal-focus.png",
+        "drafts/pontes-duas-vistas-canonical-learning-focus.json",
+        "drafts/pontes-duas-vistas-canonical-student-focus.json"
+      ],
+      "regression_test": "test_automatic_modal_wraps_tab_inside",
+      "canonical_source": "server/static/student/support-modal.js",
+      "additional_regression_test": "test_canonical_modal_host_adapter_wraps_keyboard[learning-lesson] e [student-activity-frame]"
+    },
+    {
+      "id": "stale-navigation-warning",
+      "route": "builder",
+      "severity": "medium",
+      "summary": "O aviso de falta permanece visível depois de guardar os dois ensaios.",
+      "steps": [
+        "Em u2, focar Testar e guardar B antes de A e premir Enter.",
+        "Testar A, baixar o apoio direito, testar B."
+      ],
+      "actual": "A/B completos e Seguinte ativo, mas #navigation-status ainda afirma Guardem A e baixem o apoio direito primeiro.",
+      "expected": "O aviso em falta é limpo ou recalculado após a resposta/manipulação que o resolve.",
+      "evidence": [
+        "drafts/pontes-duas-vistas-stale-warning.png",
+        "drafts/pontes-duas-vistas-after-results.png"
+      ],
+      "regression_test": "test_navigation_warning_clears_when_missing_work_is_done"
+    },
+    {
+      "id": "support-first-click-lost",
+      "route": "builder",
+      "severity": "medium",
+      "summary": "Primeiro clique numa pista é perdido ao sair de um texto editado.",
+      "steps": [
+        "Em u4, escrever no campo Colega, conta o que procuraste e o que viste.",
+        "Sem sair antes do campo, clicar Preciso de uma pista uma vez."
+      ],
+      "actual": "O painel continua sem .pc-support-action e mantém o botão Preciso de uma pista.",
+      "expected": "A primeira ativação explícita abre a pista contextual e conserva o texto.",
+      "likely_cause": "blur chama flush, que emite assessment_result; o componente comum atualiza o contexto e substitui o botão antes do click. A atividade já atualiza o contexto durante a edição. Causa a confirmar na reparação.",
+      "evidence": [
+        "drafts/pontes-duas-vistas-support-first-click.png"
+      ],
+      "regression_test": "test_support_first_click_after_editing_text"
+    }
+  ],
+  "critical": [
+    "modal-focus-wrap"
+  ],
+  "required_fixes": [
+    "Corrigir Tab/Shift+Tab na fonte canónica server/static/student/support-modal.js, sincronizar espelhos com skills/sync-from-canonical.sh, reincorporar o rascunho e atualizar cache dos anfitriões se necessário. Testar modo autónomo e adaptadores learning/lesson e student/activity-frame.",
+    "Limpar ou recalcular avisos de #navigation-status quando muda o trabalho e a condição assinalada deixa de existir. Conservar feedback pedagógico pertinente.",
+    "Conservar a primeira ativação dos controlos de apoio ao sair de um texto editado. Corrigir a integração local de flush/contexto sem duplicar evidência nem alterar o componente comum.",
+    "Reexecutar a suite real no Hub, incluindo os dois testes de regressão, e voltar ao Evaluator."
+  ],
+  "evidence": [
+    {
+      "kind": "Hub",
+      "session": "pagecraft-pontes-evaluation",
+      "profile": "temporary",
+      "cdp_url": "http://127.0.0.1:9333",
+      "operations": [
+        "start",
+        "navigate",
+        "state",
+        "screenshot",
+        "close"
+      ],
+      "initial_screenshot": "/home/proteu/agent-browser-hub/screenshots/pontes-duas-vistas-evaluator-initial.png",
+      "closed_confirmed": true
+    },
+    {
+      "kind": "browser",
+      "command": "PAGECRAFT_TEST_CDP=<CDP da sessão Hub própria> uv run --project /home/proteu/pagecraft --with playwright pytest tests/browser/test_pontes_duas_vistas.py -q --tb=short",
+      "result": "Ver final_test_run; falhas reais preservadas, não marcadas xfail."
+    },
+    {
+      "kind": "artifact",
+      "path": "drafts/pontes-duas-vistas-browser-metrics.json",
+      "maximum_observed_checkpoint_envelope_bytes": 4092,
+      "limit_bytes_exclusive": 4096,
+      "unicode": "240+240+160 emojis de quatro bytes, e 240+240+160 caracteres de controlo escapados em JSON com seis bytes, via learning_restore real num iframe de ensaio.",
+      "required_texts_preserved": true,
+      "optional_reflection_shrinks_if_needed": true
+    },
+    {
+      "kind": "before",
+      "producer": "Agente principal, prova herdada sem nova observação pelo Evaluator",
+      "json": "/tmp/pagecraft-pontes-proof/before.json",
+      "screenshot": "/home/proteu/agent-browser-hub/screenshots/pontes-duas-vistas-before.png",
+      "base": "4c6ba90",
+      "observation": "Atividade existente substitui resultado atual; zero painéis de comparação persistentes."
+    },
+    {
+      "kind": "after",
+      "path": "drafts/pontes-duas-vistas-after-results.png",
+      "observation": "Duas fichas A/B conservadas com previsões históricas, SVG superior idêntico, laterais e resultados distintos."
+    },
+    {
+      "kind": "private-integration",
+      "report": "drafts/pontes-duas-vistas-private-report.txt",
+      "screenshot": "drafts/pontes-duas-vistas-after-studio.png",
+      "observation": "Studio real isolado em tmp, rascunho published=false, retoma após reload sem duplicar assessment/attempt, reflexão individual com nome visível, download com evidências e autoavaliação separadas, preview ausente da lista de relatórios."
+    },
+    {
+      "kind": "test-log",
+      "path": "drafts/pontes-duas-vistas-evaluator-tests.txt"
+    }
+  ],
+  "acceptance_checks": [
+    {
+      "check": "Previsão A/B e hipótese confirmadas antes dos testes; u1 e u2 sem lateral/alturas de cada ficha antes do respetivo teste",
+      "result": "PASS"
+    },
+    {
+      "check": "Só altura direita muda; A2/2 e B2/1 preservados; top SVGs exatamente iguais e laterais/resultados diferentes",
+      "result": "PASS"
+    },
+    {
+      "check": "Todos os pedidos obrigatórios, vazios bloqueiam Seguinte/saltos; Ainda não sei é resposta válida; erro completo permite avançar nos três apoios",
+      "result": "PASS"
+    },
+    {
+      "check": "Hipótese e explicação revisíveis; revisão invalida só conclusão atual do colega, conservando fichas, previsões e textos",
+      "result": "PASS"
+    },
+    {
+      "check": "u4 mostra explicação concreta do par, permite testar direita1/2/3, aceita encontrou/não encontrou e relato oral; sem nota",
+      "result": "PASS"
+    },
+    {
+      "check": "Três apoios mudam pistas reais, são livres e preservam trabalho; reflexão local e host totalmente facultativas",
+      "result": "PASS"
+    },
+    {
+      "check": "Primeira pista de cada unidade corresponde ao DocSpec; Outra abordagem e professor; síntese só ao carregar Ouvir",
+      "result": "PASS; chamada à síntese observada com spy no browser, não teste acústico"
+    },
+    {
+      "check": "Três erros distintos abrem modal, repetir igual não conta, acerto e mudança de etapa reiniciam; Escape não fecha; outra pista/professor/retoma explícita",
+      "result": "PASS"
+    },
+    {
+      "check": "Foco do modal após Tab no último botão",
+      "result": "FAIL no modo autónomo e nos dois adaptadores canónicos; Tab de saída dá BODY, Shift+Tab observado permanece interior nos wrappers."
+    },
+    {
+      "check": "Contexto atualizado ignora resposta IA tardia após edição e mudança de etapa",
+      "result": "PASS com host postMessage simulado; sem fornecedor real"
+    },
+    {
+      "check": "Retoma standalone e learning_restore conservam trabalho, etapa e apoio sem novas tentativas; Studio real também confirmado",
+      "result": "PASS"
+    },
+    {
+      "check": "Envelope activity_state UTF8 completo <4096 incluindo textos máximos Unicode",
+      "result": "PASS máximo 4092 bytes, incluindo controlos escapados; textos obrigatórios preservados e reflexão facultativa pode encolher."
+    },
+    {
+      "check": "Teclado Tab, Enter, Espaço e setas; foco visível; 390/768/1280 sem overflow em quatro unidades; corpo20 e alvos48 incluindo labels/apoio",
+      "result": "PASS exceto modal-focus-wrap"
+    },
+    {
+      "check": "HTML offline, zero pedidos externos no ensaio, fonte Didact real carrega por document.fonts.load, zero erros JS da atividade nos percursos observados",
+      "result": "PASS"
+    },
+    {
+      "check": "presentation=1 suprime evidências e torna apoio inerte",
+      "result": "PASS"
+    },
+    {
+      "check": "Avisos de falta refletem estado atual após responder",
+      "result": "FAIL stale-navigation-warning"
+    },
+    {
+      "check": "Primeiro clique de apoio após escrever sem blur prévio",
+      "result": "FAIL support-first-click-lost"
+    }
+  ],
+  "blocked_by": [],
+  "limitations": [
+    "Sem observação com crianças; duração e adequação à turma carecem de revisão docente.",
+    "Sem fornecedor de IA real. Respostas tardias ensaiadas com host simulado; pistas locais e modal real no Chromium.",
+    "Sem ensaio desta atividade em grupos reais de uma Sessão de aula, autoria multiutilizador, quadro ou retomada noutro dispositivo. A integração observada foi realização individual de preview.",
+    "Contraste revisto pela paleta e inspeção visual, sem auditoria completa com leitor de ecrã ou medição de todos os pares de cores.",
+    "Só navegador Chromium do Hub; Safari/Firefox e dispositivos físicos não observados.",
+    "Os testes de foco learning/student executam o JS canónico real em wrappers HTTP locais com os IDs de iframe dos dois anfitriões. Shell/payload são simulados; não equivalem a aula real ou fornecedor de IA."
+  ],
+  "privacy_boundary": "Só draft novo e Studio temporário. Sem produção, publicação, catálogo, atividades existentes ou PR.",
+  "final_test_run": {
+    "tests": 20,
+    "passed": 15,
+    "failed": 5,
+    "duration_seconds": 37.9,
+    "failure_causes": 3,
+    "command": "PAGECRAFT_TEST_CDP=http://127.0.0.1:9333 uv run --project /home/proteu/pagecraft --with playwright pytest tests/browser/test_pontes_duas_vistas.py -q --tb=short",
+    "without_optional_browser_dependency": {
+      "command": "env -u PAGECRAFT_TEST_CDP uv run --project /home/proteu/pagecraft pytest tests/browser/test_pontes_duas_vistas.py -q --tb=short",
+      "skipped": 20,
+      "duration_seconds": 1.02
+    }
+  },
+  "evaluated_at": "2026-10-22T23:01:09.179589+00:00",
+  "test_commit": "a7bc30f35e8e0f06a92366c82789931aa3a91b85",
+  "next_verification": "Após Builder, reexecutar suite e exercitar foco também em páginas reais /student/ e /{code} do Studio descartável, não apenas wrappers. Sem publicação nem IA real."
+}

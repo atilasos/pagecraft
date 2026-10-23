@@ -1,0 +1,51 @@
+{
+  "phase": "Evaluator",
+  "activity": "pontes-duas-vistas",
+  "round": 3,
+  "status": "resolved",
+  "pass": true,
+  "route": "none",
+  "severity": "low",
+  "issues": [],
+  "required_fixes": [],
+  "original_report": "drafts/pontes-duas-vistas-repair-ticket-r3-red.json",
+  "resolution": {
+    "id": "real-host-modal-focus-return",
+    "status": "resolved",
+    "builder_code_commit": "c4c8e6a",
+    "builder_report_commit": "5f6a4ed",
+    "proofreader_commit": "08091a7",
+    "browser_regressions": "23 passed in 32.25s",
+    "red_log": "drafts/pontes-duas-vistas-resume-red-tests.txt",
+    "red_diagnostics": [
+      "drafts/pontes-duas-vistas-r3-red-real-learning-resume-focus.json",
+      "drafts/pontes-duas-vistas-r3-red-real-student-resume-focus.json"
+    ],
+    "green_diagnostics": [
+      "drafts/pontes-duas-vistas-green-real-learning-resume-focus.json",
+      "drafts/pontes-duas-vistas-green-real-student-resume-focus.json"
+    ],
+    "result": "Nos dois anfitriões, hostIFRAME/filhoDIV.pc-support-action após continue; hint_ids correlacionados e trabalho retomado com Espaço."
+  },
+  "tested_commit": "08091a7edc7957202a447ed84bccd58b989b5ae1",
+  "html_sha256_after": "c4e77ff6fe3ba903a16332361cd759b23d42cc55e244bbaee1dcce30ab2fb1d5",
+  "final_tests": {
+    "command": "PAGECRAFT_TEST_CDP=http://127.0.0.1:9331 uv run --project /home/proteu/pagecraft --with playwright pytest tests/browser/test_pontes_duas_vistas.py -q --tb=short",
+    "cdp_source": "URL atribuído à nova sessão própria e lido em /home/proteu/agent-browser-hub/sessions/pagecraft-pontes-evaluation.json; numa nova execução ler a porta atual.",
+    "passed": 23,
+    "failed": 0,
+    "total": 23,
+    "seconds": 32.25,
+    "logs": [
+      "drafts/pontes-duas-vistas-green-tests.txt",
+      "drafts/pontes-duas-vistas-final-tests.txt"
+    ],
+    "collection_verified_previous_round": {
+      "unchanged_test_commit": "b7a0f96",
+      "without_cdp_or_optional_playwright": 23,
+      "result": "skipped",
+      "seconds": 1.04,
+      "log": "drafts/pontes-duas-vistas-no-browser-tests.txt"
+    }
+  }
+}

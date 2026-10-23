@@ -1,0 +1,268 @@
+{
+  "slug": "pontes-duas-vistas",
+  "phase": "Builder",
+  "status": "focus_return_repaired_awaiting_final_real_host_evaluation",
+  "date": "2026-10-22",
+  "branch": "feat/pontes-duas-vistas",
+  "htmlCommit": "c4c8e6a",
+  "artifact": "drafts/pontes-duas-vistas.html",
+  "htmlSha256": "c4e77ff6fe3ba903a16332361cd759b23d42cc55e244bbaee1dcce30ab2fb1d5",
+  "inputs": [
+    "drafts/pontes-duas-vistas-docspec.json",
+    "drafts/pontes-duas-vistas-design-spec.json",
+    "drafts/pontes-duas-vistas-builder-prompt.md",
+    "server/pipeline/prompts/template-base.html",
+    "server/pipeline/prompts/references/bridge-contract.md"
+  ],
+  "implementation": [
+    "Quatro etapas com pedidos obrigatórios, saltos futuros validados e avanço independente de acerto.",
+    "Previsões A/B e hipótese inicial confirmadas antes de resultados. A 2/2 e B 2/1 conservadas, topo idêntico sem resultado sobreposto e laterais diferentes.",
+    "Hipótese e explicação revisíveis. Colega confronta a versão concreta com altura direita 1/2/3 num teste atual substituível; aceita encontrou/não encontrou e texto ou declaração oral.",
+    "Revisão invalida apreciação anterior do colega, conservando ensaios e comentário. Evidências anteriores continuam no host.",
+    "Três apoios livres com pistas distintas; componente comum incorporado e contexto atualizado. Confirmação verificável u3-variavel só emite attempt depois de fixar o contexto final; hipóteses e textos não recebem veredicto.",
+    "Bridge canónica por postMessage, checkpoint limitado e restauro validado por atividade/versão/valores antes de novos acontecimentos. sessionStorage só autónomo e protegido contra indisponibilidade.",
+    "Reflexão individual no host via open_reflection. Reflexão autónoma facultativa explicitamente local, sem envio. Modo presentation=1 suprime a ponte e torna painéis de apoio inertes.",
+    "Gothic real e licença incorporadas; HTML autocontido, sem scripts externos, links de rede ou chamadas API. Sem alterações a atividades existentes."
+  ],
+  "checks": [
+    {
+      "command": "python3 scripts/embed_activity_support.py --activity drafts/pontes-duas-vistas.html --docspec drafts/pontes-duas-vistas-docspec.json",
+      "result": "passed"
+    },
+    {
+      "command": "python3 scripts/embed_gothic_font.py --activity drafts/pontes-duas-vistas.html",
+      "result": "passed"
+    },
+    {
+      "command": "node --check em cada script inline extraído do HTML final",
+      "result": "passed"
+    },
+    {
+      "command": "node /tmp/check-pontes.cjs",
+      "result": "passed",
+      "note": "Harness temporário das funções reais de estado, não browser. Não é um teste persistente do repositório.",
+      "maxUtf8EnvelopeBytes": 3278,
+      "exclusiveLimit": 4096,
+      "cases": [
+        "pedidos vazios bloqueiam",
+        "respostas completas erradas concluem",
+        "mudança de apoio conserva trabalho",
+        "revisão invalida só apreciação do colega",
+        "topo igual e laterais diferentes",
+        "strings máximas Unicode astral",
+        "activity/version/valores inválidos recusados ou normalizados",
+        "restauro não emite attempt"
+      ]
+    },
+    {
+      "command": "jsonschema.validate DocSpec e design contra os esquemas canónicos",
+      "result": "passed"
+    },
+    {
+      "command": "verificação estrutural do HTML final",
+      "result": "passed",
+      "checks": [
+        "4 asides data-pagecraft-support",
+        "sem script src nem link externo",
+        "CSS e JavaScript inline"
+      ]
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    }
+  ],
+  "notVerifiedInThisPhase": [
+    "Browser real, teclado, larguras 390/768/1280, suporte automático no DOM e integração descartável pertencem ao Evaluator.",
+    "Leitura pedagógica final e AO90 pertencem ao Proofreader.",
+    "Não houve observação de crianças nem publicação ou registo de produção."
+  ],
+  "handoff": "O orquestrador conserva tests/test_pontes_draft.py, docs/reviews e execução das fases seguintes. Este relatório não declara aprovação pedagógica nem browser validado.",
+  "repairs": [
+    {
+      "iteration": 1,
+      "source": "drafts/pontes-duas-vistas-proofread.json",
+      "issue": "u2 revelava vista lateral antes do teste explícito",
+      "change": "trialCard revela vista lateral e alturas numéricas só após o teste da própria ficha. Antes apresenta Testa para revelar a vista de lado. A ficha A mantém-se quando B está por testar; u1 continua só superior e u3 conserva ambas após os testes.",
+      "scope": "Só revelação de fichas, sem alterar hipóteses ou percurso; correções AO90 e reflexão individual preservadas.",
+      "htmlCommit": "c0cf22c",
+      "checks": [
+        "node --check de todos os scripts inline do HTML final",
+        "node /tmp/check-pontes.cjs, estado e Unicode continuam a passar, envelope máximo 3278 bytes",
+        "node /tmp/check-pontes-reveal.cjs, lateral e alturas ausentes antes de cada teste e presentes depois; A conservada ao preparar B",
+        "apoio contextual e Gothic reincorporados",
+        "git diff --check"
+      ],
+      "browser": "Não executado nesta fase. Rechecagem Proofreader e Evaluator pendentes."
+    },
+    {
+      "iteration": 2,
+      "source": "drafts/pontes-duas-vistas-repair-ticket.json",
+      "commits": [
+        "2e90460",
+        "6a03829"
+      ],
+      "issues": [
+        {
+          "id": "modal-focus-wrap",
+          "rootCause": "O modal canónico não tratava Tab nos extremos; o browser podia focar BODY.",
+          "fix": "Listener keydown na fonte server/static/student/support-modal.js faz Tab do último botão para o primeiro e Shift+Tab inverso. Navegação intermédia, bloqueio de Escape, protocolos e fecho nativo que devolve foco preservados.",
+          "propagation": [
+            "skills/claude/assets/support-modal.js",
+            "skills/codex/assets/support-modal.js",
+            "drafts/pontes-duas-vistas.html"
+          ],
+          "hostCache": "/student/support-modal.js?v=2 em server/static/student/index.html e server/static/learning/activity.html."
+        },
+        {
+          "id": "stale-navigation-warning",
+          "rootCause": "renderNavigation atualizava os botões mas conservava o aviso anterior.",
+          "fix": "Quando o aviso está visível, recalcula o pedido atual ainda em falta e oculta-o só quando resolvido. A indicação não desaparece enquanto falta baixar o apoio ou testar B."
+        },
+        {
+          "id": "support-first-click-lost",
+          "rootCause": "O blur gravava assessment_result pelo emissor local; activity-support.js recebia o CustomEvent e reconstruía o botão duas vezes antes do click. O contexto já tinha sido atualizado durante a edição.",
+          "proof": "Harness com o app e activity-support.js reais observou replacements 4 != 2 antes da correção. Após reparação, flush não substitui o painel.",
+          "fix": "Só o flush de texto suprime a notificação local redundante ao apoio; mantém assessment_result via postMessage, valor, autoria delegada ao host, after_hint_id e um único registo. O componente comum de apoio não foi alterado para esta falha."
+        }
+      ],
+      "checks": [
+        {
+          "command": "bash skills/sync-from-canonical.sh --check",
+          "result": "passed, sem drift antes e depois; sync alterou só os dois assets support-modal"
+        },
+        {
+          "command": "python3 scripts/embed_activity_support.py --activity drafts/pontes-duas-vistas.html --docspec drafts/pontes-duas-vistas-docspec.json",
+          "result": "passed"
+        },
+        {
+          "command": "python3 scripts/embed_gothic_font.py --activity drafts/pontes-duas-vistas.html",
+          "result": "passed"
+        },
+        {
+          "command": "uv run --project /home/proteu/pagecraft pytest tests/test_activity_support.py -q",
+          "result": "13 passed in 0.23s"
+        },
+        {
+          "command": "node --test tests/js/activity_support.test.cjs",
+          "result": "21 passed"
+        },
+        {
+          "command": "node /tmp/check-pontes-modal.cjs",
+          "result": "red antes, green depois; Tab e Shift+Tab nos extremos, navegação intermédia nativa e Escape com escolha explícita"
+        },
+        {
+          "command": "node /tmp/check-pontes-flush.cjs",
+          "result": "red antes, green depois; sem reconstruções no blur, postMessage/valor/after_hint_id preservados e sem duplicação"
+        },
+        {
+          "command": "node /tmp/check-pontes-navigation.cjs",
+          "result": "red no HTML anterior, green depois; pedido em falta atualizado até A/B completos"
+        },
+        {
+          "command": "node /tmp/check-pontes.cjs e node /tmp/check-pontes-reveal.cjs",
+          "result": "passed; estado e revelação após testes preservados"
+        },
+        {
+          "command": "node /tmp/check-pontes-control.cjs",
+          "result": "passed; envelope com Unicode astral 3278 bytes; caso extremo adicional com controlos escapados de seis bytes 4095 bytes, abaixo de 4096; textos obrigatórios de 240 caracteres preservados, reflexão facultativa reduzida a 79 caracteres"
+        },
+        {
+          "command": "node --check de todos os scripts inline do HTML final e da fonte canónica do modal",
+          "result": "passed"
+        },
+        {
+          "command": "git diff --check",
+          "result": "passed"
+        }
+      ],
+      "checkpointEvidence": {
+        "builderExtremeEscapedControlEnvelopeBytes": 4095,
+        "evaluatorPreviousBrowserMaximumBytes": 4092,
+        "evaluatorEvidence": "drafts/pontes-duas-vistas-browser-metrics.json",
+        "limitExclusive": 4096,
+        "requiredTextsPreserved": true,
+        "optionalReflectionMayShrink": true
+      },
+      "verificationBoundary": "Harnesses Node temporários confirmam as causas e as reparações, sem equivaler a browser. O Evaluator reexecutará os testes de regressão persistentes em tests/browser/test_pontes_duas_vistas.py, hosts student/learning reais, adaptadores e modo autónomo no Hub.",
+      "scope": "Só fonte canónica do modal, seus dois espelhos, cache dos dois anfitriões, HTML e relatório Builder deste rascunho. Nenhuma atividade existente reescrita. Sem publicação, registo, PR ou browser nesta fase."
+    },
+    {
+      "iteration": 3,
+      "source": "/tmp/pagecraft-pontes-spec-r1.md",
+      "issue": "P2, pista refere personagem que não era desenhada",
+      "htmlCommit": "4a6b0f6",
+      "change": "sideView recebe tested e deriva outcome/posição do estado existente. Personagem lateral não focável na margem direita quando atravessa com altura 2, ou margem esquerda antes da travessia com altura 1/3. aria-label descreve o desfecho; Observámos conserva texto redundante. Sem animação ou novo estado/checkpoint.",
+      "visibility": "u1 sem personagem; u2 por ficha só após o respetivo teste; u3 conserva A/B testados; u4 só no caso atual testado e desaparece ao mudar altura até testar de novo.",
+      "preserved": "Função topView comparada literalmente antes/depois, sem qualquer alteração; nenhuma outra lógica ou fonte canónica alterada nesta reparação.",
+      "checks": [
+        "node /tmp/check-pontes-character.cjs, figura/posição/aria/ocultação após mudar caso: passed",
+        "node --check de todos os scripts inline finais: passed",
+        "apoio comum e Gothic reincorporados",
+        "node /tmp/check-pontes-reveal.cjs: passed",
+        "node /tmp/check-pontes-flush.cjs: passed",
+        "node /tmp/check-pontes-navigation.cjs: passed",
+        "node /tmp/check-pontes-control.cjs: passed, extremo 4095 bytes e textos obrigatórios preservados",
+        "git diff --check: passed"
+      ],
+      "boundary": "Sem browser. O pai fará merge explícito da melhoria de histórico de pistas, reincorporação canónica final, atualização do hash e nova avaliação real; estes resultados são anteriores a essa integração."
+    },
+    {
+      "iteration": 4,
+      "source": "drafts/pontes-duas-vistas-repair-ticket-r3.json",
+      "htmlCommit": "c4c8e6a",
+      "issue": "real-host-modal-focus-return, pedido local genuíno nos dois anfitriões",
+      "provenCause": "A escolha continue chegava com hint_id correlacionado mas modalAction fechava sem voltar a focar a ação do painel no iframe. present tentava focar o exterior também ao abrir um novo modal.",
+      "change": "Helper canónico focusCurrentAction foca a ação da pista atual após continue ou teacher, verifica painel atual ligado/ativo e ausência de modal aberto. present reutiliza o helper, que não desvia foco quando há modal. render preserva a ação focada se a resposta assíncrona do professor substituir o painel.",
+      "preserved": [
+        "Correlação entre pedido, pista atual e ação; rejeição de ações antigas; validação source do anfitrião; histórico integrado do PR61.",
+        "next/stuck reabrem apenas o novo modal; listen conserva o modal; invalidar contexto não reabre nem foca ajuda obsoleta.",
+        "Sandbox opaco, protocolos e fonte server/static/student/support-modal.js intactos; cache dos dois hosts continua v2.",
+        "Figura lateral e vista superior, estado obrigatório e checkpoint sem alterações de estrutura. Nenhuma atividade existente reescrita."
+      ],
+      "scope": [
+        "server/pipeline/prompts/activity-support.js",
+        "skills/claude/assets/activity-support.js",
+        "skills/codex/assets/activity-support.js",
+        "tests/js/activity_support.test.cjs",
+        "drafts/pontes-duas-vistas.html"
+      ],
+      "checks": [
+        {
+          "command": "node --test --test-name-pattern='retoma explícita|pedir outra pista ou|retoma obsoleta' tests/js/activity_support.test.cjs",
+          "result": "Antes: 2 failed/1 passed. Depois: 3 passed. Casos persistentes verificam três rotas, retorno à geração atual do painel, confirmação assíncrona do professor, next/stuck e rejeição de retoma antiga/painéis inativos."
+        },
+        {
+          "command": "node --test tests/js/activity_support.test.cjs",
+          "result": "35 passed, incluindo as 32 regressões anteriores do apoio/histórico e três novas de foco."
+        },
+        {
+          "command": "uv run --project /home/proteu/pagecraft pytest tests/test_activity_support.py tests/test_pontes_draft.py -q",
+          "result": "14 passed in 0.49s"
+        },
+        {
+          "command": "bash skills/sync-from-canonical.sh e --check",
+          "result": "Só os dois espelhos JS alterados; sem drift depois."
+        },
+        {
+          "command": "python3 scripts/embed_activity_support.py --activity drafts/pontes-duas-vistas.html --docspec drafts/pontes-duas-vistas-docspec.json; python3 scripts/embed_gothic_font.py --activity drafts/pontes-duas-vistas.html",
+          "result": "passed"
+        },
+        {
+          "command": "node --check de todos os scripts inline finais e da fonte canónica",
+          "result": "passed"
+        },
+        {
+          "command": "node /tmp/check-pontes-character.cjs e node /tmp/check-pontes-control.cjs",
+          "result": "passed; personagem e ocultação preservadas; envelope extremo com controlos escapados 4095 bytes, textos obrigatórios preservados e reflexão facultativa pode encolher."
+        },
+        {
+          "command": "git diff --check",
+          "result": "passed"
+        }
+      ],
+      "verificationBoundary": "Sem browser nesta fase Builder. As duas falhas reais persistentes em tests/browser/test_pontes_duas_vistas.py serão reavaliadas pelo Evaluator nos anfitriões learning e student reais, com sandbox opaco, mais modo autónomo e restantes 23 casos. Os testes Node não substituem essa prova."
+    }
+  ],
+  "lastRepairDate": "2026-10-23"
+}

@@ -1,0 +1,98 @@
+{
+  "slug": "pontes-duas-vistas",
+  "status": "private_draft",
+  "language": "pt-PT",
+  "palette": {
+    "bg": "oklch(0.985 0.005 250)",
+    "surface": "oklch(0.995 0.003 250)",
+    "primary": "oklch(0.43 0.075 210)",
+    "accent": "oklch(0.80 0.10 85)",
+    "ink": "oklch(0.22 0.020 260)"
+  },
+  "functional": {
+    "ok": "oklch(0.47 0.10 150)",
+    "warn": "oklch(0.55 0.10 85)",
+    "focus": "oklch(0.43 0.17 255)",
+    "okTint": "oklch(0.95 0.035 150)",
+    "warnTint": "oklch(0.96 0.045 85)",
+    "border": "oklch(0.60 0.015 260)",
+    "selectedInk": "oklch(0.995 0.003 250)"
+  },
+  "typography": {
+    "fontFamily": "'Century Gothic', 'Didact Gothic', 'URW Gothic', 'Avant Garde', sans-serif",
+    "scale": "kids-8-10",
+    "baseSizePx": 20,
+    "headingSizePx": 30,
+    "unitHeadingSizePx": 28,
+    "microcopySizePx": 16,
+    "controlSizePx": 20,
+    "lineHeight": 1.5,
+    "maxLineCh": 55,
+    "weights": [400, 700],
+    "italicAllowed": false,
+    "allCapsAllowed": false,
+    "offlineFont": "O Builder incorpora o WOFF2 real e a licença com scripts/embed_gothic_font.py antes das revisões. Sem fontes remotas."
+  },
+  "layout": {
+    "borderRadius": 14,
+    "spacing": "comfortable",
+    "maxWidthPx": 1040,
+    "padding": "clamp(12px, 3vw, 24px)",
+    "gapPx": 16,
+    "stageOrder": ["Título e etapa", "Tarefa e figuras", "Respostas", "Apoio contextual", "Voltar e Seguinte"],
+    "responsive": {
+      "390": "Uma coluna. Fichas A e B empilhadas na mesma ordem. Cada vista ocupa a largura da ficha; textos e rótulos ficam em HTML fora do desenho. Botões e labels longas quebram linha e crescem em altura. Sem barra fixa a cobrir a tarefa.",
+      "768": "Fichas A/B em duas colunas iguais, gap de 16px. Cada ficha mostra de cima e de lado em sequência vertical. Respostas abaixo da comparação, sem painel lateral estreito.",
+      "1280": "Conteúdo centrado com largura máxima de 1040px. Duas fichas A/B alinhadas pela mesma linha de base. Texto explicativo limitado a 55ch, controlos próximos da figura relevante."
+    }
+  },
+  "components": {
+    "header": "Título curto, pergunta de partida e indicação Rascunho privado. Critérios conhecidos em lista simples recolhível, sem revelar a regra do modelo. Mensagem autónoma Rascunho nesta aba, sem prometer envio ao professor.",
+    "navigation": "Quatro botões numerados Prever, Testar, Comparar e Desafiar, com aria-current=step. Usar botões nativos, sem semântica de tabs que exija outro modelo de teclado. Etapas futuras aria-disabled continuam focáveis; a indicação de resposta em falta aparece junto ao controlo e é anunciada. Voltar está sempre disponível depois de u1.",
+    "buttons": "Altura e largura mínimas de 48px, raio de 10px, padding de 12px. Ação principal teal escuro com texto quase claro; secundárias superfície clara com tinta escura e borda de 2px. Hover por brilho, sem escala. Texto pode ocupar várias linhas.",
+    "choices": "Fieldset com legend. Radio/checkbox nativo dentro de label clicável com min-height de 48px e padding de 10px. Toda a label é alvo, inclusive as declarações orais e itens de reflexão. Seleção por marca nativa, borda de 2px e texto; não depender só de cor. Nenhuma resposta começa selecionada.",
+    "trialCards": "A e B têm letras e títulos permanentes. Contorno de 2px, fundo surface e raio de 14px. Não usar cor para distinguir a identidade dos ensaios. Cada ficha reserva espaços separados para Vista de cima, Vista de lado, Pensávamos e Observámos; resultados ficam em texto fora dos desenhos. A permanece visível depois de guardar B.",
+    "topView": "Uma única função de desenho geométrico para A/B, com dimensões e posições idênticas. Sem altura, inclinação, personagem final, setas de resultado ou alteração de cor pelo resultado. Em u1 a figura mostra apenas margens, apoios e tabuleiro vistos de cima. A/B e legendas estão fora do SVG.",
+    "sideView": "Desenho horizontal simples com chão comum, dois apoios contornados e tabuleiro. Blocos empilhados tornam a altura contável. Esquerda fica em 2; direita muda para 1, 2 ou 3. Mostrar rótulos HTML de altura depois de u1. A inclinação muda apenas com a altura direita. Resultado com personagem e legenda pertence à vista lateral após testar, nunca à superior.",
+    "diagramSizing": "SVG com viewBox de aproximadamente 280 por 160 e width 100%, sem texto pequeno incorporado. Textos pedagógicos, alturas e resultados são HTML de 20px. Linhas e contornos de pelo menos 2px; rótulo acessível descreve a configuração visível. Figuras decorativas internas não recebem foco.",
+    "heightControls": "Em u2, botão Baixar o apoio direito junto de B, depois de guardar A. Em u4, grupo Altura do apoio direito com escolhas 1 bloco, 2 blocos, 3 blocos e botão Testar esta ponte. Cada escolha tem alvo mínimo de 48px e teclado nativo. Não oferecer controlo de posição, apoio esquerdo ou tabuleiro.",
+    "textFields": "Textarea com label visível, fonte de 20px, min-height de 120px, largura 100% e borda de 2px. Explicação e comentário limitados a 240 caracteres; reflexão local a 160. Contador de 16px não substitui o label. Declaração oral fica próxima e tem o mesmo alvo de 48px.",
+    "hypothesisRevision": "Em u3 mostrar Pensávamos antes e A nossa hipótese agora em blocos adjacentes ou empilhados. A hipótese inicial e previsões confirmadas ficam preservadas. Revisão não usa riscado nem sinal de erro. Em u4, mostrar a versão atual da explicação antes do teste do colega.",
+    "feedback": "Mensagens locais em aria-live=polite. Previsões confrontam Pensávamos com Observámos, sem certo/errado. Só a questão sobre variável tem feedback verificável. Se a escolha divergir, contornar os apoios direitos nas vistas laterais, manter a escolha e convidar Compara o mesmo apoio em A e B. Usar âmbar suave, ícone de rever e texto. Com todas as respostas dadas, Seguinte permite avançar mesmo após esse feedback.",
+    "supportSelector": "Com pistas, Passo a passo e Mais desafios em botões livres com estado aria-pressed. Mesmo estilo neutro, selecionado pelo contorno e marca textual. Sem semáforo, estrelas ou nota. Trocar apoio conserva etapa, fichas, escolhas, textos e confirmações compatíveis.",
+    "contextualSupport": "Reservar aside data-pagecraft-support=uN junto da tarefa de cada unidade. Incorporar o componente canónico, sem construir outro modal ou fila de pistas. Manter alvos mínimos de 48px também nos controlos injetados. Ouvir só por pedido, outra pista e pedido ao professor visíveis. Mudanças de trabalho e de apoio atualizam o contexto e a revisão.",
+    "reflection": "Secção final facultativa que retoma os critérios. No host usar reflexão individual. Em modo autónomo, labels de 48px para Sozinho, Com ajuda, Quero praticar e Prefiro não responder. Nenhuma escolha nem texto bloqueia a conclusão. Sem indicadores de desempenho."
+  },
+  "moments": {
+    "u1": "Só as duas vistas superiores iguais, hipótese inicial e previsões A/B independentes. Não mostrar altura, lateral, resultado ou regra. Guardar previsões confirma as três respostas; Ainda não sei conta como resposta. Depois da confirmação, manter a previsão histórica legível ao voltar.",
+    "u2": "Começar por Testar e guardar A, com configuração fixa 2/2. Mostrar lateral e resultado de A após o teste. Baixar só a direita prepara B 2/1 e torna essa mudança lateral observável; Testar e guardar B mostra o resultado. Conservar A/B no mesmo lugar com previsões e resultados separados.",
+    "u3": "Comparação A/B completa antes dos controlos. Confirmar variável alterada, escolher hipótese atual e escrever ou declarar explicação oral. Feedback não apaga escolhas. Sem bloqueio pelo acerto e sem avaliação automática da explicação. A hipótese e o texto podem ser revistos.",
+    "u4": "A explicação atual do par fica acima do teste do colega. Um caso atual substituível oferece altura direita 1/2/3, vista superior igual e lateral correspondente. Após testar, o colega relata um caso que não combina ou que procurou e não encontrou, por texto ou declaração oral. Não criar terceira ficha A/B. Alterar a explicação pede nova apreciação do colega; mostrar o pedido junto do relato."
+  },
+  "supportVariants": {
+    "support": "Com pistas mostra contornos adicionais nas peças relevantes, números dos blocos fora da figura e sequência de uma ação por vez. Em u1 destaca A e depois B sem mostrar alturas. Em u3 oferece Em A… Em B… A diferença que vejo é… Em u4 oferece A explicação diz… Neste teste vimos…",
+    "intermediate": "Passo a passo conserva a comparação limpa com títulos Pensávamos/Observámos e lembra a ação seguinte junto ao botão principal. Explicação numa frase ou oral, com os mesmos pedidos obrigatórios.",
+    "challenge": "Mais desafios acrescenta uma pergunta oral curta junto da tarefa: que informação falta na vista de cima; neste modelo; não encontrei significa nunca existe? Não acrescenta campos obrigatórios, variável ou bloqueios."
+  },
+  "motion": {
+    "transitions": "subtle",
+    "durationMs": 160,
+    "easing": "ease-out",
+    "respectReducedMotion": true,
+    "rules": "Só cor e opacidade. Mudanças de altura são imediatas e estáticas; sem bounce, elastic ou movimento obrigatório da personagem. Resultado textual aparece mesmo sem animação."
+  },
+  "accessibility": {
+    "contrast": "WCAG-AA",
+    "contrastBody": "AA mínimo 4.5:1",
+    "contrastMicrocopy": "AAA mínimo 7:1",
+    "focusRing": true,
+    "focusStyle": "Outline de 3px em focus, offset de 3px. Em botões escuros, intervalo claro de 2px separa anel e fundo. Nenhum contentor corta o anel.",
+    "minTapPx": 48,
+    "keyboard": "Tab percorre controlos na ordem visual. Setas operam radios nativos; Espaço seleciona, Enter ativa botões. Nenhuma ação exige arrastar. Após trocar etapa, focar o título com tabindex=-1; ao mudar apoio, conservar o foco no controlo.",
+    "soundOptIn": true,
+    "emoji": "Não usar emojis como portadores únicos de significado. Ícones redundantes e decorativos têm aria-hidden=true.",
+    "restore": "Ao retomar, restaurar a etapa e trabalho sem novo feedback, testes automáticos ou anúncios de acerto. Mostrar Trabalho retomado nesta aba em modo autónomo. Não mover foco a cada tecla.",
+    "verification": "O Evaluator verifica 390/768/1280px, ausência de transbordamento horizontal, labels e controlos injetados com 48px, foco, teclado e contraste real. Esta especificação não declara esses ensaios realizados."
+  },
+  "notes": "Duas fichas estáveis permitem comparar a previsão com a observação sem perder A ao testar B. O teal escuro reserva a cor forte para ações e mantém as figuras legíveis; a fonte Gothic incorporada permite o mesmo trabalho offline. A primeira etapa esconde as alturas para preservar a investigação, e os apoios alteram pistas concretas sem alterar as respostas exigidas."
+}

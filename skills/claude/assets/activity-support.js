@@ -76,6 +76,14 @@
     if(action==='stuck')feedback('not_helped');
     if(action==='next'||action==='stuck')requestHint(undefined,true);
     if(action==='teacher')help();
+    if(action==='continue'||action==='teacher')focusCurrentAction();
+  }
+  function focusCurrentAction(){
+    if(modalHint || !current || current.unit_id!==unitId)return;
+    const panel=panels.get(unitId);
+    if(!panel || panel.isConnected===false || panel.closest?.('[hidden], [inert]'))return;
+    const action=panel.querySelector('.pc-support-action');
+    if(action){action.focus({preventScroll:true});action.scrollIntoView({block:'center',behavior:'auto'});}
   }
   function taskKey(){return JSON.stringify([unitId,context.task_id||context.question,context.product,context.level,context.obstacle,members,language]);}
   function resetFailures(){failures={key:taskKey(),count:0,observed:[],last:null};}
@@ -159,8 +167,7 @@
     emit('hint_presented',{hint_id:current.hint_id,hint_key:hintKey,text,source,request_id:requestId,
       obstacle:current.obstacle,product:current.product,language,context:originalContext,presentation:automatic?'modal':'inline'});
     if(automatic)showModal();
-    const action=panels.get(unitId)?.querySelector('.pc-support-action');
-    if(action){action.focus({preventScroll:true});action.scrollIntoView({block:'center',behavior:'auto'});}
+    focusCurrentAction();
   }
   function requestHint(unit, automatic=false) {
     closeModal();
@@ -251,6 +258,7 @@
     if(!panel || panel.isConnected===false || !plan())return false;
     const button=(action,label,disabled=false)=>'<button type="button" data-support-action="'+action+'" '+(disabled?'disabled':'')+'>'+esc(label)+'</button>';
     const active=document.activeElement?.closest?.('[data-pagecraft-support]')===panel?document.activeElement.dataset.supportAction:null;
+    const actionFocused=document.activeElement?.matches?.('.pc-support-action') && document.activeElement.closest('[data-pagecraft-support]')===panel;
     const open=Array.from(panel.querySelectorAll?.('[data-support-disclosure][open]')||[],node=>node.dataset.supportDisclosure);
     const settings=(!locked?button('mode',members>1?t('alone'):t('pair')):'')+
       '<label>'+esc(t('obstacle'))+'<select data-support-obstacle>'+plan().obstacles.map(o=>'<option value="'+o.id+'" '+(obstacle().id===o.id?'selected':'')+'>'+esc(o.label[language])+'</option>').join('')+'</select></label>';
@@ -266,6 +274,7 @@
       historyMarkup()+'<p class="pc-support-notice" role="status">'+esc(notice)+'</p><p class="pc-support-note">'+esc(t('observation'))+'</p>';
     for(const key of open){const disclosure=panel.querySelector('[data-support-disclosure="'+key+'"]');if(disclosure)disclosure.open=true;}
     if(active)panel.querySelector('[data-support-action="'+active+'"]')?.focus({preventScroll:true});
+    else if(actionFocused)focusCurrentAction();
     return true;
   }
   function mount() {

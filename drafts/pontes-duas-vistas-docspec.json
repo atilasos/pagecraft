@@ -1,0 +1,578 @@
+{
+  "slug": "pontes-duas-vistas",
+  "title": "Duas pontes, duas vistas",
+  "status": "private_draft",
+  "language": "pt-PT",
+  "year": "3.º e 4.º anos",
+  "topic": "Olhar de cima chega para decidir se a personagem atravessa neste modelo?",
+  "ageRange": "8–10 anos, 3.º e 4.º anos",
+  "duration": 15,
+  "objectives": [
+    "Registar previsões separadas para A e B e confrontá-las com os resultados observados.",
+    "Identificar a altura do apoio direito como única variável alterada entre A 2/2 e B 2/1.",
+    "Comparar vistas superiores iguais e laterais diferentes e manter ou rever uma hipótese com um exemplo.",
+    "Procurar, como colega, um contraexemplo à explicação do par e relatar a procura sem classificação automática."
+  ],
+  "curriculum": {
+    "ae": [],
+    "competencies": [
+      "PA-B: Informação e comunicação",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-D: Pensamento crítico e pensamento criativo",
+      "PA-E: Relacionamento interpessoal",
+      "PA-I: Saber científico, técnico e tecnológico"
+    ],
+    "orientationReferences": [
+      {
+        "subject": "TIC, componente transversal",
+        "year": "1.º ciclo; progressão local para 3.º/4.º",
+        "domain": "Comunicar e Colaborar",
+        "descriptor": "Usar ferramentas digitais para expressar uma ideia, explicar ou argumentar e apresentar produtos desenvolvidos em conjunto. Paráfrase das OC, pp. 7–8.",
+        "source": "documentos-oficiais/aprendizagens-essenciais/tic-1-ano-1-ciclo.md"
+      }
+    ],
+    "alignmentNote": "Não inventar AE por ano: a fonte é OC para o ciclo inteiro. A investigação controlada é uma proposta local. Não se afirma pesquisa online pela criança nem estudo da engenharia de pontes reais.",
+    "sourceRecord": "drafts/pontes-duas-vistas-sources.md"
+  },
+  "memAlignment": {
+    "modules": [
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "Duas fichas de ensaio A/B",
+      "Explicação revisível do par",
+      "Relato do colega sobre a procura de contraexemplo"
+    ],
+    "socialOrganization": "A pares num dispositivo. Uma criança prevê/experimenta, a outra verifica; trocam antes da comparação. Depois um colega, do mesmo par ou de outro par, procura um contraexemplo à explicação apresentada. O professor medeia e transcreve quando necessário. Esta microatividade não é um projeto cooperativo completo."
+  },
+  "materials": [
+    "Um computador ou tablet por par com HTML autocontido",
+    "Professor ou colega para leitura e transcrição oral quando necessário"
+  ],
+  "successCriteria": [
+    "Registamos duas previsões e comparamos com os testes.",
+    "Dizemos o que mudou entre A e B.",
+    "Usamos um exemplo para explicar e ouvimos a pergunta de um colega."
+  ],
+  "sessionFlow": "0–3 min u1 Prever; 3–8 min u2 Testar A/B; 8–12 min u3 Comparar e explicar; 12–15 min u4 Desafiar a explicação e reflexão facultativa. As durações das quatro unidades somam 15; não acrescentar outra duração de sessionFlow.",
+  "support": {
+    "version": "pontes-duas-vistas-v1",
+    "languages": [
+      "pt"
+    ],
+    "automaticAfterFailures": 3
+  },
+  "modelContract": {
+    "fixed": {
+      "leftPosition": "margin",
+      "rightPosition": "margin",
+      "leftHeight": 2,
+      "deck": true,
+      "footprint": "constant"
+    },
+    "onlyManipulatedVariable": "rightHeight",
+    "savedA": {
+      "leftHeight": 2,
+      "rightHeight": 2,
+      "outcome": "crossed"
+    },
+    "savedB": {
+      "leftHeight": 2,
+      "rightHeight": 1,
+      "outcome": "stopped"
+    },
+    "crossingRule": "Neste modelo didático, com apoios fixos nas margens e tabuleiro presente, crossed se rightHeight === 2; caso contrário stopped. A regra não é uma afirmação sobre pontes reais.",
+    "topInvariant": "A projeção superior ignora alturas e resultado; o desenho geométrico superior A e B é idêntico. Rótulos, previsão e resultado ficam fora do SVG/figura da vista.",
+    "sideDifference": "A altura direita e a inclinação do tabuleiro mudam. Não variar posição, dimensão, esquerda, tabuleiro, carga ou cenário.",
+    "storedTrials": "Só duas fichas estáveis A e B. Testes do colega usam um estado atual substituível, sem terceira ficha nem lista crescente.",
+    "discoveryTiming": "u1 mostra apenas vista superior sem resultados e sem regra. u2 revela a vista lateral e resultados só por teste explícito; u3 conserva previsões originais junto dos resultados."
+  },
+  "experienceContract": {
+    "progression": "Avanço e saltos futuros dependem exclusivamente de respostas obrigatórias dadas, nunca de acerto. Não há escolhas iniciais que contem como resposta. Botões aria-disabled continuam focáveis e indicam junto do controlo o pedido em falta. Voltar permanece possível.",
+    "levelSwitch": "Com pistas=support; Passo a passo=intermediate na ponte e standard no DocSpec; Mais desafios=challenge. Os mesmos pedidos nos três apoios. Mudar apoio nunca apaga A/B, previsões, hipótese, explicação, declaração do colega ou etapa.",
+    "revisions": "As previsões confirmadas em u1 ficam preservadas como previsões anteriores ao teste. A hipótese inicial conserva-se. A hipótese de u3 e a explicação são revisíveis e invalidam apenas a declaração do colega que confrontava a versão anterior. Conservar a declaração anterior no histórico de evidências, não como resposta à nova hipótese.",
+    "noScore": "Sem nota, estrelas, pontuação, avaliação automática de texto aberto ou obrigação de acertar. Hipótese, explicação oral e contraexemplo são declarações. A variável pode receber feedback verificável sem bloquear.",
+    "age": "Corpo >=20px, títulos >=28px, microtexto >=16px, linha <=55ch, alvos >=48px. Foco visível, labels, teclado nativo, nada dependente de arrastar. Century Gothic com Didact Gothic real e licença incorporadas pelo script canónico.",
+    "reflection": "Todos os itens facultativos. Retomar os três critérios iniciais e ajuda recebida. Integrado: reflexão individual do host com participante visível. Autónomo: reflexão local individual com critérios na primeira pessoa, sem prometer envio ao professor nem preservação de respostas de vários participantes.",
+    "supportIntegration": "Um aside data-pagecraft-support=uN junto da tarefa em cada etapa. Componente canónico incorporado. Atualizar contexto/revision na edição, manipulação, etapa e apoio, e em pagecraft-support-ready. Não duplicar modal, áudio ou contagem.",
+    "attempts": "u3 variável alterada é a questão verificável: task_id u3-variavel. Só confirmar uma escolha não vazia emite attempt com answer/value e boolean correct. Três escolhas erradas distintas e consecutivas podem acionar apoio comum. Repetir a mesma não conta de novo; acerto reinicia. Previsões, hipóteses e contraexemplos não recebem correct inventado."
+  },
+  "checkpointContract": {
+    "activity": "pontes-duas-vistas",
+    "version": 1,
+    "maxUtf8BytesExclusive": 4096,
+    "fields": [
+      "etapa",
+      "apoio",
+      "hipótese inicial",
+      "previsões A/B confirmadas",
+      "A/B guardados e resultados",
+      "configuração atual direita",
+      "resposta variável",
+      "hipótese atual e revisão",
+      "explicação texto ou declaração oral",
+      "teste atual do colega e declaração ligada à revisão",
+      "reflexão local facultativa"
+    ],
+    "limits": "Textos da explicação e do colega <=240 caracteres cada; reflexão local <=160 caracteres. Conservar strings Unicode em medição UTF-8. Sem SVG, histórico crescente ou base64 no checkpoint.",
+    "standalone": "sessionStorage com chave própria da atividade e mensagem explícita de rascunho nesta aba. Sem guardar nomes nem credenciais.",
+    "embedded": "postMessage pelo contrato PageCraft; activity_state com activity/version/state/readyForReflection. learning_restore valida activity/version e recupera estado autorizado antes de novos acontecimentos. Não chamar API nem emitir tentativas/regravar ensaios durante restauro.",
+    "evidence": "assessment_result distingue kind simulation_trial/observed_comparison de student_hypothesis/student_explanation/peer_statement, origin observed_simulation ou student_declaration. Declarações conjuntas têm detail.activity e field estável. Não atribuir ações a alunos no HTML; autoria pertence ao host."
+  },
+  "units": [
+    {
+      "summary": "Prever antes de testar",
+      "textDescription": "Apresentar pergunta investigável e critérios sem antecipar a regra. Duas vistas superiores iguais, marcadas A e B, não permitem ainda observar os resultados.",
+      "duration": 3,
+      "interaction": {
+        "state": [
+          {
+            "name": "initialHypothesis",
+            "type": "quiz",
+            "default": "",
+            "options": [
+              "De cima chega",
+              "Preciso de outra vista",
+              "Ainda não sei"
+            ]
+          },
+          {
+            "name": "predictionA",
+            "type": "quiz",
+            "default": "",
+            "options": [
+              "Atravessa",
+              "Para",
+              "Ainda não sei"
+            ]
+          },
+          {
+            "name": "predictionB",
+            "type": "quiz",
+            "default": "",
+            "options": [
+              "Atravessa",
+              "Para",
+              "Ainda não sei"
+            ]
+          },
+          {
+            "name": "predictionsConfirmed",
+            "type": "toggle",
+            "default": false
+          }
+        ],
+        "render": "Mostrar A e B de cima, sem personagem em estado final, sem altura, sem resultado. Oferecer três grupos de escolhas sem preseleção e botão Guardar previsões. Exibir os critérios conhecidos. Não mostrar um diagrama lateral que já revele a diferença.",
+        "transition": "Escolher hipótese inicial, prever A e prever B; Guardar previsões fixa a versão anterior aos testes. Só depois abre u2. A hipótese inicial pode ser revista em u3; nunca reescrever as previsões históricas como se fossem anteriores aos testes.",
+        "constraint": "Uma representação pode omitir informação relevante. A hipótese é uma antecipação, não uma resposta classificada.",
+        "assessment": "Regista hipótese e previsões A/B separadas antes de existir resultado. Ainda não sei é uma resposta intencional válida."
+      },
+      "differentiation": {
+        "support": "Realçar A e depois B junto de cada escolha. Ler a pergunta por pedido; aceitar a escolha após conversa oral.",
+        "standard": "Mostrar duas figuras e registar previsões independentes, comparáveis após o teste.",
+        "challenge": "Convidar oralmente a dizer que informação faria falta, sem novo campo obrigatório."
+      },
+      "requiredResponses": [
+        "Escolher hipótese inicial, incluindo Ainda não sei.",
+        "Escolher previsão A e previsão B, incluindo Ainda não sei.",
+        "Confirmar Guardar previsões."
+      ],
+      "support": {
+        "objective": "Antecipar o que acontece em cada ponte antes do teste.",
+        "criteria": [
+          "Tenho uma previsão para A e outra para B.",
+          "Se ainda não sei, posso dizer isso."
+        ],
+        "obstacles": [
+          {
+            "id": "prever",
+            "label": {
+              "pt": "Dar uma previsão antes de testar"
+            },
+            "hints": [
+              {
+                "id": "olhar-a",
+                "text": {
+                  "pt": {
+                    "individual": "Olha para A. Escolhe o que pensas que acontece, mesmo sem certeza.",
+                    "group": "Olhem para A. Escolham o que pensam que acontece, mesmo sem certeza."
+                  }
+                }
+              },
+              {
+                "id": "olhar-b",
+                "text": {
+                  "pt": {
+                    "individual": "Olha agora para B. Podes prever algo igual ou diferente.",
+                    "group": "Olhem agora para B. Podem prever algo igual ou diferente."
+                  }
+                }
+              },
+              {
+                "id": "pedir-leitura",
+                "text": {
+                  "pt": {
+                    "individual": "Pede a um colega para ler as escolhas. A tua dúvida também pode ficar registada.",
+                    "group": "Peçam a um colega para ler as escolhas. A vossa dúvida também pode ficar registada."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Testar um fator de cada vez",
+      "textDescription": "Guardar A com alturas 2/2 e B com 2/1. Revelar vistas laterais e resultados após os testes explícitos. Só a altura do apoio direito muda.",
+      "duration": 5,
+      "interaction": {
+        "state": [
+          {
+            "name": "savedA",
+            "type": "derived",
+            "default": null
+          },
+          {
+            "name": "rightHeight",
+            "type": "slider",
+            "default": 2,
+            "range": [
+              1,
+              2
+            ],
+            "step": 1,
+            "unit": "blocos"
+          },
+          {
+            "name": "savedB",
+            "type": "derived",
+            "default": null
+          }
+        ],
+        "render": "A mostra apoios nas margens, esquerda 2/direita 2 e tabuleiro. Testar e guardar A revela a travessia. A ação Baixar o apoio direito prepara B com direita 1; Testar e guardar B revela que para. As duas fichas conservam topo, lado, alturas, previsão e resultado. Controlo próximo do apoio direito assinala a única mudança.",
+        "transition": "Testar e guardar A; baixar só o apoio direito de 2 para 1; testar e guardar B. Sem escolha de posição ou tabuleiro. Não repetir emissões quando a mesma ficha já foi guardada. Nunca fazer desaparecer A ao mostrar B.",
+        "constraint": "A/B têm a mesma projeção superior, mas alturas e resultados diferentes. O resultado deriva do estado do modelo, não da previsão escolhida.",
+        "assessment": "Produz dois ensaios escolhidos intencionalmente, com previsões visíveis e resultados distintos, e vê uma única variável alterada."
+      },
+      "differentiation": {
+        "support": "Marcar os blocos 1 e 2 junto do apoio direito e guiar uma ação por vez. Conservar A visível durante B.",
+        "standard": "Testar A, efetuar a mudança indicada e testar B; comparar previsões e resultados lado a lado.",
+        "challenge": "Convidar a antecipar oralmente B depois de observar A; preservar a previsão original e não exigir outra resposta."
+      },
+      "requiredResponses": [
+        "Testar e guardar A 2/2.",
+        "Baixar o apoio direito para preparar B 2/1.",
+        "Testar e guardar B, mesmo que contradiga a previsão."
+      ],
+      "support": {
+        "objective": "Comparar dois testes, mudando apenas a altura direita.",
+        "criteria": [
+          "Guardei A e B.",
+          "Entre os ensaios, mexi só no apoio direito."
+        ],
+        "obstacles": [
+          {
+            "id": "guardar",
+            "label": {
+              "pt": "Guardar os dois ensaios"
+            },
+            "hints": [
+              {
+                "id": "testar-a",
+                "text": {
+                  "pt": {
+                    "individual": "Carrega em Testar e guardar A. Repara onde fica a personagem.",
+                    "group": "Carreguem em Testar e guardar A. Reparem onde fica a personagem."
+                  }
+                }
+              },
+              {
+                "id": "baixar-direita",
+                "text": {
+                  "pt": {
+                    "individual": "Baixa o apoio direito. Procura a mudança na vista de lado.",
+                    "group": "Baixem o apoio direito. Procurem a mudança na vista de lado."
+                  }
+                }
+              },
+              {
+                "id": "testar-b",
+                "text": {
+                  "pt": {
+                    "individual": "Testa e guarda B. Compara o que pensavas com o que observaste.",
+                    "group": "Testem e guardem B. Comparem o que pensavam com o que observaram."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Comparar e explicar",
+      "textDescription": "Confrontar previsão/resultado e as duas vistas. Responder qual variável mudou. Formular hipótese atual, mantida ou revista, e explicação curta ou oral.",
+      "duration": 4,
+      "interaction": {
+        "state": [
+          {
+            "name": "changedVariable",
+            "type": "quiz",
+            "default": "",
+            "options": [
+              "Altura do apoio direito",
+              "Altura do apoio esquerdo",
+              "Posição dos apoios",
+              "Presença do tabuleiro"
+            ]
+          },
+          {
+            "name": "currentHypothesis",
+            "type": "quiz",
+            "default": "",
+            "options": [
+              "De cima chega",
+              "Preciso de outra vista",
+              "Ainda quero investigar"
+            ]
+          },
+          {
+            "name": "explanation",
+            "type": "canvas",
+            "default": ""
+          },
+          {
+            "name": "explainedOrally",
+            "type": "toggle",
+            "default": false
+          },
+          {
+            "name": "hypothesisRevision",
+            "type": "derived",
+            "default": 0
+          }
+        ],
+        "render": "A/B em comparação: figuras superiores sem marca de resultado no desenho, laterais diferentes, previsão original e resultado separados. Perguntar O que mudou? Apresentar hipótese inicial e atual lado a lado. Campo curto e opção Expliquei em voz alta, com a indicação de que é declaração. Dar feedback visual junto da variável selecionada.",
+        "transition": "Confirmar variável alterada em tarefa u3-variavel; qualquer escolha permite avançar e pode ser corrigida. Escolher hipótese atual e escrever explicação ou confirmar declaração oral. Mostrar a revisão sem apagar hipótese inicial. Edição muda revision/contexto e torna anterior declaração do colega desatualizada.",
+        "constraint": "Vistas superiores iguais não garantem resultados iguais neste modelo. Um exemplo observado pode levar a rever uma explicação, mas a máquina não avalia texto aberto.",
+        "assessment": "Seleciona variável e apresenta hipótese atual acompanhada de explicação textual ou oral declarada. A variável é verificável; a validade da explicação é apreciada pelo colega/professor."
+      },
+      "differentiation": {
+        "support": "Realçar contornos das vistas e oferecer início de frase: Em A… Em B… A diferença que vejo é… Aceitar ditado ou declaração oral.",
+        "standard": "Manter ou rever a hipótese e relacionar com A/B numa frase ou explicação oral.",
+        "challenge": "Convidar a limitar a afirmação a neste modelo e a explicar que informação a vista de cima omite, sem novo bloqueio."
+      },
+      "requiredResponses": [
+        "Confirmar uma escolha para a variável alterada, mesmo incorreta.",
+        "Escolher hipótese atual, mesmo mantendo a inicial.",
+        "Escrever uma explicação ou confirmar Expliquei em voz alta."
+      ],
+      "support": {
+        "objective": "Usar os dois ensaios para manter ou rever uma hipótese.",
+        "criteria": [
+          "Digo o que mudou.",
+          "Apresento a minha explicação com A e B."
+        ],
+        "obstacles": [
+          {
+            "id": "variavel",
+            "label": {
+              "pt": "Encontrar a mudança"
+            },
+            "hints": [
+              {
+                "id": "comparar-lado",
+                "text": {
+                  "pt": {
+                    "individual": "Aponta o topo de cada apoio na vista de lado de A e B.",
+                    "group": "Apontem o topo de cada apoio na vista de lado de A e B."
+                  }
+                }
+              },
+              {
+                "id": "comparar-pecas",
+                "text": {
+                  "pt": {
+                    "individual": "Compara a mesma peça em A e B. Que peça ficou igual?",
+                    "group": "Comparem a mesma peça em A e B. Que peça ficou igual?"
+                  }
+                }
+              },
+              {
+                "id": "olhar-alturas",
+                "text": {
+                  "pt": {
+                    "individual": "Conta os blocos de cada apoio. Volta à tua escolha sobre a mudança.",
+                    "group": "Contem os blocos de cada apoio. Voltem à vossa escolha sobre a mudança."
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": "explicar",
+            "label": {
+              "pt": "Explicar com um exemplo"
+            },
+            "hints": [
+              {
+                "id": "usar-fichas",
+                "text": {
+                  "pt": {
+                    "individual": "Mostra A e B enquanto explicas o que a vista de cima permite ver.",
+                    "group": "Mostrem A e B enquanto explicam o que a vista de cima permite ver."
+                  }
+                }
+              },
+              {
+                "id": "ditar-frase",
+                "text": {
+                  "pt": {
+                    "individual": "Podes dizer a tua frase a um colega ou professor para a escrever.",
+                    "group": "Podem dizer a vossa frase a um colega ou professor para a escrever."
+                  }
+                }
+              },
+              {
+                "id": "rever-ideia",
+                "text": {
+                  "pt": {
+                    "individual": "Compara a tua hipótese inicial com os testes. Queres mantê-la ou mudá-la?",
+                    "group": "Comparem a vossa hipótese inicial com os testes. Querem mantê-la ou mudá-la?"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Um colega desafia a explicação",
+      "textDescription": "Um colega lê/ouve a explicação do par, procura um caso que não combine com ela e declara o que encontrou. A reflexão é facultativa.",
+      "duration": 3,
+      "interaction": {
+        "state": [
+          {
+            "name": "peerRightHeight",
+            "type": "slider",
+            "default": 1,
+            "range": [
+              1,
+              3
+            ],
+            "step": 1,
+            "unit": "blocos"
+          },
+          {
+            "name": "peerTest",
+            "type": "derived",
+            "default": null
+          },
+          {
+            "name": "peerConclusion",
+            "type": "quiz",
+            "default": "",
+            "options": [
+              "Encontrei um caso que não combina",
+              "Procurei e não encontrei"
+            ]
+          },
+          {
+            "name": "peerComment",
+            "type": "canvas",
+            "default": ""
+          },
+          {
+            "name": "peerOral",
+            "type": "toggle",
+            "default": false
+          },
+          {
+            "name": "reflection",
+            "type": "canvas",
+            "default": ""
+          }
+        ],
+        "render": "Exibir a hipótese atual e a explicação do par com revisão. Instrução ao colega: Procura uma ponte que não combine com esta explicação. Só a altura direita pode mudar para 1,2,3. Mostrar teste atual com vistas superior/lateral e resultado, sem terceira ficha no par A/B. Oferecer Encontrei… / Procurei e não encontrei. Explicar contraexemplo como um caso que não combina com a explicação. Reflexão facultativa recolhida pelo host ou localmente.",
+        "transition": "Colega escolhe altura e confirma um teste, descreve ou declara oralmente a procura e escolhe conclusão. Mudar altura invalida apenas confirmação/conclusão desse teste. Não encontrar é válido. Nova hipótese do par invalida conclusão anterior que se referia à versão antiga. Partilha e reflexão não bloqueiam conclusão.",
+        "constraint": "Um caso observado pode contradizer uma afirmação; não encontrar um contraexemplo não prova que uma hipótese é universal. Toda conclusão está limitada a este modelo e aos testes feitos.",
+        "assessment": "Regista teste observado e relato do colega ligados à explicação concreta do par, aceitando contraexemplo ou procura sem encontrar. Não inferir qualidade da cooperação nem compreensão individual."
+      },
+      "differentiation": {
+        "support": "Ler a explicação do par e apontar uma ficha de cada vez. Dar início oral: A explicação diz… Neste teste vimos…",
+        "standard": "Confrontar um teste com a explicação apresentada e relatar encontrado/não encontrado.",
+        "challenge": "Convidar a distinguir não encontrei de nunca existe e propor oralmente novo teste. Não exigir outra variável nem texto adicional."
+      },
+      "requiredResponses": [
+        "Confirmar um teste do colega com altura direita escolhida.",
+        "Escolher Encontrei um caso que não combina ou Procurei e não encontrei.",
+        "Registar uma frase do colega ou confirmar que explicou a procura em voz alta."
+      ],
+      "support": {
+        "objective": "Procurar um exemplo que ponha à prova a explicação do par.",
+        "criteria": [
+          "O colega usa a nossa explicação nesta procura.",
+          "Podemos dizer que não encontrámos um caso."
+        ],
+        "obstacles": [
+          {
+            "id": "contraexemplo",
+            "label": {
+              "pt": "Procurar um caso que não combina"
+            },
+            "hints": [
+              {
+                "id": "ler-explicacao",
+                "text": {
+                  "pt": {
+                    "individual": "Lê ou ouve a explicação do par. O que diz que vai acontecer?",
+                    "group": "Leiam ou ouçam a explicação do par. O que diz que vai acontecer?"
+                  }
+                }
+              },
+              {
+                "id": "testar-caso",
+                "text": {
+                  "pt": {
+                    "individual": "Escolhe uma altura direita e testa. Compara o resultado com essa explicação.",
+                    "group": "Escolham uma altura direita e testem. Comparem o resultado com essa explicação."
+                  }
+                }
+              },
+              {
+                "id": "relatar-procura",
+                "text": {
+                  "pt": {
+                    "individual": "Diz o que procuraste. Se não encontraste um caso, podes registar isso.",
+                    "group": "Digam o que procuraram. Se não encontraram um caso, podem registar isso."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "reflection": {
+        "optional": true,
+        "criteria": "Reusar successCriteria. Cada critério permite Sozinho / Com ajuda / Quero praticar / Prefiro não responder; campos de estratégia e próximo passo opcionais. No host, não substituir reflexão individual por reflexão conjunta."
+      }
+    }
+  ],
+  "criteria": [
+    {
+      "id": "c1",
+      "pt": "Registamos duas previsões e comparamos com os testes."
+    },
+    {
+      "id": "c2",
+      "pt": "Dizemos o que mudou entre A e B."
+    },
+    {
+      "id": "c3",
+      "pt": "Usamos um exemplo para explicar e ouvimos a pergunta de um colega."
+    }
+  ]
+}

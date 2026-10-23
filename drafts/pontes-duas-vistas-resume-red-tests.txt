@@ -1,0 +1,32 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+___ test_real_studio_hosts_load_current_modal_and_resume_keyboard[learning] ____
+tests/browser/test_pontes_duas_vistas.py:693: in test_real_studio_hosts_load_current_modal_and_resume_keyboard
+    expect(frame.locator('[data-pagecraft-support="u1"] .pc-support-action')).to_be_focused()
+E   AssertionError: Locator expected to be focused
+E   Actual value: inactive 
+E   Call log:
+E     - Expect "to_be_focused" locator("#lesson").content_frame.locator("[data-pagecraft-support=\"u1\"] .pc-support-action") with timeout 5000ms
+E     - waiting for locator("#lesson").content_frame.locator("[data-pagecraft-support=\"u1\"] .pc-support-action")
+E       14 × locator resolved to <div tabindex="-1" role="status" aria-live="polite" class="pc-support-action">Olha para A. Escolhe o que pensas que acontece, m…</div>
+E          - unexpected value "inactive"
+E   
+E   Aria snapshot:
+E   - status: Olha para A. Escolhe o que pensas que acontece, mesmo sem certeza.
+____ test_real_studio_hosts_load_current_modal_and_resume_keyboard[student] ____
+tests/browser/test_pontes_duas_vistas.py:693: in test_real_studio_hosts_load_current_modal_and_resume_keyboard
+    expect(frame.locator('[data-pagecraft-support="u1"] .pc-support-action')).to_be_focused()
+E   AssertionError: Locator expected to be focused
+E   Actual value: inactive 
+E   Call log:
+E     - Expect "to_be_focused" locator("#activity-frame").content_frame.locator("[data-pagecraft-support=\"u1\"] .pc-support-action") with timeout 5000ms
+E     - waiting for locator("#activity-frame").content_frame.locator("[data-pagecraft-support=\"u1\"] .pc-support-action")
+E       14 × locator resolved to <div tabindex="-1" role="status" aria-live="polite" class="pc-support-action">Olha para A. Escolhe o que pensas que acontece, m…</div>
+E          - unexpected value "inactive"
+E   
+E   Aria snapshot:
+E   - status: Olha para A. Escolhe o que pensas que acontece, mesmo sem certeza.
+=========================== short test summary info ============================
+FAILED tests/browser/test_pontes_duas_vistas.py::test_real_studio_hosts_load_current_modal_and_resume_keyboard[learning]
+FAILED tests/browser/test_pontes_duas_vistas.py::test_real_studio_hosts_load_current_modal_and_resume_keyboard[student]
+2 failed, 21 deselected in 12.32s

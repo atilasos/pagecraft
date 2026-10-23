@@ -1,0 +1,293 @@
+{
+  "pass": true,
+  "phase": "Evaluator",
+  "activity": "pontes-duas-vistas",
+  "route": "none",
+  "severity": "low",
+  "reviewed_branch": "feat/pontes-duas-vistas",
+  "reviewed_head": "08091a7edc7957202a447ed84bccd58b989b5ae1",
+  "reviewed_html_commit": "c4c8e6a",
+  "html_sha256": "c4e77ff6fe3ba903a16332361cd759b23d42cc55e244bbaee1dcce30ab2fb1d5",
+  "scores": {
+    "factual_accuracy": 5,
+    "constraint_alignment": 5,
+    "differentiation_quality": 4,
+    "ux_accessibility": 4,
+    "visual_design": 4,
+    "technical_quality": 4
+  },
+  "issues": [],
+  "critical": [],
+  "required_fixes": [],
+  "evidence": [
+    {
+      "kind": "Hub",
+      "session": "pagecraft-pontes-evaluation",
+      "profile": "temporary",
+      "pid": 3274139,
+      "created_at": "2026-10-23T00:24:45+01:00",
+      "cdp_url": "http://127.0.0.1:9331",
+      "closed_confirmed": true,
+      "operations": [
+        "start",
+        "status",
+        "navigate",
+        "state",
+        "screenshot",
+        "close"
+      ],
+      "other_session_untouched": "pagecraft-final-integrated research9330",
+      "screenshot": "/home/proteu/agent-browser-hub/screenshots/pontes-duas-vistas-evaluator-pass.png"
+    },
+    {
+      "kind": "final_artifact",
+      "html_sha256": "c4e77ff6fe3ba903a16332361cd759b23d42cc55e244bbaee1dcce30ab2fb1d5",
+      "tested_commit": "08091a7edc7957202a447ed84bccd58b989b5ae1",
+      "canonical_and_font_exact": "drafts/pontes-duas-vistas-final-embedded-assets.json",
+      "checks": "activity-support.js/CSS e support-modal.js canónicos incorporados exatamente; WOFF2 e OFL iguais aos assets do checkout."
+    },
+    {
+      "kind": "regression",
+      "initial_red_log": "drafts/pontes-duas-vistas-red-tests.txt",
+      "return_focus_red_log": "drafts/pontes-duas-vistas-resume-red-tests.txt",
+      "green_log": "drafts/pontes-duas-vistas-green-tests.txt",
+      "observation": "As cinco causas históricas estão resolvidas. Passam os vinte casos originais, os dois anfitriões reais e a regressão DOM/SVG da personagem."
+    },
+    {
+      "kind": "character",
+      "artifact": "drafts/pontes-duas-vistas-green-character-evidence.json",
+      "screenshots": [
+        "drafts/pontes-duas-vistas-green-character-ab.png",
+        "drafts/pontes-duas-vistas-green-character-peer.png"
+      ],
+      "checks": [
+        "u1 sem lateral/personagem",
+        "u2 sem personagem antes do respetivo teste",
+        "g.character com círculo/path visíveis e crossed252/stopped22",
+        "A preservada após B",
+        "topos outerHTML exatamente iguais e sem personagem",
+        "u3 conserva figuras",
+        "colega1/2/3 revela só após confirmar e oculta ao mudar altura",
+        "ARIA descreve posição e resultado redundante"
+      ]
+    },
+    {
+      "kind": "actual_hosts",
+      "local_guide_pipeline": true,
+      "real_ai_provider": false,
+      "cache": "/student/support-modal.js?v=2,200,conteúdo igual ao canónico nos dois anfitriões reais",
+      "reports": [
+        "drafts/pontes-duas-vistas-green-real-learning-evidence.json",
+        "drafts/pontes-duas-vistas-green-real-student-evidence.json"
+      ],
+      "focus_reports": [
+        "drafts/pontes-duas-vistas-green-real-learning-resume-focus.json",
+        "drafts/pontes-duas-vistas-green-real-student-resume-focus.json"
+      ],
+      "result": "Tab último/primeiro, Shift+Tab primeiro/último, Escape mantém modal, Enter retoma pista e Espaço altera resposta; zero erros de página nos dois percursos."
+    },
+    {
+      "kind": "checkpoint",
+      "artifact": "drafts/pontes-duas-vistas-browser-metrics.json",
+      "browser_maximum_bytes": 4092,
+      "node_builder_extreme_bytes": 4095,
+      "limit_exclusive": 4096,
+      "distinction": "4092 observado no browser nesta ronda;4095 relatado pelo Builder em Node comMAXrevision. Textos obrigatórios preservados e reflexão facultativa pode encolher."
+    },
+    {
+      "kind": "responsive",
+      "widths": [
+        390,
+        768,
+        1280
+      ],
+      "artifacts": [
+        "drafts/pontes-duas-vistas-width-390.png",
+        "drafts/pontes-duas-vistas-width-768.png",
+        "drafts/pontes-duas-vistas-width-1280.png"
+      ],
+      "result": "Sem overflow nas quatro unidades; corpo20 e alvos48px incluindo labels/apoio."
+    },
+    {
+      "kind": "before_after",
+      "before_base": "4c6ba90",
+      "before_producer": "Agente principal",
+      "before_json": "/tmp/pagecraft-pontes-proof/before.json",
+      "before_screenshot": "/home/proteu/agent-browser-hub/screenshots/pontes-duas-vistas-before.png",
+      "after_screenshot": "drafts/pontes-duas-vistas-after-results.png",
+      "observation": "Antes, resultado corrente substituível sem duas fichas persistentes. Depois, A/B guardadas com previsão histórica, topos iguais e laterais/resultados/personagens distintos."
+    }
+  ],
+  "acceptance_checks": [
+    {
+      "check": "Previsão A/B e hipótese confirmadas antes dos testes; u1 e u2 sem lateral/alturas de cada ficha antes do respetivo teste",
+      "result": "PASS"
+    },
+    {
+      "check": "Só altura direita muda; A2/2 e B2/1 preservados; top SVGs exatamente iguais e laterais/resultados diferentes",
+      "result": "PASS"
+    },
+    {
+      "check": "Todos os pedidos obrigatórios, vazios bloqueiam Seguinte/saltos; Ainda não sei é resposta válida; erro completo permite avançar nos três apoios",
+      "result": "PASS"
+    },
+    {
+      "check": "Hipótese e explicação revisíveis; revisão invalida só conclusão atual do colega, conservando fichas, previsões e textos",
+      "result": "PASS"
+    },
+    {
+      "check": "u4 mostra explicação concreta do par, permite testar direita1/2/3, aceita encontrou/não encontrou e relato oral; sem nota",
+      "result": "PASS"
+    },
+    {
+      "check": "Três apoios mudam pistas reais, são livres e preservam trabalho; reflexão local e host totalmente facultativas",
+      "result": "PASS"
+    },
+    {
+      "check": "Primeira pista de cada unidade corresponde ao DocSpec; Outra abordagem e professor; síntese só ao carregar Ouvir",
+      "result": "PASS; chamada à síntese observada com spy no browser, não teste acústico"
+    },
+    {
+      "check": "Três erros distintos abrem modal, repetir igual não conta, acerto e mudança de etapa reiniciam; Escape não fecha; outra pista/professor/retoma explícita",
+      "result": "PASS"
+    },
+    {
+      "check": "Foco do modal após Tab no último botão",
+      "result": "PASS nas 20 regressões após reparação Builder"
+    },
+    {
+      "check": "Contexto atualizado ignora resposta IA tardia após edição e mudança de etapa",
+      "result": "PASS com host postMessage simulado; sem fornecedor real"
+    },
+    {
+      "check": "Retoma standalone e learning_restore conservam trabalho, etapa e apoio sem novas tentativas; Studio real também confirmado",
+      "result": "PASS"
+    },
+    {
+      "check": "Envelope activity_state UTF8 completo <4096 incluindo textos máximos Unicode",
+      "result": "PASS máximo 4092 bytes, incluindo controlos escapados; textos obrigatórios preservados e reflexão facultativa pode encolher."
+    },
+    {
+      "check": "Teclado Tab, Enter, Espaço e setas; foco visível; 390/768/1280 sem overflow em quatro unidades; corpo20 e alvos48 incluindo labels/apoio",
+      "result": "PASS exceto modal-focus-wrap"
+    },
+    {
+      "check": "HTML offline, zero pedidos externos no ensaio, fonte Didact real carrega por document.fonts.load, zero erros JS da atividade nos percursos observados",
+      "result": "PASS"
+    },
+    {
+      "check": "presentation=1 suprime evidências e torna apoio inerte",
+      "result": "PASS"
+    },
+    {
+      "check": "Avisos de falta refletem estado atual após responder",
+      "result": "PASS nas 20 regressões após reparação Builder"
+    },
+    {
+      "check": "Primeiro clique de apoio após escrever sem blur prévio",
+      "result": "PASS nas 20 regressões após reparação Builder"
+    },
+    {
+      "check": "Script canónico atual e ciclo Tab/ShiftTab/Escape nos anfitriões reais learning e student",
+      "result": "PASS incluindo retorno de foco e trabalho por teclado"
+    },
+    {
+      "check": "Representação da personagem após o teste lateral A/B/colega",
+      "result": "PASS em DOM/SVG real, geometria/transform/ARIA/revelação/ocultação"
+    },
+    {
+      "check": "Retoma do foco depois de Vou experimentar nos dois anfitriões reais com pista local genuína",
+      "result": "PASS; foco.pc-support-action restaurado e resposta retomada por Espaço"
+    }
+  ],
+  "blocked_by": [],
+  "limitations": [
+    "Sem observação com crianças; adequação à turma e duração real dependem da revisão docente.",
+    "Sem fornecedor de IA real. Usadas pistas locais revistas e, nos testes de resposta tardia, postMessage simulado.",
+    "Studio descartável, participantes fictícios, nenhum registo em produção nem publicação.",
+    "A página student real foi exercitada para apoio/teclado; não foram ensaiadas todas as combinações de grupos, autoria conjunta, quadro e retomada noutro dispositivo.",
+    "Sem auditoria completa com leitor de ecrã, Safari/Firefox ou dispositivos físicos; contraste revisto por paleta e inspeção visual."
+  ],
+  "privacy_boundary": "Só draft novo e Studio temporário. Sem produção, publicação, catálogo, atividades existentes ou PR.",
+  "final_test_run": {
+    "command": "PAGECRAFT_TEST_CDP=http://127.0.0.1:9331 uv run --project /home/proteu/pagecraft --with playwright pytest tests/browser/test_pontes_duas_vistas.py -q --tb=short",
+    "cdp_source": "URL atribuído à nova sessão própria e lido em /home/proteu/agent-browser-hub/sessions/pagecraft-pontes-evaluation.json; numa nova execução ler a porta atual.",
+    "passed": 23,
+    "failed": 0,
+    "total": 23,
+    "seconds": 32.25,
+    "logs": [
+      "drafts/pontes-duas-vistas-green-tests.txt",
+      "drafts/pontes-duas-vistas-final-tests.txt"
+    ],
+    "collection_verified_previous_round": {
+      "unchanged_test_commit": "b7a0f96",
+      "without_cdp_or_optional_playwright": 23,
+      "result": "skipped",
+      "seconds": 1.04,
+      "log": "drafts/pontes-duas-vistas-no-browser-tests.txt"
+    }
+  },
+  "evaluated_at": "2026-10-22T23:26:48.048849+00:00",
+  "test_commit": "b7a0f96",
+  "next_verification": null,
+  "resolved_issues": [
+    {
+      "id": "modal-focus-wrap",
+      "status": "resolved",
+      "builder_commits": [
+        "2e90460",
+        "6a03829"
+      ],
+      "browser_regression": "20 passed in 27.65s",
+      "evidence": "drafts/pontes-duas-vistas-green-tests.txt"
+    },
+    {
+      "id": "stale-navigation-warning",
+      "status": "resolved",
+      "builder_commits": [
+        "2e90460",
+        "6a03829"
+      ],
+      "browser_regression": "20 passed in 27.65s",
+      "evidence": "drafts/pontes-duas-vistas-green-tests.txt"
+    },
+    {
+      "id": "support-first-click-lost",
+      "status": "resolved",
+      "builder_commits": [
+        "2e90460",
+        "6a03829"
+      ],
+      "browser_regression": "20 passed in 27.65s",
+      "evidence": "drafts/pontes-duas-vistas-green-tests.txt"
+    },
+    {
+      "id": "missing-character-result",
+      "status": "resolved",
+      "builder_commit": "4a6b0f6",
+      "proofreader_commit": "1d0cb95",
+      "browser_test": "test_character_svg_reveals_only_tested_outcome_and_preserves_top_views",
+      "evidence": "drafts/pontes-duas-vistas-green-character-evidence.json"
+    },
+    {
+      "id": "real-host-modal-focus-return",
+      "status": "resolved",
+      "builder_code_commit": "c4c8e6a",
+      "builder_report_commit": "5f6a4ed",
+      "proofreader_commit": "08091a7",
+      "browser_regressions": "23 passed in 32.25s",
+      "red_log": "drafts/pontes-duas-vistas-resume-red-tests.txt",
+      "red_diagnostics": [
+        "drafts/pontes-duas-vistas-r3-red-real-learning-resume-focus.json",
+        "drafts/pontes-duas-vistas-r3-red-real-student-resume-focus.json"
+      ],
+      "green_diagnostics": [
+        "drafts/pontes-duas-vistas-green-real-learning-resume-focus.json",
+        "drafts/pontes-duas-vistas-green-real-student-resume-focus.json"
+      ],
+      "result": "Nos dois anfitriões, hostIFRAME/filhoDIV.pc-support-action após continue; hint_ids correlacionados e trabalho retomado com Espaço."
+    }
+  ],
+  "status": "private_draft_technically_verified"
+}

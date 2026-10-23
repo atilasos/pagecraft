@@ -1,0 +1,82 @@
+{
+  "phase": "Evaluator",
+  "activity": "pontes-duas-vistas",
+  "pass": false,
+  "route": "builder",
+  "severity": "high",
+  "issues": [
+    {
+      "id": "modal-focus-wrap",
+      "route": "builder",
+      "severity": "high",
+      "summary": "Tab a partir do último botão do modal coloca o foco fora do modal.",
+      "steps": [
+        "Avançar até u3.",
+        "Confirmar left, position e deck, três respostas distintas incorretas.",
+        "No modal automático, focar Vou experimentar e premir Tab."
+      ],
+      "actual": "document.activeElement.tagName === BODY e closest(dialog) === null. Escape não fecha o modal.",
+      "expected": "Tab e Shift+Tab mantêm foco nos controlos interiores enquanto o modal exige escolha explícita.",
+      "evidence": [
+        "drafts/pontes-duas-vistas-modal-focus.json",
+        "drafts/pontes-duas-vistas-modal-focus.png",
+        "drafts/pontes-duas-vistas-canonical-learning-focus.json",
+        "drafts/pontes-duas-vistas-canonical-student-focus.json"
+      ],
+      "regression_test": "test_automatic_modal_wraps_tab_inside",
+      "canonical_source": "server/static/student/support-modal.js",
+      "additional_regression_test": "test_canonical_modal_host_adapter_wraps_keyboard[learning-lesson] e [student-activity-frame]"
+    },
+    {
+      "id": "stale-navigation-warning",
+      "route": "builder",
+      "severity": "medium",
+      "summary": "O aviso de falta permanece visível depois de guardar os dois ensaios.",
+      "steps": [
+        "Em u2, focar Testar e guardar B antes de A e premir Enter.",
+        "Testar A, baixar o apoio direito, testar B."
+      ],
+      "actual": "A/B completos e Seguinte ativo, mas #navigation-status ainda afirma Guardem A e baixem o apoio direito primeiro.",
+      "expected": "O aviso em falta é limpo ou recalculado após a resposta/manipulação que o resolve.",
+      "evidence": [
+        "drafts/pontes-duas-vistas-stale-warning.png",
+        "drafts/pontes-duas-vistas-after-results.png"
+      ],
+      "regression_test": "test_navigation_warning_clears_when_missing_work_is_done"
+    },
+    {
+      "id": "support-first-click-lost",
+      "route": "builder",
+      "severity": "medium",
+      "summary": "Primeiro clique numa pista é perdido ao sair de um texto editado.",
+      "steps": [
+        "Em u4, escrever no campo Colega, conta o que procuraste e o que viste.",
+        "Sem sair antes do campo, clicar Preciso de uma pista uma vez."
+      ],
+      "actual": "O painel continua sem .pc-support-action e mantém o botão Preciso de uma pista.",
+      "expected": "A primeira ativação explícita abre a pista contextual e conserva o texto.",
+      "likely_cause": "blur chama flush, que emite assessment_result; o componente comum atualiza o contexto e substitui o botão antes do click. A atividade já atualiza o contexto durante a edição. Causa a confirmar na reparação.",
+      "evidence": [
+        "drafts/pontes-duas-vistas-support-first-click.png"
+      ],
+      "regression_test": "test_support_first_click_after_editing_text"
+    }
+  ],
+  "required_fixes": [
+    "Corrigir Tab/Shift+Tab na fonte canónica server/static/student/support-modal.js, sincronizar espelhos com skills/sync-from-canonical.sh, reincorporar o rascunho e atualizar cache dos anfitriões se necessário. Testar modo autónomo e adaptadores learning/lesson e student/activity-frame.",
+    "Limpar ou recalcular avisos de #navigation-status quando muda o trabalho e a condição assinalada deixa de existir. Conservar feedback pedagógico pertinente.",
+    "Conservar a primeira ativação dos controlos de apoio ao sair de um texto editado. Corrigir a integração local de flush/contexto sem duplicar evidência nem alterar o componente comum.",
+    "Reexecutar a suite real no Hub, incluindo os dois testes de regressão, e voltar ao Evaluator."
+  ],
+  "return_to": "Evaluator",
+  "scope": "Reparar fonte canónica do modal e sincronizar espelhos/reincorporação/cache a pedido explícito do utilizador. Corrigir restantes integrações locais do rascunho sem alterar atividades existentes.",
+  "tests": "tests/browser/test_pontes_duas_vistas.py",
+  "html_sha256_before": "7ec9b5d6d66cdb5b3f84b6c83fe204b5ee6a98ca82cdb8f1a8a1cb540a342b4e",
+  "tests_red": {
+    "passed": 15,
+    "failed": 5,
+    "test_commit": "a7bc30f35e8e0f06a92366c82789931aa3a91b85",
+    "log": "drafts/pontes-duas-vistas-evaluator-tests.txt"
+  },
+  "additional_green_requirement": "Após Builder, reexecutar suite e exercitar foco também em páginas reais /student/ e /{code} do Studio descartável, não apenas wrappers. Sem publicação nem IA real."
+}

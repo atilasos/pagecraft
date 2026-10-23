@@ -1,0 +1,122 @@
+............FF...FFF                                                     [100%]
+=================================== FAILURES ===================================
+____________________ test_automatic_modal_wraps_tab_inside _____________________
+tests/browser/test_pontes_duas_vistas.py:507: in test_automatic_modal_wraps_tab_inside
+    assert focus['inside'], f"Tab from last button escaped modal: {focus}"
+E   AssertionError: Tab from last button escaped modal: {'tag': 'BODY', 'inside': False, 'html': '<body>\n<a class="skip" href="#main">Ir para a atividade</a>\n<header><p class="meta">Rascunho privado · 3.º e 4.º anos · 15 minutos</p><h1>Duas pontes, duas vistas</h1><p>Olhar de c'}
+E   assert False
+___________ test_navigation_warning_clears_when_missing_work_is_done ___________
+tests/browser/test_pontes_duas_vistas.py:525: in test_navigation_warning_clears_when_missing_work_is_done
+    expect(page.locator('#navigation-status')).to_be_hidden()
+E   AssertionError: Locator expected to be hidden
+E   Actual value: visible 
+E   Call log:
+E     - Expect "to_be_hidden" locator("#navigation-status") with timeout 5000ms
+E     - waiting for locator("#navigation-status")
+E       14 × locator resolved to <p role="status" class="notice" aria-live="polite" id="navigation-status">Guardem A e baixem o apoio direito primeiro.</p>
+E          - unexpected value "visible"
+E   
+E   Aria snapshot:
+E   - status: Guardem A e baixem o apoio direito primeiro.
+_________________ test_support_first_click_after_editing_text __________________
+tests/browser/test_pontes_duas_vistas.py:589: in test_support_first_click_after_editing_text
+    expect(panel.locator('.pc-support-action')).to_be_visible()
+E   AssertionError: Locator expected to be visible
+E   Actual value: None
+E   Error: element(s) not found 
+E   Call log:
+E     - Expect "to_be_visible" locator("[data-pagecraft-support=\"u4\"]").locator(".pc-support-action") with timeout 5000ms
+E     - waiting for locator("[data-pagecraft-support=\"u4\"]").locator(".pc-support-action")
+E   
+E   Aria snapshot:
+E   - link "Ir para a atividade":
+E     - /url: "#main"
+E   - banner:
+E     - paragraph: Rascunho privado · 3.º e 4.º anos · 15 minutos
+E     - heading "Duas pontes, duas vistas" [level=1]
+E     - paragraph: Olhar de cima chega para decidir se a personagem atravessa neste modelo?
+E     - status: Rascunho nesta aba. O trabalho e a reflexão ficam só aqui, sem envio ao professor.
+E     - group:
+E       - text: O que vamos procurar
+E       - list:
+E         - listitem: Registamos duas previsões e comparamos com os testes.
+E         - listitem: Dizemos o que mudou entre A e B.
+E         - listitem: Usamos um exemplo para explicar e ouvimos a pergunta de um colega.
+E     - paragraph: Trabalhem a pares. Uma criança experimenta, a outra compara. Troquem de papel antes de explicar.
+E   - navigation "Etapas da investigação":
+E     - button "1. Prever"
+E     - button "2. Testar"
+E     - button "3. Comparar"
+E     - button "4. Desafiar"
+E   - paragraph: Escolham o apoio. Podem mudar quando quiserem.
+E   - group "Apoios livres":
+E     - button "Com pistas"
+E     - button "Passo a passo" [pressed]
+E     - button "Mais desafios"
+E   - paragraph: Comparem um teste com a explicação concreta do par. Encontrar e não encontrar são respostas possíveis.
+E   - main:
+E     - heading "4. Um colega desafia a explicação" [level=2]
+E     - paragraph: Passem ao colega. Procura um caso que não combine com a explicação do par. Isso é um contraexemplo.
+E     - heading "A explicação do par, versão 2" [level=3]
+E     - paragraph: "Hipótese: De cima chega."
+E     - paragraph: De cima parecem iguais. Em A atravessa e em B para.
+E     - button "Voltar para rever a explicação"
+E     - paragraph: Só podes mudar a altura direita. O teste atual substitui o anterior. As fichas A e B ficam guardadas.
+E     - group "Altura do apoio direito":
+E       - text: Altura do apoio direito
+E       - radio "1 bloco" [checked]
+E       - text: 1 bloco
+E       - radio "2 blocos"
+E       - text: 2 blocos
+E       - radio "3 blocos"
+E       - text: 3 blocos
+E     - paragraph: Vista de cima do teste atual
+E     - 'img "Vista de cima: dois apoios nas margens e o tabuleiro entre eles."'
+E     - paragraph: Vista de lado do teste atual
+E     - 'img "Vista de lado. Esquerda: 2 blocos. Direita: 1 blocos."'
+E     - paragraph: "Esquerda: 2 blocos. Direita: 1 bloco."
+E     - button "Testar esta ponte"
+E     - status: Este caso ainda não foi testado.
+E     - group "O que aconteceu à tua procura?":
+E       - text: O que aconteceu à tua procura?
+E       - radio "Encontrei um caso que não combina"
+E       - text: Encontrei um caso que não combina
+E       - radio "Procurei e não encontrei"
+E       - text: Procurei e não encontrei
+E     - text: Colega, conta o que procuraste e o que viste
+E     - textbox "Colega, conta o que procuraste e o que viste":
+E       - /placeholder: Compara este teste com a explicação do par.
+E       - text: Quero comparar a hipótese do par.
+E     - paragraph: 33 / 240 caracteres
+E     - checkbox "Expliquei a procura em voz alta ao par."
+E     - text: Expliquei a procura em voz alta ao par.
+E     - paragraph: Encontrar ou não encontrar é uma declaração do colega. Não encontrar nos testes feitos não prova que nunca existe.
+E     - status: Colega, o teu relato deve referir-se a esta versão da explicação e ao teste atual.
+E     - complementary "Um próximo passo":
+E       - heading "Um próximo passo" [level=3]
+E       - button "Mudar para trabalho a pares"
+E       - text: Onde precisas de ajuda?
+E       - combobox "Onde precisas de ajuda?":
+E         - option "Procurar um caso que não combina" [selected]
+E       - button "Preciso de uma pista"
+E       - button "Pedir ajuda ao professor"
+E       - button "Estou a ler"
+E       - status
+E       - paragraph: O PageCraft só conhece o que foi feito ou declarado nesta página.
+E     - button "Voltar"
+E     - button "Terminar e refletir" [disabled]
+______ test_canonical_modal_host_adapter_wraps_keyboard[learning-lesson] _______
+tests/browser/test_pontes_duas_vistas.py:614: in test_canonical_modal_host_adapter_wraps_keyboard
+    assert forward['inside'] and backward['inside']
+E   assert (False)
+___ test_canonical_modal_host_adapter_wraps_keyboard[student-activity-frame] ___
+tests/browser/test_pontes_duas_vistas.py:614: in test_canonical_modal_host_adapter_wraps_keyboard
+    assert forward['inside'] and backward['inside']
+E   assert (False)
+=========================== short test summary info ============================
+FAILED tests/browser/test_pontes_duas_vistas.py::test_automatic_modal_wraps_tab_inside
+FAILED tests/browser/test_pontes_duas_vistas.py::test_navigation_warning_clears_when_missing_work_is_done
+FAILED tests/browser/test_pontes_duas_vistas.py::test_support_first_click_after_editing_text
+FAILED tests/browser/test_pontes_duas_vistas.py::test_canonical_modal_host_adapter_wraps_keyboard[learning-lesson]
+FAILED tests/browser/test_pontes_duas_vistas.py::test_canonical_modal_host_adapter_wraps_keyboard[student-activity-frame]
+5 failed, 15 passed in 37.90s
