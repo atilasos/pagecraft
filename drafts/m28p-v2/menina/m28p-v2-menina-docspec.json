@@ -1,0 +1,989 @@
+{
+  "slug": "m28p-v2-menina",
+  "topic": "Percurso da palavra menina",
+  "years": [
+    1
+  ],
+  "order": 1,
+  "tags": [
+    "m28p",
+    "m28p-v2",
+    "leitura",
+    "escrita",
+    "1ano"
+  ],
+  "ageRange": "6-7 anos",
+  "duration": 37,
+  "objectives": [
+    "Relacionar menina com uma experiência e analisar oralmente me-ni-na.",
+    "Relacionar sons e grafemas a/e/i/m/n, juntar unidades e experimentar palavras novas sem imagem nem modelo.",
+    "Compreender uma frase e um pequeno texto em leitura acompanhada, explicando uma relação de sentido.",
+    "Produzir, rever e entregar um convite próprio a uma pessoa real; retomar leitura e escrita noutro dia."
+  ],
+  "curriculum": {
+    "ae": [],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-E: Relacionamento interpessoal",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ]
+  },
+  "curriculumNote": "Proposta de trabalho de leitura e escrita; conferir alinhamento no documento pedagógico da coleção.",
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "Plano individual de trabalho",
+      "Registo de observação e autoavaliação"
+    ],
+    "socialOrganization": "Mediação adulta, trabalho individual ou a pares, comunicação a um destinatário."
+  },
+  "materials": [
+    "Adulto disponível para leitura e modelação de sons",
+    "Papel e lápis",
+    "Texto ou objeto ligado à experiência da criança"
+  ],
+  "sessionFlow": "Uma experiência e uma palavra / Ouvir, juntar e experimentar / Compreender e fazer chegar um convite / Voltar noutro dia, sem modelo",
+  "support": {
+    "version": "m28p-v2-1",
+    "languages": [
+      "pt"
+    ],
+    "automaticAfterFailures": 3
+  },
+  "units": [
+    {
+      "summary": "Uma pessoa que conheces",
+      "textDescription": "Conta algo que fizeste com uma menina. Apresente oralmente os critérios. Escute sem impor uma história ou um papel associado ao género. Registe uma frase exata da criança e conversem sobre alguém a quem ela gostaria de fazer um convite. Se não quiser relatar uma experiência, aceite uma situação imaginada e registe essa opção. O botão declara conversa, não avalia a oralidade.",
+      "duration": 3,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "derived",
+            "default": null
+          }
+        ],
+        "render": "Pode ser alguém da escola ou de outro lugar. Conta algo que fizeste com uma menina.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Relaciona a palavra com uma pessoa e uma situação compreensíveis, com o apoio declarado. Produção ou declaração sem veredicto automático."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Acrescenta o que essa pessoa disse ou sentiu."
+      },
+      "support": {
+        "objective": "Conta algo que fizeste com uma menina.",
+        "criteria": [
+          "Relaciona a palavra com uma pessoa e uma situação compreensíveis, com o apoio declarado."
+        ],
+        "obstacles": [
+          {
+            "id": "uma-experiencia",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Pensa num momento de brincadeira ou trabalho.",
+                    "group": "Cada pessoa pensa num momento de brincadeira ou trabalho."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Conta quem estava contigo e o que fizeram.",
+                    "group": "Contem à vez quem estava convosco e o que fizeram."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "O cartão da conversa",
+      "textDescription": "Encontra a palavra que o adulto apresentou. Leia a palavra inteira e percorra-a da esquerda para a direita. Ligue-a ao relato anterior. Não leia os distratores nem os trate como palavras já ensinadas. A comparação com modelo permite associação visual; observe separadamente se a criança tenta ler.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "quiz",
+            "default": null
+          }
+        ],
+        "render": "menina Encontra a palavra que o adulto apresentou.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Localiza a mesma sequência escrita com o modelo disponível; este acerto não comprova decifração. Critério fechado verificável."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Mostra uma diferença entre duas opções."
+      },
+      "support": {
+        "objective": "Encontra a palavra que o adulto apresentou.",
+        "criteria": [
+          "Localiza a mesma sequência escrita com o modelo disponível; este acerto não comprova decifração."
+        ],
+        "obstacles": [
+          {
+            "id": "a-palavra-inteira",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Compara as palavras desde o início.",
+                    "group": "Comparem as palavras desde o início; cada pessoa aponta."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Segue cada letra com o dedo até ao fim.",
+                    "group": "Sigam as letras até ao fim e expliquem as diferenças."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Escutar as partes",
+      "textDescription": "Diz a palavra. Marca cada parte que ouves. Diga a palavra naturalmente. A criança marca as sílabas com três fichas ou batidas, sem contar letras. Depois modele a segmentação oral me-ni-na e volte a juntar a palavra. Aceite a redução vocálica de PT-PT e observe a sílaba mais forte. Registe a tentativa anterior à demonstração.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "derived",
+            "default": null
+          }
+        ],
+        "render": "menina Diz a palavra. Marca cada parte que ouves.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Segmenta e volta a juntar três sílabas orais, com o apoio registado. Produção ou declaração sem veredicto automático."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Mostra a parte que dizes com mais força."
+      },
+      "support": {
+        "objective": "Diz a palavra. Marca cada parte que ouves.",
+        "criteria": [
+          "Segmenta e volta a juntar três sílabas orais, com o apoio registado."
+        ],
+        "obstacles": [
+          {
+            "id": "partes-que-ouvimos",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Diz a palavra devagar, sem mudar os sons.",
+                    "group": "Digam a palavra à vez, devagar, sem mudar os sons."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Põe uma ficha por cada parte ouvida. Junta depois.",
+                    "group": "Ponham fichas por cada parte ouvida. Juntem depois a palavra."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Voltar à palavra",
+      "textDescription": "Ordena as partes. Lê com o adulto. Relacione cada peça com a parte oral, leia a sequência construída e volte à palavra inteira. Pode tapar o modelo depois da primeira exploração; registe quando o retirou. Esta reconstrução vem antes do ensino pormenorizado das letras.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "sorting",
+            "default": null
+          }
+        ],
+        "render": "menina Ordena as partes. Lê com o adulto.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Reconstitui a sequência me-ni-na e relaciona-a com a palavra inteira, com o apoio declarado. Critério fechado verificável."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Tapa o modelo e explica a tua ordem."
+      },
+      "support": {
+        "objective": "Ordena as partes. Lê com o adulto.",
+        "criteria": [
+          "Reconstitui a sequência me-ni-na e relaciona-a com a palavra inteira, com o apoio declarado."
+        ],
+        "obstacles": [
+          {
+            "id": "juntar-as-partes",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Diz a palavra e escuta o começo.",
+                    "group": "Digam a palavra e comparem o começo ouvido."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Experimenta uma sequência. Pede ao adulto para a ler.",
+                    "group": "Experimentem uma sequência e escutem a leitura do adulto."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Olhar e ouvir vogais",
+      "textDescription": "Ouve o adulto. Aponta e experimenta os sons. Mostre cada grafema e modele o som que representa nestes contextos, sem confundir som com nome da letra. Modele i, o e átono da palavra-chave e o a reduzido final. Mostre também a reduzido isolado e em posição inicial átona, como preparação para nova combinação no retorno. Explique oralmente que uma vogal pode ter outros sons noutras palavras. A criança escuta, aponta e ensaia; alterne a ordem dos cartões. Não use voz sintética.",
+      "duration": 3,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "derived",
+            "default": null
+          }
+        ],
+        "render": "a · e · i\nmenina Ouve o adulto. Aponta e experimenta os sons.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Relaciona a/e/i com os valores modelados pelo adulto; a declaração digital não confirma discriminação auditiva. Produção ou declaração sem veredicto automático."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Explica por que precisaste de ouvir a palavra inteira."
+      },
+      "support": {
+        "objective": "Ouve o adulto. Aponta e experimenta os sons.",
+        "criteria": [
+          "Relaciona a/e/i com os valores modelados pelo adulto; a declaração digital não confirma discriminação auditiva."
+        ],
+        "obstacles": [
+          {
+            "id": "vogais-e-sons",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Olha para a boca do adulto enquanto escutas.",
+                    "group": "Observem a boca do adulto; cada pessoa ensaia à vez."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Pede uma demonstração de cada vez e aponta depois.",
+                    "group": "Peçam uma demonstração de cada vez; apontem individualmente depois."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Juntar sons com letras",
+      "textDescription": "Ouve, junta e troca as letras com o adulto. Modele /m/ com lábios juntos e /n/ com a língua junto aos dentes superiores, sem acrescentar vogais de apoio nem dizer os nomes das letras para fundir. Aponte cada grafema e una /m/ ao valor de i; depois /n/ ao mesmo valor. Modele ma e na com o a central corrente nestes contextos de PT-PT e retome me com o e átono da palavra-chave. A criança constrói e lê as unidades, compara m/n e experimenta trocar uma letra. Pratique também juntar a vogal isolada a uma sílaba, sem mostrar as palavras reservadas do guia.",
+      "duration": 3,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "derived",
+            "default": null
+          }
+        ],
+        "render": "m · n\nmi · ma · ni · na · me Ouve, junta e troca as letras com o adulto.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Ensaia fusão e alteração de sons em unidades ensinadas, distinguindo m de n. Produção ou declaração sem veredicto automático."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Mostra como uma troca de letra muda o que lês."
+      },
+      "support": {
+        "objective": "Ouve, junta e troca as letras com o adulto.",
+        "criteria": [
+          "Ensaia fusão e alteração de sons em unidades ensinadas, distinguindo m de n."
+        ],
+        "obstacles": [
+          {
+            "id": "consoantes-e-fusao",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Repara nos lábios e na língua do adulto.",
+                    "group": "Reparem nos lábios e na língua do adulto, à vez."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Aponta cada letra e aproxima os sons devagar.",
+                    "group": "Apontem cada letra e aproximem os sons sem falar pelo colega."
+                  }
+                }
+              },
+              {
+                "id": "pista-3",
+                "text": {
+                  "pt": {
+                    "individual": "Troca só a primeira letra. Escuta o que mudou.",
+                    "group": "Troquem só a primeira letra. Cada pessoa explica a mudança."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Ler sem desenho",
+      "textDescription": "Lê as opções. Onde se tiram metais da terra? Leia apenas o pedido. Explique oralmente a situação de retirar metais debaixo da terra, sem nomear a palavra procurada ou ler as opções. Peça leitura de cada opção antes da escolha. As três usam código modelado; registe separadamente leitura e conhecimento do significado. Não conte a escolha isolada como transferência demonstrada.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "quiz",
+            "default": null
+          }
+        ],
+        "render": " Lê as opções. Onde se tiram metais da terra?",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Tenta decifrar uma combinação não treinada sem imagem nem modelo; distingue-se o significado conhecido da leitura observada. Critério fechado verificável."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Explica ao adulto como juntaste os sons."
+      },
+      "support": {
+        "objective": "Lê as opções. Onde se tiram metais da terra?",
+        "criteria": [
+          "Tenta decifrar uma combinação não treinada sem imagem nem modelo; distingue-se o significado conhecido da leitura observada."
+        ],
+        "obstacles": [
+          {
+            "id": "uma-combinacao-nova",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Percorre cada opção do início ao fim.",
+                    "group": "Cada pessoa percorre uma opção; escutem sem antecipar a leitura."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Junta os sons. Depois pensa no significado.",
+                    "group": "Juntem os sons à vez. Depois conversem sobre os significados."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Outra leitura sem desenho",
+      "textDescription": "Lê o cartão novo ao adulto. Apresente só o cartão T2 preparado conforme o guia, sem imagem ou duplicado de comparação. Não leia nem segmente antes da primeira tentativa. Registe a leitura, a fusão e a ajuda. Só depois converse sobre o significado. Se houver modelação posterior, identifique a tentativa como apoiada. A confirmação apenas declara a conversa.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "derived",
+            "default": null
+          }
+        ],
+        "render": " Lê o cartão novo ao adulto.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "O adulto observa diretamente a tentativa de leitura de outro item não treinado, composto por unidades já ensinadas. Produção ou declaração sem veredicto automático."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Conta se conhecias a palavra e o que significa."
+      },
+      "support": {
+        "objective": "Lê o cartão novo ao adulto.",
+        "criteria": [
+          "O adulto observa diretamente a tentativa de leitura de outro item não treinado, composto por unidades já ensinadas."
+        ],
+        "obstacles": [
+          {
+            "id": "outro-cartao",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Aponta o início e acompanha as letras até ao fim.",
+                    "group": "Leiam à vez, seguindo as letras, sem o colega dar a resposta."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Aproxima os sons que reconheces. Pede ajuda no ponto difícil.",
+                    "group": "Juntem os sons à vez e indiquem onde precisam de ajuda."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Um gesto entre amigas",
+      "textDescription": "Que gesto faz a menina? Leia a frase e todas as respostas sem salientar uma delas. A criança pode localizar e ler menina; leia o restante código não ensinado. Peça que mostre na frase o gesto descrito. Conversem depois sobre situações em que dar a mão pode ajudar ou acompanhar; essas interpretações não têm uma resposta única. Registe compreensão em leitura acompanhada, não leitura autónoma da frase.",
+      "duration": 3,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "quiz",
+            "default": null
+          }
+        ],
+        "render": "A menina dá a mão à amiga. Que gesto faz a menina?",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Identifica o gesto descrito na frase ouvida e mostra a informação que sustenta a escolha. Critério fechado verificável."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Diz em que situação esse gesto podia ajudar."
+      },
+      "support": {
+        "objective": "Que gesto faz a menina?",
+        "criteria": [
+          "Identifica o gesto descrito na frase ouvida e mostra a informação que sustenta a escolha."
+        ],
+        "obstacles": [
+          {
+            "id": "uma-frase-com-sentido",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Pede para ouvir novamente o gesto descrito.",
+                    "group": "Peçam para ouvir novamente o gesto descrito."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Representa o gesto com o adulto e explica o sentido.",
+                    "group": "Representem o gesto a pares e expliquem o sentido."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Um convite para brincar",
+      "textDescription": "Porque fez a menina o convite? Leia o pequeno texto de forma natural e releia por pedido. A criança pode localizar a palavra conhecida. Peça que relacione o que a menina viu com o convite e diga como acabou a situação. Aceite diferentes formulações apoiadas no texto. Distinguir resposta à compreensão oral de leitura autónoma. Não exigir que a criança decifre palavras com correspondências não ensinadas.",
+      "duration": 3,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "derived",
+            "default": null
+          }
+        ],
+        "render": "A menina viu uma colega sozinha.\nPerguntou: «Queres brincar comigo?»\nA colega aceitou.\nAs duas inventaram um jogo. Porque fez a menina o convite?",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Relaciona a colega estar sozinha com o convite e recupera o desfecho do texto ouvido. Produção ou declaração sem veredicto automático."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Propõe outro convite que respeite a vontade da colega."
+      },
+      "support": {
+        "objective": "Porque fez a menina o convite?",
+        "criteria": [
+          "Relaciona a colega estar sozinha com o convite e recupera o desfecho do texto ouvido."
+        ],
+        "obstacles": [
+          {
+            "id": "um-convite-na-historia",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Ouve outra vez o que aconteceu antes do convite.",
+                    "group": "Ouçam o que aconteceu antes do convite; expliquem à vez."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Compara o começo e o fim. O que mudou?",
+                    "group": "Comparem o começo e o fim. Cada pessoa diz o que mudou."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Uma mensagem para entregar",
+      "textDescription": "Escreve um convite para alguém da tua turma. Concretize um destinatário real e uma ocasião possível, sem impor uma frase. Aceite escrita emergente, letras móveis ou ditado ao adulto, preservando autoria. Leia e escreva as correspondências ainda não ensinadas com a ajuda declarada. A criança pode escrever uma parte acessível e ditar o resto. Não obrigue a incluir a palavra-chave se não servir a intenção. Copie para o campo apenas o que a criança autoriza comunicar.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "derived",
+            "default": null
+          }
+        ],
+        "render": "Escolhe a pessoa. Diz a que a convidas. Escreve um convite para alguém da tua turma.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Produz uma mensagem com destinatário e intenção identificáveis, com autoria e ajuda descritas pelo adulto. Produção ou declaração sem veredicto automático."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Acrescenta um pormenor que ajude a pessoa a responder."
+      },
+      "support": {
+        "objective": "Escreve um convite para alguém da tua turma.",
+        "criteria": [
+          "Produz uma mensagem com destinatário e intenção identificáveis, com autoria e ajuda descritas pelo adulto."
+        ],
+        "obstacles": [
+          {
+            "id": "um-convite-verdadeiro",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Diz em voz alta a quem queres escrever.",
+                    "group": "Decidam a quem escrevem e escutem as propostas de todos."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Conta o convite. Escreve o que conseguires e dita o resto.",
+                    "group": "Combinem o convite. Alternem escrita e ditado sem apagar a ideia do colega."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Fazer chegar a mensagem",
+      "textDescription": "Revê o convite e entrega-o à pessoa escolhida. Releia o rascunho à criança. O par faz uma pergunta de leitor; o autor decide uma alteração ou explica por que mantém o texto. Voltem ao ecrã anterior para rever, ou conservem rascunho e versão em papel. Entreguem em mão ao destinatário real e registem a reação, incluindo uma recusa ou resposta posterior. A criança pode ditar a leitura ao adulto. O clique não comprova entrega nem compreensão do destinatário.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "derived",
+            "default": null
+          }
+        ],
+        "render": "A pessoa percebe quem a convida e para quê? Revê o convite e entrega-o à pessoa escolhida.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Revê um aspeto de clareza com um leitor e faz circular a mensagem; o adulto regista o que foi observado. Produção ou declaração sem veredicto automático."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Explica ao destinatário uma escolha que fizeste ao escrever."
+      },
+      "support": {
+        "objective": "Revê o convite e entrega-o à pessoa escolhida.",
+        "criteria": [
+          "Revê um aspeto de clareza com um leitor e faz circular a mensagem; o adulto regista o que foi observado."
+        ],
+        "obstacles": [
+          {
+            "id": "rever-e-fazer-chegar",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Pede a alguém que leia o teu convite em voz alta.",
+                    "group": "Escolham um leitor para reler o convite aos autores."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Pergunta o que ficou por perceber. Decide o que mudar.",
+                    "group": "Escutem o que ficou por perceber e decidam juntos uma revisão."
+                  }
+                }
+              },
+              {
+                "id": "pista-3",
+                "text": {
+                  "pt": {
+                    "individual": "Combina a entrega com o adulto e escuta a resposta.",
+                    "group": "Combinem a entrega com o adulto e escutem a resposta do destinatário."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Uma palavra de outro dia",
+      "textDescription": "Qual palavra nomeia a pessoa do primeiro cartão? Faça esta sessão 24 a 48 horas após a comunicação, sem releitura prévia. Retire cartazes e modelos. Leia só a instrução, sem nomear opções ou a palavra-chave. Peça que a criança leia a opção escolhida. Uma escolha certa continua a ser reconhecimento; a observação oral seguinte é indispensável.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "quiz",
+            "default": null
+          }
+        ],
+        "render": " Qual palavra nomeia a pessoa do primeiro cartão?",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Reconhece uma palavra retomada sem imagem nem modelo de comparação; o adulto descreve se houve leitura. Critério fechado verificável."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Explica uma diferença entre duas opções."
+      },
+      "support": {
+        "objective": "Qual palavra nomeia a pessoa do primeiro cartão?",
+        "criteria": [
+          "Reconhece uma palavra retomada sem imagem nem modelo de comparação; o adulto descreve se houve leitura."
+        ],
+        "obstacles": [
+          {
+            "id": "voltar-sem-o-cartaz",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Olha para todas as letras, sem escolher pelo tamanho.",
+                    "group": "Olhem para todas as letras; cada pessoa decide antes da conversa."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Junta os sons do início ao fim e explica a escolha.",
+                    "group": "Juntem os sons à vez e expliquem as escolhas sem ler pelo colega."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "O adulto escuta a tua leitura",
+      "textDescription": "Lê cada cartão. Mostra como juntaste os sons. Use os cartões R1 e R2 do guia, um de cada vez e sem desenho, modelo duplicado ou leitura prévia. Um retoma a palavra estudada; outro é uma combinação nova com unidades ensinadas. Não mostre a chave do guia à criança. Registe literalmente a leitura de cada cartão, estratégia e ajuda antes de qualquer correção. Uma demonstração posterior transforma a retoma em ensino acompanhado. O botão apenas declara a conversa.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "derived",
+            "default": null
+          }
+        ],
+        "render": " Lê cada cartão. Mostra como juntaste os sons.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "O adulto observa leitura diferida de uma unidade antiga e tentativa de transferência nova, separando autonomia de ajuda. Produção ou declaração sem veredicto automático."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Diz o que fizeste quando uma parte te pareceu difícil."
+      },
+      "support": {
+        "objective": "Lê cada cartão. Mostra como juntaste os sons.",
+        "criteria": [
+          "O adulto observa leitura diferida de uma unidade antiga e tentativa de transferência nova, separando autonomia de ajuda."
+        ],
+        "obstacles": [
+          {
+            "id": "ler-com-o-adulto-a-ouvir",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Parte das letras que reconheces e acompanha toda a sequência.",
+                    "group": "Cada pessoa acompanha a sua sequência; os outros aguardam a tentativa."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Junta primeiro pequenas partes e volta a ler tudo.",
+                    "group": "Juntem pequenas partes à vez e voltem à leitura inteira."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Do que ouves ao que escreves",
+      "textDescription": "Escreve o que o adulto disser, sem copiar. Guarde todos os cartões e siga o ditado D1 do guia. Diga a palavra naturalmente, sem a escrever ou segmentar de antemão. Aceite a tentativa no campo, em papel ou com letras móveis. Registe a produção inicial e a ajuda. Só depois converse sobre os sons representados; qualquer comparação com modelo fica para depois da verificação. Sem veredicto automático.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "derived",
+            "default": null
+          }
+        ],
+        "render": " Escreve o que o adulto disser, sem copiar.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Tenta representar uma palavra a partir do oral, sem modelo visual, com registo da produção e do apoio. Produção ou declaração sem veredicto automático."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Relê a tua escrita e explica uma escolha de letra."
+      },
+      "support": {
+        "objective": "Escreve o que o adulto disser, sem copiar.",
+        "criteria": [
+          "Tenta representar uma palavra a partir do oral, sem modelo visual, com registo da produção e do apoio."
+        ],
+        "obstacles": [
+          {
+            "id": "escrever-sem-copiar",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Pede para ouvir outra vez, sem ver a escrita.",
+                    "group": "Peçam nova audição e tentem escrever individualmente, sem copiar."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Diz devagar o que ouviste e procura letras para os sons.",
+                    "group": "Digam à vez o que ouviram e expliquem as letras que escolheram."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "O que aconteceu depois?",
+      "textDescription": "Conta o que aconteceu ao teu convite. Mantenha os modelos de leitura guardados até terminar as observações. Converse sobre a receção do convite, aceitando que ainda não exista resposta. Pergunte que ajuda foi útil e o que a criança quer praticar a seguir. Registe a voz da criança separada da interpretação do professor. A autoavaliação do motor é facultativa e não certifica domínio.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "derived",
+            "default": null
+          }
+        ],
+        "render": " Conta o que aconteceu ao teu convite.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Retoma a função real da escrita e indica uma ajuda ou um próximo passo, sem classificação automática. Produção ou declaração sem veredicto automático."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Propõe outra mensagem que gostasses de fazer chegar."
+      },
+      "support": {
+        "objective": "Conta o que aconteceu ao teu convite.",
+        "criteria": [
+          "Retoma a função real da escrita e indica uma ajuda ou um próximo passo, sem classificação automática."
+        ],
+        "obstacles": [
+          {
+            "id": "regressar-a-mensagem",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Lembra-te de como a mensagem chegou à pessoa.",
+                    "group": "Recordem quem recebeu a mensagem e como a fizeram chegar."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Conta a reação ou diz o que ainda esperas saber.",
+                    "group": "Contem as reações ou o que ainda esperam saber; escutem cada pessoa."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

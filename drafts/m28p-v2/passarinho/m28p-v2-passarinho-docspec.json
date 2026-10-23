@@ -1,0 +1,971 @@
+{
+  "slug": "m28p-v2-passarinho",
+  "topic": "Percurso da palavra passarinho",
+  "years": [
+    1
+  ],
+  "order": 24,
+  "tags": [
+    "m28p",
+    "m28p-v2",
+    "leitura",
+    "escrita",
+    "1ano"
+  ],
+  "ageRange": "6-7 anos",
+  "duration": 37,
+  "objectives": [
+    "Relacionar passarinho com experiências, reconhecer a palavra e analisar oralmente as quatro sílabas.",
+    "Relacionar ss com /s/, retomar nh e recombinar partes conhecidas para ler itens novos sem modelo.",
+    "Compreender uma frase e um pequeno texto acompanhado, distinguindo leitura própria de escuta.",
+    "Escrever, rever e entregar um recado sobre observação de aves a um destinatário real."
+  ],
+  "curriculum": {
+    "ae": [],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-E: Relacionamento interpessoal",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ]
+  },
+  "curriculumNote": "Proposta de trabalho de leitura e escrita; conferir alinhamento no documento pedagógico da coleção.",
+  "memAlignment": {
+    "modules": [
+      "TEA (Trabalho de Estudo Autónomo)",
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "Plano individual de trabalho",
+      "Registo de observação e autoavaliação"
+    ],
+    "socialOrganization": "Mediação adulta, trabalho individual ou a pares, comunicação a um destinatário."
+  },
+  "materials": [
+    "Adulto disponível para leitura e modelação de sons",
+    "Papel e lápis",
+    "Texto ou objeto ligado à experiência da criança"
+  ],
+  "sessionFlow": "Observar e descobrir a palavra / Juntar partes e experimentar leituras / Compreender e preparar um recado / Noutro dia: rever, comunicar e ler",
+  "support": {
+    "version": "m28p-v2-1",
+    "languages": [
+      "pt"
+    ],
+    "automaticAfterFailures": 3
+  },
+  "units": [
+    {
+      "summary": "Uma ave perto de nós",
+      "textDescription": "Conta quando viste ou ouviste um passarinho. Escute sem exigir uma experiência que a criança não teve. Registe uma frase sua e uma pergunta. Pode observar-se uma ave à distância ou uma fotografia apenas nesta fase. Distinguir observação de imaginação. A declaração no ecrã só indica que houve conversa.",
+      "duration": 3,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "derived",
+            "default": null
+          }
+        ],
+        "render": "Pode ter sido na escola, em casa ou na rua. Se não te lembras, conta uma pergunta sobre aves. Conta quando viste ou ouviste um passarinho.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Conta quando viste ou ouviste um passarinho. Produção ou declaração sem veredicto automático."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Diz o que viste mesmo e o que gostarias de descobrir."
+      },
+      "support": {
+        "objective": "Conta quando viste ou ouviste um passarinho.",
+        "criteria": [
+          "Conta quando viste ou ouviste um passarinho."
+        ],
+        "obstacles": [
+          {
+            "id": "ave-perto-de-nos",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Lembra-te de um lugar onde ouviste um piar.",
+                    "group": "Cada pessoa pode recordar um lugar onde ouviu um piar."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Conta onde estavas e o que a ave fazia.",
+                    "group": "Escolham uma observação e contem o lugar e a ação da ave."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "O nome da nossa descoberta",
+      "textDescription": "Encontra a palavra passarinho. Mostre o cartão inteiro e leia passarinho uma vez. Peça que encontre a mesma palavra entre alternativas reais. Observe se compara o conjunto ou apenas a inicial. Este reconhecimento com modelo não prova decifração.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "quiz",
+            "default": null
+          }
+        ],
+        "render": "O adulto apresenta o cartão passarinho e lê-o contigo. Encontra a palavra passarinho.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Encontra a palavra passarinho. Critério fechado verificável."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Explica como distinguiste duas palavras que começam por p."
+      },
+      "support": {
+        "objective": "Encontra a palavra passarinho.",
+        "criteria": [
+          "Encontra a palavra passarinho."
+        ],
+        "obstacles": [
+          {
+            "id": "cartao-da-palavra",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Olha para a palavra inteira do cartão.",
+                    "group": "Olhem para o cartão inteiro antes de apontarem."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Compara o princípio, o meio e o fim.",
+                    "group": "Um colega compara o princípio; outro confirma o meio e o fim."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "A palavra nas mãos",
+      "textDescription": "Diz passarinho devagar e marca cada sílaba. Primeiro ouça a segmentação espontânea. Depois modele oralmente pa-ssa-ri-nho, quatro sílabas, com quatro movimentos. Não separar os dois s nem n e h em dois sons. A divisão aqui é oral, não translineação. Registe a primeira produção e se a criança a retomou depois do modelo.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "derived",
+            "default": null
+          }
+        ],
+        "render": "Usa uma pedrinha por cada parte que ouves. Diz passarinho devagar e marca cada sílaba.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Diz passarinho devagar e marca cada sílaba. Produção ou declaração sem veredicto automático."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Volta a juntar o que separaste e diz a palavra naturalmente."
+      },
+      "support": {
+        "objective": "Diz passarinho devagar e marca cada sílaba.",
+        "criteria": [
+          "Diz passarinho devagar e marca cada sílaba."
+        ],
+        "obstacles": [
+          {
+            "id": "quatro-batidas",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Diz a palavra inteira antes de a dizer devagar.",
+                    "group": "Cada pessoa diz a palavra inteira antes de a alongarem."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Move uma pedrinha a cada impulso da tua voz.",
+                    "group": "Uma pessoa diz a palavra; outra move uma pedrinha por impulso. Troquem."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Escutar e olhar com o adulto",
+      "textDescription": "Ouve o adulto e acompanha as letras com o dedo. Leia casa e passarinho naturalmente. Aponte s de casa e modele /z/; aponte ss de passarinho e modele /s/, sem vogal acrescentada. Diga que ss escreve aqui um só som, não dois. Retome nh de galinha e de passarinho como uma unidade /ɲ/ e r intervocálico como /ɾ/. Releia passarinho, com os a átonos habituais /ɐ/ e o final /u/. Convide a criança a apontar e experimentar depois do modelo. Não usar voz sintética para ensinar sons. Se estes contrastes forem demasiados, priorize ss e retome nh na sessão seguinte.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "derived",
+            "default": null
+          }
+        ],
+        "render": "casa · passarinho · galinha Ouve o adulto e acompanha as letras com o dedo.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Relaciona as unidades escritas com os sons modelados, indicando a ajuda recebida. Produção ou declaração sem veredicto automático."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Explica porque duas letras juntas podem representar um só som."
+      },
+      "support": {
+        "objective": "Ouve o adulto e acompanha as letras com o dedo.",
+        "criteria": [
+          "Relaciona as unidades escritas com os sons modelados, indicando a ajuda recebida."
+        ],
+        "obstacles": [
+          {
+            "id": "duas-letras-um-som",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Olha para as letras que o adulto aponta enquanto escutas.",
+                    "group": "Escutem o adulto e alternem quem acompanha as letras com o dedo."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Pede para ouvir outra vez e compara o que a tua boca faz.",
+                    "group": "Peçam uma nova modelação e contem que diferença ouviram, sem corrigirem a voz do colega."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Voltar a juntar",
+      "textDescription": "Junta as peças para escrever passarinho. Retome a palavra oral, mostre que ss permanece unido e modele a fusão das quatro peças se necessário. São unidades da divisão oral convencionada. Releia com pronúncia natural, sem igualar a pronúncia dos a átonos à do a tónico de sapato. Observe a ordem antes da ajuda.",
+      "duration": 3,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "sorting",
+            "default": null
+          }
+        ],
+        "render": " Junta as peças para escrever passarinho.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Junta as peças para escrever passarinho. Critério fechado verificável."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Mostra as duas unidades com duas letras e um só som."
+      },
+      "support": {
+        "objective": "Junta as peças para escrever passarinho.",
+        "criteria": [
+          "Junta as peças para escrever passarinho."
+        ],
+        "obstacles": [
+          {
+            "id": "reconstruir-a-palavra",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Diz a palavra e procura a peça do início.",
+                    "group": "Digam a palavra e combinem qual peça inicia a sequência."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Lê as peças que já juntaste e escuta o que falta.",
+                    "group": "Um colega lê o início construído; outro procura a continuação. Troquem."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Uma combinação para uma ave",
+      "textDescription": "Junta as peças para escrever ninho. Modele ni e nho e a sua fusão em ninho. Compare com nha de galinha, conservando nh como um só som. Peça que a criança explique de onde veio cada peça. Prepare também a leitura da frase da sessão seguinte: confirme ou modele o, na e fica, combinando f de funil, i e ca de casa. Registe estes itens como ensinados, nunca como transferência inédita. Não apresente antecipadamente as palavras reservadas às provas de leitura.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "sorting",
+            "default": null
+          }
+        ],
+        "render": "ni vem de menina e menino; nho vem de passarinho. Junta as peças para escrever ninho.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Junta as peças para escrever ninho. Critério fechado verificável."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Explica o que mudou no fim entre galinha e a palavra construída."
+      },
+      "support": {
+        "objective": "Junta as peças para escrever ninho.",
+        "criteria": [
+          "Junta as peças para escrever ninho."
+        ],
+        "obstacles": [
+          {
+            "id": "pecas-de-outras-palavras",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Procura o começo que reconheces noutra palavra.",
+                    "group": "Encontrem a peça que já conhecem de menina ou menino."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Junta a outra peça e lê sem fazer uma pausa no meio.",
+                    "group": "Juntem as duas peças e alternem a leitura da palavra inteira."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Uma leitura nova",
+      "textDescription": "Lê as opções. Qual nomeia um ramo pequeno? Sem imagem nem cartão-modelo, peça a leitura das três opções antes de escolher. Não as pronuncie, não aponte a correta e não forneça sílabas. Registe raminho e passinho como itens novos e ninho como item já modelado. O r inicial retoma rato e o r interior de outras palavras não tem a mesma realização. Se a criança escolher pela semelhança com o enunciado, peça leitura completa e registe essa estratégia. Depois da tentativa, pode modelar, assinalando apoio.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "quiz",
+            "default": null
+          }
+        ],
+        "render": " Lê as opções. Qual nomeia um ramo pequeno?",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Tenta ler itens novos sem modelo; a seleção isolada só verifica a escolha. Critério fechado verificável."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Lê também a opção com ss e explica como trataste essas letras."
+      },
+      "support": {
+        "objective": "Lê as opções. Qual nomeia um ramo pequeno?",
+        "criteria": [
+          "Tenta ler itens novos sem modelo; a seleção isolada só verifica a escolha."
+        ],
+        "obstacles": [
+          {
+            "id": "ler-para-escolher",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Percorre as letras de cada opção, do início ao fim.",
+                    "group": "Cada pessoa tenta ler todas as opções antes de discutirem a escolha."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Junta partes que reconheces e pensa no significado da palavra inteira.",
+                    "group": "Comparem as leituras completas e expliquem o significado que encontraram."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "A tua vez de ler",
+      "textDescription": "Lê os dois cartões que o adulto te dá. Prepare em privado dois cartões simples: pinha e passa, um item por cartão, sem desenho, divisão ou palavra-modelo. Apresente um de cada vez, sem ler. Registe a leitura literal, a fusão, a autocorreção e a ajuda. Pinha retoma p, i, nh e a; passa aplica ss /s/. Os a tónicos e átonos não se leem todos da mesma maneira. Pergunte o significado só depois de ouvir a leitura; não confundir vocabulário desconhecido com erro de código. Em grupo, cada criança lê primeiro sem ouvir a resposta do colega. O botão não certifica leitura.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "derived",
+            "default": null
+          }
+        ],
+        "render": " Lê os dois cartões que o adulto te dá.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Lê os dois cartões que o adulto te dá. Produção ou declaração sem veredicto automático."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Diz qual das leituras precisou de mais atenção e porquê."
+      },
+      "support": {
+        "objective": "Lê os dois cartões que o adulto te dá.",
+        "criteria": [
+          "Lê os dois cartões que o adulto te dá."
+        ],
+        "obstacles": [
+          {
+            "id": "cartoes-sem-modelo",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Segue o cartão com o dedo e tenta juntar os sons conhecidos.",
+                    "group": "Leiam um de cada vez, sem dizer a palavra pelo colega."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Procura uma unidade de duas letras que já estudaste e tenta de novo.",
+                    "group": "Depois da tentativa de cada pessoa, conversem sobre as unidades de duas letras que encontraram."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Onde ficou a ave?",
+      "textDescription": "Lê a frase. Onde fica o passarinho? Peça primeiro leitura pela criança, usando o corpus preparado na sessão anterior. Registe se leu a frase ou se a ouviu. Se precisar, o adulto acompanha a leitura, sem chamar autónomo a esse desempenho. As opções podem ser lidas pelo adulto depois da tentativa de leitura da frase. Peça que a criança localize no texto a informação que sustenta a escolha.",
+      "duration": 3,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "quiz",
+            "default": null
+          }
+        ],
+        "render": "O passarinho fica na janela. Lê a frase. Onde fica o passarinho?",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Lê a frase. Onde fica o passarinho? Critério fechado verificável."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Explica como mudaria o sentido se mudássemos o lugar."
+      },
+      "support": {
+        "objective": "Lê a frase. Onde fica o passarinho?",
+        "criteria": [
+          "Lê a frase. Onde fica o passarinho?"
+        ],
+        "obstacles": [
+          {
+            "id": "frase-da-janela",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Procura na frase a parte que conta o lugar.",
+                    "group": "Conversem sobre a parte da frase que indica o lugar."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Relê essa parte e compara-a com cada opção.",
+                    "group": "Um colega relê a parte escolhida; outro compara-a com as opções."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Uma pausa no recreio",
+      "textDescription": "Escuta a leitura e conta o que aconteceu. Leia integralmente o pequeno texto, com voz natural. É leitura acompanhada, pois inclui palavras e correspondências fora do corpus autónomo confirmado. Convide a criança a acompanhar uma palavra conhecida sem exigir decifração do restante. Peça reconto, escute a sequência bola, espera, voo e pergunte o que no texto apoia a explicação. Registe compreensão de texto ouvido, distinguindo-a de leitura autónoma.",
+      "duration": 3,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "derived",
+            "default": null
+          }
+        ],
+        "render": "Leitura acompanhada com um adulto.\nA Lia viu um passarinho no recreio. A bola rolou para perto dele. A Lia parou o jogo e esperou. O passarinho voou para a árvore. Escuta a leitura e conta o que aconteceu.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Escuta a leitura e conta o que aconteceu. Produção ou declaração sem veredicto automático."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Distingue uma coisa que o texto diz de uma ideia tua."
+      },
+      "support": {
+        "objective": "Escuta a leitura e conta o que aconteceu.",
+        "criteria": [
+          "Escuta a leitura e conta o que aconteceu."
+        ],
+        "obstacles": [
+          {
+            "id": "ler-com-o-adulto",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Lembra-te do que a Lia viu primeiro.",
+                    "group": "Comecem por recordar o que a Lia viu."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Conta o que a bola fez e o que aconteceu depois.",
+                    "group": "Uma pessoa conta a parte da bola; outra continua até ao fim."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Pensar na decisão",
+      "textDescription": "Porque esperou a Lia? Releia o texto e leia as alternativas se necessário. A primeira opção é a inferência sustentada pela sequência; não se pede decifração autónoma destas frases. Peça justificação oral para distinguir compreensão de seleção ao acaso. Aceite explicações equivalentes, como não assustar a ave, sem atribuir ao texto sentimentos que ele não afirma.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "quiz",
+            "default": null
+          }
+        ],
+        "render": "Leitura acompanhada com um adulto.\nA Lia viu um passarinho no recreio. A bola rolou para perto dele. A Lia parou o jogo e esperou. O passarinho voou para a árvore. Porque esperou a Lia?",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Porque esperou a Lia? Critério fechado verificável."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Explica a tua escolha com uma pista do texto."
+      },
+      "support": {
+        "objective": "Porque esperou a Lia?",
+        "criteria": [
+          "Porque esperou a Lia?"
+        ],
+        "obstacles": [
+          {
+            "id": "entender-a-espera",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Pensa onde foi parar a bola.",
+                    "group": "Recordem onde foi parar a bola antes da pausa."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Liga a pausa da Lia ao que a ave fez depois.",
+                    "group": "Comparem a decisão da Lia com o acontecimento final do texto."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Um recado que vai sair daqui",
+      "textDescription": "Escreve um recado sobre observar aves sem as assustar. Confirme que existe um destinatário real e combine como o recado lhe chegará. Escute a intenção antes de ajudar. Aceite escrita emergente, escrita a par ou ditado ao adulto, identificando quem escreveu cada parte. Guarde a primeira produção, sem a substituir por um modelo. Não há correção automática do texto livre.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "derived",
+            "default": null
+          }
+        ],
+        "render": "Escolhe um colega de outra turma. Escreve o nome dele, uma observação e um cuidado que lhe queres pedir. Escreve um recado sobre observar aves sem as assustar.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Escreve um recado sobre observar aves sem as assustar. Produção ou declaração sem veredicto automático."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Acrescenta uma pergunta para o destinatário poder responder."
+      },
+      "support": {
+        "objective": "Escreve um recado sobre observar aves sem as assustar.",
+        "criteria": [
+          "Escreve um recado sobre observar aves sem as assustar."
+        ],
+        "obstacles": [
+          {
+            "id": "recado-para-outra-turma",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Diz primeiro o recado como se o colega estivesse aqui.",
+                    "group": "Escolham o destinatário e ensaiem oralmente o recado, ouvindo todas as propostas."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Escreve uma parte de cada vez e relê para ver se o pedido se percebe.",
+                    "group": "Um colega escreve uma parte; outro relê para confirmar o pedido. Guardem as ideias de todos."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Preparar para entregar",
+      "textDescription": "Relê o teu recado e escreve a versão a entregar. Realize a sessão 4 entre 24 e 48 horas depois da sessão 3. Volte à primeira produção com a criança. Peça que a leia, ou que diga o que quis escrever. Escolham uma revisão útil ao leitor: clareza do pedido ou separação de palavras. Preserve as duas versões e anote o motivo da alteração e a ajuda recebida. Para conservar as condições da revisão de leitura, deixe nova modelação de ss/nh para depois das páginas 15 e 16. Pode preparar a cópia em papel para entregar.",
+      "duration": 3,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "derived",
+            "default": null
+          }
+        ],
+        "render": "Confirma o destinatário e o pedido. Revê uma palavra com o adulto sem apagar a tua ideia. Relê o teu recado e escreve a versão a entregar.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Relê o teu recado e escreve a versão a entregar. Produção ou declaração sem veredicto automático."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Conta o que alteraste e como isso ajuda quem vai ler."
+      },
+      "support": {
+        "objective": "Relê o teu recado e escreve a versão a entregar.",
+        "criteria": [
+          "Relê o teu recado e escreve a versão a entregar."
+        ],
+        "obstacles": [
+          {
+            "id": "rever-o-recado",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Lê como se fosses a pessoa que vai receber o recado.",
+                    "group": "Um colega faz de destinatário e diz o que entendeu, sem reescrever pelo autor."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Escolhe uma parte que possa ficar mais clara e volta a lê-la.",
+                    "group": "Combinem uma melhoria de cada vez e confirmem se manteve a intenção dos autores."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "O recado encontra um leitor",
+      "textDescription": "Entrega o recado e escuta o teu destinatário. Acompanhe a entrega ao colega escolhido. Registe uma reação real, a leitura feita pela criança e a parte lida com ajuda. Se o destinatário estiver ausente, combine entrega concreta e registe comunicação pendente; não a dê como realizada por premir o botão. Numa produção conjunta, todos devem poder explicar uma decisão. No momento de comunicação à turma, mostrar a produção real, com autorização dos autores.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "derived",
+            "default": null
+          }
+        ],
+        "render": "Lê-lhe o que escreveste, com ajuda se precisares. Pergunta o que entendeu. Entrega o recado e escuta o teu destinatário.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Entrega o recado e escuta o teu destinatário. Produção ou declaração sem veredicto automático."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Regista em papel uma pergunta ou uma resposta do destinatário."
+      },
+      "support": {
+        "objective": "Entrega o recado e escuta o teu destinatário.",
+        "criteria": [
+          "Entrega o recado e escuta o teu destinatário."
+        ],
+        "obstacles": [
+          {
+            "id": "entregar-e-escutar",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Começa por dizer para quem é o recado e por que o escreveste.",
+                    "group": "Apresentem o destinatário e combinem a vez de cada autor falar."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Pergunta ao colega qual foi o pedido que percebeu.",
+                    "group": "Escutem a resposta do destinatário e confirmem juntos se o pedido ficou claro."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Voltar noutro dia",
+      "textDescription": "Lê as opções. Qual indica um passo pequenino? Esta página integra a sessão 4, realizada 24 a 48 horas depois da sessão 3. Não reler modelos de código antes desta observação, mesmo durante a revisão do recado. Não mostrar o cartão da palavra nem ler as opções. Peça a leitura das três, já vistas na transferência da sessão 2, antes da escolha. Registe manutenção, hesitação e eventual apoio. O acerto isolado não comprova leitura. Não revelar a resposta por áudio, imagem ou exemplo prévio.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "quiz",
+            "default": null
+          }
+        ],
+        "render": " Lê as opções. Qual indica um passo pequenino?",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "Lê as opções. Qual indica um passo pequenino? Critério fechado verificável."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Explica que parte da escrita te ajudou na escolha."
+      },
+      "support": {
+        "objective": "Lê as opções. Qual indica um passo pequenino?",
+        "criteria": [
+          "Lê as opções. Qual indica um passo pequenino?"
+        ],
+        "obstacles": [
+          {
+            "id": "voltar-depois",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Tenta ler cada opção inteira antes de escolher.",
+                    "group": "Cada pessoa lê primeiro, sem ouvir a leitura do colega."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Confere as letras do meio e do fim e volta a juntar.",
+                    "group": "Depois das primeiras leituras, comparem o meio e o fim das palavras e tentem novamente."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Ler e escolher o próximo trabalho",
+      "textDescription": "Lê dois cartões novos e conversa sobre a tua leitura. Na mesma retoma diferida, apresente separadamente malinha e passo em cartões sem imagem, modelo ou divisão. Não os pronuncie antes da tentativa. São novas recombinações do corpus: m/a/l/i/nh/a e p/a/ss/o. Registe a leitura exata, a fusão e qualquer ajuda. Peça uma frase oral com um dos itens para observar significado. Pergunte o que a criança quer voltar a praticar e combine uma data. Se houver modelação, retire a condição de inédito e reserve outro item não ensaiado para observação futura. A declaração oral e a conclusão de páginas não certificam domínio.",
+      "duration": 2,
+      "interaction": {
+        "state": [
+          {
+            "name": "resposta",
+            "type": "derived",
+            "default": null
+          }
+        ],
+        "render": " Lê dois cartões novos e conversa sobre a tua leitura.",
+        "transition": "Responder, confirmar, rever e avançar. Uma resposta incorreta não bloqueia.",
+        "constraint": "Manter o significado e relacionar a escrita com a linguagem oral, sem inferir domínio pela conclusão.",
+        "assessment": "O adulto observa leitura sem modelo, significado e apoio necessário, para decidir a próxima retoma. Produção ou declaração sem veredicto automático."
+      },
+      "differentiation": {
+        "support": "Primeira pista local visível após pedido, leitura mediada e ação acompanhada.",
+        "standard": "Critério e pedido visíveis, pistas progressivas por pedido.",
+        "challenge": "Escolhe uma estratégia que te ajudou e um pedido para a próxima sessão."
+      },
+      "support": {
+        "objective": "Lê dois cartões novos e conversa sobre a tua leitura.",
+        "criteria": [
+          "O adulto observa leitura sem modelo, significado e apoio necessário, para decidir a próxima retoma."
+        ],
+        "obstacles": [
+          {
+            "id": "ler-e-combinar-a-retoma",
+            "label": {
+              "pt": "Quero uma pista para este trabalho"
+            },
+            "hints": [
+              {
+                "id": "pista-1",
+                "text": {
+                  "pt": {
+                    "individual": "Dá tempo à tua leitura e acompanha as letras sem saltar nenhuma.",
+                    "group": "Deem tempo a cada leitor e guardem a vossa resposta enquanto ele tenta."
+                  }
+                }
+              },
+              {
+                "id": "pista-2",
+                "text": {
+                  "pt": {
+                    "individual": "Junta partes conhecidas; depois diz o que a palavra pode querer dizer.",
+                    "group": "Depois de cada tentativa, escutem como o leitor juntou as partes e expliquem o sentido que encontraram."
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
