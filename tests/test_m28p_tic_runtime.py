@@ -42,11 +42,13 @@ assert.equal(TicModel.complete(data,state),true);
 ''')
 
 
-def test_pairs_allow_one_wrong_connection_and_ordering_requires_all_unique_pieces():
+def test_pairs_require_all_connections_but_allow_wrong_complete_answers():
     run_model(r'''
 const pair={id:'r1',kind:'pairs',options:[{id:'p1'},{id:'p2'}],answer:['p1','p2']};
 const state=TicModel.initial();
 TicModel.edit(state,pair,['p1=p2']);
+assert.deepEqual(TicModel.confirm(state,pair),{accepted:false,emit:false});
+TicModel.edit(state,pair,['p1=p2','p2=p1']);
 assert.deepEqual(TicModel.confirm(state,pair),{accepted:true,emit:true,correct:false});
 assert.equal(TicModel.correct(pair,['p2=p2','p1=p1']),true);
 assert.equal(TicModel.validAnswer(pair,['p1=p1','p2=p1']),false);
@@ -100,4 +102,102 @@ assert.deepEqual(TicModel.sanitize(data,state),state);
 def test_runtime_script_parses():
     source = TEMPLATE.read_text().split("<script>\n'use strict';")[1].split('</script>')[0]
     result = subprocess.run(['node', '--check'], input=source, text=True, capture_output=True)
+    assert result.returncode == 0, result.stderr
+
+
+def test_host_restore_preferences_attempts_and_audio_requests_use_real_runtime():
+    """Exercita os listeners e checkpoints; não substitui o ensaio visual no browser."""
+    source = TEMPLATE.read_text()
+    runtime = source.split("<script>\n'use strict';")[1].split('</script>')[0]
+    fixture = {
+        'slug': 'm28p-v3-menina-match', 'title': 'Palavra igual', 'game': 'match',
+        'word': {'label': 'menina', 'syllables': ['me', 'ni', 'na'], 'image': '<svg></svg>'},
+        'audio': {'word': 'data:audio/mpeg;base64,AA', 'instruction': 'data:audio/mpeg;base64,AA'},
+        'rounds': [{'id': 'r1', 'kind': 'match', 'prompt': 'Toca na palavra igual.', 'model': True,
+                    'options': [{'id': 'yes', 'label': 'menina'}, {'id': 'no', 'label': 'me'}], 'answer': ['yes']}],
+    }
+    script = r'''
+const vm=require('node:vm'),assert=require('node:assert/strict'),fs=require('node:fs');
+const input=JSON.parse(fs.readFileSync(0,'utf8'));
+const ctx=vm.createContext({assert,input,console});
+vm.runInContext(`
+const sent=[],listeners={},all=[],roots=new Map();
+const key=name=>name.replace(/-([a-z])/g,(_,letter)=>letter.toUpperCase());
+function matches(element,selector){
+ if(selector.includes(' '))selector=selector.split(' ').at(-1);
+ if(selector==='button:not(:disabled)')return element.tagName==='button'&&!element.disabled;
+ if(selector.startsWith('.'))return element.className.split(' ').includes(selector.slice(1));
+ if(selector.startsWith('[data-'))return element.dataset[key(selector.slice(6,-1))]!==undefined;
+ return element.tagName===selector;
+}
+class Element{
+ constructor(tag){this.tagName=tag;this.children=[];this.dataset={};this.listeners={};this.style={};this.className='';this.hidden=false;this.disabled=false;this.textContent='';all.push(this);
+  this.classList={add:(...names)=>{this.className=[...new Set(this.className.split(' ').concat(names))].join(' ')},remove:name=>{this.className=this.className.split(' ').filter(n=>n!==name).join(' ')},toggle:(name,on)=>{this.classList[on?'add':'remove'](name)}};
+ }
+ get isConnected(){return this.root||this.parentNode?.isConnected;}
+ appendChild(child){child.parentNode=this;this.children.push(child);return child;}
+ append(...children){children.forEach(child=>this.appendChild(child));}
+ prepend(child){child.parentNode=this;this.children.unshift(child);}
+ replaceChildren(){this.children.forEach(child=>child.parentNode=null);this.children=[];}
+ setAttribute(key,value){this[key]=value;}
+ addEventListener(type,fn){(this.listeners[type]||=[]).push(fn);}
+ fire(type){for(const fn of this.listeners[type]||[])fn({target:this});}
+ focus(){document.activeElement=this;}
+ scrollIntoView(){}
+ querySelectorAll(selector){return this.children.flatMap(child=>[...(matches(child,selector)?[child]:[]),...child.querySelectorAll(selector)]);}
+ querySelector(selector){return this.querySelectorAll(selector)[0]||null;}
+}
+for(const id of input.ids){const element=new Element('div');element.id=id;element.root=true;roots.set(id,element);}
+roots.get('m28p-content').textContent=JSON.stringify(input.fixture);
+const levels=['support','intermediate','challenge'].map(level=>{const e=new Element('button');e.dataset.level=level;e.root=true;return e;});
+const reflections=['again','help','alone'].map(reflection=>{const e=new Element('button');e.dataset.reflection=reflection;e.root=true;return e;});
+const document={activeElement:null,getElementById:id=>roots.get(id),createElement:tag=>new Element(tag),
+ querySelectorAll:selector=>all.filter(element=>element.isConnected&&matches(element,selector)),
+ querySelector:selector=>document.querySelectorAll(selector)[0],addEventListener(){}};
+const window=globalThis;window.parent={};window.addEventListener=(type,fn)=>(listeners[type]||=[]).push(fn);
+window.matchMedia=()=>({matches:true});
+const setTimeout=()=>0,clearTimeout=()=>{};
+const Audio=class{addEventListener(){}pause(){}play(){return Promise.resolve()}};
+window.PageCraftBridge={emit(type,unitId,payload){sent.push({type,unitId,payload:JSON.parse(JSON.stringify(payload))});},
+ attempt(unitId,correct,detail){this.emit('attempt',unitId,{correct,detail});},
+ unitStarted(unitId){this.emit('unit_started',unitId,{})},levelChanged(unitId,level){this.emit('level_changed',unitId,{level})}};
+function host(type,payload,source=window.parent){for(const fn of listeners.message||[])fn({source,data:{pagecraft:1,type,payload}});}
+function get(id){return roots.get(id);}
+function checkpoint(){return sent.filter(message=>message.type==='activity_state').at(-1);}
+function evidence(){return sent.filter(message=>message.type==='attempt');}
+function clickOption(id){all.findLast(element=>element.isConnected&&element.dataset.option===id).fire('click');}
+`,ctx);
+vm.runInContext(input.runtime,ctx);
+vm.runInContext(`
+assert.equal(checkpoint(),undefined);
+host('learning_preferences',{level:'support'});assert.equal(checkpoint(),undefined);
+host('learning_restore',{events:[]});
+assert.equal(checkpoint().payload.state.level,'support');
+assert.equal(checkpoint().payload.readyForReflection,false);
+get('start').fire('click');get('demo-close').fire('click');
+assert.equal(evidence().length,0);
+clickOption('no');get('confirm').fire('click');
+assert.equal(evidence().length,1);assert.equal(evidence()[0].payload.correct,false);
+assert.equal(evidence()[0].payload.detail.aids.demo_shown,true);
+assert.equal(checkpoint().payload.readyForReflection,true);
+assert.equal(get('next').hidden,false);
+get('confirm').fire('click');assert.equal(evidence().length,1);
+const saved=JSON.parse(JSON.stringify(checkpoint().payload.state));
+host('learning_restore',{events:[{type:'activity_state',payload:{activity:input.fixture.slug,version:3,state:saved}}]});
+assert.equal(evidence().length,1);assert.equal(checkpoint().payload.readyForReflection,true);
+get('confirm').fire('click');assert.equal(evidence().length,1);
+host('state_restore',{activity:'other-activity',state:{version:3}});
+assert.equal(checkpoint().payload.state.page,0);
+host('learning_preferences',{level:'challenge'});
+assert.equal(evidence().length,1);assert.equal(get('next').hidden,false);
+get('hear').fire('click');assert.equal(evidence().length,1);
+assert.equal(checkpoint().payload.state.aids.r1.audio_instruction_requested,true);
+assert.equal(checkpoint().payload.state.counts.r1,1);
+get('next').fire('click');assert.equal(checkpoint().payload.state.done,true);
+get('finish-button').fire('click');assert.equal(sent.at(-1).type,'open_reflection');
+`,ctx);
+'''
+    import re
+    payload = {'runtime': runtime, 'fixture': fixture, 'ids': re.findall(r'\bid="([^"]+)"', source)}
+    result = subprocess.run(['node', '-e', script], input=json.dumps(payload), capture_output=True, text=True)
     assert result.returncode == 0, result.stderr
