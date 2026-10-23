@@ -17,6 +17,12 @@ sys.path.insert(0, str(ROOT))
 from server.publish import regenerate_catalog
 
 
+def save_json(path: Path, value: dict) -> None:
+    temporary = path.with_suffix(path.suffix + '.tmp')
+    temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
+    temporary.replace(path)
+
+
 def archive(root: Path, apply: bool = False) -> list[str]:
     manifest_path = root / 'docs' / 'archives' / 'm28p-2026-10-23.json'
     manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {
@@ -26,6 +32,7 @@ def archive(root: Path, apply: bool = False) -> list[str]:
         'activities': {},
     }
     candidates = []
+    planned = []
     for path in sorted((root / 'activities').glob('*/meta.json')):
         meta = json.loads(path.read_text())
         if 'm28p' not in meta.get('tags', []) or meta.get('status') == 'archived':
@@ -38,10 +45,15 @@ def archive(root: Path, apply: bool = False) -> list[str]:
             manifest['activities'].setdefault(path.parent.name, meta.copy())
             meta.update(status='archived', archivedAt='2026-10-23',
                         archiveReason=manifest['reason'])
-            path.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + '\n')
+            planned.append((path, meta))
     if apply and candidates:
         manifest_path.parent.mkdir(parents=True, exist_ok=True)
-        manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
+        # Guardar todos os originais antes de modificar o primeiro metadado.
+        save_json(manifest_path, manifest)
+        for path, meta in planned:
+            save_json(path, meta)
+    if apply and manifest_path.exists():
+        # Recuperar também interrupções depois dos metadados e antes do índice.
         regenerate_catalog(root)
     return candidates
 
