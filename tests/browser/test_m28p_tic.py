@@ -145,3 +145,25 @@ def test_real_host_saves_help_and_restores_completed_draft_without_duplicate_att
     assert finished['completed_at']
     assert finished['assessment']['answers']=={'criterio-1':'help'}
     assert finished['assessment']['strategy']==''
+
+
+def test_host_waits_for_authorized_state_before_accepting_the_first_click(page,studio_origin):
+    metadata=json.loads((ROOT/'drafts/m28p-v3-menina-match-activity.json').read_text())
+    page.request.get(studio_origin+'/api/teacher-bootstrap')
+    code=page.request.post(studio_origin+'/api/learning/activities',data=metadata).json()['code']
+    page.goto(studio_origin+'/'+code)
+    page.get_by_label('Como te chamas?').fill('Ensaio de recuperação TIC')
+    page.add_init_script('''if(window!==parent){const held=[];let released=false;addEventListener('message',e=>{if(!released&&e.source===parent&&['learning_restore','learning_preferences'].includes(e.data?.type)){e.stopImmediatePropagation();held.push(e.data);document.documentElement.dataset.held=String(held.length);}},true);window.releaseInitialization=()=>{released=true;for(const data of held)dispatchEvent(new MessageEvent('message',{data,source:parent}));};}''')
+    page.get_by_role('button',name='Começar',exact=True).click()
+    frame=page.frame_locator('#lesson')
+    from playwright.sync_api import expect
+    expect(frame.locator('html')).to_have_attribute('data-held','2')
+    assert frame.locator('#start').evaluate('el=>el.closest("[inert]")!==null')
+    frame.locator('#start').focus()
+    assert not frame.locator('#start').evaluate('el=>el===document.activeElement')
+    frame.locator('body').evaluate('()=>releaseInitialization()')
+    expect(frame.locator('#start')).to_be_visible()
+    assert not frame.locator('#start').evaluate('el=>el.closest("[inert]")!==null')
+    frame.locator('#start').click()
+    frame.locator('#demo-close').click()
+    expect(frame.locator('#confirm')).to_be_disabled()
