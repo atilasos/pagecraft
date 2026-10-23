@@ -8,6 +8,9 @@ import subprocess
 
 import pytest
 from jsonschema import Draft202012Validator
+from server.activity_support import support_configuration
+from server.api.classroom import EventsRequest
+from server.api.learning import ActivityInput, Event
 
 ROOT = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location('m28p_journeys', ROOT / 'scripts/build_m28p_journeys.py')
@@ -58,6 +61,9 @@ def test_generates_real_support_font_canonical_bridge_and_valid_docspec(content,
     manifest=json.loads((folder/'m28p-v2-menina-run-manifest.json').read_text())
     assert manifest['checks']['browserEvaluation']=='pending'
     assert manifest['publication']=='not-published'
+    registration=ActivityInput.model_validate(json.loads((folder/'m28p-v2-menina-activity.json').read_text()))
+    assert registration.slug=='m28p-v2-menina'
+    assert registration.requires_completion is True
 
 
 def test_untrusted_content_cannot_break_out_of_script(content):
@@ -89,6 +95,29 @@ def test_oral_digraphs_are_preserved_not_resegmented(content):
     assert content['syllables']==['ci','ga','rra']
 
 
+def test_checkpoint_will_fit_the_host_before_generating(content):
+    for page in content['pages']:
+        page['type']='write'
+        page.pop('answer',None)
+    with pytest.raises(ValueError,match='4096 bytes'):
+        motor.validate_content(content)
+
+
+@pytest.mark.parametrize('writing', ['€'*180, '🦉'*90, '\t\n\r'*59+'fim'])
+def test_maximum_valid_writing_checkpoint_fits_both_http_boundaries(content, writing):
+    for index in [3, 10]:
+        content['pages'][index]['type']='write'
+    motor.validate_content(content)
+    answers={p['id']: p['answer'] if p['type']=='choice' else list(range(len(p['pieces'])))
+             if p['type']=='order' else True if p['type']=='oral' else writing for p in content['pages']}
+    payload={'activity':'m28p-v2-menina','version':1,'readyForReflection':False,
+             'state':{'version':1,'page':13,'level':'intermediate','answers':answers,
+                      'confirmed':dict.fromkeys(answers,True)}}
+    event={'id':'maximum-writing','type':'activity_state','payload':payload}
+    Event.model_validate(event)
+    EventsRequest.model_validate({'events':[event]})
+
+
 def test_pure_runtime_preserves_wrong_answers_levels_and_safe_restore(content):
     template=(ROOT/'scripts/templates/m28p-journey.html').read_text()
     core=template.split('/* BEGIN M28P MODEL:')[1].split('*/',1)[1].split('/* END M28P MODEL */')[0]
@@ -114,6 +143,12 @@ assert.equal(JourneyModel.correct(data.pages[0],true),null);
 assert.equal(JourneyModel.correct(data.pages[9],'O meu texto'),null);
 assert.equal(JourneyModel.validAnswer(data.pages[9],'   '),false);
 assert.equal(JourneyModel.validAnswer(data.pages[9],'Quero contar algo.'),true);
+assert.equal(JourneyModel.validAnswer(data.pages[9],'a\u0000b'),false);
+assert.equal(JourneyModel.normalizeWriting('a\u0000\u000bb\n\t\rc'),'ab\n\t\rc');
+assert.equal(JourneyModel.normalizeWriting('a'.repeat(179)+'🦉'),'a'.repeat(179));
+assert.equal(JourneyModel.normalizeWriting('a\ud800b\udc00'),'ab');
+const pasted=JourneyModel.sanitize(data,{version:1,answers:{'passo-10':'a\u0000b'},confirmed:{'passo-10':true}});
+assert.equal(pasted.answers['passo-10'],'ab');assert.equal(pasted.confirmed['passo-10'],true);
 assert.equal(JourneyModel.noHints(data.pages[5]),true);
 assert.equal(JourneyModel.noHints(data.pages[12]),true);
 assert.equal(JourneyModel.noHints(data.pages[1]),false);
@@ -137,3 +172,11 @@ def test_validate_only_does_not_write_and_index_is_private(content,tmp_path):
     assert 'menina/m28p-v2-menina.html' in index
     assert 'menina/guia-docente.md' in index
     assert 'ainda não estão publicados para os alunos' in index
+
+
+def test_runtime_restore_and_hint_revision_against_the_shared_support(content):
+    configuration=support_configuration(motor.docspec_for(content), 'm28p-v2-menina')
+    result=subprocess.run(['node', str(ROOT/'tests/js/m28p_journey.test.cjs')],
+                          input=json.dumps({'content': content, 'support': configuration}),
+                          capture_output=True, text=True, cwd=ROOT)
+    assert result.returncode==0, result.stdout+'\n'+result.stderr

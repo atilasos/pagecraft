@@ -105,7 +105,7 @@ class EventsRequest(BaseModel):
         for event in events:
             payload = event.get("payload", {})
             limit = 12000 if event.get("type") in CONTEXT_EVENT_TYPES else 4096
-            if not isinstance(payload, dict) or len(json.dumps(payload).encode("utf-8")) > limit:
+            if not isinstance(payload, dict) or len(json.dumps(payload, ensure_ascii=False, separators=(',', ':')).encode('utf-8')) > limit:
                 raise ValueError(f"O registo da atividade deve ser um objeto com até {limit} bytes.")
         return events
 

@@ -82,6 +82,22 @@ def validate_content(data: dict) -> None:
     require(phase_list[0] == 'context' and phase_list[-1] == 'review', 'O percurso começa no contexto e termina na revisão.')
     require(any(page['phase'] == 'review' and page['type'] in {'oral', 'write'} for page in pages), 'A revisão exige observação oral adulta ou escrita, além de escolhas.')
     require(any(page['phase'] == 'writing' and page['type'] == 'write' for page in pages), 'A produção escrita precisa de campo aberto.')
+    # O host limita checkpoints a 4096 bytes. A escrita admite 180 unidades
+    # UTF-16; o runtime retira controlos C0 não textuais e surrogates isolados.
+    # Texto válido ocupa até três bytes por unidade, incluindo escapes JSON.
+    answers = {}
+    for page in pages:
+        if page['type'] == 'choice':
+            answers[page['id']] = max(page['options'], key=lambda value: len(json.dumps(value, ensure_ascii=False).encode()))
+        elif page['type'] == 'order':
+            answers[page['id']] = list(range(len(page['pieces'])))
+        else:
+            answers[page['id']] = True if page['type'] == 'oral' else '€' * 180
+    payload = {'activity': 'm28p-v2-' + data['slug'], 'version': 1, 'readyForReflection': False,
+               'state': {'version': 1, 'page': len(pages) - 1, 'level': 'intermediate',
+                         'answers': answers, 'confirmed': dict.fromkeys(answers, True)}}
+    require(len(json.dumps(payload, ensure_ascii=False, separators=(',', ':')).encode()) <= 4096,
+            'O checkpoint pode exceder 4096 bytes; reduzir a extensão das opções/identificadores ou pedidos escritos simultâneos.')
 
 
 def docspec_for(data: dict) -> dict:
@@ -153,7 +169,7 @@ def build(content_path: Path, validate_only: bool = False) -> dict:
         stem + '.html': rendered,
         stem + '-docspec.json': spec,
         stem + '-design-spec.json': {'version': 1, 'visualDirection': 'Papel, tinta e caderno de palavras; uma ação por ecrã.', 'font': 'Century Gothic / Didact Gothic incorporada', 'bodyPx': 22, 'touchTargetPx': 56, 'layout': 'Coluna fluida até 50ch, sem arrastar, navegação por teclado.', 'levels': ['Com pistas', 'Passo a passo', 'Mais desafios'], 'feedback': 'Âmbar com pista concreta; avançar após resposta, incluindo incorreta.', 'representation': 'Textos do autor e peças manipuláveis. Sem imagens ou modelos na transferência e revisão.'},
-        stem + '-activity.json': {'title': 'Percurso da palavra ' + data['word'], 'year': 1, 'duration': spec['duration'], 'group': 'm28p-v2', 'languages': ['pt'], 'requires_completion': True, 'criteria': [{'id': f'criterio-{i}', 'pt': value} for i, value in enumerate(data['criteria'], 1)]},
+        stem + '-activity.json': {'slug': stem, 'title': 'Percurso da palavra ' + data['word'], 'year': 1, 'duration': spec['duration'], 'group': 'm28p-v2', 'languages': ['pt'], 'requires_completion': True, 'criteria': [{'id': f'criterio-{i}', 'pt': value} for i, value in enumerate(data['criteria'], 1)]},
         stem + '-run-manifest.json': {'slug': stem, 'status': 'draft-generated', 'content': str(content_path.relative_to(ROOT)) if content_path.is_relative_to(ROOT) else str(content_path), 'html': stem + '.html', 'docspec': stem + '-docspec.json', 'design': stem + '-design-spec.json', 'teacherGuide': 'guia-docente.md', 'checks': {'contentContract': 'passed', 'docspecSchema': 'passed', 'contextualSupport': 'embedded', 'offlineFont': 'embedded', 'browserEvaluation': 'pending', 'teacherReview': 'pending'}, 'publication': 'not-published'}}
     if not validate_only:
         for name, value in artifacts.items():

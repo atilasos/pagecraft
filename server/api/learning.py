@@ -85,7 +85,7 @@ class Event(BaseModel):
     @classmethod
     def small_payload(cls, value, info: ValidationInfo):
         limit = 12000 if info.data.get("type") in CONTEXT_EVENT_TYPES else 4096
-        if len(json.dumps(value)) > limit:
+        if len(json.dumps(value, ensure_ascii=False, separators=(',', ':')).encode('utf-8')) > limit:
             raise ValueError('Registo demasiado longo.')
         return value
 
