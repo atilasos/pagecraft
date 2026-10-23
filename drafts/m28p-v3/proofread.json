@@ -1,0 +1,108 @@
+{
+  "severity": "low",
+  "review": "Proofreader e Evaluator pedagógico, análise estática",
+  "date": "2026-10-23",
+  "issues": [],
+  "summary": "As instruções principais estão corretas em PT-PT. Os seis achados da primeira passagem foram resolvidos na rechecagem dos 168 HTML regenerados e na documentação reconciliada; não ficaram pendências materiais dentro do âmbito estático.",
+  "acceptance_checks": [
+    "Ortografia e gramática PT-PT das seis instruções principais: OK",
+    "Dados das 28 palavras, seis IDs e quatro rondas: OK",
+    "Distratores futuros nos dados dos jogos: não encontrados",
+    "Flor e dígrafos nos dados de construção: OK",
+    "Demonstração contextual e terminologia de flor nos 168 HTML: OK",
+    "Pistas visuais implementadas junto da ação nos 168 HTML: OK estático",
+    "Apoios no estado, tentativa e recuperação: OK estático e modelo Node",
+    "Pares incompletos bloqueados, completos incorretos admitidos: OK no modelo Node",
+    "Títulos, operações e apoios reais reconciliados com documentação: OK",
+    "Browser real e áudio audível: em verificação separada pelo coordenador"
+  ],
+  "limits": [
+    "Sem browser por este revisor, conforme atribuição do coordenador.",
+    "Sem audição das gravações por este revisor.",
+    "Sem experiência com alunos.",
+    "Verificação estática e do modelo puro não demonstram clareza visual ou autonomia."
+  ],
+  "pass": true,
+  "openIssues": [],
+  "scope": "Revisão linguística e pedagógica estática, com verificações do modelo puro extraído do HTML real.",
+  "releaseApproval": "Depende da verificação de browser e site pelo coordenador; não declara autonomia comprovada.",
+  "recheckedAfterCommit": "e17bee1",
+  "artifactsChecked": {
+    "html": 168,
+    "rounds": 672,
+    "games": 6
+  },
+  "snapshots": {
+    "menina-pairs": "b5a85e9389cce729f92d6ce28b19abd3ff04dc8775a2ed7e82b9f60ee043c9bd",
+    "flor-syllables": "9d4338076fe83d5a090f5ddbadc546476032f62701c0368ac797d5102105ea69",
+    "template": "e848f2ef1e6311d22563277b872b2221f49eacd42f0da3a421d10ad78b818652"
+  },
+  "resolvedFindings": [
+    {
+      "id": "demo-context",
+      "type": "pedagogical",
+      "severity": "high",
+      "status": "resolved-static-recheck",
+      "location": "scripts/templates/m28p-tic.html: demoTexts, demoPicture, paintDemo; HTML flor-syllables/gap/recall",
+      "original": "Toca nas sílabas por ordem. / Escolhe a sílaba que falta. / Ouve. Junta as sílabas. A demonstração usa pato/pa/to.",
+      "suggestion": "Usar unidades pertinentes da tarefa. Em flor: Toca nas letras por ordem. / Escolhe a letra que falta. / Ouve. Junta as letras.",
+      "reason": "Flor tem uma sílaba e a tarefa usa letras. A demonstração genérica acrescenta código não trabalhado e pode afastar a criança da ação real.",
+      "resolutionEvidence": "Os 168 HTML usam palavra, imagem e peças atuais; demoTexts usa peças. Flor preserva unit:letter."
+    },
+    {
+      "id": "local-visual-help",
+      "type": "pedagogical",
+      "severity": "high",
+      "status": "resolved-static-recheck",
+      "location": "scripts/templates/m28p-tic.html: feedback, model; scripts/build_m28p_tic.py: automaticAfterFailures",
+      "original": "Podes experimentar outra vez. / ? Ver. Borda tracejada no modelo.",
+      "suggestion": "Destacar visualmente a relação, o lugar ou a peça a rever e oferecer demonstração junto da tarefa, conservando a resposta.",
+      "reason": "A mensagem é genérica. A criança que não lê precisa de uma ação visível para reparar o erro com apoio pontual.",
+      "resolutionEvidence": "Os 168 HTML incluem visualFeedback e chamada junto da tarefa para destacar peça, lacuna, ligação, linha ou caracteres."
+    },
+    {
+      "id": "help-evidence",
+      "type": "pedagogical",
+      "severity": "high",
+      "status": "resolved-static-recheck",
+      "location": "scripts/templates/m28p-tic.html: initial, play, openDemo, confirm; guias docentes",
+      "original": "Montar de memória retira o modelo por defeito; ouvir é apoio declarado. / As ajudas usadas ficam nos registos.",
+      "suggestion": "Registar áudio, modelo e demonstração usados por ronda no checkpoint e na tentativa, sem criar tentativa por ouvir ou pedir apoio.",
+      "reason": "Na implementação lida esses apoios não ficam no estado nem no detalhe da tentativa. O professor não consegue distinguir evocação com apoio de resposta sem esse apoio.",
+      "resolutionEvidence": "Estado e tentativa incluem aids por ronda; sanitize conserva demo_shown, model_shown e pedidos de áudio."
+    },
+    {
+      "id": "pairs-incomplete",
+      "type": "pedagogical",
+      "severity": "medium",
+      "status": "resolved-static-recheck",
+      "location": "scripts/templates/m28p-tic.html: TicModel.validAnswer",
+      "original": "return !ordered(round)||value.length===round.pieces.length;",
+      "suggestion": "Nos pares, exigir uma ligação por desenho antes de confirmar, incluindo ligações incorretas.",
+      "reason": "Um tabuleiro com vários desenhos constitui vários pedidos. A versão lida aceita uma única ligação e deixa os restantes sem resposta.",
+      "resolutionEvidence": "validAnswer exige número de ligações igual ao número de desenhos; teste Node do modelo real bloqueia parcial e aceita completo incorreto."
+    },
+    {
+      "id": "pairs-first-variation",
+      "type": "pedagogical",
+      "severity": "medium",
+      "status": "resolved-static-recheck",
+      "location": "drafts/m28p-v3/menina/m28p-v3-menina-pairs.html; rounds_for; pairs",
+      "original": "Quatro rondas com a única imagem à esquerda e a única palavra à direita.",
+      "suggestion": "Variar a posição entre rondas e manter o primeiro par como familiarização, sem o interpretar como leitura.",
+      "reason": "O contrato promete posições variadas. Foi visto flipColumns entretanto no gerador, mas é preciso verificar o runtime e os HTML regenerados.",
+      "resolutionEvidence": "Todos os HTML pairs têm flipColumns [false,true,false,true], aplicado no runtime."
+    },
+    {
+      "id": "match-design-operation",
+      "type": "consistency",
+      "severity": "medium",
+      "status": "resolved-static-recheck",
+      "location": "drafts/m28p-v3/collection-design.json: games.match; scripts/build_m28p_tic.py: GAMES.match",
+      "original": "Design: associação palavra/referente. Implementação: Palavra igual, comparação com modelo.",
+      "suggestion": "Confirmar a operação final e alinhar os documentos: comparar formas escritas com modelo. Manter associação imagem/palavra identificada em pairs.",
+      "reason": "A comparação visual é adequada como iniciação, mas aproxima match de hunt e não deve ser interpretada como prova de leitura ou diversidade de processos não implementados.",
+      "resolutionEvidence": "Princípios, contrato, renovação e collection-design.json reconciliados com os títulos finais e comparação visual em match."
+    }
+  ]
+}

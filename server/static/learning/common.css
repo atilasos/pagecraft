@@ -254,3 +254,19 @@ header label {
   margin: 0.25rem 0 0.8rem;
   font-size: 0.85rem;
 }
+.visual-reflection fieldset label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 72px;
+  padding: 12px 16px;
+  border: 2px solid #bccdcc;
+  border-radius: 16px;
+  cursor: pointer;
+}
+.visual-reflection fieldset label:has(input:checked) {
+  border-color: #215b6b;
+  background: #eaf1ed;
+}
+.visual-reflection .reflection-icon { font-size: 36px; }
+.visual-reflection [hidden] { display: none !important; }

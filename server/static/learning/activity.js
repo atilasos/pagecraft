@@ -108,6 +108,7 @@ const copy = {
   },
 };
 let reflectionReady = true;
+let reflectionAudio = null;
 let requiresCompletion = false;
 let lessonLoaded = false;
 let lang = "pt",
@@ -270,9 +271,15 @@ function showWork() {
   translate();
 }
 function renderReflection() {
+  reflectionAudio?.pause();
   $("reflection-pupil").textContent = `${t("reflectionOf")} ${attempt.name}.`;
   const level = $("level").value,
     young = activity.year <= 2;
+  const visual = activity.group === "m28p-v3";
+  $("reflection").classList.toggle("visual-reflection", visual);
+  $("reflection").querySelector("h1").textContent = visual ? "Como foi o jogo?" : t("reflection");
+  $("strategy").closest("label").hidden = visual;
+  $("next-step").closest("label").hidden = visual;
   const prompts =
     lang === "pt"
       ? {
@@ -314,7 +321,7 @@ function renderReflection() {
           ],
         };
   const p = prompts[level];
-  $("scaffold").textContent = p[0];
+  $("scaffold").textContent = visual ? "Podes escolher ou passar." : p[0];
   $("strategy-label").textContent = p[1];
   $("next-label").textContent = p[2];
   $("criteria").replaceChildren();
@@ -327,6 +334,12 @@ function renderReflection() {
     listen.type = "button";
     listen.textContent = t("listen");
     listen.onclick = () => {
+      if (visual) {
+        reflectionAudio?.pause();
+        reflectionAudio = new Audio("/learning-assets/m28p-reflection.mp3");
+        reflectionAudio.play().catch(() => status("Podes escolher ou passar."));
+        return;
+      }
       if (!("speechSynthesis" in window)) {
         status(t("readUnavailable"), true);
         return;
@@ -344,7 +357,13 @@ function renderReflection() {
       input.name = c.id;
       input.value = value;
       input.checked = (reflectionDraft.answers[c.id] || "skip") === value;
-      label.append(input, document.createTextNode(t(value)));
+      if (visual) {
+        const icon = document.createElement("span");
+        icon.className = "reflection-icon";
+        icon.setAttribute("aria-hidden", "true");
+        icon.textContent = {alone: "✓", help: "☞", practising: "↻", skip: "→"}[value];
+        label.append(input, icon, document.createTextNode({alone: "Sozinho", help: "Com ajuda", practising: "Praticar", skip: "Passar"}[value]));
+      } else label.append(input, document.createTextNode(t(value)));
       fs.append(label);
     }
     $("criteria").append(fs);
@@ -421,6 +440,7 @@ $("lesson").onload = () => {
 };
 $("reflect").onclick = openReflection;
 $("back").onclick = () => {
+  reflectionAudio?.pause();
   captureReflection();
   $("reflection").hidden = true;
   $("work").hidden = false;
@@ -428,6 +448,7 @@ $("back").onclick = () => {
 $("finish-form").oninput = captureReflection;
 $("finish-form").onsubmit = async (e) => {
   e.preventDefault();
+  reflectionAudio?.pause();
   if (!reflectionReady || !attempt || attempt.completed_at) return;
   captureReflection();
   e.submitter.disabled = true;
@@ -649,6 +670,17 @@ $("recovery-new").onclick = () => {
     $("group").value = activity.group || "";
     $("language-label").hidden = !activity.languages.includes("en");
     $("draft").hidden = activity.published;
+    if (activity.archived_at) {
+      translate();
+      status("Este rascunho foi retirado. Escolhe um jogo da coleção atual.");
+      const link = document.createElement("a");
+      link.href = "/teacher/m28p-tic.html";
+      link.className = "button";
+      link.textContent = "28 palavras · jogos para TIC";
+      $("entry").append(link);
+      $("start-form").hidden = true;
+      return;
+    }
     await recoverAttempt();
     translate();
   } catch {

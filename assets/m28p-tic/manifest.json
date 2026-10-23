@@ -1,0 +1,517 @@
+{
+  "version": 1,
+  "illustrations": {
+    "author": "PageCraft, ilustrações SVG originais criadas com assistência Codex",
+    "license": "CC0-1.0",
+    "viewBox": "0 0 240 240",
+    "notes": "Sem texto visível nem emoji; os títulos SVG são alternativas acessíveis. A seta no telhado assinala a parte da casa."
+  },
+  "audio": {
+    "provider": "Microsoft Edge Read Aloud, através de edge-tts",
+    "voice": "pt-PT-RaquelNeural",
+    "locale": "pt-PT",
+    "rate": "-12%",
+    "license": "Voz sintética Microsoft; sujeita aos termos do serviço, não abrangida pela licença CC0 dos SVG.",
+    "notes": "Palavras inteiras e instruções. Não usar estes sons para modelar fonemas ou sílabas isoladas. Reprodução só após opção da criança.",
+    "transcripts": {
+      "menina": "menina",
+      "menino": "menino",
+      "uva": "uva",
+      "dedo": "dedo",
+      "sapato": "sapato",
+      "bota": "bota",
+      "leque": "leque",
+      "casa": "casa",
+      "janela": "janela",
+      "telhado": "telhado",
+      "escada": "escada",
+      "chave": "chave",
+      "galinha": "galinha",
+      "gema": "gema",
+      "rato": "rato",
+      "cenoura": "cenoura",
+      "girafa": "girafa",
+      "palhaco": "palhaço",
+      "zebra": "zebra",
+      "bandeira": "bandeira",
+      "funil": "funil",
+      "arvore": "árvore",
+      "quadro": "quadro",
+      "passarinho": "passarinho",
+      "peixe": "peixe",
+      "cigarra": "cigarra",
+      "fogueira": "fogueira",
+      "flor": "flor",
+      "match": "Toca na palavra igual ao modelo.",
+      "pairs": "Toca no desenho. Depois, toca na palavra.",
+      "hunt": "Procura as palavras iguais ao modelo.",
+      "syllables": "Toca nas peças para formar a palavra.",
+      "gap": "Escolhe a peça que falta.",
+      "recall": "Forma a palavra. Podes ouvir outra vez.",
+      "start": "Vamos jogar. Toca na seta para começar.",
+      "hint": "Olha para o exemplo. Experimenta outra vez.",
+      "success": "Já está. Podes continuar.",
+      "retry": "Vamos tentar outra vez.",
+      "finish": "Terminaste este jogo. Podes repetir.",
+      "reflection": "Como foi o jogo? Fizeste sozinho, com ajuda, ou queres praticar mais? Podes também passar."
+    }
+  },
+  "words": [
+    {
+      "slug": "menina",
+      "word": "menina",
+      "image": "images/menina.svg",
+      "audio": "audio/menina.mp3"
+    },
+    {
+      "slug": "menino",
+      "word": "menino",
+      "image": "images/menino.svg",
+      "audio": "audio/menino.mp3"
+    },
+    {
+      "slug": "uva",
+      "word": "uva",
+      "image": "images/uva.svg",
+      "audio": "audio/uva.mp3"
+    },
+    {
+      "slug": "dedo",
+      "word": "dedo",
+      "image": "images/dedo.svg",
+      "audio": "audio/dedo.mp3"
+    },
+    {
+      "slug": "sapato",
+      "word": "sapato",
+      "image": "images/sapato.svg",
+      "audio": "audio/sapato.mp3"
+    },
+    {
+      "slug": "bota",
+      "word": "bota",
+      "image": "images/bota.svg",
+      "audio": "audio/bota.mp3"
+    },
+    {
+      "slug": "leque",
+      "word": "leque",
+      "image": "images/leque.svg",
+      "audio": "audio/leque.mp3"
+    },
+    {
+      "slug": "casa",
+      "word": "casa",
+      "image": "images/casa.svg",
+      "audio": "audio/casa.mp3"
+    },
+    {
+      "slug": "janela",
+      "word": "janela",
+      "image": "images/janela.svg",
+      "audio": "audio/janela.mp3"
+    },
+    {
+      "slug": "telhado",
+      "word": "telhado",
+      "image": "images/telhado.svg",
+      "audio": "audio/telhado.mp3"
+    },
+    {
+      "slug": "escada",
+      "word": "escada",
+      "image": "images/escada.svg",
+      "audio": "audio/escada.mp3"
+    },
+    {
+      "slug": "chave",
+      "word": "chave",
+      "image": "images/chave.svg",
+      "audio": "audio/chave.mp3"
+    },
+    {
+      "slug": "galinha",
+      "word": "galinha",
+      "image": "images/galinha.svg",
+      "audio": "audio/galinha.mp3"
+    },
+    {
+      "slug": "gema",
+      "word": "gema",
+      "image": "images/gema.svg",
+      "audio": "audio/gema.mp3"
+    },
+    {
+      "slug": "rato",
+      "word": "rato",
+      "image": "images/rato.svg",
+      "audio": "audio/rato.mp3"
+    },
+    {
+      "slug": "cenoura",
+      "word": "cenoura",
+      "image": "images/cenoura.svg",
+      "audio": "audio/cenoura.mp3"
+    },
+    {
+      "slug": "girafa",
+      "word": "girafa",
+      "image": "images/girafa.svg",
+      "audio": "audio/girafa.mp3"
+    },
+    {
+      "slug": "palhaco",
+      "word": "palhaço",
+      "image": "images/palhaco.svg",
+      "audio": "audio/palhaco.mp3"
+    },
+    {
+      "slug": "zebra",
+      "word": "zebra",
+      "image": "images/zebra.svg",
+      "audio": "audio/zebra.mp3"
+    },
+    {
+      "slug": "bandeira",
+      "word": "bandeira",
+      "image": "images/bandeira.svg",
+      "audio": "audio/bandeira.mp3"
+    },
+    {
+      "slug": "funil",
+      "word": "funil",
+      "image": "images/funil.svg",
+      "audio": "audio/funil.mp3"
+    },
+    {
+      "slug": "arvore",
+      "word": "árvore",
+      "image": "images/arvore.svg",
+      "audio": "audio/arvore.mp3"
+    },
+    {
+      "slug": "quadro",
+      "word": "quadro",
+      "image": "images/quadro.svg",
+      "audio": "audio/quadro.mp3"
+    },
+    {
+      "slug": "passarinho",
+      "word": "passarinho",
+      "image": "images/passarinho.svg",
+      "audio": "audio/passarinho.mp3"
+    },
+    {
+      "slug": "peixe",
+      "word": "peixe",
+      "image": "images/peixe.svg",
+      "audio": "audio/peixe.mp3"
+    },
+    {
+      "slug": "cigarra",
+      "word": "cigarra",
+      "image": "images/cigarra.svg",
+      "audio": "audio/cigarra.mp3"
+    },
+    {
+      "slug": "fogueira",
+      "word": "fogueira",
+      "image": "images/fogueira.svg",
+      "audio": "audio/fogueira.mp3"
+    },
+    {
+      "slug": "flor",
+      "word": "flor",
+      "image": "images/flor.svg",
+      "audio": "audio/flor.mp3"
+    }
+  ],
+  "instructions": {
+    "match": "audio/match.mp3",
+    "pairs": "audio/pairs.mp3",
+    "hunt": "audio/hunt.mp3",
+    "syllables": "audio/syllables.mp3",
+    "gap": "audio/gap.mp3",
+    "recall": "audio/recall.mp3",
+    "start": "audio/start.mp3",
+    "hint": "audio/hint.mp3",
+    "success": "audio/success.mp3",
+    "retry": "audio/retry.mp3",
+    "finish": "audio/finish.mp3",
+    "reflection": "audio/reflection.mp3"
+  },
+  "files": {
+    "audio/arvore.mp3": {
+      "bytes": 11232,
+      "sha256": "3e18955b48ded7b2fa59f22477ff7b387ce31ad285857a63cccbec718d792cb9"
+    },
+    "audio/bandeira.mp3": {
+      "bytes": 12960,
+      "sha256": "b4cd6e14550940358534864e7805f6c36513c01cb2f5b766d20a547748f65dbd"
+    },
+    "audio/bota.mp3": {
+      "bytes": 11088,
+      "sha256": "d4d29ca24b5749190b80c889739e367959471c5f122b510c93b33f9bc7852798"
+    },
+    "audio/casa.mp3": {
+      "bytes": 11232,
+      "sha256": "373d22e39c0e1f699d6e113549814595b1e732e48fd0a349c0741061ee0da9bf"
+    },
+    "audio/cenoura.mp3": {
+      "bytes": 11520,
+      "sha256": "f33c8d906cda4832189b40af26aaf52bd21516adccf4bb289071e59203cbf57b"
+    },
+    "audio/chave.mp3": {
+      "bytes": 11664,
+      "sha256": "1ebe6dba5c4219ed268c9bc07299dc2538125a1e1e9b2902ed3f2608d2bdd093"
+    },
+    "audio/cigarra.mp3": {
+      "bytes": 12960,
+      "sha256": "f8eaa593786d7e555eb768e2b4b3f1dc1bfd22b353f270e0e4db84fc8981545a"
+    },
+    "audio/dedo.mp3": {
+      "bytes": 10800,
+      "sha256": "41b78c646f0137b36c9af33d0ef5954955c085d329f7ec16184f9cf68325f9cd"
+    },
+    "audio/escada.mp3": {
+      "bytes": 12096,
+      "sha256": "dd68d8d7a05ab486e67de4935ca61822fbb8d3552892f345383f5a19dce514fb"
+    },
+    "audio/finish.mp3": {
+      "bytes": 31104,
+      "sha256": "cc046680b2cb303ec4869edb129d666887ec1117bb569cedaaf6452e97260cae"
+    },
+    "audio/flor.mp3": {
+      "bytes": 11232,
+      "sha256": "7e353c81b207b0427e7779a2d51c75a66fa609341717b3980bb4989e24f42937"
+    },
+    "audio/fogueira.mp3": {
+      "bytes": 12384,
+      "sha256": "eeb92d68df746c6d421bdd754cf7eb591edc6814674501dac0cf8feb4940f5b0"
+    },
+    "audio/funil.mp3": {
+      "bytes": 10512,
+      "sha256": "de77998a71b8e73da0c6decaa7e6fff53d5529c700cd6c24c491b82a2df5b1e6"
+    },
+    "audio/galinha.mp3": {
+      "bytes": 12528,
+      "sha256": "c0ba12818224f295f0621ec5b2322a61c986891c7e2822ae3a7ceea45356e866"
+    },
+    "audio/gap.mp3": {
+      "bytes": 17424,
+      "sha256": "04098b2847b5a60dde3bef8a742009b1d1cf800b1ac8d56cd29c8ffd3e2d5ad3"
+    },
+    "audio/gema.mp3": {
+      "bytes": 11232,
+      "sha256": "571b84eb5ad04fe659a732352a538899e990c5dfadf93ac9ae4d559d33d532f3"
+    },
+    "audio/girafa.mp3": {
+      "bytes": 12672,
+      "sha256": "e4ed2eddbe06352c67f1898246ba5564d887cecfdb3944d1f9fa189966dba7c2"
+    },
+    "audio/hint.mp3": {
+      "bytes": 32976,
+      "sha256": "9f14b556cee75dacf1e2658b3465ac948be2bc8e1786a14bbaf5151c4b74810e"
+    },
+    "audio/hunt.mp3": {
+      "bytes": 23904,
+      "sha256": "75778f2b4cca8403ffc382e6c0df6e9fc437cc62b7a903eb3f516a15530b17c3"
+    },
+    "audio/janela.mp3": {
+      "bytes": 12816,
+      "sha256": "992900a1c4c5d7d998848f2086b523128b4d2f3ece37b315c844934bf9b77d4b"
+    },
+    "audio/leque.mp3": {
+      "bytes": 11232,
+      "sha256": "f1c4bff176a1384cc79c3f564cc91d3afcfe37ac15d49c34fca8dcaf136a9ed2"
+    },
+    "audio/match.mp3": {
+      "bytes": 21744,
+      "sha256": "3a76385ce02b6be95a853df3b96dcc06e3b54971b9a62de4321050e2604f4d06"
+    },
+    "audio/menina.mp3": {
+      "bytes": 11232,
+      "sha256": "99901217b2b81b110308823757221631a5f9a859a25b11913a6bb979e55f78d5"
+    },
+    "audio/menino.mp3": {
+      "bytes": 11808,
+      "sha256": "fe8b6c63ff175979bc4271bd920053c6a3d94f0ef102d86b9609c058eba595c0"
+    },
+    "audio/pairs.mp3": {
+      "bytes": 34560,
+      "sha256": "4be8ad9fce5af1b239190ea2e38e80025dcfceec98f46e37cf37c94d3d729977"
+    },
+    "audio/palhaco.mp3": {
+      "bytes": 12528,
+      "sha256": "1d09d4536a266bb7b2e83a0afef3b199129c70aa0e4c4ca36de9c0c3e41ea998"
+    },
+    "audio/passarinho.mp3": {
+      "bytes": 12384,
+      "sha256": "41813e048a4aa603e01d1df8ca665e7731ae97b996af9775fbdaa17dacd15698"
+    },
+    "audio/peixe.mp3": {
+      "bytes": 11232,
+      "sha256": "24ca064c49cb0d488c3d767521037ea2be46146050e6bbed2b660cdeec27fffb"
+    },
+    "audio/quadro.mp3": {
+      "bytes": 11232,
+      "sha256": "5b3988f5d2fd03cb278bdab4f8ed6ddfd424636cf7cc4deda0c3059bc99f8b78"
+    },
+    "audio/rato.mp3": {
+      "bytes": 10512,
+      "sha256": "1d18956047534eac3fb03ff288a206b30fa6427b5a3af3c4c94b450791d675c9"
+    },
+    "audio/recall.mp3": {
+      "bytes": 31824,
+      "sha256": "c57fee2d6f2612c33f511498e104ef1bcf6c0c1c0f8225cc8366361c28d003fb"
+    },
+    "audio/reflection.mp3": {
+      "bytes": 61200,
+      "sha256": "b5c30f8cc20c66eebf98e9382245292bd0e2348bad38be9557f26f181d5fe5c9"
+    },
+    "audio/retry.mp3": {
+      "bytes": 18576,
+      "sha256": "703e623855425fa20c9e4dfb749f98a1fc8c275681667f4bdc32698604e7f2cf"
+    },
+    "audio/sapato.mp3": {
+      "bytes": 12960,
+      "sha256": "92fd47e9806eb96bf1173be726ad4ea82bfc498794b32c82da3725b8bed8fb6c"
+    },
+    "audio/start.mp3": {
+      "bytes": 33120,
+      "sha256": "4a00f3f61a3f4202b5891c57bcd66dda61f4cbb7dfc8b54316ffabfa81c052c8"
+    },
+    "audio/success.mp3": {
+      "bytes": 26928,
+      "sha256": "57fba7e45c8badfc112d07ddc5c631ca722e820d609c87808181bd59208e2a76"
+    },
+    "audio/syllables.mp3": {
+      "bytes": 22176,
+      "sha256": "4280e136f4a303a06f714c2927abb14f423e818408902f5c728e26cc203ea9ec"
+    },
+    "audio/telhado.mp3": {
+      "bytes": 12096,
+      "sha256": "68eae52dc11c3ede9084f418dc1095bffc25779a10b8c5ffc0c60b75b10680bb"
+    },
+    "audio/uva.mp3": {
+      "bytes": 11232,
+      "sha256": "1d10f05ed4e06148913fbd049b3b40c935a3c018fe4a1884dd5327a1d4fd79c7"
+    },
+    "audio/zebra.mp3": {
+      "bytes": 11376,
+      "sha256": "fe4d0ee91a28bdd62609397317f7dae218aeec2338758d1e229104d98a3748b1"
+    },
+    "images/arvore.svg": {
+      "bytes": 924,
+      "sha256": "c0efcc0c872c914e31e6990443e787624d17244c0cf1206dca04a5f635b4cebd"
+    },
+    "images/bandeira.svg": {
+      "bytes": 629,
+      "sha256": "34d6b2c86bd20faf142620922409d456afec56a97df927b6205287f615c4f87b"
+    },
+    "images/bota.svg": {
+      "bytes": 581,
+      "sha256": "e83fa105adc201533c0d23227895dfe2ff4f37020a061b10ea131d83ef205e60"
+    },
+    "images/casa.svg": {
+      "bytes": 805,
+      "sha256": "67bc0724bf514c0b791312af5b9d7f44446e9ae7c33a2b06b813e2ac72361db5"
+    },
+    "images/cenoura.svg": {
+      "bytes": 592,
+      "sha256": "63a18d739075c96785909a361fdfc7d47f3d03ce4b6d5cd052e4ff78fb392932"
+    },
+    "images/chave.svg": {
+      "bytes": 504,
+      "sha256": "541c55973753ce7e4bd59dfb33a0186476e91fe2b3203ca9fc292024512a8f65"
+    },
+    "images/cigarra.svg": {
+      "bytes": 1173,
+      "sha256": "808a622570b4098aeb4669536fe01638757d134d8bea4609f1d8dabea5b103e3"
+    },
+    "images/dedo.svg": {
+      "bytes": 731,
+      "sha256": "206ef65d63ea967ac72cabfd9a963cd8f99f6fb5cafcfd701502b24611007d50"
+    },
+    "images/escada.svg": {
+      "bytes": 717,
+      "sha256": "ca0a34d44c4feb93b04a16adea301f7b524e2d7ecd335825e054e2516dae6ba6"
+    },
+    "images/flor.svg": {
+      "bytes": 1121,
+      "sha256": "5b9eaf6ce234f79f5009595f8b093779d3c9eb0467b7ba60e0d5d80a5dd61fbd"
+    },
+    "images/fogueira.svg": {
+      "bytes": 638,
+      "sha256": "2a7263d9ddf9d7b5b0a80547cc25aca73bcdad39a158d364c3aeb720b04d2a16"
+    },
+    "images/funil.svg": {
+      "bytes": 495,
+      "sha256": "d7773475a70ab1fcfcc1ea4c0adb6868077755bafdacd3d9aff5a22e7fd4269a"
+    },
+    "images/galinha.svg": {
+      "bytes": 867,
+      "sha256": "3064860c91e3bb1fd8460b5ba5674ed71b1b77312e4837f3ef774ae96b193738"
+    },
+    "images/gema.svg": {
+      "bytes": 731,
+      "sha256": "e1a4890d9b10f763bf544c6a3510d56f2a9e413eb6ece32ee27e36aff1036b89"
+    },
+    "images/girafa.svg": {
+      "bytes": 1325,
+      "sha256": "c3896f812176db1bbb08bca661df358ff6bcbf4ade678b2c1104fa79debc50fe"
+    },
+    "images/janela.svg": {
+      "bytes": 629,
+      "sha256": "74b2a1f7842a815f2eacc7ab6ff1be127de56f7d03d31eaf873f73bf5e1f08d1"
+    },
+    "images/leque.svg": {
+      "bytes": 1145,
+      "sha256": "4b663636aa2d3a7bd52d444b46556c3f4de320d8a2f884908e34c2671ff96bf3"
+    },
+    "images/menina.svg": {
+      "bytes": 1132,
+      "sha256": "ed0b087af8a721dbebece6633260178dddd49d6a6f37ca5016c1a9241683d4b8"
+    },
+    "images/menino.svg": {
+      "bytes": 1046,
+      "sha256": "3ac929a92e3b8b4cc2e069e1d12a7835c9ac78f718ead1627de9bdfde2458de9"
+    },
+    "images/palhaco.svg": {
+      "bytes": 1310,
+      "sha256": "29dbeeb3ea67bc048886ee8d3e1159efff1cc48b4b9f3a2bc83ddf23e484d902"
+    },
+    "images/passarinho.svg": {
+      "bytes": 893,
+      "sha256": "0b18f035daabc7354f60b93f07c97a847a642eb32beaf89db298dcf07d985275"
+    },
+    "images/peixe.svg": {
+      "bytes": 835,
+      "sha256": "8c0ecbf23f9f4f8df209e7b7dc10493932a20575e3efd6a1f316db676960194f"
+    },
+    "images/quadro.svg": {
+      "bytes": 866,
+      "sha256": "8206e0e050958c183350cd8de9664e62a58fdef9e1199be3ffdf7e0e77b49f83"
+    },
+    "images/rato.svg": {
+      "bytes": 780,
+      "sha256": "bf12a1a4be960787d31768e2f09f667c46b77318175124352c0b8988150385fd"
+    },
+    "images/sapato.svg": {
+      "bytes": 542,
+      "sha256": "324483bfaa6c05d77a3cfe10e048408c7ca3b55fab971c5489a0637be523298f"
+    },
+    "images/telhado.svg": {
+      "bytes": 911,
+      "sha256": "4f2346f5f81742c7e10384de1f24b12a477214e51fd8a83d724640d32bccd0bc"
+    },
+    "images/uva.svg": {
+      "bytes": 1447,
+      "sha256": "0ecab1399ad7e5006f3f36b6b90decd88e3fb80746f441e18947f4fae93cd863"
+    },
+    "images/zebra.svg": {
+      "bytes": 906,
+      "sha256": "323842f45c4ed6979d9ae66d10d7507ccf8ef7751781c3b80117c74c15359429"
+    }
+  }
+}

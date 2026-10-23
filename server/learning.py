@@ -69,6 +69,8 @@ class Learning:
         async with self.catalog_lock:
             activities = await self.activities()
             activity = await self.activity(code)
+            if activity.get('archived_at'):
+                raise HTTPException(409, "Este rascunho foi retirado da coleção.")
             if activity['published']:
                 return activity
             drafts = self.config.repo_root / "drafts"
@@ -85,6 +87,20 @@ class Learning:
             activity['published_at'] = utcnow()
             activities[activity['code']] = activity
             await self.storage.write_json(self.storage.path("learning", "activities.json"), activities)
+            return activity
+
+    async def archive_draft(self, code):
+        """Retira um rascunho da seleção sem apagar conteúdos ou realizações."""
+        async with self.catalog_lock:
+            activities = await self.activities()
+            activity = activities.get(code.upper())
+            if activity is None:
+                raise HTTPException(404, "Atividade não encontrada.")
+            if activity['published']:
+                raise HTTPException(409, "Só é possível retirar rascunhos por esta operação.")
+            if not activity.get('archived_at'):
+                activity['archived_at'] = utcnow()
+                await self.storage.write_json(self.storage.path("learning", "activities.json"), activities)
             return activity
 
     def content_path(self, activity):

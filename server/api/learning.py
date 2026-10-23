@@ -130,8 +130,9 @@ async def visible_activity(request, code):
 
 @router.get('/api/learning/activities')
 @access_policy(RoutePolicy.TEACHER)
-async def activities(request: Request):
-    return list((await request.app.state.learning.activities()).values())
+async def activities(request: Request, include_archived: bool = False):
+    items = (await request.app.state.learning.activities()).values()
+    return [item for item in items if include_archived or not item.get('archived_at')]
 
 
 @router.post('/api/learning/activities', status_code=201)
@@ -146,6 +147,12 @@ async def register(data: ActivityInput, request: Request):
 @access_policy(RoutePolicy.TEACHER)
 async def publish(code: Code, request: Request):
     return await request.app.state.learning.publish(code)
+
+
+@router.post('/api/learning/activities/{code}/archive')
+@access_policy(RoutePolicy.TEACHER)
+async def archive_draft(code: Code, request: Request):
+    return await request.app.state.learning.archive_draft(code)
 
 
 @router.get('/api/learning/activities/{code}')
@@ -167,6 +174,8 @@ async def content(code: Code, request: Request):
 async def start(code: Code, data: StartInput, request: Request, response: Response):
     svc = request.app.state.learning
     activity = await visible_activity(request, code)
+    if activity.get('archived_at'):
+        raise HTTPException(409, 'Este rascunho foi retirado. Escolhe uma atividade da coleção atual.')
     if data.language not in activity['languages']:
         raise HTTPException(422, 'Língua indisponível nesta atividade.')
     attempt, cookie = await svc.start(activity, data.model_dump(), preview=not activity['published'])
