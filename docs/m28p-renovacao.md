@@ -1,53 +1,35 @@
-# Renovação dos percursos das 28 palavras
+# Renovação das 28 palavras para TIC
 
-A coleção anterior, com 90 atividades, foi arquivada em 23/10/2026. Os conteúdos e os endereços anteriores permanecem para consulta de realizações; os catálogos público e do professor omitem os metadados com `status: archived`. O inventário com os metadados originais está em [arquivo](archives/m28p-2026-10-23.json). `python3 scripts/archive_m28p.py --apply` permite repetir a operação e recuperar uma interrupção sem perder o inventário.
+A revisão de 23/10/2026 substitui o desenho v2 por minijogos para crianças dos 1.º e 2.º anos que trabalham praticamente sozinhas no computador. O professor acompanha a turma e presta ajuda pontual. Os percursos v2 exigiam leitura e mediação frequentes; por isso, deixam de ser a proposta para utilização ou aprovação neste contexto. Os seus ficheiros permanecem como histórico, sem serem reutilizados como experiência infantil v3.
 
-A nova coleção tem 28 percursos e 448 páginas, distribuídas por quatro sessões por palavra. Cada palavra foi atribuída a um agente próprio; o [registo de delegação](../drafts/m28p-v2/delegation.json) conserva os identificadores. A posição 14 é **gema**, conforme a sequência editorial consultada; **ovo** pertence à variante anterior.
+## Proposta atual para revisão
 
-## Consultar os materiais
+São 28 palavras e seis minijogos independentes por palavra, num total de 168 atividades. Cada jogo tem quatro rondas e dura aproximadamente três a seis minutos. A mesma palavra pode ser retomada em vários dias, com jogos e apoios diferentes. O professor confirma o repertório e escolhe o que propor; não há uma sequência anual automática imposta à criança.
 
-- [Índice de revisão docente](../drafts/m28p-v2/index.html): abre cada percurso e o respetivo guia.
-- [Investigação com fontes e limites de leitura](research/metodo-28-palavras-2026.md).
-- [Princípios de implementação](m28p-principios-implementacao.md).
-- [Fontes da Sebenta sobre leitura, escrita e MEM](../drafts/m28p-renovacao-sources.md).
-- Pareceres pedagógicos [1–14](reviews/2026-10-23-m28p-pedagogia-1-14.md) e [15–28](reviews/2026-10-23-m28p-pedagogia-15-28.md), e [revisão técnica](reviews/2026-10-23-m28p-motor.md).
+As operações são associar, encontrar pares, procurar a igual, reconstruir com modelo, completar e reconstruir sem modelo inicial. Há imagem original, áudio PT-PT incorporado, demonstração recuperável e pistas junto da ação. A entrada não exige ler critérios nem conversar com um adulto. A posição 14 continua a ser gema; flor mantém a sua única sílaba e usa letras móveis nos jogos de reconstrução.
 
-Na Sebenta, as cópias de projeto estão em `30_Projects/PageCraft/28-palavras-2026/`. As versões navegáveis e pesquisáveis pela aplicação estão em `Research/pagecraft/28-palavras-2026/`; a leitura do relatório completo foi confirmada pela API com HTTP 200. A página `20_Wiki/Método das 28 Palavras.md` recebeu uma atualização identificada por data, preservando o registo anterior. Nenhuma fonte em `10_Sources/` foi alterada.
+- [Princípios revistos](m28p-principios-implementacao.md).
+- [Contrato de dados e interação v3](m28p-contrato-percursos.md).
+- [Pesquisa sobre manuais, Drive, Sebenta e autonomia](research/m28p-tic-autonomia-2026.md).
+- [Desenho comum dos jogos](../drafts/m28p-v3/collection-design.json).
+- [Investigação histórica e lexical anterior](research/metodo-28-palavras-2026.md), útil como enquadramento, sem validar os pressupostos de utilização do v2.
 
-## Controlar os itens novos
+## Construir e verificar
 
-O [mapa de 56 reservas](m28p-corpus-reservado.json) identifica uma leitura nova inicial e outra diferida por palavra, com referências ao ensino previsto. A [auditoria do corpus](reviews/2026-10-23-m28p-corpus.md) discrimina retenção e novidade. O auditor conta também os cartões preparados pelo adulto e as palavras nas pistas/instruções; o resultado não comprova ensino efetivo ou autonomia. Uma exposição fora da coleção pode retirar a novidade para aquela criança.
+A fonte lexical revista é `drafts/m28p-v3/words.json`. O gerador `scripts/build_m28p_tic.py` e o template `scripts/templates/m28p-tic.html` produzem os artefactos autocontidos. Consultar `python3 scripts/build_m28p_tic.py --help` para opções e destinos exatos da versão instalada.
 
-## Gerar e verificar
+A validação verifica os dados de toda a coleção e a presença real dos recursos incorporados. A revisão de browser deve incluir entrada de menina sem leitura adulta, os seis jogos, erro e reparação, demonstração, áudio, teclado/toque, mudança de apoio e recuperação; acrescentar dígrafos e o caso monossilábico de flor. Os relatórios de execução e de revisão distinguem verificações concluídas de limitações por resolver. Este documento descreve os critérios; não declara testes ainda não executados.
 
-Os conteúdos editáveis de cada palavra estão em `drafts/m28p-v2/<palavra>/content.json` e `guia-docente.md`. O [contrato](m28p-contrato-percursos.md) define a estrutura. O HTML, DocSpec, design, metadata e manifesto são derivados:
+## Site e aprovação
 
-```bash
-python3 scripts/audit_m28p_corpus.py
-python3 scripts/build_m28p_journeys.py --all --validate-only
-python3 scripts/build_m28p_journeys.py --all
-uv run --offline pytest --ignore=tests/browser -q
-node --test tests/js/*.test.cjs
-```
+Os novos materiais são rascunhos para revisão do professor. O registo canónico cria códigos estáveis e pré-visualizações privadas no Studio. O catálogo de revisão permite encontrar palavra e jogo. As atividades inadequadas são retiradas dessa proposta ativa, preservando os endereços e os registos históricos necessários.
 
-Para testar o browser, abrir uma sessão com a skill `agent-browser-hub`, obter o respetivo endereço CDP e executar:
+Integrar PRs em main coloca o trabalho no repositório. É também necessário confirmar que o serviço do site usa a versão integrada e que as pré-visualizações abrem os novos conteúdos. A entrega deve indicar as ligações reais, o número de rascunhos disponíveis e eventuais limitações verificadas. Não basta entregar ficheiros locais.
 
-```bash
-PAGECRAFT_TEST_CDP=http://127.0.0.1:PORTA uv run --offline --with playwright==1.63.0 pytest tests/browser/test_m28p_journeys.py -q
-```
+A aprovação docente continua a ser individual por atividade. A presença no Studio permite essa aprovação; não equivale a publicação para os alunos. Depois da aprovação explícita, usar o publicador canónico com `--approved`, sem editar `catalog.json` à mão.
 
-O ensaio percorre os artefactos reais, inclui respostas incorretas, os três apoios, larguras de computador/telemóvel, ordenação, escrita, declarações orais, recuperação e reflexão. Um caso com servidor descartável verifica registo, privacidade do rascunho e recuperação no anfitrião permanente. Os registos desse ensaio não são dados de alunos nem publicação de atividades.
+## Histórico preservado
 
-## Rever e publicar com o professor
+O [inventário de arquivo](archives/m28p-2026-10-23.json) conserva a coleção anterior de 90 atividades. O diretório `drafts/m28p-v2/`, os seus relatórios e o [registo anterior de fontes](../drafts/m28p-renovacao-sources.md) documentam a primeira tentativa de renovação. Os documentos operacionais presentes foram reescritos porque essa tentativa interpretou mal a disponibilidade de mediação em TIC. Nenhuma alteração à Sebenta é pressuposta por esta revisão.
 
-Os percursos são **rascunhos**. Integrar em `main` conserva os materiais e os testes; não os publica para os alunos. A aprovação docente é individual por atividade, segundo a skill PageCraft. A inspeção documental e os ensaios técnicos não demonstram eficácia em sala.
-
-O motor cria aliases relativos em `drafts/`, compatíveis com o helper de registo e publicação. Por exemplo, no checkout usado pelo servidor:
-
-```bash
-python3 skills/codex/scripts/activity.py register m28p-v2-gema --metadata drafts/m28p-v2-gema-activity.json
-```
-
-O comando devolve um código e uma pré-visualização privada. Depois de rever e aprovar esse percurso, o professor pode autorizar `activity.py publish CODIGO --approved`. O publicador canónico conserva o ano, as etiquetas e a ordem do método declarados no DocSpec e regenera o catálogo. Nunca editar `catalog.json` diretamente.
-
-O adulto modela os sons, observa a primeira leitura e identifica a ajuda prestada. Os cartões reservados não são antecipados por imagens ou modelos. A produção escrita pode usar papel, letras móveis e ditado ao adulto, com modalidades distintas no registo. Um clique, uma declaração ou a conclusão das páginas não comprova domínio da leitura.
+A revisão documental e os ensaios técnicos não demonstram aquisição de leitura. O professor verificará em sala a clareza das imagens, a autonomia de utilização e a adequação dos apoios. Os registos digitais descrevem ações, respostas e ajuda, sem certificar fluência ou domínio do método.
