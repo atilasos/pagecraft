@@ -70,6 +70,7 @@ def rounds_for(word, game, words):
             selected = shuffled([word] + prior[:min(index, 2)], rng)
             options = [dict(id=w['slug'], label=w['label'], image=illustrated(w)['image']) for w in selected]
             answer = [o['id'] for o in options]
+            item['flipColumns'] = index % 2 == 1
         elif game in {'match', 'hunt'}:
             # Na primeira palavra, os distratores são fragmentos da própria
             # palavra, não vocabulário futuro nem pseudopalavras inventadas.
