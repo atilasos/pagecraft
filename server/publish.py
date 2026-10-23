@@ -129,6 +129,8 @@ def build_catalog(repo_root: Path) -> dict[str, Any]:
     items = []
     for meta_path in sorted(activities.glob("*/meta.json")):
         meta = _load_json(meta_path, {})
+        if meta.get("status") == "archived":
+            continue
         metadata.append(meta)
         docspec = _load_json(meta_path.parent / "docspec.json", {})
         items.append(_catalog_item(meta, docspec))

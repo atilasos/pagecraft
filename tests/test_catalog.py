@@ -64,8 +64,23 @@ def test_real_catalog_and_api_share_years_without_changing_sources():
     assert bridge['year'] is None
     assert bridge['yearLabel'] == '3.º e 4.º anos (8–10 anos)'
     blocks = [item for item in api.values() if item['slug'].startswith('m28p-') and item['slug'].endswith('-blocos')]
-    assert len(blocks) == 5
-    assert all(item['years'] == [] and item['year'] is None for item in blocks)
+    assert not blocks  # A coleção anterior foi arquivada, mantendo os ficheiros.
+    for meta_path in (ROOT / 'activities').glob('*/meta.json'):
+        meta = json.loads(meta_path.read_text())
+        if meta.get('status') == 'archived':
+            assert meta['slug'] not in api
+            assert (meta_path.parent / 'index.html').is_file()
+
+
+def test_archive_hides_both_catalogs_without_removing_content(tmp_path):
+    for slug, status in [('active', 'published'), ('old', 'archived')]:
+        directory = tmp_path / 'activities' / slug
+        directory.mkdir(parents=True)
+        (directory / 'meta.json').write_text(json.dumps({'slug': slug, 'status': status}))
+        (directory / 'index.html').write_text('<p>Trabalho preservado</p>')
+    assert [item['slug'] for item in build_catalog(tmp_path)['items']] == ['active']
+    assert [item['slug'] for item in list_activities(tmp_path / 'activities')] == ['active']
+    assert (tmp_path / 'activities' / 'old' / 'index.html').read_text() == '<p>Trabalho preservado</p>'
 
 
 async def test_api_contract_facets_meta_and_teacher_boundary(tmp_path, monkeypatch):
