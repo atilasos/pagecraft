@@ -4,7 +4,7 @@ As 28 ilustrações SVG são originais PageCraft, criadas com assistência Codex
 
 Os MP3 usam a voz sintética portuguesa de Portugal `pt-PT-RaquelNeural`, fornecida por Microsoft Edge Read Aloud através de `edge-tts`, com velocidade `-12%`. A voz está sujeita aos termos do serviço Microsoft e não à licença CC0 das ilustrações. O manifesto identifica os textos gravados, os ficheiros e os seus hashes SHA-256.
 
-São 28 palavras inteiras e 11 instruções. Não há gravações de fonemas nem de sílabas isoladas. A atividade deve começar muda e permitir ouvir por escolha da criança. As imagens e as demonstrações têm de permitir jogar também sem som.
+São 28 palavras inteiras e 12 instruções, incluindo a reflexão facultativa apresentada pelo host. Não há gravações de fonemas nem de sílabas isoladas. A atividade deve começar muda e permitir ouvir por escolha da criança. As imagens e as demonstrações têm de permitir jogar também sem som.
 
 Para gerar as imagens em falta:
 

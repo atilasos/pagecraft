@@ -47,6 +47,7 @@ INSTRUCTIONS = {
     "success": "Já está. Podes continuar.",
     "retry": "Vamos tentar outra vez.",
     "finish": "Terminaste este jogo. Podes repetir.",
+    "reflection": "Como foi o jogo? Fizeste sozinho, com ajuda, ou queres praticar mais? Podes também passar.",
 }
 
 
