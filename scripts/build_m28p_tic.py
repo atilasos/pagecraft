@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import base64
 import html
+import hashlib
 import json
 import random
 import sys
@@ -164,6 +165,9 @@ def build(word, game, words, check=False):
     output=render(data,spec)
     stem=data['slug']
     folder=BASE/word['slug']
+    evidence_path=BASE/'evaluation.json'
+    evidence=json.loads(evidence_path.read_text()) if evidence_path.exists() else {}
+    verified=evidence.get('activities',{}).get(stem,{}).get('htmlSha256')==hashlib.sha256(output.encode()).hexdigest()
     artifacts={stem+'.html':output, stem+'-docspec.json':spec,
         stem+'-design-spec.json':dict(version=3, direction='Imagem, palavra e ação; uma ronda visível.',bodyPx=22,touchTargetPx=56,
             instructions='Áudio PT-PT incluído e demonstração por gestos, sem leitura obrigatória.',
@@ -172,7 +176,7 @@ def build(word, game, words, check=False):
         stem+'-activity.json':dict(slug=stem,title=spec['topic'],year=1,duration=5,group='m28p-v3',languages=['pt'],requires_completion=True,
             criteria=[dict(id='criterio-1',pt=data['criteria'][0])]),
         stem+'-run-manifest.json':dict(slug=stem,status='draft-generated',word=word['label'],game=game,
-            checks=dict(docspecSchema='passed',offlineAssets='embedded',browserEvaluation='pending',teacherReview='pending'),publication='not-published')}
+            checks=dict(docspecSchema='passed',offlineAssets='embedded',browserEvaluation='passed' if verified else 'pending',teacherReview='pending'),publication='not-published')}
     if not check:
         folder.mkdir(parents=True,exist_ok=True)
         for name,value in artifacts.items():

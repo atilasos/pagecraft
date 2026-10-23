@@ -88,3 +88,27 @@ def test_content_cannot_escape_the_json_script_boundary():
     output=motor.render(data,doc)
     assert '</script><img src=x' not in output
     assert json.loads(re.search(r'<script id="m28p-content" type="application/json">(.*?)</script>',output,re.S)[1])['word']['image']==data['word']['image']
+
+
+def test_verification_becomes_pending_when_the_artifact_changes(tmp_path,monkeypatch):
+    import hashlib
+    words=motor.read_words()
+    word=words[0]
+    data=motor.content_for(word,'match',words)
+    doc=motor.spec_for(data,word)
+    output=motor.render(data,doc)
+    # Isolar aliases de drafts e avaliação para este ensaio de proveniência.
+    monkeypatch.setattr(motor,'BASE',tmp_path/'drafts/m28p-v3')
+    monkeypatch.setattr(motor,'ROOT',tmp_path)
+    (tmp_path/'drafts').mkdir()
+    motor.BASE.mkdir()
+    (motor.BASE/'evaluation.json').write_text(json.dumps({'activities':{data['slug']:{'htmlSha256':hashlib.sha256(output.encode()).hexdigest()}}}))
+    # spec/render dependem das fontes canónicas, já verificadas acima.
+    monkeypatch.setattr(motor,'spec_for',lambda *_:doc)
+    monkeypatch.setattr(motor,'render',lambda *_:output)
+    motor.build(word,'match',words)
+    manifest=motor.BASE/word['slug']/(data['slug']+'-run-manifest.json')
+    assert json.loads(manifest.read_text())['checks']['browserEvaluation']=='passed'
+    monkeypatch.setattr(motor,'render',lambda *_:output+' ')
+    motor.build(word,'match',words)
+    assert json.loads(manifest.read_text())['checks']['browserEvaluation']=='pending'
