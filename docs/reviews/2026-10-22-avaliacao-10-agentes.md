@@ -247,7 +247,7 @@ pronta para revisão do professor, sem ensaio com crianças nem publicação.
 |---|---|---|
 | [#56](https://github.com/atilasos/pagecraft/pull/56) | Auditorias, seleção e verificação reproduzível | Decisões e limites rastreáveis |
 | [#57](https://github.com/atilasos/pagecraft/pull/57) | Quadro da sessão atual | Revoga projeção antiga, incluindo streams abertos |
-| [#58](https://github.com/atilasos/pagecraft/pull/58) | Autoria entre separadores | Conserva pendentes sem atribuir trabalho a outra realização |
+| [#58](https://github.com/atilasos/pagecraft/pull/58) | Autoria e inicialização | Conserva pendentes, distingue realizações e evita interação antes do restauro no rascunho aderente |
 | [#59](https://github.com/atilasos/pagecraft/pull/59) | Anos declarados comuns | Descoberta coerente sem inferir escolaridade da idade |
 | [#60](https://github.com/atilasos/pagecraft/pull/60) | Fila individual e recusas por contexto | Trabalho e avisos preservados com autoria correta |
 | [#61](https://github.com/atilasos/pagecraft/pull/61) | Histórico de pistas | Consulta sem consumir pistas nem cancelar ajuda atual |
@@ -280,3 +280,38 @@ As provas commitadas das pontes são preservadas por defeito nas verificações
 seguintes: a fixture escreve capturas e diagnósticos numa pasta temporária.
 A regeneração no repositório exige a opção explícita documentada no relatório.
 Este ajuste de infraestrutura recebeu Standards e Spec sem achados em `c1d3e2f`.
+
+## Inicialização e diagnóstico do clique após recarga
+
+A experiência controlada confirmou um defeito de produto: reter a entrega do
+restauro, aceitar um corte e depois entregar o checkpoint anterior apagava o
+corte. O anfitrião passou a enviar primeiro restauro com pendentes, depois
+preferências, após `load`. O rascunho de frações aderente ao modo `#learning`
+adia os controlos até consumir ambos. As atividades antigas não precisam de
+confirmar um novo protocolo. Não se atribui conclusivamente a este defeito a
+falha inicial da execução anterior.
+
+A revisão Standards encontrou o aviso de espera dentro de `body.inert`, fora
+da árvore acessível. A correção limita `inert` aos contentores interativos e
+deixa a mensagem de estado acessível. Os objetivos, critérios e escolhas
+pedagógicas do rascunho permanecem iguais; `activities/` não foi alterado.
+
+A falha residual depois de recarregar foi reproduzida num exemplo independente
+sem código PageCraft. No Chromium 151 por CDP, o clique podia atingir o iframe
+no anfitrião, sem chegar ao botão interno, apesar do DOM e hit-test interno
+corretos. O caso dinâmico falhou na 51.ª recarga; o estático passou 100. A fixture
+passou a exigir entrada nativa observada pelo seletor `:hover` interno antes
+do clique. Não dispara handlers por JavaScript nem repete cliques, e conserva
+as asserções de desenho, respostas e persistência.
+
+O exemplo mínimo com sincronização passou 100 recargas; o percurso original
+passou 50 repetições. A branch passou 95 testes de browser e 384 Python.
+Não houve prova headed: o Hub devolveu ausência de X server/DISPLAY. Estes
+resultados não certificam o comportamento de um rato físico nesse ambiente.
+O [relatório do diagnóstico](2026-10-23-inicializacao-learning.md) conserva
+comandos, experiências descartadas e limites, e o reproducer fica no repositório.
+
+Standards e Spec terminaram com zero achados em `3addb24` e confirmaram a
+integração em `6cce59b`. A resolução mantém modal `v=2` e o cliente de
+inicialização, com as restantes frentes iguais às já revistas. A suite completa
+está a ser repetida sobre esta versão final.
