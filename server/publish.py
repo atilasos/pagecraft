@@ -224,8 +224,17 @@ def publish_activity(
     supplied_maker = maker if maker is not None else _infer_maker(docspec)
     if supplied_maker is not None:
         updates["maker"] = supplied_maker
+    if tags is None:
+        tags = docspec.get("tags")
     if tags is not None:
+        if not isinstance(tags, list) or not all(isinstance(tag, str) for tag in tags):
+            raise ValueError("tags deve ser uma lista de textos.")
         updates["tags"] = tags
+    if "order" in docspec:
+        order = docspec["order"]
+        if type(order) is not int or order < 1:
+            raise ValueError("order deve ser um inteiro positivo.")
+        updates["order"] = order
 
     existing_paths = existing_meta.get("paths")
     paths = dict(existing_paths) if isinstance(existing_paths, dict) else {}

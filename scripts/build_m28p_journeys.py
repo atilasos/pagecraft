@@ -129,6 +129,8 @@ def docspec_for(data: dict) -> dict:
                     'hints': [{'id': f'pista-{n}', 'text': {'pt': hint}} for n, hint in enumerate(page['hints'], 1)]}]}})
     spec = {
         'slug': 'm28p-v2-' + data['slug'], 'topic': 'Percurso da palavra ' + data['word'],
+        'years': [1], 'order': data['order'],
+        'tags': ['m28p', 'm28p-v2', 'leitura', 'escrita', '1ano'],
         'ageRange': '6-7 anos', 'duration': sum(s['minutes'] for s in data['sessions']),
         'objectives': data['objectives'],
         'curriculum': {'ae': [], 'competencies': ['PA-A: Linguagens e textos', 'PA-E: Relacionamento interpessoal', 'PA-F: Desenvolvimento pessoal e autonomia']},
