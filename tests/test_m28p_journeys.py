@@ -176,7 +176,7 @@ def test_validate_only_does_not_write_and_index_is_private(content,tmp_path):
 
 def test_runtime_restore_and_hint_revision_against_the_shared_support(content):
     configuration=support_configuration(motor.docspec_for(content), 'm28p-v2-menina')
-    result=subprocess.run(['node', str(ROOT/'tests/js/m28p_journey.test.cjs')],
+    result=subprocess.run(['node', str(ROOT/'tests/js/m28p_journey.runner.cjs')],
                           input=json.dumps({'content': content, 'support': configuration}),
                           capture_output=True, text=True, cwd=ROOT)
     assert result.returncode==0, result.stdout+'\n'+result.stderr
