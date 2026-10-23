@@ -7,6 +7,7 @@ import argparse
 import http.cookiejar
 import json
 import sys
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -42,8 +43,8 @@ def main():
         return
     # Só retirar o conjunto anterior depois de confirmar todos os novos.
     registered=[api('/api/learning/activities',item) for item in data]
-    if any(item['published'] or item.get('archived_at') for item in registered):
-        raise RuntimeError('O conjunto v3 já contém uma versão publicada ou retirada; rever manualmente.')
+    if any(item.get('archived_at') for item in registered):
+        raise RuntimeError('O conjunto v3 já contém uma versão retirada; rever manualmente.')
     for item in previous:
         api('/api/learning/activities/'+item['code']+'/archive',{})
     current=api('/api/learning/activities')
@@ -52,8 +53,9 @@ def main():
     if any(item['slug'].startswith('m28p-v2-') for item in current):
         raise RuntimeError('Persistem percursos v2 na lista ativa.')
     # Um pedido sem cookie docente não pode obter nenhum destes conteúdos.
-    import urllib.error
     for item in registered:
+        if item['published']:
+            continue
         try:
             urllib.request.urlopen(base+'/api/learning/activities/'+item['code']+'/content',timeout=10)
         except urllib.error.HTTPError as error:
@@ -62,9 +64,9 @@ def main():
             raise
         raise RuntimeError('Rascunho acessível sem credencial docente: '+item['code'])
     manifest=dict(activities=[dict(slug=i['slug'],code=i['code'],published=i['published'],preview='https://estudio.infantinho.xyz/'+i['code']) for i in registered],
-        retired=[dict(slug=i['slug'],code=i['code']) for i in previous],publicContentCheck='168 returned 404 without teacher cookie')
+        retired=[dict(slug=i['slug'],code=i['code']) for i in previous],publicContentCheck=f"{sum(not i['published'] for i in registered)} drafts returned 404 without teacher cookie")
     (ROOT/'drafts/m28p-v3/registration.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
-    print(json.dumps(dict(registered=len(registered),retired=len(previous),published=0,publicDrafts='denied'),ensure_ascii=False))
+    print(json.dumps(dict(registered=len(registered),retired=len(previous),published=sum(i['published'] for i in registered),publicDrafts='denied'),ensure_ascii=False))
 
 
 if __name__=='__main__':
