@@ -178,6 +178,12 @@ def test_regenerate_catalog_includes_only_metadata_and_removes_deleted_activity(
         ROOT / "activities" / "bota-cacador-silabas",
         activities / "alpha",
     )
+    # O cenário testa publicações ativas, independentemente do arquivo real.
+    for name in ("zeta", "alpha"):
+        path = activities / name / "meta.json"
+        meta = json.loads(path.read_text())
+        meta["status"] = "published"
+        path.write_text(json.dumps(meta))
     (activities / "sem-metadados").mkdir()
 
     first = regenerate_catalog(repo)
