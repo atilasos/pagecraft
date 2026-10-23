@@ -1,0 +1,423 @@
+{
+  "version": "m28p-tic-v3",
+  "status": "draft-for-teacher-review",
+  "language": "pt-PT",
+  "updated": "2026-10-23",
+  "roles": [
+    "Architect",
+    "Designer"
+  ],
+  "sourcePriority": [
+    "Pedido do professor de 2026-10-23",
+    "docs/research/m28p-tic-autonomia-2026.md",
+    "docs/m28p-principios-implementacao.md"
+  ],
+  "context": {
+    "years": [
+      1,
+      2
+    ],
+    "adultSupport": "pontual",
+    "classSizeApprox": 20,
+    "weeklyTicHours": 2,
+    "readerAssumption": "A criança pode ainda não ler instruções.",
+    "purpose": "Iniciação e consolidação de palavras em trabalho individual no computador."
+  },
+  "collection": {
+    "wordCount": 28,
+    "gamesPerWord": 6,
+    "activityCount": 168,
+    "roundsPerGame": 4,
+    "estimatedMinutesRange": [
+      3,
+      6
+    ],
+    "metadataMinutes": 5,
+    "requiredWholeWordSequence": false,
+    "word14": "gema"
+  },
+  "inputs": {
+    "words": "drafts/m28p-v3/words.json",
+    "wordRequiredFields": [
+      "slug",
+      "label",
+      "order",
+      "syllables",
+      "phonologyNotes"
+    ],
+    "generator": "scripts/build_m28p_tic.py",
+    "template": "scripts/templates/m28p-tic.html",
+    "imagePattern": "images/{slug}.svg",
+    "wordAudioPattern": "audio/{slug}.mp3",
+    "instructionAudioPattern": "audio/{game}.mp3"
+  },
+  "entry": {
+    "instructionReadingRequired": false,
+    "adultConversationRequired": false,
+    "criteriaProseBeforePlay": false,
+    "primaryActionCount": 1,
+    "show": [
+      "Referente ou peças da tarefa",
+      "Ação principal visual",
+      "Ouvir",
+      "Ver como se faz"
+    ],
+    "instructionTypicalMaxWords": 6
+  },
+  "progression": {
+    "teacherChoosesWordAndGame": true,
+    "teacherConfirmsEarlierWordsKnown": true,
+    "futureWordDistractorsAllowed": false,
+    "pseudoWordDistractorsAllowed": false,
+    "firstWordDistractors": [
+      "me",
+      "ni",
+      "na"
+    ],
+    "firstWordDistractorRole": "Partes da própria palavra, sem as apresentar como outras palavras.",
+    "variation": [
+      "Posição dos cartões",
+      "Ordem das unidades",
+      "Posição da lacuna"
+    ],
+    "timers": false,
+    "lives": false,
+    "accuracyGate": false
+  },
+  "units": {
+    "default": "syllables",
+    "oralDigraphExamples": {
+      "passarinho": [
+        "pa",
+        "ssa",
+        "ri",
+        "nho"
+      ],
+      "cigarra": [
+        "ci",
+        "ga",
+        "rra"
+      ]
+    },
+    "monosyllable": {
+      "slug": "flor",
+      "syllables": [
+        "flor"
+      ],
+      "constructionUnits": [
+        "f",
+        "l",
+        "o",
+        "r"
+      ],
+      "constructionUnitType": "graphemes",
+      "childDescription": "letras",
+      "games": [
+        "syllables",
+        "gap",
+        "recall"
+      ]
+    },
+    "doNotInferPhonemesFromLetters": true
+  },
+  "games": [
+    {
+      "id": "match",
+      "title": "Associa",
+      "instruction": "Toca na palavra.",
+      "rounds": 4,
+      "srtcAssessment": {
+        "state": "Escolher o cartão da palavra apresentada.",
+        "render": "Imagem nomeada, áudio e cartões.",
+        "transition": "Uma escolha mantém-se visível; pode corrigir ou avançar.",
+        "constraint": "A palavra inteira identifica o referente.",
+        "assessment": "Escolha de cartão com apoios registados."
+      },
+      "support": {
+        "obstacles": [
+          "Não perceber onde agir",
+          "Não relacionar o modelo com a escolha",
+          "Perder a ordem das peças"
+        ],
+        "steps": [
+          "Mostrar a referência junto da ação.",
+          "Destacar o lugar ou relação a rever.",
+          "Mostrar a próxima ação numa demonstração recuperável."
+        ],
+        "preserveWork": true
+      }
+    },
+    {
+      "id": "pairs",
+      "title": "Pares",
+      "instruction": "Encontra os pares.",
+      "rounds": 4,
+      "srtcAssessment": {
+        "state": "Relacionar dois cartões do mesmo item.",
+        "render": "Cartões grandes; um par na primeira palavra, até três com repertório confirmado.",
+        "transition": "O par escolhido recebe feedback; conservar os pares feitos.",
+        "constraint": "Os cartões correspondem ao mesmo item.",
+        "assessment": "Pares tentados e completados; não comprova leitura."
+      },
+      "support": {
+        "obstacles": [
+          "Não perceber onde agir",
+          "Não relacionar o modelo com a escolha",
+          "Perder a ordem das peças"
+        ],
+        "steps": [
+          "Mostrar a referência junto da ação.",
+          "Destacar o lugar ou relação a rever.",
+          "Mostrar a próxima ação numa demonstração recuperável."
+        ],
+        "preserveWork": true
+      }
+    },
+    {
+      "id": "hunt",
+      "title": "Procura",
+      "instruction": "Toca na igual.",
+      "rounds": 4,
+      "srtcAssessment": {
+        "state": "Encontrar a mesma forma escrita.",
+        "render": "Modelo completo e cartões em posições variadas.",
+        "transition": "Uma escolha mantém-se visível; pode corrigir ou avançar.",
+        "constraint": "A ordem e a totalidade das letras coincidem com o modelo.",
+        "assessment": "Comparação visual com modelo."
+      },
+      "support": {
+        "obstacles": [
+          "Não perceber onde agir",
+          "Não relacionar o modelo com a escolha",
+          "Perder a ordem das peças"
+        ],
+        "steps": [
+          "Mostrar a referência junto da ação.",
+          "Destacar o lugar ou relação a rever.",
+          "Mostrar a próxima ação numa demonstração recuperável."
+        ],
+        "preserveWork": true
+      }
+    },
+    {
+      "id": "syllables",
+      "title": "Junta",
+      "instruction": "Junta as partes.",
+      "rounds": 4,
+      "srtcAssessment": {
+        "state": "Reconstruir a palavra com modelo.",
+        "render": "Palavra-modelo, lugares vazios e unidades móveis.",
+        "transition": "Tocar preenche um lugar; desfazer devolve a peça; confirmar regista.",
+        "constraint": "As unidades têm uma ordem.",
+        "assessment": "Sequência confirmada com modelo."
+      },
+      "support": {
+        "obstacles": [
+          "Não perceber onde agir",
+          "Não relacionar o modelo com a escolha",
+          "Perder a ordem das peças"
+        ],
+        "steps": [
+          "Mostrar a referência junto da ação.",
+          "Destacar o lugar ou relação a rever.",
+          "Mostrar a próxima ação numa demonstração recuperável."
+        ],
+        "preserveWork": true
+      }
+    },
+    {
+      "id": "gap",
+      "title": "Completa",
+      "instruction": "Escolhe a parte.",
+      "rounds": 4,
+      "srtcAssessment": {
+        "state": "Completar uma unidade em falta.",
+        "render": "Palavra com lacuna e alternativas; posição muda entre rondas.",
+        "transition": "Selecionar preenche a lacuna; permite corrigir ou avançar.",
+        "constraint": "Uma unidade completa aquele lugar.",
+        "assessment": "Unidade escolhida para uma posição."
+      },
+      "support": {
+        "obstacles": [
+          "Não perceber onde agir",
+          "Não relacionar o modelo com a escolha",
+          "Perder a ordem das peças"
+        ],
+        "steps": [
+          "Mostrar a referência junto da ação.",
+          "Destacar o lugar ou relação a rever.",
+          "Mostrar a próxima ação numa demonstração recuperável."
+        ],
+        "preserveWork": true
+      }
+    },
+    {
+      "id": "recall",
+      "title": "Tenta sem modelo",
+      "instruction": "Junta as partes.",
+      "rounds": 4,
+      "srtcAssessment": {
+        "state": "Reconstruir sem modelo inicial.",
+        "render": "Imagem, áudio, lugares vazios e peças; modelo recuperável por pedido.",
+        "transition": "Construir e confirmar; modelo ou demonstração ficam registados como ajuda.",
+        "constraint": "A ordem recompõe a palavra anteriormente apresentada.",
+        "assessment": "Sequência sem modelo inicial, com indicação de ajuda usada."
+      },
+      "support": {
+        "obstacles": [
+          "Não perceber onde agir",
+          "Não relacionar o modelo com a escolha",
+          "Perder a ordem das peças"
+        ],
+        "steps": [
+          "Mostrar a referência junto da ação.",
+          "Destacar o lugar ou relação a rever.",
+          "Mostrar a próxima ação numa demonstração recuperável."
+        ],
+        "preserveWork": true
+      }
+    }
+  ],
+  "supportLevels": [
+    {
+      "id": "support",
+      "label": "Com pistas",
+      "model": "sempre disponível",
+      "visualCue": "Comparação e lugar da ação destacados.",
+      "complexity": "Menos alternativas e pares."
+    },
+    {
+      "id": "intermediate",
+      "label": "Passo a passo",
+      "model": "disponível por pedido ou conforme o jogo",
+      "visualCue": "Indicar a ação seguinte após dificuldade.",
+      "complexity": "Alternativas e unidades da tarefa de base."
+    },
+    {
+      "id": "challenge",
+      "label": "Mais desafios",
+      "model": "oculto inicialmente quando a operação o permite",
+      "visualCue": "Ajuda continua disponível.",
+      "complexity": "Mais alternativas conhecidas; reconstrução sem modelo inicial."
+    }
+  ],
+  "supportRules": {
+    "preserveResponsesOnChange": true,
+    "supportChangeCreatesAttempt": false,
+    "demoCreatesAttempt": false,
+    "audioCreatesAttempt": false,
+    "restoreCreatesAttempt": false,
+    "incorrectResponseCanAdvance": true,
+    "localVisualFeedback": true,
+    "readingSupportModalRequired": false,
+    "demoReplayAvailable": true,
+    "demoFillsChildAnswer": false
+  },
+  "palette": {
+    "bg": "#F7F4ED",
+    "surface": "#FFFCF5",
+    "primary": "#17596B",
+    "accent": "#E9CA83",
+    "ink": "#22343D"
+  },
+  "functional": {
+    "ok": "#2C6951",
+    "warn": "#79571D",
+    "focus": "#3158A5"
+  },
+  "typography": {
+    "fontFamily": "'Century Gothic', 'Didact Gothic', 'URW Gothic', sans-serif",
+    "offlineFontEmbedded": true,
+    "baseSizePx": 22,
+    "wordSizePx": 40,
+    "headingSizePx": 30,
+    "maxLineCh": 35,
+    "italicAllowed": false,
+    "allCapsForInstructionsAllowed": false
+  },
+  "layout": {
+    "maxWidthPx": 960,
+    "minTapPx": 56,
+    "primaryActionMinHeightPx": 64,
+    "borderRadiusPx": 16,
+    "stableControlPositions": true,
+    "onePrimaryTaskPerScreen": true,
+    "sideBySideAdultInstructions": false
+  },
+  "components": {
+    "wordCard": "Grafia legível, sem decoração que dê a resposta por posição.",
+    "illustration": "Imagem original de referente inequívoco; nenhum emoji como substituto do referente.",
+    "audioButton": "Ícone de altifalante e nome acessível; reprodução após gesto.",
+    "demoButton": "Ícone de demonstração e ação visual recuperável.",
+    "feedback": "Forma, destaque e som opcional; sem sinal sonoro punitivo.",
+    "nextButton": "Disponível após resposta intencional, mesmo incorreta.",
+    "undoButton": "Devolve só a última unidade; nunca apaga a ronda inteira.",
+    "selfAssessment": "Facultativa, visual e com leitura oral por pedido."
+  },
+  "imageRequirements": {
+    "originalArtwork": true,
+    "avoidAmbiguity": {
+      "gema": "Gema de ovo visível, não joia.",
+      "quadro": "Quadro escolar.",
+      "leque": "Leque aberto.",
+      "menina": "Apresentação oral nomeia a figura; roupa não funciona como regra de género."
+    }
+  },
+  "audio": {
+    "locale": "pt-PT",
+    "embeddedWordAudio": true,
+    "embeddedInstructionAudio": true,
+    "browserVoiceRequired": false,
+    "isolatedPhonemeSynthesisAllowed": false,
+    "userGestureStartsAudio": true,
+    "replayAvailable": true,
+    "networkRequiredAtRuntime": false
+  },
+  "motion": {
+    "durationMs": 160,
+    "respectReducedMotion": true,
+    "animationRequiredToUnderstandAction": false
+  },
+  "accessibility": {
+    "contrastBody": "WCAG AA",
+    "visibleKeyboardFocus": true,
+    "keyboardAndClickAlternativeToDrag": true,
+    "colorIsSoleMeaning": false,
+    "semanticIconsHaveAccessibleName": true
+  },
+  "evidence": {
+    "record": [
+      "Palavra",
+      "Jogo",
+      "Ronda",
+      "Resposta",
+      "Apoio",
+      "Pistas ou demonstração utilizadas",
+      "Conclusão"
+    ],
+    "doNotInfer": [
+      "Leitura oral",
+      "Fluência",
+      "Domínio do método",
+      "Escrita autónoma",
+      "Transferência para palavra nova"
+    ],
+    "helpMarksSupportedResponse": true,
+    "hostIdentityOwnsParticipant": true,
+    "offlineLocalSaveIsNotServerConfirmation": true
+  },
+  "acceptance": [
+    "Validar as 28 palavras e seis jogos por palavra.",
+    "Inspecionar imagem e áudio efetivamente incorporados nos HTML.",
+    "Abrir menina e começar sem ler introdução adulta.",
+    "Percorrer quatro rondas dos seis jogos.",
+    "Errar, corrigir e avançar com resposta incorreta.",
+    "Repetir demonstração sem apagar resposta.",
+    "Mudar entre os três apoios sem perder trabalho.",
+    "Testar teclado, toque e largura reduzida.",
+    "Restaurar estado sem duplicar tentativas.",
+    "Verificar dígrafos e flor.",
+    "Confirmar ligações privadas no site para revisão docente."
+  ],
+  "notes": "Desenho de coleção adaptado ao pedido atual. A progressão de operações não é certificação de leitura. Os seis jogos partilham controlos estáveis para a criança praticar com ajuda pontual."
+}
