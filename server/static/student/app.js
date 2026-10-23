@@ -4,6 +4,7 @@
 const state = {
   session: null,
   studentId: null,
+  identityVersion: null,
   workGroup: null,
   displayName: null,
   studentState: null,
@@ -54,6 +55,7 @@ async function tryResume() {
     const me = await resp.json();
     state.session = me.session;
     state.studentId = me.student_id;
+    state.identityVersion = me.identity_version || null;
     state.workGroup = me.work_group || null;
     state.displayName = state.workGroup?.display_name || me.display_name;
     startActivity();
@@ -166,6 +168,7 @@ async function claim(student) {
   }
   const data = await resp.json();
   state.studentId = data.student_id || null;
+  state.identityVersion = data.identity_version || null;
   state.workGroup = data.work_group || null;
   state.displayName = state.workGroup?.display_name || data.display_name;
   saveIdentity();
@@ -366,6 +369,7 @@ function invalidateStudentIdentity() {
   studentTransport.stop({ discardQueue: true });
   clearIdentity();
   state.studentId = null;
+  state.identityVersion = null;
   state.workGroup = null;
   state.displayName = null;
   state.studentState = null;
@@ -409,6 +413,8 @@ const studentTransport = createStudentTransport();
 function createStudentTransport() {
   const outbox = [];
   let queueKey = null;
+  let refusals = [];
+  let storageFailed = false;
   let bridgeHandler = null;
   let stream = null;
   let generation = 0;
@@ -428,12 +434,21 @@ function createStudentTransport() {
     requests.forEach((controller) => controller.abort());
     requests.clear();
     persistQueue();
-    if (discardQueue) { outbox.length = 0; queueKey = null; }
+    if (discardQueue) {
+      outbox.length = 0;
+      queueKey = null;
+      refusals = [];
+      storageFailed = false;
+    }
   }
 
   function enqueue(type, unitId, payload) {
     const currentQueue = outbox.filter(event => !event.composition_conflict);
-    if (!hasIdentity() || currentQueue.length >= OUTBOX_LIMIT) return false;
+    if (!hasIdentity()) return false;
+    if (hasCurrentRefusal() || currentQueue.length >= OUTBOX_LIMIT) {
+      refuseWork();
+      return false;
+    }
     outbox.push({
       event_id: crypto.randomUUID(),
       type,
@@ -443,25 +458,83 @@ function createStudentTransport() {
       ...(state.workGroup ? {composition_version:state.workGroup.composition_version, access_version:state.workGroup.access_version, work_group_name:state.workGroup.display_name} : {}),
     });
     persistQueue();
+    $('save-work-status').textContent = '';
     renderPendingWork();
     return true;
   }
 
   function persistQueue() {
     if (!queueKey) return;
-    try { sessionStorage.setItem(queueKey, JSON.stringify(outbox)); } catch {}
+    try {
+      sessionStorage.setItem(queueKey, JSON.stringify(outbox));
+      // Keep the boolean for older clients, which must conservatively warn.
+      sessionStorage.setItem(`${queueKey}:status`, JSON.stringify({version:2, refusals, refusedWork:refusals.length > 0}));
+      storageFailed = false;
+    } catch {
+      storageFailed = true;
+    }
+  }
+
+  function currentScope() {
+    return state.workGroup ? {
+      device_id:state.workGroup.device_id,
+      composition_version:state.workGroup.composition_version,
+      access_version:state.workGroup.access_version,
+    } : null;
+  }
+
+  function sameScope(left, right) {
+    return left?.device_id === right?.device_id &&
+      left?.composition_version === right?.composition_version && left?.access_version === right?.access_version;
+  }
+
+  function isCurrentRefusal(refusal) {
+    // Legacy statuses without enough context stay blocking until explicit review.
+    return !refusal.scope || sameScope(refusal.scope, currentScope());
+  }
+
+  const hasCurrentRefusal = () => refusals.some(isCurrentRefusal);
+  const hasPreviousRefusals = () => refusals.some(refusal => !isCurrentRefusal(refusal));
+
+  function refuseWork() {
+    if (!hasCurrentRefusal()) refusals.push({
+      scope:currentScope(),
+      work_group_name:state.workGroup?.display_name || state.displayName,
+      participant_ids:state.workGroup ? [...state.workGroup.participant_ids] : [state.studentId],
+      refused_at:new Date().toISOString(),
+    });
+    $('save-work-status').textContent = '';
+    persistQueue();
+    renderPendingWork();
   }
 
   function renderPendingWork() {
+    const refusedWork = hasCurrentRefusal();
+    const full = outbox.filter(event => !event.composition_conflict).length >= OUTBOX_LIMIT;
+    const status = $('queue-status');
+    $('queue-notice').hidden = !(full || refusedWork || storageFailed && outbox.length);
+    status.textContent = [
+      full ? 'A fila está cheia. Espera pela ligação antes de continuar.' : '',
+      refusedWork ? 'Algumas alterações ficaram de fora. O trabalho já aceite foi conservado. Volta ao último trabalho aceite e repete essas alterações.' : '',
+      refusals.some(refusal => refusal.context_unknown) ? 'O contexto das alterações recusadas anteriores não ficou registado. Revê este aviso com o professor antes de continuar.' : '',
+      storageFailed && outbox.length ? 'Não foi possível conservar a fila neste separador. Mantém esta página aberta até guardar no servidor.' : '',
+    ].filter(Boolean).join(' ');
+    $('recover-accepted-work').hidden = !refusedWork;
+    $('recover-accepted-work').disabled = full || storageFailed;
     const previous = outbox.filter(event => event.composition_conflict && HISTORY_LABELS[event.type]);
     const panel = $("pending-group-work");
-    panel.hidden = !previous.length;
+    panel.hidden = !previous.length && !hasPreviousRefusals();
     $("pending-group-list").replaceChildren();
     const captions = new Set(previous.map(event => {
       const caption = describeHistoryEvent({...event, work_group_id:'pending'});
       const value = event.payload?.detail?.value;
       return typeof value === 'string' ? `${caption} · ${value}` : caption;
     }));
+    for (const refusal of refusals.filter(refusal => !isCurrentRefusal(refusal))) {
+      const date = new Date(refusal.refused_at);
+      const when = Number.isNaN(date.getTime()) ? 'Data não registada' : date.toLocaleString('pt-PT');
+      captions.add(`${refusal.work_group_name || 'Grupo anterior'} · ${when}: Algumas alterações ficaram de fora e não foram conservadas. Pede ao professor para as rever contigo.`);
+    }
     for (const caption of captions) {
       const item = document.createElement('li');
       item.textContent = caption;
@@ -498,13 +571,14 @@ function createStudentTransport() {
       if (payload !== null) {
         if (['assessment_result', 'attempt', 'level_changed'].includes(data.type)) $('save-work-status').textContent = '';
         enqueue(data.type, data.unitId || null, payload);
-      }
+      } else refuseWork();
     };
     window.addEventListener("message", bridgeHandler);
   }
 
   async function post(path, body) {
     if (!hasIdentity()) return null;
+    const request = generation;
     const controller = new AbortController();
     requests.add(controller);
     try {
@@ -514,7 +588,7 @@ function createStudentTransport() {
         body: JSON.stringify(body),
         signal: controller.signal,
       });
-      if (resp.status === 401) {
+      if (resp.status === 401 && request === generation) {
         invalidateStudentIdentity();
         return null;
       }
@@ -535,11 +609,18 @@ function createStudentTransport() {
     try {
       const resp = await post(
         `/api/sessions/${state.session.id}/events`,
-        { events: batch }
+        { events: batch, ...(!state.workGroup ? {
+          expected_identity: {student_id:state.studentId, version:state.identityVersion},
+        } : {}) }
       );
+      if (request !== generation) return;
       if (resp?.status === 409) {
         const error = await resp.json();
         if (request !== generation) return;
+        if (error.detail?.code === 'identity_changed') {
+          invalidateStudentIdentity();
+          return;
+        }
         if (error.detail?.code === 'composition_changed') {
           const conflicts = new Set(error.detail.event_ids);
           outbox.forEach(event => { if (conflicts.has(event.event_id)) event.composition_conflict = true; });
@@ -554,8 +635,10 @@ function createStudentTransport() {
     } catch (error) {
       /* fica na fila; tentamos outra vez no próximo flush (at-least-once) */
     } finally {
-      persistQueue();
-      renderPendingWork();
+      if (request === generation) {
+        persistQueue();
+        renderPendingWork();
+      }
       flushing = false;
     }
   }
@@ -574,6 +657,10 @@ function createStudentTransport() {
       else if (resp.ok) {
         const identity = await resp.json();
         if (request !== generation) return;
+        if (!state.workGroup && (identity.student_id !== state.studentId || identity.identity_version !== state.identityVersion)) {
+          invalidateStudentIdentity();
+          return;
+        }
         if (identity.work_group) acceptComposition(identity.work_group);
       }
     } catch (error) {
@@ -614,10 +701,37 @@ function createStudentTransport() {
     stop();
     const request = ++generation;
     const sessionId = state.session.id;
-    const nextKey = state.workGroup ? `pc-group-outbox:${sessionId}:${state.workGroup.device_id}` : null;
+    const nextKey = state.workGroup ? `pc-group-outbox:${sessionId}:${state.workGroup.device_id}` :
+      state.identityVersion ? `pc-student-outbox:${sessionId}:${state.studentId}:${state.identityVersion}` : null;
     if (nextKey !== queueKey) {
       outbox.length = 0; queueKey = nextKey;
-      try { outbox.push(...JSON.parse(sessionStorage.getItem(queueKey) || '[]')); } catch {}
+      refusals = [];
+      storageFailed = false;
+      if (queueKey) {
+        try {
+          const saved = JSON.parse(sessionStorage.getItem(queueKey) || '[]');
+          if (!Array.isArray(saved)) throw new Error('queue');
+          const ids = new Set();
+          for (const event of saved) {
+            if (!event || typeof event.event_id !== 'string' || typeof event.type !== 'string') throw new Error('event');
+            if (!ids.has(event.event_id)) outbox.push(event);
+            ids.add(event.event_id);
+          }
+          const status = JSON.parse(sessionStorage.getItem(`${queueKey}:status`) || '{}');
+          if (status.version === 2) {
+            if (!Array.isArray(status.refusals) || status.refusals.some(refusal => !refusal || typeof refusal !== 'object' ||
+                refusal.scope && (typeof refusal.scope.device_id !== 'string' ||
+                  !Number.isInteger(refusal.scope.composition_version) || !Number.isInteger(refusal.scope.access_version)))) throw new Error('refusals');
+            refusals = status.refusals;
+          } else if (status.refusedWork === true) {
+            // Remaining accepted events cannot prove who made refused edits:
+            // newer accepted work may already have drained. Never infer authors.
+            refusals.push({scope:null, context_unknown:true});
+          }
+        } catch {
+          refuseWork();
+        }
+      }
     }
     markPreviousComposition();
     renderPendingWork();
@@ -627,27 +741,39 @@ function createStudentTransport() {
   }
 
   async function savePending() {
+    const request = generation;
     for (let tries = 0; tries < 100; tries++) {
+      if (request !== generation || !hasIdentity()) return false;
       if (flushing) { await new Promise(resolve => setTimeout(resolve, 50)); continue; }
       const before = outbox.filter(event => !event.composition_conflict).length;
-      if (!before) return true;
+      if (!before) return !hasCurrentRefusal();
       await flush();
+      if (request !== generation) return false;
       if (outbox.filter(event => !event.composition_conflict).length >= before) return false;
     }
-    return outbox.every(event => event.composition_conflict);
+    return !hasCurrentRefusal() && outbox.every(event => event.composition_conflict);
   }
 
   function markPreviousComposition() {
-    if (!state.workGroup) return;
-    outbox.forEach(event => {
+    if (state.workGroup) outbox.forEach(event => {
       if (event.composition_version !== state.workGroup.composition_version ||
           (event.access_version || 1) !== state.workGroup.access_version) event.composition_conflict = true;
     });
     persistQueue();
   }
 
+  $('recover-accepted-work').addEventListener('click', () => {
+    // Explicitly abandon only the refused edits. Reload replays accepted work in
+    // a fresh iframe, so stale controls cannot silently become accepted evidence.
+    const previousRefusals = refusals;
+    refusals = refusals.filter(refusal => !isCurrentRefusal(refusal));
+    persistQueue();
+    if (storageFailed) { refusals = previousRefusals; renderPendingWork(); return; }
+    window.location.reload();
+  });
+
   return {
-    enqueue, flush, post, start, stop, savePending, markPreviousComposition,
+    enqueue, flush, post, start, stop, savePending, markPreviousComposition, hasPreviousRefusals,
     restoreEvents(history) {
       const savedIds = new Set(history.map(event => event.event_id));
       return [...history, ...outbox.filter(event => !event.composition_conflict && !savedIds.has(event.event_id))];
@@ -679,8 +805,9 @@ $('save-work').addEventListener('click', async () => {
   // Leaving the activity commits its focused field through the existing bridge.
   await new Promise(resolve => setTimeout(resolve, 50));
   const saved = await studentTransport.savePending();
-  $('save-work-status').textContent = saved ? 'Guardado. Podem continuar na próxima aula.' :
-    'Ainda não foi possível guardar tudo. Mantém esta página aberta e tenta novamente.';
+  $('save-work-status').textContent = saved ? (studentTransport.hasPreviousRefusals() ?
+    'Trabalho atual guardado. Há alterações anteriores que ficaram de fora; pede ao professor para as rever contigo.' :
+    'Guardado. Podem continuar na próxima aula.') : 'Ainda não foi possível guardar tudo. Mantém esta página aberta e tenta novamente.';
   $('save-work').disabled = state.sessionState?.closed === true;
 });
 
