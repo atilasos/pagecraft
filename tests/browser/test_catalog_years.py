@@ -34,6 +34,11 @@ def catalog_origin(tmp_path_factory):
         shutil.copy2(ROOT / name, root / name)
     for slug in ['tinkercad-pontes-3e4', 'menina', 'm28p-menina-blocos']:
         shutil.copytree(ROOT / 'activities' / slug, root / 'activities' / slug)
+        # Estes cenários exercitam destinos ativos, não o arquivo da coleção.
+        path = root / 'activities' / slug / 'meta.json'
+        meta = json.loads(path.read_text())
+        meta['status'] = 'published'
+        path.write_text(json.dumps(meta))
     # Different destination from its base, without editing a published activity.
     variant = root / 'activities' / 'menina-variante-teste'
     shutil.copytree(root / 'activities' / 'menina', variant)
