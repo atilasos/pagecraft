@@ -13,6 +13,9 @@ h1,h2,.task-title{font-size:30px}
 <style>
 .model{flex-wrap:wrap}.pair-card{overflow-wrap:anywhere;min-width:0}.pair-card>span{max-width:100%}.visual-cue{outline:4px dashed #966625!important;outline-offset:3px;position:relative}.cue-icon{position:absolute;bottom:2px;left:4px;font-size:28px;line-height:1.1;border-radius:10px;background:var(--hint);color:var(--ink);padding:2px 6px}.comparison{display:flex;align-items:center;justify-content:center;gap:16px;background:var(--hint);border-radius:16px;padding:16px;flex-wrap:wrap;margin:18px 0}.comparison .sample{font-size:36px;display:flex;flex-wrap:wrap;justify-content:center}.letter-cue{background:#e9d1a6;outline:2px dashed #966625;border-radius:4px}.search-cue{outline:3px dashed #966625;outline-offset:2px}
 </style>
+<style>
+.initialization-status{display:flex;gap:16px;align-items:center;justify-content:center;min-height:180px;padding:24px}.preparing-shape{width:48px;height:48px;border:6px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:preparing 1s linear infinite}@keyframes preparing{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.preparing-shape{animation:none}}
+</style>
 <style id="pagecraft-typography">
 /* BEGIN BUNDLED DIDACT GOTHIC */
 /* Copyright (c) 2009, 2010, 2011 Daniel Johnson (<il.basso.buffo@gmail.com>).
@@ -122,9 +125,10 @@ body, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
 </style>
 </head>
 <body>
-<a class="skip" href="#main">Ir para o jogo</a>
-<header><h1 id="game-title"></h1><div class="tools"><button id="hear" aria-label="Ouvir a instrução"><span aria-hidden="true" class="icon">🔊</span>Ouvir</button><button id="demo-open"><span aria-hidden="true" class="icon">?</span>Como jogar</button><button id="mute" hidden aria-pressed="false">Som ligado</button></div></header>
-<main id="main" tabindex="-1">
+<div id="initialization-status" class="initialization-status" role="status"><span class="preparing-shape" aria-hidden="true"></span><span>A preparar o jogo…</span></div>
+<a id="activity-skip" class="skip" href="#main" hidden>Ir para o jogo</a>
+<header id="activity-header" inert hidden><h1 id="game-title"></h1><div class="tools"><button id="hear" aria-label="Ouvir a instrução"><span aria-hidden="true" class="icon">🔊</span>Ouvir</button><button id="demo-open"><span aria-hidden="true" class="icon">?</span>Como jogar</button><button id="mute" hidden aria-pressed="false">Som ligado</button></div></header>
+<main id="main" tabindex="-1" inert hidden>
 <section id="intro" class="welcome"><div id="intro-picture" class="picture hero-image"></div><h2 id="intro-word" class="word"></h2><button id="start" class="primary"><span aria-hidden="true" class="icon">▶</span>Começar</button></section>
 <section id="demonstration" class="demo" hidden aria-labelledby="demo-heading"><h2 id="demo-heading">Vê como se faz</h2><div id="demo-stage" class="demo-stage" aria-label="Exemplo de como jogar"></div><p id="demo-caption" class="demo-caption"></p><div class="nav"><button id="demo-again"><span aria-hidden="true">↻</span> Ver outra vez</button><button id="demo-close" class="primary">Agora tu <span aria-hidden="true">→</span></button></div></section>
 <section id="workspace" hidden><div class="task-top"><h2 id="prompt" class="task-title"></h2><div id="progress" class="progress" role="img"></div></div><div id="round-content"></div><div id="feedback" class="feedback" role="status" aria-live="polite"></div><nav class="nav" aria-label="Avançar no jogo"><button id="back"><span aria-hidden="true">←</span> Voltar</button><button id="confirm" class="primary"><span aria-hidden="true">✓</span> Confirmar</button><button id="next" class="primary" hidden>Continuar <span aria-hidden="true">→</span></button></nav><details class="support-details"><summary>Mais ajuda</summary><div class="levelbar" role="group" aria-label="Tipo de ajuda"><button data-level="support">Com pistas</button><button data-level="intermediate">Passo a passo</button><button data-level="challenge">Mais desafios</button></div><aside id="support-panel" data-pagecraft-support="u1"></aside></details></section>
@@ -251,7 +255,7 @@ const $=id=>document.getElementById(id);
 const embedded=window.parent!==window;
 const storageKey='pagecraft:m28p-tic-v3:'+data.slug;
 const activity=data.slug;
-let state=TicModel.initial(),revision=0,restored=!embedded,demoOpen=false,demoTimer=null,pendingPair=null,revisionHint=null,hostLevel=null;
+let state=TicModel.initial(),revision=0,restored=!embedded,preferencesReady=!embedded,demoOpen=false,demoTimer=null,pendingPair=null,revisionHint=null,hostLevel=null;
 let audio=null,soundEnabled=false;
 const started=new Set();
 const round=()=>data.rounds[state.page];
@@ -269,7 +273,7 @@ function play(key){
 }
 function checkpoint(emit=true){
   if(!embedded){try{sessionStorage.setItem(storageKey,JSON.stringify(state));}catch(_){}}
-  if(emit&&restored&&window.PageCraftBridge)PageCraftBridge.emit('activity_state',unit(),{activity,version:3,readyForReflection:TicModel.complete(data,state),state});
+  if(emit&&restored&&preferencesReady&&window.PageCraftBridge)PageCraftBridge.emit('activity_state',unit(),{activity,version:3,readyForReflection:TicModel.complete(data,state),state});
 }
 function context(){const r=round();if(r&&window.PageCraftSupport)PageCraftSupport.update({unit_id:unit(),task_id:r.id,question:r.prompt,answer:state.answers[r.id]||[],level:state.level,revision,product:''});}
 function aid(key){const id=data.rounds[Math.max(0,state.page)].id;(state.aids[id]||={})[key]=true;}
@@ -380,10 +384,16 @@ function renderGame(){
   if(focused){const next=[...content.querySelectorAll('[data-focus]')].find(item=>item.dataset.focus===focused&&!item.disabled)||content.querySelector('button:not(:disabled)');if(next)next.focus();}
 }
 function workspace(){return $('workspace');}
+function gate(){
+  const ready=restored&&preferencesReady;
+  for(const id of ['activity-header','main']){$(id).inert=!ready;$(id).hidden=!ready;}
+  $('activity-skip').hidden=!ready;$('initialization-status').hidden=ready;
+}
 function render(){
+  gate();
   $('intro').hidden=state.page>=0||demoOpen||state.done;$('demonstration').hidden=!demoOpen;workspace().hidden=state.page<0||demoOpen||state.done;$('finish').hidden=!state.done||demoOpen;
   $('demo-open').hidden=state.done;
-  if(state.page>=0&&!state.done&&!demoOpen)renderGame();
+  if(state.page>=0&&!state.done&&!demoOpen&&restored&&preferencesReady)renderGame();
   $('local-reflection').hidden=embedded;
   document.querySelectorAll('[data-reflection]').forEach(item=>item.setAttribute('aria-pressed',String(item.dataset.reflection===state.reflection)));
 }
@@ -439,7 +449,12 @@ $('finish-button').addEventListener('click',()=>{if(embedded)window.PageCraftBri
 document.addEventListener('pagecraft-support-ready',context);
 window.addEventListener('message',event=>{
   const message=event.data;if(event.source!==window.parent||!message||message.pagecraft!==1)return;
-  if(message.type==='learning_preferences'){if(TicModel.levels.includes(message.payload?.level)){hostLevel=message.payload.level;setLevel(hostLevel,false);}return;}
+  if(message.type==='learning_preferences'||message.type==='work_group_preferences'){
+    if(message.type==='learning_preferences'&&!TicModel.levels.includes(message.payload?.level))return;
+    preferencesReady=true;
+    if(TicModel.levels.includes(message.payload?.level)){hostLevel=message.payload.level;setLevel(hostLevel,false);}else render();
+    checkpoint();return;
+  }
   if(message.type==='learning_restore'){
     const events=message.payload?.events;if(!Array.isArray(events))return;
     const checkpoints=events.filter(item=>item.type==='activity_state'&&item.payload?.activity===activity&&item.payload?.version===3);
