@@ -63,9 +63,13 @@ def main():
                 continue
             raise
         raise RuntimeError('Rascunho acessível sem credencial docente: '+item['code'])
+    manifest_path=ROOT/'drafts/m28p-v3/registration.json'
+    earlier=json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
+    retired={item['code']:item for item in earlier.get('retired',[])}
+    retired.update({item['code']:dict(slug=item['slug'],code=item['code']) for item in previous})
     manifest=dict(activities=[dict(slug=i['slug'],code=i['code'],published=i['published'],preview='https://estudio.infantinho.xyz/'+i['code']) for i in registered],
-        retired=[dict(slug=i['slug'],code=i['code']) for i in previous],publicContentCheck=f"{sum(not i['published'] for i in registered)} drafts returned 404 without teacher cookie")
-    (ROOT/'drafts/m28p-v3/registration.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
+        retired=list(retired.values()),publicContentCheck=f"{sum(not i['published'] for i in registered)} drafts returned 404 without teacher cookie")
+    manifest_path.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
     print(json.dumps(dict(registered=len(registered),retired=len(previous),published=sum(i['published'] for i in registered),publicDrafts='denied'),ensure_ascii=False))
 
 
