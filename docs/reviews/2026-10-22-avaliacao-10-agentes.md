@@ -274,7 +274,8 @@ sincronização canónica. A suite completa neste SHA teve 166 testes de browser
 aprovados e uma falha em 363,09 segundos. O teste de retoma das frações falhou
 antes da retoma: depois de cortar o pão, a opção de resposta ficou desativada.
 O mesmo teste passou isoladamente em 2,48 segundos. A inicialização e as
-preferências tardias do iframe estão em investigação, sem conclusão causal.
+preferências tardias motivaram a investigação descrita abaixo, sem atribuição
+causal conclusiva desta primeira ocorrência.
 
 As provas commitadas das pontes são preservadas por defeito nas verificações
 seguintes: a fixture escreve capturas e diagnósticos numa pasta temporária.
