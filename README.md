@@ -118,6 +118,10 @@ O `catalog.json` é um índice derivado: é regenerado a partir de todos os
 se corrige diretamente; corrige-se o `meta.json` da Atividade e regenera-se. O
 índice regenerado acompanha sempre os artefactos da Atividade no mesmo commit.
 
+Os filtros usam os anos destinatários explícitos em `years`. Consulta o
+[contrato de anos do catálogo](docs/catalog-years.md) para a precedência dos
+metadados históricos, a validação e a republicação.
+
 ## PageCraft Studio — servidor do professor
 
 O `server/` transforma o pipeline num **site local de geração de conteúdos**: o professor cria atividades a partir de um formulário, o servidor orquestra os cinco papéis com IA real, os alunos ligam-se pela rede da sala e o professor acompanha tudo em tempo real.

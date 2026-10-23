@@ -312,7 +312,7 @@ function renderPicker() {
   const list = $("picker-list");
   list.innerHTML = "";
   const matches = activities.filter((a) => {
-    if (pickerState.year && a.year !== pickerState.year) return false;
+    if (pickerState.year && !a.years.includes(pickerState.year)) return false;
     if (pickerState.subject && a.subject !== pickerState.subject) return false;
     if (pickerState.search) {
       const hay = `${a.title} ${a.subject} ${(a.tags || []).join(" ")}`.toLowerCase();
@@ -342,7 +342,7 @@ function renderPicker() {
     meta.className = "meta";
     meta.innerHTML =
       (a.subject ? `<span class="pill subject">${esc(a.subject)}</span>` : "") +
-      (a.year ? `<span class="pill">${esc(a.year)}.º ano</span>` : "") +
+      `<span class="pill">${esc(catalogYearLabel(a))}</span>` +
       (a.duration ? `<span class="pill">${esc(a.duration)} min</span>` : "");
     opt.append(title, meta);
     opt.addEventListener("click", () => {

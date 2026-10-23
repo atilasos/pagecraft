@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 from .bridge_snippet import ensure_bridge_lite
+from .catalog_years import activity_years, validate_years
 
 
 def _now_iso() -> str:
@@ -75,12 +76,14 @@ def _infer_maker(docspec: dict) -> str | None:
     return None
 
 
-def _catalog_item(meta: dict[str, Any]) -> dict[str, Any]:
+def _catalog_item(meta: dict[str, Any], docspec: dict | None = None) -> dict[str, Any]:
     slug = meta["slug"]
     item = {
         "slug": slug,
         "title": meta.get("title", slug),
         "year": meta.get("year"),
+        "yearLabel": str(meta.get("year") or ""),
+        "years": activity_years(meta, docspec),
         "ageRange": meta.get("ageRange"),
         "duration": meta.get("duration"),
         "maker": meta.get("maker", "none"),
@@ -108,11 +111,14 @@ def _catalog_item(meta: dict[str, Any]) -> dict[str, Any]:
 def build_catalog(repo_root: Path) -> dict[str, Any]:
     """Projeta em memória o Catálogo a partir dos ``meta.json`` publicados."""
     activities = Path(repo_root) / "activities"
-    metadata = [
-        _load_json(meta_path, {})
-        for meta_path in sorted(activities.glob("*/meta.json"))
-    ]
-    items = sorted((_catalog_item(meta) for meta in metadata), key=lambda item: item["slug"])
+    metadata = []
+    items = []
+    for meta_path in sorted(activities.glob("*/meta.json")):
+        meta = _load_json(meta_path, {})
+        metadata.append(meta)
+        docspec = _load_json(meta_path.parent / "docspec.json", {})
+        items.append(_catalog_item(meta, docspec))
+    items.sort(key=lambda item: item["slug"])
     updated_at = [meta["updatedAt"] for meta in metadata if meta.get("updatedAt")]
     return {
         "generatedAt": max(updated_at, default=None),
@@ -149,15 +155,7 @@ def publish_activity(
     repo_root = Path(repo_root)
     activities = repo_root / "activities"
     dst = activities / slug
-    dst.mkdir(parents=True, exist_ok=True)
-
     html_path = Path(html_path)
-    html = ensure_bridge_lite(html_path.read_text(encoding="utf-8"))
-    (dst / "index.html").write_text(html, encoding="utf-8")
-    (dst / "teacher.md").write_text(teacher_md, encoding="utf-8")
-    _save_json(dst / "docspec.json", docspec)
-    if design_spec is not None:
-        _save_json(dst / "design-spec.json", design_spec)
 
     meta_path = dst / "meta.json"
     existing_meta = _load_json(meta_path, {})
@@ -213,6 +211,19 @@ def publish_activity(
     meta.setdefault("subject", "")
     meta.setdefault("maker", "none")
     meta.setdefault("tags", [])
+    if "years" in docspec:
+        meta["years"] = validate_years(docspec["years"])
+    else:
+        meta["years"] = activity_years(existing_meta, docspec)
+
+    # Validar o destino antes de alterar qualquer artefacto publicado.
+    html = ensure_bridge_lite(html_path.read_text(encoding="utf-8"))
+    dst.mkdir(parents=True, exist_ok=True)
+    (dst / "index.html").write_text(html, encoding="utf-8")
+    (dst / "teacher.md").write_text(teacher_md, encoding="utf-8")
+    _save_json(dst / "docspec.json", docspec)
+    if design_spec is not None:
+        _save_json(dst / "design-spec.json", design_spec)
     _save_json(meta_path, meta)
     regenerate_catalog(repo_root)
     return meta

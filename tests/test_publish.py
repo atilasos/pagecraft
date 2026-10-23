@@ -208,3 +208,57 @@ def test_publish_without_title_falls_back_to_html_title(repo, html_file):
     assert meta["title"] == "Estados da água"
     assert meta["maker"] == "none"
     assert meta["tags"] == []
+
+
+def test_publish_explicit_years_and_republish_preserve_destination(repo, html_file):
+    meta = publish_activity(repo, 'multi', html_file, {**DOCSPEC, 'years': [4, 3, 4]}, TEACHER_MD)
+    assert meta['years'] == [3, 4]
+    assert build_catalog(repo)['items'][0]['years'] == [3, 4]
+    republished = publish_activity(repo, 'multi', html_file, DOCSPEC, TEACHER_MD)
+    assert republished['years'] == [3, 4]
+    empty = publish_activity(repo, 'multi', html_file, {**DOCSPEC, 'years': []}, TEACHER_MD)
+    assert empty['years'] == []
+
+
+@pytest.mark.parametrize('invalid', [None, 3, '3', [True], [False], [3.0], ['3'], [0], [5]])
+@pytest.mark.parametrize('existing', [False, True])
+def test_publish_invalid_years_does_not_write_any_artifact(repo, html_file, invalid, existing):
+    if existing:
+        publish_activity(repo, 'multi', html_file, DOCSPEC, TEACHER_MD)
+    before = {p.relative_to(repo): p.read_bytes() for p in repo.rglob('*') if p.is_file()}
+    with pytest.raises(ValueError, match='years'):
+        publish_activity(repo, 'multi', html_file, {**DOCSPEC, 'years': invalid}, 'changed')
+    assert {p.relative_to(repo): p.read_bytes() for p in repo.rglob('*') if p.is_file()} == before
+    if not existing:
+        assert not (repo / 'activities' / 'multi').exists()
+
+
+def test_republish_validates_existing_explicit_years_before_writing(repo, html_file):
+    dst = repo / 'activities' / 'multi'
+    dst.mkdir()
+    (dst / 'meta.json').write_text(json.dumps({'slug': 'multi', 'years': [True]}))
+    before = (dst / 'meta.json').read_bytes()
+    with pytest.raises(ValueError, match='years'):
+        publish_activity(repo, 'multi', html_file, DOCSPEC, TEACHER_MD)
+    assert (dst / 'meta.json').read_bytes() == before
+    assert not (dst / 'index.html').exists()
+
+
+def test_catalog_uses_historical_docspec_only_when_no_meta_declaration(repo):
+    dst = repo / 'activities' / 'historical'
+    dst.mkdir()
+    (dst / 'meta.json').write_text(json.dumps({'slug': 'historical', 'year': '8–10 anos'}))
+    (dst / 'docspec.json').write_text(json.dumps({'ageRange': '3.º e 4.º anos'}))
+    assert build_catalog(repo)['items'][0]['years'] == [3, 4]
+    (dst / 'meta.json').write_text(json.dumps({'slug': 'historical', 'years': [], 'year': 2}))
+    assert build_catalog(repo)['items'][0]['years'] == []
+
+
+def test_republish_preserves_historical_destination_when_only_age_is_supplied(repo, html_file):
+    dst = repo / 'activities' / 'historical'
+    dst.mkdir()
+    (dst / 'meta.json').write_text(json.dumps({'slug': 'historical', 'year': '3.º e 4.º anos'}))
+    meta = publish_activity(repo, 'historical', html_file, {**DOCSPEC, 'ageRange': '8–10 anos'}, TEACHER_MD)
+    assert meta['years'] == [3, 4]
+    changed = publish_activity(repo, 'historical', html_file, {**DOCSPEC, 'years': [2]}, TEACHER_MD)
+    assert changed['years'] == [2]
