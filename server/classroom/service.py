@@ -23,6 +23,7 @@ from ..storage import Storage
 from .errors import (
     ClassroomError,
     CompositionChangedError,
+    IdentityChangedError,
     InvalidPitItemError,
     InvalidSessionEventError,
     SessionClosedError,
@@ -95,6 +96,7 @@ class ClassroomService:
         # lock por sessão: torna atómicas as transações read-modify-write
         # (claim/release/PIT/close); um só processo, chega um asyncio.Lock
         self._session_locks: dict[str, asyncio.Lock] = defaultdict(asyncio.Lock)
+        self._board_selection_revision = 0
         self._clock = clock
         self._school_timezone = school_timezone or _system_local_timezone()
         self.live_ticks = LiveSessionTicks(
@@ -339,6 +341,7 @@ class ClassroomService:
             "pit_items": [],
         }
         await self.storage.write_json(self._session_path(session["id"]), session)
+        self._board_selection_revision += 1
         return session
 
     async def get_session(self, session_id: str) -> dict | None:
@@ -423,14 +426,16 @@ class ClassroomService:
     async def current_board_session(self) -> dict | None:
         """Projeta a Sessão de aula viva mais recente para o Quadro."""
 
-        session = next(
-            (
-                candidate
-                for candidate in await self.list_sessions()
-                if candidate.get("status") == "live"
-            ),
-            None,
-        )
+        # list_sessions awaits reads after enumerating the files. A completed
+        # create/resume/close can invalidate that enumeration or an earlier
+        # read. Retry the entire selection, preserving list_sessions tie order.
+        while True:
+            revision = self._board_selection_revision
+            sessions = await self.list_sessions()
+            if revision == self._board_selection_revision:
+                break
+        # No await between this revision check and returning the projection.
+        session = next((s for s in sessions if s.get("status") == "live"), None)
         return (
             self.project_session(session, role="board")
             if session is not None
@@ -454,6 +459,7 @@ class ClassroomService:
         session["status"] = "closed"
         session["closed_at"] = record["ts"]
         await self.storage.write_json(self._session_path(session_id), session)
+        self._board_selection_revision += 1
 
     @staticmethod
     def _current_groups(session: dict) -> list[dict]:
@@ -491,6 +497,7 @@ class ClassroomService:
                 group["access_code"] = _join_code(8)
             session["group_codes_visible"] = bool(self._current_groups(session))
             await self.storage.write_json(self._session_path(session_id), session)
+            self._board_selection_revision += 1
             await self._append_event_unlocked(session_id, "session_resumed", {}, author="session", ts=self.now())
             await self._publish_group_codes_unlocked(session)
             return session
@@ -774,10 +781,12 @@ class ClassroomService:
             }
         return self._seen_event_ids[session_id]
 
-    async def ingest_events(self, session_id: str, student_id: str, events: list[dict]) -> list[dict]:
+    async def ingest_events(self, session_id: str, student_id: str, events: list[dict], *, identity_version: str | None = None) -> list[dict]:
         """Aceita lote de eventos do aluno (at-least-once, dedup por event_id)."""
         async with self._session_locks[session_id]:
-            await self._require_writable_unlocked(session_id, student_id)
+            session = await self._require_writable_unlocked(session_id, student_id)
+            if identity_version is not None and session['roster'][student_id].get('claimed_at') != identity_version:
+                raise IdentityChangedError('A identidade mudou. O trabalho por enviar conserva a autoria anterior.')
             seen = await self._seen(session_id)
             accepted = []
             log = self.events_log(session_id)

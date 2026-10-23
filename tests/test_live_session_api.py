@@ -137,7 +137,7 @@ async def test_student_snapshot_contains_only_own_state_and_no_class_totals(clie
     assert "token" not in response.text.lower()
 
 
-async def test_board_stream_contains_only_shared_state_and_global_events(client):
+async def test_board_stream_contains_only_shared_state_and_global_events(client, board_frame_received):
     session = await _session(client, students=("Ana", "Bia"))
     ana_id = next(iter(session["roster"]))
     await client.post(
@@ -146,7 +146,7 @@ async def test_board_stream_contains_only_shared_state_and_global_events(client)
     )
 
     async def produce():
-        await asyncio.sleep(0.01)
+        await board_frame_received('session_state_snapshot')
         await client.app.state.classroom.emit_event(
             session["id"],
             "attempt",
@@ -166,14 +166,17 @@ async def test_board_stream_contains_only_shared_state_and_global_events(client)
             f"/api/sessions/{session['id']}/control",
             json={"action": "highlight", "unit_id": "global"},
         )
+        await board_frame_received('teacher_highlight')
         await client.post(
             f"/api/sessions/{session['id']}/control",
             json={"action": "freeze"},
         )
+        await board_frame_received('session_state_changed')
         await client.post(
             f"/api/sessions/{session['id']}/control",
             json={"action": "unfreeze"},
         )
+        await board_frame_received('session_state_changed')
         await client.post(f"/api/sessions/{session['id']}/close")
 
     transport = httpx.ASGITransport(
@@ -210,8 +213,6 @@ async def test_board_stream_contains_only_shared_state_and_global_events(client)
         "session_state_changed",
         "unfreeze_screens",
         "session_state_changed",
-        "session_closed",
-        "session_state_changed",
     ]
     assert frames[0]["data"] == {
         "session": {"status": "live", "closed": False, "frozen": False},
@@ -226,7 +227,7 @@ async def test_board_stream_contains_only_shared_state_and_global_events(client)
     }
     assert frames[1]["data"]["payload"]["unit_id"] == "global"
     assert frames[-1]["data"] == {
-        "session": {"status": "closed", "closed": True, "frozen": False}
+        "session": {"status": "live", "closed": False, "frozen": False}
     }
     assert "student_id" not in response.text
     assert ana_id not in response.text
@@ -467,3 +468,44 @@ async def test_recorded_close_terminates_stream_when_session_write_fails_and_rec
     monkeypatch.setattr(svc.storage, "write_json", original_write)
     reconciled = await svc.get_session(session["id"])
     assert reconciled["status"] == "closed"
+
+
+async def test_individual_identity_version_survives_reload_but_changes_after_release(client):
+    session = await _session(client)
+    path = f"/api/sessions/{session['id']}"
+    student_id = next(iter(session['roster']))
+    claim = await client.post(path + '/claim', json={'student_id': student_id})
+    first = claim.json()
+    assert first['identity_version']
+    original_cookie = _student_cookie(claim)
+    me = await client.get(path + '/me', headers=original_cookie)
+    assert me.json()['identity_version'] == first['identity_version']
+    assert 'student_credential' not in first
+    assert 'token' not in me.json()
+    await client.post(path + '/release/' + student_id)
+    assert (await client.get(path + '/me', headers=original_cookie)).status_code == 401
+    newer = await client.post(path + '/claim', json={'student_id': student_id})
+    assert newer.json()['identity_version'] != first['identity_version']
+
+
+async def test_outbox_replay_requires_the_original_individual_identity(client):
+    session = await _session(client, students=('Ana', 'Bruno'))
+    path = f"/api/sessions/{session['id']}"
+    ana, bruno = session['roster']
+    first = await client.post(path + '/claim', json={'student_id': ana})
+    body = {'events': [{'event_id': 'pending-ana', 'type': 'attempt', 'payload': {'correct': True}}],
+            'expected_identity': {'student_id': ana, 'version': first.json()['identity_version']}}
+    original_cookie = _student_cookie(first)
+    other = await client.post(path + '/claim', json={'student_id': bruno})
+    wrong_child = await client.post(path + '/events', json=body, headers=_student_cookie(other))
+    assert wrong_child.status_code == 409
+    assert wrong_child.json()['detail']['code'] == 'identity_changed'
+    await client.post(path + '/release/' + ana)
+    renewed = await client.post(path + '/claim', json={'student_id': ana})
+    wrong_version = await client.post(path + '/events', json=body, headers=_student_cookie(renewed))
+    assert wrong_version.status_code == 409
+    assert wrong_version.json()['detail']['code'] == 'identity_changed'
+    assert (await client.post(path + '/events', json=body, headers=original_cookie)).status_code == 401
+    for sid in (ana, bruno):
+        history = (await client.get(path + f'/students/{sid}/history')).json()['events']
+        assert not any(event.get('event_id') == 'pending-ana' for event in history)

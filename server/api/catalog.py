@@ -1,6 +1,6 @@
 """Catálogo de atividades enriquecido (classificação) e estrutura de unidades.
 
-A classificação junta o catalog.json com o docspec de cada atividade publicada
+A classificação junta os metadados com o docspec de cada atividade publicada
 (disciplina real de curriculum.ae), com cache por mtime para não reler JSON
 a cada pedido.
 """
@@ -14,6 +14,7 @@ from pathlib import Path
 from fastapi import APIRouter, HTTPException, Request
 
 from ..access import RoutePolicy, access_policy
+from ..catalog_years import activity_years
 
 router = APIRouter(prefix="/api", tags=["catalog"])
 
@@ -49,26 +50,6 @@ def _subject_from_docspec(docspec: dict | None) -> str:
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,79}$")
 
 
-def _parse_year(value) -> int | None:
-    """Normaliza o ano de escolaridade a partir dos formatos históricos:
-    3, "3", "3.º ano", "1.º ano (6-7 anos)", "9-10 anos (4.º ano do 1.º CEB)".
-    Idades soltas ("6-8 anos" — 'anos' não conta) ficam sem ano."""
-    if isinstance(value, int):
-        return value if 1 <= value <= 4 else None
-    text = str(value or "")
-    match = re.search(r"([1-4])\s*\.?\s*º?\s*ano(?!s)", text) or re.fullmatch(r"\s*([1-4])\s*", text)
-    return int(match.group(1)) if match else None
-
-
-def _year_from_docspec(docspec: dict | None) -> int | None:
-    if not docspec:
-        return None
-    ae = (docspec.get("curriculum") or {}).get("ae") or []
-    if ae and isinstance(ae, list):
-        return _parse_year(ae[0].get("year"))
-    return None
-
-
 def list_activities(activities_dir: Path) -> list[dict]:
     items = []
     if not activities_dir.is_dir():
@@ -79,14 +60,14 @@ def list_activities(activities_dir: Path) -> list[dict]:
             continue
         docspec = _read_json_cached(meta_path.parent / "docspec.json")
         subject = meta.get("subject") or _subject_from_docspec(docspec)
-        # ano: o curriculum do docspec é a fonte mais fiável; meta como fallback
-        year = _year_from_docspec(docspec) or _parse_year(meta.get("year"))
+        years = activity_years(meta, docspec)
         items.append(
             {
                 # o nome do diretório é a verdade (o slug do meta pode divergir)
                 "slug": meta_path.parent.name,
                 "title": meta.get("title", meta_path.parent.name),
-                "year": year,
+                "years": years,
+                "year": years[0] if len(years) == 1 else None,
                 "yearLabel": str(meta.get("year") or ""),
                 "ageRange": meta.get("ageRange", ""),
                 "duration": meta.get("duration"),
@@ -106,7 +87,7 @@ async def activities(request: Request):
     config = request.app.state.config
     items = list_activities(config.activities_dir)
     subjects = sorted({a["subject"] for a in items if a["subject"]})
-    years = sorted({a["year"] for a in items if a["year"]})
+    years = sorted({year for activity in items for year in activity["years"]})
     return {"items": items, "subjects": subjects, "years": years}
 
 

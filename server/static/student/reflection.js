@@ -4,6 +4,7 @@ const groupReflection = (() => {
   const labels = {alone:'Consegui com autonomia', help:'Consegui com ajuda', practising:'Quero praticar mais', skip:'Prefiro não responder'};
   const icons = {alone:'✓', help:'🤝', practising:'↻', skip:'○'};
   let context = null, current = null, criteria = [], saved = {}, drafts = {}, archived = [], generation = 0, sending = false;
+  let previousSteps = {}, opening = 0, reading = 0;
   const endpoint = () => `/api/sessions/${context.session}/groups/me/reflections`;
   const key = () => `pc-group-reflections:${context.session}:${context.group.device_id}`;
   const status = text => { element('reflection-status').textContent = text; };
@@ -15,12 +16,22 @@ const groupReflection = (() => {
 
   function reset() {
     generation++;
+    opening++;
+    previousSteps = {};
     context = null; current = null; criteria = []; saved = {}; drafts = {}; archived = []; sending = false;
     element('group-reflection').hidden = true;
     element('reflection-form').hidden = true;
     element('activity-frame').hidden = false;
     element('group-reflect-btn').hidden = true;
+    element('group-reflect-btn').disabled = false;
+    element('return-ticket-btn').disabled = false;
+    element('reflection-members').replaceChildren();
     element('pending-group-reflections').hidden = true;
+    element('return-ticket-btn').hidden = true;
+    closeTicket();
+    element('return-ticket-members').replaceChildren();
+    element('reflection-previous').hidden = true;
+    element('reflection-previous-step').textContent = '';
   }
 
   async function mount() {
@@ -34,20 +45,62 @@ const groupReflection = (() => {
     } catch { drafts = {}; archived = []; }
     element('group-reflect-btn').hidden = false;
     renderPendingReflections();
+    // Optional reminder: a failed read never holds up the activity or restores a draft as fact.
+    try { await read(); } catch { /* The reflection button can retry the read. */ }
   }
 
   async function read() {
-    const version = generation;
+    const version = generation, requestRead = ++reading;
     const response = await fetch(endpoint());
-    if (version !== generation) return false;
+    if (version !== generation || requestRead !== reading) return false;
     if (response.status === 401) { invalidateStudentIdentity(); return false; }
     if (!response.ok) throw new Error('Não foi possível abrir as reflexões. Tenta novamente.');
     const data = await response.json();
-    if (version !== generation) return false;
+    if (version !== generation || requestRead !== reading) return false;
     criteria = data.criteria;
     saved = data.reflections;
     renderPendingReflections();
+    renderTicket();
     return true;
+  }
+
+  function savedSteps() {
+    return Object.fromEntries(context.group.members.flatMap(member => {
+      const voice = saved[member.student_id]?.payload;
+      const text = voice?.skipped ? '' : voice?.next_step?.trim();
+      return text ? [[member.student_id, text]] : [];
+    }));
+  }
+
+  function closeTicket() {
+    element('return-ticket').hidden = true;
+    element('return-ticket-btn').setAttribute('aria-expanded', 'false');
+    element('return-ticket-intention').hidden = true;
+    element('return-ticket-child').textContent = '';
+    element('return-ticket-text').textContent = '';
+    element('return-ticket-text').hidden = true;
+  }
+
+  function renderTicket() {
+    const steps = savedSteps();
+    closeTicket();
+    element('return-ticket-btn').hidden = !Object.keys(steps).length;
+    const list = element('return-ticket-members');
+    list.replaceChildren();
+    context.group.members.filter(member => steps[member.student_id]).forEach(member => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = member.display_name;
+      button.setAttribute('aria-pressed', 'false');
+      button.onclick = () => {
+        list.querySelectorAll('button').forEach(choice => choice.setAttribute('aria-pressed', String(choice === button)));
+        element('return-ticket-child').textContent = `O próximo passo de ${member.display_name}`;
+        element('return-ticket-text').textContent = steps[member.student_id];
+        element('return-ticket-text').hidden = false;
+        element('return-ticket-intention').hidden = false;
+      };
+      list.append(button);
+    });
   }
 
   function isOldDraft(draft) {
@@ -105,7 +158,10 @@ const groupReflection = (() => {
       owner_name: context.group.members.find(member=>member.student_id===current).display_name,
       expected_revision: drafts[current]?.expected_revision ?? saved[current]?.payload.revision ?? 0,
       answers, strategy:element('reflection-strategy').value, next_step:element('reflection-next').value,
+      retained_next_step: drafts[current]?.retained_next_step ?? saved[current]?.payload.next_step ?? '',
+      remove_next_step: element('reflection-remove-step').checked,
     };
+    element('reflection-next').disabled = drafts[current].remove_next_step;
     persist();
     renderPendingReflections();
     participants();
@@ -148,7 +204,13 @@ const groupReflection = (() => {
       fieldset.append(choices); list.append(fieldset);
     });
     element('reflection-strategy').value = voice.strategy || '';
-    element('reflection-next').value = voice.next_step || '';
+    // A saved intention is a reference, never an answer to the new question.
+    element('reflection-next').value = draft?.next_step ?? draft?.pending?.next_step ?? '';
+    const retainedStep = draft?.retained_next_step ?? saved[studentId]?.payload.next_step ?? '';
+    element('reflection-step-choice').hidden = !retainedStep.trim();
+    element('reflection-remove-step').checked = !!draft?.remove_next_step;
+    element('reflection-previous-step').textContent = previousSteps[studentId] || '';
+    element('reflection-previous').hidden = !previousSteps[studentId];
     element('reflection-reload').hidden = !isOldDraft(draft);
     status(isOldDraft(draft) ? 'A entrada ou os participantes foram alterados. Revê a versão guardada antes de voltar a responder.' : draft?.pending ? 'Há uma reflexão por guardar. Carrega em guardar para tentar novamente.' : '');
     lockForm(!!draft?.pending || isOldDraft(draft));
@@ -157,7 +219,10 @@ const groupReflection = (() => {
   }
 
   function lockForm(pending) {
+    element('group-reflect-btn').disabled = sending;
+    element('return-ticket-btn').disabled = sending;
     element('reflection-form').querySelectorAll('input, textarea').forEach(input => { input.disabled = sending || pending; });
+    element('reflection-next').disabled = sending || pending || element('reflection-remove-step').checked;
     element('reflection-skip').disabled = sending || pending;
     element('reflection-save').disabled = sending || isOldDraft(drafts[current]);
     element('reflection-reload').disabled = sending;
@@ -165,18 +230,25 @@ const groupReflection = (() => {
   }
 
   async function open() {
-    if (!context) return;
+    if (!context || sending) return;
+    const requestOpening = ++opening;
+    previousSteps = {};
+    closeTicket();
     current = null;
+    element('reflection-members').replaceChildren();
     element('reflection-form').hidden = true;
     element('group-reflection').hidden = false;
     element('activity-frame').hidden = true;
     status('A abrir…');
     try {
       if (!await read()) return;
+      if (requestOpening !== opening) return;
+      // Keep the server's intention fixed across saves, retries and child switches in this opening.
+      previousSteps = savedSteps();
       participants(); status('');
       element('reflection-heading').focus();
       element('group-reflection').scrollIntoView({block:'start'});
-    } catch (error) { status(error.message); }
+    } catch (error) { if (requestOpening === opening) status(error.message); }
   }
 
   async function save(skipped = false) {
@@ -187,7 +259,9 @@ const groupReflection = (() => {
       draft.pending = {
         student_id:current, event_id:crypto.randomUUID(), expected_revision:draft.expected_revision, composition_version:context.group.composition_version, access_version:context.group.access_version,
         answers:skipped ? {} : draft.answers, strategy:skipped ? '' : draft.strategy,
-        next_step:skipped ? '' : draft.next_step, skipped,
+        // Empty new text keeps the intention attached to this draft's revision.
+        // Only the explicit withdrawal clears it; retries reuse this exact payload.
+        next_step:skipped || draft.remove_next_step ? '' : draft.next_step.trim() ? draft.next_step : draft.retained_next_step, skipped,
       };
       persist();
     }
@@ -205,7 +279,9 @@ const groupReflection = (() => {
       }
       const record = await response.json();
       if (version !== generation) return;
+      reading++;
       saved[studentId] = record;
+      renderTicket();
       delete drafts[studentId]; persist(); renderPendingReflections();
       current = null; element('reflection-form').hidden = true;
       status('Reflexão guardada. Agora pode responder outro colega.');
@@ -218,10 +294,28 @@ const groupReflection = (() => {
   }
 
   element('group-reflect-btn').onclick = open;
+  element('return-ticket-btn').onclick = () => {
+    if (!context || sending) return;
+    opening++;
+    reading++;
+    renderTicket();
+    element('group-reflection').hidden = true;
+    element('activity-frame').hidden = !!state.restoringWork;
+    element('return-ticket').hidden = false;
+    element('return-ticket-btn').setAttribute('aria-expanded', 'true');
+    element('return-ticket-heading').focus();
+    element('return-ticket').scrollIntoView({block:'start'});
+  };
+  element('return-ticket-back').onclick = () => {
+    closeTicket();
+    element('return-ticket-btn').focus();
+  };
   element('reflection-form').addEventListener('input', capture);
   element('reflection-form').onsubmit = event => { event.preventDefault(); save(); };
   element('reflection-skip').onclick = () => save(true);
   element('reflection-back').onclick = () => {
+    opening++;
+    reading++;
     element('group-reflection').hidden = true;
     element('activity-frame').hidden = false;
     element('group-reflect-btn').focus();

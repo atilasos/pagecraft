@@ -4,6 +4,7 @@
 const $ = (id) => document.getElementById(id);
 const workGroups = new Map();
 const students = new Map(); // id → projeção viva emitida pelo servidor
+const sessionEventDeclarations = new Map(); // vocabulário central, incluindo autoria
 let session = null;
 let previousSessions = [];
 let publicOrigin = location.origin;
@@ -312,7 +313,7 @@ function renderPicker() {
   const list = $("picker-list");
   list.innerHTML = "";
   const matches = activities.filter((a) => {
-    if (pickerState.year && a.year !== pickerState.year) return false;
+    if (pickerState.year && !a.years.includes(pickerState.year)) return false;
     if (pickerState.subject && a.subject !== pickerState.subject) return false;
     if (pickerState.search) {
       const hay = `${a.title} ${a.subject} ${(a.tags || []).join(" ")}`.toLowerCase();
@@ -342,7 +343,7 @@ function renderPicker() {
     meta.className = "meta";
     meta.innerHTML =
       (a.subject ? `<span class="pill subject">${esc(a.subject)}</span>` : "") +
-      (a.year ? `<span class="pill">${esc(a.year)}.º ano</span>` : "") +
+      `<span class="pill">${esc(catalogYearLabel(a))}</span>` +
       (a.duration ? `<span class="pill">${esc(a.duration)} min</span>` : "");
     opt.append(title, meta);
     opt.addEventListener("click", () => {
@@ -486,21 +487,19 @@ function applySessionState(delta, es) {
 }
 
 async function loadPanelEventTypes() {
+  sessionEventDeclarations.clear();
   try {
     const resp = await tfetch("/api/session-event-types");
     if (!resp.ok) return fallbackPanelEventTypes();
     const declaration = await resp.json();
     if (!Array.isArray(declaration?.types)) return fallbackPanelEventTypes();
+    const entries = declaration.types.filter(entry => entry && typeof entry.name === "string" &&
+      /^[a-z][a-z0-9_]*$/.test(entry.name));
+    entries.forEach(entry => sessionEventDeclarations.set(entry.name, entry));
     const declaredTypes = [
       ...new Set(
-        declaration.types
-          .filter(
-            (entry) =>
-              entry &&
-              typeof entry.name === "string" &&
-              /^[a-z][a-z0-9_]*$/.test(entry.name) &&
-              entry.timeline === true
-          )
+        entries
+          .filter(entry => entry.timeline === true)
           .map((entry) => entry.name)
       ),
     ];
@@ -588,7 +587,9 @@ function reflectFreeze(state) {
 
 function handleEvent(type, record) {
   const st = record.student_id ? students.get(record.student_id) : null;
-  if (type === "individual_reflection" && drawerStudent === record.student_id) loadDrawerHistory(drawerStudent);
+  if (type !== 'heartbeat' && drawerStudent && (drawerStudent === record.student_id || record.participant_ids?.includes(drawerStudent))) {
+    loadDrawerHistory(drawerStudent);
+  }
   const text = eventText(type, record);
   if (st) blip(record.student_id, type);
   if (text) {
@@ -788,11 +789,14 @@ function renderStudents() {
 
 /* ---------- drawer do aluno ---------- */
 
+let drawerHistoryRequest = 0;
+
 function openDrawer(studentId) {
   drawerStudent = studentId;
   fillDrawer(studentId);
   $("drawer-keep").checked = true;
   $("drawer-events").innerHTML = '<li class="muted">a carregar percurso…</li>';
+  $("drawer-help").textContent = 'A carregar contexto…';
   $("drawer").classList.add("open");
   loadDrawerHistory(studentId);
 }
@@ -814,25 +818,33 @@ function fillDrawer(studentId) {
 
 async function loadDrawerHistory(studentId) {
   const list = $("drawer-events");
+  const requestId = ++drawerHistoryRequest;
+  const sessionId = session.id;
+  const current = () => drawerStudent === studentId && session?.id === sessionId && requestId === drawerHistoryRequest;
+  const unavailable = message => {
+    list.textContent = message;
+    $("drawer-help").textContent = message;
+  };
   try {
     const resp = await tfetch(
-      `/api/sessions/${encodeURIComponent(session.id)}/students/${encodeURIComponent(studentId)}/history`
+      `/api/sessions/${encodeURIComponent(sessionId)}/students/${encodeURIComponent(studentId)}/history`
     );
-    if (drawerStudent !== studentId) return;
+    if (!current()) return;
     if (!resp.ok) {
-      list.innerHTML = '<li class="muted">não foi possível carregar o percurso</li>';
+      unavailable('Não foi possível carregar o percurso e o contexto.');
       return;
     }
     const data = await resp.json();
+    if (!current()) return;
     if (!Array.isArray(data?.events)) {
-      list.innerHTML = '<li class="muted">percurso incompreensível</li>';
+      unavailable('Percurso e contexto incompreensíveis.');
       return;
     }
-    renderDrawerHistory(data.events);
+    const events = data.events.filter(record => record && typeof record === 'object' && typeof record.type === 'string');
+    DrawerEvidence.renderHelp($("drawer-help"), events, students, unitLabel, sessionEventDeclarations);
+    renderDrawerHistory(events);
   } catch (error) {
-    if (drawerStudent === studentId) {
-      list.innerHTML = '<li class="muted">não foi possível carregar o percurso</li>';
-    }
+    if (current()) unavailable('Não foi possível carregar o percurso e o contexto.');
   }
 }
 
@@ -841,18 +853,10 @@ function renderDrawerHistory(events) {
   list.innerHTML = "";
   [...events].reverse().forEach((record) => {
     if (!record || typeof record !== "object" || typeof record.type !== "string") return;
-    const text = eventText(record.type, record);
+    const text = DrawerEvidence.describe(record) ?? eventText(record.type, record);
     if (!text) return;
     const li = document.createElement("li");
-    const when = new Date(record.ts).toLocaleTimeString("pt-PT", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    const group = workGroups.get(record.work_group_id);
-    const authors = group?.display_name || (record.participant_ids || []).map(id => students.get(id)?.display_name || id).join(" + ");
-    const joint = record.work_group_id ? `Trabalho conjunto · ${authors} · ` : "";
-    const child = record.type === 'individual_reflection' ? `${students.get(record.student_id)?.display_name || record.student_id} · ` : '';
-    li.textContent = `${when} · ${joint}${child}${text}`;
+    li.textContent = `${DrawerEvidence.reference(record, students, sessionEventDeclarations)} · ${text}`;
     list.appendChild(li);
   });
   if (!list.children.length) {

@@ -13,7 +13,7 @@ from ..access import (
     issue_board_cookie,
 )
 from ..classroom.activity_content import session_activity_path
-from .classroom import stream_session, _domain
+from .classroom import stream_session, _domain, _current_board_session
 from .learning import ACTIVITY_CONTENT_HEADERS
 
 
@@ -109,8 +109,8 @@ async def stream_board_session(session_id: str, request: Request):
 @access_policy(RoutePolicy.BOARD)
 async def board_activity_content(session_id: str, request: Request):
     """The paired board may demonstrate only the activity of its current class."""
-    session = await request.app.state.classroom.current_board_session()
-    if session is None or session['id'] != session_id:
+    session = await _current_board_session(session_id, request)
+    if session is None:
         raise HTTPException(404, 'A sessão já não está no quadro.')
     path = await _domain(session_activity_path(request.app, session['activity_slug']))
     return FileResponse(path, headers=ACTIVITY_CONTENT_HEADERS)

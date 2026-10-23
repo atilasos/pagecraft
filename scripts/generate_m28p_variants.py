@@ -29,6 +29,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from server.publish import regenerate_catalog
+from server.catalog_years import validate_years
 
 WORD_DATA: dict[str, dict[str, str]] = {
     "menina": {"emoji": "👧", "sentence": "A menina sorri no recreio.", "place": "no recreio", "action": "sorri", "object": "uma fita"},
@@ -401,7 +402,7 @@ def variant_meta(base_meta: dict[str, Any], word: str, variant_slug: str, varian
     slug = f"{base_meta['slug']}-{variant_slug}"
     existing = ACTIVITIES / slug / "meta.json"
     old = load_json(existing) if existing.exists() else {}
-    return {
+    meta = {
         "slug": slug,
         "title": f"M28P · Palavra {base_meta.get('order')} — {word} · {variant_title}",
         "year": base_meta.get("year", "1.º ano (6-7 anos)"),
@@ -419,6 +420,11 @@ def variant_meta(base_meta: dict[str, Any], word: str, variant_slug: str, varian
         "tags": ["m28p", "m28p-extra", "m28p-variant", "leitura", "escrita", "1ano", "silabas", f"palavra{base_meta.get('order')}", base_meta["slug"], variant_slug, slugify(variant_title)],
         "paths": {"activity": "./index.html", "teacher": "./teacher.md", "docspec": "./docspec.json"},
     }
+
+    # Uma variante pode declarar destinatários diferentes dos da palavra base.
+    if "years" in old:
+        meta["years"] = validate_years(old["years"])
+    return meta
 
 
 def quality_reports(word: str, variant_title: str) -> tuple[dict[str, Any], dict[str, Any]]:

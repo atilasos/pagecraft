@@ -90,3 +90,25 @@ def test_command_fails_before_publishing_when_repository_module_is_misaligned(
     assert result.returncode != 0
     assert "módulo de publicação desalinhado" in result.stderr
     assert not (repo / "activities" / SOURCE_ACTIVITY.name).exists()
+
+
+def test_command_validates_and_copies_optional_years(tmp_path, install_publication_module):
+    repo = tmp_path / 'pagecraft'
+    inputs = tmp_path / 'inputs'
+    shutil.copytree(SOURCE_ACTIVITY, inputs)
+    install_publication_module(repo)
+    path = inputs / 'docspec.json'
+    docspec = json.loads(path.read_text())
+    docspec['years'] = [4, 3, 4]
+    path.write_text(json.dumps(docspec))
+    result = subprocess.run(_publication_command(repo, inputs), capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr
+    meta = json.loads((repo / 'activities' / SOURCE_ACTIVITY.name / 'meta.json').read_text())
+    assert meta['years'] == [3, 4]
+    before = {p.relative_to(repo): p.read_bytes() for p in repo.rglob('*') if p.is_file()}
+    docspec['years'] = [True]
+    path.write_text(json.dumps(docspec))
+    result = subprocess.run(_publication_command(repo, inputs), capture_output=True, text=True)
+    assert result.returncode != 0
+    assert 'years' in result.stderr
+    assert {p.relative_to(repo): p.read_bytes() for p in repo.rglob('*') if p.is_file()} == before

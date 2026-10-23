@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>PageCraft — Aluno</title>
-<link rel="stylesheet" href="/studio.css?v=groups-retoma-1">
+<link rel="stylesheet" href="/studio.css?v=bilhete-regresso-2">
 </head>
 <body class="student-page">
 <a class="skip-link" href="#main-content">Saltar para entrar na aula</a>
@@ -49,13 +49,29 @@
         <button class="ghost" id="save-work" type="button">Guardar para continuar</button>
         <button class="ghost" id="help-btn" type="button">Preciso de ajuda 🙋</button>
         <button class="ghost" id="group-reflect-btn" type="button" hidden>A minha reflexão</button>
+        <button class="ghost" id="return-ticket-btn" type="button" hidden aria-controls="return-ticket" aria-expanded="false">O meu próximo passo</button>
         <button class="ghost" id="pit-btn" type="button">O meu plano 📋</button>
       </span>
       <span id="save-work-status" class="muted" role="status" aria-live="polite"></span>
     </div>
+    <div id="queue-notice" class="card" hidden>
+      <p id="queue-status" role="status" aria-live="polite"></p>
+      <button id="recover-accepted-work" class="ghost" type="button" hidden>Voltar ao último trabalho aceite</button>
+    </div>
+    <section id="return-ticket" class="card" hidden aria-labelledby="return-ticket-heading">
+      <h2 id="return-ticket-heading" tabindex="-1">O meu próximo passo</h2>
+      <p>Escolhe o teu nome para recordar o que querias experimentar.</p>
+      <div id="return-ticket-members" class="reflection-members" role="group" aria-label="Quem quer recordar o próximo passo?"></div>
+      <div id="return-ticket-intention" hidden aria-live="polite">
+        <h3 id="return-ticket-child"></h3>
+        <p>Da última vez quiseste experimentar…</p>
+        <p id="return-ticket-text" hidden></p>
+      </div>
+      <button id="return-ticket-back" class="ghost" type="button">Voltar ao trabalho</button>
+    </section>
     <section id="pending-group-work" class="card" hidden aria-live="polite">
       <h2>Trabalho do grupo anterior por confirmar</h2>
-      <p>Estas respostas conservam os nomes anteriores. Pede ao professor para as rever contigo.</p>
+      <p>O trabalho aceite conserva os nomes anteriores. As alterações que ficaram de fora têm um aviso separado. Pede ao professor para rever contigo.</p>
       <ul id="pending-group-list"></ul>
     </section>
     <section id="pending-group-reflections" class="card" hidden aria-live="polite">
@@ -93,7 +109,15 @@
         <div id="reflection-criteria"></div>
         <label for="reflection-strategy">O que te ajudou?</label>
         <textarea id="reflection-strategy" maxlength="1500" rows="2"></textarea>
+        <div id="reflection-previous" hidden>
+          <p>Da última vez quiseste experimentar…</p>
+          <p id="reflection-previous-step"></p>
+        </div>
         <label for="reflection-next">O que queres experimentar a seguir?</label>
+        <div id="reflection-step-choice" hidden>
+          <p id="reflection-next-help">Se não escreveres outro, manténs o passo guardado.</p>
+          <label class="reflection-remove-choice"><input id="reflection-remove-step" type="checkbox">Quero retirar o passo guardado</label>
+        </div>
         <textarea id="reflection-next" maxlength="1500" rows="2"></textarea>
         <p class="button-line"><button id="reflection-save" type="submit">Guardar a minha reflexão</button>
           <button id="reflection-skip" class="ghost" type="button">Prefiro não responder agora</button></p>
@@ -114,8 +138,8 @@
     </div>
   </div>
 </main>
-<script src="/student/reflection.js?v=groups-retoma-2"></script>
+<script src="/student/reflection.js?v=bilhete-regresso-2"></script>
 <script src="/student/support-modal.js?v=2"></script>
-<script src="/student/app.js?v=groups-retoma-2"></script>
+<script src="/student/app.js?v=outbox-scoped-refusals-2"></script>
 </body>
 </html>

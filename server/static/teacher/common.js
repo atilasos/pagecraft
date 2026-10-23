@@ -17,3 +17,11 @@ async function tfetch(url, opts = {}) {
   }
   return resp;
 }
+
+// Os destinos já chegam normalizados pelo catálogo; aqui só se formata texto.
+function catalogYearLabel(activity) {
+  const years = activity.years || [];
+  return years.length
+    ? years.map(year => `${year}.º`).join(" e ") + (years.length === 1 ? " ano" : " anos")
+    : "Sem ano indicado";
+}

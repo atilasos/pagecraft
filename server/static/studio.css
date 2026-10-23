@@ -1010,6 +1010,9 @@ th { background: var(--paper-deep); font-family: var(--font-type); font-size: 0.
 .reflection-choices input { width: 1.2rem; height: 1.2rem; flex: 0 0 auto; margin: 0; }
 .reflection-choices span { font-size: 1.5rem; }
 #group-reflection textarea { width: 100%; box-sizing: border-box; font: inherit; padding: .7rem; }
+.reflection-remove-choice { display: flex; align-items: center; gap: .65rem; min-height: 56px; cursor: pointer; }
+.student-page .reflection-remove-choice input { width: 1.2rem; height: 1.2rem; min-height: 1.2rem; flex: 0 0 auto; margin: 0; }
+#return-ticket-text, #reflection-previous-step { max-inline-size: 50ch; overflow-wrap: break-word; }
 @media (max-width: 520px) { .reflection-choices { grid-template-columns: 1fr; } }
 
 #pending-group-work[hidden], #pending-group-reflections[hidden], #group-editor[hidden] { display: none; }

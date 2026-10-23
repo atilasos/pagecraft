@@ -208,3 +208,156 @@ def test_publish_without_title_falls_back_to_html_title(repo, html_file):
     assert meta["title"] == "Estados da água"
     assert meta["maker"] == "none"
     assert meta["tags"] == []
+
+
+def test_publish_explicit_years_and_republish_preserve_destination(repo, html_file):
+    meta = publish_activity(repo, 'multi', html_file, {**DOCSPEC, 'years': [4, 3, 4]}, TEACHER_MD)
+    assert meta['years'] == [3, 4]
+    assert build_catalog(repo)['items'][0]['years'] == [3, 4]
+    republished = publish_activity(repo, 'multi', html_file, DOCSPEC, TEACHER_MD)
+    assert republished['years'] == [3, 4]
+    empty = publish_activity(repo, 'multi', html_file, {**DOCSPEC, 'years': []}, TEACHER_MD)
+    assert empty['years'] == []
+
+
+@pytest.mark.parametrize('invalid', [None, 3, '3', [True], [False], [3.0], ['3'], [0], [5]])
+@pytest.mark.parametrize('existing', [False, True])
+def test_publish_invalid_years_does_not_write_any_artifact(repo, html_file, invalid, existing):
+    if existing:
+        publish_activity(repo, 'multi', html_file, DOCSPEC, TEACHER_MD)
+    before = {p.relative_to(repo): p.read_bytes() for p in repo.rglob('*') if p.is_file()}
+    with pytest.raises(ValueError, match='years'):
+        publish_activity(repo, 'multi', html_file, {**DOCSPEC, 'years': invalid}, 'changed')
+    assert {p.relative_to(repo): p.read_bytes() for p in repo.rglob('*') if p.is_file()} == before
+    if not existing:
+        assert not (repo / 'activities' / 'multi').exists()
+
+
+def test_republish_validates_existing_explicit_years_before_writing(repo, html_file):
+    dst = repo / 'activities' / 'multi'
+    dst.mkdir()
+    (dst / 'meta.json').write_text(json.dumps({'slug': 'multi', 'years': [True]}))
+    before = (dst / 'meta.json').read_bytes()
+    with pytest.raises(ValueError, match='years'):
+        publish_activity(repo, 'multi', html_file, DOCSPEC, TEACHER_MD)
+    assert (dst / 'meta.json').read_bytes() == before
+    assert not (dst / 'index.html').exists()
+
+
+def test_catalog_uses_historical_docspec_only_when_no_meta_declaration(repo):
+    dst = repo / 'activities' / 'historical'
+    dst.mkdir()
+    (dst / 'meta.json').write_text(json.dumps({'slug': 'historical', 'year': '8–10 anos'}))
+    (dst / 'docspec.json').write_text(json.dumps({'ageRange': '3.º e 4.º anos'}))
+    assert build_catalog(repo)['items'][0]['years'] == [3, 4]
+    (dst / 'meta.json').write_text(json.dumps({'slug': 'historical', 'years': [], 'year': 2}))
+    assert build_catalog(repo)['items'][0]['years'] == []
+
+
+def test_republish_preserves_historical_destination_when_only_age_is_supplied(repo, html_file):
+    dst = repo / 'activities' / 'historical'
+    dst.mkdir()
+    (dst / 'meta.json').write_text(json.dumps({'slug': 'historical', 'year': '3.º e 4.º anos'}))
+    meta = publish_activity(repo, 'historical', html_file, {**DOCSPEC, 'ageRange': '8–10 anos'}, TEACHER_MD)
+    assert meta['years'] == [3, 4]
+    changed = publish_activity(repo, 'historical', html_file, {**DOCSPEC, 'years': [2]}, TEACHER_MD)
+    assert changed['years'] == [2]
+
+
+def test_generation_cannot_replace_any_existing_slug(repo, html_file):
+    publish_activity(repo, 'same-slug', html_file, DOCSPEC, TEACHER_MD)
+    before = {p.name: p.read_bytes() for p in (repo / 'activities/same-slug').iterdir()}
+    catalog = (repo / 'catalog.json').read_bytes()
+    with pytest.raises(ValueError, match='outra geração'):
+        publish_activity(repo, 'same-slug', html_file, DOCSPEC, TEACHER_MD,
+                         generation_id='job-b', review_id='review-b')
+    assert before == {p.name: p.read_bytes() for p in (repo / 'activities/same-slug').iterdir()}
+    assert catalog == (repo / 'catalog.json').read_bytes()
+
+
+@pytest.mark.parametrize('change', ['job', 'review', 'html', 'docspec', 'teacher', 'design', 'legacy_call'])
+def test_generation_rejects_conflicting_republication(repo, html_file, change):
+    args = dict(generation_id='job-a', review_id='review-a')
+    docspec, teacher, design = DOCSPEC, TEACHER_MD, {'palette': {}}
+    publish_activity(repo, 'immutable', html_file, docspec, teacher, design, **args)
+    activity = repo / 'activities/immutable'
+    before = {p.name: p.read_bytes() for p in activity.iterdir()}
+    catalog = (repo / 'catalog.json').read_bytes()
+    if change == 'job':
+        args['generation_id'] = 'job-b'
+    elif change == 'review':
+        args['review_id'] = 'review-b'
+    elif change == 'html':
+        html_file.write_text('<html>versão B</html>')
+    elif change == 'docspec':
+        docspec = {**docspec, 'topic': 'versão B'}
+    elif change == 'teacher':
+        teacher = 'versão B'
+    elif change == 'design':
+        design = None
+    elif change == 'legacy_call':
+        args = {}
+    with pytest.raises(ValueError):
+        publish_activity(repo, 'immutable', html_file, docspec, teacher, design, **args)
+    assert before == {p.name: p.read_bytes() for p in activity.iterdir()}
+    assert catalog == (repo / 'catalog.json').read_bytes()
+
+
+def test_generation_recovers_crash_before_catalog_update(repo, html_file, monkeypatch):
+    from server import publish
+    args = dict(generation_id='job-a', review_id='review-a')
+    regenerate = publish.regenerate_catalog
+
+    def crash(root):
+        raise RuntimeError('crash entre instalação e catálogo')
+
+    monkeypatch.setattr(publish, 'regenerate_catalog', crash)
+    with pytest.raises(RuntimeError, match='crash'):
+        publish_activity(repo, 'immutable', html_file, DOCSPEC, TEACHER_MD, **args)
+    activity = repo / 'activities/immutable'
+    before = {p.name: p.read_bytes() for p in activity.iterdir()}
+    assert (repo / 'catalog.json').read_text().find('immutable') == -1
+    monkeypatch.setattr(publish, 'regenerate_catalog', regenerate)
+    first = publish_activity(repo, 'immutable', html_file, DOCSPEC, TEACHER_MD, **args)
+    catalog = (repo / 'catalog.json').read_bytes()
+    second = publish_activity(repo, 'immutable', html_file, DOCSPEC, TEACHER_MD, **args)
+    assert first == second
+    assert before == {p.name: p.read_bytes() for p in activity.iterdir()}
+    assert catalog == (repo / 'catalog.json').read_bytes()
+    assert json.loads(catalog)['count'] == 1
+
+
+def test_generation_installs_complete_directory_atomically(repo, html_file, monkeypatch):
+    from server import publish
+
+    def crash(source, destination):
+        assert (Path(source) / 'index.html').exists()
+        assert (Path(source) / 'meta.json').exists()
+        raise OSError('crash antes da instalação')
+
+    monkeypatch.setattr(publish.os, 'rename', crash)
+    with pytest.raises(OSError, match='crash'):
+        publish_activity(repo, 'immutable', html_file, DOCSPEC, TEACHER_MD,
+                         generation_id='job-a', review_id='review-a')
+    assert not (repo / 'activities/immutable').exists()
+    assert not list(repo.glob('.publish-*'))
+    assert json.loads((repo / 'catalog.json').read_text())['count'] == 0
+
+
+def test_reviewed_generation_preserves_declared_years_on_retry(repo, html_file):
+    docspec = {**DOCSPEC, 'years': [4, 3, 4]}
+    identity = {'generation_id': 'job-years', 'review_id': 'review-years'}
+    first = publish_activity(repo, 'reviewed-years', html_file, docspec, TEACHER_MD, **identity)
+    catalog = (repo / 'catalog.json').read_bytes()
+    assert first['years'] == [3, 4]
+    assert build_catalog(repo)['items'][0]['years'] == [3, 4]
+    assert publish_activity(repo, 'reviewed-years', html_file, docspec, TEACHER_MD, **identity) == first
+    assert (repo / 'catalog.json').read_bytes() == catalog
+
+
+def test_reviewed_generation_rejects_invalid_years_before_installation(repo, html_file):
+    with pytest.raises(ValueError, match='years'):
+        publish_activity(repo, 'invalid-years', html_file, {**DOCSPEC, 'years': [True]}, TEACHER_MD,
+                         generation_id='job-years', review_id='review-years')
+    assert not (repo / 'activities' / 'invalid-years').exists()
+    assert not list(repo.glob('.publish-*'))

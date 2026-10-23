@@ -215,3 +215,20 @@ def test_m28p_repair_keeps_owned_fix_and_removes_stale_catalog_entry(
     assert slugs == sorted(slugs)
     assert "aaa-fora-do-metodo" in slugs
     assert "fantasma" not in slugs
+
+
+def test_m28p_generator_preserves_variant_explicit_destination(tmp_path, install_publication_module):
+    repo = tmp_path / 'pagecraft'
+    shutil.copytree(ROOT / 'activities' / 'arvore', repo / 'activities' / 'arvore')
+    slug = 'arvore-cacador-silabas'
+    original = json.loads((ROOT / 'activities' / slug / 'meta.json').read_text())
+    _write_json(repo / 'activities' / slug / 'meta.json', {**original, 'years': [4, 3, 4]})
+    install_publication_module(repo)
+    script = _copy_script(repo, 'generate_m28p_variants.py')
+    from server.publish import regenerate_catalog
+    regenerate_catalog(repo)
+    result = subprocess.run([sys.executable, str(script)], cwd=repo, capture_output=True, text=True)
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert json.loads((repo / 'activities' / slug / 'meta.json').read_text())['years'] == [3, 4]
+    item = next(item for item in json.loads((repo / 'catalog.json').read_text())['items'] if item['slug'] == slug)
+    assert item['years'] == [3, 4]

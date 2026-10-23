@@ -102,3 +102,25 @@ def studio_origin(tmp_path_factory):
         finally:
             process.terminate()
             process.wait(timeout=10)
+
+
+@pytest.fixture
+def point_into_lesson(page):
+    """Confirm native input reaches the new sandboxed frame after navigation.
+
+    DOM visibility alone does not prove Chromium has updated input routing for
+    an asynchronously revealed frame. repro_cdp_iframe.py isolates this without
+    PageCraft. Leave the old frame, then observe native hover in the new one.
+    """
+    def point(target):
+        target.scroll_into_view_if_needed()
+        # The host corner is outside #lesson at the tested viewport sizes.
+        page.mouse.move(0, 0)
+        target.hover()
+        element = target.element_handle()
+        try:
+            element.owner_frame().wait_for_function(
+                "target => target.matches(':hover')", arg=element)
+        finally:
+            element.dispose()
+    return point

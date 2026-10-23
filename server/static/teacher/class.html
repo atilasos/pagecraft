@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PageCraft Studio — Aula ao vivo</title>
 <link rel="stylesheet" href="/studio.css?v=groups-retoma-1">
+<style>
+  #drawer-help { overflow-wrap: anywhere; }
+  #drawer-help article { border: 1px solid var(--border); border-radius: 14px; padding: 1rem; margin-block: 1rem; }
+  #drawer-help h4 { margin-top: 0; }
+  #drawer-help dt { font-weight: 700; margin-top: 0.75rem; }
+  #drawer-help dd { margin: 0.25rem 0 0; white-space: pre-wrap; }
+  #drawer-help .muted { font-size: 0.85rem; }
+</style>
 </head>
 <body class="teacher-page">
 <a class="skip-link" href="#main-content">Saltar para o conteúdo</a>
@@ -205,6 +213,11 @@
     </div>
     <p class="muted" id="drawer-now"></p>
     <div id="drawer-counts" class="drawer-counts"></div>
+    <section aria-labelledby="drawer-help-title">
+      <h3 id="drawer-help-title">Contexto dos pedidos de ajuda</h3>
+      <div id="drawer-help" aria-live="polite"></div>
+      <p class="muted">Respostas conjuntas pertencem ao grupo. A utilidade é declarada pelos alunos; não comprova aprendizagem.</p>
+    </section>
     <p class="drawer-actions">
       <button type="button" class="ghost" id="drawer-msg">Enviar mensagem</button>
       <button type="button" class="ghost" id="drawer-highlight">Chamar a atenção só dele</button>
@@ -221,6 +234,7 @@
 </main>
 <script src="/teacher/common.js"></script>
 <script src="/learning-assets/support-summary.js"></script>
-<script src="/teacher/class.js?v=groups-retoma-1"></script>
+<script src="/teacher/evidence.js?v=help-context-1"></script>
+<script src="/teacher/class.js?v=help-context-1"></script>
 </body>
 </html>

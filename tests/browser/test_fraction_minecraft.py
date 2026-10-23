@@ -65,7 +65,6 @@ def start_preview(page, studio_origin, *, requires_completion=True):
     if not requires_completion:
         registration.pop('requires_completion',None)
     page.request.get(studio_origin + '/api/teacher-bootstrap')
-    page.request.post(studio_origin + '/api/learning/me/leave')
     draft = page.request.post(studio_origin + '/api/learning/activities', data=registration).json()
     page.goto(studio_origin + '/' + draft['code'])
     page.get_by_label('Como te chamas?').fill('Revisão completa')
@@ -94,7 +93,8 @@ def test_studio_reflection_waits_for_complete_work_and_finishes_once(page, studi
     assert result['assessment']['answers']['construir'] == 'help'
     assert [e['payload']['correct'] for e in result['events'] if e['type'] == 'attempt' and e['unitId'] == 'u6'] == [False]
     assert not [e for e in result['events'] if e['type'] == 'assessment_result']
-    repeated = page.request.post(studio_origin + '/api/learning/me/finish', data=result['assessment']).json()
+    repeated = page.request.post(studio_origin + '/api/learning/me/finish', data=result['assessment'],
+                                 headers={'X-PageCraft-Realization': result['id']}).json()
     assert repeated['completed_at'] == result['completed_at']
     assert page.request.get(studio_origin + '/api/learning/reports').json() == []
 
