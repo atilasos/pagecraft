@@ -74,6 +74,8 @@ Instruções e opções de compreensão podem ser lidas pelo adulto. As opções
 
 ## Apoios e evidência
 
+Na produção da mensagem, ditar ao adulto preserva a autoria oral. Numa observação de codificação sem modelo, a criança precisa de decidir que letras registar. Se o teclado ou o gesto de escrever dificultarem essa decisão, ofereça papel ou letras móveis sem uma palavra-modelo para copiar; a criança escolhe as letras e a sua ordem. O adulto pode executar o gesto indicado pela criança e registar exatamente essas decisões. Se apenas ouve a palavra inteira e escolhe todas as letras por ela, registe "codificação não observada", sem retirar valor à participação ou à intenção comunicativa.
+
 Todas as páginas têm duas pistas progressivas, individuais e de grupo. A primeira propõe observar ou escutar; a segunda muda a abordagem, sem escrever a resposta. Em transferência e revisão, recolha a primeira tentativa antes de qualquer pista. Uma página oral pode precisar que o adulto registe essa tentativa antes de a criança declarar a conversa, pois o botão não a observa.
 
 Em Com pistas, use as pistas à vez e acompanhamento humano, apontando as partes já ensinadas depois da tentativa. Em Passo a passo, peça tentativa e explicação antes de oferecer a segunda abordagem. Em Mais desafios, use a pergunta de extensão, conservando a resposta de base e evitando correspondências novas sem ensino. As designações descrevem apoios, não rótulos de capacidade. Em todos os casos, a criança pode pedir ajuda.
