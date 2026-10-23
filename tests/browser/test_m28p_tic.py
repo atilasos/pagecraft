@@ -132,8 +132,12 @@ def test_real_host_saves_help_and_restores_completed_draft_without_duplicate_att
     after=page.request.get(studio_origin+'/api/learning/me').json()
     assert len([e for e in after['events'] if e['type']=='attempt'])==4
     assert after['preview'] is True
+    page.evaluate("window.hostMessages=[];addEventListener('message',e=>{if(e.data?.pagecraft===1)hostMessages.push(e.data)});")
     frame.locator('#finish-button').click()
-    expect(page.locator('#reflection')).to_be_visible()
+    try:
+        expect(page.locator('#reflection')).to_be_visible()
+    except AssertionError as error:
+        raise AssertionError(page.evaluate('({ready:reflectionReady,completed:attempt.completed_at,messages:hostMessages})')) from error
     expect(page.locator('#strategy')).to_be_hidden()
     expect(page.locator('#next-step')).to_be_hidden()
     assert page.locator('#criteria .reflection-icon').count()==4
