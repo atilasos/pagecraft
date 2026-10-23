@@ -43,6 +43,9 @@ async function api(path, method = "GET", data) {
 }
 async function loadActivities() {
   const activities = await api("/api/learning/activities");
+  activities.sort((a, b) => (b.created_at || "").localeCompare(a.created_at || ""));
+  const drafts = activities.filter((a) => !a.published).length;
+  $("activity-count").textContent = `${activities.length} atividades · ${drafts} por aprovar`;
   $("activities").replaceChildren();
   $("filter-activity").replaceChildren(new Option("Todas", ""));
   for (const a of activities) {
