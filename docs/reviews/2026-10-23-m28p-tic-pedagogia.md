@@ -41,7 +41,7 @@ Foi extraído e analisado o JSON de `script#m28p-content` de todos os HTML em `d
 
 Executei em Node o modelo JavaScript extraído do HTML de menina-pairs. Asserções confirmaram bloqueio de pares incompletos, aceitação de pares completos incorretos, rejeição do acerto dessas ligações e conservação dos apoios na recuperação. Isso verifica a lógica pura, sem substituir o ensaio de interação.
 
-Fotografia final dos artefactos verificados: menina-pairs SHA-256 `b5a85e9389cce729f92d6ce28b19abd3ff04dc8775a2ed7e82b9f60ee043c9bd`; flor-syllables `9d4338076fe83d5a090f5ddbadc546476032f62701c0368ac797d5102105ea69`; template `e848f2ef1e6311d22563277b872b2221f49eacd42f0da3a421d10ad78b818652`.
+Fotografia da revisão pedagógica, anterior à barreira de recuperação do host: menina-pairs SHA-256 `b5a85e9389cce729f92d6ce28b19abd3ff04dc8775a2ed7e82b9f60ee043c9bd`; flor-syllables `9d4338076fe83d5a090f5ddbadc546476032f62701c0368ac797d5102105ea69`; template `e848f2ef1e6311d22563277b872b2221f49eacd42f0da3a421d10ad78b818652`.
 
 Foram lidos os SVG de menina, gema e cigarra como código, sem concluir clareza visual a partir dessa leitura. O manifesto identifica voz sintética `pt-PT-RaquelNeural` e transcrições coerentes com as instruções. Não foi feita verificação auditiva da pronúncia nesta fase.
 
