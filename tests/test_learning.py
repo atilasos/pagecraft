@@ -72,6 +72,7 @@ async def test_retired_draft_preserves_realizations_and_cannot_be_published(lear
     assert (await teacher.get('/api/learning/activities')).json() == []
     assert (await teacher.get('/api/learning/activities?include_archived=true')).json()[0]['code'] == code
     assert (await teacher.post(f'/api/learning/activities/{code}/publish')).status_code == 409
+    assert (await teacher.post(f'/api/learning/activities/{code}/start', json={'name': 'Novo ensaio'})).status_code == 409
     # Reexecutar o registo não reativa inadvertidamente o rascunho antigo.
     assert (await teacher.post('/api/learning/activities', json=data)).json()['archived_at']
     preserved = await app.state.learning.attempt(started.json()['id'])

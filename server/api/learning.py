@@ -174,6 +174,8 @@ async def content(code: Code, request: Request):
 async def start(code: Code, data: StartInput, request: Request, response: Response):
     svc = request.app.state.learning
     activity = await visible_activity(request, code)
+    if activity.get('archived_at'):
+        raise HTTPException(409, 'Este rascunho foi retirado. Escolhe uma atividade da coleção atual.')
     if data.language not in activity['languages']:
         raise HTTPException(422, 'Língua indisponível nesta atividade.')
     attempt, cookie = await svc.start(activity, data.model_dump(), preview=not activity['published'])
