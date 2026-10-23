@@ -1,63 +1,74 @@
-# Contrato dos percursos M28P v2
+# Contrato dos minijogos M28P v3
 
-Cada agente escreve apenas `drafts/m28p-v2/<slug>/content.json` e `guia-docente.md`. O motor `python3 scripts/build_m28p_journeys.py --word <slug>` valida o conteúdo e gera HTML, DocSpec, design e manifesto na mesma pasta. `--all` gera toda a coleção; `--validate-only` verifica sem escrever.
+Este contrato substitui o desenho v2 de 12–16 ecrãs acompanhados. Os ficheiros v2 e os arquivos mantêm-se como histórico. A proposta atual está nos [princípios](m28p-principios-implementacao.md) e na [pesquisa para TIC](research/m28p-tic-autonomia-2026.md).
 
-O JSON usa esta estrutura. Os nomes dos campos e valores de `phase` e `type` são fixos. Não incluir HTML.
+## Entradas e artefactos
+
+- `drafts/m28p-v3/words.json`: lista revista das 28 palavras. É a fonte lexical editável.
+- `drafts/m28p-v3/collection-design.json`: arquitetura pedagógica e visual comum, com seis jogos independentes.
+- `scripts/build_m28p_tic.py`: gerador e validação dos dados, sem publicar nem editar o catálogo.
+- `scripts/templates/m28p-tic.html`: interação comum, sem dependências de rede.
+- Recursos locais de origem: `images/{slug}.svg`, `audio/{slug}.mp3` e áudio de instrução por ID de jogo, como `audio/match.mp3`, na árvore de recursos v3 usada pelo gerador.
+
+Cada atividade gerada incorpora imagem, fonte e áudios necessários. Caminhos dos recursos de origem não se tornam pedidos de rede em tempo de utilização. O gerador produz 28 × 6 = 168 minijogos HTML, acompanhados pelos artefactos exigidos pelo registo PageCraft, incluindo DocSpec, design, metadados e manifesto. A duração orientadora é cinco minutos nos metadados, com intervalo de planeamento de três a seis minutos. Uma palavra não é um percurso obrigatório de trinta minutos.
+
+A interface de linha de comandos deve permitir gerar a coleção e validar sem escrita. O manual de comandos e destinos finais consta do próprio script e do [registo de renovação](m28p-renovacao.md); não alterar o catálogo como efeito lateral da geração.
+
+## Palavra
+
+`words.json` é um array com esta forma mínima:
 
 ```json
-{
-  "slug": "menina",
-  "word": "menina",
-  "order": 1,
-  "syllables": ["me", "ni", "na"],
-  "phonologyNotes": "A divisão é oral. O adulto modela os sons sem acrescentar vogais.",
-  "prerequisites": ["Conversar sobre uma experiência com uma menina."],
-  "assistedReading": "O adulto lê instruções e textos ainda não decifráveis. Não lê pelo aluno os itens de transferência e revisão.",
-  "objectives": ["Reconhecer e analisar menina.", "Ler novas combinações e escrever para alguém."],
-  "criteria": ["Relaciono a palavra com uma experiência.", "Leio uma combinação sem imagem.", "Escrevo e revejo uma mensagem para alguém."],
-  "sessions": [
-    {"title": "Conhecer e descobrir", "minutes": 8},
-    {"title": "Analisar e combinar", "minutes": 8},
-    {"title": "Ler e compreender", "minutes": 8},
-    {"title": "Escrever e partilhar", "minutes": 8}
-  ],
-  "pages": [
-    {
-      "id": "encontro",
-      "session": 1,
-      "phase": "context",
-      "type": "oral",
-      "title": "Uma pessoa da nossa vida",
-      "prompt": "Conta uma situação que viveste.",
-      "text": "Conversa com um adulto sobre uma menina que conheces.",
-      "adultPrompt": "Escute a experiência. Registe uma frase da criança; este botão apenas declara que houve conversa.",
-      "hints": [
-        {"individual": "Pensa numa pessoa da tua escola.", "group": "Pensem numa pessoa da vossa escola."},
-        {"individual": "Conta o que fizeram juntos.", "group": "Contem o que fizeram juntos."}
-      ],
-      "challenge": "Conta mais um pormenor."
-    }
-  ]
-}
+[
+  {
+    "slug": "menina",
+    "label": "menina",
+    "order": 1,
+    "syllables": ["me", "ni", "na"],
+    "phonologyNotes": "Palavra em PT-PT; divisão oral em três sílabas."
+  }
+]
 ```
 
-O exemplo mostra uma página; cada percurso exige **12 a 16 páginas**, agrupadas em **3 ou 4 sessões** com **6 a 12 minutos** cada. `session` é um inteiro a partir de 1, em ordem. `id` é único, em minúsculas sem acentos, com hífen permitido. `objectives` tem 2 a 4 itens; `criteria`, 2 a 4. `order` é a posição 1–28. Não automatizar a divisão silábica. Em divisão oral usam-se, por exemplo, `ca-rro`, `ma-ssa`, `ci-ga-rra`, `pa-ssa-ri-nho`; não confundir com translineação.
+`slug` é identificador estável sem acentos; `label` preserva a grafia correta. `order` é único e cobre 1–28. A posição 14 é gema. A concatenação de `syllables` recompõe `label`, com revisão humana da segmentação oral e dos dígrafos. `phonologyNotes` destina-se ao professor e não aparece como instrução infantil. A revisão lexical não importa do v2 as tarefas, pré-requisitos de conversa ou obrigatoriedade do adulto.
 
-Cada página tem `id`, `session`, `phase`, `type`, `title`, `prompt` e **duas ou três** `hints`, cada uma com `individual` e `group` escritos de propósito. As pistas indicam abordagens progressivas sem dar a resposta. Campos opcionais: `text` apresenta contexto ou texto de leitura; `challenge` acrescenta explicação ou aplicação, conservando a mesma resposta de base. `adultPrompt` explica a mediação e é obrigatório nas páginas orais. `criterion` pode explicitar o critério próprio da página; na sua ausência usa-se o pedido.
+Por defeito, a unidade móvel é a sílaba. Se a palavra tem uma sílaba, como flor, os jogos `syllables`, `gap` e `recall` usam os grafemas/letras da palavra. A interface diz "letras" ou "partes" e os registos identificam essa unidade. Não dividir grupos consonânticos em falsas sílabas nem apresentar cada letra como fonema.
 
-Tipos de resposta:
+## Jogos e SRTC-A
 
-- `choice`: `options` tem 2 a 5 strings diferentes; `answer` é exatamente uma dessas strings. A escolha recebe feedback imediato. A posição da resposta certa deve variar entre páginas.
-- `order`: `pieces` contém 2 a 8 strings apresentadas fora da ordem certa; `answer` é um array com exatamente as mesmas peças na ordem pretendida, incluindo duplicados. A criança toca nas peças e confirma. As peças podem ser sílabas ou palavras. A avaliação compara a sequência sem inventar regras fonológicas.
-- `write`: texto aberto; `placeholder` pode sugerir o género de produção, sem fornecer o texto final. Nunca recebe veredicto automático. O adulto acompanha escrita emergente, escrita a par ou ditado ao adulto, preservando o que a criança quis comunicar.
-- `oral`: declaração «Já conversei com um adulto». Não observa pronúncia, leitura ou compreensão. Exige `adultPrompt`, e a tarefa pode ser realizada oralmente, em papel ou com objetos. Não usar voz sintética para ensinar fonemas.
+Os IDs são fixos. Cada jogo tem quatro rondas; a resposta e o apoio ficam ligados à ronda. A primeira apresentação inclui demonstração da ação, recuperável depois por um controlo visível. No jogo `recall`, uma demonstração com modelo conta como ajuda, não como evocação independente.
 
-Fases obrigatórias em cada percurso: `context`, `recognition`, `syllables`, `code`, `transfer`, `comprehension`, `writing`, `communication`, `review`. Cada uma pode ocupar mais de uma página. As primeiras fases partem de sentido e da experiência da criança, e antecedem análise e transferência. A revisão aparece no fim, depois da comunicação. `code` exige mediação explícita que modele a relação som/grafema. `transfer` e `review` **não têm imagens nem modelos da resposta**: `text`, `prompt` e `title` não devem revelar o item correto, e o motor oculta pistas até à primeira resposta. O adulto observa leitura/explicação e decide retoma; escolhas fechadas só mostram reconhecimento entre alternativas. A sessão de revisão inclui leitura sem imagem e uma declaração oral com adulto ou escrita, pois clicar numa opção não comprova leitura autónoma.
+| ID | Estado e representação | Ação e transição | Restrição descoberta | Evidência observável |
+| --- | --- | --- | --- | --- |
+| `match` | Imagem, palavra e controlo de áudio; escolhas de cartão | Escolher o cartão correspondente, rever ou continuar | Palavra inteira corresponde ao referente apresentado | Cartão escolhido e ajudas vistas |
+| `pairs` | Cartões emparelháveis, referência conforme apoio | Escolher dois cartões; repetir pares sem perder os já feitos | Dois cartões correspondem ao mesmo item | Pares tentados e concluídos, com apoio |
+| `hunt` | Palavra-modelo e cartões em posições variadas | Tocar na palavra igual; seleção permanece visível | A sequência completa coincide com o modelo | Forma selecionada, comparação visual |
+| `syllables` | Modelo, lugares vazios e unidades móveis | Tocar unidades pela ordem; desfazer e confirmar | As partes têm uma ordem na palavra | Sequência confirmada com modelo |
+| `gap` | Palavra com uma unidade em falta e alternativas | Escolher a unidade; variar lacuna entre rondas | Uma unidade completa aquele lugar | Unidade escolhida para a lacuna |
+| `recall` | Imagem/áudio, lugares vazios e peças sem modelo inicial | Reconstruir, confirmar; recuperar modelo por pedido | A ordem recompõe a palavra trabalhada | Sequência sem modelo inicial e ajuda efetivamente usada |
 
-Os textos de leitura usam o repertório cumulativo já trabalhado, identificado em `prerequisites`; palavras ainda não decifráveis ficam expressamente para leitura do adulto. Não declarar que percorrer páginas comprova domínio da leitura. Incluir compreensão de frase e de pequeno texto, recombinação com sílabas/padrões anteriores quando disponíveis, produção com destinatário real, revisão e comunicação. A autoavaliação facultativa é acrescentada pelo motor e retoma os critérios iniciais.
+As peças e posições variam entre rondas. Repetições de sílaba usam identidade por ocorrência para permitir remover e recolocar sem apagar outra igual. Não avaliar ordenação apenas pelo conjunto de peças. O botão de desfazer devolve a peça ao banco e preserva as restantes.
 
-O guia docente identifica repertório e partes lidas pelo adulto, modelação de código, respostas verificáveis, indicadores de observação oral e de escrita, materiais, destinatário, revisão em dias seguintes e critérios para voltar a apoiar. Regista as adaptações MEM como decisões propostas, sem atribuí-las ao método original.
+Os distratores escritos usam o repertório atual e anterior que o professor confirmou. No início, menina pode contrastar com os seus fragmentos `me`, `ni` e `na`, apresentados como partes. Não preencher opções com pseudopalavras ou palavras futuras. Pares da primeira palavra podem usar um só par em quatro rondas de posições distintas; depois, acrescentar até três pares do repertório conhecido. Imagens distratoras podem ser apresentadas sem exigir a leitura de nomes novos.
 
-O motor conserva respostas ao mudar entre Com pistas, Passo a passo e Mais desafios, guarda no dispositivo e restaura sem emitir novas tentativas. O restauro reenvia apenas o checkpoint para atualizar a disponibilidade da reflexão no host. Avançar depende de responder, incluindo respostas incorretas; acerto não bloqueia. A escrita no ecrã admite até 180 caracteres e apresenta contador; a produção pode continuar em papel. Não publicar nem escrever no catálogo através deste motor.
+## Apoios e avanço
 
-Para compatibilidade com o registo canónico, o motor cria ligações simbólicas relativas em `drafts/m28p-v2-<slug>.html`, `drafts/m28p-v2-<slug>-docspec.json`, `drafts/m28p-v2-<slug>-design-spec.json`, `drafts/m28p-v2-<slug>-activity.json`, `drafts/m28p-v2-<slug>-run-manifest.json` e `drafts/m28p-v2-<slug>.md`. O guia e todos os artefactos continuam na pasta da palavra. O motor nunca substitui um ficheiro existente por uma ligação simbólica.
+Os valores da ponte são `support`, `intermediate` e `challenge`, correspondendo a Com pistas, Passo a passo e Mais desafios. Quando o DocSpec exigir `standard`, mapear para `intermediate` na ponte. Os três apoios ajustam modelo, alternativas e destaque; não mudam a resposta correta nem a grafia-alvo no meio da ronda.
+
+Apoio local tem três passos recuperáveis: observar referência; destacar a relação ou lugar a rever; demonstrar a próxima ação. Não exigir leitura de instruções sobre utilidade da ajuda para regressar à tarefa. Conservar unidades, seleção, pares, ronda e respostas ao mudar de apoio. Não emitir tentativa por mudar apoio, ouvir, ver demonstração ou restaurar.
+
+Avançar depende de responder ao pedido da ronda, mesmo com erro. Ordenação requer confirmar uma sequência completa, que pode estar incorreta. Erro não apaga trabalho nem retira acesso a "Seguinte". Há feedback visual imediato e opção de corrigir. Uma ajuda não deve responder automaticamente pela criança nem acrescentar uma tentativa correta ao relatório.
+
+## Interface, áudio e recuperação
+
+Uma ação principal por momento, instrução de duas a seis palavras sempre que possível, controlos estáveis, corpo ≥22 px e alvos ≥56 px. Sem entrada com objetivos em prosa, critérios para ler ou conversa obrigatória. Áudio PT-PT incorporado da palavra e da instrução, iniciado por gesto e repetível. `speechSynthesis` pode ser acessório, mas a disponibilidade de uma voz do sistema não satisfaz este contrato.
+
+A demonstração mostra uma ação observável junto dos controlos reais. Oferecer alternativa por clique e teclado a qualquer arrasto; foco e rótulos acessíveis; redução de movimento; fonte offline. A criança pode sair ou pedir ajuda sem ter de concluir a coleção. A autoavaliação é visual/oral e facultativa.
+
+Guardar jogo, palavra, ronda, resposta, apoio e ajudas. Persistência local não pode misturar tentativas entre participantes ou realizações do host. Recuperar trabalho restaura estado sem novos eventos de tentativa. A conclusão atualiza o host pelo contrato canónico de `postMessage`; o HTML não chama APIs nem leva credenciais. Não se afirma sincronização com o professor sem confirmação do servidor.
+
+## Critérios de aceitação
+
+Validar os 28 registos, ordem, grafia, concatenação, seis jogos e recursos. O teste deve inspecionar os HTML produzidos e confirmar que os áudios e imagens incorporados existem. Testar interação real: resposta errada permite avançar, pista ajuda sem apagar, demonstração reaparece, mudar apoio conserva, desfazer funciona, teclado/toque operam e recuperação não duplica tentativas. Menina, passarinho/cigarra e flor cobrem casos pedagógicos distintos; não substituem a validação de dados de toda a coleção.
+
+A revisão docente recebe ligações privadas de todas as 168 atividades e os guias. Registo como rascunho e integração em main não são aprovação para publicação aos alunos. Associação visual, memória e reconstrução não são classificadas automaticamente como leitura, fluência ou domínio do método.
