@@ -194,7 +194,7 @@ def test_unchanged_association_survives_switching_support(page, lesson_origin):
     assert page.get_by_role('button', name='Seguinte', exact=True).is_disabled()
 
 
-def test_realization_restores_all_units_and_drawing_without_duplicate_attempts(page, studio_origin):
+def test_realization_restores_all_units_and_drawing_without_duplicate_attempts(page, studio_origin, point_into_lesson):
     import json
     import time
     from pathlib import Path
@@ -234,7 +234,9 @@ def test_realization_restores_all_units_and_drawing_without_duplicate_attempts(p
     assert [e['payload']['correct'] for e in attempts if e['unitId'] == 'u5'] == [False, True]
     page.reload()
     expect(lesson.get_by_role('heading', name='Exploraste as cinco unidades.')).to_be_visible()
-    lesson.get_by_role('button', name='5. Grelha', exact=True).click()
+    grid_page = lesson.get_by_role('button', name='5. Grelha', exact=True)
+    point_into_lesson(grid_page)
+    grid_page.click()
     lesson.get_by_text('Desenho livre (opcional)', exact=True).click()
     assert sketch.locator('path').get_attribute('d') == path
     assert lesson.get_by_role('button', name='Seguinte', exact=True).is_enabled()

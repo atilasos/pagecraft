@@ -164,3 +164,94 @@ Antes da correção, a nova asserção do status falhou nas duas variantes, em
 1,67 s (`/tmp/pagecraft-loading-accessibility-red.log`). Depois, os quatro testes
 de `test_learning_initialization.py` passaram em 3,89 s, sem instrumentação
 externa (`/tmp/pagecraft-loading-accessibility-green.log`).
+
+## Falha após reload isolada no encaminhamento de entrada
+
+A continuação começou com o worktree limpo em `df433ea`. O teste original
+não foi editado durante a reprodução e as comparações instrumentadas.
+Uma primeira execução falhou em 5,80 s ao procurar o desenho após reload.
+A grelha não tinha aberto: o botão "5. Grelha" existia, estava visível e o
+`document.elementFromPoint` interno encontrava-o no centro da sua caixa.
+No entanto, `pointerdown`, `pointerup` e `click` chegavam ao elemento `IFRAME`
+no anfitrião. O documento interno não recebia qualquer evento. As fontes já
+estavam carregadas e a geometria correspondia às coordenadas do gesto.
+O log é `/tmp/pagecraft-reload-baseline.log` e a captura é
+`/tmp/pagecraft-reload-probe-baseline.png`.
+
+A hipótese de restauro não explica esta falha: o documento interno continuava
+na página "Exploraste as cinco unidades." porque o clique não lhe chegara.
+`bring_to_front()` depois de reload não resolveu. A repetição deu 19 passes e
+uma falha no mesmo ponto, em 42,15 s. Um `hover` sem deslocar primeiro o rato
+para fora do iframe também não confirmou entrada no documento novo. Uma
+captura do controlo antes do clique falhou no caso mínimo; não é usada como
+sincronização. Estes resultados excluem usar ativação da tab ou screenshot
+como correções suficientes.
+
+### Reprodução sem código PageCraft
+
+`tests/browser/repro_cdp_iframe.py` serve dois documentos mínimos por rotas
+Playwright locais, dentro de um contexto descartável da sessão Hub existente.
+Não lança outro Chrome. O anfitrião obtém uma resposta, define `src` no iframe
+sandboxed e mostra o contentor. O iframe mostra um heading e um botão ao receber
+uma mensagem. O botão escreve "Clicked" num `output` por um listener HTML
+normal. Não há fontes, CSS ou JavaScript PageCraft, restauro, dados de aluno,
+autenticação ou persistência.
+
+No Chrome `151.0.7922.75`, o modo dinâmico passou 50 recargas e falhou na 51.ª.
+O JSON `/tmp/pagecraft-cdp-dynamic.json` regista o rato a atingir o `IFRAME`
+no anfitrião em x=737,5, y=667, sem qualquer evento interno. O botão interno
+estava em x=592, y=334, com 111 × 56 px, sem antepassado inerte, e o hit-test
+interno retornava `BUTTON`. O `output` permaneceu vazio. A asserção de
+visibilidade do heading e a verificação automática do clique pelo Playwright
+já tinham passado. O mesmo cenário com iframe estático passou 100 recargas.
+
+Esta é uma falha observada no encaminhamento de entrada do Chromium por CDP,
+reproduzida independentemente do produto. A experiência não identifica a
+função interna do Chromium responsável, nem determina se um rato físico num
+browser visível sofre a mesma falha. A comparação headed foi tentada pelo Hub
+e abortou com `Missing X server or $DISPLAY`; não existe evidência headed.
+
+### Sincronização por entrada nativa observada
+
+A fixture `point_into_lesson` primeiro coloca o alvo na área visível. Move o
+rato para o canto do anfitrião, fora de `#lesson`, entra no alvo com `hover()`
+nativo e exige que o elemento interno corresponda a `:hover`. Essa é a condição
+observável de encaminhamento. A avaliação JavaScript apenas lê `:hover`.
+Não dispara eventos nem executa handlers de interação. Se a condição não chega,
+o teste falha antes do clique.
+
+O caso mínimo dinâmico com esta sequência passou 100 recargas. A aplicação
+experimental da mesma sequência ao teste original, ainda intacto, passou
+30 repetições em 59,04 s. Só depois destas provas se alterou o teste original,
+para confirmar a entrada do ponteiro antes do primeiro clique depois de reload.
+Todos os cliques e as asserções de desenho, respostas, tentativas e relatórios
+mantêm-se. Não há sleep novo, repetição de clique ou alteração de timeout.
+A correção de produto `cfdbe07` permanece intacta; esta falha restante só exigiu
+uma sincronização explícita da automação.
+
+Os comandos abaixo reproduzem as três variantes. O primeiro deve poder falhar
+neste browser; uma passagem isolada não refuta a intermitência.
+
+```bash
+export PAGECRAFT_TEST_CDP=http://127.0.0.1:9330
+uv run --offline --project /home/proteu/pagecraft --with playwright==1.63.0 python tests/browser/repro_cdp_iframe.py
+uv run --offline --project /home/proteu/pagecraft --with playwright==1.63.0 python tests/browser/repro_cdp_iframe.py --static-frame
+uv run --offline --project /home/proteu/pagecraft --with playwright==1.63.0 python tests/browser/repro_cdp_iframe.py --sync-pointer
+```
+
+Os logs são `/tmp/pagecraft-cdp-dynamic.log`, `/tmp/pagecraft-cdp-static.log`
+e `/tmp/pagecraft-cdp-pointer.log`. Os logs das experiências descartadas são
+`/tmp/pagecraft-reload-front.log`, `/tmp/pagecraft-reload-hover.log` e
+`/tmp/pagecraft-reload-minimal-paint.log`. A instrumentação exploratória está
+fora do repositório. O reproducer permanente contém apenas documentos
+sintéticos e a recolha de evidência da falha.
+
+A repetição final sem instrumentação externa passou 50 vezes em 99,50 s
+(`/tmp/pagecraft-reload-final-loop.log`). O invólucro
+`/tmp/test_pagecraft_reload_loop.py` parametriza a função original com as
+fixtures reais e chama-a sem alterar qualquer passo. A repetição direta do
+mesmo nó também pode ser pedida ao pytest com `--keep-duplicates`:
+
+```bash
+PAGECRAFT_TEST_CDP=http://127.0.0.1:9330 uv run --offline --project /home/proteu/pagecraft --with playwright==1.63.0 pytest -q --keep-duplicates $(for n in {1..50}; do echo tests/browser/test_fraction_units.py::test_realization_restores_all_units_and_drawing_without_duplicate_attempts; done)
+```
