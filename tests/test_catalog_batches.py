@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 
 from server.bridge_snippet import ensure_bridge_lite
+from server.publish import build_catalog
 
 
 ROOT = Path(__file__).parent.parent
@@ -75,10 +76,13 @@ def test_m28p_generator_keeps_variants_and_delegates_canonical_catalog(
 ):
     repo = tmp_path / "pagecraft"
     shutil.copytree(ROOT / "activities" / "arvore", repo / "activities" / "arvore")
+    base_meta = json.loads((repo / 'activities/arvore/meta.json').read_text())
+    base_meta['status'] = 'published'
+    _write_json(repo / 'activities/arvore/meta.json', base_meta)
     _write_json(repo / "activities" / "aaa-fora-do-metodo" / "meta.json", _meta("aaa-fora-do-metodo"))
     install_publication_module(repo)
     script = _copy_script(repo, "generate_m28p_variants.py")
-    real_catalog = json.loads((ROOT / "catalog.json").read_text(encoding="utf-8"))
+    real_catalog = build_catalog(repo)
     arvore = next(item for item in real_catalog["items"] if item["slug"] == "arvore")
     _write_json(
         repo / "catalog.json",
@@ -108,13 +112,17 @@ def test_m28p_generator_keeps_variants_and_delegates_canonical_catalog(
         generated = repo / "activities" / slug
         committed = ROOT / "activities" / slug
         for name in (
-            "meta.json",
             "design-spec.json",
             "teacher.md",
             "proofread-v1.json",
             "evaluation-v1.json",
         ):
             assert (generated / name).read_bytes() == (committed / name).read_bytes()
+        expected_meta = json.loads((committed / 'meta.json').read_text())
+        expected_meta['status'] = 'published'
+        expected_meta.pop('archivedAt', None)
+        expected_meta.pop('archiveReason', None)
+        assert json.loads((generated / 'meta.json').read_text()) == expected_meta
         assert ensure_bridge_lite(
             (generated / "index.html").read_text(encoding="utf-8")
         ) == (committed / "index.html").read_text(encoding="utf-8")
@@ -220,6 +228,9 @@ def test_m28p_repair_keeps_owned_fix_and_removes_stale_catalog_entry(
 def test_m28p_generator_preserves_variant_explicit_destination(tmp_path, install_publication_module):
     repo = tmp_path / 'pagecraft'
     shutil.copytree(ROOT / 'activities' / 'arvore', repo / 'activities' / 'arvore')
+    base_meta = json.loads((repo / 'activities/arvore/meta.json').read_text())
+    base_meta['status'] = 'published'
+    _write_json(repo / 'activities/arvore/meta.json', base_meta)
     slug = 'arvore-cacador-silabas'
     original = json.loads((ROOT / 'activities' / slug / 'meta.json').read_text())
     _write_json(repo / 'activities' / slug / 'meta.json', {**original, 'years': [4, 3, 4]})

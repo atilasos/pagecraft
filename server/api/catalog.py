@@ -56,7 +56,7 @@ def list_activities(activities_dir: Path) -> list[dict]:
         return items
     for meta_path in sorted(activities_dir.glob("*/meta.json")):
         meta = _read_json_cached(meta_path)
-        if not meta:
+        if not meta or meta.get("status") == "archived":
             continue
         docspec = _read_json_cached(meta_path.parent / "docspec.json")
         subject = meta.get("subject") or _subject_from_docspec(docspec)

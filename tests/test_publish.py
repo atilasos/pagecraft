@@ -178,6 +178,12 @@ def test_regenerate_catalog_includes_only_metadata_and_removes_deleted_activity(
         ROOT / "activities" / "bota-cacador-silabas",
         activities / "alpha",
     )
+    # O cenário testa publicações ativas, independentemente do arquivo real.
+    for name in ("zeta", "alpha"):
+        path = activities / name / "meta.json"
+        meta = json.loads(path.read_text())
+        meta["status"] = "published"
+        path.write_text(json.dumps(meta))
     (activities / "sem-metadados").mkdir()
 
     first = regenerate_catalog(repo)
@@ -218,6 +224,17 @@ def test_publish_explicit_years_and_republish_preserve_destination(repo, html_fi
     assert republished['years'] == [3, 4]
     empty = publish_activity(repo, 'multi', html_file, {**DOCSPEC, 'years': []}, TEACHER_MD)
     assert empty['years'] == []
+
+
+def test_publish_journey_keeps_declared_method_and_position(repo, html_file):
+    spec = {**DOCSPEC, 'years': [1], 'order': 14, 'tags': ['m28p', 'm28p-v2']}
+    meta = publish_activity(repo, 'm28p-v2-gema', html_file, spec, TEACHER_MD)
+    item = build_catalog(repo)['items'][0]
+    assert item['years'] == [1]
+    assert item['order'] == 14
+    assert item['tags'] == meta['tags'] == ['m28p', 'm28p-v2']
+    explicit = publish_activity(repo, 'm28p-v2-gema', html_file, spec, TEACHER_MD, tags=['revista'])
+    assert explicit['tags'] == ['revista']
 
 
 @pytest.mark.parametrize('invalid', [None, 3, '3', [True], [False], [3.0], ['3'], [0], [5]])

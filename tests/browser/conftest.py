@@ -66,6 +66,11 @@ def studio_origin(tmp_path_factory):
     (root / 'drafts').mkdir()
     shutil.copytree(DRAFT.parent.parent / 'server' / 'static', root / 'server' / 'static')
     shutil.copyfile(DRAFT, root / 'drafts' / DRAFT.name)
+    # Rascunho real da nova coleção, apenas no servidor descartável de ensaio.
+    for suffix in ['.html', '-docspec.json', '.md', '-design-spec.json', '-activity.json']:
+        source = DRAFT.parent / ('m28p-v2-gema' + suffix)
+        if source.is_file():
+            shutil.copyfile(source, root / 'drafts' / source.name)
     activity = root / 'activities' / 'fraction-test'
     activity.mkdir(parents=True)
     shutil.copyfile(DRAFT, activity / 'index.html')
