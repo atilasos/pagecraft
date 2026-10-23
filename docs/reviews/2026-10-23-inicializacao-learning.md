@@ -144,3 +144,23 @@ feita alteração especulativa para essas falhas restantes.
 
 A única alteração ao comportamento da criança é adiar os controlos até consumir
 o restauro. Não foram alterados objetivos, critérios ou escolhas pedagógicas.
+
+## Revisão de acessibilidade da espera
+
+A revisão independente de `df433ea` identificou que `body.inert` também retira
+`#learning-loading[role=status]` da árvore acessível. A espera passa a ser
+assinalada por `data-learning-loading` no elemento raiz; apenas `.wrap` e
+`.skip`, que contêm os controlos ocultos, ficam inertes. A mensagem permanece
+visível e sem qualquer antepassado inerte até consumir restauro e preferências.
+
+As regressões verificam a visibilidade e ausência de antepassado inerte do
+status, a impossibilidade de focar o corte enquanto oculto e a ausência de ação
+por teclado. Usam Enter para ativação: Espaço, sem um botão focado, deslocava o
+anfitrião e introduzia uma segunda variável na investigação de encaminhamento
+do rato. O cenário alternativo que aceita o corte antecipado e verifica se o
+restauro o apaga mantém-se intacto.
+
+Antes da correção, a nova asserção do status falhou nas duas variantes, em
+1,67 s (`/tmp/pagecraft-loading-accessibility-red.log`). Depois, os quatro testes
+de `test_learning_initialization.py` passaram em 3,89 s, sem instrumentação
+externa (`/tmp/pagecraft-loading-accessibility-green.log`).

@@ -39,7 +39,6 @@ def register_fraction(page, origin):
 
 
 def wait_for_initialization(lesson):
-    expect(lesson.locator('body')).to_have_js_property('inert', False)
     # The activity exposes its controls only after consuming both messages.
     expect(lesson.get_by_role('button', name='Cortar ao meio', exact=True)).to_be_visible()
 
@@ -68,15 +67,18 @@ def test_learning_restores_before_accepting_native_input(page, studio_origin, re
     cut = lesson.locator('[data-cut="0.5"]')
     early_input_available = cut.is_visible()
     if not early_input_available:
-        expect(lesson.locator('#learning-loading')).to_be_visible()
-        expect(lesson.locator('body')).to_have_js_property('inert', True)
+        status = lesson.get_by_role('status').filter(has_text='A recuperar o teu trabalho…')
+        expect(status).to_be_visible()
+        # Inert descendants are absent from the browser accessibility tree.
+        assert status.evaluate("el => el.closest('[inert]') === null")
     # A product may defer input or preserve it. It must never accept a cut and
     # then silently erase it when the authorized snapshot arrives.
     if early_input_available:
         cut.click()
     else:
         cut.focus()
-        page.keyboard.press('Space')
+        assert not cut.evaluate('el => el === document.activeElement')
+        page.keyboard.press('Enter')
     expect(cut).to_have_attribute('aria-pressed', str(early_input_available).lower())
     lesson.locator('body').evaluate('() => window.releaseInitialization()')
     wait_for_initialization(lesson)

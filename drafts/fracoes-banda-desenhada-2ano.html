@@ -122,13 +122,14 @@ OTHER DEALINGS IN THE FONT SOFTWARE. */
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 </style>
 <style>
-#learning-loading{display:none}body[inert] #learning-loading{display:block}body[inert] .wrap,body[inert] .skip{visibility:hidden}
+#learning-loading{display:none}html[data-learning-loading] #learning-loading{display:block}html[data-learning-loading] .wrap,html[data-learning-loading] .skip{visibility:hidden}
 </style>
 </head>
 <body>
 <script>
 // The permanent host promises restore followed by preferences for this mode.
-document.body.inert = window.parent !== window && location.hash === '#learning';
+if (window.parent !== window && location.hash === '#learning')
+  document.documentElement.dataset.learningLoading = 'true';
 </script>
 <a class="skip" href="#activity">Saltar para a atividade</a>
 <p class="draft">Rascunho em revisão · Frações com Minecraft</p>
@@ -148,7 +149,9 @@ document.body.inert = window.parent !== window && location.hash === '#learning';
   const activity = document.getElementById('activity');
   // Presentation is a local UI mode, never a role or an access credential.
   let learningHost = false;
-  let awaitingLearningInitialization = document.body.inert;
+  let awaitingLearningInitialization = document.documentElement.hasAttribute('data-learning-loading');
+  const learningControls = [document.querySelector('.wrap'), document.querySelector('.skip')];
+  learningControls.forEach(element => { element.inert = awaitingLearningInitialization; });
   let learningRestored = false;
   const presentation = new URL(location.href).searchParams.get('presentation') === '1';
   document.getElementById('presentation').hidden = !presentation;
@@ -565,7 +568,8 @@ document.body.inert = window.parent !== window && location.hash === '#learning';
       learningHost = true;
       if (!changeLevel(d.payload?.level)) saveWork();
       if (learningRestored && awaitingLearningInitialization) {
-        document.body.inert = false;
+        learningControls.forEach(element => { element.inert = false; });
+        delete document.documentElement.dataset.learningLoading;
         awaitingLearningInitialization = false;
       }
     }
