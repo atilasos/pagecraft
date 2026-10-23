@@ -6,7 +6,7 @@ Primeira leitura reservada: **pano**, p. 8 (um-cartao-novo). Leitura nova diferi
 
 Cartões efetivamente apresentados: p. 8: pano; p. 15: jato, pano, janela. Nas opções fechadas, ouvir todas as leituras antes do clique. Na leitura dos cartões, mostrar apenas o estímulo, sem imagem, duplicado, modelo oral, primeira sílaba ou ajuda do par antes da tentativa. Registar leitura literal, fusão, autocorreção e apoio; explicar significados depois. As restantes reaparições são retenção.
 
-Correspondências a confirmar antes das tentativas: p /p/; n /n/; j /ʒ/; t /t/; a tónico /a/; o final /u/. Ensino localizado em sapato p. 4, janela p. 4, janela p. 5. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
+Correspondências a confirmar antes das tentativas: p /p/; n /n/; j /ʒ/; t /t/; a tónico /a/; o final /u/. Ensino localizado em menina p. 6, sapato p. 4, janela p. 4, janela p. 5. Se uma correspondência não tiver sido ensinada com esta criança, reensinar sem antecipar o item e registar a ajuda. As referências localizam o ensino proposto, não provam que aconteceu.
 
 O mapa global é [docs/m28p-corpus-reservado.json](../../../docs/m28p-corpus-reservado.json). A auditoria confere exposições e referências; não classifica descodificação. Instruções, textos originais e mensagens próprias que ultrapassem o código ensinado continuam em leitura acompanhada explícita, sem reduzir o que a criança quer dizer.
 
@@ -98,3 +98,5 @@ Foram lidos AGENTS.md, PRODUCT.md, CONTEXT.md, o contrato fixo dos percursos e a
 A validação estrutural e a revisão do conteúdo não substituem a avaliação pedagógica do professor nem uma observação com crianças. Não se afirma eficácia específica deste percurso ou aprendizagem assegurada por completar páginas.
 
 Validação executada: `python3 -m json.tool drafts/m28p-v2/janela/content.json` e `python3 scripts/build_m28p_journeys.py --word janela --validate-only`, ambas com sucesso. O motor indicou 16 páginas e `validation: passed`. Não foram gerados artefactos nem feitos testes de browser por este agente.
+
+Para o cartão pano, recuperar também menina p. 6: a central TÓNICO [ɐ] antes de n, sem confundir timbre central com vogal átona. A referência consta no mapa global. Não antecipar o cartão inteiro ao retomar este valor.
