@@ -42,12 +42,16 @@ async function api(path, method = "GET", data) {
   return r.status === 204 ? null : r.json();
 }
 async function loadActivities() {
-  const activities = await api("/api/learning/activities");
+  const allActivities = await api("/api/learning/activities?include_archived=true");
+  const activities = allActivities.filter((a) => !a.archived_at);
   activities.sort((a, b) => (b.created_at || "").localeCompare(a.created_at || ""));
   const drafts = activities.filter((a) => !a.published).length;
   $("activity-count").textContent = `${activities.length} atividades · ${drafts} por aprovar`;
   $("activities").replaceChildren();
   $("filter-activity").replaceChildren(new Option("Todas", ""));
+  for (const a of allActivities) {
+    $("filter-activity").append(new Option(a.title + (a.archived_at ? " (retirada)" : ""), a.code));
+  }
   for (const a of activities) {
     const card = el("article", undefined, "card"),
       state = el("span", a.published ? "Disponível" : "Rascunho", "tag");
@@ -101,7 +105,6 @@ async function loadActivities() {
       card.append(publish);
     }
     $("activities").append(card);
-    $("filter-activity").append(new Option(a.title, a.code));
   }
   if (!activities.length)
     $("activities").append(

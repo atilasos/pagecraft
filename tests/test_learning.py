@@ -58,6 +58,35 @@ async def test_draft_is_private_registration_idempotent_and_code_survives_restar
     assert (await reloaded.activity(code))['slug'] == 'test-lesson'
 
 
+async def test_retired_draft_preserves_realizations_and_cannot_be_published(learning_clients):
+    app, teacher, pupil = learning_clients
+    activity, data = await register(teacher, published=False)
+    code = activity['code']
+    started = await teacher.post(f'/api/learning/activities/{code}/start', json={'name': 'Revisão'})
+    assert started.status_code == 201
+    assert (await pupil.post(f'/api/learning/activities/{code}/archive')).status_code in (401, 403)
+    first = await teacher.post(f'/api/learning/activities/{code}/archive')
+    assert first.status_code == 200
+    again = await teacher.post(f'/api/learning/activities/{code}/archive')
+    assert again.json()['archived_at'] == first.json()['archived_at']
+    assert (await teacher.get('/api/learning/activities')).json() == []
+    assert (await teacher.get('/api/learning/activities?include_archived=true')).json()[0]['code'] == code
+    assert (await teacher.post(f'/api/learning/activities/{code}/publish')).status_code == 409
+    # Reexecutar o registo não reativa inadvertidamente o rascunho antigo.
+    assert (await teacher.post('/api/learning/activities', json=data)).json()['archived_at']
+    preserved = await app.state.learning.attempt(started.json()['id'])
+    assert preserved['name'] == 'Revisão'
+    assert preserved['code'] == code
+    assert app.state.learning.content_path(await app.state.learning.activity(code)).is_file()
+
+
+async def test_retirement_does_not_unpublish_existing_lessons(learning_clients):
+    _, teacher, _ = learning_clients
+    activity, _ = await register(teacher)
+    assert (await teacher.post(f"/api/learning/activities/{activity['code']}/archive")).status_code == 409
+    assert len((await teacher.get('/api/learning/activities')).json()) == 1
+
+
 async def test_identity_is_scoped_to_realization_not_typed_name(learning_clients):
     app, teacher, pupil = learning_clients
     activity, _ = await register(teacher)
