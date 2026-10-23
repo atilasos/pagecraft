@@ -2,7 +2,42 @@
   "severity": "low",
   "review": "Proofreader e Evaluator pedagógico, análise estática",
   "date": "2026-10-23",
-  "issues": [
+  "issues": [],
+  "summary": "As instruções principais estão corretas em PT-PT. Os seis achados da primeira passagem foram resolvidos na rechecagem dos 168 HTML regenerados e na documentação reconciliada; não ficaram pendências materiais dentro do âmbito estático.",
+  "acceptance_checks": [
+    "Ortografia e gramática PT-PT das seis instruções principais: OK",
+    "Dados das 28 palavras, seis IDs e quatro rondas: OK",
+    "Distratores futuros nos dados dos jogos: não encontrados",
+    "Flor e dígrafos nos dados de construção: OK",
+    "Demonstração contextual e terminologia de flor nos 168 HTML: OK",
+    "Pistas visuais implementadas junto da ação nos 168 HTML: OK estático",
+    "Apoios no estado, tentativa e recuperação: OK estático e modelo Node",
+    "Pares incompletos bloqueados, completos incorretos admitidos: OK no modelo Node",
+    "Títulos, operações e apoios reais reconciliados com documentação: OK",
+    "Browser real e áudio audível: em verificação separada pelo coordenador"
+  ],
+  "limits": [
+    "Sem browser por este revisor, conforme atribuição do coordenador.",
+    "Sem audição das gravações por este revisor.",
+    "Sem experiência com alunos.",
+    "Verificação estática e do modelo puro não demonstram clareza visual ou autonomia."
+  ],
+  "pass": true,
+  "openIssues": [],
+  "scope": "Revisão linguística e pedagógica estática, com verificações do modelo puro extraído do HTML real.",
+  "releaseApproval": "Depende da verificação de browser e site pelo coordenador; não declara autonomia comprovada.",
+  "recheckedAfterCommit": "e17bee1",
+  "artifactsChecked": {
+    "html": 168,
+    "rounds": 672,
+    "games": 6
+  },
+  "snapshots": {
+    "menina-pairs": "b5a85e9389cce729f92d6ce28b19abd3ff04dc8775a2ed7e82b9f60ee043c9bd",
+    "flor-syllables": "9d4338076fe83d5a090f5ddbadc546476032f62701c0368ac797d5102105ea69",
+    "template": "e848f2ef1e6311d22563277b872b2221f49eacd42f0da3a421d10ad78b818652"
+  },
+  "resolvedFindings": [
     {
       "id": "demo-context",
       "type": "pedagogical",
@@ -69,39 +104,5 @@
       "reason": "A comparação visual é adequada como iniciação, mas aproxima match de hunt e não deve ser interpretada como prova de leitura ou diversidade de processos não implementados.",
       "resolutionEvidence": "Princípios, contrato, renovação e collection-design.json reconciliados com os títulos finais e comparação visual em match."
     }
-  ],
-  "summary": "As instruções principais estão corretas em PT-PT. Os seis achados da primeira passagem foram resolvidos na rechecagem dos 168 HTML regenerados e na documentação reconciliada; não ficaram pendências materiais dentro do âmbito estático.",
-  "acceptance_checks": [
-    "Ortografia e gramática PT-PT das seis instruções principais: OK",
-    "Dados das 28 palavras, seis IDs e quatro rondas: OK",
-    "Distratores futuros nos dados dos jogos: não encontrados",
-    "Flor e dígrafos nos dados de construção: OK",
-    "Demonstração contextual e terminologia de flor nos 168 HTML: OK",
-    "Pistas visuais implementadas junto da ação nos 168 HTML: OK estático",
-    "Apoios no estado, tentativa e recuperação: OK estático e modelo Node",
-    "Pares incompletos bloqueados, completos incorretos admitidos: OK no modelo Node",
-    "Títulos, operações e apoios reais reconciliados com documentação: OK",
-    "Browser real e áudio audível: executados separadamente pelo coordenador"
-  ],
-  "limits": [
-    "Sem browser por este revisor, conforme atribuição do coordenador.",
-    "Sem audição das gravações por este revisor.",
-    "Sem experiência com alunos.",
-    "Verificação estática e do modelo puro não demonstram clareza visual ou autonomia."
-  ],
-  "pass": true,
-  "openIssues": [],
-  "scope": "Revisão linguística e pedagógica estática, com verificações do modelo puro extraído do HTML real.",
-  "releaseApproval": "Depende da verificação de browser e site pelo coordenador; não declara autonomia comprovada.",
-  "recheckedAfterCommit": "e17bee1",
-  "artifactsChecked": {
-    "html": 168,
-    "rounds": 672,
-    "games": 6
-  },
-  "snapshots": {
-    "menina-pairs": "b5a85e9389cce729f92d6ce28b19abd3ff04dc8775a2ed7e82b9f60ee043c9bd",
-    "flor-syllables": "9d4338076fe83d5a090f5ddbadc546476032f62701c0368ac797d5102105ea69",
-    "template": "e848f2ef1e6311d22563277b872b2221f49eacd42f0da3a421d10ad78b818652"
-  }
+  ]
 }
