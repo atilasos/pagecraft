@@ -112,8 +112,7 @@ def test_pending_level_change_survives_reload_before_sync(page, studio_origin):
     registration = json.loads((Path(__file__).resolve().parents[2] / 'drafts/fracoes-banda-desenhada-2ano-registration.json').read_text())
     page.request.get(studio_origin + '/api/teacher-bootstrap')
     draft = page.request.post(studio_origin + '/api/learning/activities', data=registration).json()
-    # Each check owns a fresh realization, even when another preview exists.
-    page.request.post(studio_origin + '/api/learning/me/leave')
+    # The browser fixture gives each check a fresh context and realization.
     page.goto(studio_origin + '/' + draft['code'])
     page.get_by_label('Como te chamas?').fill('Retoma com rede em falta')
     page.get_by_role('button', name='Começar', exact=True).click()

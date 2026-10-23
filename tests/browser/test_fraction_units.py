@@ -194,13 +194,12 @@ def test_unchanged_association_survives_switching_support(page, lesson_origin):
     assert page.get_by_role('button', name='Seguinte', exact=True).is_disabled()
 
 
-def test_realization_restores_all_units_and_drawing_without_duplicate_attempts(page, studio_origin):
+def test_realization_restores_all_units_and_drawing_without_duplicate_attempts(page, studio_origin, point_into_lesson):
     import json
     import time
     from pathlib import Path
     registration = json.loads((Path(__file__).resolve().parents[2] / 'drafts/fracoes-banda-desenhada-2ano-registration.json').read_text())
     page.request.get(studio_origin + '/api/teacher-bootstrap')
-    page.request.post(studio_origin + '/api/learning/me/leave')
     draft = page.request.post(studio_origin + '/api/learning/activities', data=registration).json()
     page.goto(studio_origin + '/' + draft['code'])
     page.get_by_label('Como te chamas?').fill('Ensaio cinco unidades')
@@ -235,7 +234,9 @@ def test_realization_restores_all_units_and_drawing_without_duplicate_attempts(p
     assert [e['payload']['correct'] for e in attempts if e['unitId'] == 'u5'] == [False, True]
     page.reload()
     expect(lesson.get_by_role('heading', name='Exploraste as cinco unidades.')).to_be_visible()
-    lesson.get_by_role('button', name='5. Grelha', exact=True).click()
+    grid_page = lesson.get_by_role('button', name='5. Grelha', exact=True)
+    point_into_lesson(grid_page)
+    grid_page.click()
     lesson.get_by_text('Desenho livre (opcional)', exact=True).click()
     assert sketch.locator('path').get_attribute('d') == path
     assert lesson.get_by_role('button', name='Seguinte', exact=True).is_enabled()

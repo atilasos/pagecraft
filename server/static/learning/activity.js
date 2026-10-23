@@ -43,10 +43,14 @@ const copy = {
     recoveryUnavailable:
       "Não foi possível recuperar o teu trabalho. Tenta novamente antes de começar.",
     retryRecovery: "Tentar recuperar novamente",
+    recoveryExpired:
+      "O acesso a esta realização terminou. Não há trabalho pendente neste separador. Podes começar uma nova realização.",
     unavailable:
       "Não foi possível abrir a atividade. Confirma o endereço ou tenta novamente.",
     newAttempt:
       "Tens trabalho por guardar. Tenta guardar antes de trocar de aluno.",
+    identityConflict:
+      "Foi aberta outra realização neste browser. O trabalho deste separador continua por guardar. Mantém esta página aberta e pede ajuda ao professor.",
     readUnavailable: "Este dispositivo não tem leitura em voz alta disponível.",
     preview:
       "Pré-visualização: estes registos não entram nos relatórios dos alunos.",
@@ -91,42 +95,61 @@ const copy = {
     recoveryUnavailable:
       "We could not recover your work. Please try again before starting.",
     retryRecovery: "Try recovering again",
+    recoveryExpired:
+      "Access to this attempt has expired. There is no pending work in this tab. You can start a new attempt.",
     unavailable:
       "We could not open this activity. Check the address or try again.",
     newAttempt:
       "Some work still needs saving. Try saving before changing pupil.",
+    identityConflict:
+      "Another attempt was opened in this browser. This tab's work still needs saving. Keep this page open and ask your teacher for help.",
     readUnavailable: "Reading aloud is not available on this device.",
     preview: "Preview: these records are not included in pupil reports.",
   },
 };
 let reflectionReady = true;
 let requiresCompletion = false;
+let lessonLoaded = false;
 let lang = "pt",
   activity,
   attempt,
+  expiredIdentity,
+  identityConflict = false,
   queue = [],
   flushing = null,
   reflectionDraft = { answers: {}, strategy: "", next_step: "" };
 const code = location.pathname.split("/").filter(Boolean).pop().toUpperCase();
 const t = (key) => copy[lang][key];
 function status(message, error = false) {
+  if (identityConflict) {
+    message = t("identityConflict");
+    error = true;
+  }
   $("status").textContent = message;
   $("status").classList.toggle("error", error);
 }
-async function api(path, method = "GET", data) {
+async function api(path, method = "GET", data, expectedId) {
+  const headers = data ? { "Content-Type": "application/json" } : {};
+  if (expectedId) headers["X-PageCraft-Realization"] = expectedId;
   const r = await fetch(path, {
     method,
-    headers: data ? { "Content-Type": "application/json" } : {},
+    headers,
     body: data ? JSON.stringify(data) : undefined,
   });
   if (!r.ok) {
+    const detail = (await r.json().catch(() => ({}))).detail;
+    if (detail?.code === "realization_conflict") {
+      identityConflict = true;
+      status(t("identityConflict"), true);
+    }
     const error = new Error(
-      lang === "en"
+      identityConflict ? t("identityConflict") : lang === "en"
         ? "Could not save. Please try again."
-        : (await r.json().catch(() => ({}))).detail ||
+        : (typeof detail === "string" ? detail : detail?.message) ||
           "Não foi possível guardar. Tenta novamente.",
     );
     error.status = r.status;
+    error.identityConflict = identityConflict;
     throw error;
   }
   return r.status === 204 ? null : r.json();
@@ -134,6 +157,7 @@ async function api(path, method = "GET", data) {
 function persist() {
   if (!attempt) return;
   try {
+    sessionStorage.setItem("pc-realization:" + code, attempt.id);
     sessionStorage.setItem("pc-queue:" + attempt.id, JSON.stringify(queue));
     sessionStorage.setItem(
       "pc-reflection:" + attempt.id,
@@ -157,7 +181,7 @@ function captureReflection() {
   }
 }
 function sendPreferences() {
-  if (attempt)
+  if (attempt && lessonLoaded)
     $("lesson").contentWindow?.postMessage(
       {
         pagecraft: 1,
@@ -214,7 +238,7 @@ async function flush() {
   flushing = (async () => {
     while (queue.length) {
       const batch = queue.slice(0, 100);
-      await api("/api/learning/me/events", "POST", { events: batch });
+      await api("/api/learning/me/events", "POST", { events: batch }, attempt.id);
       attempt.events.push(...batch);
       queue.splice(0, batch.length);
       persist();
@@ -237,7 +261,10 @@ function showWork() {
   for (const id of ["entry", "reflection", "done"]) $(id).hidden = true;
   $("work").hidden = false;
   $("leave").hidden = false;
-  $("lesson").src = `/api/learning/activities/${code}/content`;
+  lessonLoaded = false;
+  // New drafts can defer input until restore and preferences are consumed.
+  // Older activities ignore the fragment and keep their existing behavior.
+  $("lesson").src = `/api/learning/activities/${code}/content#learning`;
   $("level").value = attempt.level;
   $("language").value = lang;
   translate();
@@ -380,6 +407,7 @@ $("level").onchange = () => {
   sendPreferences();
 };
 $("lesson").onload = () => {
+  lessonLoaded = true;
   if (attempt)
     $("lesson").contentWindow.postMessage(
       {
@@ -410,7 +438,7 @@ $("finish-form").onsubmit = async (e) => {
       ...reflectionDraft,
       language: lang,
       level: $("level").value,
-    });
+    }, attempt.id);
     sessionStorage.removeItem("pc-queue:" + attempt.id);
     sessionStorage.removeItem("pc-reflection:" + attempt.id);
     showDone();
@@ -420,16 +448,61 @@ $("finish-form").onsubmit = async (e) => {
     e.submitter.disabled = false;
   }
 };
+function emptyReflection(draft) {
+  return draft && typeof draft === "object" && !Array.isArray(draft) &&
+    Object.keys(draft).every((key) => ["answers", "strategy", "next_step"].includes(key)) &&
+    draft.answers && typeof draft.answers === "object" && !Array.isArray(draft.answers) &&
+    Object.keys(draft.answers).length === 0 && draft.strategy === "" && draft.next_step === "";
+}
+function noPendingWork(id) {
+  try {
+    if (queue.length || (attempt && !attempt.completed_at && !emptyReflection(reflectionDraft))) return false;
+    const storedQueue = sessionStorage.getItem("pc-queue:" + id);
+    const pending = storedQueue === null ? [] : JSON.parse(storedQueue);
+    const storedReflection = sessionStorage.getItem("pc-reflection:" + id);
+    return Array.isArray(pending) && pending.length === 0 &&
+      (storedReflection === null || emptyReflection(JSON.parse(storedReflection)));
+  } catch {
+    // Unreadable or malformed storage is not proof that no work is pending.
+    return false;
+  }
+}
+function startLocally(id) {
+  if (identityConflict || !id || !noPendingWork(id)) return false;
+  try {
+    if (sessionStorage.getItem("pc-realization:" + code) !== id) return false;
+    // This explicit choice only forgets this tab's reference. It never clears
+    // a shared cookie, nor removes drafts belonging to any realization.
+    sessionStorage.removeItem("pc-realization:" + code);
+  } catch {
+    return false;
+  }
+  attempt = null;
+  expiredIdentity = null;
+  queue = [];
+  reflectionDraft = { answers: {}, strategy: "", next_step: "" };
+  for (const id of ["work", "reflection", "done", "leave", "recovery-retry", "recovery-new"]) $(id).hidden = true;
+  $("lesson").src = "about:blank";
+  $("entry").hidden = false;
+  $("start-form").hidden = false;
+  $("name").value = "";
+  status("");
+  return true;
+}
 async function leave() {
   try {
     await flush();
-    await api("/api/learning/me/leave", "POST");
+    await api("/api/learning/me/leave", "POST", undefined, attempt.id);
     if (attempt) {
       sessionStorage.removeItem("pc-queue:" + attempt.id);
       sessionStorage.removeItem("pc-reflection:" + attempt.id);
+      sessionStorage.removeItem("pc-realization:" + code);
     }
     location.reload();
-  } catch {
+  } catch (error) {
+    // The pupil already chose to start anew. A 401 permits a local exit only
+    // when every source of pending work can be checked; 409 never permits it.
+    if (error.status === 401 && startLocally(attempt?.id)) return;
     status(t("newAttempt"), true);
   }
 }
@@ -443,8 +516,10 @@ async function requestFeedback(payload, unitId) {
     await flush();
     result = await api("/api/learning/me/feedback", "POST", {
       unit_id: unitId, request_id: payload.request_id, context: payload,
-    });
-  } catch {
+    }, owner);
+  } catch (error) {
+    // A conflict must not turn into an apparently delivered hint for this work.
+    if (error.identityConflict) return;
     result = {request_id: payload.request_id, unit_id: unitId, source: "unavailable",
       text: "Não consegui dar uma pista agora. Usa as pistas do guião ou pede ajuda ao professor."};
   }
@@ -514,10 +589,15 @@ setInterval(() => flush().catch(() => {}), 5000);
 async function recoverAttempt() {
   $("start-form").hidden = true;
   $("recovery-retry").hidden = true;
+  $("recovery-new").hidden = true;
+  expiredIdentity = null;
   status(t("recovering"));
+  let expectedId;
   try {
-    const previous = await api("/api/learning/me");
+    expectedId = sessionStorage.getItem("pc-realization:" + code);
+    const previous = await api("/api/learning/me", "GET", undefined, expectedId);
     if (previous.code === code) {
+      identityConflict = false;
       attempt = previous;
       lang = previous.language;
       queue = JSON.parse(
@@ -529,6 +609,7 @@ async function recoverAttempt() {
         JSON.parse(
           sessionStorage.getItem("pc-reflection:" + attempt.id) || "null",
         ) || reflectionDraft;
+      persist();
       status("");
       showWork();
       if (attempt.completed_at) showDone();
@@ -538,18 +619,27 @@ async function recoverAttempt() {
       status("");
     }
   } catch (error) {
-    // Only a missing/expired credential permits a fresh entry. A failed
-    // recovery must not invite the child to replace the existing credential.
-    if (error.status === 401) {
+    // Known tabs need an explicit choice to forget their reference. Pending
+    // or uncertain data must remain recoverable, even after credentials expire.
+    if (error.status === 401 && !expectedId) {
       $("start-form").hidden = false;
       status("");
     } else {
-      status(t("recoveryUnavailable"), true);
+      const canStartNew = error.status === 401 && expectedId && !identityConflict && noPendingWork(expectedId);
+      if (canStartNew) expiredIdentity = expectedId;
+      status(t(canStartNew ? "recoveryExpired" : "recoveryUnavailable"), true);
       $("recovery-retry").hidden = false;
+      $("recovery-new").hidden = !canStartNew;
     }
   }
 }
 $("recovery-retry").onclick = recoverAttempt;
+$("recovery-new").onclick = () => {
+  if (!startLocally(expiredIdentity)) {
+    $("recovery-new").hidden = true;
+    status(t("recoveryUnavailable"), true);
+  }
+};
 (async () => {
   try {
     activity = await api(`/api/learning/activities/${code}`);

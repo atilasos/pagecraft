@@ -78,6 +78,7 @@ async def test_complete_revision_can_publish_in_isolation_without_changing_old_w
             assert (await teacher.post(f"/api/learning/activities/{old['code']}/publish")).status_code == 200
             async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app,client=('192.0.2.44',1234)),base_url='http://test') as pupil:
                 previous = (await pupil.post(f"/api/learning/activities/{old['code']}/start",json={'name':'Trabalho anterior'})).json()
+                pupil.headers['X-PageCraft-Realization'] = previous['id']
                 response = await pupil.post('/api/learning/me/events',json={'events':[{'id':'old-answer','type':'attempt','unitId':'u1','payload':{'correct':False}}]})
                 assert response.status_code == 200
                 original = (await pupil.get(f"/api/learning/activities/{old['code']}/content")).text

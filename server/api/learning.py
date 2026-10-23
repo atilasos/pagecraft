@@ -176,18 +176,33 @@ async def start(code: Code, data: StartInput, request: Request, response: Respon
     return svc.public_attempt(attempt)
 
 
-async def current_id(request):
+async def current_id(request, *, discovery=False):
     # Teachers exercise drafts with the separate realization cookie too.
     identifier = await request.app.state.learning.resolve(request.cookies.get(LEARNING_COOKIE, ''))
     if identifier is None:
         raise HTTPException(401, 'Volta a entrar na atividade.')
+    # This header is a precondition, not a credential. Resolve the HttpOnly
+    # cookie first and never load a realization named by the caller.
+    expected = request.headers.get('X-PageCraft-Realization')
+    if expected is None and discovery:
+        return identifier
+    if expected is None:
+        raise HTTPException(428, 'Falta identificar a realização esperada. Reabre a atividade.')
+    if expected != identifier:
+        raise HTTPException(409, detail={
+            'code': 'realization_conflict',
+            'message': 'Foi aberta outra realização neste browser. O trabalho deste separador continua por guardar.',
+        })
     return identifier
 
 
 @router.get('/api/learning/me')
 @access_policy(RoutePolicy.LEARNER, RoutePolicy.TEACHER)
 async def me(request: Request):
-    return request.app.state.learning.public_attempt(await request.app.state.learning.attempt(await current_id(request)))
+    # A fresh tab may discover its cookie identity. Once a tab has an identity,
+    # including after reload, it supplies the same precondition as mutations.
+    identifier = await current_id(request, discovery=True)
+    return request.app.state.learning.public_attempt(await request.app.state.learning.attempt(identifier))
 
 
 @router.post('/api/learning/me/events')
@@ -213,8 +228,9 @@ async def finish(data: Assessment, request: Request):
 
 
 @router.post('/api/learning/me/leave', status_code=204)
-@access_policy(RoutePolicy.PUBLIC)
-async def leave(response: Response):
+@access_policy(RoutePolicy.LEARNER, RoutePolicy.TEACHER)
+async def leave(request: Request, response: Response):
+    await current_id(request)
     response.delete_cookie(LEARNING_COOKIE, path='/')
 
 

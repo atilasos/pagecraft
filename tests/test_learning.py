@@ -38,7 +38,10 @@ async def register(teacher, published=True):
 async def start(pupil, code, name='Ana'):
     response = await pupil.post(f'/api/learning/activities/{code}/start', json={'name': name, 'language': 'en'})
     assert response.status_code == 201, response.text
-    return response.json()
+    attempt = response.json()
+    # This client now represents the tab that started this realization.
+    pupil.headers['X-PageCraft-Realization'] = attempt['id']
+    return attempt
 
 
 async def test_draft_is_private_registration_idempotent_and_code_survives_restart(learning_clients):
