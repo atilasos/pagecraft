@@ -51,7 +51,7 @@ def test_every_game_all_rounds_keyboard_restore_and_no_network(page,tic_origin,p
     page.on('pageerror',lambda error:errors.append(str(error)))
     requests=[]
     page.on('request',lambda request:requests.append(request.url))
-    page.add_init_script("window.observed=[];addEventListener('message',e=>{if(e.data?.pagecraft===1)window.observed.push(e.data)});")
+    page.add_init_script("window.observed=[];document.addEventListener('pagecraft:activity-event',e=>window.observed.push(e.detail));")
     page.goto(tic_origin+'/'+str(path.relative_to(ROOT)))
     data=page.locator('#m28p-content').text_content()
     data=json.loads(data)
