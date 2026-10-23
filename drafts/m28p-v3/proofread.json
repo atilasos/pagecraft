@@ -1,0 +1,84 @@
+{
+  "severity": "high",
+  "review": "Proofreader e Evaluator pedagógico, análise estática",
+  "date": "2026-10-23",
+  "issues": [
+    {
+      "id": "demo-context",
+      "type": "pedagogical",
+      "severity": "high",
+      "status": "reported-pending-recheck",
+      "location": "scripts/templates/m28p-tic.html: demoTexts, demoPicture, paintDemo; HTML flor-syllables/gap/recall",
+      "original": "Toca nas sílabas por ordem. / Escolhe a sílaba que falta. / Ouve. Junta as sílabas. A demonstração usa pato/pa/to.",
+      "suggestion": "Usar unidades pertinentes da tarefa. Em flor: Toca nas letras por ordem. / Escolhe a letra que falta. / Ouve. Junta as letras.",
+      "reason": "Flor tem uma sílaba e a tarefa usa letras. A demonstração genérica acrescenta código não trabalhado e pode afastar a criança da ação real."
+    },
+    {
+      "id": "local-visual-help",
+      "type": "pedagogical",
+      "severity": "high",
+      "status": "reported-pending-recheck",
+      "location": "scripts/templates/m28p-tic.html: feedback, model; scripts/build_m28p_tic.py: automaticAfterFailures",
+      "original": "Podes experimentar outra vez. / ? Ver. Borda tracejada no modelo.",
+      "suggestion": "Destacar visualmente a relação, o lugar ou a peça a rever e oferecer demonstração junto da tarefa, conservando a resposta.",
+      "reason": "A mensagem é genérica. A criança que não lê precisa de uma ação visível para reparar o erro com apoio pontual."
+    },
+    {
+      "id": "help-evidence",
+      "type": "pedagogical",
+      "severity": "high",
+      "status": "reported-pending-recheck",
+      "location": "scripts/templates/m28p-tic.html: initial, play, openDemo, confirm; guias docentes",
+      "original": "Montar de memória retira o modelo por defeito; ouvir é apoio declarado. / As ajudas usadas ficam nos registos.",
+      "suggestion": "Registar áudio, modelo e demonstração usados por ronda no checkpoint e na tentativa, sem criar tentativa por ouvir ou pedir apoio.",
+      "reason": "Na implementação lida esses apoios não ficam no estado nem no detalhe da tentativa. O professor não consegue distinguir evocação com apoio de resposta sem esse apoio."
+    },
+    {
+      "id": "pairs-incomplete",
+      "type": "pedagogical",
+      "severity": "medium",
+      "status": "reported-pending-recheck",
+      "location": "scripts/templates/m28p-tic.html: TicModel.validAnswer",
+      "original": "return !ordered(round)||value.length===round.pieces.length;",
+      "suggestion": "Nos pares, exigir uma ligação por desenho antes de confirmar, incluindo ligações incorretas.",
+      "reason": "Um tabuleiro com vários desenhos constitui vários pedidos. A versão lida aceita uma única ligação e deixa os restantes sem resposta."
+    },
+    {
+      "id": "pairs-first-variation",
+      "type": "pedagogical",
+      "severity": "medium",
+      "status": "generator-change-seen-html-recheck-pending",
+      "location": "drafts/m28p-v3/menina/m28p-v3-menina-pairs.html; rounds_for; pairs",
+      "original": "Quatro rondas com a única imagem à esquerda e a única palavra à direita.",
+      "suggestion": "Variar a posição entre rondas e manter o primeiro par como familiarização, sem o interpretar como leitura.",
+      "reason": "O contrato promete posições variadas. Foi visto flipColumns entretanto no gerador, mas é preciso verificar o runtime e os HTML regenerados."
+    },
+    {
+      "id": "match-design-operation",
+      "type": "consistency",
+      "severity": "medium",
+      "status": "decision-required",
+      "location": "drafts/m28p-v3/collection-design.json: games.match; scripts/build_m28p_tic.py: GAMES.match",
+      "original": "Design: associação palavra/referente. Implementação: Palavra igual, comparação com modelo.",
+      "suggestion": "Confirmar a operação final e alinhar os documentos: comparar formas escritas com modelo. Manter associação imagem/palavra identificada em pairs.",
+      "reason": "A comparação visual é adequada como iniciação, mas aproxima match de hunt e não deve ser interpretada como prova de leitura ou diversidade de processos não implementados."
+    }
+  ],
+  "summary": "As instruções principais estão corretas em PT-PT e a coleção tem 168 atividades com quatro rondas. A primeira passagem exige correção e nova verificação da demonstração, das pistas e dos registos de ajuda; não declara autonomia de utilização.",
+  "acceptance_checks": [
+    "Ortografia e gramática PT-PT das seis instruções principais: OK",
+    "Dados das 28 palavras, seis IDs e quatro rondas: OK",
+    "Distratores futuros nos dados dos jogos: não encontrados",
+    "Flor e dígrafos nos dados de construção: OK",
+    "Demonstração contextual e terminologia de flor: correção necessária na fotografia inicial",
+    "Pistas visuais e evidência de apoio: nova verificação necessária",
+    "Browser real e áudio audível: não executados por este revisor"
+  ],
+  "limits": [
+    "Sem browser nesta fase, conforme atribuição do coordenador.",
+    "Sem audição das gravações.",
+    "Sem experiência com alunos.",
+    "Runtime e gerador em alteração; verificar correções nos HTML regenerados."
+  ],
+  "pass": false
+}
