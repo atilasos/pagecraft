@@ -13,7 +13,7 @@
   <header class="notebook-head">
     <div class="brand">
       <p class="eyebrow">PageCraft Studio</p>
-      <h1>O ficheiro do professor<span class="accent-dot">.</span></h1>
+      <h1>Preparar a aula<span class="accent-dot">.</span></h1>
     </div>
     <nav class="teacher-nav" aria-label="Área do professor">
       <a href="/teacher/" aria-current="page">Preparar</a>
@@ -23,7 +23,23 @@
     </nav>
   </header>
 
-  <div class="desk">
+  <section class="card class-overview" aria-labelledby="overview-title">
+    <div class="overview-heading">
+      <div><p class="eyebrow">A tua turma</p><h2 id="overview-title">Por onde vamos continuar?</h2></div>
+      <label for="dashboard-class">Turma<select id="dashboard-class" disabled><option>A carregar…</option></select></label>
+    </div>
+    <p id="overview-status" class="muted" role="status">A consultar as aulas…</p>
+    <div id="overview-content"></div>
+    <button type="button" class="ghost" id="overview-retry" hidden>Tentar novamente</button>
+  </section>
+  <nav class="dashboard-shortcuts" aria-label="Ações frequentes">
+    <a href="/teacher/activities.html?estado=draft#atividades"><strong>Rever rascunhos</strong><span>Experimentar antes de publicar</span></a>
+    <a href="#catalog-title"><strong>Escolher uma atividade</strong><span>Procurar no catálogo da aula</span></a>
+    <a href="/teacher/activities.html#registos"><strong>Consultar registos</strong><span>Trabalho e reflexão dos alunos</span></a>
+  </nav>
+
+  <details class="desk creation-panel" id="create-activity">
+    <summary><strong>Criar uma atividade</strong><span class="muted">Preparar um novo rascunho para revisão</span></summary>
     <section aria-labelledby="nova-atividade">
       <p class="eyebrow" id="nova-atividade">Nova atividade</p>
       <h2>O que vamos explorar a seguir?</h2>
@@ -55,11 +71,11 @@
           <button type="submit" id="submit-btn">Gerar atividade</button>
           <span class="muted" id="form-status" role="status"></span>
         </p>
-        <p class="muted">O Architect consulta a tua wiki (instrumentos MEM) e as Aprendizagens
-        Essenciais oficiais, e cita as fontes no plano. Demora alguns minutos.</p>
+        <p class="muted">A preparação consulta os instrumentos MEM e as Aprendizagens
+        Essenciais. Demora alguns minutos. No fim, podes experimentar e rever a atividade antes de a publicar.</p>
       </form>
     </section>
-  </div>
+  </details>
 
   <section class="sheet" aria-labelledby="jobs-title">
     <p class="eyebrow" id="jobs-title">Bancada de geração</p>
@@ -74,6 +90,7 @@
   </section>
 </main>
 <script src="/teacher/common.js"></script>
+<script src="/teacher/dashboard.js"></script>
 <script src="/teacher/app.js"></script>
 </body>
 </html>

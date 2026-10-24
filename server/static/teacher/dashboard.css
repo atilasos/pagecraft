@@ -52,6 +52,23 @@
 .library-pagination { margin-top: 1rem; }
 .teacher-library .error { color: #9b342a; }
 .teacher-library [role="status"]:empty { min-height: 0; margin: 0; }
+.overview-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.overview-heading h2 { margin: 0; }
+.overview-heading label { margin: 0; min-width: 200px; }
+.class-overview { border-top: 4px solid var(--stamp); }
+.overview-session { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 0; }
+.overview-session h3 { margin: .4rem 0 .2rem; }
+.overview-session .button-link { flex-shrink: 0; }
+.overview-history summary { cursor: pointer; min-height: 44px; align-content: center; }
+.dashboard-shortcuts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; margin: 1rem 0 1.5rem; }
+.dashboard-shortcuts a { display: flex; flex-direction: column; gap: .25rem; padding: 1rem; border: 1px solid var(--line); border-radius: 10px; text-decoration: none; background: var(--paper); }
+.dashboard-shortcuts a:hover { border-color: var(--stamp); }
+.dashboard-shortcuts span { color: var(--ink-soft); font-size: .9rem; }
+.creation-panel > summary { cursor: pointer; min-height: 44px; align-content: center; }
+.creation-panel > summary strong { font-size: 1.15rem; }
+.creation-panel > summary span { display: block; margin-top: .3rem; }
+.creation-panel[open] > summary { margin-bottom: 1.5rem; }
+.teacher-page #overview-retry[hidden] { display: none; }
 @media (max-width: 850px) {
   .library-filters { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
   .activity-row-main { align-items: flex-start; flex-direction: column; gap: .65rem; }
@@ -62,4 +79,7 @@
   .teacher-library .row > label { width: 100%; }
   .teacher-library .row :is(input, select) { width: 100%; }
   .library-filters { grid-template-columns: minmax(0, 1fr); }
+  .dashboard-shortcuts { grid-template-columns: minmax(0, 1fr); }
+  .overview-heading label { width: 100%; min-width: 0; }
+  .overview-session { align-items: flex-start; flex-direction: column; }
 }
