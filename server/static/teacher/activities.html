@@ -6,30 +6,33 @@
     <title>Atividades e progressos · PageCraft</title>
     <link rel="stylesheet" href="/learning-assets/fonts.css" />
     <link rel="stylesheet" href="/learning-assets/common.css" />
+    <link rel="stylesheet" href="/teacher/dashboard.css" />
     <script defer src="/learning-assets/support-summary.js"></script>
     <script defer src="/learning-assets/teacher.js?v=m28p-tic-v3"></script>
   </head>
-  <body>
+  <body class="teacher-library">
     <a href="#main" class="skip">Saltar para o conteúdo</a>
     <header>
-      <a href="/teacher/">PageCraft · Professor</a>
-      <div class="row">
-        <a class="button" href="/teacher/">Sessões de aula</a
-        ><button id="logout">Sair</button>
+      <div class="teacher-brand-row">
+        <a href="/teacher/">PageCraft Studio · Professor</a>
+        <button id="logout">Sair</button>
       </div>
+      <nav class="teacher-nav" aria-label="Área do professor">
+        <a href="/teacher/">Preparar</a>
+        <a href="/teacher/class.html">Aula ao vivo</a>
+        <a href="#atividades" id="nav-activities" aria-current="page">Atividades</a>
+        <a href="#registos" id="nav-reports">Registos</a>
+      </nav>
     </header>
     <main id="main">
-      <p class="eyebrow">Preparar · Observar · Acompanhar</p>
-      <h1>Atividades e progressos</h1>
+      <h1 id="page-title" tabindex="-1">Atividades</h1>
       <p id="status" class="status" role="status" aria-live="polite"></p>
-      <section>
-        <h2>Atividades</h2>
+      <section id="activities-panel" aria-label="Biblioteca de atividades">
         <p><a class="button" href="/teacher/m28p-tic.html">28 palavras · jogos para TIC</a></p>
         <p id="activity-count" class="muted" role="status"></p>
         <div id="activities" class="grid"></div>
       </section>
-      <section>
-        <h2>Registos de trabalho</h2>
+      <section id="reports-panel" aria-label="Registos de trabalho" hidden>
         <p class="muted">
           Os nomes são escritos pelos alunos. Podes corrigir o nome e a turma de
           cada registo para reunir o trabalho da mesma criança. A reflexão do

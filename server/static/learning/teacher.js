@@ -2,6 +2,21 @@
 const $ = (id) => document.getElementById(id);
 let reports = [];
 let publicOrigin = location.origin;
+
+function showTeacherSection(focus = false) {
+  const viewingReports = location.hash === "#registos";
+  $("activities-panel").hidden = viewingReports;
+  $("reports-panel").hidden = !viewingReports;
+  $("page-title").textContent = viewingReports ? "Registos de trabalho" : "Atividades";
+  document.title = $("page-title").textContent + " · PageCraft";
+  for (const [id, current] of [["nav-activities", !viewingReports], ["nav-reports", viewingReports]]) {
+    if (current) $(id).setAttribute("aria-current", "page");
+    else $(id).removeAttribute("aria-current");
+  }
+  if (focus) $("page-title").focus();
+}
+window.addEventListener("hashchange", () => showTeacherSection(true));
+showTeacherSection();
 const eventLabels = {
   activity_loaded: "Abriu a atividade",
   unit_started: "Começou uma etapa",

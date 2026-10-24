@@ -1,0 +1,39 @@
+/* Navegação comum e áreas de trabalho do professor. */
+.teacher-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1rem 0;
+  padding-bottom: .65rem;
+  border-bottom: 1px solid var(--line);
+}
+.teacher-nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: .6rem 1rem;
+  border-radius: 9px;
+  color: #185f63;
+  font-weight: 700;
+  text-decoration: none;
+}
+.teacher-nav a:hover { background: #e7eeea; }
+.teacher-nav a[aria-current="page"] { background: #166e73; color: white; }
+.teacher-nav a:focus-visible { outline: 3px solid #2869b1; outline-offset: 3px; }
+.teacher-page .notebook-head { display: block; }
+.teacher-library header { display: block; }
+.teacher-brand-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.teacher-brand-row > a { font-weight: 700; text-decoration: none; }
+.teacher-library .teacher-nav { margin-bottom: 0; }
+.teacher-library main { padding-top: 1.25rem; }
+.teacher-library h1 { margin-top: 0; }
+.teacher-library [hidden] { display: none !important; }
+.teacher-library :is(input, select, .row > *, .card) { min-width: 0; max-width: 100%; }
+.teacher-library :is(h1, h2, h3, p, a, button) { overflow-wrap: anywhere; }
+.teacher-library :focus-visible { outline: 3px solid #2869b1; outline-offset: 3px; }
+@media (max-width: 600px) {
+  .teacher-nav a { flex: 1 1 calc(50% - .4rem); padding-inline: .5rem; }
+  .teacher-library .row > label { width: 100%; }
+  .teacher-library .row :is(input, select) { width: 100%; }
+}
