@@ -116,7 +116,7 @@ function activityRow(a) {
   const main = el("div", undefined, "activity-row-main");
   const copy = el("div", undefined, "activity-row-copy");
   const heading = el("div", undefined, "activity-row-title");
-  heading.append(el("h3", a.title), el("span", a.published ? "Disponível" : "Por rever", "tag"));
+  heading.append(el("h2", a.title), el("span", a.published ? "Disponível" : "Por rever", "tag"));
   copy.append(heading,
     el("p", `${a.year}.º ano · ${a.duration} min · ${a.languages.includes("en") ? "PT/EN" : "Português"} · ${a.code}`, "muted"));
   const actions = el("div", undefined, "activity-row-actions");
@@ -225,7 +225,7 @@ function render() {
     const card = el("article", undefined, "card");
     card.append(
       el("span", r.completed_at ? "Terminada" : "Em curso", "tag"),
-      el("h3", `${r.name} · ${r.title}`),
+      el("h2", `${r.name} · ${r.title}`),
       el(
         "p",
         `${r.group || "Turma por indicar"} · ${new Date(r.started_at).toLocaleString("pt-PT")} · ${r.mode === "home" ? "Em casa" : "Na aula"}`,
@@ -279,8 +279,12 @@ function render() {
     g.input.maxLength = 80;
     note.input.maxLength = 5000;
     const save = el("button", "Guardar observação");
+    const feedback = el("p");
+    feedback.setAttribute("role", "status");
     save.onclick = async () => {
       save.disabled = true;
+      feedback.textContent = "A guardar…";
+      feedback.className = "";
       try {
         const updated = await api(`/api/learning/reports/${r.id}`, "PATCH", {
           name: n.input.value,
@@ -288,14 +292,16 @@ function render() {
           teacher_note: note.input.value,
         });
         Object.assign(r, updated);
-        status("Observação guardada.");
+        card.querySelector("h2").textContent = `${r.name} · ${r.title}`;
+        feedback.textContent = "Observação guardada.";
       } catch (e) {
-        status(e.message, true);
+        feedback.textContent = e.message;
+        feedback.className = "error";
       } finally {
         save.disabled = false;
       }
     };
-    edit.append(n.label, g.label, note.label, save);
+    edit.append(n.label, g.label, note.label, save, feedback);
     card.append(edit);
     const download = el("a", "Descarregar relatório", "button");
     download.href = `/api/learning/reports/${r.id}/download`;
