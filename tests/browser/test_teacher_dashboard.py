@@ -1,4 +1,6 @@
 """Fluxos do professor num Studio descartável e browser aberto pelo Hub."""
+import re
+
 
 def test_class_and_session_links_keep_the_explicit_context(page, studio_origin):
     from playwright.sync_api import expect
@@ -166,3 +168,85 @@ def test_home_recovers_without_confusing_failure_with_empty_classes(page, studio
     page.locator('#overview-retry').click()
     expect(page.get_by_role('link', name='Criar a primeira turma')).to_be_visible()
     expect(page.locator('#overview-retry')).to_be_hidden()
+
+
+def test_catalog_keeps_class_while_overview_refreshes_or_fails(page, studio_origin):
+    from playwright.sync_api import expect
+
+    classes = [dict(id=key, name=key, year=3, students=[]) for key in ['Turma A', 'Turma B']]
+    page.route('**/api/classes', lambda route: route.fulfill(json=classes))
+    page.route('**/api/sessions', lambda route: route.fulfill(json=[]))
+    page.goto(studio_origin + '/teacher/')
+    page.locator('#dashboard-class').select_option('Turma B')
+    links = page.locator('#catalog a.button-link')
+    expect(links.first).to_have_attribute('href', re.compile(r'class=Turma\+B'))
+    pending = []
+    page.route('**/api/sessions', lambda route: pending.append(route))
+    page.evaluate("window.dispatchEvent(new PageTransitionEvent('pageshow', {persisted: true}))")
+    expect(page.locator('#dashboard-class')).to_be_disabled()
+    page.locator('#catalog-search').fill('canva')
+    expect(links.first).to_have_attribute('href', re.compile(r'class=Turma\+B'))
+    assert len(pending) == 1
+    pending[0].fulfill(status=503, json={})
+    expect(page.locator('#overview-status')).to_contain_text('Não foi possível')
+    page.locator('#catalog-search').fill('')
+    expect(links.first).to_have_attribute('href', re.compile(r'class=Turma\+B'))
+
+
+def mock_job_events(page):
+    """Controla a entrega e o replay do SSE, mantendo reais o fetch e a interface."""
+    page.add_init_script("""
+      window.jobStreams = {};
+      window.EventSource = class extends EventTarget {
+        constructor(url) { super(); this.closed = false; window.jobStreams[url] = this; }
+        close() { this.closed = true; }
+        emit(type) {
+          if (!this.closed) this.dispatchEvent(new MessageEvent(type, {data: '{"payload":{}}'}));
+        }
+      };
+    """)
+
+
+def test_historical_review_event_does_not_stop_publication_updates(page, studio_origin):
+    from playwright.sync_api import expect
+
+    mock_job_events(page)
+    job = dict(id='publishing', topic='A publicar', status='publishing',
+               subject='Matemática', year=3, duration=30, slug='exemplo')
+    page.route('**/api/jobs', lambda route: route.fulfill(json=[job]))
+    page.route('**/api/jobs/publishing', lambda route: route.fulfill(json=job))
+    page.goto(studio_origin + '/teacher/')
+    expect(page.locator('#job-publishing progress')).to_be_visible()
+    with page.expect_response('**/api/jobs/publishing'):
+        page.evaluate("jobStreams['/api/jobs/publishing/stream'].emit('awaiting_review')")
+    expect(page.locator('#job-publishing-log')).not_to_be_empty()
+    assert page.evaluate("!jobStreams['/api/jobs/publishing/stream'].closed")
+    job['status'] = 'done'
+    page.evaluate("jobStreams['/api/jobs/publishing/stream'].emit('done')")
+    expect(page.locator('#published-jobs #job-publishing')).to_have_count(1)
+    expect(page.locator('#job-history-label')).to_contain_text('(1)')
+    assert page.evaluate("jobStreams['/api/jobs/publishing/stream'].closed")
+
+
+def test_unrelated_job_events_keep_keyboard_focus_on_review(page, studio_origin):
+    from playwright.sync_api import expect
+
+    mock_job_events(page)
+    review = dict(id='review', topic='Rever', status='awaiting_review',
+                  subject='Matemática', year=3, duration=30, artifact_version=1,
+                  review={'id': 'a' * 64}, preview_url='/api/jobs/review/preview')
+    running = dict(review, id='running', topic='Em preparação', status='queued')
+    page.route('**/api/jobs', lambda route: route.fulfill(json=[review, running]))
+    page.route('**/api/jobs/running', lambda route: route.fulfill(json=running))
+    page.goto(studio_origin + '/teacher/')
+    expect(page.locator('#job-running')).to_be_visible()
+    approve = page.locator('#job-review button[data-approve]')
+    approve.focus()
+    page.evaluate("jobStreams['/api/jobs/running/stream'].emit('phase_started')")
+    expect(page.locator('#job-running-log')).not_to_be_empty()
+    expect(approve).to_be_focused()
+    # Uma nova revisão pode mudar a ordem sem tirar o foco da revisão já aberta.
+    running.update(status='awaiting_review', created_at='2026-10-24')
+    page.evaluate("jobStreams['/api/jobs/running/stream'].emit('awaiting_review')")
+    expect(page.locator('#jobs > .card').first).to_have_attribute('id', 'job-running')
+    expect(approve).to_be_focused()
