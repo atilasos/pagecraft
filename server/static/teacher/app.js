@@ -51,7 +51,7 @@ function renderCatalog() {
   const classId = document.getElementById("dashboard-class").value;
   document.getElementById("catalog").innerHTML = matches.slice(0, catalogLimit).map(a => {
     const params = new URLSearchParams({activity: a.slug});
-    if (classId && !document.getElementById("dashboard-class").disabled) params.set("class", classId);
+    if (classId) params.set("class", classId);
     return `<li class="catalog-entry"><div><h3><a href="/activities/${encodeURIComponent(a.slug)}/" target="_blank" rel="noopener">${esc(a.title || a.slug)}</a></h3>
       <span class="muted">${esc(a.subject || "Disciplina por indicar")} · ${esc(catalogYearLabel(a))}${a.duration ? ` · ${esc(a.duration)} min` : ""}</span></div>
       <a class="button-link ghost" href="/teacher/class.html?${esc(params.toString())}">Preparar aula</a></li>`;
