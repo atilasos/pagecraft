@@ -54,28 +54,6 @@
     <button type="button" class="quiet" id="close-btn">Terminar sessão</button>
   </div>
 
-  <section class="sheet board-pairing-panel" aria-labelledby="board-pairing-title">
-    <p class="eyebrow">Equipamento da sala</p>
-    <h2 id="board-pairing-title">Emparelhamento do quadro</h2>
-    <p class="muted" id="board-pairing-status" role="status">
-      A consultar o estado do quadro…
-    </p>
-    <form id="board-pairing-form" class="board-pairing-form" hidden>
-      <div>
-        <label for="board-pairing-code">Código mostrado no quadro</label>
-        <input id="board-pairing-code" required maxlength="8"
-               autocomplete="off" autocapitalize="characters"
-               placeholder="ABCD" aria-describedby="board-pairing-hint">
-        <p class="muted" id="board-pairing-hint">
-          Abre o favorito <strong>/board/</strong> no PC do quadro e copia o código.
-        </p>
-      </div>
-      <button type="submit">Confirmar código</button>
-    </form>
-    <button type="button" class="quiet" id="board-unpair" hidden>
-      Desemparelhar quadro
-    </button>
-  </section>
 
   <div class="desk" id="prep-desk">
     <section aria-labelledby="launch-title">
@@ -87,7 +65,7 @@
           <select id="launch-class"></select>
           <p class="button-line"><button id="launch-btn" type="button" disabled>Lançar sessão</button>
             <button id="new-work-btn" class="ghost" type="button" hidden>Começar novo trabalho</button></p>
-          <p class="muted" id="launch-hint">Escolhe uma atividade ao lado.</p>
+          <p class="muted" id="launch-hint" role="status">Escolhe uma atividade ao lado.</p>
         </div>
         <div>
           <label for="picker-search">Atividade</label>
@@ -101,7 +79,7 @@
       </div>
     </section>
 
-    <section class="sheet" aria-labelledby="report-title">
+    <section class="sheet" id="class-report" aria-labelledby="report-title" tabindex="-1">
       <p class="eyebrow" id="report-title">Avaliação cooperada</p>
       <h2>Registo de trabalho da turma</h2>
       <div class="picker-filters">
@@ -115,7 +93,7 @@
       <div id="session-support-summary"></div>
     </section>
 
-    <section class="sheet" aria-labelledby="classes-title">
+    <section class="sheet" id="class-management" aria-labelledby="classes-title" tabindex="-1">
       <p class="eyebrow" id="classes-title">Turmas</p>
       <div id="classes-list" class="muted"></div>
       <details class="details-create">
@@ -207,6 +185,30 @@
       </section>
     </div>
   </div>
+
+  <section class="sheet board-pairing-panel" aria-labelledby="board-pairing-title">
+    <p class="eyebrow">Equipamento da sala</p>
+    <h2 id="board-pairing-title">Emparelhamento do quadro</h2>
+    <p class="muted" id="board-pairing-status" role="status">
+      A consultar o estado do quadro…
+    </p>
+    <form id="board-pairing-form" class="board-pairing-form" hidden>
+      <div>
+        <label for="board-pairing-code">Código mostrado no quadro</label>
+        <input id="board-pairing-code" required maxlength="8"
+               autocomplete="off" autocapitalize="characters"
+               placeholder="ABCD" aria-describedby="board-pairing-hint">
+        <p class="muted" id="board-pairing-hint">
+          Abre o favorito <strong>/board/</strong> no PC do quadro e copia o código.
+        </p>
+      </div>
+      <button type="submit">Confirmar código</button>
+    </form>
+    <button type="button" class="quiet" id="board-unpair" hidden>
+      Desemparelhar quadro
+    </button>
+  </section>
+
 
   <!-- painel de detalhe do aluno -->
   <aside class="drawer" id="drawer" aria-label="Detalhe do aluno">
