@@ -112,8 +112,9 @@ function activityRow(a) {
   row.dataset.code = a.code;
   const main = el("div", undefined, "activity-row-main");
   const copy = el("div", undefined, "activity-row-copy");
-  copy.append(el("span", a.published ? "Disponível" : "Por rever", "tag"),
-    el("h3", a.title),
+  const heading = el("div", undefined, "activity-row-title");
+  heading.append(el("h3", a.title), el("span", a.published ? "Disponível" : "Por rever", "tag"));
+  copy.append(heading,
     el("p", `${a.year}.º ano · ${a.duration} min · ${a.languages.includes("en") ? "PT/EN" : "Português"} · ${a.code}`, "muted"));
   const actions = el("div", undefined, "activity-row-actions");
   const preview = el("a", a.published ? "Abrir atividade" : "Pré-visualizar", "button");
