@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/learning-assets/common.css" />
     <link rel="stylesheet" href="/teacher/dashboard.css" />
     <script defer src="/learning-assets/support-summary.js"></script>
-    <script defer src="/learning-assets/teacher.js?v=m28p-tic-v3"></script>
+    <script defer src="/learning-assets/teacher.js?v=teacher-dashboard-1"></script>
   </head>
   <body class="teacher-library">
     <a href="#main" class="skip">Saltar para o conteúdo</a>
@@ -28,9 +28,27 @@
       <h1 id="page-title" tabindex="-1">Atividades</h1>
       <p id="status" class="status" role="status" aria-live="polite"></p>
       <section id="activities-panel" aria-label="Biblioteca de atividades">
-        <p><a class="button" href="/teacher/m28p-tic.html">28 palavras · jogos para TIC</a></p>
-        <p id="activity-count" class="muted" role="status"></p>
-        <div id="activities" class="grid"></div>
+        <div class="library-intro">
+          <p id="library-total" class="muted">A carregar as atividades…</p>
+          <a href="/teacher/m28p-tic.html">Explorar a coleção 28 palavras</a>
+        </div>
+        <div class="library-filters">
+          <label for="library-search">Pesquisar atividades
+            <input type="search" id="library-search" placeholder="Título ou código da atividade" /></label>
+          <label for="library-state">Publicação
+            <select id="library-state"><option value="">Todas</option><option value="draft">Por rever</option><option value="published">Disponíveis</option></select></label>
+          <label for="library-year">Ano
+            <select id="library-year"><option value="">Todos</option><option value="1">1.º ano</option><option value="2">2.º ano</option><option value="3">3.º ano</option><option value="4">4.º ano</option></select></label>
+          <button type="button" id="library-clear">Limpar filtros</button>
+        </div>
+        <p id="library-load-status" role="status"></p>
+        <button type="button" id="library-retry" hidden>Tentar novamente</button>
+        <p id="activity-count" class="muted" role="status" tabindex="-1"></p>
+        <div id="activities" class="activity-list"></div>
+        <nav id="library-pagination" class="library-pagination" aria-label="Páginas de atividades" hidden>
+          <span id="library-page" class="muted"></span>
+          <div class="row"><button type="button" id="library-previous">Anterior</button><button type="button" id="library-next">Seguinte</button></div>
+        </nav>
       </section>
       <section id="reports-panel" aria-label="Registos de trabalho" hidden>
         <p class="muted">
@@ -57,6 +75,7 @@
             ><button id="refresh">Atualizar</button>
           </div>
           <p id="summary" class="muted"></p>
+          <p id="report-load-status" role="status"></p>
           <button id="support-summary-btn">Resumo do apoio nesta seleção</button>
           <div id="support-summary"></div>
         </div>
