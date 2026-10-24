@@ -57,6 +57,7 @@ async function api(path, method = "GET", data) {
   return r.status === 204 ? null : r.json();
 }
 let library = [];
+let libraryLoaded = false;
 let libraryPage = 1;
 const LIBRARY_PAGE_SIZE = 6;
 const libraryParams = new URLSearchParams(location.search);
@@ -72,6 +73,7 @@ async function loadActivities() {
   const all = await api("/api/learning/activities?include_archived=true");
   library = all.filter((a) => !a.archived_at)
     .sort((a, b) => (b.created_at || "").localeCompare(a.created_at || ""));
+  libraryLoaded = true;
   const selected = $("filter-activity").value;
   $("filter-activity").replaceChildren(new Option("Todas", ""));
   for (const a of all) {
@@ -82,6 +84,7 @@ async function loadActivities() {
 }
 
 function renderLibrary() {
+  if (!libraryLoaded) return;
   const query = searchText($("library-search").value.trim());
   const state = $("library-state").value;
   const year = $("library-year").value;
