@@ -10,6 +10,7 @@ def test_teacher_client_keeps_the_credential_out_of_javascript_and_urls():
         for path in (
             TEACHER_STATIC / "common.js",
             TEACHER_STATIC / "app.js",
+            TEACHER_STATIC / "dashboard.js",
             TEACHER_STATIC / "class.js",
         )
     )

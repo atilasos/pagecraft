@@ -7,6 +7,7 @@ const students = new Map(); // id → projeção viva emitida pelo servidor
 const sessionEventDeclarations = new Map(); // vocabulário central, incluindo autoria
 let session = null;
 let previousSessions = [];
+let selectedSessionId = null;
 let publicOrigin = location.origin;
 let liveSessionState = { status: "live", closed: false, frozen: false };
 let units = [];
@@ -347,6 +348,7 @@ function renderPicker() {
       (a.duration ? `<span class="pill">${esc(a.duration)} min</span>` : "");
     opt.append(title, meta);
     opt.addEventListener("click", () => {
+      selectedSessionId = null;
       pickerState.selected = a;
       $("launch-btn").disabled = false;
       $("launch-hint").textContent = `Selecionada: ${a.title || a.slug}`;
@@ -357,16 +359,17 @@ function renderPicker() {
 }
 
 function continuationCandidate() {
-  return previousSessions.find(item => item.class_id === $('launch-class').value &&
+  const matches = previousSessions.filter(item => item.class_id === $('launch-class').value &&
     item.activity_slug === pickerState.selected?.slug);
+  return matches.find(item => item.id === selectedSessionId) || matches[0];
 }
 
 function updateLaunchChoice() {
   const previous = continuationCandidate();
-  $('launch-btn').textContent = previous ? 'Continuar trabalho' : 'Lançar sessão';
+  $('launch-btn').textContent = previous?.status === 'live' ? 'Acompanhar aula' : previous ? 'Continuar trabalho' : 'Lançar sessão';
   $('launch-btn').disabled = !pickerState.selected || !$('launch-class').value;
   $('new-work-btn').hidden = !previous;
-  if (previous) $('launch-hint').textContent = 'Recupera os grupos e o trabalho guardado. Cada grupo recebe um código para esta aula.';
+  if (previous) $('launch-hint').textContent = previous.status === 'live' ? 'A aula está aberta. Podes acompanhar o trabalho da turma.' : 'Recupera os grupos e o trabalho guardado. Cada grupo recebe um código para esta aula.';
 }
 
 async function launchWork(startNew = false) {
@@ -375,7 +378,16 @@ async function launchWork(startNew = false) {
   const previous = !startNew && continuationCandidate();
   $('launch-btn').disabled = true;
   $('new-work-btn').disabled = true;
+  let launchError = '';
   try {
+    if (previous?.status === 'live') {
+      const response = await tfetch(`/api/sessions/${previous.id}`);
+      if (!response.ok) throw new Error('Não foi possível abrir a aula. Tenta novamente.');
+      const fresh = await response.json();
+      Object.assign(previous, fresh);
+      if (fresh.status === 'live') await startLive(fresh);
+      return;
+    }
     const response = await tfetch(previous ? `/api/sessions/${previous.id}/resume` : '/api/sessions', {
       method:'POST', headers:{'content-type':'application/json'},
       body:JSON.stringify(previous ? {} : {class_id:$('launch-class').value,
@@ -383,10 +395,18 @@ async function launchWork(startNew = false) {
     });
     if (!response.ok) throw new Error('Não foi possível abrir o trabalho. Tenta novamente.');
     await startLive(await response.json());
-  } catch (error) { $('launch-hint').textContent = error.message; }
-  finally { $('new-work-btn').disabled = false; updateLaunchChoice(); }
+  } catch (error) { launchError = error.message; }
+  finally {
+    $('new-work-btn').disabled = false;
+    updateLaunchChoice();
+    if (launchError) $('launch-hint').textContent = launchError;
+  }
 }
-$('launch-class').addEventListener('change', updateLaunchChoice);
+$('launch-class').addEventListener('change', () => {
+  selectedSessionId = null;
+  $('report-class').value = $('launch-class').value;
+  updateLaunchChoice();
+});
 $('launch-btn').addEventListener('click', () => launchWork());
 $('new-work-btn').addEventListener('click', () => launchWork(true));
 
@@ -918,19 +938,55 @@ $("close-btn").addEventListener("click", async () => {
 
 /* ---------- arranque ---------- */
 
-(async function init() {
-  const info = await fetch("/api/access-info").then((r) => r.json());
-  publicOrigin = info.public_origin || location.origin;
-  await Promise.all([loadClasses(), loadActivities(), loadBoardPairing()]);
-  const resp = await tfetch("/api/sessions");
-  if (!resp.ok) return;
-  const sessions = await resp.json();
-  previousSessions = sessions;
-  updateLaunchChoice();
-  const live = sessions.find((s) => s.status === "live");
-  if (live) startLive(live);
-  const summarySession = new URLSearchParams(location.search).get("support-summary");
+async function openRequestedContext(sessions) {
+  const params = new URLSearchParams(location.search);
+  const requestedSession = sessions.find(item => item.id === params.get("session"));
+  const classId = requestedSession?.class_id || params.get("class");
+  const activitySlug = requestedSession?.activity_slug || params.get("activity");
+  const hasContext = ["session", "class", "activity", "view", "support-summary"].some(key => params.has(key));
+  if (classId && [...$("launch-class").options].some(option => option.value === classId)) {
+    $("launch-class").value = classId;
+    $("report-class").value = classId;
+  }
+  if (activitySlug) pickerState.selected = activities.find(item => item.slug === activitySlug) || null;
+  selectedSessionId = requestedSession?.id || null;
+  renderPicker();
+  const live = requestedSession?.status === "live" && !params.has("view") ? requestedSession
+    : !hasContext ? sessions.find(item => item.status === "live") : null;
+  if (live) await startLive(live);
+  if (params.has("session") && !requestedSession) {
+    $("launch-hint").textContent = "Esta sessão não foi encontrada. Escolhe a turma e a atividade para continuar.";
+  } else if (classId && $("launch-class").value !== classId) {
+    $("launch-class").value = "";
+    updateLaunchChoice();
+    $("launch-hint").textContent = "Esta turma não foi encontrada. Seleciona outra turma.";
+  } else if (activitySlug && !pickerState.selected && !live) {
+    $("launch-hint").textContent = "Esta atividade já não está no catálogo. Escolhe outra atividade.";
+  }
+  if (params.get("view") === "report") {
+    $("report-btn").click();
+    $("class-report").focus();
+  }
+  if (params.get("view") === "classes") {
+    $("class-form").closest("details").open = true;
+    $("class-management").focus();
+  }
+  const summarySession = params.get("support-summary");
   if (summarySession) await showSupportSummary(summarySession);
+}
+
+(async function init() {
+  try {
+    const info = await fetch("/api/access-info").then((r) => r.json());
+    publicOrigin = info.public_origin || location.origin;
+    await Promise.all([loadClasses(), loadActivities(), loadBoardPairing()]);
+    const resp = await tfetch("/api/sessions");
+    if (!resp.ok) throw new Error("Não foi possível consultar as sessões.");
+    previousSessions = await resp.json();
+    await openRequestedContext(previousSessions);
+  } catch (error) {
+    $("launch-hint").textContent = "Não foi possível carregar a aula. Atualiza a página para tentar novamente.";
+  }
 })();
 
 function applyWorkGroupState(delta) {

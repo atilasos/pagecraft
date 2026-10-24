@@ -1,43 +1,108 @@
 /* Estúdio do professor: criação de jobs, progresso SSE, aprovação e catálogo. */
 
 const PHASE_LABELS = {
-  architect: "1/5 Pedagogia (Architect)",
-  designer: "2/5 Design (Designer)",
-  builder: "3/5 Construção (Builder)",
-  proofreader: "4/5 Revisão de texto (Proofreader)",
-  evaluator: "5/5 Avaliação (Evaluator)",
+  architect: "1/5 Plano pedagógico",
+  designer: "2/5 Organização visual",
+  builder: "3/5 Construção da atividade",
+  proofreader: "4/5 Revisão do texto",
+  evaluator: "5/5 Verificação final",
 };
 const PHASE_ORDER = ["architect", "designer", "builder", "proofreader", "evaluator"];
 
 const jobsEl = document.getElementById("jobs");
 const streams = new Map();
+const jobStates = new Map();
+let catalogActivities = [];
+let catalogLoaded = false;
+let catalogLimit = 8;
 
 async function loadMeta() {
-  const meta = await (await tfetch("/api/meta")).json();
+  const response = await tfetch("/api/meta");
+  if (!response.ok) throw new Error("Catálogo indisponível");
+  const meta = await response.json();
   const subject = document.getElementById("subject");
-  subject.innerHTML = meta.subjects
-    .map((s) => `<option value="${s}">${s}</option>`)
-    .join("");
-  subject.value = "Matemática";
-  const year = document.getElementById("year");
-  year.innerHTML = meta.years.map((y) => `<option value="${y}">${y}.º ano</option>`).join("");
-  const maker = document.getElementById("maker");
-  maker.innerHTML =
-    '<option value="">— sem maker —</option>' +
-    meta.makers.map((m) => `<option value="${m}">${m}</option>`).join("");
-  const catalog = document.getElementById("catalog");
-  catalog.innerHTML = (meta.activities || [])
-    .map(
-      (a) =>
-        `<li><a href="/activities/${encodeURIComponent(a.slug)}/" target="_blank" rel="noopener">${esc(a.title || a.slug)}</a>
-         <span class="pill subject">${esc(a.subject || "—")}</span>
-         <span class="muted">· ${esc(catalogYearLabel(a))} · ${esc(a.duration || "?")} min</span></li>`
-    )
-    .join("") || '<li class="muted">Ainda não há atividades publicadas.</li>';
+  if (!subject.options.length) {
+    subject.replaceChildren(...meta.subjects.map(value => new Option(value, value)));
+    subject.value = "Matemática";
+    document.getElementById("year").replaceChildren(...meta.years.map(value => new Option(`${value}.º ano`, value)));
+    const names = {minecraft: "Minecraft", lego: "LEGO", "3d-print": "Impressão 3D", robotics: "Robótica", whiteboard: "Quadro interativo", unplugged: "Sem computador"};
+    document.getElementById("maker").replaceChildren(new Option("Sem desafio maker", ""),
+      ...meta.makers.map(value => new Option(names[value] || value, value)));
+  }
+  catalogActivities = meta.activities || [];
+  catalogLoaded = true;
+  const filter = document.getElementById("catalog-subject");
+  const selected = filter.value;
+  filter.replaceChildren(new Option("Todas", ""), ...[...new Set(catalogActivities.map(a => a.subject).filter(Boolean))]
+    .sort((a, b) => a.localeCompare(b, "pt")).map(value => new Option(value, value)));
+  filter.value = selected;
+  document.getElementById("submit-btn").disabled = false;
+  renderCatalog();
+}
+
+function renderCatalog() {
+  if (!catalogLoaded) return;
+  const search = value => String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt");
+  const query = search(document.getElementById("catalog-search").value.trim());
+  const year = document.getElementById("catalog-year").value;
+  const subject = document.getElementById("catalog-subject").value;
+  const matches = catalogActivities.filter(a => (!year || a.years.includes(Number(year))) &&
+    (!subject || a.subject === subject) && (!query || search(`${a.title} ${a.subject} ${(a.tags || []).join(" ")}`).includes(query)));
+  const classId = document.getElementById("dashboard-class").value;
+  document.getElementById("catalog").innerHTML = matches.slice(0, catalogLimit).map(a => {
+    const params = new URLSearchParams({activity: a.slug});
+    if (classId) params.set("class", classId);
+    return `<li class="catalog-entry"><div><h3><a href="/activities/${encodeURIComponent(a.slug)}/" target="_blank" rel="noopener">${esc(a.title || a.slug)}</a></h3>
+      <span class="muted">${esc(a.subject || "Disciplina por indicar")} · ${esc(catalogYearLabel(a))}${a.duration ? ` · ${esc(a.duration)} min` : ""}</span></div>
+      <a class="button-link ghost" href="/teacher/class.html?${esc(params.toString())}">Preparar aula</a></li>`;
+  }).join("") || '<li class="muted">Nenhuma atividade corresponde aos filtros.</li>';
+  document.getElementById("catalog-status").textContent = `${Math.min(matches.length, catalogLimit)} de ${matches.length} atividades`;
+  document.getElementById("catalog-more").hidden = matches.length <= catalogLimit;
+}
+for (const id of ["catalog-search", "catalog-year", "catalog-subject"]) {
+  document.getElementById(id).addEventListener("input", () => { catalogLimit = 8; renderCatalog(); });
+}
+document.getElementById("catalog-more").onclick = () => { catalogLimit += 8; renderCatalog(); };
+document.getElementById("dashboard-class").addEventListener("change", renderCatalog);
+async function refreshMeta() {
+  document.getElementById("meta-retry").hidden = true;
+  try { await loadMeta(); }
+  catch (error) {
+    document.getElementById("catalog-status").textContent = "Não foi possível carregar o catálogo. Tenta novamente.";
+    document.getElementById("form-status").textContent = "Não foi possível carregar as opções. Tenta novamente no catálogo.";
+    document.getElementById("meta-retry").hidden = false;
+  }
+}
+document.getElementById("meta-retry").onclick = refreshMeta;
+
+function orderJobs() {
+  const priority = job => ({awaiting_review: 0, failed: 1, done: 3})[job.status] ?? 2;
+  const jobs = [...jobStates.values()].sort((a, b) => priority(a) - priority(b) || (b.created_at || "").localeCompare(a.created_at || ""));
+  const publishedEl = document.getElementById("published-jobs");
+  const focused = document.activeElement;
+  const restoreFocus = jobsEl.contains(focused) || publishedEl.contains(focused);
+  for (const target of [jobsEl, publishedEl]) {
+    const entries = jobs.filter(job => (job.status === "done") === (target === publishedEl));
+    entries.forEach((job, index) => {
+      const card = document.getElementById(`job-${job.id}`);
+      const position = target.children[index];
+      if (position !== card) target.insertBefore(card, position || null);
+    });
+  }
+  if (restoreFocus && focused.isConnected && document.activeElement !== focused) focused.focus({preventScroll: true});
+  const review = jobs.filter(job => job.status === "awaiting_review").length;
+  const failed = jobs.filter(job => job.status === "failed").length;
+  const published = jobs.filter(job => job.status === "done").length;
+  const running = jobs.length - review - failed - published;
+  document.getElementById("jobs-summary").textContent = review + failed + running
+    ? `${review} por rever · ${running} em preparação · ${failed} com erro`
+    : "Não há atividades em preparação ou à espera de revisão.";
+  document.getElementById("job-history").hidden = published === 0;
+  document.getElementById("job-history-label").textContent = `Atividades já publicadas (${published})`;
 }
 
 function jobCard(job) {
-  document.getElementById("jobs-empty")?.remove();
+  jobStates.set(job.id, job);
   let el = document.getElementById(`job-${job.id}`);
   if (!el) {
     el = document.createElement("div");
@@ -45,13 +110,15 @@ function jobCard(job) {
     el.id = `job-${job.id}`;
     jobsEl.prepend(el);
   }
+  const previousLog = el.querySelector('[aria-live]')?.textContent || "";
   const phaseIdx = PHASE_ORDER.indexOf(job.current_phase);
   const statusPill = {
     done: '<span class="pill ok">publicada</span>',
     awaiting_review: '<span class="pill warn">a aguardar a tua revisão</span>',
     failed: '<span class="pill warn">falhou</span>',
     queued: '<span class="pill">em fila</span>',
-  }[job.status] || `<span class="pill">${PHASE_LABELS[job.current_phase] || job.status}</span>`;
+    publishing: '<span class="pill">a publicar</span>',
+  }[job.status] || `<span class="pill">${esc(PHASE_LABELS[job.current_phase] || job.status)}</span>`;
 
   const running = !["done", "failed", "awaiting_review"].includes(job.status);
   const canReview = job.artifact_version === 1 && job.review && job.preview_url;
@@ -59,8 +126,8 @@ function jobCard(job) {
   el.innerHTML = `
     <strong>${esc(job.topic)}</strong> <span class="muted">· ${esc(job.subject)} · ${esc(job.year)}.º ano · ${esc(job.duration)} min</span>
     <p>${statusPill} ${job.iteration > 1 ? `<span class="pill">iteração ${esc(job.iteration)}</span>` : ""}</p>
-    ${running ? `<progress max="5" value="${phaseIdx + 1}"></progress>` : ""}
-    <p class="muted" id="job-${esc(job.id)}-log" aria-live="polite"></p>
+    ${running ? `<progress aria-label="Preparação da atividade" max="5" value="${phaseIdx + 1}"></progress>` : ""}
+    <p class="muted" id="job-${esc(job.id)}-log" aria-live="polite">${esc(previousLog)}</p>
     <p>
       ${canReview ? `<a href="${esc(job.preview_url)}" target="_blank" rel="noopener">pré-visualizar</a> · ` : ""}
       ${job.status === "awaiting_review" && canReview ? `<button data-approve="${esc(job.id)}" data-review="${esc(job.review.id)}">Aprovar e publicar</button>` : ""}
@@ -68,25 +135,33 @@ function jobCard(job) {
       ${job.status === "done" ? `<a href="/activities/${encodeURIComponent(job.slug)}/" target="_blank" rel="noopener">abrir atividade publicada</a>` : ""}
       ${job.status === "failed" ? `<span class="feedback-warn">${esc(job.error || "erro desconhecido")}</span>` : ""}
     </p>`;
+  orderJobs();
 }
 
 async function watchJob(job) {
   jobCard(job);
-  if (["done", "failed"].includes(job.status) || streams.has(job.id)) return;
+  if (["done", "failed", "awaiting_review"].includes(job.status) || streams.has(job.id)) return;
   const es = new EventSource(`/api/jobs/${job.id}/stream`);
   streams.set(job.id, es);
   es.onmessage = () => {};
   ["job_created", "knowledge_ready", "phase_started", "phase_done", "phase_retry", "validation", "repair", "resumed_artifact", "awaiting_review", "done", "failed"].forEach((type) => {
     es.addEventListener(type, async (ev) => {
       const data = JSON.parse(ev.data);
-      const logEl = document.getElementById(`job-${job.id}-log`);
-      if (logEl) logEl.textContent = describeEvent(type, data);
-      const fresh = await (await tfetch(`/api/jobs/${job.id}`)).json();
-      jobCard(fresh);
-      if (["done", "failed"].includes(type)) {
-        es.close();
-        streams.delete(job.id);
-        loadMeta();
+      try {
+        const response = await tfetch(`/api/jobs/${job.id}`);
+        if (!response.ok) throw new Error("Progresso indisponível");
+        const current = await response.json();
+        jobCard(current);
+        document.getElementById(`job-${job.id}-log`).textContent = current.status === "publishing"
+          ? "A publicar a atividade…" : describeEvent(type, data);
+        // O stream repete eventos antigos; o GET é que indica o estado atual.
+        if (["done", "failed", "awaiting_review"].includes(current.status)) {
+          es.close();
+          streams.delete(job.id);
+          if (current.status === "done") refreshMeta();
+        }
+      } catch (error) {
+        document.getElementById(`job-${job.id}-log`).textContent = "Não foi possível atualizar o progresso. Atualiza a página para tentar novamente.";
       }
     });
   });
@@ -155,30 +230,42 @@ document.getElementById("job-form").addEventListener("submit", async (ev) => {
 });
 
 document.addEventListener("click", async (ev) => {
-  const id = ev.target?.dataset?.approve;
-  if (!id) return;
-  const override = ev.target?.dataset?.override === "true";
-  ev.target.disabled = true;
-  const resp = await tfetch(`/api/jobs/${id}/approve${override ? "?override=true" : ""}`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ review_id: ev.target.dataset.review }),
-  });
-  if (resp.ok) {
-    jobCard(await resp.json());
-    loadMeta();
-  } else {
-    const error = await resp.json().catch(() => ({}));
-    const logEl = document.getElementById(`job-${id}-log`);
-    if (logEl) logEl.textContent = error.detail || "Não foi possível publicar esta revisão.";
-    ev.target.disabled = false;
+  const button = ev.target.closest("[data-approve]");
+  if (!button) return;
+  const id = button.dataset.approve;
+  const override = button.dataset.override === "true";
+  button.disabled = true;
+  try {
+    const resp = await tfetch(`/api/jobs/${id}/approve${override ? "?override=true" : ""}`, {
+      method: "POST", headers: {"content-type": "application/json"},
+      body: JSON.stringify({review_id: button.dataset.review}),
+    });
+    const result = await resp.json().catch(() => ({}));
+    if (!resp.ok) throw new Error(result.detail || "Não foi possível publicar esta revisão.");
+    jobCard(result);
+    document.getElementById("jobs-feedback").textContent = "Atividade publicada. Podes encontrá-la no catálogo e no histórico.";
+    document.getElementById("jobs-title").focus();
+    refreshMeta();
+  } catch (error) {
+    document.getElementById(`job-${id}-log`).textContent = error.message || "Não foi possível publicar. Tenta novamente.";
+    button.disabled = false;
   }
 });
 
-(async function init() {
-  await loadMeta();
-  const resp = await tfetch("/api/jobs");
-  if (!resp.ok) return;
-  const jobs = await resp.json();
-  jobs.slice(0, 10).reverse().forEach(watchJob);
-})();
+async function loadJobs() {
+  document.getElementById("jobs-retry").hidden = true;
+  try {
+    const resp = await tfetch("/api/jobs");
+    if (!resp.ok) throw new Error("Geração indisponível");
+    const jobs = await resp.json();
+    jobs.forEach(watchJob);
+    orderJobs();
+    document.getElementById("jobs-feedback").textContent = "";
+  } catch (error) {
+    document.getElementById("jobs-summary").textContent = "Não foi possível consultar as atividades em preparação.";
+    document.getElementById("jobs-retry").hidden = false;
+  }
+}
+document.getElementById("jobs-retry").onclick = loadJobs;
+refreshMeta();
+loadJobs();

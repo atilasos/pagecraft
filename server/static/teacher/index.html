@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PageCraft Studio — Preparar</title>
 <link rel="stylesheet" href="/studio.css">
+<link rel="stylesheet" href="/teacher/dashboard.css">
 </head>
 <body class="teacher-page">
 <a class="skip-link" href="#main-content">Saltar para o conteúdo</a>
@@ -12,16 +13,33 @@
   <header class="notebook-head">
     <div class="brand">
       <p class="eyebrow">PageCraft Studio</p>
-      <h1>O ficheiro do professor<span class="accent-dot">.</span></h1>
+      <h1>Preparar a aula<span class="accent-dot">.</span></h1>
     </div>
-    <nav class="tabs-folder" aria-label="Secções">
+    <nav class="teacher-nav" aria-label="Área do professor">
       <a href="/teacher/" aria-current="page">Preparar</a>
       <a href="/teacher/class.html">Aula ao vivo</a>
-      <a href="/teacher/activities.html">Atividades e progressos</a>
+      <a href="/teacher/activities.html#atividades">Atividades</a>
+      <a href="/teacher/activities.html#registos">Registos</a>
     </nav>
   </header>
 
-  <div class="desk">
+  <section class="card class-overview" aria-labelledby="overview-title">
+    <div class="overview-heading">
+      <div><p class="eyebrow">A tua turma</p><h2 id="overview-title">Por onde vamos continuar?</h2></div>
+      <label for="dashboard-class">Turma<select id="dashboard-class" disabled><option>A carregar…</option></select></label>
+    </div>
+    <p id="overview-status" class="muted" role="status">A consultar as aulas…</p>
+    <div id="overview-content"></div>
+    <button type="button" class="ghost" id="overview-retry" hidden>Tentar novamente</button>
+  </section>
+  <nav class="dashboard-shortcuts" aria-label="Ações frequentes">
+    <a href="/teacher/activities.html?estado=draft#atividades"><strong>Rever rascunhos</strong><span>Experimentar antes de publicar</span></a>
+    <a href="#catalog-title"><strong>Escolher uma atividade</strong><span>Procurar no catálogo da aula</span></a>
+    <a href="/teacher/activities.html#registos"><strong>Consultar registos</strong><span>Trabalho e reflexão dos alunos</span></a>
+  </nav>
+
+  <details class="desk creation-panel" id="create-activity">
+    <summary><strong>Criar uma atividade</strong><span class="muted">Preparar um novo rascunho para revisão</span></summary>
     <section aria-labelledby="nova-atividade">
       <p class="eyebrow" id="nova-atividade">Nova atividade</p>
       <h2>O que vamos explorar a seguir?</h2>
@@ -50,28 +68,43 @@
           </div>
         </div>
         <p class="button-line">
-          <button type="submit" id="submit-btn">Gerar atividade</button>
+          <button type="submit" id="submit-btn" disabled>Gerar atividade</button>
           <span class="muted" id="form-status" role="status"></span>
         </p>
-        <p class="muted">O Architect consulta a tua wiki (instrumentos MEM) e as Aprendizagens
-        Essenciais oficiais, e cita as fontes no plano. Demora alguns minutos.</p>
+        <p class="muted">A preparação consulta os instrumentos MEM e as Aprendizagens
+        Essenciais. Demora alguns minutos. No fim, podes experimentar e rever a atividade antes de a publicar.</p>
       </form>
     </section>
-  </div>
+  </details>
 
   <section class="sheet" aria-labelledby="jobs-title">
-    <p class="eyebrow" id="jobs-title">Bancada de geração</p>
-    <h2>Atividades em produção</h2>
-    <div id="jobs"><p class="muted" id="jobs-empty">Nada em produção. Lança um tema lá em cima.</p></div>
+    <h2 id="jobs-title" tabindex="-1">Geração e revisão</h2>
+    <p id="jobs-summary" class="muted" role="status">A consultar as atividades…</p>
+    <p id="jobs-feedback" role="status"></p>
+    <button type="button" class="ghost" id="jobs-retry" hidden>Tentar novamente</button>
+    <div id="jobs"></div>
+    <details id="job-history" class="overview-history" hidden>
+      <summary id="job-history-label">Atividades já publicadas</summary>
+      <div id="published-jobs"></div>
+    </details>
   </section>
 
   <section class="sheet" aria-labelledby="catalog-title">
-    <p class="eyebrow" id="catalog-title">Arquivo</p>
-    <h2>Catálogo publicado</h2>
+    <h2 id="catalog-title" tabindex="-1">Atividades para a aula</h2>
+    <p class="muted">Escolhe uma atividade publicada para trabalhar com a turma.</p>
+    <div class="row catalog-filters">
+      <label for="catalog-search">Pesquisar<input type="search" id="catalog-search" placeholder="Título ou tema"></label>
+      <label for="catalog-year">Ano<select id="catalog-year"><option value="">Todos</option><option value="1">1.º ano</option><option value="2">2.º ano</option><option value="3">3.º ano</option><option value="4">4.º ano</option></select></label>
+      <label for="catalog-subject">Disciplina<select id="catalog-subject"><option value="">Todas</option></select></label>
+    </div>
+    <p id="catalog-status" class="muted" role="status">A carregar o catálogo…</p>
+    <button type="button" class="ghost" id="meta-retry" hidden>Tentar novamente</button>
     <div class="card"><ul class="plain" id="catalog"></ul></div>
+    <button type="button" class="ghost" id="catalog-more" hidden>Mostrar mais atividades</button>
   </section>
 </main>
 <script src="/teacher/common.js"></script>
+<script src="/teacher/dashboard.js"></script>
 <script src="/teacher/app.js"></script>
 </body>
 </html>
