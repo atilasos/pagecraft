@@ -69,6 +69,15 @@
 .creation-panel > summary span { display: block; margin-top: .3rem; }
 .creation-panel[open] > summary { margin-bottom: 1.5rem; }
 .teacher-page #overview-retry[hidden] { display: none; }
+.teacher-page :is(#jobs-retry, #job-history, #meta-retry, #catalog-more)[hidden] { display: none; }
+.teacher-page [role="status"]:empty { margin: 0; }
+.catalog-filters { grid-template-columns: minmax(0, 2fr) minmax(0, .75fr) minmax(0, 1.25fr); }
+.catalog-filters :is(label, input, select) { min-width: 0; }
+.catalog-entry { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.catalog-entry > div { min-width: 0; }
+.catalog-entry h3 { margin: .4rem 0; }
+.catalog-entry .button-link { flex-shrink: 0; }
+#catalog-more { margin-top: 1rem; }
 @media (max-width: 850px) {
   .library-filters { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
   .activity-row-main { align-items: flex-start; flex-direction: column; gap: .65rem; }
@@ -82,4 +91,6 @@
   .dashboard-shortcuts { grid-template-columns: minmax(0, 1fr); }
   .overview-heading label { width: 100%; min-width: 0; }
   .overview-session { align-items: flex-start; flex-direction: column; }
+  .catalog-filters { grid-template-columns: minmax(0, 1fr); }
+  .catalog-entry { align-items: flex-start; flex-direction: column; padding: .75rem 0; }
 }

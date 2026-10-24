@@ -68,7 +68,7 @@
           </div>
         </div>
         <p class="button-line">
-          <button type="submit" id="submit-btn">Gerar atividade</button>
+          <button type="submit" id="submit-btn" disabled>Gerar atividade</button>
           <span class="muted" id="form-status" role="status"></span>
         </p>
         <p class="muted">A preparação consulta os instrumentos MEM e as Aprendizagens
@@ -78,15 +78,29 @@
   </details>
 
   <section class="sheet" aria-labelledby="jobs-title">
-    <p class="eyebrow" id="jobs-title">Bancada de geração</p>
-    <h2>Atividades em produção</h2>
-    <div id="jobs"><p class="muted" id="jobs-empty">Nada em produção. Lança um tema lá em cima.</p></div>
+    <h2 id="jobs-title" tabindex="-1">Geração e revisão</h2>
+    <p id="jobs-summary" class="muted" role="status">A consultar as atividades…</p>
+    <p id="jobs-feedback" role="status"></p>
+    <button type="button" class="ghost" id="jobs-retry" hidden>Tentar novamente</button>
+    <div id="jobs"></div>
+    <details id="job-history" class="overview-history" hidden>
+      <summary id="job-history-label">Atividades já publicadas</summary>
+      <div id="published-jobs"></div>
+    </details>
   </section>
 
   <section class="sheet" aria-labelledby="catalog-title">
-    <p class="eyebrow" id="catalog-title">Arquivo</p>
-    <h2>Catálogo publicado</h2>
+    <h2 id="catalog-title" tabindex="-1">Atividades para a aula</h2>
+    <p class="muted">Escolhe uma atividade publicada para trabalhar com a turma.</p>
+    <div class="row catalog-filters">
+      <label for="catalog-search">Pesquisar<input type="search" id="catalog-search" placeholder="Título ou tema"></label>
+      <label for="catalog-year">Ano<select id="catalog-year"><option value="">Todos</option><option value="1">1.º ano</option><option value="2">2.º ano</option><option value="3">3.º ano</option><option value="4">4.º ano</option></select></label>
+      <label for="catalog-subject">Disciplina<select id="catalog-subject"><option value="">Todas</option></select></label>
+    </div>
+    <p id="catalog-status" class="muted" role="status">A carregar o catálogo…</p>
+    <button type="button" class="ghost" id="meta-retry" hidden>Tentar novamente</button>
     <div class="card"><ul class="plain" id="catalog"></ul></div>
+    <button type="button" class="ghost" id="catalog-more" hidden>Mostrar mais atividades</button>
   </section>
 </main>
 <script src="/teacher/common.js"></script>

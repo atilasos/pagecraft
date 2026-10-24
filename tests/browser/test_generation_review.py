@@ -77,7 +77,14 @@ def test_review_preview_approval_and_changed_artifacts_in_studio(page, generatio
     page.on('pageerror', lambda error: errors.append(str(error)))
 
     def generate():
-        response = page.request.post(origin + '/api/jobs', data={'topic': 'Frações', 'subject': 'Matemática', 'year': 3})
+        if not page.locator('#create-activity').get_attribute('open') == '':
+            page.locator('#create-activity > summary').click()
+        page.locator('#topic').fill('Frações')
+        page.locator('#subject').select_option('Matemática')
+        page.locator('#year').select_option('3')
+        with page.expect_response(lambda r: r.url.endswith('/api/jobs') and r.request.method == 'POST') as created:
+            page.get_by_role('button', name='Gerar atividade', exact=True).click()
+        response = created.value
         assert response.ok
         job_id = response.json()['id']
         for _ in range(100):
@@ -103,6 +110,8 @@ def test_review_preview_approval_and_changed_artifacts_in_studio(page, generatio
     preview.close()
     reviewed = Path(a['artifacts']['html']).read_bytes()
     card_a.get_by_role('button', name='Aprovar e publicar').click()
+    expect(page.locator('#jobs-feedback')).to_contain_text('Atividade publicada')
+    page.locator('#job-history > summary').click()
     expect(card_a.get_by_text('publicada', exact=True)).to_be_visible()
     assert (root / 'activities' / a['slug'] / 'index.html').read_bytes() == reviewed
     expect(card_b.get_by_role('button', name='Publicar mesmo assim (decisão do professor)')).to_be_visible()
