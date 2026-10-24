@@ -78,10 +78,18 @@ document.getElementById("meta-retry").onclick = refreshMeta;
 function orderJobs() {
   const priority = job => ({awaiting_review: 0, failed: 1, done: 3})[job.status] ?? 2;
   const jobs = [...jobStates.values()].sort((a, b) => priority(a) - priority(b) || (b.created_at || "").localeCompare(a.created_at || ""));
-  for (const job of jobs) {
-    const target = job.status === "done" ? document.getElementById("published-jobs") : jobsEl;
-    target.appendChild(document.getElementById(`job-${job.id}`));
+  const publishedEl = document.getElementById("published-jobs");
+  const focused = document.activeElement;
+  const restoreFocus = jobsEl.contains(focused) || publishedEl.contains(focused);
+  for (const target of [jobsEl, publishedEl]) {
+    const entries = jobs.filter(job => (job.status === "done") === (target === publishedEl));
+    entries.forEach((job, index) => {
+      const card = document.getElementById(`job-${job.id}`);
+      const position = target.children[index];
+      if (position !== card) target.insertBefore(card, position || null);
+    });
   }
+  if (restoreFocus && focused.isConnected && document.activeElement !== focused) focused.focus({preventScroll: true});
   const review = jobs.filter(job => job.status === "awaiting_review").length;
   const failed = jobs.filter(job => job.status === "failed").length;
   const published = jobs.filter(job => job.status === "done").length;
