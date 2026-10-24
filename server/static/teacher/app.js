@@ -109,6 +109,7 @@ function jobCard(job) {
     awaiting_review: '<span class="pill warn">a aguardar a tua revisão</span>',
     failed: '<span class="pill warn">falhou</span>',
     queued: '<span class="pill">em fila</span>',
+    publishing: '<span class="pill">a publicar</span>',
   }[job.status] || `<span class="pill">${esc(PHASE_LABELS[job.current_phase] || job.status)}</span>`;
 
   const running = !["done", "failed", "awaiting_review"].includes(job.status);
@@ -141,12 +142,15 @@ async function watchJob(job) {
       try {
         const response = await tfetch(`/api/jobs/${job.id}`);
         if (!response.ok) throw new Error("Progresso indisponível");
-        jobCard(await response.json());
-        document.getElementById(`job-${job.id}-log`).textContent = describeEvent(type, data);
-        if (["done", "failed", "awaiting_review"].includes(type)) {
+        const current = await response.json();
+        jobCard(current);
+        document.getElementById(`job-${job.id}-log`).textContent = current.status === "publishing"
+          ? "A publicar a atividade…" : describeEvent(type, data);
+        // O stream repete eventos antigos; o GET é que indica o estado atual.
+        if (["done", "failed", "awaiting_review"].includes(current.status)) {
           es.close();
           streams.delete(job.id);
-          if (type === "done") refreshMeta();
+          if (current.status === "done") refreshMeta();
         }
       } catch (error) {
         document.getElementById(`job-${job.id}-log`).textContent = "Não foi possível atualizar o progresso. Atualiza a página para tentar novamente.";
