@@ -59,6 +59,8 @@ async function api(path, method = "GET", data) {
 let library = [];
 let libraryLoaded = false;
 let libraryPage = 1;
+// Rascunhos escolhidos para aprovar em conjunto; a escolha mantém-se ao mudar filtros e páginas.
+const selectedDrafts = new Set();
 const LIBRARY_PAGE_SIZE = 6;
 const libraryParams = new URLSearchParams(location.search);
 $("library-search").value = libraryParams.get("q") || "";
@@ -74,6 +76,8 @@ async function loadActivities() {
   library = all.filter((a) => !a.archived_at)
     .sort((a, b) => (b.created_at || "").localeCompare(a.created_at || ""));
   libraryLoaded = true;
+  const drafts = new Set(library.filter(a => !a.published).map(a => a.code));
+  for (const code of [...selectedDrafts]) if (!drafts.has(code)) selectedDrafts.delete(code);
   const selected = $("filter-activity").value;
   $("filter-activity").replaceChildren(new Option("Todas", ""));
   for (const a of all) {
@@ -83,15 +87,19 @@ async function loadActivities() {
   renderLibrary();
 }
 
-function renderLibrary() {
-  if (!libraryLoaded) return;
+function libraryMatches() {
   const query = searchText($("library-search").value.trim());
   const state = $("library-state").value;
   const year = $("library-year").value;
-  const matches = library.filter(a =>
+  return library.filter(a =>
     (!query || searchText(a.title + " " + a.code).includes(query)) &&
     (!year || String(a.year) === year) &&
     (!state || (state === "published" ? a.published : !a.published)));
+}
+
+function renderLibrary() {
+  if (!libraryLoaded) return;
+  const matches = libraryMatches();
   const pages = Math.max(1, Math.ceil(matches.length / LIBRARY_PAGE_SIZE));
   libraryPage = Math.min(libraryPage, pages);
   const start = (libraryPage - 1) * LIBRARY_PAGE_SIZE;
@@ -108,6 +116,44 @@ function renderLibrary() {
   $("library-page").textContent = `Página ${libraryPage} de ${pages}`;
   $("library-previous").disabled = libraryPage === 1;
   $("library-next").disabled = libraryPage === pages;
+  renderSelection(matches);
+}
+
+const wordOf = (activity) => PageCraftActivitySelection.wordOf(activity);
+
+function renderSelection(matches) {
+  const drafts = library.filter(a => !a.published);
+  const words = new Map();
+  for (const activity of matches.filter(a => !a.published)) {
+    const word = wordOf(activity);
+    // Procurar só um jogo não limita a seleção de todos os jogos da palavra.
+    if (word && !words.has(word.id)) words.set(word.id, { ...word,
+      codes: drafts.filter(a => wordOf(a)?.id === word.id).map(a => a.code) });
+  }
+  const fieldset = $("library-words");
+  fieldset.replaceChildren(el("legend", "Selecionar todos os jogos de uma palavra"));
+  fieldset.hidden = !words.size;
+  for (const word of [...words.values()].sort((a, b) => a.label.localeCompare(b.label, "pt"))) {
+    const label = el("label");
+    const check = el("input");
+    check.type = "checkbox";
+    check.value = word.id;
+    check.checked = word.codes.every(code => selectedDrafts.has(code));
+    check.indeterminate = !check.checked && word.codes.some(code => selectedDrafts.has(code));
+    check.onchange = () => {
+      for (const code of word.codes) check.checked ? selectedDrafts.add(code) : selectedDrafts.delete(code);
+      renderLibrary();
+      [...$("library-words").querySelectorAll("input")].find(input => input.value === word.id)?.focus({ preventScroll: true });
+    };
+    label.append(check, document.createTextNode(`${word.label} (${word.codes.length})`));
+    fieldset.append(label);
+  }
+  const n = selectedDrafts.size;
+  $("selection-count").textContent = n ? `${n} selecionadas para aprovar` : "Nenhum rascunho selecionado.";
+  $("library-select-results").disabled = !matches.some(a => !a.published);
+  $("library-select-clear").disabled = !n;
+  $("publish-selected").disabled = !n;
+  $("publish-selected").textContent = `Aprovar e publicar selecionadas (${n})`;
 }
 
 function activityRow(a) {
@@ -115,6 +161,20 @@ function activityRow(a) {
   row.dataset.code = a.code;
   const main = el("div", undefined, "activity-row-main");
   const copy = el("div", undefined, "activity-row-copy");
+  if (!a.published) {
+    const pick = el("label", undefined, "selection-label");
+    const check = el("input");
+    check.type = "checkbox";
+    check.checked = selectedDrafts.has(a.code);
+    check.onchange = () => {
+      check.checked ? selectedDrafts.add(a.code) : selectedDrafts.delete(a.code);
+      renderLibrary();
+      // Manter o foco na mesma caixa depois de redesenhar a página.
+      $("activities").querySelector(`[data-code="${CSS.escape(a.code)}"] .selection-label input`)?.focus({ preventScroll: true });
+    };
+    pick.append(check, document.createTextNode(`Selecionar ${a.title}`));
+    copy.append(pick);
+  }
   const heading = el("div", undefined, "activity-row-title");
   heading.append(el("h2", a.title), el("span", a.published ? "Disponível" : "Por rever", "tag"));
   copy.append(heading,
@@ -196,6 +256,37 @@ async function refreshActivities() {
   }
 }
 $("library-retry").onclick = refreshActivities;
+$("library-select-results").onclick = () => {
+  for (const a of libraryMatches()) if (!a.published) selectedDrafts.add(a.code);
+  renderLibrary();
+};
+$("library-select-clear").onclick = () => {
+  selectedDrafts.clear();
+  renderLibrary();
+};
+async function publishActivities(codes) {
+  if (!codes.length || !confirm(`Já reveste estas ${codes.length} atividades? Ao publicar, qualquer pessoa com o endereço pode abri-las.`)) return;
+  $("publish-selected").disabled = true;
+  $("publish-errors").replaceChildren();
+  $("library-load-status").textContent = `A publicar ${codes.length} atividades…`;
+  // Bloqueia cliques repetidos enquanto o servidor publica a seleção.
+  $("activities").inert = true;
+  try {
+    const result = await api("/api/learning/activities/publish", "POST", { codes });
+    for (const error of result.errors) {
+      const title = library.find(a => a.code === error.code)?.title || error.code;
+      $("publish-errors").append(el("li", `${title}: ${error.detail}`));
+    }
+    await loadActivities();
+    $("library-load-status").textContent = `${result.published.length} publicadas · ${result.errors.length} por resolver.`;
+  } catch (error) {
+    $("library-load-status").textContent = error.message;
+  } finally {
+    $("activities").inert = false;
+    renderLibrary();
+  }
+}
+$("publish-selected").onclick = () => publishActivities([...selectedDrafts]);
 function field(title, value, multi = false) {
   const label = el("label", title),
     input = el(multi ? "textarea" : "input");
