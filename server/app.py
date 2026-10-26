@@ -97,6 +97,8 @@ def create_app(
             clock=classroom_clock,
             school_timezone=school_timezone,
         )
+        from .lesson_plans import LessonPlans
+        app.state.lesson_plans = LessonPlans(storage, app.state.learning, app.state.classroom)
         app.state.feedback = FeedbackService(
             config, storage, app.state.classroom, build_feedback_provider(config)
         )
@@ -248,12 +250,14 @@ def create_app(
     from .api import classroom as classroom_api
     from .api import jobs
     from .api import learning as learning_api
+    from .api import lesson_plans as lesson_plans_api
 
     app.include_router(jobs.router)
     app.include_router(board_api.router)
     app.include_router(classroom_api.router)
     app.include_router(catalog_api.router)
     app.include_router(learning_api.router)
+    app.include_router(lesson_plans_api.router)
 
     for extend_routes in route_extensions:
         extend_routes(app)

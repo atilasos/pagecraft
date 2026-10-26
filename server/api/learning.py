@@ -23,6 +23,7 @@ ACTIVITY_CONTENT_HEADERS = {
 router = APIRouter()
 Slug = Annotated[str, Field(pattern=r'^[a-z0-9][a-z0-9-]{0,100}$')]
 Code = Annotated[str, Field(pattern=r'^[A-Za-z2-9]{6}$')]
+LessonCode = Annotated[str, Field(pattern=r'^[A-Za-z2-9]{7}$')]
 Identifier = Annotated[str, Field(pattern=r'^[a-f0-9]{32}$')]
 Short = Annotated[str, Field(min_length=1, max_length=120)]
 Level = Literal['support', 'intermediate', 'challenge']
@@ -50,12 +51,18 @@ class ActivityInput(BaseModel):
         return criteria
 
 
+class LessonIdentity(BaseModel):
+    lesson_code: LessonCode
+    student_id: Annotated[str, Field(pattern=r'^[a-f0-9]{8}$')]
+
+
 class StartInput(BaseModel):
     name: Short
     group: str = Field(default='', max_length=80)
     mode: Literal['classroom', 'home'] = 'classroom'
     language: Language = 'pt'
     level: Level = 'intermediate'
+    assignment: LessonIdentity | None = None
 
     @field_validator('name')
     @classmethod
@@ -188,7 +195,11 @@ async def start(code: Code, data: StartInput, request: Request, response: Respon
         raise HTTPException(409, 'Este rascunho foi retirado. Escolhe uma atividade da coleção atual.')
     if data.language not in activity['languages']:
         raise HTTPException(422, 'Língua indisponível nesta atividade.')
-    attempt, cookie = await svc.start(activity, data.model_dump(), preview=not activity['published'])
+    values = data.model_dump(exclude={'assignment'})
+    if data.assignment:
+        values.update(await request.app.state.lesson_plans.start_context(
+            data.assignment.lesson_code, data.assignment.student_id, code))
+    attempt, cookie = await svc.start(activity, values, preview=not activity['published'])
     response.set_cookie(LEARNING_COOKIE, cookie, httponly=True, samesite='strict',
                         secure=request.state.access.channel is TrustChannel.CLOUDFLARE,
                         max_age=86400, path='/')

@@ -109,6 +109,105 @@ async def test_bulk_publication_is_teacher_only_retryable_and_reports_each_failu
     assert not (await app.state.learning.activity(retired['code']))['published']
 
 
+async def lesson_setup(app, teacher):
+    first, data = await register(teacher)
+    directory = app.state.config.activities_dir / 'other-lesson'
+    directory.mkdir()
+    (directory / 'index.html').write_text('<html>Other lesson</html>')
+    second = (await teacher.post('/api/learning/activities', json={**data, 'slug': 'other-lesson'})).json()
+    await teacher.post(f"/api/learning/activities/{second['code']}/publish")
+    cls = (await teacher.post('/api/classes', json={'name': '2A', 'year': 2, 'students': ['Ana', 'Bruno', 'Carla']})).json()
+    ana, bruno, carla = [s['id'] for s in cls['students']]
+    data = dict(title='A nossa aula', class_id=cls['id'], assignments=[
+        dict(title='Leitura', student_ids=[ana, bruno], activity_codes=[first['code'], second['code']]),
+        dict(title='Outro trabalho', student_ids=[carla, bruno], activity_codes=[second['code']]),
+    ])
+    response = await teacher.post('/api/learning/lessons', json=data)
+    assert response.status_code == 201, response.text
+    return response.json(), first, second
+
+
+async def test_lesson_assigns_several_activities_to_different_students_without_duplicates(learning_clients):
+    app, teacher, pupil = learning_clients
+    lesson, first, second = await lesson_setup(app, teacher)
+    code = lesson['code']
+    assert len(code) == 7
+    entry = (await pupil.get(f'/api/learning/lessons/{code}/entry')).json()
+    assert 'assignments' not in entry
+    assert 'revision' not in entry
+    assert entry['class_name'] == '2A'
+    for student, expected in zip(lesson['students'], [[first['code'], second['code']], [first['code'], second['code']], [second['code']]]):
+        result = await pupil.get(f"/api/learning/lessons/{code}/students/{student['id']}")
+        assert result.status_code == 200
+        assert [a['code'] for a in result.json()['activities']] == expected
+        assert 'students' not in result.json()
+    assert (await pupil.get('/api/learning/lessons')).status_code in (401, 403)
+    assert (await pupil.put(f'/api/learning/lessons/{code}', json=lesson)).status_code in (401, 403)
+    from server.lesson_plans import LessonPlans
+    reloaded = LessonPlans(app.state.storage, app.state.learning, app.state.classroom)
+    assert (await reloaded.get(code.lower()))['assignments'] == lesson['assignments']
+
+
+async def test_assigned_realization_uses_roster_and_denies_unassigned_activity(learning_clients):
+    app, teacher, pupil = learning_clients
+    lesson, first, second = await lesson_setup(app, teacher)
+    carla = lesson['students'][2]
+    values = dict(name='Nome enviado pelo browser', group='Outra turma', mode='home', assignment={
+        'lesson_code': lesson['code'], 'student_id': carla['id']})
+    assert (await pupil.post(f"/api/learning/activities/{first['code']}/start", json=values)).status_code == 403
+    response = await pupil.post(f"/api/learning/activities/{second['code']}/start", json=values)
+    assert response.status_code == 201
+    attempt = response.json()
+    assert attempt['name'] == 'Carla' and attempt['group'] == '2A' and attempt['mode'] == 'classroom'
+    assert attempt['lesson_code'] == lesson['code'] and attempt['student_id'] == carla['id']
+    assert attempt['class_id'] == lesson['class_id']
+    pupil.headers['X-PageCraft-Realization'] = attempt['id']
+    # Escolher o mesmo nome noutro browser não oferece a credencial desta realização.
+    pupil.cookies.clear()
+    await pupil.get(f"/api/learning/lessons/{lesson['code']}/students/{carla['id']}")
+    assert (await pupil.get('/api/learning/me')).status_code == 401
+    assert (await teacher.get('/api/learning/reports')).json()[0]['id'] == attempt['id']
+
+
+async def test_lesson_updates_keep_roster_detect_conflicts_and_close_only_new_entry(learning_clients):
+    app, teacher, pupil = learning_clients
+    lesson, first, second = await lesson_setup(app, teacher)
+    ana = lesson['students'][0]
+    values = dict(name='Ana', assignment={'lesson_code': lesson['code'], 'student_id': ana['id']})
+    started = await pupil.post(f"/api/learning/activities/{first['code']}/start", json=values)
+    pupil.headers['X-PageCraft-Realization'] = started.json()['id']
+    # Alterar a turma não reatribui trabalho guardado a outros alunos.
+    await app.state.classroom.update_class_students(lesson['class_id'], ['Outro nome'])
+    update = {k: lesson[k] for k in ('title', 'assignments', 'revision')}
+    update['active'] = False
+    closed = await teacher.put(f"/api/learning/lessons/{lesson['code']}", json=update)
+    assert closed.status_code == 200
+    assert closed.json()['students'] == lesson['students']
+    assert (await teacher.put(f"/api/learning/lessons/{lesson['code']}", json=update)).status_code == 409
+    assert (await pupil.get(f"/api/learning/lessons/{lesson['code']}/entry")).status_code == 409
+    assert (await pupil.post(f"/api/learning/activities/{first['code']}/start", json=values)).status_code == 409
+    assert (await pupil.post('/api/learning/me/events', json={'events': [{'id': 'saved', 'type': 'discovery'}]})).status_code == 200
+    assert (await pupil.post('/api/learning/me/finish', json={'answers': {}})).status_code == 200
+    update.update(active=True, revision=closed.json()['revision'])
+    assert (await teacher.put(f"/api/learning/lessons/{lesson['code']}", json=update)).status_code == 200
+    assert (await pupil.get(f"/api/learning/lessons/{lesson['code']}/entry")).status_code == 200
+
+
+async def test_lesson_rejects_drafts_unknown_students_and_empty_assignments(learning_clients):
+    app, teacher, _ = learning_clients
+    activity, _ = await register(teacher, published=False)
+    cls = (await teacher.post('/api/classes', json={'name': '2A', 'year': 2, 'students': ['Ana']})).json()
+    data = dict(title='Aula', class_id=cls['id'], assignments=[dict(title='Leitura', student_ids=[cls['students'][0]['id']], activity_codes=[activity['code']])])
+    assert (await teacher.post('/api/learning/lessons', json=data)).status_code == 422
+    await teacher.post(f"/api/learning/activities/{activity['code']}/publish")
+    data['assignments'][0]['student_ids'] = ['ffffffff']
+    assert (await teacher.post('/api/learning/lessons', json=data)).status_code == 422
+    data['assignments'][0]['student_ids'] = []
+    assert (await teacher.post('/api/learning/lessons', json=data)).status_code == 422
+    data['assignments'] = []
+    assert (await teacher.post('/api/learning/lessons', json=data)).status_code == 422
+
+
 async def test_identity_is_scoped_to_realization_not_typed_name(learning_clients):
     app, teacher, pupil = learning_clients
     activity, _ = await register(teacher)

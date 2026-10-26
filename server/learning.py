@@ -133,6 +133,9 @@ class Learning:
             credential_hash=hashlib.sha256(credential.encode()).hexdigest(),
             events=[], assessment=None, teacher_note="",
         )
+        for key in ('lesson_code', 'class_id', 'student_id'):
+            if key in data:
+                attempt[key] = data[key]
         await self.storage.write_json(self.storage.path("learning", "realizations", f"{attempt_id}.json"), attempt)
         return attempt, f"{attempt_id}.{credential}"
 
