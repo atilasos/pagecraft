@@ -1,6 +1,7 @@
 "use strict";
 const $ = (id) => document.getElementById(id);
 let reports = [];
+let lessonTitles = new Map();
 let publicOrigin = location.origin;
 
 function showTeacherSection(focus = false) {
@@ -299,6 +300,7 @@ function render() {
   const name = $("filter-name").value.trim().toLocaleLowerCase("pt"),
     group = $("filter-group").value.trim().toLocaleLowerCase("pt"),
     code = $("filter-activity").value,
+    lesson = $("filter-lesson").value,
     from = $("filter-from").value,
     to = $("filter-to").value;
   const filtered = reports.filter(
@@ -306,6 +308,7 @@ function render() {
       r.name.toLocaleLowerCase("pt").includes(name) &&
       r.group.toLocaleLowerCase("pt").includes(group) &&
       (!code || r.code === code) &&
+      (!lesson || r.lesson_code === lesson) &&
       (!from || r.started_at.slice(0, 10) >= from) &&
       (!to || r.started_at.slice(0, 10) <= to),
   );
@@ -314,6 +317,7 @@ function render() {
     `${filtered.length} realizações · ${filtered.filter((r) => r.completed_at).length} terminadas`;
   for (const r of filtered) {
     const card = el("article", undefined, "card");
+    if (r.lesson_code) card.append(el("p", lessonTitles.get(r.lesson_code) || `Roteiro ${r.lesson_code}`, "muted"));
     card.append(
       el("span", r.completed_at ? "Terminada" : "Em curso", "tag"),
       el("h2", `${r.name} · ${r.title}`),
@@ -407,12 +411,24 @@ function render() {
       ),
     );
 }
+async function loadLessons() {
+  try {
+    const lessons = await api("/api/learning/lessons");
+    lessonTitles = new Map(lessons.map(lesson => [lesson.code, lesson.title]));
+    for (const lesson of lessons) $("filter-lesson").append(new Option(`${lesson.title} · ${lesson.class_name}`, lesson.code));
+    const selectedLesson = new URLSearchParams(location.search).get("aula");
+    if (lessonTitles.has(selectedLesson)) $("filter-lesson").value = selectedLesson;
+  } catch (error) {
+    $("report-load-status").textContent = "Não foi possível carregar os roteiros da aula. " + error.message;
+  }
+}
 async function loadReports() {
   reports = await api("/api/learning/reports");
   render();
 }
 for (const id of [
   "filter-name",
+  "filter-lesson",
   "filter-group",
   "filter-activity",
   "filter-from",
@@ -448,7 +464,7 @@ $("logout").onclick = () => { location.href = "/logout"; };
     await api("/api/teacher-bootstrap");
     const info = await api("/api/access-info");
     publicOrigin = info.public_origin || location.origin;
-    await Promise.all([refreshActivities(), refreshReports()]);
+    await Promise.all([refreshActivities(), loadLessons().then(refreshReports)]);
   } catch (e) {
     status(e.message, true);
   }

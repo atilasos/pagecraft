@@ -71,10 +71,11 @@ def studio_origin(tmp_path_factory):
         source = DRAFT.parent / ('m28p-v2-gema' + suffix)
         if source.is_file():
             shutil.copyfile(source, root / 'drafts' / source.name)
-    for suffix in ['.html', '-docspec.json', '.md', '-design-spec.json', '-activity.json']:
-        source = DRAFT.parent / ('m28p-v3-menina-match' + suffix)
-        if source.is_file():
-            shutil.copyfile(source, root / 'drafts' / source.name)
+    for kind in ['match', 'pairs', 'syllables', 'gap', 'recall', 'hunt']:
+        for suffix in ['.html', '-docspec.json', '.md', '-design-spec.json', '-activity.json']:
+            source = DRAFT.parent / ('m28p-v3-menina-' + kind + suffix)
+            if source.is_file():
+                shutil.copyfile(source, root / 'drafts' / source.name)
     activity = root / 'activities' / 'fraction-test'
     activity.mkdir(parents=True)
     shutil.copyfile(DRAFT, activity / 'index.html')
@@ -84,7 +85,7 @@ def studio_origin(tmp_path_factory):
     canva = root / 'activities' / 'canva-animais-4ano'
     canva.mkdir()
     shutil.copyfile(DRAFT.parent / 'canva-animais-4ano.html', canva / 'index.html')
-    (canva / 'meta.json').write_text('{"title":"Dois animais, três formas de comunicar","year":"4","subject":"TIC"}')
+    (canva / 'meta.json').write_text('{"slug":"canva-animais-4ano","title":"Dois animais, três formas de comunicar","year":"4","subject":"TIC"}')
     with socket.socket() as socket_:
         socket_.bind(('127.0.0.1', 0))
         port = socket_.getsockname()[1]

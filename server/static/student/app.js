@@ -76,6 +76,12 @@ $("code-form").addEventListener("submit", async (ev) => {
   const status = $("code-status");
   status.textContent = "A procurar a aula…";
   try {
+    if (code.length === 7) {
+      const response = await fetch(`/api/learning/lessons/${encodeURIComponent(code)}/entry`);
+      if (!response.ok) throw new Error((await response.json()).detail || "código não encontrado");
+      location.href = `/aula/${encodeURIComponent(code)}`;
+      return;
+    }
     const resumingGroup = code.length === 8;
     const resp = await fetch(resumingGroup ? '/api/groups/enter' : `/api/join/${encodeURIComponent(code)}`,
       resumingGroup ? {method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({code})} : {});

@@ -40,6 +40,7 @@ class LessonContent(BaseModel):
 
 class CreateLesson(LessonContent):
     class_id: Annotated[str, Field(pattern=r'^[a-f0-9]{10}$')]
+    active: bool = True
 
 
 class UpdateLesson(LessonContent):

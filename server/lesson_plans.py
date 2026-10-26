@@ -56,7 +56,7 @@ class LessonPlans:
             while self.path(code).exists():
                 code = ''.join(secrets.choice(ALPHABET) for _ in range(7))
             lesson = dict(data, code=code, class_name=cls['name'], year=cls['year'],
-                          students=cls['students'], active=True, revision=1,
+                          students=cls['students'], active=data.get('active', True), revision=1,
                           created_at=utcnow(), updated_at=utcnow())
             await self.storage.write_json(self.path(code), lesson)
         return lesson

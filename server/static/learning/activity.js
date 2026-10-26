@@ -120,6 +120,8 @@ let lang = "pt",
   flushing = null,
   reflectionDraft = { answers: {}, strategy: "", next_step: "" };
 const code = location.pathname.split("/").filter(Boolean).pop().toUpperCase();
+const lessonQuery = new URLSearchParams(location.search);
+let assignmentContext = null;
 const t = (key) => copy[lang][key];
 function status(message, error = false) {
   if (identityConflict) {
@@ -390,6 +392,9 @@ function showDone() {
     : "teacherSees";
   teacherMessage.textContent = t(teacherMessage.dataset.i18n);
   $("done-next").textContent = attempt.assessment?.next_step || "";
+  const returnLink = $("lesson-return");
+  returnLink.hidden = !attempt.lesson_code;
+  if (attempt.lesson_code) returnLink.href = `/aula/${attempt.lesson_code}?aluno=${attempt.student_id}`;
   status(attempt.preview ? t("preview") : t("synced"));
 }
 $("start-form").onsubmit = async (e) => {
@@ -403,6 +408,7 @@ $("start-form").onsubmit = async (e) => {
       mode: $("mode").value,
       language: lang,
       level: "intermediate",
+      ...(assignmentContext ? {assignment: {lesson_code: assignmentContext.code, student_id: assignmentContext.student.id}} : {}),
     });
     queue = [];
     reflectionDraft = { answers: {}, strategy: "", next_step: "" };
@@ -507,10 +513,11 @@ function startLocally(id) {
   $("entry").hidden = false;
   $("start-form").hidden = false;
   $("name").value = "";
+  if (assignmentContext) $("name").value = assignmentContext.student.display_name;
   status("");
   return true;
 }
-async function leave() {
+async function leave(changeStudent = false) {
   try {
     await flush();
     await api("/api/learning/me/leave", "POST", undefined, attempt.id);
@@ -519,7 +526,8 @@ async function leave() {
       sessionStorage.removeItem("pc-reflection:" + attempt.id);
       sessionStorage.removeItem("pc-realization:" + code);
     }
-    location.reload();
+    if (changeStudent && assignmentContext) location.href = `/aula/${assignmentContext.code}`;
+    else location.reload();
   } catch (error) {
     // The pupil already chose to start anew. A 401 permits a local exit only
     // when every source of pending work can be checked; 409 never permits it.
@@ -527,8 +535,8 @@ async function leave() {
     status(t("newAttempt"), true);
   }
 }
-$("leave").onclick = leave;
-$("again").onclick = leave;
+$("leave").onclick = () => leave(true);
+$("again").onclick = () => leave();
 async function requestFeedback(payload, unitId) {
   if (!attempt || attempt.completed_at || !payload.request_id) return;
   const owner = attempt.id;
@@ -617,6 +625,16 @@ async function recoverAttempt() {
   try {
     expectedId = sessionStorage.getItem("pc-realization:" + code);
     const previous = await api("/api/learning/me", "GET", undefined, expectedId);
+    if (previous.code === code && assignmentContext &&
+        (previous.lesson_code !== assignmentContext.code || previous.student_id !== assignmentContext.student.id)) {
+      // O nome no roteiro não dá acesso ao trabalho de outro aluno neste browser.
+      // Uma troca explícita guarda primeiro os registos pendentes da credencial atual.
+      attempt = previous;
+      queue = JSON.parse(sessionStorage.getItem("pc-queue:" + previous.id) || "[]");
+      $("leave").hidden = false;
+      status("Este browser tem outra realização desta atividade. Usa «Trocar de aluno» antes de começar.");
+      return;
+    }
     if (previous.code === code) {
       identityConflict = false;
       attempt = previous;
@@ -667,9 +685,35 @@ $("recovery-new").onclick = () => {
     document.body.dataset.year = String(activity.year);
     $("title").textContent = activity.title;
     document.title = activity.title + " · PageCraft";
-    $("group").value = activity.group || "";
     $("language-label").hidden = !activity.languages.includes("en");
     $("draft").hidden = activity.published;
+    if (lessonQuery.has("aula") || lessonQuery.has("aluno")) {
+      const lessonCode = lessonQuery.get("aula"), studentId = lessonQuery.get("aluno");
+      if (!/^[A-Za-z2-9]{7}$/.test(lessonCode || "") || !/^[a-f0-9]{8}$/.test(studentId || ""))
+        throw Error("Endereço do roteiro inválido.");
+      assignmentContext = {code: lessonCode.toUpperCase(), student: {id: studentId}};
+      try {
+        assignmentContext = await api(`/api/learning/lessons/${lessonCode}/students/${studentId}`);
+        if (!assignmentContext.activities.some(a => a.code === code)) throw Error("Atividade não atribuída.");
+      } catch (error) {
+        // Encerrar ou alterar o roteiro impede novas entradas, mas a credencial
+        // de uma realização existente continua a poder recuperar o trabalho.
+        await recoverAttempt();
+        if (attempt?.code === code && attempt.lesson_code === assignmentContext.code &&
+            attempt.student_id === studentId) {
+          assignmentContext.student.display_name = attempt.name;
+          translate();
+          return;
+        }
+        throw error;
+      }
+      $("name").value = assignmentContext.student.display_name;
+      $("name").readOnly = true;
+      $("group").readOnly = true;
+      $("mode").value = "classroom";
+      $("mode").disabled = true;
+    }
+    $("group").value = assignmentContext?.class_name || activity.group || "";
     if (activity.archived_at) {
       translate();
       status("Este rascunho foi retirado. Escolhe um jogo da coleção atual.");

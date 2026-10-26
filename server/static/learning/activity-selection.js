@@ -17,6 +17,7 @@ window.PageCraftActivitySelection = class {
     const filters = make("div");
     filters.className = "row";
     const label = (text, input) => {
+      input.setAttribute("aria-label", text);
       const node = make("label", text);
       node.append(input);
       filters.append(node);
@@ -81,8 +82,8 @@ window.PageCraftActivitySelection = class {
     for (const activity of filtered.filter(this.eligible)) {
       const word = this.word(activity);
       if (!word) continue;
-      if (!words.has(word.id)) words.set(word.id, { ...word, codes: [] });
-      words.get(word.id).codes.push(activity.code);
+      if (!words.has(word.id)) words.set(word.id, { ...word, codes: this.activities
+        .filter(a => this.eligible(a) && this.word(a)?.id === word.id).map(a => a.code) });
     }
     this.words.replaceChildren(make("legend", "Selecionar todos os jogos de uma palavra"));
     this.words.hidden = !words.size;
@@ -90,11 +91,13 @@ window.PageCraftActivitySelection = class {
       const label = make("label");
       const check = make("input");
       check.type = "checkbox";
+      check.value = word.id;
       check.checked = word.codes.every(code => this.selected.has(code));
       check.indeterminate = !check.checked && word.codes.some(code => this.selected.has(code));
       check.onchange = () => {
         word.codes.forEach(code => check.checked ? this.selected.add(code) : this.selected.delete(code));
         this.render();
+        [...this.words.querySelectorAll("input")].find(input => input.value === word.id)?.focus({ preventScroll: true });
       };
       label.append(check, document.createTextNode(`${word.label} (${word.codes.length})`));
       this.words.append(label);

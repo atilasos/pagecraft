@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Roteiros da aula · PageCraft</title>
+  <link rel="stylesheet" href="/learning-assets/fonts.css">
+  <link rel="stylesheet" href="/learning-assets/common.css">
+  <link rel="stylesheet" href="/teacher/dashboard.css">
+  <script defer src="/learning-assets/activity-selection.js"></script>
+  <script defer src="/learning-assets/lesson-teacher.js"></script>
+</head>
+<body>
+  <a href="#main" class="skip">Saltar para o conteúdo</a>
+  <header>
+    <div class="teacher-brand-row">
+      <a href="/teacher/">PageCraft Studio · Professor</a>
+    </div>
+    <nav class="teacher-nav" aria-label="Área do professor">
+      <a href="/teacher/">Preparar</a>
+      <a href="/teacher/class.html">Aula ao vivo</a>
+      <a href="/teacher/lesson.html" aria-current="page">Roteiros da aula</a>
+      <a href="/teacher/activities.html#atividades">Atividades</a>
+      <a href="/teacher/activities.html#registos">Registos</a>
+    </nav>
+  </header>
+  <main id="main">
+    <p class="eyebrow">Preparar a aula</p>
+    <h1>Distribuir atividades por alunos</h1>
+    <p>Na mesma aula, cada conjunto de alunos pode explorar atividades diferentes. Seleciona as palavras para incluir todos os seus jogos.</p>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+    <section class="card">
+      <h2>Roteiros guardados</h2>
+      <div id="lessons"></div>
+      <button id="new-lesson" type="button">Preparar novo roteiro</button>
+    </section>
+    <form id="lesson-form" inert>
+      <section class="card">
+        <h2 id="form-title">Novo roteiro da aula</h2>
+        <div class="row">
+          <label>Nome do roteiro<input id="lesson-title" maxlength="120" required placeholder="Leitura e matemática · 2.º ano"></label>
+          <label>Turma<select id="lesson-class" aria-label="Turma" required></select></label>
+        </div>
+        <p><a href="/teacher/class.html">Criar ou editar turmas</a></p>
+        <label class="selection-label"><input id="lesson-active" type="checkbox" checked> Disponível aos alunos</label>
+        <p id="entry-link" aria-live="polite"></p>
+      </section>
+      <section class="card">
+        <h2>Atividades atribuídas</h2>
+        <div id="assignments"></div>
+        <p id="unassigned" class="muted"></p>
+      </section>
+      <section class="card" aria-labelledby="assignment-heading">
+        <h2 id="assignment-heading">Acrescentar conjunto de alunos</h2>
+        <label>Nome do conjunto<input id="assignment-title" maxlength="120" placeholder="Ex.: Leitura · 28 palavras"></label>
+        <fieldset><legend>Alunos deste conjunto</legend><div id="students"></div></fieldset>
+        <button id="all-students" type="button">Selecionar todos os alunos</button>
+        <p class="muted">Um aluno pode pertencer a vários conjuntos. Recebe todas as atividades atribuídas, sem repetições.</p>
+        <h3>Atividades para este conjunto</h3>
+        <p>Só aparecem atividades aprovadas. <a href="/teacher/activities.html#atividades">Rever e aprovar rascunhos</a></p>
+        <div id="activity-selection"></div>
+        <p class="row"><button id="add-assignment" type="button">Acrescentar conjunto ao roteiro</button><button id="cancel-assignment" type="button">Limpar conjunto</button></p>
+        <p id="assignment-status" role="status"></p>
+      </section>
+      <p class="row"><button id="save-lesson" class="primary" type="submit">Guardar roteiro da aula</button><span id="save-status" role="status"></span></p>
+    </form>
+  </main>
+</body>
+</html>
