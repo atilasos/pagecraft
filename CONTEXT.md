@@ -28,6 +28,12 @@ _Avoid_: agendamento, calendário
 A lista do que cada criança se propõe fazer na sessão, escrita por ela no seu tablet. Prática MEM. Cada item passa por **por fazer → a fazer → feito → para partilhar**, e a criança avança-o com um toque; do último estado, tocar recua um passo, para um toque distraído nunca apagar trabalho de uma vez. «Para partilhar» é o que a criança quer levar ao conselho de cooperação. Não confundir com o **Plano de aula**, que é do professor e é uma fila de atividades.
 _Avoid_: tarefas, checklist, to-do
 
+**Roteiro da aula**:
+Seleção de atividades que o professor atribui a conjuntos de alunos da mesma turma para uma aula. Cada aluno escolhe o seu nome e recebe todas as atividades que lhe foram atribuídas, sem repetições. Pode escolher entre essas atividades e regressar ao roteiro depois de terminar uma realização.
+
+**Conjunto de alunos**:
+Seleção feita pelo professor para atribuir as mesmas atividades a várias crianças. Um aluno pode pertencer a vários conjuntos. A pertença ao conjunto não torna o trabalho conjunto: cada realização conserva o seu autor. Distinto do **Grupo de trabalho**, cujos participantes trabalham no mesmo computador.
+
 **Sessão de aula**:
 Registo de uma atividade para uma turma, com participantes e acontecimentos persistentes. Cada aula abre uma janela de acesso que pode terminar e ser reativada pelo professor, conservando o trabalho. «Começar novo trabalho» cria outro registo.
 

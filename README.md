@@ -143,6 +143,8 @@ O que o Studio faz:
 
 Configuração por `server/config.toml` (começar por copiar [`server/config.toml.example`](server/config.toml.example)) ou variáveis `PAGECRAFT_*` (ex.: `PAGECRAFT_VAULT_PATH`, `PAGECRAFT_GENERATION_PROVIDER=codex|anthropic`, `PAGECRAFT_FEEDBACK_PROVIDER=auto|codex|anthropic`). Dados de sala em `server/data/` (JSON/JSONL, sem base de dados, *git-ignored*). Testes: `uv run pytest`.
 
+Para atribuir várias atividades a diferentes conjuntos de alunos na mesma aula, usa **Roteiros da aula**. Consulta o [guia de distribuição e aprovação em lote](docs/roteiros-da-aula.md).
+
 Para expor o servidor fora da rede local, usar um Cloudflare Tunnel (ver skill `cloudflare-tunnel`) — decisão do professor, nunca automática.
 
 ## Princípios não negociáveis
