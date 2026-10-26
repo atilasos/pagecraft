@@ -88,6 +88,27 @@ async def test_retirement_does_not_unpublish_existing_lessons(learning_clients):
     assert len((await teacher.get('/api/learning/activities')).json()) == 1
 
 
+async def test_bulk_publication_is_teacher_only_retryable_and_reports_each_failure(learning_clients):
+    app, teacher, pupil = learning_clients
+    activity, data = await register(teacher, published=False)
+    retired_dir = app.state.config.activities_dir / 'retired-lesson'
+    retired_dir.mkdir()
+    (retired_dir / 'index.html').write_text('<html>Retired</html>')
+    retired = (await teacher.post('/api/learning/activities', json={**data, 'slug': 'retired-lesson'})).json()
+    await teacher.post(f"/api/learning/activities/{retired['code']}/archive")
+    batch = {'codes': [activity['code'].lower(), retired['code'], activity['code'], 'ZZZZZZ']}
+    assert (await pupil.post('/api/learning/activities/publish', json=batch)).status_code in (401, 403)
+    assert (await teacher.post('/api/learning/activities/publish', json={'codes': []})).status_code == 422
+    result = await teacher.post('/api/learning/activities/publish', json=batch)
+    assert result.status_code == 200
+    assert [a['code'] for a in result.json()['published']] == [activity['code']]
+    assert {e['code'] for e in result.json()['errors']} == {retired['code'], 'ZZZZZZ'}
+    repeated = (await teacher.post('/api/learning/activities/publish', json=batch)).json()
+    assert repeated['published'][0]['published_at'] == result.json()['published'][0]['published_at']
+    assert (await pupil.get('/' + activity['code'])).status_code == 200
+    assert not (await app.state.learning.activity(retired['code']))['published']
+
+
 async def test_identity_is_scoped_to_realization_not_typed_name(learning_clients):
     app, teacher, pupil = learning_clients
     activity, _ = await register(teacher)

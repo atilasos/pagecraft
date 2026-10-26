@@ -103,6 +103,18 @@ class Learning:
                 await self.storage.write_json(self.storage.path("learning", "activities.json"), activities)
             return activity
 
+    async def publish_many(self, codes):
+        """Repete a aprovação individual e conserva o resultado de cada rascunho."""
+        published, errors = [], []
+        for code in dict.fromkeys(code.upper() for code in codes):
+            try:
+                published.append(await self.publish(code))
+            except HTTPException as error:
+                errors.append(dict(code=code, detail=error.detail))
+            except (ValueError, OSError):
+                errors.append(dict(code=code, detail="Não foi possível publicar. Revê os ficheiros da atividade e tenta novamente."))
+        return dict(published=published, errors=errors)
+
     def content_path(self, activity):
         if activity['published']:
             return self.config.activities_dir / activity['slug'] / "index.html"

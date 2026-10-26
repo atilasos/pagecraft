@@ -65,6 +65,10 @@ class StartInput(BaseModel):
         return value
 
 
+class PublishBatch(BaseModel):
+    codes: list[Code] = Field(min_length=1, max_length=300)
+
+
 class Event(BaseModel):
     id: Annotated[str, Field(min_length=1, max_length=80)]
     type: Literal['activity_loaded', 'unit_started', 'attempt', 'discovery',
@@ -141,6 +145,12 @@ async def register(data: ActivityInput, request: Request):
     if 'en' in data.languages and any(not c.en for c in data.criteria):
         raise HTTPException(422, 'Traduz todos os critérios para inglês.')
     return await request.app.state.learning.register(data.model_dump())
+
+
+@router.post('/api/learning/activities/publish')
+@access_policy(RoutePolicy.TEACHER)
+async def publish_many(data: PublishBatch, request: Request):
+    return await request.app.state.learning.publish_many(data.codes)
 
 
 @router.post('/api/learning/activities/{code}/publish')
