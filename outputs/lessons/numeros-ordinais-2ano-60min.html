@@ -585,7 +585,11 @@ body, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
     }
     function R(o, i) { return o.res[i] || (o.res[i] = { tries: [], ok: false, first: false }); }
     function resp(o, i) { var r = o.res[i]; return !!(r && (r.tries.length || r.conf)); }
+    var preSynced = false;
     function att(uid, ok, val, q, task) {
+      /* o contexto do apoio é atualizado ANTES da tentativa: a pista automática não pode ser invalidada por um update posterior */
+      var cu = UNITS[cur];
+      if (cu && cu.id === uid) { var cs = st(uid); cs.rev = (cs.rev || 0) + 1; sync(); preSynced = true; setTimeout(function () { preSynced = false; }, 0); }
       if (window.PageCraftBridge) PageCraftBridge.attempt(uid, ok, { value: String(val), question: q, task_id: task });
     }
     function disc(uid, key, msg) {
@@ -1560,7 +1564,7 @@ body, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
       var p = s.pq, lv = s.lv;
       body.appendChild(h('p', { class: 'lead', text: 'Cria com o teu par uma pergunta sobre lugares.' }));
       var status = h('p', { class: 'micro', role: 'status', 'aria-live': 'polite', text: p.conf ? 'Pergunta guardada. Podem lê-la à turma.' : (p.dict ? 'Vão ditar a pergunta ao professor.' : '') });
-      function edited() { if (p.conf || p.dict) { p.conf = false; p.dict = false; status.textContent = 'Mudaste a pergunta. Confirma outra vez.'; say(null); } s.pqRev = (s.pqRev || 0) + 1; commit(); }
+      function edited() { if (p.conf || p.dict) { p.conf = false; p.dict = false; status.textContent = 'Mudaste a pergunta. Confirma outra vez.'; say(null); var fin = document.querySelector('#u6 .final'); if (fin) fin.hidden = true; } s.pqRev = (s.pqRev || 0) + 1; commit(); }
       if (lv === 'challenge') {
         var mkTa = function (key, lab) {
           var ta = h('textarea', { rows: '3', 'aria-label': lab, 'data-fk': 'ta-' + key, maxlength: '240' }); ta.value = p[key] || '';
@@ -1704,7 +1708,8 @@ body, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
     }
     function commit() {
       var u = UNITS[cur], s = st(u.id);
-      s.rev = (s.rev || 0) + 1; sync(); checkDone(u, s); navUpdate();
+      if (!preSynced) { s.rev = (s.rev || 0) + 1; sync(); }
+      preSynced = false; checkDone(u, s); navUpdate();
     }
     function anyDone(i) {
       for (var k = 0; k < 3; k++) { var key = UNITS[i].id + ':' + LV[k].id; if (S[key] && UNITS[i].missing(S[key]) === '') return true; }
