@@ -829,7 +829,7 @@ body, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
         { k: 'l', text: 'Em que lugar está o menino de boné?', cards: ['3', '3.º'], right: '3.º', t: 2, ok: 'Encontraste! Contaste até ao menino de boné.' },
         { k: 'q', text: 'Quantas crianças têm mochila?', cards: ['3', '3.º'], right: '3', lit: [1, 7, 10], ok: 'Encontraste! Três crianças têm mochila.' },
         { k: 'l', text: 'Em que lugar está a Rita?', cards: ['7', '7.º'], right: '7.º', t: 6, ok: 'Encontraste! Contaste até à Rita.' },
-        { k: 'f', text: 'Se a Rita é a 7.ª, quantas crianças estão à frente dela?', cards: ['6', '7.º'], right: '6', t: 6, ok: 'Encontraste! À frente da Rita estão 6 crianças e ela está em 7.º lugar.' },
+        { k: 'f', text: 'Se a Rita está em 7.º lugar, quantas crianças estão à frente dela?', cards: ['6', '7.º'], right: '6', t: 6, ok: 'Encontraste! Há 6 crianças à frente da Rita.' },
         { k: 'b', text: 'Quantas crianças estão atrás da Rita?', cards: ['5', '8.º'], right: '5', t: 6, ok: 'Encontraste! Atrás da Rita estão 5 crianças.' },
         { k: 'l', text: 'Em que lugar está a Leonor?', cards: ['11', '11.º'], right: '11.º', t: 10, ok: 'Encontraste! Contaste até à Leonor.' },
         { k: 'l', text: 'Em que lugar está a última criança?', cards: ['12', '12.º'], right: '12.º', t: 11, ok: 'Encontraste! Contaste até à última criança.' }] };
@@ -838,7 +838,7 @@ body, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
         { k: 'l', text: 'Em que lugar está o menino de boné?', cards: ['3', '3.º'], right: '3.º', t: 2, ok: 'Encontraste! Contaste até ao menino de boné.' },
         { k: 'q', text: 'Quantas crianças têm mochila?', cards: ['2', '2.º'], right: '2', lit: [1, 4], ok: 'Encontraste! Duas crianças têm mochila.' },
         { k: 'l', text: 'Em que lugar está a Rita?', cards: ['4', '4.º'], right: '4.º', t: 3, ok: 'Encontraste! Contaste até à Rita.' },
-        { k: 'f', text: 'Quantas crianças estão à frente da Rita?', cards: ['3', '4.º'], right: '3', t: 3, ok: 'Encontraste! À frente da Rita estão 3 crianças e ela está em 4.º lugar.' },
+        { k: 'f', text: 'Quantas crianças estão à frente da Rita?', cards: ['3', '4.º'], right: '3', t: 3, ok: 'Encontraste! Há 3 crianças à frente da Rita.' },
         { k: 'l', text: 'Em que lugar está a última criança?', cards: ['8', '8.º'], right: '8.º', t: 7, ok: 'Encontraste! Contaste até à última criança.' }] };
     }
     function u1Lights(q, n) {
@@ -851,7 +851,7 @@ body, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
       if (q.k === 'l') return 'Quase, tenta novamente. Segue os números a partir da porta.';
       if (q.k === 'f') return 'Quase, tenta novamente. Conta só as crianças que estão à frente.';
       if (q.k === 'b') return 'Quase, tenta novamente. Conta só as crianças que estão atrás.';
-      return 'Quase, tenta novamente. Conta as crianças pelos pontos.';
+      return 'Quase, tenta novamente. Conta as crianças que acendem, uma a uma.';
     }
     function u1Render(body, s) {
       var c = u1Qs(s.lv), q = c.qs[s.ti], r = R(s, s.ti), n = c.qs.length;
@@ -1056,7 +1056,7 @@ body, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
       r.tries.push(i); if (ok) { r.ok = true; r.first = r.tries.length === 1; }
       att('u2', ok, 'criança ' + (i + 1), t.text, s.lv + '-d' + s.rq.ti);
       s.rq.pend = true; commit(); redraw();
-      say(ok ? 'ok' : 'warn', ok ? 'Encontraste! O tabuleiro chegou à criança certa.' : 'Quase, tenta novamente. Os pés da fila contam a partir da porta.');
+      say(ok ? 'ok' : 'warn', ok ? 'Encontraste! O tabuleiro chegou à criança certa.' : 'Quase, tenta novamente. Conta as crianças a partir da porta, uma a uma.');
     }
     function u2Final(s, t, r, v) {
       var ok = v === t.right; r.tries.push(v); if (ok) { r.ok = true; r.first = r.tries.length === 1; }
@@ -1264,10 +1264,9 @@ body, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
         u4Pin('da frente', fr), (t.k === 'o' && t.door === 'front' && !resp(s, fi + 1)) ? null : u4Pin('de trás', br)]);
       body.appendChild(pins);
       if (t.k === 'o') {
-        var right = u4Right(C, t), lab = ord(right, g.fem);
+        var right = u4Right(C, t), lab = ord(right);
         body.appendChild(qbox('🚩', 'Em que lugar está ' + (g.fem ? 'a ' : 'o ') + g.name + '? Conta a partir da porta aberta.'));
         if (s.lv === 'challenge') {
-          if (s.cmp === 'sign') body.appendChild(h('p', { class: 'micro', text: 'Olha para o fim do cartão: é um menino ou uma menina?' }));
           body.appendChild(keypad({ fem: true, label: 'Lugar de ' + g.name, submit: function (v) { u4Answer(s, C, t, r, v, lab, Q); } }));
         } else {
           body.appendChild(choices(u4Opts(right, C.n), r, ord(right), function (l) { u4Answer(s, C, t, r, l, ord(right), Q); }));
@@ -1294,15 +1293,15 @@ body, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
       return h('div', { class: 'pin' }, [h('span', { text: label }), l ? h('span', { class: 'qc ord ' + (r.ok ? 'ok' : 'warn') }, [l, h('span', { class: 'mk', 'aria-hidden': 'true', text: r.ok ? '✓' : '↻' })]) : h('span', { class: 'empty', 'aria-label': 'ainda sem resposta', text: '?' })]);
     }
     function u4Answer(s, C, t, r, v, expected, Q) {
-      var g = C.tg[t.g], ok = v === expected;
+      var g = C.tg[t.g], ok = v === expected || (g.fem && v === expected.replace('.º', '.ª'));
       r.tries.push(v); if (ok) { r.ok = true; r.first = r.tries.length === 1; }
       att('u4', ok, v, 'Em que lugar está ' + g.name + ' (porta ' + (t.door === 'front' ? 'da frente' : 'de trás') + ')', s.lv + '-o' + s.ti);
-      s.cmp = (!ok && s.lv === 'challenge' && parseInt(v, 10) === parseInt(expected, 10)) ? 'sign' : null;
+      s.cmp = null;
       s.pend = { ok: ok }; if (t.door === 'front') s.doorAnim = true; commit(); redraw();
       if (ok) {
         say('ok', t.door === 'front' ? 'Encontraste! Contaste a partir da porta da frente.' : 'Encontraste! Agora a contagem começou na porta de trás.');
         if (t.door === 'back') disc('u4', 'o' + t.g, 'Encontraste o lugar de ' + g.name + ' contando pela outra porta.');
-      } else say('warn', s.cmp === 'sign' ? 'Quase, tenta novamente. O número está bem. Olha para o fim do cartão.' : 'Quase, tenta novamente. A fila acende a partir da porta aberta.');
+      } else say('warn', parseInt(v, 10) === parseInt(expected, 10) ? 'Quase, tenta novamente. O número está certo: confere o sinal.' : 'Quase, tenta novamente. A fila acende a partir da porta aberta.');
     }
     function u4Mudou(s, C, r, l) {
       var ok = l === 'Não, ficou no mesmo sítio';
@@ -1338,6 +1337,12 @@ body, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
       var q = t.k === 'o' ? 'Lugar de ' + C.tg[t.g].name + ' pela porta ' + (t.door === 'front' ? 'da frente' : 'de trás') : t.k === 'm' ? 'A criança mudou de lugar na fila?' : 'Quantas crianças há na fila?';
       return { q: q, a: r ? r.tries.join(',') : '' };
     }
+    function u4Assess(s) {
+      var C = u4Cfg(s.lv), n = C.tg.length, good = 0, mi = C.tasks.length - (s.lv === 'challenge' ? 2 : 1);
+      C.tg.forEach(function (x, gi) { if (s.res[gi * 2] && s.res[gi * 2].ok && s.res[gi * 2 + 1] && s.res[gi * 2 + 1].ok) good++; });
+      var no = !!(s.res[mi] && s.res[mi].ok);
+      return { result: (good >= n - 1 && no) ? 'met' : 'partial', detail: { children_ok_both_doors: good, children: n, chose_same_place: no, level: brLevel() } };
+    }
     function u4Missing(s) {
       var C = u4Cfg(s.lv), m = 0;
       for (var i = 0; i < C.tasks.length; i++) if (!resp(s, i)) m++;
@@ -1371,7 +1376,7 @@ body, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
       if (t.k === 'L') task = h('div', { class: 'letter' }, [h('span', { class: 'l', text: 'Carta para entregar' }), emo('✉️ '), t.L.a + ': ' + t.L.txt]);
       else if (t.k === 'N') {
         task = h('div', null, [qbox('🏢', 'Como se diz o ' + ord(t.L.f) + ' andar?'), choices(t.L.nq.o, r, t.L.nq.r, function (l) { u5Name(s, t, r, l); })]);
-      } else task = h('div', null, [qbox('🏢', 'Num prédio com R/C e 20 andares, quantos pisos há ao todo?'),
+      } else task = h('div', null, [qbox('🏢', 'Contando também o rés-do-chão, quantos pisos há ao todo num prédio com 20 andares?'),
         keypad({ card: true, label: 'Número de pisos', submit: function (v) { u5Final(s, t, r, v); } }),
         r.ok ? h('p', { class: 'oral' }, [emo('🗣️ '), 'Explica a tua resposta ao teu par.']) : null]);
       body.appendChild(h('p', { class: 'lead', text: t.k === 'L' ? 'Toca no botão do andar certo.' : t.k === 'N' ? 'Escolhe o nome.' : 'Última pergunta.' }));
@@ -1443,8 +1448,8 @@ body, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
       s.pendLights = { to: f, slow: !ok };
       commit(); redraw();
       if (ok) {
-        say('ok', f === 1 ? 'Encontraste! O 1.º andar é o primeiro depois do rés-do-chão.' : 'Encontraste! A carta chegou ao ' + u5Flo(f) + '.');
-        if (f === 1) disc('u5', 'f1', 'Encontraste que o 1.º andar vem logo a seguir ao rés-do-chão.');
+        say('ok', 'Encontraste! A carta chegou ao ' + u5Flo(f) + '.');
+        if (f === 1) disc('u5', 'f1', 'Encontraste o andar da carta do 1.º andar.');
       } else say('warn', 'Quase, tenta novamente. O painel volta a contar a partir do R/C.');
     }
     function u5Name(s, t, r, l) {
@@ -1456,11 +1461,11 @@ body, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
     function u5Final(s, t, r, v) {
       var ok = v === '21'; r.tries.push(v); if (ok) { r.ok = true; r.first = r.tries.length === 1; }
       att('u5', ok, v, 'Quantos pisos há ao todo?', s.lv + '-K'); commit(); redraw();
-      say(ok ? 'ok' : 'warn', ok ? 'Encontraste! São 20 andares e mais o rés-do-chão.' : 'Quase, tenta novamente. O rés-do-chão também é um piso.');
+      say(ok ? 'ok' : 'warn', ok ? 'Encontraste! São 21 pisos ao todo.' : 'Quase, tenta novamente. O rés-do-chão também é um piso.');
     }
     function u5Ctx(s) {
       var C = u5Cfg(s.lv), t = C.tasks[s.ti], r = s.res[s.ti];
-      var q = t.k === 'L' ? 'Entrega a carta: ' + t.L.a + ', ' + t.L.txt : t.k === 'N' ? 'Como se diz o ' + ord(t.L.f) + ' andar' : 'Quantos pisos há ao todo';
+      var q = t.k === 'L' ? 'Entrega a carta: ' + t.L.a + ', ' + t.L.txt : t.k === 'N' ? 'Como se diz o ' + ord(t.L.f) + ' andar' : 'Contando o rés-do-chão, quantos pisos há ao todo';
       return { q: q, a: r ? r.tries.join(',') : '' };
     }
     function u5Missing(s) {
@@ -1479,7 +1484,7 @@ body, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
       var P = { k: 'pd', ctx: '🏆 Pódio da corrida', text: 'Quem ficou em 2.º lugar? Toca no degrau.', right: 0 };
       if (lv === 'support') return [
         { k: 'nm', ctx: '🏁 Corrida da escola', text: 'O Rui chegou em 7.º lugar. Como se diz?', opts: ['sexto', 'sétimo', 'oitavo'], right: 'sétimo', strip: [7, 10] },
-        { k: 'ch', ctx: '🍽️ Fila da cantina', text: 'Na fila, a Eva é a quarta. Qual é o numeral?', opts: ['4', '4.º', '5.º'], right: '4.º', strip: [4, 10] },
+        { k: 'ch', ctx: '🍽️ Fila da cantina', text: 'Na fila, a Eva é a quarta. Qual destes escreve o lugar dela?', opts: ['4', '4.º', '5.º'], right: '4.º', strip: [4, 10] },
         { k: 'ch', ctx: '🏁 Corrida da escola', text: 'Quantos chegaram antes do 3.º lugar?', opts: ['2', '3', '3.º'], right: '2', strip: [3, 10] },
         { k: 'bk', ctx: '🍽️ Fila da cantina', text: 'Toca na criança que está em 4.º lugar.', n: 6, right: 3, front: true }];
       if (lv === 'challenge') return [A, B, Cc,
@@ -1642,7 +1647,7 @@ body, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
       { id: 'u3', title: 'A fila do autocarro', lead: 'Os passageiros esperam o autocarro. Descobre o nome de cada lugar.', init: function () { return { ti: 0 }; }, render: u3Render, missing: u3Missing, ctx: u3Ctx,
         assess: function (s) { return genericAssess(s, u3Cfg(s.lv).tasks.length, function (i) { return u3Cfg(s.lv).tasks[i].k === 'p'; }); } },
       { id: 'u4', title: 'As portas do autocarro', lead: 'Responde às perguntas e vê o que acontece quando mudas de porta.', init: function () { return { ti: 0 }; }, render: u4Render, missing: u4Missing, ctx: u4Ctx,
-        assess: function (s) { return genericAssess(s, u4Cfg(s.lv).tasks.length); } },
+        assess: u4Assess },
       { id: 'u5', title: 'O prédio da Rua do Carteiro', lead: 'Ajuda o carteiro a entregar as cartas.', init: function () { return { ti: 0, del: {} }; }, render: u5Render, missing: u5Missing, ctx: u5Ctx,
         assess: function (s) { return genericAssess(s, u5Cfg(s.lv).tasks.length); } },
       { id: 'u6', title: 'Pódio e perguntas da turma', lead: 'Mostra o que já sabes e cria uma pergunta com o teu par.', init: function () { return { step: 0, ti: 0, pq: { quem: '', lugar: '', onde: '', q2: '', conf: false, dict: false } }; }, render: u6Render,
