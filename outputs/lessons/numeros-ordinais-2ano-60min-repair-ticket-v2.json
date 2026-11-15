@@ -1,0 +1,18 @@
+{
+  "route": "builder",
+  "severity": "high",
+  "source": "numeros-ordinais-2ano-60min-evaluation-v2.json",
+  "fixes": [
+    {
+      "id": "E3b",
+      "severity": "high",
+      "file": "outputs/lessons/numeros-ordinais-2ano-60min.html",
+      "where": "CSS .kp / .kp-keys e .fq.lug / .frame-q (u6 passo 2, Intermédio)",
+      "problem": "Entre 768 e ~1024 px o keypad (5 colunas) é mais largo do que a caixa 'Lugar'. As teclas 5 e 0 ficam tapadas pela caixa 'De onde se conta' (elementFromPoint falha) e 4/9 saem da borda.",
+      "fix": "Tornar o grid das teclas fluido (grid-template-columns: repeat(5, minmax(0,1fr)), min-width:0 nas teclas) ou dar mais largura/empilhar as três caixas abaixo de ~1100px.",
+      "verify": "A 768, 820, 900, 1024, 1366, 1920: todas as teclas 0-9 clicáveis (elementFromPoint == tecla), dentro da caixa, sem scroll horizontal."
+    },
+    {"id": "E4", "severity": "low", "fix": "Em edited() (u6): esconder .final e limpar o fb 'Pergunta guardada' enquanto p.conf for false."}
+  ],
+  "reverify_after_fix": ["PROBE de cliques nas teclas 0-9 a 768/820/900/1024", "regressão: E1 nos 3 níveis e evento activity_state completed", "consola limpa"]
+}

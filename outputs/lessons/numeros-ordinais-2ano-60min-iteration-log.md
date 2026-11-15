@@ -7,3 +7,5 @@
 - Proofreader v1: 0 critical, 2 high, 3 medium, 6 low → ticket de texto para o Builder.
 - Iteração 1 (texto): Builder corrigiu 2 high + 3 medium + 4 low do proofread v1 → 0b5a421.
 - Evaluator v1: FAIL critical (route builder). E1: u6 Intermédio nunca fecha (keypad() chama live('') e apaga p.lugar/conf); E2: falta favicon (404 na consola); E3: sobreposição no quadro «Lugar» da u6. u1–u5, níveis, layout 3 viewports, teclado e rede OK.
+- Iteração 2: Builder corrigiu E1/E2/E3 → 114ca5c.
+- Evaluator v2: FAIL high (route builder). E1 e E2 confirmados; E3b: keypad da u6 (Intermédio) transborda a 768–1024 px, teclas 5 e 0 tapadas; E4 low: bloco final e «Pergunta guardada» ficam visíveis após editar a pergunta confirmada.

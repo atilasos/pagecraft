@@ -1,0 +1,62 @@
+{
+  "pass": false,
+  "route": "builder",
+  "severity": "high",
+  "commit_evaluated": "114ca5c",
+  "scores": {
+    "factual_accuracy": 5,
+    "constraint_alignment": 4,
+    "differentiation_quality": 4,
+    "ux_accessibility": 3,
+    "visual_design": 3,
+    "technical_quality": 4
+  },
+  "issues": [
+    {
+      "id": "E3b",
+      "severity": "high",
+      "type": "layout",
+      "location": "u6 passo 2, Passo a passo, quadro 'Lugar' (keypad de 5 colunas dentro de .fq.lug) entre 768 e 1024 px de largura",
+      "description": "O keypad é mais largo do que a caixa 'Lugar': as teclas 5 e 0 ficam fora da caixa e tapadas pela caixa 'De onde se conta' (não clicáveis); as teclas 4 e 9 saem da borda. Em tablet a criança não consegue escrever 5, 10, 15 nem 20 com o teclado (nem há chip 'quinto'). O E3 pedia ausência de sobreposição neste viewport e não está cumprido.",
+      "evidence": "768x1024: elementFromPoint no centro de 'Algarismo 5' e 'Algarismo 0' -> hit=false (x 530-586, caixa termina em 500); 4 e 9 x até 524 > 500; childOverflow=true também a 820, 900 e 1024; a 1366 e 1920 sem overflow. Screenshot /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/v2-u6-passo2-768x1024.png (comparar com /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/v2-u6-passo2-1920x1080.png)"
+    },
+    {
+      "id": "E4",
+      "severity": "low",
+      "type": "ux",
+      "location": "u6 passo 2 depois de 'Já está', ao editar a pergunta",
+      "description": "Ao editar depois de confirmar (ex.: chip ou dígito novo), o estado 'Mudaste a pergunta. Confirma outra vez.' aparece, mas o bloco final 'Já sabes dizer lugares até ao 20.º!' e a mensagem fb 'Pergunta guardada' ficam visíveis, o que é contraditório até nova confirmação.",
+      "evidence": "KB '1.' depois de confirmado: status=['Mudaste a pergunta. Confirma outra vez.', bloco final, 'ℹ Pergunta guardada...'], final=true"
+    }
+  ],
+  "required_fixes": [
+    "E3b: no quadro Lugar, fazer o keypad caber na caixa (grid com minmax(0,1fr), teclas com largura fluida/min-width 0, ou .fq.lug com flex-basis maior / empilhar as 3 caixas abaixo de ~1100px). Verificar a 768, 820, 900 e 1024 que todas as teclas 0-9 são clicáveis e dentro da caixa.",
+    "E4 (opcional): em edited(), esconder o bloco final e limpar o fb enquanto p.conf é false."
+  ],
+  "evidence": [
+    "E1 u6 Passo a passo: chips O Rui + primeiro + da frente + 'Já está' -> #u6 .final='Já sabes dizer lugares até ao 20.º!', campo Lugar mantém 'primeiro', chips marcados, status='Pergunta guardada.', sem 'Mudaste a pergunta' — 2026-11-15",
+    "E1 u6 Com pistas (A Ana + terceiro + da frente) -> .final visível, Lugar 'terceiro' mantido — 2026-11-15",
+    "E1 u6 Mais desafios (2 textareas) -> .final visível — 2026-11-15",
+    "Conclusão: interceptado o CustomEvent pagecraft:activity-event e o postMessage (window.parent simulado): activity_state {state:'completed'} emitido 1x por nível (3 no total, cada estado de nível só dispara uma vez), com pagecraft:1; assessment_result u6 'met' (6/6, intermediate) e 'declared' (pergunta_do_par: 'O Rui está em primeiro lugar, a contar da frente.') — 2026-11-15",
+    "E2: consola em todo o percurso u1-u6 nos 3 níveis -> [] (zero erros e avisos, favicon incluído); REQS só o próprio HTML, FAILS=[] — 2026-11-15",
+    "E3 a 1366 e 1920: três caixas lado a lado, alinhadas ao topo, um só ecrã no Lugar, sem sobreposição (overlaps=[]); a 768 caixas sem intersecção mas keypad transborda (ver E3b)",
+    "Regressão: Intermédio u1-u6 completo sem erros de consola; scrollWidth==clientWidth em 768x1024, 1366x768 e 1920x1080 para 6 unidades x 3 níveis (54 combinações) -> overflows=[] — 2026-11-15",
+    "Teclado no keypad da u6 (Intermédio): '1' '.' -> '1.º'; chip 'segundo' -> mostra 'segundo'; dígito '3' -> substitui por '3' (sensato); '.' 'º' -> '3.º'; Backspace -> '3'; Backspace + '.' -> '3.º'; Tab até 'Já está' (23 Tabs) + Enter -> 'Pergunta guardada', final visível, Lugar '3.º' mantido",
+    "Screenshots: /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/v2-u6-passo2-768x1024.png, /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/v2-u6-passo2-1920x1080.png, /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/v2-u6-final-standard.png, /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/v2-u6-final-support.png, /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/v2-u6-final-challenge.png, /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/v2-u6-teclado.png"
+  ],
+  "acceptance_checks": [
+    {"check": "E1 fecho da u6 nos 3 níveis", "result": "pass"},
+    {"check": "evento activity_state completed emitido", "result": "pass"},
+    {"check": "E2 consola limpa", "result": "pass"},
+    {"check": "E3 sem sobreposição a 1920x1080", "result": "pass"},
+    {"check": "E3 sem sobreposição a 768x1024", "result": "FAIL (teclas 5 e 0 tapadas)"},
+    {"check": "percurso Intermédio u1-u6 sem erros de consola", "result": "pass"},
+    {"check": "sem scroll horizontal nos 3 viewports", "result": "pass"},
+    {"check": "teclado do keypad da u6", "result": "pass"}
+  ],
+  "blocked_by": [],
+  "not_verified": [
+    "Pelo código a u6 Com pistas tem botão 'Ditar ao professor' (p.dict); não foi percorrido nesta v2.",
+    "Apoio automático após 3 falhas não accionado."
+  ]
+}
