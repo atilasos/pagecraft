@@ -272,10 +272,12 @@ async def reports(request: Request):
 
 @router.get('/api/learning/support-summary')
 @access_policy(RoutePolicy.TEACHER)
-async def support_summary(request: Request, code: Code, group: str = '', name: str = '', date_from: str = '', date_to: str = ''):
+async def support_summary(request: Request, code: Code, group: str = '', name: str = '', date_from: str = '', date_to: str = '',
+                          lesson: LessonCode | None = None):
     from ..support_summary import build_support_summary, realization_support_events
     attempts = [a for a in await request.app.state.learning.reports()
                 if a['code'] == code.upper() and (not group or group.casefold() in a['group'].casefold())
+                and (not lesson or str(a.get('lesson_code') or '').upper() == lesson.upper())
                 and (not name or name.casefold() in a['name'].casefold())
                 and (not date_from or a['started_at'][:10] >= date_from)
                 and (not date_to or a['started_at'][:10] <= date_to)]

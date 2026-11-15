@@ -357,3 +357,25 @@ async def test_download_keeps_checkpoints_out_of_evidence(learning_clients, with
     assert 'Retomar a comparação com material.' in download.text
     restored = (await pupil.get('/api/learning/me')).json()['events']
     assert [event['type'] for event in restored] == [event['type'] for event in events]
+
+
+async def test_support_summary_can_be_limited_to_one_lesson(learning_clients):
+    app, teacher, pupil = learning_clients
+    lesson, first, second = await lesson_setup(app, teacher)
+    carla = lesson['students'][2]
+    hint = {'events': [{'id': 'hint', 'type': 'hint_presented', 'unitId': 'u1',
+                        'payload': {'hint_id': 'h', 'text': 'Conta a partir da porta.'}}]}
+    assigned = await pupil.post(f"/api/learning/activities/{second['code']}/start", json=dict(
+        name='Carla', assignment={'lesson_code': lesson['code'], 'student_id': carla['id']}))
+    assert assigned.status_code == 201, assigned.text
+    pupil.headers['X-PageCraft-Realization'] = assigned.json()['id']
+    assert (await pupil.post('/api/learning/me/events', json=hint)).status_code == 200
+    pupil.cookies.clear()
+    await start(pupil, second['code'], 'Outra criança')
+    assert (await pupil.post('/api/learning/me/events', json=hint)).status_code == 200
+    path = f"/api/learning/support-summary?code={second['code']}"
+    assert (await teacher.get(path)).json()['counts']['presented'] == 2
+    only_lesson = await teacher.get(path + f"&lesson={lesson['code']}")
+    assert only_lesson.status_code == 200, only_lesson.text
+    assert only_lesson.json()['counts']['presented'] == 1
+    assert (await teacher.get(path + '&lesson=<x>')).status_code == 422
