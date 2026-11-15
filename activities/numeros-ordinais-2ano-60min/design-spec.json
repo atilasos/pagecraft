@@ -1,0 +1,194 @@
+{
+  "slug": "numeros-ordinais-2ano-60min",
+  "palette": {
+    "bg": "oklch(0.97 0.008 250)",
+    "surface": "oklch(0.99 0.005 250)",
+    "primary": "oklch(0.48 0.13 255)",
+    "accent": "oklch(0.46 0.15 305)",
+    "ink": "oklch(0.22 0.02 260)"
+  },
+  "functional": {
+    "ok": "oklch(0.68 0.16 150)",
+    "okTint": "oklch(0.95 0.05 150)",
+    "warn": "oklch(0.75 0.14 85)",
+    "warnTint": "oklch(0.96 0.06 85)",
+    "focus": "oklch(0.52 0.19 255)"
+  },
+  "neutrals": {
+    "inkSoft": "oklch(0.42 0.02 260)",
+    "border": "oklch(0.86 0.01 260)",
+    "primaryInk": "oklch(0.98 0.01 255)",
+    "scene": "oklch(0.94 0.012 250)"
+  },
+  "typography": {
+    "fontFamily": "'Century Gothic', 'Didact Gothic', 'URW Gothic', 'Avant Garde', sans-serif",
+    "scale": "kids-6-7",
+    "baseSizePx": 22,
+    "headingSizePx": 32,
+    "ordinalDisplaySizePx": 40,
+    "microcopyMinPx": 18,
+    "maxLineCh": 50,
+    "weights": [
+      400,
+      700,
+      800
+    ],
+    "italicAllowed": false,
+    "allCapsAllowed": false,
+    "numerals": "tabular-nums; sinal ordinal «.º» e «.ª» em sobrescrito do próprio glifo (o), nunca em tamanho reduzido abaixo de 70% do numeral, com letter-spacing 0.02em para o ponto e o «º» não se colarem"
+  },
+  "layout": {
+    "borderRadius": 14,
+    "spacing": "comfortable",
+    "maxWidthPx": 1100,
+    "padding": "1.25rem",
+    "sceneMinHeightPx": 280,
+    "sceneBackground": "scene (neutro tintado), sem gradiente; cenas desenhadas com formas planas e contorno ink/20"
+  },
+  "components": {
+    "buttons": "radius 10px, min-height 56px, padding 0.6rem 1.25rem, peso 700; primário em primary com texto primaryInk; secundário surface com borda 2px primary; hover via filter:brightness(1.06), active brightness(0.94), sem scale nem transform; outline de foco 3px focus com offset 3px",
+    "cards": "surface com borda 2px border e sombra 0 1px 2px + 0 4px 14px de ink a 8%; radius 14px; padding 1.25rem 1.5rem; sem stripe lateral",
+    "badges": "pill, fundo surface com borda 2px da cor do marcador e texto ink 18px peso 700; sempre com forma + texto, nunca só cor",
+    "feedback_correct": "okTint com borda 2px ok, ícone ✓ (aria-hidden) e microcopy de descoberta em ink («Encontraste! Contaste a partir da porta.»), aria-live polite",
+    "feedback_incorrect": "warnTint com borda 2px warn, ícone ↻ e pista concreta («Quase! Conta outra vez a partir da porta.»); nunca vermelho, nunca «Errado»",
+    "tabs": "role=tablist, aria-selected, altura 56px; separadores neutros com marcador de forma + etiqueta de texto (ver differentiationMarkers)",
+    "ordinalCard": "cartão 72x72px mínimo, surface, borda 2px accent, numeral ordinal a 40px peso 800 em ink e nome por extenso por baixo a 22px; é o único elemento com borda accent, para o ordinal ser sempre reconhecível",
+    "cardinalCard": "cartão com a mesma dimensão, borda 2px inkSoft tracejada, numeral sem «.º» em ink; contraste forma+borda com o ordinalCard distingue «quantos» de «lugar» sem depender de cor",
+    "wordPiece": "peça de palavra (décimo, vigésimo, primeiro…) 56px de altura, surface, borda 2px primary, radius 10px; casa de destino com contorno tracejado 2px border e altura igual; peça colocada passa a fundo tint-info oklch(0.96 0.03 255)",
+    "keypadOrdinal": "teclado 0–9 em botões 56x56 e tecla «.º» larga (112x56) em accent com texto primaryInk",
+    "progress": "barra de 6 marcas (círculos 20px) com número dentro; marca atual com contorno 3px focus, concluída com ✓; sem cor como único portador",
+    "supportPanel": "painel de apoio junto da tarefa, surface com borda 2px border, ações em botões 56px com ícone e texto"
+  },
+  "contexts": {
+    "shared": {
+      "startPoint": "o ponto de partida da contagem (porta, meta, R/C) é sempre marcado por um mesmo marcador: seta grossa em accent com a etiqueta de texto («frente», «entra-se aqui», «R/C»), 28px de altura mínima; consistência entre cenas ensina que contar começa num sítio",
+      "countingHint": "pista de contagem: itens acendem um a um do ponto de partida até ao alvo com fundo tint-info e número pequeno (≥18px) por cima; não revela o cartão certo",
+      "characters": "crianças desenhadas com formas planas, cada uma com um traço distintivo (boné, mochila, laço, óculos, cachecol) para se identificarem sem depender de cor de pele ou de roupa; cores de roupa em chroma ≤0.10, nunca rubro nem verde-amarelo saturados"
+    },
+    "cantina": {
+      "scene": "fila horizontal à esquerda da porta da cantina; porta numa moldura primary a 2px com seta «frente» em accent; chão como faixa scene; pegadas pontilhadas em border para o nível Com pistas",
+      "tray": "tabuleiros como retângulos com contorno ink/30 e uma cor de identificação por forma+cor (azul, laranja, cinzento) com etiqueta de texto; «tabuleiro azul» usa primary mais claro e etiqueta «azul»",
+      "slots": "cada criança tem uma ranhura de cartão por baixo (64px) com contorno tracejado; cartão colocado fica com fundo surface e borda accent",
+      "pairs": "pares numeral-nome ligados por cor de fundo tint-info alternada em duas matizes neutras (azul e bege) mais ícone 🔗 aria-hidden e número de ordem; nunca só cor"
+    },
+    "autocarro": {
+      "scene": "paragem em duas filas de 10 (a segunda continua a primeira através de uma seta curva em accent com a etiqueta «continua»); autocarro desenhado em primary claro com contorno ink e duas portas (frente e trás) em surface com etiqueta de texto «frente» e «trás»",
+      "doors": "porta aberta: moldura 3px accent, seta grande «entra-se aqui» e ícone de porta aberta; porta fechada: moldura tracejada border e ícone ✕ cinzento inkSoft com texto «fechada»; sem vermelho",
+      "firstTen": "os 10 primeiros passageiros ficam dentro de uma moldura tracejada accent com a etiqueta «10»; os cartões 1.º–10.º aparecem com opacidade 0.6 (ainda ≥4.5:1 de contraste)",
+      "buildBoard": "quadro de duas casas lado a lado com sinal «+» entre elas; a peça «décimo» e a peça «vigésimo» distinguem-se das peças das unidades apenas pelo texto e por uma pequena marca de forma (◆ nas duas peças especiais), não por cor",
+      "twoDoorsCompare": "dois espaços sob a criança alvo, esquerdo «da frente» e direito «de trás», com cartões ordinalCard; ambos permanecem visíveis para comparação; etiquetas ≥18px"
+    },
+    "predio": {
+      "scene": "prédio alto e estreito ao centro, 13 pisos de altura igual (máx. 18px a 22px cada em escala de 6 anos, cabendo em 360px de altura sem deslocar a página); janelas surface com contorno ink/30 e caixa de correio por piso; fachada em scene com tijolo implícito por linhas border",
+      "groundFloor": "R/C com porta da rua grande em primary, tapete em accent e etiqueta «R/C» em 22px; destaque extra para o nível Com pistas (porta 1.5x)",
+      "elevator": "painel à direita com botões 56x56 empilhados, R/C na base; botão aceso usa fundo primary com texto primaryInk; luzes do painel acendem do R/C ao andar tocado; no erro, o R/C ganha contorno 3px accent e o painel acende de forma lenta",
+      "mailbox": "caixa de correio abre com transform (rotação 20°) em 160ms; nunca anima altura; etiqueta do andar surge com opacidade",
+      "heightHint": "ao lado do prédio, escala vertical em border com marcas de andar visíveis só depois da primeira entrega, para não antecipar a regra"
+    },
+    "podio": {
+      "scene": "pódio de três degraus com alturas 2:3:1 (prata à esquerda, ouro ao centro, bronze à direita), em tons neutros distintos por forma e texto: degrau 1.º com ícone ★ e etiqueta «1.º», degrau 2.º com ◆, degrau 3.º com ●; não depende de dourado, prateado ou acobreado",
+      "medals": "medalhas em círculo 40px com o numeral ordinal dentro, contorno ink e fundo surface; o texto «ouro», «prata» e «bronze» aparece sempre ao lado em 18px",
+      "meta": "meta com bandeira de xadrez simplificada (quadrados ink e surface alternados) e etiqueta «meta»; chegada é lida da meta para trás",
+      "itemFrame": "cada um dos 6 itens ocupa uma cena a que se sobrepõe uma frase curta (≤10 palavras) com ícone",
+      "pairQuestion": "moldura de frase com três espaços em cartões grandes: o espaço «quem» surface, o espaço «lugar» com borda accent e o espaço «de onde se conta» com borda primary; cada espaço tem etiqueta de texto por cima"
+    }
+  },
+  "differentiationMarkers": {
+    "support": {
+      "label": "Com pistas",
+      "shape": "círculo ●",
+      "color": "oklch(0.42 0.09 200)",
+      "tint": "oklch(0.95 0.025 200)"
+    },
+    "standard": {
+      "label": "Passo a passo",
+      "shape": "quadrado ■",
+      "color": "oklch(0.42 0.12 330)",
+      "tint": "oklch(0.95 0.025 330)"
+    },
+    "challenge": {
+      "label": "Mais desafios",
+      "shape": "losango ◆",
+      "color": "oklch(0.42 0.07 60)",
+      "tint": "oklch(0.95 0.025 60)"
+    },
+    "usage": "o marcador é forma + etiqueta de texto sobre fundo tint, com o texto em ink; matizes teal, malva e castanho-bronze, sem verde, amarelo vivo nem vermelho; nenhum coincide com ok (150), warn (85) ou focus (255); em tabs, o separador selecionado mostra o marcador a preencher e sublinhado de 3px"
+  },
+  "motion": {
+    "transitions": "subtle",
+    "durationMs": 160,
+    "maxStateMs": 300,
+    "easing": "ease-out",
+    "respectReducedMotion": true,
+    "rules": "animar apenas transform, opacity, filter e cor; fila acende item a item com intervalo de 140ms; elevador sobe com transform translateY até 300ms; troca de porta do autocarro com opacity e transform até 300ms; sem bounce nem elastic; com prefers-reduced-motion, as pistas passam a estado estático (numeração visível de uma vez) e nenhuma animação"
+  },
+  "accessibility": {
+    "contrastBody": "AA",
+    "contrastMicrocopy": "AAA",
+    "focusRing": "outline 3px focus, offset 3px, em :focus-visible",
+    "minTapPx": 56,
+    "ordinalCardMinTapPx": 72,
+    "keyboardAlternatives": "Tab e setas para escolher cartão e criança, Enter confirma; no prédio, setas cima e baixo percorrem os andares; teclado numérico no ecrã e físico com tecla «.»",
+    "lang": "pt-PT",
+    "soundOptIn": true,
+    "projection": "para o Quadro: todos os numerais ordinais a 40px ou mais, linhas de contorno 2px, texto ink sobre superfícies claras, sem informação só em cinzento claro",
+    "emoji": {
+      "decorative": [
+        "🔗",
+        "➜",
+        "★ ◆ ●",
+        "figuras de cenas"
+      ],
+      "semantic": [
+        "🔊 com aria-label «Ouvir a pergunta»",
+        "✓ com aria-label «Encontraste»",
+        "↻ com aria-label «Tenta outra vez»"
+      ],
+      "rule": "nenhum emoji é o único portador de significado; cada símbolo semântico tem texto ao lado ou aria-label"
+    },
+    "contrastChecks": [
+      {
+        "fg": "ink oklch(0.22 0.02 260)",
+        "bg": "bg oklch(0.97 0.008 250)",
+        "ratio": "≈15.9:1 (AAA)"
+      },
+      {
+        "fg": "ink",
+        "bg": "surface oklch(0.99 0.005 250)",
+        "ratio": "≈16.8:1 (AAA)"
+      },
+      {
+        "fg": "inkSoft oklch(0.42 0.02 260)",
+        "bg": "bg",
+        "ratio": "≈7.8:1 (AAA)"
+      },
+      {
+        "fg": "primaryInk",
+        "bg": "primary oklch(0.48 0.13 255)",
+        "ratio": "≈6.2:1 (AA)"
+      },
+      {
+        "fg": "primaryInk",
+        "bg": "accent oklch(0.46 0.15 305)",
+        "ratio": "≈7.2:1 (AAA)"
+      },
+      {
+        "fg": "ink",
+        "bg": "okTint e warnTint",
+        "ratio": "≈15.2:1 (AAA)"
+      },
+      {
+        "fg": "focus oklch(0.52 0.19 255)",
+        "bg": "bg",
+        "ratio": "≈5.1:1 (anel de foco)"
+      },
+      {
+        "fg": "marcadores de diferenciação (L 0.42)",
+        "bg": "surface",
+        "ratio": "≈7.7 a 8.8:1 (AAA)"
+      }
+    ],
+    "contrastMethod": "valores calculados por conversão OKLCH para sRGB e luminância relativa WCAG; não verificados em browser"
+  },
+  "notes": "2.º ano (7–8 anos) segue a faixa 6–7 do guia de idade: corpo 22px, alvos de 56px (72px nos cartões ordinais), frases até 10 palavras e linhas até 50ch; os numerais ordinais a 40px servem também o Quadro interativo. Uma só cor de tema (primary azul) e um único accent violeta reservado ao ordinal e ao ponto de partida, de modo que cardinal (borda tracejada neutra) e ordinal (borda accent) se distinguem por forma e cor; as quatro cenas (cantina, autocarro, prédio, pódio) partilham a mesma gramática de seta de partida, pista de contagem a acender e crianças com traços distintivos. A diferenciação usa círculo, quadrado e losango com teal, malva e bronze e etiquetas de texto, sem semáforo nem metáforas vegetais, e o feedback é okTint ou warnTint com ✓ ou ↻, sem vermelho."
+}
