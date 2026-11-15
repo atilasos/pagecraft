@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="color-scheme" content="light">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http%3A//www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%276%27 fill=%27%232b4f9e%27/%3E%3Ctext x=%2716%27 y=%2723%27 font-size=%2719%27 font-family=%27sans-serif%27 font-weight=%27bold%27 text-anchor=%27middle%27 fill=%27white%27%3E1.%C2%BA%3C/text%3E%3C/svg%3E">
   <title>PageCraft: Números ordinais, em que lugar?</title>
   <style>
     :root {
@@ -256,7 +257,7 @@
     .mini button.warn { background: var(--warn-tint); border-color: var(--warn); }
 
     /* moldura da pergunta */
-    .frame-q { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: flex-end; margin: 0.6rem 0; }
+    .frame-q { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: flex-start; margin: 0.6rem 0; }
     .fq { background: var(--surface); border: 2px solid var(--border); border-radius: 12px; padding: 0.5rem 0.7rem; min-width: 170px; flex: 1; }
     .fq.lug { border-color: var(--accent); }
     .fq.ond { border-color: var(--primary); }
@@ -710,9 +711,9 @@ body, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
       var val = '', signed = false;
       var disp = h('div', { class: 'kp-disp', tabindex: '0', role: 'textbox', 'aria-readonly': 'true', 'aria-label': o.label || 'Resposta escrita', 'data-fk': 'kpd' });
       var wrap = h('div', { class: 'kp' });
-      function refresh() { disp.textContent = val || ' '; if (o.live) o.live(val); }
-      function add(d) { if (signed || val.length >= 3) return; val += d; refresh(); }
-      function sign(ch) { if (!val || signed) return; val += ch; signed = true; refresh(); }
+      function refresh(silent) { disp.textContent = val || ' '; if (o.live && !silent) o.live(val); }
+      function add(d) { if (/[a-zç]/i.test(val)) { val = ''; signed = false; } if (signed || val.length >= 3) return; val += d; refresh(); }
+      function sign(ch) { if (!val || signed || /[a-zç]/i.test(val)) return; val += ch; signed = true; refresh(); }
       function back() { if (signed) { val = val.slice(0, -2); signed = false; } else val = val.slice(0, -1); refresh(); }
       function submit() { if (!val) { say('info', 'Escreve primeiro a tua resposta.'); return; } o.submit(val); }
       disp.addEventListener('keydown', function (e) {
@@ -731,9 +732,9 @@ body, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
       keys.appendChild(h('button', { type: 'button', text: '⌫', 'aria-label': 'Apagar', onclick: back }));
       if (o.submit) keys.appendChild(h('button', { type: 'button', class: 'go', text: 'Confirmar', 'data-fk': 'kpgo', onclick: submit }));
       wrap.appendChild(disp); wrap.appendChild(keys);
-      refresh();
+      val = o.init || ''; signed = /[ºª]$/.test(val); refresh(true);
       wrap.get = function () { return val; };
-      wrap.set = function (v) { val = v || ''; signed = /[ºª]$/.test(val); refresh(); };
+      wrap.set = function (v) { val = v || ''; signed = /[ºª]$/.test(val); refresh(true); };
       return wrap;
     }
 
@@ -1580,7 +1581,7 @@ body, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
           var w = h('div', { class: 'chips' });
           list.forEach(function (x) {
             w.appendChild(h('button', { type: 'button', class: 'chip', 'aria-pressed': p[key] === x ? 'true' : 'false', 'data-fk': 'ch-' + key + x, onclick: function () {
-              p[key] = x; if (input.tagName === 'INPUT') input.value = x; else input.textContent = x; w.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', c.getAttribute('data-v') === x ? 'true' : 'false'); }); edited();
+              p[key] = x; if (input.set) input.set(x); else if (input.tagName === 'INPUT') input.value = x; else input.textContent = x; w.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', c.getAttribute('data-v') === x ? 'true' : 'false'); }); edited();
             }, 'data-v': x }, [x, (sugg && sugg === x) ? ' (sugestão)' : '']));
           });
           return w;
@@ -1589,8 +1590,10 @@ body, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
         var lugBox = h('div', { class: 'fq lug' }, [h('span', { class: 'lb', text: 'Lugar' }), inL]);
         if (support) lugBox.appendChild(chips(range(1, 10).map(function (k) { return N10[k]; }), 'lugar', inL));
         else {
-          lugBox.appendChild(keypad({ label: 'Lugar', live: function (v) { if (v !== (p.lugar || '')) { p.lugar = v; inL.textContent = v || ' '; edited(); } } }));
-          lugBox.appendChild(chips(['primeiro', 'segundo', 'terceiro', 'décimo', 'vigésimo'], 'lugar', inL));
+          var kp = keypad({ label: 'Lugar', init: p.lugar || '', live: function (v) { p.lugar = v; edited(); } });
+          lugBox.removeChild(inL);
+          lugBox.appendChild(kp);
+          lugBox.appendChild(chips(['primeiro', 'segundo', 'terceiro', 'décimo', 'vigésimo'], 'lugar', kp));
         }
         frame.appendChild(lugBox);
         var ond = h('div', { class: 'fq ond' }, [h('span', { class: 'lb', text: 'De onde se conta' }), inO, chips(['da frente', 'de trás', 'de baixo', 'de cima'], 'onde', inO, support ? 'da frente' : null)]);
