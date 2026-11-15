@@ -1,0 +1,102 @@
+{
+  "pass": false,
+  "severity": "high",
+  "issues": [
+    {
+      "type": "pedagogical",
+      "severity": "high",
+      "location": "unit 5 (prédio), feedback de acerto em u5Go (linha 1446 do HTML); a mensagem de descoberta da linha 1447 repete a mesma regra",
+      "original": "Encontraste! O 1.º andar é o primeiro depois do rés-do-chão.",
+      "suggestion": "Encontraste! A carta chegou ao 1.º andar.",
+      "reason": "O invariante do DocSpec (o rés-do-chão é o ponto de partida e o 1.º andar é o primeiro acima dele) aparece escrito como regra pronta no feedback, o que retira a descoberta que a unidade deve provocar. A mensagem de descoberta repete a mesma regra."
+    },
+    {
+      "type": "semantic",
+      "severity": "high",
+      "location": "unit 4 (porta do autocarro), nível Mais desafios: pergunta «Em que lugar está a Leonor?» (u4Render, linhas 1267-1271) e feedback de erro (linha 1305)",
+      "original": "Olha para o fim do cartão: é um menino ou uma menina? (dica) — O número está bem. Olha para o fim do cartão. (feedback)",
+      "suggestion": "Aceitar 6.º e 6.ª como corretas. Dica: «Os dois sinais podem estar certos: 6.º se pensas em «lugar» (masculino) e 6.ª se pensas na Leonor. Escreve um deles.» Feedback: «Quase, tenta novamente. O número está certo: confere o sinal.»",
+      "reason": "Em «Em que lugar está a Leonor?» o ordinal 6.º concorda com «lugar» e é gramaticalmente válido, mas o motor só aceita 6.ª, o que pode marcar uma resposta correta como errada. A dica «é um menino ou uma menina?» ensina uma regra falsa, porque o género do ordinal depende do nome a que se refere, não do sexo da criança."
+    },
+    {
+      "type": "semantic",
+      "severity": "medium",
+      "location": "unit 5, nível Mais desafios: pergunta final (linha 1374) e feedback do keypad (linha 1459)",
+      "original": "Num prédio com R/C e 20 andares, quantos pisos há ao todo?",
+      "suggestion": "Contando também o rés-do-chão, quantos pisos há ao todo num prédio com 20 andares?",
+      "reason": "A pergunta mistura «andares» e «pisos» e não diz que o rés-do-chão conta, por isso a resposta esperada (21) só se descobre no feedback de erro. Para alunos de 7-8 anos a formulação deve dizer explicitamente o que se conta."
+    },
+    {
+      "type": "semantic",
+      "severity": "medium",
+      "location": "unit 1 (quantos ou em que lugar), dica de erro para perguntas do tipo «q» (linha 854, função u1Hint)",
+      "original": "Quase, tenta novamente. Conta as crianças pelos pontos.",
+      "suggestion": "Quase, tenta novamente. Conta as crianças que acendem, uma a uma.",
+      "reason": "A unidade 1 não mostra pontos: os pontos (dotsEl) só existem na unidade 2 com apoio, por isso a dica remete para um elemento que o aluno não vê. A versão proposta descreve o que de facto acende na fila."
+    },
+    {
+      "type": "consistency",
+      "severity": "medium",
+      "location": "unit 4, critério de avaliação automática: genericAssess(s, u4Cfg(s.lv).tasks.length) (linha 1645; função na linha 814)",
+      "original": "genericAssess(s, u4Cfg(s.lv).tasks.length) — considera «met» só com 6 em 7 respostas corretas no nível Passo a passo",
+      "suggestion": "Implementar o critério do DocSpec: «met» se pelo menos 2 das 3 crianças estiverem certas nas duas portas e for escolhido «Não, ficou no mesmo sítio»; caso contrário «partial».",
+      "reason": "O DocSpec define a avaliação da unidade 4 como 2 de 3 crianças nas duas portas mais a escolha de «Não», mas o código exige quase todas as respostas, o que dá um resultado diferente ao professor. O Builder deve alinhar a lógica com o DocSpec ou o DocSpec deve ser corrigido."
+    },
+    {
+      "type": "consistency",
+      "severity": "low",
+      "location": "unit 1, nível Mais desafios: pergunta «Se a Rita é a 7.ª…» (linha 832) face à pergunta «Em que lugar está a Rita?» do nível Passo a passo (linha 840, resposta 4.º)",
+      "original": "Se a Rita é a 7.ª, quantas crianças estão à frente dela?",
+      "suggestion": "Se a Rita está em 7.º lugar, quantas crianças estão à frente dela?",
+      "reason": "Na mesma unidade o ordinal da Rita aparece no feminino num nível e no masculino com «lugar» noutro, o que confunde a regra de concordância que a unidade pretende ensinar. A forma com «lugar» é a mais simples e coincide com o feedback da linha 832."
+    },
+    {
+      "type": "semantic",
+      "severity": "low",
+      "location": "unit 2 (fila da cantina), feedback de erro ao colocar um cartão (linha 1059, função u2Deliver)",
+      "original": "Quase, tenta novamente. Os pés da fila contam a partir da porta.",
+      "suggestion": "Quase, tenta novamente. Conta as crianças a partir da porta, uma a uma.",
+      "reason": "«Os pés da fila» é uma expressão pouco clara para uma criança de 7-8 anos e não corresponde a nenhum elemento visível. A versão proposta diz a ação a fazer."
+    },
+    {
+      "type": "pedagogical",
+      "severity": "low",
+      "location": "unit 1, nível Mais desafios: feedback de acerto da pergunta «Se a Rita é a 7.ª…» e do nível Passo a passo (linhas 832 e 841)",
+      "original": "Encontraste! À frente da Rita estão 3 crianças e ela está em 4.º lugar.",
+      "suggestion": "Encontraste! Há 3 crianças à frente da Rita.",
+      "reason": "Pôr lado a lado «3 crianças à frente» e «4.º lugar» já enuncia o contraste que o aluno deve descobrir sozinho com o par. A versão proposta confirma a resposta sem fazer essa comparação."
+    },
+    {
+      "type": "consistency",
+      "severity": "low",
+      "location": "unit 3 (fila do autocarro), nível Mais desafios: peças da fila (linha 1088)",
+      "original": "pieces: décimo, décimo, vigésimo, primeiro…nono (sem a peça «segundo» como armadilha)",
+      "suggestion": "Acrescentar a peça-armadilha «segundo» (ou «décimo» com «segundo» a formar «segundo décimo») conforme o DocSpec, ou corrigir o DocSpec se a intenção for só «décimo décimo».",
+      "reason": "O DocSpec pede as peças-armadilha «décimo décimo» e «segundo décimo», mas o código só tem a primeira. A diferença enfraquece a diferenciação prevista para o nível desafio."
+    },
+    {
+      "type": "consistency",
+      "severity": "low",
+      "location": "unit 6 (pódio e perguntas): pergunta do pódio (linha 1479) e item de apoio por toque (linha 1484)",
+      "original": "Quem ficou em 2.º lugar? Toca no degrau. — e — item de apoio «Toca na criança que está em 4.º lugar.» (escolha por toque, não por cartões)",
+      "suggestion": "Quem ganhou a medalha de prata? Toca no degrau. — e, no nível Com pistas, manter a escolha por cartões como indica o DocSpec, ou alterar o DocSpec para permitir o toque na fila.",
+      "reason": "O DocSpec formula a pergunta do pódio como «medalha de prata» e diz que todos os itens de apoio usam escolha entre cartões, mas o código usa «2.º lugar» e um item por toque. Trata-se de uma divergência entre o DocSpec e o HTML, sem erro linguístico."
+    },
+    {
+      "type": "pedagogical",
+      "severity": "low",
+      "location": "unit 6, nível Com pistas: item «Na fila, a Eva é a quarta» (linha 1482)",
+      "original": "Na fila, a Eva é a quarta. Qual é o numeral?",
+      "suggestion": "Na fila, a Eva é a quarta. Qual destes escreve o lugar dela?",
+      "reason": "«Numeral» é um termo técnico que pode não ser conhecido por um aluno de 2.º ano nesta fase, e a pergunta não diz o que é pedido. A versão proposta usa uma formulação que a criança consegue ler e seguir."
+    }
+  ],
+  "summary": "A revisão não encontrou erros ortográficos ou gramaticais pt-PT AO90 no texto visível, e todas as respostas esperadas dos dados das tarefas estão matematicamente corretas (verificadas unidade a unidade, incluindo as concordâncias de ordinais nas perguntas). Há duas questões de alta severidade: o feedback da unidade 5 enuncia a regra do rés-do-chão, e o nível desafio da unidade 4 aceita apenas 6.ª para uma pergunta em que 6.º também é gramaticalmente correto, com uma dica que ensina uma regra falsa. Restam divergências pontuais em relação ao DocSpec (critério de avaliação da unidade 4, peças-armadilha da unidade 3, formulação de dois itens) e algumas formulações a clarificar para o público de 7-8 anos.",
+  "acceptance_checks": [
+    "Ortografia e gramática pt-PT AO90: OK",
+    "Registo consistente: OK",
+    "Adequação à faixa etária: OK",
+    "Instruções claras e seguíveis: FAIL",
+    "Alinhamento com objectivos: FAIL"
+  ]
+}
