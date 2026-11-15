@@ -1,0 +1,18 @@
+{
+  "route": "builder",
+  "severity": "high",
+  "source": "numeros-ordinais-2ano-60min-evaluation-v3.json",
+  "fixes": [
+    {
+      "id": "A1",
+      "severity": "high",
+      "file": "outputs/lessons/numeros-ordinais-2ano-60min.html",
+      "where": "att() / commit() / sync() (~linhas 588, 780 e 1676) em todas as unidades; ordem: att() -> commit() -> sync() -> PageCraftSupport.update(revision/answer)",
+      "problem": "Na 3.ª falha o apoio abre a modal; logo a seguir sync() envia um update com assinatura nova e o apoio faz invalidate()/closeModal(). A modal abre e fecha no mesmo milissegundo.",
+      "fix": "Chamar commit()/sync() antes de att() (o contexto já está atualizado quando o evento 'attempt' chega) ou impedir que o update seguinte à mesma tentativa invalide a pista acabada de apresentar.",
+      "verify": "u5 (3 erros distintos: f-3, f-4, f-6) e u3 (3 passageiros errados): dialog[open] fica true por >2 s; Escape e clique fora não fecham; 'Vou experimentar' fecha e devolve o foco; hint_presented com presentation 'modal' e hint_acknowledged emitidos."
+    },
+    {"id": "L1", "severity": "low", "fix": "Esconder o bloco final da u6 enquanto p.conf for false."}
+  ],
+  "reverify_after_fix": ["apoio automático em u3, u4 e u5", "E1/E3b/E4 sem regressões", "consola limpa e sem scroll horizontal"]
+}

@@ -1,0 +1,60 @@
+{
+  "pass": false,
+  "route": "builder",
+  "severity": "high",
+  "commit_evaluated": "8076dc4",
+  "scores": {
+    "factual_accuracy": 5,
+    "constraint_alignment": 4,
+    "differentiation_quality": 4,
+    "ux_accessibility": 4,
+    "visual_design": 4,
+    "technical_quality": 3
+  },
+  "issues": [
+    {
+      "id": "A1",
+      "severity": "high",
+      "type": "technical",
+      "location": "sync()/commit() da página vs. apoio automático (PageCraftSupport.update -> invalidate -> closeModal); presente em u3 (tocar passageiro), u5 (cartas) e em qualquer unidade em que att() precede commit()",
+      "description": "O apoio automático após 3 tentativas falhadas (automatic_after_failures=3) abre a modal e fecha-a no mesmo instante, sem escolha da criança. att() dispara o evento 'attempt' (3.ª falha -> recordAttempt -> requestAI -> showModal) e logo a seguir commit() chama sync() -> PageCraftSupport.update({answer, revision}); como a assinatura muda, update() chama invalidate() -> closeModal(). A pista fica gravada no histórico, mas a criança nunca a vê aberta. O desenho da modal está certo (ver evidência), o fecho é causado pela ordem de chamadas da página.",
+      "evidence": "MutationObserver em dialog[open]: u5, 3 erros distintos (f-3, f-4, f-6) -> abre e fecha no mesmo milissegundo (open=false, texto 'Olha para o painel do elevador...'), dialog.open=false depois de 600 ms; idem u3 com 3 passageiros errados. Causa confirmada: com PageCraftSupport.update neutralizado, a modal da u5 fica aberta (open=true 2.5 s depois). Screenshots /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/v3-u5-apoio-causa.png (aberta, com a causa removida) e /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/v3-u5-apoio-automatico.png (fechada, comportamento real)"
+    },
+    {
+      "id": "L1",
+      "severity": "low",
+      "type": "ux",
+      "location": "u6 passo 2 depois de 'Já está', ao editar",
+      "description": "Depois de editar, o aviso fb fica limpo e o status mostra só 'Mudaste a pergunta. Confirma outra vez.' (E4 resolvido). O bloco final 'Já sabes dizer lugares até ao 20.º!' continua visível até nova confirmação; é inofensivo, mas ligeiramente contraditório.",
+      "evidence": "chip 'segundo' depois de confirmar -> fb='' , status 'Mudaste a pergunta...', #u6 .final presente"
+    }
+  ],
+  "required_fixes": [
+    "A1: garantir que o update de contexto (sync) acontece ANTES do evento 'attempt' (chamar commit()/sync() antes de att(), ou emitir a tentativa já depois do redraw), ou fazer o sync enviar answer/revision junto do attempt para a assinatura não mudar a seguir. Depois de 3 falhas distintas a modal tem de ficar aberta até a criança escolher uma das opções (Vou experimentar, Outra pista, Ainda estou preso, Pedir ajuda ao professor).",
+    "L1 (opcional): esconder o bloco final enquanto conf=false."
+  ],
+  "evidence": [
+    "E3b u6 passo 2 Intermédio, 10 teclas 0-9: elementFromPoint devolve a tecla e a tecla está dentro da caixa a 768x1024, 820x1180, 900x1200, 1024x768, 1366x768 e 1920x1080 (allHit=true, allIn=true, tecla mínima 56 px, sobreposição de caixas 0, scrollWidth==clientWidth) — 2026-11-15. Screenshot /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/v3-u6-passo2-768x1024.png (também v3-u6-passo2-1024x768.png)",
+    "E4: depois de 'Já está' (activity_state=1), editar por chip e por teclado -> fb vazio, status 'Mudaste a pergunta. Confirma outra vez.'; reconfirmar -> 'Pergunta guardada'; activity_state continua em 1 (sem duplicado) — 2026-11-15",
+    "E1 nos 3 níveis: .final aparece em Intermédio, Com pistas e Mais desafios; activity_state completed total=3 (CustomEvent) e 3 postMessage (1 por nível, sem duplicados) — 2026-11-15",
+    "Regressão: percurso Intermédio u1-u6 sem erros ou avisos de consola (CONSOLE=[]); sem scroll horizontal em 768x1024, 1366x768, 1920x1080 para 6 unidades x 3 níveis (overflows=[]); pedidos de rede só ao próprio HTML (REQS com 1 URL, FAILS=[]) — 2026-11-15",
+    "Modal de apoio, em condições isoladas (update neutralizado): fica aberta 2.5 s; Escape não fecha (cancel bloqueado); clicar fora não fecha; foco inicial no botão 'Vou experimentar'; botões Ouvir / Outra pista / Ainda estou preso / Pedir ajuda ao professor / Vou experimentar; 'Vou experimentar' fecha e devolve o foco ao botão de ação do apoio — desenho conforme",
+    "Screenshots: /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/v3-u6-passo2-768x1024.png, /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/v3-u6-passo2-1024x768.png, /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/v3-u6-editado.png, /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/v3-u5-apoio-automatico.png, /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/v3-u5-apoio-causa.png"
+  ],
+  "acceptance_checks": [
+    {"check": "E3b teclas clicáveis em 6 viewports", "result": "pass"},
+    {"check": "E4 edição mostra só 'Mudaste...'", "result": "pass"},
+    {"check": "activity_state completed sem duplicar", "result": "pass"},
+    {"check": "regressão: consola limpa, sem scroll horizontal, zero rede externa", "result": "pass"},
+    {"check": "E1 fecha nos 3 níveis", "result": "pass"},
+    {"check": "apoio automático abre e fecha por escolha explícita", "result": "FAIL (abre e fecha sozinho no mesmo instante)"}
+  ],
+  "blocked_by": [],
+  "risks_future_non_critical": [
+    "Janelas de falha: failures.last usa a resposta; tentar duas vezes a mesma resposta errada não conta, o que é razoável mas deve constar do guia do professor.",
+    "Em u3 'toca no passageiro' e u4 o att() usa um texto de pergunta diferente do ctx().q (u3 'O décimo oitavo leva o bilhete...' vs 'Encontra o décimo oitavo'; u4 'Em que lugar está X (porta...)' vs 'Lugar de X pela porta...'): o taskKey do apoio muda a cada tentativa e a contagem de falhas pode reiniciar. Unificar os textos. (Não conseguimos isolar este efeito do A1 em u3/u4.)",
+    "O Chrome headless não testou voz (speechSynthesis) nem o botão 'Ouvir' de apoio.",
+    "u6 Com pistas, 'Ditar ao professor' não percorrido em nenhuma ronda.",
+    "Só testado em Chromium; Safari/iPad e Firefox não verificados."
+  ]
+}
