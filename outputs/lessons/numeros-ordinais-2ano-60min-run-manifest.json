@@ -5,7 +5,7 @@
   "duration": 60,
   "maker": "none",
   "max_iterations": 3,
-  "current_iteration": 2,
+  "current_iteration": 4,
   "agents": {
     "architect": "pagecraft-architect",
     "designer": "pagecraft-designer",
@@ -13,6 +13,15 @@
     "proofreader": "pagecraft-proofreader",
     "evaluator": "pagecraft-evaluator"
   },
-  "status": "repair",
-  "artifacts": {}
+  "status": "done",
+  "artifacts": {
+    "docspec": "outputs/lessons/numeros-ordinais-2ano-60min-docspec.json",
+    "design": "outputs/lessons/numeros-ordinais-2ano-60min-design-spec.json",
+    "builder_prompt": "outputs/lessons/numeros-ordinais-2ano-60min-builder-prompt.md",
+    "html": "outputs/lessons/numeros-ordinais-2ano-60min.html",
+    "teacher": "outputs/lessons/numeros-ordinais-2ano-60min.md",
+    "proofread": "outputs/lessons/numeros-ordinais-2ano-60min-proofread-v1.json",
+    "evaluation": "outputs/lessons/numeros-ordinais-2ano-60min-evaluation-v4.json",
+    "log": "outputs/lessons/numeros-ordinais-2ano-60min-iteration-log.md"
+  }
 }

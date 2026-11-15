@@ -1,0 +1,43 @@
+{
+  "pass": true,
+  "route": "none",
+  "severity": "low",
+  "commit_evaluated": "7c33b3b",
+  "scores": {
+    "factual_accuracy": 5,
+    "constraint_alignment": 4,
+    "differentiation_quality": 4,
+    "ux_accessibility": 4,
+    "visual_design": 4,
+    "technical_quality": 4
+  },
+  "issues": [],
+  "required_fixes": [],
+  "evidence": [
+    "A1 u5 (f-3, f-4, f-6): modal aberta após a 3.ª falha; ainda aberta 2.5 s depois; Escape não fecha; clique fora não fecha; 'Vou experimentar' fecha e o foco vai para .pc-support-action (botão de ação do apoio, texto da pista); resposta certa a seguir (f-5) -> fb verde e modal não reabre — 2026-11-15",
+    "A1 u3 (3 passageiros errados k-0, k-1, k-2): fechada após 2 falhas, aberta após a 3.ª, aberta 2.5 s depois, Escape e clique fora não fecham, 'Vou experimentar' fecha com foco em .pc-support-action, resposta certa (k-17) não reabre — 2026-11-15",
+    "Eventos (postMessage para window.parent simulado): hint_presented presentation 'modal' (u3 e u5, 1 cada), hint_acknowledged action 'continue' (u3, u5), support_modal action 'close' (u3) — 2026-11-15",
+    "Pista manual: 'Preciso de uma pista' na u5 -> pista inline no apoio ('Entra pela porta do prédio. Já subiste algum andar?...'), sem modal; mudar para Mais desafios limpa a pista — 2026-11-15",
+    "Invalidação legítima mantida: modal aberta em Mais desafios u5 (f-1, f-2, f-3) fecha ao mudar de unidade (clique JS no stepper; unidade=u4); nova modal (f-4, f-5, f-6) fecha ao mudar de nível (clique JS no separador; nível=Passo a passo) — 2026-11-15",
+    "L1 u6 Intermédio: depois de 'Já está' bloco final visível, activity_state=1; editar chip -> bloco final deixa de se ver (elemento fica no DOM, innerText já colapsado; ver /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/v4-u6-editado.png: só 'Mudaste a pergunta. Confirma outra vez.'), fb vazio; reconfirmar -> bloco final de volta, activity_state continua 1 (CustomEvent e postMessage), sem duplicado — 2026-11-15",
+    "E1 nos 3 níveis: .final aparece em Com pistas, Intermédio e Mais desafios; activity_state completed total=3 (CustomEvent) e 3 (postMessage) — 2026-11-15",
+    "Regressão: Intermédio u1-u6 CONSOLE=[]; sem scroll horizontal a 768x1024 e 1920x1080 em 6 unidades x 3 níveis (overflows=[]); REQS só o próprio HTML, FAILS=[] — 2026-11-15",
+    "Screenshots: /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/v4-u3-apoio-automatico.png, /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/v4-u5-apoio-automatico.png, /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/v4-u6-editado.png"
+  ],
+  "acceptance_checks": [
+    {"check": "A1 apoio automático fica aberto, só fecha por escolha explícita (u5 e u3)", "result": "pass"},
+    {"check": "resposta certa não reabre a modal", "result": "pass"},
+    {"check": "hint_presented / hint_acknowledged por postMessage", "result": "pass"},
+    {"check": "pista manual funciona; nível/unidade invalidam pista aberta", "result": "pass"},
+    {"check": "L1 esconde bloco final ao editar; reconfirmar mostra sem duplicar completed", "result": "pass"},
+    {"check": "regressão curta (consola, scroll horizontal, E1 nos 3 níveis)", "result": "pass"}
+  ],
+  "blocked_by": [],
+  "risks_future_non_critical": [
+    "u3 'toca no passageiro' e u4: att() usa um texto de pergunta diferente do de ctx().q (ex.: 'O décimo oitavo leva o bilhete...' vs 'Encontra o décimo oitavo'). A contagem de falhas funcionou no teste de u3 (modal à 3.ª falha), mas convém unificar os textos para evitar reinícios do taskKey.",
+    "Repetir a mesma resposta errada não conta como nova falha (fingerprint); incluir no guia do professor.",
+    "O bloco final da u6 fica no DOM escondido depois de editar; leitores de ecrã dependem de hidden/display:none estar mesmo aplicado (visualmente confirmado, não verificado via árvore de acessibilidade).",
+    "Não testados: voz (speechSynthesis) e 'Ouvir' do apoio, 'Ditar ao professor' da u6 Com pistas, Safari/iPad e Firefox (só Chromium), 3 viewports completos nesta ronda (feitos na v3).",
+    "A modal só foi verificada no modo standalone; em modo embebido (route studio) a abertura da modal passa pelo parent via support_modal e não foi testada."
+  ]
+}

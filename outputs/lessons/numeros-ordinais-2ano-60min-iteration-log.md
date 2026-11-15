@@ -12,3 +12,5 @@
 - Iteração 3: Builder corrigiu E3b/E4 → 8076dc4.
 - Evaluator v3: FAIL high. E3b, E4, E1 e regressão OK. A1 (novo): a pista automática após 3 falhas abre e fecha de imediato (commit()→sync() muda a assinatura do contexto e invalida a modal).
 - Decisão do orquestrador: max_iterations atingido, mas A1 é novo, localizado e com causa confirmada no código → reparação extra única (v4) com verificação dirigida.
+- Reparação extra: Builder sincroniza o contexto do apoio antes da tentativa → 7c33b3b.
+- Evaluator v4: PASS, severidade low, sem issues. Riscos não críticos: textos de pergunta em att() vs ctx().q (u3/u4); modal só testada standalone; voz, «Ditar» e Safari/Firefox não testados.
