@@ -104,6 +104,44 @@ def test_library_search_pages_keyboard_and_report_context(page, studio_origin):
     assert errors == []
 
 
+def test_library_selection_survives_pages_and_filters_and_publishes_once(page, studio_origin):
+    from playwright.sync_api import expect
+
+    errors, published = [], []
+    page.on('pageerror', lambda error: errors.append(str(error)))
+    page.route('**/api/learning/activities?include_archived=true', lambda route: route.fulfill(json=library_examples()))
+    def publish(route):
+        codes = route.request.post_data_json['codes']
+        published.append(codes)
+        route.fulfill(json={'published': codes, 'errors': []})
+    page.route('**/api/learning/activities/publish', publish)
+    page.goto(studio_origin + '/teacher/activities.html')
+    expect(page.locator('.activity-row')).to_have_count(6)
+    # Só os rascunhos podem ser escolhidos para aprovar.
+    expect(page.locator('.activity-row input[type=checkbox]')).to_have_count(3)
+    expect(page.locator('.activity-row[data-code="TESTSA"] input[type=checkbox]')).to_have_count(0)
+    expect(page.locator('#publish-selected')).to_be_disabled()
+    page.get_by_role('checkbox', name='Selecionar Atividade de ensaio 19', exact=True).check()
+    expect(page.locator('#publish-selected')).to_have_text('Aprovar e publicar selecionadas (1)')
+    page.locator('#library-next').click()
+    page.get_by_role('checkbox', name='Selecionar Atividade de ensaio 13', exact=True).check()
+    page.locator('#library-year').select_option('2')
+    page.locator('#library-select-results').click()
+    # Ensaio 13 e 17 já cumpriam o filtro; 1, 5 e 9 juntam-se aos escolhidos antes.
+    expect(page.locator('#publish-selected')).to_have_text('Aprovar e publicar selecionadas (6)')
+    page.locator('#library-clear').click()
+    expect(page.locator('#selection-count')).to_have_text('6 selecionadas para aprovar')
+    page.once('dialog', lambda dialog: dialog.accept())
+    page.locator('#publish-selected').click()
+    expect(page.locator('#library-load-status')).to_have_text('6 publicadas · 0 por resolver.')
+    assert len(published) == 1 and sorted(published[0]) == sorted(['TESTTA', 'TESTNA', 'TESTBA', 'TESTFA', 'TESTJA', 'TESTRA'])
+    page.locator('#library-select-clear').click()
+    expect(page.locator('#publish-selected')).to_be_disabled()
+    page.set_viewport_size({'width': 360, 'height': 900})
+    assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
+    assert errors == []
+
+
 def test_library_failure_does_not_hide_reports_and_can_retry(page, studio_origin):
     from playwright.sync_api import expect
 
