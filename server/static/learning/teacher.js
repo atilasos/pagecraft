@@ -156,6 +156,8 @@ function renderSelection(matches) {
     fieldset.append(label);
   }
   const n = selectedDrafts.size;
+  // Sem rascunhos na biblioteca não há nada para aprovar em conjunto.
+  document.querySelector(".library-selection").hidden = !drafts.length && !publishing;
   $("selection-count").textContent = n ? `${n} selecionadas para aprovar` : "Nenhum rascunho selecionado.";
   $("library-words").disabled = publishing;
   $("library-select-results").disabled = publishing || !matches.some(a => !a.published);

@@ -38,6 +38,7 @@
 .library-filters label { margin: 0; min-width: 0; }
 .library-filters :is(input, select) { width: 100%; }
 .library-selection { margin-top: 1rem; padding: .75rem 1rem; border: 1px solid var(--line); border-radius: 12px; }
+.library-selection[hidden] { display: none; }
 .library-selection > p { margin: 0 0 .5rem; }
 .library-selection .word-selection { max-height: 12rem; overflow-y: auto; }
 .library-selection .row { flex-wrap: wrap; }
