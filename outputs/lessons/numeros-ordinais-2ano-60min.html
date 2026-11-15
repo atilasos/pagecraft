@@ -259,7 +259,7 @@
     /* moldura da pergunta */
     .frame-q { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: flex-start; margin: 0.6rem 0; }
     .fq { background: var(--surface); border: 2px solid var(--border); border-radius: 12px; padding: 0.5rem 0.7rem; min-width: 170px; flex: 1; }
-    .fq.lug { border-color: var(--accent); }
+    .fq.lug { border-color: var(--accent); flex: 1 1 100%; min-width: 340px; }
     .fq.ond { border-color: var(--primary); }
     .fq label, .fq .lb { display: block; font-size: 18px; font-weight: 800; margin-bottom: 0.2rem; }
     .fq input, .fqt textarea { width: 100%; min-height: 56px; border: 2px solid var(--ink-soft); border-radius: 10px; padding: 0.3rem 0.7rem; font-size: 22px; background: var(--surface); color: var(--ink); }
@@ -1560,7 +1560,7 @@ body, h1, h2, h3, h4, h5, h6, button, input, select, textarea {
       var p = s.pq, lv = s.lv;
       body.appendChild(h('p', { class: 'lead', text: 'Cria com o teu par uma pergunta sobre lugares.' }));
       var status = h('p', { class: 'micro', role: 'status', 'aria-live': 'polite', text: p.conf ? 'Pergunta guardada. Podem lê-la à turma.' : (p.dict ? 'Vão ditar a pergunta ao professor.' : '') });
-      function edited() { if (p.conf || p.dict) { p.conf = false; p.dict = false; status.textContent = 'Mudaste a pergunta. Confirma outra vez.'; } s.pqRev = (s.pqRev || 0) + 1; commit(); }
+      function edited() { if (p.conf || p.dict) { p.conf = false; p.dict = false; status.textContent = 'Mudaste a pergunta. Confirma outra vez.'; say(null); } s.pqRev = (s.pqRev || 0) + 1; commit(); }
       if (lv === 'challenge') {
         var mkTa = function (key, lab) {
           var ta = h('textarea', { rows: '3', 'aria-label': lab, 'data-fk': 'ta-' + key, maxlength: '240' }); ta.value = p[key] || '';
