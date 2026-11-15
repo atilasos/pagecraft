@@ -2,7 +2,7 @@
 
 ## Aprovar vários rascunhos
 
-1. Abre **Atividades e progressos**.
+1. Abre **Atividades**. Podes usar a pesquisa e os filtros: a seleção mantém-se quando mudas de filtro ou de página.
 2. Pré-visualiza os rascunhos que queres disponibilizar.
 3. Marca as atividades revistas. Para incluir todos os jogos de uma palavra, marca a palavra no seletor.
 4. Carrega em **Aprovar e publicar selecionadas**.
@@ -43,4 +43,4 @@ Um aluno em vários conjuntos recebe a união das atividades, sem repetições. 
 
 Para impedir novas entradas, desmarca **Disponível aos alunos** e guarda. Uma realização já iniciada continua a poder guardar e recuperar o seu trabalho. Para voltar a permitir entradas, marca a opção e guarda novamente.
 
-Abre **Ver registos deste roteiro** para consultar as realizações da aula. O filtro **Roteiro da aula** também está disponível em **Atividades e progressos**.
+Abre **Ver registos deste roteiro** para consultar as realizações da aula. O filtro **Roteiro da aula** também está disponível em **Registos**.

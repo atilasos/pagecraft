@@ -29,7 +29,7 @@ def seed(page, origin):
 def approve_word(page, origin):
     page.goto(origin + '/teacher/activities.html')
     # Procurar só um jogo não limita a seleção de todos os jogos da palavra.
-    page.locator('#activities').get_by_label('Procurar atividades').fill('Jogo 1')
+    page.locator('#library-search').fill('Jogo 1')
     page.get_by_role('checkbox', name='menina (6)', exact=True).check()
     expect(page.locator('#publish-selected')).to_have_text('Aprovar e publicar selecionadas (6)')
     dialogs = []
@@ -38,14 +38,14 @@ def approve_word(page, origin):
         dialog.accept()
     page.once('dialog', approve)
     page.locator('#publish-selected').click()
-    expect(page.locator('#status')).to_have_text('6 publicadas · 0 por resolver.')
+    expect(page.locator('#library-load-status')).to_have_text('6 publicadas · 0 por resolver.')
     assert len(dialogs) == 1
     expect(page.locator('#publish-selected')).to_be_disabled()
-    page.locator('#activities').get_by_label('Procurar atividades').fill('Metades')
+    page.locator('#library-search').fill('Metades')
     page.get_by_role('checkbox', name='Selecionar Metades na aula', exact=True).check()
     page.once('dialog', lambda dialog: dialog.accept())
     page.locator('#publish-selected').click()
-    expect(page.locator('#status')).to_have_text('1 publicadas · 0 por resolver.')
+    expect(page.locator('#library-load-status')).to_have_text('1 publicadas · 0 por resolver.')
 
 
 def test_teacher_distributes_word_and_other_activity_and_pupil_returns_to_own_list(page, studio_origin):
@@ -116,6 +116,7 @@ def test_teacher_distributes_word_and_other_activity_and_pupil_returns_to_own_li
     assert cls['students'][2]['id'] in updated['assignments'][0]['student_ids']
     page.get_by_role('link', name='Ver registos deste roteiro', exact=True).click()
     expect(page.locator('#filter-lesson')).to_have_value(lesson['code'])
+    expect(page.locator('#reports-panel')).to_be_visible()
     expect(page.locator('#reports')).to_contain_text('Carla')
     expect(page.locator('#reports')).to_contain_text('Leitura e matemática')
 
