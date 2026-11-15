@@ -142,6 +142,68 @@ def test_library_selection_survives_pages_and_filters_and_publishes_once(page, s
     assert errors == []
 
 
+def test_bulk_publication_in_flight_and_individual_publication_keep_selection_honest(page, studio_origin):
+    from playwright.sync_api import expect
+
+    errors, pending = [], []
+    library = library_examples()
+    page.on('pageerror', lambda error: errors.append(str(error)))
+    page.route('**/api/learning/activities?include_archived=true', lambda route: route.fulfill(json=library))
+    page.route('**/api/learning/activities/publish', lambda route: pending.append(route))
+    def publish_one(route):
+        code = route.request.url.rsplit('/', 2)[-2]
+        route.fulfill(json=dict(next(a for a in library if a['code'] == code), published=True))
+    page.route('**/api/learning/activities/*/publish', publish_one)
+    page.goto(studio_origin + '/teacher/activities.html')
+    for title in ['Atividade de ensaio 19', 'Atividade de ensaio 17']:
+        page.get_by_role('checkbox', name='Selecionar ' + title, exact=True).check()
+    page.once('dialog', lambda dialog: dialog.accept())
+    page.locator('#publish-selected').click()
+    for _ in range(30):
+        if pending:
+            break
+        page.wait_for_timeout(100)
+    assert len(pending) == 1
+    # Mudar de página durante o pedido não volta a permitir uma segunda publicação.
+    page.locator('#library-next').click()
+    expect(page.locator('#publish-selected')).to_be_disabled()
+    expect(page.locator('#library-select-results')).to_be_disabled()
+    pending[0].fulfill(json={'published': [], 'errors': [{'code': 'TESTTA', 'detail': 'Falha de ensaio'}]})
+    expect(page.locator('#library-load-status')).to_have_text('0 publicadas · 1 por resolver.')
+    expect(page.locator('#publish-errors')).to_contain_text('Atividade de ensaio 19: Falha de ensaio')
+    expect(page.locator('#publish-selected')).to_have_text('Aprovar e publicar selecionadas (2)')
+    expect(page.locator('#publish-selected')).to_be_enabled()
+    page.locator('#library-previous').click()
+    # Publicar um rascunho escolhido individualmente retira-o da seleção.
+    row = page.locator('.activity-row[data-code="TESTRA"]')
+    row.locator('summary').click()
+    page.once('dialog', lambda dialog: dialog.accept())
+    row.get_by_role('button', name='Aprovar e publicar', exact=True).click()
+    expect(page.locator('#library-load-status')).to_contain_text('Atividade publicada')
+    expect(page.locator('#publish-selected')).to_have_text('Aprovar e publicar selecionadas (1)')
+    assert errors == []
+
+
+def test_lessons_failure_keeps_requested_lesson_in_reports(page, studio_origin):
+    from playwright.sync_api import expect
+
+    def report(identifier, name, lesson=None):
+        item = {'id': identifier, 'name': name, 'group': '2A', 'code': 'TESTBA', 'title': 'Atividade de ensaio 1',
+                'started_at': '2026-11-10T10:00:00Z', 'completed_at': None, 'mode': 'classroom', 'events': [],
+                'evidence': [], 'criteria': [], 'assessment': None, 'teacher_note': ''}
+        if lesson:
+            item['lesson_code'] = lesson
+        return item
+    page.route('**/api/learning/activities?include_archived=true', lambda route: route.fulfill(json=library_examples()))
+    page.route('**/api/learning/reports', lambda route: route.fulfill(json=[report('r1', 'Ana', 'ROTEIRO'), report('r2', 'Bruno')]))
+    page.route('**/api/learning/lessons', lambda route: route.fulfill(status=503, json={'detail': 'Falha de ensaio'}))
+    page.goto(studio_origin + '/teacher/activities.html?aula=ROTEIRO#registos')
+    expect(page.locator('#lesson-load-status')).to_contain_text('limitados ao roteiro ROTEIRO')
+    expect(page.locator('#reports article')).to_have_count(1)
+    expect(page.locator('#reports')).to_contain_text('Ana')
+    expect(page.locator('#reports')).not_to_contain_text('Bruno')
+
+
 def test_library_failure_does_not_hide_reports_and_can_retry(page, studio_origin):
     from playwright.sync_api import expect
 

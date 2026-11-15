@@ -2,6 +2,10 @@
 const $ = (id) => document.getElementById(id);
 let reports = [];
 let lessonTitles = new Map();
+// Roteiro pedido por «Ver registos deste roteiro»; aplica-se mesmo antes de os roteiros carregarem.
+let requestedLesson = new URLSearchParams(location.search).get("aula") || "";
+let lessonsLoaded = false;
+let reportsLoaded = false;
 let publicOrigin = location.origin;
 
 function showTeacherSection(focus = false) {
@@ -62,6 +66,7 @@ let libraryLoaded = false;
 let libraryPage = 1;
 // Rascunhos escolhidos para aprovar em conjunto; a escolha mantém-se ao mudar filtros e páginas.
 const selectedDrafts = new Set();
+let publishing = false;
 const LIBRARY_PAGE_SIZE = 6;
 const libraryParams = new URLSearchParams(location.search);
 $("library-search").value = libraryParams.get("q") || "";
@@ -77,8 +82,6 @@ async function loadActivities() {
   library = all.filter((a) => !a.archived_at)
     .sort((a, b) => (b.created_at || "").localeCompare(a.created_at || ""));
   libraryLoaded = true;
-  const drafts = new Set(library.filter(a => !a.published).map(a => a.code));
-  for (const code of [...selectedDrafts]) if (!drafts.has(code)) selectedDrafts.delete(code);
   const selected = $("filter-activity").value;
   $("filter-activity").replaceChildren(new Option("Todas", ""));
   for (const a of all) {
@@ -124,6 +127,9 @@ const wordOf = (activity) => PageCraftActivitySelection.wordOf(activity);
 
 function renderSelection(matches) {
   const drafts = library.filter(a => !a.published);
+  // Só rascunhos podem continuar escolhidos, também depois de uma publicação individual.
+  const draftCodes = new Set(drafts.map(a => a.code));
+  for (const code of [...selectedDrafts]) if (!draftCodes.has(code)) selectedDrafts.delete(code);
   const words = new Map();
   for (const activity of matches.filter(a => !a.published)) {
     const word = wordOf(activity);
@@ -151,9 +157,10 @@ function renderSelection(matches) {
   }
   const n = selectedDrafts.size;
   $("selection-count").textContent = n ? `${n} selecionadas para aprovar` : "Nenhum rascunho selecionado.";
-  $("library-select-results").disabled = !matches.some(a => !a.published);
-  $("library-select-clear").disabled = !n;
-  $("publish-selected").disabled = !n;
+  $("library-words").disabled = publishing;
+  $("library-select-results").disabled = publishing || !matches.some(a => !a.published);
+  $("library-select-clear").disabled = publishing || !n;
+  $("publish-selected").disabled = publishing || !n;
   $("publish-selected").textContent = `Aprovar e publicar selecionadas (${n})`;
 }
 
@@ -266,7 +273,9 @@ $("library-select-clear").onclick = () => {
   renderLibrary();
 };
 async function publishActivities(codes) {
-  if (!codes.length || !confirm(`Já reveste estas ${codes.length} atividades? Ao publicar, qualquer pessoa com o endereço pode abri-las.`)) return;
+  if (publishing || !codes.length || !confirm(`Já reveste estas ${codes.length} atividades? Ao publicar, qualquer pessoa com o endereço pode abri-las.`)) return;
+  // Mudar filtros ou páginas durante o pedido não pode reativar a publicação.
+  publishing = true;
   $("publish-selected").disabled = true;
   $("publish-errors").replaceChildren();
   $("library-load-status").textContent = `A publicar ${codes.length} atividades…`;
@@ -283,6 +292,7 @@ async function publishActivities(codes) {
   } catch (error) {
     $("library-load-status").textContent = error.message;
   } finally {
+    publishing = false;
     $("activities").inert = false;
     renderLibrary();
   }
@@ -300,7 +310,7 @@ function render() {
   const name = $("filter-name").value.trim().toLocaleLowerCase("pt"),
     group = $("filter-group").value.trim().toLocaleLowerCase("pt"),
     code = $("filter-activity").value,
-    lesson = $("filter-lesson").value,
+    lesson = $("filter-lesson").value || requestedLesson,
     from = $("filter-from").value,
     to = $("filter-to").value;
   const filtered = reports.filter(
@@ -412,20 +422,32 @@ function render() {
     );
 }
 async function loadLessons() {
+  $("lesson-load-status").textContent = "";
   try {
     const lessons = await api("/api/learning/lessons");
     lessonTitles = new Map(lessons.map(lesson => [lesson.code, lesson.title]));
+    $("filter-lesson").replaceChildren(new Option("Todos", ""));
     for (const lesson of lessons) $("filter-lesson").append(new Option(`${lesson.title} · ${lesson.class_name}`, lesson.code));
-    const selectedLesson = new URLSearchParams(location.search).get("aula");
-    if (lessonTitles.has(selectedLesson)) $("filter-lesson").value = selectedLesson;
+    lessonsLoaded = true;
+    if (lessonTitles.has(requestedLesson)) $("filter-lesson").value = requestedLesson;
+    else if (requestedLesson) {
+      $("lesson-load-status").textContent = `O roteiro ${requestedLesson} já não existe. Mostro os registos de todos os roteiros.`;
+      requestedLesson = "";
+    }
   } catch (error) {
-    $("report-load-status").textContent = "Não foi possível carregar os roteiros da aula. " + error.message;
+    $("lesson-load-status").textContent = "Não foi possível carregar os roteiros da aula. "
+      + (requestedLesson ? `Os registos continuam limitados ao roteiro ${requestedLesson}. ` : "")
+      + "Tenta novamente em Atualizar. " + error.message;
   }
+  if (reportsLoaded) render();
 }
 async function loadReports() {
   reports = await api("/api/learning/reports");
+  reportsLoaded = true;
   render();
 }
+// Escolher outro roteiro no filtro substitui o pedido que veio no endereço.
+$("filter-lesson").addEventListener("input", () => { requestedLesson = ""; });
 for (const id of [
   "filter-name",
   "filter-lesson",
@@ -447,12 +469,14 @@ async function refreshReports() {
     $("refresh").disabled = false;
   }
 }
-$("refresh").onclick = refreshReports;
+$("refresh").onclick = () => Promise.all([refreshReports(), lessonsLoaded ? null : loadLessons()]);
 $("support-summary-btn").onclick = async () => {
   const code = $("filter-activity").value;
   if (!code) { $("support-summary").textContent = "Escolhe uma atividade e as datas da aula para preparar o resumo."; return; }
   const params = new URLSearchParams({code, group:$("filter-group").value, name:$("filter-name").value,
     date_from:$("filter-from").value, date_to:$("filter-to").value});
+  const lesson = $("filter-lesson").value || requestedLesson;
+  if (lesson) params.set("lesson", lesson);
   const root = $("support-summary");
   root.textContent = "A preparar o resumo…";
   try { PageCraftSupportSummary.render(root, await api('/api/learning/support-summary?'+params)); }
@@ -464,7 +488,7 @@ $("logout").onclick = () => { location.href = "/logout"; };
     await api("/api/teacher-bootstrap");
     const info = await api("/api/access-info");
     publicOrigin = info.public_origin || location.origin;
-    await Promise.all([refreshActivities(), loadLessons().then(refreshReports)]);
+    await Promise.all([refreshActivities(), refreshReports(), loadLessons()]);
   } catch (e) {
     status(e.message, true);
   }
