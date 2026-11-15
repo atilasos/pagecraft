@@ -1,0 +1,19 @@
+{
+  "route": "builder",
+  "severity": "critical",
+  "source": "numeros-ordinais-2ano-60min-evaluation-v1.json",
+  "fixes": [
+    {
+      "id": "E1",
+      "severity": "critical",
+      "file": "outputs/lessons/numeros-ordinais-2ano-60min.html",
+      "where": "u6Pair, keypad({label:'Lugar', live:...}) (~linha 1578) e u6Confirm",
+      "problem": "keypad() chama refresh() -> o.live('') ao ser criado; como p.lugar='primeiro' !== '', escreve p.lugar='' e chama edited(), que põe p.conf=false. Depois de 'Já está' (redraw) a pergunta fica por confirmar e u6Final não aparece.",
+      "fix": "Não chamar live no refresh inicial (ou só quando houver input do utilizador); inicializar o keypad com wrap.set(p.lugar) sem disparar live. Garantir que, depois de 'Já está', p.conf continua true, #u6 .final aparece e activityState 'completed' é enviado.",
+      "verify": "Intermédio: u6 itens 6/6, passo 2 com chips 'O Rui'+'primeiro'+'da frente' (e também lugar escrito no keypad) + 'Já está' -> .final visível, campo Lugar mantém o valor, status 'Pergunta guardada...'."
+    },
+    {"id": "E2", "severity": "low", "fix": "<link rel=\"icon\" href=\"data:,\"> para evitar 404 de favicon."},
+    {"id": "E3", "severity": "low", "fix": "u6 passo 2: remover o ecrã duplicado no quadro Lugar e alinhar as três caixas ao topo."}
+  ],
+  "reverify_after_fix": ["percurso Intermédio completo u1-u6 sem erros de consola", "u6 nos níveis Com pistas e Mais desafios", "layout 768/1366/1920 sem scroll horizontal"]
+}

@@ -1,0 +1,78 @@
+{
+  "pass": false,
+  "route": "builder",
+  "severity": "critical",
+  "scores": {
+    "factual_accuracy": 5,
+    "constraint_alignment": 4,
+    "differentiation_quality": 4,
+    "ux_accessibility": 4,
+    "visual_design": 4,
+    "technical_quality": 2
+  },
+  "issues": [
+    {
+      "id": "E1",
+      "severity": "critical",
+      "type": "technical",
+      "location": "u6, passo 2 'A nossa pergunta', nível Passo a passo (Intermédio): keypad 'Lugar' com callback live (linha ~1578) + u6Confirm/redraw",
+      "description": "Ao carregar em 'Já está' a página redesenha-se, o keypad novo chama live('') e apaga p.lugar, o que chama edited() e repõe conf=false. A pergunta nunca fica confirmada, o bloco final u6Final não aparece e activityState 'completed' nunca é enviado. O ecrã mostra em simultâneo 'Pergunta guardada. Podem lê-la à turma.' (fb) e 'Mudaste a pergunta. Confirma outra vez.' (status), com o campo Lugar vazio e os chips desmarcados. Segunda tentativa repete o mesmo resultado.",
+      "evidence": "Playwright 1366x768: percurso Intermédio completo u1-u5 OK; u6 itens 6/6 certos; chips 'O Rui' + 'primeiro' + 'da frente' + 'Já está' -> #fq-lugar=' ', status='Mudaste a pergunta. Confirma outra vez.', #u6 .final inexistente; repetir chip+'Já está' -> igual. Screenshot /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/u6-diag-full.png",
+      "criterion_failed": "Critério funcional 5: percurso completo para Intermédio"
+    },
+    {
+      "id": "E2",
+      "severity": "low",
+      "type": "technical",
+      "location": "<head>: falta link rel=icon",
+      "description": "O browser pede /favicon.ico e regista erro 404 na consola (único erro). Não é crítico, mas contraria 'consola sem erros'.",
+      "evidence": "read_console: 'Failed to load resource: 404 favicon.ico' em todas as cargas"
+    },
+    {
+      "id": "E3",
+      "severity": "low",
+      "type": "ux",
+      "location": "u6 passo 2, Intermédio, 1366x768",
+      "description": "No quadro 'Lugar' aparecem dois ecrãs vazios sobrepostos (o kp-disp do campo e o do keypad), e as caixas Quem / De onde se conta ficam alinhadas por baixo, com muito espaço vazio por cima. Confunde quem escreve.",
+      "evidence": "/tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/u6-diag-full.png"
+    }
+  ],
+  "required_fixes": [
+    "E1: o callback live do keypad do u6 não pode escrever em p.lugar nem chamar edited() durante a criação/redesenho (ignorar chamadas do refresh inicial, ou só chamar edited() quando v difere E houve input do utilizador); inicializar o keypad com wrap.set(p.lugar). Depois de 'Já está', p.conf deve manter-se true, o bloco u6Final deve aparecer e PageCraftBridge.activityState(null,'completed') deve disparar. Adicionar teste: percurso Intermédio completo até u6Final.",
+    "E2: acrescentar <link rel=\"icon\" href=\"data:,\"> (sem pedido de rede).",
+    "E3 (opcional): remover o ecrã duplicado e alinhar as três caixas ao topo."
+  ],
+  "evidence": [
+    "Abertura http://127.0.0.1:8811/outputs/lessons/numeros-ordinais-2ano-60min.html -> sem erro fatal, tab inicial 'Passo a passo' — 2026-11-15",
+    "Consola em todo o percurso -> 1 erro (favicon 404), sem PAGEERR — 2026-11-15",
+    "Rede: percurso completo -> só o próprio HTML pedido; zero pedidos externos (requestfailed=[]) — 2026-11-15",
+    "Intermédio u1-u5: certo e errado em cada pergunta -> feedback verde 'feedback-correct' e âmbar 'feedback-try-again' em todas as unidades; apoio contextual diferente por unidade; 'Preciso de uma pista' em u4 abre pista contextual ('Procura a seta «entra-se aqui»...') — OK",
+    "u1 erro 8.º na pergunta 1 -> «Quase, tenta novamente. Conta as crianças que acendem, uma a uma.» (reparação confirmada)",
+    "u5 f-1 certo -> «Encontraste! A carta chegou ao 1.º andar.» (reparação confirmada; também 5.º e 12.º seguem o mesmo padrão)",
+    "u4 Mais desafios: Leonor 6.ª -> aceite (FEM=ª); Leonor 6.º -> aceite (FEM=º); '6' sem sinal -> «O número está certo: confere o sinal.»; 5.º -> «A fila acende a partir da porta aberta.»; atrás 11.º aceite; pergunta 'Em que lugar está a Leonor?' (reparação confirmada)",
+    "Níveis: u1 Com pistas 4 perguntas/5 crianças, Passo a passo 6/8, Mais desafios 8/12 com perguntas atrás/à frente; u4 Com pistas 5 pedidos com opções, Mais desafios keypad + construção; teclas de seta nos tabs mudam o nível (ArrowRight -> ◆, ArrowLeft -> ■) — diferenciação real",
+    "Layout 768x1024, 1366x768, 1920x1080 x 6 unidades x 3 níveis (54 combinações) -> scrollWidth == clientWidth em todas, nenhum elemento fora do viewport; u5 bld-wrap e painel dentro do viewport em todos (nível Mais desafios, 20 andares, 3 colunas); u5 exige scroll vertical normal a 1366x768",
+    "Teclado u5 Intermédio: Tab até f-0 (1 Tab), 3x ArrowUp -> f-3 com outline solid 3px, Enter -> feedback âmbar, 2x ArrowUp+Enter -> verde, Tab até Seguinte (8) e até c-quinto (21) com Enter -> verde; foco sempre com outline 3px visível",
+    "Constraint: grep na UI -> não aparece escrito como regra; descoberta via contagem/porta/R/C e mensagens 'Encontraste!' após o acerto — OK",
+    "Screenshots: /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/u6-diag-full.png, /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/u5-challenge-768x1024.png, /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/u5-challenge-1366x768.png, /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/u1-erro-ambar.png, /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/u4c-leonor-ª.png, /tmp/claude-1000/-home-proteu-pagecraft/43f7669e-c482-4da9-8441-ceb74ec54d99/scratchpad/u5-1andar.png"
+  ],
+  "acceptance_checks": [
+    {"check": "abre sem erro fatal", "result": "pass"},
+    {"check": "consola sem erros críticos", "result": "pass (apenas favicon 404, low)"},
+    {"check": "pelo menos 1 interacção principal funciona", "result": "pass"},
+    {"check": "layout legível em tablet/desktop/quadro", "result": "pass"},
+    {"check": "percurso completo Intermédio", "result": "FAIL (u6 nunca fecha)"},
+    {"check": "atividade conduz à descoberta do constraint", "result": "pass"},
+    {"check": "mini-avaliação observável", "result": "pass até u6 itens; u6 pergunta do par não regista conf"},
+    {"check": "não depende de internet", "result": "pass"},
+    {"check": "reparação v1: u4 6.º e 6.ª", "result": "pass"},
+    {"check": "reparação v1: u5 1.º andar", "result": "pass"},
+    {"check": "reparação v1: u1 dica", "result": "pass"},
+    {"check": "operação só por teclado", "result": "pass (u5)"}
+  ],
+  "blocked_by": [],
+  "not_verified": [
+    "Níveis Com pistas e Mais desafios de u6 (chips/textareas, sem keypad live) não foram percorridos até ao fim; pelo código não sofrem o mesmo bug.",
+    "Apoio automático após 3 falhas não foi accionado (pista manual testada)."
+  ]
+}

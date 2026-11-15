@@ -5,3 +5,5 @@
 - Architect: DocSpec com 6 unidades (8+11+11+10+10+10). Nota: o schema do Studio limita duration a 50; mantido 60 por pedido explícito.
 - Designer: design-spec OKLCH (primary azul, accent violeta para ordinais).
 - Proofreader v1: 0 critical, 2 high, 3 medium, 6 low → ticket de texto para o Builder.
+- Iteração 1 (texto): Builder corrigiu 2 high + 3 medium + 4 low do proofread v1 → 0b5a421.
+- Evaluator v1: FAIL critical (route builder). E1: u6 Intermédio nunca fecha (keypad() chama live('') e apaga p.lugar/conf); E2: falta favicon (404 na consola); E3: sobreposição no quadro «Lugar» da u6. u1–u5, níveis, layout 3 viewports, teclado e rede OK.
