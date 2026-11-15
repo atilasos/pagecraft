@@ -33,9 +33,9 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
     },
     "duration": {
       "type": "integer",
-      "description": "Duração em minutos (3-50), incluindo miniatividades de consolidação",
+      "description": "Duração em minutos (3-90), incluindo miniatividades de consolidação",
       "minimum": 3,
-      "maximum": 50
+      "maximum": 90
     },
     "objectives": {
       "type": "array",

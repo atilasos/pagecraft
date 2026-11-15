@@ -104,3 +104,29 @@ def test_evaluation_fail_requires_route():
     validator.validate({"pass": True, "severity": "low", "issues": []})
     with pytest.raises(ValidationError):
         validator.validate({"pass": False, "severity": "high", "issues": []})
+
+
+@pytest.mark.parametrize("duration", [60, 90])
+def test_docspec_accepts_lessons_up_to_ninety_minutes(duration):
+    docspec = copy.deepcopy(MINIMAL_DOCSPEC)
+    docspec["duration"] = duration
+    Draft202012Validator(load_schema("docspec.schema.json")).validate(docspec)
+
+
+def test_docspec_rejects_lessons_longer_than_ninety_minutes():
+    docspec = copy.deepcopy(MINIMAL_DOCSPEC)
+    docspec["duration"] = 91
+    with pytest.raises(ValidationError):
+        Draft202012Validator(load_schema("docspec.schema.json")).validate(docspec)
+
+
+def test_job_request_accepts_sixty_and_ninety_minute_lessons():
+    from pydantic import ValidationError as PydanticValidationError
+
+    from server.api.jobs import JobRequest
+
+    base = {"topic": "Números ordinais", "subject": "Matemática", "year": 2}
+    assert JobRequest(**base, duration=60).duration == 60
+    assert JobRequest(**base, duration=90).duration == 90
+    with pytest.raises(PydanticValidationError):
+        JobRequest(**base, duration=91)

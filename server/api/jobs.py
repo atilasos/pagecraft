@@ -19,7 +19,7 @@ class JobRequest(BaseModel):
     topic: str = Field(min_length=3, max_length=200)
     subject: str = Field(min_length=2, max_length=60)
     year: int = Field(ge=1, le=4)
-    duration: int = Field(ge=15, le=50, default=30)
+    duration: int = Field(ge=15, le=90, default=30)
     maker: str | None = None
     auto_publish: bool = False
 
