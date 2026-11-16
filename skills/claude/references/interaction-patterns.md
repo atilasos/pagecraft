@@ -21,10 +21,10 @@ C: "Quanto maior a velocidade, menor o tempo para percorrer a mesma distância"
 A: "O aluno ajusta o slider para fazer o carro chegar em exatamente 10 segundos"
 ```
 
-**Adaptação por idade:**
-- **Com pistas — Apoio (4–6):** range pequeno [1,5], feedback visual reforçado (cor + texto, com som opcional)
-- **Passo a passo — Intermédio (7–8):** range médio, label numérico visível
-- **Mais desafios — Desafio (9–10):** range largo, cálculo mental envolvido
+**Adaptação por idade** (não confundir com os três níveis, que existem em todas as idades e partilham a meta):
+- **4–6 anos:** range pequeno [1,5], feedback visual reforçado (cor + texto, com som opcional)
+- **7–8 anos:** range médio, label numérico visível
+- **9–10 anos:** range largo, cálculo mental envolvido
 
 ---
 
@@ -151,13 +151,13 @@ S: { var: "estacao", type: "tap-cycle", options: ["Primavera","Verão","Outono",
 R: "Botão grande (≥64px alto para 4–5; ≥56px para 6–7) com o nome e um ícone da estação atual; seta visual indica que cicla"
 T: "Tocar botão → próxima opção (com wrap-around) → cena actualiza"
 C: "Cada estação tem características visuais distintas"
-A: "O aluno passa pelas 4 estações e identifica a actual quando pedido"
+A: "O aluno passa pelas 4 estações e identifica a atual quando pedido"
 ```
 
 **Adaptação por idade:**
-- **Com pistas — Apoio (4–6):** 2–3 opções, ícone + cor de fundo redundantes ao texto.
-- **Passo a passo — Intermédio (7–8):** 3–4 opções, ícone + texto.
-- **Mais desafios — Desafio (9–10):** tipicamente preferir `dropdown` ou `slider` para escolhas finas.
+- **4–6 anos:** 2–3 opções, ícone + cor de fundo redundantes ao texto.
+- **7–8 anos:** 3–4 opções, ícone + texto.
+- **9–10 anos:** tipicamente preferir `dropdown` ou `slider` para escolhas finas.
 
 **Acessibilidade:** `aria-label="Mudar estação. Atual: <valor>"`. Anunciar mudança em `aria-live="polite"`.
 
@@ -178,9 +178,9 @@ A: "O aluno coloca os 3 alimentos nas categorias certas"
 ```
 
 **Adaptação por idade:**
-- **Com pistas — Apoio (4–6):** 2 categorias, ícones grandes, feedback visual e som opcional em cada descoberta.
-- **Passo a passo — Intermédio (7–8):** 3 categorias.
-- **Mais desafios — Desafio (9–10):** também aceitar `drag` real como alternativa.
+- **4–6 anos:** 2 categorias, ícones grandes, feedback visual e som opcional em cada descoberta.
+- **7–8 anos:** 3 categorias.
+- **9–10 anos:** também aceitar `drag` real como alternativa.
 
 **Acessibilidade:** após seleção do source, focar primeira caixa; navegação por setas; `Enter` confirma. `aria-live` anuncia "X colocado em Y".
 
