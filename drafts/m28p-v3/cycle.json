@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "status": "proposta para revisão docente",
+  "source": {
+    "title": "Manual Metodo-28-Palavras-Outras-Fichas.pdf (pasta m28p do Drive do professor)",
+    "pages": "1-29",
+    "rights": "material escolar com direito de uso confirmado pelo professor em 16/11/2026",
+    "use": "Só o conteúdo linguístico (palavras). Letra, imagens e atividades do material não são reutilizadas: estão desatualizadas (cursiva, clip-art, figuras despidas p.4 e p.7, cópia mecânica)."
+  },
+  "repertoire": {
+    "model": "famílias silábicas: consoantes das palavras-chave 1..N combinadas com as vogais (como o manual faz na p.29)",
+    "vowels": ["a", "e", "i", "o", "u", "á", "é", "í", "ó", "ú", "â", "ê", "ô"],
+    "consonantsByKeyword": {"menina": ["m", "n"], "menino": [], "uva": ["v"]}
+  },
+  "policy": {
+    "realWordsOnly": true,
+    "excludedFromSource": [
+      {"label": "nina", "page": 12, "reason": "nome próprio sem personagem apresentada"},
+      {"label": "mena", "page": 12, "reason": "pseudopalavra"},
+      {"label": "nani", "page": 15, "reason": "pseudopalavra"},
+      {"label": "nini", "page": 15, "reason": "pseudopalavra"},
+      {"label": "nana", "page": 15, "reason": "linguagem infantil coloquial; ambígua sem contexto"},
+      {"label": "nino", "page": 12, "reason": "pseudopalavra"},
+      {"label": "nano", "page": 15, "reason": "prefixo/termo técnico, sem significado para a criança"},
+      {"label": "memé", "page": 15, "reason": "onomatopeia; fora do repertório"},
+      {"label": "uni", "page": 28, "reason": "não é palavra autónoma"},
+      {"label": "meu", "page": 28, "reason": "ditongo eu: não se monta com sílabas do repertório"},
+      {"label": "vai", "page": 29, "reason": "ditongo ai: não se monta com sílabas do repertório"}
+    ]
+  },
+  "functionWords": [
+    {"word": "a", "origin": "vogal"}, {"word": "o", "origin": "vogal"},
+    {"word": "e", "origin": "vogal"}, {"word": "é", "origin": "vogal acentuada"}
+  ],
+  "keywords": {
+    "menina": {
+      "newWords": [
+        {"label": "nome", "syllables": ["no", "me"], "page": 15, "picturable": false},
+        {"label": "mana", "syllables": ["ma", "na"], "source": "proposta", "picturable": true, "notes": "irmã, uso familiar PT-PT"},
+        {"label": "mano", "syllables": ["ma", "no"], "source": "proposta", "picturable": true, "notes": "irmão, uso familiar PT-PT"}
+      ],
+      "sentences": [
+        {"text": "A menina é a mana.", "tokens": ["A", "menina", "é", "a", "mana"], "source": "proposta"}
+      ]
+    },
+    "menino": {
+      "newWords": [],
+      "sentences": [
+        {"text": "O menino é o mano.", "tokens": ["O", "menino", "é", "o", "mano"], "source": "proposta"},
+        {"text": "A mana e o mano.", "tokens": ["A", "mana", "e", "o", "mano"], "source": "proposta"}
+      ]
+    },
+    "uva": {
+      "newWords": [
+        {"label": "nova", "syllables": ["no", "va"], "page": 28, "picturable": false},
+        {"label": "ovo", "syllables": ["o", "vo"], "page": 29, "picturable": true},
+        {"label": "novo", "syllables": ["no", "vo"], "page": 29, "picturable": false},
+        {"label": "nove", "syllables": ["no", "ve"], "page": 29, "picturable": true, "notes": "número 9"},
+        {"label": "neve", "syllables": ["ne", "ve"], "page": 29, "picturable": true},
+        {"label": "avó", "syllables": ["a", "vó"], "page": 29, "picturable": true},
+        {"label": "avô", "syllables": ["a", "vô"], "page": 29, "picturable": true}
+      ],
+      "sentences": [
+        {"text": "A avó vê a uva.", "tokens": ["A", "avó", "vê", "a", "uva"], "source": "proposta", "notes": "vê: família do v"},
+        {"text": "O avô vê o ovo.", "tokens": ["O", "avô", "vê", "o", "ovo"], "source": "proposta"},
+        {"text": "O menino vê a neve.", "tokens": ["O", "menino", "vê", "a", "neve"], "source": "proposta"},
+        {"text": "A uva é nova.", "tokens": ["A", "uva", "é", "nova"], "source": "proposta"}
+      ]
+    }
+  },
+  "classSentences": {
+    "notes": "Frases ditadas pela turma (texto livre). O gerador aceita-as se cumprirem o repertório da palavra-chave; o professor regista quem as propôs se a turma quiser."
+  }
+}
