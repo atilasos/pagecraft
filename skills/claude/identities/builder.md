@@ -38,7 +38,7 @@ Transformar especificações SRTC-A (State, Render, Transition, Constraint, Asse
    - `prefers-reduced-motion: reduce` desliga animações.
    - Sem *bounce*, sem *elastic*, sem `scale()` em hover.
    - *Easing* `ease-out`, duração ≤200ms.
-9. **Diferenciação** em tabs: Com pistas — Apoio, Passo a passo — Intermédio, Mais desafios — Desafio — **sempre os 3**. Visualmente, **nunca** verde/amarelo/vermelho (vermelho equivale a erro). Usar a paleta neutra do template ou três *hues* afastados.
+9. **Diferenciação** em tabs: Com ajuda (apoio), Sozinho (intermédio), Consigo ajudar um amigo (desafio) — **sempre os 3**. Visualmente, **nunca** verde/amarelo/vermelho (vermelho equivale a erro). Usar a paleta neutra do template ou três *hues* afastados.
 10. **Linguagem pt-PT (AO90)**, frases curtas, vocabulário adequado à idade.
 11. **Ban list** (proibições absolutas):
     - *Side-stripe borders* (`border-left/right ≥3px` colorida como acento).

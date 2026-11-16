@@ -252,9 +252,9 @@ def build_writer_prompt(docspec: dict) -> str:
 **Constraint:** {unit.get("interaction", {}).get("constraint", "")}
 
 **Differentiation:**
-- Com pistas — Apoio: {unit.get("differentiation", {}).get("support", "")}
-- Passo a passo — Intermédio: {unit.get("differentiation", {}).get("standard", "")}
-- Mais desafios — Desafio: {unit.get("differentiation", {}).get("challenge", "")}
+- Com ajuda (apoio): {unit.get("differentiation", {}).get("support", "")}
+- Sozinho (intermédio): {unit.get("differentiation", {}).get("standard", "")}
+- Consigo ajudar um amigo (desafio): {unit.get("differentiation", {}).get("challenge", "")}
 """)
 
     maker_sections = []
@@ -342,9 +342,9 @@ def build_builder_prompt(docspec: dict) -> str:
 **Assessment:** {interaction.get("assessment", "")}
 
 **Differentiation:**
-- Com pistas — Apoio: {diff.get("support", "")}
-- Passo a passo — Intermédio: {diff.get("standard", "")}
-- Mais desafios — Desafio: {diff.get("challenge", "")}
+- Com ajuda (apoio): {diff.get("support", "")}
+- Sozinho (intermédio): {diff.get("standard", "")}
+- Consigo ajudar um amigo (desafio): {diff.get("challenge", "")}
 """)
 
     prompt = f"""# Tarefa: Gerar interacções HTML/CSS/JS para PageCraft
@@ -700,9 +700,9 @@ def build_markdown(topic: str, docspec: dict) -> str:
                 f"- Assessment: {unit.get('interaction', {}).get('assessment', '')}",
                 "",
                 f"**Diferenciação:**",
-                f"- Com pistas — Apoio: {unit.get('differentiation', {}).get('support', '')}",
-                f"- Passo a passo — Intermédio: {unit.get('differentiation', {}).get('standard', '')}",
-                f"- Mais desafios — Desafio: {unit.get('differentiation', {}).get('challenge', '')}",
+                f"- Com ajuda (apoio): {unit.get('differentiation', {}).get('support', '')}",
+                f"- Sozinho (intermédio): {unit.get('differentiation', {}).get('standard', '')}",
+                f"- Consigo ajudar um amigo (desafio): {unit.get('differentiation', {}).get('challenge', '')}",
             ]
         )
 

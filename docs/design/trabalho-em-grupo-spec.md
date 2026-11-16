@@ -53,7 +53,7 @@ Depois de começar, só o professor altera os participantes. As respostas conser
 - O acontecimento conjunto tem uma autoria canónica do grupo e conserva os membros participantes nesse momento. Associá-lo aos membros não significa duplicá-lo como acontecimentos individuais.
 - Históricos e relatórios identificam explicitamente a produção conjunta. Uma resposta certa ou errada do grupo não demonstra, por si só, a competência de cada membro.
 - Pedidos de ajuda e acompanhamento do trabalho conjunto permitem ao professor intervir junto do grupo. Manter as ações individuais já existentes identificadas com o respetivo aluno.
-- O grupo escolhe livremente o nível comum. Mostrar «Com pistas», «Passo a passo» e «Mais desafios»; usar Passo a passo como escolha inicial neutra e pedir a confirmação do grupo ao começar. Não escolher automaticamente o perfil mais baixo ou mais alto.
+- O grupo escolhe livremente o nível comum. Mostrar «Com ajuda», «Sozinho» e «Consigo ajudar um amigo»; usar Sozinho como escolha inicial neutra e pedir a confirmação do grupo ao começar. Não escolher automaticamente o perfil mais baixo ou mais alto.
 - A mudança de nível pertence ao trabalho conjunto e não altera os Perfis de diferenciação individuais. Respeitar a invalidação de respostas definida por cada atividade.
 - Conservar os nomes congelados na ponte. A autoria dos acontecimentos é resolvida pelo anfitrião e pelo servidor, sem exigir que cada HTML invente autenticação ou atribuição aos membros.
 

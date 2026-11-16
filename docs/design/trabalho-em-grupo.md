@@ -15,7 +15,7 @@ A revisão de Frações está concluída como rascunho para revisão do professo
 - Cada criança faz a sua autoavaliação individual. Uma resposta conjunta não é convertida numa demonstração individual de cada participante.
 - Começar nas sessões de aula com lista da turma. A entrada em grupo pelo endereço permanente fica para outro recorte.
 - Depois de começar, só o professor altera os participantes. Preservar quem participou nas respostas anteriores.
-- O grupo escolhe e pode mudar o nível comum entre «Com pistas», «Passo a passo» e «Mais desafios», mesmo quando os perfis individuais são diferentes.
+- O grupo escolhe e pode mudar o nível comum entre «Com ajuda», «Sozinho» e «Consigo ajudar um amigo», mesmo quando os perfis individuais são diferentes.
 
 ## Preparação da implementação
 

@@ -66,7 +66,7 @@ def test_markdown_contains_title_objectives_and_units():
     assert "- Identificar os três estados físicos da água" in md
     assert "## Unit 1: Os três estados da água dependem da temperatura (20 min)" in md
     assert "**Constraint:** A água muda de estado a 0°C e 100°C" in md
-    assert "- Com pistas: Slider com 3 posições" in md
+    assert "- Com ajuda: Slider com 3 posições" in md
     assert "### 🛠️ Maker — Minecraft" in md
     assert "- **Alternativas:** Lego com etiquetas" in md
     assert "**Duração:** 40 minutos" in md
@@ -103,8 +103,8 @@ def test_markdown_differentiation_uses_neutral_labels(source, tmp_path):
 
     differentiation = md.split("**Diferenciação:**\n", 1)[1].split("\n\n", 1)[0]
     assert differentiation.splitlines() == [
-        "- Com pistas: Slider com 3 posições",
-        "- Passo a passo: Slider contínuo",
-        "- Mais desafios: Gráfico de energia",
+        "- Com ajuda: Slider com 3 posições",
+        "- Sozinho: Slider contínuo",
+        "- Consigo ajudar um amigo: Gráfico de energia",
     ]
     assert not any(marker in md for marker in ("🟢", "🟡", "🔴"))

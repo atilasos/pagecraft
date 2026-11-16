@@ -43,7 +43,7 @@ O áudio da palavra inteira usa PT-PT e preserva a pronúncia natural. Não se a
 
 ## Apoiar sem interromper o jogo
 
-Com pistas, Passo a passo e Mais desafios alteram a visibilidade da imagem, do modelo, da segmentação e dos destaques, conservando todos os itens, a tarefa respondida e as peças já colocadas. O número de opções e pares varia entre palavras ou rondas, sem mudar ao selecionar outro apoio. Os apoios não são notas ou categorias de crianças. Mudar de apoio não cria uma nova tentativa nem reinicia o jogo.
+Com ajuda, Sozinho e Consigo ajudar um amigo alteram a visibilidade da imagem, do modelo, da segmentação e dos destaques, conservando todos os itens, a tarefa respondida e as peças já colocadas. O número de opções e pares varia entre palavras ou rondas, sem mudar ao selecionar outro apoio. Os apoios não são notas ou categorias de crianças. Mudar de apoio não cria uma nova tentativa nem reinicia o jogo.
 
 Uma tentativa incorreta recebe primeiro uma pista visual local: comparar com o modelo, destacar o lugar a rever ou mostrar a próxima ação. Após novas dificuldades oferece demonstração ou apoio maior, sem exigir leitura de um modal. A criança pode corrigir ou continuar com a resposta dada; acerto não é condição de avanço. A seleção continua visível para tornar claro o que respondeu.
 

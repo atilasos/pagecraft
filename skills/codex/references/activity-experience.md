@@ -26,7 +26,7 @@ Definir o que acontece às respostas ao mudar de apoio: conservar as compatívei
 
 ## Representações e diferenciação
 
-Mostrar Com pistas, Passo a passo e Mais desafios, sem paleta semáforo. Usar `support`, `intermediate` e `challenge` nos valores da ponte; no DocSpec o campo intermédio continua `standard`. Os apoios mudam as pistas, a complexidade e a forma de explicar; não classificam a criança.
+Mostrar Com ajuda, Sozinho e Consigo ajudar um amigo, sem paleta semáforo. Usar `support`, `intermediate` e `challenge` nos valores da ponte; no DocSpec o campo intermédio continua `standard`. Os três níveis partilham a mesma meta e o mesmo critério. «Com ajuda» dá andaime e pistas; «Sozinho» permite fazer o percurso sem andaime; «Consigo ajudar um amigo» acrescenta uma extensão e pede à criança que explique a sua estratégia a um colega, em cooperação MEM. O nível escolhido nunca classifica a criança.
 
 Nas atividades de frações, apresentar numerador sobre denominador, separados por uma barra horizontal, também nas escolhas, instruções, comparações e feedback. Conservar valores internos `n/d` e rótulos acessíveis. As representações visuais devem respeitar partes iguais da mesma unidade.
 

@@ -67,9 +67,9 @@ def main():
                 *([f"**Decisão de ajuste:** {inter['adjustment']}"] if inter.get("adjustment") else []),
                 "",
                 "**Diferenciação:**",
-                f"- Com pistas: {diff.get('support', '')}",
-                f"- Passo a passo: {diff.get('standard', '')}",
-                f"- Mais desafios: {diff.get('challenge', '')}",
+                f"- Com ajuda: {diff.get('support', '')}",
+                f"- Sozinho: {diff.get('standard', '')}",
+                f"- Consigo ajudar um amigo: {diff.get('challenge', '')}",
             ]
         )
         if maker:

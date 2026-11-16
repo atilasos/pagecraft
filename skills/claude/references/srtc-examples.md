@@ -17,9 +17,9 @@ T: "Tocar nos baldes para escolher cor1 e cor2 (ou tocar numa cor e colocá-la n
 C: "Duas cores primárias misturadas produzem sempre a mesma cor secundária"
 A: "O aluno prevê a cor resultante antes de misturar"
 Diferenciação:
-  Com pistas: as mesmas 3 cores, mas uma combinação de cada vez com a cor-alvo visível; feedback visual e som opt-in; o aluno acaba por testar todas as combinações
-  Passo a passo: todas as combinações, label com nome da cor
-  Mais desafios: todas as combinações sem label e "o que acontece se misturares as 3?"; todos terminam com «Acontece sempre? Porquê?»
+  Com ajuda: as mesmas 3 cores, mas uma combinação de cada vez com a cor-alvo visível; feedback visual e som opt-in; o aluno acaba por testar todas as combinações
+  Sozinho: todas as combinações, label com nome da cor
+  Consigo ajudar um amigo: todas as combinações sem label e "o que acontece se misturares as 3?"; todos terminam com «Acontece sempre? Porquê?»
 ```
 
 ### Contagem até 10
@@ -33,9 +33,9 @@ T: "Tocar «+1»/«−1» → maçãs aparecem uma a uma; som só se a criança 
 C: "O número representa a quantidade de objetos"
 A: "O aluno mostra 7 maçãs quando pedido 'mostra-me 7 maçãs'"
 Diferenciação:
-  Com pistas: 1 a 10, maçãs grandes agrupadas de 5 em 5 (mão de cinco), botão «Ouvir» para a criança iniciar a contagem oral
-  Passo a passo: 1 a 10, aluno conta sozinho
-  Mais desafios: 1 a 10, pergunta "quantas faltam para 10?"; todos terminam com «Acontece sempre? Porquê?»
+  Com ajuda: 1 a 10, maçãs grandes agrupadas de 5 em 5 (mão de cinco), botão «Ouvir» para a criança iniciar a contagem oral
+  Sozinho: 1 a 10, aluno conta sozinho
+  Consigo ajudar um amigo: 1 a 10, pergunta "quantas faltam para 10?"; todos terminam com «Acontece sempre? Porquê?»
 ```
 
 ---
@@ -55,9 +55,9 @@ T: "Desenhar no lado esquerdo → espelho atualiza instantaneamente; toggle eixo
 C: "Uma figura simétrica é igual dos dois lados do eixo"
 A: "O aluno desenha metade de uma borboleta e verifica que o espelho completa"
 Diferenciação:
-  Com pistas: formas simples pré-desenhadas para completar, com o eixo visível; o critério final é o mesmo (a figura é igual dos dois lados)
-  Passo a passo: desenho livre com eixo visível
-  Mais desafios: eixo escondido, aluno tenta desenhar simétrico sem ajuda; todos terminam com «Acontece sempre? Porquê?»
+  Com ajuda: formas simples pré-desenhadas para completar, com o eixo visível; o critério final é o mesmo (a figura é igual dos dois lados)
+  Sozinho: desenho livre com eixo visível
+  Consigo ajudar um amigo: eixo escondido, aluno tenta desenhar simétrico sem ajuda; todos terminam com «Acontece sempre? Porquê?»
 ```
 
 ---
@@ -77,9 +77,9 @@ T: "Arrastar temperatura → moléculas mudam velocidade e disposição → esta
 C: "A água muda de estado a 0°C e 100°C; as moléculas movem-se mais rápido com o calor"
 A: "O aluno identifica a temperatura de fusão e ebulição ajustando o slider"
 Diferenciação:
-  Com pistas: slider com passos de 10°C e marcas visíveis; o aluno prevê o estado antes de mover e as pistas pedem "entre que valores muda?" sem indicar 0°C nem 100°C
-  Passo a passo: slider contínuo, aluno descobre os pontos de transição
-  Mais desafios: inclui pressão como segunda variável (panela de pressão); todos terminam com «Acontece sempre? Porquê?»
+  Com ajuda: slider com passos de 10°C e marcas visíveis; o aluno prevê o estado antes de mover e as pistas pedem "entre que valores muda?" sem indicar 0°C nem 100°C
+  Sozinho: slider contínuo, aluno descobre os pontos de transição
+  Consigo ajudar um amigo: inclui pressão como segunda variável (panela de pressão); todos terminam com «Acontece sempre? Porquê?»
 ```
 
 ### Frações equivalentes
@@ -96,7 +96,7 @@ T: "Ajustar numerador/denominador → barra atualiza; quando frações são equi
 C: "Frações diferentes podem representar a mesma quantidade (ex: 2/4 = 1/2)"
 A: "O aluno encontra 3 frações equivalentes a 1/2"
 Diferenciação:
-  Com pistas: denominador fixo em cada passo (primeiro 2, depois 4, depois 8), só muda o numerador; o aluno chega às mesmas 3 frações equivalentes a 1/2
-  Passo a passo: ambos ajustáveis, referência visível
-  Mais desafios: referência visual disponível, aluno encontra outra representação e explica a equivalência; todos terminam com «Acontece sempre? Porquê?»
+  Com ajuda: denominador fixo em cada passo (primeiro 2, depois 4, depois 8), só muda o numerador; o aluno chega às mesmas 3 frações equivalentes a 1/2
+  Sozinho: ambos ajustáveis, referência visível
+  Consigo ajudar um amigo: referência visual disponível, aluno encontra outra representação e explica a equivalência; todos terminam com «Acontece sempre? Porquê?»
 ```

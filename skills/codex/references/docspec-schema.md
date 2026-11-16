@@ -366,15 +366,15 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
       "properties": {
         "support": {
           "type": "string",
-          "description": "Com pistas — Apoio — versão simplificada (menos variáveis, mais guia visual)"
+          "description": "Com ajuda (apoio): andaime e pistas para a mesma meta e critério; o nível escolhido nunca classifica a criança."
         },
         "standard": {
           "type": "string",
-          "description": "Passo a passo — Intermédio — objetivo esperado"
+          "description": "Sozinho (intermédio): percurso sem andaime, com a mesma meta e critério; o nível escolhido nunca classifica a criança."
         },
         "challenge": {
           "type": "string",
-          "description": "Mais desafios — Desafio — extensão (mais variáveis, raciocínio abstrato)"
+          "description": "Consigo ajudar um amigo (desafio): extensão com a mesma meta e critério; a criança explica a sua estratégia a um colega, em cooperação MEM; o nível escolhido nunca classifica a criança."
         }
       }
     },

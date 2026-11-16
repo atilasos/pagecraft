@@ -149,6 +149,10 @@
       background: var(--surface);
       color: var(--ink);
       min-height: var(--tap);
+      min-width: var(--tap);
+      max-width: 100%;
+      white-space: normal;
+      overflow-wrap: anywhere;
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
@@ -162,10 +166,10 @@
       border-color: var(--primary);
       color: var(--primary-ink);
     }
-    .diff-tab .level-marker { width: 14px; height: 14px; border-radius: 50%; display: inline-block; box-shadow: 0 0 0 2px var(--surface); }
-    .diff-tab[data-level="support"]   .level-marker { background: oklch(0.50 0.02 260); } /* Com pistas: neutro, nunca o verde de sucesso */
-    .diff-tab[data-level="standard"]  .level-marker { background: oklch(0.55 0.08 195); } /* Passo a passo: ≥3:1 sobre --surface */
-    .diff-tab[data-level="challenge"] .level-marker { background: oklch(0.55 0.14 280); } /* Mais desafios */
+    .diff-tab .level-marker { flex-shrink: 0; width: 14px; height: 14px; border-radius: 50%; display: inline-block; box-shadow: 0 0 0 2px var(--surface); }
+    .diff-tab[data-level="support"]   .level-marker { background: oklch(0.50 0.02 260); } /* Com ajuda: neutro, nunca o verde de sucesso */
+    .diff-tab[data-level="standard"]  .level-marker { background: oklch(0.55 0.08 195); } /* Sozinho: ≥3:1 sobre --surface */
+    .diff-tab[data-level="challenge"] .level-marker { background: oklch(0.55 0.14 280); } /* Consigo ajudar um amigo */
     .diff-content { display: none; }
     .diff-content[data-active="true"] { display: block; }
 

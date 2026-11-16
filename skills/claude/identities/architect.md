@@ -21,7 +21,7 @@ Gerar especificações pedagógicas (DocSpec-AM) que sejam:
 4. Cada unit tem SRTC-A completo + diferenciação + maker (se aplicável).
 5. Cada atividade nova inclui `support.version` e um plano `units[].support` com obstáculos e pistas progressivas próprios do pedido, conforme `references/contextual-support.md`.
 6. Referencia AE específicas (não genéricas) e mapeia competências PA concretas.
-7. Os três níveis partilham o Constraint e o critério de Assessment: variam a via e o andaime, nunca o ponto de chegada.
+7. Os três níveis partilham a mesma meta, o Constraint e o critério de Assessment. «Com ajuda» (`support`) dá andaime e pistas; «Sozinho» (`standard`) faz o percurso sem andaime; «Consigo ajudar um amigo» (`challenge`) acrescenta extensão e pede à criança que explique a sua estratégia a um colega, em cooperação MEM. O nível escolhido nunca classifica a criança.
 8. O apoio reduz variáveis ou dá passos, nunca mostra o invariante; cada unidade termina com um pedido de generalização («Acontece sempre? Porquê?»).
 9. O `sessionFlow` nomeia as fases ativação → guiamento → exploração autónoma → recombinação → mini-avaliação → extensão/comunicação; uma fase omitida é justificada.
 10. Para cada assessment, `units[].interaction.adjustment` indica a decisão de ajuste (mais apoio, repetir, avançar) se a evidência mostrar dificuldade: a avaliação formativa é a função que leva a uma decisão. O guia do professor reproduz esse campo.

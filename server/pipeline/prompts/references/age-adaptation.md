@@ -56,7 +56,7 @@ Fora do pipeline do Studio, depois de guardar ou reparar o rascunho e antes da r
 
 - Usar **OKLCH**, com chroma reduzido perto dos extremos de lightness.
 - **Identidade**: 4–5 *hues*. **Funcional**: `ok` (verde 150°), `warn` (âmbar 85°), `focus` (por defeito o `ink`, oklch(0.22 0.02 260)); o anel de foco tem ≥3:1 contra o fundo e contra `primary`.
-- **Proibido**: usar `verde/amarelo/vermelho` como níveis de dificuldade — colide com feedback de acerto/erro e ativa carga emocional de "errado". Use três *hues* distintos sem semântica de semáforo (template usa Com pistas / Passo a passo / Mais desafios).
+- **Proibido**: usar `verde/amarelo/vermelho` como níveis de dificuldade — colide com feedback de acerto/erro e ativa carga emocional de "errado". Use três *hues* distintos sem semântica de semáforo (template usa Com ajuda / Sozinho / Consigo ajudar um amigo).
 
 ## Movimento
 

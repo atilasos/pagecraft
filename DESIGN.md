@@ -230,7 +230,7 @@ Mensagem de descoberta usa `ok-tint`, borda `ok`, texto escuro e `aria-live="pol
 
 ### Differentiation Tabs
 
-Apoio, Intermédio e Desafio existem sempre quando a atividade inclui diferenciação. A interface usa labels explícitas e marcadores neutros — Com pistas/Apoio, Passo a passo/Intermédio e Mais desafios/Desafio — ou símbolos neutros equivalentes. Não usar 🟢, 🟡 e 🔴 nestes níveis: mesmo acompanhados por texto, reintroduzem a leitura de semáforo emocional que o sistema rejeita.
+Apoio, Intermédio e Desafio existem sempre quando a atividade inclui diferenciação. A interface usa labels explícitas e marcadores neutros — Com ajuda (apoio), Sozinho (intermédio) e Consigo ajudar um amigo (desafio) — ou símbolos neutros equivalentes. Não usar 🟢, 🟡 e 🔴 nestes níveis: mesmo acompanhados por texto, reintroduzem a leitura de semáforo emocional que o sistema rejeita.
 
 ### Audio Toggle
 
