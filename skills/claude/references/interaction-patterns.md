@@ -15,8 +15,8 @@ Exploração de parâmetros contínuos.
 
 ```yaml
 S: { var: "velocidade", type: "slider", range: [1, 20], step: 1, default: 5 }
-R: "Carro animado cuja velocidade reflecte o valor; label mostra km/h"
-T: "Arrastar slider → velocidade actualiza → animação acelera/desacelera"
+R: "Carro animado cuja velocidade reflete o valor; label mostra km/h"
+T: "Arrastar slider → velocidade atualiza → animação acelera/desacelera"
 C: "Quanto maior a velocidade, menor o tempo para percorrer a mesma distância"
 A: "O aluno ajusta o slider para fazer o carro chegar em exatamente 10 segundos"
 ```
@@ -37,7 +37,7 @@ Seleção de opções discretas.
 ```yaml
 S: { var: "estacao", type: "dropdown", options: ["Primavera","Verão","Outono","Inverno"], default: "Primavera" }
 R: "Paisagem ilustrada que muda conforme a estação; árvore central muda folhagem"
-T: "Selecionar estação → paisagem actualiza com transição suave"
+T: "Selecionar estação → paisagem atualiza com transição suave"
 C: "Cada estação tem características visuais distintas (cores, folhas, clima)"
 A: "O aluno identifica a estação correta a partir de uma descrição"
 ```
@@ -53,7 +53,7 @@ Manipulação directa de elementos.
 ```yaml
 S: { var: "posicao_planeta", type: "drag", targets: ["orbita1","orbita2","orbita3"] }
 R: "Sistema solar simplificado; planetas arrastáveis para órbitas"
-T: "Arrastar planeta → encaixa na órbita mais próxima → label actualiza"
+T: "Arrastar planeta → encaixa na órbita mais próxima → label atualiza"
 C: "Os planetas têm órbitas específicas ordenadas por distância ao Sol"
 A: "O aluno coloca 3 planetas nas órbitas corretas"
 ```
@@ -83,7 +83,7 @@ Pergunta integrada no fluxo da exploração.
 **Quando usar:** Verificação de compreensão no momento, sem interromper a experiência.
 
 ```yaml
-S: { var: "resposta", type: "quiz", question: "Quantas patas tem o insecto?", options: [4,6,8], correct: 6 }
+S: { var: "resposta", type: "quiz", question: "Quantas patas tem o inseto?", options: [4,6,8], correct: 6 }
 R: "Pergunta aparece após exploração; feedback imediato com texto e ícone: ✓ «Encontraste» ou ↻ «Quase, tenta novamente»"
 T: "Selecionar opção → celebrar a descoberta ou convidar a tentar novamente → mostrar uma pista breve"
 C: "Insetos têm sempre 6 patas"
@@ -103,7 +103,7 @@ S: { var: "ordem", type: "sorting", items: ["ovo","larva","casulo","borboleta"],
 R: "Cards arrastáveis com imagens; zona de ordenação horizontal"
 T: "Arrastar cards → reordenar → feedback quando ordem correta"
 C: "O ciclo de vida da borboleta segue uma sequência fixa"
-A: "O aluno ordena as 4 fases correctamente"
+A: "O aluno ordena as 4 fases corretamente"
 ```
 
 ---
@@ -119,7 +119,7 @@ S: { var: "pares", type: "matching", left: ["🐶","🐱","🐰"], right: ["ladr
 R: "Duas colunas; linhas desenhadas quando o aluno liga pares"
 T: "Clicar item esquerdo → clicar item direito → linha fica se corresponder; caso contrário, ↻ «Quase, tenta novamente»"
 C: "Cada animal tem um comportamento característico"
-A: "O aluno liga correctamente os 3 pares"
+A: "O aluno liga corretamente os 3 pares"
 ```
 
 ---
@@ -149,7 +149,7 @@ Avançar por opções com um único toque grande. Substitui o `dropdown` e o `sl
 ```yaml
 S: { var: "estacao", type: "tap-cycle", options: ["Primavera","Verão","Outono","Inverno"], default: "Primavera" }
 R: "Botão grande (≥64px alto para 4–5; ≥56px para 6–7) com o nome e um ícone da estação atual; seta visual indica que cicla"
-T: "Tocar botão → próxima opção (com wrap-around) → cena actualiza"
+T: "Tocar botão → próxima opção (com wrap-around) → cena atualiza"
 C: "Cada estação tem características visuais distintas"
 A: "O aluno passa pelas 4 estações e identifica a atual quando pedido"
 ```

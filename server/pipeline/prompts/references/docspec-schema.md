@@ -640,8 +640,8 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
           { "name": "estado", "type": "derived", "derivedFrom": "temperatura < 0 ? 'sólido' : temperatura > 100 ? 'gasoso' : 'líquido'" },
           { "name": "velocidadeMoleculas", "type": "derived", "derivedFrom": "(temperatura + 20) / 140" }
         ],
-        "render": "Termómetro visual à esquerda; recipiente central com moléculas animadas (círculos azuis) cuja velocidade e disposição reflectem o estado; label grande com nome do estado e temperatura; fundo muda de cor (azul gelado → azul normal → vermelho quente)",
-        "transition": "Arrastar slider de temperatura → moléculas ajustam velocidade e padrão (agrupadas/lentas para sólido, médias para líquido, dispersas/rápidas para gasoso) → label e fundo actualizam",
+        "render": "Termómetro visual à esquerda; recipiente central com moléculas animadas (círculos azuis) cuja velocidade e disposição refletem o estado; label grande com nome do estado e temperatura; fundo muda de cor (azul gelado → azul normal → vermelho quente)",
+        "transition": "Arrastar slider de temperatura → moléculas ajustam velocidade e padrão (agrupadas/lentas para sólido, médias para líquido, dispersas/rápidas para gasoso) → label e fundo atualizam",
         "constraint": "A água muda de estado a exatamente 0°C (fusão/solidificação) e 100°C (ebulição/condensação)",
         "assessment": "O aluno ajusta o slider para encontrar as duas temperaturas de mudança de estado e regista-as"
       },

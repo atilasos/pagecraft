@@ -11,7 +11,7 @@ A página interativa é o **ponto de partida**, não o fim. O ciclo completo:
 1. Explorar (página interativa — individual/pares)
 2. Construir (desafio maker — grupo 2-4)
 3. Comunicar (apresentação — circuito MEM)
-4. Reflectir (conselho de cooperação)
+4. Refletir (conselho de cooperação)
 ```
 
 ## Recursos disponíveis

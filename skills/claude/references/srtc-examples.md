@@ -28,7 +28,7 @@ Diferenciação:
 Unit: Contar objectos
 S:
   - quantidade: tap-to-place/botões «+1» e «−1» (1 a 10), default 3
-R: "Maçãs animadas aparecem/desaparecem; número grande actualiza; barra de progresso visual"
+R: "Maçãs animadas aparecem/desaparecem; número grande atualiza; barra de progresso visual"
 T: "Tocar «+1»/«−1» → maçãs aparecem uma a uma; som só se a criança o ligar; botão «Ouvir» lê o número quando a criança o toca"
 C: "O número representa a quantidade de objectos"
 A: "O aluno mostra 7 maçãs quando pedido 'mostra-me 7 maçãs'"
@@ -51,7 +51,7 @@ S:
   - espelho: derived (reflexão horizontal automática)
   - eixo_visivel: toggle [Sim, Não], default Sim
 R: "Canvas dividido ao meio; lado esquerdo desenhável, lado direito espelha em tempo real; linha de eixo tracejada"
-T: "Desenhar no lado esquerdo → espelho actualiza instantaneamente; toggle eixo → linha aparece/desaparece"
+T: "Desenhar no lado esquerdo → espelho atualiza instantaneamente; toggle eixo → linha aparece/desaparece"
 C: "Uma figura simétrica é igual dos dois lados do eixo"
 A: "O aluno desenha metade de uma borboleta e verifica que o espelho completa"
 Diferenciação:
@@ -73,7 +73,7 @@ S:
   - estado: derived (solid <0, liquid 0-100, gas >100)
   - moleculas_velocidade: derived (proporcional à temperatura)
 R: "Termómetro visual; recipiente com moléculas animadas (lentas=gelo, médias=líquido, rápidas=vapor); label do estado"
-T: "Arrastar temperatura → moléculas mudam velocidade e disposição → estado actualiza"
+T: "Arrastar temperatura → moléculas mudam velocidade e disposição → estado atualiza"
 C: "A água muda de estado a 0°C e 100°C; as moléculas movem-se mais rápido com o calor"
 A: "O aluno identifica a temperatura de fusão e ebulição ajustando o slider"
 Diferenciação:
@@ -92,7 +92,7 @@ S:
   - barra_visual: derived (numerador/denominador da barra preenchida)
   - barra_referencia: toggle entre 1/2, 1/3, 1/4
 R: "Duas barras horizontais: a de cima é a fração do aluno, a de baixo é a referência; sobreposição com transparência"
-T: "Ajustar numerador/denominador → barra actualiza; quando fracções são equivalentes, destaque visual + som opt-in"
+T: "Ajustar numerador/denominador → barra atualiza; quando fracções são equivalentes, destaque visual + som opt-in"
 C: "Frações diferentes podem representar a mesma quantidade (ex: 2/4 = 1/2)"
 A: "O aluno encontra 3 frações equivalentes a 1/2"
 Diferenciação:
