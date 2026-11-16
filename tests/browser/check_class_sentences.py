@@ -24,6 +24,15 @@ with sync_playwright() as p:
             # Sem voz local, não pode existir leitura remota nem botão enganador.
             if not page.evaluate("!!window.speechSynthesis?.getVoices().some(v=>v.localService===true&&/^pt[-_]PT$/i.test(v.lang))"):
                 assert page.locator('.model').get_by_role('button', name='Ouvir a frase').count() == 0
+            # A voz remota aparece primeiro: só a voz local pode receber o texto.
+            page.evaluate("""() => {
+              window.SpeechSynthesisUtterance=class {constructor(text){this.text=text;}};
+              speechSynthesis.getVoices=()=>[{lang:'pt-PT',localService:false},{lang:'pt-PT',localService:true}];
+              speechSynthesis.speak=u=>{window.spoken={text:u.text,local:u.voice.localService};};
+              speechSynthesis.dispatchEvent(new Event('voiceschanged'));
+            }""")
+            page.locator('.model').get_by_role('button', name='Ouvir a frase').click()
+            assert page.evaluate('window.spoken') == {'text': 'A menina.', 'local': True}
             page.locator('[data-piece="p1"]').click()
             page.locator('#confirm').click()
             assert 'Encontraste' in page.locator('#feedback').text_content()

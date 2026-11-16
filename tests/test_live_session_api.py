@@ -555,3 +555,18 @@ async def test_session_sentences_filter_and_student_access(client):
     client.cookies.clear()
     assert (await client.get(url, headers=cookie)).status_code == 200
     assert (await client.get(f"/api/sessions/{other['id']}/class-sentences", headers=cookie)).status_code in (401, 403)
+
+
+async def test_class_sentence_default_keyword_and_limit(client):
+    session = await _session(client)
+    session = (await client.post('/api/sessions', json={
+        'class_id': session['class_id'], 'activity_slug': 'm28p-ciclo-uva-sentence'})).json()
+    base = f"/api/classes/{session['class_id']}/sentences"
+    for index in range(6):
+        response = await client.post(base, json={'text': 'A uva', 'session_id': session['id']})
+        assert response.status_code == 200
+        assert response.json()['keyword'] == 'uva'
+        assert response.json()['warnings'] == []
+    bank = (await client.get(base)).json()
+    sentences = (await client.get(f"/api/sessions/{session['id']}/class-sentences")).json()['sentences']
+    assert [s['id'] for s in sentences] == [s['id'] for s in reversed(bank[-4:])]
