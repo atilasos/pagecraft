@@ -249,28 +249,67 @@ def generate_images(overwrite):
         write_if_needed(DEST / "images" / f"{slug}.svg", content, overwrite)
 
 
+def cycle_person(kind, looking=False):
+    """Pistas sóbrias exclusivas do ciclo; preserva as figuras neutras v3."""
+    gray = '#c8c6bf'
+    drawing = person(False)
+    # Calças compridas para as pessoas idosas, sem bengalas.
+    if kind in ('avó', 'avô'):
+        drawing = drawing.replace('#604535', gray)
+        drawing = drawing.replace('L149 177 L126 177 L120 159 L114 177 L91 177',
+                                  'L153 204 L130 204 L120 164 L110 204 L87 204')
+    if kind == 'avó':
+        drawing = circle(120, 22, 17, gray) + drawing
+        drawing = drawing.replace('M86 61 Q82 19 119 25 Q156 19 154 61 L144 46 L129 42 L111 48 L96 43 Z',
+                                  'M86 61 Q80 22 120 26 Q160 22 154 61 Q135 55 120 38 Q106 56 86 61 Z')
+    elif kind == 'avô':
+        drawing += path('M102 79 Q108 70 120 76 Q132 70 138 79 Q130 86 120 81 Q110 86 102 79 Z', gray)
+    elif kind == 'mana':
+        drawing = path('M86 52 Q65 85 81 116 L99 103 L143 103 L160 116 Q175 80 153 48 Z', '#604535') + drawing
+        drawing += path('M81 49 L68 41 L68 59 Z M81 49 L94 41 L94 59 Z', GOLD)
+    if looking:
+        drawing = drawing.replace(circle(120, 65, 36, SKIN),
+            path('M89 46 Q113 21 142 39 Q153 48 151 62 L163 72 L152 77 Q151 97 132 100 Q96 102 89 78 Z', SKIN))
+        drawing = drawing.replace(eyes(120, 65), circle(143, 64, 3, INK, stroke='none'))
+        drawing = drawing.replace(path('M109 82 Q120 91 131 82', stroke_width=3),
+                                  path('M138 85 Q146 88 151 84', stroke_width=3))
+        if kind == 'avô':
+            drawing = drawing.replace('M102 79 Q108 70 120 76 Q132 70 138 79 Q130 86 120 81 Q110 86 102 79 Z',
+                                      'M136 77 Q144 72 153 78 L151 83 Q142 86 136 81 Z')
+    return drawing
+
+
+def cycle_siblings(left, right):
+    return ('<g transform="translate(-6 42) scale(.65)">'+cycle_person(left)+
+            '</g><g transform="translate(94 42) scale(.65)">'+
+            cycle_person(right).replace(TEAL,GOLD)+'</g>')
+
+
 def generate_cycle_images(overwrite):
     # Cenas compostas exclusivamente por traços SVG originais da coleção.
     art = drawings()
     art['ovo'] = ellipse(120,125,57,78,'#fff4d9')
     art['neve'] = path('M20 190 L85 45 L125 122 L158 65 L220 190 Z','#e2eff5') + path('M65 90 L85 45 L108 90 L89 81 Z','#ffffff') + ''.join(circle(x,y,5,'#ffffff') for x,y in [(35,45),(180,25),(205,90),(135,30)])
     art['nove'] = ''.join(circle(65+55*(i%3),65+55*(i//3),19,TEAL) for i in range(9))
-    elder = person(False).replace('#604535','#c8c6bf') + path('M86 60 Q102 48 117 60 M123 60 Q138 48 154 60 M117 60 L123 60',stroke=INK) + path('M172 125 L180 205',stroke=INK,stroke_width=7)
-    art['avo'] = elder + path('M92 96 Q120 112 148 96',stroke='#c8c6bf',stroke_width=9)
-    art['avo-circ'] = elder + path('M102 85 Q120 94 138 85',stroke='#c8c6bf',stroke_width=6)
-    # Irmãos juntos, com o referente indicado por uma seta sem texto.
-    siblings = '<g transform="translate(0 40) scale(.65)">'+person(False)+'</g><g transform="translate(105 40) scale(.65)">'+person(False).replace(TEAL,GOLD)+'</g>'
-    art['mana'] = siblings + path('M175 16 L180 44 M168 34 L180 44 L190 32',stroke=INK,stroke_width=5)
-    art['mano'] = siblings + path('M70 16 L76 44 M64 34 L76 44 L87 32',stroke=INK,stroke_width=5)
+    art['avo'] = cycle_person('avó')
+    art['avo-circ'] = cycle_person('avô')
+    # O par dá contexto familiar; a seta assinala o referente.
+    siblings = cycle_siblings('mana', 'mano')
+    art['mana'] = siblings + path('M66 15 L72 45 M60 35 L72 45 L83 32',stroke=INK,stroke_width=5)
+    art['mano'] = siblings + path('M166 15 L172 45 M160 35 L172 45 L183 32',stroke=INK,stroke_width=5)
     for slug,text in SENTENCES:
-        tokens=text.lower().split()
-        if 'mana' in text or 'mano' in text:
-            art[slug]=siblings
+        if 'mana' in text and 'mano' in text:
+            art[slug] = siblings
+        elif 'mana' in text:
+            art[slug] = cycle_siblings('mana', 'mana')
+        elif 'mano' in text:
+            art[slug] = cycle_siblings('mano', 'mano')
         elif 'neve' in text:
             art[slug]=art['neve']+'<g transform="translate(5 50) scale(.65)">'+person(False)+'</g>'
         elif 'avó' in text or 'avô' in text:
             obj=art['uva'] if 'uva' in text else art['ovo']
-            art[slug]='<g transform="translate(-8 25) scale(.75)">'+elder+'</g><g transform="translate(138 100) scale(.4)">'+obj+'</g>'
+            elder=cycle_person('avó' if 'avó' in text else 'avô', looking=True)
+            art[slug]='<g transform="translate(-8 25) scale(.75)">'+elder+'</g><g transform="translate(137 25) scale(.4)">'+obj+'</g>'
         else:
             art[slug]=art['uva']
     for slug,text in NEW_WORDS+SENTENCES:
