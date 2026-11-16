@@ -51,6 +51,17 @@ INSTRUCTIONS = {
 }
 
 
+# Os identificadores dependem do texto, nunca da posição na revisão docente.
+import sys
+sys.path.insert(0, str(ROOT))
+from scripts.m28p_cycle import asset_id, CYCLE_GAMES
+CYCLE = json.loads((ROOT/'drafts/m28p-v3/cycle.json').read_text())
+NEW_WORDS = [(asset_id(w['label']),w['label']) for section in CYCLE['keywords'].values() for w in section['newWords']]
+SENTENCES = [(asset_id(s['text'], True),s['text']) for section in CYCLE['keywords'].values() for s in section['sentences']]
+PICTURABLE = {asset_id(w['label']) for section in CYCLE['keywords'].values() for w in section['newWords'] if w['picturable']}
+INSTRUCTIONS.update({key:value[1] for key,value in CYCLE_GAMES.items()})
+
+
 def circle(x, y, r, fill, **attrs):
     return element("circle", cx=x, cy=y, r=r, fill=fill, **attrs)
 
@@ -238,12 +249,45 @@ def generate_images(overwrite):
         write_if_needed(DEST / "images" / f"{slug}.svg", content, overwrite)
 
 
+def generate_cycle_images(overwrite):
+    # Cenas compostas exclusivamente por traços SVG originais da coleção.
+    art = drawings()
+    art['ovo'] = ellipse(120,125,57,78,'#fff4d9')
+    art['neve'] = path('M20 190 L85 45 L125 122 L158 65 L220 190 Z','#e2eff5') + path('M65 90 L85 45 L108 90 L89 81 Z','#ffffff') + ''.join(circle(x,y,5,'#ffffff') for x,y in [(35,45),(180,25),(205,90),(135,30)])
+    art['nove'] = ''.join(circle(65+55*(i%3),65+55*(i//3),19,TEAL) for i in range(9))
+    elder = person(False).replace('#604535','#c8c6bf') + path('M86 60 Q102 48 117 60 M123 60 Q138 48 154 60 M117 60 L123 60',stroke=INK) + path('M172 125 L180 205',stroke=INK,stroke_width=7)
+    art['avo'] = elder + path('M92 96 Q120 112 148 96',stroke='#c8c6bf',stroke_width=9)
+    art['avo-circ'] = elder + path('M102 85 Q120 94 138 85',stroke='#c8c6bf',stroke_width=6)
+    # Irmãos juntos, com o referente indicado por uma seta sem texto.
+    siblings = '<g transform="translate(0 40) scale(.65)">'+person(False)+'</g><g transform="translate(105 40) scale(.65)">'+person(False).replace(TEAL,GOLD)+'</g>'
+    art['mana'] = siblings + path('M175 16 L180 44 M168 34 L180 44 L190 32',stroke=INK,stroke_width=5)
+    art['mano'] = siblings + path('M70 16 L76 44 M64 34 L76 44 L87 32',stroke=INK,stroke_width=5)
+    for slug,text in SENTENCES:
+        tokens=text.lower().split()
+        if 'mana' in text or 'mano' in text:
+            art[slug]=siblings
+        elif 'neve' in text:
+            art[slug]=art['neve']+'<g transform="translate(5 50) scale(.65)">'+person(False)+'</g>'
+        elif 'avó' in text or 'avô' in text:
+            obj=art['uva'] if 'uva' in text else art['ovo']
+            art[slug]='<g transform="translate(-8 25) scale(.75)">'+elder+'</g><g transform="translate(138 100) scale(.4)">'+obj+'</g>'
+        else:
+            art[slug]=art['uva']
+    for slug,text in NEW_WORDS+SENTENCES:
+        if slug not in PICTURABLE and not slug.startswith('frase-'):
+            continue
+        if slug not in art:
+            raise ValueError(f'Falta uma ilustração original para {text}')
+        svg=f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"><title>{html.escape(text)}</title><g stroke="{INK}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">{art[slug]}</g></svg>\n'
+        write_if_needed(DEST/'images'/f'{slug}.svg',svg,overwrite)
+
+
 async def generate_audio(overwrite):
     try:
         import edge_tts
     except ImportError as exc:
         raise SystemExit("Use uv run --with edge-tts python scripts/prepare_m28p_tic_assets.py --audio") from exc
-    for slug, text in [*WORDS, *INSTRUCTIONS.items()]:
+    for slug, text in [*WORDS, *NEW_WORDS, *SENTENCES, *INSTRUCTIONS.items()]:
         destination = DEST / "audio" / f"{slug}.mp3"
         if destination.exists() and not overwrite:
             continue
@@ -263,7 +307,7 @@ def generate_manifest():
     assets = []
     for slug, word in WORDS:
         assets.append({"slug": slug, "word": word, "image": f"images/{slug}.svg", "audio": f"audio/{slug}.mp3"})
-    recordings = {**dict(WORDS), **INSTRUCTIONS}
+    recordings = {**dict(WORDS + NEW_WORDS + SENTENCES), **INSTRUCTIONS}
     files = {}
     for path_ in sorted(DEST.rglob("*")):
         if path_.suffix in (".svg", ".mp3"):
@@ -273,6 +317,7 @@ def generate_manifest():
         "illustrations": {"author": "PageCraft, ilustrações SVG originais criadas com assistência Codex", "license": "CC0-1.0", "viewBox": "0 0 240 240", "notes": "Sem texto visível nem emoji; os títulos SVG são alternativas acessíveis. A seta no telhado assinala a parte da casa."},
         "audio": {"provider": "Microsoft Edge Read Aloud, através de edge-tts", "voice": VOICE, "locale": "pt-PT", "rate": RATE, "license": "Voz sintética Microsoft; sujeita aos termos do serviço, não abrangida pela licença CC0 dos SVG.", "notes": "Palavras inteiras e instruções. Não usar estes sons para modelar fonemas ou sílabas isoladas. Reprodução só após opção da criança.", "transcripts": recordings},
         "words": assets,
+        "cycle": [{"slug":slug,"text":text,"audio":f"audio/{slug}.mp3", "image":f"images/{slug}.svg" if slug in PICTURABLE or slug.startswith("frase-") else None} for slug,text in NEW_WORDS+SENTENCES],
         "instructions": {slug: f"audio/{slug}.mp3" for slug in INSTRUCTIONS},
         "files": files,
     }
@@ -305,6 +350,7 @@ def main():
     parser.add_argument("--verify", action="store_true", help="Verificar SVG locais e os áudios quando usados com --audio.")
     args = parser.parse_args()
     generate_images(args.overwrite)
+    generate_cycle_images(args.overwrite)
     if args.audio:
         asyncio.run(generate_audio(args.overwrite))
     generate_manifest()
