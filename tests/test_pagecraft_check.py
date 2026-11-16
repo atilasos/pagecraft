@@ -170,3 +170,12 @@ def test_delivery_counts_html_repairs_as_builder_and_checks_activity(tmp_path):
     (tmp_path / "demo-activity.json").write_text(json.dumps({"title": "", "year": "3", "criteria": []}))
     joined = " | ".join(delivery_errors(tmp_path))
     assert "falta title" in joined and "year" in joined and "criteria" in joined
+
+
+def test_proofreader_warning_uses_html_repairs_as_builder(tmp_path):
+    ready_for_delivery(tmp_path)
+    for phase, model in (("repair", "claude/sonnet"), ("proofreader", "claude/haiku"), ("evaluator", "gpt/sol")):
+        run("--dir", tmp_path, "log", "demo", "--phase", phase, "--status", "done", "--model", model,
+            "--artifact", str(tmp_path / "demo.html"))
+    report = json.loads(run("--dir", tmp_path, "check", "demo", "--phase", "delivery").stdout)
+    assert any("Proofreader e Builder da mesma família (claude)" in w for w in report["warnings"])
