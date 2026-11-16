@@ -14,6 +14,7 @@ h1,h2,.task-title{font-size:30px}
 .model{flex-wrap:wrap}.pair-card{overflow-wrap:anywhere;min-width:0}.pair-card>span{max-width:100%}.visual-cue{outline:4px dashed #966625!important;outline-offset:3px;position:relative}.cue-icon{position:absolute;bottom:2px;left:4px;font-size:28px;line-height:1.1;border-radius:10px;background:var(--hint);color:var(--ink);padding:2px 6px}.comparison{display:flex;align-items:center;justify-content:center;gap:16px;background:var(--hint);border-radius:16px;padding:16px;flex-wrap:wrap;margin:18px 0}.comparison .sample{font-size:36px;display:flex;flex-wrap:wrap;justify-content:center}.letter-cue{background:#e9d1a6;outline:2px dashed #966625;border-radius:4px}.search-cue{outline:3px dashed #966625;outline-offset:2px}
 .choices .picture{display:block;width:150px;height:140px}.pieces{flex-wrap:wrap}.pieces button{min-width:64px}button:focus-visible{outline:4px solid var(--focus);outline-offset:3px}</style>
 <style>
+.hidden-words{margin:12px 0}.hidden-count{font-weight:700;margin:0 0 8px}.hidden-words ul{display:flex;flex-wrap:wrap;gap:12px;list-style:none;margin:0;padding:0}.hidden-word{display:flex;align-items:center;gap:8px;min-height:84px;min-width:120px;padding:8px 12px;border:3px dashed var(--line);border-radius:18px;background:var(--surface)}.hidden-word.found{border-style:solid;border-color:var(--accent);background:var(--ok)}.hidden-word.revealed{border-style:solid;background:var(--hint)}.hidden-word button{display:flex;align-items:center;gap:8px;font-size:34px}.hidden-word .picture{width:76px;height:70px}.hidden-word .empty-slot{width:48px;height:56px}.hidden-word .unknown{font-size:34px;padding:0 12px}.punctuation{align-self:flex-end;font-size:44px;line-height:1;padding:0 4px}#discover-finish{margin-top:8px}
 .initialization-status{display:flex;gap:16px;align-items:center;justify-content:center;min-height:180px;padding:24px}.preparing-shape{width:48px;height:48px;border:6px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:preparing 1s linear infinite}@keyframes preparing{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.preparing-shape{animation:none}}
 .choices .picture{display:block;width:150px;height:140px}.pieces{flex-wrap:wrap}.pieces button{min-width:64px}button:focus-visible{outline:4px solid var(--focus);outline-offset:3px}</style>
 <style id="pagecraft-typography">
@@ -214,6 +215,7 @@ const TicModel = (() => {
   }
   function signature(round,value){return JSON.stringify(ordered(round)?value.map(id=>round.pieces.find(piece=>piece.id===id)?.label||id):[...value].sort());}
   const discovery=(round,value)=>round.lexicon?.find(w=>w.label===value.map(id=>round.pieces.find(p=>p.id===id)?.label||'').join(''));
+  const allFound=(round,labels)=>round.lexicon.every(w=>(labels||[]).includes(w.label));
   function correct(round,value){
     if(round.kind==='discover')return !!discovery(round,value);
     if(!validAnswer(round,value))return false;
@@ -231,7 +233,7 @@ const TicModel = (() => {
       if(round.kind==='read-choose')clean.choiceAudio[round.id]=raw.choiceAudio?.[round.id]===true;
       const value=cleanAnswer(round,raw.answers?.[round.id]);
       if(value.length)clean.answers[round.id]=value;
-      if(raw.confirmed?.[round.id]===true&&validAnswer(round,value)&&(round.kind!=='discover'||value[0]==='finish'||discovery(round,value)))clean.confirmed[round.id]=true;
+      if(raw.confirmed?.[round.id]===true&&validAnswer(round,value)&&(round.kind!=='discover'||value[0]==='finish'||allFound(round,clean.discoveries[round.id])))clean.confirmed[round.id]=true;
       const last=cleanAnswer(round,raw.last?.[round.id]);
       if(validAnswer(round,last))clean.last[round.id]=last;
       const count=raw.counts?.[round.id];
@@ -248,14 +250,15 @@ const TicModel = (() => {
   function confirm(state,round){
     const value=state.answers[round.id];if(!validAnswer(round,value))return {accepted:false,emit:false};
     const emit=!state.last[round.id]||signature(round,state.last[round.id])!==signature(round,value);
-    const candidate=round.kind==='discover'?discovery(round,value):null;
-    const found=candidate&&!Object.entries(state.discoveries).some(([id,labels])=>id!==round.id&&labels.includes(candidate.label))?candidate:null;
-    state.confirmed[round.id]=round.kind!=='discover'||!!found||value[0]==='finish';
+    const found=round.kind==='discover'?discovery(round,value):null;
     if(found){const box=state.discoveries[round.id]||=[];if(!box.includes(found.label))box.push(found.label);}
+    state.confirmed[round.id]=round.kind!=='discover'||value[0]==='finish'||allFound(round,state.discoveries[round.id]);
     if(emit){state.last[round.id]=value.slice();state.counts[round.id]=(state.counts[round.id]||0)+1;}
+    // Uma palavra encontrada fica guardada; o tabuleiro esvazia para a seguinte.
+    if(found&&!state.confirmed[round.id])state.answers[round.id]=[];
     return {accepted:true,emit,correct:correct(round,value)};
   }
-  return {levels,ordered,ids,discovery,initial,cleanAnswer,validAnswer,signature,correct,answered,complete,accessible,sanitize,edit,confirm};
+  return {levels,ordered,ids,discovery,allFound,initial,cleanAnswer,validAnswer,signature,correct,answered,complete,accessible,sanitize,edit,confirm};
 })();
 /* END M28P TIC MODEL */
 (() => {
@@ -304,32 +307,45 @@ function model(r){
   if(state.confirmed[r.id]&&!TicModel.correct(r,selected()))box.classList.add('hint-model');
   return box;
 }
+const endMark=target=>(/[.!?…]$/.exec(target?.text||'')||[''])[0];
 function cycleModel(r){
   const box=node('div',undefined,'model'),t=r.target;
   if(r.kind==='read-choose')box.appendChild(node('span',t.label,'word'));
   else if(r.kind==='sentence'&&state.level!=='challenge')box.appendChild(picture(t.image,t.text));
   if(state.level==='support'&&r.kind!=='read-choose'&&r.kind!=='discover'){
-    aid('model_shown');box.appendChild(node('span',(t.tokens||t.syllables).join(' · '),'word'));
+    aid('model_shown');box.appendChild(node('span',(t.tokens||t.syllables).join(' · ')+(endMark(t)||''),'word'));
   }
   if(r.kind!=='discover'){const hear=button('🔊',()=>play('word'));hear.setAttribute('aria-label',r.kind==='sentence'?'Ouvir a frase':'Ouvir a palavra');box.appendChild(hear);}
   return box;
 }
 function discoverBoard(r,container){
-  const tray=node('div',undefined,'tray');
+  const found=state.discoveries[r.id]||[],revealed=state.confirmed[r.id]&&selected()[0]==='finish';
+  const box=node('div',undefined,'hidden-words');
+  box.appendChild(node('p','Palavras escondidas: '+found.length+' de '+r.lexicon.length,'hidden-count'));
+  const list=node('ul');list.setAttribute('aria-label','Palavras escondidas');
+  for(const w of r.lexicon){
+    const item=node('li',undefined,'hidden-word');
+    if(found.includes(w.label)||revealed){
+      item.classList.add(found.includes(w.label)?'found':'revealed');
+      const card=button(w.label,()=>play('word',w.audio));card.setAttribute('aria-label',(found.includes(w.label)?'Encontraste ':'Era ')+w.label+'. Ouvir');
+      if(w.image)card.prepend(picture(w.image,w.label));item.appendChild(card);
+    }else if(state.level==='support'){
+      aid('model_shown');
+      if(w.image)item.appendChild(picture(w.image,'Pista: imagem da palavra escondida'));
+      const hear=button('🔊',()=>play('word',w.audio));hear.setAttribute('aria-label','Ouvir a palavra escondida');item.appendChild(hear);
+    }else if(state.level==='intermediate'){
+      item.setAttribute('aria-label','Palavra escondida com '+w.syllables.length+' sílabas');
+      w.syllables.forEach(()=>{const slot=node('span',undefined,'empty-slot');slot.setAttribute('aria-hidden','true');item.appendChild(slot);});
+    }else{item.setAttribute('aria-label','Palavra escondida');const mark=node('span','?','unknown');mark.setAttribute('aria-hidden','true');item.appendChild(mark);}
+    list.appendChild(item);
+  }
+  box.appendChild(list);
+  const tray=node('div',undefined,'tray');tray.setAttribute('aria-label','A tua palavra. Toca numa sílaba para a retirar.');
   selected().filter(id=>id!=='finish').forEach((id,i)=>tray.appendChild(button(r.pieces.find(p=>p.id===id).label,()=>edit(selected().filter((_,j)=>i!==j)))));
-  const board=node('div',undefined,'pieces');
-  for(const label of [...new Set(r.pieces.map(p=>p.label))].sort()){
-    const available=r.pieces.find(p=>p.label===label&&!selected().includes(p.id));
-    const b=button(label,()=>edit([...selected().filter(id=>id!=='finish'),available.id]));b.disabled=!available||selected().length>=3;b.dataset.piece=available?.id;board.appendChild(b);
-  }
-  const box=node('div');box.appendChild(node('h3','Caixa de palavras'));
-  for(const label of [...new Set(Object.values(state.discoveries).flat())]){
-    const w=r.lexicon.find(w=>w.label===label);if(!w)continue;
-    const card=button(label,()=>{stopAudio();aid('audio_word_requested');checkpoint();audio=new Audio(w.audio);audio.play().catch(()=>{});});
-    if(w.image)card.appendChild(picture(w.image,w.label));box.appendChild(card);
-  }
-  const end=button('Terminar a ronda',()=>{edit(['finish']);confirm();});
-  container.append(tray,board,box,end);
+  const board=node('div',undefined,'pieces');board.setAttribute('role','group');board.setAttribute('aria-label','Sílabas para juntar');
+  for(const piece of r.pieces){const b=button(piece.label,()=>edit([...selected().filter(id=>id!=='finish'),piece.id]));b.disabled=state.confirmed[r.id]||selected().includes(piece.id)||selected().length>=3;b.dataset.piece=piece.id;board.appendChild(b);}
+  container.append(box,tray,board);
+  if(!state.confirmed[r.id]){const end=button('Não encontro mais',()=>{aid('model_shown');edit(['finish']);confirm();});end.id='discover-finish';container.appendChild(end);}
 }
 function toggle(id){const values=selected();edit(round().kind==='hunt'?(values.includes(id)?values.filter(value=>value!==id):[...values,id]):[id]);}
 function choices(r,container){
@@ -367,10 +383,11 @@ function pairs(r,container){
   if(r.flipColumns)board.append(right,left);else board.append(left,right);container.appendChild(board);
 }
 function order(r,container){
-  const tray=node('div',undefined,'tray');tray.setAttribute('aria-label','A tua palavra. Toca numa '+(r.unit==='letter'?'letra':'sílaba')+' para a retirar.');
+  const tray=node('div',undefined,'tray');tray.setAttribute('aria-label',r.unit==='word'?'A tua frase. Toca numa palavra para a retirar.':'A tua palavra. Toca numa '+(r.unit==='letter'?'letra':'sílaba')+' para a retirar.');
   selected().forEach((id,index)=>{const piece=r.pieces.find(piece=>piece.id===id);const item=button(piece.label,()=>edit(selected().filter((_,i)=>i!==index)));item.setAttribute('aria-label','Retirar '+piece.label);item.dataset.focus='placed-'+id;tray.appendChild(item);});
   for(let i=selected().length;state.level!=='challenge'&&i<(r.length||r.pieces.length);i++){const slot=node('span',undefined,'empty-slot');slot.setAttribute('aria-hidden','true');tray.appendChild(slot);}
-  const pieces=node('div',undefined,'pieces');pieces.setAttribute('role','group');pieces.setAttribute('aria-label',(r.unit==='letter'?'Letras':'Sílabas')+' para escolher');
+  const mark=r.kind==='sentence'&&endMark(r.target);if(mark){const end=node('span',mark,'punctuation');end.setAttribute('aria-label','ponto final');tray.appendChild(end);}
+  const pieces=node('div',undefined,'pieces');pieces.setAttribute('role','group');pieces.setAttribute('aria-label',(r.unit==='word'?'Palavras':r.unit==='letter'?'Letras':'Sílabas')+' para escolher');
   for(const piece of r.pieces){const item=button(piece.label,()=>edit([...selected(),piece.id]));item.dataset.piece=piece.id;item.dataset.focus='piece-'+piece.id;item.disabled=selected().includes(piece.id)||selected().length>=(r.length||r.pieces.length);pieces.appendChild(item);}
   container.append(tray,pieces);
 }
@@ -403,7 +420,18 @@ function visualFeedback(r,container){
 }
 function feedback(r){
   const box=$('feedback');box.replaceChildren();box.classList.remove('ok');
-  if(r.kind==='discover'){if(state.last[r.id]){const found=TicModel.discovery(r,selected());box.textContent=found?'Encontraste: '+found.label:selected()[0]==='finish'?'Podes continuar.':'Essa não está na nossa lista';}return;}
+  if(r.kind==='discover'){
+    const last=state.last[r.id];if(!last||(selected().length&&JSON.stringify(selected())!==JSON.stringify(last)))return;
+    if(state.confirmed[r.id]){
+      const all=last[0]!=='finish';box.classList.toggle('ok',all);box.appendChild(node('span',all?'✓':'☞','icon'));
+      box.appendChild(node('span',all?'Descobriste as '+r.lexicon.length+' palavras escondidas!':'Estas eram as palavras escondidas. Podes continuar.'));return;
+    }
+    const found=TicModel.discovery(r,last),missing=r.lexicon.length-(state.discoveries[r.id]||[]).length;
+    const word=last.map(id=>r.pieces.find(p=>p.id===id)?.label||'').join('');
+    box.appendChild(node('span',found?'✓':'↻','icon'));
+    box.appendChild(node('span',found?'Encontraste «'+found.label+'». '+(missing===1?'Falta 1.':'Faltam '+missing+'.'):'«'+word+'» não é uma das palavras escondidas. Se conheces esta palavra, conta à turma.'));
+    return;
+  }
   if(!state.confirmed[r.id])return;
   const correct=TicModel.correct(r,selected());box.classList.toggle('ok',correct);box.appendChild(node('span',correct?'✓':'↻','icon'));box.appendChild(node('span',correct?'Encontraste!':'Podes experimentar outra vez.'));
   if(!correct){const help=button('? Ver',()=>openDemo());help.setAttribute('aria-label','Ver como se faz');box.appendChild(help);}
@@ -416,7 +444,7 @@ function renderGame(){
   $('prompt').textContent=r.prompt||data.instruction;
   const progress=$('progress');progress.replaceChildren();progress.setAttribute('aria-label','Ronda '+(state.page+1)+' de '+data.rounds.length);
   data.rounds.forEach((_,index)=>{const dot=node('span');if(TicModel.answered(data,state,index))dot.className='complete';if(index===state.page)dot.classList.add('current');progress.appendChild(dot);});
-  const content=$('round-content');content.replaceChildren();content.appendChild(model(r));
+  const content=$('round-content');content.replaceChildren();if(r.kind!=='discover')content.appendChild(model(r));
   if(r.kind==='discover')discoverBoard(r,content);
   else if(r.kind==='pairs')pairs(r,content);
   else if(TicModel.ordered(r))order(r,content);
