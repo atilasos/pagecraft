@@ -643,7 +643,8 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
         "render": "Termómetro visual à esquerda; recipiente central com moléculas animadas (círculos azuis) cuja velocidade e disposição refletem o estado; label grande com nome do estado e temperatura; fundo muda de cor (azul gelado → azul normal → vermelho quente)",
         "transition": "Arrastar slider de temperatura → moléculas ajustam velocidade e padrão (agrupadas/lentas para sólido, médias para líquido, dispersas/rápidas para gasoso) → label e fundo atualizam",
         "constraint": "A água muda de estado a exatamente 0°C (fusão/solidificação) e 100°C (ebulição/condensação)",
-        "assessment": "O aluno ajusta o slider para encontrar as duas temperaturas de mudança de estado e regista-as"
+        "assessment": "O aluno ajusta o slider para encontrar as duas temperaturas de mudança de estado e regista-as",
+        "adjustment": "Se não encontrar as duas temperaturas, retomar em pequeno grupo com um termómetro real e gelo antes de voltar ao slider"
       },
       "maker": {
         "type": "minecraft",
@@ -673,7 +674,8 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
         "render": "Paisagem com mar, montanha e céu; setas animadas mostram o movimento da água; quando 'Uma fase', destaca apenas a fase selecionada com cor e animação; quando 'Ciclo completo', todas as fases animam em sequência",
         "transition": "Selecionar fase → paisagem destaca essa parte do ciclo com animação; toggle ciclo completo → animação contínua de todas as fases em loop",
         "constraint": "O ciclo da água é contínuo — cada fase alimenta a seguinte, sem princípio nem fim",
-        "assessment": "O aluno descreve as 4 fases pela ordem correta e explica o que acontece em cada uma"
+        "assessment": "O aluno descreve as 4 fases pela ordem correta e explica o que acontece em cada uma",
+        "adjustment": "Se trocar a ordem das fases, pedir que explique a um colega o que acontece à água entre duas fases seguidas e rever o esquema em conjunto"
       },
       "maker": {
         "type": "whiteboard",
