@@ -21,7 +21,7 @@ Domínios: **Sociedade**, **Natureza**, **Tecnologia**, **Sociedade/Natureza/Tec
 | 1.º | `estudo-do-meio-1-ano-1-ciclo.md` | Identidade, família, corpo humano, seres vivos, objetos/materiais |
 | 2.º | `estudo-do-meio-2-ano-1-ciclo.md` | Comunidade, saúde, plantas/animais, experiências com materiais |
 | 3.º | `estudo-do-meio-3-ano-1-ciclo.md` | Portugal, meio local, sistemas corpo humano, estados da matéria, experimentação |
-| 4.º | `estudo-do-meio-4-ano-1-ciclo.md` | História de Portugal, ambiente, electricidade/magnetismo, tecnologia |
+| 4.º | `estudo-do-meio-4-ano-1-ciclo.md` | História de Portugal, ambiente, eletricidade/magnetismo, tecnologia |
 
 ### Matemática (1.º–4.º ano)
 Domínios: **Números e Operações**, **Geometria e Medida**, **Organização e Tratamento de Dados**, **Álgebra** (3.º-4.º)

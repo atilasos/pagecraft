@@ -374,7 +374,7 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
         },
         "challenge": {
           "type": "string",
-          "description": "Mais desafios — Desafio — extensão (mais variáveis, raciocínio abstracto)"
+          "description": "Mais desafios — Desafio — extensão (mais variáveis, raciocínio abstrato)"
         }
       }
     },
