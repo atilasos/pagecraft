@@ -7,7 +7,7 @@ Atividades HTML interativas, self-contained, para crianças do 1.º ciclo (6–1
 ### Diferenciação
 
 **Nível de diferenciação**:
-Um dos três percursos para a mesma meta e critério presentes em toda a atividade: **Com ajuda** (Apoio), **Sozinho** (Intermédio) e **Consigo ajudar um amigo** (Desafio). Os nomes descrevem o tipo de trabalho, não classificam a criança. Usar estes nomes nas interfaces e nas novas atividades, com marcadores neutros, sem metáforas de crescimento vegetal nem paleta semáforo. Os identificadores internos mantêm-se para preservar os registos existentes.
+Um dos três percursos para a mesma meta e critério presentes em toda a atividade: **Com ajuda** (Apoio), **Sozinho** (Intermédio) e **Consigo ajudar um amigo** (Desafio). Num par ou grupo, os rótulos passam ao plural: **Com ajuda**, **Sozinhos** e **Conseguimos ajudar outros**, para não confundir com a forma de trabalhar «Sozinho». Os nomes descrevem o tipo de trabalho, não classificam a criança. Usar estes nomes nas interfaces e nas novas atividades, com marcadores neutros, sem metáforas de crescimento vegetal nem paleta semáforo. Os identificadores internos mantêm-se para preservar os registos existentes.
 _Avoid_: dificuldade fácil/média/difícil, verde/amarelo/vermelho
 
 **Perfil de diferenciação**:
