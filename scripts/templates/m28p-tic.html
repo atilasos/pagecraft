@@ -9,13 +9,13 @@
 h1,h2,.task-title{font-size:30px}
 @media(max-width:600px){header,main{padding:14px 12px}header{justify-content:center}header h1{width:100%;text-align:center}.tools{justify-content:center;width:100%}.tools button{flex:1 1 120px}section{padding:18px 12px}.task-top{display:block}.task-title{text-align:center}.model{gap:10px;padding:12px 8px}.model .picture{width:100px;height:100px}.choices{gap:10px}.choices.hunt{grid-template-columns:repeat(2,minmax(0,1fr))}.pairs{gap:12px}.pair-card{font-size:28px;min-height:100px;padding:8px}.pair-card .picture{width:82px;height:82px}.badge{right:3px;top:3px}.nav{gap:10px}.nav button{flex:1 1 130px}.nav .primary{min-width:130px}.word{font-size:40px}.demo-card{font-size:32px;padding:12px}.pieces button,.tray button{font-size:36px;min-width:68px}.levelbar button{flex:1 1 100%}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
-.levelbar button{max-width:100%;min-width:56px;white-space:normal;overflow-wrap:anywhere}</style>
+.levelbar button{max-width:100%;min-width:56px;white-space:normal;overflow-wrap:anywhere}.choices .picture{display:block;width:150px;height:140px}.pieces{flex-wrap:wrap}.pieces button{min-width:64px}button:focus-visible{outline:4px solid var(--focus);outline-offset:3px}</style>
 <style>
 .model{flex-wrap:wrap}.pair-card{overflow-wrap:anywhere;min-width:0}.pair-card>span{max-width:100%}.visual-cue{outline:4px dashed #966625!important;outline-offset:3px;position:relative}.cue-icon{position:absolute;bottom:2px;left:4px;font-size:28px;line-height:1.1;border-radius:10px;background:var(--hint);color:var(--ink);padding:2px 6px}.comparison{display:flex;align-items:center;justify-content:center;gap:16px;background:var(--hint);border-radius:16px;padding:16px;flex-wrap:wrap;margin:18px 0}.comparison .sample{font-size:36px;display:flex;flex-wrap:wrap;justify-content:center}.letter-cue{background:#e9d1a6;outline:2px dashed #966625;border-radius:4px}.search-cue{outline:3px dashed #966625;outline-offset:2px}
-</style>
+.choices .picture{display:block;width:150px;height:140px}.pieces{flex-wrap:wrap}.pieces button{min-width:64px}button:focus-visible{outline:4px solid var(--focus);outline-offset:3px}</style>
 <style>
 .initialization-status{display:flex;gap:16px;align-items:center;justify-content:center;min-height:180px;padding:24px}.preparing-shape{width:48px;height:48px;border:6px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:preparing 1s linear infinite}@keyframes preparing{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.preparing-shape{animation:none}}
-</style>
+.choices .picture{display:block;width:150px;height:140px}.pieces{flex-wrap:wrap}.pieces button{min-width:64px}button:focus-visible{outline:4px solid var(--focus);outline-offset:3px}</style>
 </head>
 <body>
 <div id="initialization-status" class="initialization-status" role="status"><span class="preparing-shape" aria-hidden="true"></span><span>A preparar o jogo…</span></div>
@@ -35,12 +35,13 @@ h1,h2,.task-title{font-size:30px}
 /* BEGIN M28P TIC MODEL: funções puras verificáveis em Node. */
 const TicModel = (() => {
   const levels=['support','intermediate','challenge'];
-  const ordered=round=>['syllables','recall'].includes(round.kind);
+  const ordered=round=>['syllables','recall','listen-build','sentence','discover'].includes(round.kind);
   const ids=round=>(ordered(round)?round.pieces:round.options).map(option=>option.id);
-  const initial=()=>({version:3,page:-1,level:'intermediate',answers:{},confirmed:{},last:{},counts:{},aids:{},done:false,reflection:null});
+  const initial=()=>({version:3,page:-1,level:'intermediate',answers:{},confirmed:{},last:{},counts:{},aids:{},done:false,reflection:null,discoveries:{}});
   function cleanAnswer(round,value){
     if(!Array.isArray(value))return [];
     const allowed=ids(round);
+    if(round.kind==='discover'&&value.length===1&&value[0]==='finish')return ['finish'];
     if(round.kind==='pairs'){
       const usedLeft=new Set(),usedRight=new Set();
       return value.filter(item=>{
@@ -50,15 +51,18 @@ const TicModel = (() => {
         usedLeft.add(pair[0]);usedRight.add(pair[1]);return true;
       }).slice(0,allowed.length);
     }
-    return [...new Set(value.filter(id=>typeof id==='string'&&allowed.includes(id)))].slice(0,['match','gap'].includes(round.kind)?1:allowed.length);
+    return [...new Set(value.filter(id=>typeof id==='string'&&allowed.includes(id)))].slice(0,['match','gap','read-choose'].includes(round.kind)?1:(round.length||allowed.length));
   }
   function validAnswer(round,value){
     if(!Array.isArray(value)||!value.length||JSON.stringify(cleanAnswer(round,value))!==JSON.stringify(value))return false;
     if(round.kind==='pairs')return value.length===round.options.length;
-    return !ordered(round)||value.length===round.pieces.length;
+    if(round.kind==='discover')return value[0]==='finish'||(value.length>=2&&value.length<=3);
+    return !ordered(round)||value.length===(round.length||round.pieces.length);
   }
   function signature(round,value){return JSON.stringify(ordered(round)?value.map(id=>round.pieces.find(piece=>piece.id===id)?.label||id):[...value].sort());}
+  const discovery=(round,value)=>round.lexicon?.find(w=>w.label===value.map(id=>round.pieces.find(p=>p.id===id)?.label||'').join(''));
   function correct(round,value){
+    if(round.kind==='discover')return !!discovery(round,value);
     if(!validAnswer(round,value))return false;
     const answer=round.kind==='pairs'?round.options.map(option=>option.id+'='+option.id):round.answer;
     return signature(round,value)===signature(round,answer);
@@ -70,9 +74,10 @@ const TicModel = (() => {
     const clean=initial();if(!raw||raw.version!==3)return clean;
     if(levels.includes(raw.level))clean.level=raw.level;
     for(const round of data.rounds){
+      if(round.kind==='discover'&&raw.discoveries?.[round.id])clean.discoveries[round.id]=[...new Set((raw.discoveries?.[round.id]||[]).filter(label=>round.lexicon.some(w=>w.label===label)))];
       const value=cleanAnswer(round,raw.answers?.[round.id]);
       if(value.length)clean.answers[round.id]=value;
-      if(raw.confirmed?.[round.id]===true&&validAnswer(round,value))clean.confirmed[round.id]=true;
+      if(raw.confirmed?.[round.id]===true&&validAnswer(round,value)&&(round.kind!=='discover'||value[0]==='finish'||discovery(round,value)))clean.confirmed[round.id]=true;
       const last=cleanAnswer(round,raw.last?.[round.id]);
       if(validAnswer(round,last))clean.last[round.id]=last;
       const count=raw.counts?.[round.id];
@@ -89,11 +94,14 @@ const TicModel = (() => {
   function confirm(state,round){
     const value=state.answers[round.id];if(!validAnswer(round,value))return {accepted:false,emit:false};
     const emit=!state.last[round.id]||signature(round,state.last[round.id])!==signature(round,value);
-    state.confirmed[round.id]=true;
+    const candidate=round.kind==='discover'?discovery(round,value):null;
+    const found=candidate&&!Object.entries(state.discoveries).some(([id,labels])=>id!==round.id&&labels.includes(candidate.label))?candidate:null;
+    state.confirmed[round.id]=round.kind!=='discover'||!!found||value[0]==='finish';
+    if(found){const box=state.discoveries[round.id]||=[];if(!box.includes(found.label))box.push(found.label);}
     if(emit){state.last[round.id]=value.slice();state.counts[round.id]=(state.counts[round.id]||0)+1;}
     return {accepted:true,emit,correct:correct(round,value)};
   }
-  return {levels,ordered,ids,initial,cleanAnswer,validAnswer,signature,correct,answered,complete,accessible,sanitize,edit,confirm};
+  return {levels,ordered,ids,discovery,initial,cleanAnswer,validAnswer,signature,correct,answered,complete,accessible,sanitize,edit,confirm};
 })();
 /* END M28P TIC MODEL */
 (() => {
@@ -113,7 +121,7 @@ function picture(svg,label,className=''){const element=node('span',undefined,'pi
 function stopAudio(){if(audio){audio.pause();audio=null;}}
 function play(key){
   stopAudio();aid(key==='word'?'audio_word_requested':'audio_instruction_requested');checkpoint();soundEnabled=true;$('mute').hidden=false;$('mute').textContent='Desligar som';$('mute').setAttribute('aria-pressed','false');
-  const source=data.audio?.[key]||data.audio?.instruction;
+  const source=(key==='word'?round()?.target?.audio:null)||data.audio?.[key]||data.audio?.instruction;
   if(!source){$('audio-status').textContent='Vê o exemplo no botão ?.';return;}
   audio=new Audio(source);audio.addEventListener('error',()=>{$('audio-status').textContent='Vê o exemplo no botão ?.';});
   audio.play().then(()=>{$('audio-status').textContent='';}).catch(()=>{$('audio-status').textContent='Carrega em Ouvir outra vez.';});
@@ -128,6 +136,7 @@ function selected(){return state.answers[round().id]||[];}
 function edit(value){revisionHint=window.PageCraftSupport?.currentHintId()||revisionHint;TicModel.edit(state,round(),value);revision++;context();checkpoint();renderGame();}
 function showModel(r){return state.level==='support'||(r.kind!=='recall'&&(['match','hunt'].includes(r.kind)||(state.level==='intermediate'&&r.model)));}
 function model(r){
+  if(r.target)return cycleModel(r);
   const box=node('div',undefined,'model');
   if(state.level!=='challenge'||!showModel(r))box.appendChild(picture(data.word.image,data.word.label));
   if(showModel(r)){
@@ -141,10 +150,37 @@ function model(r){
   if(state.confirmed[r.id]&&!TicModel.correct(r,selected()))box.classList.add('hint-model');
   return box;
 }
+function cycleModel(r){
+  const box=node('div',undefined,'model'),t=r.target;
+  if(r.kind==='read-choose')box.appendChild(node('span',t.label,'word'));
+  else if(r.kind==='sentence'&&state.level!=='challenge')box.appendChild(picture(t.image,t.text));
+  if(state.level==='support'&&r.kind!=='read-choose'&&r.kind!=='discover'){
+    aid('model_shown');box.appendChild(node('span',(t.tokens||t.syllables).join(' · '),'word'));
+  }
+  if(r.kind!=='discover'){const hear=button('🔊',()=>play('word'));hear.setAttribute('aria-label',r.kind==='sentence'?'Ouvir a frase':'Ouvir a palavra');box.appendChild(hear);}
+  return box;
+}
+function discoverBoard(r,container){
+  const tray=node('div',undefined,'tray');
+  selected().filter(id=>id!=='finish').forEach((id,i)=>tray.appendChild(button(r.pieces.find(p=>p.id===id).label,()=>edit(selected().filter((_,j)=>i!==j)))));
+  const board=node('div',undefined,'pieces');
+  for(const label of [...new Set(r.pieces.map(p=>p.label))].sort()){
+    const available=r.pieces.find(p=>p.label===label&&!selected().includes(p.id));
+    const b=button(label,()=>edit([...selected().filter(id=>id!=='finish'),available.id]));b.disabled=!available||selected().length>=3;b.dataset.piece=available?.id;board.appendChild(b);
+  }
+  const box=node('div');box.appendChild(node('h3','Caixa de palavras'));
+  for(const label of [...new Set(Object.values(state.discoveries).flat())]){
+    const w=r.lexicon.find(w=>w.label===label);if(!w)continue;
+    const card=button(label,()=>{stopAudio();aid('audio_word_requested');checkpoint();audio=new Audio(w.audio);audio.play().catch(()=>{});});
+    if(w.image)card.appendChild(picture(w.image,w.label));box.appendChild(card);
+  }
+  const end=button('Terminar a ronda',()=>{edit(['finish']);confirm();});
+  container.append(tray,board,box,end);
+}
 function toggle(id){const values=selected();edit(round().kind==='hunt'?(values.includes(id)?values.filter(value=>value!==id):[...values,id]):[id]);}
 function choices(r,container){
   const choices=node('div',undefined,'choices'+(r.kind==='hunt'?' hunt':''));
-  for(const option of r.options){const item=button(option.label,()=>toggle(option.id));item.dataset.option=option.id;item.dataset.focus='option-'+option.id;item.setAttribute('aria-pressed',String(selected().includes(option.id)));choices.appendChild(item);}
+  for(const option of r.options){const item=button(r.kind==='read-choose'?'':option.label,()=>toggle(option.id));if(r.kind==='read-choose'){item.appendChild(picture(option.image,option.label));item.setAttribute('aria-label','Imagem: '+option.label);}item.dataset.option=option.id;item.dataset.focus='option-'+option.id;item.setAttribute('aria-pressed',String(selected().includes(option.id)));choices.appendChild(item);}
   container.appendChild(choices);
 }
 function pairs(r,container){
@@ -179,14 +215,15 @@ function pairs(r,container){
 function order(r,container){
   const tray=node('div',undefined,'tray');tray.setAttribute('aria-label','A tua palavra. Toca numa '+(r.unit==='letter'?'letra':'sílaba')+' para a retirar.');
   selected().forEach((id,index)=>{const piece=r.pieces.find(piece=>piece.id===id);const item=button(piece.label,()=>edit(selected().filter((_,i)=>i!==index)));item.setAttribute('aria-label','Retirar '+piece.label);item.dataset.focus='placed-'+id;tray.appendChild(item);});
-  for(let i=selected().length;state.level!=='challenge'&&i<r.pieces.length;i++){const slot=node('span',undefined,'empty-slot');slot.setAttribute('aria-hidden','true');tray.appendChild(slot);}
+  for(let i=selected().length;state.level!=='challenge'&&i<(r.length||r.pieces.length);i++){const slot=node('span',undefined,'empty-slot');slot.setAttribute('aria-hidden','true');tray.appendChild(slot);}
   const pieces=node('div',undefined,'pieces');pieces.setAttribute('role','group');pieces.setAttribute('aria-label',(r.unit==='letter'?'Letras':'Sílabas')+' para escolher');
-  for(const piece of r.pieces){const item=button(piece.label,()=>edit([...selected(),piece.id]));item.dataset.piece=piece.id;item.dataset.focus='piece-'+piece.id;item.disabled=selected().includes(piece.id);pieces.appendChild(item);}
+  for(const piece of r.pieces){const item=button(piece.label,()=>edit([...selected(),piece.id]));item.dataset.piece=piece.id;item.dataset.focus='piece-'+piece.id;item.disabled=selected().includes(piece.id)||selected().length>=(r.length||r.pieces.length);pieces.appendChild(item);}
   container.append(tray,pieces);
 }
 function markCue(element){if(!element)return;element.classList.add('visual-cue');const cue=node('span','↻','cue-icon');cue.setAttribute('aria-hidden','true');element.appendChild(cue);}
 function visualFeedback(r,container){
   if(!state.confirmed[r.id]||TicModel.correct(r,selected()))return;
+  if(r.kind==='discover')return;
   if(TicModel.ordered(r)){
     const labels=selected().map(id=>r.pieces.find(piece=>piece.id===id).label),expected=r.answer.map(id=>r.pieces.find(piece=>piece.id===id).label);
     const index=labels.findIndex((label,index)=>label!==expected[index]);markCue(container.querySelector('.tray')?.children[index]);
@@ -209,6 +246,7 @@ function visualFeedback(r,container){
 }
 function feedback(r){
   const box=$('feedback');box.replaceChildren();box.classList.remove('ok');
+  if(r.kind==='discover'){if(state.last[r.id]){const found=TicModel.discovery(r,selected());box.textContent=found?'Encontraste: '+found.label:selected()[0]==='finish'?'Podes continuar.':'Essa não está na nossa lista';}return;}
   if(!state.confirmed[r.id])return;
   const correct=TicModel.correct(r,selected());box.classList.toggle('ok',correct);box.appendChild(node('span',correct?'✓':'↻','icon'));box.appendChild(node('span',correct?'Encontraste!':'Podes experimentar outra vez.'));
   if(!correct){const help=button('? Ver',()=>openDemo());help.setAttribute('aria-label','Ver como se faz');box.appendChild(help);}
@@ -222,7 +260,8 @@ function renderGame(){
   const progress=$('progress');progress.replaceChildren();progress.setAttribute('aria-label','Ronda '+(state.page+1)+' de '+data.rounds.length);
   data.rounds.forEach((_,index)=>{const dot=node('span');if(TicModel.answered(data,state,index))dot.className='complete';if(index===state.page)dot.classList.add('current');progress.appendChild(dot);});
   const content=$('round-content');content.replaceChildren();content.appendChild(model(r));
-  if(r.kind==='pairs')pairs(r,content);
+  if(r.kind==='discover')discoverBoard(r,content);
+  else if(r.kind==='pairs')pairs(r,content);
   else if(TicModel.ordered(r))order(r,content);
   else {if(r.kind==='gap'){const gap=node('div',undefined,'gap-word');(r.gap||[]).forEach(value=>gap.appendChild(node('span',value||'?',value?'':'empty-slot')));content.appendChild(gap);}choices(r,content);}
   $('support-panel').dataset.pagecraftSupport=unit();
@@ -254,16 +293,23 @@ function move(index){
 function confirm(){
   const r=round(),value=selected().slice(),result=TicModel.confirm(state,r);if(!result.accepted)return;
   revision++;context();
-  if(result.emit&&restored){const detail={value,question:r.prompt,task_id:r.id,activity:data.slug,field:r.id,level:state.level,aids:{...state.aids[r.id]},model_visible:showModel(r)};if(revisionHint)detail.after_hint_id=revisionHint;window.PageCraftBridge?.attempt(unit(),result.correct,detail);}
-  revisionHint=null;checkpoint();renderGame();$('next').focus();
+  if(result.emit&&restored){const detail={value,question:r.prompt,task_id:r.id,activity:data.slug,field:r.id,level:state.level,aids:{...state.aids[r.id]},model_visible:showModel(r)};if(revisionHint)detail.after_hint_id=revisionHint;if(r.kind==='discover')window.PageCraftBridge?.emit('attempt',unit(),{detail:{...detail,discoveries:state.discoveries[r.id]||[]}});else window.PageCraftBridge?.attempt(unit(),result.correct,detail);}
+  revisionHint=null;checkpoint();renderGame();if(r.kind==='discover'&&TicModel.discovery(r,value))play('word');if(state.confirmed[r.id])$('next').focus();
 }
 function setLevel(level,emit=true){if(!TicModel.levels.includes(level))return;state.level=level;revision++;revisionHint=null;if(emit)window.PageCraftBridge?.levelChanged(unit(),level);render();context();checkpoint(emit);}
-function finish(){state.done=true;stopAudio();checkpoint();render();$('finish-button').focus();}
+function finish(){if(data.rounds[0].target&&state.level==='challenge')$('finish-picture').appendChild(node('p','Se quiseres, explica a um amigo como leste.'));state.done=true;stopAudio();checkpoint();render();$('finish-button').focus();}
 const demoTexts={match:'Toca na palavra igual.',pairs:'Toca na imagem. Toca na palavra.',hunt:'Toca nas palavras iguais. Confirma.',syllables:'Toca nas peças por ordem.',gap:'Escolhe a peça que falta.',recall:'Ouve. Junta as peças.'};
 function demoPicture(target=false){const card=demoCard('',target);const image=picture(data.word.image,data.word.label);image.style.width='120px';image.style.height='100px';card.prepend(image);return card;}
 function demoCard(text,target=false){const card=node('div',text,'demo-card'+(target?' target':''));if(target){const hand=node('span','☝','demo-hand');hand.setAttribute('aria-hidden','true');card.appendChild(hand);}return card;}
 function paintDemo(step){
   const kind=data.game,r=data.rounds[Math.max(0,state.page)],stage=$('demo-stage');stage.replaceChildren();
+  if(r.target){
+    const target=r.kind==='discover'?r.lexicon.find(w=>w.syllables.length>=2):r.target;
+    stage.appendChild(demoCard(target.text||target.label));
+    if(r.kind==='read-choose')stage.appendChild(picture(target.image,target.label));
+    else (target.tokens||target.syllables).forEach((part,i)=>stage.appendChild(demoCard(part,i===step)));
+    $('demo-caption').textContent=data.instruction;return;
+  }
   if(kind==='pairs'){stage.append(demoPicture(step===0),node('span','→','demo-arrow'),demoCard(data.word.label,step>0));}
   else if(['syllables','recall'].includes(kind)){
     stage.append(kind==='recall'?demoPicture():demoCard(data.word.label),node('span','→','demo-arrow'));
@@ -284,6 +330,7 @@ function runDemo(){clearTimeout(demoTimer);paintDemo(0);if(!window.matchMedia('(
 function openDemo(){stopAudio();pendingPair=null;aid('demo_shown');checkpoint();demoOpen=true;render();runDemo();$('demo-close').focus();}
 function closeDemo(){clearTimeout(demoTimer);demoOpen=false;if(state.page<0)move(0);else render();if(state.page>=0){$('prompt').tabIndex=-1;$('prompt').focus();}}
 function restore(raw){state=TicModel.sanitize(data,raw);if(hostLevel)state.level=hostLevel;restored=true;revision++;revisionHint=null;pendingPair=null;started.clear();render();context();checkpoint();}
+if(data.rounds[0].target){const undo=button('Desfazer',()=>edit(selected().slice(0,-1)));undo.id='undo';$('confirm').parentNode.prepend(undo);}
 $('game-title').textContent=data.title;$('intro-word').textContent=data.word.label;$('intro-picture').appendChild(picture(data.word.image,data.word.label));$('finish-picture').appendChild(picture(data.word.image,data.word.label));
 $('start').addEventListener('click',openDemo);$('demo-open').addEventListener('click',openDemo);$('demo-close').addEventListener('click',closeDemo);$('demo-again').addEventListener('click',runDemo);
 $('hear').addEventListener('click',()=>play(state.page<0?'start':demoOpen?'instruction':'instruction'));
