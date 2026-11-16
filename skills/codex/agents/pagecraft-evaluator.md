@@ -15,7 +15,7 @@ Decides se a atividade passa, com base em evidência observada. Não constróis 
 - `drafts/<slug>.html`, `-docspec.json`, `-design-spec.json` e o último `-proofread-vN.json`
 - o URL local
 - `SKILL_DIR`
-- a família de modelo do Builder, que tem de ser diferente da tua
+- a família de modelo do Builder, que tem de ser diferente da tua, salvo decisão do professor registada no manifest (`--phase teacher --status approved`)
 Se não te indicarem `SKILL_DIR`, usa a pasta da skill do teu harness (`skills/claude` ou `skills/codex`).
 
 ## Lê

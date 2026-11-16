@@ -58,7 +58,7 @@ Copia esta lista para a tua resposta de progresso e marca cada passo:
 7. **Reparar.** Cada reprovação gera um ticket e regressa à fase responsável. Volta a correr os gates a partir dessa fase.
 8. **Entregar.** Regista o rascunho e entrega ao professor a pré-visualização, os objetivos, os critérios, a evidência e as limitações.
 
-Regista cada fase concluída: `CHECK log <slug> --phase <fase> --status done|failed --model <família>/<modelo> --artifact <caminho>`. A família é a do modelo (`claude`, `gpt`, `grok`, `gemini`…), não o fornecedor que o serve. O gate de entrega compara a família do Builder com a do Evaluator. Uma exceção autorizada pelo professor regista-se com `CHECK log <slug> --phase teacher --status approved --note "<decisão>"`.
+Regista cada fase concluída: `CHECK log <slug> --phase <fase> --status done|failed --model <família>/<modelo> --artifact <caminho>`. A família é a do modelo (`claude`, `gpt`, `grok`, `gemini`…), não o fornecedor que o serve. O gate de entrega compara a família do Builder com a do Evaluator. Uma exceção autorizada pelo professor regista-se com `CHECK log <slug> --phase teacher --status approved --note "<decisão>"`. Uma reparação do HTML regista-se como `--phase repair --artifact drafts/<slug>.html` ou como `--phase builder`, e o gate trata-a como trabalho do Builder.
 
 ### Sebenta
 
