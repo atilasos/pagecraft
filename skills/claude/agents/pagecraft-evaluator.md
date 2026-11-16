@@ -32,7 +32,7 @@ Usa o primeiro destes que estiver disponível:
 2. A skill `agent-browser-hub` com o perfil `research` ou `temporary`. Fecha a sessão no fim.
 3. Nenhum: regista `blocked_by` e põe `pass:false`, ou julga a evidência que o orquestrador te entregar.
 
-Para servir a página: `python3 -m http.server 8765 --bind 127.0.0.1` na raiz do repositório e `http://127.0.0.1:8765/drafts/<slug>.html`. Antes, confirma que a porta está livre.
+Para servir a página: `python3 -m http.server 8790 --bind 127.0.0.1` na raiz do repositório e `http://127.0.0.1:8790/drafts/<slug>.html`. A porta 8765 é da Sebenta e a 8777 é do Studio. Antes, confirma que a 8790 está livre e, no fim, para o servidor que arrancaste.
 
 ## Percorre e regista evidência
 
