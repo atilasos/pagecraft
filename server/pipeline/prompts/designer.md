@@ -36,7 +36,7 @@ Gerar um **design-spec.json** que define o sistema visual completo da atividade,
   "functional": {
     "ok":    "oklch(... 150)",
     "warn":  "oklch(... 85)",
-    "focus": "anel ≥3:1 contra bg e primary (por defeito, o ink)"
+    "focus": "oklch(0.22 0.02 260)"
   },
   "typography": {
     "fontFamily": "'Century Gothic', 'Didact Gothic', 'URW Gothic', 'Avant Garde', sans-serif",
