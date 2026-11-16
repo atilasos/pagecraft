@@ -7,7 +7,7 @@ Guia operacional para o Architect, Designer e Builder traduzirem **faixa etária
 1. **Idade não é só vocabulário** — afeta tipografia, motricidade, tempo de atenção, formato de instruções e modalidade (texto/áudio/visual).
 2. **Redundância de canais** — para 4–7 anos, qualquer informação importante deve estar em pelo menos dois canais (texto + ícone, texto + áudio, cor + texto).
 3. **Cor nunca é semântica única** — daltonismo afeta ~8% dos rapazes; em sala de aula é certo que existe.
-4. **Sem feedback punitivo** — vermelho de erro está banido. Use âmbar com mensagem do tipo "quase! tenta outra vez" e ícone ↻.
+4. **Sem feedback punitivo** — vermelho de erro está banido. Use âmbar e ícone ↻, com uma mensagem que descreve o que a criança fez e pergunta ("Puseste 3. Que acontece se puseres mais um?").
 
 ## Mínimos por faixa
 
@@ -80,6 +80,6 @@ Fora do pipeline do Studio, depois de guardar ou reparar o rascunho e antes da r
 ## Comunicação com o aluno
 
 - Tratamento por **tu**.
-- Microcopy de erro **convida a tentar de novo** e nunca culpa. Ex.: *"Quase! Que tal experimentar outra peça?"* — nunca *"Errado"*.
+- Microcopy de erro **descreve e pergunta** e nunca culpa. Ex.: *"Escolheste a peça azul. Cabe no espaço?"* — nunca *"Errado"*.
 - Microcopy de acerto **celebra a descoberta**, não o desempenho. Ex.: *"Encontraste! Já sabes que…"* — preferir descrever o que se descobriu a só *"Correto!"*.
 - Em ações destrutivas (reiniciar/limpar), pedir confirmação curta e visual.
