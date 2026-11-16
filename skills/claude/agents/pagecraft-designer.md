@@ -35,7 +35,7 @@ Se não te indicarem `SKILL_DIR`, usa a pasta da skill do teu harness (`skills/c
 
 ## Antes de terminar
 
-Corre `uv run python "$SKILL_DIR/scripts/pagecraft_check.py" check <slug>` até não haver erros no design-spec.
+Corre `uv run python "$SKILL_DIR/scripts/pagecraft_check.py" check <slug> --phase designer` até não haver erros no design-spec.
 
 ## Devolve
 

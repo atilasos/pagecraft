@@ -41,7 +41,7 @@ Depois de escrever ou corrigir o HTML, corre:
 ```bash
 uv run python scripts/embed_activity_support.py --activity drafts/<slug>.html --docspec drafts/<slug>-docspec.json
 uv run python scripts/embed_gothic_font.py --activity drafts/<slug>.html
-uv run python "$SKILL_DIR/scripts/pagecraft_check.py" check <slug>
+uv run python "$SKILL_DIR/scripts/pagecraft_check.py" check <slug> --phase builder
 ```
 
 Repete até o check sair com 0. Se o DocSpec declarar uma tarefa externa, a ligação para fora é a única exceção aceite e tens de a justificar.

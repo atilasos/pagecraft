@@ -36,14 +36,14 @@ Copia esta lista para a tua resposta de progresso e marca cada passo:
 
 ```text
 - [ ] 0 Pedido normalizado e manifest iniciado
-- [ ] 1 Fontes da Sebenta e DocSpec (Architect)    → CHECK check sem erros
+- [ ] 1 Fontes da Sebenta e DocSpec (Architect)    → CHECK check <slug> --phase architect
 - [ ] 2 Guia do professor (build_markdown.py)
-- [ ] 3 Design-spec (Designer)                     → CHECK check sem erros
-- [ ] 4 HTML e incorporações (Builder)             → CHECK check sem erros
-- [ ] 5 Revisão linguística (Proofreader)          → proofread-vN válido
-- [ ] 6 Avaliação no browser (Evaluator)           → evaluation-vN válido
+- [ ] 3 Design-spec (Designer)                     → CHECK check <slug> --phase designer
+- [ ] 4 HTML e incorporações (Builder)             → CHECK check <slug> --phase builder
+- [ ] 5 Revisão linguística (Proofreader)          → CHECK check <slug> --phase proofreader
+- [ ] 6 Avaliação no browser (Evaluator)           → CHECK check <slug> --phase evaluator
 - [ ] 7 Reparações até PASS (no máximo 3 iterações)
-- [ ] 8 Rascunho registado e entregue para revisão do professor
+- [ ] 8 Rascunho registado e entregue              → CHECK check <slug> --phase delivery
 ```
 
 0. **Normalizar o pedido.** Fixa tema, ano, duração, línguas (só `pt` por defeito), maker (`none` por defeito), restrições, ligação ao trabalho da turma quando o professor a indicar, e o slug. Inicia o manifest com `CHECK log <slug> --phase orchestrator --status planning`. Pergunta ao professor apenas o que mudaria materialmente a atividade.
@@ -74,7 +74,7 @@ Em `sources.md`, separa o que é Fonte, o que é Síntese da wiki e o que é pro
 
 ## Gates e reparação
 
-- **Gate determinístico:** `CHECK check <slug>` termina com código 0. Só uma ligação externa a uma aplicação que o DocSpec declara como tarefa externa pode ficar como exceção, e a justificação vai para o manifest com `--note`. Os avisos são lidos e corrigidos ou justificados.
+- **Gate determinístico:** `CHECK check <slug> --phase <fase>` termina com código 0. Valida só os artefactos até essa fase, exige as saídas dela e aplica as regras de aprovação: seis scores ≥3, evidência e nenhum `blocked_by` quando `pass:true`, e unidades que cabem na duração. Numa reparação, corre o gate da fase reparada e depois o das seguintes. Só uma ligação externa a uma aplicação que o DocSpec declara como tarefa externa pode ficar como exceção, e a justificação vai para o manifest com `--note`. Os avisos são lidos e corrigidos ou justificados.
 - **Gate do browser:** o Evaluator só aprova com evidência observada. Sem browser, `pass:false` e `blocked_by`. Uma análise estática não demonstra usabilidade.
 - **Encaminhamento:**
   - JS, CSS, layout ou acessibilidade técnica → Builder;
@@ -89,7 +89,7 @@ Em `sources.md`, separa o que é Fonte, o que é Síntese da wiki e o que é pro
 
 Uma atividade está pronta para o professor quando:
 
-- `CHECK check <slug>` sai com 0, ou com a exceção justificada;
+- `CHECK check <slug> --phase delivery` sai com 0, ou com a exceção justificada;
 - existem o guia `<slug>.md` e as fontes `<slug>-sources.md`;
 - o último `evaluation-vN` tem `pass:true`, sem problemas críticos e com todos os scores ≥3;
 - a página abre sem erros na consola e a interação principal funciona;

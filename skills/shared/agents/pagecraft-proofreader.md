@@ -39,6 +39,8 @@ O caminho vem de `uv run python "$SKILL_DIR/scripts/pagecraft_check.py" next <sl
 - cada issue tem também `severity`, `location`, `original`, `suggestion` e `reason`;
 - `pass:false` sempre que houver uma issue `high` ou `critical`.
 
+Antes de terminar, corre `uv run python "$SKILL_DIR/scripts/pagecraft_check.py" check <slug> --phase proofreader` até sair com 0.
+
 ## Devolve
 
 O caminho do relatório, o número de issues por severidade e as que são estruturais, isto é, as que devem seguir para o Architect.

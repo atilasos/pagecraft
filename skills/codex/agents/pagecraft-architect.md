@@ -42,7 +42,7 @@ Se não te indicarem `SKILL_DIR`, usa a pasta da skill do teu harness (`skills/c
 
 ## Antes de terminar
 
-Corre `uv run python "$SKILL_DIR/scripts/pagecraft_check.py" check <slug>` até não haver erros no DocSpec. Os erros do HTML ainda não se aplicam nesta fase. Nas reparações, altera só o que o ticket aponta e diz que unidades mudaram.
+Corre `uv run python "$SKILL_DIR/scripts/pagecraft_check.py" check <slug> --phase architect` até não haver erros no DocSpec. Nas reparações, altera só o que o ticket aponta e diz que unidades mudaram.
 
 ## Devolve
 

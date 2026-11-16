@@ -13,8 +13,8 @@ O orquestrador é a sessão que carregou a skill. Coordena, lança as fases, cor
 2. **Claude Code sem T3:** usa os subagentes `pagecraft-*` com a ferramenta `Agent`. O `model:` do frontmatter já aplica a classe indicada abaixo. Para a independência, corre o Builder no Codex com `/codex:rescue` quando o plugin existir.
 3. **Codex sem T3:** usa os subagentes do Codex com o ficheiro de fase como instrução. Para a independência, corre o Proofreader e o Evaluator noutra família quando houver um CLI disponível (por exemplo, `claude -p`).
 
-Se não houver segundo fornecedor, regista `--note "independência indisponível"` na entrada do Evaluator e declara-o ao professor na entrega.
-4. **Sem delegação:** executa as fases em sequência e escreve o artefacto de cada uma antes de começar a seguinte. Não mistures responsabilidades.
+Se não houver segundo fornecedor, o Evaluator não aprova. Entrega o rascunho com a limitação declarada e pede ao professor uma decisão: autorizar a revisão na mesma família ou disponibilizar outro fornecedor. A decisão fica no manifest com `--note`.
+4. **Sem delegação:** executa as fases em sequência e escreve o artefacto de cada uma antes de começar a seguinte. Não mistures responsabilidades. A mesma sessão pode produzir, mas não pode aprovar o que produziu: sem revisão independente, o Evaluator não emite `pass:true`.
 
 ## Classe de modelo por fase
 
@@ -32,8 +32,8 @@ Escolhe pela classe, não por um nome fixo. Os exemplos são indicativos; o que 
 As regras de família:
 
 - **Independência:** quem revê ou avalia é de família diferente de quem escreveu o artefacto. Se o Builder for Claude, o Evaluator é GPT ou Grok (Cursor). Regista o par autor/revisor no manifest.
-- **Terceira família:** Grok 4.x via Cursor serve como crítico independente quando já há duas famílias envolvidas, ou para uma segunda opinião sobre o DocSpec em atividades de duas ou mais unidades.
-- **Indisponibilidade:** se o modelo pedido não existir, usa outro da mesma classe e de família diferente do autor, e diz isso ao professor. Não substituas em silêncio.
+- **Terceira família:** Grok via Cursor serve como crítico independente quando já há duas famílias envolvidas, ou para uma segunda opinião sobre o DocSpec em atividades de duas ou mais unidades.
+- **Indisponibilidade:** se faltar um modelo que o professor pediu, diz-lho e espera autorização antes de o substituir. Se faltar só o exemplo por defeito, escolhe outro da mesma classe e de família diferente da do autor, e regista-o no manifest.
 
 ## Brief de cada delegado
 
