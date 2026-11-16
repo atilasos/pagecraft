@@ -6,6 +6,8 @@ Decisões do professor consolidadas em 01/10/2026. Esta referência é comum à 
 
 Planear a divisão de páginas caso a caso, conforme objetivos, interações e atenção exigida. Registar no DocSpec os pedidos obrigatórios de cada etapa e como a criança lhes responde. A banda desenhada «Imagina / Experimenta / Repara» foi aprovada para Frações com Minecraft do 2.º ano; outras atividades podem usar outra organização.
 
+Quando a duração o permitir, a atividade fecha com algo comunicável (um registo, uma frase, um problema para outro grupo), mesmo sem maker.
+
 A ação deve perceber-se ao olhar: mostrar o objeto, o local onde tocar ou colocar e uma pista visual junto da ação. Usar instruções curtas, uma ação principal por momento e texto adicional apenas quando ajuda a criança. Escolher representações do tema e estados visíveis de seleção, evitando longas explicações e decoração sem função. A pista apoia a descoberta sem antecipar a resposta.
 
 ## Apoio durante o trabalho
@@ -16,7 +18,7 @@ Cada atividade nova tem um plano de apoio no DocSpec, com objetivo e critérios 
 
 Uma Página respondida tem resposta a todos os pedidos obrigatórios, mesmo com erros. O acerto não é condição para avançar. Se houver páginas sequenciais, bloquear «Seguinte» e saltos para etapas futuras enquanto faltar uma resposta; indicar junto do controlo o pedido em falta. Permitir voltar e corrigir.
 
-Distinguir uma resposta vazia de uma confirmação intencional de uma representação vazia. Quando pintar, construir ou manipular exige confirmação, oferecer uma ação explícita para confirmar. Respostas erradas recebem feedback automático imediato, começando por uma pista visual que permite corrigir; acrescentar uma frase curta quando necessário. Manter a mesma regra de avanço por respostas após a correção.
+Distinguir uma resposta vazia de uma confirmação intencional de uma representação vazia. Quando pintar, construir ou manipular exige confirmação, oferecer uma ação explícita para confirmar. Respostas erradas recebem feedback automático imediato, começando por uma pista visual que permite corrigir; acrescentar uma frase curta quando necessário. O primeiro feedback descreve o que a criança fez e faz uma pergunta («Puseste… Que acontece se…?»); a correção é feita pela criança, porque o erro é informação. Cada aviso ou estado é recalculado a cada atualização e removido quando a condição deixa de existir. Manter a mesma regra de avanço por respostas após a correção.
 
 Nos pedidos em Minecraft ou noutra aplicação externa, pedir «Já fizemos» e uma resposta curta sobre o trabalho. Registar essa construção como declaração da criança. A página não observa automaticamente a aplicação externa.
 

@@ -30,7 +30,7 @@
     },
     "objectives": {
       "type": "array",
-      "description": "Objectivos de aprendizagem (2-4)",
+      "description": "Objetivos de aprendizagem (2-4)",
       "items": {
         "type": "string"
       },
@@ -224,7 +224,7 @@
         },
         "transition": {
           "type": "string",
-          "description": "Como acções do utilizador modificam o estado"
+          "description": "Como ações do utilizador modificam o estado"
         },
         "constraint": {
           "type": "string",
@@ -233,6 +233,10 @@
         "assessment": {
           "type": "string",
           "description": "O que o aluno deve demonstrar; critério observável"
+        },
+        "adjustment": {
+          "type": "string",
+          "description": "Decisão do professor se a evidência mostrar dificuldade (mais apoio, repetir, avançar); aparece no guia"
         }
       }
     },
@@ -357,11 +361,11 @@
         },
         "standard": {
           "type": "string",
-          "description": "Passo a passo — Intermédio — objectivo esperado"
+          "description": "Passo a passo — Intermédio — objetivo esperado"
         },
         "challenge": {
           "type": "string",
-          "description": "Mais desafios — Desafio — extensão (mais variáveis, raciocínio abstracto)"
+          "description": "Mais desafios — Desafio — extensão (mais variáveis, raciocínio abstrato)"
         }
       }
     },

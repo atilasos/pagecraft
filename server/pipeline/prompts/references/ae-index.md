@@ -18,17 +18,17 @@ Domínios: **Sociedade**, **Natureza**, **Tecnologia**, **Sociedade/Natureza/Tec
 
 | Ano | Ficheiro | Temas-chave |
 |---|---|---|
-| 1.º | `estudo-do-meio-1-ano-1-ciclo.md` | Identidade, família, corpo humano, seres vivos, objectos/materiais |
+| 1.º | `estudo-do-meio-1-ano-1-ciclo.md` | Identidade, família, corpo humano, seres vivos, objetos/materiais |
 | 2.º | `estudo-do-meio-2-ano-1-ciclo.md` | Comunidade, saúde, plantas/animais, experiências com materiais |
 | 3.º | `estudo-do-meio-3-ano-1-ciclo.md` | Portugal, meio local, sistemas corpo humano, estados da matéria, experimentação |
-| 4.º | `estudo-do-meio-4-ano-1-ciclo.md` | História de Portugal, ambiente, electricidade/magnetismo, tecnologia |
+| 4.º | `estudo-do-meio-4-ano-1-ciclo.md` | História de Portugal, ambiente, eletricidade/magnetismo, tecnologia |
 
 ### Matemática (1.º–4.º ano)
 Domínios: **Números e Operações**, **Geometria e Medida**, **Organização e Tratamento de Dados**, **Álgebra** (3.º-4.º)
 
 | Ano | Ficheiro | Temas-chave |
 |---|---|---|
-| 1.º | `matematica-1-ano-1-ciclo.md` | Números naturais até 100, adição/subtracção, figuras geométricas, comprimento |
+| 1.º | `matematica-1-ano-1-ciclo.md` | Números naturais até 100, adição/subtração, figuras geométricas, comprimento |
 | 2.º | `matematica-2-ano-1-ciclo.md` | Números até 1000, multiplicação, medida (tempo, dinheiro), gráficos |
 | 3.º | `matematica-3-ano-1-ciclo.md` | Números até 10000, algoritmos, frações, perímetro/área, ângulos |
 | 4.º | `matematica-4-ano-1-ciclo.md` | Números até 1000000, divisão, decimais, volume/capacidade, probabilidades |
@@ -68,7 +68,7 @@ Ficheiro: `vault/documentos-oficiais/2026-03-03-perfil-dos-alunos-saida-escolari
 | Código | Área de Competência | Relevância PageCraft |
 |---|---|---|
 | **PA-A** | Linguagens e textos | Texto explicativo, labels, comunicação |
-| **PA-B** | Informação e comunicação | Pesquisa, selecção, apresentação |
+| **PA-B** | Informação e comunicação | Pesquisa, seleção, apresentação |
 | **PA-C** | Raciocínio e resolução de problemas | Exploração de variáveis, descoberta de padrões |
 | **PA-D** | Pensamento crítico e pensamento criativo | Questionamento, criação, inovação |
 | **PA-E** | Relacionamento interpessoal | Trabalho cooperativo, desafios maker em grupo |

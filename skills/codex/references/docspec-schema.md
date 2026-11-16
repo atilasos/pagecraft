@@ -39,7 +39,7 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
     },
     "objectives": {
       "type": "array",
-      "description": "Objectivos de aprendizagem (2-4)",
+      "description": "Objetivos de aprendizagem (2-4)",
       "items": {
         "type": "string"
       },
@@ -233,7 +233,7 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
         },
         "transition": {
           "type": "string",
-          "description": "Como acções do utilizador modificam o estado"
+          "description": "Como ações do utilizador modificam o estado"
         },
         "constraint": {
           "type": "string",
@@ -242,6 +242,10 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
         "assessment": {
           "type": "string",
           "description": "O que o aluno deve demonstrar; critério observável"
+        },
+        "adjustment": {
+          "type": "string",
+          "description": "Decisão do professor se a evidência mostrar dificuldade (mais apoio, repetir, avançar); aparece no guia"
         }
       }
     },
@@ -366,11 +370,11 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
         },
         "standard": {
           "type": "string",
-          "description": "Passo a passo — Intermédio — objectivo esperado"
+          "description": "Passo a passo — Intermédio — objetivo esperado"
         },
         "challenge": {
           "type": "string",
-          "description": "Mais desafios — Desafio — extensão (mais variáveis, raciocínio abstracto)"
+          "description": "Mais desafios — Desafio — extensão (mais variáveis, raciocínio abstrato)"
         }
       }
     },
@@ -624,7 +628,7 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
   "materials": [
     "Tablet ou computador com browser (1 por aluno ou par)",
     "Minecraft Education Edition (1 conta por grupo)",
-    "Quadro interactivo para apresentação final"
+    "Quadro interativo para apresentação final"
   ],
   "units": [
     {
@@ -636,10 +640,11 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
           { "name": "estado", "type": "derived", "derivedFrom": "temperatura < 0 ? 'sólido' : temperatura > 100 ? 'gasoso' : 'líquido'" },
           { "name": "velocidadeMoleculas", "type": "derived", "derivedFrom": "(temperatura + 20) / 140" }
         ],
-        "render": "Termómetro visual à esquerda; recipiente central com moléculas animadas (círculos azuis) cuja velocidade e disposição reflectem o estado; label grande com nome do estado e temperatura; fundo muda de cor (azul gelado → azul normal → vermelho quente)",
-        "transition": "Arrastar slider de temperatura → moléculas ajustam velocidade e padrão (agrupadas/lentas para sólido, médias para líquido, dispersas/rápidas para gasoso) → label e fundo actualizam",
-        "constraint": "A água muda de estado a exactamente 0°C (fusão/solidificação) e 100°C (ebulição/condensação)",
-        "assessment": "O aluno ajusta o slider para encontrar as duas temperaturas de mudança de estado e regista-as"
+        "render": "Termómetro visual à esquerda; recipiente central com moléculas animadas (círculos azuis) cuja velocidade e disposição refletem o estado; label grande com nome do estado e temperatura; fundo muda de cor (azul gelado → azul normal → vermelho quente)",
+        "transition": "Arrastar slider de temperatura → moléculas ajustam velocidade e padrão (agrupadas/lentas para sólido, médias para líquido, dispersas/rápidas para gasoso) → label e fundo atualizam",
+        "constraint": "A água muda de estado a exatamente 0°C (fusão/solidificação) e 100°C (ebulição/condensação)",
+        "assessment": "O aluno ajusta o slider para encontrar as duas temperaturas de mudança de estado e regista-as",
+        "adjustment": "Se não encontrar as duas temperaturas, retomar em pequeno grupo com um termómetro real e gelo antes de voltar ao slider"
       },
       "maker": {
         "type": "minecraft",
@@ -647,13 +652,13 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
         "materials": ["Minecraft Education Edition", "blocos: gelo, água, soul fire (vapor)"],
         "groupSize": "3-4",
         "connection": "Depois de descobrir as temperaturas de mudança na página, o grupo reconstrói o ciclo em 3D",
-        "communication": "Tour guiado ao mundo Minecraft: cada grupo explica o seu ciclo à turma via quadro interactivo",
+        "communication": "Tour guiado ao mundo Minecraft: cada grupo explica o seu ciclo à turma via quadro interativo",
         "alternatives": ["Sem Minecraft: construir com Lego (azul=gelo, transparente=água, branco=vapor) e etiquetas"]
       },
       "differentiation": {
-        "support": "Slider com apenas 3 posições (-10°C, 50°C, 110°C); estado indicado automaticamente com ícone grande; no Minecraft, modelo pré-construído para completar",
+        "support": "Slider com passos de 10°C e marcas visíveis; o aluno prevê o estado antes de mover (o estado não é indicado automaticamente) e a pista pergunta 'entre que valores muda?'; no Minecraft, modelo pré-construído para completar; mesmo critério de assessment (0°C e 100°C)",
         "standard": "Slider contínuo, aluno descobre os pontos de transição; Minecraft: construção livre com orientação",
-        "challenge": "Slider inclui gráfico de energia das moléculas; pergunta: 'O que acontece a 100°C numa panela de pressão?'; Minecraft: adicionar o ciclo da água completo (evaporação→nuvem→chuva→rio)"
+        "challenge": "Slider inclui gráfico de energia das moléculas; pergunta: 'O que acontece a 100°C numa panela de pressão?'; fecha com 'Acontece sempre? Porquê?'; Minecraft: adicionar o ciclo da água completo (evaporação→nuvem→chuva→rio)"
       },
       "duration": 20
     },
@@ -666,28 +671,29 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
           { "name": "animacao", "type": "derived", "derivedFrom": "fase" },
           { "name": "verTudo", "type": "toggle", "options": ["Uma fase", "Ciclo completo"], "default": "Uma fase" }
         ],
-        "render": "Paisagem com mar, montanha e céu; setas animadas mostram o movimento da água; quando 'Uma fase', destaca apenas a fase seleccionada com cor e animação; quando 'Ciclo completo', todas as fases animam em sequência",
-        "transition": "Seleccionar fase → paisagem destaca essa parte do ciclo com animação; toggle ciclo completo → animação contínua de todas as fases em loop",
+        "render": "Paisagem com mar, montanha e céu; setas animadas mostram o movimento da água; quando 'Uma fase', destaca apenas a fase selecionada com cor e animação; quando 'Ciclo completo', todas as fases animam em sequência",
+        "transition": "Selecionar fase → paisagem destaca essa parte do ciclo com animação; toggle ciclo completo → animação contínua de todas as fases em loop",
         "constraint": "O ciclo da água é contínuo — cada fase alimenta a seguinte, sem princípio nem fim",
-        "assessment": "O aluno descreve as 4 fases pela ordem correcta e explica o que acontece em cada uma"
+        "assessment": "O aluno descreve as 4 fases pela ordem correta e explica o que acontece em cada uma",
+        "adjustment": "Se trocar a ordem das fases, pedir que explique a um colega o que acontece à água entre duas fases seguidas e rever o esquema em conjunto"
       },
       "maker": {
         "type": "whiteboard",
-        "challenge": "Cada grupo apresenta uma fase do ciclo no quadro interactivo, usando a página. No fim, a turma junta tudo num mapa de conceitos colectivo.",
-        "materials": ["Quadro interactivo", "página PageCraft"],
+        "challenge": "Cada grupo apresenta uma fase do ciclo no quadro interativo, usando a página. No fim, a turma junta tudo num mapa de conceitos coletivo.",
+        "materials": ["Quadro interativo", "página PageCraft"],
         "groupSize": "turma (4 grupos, 1 fase cada)",
         "connection": "Cada grupo explora 1 fase em profundidade na página → apresenta à turma",
-        "communication": "Mapa de conceitos colectivo no quadro: cada grupo adiciona a sua fase com setas",
+        "communication": "Mapa de conceitos coletivo no quadro: cada grupo adiciona a sua fase com setas",
         "alternatives": ["Sem quadro: cartolinas A3 por grupo, coladas na parede em sequência circular"]
       },
       "differentiation": {
-        "support": "Apenas 2 fases (evaporação + chuva), com imagens descritivas; apresentação com guião",
+        "support": "As 4 fases, uma de cada vez, com imagens descritivas e a ordem sugerida passo a passo; apresentação com guião; mesmo critério de assessment (4 fases pela ordem correta)",
         "standard": "4 fases, exploração livre; apresentação com pontos-chave",
         "challenge": "Inclui infiltração e lençóis freáticos; pergunta: 'O que acontece ao ciclo se não chover durante 3 meses?'"
       },
       "duration": 20
     }
   ],
-  "sessionFlow": "0-5min: activação (pergunta: 'De onde vem a chuva?') → 5-25min: Unit 1 exploração + maker → 25-35min: Unit 2 exploração + comunicação → 35-40min: síntese colectiva no quadro"
+  "sessionFlow": "0-5min: ativação (pergunta: 'De onde vem a chuva?') → 5-25min: Unit 1 exploração + maker → 25-35min: Unit 2 exploração + comunicação → 35-40min: síntese coletiva no quadro"
 }
 ```

@@ -7,7 +7,7 @@ Guia operacional para o Architect, Designer e Builder traduzirem **faixa etária
 1. **Idade não é só vocabulário** — afeta tipografia, motricidade, tempo de atenção, formato de instruções e modalidade (texto/áudio/visual).
 2. **Redundância de canais** — para 4–7 anos, qualquer informação importante deve estar em pelo menos dois canais (texto + ícone, texto + áudio, cor + texto).
 3. **Cor nunca é semântica única** — daltonismo afeta ~8% dos rapazes; em sala de aula é certo que existe.
-4. **Sem feedback punitivo** — vermelho de erro está banido. Use âmbar com mensagem do tipo "quase! tenta outra vez" e ícone ↻.
+4. **Sem feedback punitivo** — vermelho de erro está banido. Use âmbar e ícone ↻, com uma mensagem que descreve o que a criança fez e pergunta ("Puseste 3. Que acontece se puseres mais um?").
 
 ## Mínimos por faixa
 
@@ -24,7 +24,7 @@ Guia operacional para o Architect, Designer e Builder traduzirem **faixa etária
 | Slider thumb | n/a (use tap-cycle) | ≥48px com snapping | ≥40px |
 | Decisões por ecrã | 1 | 1–2 | 2–3 |
 | Vocabulário | concreto, próximo | concreto | concreto + jargão pontual com gloss |
-| Instruções | áudio + ícone redundantes | ícone redundante ao texto | texto |
+| Instruções | áudio («Ouvir») + ícone redundantes | «Ouvir» + ícone redundante ao texto | texto |
 | Tempo por atividade | 3–5 min | 5–8 min | 8–12 min |
 
 ## Padrões recomendados por idade
@@ -33,7 +33,7 @@ Guia operacional para o Architect, Designer e Builder traduzirem **faixa etária
 |---|---|---|---|
 | `tap-to-cycle` | ✅ ideal | ✅ ideal | ⚠️ só se simplifica |
 | `tap-to-place` | ✅ ideal | ✅ ideal | ✅ ok |
-| `audio-first` | ✅ obrigatório | ✅ ideal | ⚠️ opcional |
+| `audio-first` | ✅ obrigatório | ✅ obrigatório | ⚠️ opcional |
 | `toggle` | ✅ | ✅ | ✅ |
 | `dropdown` | ⚠️ evitar | ⚠️ se botão grande | ✅ |
 | `slider` | ⚠️ só com snap a 2–3 valores | ✅ com snap | ✅ contínuo |
@@ -50,12 +50,12 @@ Preferência confirmada pelo professor: `"Century Gothic", "Didact Gothic", "URW
 
 Para dispositivos sem Century Gothic, o pipeline do Studio incorpora automaticamente a Didact Gothic e a licença OFL no HTML antes de o enviar ao Proofreader e ao Evaluator, em cada ronda de construção ou reparação. O Builder deve usar a família acima no CSS e não deve inventar data URLs nem tentar ler ficheiros de fontes: a incorporação é responsabilidade do servidor. O artefacto final inclui o WOFF2 real, sem ligações externas ou dependências de rede.
 
-Fora do pipeline do Studio, depois de guardar ou reparar o rascunho e antes da revisão, executar no repositório PageCraft `python3 scripts/embed_gothic_font.py --activity drafts/<slug>.html`. Este comando incorpora a mesma fonte e licença; pode ser repetido sem duplicar o bloco.
+Fora do pipeline do Studio, depois de guardar ou reparar o rascunho e antes da revisão, executar no repositório PageCraft `uv run python scripts/embed_gothic_font.py --activity drafts/<slug>.html`. Este comando incorpora a mesma fonte e licença; pode ser repetido sem duplicar o bloco.
 
 ## Cor
 
 - Usar **OKLCH**, com chroma reduzido perto dos extremos de lightness.
-- **Identidade**: 4–5 *hues*. **Funcional**: `ok` (verde 150°), `warn` (âmbar 85°), `focus` (azul 255°).
+- **Identidade**: 4–5 *hues*. **Funcional**: `ok` (verde 150°), `warn` (âmbar 85°), `focus` (por defeito o `ink`, oklch(0.22 0.02 260)); o anel de foco tem ≥3:1 contra o fundo e contra `primary`.
 - **Proibido**: usar `verde/amarelo/vermelho` como níveis de dificuldade — colide com feedback de acerto/erro e ativa carga emocional de "errado". Use três *hues* distintos sem semântica de semáforo (template usa Com pistas / Passo a passo / Mais desafios).
 
 ## Movimento
@@ -67,13 +67,19 @@ Fora do pipeline do Studio, depois de guardar ou reparar o rascunho e antes da r
 
 ## Som
 
-- **Sempre opt-in**: a página começa muda; um botão 🔊 visível liga o áudio.
+- **Sempre opt-in**: a página começa muda; um botão 🔊 visível liga os efeitos sonoros (a leitura «Ouvir» é um controlo à parte, ver Voz).
 - **Nunca** o som é o único portador de significado.
-- Tons curtos (~120 ms, volume ≤0.05) para confirmação; síntese de voz em `pt-PT` para narração.
+- Tons curtos (~120 ms, volume ≤0.05) para confirmação, só com o interruptor de efeitos sonoros ligado.
+- **Voz (regra única)**: até ao 2.º ano (≤7 anos), cada instrução e cada opção de resposta tem um botão «Ouvir» (`speechSynthesis` com `lang='pt-PT'`, helper `PageCraftAudio.say(texto)` do template). A leitura é sempre iniciada pela criança, nunca automática, e é independente do interruptor de efeitos sonoros. No 3.º/4.º ano é opcional.
+
+## Contexto de utilização
+
+- Contexto principal: sala de TIC com desktops (rato e teclado), com a atividade aberta num iframe do host com ~920px de largura. O toque continua suportado (tablet, telemóvel), mas não é o contexto principal.
+- Texto dentro de SVG ou imagens (legendas, cotas, etiquetas) obedece ao mesmo mínimo do microcopy da faixa etária, medido a 390px de largura.
 
 ## Comunicação com o aluno
 
 - Tratamento por **tu**.
-- Microcopy de erro **convida a tentar de novo** e nunca culpa. Ex.: *"Quase! Que tal experimentar outra peça?"* — nunca *"Errado"*.
+- Microcopy de erro **descreve e pergunta** e nunca culpa. Ex.: *"Escolheste a peça azul. Cabe no espaço?"* — nunca *"Errado"*.
 - Microcopy de acerto **celebra a descoberta**, não o desempenho. Ex.: *"Encontraste! Já sabes que…"* — preferir descrever o que se descobriu a só *"Correto!"*.
 - Em ações destrutivas (reiniciar/limpar), pedir confirmação curta e visual.

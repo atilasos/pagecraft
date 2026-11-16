@@ -12,7 +12,7 @@
       --surface:   oklch(1    0.003 250);
       --ink:       oklch(0.22 0.02  260);
       --ink-soft:  oklch(0.40 0.02  260);
-      --primary:   oklch(0.62 0.12  255);
+      --primary:   oklch(0.52 0.12  255); /* ≥4.5:1 com --primary-ink e com --surface (texto) */
       --primary-ink: oklch(0.98 0.01 255);
       --accent:    oklch(0.78 0.13  85);
       --tint-info: oklch(0.96 0.03  255);
@@ -23,10 +23,14 @@
       --ok-tint:   oklch(0.95 0.05  150);
       --warn:      oklch(0.75 0.14  85);
       --warn-tint: oklch(0.96 0.06  85);
-      --focus:     oklch(0.70 0.20  255);
+      --focus:     var(--ink); /* anel de foco: ≥3:1 contra o fundo e contra --primary */
       /* Métricas */
       --radius: 14px;
-      --tap: 48px;
+      --tap: 48px;                  /* 8-10; body.young 56px, body.prek 64px */
+      --btn-font: 18px;
+      --micro: 16px;                /* microcopy/rodapé: 16px (8-10), 18px (≤7) */
+      --h-unit: 28px;               /* título de unidade: 28 / 30 / 34 */
+      --thumb: 40px;                /* slider thumb: 40 / 48 */
       --maxw: 960px;
       --shadow: 0 1px 2px oklch(0.50 0.02 260 / 0.06), 0 4px 14px oklch(0.50 0.02 260 / 0.08);
     }
@@ -46,7 +50,8 @@
       text-rendering: optimizeLegibility;
       -webkit-font-smoothing: antialiased;
     }
-    body.young { font-size: 22px; line-height: 1.6; } /* 6-7 anos */
+    body.young { font-size: 22px; line-height: 1.6; --btn-font: 22px; --tap: 56px; --micro: 18px; --h-unit: 30px; --thumb: 48px; } /* 6-7 anos */
+    body.prek  { font-size: 24px; line-height: 1.6; --btn-font: 24px; --tap: 64px; --micro: 18px; --h-unit: 34px; }               /* 4-5 anos */
 
     /* Emoji renderiza igual em qualquer SO */
     .emoji {
@@ -57,17 +62,18 @@
 
     /* Tipografia — sem itálico em corpo, sem ALL CAPS, comprimento de linha ≤55ch */
     h1, h2, h3 { font-weight: 800; letter-spacing: -0.01em; line-height: 1.2; }
-    h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); }
-    h2 { font-size: clamp(1.3rem, 3vw, 1.6rem); }
-    h3 { font-size: 1.15rem; }
+    h1 { font-size: calc(var(--h-unit) * 1.3); }
+    h2 { font-size: var(--h-unit); }
+    h3 { font-size: 1.15em; }
     p, li { max-width: 55ch; }
     strong { font-weight: 800; }
 
     /* Foco visível obrigatório */
+    /* Anel escuro com halo claro: ≥3:1 contra o fundo e contra --primary */
     :focus-visible {
       outline: 3px solid var(--focus);
-      outline-offset: 3px;
-      border-radius: 6px;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 6px var(--surface);
     }
 
     /* Header — sem gradiente decorativo */
@@ -81,7 +87,7 @@
       box-shadow: var(--shadow);
     }
     header h1 { color: var(--primary); margin: 0 0 0.4rem 0; }
-    header .meta { font-size: 1rem; color: var(--ink-soft); }
+    header .meta { font-size: var(--micro); color: var(--ink-soft); }
     header .objectives {
       margin-top: 1rem;
       padding: 0.9rem 1rem;
@@ -108,7 +114,7 @@
       padding: 1rem 1.25rem;
       border-radius: 10px;
       margin-bottom: 1.25rem;
-      font-size: 1.1rem;
+      font-size: 1.1em;
       font-weight: 700;
       color: var(--ink);
     }
@@ -156,9 +162,9 @@
       border-color: var(--primary);
       color: var(--primary-ink);
     }
-    .diff-tab .level-marker { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
-    .diff-tab[data-level="support"]   .level-marker { background: oklch(0.78 0.13 150); } /* Com pistas */
-    .diff-tab[data-level="standard"]  .level-marker { background: oklch(0.72 0.13 195); } /* Passo a passo */
+    .diff-tab .level-marker { width: 14px; height: 14px; border-radius: 50%; display: inline-block; box-shadow: 0 0 0 2px var(--surface); }
+    .diff-tab[data-level="support"]   .level-marker { background: oklch(0.50 0.02 260); } /* Com pistas: neutro, nunca o verde de sucesso */
+    .diff-tab[data-level="standard"]  .level-marker { background: oklch(0.55 0.08 195); } /* Passo a passo: ≥3:1 sobre --surface */
     .diff-tab[data-level="challenge"] .level-marker { background: oklch(0.55 0.14 280); } /* Mais desafios */
     .diff-content { display: none; }
     .diff-content[data-active="true"] { display: block; }
@@ -192,14 +198,14 @@
       border: 1px solid oklch(0.88 0.03 150);
     }
     .maker-card h3 { color: oklch(0.40 0.13 150); margin: 0 0 0.35rem 0; }
-    .maker-card .materials { font-size: 0.95rem; color: var(--ink-soft); }
+    .maker-card .materials { font-size: var(--micro); color: var(--ink-soft); }
 
     /* Rodapé curricular — texto legível, nada minúsculo */
     .curriculum-footer {
       background: oklch(0.97 0.02 300);
       border-radius: var(--radius);
       padding: 1rem 1.25rem;
-      font-size: 1rem;
+      font-size: var(--micro);
       margin-top: 1.5rem;
       color: var(--ink);
     }
@@ -215,7 +221,7 @@
       padding: 1rem 1.25rem;
       border-radius: var(--radius);
       text-align: center;
-      font-size: 1.1rem;
+      font-size: 1.1em;
       font-weight: 800;
       margin: 1rem 0;
     }
@@ -237,16 +243,16 @@
     }
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none; appearance: none;
-      height: 40px; width: 40px;
+      height: var(--thumb); width: var(--thumb);
       border-radius: 50%;
       background: var(--primary);
       border: 3px solid var(--surface);
       box-shadow: var(--shadow);
-      margin-top: -15px;
+      margin-top: calc((10px - var(--thumb)) / 2);
       cursor: pointer;
     }
     input[type="range"]::-moz-range-thumb {
-      height: 40px; width: 40px;
+      height: var(--thumb); width: var(--thumb);
       border-radius: 50%;
       background: var(--primary);
       border: 3px solid var(--surface);
@@ -255,7 +261,7 @@
 
     select, button, .btn {
       font: inherit;
-      font-size: 1rem;
+      font-size: var(--btn-font);
       min-height: var(--tap);
       border-radius: 10px;
       padding: 0.55rem 1.1rem;
@@ -291,6 +297,7 @@
     @media (max-width: 768px) {
       body { font-size: 20px; padding: 0.75rem; }
       body.young { font-size: 22px; }
+      body.prek { font-size: 24px; }
       .knowledge-unit { padding: 1rem; }
       .diff-tabs { flex-direction: column; align-items: stretch; }
       .diff-tab { justify-content: center; }
@@ -315,7 +322,7 @@
     /* Rodapé PageCraft */
     .pagecraft-footer {
       text-align: center;
-      font-size: 0.95rem;
+      font-size: var(--micro);
       color: var(--ink-soft);
       margin-top: 1.5rem;
       padding: 0.75rem;
@@ -549,6 +556,24 @@
           return enabled;
         },
         isOn: function () { return enabled; },
+        /* «Ouvir»: leitura em voz alta pt-PT, sempre iniciada pela criança (clique no botão).
+           Independente do interruptor de efeitos sonoros; cancela a fala anterior;
+           no-op seguro (devolve false) se a síntese de voz não existir. */
+        say: function (text) {
+          try {
+            if (!text || !('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') return false;
+            var synth = window.speechSynthesis;
+            synth.cancel();
+            var u = new SpeechSynthesisUtterance(String(text));
+            u.lang = 'pt-PT';
+            var voices = synth.getVoices ? synth.getVoices() : [];
+            for (var i = 0; i < voices.length; i++) {
+              if (String(voices[i].lang).replace('_', '-').toLowerCase() === 'pt-pt') { u.voice = voices[i]; break; }
+            }
+            synth.speak(u);
+            return true;
+          } catch (e) { return false; }
+        },
         beep: function (freq, ms) {
           if (!enabled) return;
           var c = ensureCtx(); if (!c) return;

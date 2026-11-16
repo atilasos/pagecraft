@@ -36,13 +36,13 @@ Gerar um **design-spec.json** que define o sistema visual completo da atividade,
   "functional": {
     "ok":    "oklch(... 150)",
     "warn":  "oklch(... 85)",
-    "focus": "oklch(... 255)"
+    "focus": "oklch(0.22 0.02 260)"
   },
   "typography": {
     "fontFamily": "'Century Gothic', 'Didact Gothic', 'URW Gothic', 'Avant Garde', sans-serif",
     "scale": "kids-8-10 | kids-6-7 | kids-4-5",
     "baseSizePx": 20,
-    "headingSizePx": 30,
+    "headingSizePx": 28,
     "maxLineCh": 55,
     "weights": [400, 700, 800],
     "italicAllowed": false,
@@ -59,7 +59,7 @@ Gerar um **design-spec.json** que define o sistema visual completo da atividade,
     "cards": "surface com borda 1–2px ink/10, sem stripe lateral",
     "badges": "pill, accent bg, ink contrastante (sem gradient-text)",
     "feedback_correct": "ok tint + ícone ✓ + microcopy de descoberta («Encontraste…»)",
-    "feedback_incorrect": "warn tint + ícone ↻ + microcopy «Quase, tenta novamente» — nunca vermelho-erro",
+    "feedback_incorrect": "warn tint + ícone ↻ + microcopy que descreve o que a criança fez e pergunta («Puseste… Que acontece se…?») — nunca vermelho-erro",
     "tabs": "role=tablist + aria-selected; cores neutras distintas, NUNCA traffic-light"
   },
   "motion": {
@@ -73,15 +73,21 @@ Gerar um **design-spec.json** que define o sistema visual completo da atividade,
     "contrastMicrocopy": "AAA",
     "focusRing": true,
     "minTapPx": 48,
+    "contrastPairs": [
+      { "fg": "ink", "bg": "bg", "ratio": "calculado, ≥4.5" },
+      { "fg": "primary-ink", "bg": "primary", "ratio": "calculado, ≥4.5" }
+    ],
     "soundOptIn": true
   },
   "notes": "justificação das decisões em 2-3 frases"
 }
 ```
 
+Os valores `baseSizePx`, `headingSizePx` e `minTapPx` do exemplo são os de 8–10 anos; para 6–7 usa 22/30/56 e para 4–5 usa 24/34/64. Dependem de `ageRange` e seguem `references/age-adaptation.md`. `contrastPairs` lista cada par texto/fundo usado (incluindo texto sobre `primary`, `accent` e botões ghost) com o rácio WCAG calculado, não estimado.
+
 ## Adequação por idade
 - **4–5**: corpo ≥24px, alvos tocáveis ≥64px, frases ≤6 palavras, no máximo 1 decisão por ecrã, áudio acompanha texto.
-- **6–7**: corpo ≥22px, alvos tocáveis ≥56px, frases ≤10 palavras, sem itálico, instruções com ícone redundante ao texto.
+- **6–7**: corpo ≥22px, alvos tocáveis ≥56px, frases ≤10 palavras, sem itálico, instruções com «Ouvir» e ícone redundante ao texto.
 - **8–10**: corpo ≥20px, alvos tocáveis ≥48px, frases ≤14 palavras, vocabulário concreto, jargão só quando o tópico o exige.
 
 ## O que NÃO fazes

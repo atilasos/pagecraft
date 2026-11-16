@@ -4,58 +4,58 @@ Biblioteca de patterns reutilizáveis para interações pedagógicas. Cada patte
 
 > **Escolha por idade** (resumo; ver `age-adaptation.md`):
 > - **4–7 anos**: preferir `tap-to-cycle`, `tap-to-place`, `audio-first`, `toggle`, `quiz-inline`. Evitar `drag` e `matching` por linhas em touch.
-> - **8–10 anos**: todos os patterns são viáveis. `slider`, `drag`, `sorting` e `matching` funcionam bem em tablet.
+> - **8–10 anos**: todos os patterns são viáveis. `slider`, `drag`, `sorting` e `matching` funcionam bem com rato e com toque.
 > - **Sempre**: pelo menos uma alternativa **sem som** e uma alternativa **só por toque** disponível.
 
 ## slider
 
 Exploração de parâmetros contínuos.
 
-**Quando usar:** O aluno precisa observar como uma variável afecta um resultado.
+**Quando usar:** O aluno precisa observar como uma variável afeta um resultado.
 
 ```yaml
 S: { var: "velocidade", type: "slider", range: [1, 20], step: 1, default: 5 }
-R: "Carro animado cuja velocidade reflecte o valor; label mostra km/h"
-T: "Arrastar slider → velocidade actualiza → animação acelera/desacelera"
+R: "Carro animado cuja velocidade reflete o valor; label mostra km/h"
+T: "Arrastar slider → velocidade atualiza → animação acelera/desacelera"
 C: "Quanto maior a velocidade, menor o tempo para percorrer a mesma distância"
-A: "O aluno ajusta o slider para fazer o carro chegar em exactamente 10 segundos"
+A: "O aluno ajusta o slider para fazer o carro chegar em exatamente 10 segundos"
 ```
 
-**Adaptação por idade:**
-- **Com pistas — Apoio (4–6):** range pequeno [1,5], feedback visual reforçado (cor + texto, com som opcional)
-- **Passo a passo — Intermédio (7–8):** range médio, label numérico visível
-- **Mais desafios — Desafio (9–10):** range largo, cálculo mental envolvido
+**Adaptação por idade** (não confundir com os três níveis, que existem em todas as idades e partilham a meta):
+- **4–6 anos:** range pequeno [1,5], feedback visual reforçado (cor + texto, com som opcional)
+- **7–8 anos:** range médio, label numérico visível
+- **9–10 anos:** range largo, cálculo mental envolvido
 
 ---
 
 ## dropdown
 
-Selecção de opções discretas.
+Seleção de opções discretas.
 
 **Quando usar:** O aluno escolhe entre categorias/opções e observa o efeito.
 
 ```yaml
 S: { var: "estacao", type: "dropdown", options: ["Primavera","Verão","Outono","Inverno"], default: "Primavera" }
 R: "Paisagem ilustrada que muda conforme a estação; árvore central muda folhagem"
-T: "Seleccionar estação → paisagem actualiza com transição suave"
+T: "Selecionar estação → paisagem atualiza com transição suave"
 C: "Cada estação tem características visuais distintas (cores, folhas, clima)"
-A: "O aluno identifica a estação correcta a partir de uma descrição"
+A: "O aluno identifica a estação correta a partir de uma descrição"
 ```
 
 ---
 
 ## drag
 
-Manipulação directa de elementos.
+Manipulação direta de elementos.
 
 **Quando usar:** O aluno precisa organizar, mover ou posicionar elementos.
 
 ```yaml
 S: { var: "posicao_planeta", type: "drag", targets: ["orbita1","orbita2","orbita3"] }
 R: "Sistema solar simplificado; planetas arrastáveis para órbitas"
-T: "Arrastar planeta → encaixa na órbita mais próxima → label actualiza"
+T: "Arrastar planeta → encaixa na órbita mais próxima → label atualiza"
 C: "Os planetas têm órbitas específicas ordenadas por distância ao Sol"
-A: "O aluno coloca 3 planetas nas órbitas correctas"
+A: "O aluno coloca 3 planetas nas órbitas corretas"
 ```
 
 ---
@@ -64,14 +64,14 @@ A: "O aluno coloca 3 planetas nas órbitas correctas"
 
 Alternância entre dois modos/estados.
 
-**Quando usar:** Comparação directa entre duas condições (dia/noite, com/sem, antes/depois).
+**Quando usar:** Comparação direta entre duas condições (dia/noite, com/sem, antes/depois).
 
 ```yaml
 S: { var: "modo", type: "toggle", options: ["Dia","Noite"], default: "Dia" }
-R: "Cena com céu, sol/lua, animais diurnos/nocturnos"
+R: "Cena com céu, sol/lua, animais diurnos/noturnos"
 T: "Clicar toggle → transição animada dia↔noite"
-C: "Animais diferentes estão activos de dia e de noite"
-A: "O aluno classifica 4 animais como diurnos ou nocturnos"
+C: "Animais diferentes estão ativos de dia e de noite"
+A: "O aluno classifica 4 animais como diurnos ou noturnos"
 ```
 
 ---
@@ -83,8 +83,8 @@ Pergunta integrada no fluxo da exploração.
 **Quando usar:** Verificação de compreensão no momento, sem interromper a experiência.
 
 ```yaml
-S: { var: "resposta", type: "quiz", question: "Quantas patas tem o insecto?", options: [4,6,8], correct: 6 }
-R: "Pergunta aparece após exploração; feedback imediato com texto e ícone: ✓ «Encontraste» ou ↻ «Quase, tenta novamente»"
+S: { var: "resposta", type: "quiz", question: "Quantas patas tem o inseto?", options: [4,6,8], correct: 6 }
+R: "Pergunta aparece após exploração; feedback imediato com texto e ícone: ✓ «Encontraste» ou ↻ uma descrição do que a criança escolheu seguida de pergunta («Escolheste… Porque achas?»)"
 T: "Selecionar opção → celebrar a descoberta ou convidar a tentar novamente → mostrar uma pista breve"
 C: "Insetos têm sempre 6 patas"
 A: "O aluno encontra a resposta ou usa a pista para tentar novamente"
@@ -101,9 +101,9 @@ Ordenação por arrasto.
 ```yaml
 S: { var: "ordem", type: "sorting", items: ["ovo","larva","casulo","borboleta"], correct_order: [0,1,2,3] }
 R: "Cards arrastáveis com imagens; zona de ordenação horizontal"
-T: "Arrastar cards → reordenar → feedback quando ordem correcta"
+T: "Arrastar cards → reordenar → feedback quando ordem correta"
 C: "O ciclo de vida da borboleta segue uma sequência fixa"
-A: "O aluno ordena as 4 fases correctamente"
+A: "O aluno ordena as 4 fases corretamente"
 ```
 
 ---
@@ -117,9 +117,9 @@ Correspondência entre pares (ligar).
 ```yaml
 S: { var: "pares", type: "matching", left: ["🐶","🐱","🐰"], right: ["ladra","mia","salta"], correct: [[0,0],[1,1],[2,2]] }
 R: "Duas colunas; linhas desenhadas quando o aluno liga pares"
-T: "Clicar item esquerdo → clicar item direito → linha fica se corresponder; caso contrário, ↻ «Quase, tenta novamente»"
+T: "Clicar item esquerdo → clicar item direito → linha fica se corresponder; caso contrário, ↻ «Ligaste … a … Combinam?»"
 C: "Cada animal tem um comportamento característico"
-A: "O aluno liga correctamente os 3 pares"
+A: "O aluno liga corretamente os 3 pares"
 ```
 
 ---
@@ -133,9 +133,9 @@ Desenho livre ou guiado em canvas HTML5.
 ```yaml
 S: { var: "desenho", type: "canvas", tools: ["lápis","borracha"], colors: ["preto","vermelho","azul"] }
 R: "Canvas branco com barra de ferramentas simples; área de desenho responsiva"
-T: "Tocar/arrastar → desenha; seleccionar ferramenta/cor → muda modo"
+T: "Tocar/arrastar → desenha; selecionar ferramenta/cor → muda modo"
 C: "Formas geométricas têm propriedades específicas (lados, ângulos)"
-A: "O aluno desenha um triângulo com 3 lados rectos"
+A: "O aluno desenha um triângulo com 3 lados retos"
 ```
 
 ---
@@ -149,15 +149,15 @@ Avançar por opções com um único toque grande. Substitui o `dropdown` e o `sl
 ```yaml
 S: { var: "estacao", type: "tap-cycle", options: ["Primavera","Verão","Outono","Inverno"], default: "Primavera" }
 R: "Botão grande (≥64px alto para 4–5; ≥56px para 6–7) com o nome e um ícone da estação atual; seta visual indica que cicla"
-T: "Tocar botão → próxima opção (com wrap-around) → cena actualiza"
+T: "Tocar botão → próxima opção (com wrap-around) → cena atualiza"
 C: "Cada estação tem características visuais distintas"
-A: "O aluno passa pelas 4 estações e identifica a actual quando pedido"
+A: "O aluno passa pelas 4 estações e identifica a atual quando pedido"
 ```
 
 **Adaptação por idade:**
-- **Com pistas — Apoio (4–6):** 2–3 opções, ícone + cor de fundo redundantes ao texto.
-- **Passo a passo — Intermédio (7–8):** 3–4 opções, ícone + texto.
-- **Mais desafios — Desafio (9–10):** tipicamente preferir `dropdown` ou `slider` para escolhas finas.
+- **4–6 anos:** 2–3 opções, ícone + cor de fundo redundantes ao texto.
+- **7–8 anos:** 3–4 opções, ícone + texto.
+- **9–10 anos:** tipicamente preferir `dropdown` ou `slider` para escolhas finas.
 
 **Acessibilidade:** `aria-label="Mudar estação. Atual: <valor>"`. Anunciar mudança em `aria-live="polite"`.
 
@@ -171,16 +171,16 @@ Tocar na origem, depois tocar no destino. Substitui `drag` para 4–7 anos em to
 
 ```yaml
 S: { var: "classificacao", type: "tap-place", sources: ["maçã","cenoura","pão"], buckets: ["fruta","legume","cereal"] }
-R: "Cards grandes em cima; 'caixas' grandes em baixo; selecção realçada com contorno espesso"
+R: "Cards grandes em cima; 'caixas' grandes em baixo; seleção realçada com contorno espesso"
 T: "Tocar source (fica destacado) → tocar bucket → card 'voa' para a caixa com transição curta"
 C: "Cada alimento pertence a uma categoria"
 A: "O aluno coloca os 3 alimentos nas categorias certas"
 ```
 
 **Adaptação por idade:**
-- **Com pistas — Apoio (4–6):** 2 categorias, ícones grandes, feedback visual e som opcional em cada descoberta.
-- **Passo a passo — Intermédio (7–8):** 3 categorias.
-- **Mais desafios — Desafio (9–10):** também aceitar `drag` real como alternativa.
+- **4–6 anos:** 2 categorias, ícones grandes, feedback visual e som opcional em cada descoberta.
+- **7–8 anos:** 3 categorias.
+- **9–10 anos:** também aceitar `drag` real como alternativa.
 
 **Acessibilidade:** após seleção do source, focar primeira caixa; navegação por setas; `Enter` confirma. `aria-live` anuncia "X colocado em Y".
 
@@ -188,13 +188,13 @@ A: "O aluno coloca os 3 alimentos nas categorias certas"
 
 ## audio-first
 
-Instrução ou questão entregue por áudio antes de qualquer leitura. Para pré-leitores e leitores em formação.
+Instrução ou questão disponível por áudio antes de qualquer leitura, sempre iniciado pela criança com «Ouvir» (nunca automático). Para pré-leitores e leitores em formação.
 
 **Quando usar:** sempre que a faixa etária inclua 4–7 anos, ou quando a leitura não é o objetivo de aprendizagem da unidade.
 
 ```yaml
 S: { var: "resposta", type: "audio-quiz", audioRef: "audio:pergunta1", options: ["🐶","🐱","🐰"], correct: 1 }
-R: "Botão grande 🔊 'Ouvir pergunta' (≥64px para 4–5; ≥56px para 6–7); opções como cards grandes com emoji semântico"
+R: "Botão grande 🔊 'Ouvir pergunta' (≥64px para 4–5; ≥56px para 6–7), com «Ouvir» também em cada opção; opções como cards grandes com emoji semântico"
 T: "Tocar 🔊 → áudio toca → tocar opção → feedback visual + áudio curto de confirmação"
 C: "O aluno consegue responder mesmo sem ler"
 A: "O aluno acerta sem suporte textual"
