@@ -18,7 +18,7 @@ S: { var: "velocidade", type: "slider", range: [1, 20], step: 1, default: 5 }
 R: "Carro animado cuja velocidade reflecte o valor; label mostra km/h"
 T: "Arrastar slider → velocidade actualiza → animação acelera/desacelera"
 C: "Quanto maior a velocidade, menor o tempo para percorrer a mesma distância"
-A: "O aluno ajusta o slider para fazer o carro chegar em exactamente 10 segundos"
+A: "O aluno ajusta o slider para fazer o carro chegar em exatamente 10 segundos"
 ```
 
 **Adaptação por idade:**
@@ -30,16 +30,16 @@ A: "O aluno ajusta o slider para fazer o carro chegar em exactamente 10 segundos
 
 ## dropdown
 
-Selecção de opções discretas.
+Seleção de opções discretas.
 
 **Quando usar:** O aluno escolhe entre categorias/opções e observa o efeito.
 
 ```yaml
 S: { var: "estacao", type: "dropdown", options: ["Primavera","Verão","Outono","Inverno"], default: "Primavera" }
 R: "Paisagem ilustrada que muda conforme a estação; árvore central muda folhagem"
-T: "Seleccionar estação → paisagem actualiza com transição suave"
+T: "Selecionar estação → paisagem actualiza com transição suave"
 C: "Cada estação tem características visuais distintas (cores, folhas, clima)"
-A: "O aluno identifica a estação correcta a partir de uma descrição"
+A: "O aluno identifica a estação correta a partir de uma descrição"
 ```
 
 ---
@@ -55,7 +55,7 @@ S: { var: "posicao_planeta", type: "drag", targets: ["orbita1","orbita2","orbita
 R: "Sistema solar simplificado; planetas arrastáveis para órbitas"
 T: "Arrastar planeta → encaixa na órbita mais próxima → label actualiza"
 C: "Os planetas têm órbitas específicas ordenadas por distância ao Sol"
-A: "O aluno coloca 3 planetas nas órbitas correctas"
+A: "O aluno coloca 3 planetas nas órbitas corretas"
 ```
 
 ---
@@ -70,7 +70,7 @@ Alternância entre dois modos/estados.
 S: { var: "modo", type: "toggle", options: ["Dia","Noite"], default: "Dia" }
 R: "Cena com céu, sol/lua, animais diurnos/nocturnos"
 T: "Clicar toggle → transição animada dia↔noite"
-C: "Animais diferentes estão activos de dia e de noite"
+C: "Animais diferentes estão ativos de dia e de noite"
 A: "O aluno classifica 4 animais como diurnos ou nocturnos"
 ```
 
@@ -101,7 +101,7 @@ Ordenação por arrasto.
 ```yaml
 S: { var: "ordem", type: "sorting", items: ["ovo","larva","casulo","borboleta"], correct_order: [0,1,2,3] }
 R: "Cards arrastáveis com imagens; zona de ordenação horizontal"
-T: "Arrastar cards → reordenar → feedback quando ordem correcta"
+T: "Arrastar cards → reordenar → feedback quando ordem correta"
 C: "O ciclo de vida da borboleta segue uma sequência fixa"
 A: "O aluno ordena as 4 fases correctamente"
 ```
@@ -133,7 +133,7 @@ Desenho livre ou guiado em canvas HTML5.
 ```yaml
 S: { var: "desenho", type: "canvas", tools: ["lápis","borracha"], colors: ["preto","vermelho","azul"] }
 R: "Canvas branco com barra de ferramentas simples; área de desenho responsiva"
-T: "Tocar/arrastar → desenha; seleccionar ferramenta/cor → muda modo"
+T: "Tocar/arrastar → desenha; selecionar ferramenta/cor → muda modo"
 C: "Formas geométricas têm propriedades específicas (lados, ângulos)"
 A: "O aluno desenha um triângulo com 3 lados rectos"
 ```
@@ -171,7 +171,7 @@ Tocar na origem, depois tocar no destino. Substitui `drag` para 4–7 anos em to
 
 ```yaml
 S: { var: "classificacao", type: "tap-place", sources: ["maçã","cenoura","pão"], buckets: ["fruta","legume","cereal"] }
-R: "Cards grandes em cima; 'caixas' grandes em baixo; selecção realçada com contorno espesso"
+R: "Cards grandes em cima; 'caixas' grandes em baixo; seleção realçada com contorno espesso"
 T: "Tocar source (fica destacado) → tocar bucket → card 'voa' para a caixa com transição curta"
 C: "Cada alimento pertence a uma categoria"
 A: "O aluno coloca os 3 alimentos nas categorias certas"

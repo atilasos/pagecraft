@@ -68,7 +68,7 @@ Ficheiro: `vault/documentos-oficiais/2026-03-03-perfil-dos-alunos-saida-escolari
 | Código | Área de Competência | Relevância PageCraft |
 |---|---|---|
 | **PA-A** | Linguagens e textos | Texto explicativo, labels, comunicação |
-| **PA-B** | Informação e comunicação | Pesquisa, selecção, apresentação |
+| **PA-B** | Informação e comunicação | Pesquisa, seleção, apresentação |
 | **PA-C** | Raciocínio e resolução de problemas | Exploração de variáveis, descoberta de padrões |
 | **PA-D** | Pensamento crítico e pensamento criativo | Questionamento, criação, inovação |
 | **PA-E** | Relacionamento interpessoal | Trabalho cooperativo, desafios maker em grupo |

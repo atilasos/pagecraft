@@ -68,7 +68,7 @@ def main():
 
     spec = json.loads(Path(args.docspec).read_text(encoding="utf-8"))
 
-    topic = spec.get("topic", "Aula interactiva")
+    topic = spec.get("topic", "Aula interativa")
     age = spec.get("ageRange", "6-10 anos")
     duration = spec.get("duration", 40)
     objectives = spec.get("objectives", [])
@@ -116,7 +116,7 @@ def main():
 
 **Assessment (observável):** {inter.get("assessment", "")}
 
-### Diferenciação (implementar como tabs seleccionáveis)
+### Diferenciação (implementar como tabs selecionáveis)
 
 - **Com pistas — Apoio:** {diff.get("support", "")}
 - **Passo a passo — Intermédio:** {diff.get("standard", "")}

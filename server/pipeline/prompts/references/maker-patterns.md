@@ -1,14 +1,14 @@
 # Maker Patterns — PageCraft
 
 Biblioteca de extensões Maker que ligam a exploração digital ao mundo tangível.
-Cada pattern define como um recurso físico estende uma knowledge unit da página interactiva.
+Cada pattern define como um recurso físico estende uma knowledge unit da página interativa.
 
 ## Princípio
 
-A página interactiva é o **ponto de partida**, não o fim. O ciclo completo:
+A página interativa é o **ponto de partida**, não o fim. O ciclo completo:
 
 ```
-1. Explorar (página interactiva — individual/pares)
+1. Explorar (página interativa — individual/pares)
 2. Construir (desafio maker — grupo 2-4)
 3. Comunicar (apresentação — circuito MEM)
 4. Reflectir (conselho de cooperação)
@@ -22,7 +22,7 @@ A página interactiva é o **ponto de partida**, não o fim. O ciclo completo:
 | Lego / Lego Technic | Físico | Estruturas, mecanismos, contagem, padrões |
 | Impressão 3D | Digital→Físico | Prototipagem, formas geométricas, design |
 | Robótica (robot educativo) | Físico/Programação | Sequências, ciclos, sensores, movimento |
-| Quadro interactivo | Digital/Colectivo | Apresentação, manipulação colectiva, votação |
+| Quadro interativo | Digital/Colectivo | Apresentação, manipulação colectiva, votação |
 | Computadores/tablets | Digital | Exploração individual, pesquisa, produção |
 
 ---
@@ -37,7 +37,7 @@ A página interactiva é o **ponto de partida**, não o fim. O ciclo completo:
 ```yaml
 maker:
   type: minecraft
-  challenge: "Constrói uma casa com exactamente {X} blocos de largura e {Y} de altura. Calcula a área da fachada."
+  challenge: "Constrói uma casa com exatamente {X} blocos de largura e {Y} de altura. Calcula a área da fachada."
   materials: ["Minecraft Education Edition", "conta escola"]
   groupSize: 2
   connection: "O slider da página controla as dimensões → o aluno replica no Minecraft"
@@ -144,7 +144,7 @@ maker:
   challenge: "Modela a ilha da Madeira em 3D. Marca o pico mais alto e o teu concelho."
   materials: ["TinkerCAD ou Cura", "impressora 3D", "mapa topográfico (da página)"]
   groupSize: 3-4
-  connection: "Página mostra mapa interactivo com altitudes → aluno traduz para 3D"
+  connection: "Página mostra mapa interativo com altitudes → aluno traduz para 3D"
 ```
 
 ---
@@ -200,7 +200,7 @@ maker:
 maker:
   type: whiteboard
   challenge: "Apresenta à turma o que descobriste. Mostra a página no quadro e explica o que acontece quando moves o slider."
-  materials: ["Quadro interactivo", "página PageCraft"]
+  materials: ["Quadro interativo", "página PageCraft"]
   groupSize: 1-2 (apresentadores) + turma
   connection: "Exploração individual → comunicação colectiva"
   mem_module: "circuitos de comunicação"
@@ -211,7 +211,7 @@ maker:
 maker:
   type: whiteboard
   challenge: "Em turma, completem o mapa de conceitos no quadro. Cada grupo adiciona o que aprendeu."
-  materials: ["Quadro interactivo", "template de mapa de conceitos"]
+  materials: ["Quadro interativo", "template de mapa de conceitos"]
   groupSize: turma
   connection: "Cada grupo traz a sua descoberta (constraint C) → turma constrói mapa completo"
   mem_module: "trabalho curricular comparticipado"
@@ -225,8 +225,8 @@ maker:
 |---|---|---|
 | **TEA** (Trabalho Estudo Autónomo) | Exploração individual na página | Tablet/computador |
 | **Projecto cooperativo** | Desafio maker em grupo | Minecraft/Lego/3D/Robot |
-| **Trabalho curricular comparticipado** | Síntese colectiva | Quadro interactivo |
-| **Circuitos de comunicação** | Apresentação de descobertas | Quadro interactivo + produções |
+| **Trabalho curricular comparticipado** | Síntese colectiva | Quadro interativo |
+| **Circuitos de comunicação** | Apresentação de descobertas | Quadro interativo + produções |
 | **Conselho de cooperação** | Reflexão: "O que aprendemos? O que correu bem/mal?" | Diário de turma |
 
 ## Regras
