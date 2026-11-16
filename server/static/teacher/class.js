@@ -1153,6 +1153,7 @@ async function loadSentencePanel() {
   const classId = $('sentence-class').value;
   const live = session && session.class_id === classId && session.status !== 'closed';
   $('sentence-hide').disabled = !live;
+  $('sentence-live-hint').hidden = live;
   $('sentence-save').disabled = !classId;
   const list = $('sentence-list'); list.replaceChildren();
   if (!classId) return;
