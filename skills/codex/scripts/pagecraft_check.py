@@ -70,6 +70,48 @@ def validate_json(path: Path, schema_name: str) -> list[str]:
             for e in sorted(validator.iter_errors(data), key=lambda e: list(e.absolute_path))[:10]]
 
 
+def load(path: Path) -> dict:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def severities(report: dict) -> set[str]:
+    return {i.get("severity") for i in report.get("issues") or [] if isinstance(i, dict)} | (
+        {"critical"} if report.get("critical") else set())
+
+
+def semantic_rules(kind: str, path: Path, html_path: Path) -> tuple[list[str], list[str]]:
+    """Regras de aprovação que o schema não exprime (ver references/workflow.md)."""
+    data, errors, warnings = load(path), [], []
+    if not data:
+        return errors, warnings
+    name = path.name
+    if kind == "evaluation" and data.get("pass") is True:
+        scores = data.get("scores")
+        if not isinstance(scores, dict) or not scores:
+            errors.append(f"{name}: pass:true sem scores")
+        else:
+            low = [k for k, v in scores.items() if not isinstance(v, (int, float)) or v < 3]
+            if low:
+                errors.append(f"{name}: pass:true com scores < 3 em {', '.join(low)}")
+        if "critical" in severities(data):
+            errors.append(f"{name}: pass:true com issue critical")
+        if not data.get("evidence"):
+            errors.append(f"{name}: pass:true sem evidence observada")
+        if data.get("blocked_by"):
+            errors.append(f"{name}: pass:true com blocked_by por resolver")
+        if "route" in data:
+            errors.append(f"{name}: pass:true não leva route")
+    if kind == "proofread" and data.get("pass") is True and severities(data) & {"high", "critical"}:
+        errors.append(f"{name}: pass:true com issues high/critical")
+    if kind in ("proofread", "evaluation") and html_path.is_file() and path.stat().st_mtime < html_path.stat().st_mtime:
+        warnings.append(f"{name}: mais antigo do que {html_path.name}; o HTML mudou depois desta revisão")
+    return errors, warnings
+
+
 def cmd_check(args) -> int:
     from server.pipeline.validators import validate_activity_html
 
@@ -84,22 +126,27 @@ def cmd_check(args) -> int:
     else:
         checked.append(docspec_path.name)
         errors += validate_json(docspec_path, "docspec")
-        try:
-            docspec = json.loads(docspec_path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
-            docspec = {}
+        docspec = load(docspec_path)
+        units = [u for u in docspec.get("units") or [] if isinstance(u, dict)]
+        planned = sum(u["duration"] for u in units if isinstance(u.get("duration"), (int, float)))
+        if isinstance(docspec.get("duration"), (int, float)) and planned > docspec["duration"]:
+            errors.append(f"{docspec_path.name}: unidades somam {planned} min, acima da duração de {docspec['duration']} min")
     design = drafts / f"{args.slug}-design-spec.json"
     if design.is_file():
         checked.append(design.name)
         errors += validate_json(design, "design-spec")
+    html_path = drafts / f"{args.slug}.html"
     for kind in KINDS:
         found = versions(drafts, args.slug, kind)
         if found:
-            checked.append(found[-1][1].name)
-            errors += validate_json(found[-1][1], SCHEMAS[kind])
+            latest = found[-1][1]
+            checked.append(latest.name)
+            errors += validate_json(latest, SCHEMAS[kind])
+            more_errors, more_warnings = semantic_rules(kind, latest, html_path)
+            errors += more_errors
+            warnings += more_warnings
             if found[-1][0] == 0:
-                warnings.append(f"{found[-1][1].name}: sem versão -vN; a próxima iteração sobrescreve o histórico")
-    html_path = drafts / f"{args.slug}.html"
+                warnings.append(f"{latest.name}: sem versão -vN; a próxima iteração sobrescreve o histórico")
     if html_path.is_file():
         checked.append(html_path.name)
         units = docspec.get("units") or []
