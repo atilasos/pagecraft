@@ -75,7 +75,7 @@ Em `sources.md`, separa o que é Fonte, o que é Síntese da wiki e o que é pro
 ## Gates e reparação
 
 - **Gate determinístico:** `CHECK check <slug> --phase <fase>` termina com código 0. Valida só os artefactos até essa fase, exige as saídas dela e aplica as regras de aprovação: seis scores ≥3, evidência e nenhum `blocked_by` quando `pass:true`, e unidades que cabem na duração. Numa reparação, corre o gate da fase reparada e depois o das seguintes. Só uma ligação externa a uma aplicação que o DocSpec declara como tarefa externa pode ficar como exceção, e a justificação vai para o manifest com `--note`. Os avisos são lidos e corrigidos ou justificados.
-- **Gate do browser:** o Evaluator só aprova com evidência observada. Sem browser, `pass:false` e `blocked_by`. Uma análise estática não demonstra usabilidade.
+- **Gate do browser:** o Evaluator só aprova com evidência observada. Sem browser, `pass:false` e `blocked_by`, sem ticket: o orquestrador resolve o bloqueio e volta a correr o Evaluator. Uma análise estática não demonstra usabilidade.
 - **Encaminhamento:**
   - JS, CSS, layout ou acessibilidade técnica → Builder;
   - paleta, tipografia ou sistema visual → Designer e depois Builder;
