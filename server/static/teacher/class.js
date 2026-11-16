@@ -1167,6 +1167,7 @@ async function loadSentencePanel() {
       project.onclick = () => projectClassSentence(sentence.id);
       const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = 'Apagar';
       remove.onclick = async () => {
+        if (!window.confirm(`Apagar «${sentence.text}»?`)) return;
         const response = await tfetch(`/api/classes/${classId}/sentences/${sentence.id}`, {method:'DELETE'});
         if (response.ok) await loadSentencePanel();
         else $('sentence-status').textContent = 'Não foi possível apagar a frase.';

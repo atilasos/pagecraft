@@ -825,7 +825,9 @@ class ShowClassSentenceRequest(BaseModel):
 
 
 async def _sentence_bank(request, class_id):
-    if not await _svc(request).get_class(class_id):
+    cls = await _svc(request).get_class(class_id)
+    # O identificador entra num caminho de ficheiro: só aceita o de uma turma real.
+    if not cls or cls.get("id") != class_id:
         raise HTTPException(404, "Turma não encontrada.")
     return request.app.state.storage.path("classes", class_id, "sentences.json")
 
