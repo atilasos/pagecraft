@@ -95,6 +95,7 @@ class ClassroomService:
         self._seen_event_ids: dict[str, set[str]] = {}
         # lock por sessão: torna atómicas as transações read-modify-write
         # (claim/release/PIT/close); um só processo, chega um asyncio.Lock
+        self._sentence_locks: dict[str, asyncio.Lock] = defaultdict(asyncio.Lock)
         self._session_locks: dict[str, asyncio.Lock] = defaultdict(asyncio.Lock)
         self._board_selection_revision = 0
         self._clock = clock

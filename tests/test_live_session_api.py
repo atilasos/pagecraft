@@ -219,6 +219,8 @@ async def test_board_stream_contains_only_shared_state_and_global_events(client,
         "event_types": [
             {"name": "session_resumed", "bridge_name": None},
             {"name": "group_codes_updated", "bridge_name": None},
+            {"name": "class_sentence_shown", "bridge_name": None},
+            {"name": "class_sentence_hidden", "bridge_name": None},
             {"name": "teacher_highlight", "bridge_name": "highlight"},
             {"name": "freeze_screens", "bridge_name": None},
             {"name": "unfreeze_screens", "bridge_name": None},
@@ -509,3 +511,47 @@ async def test_outbox_replay_requires_the_original_individual_identity(client):
     for sid in (ana, bruno):
         history = (await client.get(path + f'/students/{sid}/history')).json()['events']
         assert not any(event.get('event_id') == 'pending-ana' for event in history)
+
+
+async def test_class_sentence_bank_and_projection(client):
+    session = await _session(client)
+    base = f"/api/classes/{session['class_id']}/sentences"
+    response = await client.post(base, json={'text': '  O  Rui vê a uva ', 'keyword': 'menina'})
+    assert response.status_code == 200, response.text
+    sentence = response.json()
+    assert sentence['text'] == 'O Rui vê a uva.'
+    assert sentence['tokens'] == ['O', 'Rui', 'vê', 'a', 'uva']
+    assert any('Rui' in w for w in sentence['warnings'])
+    for text in ('Olá', ' '.join(['uva'] * 13)):
+        assert (await client.post(base, json={'text': text, 'keyword': 'uva'})).status_code == 422
+    assert len((await client.get(base)).json()) == 1
+    sid = session['id']
+    assert (await client.post(f'/api/sessions/{sid}/class-sentence', json={'sentence_id': sentence['id']})).status_code == 200
+    from server.classroom.live_state import session_state_snapshot
+    events = await client.app.state.classroom.events_log(sid).replay()
+    snapshot = session_state_snapshot(events, session, now=datetime.now(), role='board')
+    assert snapshot['session']['class_sentence']['text'] == sentence['text']
+    await client.post(f'/api/sessions/{sid}/class-sentence', json={})
+    events = await client.app.state.classroom.events_log(sid).replay()
+    assert session_state_snapshot(events, session, now=datetime.now(), role='board')['session']['class_sentence'] is None
+    assert (await client.delete(base + '/' + sentence['id'])).status_code == 200
+    assert (await client.get(base)).json() == []
+    client.cookies.clear()
+    assert (await client.post(base, json={'text': 'A uva', 'keyword': 'uva'})).status_code in (401, 403)
+
+
+async def test_session_sentences_filter_and_student_access(client):
+    session = await _session(client)
+    cid = session['class_id']
+    session = (await client.post('/api/sessions', json={'class_id': cid, 'activity_slug': 'm28p-ciclo-menino-sentence'})).json()
+    for keyword in ('menina', 'menino', 'uva'):
+        await client.post(f'/api/classes/{cid}/sentences', json={'text': 'A menina', 'keyword': keyword})
+    other = await _session(client)
+    await client.post(f"/api/classes/{other['class_id']}/sentences", json={'text': 'A menina', 'keyword': 'menina'})
+    url = f"/api/sessions/{session['id']}/class-sentences"
+    assert [s['keyword'] for s in (await client.get(url)).json()['sentences']] == ['menino', 'menina']
+    claim = await client.post(f"/api/sessions/{session['id']}/claim", json={'student_id': next(iter(session['roster']))})
+    cookie = _student_cookie(claim)
+    client.cookies.clear()
+    assert (await client.get(url, headers=cookie)).status_code == 200
+    assert (await client.get(f"/api/sessions/{other['id']}/class-sentences", headers=cookie)).status_code in (401, 403)

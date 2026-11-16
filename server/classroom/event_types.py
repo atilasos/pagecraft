@@ -288,6 +288,8 @@ SESSION_EVENT_TYPES = SessionEventRegistry(
                 "unit_id": "Unidade a que a falha diz respeito.",
             },
         ),
+        _event("class_sentence_shown", "teacher", board_visible=True, student_visible=True),
+        _event("class_sentence_hidden", "teacher", board_visible=True),
         _event(
             "teacher_message",
             "teacher",
