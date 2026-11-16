@@ -55,7 +55,7 @@ Copia esta lista para a tua resposta de progresso e marca cada passo:
    `uv run python scripts/embed_gothic_font.py --activity drafts/<slug>.html`
 5. **Proofreader.** Lê a vista enxuta `CHECK lean drafts/<slug>.html`, nunca o HTML integral. Revê português e, quando pedido, inglês, incluindo estados, feedback, `aria-label` e autoavaliação.
 6. **Evaluator.** Testa no browser a página servida localmente e segue [a lista do Evaluator](../agents/pagecraft-evaluator.md). Para ler o código, usa a vista enxuta.
-7. **Reparar.** Cada reprovação gera um ticket e regressa à fase responsável. Volta a correr os gates a partir dessa fase.
+7. **Reparar.** Cada reprovação com falhas na página gera um ticket e regressa à fase responsável. Uma reprovação só por `blocked_by` não gera ticket (ver «Gate do browser»). Volta a correr os gates a partir dessa fase.
 8. **Entregar.** Regista o rascunho e entrega ao professor a pré-visualização, os objetivos, os critérios, a evidência e as limitações.
 
 Regista cada fase concluída: `CHECK log <slug> --phase <fase> --status done|failed --model <família>/<modelo> --artifact <caminho>`. A família é a do modelo (`claude`, `gpt`, `grok`, `gemini`…), não o fornecedor que o serve. O gate de entrega compara a família do Builder com a do Evaluator. Uma exceção autorizada pelo professor regista-se com `CHECK log <slug> --phase teacher --status approved --note "<decisão>"`. Depois disso, corre de novo o Evaluator e regista-o com `--status done --artifact drafts/<slug>-evaluation-vN.json`; só essa nova avaliação satisfaz o gate. Uma reparação do HTML regista-se como `--phase repair --artifact drafts/<slug>.html` ou como `--phase builder`, e o gate trata-a como trabalho do Builder.

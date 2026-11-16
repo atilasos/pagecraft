@@ -33,7 +33,7 @@ As regras de família:
 - **Independência:** o Evaluator é obrigatoriamente de família diferente da do Builder; o Proofreader, de preferência (o gate avisa). Se o Builder for Claude, o Evaluator é GPT ou Grok (Cursor). Regista o par autor/revisor no manifest.
 - **Terceira família:** Grok via Cursor serve como crítico independente quando já há duas famílias envolvidas, ou para uma segunda opinião sobre o DocSpec em atividades de duas ou mais unidades.
 - **Indisponibilidade:** se faltar um modelo que o professor pediu, diz-lho e espera autorização antes de o substituir. Se faltar só o exemplo por defeito, escolhe outro da mesma classe e de família diferente da do autor, e regista-o no manifest.
-- **Sem segunda família:** em qualquer modo, se não houver revisão independente, o Evaluator não aprova. Entrega o rascunho com a limitação declarada e pede ao professor uma decisão: autorizar a revisão na mesma família ou disponibilizar outro fornecedor. A decisão regista-se com `CHECK log <slug> --phase teacher --status approved --note "<decisão>"`, e o gate de entrega verifica-a. Depois da autorização, volta a correr o Evaluator.
+- **Sem segunda família:** em qualquer modo, se não houver revisão independente, o Evaluator não aprova. Entrega o rascunho com a limitação declarada e pede ao professor uma decisão: autorizar a revisão na mesma família ou disponibilizar outro fornecedor. A decisão regista-se com `CHECK log <slug> --phase teacher --status approved --note "revisão na mesma família: <decisão>"`, e o gate de entrega verifica-a. Depois da autorização, volta a correr o Evaluator.
 
 ## Brief de cada delegado
 
