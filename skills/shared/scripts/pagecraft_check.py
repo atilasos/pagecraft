@@ -149,8 +149,9 @@ def independence_errors(manifest_path: Path, latest_evaluation: Path | None = No
     if family(last["builder"]) != family(last["evaluator"]):
         return []
     # só a última decisão do professor conta: uma recusa posterior anula uma aprovação anterior
-    decisions = [i for i, r in enumerate(runs) if r.get("phase") == "teacher" and r.get("note")]
-    approvals = decisions[-1:] if decisions and runs[decisions[-1]].get("status") == "approved" else []
+    decisions = [i for i, r in enumerate(runs) if r.get("phase") == "teacher"]
+    final = runs[decisions[-1]] if decisions else {}
+    approvals = decisions[-1:] if final.get("status") == "approved" and final.get("note") else []
     reevaluated = latest_evaluation is not None and any(
         latest_evaluation.name != runs[i].get("evaluation_at_decision") and any(
             role(r) == "evaluator" and r.get("status") == "done"
