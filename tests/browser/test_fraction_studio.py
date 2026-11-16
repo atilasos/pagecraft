@@ -163,7 +163,7 @@ def test_teacher_snapshot_renders_roster_and_shared_authorship(page, studio_orig
         page.goto(studio_origin + '/teacher/class.html')
         expect(page.locator('.student-card')).to_have_count(3)
         expect(page.locator('#work-groups')).to_contain_text('Ana + Bruno')
-        expect(page.locator('#work-groups')).to_contain_text('Consigo ajudar um amigo')
+        expect(page.locator('#work-groups')).to_contain_text('Conseguimos ajudar outros')
         page.get_by_role('button', name='Ver percurso de Ana', exact=True).click()
         expect(page.locator('#drawer-events')).to_contain_text('Trabalho conjunto · Ana + Bruno')
         pupil.reload()

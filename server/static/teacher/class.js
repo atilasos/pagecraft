@@ -999,13 +999,14 @@ function renderWorkGroups() {
   const container = $("work-groups");
   container.replaceChildren();
   $("work-groups-section").hidden = workGroups.size === 0;
-  const levelNames = {support:"Com ajuda", intermediate:"Sozinho", challenge:"Consigo ajudar um amigo"};
+  // níveis de um par ou grupo: formas no plural, para não colidir com a forma de trabalhar «Sozinho»
+  const levelNames = {support:"Com ajuda", intermediate:"Sozinhos", challenge:"Conseguimos ajudar outros"};
   for (const group of workGroups.values()) {
     const card = document.createElement("article");
     card.className = "work-group-card";
     const heading = document.createElement("h3"); heading.textContent = group.display_name;
     const detail = document.createElement("p");
-    detail.textContent = `${group.numbers?.evidence?.attempt || 0} tentativas conjuntas · ${levelNames[group.level] || "Sozinho"} · ${group.active ? group.triage?.reason || "A trabalhar" : group.replaced_by ? "Composição anterior" : "Dispositivo libertado"}`;
+    detail.textContent = `${group.numbers?.evidence?.attempt || 0} tentativas conjuntas · ${levelNames[group.level] || "Sozinhos"} · ${group.active ? group.triage?.reason || "A trabalhar" : group.replaced_by ? "Composição anterior" : "Dispositivo libertado"}`;
     card.append(heading, detail);
     if (group.active && !liveSessionState.closed) {
       const codeRow = (liveSessionState.group_codes || session.group_codes || []).find(row => row.id === group.id);
