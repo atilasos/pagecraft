@@ -149,7 +149,8 @@ def main():
     if not refs.is_dir():
         refs = PAGECRAFT_REPO / "server/pipeline/prompts/references"
     experience = (refs / "activity-experience.md").read_text(encoding="utf-8")
-    support_rules = (refs / "contextual-support.md").read_text(encoding="utf-8")
+    # a secção de manutenção do componente comum não serve ao Builder de uma atividade
+    support_rules = (refs / "contextual-support.md").read_text(encoding="utf-8").split("\n## Ao alterar o componente comum")[0].rstrip() + "\n"
     support_plan = {"support": spec.get("support"), "units": [u.get("support") for u in units]}
     age_rules = (refs / "age-adaptation.md").read_text(encoding="utf-8")
     parts.append(f"""# PageCraft Builder
