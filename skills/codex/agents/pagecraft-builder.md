@@ -22,7 +22,7 @@ Se não te indicarem `SKILL_DIR`, usa a pasta da skill do teu harness (`skills/c
 
 ## Lê
 
-1. `$SKILL_DIR/identities/builder.md`: a tua identidade e as proibições.
+1. `$SKILL_DIR/identities/builder.md`: a tua identidade e as proibições. A identidade foi escrita para o Studio, que lê o JSON da resposta. Aqui, escreve o JSON no ficheiro de saída e responde só com o resumo pedido em «Devolve».
 2. `drafts/<slug>-builder-prompt.md`. Já inclui a experiência, a adaptação à idade e o apoio contextual, por isso não leias essas referências à parte.
 3. O design-spec.
 4. `$SKILL_DIR/assets/template-base.html`, como base técnica: tokens, ponte, foco e helper de voz.

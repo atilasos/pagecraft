@@ -10,7 +10,7 @@ O orquestrador é a sessão que carregou a skill. Coordena, lança as fases, cor
    - fase com modelo de outro fornecedor, ou com opções próprias → `delegate_task` com `target` (fornecedor, modelo, esforço), `role` adequado e isolamento `shared`, porque os artefactos vivem na mesma checkout;
    - segue o `next` que o `delegate_task` devolve: a conclusão reacorda a thread. Não faças polling nem `sleep`;
    - não cries worktrees nem threads novas para as fases.
-2. **Claude Code sem T3:** usa os subagentes `pagecraft-*` com a ferramenta `Agent`. O `model:` do frontmatter já aplica a classe indicada abaixo. Para a independência, corre o Builder no Codex com `/codex:rescue` quando o plugin existir.
+2. **Claude Code sem T3:** usa os subagentes `pagecraft-*` com a ferramenta `Agent`. O `model:` do frontmatter aplica a classe de cada fase dentro da família Claude. Para a independência, corre o Builder no Codex com `/codex:rescue` quando o plugin existir.
 3. **Codex sem T3:** usa os subagentes do Codex com o ficheiro de fase como instrução. Para a independência, corre o Proofreader e o Evaluator noutra família quando houver um CLI disponível (por exemplo, `claude -p`).
 
 4. **Sem delegação:** executa as fases em sequência e escreve o artefacto de cada uma antes de começar a seguinte. Não mistures responsabilidades. A mesma sessão pode produzir, mas não pode aprovar o que produziu: sem revisão independente, o Evaluator não emite `pass:true`.

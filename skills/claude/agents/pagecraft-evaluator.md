@@ -20,7 +20,7 @@ Se não te indicarem `SKILL_DIR`, usa a pasta da skill do teu harness (`skills/c
 
 ## Lê
 
-1. `$SKILL_DIR/identities/evaluator.md`.
+1. `$SKILL_DIR/identities/evaluator.md`. A identidade foi escrita para o Studio, que lê o JSON da resposta. Aqui, escreve o JSON no ficheiro de saída e responde só com o resumo pedido em «Devolve».
 2. `$SKILL_DIR/references/activity-experience.md`, `age-adaptation.md` e a secção de verificação de `contextual-support.md`.
 3. O código só na vista enxuta (`pagecraft_check.py lean`).
 

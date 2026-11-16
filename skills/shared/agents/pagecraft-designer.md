@@ -18,7 +18,7 @@ Se não te indicarem `SKILL_DIR`, usa a pasta da skill do teu harness (`skills/c
 
 ## Lê
 
-1. `$SKILL_DIR/identities/designer.md`: a tua identidade e o schema de saída.
+1. `$SKILL_DIR/identities/designer.md`: a tua identidade e o schema de saída. A identidade foi escrita para o Studio, que lê o JSON da resposta. Aqui, escreve o JSON no ficheiro de saída e responde só com o resumo pedido em «Devolve».
 2. `$SKILL_DIR/references/age-adaptation.md` e `activity-experience.md`.
 3. `DESIGN.md` do repositório: tokens e proibições do sistema PageCraft.
 4. Nas atividades M28P, o design-spec da palavra correspondente. Mantém a paleta e as `syllableColors`.

@@ -18,7 +18,7 @@ Se não te indicarem `SKILL_DIR`, usa a pasta da skill do teu harness (`skills/c
 
 ## Lê
 
-1. `$SKILL_DIR/identities/proofreader.md`: a tua identidade e as prioridades.
+1. `$SKILL_DIR/identities/proofreader.md`: a tua identidade e as prioridades. A identidade foi escrita para o Studio, que lê o JSON da resposta. Aqui, escreve o JSON no ficheiro de saída e responde só com o resumo pedido em «Devolve».
 2. A vista enxuta da página: `uv run python "$SKILL_DIR/scripts/pagecraft_check.py" lean drafts/<slug>.html`. O texto está sobretudo nas strings do JS. Não leias o HTML integral.
 3. O DocSpec, para confirmar a coerência entre o texto, a meta e os critérios.
 
