@@ -58,7 +58,7 @@ Copia esta lista para a tua resposta de progresso e marca cada passo:
 7. **Reparar.** Cada reprovação com falhas na página gera um ticket e regressa à fase responsável. Uma reprovação só por `blocked_by` não gera ticket (ver «Gate do browser»). Volta a correr os gates a partir dessa fase.
 8. **Entregar.** Regista o rascunho e entrega ao professor a pré-visualização, os objetivos, os critérios, a evidência e as limitações.
 
-Regista cada fase concluída: `CHECK log <slug> --phase <fase> --status done|failed --model <família>/<modelo> --artifact <caminho>`. A família é a do modelo (`claude`, `gpt`, `grok`, `gemini`…), não o fornecedor que o serve. O gate de entrega compara a família do Builder com a do Evaluator. Uma exceção autorizada pelo professor regista-se com `CHECK log <slug> --phase teacher --status approved --note "<decisão>"`. Depois disso, corre de novo o Evaluator e regista-o com `--status done --artifact drafts/<slug>-evaluation-vN.json`; só essa nova avaliação satisfaz o gate. Uma reparação do HTML regista-se como `--phase repair --artifact drafts/<slug>.html` ou como `--phase builder`, e o gate trata-a como trabalho do Builder.
+Regista cada fase concluída: `CHECK log <slug> --phase <fase> --status done|failed --model <família>/<modelo> --artifact <caminho>`. A família é a do modelo (`claude`, `gpt`, `grok`, `gemini`…), não o fornecedor que o serve. O gate de entrega compara a família do Builder com a do Evaluator. Uma exceção autorizada pelo professor regista-se com `CHECK log <slug> --phase teacher --status approved --note "<decisão>"`. Depois disso, corre de novo o Evaluator e regista-o com `--status done --artifact drafts/<slug>-evaluation-vN.json`; só essa nova avaliação satisfaz o gate. Só conta a última decisão do professor: uma recusa posterior anula a aprovação. Uma reparação do HTML regista-se como `--phase repair --artifact drafts/<slug>.html` ou como `--phase builder`, e o gate trata-a como trabalho do Builder.
 
 ### Sebenta
 
@@ -89,7 +89,7 @@ Em `sources.md`, separa o que é Fonte, o que é Síntese da wiki e o que é pro
 
 Uma atividade está pronta para o professor quando:
 
-- `CHECK check <slug> --phase delivery` sai com 0, ou com a exceção justificada. Este gate exige `pass:true` na última revisão linguística e na última avaliação, as duas mais recentes do que o HTML, e Builder e Evaluator de famílias diferentes;
+- `CHECK check <slug> --phase delivery` sai com 0, ou com a exceção justificada. Este gate exige `pass:true` na última revisão linguística e na última avaliação, as duas mais recentes do que o HTML, e Builder e Evaluator de famílias diferentes, salvo se a última decisão do professor for `approved`, com nota, e for seguida de um novo `evaluation-vN` registado;
 - existem o guia `<slug>.md` e as fontes `<slug>-sources.md`;
 - o último `evaluation-vN` tem `pass:true`, sem problemas críticos e com todos os scores ≥3;
 - a página abre sem erros na consola e a interação principal funciona;
