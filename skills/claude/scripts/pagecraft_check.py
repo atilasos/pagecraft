@@ -137,20 +137,30 @@ def last_models(manifest_path: Path) -> tuple[list[dict], dict]:
                   for phase in ("builder", "evaluator", "proofreader")}
 
 
-def independence_errors(manifest_path: Path) -> list[str]:
-    """Builder e Evaluator de famílias diferentes, salvo decisão do professor registada."""
+def independence_errors(manifest_path: Path, latest_evaluation: Path | None = None) -> list[str]:
+    """Builder e Evaluator de famílias diferentes, salvo decisão do professor registada.
+
+    A decisão só vale se, depois dela, uma execução concluída do Evaluator tiver
+    produzido o último evaluation-vN (o --artifact da entrada aponta para ele)."""
     runs, last = last_models(manifest_path)
     missing = [p for p in ("builder", "evaluator") if not family(last[p])]
     if missing:
         return [f"{manifest_path.name}: falta o modelo <família>/<modelo> da fase {', '.join(missing)} (CHECK log --model)"]
-    last_evaluation = max((i for i, r in enumerate(runs) if role(r) == "evaluator" and r.get("model")), default=-1)
-    # a decisão do professor só vale se a avaliação tiver sido refeita depois dela
-    if family(last["builder"]) == family(last["evaluator"]) and not any(
-            r.get("phase") == "teacher" and r.get("status") == "approved" and r.get("note")
-            for r in runs[:last_evaluation]):
-        return [f"{manifest_path.name}: Builder e Evaluator da mesma família ({family(last['builder'])}) "
-                "sem decisão do professor registada (CHECK log <slug> --phase teacher --status approved --note \"<decisão>\")"]
-    return []
+    if family(last["builder"]) != family(last["evaluator"]):
+        return []
+    approvals = [i for i, r in enumerate(runs)
+                 if r.get("phase") == "teacher" and r.get("status") == "approved" and r.get("note")]
+    reevaluated = latest_evaluation is not None and any(
+        latest_evaluation.name != runs[i].get("evaluation_at_decision") and any(
+            role(r) == "evaluator" and r.get("status") == "done"
+            and Path(str(r.get("artifact") or "")).name == latest_evaluation.name
+            for r in runs[i + 1:])
+        for i in approvals)
+    if reevaluated:
+        return []
+    return [f"{manifest_path.name}: Builder e Evaluator da mesma família ({family(last['builder'])}) sem decisão do "
+            "professor seguida de nova avaliação (CHECK log <slug> --phase teacher --status approved --note \"<decisão>\"; "
+            "depois corre o Evaluator e regista-o com --status done --artifact <evaluation-vN>)"]
 
 
 def activity_errors(path: Path) -> list[str]:
@@ -246,7 +256,9 @@ def cmd_check(args) -> int:
         stale = [w for w in warnings if "o HTML mudou depois desta revisão" in w]
         errors += stale
         warnings = [w for w in warnings if w not in stale]
-        errors += independence_errors(drafts / f"{slug}-run-manifest.json")
+        evaluations = versions(drafts, slug, "evaluation")
+        errors += independence_errors(drafts / f"{slug}-run-manifest.json",
+                                      evaluations[-1][1] if evaluations else None)
         _, last = last_models(drafts / f"{slug}-run-manifest.json")
         builder, proofreader = last["builder"], last["proofreader"]
         if family(builder) and family(builder) == family(proofreader):
@@ -291,6 +303,10 @@ def cmd_log(args) -> int:
     for key in ("model", "artifact", "note"):
         if getattr(args, key):
             entry[key] = getattr(args, key)
+    if args.phase == "teacher":
+        # a decisão aplica-se à avaliação seguinte; guarda a que estava em vigor
+        found = versions(Path(args.dir), args.slug, "evaluation")
+        entry["evaluation_at_decision"] = found[-1][1].name if found else None
     manifest["runs"].append(entry)
     manifest["status"] = args.status if args.phase == "orchestrator" else manifest.get("status", "running")
     path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
