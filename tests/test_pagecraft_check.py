@@ -154,6 +154,11 @@ def test_delivery_requires_independent_families_unless_teacher_decides(tmp_path)
     run("--dir", tmp_path, "log", "demo", "--phase", "evaluator", "--status", "done", "--model", "claude/opus",
         "--artifact", str(tmp_path / "demo-evaluation-v2.json"))
     assert delivery_errors(tmp_path) == []
+    run("--dir", tmp_path, "log", "demo", "--phase", "teacher", "--status", "rejected", "--note", "afinal não")
+    (tmp_path / "demo-evaluation-v3.json").write_text(json.dumps(PASSING))
+    run("--dir", tmp_path, "log", "demo", "--phase", "evaluator", "--status", "done", "--model", "claude/opus",
+        "--artifact", str(tmp_path / "demo-evaluation-v3.json"))
+    assert any("mesma família" in e for e in delivery_errors(tmp_path))  # a última decisão é uma recusa
 
 
 def test_delivery_rejects_reviews_older_than_the_html(tmp_path):

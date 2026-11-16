@@ -148,8 +148,9 @@ def independence_errors(manifest_path: Path, latest_evaluation: Path | None = No
         return [f"{manifest_path.name}: falta o modelo <família>/<modelo> da fase {', '.join(missing)} (CHECK log --model)"]
     if family(last["builder"]) != family(last["evaluator"]):
         return []
-    approvals = [i for i, r in enumerate(runs)
-                 if r.get("phase") == "teacher" and r.get("status") == "approved" and r.get("note")]
+    # só a última decisão do professor conta: uma recusa posterior anula uma aprovação anterior
+    decisions = [i for i, r in enumerate(runs) if r.get("phase") == "teacher" and r.get("note")]
+    approvals = decisions[-1:] if decisions and runs[decisions[-1]].get("status") == "approved" else []
     reevaluated = latest_evaluation is not None and any(
         latest_evaluation.name != runs[i].get("evaluation_at_decision") and any(
             role(r) == "evaluator" and r.get("status") == "done"
