@@ -117,10 +117,29 @@ def semantic_rules(kind: str, path: Path, html_path: Path) -> tuple[list[str], l
     return errors, warnings
 
 
+def family(model: str | None) -> str | None:
+    return model.split("/", 1)[0].strip().lower() if model and "/" in model else None
+
+
+def independence_errors(manifest_path: Path) -> list[str]:
+    """Builder e Evaluator de famílias diferentes, salvo decisão do professor registada."""
+    runs = [r for r in load(manifest_path).get("runs") or [] if isinstance(r, dict)]
+    last = {phase: next((r.get("model") for r in reversed(runs) if r.get("phase") == phase and r.get("model")), None)
+            for phase in ("builder", "evaluator")}
+    missing = [p for p, m in last.items() if not family(m)]
+    if missing:
+        return [f"{manifest_path.name}: falta o modelo <família>/<modelo> da fase {', '.join(missing)} (CHECK log --model)"]
+    if family(last["builder"]) == family(last["evaluator"]) and not any(
+            r.get("phase") == "teacher" and r.get("note") for r in runs):
+        return [f"{manifest_path.name}: Builder e Evaluator da mesma família ({family(last['builder'])}) "
+                "sem decisão do professor registada (CHECK log --phase teacher --note)"]
+    return []
+
+
 PHASES = ("architect", "designer", "builder", "proofreader", "evaluator", "delivery")
 # o que cada fase tem de ter produzido (cumulativo); validar só o que já se aplica
 REQUIRED = {"architect": {"docspec", "sources"}, "designer": {"design-spec"}, "builder": {"html"},
-            "proofreader": {"proofread"}, "evaluator": {"evaluation"}, "delivery": {"guide"}}
+            "proofreader": {"proofread"}, "evaluator": {"evaluation"}, "delivery": {"guide", "activity"}}
 
 
 def cmd_check(args) -> int:
@@ -135,8 +154,8 @@ def cmd_check(args) -> int:
     checked: list[str] = []
     paths = {"docspec": drafts / f"{slug}-docspec.json", "sources": drafts / f"{slug}-sources.md",
              "design-spec": drafts / f"{slug}-design-spec.json", "html": drafts / f"{slug}.html",
-             "guide": drafts / f"{slug}.md"}
-    for name in ("docspec", "sources", "design-spec", "html", "guide"):
+             "guide": drafts / f"{slug}.md", "activity": drafts / f"{slug}-activity.json"}
+    for name in paths:
         if name in required and not paths[name].is_file():
             errors.append(f"falta {paths[name]}")
     docspec = {}
@@ -179,6 +198,11 @@ def cmd_check(args) -> int:
         evaluation = versions(drafts, slug, "evaluation")
         if evaluation and load(evaluation[-1][1]).get("pass") is not True:
             errors.append(f"{evaluation[-1][1].name}: a última avaliação não aprova a atividade")
+        # na entrega, uma revisão mais antiga do que o HTML já não cobre a página
+        stale = [w for w in warnings if "o HTML mudou depois desta revisão" in w]
+        errors += stale
+        warnings = [w for w in warnings if w not in stale]
+        errors += independence_errors(drafts / f"{slug}-run-manifest.json")
     print(json.dumps({"slug": slug, "phase": phase or "all", "passed": not errors, "checked": checked,
                       "errors": errors, "warnings": warnings}, ensure_ascii=False, indent=1))
     return 1 if errors else 0

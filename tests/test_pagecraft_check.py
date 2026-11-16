@@ -98,3 +98,41 @@ def test_phase_scope_ignores_downstream_artifacts_and_requires_outputs(tmp_path)
     assert any("design-spec" in e for e in designer["errors"])
     delivery = json.loads(run("--dir", tmp_path, "check", "demo", "--phase", "delivery").stdout)
     assert any("demo.md" in e for e in delivery["errors"]) and any("sem evidence" in e for e in delivery["errors"])
+
+
+def ready_for_delivery(tmp_path, builder="gpt/sol", evaluator="claude/opus"):
+    import os
+
+    write_minimal(tmp_path, "demo", PASSING)
+    for name in ("demo-sources.md", "demo.md", "demo-design-spec.json", "demo-activity.json"):
+        (tmp_path / name).write_text('{"palette": {}}' if name.endswith(".json") else "x")
+    (tmp_path / "demo.html").write_text("<p>x</p>")
+    (tmp_path / "demo-proofread-v1.json").write_text(json.dumps({"pass": True, "summary": "ok", "issues": []}))
+    os.utime(tmp_path / "demo.html", (1, 1))
+    for phase, model in (("builder", builder), ("evaluator", evaluator)):
+        run("--dir", tmp_path, "log", "demo", "--phase", phase, "--status", "done", "--model", model)
+
+
+def delivery_errors(tmp_path):
+    report = json.loads(run("--dir", tmp_path, "check", "demo", "--phase", "delivery").stdout)
+    return [e for e in report["errors"] if not e.startswith("demo.html:")]
+
+
+def test_delivery_requires_independent_families_unless_teacher_decides(tmp_path):
+    ready_for_delivery(tmp_path)
+    assert delivery_errors(tmp_path) == []
+    ready_for_delivery(tmp_path, builder="claude/sonnet", evaluator="claude/opus")
+    assert any("mesma família (claude)" in e for e in delivery_errors(tmp_path))
+    run("--dir", tmp_path, "log", "demo", "--phase", "teacher", "--status", "approved", "--note", "autorizo")
+    assert delivery_errors(tmp_path) == []
+
+
+def test_delivery_rejects_reviews_older_than_the_html(tmp_path):
+    import os
+
+    ready_for_delivery(tmp_path)
+    os.utime(tmp_path / "demo-evaluation-v1.json", (1, 1))
+    os.utime(tmp_path / "demo.html", (10, 10))
+    assert any("o HTML mudou" in e for e in delivery_errors(tmp_path))
+    evaluator = json.loads(run("--dir", tmp_path, "check", "demo", "--phase", "evaluator").stdout)
+    assert any("o HTML mudou" in w for w in evaluator["warnings"])
