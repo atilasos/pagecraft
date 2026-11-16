@@ -195,9 +195,10 @@ def cmd_check(args) -> int:
         if found[-1][0] == 0:
             warnings.append(f"{latest.name}: sem versão -vN; a próxima iteração sobrescreve o histórico")
     if phase == "delivery":
-        evaluation = versions(drafts, slug, "evaluation")
-        if evaluation and load(evaluation[-1][1]).get("pass") is not True:
-            errors.append(f"{evaluation[-1][1].name}: a última avaliação não aprova a atividade")
+        for kind, label in (("evaluation", "a última avaliação"), ("proofread", "a última revisão linguística")):
+            found = versions(drafts, slug, kind)
+            if found and load(found[-1][1]).get("pass") is not True:
+                errors.append(f"{found[-1][1].name}: {label} não aprova a atividade")
         # na entrega, uma revisão mais antiga do que o HTML já não cobre a página
         stale = [w for w in warnings if "o HTML mudou depois desta revisão" in w]
         errors += stale

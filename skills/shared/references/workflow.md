@@ -89,7 +89,7 @@ Em `sources.md`, separa o que é Fonte, o que é Síntese da wiki e o que é pro
 
 Uma atividade está pronta para o professor quando:
 
-- `CHECK check <slug> --phase delivery` sai com 0, ou com a exceção justificada;
+- `CHECK check <slug> --phase delivery` sai com 0, ou com a exceção justificada. Este gate exige `pass:true` na última revisão linguística e na última avaliação, as duas mais recentes do que o HTML, e Builder e Evaluator de famílias diferentes;
 - existem o guia `<slug>.md` e as fontes `<slug>-sources.md`;
 - o último `evaluation-vN` tem `pass:true`, sem problemas críticos e com todos os scores ≥3;
 - a página abre sem erros na consola e a interação principal funciona;
