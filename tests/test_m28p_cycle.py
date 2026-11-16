@@ -31,8 +31,8 @@ def test_cumulative_repertoire_and_generation_limits():
                 spec=motor.spec_for(data,word)
                 assert '@@' not in motor.render(data,spec)
             elif data:
-                assert len(data['rounds'])==4
-                assert len({r['target']['slug'] for r in data['rounds']})==4
+                assert 1<=len(data['rounds'])<=4 if game=='sentence' else len(data['rounds'])==4
+                assert len({r['target']['slug'] for r in data['rounds']})==len(data['rounds'])
                 if game=='read-choose':
                     assert all(r['target']['picturable'] for r in data['rounds'])
                 spec=motor.spec_for(data,word)
@@ -159,3 +159,30 @@ def test_discover_rounds_show_only_needed_syllables_and_honest_counts():
             hidden={w['label'] for w in group['hidden']}
             assert not [w['label'] for w in pool['words'] if 2<=len(w['syllables'])<=3 and w['label'] not in hidden and formable(w['label'],group['pieces'])]
     assert formable('ovo',['o','vo']) and not formable('ovo',['vo']) and not formable('nono',['no'])
+
+
+def test_js_class_sentences_and_restore_in_either_order():
+    template=(motor.ROOT/'scripts/templates/m28p-tic.html').read_text()
+    model=template.split('/* BEGIN M28P TIC MODEL: funções puras verificáveis em Node. */')[1].split('/* END M28P TIC MODEL */')[0]
+    js=model+"""
+const assert=require('node:assert/strict');
+const fixed=[{id:'r1',kind:'sentence',pieces:[{id:'p0',label:'A'},{id:'p1',label:'menina'}],answer:['p0','p1']}];
+const sentences=[{id:'abc',text:'A menina!',tokens:['A','menina']}];
+const rounds=TicModel.classRounds(fixed,sentences);
+assert.equal(rounds[0].id,'c-abc');assert.equal(rounds[0].target.text,'A menina!');
+assert.deepEqual(rounds,TicModel.classRounds(fixed,sentences));
+assert.equal(TicModel.classRounds(fixed,Array.from({length:5},(_,i)=>({...sentences[0],id:String(i)}))).length,4);
+const raw=TicModel.initial();raw.page=0;
+TicModel.edit(raw,rounds[0],rounds[0].answer);TicModel.confirm(raw,rounds[0]);
+for(const restoreFirst of [true,false]){
+ let saved=raw;
+ if(restoreFirst){const early=TicModel.sanitize({rounds:fixed},raw);saved=TicModel.retainState(raw,early,fixed);}
+ const clean=TicModel.sanitize({rounds},saved);
+ assert.deepEqual(clean.answers['c-abc'],['p0','p1']);assert(clean.confirmed['c-abc']);
+ TicModel.edit(clean,rounds[0],[]);
+ const edited=TicModel.retainState(saved,clean,rounds);
+ assert(!edited.confirmed['c-abc']);
+}
+"""
+    result=subprocess.run(['node'],input=js,capture_output=True,text=True)
+    assert result.returncode==0,result.stderr
