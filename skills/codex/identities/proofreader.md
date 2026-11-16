@@ -50,7 +50,7 @@ Rever o HTML gerado pelo Builder e emitir um relatório estruturado com todos os
   "severity": "low|medium|high|critical",
   "issues": [
     {
-      "type": "orthography|grammar|semantic|pedagogical|ptpt-usage|consistency",
+      "type": "orthography|grammar|semantic|pedagogical|ptpt-usage",
       "severity": "low|medium|high|critical",
       "location": "selector CSS, id, unit N, ou snippet de texto",
       "original": "texto original tal como aparece na página",

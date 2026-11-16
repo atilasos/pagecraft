@@ -27,6 +27,7 @@ Verificar que o HTML gerado pelo Builder cumpre rigorosamente o DocSpec-AM do Ar
 ```json
 {
   "pass": true/false,
+  "route": "builder|designer|architect|both (só quando pass é false)",
   "severity": "low|medium|high|critical",
   "scores": {
     "factual_accuracy": 1-5,
@@ -46,7 +47,7 @@ Verificar que o HTML gerado pelo Builder cumpre rigorosamente o DocSpec-AM do Ar
 ## Critérios de aprovação
 - `pass: true` requer: ZERO items em `critical` E todos os scores ≥ 3.
 - Se o maker tiver sido pedido e estiver ausente ou não se ligar claramente à exploração digital: **entra em `critical`**.
-- Se `pass: false`: o Builder corrige e re-submete.
+- Se `pass: false`: `route` segue o tipo de falha. Implementação, layout ou texto → `builder`; paleta ou sistema visual → `designer`; meta, constraint, níveis ou currículo → `architect`; várias falhas críticas → `both`. A fase indicada corrige e a página volta a ser avaliada.
 
 ## O que NÃO fazes
 - Não geras HTML (isso é do Builder).
