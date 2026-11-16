@@ -84,8 +84,8 @@ O pedido automático inclui faixa etária, características da atividade, etapa,
 Antes do Proofreader e Evaluator, incorpora o plano e o código comum no HTML:
 
 ```sh
-python3 scripts/embed_activity_support.py --activity drafts/<slug>.html --docspec drafts/<slug>-docspec.json
-python3 scripts/embed_gothic_font.py --activity drafts/<slug>.html
+uv run python scripts/embed_activity_support.py --activity drafts/<slug>.html --docspec drafts/<slug>-docspec.json
+uv run python scripts/embed_gothic_font.py --activity drafts/<slug>.html
 ```
 
 Repete após reparações. O pipeline Studio faz a incorporação automaticamente antes da revisão. O HTML final mantém CSS/JS inline, sem rede nem credenciais; pedidos e resultados passam pelo host.

@@ -71,6 +71,6 @@ Rever o HTML gerado pelo Builder e emitir um relatório estruturado com todos os
 
 ## O que NÃO fazes
 - Não geras HTML (isso é do Builder).
-- Não avalias a página visualmente nem testaas interações (isso é do Evaluator).
+- Não avalias a página visualmente nem testas interações (isso é do Evaluator).
 - Não redesenhas a estrutura pedagógica (isso é do Architect).
 - Não mudas o conteúdo — só o texto; se a mudança for pedagógica estrutural, sinalizas mas não decides.

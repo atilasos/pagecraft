@@ -677,11 +677,11 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
       },
       "maker": {
         "type": "whiteboard",
-        "challenge": "Cada grupo apresenta uma fase do ciclo no quadro interativo, usando a página. No fim, a turma junta tudo num mapa de conceitos colectivo.",
+        "challenge": "Cada grupo apresenta uma fase do ciclo no quadro interativo, usando a página. No fim, a turma junta tudo num mapa de conceitos coletivo.",
         "materials": ["Quadro interativo", "página PageCraft"],
         "groupSize": "turma (4 grupos, 1 fase cada)",
         "connection": "Cada grupo explora 1 fase em profundidade na página → apresenta à turma",
-        "communication": "Mapa de conceitos colectivo no quadro: cada grupo adiciona a sua fase com setas",
+        "communication": "Mapa de conceitos coletivo no quadro: cada grupo adiciona a sua fase com setas",
         "alternatives": ["Sem quadro: cartolinas A3 por grupo, coladas na parede em sequência circular"]
       },
       "differentiation": {
@@ -692,6 +692,6 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
       "duration": 20
     }
   ],
-  "sessionFlow": "0-5min: activação (pergunta: 'De onde vem a chuva?') → 5-25min: Unit 1 exploração + maker → 25-35min: Unit 2 exploração + comunicação → 35-40min: síntese colectiva no quadro"
+  "sessionFlow": "0-5min: ativação (pergunta: 'De onde vem a chuva?') → 5-25min: Unit 1 exploração + maker → 25-35min: Unit 2 exploração + comunicação → 35-40min: síntese coletiva no quadro"
 }
 ```
