@@ -5,40 +5,25 @@ Proposta de 16/11/2026, a pedido do professor de TIC, para os alunos do 2.º ano
 ## Decisões do professor (16/11/2026)
 
 - Entram as quatro operações abaixo.
-- **Fonte das palavras novas e das frases:** a lista editorial dos materiais do método que o professor usa com a turma. Não geramos listas nem inventamos pseudopalavras. O professor fornece o material e confirma o direito de uso em turma, que fica registado em `source.rights`.
-- **Repertório por aluno:** os jogos de uma palavra-chave N usam só as sílabas e palavras de 1..N. O professor escolhe a palavra de cada criança.
+- **Fonte:** o material escolar da pasta «m28p» do Drive do professor, com direito de uso confirmado. Aproveita-se só o conteúdo linguístico. A letra, as imagens e as atividades não se reutilizam, porque estão desatualizadas: cursiva, clip-art e cópia mecânica. O inventário das páginas 1–29 identificou ainda figuras impróprias nas páginas 4 e 7, que não se usam.
+- **Repertório por famílias silábicas:** até à palavra-chave N contam as consoantes das palavras 1..N, combinadas com as vogais (com e sem acento). É o que o manual faz na p.29: «ovo», «novo», «nove», «neve», «avó», «avô». Os dígrafos e os ditongos só entram quando uma palavra-chave os traz.
+- **Só palavras reais.** Não entram pseudopalavras nem nomes próprios sem personagem apresentada. As exclusões ficam registadas com a razão em `policy.excludedFromSource`.
+- **Frases:** o PageCraft propõe frases curtas só com o repertório e o professor revê-as. O formato aceita depois frases ditadas pela turma (texto livre, MEM).
+- **Repertório por aluno:** o professor escolhe a palavra-chave de cada criança.
+- **Piloto:** menina, menino e uva.
 
-## Repertório cumulativo
+## Repertório e dados
 
-O repertório de N é a união das sílabas orais das palavras 1..N em `drafts/m28p-v3/words.json`. Os dígrafos ficam inteiros (`nha`, `lha`, `que`, `rra`, `ssa`). Alguns marcos de dimensão: menina tem 3 sílabas, sapato 11, galinha 28, gema 30 e flor 57. Nas primeiras palavras há poucas palavras novas possíveis, por isso só se geram jogos de ciclo para as palavras-chave em que a lista editorial tenha itens.
+Os dados vivem em `drafts/m28p-v3/cycle.json`, cujo estado é «proposta para revisão docente». Cada palavra nova entra na primeira palavra-chave em que é formável e cita a página de origem, ou fica marcada `"source": "proposta"`. `picturable` indica se a palavra tem uma imagem inequívoca: só essas entram em «Ler e escolher». Palavras como «nome», «nova» e «novo» ficam em «Ouvir e montar», «Descobrir palavras» e frases.
 
-## Contrato de dados: `drafts/m28p-v3/cycle.json`
+O gerador recusa os dados quando:
+- uma palavra nova ou um token de frase usa uma consoante que ainda não foi aprendida até N, ou um ditongo ou dígrafo que ainda não foi introduzido;
+- a concatenação das sílabas não reproduz a grafia;
+- falta a imagem ou o áudio de algum item.
 
-```json
-{
-  "source": {"title": "<material editorial>", "pages": "<páginas>", "rights": "<autorização de uso em turma>", "addedBy": "professor", "date": "2026-11-16"},
-  "functionWords": ["a", "o", "e", "é", "um", "uma", "tem"],
-  "keywords": {
-    "casa": {
-      "newWords": [{"label": "saco", "syllables": ["sa", "co"], "image": "saco", "audio": "saco"}],
-      "sentences": [{"text": "A menina tem uma bota.", "tokens": ["A", "menina", "tem", "uma", "bota"], "image": "frase-casa-1", "audio": "frase-casa-1"}]
-    }
-  }
-}
-```
+As imagens são SVG originais e o áudio é pt-PT com a voz da coleção. O TTS nunca modela fonemas nem sílabas isoladas.
 
-O exemplo `saco` é só ilustrativo da forma dos dados. O gerador valida o seguinte e recusa os dados quando falha:
-
-- **Sílabas e grafia:**
-  - cada `newWords[].syllables` pertence ao repertório de N;
-  - a concatenação das sílabas reproduz `label`;
-  - nenhuma palavra nova usa uma sílaba de uma palavra posterior a N.
-- **Frases:** cada token é uma palavra-chave de 1..N, uma palavra nova já introduzida até N ou uma `functionWords` da fonte editorial.
-- **Recursos:**
-  - cada imagem e cada áudio referidos existem em `assets/m28p-tic/` (cycle);
-  - as imagens são SVG originais e inequívocas;
-  - o áudio é pt-PT com a mesma voz da coleção e regista-se no manifesto;
-  - não se usa TTS para modelar fonemas nem sílabas isoladas.
+Nas três primeiras palavras há poucas palavras novas, e o próprio método funciona assim. Por isso, as rondas misturam as palavras-chave já trabalhadas com as palavras novas. Um jogo só é gerado se houver itens distintos para as suas quatro rondas.
 
 ## Quatro minijogos novos por palavra-chave
 
