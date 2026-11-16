@@ -14,6 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from jsonschema import Draft202012Validator
+from scripts.m28p_cycle import CYCLE_GAMES, validate_cycle, image_choices
 from server.activity_support import embed_activity_support
 from server.bridge_snippet import ensure_bridge_lite
 from server.typography import embed_activity_typography
@@ -41,6 +42,8 @@ def read_words():
 
 
 def data_audio(name):
+    if not (ASSETS / 'audio' / f'{name}.mp3').is_file():
+        raise ValueError(f'Áudio em falta: {name}. Executar prepare_m28p_tic_assets.py --audio.')
     return 'data:audio/mpeg;base64,' + base64.b64encode((ASSETS / 'audio' / f'{name}.mp3').read_bytes()).decode()
 
 
@@ -123,7 +126,7 @@ def spec_for(data, word):
     units = []
     for item in data['rounds']:
         units.append(dict(summary=data['title'], textDescription=data['instruction'], duration=1,
-            interaction=dict(state=[dict(name='resposta', type='matching' if data['game'] == 'pairs' else 'sorting' if data['game'] in {'syllables','recall'} else 'quiz', default=None)],
+            interaction=dict(state=[dict(name='resposta', type='matching' if data['game'] == 'pairs' else 'sorting' if data['game'] in {'syllables','recall','listen-build','sentence','discover'} else 'quiz', default=None)],
                 render='Imagem original, cartões grandes e exemplo visual recuperável; áudio PT-PT incorporado por pedido.',
                 transition='Selecionar, confirmar, receber pista e continuar após resposta, mesmo incorreta.',
                 constraint='Comparar a escrita e o significado; conservar a ordem gráfica das peças.',
@@ -132,7 +135,7 @@ def spec_for(data, word):
                 standard='Modelo nos jogos de associação e montagem apoiada; demonstração recuperável.',
                 challenge='Retirar modelo opcional sem alterar as respostas nem introduzir palavras futuras.'),
             support=dict(objective=data['instruction'], criteria=data['criteria'], obstacles=[dict(id='comparar', label={'pt':'Quero uma pista'},
-                hints=[dict(id=f'pista-{i}', text={'pt':{'individual':ind,'group':group}}) for i,(ind,group) in enumerate(hints[data['game']],1)])])))
+                hints=[dict(id=f'pista-{i}', text={'pt':{'individual':ind,'group':group}}) for i,(ind,group) in enumerate(hints.get(data['game'], hints['recall']),1)])])))
     spec = dict(slug=data['slug'], topic=f"{data['title']} · {word['label']}", years=[1,2], order=word['order'],
         tags=['m28p','m28p-v3','tic','leitura','1ano','2ano'], ageRange='6-8 anos', duration=5,
         objectives=[data['criteria'][0], 'Usar a demonstração e as pistas para continuar com apoio pontual.'],
@@ -159,8 +162,8 @@ def save_json(path, value):
     path.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n')
 
 
-def build(word, game, words, check=False):
-    data=content_for(word,game,words)
+def build(word, game, words, check=False, cycle_data=None):
+    data=cycle_data if cycle_data is not None else content_for(word,game,words)
     spec=spec_for(data,word)
     output=render(data,spec)
     stem=data['slug']
@@ -189,11 +192,13 @@ def build(word, game, words, check=False):
             if alias.exists() or alias.is_symlink():
                 raise ValueError(f'Preservar ficheiro existente: {alias}')
             alias.symlink_to(target)
-        guide=folder/'guia-docente.md'
+        guide=folder/(stem+'-guia-docente.md' if cycle_data else 'guia-docente.md')
         guide.write_text(f"# {word['label']} nas aulas de TIC\n\nSeis jogos de cerca de cinco minutos, para 1.º/2.º ano. O professor escolhe a palavra e confirma o repertório anterior. Podem ser repetidos ao longo do ano; não é uma sessão de duas horas num único jogo.\n\nComeçar por Palavra igual, Ligar pares e Procurar palavras. Seguir para Montar com modelo e A peça que falta. Montar de memória retira o modelo por defeito; ouvir é apoio declarado. Cada jogo tem quatro rondas com posições variadas. Na primeira palavra, pares trabalha um par e as escolhas usam fragmentos da própria palavra. Flor usa letras móveis por ter uma só sílaba.\n\nPreparação pontual: abrir o jogo, identificar a criança no host e mostrar os botões de ouvir, exemplo e continuar. O áudio incluído funciona sem voz instalada. Durante o jogo, não há conversa nem ditado obrigatório ao adulto. A reflexão é facultativa. A conclusão admite erros; observar as respostas e o apoio antes de decidir o próximo jogo.\n\nNota linguística: {word['phonologyNotes']}\n\nA voz lê palavras inteiras e instruções, nunca fonemas isolados. O jogo não avalia pronúncia nem comprova fluência. Montar peças é reconstrução gráfica, não escrita livre. O ensino de correspondências novas e a leitura de textos continuam com o professor titular.\n\nRever as imagens, ouvir as gravações e experimentar com a criança antes de aprovar cada atividade. Princípios e fontes em docs/m28p-principios-implementacao.md e docs/research/m28p-tic-autonomia-2026.md.\n")
+        if cycle_data:
+            guide.write_text(f"# {data['title']} · {word['label']}\n\nRascunho para revisão docente. Quatro rondas distintas, cerca de cinco minutos. Confirmar o repertório cumulativo, imagens e gravações antes de utilizar.\n\nCom ajuda disponibiliza modelo segmentado; Sozinho retira o modelo; Consigo ajudar um amigo retira referências auxiliares. Ouvir, demonstração, desfazer e mudar apoio conservam o trabalho. Pode continuar após confirmar uma resposta, incluindo incorreta. Descobrir permite terminar a ronda sem descobrir uma palavra. Combinações fora da lista recebem feedback neutro.\n\nOs registos descrevem ações e ajudas, sem certificar leitura ou fluência. O convite oral final é facultativo. Não publicado nem registado.\n")
         guide_alias=ROOT/'drafts'/(stem+'.md')
         if not guide_alias.exists():
-            guide_alias.symlink_to(Path('m28p-v3')/word['slug']/'guia-docente.md')
+            guide_alias.symlink_to(Path('m28p-v3')/word['slug']/guide.name)
     return dict(slug=stem,word=word['label'],game=game,rounds=len(data['rounds']),bytes=len(output.encode()))
 
 
@@ -221,13 +226,89 @@ document.getElementById('status').textContent=total+' jogos disponíveis para re
     (ROOT/'server/static/teacher/m28p-tic.html').write_text(embed_activity_typography(teacher))
 
 
+def cycle_content(word, game, pool):
+    title, instruction, criterion = CYCLE_GAMES[game]
+    def resource(item):
+        result = dict(item, audio=data_audio(item['slug']))
+        needs_image = item.get('picturable', False) or 'text' in item
+        path = ASSETS/'images'/(item['slug']+'.svg')
+        if needs_image and not path.is_file():
+            raise ValueError(f"Imagem em falta: {path}")
+        result['image'] = path.read_text() if needs_image else ''
+        return result
+    vocabulary = [resource(w) for w in pool['words']]
+    items = [resource(s) for s in pool['sentences']] if game=='sentence' else [w for w in vocabulary if game!='read-choose' or w['picturable']]
+    choices = {}
+    if game=='read-choose':
+        choices = {w['slug']: image_choices(w, items, pool['visualConflicts']) for w in items}
+        items = [w for w in items if choices[w['slug']]]
+    if game=='discover':
+        vocabulary=[w for w in vocabulary if 2<=len(w['syllables'])<=3]
+        items=vocabulary
+    if len(items)<4:
+        return None, f"Apenas {len(items)} itens distintos; são necessários 4." + (" Cada alvo requer 2 distratores sem conflitos visuais entre as opções." if game=='read-choose' else "")
+    rounds=[]
+    selected=items[-4:]
+    if game!='sentence':
+        current=next((item for item in items if item['slug']==word['slug']),None)
+        if current and current not in selected:
+            selected=[current]+selected[-3:]
+    for index,item in enumerate(selected):
+        r=dict(id=f'r{index+1}',kind=game,prompt=instruction,model=False,options=[],answer=[],unit='word' if game=='sentence' else 'syllable',target=item)
+        units=item.get('tokens',item.get('syllables'))
+        if game=='read-choose':
+            r['options']=shuffled([dict(id=w['slug'],label=w['label'],image=w['image']) for w in choices[item['slug']]],random.Random(index))
+            r['answer']=[item['slug']]
+        else:
+            labels=units if game!='discover' else pool['families']*3
+            pieces=[dict(id=f'p{i}',label=s) for i,s in enumerate(labels)]
+            r['answer']=[f'p{i}' for i in range(len(units))] if game!='discover' else []
+            if game=='listen-build':
+                pieces += [dict(id=f'd{i}',label=s) for i,s in enumerate(pool['families']) if s not in units][:3]
+            r['length']=len(units) if game!='discover' else 3
+            r['pieces']=shuffled(pieces,random.Random(index))
+            if game=='discover':
+                r['lexicon']=vocabulary
+        rounds.append(r)
+    return dict(slug=f"m28p-ciclo-{word['slug']}-{game}",word=illustrated(word),game=game,title=title,instruction=instruction,criteria=[criterion],rounds=rounds,audio={k:data_audio(v) for k,v in dict(start='start',instruction=game,word=word['slug'],hint='hint',success='success',retry='retry',finish='finish').items()}), None
+
+
+def build_cycle(words,args):
+    pools=validate_cycle(json.loads((BASE/'cycle.json').read_text()),words)
+    report=[]
+    for word in words:
+        if word['slug'] not in pools or (args.word and args.word!=word['slug']):
+            continue
+        for game in CYCLE_GAMES:
+            if args.game and args.game!=game:
+                continue
+            data,reason=cycle_content(word,game,pools[word['slug']])
+            if reason and not args.validate_only:
+                stem=f"m28p-ciclo-{word['slug']}-{game}"
+                for path in (BASE/word['slug']).glob(stem+'*'):
+                    path.unlink()
+                for path in (ROOT/'drafts').glob(stem+'*'):
+                    if path.is_symlink():
+                        path.unlink()
+            report.append(dict(word=word['slug'],game=game,status='omitted',reason=reason) if reason else dict(build(word,game,words,args.validate_only,data),status='generated'))
+    if not args.validate_only:
+        save_json(BASE/'cycle-generation-report.json',report)
+    return report
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--cycle',action='store_true',help='Gerar apenas o ciclo, preservando a v3.')
     parser.add_argument('--word',choices=[w['slug'] for w in read_words()])
-    parser.add_argument('--game',choices=list(GAMES))
+    parser.add_argument('--game',choices=list(GAMES)+list(CYCLE_GAMES))
     parser.add_argument('--validate-only',action='store_true')
     args=parser.parse_args()
     words=read_words()
+    if args.cycle:
+        print(json.dumps(build_cycle(words,args),ensure_ascii=False,indent=2))
+        return
+    if args.game in CYCLE_GAMES:
+        parser.error('Os jogos do ciclo requerem --cycle.')
     results=[build(w,g,words,args.validate_only) for w in words if not args.word or w['slug']==args.word for g in GAMES if not args.game or g==args.game]
     if not args.validate_only and not args.word and not args.game:
         build_index(words)

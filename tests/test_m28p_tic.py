@@ -18,7 +18,7 @@ def content(path):
 
 def test_all_generated_games_are_complete_private_artifacts_with_offline_assets():
     from server.api.learning import ActivityInput
-    paths = list((ROOT / 'drafts/m28p-v3').glob('*/*.html'))
+    paths = list((ROOT / 'drafts/m28p-v3').glob('*/m28p-v3-*.html'))
     assert len(paths) == 168
     for path in paths:
         data = content(path)

@@ -42,6 +42,23 @@
       "cigarra": "cigarra",
       "fogueira": "fogueira",
       "flor": "flor",
+      "nome": "nome",
+      "mana": "mana",
+      "mano": "mano",
+      "nova": "nova",
+      "ovo": "ovo",
+      "novo": "novo",
+      "nove": "nove",
+      "neve": "neve",
+      "avo": "avó",
+      "avo-circ": "avô",
+      "frase-3d2f79aca608": "A menina é a mana.",
+      "frase-a92eadbc4509": "O menino é o mano.",
+      "frase-b37fff422510": "A mana e o mano.",
+      "frase-6f4bc3b2c2d7": "A avó vê a uva.",
+      "frase-69fcd4799ba6": "O avô vê o ovo.",
+      "frase-9753cfa8e327": "O menino vê a neve.",
+      "frase-20d5affa2353": "A uva é nova.",
       "match": "Toca na palavra igual ao modelo.",
       "pairs": "Toca no desenho. Depois, toca na palavra.",
       "hunt": "Procura as palavras iguais ao modelo.",
@@ -53,7 +70,11 @@
       "success": "Já está. Podes continuar.",
       "retry": "Vamos tentar outra vez.",
       "finish": "Terminaste este jogo. Podes repetir.",
-      "reflection": "Como foi o jogo? Fizeste sozinho, com ajuda, ou queres praticar mais? Podes também passar."
+      "reflection": "Como foi o jogo? Fizeste sozinho, com ajuda, ou queres praticar mais? Podes também passar.",
+      "listen-build": "Ouve e junta as sílabas.",
+      "read-choose": "Lê e escolhe a imagem.",
+      "sentence": "Ordena as palavras da frase.",
+      "discover": "Junta sílabas. Descobre palavras."
     }
   },
   "words": [
@@ -226,6 +247,110 @@
       "audio": "audio/flor.mp3"
     }
   ],
+  "cycle": [
+    {
+      "slug": "nome",
+      "text": "nome",
+      "audio": "audio/nome.mp3",
+      "image": null
+    },
+    {
+      "slug": "mana",
+      "text": "mana",
+      "audio": "audio/mana.mp3",
+      "image": "images/mana.svg"
+    },
+    {
+      "slug": "mano",
+      "text": "mano",
+      "audio": "audio/mano.mp3",
+      "image": "images/mano.svg"
+    },
+    {
+      "slug": "nova",
+      "text": "nova",
+      "audio": "audio/nova.mp3",
+      "image": null
+    },
+    {
+      "slug": "ovo",
+      "text": "ovo",
+      "audio": "audio/ovo.mp3",
+      "image": "images/ovo.svg"
+    },
+    {
+      "slug": "novo",
+      "text": "novo",
+      "audio": "audio/novo.mp3",
+      "image": null
+    },
+    {
+      "slug": "nove",
+      "text": "nove",
+      "audio": "audio/nove.mp3",
+      "image": "images/nove.svg"
+    },
+    {
+      "slug": "neve",
+      "text": "neve",
+      "audio": "audio/neve.mp3",
+      "image": "images/neve.svg"
+    },
+    {
+      "slug": "avo",
+      "text": "avó",
+      "audio": "audio/avo.mp3",
+      "image": "images/avo.svg"
+    },
+    {
+      "slug": "avo-circ",
+      "text": "avô",
+      "audio": "audio/avo-circ.mp3",
+      "image": "images/avo-circ.svg"
+    },
+    {
+      "slug": "frase-3d2f79aca608",
+      "text": "A menina é a mana.",
+      "audio": "audio/frase-3d2f79aca608.mp3",
+      "image": "images/frase-3d2f79aca608.svg"
+    },
+    {
+      "slug": "frase-a92eadbc4509",
+      "text": "O menino é o mano.",
+      "audio": "audio/frase-a92eadbc4509.mp3",
+      "image": "images/frase-a92eadbc4509.svg"
+    },
+    {
+      "slug": "frase-b37fff422510",
+      "text": "A mana e o mano.",
+      "audio": "audio/frase-b37fff422510.mp3",
+      "image": "images/frase-b37fff422510.svg"
+    },
+    {
+      "slug": "frase-6f4bc3b2c2d7",
+      "text": "A avó vê a uva.",
+      "audio": "audio/frase-6f4bc3b2c2d7.mp3",
+      "image": "images/frase-6f4bc3b2c2d7.svg"
+    },
+    {
+      "slug": "frase-69fcd4799ba6",
+      "text": "O avô vê o ovo.",
+      "audio": "audio/frase-69fcd4799ba6.mp3",
+      "image": "images/frase-69fcd4799ba6.svg"
+    },
+    {
+      "slug": "frase-9753cfa8e327",
+      "text": "O menino vê a neve.",
+      "audio": "audio/frase-9753cfa8e327.mp3",
+      "image": "images/frase-9753cfa8e327.svg"
+    },
+    {
+      "slug": "frase-20d5affa2353",
+      "text": "A uva é nova.",
+      "audio": "audio/frase-20d5affa2353.mp3",
+      "image": "images/frase-20d5affa2353.svg"
+    }
+  ],
   "instructions": {
     "match": "audio/match.mp3",
     "pairs": "audio/pairs.mp3",
@@ -238,12 +363,24 @@
     "success": "audio/success.mp3",
     "retry": "audio/retry.mp3",
     "finish": "audio/finish.mp3",
-    "reflection": "audio/reflection.mp3"
+    "reflection": "audio/reflection.mp3",
+    "listen-build": "audio/listen-build.mp3",
+    "read-choose": "audio/read-choose.mp3",
+    "sentence": "audio/sentence.mp3",
+    "discover": "audio/discover.mp3"
   },
   "files": {
     "audio/arvore.mp3": {
       "bytes": 11232,
       "sha256": "3e18955b48ded7b2fa59f22477ff7b387ce31ad285857a63cccbec718d792cb9"
+    },
+    "audio/avo-circ.mp3": {
+      "bytes": 10368,
+      "sha256": "dc0b5734a2b67906de6a742b69c7f84f8a15483a6f90ffc976f310ed43088ebc"
+    },
+    "audio/avo.mp3": {
+      "bytes": 10368,
+      "sha256": "4425f123d5824c4faaf7824b4bf8dc94a385b67ff5ac11f9b5aa999dbbeb5788"
     },
     "audio/bandeira.mp3": {
       "bytes": 12960,
@@ -273,6 +410,10 @@
       "bytes": 10800,
       "sha256": "41b78c646f0137b36c9af33d0ef5954955c085d329f7ec16184f9cf68325f9cd"
     },
+    "audio/discover.mp3": {
+      "bytes": 33696,
+      "sha256": "10db1192c18d1c8df846cd02ed2f54cd7823b764345b647039083f2f62045b72"
+    },
     "audio/escada.mp3": {
       "bytes": 12096,
       "sha256": "dd68d8d7a05ab486e67de4935ca61822fbb8d3552892f345383f5a19dce514fb"
@@ -288,6 +429,34 @@
     "audio/fogueira.mp3": {
       "bytes": 12384,
       "sha256": "eeb92d68df746c6d421bdd754cf7eb591edc6814674501dac0cf8feb4940f5b0"
+    },
+    "audio/frase-20d5affa2353.mp3": {
+      "bytes": 14400,
+      "sha256": "275001ebf93b017257165e51bf1d45c627a6377d1a7e136dc9f77948ed623f4a"
+    },
+    "audio/frase-3d2f79aca608.mp3": {
+      "bytes": 17136,
+      "sha256": "6002b9bc449e80ad53206eeea2218cd132e64a18a52eeb8b1fc905ebe1dea153"
+    },
+    "audio/frase-69fcd4799ba6.mp3": {
+      "bytes": 16704,
+      "sha256": "7d1b95b0d41964627965e8549aaaf9e40c9060e736503c8d1b5a08b5c00b54bd"
+    },
+    "audio/frase-6f4bc3b2c2d7.mp3": {
+      "bytes": 16128,
+      "sha256": "e07195ee06ea310561b0ec0d8c0f8d5637e6f06bef5ea9d4e4c03f4476fc9c5b"
+    },
+    "audio/frase-9753cfa8e327.mp3": {
+      "bytes": 16848,
+      "sha256": "94a68ac7ec34b54607aec3b2f0b5af81d76b36bfd5f359e54063b3c5e5d84b76"
+    },
+    "audio/frase-a92eadbc4509.mp3": {
+      "bytes": 16704,
+      "sha256": "a43df633bf87b98019c57341df94fa2e0ad2381dc39bb73cc96cc9310d9dbecb"
+    },
+    "audio/frase-b37fff422510.mp3": {
+      "bytes": 16848,
+      "sha256": "5afb660a6f90bc10404b02aa6b2decbd721b475fa034d2dd8a04f330f6b19f96"
     },
     "audio/funil.mp3": {
       "bytes": 10512,
@@ -325,6 +494,18 @@
       "bytes": 11232,
       "sha256": "f1c4bff176a1384cc79c3f564cc91d3afcfe37ac15d49c34fca8dcaf136a9ed2"
     },
+    "audio/listen-build.mp3": {
+      "bytes": 19584,
+      "sha256": "ffffbcb59596702d3237aa5eb5240da36bee9d277daf7e25f63378cffabd28d5"
+    },
+    "audio/mana.mp3": {
+      "bytes": 11232,
+      "sha256": "ace2d3e0be2afdcc39296fe244b8e6a9b82ed66f4a625283e27e40435a0dda70"
+    },
+    "audio/mano.mp3": {
+      "bytes": 9792,
+      "sha256": "668c670d34466368e360d89459b197786b5adb7739ec2e58ae8239eadc1c854f"
+    },
     "audio/match.mp3": {
       "bytes": 21744,
       "sha256": "3a76385ce02b6be95a853df3b96dcc06e3b54971b9a62de4321050e2604f4d06"
@@ -336,6 +517,30 @@
     "audio/menino.mp3": {
       "bytes": 11808,
       "sha256": "fe8b6c63ff175979bc4271bd920053c6a3d94f0ef102d86b9609c058eba595c0"
+    },
+    "audio/neve.mp3": {
+      "bytes": 11232,
+      "sha256": "b06161944a0f5230c3e0311c6cb2474c758908dff0a5c62d98de8c588352e325"
+    },
+    "audio/nome.mp3": {
+      "bytes": 10224,
+      "sha256": "d384785d8d7ef8c73ac0ad3a5852867db2db2f833b08c5bd7fcc2d75b889f254"
+    },
+    "audio/nova.mp3": {
+      "bytes": 11376,
+      "sha256": "b7df7674720ca2cfc3813d07d0ab87af88616a58b4cc68e581998bb56068f2bc"
+    },
+    "audio/nove.mp3": {
+      "bytes": 10800,
+      "sha256": "2518a69bb2a8bb3be54cbb6f5d74ecf89c91645084092b410b171fab1f24f8f4"
+    },
+    "audio/novo.mp3": {
+      "bytes": 11232,
+      "sha256": "d07b29e7be6640abe074a2bffe237a34ffed387d960b0b388ab3a5db0c871d7c"
+    },
+    "audio/ovo.mp3": {
+      "bytes": 9504,
+      "sha256": "0c6a5d23ac7c35e9ed58114a3a20628a8bb0f2b0900b46d78ef228343c815ed4"
     },
     "audio/pairs.mp3": {
       "bytes": 34560,
@@ -361,6 +566,10 @@
       "bytes": 10512,
       "sha256": "1d18956047534eac3fb03ff288a206b30fa6427b5a3af3c4c94b450791d675c9"
     },
+    "audio/read-choose.mp3": {
+      "bytes": 18144,
+      "sha256": "2ac532040390f9846d91de93df52d0c50b6b9190f1eb9deb0e5291e9a0800ecb"
+    },
     "audio/recall.mp3": {
       "bytes": 31824,
       "sha256": "c57fee2d6f2612c33f511498e104ef1bcf6c0c1c0f8225cc8366361c28d003fb"
@@ -376,6 +585,10 @@
     "audio/sapato.mp3": {
       "bytes": 12960,
       "sha256": "92fd47e9806eb96bf1173be726ad4ea82bfc498794b32c82da3725b8bed8fb6c"
+    },
+    "audio/sentence.mp3": {
+      "bytes": 21024,
+      "sha256": "b35554c6046287c0c48408f6230bc9da5dd1273dd039f2b0479fb4adc65948dd"
     },
     "audio/start.mp3": {
       "bytes": 33120,
@@ -404,6 +617,14 @@
     "images/arvore.svg": {
       "bytes": 924,
       "sha256": "c0efcc0c872c914e31e6990443e787624d17244c0cf1206dca04a5f635b4cebd"
+    },
+    "images/avo-circ.svg": {
+      "bytes": 1075,
+      "sha256": "ffeaf133980518dc5fe2d20abf12c47ff758d6b1c449ae5f9a66267204c91d2f"
+    },
+    "images/avo.svg": {
+      "bytes": 1025,
+      "sha256": "be5bacd783d9f8ba08129364c336821bf19fb014bb87d8c2645f4a54674ad203"
     },
     "images/bandeira.svg": {
       "bytes": 629,
@@ -445,6 +666,34 @@
       "bytes": 638,
       "sha256": "2a7263d9ddf9d7b5b0a80547cc25aca73bcdad39a158d364c3aeb720b04d2a16"
     },
+    "images/frase-20d5affa2353.svg": {
+      "bytes": 1399,
+      "sha256": "17e2e3a4650a8eb4942190ce0365f492e532ead23d90530e1801312e2b7f9c80"
+    },
+    "images/frase-3d2f79aca608.svg": {
+      "bytes": 2213,
+      "sha256": "602df4950725a8da5eb0ce4807eed1a905c0d0c116e1411687ecbbb08bb7196b"
+    },
+    "images/frase-69fcd4799ba6.svg": {
+      "bytes": 1217,
+      "sha256": "fb2dee351aa2dc52a0d2cbb63978e26031b78b20effcdb7454ac2a15d5b28237"
+    },
+    "images/frase-6f4bc3b2c2d7.svg": {
+      "bytes": 2341,
+      "sha256": "8c9547ac0530879348135f986c8bc542c87c67da9ab6a22385ad2b0012501834"
+    },
+    "images/frase-9753cfa8e327.svg": {
+      "bytes": 1354,
+      "sha256": "8a2d5f11647122f6520f3fddebe414c128f22e9d3e96e2d0ba31452041898b5f"
+    },
+    "images/frase-a92eadbc4509.svg": {
+      "bytes": 1889,
+      "sha256": "126c3b377a4452201de67af1817084ee147a04274656ef6e62562e66d0b4e2ec"
+    },
+    "images/frase-b37fff422510.svg": {
+      "bytes": 2048,
+      "sha256": "c6b27e4a04c5e37a708ffd5b2e5e90409032fc6f139f165673acf5785dd45df4"
+    },
     "images/funil.svg": {
       "bytes": 495,
       "sha256": "d7773475a70ab1fcfcc1ea4c0adb6868077755bafdacd3d9aff5a22e7fd4269a"
@@ -469,6 +718,14 @@
       "bytes": 1145,
       "sha256": "4b663636aa2d3a7bd52d444b46556c3f4de320d8a2f884908e34c2671ff96bf3"
     },
+    "images/mana.svg": {
+      "bytes": 2128,
+      "sha256": "999280de75c99f018b329ba2841482a7e0ec93c1c8504aed52dddc6e8b8f4c3d"
+    },
+    "images/mano.svg": {
+      "bytes": 2133,
+      "sha256": "08bb69ec5ac740dbc3ae9822f25a80bb15a2cafec79c84a71c8792143edae556"
+    },
     "images/menina.svg": {
       "bytes": 1132,
       "sha256": "ed0b087af8a721dbebece6633260178dddd49d6a6f37ca5016c1a9241683d4b8"
@@ -476,6 +733,18 @@
     "images/menino.svg": {
       "bytes": 1046,
       "sha256": "3ac929a92e3b8b4cc2e069e1d12a7835c9ac78f718ead1627de9bdfde2458de9"
+    },
+    "images/neve.svg": {
+      "bytes": 491,
+      "sha256": "ee2e500149619bcba928d22e2cbb5d14c2b1c7825a666cdf8814531738c95fbc"
+    },
+    "images/nove.svg": {
+      "bytes": 613,
+      "sha256": "3ee11ebc3eb6b731a52469a6474a4f85466f721ba1ff365a6cc80c52f5fb889a"
+    },
+    "images/ovo.svg": {
+      "bytes": 236,
+      "sha256": "a5abf3ec8c68b45d471a1007a696223a3ceee087f64f45051e50596b3e491291"
     },
     "images/palhaco.svg": {
       "bytes": 1310,
