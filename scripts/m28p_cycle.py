@@ -132,7 +132,7 @@ def discover_rounds(current, vocabulary, families, rng, size=2, max_rounds=4):
     for group in groups:
         counts = {}
         for word in group:
-            for syllable in set(word['syllables']):
+            for syllable in dict.fromkeys(word['syllables']):
                 counts[syllable] = max(counts.get(syllable, 0), word['syllables'].count(syllable))
         pieces = [s for s, n in counts.items() for _ in range(n)]
         extra = sorted(s for s in families if len(s) >= 2 and _plain(s) and s not in counts)
