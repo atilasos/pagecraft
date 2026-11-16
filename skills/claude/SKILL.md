@@ -3,6 +3,7 @@ name: pagecraft
 description: "Cria atividades PageCraft para o 1.º ciclo: páginas HTML interativas e self-contained em pt-PT, com três níveis de diferenciação, apoio contextual e autoavaliação, a partir de tema, ano e duração. Consulta a Sebenta, orquestra as fases Architect, Designer, Builder, Proofreader e Evaluator com o modelo adequado a cada fase (incluindo delegação entre fornecedores no T3 Code), valida com gates determinísticos e QA em browser e deixa um rascunho para aprovação do professor antes de publicar. Usar quando for pedida uma atividade, aula, página ou ficha interativa PageCraft, uma explicação explorável, uma atividade M28P ou maker com componente digital, ou a reparação ou revisão de um rascunho PageCraft."
 ---
 
+<!-- corpo comum: skills/shared/skill-body.md (sincronizado; não editar aqui) -->
 # PageCraft
 
 Produz uma atividade interativa que o professor revê e usa com a turma. O ponto de partida é o tema, o ano e a duração. Produz em `drafts/` o DocSpec, o guia do professor, o HTML self-contained e a evidência de QA. Publica só depois de o professor aprovar.
@@ -60,6 +61,7 @@ Entrega ao professor o seguinte:
 - as limitações.
 
 Os alunos usam `https://pagecraft.infantinho.xyz/<CODIGO>`. Nunca lhes entregues o hostname privado do Studio.
+<!-- fim do corpo comum -->
 
 ## Claude Code
 

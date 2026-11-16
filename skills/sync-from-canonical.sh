@@ -96,6 +96,26 @@ for target in "${TARGETS[@]}"; do
   done
 done
 
+# corpo comum das SKILL.md: o bloco entre marcadores vem de skills/shared/skill-body.md
+for target in "${TARGETS[@]}"; do
+  skill="$target/SKILL.md"
+  expected="$(python3 - "$skill" "$SHARED/skill-body.md" <<'PY'
+import sys
+skill, body = (open(p, encoding="utf-8").read() for p in sys.argv[1:3])
+begin, end = "<!-- corpo comum:", "<!-- fim do corpo comum -->"
+i = skill.index(begin); i = skill.index("\n", i) + 1; j = skill.index(end)
+sys.stdout.write(skill[:i] + body + skill[j:])
+PY
+)"
+  if [[ "$expected" != "$(cat "$skill")" ]]; then
+    if [[ "$mode" == "check" ]]; then
+      echo "drift: $(basename "$target")/SKILL.md (corpo comum)"; drift=1
+    else
+      printf '%s\n' "$expected" > "$skill"; echo "synced: $(basename "$target")/SKILL.md (corpo comum)"
+    fi
+  fi
+done
+
 if [[ "$mode" == "check" ]]; then
   [[ $drift -eq 0 ]] && echo "ok: no drift from canonical" || exit 1
 else
