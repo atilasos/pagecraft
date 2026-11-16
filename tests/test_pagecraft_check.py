@@ -144,6 +144,8 @@ def test_delivery_requires_independent_families_unless_teacher_decides(tmp_path)
     run("--dir", tmp_path, "log", "demo", "--phase", "teacher", "--status", "rejected", "--note", "não autorizo")
     assert any("mesma família" in e for e in delivery_errors(tmp_path))
     run("--dir", tmp_path, "log", "demo", "--phase", "teacher", "--status", "approved", "--note", "autorizo")
+    assert any("mesma família" in e for e in delivery_errors(tmp_path))  # falta refazer a avaliação
+    run("--dir", tmp_path, "log", "demo", "--phase", "evaluator", "--status", "done", "--model", "claude/opus")
     assert delivery_errors(tmp_path) == []
 
 

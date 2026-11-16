@@ -143,8 +143,11 @@ def independence_errors(manifest_path: Path) -> list[str]:
     missing = [p for p in ("builder", "evaluator") if not family(last[p])]
     if missing:
         return [f"{manifest_path.name}: falta o modelo <família>/<modelo> da fase {', '.join(missing)} (CHECK log --model)"]
+    last_evaluation = max((i for i, r in enumerate(runs) if role(r) == "evaluator" and r.get("model")), default=-1)
+    # a decisão do professor só vale se a avaliação tiver sido refeita depois dela
     if family(last["builder"]) == family(last["evaluator"]) and not any(
-            r.get("phase") == "teacher" and r.get("status") == "approved" and r.get("note") for r in runs):
+            r.get("phase") == "teacher" and r.get("status") == "approved" and r.get("note")
+            for r in runs[:last_evaluation]):
         return [f"{manifest_path.name}: Builder e Evaluator da mesma família ({family(last['builder'])}) "
                 "sem decisão do professor registada (CHECK log <slug> --phase teacher --status approved --note \"<decisão>\")"]
     return []
