@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 # Sincroniza conteúdo partilhado a partir das fontes canónicas para
-# skills/claude/ e skills/codex/. Mantém intactos os ficheiros específicos
-# de cada harness: SKILL.md, agents/, install.sh, README.md.
+# skills/claude/ e skills/codex/, e os contratos de fase para .claude/agents/
+# (subagentes do projeto). Mantém intactos os ficheiros específicos de cada
+# harness: SKILL.md, install.*, README.md, CANONICAL.md, references/runtime.md.
 #
 # Fontes canónicas:
 #   - identities/references/template: server/pipeline/prompts/ (usadas pelo
 #     PageCraft Studio em runtime — editar lá, sincronizar para os harnesses)
-#   - scripts: skills/shared/scripts/
+#   - scripts, contratos de fase (agents/) e referências do percurso:
+#     skills/shared/{scripts,agents,references}/
 #
 # Usage:
 #   bash skills/sync-from-canonical.sh           # sync com diff
@@ -17,7 +19,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 PROMPTS="$REPO_ROOT/server/pipeline/prompts"
-SHARED_SCRIPTS="$SCRIPT_DIR/shared/scripts"
+SHARED="$SCRIPT_DIR/shared"
+SHARED_SCRIPTS="$SHARED/scripts"
 TARGETS=("$SCRIPT_DIR/claude" "$SCRIPT_DIR/codex")
 
 # pares "caminho canónico|destino relativo ao harness"
@@ -44,7 +47,16 @@ MAPPINGS=(
   "$SHARED_SCRIPTS/build_prompt.py|scripts/build_prompt.py"
   "$SHARED_SCRIPTS/pagecraft.py|scripts/pagecraft.py"
   "$SHARED_SCRIPTS/publish_to_catalog.py|scripts/publish_to_catalog.py"
+  "$SHARED_SCRIPTS/pagecraft_check.py|scripts/pagecraft_check.py"
+  "$SHARED_SCRIPTS/activity.py|scripts/activity.py"
+  "$SHARED/references/workflow.md|references/workflow.md"
+  "$SHARED/references/routing.md|references/routing.md"
+  "$SHARED/references/learning.md|references/learning.md"
 )
+AGENTS=(pagecraft-architect pagecraft-designer pagecraft-builder pagecraft-proofreader pagecraft-evaluator)
+for agent in "${AGENTS[@]}"; do
+  MAPPINGS+=("$SHARED/agents/$agent.md|agents/$agent.md")
+done
 
 mode="sync"
 for arg in "$@"; do
@@ -55,24 +67,32 @@ for arg in "$@"; do
   esac
 done
 
+sync_pair() {
+  local src="$1" dst="$2" label="$3"
+  [[ -f "$src" ]] || { echo "missing canonical: $src" >&2; exit 1; }
+  if ! cmp -s "$src" "$dst" 2>/dev/null; then
+    if [[ "$mode" == "check" ]]; then
+      echo "drift: $label"
+      drift=1
+    else
+      mkdir -p "$(dirname "$dst")"
+      cp "$src" "$dst"
+      echo "synced: $label"
+    fi
+  fi
+}
+
 drift=0
+# subagentes do projeto (.claude/agents) carregados pelo Claude Code neste repo
+for agent in "${AGENTS[@]}"; do
+  sync_pair "$SHARED/agents/$agent.md" "$REPO_ROOT/.claude/agents/$agent.md" ".claude/agents/$agent.md"
+done
 for target in "${TARGETS[@]}"; do
   name="$(basename "$target")"
   for pair in "${MAPPINGS[@]}"; do
     src="${pair%%|*}"
     rel="${pair##*|}"
-    dst="$target/$rel"
-    [[ -f "$src" ]] || { echo "missing canonical: $src" >&2; exit 1; }
-    if ! cmp -s "$src" "$dst" 2>/dev/null; then
-      if [[ "$mode" == "check" ]]; then
-        echo "drift: $name/$rel"
-        drift=1
-      else
-        mkdir -p "$(dirname "$dst")"
-        cp "$src" "$dst"
-        echo "synced: $name/$rel"
-      fi
-    fi
+    sync_pair "$src" "$target/$rel" "$name/$rel"
   done
 done
 
