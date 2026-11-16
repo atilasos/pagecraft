@@ -36,13 +36,13 @@ Gerar um **design-spec.json** que define o sistema visual completo da atividade,
   "functional": {
     "ok":    "oklch(... 150)",
     "warn":  "oklch(... 85)",
-    "focus": "oklch(... 255)"
+    "focus": "anel ≥3:1 contra bg e primary (por defeito, o ink)"
   },
   "typography": {
     "fontFamily": "'Century Gothic', 'Didact Gothic', 'URW Gothic', 'Avant Garde', sans-serif",
     "scale": "kids-8-10 | kids-6-7 | kids-4-5",
-    "baseSizePx": "≥ mínimo de ageRange (24 | 22 | 20)",
-    "headingSizePx": "≥ mínimo de ageRange (34 | 30 | 28)",
+    "baseSizePx": 20,
+    "headingSizePx": 28,
     "maxLineCh": 55,
     "weights": [400, 700, 800],
     "italicAllowed": false,
@@ -72,7 +72,7 @@ Gerar um **design-spec.json** que define o sistema visual completo da atividade,
     "contrastBody": "AA",
     "contrastMicrocopy": "AAA",
     "focusRing": true,
-    "minTapPx": "≥ mínimo de ageRange (64 | 56 | 48)",
+    "minTapPx": 48,
     "contrastPairs": [
       { "fg": "ink", "bg": "bg", "ratio": "calculado, ≥4.5" },
       { "fg": "primary-ink", "bg": "primary", "ratio": "calculado, ≥4.5" }
@@ -83,7 +83,7 @@ Gerar um **design-spec.json** que define o sistema visual completo da atividade,
 }
 ```
 
-Os valores `baseSizePx`, `headingSizePx` e `minTapPx` dependem de `ageRange` e seguem `references/age-adaptation.md`. `contrastPairs` lista cada par texto/fundo usado (incluindo texto sobre `primary`, `accent` e botões ghost) com o rácio WCAG calculado, não estimado.
+Os valores `baseSizePx`, `headingSizePx` e `minTapPx` do exemplo são os de 8–10 anos; para 6–7 usa 22/30/56 e para 4–5 usa 24/34/64. Dependem de `ageRange` e seguem `references/age-adaptation.md`. `contrastPairs` lista cada par texto/fundo usado (incluindo texto sobre `primary`, `accent` e botões ghost) com o rácio WCAG calculado, não estimado.
 
 ## Adequação por idade
 - **4–5**: corpo ≥24px, alvos tocáveis ≥64px, frases ≤6 palavras, no máximo 1 decisão por ecrã, áudio acompanha texto.
