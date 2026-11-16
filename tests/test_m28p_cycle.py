@@ -24,7 +24,13 @@ def test_cumulative_repertoire_and_generation_limits():
     for word in motor.read_words()[:3]:
         for game in motor.CYCLE_GAMES:
             data,reason=motor.cycle_content(word,game,pools[word['slug']])
-            if data:
+            if data and game=='discover':
+                assert 2<=len(data['rounds'])<=4
+                for r in data['rounds']:
+                    assert 2<=len(r['lexicon'])<=3 and len(r['pieces'])<=len({s for w in r['lexicon'] for s in w['syllables']})+1
+                spec=motor.spec_for(data,word)
+                assert '@@' not in motor.render(data,spec)
+            elif data:
                 assert len(data['rounds'])==4
                 assert len({r['target']['slug'] for r in data['rounds']})==4
                 if game=='read-choose':
@@ -61,12 +67,17 @@ const assert=require('node:assert/strict');
 for(const data of FIXTURES){
  const r=data.rounds[0],s=TicModel.initial();
  if(r.kind==='discover'){
-  const w=r.lexicon.find(w=>w.syllables.length===2);
-  const used=[];for(const label of w.syllables)used.push(r.pieces.find(p=>p.label===label&&!used.includes(p.id)).id);
-  TicModel.edit(s,r,used);TicModel.confirm(s,r);
-  assert.deepEqual(s.discoveries[r.id],[w.label]);assert(TicModel.answered(data,s,0));
-  const saved=TicModel.sanitize(data,s);assert.deepEqual(saved.discoveries,s.discoveries);
-  TicModel.edit(s,r,['finish']);TicModel.confirm(s,r);assert(TicModel.answered(data,s,0));
+  const ids=w=>{const used=[];for(const label of w.syllables)used.push(r.pieces.find(p=>p.label===label&&!used.includes(p.id)).id);return used;};
+  const [first,...rest]=r.lexicon;
+  TicModel.edit(s,r,ids(first));TicModel.confirm(s,r);
+  assert.deepEqual(s.discoveries[r.id],[first.label]);
+  // Encontrar uma palavra não termina a ronda: o tabuleiro esvazia e o progresso fica guardado.
+  assert(!TicModel.answered(data,s,0));assert.deepEqual(s.answers[r.id],[]);
+  let saved=TicModel.sanitize(data,s);assert.deepEqual(saved.discoveries,s.discoveries);assert(!saved.confirmed[r.id]);
+  for(const w of rest){TicModel.edit(s,r,ids(w));TicModel.confirm(s,r);}
+  assert(TicModel.answered(data,s,0));
+  saved=TicModel.sanitize(data,s);assert(saved.confirmed[r.id]);
+  const other=TicModel.initial();TicModel.edit(other,r,['finish']);TicModel.confirm(other,r);assert(TicModel.answered(data,other,0));
  }else{
   const wrong=TicModel.ordered(r)?r.answer.slice().reverse():[r.options.find(o=>!r.answer.includes(o.id)).id];
   TicModel.edit(s,r,wrong);assert(TicModel.confirm(s,r).accepted);assert(TicModel.answered(data,s,0));
@@ -132,3 +143,19 @@ def test_distractors_must_also_be_distinguishable_from_each_other():
     items=[dict(slug=s,label=s) for s in ('uva','mana','mano','ovo')]
     chosen=image_choices(items[0],items,[['mana','mano']])
     assert [w['label'] for w in chosen]==['uva','mana','ovo']
+
+
+def test_discover_rounds_show_only_needed_syllables_and_honest_counts():
+    from scripts.m28p_cycle import discover_rounds, formable
+    import random
+    pools=validate_cycle(source(),motor.read_words())
+    for word in motor.read_words()[:3]:
+        pool=pools[word['slug']]
+        groups=discover_rounds(word['slug'],pool['words'],pool['families'],random.Random(0))
+        assert groups
+        for group in groups:
+            assert len(group['pieces'])<=8
+            assert all(formable(w['label'],group['pieces']) for w in group['hidden'])
+            hidden={w['label'] for w in group['hidden']}
+            assert not [w['label'] for w in pool['words'] if 2<=len(w['syllables'])<=3 and w['label'] not in hidden and formable(w['label'],group['pieces'])]
+    assert formable('ovo',['o','vo']) and not formable('ovo',['vo']) and not formable('nono',['no'])

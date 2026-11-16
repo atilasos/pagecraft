@@ -14,7 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from jsonschema import Draft202012Validator
-from scripts.m28p_cycle import CYCLE_GAMES, validate_cycle, image_choices
+from scripts.m28p_cycle import CYCLE_GAMES, validate_cycle, image_choices, discover_rounds
 from server.activity_support import embed_activity_support
 from server.bridge_snippet import ensure_bridge_lite
 from server.typography import embed_activity_typography
@@ -243,8 +243,15 @@ def cycle_content(word, game, pool):
         choices = {w['slug']: image_choices(w, items, pool['visualConflicts']) for w in items}
         items = [w for w in items if choices[w['slug']]]
     if game=='discover':
-        vocabulary=[w for w in vocabulary if 2<=len(w['syllables'])<=3]
-        items=vocabulary
+        groups=discover_rounds(word['slug'],vocabulary,pool['families'],random.Random(word['slug']))
+        if len(groups)<2:
+            return None, f"Apenas {len(groups)} rondas com duas palavras escondidas; são necessárias 2."
+        rounds=[]
+        for index,group in enumerate(groups):
+            pieces=[dict(id=f'p{i}',label=s) for i,s in enumerate(group['pieces'])]
+            rounds.append(dict(id=f'r{index+1}',kind=game,prompt=instruction,model=False,options=[],answer=[],unit='syllable',
+                target=group['hidden'][0],lexicon=group['hidden'],length=3,pieces=shuffled(pieces,random.Random(index))))
+        return dict(slug=f"m28p-ciclo-{word['slug']}-{game}",word=illustrated(word),game=game,title=title,instruction=instruction,criteria=[criterion],rounds=rounds,audio={k:data_audio(v) for k,v in dict(start='start',instruction=game,word=word['slug'],hint='hint',success='success',retry='retry',finish='finish').items()}), None
     if len(items)<4:
         return None, f"Apenas {len(items)} itens distintos; são necessários 4." + (" Cada alvo requer 2 distratores sem conflitos visuais entre as opções." if game=='read-choose' else "")
     rounds=[]
@@ -260,15 +267,13 @@ def cycle_content(word, game, pool):
             r['options']=shuffled([dict(id=w['slug'],label=w['label'],image=w['image']) for w in choices[item['slug']]],random.Random(index))
             r['answer']=[item['slug']]
         else:
-            labels=units if game!='discover' else pool['families']*3
+            labels=units
             pieces=[dict(id=f'p{i}',label=s) for i,s in enumerate(labels)]
-            r['answer']=[f'p{i}' for i in range(len(units))] if game!='discover' else []
+            r['answer']=[f'p{i}' for i in range(len(units))]
             if game=='listen-build':
                 pieces += [dict(id=f'd{i}',label=s) for i,s in enumerate(pool['families']) if s not in units][:3]
-            r['length']=len(units) if game!='discover' else 3
+            r['length']=len(units)
             r['pieces']=shuffled(pieces,random.Random(index))
-            if game=='discover':
-                r['lexicon']=vocabulary
         rounds.append(r)
     return dict(slug=f"m28p-ciclo-{word['slug']}-{game}",word=illustrated(word),game=game,title=title,instruction=instruction,criteria=[criterion],rounds=rounds,audio={k:data_audio(v) for k,v in dict(start='start',instruction=game,word=word['slug'],hint='hint',success='success',retry='retry',finish='finish').items()}), None
 
