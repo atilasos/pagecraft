@@ -25,6 +25,20 @@ As imagens são SVG originais e o áudio é pt-PT com a voz da coleção. O TTS 
 
 Nas três primeiras palavras há poucas palavras novas, e o próprio método funciona assim. Por isso, as rondas misturam as palavras-chave já trabalhadas com as palavras novas. Um jogo só é gerado se houver itens distintos para as suas quatro rondas.
 
+## Ordem das palavras-chave
+
+As fontes disponíveis não concordam na ordem (verificado a 16/11/2026):
+
+| Fonte | Ordem | Notas |
+| --- | --- | --- |
+| Catálogo oficial de *O Novo Mundo das Palavras* (Porto Editora, edição de 2024), consultado a 23/10/2026 ([investigação](research/metodo-28-palavras-2026.md)) | menina, menino, uva, dedo, sapato, bota, leque, casa, janela, telhado, escada, chave, galinha, gema, rato, cenoura, girafa, palhaço, zebra, bandeira, funil, árvore, quadro, passarinho, peixe, cigarra, fogueira, flor | É a edição mais recente e a ordem de `words.json`. O catálogo apresenta a lista em quatro colunas lidas na vertical. A 16/11 o site devolveu 403 a pedidos automáticos e não foi possível voltar a confirmar. |
+| Fichas da escola («1º Ano - Fichas-Método 28 palavras», 432 `.doc`) | menina, menino, bota, sapato, uva, leque, casa, janela, escada, telhado, chave, gema, galinha, girafa, rato, cenoura, palhaço, zebra, peixe, bandeira, árvore, quadro, passarinho, cigarra, fogueira, flor | São 26 palavras, sem dedo nem funil. A ordem foi deduzida da numeração das fichas «Sílabas». |
+| «Manual Metodo-28-Palavras-Outras-Fichas» (2011) | menina, menino, uva, sapato, bota, mamã, leque, … | Inclui «mamã» e não inclui «dedo». |
+
+**Decisão:** a coleção mantém a ordem do catálogo oficial mais recente. O repertório de cada palavra-chave é calculado a partir dessa ordem. Uma turma que siga outra variante só precisa de outra ordem em `consonantsByKeyword` e `words.json`. As diferenças entre fontes são trocas locais (bota/sapato, escada/telhado, gema/galinha, peixe/bandeira). O piloto é válido nas três ordens porque usa só m, n e v.
+
+**Frases das fichas da escola:** «O menino tem o balão», «A Ana faz o Sol», «O menino vai à escola» e outras são de leitura global e usam letras que ainda não foram trabalhadas. Não servem os jogos de recombinação de menina e menino. Ficam como referência para palavras-chave posteriores, quando o repertório as cobrir.
+
 ## Quatro minijogos novos por palavra-chave
 
 Cada jogo segue as regras da v3:
