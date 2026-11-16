@@ -209,7 +209,7 @@ A elevação PageCraft é baixa, estrutural e tátil. Cards e zonas interativas 
 - **Corner Style:** raio principal `14px` em atividades, catálogo e páginas do professor; variações exigem motivo funcional ou pedagógico.
 - **Background:** `surface` para unidades, `activity-surface` para zonas interativas, tints funcionais para feedback.
 - **Shadow Strategy:** sombra baixa e borda visível. Não usar side-stripe borders.
-- **Internal Padding:** `1.25rem 1.5rem` em desktop; reduzir para `1rem` em mobile sem comprimir alvos.
+- **Internal Padding:** `1.25rem 1.5rem` em desktop; reduzir para `1rem` em janelas estreitas sem comprimir alvos.
 
 ### Inputs / Fields
 
@@ -222,7 +222,7 @@ A elevação PageCraft é baixa, estrutural e tátil. Cards e zonas interativas 
 
 - **Catalogue Navigation:** pode ser mais denso, mas deve herdar tintas e foco PageCraft. Evitar que o catálogo pareça outro produto.
 - **Activity Navigation:** tabs ARIA com `role=tablist`, `role=tab`, `aria-selected` e navegação por setas quando aplicável.
-- **Mobile:** tabs empilham e ocupam a largura disponível. Alvo de toque continua a mandar.
+- **Janelas estreitas (robustez opcional):** tabs empilham e ocupam a largura disponível. Alvo de toque continua a mandar.
 
 ### Discovery Message
 
@@ -261,3 +261,7 @@ O som começa desligado. O botão de áudio é visível, tem label acessível e 
 - **Don't** usar itálico em corpo, ALL CAPS em instruções ou linhas longas para crianças.
 - **Don't** animar `width`, `height`, `top`, `left`, `padding` ou `margin`. Usar `transform`, `opacity`, `filter` ou cor.
 - **Don't** usar modais como primeira solução para explicar, confirmar ou corrigir. Preferir feedback inline, estados progressivos e zonas de descoberta.
+
+## Contexto de sala e verificação
+
+Os alunos trabalham em desktops com rato e teclado, num iframe do host com cerca de 920 px × 70vh. O quadro interativo serve para explicar à turma inteira e chamar a atenção para uma atividade ou unidade; professor e crianças podem tocar no quadro. Verificar 1366×768 no desktop, o iframe do host e 1920×1080 em projeção, com texto e controlos legíveis a 3–4 m, contraste mantido e toque funcional. Aumentar corpo e controlos para projeção quando necessário, respeitando os mínimos por idade. 390 e 768 px são verificações opcionais de robustez. Os seletores e botões de nível mostram os rótulos completos; admitem quebra de linha sem reduzir os alvos mínimos por idade.

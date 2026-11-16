@@ -11,11 +11,11 @@ Um dos três percursos para a mesma meta e critério presentes em toda a ativida
 _Avoid_: dificuldade fácil/média/difícil, verde/amarelo/vermelho
 
 **Perfil de diferenciação**:
-O nível por defeito que o professor define para cada aluno, **por área disciplinar** (Português, Matemática, Estudo do Meio…). Na sessão, o tablet do aluno abre automaticamente no nível do seu perfil para a área da atividade; a criança pode mudar de nível livremente e a mudança fica registada como evento — evidência, nunca bloqueio nem juízo. Sem perfil preenchido, o defeito é Sozinho.
+O nível por defeito que o professor define para cada aluno, **por área disciplinar** (Português, Matemática, Estudo do Meio…). Na sessão, o computador do aluno abre automaticamente no nível do seu perfil para a área da atividade; a criança pode mudar de nível livremente e a mudança fica registada como evento — evidência, nunca bloqueio nem juízo. Sem perfil preenchido, o defeito é Sozinho.
 _Avoid_: nível fixo, tracking
 
 **Convite de nível**:
-Sugestão de mudança de nível que o professor envia ao tablet de um aluno durante a sessão. Aparece como convite calmo que a criança aceita com um toque ou ignora; nunca é troca forçada. Convite e resposta ficam registados como evidência.
+Sugestão de mudança de nível que o professor envia ao computador de um aluno durante a sessão. Aparece como convite calmo que a criança aceita com um toque ou ignora; nunca é troca forçada. Convite e resposta ficam registados como evidência.
 _Avoid_: mudança forçada, override
 
 ### Sala
@@ -25,7 +25,7 @@ Fila ordenada e leve de atividades que o professor prepara para uma turma antes 
 _Avoid_: agendamento, calendário
 
 **Plano individual de trabalho**:
-A lista do que cada criança se propõe fazer na sessão, escrita por ela no seu tablet. Prática MEM. Cada item passa por **por fazer → a fazer → feito → para partilhar**, e a criança avança-o com um toque; do último estado, tocar recua um passo, para um toque distraído nunca apagar trabalho de uma vez. «Para partilhar» é o que a criança quer levar ao conselho de cooperação. Não confundir com o **Plano de aula**, que é do professor e é uma fila de atividades.
+A lista do que cada criança se propõe fazer na sessão, escrita por ela no seu computador. Prática MEM. Cada item passa por **por fazer → a fazer → feito → para partilhar**, e a criança avança-o com um toque; do último estado, tocar recua um passo, para um toque distraído nunca apagar trabalho de uma vez. «Para partilhar» é o que a criança quer levar ao conselho de cooperação. Não confundir com o **Plano de aula**, que é do professor e é uma fila de atividades.
 _Avoid_: tarefas, checklist, to-do
 
 **Roteiro da aula**:

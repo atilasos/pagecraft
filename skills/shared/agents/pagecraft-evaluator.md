@@ -37,7 +37,7 @@ Para servir a página: `python3 -m http.server 8790 --bind 127.0.0.1` na raiz do
 ## Percorre e regista evidência
 
 1. Consola: sem erros.
-2. Larguras: 390, 768 e 1366×768, e o iframe do host (~920 px). Sem scroll horizontal e com a ação principal visível.
+2. Contexto e larguras: Os alunos trabalham em desktops com rato e teclado, num iframe do host com cerca de 920 px × 70vh. O quadro interativo serve para explicar à turma inteira e chamar a atenção para uma atividade ou unidade; professor e crianças podem tocar no quadro. Verificar 1366×768 no desktop, o iframe do host e 1920×1080 em projeção, com texto e controlos legíveis a 3–4 m, contraste mantido e toque funcional. Aumentar corpo e controlos para projeção quando necessário, respeitando os mínimos por idade. 390 e 768 px são verificações opcionais de robustez. Sem scroll horizontal e com a ação principal visível. Verifica «Consigo ajudar um amigo» completo nos botões e seletores, sem cortes e com alvos por idade.
 3. Teclado: Tab por todos os controlos, com foco visível. O foco mantém-se depois de um re-render.
 4. Três níveis: cada um tem de se conseguir concluir, e a criança descobre o constraint em vez de o receber.
 5. Percurso de resposta: sem resposta, erro, pista, correção e volta atrás.

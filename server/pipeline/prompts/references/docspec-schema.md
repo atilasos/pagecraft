@@ -626,7 +626,7 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
     "socialOrganization": "individual (exploração 10min) → pares (desafio digital 10min) → grupo 3-4 (maker 15min) → turma (comunicação 5min)"
   },
   "materials": [
-    "Tablet ou computador com browser (1 por aluno ou par)",
+    "Computador com browser (1 por aluno ou par)",
     "Minecraft Education Edition (1 conta por grupo)",
     "Quadro interativo para apresentação final"
   ],

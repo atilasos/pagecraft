@@ -31,7 +31,7 @@ Se não te indicarem `SKILL_DIR`, usa a pasta da skill do teu harness (`skills/c
 - **Contraste:** cada par texto/fundo e o anel de foco têm o rácio calculado e registado. O mínimo é 4,5:1 para texto e 3:1 para elementos não textuais.
 - **Níveis de diferenciação:** os marcadores são neutros e não reutilizam as cores de sucesso nem de aviso.
 - **Estados:** a interação principal tem estados de foco, seleção, acerto, tentativa a rever e desativado.
-- **Contexto de uso:** o layout serve um desktop de sala de TIC e o iframe do host com cerca de 920 px de largura, e continua a funcionar ao toque.
+- **Contexto de uso:** Os alunos trabalham em desktops com rato e teclado, num iframe do host com cerca de 920 px × 70vh. O quadro interativo serve para explicar à turma inteira e chamar a atenção para uma atividade ou unidade; professor e crianças podem tocar no quadro. Verificar 1366×768 no desktop, o iframe do host e 1920×1080 em projeção, com texto e controlos legíveis a 3–4 m, contraste mantido e toque funcional. Aumentar corpo e controlos para projeção quando necessário, respeitando os mínimos por idade. 390 e 768 px são verificações opcionais de robustez.
 
 ## Antes de terminar
 

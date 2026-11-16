@@ -5,6 +5,7 @@ Biblioteca de patterns reutilizáveis para interações pedagógicas. Cada patte
 > **Escolha por idade** (resumo; ver `age-adaptation.md`):
 > - **4–7 anos**: preferir `tap-to-cycle`, `tap-to-place`, `audio-first`, `toggle`, `quiz-inline`. Evitar `drag` e `matching` por linhas em touch.
 > - **8–10 anos**: todos os patterns são viáveis. `slider`, `drag`, `sorting` e `matching` funcionam bem com rato e com toque.
+> - **Contexto:** desktops com rato e teclado no iframe do host (~920 px × 70vh); quadro interativo para explicação à turma e destaque de atividades, com toque pelo professor e pelas crianças.
 > - **Sempre**: pelo menos uma alternativa **sem som** e uma alternativa **só por toque** disponível.
 
 ## slider
@@ -167,7 +168,7 @@ A: "O aluno passa pelas 4 estações e identifica a atual quando pedido"
 
 Tocar na origem, depois tocar no destino. Substitui `drag` para 4–7 anos em touch.
 
-**Quando usar:** organizar/categorizar/posicionar elementos quando o público é jovem ou o dispositivo é tablet escolar com calibração imperfeita.
+**Quando usar:** organizar/categorizar/posicionar elementos quando o público é jovem ou a interação ocorre por toque no quadro interativo.
 
 ```yaml
 S: { var: "classificacao", type: "tap-place", sources: ["maçã","cenoura","pão"], buckets: ["fruta","legume","cereal"] }

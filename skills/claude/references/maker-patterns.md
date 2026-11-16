@@ -23,7 +23,7 @@ A página interativa é o **ponto de partida**, não o fim. O ciclo completo:
 | Impressão 3D | Digital→Físico | Prototipagem, formas geométricas, design |
 | Robótica (robot educativo) | Físico/Programação | Sequências, ciclos, sensores, movimento |
 | Quadro interativo | Digital/Coletivo | Apresentação, manipulação coletiva, votação |
-| Computadores/tablets | Digital | Exploração individual, pesquisa, produção |
+| Computadores | Digital | Exploração individual, pesquisa, produção |
 
 ---
 
@@ -223,7 +223,7 @@ maker:
 
 | Módulo MEM | Momento PageCraft | Recurso típico |
 |---|---|---|
-| **TEA** (Trabalho Estudo Autónomo) | Exploração individual na página | Tablet/computador |
+| **TEA** (Trabalho Estudo Autónomo) | Exploração individual na página | Computador |
 | **Projecto cooperativo** | Desafio maker em grupo | Minecraft/Lego/3D/Robot |
 | **Trabalho curricular comparticipado** | Síntese coletiva | Quadro interativo |
 | **Circuitos de comunicação** | Apresentação de descobertas | Quadro interativo + produções |

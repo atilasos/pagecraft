@@ -45,7 +45,7 @@ O Evaluator regista os percursos e resultados reais, por apoio:
 - Pedido por responder bloqueia avanço e saltos; todas as respostas, mesmo erradas, permitem continuar.
 - Erro mostra pista visual; a criança consegue corrigir e voltar às respostas.
 - Mudança de apoio e recuperação conservam o trabalho compatível e atualizam a conclusão.
-- Tipografia, símbolos e alvos funcionam em computador, tablet e telemóvel, com toque ou teclado e sem transbordamento.
+- Tipografia, símbolos e alvos funcionam em desktops 1366×768, no iframe do host (~920 px × 70vh) e no quadro interativo 1920×1080, com legibilidade a 3–4 m, contraste mantido, rato, teclado e toque, sem transbordamento.
 - Em Sessões de aula, grupo e reflexão individual são identificados pelo host; a demonstração do Quadro não regista tentativas de alunos.
 - HTML funciona offline; registos sincronizados são confirmados pelo servidor e não presumidos pela interface.
 
