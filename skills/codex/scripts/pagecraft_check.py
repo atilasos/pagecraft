@@ -2,8 +2,11 @@
 """Verificações determinísticas do percurso PageCraft (sem IA).
 
 Subcomandos:
-  check <slug>   valida os artefactos de drafts/<slug>* contra os schemas do
-                 Studio e o HTML contra os invariantes de validate_activity_html.
+  check <slug> [--phase F]
+                 valida os artefactos de drafts/<slug>* contra os schemas do
+                 Studio, as regras de aprovação e o HTML (validate_activity_html).
+                 Com --phase, valida só até essa fase e exige as suas saídas;
+                 --phase delivery exige tudo e uma avaliação aprovada.
   lean <html>    imprime o HTML sem os blocos incorporados (fonte, componente
                  de apoio, data: URIs) para leitura económica por modelos.
   next <slug> <proofread|evaluation|repair-ticket>
@@ -39,6 +42,8 @@ REPO = find_repo()
 sys.path.insert(0, str(REPO))
 
 KINDS = ("proofread", "evaluation", "repair-ticket")
+SCORE_KEYS = ("factual_accuracy", "constraint_alignment", "differentiation_quality",
+              "ux_accessibility", "visual_design", "technical_quality")
 SCHEMAS = {
     "docspec": "docspec",
     "design-spec": "design-spec",
@@ -90,13 +95,13 @@ def semantic_rules(kind: str, path: Path, html_path: Path) -> tuple[list[str], l
         return errors, warnings
     name = path.name
     if kind == "evaluation" and data.get("pass") is True:
-        scores = data.get("scores")
-        if not isinstance(scores, dict) or not scores:
-            errors.append(f"{name}: pass:true sem scores")
-        else:
-            low = [k for k, v in scores.items() if not isinstance(v, (int, float)) or v < 3]
-            if low:
-                errors.append(f"{name}: pass:true com scores < 3 em {', '.join(low)}")
+        scores = data.get("scores") if isinstance(data.get("scores"), dict) else {}
+        missing = [k for k in SCORE_KEYS if k not in scores]
+        if missing:
+            errors.append(f"{name}: pass:true sem scores de {', '.join(missing)}")
+        low = [k for k, v in scores.items() if not isinstance(v, (int, float)) or v < 3]
+        if low:
+            errors.append(f"{name}: pass:true com scores < 3 em {', '.join(low)}")
         if "critical" in severities(data):
             errors.append(f"{name}: pass:true com issue critical")
         if not data.get("evidence"):
@@ -112,49 +117,69 @@ def semantic_rules(kind: str, path: Path, html_path: Path) -> tuple[list[str], l
     return errors, warnings
 
 
+PHASES = ("architect", "designer", "builder", "proofreader", "evaluator", "delivery")
+# o que cada fase tem de ter produzido (cumulativo); validar só o que já se aplica
+REQUIRED = {"architect": {"docspec", "sources"}, "designer": {"design-spec"}, "builder": {"html"},
+            "proofreader": {"proofread"}, "evaluator": {"evaluation"}, "delivery": {"guide"}}
+
+
 def cmd_check(args) -> int:
     from server.pipeline.validators import validate_activity_html
 
-    drafts = Path(args.dir)
+    drafts, slug = Path(args.dir), args.slug
+    phase = args.phase
+    scope = PHASES[:PHASES.index(phase) + 1] if phase else PHASES
+    required = set().union(*(REQUIRED[p] for p in scope)) if phase else {"docspec"}
     errors: list[str] = []
     warnings: list[str] = []
     checked: list[str] = []
-    docspec_path = drafts / f"{args.slug}-docspec.json"
+    paths = {"docspec": drafts / f"{slug}-docspec.json", "sources": drafts / f"{slug}-sources.md",
+             "design-spec": drafts / f"{slug}-design-spec.json", "html": drafts / f"{slug}.html",
+             "guide": drafts / f"{slug}.md"}
+    for name in ("docspec", "sources", "design-spec", "html", "guide"):
+        if name in required and not paths[name].is_file():
+            errors.append(f"falta {paths[name]}")
     docspec = {}
-    if not docspec_path.is_file():
-        errors.append(f"falta {docspec_path}")
-    else:
-        checked.append(docspec_path.name)
-        errors += validate_json(docspec_path, "docspec")
-        docspec = load(docspec_path)
+    if paths["docspec"].is_file():
+        checked.append(paths["docspec"].name)
+        errors += validate_json(paths["docspec"], "docspec")
+        docspec = load(paths["docspec"])
         units = [u for u in docspec.get("units") or [] if isinstance(u, dict)]
         planned = sum(u["duration"] for u in units if isinstance(u.get("duration"), (int, float)))
         if isinstance(docspec.get("duration"), (int, float)) and planned > docspec["duration"]:
-            errors.append(f"{docspec_path.name}: unidades somam {planned} min, acima da duração de {docspec['duration']} min")
-    design = drafts / f"{args.slug}-design-spec.json"
-    if design.is_file():
-        checked.append(design.name)
-        errors += validate_json(design, "design-spec")
-    html_path = drafts / f"{args.slug}.html"
-    for kind in KINDS:
-        found = versions(drafts, args.slug, kind)
-        if found:
-            latest = found[-1][1]
-            checked.append(latest.name)
-            errors += validate_json(latest, SCHEMAS[kind])
-            more_errors, more_warnings = semantic_rules(kind, latest, html_path)
-            errors += more_errors
-            warnings += more_warnings
-            if found[-1][0] == 0:
-                warnings.append(f"{latest.name}: sem versão -vN; a próxima iteração sobrescreve o histórico")
-    if html_path.is_file():
+            errors.append(f"{paths['docspec'].name}: unidades somam {planned} min, acima da duração de {docspec['duration']} min")
+    if "designer" in scope and paths["design-spec"].is_file():
+        checked.append(paths["design-spec"].name)
+        errors += validate_json(paths["design-spec"], "design-spec")
+    html_path = paths["html"]
+    if "builder" in scope and html_path.is_file():
         checked.append(html_path.name)
-        units = docspec.get("units") or []
-        report = validate_activity_html(html_path.read_text(encoding="utf-8"), len(units),
+        report = validate_activity_html(html_path.read_text(encoding="utf-8"), len(docspec.get("units") or []),
                                         expected_support=bool(docspec.get("support")))
         errors += [f"{html_path.name}: {m}" for m in report.errors]
         warnings += [f"{html_path.name}: {m}" for m in report.warnings]
-    print(json.dumps({"slug": args.slug, "passed": not errors, "checked": checked,
+    kinds = {"proofread": "proofreader", "evaluation": "evaluator", "repair-ticket": "evaluator"}
+    for kind in KINDS:
+        found = versions(drafts, slug, kind)
+        if kinds[kind] not in scope:
+            continue
+        if not found:
+            if kind in required:
+                errors.append(f"falta {drafts / f'{slug}-{kind}-v1.json'}")
+            continue
+        latest = found[-1][1]
+        checked.append(latest.name)
+        errors += validate_json(latest, SCHEMAS[kind])
+        more_errors, more_warnings = semantic_rules(kind, latest, html_path)
+        errors += more_errors
+        warnings += more_warnings
+        if found[-1][0] == 0:
+            warnings.append(f"{latest.name}: sem versão -vN; a próxima iteração sobrescreve o histórico")
+    if phase == "delivery":
+        evaluation = versions(drafts, slug, "evaluation")
+        if evaluation and load(evaluation[-1][1]).get("pass") is not True:
+            errors.append(f"{evaluation[-1][1].name}: a última avaliação não aprova a atividade")
+    print(json.dumps({"slug": slug, "phase": phase or "all", "passed": not errors, "checked": checked,
                       "errors": errors, "warnings": warnings}, ensure_ascii=False, indent=1))
     return 1 if errors else 0
 
@@ -206,6 +231,8 @@ def main(argv: list[str] | None = None) -> int:
     sub = parser.add_subparsers(dest="command", required=True)
     check = sub.add_parser("check")
     check.add_argument("slug")
+    check.add_argument("--phase", choices=PHASES,
+                       help="valida só até esta fase e exige as suas saídas; delivery exige tudo e PASS")
     lean = sub.add_parser("lean")
     lean.add_argument("html")
     nxt = sub.add_parser("next")

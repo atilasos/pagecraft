@@ -11,8 +11,10 @@ def run(*args, cwd=ROOT):
     return subprocess.run([sys.executable, str(SCRIPT), *map(str, args)], cwd=cwd, capture_output=True, text=True)
 
 
+SCORES = {k: 4 for k in ("factual_accuracy", "constraint_alignment", "differentiation_quality",
+                          "ux_accessibility", "visual_design", "technical_quality")}
 PASSING = {"pass": True, "severity": "low", "issues": [], "evidence": ["abri a página a 390px; sem erros"],
-           "scores": {"constraint_alignment": 4, "ux_accessibility": 3}}
+           "scores": SCORES}
 
 
 def write_minimal(drafts: Path, slug: str, evaluation: dict) -> None:
@@ -69,7 +71,7 @@ def test_pass_requires_scores_evidence_and_no_blockers(tmp_path):
     bad = {"pass": True, "severity": "low", "issues": [{"severity": "critical"}],
            "scores": {"visual_design": 2}, "blocked_by": ["sem browser"]}
     joined = " | ".join(errors_for(tmp_path, bad))
-    for expected in ("scores < 3", "issue critical", "sem evidence", "blocked_by"):
+    for expected in ("scores < 3", "sem scores de factual_accuracy", "issue critical", "sem evidence", "blocked_by"):
         assert expected in joined
 
 
@@ -83,3 +85,16 @@ def test_proofread_pass_with_high_issue_and_overlong_units_fail(tmp_path):
     (tmp_path / "demo-docspec.json").write_text(json.dumps(spec))
     result = json.loads(run("--dir", tmp_path, "check", "demo").stdout)
     assert any("acima da duração" in e for e in result["errors"])
+
+
+def test_phase_scope_ignores_downstream_artifacts_and_requires_outputs(tmp_path):
+    write_minimal(tmp_path, "demo", {"pass": True, "severity": "low", "issues": []})
+    (tmp_path / "demo.html").write_text("<p>antigo</p>")
+    architect = json.loads(run("--dir", tmp_path, "check", "demo", "--phase", "architect").stdout)
+    assert architect["errors"] == [f"falta {tmp_path / 'demo-sources.md'}"]
+    (tmp_path / "demo-sources.md").write_text("fontes")
+    assert run("--dir", tmp_path, "check", "demo", "--phase", "architect").returncode == 0
+    designer = json.loads(run("--dir", tmp_path, "check", "demo", "--phase", "designer").stdout)
+    assert any("design-spec" in e for e in designer["errors"])
+    delivery = json.loads(run("--dir", tmp_path, "check", "demo", "--phase", "delivery").stdout)
+    assert any("demo.md" in e for e in delivery["errors"]) and any("sem evidence" in e for e in delivery["errors"])
