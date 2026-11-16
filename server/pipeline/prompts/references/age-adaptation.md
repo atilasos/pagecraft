@@ -24,7 +24,7 @@ Guia operacional para o Architect, Designer e Builder traduzirem **faixa etária
 | Slider thumb | n/a (use tap-cycle) | ≥48px com snapping | ≥40px |
 | Decisões por ecrã | 1 | 1–2 | 2–3 |
 | Vocabulário | concreto, próximo | concreto | concreto + jargão pontual com gloss |
-| Instruções | áudio + ícone redundantes | ícone redundante ao texto | texto |
+| Instruções | áudio («Ouvir») + ícone redundantes | «Ouvir» + ícone redundante ao texto | texto |
 | Tempo por atividade | 3–5 min | 5–8 min | 8–12 min |
 
 ## Padrões recomendados por idade
@@ -33,7 +33,7 @@ Guia operacional para o Architect, Designer e Builder traduzirem **faixa etária
 |---|---|---|---|
 | `tap-to-cycle` | ✅ ideal | ✅ ideal | ⚠️ só se simplifica |
 | `tap-to-place` | ✅ ideal | ✅ ideal | ✅ ok |
-| `audio-first` | ✅ obrigatório | ✅ ideal | ⚠️ opcional |
+| `audio-first` | ✅ obrigatório | ✅ obrigatório | ⚠️ opcional |
 | `toggle` | ✅ | ✅ | ✅ |
 | `dropdown` | ⚠️ evitar | ⚠️ se botão grande | ✅ |
 | `slider` | ⚠️ só com snap a 2–3 valores | ✅ com snap | ✅ contínuo |
@@ -67,9 +67,15 @@ Fora do pipeline do Studio, depois de guardar ou reparar o rascunho e antes da r
 
 ## Som
 
-- **Sempre opt-in**: a página começa muda; um botão 🔊 visível liga o áudio.
+- **Sempre opt-in**: a página começa muda; um botão 🔊 visível liga os efeitos sonoros (a leitura «Ouvir» é um controlo à parte, ver Voz).
 - **Nunca** o som é o único portador de significado.
-- Tons curtos (~120 ms, volume ≤0.05) para confirmação; síntese de voz em `pt-PT` para narração.
+- Tons curtos (~120 ms, volume ≤0.05) para confirmação, só com o interruptor de efeitos sonoros ligado.
+- **Voz (regra única)**: até ao 2.º ano (≤7 anos), cada instrução e cada opção de resposta tem um botão «Ouvir» (`speechSynthesis` com `lang='pt-PT'`, helper `PageCraftAudio.say(texto)` do template). A leitura é sempre iniciada pela criança, nunca automática, e é independente do interruptor de efeitos sonoros. No 3.º/4.º ano é opcional.
+
+## Contexto de utilização
+
+- Contexto principal: sala de TIC com desktops (rato e teclado), com a atividade aberta num iframe do host com ~920px de largura. O toque continua suportado (tablet, telemóvel), mas não é o contexto principal.
+- Texto dentro de SVG ou imagens (legendas, cotas, etiquetas) obedece ao mesmo mínimo do microcopy da faixa etária, medido a 390px de largura.
 
 ## Comunicação com o aluno
 

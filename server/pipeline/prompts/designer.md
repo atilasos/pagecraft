@@ -41,8 +41,8 @@ Gerar um **design-spec.json** que define o sistema visual completo da atividade,
   "typography": {
     "fontFamily": "'Century Gothic', 'Didact Gothic', 'URW Gothic', 'Avant Garde', sans-serif",
     "scale": "kids-8-10 | kids-6-7 | kids-4-5",
-    "baseSizePx": 20,
-    "headingSizePx": 30,
+    "baseSizePx": "≥ mínimo de ageRange (24 | 22 | 20)",
+    "headingSizePx": "≥ mínimo de ageRange (34 | 30 | 28)",
     "maxLineCh": 55,
     "weights": [400, 700, 800],
     "italicAllowed": false,
@@ -72,12 +72,18 @@ Gerar um **design-spec.json** que define o sistema visual completo da atividade,
     "contrastBody": "AA",
     "contrastMicrocopy": "AAA",
     "focusRing": true,
-    "minTapPx": 48,
+    "minTapPx": "≥ mínimo de ageRange (64 | 56 | 48)",
+    "contrastPairs": [
+      { "fg": "ink", "bg": "bg", "ratio": "calculado, ≥4.5" },
+      { "fg": "primary-ink", "bg": "primary", "ratio": "calculado, ≥4.5" }
+    ],
     "soundOptIn": true
   },
   "notes": "justificação das decisões em 2-3 frases"
 }
 ```
+
+Os valores `baseSizePx`, `headingSizePx` e `minTapPx` dependem de `ageRange` e seguem `references/age-adaptation.md`. `contrastPairs` lista cada par texto/fundo usado (incluindo texto sobre `primary`, `accent` e botões ghost) com o rácio WCAG calculado, não estimado.
 
 ## Adequação por idade
 - **4–5**: corpo ≥24px, alvos tocáveis ≥64px, frases ≤6 palavras, no máximo 1 decisão por ecrã, áudio acompanha texto.

@@ -188,13 +188,13 @@ A: "O aluno coloca os 3 alimentos nas categorias certas"
 
 ## audio-first
 
-Instrução ou questão entregue por áudio antes de qualquer leitura. Para pré-leitores e leitores em formação.
+Instrução ou questão disponível por áudio antes de qualquer leitura, sempre iniciado pela criança com «Ouvir» (nunca automático). Para pré-leitores e leitores em formação.
 
 **Quando usar:** sempre que a faixa etária inclua 4–7 anos, ou quando a leitura não é o objetivo de aprendizagem da unidade.
 
 ```yaml
 S: { var: "resposta", type: "audio-quiz", audioRef: "audio:pergunta1", options: ["🐶","🐱","🐰"], correct: 1 }
-R: "Botão grande 🔊 'Ouvir pergunta' (≥64px para 4–5; ≥56px para 6–7); opções como cards grandes com emoji semântico"
+R: "Botão grande 🔊 'Ouvir pergunta' (≥64px para 4–5; ≥56px para 6–7), com «Ouvir» também em cada opção; opções como cards grandes com emoji semântico"
 T: "Tocar 🔊 → áudio toca → tocar opção → feedback visual + áudio curto de confirmação"
 C: "O aluno consegue responder mesmo sem ler"
 A: "O aluno acerta sem suporte textual"

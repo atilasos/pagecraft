@@ -9,7 +9,7 @@ Acrescenta `support.version` ao DocSpec e `support` a cada unidade. Usa o schema
 - Em `support`, indica uma versão do conteúdo e as línguas pedidas. `automaticAfterFailures` usa três tentativas por defeito, aceita limiares de dois a cinco ou `0` para desativar. A faixa etária vem de `ageRange`, sem inferir características pessoais. Inclui `externalWork` apenas quando o trabalho decorrer também fora do PageCraft; o valor é o nome dessa aplicação ou contexto.
 - Em cada unidade, define `objective`, `criteria` relevantes e `obstacles` previsíveis para aquela tarefa. Escolhe categorias reconhecíveis pelas crianças, próprias do tema e do que estão a fazer.
 - Cada obstáculo tem um `id`, `label` por língua e duas ou três pistas progressivas. A primeira indica uma ação curta. A seguinte propõe outra abordagem, comparação ou pergunta que ajude a distinguir a causa. Cada pista tem `id` e `text.pt.individual`/`text.pt.group`; quando houver inglês, acrescenta os mesmos modos em `text.en`.
-- Escreve as duas formas de tratamento; não confies numa troca automática de verbos. Uma pista mostra um próximo passo sem entregar a solução. A revisão docente da atividade inclui estas pistas.
+- Escreve as duas formas de tratamento; não confies numa troca automática de verbos. Uma pista mostra um próximo passo sem entregar a solução. Pistas e esclarecimento por IA nunca escrevem a resposta nem o texto da criança. Quando a atividade admite pares ou grupo, pelo menos uma pista convida a comparar ou explicar a um colega. A revisão docente da atividade inclui estas pistas.
 
 Exemplo parcial para uma atividade de escrita:
 
