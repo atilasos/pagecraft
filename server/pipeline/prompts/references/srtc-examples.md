@@ -25,12 +25,12 @@ Diferenciação:
 ### Contagem até 10
 
 ```yaml
-Unit: Contar objectos
+Unit: Contar objetos
 S:
   - quantidade: tap-to-place/botões «+1» e «−1» (1 a 10), default 3
 R: "Maçãs animadas aparecem/desaparecem; número grande atualiza; barra de progresso visual"
 T: "Tocar «+1»/«−1» → maçãs aparecem uma a uma; som só se a criança o ligar; botão «Ouvir» lê o número quando a criança o toca"
-C: "O número representa a quantidade de objectos"
+C: "O número representa a quantidade de objetos"
 A: "O aluno mostra 7 maçãs quando pedido 'mostra-me 7 maçãs'"
 Diferenciação:
   Com pistas: 1 a 10, maçãs grandes agrupadas de 5 em 5 (mão de cinco), botão «Ouvir» para a criança iniciar a contagem oral
@@ -92,7 +92,7 @@ S:
   - barra_visual: derived (numerador/denominador da barra preenchida)
   - barra_referencia: toggle entre 1/2, 1/3, 1/4
 R: "Duas barras horizontais: a de cima é a fração do aluno, a de baixo é a referência; sobreposição com transparência"
-T: "Ajustar numerador/denominador → barra atualiza; quando fracções são equivalentes, destaque visual + som opt-in"
+T: "Ajustar numerador/denominador → barra atualiza; quando frações são equivalentes, destaque visual + som opt-in"
 C: "Frações diferentes podem representar a mesma quantidade (ex: 2/4 = 1/2)"
 A: "O aluno encontra 3 frações equivalentes a 1/2"
 Diferenciação:

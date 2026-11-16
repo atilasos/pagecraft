@@ -111,7 +111,7 @@ maker:
 
 ## 3d-print
 
-**Quando usar:** Tópicos que envolvem formas geométricas, design, prototipagem, visualização de objectos 3D.
+**Quando usar:** Tópicos que envolvem formas geométricas, design, prototipagem, visualização de objetos 3D.
 
 ### Templates de desafio
 
@@ -181,8 +181,8 @@ maker:
 ```yaml
 maker:
   type: robotics
-  challenge: "Programa o robot para parar quando detectar um obstáculo. Testa com objectos a diferentes distâncias."
-  materials: ["mBot com sensor ultrassónico", "objectos variados"]
+  challenge: "Programa o robot para parar quando detetar um obstáculo. Testa com objetos a diferentes distâncias."
+  materials: ["mBot com sensor ultrassónico", "objetos variados"]
   groupSize: 2-3
   connection: "Toggle na página (com obstáculo / sem obstáculo) → aluno replica no mundo real"
 ```
