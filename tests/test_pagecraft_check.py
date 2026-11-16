@@ -119,8 +119,11 @@ def ready_for_delivery(tmp_path, builder="gpt/sol", evaluator="claude/opus"):
     import os
 
     write_minimal(tmp_path, "demo", PASSING)
-    for name in ("demo-sources.md", "demo.md", "demo-design-spec.json", "demo-activity.json"):
-        (tmp_path / name).write_text('{"palette": {}}' if name.endswith(".json") else "x")
+    for name in ("demo-sources.md", "demo.md"):
+        (tmp_path / name).write_text("x")
+    (tmp_path / "demo-design-spec.json").write_text('{"palette": {}}')
+    (tmp_path / "demo-activity.json").write_text(json.dumps(
+        {"title": "Demo", "year": 3, "languages": ["pt"], "criteria": [{"id": "c1", "pt": "Consigo explicar."}]}))
     (tmp_path / "demo.html").write_text("<p>x</p>")
     (tmp_path / "demo-proofread-v1.json").write_text(json.dumps({"pass": True, "summary": "ok", "issues": []}))
     os.utime(tmp_path / "demo.html", (1, 1))
@@ -157,3 +160,13 @@ def test_delivery_rejects_reviews_older_than_the_html(tmp_path):
     (tmp_path / "demo-proofread-v2.json").write_text(json.dumps({"pass": False, "summary": "x", "issues": []}))
     os.utime(tmp_path / "demo-proofread-v2.json", (20, 20))
     assert any("revisão linguística não aprova" in e for e in delivery_errors(tmp_path))
+
+
+def test_delivery_counts_html_repairs_as_builder_and_checks_activity(tmp_path):
+    ready_for_delivery(tmp_path)
+    run("--dir", tmp_path, "log", "demo", "--phase", "repair", "--status", "done",
+        "--model", "claude/sonnet", "--artifact", str(tmp_path / "demo.html"))
+    assert any("mesma família (claude)" in e for e in delivery_errors(tmp_path))
+    (tmp_path / "demo-activity.json").write_text(json.dumps({"title": "", "year": "3", "criteria": []}))
+    joined = " | ".join(delivery_errors(tmp_path))
+    assert "falta title" in joined and "year" in joined and "criteria" in joined

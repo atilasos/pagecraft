@@ -127,16 +127,42 @@ def family(model: str | None) -> str | None:
 def independence_errors(manifest_path: Path) -> list[str]:
     """Builder e Evaluator de famílias diferentes, salvo decisão do professor registada."""
     runs = [r for r in load(manifest_path).get("runs") or [] if isinstance(r, dict)]
-    last = {phase: next((r.get("model") for r in reversed(runs) if r.get("phase") == phase and r.get("model")), None)
-            for phase in ("builder", "evaluator")}
-    missing = [p for p, m in last.items() if not family(m)]
+    def role(run: dict) -> str | None:
+        # uma reparação do HTML conta como trabalho do Builder
+        if run.get("phase") == "repair" and str(run.get("artifact") or "").endswith(".html"):
+            return "builder"
+        return run.get("phase")
+
+    last = {phase: next((r.get("model") for r in reversed(runs) if role(r) == phase and r.get("model")), None)
+            for phase in ("builder", "evaluator", "proofreader")}
+    missing = [p for p in ("builder", "evaluator") if not family(last[p])]
     if missing:
         return [f"{manifest_path.name}: falta o modelo <família>/<modelo> da fase {', '.join(missing)} (CHECK log --model)"]
     if family(last["builder"]) == family(last["evaluator"]) and not any(
             r.get("phase") == "teacher" and r.get("status") == "approved" and r.get("note") for r in runs):
         return [f"{manifest_path.name}: Builder e Evaluator da mesma família ({family(last['builder'])}) "
-                "sem decisão do professor registada (CHECK log --phase teacher --note)"]
+                "sem decisão do professor registada (CHECK log <slug> --phase teacher --status approved --note \"<decisão>\")"]
     return []
+
+
+def activity_errors(path: Path) -> list[str]:
+    """Mínimo dos metadados de registo (references/learning.md)."""
+    if not path.is_file():
+        return []
+    data, name, errors = load(path), path.name, []
+    if not data:
+        return [f"{name}: JSON inválido"]
+    if not str(data.get("title") or "").strip():
+        errors.append(f"{name}: falta title")
+    if not isinstance(data.get("year"), int):
+        errors.append(f"{name}: year tem de ser um número inteiro")
+    if not isinstance(data.get("languages"), list) or "pt" not in data["languages"]:
+        errors.append(f"{name}: languages tem de incluir \"pt\"")
+    criteria = data.get("criteria")
+    if not isinstance(criteria, list) or not criteria or not all(
+            isinstance(c, dict) and c.get("id") and c.get("pt") for c in criteria):
+        errors.append(f"{name}: criteria precisa de pelo menos um critério com id e pt")
+    return errors
 
 
 PHASES = ("architect", "designer", "builder", "proofreader", "evaluator", "delivery")
@@ -213,6 +239,12 @@ def cmd_check(args) -> int:
         errors += stale
         warnings = [w for w in warnings if w not in stale]
         errors += independence_errors(drafts / f"{slug}-run-manifest.json")
+        builder, proofreader = (next((r.get("model") for r in reversed(
+            [r for r in load(drafts / f"{slug}-run-manifest.json").get("runs") or [] if isinstance(r, dict)])
+            if r.get("phase") == p and r.get("model")), None) for p in ("builder", "proofreader"))
+        if family(builder) and family(builder) == family(proofreader):
+            warnings.append(f"Proofreader e Builder da mesma família ({family(builder)}); preferir outra família")
+        errors += activity_errors(paths["activity"])
     print(json.dumps({"slug": slug, "phase": phase or "all", "passed": not errors, "checked": checked,
                       "errors": errors, "warnings": warnings}, ensure_ascii=False, indent=1))
     return 1 if errors else 0
