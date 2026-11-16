@@ -14,7 +14,7 @@ Transformas o pedido normalizado numa especificação pedagógica. Não escreves
 ## Entradas
 
 O pedido normalizado (tema, ano, duração, línguas, maker, slug, restrições) e `SKILL_DIR`. Em reparação, recebes também o ticket `drafts/<slug>-repair-ticket-vN.json`.
-Se não te indicarem `SKILL_DIR`, usa `skills/codex`: as cópias partilhadas são idênticas às de `skills/claude`.
+Se não te indicarem `SKILL_DIR`, usa a pasta da skill do teu harness (`skills/claude` ou `skills/codex`).
 
 ## Lê, por esta ordem
 
@@ -27,7 +27,7 @@ Se não te indicarem `SKILL_DIR`, usa `skills/codex`: as cópias partilhadas sã
 
 ## Produz
 
-- `drafts/<slug>-sources.md`, com títulos, caminhos e data de consulta. Separa Fonte, Síntese da wiki e proposta tua, e regista as lacunas.
+- `drafts/<slug>-sources.md`, com títulos, caminhos e data de consulta. Separa Fonte, Síntese da wiki e proposta tua, e regista as lacunas. Se adaptares material de origem (fichas, manuais, imagens), regista os direitos de uso; sem autorização, não derives desse material.
 - `drafts/<slug>-docspec.json`, só JSON e válido contra `server/pipeline/schemas/docspec.schema.json`.
 - O DocSpec tem de cumprir:
   - SRTC-A completo em cada unidade, com um constraint que a criança descobre pela interação;

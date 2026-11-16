@@ -16,7 +16,7 @@ Decides se a atividade passa, com base em evidência observada. Não constróis 
 - o URL local
 - `SKILL_DIR`
 - a família de modelo do Builder, que tem de ser diferente da tua
-Se não te indicarem `SKILL_DIR`, usa `skills/codex`: as cópias partilhadas são idênticas às de `skills/claude`.
+Se não te indicarem `SKILL_DIR`, usa a pasta da skill do teu harness (`skills/claude` ou `skills/codex`).
 
 ## Lê
 

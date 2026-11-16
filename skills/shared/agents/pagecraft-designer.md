@@ -14,7 +14,7 @@ Defines um sistema visual sóbrio, quente, legível e implementável em CSS inli
 ## Entradas
 
 `drafts/<slug>-docspec.json` e `SKILL_DIR`. Em reparação, recebes também o ticket com `route: designer`.
-Se não te indicarem `SKILL_DIR`, usa `skills/codex`: as cópias partilhadas são idênticas às de `skills/claude`.
+Se não te indicarem `SKILL_DIR`, usa a pasta da skill do teu harness (`skills/claude` ou `skills/codex`).
 
 ## Lê
 

@@ -18,7 +18,7 @@ Concretizas a especificação numa página HTML única. Não alteras a meta, o c
 - `drafts/<slug>-builder-prompt.md`
 - `SKILL_DIR`
 - em reparação, `drafts/<slug>-repair-ticket-vN.json` ou as sugestões do Proofreader
-Se não te indicarem `SKILL_DIR`, usa `skills/codex`: as cópias partilhadas são idênticas às de `skills/claude`.
+Se não te indicarem `SKILL_DIR`, usa a pasta da skill do teu harness (`skills/claude` ou `skills/codex`).
 
 ## Lê
 

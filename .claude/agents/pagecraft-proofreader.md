@@ -14,7 +14,7 @@ Garantes que o texto está correto, claro e adequado à idade. O teu output é u
 ## Entradas
 
 `drafts/<slug>.html`, `drafts/<slug>-docspec.json` e `SKILL_DIR`.
-Se não te indicarem `SKILL_DIR`, usa `skills/codex`: as cópias partilhadas são idênticas às de `skills/claude`.
+Se não te indicarem `SKILL_DIR`, usa a pasta da skill do teu harness (`skills/claude` ou `skills/codex`).
 
 ## Lê
 
