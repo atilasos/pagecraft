@@ -31,7 +31,7 @@ Transformar especificações SRTC-A (State, Render, Transition, Constraint, Asse
    - Sem ALL CAPS em corpo. Sem itálico em corpo.
 6. **Feedback**:
    - Descoberta: cor verde-suave + ícone ✓ + microcopy «Encontraste…».
-   - A rever: cor âmbar-suave + ícone ↻ + microcopy «Quase, tenta novamente» e sugestão concreta. **Nunca vermelho de erro.**
+   - A rever: cor âmbar-suave + ícone ↻ + microcopy que descreve o que a criança fez e faz uma pergunta («Puseste 3 em cima. Que acontece se puseres mais um?»); a correção é da criança. **Nunca vermelho de erro.**
    - Som **opt-in** (botão de ligar áudio visível); nunca som único portador de significado — sempre redundante a visual/texto.
 7. **Apoio contextual**: usa o plano do DocSpec e o componente comum de `references/contextual-support.md`. Coloca o painel junto da tarefa e atualiza o contexto em cada transição; incorpora o apoio antes da revisão.
 8. **Motion**:

@@ -11,7 +11,7 @@ Biblioteca de patterns reutilizáveis para interações pedagógicas. Cada patte
 
 Exploração de parâmetros contínuos.
 
-**Quando usar:** O aluno precisa observar como uma variável afecta um resultado.
+**Quando usar:** O aluno precisa observar como uma variável afeta um resultado.
 
 ```yaml
 S: { var: "velocidade", type: "slider", range: [1, 20], step: 1, default: 5 }
@@ -46,7 +46,7 @@ A: "O aluno identifica a estação correta a partir de uma descrição"
 
 ## drag
 
-Manipulação directa de elementos.
+Manipulação direta de elementos.
 
 **Quando usar:** O aluno precisa organizar, mover ou posicionar elementos.
 
@@ -64,14 +64,14 @@ A: "O aluno coloca 3 planetas nas órbitas corretas"
 
 Alternância entre dois modos/estados.
 
-**Quando usar:** Comparação directa entre duas condições (dia/noite, com/sem, antes/depois).
+**Quando usar:** Comparação direta entre duas condições (dia/noite, com/sem, antes/depois).
 
 ```yaml
 S: { var: "modo", type: "toggle", options: ["Dia","Noite"], default: "Dia" }
-R: "Cena com céu, sol/lua, animais diurnos/nocturnos"
+R: "Cena com céu, sol/lua, animais diurnos/noturnos"
 T: "Clicar toggle → transição animada dia↔noite"
 C: "Animais diferentes estão ativos de dia e de noite"
-A: "O aluno classifica 4 animais como diurnos ou nocturnos"
+A: "O aluno classifica 4 animais como diurnos ou noturnos"
 ```
 
 ---
@@ -84,7 +84,7 @@ Pergunta integrada no fluxo da exploração.
 
 ```yaml
 S: { var: "resposta", type: "quiz", question: "Quantas patas tem o inseto?", options: [4,6,8], correct: 6 }
-R: "Pergunta aparece após exploração; feedback imediato com texto e ícone: ✓ «Encontraste» ou ↻ «Quase, tenta novamente»"
+R: "Pergunta aparece após exploração; feedback imediato com texto e ícone: ✓ «Encontraste» ou ↻ uma descrição do que a criança escolheu seguida de pergunta («Escolheste… Porque achas?»)"
 T: "Selecionar opção → celebrar a descoberta ou convidar a tentar novamente → mostrar uma pista breve"
 C: "Insetos têm sempre 6 patas"
 A: "O aluno encontra a resposta ou usa a pista para tentar novamente"
@@ -117,7 +117,7 @@ Correspondência entre pares (ligar).
 ```yaml
 S: { var: "pares", type: "matching", left: ["🐶","🐱","🐰"], right: ["ladra","mia","salta"], correct: [[0,0],[1,1],[2,2]] }
 R: "Duas colunas; linhas desenhadas quando o aluno liga pares"
-T: "Clicar item esquerdo → clicar item direito → linha fica se corresponder; caso contrário, ↻ «Quase, tenta novamente»"
+T: "Clicar item esquerdo → clicar item direito → linha fica se corresponder; caso contrário, ↻ «Ligaste … a … Combinam?»"
 C: "Cada animal tem um comportamento característico"
 A: "O aluno liga corretamente os 3 pares"
 ```
@@ -135,7 +135,7 @@ S: { var: "desenho", type: "canvas", tools: ["lápis","borracha"], colors: ["pre
 R: "Canvas branco com barra de ferramentas simples; área de desenho responsiva"
 T: "Tocar/arrastar → desenha; selecionar ferramenta/cor → muda modo"
 C: "Formas geométricas têm propriedades específicas (lados, ângulos)"
-A: "O aluno desenha um triângulo com 3 lados rectos"
+A: "O aluno desenha um triângulo com 3 lados retos"
 ```
 
 ---

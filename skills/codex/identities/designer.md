@@ -59,7 +59,7 @@ Gerar um **design-spec.json** que define o sistema visual completo da atividade,
     "cards": "surface com borda 1–2px ink/10, sem stripe lateral",
     "badges": "pill, accent bg, ink contrastante (sem gradient-text)",
     "feedback_correct": "ok tint + ícone ✓ + microcopy de descoberta («Encontraste…»)",
-    "feedback_incorrect": "warn tint + ícone ↻ + microcopy «Quase, tenta novamente» — nunca vermelho-erro",
+    "feedback_incorrect": "warn tint + ícone ↻ + microcopy que descreve o que a criança fez e pergunta («Puseste… Que acontece se…?») — nunca vermelho-erro",
     "tabs": "role=tablist + aria-selected; cores neutras distintas, NUNCA traffic-light"
   },
   "motion": {
