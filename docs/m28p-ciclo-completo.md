@@ -42,7 +42,7 @@ As fontes disponíveis não concordam na ordem (verificado a 16/11/2026):
 ## Quatro minijogos novos por palavra-chave
 
 Cada jogo segue as regras da v3:
-- quatro rondas;
+- quatro rondas; Montar frases admite uma a quatro rondas fixas;
 - demonstração recuperável;
 - avanço por resposta, mesmo com erro;
 - pista local antes da demonstração;
@@ -67,6 +67,12 @@ Os apoios ajustam a visibilidade de modelo, imagem e segmentação, como na v3:
   - sem modelo nem imagem auxiliar;
   - no fim, há um convite opcional e só oral para explicar a um colega como leu;
   - o convite não se regista como avaliação.
+
+### Frase da turma
+
+Na página da turma, o professor guarda frases ditadas pelas crianças, escolhe a palavra-chave e pode projetá-las no Quadro durante a sessão, até carregar em «Esconder frase no Quadro». O banco funciona também sem sessão. Aceita frases com 2 a 12 palavras e acrescenta ponto final quando falta pontuação. Os avisos de repertório ajudam o professor a decidir, sem bloquear texto livre nem nomes próprios.
+
+Em Montar frases, as quatro frases mais recentes da turma até à palavra-chave da atividade entram primeiro. As frases fixas completam as rondas até quatro. Menina e menino passam a ter este jogo, mesmo com menos de quatro frases fixas. As frases da turma mostram o rótulo «Frase da turma», sem imagem; Com ajuda mostra os tokens e os restantes níveis ocultam o texto. O áudio destas frases usa apenas vozes locais pt-PT; sem voz local, o botão de ouvir fica oculto. As frases fixas conservam o MP3 incluído. O progresso é recuperado mesmo quando as frases chegam depois do estado guardado.
 
 ## Volume e fases
 

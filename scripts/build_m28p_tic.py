@@ -202,9 +202,9 @@ def build(word, game, words, check=False, cycle_data=None):
                         "Com ajuda mostra a imagem (quando existe) e o som de cada palavra escondida; Sozinho mostra quantas sílabas tem; Consigo ajudar um amigo mostra só que existe. "
                         "Uma combinação fora da lista recebe «não é uma das palavras escondidas; se conheces esta palavra, conta à turma» — bom ponto de partida para o conselho ou o texto livre.")
             else:
-                levels=("Quatro rondas distintas, cerca de cinco minutos. Com ajuda disponibiliza modelo segmentado; Sozinho retira o modelo; Consigo ajudar um amigo retira referências auxiliares. "
+                levels=((f"{len(data['rounds'])} rondas fixas" if data['game']=='sentence' else "Quatro rondas distintas") + ", cerca de cinco minutos. Com ajuda disponibiliza modelo segmentado; Sozinho retira o modelo; Consigo ajudar um amigo retira referências auxiliares. "
                         "Pode continuar após confirmar uma resposta, incluindo incorreta.")
-            guide.write_text(f"# {data['title']} · {word['label']}\n\nRascunho para revisão docente. Confirmar o repertório cumulativo, imagens e gravações antes de utilizar.\n\n{levels} Ouvir, demonstração, desfazer e mudar apoio conservam o trabalho.\n\nOs registos descrevem ações e ajudas, sem certificar leitura ou fluência. O convite oral final é facultativo. Não publicado nem registado.\n")
+            guide.write_text(f"# {data['title']} · {word['label']}\n\nRascunho para revisão docente. Confirmar o repertório cumulativo, imagens e gravações antes de utilizar.\n\n{levels} Ouvir, demonstração, desfazer e mudar apoio conservam o trabalho.{(' ' + 'Na página da turma, guarde as frases ditadas pelas crianças e projete-as no Quadro. Em sessão, até quatro frases da turma surgem primeiro, completadas pelas frases fixas. Com ajuda mostra os tokens; os outros níveis ocultam o texto. As frases da turma só têm leitura áudio quando existe uma voz local pt-PT no computador.' if data['game'] == 'sentence' else '')}\n\nOs registos descrevem ações e ajudas, sem certificar leitura ou fluência. O convite oral final é facultativo. Não publicado nem registado.\n")
         guide_alias=ROOT/'drafts'/(stem+'.md')
         if not guide_alias.exists():
             guide_alias.symlink_to(Path('m28p-v3')/word['slug']/guide.name)
@@ -261,7 +261,7 @@ def cycle_content(word, game, pool):
             rounds.append(dict(id=f'r{index+1}',kind=game,prompt=instruction,model=False,options=[],answer=[],unit='syllable',
                 target=group['hidden'][0],lexicon=group['hidden'],length=3,pieces=shuffled(pieces,random.Random(index))))
         return dict(slug=f"m28p-ciclo-{word['slug']}-{game}",word=illustrated(word),game=game,title=title,instruction=instruction,criteria=[criterion],rounds=rounds,audio={k:data_audio(v) for k,v in dict(start='start',instruction=game,word=word['slug'],hint='hint',success='success',retry='retry',finish='finish').items()}), None
-    if len(items)<4:
+    if len(items)<(1 if game=='sentence' else 4):
         return None, f"Apenas {len(items)} itens distintos; são necessários 4." + (" Cada alvo requer 2 distratores sem conflitos visuais entre as opções." if game=='read-choose' else "")
     rounds=[]
     selected=items[-4:]
