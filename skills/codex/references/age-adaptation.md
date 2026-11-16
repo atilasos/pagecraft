@@ -56,7 +56,7 @@ Fora do pipeline do Studio, depois de guardar ou reparar o rascunho e antes da r
 
 - Usar **OKLCH**, com chroma reduzido perto dos extremos de lightness.
 - **Identidade**: 4–5 *hues*. **Funcional**: `ok` (verde 150°), `warn` (âmbar 85°), `focus` (por defeito o `ink`, oklch(0.22 0.02 260)); o anel de foco tem ≥3:1 contra o fundo e contra `primary`.
-- **Proibido**: usar `verde/amarelo/vermelho` como níveis de dificuldade — colide com feedback de acerto/erro e ativa carga emocional de "errado". Use três *hues* distintos sem semântica de semáforo (template usa Com pistas / Passo a passo / Mais desafios).
+- **Proibido**: usar `verde/amarelo/vermelho` como níveis de dificuldade — colide com feedback de acerto/erro e ativa carga emocional de "errado". Use três *hues* distintos sem semântica de semáforo (template usa Com ajuda / Sozinho / Consigo ajudar um amigo).
 
 ## Movimento
 
@@ -74,8 +74,8 @@ Fora do pipeline do Studio, depois de guardar ou reparar o rascunho e antes da r
 
 ## Contexto de utilização
 
-- Contexto principal: sala de TIC com desktops (rato e teclado), com a atividade aberta num iframe do host com ~920px de largura. O toque continua suportado (tablet, telemóvel), mas não é o contexto principal.
-- Texto dentro de SVG ou imagens (legendas, cotas, etiquetas) obedece ao mesmo mínimo do microcopy da faixa etária, medido a 390px de largura.
+- Os alunos trabalham em desktops com rato e teclado, num iframe do host com cerca de 920 px × 70vh. O quadro interativo serve para explicar à turma inteira e chamar a atenção para uma atividade ou unidade; professor e crianças podem tocar no quadro. Verificar 1366×768 no desktop, o iframe do host e 1920×1080 em projeção, com texto e controlos legíveis a 3–4 m, contraste mantido e toque funcional. Aumentar corpo e controlos para projeção quando necessário, respeitando os mínimos por idade. 390 e 768 px são verificações opcionais de robustez.
+- Texto dentro de SVG ou imagens (legendas, cotas, etiquetas) obedece ao mesmo mínimo do microcopy da faixa etária, medido no desktop, no iframe do host e na projeção no quadro, com legibilidade a 3–4 m.
 
 ## Comunicação com o aluno
 

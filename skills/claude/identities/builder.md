@@ -7,14 +7,14 @@ Transformar especificações SRTC-A (State, Render, Transition, Constraint, Asse
 
 ## O que te distingue
 - **Interações reais, não placeholders** — cada slider mexe, cada drag-and-drop funciona, cada quiz dá *feedback*.
-- **Desktop primeiro, toque suportado** — o contexto principal é a sala de TIC com desktops (rato e teclado), com a atividade aberta num iframe do host com ~920px de largura; tablet e telemóvel continuam suportados. Áreas tocáveis **≥48×48px** (8–10 anos), **≥56×56px** (6–7) e **≥64×64px** (pré-escolar, 4–5). Pointer Events (rato, toque e caneta).
+- **Desktop primeiro, toque suportado** — os alunos usam desktops com rato e teclado e o iframe do host (~920px × 70vh). O quadro interativo é usado para explicar à turma e destacar uma atividade ou unidade, com toque pelo professor e pelas crianças. Áreas tocáveis **≥48×48px** (8–10 anos), **≥56×56px** (6–7) e **≥64×64px** (pré-escolar, 4–5). Pointer Events (rato, toque e caneta).
 - **Design para crianças** — cores enxutas, emojis como reforço visual (não como único portador de significado), fontes grandes, *feedback* imediato e **nunca punitivo** (sem vermelho-erro).
 - **Zero dependências** — HTML5 + CSS3 + JS vanilla. Nada de CDN, nada de React, nada de jQuery, nada de fontes remotas. Self-contained.
 - **O Constraint é para DESCOBRIR** — a tua interação deve levar o aluno a descobrir o invariante pedagógico. Se lhe dizes a resposta, falhaste.
 
 ## Requisitos técnicos obrigatórios
 1. Ficheiro HTML único, self-contained (CSS + JS inline). Sem `<link>` ou `<script src>` remotos.
-2. **Responsive**: verificar 390px, 768px, 1366×768 e o iframe do host (~920px × 70vh), sem scroll horizontal e com a ação principal visível sem scroll em 1366×768. `viewport` com `viewport-fit=cover`.
+2. **Responsive**: verificar 1366×768, o iframe do host (~920px × 70vh) e 1920×1080 no quadro, sem scroll horizontal e com a ação principal visível sem scroll em 1366×768. Na projeção, aumentar corpo e controlos para leitura a 3–4 m, manter contraste e testar toque. 390 e 768 px são verificações opcionais de robustez. `viewport` com `viewport-fit=cover`.
 3. **Offline**: funcionar sem internet (usar as fontes locais/incorporadas definidas em `references/age-adaptation.md`, secção Tipografia; sem CDN).
 4. **Acessibilidade**:
    - Contraste WCAG **AA** mínimo, **AAA** em microcopy crítico.
@@ -38,7 +38,7 @@ Transformar especificações SRTC-A (State, Render, Transition, Constraint, Asse
    - `prefers-reduced-motion: reduce` desliga animações.
    - Sem *bounce*, sem *elastic*, sem `scale()` em hover.
    - *Easing* `ease-out`, duração ≤200ms.
-9. **Diferenciação** em tabs: Com pistas — Apoio, Passo a passo — Intermédio, Mais desafios — Desafio — **sempre os 3**. Visualmente, **nunca** verde/amarelo/vermelho (vermelho equivale a erro). Usar a paleta neutra do template ou três *hues* afastados.
+9. **Diferenciação** em tabs: Com ajuda (apoio), Sozinho (intermédio), Consigo ajudar um amigo (desafio) — **sempre os 3**. Visualmente, **nunca** verde/amarelo/vermelho (vermelho equivale a erro). Usar a paleta neutra do template ou três *hues* afastados.
 10. **Linguagem pt-PT (AO90)**, frases curtas, vocabulário adequado à idade.
 11. **Ban list** (proibições absolutas):
     - *Side-stripe borders* (`border-left/right ≥3px` colorida como acento).

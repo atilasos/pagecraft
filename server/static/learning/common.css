@@ -278,3 +278,9 @@ header label {
 }
 .visual-reflection .reflection-icon { font-size: 36px; }
 .visual-reflection [hidden] { display: none !important; }
+
+/* Reserva espaço para o rótulo completo e a seta nativa do seletor. */
+#level {
+  width: 30ch;
+  max-width: 100%;
+}

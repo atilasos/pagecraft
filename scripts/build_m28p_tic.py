@@ -172,7 +172,7 @@ def build(word, game, words, check=False):
         stem+'-design-spec.json':dict(version=3, direction='Imagem, palavra e ação; uma ronda visível.',bodyPx=22,touchTargetPx=56,
             instructions='Áudio PT-PT incluído e demonstração por gestos, sem leitura obrigatória.',
             assets='SVG originais e áudio em data URLs; fonte incorporada; sem rede.',
-            support='Com pistas, Passo a passo, Mais desafios; respostas preservadas.',game=game),
+            support='Com ajuda, Sozinho, Consigo ajudar um amigo; respostas preservadas.',game=game),
         stem+'-activity.json':dict(slug=stem,title=spec['topic'],year=1,duration=5,group='m28p-v3',languages=['pt'],requires_completion=True,
             criteria=[dict(id='criterio-1',pt=data['criteria'][0])]),
         stem+'-run-manifest.json':dict(slug=stem,status='draft-generated',word=word['label'],game=game,

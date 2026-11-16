@@ -294,7 +294,7 @@ async def test_teacher_notes_are_private_and_preferences_survive_reload(learning
     assert 'teacher_note' not in current
     report = (await teacher.get('/api/learning/reports')).json()[0]
     assert report['teacher_note'] == 'Observação privada'
-    assert report['evidence'][1]['text'] == ['Apoio: Mais desafios']
+    assert report['evidence'][1]['text'] == ['Apoio: Consigo ajudar um amigo']
 
 
 async def test_saved_activity_state_restores_without_becoming_evidence(learning_clients):

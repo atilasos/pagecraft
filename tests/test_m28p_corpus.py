@@ -1,6 +1,7 @@
 """A coleção inteira preserva os itens novos e o HTML corresponde à autoria."""
 import importlib.util
 import json
+import re
 from pathlib import Path
 import shutil
 
@@ -57,7 +58,7 @@ def test_the_reservations_cannot_be_reused(corpus_copy):
     assert any('duplicados' in error for error in audit(corpus_copy)['erros'])
 
 
-def test_committed_journeys_are_generated_from_the_current_content():
+def test_committed_journeys_preserve_authored_content_with_current_labels():
     module_spec = importlib.util.spec_from_file_location('m28p_motor', ROOT / 'scripts/build_m28p_journeys.py')
     motor = importlib.util.module_from_spec(module_spec)
     module_spec.loader.exec_module(motor)
@@ -67,4 +68,13 @@ def test_committed_journeys_are_generated_from_the_current_content():
         spec = motor.docspec_for(data)
         stem = 'm28p-v2-' + data['slug']
         assert json.loads((source.parent / (stem + '-docspec.json')).read_text()) == spec
-        assert (source.parent / (stem + '.html')).read_text() == motor.render_html(data, spec)
+        # Os HTML arquivados preservam a UI da sua geração. O conteúdo de
+        # autoria mantém-se igual; os modelos atuais usam os novos rótulos.
+        archived = (source.parent / (stem + '.html')).read_text()
+        generated = motor.render_html(data, spec)
+        pattern = r'<script id="m28p-content" type="application/json">(.*?)</script>'
+        assert json.loads(re.search(pattern, archived, re.S).group(1)) == data
+        assert json.loads(re.search(pattern, generated, re.S).group(1)) == data
+        for key, label in [('support', 'Com ajuda'), ('intermediate', 'Sozinho'),
+                           ('challenge', 'Consigo ajudar um amigo')]:
+            assert re.search(rf'<button data-level="{key}"[^>]*>{label}</button>', generated)

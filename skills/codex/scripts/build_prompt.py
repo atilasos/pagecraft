@@ -118,9 +118,9 @@ def main():
 
 ### Diferenciação (implementar como tabs selecionáveis)
 
-- **Com pistas — Apoio:** {diff.get("support", "")}
-- **Passo a passo — Intermédio:** {diff.get("standard", "")}
-- **Mais desafios — Desafio:** {diff.get("challenge", "")}
+- **Com ajuda (apoio):** {diff.get("support", "")}
+- **Sozinho (intermédio):** {diff.get("standard", "")}
+- **Consigo ajudar um amigo (desafio):** {diff.get("challenge", "")}
 {maker_text}""")
 
     # Curriculum footer

@@ -46,6 +46,8 @@ Copia esta lista para a tua resposta de progresso e marca cada passo:
 - [ ] 8 Rascunho registado e entregue              → CHECK check <slug> --phase delivery
 ```
 
+Contexto da sala: Os alunos trabalham em desktops com rato e teclado, num iframe do host com cerca de 920 px × 70vh. O quadro interativo serve para explicar à turma inteira e chamar a atenção para uma atividade ou unidade; professor e crianças podem tocar no quadro. Verificar 1366×768 no desktop, o iframe do host e 1920×1080 em projeção, com texto e controlos legíveis a 3–4 m, contraste mantido e toque funcional. Aumentar corpo e controlos para projeção quando necessário, respeitando os mínimos por idade. 390 e 768 px são verificações opcionais de robustez.
+
 0. **Normalizar o pedido.** Fixa tema, ano, duração, línguas (só `pt` por defeito), maker (`none` por defeito), restrições, ligação ao trabalho da turma quando o professor a indicar, e o slug. Inicia o manifest com `CHECK log <slug> --phase orchestrator --status planning`. Pergunta ao professor apenas o que mudaria materialmente a atividade.
 1. **Architect.** Consulta a Sebenta (ver abaixo) e escreve `sources.md` e `docspec.json`. As unidades seguem SRTC-A, as três vias partilham a mesma meta e a atividade tem um plano `support` próprio. O Architect consulta a Sebenta sozinho, para que a pesquisa não ocupe o contexto do orquestrador.
 2. **Guia.** Gera-o com `uv run python "$SKILL_DIR/scripts/build_markdown.py" drafts/<slug>-docspec.json > drafts/<slug>.md`.

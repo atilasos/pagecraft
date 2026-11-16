@@ -23,7 +23,7 @@
       previousContext:'Pista anterior: o contexto mudou.', savedContext:'Contexto original não registado.',
       version:'Versão', stage:'Etapa', question:'Pergunta', answer:'Resposta nessa altura', product:'Trabalho',
       level:'Tipo de ajuda', participants:'Participantes', hintLanguage:'Língua', goal:'Objetivo da etapa', criteria:'Critérios',
-      support:'Com pistas', intermediate:'Passo a passo', challenge:'Mais desafios',
+      support:'Com ajuda', intermediate:'Sozinho', challenge:'Consigo ajudar um amigo',
       outside:'Local de trabalho declarado.', observation:'O PageCraft só conhece o que foi feito ou declarado nesta página.',
       returned:'De volta ao guião. Regista o que fizeste ou pede uma pista.'},
     en: {resume:'I will try this', groupResume:'We will try this', pause:'A hint to help you continue', title:'One next step', hint:'I need a hint', groupHint:'We need a hint', obstacle:'Where do you need help?',

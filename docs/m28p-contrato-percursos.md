@@ -55,7 +55,7 @@ Os nomes finais dos jogos são Palavra igual, Ligar pares, Procurar palavras, Mo
 
 ## Apoios e avanço
 
-Os valores da ponte são `support`, `intermediate` e `challenge`, correspondendo a Com pistas, Passo a passo e Mais desafios. Quando o DocSpec exigir `standard`, mapear para `intermediate` na ponte. Os três apoios ajustam a visibilidade de imagem, modelo, segmentação e destaque. Conservam o conjunto de opções, os pares, a resposta correta e a grafia-alvo no meio da ronda. Com pistas mostra modelo segmentado e legendas dos desenhos; Passo a passo apresenta o modelo previsto para o jogo; Mais desafios retira o modelo quando a operação o permite e reduz outras referências visuais. Os jogos de igualdade visual conservam o modelo.
+Os valores da ponte são `support`, `intermediate` e `challenge`, correspondendo a Com ajuda, Sozinho e Consigo ajudar um amigo. Quando o DocSpec exigir `standard`, mapear para `intermediate` na ponte. Os três apoios ajustam a visibilidade de imagem, modelo, segmentação e destaque. Conservam o conjunto de opções, os pares, a resposta correta e a grafia-alvo no meio da ronda. Com ajuda mostra modelo segmentado e legendas dos desenhos; Sozinho apresenta o modelo previsto para o jogo; Consigo ajudar um amigo retira o modelo quando a operação o permite e reduz outras referências visuais. Os jogos de igualdade visual conservam o modelo.
 
 Apoio local tem três passos recuperáveis: observar referência; destacar a relação ou lugar a rever; demonstrar a próxima ação. Não exigir leitura de instruções sobre utilidade da ajuda para regressar à tarefa. Conservar unidades, seleção, pares, ronda e respostas ao mudar de apoio. Não emitir tentativa por mudar apoio, ouvir, ver demonstração ou restaurar.
 

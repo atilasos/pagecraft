@@ -24,7 +24,7 @@ const EVENT_TEXT = {
   work_group_released: () => "dispositivo do grupo libertado pelo professor",
   activity_loaded: () => "abriu a atividade",
   heartbeat: () => "",
-  level_changed: (e) => `escolheu ${({support:"Com pistas", intermediate:"Passo a passo", challenge:"Mais desafios"})[e.payload?.level] || "outro nível"}`,
+  level_changed: (e) => `escolheu ${({support:"Com ajuda", intermediate:"Sozinho", challenge:"Consigo ajudar um amigo"})[e.payload?.level] || "outro nível"}`,
   unit_started: (e) => `começou ${unitLabel(e.payload?.unit_id || e.unit_id)}`,
   attempt: (e) => (e.payload?.correct ? "acertou uma tentativa ✓" : "fez uma tentativa"),
   discovery: (e) => `descobriu: ${e.payload?.message || ""}`,
@@ -999,13 +999,14 @@ function renderWorkGroups() {
   const container = $("work-groups");
   container.replaceChildren();
   $("work-groups-section").hidden = workGroups.size === 0;
-  const levelNames = {support:"Com pistas", intermediate:"Passo a passo", challenge:"Mais desafios"};
+  // níveis de um par ou grupo: formas no plural, para não colidir com a forma de trabalhar «Sozinho»
+  const levelNames = {support:"Com ajuda", intermediate:"Sozinhos", challenge:"Conseguimos ajudar outros"};
   for (const group of workGroups.values()) {
     const card = document.createElement("article");
     card.className = "work-group-card";
     const heading = document.createElement("h3"); heading.textContent = group.display_name;
     const detail = document.createElement("p");
-    detail.textContent = `${group.numbers?.evidence?.attempt || 0} tentativas conjuntas · ${levelNames[group.level] || "Passo a passo"} · ${group.active ? group.triage?.reason || "A trabalhar" : group.replaced_by ? "Composição anterior" : "Dispositivo libertado"}`;
+    detail.textContent = `${group.numbers?.evidence?.attempt || 0} tentativas conjuntas · ${levelNames[group.level] || "Sozinhos"} · ${group.active ? group.triage?.reason || "A trabalhar" : group.replaced_by ? "Composição anterior" : "Dispositivo libertado"}`;
     card.append(heading, detail);
     if (group.active && !liveSessionState.closed) {
       const codeRow = (liveSessionState.group_codes || session.group_codes || []).find(row => row.id === group.id);

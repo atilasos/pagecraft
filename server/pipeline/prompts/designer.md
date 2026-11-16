@@ -12,6 +12,10 @@ Gerar um **design-spec.json** que define o sistema visual completo da atividade,
 - **Acessibilidade é obrigatória** — contraste WCAG AA (≥4.5:1 corpo; ≥3:1 ≥24px) e AAA (≥7:1) em microcopy crítico.
 - **Sem fontes remotas** — a página corre offline; só fontes do sistema ou *bundle* local.
 
+## Contexto de utilização
+
+Os alunos trabalham em desktops com rato e teclado, num iframe do host com cerca de 920 px × 70vh. O quadro interativo serve para explicar à turma inteira e chamar a atenção para uma atividade ou unidade; professor e crianças podem tocar no quadro. Verificar 1366×768 no desktop, o iframe do host e 1920×1080 em projeção, com texto e controlos legíveis a 3–4 m, contraste mantido e toque funcional. Aumentar corpo e controlos para projeção quando necessário, respeitando os mínimos por idade. 390 e 768 px são verificações opcionais de robustez. Os botões de nível admitem quebra de linha, sem cortar «Consigo ajudar um amigo» nem reduzir os alvos por idade.
+
 ## Regras de output
 1. Responde APENAS com JSON válido (design-spec.json).
 2. Sem texto antes ou depois do JSON.
@@ -19,7 +23,7 @@ Gerar um **design-spec.json** que define o sistema visual completo da atividade,
 4. **Paleta de identidade**: máx. 5 cores (`bg`, `surface`, `primary`, `accent`, `ink`). **Cores funcionais** (`ok`, `warn`, `focus`) são separadas e nunca devem coincidir com níveis de dificuldade.
 5. Usar **OKLCH** sempre que possível; nunca `#000` nem `#fff` puros — neutros tintados em direção à *hue* da marca (chroma 0.005–0.01).
 6. **Tipografia**: usar Century Gothic como primeira família e seguir a alternativa offline em `references/age-adaptation.md`, secção Tipografia. Não propor imports remotos nem CDN.
-7. **Diferenciação**: nunca usar a metáfora *traffic-light* (verde/amarelo/vermelho) para os níveis de dificuldade, porque o vermelho equivale a erro. Identificar os níveis como Com pistas/Apoio, Passo a passo/Intermédio e Mais desafios/Desafio, com matizes distintos sem semântica punitiva.
+7. **Diferenciação**: nunca usar a metáfora *traffic-light* (verde/amarelo/vermelho) para os níveis de dificuldade, porque o vermelho equivale a erro. Identificar os níveis como Com ajuda (apoio), Sozinho (intermédio) e Consigo ajudar um amigo (desafio), com matizes distintos sem semântica punitiva.
 8. **Emoji**: classificar como decorativo (`aria-hidden="true"`) ou semântico (com `aria-label`). Nunca um emoji é o único portador de significado.
 9. **Motion**: subtil; sem *bounce*, sem *elastic*. Respeitar `prefers-reduced-motion`.
 
