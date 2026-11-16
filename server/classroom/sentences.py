@@ -12,6 +12,8 @@ def repertoire():
     base = Path(__file__).resolve().parents[2] / 'drafts/m28p-v3'
     words = sorted(json.loads((base / 'words.json').read_text()), key=lambda w: w['order'])
     cycle = json.loads((base / 'cycle.json').read_text())
+    for word in words:
+        cycle['keywords'].setdefault(word['slug'], {'newWords': [], 'sentences': []})
     return words, cycle, validate_cycle(cycle, words)
 
 

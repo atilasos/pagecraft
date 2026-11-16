@@ -22,6 +22,7 @@ def test_registry_can_be_queried_without_knowing_its_representation():
 
     assert _names(SESSION_EVENT_TYPES.visible_to("student")) == {
         "hint_presented", "hint_feedback", "hint_acknowledged", "hint_listened", "work_location", "help_resolved",
+        "class_sentence_shown",
         "activity_state",
         "session_resumed",
         "ai_feedback",
@@ -35,6 +36,8 @@ def test_registry_can_be_queried_without_knowing_its_representation():
     }
     assert "feedback_error" in _names(SESSION_EVENT_TYPES.visible_to("teacher"))
     assert _names(SESSION_EVENT_TYPES.visible_to("board")) == {
+        "class_sentence_shown",
+        "class_sentence_hidden",
         "group_codes_updated",
         "session_resumed",
         "freeze_screens",
