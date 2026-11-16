@@ -20,17 +20,21 @@ with sync_playwright() as p:
                     page.keyboard.press('Enter')
                 key('#start');key('#demo-close')
                 if game=='discover':
-                    # Duas vogais isoladas não são palavras da lista.
-                    for label in ('a','a'):
-                        page.get_by_role('button',name=label,exact=True).last.focus();page.keyboard.press('Enter')
+                    assert f"0 de {len(r['lexicon'])}" in page.locator('.hidden-count').text_content()
+                    # Duas vogais isoladas não são palavras escondidas.
+                    pair=[p['label'] for p in r['pieces'] if p['label'] not in {s for w in r['lexicon'] for s in w['syllables']}][:1]+[r['lexicon'][0]['syllables'][0]]
+                    for label in pair:
+                        page.locator('.pieces').get_by_role('button',name=label,exact=True,disabled=False).first.focus();page.keyboard.press('Enter')
                     key('#confirm')
-                    assert 'Essa não está na nossa lista' in page.locator('#feedback').text_content()
+                    assert 'não é uma das palavras escondidas' in page.locator('#feedback').text_content()
                     key('#undo');key('#undo')
-                    w=next(w for w in r['lexicon'] if len(w['syllables'])==2)
-                    for label in w['syllables']:
-                        page.get_by_role('button',name=label,exact=True).last.focus();page.keyboard.press('Enter')
-                    key('#confirm')
-                    assert w['label'] in page.locator('#round-content').text_content()
+                    for w in r['lexicon']:
+                        assert not page.locator('#next').is_visible()
+                        for label in w['syllables']:
+                            page.locator('.pieces').get_by_role('button',name=label,exact=True,disabled=False).first.focus();page.keyboard.press('Enter')
+                        key('#confirm')
+                    assert 'Descobriste' in page.locator('#feedback').text_content()
+                    assert page.locator('.hidden-word.found').count()==len(r['lexicon'])
                 else:
                     wrong=r['answer'][::-1] if game!='read-choose' else [next(o['id'] for o in r['options'] if o['id'] not in r['answer'])]
                     for id_ in wrong:

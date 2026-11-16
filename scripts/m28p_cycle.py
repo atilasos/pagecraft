@@ -8,7 +8,7 @@ CYCLE_GAMES = {
     'listen-build': ('Ouvir e montar', 'Ouve e junta as sílabas.', 'Monto uma palavra a partir do áudio.'),
     'read-choose': ('Ler e escolher', 'Lê e escolhe a imagem.', 'Escolho a imagem da palavra escrita.'),
     'sentence': ('Montar frases', 'Ordena as palavras da frase.', 'Ordeno palavras para formar uma frase.'),
-    'discover': ('Descobrir palavras', 'Junta sílabas. Descobre palavras.', 'Experimento combinações e guardo palavras.'),
+    'discover': ('Descobrir palavras', 'Junta sílabas. Descobre as palavras escondidas.', 'Experimento combinações e descubro palavras.'),
 }
 
 
@@ -93,3 +93,51 @@ def image_choices(target, items, conflicts):
         if all(len(labels.intersection(group)) <= 1 for group in conflicts):
             return [target, *pair]
     return []
+
+
+def _plain(text):
+    return ''.join(c for c in unicodedata.normalize('NFD', text) if not unicodedata.combining(c)) == text
+
+
+def formable(label, pieces, limit=3):
+    """Indica se a palavra se forma juntando até `limit` peças diferentes do tabuleiro."""
+    def search(rest, used, depth):
+        if not rest:
+            return True
+        if depth == limit:
+            return False
+        return any(rest.startswith(piece) and search(rest[len(piece):], used | {i}, depth + 1)
+                   for i, piece in enumerate(pieces) if i not in used)
+    return search(label, frozenset(), 0)
+
+
+def discover_rounds(current, vocabulary, families, rng, size=2, max_rounds=4):
+    """Agrupa as palavras escondidas por ronda e escolhe sílabas suficientes, sem excesso.
+
+    Cada ronda mostra as sílabas das suas palavras e uma sílaba a mais. As palavras
+    escondidas são todas as do vocabulário que se formam com essas peças, para que o
+    contador que a criança vê corresponda ao que é possível descobrir.
+    """
+    usable = [w for w in vocabulary if 2 <= len(w['syllables']) <= 3]
+    start = next((i for i, w in enumerate(usable) if w['slug'] == current), len(usable))
+    priority = usable[start:] + usable[:start]
+    rounds = min(max_rounds, len(priority) // size)
+    if not rounds:
+        return []
+    groups = [priority[i * size:(i + 1) * size] for i in range(rounds)]
+    leftover = priority[rounds * size:]
+    if len(leftover) == 1 and rounds < max_rounds:
+        groups[-1].append(leftover[0])
+    result = []
+    for group in groups:
+        counts = {}
+        for word in group:
+            for syllable in dict.fromkeys(word['syllables']):
+                counts[syllable] = max(counts.get(syllable, 0), word['syllables'].count(syllable))
+        pieces = [s for s, n in counts.items() for _ in range(n)]
+        extra = sorted(s for s in families if len(s) >= 2 and _plain(s) and s not in counts)
+        if extra:
+            pieces.append(rng.choice(extra))
+        hidden = list(group) + [w for w in usable if w not in group and formable(w['label'], pieces)]
+        result.append(dict(pieces=pieces, hidden=hidden))
+    return result

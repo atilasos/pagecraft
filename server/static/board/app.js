@@ -210,14 +210,27 @@ function registerCollectiveEventListeners(activeStream, declarations) {
 
 function finishLiveSession(message) {
   stopLiveSession();
+  showClassSentence(null);
   show(waiting);
   waitingStatus.textContent = message;
   sessionTimer = later(checkSession, 1500);
 }
 
+function showClassSentence(sentence) {
+  let panel = document.getElementById('class-sentence-panel');
+  if (!panel) {
+    panel = document.createElement('div'); panel.id = 'class-sentence-panel';
+    panel.setAttribute('role', 'status');
+    panel.style.cssText = 'position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:5vw;background:#fff;color:#182b32;font:700 clamp(48px,7vw,120px)/1.4 "Century Gothic","Didact Gothic","URW Gothic",sans-serif;text-align:center;white-space:pre-wrap';
+    document.body.appendChild(panel);
+  }
+  panel.textContent = sentence?.text || '';
+  panel.style.display = sentence ? 'flex' : 'none';
+}
 function applySessionState(data) {
   const state = data.session;
   if (!state || typeof state !== "object" || Array.isArray(state)) return;
+  showClassSentence(state.class_sentence);
   const showingCodes = state.group_codes_visible === true;
   document.getElementById('group-codes-panel').hidden = !showingCodes;
   board.hidden = showingCodes;
@@ -240,6 +253,9 @@ function dispatchCollectiveEvent(declaration, rawData) {
   const data = parseObject(rawData);
   if (!data) return;
   if (data.student_id != null) return;
+  if (declaration.name === 'class_sentence_shown' || declaration.name === 'class_sentence_hidden') {
+    showClassSentence(data.payload?.sentence); return;
+  }
   if (declaration.name === "session_closed") {
     finishLiveSession("Sessão terminada. A aguardar a próxima aula.");
     return;

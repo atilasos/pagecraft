@@ -90,6 +90,8 @@ async function loadClasses() {
     .map((c) => `<option value="${esc(c.id)}">${esc(c.name)}</option>`)
     .join("");
   $("launch-class").innerHTML = options;
+  $("sentence-class").innerHTML = options;
+  await loadSentencePanel();
   $("report-class").innerHTML = options;
 }
 
@@ -416,6 +418,10 @@ async function startLive(s) {
   editingGroup = null;
   $("group-editor").hidden = true;
   session = s;
+  $('sentence-class').value = s.class_id;
+  const keyword = [...$('sentence-keyword').options].find(o => s.activity_slug.startsWith(`m28p-ciclo-${o.value}-`));
+  if (keyword) $('sentence-keyword').value = keyword.value;
+  await loadSentencePanel();
   liveSessionState = {status:s.status, closed:false, frozen:false, group_codes:s.group_codes || [], group_codes_visible:s.group_codes_visible || false};
   $("prep-desk").hidden = true;
   $("live").hidden = false;
@@ -1141,3 +1147,66 @@ $('show-group-codes').addEventListener('click', async () => {
   });
   if (!response.ok) $('group-edit-feedback').textContent = 'Não foi possível atualizar o quadro. Tenta novamente.';
 });
+
+
+async function loadSentencePanel() {
+  const classId = $('sentence-class').value;
+  const live = session && session.class_id === classId && session.status !== 'closed';
+  $('sentence-hide').disabled = !live;
+  $('sentence-live-hint').hidden = live;
+  $('sentence-save').disabled = !classId;
+  const list = $('sentence-list'); list.replaceChildren();
+  if (!classId) return;
+  try {
+    const response = await tfetch(`/api/classes/${classId}/sentences`);
+    if (!response.ok) throw new Error('Não foi possível ler as frases.');
+    for (const sentence of (await response.json()).reverse()) {
+      const li = document.createElement('li');
+      const text = document.createElement('p'); text.textContent = sentence.text; li.appendChild(text);
+      const project = document.createElement('button'); project.type = 'button';
+      project.textContent = 'Projetar no Quadro'; project.disabled = !live;
+      project.onclick = () => projectClassSentence(sentence.id);
+      const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = 'Apagar';
+      remove.onclick = async () => {
+        if (!window.confirm(`Apagar «${sentence.text}»?`)) return;
+        const response = await tfetch(`/api/classes/${classId}/sentences/${sentence.id}`, {method:'DELETE'});
+        if (response.ok) await loadSentencePanel();
+        else $('sentence-status').textContent = 'Não foi possível apagar a frase.';
+      };
+      li.append(project, remove); list.appendChild(li);
+    }
+  } catch (error) { $('sentence-status').textContent = error.message; }
+}
+async function projectClassSentence(sentenceId = null) {
+  if (!session) return;
+  const response = await tfetch(`/api/sessions/${session.id}/class-sentence`, {
+    method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({sentence_id:sentenceId}),
+  });
+  $('sentence-status').textContent = response.ok ? (sentenceId ? 'Frase projetada no Quadro.' : 'Frase escondida no Quadro.') : 'Não foi possível atualizar o Quadro.';
+}
+$('sentence-hide').onclick = () => projectClassSentence();
+$('sentence-class').onchange = loadSentencePanel;
+$('class-sentence-form').onsubmit = async event => {
+  event.preventDefault(); $('sentence-save').disabled = true;
+  try {
+    const response = await tfetch(`/api/classes/${$('sentence-class').value}/sentences`, {
+      method:'POST', headers:{'content-type':'application/json'},
+      body:JSON.stringify({text:$('sentence-text').value, keyword:$('sentence-keyword').value}),
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(typeof result.detail === 'string' ? result.detail : 'Revê a frase. Usa 2 a 12 palavras.');
+    $('sentence-status').textContent = ['Frase guardada.', ...result.warnings].join(' ');
+    $('sentence-text').value = ''; await loadSentencePanel();
+  } catch (error) { $('sentence-status').textContent = error.message; }
+  finally { $('sentence-save').disabled = false; }
+};
+(async () => {
+  const response = await tfetch('/api/class-sentence-keywords');
+  if (!response.ok) return;
+  for (const keyword of await response.json()) {
+    const option = document.createElement('option'); option.value = keyword.slug; option.textContent = keyword.label;
+    $('sentence-keyword').appendChild(option);
+  }
+  const keyword = [...$('sentence-keyword').options].find(o => session?.activity_slug.startsWith(`m28p-ciclo-${o.value}-`));
+  if (keyword) $('sentence-keyword').value = keyword.value;
+})();

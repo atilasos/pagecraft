@@ -35,14 +35,14 @@ As fontes disponíveis não concordam na ordem (verificado a 16/11/2026):
 | Fichas da escola («1º Ano - Fichas-Método 28 palavras», 432 `.doc`) | menina, menino, bota, sapato, uva, leque, casa, janela, escada, telhado, chave, gema, galinha, girafa, rato, cenoura, palhaço, zebra, peixe, bandeira, árvore, quadro, passarinho, cigarra, fogueira, flor | São 26 palavras, sem dedo nem funil. A ordem foi deduzida da numeração das fichas «Sílabas». |
 | «Manual Metodo-28-Palavras-Outras-Fichas» (2011) | menina, menino, uva, sapato, bota, mamã, leque, … | Inclui «mamã» e não inclui «dedo». |
 
-**Decisão:** a coleção mantém a ordem do catálogo oficial mais recente. O repertório de cada palavra-chave é calculado a partir dessa ordem. Uma turma que siga outra variante só precisa de outra ordem em `consonantsByKeyword` e `words.json`. As diferenças entre fontes são trocas locais (bota/sapato, escada/telhado, gema/galinha, peixe/bandeira). O piloto é válido nas três ordens porque usa só m, n e v.
+**Decisão:** a coleção mantém a ordem do catálogo oficial mais recente, confirmada pelo professor a 16/11/2026. O repertório de cada palavra-chave é calculado a partir dessa ordem. Uma turma que siga outra variante só precisa de outra ordem em `consonantsByKeyword` e `words.json`. As diferenças entre fontes são trocas locais (bota/sapato, escada/telhado, gema/galinha, peixe/bandeira). O piloto é válido nas três ordens porque usa só m, n e v.
 
 **Frases das fichas da escola:** «O menino tem o balão», «A Ana faz o Sol», «O menino vai à escola» e outras são de leitura global e usam letras que ainda não foram trabalhadas. Não servem os jogos de recombinação de menina e menino. Ficam como referência para palavras-chave posteriores, quando o repertório as cobrir.
 
 ## Quatro minijogos novos por palavra-chave
 
 Cada jogo segue as regras da v3:
-- quatro rondas;
+- quatro rondas; Montar frases admite uma a quatro rondas fixas;
 - demonstração recuperável;
 - avanço por resposta, mesmo com erro;
 - pista local antes da demonstração;
@@ -58,7 +58,7 @@ Os três apoios chamam-se **Com ajuda**, **Sozinho** e **Consigo ajudar um amigo
 | `listen-build` | Ouvir e montar | Ouve uma palavra nova e monta-a com peças silábicas do repertório (alvo e distratores conhecidos), sem modelo | Sílabas conhecidas formam palavras que ainda não tinham sido vistas | Sequência confirmada e ajudas usadas, incluindo ver o modelo |
 | `read-choose` | Ler e escolher | Lê uma palavra nova escrita e escolhe a imagem entre três; o áudio é ajuda registada | A leitura das sílabas dá o significado | Imagem escolhida e se ouviu antes de escolher |
 | `sentence` | Montar frases | Vê a imagem (o áudio é opcional) e ordena cartões de palavras para formar a frase | As palavras têm ordem e a frase diz o que a imagem mostra | Ordem confirmada e ajudas usadas |
-| `discover` | Descobrir palavras | Quadro silábico do repertório: junta 2 ou 3 sílabas e, se formar uma palavra da lista, revela imagem e áudio e guarda-a na «caixa de palavras» | Combinações diferentes dão palavras diferentes | Palavras descobertas e tentativas; nunca uma nota |
+| `discover` | Descobrir palavras | Até quatro rondas com 2 ou 3 palavras escondidas cada; o tabuleiro tem só as sílabas dessas palavras e mais uma. Contador «1 de 2», lugar por palavra (imagem e som em Com ajuda, sílabas vazias em Sozinho) e «Não encontro mais», que revela as que faltam. Revisto a 16/11/2026: com 39–52 sílabas e sem contador, o professor não sabia quantas palavras havia nem quando o jogo acabava | Combinações diferentes dão palavras diferentes | Palavras descobertas e tentativas; nunca uma nota |
 
 Os apoios ajustam a visibilidade de modelo, imagem e segmentação, como na v3:
 - **Com ajuda:** o modelo segmentado fica disponível.
@@ -67,6 +67,12 @@ Os apoios ajustam a visibilidade de modelo, imagem e segmentação, como na v3:
   - sem modelo nem imagem auxiliar;
   - no fim, há um convite opcional e só oral para explicar a um colega como leu;
   - o convite não se regista como avaliação.
+
+### Frase da turma
+
+Na página da turma, o professor guarda frases ditadas pelas crianças, escolhe a palavra-chave e pode projetá-las no Quadro durante a sessão, até carregar em «Esconder frase no Quadro». O banco funciona também sem sessão. Aceita frases com 2 a 12 palavras e acrescenta ponto final quando falta pontuação. Os avisos de repertório ajudam o professor a decidir, sem bloquear texto livre nem nomes próprios.
+
+Em Montar frases, as quatro frases mais recentes da turma até à palavra-chave da atividade entram primeiro. As frases fixas completam as rondas até quatro. Menina e menino passam a ter este jogo, mesmo com menos de quatro frases fixas. As frases da turma mostram o rótulo «Frase da turma», sem imagem; Com ajuda mostra os tokens e os restantes níveis ocultam o texto. O áudio destas frases usa apenas vozes locais pt-PT; sem voz local, o botão de ouvir fica oculto. As frases fixas conservam o MP3 incluído. O progresso é recuperado mesmo quando as frases chegam depois do estado guardado.
 
 ## Volume e fases
 

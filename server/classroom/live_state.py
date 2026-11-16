@@ -128,6 +128,9 @@ def _session_projection(events: Iterable[Mapping], session: Mapping, *, role: st
         if codes:
             projection.update(group_codes=codes.get("groups", []),
                               group_codes_visible=codes.get("visible", False) and not projection["closed"])
+    sentence = next((r for r in reversed(records) if r.get("type") in {"class_sentence_shown", "class_sentence_hidden"}), None)
+    if sentence and role in {"teacher", "board"}:
+        projection["class_sentence"] = sentence["payload"].get("sentence") if not projection["closed"] else None
     return projection
 
 

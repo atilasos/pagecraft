@@ -246,6 +246,7 @@ async function restoreWork() {
     $('activity-frame').contentWindow?.postMessage({pagecraft:1, type:'learning_restore',
       payload:{events}}, '*');
     sendGroupPreferences({duringRestore:true});
+    await sendClassSentences();
     // Let the activity apply both messages before a child can edit its controls.
     await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
     if (generation !== state.restoreGeneration) return;
@@ -263,6 +264,7 @@ $('restore-retry').addEventListener('click', restoreWork);
 
 /* SSE: feedback IA, mensagens do professor, PIT */
 const STUDENT_EVENT_HANDLERS = {
+  class_sentence_shown() { sendClassSentences(); },
   ai_feedback(data) {
     if (!data.payload.request_id) showMessage(data.payload.text, "feedback-warn");
     return { payload: { ...data.payload } };
@@ -997,3 +999,15 @@ $("group-level").addEventListener("change", () => {
   // A escolha explícita também deve chegar durante os frames finais da retoma.
   sendGroupPreferences({duringRestore:true});
 });
+
+
+async function sendClassSentences() {
+  const session = state.session;
+  if (!/^m28p-ciclo-.+-sentence$/.test(session?.activity_slug || '')) return;
+  try {
+    const response = await fetch(`/api/sessions/${session.id}/class-sentences`);
+    if (!response.ok || state.session?.id !== session.id) return;
+    const payload = await response.json();
+    $('activity-frame').contentWindow?.postMessage({pagecraft:1, type:'class_sentences', payload}, '*');
+  } catch { /* O jogo conserva as frases fixas se a ligação falhar. */ }
+}

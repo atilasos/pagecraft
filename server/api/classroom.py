@@ -812,3 +812,106 @@ async def stream_session(session_id: str, request: Request):
             await raw_records.aclose()
 
     return StreamingResponse(gen(), media_type="text/event-stream")
+
+
+class ClassSentenceRequest(BaseModel):
+    text: str = Field(min_length=1, max_length=1000)
+    keyword: str | None = None
+    session_id: str | None = None
+
+
+class ShowClassSentenceRequest(BaseModel):
+    sentence_id: str | None = None
+
+
+async def _sentence_bank(request, class_id):
+    cls = await _svc(request).get_class(class_id)
+    # O identificador entra num caminho de ficheiro: só aceita o de uma turma real.
+    if not cls or cls.get("id") != class_id:
+        raise HTTPException(404, "Turma não encontrada.")
+    return request.app.state.storage.path("classes", class_id, "sentences.json")
+
+
+@router.get("/class-sentence-keywords")
+@access_policy(RoutePolicy.TEACHER)
+async def class_sentence_keywords():
+    from ..classroom.sentences import repertoire
+    words, _, pools = repertoire()
+    return [{"slug": w["slug"], "label": w["label"]} for w in words if w["slug"] in pools]
+
+
+@router.get("/classes/{class_id}/sentences")
+@access_policy(RoutePolicy.TEACHER)
+async def list_class_sentences(class_id: str, request: Request):
+    return await request.app.state.storage.read_json(await _sentence_bank(request, class_id), [])
+
+
+@router.post("/classes/{class_id}/sentences")
+@access_policy(RoutePolicy.TEACHER)
+async def create_class_sentence(class_id: str, body: ClassSentenceRequest, request: Request):
+    from datetime import datetime, timezone
+    from uuid import uuid4
+    from ..classroom.sentences import prepare_sentence, session_keyword
+    svc = _svc(request)
+    path = await _sentence_bank(request, class_id)
+    keyword = body.keyword
+    if not keyword and body.session_id:
+        session = await svc.get_session(body.session_id)
+        if not session or session['class_id'] != class_id:
+            raise HTTPException(404, "Sessão não encontrada nesta turma.")
+        keyword = session_keyword(session)
+    try:
+        text, tokens, warnings = prepare_sentence(body.text, keyword)
+    except ValueError as error:
+        raise HTTPException(422, str(error)) from error
+    sentence = dict(id=uuid4().hex, text=text, tokens=tokens, keyword=keyword,
+                    created_at=datetime.now(timezone.utc).isoformat())
+    async with svc._sentence_locks[class_id]:
+        bank = await request.app.state.storage.read_json(path, [])
+        await request.app.state.storage.write_json(path, [*bank, sentence])
+    return {**sentence, "warnings": warnings}
+
+
+@router.delete("/classes/{class_id}/sentences/{sentence_id}")
+@access_policy(RoutePolicy.TEACHER)
+async def delete_class_sentence(class_id: str, sentence_id: str, request: Request):
+    path = await _sentence_bank(request, class_id)
+    async with _svc(request)._sentence_locks[class_id]:
+        bank = await request.app.state.storage.read_json(path, [])
+        if not any(s['id'] == sentence_id for s in bank):
+            raise HTTPException(404, "Frase não encontrada.")
+        await request.app.state.storage.write_json(path, [s for s in bank if s['id'] != sentence_id])
+    return {"ok": True}
+
+
+@router.get("/sessions/{session_id}/class-sentences")
+@access_policy(RoutePolicy.TEACHER, RoutePolicy.STUDENT)
+async def session_class_sentences(session_id: str, request: Request):
+    from ..classroom.sentences import repertoire, session_keyword
+    session = await _svc(request).get_session(session_id)
+    if not session:
+        raise HTTPException(404, "Sessão não encontrada.")
+    keyword = session_keyword(session)
+    if not keyword:
+        return {"sentences": []}
+    order = {w['slug']: i for i, w in enumerate(repertoire()[0])}
+    bank = await request.app.state.storage.read_json(await _sentence_bank(request, session['class_id']), [])
+    return {"sentences": sorted((s for s in bank if order.get(s['keyword'], 999) <= order[keyword]),
+                                 key=lambda s: s['created_at'], reverse=True)[:4]}
+
+
+@router.post("/sessions/{session_id}/class-sentence")
+@access_policy(RoutePolicy.TEACHER)
+async def show_class_sentence(session_id: str, body: ShowClassSentenceRequest, request: Request):
+    svc = _svc(request)
+    session = await svc.get_session(session_id)
+    if not session:
+        raise HTTPException(404, "Sessão não encontrada.")
+    sentence = None
+    if body.sentence_id:
+        bank = await request.app.state.storage.read_json(await _sentence_bank(request, session['class_id']), [])
+        sentence = next((s for s in bank if s['id'] == body.sentence_id), None)
+        if not sentence:
+            raise HTTPException(404, "Frase não encontrada nesta turma.")
+    return await _domain(svc.emit_event(session_id, 'class_sentence_shown' if sentence else 'class_sentence_hidden',
+                                       {"sentence": sentence}, author='teacher'))

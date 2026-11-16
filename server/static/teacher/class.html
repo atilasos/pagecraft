@@ -56,6 +56,20 @@
   </div>
 
 
+  <section class="sheet" aria-labelledby="class-sentence-title">
+    <h2 id="class-sentence-title">Frase da turma</h2>
+    <form id="class-sentence-form">
+      <label for="sentence-class">Turma</label><select id="sentence-class"></select>
+      <label for="sentence-text">Frase ditada pela turma</label>
+      <textarea id="sentence-text" required maxlength="1000" rows="2"></textarea>
+      <label for="sentence-keyword">Palavra-chave</label><select id="sentence-keyword"></select>
+      <button id="sentence-save" type="submit">Guardar</button>
+    </form>
+    <p id="sentence-live-hint" class="hint">Para projetar no Quadro e enviar às crianças, lança uma sessão desta turma.</p>
+    <p id="sentence-status" role="status"></p>
+    <button id="sentence-hide" type="button" disabled>Esconder frase no Quadro</button>
+    <ul id="sentence-list"></ul>
+  </section>
   <div class="desk" id="prep-desk">
     <section aria-labelledby="launch-title">
       <p class="eyebrow" id="launch-title">Lançar sessão</p>

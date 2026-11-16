@@ -14,7 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from jsonschema import Draft202012Validator
-from scripts.m28p_cycle import CYCLE_GAMES, validate_cycle, image_choices
+from scripts.m28p_cycle import CYCLE_GAMES, validate_cycle, image_choices, discover_rounds
 from server.activity_support import embed_activity_support
 from server.bridge_snippet import ensure_bridge_lite
 from server.typography import embed_activity_typography
@@ -195,7 +195,16 @@ def build(word, game, words, check=False, cycle_data=None):
         guide=folder/(stem+'-guia-docente.md' if cycle_data else 'guia-docente.md')
         guide.write_text(f"# {word['label']} nas aulas de TIC\n\nSeis jogos de cerca de cinco minutos, para 1.º/2.º ano. O professor escolhe a palavra e confirma o repertório anterior. Podem ser repetidos ao longo do ano; não é uma sessão de duas horas num único jogo.\n\nComeçar por Palavra igual, Ligar pares e Procurar palavras. Seguir para Montar com modelo e A peça que falta. Montar de memória retira o modelo por defeito; ouvir é apoio declarado. Cada jogo tem quatro rondas com posições variadas. Na primeira palavra, pares trabalha um par e as escolhas usam fragmentos da própria palavra. Flor usa letras móveis por ter uma só sílaba.\n\nPreparação pontual: abrir o jogo, identificar a criança no host e mostrar os botões de ouvir, exemplo e continuar. O áudio incluído funciona sem voz instalada. Durante o jogo, não há conversa nem ditado obrigatório ao adulto. A reflexão é facultativa. A conclusão admite erros; observar as respostas e o apoio antes de decidir o próximo jogo.\n\nNota linguística: {word['phonologyNotes']}\n\nA voz lê palavras inteiras e instruções, nunca fonemas isolados. O jogo não avalia pronúncia nem comprova fluência. Montar peças é reconstrução gráfica, não escrita livre. O ensino de correspondências novas e a leitura de textos continuam com o professor titular.\n\nRever as imagens, ouvir as gravações e experimentar com a criança antes de aprovar cada atividade. Princípios e fontes em docs/m28p-principios-implementacao.md e docs/research/m28p-tic-autonomia-2026.md.\n")
         if cycle_data:
-            guide.write_text(f"# {data['title']} · {word['label']}\n\nRascunho para revisão docente. Quatro rondas distintas, cerca de cinco minutos. Confirmar o repertório cumulativo, imagens e gravações antes de utilizar.\n\nCom ajuda disponibiliza modelo segmentado; Sozinho retira o modelo; Consigo ajudar um amigo retira referências auxiliares. Ouvir, demonstração, desfazer e mudar apoio conservam o trabalho. Pode continuar após confirmar uma resposta, incluindo incorreta. Descobrir permite terminar a ronda sem descobrir uma palavra. Combinações fora da lista recebem feedback neutro.\n\nOs registos descrevem ações e ajudas, sem certificar leitura ou fluência. O convite oral final é facultativo. Não publicado nem registado.\n")
+            if data['game']=='discover':
+                hidden=' / '.join(', '.join(w['label'] for w in r['lexicon']) for r in data['rounds'])
+                levels=(f"{len(data['rounds'])} rondas, cerca de cinco minutos. Em cada ronda há 2 ou 3 palavras escondidas ({hidden}) e só as sílabas dessas palavras, mais uma. "
+                        "A criança vê quantas faltam («Palavras escondidas: 1 de 2»); a ronda acaba quando as encontra todas ou quando escolhe «Não encontro mais», que mostra as que faltavam. "
+                        "Com ajuda mostra a imagem (quando existe) e o som de cada palavra escondida; Sozinho mostra quantas sílabas tem; Consigo ajudar um amigo mostra só que existe. "
+                        "Uma combinação fora da lista recebe «não é uma das palavras escondidas; se conheces esta palavra, conta à turma» — bom ponto de partida para o conselho ou o texto livre.")
+            else:
+                levels=((("Uma ronda fixa" if len(data['rounds'])==1 else f"{len(data['rounds'])} rondas fixas") if data['game']=='sentence' else "Quatro rondas distintas") + ", cerca de cinco minutos. Com ajuda disponibiliza modelo segmentado; Sozinho retira o modelo; Consigo ajudar um amigo retira referências auxiliares. "
+                        "Pode continuar após confirmar uma resposta, incluindo incorreta.")
+            guide.write_text(f"# {data['title']} · {word['label']}\n\nRascunho para revisão docente. Confirmar o repertório cumulativo, imagens e gravações antes de utilizar.\n\n{levels} Ouvir, demonstração, desfazer e mudar apoio conservam o trabalho.{(' ' + 'Na página da turma, guarde as frases ditadas pelas crianças e projete-as no Quadro. Em sessão, até quatro frases da turma surgem primeiro, completadas pelas frases fixas. Com ajuda mostra os tokens; os outros níveis ocultam o texto. As frases da turma só têm leitura áudio quando existe uma voz local pt-PT no computador.' if data['game'] == 'sentence' else '')}\n\nOs registos descrevem ações e ajudas, sem certificar leitura ou fluência. O convite oral final é facultativo. Não publicado nem registado.\n")
         guide_alias=ROOT/'drafts'/(stem+'.md')
         if not guide_alias.exists():
             guide_alias.symlink_to(Path('m28p-v3')/word['slug']/guide.name)
@@ -243,9 +252,16 @@ def cycle_content(word, game, pool):
         choices = {w['slug']: image_choices(w, items, pool['visualConflicts']) for w in items}
         items = [w for w in items if choices[w['slug']]]
     if game=='discover':
-        vocabulary=[w for w in vocabulary if 2<=len(w['syllables'])<=3]
-        items=vocabulary
-    if len(items)<4:
+        groups=discover_rounds(word['slug'],vocabulary,pool['families'],random.Random(word['slug']))
+        if len(groups)<2:
+            return None, f"Apenas {len(groups)} rondas com duas palavras escondidas; são necessárias 2."
+        rounds=[]
+        for index,group in enumerate(groups):
+            pieces=[dict(id=f'p{i}',label=s) for i,s in enumerate(group['pieces'])]
+            rounds.append(dict(id=f'r{index+1}',kind=game,prompt=instruction,model=False,options=[],answer=[],unit='syllable',
+                target=group['hidden'][0],lexicon=group['hidden'],length=3,pieces=shuffled(pieces,random.Random(index))))
+        return dict(slug=f"m28p-ciclo-{word['slug']}-{game}",word=illustrated(word),game=game,title=title,instruction=instruction,criteria=[criterion],rounds=rounds,audio={k:data_audio(v) for k,v in dict(start='start',instruction=game,word=word['slug'],hint='hint',success='success',retry='retry',finish='finish').items()}), None
+    if len(items)<(1 if game=='sentence' else 4):
         return None, f"Apenas {len(items)} itens distintos; são necessários 4." + (" Cada alvo requer 2 distratores sem conflitos visuais entre as opções." if game=='read-choose' else "")
     rounds=[]
     selected=items[-4:]
@@ -260,15 +276,13 @@ def cycle_content(word, game, pool):
             r['options']=shuffled([dict(id=w['slug'],label=w['label'],image=w['image']) for w in choices[item['slug']]],random.Random(index))
             r['answer']=[item['slug']]
         else:
-            labels=units if game!='discover' else pool['families']*3
+            labels=units
             pieces=[dict(id=f'p{i}',label=s) for i,s in enumerate(labels)]
-            r['answer']=[f'p{i}' for i in range(len(units))] if game!='discover' else []
+            r['answer']=[f'p{i}' for i in range(len(units))]
             if game=='listen-build':
                 pieces += [dict(id=f'd{i}',label=s) for i,s in enumerate(pool['families']) if s not in units][:3]
-            r['length']=len(units) if game!='discover' else 3
+            r['length']=len(units)
             r['pieces']=shuffled(pieces,random.Random(index))
-            if game=='discover':
-                r['lexicon']=vocabulary
         rounds.append(r)
     return dict(slug=f"m28p-ciclo-{word['slug']}-{game}",word=illustrated(word),game=game,title=title,instruction=instruction,criteria=[criterion],rounds=rounds,audio={k:data_audio(v) for k,v in dict(start='start',instruction=game,word=word['slug'],hint='hint',success='success',retry='retry',finish='finish').items()}), None
 
