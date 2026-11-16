@@ -58,7 +58,7 @@ Os três apoios chamam-se **Com ajuda**, **Sozinho** e **Consigo ajudar um amigo
 | `listen-build` | Ouvir e montar | Ouve uma palavra nova e monta-a com peças silábicas do repertório (alvo e distratores conhecidos), sem modelo | Sílabas conhecidas formam palavras que ainda não tinham sido vistas | Sequência confirmada e ajudas usadas, incluindo ver o modelo |
 | `read-choose` | Ler e escolher | Lê uma palavra nova escrita e escolhe a imagem entre três; o áudio é ajuda registada | A leitura das sílabas dá o significado | Imagem escolhida e se ouviu antes de escolher |
 | `sentence` | Montar frases | Vê a imagem (o áudio é opcional) e ordena cartões de palavras para formar a frase | As palavras têm ordem e a frase diz o que a imagem mostra | Ordem confirmada e ajudas usadas |
-| `discover` | Descobrir palavras | Quadro silábico do repertório: junta 2 ou 3 sílabas e, se formar uma palavra da lista, revela imagem e áudio e guarda-a na «caixa de palavras» | Combinações diferentes dão palavras diferentes | Palavras descobertas e tentativas; nunca uma nota |
+| `discover` | Descobrir palavras | Até quatro rondas com 2 ou 3 palavras escondidas cada; o tabuleiro tem só as sílabas dessas palavras e mais uma. Contador «1 de 2», lugar por palavra (imagem e som em Com ajuda, sílabas vazias em Sozinho) e «Não encontro mais», que revela as que faltam. Revisto a 16/11/2026: com 39–52 sílabas e sem contador, o professor não sabia quantas palavras havia nem quando o jogo acabava | Combinações diferentes dão palavras diferentes | Palavras descobertas e tentativas; nunca uma nota |
 
 Os apoios ajustam a visibilidade de modelo, imagem e segmentação, como na v3:
 - **Com ajuda:** o modelo segmentado fica disponível.
