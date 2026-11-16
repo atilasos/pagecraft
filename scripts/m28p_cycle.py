@@ -1,5 +1,6 @@
 """Dados cumulativos do ciclo M28P, independentes da lista editorial do piloto."""
 import hashlib
+from itertools import combinations
 import re
 import unicodedata
 
@@ -23,6 +24,14 @@ def validate_cycle(cycle, words):
     unknown = set(cycle['keywords']) - {w['slug'] for w in ordered}
     if unknown:
         raise ValueError(f'Palavras-chave desconhecidas: {sorted(unknown)}')
+    conflicts = cycle.get('visualConflicts', [])
+    labels = {w['label'] for w in words} | {
+        w['label'] for section in cycle['keywords'].values() for w in section['newWords']}
+    if not isinstance(conflicts, list) or any(
+        not isinstance(group, list) or any(not isinstance(label, str) or label not in labels for label in group)
+        for group in conflicts
+    ):
+        raise ValueError('visualConflicts deve conter grupos de palavras existentes.')
     consonants, known, sentences, result = set(), [], [], {}
     vowels = set(cycle['repertoire']['vowels'])
     if not vowels or any(len(v) != 1 or v not in 'aeiouáéíóúâêôãõà' for v in vowels):
@@ -73,5 +82,14 @@ def validate_cycle(cycle, words):
             sentences.append(dict(sentence, slug=asset_id(sentence['text'], True)))
         if len({s['text'] for s in sentences}) != len(sentences):
             raise ValueError(f'{slug}: frases repetidas.')
-        result[slug] = dict(words=list(known), sentences=list(sentences), families=sorted(families))
+        result[slug] = dict(words=list(known), sentences=list(sentences), families=sorted(families), visualConflicts=conflicts)
     return result
+
+
+def image_choices(target, items, conflicts):
+    """Escolhe duas imagens distinguíveis entre si e do alvo."""
+    for pair in combinations((w for w in items if w['slug'] != target['slug']), 2):
+        labels = {w['label'] for w in (target, *pair)}
+        if all(len(labels.intersection(group)) <= 1 for group in conflicts):
+            return [target, *pair]
+    return []

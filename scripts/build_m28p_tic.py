@@ -14,7 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from jsonschema import Draft202012Validator
-from scripts.m28p_cycle import CYCLE_GAMES, validate_cycle
+from scripts.m28p_cycle import CYCLE_GAMES, validate_cycle, image_choices
 from server.activity_support import embed_activity_support
 from server.bridge_snippet import ensure_bridge_lite
 from server.typography import embed_activity_typography
@@ -238,11 +238,15 @@ def cycle_content(word, game, pool):
         return result
     vocabulary = [resource(w) for w in pool['words']]
     items = [resource(s) for s in pool['sentences']] if game=='sentence' else [w for w in vocabulary if game!='read-choose' or w['picturable']]
+    choices = {}
+    if game=='read-choose':
+        choices = {w['slug']: image_choices(w, items, pool['visualConflicts']) for w in items}
+        items = [w for w in items if choices[w['slug']]]
     if game=='discover':
         vocabulary=[w for w in vocabulary if 2<=len(w['syllables'])<=3]
         items=vocabulary
     if len(items)<4:
-        return None, f"Apenas {len(items)} itens distintos; são necessários 4."
+        return None, f"Apenas {len(items)} itens distintos; são necessários 4." + (" Cada alvo requer 2 distratores sem conflitos visuais entre as opções." if game=='read-choose' else "")
     rounds=[]
     selected=items[-4:]
     if game!='sentence':
@@ -253,7 +257,7 @@ def cycle_content(word, game, pool):
         r=dict(id=f'r{index+1}',kind=game,prompt=instruction,model=False,options=[],answer=[],unit='word' if game=='sentence' else 'syllable',target=item)
         units=item.get('tokens',item.get('syllables'))
         if game=='read-choose':
-            r['options']=shuffled([dict(id=w['slug'],label=w['label'],image=w['image']) for w in [item]+[w for w in items if w!=item][:2]],random.Random(index))
+            r['options']=shuffled([dict(id=w['slug'],label=w['label'],image=w['image']) for w in choices[item['slug']]],random.Random(index))
             r['answer']=[item['slug']]
         else:
             labels=units if game!='discover' else pool['families']*3
@@ -279,6 +283,13 @@ def build_cycle(words,args):
             if args.game and args.game!=game:
                 continue
             data,reason=cycle_content(word,game,pools[word['slug']])
+            if reason and not args.validate_only:
+                stem=f"m28p-ciclo-{word['slug']}-{game}"
+                for path in (BASE/word['slug']).glob(stem+'*'):
+                    path.unlink()
+                for path in (ROOT/'drafts').glob(stem+'*'):
+                    if path.is_symlink():
+                        path.unlink()
             report.append(dict(word=word['slug'],game=game,status='omitted',reason=reason) if reason else dict(build(word,game,words,args.validate_only,data),status='generated'))
     if not args.validate_only:
         save_json(BASE/'cycle-generation-report.json',report)

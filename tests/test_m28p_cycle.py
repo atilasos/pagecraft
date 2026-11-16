@@ -100,3 +100,35 @@ def test_missing_audio_and_images_refuse_generation(tmp_path,monkeypatch):
     monkeypatch.setattr(motor,'data_audio',lambda _: 'data:audio/mpeg;base64,test')
     with pytest.raises(ValueError,match='Imagem em falta'):
         motor.cycle_content(motor.read_words()[0],'listen-build',pools['menina'])
+
+
+def test_image_choices_never_share_a_visual_conflict():
+    cycle=source()
+    pools=validate_cycle(cycle,motor.read_words())
+    for word in motor.read_words()[:3]:
+        for game in motor.CYCLE_GAMES:
+            data,_=motor.cycle_content(word,game,pools[word['slug']])
+            for round_ in data['rounds'] if data else []:
+                labels={o['label'] for o in round_['options'] if o.get('image')}
+                assert all(len(labels.intersection(group))<=1 for group in cycle['visualConflicts'])
+
+
+def test_menino_read_choose_is_omitted_without_valid_distractors():
+    pools=validate_cycle(source(),motor.read_words())
+    data,reason=motor.cycle_content(motor.read_words()[1],'read-choose',pools['menino'])
+    assert data is None
+    assert 'distratores' in reason
+
+
+def test_unknown_visual_conflicts_are_rejected():
+    cycle=source()
+    cycle['visualConflicts'].append(['dragão'])
+    with pytest.raises(ValueError,match='visualConflicts'):
+        validate_cycle(cycle,motor.read_words())
+
+
+def test_distractors_must_also_be_distinguishable_from_each_other():
+    from scripts.m28p_cycle import image_choices
+    items=[dict(slug=s,label=s) for s in ('uva','mana','mano','ovo')]
+    chosen=image_choices(items[0],items,[['mana','mano']])
+    assert [w['label'] for w in chosen]==['uva','mana','ovo']
