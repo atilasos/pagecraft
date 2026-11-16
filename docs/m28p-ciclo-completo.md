@@ -35,7 +35,7 @@ As fontes disponíveis não concordam na ordem (verificado a 16/11/2026):
 | Fichas da escola («1º Ano - Fichas-Método 28 palavras», 432 `.doc`) | menina, menino, bota, sapato, uva, leque, casa, janela, escada, telhado, chave, gema, galinha, girafa, rato, cenoura, palhaço, zebra, peixe, bandeira, árvore, quadro, passarinho, cigarra, fogueira, flor | São 26 palavras, sem dedo nem funil. A ordem foi deduzida da numeração das fichas «Sílabas». |
 | «Manual Metodo-28-Palavras-Outras-Fichas» (2011) | menina, menino, uva, sapato, bota, mamã, leque, … | Inclui «mamã» e não inclui «dedo». |
 
-**Decisão:** a coleção mantém a ordem do catálogo oficial mais recente. O repertório de cada palavra-chave é calculado a partir dessa ordem. Uma turma que siga outra variante só precisa de outra ordem em `consonantsByKeyword` e `words.json`. As diferenças entre fontes são trocas locais (bota/sapato, escada/telhado, gema/galinha, peixe/bandeira). O piloto é válido nas três ordens porque usa só m, n e v.
+**Decisão:** a coleção mantém a ordem do catálogo oficial mais recente, confirmada pelo professor a 16/11/2026. O repertório de cada palavra-chave é calculado a partir dessa ordem. Uma turma que siga outra variante só precisa de outra ordem em `consonantsByKeyword` e `words.json`. As diferenças entre fontes são trocas locais (bota/sapato, escada/telhado, gema/galinha, peixe/bandeira). O piloto é válido nas três ordens porque usa só m, n e v.
 
 **Frases das fichas da escola:** «O menino tem o balão», «A Ana faz o Sol», «O menino vai à escola» e outras são de leitura global e usam letras que ainda não foram trabalhadas. Não servem os jogos de recombinação de menina e menino. Ficam como referência para palavras-chave posteriores, quando o repertório as cobrir.
 
