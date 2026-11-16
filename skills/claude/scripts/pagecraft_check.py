@@ -7,6 +7,7 @@ Subcomandos:
                  Studio, as regras de aprovação e o HTML (validate_activity_html).
                  Com --phase, valida só até essa fase e exige as suas saídas;
                  --phase delivery exige tudo e uma avaliação aprovada.
+                 Sem --phase é só auditoria do que existe; não serve de gate.
   lean <html>    imprime o HTML sem os blocos incorporados (fonte, componente
                  de apoio, data: URIs) para leitura económica por modelos.
   next <slug> <proofread|evaluation|repair-ticket>
@@ -84,8 +85,10 @@ def load(path: Path) -> dict:
 
 
 def severities(report: dict) -> set[str]:
-    return {i.get("severity") for i in report.get("issues") or [] if isinstance(i, dict)} | (
-        {"critical"} if report.get("critical") else set())
+    found = {i.get("severity") for i in report.get("issues") or [] if isinstance(i, dict)}
+    if isinstance(report.get("severity"), str):
+        found.add(report["severity"])
+    return found | ({"critical"} if report.get("critical") else set())
 
 
 def semantic_rules(kind: str, path: Path, html_path: Path) -> tuple[list[str], list[str]]:
@@ -130,7 +133,7 @@ def independence_errors(manifest_path: Path) -> list[str]:
     if missing:
         return [f"{manifest_path.name}: falta o modelo <família>/<modelo> da fase {', '.join(missing)} (CHECK log --model)"]
     if family(last["builder"]) == family(last["evaluator"]) and not any(
-            r.get("phase") == "teacher" and r.get("note") for r in runs):
+            r.get("phase") == "teacher" and r.get("status") == "approved" and r.get("note") for r in runs):
         return [f"{manifest_path.name}: Builder e Evaluator da mesma família ({family(last['builder'])}) "
                 "sem decisão do professor registada (CHECK log --phase teacher --note)"]
     return []
@@ -165,6 +168,12 @@ def cmd_check(args) -> int:
         docspec = load(paths["docspec"])
         units = [u for u in docspec.get("units") or [] if isinstance(u, dict)]
         planned = sum(u["duration"] for u in units if isinstance(u.get("duration"), (int, float)))
+        for number, unit in enumerate(units, 1):
+            if not isinstance(unit.get("duration"), (int, float)):
+                errors.append(f"{paths['docspec'].name}: unidade u{number} sem duration numérica")
+            interaction = unit.get("interaction") if isinstance(unit.get("interaction"), dict) else {}
+            if not str(interaction.get("adjustment") or "").strip():
+                errors.append(f"{paths['docspec'].name}: unidade u{number} sem interaction.adjustment (decisão de ajuste)")
         if isinstance(docspec.get("duration"), (int, float)) and planned > docspec["duration"]:
             errors.append(f"{paths['docspec'].name}: unidades somam {planned} min, acima da duração de {docspec['duration']} min")
     if "designer" in scope and paths["design-spec"].is_file():

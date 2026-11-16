@@ -20,7 +20,10 @@ PASSING = {"pass": True, "severity": "low", "issues": [], "evidence": ["abri a p
 def write_minimal(drafts: Path, slug: str, evaluation: dict) -> None:
     from test_schemas import MINIMAL_DOCSPEC
 
-    (drafts / f"{slug}-docspec.json").write_text(json.dumps(MINIMAL_DOCSPEC))
+    spec = json.loads(json.dumps(MINIMAL_DOCSPEC))
+    for unit in spec["units"]:
+        unit.setdefault("interaction", {})["adjustment"] = "Retomar com material concreto em pequeno grupo."
+    (drafts / f"{slug}-docspec.json").write_text(json.dumps(spec))
     (drafts / f"{slug}-evaluation-v1.json").write_text(json.dumps(evaluation))
 
 
@@ -73,13 +76,25 @@ def test_pass_requires_scores_evidence_and_no_blockers(tmp_path):
     joined = " | ".join(errors_for(tmp_path, bad))
     for expected in ("scores < 3", "sem scores de factual_accuracy", "issue critical", "sem evidence", "blocked_by"):
         assert expected in joined
+    aggregate = dict(PASSING, severity="critical")
+    assert any("issue critical" in e for e in errors_for(tmp_path, aggregate))
+
+
+def test_docspec_units_need_duration_and_adjustment(tmp_path):
+    write_minimal(tmp_path, "demo", PASSING)
+    spec = json.loads((tmp_path / "demo-docspec.json").read_text())
+    del spec["units"][0]["interaction"]["adjustment"]
+    del spec["units"][0]["duration"]
+    (tmp_path / "demo-docspec.json").write_text(json.dumps(spec))
+    errors = " | ".join(json.loads(run("--dir", tmp_path, "check", "demo", "--phase", "architect").stdout)["errors"])
+    assert "sem duration" in errors and "sem interaction.adjustment" in errors
 
 
 def test_proofread_pass_with_high_issue_and_overlong_units_fail(tmp_path):
     proofread = {"pass": True, "summary": "ok", "issues": [{"type": "grammar", "severity": "high"}]}
     assert any("high/critical" in e for e in errors_for(tmp_path, proofread=proofread))
     from test_schemas import MINIMAL_DOCSPEC
-    spec = json.loads(json.dumps(MINIMAL_DOCSPEC))
+    spec = json.loads((tmp_path / "demo-docspec.json").read_text())
     spec["duration"] = 1
     spec["units"][0]["duration"] = 5
     (tmp_path / "demo-docspec.json").write_text(json.dumps(spec))
@@ -123,6 +138,8 @@ def test_delivery_requires_independent_families_unless_teacher_decides(tmp_path)
     assert delivery_errors(tmp_path) == []
     ready_for_delivery(tmp_path, builder="claude/sonnet", evaluator="claude/opus")
     assert any("mesma família (claude)" in e for e in delivery_errors(tmp_path))
+    run("--dir", tmp_path, "log", "demo", "--phase", "teacher", "--status", "rejected", "--note", "não autorizo")
+    assert any("mesma família" in e for e in delivery_errors(tmp_path))
     run("--dir", tmp_path, "log", "demo", "--phase", "teacher", "--status", "approved", "--note", "autorizo")
     assert delivery_errors(tmp_path) == []
 
