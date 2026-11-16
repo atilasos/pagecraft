@@ -242,6 +242,10 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
         "assessment": {
           "type": "string",
           "description": "O que o aluno deve demonstrar; critério observável"
+        },
+        "adjustment": {
+          "type": "string",
+          "description": "Decisão do professor se a evidência mostrar dificuldade (mais apoio, repetir, avançar); aparece no guia"
         }
       }
     },
@@ -669,7 +673,7 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
         "render": "Paisagem com mar, montanha e céu; setas animadas mostram o movimento da água; quando 'Uma fase', destaca apenas a fase seleccionada com cor e animação; quando 'Ciclo completo', todas as fases animam em sequência",
         "transition": "Seleccionar fase → paisagem destaca essa parte do ciclo com animação; toggle ciclo completo → animação contínua de todas as fases em loop",
         "constraint": "O ciclo da água é contínuo — cada fase alimenta a seguinte, sem princípio nem fim",
-        "assessment": "O aluno descreve as 4 fases pela ordem correcta e explica o que acontece em cada uma"
+        "assessment": "O aluno descreve as 4 fases pela ordem correta e explica o que acontece em cada uma"
       },
       "maker": {
         "type": "whiteboard",
@@ -681,7 +685,7 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
         "alternatives": ["Sem quadro: cartolinas A3 por grupo, coladas na parede em sequência circular"]
       },
       "differentiation": {
-        "support": "As 4 fases, uma de cada vez, com imagens descritivas e a ordem sugerida passo a passo; apresentação com guião; mesmo critério de assessment (4 fases pela ordem correcta)",
+        "support": "As 4 fases, uma de cada vez, com imagens descritivas e a ordem sugerida passo a passo; apresentação com guião; mesmo critério de assessment (4 fases pela ordem correta)",
         "standard": "4 fases, exploração livre; apresentação com pontos-chave",
         "challenge": "Inclui infiltração e lençóis freáticos; pergunta: 'O que acontece ao ciclo se não chover durante 3 meses?'"
       },

@@ -64,6 +64,7 @@ def main():
                 "",
                 f"**Constraint:** {inter.get('constraint', '')}",
                 f"**Assessment:** {inter.get('assessment', '')}",
+                *([f"**Decisão de ajuste:** {inter['adjustment']}"] if inter.get("adjustment") else []),
                 "",
                 "**Diferenciação:**",
                 f"- Com pistas: {diff.get('support', '')}",

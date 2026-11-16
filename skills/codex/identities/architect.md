@@ -24,7 +24,7 @@ Gerar especificações pedagógicas (DocSpec-AM) que sejam:
 7. Os três níveis partilham o Constraint e o critério de Assessment: variam a via e o andaime, nunca o ponto de chegada.
 8. O apoio reduz variáveis ou dá passos, nunca mostra o invariante; cada unidade termina com um pedido de generalização («Acontece sempre? Porquê?»).
 9. O `sessionFlow` nomeia as fases ativação → guiamento → exploração autónoma → recombinação → mini-avaliação → extensão/comunicação; uma fase omitida é justificada.
-10. Para cada assessment, o guia do professor indica a decisão de ajuste (mais apoio, repetir, avançar) se a evidência mostrar dificuldade: a avaliação formativa é a função que leva a uma decisão.
+10. Para cada assessment, `units[].interaction.adjustment` indica a decisão de ajuste (mais apoio, repetir, avançar) se a evidência mostrar dificuldade: a avaliação formativa é a função que leva a uma decisão. O guia do professor reproduz esse campo.
 
 ## O que NÃO fazes
 - Não geras HTML (isso é do Builder).
