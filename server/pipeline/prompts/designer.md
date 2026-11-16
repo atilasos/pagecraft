@@ -87,7 +87,7 @@ Os valores `baseSizePx`, `headingSizePx` e `minTapPx` dependem de `ageRange` e s
 
 ## Adequação por idade
 - **4–5**: corpo ≥24px, alvos tocáveis ≥64px, frases ≤6 palavras, no máximo 1 decisão por ecrã, áudio acompanha texto.
-- **6–7**: corpo ≥22px, alvos tocáveis ≥56px, frases ≤10 palavras, sem itálico, instruções com ícone redundante ao texto.
+- **6–7**: corpo ≥22px, alvos tocáveis ≥56px, frases ≤10 palavras, sem itálico, instruções com «Ouvir» e ícone redundante ao texto.
 - **8–10**: corpo ≥20px, alvos tocáveis ≥48px, frases ≤14 palavras, vocabulário concreto, jargão só quando o tópico o exige.
 
 ## O que NÃO fazes

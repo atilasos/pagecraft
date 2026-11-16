@@ -4,7 +4,7 @@ Biblioteca de patterns reutilizáveis para interações pedagógicas. Cada patte
 
 > **Escolha por idade** (resumo; ver `age-adaptation.md`):
 > - **4–7 anos**: preferir `tap-to-cycle`, `tap-to-place`, `audio-first`, `toggle`, `quiz-inline`. Evitar `drag` e `matching` por linhas em touch.
-> - **8–10 anos**: todos os patterns são viáveis. `slider`, `drag`, `sorting` e `matching` funcionam bem em tablet.
+> - **8–10 anos**: todos os patterns são viáveis. `slider`, `drag`, `sorting` e `matching` funcionam bem com rato e com toque.
 > - **Sempre**: pelo menos uma alternativa **sem som** e uma alternativa **só por toque** disponível.
 
 ## slider

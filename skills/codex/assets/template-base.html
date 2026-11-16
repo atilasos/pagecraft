@@ -50,8 +50,8 @@
       text-rendering: optimizeLegibility;
       -webkit-font-smoothing: antialiased;
     }
-    body.young { font-size: 22px; line-height: 1.6; --tap: 56px; --micro: 18px; --h-unit: 30px; --thumb: 48px; } /* 6-7 anos */
-    body.prek  { font-size: 24px; line-height: 1.6; --tap: 64px; --micro: 18px; --h-unit: 34px; }               /* 4-5 anos */
+    body.young { font-size: 22px; line-height: 1.6; --btn-font: 22px; --tap: 56px; --micro: 18px; --h-unit: 30px; --thumb: 48px; } /* 6-7 anos */
+    body.prek  { font-size: 24px; line-height: 1.6; --btn-font: 24px; --tap: 64px; --micro: 18px; --h-unit: 34px; }               /* 4-5 anos */
 
     /* Emoji renderiza igual em qualquer SO */
     .emoji {
@@ -164,7 +164,7 @@
     }
     .diff-tab .level-marker { width: 14px; height: 14px; border-radius: 50%; display: inline-block; box-shadow: 0 0 0 2px var(--surface); }
     .diff-tab[data-level="support"]   .level-marker { background: oklch(0.50 0.02 260); } /* Com pistas: neutro, nunca o verde de sucesso */
-    .diff-tab[data-level="standard"]  .level-marker { background: oklch(0.72 0.13 195); } /* Passo a passo */
+    .diff-tab[data-level="standard"]  .level-marker { background: oklch(0.55 0.08 195); } /* Passo a passo: ≥3:1 sobre --surface */
     .diff-tab[data-level="challenge"] .level-marker { background: oklch(0.55 0.14 280); } /* Mais desafios */
     .diff-content { display: none; }
     .diff-content[data-active="true"] { display: block; }

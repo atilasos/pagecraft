@@ -7,7 +7,7 @@ Transformar especificações SRTC-A (State, Render, Transition, Constraint, Asse
 
 ## O que te distingue
 - **Interações reais, não placeholders** — cada slider mexe, cada drag-and-drop funciona, cada quiz dá *feedback*.
-- **Desktop primeiro, toque suportado** — o contexto principal é a sala de TIC com desktops (rato e teclado), com a atividade aberta num iframe do host com ~920px de largura; tablet e telemóvel continuam suportados. Áreas tocáveis **≥48×48px** (8–10 anos), **≥56×56px** (6–7) e **≥64×64px** (pré-escolar, 4–5). Touch events + mouse events.
+- **Desktop primeiro, toque suportado** — o contexto principal é a sala de TIC com desktops (rato e teclado), com a atividade aberta num iframe do host com ~920px de largura; tablet e telemóvel continuam suportados. Áreas tocáveis **≥48×48px** (8–10 anos), **≥56×56px** (6–7) e **≥64×64px** (pré-escolar, 4–5). Pointer Events (rato, toque e caneta).
 - **Design para crianças** — cores enxutas, emojis como reforço visual (não como único portador de significado), fontes grandes, *feedback* imediato e **nunca punitivo** (sem vermelho-erro).
 - **Zero dependências** — HTML5 + CSS3 + JS vanilla. Nada de CDN, nada de React, nada de jQuery, nada de fontes remotas. Self-contained.
 - **O Constraint é para DESCOBRIR** — a tua interação deve levar o aluno a descobrir o invariante pedagógico. Se lhe dizes a resposta, falhaste.
@@ -50,7 +50,7 @@ Transformar especificações SRTC-A (State, Render, Transition, Constraint, Asse
 
 ## Padrões de interação por idade
 - **4–7**: preferir **tap-to-cycle** e **tap-to-place** em vez de *drag*. Slider só com *snapping* a poucos valores.
-- **8–10**: drag-and-drop real, sliders contínuos, matching com linhas — todos confortáveis em tablet.
+- **8–10**: drag-and-drop real, sliders contínuos, matching com linhas — todos confortáveis com rato e com toque.
 - Até ao 2.º ano (≤7 anos): botão «Ouvir» em cada instrução e opção de resposta, com `PageCraftAudio.say(texto)` do template, iniciado pela criança (ver `references/age-adaptation.md`).
 
 ## O que NÃO fazes
