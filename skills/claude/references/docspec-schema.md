@@ -651,9 +651,9 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
         "alternatives": ["Sem Minecraft: construir com Lego (azul=gelo, transparente=água, branco=vapor) e etiquetas"]
       },
       "differentiation": {
-        "support": "Slider com apenas 3 posições (-10°C, 50°C, 110°C); estado indicado automaticamente com ícone grande; no Minecraft, modelo pré-construído para completar",
+        "support": "Slider com passos de 10°C e marcas visíveis; o aluno prevê o estado antes de mover (o estado não é indicado automaticamente) e a pista pergunta 'entre que valores muda?'; no Minecraft, modelo pré-construído para completar; mesmo critério de assessment (0°C e 100°C)",
         "standard": "Slider contínuo, aluno descobre os pontos de transição; Minecraft: construção livre com orientação",
-        "challenge": "Slider inclui gráfico de energia das moléculas; pergunta: 'O que acontece a 100°C numa panela de pressão?'; Minecraft: adicionar o ciclo da água completo (evaporação→nuvem→chuva→rio)"
+        "challenge": "Slider inclui gráfico de energia das moléculas; pergunta: 'O que acontece a 100°C numa panela de pressão?'; fecha com 'Acontece sempre? Porquê?'; Minecraft: adicionar o ciclo da água completo (evaporação→nuvem→chuva→rio)"
       },
       "duration": 20
     },
@@ -681,7 +681,7 @@ Novas atividades acrescentam um plano `support` específico do pedido e de cada 
         "alternatives": ["Sem quadro: cartolinas A3 por grupo, coladas na parede em sequência circular"]
       },
       "differentiation": {
-        "support": "Apenas 2 fases (evaporação + chuva), com imagens descritivas; apresentação com guião",
+        "support": "As 4 fases, uma de cada vez, com imagens descritivas e a ordem sugerida passo a passo; apresentação com guião; mesmo critério de assessment (4 fases pela ordem correcta)",
         "standard": "4 fases, exploração livre; apresentação com pontos-chave",
         "challenge": "Inclui infiltração e lençóis freáticos; pergunta: 'O que acontece ao ciclo se não chover durante 3 meses?'"
       },
