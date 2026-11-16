@@ -79,3 +79,24 @@ for(const data of FIXTURES){
 '''.replace('FIXTURES',json.dumps(fixtures,ensure_ascii=False))
     result=subprocess.run(['node'],input=js,capture_output=True,text=True)
     assert result.returncode==0,result.stderr
+
+
+def test_revisions_are_not_bound_to_pilot_positions_or_syllable_count():
+    cycle=source()
+    cycle['keywords']=dict(reversed(list(cycle['keywords'].items())))
+    cycle['keywords']['uva']['newWords'].append(dict(label='novamente',syllables=['no','va','men','te'],picturable=False))
+    with pytest.raises(ValueError,match='repertório'):
+        validate_cycle(cycle,motor.read_words())
+    cycle['keywords']['uva']['newWords'].pop()
+    pools=validate_cycle(cycle,motor.read_words())
+    assert len(pools['uva']['words'])==13
+
+
+def test_missing_audio_and_images_refuse_generation(tmp_path,monkeypatch):
+    pools=validate_cycle(source(),motor.read_words())
+    monkeypatch.setattr(motor,'ASSETS',tmp_path)
+    with pytest.raises(ValueError,match='Áudio em falta'):
+        motor.cycle_content(motor.read_words()[0],'listen-build',pools['menina'])
+    monkeypatch.setattr(motor,'data_audio',lambda _: 'data:audio/mpeg;base64,test')
+    with pytest.raises(ValueError,match='Imagem em falta'):
+        motor.cycle_content(motor.read_words()[0],'listen-build',pools['menina'])

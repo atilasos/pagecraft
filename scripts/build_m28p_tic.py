@@ -126,7 +126,7 @@ def spec_for(data, word):
     units = []
     for item in data['rounds']:
         units.append(dict(summary=data['title'], textDescription=data['instruction'], duration=1,
-            interaction=dict(state=[dict(name='resposta', type='matching' if data['game'] == 'pairs' else 'sorting' if data['game'] in {'syllables','recall'} else 'quiz', default=None)],
+            interaction=dict(state=[dict(name='resposta', type='matching' if data['game'] == 'pairs' else 'sorting' if data['game'] in {'syllables','recall','listen-build','sentence','discover'} else 'quiz', default=None)],
                 render='Imagem original, cartões grandes e exemplo visual recuperável; áudio PT-PT incorporado por pedido.',
                 transition='Selecionar, confirmar, receber pista e continuar após resposta, mesmo incorreta.',
                 constraint='Comparar a escrita e o significado; conservar a ordem gráfica das peças.',
@@ -238,10 +238,18 @@ def cycle_content(word, game, pool):
         return result
     vocabulary = [resource(w) for w in pool['words']]
     items = [resource(s) for s in pool['sentences']] if game=='sentence' else [w for w in vocabulary if game!='read-choose' or w['picturable']]
+    if game=='discover':
+        vocabulary=[w for w in vocabulary if 2<=len(w['syllables'])<=3]
+        items=vocabulary
     if len(items)<4:
         return None, f"Apenas {len(items)} itens distintos; são necessários 4."
     rounds=[]
-    for index,item in enumerate(items[-4:]):
+    selected=items[-4:]
+    if game!='sentence':
+        current=next((item for item in items if item['slug']==word['slug']),None)
+        if current and current not in selected:
+            selected=[current]+selected[-3:]
+    for index,item in enumerate(selected):
         r=dict(id=f'r{index+1}',kind=game,prompt=instruction,model=False,options=[],answer=[],unit='word' if game=='sentence' else 'syllable',target=item)
         units=item.get('tokens',item.get('syllables'))
         if game=='read-choose':
@@ -288,6 +296,8 @@ def main():
     if args.cycle:
         print(json.dumps(build_cycle(words,args),ensure_ascii=False,indent=2))
         return
+    if args.game in CYCLE_GAMES:
+        parser.error('Os jogos do ciclo requerem --cycle.')
     results=[build(w,g,words,args.validate_only) for w in words if not args.word or w['slug']==args.word for g in GAMES if not args.game or g==args.game]
     if not args.validate_only and not args.word and not args.game:
         build_index(words)

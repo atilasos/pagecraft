@@ -37,7 +37,7 @@ const TicModel = (() => {
   const levels=['support','intermediate','challenge'];
   const ordered=round=>['syllables','recall','listen-build','sentence','discover'].includes(round.kind);
   const ids=round=>(ordered(round)?round.pieces:round.options).map(option=>option.id);
-  const initial=()=>({version:3,page:-1,level:'intermediate',answers:{},confirmed:{},last:{},counts:{},aids:{},done:false,reflection:null,discoveries:{}});
+  const initial=()=>({version:3,page:-1,level:'intermediate',answers:{},confirmed:{},last:{},counts:{},aids:{},done:false,reflection:null,discoveries:{},choiceAudio:{}});
   function cleanAnswer(round,value){
     if(!Array.isArray(value))return [];
     const allowed=ids(round);
@@ -75,6 +75,7 @@ const TicModel = (() => {
     if(levels.includes(raw.level))clean.level=raw.level;
     for(const round of data.rounds){
       if(round.kind==='discover'&&raw.discoveries?.[round.id])clean.discoveries[round.id]=[...new Set((raw.discoveries?.[round.id]||[]).filter(label=>round.lexicon.some(w=>w.label===label)))];
+      if(round.kind==='read-choose')clean.choiceAudio[round.id]=raw.choiceAudio?.[round.id]===true;
       const value=cleanAnswer(round,raw.answers?.[round.id]);
       if(value.length)clean.answers[round.id]=value;
       if(raw.confirmed?.[round.id]===true&&validAnswer(round,value)&&(round.kind!=='discover'||value[0]==='finish'||discovery(round,value)))clean.confirmed[round.id]=true;
@@ -90,7 +91,7 @@ const TicModel = (() => {
     if(['again','help','alone'].includes(raw.reflection))clean.reflection=raw.reflection;
     return clean;
   }
-  function edit(state,round,value){state.answers[round.id]=cleanAnswer(round,value);delete state.confirmed[round.id];state.done=false;}
+  function edit(state,round,value){if(round.kind==='read-choose')state.choiceAudio[round.id]=state.aids[round.id]?.audio_word_requested===true;state.answers[round.id]=cleanAnswer(round,value);delete state.confirmed[round.id];state.done=false;}
   function confirm(state,round){
     const value=state.answers[round.id];if(!validAnswer(round,value))return {accepted:false,emit:false};
     const emit=!state.last[round.id]||signature(round,state.last[round.id])!==signature(round,value);
@@ -119,9 +120,9 @@ function node(tag,text,className){const element=document.createElement(tag);if(t
 function button(text,action,className){const element=node('button',text,className);element.type='button';element.addEventListener('click',action);return element;}
 function picture(svg,label,className=''){const element=node('span',undefined,'picture '+className);element.innerHTML=svg||data.word.image;element.setAttribute('role','img');element.setAttribute('aria-label',label||data.word.label);return element;}
 function stopAudio(){if(audio){audio.pause();audio=null;}}
-function play(key){
+function play(key,override){
   stopAudio();aid(key==='word'?'audio_word_requested':'audio_instruction_requested');checkpoint();soundEnabled=true;$('mute').hidden=false;$('mute').textContent='Desligar som';$('mute').setAttribute('aria-pressed','false');
-  const source=(key==='word'?round()?.target?.audio:null)||data.audio?.[key]||data.audio?.instruction;
+  const source=override||(key==='word'?round()?.target?.audio:null)||data.audio?.[key]||data.audio?.instruction;
   if(!source){$('audio-status').textContent='Vê o exemplo no botão ?.';return;}
   audio=new Audio(source);audio.addEventListener('error',()=>{$('audio-status').textContent='Vê o exemplo no botão ?.';});
   audio.play().then(()=>{$('audio-status').textContent='';}).catch(()=>{$('audio-status').textContent='Carrega em Ouvir outra vez.';});
@@ -227,6 +228,9 @@ function visualFeedback(r,container){
   if(TicModel.ordered(r)){
     const labels=selected().map(id=>r.pieces.find(piece=>piece.id===id).label),expected=r.answer.map(id=>r.pieces.find(piece=>piece.id===id).label);
     const index=labels.findIndex((label,index)=>label!==expected[index]);markCue(container.querySelector('.tray')?.children[index]);
+  }else if(r.kind==='read-choose'){
+    markCue([...container.querySelectorAll('[data-option]')].find(item=>item.dataset.option===selected()[0]));
+    container.appendChild(node('p',r.target.syllables.join(' · '),'comparison'));
   }else if(r.kind==='gap')markCue(container.querySelector('.gap-word .empty-slot'));
   else if(r.kind==='pairs'){
     const wrong=selected().map(value=>value.split('=')).find(([left,right])=>left!==right);
@@ -293,8 +297,8 @@ function move(index){
 function confirm(){
   const r=round(),value=selected().slice(),result=TicModel.confirm(state,r);if(!result.accepted)return;
   revision++;context();
-  if(result.emit&&restored){const detail={value,question:r.prompt,task_id:r.id,activity:data.slug,field:r.id,level:state.level,aids:{...state.aids[r.id]},model_visible:showModel(r)};if(revisionHint)detail.after_hint_id=revisionHint;if(r.kind==='discover')window.PageCraftBridge?.emit('attempt',unit(),{detail:{...detail,discoveries:state.discoveries[r.id]||[]}});else window.PageCraftBridge?.attempt(unit(),result.correct,detail);}
-  revisionHint=null;checkpoint();renderGame();if(r.kind==='discover'&&TicModel.discovery(r,value))play('word');if(state.confirmed[r.id])$('next').focus();
+  if(result.emit&&restored){const detail={value,question:r.prompt,task_id:r.id,activity:data.slug,field:r.id,level:state.level,aids:{...state.aids[r.id]},model_visible:r.target?state.level==='support':showModel(r),audio_before_choice:state.choiceAudio[r.id]===true};if(revisionHint)detail.after_hint_id=revisionHint;if(r.kind==='discover')window.PageCraftBridge?.emit('attempt',unit(),{detail:{...detail,discoveries:state.discoveries[r.id]||[]}});else window.PageCraftBridge?.attempt(unit(),result.correct,detail);}
+  revisionHint=null;checkpoint();renderGame();if(r.kind==='discover'&&TicModel.discovery(r,value))play('word',TicModel.discovery(r,value).audio);if(state.confirmed[r.id])$('next').focus();
 }
 function setLevel(level,emit=true){if(!TicModel.levels.includes(level))return;state.level=level;revision++;revisionHint=null;if(emit)window.PageCraftBridge?.levelChanged(unit(),level);render();context();checkpoint(emit);}
 function finish(){if(data.rounds[0].target&&state.level==='challenge')$('finish-picture').appendChild(node('p','Se quiseres, explica a um amigo como leste.'));state.done=true;stopAudio();checkpoint();render();$('finish-button').focus();}

@@ -37,15 +37,15 @@ def validate_cycle(cycle, words):
         groups = [g for g in ('nh','lh','ch','rr','ss','qu','gu','ai','ei','oi','ui','au','eu','ou','ão','ãe','õe') if g in introduced]
         families |= {g + v for g in groups if g[-1] not in vowels for v in vowels}
         families |= set(groups)
+        known.append(dict(keyword, picturable=True))
         if slug not in cycle['keywords']:
             continue
         section = cycle['keywords'][slug]
-        known.append(dict(keyword, picturable=True))
         for item in section['newWords']:
             label = item['label']
             if ''.join(item['syllables']) != label:
                 raise ValueError(f'{slug}: concatenação das sílabas diferente da grafia: {label}')
-            if not 2 <= len(item['syllables']) <= 3 or any(s not in families for s in item['syllables']):
+            if not item['syllables'] or any(s not in families for s in item['syllables']):
                 raise ValueError(f'{slug}: sílabas fora do repertório: {label}')
             if any(g in label and g not in groups for g in ('nh','lh','ch','rr','ss','ai','ei','oi','ui','au','eu','ou','ão','ãe','õe')):
                 raise ValueError(f'{slug}: dígrafo ou ditongo ainda não introduzido: {label}')
@@ -54,6 +54,14 @@ def validate_cycle(cycle, words):
             if not isinstance(item['picturable'], bool):
                 raise ValueError(f'{slug}: picturable deve ser booleano: {label}')
             known.append(dict(item, slug=asset_id(label)))
+        for function in cycle['functionWords']:
+            text=function['word']
+            reachable={0}
+            for start in range(len(text)):
+                if start in reachable:
+                    reachable.update(start+len(part) for part in families if text.startswith(part,start))
+            if len(text) not in reachable:
+                raise ValueError(f'{slug}: palavra funcional fora do repertório: {function["word"]}')
         allowed = {w['label'] for w in known} | {w['word'] for w in cycle['functionWords']}
         for sentence in section['sentences']:
             tokens = sentence['tokens']

@@ -328,7 +328,7 @@ def generate_manifest():
 
 
 def verify_assets(require_audio):
-    for slug, _ in WORDS:
+    for slug in [*(slug for slug,_ in WORDS), *PICTURABLE, *(slug for slug,_ in SENTENCES)]:
         image = ET.parse(DEST / "images" / f"{slug}.svg").getroot()
         assert image.attrib["viewBox"] == "0 0 240 240", slug
         assert image.find("{http://www.w3.org/2000/svg}title") is not None, slug
@@ -337,10 +337,10 @@ def verify_assets(require_audio):
             assert node.tag.split("}")[-1] not in {"text", "image", "script", "foreignObject"}, slug
             assert all("href" not in key and not key.startswith("on") for key in node.attrib), slug
     if require_audio:
-        for slug in [*(slug for slug, _ in WORDS), *INSTRUCTIONS]:
+        for slug in [*(slug for slug, _ in WORDS+NEW_WORDS+SENTENCES), *INSTRUCTIONS]:
             audio = DEST / "audio" / f"{slug}.mp3"
             assert audio.stat().st_size >= 800, slug
-    print(f"Verificação: {len(WORDS)} SVG" + (f", {len(WORDS) + len(INSTRUCTIONS)} MP3" if require_audio else ""))
+    print(f"Verificação: {len(WORDS)+len(PICTURABLE)+len(SENTENCES)} SVG" + (f", {len(WORDS) + len(NEW_WORDS) + len(SENTENCES) + len(INSTRUCTIONS)} MP3" if require_audio else ""))
 
 
 def main():
