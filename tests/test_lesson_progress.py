@@ -24,6 +24,8 @@ async def clients(tmp_path, monkeypatch):
 
 
 async def publish(app, teacher, slug, title, *, order=None, status='published'):
+    # Slugs fictícios: a publicação lê drafts/ da raiz real e não pode tocar na coleção.
+    assert not (app.state.config.repo_root / 'drafts' / f'{slug}.html').exists()
     folder = app.state.config.activities_dir / slug
     folder.mkdir(parents=True)
     (folder / 'index.html').write_text(f'<html>{title}</html>')
@@ -42,11 +44,11 @@ async def publish(app, teacher, slug, title, *, order=None, status='published'):
 
 async def setup(app, teacher):
     codes = {
-        'old': await publish(app, teacher, 'm28p-v3-casa-match', 'Palavra igual · casa', order=8, status='archived'),
-        'sentence': await publish(app, teacher, 'm28p-ciclo-casa-sentence', 'Montar frases · casa', order=8),
-        'discover': await publish(app, teacher, 'm28p-ciclo-casa-discover', 'Descobrir palavras · casa', order=8),
-        'uva': await publish(app, teacher, 'm28p-ciclo-uva-discover', 'Descobrir palavras · uva', order=3),
-        'math': await publish(app, teacher, 'dobro-ate-10', 'Dobro até 10'),
+        'old': await publish(app, teacher, 'm28p-v3-zzcasa-match', 'Palavra igual · casa', order=8, status='archived'),
+        'sentence': await publish(app, teacher, 'm28p-ciclo-zzcasa-sentence', 'Montar frases · casa', order=8),
+        'discover': await publish(app, teacher, 'm28p-ciclo-zzcasa-discover', 'Descobrir palavras · casa', order=8),
+        'uva': await publish(app, teacher, 'm28p-ciclo-zzuva-discover', 'Descobrir palavras · uva', order=3),
+        'math': await publish(app, teacher, 'zz-dobro-ensaio', 'Dobro até 10'),
     }
     cls = (await teacher.post('/api/classes', json={'name': '1A', 'year': 1,
                                                      'students': ['Ana', 'Bruno', 'Carla', 'Duarte']})).json()
@@ -59,7 +61,7 @@ async def test_word_metadata_marks_cycle_games_and_retired_collection(clients):
     items = {a['code']: a for a in (await teacher.get('/api/learning/activities')).json()}
     assert items[codes['old']]['retired'] is True
     assert items[codes['sentence']]['retired'] is False
-    assert items[codes['sentence']]['m28p'] == {'word': 'casa', 'label': 'casa', 'kind': 'sentence',
+    assert items[codes['sentence']]['m28p'] == {'word': 'zzcasa', 'label': 'casa', 'kind': 'sentence',
                                                 'kind_order': 9, 'order': 8}
     assert items[codes['uva']]['m28p']['order'] == 3
     assert 'm28p' not in items[codes['math']]
@@ -69,7 +71,7 @@ async def test_offline_pupils_are_recorded_hidden_from_entry_and_never_assigned(
     app, teacher, pupil = clients
     codes, cls, (ana, bruno, carla, duarte) = await setup(app, teacher)
     lesson = {'title': 'Terça', 'class_id': cls['id'], 'offline': {duarte: 'Caderno com a professora'},
-              'assignments': [{'title': 'Palavra casa', 'word': 'casa', 'student_ids': [ana],
+              'assignments': [{'title': 'Palavra casa', 'word': 'zzcasa', 'student_ids': [ana],
                                'activity_codes': [codes['discover'], codes['sentence']]}]}
     created = await teacher.post('/api/learning/lessons', json=lesson)
     assert created.status_code == 201, created.text
@@ -95,7 +97,7 @@ async def test_progress_reports_each_pupil_including_missing_self_assessment(cli
     lesson = (await teacher.post('/api/learning/lessons', json={
         'title': 'Terça', 'class_id': cls['id'], 'offline': {duarte: 'Leitura com a professora'},
         'assignments': [
-            {'title': 'Palavra casa', 'word': 'casa', 'student_ids': [ana, bruno],
+            {'title': 'Palavra casa', 'word': 'zzcasa', 'student_ids': [ana, bruno],
              'activity_codes': [codes['discover'], codes['sentence']]},
         ]})).json()
     code = lesson['code']
@@ -122,7 +124,7 @@ async def test_progress_reports_each_pupil_including_missing_self_assessment(cli
     [done] = rows['Ana']['realizations']
     assert (done['correct'], done['incorrect'], done['help'], done['help_pending']) == (1, 1, 1, True)
     assert done['assessment'] == {'alone': 0, 'help': 1, 'practising': 0, 'skip': 0}
-    assert rows['Ana']['words'] == ['casa']
+    assert rows['Ana']['words'] == ['zzcasa']
     assert rows['Bruno']['state'] == 'working'
     assert rows['Bruno']['current'] == codes['sentence']
     assert rows['Bruno']['realizations'][0]['assessment'] is None
@@ -165,7 +167,7 @@ async def test_board_shows_chosen_lesson_activity_until_a_newer_live_session(cli
         assert 'students' not in shown
         content = await screen.get('/api/board/lesson-content')
         assert content.status_code == 200 and 'Dobro até 10' in content.text
-        live = await teacher.post('/api/sessions', json={'class_id': cls['id'], 'activity_slug': 'dobro-ate-10'})
+        live = await teacher.post('/api/sessions', json={'class_id': cls['id'], 'activity_slug': 'zz-dobro-ensaio'})
         assert live.status_code in (200, 201), live.text
         assert (await screen.get('/api/board/session')).json().get('kind') != 'lesson'
         await teacher.post(f"/api/sessions/{live.json()['id']}/close")

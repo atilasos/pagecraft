@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Acompanhar a aula · PageCraft</title>
+  <link rel="stylesheet" href="/learning-assets/fonts.css">
+  <link rel="stylesheet" href="/learning-assets/common.css">
+  <link rel="stylesheet" href="/teacher/dashboard.css?v=roteiro-plano-1">
+  <script defer src="/teacher/lesson-live.js?v=roteiro-plano-1"></script>
+</head>
+<body class="teacher-library lesson-live">
+  <a href="#main" class="skip">Saltar para o conteúdo</a>
+  <header>
+    <div class="teacher-brand-row">
+      <a href="/teacher/">PageCraft Studio · Professor</a>
+    </div>
+    <nav class="teacher-nav" aria-label="Área do professor">
+      <a href="/teacher/">Preparar</a>
+      <a href="/teacher/class.html">Aula ao vivo</a>
+      <a href="/teacher/lesson.html" aria-current="page">Roteiros da aula</a>
+      <a href="/teacher/activities.html#atividades">Atividades</a>
+      <a href="/teacher/activities.html#registos">Registos</a>
+    </nav>
+  </header>
+  <main id="main">
+    <div class="live-head">
+      <div>
+        <p class="eyebrow" id="class-name">Acompanhar a aula</p>
+        <h1 id="title" tabindex="-1">Acompanhar a aula</h1>
+        <p id="entry" class="muted"></p>
+      </div>
+      <div class="no-print">
+        <p class="eyebrow">Código do roteiro</p>
+        <p id="code" class="entry-code"></p>
+      </div>
+    </div>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+
+    <section class="card" id="board-panel" aria-labelledby="board-heading">
+      <h2 id="board-heading">No quadro</h2>
+      <p id="board-now" class="board-now" aria-live="polite"></p>
+      <p class="muted">Escolhe a atividade que aparece no quadro interativo. O quadro mostra a atividade e o código de entrada, nunca o trabalho de um aluno.</p>
+      <div id="board-choices" class="board-choices" role="group" aria-label="Atividades a decorrer"></div>
+      <div class="row">
+        <label>Outra atividade do roteiro<select id="board-other"></select></label>
+        <button type="button" id="board-show-other">Mostrar no quadro</button>
+        <button type="button" id="board-off">Tirar do quadro</button>
+      </div>
+      <p id="board-pairing" class="muted"></p>
+    </section>
+
+    <section class="card" aria-labelledby="students-heading">
+      <h2 id="students-heading">Alunos</h2>
+      <ul id="counts" class="live-counts" aria-label="Resumo da turma"></ul>
+      <p class="muted">Atualiza sozinho a cada 10 segundos. «Sem atividade recente no PageCraft» descreve só a falta de ações nos últimos 3 minutos. Os números são acontecimentos registados, não notas.</p>
+      <div class="plan-scroll">
+        <table class="plan-table live-table">
+          <caption class="sr-only">Estado, trabalho feito e autoavaliação de cada aluno</caption>
+          <thead><tr><th scope="col">Aluno</th><th scope="col">Agora</th><th scope="col">Atividades</th><th scope="col">Autoavaliação</th><th scope="col">Respostas e ajuda</th><th scope="col">A minha observação</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card no-print" aria-labelledby="record-heading">
+      <h2 id="record-heading">Registo da aula</h2>
+      <p class="muted">Fica guardado com o roteiro: o que cada aluno fez, a autoavaliação de cada atividade (ou a falta dela), as respostas registadas e a tua observação. Quem trabalhou fora do PageCraft aparece com a tua nota.</p>
+      <p class="row">
+        <button type="button" id="download">Descarregar registo (Markdown)</button>
+        <button type="button" id="print">Imprimir</button>
+        <a id="reports-link" href="/teacher/activities.html#registos">Ver registos detalhados</a>
+        <a id="edit-link" href="/teacher/lesson.html">Alterar distribuição</a>
+      </p>
+    </section>
+  </main>
+</body>
+</html>
