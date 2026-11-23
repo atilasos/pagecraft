@@ -43,13 +43,13 @@ INSTRUCTIONS = {
     "syllables": "Toca nas peças para formar a palavra.",
     "gap": "Escolhe a peça que falta.",
     "recall": "Forma a palavra. Podes ouvir outra vez.",
-    "start": "Vamos jogar. Toca na seta para começar.",
+    "start": "Vamos jogar. Toca em Começar.",
     "hint": "Olha para o exemplo. Experimenta outra vez.",
     "success": "Já está. Podes continuar.",
     "retry": "Vamos tentar outra vez.",
     "finish": "Terminaste este jogo. Podes repetir.",
     "reflection": "Como foi o jogo? Fizeste sozinho, com ajuda, ou queres praticar mais? Podes também passar.",
-    # Respostas do ciclo: o mesmo texto que a criança vê no ecrã.
+    # Respostas do ciclo, curtas e coerentes com o ecrã (o ecrã acrescenta a palavra encontrada).
     "correct": "Está certo!",
     "tryagain": "Experimenta outra vez.",
     "found": "Encontraste uma palavra!",
@@ -65,6 +65,7 @@ CYCLE = json.loads((ROOT/'drafts/m28p-v3/cycle.json').read_text())
 NEW_WORDS = [(asset_id(w['label']),w['label']) for section in CYCLE['keywords'].values() for w in section['newWords']]
 SENTENCES = [(asset_id(s['text'], True),s['text']) for section in CYCLE['keywords'].values() for s in section['sentences']]
 PICTURABLE = {asset_id(w['label']) for section in CYCLE['keywords'].values() for w in section['newWords'] if w['picturable']}
+EXAMPLES = [(f"exemplo-{asset_id(w['label'])}", f"{CYCLE['keywordArticles'][slug].capitalize()} {w['label']}.") for slug, w in ((s, next(x for x in json.loads((ROOT/'drafts/m28p-v3/words.json').read_text()) if x['slug'] == s)) for s in CYCLE['keywordArticles'])]
 SCENES = {asset_id(s['text'], True): s['scene'] for section in CYCLE['keywords'].values() for s in section['sentences']}
 INSTRUCTIONS.update({key:value[1] for key,value in CYCLE_GAMES.items()})
 
@@ -366,7 +367,7 @@ async def generate_audio(overwrite):
         import edge_tts
     except ImportError as exc:
         raise SystemExit("Use uv run --with edge-tts python scripts/prepare_m28p_tic_assets.py --audio") from exc
-    for slug, text in [*WORDS, *NEW_WORDS, *SENTENCES, *INSTRUCTIONS.items()]:
+    for slug, text in [*WORDS, *NEW_WORDS, *SENTENCES, *EXAMPLES, *INSTRUCTIONS.items()]:
         destination = DEST / "audio" / f"{slug}.mp3"
         if destination.exists() and not overwrite:
             continue

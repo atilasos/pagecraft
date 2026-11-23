@@ -222,11 +222,11 @@ def cycle_guide(data, word):
     if game == 'listen-build':
         body = ("A criança ouve uma palavra e monta-a com sílabas, sem a ver escrita. Há duas ou três sílabas a mais, da mesma família. "
                 "«Com ajuda» mostra a palavra dividida em sílabas; «Sozinho» e «Consigo ajudar um amigo» mostram só o botão de ouvir. "
-                f"Palavras, uma por ronda: {', '.join(r['target']['label'] for r in rounds)}.")
+                f"Palavras, uma por ronda: {', '.join('«' + r['target']['label'] + '»' for r in rounds)}.")
     elif game == 'read-choose':
         body = ("A criança lê uma palavra e escolhe a imagem certa entre três. «Com ajuda» mostra a palavra dividida em sílabas e deixa ouvi-la; "
                 "«Sozinho» mostra a palavra inteira e deixa ouvi-la; «Consigo ajudar um amigo» mostra só a palavra escrita. Ouvir fica registado como ajuda. "
-                f"Palavras, uma por ronda: {', '.join(r['target']['label'] for r in rounds)}.")
+                f"Palavras, uma por ronda: {', '.join('«' + r['target']['label'] + '»' for r in rounds)}.")
     elif game == 'sentence':
         listed = ' / '.join(f"«{r['target']['text']}»" for r in rounds)
         alternatives = [r for r in rounds if r.get('alternatives')]
@@ -237,22 +237,32 @@ def cycle_guide(data, word):
         body = ("A criança ordena as palavras de uma frase. «Com ajuda» mostra a imagem, a frase escrita com as palavras separadas e o botão de ouvir; "
                 "«Sozinho» mostra a imagem e o botão de ouvir; «Consigo ajudar um amigo» mostra só o botão de ouvir. "
                 f"Frases, uma por ronda: {listed}. {equivalent}"
-                "Na página da turma, podes guardar as frases ditadas pelas crianças e projetá-las no Quadro. Em sessão, até quatro frases da turma surgem primeiro, "
+                "Na página da turma, podes guardar as frases ditadas pelas crianças e projetá-las no Quadro. Quando a turma joga numa sessão, até quatro frases da turma surgem primeiro, "
                 "completadas pelas frases fixas. «Com ajuda» mostra as palavras da frase da turma; nos outros níveis, a criança pode tocar em «Ver a frase», "
                 "o que fica registado. As frases da turma só têm leitura em voz alta quando o computador tem uma voz pt-PT instalada.")
     else:
-        hidden = ' / '.join(', '.join(w['label'] for w in r['lexicon']) for r in rounds)
-        body = ("Em cada ronda há duas ou três palavras escondidas; o tabuleiro tem só as sílabas dessas palavras e uma sílaba a mais. "
-                f"Palavras escondidas (as rondas estão separadas por « / »): {hidden}. A criança vê quantas já encontrou («Encontradas: 1 de 2»); "
-                "a ronda acaba quando as encontra todas ou quando toca em «Não encontro mais», que mostra as que faltavam. "
+        hidden = ' / '.join(', '.join('«' + w['label'] + '»' for w in r['lexicon']) for r in rounds)
+        body = ("Em cada ronda há duas ou três palavras escondidas; o tabuleiro tem só as sílabas dessas palavras e, quando possível, uma sílaba a mais. "
+                f"Palavras escondidas (as rondas estão separadas por « / »): {hidden}. A criança vê quantas já encontrou («Encontraste 1 de 2.»); "
+                "a ronda acaba quando as encontra todas ou quando toca em «Não encontro mais palavras», que mostra as que faltavam. "
                 "«Com ajuda» mostra a imagem (quando existe) e o som de cada palavra escondida; «Sozinho» mostra quantas sílabas tem cada uma; "
                 "«Consigo ajudar um amigo» mostra só quantas são. Uma combinação fora da lista recebe «não está escondida».")
+        if all(w.get('newIn') != word['slug'] for r in rounds for w in r['lexicon']):
+            body += f" «{word['label']}» não traz palavras novas: este jogo revê palavras de palavras-chave anteriores."
+        without = sum(1 for r in rounds if not r.get('extra'))
+        if without:
+            body += (" Numa das rondas não há sílaba a mais: qualquer sílaba disponível formaria outra palavra que não está escondida."
+                     if without == 1 else f" Em {without} rondas não há sílaba a mais: qualquer sílaba disponível formaria outra palavra que não está escondida.")
         extra = sorted({w for r in rounds for w in r.get('warnings', [])})
         if extra:
-            body += (f" Com estas peças também se formam palavras reais que não estão escondidas ({', '.join(extra)}): se uma criança as encontrar, "
-                     "é um bom ponto de partida para o Conselho de Cooperação ou para o Texto Livre.")
+            body += (f" Com estas peças também se formam sequências que o dicionário aceita mas que não estão escondidas ({', '.join(extra)}); "
+                     "podem não ser conhecidas das crianças. Se uma criança as encontrar, aproveita para conversar sobre o que significam, "
+                     "por exemplo no Conselho de Cooperação ou no Texto Livre.")
     if game == 'sentence':
-        example = f"A demonstração usa «{demo['target']['text']}», que não é uma das frases, e mostra os mesmos botões do jogo."
+        example = f"A demonstração usa «{demo['target']['text']}.», que não é uma das frases, e mostra os mesmos botões do jogo."
+    elif demo['target']['label'] != word['label']:
+        example = (f"A demonstração usa a palavra-chave anterior «{demo['target']['label']}» («{word['label']}» não tem o número de sílabas "
+                   "deste jogo); essa palavra não é uma das rondas, e a demonstração mostra os mesmos botões do jogo.")
     else:
         example = f"A demonstração usa a palavra-chave «{demo['target']['label']}», que não é uma das rondas, e mostra os mesmos botões do jogo."
     keeps = "Ouvir, ver a demonstração e mudar de ajuda conservam o trabalho." if game == 'read-choose' else \
@@ -335,7 +345,8 @@ def cycle_content(word, game, pool, lexicon=None):
             rounds.append(dict(id=f"ouvir-{item['slug']}", target=resource(item), unit='syllable', length=len(units),
                                answer=[p['id'] for p in pieces[:len(units)]], pieces=mixed(pieces, rng, [units])))
         extra = near_syllables(sample['syllables'], pool['families'], seed('demo'), 2, syllables)
-        demo = dict(target=example, pieces=[p['label'] for p in mixed(pieces_for(sample['syllables'] + extra), seed('demo'), [sample['syllables']])])
+        demo = dict(target=example, pieces=[p['label'] for p in mixed(pieces_for(sample['syllables'] + extra), seed('demo'), [sample['syllables']])],
+                    audio=example['audio'])
     elif game == 'read-choose':
         usage = {}
         for item in newest_first(pool, lambda w: w['picturable']):
@@ -352,7 +363,7 @@ def cycle_content(word, game, pool, lexicon=None):
             rng.shuffle(options)
             rounds.append(dict(id=f"ler-{item['slug']}", target=resource(item), unit='syllable', options=options, answer=[item['slug']]))
         choices = image_choices(keyword, picturable, conflicts, seed('demo'))
-        demo = dict(target=keyword, options=[dict(label=w['label'], image=w['image']) for w in choices]) if choices else None
+        demo = dict(target=keyword, options=[dict(label=w['label'], image=w['image']) for w in choices], audio=keyword['audio']) if choices else None
     elif game == 'sentence':
         own = [s for s in pool['sentences'] if s['newIn'] == word['slug']]
         earlier = [s for s in reversed(pool['sentences']) if s['newIn'] != word['slug']]
@@ -364,17 +375,20 @@ def cycle_content(word, game, pool, lexicon=None):
                                answer=[p['id'] for p in pieces],
                                alternatives=item.get('alternatives', []), pieces=mixed(pieces, rng, answers)))
         tokens = [pool['keyword']['article'].capitalize(), word['label']]
-        demo = dict(target=dict(text=' '.join(tokens), tokens=tokens, image=keyword['image']), pieces=tokens[::-1])
+        demo = dict(target=dict(text=' '.join(tokens), tokens=tokens, image=keyword['image']), pieces=tokens[::-1],
+                    audio=data_audio(f"exemplo-{word['slug']}"))
     else:
         groups = discover_rounds(pool, random.Random(word['slug']), lexicon, reserved={sample['slug']})
         for index, group in enumerate(groups):
             pieces = pieces_for(group['pieces'])
             seed(index).shuffle(pieces)
-            rounds.append(dict(id='descobrir-' + '-'.join(w['slug'] for w in group['hidden']), unit='syllable',
-                               target=resource(group['hidden'][0]), warnings=group['warnings'],
+            excluded = {e['label'] for e in pool.get('excluded', [])}
+            rounds.append(dict(id='descobrir-' + '-'.join(w['slug'] for w in group['hidden']), unit='syllable', extra=group['extra'],
+                               target=resource(group['hidden'][0]), warnings=[w for w in group['warnings'] if w not in excluded],
                                lexicon=[resource(w) for w in group['hidden']], length=3, pieces=pieces))
         extra = near_syllables(sample['syllables'], pool['families'], seed('demo'), 1, syllables)
-        demo = dict(target=example, pieces=[p['label'] for p in mixed(pieces_for(sample['syllables'] + extra), seed('demo'), [sample['syllables']])])
+        demo = dict(target=example, pieces=[p['label'] for p in mixed(pieces_for(sample['syllables'] + extra), seed('demo'), [sample['syllables']])],
+                    audio=example['audio'])
     if len(rounds) < MIN_ROUNDS[game] or demo is None:
         need = MIN_ROUNDS[game]
         why = " Cada alvo requer 2 distratores sem conflitos visuais entre as opções." if game == 'read-choose' else ''
