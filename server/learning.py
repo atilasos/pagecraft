@@ -27,6 +27,8 @@ class Learning:
         self.config = config
         self.catalog_lock = asyncio.Lock()
         self.locks: dict[str, asyncio.Lock] = {}
+        # nome do ficheiro -> (mtime, código do roteiro) para o acompanhamento.
+        self._lesson_index: dict[str, tuple[int, str | None]] = {}
 
     def lock(self, key):
         return self.locks.setdefault(key, asyncio.Lock())
@@ -215,9 +217,10 @@ class Learning:
         O acompanhamento pede isto a cada 10 s; um índice por mtime evita reler
         as realizações de outros roteiros ao longo do ano."""
         directory = self.storage.root / "learning" / "realizations"
-        index = self.__dict__.setdefault('_lesson_index', {})
-        result = []
+        index = self._lesson_index
+        result, present = [], set()
         for path in directory.glob('*.json'):
+            present.add(path.name)
             try:
                 mtime = path.stat().st_mtime_ns
             except FileNotFoundError:
@@ -231,6 +234,8 @@ class Learning:
             index[path.name] = (mtime, None if record['preview'] else record.get('lesson_code'))
             if not record['preview'] and record.get('lesson_code') == lesson_code.upper():
                 result.append(record)
+        for name in set(index) - present:
+            del index[name]
         return result
 
     @staticmethod

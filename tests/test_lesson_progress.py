@@ -166,15 +166,17 @@ async def test_board_shows_chosen_lesson_activity_until_a_newer_live_session(cli
         assert shown['kind'] == 'lesson'
         assert (shown['lesson_code'], shown['activity_title']) == (code, 'Dobro até 10')
         assert 'students' not in shown
-        content = await screen.get('/api/board/lesson-content')
+        content = await screen.get(f"/api/board/lesson-content?atividade={codes['math']}")
         assert content.status_code == 200 and 'Dobro até 10' in content.text
+        # Um pedido para outra escolha não recebe a atividade atual.
+        assert (await screen.get(f"/api/board/lesson-content?atividade={codes['uva']}")).status_code == 404
         live = await teacher.post('/api/sessions', json={'class_id': cls['id'], 'activity_slug': 'zz-dobro-ensaio'})
         assert live.status_code in (200, 201), live.text
         assert (await screen.get('/api/board/session')).json().get('kind') != 'lesson'
         # O painel do roteiro diz que o quadro passou para a sessão e o conteúdo deixa de ser servido.
         progress = (await teacher.get(f'/api/learning/lessons/{code}/progress')).json()
         assert progress['board'] is None and progress['board_elsewhere']['kind'] == 'session'
-        assert (await screen.get('/api/board/lesson-content')).status_code == 404
+        assert (await screen.get(f"/api/board/lesson-content?atividade={codes['math']}")).status_code == 404
         session_id = live.json()['id']
         assert (await screen.get(f'/api/board/sessions/{session_id}/content')).status_code == 200
         # Escolher depois um roteiro tira a sessão do quadro, também para o stream e o conteúdo.
@@ -190,7 +192,7 @@ async def test_board_shows_chosen_lesson_activity_until_a_newer_live_session(cli
         assert (await screen.get('/api/board/session')).json()['kind'] == 'lesson'
         assert (await teacher.put(f'/api/learning/lessons/{code}/board', json={'activity_code': None})).status_code == 200
         assert (await screen.get('/api/board/session')).status_code == 204
-        assert (await screen.get('/api/board/lesson-content')).status_code == 404
+        assert (await screen.get(f"/api/board/lesson-content?atividade={codes['math']}")).status_code == 404
 
 
 async def test_state_follows_latest_action_and_game_end_without_self_assessment(clients):
@@ -213,8 +215,13 @@ async def test_state_follows_latest_action_and_game_end_without_self_assessment(
     await begin(codes['discover'])
     await pupil.post('/api/learning/me/events', json={'events': [
         {'id': 'd1', 'type': 'attempt', 'unitId': 'u1', 'payload': {'detail': {'discoveries': ['mana']}}}]})
+    await pupil.post('/api/learning/me/events', json={'events': [
+        {'id': 'dh', 'type': 'help_needed', 'unitId': 'u1', 'payload': {}}]})
+    middle = (await teacher.get(f'/api/learning/lessons/{code}/progress')).json()
+    assert [s for s in middle['students'] if s['id'] == ana][0]['help_pending'] is True
     await begin(codes['sentence'])
     await pupil.post('/api/learning/me/events', json={'events': [
+        {'id': 's0', 'type': 'help_needed', 'unitId': 'u1', 'payload': {}},
         {'id': 's1', 'type': 'activity_state', 'unitId': 'u1', 'payload': {'readyForReflection': True, 'state': {}}}]})
     progress = (await teacher.get(f'/api/learning/lessons/{code}/progress')).json()
     [row] = [s for s in progress['students'] if s['id'] == ana]
@@ -222,6 +229,9 @@ async def test_state_follows_latest_action_and_game_end_without_self_assessment(
     discover, sentence = row['realizations']
     assert (discover['correct'], discover['different'], discover['unscored']) == (0, 0, 1)
     assert sentence['finished'] and sentence['completed_at'] is None and sentence['assessment'] is None
+    # Pedidos de atividades anteriores ou de um jogo que chegou ao fim já não estão pendentes.
+    assert row['help_pending'] is False and not sentence['help_pending']
+    assert discover['help'] == 1
 
 
 async def test_board_focus_ends_with_the_school_day_or_when_activity_leaves_lesson(clients):

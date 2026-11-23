@@ -130,6 +130,11 @@ class ClassroomService:
         )
         return local_midnight.astimezone(timezone.utc).isoformat()
 
+    def school_date(self, instant: datetime | None = None):
+        """Dia letivo no fuso da escola, com o relógio do serviço por omissão."""
+        instant = instant or self._now_as_datetime()
+        return instant.astimezone(self._school_timezone).date()
+
     def tick_session(self, session_id: str, *, now=None) -> None:
         """Publica um tique controlado; útil também para testes do protocolo."""
         self.live_ticks.publish(session_id, now=now)

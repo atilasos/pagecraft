@@ -30,10 +30,11 @@ def summarize_realization(attempt: dict) -> dict:
     different = sum(1 for e in attempts if e["payload"].get("correct") is False)
     help_events = [e for e in events if e.get("type") in {"help_needed", "help_resolved"}]
     completed_at = attempt.get("completed_at")
-    help_pending = not completed_at and bool(help_events) and help_events[-1]["type"] == "help_needed"
     states = [e for e in events if e.get("type") == "activity_state" and isinstance(e.get("payload"), dict)]
     # O jogo declara quando chegou ao fim; a autoavaliação pode ficar por fazer.
     reached_end = bool(states) and states[-1]["payload"].get("readyForReflection") is True
+    finished = bool(completed_at) or reached_end
+    help_pending = not finished and bool(help_events) and help_events[-1]["type"] == "help_needed"
     seen = [e.get("received_at") for e in events if e.get("received_at")]
     assessment = attempt.get("assessment")
     answers = None
@@ -47,7 +48,7 @@ def summarize_realization(attempt: dict) -> dict:
         "level": attempt.get("level"),
         "started_at": attempt["started_at"],
         "completed_at": completed_at,
-        "finished": bool(completed_at) or reached_end,
+        "finished": finished,
         "last_at": max(seen + [attempt["started_at"]] + ([completed_at] if completed_at else [])),
         "correct": correct,
         "different": different,
@@ -225,6 +226,8 @@ class LessonPlans:
                 'offline': offline.get(sid), 'note': notes.get(sid, ''), 'words': words.get(sid, []),
                 'assigned': assigned, 'current': current['code'] if current else None,
                 'current_title': current['title'] if current else None,
+                # Só o pedido da atividade atual fica pendente; os anteriores ficam no histórico.
+                'help_pending': bool(current and current['help_pending']),
                 'realizations': realizations,
             })
         return {
@@ -263,8 +266,7 @@ class LessonPlans:
         if not focus:
             return None
         # Como as sessões ao vivo, a escolha vale só no dia letivo em que foi feita.
-        zone = getattr(self.classroom, '_school_timezone', None) or timezone.utc
-        if _instant(focus['set_at']).astimezone(zone).date() != datetime.now(zone).date():
+        if self.classroom.school_date(_instant(focus['set_at'])) != self.classroom.school_date():
             return None
         if lesson is None:
             lesson = await self.storage.read_json(self.path(focus['lesson_code']))

@@ -101,10 +101,12 @@ async def current_session(request: Request):
 
 @router.get("/lesson-content")
 @access_policy(RoutePolicy.BOARD)
-async def board_lesson_content(request: Request):
+async def board_lesson_content(request: Request, atividade: str = ''):
     """O quadro só demonstra a atividade de roteiro que o professor escolheu."""
     focus = await current_board_view(request)
-    if focus is None or focus.get('kind') != 'lesson':
+    # Um pedido para uma escolha anterior não recebe a atual com o título errado;
+    # o Quadro volta a consultar a escolha e carrega a nova.
+    if focus is None or focus.get('kind') != 'lesson' or atividade.upper() != focus['activity_code']:
         raise HTTPException(404, 'Nenhuma atividade de roteiro está no quadro.')
     learning = request.app.state.learning
     path = learning.content_path(await learning.activity(focus['activity_code']))
