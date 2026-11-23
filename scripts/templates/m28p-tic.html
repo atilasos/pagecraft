@@ -401,7 +401,10 @@ function confirm(){
   if(result.emit&&restored){const detail={value,question:r.prompt,task_id:r.id,activity:data.slug,field:r.id,level:state.level,aids:{...state.aids[r.id]},model_visible:r.target?state.level==='support':showModel(r),audio_before_choice:state.choiceAudio[r.id]===true};if(revisionHint)detail.after_hint_id=revisionHint;if(r.kind==='discover')window.PageCraftBridge?.emit('attempt',unit(),{detail:{...detail,discoveries:state.discoveries[r.id]||[]}});else window.PageCraftBridge?.attempt(unit(),result.correct,detail);}
   revisionHint=null;checkpoint();renderGame();
   // Som de resposta com o mesmo texto do ecrã; nas descobertas intermédias, sem convite a continuar.
-  if(value[0]!=='finish'&&!repeatFound)playFeedback(r.kind==='discover'?(!result.correct?'tryagain':state.confirmed[r.id]?'allfound':'found'):(result.correct?'correct':'tryagain'));
+  // Uma palavra real que não está escondida tem som próprio, como no ecrã.
+  const formed=r.kind==='discover'?value.map(id=>r.pieces.find(p=>p.id===id)?.label||'').join(''):'';
+  const real=!result.correct&&(r.warnings||[]).includes(formed);
+  if(value[0]!=='finish'&&!repeatFound)playFeedback(r.kind==='discover'?(real&&data.audio?.realword?'realword':!result.correct?'tryagain':state.confirmed[r.id]?'allfound':'found'):(result.correct?'correct':'tryagain'));
   if(state.confirmed[r.id])$('next').focus();
   else if(r.kind==='discover'&&!selected().length)(document.querySelector('#round-content [data-piece]:not(:disabled)')||$('discover-finish'))?.focus();
 }

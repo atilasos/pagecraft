@@ -54,6 +54,7 @@ INSTRUCTIONS = {
     "tryagain": "Experimenta outra vez.",
     "found": "Encontraste uma palavra!",
     "allfound": "Encontraste todas as palavras!",
+    "realword": "É uma palavra, mas não está escondida aqui.",
 }
 
 
