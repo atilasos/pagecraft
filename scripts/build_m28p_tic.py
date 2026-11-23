@@ -240,8 +240,8 @@ def cycle_guide(data, word):
                 f"Frases, uma por ronda: {listed} {equivalent}"
                 "Na página da turma, podes guardar as frases ditadas pelas crianças e projetá-las no Quadro. Quando a turma joga numa sessão, até quatro frases da turma surgem primeiro, "
                 "completadas pelas frases fixas. «Com ajuda» mostra as palavras da frase da turma. As frases da turma só têm leitura em voz alta "
-                "quando o computador tem uma voz pt-PT instalada; sem essa voz, nos outros níveis, o botão de ouvir é substituído por «Ver a frase», "
-                "que mostra a frase escrita e fica registado.")
+                "quando o computador tem uma voz pt-PT instalada; sem essa voz, em «Sozinho» e «Consigo ajudar um amigo», o botão de ouvir é substituído "
+                "por «Ver a frase», que mostra a frase escrita; essa ação fica registada.")
     else:
         hidden = ' / '.join(', '.join('«' + w['label'] + '»' for w in r['lexicon']) for r in rounds)
         body = ("Em cada ronda há duas ou três palavras escondidas; o tabuleiro tem só as sílabas dessas palavras e, quando possível, uma sílaba a mais. "
