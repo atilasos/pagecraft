@@ -464,6 +464,21 @@
           ],
           "source": "proposta"
         }
+      ],
+      "discoverBoards": [
+        {
+          "hidden": [
+            "nome",
+            "mana",
+            "mano"
+          ],
+          "pieces": [
+            "ma",
+            "me",
+            "na",
+            "no"
+          ]
+        }
       ]
     },
     "menino": {
@@ -498,6 +513,20 @@
             }
           ],
           "source": "proposta"
+        }
+      ],
+      "discoverBoards": [
+        {
+          "hidden": [
+            "mano",
+            "mana"
+          ],
+          "pieces": [
+            "ma",
+            "na",
+            "ni",
+            "no"
+          ]
         }
       ]
     },
@@ -658,6 +687,55 @@
           ],
           "notes": "verbo ver; família do v"
         }
+      ],
+      "discoverBoards": [
+        {
+          "hidden": [
+            "nova",
+            "novo"
+          ],
+          "pieces": [
+            "ne",
+            "no",
+            "va",
+            "vo"
+          ]
+        },
+        {
+          "hidden": [
+            "nove",
+            "mano"
+          ],
+          "pieces": [
+            "ma",
+            "ni",
+            "no",
+            "ve"
+          ]
+        },
+        {
+          "hidden": [
+            "avó",
+            "avô"
+          ],
+          "pieces": [
+            "a",
+            "na",
+            "vó",
+            "vô"
+          ]
+        },
+        {
+          "hidden": [
+            "menino",
+            "nome"
+          ],
+          "pieces": [
+            "me",
+            "ni",
+            "no"
+          ]
+        }
       ]
     },
     "dedo": {
@@ -750,20 +828,21 @@
           "source": "proposta"
         },
         {
-          "text": "O dedo é do menino.",
+          "text": "A menina vê o dominó.",
           "tokens": [
-            "O",
-            "dedo",
-            "é",
-            "do",
-            "menino"
+            "A",
+            "menina",
+            "vê",
+            "o",
+            "dominó"
           ],
           "scene": [
             {
-              "image": "dedo"
+              "image": "menina",
+              "pose": "looking"
             },
             {
-              "image": "menino"
+              "image": "domino"
             }
           ],
           "source": "proposta"
@@ -866,7 +945,8 @@
               "image": "sopa"
             }
           ],
-          "source": "proposta"
+          "source": "proposta",
+          "layout": "eat"
         },
         {
           "text": "A avó vê o mapa.",
@@ -1302,7 +1382,13 @@
               "image": "banana"
             }
           ],
-          "source": "proposta"
+          "source": "proposta",
+          "layout": "eat",
+          "place": [
+            80,
+            92,
+            0.3
+          ]
         },
         {
           "text": "A boneca é da menina.",
@@ -1783,7 +1869,8 @@
               "image": "bolacha"
             }
           ],
-          "source": "proposta"
+          "source": "proposta",
+          "layout": "eat"
         },
         {
           "text": "A chuva molha a casa.",
@@ -1802,7 +1889,13 @@
               "image": "casa"
             }
           ],
-          "source": "proposta"
+          "source": "proposta",
+          "layout": "on",
+          "place": [
+            60,
+            4,
+            0.5
+          ]
         },
         {
           "text": "O chocolate é da avó.",
@@ -1938,7 +2031,13 @@
               "image": "minhoca"
             }
           ],
-          "source": "proposta"
+          "source": "proposta",
+          "layout": "eat",
+          "place": [
+            140,
+            80,
+            0.3
+          ]
         },
         {
           "text": "O menino toma banho.",
@@ -1957,7 +2056,12 @@
             }
           ],
           "source": "proposta",
-          "layout": "on"
+          "layout": "on",
+          "place": [
+            74,
+            84,
+            0.38
+          ]
         },
         {
           "text": "O pato está no lago.",
@@ -2033,7 +2137,8 @@
               "image": "gelado"
             }
           ],
-          "source": "proposta"
+          "source": "proposta",
+          "layout": "eat"
         },
         {
           "text": "A gema está na tigela.",
@@ -2145,7 +2250,13 @@
               "image": "uva"
             }
           ],
-          "source": "proposta"
+          "source": "proposta",
+          "layout": "eat",
+          "place": [
+            140,
+            96,
+            0.28
+          ]
         },
         {
           "text": "O menino vê a roda.",
@@ -2295,14 +2406,20 @@
               "image": "cenoura"
             }
           ],
-          "source": "proposta"
+          "source": "proposta",
+          "layout": "eat",
+          "place": [
+            78,
+            96,
+            0.3
+          ]
         },
         {
-          "text": "O menino ouve a coruja.",
+          "text": "O menino vê a coruja.",
           "tokens": [
             "O",
             "menino",
-            "ouve",
+            "vê",
             "a",
             "coruja"
           ],
@@ -2355,7 +2472,8 @@
               "image": "cereja"
             }
           ],
-          "source": "proposta"
+          "source": "proposta",
+          "layout": "eat"
         }
       ]
     },
@@ -2441,7 +2559,13 @@
               "image": "folha"
             }
           ],
-          "source": "proposta"
+          "source": "proposta",
+          "layout": "eat",
+          "place": [
+            118,
+            26,
+            0.28
+          ]
         },
         {
           "text": "O gato está no sofá.",
@@ -2655,17 +2779,6 @@
           ],
           "picturable": true,
           "source": "proposta"
-        },
-        {
-          "label": "buzina",
-          "syllables": [
-            "bu",
-            "zi",
-            "na"
-          ],
-          "picturable": false,
-          "source": "proposta",
-          "notes": "sem imagem própria: o desenho não era imediato para crianças de 6 anos (revisão de 23/11/2026)"
         }
       ],
       "sentenceWords": [
@@ -2715,7 +2828,13 @@
               "image": "folha"
             }
           ],
-          "source": "proposta"
+          "source": "proposta",
+          "layout": "eat",
+          "place": [
+            128,
+            58,
+            0.28
+          ]
         },
         {
           "text": "O menino vê a cobra.",
@@ -2837,20 +2956,20 @@
       ],
       "sentences": [
         {
-          "text": "O bebé bebe o leite.",
+          "text": "O leite é do bebé.",
           "tokens": [
             "O",
-            "bebé",
-            "bebe",
-            "o",
-            "leite"
+            "leite",
+            "é",
+            "do",
+            "bebé"
           ],
           "scene": [
             {
-              "image": "bebe"
+              "image": "leite"
             },
             {
-              "image": "leite"
+              "image": "bebe"
             }
           ],
           "source": "proposta"
@@ -2885,7 +3004,8 @@
           ],
           "scene": [
             {
-              "image": "pente"
+              "image": "pente",
+              "tint": "gold"
             },
             {
               "image": "cadeira"
@@ -2910,13 +3030,20 @@
           ],
           "scene": [
             {
-              "image": "elefante"
+              "image": "elefante",
+              "flip": true
             },
             {
               "image": "laranja"
             }
           ],
-          "source": "proposta"
+          "source": "proposta",
+          "layout": "eat",
+          "place": [
+            132,
+            108,
+            0.3
+          ]
         }
       ]
     },
@@ -3006,7 +3133,13 @@
               "image": "alface"
             }
           ],
-          "source": "proposta"
+          "source": "proposta",
+          "layout": "eat",
+          "place": [
+            150,
+            96,
+            0.32
+          ]
         },
         {
           "text": "O golfinho salta.",
@@ -3117,11 +3250,11 @@
       "sentenceWords": [],
       "sentences": [
         {
-          "text": "O urso toma a sopa.",
+          "text": "O urso come a sopa.",
           "tokens": [
             "O",
             "urso",
-            "toma",
+            "come",
             "a",
             "sopa"
           ],
@@ -3133,7 +3266,13 @@
               "image": "sopa"
             }
           ],
-          "source": "proposta"
+          "source": "proposta",
+          "layout": "eat",
+          "place": [
+            74,
+            110,
+            0.32
+          ]
         },
         {
           "text": "A formiga sobe a árvore.",
@@ -3166,13 +3305,20 @@
           ],
           "scene": [
             {
-              "image": "porco"
+              "image": "porco",
+              "flip": true
             },
             {
               "image": "pera"
             }
           ],
-          "source": "proposta"
+          "source": "proposta",
+          "layout": "eat",
+          "place": [
+            140,
+            90,
+            0.3
+          ]
         },
         {
           "text": "A tartaruga vê o barco.",
@@ -3383,20 +3529,20 @@
           "source": "proposta"
         },
         {
-          "text": "A avó pega na vassoura.",
+          "text": "A vassoura é da avó.",
           "tokens": [
             "A",
-            "avó",
-            "pega",
-            "na",
-            "vassoura"
+            "vassoura",
+            "é",
+            "da",
+            "avó"
           ],
           "scene": [
             {
-              "image": "avo"
+              "image": "vassoura"
             },
             {
-              "image": "vassoura"
+              "image": "avo"
             }
           ],
           "source": "proposta"
@@ -3419,7 +3565,8 @@
               "image": "pessego"
             }
           ],
-          "source": "proposta"
+          "source": "proposta",
+          "layout": "eat"
         }
       ]
     },
@@ -3501,7 +3648,13 @@
               "image": "peixe"
             }
           ],
-          "source": "proposta"
+          "source": "proposta",
+          "layout": "eat",
+          "place": [
+            76,
+            110,
+            0.3
+          ]
         },
         {
           "text": "A lagartixa está na pedra.",
@@ -3524,20 +3677,20 @@
           "layout": "on"
         },
         {
-          "text": "O menino toca o xilofone.",
+          "text": "O xilofone é do menino.",
           "tokens": [
             "O",
-            "menino",
-            "toca",
-            "o",
-            "xilofone"
+            "xilofone",
+            "é",
+            "do",
+            "menino"
           ],
           "scene": [
             {
-              "image": "menino"
+              "image": "xilofone"
             },
             {
-              "image": "xilofone"
+              "image": "menino"
             }
           ],
           "source": "proposta"
@@ -3624,29 +3777,40 @@
       ],
       "sentences": [
         {
-          "text": "A cigarra canta.",
+          "text": "A cigarra está na árvore.",
           "tokens": [
             "A",
             "cigarra",
-            "canta"
+            "está",
+            "na",
+            "árvore"
           ],
           "scene": [
             {
               "image": "cigarra"
+            },
+            {
+              "image": "arvore"
             }
           ],
-          "source": "proposta"
+          "source": "proposta",
+          "layout": "on"
         },
         {
-          "text": "O burro corre.",
+          "text": "O burro vê o carro.",
           "tokens": [
             "O",
             "burro",
-            "corre"
+            "vê",
+            "o",
+            "carro"
           ],
           "scene": [
             {
               "image": "burro"
+            },
+            {
+              "image": "carro"
             }
           ],
           "source": "proposta"
@@ -3857,11 +4021,11 @@
           "layout": "on"
         },
         {
-          "text": "A menina pinta a flor.",
+          "text": "A menina vê a flor.",
           "tokens": [
             "A",
             "menina",
-            "pinta",
+            "vê",
             "a",
             "flor"
           ],
@@ -3911,5 +4075,117 @@
     "cigarra": "a",
     "fogueira": "a",
     "flor": "a"
+  },
+  "knownWords": {
+    "notes": "Palavras comuns para crianças de 6–7 anos, além do vocabulário do ciclo. Em Descobrir, só estas (e as do ciclo) são celebradas quando a criança as forma sem estarem escondidas; formas raras do dicionário recebem a resposta neutra.",
+    "words": [
+      "ama",
+      "amo",
+      "ano",
+      "asa",
+      "ave",
+      "bebe",
+      "boca",
+      "bola",
+      "bolo",
+      "cabo",
+      "café",
+      "cama",
+      "cana",
+      "capa",
+      "cara",
+      "casa",
+      "cedo",
+      "cela",
+      "cima",
+      "coco",
+      "cola",
+      "copo",
+      "dado",
+      "dama",
+      "dedo",
+      "dia",
+      "doce",
+      "dono",
+      "eco",
+      "faca",
+      "fada",
+      "fala",
+      "fila",
+      "fio",
+      "foca",
+      "fogo",
+      "gala",
+      "gato",
+      "gelo",
+      "gola",
+      "lado",
+      "lago",
+      "lama",
+      "lata",
+      "lava",
+      "leite",
+      "lobo",
+      "lua",
+      "luva",
+      "mala",
+      "mapa",
+      "mar",
+      "mato",
+      "meia",
+      "mel",
+      "mesa",
+      "moda",
+      "mola",
+      "mota",
+      "muro",
+      "nabo",
+      "nada",
+      "nata",
+      "nave",
+      "neve",
+      "nome",
+      "nove",
+      "novo",
+      "olho",
+      "onda",
+      "osso",
+      "ovo",
+      "pala",
+      "pano",
+      "papa",
+      "pata",
+      "pato",
+      "pena",
+      "pera",
+      "pote",
+      "rato",
+      "roda",
+      "rosa",
+      "rua",
+      "saco",
+      "sala",
+      "sapo",
+      "seda",
+      "sede",
+      "selo",
+      "sino",
+      "sol",
+      "sopa",
+      "sumo",
+      "tapete",
+      "taça",
+      "teto",
+      "tia",
+      "tio",
+      "toca",
+      "uva",
+      "vaca",
+      "vela",
+      "vida",
+      "vila",
+      "voo",
+      "zero"
+    ]
   }
 }
