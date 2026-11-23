@@ -49,6 +49,11 @@ INSTRUCTIONS = {
     "retry": "Vamos tentar outra vez.",
     "finish": "Terminaste este jogo. Podes repetir.",
     "reflection": "Como foi o jogo? Fizeste sozinho, com ajuda, ou queres praticar mais? Podes também passar.",
+    # Respostas do ciclo: o mesmo texto que a criança vê no ecrã.
+    "correct": "Está certo!",
+    "tryagain": "Experimenta outra vez.",
+    "found": "Encontraste uma palavra!",
+    "allfound": "Encontraste todas as palavras!",
 }
 
 
@@ -319,8 +324,10 @@ def scene_part(part, art):
 def compose_scene(scene, art):
     """Sujeito à esquerda, a olhar para a direita; objeto à direita, à altura do olhar.
     Duas figuras grandes ficam lado a lado (frases do tipo «A menina é a mana.»)."""
+    if len(scene) == 1:
+        return f'<g transform="translate(24 24) scale(.8)">{scene_part(scene[0], art)}</g>'
     if len(scene) != 2:
-        raise ValueError('Cada cena tem duas figuras.')
+        raise ValueError('Cada cena tem uma ou duas figuras.')
     left, right = (scene_part(part, art) for part in scene)
     if scene[1].get('size') == 'large':
         return (f'<g transform="translate(-6 42) scale(.65)">{left}</g>'

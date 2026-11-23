@@ -70,10 +70,14 @@
       "retry": "Vamos tentar outra vez.",
       "finish": "Terminaste este jogo. Podes repetir.",
       "reflection": "Como foi o jogo? Fizeste sozinho, com ajuda, ou queres praticar mais? Podes também passar.",
+      "correct": "Está certo!",
+      "tryagain": "Experimenta outra vez.",
+      "found": "Encontraste uma palavra!",
+      "allfound": "Encontraste todas as palavras!",
       "listen-build": "Ouve e junta as sílabas.",
       "read-choose": "Lê e escolhe a imagem.",
       "sentence": "Ordena as palavras da frase.",
-      "discover": "Junta sílabas. Descobre as palavras escondidas."
+      "discover": "Junta as sílabas. Descobre as palavras escondidas."
     }
   },
   "words": [
@@ -357,12 +361,20 @@
     "retry": "audio/retry.mp3",
     "finish": "audio/finish.mp3",
     "reflection": "audio/reflection.mp3",
+    "correct": "audio/correct.mp3",
+    "tryagain": "audio/tryagain.mp3",
+    "found": "audio/found.mp3",
+    "allfound": "audio/allfound.mp3",
     "listen-build": "audio/listen-build.mp3",
     "read-choose": "audio/read-choose.mp3",
     "sentence": "audio/sentence.mp3",
     "discover": "audio/discover.mp3"
   },
   "files": {
+    "audio/allfound.mp3": {
+      "bytes": 21888,
+      "sha256": "e33f8b06e460700d74526edc08285b8ce6756f0bde4c88f6dd79a81d04142008"
+    },
     "audio/arvore.mp3": {
       "bytes": 11232,
       "sha256": "3e18955b48ded7b2fa59f22477ff7b387ce31ad285857a63cccbec718d792cb9"
@@ -399,13 +411,17 @@
       "bytes": 12960,
       "sha256": "f8eaa593786d7e555eb768e2b4b3f1dc1bfd22b353f270e0e4db84fc8981545a"
     },
+    "audio/correct.mp3": {
+      "bytes": 14112,
+      "sha256": "2a79c99c3f694a44da275357d71034a27324cb430d2788fd1d57d28e7b4b8688"
+    },
     "audio/dedo.mp3": {
       "bytes": 10800,
       "sha256": "41b78c646f0137b36c9af33d0ef5954955c085d329f7ec16184f9cf68325f9cd"
     },
     "audio/discover.mp3": {
-      "bytes": 37728,
-      "sha256": "c67ba0066221541173863aec175d54db0734362bffe79433a974ab94999e22ae"
+      "bytes": 38016,
+      "sha256": "81d3decc7d635627cb313b42a0ee5d311a84dbdf020f0e8d34b81202b92b42cf"
     },
     "audio/escada.mp3": {
       "bytes": 12096,
@@ -422,6 +438,10 @@
     "audio/fogueira.mp3": {
       "bytes": 12384,
       "sha256": "eeb92d68df746c6d421bdd754cf7eb591edc6814674501dac0cf8feb4940f5b0"
+    },
+    "audio/found.mp3": {
+      "bytes": 17712,
+      "sha256": "da70e89d23762819fe1188f203bd00790fe0da46fb92539a23a6eb5698dd2b90"
     },
     "audio/frase-3d2f79aca608.mp3": {
       "bytes": 17136,
@@ -594,6 +614,10 @@
     "audio/telhado.mp3": {
       "bytes": 12096,
       "sha256": "68eae52dc11c3ede9084f418dc1095bffc25779a10b8c5ffc0c60b75b10680bb"
+    },
+    "audio/tryagain.mp3": {
+      "bytes": 17856,
+      "sha256": "33dd9e0e51e807e59094f3e4f8dac121fdfeeae75239bb8ffa1d5adcd722d0ca"
     },
     "audio/uva.mp3": {
       "bytes": 11232,
