@@ -56,6 +56,8 @@ with sync_playwright() as p:
                         for label in w['syllables']:
                             piece(label)
                         key('#confirm')
+                        # Depois de uma descoberta, o foco fica numa peça ou em «Não encontro mais».
+                        assert page.evaluate('document.activeElement && document.activeElement !== document.body'), 'foco perdido após descoberta'
                     assert 'Encontraste todas' in page.locator('#feedback').text_content()
                     assert page.locator('.hidden-word.found').count() == len(r['lexicon'])
                     # Concluída, a ronda não reabre: desfazer fica indisponível.

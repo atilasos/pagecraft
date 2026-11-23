@@ -160,7 +160,8 @@ function picture(svg,label,className=''){const element=node('span',undefined,'pi
 function localVoice(){return window.speechSynthesis?.getVoices().find(v=>v.localService===true&&/^pt[-_]PT$/i.test(v.lang));}
 function stopAudio(){if(audio){audio.pause();audio=null;}window.speechSynthesis?.cancel();}
 function play(key,override){
-  stopAudio();aid(key==='word'?'audio_word_requested':'audio_instruction_requested');checkpoint();soundEnabled=true;$('mute').hidden=false;$('mute').textContent='Desligar som';$('mute').setAttribute('aria-pressed','false');
+  // Antes de começar não há ronda: ouvir não fica registado como ajuda.
+  stopAudio();if(state.page>=0)aid(key==='word'?'audio_word_requested':'audio_instruction_requested');checkpoint();soundEnabled=true;$('mute').hidden=false;$('mute').textContent='Desligar som';$('mute').setAttribute('aria-pressed','false');
   if(key==='word'&&!override&&round()?.classSentence){
     const voice=localVoice();if(!voice)return;
     const utterance=new SpeechSynthesisUtterance(round().target.text);utterance.voice=voice;utterance.lang='pt-PT';
@@ -402,6 +403,7 @@ function confirm(){
   // Som de resposta com o mesmo texto do ecrã; nas descobertas intermédias, sem convite a continuar.
   if(value[0]!=='finish')playFeedback(r.kind==='discover'?(!result.correct?'tryagain':state.confirmed[r.id]?'allfound':'found'):(result.correct?'correct':'tryagain'));
   if(state.confirmed[r.id])$('next').focus();
+  else if(r.kind==='discover'&&!selected().length)(document.querySelector('#round-content [data-piece]:not(:disabled)')||$('discover-finish'))?.focus();
 }
 function setLevel(level,emit=true){if(!TicModel.levels.includes(level))return;state.level=level;revision++;revisionHint=null;if(emit)window.PageCraftBridge?.levelChanged(unit(),level);render();context();checkpoint(emit);}
 const invites={'listen-build':'Se quiseres, mostra a um amigo como juntaste as sílabas.','discover':'Se quiseres, mostra a um amigo como juntaste as sílabas.','read-choose':'Se quiseres, lê as palavras a um amigo.','sentence':'Se quiseres, lê as frases a um amigo.'};
