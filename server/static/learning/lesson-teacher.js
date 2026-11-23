@@ -6,6 +6,7 @@ let classes = [], lessons = [], catalog = [], current = null, selection;
 let students = [], plan = new Map(), marked = new Set();
 let publicOrigin = location.origin, dirty = false, studentsClass = "";
 let words = new Map(); // id -> {id, label, order, codes}
+let hints = new Map(); // id do aluno -> resumo factual da aula anterior (só ao preparar a próxima)
 
 function el(tag, text, className) {
   const node = document.createElement(tag);
@@ -28,6 +29,7 @@ async function api(path, method = "GET", data) {
 const titleOf = code => catalog.find(a => a.code === code)?.title || code;
 const wordOf = activity => PageCraftActivitySelection.wordOf(activity);
 const today = () => new Date().toLocaleDateString("pt-PT", {weekday: "long", day: "numeric", month: "numeric"});
+const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 const emptyPlan = () => ({word: "", extras: new Set(), offline: false, note: ""});
 
 function buildWords() {
@@ -74,8 +76,8 @@ function planFromLesson(lesson) {
       for (const code of assignment.activity_codes) {
         const activity = catalog.find(a => a.code === code);
         if (!activity) { droppedCodes.add(code); continue; }
-        // Os jogos da palavra escolhida ficam na coluna da palavra.
-        if (word && wordOf(activity)?.id === word) continue;
+        // Os jogos da palavra da linha ficam nessa coluna; os de outra palavra passam a outras atividades.
+        if (entry.word && wordOf(activity)?.id === entry.word) continue;
         entry.extras.add(code);
       }
     }
@@ -130,6 +132,7 @@ function renderPlan() {
     markCell.append(mark);
     const name = el("th", student.display_name);
     name.scope = "row";
+    if (hints.has(student.id)) name.append(el("span", hints.get(student.id), "row-hint"));
 
     const wordCell = el("td");
     if (!entry.offline) {
@@ -215,7 +218,8 @@ function renderSummary() {
 function renderToolbar() {
   const count = marked.size;
   $("marked-count").textContent = count ? `${count} ${count === 1 ? "aluno marcado" : "alunos marcados"}` : "Nenhum aluno marcado";
-  for (const id of ["apply-word", "next-word", "bulk-offline", "bulk-clear", "assign-selected"]) $(id).disabled = !count;
+  for (const id of ["apply-word", "next-word", "bulk-offline", "bulk-clear", "assign-selected", "pick-activities"]) $(id).disabled = !count;
+  if (!count && !$("picker").hidden) closePicker();
   $("assign-selected").textContent = count ? `Atribuir aos ${count} alunos marcados` : "Atribuir aos alunos marcados";
   if (count === 1) $("assign-selected").textContent = "Atribuir ao aluno marcado";
 }
@@ -280,12 +284,19 @@ function openLesson(lesson, {copy = false} = {}) {
   else setStudentsFor(select.value);
   plan = planFromLesson(lesson);
   marked = new Set();
+  hints = new Map();
+  // A próxima aula começa sem «Fora do PageCraft»: a nota anterior raramente continua a valer.
+  const wasOffline = copy ? students.filter(s => plan.get(s.id)?.offline).map(s => s.display_name) : [];
+  if (copy) for (const entry of plan.values()) if (entry.offline) Object.assign(entry, emptyPlan());
   $("lesson-title").value = copy || !lesson ? `Aula de ${today()}` : lesson.title;
   $("lesson-active").checked = current?.active ?? true;
   $("form-title").textContent = current ? "Alterar roteiro da aula" : copy ? "Próxima aula a partir de um roteiro" : "Novo roteiro da aula";
   const notes = [];
-  if (copy) notes.push("Marca os alunos que avançam e carrega em «Avançar para a palavra seguinte».");
-  if (droppedCodes.size) notes.push(`${droppedCodes.size} ${droppedCodes.size === 1 ? "atividade deixou" : "atividades deixaram"} de estar disponíveis (por exemplo, jogos substituídos pela coleção atual) e não ${droppedCodes.size === 1 ? "é atribuída" : "são atribuídas"} ao guardar.`);
+  if (copy) notes.push("Por baixo de cada nome está o que aconteceu na aula anterior. Marca os alunos que avançam e carrega em «Avançar para a palavra seguinte».");
+  if (wasOffline.length) notes.push(`Na aula anterior estiveram fora do PageCraft: ${wasOffline.join(", ")}. Marca-os de novo se for o caso.`);
+  if (droppedCodes.size) notes.push(droppedCodes.size === 1
+    ? "1 atividade deixou de estar disponível (por exemplo, um jogo substituído pela coleção atual) e não é atribuída ao guardar."
+    : `${droppedCodes.size} atividades deixaram de estar disponíveis (por exemplo, jogos substituídos pela coleção atual) e não são atribuídas ao guardar.`);
   $("bulk-status").textContent = notes.join(" ");
   closePicker();
   renderPlan();
@@ -293,6 +304,26 @@ function openLesson(lesson, {copy = false} = {}) {
   $("save-status").textContent = "";
   dirty = !!copy;
   if (lesson) $("form-title").focus();
+  if (copy) loadHints(lesson);
+}
+async function loadHints(source) {
+  try {
+    const progress = await api(`/api/learning/lessons/${source.code}/progress`);
+    for (const student of progress.students) {
+      const parts = [];
+      if (student.state === "offline") parts.push(`fora do PageCraft${student.offline ? ` (${student.offline})` : ""}`);
+      else if (!student.realizations.length) parts.push(student.assigned.length ? "não começou atividades" : "sem atividades");
+      else {
+        if (student.words.length) parts.push(student.words.map(w => words.get(w)?.label || w).join(", "));
+        parts.push(`${student.realizations.filter(r => r.finished).length} de ${student.assigned.length} terminadas`);
+        const assessed = student.realizations.filter(r => r.assessment).length;
+        parts.push(assessed ? `autoavaliação em ${assessed}` : "sem autoavaliação");
+      }
+      if (student.note) parts.push(`«${student.note.slice(0, 60)}${student.note.length > 60 ? "…" : ""}»`);
+      hints.set(student.id, `Aula anterior: ${parts.join(" · ")}`);
+    }
+    renderPlan();
+  } catch { /* As pistas são uma ajuda; o roteiro prepara-se sem elas. */ }
 }
 async function loadLessons() {
   lessons = await api("/api/learning/lessons");
@@ -300,6 +331,8 @@ async function loadLessons() {
   if (!lessons.length) $("lessons").append(el("li", "Ainda não há roteiros guardados.", "muted"));
 }
 function openPicker() {
+  // As palavras têm coluna própria: a seleção abre nas outras atividades, sem impedir mudar.
+  if (!selection.collection.value && catalog.some(a => !wordOf(a))) { selection.collection.value = "other"; selection.render(); }
   $("picker").hidden = false;
   $("pick-activities").setAttribute("aria-expanded", "true");
   $("picker").querySelector("input")?.focus();
@@ -316,8 +349,12 @@ $("mark-all").onclick = () => { marked = new Set(students.map(s => s.id)); rende
 $("mark-none").onclick = () => { marked.clear(); renderPlan(); };
 $("apply-word").onclick = () => {
   const word = $("bulk-word").value;
-  bulk(entry => { if (!entry.offline) entry.word = word; },
-    word ? `Palavra ${words.get(word)?.label} dada aos alunos marcados.` : "Palavra retirada aos alunos marcados.");
+  let changedCount = 0;
+  bulk(entry => { if (!entry.offline) { entry.word = word; changedCount++; } }, "");
+  const skipped = marked.size - changedCount;
+  const done = !changedCount ? "Nenhum aluno marcado pode receber a palavra: estão fora do PageCraft."
+    : word ? `Palavra ${words.get(word)?.label} dada a ${plural(changedCount, "aluno", "alunos")}.` : `Palavra retirada a ${plural(changedCount, "aluno", "alunos")}.`;
+  $("bulk-status").textContent = done + (changedCount && skipped ? ` ${plural(skipped, "aluno fora do PageCraft ficou", "alunos fora do PageCraft ficaram")} sem palavra.` : "");
 };
 $("next-word").onclick = () => {
   let moved = 0;

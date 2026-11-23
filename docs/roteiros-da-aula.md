@@ -24,7 +24,7 @@ Se uma atividade falhar, consulta a mensagem junto da seleção. As atividades p
 5. Confirma o resumo por baixo da tabela: quem tem atividades, quem está fora do PageCraft e quem ainda não tem nada atribuído.
 6. Carrega em **Guardar roteiro da aula**.
 
-Para a aula seguinte, usa **Preparar a próxima aula** no roteiro anterior: a distribuição é copiada para um roteiro novo; marca os alunos que avançam e carrega em **Avançar para a palavra seguinte**.
+Para a aula seguinte, usa **Preparar a próxima aula** no roteiro anterior: a distribuição é copiada para um roteiro novo e, por baixo de cada nome, aparece o que aconteceu nessa aula (palavra, atividades terminadas, autoavaliação e a tua observação). Marca os alunos que avançam e carrega em **Avançar para a palavra seguinte**. Os alunos que estiveram fora do PageCraft não são copiados como tal: marca-os de novo se for o caso.
 
 Para preparar sem permitir a entrada dos alunos, desmarca **Disponível aos alunos** antes de guardar. Só as atividades já aprovadas aparecem na preparação do roteiro.
 
@@ -42,7 +42,7 @@ Um aluno em vários conjuntos recebe a união das atividades, sem repetições. 
 
 1. Num roteiro guardado, carrega em **Acompanhar e quadro**.
 2. A tabela mostra cada aluno, atualizada a cada 10 segundos: **A trabalhar** (e em quê), **Sem atividade recente no PageCraft** (3 minutos sem ações), **Terminou uma atividade**, **Ainda não entrou**, **Fora do PageCraft** e **Pediu ajuda**.
-3. Em **No quadro**, as atividades que estão a decorrer aparecem com o número de alunos. Carrega numa para a mostrar no quadro interativo; usa **Outra atividade do roteiro** para mostrar uma que ainda ninguém começou. **Tirar do quadro** volta a deixá-lo em espera.
+3. Em **No quadro**, as atividades que estão a decorrer aparecem com o número de alunos. Carrega numa para a mostrar no quadro interativo; usa **Outra atividade do roteiro** para mostrar uma que ainda ninguém começou. **Tirar do quadro** deixa-o em espera, ou volta a mostrar a sessão de **Aula ao vivo** que estiver a decorrer. A escolha vale só para o dia em que foi feita.
 4. O quadro mostra a atividade e o código do roteiro, nunca o trabalho de um aluno. Se começares ou retomares uma sessão em **Aula ao vivo**, o quadro passa a mostrá-la; voltar a escolher uma atividade do roteiro devolve-o ao roteiro.
 
 O quadro tem de estar emparelhado uma vez em **Aula ao vivo**.
@@ -52,8 +52,8 @@ O quadro tem de estar emparelhado uma vez em **Aula ao vivo**.
 A página **Acompanhar** é também o registo simples da aula. Para cada aluno mostra:
 
 - as atividades atribuídas, terminadas e em curso;
-- a autoavaliação de cada atividade terminada (com autonomia, com ajuda, quer praticar) e as atividades **sem autoavaliação**;
-- as respostas certas, as tentativas erradas e os pedidos de ajuda registados;
+- a autoavaliação de cada atividade (com autonomia, com ajuda, quer praticar) e as atividades **sem autoavaliação**, incluindo jogos que chegaram ao fim sem a criança a preencher;
+- as respostas certas, as diferentes da esperada, as tentativas sem correção automática (por exemplo, descobertas) e os pedidos de ajuda registados;
 - a tua observação, guardada ao sair do campo.
 
 Os números descrevem acontecimentos registados, não são notas. Usa **Descarregar registo (Markdown)** ou **Imprimir** para guardar uma cópia. O registo continua disponível depois de encerrar o roteiro.

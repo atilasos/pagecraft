@@ -216,6 +216,7 @@ def test_teacher_follows_lesson_records_missing_self_assessment_and_switches_boa
         rows = page.locator('#rows')
         expect(rows.get_by_role('row', name=re.compile('^Bruno'))).to_contain_text('A trabalhar')
         expect(rows.get_by_role('row', name=re.compile('^Bruno'))).to_contain_text('Sem autoavaliação em 1 atividade')
+        expect(page.locator('#board-now')).to_have_text('O quadro não mostra nenhuma atividade deste roteiro.')
         expect(rows.get_by_role('row', name=re.compile('^Ana'))).to_contain_text('Ainda não entrou')
         expect(rows.get_by_role('row', name=re.compile('^Carla'))).to_contain_text('Caderno')
         page.get_by_role('button', name='Metades na aula · 1 aluno', exact=True).click()
@@ -225,6 +226,10 @@ def test_teacher_follows_lesson_records_missing_self_assessment_and_switches_boa
         page.get_by_label('Outra atividade do roteiro', exact=True).select_option(activities[0]['code'])
         page.get_by_role('button', name='Mostrar no quadro', exact=True).click()
         expect(screen.locator('#session-title')).to_contain_text(activities[0]['title'], timeout=8000)
+        # O jogo arranca no quadro com uma realização vazia, sem ficar em «A preparar o jogo…».
+        game = screen.frame_locator('#board')
+        expect(game.locator('#initialization-status')).to_be_hidden(timeout=8000)
+        expect(game.locator('#main')).to_be_visible()
         page.get_by_label('Observação sobre Bruno', exact=True).fill('Precisou de apoio na segunda página.')
         page.get_by_label('Observação sobre Ana', exact=True).focus()
         expect(rows.get_by_role('row', name=re.compile('^Bruno'))).to_contain_text('Guardada.')

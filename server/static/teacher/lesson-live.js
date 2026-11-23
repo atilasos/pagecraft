@@ -13,6 +13,7 @@ const STATES = {
 };
 const ANSWERS = {alone: "com autonomia", help: "com ajuda", practising: "quer praticar", skip: "sem resposta"};
 let data = null, rows = new Map(), timer = null, publicOrigin = location.origin;
+const pendingNotes = new Map(); // id do aluno -> gravação em curso
 
 function el(tag, text, className) {
   const node = document.createElement(tag);
@@ -33,6 +34,7 @@ async function api(path, method = "GET", body) {
   return result;
 }
 const titleOf = activityCode => data.activities[activityCode]?.title || activityCode;
+const status_of = r => r.completed_at ? `terminada às ${time(r.completed_at)}` : r.finished ? "chegou ao fim do jogo, sem autoavaliação" : `em curso desde ${time(r.started_at)}`;
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 const time = iso => new Date(iso).toLocaleTimeString("pt-PT", {hour: "2-digit", minute: "2-digit"});
 
@@ -48,16 +50,16 @@ function assessmentTotals(student) {
 }
 function evidenceTotals(student) {
   return student.realizations.reduce((sum, r) => ({
-    correct: sum.correct + r.correct, incorrect: sum.incorrect + r.incorrect,
+    correct: sum.correct + r.correct, different: sum.different + r.different, unscored: sum.unscored + r.unscored,
     help: sum.help + r.help, pending: sum.pending || r.help_pending,
-  }), {correct: 0, incorrect: 0, help: 0, pending: false});
+  }), {correct: 0, different: 0, unscored: 0, help: 0, pending: false});
 }
 
 function nowCell(student) {
   const cell = el("td");
   const [label, className] = STATES[student.state];
   cell.append(el("span", label, `state ${className}`));
-  if (student.current) cell.append(el("p", titleOf(student.current)));
+  if (student.current) cell.append(el("p", student.current_title || titleOf(student.current)));
   if (student.state === "offline" && student.offline) cell.append(el("p", student.offline, "muted"));
   if (student.state === "finished") cell.append(el("p", "Pode escolher outra atividade do roteiro.", "muted"));
   if (evidenceTotals(student).pending) {
@@ -70,7 +72,7 @@ function nowCell(student) {
 function workCell(student) {
   const cell = el("td");
   if (student.state === "offline" || !student.assigned.length) { cell.append(el("span", "—", "muted")); return cell; }
-  const done = student.realizations.filter(r => r.completed_at).length;
+  const done = student.realizations.filter(r => r.finished).length;
   const open = student.realizations.length - done;
   const parts = [plural(student.assigned.length, "atribuída", "atribuídas")];
   if (done) parts.push(plural(done, "terminada", "terminadas"));
@@ -81,7 +83,7 @@ function workCell(student) {
     const details = el("details"), list = el("ul");
     details.append(el("summary", "Ver atividades"));
     for (const r of student.realizations) {
-      const item = el("li", `${r.title} — ${r.completed_at ? `terminada às ${time(r.completed_at)}` : `em curso desde ${time(r.started_at)}`}`);
+      const item = el("li", `${r.title} — ${status_of(r)}`);
       if (r.strategy) item.append(el("p", `Estratégia: ${r.strategy}`, "muted"));
       if (r.next_step) item.append(el("p", `Próximo passo proposto: ${r.next_step}`, "muted"));
       list.append(item);
@@ -111,7 +113,8 @@ function evidenceCell(student) {
   const cell = el("td");
   if (!student.realizations.length) { cell.append(el("span", "—", "muted")); return cell; }
   const t = evidenceTotals(student);
-  cell.append(el("p", `${plural(t.correct, "resposta certa", "respostas certas")} · ${plural(t.incorrect, "tentativa errada", "tentativas erradas")}`));
+  cell.append(el("p", `${plural(t.correct, "resposta certa", "respostas certas")} · ${plural(t.different, "diferente da esperada", "diferentes da esperada")}`));
+  if (t.unscored) cell.append(el("p", `${plural(t.unscored, "tentativa sem correção automática", "tentativas sem correção automática")} (ex.: descobertas)`, "muted"));
   if (t.help) cell.append(el("p", plural(t.help, "pedido de ajuda", "pedidos de ajuda"), "muted"));
   const last = student.realizations.map(r => r.last_at).sort().at(-1);
   cell.append(el("p", `Última ação às ${time(last)}`, "muted"));
@@ -125,16 +128,23 @@ function noteCell(student) {
   area.placeholder = "Ex.: leu sozinho as frases";
   line.setAttribute("role", "status");
   let saved = student.note;
-  const save = async () => {
-    if (area.value.trim() === saved.trim()) return;
+  const save = () => {
+    if (area.value.trim() === saved.trim()) return pendingNotes.get(student.id) || Promise.resolve();
+    const text = area.value;
     line.textContent = "A guardar…";
-    try {
-      await api(`/api/learning/lessons/${code}/notes/${student.id}`, "PUT", {text: area.value});
-      saved = area.value;
+    const request = api(`/api/learning/lessons/${code}/notes/${student.id}`, "PUT", {text}).then(() => {
+      saved = text;
+      // O registo descarregado usa logo a nota confirmada, sem esperar pela atualização.
+      const row = data?.students.find(s => s.id === student.id);
+      if (row) row.note = text.trim();
       line.textContent = "Guardada.";
-    } catch (error) { line.textContent = error.message; }
+    }, error => { line.textContent = error.message; throw error; }).finally(() => pendingNotes.delete(student.id));
+    pendingNotes.set(student.id, request);
+    return request;
   };
-  area.onblur = save;
+  area.onblur = () => { save().catch(() => {}); };
+  area.dataset.student = student.id;
+  area.saveNote = save;
   cell.append(area, line);
   cell.dataset.note = "1";
   return cell;
@@ -178,16 +188,21 @@ function renderCounts() {
   $("counts").replaceChildren(...items);
 }
 function renderBoard() {
-  const focus = data.board;
-  $("board-now").textContent = focus ? `O quadro mostra: ${focus.activity_title}` : "O quadro não mostra nenhuma atividade deste roteiro.";
+  const focus = data.board, elsewhere = data.board_elsewhere;
+  $("board-now").textContent = focus ? `O quadro mostra: ${focus.activity_title}`
+    : elsewhere?.kind === "session" ? `O quadro mostra a aula ao vivo «${elsewhere.title}». Escolhe uma atividade para voltar a este roteiro.`
+    : elsewhere?.kind === "lesson" ? `O quadro mostra outro roteiro: «${elsewhere.title}».`
+    : "O quadro não mostra nenhuma atividade deste roteiro.";
+  // Só conta quem está a trabalhar agora numa atividade que ainda está no roteiro.
   const working = new Map();
   for (const student of data.students)
-    if (student.current) working.set(student.current, (working.get(student.current) || 0) + 1);
+    if (student.state === "working" && data.activities[student.current]) working.set(student.current, (working.get(student.current) || 0) + 1);
   const buttons = [...working.entries()].sort((a, b) => b[1] - a[1] || titleOf(a[0]).localeCompare(titleOf(b[0]), "pt")).map(([activityCode, n]) => {
     const button = el("button", `${titleOf(activityCode)} · ${plural(n, "aluno", "alunos")}`);
     button.type = "button";
     button.setAttribute("aria-pressed", String(focus?.activity_code === activityCode));
     button.onclick = () => showOnBoard(activityCode);
+    button.disabled = !data.active;
     return button;
   });
   if (!buttons.length) buttons.push(el("p", "Ainda ninguém está a trabalhar numa atividade. Podes escolher uma abaixo.", "muted"));
@@ -237,7 +252,8 @@ function markdown() {
     if (student.state !== "offline") lines.push(`- Atividades atribuídas: ${student.assigned.length}`);
     for (const r of student.realizations) {
       const said = r.assessment ? Object.entries(r.assessment).filter(([, n]) => n).map(([k, n]) => `${n} ${ANSWERS[k]}`).join(", ") || "sem respostas" : "sem autoavaliação";
-      lines.push(`- ${r.title}: ${r.completed_at ? "terminada" : "não terminada"} · ${r.correct} certas, ${r.incorrect} tentativas erradas, ${r.help} pedidos de ajuda · autoavaliação: ${said}`);
+      const unscored = r.unscored ? `, ${r.unscored} sem correção automática` : "";
+      lines.push(`- ${r.title}: ${status_of(r)} · ${r.correct} respostas certas, ${r.different} diferentes da esperada${unscored}, ${r.help} pedidos de ajuda · autoavaliação: ${said}`);
       if (r.strategy) lines.push(`  - Estratégia: ${r.strategy}`);
       if (r.next_step) lines.push(`  - Próximo passo proposto: ${r.next_step}`);
     }
@@ -246,15 +262,29 @@ function markdown() {
   }
   return lines.join("\n");
 }
-$("download").onclick = () => {
+async function flushNotes() {
+  // Grava a nota em edição e espera pelas gravações pendentes antes de exportar.
+  for (const area of document.querySelectorAll("#rows textarea")) area.saveNote?.().catch(() => {});
+  await Promise.allSettled([...pendingNotes.values()]);
+}
+addEventListener("beforeunload", event => {
+  const unsaved = [...document.querySelectorAll("#rows textarea")].some(area => {
+    const student = data?.students.find(s => s.id === area.dataset.student);
+    return student && area.value.trim() !== student.note.trim();
+  });
+  if (unsaved || pendingNotes.size) { event.preventDefault(); event.returnValue = ""; }
+});
+$("download").onclick = async () => {
   if (!data) return;
+  await flushNotes();
   const link = el("a");
   link.href = URL.createObjectURL(new Blob([markdown()], {type: "text/markdown"}));
   link.download = `roteiro-${data.code}.md`;
   link.click();
   setTimeout(() => URL.revokeObjectURL(link.href), 1000);
 };
-$("print").onclick = () => {
+$("print").onclick = async () => {
+  await flushNotes();
   document.querySelectorAll(".live-table details").forEach(d => { d.open = true; });
   print();
 };

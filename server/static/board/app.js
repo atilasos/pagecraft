@@ -164,9 +164,21 @@ function startLessonFocus(focus) {
   sessionEntryUrl.textContent = `${new URL(publicOrigin).host}/aula/${focus.lesson_code}`;
   document.getElementById("session-code-label").textContent = "Código do roteiro";
   sessionJoinCode.textContent = focus.lesson_code;
-  board.src = `/api/board/lesson-content?atividade=${encodeURIComponent(focus.activity_code)}`;
+  board.src = `/api/board/lesson-content?atividade=${encodeURIComponent(focus.activity_code)}&presentation=1`;
   currentSessionId = focus.id;
 }
+
+/* Os jogos do ciclo esperam o arranque que a página do aluno lhes dá. O quadro
+   envia uma realização vazia, sem dados de nenhum aluno. */
+board.addEventListener("load", () => {
+  if (!currentSessionId?.startsWith("lesson-") || !board.getAttribute("src")) return;
+  board.contentWindow?.postMessage({ pagecraft: 1, type: "learning_restore", payload: { events: [] } }, "*");
+  board.contentWindow?.postMessage({
+    pagecraft: 1,
+    type: "learning_preferences",
+    payload: { language: "pt", level: "intermediate", participant_count: 1, route: "permanent" },
+  }, "*");
+});
 
 function startLiveSession(session) {
   if (currentSessionId === session.id && stream) return;
