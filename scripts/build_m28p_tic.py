@@ -258,7 +258,7 @@ def cycle_guide(data, word):
         if extra:
             body += (f" Com estas peças também se formam sequências que o dicionário aceita mas que não estão escondidas ({', '.join(extra)}); "
                      "nesse caso, a criança recebe «é uma palavra, mas não está escondida aqui». "
-                     "podem não ser conhecidas das crianças. Se uma criança as encontrar, aproveita para conversar sobre o que significam, "
+                     "Podem não ser conhecidas das crianças. Se uma criança as encontrar, aproveita para conversar sobre o que significam, "
                      "por exemplo no Conselho de Cooperação ou no Texto Livre.")
     if game == 'sentence':
         example = f"A demonstração usa «{demo['target']['text']}.», que não é uma das frases, e mostra os mesmos botões do jogo."
