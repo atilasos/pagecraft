@@ -750,21 +750,20 @@
           "source": "proposta"
         },
         {
-          "text": "A menina vê o dominó.",
+          "text": "O dedo é do menino.",
           "tokens": [
-            "A",
-            "menina",
-            "vê",
-            "o",
-            "dominó"
+            "O",
+            "dedo",
+            "é",
+            "do",
+            "menino"
           ],
           "scene": [
             {
-              "image": "menina",
-              "pose": "looking"
+              "image": "dedo"
             },
             {
-              "image": "domino"
+              "image": "menino"
             }
           ],
           "source": "proposta"
@@ -1540,21 +1539,20 @@
           "source": "proposta"
         },
         {
-          "text": "O avô vê o coelho.",
+          "text": "O coelho vê o telhado.",
           "tokens": [
             "O",
-            "avô",
+            "coelho",
             "vê",
             "o",
-            "coelho"
+            "telhado"
           ],
           "scene": [
             {
-              "image": "avo-circ",
-              "pose": "looking"
+              "image": "coelho"
             },
             {
-              "image": "coelho"
+              "image": "telhado"
             }
           ],
           "source": "proposta"
@@ -2150,24 +2148,24 @@
           "source": "proposta"
         },
         {
-          "text": "O rato está na roda.",
+          "text": "O menino vê a roda.",
           "tokens": [
             "O",
-            "rato",
-            "está",
-            "na",
+            "menino",
+            "vê",
+            "a",
             "roda"
           ],
           "scene": [
             {
-              "image": "rato"
+              "image": "menino",
+              "pose": "looking"
             },
             {
               "image": "roda"
             }
           ],
-          "source": "proposta",
-          "layout": "on"
+          "source": "proposta"
         },
         {
           "text": "A rosa é da avó.",
@@ -2340,14 +2338,19 @@
           "layout": "on"
         },
         {
-          "text": "A cereja é doce.",
+          "text": "A menina come a cereja.",
           "tokens": [
             "A",
-            "cereja",
-            "é",
-            "doce"
+            "menina",
+            "come",
+            "a",
+            "cereja"
           ],
           "scene": [
+            {
+              "image": "menina",
+              "pose": "looking"
+            },
             {
               "image": "cereja"
             }
@@ -3040,20 +3043,20 @@
           "source": "proposta"
         },
         {
-          "text": "O anel é da avó.",
+          "text": "O funil é do avô.",
           "tokens": [
             "O",
-            "anel",
+            "funil",
             "é",
-            "da",
-            "avó"
+            "do",
+            "avô"
           ],
           "scene": [
             {
-              "image": "anel"
+              "image": "funil"
             },
             {
-              "image": "avo"
+              "image": "avo-circ"
             }
           ],
           "source": "proposta"
@@ -3540,16 +3543,20 @@
           "source": "proposta"
         },
         {
-          "text": "A ameixa é doce.",
+          "text": "A ameixa é da avó.",
           "tokens": [
             "A",
             "ameixa",
             "é",
-            "doce"
+            "da",
+            "avó"
           ],
           "scene": [
             {
               "image": "ameixa"
+            },
+            {
+              "image": "avo"
             }
           ],
           "source": "proposta"
@@ -3721,21 +3728,20 @@
       "sentenceWords": [],
       "sentences": [
         {
-          "text": "O avô toca a guitarra.",
+          "text": "A guitarra é do avô.",
           "tokens": [
-            "O",
-            "avô",
-            "toca",
-            "a",
-            "guitarra"
+            "A",
+            "guitarra",
+            "é",
+            "do",
+            "avô"
           ],
           "scene": [
             {
-              "image": "avo-circ",
-              "pose": "looking"
+              "image": "guitarra"
             },
             {
-              "image": "guitarra"
+              "image": "avo-circ"
             }
           ],
           "source": "proposta"
