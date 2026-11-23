@@ -1,0 +1,7 @@
+# Montar frases · fogueira
+
+4 rondas, cerca de cinco minutos. A criança ordena as palavras de uma frase. «Com ajuda» mostra a imagem, a frase escrita com as palavras separadas e o botão de ouvir; «Sozinho» mostra a imagem, o botão de ouvir e um espaço por palavra; «Consigo ajudar um amigo» mostra só o botão de ouvir. Frases, uma por ronda: «O avô toca a guitarra.» / «O foguete sobe.» / «O menino vê a fogueira.» / «O gorro é do avô.» Na página da turma, podes guardar as frases ditadas pelas crianças e projetá-las no Quadro. Quando a turma joga numa sessão, até quatro frases da turma surgem primeiro, completadas pelas frases fixas. «Com ajuda» mostra as palavras da frase da turma. As frases da turma só têm leitura em voz alta quando o computador tem uma voz pt-PT instalada; sem essa voz, nos outros níveis, o botão de ouvir é substituído por «Ver a frase», que mostra a frase escrita e fica registado.
+
+A demonstração usa «A fogueira.», que não é uma das frases, e mostra os mesmos botões do jogo. Ouvir, ver a demonstração, desfazer e mudar de ajuda conservam o trabalho. A criança pode continuar depois de confirmar, mesmo com erro.
+
+Os registos descrevem ações e ajudas usadas; não certificam leitura nem fluência. No fim, em «Consigo ajudar um amigo», aparece um convite escrito facultativo para partilhar com um amigo, que não é registado. Revê as imagens e ouve as gravações antes de usar com a turma.
