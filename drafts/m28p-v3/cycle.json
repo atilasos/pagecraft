@@ -273,6 +273,18 @@
     [
       "gato",
       "lobo"
+    ],
+    [
+      "casa",
+      "telhado"
+    ],
+    [
+      "pêssego",
+      "ameixa"
+    ],
+    [
+      "mala",
+      "mochila"
     ]
   ],
   "policy": {
@@ -1737,24 +1749,23 @@
       "sentenceWords": [],
       "sentences": [
         {
-          "text": "A chave está na mochila.",
+          "text": "A chave é do avô.",
           "tokens": [
             "A",
             "chave",
-            "está",
-            "na",
-            "mochila"
+            "é",
+            "do",
+            "avô"
           ],
           "scene": [
             {
               "image": "chave"
             },
             {
-              "image": "mochila"
+              "image": "avo-circ"
             }
           ],
-          "source": "proposta",
-          "layout": "on"
+          "source": "proposta"
         },
         {
           "text": "O menino come a bolacha.",
@@ -1913,17 +1924,17 @@
           "layout": "on"
         },
         {
-          "text": "O gato vê a minhoca.",
+          "text": "A galinha come a minhoca.",
           "tokens": [
-            "O",
-            "gato",
-            "vê",
+            "A",
+            "galinha",
+            "come",
             "a",
             "minhoca"
           ],
           "scene": [
             {
-              "image": "gato"
+              "image": "galinha"
             },
             {
               "image": "minhoca"
@@ -2104,8 +2115,9 @@
             "re",
             "de"
           ],
-          "picturable": true,
-          "source": "proposta"
+          "picturable": false,
+          "source": "proposta",
+          "notes": "sem imagem própria: «rede» tem vários referentes (pesca, baliza, descanso)"
         }
       ],
       "sentenceWords": [
@@ -2118,20 +2130,21 @@
       ],
       "sentences": [
         {
-          "text": "A raposa vê o rato.",
+          "text": "A raposa come a uva.",
           "tokens": [
             "A",
             "raposa",
-            "vê",
-            "o",
-            "rato"
+            "come",
+            "a",
+            "uva"
           ],
           "scene": [
             {
-              "image": "raposa"
+              "image": "raposa",
+              "flip": true
             },
             {
-              "image": "rato"
+              "image": "uva"
             }
           ],
           "source": "proposta"
@@ -2176,15 +2189,20 @@
           "source": "proposta"
         },
         {
-          "text": "O bebé ri.",
+          "text": "O rato vê a rosa.",
           "tokens": [
             "O",
-            "bebé",
-            "ri"
+            "rato",
+            "vê",
+            "a",
+            "rosa"
           ],
           "scene": [
             {
-              "image": "bebe"
+              "image": "rato"
+            },
+            {
+              "image": "rosa"
             }
           ],
           "source": "proposta"
@@ -2282,20 +2300,21 @@
           "source": "proposta"
         },
         {
-          "text": "A coruja ouve o rato.",
+          "text": "O menino ouve a coruja.",
           "tokens": [
-            "A",
-            "coruja",
+            "O",
+            "menino",
             "ouve",
-            "o",
-            "rato"
+            "a",
+            "coruja"
           ],
           "scene": [
             {
-              "image": "coruja"
+              "image": "menino",
+              "pose": "looking"
             },
             {
-              "image": "rato"
+              "image": "coruja"
             }
           ],
           "source": "proposta"
@@ -2461,18 +2480,24 @@
           "source": "proposta"
         },
         {
-          "text": "A foca nada.",
+          "text": "A foca está no lago.",
           "tokens": [
             "A",
             "foca",
-            "nada"
+            "está",
+            "no",
+            "lago"
           ],
           "scene": [
             {
               "image": "foca"
+            },
+            {
+              "image": "lago"
             }
           ],
-          "source": "proposta"
+          "source": "proposta",
+          "layout": "on"
         }
       ]
     },
@@ -2690,13 +2715,13 @@
           "source": "proposta"
         },
         {
-          "text": "O menino abre a janela.",
+          "text": "O menino vê a cobra.",
           "tokens": [
             "O",
             "menino",
-            "abre",
+            "vê",
             "a",
-            "janela"
+            "cobra"
           ],
           "scene": [
             {
@@ -2704,7 +2729,7 @@
               "pose": "looking"
             },
             {
-              "image": "janela"
+              "image": "cobra"
             }
           ],
           "source": "proposta"
@@ -2828,21 +2853,20 @@
           "source": "proposta"
         },
         {
-          "text": "A menina pinta a bandeira.",
+          "text": "A bandeira é da menina.",
           "tokens": [
             "A",
-            "menina",
-            "pinta",
-            "a",
-            "bandeira"
+            "bandeira",
+            "é",
+            "da",
+            "menina"
           ],
           "scene": [
             {
-              "image": "menina",
-              "pose": "looking"
+              "image": "bandeira"
             },
             {
-              "image": "bandeira"
+              "image": "menina"
             }
           ],
           "source": "proposta"
@@ -2865,7 +2889,12 @@
             }
           ],
           "source": "proposta",
-          "layout": "on"
+          "layout": "on",
+          "place": [
+            64,
+            74,
+            0.42
+          ]
         },
         {
           "text": "O elefante come a laranja.",
@@ -3085,20 +3114,20 @@
       "sentenceWords": [],
       "sentences": [
         {
-          "text": "O urso vê a formiga.",
+          "text": "O urso toma a sopa.",
           "tokens": [
             "O",
             "urso",
-            "vê",
+            "toma",
             "a",
-            "formiga"
+            "sopa"
           ],
           "scene": [
             {
               "image": "urso"
             },
             {
-              "image": "formiga"
+              "image": "sopa"
             }
           ],
           "source": "proposta"
@@ -3331,17 +3360,18 @@
           "layout": "on"
         },
         {
-          "text": "O passarinho vê o girassol.",
+          "text": "A menina vê o girassol.",
           "tokens": [
-            "O",
-            "passarinho",
+            "A",
+            "menina",
             "vê",
             "o",
             "girassol"
           ],
           "scene": [
             {
-              "image": "passarinho"
+              "image": "menina",
+              "pose": "looking"
             },
             {
               "image": "girassol"
