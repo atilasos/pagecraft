@@ -280,3 +280,36 @@ def test_board_leaves_live_session_when_teacher_shows_a_lesson_activity(page, st
     finally:
         board.close()
         page.request.post(origin + f"/api/sessions/{live['id']}/close")
+
+
+def test_note_that_fails_to_save_blocks_the_lesson_record_download(page, studio_origin):
+    origin = studio_origin
+    page.request.get(origin + '/api/teacher-bootstrap')
+    _, other, cls = seed(page, origin)
+    page.request.post(origin + '/api/learning/activities/publish', data={'codes': [other['code']]})
+    lesson = page.request.post(origin + '/api/learning/lessons', data={
+        'title': 'Notas que falham', 'class_id': cls['id'], 'assignments': [
+            {'title': 'Metades', 'student_ids': [cls['students'][0]['id']], 'activity_codes': [other['code']]}]}).json()
+    attempts = []
+
+    def fail_first(route):
+        attempts.append(route.request.post_data)
+        if len(attempts) == 1:
+            route.fulfill(status=500, content_type='application/json', body='{"detail": "falha simulada"}')
+        else:
+            route.continue_()
+
+    page.route('**/notes/**', fail_first)
+    downloads = []
+    page.on('download', lambda item: downloads.append(item))
+    page.goto(origin + f"/teacher/lesson-live.html?aula={lesson['code']}")
+    note = page.get_by_label('Observação sobre Ana', exact=True)
+    note.fill('Leu as metades sozinha.')
+    # Escrever e carregar logo em descarregar: a gravação falha e nada é descarregado.
+    page.get_by_role('button', name='Descarregar registo (Markdown)', exact=True).click()
+    expect(page.locator('#status')).to_have_text('Há uma observação por guardar. Tenta novamente antes de descarregar ou imprimir.')
+    page.wait_for_timeout(500)
+    assert downloads == []
+    with page.expect_download() as download:
+        page.get_by_role('button', name='Descarregar registo (Markdown)', exact=True).click()
+    assert 'Leu as metades sozinha.' in open(download.value.path(), encoding='utf-8').read()

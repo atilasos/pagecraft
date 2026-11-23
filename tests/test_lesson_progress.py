@@ -164,6 +164,11 @@ async def test_board_shows_chosen_lesson_activity_until_a_newer_live_session(cli
         assert chosen.status_code == 200, chosen.text
         shown = (await screen.get('/api/board/session')).json()
         assert shown['kind'] == 'lesson'
+        # Cada escolha é distinta, mesmo repetida (A → B → A): o quadro volta a carregar.
+        again = await teacher.put(f'/api/learning/lessons/{code}/board', json={'activity_code': codes['math']})
+        assert again.json()['id'] != shown['id']
+        shown = (await screen.get('/api/board/session')).json()
+        assert shown['id'] == again.json()['id']
         assert (shown['lesson_code'], shown['activity_title']) == (code, 'Dobro até 10')
         assert 'students' not in shown
         content = await screen.get(f"/api/board/lesson-content?atividade={codes['math']}")

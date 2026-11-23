@@ -14,7 +14,7 @@ const STATES = {
 const ANSWERS = {alone: "com autonomia", help: "com ajuda", practising: "quer praticar", skip: "sem resposta"};
 let data = null, rows = new Map(), timer = null, publicOrigin = location.origin;
 // Observações: por aluno, o texto confirmado pelo servidor e a fila de gravações.
-const notes = new Map(); // id -> {saved, queued, pending, chain}
+const notes = new Map(); // id -> {saved, queued, pending, latest, chain}
 let refreshRequest = 0; // só a consulta mais recente atualiza o painel e reagenda
 
 function el(tag, text, className) {
@@ -140,22 +140,24 @@ function noteCell(student) {
   const save = () => {
     const text = area.value;
     if (text.trim() === state.queued.trim() && !state.pending) return Promise.resolve();
-    if (text.trim() === state.queued.trim()) return state.chain;
+    // A exportação espera pela gravação real, que pode falhar; a fila só serve para encadear.
+    if (text.trim() === state.queued.trim()) return state.latest;
     state.queued = text;
     state.pending++;
     line.textContent = "A guardar…";
     const request = state.chain.then(() =>
       api(`/api/learning/lessons/${code}/notes/${student.id}`, "PUT", {text})).then(() => {
       state.saved = text;
-      if (state.queued === text) line.textContent = "Guardada.";
+      if (state.latest === request) line.textContent = "Guardada.";
     }, error => {
       // Só a escrita mais recente decide o que falta guardar e a mensagem mostrada.
-      if (state.queued === text) {
+      if (state.latest === request) {
         state.queued = state.saved;
         line.textContent = `Não foi possível guardar: ${error.message}`;
       }
       throw error;
     }).finally(() => { state.pending--; });
+    state.latest = request;
     state.chain = request.catch(() => {});
     return request;
   };
@@ -237,17 +239,18 @@ function renderBoard() {
 async function showOnBoard(activityCode) {
   try {
     await api(`/api/learning/lessons/${code}/board`, "PUT", {activity_code: activityCode});
-    await refresh();
-    status(activityCode ? `No quadro: ${titleOf(activityCode)}.` : "O quadro deixou de mostrar este roteiro.");
+    // Com dois toques seguidos, só o pedido mais recente escreve o estado.
+    if (await refresh()) status(activityCode ? `No quadro: ${titleOf(activityCode)}.` : "O quadro deixou de mostrar este roteiro.");
   } catch (error) { status(error.message, true); }
 }
 
 async function refresh() {
   clearTimeout(timer);
   const request = ++refreshRequest;
+  let applied = false;
   try {
     const fresh = await api(`/api/learning/lessons/${code}/progress`);
-    if (request !== refreshRequest) return;
+    if (request !== refreshRequest) return false;
     data = fresh;
     // Uma atualização que saiu antes de uma gravação não repõe a observação antiga.
     for (const student of data.students) if (notes.has(student.id)) student.note = notes.get(student.id).saved.trim();
@@ -260,8 +263,10 @@ async function refresh() {
     renderRows();
     renderBoard();
     if ($("status").classList.contains("error")) status("");
+    applied = true;
   } catch (error) { if (request === refreshRequest) status(error.message, true); }
   if (request === refreshRequest && !document.hidden) timer = setTimeout(refresh, 10000);
+  return applied;
 }
 document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
 
@@ -288,11 +293,17 @@ async function flushNotes() {
   // Grava a observação em edição e espera pela fila de cada aluno antes de exportar.
   const saves = [...document.querySelectorAll("#rows textarea")].map(area => area.saveNote?.());
   const results = await Promise.allSettled(saves);
-  if (results.some(result => result.status === "rejected")) {
+  const unsaved = [...document.querySelectorAll("#rows textarea")].some(area =>
+    area.value.trim() !== (notes.get(area.dataset.student)?.saved || "").trim());
+  if (unsaved || results.some(result => result.status === "rejected")) {
     status("Há uma observação por guardar. Tenta novamente antes de descarregar ou imprimir.", true);
     return false;
   }
-  for (const student of data.students) if (notes.has(student.id)) student.note = notes.get(student.id).saved.trim();
+  // O registo sai do estado atual da aula, não da última consulta periódica.
+  if (!(await refresh())) {
+    status("Não foi possível atualizar o registo. Tenta novamente.", true);
+    return false;
+  }
   return true;
 }
 addEventListener("beforeunload", event => {
