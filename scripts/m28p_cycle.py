@@ -427,6 +427,10 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserve
             _, _, _, pieces, hidden = options[0]
         else:
             _, pieces, hidden = best
+            # Se a sílaba a mais só acrescenta palavras reais fora da lista, o tabuleiro fica sem ela.
+            base = pieces[:-1]
+            if len(real_words(pieces, {w['label'] for w in hidden})) > len(real_words(base, {w['label'] for w in hidden})):
+                pieces = base
         labels = {w['label'] for w in hidden}
         base = {s for w in hidden for s in w['syllables']}
         rounds.append(dict(pieces=pieces, hidden=hidden, warnings=real_words(pieces, labels),

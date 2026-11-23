@@ -239,12 +239,13 @@ def cycle_guide(data, word):
                 "«Sozinho» mostra a imagem, o botão de ouvir e um espaço por palavra; «Consigo ajudar um amigo» mostra só o botão de ouvir. "
                 f"Frases, uma por ronda: {listed} {equivalent}"
                 "Na página da turma, podes guardar as frases ditadas pelas crianças e projetá-las no Quadro. Quando a turma joga numa sessão, até quatro frases da turma surgem primeiro, "
-                "completadas pelas frases fixas. «Com ajuda» mostra as palavras da frase da turma; nos outros níveis, a criança pode tocar em «Ver a frase», "
-                "o que fica registado. As frases da turma só têm leitura em voz alta quando o computador tem uma voz pt-PT instalada.")
+                "completadas pelas frases fixas. «Com ajuda» mostra as palavras da frase da turma. As frases da turma só têm leitura em voz alta "
+                "quando o computador tem uma voz pt-PT instalada; sem essa voz, nos outros níveis, o botão de ouvir é substituído por «Ver a frase», "
+                "que mostra a frase escrita e fica registado.")
     else:
         hidden = ' / '.join(', '.join('«' + w['label'] + '»' for w in r['lexicon']) for r in rounds)
         body = ("Em cada ronda há duas ou três palavras escondidas; o tabuleiro tem só as sílabas dessas palavras e, quando possível, uma sílaba a mais. "
-                f"Palavras escondidas (as rondas estão separadas por « / »): {hidden}. A criança vê quantas já encontrou («Encontraste 1 de 2.»); "
+                f"Palavras escondidas (as rondas estão separadas por « / »): {hidden}. A criança vê quantas já encontrou («Encontraste 1 de {len(rounds[0]['lexicon'])}.»); "
                 "a ronda acaba quando as encontra todas ou quando toca em «Não encontro mais palavras», que mostra as que faltavam. "
                 "«Com ajuda» mostra a imagem (quando existe) e o som de cada palavra escondida; «Sozinho» mostra quantas sílabas tem cada uma; "
                 "«Consigo ajudar um amigo» mostra só quantas são. Uma combinação fora da lista recebe «não está escondida».")
