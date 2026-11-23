@@ -270,5 +270,8 @@ def test_self_assessment_voice_distinguishes_answered_empty_and_missing():
                                           assessment=assessment))['voice']
     assert voice(None, completed=False) == 'missing'
     assert voice({'answers': {'read': 'skip'}, 'strategy': '  ', 'next_step': ''}) == 'empty'
+    blank = summarize_realization(dict(base, completed_at='2026-11-23T10:05:00+00:00',
+                                       assessment={'answers': {}, 'strategy': '  ', 'next_step': ' \n'}))
+    assert (blank['strategy'], blank['next_step']) == ('', '')
     assert voice({'answers': {'read': 'skip'}, 'strategy': 'Li devagar'}) == 'answered'
     assert voice({'answers': {'read': 'alone'}}) == 'answered'

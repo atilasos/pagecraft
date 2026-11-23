@@ -32,10 +32,6 @@ const titleOf = code => {
   if (!activity) return code;
   return activity.retired ? `${activity.title} (coleção anterior)` : activity.title;
 };
-/* Atividades distintas: repetir um jogo cria outra realização, não outra atividade. */
-function distinctFinished(student) {
-  return new Set(student.realizations.filter(r => r.finished && student.assigned.includes(r.code)).map(r => r.code)).size;
-}
 const wordOf = activity => PageCraftActivitySelection.wordOf(activity);
 const today = () => new Date().toLocaleDateString("pt-PT", {weekday: "long", day: "numeric", month: "numeric"});
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
@@ -364,10 +360,14 @@ async function loadHints(source, request) {
       if (!student.realizations.length) {
         if (student.state !== "offline") parts.push(student.assigned.length ? "não começou atividades" : "sem atividades");
       } else {
-        // O trabalho registado conta mesmo que a distribuição tenha mudado depois.
-        if (student.words.length) parts.push(student.words.map(w => words.get(w)?.label || w).join(", "));
-        const finished = new Set(student.realizations.filter(r => r.finished).map(r => r.code)).size;
-        parts.push(student.assigned.length ? `${distinctFinished(student)} de ${student.assigned.length} terminadas` : `${finished} terminadas`);
+        // Parte do que foi realmente terminado (e de que palavra), mesmo que a distribuição
+        // tenha mudado durante a aula; a palavra do roteiro aparece à parte.
+        const finishedCodes = [...new Set(student.realizations.filter(r => r.finished).map(r => r.code))];
+        const finishedWords = [...new Set(finishedCodes.map(c => wordOf(published.find(a => a.code === c) || {})?.label).filter(Boolean))];
+        parts.push(finishedCodes.length
+          ? `terminou ${plural(finishedCodes.length, "atividade", "atividades")}${finishedWords.length ? ` (${finishedWords.join(", ")})` : ""}`
+          : "não terminou atividades");
+        if (student.words.length) parts.push(`no roteiro: ${student.words.map(w => words.get(w)?.label || w).join(", ")}`);
         // Mesmo critério que «Acompanhar»: respondida, entregue sem respostas ou em falta.
         const answeredCodes = new Set(student.realizations.filter(r => r.voice === "answered").map(r => r.code));
         const emptyCodes = new Set(student.realizations.filter(r => r.voice === "empty" && !answeredCodes.has(r.code)).map(r => r.code));
@@ -445,6 +445,12 @@ $("lesson-class").onchange = () => {
 $("lesson-title").oninput = $("lesson-active").onchange = () => { dirty = true; };
 $("lesson-form").onsubmit = async event => {
   event.preventDefault();
+  // Uma seleção por atribuir não se perde em silêncio ao guardar.
+  if (!$("picker").hidden && selection.selected.size) {
+    status("Há atividades selecionadas por atribuir. Carrega em «Atribuir aos alunos marcados» ou fecha a seleção antes de guardar.", true);
+    $("assign-selected").focus();
+    return;
+  }
   const assignments = assignmentsFromPlan(), offline = offlineFromPlan();
   if (!assignments.length && !Object.keys(offline).length) { status("Atribui uma palavra ou atividades a pelo menos um aluno.", true); return; }
   const button = $("save-lesson");

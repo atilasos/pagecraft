@@ -61,8 +61,8 @@ def summarize_realization(attempt: dict) -> dict:
         "help_pending": help_pending,
         "assessment": answers,
         "voice": voice,
-        "strategy": (assessment or {}).get("strategy", ""),
-        "next_step": (assessment or {}).get("next_step", ""),
+        "strategy": str((assessment or {}).get("strategy", "")).strip(),
+        "next_step": str((assessment or {}).get("next_step", "")).strip(),
     }
 
 

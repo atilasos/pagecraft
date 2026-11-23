@@ -42,7 +42,13 @@ const status_of = r => r.completed_at ? `terminada às ${time(r.completed_at)}` 
 // O servidor classifica cada realização: answered, empty (entregue sem respostas) ou missing.
 const answered = r => r.voice === "answered";
 const voice_of = r => answered(r) ? "com autoavaliação" : r.voice === "empty" ? "autoavaliação entregue sem respostas" : "sem autoavaliação";
-const answers_of = r => Object.entries(r.assessment || {}).filter(([, n]) => n).map(([key, n]) => `${n} ${ANSWERS[key]}`).join(", ") || "apenas texto";
+// Respostas aos critérios; «sem resposta» só acompanha outras respostas, nunca as substitui.
+const answers_of = r => {
+  const given = Object.entries(r.assessment || {}).filter(([key, n]) => key !== "skip" && n).map(([key, n]) => `${n} ${ANSWERS[key]}`);
+  if (!given.length) return "apenas texto";
+  const skipped = r.assessment?.skip ? [`${r.assessment.skip} ${ANSWERS.skip}`] : [];
+  return [...given, ...skipped].join(", ");
+};
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 const time = iso => new Date(iso).toLocaleTimeString("pt-PT", {hour: "2-digit", minute: "2-digit"});
 
