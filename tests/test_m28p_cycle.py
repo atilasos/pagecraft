@@ -116,6 +116,11 @@ def test_round_and_piece_ids_follow_content():
             assert not re.fullmatch(r'r\d+',r['id'])
             if r.get('pieces'):
                 assert all(p['id'].split('#')[0]==p['label'] for p in r['pieces'])
+            if r.get('answer') and r.get('pieces') and game!='discover':
+                labels=[p['label'] for p in r['pieces']]
+                answer=[next(p['label'] for p in r['pieces'] if p['id']==i) for i in r['answer']]
+                # A resposta nunca aparece já montada em peças seguidas.
+                assert not any(labels[i:i+len(answer)]==answer for i in range(len(labels)-len(answer)+1)),(labels,answer)
 
 
 def test_js_cycle_state_and_recovery():

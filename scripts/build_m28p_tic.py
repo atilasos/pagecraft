@@ -308,11 +308,14 @@ def cycle_content(word, game, pool, lexicon=None):
             result.append(dict(id=f"{label}#{seen[label]}", label=label))
         return result
     def mixed(pieces, rng, answers):
-        """Baralha sem deixar as peças já pela ordem de uma resposta aceite."""
+        """Baralha sem deixar uma resposta aceite em peças seguidas, em qualquer posição."""
         result = list(pieces)
-        for _ in range(20):
+        def solved(order):
+            labels = [p['label'] for p in order]
+            return any(labels[i:i + len(answer)] == answer for answer in answers for i in range(len(labels) - len(answer) + 1))
+        for _ in range(200):
             rng.shuffle(result)
-            if [p['label'] for p in result[:len(answers[0])]] not in answers:
+            if not solved(result):
                 break
         return result
     keyword = resource(dict(pool['keyword'], slug=word['slug']))

@@ -161,7 +161,9 @@ def validate_cycle(cycle, words, lexicon=None):
         slug = keyword['slug']
         item = dict(keyword, picturable=True, keyword=True, newIn=slug)
         known.append(item)
-        ids.setdefault(asset_id(keyword['label']), keyword['label'])
+        if ids.get(asset_id(keyword['label']), keyword['label']) != keyword['label']:
+            raise ValueError(f"{keyword['label']} e {ids[asset_id(keyword['label'])]} partilhariam os mesmos recursos.")
+        ids[asset_id(keyword['label'])] = keyword['label']
         if slug not in cycle['keywords']:
             continue
         section = cycle['keywords'][slug]
