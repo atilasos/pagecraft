@@ -90,7 +90,7 @@ function workCell(student) {
     const details = el("details"), list = el("ul");
     details.append(el("summary", "Ver atividades"));
     for (const r of student.realizations) {
-      const item = el("li", `${r.title} — ${status_of(r)}`);
+      const item = el("li", `${r.title} — ${status_of(r)} · ${r.assessment ? "com autoavaliação" : "sem autoavaliação"}`);
       if (r.strategy) item.append(el("p", `Estratégia: ${r.strategy}`, "muted"));
       if (r.next_step) item.append(el("p", `Próximo passo proposto: ${r.next_step}`, "muted"));
       list.append(item);

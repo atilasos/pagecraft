@@ -42,8 +42,13 @@ const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 // savedWord/savedWordCodes: os jogos que o roteiro guardou para a palavra, conservados
 // enquanto o professor não mudar a palavra (encerrar um roteiro antigo não o altera).
 const emptyPlan = () => ({word: "", extras: new Set(), offline: false, note: "", savedWord: "", savedWordCodes: []});
-const wordCodesOf = entry => entry.word && entry.word === entry.savedWord && entry.savedWordCodes.length
+// Uma lista guardada vazia também conta: a palavra guardou zero jogos atuais.
+const wordCodesOf = entry => entry.word && entry.word === entry.savedWord
   ? entry.savedWordCodes : (words.get(entry.word)?.codes || []);
+// Qualquer escolha explícita da palavra (ou passar a «Fora do PageCraft») usa os jogos atuais.
+function setWord(entry, word) {
+  Object.assign(entry, {word, savedWord: "", savedWordCodes: []});
+}
 
 function buildWords() {
   words = new Map();
@@ -113,7 +118,7 @@ function assignmentsFromPlan() {
     const entry = plan.get(student.id);
     if (!entry || entry.offline || (!entry.word && !entry.extras.size)) continue;
     const extras = [...entry.extras].sort();
-    const wordCodes = wordCodesOf(entry);
+    const wordCodes = [...wordCodesOf(entry)].sort();
     const key = `${entry.word}|${wordCodes.join(",")}|${extras.join(",")}`;
     if (!groups.has(key)) groups.set(key, {word: entry.word, wordCodes, extras, student_ids: []});
     groups.get(key).student_ids.push(student.id);
@@ -160,17 +165,21 @@ function renderPlan() {
       select.setAttribute("aria-label", `Palavra de ${student.display_name}`);
       select.dataset.focusKey = `word-${student.id}`;
       wordOptions(select, entry.word);
-      select.onchange = () => { entry.word = select.value; changed(); };
+      select.onchange = () => { setWord(entry, select.value); changed(); };
       const next = el("button", "›", "icon-button");
       next.type = "button";
       next.title = "Palavra seguinte";
       next.setAttribute("aria-label", `Palavra seguinte para ${student.display_name}`);
       next.dataset.focusKey = `next-${student.id}`;
       next.disabled = !nextWord(entry.word);
-      next.onclick = () => { entry.word = nextWord(entry.word); changed(); };
+      next.onclick = () => { setWord(entry, nextWord(entry.word)); changed(); };
       const line = el("div", undefined, "word-cell");
       line.append(select, next);
       wordCell.append(line);
+      // O seletor mostra os jogos atuais; um roteiro guardado pode conservar outros.
+      const kept = wordCodesOf(entry);
+      if (entry.word && entry.word === entry.savedWord && kept.length !== (words.get(entry.word)?.codes.length || 0))
+        wordCell.append(el("span", `Este roteiro mantém ${plural(kept.length, "jogo guardado", "jogos guardados")} desta palavra.`, "row-hint"));
     } else wordCell.append(el("span", "—", "muted"));
 
     const extrasCell = el("td");
@@ -195,7 +204,7 @@ function renderPlan() {
     check.setAttribute("aria-label", `${student.display_name} trabalha fora do PageCraft`);
     check.onchange = () => {
       entry.offline = check.checked;
-      if (entry.offline) { entry.word = ""; entry.extras.clear(); }
+      if (entry.offline) { setWord(entry, ""); entry.extras.clear(); }
       changed();
     };
     label.append(check);
@@ -329,7 +338,8 @@ function openLesson(lesson, {copy = false} = {}) {
   const notes = [];
   if (copy) notes.push("Por baixo de cada nome está o que aconteceu na aula anterior. Marca os alunos que avançam e carrega em «Avançar para a palavra seguinte».");
   if (retiredLeft) notes.push("Os jogos da coleção anterior não foram copiados; cada palavra traz os jogos atuais.");
-  if (needsWord.length) notes.push(`Perderam jogos da coleção anterior e estão sem palavra: ${needsWord.join(", ")}. Escolhe a palavra na linha.`);
+  if (needsWord.length === 1) notes.push(`${needsWord[0]} perdeu jogos da coleção anterior e está sem palavra. Escolhe a palavra na linha.`);
+  else if (needsWord.length) notes.push(`Perderam jogos da coleção anterior e estão sem palavra: ${needsWord.join(", ")}. Escolhe a palavra na linha.`);
   if (wasOffline.length) notes.push(`Na aula anterior estiveram fora do PageCraft: ${wasOffline.join(", ")}. Marca-os de novo se for o caso.`);
   if (droppedCodes.size) notes.push(droppedCodes.size === 1
     ? "1 atividade deixou de estar disponível e não é atribuída ao guardar."
@@ -389,7 +399,7 @@ $("mark-none").onclick = () => { marked.clear(); renderPlan(); };
 $("apply-word").onclick = () => {
   const word = $("bulk-word").value;
   let changedCount = 0;
-  bulk(entry => { if (!entry.offline) { entry.word = word; changedCount++; } }, "");
+  bulk(entry => { if (!entry.offline) { setWord(entry, word); changedCount++; } }, "");
   const skipped = marked.size - changedCount;
   const done = !changedCount ? "Nenhum aluno marcado pode receber a palavra: estão fora do PageCraft."
     : word ? `Palavra ${words.get(word)?.label} dada a ${plural(changedCount, "aluno", "alunos")}.` : `Palavra retirada a ${plural(changedCount, "aluno", "alunos")}.`;
@@ -397,10 +407,10 @@ $("apply-word").onclick = () => {
 };
 $("next-word").onclick = () => {
   let moved = 0;
-  bulk(entry => { const next = nextWord(entry.word); if (next && !entry.offline) { entry.word = next; moved++; } }, "");
+  bulk(entry => { const next = nextWord(entry.word); if (next && !entry.offline) { setWord(entry, next); moved++; } }, "");
   $("bulk-status").textContent = moved ? `${moved} ${moved === 1 ? "aluno avançou" : "alunos avançaram"} para a palavra seguinte.` : "Os alunos marcados não têm uma palavra seguinte.";
 };
-$("bulk-offline").onclick = () => bulk(entry => { entry.offline = true; entry.word = ""; entry.extras.clear(); },
+$("bulk-offline").onclick = () => bulk(entry => { entry.offline = true; setWord(entry, ""); entry.extras.clear(); },
   "Alunos marcados fora do PageCraft nesta aula. Podes escrever o que vão fazer.");
 $("bulk-clear").onclick = () => bulk(entry => Object.assign(entry, emptyPlan()), "Atribuição dos alunos marcados limpa.");
 $("pick-activities").onclick = () => $("picker").hidden ? openPicker() : closePicker();
