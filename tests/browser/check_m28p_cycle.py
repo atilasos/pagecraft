@@ -32,7 +32,8 @@ with sync_playwright() as p:
                 stage = page.locator('#demo-stage').inner_text()
                 answers = [w['label'] for x in data['rounds'] for w in x.get('lexicon', [])] or \
                           [x['target'].get('label') or x['target'].get('text') for x in data['rounds']]
-                assert data['word']['syllables'][0] in stage, stage
+                sample = data['demo']['target']
+                assert (sample.get('syllables') or sample.get('tokens'))[0] in stage, stage
                 assert not any(a and a in stage for a in answers), stage
                 if SHOTS and width == 1366:
                     page.wait_for_timeout(2600)
@@ -41,7 +42,7 @@ with sync_playwright() as p:
                 state = json.loads(page.evaluate(f"sessionStorage.getItem('pagecraft:m28p-tic-v3:{data['slug']}')"))
                 assert state['introDemo'] is True and not state['aids'].get(r['id'], {}).get('demo_shown')
                 if game == 'discover':
-                    assert f"Encontradas: 0 de {len(r['lexicon'])}" in page.locator('.hidden-count').text_content()
+                    assert f"Encontraste 0 de {len(r['lexicon'])}." in page.locator('.hidden-count').text_content()
                     used = {s for w in r['lexicon'] for s in w['syllables']}
                     extra = [x['label'] for x in r['pieces'] if x['label'] not in used]
                     if extra:

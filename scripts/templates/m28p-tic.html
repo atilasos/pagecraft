@@ -161,7 +161,7 @@ function localVoice(){return window.speechSynthesis?.getVoices().find(v=>v.local
 function stopAudio(){if(audio){audio.pause();audio=null;}window.speechSynthesis?.cancel();}
 function play(key,override){
   // Antes de começar não há ronda: ouvir não fica registado como ajuda.
-  stopAudio();if(state.page>=0)aid(key==='word'?'audio_word_requested':'audio_instruction_requested');checkpoint();soundEnabled=true;$('mute').hidden=false;$('mute').textContent='Desligar som';$('mute').setAttribute('aria-pressed','false');
+  stopAudio();if(state.page>=0&&!state.done)aid(key==='word'?'audio_word_requested':'audio_instruction_requested');checkpoint();soundEnabled=true;$('mute').hidden=false;$('mute').textContent='Desligar som';$('mute').setAttribute('aria-pressed','false');
   if(key==='word'&&!override&&round()?.classSentence){
     const voice=localVoice();if(!voice)return;
     const utterance=new SpeechSynthesisUtterance(round().target.text);utterance.voice=voice;utterance.lang='pt-PT';
@@ -170,7 +170,7 @@ function play(key,override){
   const source=override||(key==='word'?round()?.target?.audio:null)||data.audio?.[key]||data.audio?.instruction;
   if(!source){$('audio-status').textContent='Toca em «Como jogar».';return;}
   audio=new Audio(source);audio.addEventListener('error',()=>{$('audio-status').textContent='Toca em «Como jogar».';});
-  audio.play().then(()=>{$('audio-status').textContent='';}).catch(()=>{$('audio-status').textContent='Toca em Ouvir.';});
+  audio.play().then(()=>{$('audio-status').textContent='';}).catch(()=>{$('audio-status').textContent='Toca em «Ouvir».';});
 }
 function playQuiet(source){
   // Som pedido durante a demonstração: não conta como ajuda numa ronda.
@@ -232,7 +232,7 @@ function cycleModel(r){
 function discoverBoard(r,container){
   const found=state.discoveries[r.id]||[],revealed=state.confirmed[r.id]&&selected()[0]==='finish';
   const box=node('div',undefined,'hidden-words');
-  box.appendChild(node('p','Encontradas: '+found.length+' de '+r.lexicon.length,'hidden-count'));
+  box.appendChild(node('p','Encontraste '+found.length+' de '+r.lexicon.length+'.','hidden-count'));
   const list=node('ul');list.setAttribute('aria-label','Palavras escondidas');
   for(const w of r.lexicon){
     const item=node('li',undefined,'hidden-word');
@@ -256,7 +256,7 @@ function discoverBoard(r,container){
   const board=node('div',undefined,'pieces');board.setAttribute('role','group');board.setAttribute('aria-label','Sílabas para juntar');
   for(const piece of r.pieces){const b=button(piece.label,()=>edit([...selected().filter(id=>id!=='finish'),piece.id]));b.disabled=state.confirmed[r.id]||selected().includes(piece.id)||selected().length>=3;b.dataset.piece=piece.id;b.dataset.focus='piece-'+piece.id;board.appendChild(b);}
   container.append(box,tray,board);
-  if(!state.confirmed[r.id]){const end=button('Não encontro mais',()=>{aid('model_shown');edit(['finish']);confirm();});end.prepend(node('span','🏳 ','icon'));end.id='discover-finish';end.dataset.focus='discover-finish';container.appendChild(end);}
+  if(!state.confirmed[r.id]){const end=button('Não encontro mais palavras',()=>{aid('model_shown');edit(['finish']);confirm();});end.prepend(node('span','🏳 ','icon'));end.id='discover-finish';end.dataset.focus='discover-finish';container.appendChild(end);}
 }
 function toggle(id){const values=selected();edit(round().kind==='hunt'?(values.includes(id)?values.filter(value=>value!==id):[...values,id]):[id]);}
 function choices(r,container){
@@ -341,7 +341,7 @@ function feedback(r){
     const found=TicModel.discovery(r,last),missing=r.lexicon.length-(state.discoveries[r.id]||[]).length,again=found&&repeatFound;
     const word=last.map(id=>r.pieces.find(p=>p.id===id)?.label||'').join('');
     box.appendChild(node('span',found?'✓':'↻','icon'));
-    box.appendChild(node('span',found?(again?'Já encontraste «':'Encontraste «')+found.label+'». '+(missing===1?'Falta 1.':'Faltam '+missing+'.'):'«'+word+'» não está escondida. Experimenta outra.'));
+    box.appendChild(node('span',found?(again?'Já encontraste «':'Encontraste «')+found.label+'». '+(missing===1?'Falta 1.':'Faltam '+missing+'.'):((r.warnings||[]).includes(word)?'«'+word+'» é uma palavra, mas não está escondida aqui. Experimenta outra vez.':'«'+word+'» não está escondida. Experimenta outra vez.')));
     return;
   }
   if(!state.confirmed[r.id])return;
@@ -401,12 +401,12 @@ function confirm(){
   if(result.emit&&restored){const detail={value,question:r.prompt,task_id:r.id,activity:data.slug,field:r.id,level:state.level,aids:{...state.aids[r.id]},model_visible:r.target?state.level==='support':showModel(r),audio_before_choice:state.choiceAudio[r.id]===true};if(revisionHint)detail.after_hint_id=revisionHint;if(r.kind==='discover')window.PageCraftBridge?.emit('attempt',unit(),{detail:{...detail,discoveries:state.discoveries[r.id]||[]}});else window.PageCraftBridge?.attempt(unit(),result.correct,detail);}
   revisionHint=null;checkpoint();renderGame();
   // Som de resposta com o mesmo texto do ecrã; nas descobertas intermédias, sem convite a continuar.
-  if(value[0]!=='finish')playFeedback(r.kind==='discover'?(!result.correct?'tryagain':state.confirmed[r.id]?'allfound':'found'):(result.correct?'correct':'tryagain'));
+  if(value[0]!=='finish'&&!repeatFound)playFeedback(r.kind==='discover'?(!result.correct?'tryagain':state.confirmed[r.id]?'allfound':'found'):(result.correct?'correct':'tryagain'));
   if(state.confirmed[r.id])$('next').focus();
   else if(r.kind==='discover'&&!selected().length)(document.querySelector('#round-content [data-piece]:not(:disabled)')||$('discover-finish'))?.focus();
 }
 function setLevel(level,emit=true){if(!TicModel.levels.includes(level))return;state.level=level;revision++;revisionHint=null;if(emit)window.PageCraftBridge?.levelChanged(unit(),level);render();context();checkpoint(emit);}
-const invites={'listen-build':'Se quiseres, mostra a um amigo como juntaste as sílabas.','discover':'Se quiseres, mostra a um amigo como juntaste as sílabas.','read-choose':'Se quiseres, lê as palavras a um amigo.','sentence':'Se quiseres, lê as frases a um amigo.'};
+const invites={'listen-build':'Se quiseres, mostra a um amigo como juntaste as sílabas.','discover':'Se quiseres, mostra a um amigo as palavras que descobriste.','read-choose':'Se quiseres, lê as palavras a um amigo.','sentence':'Se quiseres, lê as frases a um amigo.'};
 function finish(){state.done=true;stopAudio();checkpoint();render();$('finish-button').focus();}
 const demoTexts={match:'Toca na palavra igual.',pairs:'Toca na imagem. Toca na palavra.',hunt:'Toca nas palavras iguais. Confirma.',syllables:'Toca nas peças por ordem.',gap:'Escolhe a peça que falta.',recall:'Ouve. Junta as peças.'};
 function demoPicture(target=false){const card=demoCard('',target);const image=picture(data.word.image,data.word.label);image.style.width='120px';image.style.height='100px';card.prepend(image);return card;}
@@ -430,11 +430,11 @@ function paintDemo(step){
   }
   $('demo-caption').textContent=demoTexts[kind]||data.instruction;
 }
-const demoCaptions={'listen-build':'Ouve a palavra. Toca nas sílabas, por ordem. Depois, toca em Confirmar.','read-choose':'Lê a palavra. Toca na imagem certa. Depois, toca em Confirmar.','sentence':'Ouve a frase. Toca nas palavras, por ordem. Depois, toca em Confirmar.','discover':'Junta sílabas para formar uma palavra. Toca em Confirmar. Descobre todas as palavras escondidas.'};
+const demoCaptions={'listen-build':'Ouve a palavra. Toca nas sílabas, por ordem. Depois, toca em «Confirmar».','read-choose':'Lê a palavra. Toca na imagem certa. Depois, toca em «Confirmar».','sentence':'Ouve e ordena as palavras. Depois, toca em «Confirmar».','discover':'Junta sílabas para formar uma palavra. Toca em «Confirmar». Depois, procura as outras palavras escondidas.'};
 function demoSteps(){if(!data.demo)return 3;if(data.game==='read-choose')return 4;return (data.game==='discover'?data.demo.target.syllables:(data.demo.target.tokens||data.demo.target.syllables)).length+3;}
 function fake(label,pointed,pressed){const b=node('button',label);b.type='button';b.tabIndex=-1;if(pressed)b.setAttribute('aria-pressed','true');if(pointed){const hand=node('span','☝','demo-hand');b.appendChild(hand);}return b;}
 function paintCycleDemo(step){
-  // Exemplo com a palavra-chave, que nunca é uma ronda, e com os mesmos controlos do jogo.
+  // Exemplo com a palavra-chave (ou a anterior, se não couber no jogo), que nunca é uma ronda, e com os mesmos controlos.
   const d=data.demo,stage=$('demo-stage'),game=node('div',undefined,'demo-game');game.inert=true;game.setAttribute('aria-hidden','true');
   const last=demoSteps()-1;
   if(data.game==='read-choose'){
@@ -444,7 +444,7 @@ function paintCycleDemo(step){
     game.append(model,choices);
   }else{
     const units=data.game==='sentence'?d.target.tokens:d.target.syllables,placed=Math.max(0,Math.min(step-1,units.length));
-    if(data.game==='discover')game.appendChild(node('p','Encontradas: '+(step>=last?1:0)+' de 1','hidden-count'));
+    if(data.game==='discover')game.appendChild(node('p','Encontraste '+(step>=last?1:0)+' de 1.','hidden-count'));
     else{const model=node('div',undefined,'model');if(data.game==='sentence')model.appendChild(picture(d.target.image,d.target.text));model.appendChild(fake('🔊',step===0));game.appendChild(model);}
     const tray=node('div',undefined,'tray');units.slice(0,placed).forEach(u=>tray.appendChild(fake(u)));
     if(data.game!=='discover')for(let i=placed;i<units.length;i++)tray.appendChild(node('span',undefined,'empty-slot'));
@@ -464,13 +464,13 @@ function runDemo(){
   let step=0;paintDemo(0);const tick=()=>{step++;paintDemo(step);if(step<steps-1)demoTimer=setTimeout(tick,1100);};demoTimer=setTimeout(tick,1100);
 }
 function openDemo(){stopAudio();pendingPair=null;if(state.page<0&&data.demo)state.introDemo=true;else aid('demo_shown');checkpoint();demoOpen=true;render();runDemo();$('demo-close').focus();}
-function closeDemo(){clearTimeout(demoTimer);$('demo-stage').replaceChildren();demoOpen=false;if(state.page<0)move(0);else render();if(state.page>=0){$('prompt').tabIndex=-1;$('prompt').focus();}}
+function closeDemo(){clearTimeout(demoTimer);stopAudio();$('demo-stage').replaceChildren();demoOpen=false;if(state.page<0)move(0);else render();if(state.page>=0){$('prompt').tabIndex=-1;$('prompt').focus();}}
 function restore(raw){lastRaw=raw;state=TicModel.sanitize(data,raw);if(hostLevel)state.level=hostLevel;restored=true;revision++;revisionHint=null;pendingPair=null;started.clear();render();context();checkpoint();}
 if(data.rounds[0].target&&data.game!=='read-choose'){const undo=button('Desfazer',()=>edit(selected().slice(0,-1)));undo.prepend(node('span','↶ ','icon'));undo.id='undo';$('back').after(undo);}
 $('game-title').textContent=data.title;$('intro-word').textContent=data.word.label;$('intro-picture').appendChild(picture(data.word.image,data.word.label));$('finish-picture').appendChild(picture(data.word.image,data.word.label));
 $('start').addEventListener('click',openDemo);$('demo-open').addEventListener('click',openDemo);$('demo-close').addEventListener('click',closeDemo);$('demo-again').addEventListener('click',runDemo);
 $('hear').addEventListener('click',()=>demoOpen?playQuiet(data.audio?.instruction):play(state.done?'finish':state.page<0?'start':'instruction'));
-$('demo-hear').hidden=!data.demo;$('demo-hear').addEventListener('click',()=>playQuiet(data.audio?.word));
+$('demo-hear').hidden=!data.demo;$('demo-hear').addEventListener('click',()=>playQuiet(data.demo?.audio||data.audio?.word));
 $('mute').addEventListener('click',()=>{soundEnabled=!soundEnabled;if(!soundEnabled)stopAudio();$('mute').textContent=soundEnabled?'Desligar som':'Ligar som';$('mute').setAttribute('aria-pressed',String(!soundEnabled));});
 $('back').addEventListener('click',()=>move(state.page-1));$('confirm').addEventListener('click',confirm);$('next').addEventListener('click',()=>state.page===data.rounds.length-1?finish():move(state.page+1));
 $('repeat').addEventListener('click',()=>{state=TicModel.initial();revision++;checkpoint();render();$('start').focus();});
