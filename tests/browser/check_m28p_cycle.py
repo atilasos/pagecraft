@@ -53,6 +53,19 @@ with sync_playwright() as p:
                         assert 'não está escondida' in page.locator('#feedback').text_content()
                         assert page.locator('.tray.visual-cue').count() == 1
                         key('#undo'); key('#undo')
+                    if r.get('warnings'):
+                        # Uma palavra real que não está escondida recebe a resposta própria.
+                        word = r['warnings'][0]
+                        labels, used, rest = [x['label'] for x in r['pieces']], [], word
+                        while rest:
+                            label = next(l for l in sorted(set(labels), key=len, reverse=True) if rest.startswith(l) and labels.count(l) > used.count(l))
+                            used.append(label); rest = rest[len(label):]
+                        for label in used:
+                            piece(label)
+                        key('#confirm')
+                        assert 'é uma palavra, mas não está escondida aqui' in page.locator('#feedback').text_content()
+                        for _ in used:
+                            key('#undo')
                     for w in r['lexicon']:
                         assert not page.locator('#next').is_visible()
                         for label in w['syllables']:

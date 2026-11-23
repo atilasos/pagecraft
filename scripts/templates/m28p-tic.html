@@ -110,7 +110,8 @@ const TicModel = (() => {
     const found=round.kind==='discover'?discovery(round,value):null;
     if(found){const box=state.discoveries[round.id]||=[];if(!box.includes(found.label))box.push(found.label);}
     state.confirmed[round.id]=round.kind!=='discover'||value[0]==='finish'||allFound(round,state.discoveries[round.id]);
-    if(emit){state.last[round.id]=value.slice();state.counts[round.id]=(state.counts[round.id]||0)+1;}
+    // A última seleção confirmada acompanha sempre o ecrã; só a contagem e os eventos ignoram repetições.
+    state.last[round.id]=value.slice();if(emit)state.counts[round.id]=(state.counts[round.id]||0)+1;
     // Uma palavra encontrada fica guardada; o tabuleiro esvazia para a seguinte.
     if(found&&!state.confirmed[round.id])state.answers[round.id]=[];
     return {accepted:true,emit,correct:correct(round,value)};
@@ -400,7 +401,7 @@ function confirm(){
   revision++;context();
   if(result.emit&&restored){const detail={value,question:r.prompt,task_id:r.id,activity:data.slug,field:r.id,level:state.level,aids:{...state.aids[r.id]},model_visible:r.target?state.level==='support':showModel(r),audio_before_choice:state.choiceAudio[r.id]===true};if(revisionHint)detail.after_hint_id=revisionHint;if(r.kind==='discover')window.PageCraftBridge?.emit('attempt',unit(),{detail:{...detail,discoveries:state.discoveries[r.id]||[]}});else window.PageCraftBridge?.attempt(unit(),result.correct,detail);}
   revisionHint=null;checkpoint();renderGame();
-  // Som de resposta com o mesmo texto do ecrã; nas descobertas intermédias, sem convite a continuar.
+  // Som de resposta curto e coerente com o ecrã (o ecrã acrescenta a palavra); nas descobertas intermédias, sem convite a continuar.
   // Uma palavra real que não está escondida tem som próprio, como no ecrã.
   const formed=r.kind==='discover'?value.map(id=>r.pieces.find(p=>p.id===id)?.label||'').join(''):'';
   const real=!result.correct&&(r.warnings||[]).includes(formed);
