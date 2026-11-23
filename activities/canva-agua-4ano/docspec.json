@@ -1,0 +1,601 @@
+{
+  "topic": "Como podemos poupar água na nossa escola? — Introdução ao Canva",
+  "slug": "canva-agua-4ano",
+  "ageRange": "4.º ano (9–10 anos)",
+  "duration": 45,
+  "languages": [
+    "pt-PT",
+    "en"
+  ],
+  "defaultLanguage": "pt-PT",
+  "title": {
+    "pt-PT": "Água na escola: a nossa ideia em quatro diapositivos",
+    "en": "Water at school: our idea in four slides"
+  },
+  "objectives": [
+    "Relacionar uma situação de uso de água na escola com uma ação individual ou coletiva.",
+    "Planear e criar uma apresentação com quatro diapositivos: problema, exemplo, proposta e convite à ação.",
+    "Comparar e rever a legibilidade de texto e imagem para um público conhecido.",
+    "Usar feedback e autoavaliação para escolher um próximo passo."
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Estudo do Meio",
+        "year": "4.º ano",
+        "domain": "Sociedade/Natureza/Tecnologia",
+        "descriptor": "Relacionar consumo de bens e efeitos no ambiente, reconhecendo a necessidade de medidas individuais e coletivas que reduzam impactos negativos (paráfrase do descritor da p. 10).",
+        "source": "documentos-oficiais/aprendizagens-essenciais/estudo-do-meio-4-ano-1-ciclo.md"
+      },
+      {
+        "subject": "TIC — Orientações Curriculares de ciclo",
+        "year": "1.º ciclo; concretização para o 4.º ano",
+        "domain": "Comunicar e Colaborar; Criar e Inovar",
+        "descriptor": "Criar em colaboração um produto digital para exprimir ideias e apresentar o trabalho a públicos conhecidos (paráfrase das pp. 7–8 das OC).",
+        "source": "documentos-oficiais/aprendizagens-essenciais/tic-1-ano-1-ciclo.md"
+      }
+    ],
+    "competencies": [
+      "PA-B: Informação e comunicação",
+      "PA-D: Pensamento crítico e pensamento criativo",
+      "PA-E: Relacionamento interpessoal",
+      "PA-F: Desenvolvimento pessoal e autonomia",
+      "PA-G: Bem-estar, saúde e ambiente"
+    ],
+    "note": "Fontes locais oficiais consultadas; OC de TIC são de ciclo, apesar do título de ficheiro 1.º ano. Não afirmar que a proposta de revisão de 2026 está homologada."
+  },
+  "memAlignment": {
+    "modules": [
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "Plano de quatro diapositivos",
+      "Critérios discutidos com a turma",
+      "Registo de sugestão e revisão",
+      "Autoavaliação e próximo passo"
+    ],
+    "socialOrganization": "Turma escolhe situação/destinatário e discute critérios; pares com alternância de papéis; comunicação entre pares; reflexão individual. Em casa, trabalho autónomo com opção de retomar a partilha na aula."
+  },
+  "materials": [
+    "Computador ou tablet com navegador",
+    "Internet e acesso Canva preparados pelo professor",
+    "PageCraft e plano guardado",
+    "Papel e lápis para alternativa sem Canva"
+  ],
+  "units": [
+    {
+      "id": "explore",
+      "summary": "Escolher uma situação concreta de uso de água na escola.",
+      "textDescription": "Partir do que a turma conhece; distinguir um exemplo imaginado de algo observado. A turma escolhe destinatário e discute os critérios. Não apresentar um problema fictício como diagnóstico real da escola.",
+      "duration": 5,
+      "interaction": {
+        "state": [
+          {
+            "name": "scenario",
+            "type": "dropdown",
+            "default": "tap",
+            "options": [
+              "tap",
+              "garden",
+              "own"
+            ]
+          },
+          {
+            "name": "prediction",
+            "type": "quiz",
+            "default": ""
+          },
+          {
+            "name": "localExample",
+            "type": "canvas",
+            "default": ""
+          }
+        ],
+        "render": "Três cartões com desenho, título e pergunta: torneira a pingar; rega; uma situação escolhida pelo aluno. Mostrar previsão e possibilidade de rever.",
+        "transition": "Escolher cartão e ação; comparar duas consequências qualitativas; registar exemplo e marcar se é observado ou imaginado.",
+        "constraint": "Uma proposta útil responde à situação concreta e ao destinatário; um slogan sozinho não indica como agir.",
+        "assessment": "Aluno escolhe uma ação coerente com a situação e descreve um exemplo; registar escolhas e revisão, sem atribuir domínio conceptual por clique."
+      },
+      "differentiation": {
+        "support": "Broto / Apoio: dois exemplos ilustrados e início de frase para escolher ou completar.",
+        "standard": "Árvore jovem / Intermédio: escolher e explicar um exemplo da escola.",
+        "challenge": "Árvore robusta / Desafio: comparar duas ações e indicar como confirmar o problema antes de propor uma."
+      },
+      "copy": {
+        "title": {
+          "pt-PT": "Onde podemos fazer a diferença?",
+          "en": "Where can we make a difference?"
+        },
+        "prompt": {
+          "pt-PT": "Onde usamos água na escola? Escolhe uma situação para investigar.",
+          "en": "Where do we use water at school? Choose a situation to explore."
+        },
+        "scenarios": [
+          {
+            "pt-PT": "Uma torneira fica a pingar.",
+            "en": "A tap keeps dripping."
+          },
+          {
+            "pt-PT": "Regamos as plantas do recreio.",
+            "en": "We water the playground plants."
+          },
+          {
+            "pt-PT": "Tenho outra ideia.",
+            "en": "I have another idea."
+          }
+        ],
+        "observedLabel": {
+          "pt-PT": "Já observei isto / É um exemplo imaginado",
+          "en": "I have seen this / This is an imagined example"
+        },
+        "feedback": {
+          "pt-PT": "Que ação ajudaria nesta situação? Experimenta outra proposta e compara.",
+          "en": "Which action would help in this situation? Try another suggestion and compare."
+        }
+      }
+    },
+    {
+      "id": "guide",
+      "summary": "Experimentar como texto, tamanho e contraste mudam a comunicação.",
+      "textDescription": "Comparar diapositivos originais no PageCraft; depois o professor demonstra no Canva criar/editar apresentação, texto, imagem e ordem, sem depender de nomes ou localização de botões. Internet e acesso Canva preparados pelo professor.",
+      "duration": 10,
+      "interaction": {
+        "state": [
+          {
+            "name": "textLength",
+            "type": "toggle",
+            "default": "long",
+            "options": [
+              "short",
+              "long"
+            ]
+          },
+          {
+            "name": "fontSize",
+            "type": "slider",
+            "default": 18,
+            "range": [
+              18,
+              40
+            ],
+            "step": 2
+          },
+          {
+            "name": "contrast",
+            "type": "toggle",
+            "default": "soft",
+            "options": [
+              "soft",
+              "strong"
+            ]
+          },
+          {
+            "name": "readabilityReason",
+            "type": "canvas",
+            "default": ""
+          }
+        ],
+        "render": "Um diapositivo de exemplo muda com texto curto/longo, tamanho e contraste. Todos os controlos têm rótulo e alternativa por teclado; versão difícil está limitada ao exemplo, nunca à navegação.",
+        "transition": "Alterar uma variável e observar; comparar antes/depois; explicar a versão escolhida. Professor transfere a descoberta para uma demonstração real do Canva.",
+        "constraint": "A legibilidade resulta de escolhas articuladas; aumentar a letra sem reduzir texto pode tornar o diapositivo mais cheio.",
+        "assessment": "Registar configurações antes/depois e explicação. O professor observa se o aluno consegue editar uma caixa de texto e ordenar páginas no Canva; o PageCraft não verifica essas ações."
+      },
+      "differentiation": {
+        "support": "Broto / Apoio: alternar entre dois exemplos prontos e completar «Leio melhor porque…».",
+        "standard": "Árvore jovem / Intermédio: modificar duas variáveis e justificar uma escolha.",
+        "challenge": "Árvore robusta / Desafio: manter a mensagem alterando texto e hierarquia; explicar o compromisso."
+      },
+      "copy": {
+        "title": {
+          "pt-PT": "Faz a mensagem chegar",
+          "en": "Help your message reach others"
+        },
+        "prompt": {
+          "pt-PT": "Experimenta mudar o diapositivo. Qual consegues ler melhor à distância?",
+          "en": "Try changing the slide. Which version can you read more easily from a distance?"
+        },
+        "shortText": {
+          "pt-PT": "A torneira pinga. Vamos avisar um adulto.",
+          "en": "The tap is dripping. Let’s tell an adult."
+        },
+        "longText": {
+          "pt-PT": "Na nossa escola, uma torneira continua a pingar depois de a usarmos. Podemos avisar um adulto para que a situação seja verificada.",
+          "en": "At our school, a tap keeps dripping after we use it. We can tell an adult so that the situation can be checked."
+        },
+        "controls": [
+          {
+            "pt-PT": "Texto curto / Texto longo",
+            "en": "Short text / Long text"
+          },
+          {
+            "pt-PT": "Tamanho da letra",
+            "en": "Text size"
+          },
+          {
+            "pt-PT": "Contraste suave / Contraste forte",
+            "en": "Soft contrast / Strong contrast"
+          }
+        ],
+        "reason": {
+          "pt-PT": "Leio melhor porque…",
+          "en": "I can read it more easily because…"
+        },
+        "canvaTitle": {
+          "pt-PT": "Agora experimenta no Canva",
+          "en": "Now try it in Canva"
+        },
+        "canvaGuide": {
+          "pt-PT": "Abre o Canva noutra aba com o acesso preparado pelo professor. Cria uma apresentação simples. Escreve um título, acrescenta uma imagem ou forma e experimenta mudar a ordem dos diapositivos. Mantém o PageCraft aberto para o teu plano.",
+          "en": "Open Canva in another tab using the access prepared by your teacher. Create a simple presentation. Write a title, add an image or shape, and try changing the order of the slides. Keep PageCraft open for your plan."
+        },
+        "canvaLinkLabel": {
+          "pt-PT": "Abrir Canva noutra aba",
+          "en": "Open Canva in another tab"
+        },
+        "canvaUrl": "https://www.canva.com/",
+        "externalNotice": {
+          "pt-PT": "O Canva precisa de internet. O professor ajuda com o acesso. O PageCraft não vê o que fazes dentro do Canva.",
+          "en": "Canva needs an internet connection. Your teacher will help you access it. PageCraft cannot see what you do inside Canva."
+        }
+      }
+    },
+    {
+      "id": "create",
+      "summary": "Planear e criar quatro diapositivos com mensagem própria.",
+      "textDescription": "O planeador PageCraft recolhe quatro ideias escritas pela criança. A apresentação é criada no Canva em pares, com alternância entre quem edita e quem revê. Não gerar a apresentação acabada pelo aluno. Sem acesso Canva, fazer o plano e quatro cartões em papel; registar essa condição, sem fingir cumprir a parte Canva.",
+      "duration": 20,
+      "interaction": {
+        "state": [
+          {
+            "name": "slidePlan",
+            "type": "canvas",
+            "default": {
+              "problem": "",
+              "example": "",
+              "proposal": "",
+              "invitation": ""
+            }
+          },
+          {
+            "name": "workMode",
+            "type": "dropdown",
+            "default": "canva",
+            "options": [
+              "canva",
+              "paper"
+            ]
+          },
+          {
+            "name": "supportLevel",
+            "type": "dropdown",
+            "default": "standard",
+            "options": [
+              "support",
+              "standard",
+              "challenge"
+            ]
+          }
+        ],
+        "render": "Quatro cartões editáveis com título, pergunta e início de frase opcional; mostrar o conjunto do plano. Botão para voltar à comparação de legibilidade.",
+        "transition": "Editar ideias; rever com colega; criar diapositivos no Canva; alternar papéis a meio. Guardar texto introduzido como produção do aluno, sem sobrescrever ao trocar língua ou nível.",
+        "constraint": "A ordem problema → exemplo → proposta → convite constrói um argumento; quatro páginas decoradas sem ligação não cumprem a intenção comunicativa.",
+        "assessment": "Registar os quatro campos do plano e modo de trabalho. Professor verifica apresentação externa, pertinência da imagem e autoria do texto; não inferir conclusão Canva a partir do plano preenchido."
+      },
+      "differentiation": {
+        "support": "Broto / Apoio: quatro inícios de frase, banco de palavras e apoio de um par na escrita; escolher desenhos simples.",
+        "standard": "Árvore jovem / Intermédio: quatro frases próprias e uma imagem pertinente, revendo legibilidade.",
+        "challenge": "Árvore robusta / Desafio: justificar a proposta e prever como verificar se ajudou, dentro dos mesmos quatro diapositivos."
+      },
+      "copy": {
+        "title": {
+          "pt-PT": "Quatro diapositivos, uma ideia para a escola",
+          "en": "Four slides, one idea for our school"
+        },
+        "prompt": {
+          "pt-PT": "Planeia aqui. Depois cria os teus diapositivos no Canva. Trabalha com um colega e troquem de papéis a meio.",
+          "en": "Plan here. Then create your slides in Canva. Work with a partner and swap roles halfway through."
+        },
+        "slides": [
+          {
+            "id": "problem",
+            "title": {
+              "pt-PT": "1. O problema",
+              "en": "1. The problem"
+            },
+            "prompt": {
+              "pt-PT": "O que queremos melhorar?",
+              "en": "What do we want to improve?"
+            },
+            "starter": {
+              "pt-PT": "Na nossa escola…",
+              "en": "At our school…"
+            }
+          },
+          {
+            "id": "example",
+            "title": {
+              "pt-PT": "2. Um exemplo",
+              "en": "2. An example"
+            },
+            "prompt": {
+              "pt-PT": "Que situação mostra o problema? Diz se a observaste ou imaginaste.",
+              "en": "Which situation shows the problem? Say whether you saw it or imagined it."
+            },
+            "starter": {
+              "pt-PT": "Por exemplo…",
+              "en": "For example…"
+            }
+          },
+          {
+            "id": "proposal",
+            "title": {
+              "pt-PT": "3. A nossa proposta",
+              "en": "3. Our suggestion"
+            },
+            "prompt": {
+              "pt-PT": "O que podemos fazer? Como ajuda?",
+              "en": "What can we do? How does it help?"
+            },
+            "starter": {
+              "pt-PT": "Propomos… porque…",
+              "en": "We suggest… because…"
+            }
+          },
+          {
+            "id": "invitation",
+            "title": {
+              "pt-PT": "4. Convite à ação",
+              "en": "4. An invitation to act"
+            },
+            "prompt": {
+              "pt-PT": "A quem pedimos ajuda? O que pode fazer?",
+              "en": "Who are we asking to help? What can they do?"
+            },
+            "starter": {
+              "pt-PT": "Junta-te a nós:…",
+              "en": "Join us:…"
+            }
+          }
+        ],
+        "wordBank": {
+          "pt-PT": "torneira · água · reparar · avisar · regar · cuidar · escola",
+          "en": "tap · water · repair · tell · water plants · care · school"
+        },
+        "fallback": {
+          "pt-PT": "Sem acesso ao Canva? Guarda o plano e usa quatro cartões de papel. Conta ao professor o que ficou por experimentar.",
+          "en": "No access to Canva? Save your plan and use four paper cards. Tell your teacher what you still need to try."
+        },
+        "challenge": {
+          "pt-PT": "Como poderemos verificar se a nossa proposta ajudou? Não inventes resultados.",
+          "en": "How could we check whether our suggestion helped? Do not invent results."
+        }
+      }
+    },
+    {
+      "id": "share",
+      "summary": "Partilhar com um par e usar uma sugestão concreta.",
+      "textDescription": "Cinco minutos permitem comunicações entre pares, não todas as apresentações em plenário. Cada par mostra a outro par; cada criança pode registar uma sugestão. Uma ou duas comunicações para turma ficam para prolongamento, sem acrescentar tempo fictício.",
+      "duration": 5,
+      "interaction": {
+        "state": [
+          {
+            "name": "peerSuggestion",
+            "type": "canvas",
+            "default": ""
+          },
+          {
+            "name": "revision",
+            "type": "canvas",
+            "default": ""
+          }
+        ],
+        "render": "Dois campos: sugestão recebida e alteração escolhida. Critérios disponíveis para orientar a conversa.",
+        "transition": "Um colega diz o que conseguiu perceber e o que poderia ficar mais claro; autores escolhem uma alteração ou explicam porque mantêm a opção.",
+        "constraint": "Uma sugestão útil indica um elemento concreto e abre uma possibilidade de revisão; elogios gerais não dizem o que mudar.",
+        "assessment": "Registar sugestão e decisão de revisão. A execução da alteração no Canva depende da observação do professor, não do relato automático."
+      },
+      "differentiation": {
+        "support": "Broto / Apoio: escolher o diapositivo e completar «Li… / Podes…».",
+        "standard": "Árvore jovem / Intermédio: escrever uma sugestão ligada a um critério e a alteração escolhida.",
+        "challenge": "Árvore robusta / Desafio: justificar a revisão pelo efeito no destinatário ou explicar por que não adota uma sugestão."
+      },
+      "copy": {
+        "title": {
+          "pt-PT": "Mostra, escuta e melhora",
+          "en": "Show, listen and improve"
+        },
+        "prompt": {
+          "pt-PT": "Mostra a apresentação a outro par. O que perceberam? Que parte pode ficar mais clara?",
+          "en": "Show your presentation to another pair. What did they understand? Which part could be clearer?"
+        },
+        "suggestion": {
+          "pt-PT": "Uma sugestão que recebemos",
+          "en": "A suggestion we received"
+        },
+        "revision": {
+          "pt-PT": "O que decidi mudar — ou manter — e porquê",
+          "en": "What I chose to change — or keep — and why"
+        }
+      }
+    },
+    {
+      "id": "reflect",
+      "summary": "Autoavaliar pelos critérios e escolher um próximo passo.",
+      "textDescription": "Os mesmos critérios vistos ao longo da atividade reaparecem no fecho. Respostas opcionais e apoio de leitura; não transformar reflexão em nota nem preencher respostas pela criança. Professor interpreta mais tarde com evidências.",
+      "duration": 5,
+      "interaction": {
+        "state": [
+          {
+            "name": "criterionReflections",
+            "type": "canvas",
+            "default": {}
+          },
+          {
+            "name": "achievement",
+            "type": "canvas",
+            "default": ""
+          },
+          {
+            "name": "helpNeeded",
+            "type": "canvas",
+            "default": ""
+          },
+          {
+            "name": "nextStep",
+            "type": "canvas",
+            "default": ""
+          }
+        ],
+        "render": "Três critérios com opções textuais sem codificação semáforo; evidência breve opcional. Perguntas sobre conquista, ajuda e próximo passo. Mostrar confirmação de envio apenas após confirmação do servidor.",
+        "transition": "Escolher resposta por critério, acrescentar exemplo opcional e próximo passo; permitir omitir respostas e guardar realização sem perda de evidências.",
+        "constraint": "Uma reflexão com exemplo e próximo passo dá orientação para continuar; um rótulo sozinho não explica a aprendizagem.",
+        "assessment": "Guardar autorrelato separado das evidências e da observação do professor; este decide apoio/parceria/tarefa seguinte. Não calcular nota agregada ou competência por autoavaliação."
+      },
+      "differentiation": {
+        "support": "Broto / Apoio: critérios em frases curtas, opções ilustradas com texto e inícios de frase; leitura pelo professor ou áudio opcional quando disponível.",
+        "standard": "Árvore jovem / Intermédio: mesmas opções, com exemplo curto e próximo passo.",
+        "challenge": "Árvore robusta / Desafio: relacionar exemplo, dificuldade e estratégia para verificar progresso; critérios iguais."
+      },
+      "copy": {
+        "title": {
+          "pt-PT": "O que aprendi? O que quero experimentar a seguir?",
+          "en": "What did I learn? What do I want to try next?"
+        },
+        "prompt": {
+          "pt-PT": "Pensa no teu trabalho. Podes deixar uma resposta por dar. As tuas respostas ajudam o professor a preparar o trabalho seguinte.",
+          "en": "Think about your work. You may leave a question unanswered. Your answers help your teacher plan what comes next."
+        },
+        "achievement": {
+          "pt-PT": "O que consegui fazer? Mostra um exemplo.",
+          "en": "What did I manage to do? Give an example."
+        },
+        "helpNeeded": {
+          "pt-PT": "Onde precisei de ajuda?",
+          "en": "Where did I need help?"
+        },
+        "nextStep": {
+          "pt-PT": "O que quero experimentar a seguir?",
+          "en": "What do I want to try next?"
+        },
+        "supportStarters": [
+          {
+            "pt-PT": "Consegui…",
+            "en": "I managed to…"
+          },
+          {
+            "pt-PT": "Precisei de ajuda para…",
+            "en": "I needed help to…"
+          },
+          {
+            "pt-PT": "A seguir quero…",
+            "en": "Next I want to…"
+          }
+        ],
+        "challengePrompt": {
+          "pt-PT": "Que parte do teu trabalho mostra isso? Como vais verificar o teu próximo passo?",
+          "en": "Which part of your work shows this? How will you check your next step?"
+        }
+      }
+    }
+  ],
+  "sessionFlow": "0–5 explorar; 5–15 comparar legibilidade e orientação Canva; 15–35 planear/criar; 35–40 partilhar entre pares; 40–45 autoavaliar. Total: 45 min, sem tempo adicional implícito.",
+  "assessment": {
+    "criteria": [
+      {
+        "id": "water-action",
+        "label": {
+          "pt-PT": "Explico um problema de água na escola e proponho uma ação.",
+          "en": "I explain a water problem at school and suggest an action."
+        },
+        "observable": "O plano relaciona situação concreta e ação adequada; o professor confirma oralmente a justificação."
+      },
+      {
+        "id": "clear-slides",
+        "label": {
+          "pt-PT": "Organizo quatro diapositivos que os colegas conseguem ler.",
+          "en": "I organise four slides that classmates can read."
+        },
+        "observable": "Plano com quatro funções distintas; aluno compara versões de legibilidade. A leitura da apresentação Canva é verificada pelo professor/colega."
+      },
+      {
+        "id": "revise-together",
+        "label": {
+          "pt-PT": "Uso uma sugestão para melhorar e escolho um próximo passo.",
+          "en": "I use a suggestion to improve and choose a next step."
+        },
+        "observable": "Aluno regista uma sugestão e alteração ou justifica mantê-la; identifica um próximo passo concreto."
+      }
+    ],
+    "options": [
+      {
+        "value": "independent",
+        "label": {
+          "pt-PT": "Consegui com autonomia",
+          "en": "I managed independently"
+        }
+      },
+      {
+        "value": "with-help",
+        "label": {
+          "pt-PT": "Consegui com ajuda",
+          "en": "I managed with help"
+        }
+      },
+      {
+        "value": "next-time",
+        "label": {
+          "pt-PT": "Quero continuar a praticar",
+          "en": "I want to keep practising"
+        }
+      },
+      {
+        "value": "not-tried",
+        "label": {
+          "pt-PT": "Ainda não experimentei",
+          "en": "I have not tried it yet"
+        }
+      }
+    ],
+    "optional": true,
+    "teacherFields": [
+      "Observação com evidência",
+      "Próximo passo acordado",
+      "Apoio/parceria a preparar"
+    ],
+    "noAutomaticGrade": true
+  },
+  "supportLabels": {
+    "support": {
+      "pt-PT": "Broto · Apoio",
+      "en": "Sprout · Support"
+    },
+    "standard": {
+      "pt-PT": "Árvore jovem · Intermédio",
+      "en": "Young tree · Core"
+    },
+    "challenge": {
+      "pt-PT": "Árvore robusta · Desafio",
+      "en": "Strong tree · Challenge"
+    }
+  },
+  "languageRules": [
+    "Todo o conteúdo dirigido ao aluno, feedback, rótulos e autoavaliação tem versões PT/EN.",
+    "Mudar a língua não apaga nem traduz automaticamente texto escrito pelo aluno.",
+    "Língua e apoio são escolhas independentes; inglês não implica nível de apoio.",
+    "Não prometer traduzir automaticamente a interface do Canva."
+  ],
+  "evidenceRules": [
+    "Guardar apenas interações PageCraft como observadas pelo sistema.",
+    "Guardar reflexões como autorrelato da criança, nunca como confirmação de execução Canva.",
+    "Professor observa a apresentação Canva e acrescenta interpretação separadamente.",
+    "Texto/nome do aluno não dá acesso ao histórico privado.",
+    "Modo aula/casa, língua e apoio acompanham cada realização."
+  ],
+  "publication": {
+    "status": "draft",
+    "teacherReviewRequired": true,
+    "note": "Preparar para revisão; não publicar a atividade automaticamente nem partilhar apresentações no Canva."
+  },
+  "provenanceFile": "drafts/canva-agua-4ano-sources.md"
+}
