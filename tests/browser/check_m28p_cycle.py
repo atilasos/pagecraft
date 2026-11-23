@@ -60,9 +60,7 @@ with sync_playwright() as p:
                             piece(label)
                         key('#confirm')
                         assert 'é uma palavra! Não estava escondida' in page.locator('#feedback').text_content()
-                        assert page.locator('.tray.visual-cue').count() == 0
-                        for _ in used:
-                            key('#undo')
+                        assert page.locator('.tray.visual-cue').count() == 0 and page.locator('.tray button').count() == 0
                     for w in r['lexicon']:
                         assert not page.locator('#next').is_visible()
                         for label in w['syllables']:
@@ -119,8 +117,9 @@ with sync_playwright() as p:
                                 assert 'é uma palavra! Não estava escondida' in page.locator('#feedback').text_content()
                                 assert page.locator('.tray.visual-cue').count() == 0
                                 assert f"Encontraste 0 de {len(rr['lexicon'])}." in page.locator('.hidden-count').text_content()
-                                for _ in seq.split('·'):
-                                    key('#undo')
+                                # As peças voltam ao tabuleiro e o foco fica numa peça.
+                                assert page.locator('.tray button').count() == 0
+                                assert page.evaluate("document.activeElement?.dataset?.piece !== undefined")
                             for w in rr['lexicon']:
                                 for label in w['syllables']:
                                     piece(label)

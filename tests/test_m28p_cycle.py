@@ -403,6 +403,9 @@ def test_pinned_pilot_boards_match_the_approved_order_and_are_validated():
     twice=copy.deepcopy(source());twice['keywords']['menino']['discoverBoards'][0]['hidden']=['mano','mano']
     with pytest.raises(ValueError,match='Tabuleiro fixo'):
         discover_rounds(validate_cycle(twice,motor.read_words())['menino'],random.Random(0))
+    many=copy.deepcopy(source());many['keywords']['menino']['discoverBoards'][0]['pieces']+=['ma']*10
+    with pytest.raises(ValueError,match='Tabuleiro fixo'):
+        discover_rounds(validate_cycle(many,motor.read_words())['menino'],random.Random(0))
     bad=copy.deepcopy(source());bad['keywords']['menino']['discoverBoards'][0]['pieces']=['ma','nu','ni','no']
     with pytest.raises(ValueError,match='Tabuleiro fixo'):
         discover_rounds(validate_cycle(bad,motor.read_words())['menino'],random.Random(0))
@@ -420,3 +423,26 @@ def test_celebration_needs_a_common_word_a_valid_split_and_the_right_stage():
     assert celebrated_sequences(['po','sa'],{'posa'},known,slugs.index('casa'),rep,slugs)==['po·sa']
     # Formas raras (fora do vocabulário infantil) não se celebram.
     assert celebrated_sequences(['ma','la'],{'mala'},known,slugs.index('leque'),rep,slugs)==[]
+
+
+def test_repeated_sentence_note_uses_singular_and_plural():
+    rounds=lambda own,rest:[{'target':{'newIn':'menino'}}]*own+[{'target':{'newIn':'menina'}}]*rest
+    word={'slug':'menino','label':'menino'}
+    assert motor.repeated_note(rounds(1,1),word)=="A primeira frase é de «menino»; a última repete uma frase de uma palavra-chave anterior. "
+    assert motor.repeated_note(rounds(3,1),word).startswith("As primeiras 3 frases são de «menino»; a última repete")
+    assert "as 2 seguintes repetem" in motor.repeated_note(rounds(2,2),word)
+    assert motor.repeated_note(rounds(4,0),word)==""
+
+
+def test_avoid_words_weigh_on_boards_but_are_never_celebrated():
+    from scripts.m28p_cycle import discover_rounds
+    import random
+    pools=validate_cycle(source(),motor.read_words())
+    pool=dict(pools['sapato']);real={'mato','teto','topa'}
+    lex=lambda w:w in real
+    plain=discover_rounds(pool,random.Random(3),lexicon=lex)
+    pool['avoidWords']=['mato','teto']
+    avoided=discover_rounds(pool,random.Random(3),lexicon=lex)
+    count=lambda rs:sum(len(set(r['warnings'])&{'mato','teto'}) for r in rs)
+    assert count(avoided)<=count(plain)
+    assert not any(seq.replace('·','') in {'mato','teto'} for r in avoided for seq in r['celebrate'])

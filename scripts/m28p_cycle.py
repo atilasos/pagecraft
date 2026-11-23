@@ -418,6 +418,13 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserve
     def weight(words):
         # Uma palavra que a criança conhece (celebrada ou não) pesa muito mais do que uma forma rara do dicionário («too», «coes»).
         return sum(1 if word in familiar else 0.25 for word in words)
+    def surplus(pieces, hidden):
+        """Peças a mais em relação às necessárias para montar as palavras escondidas (no máximo uma)."""
+        need = {}
+        for word in hidden:
+            for syllable in set(word['syllables']):
+                need[syllable] = max(need.get(syllable, 0), word['syllables'].count(syllable))
+        return sum(max(0, pieces.count(p) - need.get(p, 0)) for p in set(pieces))
     if pool.get('discoverBoards'):
         # Tabuleiros já aprovados ficam fixos: uma ronda concluída nunca reabre noutra versão.
         by_label = {w['label']: w for w in pool['words']}
@@ -429,6 +436,7 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserve
             # Um tabuleiro fixo continua sujeito às mesmas regras: peças do repertório, respostas montáveis, contagem honesta.
             if any(piece not in units for piece in pieces) or not all(formable(w['label'], pieces) for w in hidden) \
                     or not 2 <= len(labels) == len(hidden) <= 3 \
+                    or surplus(pieces, hidden) > 1 \
                     or not honest(pieces, hidden):
                 raise ValueError(f"Tabuleiro fixo inválido em {pool['keyword']['label']}: {board_spec}")
             found = real_words(pieces, labels)

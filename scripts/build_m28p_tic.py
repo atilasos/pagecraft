@@ -215,6 +215,18 @@ def build(word, game, words, check=False, cycle_data=None):
     return dict(slug=stem,word=word['label'],game=game,rounds=len(data['rounds']),bytes=len(output.encode()))
 
 
+def repeated_note(rounds, word):
+    """Nota do guia quando Montar frases repete frases de palavras-chave anteriores, com singular e plural certos."""
+    own = sum(1 for r in rounds if r['target'].get('newIn') == word['slug'])
+    rest = len(rounds) - own
+    if not rest:
+        return ""
+    first = f"A primeira frase é de «{word['label']}»; " if own == 1 else f"As primeiras {own} frases são de «{word['label']}»; "
+    tail = ("a última repete uma frase de uma palavra-chave anterior. " if rest == 1
+            else f"as {rest} seguintes repetem frases de palavras-chave anteriores. ")
+    return first + tail
+
+
 def cycle_guide(data, word):
     """Guia docente de um jogo do ciclo, com o que cada nível mostra de facto."""
     game, rounds, demo = data['game'], data['rounds'], data['demo']
@@ -238,9 +250,8 @@ def cycle_guide(data, word):
         body = ("A criança ordena as palavras de uma frase. «Com ajuda» mostra a imagem, a frase escrita com as palavras separadas e o botão de ouvir; "
                 "«Sozinho» mostra a imagem, o botão de ouvir e um espaço por palavra; «Consigo ajudar um amigo» mostra só o botão de ouvir. "
                 f"Frases, uma por ronda{' (separadas por « / »)' if len(rounds) > 1 else ''}: {listed} {equivalent}"
-                + (f"As primeiras {sum(1 for r in rounds if r['target'].get('newIn') == word['slug'])} frases são de «{word['label']}»; "
-                   "as restantes repetem frases de palavras-chave anteriores. "
-                   if any(r['target'].get('newIn') != word['slug'] for r in rounds) else "")
+                + repeated_note(rounds, word)
+
                 +
                 "Na página da turma, podes guardar as frases ditadas pelas crianças e projetá-las no Quadro. Quando a turma joga numa sessão, até quatro frases da turma surgem primeiro, "
                 "completadas pelas frases fixas. «Com ajuda» mostra as palavras da frase da turma. As frases da turma só têm leitura em voz alta "
