@@ -14,7 +14,7 @@ const STATES = {
 const ANSWERS = {alone: "com autonomia", help: "com ajuda", practising: "quer praticar", skip: "sem resposta"};
 let data = null, rows = new Map(), timer = null, publicOrigin = location.origin;
 // Observações: por aluno, o texto confirmado pelo servidor e a fila de gravações.
-const notes = new Map(); // id -> {saved, queued, pending, latest, chain}
+const notes = new Map(); // id -> {saved, queued, pending, latest, chain, version}
 let refreshRequest = 0; // só a consulta mais recente atualiza o painel e reagenda
 
 function el(tag, text, className) {
@@ -134,7 +134,7 @@ function noteCell(student) {
   area.setAttribute("aria-label", `Observação sobre ${student.display_name}`);
   area.placeholder = "Ex.: leu sozinho as frases";
   line.setAttribute("role", "status");
-  const state = notes.get(student.id) || {saved: student.note, queued: student.note, pending: 0, chain: Promise.resolve()};
+  const state = notes.get(student.id) || {saved: student.note, queued: student.note, pending: 0, chain: Promise.resolve(), version: 0};
   notes.set(student.id, state);
   // As gravações do mesmo aluno seguem em fila: a última escrita é a que fica.
   const save = () => {
@@ -151,6 +151,7 @@ function noteCell(student) {
     const request = state.chain.then(() =>
       api(`/api/learning/lessons/${code}/notes/${student.id}`, "PUT", {text})).then(() => {
       state.saved = text;
+      state.version++;
       if (state.latest === request) line.textContent = "Guardada.";
     }, error => {
       // Só a escrita mais recente decide o que falta guardar e a mensagem mostrada.
@@ -245,7 +246,10 @@ function showOnBoard(activityCode) {
   boardQueue = boardQueue.then(async () => {
     try {
       await api(`/api/learning/lessons/${code}/board`, "PUT", {activity_code: activityCode});
-      if (await refresh() === true) status(data.board ? `No quadro: ${data.board.activity_title}.` : "O quadro deixou de mostrar este roteiro.");
+      if (await refresh() !== true) return;
+      if (data.board) status(`No quadro: ${data.board.activity_title}.`);
+      else if (activityCode && data.board_elsewhere) status(`O quadro está a mostrar outra coisa: «${data.board_elsewhere.title}».`);
+      else status("O quadro deixou de mostrar este roteiro.");
     } catch (error) { status(error.message, true); }
   });
   return boardQueue;
@@ -255,12 +259,14 @@ async function refresh() {
   clearTimeout(timer);
   const request = ++refreshRequest;
   let applied = false;
+  // Versão de cada observação no início do pedido: uma gravação confirmada entretanto ganha.
+  const versions = new Map([...notes].map(([id, state]) => [id, state.version]));
   try {
     const fresh = await api(`/api/learning/lessons/${code}/progress`);
     if (request !== refreshRequest) return "stale";
     data = fresh;
     // Uma atualização que saiu antes de uma gravação não repõe a observação antiga.
-    for (const student of data.students) syncNote(student);
+    for (const student of data.students) syncNote(student, versions);
     $("title").textContent = data.title;
     document.title = `${data.title} · Acompanhar · PageCraft`;
     $("class-name").textContent = `Acompanhar a aula · ${data.class_name}`;
@@ -298,11 +304,12 @@ function markdown() {
 }
 /* Uma observação sem alterações locais segue o servidor (pode ter sido guardada noutro
    separador); a que está em edição ou a gravar mantém-se até ser confirmada. */
-function syncNote(student) {
+function syncNote(student, versions) {
   const state = notes.get(student.id);
   const area = [...document.querySelectorAll("#rows textarea")].find(a => a.dataset.student === student.id);
   if (!state || !area) return;
-  const untouched = !state.pending && document.activeElement !== area && area.value.trim() === state.saved.trim();
+  const untouched = !state.pending && versions.get(student.id) === state.version &&
+    document.activeElement !== area && area.value.trim() === state.saved.trim();
   if (untouched && student.note !== state.saved.trim()) {
     area.value = state.saved = state.queued = student.note;
   } else student.note = state.saved.trim();

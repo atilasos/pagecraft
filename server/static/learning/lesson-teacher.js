@@ -310,7 +310,7 @@ function openLesson(lesson, {copy = false} = {}) {
     retired.forEach(a => entry.extras.delete(a.code));
     retiredLeft += retired.length;
     if (!entry.word && retiredWords.size === 1 && words.has([...retiredWords][0])) entry.word = [...retiredWords][0];
-    else if (retired.length && !entry.word && !entry.extras.size) withoutWord++;
+    else if (retiredWords.size && !entry.word) withoutWord++;
   }
   $("lesson-title").value = copy || !lesson ? `Aula de ${today()}` : lesson.title;
   $("lesson-active").checked = current?.active ?? true;

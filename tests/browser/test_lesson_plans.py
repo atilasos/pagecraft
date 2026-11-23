@@ -306,8 +306,12 @@ def test_note_that_fails_to_save_blocks_the_lesson_record_download(page, studio_
     page.goto(origin + f"/teacher/lesson-live.html?aula={lesson['code']}")
     note = page.get_by_label('Observação sobre Ana', exact=True)
     note.fill('Leu as metades sozinha.')
-    page.get_by_role('button', name='Descarregar registo (Markdown)', exact=True).click()
-    page.wait_for_function('() => true')
+    with page.expect_request('**/notes/**'):
+        page.get_by_role('button', name='Descarregar registo (Markdown)', exact=True).click()
+    for _ in range(50):
+        if held:
+            break
+        page.wait_for_timeout(20)
     assert len(held) == 1
     held.pop().fulfill(status=500, content_type='application/json', body='{"detail": "falha simulada"}')
     expect(page.locator('#status')).to_have_text('Há uma observação por guardar. Tenta novamente antes de descarregar ou imprimir.')
@@ -316,3 +320,40 @@ def test_note_that_fails_to_save_blocks_the_lesson_record_download(page, studio_
     with page.expect_download() as download:
         page.get_by_role('button', name='Descarregar registo (Markdown)', exact=True).click()
     assert 'Leu as metades sozinha.' in open(download.value.path(), encoding='utf-8').read()
+
+
+def test_progress_answer_started_before_a_save_does_not_restore_the_old_note(page, studio_origin):
+    origin = studio_origin
+    page.request.get(origin + '/api/teacher-bootstrap')
+    _, other, cls = seed(page, origin)
+    page.request.post(origin + '/api/learning/activities/publish', data={'codes': [other['code']]})
+    lesson = page.request.post(origin + '/api/learning/lessons', data={
+        'title': 'Consulta atrasada', 'class_id': cls['id'], 'assignments': [
+            {'title': 'Metades', 'student_ids': [cls['students'][0]['id']], 'activity_codes': [other['code']]}]}).json()
+    page.goto(origin + f"/teacher/lesson-live.html?aula={lesson['code']}")
+    note = page.get_by_label('Observação sobre Ana', exact=True)
+    expect(note).to_be_visible()
+    held = []
+
+    def hold(route):
+        # A resposta fica com o estado anterior à gravação e só chega depois dela.
+        held.append((route, route.fetch()))
+
+    page.route('**/progress', hold)
+    page.evaluate('refresh(); 0')
+    for _ in range(100):
+        if held:
+            break
+        page.wait_for_timeout(20)
+    assert held
+    note.fill('Nota nova confirmada.')
+    page.get_by_label('Observação sobre Bruno', exact=True).focus()
+    expect(page.locator('#rows').get_by_role('row', name=re.compile('^Ana'))).to_contain_text('Guardada.')
+    route, stale = held.pop()
+    route.fulfill(response=stale)
+    page.unroute('**/progress')
+    page.wait_for_timeout(500)
+    expect(note).to_have_value('Nota nova confirmada.')
+    with page.expect_download() as download:
+        page.get_by_role('button', name='Descarregar registo (Markdown)', exact=True).click()
+    assert 'Nota nova confirmada.' in open(download.value.path(), encoding='utf-8').read()
