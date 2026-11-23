@@ -380,8 +380,8 @@ def cycle_content(word, game, pool, lexicon=None):
     else:
         groups = discover_rounds(pool, random.Random(word['slug']), lexicon, reserved={sample['slug']})
         for index, group in enumerate(groups):
-            pieces = pieces_for(group['pieces'])
-            seed(index).shuffle(pieces)
+            # Nenhuma palavra escondida aparece já montada em peças seguidas.
+            pieces = mixed(pieces_for(group['pieces']), seed(index), [w['syllables'] for w in group['hidden']])
             excluded = {e['label'] for e in pool.get('excluded', [])}
             rounds.append(dict(id='descobrir-' + '-'.join(w['slug'] for w in group['hidden']), unit='syllable', extra=group['extra'],
                                target=resource(group['hidden'][0]), warnings=[w for w in group['warnings'] if w not in excluded],

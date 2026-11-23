@@ -54,7 +54,7 @@ def units_until(repertoire, slugs, index):
     units = set(vowels) | nuclei
     for onset, bases in onsets.items():
         units |= {onset + v for v in vowels if plain(v) in bases}
-        units |= {onset + n for n in nuclei if n[0] in bases}
+        units |= {onset + n for n in nuclei if plain(n[0]) in bases}
     # Sílabas fechadas só depois de vogal simples (não depois de ditongo: «roul» não é uma sílaba do repertório).
     units |= {u + c for u in list(units) for c in codas if u[-1] in vowels and not any(u.endswith(n) for n in nuclei)}
     return units

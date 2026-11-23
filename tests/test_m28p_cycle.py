@@ -152,6 +152,9 @@ def test_round_and_piece_ids_follow_content():
             assert not re.fullmatch(r'r\d+',r['id'])
             if r.get('pieces'):
                 assert all(p['id'].split('#')[0]==p['label'] for p in r['pieces'])
+            for w in r.get('lexicon',[]):
+                labels=[p['label'] for p in r['pieces']]
+                assert not any(labels[i:i+len(w['syllables'])]==w['syllables'] for i in range(len(labels)-len(w['syllables'])+1)),(labels,w['label'])
             if r.get('answer') and r.get('pieces') and game!='discover':
                 labels=[p['label'] for p in r['pieces']]
                 answer=[next(p['label'] for p in r['pieces'] if p['id']==i) for i in r['answer']]
