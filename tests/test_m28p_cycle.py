@@ -113,9 +113,12 @@ def test_syllable_boundaries_hiatus_and_reserved_keywords():
     bad=copy.deepcopy(cycle);bad['keywords']['menina']['newWords'].append(dict(label='menino',syllables=['me','ni','no'],picturable=True))
     with pytest.raises(ValueError,match='palavra-chave'):
         validate_cycle(bad,motor.read_words())
-    hiatus=copy.deepcopy(cycle);hiatus['keywords']['uva']['newWords'].append(dict(label='moinho',syllables=['mo','i','nho'],picturable=False))
-    with pytest.raises(ValueError):
-        validate_cycle(hiatus,motor.read_words())
+    # Um hiato declarado não dispensa as outras fronteiras («sal-a» continua inválido).
+    from scripts.m28p_cycle import _boundary_errors
+    assert _boundary_errors('sala',['sal','a'],hiatus=True)
+    assert not _boundary_errors('saída',['sa','í','da'],hiatus=True)
+    assert readable_at('rainha',['ra','i','nha'],slugs.index('rato'),rep,slugs,hiatus=True)
+    assert not readable_at('rainha',['ra','i','nha'],slugs.index('rato'),rep,slugs)
 
 
 def test_demo_audio_matches_the_demo_target():

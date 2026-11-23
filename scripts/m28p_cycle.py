@@ -65,7 +65,7 @@ def _context_errors(label, index, repertoire, slugs):
             if re.search(rule['pattern'], label) and slugs.index(rule['from']) > index]
 
 
-def _boundary_errors(label, syllables):
+def _boundary_errors(label, syllables, hiatus=False):
     """Fronteiras silábicas inválidas: uma consoante entre vogais vai para a sílaba seguinte («sa-la», não «sal-a»),
     e nenhum ditongo ou dígrafo se parte entre duas sílabas."""
     errors, start = [], 0
@@ -77,12 +77,13 @@ def _boundary_errors(label, syllables):
         if current.endswith(('gu', 'qu')) and following[0] in VOWELS:
             errors.append(f'{current}-{following}')
         pair = label[start - 1:start + 1]
-        if pair in DIPHTHONGS or pair in DIGRAPHS:
+        # Um hiato declarado só dispensa a fronteira entre duas vogais («ra-i-nha»), nunca as restantes regras.
+        if (pair in DIPHTHONGS and not (hiatus and pair[0] in VOWELS and pair[1] in VOWELS)) or pair in DIGRAPHS:
             errors.append(pair)
     return errors
 
 
-def _diphthong_errors(label, syllables):
+def _diphthong_errors(label, syllables, hiatus=False):
     """Um ditongo ou dígrafo que atravessa a fronteira silábica não foi trabalhado como unidade."""
     bounds, start = [], 0
     for syllable in syllables:
@@ -92,16 +93,18 @@ def _diphthong_errors(label, syllables):
     for d in DIPHTHONGS + DIGRAPHS:
         for match in re.finditer(d, label):
             if not any(a <= match.start() and match.end() <= b for a, b in bounds):
+                if hiatus and d in DIPHTHONGS and any(b == match.start() + 1 for _, b in bounds):
+                    continue
                 errors.append(d)
     return errors
 
 
-def readable_at(label, syllables, index, repertoire, slugs):
+def readable_at(label, syllables, index, repertoire, slugs, hiatus=False):
     if not syllables or ''.join(syllables) != label:
         return False
     units = units_until(repertoire, slugs, index)
     return (all(s in units for s in syllables) and not _context_errors(label, index, repertoire, slugs)
-            and not _diphthong_errors(label, syllables) and not _boundary_errors(label, syllables))
+            and not _diphthong_errors(label, syllables, hiatus) and not _boundary_errors(label, syllables, hiatus))
 
 
 def segmentations(label, units):
@@ -153,13 +156,14 @@ def _check_item(slug, item, index, repertoire, slugs, lexicon, first_rule=True):
         raise ValueError(f'{slug}: sílabas fora do repertório: {label}')
     if errors := _context_errors(label, index, repertoire, slugs):
         raise ValueError(f'{slug}: leitura ainda não trabalhada em {label}: {errors[0]}')
-    if not item.get('hiatus') and (errors := _diphthong_errors(label, syllables)):
+    hiatus = bool(item.get('hiatus'))
+    if errors := _diphthong_errors(label, syllables, hiatus):
         raise ValueError(f'{slug}: ditongo ou dígrafo partido, ou ainda não introduzido, em {label} ({errors[0]}); '
                          'se for um hiato («ra-i-nha»), registar hiatus: true')
-    if not item.get('hiatus') and (errors := _boundary_errors(label, syllables)):
+    if errors := _boundary_errors(label, syllables, hiatus):
         raise ValueError(f'{slug}: divisão silábica inválida em {label}: {errors[0]}')
-    if first_rule and index and readable_at(label, syllables, index - 1, repertoire, slugs):
-        earlier = next(i for i in range(index) if readable_at(label, syllables, i, repertoire, slugs))
+    if first_rule and index and readable_at(label, syllables, index - 1, repertoire, slugs, hiatus):
+        earlier = next(i for i in range(index) if readable_at(label, syllables, i, repertoire, slugs, hiatus))
         raise ValueError(f'{slug}: {label} já é formável em {slugs[earlier]}; entra na primeira palavra-chave possível.')
     if lexicon is not None and not lexicon(label):
         raise ValueError(f'{slug}: {label} não consta do dicionário pt-PT.')
@@ -369,13 +373,15 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserve
     def honest(pieces, hidden):
         labels = {w['label'] for w in hidden}
         return not any(w['label'] not in labels and formable(w['label'], pieces) for w in vocabulary)
+    excluded = {e['label'] for e in pool.get('excluded', [])}
     def real_words(pieces, labels, must=None):
         made = set()
         for size in range(2, 4):
             for order in permutations(range(len(pieces)), size):
                 if must is None or must in order:
                     made.add(''.join(pieces[i] for i in order))
-        return sorted(word for word in made - labels if lexicon and lexicon(word))
+        # Palavras que o professor excluiu («nina», «nano») não contam como palavras para a criança.
+        return sorted(word for word in made - labels - excluded if lexicon and lexicon(word))
     while len(remaining) >= 2 and len(rounds) < max_rounds:
         sizes = (3, 2) if len(remaining) == 3 else (2,)
         used = {w['label'] for r in rounds for w in r['hidden']}
@@ -403,7 +409,8 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserve
                 board_pieces = pieces + [candidate]
                 if not honest(board_pieces, hidden):
                     continue
-                clash = len(real_words(board_pieces, labels, len(pieces)))
+                # Conta todas as palavras fora da lista no tabuleiro final, base e sílaba a mais.
+                clash = len(real_words(board_pieces, labels))
                 score = (repeated, clash)
                 if best is None or score < best[0]:
                     best = (score, board_pieces, hidden)
