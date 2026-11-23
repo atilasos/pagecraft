@@ -330,3 +330,115 @@ for(const restoreFirst of [true,false]){
 """
     result=subprocess.run(['node'],input=js,capture_output=True,text=True)
     assert result.returncode==0,result.stderr
+
+
+def test_repeating_a_sequence_with_other_pieces_keeps_feedback():
+    template=(motor.ROOT/'scripts/templates/m28p-tic.html').read_text()
+    model=template.split('/* BEGIN M28P TIC MODEL: funções puras verificáveis em Node. */')[1].split('/* END M28P TIC MODEL */')[0]
+    js=model+"""
+const assert=require('node:assert/strict');
+const r={id:'d',kind:'discover',pieces:[{id:'ma#1',label:'ma'},{id:'da#1',label:'da'},{id:'da#2',label:'da'},{id:'na#1',label:'na'}],lexicon:[{label:'dama',syllables:['da','ma']},{label:'nada',syllables:['na','da']}]};
+const s=TicModel.initial();
+TicModel.edit(s,r,['ma#1','da#1']);assert(TicModel.confirm(s,r).emit);
+TicModel.edit(s,r,['ma#1','da#2']);const second=TicModel.confirm(s,r);
+assert.equal(second.emit,false);assert.equal(s.counts.d,1);
+// A última seleção acompanha o ecrã, para a mensagem e a pista não desaparecerem.
+assert.deepEqual(s.last.d,['ma#1','da#2']);
+"""
+    result=subprocess.run(['node'],input=js,capture_output=True,text=True)
+    assert result.returncode==0,result.stderr
+
+
+def test_full_generation_replaces_the_report_and_filtered_keeps_others(tmp_path,monkeypatch):
+    real_root=motor.ROOT
+    monkeypatch.setattr(motor,'BASE',tmp_path)
+    # O gerador apaga os atalhos de jogos omitidos em ROOT/drafts: o teste nunca toca nos reais.
+    monkeypatch.setattr(motor,'ROOT',tmp_path)
+    (tmp_path/'drafts').mkdir()
+    (tmp_path/'cycle.json').write_text((real_root/'drafts/m28p-v3/cycle.json').read_text())
+    stale=[dict(keyword='flor',game='sentence',status='generated',slug='x'),dict(keyword='menina',game='discover',status='generated',slug='y')]
+    (tmp_path/'cycle-generation-report.json').write_text(json.dumps(stale))
+    monkeypatch.setattr(motor,'cycle_content',lambda word,game,pool,lexicon=None:(None,'teste'))
+    words=json.loads((real_root/'drafts/m28p-v3/words.json').read_text())
+    motor.build_cycle(words,SimpleNamespace(word='menina',game=None,validate_only=False))
+    kept=json.loads((tmp_path/'cycle-generation-report.json').read_text())
+    assert any(e['keyword']=='flor' for e in kept)
+    motor.build_cycle(words,SimpleNamespace(word=None,game=None,validate_only=False))
+    full=json.loads((tmp_path/'cycle-generation-report.json').read_text())
+    assert all(e['status']=='omitted' for e in full)
+
+
+def test_discover_uses_new_words_and_extra_syllable_only_when_it_adds_no_real_words():
+    from scripts.m28p_cycle import discover_rounds
+    import random
+    pools=validate_cycle(source(),motor.read_words())
+    for slug in ('menina','uva','sapato','cenoura','quadro','peixe'):
+        pool=pools[slug]
+        fresh=[w for w in pool['newWords'] if 2<=len(w['syllables'])<=3]
+        rounds=discover_rounds(pool,random.Random(slug))
+        if len(fresh)>=2 and rounds:
+            assert any(w.get('newIn')==slug for w in rounds[0]['hidden']),slug
+    from itertools import permutations
+    real={'nine','ove','voo','mame','nona','nove','nave'}
+    def made(pieces):
+        return {''.join(pieces[i] for i in order) for n in (2,3) for order in permutations(range(len(pieces)),n)}&real
+    # Palavras-chave sem tabuleiro fixo, para exercitar a escolha dinâmica da sílaba a mais.
+    for slug in ('dedo','sapato','bota','casa'):
+        for r in discover_rounds(pools[slug],random.Random(1),lexicon=lambda w:w in real):
+            labels={w['label'] for w in r['hidden']}
+            if r['extra']:
+                # A sílaba a mais só aparece quando não acrescenta palavras reais fora da lista.
+                base={s for w in r['hidden'] for s in w['syllables']}
+                core=[p for p in r['pieces'] if p in base]
+                assert made(r['pieces'])-labels==made(core)-labels,(slug,r['pieces'])
+
+
+def test_pinned_pilot_boards_match_the_approved_order_and_are_validated():
+    from scripts.m28p_cycle import discover_rounds
+    import random
+    pools=validate_cycle(source(),motor.read_words())
+    uva=next(w for w in motor.read_words() if w['slug']=='uva')
+    data,_=motor.cycle_content(uva,'discover',pools['uva'])
+    assert [[p['label'] for p in r['pieces']] for r in data['rounds']]==[b['pieces'] for b in source()['keywords']['uva']['discoverBoards']]
+    twice=copy.deepcopy(source());twice['keywords']['menino']['discoverBoards'][0]['hidden']=['mano','mano']
+    with pytest.raises(ValueError,match='Tabuleiro fixo'):
+        discover_rounds(validate_cycle(twice,motor.read_words())['menino'],random.Random(0))
+    many=copy.deepcopy(source());many['keywords']['menino']['discoverBoards'][0]['pieces']+=['ma']*10
+    with pytest.raises(ValueError,match='Tabuleiro fixo'):
+        discover_rounds(validate_cycle(many,motor.read_words())['menino'],random.Random(0))
+    bad=copy.deepcopy(source());bad['keywords']['menino']['discoverBoards'][0]['pieces']=['ma','nu','ni','no']
+    with pytest.raises(ValueError,match='Tabuleiro fixo'):
+        discover_rounds(validate_cycle(bad,motor.read_words())['menino'],random.Random(0))
+
+
+def test_celebration_needs_a_common_word_a_valid_split_and_the_right_stage():
+    from scripts.m28p_cycle import celebrated_sequences
+    cycle=source();slugs=[w['slug'] for w in sorted(motor.read_words(),key=lambda w:w['order'])];rep=cycle['repertoire']
+    known={'nela','posa','lama'}
+    # «ne·la» celebra-se; «nel·a» não (divisão inválida).
+    assert celebrated_sequences(['ne','la'],{'nela'},known,slugs.index('funil'),rep,slugs)==['ne·la']
+    assert celebrated_sequences(['nel','a'],{'nela'},known,slugs.index('funil'),rep,slugs)==[]
+    # «po·sa» só depois de casa (s entre vogais).
+    assert celebrated_sequences(['po','sa'],{'posa'},known,slugs.index('bota'),rep,slugs)==[]
+    assert celebrated_sequences(['po','sa'],{'posa'},known,slugs.index('casa'),rep,slugs)==['po·sa']
+    # Formas raras (fora do vocabulário infantil) não se celebram.
+    assert celebrated_sequences(['ma','la'],{'mala'},known,slugs.index('leque'),rep,slugs)==[]
+
+
+def test_repeated_sentence_note_uses_singular_and_plural():
+    rounds=lambda own,rest:[{'target':{'newIn':'menino'}}]*own+[{'target':{'newIn':'menina'}}]*rest
+    word={'slug':'menino','label':'menino'}
+    assert motor.repeated_note(rounds(1,1),word)=="A primeira frase é de «menino»; a última repete uma frase de uma palavra-chave anterior. "
+    assert motor.repeated_note(rounds(3,1),word).startswith("As primeiras 3 frases são de «menino»; a última repete")
+    assert "as 2 seguintes repetem" in motor.repeated_note(rounds(2,2),word)
+    assert motor.repeated_note(rounds(4,0),word)==""
+
+
+def test_avoid_words_weigh_on_boards_but_are_never_celebrated():
+    from scripts.m28p_cycle import board_weight, celebrated_sequences
+    cycle=source();slugs=[w['slug'] for w in sorted(motor.read_words(),key=lambda w:w['order'])]
+    # Uma palavra a evitar pesa como conhecida (1), uma forma rara pesa 0.25.
+    assert board_weight(['rabo','toes'],known={'bolo'})==0.5
+    assert board_weight(['rabo','toes'],known={'bolo'},avoid={'rabo'})==1.25
+    # Mas só as palavras celebradas (knownWords) recebem a ★.
+    assert celebrated_sequences(['ra','bo'],{'rabo'},{'bolo'},slugs.index('rato'),cycle['repertoire'],slugs)==[]
