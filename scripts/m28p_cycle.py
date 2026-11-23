@@ -414,10 +414,15 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserve
     if pool.get('discoverBoards'):
         # Tabuleiros já aprovados ficam fixos: uma ronda concluída nunca reabre noutra versão.
         by_label = {w['label']: w for w in pool['words']}
+        units = set(pool['families'])
         for board_spec in pool['discoverBoards']:
             hidden = [by_label[label] for label in board_spec['hidden']]
             pieces = list(board_spec['pieces'])
             labels = {w['label'] for w in hidden}
+            # Um tabuleiro fixo continua sujeito às mesmas regras: peças do repertório, respostas montáveis, contagem honesta.
+            if any(piece not in units for piece in pieces) or not all(formable(w['label'], pieces) for w in hidden) \
+                    or not honest(pieces, hidden):
+                raise ValueError(f"Tabuleiro fixo inválido em {pool['keyword']['label']}: {board_spec}")
             found = real_words(pieces, labels)
             base = {s for w in hidden for s in w['syllables']}
             rounds.append(dict(pieces=pieces, hidden=hidden, warnings=found, celebrate=celebrated(pieces, set(found)),

@@ -108,6 +108,25 @@ with sync_playwright() as p:
                 if len(data['rounds']) > 1:
                     key('#next')
                     assert 'Ronda 2' in page.locator('#progress').get_attribute('aria-label')
+                    if game == 'discover':
+                        # Percorre as restantes rondas: celebração (sem marca de erro nem contagem) e descoberta de todas.
+                        for index, rr in enumerate(data['rounds'][1:], start=1):
+                            if index > 1:
+                                key('#next')
+                            for seq in rr.get('celebrate', [])[:1]:
+                                for label in seq.split('·'):
+                                    piece(label)
+                                key('#confirm')
+                                assert 'é uma palavra! Não estava escondida' in page.locator('#feedback').text_content()
+                                assert page.locator('.tray.visual-cue').count() == 0
+                                assert f"Encontraste 0 de {len(rr['lexicon'])}." in page.locator('.hidden-count').text_content()
+                                for _ in seq.split('·'):
+                                    key('#undo')
+                            for w in rr['lexicon']:
+                                for label in w['syllables']:
+                                    piece(label)
+                                key('#confirm')
+                            assert 'Encontraste todas' in page.locator('#feedback').text_content()
                 assert page.locator('svg title').count() == 0
                 assert not errors, errors
                 assert page.evaluate('document.documentElement.scrollWidth<=innerWidth'), 'scroll horizontal'

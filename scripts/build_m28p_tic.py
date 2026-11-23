@@ -392,7 +392,10 @@ def cycle_content(word, game, pool, lexicon=None):
         groups = discover_rounds(pool, random.Random(word['slug']), lexicon, reserved={sample['slug']})
         for index, group in enumerate(groups):
             # Nenhuma palavra escondida aparece já montada em peças seguidas.
-            pieces = mixed(pieces_for(group['pieces']), seed(index), [w['syllables'] for w in group['hidden']])
+            pieces = pieces_for(group['pieces'])
+            if not pool.get('discoverBoards'):
+                pieces = mixed(pieces, seed(index), [w['syllables'] for w in group['hidden']])
+            # Os tabuleiros fixos (piloto aprovado) mantêm a ordem publicada das peças.
             excluded = {e['label'] for e in pool.get('excluded', [])}
             rounds.append(dict(id='descobrir-' + '-'.join(w['slug'] for w in group['hidden']), unit='syllable', extra=group['extra'],
                                target=resource(group['hidden'][0]), warnings=[w for w in group['warnings'] if w not in excluded],

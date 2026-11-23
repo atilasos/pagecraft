@@ -388,3 +388,14 @@ def test_discover_uses_new_words_and_extra_syllable_only_when_it_adds_no_real_wo
             if r['extra']:
                 # A sílaba a mais só aparece quando não acrescenta palavras reais fora da lista.
                 assert made(r['pieces'])-labels==made(r['pieces'][:-1])-labels,(slug,r['pieces'])
+
+
+def test_pinned_pilot_boards_match_the_approved_order_and_are_validated():
+    pools=validate_cycle(source(),motor.read_words())
+    data,_=motor.cycle_content(motor.read_words()[2],'discover',pools['uva'])
+    assert [[p['label'] for p in r['pieces']] for r in data['rounds']]==[b['pieces'] for b in source()['keywords']['uva']['discoverBoards']]
+    bad=copy.deepcopy(source());bad['keywords']['menino']['discoverBoards'][0]['pieces']=['ma','nu','ni','no']
+    from scripts.m28p_cycle import discover_rounds
+    import random
+    with pytest.raises(ValueError,match='Tabuleiro fixo'):
+        discover_rounds(validate_cycle(bad,motor.read_words())['menino'],random.Random(0))
