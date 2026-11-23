@@ -97,6 +97,38 @@ def test_function_words_and_sentence_words_follow_their_keyword():
         validate_cycle(cycle,motor.read_words())
 
 
+def test_syllable_boundaries_hiatus_and_reserved_keywords():
+    from scripts.m28p_cycle import readable_at, readable_word
+    cycle=source();slugs=[w['slug'] for w in sorted(motor.read_words(),key=lambda w:w['order'])];rep=cycle['repertoire']
+    # A consoante entre vogais vai para a sílaba seguinte: «sal-a» não é divisão de «sala».
+    assert not readable_at('sala',['sal','a'],slugs.index('funil'),rep,slugs)
+    assert readable_at('sala',['sa','la'],slugs.index('leque'),rep,slugs)
+    assert readable_word('sala',slugs.index('leque'),rep,slugs) and not readable_word('sala',slugs.index('sapato'),rep,slugs)
+    # Palavras longas verificam-se sem explosão combinatória.
+    assert not readable_word('mana'*40+'x',slugs.index('uva'),rep,slugs)
+    # «gu» e «qu» seguidos de vogal não se separam.
+    assert not readable_word('fogueira',slugs.index('bandeira'),rep,slugs)
+    assert readable_word('fogueira',slugs.index('fogueira'),rep,slugs)
+    assert not readable_word('água',slugs.index('quadro'),rep,slugs)
+    bad=copy.deepcopy(cycle);bad['keywords']['menina']['newWords'].append(dict(label='menino',syllables=['me','ni','no'],picturable=True))
+    with pytest.raises(ValueError,match='palavra-chave'):
+        validate_cycle(bad,motor.read_words())
+    hiatus=copy.deepcopy(cycle);hiatus['keywords']['uva']['newWords'].append(dict(label='moinho',syllables=['mo','i','nho'],picturable=False))
+    with pytest.raises(ValueError):
+        validate_cycle(hiatus,motor.read_words())
+
+
+def test_demo_audio_matches_the_demo_target():
+    pools=validate_cycle(source(),motor.read_words())
+    for word in motor.read_words()[:3]:
+        for game in motor.CYCLE_GAMES:
+            data,_=motor.cycle_content(word,game,pools[word['slug']])
+            if not data:
+                continue
+            expected=motor.data_audio(f"exemplo-{word['slug']}") if game=='sentence' else data['demo']['target']['audio']
+            assert data['demo']['audio']==expected
+
+
 def test_class_sentence_warnings_use_the_reading_rules():
     from server.classroom.sentences import prepare_sentence
     text,tokens,warnings=prepare_sentence('Avó, vê o guarda-chuva!','uva')
@@ -105,6 +137,10 @@ def test_class_sentence_warnings_use_the_reading_rules():
     assert any('meu' in w for w in warnings)
     _,_,warnings=prepare_sentence('A avó vê o ovo','uva')
     assert warnings==[]
+    # Palavras funcionais só a partir da sua etapa: «da» entra em dedo.
+    from server.classroom import sentences
+    words,cycle,pools=sentences.repertoire()
+    assert 'da' not in pools['uva']['functionWords']
 
 
 def test_round_and_piece_ids_follow_content():

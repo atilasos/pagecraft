@@ -12,7 +12,7 @@ import unicodedata
 
 CYCLE_GAMES = {
     'listen-build': ('Ouvir e montar', 'Ouve e junta as sílabas.', 'Monto a palavra que ouvi.'),
-    'read-choose': ('Ler e escolher', 'Lê e escolhe a imagem.', 'Escolho a imagem da palavra que li.'),
+    'read-choose': ('Ler e escolher', 'Lê a palavra. Escolhe a imagem certa.', 'Escolho a imagem da palavra que li.'),
     'sentence': ('Montar frases', 'Ordena as palavras da frase.', 'Ordeno palavras para formar uma frase.'),
     'discover': ('Descobrir palavras', 'Junta as sílabas. Descobre as palavras escondidas.', 'Junto sílabas e descubro palavras.'),
 }
@@ -22,6 +22,7 @@ DIPHTHONGS = ('ai', 'ao', 'au', 'ei', 'eu', 'iu', 'oi', 'ou', 'ui', 'ão', 'ãe'
               'ái', 'áu', 'éi', 'éu', 'êi', 'êu', 'ói', 'ôu', 'óu')
 # Dígrafos que só se leem dentro de uma unidade já trabalhada («ss» de passarinho, não «s» de escada + «s»).
 DIGRAPHS = ('ch', 'lh', 'nh', 'rr', 'ss', 'qu', 'gu')
+VOWELS = set('aeiouáéíóúâêôãõà')
 TOKEN = re.compile(r"[^\W\d_]+(?:-[^\W\d_]+)*")
 MIN_ROUNDS = {'listen-build': 3, 'read-choose': 3, 'sentence': 1, 'discover': 1}
 
@@ -64,6 +65,23 @@ def _context_errors(label, index, repertoire, slugs):
             if re.search(rule['pattern'], label) and slugs.index(rule['from']) > index]
 
 
+def _boundary_errors(label, syllables):
+    """Fronteiras silábicas inválidas: uma consoante entre vogais vai para a sílaba seguinte («sa-la», não «sal-a»),
+    e nenhum ditongo ou dígrafo se parte entre duas sílabas."""
+    errors, start = [], 0
+    for current, following in zip(syllables, syllables[1:]):
+        start += len(current)
+        if current[-1] not in VOWELS and following[0] in VOWELS:
+            errors.append(f'{current}-{following}')
+        # «gu»/«qu» seguidos de vogal leem-se juntos («fo-guei-ra», não «fo-gu-ei-ra»; «á-gua» não é «á-gu-a»).
+        if current.endswith(('gu', 'qu')) and following[0] in VOWELS:
+            errors.append(f'{current}-{following}')
+        pair = label[start - 1:start + 1]
+        if pair in DIPHTHONGS or pair in DIGRAPHS:
+            errors.append(pair)
+    return errors
+
+
 def _diphthong_errors(label, syllables):
     """Um ditongo ou dígrafo que atravessa a fronteira silábica não foi trabalhado como unidade."""
     bounds, start = [], 0
@@ -83,7 +101,7 @@ def readable_at(label, syllables, index, repertoire, slugs):
         return False
     units = units_until(repertoire, slugs, index)
     return (all(s in units for s in syllables) and not _context_errors(label, index, repertoire, slugs)
-            and not _diphthong_errors(label, syllables))
+            and not _diphthong_errors(label, syllables) and not _boundary_errors(label, syllables))
 
 
 def segmentations(label, units):
@@ -101,9 +119,29 @@ def segmentations(label, units):
 
 
 def readable_word(label, index, repertoire, slugs):
-    """Indica se alguma divisão da palavra se lê com o que foi trabalhado até à palavra-chave index."""
+    """Indica se alguma divisão da palavra se lê com o que foi trabalhado até à palavra-chave index.
+
+    Percorre as posições alcançáveis (tempo quadrático no comprimento), porque todas as regras de
+    fronteira são locais; os contextos dependem só da grafia."""
+    if _context_errors(label, index, repertoire, slugs):
+        return False
     units = units_until(repertoire, slugs, index)
-    return any(readable_at(label, parts, index, repertoire, slugs) for parts in segmentations(label, units))
+    longest = max(map(len, units))
+    reachable = {0: None}
+    for start in range(len(label)):
+        if start not in reachable:
+            continue
+        previous = reachable[start]
+        for end in range(start + 1, min(len(label), start + longest) + 1):
+            unit = label[start:end]
+            if unit not in units or end in reachable:
+                continue
+            if previous is not None and (previous[-1] not in VOWELS and unit[0] in VOWELS
+                                         or previous.endswith(('gu', 'qu')) and unit[0] in VOWELS
+                                         or label[start - 1:start + 1] in DIPHTHONGS + DIGRAPHS):
+                continue
+            reachable[end] = unit
+    return len(label) in reachable
 
 
 def _check_item(slug, item, index, repertoire, slugs, lexicon, first_rule=True):
@@ -115,8 +153,11 @@ def _check_item(slug, item, index, repertoire, slugs, lexicon, first_rule=True):
         raise ValueError(f'{slug}: sílabas fora do repertório: {label}')
     if errors := _context_errors(label, index, repertoire, slugs):
         raise ValueError(f'{slug}: leitura ainda não trabalhada em {label}: {errors[0]}')
-    if errors := _diphthong_errors(label, syllables):
-        raise ValueError(f'{slug}: dígrafo ou ditongo ainda não introduzido: {label} ({errors[0]})')
+    if not item.get('hiatus') and (errors := _diphthong_errors(label, syllables)):
+        raise ValueError(f'{slug}: ditongo ou dígrafo partido, ou ainda não introduzido, em {label} ({errors[0]}); '
+                         'se for um hiato («ra-i-nha»), registar hiatus: true')
+    if not item.get('hiatus') and (errors := _boundary_errors(label, syllables)):
+        raise ValueError(f'{slug}: divisão silábica inválida em {label}: {errors[0]}')
     if first_rule and index and readable_at(label, syllables, index - 1, repertoire, slugs):
         earlier = next(i for i in range(index) if readable_at(label, syllables, i, repertoire, slugs))
         raise ValueError(f'{slug}: {label} já é formável em {slugs[earlier]}; entra na primeira palavra-chave possível.')
@@ -170,6 +211,8 @@ def validate_cycle(cycle, words, lexicon=None):
         current = []
         for entry in section['newWords']:
             label = entry['label']
+            if label in {w['label'] for w in ordered}:
+                raise ValueError(f'{slug}: {label} é uma palavra-chave e não pode ser palavra nova.')
             _check_item(slug, entry, index, repertoire, slugs, lexicon)
             if label in {w['label'] for w in known + extra}:
                 raise ValueError(f'{slug}: palavra repetida: {label}')
@@ -211,6 +254,7 @@ def validate_cycle(cycle, words, lexicon=None):
             raise ValueError(f'{slug}: frases repetidas.')
         result[slug] = dict(
             keyword=dict(item, article=articles[slug]), words=list(known), newWords=list(current), sentenceWords=list(extra),
+            functionWords=sorted(function_words), excluded=cycle['policy'].get('excludedFromSource', []),
             sentences=list(sentences), families=sorted(units_until(repertoire, slugs, index)),
             visualConflicts=conflicts)
     return result
@@ -299,15 +343,6 @@ def formable(label, pieces, limit=3):
     return search(label, frozenset(), 0)
 
 
-def _combined_words(pieces, must, limit=3):
-    words = set()
-    for size in range(2, limit + 1):
-        for order in permutations(range(len(pieces)), size):
-            if must in order:
-                words.add(''.join(pieces[i] for i in order))
-    return words
-
-
 def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserved=()):
     """Agrupa as palavras escondidas por ronda e escolhe sílabas suficientes, sem excesso.
 
@@ -342,20 +377,25 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserve
                     made.add(''.join(pieces[i] for i in order))
         return sorted(word for word in made - labels if lexicon and lexicon(word))
     while len(remaining) >= 2 and len(rounds) < max_rounds:
-        size = 3 if len(remaining) == 3 else 2
+        sizes = (3, 2) if len(remaining) == 3 else (2,)
         used = {w['label'] for r in rounds for w in r['hidden']}
         options = []
-        for first in range(len(remaining)):
+        for size, first in ((size, first) for size in sizes for first in range(len(remaining))):
             for others in combinations(range(first + 1, len(remaining)), size - 1):
                 group = [remaining[first]] + [remaining[i] for i in others]
                 pieces, hidden = board(group)
                 if len(hidden) <= max_hidden and honest(pieces, hidden):
-                    options.append((bool(used & {w['label'] for w in hidden}), first, pieces, hidden))
+                    # Preferir tabuleiros cujas peças base não formem palavras reais fora da lista («ano», «ova»).
+                    clashes = len(real_words(pieces, {w['label'] for w in hidden}))
+                    options.append((bool(used & {w['label'] for w in hidden}), clashes, first, pieces, hidden))
         if not options:
             break
-        options.sort(key=lambda option: (option[0], option[1]))
+        # Com três palavras por usar, o trio evita deixar uma de fora; os pares só servem se o trio não for honesto.
+        trios = [option for option in options if len(option[4]) >= 3 and len(remaining) == 3]
+        options = trios or options
+        options.sort(key=lambda option: option[:3])
         best = None
-        for repeated, _, pieces, hidden in options[:12]:
+        for repeated, _, _, pieces, hidden in options[:12]:
             labels = {w['label'] for w in hidden}
             candidates = sorted(s for s in syllables if len(s) >= 2 and plain(s) == s and s not in pieces)
             rng.shuffle(candidates)
@@ -372,10 +412,12 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserve
             if best and best[0] == (False, 0):
                 break
         if best is None:
-            _, _, pieces, hidden = options[0]
+            _, _, _, pieces, hidden = options[0]
         else:
             _, pieces, hidden = best
         labels = {w['label'] for w in hidden}
-        rounds.append(dict(pieces=pieces, hidden=hidden, warnings=real_words(pieces, labels)))
+        base = {s for w in hidden for s in w['syllables']}
+        rounds.append(dict(pieces=pieces, hidden=hidden, warnings=real_words(pieces, labels),
+                           extra=any(piece not in base for piece in pieces)))
         remaining = [w for w in remaining if w['label'] not in labels]
     return rounds
