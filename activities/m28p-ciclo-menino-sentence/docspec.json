@@ -79,8 +79,8 @@
                 "id": "pista-1",
                 "text": {
                   "pt": {
-                    "individual": "Ouve a palavra outra vez.",
-                    "group": "Ouçam a palavra outra vez."
+                    "individual": "Começa pela palavra com letra maiúscula.",
+                    "group": "Comecem pela palavra com letra maiúscula."
                   }
                 }
               },
@@ -88,8 +88,8 @@
                 "id": "pista-2",
                 "text": {
                   "pt": {
-                    "individual": "Experimenta juntar as peças.",
-                    "group": "Experimentem juntar as peças."
+                    "individual": "Olha para a imagem. Quem aparece primeiro na frase?",
+                    "group": "Olhem para a imagem. Quem aparece primeiro na frase?"
                   }
                 }
               }
@@ -136,8 +136,8 @@
                 "id": "pista-1",
                 "text": {
                   "pt": {
-                    "individual": "Ouve a palavra outra vez.",
-                    "group": "Ouçam a palavra outra vez."
+                    "individual": "Começa pela palavra com letra maiúscula.",
+                    "group": "Comecem pela palavra com letra maiúscula."
                   }
                 }
               },
@@ -145,65 +145,8 @@
                 "id": "pista-2",
                 "text": {
                   "pt": {
-                    "individual": "Experimenta juntar as peças.",
-                    "group": "Experimentem juntar as peças."
-                  }
-                }
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "summary": "Montar frases",
-      "textDescription": "Ordena as palavras da frase.",
-      "duration": 1,
-      "interaction": {
-        "state": [
-          {
-            "name": "resposta",
-            "type": "sorting",
-            "default": null
-          }
-        ],
-        "render": "Imagem original, cartões grandes e exemplo visual recuperável; áudio PT-PT incorporado por pedido.",
-        "transition": "Selecionar, confirmar, receber pista e continuar após resposta, mesmo incorreta.",
-        "constraint": "Comparar a escrita e o significado; conservar a ordem gráfica das peças.",
-        "assessment": "Ordeno palavras para formar uma frase. Registar a resposta e o apoio, sem inferir leitura oral ou domínio."
-      },
-      "differentiation": {
-        "support": "Modelo e peças comparáveis; primeira pista visual sempre disponível.",
-        "standard": "Modelo nos jogos de associação e montagem apoiada; demonstração recuperável.",
-        "challenge": "Retirar modelo opcional sem alterar as respostas nem introduzir palavras futuras."
-      },
-      "support": {
-        "objective": "Ordena as palavras da frase.",
-        "criteria": [
-          "Ordeno palavras para formar uma frase."
-        ],
-        "obstacles": [
-          {
-            "id": "comparar",
-            "label": {
-              "pt": "Quero uma pista"
-            },
-            "hints": [
-              {
-                "id": "pista-1",
-                "text": {
-                  "pt": {
-                    "individual": "Ouve a palavra outra vez.",
-                    "group": "Ouçam a palavra outra vez."
-                  }
-                }
-              },
-              {
-                "id": "pista-2",
-                "text": {
-                  "pt": {
-                    "individual": "Experimenta juntar as peças.",
-                    "group": "Experimentem juntar as peças."
+                    "individual": "Olha para a imagem. Quem aparece primeiro na frase?",
+                    "group": "Olhem para a imagem. Quem aparece primeiro na frase?"
                   }
                 }
               }

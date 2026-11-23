@@ -79,8 +79,8 @@
                 "id": "pista-1",
                 "text": {
                   "pt": {
-                    "individual": "Ouve a palavra outra vez.",
-                    "group": "Ouçam a palavra outra vez."
+                    "individual": "Junta duas sílabas e lê o que formaste.",
+                    "group": "Juntem duas sílabas e leiam o que formaram."
                   }
                 }
               },
@@ -88,65 +88,8 @@
                 "id": "pista-2",
                 "text": {
                   "pt": {
-                    "individual": "Experimenta juntar as peças.",
-                    "group": "Experimentem juntar as peças."
-                  }
-                }
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "summary": "Descobrir palavras",
-      "textDescription": "Junta sílabas. Descobre as palavras escondidas.",
-      "duration": 1,
-      "interaction": {
-        "state": [
-          {
-            "name": "resposta",
-            "type": "sorting",
-            "default": null
-          }
-        ],
-        "render": "Imagem original, cartões grandes e exemplo visual recuperável; áudio PT-PT incorporado por pedido.",
-        "transition": "Selecionar, confirmar, receber pista e continuar após resposta, mesmo incorreta.",
-        "constraint": "Comparar a escrita e o significado; conservar a ordem gráfica das peças.",
-        "assessment": "Experimento combinações e descubro palavras. Registar a resposta e o apoio, sem inferir leitura oral ou domínio."
-      },
-      "differentiation": {
-        "support": "Modelo e peças comparáveis; primeira pista visual sempre disponível.",
-        "standard": "Modelo nos jogos de associação e montagem apoiada; demonstração recuperável.",
-        "challenge": "Retirar modelo opcional sem alterar as respostas nem introduzir palavras futuras."
-      },
-      "support": {
-        "objective": "Junta sílabas. Descobre as palavras escondidas.",
-        "criteria": [
-          "Experimento combinações e descubro palavras."
-        ],
-        "obstacles": [
-          {
-            "id": "comparar",
-            "label": {
-              "pt": "Quero uma pista"
-            },
-            "hints": [
-              {
-                "id": "pista-1",
-                "text": {
-                  "pt": {
-                    "individual": "Ouve a palavra outra vez.",
-                    "group": "Ouçam a palavra outra vez."
-                  }
-                }
-              },
-              {
-                "id": "pista-2",
-                "text": {
-                  "pt": {
-                    "individual": "Experimenta juntar as peças.",
-                    "group": "Experimentem juntar as peças."
+                    "individual": "Experimenta trocar a ordem das sílabas.",
+                    "group": "Experimentem trocar a ordem das sílabas."
                   }
                 }
               }

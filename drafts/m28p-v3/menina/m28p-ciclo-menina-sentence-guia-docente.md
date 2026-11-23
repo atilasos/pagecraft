@@ -1,7 +1,7 @@
 # Montar frases · menina
 
-Rascunho para revisão docente. Confirmar o repertório cumulativo, imagens e gravações antes de utilizar.
+1 ronda, cerca de cinco minutos. A criança ordena as palavras de uma frase. Com ajuda mostra a imagem, a frase escrita com as palavras separadas e o botão de ouvir; Sozinho mostra a imagem e o botão de ouvir; Consigo ajudar um amigo mostra só o botão de ouvir. Frases: A menina é a mana. Quando duas ordens dizem o mesmo (por exemplo, «A mana é a menina.»), as duas contam como certas. Na página da turma, podes guardar as frases ditadas pelas crianças e projetá-las no Quadro. Em sessão, até quatro frases da turma surgem primeiro, completadas pelas frases fixas. Com ajuda mostra as palavras da frase da turma; nos outros níveis, a criança pode tocar em «Ver a frase», que fica registado. As frases da turma só têm leitura em voz alta quando o computador tem uma voz pt-PT instalada.
 
-Uma ronda fixa, cerca de cinco minutos. Com ajuda disponibiliza modelo segmentado; Sozinho retira o modelo; Consigo ajudar um amigo retira referências auxiliares. Pode continuar após confirmar uma resposta, incluindo incorreta. Ouvir, demonstração, desfazer e mudar apoio conservam o trabalho. Na página da turma, guarde as frases ditadas pelas crianças e projete-as no Quadro. Em sessão, até quatro frases da turma surgem primeiro, completadas pelas frases fixas. Com ajuda mostra os tokens; os outros níveis ocultam o texto. As frases da turma só têm leitura áudio quando existe uma voz local pt-PT no computador.
+A demonstração usa a palavra-chave «A menina», que não aparece nas rondas, e mostra os mesmos botões do jogo. Ouvir, ver a demonstração, desfazer e mudar de ajuda conservam o trabalho. A criança pode continuar depois de confirmar, mesmo com erro.
 
-Os registos descrevem ações e ajudas, sem certificar leitura ou fluência. O convite oral final é facultativo. Não publicado nem registado.
+Os registos descrevem ações e ajudas usadas; não certificam leitura nem fluência. No fim, em Consigo ajudar um amigo, há um convite oral facultativo, que não é registado. Revê as imagens e ouve as gravações antes de usar com a turma.
