@@ -38,9 +38,13 @@ def summarize_realization(attempt: dict) -> dict:
     seen = [e.get("received_at") for e in events if e.get("received_at")]
     assessment = attempt.get("assessment")
     answers = None
+    voice = "missing"
     if assessment:
         counts = Counter(assessment.get("answers", {}).values())
         answers = {key: counts.get(key, 0) for key in ("alone", "help", "practising", "skip")}
+        # Entregar tudo em «Passar» e sem texto é voz da criança, mas não é resposta.
+        text = str(assessment.get("strategy", "")).strip() or str(assessment.get("next_step", "")).strip()
+        voice = "answered" if text or any(answers[key] for key in ("alone", "help", "practising")) else "empty"
     return {
         "id": attempt["id"],
         "code": attempt["code"],
@@ -56,6 +60,7 @@ def summarize_realization(attempt: dict) -> dict:
         "help": sum(1 for e in events if e.get("type") == "help_needed"),
         "help_pending": help_pending,
         "assessment": answers,
+        "voice": voice,
         "strategy": (assessment or {}).get("strategy", ""),
         "next_step": (assessment or {}).get("next_step", ""),
     }

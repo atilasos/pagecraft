@@ -361,12 +361,18 @@ async function loadHints(source, request) {
     for (const student of progress.students) {
       const parts = [];
       if (student.state === "offline") parts.push(`fora do PageCraft${student.offline ? ` (${student.offline})` : ""}`);
-      else if (!student.realizations.length) parts.push(student.assigned.length ? "não começou atividades" : "sem atividades");
-      else {
+      if (!student.realizations.length) {
+        if (student.state !== "offline") parts.push(student.assigned.length ? "não começou atividades" : "sem atividades");
+      } else {
+        // O trabalho registado conta mesmo que a distribuição tenha mudado depois.
         if (student.words.length) parts.push(student.words.map(w => words.get(w)?.label || w).join(", "));
-        parts.push(`${distinctFinished(student)} de ${student.assigned.length} terminadas`);
-        const assessed = new Set(student.realizations.filter(r => r.assessment).map(r => r.code)).size;
-        parts.push(assessed ? `autoavaliação em ${assessed}` : "sem autoavaliação");
+        const finished = new Set(student.realizations.filter(r => r.finished).map(r => r.code)).size;
+        parts.push(student.assigned.length ? `${distinctFinished(student)} de ${student.assigned.length} terminadas` : `${finished} terminadas`);
+        // Mesmo critério que «Acompanhar»: respondida, entregue sem respostas ou em falta.
+        const answeredCodes = new Set(student.realizations.filter(r => r.voice === "answered").map(r => r.code));
+        const emptyCodes = new Set(student.realizations.filter(r => r.voice === "empty" && !answeredCodes.has(r.code)).map(r => r.code));
+        parts.push(answeredCodes.size ? `autoavaliação em ${answeredCodes.size}` : "sem autoavaliação respondida");
+        if (emptyCodes.size) parts.push(`${emptyCodes.size} entregue${emptyCodes.size === 1 ? "" : "s"} sem respostas`);
       }
       if (student.note) parts.push(`«${student.note.slice(0, 60)}${student.note.length > 60 ? "…" : ""}»`);
       hints.set(student.id, `Aula anterior: ${parts.join(" · ")}`);

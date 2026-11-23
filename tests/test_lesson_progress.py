@@ -125,6 +125,7 @@ async def test_progress_reports_each_pupil_including_missing_self_assessment(cli
     # Terminada: o pedido de ajuda deixa de estar pendente.
     assert (done['correct'], done['different'], done['unscored'], done['help'], done['help_pending']) == (1, 1, 0, 1, False)
     assert done['assessment'] == {'alone': 0, 'help': 1, 'practising': 0, 'skip': 0}
+    assert done['voice'] == 'answered'
     assert rows['Ana']['words'] == ['zzcasa']
     assert rows['Bruno']['state'] == 'working'
     assert rows['Bruno']['current'] == codes['sentence']
@@ -259,3 +260,15 @@ async def test_board_focus_ends_with_the_school_day_or_when_activity_leaves_less
     focus['set_at'] = (datetime.now(timezone.utc) - timedelta(days=1)).isoformat()
     path.write_text(json.dumps(focus))
     assert await app.state.lesson_plans.board_focus() is None
+
+
+def test_self_assessment_voice_distinguishes_answered_empty_and_missing():
+    from server.lesson_plans import summarize_realization
+    base = dict(id='x', code='ABCDEF', title='Jogo', started_at='2026-11-23T10:00:00+00:00', events=[])
+    def voice(assessment, completed=True):
+        return summarize_realization(dict(base, completed_at='2026-11-23T10:05:00+00:00' if completed else None,
+                                          assessment=assessment))['voice']
+    assert voice(None, completed=False) == 'missing'
+    assert voice({'answers': {'read': 'skip'}, 'strategy': '  ', 'next_step': ''}) == 'empty'
+    assert voice({'answers': {'read': 'skip'}, 'strategy': 'Li devagar'}) == 'answered'
+    assert voice({'answers': {'read': 'alone'}}) == 'answered'

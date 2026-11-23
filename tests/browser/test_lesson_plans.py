@@ -248,6 +248,20 @@ def test_teacher_follows_lesson_records_missing_self_assessment_and_switches_boa
         expect(page.locator('#board-now')).to_have_text('O quadro não mostra nenhuma atividade deste roteiro.')
         # O quadro volta à espera no próximo ciclo; consulta-se o mesmo pedido que o quadro faz.
         assert screen.request.get(origin + '/api/board/session').status == 204
+        # O Bruno entrega a autoavaliação só com «Passar»: conta à parte, não como respondida.
+        status = tab.evaluate('''async () => {
+            const me = await (await fetch('/api/learning/me')).json();
+            const answers = Object.fromEntries(me.criteria.map(c => [c.id, 'skip']));
+            const response = await fetch('/api/learning/me/finish', {method: 'POST', headers: {
+                'content-type': 'application/json', 'X-PageCraft-Realization': me.id},
+                body: JSON.stringify({answers})});
+            return response.status;
+        }''')
+        assert status == 200
+        page.evaluate('refresh(); 0')
+        bruno_row = rows.get_by_role('row', name=re.compile('^Bruno'))
+        expect(bruno_row).to_contain_text('Entregue sem respostas em 1 atividade')
+        expect(bruno_row).to_contain_text('autoavaliação entregue sem respostas')
     finally:
         pupil.close()
         board.close()
