@@ -1385,8 +1385,8 @@
           "source": "proposta",
           "layout": "eat",
           "place": [
-            80,
             92,
+            58,
             0.3
           ]
         },
@@ -1625,17 +1625,18 @@
           "source": "proposta"
         },
         {
-          "text": "O coelho vê o telhado.",
+          "text": "O menino vê o telhado.",
           "tokens": [
             "O",
-            "coelho",
+            "menino",
             "vê",
             "o",
             "telhado"
           ],
           "scene": [
             {
-              "image": "coelho"
+              "image": "menino",
+              "pose": "looking"
             },
             {
               "image": "telhado"
@@ -2034,9 +2035,9 @@
           "source": "proposta",
           "layout": "eat",
           "place": [
-            140,
-            80,
-            0.3
+            150,
+            40,
+            0.28
           ]
         },
         {
@@ -2607,24 +2608,23 @@
           "source": "proposta"
         },
         {
-          "text": "A foca está no lago.",
+          "text": "A foca vê a bola.",
           "tokens": [
             "A",
             "foca",
-            "está",
-            "no",
-            "lago"
+            "vê",
+            "a",
+            "bola"
           ],
           "scene": [
             {
               "image": "foca"
             },
             {
-              "image": "lago"
+              "image": "bola"
             }
           ],
-          "source": "proposta",
-          "layout": "on"
+          "source": "proposta"
         }
       ]
     },
@@ -2690,36 +2690,39 @@
       ],
       "sentences": [
         {
-          "text": "O laço é da menina.",
+          "text": "O laço é do palhaço.",
           "tokens": [
             "O",
             "laço",
             "é",
-            "da",
-            "menina"
+            "do",
+            "palhaço"
           ],
           "scene": [
             {
               "image": "laco"
             },
             {
-              "image": "menina"
+              "image": "palhaco"
             }
           ],
           "source": "proposta"
         },
         {
-          "text": "A girafa estica o pescoço.",
+          "text": "O palhaço vê a taça.",
           "tokens": [
-            "A",
-            "girafa",
-            "estica",
-            "o",
-            "pescoço"
+            "O",
+            "palhaço",
+            "vê",
+            "a",
+            "taça"
           ],
           "scene": [
             {
-              "image": "girafa"
+              "image": "palhaco"
+            },
+            {
+              "image": "taca"
             }
           ],
           "source": "proposta"
@@ -3014,9 +3017,9 @@
           "source": "proposta",
           "layout": "on",
           "place": [
-            64,
-            74,
-            0.42
+            66,
+            92,
+            0.38
           ]
         },
         {
@@ -3250,28 +3253,28 @@
       "sentenceWords": [],
       "sentences": [
         {
-          "text": "O urso come a sopa.",
+          "text": "O urso come a uva.",
           "tokens": [
             "O",
             "urso",
             "come",
             "a",
-            "sopa"
+            "uva"
           ],
           "scene": [
             {
               "image": "urso"
             },
             {
-              "image": "sopa"
+              "image": "uva"
             }
           ],
           "source": "proposta",
           "layout": "eat",
           "place": [
-            74,
-            110,
-            0.32
+            76,
+            104,
+            0.3
           ]
         },
         {
@@ -3394,9 +3397,9 @@
           "source": "proposta",
           "layout": "room",
           "place": [
-            98,
-            118,
-            0.46
+            100,
+            108,
+            0.44
           ]
         },
         {
@@ -3819,7 +3822,12 @@
               "image": "carro"
             }
           ],
-          "source": "proposta"
+          "source": "proposta",
+          "place": [
+            140,
+            96,
+            0.4
+          ]
         },
         {
           "text": "A borracha está no estojo.",
@@ -4083,39 +4091,35 @@
     "flor": "a"
   },
   "knownWords": {
-    "notes": "Palavras comuns no vocabulário de crianças de 6–7 anos (objetos, animais, ações e plurais do dia a dia), além do vocabulário do ciclo. Em Descobrir, só estas são celebradas quando a criança as forma, com divisão válida, sem estarem escondidas; formas raras ou de uso adulto recebem a resposta neutra. Revista a partir das palavras que os tabuleiros formam por acaso.",
+    "notes": "Palavras comuns no vocabulário de crianças de 6–7 anos (objetos, animais, ações e plurais do dia a dia), além do vocabulário do ciclo. Em Descobrir, só estas são celebradas quando a criança as forma, com divisão válida, sem estarem escondidas; formas raras ou de uso adulto recebem a resposta neutra. Revista a partir das palavras que os tabuleiros formam por acaso. Algumas entradas servem para tabuleiros futuros e podem não se formar nos atuais.",
     "words": [
-      "ama",
-      "amo",
       "ano",
       "asa",
       "ave",
+      "bata",
       "bebe",
       "boca",
       "bola",
       "bolo",
-      "cabo",
       "café",
       "cama",
+      "caminho",
       "cana",
       "capa",
       "cara",
       "casa",
-      "caça",
       "cedo",
       "cima",
       "coco",
       "cola",
       "copo",
-      "cova",
       "dado",
       "dedo",
       "dia",
       "doce",
       "dono",
-      "eco",
+      "esqui",
       "faca",
-      "face",
       "fada",
       "fala",
       "fila",
@@ -4127,7 +4131,6 @@
       "gato",
       "gelo",
       "gira",
-      "gola",
       "lado",
       "lago",
       "lama",
@@ -4153,10 +4156,10 @@
       "nada",
       "nata",
       "nave",
-      "nela",
       "neve",
       "nome",
       "nove",
+      "novela",
       "novo",
       "olho",
       "onda",
@@ -4169,6 +4172,7 @@
       "pena",
       "pera",
       "pote",
+      "quilo",
       "rato",
       "roda",
       "rosa",
@@ -4191,7 +4195,6 @@
       "toca",
       "uva",
       "vaca",
-      "vara",
       "vela",
       "vida",
       "vila",
