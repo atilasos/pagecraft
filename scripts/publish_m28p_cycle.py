@@ -22,15 +22,16 @@ BASE = ROOT / 'drafts/m28p-v3'
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--word', action='append', required=True, help='Palavra-chave a publicar (repetível).')
+    parser.add_argument('--word', action='append', required=True, help='Slug da palavra-chave a publicar (repetível), por exemplo palhaco.')
     parser.add_argument('--apply', action='store_true')
     args = parser.parse_args()
     report = json.loads((BASE / 'cycle-generation-report.json').read_text())
-    selected = [item for item in report if item['word'] in args.word and item['status'] == 'generated']
+    # O relatório guarda o slug da palavra-chave («palhaco», «arvore»), que é também o nome da pasta.
+    selected = [item for item in report if item['keyword'] in args.word and item['status'] == 'generated']
     plan = []
     for item in selected:
         slug = item['slug']
-        folder = BASE / item['word']
+        folder = BASE / item['keyword']
         files = dict(html=folder / f'{slug}.html', docspec=folder / f'{slug}-docspec.json',
                      design=folder / f'{slug}-design-spec.json', guide=folder / f'{slug}-guia-docente.md')
         missing = [str(path) for path in files.values() if not path.is_file()]
