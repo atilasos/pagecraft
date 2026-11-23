@@ -20,7 +20,7 @@ Se não te indicarem `SKILL_DIR`, usa a pasta da skill do teu harness (`skills/c
 
 1. `$SKILL_DIR/identities/architect.md`: a tua identidade e as regras de conceção. A identidade foi escrita para o Studio, que lê o JSON da resposta. Aqui, escreve o JSON no ficheiro de saída e responde só com o resumo pedido em «Devolve».
 2. `$SKILL_DIR/references/activity-experience.md`, `age-adaptation.md` e `contextual-support.md`.
-3. `$SKILL_DIR/references/srtc-examples.md` e `ae-index.md`.
+3. `$SKILL_DIR/references/srtc-examples.md` e `ae-index.md`, só os exemplos e as entradas pertinentes para o tema e o ano: localiza-os pelos títulos e não leias os catálogos inteiros.
 4. `$SKILL_DIR/references/docspec-schema.md`, só nas secções de que precisares.
 5. `$SKILL_DIR/references/maker-patterns.md`, só se o maker for pedido.
 6. A Sebenta, conforme a secção «Sebenta» de `$SKILL_DIR/references/workflow.md`. Lê integralmente poucas páginas.

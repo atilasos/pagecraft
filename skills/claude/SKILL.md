@@ -8,7 +8,7 @@ description: "Cria atividades PageCraft para o 1.º ciclo: páginas HTML interat
 
 Produz uma atividade interativa que o professor revê e usa com a turma. O ponto de partida é o tema, o ano e a duração. Produz em `drafts/` o DocSpec, o guia do professor, o HTML self-contained e a evidência de QA. Publica só depois de o professor aprovar.
 
-Repositório: o checkout PageCraft indicado pelo professor, senão `PAGECRAFT_REPO`, senão o destino real desta skill. Corre os comandos na raiz do repositório. Os scripts precisam do ambiente `uv` do repositório.
+Repositório: o checkout PageCraft indicado pelo professor, senão `PAGECRAFT_REPO`, senão a raiz do repositório que contém esta skill (dois níveis acima da pasta real da skill). Corre os comandos na raiz do repositório. Os scripts precisam do ambiente `uv` do repositório.
 
 ## Invariantes
 

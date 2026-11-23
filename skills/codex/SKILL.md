@@ -1,6 +1,6 @@
 ---
 name: pagecraft-codex
-description: "Cria atividades PageCraft para o 1.º ciclo no Codex ou via OpenClaw: páginas HTML interativas e self-contained em pt-PT, com três níveis de diferenciação, apoio contextual e autoavaliação, a partir de tema, ano e duração. Consulta a Sebenta, orquestra as fases Architect, Designer, Builder, Proofreader e Evaluator com o modelo adequado a cada fase (incluindo delegação entre fornecedores no T3 Code), valida com gates determinísticos e QA em browser e deixa um rascunho para aprovação do professor antes de publicar em pagecraft.infantinho.xyz. Usar quando for pedida uma atividade, aula ou página interativa PageCraft, uma atividade M28P ou maker com componente digital, ou a reparação de um rascunho PageCraft."
+description: "Cria ou repara atividades PageCraft (páginas HTML interativas em pt-PT para o 1.º ciclo, com três níveis e autoavaliação) a partir de tema, ano e duração, até rascunho para aprovação do professor, no Codex ou via OpenClaw. Usa quando pedirem uma atividade, aula ou página PageCraft, incluindo M28P ou maker para PageCraft."
 ---
 
 <!-- corpo comum: skills/shared/skill-body.md (sincronizado; não editar aqui) -->
@@ -8,7 +8,7 @@ description: "Cria atividades PageCraft para o 1.º ciclo no Codex ou via OpenCl
 
 Produz uma atividade interativa que o professor revê e usa com a turma. O ponto de partida é o tema, o ano e a duração. Produz em `drafts/` o DocSpec, o guia do professor, o HTML self-contained e a evidência de QA. Publica só depois de o professor aprovar.
 
-Repositório: o checkout PageCraft indicado pelo professor, senão `PAGECRAFT_REPO`, senão o destino real desta skill. Corre os comandos na raiz do repositório. Os scripts precisam do ambiente `uv` do repositório.
+Repositório: o checkout PageCraft indicado pelo professor, senão `PAGECRAFT_REPO`, senão a raiz do repositório que contém esta skill (dois níveis acima da pasta real da skill). Corre os comandos na raiz do repositório. Os scripts precisam do ambiente `uv` do repositório.
 
 ## Invariantes
 
@@ -67,6 +67,6 @@ Os alunos usam `https://pagecraft.infantinho.xyz/<CODIGO>`. Nunca lhes entregues
 
 `SKILL_DIR=skills/codex`. A instalação é um link de `~/.agents/skills/pagecraft-codex` para esta pasta.
 
-Cada fase corre num subagente Codex que recebe como instrução o contrato em `agents/`. No T3 Code segue o [encaminhamento](references/routing.md). Com o Builder em GPT, o Proofreader e o Evaluator correm noutro fornecedor, via `delegate_task`; o Architect pode correr noutro fornecedor.
+Quem executa cada fase, com que modelo e com que independência entre Builder e Evaluator, incluindo a execução sem T3 ou sem delegação, está no [encaminhamento](references/routing.md); o contrato de cada fase está em `agents/`.
 
 Para o browser, usa `preview_*` no T3 e `agent-browser-hub` nos outros ambientes. A execução via OpenClaw está descrita em [runtime](references/runtime.md).

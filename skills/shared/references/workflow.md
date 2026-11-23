@@ -46,9 +46,9 @@ Copia esta lista para a tua resposta de progresso e marca cada passo:
 - [ ] 8 Rascunho registado e entregue              → CHECK check <slug> --phase delivery
 ```
 
-Contexto da sala: Os alunos trabalham em desktops com rato e teclado, num iframe do host com cerca de 920 px × 70vh. O quadro interativo serve para explicar à turma inteira e chamar a atenção para uma atividade ou unidade; professor e crianças podem tocar no quadro. Verificar 1366×768 no desktop, o iframe do host e 1920×1080 em projeção, com texto e controlos legíveis a 3–4 m, contraste mantido e toque funcional. Aumentar corpo e controlos para projeção quando necessário, respeitando os mínimos por idade. 390 e 768 px são verificações opcionais de robustez.
+Contexto da sala e larguras a verificar: secção «Contexto de utilização» de [adaptação à idade](age-adaptation.md).
 
-0. **Normalizar o pedido.** Fixa tema, ano, duração, línguas (só `pt` por defeito), maker (`none` por defeito), restrições, ligação ao trabalho da turma quando o professor a indicar, e o slug. Inicia o manifest com `CHECK log <slug> --phase orchestrator --status planning`. Pergunta ao professor apenas o que mudaria materialmente a atividade.
+0. **Normalizar o pedido.** Fixa tema, ano, duração, línguas (só `pt` por defeito), maker (`none` por defeito), restrições, ligação ao trabalho da turma quando o professor a indicar, e o slug. Inicia o manifest com `CHECK log <slug> --phase orchestrator --status planning`. Pergunta ao professor apenas o que mudaria materialmente a atividade. **Rascunho existente:** usa o slug e o manifest atuais, lê o último ticket ou a revisão ligada ao pedido e retoma na fase afetada (ciclo do passo 7), sem regenerar os artefactos.
 1. **Architect.** Consulta a Sebenta (ver abaixo) e escreve `sources.md` e `docspec.json`. As unidades seguem SRTC-A, as três vias partilham a mesma meta e a atividade tem um plano `support` próprio. O Architect consulta a Sebenta sozinho, para que a pesquisa não ocupe o contexto do orquestrador.
 2. **Guia.** Gera-o com `uv run python "$SKILL_DIR/scripts/build_markdown.py" drafts/<slug>-docspec.json > drafts/<slug>.md`.
 3. **Designer.** Escreve `design-spec.json` a partir do DocSpec e dos mínimos por idade. Em M28P, preserva a paleta e as `syllableColors` da palavra.
@@ -56,9 +56,9 @@ Contexto da sala: Os alunos trabalham em desktops com rato e teclado, num iframe
    `uv run python scripts/embed_activity_support.py --activity drafts/<slug>.html --docspec drafts/<slug>-docspec.json`
    `uv run python scripts/embed_gothic_font.py --activity drafts/<slug>.html`
 5. **Proofreader.** Lê a vista enxuta `CHECK lean drafts/<slug>.html`, nunca o HTML integral. Revê português e, quando pedido, inglês, incluindo estados, feedback, `aria-label` e autoavaliação.
-6. **Evaluator.** Testa no browser a página servida localmente e segue [a lista do Evaluator](../agents/pagecraft-evaluator.md). Para ler o código, usa a vista enxuta.
-7. **Reparar.** Cada reprovação com falhas na página gera um ticket e regressa à fase responsável. Uma reprovação só por `blocked_by` não gera ticket (ver «Gate do browser»). Volta a correr os gates a partir dessa fase.
-8. **Entregar.** Regista o rascunho e entrega ao professor a pré-visualização, os objetivos, os critérios, a evidência e as limitações.
+6. **Evaluator.** Testa no browser a página servida localmente e segue [a lista do Evaluator](../agents/pagecraft-evaluator.md). Para ler o código, usa a vista enxuta. Para o iframe do host e a ponte, regista antes o rascunho privado (passo 1 de «Registo»; o registo reutiliza o slug e a pré-visualização serve o HTML atual de `drafts/`) e, no browser, abre `http://127.0.0.1:8777/api/teacher-bootstrap` (Papel Professor por loopback) antes de `http://127.0.0.1:8777/<CODIGO>`. Sem Studio, `blocked_by` para o ensaio integrado.
+7. **Reparar.** Cada reprovação com falhas na página gera um ticket e regressa à fase responsável. Uma reprovação só por `blocked_by` não gera ticket (ver «Gate do browser»). Volta a correr os gates a partir dessa fase. Se a reparação mudar metadados de registo (critérios, línguas ou outros campos de `drafts/<slug>-activity.json`) depois de o rascunho estar registado, atualiza `drafts/<slug>-activity.json` e repete `register` com o mesmo slug antes de repetir o ensaio integrado; o código mantém-se.
+8. **Entregar.** Regista o rascunho, se ainda não o fizeste no passo 6 (ou volta a registá-lo, se os metadados mudaram desde então), e entrega ao professor a pré-visualização, os objetivos, os critérios, a evidência e as limitações.
 
 Regista cada fase concluída: `CHECK log <slug> --phase <fase> --status done|failed --model <família>/<modelo> --artifact <caminho>`. A família é a do modelo (`claude`, `gpt`, `grok`, `gemini`…), não o fornecedor que o serve. O gate de entrega compara a família do Builder com a do Evaluator. Uma exceção autorizada pelo professor regista-se com `CHECK log <slug> --phase teacher --status approved --note "<decisão>"`. Depois disso, corre de novo o Evaluator e regista-o com `--status done --artifact drafts/<slug>-evaluation-vN.json`; só essa nova avaliação satisfaz o gate. Só conta a última decisão do professor: uma recusa posterior anula a aprovação. Uma reparação do HTML regista-se como `--phase repair --artifact drafts/<slug>.html` ou como `--phase builder`, e o gate trata-a como trabalho do Builder.
 
@@ -101,7 +101,7 @@ Uma atividade está pronta para o professor quando:
 
 ## Registo, aprovação e publicação
 
-1. `uv run python "$SKILL_DIR/scripts/activity.py" register <slug> --metadata drafts/<slug>-activity.json`. O servidor (`127.0.0.1:8777`) reserva um código estável de seis caracteres. Confirma que a API pública recusa o rascunho.
+1. `uv run python "$SKILL_DIR/scripts/activity.py" register <slug> --metadata drafts/<slug>-activity.json`. O servidor (`127.0.0.1:8777`) reserva um código estável de seis caracteres. O Studio lê `drafts/` do seu próprio checkout: confirma que serve o checkout escolhido; senão, mantém o rascunho local e regista o bloqueio do ensaio integrado. Confirma que a API pública recusa o rascunho.
 2. Entrega a ligação de pré-visualização e espera pela revisão do professor. **Cada atividade exige aprovação própria.** Instalar a skill, arrancar o serviço ou criar o túnel não aprova nenhuma atividade.
 3. Só depois da aprovação explícita: `uv run python "$SKILL_DIR/scripts/activity.py" publish <CODIGO> --approved`. O servidor injeta a ponte, regenera o catálogo e serve o endereço permanente `https://pagecraft.infantinho.xyz/<CODIGO>`. Não escrevas diretamente em `activities/` nem em `catalog.json`.
 4. Para mudar uma atividade publicada, cria um novo slug de versão. A versão que os alunos já realizaram fica preservada.
