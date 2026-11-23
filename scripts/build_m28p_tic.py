@@ -401,7 +401,7 @@ def cycle_content(word, game, pool, lexicon=None):
                 rounds=rounds, demo=demo,
                 audio={k: data_audio(v) for k, v in dict(start='start', instruction=game, word=word['slug'], hint='hint',
                                                           success='success', retry='retry', finish='finish', correct='correct',
-                                                          tryagain='tryagain', found='found', allfound='allfound').items()}), None
+                                                          tryagain='tryagain', found='found', allfound='allfound', realword='realword').items()}), None
 
 
 def build_cycle(words, args, lexicon=None):
@@ -428,7 +428,13 @@ def build_cycle(words, args, lexicon=None):
                 entry['realWordsOnBoard']=warnings
             report.append(entry)
     if not args.validate_only:
-        save_json(BASE/'cycle-generation-report.json',report)
+        # Uma geração filtrada (--word, --game) só substitui as suas entradas; as outras ficam no relatório.
+        path=BASE/'cycle-generation-report.json'
+        done={(e['keyword'],e['game']) for e in report}
+        previous=[e for e in (json.loads(path.read_text()) if path.exists() else []) if (e.get('keyword'),e['game']) not in done and e.get('keyword')]
+        order={w['slug']:w['order'] for w in words}
+        games=list(CYCLE_GAMES)
+        save_json(path,sorted(previous+report,key=lambda e:(order[e['keyword']],games.index(e['game']))))
     return report
 
 

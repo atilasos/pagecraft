@@ -38,6 +38,9 @@ def main():
         if missing:
             parser.error(f'Artefactos em falta para {slug}: {missing}')
         plan.append((slug, files))
+    missing_words = [word for word in args.word if not any(item['keyword'] == word for item in selected)]
+    if missing_words:
+        parser.error(f'Sem jogos gerados no relatório para: {", ".join(missing_words)}. Gerar primeiro com build_m28p_tic.py --cycle.')
     print(json.dumps([slug for slug, _ in plan], ensure_ascii=False, indent=2))
     if not args.apply:
         return
