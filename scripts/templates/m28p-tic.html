@@ -344,7 +344,7 @@ function feedback(r){
     // Só se celebra uma palavra comum montada com uma divisão válida («ne·la», não «nel·a»).
     const celebrated=!found&&(r.celebrate||[]).includes(last.map(id=>r.pieces.find(p=>p.id===id)?.label||'').join('·'));
     box.classList.toggle('ok',!!found);box.appendChild(node('span',found?'✓':celebrated?'★':'↻','icon'));
-    box.appendChild(node('span',found?(again?'Já encontraste «':'Encontraste «')+found.label+'». '+(missing===1?'Falta 1.':'Faltam '+missing+'.'):(celebrated?'«'+word+'» é uma palavra! Não estava escondida, mas descobriste-a.':'«'+word+'» não está escondida. Experimenta outra vez.')));
+    box.appendChild(node('span',found?(again?'Já encontraste «':'Encontraste «')+found.label+'». '+(missing===1?'Falta 1.':'Faltam '+missing+'.'):(celebrated?'«'+word+'» é uma palavra! Não estava escondida, mas descobriste-a. Continua a procurar.':'«'+word+'» não está escondida. Experimenta outra vez.')));
     return;
   }
   if(!state.confirmed[r.id])return;

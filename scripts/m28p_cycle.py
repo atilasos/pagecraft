@@ -426,6 +426,7 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserve
             labels = {w['label'] for w in hidden}
             # Um tabuleiro fixo continua sujeito às mesmas regras: peças do repertório, respostas montáveis, contagem honesta.
             if any(piece not in units for piece in pieces) or not all(formable(w['label'], pieces) for w in hidden) \
+                    or not 2 <= len(labels) == len(hidden) <= 3 \
                     or not honest(pieces, hidden):
                 raise ValueError(f"Tabuleiro fixo inválido em {pool['keyword']['label']}: {board_spec}")
             found = real_words(pieces, labels)

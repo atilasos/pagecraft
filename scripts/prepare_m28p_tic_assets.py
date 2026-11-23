@@ -54,7 +54,7 @@ INSTRUCTIONS = {
     "tryagain": "Experimenta outra vez.",
     "found": "Encontraste uma palavra!",
     "allfound": "Encontraste todas as palavras!",
-    "realword": "É uma palavra! Não estava escondida, mas descobriste-a.",
+    "realword": "É uma palavra! Não estava escondida, mas descobriste-a. Continua a procurar.",
 }
 
 
@@ -348,8 +348,9 @@ def compose_scene(scene, art, layout=None, place=None):
         # Uma pessoa como objeto fica no mesmo chão que o sujeito, não a flutuar.
         return (f'<g transform="translate(-8 25) scale(.75)">{left}</g>'
                 f'<g transform="translate(120 74) scale(.55)">{right}</g>')
+    x, y, k = place or (137, 25, .4)
     return (f'<g transform="translate(-8 25) scale(.75)">{left}</g>'
-            f'<g transform="translate(137 25) scale(.4)">{right}</g>')
+            f'<g transform="translate({x} {y}) scale({k})">{right}</g>')
 
 
 def generate_cycle_images(overwrite):

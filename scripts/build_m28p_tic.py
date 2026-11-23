@@ -237,7 +237,10 @@ def cycle_guide(data, word):
             equivalent = f"Quando duas ordens dizem o mesmo (por exemplo, «{example}»), as duas contam como certas. "
         body = ("A criança ordena as palavras de uma frase. «Com ajuda» mostra a imagem, a frase escrita com as palavras separadas e o botão de ouvir; "
                 "«Sozinho» mostra a imagem, o botão de ouvir e um espaço por palavra; «Consigo ajudar um amigo» mostra só o botão de ouvir. "
-                f"Frases, uma por ronda: {listed} {equivalent}"
+                f"Frases, uma por ronda (separadas por « / »): {listed} {equivalent}"
+                + ("Depois das frases desta palavra-chave, as rondas seguintes repetem frases de palavras-chave anteriores. "
+                   if any(r['target'].get('newIn') != word['slug'] for r in rounds) else "")
+                +
                 "Na página da turma, podes guardar as frases ditadas pelas crianças e projetá-las no Quadro. Quando a turma joga numa sessão, até quatro frases da turma surgem primeiro, "
                 "completadas pelas frases fixas. «Com ajuda» mostra as palavras da frase da turma. As frases da turma só têm leitura em voz alta "
                 "quando o computador tem uma voz pt-PT instalada; sem essa voz, em «Sozinho» e «Consigo ajudar um amigo», o botão de ouvir é substituído "
@@ -248,7 +251,8 @@ def cycle_guide(data, word):
                 f"Palavras escondidas (as rondas estão separadas por « / »): {hidden}. A criança vê quantas já encontrou na ronda (por exemplo, «Encontraste 1 de {len(rounds[0]['lexicon'])}.»; o total é o de cada ronda); "
                 "a ronda acaba quando as encontra todas ou quando toca em «Não encontro mais palavras», que mostra as que faltavam. "
                 "«Com ajuda» mostra a imagem (quando existe) e o som de cada palavra escondida; «Sozinho» mostra quantas sílabas tem cada uma; "
-                "«Consigo ajudar um amigo» mostra só quantas são. Uma combinação fora da lista recebe «não está escondida».")
+                "«Consigo ajudar um amigo» mostra só quantas palavras há. Uma palavra comum que não estava escondida recebe «É uma palavra! "
+                "Não estava escondida, mas descobriste-a. Continua a procurar.» (com ★); qualquer outra combinação recebe «não está escondida».")
         used_new = [w['label'] for r in rounds for w in r['lexicon'] if w.get('newIn') == word['slug']]
         if not data.get('newWords'):
             body += f" «{word['label']}» não traz palavras novas: este jogo revê palavras de palavras-chave anteriores."
@@ -261,19 +265,20 @@ def cycle_guide(data, word):
                      if without == 1 else f" Em {without} rondas não há sílaba a mais: qualquer sílaba disponível formaria outra palavra que não está escondida.")
         celebrated = sorted({seq.replace('·', '') for r in rounds for seq in r.get('celebrate', [])})
         if celebrated:
-            body += (f" Se a criança formar {', '.join('«' + w + '»' for w in celebrated)}, recebe «é uma palavra! Não estava escondida, "
-                     "mas descobriste-a.» (com ★), sem contar para o jogo.")
+            body += (f" Se a criança formar {', '.join('«' + w + '»' for w in celebrated)}, recebe a resposta com ★, sem contar para o jogo.")
         extra = sorted({w for r in rounds for w in r.get('warnings', [])} - set(celebrated))
         if extra:
-            body += (f" Com estas peças também se formam formas raras que o dicionário aceita ({', '.join(extra)}); "
-                     "recebem a resposta neutra «não está escondida». "
+            body += (f" Com estas peças também se formam outras sequências que o dicionário aceita ({', '.join(extra)}); "
+                     "recebem a resposta neutra «não está escondida», por serem formas pouco usadas pelas crianças ou palavras que aqui "
+                     "só se formam com uma divisão ainda não trabalhada. "
                      "Podem não ser conhecidas das crianças. Se uma criança as encontrar, aproveita para conversar sobre o que significam, "
                      "por exemplo no Conselho de Cooperação ou no Texto Livre.")
     if game == 'sentence':
         example = f"A demonstração usa «{demo['target']['text']}.», que não é uma das frases, e mostra os mesmos botões do jogo."
     elif demo['target']['label'] != word['label']:
-        example = (f"A demonstração usa a palavra-chave anterior «{demo['target']['label']}» («{word['label']}» não tem o número de sílabas "
-                   "deste jogo); essa palavra não é uma das rondas, e a demonstração mostra os mesmos botões do jogo.")
+        why = "só tem uma sílaba, poucas para este jogo" if len(word['syllables']) < 2 else "tem sílabas a mais para este jogo"
+        example = (f"A demonstração usa a palavra-chave anterior «{demo['target']['label']}» («{word['label']}» {why}); "
+                   "essa palavra não é uma das rondas, e a demonstração mostra os mesmos botões do jogo.")
     else:
         example = f"A demonstração usa a palavra-chave «{demo['target']['label']}», que não é uma das rondas, e mostra os mesmos botões do jogo."
     keeps = "Ouvir, ver a demonstração e mudar de ajuda conservam o trabalho." if game == 'read-choose' else \

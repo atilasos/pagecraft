@@ -391,12 +391,16 @@ def test_discover_uses_new_words_and_extra_syllable_only_when_it_adds_no_real_wo
 
 
 def test_pinned_pilot_boards_match_the_approved_order_and_are_validated():
-    pools=validate_cycle(source(),motor.read_words())
-    data,_=motor.cycle_content(motor.read_words()[2],'discover',pools['uva'])
-    assert [[p['label'] for p in r['pieces']] for r in data['rounds']]==[b['pieces'] for b in source()['keywords']['uva']['discoverBoards']]
-    bad=copy.deepcopy(source());bad['keywords']['menino']['discoverBoards'][0]['pieces']=['ma','nu','ni','no']
     from scripts.m28p_cycle import discover_rounds
     import random
+    pools=validate_cycle(source(),motor.read_words())
+    uva=next(w for w in motor.read_words() if w['slug']=='uva')
+    data,_=motor.cycle_content(uva,'discover',pools['uva'])
+    assert [[p['label'] for p in r['pieces']] for r in data['rounds']]==[b['pieces'] for b in source()['keywords']['uva']['discoverBoards']]
+    twice=copy.deepcopy(source());twice['keywords']['menino']['discoverBoards'][0]['hidden']=['mano','mano']
+    with pytest.raises(ValueError,match='Tabuleiro fixo'):
+        discover_rounds(validate_cycle(twice,motor.read_words())['menino'],random.Random(0))
+    bad=copy.deepcopy(source());bad['keywords']['menino']['discoverBoards'][0]['pieces']=['ma','nu','ni','no']
     with pytest.raises(ValueError,match='Tabuleiro fixo'):
         discover_rounds(validate_cycle(bad,motor.read_words())['menino'],random.Random(0))
 
