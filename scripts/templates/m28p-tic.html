@@ -23,12 +23,12 @@ h1,h2,.task-title{font-size:30px}
 <body>
 <div id="initialization-status" class="initialization-status" role="status"><span class="preparing-shape" aria-hidden="true"></span><span>A preparar o jogo…</span></div>
 <a id="activity-skip" class="skip" href="#main" hidden>Ir para o jogo</a>
-<header id="activity-header" inert hidden><h1 id="game-title"></h1><div class="tools"><button id="hear" aria-label="Ouvir a instrução"><span aria-hidden="true" class="icon">🔊</span>Ouvir</button><button id="demo-open"><span aria-hidden="true" class="icon">?</span>Como jogar</button><button id="mute" hidden aria-pressed="false">Som ligado</button></div></header>
+<header id="activity-header" inert hidden><h1 id="game-title"></h1><div class="tools"><button id="hear" aria-label="Ouvir a instrução"><span aria-hidden="true" class="icon">🔊</span>Ouvir</button><button id="demo-open"><span aria-hidden="true" class="icon">?</span>Como jogar</button><button id="mute" hidden aria-pressed="false">Desligar som</button></div></header>
 <main id="main" tabindex="-1" inert hidden>
 <section id="intro" class="welcome"><div id="intro-picture" class="picture hero-image"></div><h2 id="intro-word" class="word"></h2><button id="start" class="primary"><span aria-hidden="true" class="icon">▶</span>Começar</button></section>
-<section id="demonstration" class="demo" hidden aria-labelledby="demo-heading"><h2 id="demo-heading">Vê como se faz</h2><div id="demo-stage" class="demo-stage" aria-label="Exemplo de como jogar"></div><p id="demo-caption" class="demo-caption"></p><div class="nav"><button id="demo-again"><span aria-hidden="true">↻</span> Ver outra vez</button><button id="demo-close" class="primary">Agora tu <span aria-hidden="true">→</span></button></div></section>
+<section id="demonstration" class="demo" hidden aria-labelledby="demo-heading"><h2 id="demo-heading">Vê como se faz</h2><div id="demo-stage" class="demo-stage" aria-label="Exemplo de como jogar"></div><p id="demo-caption" class="demo-caption"></p><div class="nav"><button id="demo-hear" hidden><span aria-hidden="true">🔊</span> Ouvir o exemplo</button><button id="demo-again"><span aria-hidden="true">↻</span> Ver outra vez</button><button id="demo-close" class="primary">Agora tu <span aria-hidden="true">→</span></button></div></section>
 <section id="workspace" hidden><div class="task-top"><h2 id="prompt" class="task-title"></h2><div id="progress" class="progress" role="img"></div></div><div id="round-content"></div><div id="feedback" class="feedback" role="status" aria-live="polite"></div><nav class="nav" aria-label="Avançar no jogo"><button id="back"><span aria-hidden="true">←</span> Voltar</button><button id="confirm" class="primary"><span aria-hidden="true">✓</span> Confirmar</button><button id="next" class="primary" hidden>Continuar <span aria-hidden="true">→</span></button></nav><details class="support-details"><summary>Mais ajuda</summary><div class="levelbar" role="group" aria-label="Tipo de ajuda"><button data-level="support">Com ajuda</button><button data-level="intermediate">Sozinho</button><button data-level="challenge">Consigo ajudar um amigo</button></div><aside id="support-panel" data-pagecraft-support="u1"></aside></details></section>
-<section id="finish" class="finish" hidden><span class="finish-symbol" aria-hidden="true">✓</span><h2>Fizeste o teu jogo!</h2><div id="finish-picture" class="picture hero-image"></div><p id="finish-invite" hidden></p><div class="row"><button id="repeat"><span aria-hidden="true">↻</span> Repetir</button><button id="finish-button" class="primary">Terminar <span aria-hidden="true">✓</span></button></div><div id="local-reflection"><p>Como foi? Podes escolher.</p><div class="reflection" role="group" aria-label="Como foi o jogo?"><button data-reflection="again"><span class="icon" aria-hidden="true">↻</span>Quero praticar</button><button data-reflection="help"><span class="icon" aria-hidden="true">☞</span>Com ajuda</button><button data-reflection="alone"><span class="icon" aria-hidden="true">✓</span>Consegui</button></div><p id="local-note" class="visually-hidden">Esta escolha fica apenas neste dispositivo.</p></div></section>
+<section id="finish" class="finish" hidden><span class="finish-symbol" aria-hidden="true">✓</span><h2>Terminaste este jogo!</h2><div id="finish-picture" class="picture hero-image"></div><p id="finish-invite" hidden></p><div class="row"><button id="repeat"><span aria-hidden="true">↻</span> Repetir</button><button id="finish-button" class="primary">Terminar <span aria-hidden="true">✓</span></button></div><div id="local-reflection"><p>Como foi? Podes escolher.</p><div class="reflection" role="group" aria-label="Como foi o jogo?"><button data-reflection="again"><span class="icon" aria-hidden="true">↻</span>Quero praticar</button><button data-reflection="help"><span class="icon" aria-hidden="true">☞</span>Precisei de ajuda</button><button data-reflection="alone"><span class="icon" aria-hidden="true">✓</span>Consegui</button></div><p id="local-note" class="visually-hidden">Esta escolha fica apenas neste dispositivo.</p></div></section>
 <p id="audio-status" role="status" aria-live="polite"></p>
 </main>
 <script>@@BRIDGE@@</script>
@@ -96,7 +96,8 @@ const TicModel = (() => {
     const byId=typeof raw.pageId==='string'?data.rounds.findIndex(r=>r.id===raw.pageId):-1;
     const page=byId>=0?byId:raw.page;
     if(raw.page!==-1)clean.page=accessible(data,clean,page)?page:(firstMissing<0?data.rounds.length-1:Math.max(0,firstMissing));
-    if(clean.page>=0&&typeof raw.pageId==='string')clean.pageId=data.rounds[clean.page]?.id||null;
+    // Uma ronda que ainda não existe (frase da turma por chegar) mantém-se pendente até ser encontrada.
+    if(typeof raw.pageId==='string')clean.pageId=byId>=0||raw.pageId.length>200?data.rounds[clean.page]?.id||null:raw.pageId;
     clean.introDemo=raw.introDemo===true;
     clean.done=raw.done===true&&complete(data,clean);
     if(['again','help','alone'].includes(raw.reflection))clean.reflection=raw.reflection;
@@ -166,9 +167,13 @@ function play(key,override){
     window.speechSynthesis.speak(utterance);return;
   }
   const source=override||(key==='word'?round()?.target?.audio:null)||data.audio?.[key]||data.audio?.instruction;
-  if(!source){$('audio-status').textContent='Vê o exemplo no botão ?.';return;}
-  audio=new Audio(source);audio.addEventListener('error',()=>{$('audio-status').textContent='Vê o exemplo no botão ?.';});
-  audio.play().then(()=>{$('audio-status').textContent='';}).catch(()=>{$('audio-status').textContent='Carrega em Ouvir outra vez.';});
+  if(!source){$('audio-status').textContent='Toca em «Como jogar».';return;}
+  audio=new Audio(source);audio.addEventListener('error',()=>{$('audio-status').textContent='Toca em «Como jogar».';});
+  audio.play().then(()=>{$('audio-status').textContent='';}).catch(()=>{$('audio-status').textContent='Toca em Ouvir.';});
+}
+function playQuiet(source){
+  // Som pedido durante a demonstração: não conta como ajuda numa ronda.
+  if(!source)return;stopAudio();soundEnabled=true;$('mute').hidden=false;$('mute').textContent='Desligar som';$('mute').setAttribute('aria-pressed','false');audio=new Audio(source);audio.play().catch(()=>{});
 }
 function playFeedback(key){
   // Som curto de resposta só quando a criança ligou o som; não conta como pedido de ajuda.
@@ -330,17 +335,17 @@ function feedback(r){
     const last=state.last[r.id];if(!last||(selected().length&&JSON.stringify(selected())!==JSON.stringify(last)))return;
     if(state.confirmed[r.id]){
       const all=last[0]!=='finish';box.classList.toggle('ok',all);box.appendChild(node('span',all?'✓':'☞','icon'));
-      box.appendChild(node('span',all?'Encontraste todas!':'Estas eram as palavras escondidas.'));return;
+      box.appendChild(node('span',all?'Encontraste todas as palavras!':'Estas eram as palavras escondidas.'));return;
     }
     const found=TicModel.discovery(r,last),missing=r.lexicon.length-(state.discoveries[r.id]||[]).length,again=found&&repeatFound;
     const word=last.map(id=>r.pieces.find(p=>p.id===id)?.label||'').join('');
     box.appendChild(node('span',found?'✓':'↻','icon'));
-    box.appendChild(node('span',found?(again?'Já encontraste «':'Encontraste «')+found.label+'». '+(missing===1?'Falta 1.':'Faltam '+missing+'.'):'«'+word+'» não está escondida.'));
+    box.appendChild(node('span',found?(again?'Já encontraste «':'Encontraste «')+found.label+'». '+(missing===1?'Falta 1.':'Faltam '+missing+'.'):'«'+word+'» não está escondida. Experimenta outra.'));
     return;
   }
   if(!state.confirmed[r.id])return;
   const correct=TicModel.correct(r,selected());box.classList.toggle('ok',correct);box.appendChild(node('span',correct?'✓':'↻','icon'));box.appendChild(node('span',correct?'Está certo!':'Experimenta outra vez.'));
-  if(!correct){const help=button('? Ver',()=>openDemo());help.setAttribute('aria-label','Ver como se faz');box.appendChild(help);}
+  if(!correct){const help=button('Ver como se faz',()=>openDemo());help.prepend(node('span','? ','icon'));box.appendChild(help);}
 }
 function updateNav(r){const confirmed=!!state.confirmed[r.id];if($('undo'))$('undo').disabled=!selected().filter(id=>id!=='finish').length||(r.kind==='discover'&&confirmed);$('confirm').hidden=confirmed;$('confirm').disabled=!TicModel.validAnswer(r,selected());$('next').hidden=!confirmed;$('back').disabled=state.page===0;}
 function renderGame(){
@@ -393,10 +398,13 @@ function confirm(){
   repeatFound=r.kind==='discover'&&!!TicModel.discovery(r,value)&&before.includes(TicModel.discovery(r,value).label);
   revision++;context();
   if(result.emit&&restored){const detail={value,question:r.prompt,task_id:r.id,activity:data.slug,field:r.id,level:state.level,aids:{...state.aids[r.id]},model_visible:r.target?state.level==='support':showModel(r),audio_before_choice:state.choiceAudio[r.id]===true};if(revisionHint)detail.after_hint_id=revisionHint;if(r.kind==='discover')window.PageCraftBridge?.emit('attempt',unit(),{detail:{...detail,discoveries:state.discoveries[r.id]||[]}});else window.PageCraftBridge?.attempt(unit(),result.correct,detail);}
-  revisionHint=null;checkpoint();renderGame();if(value[0]!=='finish')playFeedback(result.correct?'success':'retry');if(state.confirmed[r.id])$('next').focus();
+  revisionHint=null;checkpoint();renderGame();
+  // Som de resposta com o mesmo texto do ecrã; nas descobertas intermédias, sem convite a continuar.
+  if(value[0]!=='finish')playFeedback(r.kind==='discover'?(!result.correct?'tryagain':state.confirmed[r.id]?'allfound':'found'):(result.correct?'correct':'tryagain'));
+  if(state.confirmed[r.id])$('next').focus();
 }
 function setLevel(level,emit=true){if(!TicModel.levels.includes(level))return;state.level=level;revision++;revisionHint=null;if(emit)window.PageCraftBridge?.levelChanged(unit(),level);render();context();checkpoint(emit);}
-const invites={'listen-build':'Se quiseres, mostra a um amigo como juntaste as sílabas.','discover':'Se quiseres, mostra a um amigo como juntaste as sílabas.','read-choose':'Se quiseres, explica a um amigo como leste as palavras.','sentence':'Se quiseres, lê as frases a um amigo.'};
+const invites={'listen-build':'Se quiseres, mostra a um amigo como juntaste as sílabas.','discover':'Se quiseres, mostra a um amigo como juntaste as sílabas.','read-choose':'Se quiseres, lê as palavras a um amigo.','sentence':'Se quiseres, lê as frases a um amigo.'};
 function finish(){state.done=true;stopAudio();checkpoint();render();$('finish-button').focus();}
 const demoTexts={match:'Toca na palavra igual.',pairs:'Toca na imagem. Toca na palavra.',hunt:'Toca nas palavras iguais. Confirma.',syllables:'Toca nas peças por ordem.',gap:'Escolhe a peça que falta.',recall:'Ouve. Junta as peças.'};
 function demoPicture(target=false){const card=demoCard('',target);const image=picture(data.word.image,data.word.label);image.style.width='120px';image.style.height='100px';card.prepend(image);return card;}
@@ -420,7 +428,7 @@ function paintDemo(step){
   }
   $('demo-caption').textContent=demoTexts[kind]||data.instruction;
 }
-const demoCaptions={'listen-build':'Ouve a palavra. Toca nas sílabas, por ordem. Depois, toca em Confirmar.','read-choose':'Lê a palavra. Toca na imagem certa. Depois, toca em Confirmar.','sentence':'Ouve a frase. Toca nas palavras, por ordem. Depois, toca em Confirmar.','discover':'Junta sílabas para formar uma palavra. Toca em Confirmar. Encontra todas as palavras escondidas.'};
+const demoCaptions={'listen-build':'Ouve a palavra. Toca nas sílabas, por ordem. Depois, toca em Confirmar.','read-choose':'Lê a palavra. Toca na imagem certa. Depois, toca em Confirmar.','sentence':'Ouve a frase. Toca nas palavras, por ordem. Depois, toca em Confirmar.','discover':'Junta sílabas para formar uma palavra. Toca em Confirmar. Descobre todas as palavras escondidas.'};
 function demoSteps(){if(!data.demo)return 3;if(data.game==='read-choose')return 4;return (data.game==='discover'?data.demo.target.syllables:(data.demo.target.tokens||data.demo.target.syllables)).length+3;}
 function fake(label,pointed,pressed){const b=node('button',label);b.type='button';b.tabIndex=-1;if(pressed)b.setAttribute('aria-pressed','true');if(pointed){const hand=node('span','☝','demo-hand');b.appendChild(hand);}return b;}
 function paintCycleDemo(step){
@@ -459,7 +467,8 @@ function restore(raw){lastRaw=raw;state=TicModel.sanitize(data,raw);if(hostLevel
 if(data.rounds[0].target&&data.game!=='read-choose'){const undo=button('Desfazer',()=>edit(selected().slice(0,-1)));undo.prepend(node('span','↶ ','icon'));undo.id='undo';$('back').after(undo);}
 $('game-title').textContent=data.title;$('intro-word').textContent=data.word.label;$('intro-picture').appendChild(picture(data.word.image,data.word.label));$('finish-picture').appendChild(picture(data.word.image,data.word.label));
 $('start').addEventListener('click',openDemo);$('demo-open').addEventListener('click',openDemo);$('demo-close').addEventListener('click',closeDemo);$('demo-again').addEventListener('click',runDemo);
-$('hear').addEventListener('click',()=>play(state.done?'finish':state.page<0?'start':'instruction'));
+$('hear').addEventListener('click',()=>demoOpen?playQuiet(data.audio?.instruction):play(state.done?'finish':state.page<0?'start':'instruction'));
+$('demo-hear').hidden=!data.demo;$('demo-hear').addEventListener('click',()=>playQuiet(data.audio?.word));
 $('mute').addEventListener('click',()=>{soundEnabled=!soundEnabled;if(!soundEnabled)stopAudio();$('mute').textContent=soundEnabled?'Desligar som':'Ligar som';$('mute').setAttribute('aria-pressed',String(!soundEnabled));});
 $('back').addEventListener('click',()=>move(state.page-1));$('confirm').addEventListener('click',confirm);$('next').addEventListener('click',()=>state.page===data.rounds.length-1?finish():move(state.page+1));
 $('repeat').addEventListener('click',()=>{state=TicModel.initial();revision++;checkpoint();render();$('start').focus();});

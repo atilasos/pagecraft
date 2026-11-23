@@ -39,7 +39,7 @@ with sync_playwright() as p:
                     page.screenshot(path=str(SHOTS/f"{data['slug']}-demo.png"))
                 key('#demo-close')
                 state = json.loads(page.evaluate(f"sessionStorage.getItem('pagecraft:m28p-tic-v3:{data['slug']}')"))
-                assert state['introDemo'] is True and not state['aids'].get('r1', {}).get('demo_shown')
+                assert state['introDemo'] is True and not state['aids'].get(r['id'], {}).get('demo_shown')
                 if game == 'discover':
                     assert f"Encontradas: 0 de {len(r['lexicon'])}" in page.locator('.hidden-count').text_content()
                     used = {s for w in r['lexicon'] for s in w['syllables']}
