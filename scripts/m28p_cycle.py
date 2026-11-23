@@ -366,6 +366,12 @@ def formable(label, pieces, limit=3):
     return search(label, frozenset(), 0)
 
 
+def board_weight(words, known, avoid=()):
+    """Peso das palavras formadas por acaso: conhecidas (celebradas ou a evitar) pesam 1, formas raras 0.25."""
+    familiar = set(known) | set(avoid)
+    return sum(1 if word in familiar else 0.25 for word in words)
+
+
 def celebrated_sequences(pieces, words, known, index, repertoire, slugs):
     """Sequências de peças («ne·la») que formam uma palavra comum com uma divisão válida nesta etapa.
 
@@ -414,10 +420,8 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserve
     known = set(pool.get('knownWords', []))
     def celebrated(pieces, words):
         return celebrated_sequences(pieces, words, known, pool.get('index', 0), pool['repertoire'], pool['slugs'])
-    familiar = known | set(pool.get('avoidWords', []))
     def weight(words):
-        # Uma palavra que a criança conhece (celebrada ou não) pesa muito mais do que uma forma rara do dicionário («too», «coes»).
-        return sum(1 if word in familiar else 0.25 for word in words)
+        return board_weight(words, known, pool.get('avoidWords', []))
     def surplus(pieces, hidden):
         """Peças a mais em relação às necessárias para montar as palavras escondidas (no máximo uma)."""
         need = {}

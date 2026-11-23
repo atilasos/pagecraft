@@ -435,14 +435,10 @@ def test_repeated_sentence_note_uses_singular_and_plural():
 
 
 def test_avoid_words_weigh_on_boards_but_are_never_celebrated():
-    from scripts.m28p_cycle import discover_rounds
-    import random
-    pools=validate_cycle(source(),motor.read_words())
-    pool=dict(pools['sapato']);real={'mato','teto','topa'}
-    lex=lambda w:w in real
-    plain=discover_rounds(pool,random.Random(3),lexicon=lex)
-    pool['avoidWords']=['mato','teto']
-    avoided=discover_rounds(pool,random.Random(3),lexicon=lex)
-    count=lambda rs:sum(len(set(r['warnings'])&{'mato','teto'}) for r in rs)
-    assert count(avoided)<=count(plain)
-    assert not any(seq.replace('·','') in {'mato','teto'} for r in avoided for seq in r['celebrate'])
+    from scripts.m28p_cycle import board_weight, celebrated_sequences
+    cycle=source();slugs=[w['slug'] for w in sorted(motor.read_words(),key=lambda w:w['order'])]
+    # Uma palavra a evitar pesa como conhecida (1), uma forma rara pesa 0.25.
+    assert board_weight(['rabo','toes'],known={'bolo'})==0.5
+    assert board_weight(['rabo','toes'],known={'bolo'},avoid={'rabo'})==1.25
+    # Mas só as palavras celebradas (knownWords) recebem a ★.
+    assert celebrated_sequences(['ra','bo'],{'rabo'},{'bolo'},slugs.index('rato'),cycle['repertoire'],slugs)==[]
