@@ -433,7 +433,9 @@ def build_cycle(words, args, lexicon=None):
         # Uma geração filtrada (--word, --game) só substitui as suas entradas; as outras ficam no relatório.
         path=BASE/'cycle-generation-report.json'
         done={(e['keyword'],e['game']) for e in report}
-        previous=[e for e in (json.loads(path.read_text()) if path.exists() else []) if (e.get('keyword'),e['game']) not in done and e.get('keyword')]
+        filtered=bool(args.word or args.game)
+        # Uma geração completa substitui o relatório: palavras-chave retiradas de cycle.json deixam de ser publicáveis.
+        previous=[e for e in (json.loads(path.read_text()) if path.exists() and filtered else []) if (e.get('keyword'),e['game']) not in done and e.get('keyword')]
         order={w['slug']:w['order'] for w in words}
         games=list(CYCLE_GAMES)
         save_json(path,sorted(previous+report,key=lambda e:(order[e['keyword']],games.index(e['game']))))
