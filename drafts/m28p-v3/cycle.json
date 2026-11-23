@@ -3392,7 +3392,12 @@
             }
           ],
           "source": "proposta",
-          "layout": "room"
+          "layout": "room",
+          "place": [
+            98,
+            118,
+            0.46
+          ]
         },
         {
           "text": "A avó vê o quadro.",
@@ -3807,7 +3812,8 @@
           ],
           "scene": [
             {
-              "image": "burro"
+              "image": "burro",
+              "flip": true
             },
             {
               "image": "carro"
@@ -4077,7 +4083,7 @@
     "flor": "a"
   },
   "knownWords": {
-    "notes": "Palavras comuns para crianças de 6–7 anos, além do vocabulário do ciclo. Em Descobrir, só estas (e as do ciclo) são celebradas quando a criança as forma sem estarem escondidas; formas raras do dicionário recebem a resposta neutra.",
+    "notes": "Palavras comuns no vocabulário de crianças de 6–7 anos (objetos, animais, ações e plurais do dia a dia), além do vocabulário do ciclo. Em Descobrir, só estas são celebradas quando a criança as forma, com divisão válida, sem estarem escondidas; formas raras ou de uso adulto recebem a resposta neutra. Revista a partir das palavras que os tabuleiros formam por acaso.",
     "words": [
       "ama",
       "amo",
@@ -4095,29 +4101,32 @@
       "capa",
       "cara",
       "casa",
+      "caça",
       "cedo",
-      "cela",
       "cima",
       "coco",
       "cola",
       "copo",
+      "cova",
       "dado",
-      "dama",
       "dedo",
       "dia",
       "doce",
       "dono",
       "eco",
       "faca",
+      "face",
       "fada",
       "fala",
       "fila",
       "fio",
+      "flores",
       "foca",
       "fogo",
-      "gala",
+      "garra",
       "gato",
       "gelo",
+      "gira",
       "gola",
       "lado",
       "lago",
@@ -4135,6 +4144,7 @@
       "meia",
       "mel",
       "mesa",
+      "mia",
       "moda",
       "mola",
       "mota",
@@ -4143,6 +4153,7 @@
       "nada",
       "nata",
       "nave",
+      "nela",
       "neve",
       "nome",
       "nove",
@@ -4151,7 +4162,6 @@
       "onda",
       "osso",
       "ovo",
-      "pala",
       "pano",
       "papa",
       "pata",
@@ -4166,7 +4176,6 @@
       "saco",
       "sala",
       "sapo",
-      "seda",
       "sede",
       "selo",
       "sino",
@@ -4175,12 +4184,14 @@
       "sumo",
       "tapete",
       "taça",
+      "tenho",
       "teto",
       "tia",
       "tio",
       "toca",
       "uva",
       "vaca",
+      "vara",
       "vela",
       "vida",
       "vila",
