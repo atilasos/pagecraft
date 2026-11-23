@@ -122,6 +122,7 @@ def test_m28p_generator_keeps_variants_and_delegates_canonical_catalog(
         expected_meta['status'] = 'published'
         expected_meta.pop('archivedAt', None)
         expected_meta.pop('archiveReason', None)
+        expected_meta.pop('archiveCollection', None)
         assert json.loads((generated / 'meta.json').read_text()) == expected_meta
         assert ensure_bridge_lite(
             (generated / "index.html").read_text(encoding="utf-8")
