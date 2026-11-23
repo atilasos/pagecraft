@@ -143,11 +143,40 @@ def build_catalog(repo_root: Path) -> dict[str, Any]:
     }
 
 
+def build_archive(repo_root: Path) -> dict[str, Any]:
+    """Projeta a zona de arquivo: atividades retiradas do Catálogo cujo conteúdo
+    e endereço se mantêm, com a data e a razão de cada arquivo."""
+    activities = Path(repo_root) / "activities"
+    items = []
+    for meta_path in sorted(activities.glob("*/meta.json")):
+        meta = _load_json(meta_path, {})
+        if meta.get("status") != "archived" or not meta.get("slug"):
+            continue
+        docspec = _load_json(meta_path.parent / "docspec.json", {})
+        item = _catalog_item(meta, docspec)
+        item.update(
+            {
+                "archivedAt": meta.get("archivedAt"),
+                "archiveReason": meta.get("archiveReason", ""),
+                "archiveCollection": meta.get("archiveCollection", ""),
+            }
+        )
+        items.append(item)
+    items.sort(key=lambda item: item["slug"])
+    archived_at = [item["archivedAt"] for item in items if item["archivedAt"]]
+    return {
+        "generatedAt": max(archived_at, default=None),
+        "count": len(items),
+        "items": items,
+    }
+
+
 def regenerate_catalog(repo_root: Path) -> dict[str, Any]:
-    """Reconstrói e substitui atomicamente ``catalog.json``."""
+    """Reconstrói e substitui atomicamente ``catalog.json`` e ``archive.json``."""
     repo_root = Path(repo_root)
     catalog = build_catalog(repo_root)
     _replace_json(repo_root / "catalog.json", catalog)
+    _replace_json(repo_root / "archive.json", build_archive(repo_root))
     return catalog
 
 
