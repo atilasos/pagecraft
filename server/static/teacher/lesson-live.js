@@ -13,7 +13,8 @@ const STATES = {
 };
 const ANSWERS = {alone: "com autonomia", help: "com ajuda", practising: "quer praticar", skip: "sem resposta"};
 let data = null, rows = new Map(), timer = null, publicOrigin = location.origin;
-const pendingNotes = new Map(); // id do aluno -> gravação em curso
+// Observações: por aluno, o texto confirmado pelo servidor e a fila de gravações.
+const notes = new Map(); // id -> {saved, queued, chain}
 
 function el(tag, text, className) {
   const node = document.createElement(tag);
@@ -48,6 +49,13 @@ function assessmentTotals(student) {
   }
   return {filled, missing: student.realizations.length - filled, totals};
 }
+/* Atividades distintas: repetir ou reabrir um jogo cria outra realização. */
+function activityCounts(student) {
+  const assigned = new Set(student.assigned);
+  const finished = new Set(student.realizations.filter(r => r.finished && assigned.has(r.code)).map(r => r.code));
+  const open = new Set(student.realizations.filter(r => !r.finished && assigned.has(r.code) && !finished.has(r.code)).map(r => r.code));
+  return {finished: finished.size, open: open.size};
+}
 function evidenceTotals(student) {
   return student.realizations.reduce((sum, r) => ({
     correct: sum.correct + r.correct, different: sum.different + r.different, unscored: sum.unscored + r.unscored,
@@ -62,7 +70,7 @@ function nowCell(student) {
   if (student.current) cell.append(el("p", student.current_title || titleOf(student.current)));
   if (student.state === "offline" && student.offline) cell.append(el("p", student.offline, "muted"));
   if (student.state === "finished") cell.append(el("p", "Pode escolher outra atividade do roteiro.", "muted"));
-  if (evidenceTotals(student).pending) {
+  if (student.help_pending) {
     const flag = el("p");
     flag.append(el("span", "Pediu ajuda", "state state-help"));
     cell.append(flag);
@@ -72,8 +80,7 @@ function nowCell(student) {
 function workCell(student) {
   const cell = el("td");
   if (student.state === "offline" || !student.assigned.length) { cell.append(el("span", "—", "muted")); return cell; }
-  const done = student.realizations.filter(r => r.finished).length;
-  const open = student.realizations.length - done;
+  const {finished: done, open} = activityCounts(student);
   const parts = [plural(student.assigned.length, "atribuída", "atribuídas")];
   if (done) parts.push(plural(done, "terminada", "terminadas"));
   if (open) parts.push(`${open} em curso`);
@@ -100,7 +107,10 @@ function wordLabel(word) {
 function assessmentCell(student) {
   const cell = el("td");
   if (!student.realizations.length) { cell.append(el("span", "—", "muted")); return cell; }
-  const {filled, missing, totals} = assessmentTotals(student);
+  const {filled, totals} = assessmentTotals(student);
+  // Atividades (distintas) começadas no PageCraft sem nenhuma autoavaliação.
+  const assessedCodes = new Set(student.realizations.filter(r => r.assessment).map(r => r.code));
+  const missing = new Set(student.realizations.filter(r => !assessedCodes.has(r.code)).map(r => r.code)).size;
   if (filled) {
     cell.append(el("p", `Preenchida em ${plural(filled, "atividade", "atividades")}`));
     const said = Object.entries(totals).filter(([, n]) => n).map(([key, n]) => `${n} ${ANSWERS[key]}`);
@@ -127,20 +137,24 @@ function noteCell(student) {
   area.setAttribute("aria-label", `Observação sobre ${student.display_name}`);
   area.placeholder = "Ex.: leu sozinho as frases";
   line.setAttribute("role", "status");
-  let saved = student.note;
+  const state = notes.get(student.id) || {saved: student.note, queued: student.note, chain: Promise.resolve()};
+  notes.set(student.id, state);
+  // As gravações do mesmo aluno seguem em fila: a última escrita é a que fica.
   const save = () => {
-    if (area.value.trim() === saved.trim()) return pendingNotes.get(student.id) || Promise.resolve();
     const text = area.value;
+    if (text.trim() === state.queued.trim()) return state.chain;
+    state.queued = text;
     line.textContent = "A guardar…";
-    const request = api(`/api/learning/lessons/${code}/notes/${student.id}`, "PUT", {text}).then(() => {
-      saved = text;
-      // O registo descarregado usa logo a nota confirmada, sem esperar pela atualização.
-      const row = data?.students.find(s => s.id === student.id);
-      if (row) row.note = text.trim();
-      line.textContent = "Guardada.";
-    }, error => { line.textContent = error.message; throw error; }).finally(() => pendingNotes.delete(student.id));
-    pendingNotes.set(student.id, request);
-    return request;
+    state.chain = state.chain.catch(() => {}).then(() =>
+      api(`/api/learning/lessons/${code}/notes/${student.id}`, "PUT", {text})).then(() => {
+      state.saved = text;
+      if (state.queued === text) line.textContent = "Guardada.";
+    }, error => {
+      state.queued = state.saved;
+      line.textContent = `Não foi possível guardar: ${error.message}`;
+      throw error;
+    });
+    return state.chain;
   };
   area.onblur = () => { save().catch(() => {}); };
   area.dataset.student = student.id;
@@ -174,7 +188,7 @@ function renderRows() {
 function renderCounts() {
   const counts = {};
   for (const student of data.students) counts[student.state] = (counts[student.state] || 0) + 1;
-  const help = data.students.filter(s => evidenceTotals(s).pending).length;
+  const help = data.students.filter(s => s.help_pending).length;
   const items = Object.keys(STATES).filter(state => counts[state]).map(state => {
     const item = el("li");
     item.append(el("span", `${STATES[state][0]}: ${counts[state]}`, `state ${STATES[state][1]}`));
@@ -219,8 +233,8 @@ function renderBoard() {
 }
 async function showOnBoard(activityCode) {
   try {
-    data.board = await api(`/api/learning/lessons/${code}/board`, "PUT", {activity_code: activityCode});
-    renderBoard();
+    await api(`/api/learning/lessons/${code}/board`, "PUT", {activity_code: activityCode});
+    await refresh();
     status(activityCode ? `No quadro: ${titleOf(activityCode)}.` : "O quadro deixou de mostrar este roteiro.");
   } catch (error) { status(error.message, true); }
 }
@@ -229,6 +243,8 @@ async function refresh() {
   clearTimeout(timer);
   try {
     data = await api(`/api/learning/lessons/${code}/progress`);
+    // Uma atualização que saiu antes de uma gravação não repõe a observação antiga.
+    for (const student of data.students) if (notes.has(student.id)) student.note = notes.get(student.id).saved.trim();
     $("title").textContent = data.title;
     document.title = `${data.title} · Acompanhar · PageCraft`;
     $("class-name").textContent = `Acompanhar a aula · ${data.class_name}`;
@@ -263,20 +279,23 @@ function markdown() {
   return lines.join("\n");
 }
 async function flushNotes() {
-  // Grava a nota em edição e espera pelas gravações pendentes antes de exportar.
-  for (const area of document.querySelectorAll("#rows textarea")) area.saveNote?.().catch(() => {});
-  await Promise.allSettled([...pendingNotes.values()]);
+  // Grava a observação em edição e espera pela fila de cada aluno antes de exportar.
+  const saves = [...document.querySelectorAll("#rows textarea")].map(area => area.saveNote?.());
+  const results = await Promise.allSettled(saves);
+  if (results.some(result => result.status === "rejected")) {
+    status("Há uma observação por guardar. Tenta novamente antes de descarregar ou imprimir.", true);
+    return false;
+  }
+  for (const student of data.students) if (notes.has(student.id)) student.note = notes.get(student.id).saved.trim();
+  return true;
 }
 addEventListener("beforeunload", event => {
-  const unsaved = [...document.querySelectorAll("#rows textarea")].some(area => {
-    const student = data?.students.find(s => s.id === area.dataset.student);
-    return student && area.value.trim() !== student.note.trim();
-  });
-  if (unsaved || pendingNotes.size) { event.preventDefault(); event.returnValue = ""; }
+  const unsaved = [...document.querySelectorAll("#rows textarea")].some(area =>
+    area.value.trim() !== (notes.get(area.dataset.student)?.saved || "").trim());
+  if (unsaved) { event.preventDefault(); event.returnValue = ""; }
 });
 $("download").onclick = async () => {
-  if (!data) return;
-  await flushNotes();
+  if (!data || !(await flushNotes())) return;
   const link = el("a");
   link.href = URL.createObjectURL(new Blob([markdown()], {type: "text/markdown"}));
   link.download = `roteiro-${data.code}.md`;
@@ -284,7 +303,7 @@ $("download").onclick = async () => {
   setTimeout(() => URL.revokeObjectURL(link.href), 1000);
 };
 $("print").onclick = async () => {
-  await flushNotes();
+  if (!data || !(await flushNotes())) return;
   document.querySelectorAll(".live-table details").forEach(d => { d.open = true; });
   print();
 };

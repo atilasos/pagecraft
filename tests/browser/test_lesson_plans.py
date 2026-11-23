@@ -219,20 +219,29 @@ def test_teacher_follows_lesson_records_missing_self_assessment_and_switches_boa
         expect(page.locator('#board-now')).to_have_text('O quadro não mostra nenhuma atividade deste roteiro.')
         expect(rows.get_by_role('row', name=re.compile('^Ana'))).to_contain_text('Ainda não entrou')
         expect(rows.get_by_role('row', name=re.compile('^Carla'))).to_contain_text('Caderno')
-        page.get_by_role('button', name='Metades na aula · 1 aluno', exact=True).click()
-        expect(page.locator('#board-now')).to_have_text('O quadro mostra: Metades na aula')
-        expect(screen.locator('#session-join-code')).to_have_text(lesson['code'], timeout=8000)
-        expect(screen.locator('#session-title')).to_contain_text('Metades na aula')
+        # Primeiro um jogo das 28 palavras: arranca no quadro com uma realização vazia.
         page.get_by_label('Outra atividade do roteiro', exact=True).select_option(activities[0]['code'])
         page.get_by_role('button', name='Mostrar no quadro', exact=True).click()
-        expect(screen.locator('#session-title')).to_contain_text(activities[0]['title'], timeout=8000)
-        # O jogo arranca no quadro com uma realização vazia, sem ficar em «A preparar o jogo…».
+        expect(screen.locator('#session-join-code')).to_have_text(lesson['code'], timeout=8000)
+        expect(screen.locator('#session-title')).to_contain_text(activities[0]['title'])
         game = screen.frame_locator('#board')
         expect(game.locator('#initialization-status')).to_be_hidden(timeout=8000)
         expect(game.locator('#main')).to_be_visible()
+        # Depois, a atividade em curso: um toque troca o quadro.
+        page.get_by_role('button', name='Metades na aula · 1 aluno', exact=True).click()
+        expect(page.locator('#board-now')).to_have_text('O quadro mostra: Metades na aula')
+        expect(page.get_by_role('button', name='Metades na aula · 1 aluno', exact=True)).to_have_attribute('aria-pressed', 'true')
+        expect(screen.locator('#session-title')).to_contain_text('Metades na aula', timeout=8000)
         page.get_by_label('Observação sobre Bruno', exact=True).fill('Precisou de apoio na segunda página.')
         page.get_by_label('Observação sobre Ana', exact=True).focus()
         expect(rows.get_by_role('row', name=re.compile('^Bruno'))).to_contain_text('Guardada.')
+        # Uma observação ainda em edição entra no registo descarregado.
+        page.get_by_label('Observação sobre Ana', exact=True).fill('Ainda não entrou: leu comigo.')
+        with page.expect_download() as download:
+            page.get_by_role('button', name='Descarregar registo (Markdown)', exact=True).click()
+        record = open(download.value.path(), encoding='utf-8').read()
+        assert 'Precisou de apoio na segunda página.' in record and 'Ainda não entrou: leu comigo.' in record
+        assert 'Sem autoavaliação' in page.locator('#rows').inner_text() and 'Caderno' in record
         progress = page.request.get(origin + f"/api/learning/lessons/{lesson['code']}/progress").json()
         assert next(s for s in progress['students'] if s['id'] == bruno['id'])['note'] == 'Precisou de apoio na segunda página.'
         page.get_by_role('button', name='Tirar do quadro', exact=True).click()

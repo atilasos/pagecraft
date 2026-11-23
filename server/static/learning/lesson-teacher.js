@@ -2,7 +2,8 @@
 /* Roteiro da aula: uma linha por aluno. O roteiro guardado continua a ser uma
    lista de conjuntos; o editor agrupa os alunos com o mesmo plano ao guardar. */
 const $ = id => document.getElementById(id);
-let classes = [], lessons = [], catalog = [], current = null, selection;
+let classes = [], lessons = [], catalog = [], published = [], current = null, selection;
+let hintsRequest = 0; // as pistas só se aplicam à preparação que as pediu
 let students = [], plan = new Map(), marked = new Set();
 let publicOrigin = location.origin, dirty = false, studentsClass = "";
 let words = new Map(); // id -> {id, label, order, codes}
@@ -26,7 +27,15 @@ async function api(path, method = "GET", data) {
   if (!response.ok) throw Error(typeof result.detail === "string" ? result.detail : "Revê os alunos e as atividades escolhidas.");
   return result;
 }
-const titleOf = code => catalog.find(a => a.code === code)?.title || code;
+const titleOf = code => {
+  const activity = published.find(a => a.code === code);
+  if (!activity) return code;
+  return activity.retired ? `${activity.title} (coleção anterior)` : activity.title;
+};
+/* Atividades distintas: repetir um jogo cria outra realização, não outra atividade. */
+function distinctFinished(student) {
+  return new Set(student.realizations.filter(r => r.finished && student.assigned.includes(r.code)).map(r => r.code)).size;
+}
 const wordOf = activity => PageCraftActivitySelection.wordOf(activity);
 const today = () => new Date().toLocaleDateString("pt-PT", {weekday: "long", day: "numeric", month: "numeric"});
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
@@ -74,7 +83,9 @@ function planFromLesson(lesson) {
       if (!entry) continue;
       if (word && !entry.word) entry.word = word;
       for (const code of assignment.activity_codes) {
-        const activity = catalog.find(a => a.code === code);
+        // Jogos de uma coleção substituída ficam onde estavam: não se oferecem a novas
+        // atribuições, mas abrir um roteiro antigo não apaga o que lá está.
+        const activity = published.find(a => a.code === code);
         if (!activity) { droppedCodes.add(code); continue; }
         // Os jogos da palavra da linha ficam nessa coluna; os de outra palavra passam a outras atividades.
         if (entry.word && wordOf(activity)?.id === entry.word) continue;
@@ -295,8 +306,8 @@ function openLesson(lesson, {copy = false} = {}) {
   if (copy) notes.push("Por baixo de cada nome está o que aconteceu na aula anterior. Marca os alunos que avançam e carrega em «Avançar para a palavra seguinte».");
   if (wasOffline.length) notes.push(`Na aula anterior estiveram fora do PageCraft: ${wasOffline.join(", ")}. Marca-os de novo se for o caso.`);
   if (droppedCodes.size) notes.push(droppedCodes.size === 1
-    ? "1 atividade deixou de estar disponível (por exemplo, um jogo substituído pela coleção atual) e não é atribuída ao guardar."
-    : `${droppedCodes.size} atividades deixaram de estar disponíveis (por exemplo, jogos substituídos pela coleção atual) e não são atribuídas ao guardar.`);
+    ? "1 atividade deixou de estar disponível e não é atribuída ao guardar."
+    : `${droppedCodes.size} atividades deixaram de estar disponíveis e não são atribuídas ao guardar.`);
   $("bulk-status").textContent = notes.join(" ");
   closePicker();
   renderPlan();
@@ -304,19 +315,21 @@ function openLesson(lesson, {copy = false} = {}) {
   $("save-status").textContent = "";
   dirty = !!copy;
   if (lesson) $("form-title").focus();
-  if (copy) loadHints(lesson);
+  const request = ++hintsRequest;
+  if (copy) loadHints(lesson, request);
 }
-async function loadHints(source) {
+async function loadHints(source, request) {
   try {
     const progress = await api(`/api/learning/lessons/${source.code}/progress`);
+    if (request !== hintsRequest) return;
     for (const student of progress.students) {
       const parts = [];
       if (student.state === "offline") parts.push(`fora do PageCraft${student.offline ? ` (${student.offline})` : ""}`);
       else if (!student.realizations.length) parts.push(student.assigned.length ? "não começou atividades" : "sem atividades");
       else {
         if (student.words.length) parts.push(student.words.map(w => words.get(w)?.label || w).join(", "));
-        parts.push(`${student.realizations.filter(r => r.finished).length} de ${student.assigned.length} terminadas`);
-        const assessed = student.realizations.filter(r => r.assessment).length;
+        parts.push(`${distinctFinished(student)} de ${student.assigned.length} terminadas`);
+        const assessed = new Set(student.realizations.filter(r => r.assessment).map(r => r.code)).size;
         parts.push(assessed ? `autoavaliação em ${assessed}` : "sem autoavaliação");
       }
       if (student.note) parts.push(`«${student.note.slice(0, 60)}${student.note.length > 60 ? "…" : ""}»`);
@@ -381,6 +394,8 @@ $("lesson-class").onchange = () => {
     return;
   }
   setStudentsFor($("lesson-class").value);
+  hintsRequest++;
+  hints = new Map();
   plan = planFromLesson(null);
   marked.clear();
   changed();
@@ -414,7 +429,8 @@ addEventListener("beforeunload", event => { if (dirty) { event.preventDefault();
     publicOrigin = info.public_origin || location.origin;
     classes = roster;
     // Só a coleção atual: jogos substituídos por coleções novas não se atribuem.
-    catalog = activities.filter(a => a.published && !a.retired);
+    published = activities.filter(a => a.published);
+    catalog = published.filter(a => !a.retired);
     buildWords();
     wordOptions($("bulk-word"), "");
     $("lesson-class").replaceChildren(...classes.map(c => new Option(`${c.name} · ${c.students.length} alunos`, c.id)));
