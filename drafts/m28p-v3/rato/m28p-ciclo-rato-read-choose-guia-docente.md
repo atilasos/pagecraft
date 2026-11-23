@@ -1,6 +1,6 @@
 # Ler e escolher · rato
 
-4 rondas, cerca de cinco minutos. A criança lê uma palavra e escolhe a imagem certa entre três. «Com ajuda» mostra a palavra dividida em sílabas e deixa ouvi-la; «Sozinho» mostra a palavra inteira e deixa ouvi-la; «Consigo ajudar um amigo» mostra só a palavra escrita. Ouvir fica registado como ajuda. Palavras, uma por ronda: «raposa», «rosa», «roda», «rede».
+4 rondas, cerca de cinco minutos. A criança lê uma palavra e escolhe a imagem certa entre três. «Com ajuda» mostra a palavra dividida em sílabas e deixa ouvi-la; «Sozinho» mostra a palavra inteira e deixa ouvi-la; «Consigo ajudar um amigo» mostra só a palavra escrita. Ouvir fica registado como ajuda. Palavras, uma por ronda: «raposa», «rosa», «roda», «tigela».
 
 A demonstração usa a palavra-chave «rato», que não é uma das rondas, e mostra os mesmos botões do jogo. Ouvir, ver a demonstração e mudar de ajuda conservam o trabalho. A criança pode continuar depois de confirmar, mesmo com erro.
 
