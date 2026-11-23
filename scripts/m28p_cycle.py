@@ -30,13 +30,17 @@ MIN_ROUNDS = {'listen-build': 3, 'read-choose': 3, 'sentence': 1, 'discover': 1}
 
 
 def plain(text):
-    return ''.join(c for c in unicodedata.normalize('NFD', text) if not unicodedata.combining(c))
+    """Sem acentos; o «ç» mantém-se, porque é outra letra e não um acento."""
+    return unicodedata.normalize('NFC', ''.join(c for c in unicodedata.normalize('NFD', text)
+                                                if not unicodedata.combining(c) or c == '\u0327'))
 
 
 def asset_id(text, sentence=False):
     if sentence:
         return 'frase-' + hashlib.sha256(text.encode()).hexdigest()[:12]
-    return plain(text).replace(' ', '-') + ('-circ' if 'ô' in text else '')
+    # Os IDs dos recursos retiram todos os diacríticos, incluindo o «ç», para se manterem estáveis.
+    bare = ''.join(c for c in unicodedata.normalize('NFD', text) if not unicodedata.combining(c))
+    return bare.replace(' ', '-') + ('-circ' if 'ô' in text else '')
 
 
 def leftover(text):
@@ -341,7 +345,8 @@ def near_syllables(units, families, rng, count=3, preferred=None):
         return score
     rng.shuffle(pool)
     favoured = set(preferred or [])
-    pool.sort(key=lambda f: (f in favoured, closeness(f)), reverse=True)
+    # Primeiro a mesma família da peça-alvo (ataque ou vogal); entre iguais, as sílabas já vistas.
+    pool.sort(key=lambda f: (closeness(f), f in favoured), reverse=True)
     return pool[:count]
 
 
