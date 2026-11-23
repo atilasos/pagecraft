@@ -325,10 +325,15 @@ def compose_scene(scene, art, layout=None, place=None):
     if len(scene) != 2:
         raise ValueError('Cada cena tem uma ou duas figuras.')
     left, right = (scene_part(part, art) for part in scene)
+    if layout == 'eat':
+        # «Come», «toma a sopa»: o alimento fica junto à boca do sujeito, não afastado dele.
+        x, y, k = place or (104, 54, .32)
+        return (f'<g transform="translate(-8 25) scale(.75)">{left}</g>'
+                f'<g transform="translate({x} {y}) scale({k})">{right}</g>')
     if layout == 'room':
-        # «Está no quarto/na cozinha»: o lugar ao fundo e o sujeito no chão, à frente, sem tocar no fogão nem na janela.
+        # «Está no quarto/na cozinha»: o lugar ao fundo e o sujeito no chão, à direita, longe do fogão e da janela.
         return (f'<g transform="translate(12 6) scale(.9)">{right}</g>'
-                f'<g transform="translate(8 104) scale(.5)">{left}</g>')
+                f'<g transform="translate(130 112) scale(.48)">{left}</g>')
     if layout == 'on':
         # «Está no/na», «toma banho», «sobe a»: o sujeito fica em cima ou dentro do lugar, não ao lado.
         # `place` ajusta o ponto de apoio quando o lugar o exige (o assento de uma cadeira).
@@ -338,7 +343,7 @@ def compose_scene(scene, art, layout=None, place=None):
     if scene[1].get('size') == 'large':
         return (f'<g transform="translate(-6 42) scale(.65)">{left}</g>'
                 f'<g transform="translate(94 42) scale(.65)">{right}</g>')
-    if scene[1]['image'] in PEOPLE:
+    if scene[1]['image'] in PEOPLE or scene[1]['image'] == 'bebe':
         # Uma pessoa como objeto fica no mesmo chão que o sujeito, não a flutuar.
         return (f'<g transform="translate(-8 25) scale(.75)">{left}</g>'
                 f'<g transform="translate(120 74) scale(.55)">{right}</g>')
