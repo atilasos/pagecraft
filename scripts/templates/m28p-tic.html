@@ -15,6 +15,7 @@ h1,h2,.task-title{font-size:30px}
 .choices .picture{display:block;width:150px;height:140px}.pieces{flex-wrap:wrap}.pieces button{min-width:64px}button:focus-visible{outline:4px solid var(--focus);outline-offset:3px}</style>
 <style>
 .hidden-words{margin:12px 0}.hidden-count{font-weight:700;margin:0 0 8px}.hidden-words ul{display:flex;flex-wrap:wrap;gap:12px;list-style:none;margin:0;padding:0}.hidden-word{display:flex;align-items:center;gap:8px;min-height:84px;min-width:120px;padding:8px 12px;border:3px dashed var(--line);border-radius:18px;background:var(--surface)}.hidden-word.found{border-style:solid;border-color:var(--accent);background:var(--ok)}.hidden-word.revealed{border-style:solid;background:var(--hint)}.hidden-word button{display:flex;align-items:center;gap:8px;font-size:34px}.hidden-word .picture{width:76px;height:70px}.hidden-word .empty-slot{width:48px;height:56px}.hidden-word .unknown{font-size:34px;padding:0 12px}.punctuation{align-self:flex-end;font-size:44px;line-height:1;padding:0 4px}#discover-finish{margin-top:8px}
+.choices.read-choose{grid-template-columns:repeat(3,minmax(0,1fr))}.choices .picture{margin:0 auto;max-width:100%}.choices.read-choose button{padding:8px}@media(max-width:600px){.choices.read-choose .picture{width:100%;height:96px}}
 .demo-game{display:grid;gap:12px;justify-items:center;width:100%}.demo-game button{position:relative;pointer-events:none}.demo-game .model,.demo-game .tray,.demo-game .pieces,.demo-game .choices{width:100%;margin:6px 0}.demo-game .choices{grid-template-columns:repeat(3,minmax(0,1fr))}.demo-game .feedback{margin:6px 0}.demo-game .demo-hand{bottom:-34px;right:-6px;font-size:40px}.tray.visual-cue{outline-offset:6px}
 .initialization-status{display:flex;gap:16px;align-items:center;justify-content:center;min-height:180px;padding:24px}.preparing-shape{width:48px;height:48px;border:6px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:preparing 1s linear infinite}@keyframes preparing{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.preparing-shape{animation:none}}
 .choices .picture{display:block;width:150px;height:140px}.pieces{flex-wrap:wrap}.pieces button{min-width:64px}button:focus-visible{outline:4px solid var(--focus);outline-offset:3px}</style>
@@ -122,6 +123,8 @@ const TicModel = (() => {
       const pieces=s.tokens.map((label,i)=>({id:'p'+i,label}));
       let seed=2166136261;for(const c of s.id)seed=Math.imul(seed^c.charCodeAt(0),16777619)>>>0;
       for(let i=pieces.length-1;i>0;i--){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const j=seed%(i+1);[pieces[i],pieces[j]]=[pieces[j],pieces[i]];}
+      // Nunca começar com a frase já ordenada.
+      if(pieces.every((p,i)=>p.label===s.tokens[i]))pieces.push(pieces.shift());
       // A leitura em voz alta usa o texto original (vírgulas, hífenes), não as peças.
       const text=typeof s.text==='string'&&s.text.trim()&&s.text.length<300?s.text.trim():s.tokens.join(' ')+'.';
       return {id:'c-'+s.id,kind:'sentence',classSentence:true,prompt:'Ordena as palavras da frase.',model:false,options:[],unit:'word',length:s.tokens.length,pieces,answer:s.tokens.map((_,i)=>'p'+i),target:{text:/[.!?…]$/.test(text)?text:text+'.',tokens:s.tokens}};
@@ -145,7 +148,7 @@ const embedded=window.parent!==window;
 const storageKey='pagecraft:m28p-tic-v3:'+data.slug;
 const activity=data.slug;
 let state=TicModel.initial(),revision=0,restored=!embedded,preferencesReady=!embedded,demoOpen=false,demoTimer=null,pendingPair=null,revisionHint=null,hostLevel=null;
-let audio=null,soundEnabled=false,lastRaw=null;
+let audio=null,soundEnabled=false,lastRaw=null,repeatFound=false;
 const fixedRounds=data.rounds.slice();
 const started=new Set();
 const round=()=>data.rounds[state.page];
@@ -251,7 +254,7 @@ function discoverBoard(r,container){
 }
 function toggle(id){const values=selected();edit(round().kind==='hunt'?(values.includes(id)?values.filter(value=>value!==id):[...values,id]):[id]);}
 function choices(r,container){
-  const choices=node('div',undefined,'choices'+(r.kind==='hunt'?' hunt':''));
+  const choices=node('div',undefined,'choices'+(r.kind==='hunt'?' hunt':r.kind==='read-choose'?' read-choose':''));
   for(const option of r.options){const item=button(r.kind==='read-choose'?'':option.label,()=>toggle(option.id));if(r.kind==='read-choose'){const index=r.options.indexOf(option)+1;item.appendChild(picture(option.image,'Imagem '+index));item.setAttribute('aria-label','Imagem '+index);}item.dataset.option=option.id;item.dataset.focus='option-'+option.id;item.setAttribute('aria-pressed',String(selected().includes(option.id)));choices.appendChild(item);}
   container.appendChild(choices);
 }
@@ -288,7 +291,7 @@ function order(r,container){
   const tray=node('div',undefined,'tray');tray.setAttribute('aria-label',r.unit==='word'?'A tua frase. Toca numa palavra para a retirar.':'A tua palavra. Toca numa '+(r.unit==='letter'?'letra':'sílaba')+' para a retirar.');
   selected().forEach((id,index)=>{const piece=r.pieces.find(piece=>piece.id===id);const item=button(piece.label,()=>edit(selected().filter((_,i)=>i!==index)));item.setAttribute('aria-label','Retirar '+piece.label);item.dataset.focus='placed-'+id;tray.appendChild(item);});
   for(let i=selected().length;state.level!=='challenge'&&i<(r.length||r.pieces.length);i++){const slot=node('span',undefined,'empty-slot');slot.setAttribute('aria-hidden','true');tray.appendChild(slot);}
-  const mark=r.kind==='sentence'&&endMark(r.target);if(mark){const end=node('span',mark,'punctuation');end.setAttribute('aria-label','ponto final');tray.appendChild(end);}
+  const mark=r.kind==='sentence'&&endMark(r.target);if(mark){const end=node('span',mark,'punctuation');end.setAttribute('aria-label',{'.':'ponto final','!':'ponto de exclamação','?':'ponto de interrogação','…':'reticências'}[mark]);tray.appendChild(end);}
   const pieces=node('div',undefined,'pieces');pieces.setAttribute('role','group');pieces.setAttribute('aria-label',(r.unit==='word'?'Palavras':r.unit==='letter'?'Letras':'Sílabas')+' para escolher');
   for(const piece of r.pieces){const item=button(piece.label,()=>edit([...selected(),piece.id]));item.dataset.piece=piece.id;item.dataset.focus='piece-'+piece.id;item.disabled=selected().includes(piece.id)||selected().length>=(r.length||r.pieces.length);pieces.appendChild(item);}
   container.append(tray,pieces);
@@ -329,10 +332,10 @@ function feedback(r){
       const all=last[0]!=='finish';box.classList.toggle('ok',all);box.appendChild(node('span',all?'✓':'☞','icon'));
       box.appendChild(node('span',all?'Encontraste todas!':'Estas eram as palavras escondidas.'));return;
     }
-    const found=TicModel.discovery(r,last),missing=r.lexicon.length-(state.discoveries[r.id]||[]).length;
+    const found=TicModel.discovery(r,last),missing=r.lexicon.length-(state.discoveries[r.id]||[]).length,again=found&&repeatFound;
     const word=last.map(id=>r.pieces.find(p=>p.id===id)?.label||'').join('');
     box.appendChild(node('span',found?'✓':'↻','icon'));
-    box.appendChild(node('span',found?'Encontraste «'+found.label+'». '+(missing===1?'Falta 1.':'Faltam '+missing+'.'):'«'+word+'» não está escondida.'));
+    box.appendChild(node('span',found?(again?'Já encontraste «':'Encontraste «')+found.label+'». '+(missing===1?'Falta 1.':'Faltam '+missing+'.'):'«'+word+'» não está escondida.'));
     return;
   }
   if(!state.confirmed[r.id])return;
@@ -375,6 +378,7 @@ function render(){
   $('demo-open').hidden=state.done;
   if(state.page>=0&&!state.done&&!demoOpen&&restored&&preferencesReady)renderGame();
   $('local-reflection').hidden=embedded;
+  const invite=$('finish-invite');invite.textContent=invites[data.game]||'';invite.hidden=!(state.done&&data.rounds[0].target&&state.level==='challenge'&&invites[data.game]);
   document.querySelectorAll('[data-reflection]').forEach(item=>item.setAttribute('aria-pressed',String(item.dataset.reflection===state.reflection)));
 }
 function move(index){
@@ -385,14 +389,15 @@ function move(index){
   $('prompt').tabIndex=-1;$('prompt').focus();
 }
 function confirm(){
-  const r=round(),value=selected().slice(),result=TicModel.confirm(state,r);if(!result.accepted)return;
+  const r=round(),value=selected().slice(),before=(state.discoveries[r.id]||[]).slice(),result=TicModel.confirm(state,r);if(!result.accepted)return;
+  repeatFound=r.kind==='discover'&&!!TicModel.discovery(r,value)&&before.includes(TicModel.discovery(r,value).label);
   revision++;context();
   if(result.emit&&restored){const detail={value,question:r.prompt,task_id:r.id,activity:data.slug,field:r.id,level:state.level,aids:{...state.aids[r.id]},model_visible:r.target?state.level==='support':showModel(r),audio_before_choice:state.choiceAudio[r.id]===true};if(revisionHint)detail.after_hint_id=revisionHint;if(r.kind==='discover')window.PageCraftBridge?.emit('attempt',unit(),{detail:{...detail,discoveries:state.discoveries[r.id]||[]}});else window.PageCraftBridge?.attempt(unit(),result.correct,detail);}
   revisionHint=null;checkpoint();renderGame();if(value[0]!=='finish')playFeedback(result.correct?'success':'retry');if(state.confirmed[r.id])$('next').focus();
 }
 function setLevel(level,emit=true){if(!TicModel.levels.includes(level))return;state.level=level;revision++;revisionHint=null;if(emit)window.PageCraftBridge?.levelChanged(unit(),level);render();context();checkpoint(emit);}
 const invites={'listen-build':'Se quiseres, mostra a um amigo como juntaste as sílabas.','discover':'Se quiseres, mostra a um amigo como juntaste as sílabas.','read-choose':'Se quiseres, explica a um amigo como leste as palavras.','sentence':'Se quiseres, lê as frases a um amigo.'};
-function finish(){const invite=$('finish-invite');invite.textContent=invites[data.game]||'';invite.hidden=!(data.rounds[0].target&&state.level==='challenge'&&invites[data.game]);state.done=true;stopAudio();checkpoint();render();$('finish-button').focus();}
+function finish(){state.done=true;stopAudio();checkpoint();render();$('finish-button').focus();}
 const demoTexts={match:'Toca na palavra igual.',pairs:'Toca na imagem. Toca na palavra.',hunt:'Toca nas palavras iguais. Confirma.',syllables:'Toca nas peças por ordem.',gap:'Escolhe a peça que falta.',recall:'Ouve. Junta as peças.'};
 function demoPicture(target=false){const card=demoCard('',target);const image=picture(data.word.image,data.word.label);image.style.width='120px';image.style.height='100px';card.prepend(image);return card;}
 function demoCard(text,target=false){const card=node('div',text,'demo-card'+(target?' target':''));if(target){const hand=node('span','☝','demo-hand');hand.setAttribute('aria-hidden','true');card.appendChild(hand);}return card;}
@@ -424,7 +429,7 @@ function paintCycleDemo(step){
   const last=demoSteps()-1;
   if(data.game==='read-choose'){
     const model=node('div',undefined,'model');model.append(node('span',d.target.label,'word'),fake('🔊'));
-    const choices=node('div',undefined,'choices'),order=[d.options[1],d.options[0],d.options[2]].filter(Boolean);
+    const choices=node('div',undefined,'choices read-choose'),order=[d.options[1],d.options[0],d.options[2]].filter(Boolean);
     order.forEach(option=>{const b=fake('',step===1&&option===d.options[0],step>=1&&option===d.options[0]);b.appendChild(picture(option.image,option.label));choices.appendChild(b);});
     game.append(model,choices);
   }else{
@@ -451,10 +456,10 @@ function runDemo(){
 function openDemo(){stopAudio();pendingPair=null;if(state.page<0&&data.demo)state.introDemo=true;else aid('demo_shown');checkpoint();demoOpen=true;render();runDemo();$('demo-close').focus();}
 function closeDemo(){clearTimeout(demoTimer);$('demo-stage').replaceChildren();demoOpen=false;if(state.page<0)move(0);else render();if(state.page>=0){$('prompt').tabIndex=-1;$('prompt').focus();}}
 function restore(raw){lastRaw=raw;state=TicModel.sanitize(data,raw);if(hostLevel)state.level=hostLevel;restored=true;revision++;revisionHint=null;pendingPair=null;started.clear();render();context();checkpoint();}
-if(data.rounds[0].target){const undo=button('Desfazer',()=>edit(selected().slice(0,-1)));undo.id='undo';$('confirm').parentNode.prepend(undo);}
+if(data.rounds[0].target&&data.game!=='read-choose'){const undo=button('Desfazer',()=>edit(selected().slice(0,-1)));undo.prepend(node('span','↶ ','icon'));undo.id='undo';$('back').after(undo);}
 $('game-title').textContent=data.title;$('intro-word').textContent=data.word.label;$('intro-picture').appendChild(picture(data.word.image,data.word.label));$('finish-picture').appendChild(picture(data.word.image,data.word.label));
 $('start').addEventListener('click',openDemo);$('demo-open').addEventListener('click',openDemo);$('demo-close').addEventListener('click',closeDemo);$('demo-again').addEventListener('click',runDemo);
-$('hear').addEventListener('click',()=>play(state.page<0?'start':demoOpen?'instruction':'instruction'));
+$('hear').addEventListener('click',()=>play(state.done?'finish':state.page<0?'start':'instruction'));
 $('mute').addEventListener('click',()=>{soundEnabled=!soundEnabled;if(!soundEnabled)stopAudio();$('mute').textContent=soundEnabled?'Desligar som':'Ligar som';$('mute').setAttribute('aria-pressed',String(!soundEnabled));});
 $('back').addEventListener('click',()=>move(state.page-1));$('confirm').addEventListener('click',confirm);$('next').addEventListener('click',()=>state.page===data.rounds.length-1?finish():move(state.page+1));
 $('repeat').addEventListener('click',()=>{state=TicModel.initial();revision++;checkpoint();render();$('start').focus();});
