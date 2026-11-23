@@ -243,8 +243,9 @@ function renderSummary() {
 function renderToolbar() {
   const count = marked.size;
   $("marked-count").textContent = count ? `${count} ${count === 1 ? "aluno marcado" : "alunos marcados"}` : "Nenhum aluno marcado";
-  for (const id of ["apply-word", "next-word", "bulk-offline", "bulk-clear", "assign-selected", "pick-activities"]) $(id).disabled = !count;
-  if (!count && !$("picker").hidden) closePicker();
+  // Desmarcar todos não apaga a seleção aberta: só desativa a atribuição até haver alunos.
+  for (const id of ["apply-word", "next-word", "bulk-offline", "bulk-clear", "assign-selected"]) $(id).disabled = !count;
+  $("pick-activities").disabled = !count && $("picker").hidden;
   $("assign-selected").textContent = count ? `Atribuir aos ${count} alunos marcados` : "Atribuir aos alunos marcados";
   if (count === 1) $("assign-selected").textContent = "Atribuir ao aluno marcado";
 }
@@ -363,10 +364,16 @@ async function loadHints(source, request) {
         // Parte do que foi realmente terminado (e de que palavra), mesmo que a distribuição
         // tenha mudado durante a aula; a palavra do roteiro aparece à parte.
         const finishedCodes = [...new Set(student.realizations.filter(r => r.finished).map(r => r.code))];
-        const finishedWords = [...new Set(finishedCodes.map(c => wordOf(published.find(a => a.code === c) || {})?.label).filter(Boolean))];
-        parts.push(finishedCodes.length
-          ? `terminou ${plural(finishedCodes.length, "atividade", "atividades")}${finishedWords.length ? ` (${finishedWords.join(", ")})` : ""}`
-          : "não terminou atividades");
+        // Por palavra («casa 2, bota 1») e as atividades sem palavra à parte.
+        const perWord = new Map();
+        let others = 0;
+        for (const c of finishedCodes) {
+          const label = wordOf(published.find(a => a.code === c) || {})?.label;
+          if (label) perWord.set(label, (perWord.get(label) || 0) + 1); else others++;
+        }
+        const pieces = [...perWord].map(([label, n]) => `${label} ${n}`);
+        if (others) pieces.push(plural(others, "outra atividade", "outras atividades"));
+        parts.push(finishedCodes.length ? `terminou: ${pieces.join(", ")}` : "não terminou atividades");
         if (student.words.length) parts.push(`no roteiro: ${student.words.map(w => words.get(w)?.label || w).join(", ")}`);
         // Mesmo critério que «Acompanhar»: respondida, entregue sem respostas ou em falta.
         const answeredCodes = new Set(student.realizations.filter(r => r.voice === "answered").map(r => r.code));
@@ -447,8 +454,12 @@ $("lesson-form").onsubmit = async event => {
   event.preventDefault();
   // Uma seleção por atribuir não se perde em silêncio ao guardar.
   if (!$("picker").hidden && selection.selected.size) {
-    status("Há atividades selecionadas por atribuir. Carrega em «Atribuir aos alunos marcados» ou fecha a seleção antes de guardar.", true);
-    $("assign-selected").focus();
+    const message = marked.size
+      ? `Há atividades selecionadas por atribuir. Carrega em «${$("assign-selected").textContent}» ou fecha a seleção antes de guardar.`
+      : "Há atividades selecionadas por atribuir. Marca os alunos e atribui-as, ou fecha a seleção antes de guardar.";
+    status(message, true);
+    $("bulk-status").textContent = message;
+    (marked.size ? $("assign-selected") : $("close-picker")).focus();
     return;
   }
   const assignments = assignmentsFromPlan(), offline = offlineFromPlan();

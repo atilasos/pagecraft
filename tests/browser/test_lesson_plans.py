@@ -68,9 +68,13 @@ def test_teacher_distributes_word_and_other_activity_and_pupil_returns_to_own_li
     page.get_by_label('Marcar Carla', exact=True).check()
     page.get_by_role('button', name='Escolher outras atividades…', exact=True).click()
     page.get_by_role('checkbox', name='Selecionar Metades na aula', exact=True).check()
-    # Guardar com uma seleção por atribuir é recusado, em vez de a perder.
+    # Desmarcar o aluno não apaga a seleção; guardar com ela por atribuir é recusado.
+    page.get_by_label('Marcar Carla', exact=True).uncheck()
+    expect(page.locator('#picker')).to_be_visible()
     page.get_by_role('button', name='Guardar roteiro da aula', exact=True).click()
     expect(page.locator('#status')).to_contain_text('Há atividades selecionadas por atribuir.')
+    page.get_by_label('Marcar Carla', exact=True).check()
+    expect(page.get_by_role('checkbox', name='Selecionar Metades na aula', exact=True)).to_be_checked()
     page.get_by_role('button', name='Atribuir ao aluno marcado', exact=True).click()
     expect(page.locator('#plan-rows')).to_contain_text('Metades na aula')
     expect(page.locator('#plan-summary')).to_contain_text('Todos os alunos têm um plano')

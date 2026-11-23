@@ -128,8 +128,8 @@ function assessmentCell(student) {
   const {filled, empty, missing, totals} = assessmentTotals(student);
   if (filled) {
     cell.append(el("p", `Preenchida em ${plural(filled, "atividade", "atividades")}`));
-    const said = Object.entries(totals).filter(([, n]) => n).map(([key, n]) => `${n} ${ANSWERS[key]}`);
-    if (said.length) cell.append(el("p", said.join(" · "), "muted"));
+    // Mesmo critério do detalhe: «sem resposta» só ao lado de respostas aos critérios.
+    cell.append(el("p", answers_of({assessment: totals}).replaceAll(", ", " · "), "muted"));
   }
   if (empty) cell.append(el("p", `Entregue sem respostas em ${plural(empty, "atividade", "atividades")}`, filled ? "muted" : ""));
   if (missing) cell.append(el("p", `Sem autoavaliação em ${plural(missing, "atividade", "atividades")}`, filled ? "muted" : ""));
