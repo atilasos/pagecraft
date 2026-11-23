@@ -221,10 +221,6 @@
       "minhoca"
     ],
     [
-      "lagartixa",
-      "jacaré"
-    ],
-    [
       "raposa",
       "esquilo"
     ],
@@ -326,6 +322,11 @@
         "label": "A uva é nova.",
         "page": null,
         "reason": "pouco natural e a imagem não mostra «nova» (revisão de 23/11/2026)"
+      },
+      {
+        "label": "jacaré",
+        "page": null,
+        "reason": "pouco usado por crianças portuguesas («crocodilo»); retirado na revisão textual de 23/11/2026"
       }
     ]
   },
@@ -738,21 +739,20 @@
           "source": "proposta"
         },
         {
-          "text": "O menino vê o dado.",
+          "text": "O dado é do avô.",
           "tokens": [
             "O",
-            "menino",
-            "vê",
-            "o",
-            "dado"
+            "dado",
+            "é",
+            "do",
+            "avô"
           ],
           "scene": [
             {
-              "image": "menino",
-              "pose": "looking"
+              "image": "dado"
             },
             {
-              "image": "dado"
+              "image": "avo-circ"
             }
           ],
           "source": "proposta"
@@ -879,21 +879,20 @@
           "source": "proposta"
         },
         {
-          "text": "O avô vê o tomate.",
+          "text": "O sapato é do avô.",
           "tokens": [
             "O",
-            "avô",
-            "vê",
-            "o",
-            "tomate"
+            "sapato",
+            "é",
+            "do",
+            "avô"
           ],
           "scene": [
             {
-              "image": "avo-circ",
-              "pose": "looking"
+              "image": "sapato"
             },
             {
-              "image": "tomate"
+              "image": "avo-circ"
             }
           ],
           "source": "proposta"
@@ -1016,21 +1015,20 @@
           "source": "proposta"
         },
         {
-          "text": "O avô vê a batata.",
+          "text": "O bebé bebe a sopa.",
           "tokens": [
             "O",
-            "avô",
-            "vê",
+            "bebé",
+            "bebe",
             "a",
-            "batata"
+            "sopa"
           ],
           "scene": [
             {
-              "image": "avo-circ",
-              "pose": "looking"
+              "image": "bebe"
             },
             {
-              "image": "batata"
+              "image": "sopa"
             }
           ],
           "source": "proposta"
@@ -1613,20 +1611,20 @@
           "layout": "on"
         },
         {
-          "text": "A mosca está na mesa.",
+          "text": "O menino sobe a escada.",
           "tokens": [
-            "A",
-            "mosca",
-            "está",
-            "na",
-            "mesa"
+            "O",
+            "menino",
+            "sobe",
+            "a",
+            "escada"
           ],
           "scene": [
             {
-              "image": "mosca"
+              "image": "menino"
             },
             {
-              "image": "mesa"
+              "image": "escada"
             }
           ],
           "source": "proposta",
@@ -2225,16 +2223,6 @@
           "source": "proposta"
         },
         {
-          "label": "jacaré",
-          "syllables": [
-            "ja",
-            "ca",
-            "ré"
-          ],
-          "picturable": true,
-          "source": "proposta"
-        },
-        {
           "label": "doce",
           "syllables": [
             "do",
@@ -2450,7 +2438,16 @@
               "image": "gato"
             }
           ],
-          "source": "proposta"
+          "source": "proposta",
+          "alternatives": [
+            [
+              "O",
+              "gato",
+              "foge",
+              "do",
+              "rato"
+            ]
+          ]
         },
         {
           "text": "A foca nada.",
@@ -2641,17 +2638,17 @@
       ],
       "sentences": [
         {
-          "text": "A cobra está na cozinha.",
+          "text": "O gato está na cozinha.",
           "tokens": [
-            "A",
-            "cobra",
+            "O",
+            "gato",
             "está",
             "na",
             "cozinha"
           ],
           "scene": [
             {
-              "image": "cobra"
+              "image": "gato"
             },
             {
               "image": "cozinha"
@@ -3207,24 +3204,24 @@
           "layout": "on"
         },
         {
-          "text": "A tartaruga está na pedra.",
+          "text": "A avó vê o quadro.",
           "tokens": [
             "A",
-            "tartaruga",
-            "está",
-            "na",
-            "pedra"
+            "avó",
+            "vê",
+            "o",
+            "quadro"
           ],
           "scene": [
             {
-              "image": "tartaruga"
+              "image": "avo",
+              "pose": "looking"
             },
             {
-              "image": "pedra"
+              "image": "quadro"
             }
           ],
-          "source": "proposta",
-          "layout": "on"
+          "source": "proposta"
         },
         {
           "text": "O quadrado está no quadro.",
@@ -3359,17 +3356,18 @@
           "source": "proposta"
         },
         {
-          "text": "O gato come o pêssego.",
+          "text": "O menino come o pêssego.",
           "tokens": [
             "O",
-            "gato",
+            "menino",
             "come",
             "o",
             "pêssego"
           ],
           "scene": [
             {
-              "image": "gato"
+              "image": "menino",
+              "pose": "looking"
             },
             {
               "image": "pessego"
@@ -3680,16 +3678,18 @@
       "sentenceWords": [],
       "sentences": [
         {
-          "text": "O avô toca guitarra.",
+          "text": "O avô toca a guitarra.",
           "tokens": [
             "O",
             "avô",
             "toca",
+            "a",
             "guitarra"
           ],
           "scene": [
             {
-              "image": "avo-circ"
+              "image": "avo-circ",
+              "pose": "looking"
             },
             {
               "image": "guitarra"
@@ -3808,24 +3808,24 @@
           "layout": "on"
         },
         {
-          "text": "O urso está na floresta.",
+          "text": "A menina pinta a flor.",
           "tokens": [
-            "O",
-            "urso",
-            "está",
-            "na",
-            "floresta"
+            "A",
+            "menina",
+            "pinta",
+            "a",
+            "flor"
           ],
           "scene": [
             {
-              "image": "urso"
+              "image": "menina",
+              "pose": "looking"
             },
             {
-              "image": "floresta"
+              "image": "flor"
             }
           ],
-          "source": "proposta",
-          "layout": "on"
+          "source": "proposta"
         }
       ]
     }
