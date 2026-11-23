@@ -36,7 +36,11 @@ async function api(path, method = "GET", body) {
   return result;
 }
 const titleOf = activityCode => data.activities[activityCode]?.title || activityCode;
-const status_of = r => r.completed_at ? `terminada às ${time(r.completed_at)}` : r.finished ? "chegou ao fim do jogo, sem autoavaliação" : `em curso desde ${time(r.started_at)}`;
+const status_of = r => r.completed_at ? `terminada às ${time(r.completed_at)}` : r.finished ? "chegou ao fim do jogo" : `em curso desde ${time(r.started_at)}`;
+/* Autoavaliação de uma realização: preenchida, entregue sem respostas (tudo «Passar» e
+   sem texto) ou em falta. A entrega vazia também é voz da criança, mas não é resposta. */
+const answered = r => !!r.assessment && (Object.entries(r.assessment).some(([key, n]) => key !== "skip" && n > 0) || !!r.strategy || !!r.next_step);
+const voice_of = r => answered(r) ? "com autoavaliação" : r.assessment ? "autoavaliação entregue sem respostas" : "sem autoavaliação";
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 const time = iso => new Date(iso).toLocaleTimeString("pt-PT", {hour: "2-digit", minute: "2-digit"});
 
@@ -45,9 +49,10 @@ function assessmentTotals(student) {
   const totals = {alone: 0, help: 0, practising: 0, skip: 0};
   for (const r of student.realizations)
     if (r.assessment) for (const key of Object.keys(totals)) totals[key] += r.assessment[key] || 0;
-  const assessed = new Set(student.realizations.filter(r => r.assessment).map(r => r.code));
-  const missing = new Set(student.realizations.filter(r => !assessed.has(r.code)).map(r => r.code));
-  return {filled: assessed.size, missing: missing.size, totals};
+  const filled = new Set(student.realizations.filter(answered).map(r => r.code));
+  const empty = new Set(student.realizations.filter(r => r.assessment && !filled.has(r.code)).map(r => r.code));
+  const missing = new Set(student.realizations.filter(r => !filled.has(r.code) && !empty.has(r.code)).map(r => r.code));
+  return {filled: filled.size, empty: empty.size, missing: missing.size, totals};
 }
 /* Atividades distintas: repetir ou reabrir um jogo cria outra realização. */
 function activityCounts(student) {
@@ -79,18 +84,22 @@ function nowCell(student) {
 }
 function workCell(student) {
   const cell = el("td");
-  if (student.state === "offline" || !student.assigned.length) { cell.append(el("span", "—", "muted")); return cell; }
-  const {finished: done, open} = activityCounts(student);
-  const parts = [plural(student.assigned.length, "atribuída", "atribuídas")];
-  if (done) parts.push(plural(done, "terminada", "terminadas"));
-  if (open) parts.push(`${open} em curso`);
-  cell.append(el("p", parts.join(" · ")));
+  // O trabalho já registado mostra-se sempre, mesmo que a distribuição tenha mudado.
+  if (student.state === "offline" || !student.assigned.length) {
+    cell.append(el("span", student.realizations.length ? "Sem atividades atribuídas agora" : "—", "muted"));
+  } else {
+    const {finished: done, open} = activityCounts(student);
+    const parts = [plural(student.assigned.length, "atribuída", "atribuídas")];
+    if (done) parts.push(plural(done, "terminada", "terminadas"));
+    if (open) parts.push(`${open} em curso`);
+    cell.append(el("p", parts.join(" · ")));
+  }
   if (student.words.length) cell.append(el("p", `Palavra: ${student.words.map(w => wordLabel(w)).join(", ")}`, "muted"));
   if (student.realizations.length) {
     const details = el("details"), list = el("ul");
     details.append(el("summary", "Ver atividades"));
     for (const r of student.realizations) {
-      const item = el("li", `${r.title} — ${status_of(r)} · ${r.assessment ? "com autoavaliação" : "sem autoavaliação"}`);
+      const item = el("li", `${r.title} — ${status_of(r)} · ${voice_of(r)}`);
       if (r.strategy) item.append(el("p", `Estratégia: ${r.strategy}`, "muted"));
       if (r.next_step) item.append(el("p", `Próximo passo proposto: ${r.next_step}`, "muted"));
       list.append(item);
@@ -107,12 +116,13 @@ function wordLabel(word) {
 function assessmentCell(student) {
   const cell = el("td");
   if (!student.realizations.length) { cell.append(el("span", "—", "muted")); return cell; }
-  const {filled, missing, totals} = assessmentTotals(student);
+  const {filled, empty, missing, totals} = assessmentTotals(student);
   if (filled) {
     cell.append(el("p", `Preenchida em ${plural(filled, "atividade", "atividades")}`));
     const said = Object.entries(totals).filter(([, n]) => n).map(([key, n]) => `${n} ${ANSWERS[key]}`);
     if (said.length) cell.append(el("p", said.join(" · "), "muted"));
   }
+  if (empty) cell.append(el("p", `Entregue sem respostas em ${plural(empty, "atividade", "atividades")}`, filled ? "muted" : ""));
   if (missing) cell.append(el("p", `Sem autoavaliação em ${plural(missing, "atividade", "atividades")}`, filled ? "muted" : ""));
   return cell;
 }
@@ -291,7 +301,7 @@ function markdown() {
     if (student.words.length) lines.push(`- Palavra: ${student.words.map(wordLabel).join(", ")}`);
     if (student.state !== "offline") lines.push(`- Atividades atribuídas: ${student.assigned.length}`);
     for (const r of student.realizations) {
-      const said = r.assessment ? Object.entries(r.assessment).filter(([, n]) => n).map(([k, n]) => `${n} ${ANSWERS[k]}`).join(", ") || "sem respostas" : "sem autoavaliação";
+      const said = answered(r) ? Object.entries(r.assessment).filter(([, n]) => n).map(([k, n]) => `${n} ${ANSWERS[k]}`).join(", ") : voice_of(r);
       const unscored = r.unscored ? `, ${r.unscored} sem correção automática` : "";
       lines.push(`- ${r.title}: ${status_of(r)} · ${r.correct} respostas certas, ${r.different} diferentes da esperada${unscored}, ${r.help} pedidos de ajuda · autoavaliação: ${said}`);
       if (r.strategy) lines.push(`  - Estratégia: ${r.strategy}`);

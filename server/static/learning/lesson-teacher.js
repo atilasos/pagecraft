@@ -179,7 +179,7 @@ function renderPlan() {
       // O seletor mostra os jogos atuais; um roteiro guardado pode conservar outros.
       const kept = wordCodesOf(entry);
       if (entry.word && entry.word === entry.savedWord && kept.length !== (words.get(entry.word)?.codes.length || 0))
-        wordCell.append(el("span", `Este roteiro mantém ${plural(kept.length, "jogo guardado", "jogos guardados")} desta palavra.`, "row-hint"));
+        wordCell.append(el("span", `Este roteiro mantém ${plural(kept.length, "jogo guardado", "jogos guardados")} desta palavra. Para usar os jogos atuais, escolhe outra palavra e volta a esta.`, "row-hint"));
     } else wordCell.append(el("span", "—", "muted"));
 
     const extrasCell = el("td");

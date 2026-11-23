@@ -52,7 +52,7 @@ O quadro tem de estar emparelhado uma vez em **Aula ao vivo**.
 A página **Acompanhar** é também o registo simples da aula. Para cada aluno mostra:
 
 - as atividades atribuídas, terminadas e em curso;
-- a autoavaliação de cada atividade (com autonomia, com ajuda, quer praticar) e as atividades **sem autoavaliação**, incluindo jogos que chegaram ao fim sem a criança a preencher;
+- a autoavaliação de cada atividade (com autonomia, com ajuda, quer praticar), as entregues **sem respostas** e as atividades **sem autoavaliação**, incluindo jogos que chegaram ao fim sem a criança a preencher;
 - as respostas certas, as diferentes da esperada, as tentativas sem correção automática (por exemplo, descobertas) e os pedidos de ajuda registados;
 - a tua observação, guardada ao sair do campo.
 
