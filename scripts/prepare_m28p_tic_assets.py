@@ -421,7 +421,7 @@ def verify_assets(require_audio):
         for slug in [*(slug for slug, _ in WORDS+NEW_WORDS+SENTENCES+EXAMPLES), *INSTRUCTIONS]:
             audio = DEST / "audio" / f"{slug}.mp3"
             assert audio.stat().st_size >= 800, slug
-    print(f"Verificação: {len(WORDS)+len(PICTURABLE)+len(SENTENCES)} SVG" + (f", {len(WORDS) + len(NEW_WORDS) + len(SENTENCES) + len(INSTRUCTIONS)} MP3" if require_audio else ""))
+    print(f"Verificação: {len(WORDS)+len(PICTURABLE)+len(SENTENCES)} SVG" + (f", {len(WORDS) + len(NEW_WORDS) + len(SENTENCES) + len(EXAMPLES) + len(INSTRUCTIONS)} MP3" if require_audio else ""))
 
 
 def main():

@@ -247,8 +247,7 @@ def cycle_guide(data, word):
                 f"Palavras escondidas (as rondas estão separadas por « / »): {hidden}. A criança vê quantas já encontrou («Encontraste 1 de 2.»); "
                 "a ronda acaba quando as encontra todas ou quando toca em «Não encontro mais palavras», que mostra as que faltavam. "
                 "«Com ajuda» mostra a imagem (quando existe) e o som de cada palavra escondida; «Sozinho» mostra quantas sílabas tem cada uma; "
-                "«Consigo ajudar um amigo» mostra só quantas são. Uma combinação fora da lista recebe «não está escondida»; "
-                "se for uma das palavras reais indicadas abaixo, recebe «é uma palavra, mas não está escondida aqui».")
+                "«Consigo ajudar um amigo» mostra só quantas são. Uma combinação fora da lista recebe «não está escondida».")
         if all(w.get('newIn') != word['slug'] for r in rounds for w in r['lexicon']):
             body += f" «{word['label']}» não traz palavras novas: este jogo revê palavras de palavras-chave anteriores."
         without = sum(1 for r in rounds if not r.get('extra'))
@@ -258,6 +257,7 @@ def cycle_guide(data, word):
         extra = sorted({w for r in rounds for w in r.get('warnings', [])})
         if extra:
             body += (f" Com estas peças também se formam sequências que o dicionário aceita mas que não estão escondidas ({', '.join(extra)}); "
+                     "nesse caso, a criança recebe «é uma palavra, mas não está escondida aqui». "
                      "podem não ser conhecidas das crianças. Se uma criança as encontrar, aproveita para conversar sobre o que significam, "
                      "por exemplo no Conselho de Cooperação ou no Texto Livre.")
     if game == 'sentence':
