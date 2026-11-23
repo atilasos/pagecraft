@@ -246,12 +246,13 @@ def cycle_guide(data, word):
                 f"Palavras escondidas (as rondas estão separadas por « / »): {hidden}. A criança vê quantas já encontrou («Encontraste 1 de 2.»); "
                 "a ronda acaba quando as encontra todas ou quando toca em «Não encontro mais palavras», que mostra as que faltavam. "
                 "«Com ajuda» mostra a imagem (quando existe) e o som de cada palavra escondida; «Sozinho» mostra quantas sílabas tem cada uma; "
-                "«Consigo ajudar um amigo» mostra só quantas são. Uma combinação fora da lista recebe «não está escondida».")
+                "«Consigo ajudar um amigo» mostra só quantas são. Uma combinação fora da lista recebe «não está escondida»; "
+                "se for uma das palavras reais indicadas abaixo, recebe «é uma palavra, mas não está escondida aqui».")
         if all(w.get('newIn') != word['slug'] for r in rounds for w in r['lexicon']):
             body += f" «{word['label']}» não traz palavras novas: este jogo revê palavras de palavras-chave anteriores."
         without = sum(1 for r in rounds if not r.get('extra'))
         if without:
-            body += (" Numa das rondas não há sílaba a mais: qualquer sílaba disponível formaria outra palavra que não está escondida."
+            body += ((" Nesta ronda" if len(rounds) == 1 else " Numa das rondas") + " não há sílaba a mais: qualquer sílaba disponível formaria outra palavra que não está escondida."
                      if without == 1 else f" Em {without} rondas não há sílaba a mais: qualquer sílaba disponível formaria outra palavra que não está escondida.")
         extra = sorted({w for r in rounds for w in r.get('warnings', [])})
         if extra:

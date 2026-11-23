@@ -389,7 +389,7 @@ function render(){
 }
 function move(index){
   if(!TicModel.accessible(data,state,index))return;
-  stopAudio();state.page=index;state.pageId=data.rounds[index]?.id||null;state.done=false;pendingPair=null;revisionHint=null;revision++;
+  stopAudio();repeatFound=false;state.page=index;state.pageId=data.rounds[index]?.id||null;state.done=false;pendingPair=null;revisionHint=null;revision++;
   render();context();checkpoint();
   if(restored&&!started.has(unit())){started.add(unit());window.PageCraftBridge?.unitStarted(unit());}
   $('prompt').tabIndex=-1;$('prompt').focus();
@@ -468,7 +468,7 @@ function runDemo(){
 }
 function openDemo(){stopAudio();pendingPair=null;if(state.page<0&&data.demo)state.introDemo=true;else aid('demo_shown');checkpoint();demoOpen=true;render();runDemo();$('demo-close').focus();}
 function closeDemo(){clearTimeout(demoTimer);stopAudio();$('demo-stage').replaceChildren();demoOpen=false;if(state.page<0)move(0);else render();if(state.page>=0){$('prompt').tabIndex=-1;$('prompt').focus();}}
-function restore(raw){lastRaw=raw;state=TicModel.sanitize(data,raw);if(hostLevel)state.level=hostLevel;restored=true;revision++;revisionHint=null;pendingPair=null;started.clear();render();context();checkpoint();}
+function restore(raw){repeatFound=false;lastRaw=raw;state=TicModel.sanitize(data,raw);if(hostLevel)state.level=hostLevel;restored=true;revision++;revisionHint=null;pendingPair=null;started.clear();render();context();checkpoint();}
 if(data.rounds[0].target&&data.game!=='read-choose'){const undo=button('Desfazer',()=>edit(selected().slice(0,-1)));undo.prepend(node('span','↶ ','icon'));undo.id='undo';$('back').after(undo);}
 $('game-title').textContent=data.title;$('intro-word').textContent=data.word.label;$('intro-picture').appendChild(picture(data.word.image,data.word.label));$('finish-picture').appendChild(picture(data.word.image,data.word.label));
 $('start').addEventListener('click',openDemo);$('demo-open').addEventListener('click',openDemo);$('demo-close').addEventListener('click',closeDemo);$('demo-again').addEventListener('click',runDemo);
@@ -476,7 +476,7 @@ $('hear').addEventListener('click',()=>demoOpen?playQuiet(data.audio?.instructio
 $('demo-hear').hidden=!data.demo;$('demo-hear').addEventListener('click',()=>playQuiet(data.demo?.audio||data.audio?.word));
 $('mute').addEventListener('click',()=>{soundEnabled=!soundEnabled;if(!soundEnabled)stopAudio();$('mute').textContent=soundEnabled?'Desligar som':'Ligar som';$('mute').setAttribute('aria-pressed',String(!soundEnabled));});
 $('back').addEventListener('click',()=>move(state.page-1));$('confirm').addEventListener('click',confirm);$('next').addEventListener('click',()=>state.page===data.rounds.length-1?finish():move(state.page+1));
-$('repeat').addEventListener('click',()=>{state=TicModel.initial();revision++;checkpoint();render();$('start').focus();});
+$('repeat').addEventListener('click',()=>{stopAudio();repeatFound=false;state=TicModel.initial();if(hostLevel)state.level=hostLevel;revision++;checkpoint();render();$('start').focus();});
 $('finish-button').addEventListener('click',()=>{if(embedded)window.PageCraftBridge?.emit('open_reflection',null,{});else {$('local-reflection').scrollIntoView({block:'nearest'});document.querySelector('[data-reflection]').focus();}});
  document.querySelectorAll('[data-level]').forEach(item=>item.addEventListener('click',()=>setLevel(item.dataset.level)));
  document.querySelectorAll('[data-reflection]').forEach(item=>item.addEventListener('click',()=>{state.reflection=item.dataset.reflection;checkpoint();render();}));

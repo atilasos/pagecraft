@@ -388,7 +388,7 @@ def generate_manifest():
     assets = []
     for slug, word in WORDS:
         assets.append({"slug": slug, "word": word, "image": f"images/{slug}.svg", "audio": f"audio/{slug}.mp3"})
-    recordings = {**dict(WORDS + NEW_WORDS + SENTENCES), **INSTRUCTIONS}
+    recordings = {**dict(WORDS + NEW_WORDS + SENTENCES + EXAMPLES), **INSTRUCTIONS}
     files = {}
     for path_ in sorted(DEST.rglob("*")):
         if path_.suffix in (".svg", ".mp3"):
@@ -398,7 +398,7 @@ def generate_manifest():
         "illustrations": {"author": "PageCraft, ilustrações SVG originais criadas com assistência Codex", "license": "CC0-1.0", "viewBox": "0 0 240 240", "notes": "Sem texto visível nem emoji; os títulos SVG são alternativas acessíveis, retirados ao incorporar nos jogos (o nome acessível vem do jogo). A seta no telhado assinala a parte da casa. As cenas das frases compõem as figuras indicadas em cycle.json."},
         "audio": {"provider": "Microsoft Edge Read Aloud, através de edge-tts", "voice": VOICE, "locale": "pt-PT", "rate": RATE, "license": "Voz sintética Microsoft; sujeita aos termos do serviço, não abrangida pela licença CC0 dos SVG.", "notes": "Palavras inteiras e instruções. Não usar estes sons para modelar fonemas ou sílabas isoladas. Reprodução só após opção da criança.", "transcripts": recordings},
         "words": assets,
-        "cycle": [{"slug":slug,"text":text,"audio":f"audio/{slug}.mp3", "image":f"images/{slug}.svg" if slug in PICTURABLE or slug.startswith("frase-") else None} for slug,text in NEW_WORDS+SENTENCES],
+        "cycle": [{"slug":slug,"text":text,"audio":f"audio/{slug}.mp3", "image":f"images/{slug}.svg" if slug in PICTURABLE or slug.startswith("frase-") else None} for slug,text in NEW_WORDS+SENTENCES+EXAMPLES],
         "instructions": {slug: f"audio/{slug}.mp3" for slug in INSTRUCTIONS},
         "files": files,
     }
@@ -418,7 +418,7 @@ def verify_assets(require_audio):
             assert node.tag.split("}")[-1] not in {"text", "image", "script", "foreignObject"}, slug
             assert all("href" not in key and not key.startswith("on") for key in node.attrib), slug
     if require_audio:
-        for slug in [*(slug for slug, _ in WORDS+NEW_WORDS+SENTENCES), *INSTRUCTIONS]:
+        for slug in [*(slug for slug, _ in WORDS+NEW_WORDS+SENTENCES+EXAMPLES), *INSTRUCTIONS]:
             audio = DEST / "audio" / f"{slug}.mp3"
             assert audio.stat().st_size >= 800, slug
     print(f"Verificação: {len(WORDS)+len(PICTURABLE)+len(SENTENCES)} SVG" + (f", {len(WORDS) + len(NEW_WORDS) + len(SENTENCES) + len(INSTRUCTIONS)} MP3" if require_audio else ""))
