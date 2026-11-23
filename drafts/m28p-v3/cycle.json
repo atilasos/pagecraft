@@ -226,8 +226,7 @@
     ],
     [
       "cabeça",
-      "pescoço",
-      "braço"
+      "pescoço"
     ],
     [
       "pato",
@@ -253,6 +252,27 @@
     [
       "chave",
       "anel"
+    ],
+    [
+      "flor",
+      "rosa",
+      "girassol"
+    ],
+    [
+      "árvore",
+      "floresta"
+    ],
+    [
+      "cigarra",
+      "mosca"
+    ],
+    [
+      "sapato",
+      "bota"
+    ],
+    [
+      "gato",
+      "lobo"
     ]
   ],
   "policy": {
@@ -680,21 +700,20 @@
       ],
       "sentences": [
         {
-          "text": "A avó dá a moeda.",
+          "text": "A moeda é da avó.",
           "tokens": [
             "A",
-            "avó",
-            "dá",
-            "a",
-            "moeda"
+            "moeda",
+            "é",
+            "da",
+            "avó"
           ],
           "scene": [
             {
-              "image": "avo",
-              "pose": "looking"
+              "image": "moeda"
             },
             {
-              "image": "moeda"
+              "image": "avo"
             }
           ],
           "source": "proposta"
@@ -1015,20 +1034,21 @@
           "source": "proposta"
         },
         {
-          "text": "O bebé bebe a sopa.",
+          "text": "A avó vê a batata.",
           "tokens": [
-            "O",
-            "bebé",
-            "bebe",
+            "A",
+            "avó",
+            "vê",
             "a",
-            "sopa"
+            "batata"
           ],
           "scene": [
             {
-              "image": "bebe"
+              "image": "avo",
+              "pose": "looking"
             },
             {
-              "image": "sopa"
+              "image": "batata"
             }
           ],
           "source": "proposta"
@@ -1508,21 +1528,21 @@
           "source": "proposta"
         },
         {
-          "text": "O menino molha a toalha.",
+          "text": "O avô vê o coelho.",
           "tokens": [
             "O",
-            "menino",
-            "molha",
-            "a",
-            "toalha"
+            "avô",
+            "vê",
+            "o",
+            "coelho"
           ],
           "scene": [
             {
-              "image": "menino",
+              "image": "avo-circ",
               "pose": "looking"
             },
             {
-              "image": "toalha"
+              "image": "coelho"
             }
           ],
           "source": "proposta"
@@ -2422,32 +2442,23 @@
           "layout": "on"
         },
         {
-          "text": "O rato foge do gato.",
+          "text": "O sofá é da fada.",
           "tokens": [
             "O",
-            "rato",
-            "foge",
-            "do",
-            "gato"
+            "sofá",
+            "é",
+            "da",
+            "fada"
           ],
           "scene": [
             {
-              "image": "rato"
+              "image": "sofa"
             },
             {
-              "image": "gato"
+              "image": "fada"
             }
           ],
-          "source": "proposta",
-          "alternatives": [
-            [
-              "O",
-              "gato",
-              "foge",
-              "do",
-              "rato"
-            ]
-          ]
+          "source": "proposta"
         },
         {
           "text": "A foca nada.",
@@ -2603,8 +2614,9 @@
             "bra",
             "ço"
           ],
-          "picturable": true,
-          "source": "proposta"
+          "picturable": false,
+          "source": "proposta",
+          "notes": "sem imagem própria: o desenho não era imediato para crianças de 6 anos (revisão de 23/11/2026)"
         },
         {
           "label": "cozinha",
@@ -2623,8 +2635,9 @@
             "zi",
             "na"
           ],
-          "picturable": true,
-          "source": "proposta"
+          "picturable": false,
+          "source": "proposta",
+          "notes": "sem imagem própria: o desenho não era imediato para crianças de 6 anos (revisão de 23/11/2026)"
         }
       ],
       "sentenceWords": [
@@ -2655,7 +2668,7 @@
             }
           ],
           "source": "proposta",
-          "layout": "on"
+          "layout": "room"
         },
         {
           "text": "A cabra come a folha.",
@@ -3201,7 +3214,7 @@
             }
           ],
           "source": "proposta",
-          "layout": "on"
+          "layout": "room"
         },
         {
           "text": "A avó vê o quadro.",
