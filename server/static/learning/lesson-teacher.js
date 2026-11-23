@@ -39,7 +39,11 @@ function distinctFinished(student) {
 const wordOf = activity => PageCraftActivitySelection.wordOf(activity);
 const today = () => new Date().toLocaleDateString("pt-PT", {weekday: "long", day: "numeric", month: "numeric"});
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
-const emptyPlan = () => ({word: "", extras: new Set(), offline: false, note: ""});
+// savedWord/savedWordCodes: os jogos que o roteiro guardou para a palavra, conservados
+// enquanto o professor não mudar a palavra (encerrar um roteiro antigo não o altera).
+const emptyPlan = () => ({word: "", extras: new Set(), offline: false, note: "", savedWord: "", savedWordCodes: []});
+const wordCodesOf = entry => entry.word && entry.word === entry.savedWord && entry.savedWordCodes.length
+  ? entry.savedWordCodes : (words.get(entry.word)?.codes || []);
 
 function buildWords() {
   words = new Map();
@@ -81,7 +85,7 @@ function planFromLesson(lesson) {
     for (const id of assignment.student_ids) {
       const entry = result.get(id);
       if (!entry) continue;
-      if (word && !entry.word) entry.word = word;
+      if (word && !entry.word) Object.assign(entry, {word, savedWord: word, savedWordCodes: []});
       for (const code of assignment.activity_codes) {
         // Jogos de uma coleção substituída ficam onde estavam: não se oferecem a novas
         // atribuições, mas abrir um roteiro antigo não apaga o que lá está.
@@ -89,7 +93,10 @@ function planFromLesson(lesson) {
         if (!activity) { droppedCodes.add(code); continue; }
         // A coluna da palavra só volta a gravar os jogos atuais dessa palavra; tudo o resto
         // (outra palavra, coleção anterior) fica em outras atividades e não se perde.
-        if (entry.word && words.get(entry.word)?.codes.includes(code)) continue;
+        if (entry.word && words.get(entry.word)?.codes.includes(code)) {
+          if (entry.savedWord === entry.word && !entry.savedWordCodes.includes(code)) entry.savedWordCodes.push(code);
+          continue;
+        }
         entry.extras.add(code);
       }
     }
@@ -106,15 +113,16 @@ function assignmentsFromPlan() {
     const entry = plan.get(student.id);
     if (!entry || entry.offline || (!entry.word && !entry.extras.size)) continue;
     const extras = [...entry.extras].sort();
-    const key = `${entry.word}|${extras.join(",")}`;
-    if (!groups.has(key)) groups.set(key, {word: entry.word, extras, student_ids: []});
+    const wordCodes = wordCodesOf(entry);
+    const key = `${entry.word}|${wordCodes.join(",")}|${extras.join(",")}`;
+    if (!groups.has(key)) groups.set(key, {word: entry.word, wordCodes, extras, student_ids: []});
     groups.get(key).student_ids.push(student.id);
   }
   return [...groups.values()].map(group => {
     const parts = [];
     if (group.word) parts.push(`Palavra ${words.get(group.word)?.label || group.word}`);
     if (group.extras.length) parts.push(titleOf(group.extras[0]) + (group.extras.length > 1 ? ` e mais ${group.extras.length - 1}` : ""));
-    const codes = [...(words.get(group.word)?.codes || []), ...group.extras];
+    const codes = [...group.wordCodes, ...group.extras];
     const assignment = {title: parts.join(" + ").slice(0, 120), student_ids: group.student_ids, activity_codes: [...new Set(codes)]};
     if (group.word) assignment.word = group.word;
     return assignment;
@@ -303,14 +311,17 @@ function openLesson(lesson, {copy = false} = {}) {
   // Jogos de uma coleção substituída conservam-se ao editar o roteiro original, mas não passam para uma aula nova.
   // Num roteiro antigo, a palavra só se conhece pelos jogos retirados: quando é uma só,
   // passa para a coluna da palavra com os jogos atuais.
-  let retiredLeft = 0, withoutWord = 0;
-  if (copy) for (const entry of plan.values()) {
+  let retiredLeft = 0;
+  const needsWord = [];
+  if (copy) for (const [id, entry] of plan) {
+    // Uma aula nova usa sempre os jogos atuais de cada palavra.
+    Object.assign(entry, {savedWord: "", savedWordCodes: []});
     const retired = [...entry.extras].map(c => published.find(a => a.code === c)).filter(a => a?.retired);
     const retiredWords = new Set(retired.map(a => wordOf(a)?.id).filter(Boolean));
     retired.forEach(a => entry.extras.delete(a.code));
     retiredLeft += retired.length;
     if (!entry.word && retiredWords.size === 1 && words.has([...retiredWords][0])) entry.word = [...retiredWords][0];
-    else if (retiredWords.size && !entry.word) withoutWord++;
+    else if (retired.length && !entry.word) needsWord.push(students.find(s => s.id === id)?.display_name);
   }
   $("lesson-title").value = copy || !lesson ? `Aula de ${today()}` : lesson.title;
   $("lesson-active").checked = current?.active ?? true;
@@ -318,7 +329,7 @@ function openLesson(lesson, {copy = false} = {}) {
   const notes = [];
   if (copy) notes.push("Por baixo de cada nome está o que aconteceu na aula anterior. Marca os alunos que avançam e carrega em «Avançar para a palavra seguinte».");
   if (retiredLeft) notes.push("Os jogos da coleção anterior não foram copiados; cada palavra traz os jogos atuais.");
-  if (withoutWord) notes.push(`${plural(withoutWord, "aluno ficou", "alunos ficaram")} sem palavra: escolhe-a na linha.`);
+  if (needsWord.length) notes.push(`Perderam jogos da coleção anterior e estão sem palavra: ${needsWord.join(", ")}. Escolhe a palavra na linha.`);
   if (wasOffline.length) notes.push(`Na aula anterior estiveram fora do PageCraft: ${wasOffline.join(", ")}. Marca-os de novo se for o caso.`);
   if (droppedCodes.size) notes.push(droppedCodes.size === 1
     ? "1 atividade deixou de estar disponível e não é atribuída ao guardar."
