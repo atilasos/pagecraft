@@ -1385,8 +1385,8 @@
           "source": "proposta",
           "layout": "eat",
           "place": [
-            92,
-            58,
+            74,
+            86,
             0.3
           ]
         },
@@ -2608,20 +2608,21 @@
           "source": "proposta"
         },
         {
-          "text": "A foca vê a bola.",
+          "text": "O menino vê a foca.",
           "tokens": [
-            "A",
-            "foca",
+            "O",
+            "menino",
             "vê",
             "a",
-            "bola"
+            "foca"
           ],
           "scene": [
             {
-              "image": "foca"
+              "image": "menino",
+              "pose": "looking"
             },
             {
-              "image": "bola"
+              "image": "foca"
             }
           ],
           "source": "proposta"
@@ -2690,20 +2691,21 @@
       ],
       "sentences": [
         {
-          "text": "O laço é do palhaço.",
+          "text": "A menina vê o laço.",
           "tokens": [
-            "O",
-            "laço",
-            "é",
-            "do",
-            "palhaço"
+            "A",
+            "menina",
+            "vê",
+            "o",
+            "laço"
           ],
           "scene": [
             {
-              "image": "laco"
+              "image": "menina",
+              "pose": "looking"
             },
             {
-              "image": "palhaco"
+              "image": "laco"
             }
           ],
           "source": "proposta"
@@ -3273,7 +3275,7 @@
           "layout": "eat",
           "place": [
             76,
-            104,
+            74,
             0.3
           ]
         },
@@ -4091,7 +4093,7 @@
     "flor": "a"
   },
   "knownWords": {
-    "notes": "Palavras comuns no vocabulário de crianças de 6–7 anos (objetos, animais, ações e plurais do dia a dia), além do vocabulário do ciclo. Em Descobrir, só estas são celebradas quando a criança as forma, com divisão válida, sem estarem escondidas; formas raras ou de uso adulto recebem a resposta neutra. Revista a partir das palavras que os tabuleiros formam por acaso. Algumas entradas servem para tabuleiros futuros e podem não se formar nos atuais.",
+    "notes": "«words»: palavras comuns para crianças de 6–7 anos; quando a criança as forma, com divisão válida, sem estarem escondidas, são celebradas. «avoid»: palavras correntes que não se celebram (ambíguas ou de registo adulto) mas que os tabuleiros também evitam formar. Ambas as listas pesam como palavras conhecidas na escolha dos tabuleiros. Algumas entradas servem tabuleiros futuros.",
     "words": [
       "ano",
       "asa",
@@ -4200,6 +4202,23 @@
       "vila",
       "voo",
       "zero"
+    ],
+    "avoid": [
+      "ama",
+      "amo",
+      "cabo",
+      "caça",
+      "cela",
+      "cova",
+      "dama",
+      "eco",
+      "face",
+      "gala",
+      "gola",
+      "nela",
+      "pala",
+      "seda",
+      "vara"
     ]
   }
 }
