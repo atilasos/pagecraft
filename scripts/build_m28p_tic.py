@@ -8,13 +8,14 @@ import html
 import hashlib
 import json
 import random
+import re
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from jsonschema import Draft202012Validator
-from scripts.m28p_cycle import CYCLE_GAMES, validate_cycle, image_choices, discover_rounds
+from scripts.m28p_cycle import CYCLE_GAMES, MIN_ROUNDS, validate_cycle, image_choices, discover_rounds, near_syllables, newest_first, vocabulary_syllables, demo_word
 from server.activity_support import embed_activity_support
 from server.bridge_snippet import ensure_bridge_lite
 from server.typography import embed_activity_typography
@@ -47,9 +48,16 @@ def data_audio(name):
     return 'data:audio/mpeg;base64,' + base64.b64encode((ASSETS / 'audio' / f'{name}.mp3').read_bytes()).decode()
 
 
+def svg(path):
+    """SVG sem <title>: o nome acessível vem do template, e a dica nativa não revela a resposta."""
+    text = path.read_text()
+    text = re.sub(r'<title\b[^>]*>.*?</title>\s*', '', text, flags=re.S)
+    return re.sub(r'\s(?:role="img"|aria-labelledby="[^"]*")', '', text)
+
+
 def illustrated(word):
     return dict(slug=word['slug'], label=word['label'], syllables=word['syllables'],
-                image=(ASSETS / 'images' / f"{word['slug']}.svg").read_text())
+                image=svg(ASSETS / 'images' / f"{word['slug']}.svg"))
 
 
 def shuffled(values, rng):
@@ -122,9 +130,14 @@ def spec_for(data, word):
         'syllables': [('Olha para a primeira peça do modelo.', 'Olhem para a primeira peça do modelo.'), ('Toca numa peça para a retirar.', 'Toquem numa peça para a retirar.')],
         'gap': [('Olha para o espaço vazio.', 'Olhem para o espaço vazio.'), ('Compara com a palavra inteira.', 'Comparem com a palavra inteira.')],
         'recall': [('Ouve a palavra outra vez.', 'Ouçam a palavra outra vez.'), ('Experimenta juntar as peças.', 'Experimentem juntar as peças.')],
+        'listen-build': [('Toca em 🔊 e ouve outra vez.', 'Toquem em 🔊 e ouçam outra vez.'), ('Diz a palavra devagar. Qual é a primeira sílaba?', 'Digam a palavra devagar. Qual é a primeira sílaba?')],
+        'read-choose': [('Lê a palavra devagar, sílaba a sílaba.', 'Leiam a palavra devagar, sílaba a sílaba.'), ('Olha para cada imagem. Qual é a imagem desta palavra?', 'Olhem para cada imagem. Qual é a imagem desta palavra?')],
+        'sentence': [('Começa pela palavra com letra maiúscula.', 'Comecem pela palavra com letra maiúscula.'), ('Diz a frase em voz alta. Qual é a primeira palavra?', 'Digam a frase em voz alta. Qual é a primeira palavra?')],
+        'discover': [('Junta sílabas e lê o que formaste.', 'Juntem sílabas e leiam o que formaram.'), ('Experimenta trocar a ordem das sílabas.', 'Experimentem trocar a ordem das sílabas.')],
     }
     units = []
-    for item in data['rounds']:
+    # As frases da turma podem levar Montar frases até quatro rondas: o apoio precisa de u1..u4.
+    for item in data['rounds'] + [data['rounds'][-1]] * ((4 - len(data['rounds'])) if data['game'] == 'sentence' else 0):
         units.append(dict(summary=data['title'], textDescription=data['instruction'], duration=1,
             interaction=dict(state=[dict(name='resposta', type='matching' if data['game'] == 'pairs' else 'sorting' if data['game'] in {'syllables','recall','listen-build','sentence','discover'} else 'quiz', default=None)],
                 render='Imagem original, cartões grandes e exemplo visual recuperável; áudio PT-PT incorporado por pedido.',
@@ -135,13 +148,13 @@ def spec_for(data, word):
                 standard='Modelo nos jogos de associação e montagem apoiada; demonstração recuperável.',
                 challenge='Retirar modelo opcional sem alterar as respostas nem introduzir palavras futuras.'),
             support=dict(objective=data['instruction'], criteria=data['criteria'], obstacles=[dict(id='comparar', label={'pt':'Quero uma pista'},
-                hints=[dict(id=f'pista-{i}', text={'pt':{'individual':ind,'group':group}}) for i,(ind,group) in enumerate(hints.get(data['game'], hints['recall']),1)])])))
+                hints=[dict(id=f'pista-{i}', text={'pt':{'individual':ind,'group':group}}) for i,(ind,group) in enumerate(hints[data['game']],1)])])))
     spec = dict(slug=data['slug'], topic=f"{data['title']} · {word['label']}", years=[1,2], order=word['order'],
         tags=['m28p','m28p-v3','tic','leitura','1ano','2ano'], ageRange='6-8 anos', duration=5,
         objectives=[data['criteria'][0], 'Usar a demonstração e as pistas para continuar com apoio pontual.'],
         curriculum={'ae':[],'competencies':['PA-A: Linguagens e textos','PA-F: Desenvolvimento pessoal e autonomia']},
         curriculumNote='Consolidação complementar ao método trabalhado com o professor titular; sem pretender substituir esse ensino.',
-        materials=['Computador ou tablet', 'Auscultadores opcionais'], sessionFlow='Exemplo visual, quatro rondas curtas, reflexão facultativa.',
+        materials=['Computador ou tablet', 'Auscultadores opcionais'], sessionFlow=f"Exemplo visual, {len(data['rounds'])} {'ronda curta' if len(data['rounds']) == 1 else 'rondas curtas'}, reflexão facultativa.",
         support={'version':'m28p-tic-v3','languages':['pt'],'automaticAfterFailures':0}, units=units)
     Draft202012Validator(json.loads((ROOT/'server/pipeline/schemas/docspec.schema.json').read_text())).validate(spec)
     return spec
@@ -195,21 +208,73 @@ def build(word, game, words, check=False, cycle_data=None):
         guide=folder/(stem+'-guia-docente.md' if cycle_data else 'guia-docente.md')
         guide.write_text(f"# {word['label']} nas aulas de TIC\n\nSeis jogos de cerca de cinco minutos, para 1.º/2.º ano. O professor escolhe a palavra e confirma o repertório anterior. Podem ser repetidos ao longo do ano; não é uma sessão de duas horas num único jogo.\n\nComeçar por Palavra igual, Ligar pares e Procurar palavras. Seguir para Montar com modelo e A peça que falta. Montar de memória retira o modelo por defeito; ouvir é apoio declarado. Cada jogo tem quatro rondas com posições variadas. Na primeira palavra, pares trabalha um par e as escolhas usam fragmentos da própria palavra. Flor usa letras móveis por ter uma só sílaba.\n\nPreparação pontual: abrir o jogo, identificar a criança no host e mostrar os botões de ouvir, exemplo e continuar. O áudio incluído funciona sem voz instalada. Durante o jogo, não há conversa nem ditado obrigatório ao adulto. A reflexão é facultativa. A conclusão admite erros; observar as respostas e o apoio antes de decidir o próximo jogo.\n\nNota linguística: {word['phonologyNotes']}\n\nA voz lê palavras inteiras e instruções, nunca fonemas isolados. O jogo não avalia pronúncia nem comprova fluência. Montar peças é reconstrução gráfica, não escrita livre. O ensino de correspondências novas e a leitura de textos continuam com o professor titular.\n\nRever as imagens, ouvir as gravações e experimentar com a criança antes de aprovar cada atividade. Princípios e fontes em docs/m28p-principios-implementacao.md e docs/research/m28p-tic-autonomia-2026.md.\n")
         if cycle_data:
-            if data['game']=='discover':
-                hidden=' / '.join(', '.join(w['label'] for w in r['lexicon']) for r in data['rounds'])
-                levels=(f"{len(data['rounds'])} rondas, cerca de cinco minutos. Em cada ronda há 2 ou 3 palavras escondidas ({hidden}) e só as sílabas dessas palavras, mais uma. "
-                        "A criança vê quantas faltam («Palavras escondidas: 1 de 2»); a ronda acaba quando as encontra todas ou quando escolhe «Não encontro mais», que mostra as que faltavam. "
-                        "Com ajuda mostra a imagem (quando existe) e o som de cada palavra escondida; Sozinho mostra quantas sílabas tem; Consigo ajudar um amigo mostra só que existe. "
-                        "Uma combinação fora da lista recebe «não é uma das palavras escondidas; se conheces esta palavra, conta à turma» — bom ponto de partida para o conselho ou o texto livre.")
-            else:
-                levels=((("Uma ronda fixa" if len(data['rounds'])==1 else f"{len(data['rounds'])} rondas fixas") if data['game']=='sentence' else "Quatro rondas distintas") + ", cerca de cinco minutos. Com ajuda disponibiliza modelo segmentado; Sozinho retira o modelo; Consigo ajudar um amigo retira referências auxiliares. "
-                        "Pode continuar após confirmar uma resposta, incluindo incorreta.")
-            guide.write_text(f"# {data['title']} · {word['label']}\n\nRascunho para revisão docente. Confirmar o repertório cumulativo, imagens e gravações antes de utilizar.\n\n{levels} Ouvir, demonstração, desfazer e mudar apoio conservam o trabalho.{(' ' + 'Na página da turma, guarde as frases ditadas pelas crianças e projete-as no Quadro. Em sessão, até quatro frases da turma surgem primeiro, completadas pelas frases fixas. Com ajuda mostra os tokens; os outros níveis ocultam o texto. As frases da turma só têm leitura áudio quando existe uma voz local pt-PT no computador.' if data['game'] == 'sentence' else '')}\n\nOs registos descrevem ações e ajudas, sem certificar leitura ou fluência. O convite oral final é facultativo. Não publicado nem registado.\n")
+            guide.write_text(cycle_guide(data, word))
         guide_alias=ROOT/'drafts'/(stem+'.md')
         if not guide_alias.exists():
             guide_alias.symlink_to(Path('m28p-v3')/word['slug']/guide.name)
     return dict(slug=stem,word=word['label'],game=game,rounds=len(data['rounds']),bytes=len(output.encode()))
 
+
+def cycle_guide(data, word):
+    """Guia docente de um jogo do ciclo, com o que cada nível mostra de facto."""
+    game, rounds, demo = data['game'], data['rounds'], data['demo']
+    count = f"{len(rounds)} {'ronda' if len(rounds) == 1 else 'rondas'}, cerca de cinco minutos."
+    if game == 'listen-build':
+        body = ("A criança ouve uma palavra e monta-a com sílabas, sem a ver escrita. Há duas ou três sílabas a mais, da mesma família. "
+                "«Com ajuda» mostra a palavra dividida em sílabas; «Sozinho» mostra o botão de ouvir e um espaço por sílaba; «Consigo ajudar um amigo» mostra só o botão de ouvir. "
+                f"Palavras, uma por ronda: {', '.join('«' + r['target']['label'] + '»' for r in rounds)}.")
+    elif game == 'read-choose':
+        body = ("A criança lê uma palavra e escolhe a imagem certa entre três. «Com ajuda» mostra a palavra dividida em sílabas e deixa ouvi-la; "
+                "«Sozinho» mostra a palavra inteira e deixa ouvi-la; «Consigo ajudar um amigo» mostra só a palavra escrita. Ouvir fica registado como ajuda. "
+                f"Palavras, uma por ronda: {', '.join('«' + r['target']['label'] + '»' for r in rounds)}.")
+    elif game == 'sentence':
+        listed = ' / '.join(f"«{r['target']['text']}»" for r in rounds)
+        # A lista termina numa citação com pontuação própria: não acrescentar outro ponto.
+        alternatives = [r for r in rounds if r.get('alternatives')]
+        equivalent = ''
+        if alternatives:
+            example = ' '.join(alternatives[0]['alternatives'][0]) + alternatives[0]['target']['text'][-1]
+            equivalent = f"Quando duas ordens dizem o mesmo (por exemplo, «{example}»), as duas contam como certas. "
+        body = ("A criança ordena as palavras de uma frase. «Com ajuda» mostra a imagem, a frase escrita com as palavras separadas e o botão de ouvir; "
+                "«Sozinho» mostra a imagem, o botão de ouvir e um espaço por palavra; «Consigo ajudar um amigo» mostra só o botão de ouvir. "
+                f"Frases, uma por ronda: {listed} {equivalent}"
+                "Na página da turma, podes guardar as frases ditadas pelas crianças e projetá-las no Quadro. Quando a turma joga numa sessão, até quatro frases da turma surgem primeiro, "
+                "completadas pelas frases fixas. «Com ajuda» mostra as palavras da frase da turma. As frases da turma só têm leitura em voz alta "
+                "quando o computador tem uma voz pt-PT instalada; sem essa voz, nos outros níveis, o botão de ouvir é substituído por «Ver a frase», "
+                "que mostra a frase escrita e fica registado.")
+    else:
+        hidden = ' / '.join(', '.join('«' + w['label'] + '»' for w in r['lexicon']) for r in rounds)
+        body = ("Em cada ronda há duas ou três palavras escondidas; o tabuleiro tem só as sílabas dessas palavras e, quando possível, uma sílaba a mais. "
+                f"Palavras escondidas (as rondas estão separadas por « / »): {hidden}. A criança vê quantas já encontrou («Encontraste 1 de {len(rounds[0]['lexicon'])}.»); "
+                "a ronda acaba quando as encontra todas ou quando toca em «Não encontro mais palavras», que mostra as que faltavam. "
+                "«Com ajuda» mostra a imagem (quando existe) e o som de cada palavra escondida; «Sozinho» mostra quantas sílabas tem cada uma; "
+                "«Consigo ajudar um amigo» mostra só quantas são. Uma combinação fora da lista recebe «não está escondida».")
+        if all(w.get('newIn') != word['slug'] for r in rounds for w in r['lexicon']):
+            body += f" «{word['label']}» não traz palavras novas: este jogo revê palavras de palavras-chave anteriores."
+        without = sum(1 for r in rounds if not r.get('extra'))
+        if without:
+            body += ((" Nesta ronda" if len(rounds) == 1 else " Numa das rondas") + " não há sílaba a mais: qualquer sílaba disponível formaria outra palavra que não está escondida."
+                     if without == 1 else f" Em {without} rondas não há sílaba a mais: qualquer sílaba disponível formaria outra palavra que não está escondida.")
+        extra = sorted({w for r in rounds for w in r.get('warnings', [])})
+        if extra:
+            body += (f" Com estas peças também se formam sequências que o dicionário aceita mas que não estão escondidas ({', '.join(extra)}); "
+                     "nesse caso, a criança recebe «é uma palavra, mas não está escondida aqui». "
+                     "Podem não ser conhecidas das crianças. Se uma criança as encontrar, aproveita para conversar sobre o que significam, "
+                     "por exemplo no Conselho de Cooperação ou no Texto Livre.")
+    if game == 'sentence':
+        example = f"A demonstração usa «{demo['target']['text']}.», que não é uma das frases, e mostra os mesmos botões do jogo."
+    elif demo['target']['label'] != word['label']:
+        example = (f"A demonstração usa a palavra-chave anterior «{demo['target']['label']}» («{word['label']}» não tem o número de sílabas "
+                   "deste jogo); essa palavra não é uma das rondas, e a demonstração mostra os mesmos botões do jogo.")
+    else:
+        example = f"A demonstração usa a palavra-chave «{demo['target']['label']}», que não é uma das rondas, e mostra os mesmos botões do jogo."
+    keeps = "Ouvir, ver a demonstração e mudar de ajuda conservam o trabalho." if game == 'read-choose' else \
+        "Ouvir, ver a demonstração, desfazer e mudar de ajuda conservam o trabalho."
+    return (f"# {data['title']} · {word['label']}\n\n{count} {body}\n\n{example} {keeps} "
+            "A criança pode continuar depois de confirmar, mesmo com erro.\n\n"
+            "Os registos descrevem ações e ajudas usadas; não certificam leitura nem fluência. No fim, em «Consigo ajudar um amigo», "
+            "aparece um convite escrito facultativo para partilhar com um amigo, que não é registado. "
+            "Revê as imagens e ouve as gravações antes de usar com a turma.\n")
 
 def build_index(words):
     cards=[]
@@ -235,60 +300,115 @@ document.getElementById('status').textContent=total+' jogos disponíveis para re
     (ROOT/'server/static/teacher/m28p-tic.html').write_text(embed_activity_typography(teacher))
 
 
-def cycle_content(word, game, pool):
+def cycle_content(word, game, pool, lexicon=None):
+    """Conteúdo de um jogo do ciclo. A palavra-chave fica reservada para a demonstração."""
     title, instruction, criterion = CYCLE_GAMES[game]
+    slug = f"m28p-ciclo-{word['slug']}-{game}"
+    seed = lambda index: random.Random(f'{slug}/{index}')
     def resource(item):
         result = dict(item, audio=data_audio(item['slug']))
         needs_image = item.get('picturable', False) or 'text' in item
         path = ASSETS/'images'/(item['slug']+'.svg')
         if needs_image and not path.is_file():
             raise ValueError(f"Imagem em falta: {path}")
-        result['image'] = path.read_text() if needs_image else ''
+        result['image'] = svg(path) if needs_image else ''
         return result
-    vocabulary = [resource(w) for w in pool['words']]
-    items = [resource(s) for s in pool['sentences']] if game=='sentence' else [w for w in vocabulary if game!='read-choose' or w['picturable']]
-    choices = {}
-    if game=='read-choose':
-        choices = {w['slug']: image_choices(w, items, pool['visualConflicts']) for w in items}
-        items = [w for w in items if choices[w['slug']]]
-    if game=='discover':
-        groups=discover_rounds(word['slug'],vocabulary,pool['families'],random.Random(word['slug']))
-        if len(groups)<2:
-            return None, f"Apenas {len(groups)} rondas com duas palavras escondidas; são necessárias 2."
-        rounds=[]
-        for index,group in enumerate(groups):
-            pieces=[dict(id=f'p{i}',label=s) for i,s in enumerate(group['pieces'])]
-            rounds.append(dict(id=f'r{index+1}',kind=game,prompt=instruction,model=False,options=[],answer=[],unit='syllable',
-                target=group['hidden'][0],lexicon=group['hidden'],length=3,pieces=shuffled(pieces,random.Random(index))))
-        return dict(slug=f"m28p-ciclo-{word['slug']}-{game}",word=illustrated(word),game=game,title=title,instruction=instruction,criteria=[criterion],rounds=rounds,audio={k:data_audio(v) for k,v in dict(start='start',instruction=game,word=word['slug'],hint='hint',success='success',retry='retry',finish='finish').items()}), None
-    if len(items)<(1 if game=='sentence' else 4):
-        return None, f"Apenas {len(items)} itens distintos; são necessários 4." + (" Cada alvo requer 2 distratores sem conflitos visuais entre as opções." if game=='read-choose' else "")
-    rounds=[]
-    selected=items[-4:]
-    if game!='sentence':
-        current=next((item for item in items if item['slug']==word['slug']),None)
-        if current and current not in selected:
-            selected=[current]+selected[-3:]
-    for index,item in enumerate(selected):
-        r=dict(id=f'r{index+1}',kind=game,prompt=instruction,model=False,options=[],answer=[],unit='word' if game=='sentence' else 'syllable',target=item)
-        units=item.get('tokens',item.get('syllables'))
-        if game=='read-choose':
-            r['options']=shuffled([dict(id=w['slug'],label=w['label'],image=w['image']) for w in choices[item['slug']]],random.Random(index))
-            r['answer']=[item['slug']]
-        else:
-            labels=units
-            pieces=[dict(id=f'p{i}',label=s) for i,s in enumerate(labels)]
-            r['answer']=[f'p{i}' for i in range(len(units))]
-            if game=='listen-build':
-                pieces += [dict(id=f'd{i}',label=s) for i,s in enumerate(pool['families']) if s not in units][:3]
-            r['length']=len(units)
-            r['pieces']=shuffled(pieces,random.Random(index))
-        rounds.append(r)
-    return dict(slug=f"m28p-ciclo-{word['slug']}-{game}",word=illustrated(word),game=game,title=title,instruction=instruction,criteria=[criterion],rounds=rounds,audio={k:data_audio(v) for k,v in dict(start='start',instruction=game,word=word['slug'],hint='hint',success='success',retry='retry',finish='finish').items()}), None
+    def pieces_for(labels):
+        """Peças identificadas pelo texto: uma republicação nunca troca o sentido de uma resposta guardada."""
+        seen, result = {}, []
+        for label in labels:
+            seen[label] = seen.get(label, 0) + 1
+            result.append(dict(id=f"{label}#{seen[label]}", label=label))
+        return result
+    def mixed(pieces, rng, answers):
+        """Baralha sem deixar uma resposta aceite em peças seguidas, em qualquer posição."""
+        result = list(pieces)
+        def solved(order):
+            labels = [p['label'] for p in order]
+            return any(labels[i:i + len(answer)] == answer for answer in answers for i in range(len(labels) - len(answer) + 1))
+        for _ in range(200):
+            rng.shuffle(result)
+            if not solved(result):
+                break
+        return result
+    keyword = resource(dict(pool['keyword'], slug=word['slug']))
+    syllables = vocabulary_syllables(pool)
+    picturable = [resource(w) for w in pool['words'] if w['picturable']]
+    conflicts = pool['visualConflicts']
+    rounds, demo = [], None
+    if game in ('listen-build', 'discover'):
+        sample = demo_word(pool, 2, 3 if game == 'discover' else 6)
+        example = keyword if sample['slug'] == word['slug'] else resource(sample)
+    if game == 'listen-build':
+        for index, item in enumerate(newest_first(pool, lambda w: len(w['syllables']) >= 2, {sample['slug']})[:4]):
+            rng = seed(index)
+            units = item['syllables']
+            extra = near_syllables(units, pool['families'], rng, 3 if len(units) <= 2 else 2, syllables)
+            pieces = pieces_for(units + extra)
+            rounds.append(dict(id=f"ouvir-{item['slug']}", target=resource(item), unit='syllable', length=len(units),
+                               answer=[p['id'] for p in pieces[:len(units)]], pieces=mixed(pieces, rng, [units])))
+        extra = near_syllables(sample['syllables'], pool['families'], seed('demo'), 2, syllables)
+        demo = dict(target=example, pieces=[p['label'] for p in mixed(pieces_for(sample['syllables'] + extra), seed('demo'), [sample['syllables']])],
+                    audio=example['audio'])
+    elif game == 'read-choose':
+        usage = {}
+        for item in newest_first(pool, lambda w: w['picturable']):
+            if len(rounds) == 4:
+                break
+            rng = seed(len(rounds))
+            choices = image_choices(resource(item), picturable, conflicts, rng, usage)
+            if not choices:
+                continue
+            for other in choices[1:]:
+                usage[other['slug']] = usage.get(other['slug'], 0) + 1
+            usage[item['slug']] = usage.get(item['slug'], 0) + 1
+            options = [dict(id=w['slug'], label=w['label'], image=w['image']) for w in choices]
+            rng.shuffle(options)
+            rounds.append(dict(id=f"ler-{item['slug']}", target=resource(item), unit='syllable', options=options, answer=[item['slug']]))
+        choices = image_choices(keyword, picturable, conflicts, seed('demo'))
+        demo = dict(target=keyword, options=[dict(label=w['label'], image=w['image']) for w in choices], audio=keyword['audio']) if choices else None
+    elif game == 'sentence':
+        own = [s for s in pool['sentences'] if s['newIn'] == word['slug']]
+        earlier = [s for s in reversed(pool['sentences']) if s['newIn'] != word['slug']]
+        for index, item in enumerate((own + earlier)[:4]):
+            rng = seed(index)
+            pieces = pieces_for(item['tokens'])
+            answers = [item['tokens'], *item.get('alternatives', [])]
+            rounds.append(dict(id=item['slug'], target=resource(item), unit='word', length=len(item['tokens']),
+                               answer=[p['id'] for p in pieces],
+                               alternatives=item.get('alternatives', []), pieces=mixed(pieces, rng, answers)))
+        tokens = [pool['keyword']['article'].capitalize(), word['label']]
+        demo = dict(target=dict(text=' '.join(tokens), tokens=tokens, image=keyword['image']), pieces=tokens[::-1],
+                    audio=data_audio(f"exemplo-{word['slug']}"))
+    else:
+        groups = discover_rounds(pool, random.Random(word['slug']), lexicon, reserved={sample['slug']})
+        for index, group in enumerate(groups):
+            # Nenhuma palavra escondida aparece já montada em peças seguidas.
+            pieces = mixed(pieces_for(group['pieces']), seed(index), [w['syllables'] for w in group['hidden']])
+            excluded = {e['label'] for e in pool.get('excluded', [])}
+            rounds.append(dict(id='descobrir-' + '-'.join(w['slug'] for w in group['hidden']), unit='syllable', extra=group['extra'],
+                               target=resource(group['hidden'][0]), warnings=[w for w in group['warnings'] if w not in excluded],
+                               lexicon=[resource(w) for w in group['hidden']], length=3, pieces=pieces))
+        extra = near_syllables(sample['syllables'], pool['families'], seed('demo'), 1, syllables)
+        demo = dict(target=example, pieces=[p['label'] for p in mixed(pieces_for(sample['syllables'] + extra), seed('demo'), [sample['syllables']])],
+                    audio=example['audio'])
+    if len(rounds) < MIN_ROUNDS[game] or demo is None:
+        need = MIN_ROUNDS[game]
+        why = " Cada alvo requer 2 distratores sem conflitos visuais entre as opções." if game == 'read-choose' else ''
+        return None, f"Apenas {len(rounds)} rondas possíveis; são necessárias pelo menos {need}.{why}"
+    for r in rounds:
+        r.update(kind=game, prompt=instruction, model=False)
+        r.setdefault('options', [])
+        r.setdefault('answer', [])
+    return dict(slug=slug, word=illustrated(word), game=game, title=title, instruction=instruction, criteria=[criterion],
+                rounds=rounds, demo=demo,
+                audio={k: data_audio(v) for k, v in dict(start='start', instruction=game, word=word['slug'], hint='hint',
+                                                          success='success', retry='retry', finish='finish', correct='correct',
+                                                          tryagain='tryagain', found='found', allfound='allfound', realword='realword').items()}), None
 
 
-def build_cycle(words,args):
-    pools=validate_cycle(json.loads((BASE/'cycle.json').read_text()),words)
+def build_cycle(words, args, lexicon=None):
+    pools=validate_cycle(json.loads((BASE/'cycle.json').read_text()),words,lexicon)
     report=[]
     for word in words:
         if word['slug'] not in pools or (args.word and args.word!=word['slug']):
@@ -296,7 +416,7 @@ def build_cycle(words,args):
         for game in CYCLE_GAMES:
             if args.game and args.game!=game:
                 continue
-            data,reason=cycle_content(word,game,pools[word['slug']])
+            data,reason=cycle_content(word,game,pools[word['slug']],lexicon)
             if reason and not args.validate_only:
                 stem=f"m28p-ciclo-{word['slug']}-{game}"
                 for path in (BASE/word['slug']).glob(stem+'*'):
@@ -304,9 +424,22 @@ def build_cycle(words,args):
                 for path in (ROOT/'drafts').glob(stem+'*'):
                     if path.is_symlink():
                         path.unlink()
-            report.append(dict(word=word['slug'],game=game,status='omitted',reason=reason) if reason else dict(build(word,game,words,args.validate_only,data),status='generated'))
+            entry=dict(word=word['slug'],game=game,status='omitted',reason=reason) if reason else dict(build(word,game,words,args.validate_only,data),status='generated')
+            entry['keyword']=word['slug']
+            warnings=sorted({w for r in (data or {}).get('rounds',[]) for w in r.get('warnings',[])})
+            if warnings:
+                entry['realWordsOnBoard']=warnings
+            report.append(entry)
     if not args.validate_only:
-        save_json(BASE/'cycle-generation-report.json',report)
+        # Uma geração filtrada (--word, --game) só substitui as suas entradas; as outras ficam no relatório.
+        path=BASE/'cycle-generation-report.json'
+        done={(e['keyword'],e['game']) for e in report}
+        filtered=bool(args.word or args.game)
+        # Uma geração completa substitui o relatório: palavras-chave retiradas de cycle.json deixam de ser publicáveis.
+        previous=[e for e in (json.loads(path.read_text()) if path.exists() and filtered else []) if (e.get('keyword'),e['game']) not in done and e.get('keyword')]
+        order={w['slug']:w['order'] for w in words}
+        games=list(CYCLE_GAMES)
+        save_json(path,sorted(previous+report,key=lambda e:(order[e['keyword']],games.index(e['game']))))
     return report
 
 
@@ -319,7 +452,8 @@ def main():
     args=parser.parse_args()
     words=read_words()
     if args.cycle:
-        print(json.dumps(build_cycle(words,args),ensure_ascii=False,indent=2))
+        from scripts.m28p_lexicon import load
+        print(json.dumps(build_cycle(words,args,load()),ensure_ascii=False,indent=2))
         return
     if args.game in CYCLE_GAMES:
         parser.error('Os jogos do ciclo requerem --cycle.')

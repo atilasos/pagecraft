@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "status": "proposta para revisão docente",
   "source": {
     "title": "Manual Metodo-28-Palavras-Outras-Fichas.pdf (pasta m28p do Drive do professor)",
@@ -8,68 +8,578 @@
     "use": "Só o conteúdo linguístico (palavras). Letra, imagens e atividades do material não são reutilizadas: estão desatualizadas (cursiva, clip-art, figuras despidas p.4 e p.7, cópia mecânica)."
   },
   "repertoire": {
-    "model": "famílias silábicas: consoantes das palavras-chave 1..N combinadas com as vogais (como o manual faz na p.29)",
-    "vowels": ["a", "e", "i", "o", "u", "á", "é", "í", "ó", "ú", "â", "ê", "ô"],
-    "consonantsByKeyword": {"menina": ["m", "n"], "menino": [], "uva": ["v"]}
+    "model": "unidades gráficas por palavra-chave: ataques (consoante ou dígrafo, com as vogais trabalhadas), núcleos (ditongos) e codas (sílabas fechadas); contextos para leituras que dependem da posição",
+    "vowels": [
+      "a",
+      "e",
+      "i",
+      "o",
+      "u",
+      "á",
+      "é",
+      "í",
+      "ó",
+      "ú",
+      "â",
+      "ê",
+      "ô"
+    ],
+    "byKeyword": {
+      "menina": {
+        "onsets": {
+          "m": "aeiou",
+          "n": "aeiou"
+        }
+      },
+      "uva": {
+        "onsets": {
+          "v": "aeiou"
+        }
+      },
+      "dedo": {
+        "onsets": {
+          "d": "aeiou"
+        }
+      },
+      "sapato": {
+        "onsets": {
+          "s": "aeiou",
+          "p": "aeiou",
+          "t": "aeiou"
+        }
+      },
+      "bota": {
+        "onsets": {
+          "b": "aeiou"
+        }
+      },
+      "leque": {
+        "onsets": {
+          "l": "aeiou",
+          "qu": "ei"
+        }
+      },
+      "casa": {
+        "onsets": {
+          "c": "aou"
+        }
+      },
+      "janela": {
+        "onsets": {
+          "j": "aeiou"
+        }
+      },
+      "telhado": {
+        "onsets": {
+          "lh": "aeiou"
+        }
+      },
+      "escada": {
+        "codas": [
+          "s"
+        ]
+      },
+      "chave": {
+        "onsets": {
+          "ch": "aeiou"
+        }
+      },
+      "galinha": {
+        "onsets": {
+          "g": "aou",
+          "nh": "aeiou"
+        }
+      },
+      "gema": {
+        "onsets": {
+          "g": "ei"
+        }
+      },
+      "rato": {
+        "onsets": {
+          "r": "aeiou"
+        }
+      },
+      "cenoura": {
+        "onsets": {
+          "c": "ei"
+        },
+        "nuclei": [
+          "ou"
+        ]
+      },
+      "girafa": {
+        "onsets": {
+          "f": "aeiou"
+        }
+      },
+      "palhaco": {
+        "onsets": {
+          "ç": "aou"
+        }
+      },
+      "zebra": {
+        "onsets": {
+          "z": "aeiou",
+          "br": "aeiou"
+        }
+      },
+      "bandeira": {
+        "nuclei": [
+          "ei"
+        ],
+        "codas": [
+          "n"
+        ]
+      },
+      "funil": {
+        "codas": [
+          "l"
+        ]
+      },
+      "arvore": {
+        "codas": [
+          "r"
+        ]
+      },
+      "quadro": {
+        "onsets": {
+          "qu": "ao",
+          "dr": "aeiou"
+        }
+      },
+      "passarinho": {
+        "onsets": {
+          "ss": "aeiou"
+        }
+      },
+      "peixe": {
+        "onsets": {
+          "x": "aeiou"
+        }
+      },
+      "cigarra": {
+        "onsets": {
+          "rr": "aeiou"
+        }
+      },
+      "fogueira": {
+        "onsets": {
+          "gu": "ei"
+        }
+      },
+      "flor": {
+        "onsets": {
+          "fl": "aeiou"
+        }
+      }
+    },
+    "contexts": [
+      {
+        "pattern": "(?<=[aeiouáéíóúâêôãõ])s(?=[aeiouáéíóúâêôãõ])",
+        "from": "casa",
+        "reason": "s entre vogais lê-se /z/ (casa)"
+      },
+      {
+        "pattern": "(?<=[aeiouáéíóúâêôãõ])r(?=[aeiouáéíóúâêôãõ])",
+        "from": "cenoura",
+        "reason": "r entre vogais (r brando, cenoura)"
+      },
+      {
+        "pattern": "^r",
+        "from": "rato",
+        "reason": "r inicial (r forte, rato)"
+      }
+    ]
   },
-  "visualConflicts": [["menina", "menino", "mana", "mano"]],
+  "visualConflicts": [
+    [
+      "menina",
+      "menino",
+      "mana",
+      "mano"
+    ]
+  ],
   "policy": {
     "realWordsOnly": true,
     "excludedFromSource": [
-      {"label": "nina", "page": 12, "reason": "nome próprio sem personagem apresentada"},
-      {"label": "mena", "page": 12, "reason": "pseudopalavra"},
-      {"label": "nani", "page": 15, "reason": "pseudopalavra"},
-      {"label": "nini", "page": 15, "reason": "pseudopalavra"},
-      {"label": "nana", "page": 15, "reason": "linguagem infantil coloquial; ambígua sem contexto"},
-      {"label": "nino", "page": 12, "reason": "pseudopalavra"},
-      {"label": "nano", "page": 15, "reason": "prefixo/termo técnico, sem significado para a criança"},
-      {"label": "memé", "page": 15, "reason": "onomatopeia; fora do repertório"},
-      {"label": "uni", "page": 28, "reason": "não é palavra autónoma"},
-      {"label": "meu", "page": 28, "reason": "ditongo eu: não se monta com sílabas do repertório"},
-      {"label": "vai", "page": 29, "reason": "ditongo ai: não se monta com sílabas do repertório"}
+      {
+        "label": "nina",
+        "page": 12,
+        "reason": "nome próprio sem personagem apresentada"
+      },
+      {
+        "label": "mena",
+        "page": 12,
+        "reason": "pseudopalavra"
+      },
+      {
+        "label": "nani",
+        "page": 15,
+        "reason": "pseudopalavra"
+      },
+      {
+        "label": "nini",
+        "page": 15,
+        "reason": "pseudopalavra"
+      },
+      {
+        "label": "nana",
+        "page": 15,
+        "reason": "linguagem infantil coloquial; ambígua sem contexto"
+      },
+      {
+        "label": "nino",
+        "page": 12,
+        "reason": "pseudopalavra"
+      },
+      {
+        "label": "nano",
+        "page": 15,
+        "reason": "prefixo/termo técnico, sem significado para a criança"
+      },
+      {
+        "label": "memé",
+        "page": 15,
+        "reason": "onomatopeia; fora do repertório"
+      },
+      {
+        "label": "uni",
+        "page": 28,
+        "reason": "não é palavra autónoma"
+      },
+      {
+        "label": "meu",
+        "page": 28,
+        "reason": "ditongo eu: não se monta com sílabas do repertório"
+      },
+      {
+        "label": "vai",
+        "page": 29,
+        "reason": "ditongo ai: não se monta com sílabas do repertório"
+      },
+      {
+        "label": "A mana e o mano.",
+        "page": null,
+        "reason": "frase sem verbo, retirada após revisão (23/11/2026)"
+      },
+      {
+        "label": "A uva é nova.",
+        "page": null,
+        "reason": "pouco natural e a imagem não mostra «nova» (revisão de 23/11/2026)"
+      }
     ]
   },
   "functionWords": [
-    {"word": "a", "origin": "vogal"}, {"word": "o", "origin": "vogal"},
-    {"word": "e", "origin": "vogal"}, {"word": "é", "origin": "vogal acentuada"}
+    {
+      "word": "a",
+      "origin": "vogal"
+    },
+    {
+      "word": "o",
+      "origin": "vogal"
+    },
+    {
+      "word": "e",
+      "origin": "vogal"
+    },
+    {
+      "word": "é",
+      "origin": "vogal acentuada"
+    }
   ],
   "keywords": {
     "menina": {
       "newWords": [
-        {"label": "nome", "syllables": ["no", "me"], "page": 15, "picturable": false},
-        {"label": "mana", "syllables": ["ma", "na"], "source": "proposta", "picturable": true, "notes": "irmã, uso familiar PT-PT"},
-        {"label": "mano", "syllables": ["ma", "no"], "source": "proposta", "picturable": true, "notes": "irmão, uso familiar PT-PT"}
+        {
+          "label": "nome",
+          "syllables": [
+            "no",
+            "me"
+          ],
+          "page": 15,
+          "picturable": false
+        },
+        {
+          "label": "mana",
+          "syllables": [
+            "ma",
+            "na"
+          ],
+          "source": "proposta",
+          "picturable": false,
+          "notes": "irmã, uso familiar PT-PT; sem imagem própria: «mana» e «mano» só se distinguem numa cena"
+        },
+        {
+          "label": "mano",
+          "syllables": [
+            "ma",
+            "no"
+          ],
+          "source": "proposta",
+          "picturable": false,
+          "notes": "irmão, uso familiar PT-PT; sem imagem própria: «mana» e «mano» só se distinguem numa cena"
+        }
       ],
       "sentences": [
-        {"text": "A menina é a mana.", "tokens": ["A", "menina", "é", "a", "mana"], "source": "proposta"}
+        {
+          "text": "A menina é a mana.",
+          "tokens": [
+            "A",
+            "menina",
+            "é",
+            "a",
+            "mana"
+          ],
+          "alternatives": [
+            [
+              "A",
+              "mana",
+              "é",
+              "a",
+              "menina"
+            ]
+          ],
+          "scene": [
+            {
+              "image": "menina"
+            },
+            {
+              "image": "menina",
+              "size": "large",
+              "tint": "gold"
+            }
+          ],
+          "source": "proposta"
+        }
       ]
     },
     "menino": {
       "newWords": [],
       "sentences": [
-        {"text": "O menino é o mano.", "tokens": ["O", "menino", "é", "o", "mano"], "source": "proposta"},
-        {"text": "A mana e o mano.", "tokens": ["A", "mana", "e", "o", "mano"], "source": "proposta"}
+        {
+          "text": "O menino é o mano.",
+          "tokens": [
+            "O",
+            "menino",
+            "é",
+            "o",
+            "mano"
+          ],
+          "alternatives": [
+            [
+              "O",
+              "mano",
+              "é",
+              "o",
+              "menino"
+            ]
+          ],
+          "scene": [
+            {
+              "image": "menino"
+            },
+            {
+              "image": "menino",
+              "size": "large",
+              "tint": "gold"
+            }
+          ],
+          "source": "proposta"
+        }
       ]
     },
     "uva": {
       "newWords": [
-        {"label": "nova", "syllables": ["no", "va"], "page": 28, "picturable": false},
-        {"label": "ovo", "syllables": ["o", "vo"], "page": 29, "picturable": true},
-        {"label": "novo", "syllables": ["no", "vo"], "page": 29, "picturable": false},
-        {"label": "nove", "syllables": ["no", "ve"], "page": 29, "picturable": true, "notes": "número 9"},
-        {"label": "neve", "syllables": ["ne", "ve"], "page": 29, "picturable": true},
-        {"label": "avó", "syllables": ["a", "vó"], "page": 29, "picturable": true},
-        {"label": "avô", "syllables": ["a", "vô"], "page": 29, "picturable": true}
+        {
+          "label": "nova",
+          "syllables": [
+            "no",
+            "va"
+          ],
+          "page": 28,
+          "picturable": false
+        },
+        {
+          "label": "ovo",
+          "syllables": [
+            "o",
+            "vo"
+          ],
+          "page": 29,
+          "picturable": true
+        },
+        {
+          "label": "novo",
+          "syllables": [
+            "no",
+            "vo"
+          ],
+          "page": 29,
+          "picturable": false
+        },
+        {
+          "label": "nove",
+          "syllables": [
+            "no",
+            "ve"
+          ],
+          "page": 29,
+          "picturable": true,
+          "notes": "número 9"
+        },
+        {
+          "label": "neve",
+          "syllables": [
+            "ne",
+            "ve"
+          ],
+          "page": 29,
+          "picturable": true
+        },
+        {
+          "label": "avó",
+          "syllables": [
+            "a",
+            "vó"
+          ],
+          "page": 29,
+          "picturable": true
+        },
+        {
+          "label": "avô",
+          "syllables": [
+            "a",
+            "vô"
+          ],
+          "page": 29,
+          "picturable": true
+        }
       ],
       "sentences": [
-        {"text": "A avó vê a uva.", "tokens": ["A", "avó", "vê", "a", "uva"], "source": "proposta", "notes": "vê: família do v"},
-        {"text": "O avô vê o ovo.", "tokens": ["O", "avô", "vê", "o", "ovo"], "source": "proposta"},
-        {"text": "O menino vê a neve.", "tokens": ["O", "menino", "vê", "a", "neve"], "source": "proposta"},
-        {"text": "A uva é nova.", "tokens": ["A", "uva", "é", "nova"], "source": "proposta"}
+        {
+          "text": "A avó vê a uva.",
+          "tokens": [
+            "A",
+            "avó",
+            "vê",
+            "a",
+            "uva"
+          ],
+          "scene": [
+            {
+              "image": "avo",
+              "pose": "looking"
+            },
+            {
+              "image": "uva"
+            }
+          ],
+          "source": "proposta"
+        },
+        {
+          "text": "O avô vê o ovo.",
+          "tokens": [
+            "O",
+            "avô",
+            "vê",
+            "o",
+            "ovo"
+          ],
+          "scene": [
+            {
+              "image": "avo-circ",
+              "pose": "looking"
+            },
+            {
+              "image": "ovo"
+            }
+          ],
+          "source": "proposta"
+        },
+        {
+          "text": "O menino vê a neve.",
+          "tokens": [
+            "O",
+            "menino",
+            "vê",
+            "a",
+            "neve"
+          ],
+          "scene": [
+            {
+              "image": "menino",
+              "pose": "looking"
+            },
+            {
+              "image": "neve"
+            }
+          ],
+          "source": "proposta"
+        },
+        {
+          "text": "A avó vê o menino.",
+          "tokens": [
+            "A",
+            "avó",
+            "vê",
+            "o",
+            "menino"
+          ],
+          "scene": [
+            {
+              "image": "avo",
+              "pose": "looking"
+            },
+            {
+              "image": "menino"
+            }
+          ],
+          "source": "proposta"
+        }
+      ],
+      "sentenceWords": [
+        {
+          "label": "vê",
+          "syllables": [
+            "vê"
+          ],
+          "notes": "verbo ver; família do v"
+        }
       ]
     }
   },
   "classSentences": {
     "notes": "Frases ditadas pela turma (texto livre). O gerador aceita-as se cumprirem o repertório da palavra-chave; o professor regista quem as propôs se a turma quiser."
+  },
+  "keywordArticles": {
+    "menina": "a",
+    "menino": "o",
+    "uva": "a",
+    "dedo": "o",
+    "sapato": "o",
+    "bota": "a",
+    "leque": "o",
+    "casa": "a",
+    "janela": "a",
+    "telhado": "o",
+    "escada": "a",
+    "chave": "a",
+    "galinha": "a",
+    "gema": "a",
+    "rato": "o",
+    "cenoura": "a",
+    "girafa": "a",
+    "palhaco": "o",
+    "zebra": "a",
+    "bandeira": "a",
+    "funil": "o",
+    "arvore": "a",
+    "quadro": "o",
+    "passarinho": "o",
+    "peixe": "o",
+    "cigarra": "a",
+    "fogueira": "a",
+    "flor": "a"
   }
 }

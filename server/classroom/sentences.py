@@ -1,10 +1,9 @@
 """Frases ditadas pela turma e avisos sobre o repertório cumulativo."""
 import json
-import re
 from functools import lru_cache
 from pathlib import Path
 
-from scripts.m28p_cycle import validate_cycle
+from scripts.m28p_cycle import TOKEN, readable_word, tokens_of, validate_cycle
 
 
 @lru_cache(maxsize=1)
@@ -27,13 +26,20 @@ def prepare_sentence(text, keyword):
     if keyword not in pools:
         raise ValueError('Escolhe uma palavra-chave disponível.')
     text = ' '.join(text.split())
-    tokens = re.findall(r'[^\W\d_]+', text)
+    # Palavras com hífen («guarda-chuva») ficam numa só peça.
+    tokens = tokens_of(text)
     if not 2 <= len(tokens) <= 12:
         raise ValueError('Escreve uma frase com 2 a 12 palavras.')
+    # Números e símbolos ouvem-se na leitura mas não aparecem nos cartões: avisar o professor.
+    leftover = TOKEN.sub('', text).strip(' ,.;:!?…«»"\'')
     if text[-1] not in '.!?…':
         text += '.'
     pool = pools[keyword]
-    known = {w['label'].lower() for w in pool['words']} | {w['word'].lower() for w in cycle['functionWords']}
+    slugs = [w['slug'] for w in repertoire()[0]]
+    index = slugs.index(keyword)
+    # Só contam as palavras funcionais já introduzidas nesta etapa, como no gerador.
+    known = ({w['label'].lower() for w in pool['words'] + pool['sentenceWords']}
+             | {word.lower() for word in pool['functionWords']})
     families = pool['families']
     letters = set(''.join(families))
     warnings = []
@@ -41,12 +47,11 @@ def prepare_sentence(text, keyword):
         word = token.lower()
         if word in known:
             continue
-        reachable = {0}
-        for start in range(len(word)):
-            if start in reachable:
-                reachable.update(start + len(part) for part in families if word.startswith(part, start))
-        if len(word) in reachable:
+        # As mesmas regras de leitura do gerador: unidades, ditongos, dígrafos e contextos.
+        if all(readable_word(part, index, cycle['repertoire'], slugs) for part in word.split('-')):
             continue
-        missing = sorted(set(word) - letters)
+        missing = sorted(set(word.replace('-', '')) - letters)
         warnings.append(f'“{token}” tem letras ainda não trabalhadas: {", ".join(missing)}' if missing else f'“{token}” tem sílabas ainda não trabalhadas.')
+    if leftover:
+        warnings.append(f'A frase tem números ou símbolos que não aparecem nos cartões: {leftover}')
     return text, tokens, warnings

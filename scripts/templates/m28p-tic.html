@@ -15,18 +15,20 @@ h1,h2,.task-title{font-size:30px}
 .choices .picture{display:block;width:150px;height:140px}.pieces{flex-wrap:wrap}.pieces button{min-width:64px}button:focus-visible{outline:4px solid var(--focus);outline-offset:3px}</style>
 <style>
 .hidden-words{margin:12px 0}.hidden-count{font-weight:700;margin:0 0 8px}.hidden-words ul{display:flex;flex-wrap:wrap;gap:12px;list-style:none;margin:0;padding:0}.hidden-word{display:flex;align-items:center;gap:8px;min-height:84px;min-width:120px;padding:8px 12px;border:3px dashed var(--line);border-radius:18px;background:var(--surface)}.hidden-word.found{border-style:solid;border-color:var(--accent);background:var(--ok)}.hidden-word.revealed{border-style:solid;background:var(--hint)}.hidden-word button{display:flex;align-items:center;gap:8px;font-size:34px}.hidden-word .picture{width:76px;height:70px}.hidden-word .empty-slot{width:48px;height:56px}.hidden-word .unknown{font-size:34px;padding:0 12px}.punctuation{align-self:flex-end;font-size:44px;line-height:1;padding:0 4px}#discover-finish{margin-top:8px}
+.choices.read-choose{grid-template-columns:repeat(3,minmax(0,1fr))}.choices .picture{margin:0 auto;max-width:100%}.choices.read-choose button{padding:8px}@media(max-width:600px){.choices.read-choose .picture{width:100%;height:96px}}
+.demo-game{display:grid;gap:12px;justify-items:center;width:100%}.demo-game button{position:relative;pointer-events:none}.demo-game .model,.demo-game .tray,.demo-game .pieces,.demo-game .choices{width:100%;margin:6px 0}.demo-game .choices{grid-template-columns:repeat(3,minmax(0,1fr))}.demo-game .feedback{margin:6px 0}.demo-game .demo-hand{bottom:-34px;right:-6px;font-size:40px}.tray.visual-cue{outline-offset:6px}
 .initialization-status{display:flex;gap:16px;align-items:center;justify-content:center;min-height:180px;padding:24px}.preparing-shape{width:48px;height:48px;border:6px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:preparing 1s linear infinite}@keyframes preparing{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.preparing-shape{animation:none}}
 .choices .picture{display:block;width:150px;height:140px}.pieces{flex-wrap:wrap}.pieces button{min-width:64px}button:focus-visible{outline:4px solid var(--focus);outline-offset:3px}</style>
 </head>
 <body>
 <div id="initialization-status" class="initialization-status" role="status"><span class="preparing-shape" aria-hidden="true"></span><span>A preparar o jogo…</span></div>
 <a id="activity-skip" class="skip" href="#main" hidden>Ir para o jogo</a>
-<header id="activity-header" inert hidden><h1 id="game-title"></h1><div class="tools"><button id="hear" aria-label="Ouvir a instrução"><span aria-hidden="true" class="icon">🔊</span>Ouvir</button><button id="demo-open"><span aria-hidden="true" class="icon">?</span>Como jogar</button><button id="mute" hidden aria-pressed="false">Som ligado</button></div></header>
+<header id="activity-header" inert hidden><h1 id="game-title"></h1><div class="tools"><button id="hear" aria-label="Ouvir a instrução"><span aria-hidden="true" class="icon">🔊</span>Ouvir</button><button id="demo-open"><span aria-hidden="true" class="icon">?</span>Como jogar</button><button id="mute" hidden aria-pressed="false">Desligar som</button></div></header>
 <main id="main" tabindex="-1" inert hidden>
 <section id="intro" class="welcome"><div id="intro-picture" class="picture hero-image"></div><h2 id="intro-word" class="word"></h2><button id="start" class="primary"><span aria-hidden="true" class="icon">▶</span>Começar</button></section>
-<section id="demonstration" class="demo" hidden aria-labelledby="demo-heading"><h2 id="demo-heading">Vê como se faz</h2><div id="demo-stage" class="demo-stage" aria-label="Exemplo de como jogar"></div><p id="demo-caption" class="demo-caption"></p><div class="nav"><button id="demo-again"><span aria-hidden="true">↻</span> Ver outra vez</button><button id="demo-close" class="primary">Agora tu <span aria-hidden="true">→</span></button></div></section>
+<section id="demonstration" class="demo" hidden aria-labelledby="demo-heading"><h2 id="demo-heading">Vê como se faz</h2><div id="demo-stage" class="demo-stage" aria-label="Exemplo de como jogar"></div><p id="demo-caption" class="demo-caption"></p><div class="nav"><button id="demo-hear" hidden><span aria-hidden="true">🔊</span> Ouvir o exemplo</button><button id="demo-again"><span aria-hidden="true">↻</span> Ver outra vez</button><button id="demo-close" class="primary">Agora tu <span aria-hidden="true">→</span></button></div></section>
 <section id="workspace" hidden><div class="task-top"><h2 id="prompt" class="task-title"></h2><div id="progress" class="progress" role="img"></div></div><div id="round-content"></div><div id="feedback" class="feedback" role="status" aria-live="polite"></div><nav class="nav" aria-label="Avançar no jogo"><button id="back"><span aria-hidden="true">←</span> Voltar</button><button id="confirm" class="primary"><span aria-hidden="true">✓</span> Confirmar</button><button id="next" class="primary" hidden>Continuar <span aria-hidden="true">→</span></button></nav><details class="support-details"><summary>Mais ajuda</summary><div class="levelbar" role="group" aria-label="Tipo de ajuda"><button data-level="support">Com ajuda</button><button data-level="intermediate">Sozinho</button><button data-level="challenge">Consigo ajudar um amigo</button></div><aside id="support-panel" data-pagecraft-support="u1"></aside></details></section>
-<section id="finish" class="finish" hidden><span class="finish-symbol" aria-hidden="true">✓</span><h2>Fizeste o teu jogo!</h2><div id="finish-picture" class="picture hero-image"></div><div class="row"><button id="repeat"><span aria-hidden="true">↻</span> Repetir</button><button id="finish-button" class="primary">Terminar <span aria-hidden="true">✓</span></button></div><div id="local-reflection"><p>Como foi? Podes escolher.</p><div class="reflection" role="group" aria-label="Como foi o jogo?"><button data-reflection="again"><span class="icon" aria-hidden="true">↻</span>Quero praticar</button><button data-reflection="help"><span class="icon" aria-hidden="true">☞</span>Com ajuda</button><button data-reflection="alone"><span class="icon" aria-hidden="true">✓</span>Consegui</button></div><p id="local-note" class="visually-hidden">Esta escolha fica apenas neste dispositivo.</p></div></section>
+<section id="finish" class="finish" hidden><span class="finish-symbol" aria-hidden="true">✓</span><h2>Terminaste este jogo!</h2><div id="finish-picture" class="picture hero-image"></div><p id="finish-invite" hidden></p><div class="row"><button id="repeat"><span aria-hidden="true">↻</span> Repetir</button><button id="finish-button" class="primary">Terminar <span aria-hidden="true">✓</span></button></div><div id="local-reflection"><p>Como foi? Podes escolher.</p><div class="reflection" role="group" aria-label="Como foi o jogo?"><button data-reflection="again"><span class="icon" aria-hidden="true">↻</span>Quero praticar</button><button data-reflection="help"><span class="icon" aria-hidden="true">☞</span>Precisei de ajuda</button><button data-reflection="alone"><span class="icon" aria-hidden="true">✓</span>Consegui</button></div><p id="local-note" class="visually-hidden">Esta escolha fica apenas neste dispositivo.</p></div></section>
 <p id="audio-status" role="status" aria-live="polite"></p>
 </main>
 <script>@@BRIDGE@@</script>
@@ -38,7 +40,7 @@ const TicModel = (() => {
   const levels=['support','intermediate','challenge'];
   const ordered=round=>['syllables','recall','listen-build','sentence','discover'].includes(round.kind);
   const ids=round=>(ordered(round)?round.pieces:round.options).map(option=>option.id);
-  const initial=()=>({version:3,page:-1,level:'intermediate',answers:{},confirmed:{},last:{},counts:{},aids:{},done:false,reflection:null,discoveries:{},choiceAudio:{}});
+  const initial=()=>({version:3,page:-1,pageId:null,introDemo:false,level:'intermediate',answers:{},confirmed:{},last:{},counts:{},aids:{},done:false,reflection:null,discoveries:{},choiceAudio:{}});
   function cleanAnswer(round,value){
     if(!Array.isArray(value))return [];
     const allowed=ids(round);
@@ -67,7 +69,9 @@ const TicModel = (() => {
     if(round.kind==='discover')return !!discovery(round,value);
     if(!validAnswer(round,value))return false;
     const answer=round.kind==='pairs'?round.options.map(option=>option.id+'='+option.id):round.answer;
-    return signature(round,value)===signature(round,answer);
+    if(signature(round,value)===signature(round,answer))return true;
+    // Ordens equivalentes («A mana é a menina.») contam como certas.
+    return ordered(round)&&(round.alternatives||[]).some(labels=>JSON.stringify(labels)===signature(round,value));
   }
   const answered=(data,state,index)=>!!state.confirmed[data.rounds[index]?.id]&&validAnswer(data.rounds[index],state.answers[data.rounds[index].id]);
   const complete=(data,state)=>data.rounds.every((_,index)=>answered(data,state,index));
@@ -85,22 +89,29 @@ const TicModel = (() => {
       if(validAnswer(round,last))clean.last[round.id]=last;
       const count=raw.counts?.[round.id];
       if(Number.isInteger(count)&&count>=0)clean.counts[round.id]=Math.min(count,999);
-      for(const key of ['demo_shown','model_shown','audio_word_requested','audio_instruction_requested'])if(raw.aids?.[round.id]?.[key]===true)(clean.aids[round.id]||={})[key]=true;
+      for(const key of ['demo_shown','model_shown','text_shown','audio_word_requested','audio_instruction_requested'])if(raw.aids?.[round.id]?.[key]===true)(clean.aids[round.id]||={})[key]=true;
     }
     const firstMissing=data.rounds.findIndex((_,index)=>!answered(data,clean,index));
-    if(raw.page!==-1)clean.page=accessible(data,clean,raw.page)?raw.page:(firstMissing<0?data.rounds.length-1:Math.max(0,firstMissing));
+    // A ronda ativa guarda-se pelo identificador: as frases da turma podem chegar depois e mudar as posições.
+    const byId=typeof raw.pageId==='string'?data.rounds.findIndex(r=>r.id===raw.pageId):-1;
+    const page=byId>=0?byId:raw.page;
+    if(raw.page!==-1)clean.page=accessible(data,clean,page)?page:(firstMissing<0?data.rounds.length-1:Math.max(0,firstMissing));
+    // Uma ronda que ainda não existe (frase da turma por chegar) mantém-se pendente até ser encontrada.
+    if(typeof raw.pageId==='string')clean.pageId=byId>=0||raw.pageId.length>200?data.rounds[clean.page]?.id||null:raw.pageId;
+    clean.introDemo=raw.introDemo===true;
     clean.done=raw.done===true&&complete(data,clean);
     if(['again','help','alone'].includes(raw.reflection))clean.reflection=raw.reflection;
     return clean;
   }
-  function edit(state,round,value){if(round.kind==='read-choose')state.choiceAudio[round.id]=state.aids[round.id]?.audio_word_requested===true;state.answers[round.id]=cleanAnswer(round,value);delete state.confirmed[round.id];state.done=false;}
+  function edit(state,round,value){if(round.kind==='discover'&&state.confirmed[round.id])return false;if(round.kind==='read-choose')state.choiceAudio[round.id]=state.aids[round.id]?.audio_word_requested===true;state.answers[round.id]=cleanAnswer(round,value);delete state.confirmed[round.id];state.done=false;return true;}
   function confirm(state,round){
     const value=state.answers[round.id];if(!validAnswer(round,value))return {accepted:false,emit:false};
     const emit=!state.last[round.id]||signature(round,state.last[round.id])!==signature(round,value);
     const found=round.kind==='discover'?discovery(round,value):null;
     if(found){const box=state.discoveries[round.id]||=[];if(!box.includes(found.label))box.push(found.label);}
     state.confirmed[round.id]=round.kind!=='discover'||value[0]==='finish'||allFound(round,state.discoveries[round.id]);
-    if(emit){state.last[round.id]=value.slice();state.counts[round.id]=(state.counts[round.id]||0)+1;}
+    // A última seleção confirmada acompanha sempre o ecrã; só a contagem e os eventos ignoram repetições.
+    state.last[round.id]=value.slice();if(emit)state.counts[round.id]=(state.counts[round.id]||0)+1;
     // Uma palavra encontrada fica guardada; o tabuleiro esvazia para a seguinte.
     if(found&&!state.confirmed[round.id])state.answers[round.id]=[];
     return {accepted:true,emit,correct:correct(round,value)};
@@ -114,7 +125,11 @@ const TicModel = (() => {
       const pieces=s.tokens.map((label,i)=>({id:'p'+i,label}));
       let seed=2166136261;for(const c of s.id)seed=Math.imul(seed^c.charCodeAt(0),16777619)>>>0;
       for(let i=pieces.length-1;i>0;i--){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const j=seed%(i+1);[pieces[i],pieces[j]]=[pieces[j],pieces[i]];}
-      return {id:'c-'+s.id,kind:'sentence',classSentence:true,prompt:'Ordena as palavras da frase.',model:false,options:[],unit:'word',length:s.tokens.length,pieces,answer:s.tokens.map((_,i)=>'p'+i),target:{text:s.tokens.join(' ')+(/[.!?…]$/.exec(s.text||'')||['.'])[0],tokens:s.tokens}};
+      // Nunca começar com a frase já ordenada.
+      if(pieces.every((p,i)=>p.label===s.tokens[i]))pieces.push(pieces.shift());
+      // A leitura em voz alta usa o texto original (vírgulas, hífenes), não as peças.
+      const text=typeof s.text==='string'&&s.text.trim()&&s.text.length<300?s.text.trim():s.tokens.join(' ')+'.';
+      return {id:'c-'+s.id,kind:'sentence',classSentence:true,prompt:'Ordena as palavras da frase.',model:false,options:[],unit:'word',length:s.tokens.length,pieces,answer:s.tokens.map((_,i)=>'p'+i),target:{text:/[.!?…]$/.test(text)?text:text+'.',tokens:s.tokens}};
     });
     return [...rounds,...fixed].slice(0,4);
   }
@@ -135,7 +150,7 @@ const embedded=window.parent!==window;
 const storageKey='pagecraft:m28p-tic-v3:'+data.slug;
 const activity=data.slug;
 let state=TicModel.initial(),revision=0,restored=!embedded,preferencesReady=!embedded,demoOpen=false,demoTimer=null,pendingPair=null,revisionHint=null,hostLevel=null;
-let audio=null,soundEnabled=false,lastRaw=null;
+let audio=null,soundEnabled=false,lastRaw=null,repeatFound=false;
 const fixedRounds=data.rounds.slice();
 const started=new Set();
 const round=()=>data.rounds[state.page];
@@ -146,16 +161,26 @@ function picture(svg,label,className=''){const element=node('span',undefined,'pi
 function localVoice(){return window.speechSynthesis?.getVoices().find(v=>v.localService===true&&/^pt[-_]PT$/i.test(v.lang));}
 function stopAudio(){if(audio){audio.pause();audio=null;}window.speechSynthesis?.cancel();}
 function play(key,override){
-  stopAudio();aid(key==='word'?'audio_word_requested':'audio_instruction_requested');checkpoint();soundEnabled=true;$('mute').hidden=false;$('mute').textContent='Desligar som';$('mute').setAttribute('aria-pressed','false');
+  // Antes de começar não há ronda: ouvir não fica registado como ajuda.
+  stopAudio();if(state.page>=0&&!state.done)aid(key==='word'?'audio_word_requested':'audio_instruction_requested');checkpoint();soundEnabled=true;$('mute').hidden=false;$('mute').textContent='Desligar som';$('mute').setAttribute('aria-pressed','false');
   if(key==='word'&&!override&&round()?.classSentence){
     const voice=localVoice();if(!voice)return;
     const utterance=new SpeechSynthesisUtterance(round().target.text);utterance.voice=voice;utterance.lang='pt-PT';
     window.speechSynthesis.speak(utterance);return;
   }
   const source=override||(key==='word'?round()?.target?.audio:null)||data.audio?.[key]||data.audio?.instruction;
-  if(!source){$('audio-status').textContent='Vê o exemplo no botão ?.';return;}
-  audio=new Audio(source);audio.addEventListener('error',()=>{$('audio-status').textContent='Vê o exemplo no botão ?.';});
-  audio.play().then(()=>{$('audio-status').textContent='';}).catch(()=>{$('audio-status').textContent='Carrega em Ouvir outra vez.';});
+  if(!source){$('audio-status').textContent='Toca em «Como jogar».';return;}
+  audio=new Audio(source);audio.addEventListener('error',()=>{$('audio-status').textContent='Toca em «Como jogar».';});
+  audio.play().then(()=>{$('audio-status').textContent='';}).catch(()=>{$('audio-status').textContent='Toca em «Ouvir».';});
+}
+function playQuiet(source){
+  // Som pedido durante a demonstração: não conta como ajuda numa ronda.
+  if(!source)return;stopAudio();soundEnabled=true;$('mute').hidden=false;$('mute').textContent='Desligar som';$('mute').setAttribute('aria-pressed','false');audio=new Audio(source);audio.play().catch(()=>{});
+}
+function playFeedback(key){
+  // Som curto de resposta só quando a criança ligou o som; não conta como pedido de ajuda.
+  if(!soundEnabled||!data.audio?.[key])return;
+  stopAudio();audio=new Audio(data.audio[key]);audio.play().catch(()=>{});
 }
 function checkpoint(emit=true){
   lastRaw=TicModel.retainState(lastRaw,state,data.rounds);
@@ -165,7 +190,7 @@ function checkpoint(emit=true){
 function context(){const r=round();if(r&&window.PageCraftSupport)PageCraftSupport.update({unit_id:unit(),task_id:r.id,question:r.prompt,answer:state.answers[r.id]||[],level:state.level,revision,product:''});}
 function aid(key){const id=data.rounds[Math.max(0,state.page)].id;(state.aids[id]||={})[key]=true;}
 function selected(){return state.answers[round().id]||[];}
-function edit(value){revisionHint=window.PageCraftSupport?.currentHintId()||revisionHint;TicModel.edit(state,round(),value);revision++;context();checkpoint();renderGame();}
+function edit(value){revisionHint=window.PageCraftSupport?.currentHintId()||revisionHint;if(TicModel.edit(state,round(),value)===false)return;revision++;context();checkpoint();renderGame();}
 function showModel(r){return state.level==='support'||(r.kind!=='recall'&&(['match','hunt'].includes(r.kind)||(state.level==='intermediate'&&r.model)));}
 function model(r){
   if(r.target)return cycleModel(r);
@@ -185,19 +210,30 @@ function model(r){
 const endMark=target=>(/[.!?…]$/.exec(target?.text||'')||[''])[0];
 function cycleModel(r){
   const box=node('div',undefined,'model'),t=r.target;
-  if(r.kind==='read-choose')box.appendChild(node('span',t.label,'word'));
-  else if(r.classSentence)box.appendChild(node('span','Frase da turma'));
-  else if(r.kind==='sentence'&&state.level!=='challenge')box.appendChild(picture(t.image,t.text));
-  if(state.level==='support'&&r.kind!=='read-choose'&&r.kind!=='discover'){
-    aid('model_shown');box.appendChild(node('span',(t.tokens||t.syllables).join(' · ')+(endMark(t)||''),'word'));
+  if(r.kind==='read-choose'){
+    // Com ajuda: palavra dividida em sílabas; Sozinho: palavra inteira; Consigo ajudar um amigo: sem ouvir.
+    if(state.level==='support'){aid('model_shown');box.appendChild(node('span',t.syllables.join(' · '),'word'));box.classList.add('hint-model');}
+    else box.appendChild(node('span',t.label,'word'));
+    if(state.level!=='challenge'){const hear=button('🔊',()=>play('word'));hear.setAttribute('aria-label','Ouvir a palavra');hear.dataset.focus='hear-word';box.appendChild(hear);}
+    return box;
   }
-  if(r.kind!=='discover'&&(!r.classSentence||localVoice())){const hear=button('🔊',()=>play('word'));hear.setAttribute('aria-label',r.kind==='sentence'?'Ouvir a frase':'Ouvir a palavra');box.appendChild(hear);}
+  if(r.classSentence)box.appendChild(node('span','Frase da turma'));
+  else if(r.kind==='sentence'&&state.level!=='challenge')box.appendChild(picture(t.image,'Imagem da frase'));
+  const shown=state.level==='support'||(r.classSentence&&state.aids[r.id]?.text_shown);
+  if(shown){
+    aid('model_shown');box.appendChild(node('span',(t.tokens||t.syllables).join(' · ')+(endMark(t)||''),'word'));box.classList.add('hint-model');
+  }
+  if(r.classSentence&&!localVoice()&&!shown){
+    // Sem voz local, a frase da turma não tem som: a criança pode pedir para a ver escrita (fica registado).
+    const reveal=button('Ver a frase',()=>{aid('text_shown');checkpoint();renderGame();});reveal.prepend(node('span','👀 ','icon'));reveal.dataset.focus='reveal';box.appendChild(reveal);
+  }
+  if(!r.classSentence||localVoice()){const hear=button('🔊',()=>play('word'));hear.setAttribute('aria-label',r.kind==='sentence'?'Ouvir a frase':'Ouvir a palavra');hear.dataset.focus='hear-word';box.appendChild(hear);}
   return box;
 }
 function discoverBoard(r,container){
   const found=state.discoveries[r.id]||[],revealed=state.confirmed[r.id]&&selected()[0]==='finish';
   const box=node('div',undefined,'hidden-words');
-  box.appendChild(node('p','Palavras escondidas: '+found.length+' de '+r.lexicon.length,'hidden-count'));
+  box.appendChild(node('p','Encontraste '+found.length+' de '+r.lexicon.length+'.','hidden-count'));
   const list=node('ul');list.setAttribute('aria-label','Palavras escondidas');
   for(const w of r.lexicon){
     const item=node('li',undefined,'hidden-word');
@@ -217,16 +253,16 @@ function discoverBoard(r,container){
   }
   box.appendChild(list);
   const tray=node('div',undefined,'tray');tray.setAttribute('aria-label','A tua palavra. Toca numa sílaba para a retirar.');
-  selected().filter(id=>id!=='finish').forEach((id,i)=>tray.appendChild(button(r.pieces.find(p=>p.id===id).label,()=>edit(selected().filter((_,j)=>i!==j)))));
+  selected().filter(id=>id!=='finish').forEach((id,i)=>{const placed=button(r.pieces.find(p=>p.id===id).label,()=>edit(selected().filter((_,j)=>i!==j)));placed.dataset.focus='placed-'+i;placed.disabled=!!state.confirmed[r.id];tray.appendChild(placed);});
   const board=node('div',undefined,'pieces');board.setAttribute('role','group');board.setAttribute('aria-label','Sílabas para juntar');
-  for(const piece of r.pieces){const b=button(piece.label,()=>edit([...selected().filter(id=>id!=='finish'),piece.id]));b.disabled=state.confirmed[r.id]||selected().includes(piece.id)||selected().length>=3;b.dataset.piece=piece.id;board.appendChild(b);}
+  for(const piece of r.pieces){const b=button(piece.label,()=>edit([...selected().filter(id=>id!=='finish'),piece.id]));b.disabled=state.confirmed[r.id]||selected().includes(piece.id)||selected().length>=3;b.dataset.piece=piece.id;b.dataset.focus='piece-'+piece.id;board.appendChild(b);}
   container.append(box,tray,board);
-  if(!state.confirmed[r.id]){const end=button('Não encontro mais',()=>{aid('model_shown');edit(['finish']);confirm();});end.id='discover-finish';container.appendChild(end);}
+  if(!state.confirmed[r.id]){const end=button('Não encontro mais palavras',()=>{aid('model_shown');edit(['finish']);confirm();});end.prepend(node('span','🏳 ','icon'));end.id='discover-finish';end.dataset.focus='discover-finish';container.appendChild(end);}
 }
 function toggle(id){const values=selected();edit(round().kind==='hunt'?(values.includes(id)?values.filter(value=>value!==id):[...values,id]):[id]);}
 function choices(r,container){
-  const choices=node('div',undefined,'choices'+(r.kind==='hunt'?' hunt':''));
-  for(const option of r.options){const item=button(r.kind==='read-choose'?'':option.label,()=>toggle(option.id));if(r.kind==='read-choose'){item.appendChild(picture(option.image,option.label));item.setAttribute('aria-label','Imagem: '+option.label);}item.dataset.option=option.id;item.dataset.focus='option-'+option.id;item.setAttribute('aria-pressed',String(selected().includes(option.id)));choices.appendChild(item);}
+  const choices=node('div',undefined,'choices'+(r.kind==='hunt'?' hunt':r.kind==='read-choose'?' read-choose':''));
+  for(const option of r.options){const item=button(r.kind==='read-choose'?'':option.label,()=>toggle(option.id));if(r.kind==='read-choose'){const index=r.options.indexOf(option)+1;item.appendChild(picture(option.image,'Imagem '+index));item.setAttribute('aria-label','Imagem '+index);}item.dataset.option=option.id;item.dataset.focus='option-'+option.id;item.setAttribute('aria-pressed',String(selected().includes(option.id)));choices.appendChild(item);}
   container.appendChild(choices);
 }
 function pairs(r,container){
@@ -262,13 +298,14 @@ function order(r,container){
   const tray=node('div',undefined,'tray');tray.setAttribute('aria-label',r.unit==='word'?'A tua frase. Toca numa palavra para a retirar.':'A tua palavra. Toca numa '+(r.unit==='letter'?'letra':'sílaba')+' para a retirar.');
   selected().forEach((id,index)=>{const piece=r.pieces.find(piece=>piece.id===id);const item=button(piece.label,()=>edit(selected().filter((_,i)=>i!==index)));item.setAttribute('aria-label','Retirar '+piece.label);item.dataset.focus='placed-'+id;tray.appendChild(item);});
   for(let i=selected().length;state.level!=='challenge'&&i<(r.length||r.pieces.length);i++){const slot=node('span',undefined,'empty-slot');slot.setAttribute('aria-hidden','true');tray.appendChild(slot);}
-  const mark=r.kind==='sentence'&&endMark(r.target);if(mark){const end=node('span',mark,'punctuation');end.setAttribute('aria-label','ponto final');tray.appendChild(end);}
+  const mark=r.kind==='sentence'&&endMark(r.target);if(mark){const end=node('span',mark,'punctuation');end.setAttribute('aria-label',{'.':'ponto final','!':'ponto de exclamação','?':'ponto de interrogação','…':'reticências'}[mark]);tray.appendChild(end);}
   const pieces=node('div',undefined,'pieces');pieces.setAttribute('role','group');pieces.setAttribute('aria-label',(r.unit==='word'?'Palavras':r.unit==='letter'?'Letras':'Sílabas')+' para escolher');
   for(const piece of r.pieces){const item=button(piece.label,()=>edit([...selected(),piece.id]));item.dataset.piece=piece.id;item.dataset.focus='piece-'+piece.id;item.disabled=selected().includes(piece.id)||selected().length>=(r.length||r.pieces.length);pieces.appendChild(item);}
   container.append(tray,pieces);
 }
 function markCue(element){if(!element)return;element.classList.add('visual-cue');const cue=node('span','↻','cue-icon');cue.setAttribute('aria-hidden','true');element.appendChild(cue);}
 function visualFeedback(r,container){
+  if(r.kind==='discover'){const last=state.last[r.id];if(!state.confirmed[r.id]&&last&&selected().length&&JSON.stringify(selected())===JSON.stringify(last)&&!TicModel.discovery(r,last))markCue(container.querySelector('.tray'));return;}
   if(!state.confirmed[r.id]||TicModel.correct(r,selected()))return;
   if(r.kind==='discover')return;
   if(TicModel.ordered(r)){
@@ -300,19 +337,19 @@ function feedback(r){
     const last=state.last[r.id];if(!last||(selected().length&&JSON.stringify(selected())!==JSON.stringify(last)))return;
     if(state.confirmed[r.id]){
       const all=last[0]!=='finish';box.classList.toggle('ok',all);box.appendChild(node('span',all?'✓':'☞','icon'));
-      box.appendChild(node('span',all?'Descobriste as '+r.lexicon.length+' palavras escondidas!':'Estas eram as palavras escondidas. Podes continuar.'));return;
+      box.appendChild(node('span',all?'Encontraste todas as palavras!':'Estas eram as palavras escondidas.'));return;
     }
-    const found=TicModel.discovery(r,last),missing=r.lexicon.length-(state.discoveries[r.id]||[]).length;
+    const found=TicModel.discovery(r,last),missing=r.lexicon.length-(state.discoveries[r.id]||[]).length,again=found&&repeatFound;
     const word=last.map(id=>r.pieces.find(p=>p.id===id)?.label||'').join('');
-    box.appendChild(node('span',found?'✓':'↻','icon'));
-    box.appendChild(node('span',found?'Encontraste «'+found.label+'». '+(missing===1?'Falta 1.':'Faltam '+missing+'.'):'«'+word+'» não é uma das palavras escondidas. Se conheces esta palavra, conta à turma.'));
+    box.classList.toggle('ok',!!found);box.appendChild(node('span',found?'✓':'↻','icon'));
+    box.appendChild(node('span',found?(again?'Já encontraste «':'Encontraste «')+found.label+'». '+(missing===1?'Falta 1.':'Faltam '+missing+'.'):((r.warnings||[]).includes(word)?'«'+word+'» é uma palavra, mas não está escondida aqui. Experimenta outra vez.':'«'+word+'» não está escondida. Experimenta outra vez.')));
     return;
   }
   if(!state.confirmed[r.id])return;
-  const correct=TicModel.correct(r,selected());box.classList.toggle('ok',correct);box.appendChild(node('span',correct?'✓':'↻','icon'));box.appendChild(node('span',correct?'Encontraste!':'Podes experimentar outra vez.'));
-  if(!correct){const help=button('? Ver',()=>openDemo());help.setAttribute('aria-label','Ver como se faz');box.appendChild(help);}
+  const correct=TicModel.correct(r,selected());box.classList.toggle('ok',correct);box.appendChild(node('span',correct?'✓':'↻','icon'));box.appendChild(node('span',correct?'Está certo!':'Experimenta outra vez.'));
+  if(!correct){const help=button('Ver como se faz',()=>openDemo());help.prepend(node('span','? ','icon'));box.appendChild(help);}
 }
-function updateNav(r){const confirmed=!!state.confirmed[r.id];$('confirm').hidden=confirmed;$('confirm').disabled=!TicModel.validAnswer(r,selected());$('next').hidden=!confirmed;$('back').disabled=state.page===0;}
+function updateNav(r){const confirmed=!!state.confirmed[r.id];if($('undo'))$('undo').disabled=!selected().filter(id=>id!=='finish').length||(r.kind==='discover'&&confirmed);$('confirm').hidden=confirmed;$('confirm').disabled=!TicModel.validAnswer(r,selected());$('next').hidden=!confirmed;$('back').disabled=state.page===0;}
 function renderGame(){
   const r=round();if(!r)return;
   const focused=document.activeElement?.dataset?.focus;
@@ -328,7 +365,13 @@ function renderGame(){
   $('support-panel').dataset.pagecraftSupport=unit();
   document.querySelectorAll('[data-level]').forEach(item=>item.setAttribute('aria-pressed',String(item.dataset.level===state.level)));
   visualFeedback(r,content);feedback(r);updateNav(r);context();
-  if(focused){const next=[...content.querySelectorAll('[data-focus]')].find(item=>item.dataset.focus===focused&&!item.disabled)||content.querySelector('button:not(:disabled)');if(next)next.focus();}
+  if(focused){
+    // Ao usar uma peça, o foco passa para a peça seguinte disponível ou para Confirmar, nunca para o corpo da página.
+    const same=[...content.querySelectorAll('[data-focus]')].find(item=>item.dataset.focus===focused&&!item.disabled);
+    const piece=focused.startsWith('piece-')?content.querySelector('[data-piece]:not(:disabled)'):null;
+    const next=same||piece||(!$('confirm').hidden&&!$('confirm').disabled?$('confirm'):null)||content.querySelector('button:not(:disabled)');
+    if(next)next.focus();
+  }
 }
 function workspace(){return $('workspace');}
 function gate(){
@@ -342,35 +385,39 @@ function render(){
   $('demo-open').hidden=state.done;
   if(state.page>=0&&!state.done&&!demoOpen&&restored&&preferencesReady)renderGame();
   $('local-reflection').hidden=embedded;
+  const invite=$('finish-invite');invite.textContent=invites[data.game]||'';invite.hidden=!(state.done&&data.rounds[0].target&&state.level==='challenge'&&invites[data.game]);
   document.querySelectorAll('[data-reflection]').forEach(item=>item.setAttribute('aria-pressed',String(item.dataset.reflection===state.reflection)));
 }
 function move(index){
   if(!TicModel.accessible(data,state,index))return;
-  stopAudio();state.page=index;state.done=false;pendingPair=null;revisionHint=null;revision++;
+  stopAudio();repeatFound=false;state.page=index;state.pageId=data.rounds[index]?.id||null;state.done=false;pendingPair=null;revisionHint=null;revision++;
   render();context();checkpoint();
   if(restored&&!started.has(unit())){started.add(unit());window.PageCraftBridge?.unitStarted(unit());}
   $('prompt').tabIndex=-1;$('prompt').focus();
 }
 function confirm(){
-  const r=round(),value=selected().slice(),result=TicModel.confirm(state,r);if(!result.accepted)return;
+  const r=round(),value=selected().slice(),before=(state.discoveries[r.id]||[]).slice(),result=TicModel.confirm(state,r);if(!result.accepted)return;
+  repeatFound=r.kind==='discover'&&!!TicModel.discovery(r,value)&&before.includes(TicModel.discovery(r,value).label);
   revision++;context();
   if(result.emit&&restored){const detail={value,question:r.prompt,task_id:r.id,activity:data.slug,field:r.id,level:state.level,aids:{...state.aids[r.id]},model_visible:r.target?state.level==='support':showModel(r),audio_before_choice:state.choiceAudio[r.id]===true};if(revisionHint)detail.after_hint_id=revisionHint;if(r.kind==='discover')window.PageCraftBridge?.emit('attempt',unit(),{detail:{...detail,discoveries:state.discoveries[r.id]||[]}});else window.PageCraftBridge?.attempt(unit(),result.correct,detail);}
-  revisionHint=null;checkpoint();renderGame();if(r.kind==='discover'&&TicModel.discovery(r,value))play('word',TicModel.discovery(r,value).audio);if(state.confirmed[r.id])$('next').focus();
+  revisionHint=null;checkpoint();renderGame();
+  // Som de resposta curto e coerente com o ecrã (o ecrã acrescenta a palavra); nas descobertas intermédias, sem convite a continuar.
+  // Uma palavra real que não está escondida tem som próprio, como no ecrã.
+  const formed=r.kind==='discover'?value.map(id=>r.pieces.find(p=>p.id===id)?.label||'').join(''):'';
+  const real=!result.correct&&(r.warnings||[]).includes(formed);
+  if(value[0]!=='finish'&&!repeatFound)playFeedback(r.kind==='discover'?(real&&data.audio?.realword?'realword':!result.correct?'tryagain':state.confirmed[r.id]?'allfound':'found'):(result.correct?'correct':'tryagain'));
+  if(state.confirmed[r.id])$('next').focus();
+  else if(r.kind==='discover'&&!selected().length)(document.querySelector('#round-content [data-piece]:not(:disabled)')||$('discover-finish'))?.focus();
 }
 function setLevel(level,emit=true){if(!TicModel.levels.includes(level))return;state.level=level;revision++;revisionHint=null;if(emit)window.PageCraftBridge?.levelChanged(unit(),level);render();context();checkpoint(emit);}
-function finish(){if(data.rounds[0].target&&state.level==='challenge')$('finish-picture').appendChild(node('p','Se quiseres, explica a um amigo como leste.'));state.done=true;stopAudio();checkpoint();render();$('finish-button').focus();}
+const invites={'listen-build':'Se quiseres, mostra a um amigo como juntaste as sílabas.','discover':'Se quiseres, mostra a um amigo as palavras que descobriste.','read-choose':'Se quiseres, lê as palavras a um amigo.','sentence':'Se quiseres, lê as frases a um amigo.'};
+function finish(){state.done=true;stopAudio();checkpoint();render();$('finish-button').focus();}
 const demoTexts={match:'Toca na palavra igual.',pairs:'Toca na imagem. Toca na palavra.',hunt:'Toca nas palavras iguais. Confirma.',syllables:'Toca nas peças por ordem.',gap:'Escolhe a peça que falta.',recall:'Ouve. Junta as peças.'};
 function demoPicture(target=false){const card=demoCard('',target);const image=picture(data.word.image,data.word.label);image.style.width='120px';image.style.height='100px';card.prepend(image);return card;}
 function demoCard(text,target=false){const card=node('div',text,'demo-card'+(target?' target':''));if(target){const hand=node('span','☝','demo-hand');hand.setAttribute('aria-hidden','true');card.appendChild(hand);}return card;}
 function paintDemo(step){
   const kind=data.game,r=data.rounds[Math.max(0,state.page)],stage=$('demo-stage');stage.replaceChildren();
-  if(r.target){
-    const target=r.kind==='discover'?r.lexicon.find(w=>w.syllables.length>=2):r.target;
-    stage.appendChild(demoCard(target.text||target.label));
-    if(r.kind==='read-choose')stage.appendChild(picture(target.image,target.label));
-    else (target.tokens||target.syllables).forEach((part,i)=>stage.appendChild(demoCard(part,i===step)));
-    $('demo-caption').textContent=data.instruction;return;
-  }
+  if(data.demo){paintCycleDemo(step);return;}
   if(kind==='pairs'){stage.append(demoPicture(step===0),node('span','→','demo-arrow'),demoCard(data.word.label,step>0));}
   else if(['syllables','recall'].includes(kind)){
     stage.append(kind==='recall'?demoPicture():demoCard(data.word.label),node('span','→','demo-arrow'));
@@ -387,17 +434,50 @@ function paintDemo(step){
   }
   $('demo-caption').textContent=demoTexts[kind]||data.instruction;
 }
-function runDemo(){clearTimeout(demoTimer);paintDemo(0);if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){demoTimer=setTimeout(()=>{paintDemo(1);demoTimer=setTimeout(()=>paintDemo(2),1300);},1100);}else paintDemo(2);}
-function openDemo(){stopAudio();pendingPair=null;aid('demo_shown');checkpoint();demoOpen=true;render();runDemo();$('demo-close').focus();}
-function closeDemo(){clearTimeout(demoTimer);demoOpen=false;if(state.page<0)move(0);else render();if(state.page>=0){$('prompt').tabIndex=-1;$('prompt').focus();}}
-function restore(raw){lastRaw=raw;state=TicModel.sanitize(data,raw);if(hostLevel)state.level=hostLevel;restored=true;revision++;revisionHint=null;pendingPair=null;started.clear();render();context();checkpoint();}
-if(data.rounds[0].target){const undo=button('Desfazer',()=>edit(selected().slice(0,-1)));undo.id='undo';$('confirm').parentNode.prepend(undo);}
+const demoCaptions={'listen-build':'Ouve a palavra. Toca nas sílabas, por ordem. Depois, toca em «Confirmar».','read-choose':'Lê a palavra. Toca na imagem certa. Depois, toca em «Confirmar».','sentence':'Ouve e ordena as palavras. Depois, toca em «Confirmar».','discover':'Junta sílabas para formar uma palavra. Toca em «Confirmar». Depois, procura as outras palavras escondidas.'};
+function demoSteps(){if(!data.demo)return 3;if(data.game==='read-choose')return 4;return (data.game==='discover'?data.demo.target.syllables:(data.demo.target.tokens||data.demo.target.syllables)).length+3;}
+function fake(label,pointed,pressed){const b=node('button',label);b.type='button';b.tabIndex=-1;if(pressed)b.setAttribute('aria-pressed','true');if(pointed){const hand=node('span','☝','demo-hand');b.appendChild(hand);}return b;}
+function paintCycleDemo(step){
+  // Exemplo com a palavra-chave (ou a anterior, se não couber no jogo), que nunca é uma ronda, e com os mesmos controlos.
+  const d=data.demo,stage=$('demo-stage'),game=node('div',undefined,'demo-game');game.inert=true;game.setAttribute('aria-hidden','true');
+  const last=demoSteps()-1;
+  if(data.game==='read-choose'){
+    const model=node('div',undefined,'model');model.append(node('span',d.target.label,'word'),fake('🔊'));
+    const choices=node('div',undefined,'choices read-choose'),order=[d.options[1],d.options[0],d.options[2]].filter(Boolean);
+    order.forEach(option=>{const b=fake('',step===1&&option===d.options[0],step>=1&&option===d.options[0]);b.appendChild(picture(option.image,option.label));choices.appendChild(b);});
+    game.append(model,choices);
+  }else{
+    const units=data.game==='sentence'?d.target.tokens:d.target.syllables,placed=Math.max(0,Math.min(step-1,units.length));
+    if(data.game==='discover')game.appendChild(node('p','Encontraste '+(step>=last?1:0)+' de 1.','hidden-count'));
+    else{const model=node('div',undefined,'model');if(data.game==='sentence')model.appendChild(picture(d.target.image,d.target.text));model.appendChild(fake('🔊',step===0));game.appendChild(model);}
+    const tray=node('div',undefined,'tray');units.slice(0,placed).forEach(u=>tray.appendChild(fake(u)));
+    if(data.game!=='discover')for(let i=placed;i<units.length;i++)tray.appendChild(node('span',undefined,'empty-slot'));
+    const pieces=node('div',undefined,'pieces'),used=new Set();
+    units.slice(0,placed).forEach(u=>used.add(d.pieces.findIndex((p,i)=>p===u&&!used.has(i))));
+    const nextIndex=placed<units.length?d.pieces.findIndex((p,i)=>p===units[placed]&&!used.has(i)):-1;
+    d.pieces.forEach((p,i)=>{const b=fake(p,step>=1&&i===nextIndex&&step-1===placed);b.disabled=used.has(i);pieces.appendChild(b);});
+    game.append(tray,pieces);
+  }
+  const confirm=fake('✓ Confirmar',step===last-1);confirm.className='primary';game.appendChild(confirm);
+  if(step>=last){const ok=node('div',undefined,'feedback ok');ok.append(node('span','✓','icon'),node('span',data.game==='discover'?'Encontraste «'+d.target.label+'».':'Está certo!'));game.appendChild(ok);}
+  stage.appendChild(game);$('demo-caption').textContent=demoCaptions[data.game]||data.instruction;
+}
+function runDemo(){
+  clearTimeout(demoTimer);const steps=demoSteps();
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){paintDemo(steps-1);return;}
+  let step=0;paintDemo(0);const tick=()=>{step++;paintDemo(step);if(step<steps-1)demoTimer=setTimeout(tick,1100);};demoTimer=setTimeout(tick,1100);
+}
+function openDemo(){stopAudio();pendingPair=null;if(state.page<0&&data.demo)state.introDemo=true;else aid('demo_shown');checkpoint();demoOpen=true;render();runDemo();$('demo-close').focus();}
+function closeDemo(){clearTimeout(demoTimer);stopAudio();$('demo-stage').replaceChildren();demoOpen=false;if(state.page<0)move(0);else render();if(state.page>=0){$('prompt').tabIndex=-1;$('prompt').focus();}}
+function restore(raw){repeatFound=false;lastRaw=raw;state=TicModel.sanitize(data,raw);if(hostLevel)state.level=hostLevel;restored=true;revision++;revisionHint=null;pendingPair=null;started.clear();render();context();checkpoint();}
+if(data.rounds[0].target&&data.game!=='read-choose'){const undo=button('Desfazer',()=>edit(selected().slice(0,-1)));undo.prepend(node('span','↶ ','icon'));undo.id='undo';$('back').after(undo);}
 $('game-title').textContent=data.title;$('intro-word').textContent=data.word.label;$('intro-picture').appendChild(picture(data.word.image,data.word.label));$('finish-picture').appendChild(picture(data.word.image,data.word.label));
 $('start').addEventListener('click',openDemo);$('demo-open').addEventListener('click',openDemo);$('demo-close').addEventListener('click',closeDemo);$('demo-again').addEventListener('click',runDemo);
-$('hear').addEventListener('click',()=>play(state.page<0?'start':demoOpen?'instruction':'instruction'));
+$('hear').addEventListener('click',()=>demoOpen?playQuiet(data.audio?.instruction):play(state.done?'finish':state.page<0?'start':'instruction'));
+$('demo-hear').hidden=!data.demo;$('demo-hear').addEventListener('click',()=>playQuiet(data.demo?.audio||data.audio?.word));
 $('mute').addEventListener('click',()=>{soundEnabled=!soundEnabled;if(!soundEnabled)stopAudio();$('mute').textContent=soundEnabled?'Desligar som':'Ligar som';$('mute').setAttribute('aria-pressed',String(!soundEnabled));});
 $('back').addEventListener('click',()=>move(state.page-1));$('confirm').addEventListener('click',confirm);$('next').addEventListener('click',()=>state.page===data.rounds.length-1?finish():move(state.page+1));
-$('repeat').addEventListener('click',()=>{state=TicModel.initial();revision++;checkpoint();render();$('start').focus();});
+$('repeat').addEventListener('click',()=>{stopAudio();repeatFound=false;state=TicModel.initial();if(hostLevel)state.level=hostLevel;revision++;checkpoint();render();$('start').focus();});
 $('finish-button').addEventListener('click',()=>{if(embedded)window.PageCraftBridge?.emit('open_reflection',null,{});else {$('local-reflection').scrollIntoView({block:'nearest'});document.querySelector('[data-reflection]').focus();}});
  document.querySelectorAll('[data-level]').forEach(item=>item.addEventListener('click',()=>setLevel(item.dataset.level)));
  document.querySelectorAll('[data-reflection]').forEach(item=>item.addEventListener('click',()=>{state.reflection=item.dataset.reflection;checkpoint();render();}));

@@ -4,7 +4,7 @@
     "author": "PageCraft, ilustrações SVG originais criadas com assistência Codex",
     "license": "CC0-1.0",
     "viewBox": "0 0 240 240",
-    "notes": "Sem texto visível nem emoji; os títulos SVG são alternativas acessíveis. A seta no telhado assinala a parte da casa."
+    "notes": "Sem texto visível nem emoji; os títulos SVG são alternativas acessíveis, retirados ao incorporar nos jogos (o nome acessível vem do jogo). A seta no telhado assinala a parte da casa. As cenas das frases compõem as figuras indicadas em cycle.json."
   },
   "audio": {
     "provider": "Microsoft Edge Read Aloud, através de edge-tts",
@@ -54,27 +54,59 @@
       "avo-circ": "avô",
       "frase-3d2f79aca608": "A menina é a mana.",
       "frase-a92eadbc4509": "O menino é o mano.",
-      "frase-b37fff422510": "A mana e o mano.",
       "frase-6f4bc3b2c2d7": "A avó vê a uva.",
       "frase-69fcd4799ba6": "O avô vê o ovo.",
       "frase-9753cfa8e327": "O menino vê a neve.",
-      "frase-20d5affa2353": "A uva é nova.",
+      "frase-a1e84f0d02f5": "A avó vê o menino.",
+      "exemplo-menina": "A menina.",
+      "exemplo-menino": "O menino.",
+      "exemplo-uva": "A uva.",
+      "exemplo-dedo": "O dedo.",
+      "exemplo-sapato": "O sapato.",
+      "exemplo-bota": "A bota.",
+      "exemplo-leque": "O leque.",
+      "exemplo-casa": "A casa.",
+      "exemplo-janela": "A janela.",
+      "exemplo-telhado": "O telhado.",
+      "exemplo-escada": "A escada.",
+      "exemplo-chave": "A chave.",
+      "exemplo-galinha": "A galinha.",
+      "exemplo-gema": "A gema.",
+      "exemplo-rato": "O rato.",
+      "exemplo-cenoura": "A cenoura.",
+      "exemplo-girafa": "A girafa.",
+      "exemplo-palhaco": "O palhaço.",
+      "exemplo-zebra": "A zebra.",
+      "exemplo-bandeira": "A bandeira.",
+      "exemplo-funil": "O funil.",
+      "exemplo-arvore": "A árvore.",
+      "exemplo-quadro": "O quadro.",
+      "exemplo-passarinho": "O passarinho.",
+      "exemplo-peixe": "O peixe.",
+      "exemplo-cigarra": "A cigarra.",
+      "exemplo-fogueira": "A fogueira.",
+      "exemplo-flor": "A flor.",
       "match": "Toca na palavra igual ao modelo.",
       "pairs": "Toca no desenho. Depois, toca na palavra.",
       "hunt": "Procura as palavras iguais ao modelo.",
       "syllables": "Toca nas peças para formar a palavra.",
       "gap": "Escolhe a peça que falta.",
       "recall": "Forma a palavra. Podes ouvir outra vez.",
-      "start": "Vamos jogar. Toca na seta para começar.",
+      "start": "Vamos jogar. Toca em Começar.",
       "hint": "Olha para o exemplo. Experimenta outra vez.",
       "success": "Já está. Podes continuar.",
       "retry": "Vamos tentar outra vez.",
       "finish": "Terminaste este jogo. Podes repetir.",
       "reflection": "Como foi o jogo? Fizeste sozinho, com ajuda, ou queres praticar mais? Podes também passar.",
+      "correct": "Está certo!",
+      "tryagain": "Experimenta outra vez.",
+      "found": "Encontraste uma palavra!",
+      "allfound": "Encontraste todas as palavras!",
+      "realword": "É uma palavra, mas não está escondida aqui.",
       "listen-build": "Ouve e junta as sílabas.",
-      "read-choose": "Lê e escolhe a imagem.",
+      "read-choose": "Lê a palavra. Escolhe a imagem certa.",
       "sentence": "Ordena as palavras da frase.",
-      "discover": "Junta sílabas. Descobre as palavras escondidas."
+      "discover": "Junta as sílabas. Descobre as palavras escondidas."
     }
   },
   "words": [
@@ -258,13 +290,13 @@
       "slug": "mana",
       "text": "mana",
       "audio": "audio/mana.mp3",
-      "image": "images/mana.svg"
+      "image": null
     },
     {
       "slug": "mano",
       "text": "mano",
       "audio": "audio/mano.mp3",
-      "image": "images/mano.svg"
+      "image": null
     },
     {
       "slug": "nova",
@@ -321,12 +353,6 @@
       "image": "images/frase-a92eadbc4509.svg"
     },
     {
-      "slug": "frase-b37fff422510",
-      "text": "A mana e o mano.",
-      "audio": "audio/frase-b37fff422510.mp3",
-      "image": "images/frase-b37fff422510.svg"
-    },
-    {
       "slug": "frase-6f4bc3b2c2d7",
       "text": "A avó vê a uva.",
       "audio": "audio/frase-6f4bc3b2c2d7.mp3",
@@ -345,10 +371,178 @@
       "image": "images/frase-9753cfa8e327.svg"
     },
     {
-      "slug": "frase-20d5affa2353",
-      "text": "A uva é nova.",
-      "audio": "audio/frase-20d5affa2353.mp3",
-      "image": "images/frase-20d5affa2353.svg"
+      "slug": "frase-a1e84f0d02f5",
+      "text": "A avó vê o menino.",
+      "audio": "audio/frase-a1e84f0d02f5.mp3",
+      "image": "images/frase-a1e84f0d02f5.svg"
+    },
+    {
+      "slug": "exemplo-menina",
+      "text": "A menina.",
+      "audio": "audio/exemplo-menina.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-menino",
+      "text": "O menino.",
+      "audio": "audio/exemplo-menino.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-uva",
+      "text": "A uva.",
+      "audio": "audio/exemplo-uva.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-dedo",
+      "text": "O dedo.",
+      "audio": "audio/exemplo-dedo.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-sapato",
+      "text": "O sapato.",
+      "audio": "audio/exemplo-sapato.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-bota",
+      "text": "A bota.",
+      "audio": "audio/exemplo-bota.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-leque",
+      "text": "O leque.",
+      "audio": "audio/exemplo-leque.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-casa",
+      "text": "A casa.",
+      "audio": "audio/exemplo-casa.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-janela",
+      "text": "A janela.",
+      "audio": "audio/exemplo-janela.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-telhado",
+      "text": "O telhado.",
+      "audio": "audio/exemplo-telhado.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-escada",
+      "text": "A escada.",
+      "audio": "audio/exemplo-escada.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-chave",
+      "text": "A chave.",
+      "audio": "audio/exemplo-chave.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-galinha",
+      "text": "A galinha.",
+      "audio": "audio/exemplo-galinha.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-gema",
+      "text": "A gema.",
+      "audio": "audio/exemplo-gema.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-rato",
+      "text": "O rato.",
+      "audio": "audio/exemplo-rato.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-cenoura",
+      "text": "A cenoura.",
+      "audio": "audio/exemplo-cenoura.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-girafa",
+      "text": "A girafa.",
+      "audio": "audio/exemplo-girafa.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-palhaco",
+      "text": "O palhaço.",
+      "audio": "audio/exemplo-palhaco.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-zebra",
+      "text": "A zebra.",
+      "audio": "audio/exemplo-zebra.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-bandeira",
+      "text": "A bandeira.",
+      "audio": "audio/exemplo-bandeira.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-funil",
+      "text": "O funil.",
+      "audio": "audio/exemplo-funil.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-arvore",
+      "text": "A árvore.",
+      "audio": "audio/exemplo-arvore.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-quadro",
+      "text": "O quadro.",
+      "audio": "audio/exemplo-quadro.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-passarinho",
+      "text": "O passarinho.",
+      "audio": "audio/exemplo-passarinho.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-peixe",
+      "text": "O peixe.",
+      "audio": "audio/exemplo-peixe.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-cigarra",
+      "text": "A cigarra.",
+      "audio": "audio/exemplo-cigarra.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-fogueira",
+      "text": "A fogueira.",
+      "audio": "audio/exemplo-fogueira.mp3",
+      "image": null
+    },
+    {
+      "slug": "exemplo-flor",
+      "text": "A flor.",
+      "audio": "audio/exemplo-flor.mp3",
+      "image": null
     }
   ],
   "instructions": {
@@ -364,12 +558,21 @@
     "retry": "audio/retry.mp3",
     "finish": "audio/finish.mp3",
     "reflection": "audio/reflection.mp3",
+    "correct": "audio/correct.mp3",
+    "tryagain": "audio/tryagain.mp3",
+    "found": "audio/found.mp3",
+    "allfound": "audio/allfound.mp3",
+    "realword": "audio/realword.mp3",
     "listen-build": "audio/listen-build.mp3",
     "read-choose": "audio/read-choose.mp3",
     "sentence": "audio/sentence.mp3",
     "discover": "audio/discover.mp3"
   },
   "files": {
+    "audio/allfound.mp3": {
+      "bytes": 21888,
+      "sha256": "e33f8b06e460700d74526edc08285b8ce6756f0bde4c88f6dd79a81d04142008"
+    },
     "audio/arvore.mp3": {
       "bytes": 11232,
       "sha256": "3e18955b48ded7b2fa59f22477ff7b387ce31ad285857a63cccbec718d792cb9"
@@ -406,17 +609,133 @@
       "bytes": 12960,
       "sha256": "f8eaa593786d7e555eb768e2b4b3f1dc1bfd22b353f270e0e4db84fc8981545a"
     },
+    "audio/correct.mp3": {
+      "bytes": 14112,
+      "sha256": "2a79c99c3f694a44da275357d71034a27324cb430d2788fd1d57d28e7b4b8688"
+    },
     "audio/dedo.mp3": {
       "bytes": 10800,
       "sha256": "41b78c646f0137b36c9af33d0ef5954955c085d329f7ec16184f9cf68325f9cd"
     },
     "audio/discover.mp3": {
-      "bytes": 37728,
-      "sha256": "c67ba0066221541173863aec175d54db0734362bffe79433a974ab94999e22ae"
+      "bytes": 38016,
+      "sha256": "81d3decc7d635627cb313b42a0ee5d311a84dbdf020f0e8d34b81202b92b42cf"
     },
     "audio/escada.mp3": {
       "bytes": 12096,
       "sha256": "dd68d8d7a05ab486e67de4935ca61822fbb8d3552892f345383f5a19dce514fb"
+    },
+    "audio/exemplo-arvore.mp3": {
+      "bytes": 12528,
+      "sha256": "c7cbe70ce1a45f5234ade53bc30e72143b1ecda9f7e8d358ebb6334075fd4dcc"
+    },
+    "audio/exemplo-bandeira.mp3": {
+      "bytes": 13104,
+      "sha256": "9e2103b5473ef11e464bfa938790e359e4aacf04d1800fa3e89e9b750270e0ca"
+    },
+    "audio/exemplo-bota.mp3": {
+      "bytes": 11808,
+      "sha256": "d8c05cb17fd5c5a0220c9950ba147580e512cb45a480e3340cd293521c31c75b"
+    },
+    "audio/exemplo-casa.mp3": {
+      "bytes": 12096,
+      "sha256": "3e68eb59fe5925a0a4ef722a69b8e369462eb4fa7e2953d66429c6bf05475ef5"
+    },
+    "audio/exemplo-cenoura.mp3": {
+      "bytes": 12672,
+      "sha256": "549bb60b39f2d1ac6638afeeafb6ee30659d247ac3e4500d9678ecf01fc718e5"
+    },
+    "audio/exemplo-chave.mp3": {
+      "bytes": 11952,
+      "sha256": "7f183de43bc58cf05abc1ae6a367414002361b68647aac8d51884a71bbd6d9f8"
+    },
+    "audio/exemplo-cigarra.mp3": {
+      "bytes": 13536,
+      "sha256": "49c093fac90bc1f107b76fd3a6ee743448a4763bd596afd5ca6155615e74d08e"
+    },
+    "audio/exemplo-dedo.mp3": {
+      "bytes": 11376,
+      "sha256": "efc49caa4a74bc2989b6d38ff381a5059b7b52bac6599f268ea45b28b5c6d2ae"
+    },
+    "audio/exemplo-escada.mp3": {
+      "bytes": 12672,
+      "sha256": "bcca6294e7dcafa29118d0df4e72c1f2e3c1101d3361671c6e24f70cb0373805"
+    },
+    "audio/exemplo-flor.mp3": {
+      "bytes": 11232,
+      "sha256": "8c7855bc30680596bfec659b0407e70ce88c04bf8a17ac51be8cab96f195518b"
+    },
+    "audio/exemplo-fogueira.mp3": {
+      "bytes": 13104,
+      "sha256": "a98a8aba919a960802cca244a9bba5d4fbf064d6121d92062004acf739eb2858"
+    },
+    "audio/exemplo-funil.mp3": {
+      "bytes": 11808,
+      "sha256": "267c05f82115377290c34ce637f82fb9f3ae3dba5110a9da44de1ae27d0af2bd"
+    },
+    "audio/exemplo-galinha.mp3": {
+      "bytes": 12672,
+      "sha256": "ff6d84c479657427b6191a3d7e8a0421c48cb74ad7fa7a2ad35842b85068404a"
+    },
+    "audio/exemplo-gema.mp3": {
+      "bytes": 12096,
+      "sha256": "8f97e223341d79079ff81f912120b4734d9cf84636e385d74b8366248c844467"
+    },
+    "audio/exemplo-girafa.mp3": {
+      "bytes": 13392,
+      "sha256": "156d9d740a91d7cfb6690e242fd92dbf3db24b63f035615196d5bff1b30ffdea"
+    },
+    "audio/exemplo-janela.mp3": {
+      "bytes": 13248,
+      "sha256": "f6ac7b3ca85143c73b0237cfdbbebe3fe60fb68ffd3ed13fb323e63aae234405"
+    },
+    "audio/exemplo-leque.mp3": {
+      "bytes": 11664,
+      "sha256": "5a66e3e036082a46470378577e085b06cedd97a770737e449161c6ac27bce1b0"
+    },
+    "audio/exemplo-menina.mp3": {
+      "bytes": 12384,
+      "sha256": "1d1808ee8cce7f750666d89470a370948822b27809efbe0abf334de1a667aa09"
+    },
+    "audio/exemplo-menino.mp3": {
+      "bytes": 12384,
+      "sha256": "0b0ae139dcd44e2f0579ab4037ff09873462042bae94456591024567c2662b53"
+    },
+    "audio/exemplo-palhaco.mp3": {
+      "bytes": 13392,
+      "sha256": "1212ea4404ebb4e776fcdc8e3f0dca614618e86178697b81f108b715b1a9132c"
+    },
+    "audio/exemplo-passarinho.mp3": {
+      "bytes": 13680,
+      "sha256": "bf818b17728b5fcd01a7ae94d6fcd363b826409c182ee95dfa4827530d6a7df0"
+    },
+    "audio/exemplo-peixe.mp3": {
+      "bytes": 11808,
+      "sha256": "f177b843d509b8195ed1c496624ea3b75240755c30ba8c93ba276861386b3ef8"
+    },
+    "audio/exemplo-quadro.mp3": {
+      "bytes": 12096,
+      "sha256": "a308d4f206f83ab625ef66f35e863fbb3f8e30f0c8b06d1b7ad3fb926d43a21e"
+    },
+    "audio/exemplo-rato.mp3": {
+      "bytes": 11952,
+      "sha256": "1ffb62a7dcde0c5b760e07a4aaa8e0f4e1238eb822c9118b2364b2a4a5125d9b"
+    },
+    "audio/exemplo-sapato.mp3": {
+      "bytes": 13392,
+      "sha256": "2d85d6a32d3760924ac2404358de483e1792730a7c7c394ca72fa45f3ed27b9c"
+    },
+    "audio/exemplo-telhado.mp3": {
+      "bytes": 12816,
+      "sha256": "1781790b2e6d3d7b47bad594fe74d919ab4c177f33c69bbb061889f2437d0497"
+    },
+    "audio/exemplo-uva.mp3": {
+      "bytes": 11520,
+      "sha256": "e2612bbdbbd8fd68ac07add8cc4161b6fe2676212ad1c8348ad35ad920ad0d01"
+    },
+    "audio/exemplo-zebra.mp3": {
+      "bytes": 12240,
+      "sha256": "1913ead6ae0ea1fe395590ab394640b55c5d369d7cc2f02cf7093c32926c1d9a"
     },
     "audio/finish.mp3": {
       "bytes": 31104,
@@ -430,9 +749,9 @@
       "bytes": 12384,
       "sha256": "eeb92d68df746c6d421bdd754cf7eb591edc6814674501dac0cf8feb4940f5b0"
     },
-    "audio/frase-20d5affa2353.mp3": {
-      "bytes": 14400,
-      "sha256": "275001ebf93b017257165e51bf1d45c627a6377d1a7e136dc9f77948ed623f4a"
+    "audio/found.mp3": {
+      "bytes": 17712,
+      "sha256": "da70e89d23762819fe1188f203bd00790fe0da46fb92539a23a6eb5698dd2b90"
     },
     "audio/frase-3d2f79aca608.mp3": {
       "bytes": 17136,
@@ -450,13 +769,13 @@
       "bytes": 16848,
       "sha256": "94a68ac7ec34b54607aec3b2f0b5af81d76b36bfd5f359e54063b3c5e5d84b76"
     },
+    "audio/frase-a1e84f0d02f5.mp3": {
+      "bytes": 16416,
+      "sha256": "69af7716fda19239d640ce5c396b04835252e7e14cb75e2ab30706d61b9ffab1"
+    },
     "audio/frase-a92eadbc4509.mp3": {
       "bytes": 16704,
       "sha256": "a43df633bf87b98019c57341df94fa2e0ad2381dc39bb73cc96cc9310d9dbecb"
-    },
-    "audio/frase-b37fff422510.mp3": {
-      "bytes": 16848,
-      "sha256": "5afb660a6f90bc10404b02aa6b2decbd721b475fa034d2dd8a04f330f6b19f96"
     },
     "audio/funil.mp3": {
       "bytes": 10512,
@@ -567,8 +886,12 @@
       "sha256": "1d18956047534eac3fb03ff288a206b30fa6427b5a3af3c4c94b450791d675c9"
     },
     "audio/read-choose.mp3": {
-      "bytes": 18144,
-      "sha256": "2ac532040390f9846d91de93df52d0c50b6b9190f1eb9deb0e5291e9a0800ecb"
+      "bytes": 31968,
+      "sha256": "9d2d503699b68b77fe1f32b6693a2cf98182592f66052fee5a97b3757f5cba26"
+    },
+    "audio/realword.mp3": {
+      "bytes": 24048,
+      "sha256": "46367ed1cf3546da1e68dc4e8a1ca67003c8ffc3b1a0c58e340ae56ffb037ab5"
     },
     "audio/recall.mp3": {
       "bytes": 31824,
@@ -591,8 +914,8 @@
       "sha256": "b35554c6046287c0c48408f6230bc9da5dd1273dd039f2b0479fb4adc65948dd"
     },
     "audio/start.mp3": {
-      "bytes": 33120,
-      "sha256": "4a00f3f61a3f4202b5891c57bcd66dda61f4cbb7dfc8b54316ffabfa81c052c8"
+      "bytes": 29376,
+      "sha256": "02f92b85f7f2e31b40ef71bc5a5bac5e174a67575d9c3e774499c8479fd0a3a0"
     },
     "audio/success.mp3": {
       "bytes": 26928,
@@ -605,6 +928,10 @@
     "audio/telhado.mp3": {
       "bytes": 12096,
       "sha256": "68eae52dc11c3ede9084f418dc1095bffc25779a10b8c5ffc0c60b75b10680bb"
+    },
+    "audio/tryagain.mp3": {
+      "bytes": 17856,
+      "sha256": "33dd9e0e51e807e59094f3e4f8dac121fdfeeae75239bb8ffa1d5adcd722d0ca"
     },
     "audio/uva.mp3": {
       "bytes": 11232,
@@ -666,33 +993,29 @@
       "bytes": 638,
       "sha256": "2a7263d9ddf9d7b5b0a80547cc25aca73bcdad39a158d364c3aeb720b04d2a16"
     },
-    "images/frase-20d5affa2353.svg": {
-      "bytes": 1399,
-      "sha256": "17e2e3a4650a8eb4942190ce0365f492e532ead23d90530e1801312e2b7f9c80"
-    },
     "images/frase-3d2f79aca608.svg": {
-      "bytes": 2213,
-      "sha256": "602df4950725a8da5eb0ce4807eed1a905c0d0c116e1411687ecbbb08bb7196b"
+      "bytes": 2069,
+      "sha256": "da23090dc421f64cd50c8fcc24e66e1c853be310603f8feee00bb163c0c37f57"
     },
     "images/frase-69fcd4799ba6.svg": {
-      "bytes": 1217,
-      "sha256": "fb2dee351aa2dc52a0d2cbb63978e26031b78b20effcdb7454ac2a15d5b28237"
+      "bytes": 1577,
+      "sha256": "b281e63fd426dc638c2dd633452f89166c54ff3f09300c347ffca59d538702d9"
     },
     "images/frase-6f4bc3b2c2d7.svg": {
       "bytes": 2341,
       "sha256": "8c9547ac0530879348135f986c8bc542c87c67da9ab6a22385ad2b0012501834"
     },
     "images/frase-9753cfa8e327.svg": {
-      "bytes": 1354,
-      "sha256": "8a2d5f11647122f6520f3fddebe414c128f22e9d3e96e2d0ba31452041898b5f"
+      "bytes": 3955,
+      "sha256": "56782c73800c52c21510e36992fd1d7e4a836d64a090f386c8e5deaa46051a93"
+    },
+    "images/frase-a1e84f0d02f5.svg": {
+      "bytes": 1935,
+      "sha256": "2e48d9b66e2722bcfeab154d897f1b25e031fd2da237ebbf0a39288927861adc"
     },
     "images/frase-a92eadbc4509.svg": {
       "bytes": 1889,
       "sha256": "126c3b377a4452201de67af1817084ee147a04274656ef6e62562e66d0b4e2ec"
-    },
-    "images/frase-b37fff422510.svg": {
-      "bytes": 2048,
-      "sha256": "c6b27e4a04c5e37a708ffd5b2e5e90409032fc6f139f165673acf5785dd45df4"
     },
     "images/funil.svg": {
       "bytes": 495,
@@ -718,33 +1041,25 @@
       "bytes": 1145,
       "sha256": "4b663636aa2d3a7bd52d444b46556c3f4de320d8a2f884908e34c2671ff96bf3"
     },
-    "images/mana.svg": {
-      "bytes": 2128,
-      "sha256": "999280de75c99f018b329ba2841482a7e0ec93c1c8504aed52dddc6e8b8f4c3d"
-    },
-    "images/mano.svg": {
-      "bytes": 2133,
-      "sha256": "08bb69ec5ac740dbc3ae9822f25a80bb15a2cafec79c84a71c8792143edae556"
-    },
     "images/menina.svg": {
-      "bytes": 1132,
-      "sha256": "ed0b087af8a721dbebece6633260178dddd49d6a6f37ca5016c1a9241683d4b8"
+      "bytes": 1136,
+      "sha256": "fa78ee2e467f1f9524665b0b33bc9be149d23b16eb2eb1a10e9d99dd05845b4e"
     },
     "images/menino.svg": {
       "bytes": 1046,
       "sha256": "3ac929a92e3b8b4cc2e069e1d12a7835c9ac78f718ead1627de9bdfde2458de9"
     },
     "images/neve.svg": {
-      "bytes": 491,
-      "sha256": "ee2e500149619bcba928d22e2cbb5d14c2b1c7825a666cdf8814531738c95fbc"
+      "bytes": 3046,
+      "sha256": "58a135b5d0de57841a0b787cb8c5b24ef1c383b10e66870eaad28983b7cb579e"
     },
     "images/nove.svg": {
       "bytes": 613,
       "sha256": "3ee11ebc3eb6b731a52469a6474a4f85466f721ba1ff365a6cc80c52f5fb889a"
     },
     "images/ovo.svg": {
-      "bytes": 236,
-      "sha256": "a5abf3ec8c68b45d471a1007a696223a3ceee087f64f45051e50596b3e491291"
+      "bytes": 596,
+      "sha256": "15f8c64d8536fb2bb58ef01fb3c68546a7c7f27a6d4f23b1d8e36d25e2932f84"
     },
     "images/palhaco.svg": {
       "bytes": 1310,
