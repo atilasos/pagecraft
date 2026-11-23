@@ -80,6 +80,9 @@ def test_digraphs_cannot_be_split_across_syllables():
     assert not readable_at('carro',['car','ro'],slugs.index('arvore'),rep,slugs)
     assert readable_at('carro',['ca','rro'],slugs.index('cigarra'),rep,slugs)
     assert not readable_at('roupa',['rou','pa'],slugs.index('rato'),rep,slugs)
+    # Ditongos com acento também não se partem («véu» não é vé + u).
+    assert not readable_at('véu',['vé','u'],slugs.index('uva'),rep,slugs)
+    assert readable_at('saída',['sa','í','da'],slugs.index('casa'),rep,slugs)
 
 
 def test_function_words_and_sentence_words_follow_their_keyword():

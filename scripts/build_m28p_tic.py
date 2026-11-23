@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from jsonschema import Draft202012Validator
-from scripts.m28p_cycle import CYCLE_GAMES, MIN_ROUNDS, validate_cycle, image_choices, discover_rounds, near_syllables, newest_first, vocabulary_syllables
+from scripts.m28p_cycle import CYCLE_GAMES, MIN_ROUNDS, validate_cycle, image_choices, discover_rounds, near_syllables, newest_first, vocabulary_syllables, demo_word
 from server.activity_support import embed_activity_support
 from server.bridge_snippet import ensure_bridge_lite
 from server.typography import embed_activity_typography
@@ -320,16 +320,19 @@ def cycle_content(word, game, pool, lexicon=None):
     picturable = [resource(w) for w in pool['words'] if w['picturable']]
     conflicts = pool['visualConflicts']
     rounds, demo = [], None
+    if game in ('listen-build', 'discover'):
+        sample = demo_word(pool, 2, 3 if game == 'discover' else 6)
+        example = keyword if sample['slug'] == word['slug'] else resource(sample)
     if game == 'listen-build':
-        for index, item in enumerate(newest_first(pool, lambda w: len(w['syllables']) >= 2)[:4]):
+        for index, item in enumerate(newest_first(pool, lambda w: len(w['syllables']) >= 2, {sample['slug']})[:4]):
             rng = seed(index)
             units = item['syllables']
             extra = near_syllables(units, pool['families'], rng, 3 if len(units) <= 2 else 2, syllables)
             pieces = pieces_for(units + extra)
             rounds.append(dict(id=f"ouvir-{item['slug']}", target=resource(item), unit='syllable', length=len(units),
                                answer=[p['id'] for p in pieces[:len(units)]], pieces=mixed(pieces, rng, [units])))
-        extra = near_syllables(word['syllables'], pool['families'], seed('demo'), 2, syllables)
-        demo = dict(target=keyword, pieces=word['syllables'] + extra)
+        extra = near_syllables(sample['syllables'], pool['families'], seed('demo'), 2, syllables)
+        demo = dict(target=example, pieces=[p['label'] for p in mixed(pieces_for(sample['syllables'] + extra), seed('demo'), [sample['syllables']])])
     elif game == 'read-choose':
         usage = {}
         for item in newest_first(pool, lambda w: w['picturable']):
@@ -360,15 +363,15 @@ def cycle_content(word, game, pool, lexicon=None):
         tokens = [pool['keyword']['article'].capitalize(), word['label']]
         demo = dict(target=dict(text=' '.join(tokens), tokens=tokens, image=keyword['image']), pieces=tokens[::-1])
     else:
-        groups = discover_rounds(pool, random.Random(word['slug']), lexicon)
+        groups = discover_rounds(pool, random.Random(word['slug']), lexicon, reserved={sample['slug']})
         for index, group in enumerate(groups):
             pieces = pieces_for(group['pieces'])
             seed(index).shuffle(pieces)
             rounds.append(dict(id='descobrir-' + '-'.join(w['slug'] for w in group['hidden']), unit='syllable',
                                target=resource(group['hidden'][0]), warnings=group['warnings'],
                                lexicon=[resource(w) for w in group['hidden']], length=3, pieces=pieces))
-        extra = near_syllables(word['syllables'], pool['families'], seed('demo'), 1, syllables)
-        demo = dict(target=keyword, pieces=word['syllables'] + extra)
+        extra = near_syllables(sample['syllables'], pool['families'], seed('demo'), 1, syllables)
+        demo = dict(target=example, pieces=[p['label'] for p in mixed(pieces_for(sample['syllables'] + extra), seed('demo'), [sample['syllables']])])
     if len(rounds) < MIN_ROUNDS[game] or demo is None:
         need = MIN_ROUNDS[game]
         why = " Cada alvo requer 2 distratores sem conflitos visuais entre as opções." if game == 'read-choose' else ''

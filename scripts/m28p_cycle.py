@@ -18,7 +18,8 @@ CYCLE_GAMES = {
 }
 VOWEL_BASES = {'a': 'aáâ', 'e': 'eéê', 'i': 'ií', 'o': 'oóô', 'u': 'uú'}
 # Ditongos orais e nasais que só podem aparecer dentro de uma unidade já introduzida.
-DIPHTHONGS = ('ai', 'ao', 'au', 'ei', 'eu', 'iu', 'oi', 'ou', 'ui', 'ão', 'ãe', 'õe')
+DIPHTHONGS = ('ai', 'ao', 'au', 'ei', 'eu', 'iu', 'oi', 'ou', 'ui', 'ão', 'ãe', 'õe',
+              'ái', 'áu', 'éi', 'éu', 'êi', 'êu', 'ói', 'ôu', 'óu')
 # Dígrafos que só se leem dentro de uma unidade já trabalhada («ss» de passarinho, não «s» de escada + «s»).
 DIGRAPHS = ('ch', 'lh', 'nh', 'rr', 'ss', 'qu', 'gu')
 TOKEN = re.compile(r"[^\W\d_]+(?:-[^\W\d_]+)*")
@@ -213,11 +214,13 @@ def validate_cycle(cycle, words, lexicon=None):
     return result
 
 
-def newest_first(pool, predicate=lambda w: True):
-    """Palavras novas desta palavra-chave primeiro; depois as anteriores, das mais recentes para as mais antigas."""
-    current = pool['keyword']['slug']
-    fresh = [w for w in pool['newWords'] if predicate(w)]
-    rest = [w for w in reversed(pool['words']) if w['slug'] != current and w not in fresh and predicate(w)]
+def newest_first(pool, predicate=lambda w: True, reserved=()):
+    """Palavras novas desta palavra-chave primeiro; depois as anteriores, das mais recentes para as mais antigas.
+
+    A palavra-chave e as palavras reservadas para a demonstração nunca são rondas."""
+    excluded = {pool['keyword']['slug'], *reserved}
+    fresh = [w for w in pool['newWords'] if predicate(w) and w['slug'] not in excluded]
+    rest = [w for w in reversed(pool['words']) if w['slug'] not in excluded and w not in fresh and predicate(w)]
     return fresh + rest
 
 
@@ -236,6 +239,16 @@ def image_choices(target, items, conflicts, rng=None, usage=None):
     if usage is not None:
         pairs.sort(key=lambda pair: sum(usage.get(w['slug'], 0) for w in pair))
     return [target, *pairs[0]]
+
+
+def demo_word(pool, low=2, high=3):
+    """Exemplo da demonstração: a palavra-chave, ou a palavra-chave anterior mais recente com 2 a 3 sílabas
+    quando a atual não cabe no jogo («flor» tem uma sílaba, «passarinho» tem quatro)."""
+    keywords = [w for w in pool['words'] if w.get('keyword')]
+    for word in reversed(keywords):
+        if low <= len(word['syllables']) <= high:
+            return word
+    return keywords[-1]
 
 
 def vocabulary_syllables(pool):
@@ -293,7 +306,7 @@ def _combined_words(pieces, must, limit=3):
     return words
 
 
-def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3):
+def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserved=()):
     """Agrupa as palavras escondidas por ronda e escolhe sílabas suficientes, sem excesso.
 
     Cada ronda mostra só as sílabas das suas palavras e uma sílaba a mais. São escondidas
@@ -304,7 +317,7 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3):
     vocabulário nem, havendo dicionário, outras palavras reais. O que não for possível
     evitar fica em `warnings`, para o professor rever.
     """
-    usable = newest_first(pool, lambda w: 2 <= len(w['syllables']) <= 3)
+    usable = newest_first(pool, lambda w: 2 <= len(w['syllables']) <= 3, reserved)
     vocabulary = [w for w in pool['words'] if len(w['syllables']) <= 3]
     syllables = vocabulary_syllables(pool)
     remaining, rounds = list(usable), []
