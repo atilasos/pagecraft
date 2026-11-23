@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timezone
+
 
 from fastapi.responses import FileResponse
 from fastapi import APIRouter, HTTPException, Request, Response
@@ -94,9 +96,36 @@ async def revoke_pairing(request: Request):
 async def current_session(request: Request):
     classroom = request.app.state.classroom
     session = await classroom.current_board_session()
+    focus = await request.app.state.lesson_plans.board_focus()
+    # A escolha mais recente do professor ocupa o quadro: começar ou retomar uma
+    # sessão ao vivo depois de mostrar um roteiro volta a mostrar a sessão.
+    if focus is not None and session is not None:
+        full = await classroom.get_session(session['id']) or {}
+        live_since = _instant(full.get('active_since') or full.get('started_at') or session['started_at'])
+        if live_since > _instant(focus['set_at']):
+            focus = None
+    if focus is not None:
+        return focus
     if session is None:
         return Response(status_code=204)
     return session
+
+
+def _instant(value):
+    instant = datetime.fromisoformat(str(value).replace('Z', '+00:00'))
+    return instant if instant.tzinfo else instant.replace(tzinfo=timezone.utc)
+
+
+@router.get("/lesson-content")
+@access_policy(RoutePolicy.BOARD)
+async def board_lesson_content(request: Request):
+    """O quadro só demonstra a atividade de roteiro que o professor escolheu."""
+    focus = await request.app.state.lesson_plans.board_focus()
+    if focus is None:
+        raise HTTPException(404, 'Nenhuma atividade de roteiro está no quadro.')
+    learning = request.app.state.learning
+    path = learning.content_path(await learning.activity(focus['activity_code']))
+    return FileResponse(path, headers=ACTIVITY_CONTENT_HEADERS)
 
 
 @router.get("/sessions/{session_id}/stream")

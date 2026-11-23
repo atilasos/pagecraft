@@ -209,6 +209,12 @@ class Learning:
         return sorted((self.public_attempt(r, teacher=True) for r in records if not r['preview']),
                       key=lambda r: r['started_at'], reverse=True)
 
+    async def lesson_attempts(self, lesson_code):
+        """Realizações de um roteiro, em bruto, para o resumo do professor."""
+        directory = self.storage.root / "learning" / "realizations"
+        records = [await self.storage.read_json(p) for p in directory.glob('*.json')]
+        return [r for r in records if r and not r['preview'] and r.get('lesson_code') == lesson_code.upper()]
+
     @staticmethod
     def public_attempt(attempt, *, teacher=False):
         hidden = {"credential_hash", "expires_at"}
