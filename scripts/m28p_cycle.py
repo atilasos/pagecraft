@@ -11,14 +11,16 @@ import re
 import unicodedata
 
 CYCLE_GAMES = {
-    'listen-build': ('Ouvir e montar', 'Ouve e junta as sílabas.', 'Monto uma palavra a partir do áudio.'),
-    'read-choose': ('Ler e escolher', 'Lê e escolhe a imagem.', 'Escolho a imagem da palavra escrita.'),
+    'listen-build': ('Ouvir e montar', 'Ouve e junta as sílabas.', 'Monto a palavra que ouvi.'),
+    'read-choose': ('Ler e escolher', 'Lê e escolhe a imagem.', 'Escolho a imagem da palavra que li.'),
     'sentence': ('Montar frases', 'Ordena as palavras da frase.', 'Ordeno palavras para formar uma frase.'),
-    'discover': ('Descobrir palavras', 'Junta sílabas. Descobre as palavras escondidas.', 'Experimento combinações e descubro palavras.'),
+    'discover': ('Descobrir palavras', 'Junta as sílabas. Descobre as palavras escondidas.', 'Junto sílabas e descubro palavras.'),
 }
 VOWEL_BASES = {'a': 'aáâ', 'e': 'eéê', 'i': 'ií', 'o': 'oóô', 'u': 'uú'}
 # Ditongos orais e nasais que só podem aparecer dentro de uma unidade já introduzida.
-DIPHTHONGS = ('ai', 'au', 'ei', 'eu', 'iu', 'oi', 'ou', 'ui', 'ão', 'ãe', 'õe')
+DIPHTHONGS = ('ai', 'ao', 'au', 'ei', 'eu', 'iu', 'oi', 'ou', 'ui', 'ão', 'ãe', 'õe')
+# Dígrafos que só se leem dentro de uma unidade já trabalhada («ss» de passarinho, não «s» de escada + «s»).
+DIGRAPHS = ('ch', 'lh', 'nh', 'rr', 'ss', 'qu', 'gu')
 TOKEN = re.compile(r"[^\W\d_]+(?:-[^\W\d_]+)*")
 MIN_ROUNDS = {'listen-build': 3, 'read-choose': 3, 'sentence': 1, 'discover': 1}
 
@@ -51,7 +53,8 @@ def units_until(repertoire, slugs, index):
     for onset, bases in onsets.items():
         units |= {onset + v for v in vowels if plain(v) in bases}
         units |= {onset + n for n in nuclei if n[0] in bases}
-    units |= {u + c for u in list(units) for c in codas if u[-1] in vowels}
+    # Sílabas fechadas só depois de vogal simples (não depois de ditongo: «roul» não é uma sílaba do repertório).
+    units |= {u + c for u in list(units) for c in codas if u[-1] in vowels and not any(u.endswith(n) for n in nuclei)}
     return units
 
 
@@ -61,13 +64,13 @@ def _context_errors(label, index, repertoire, slugs):
 
 
 def _diphthong_errors(label, syllables):
-    """Um ditongo que atravessa a fronteira silábica não foi trabalhado como unidade."""
+    """Um ditongo ou dígrafo que atravessa a fronteira silábica não foi trabalhado como unidade."""
     bounds, start = [], 0
     for syllable in syllables:
         bounds.append((start, start + len(syllable)))
         start += len(syllable)
     errors = []
-    for d in DIPHTHONGS:
+    for d in DIPHTHONGS + DIGRAPHS:
         for match in re.finditer(d, label):
             if not any(a <= match.start() and match.end() <= b for a, b in bounds):
                 errors.append(d)
@@ -80,6 +83,26 @@ def readable_at(label, syllables, index, repertoire, slugs):
     units = units_until(repertoire, slugs, index)
     return (all(s in units for s in syllables) and not _context_errors(label, index, repertoire, slugs)
             and not _diphthong_errors(label, syllables))
+
+
+def segmentations(label, units):
+    """Todas as divisões da palavra em unidades do repertório."""
+    result = []
+    def search(start, parts):
+        if start == len(label):
+            result.append(parts)
+            return
+        for end in range(start + 1, len(label) + 1):
+            if label[start:end] in units:
+                search(end, parts + [label[start:end]])
+    search(0, [])
+    return result
+
+
+def readable_word(label, index, repertoire, slugs):
+    """Indica se alguma divisão da palavra se lê com o que foi trabalhado até à palavra-chave index."""
+    units = units_until(repertoire, slugs, index)
+    return any(readable_at(label, parts, index, repertoire, slugs) for parts in segmentations(label, units))
 
 
 def _check_item(slug, item, index, repertoire, slugs, lexicon, first_rule=True):
@@ -128,9 +151,9 @@ def validate_cycle(cycle, words, lexicon=None):
     ):
         raise ValueError('visualConflicts deve conter grupos de palavras existentes.')
     for function in cycle['functionWords']:
-        if not readable_at(function['word'], function.get('syllables', [function['word']]), 0, repertoire, slugs):
+        start = slugs.index(function.get('from', slugs[0]))
+        if not readable_at(function['word'], function.get('syllables', [function['word']]), start, repertoire, slugs):
             raise ValueError(f'Palavra funcional fora do repertório: {function["word"]}')
-    function_words = {f['word'] for f in cycle['functionWords']}
     ids = {}
     known, extra, sentences, result = [], [], [], {}
     for index, keyword in enumerate(ordered):
@@ -157,10 +180,12 @@ def validate_cycle(cycle, words, lexicon=None):
             known.append(word)
             current.append(word)
         for entry in section.get('sentenceWords', []):
-            _check_item(slug, entry, index, repertoire, slugs, lexicon)
+            # Verbos e adjetivos das frases não são itens de jogo: entram quando uma frase precisa deles.
+            _check_item(slug, entry, index, repertoire, slugs, lexicon, first_rule=False)
             if entry['label'] in {w['label'] for w in known + extra}:
                 raise ValueError(f'{slug}: palavra repetida: {entry["label"]}')
             extra.append(dict(entry, newIn=slug))
+        function_words = {f['word'] for f in cycle['functionWords'] if slugs.index(f.get('from', slugs[0])) <= index}
         allowed = {w['label'].lower() for w in known + extra} | function_words
         for sentence in section['sentences']:
             tokens = sentence['tokens']
@@ -176,7 +201,7 @@ def validate_cycle(cycle, words, lexicon=None):
             if (len(tokens) == 5 and lowered[2] in ('é', 'e') and lowered[0] == lowered[3]
                     and [tokens[0], tokens[4], tokens[2], tokens[3], tokens[1]] not in sentence.get('alternatives', [])):
                 raise ValueError(f'{slug}: a frase admite a ordem inversa; registar alternatives: {sentence["text"]}')
-            if not isinstance(sentence.get('scene'), list) or not sentence['scene']:
+            if not isinstance(sentence.get('scene'), list) or not 1 <= len(sentence['scene']) <= 2:
                 raise ValueError(f'{slug}: falta a cena ilustrada de {sentence["text"]}')
             sentences.append(dict(sentence, slug=asset_id(sentence['text'], True), newIn=slug))
         if len({s['text'] for s in sentences}) != len(sentences):
@@ -213,11 +238,24 @@ def image_choices(target, items, conflicts, rng=None, usage=None):
     return [target, *pairs[0]]
 
 
-def near_syllables(units, families, rng, count=3):
-    """Distratores do mesmo tamanho e da mesma família (mesmo ataque ou mesma vogal)."""
+def vocabulary_syllables(pool):
+    """Sílabas que a criança já viu em palavras: são estas as candidatas a distrator."""
+    return sorted({s for w in pool['words'] for s in w['syllables']})
+
+
+def near_syllables(units, families, rng, count=3, preferred=None):
+    """Distratores do mesmo tamanho e da mesma família (mesmo ataque ou mesma vogal).
+
+    Dá prioridade a sílabas que já apareceram em palavras (`preferred`), para não mostrar
+    combinações estranhas do repertório; só recorre às restantes quando faltam candidatas.
+    """
     lengths = {len(u) for u in units}
     accented = any(plain(u) != u for u in units)
-    pool = [f for f in families if len(f) in lengths and f not in units and (accented or plain(f) == f)]
+    def fits(f):
+        return len(f) in lengths and f not in units and (plain(f) == f or (accented and plain(f) in {plain(u) for u in units}))
+    pool = [f for f in (preferred or []) if fits(f)]
+    if len(pool) < count:
+        pool += [f for f in families if fits(f) and f not in pool and plain(f) == f]
     def closeness(candidate):
         score = 0
         for unit in units:
@@ -229,7 +267,8 @@ def near_syllables(units, families, rng, count=3):
                 score = max(score, 1)
         return score
     rng.shuffle(pool)
-    pool.sort(key=closeness, reverse=True)
+    favoured = set(preferred or [])
+    pool.sort(key=lambda f: (f in favoured, closeness(f)), reverse=True)
     return pool[:count]
 
 
@@ -257,13 +296,17 @@ def _combined_words(pieces, must, limit=3):
 def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3):
     """Agrupa as palavras escondidas por ronda e escolhe sílabas suficientes, sem excesso.
 
-    Cada ronda mostra só as sílabas das suas palavras e uma sílaba a mais. As palavras
-    escondidas são todas as do vocabulário que se formam com essas peças, para que o
-    contador corresponda ao que é possível descobrir, e nunca passam de três. A sílaba a
-    mais é escolhida para não formar palavras do vocabulário nem, havendo dicionário,
-    outras palavras reais.
+    Cada ronda mostra só as sílabas das suas palavras e uma sílaba a mais. São escondidas
+    todas as palavras do vocabulário que se formam com essas peças, para que o contador
+    corresponda ao que é possível descobrir, e nunca mais de três. A palavra-chave fica
+    reservada para a demonstração: nenhum tabuleiro a deixa formar. O grupo e a sílaba a
+    mais escolhem-se em conjunto, para que a sílaba a mais não forme palavras do
+    vocabulário nem, havendo dicionário, outras palavras reais. O que não for possível
+    evitar fica em `warnings`, para o professor rever.
     """
     usable = newest_first(pool, lambda w: 2 <= len(w['syllables']) <= 3)
+    vocabulary = [w for w in pool['words'] if len(w['syllables']) <= 3]
+    syllables = vocabulary_syllables(pool)
     remaining, rounds = list(usable), []
     def board(group):
         counts = {}
@@ -273,43 +316,51 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3):
         pieces = [s for s, n in counts.items() for _ in range(n)]
         hidden = list(group) + [w for w in usable if w not in group and formable(w['label'], pieces)]
         return pieces, hidden
+    def honest(pieces, hidden):
+        labels = {w['label'] for w in hidden}
+        return not any(w['label'] not in labels and formable(w['label'], pieces) for w in vocabulary)
+    def real_words(pieces, labels, must=None):
+        made = set()
+        for size in range(2, 4):
+            for order in permutations(range(len(pieces)), size):
+                if must is None or must in order:
+                    made.add(''.join(pieces[i] for i in order))
+        return sorted(word for word in made - labels if lexicon and lexicon(word))
     while len(remaining) >= 2 and len(rounds) < max_rounds:
         size = 3 if len(remaining) == 3 else 2
-        found = None
         used = {w['label'] for r in rounds for w in r['hidden']}
-        # Primeiro, tabuleiros que não voltam a esconder palavras de rondas anteriores.
-        for strict in (True, False):
-            for first in range(len(remaining)):
-                for others in combinations(range(first + 1, len(remaining)), size - 1):
-                    group = [remaining[first]] + [remaining[i] for i in others]
-                    pieces, hidden = board(group)
-                    if len(hidden) <= max_hidden and not (strict and used & {w['label'] for w in hidden}):
-                        found = pieces, hidden
-                        break
-                if found:
-                    break
-            if found:
-                break
-        if not found:
+        options = []
+        for first in range(len(remaining)):
+            for others in combinations(range(first + 1, len(remaining)), size - 1):
+                group = [remaining[first]] + [remaining[i] for i in others]
+                pieces, hidden = board(group)
+                if len(hidden) <= max_hidden and honest(pieces, hidden):
+                    options.append((bool(used & {w['label'] for w in hidden}), first, pieces, hidden))
+        if not options:
             break
-        pieces, hidden = found
-        labels = {w['label'] for w in hidden}
-        vocabulary = {w['label'] for w in pool['words']}
-        candidates = sorted(s for s in pool['families'] if len(s) >= 2 and plain(s) == s and s not in pieces)
-        rng.shuffle(candidates)
+        options.sort(key=lambda option: (option[0], option[1]))
         best = None
-        for candidate in candidates:
-            board_pieces = pieces + [candidate]
-            if any(w not in hidden and formable(w['label'], board_pieces) for w in usable):
-                continue
-            made = _combined_words(board_pieces, len(pieces)) - labels
-            clash = len(made & vocabulary) * 10 + (sum(1 for word in made if lexicon(word)) if lexicon else 0)
-            if best is None or clash < best[0]:
-                best = (clash, candidate)
-            if clash == 0:
+        for repeated, _, pieces, hidden in options[:12]:
+            labels = {w['label'] for w in hidden}
+            candidates = sorted(s for s in syllables if len(s) >= 2 and plain(s) == s and s not in pieces)
+            rng.shuffle(candidates)
+            for candidate in candidates:
+                board_pieces = pieces + [candidate]
+                if not honest(board_pieces, hidden):
+                    continue
+                clash = len(real_words(board_pieces, labels, len(pieces)))
+                score = (repeated, clash)
+                if best is None or score < best[0]:
+                    best = (score, board_pieces, hidden)
+                if clash == 0:
+                    break
+            if best and best[0] == (False, 0):
                 break
-        if best:
-            pieces = pieces + [best[1]]
-        rounds.append(dict(pieces=pieces, hidden=hidden))
+        if best is None:
+            _, _, pieces, hidden = options[0]
+        else:
+            _, pieces, hidden = best
+        labels = {w['label'] for w in hidden}
+        rounds.append(dict(pieces=pieces, hidden=hidden, warnings=real_words(pieces, labels)))
         remaining = [w for w in remaining if w['label'] not in labels]
     return rounds

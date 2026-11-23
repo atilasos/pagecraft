@@ -62,11 +62,57 @@ def test_cumulative_repertoire_and_generation_limits():
     (lambda c:c['functionWords'].append(dict(word='ai',syllables=['a','i'])),'funcional'),
     (lambda c:(c['repertoire']['byKeyword']['uva']['onsets'].update(s='aeiou'),c['keywords']['uva']['newWords'].append(dict(label='vaso',syllables=['va','so'],picturable=True))),'s entre vogais'),
     (lambda c:c['keywords']['uva']['sentences'].append(dict(text='A uva mu.',tokens=['A','uva','mu'],scene=[{'image':'uva'},{'image':'uva'}])),'token'),
+    (lambda c:c['functionWords'].append(dict(word='da',**{'from':'menina'})),'funcional'),
+    (lambda c:c['keywords']['uva']['sentences'].append(dict(text='A uva é da avó.',tokens=['A','uva','é','da','avó'],scene=[{'image':'uva'}])),'token'),
 ])
 def test_refuses_invalid_editorial_data(change,match):
     cycle=copy.deepcopy(source());change(cycle)
     with pytest.raises(ValueError,match=match):
         validate_cycle(cycle,motor.read_words())
+
+
+def test_digraphs_cannot_be_split_across_syllables():
+    from scripts.m28p_cycle import readable_at
+    cycle=source();slugs=[w['slug'] for w in sorted(motor.read_words(),key=lambda w:w['order'])]
+    rep=cycle['repertoire']
+    # «passo» como pas + so (s de escada + s) e «carro» como car + ro (r de árvore + r) antecipariam ss e rr.
+    assert not readable_at('passo',['pas','so'],slugs.index('escada'),rep,slugs)
+    assert not readable_at('carro',['car','ro'],slugs.index('arvore'),rep,slugs)
+    assert readable_at('carro',['ca','rro'],slugs.index('cigarra'),rep,slugs)
+    assert not readable_at('roupa',['rou','pa'],slugs.index('rato'),rep,slugs)
+
+
+def test_function_words_and_sentence_words_follow_their_keyword():
+    cycle=source()
+    cycle['functionWords'].append({'word':'da','from':'dedo'})
+    cycle['keywords']['uva']['sentenceWords'].append({'label':'ama','syllables':['a','ma']})
+    cycle['keywords']['uva']['sentences'].append(dict(text='A avó ama a uva.',tokens=['A','avó','ama','a','uva'],scene=[{'image':'avo'},{'image':'uva'}]))
+    pools=validate_cycle(cycle,motor.read_words())
+    assert 'ama' in {w['label'] for w in pools['uva']['sentenceWords']}
+    cycle['keywords']['uva']['sentences'].append(dict(text='A uva é da avó.',tokens=['A','uva','é','da','avó'],scene=[{'image':'uva'}]))
+    with pytest.raises(ValueError,match='token'):
+        validate_cycle(cycle,motor.read_words())
+
+
+def test_class_sentence_warnings_use_the_reading_rules():
+    from server.classroom.sentences import prepare_sentence
+    text,tokens,warnings=prepare_sentence('Avó, vê o guarda-chuva!','uva')
+    assert text=='Avó, vê o guarda-chuva!' and 'guarda-chuva' in tokens
+    _,_,warnings=prepare_sentence('O meu ovo','uva')
+    assert any('meu' in w for w in warnings)
+    _,_,warnings=prepare_sentence('A avó vê o ovo','uva')
+    assert warnings==[]
+
+
+def test_round_and_piece_ids_follow_content():
+    pools=validate_cycle(source(),motor.read_words())
+    word=motor.read_words()[2]
+    for game in motor.CYCLE_GAMES:
+        data,_=motor.cycle_content(word,game,pools['uva'])
+        for r in data['rounds']:
+            assert not re.fullmatch(r'r\d+',r['id'])
+            if r.get('pieces'):
+                assert all(p['id'].split('#')[0]==p['label'] for p in r['pieces'])
 
 
 def test_js_cycle_state_and_recovery():
@@ -187,7 +233,8 @@ def test_discover_rounds_show_only_needed_syllables_and_honest_counts():
             assert word['label'] not in {w['label'] for w in group['hidden']}
             assert all(formable(w['label'],group['pieces']) for w in group['hidden'])
             hidden={w['label'] for w in group['hidden']}
-            assert not [w['label'] for w in pool['words'] if w['slug']!=word['slug'] and 2<=len(w['syllables'])<=3 and w['label'] not in hidden and formable(w['label'],group['pieces'])]
+            # Nenhuma palavra do vocabulário (nem a palavra-chave da demonstração) se forma sem estar escondida.
+            assert not [w['label'] for w in pool['words'] if len(w['syllables'])<=3 and w['label'] not in hidden and formable(w['label'],group['pieces'])]
     assert formable('ovo',['o','vo']) and not formable('ovo',['vo']) and not formable('nono',['no'])
 
 
@@ -203,6 +250,14 @@ const rounds=TicModel.classRounds(fixed,sentences);
 assert.equal(rounds[0].id,'c-abc');assert.equal(rounds[0].target.text,'A menina!');
 assert.deepEqual(rounds,TicModel.classRounds(fixed,sentences));
 assert.equal(TicModel.classRounds(fixed,Array.from({length:5},(_,i)=>({...sentences[0],id:String(i)}))).length,4);
+// Com várias frases da turma, a retoma volta à segunda frase em qualquer ordem de chegada.
+{const many=[{id:'a1',text:'A uva.',tokens:['A','uva']},{id:'a2',text:'O ovo.',tokens:['O','ovo']}];
+ const full=TicModel.classRounds(fixed,many);const st=TicModel.initial();
+ TicModel.edit(st,full[0],full[0].answer);TicModel.confirm(st,full[0]);st.page=1;st.pageId='c-a2';
+ const early=TicModel.sanitize({rounds:fixed},JSON.parse(JSON.stringify(st)));assert.equal(early.pageId,'c-a2');
+ const merged=TicModel.retainState(st,early,fixed);
+ assert.equal(TicModel.sanitize({rounds:full},merged).page,1);
+ assert.equal(TicModel.sanitize({rounds:full},st).page,1);}
 const raw=TicModel.initial();raw.page=0;raw.pageId='c-abc';
 TicModel.edit(raw,rounds[0],rounds[0].answer);TicModel.confirm(raw,rounds[0]);
 // A retoma volta à mesma frase mesmo quando as frases da turma chegam depois.
