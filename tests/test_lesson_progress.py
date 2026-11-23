@@ -170,7 +170,17 @@ async def test_board_shows_chosen_lesson_activity_until_a_newer_live_session(cli
         live = await teacher.post('/api/sessions', json={'class_id': cls['id'], 'activity_slug': 'zz-dobro-ensaio'})
         assert live.status_code in (200, 201), live.text
         assert (await screen.get('/api/board/session')).json().get('kind') != 'lesson'
-        await teacher.post(f"/api/sessions/{live.json()['id']}/close")
+        session_id = live.json()['id']
+        assert (await screen.get(f'/api/board/sessions/{session_id}/content')).status_code == 200
+        # Escolher depois um roteiro tira a sessão do quadro, também para o stream e o conteúdo.
+        ticks = []
+        app.state.classroom.tick_session = lambda sid, **kw: ticks.append(sid)
+        app.state.classroom.live_session_ids = lambda: (session_id,)
+        await teacher.put(f'/api/learning/lessons/{code}/board', json={'activity_code': codes['math']})
+        assert ticks == [session_id]
+        assert (await screen.get('/api/board/session')).json()['kind'] == 'lesson'
+        assert (await screen.get(f'/api/board/sessions/{session_id}/content')).status_code == 404
+        await teacher.post(f"/api/sessions/{session_id}/close")
         await teacher.put(f'/api/learning/lessons/{code}/board', json={'activity_code': codes['math']})
         assert (await screen.get('/api/board/session')).json()['kind'] == 'lesson'
         assert (await teacher.put(f'/api/learning/lessons/{code}/board', json={'activity_code': None})).status_code == 200

@@ -56,18 +56,21 @@ def test_teacher_distributes_word_and_other_activity_and_pupil_returns_to_own_li
     expect(page.locator('#lesson-form'), page.locator('#status').text_content()).not_to_have_attribute('inert', '')
     page.get_by_label('Nome do roteiro', exact=True).fill('Leitura e matemática')
     page.get_by_label('Turma', exact=True).select_option(cls['id'])
-    page.get_by_label('Nome do conjunto', exact=True).fill('Leitores')
-    page.locator('#students').get_by_role('checkbox', name='Ana', exact=True).check()
-    page.locator('#students').get_by_role('checkbox', name='Bruno', exact=True).check()
-    page.get_by_role('checkbox', name='menina (6)', exact=True).check()
-    page.get_by_role('button', name='Acrescentar conjunto ao roteiro', exact=True).click()
-    expect(page.locator('#assignments')).to_contain_text('6 atividades')
-    expect(page.locator('#unassigned')).to_contain_text('Carla')
-    page.get_by_label('Nome do conjunto', exact=True).fill('Matemática')
-    page.locator('#students').get_by_role('checkbox', name='Carla', exact=True).check()
+    # Dois alunos na mesma palavra com uma só ação; a Carla com outra atividade.
+    page.get_by_label('Marcar Ana', exact=True).check()
+    page.get_by_label('Marcar Bruno', exact=True).check()
+    expect(page.locator('#marked-count')).to_have_text('2 alunos marcados')
+    page.get_by_label('Palavra para os marcados', exact=True).select_option('menina')
+    page.get_by_role('button', name='Dar esta palavra', exact=True).click()
+    expect(page.get_by_label('Palavra de Bruno', exact=True)).to_have_value('menina')
+    expect(page.locator('#plan-summary')).to_contain_text('Sem nada atribuído: Carla')
+    page.get_by_role('button', name='Desmarcar', exact=True).click()
+    page.get_by_label('Marcar Carla', exact=True).check()
+    page.get_by_role('button', name='Escolher outras atividades…', exact=True).click()
     page.get_by_role('checkbox', name='Selecionar Metades na aula', exact=True).check()
-    page.get_by_role('button', name='Acrescentar conjunto ao roteiro', exact=True).click()
-    expect(page.locator('#unassigned')).to_have_text('Todos os alunos têm atividades atribuídas.')
+    page.get_by_role('button', name='Atribuir ao aluno marcado', exact=True).click()
+    expect(page.locator('#plan-rows')).to_contain_text('Metades na aula')
+    expect(page.locator('#plan-summary')).to_contain_text('Todos os alunos têm um plano')
     page.get_by_role('button', name='Guardar roteiro da aula', exact=True).click()
     expect(page.locator('#save-status')).to_have_text('Roteiro guardado.')
     lesson = next(l for l in page.request.get(origin + '/api/learning/lessons').json() if l['title'] == 'Leitura e matemática')
@@ -104,16 +107,16 @@ def test_teacher_distributes_word_and_other_activity_and_pupil_returns_to_own_li
         assert report['completed_at']
     finally:
         pupil.close()
-    # O professor consegue alterar um conjunto existente e encerrar a entrada.
-    page.locator('#assignments').get_by_role('button', name='Alterar conjunto', exact=True).first.click()
-    page.locator('#students').get_by_role('checkbox', name='Carla', exact=True).check()
-    page.get_by_role('button', name='Guardar alteração do conjunto', exact=True).click()
+    # O professor acrescenta a palavra à Carla e encerra a entrada.
+    page.get_by_label('Palavra de Carla', exact=True).select_option('menina')
     page.get_by_label('Disponível aos alunos', exact=True).uncheck()
     page.get_by_role('button', name='Guardar roteiro da aula', exact=True).click()
     expect(page.locator('#save-status')).to_have_text('Roteiro guardado.')
     updated = next(l for l in page.request.get(origin + '/api/learning/lessons').json() if l['code'] == lesson['code'])
     assert not updated['active']
-    assert cls['students'][2]['id'] in updated['assignments'][0]['student_ids']
+    carla = next(a for a in updated['assignments'] if cls['students'][2]['id'] in a['student_ids'])
+    assert carla['word'] == 'menina' and other['code'] in carla['activity_codes']
+    assert len(carla['activity_codes']) == 7
     page.get_by_role('link', name='Ver registos deste roteiro', exact=True).click()
     expect(page.locator('#filter-lesson')).to_have_value(lesson['code'])
     expect(page.locator('#reports-panel')).to_be_visible()
@@ -180,3 +183,86 @@ def test_closing_roster_keeps_existing_realization_recoverable(page, studio_orig
     page.get_by_role('button', name='Autoavaliar e terminar', exact=True).click()
     page.get_by_role('button', name='Guardar e terminar', exact=True).click()
     expect(page.locator('#done')).to_be_visible()
+
+
+def test_teacher_follows_lesson_records_missing_self_assessment_and_switches_board(page, studio_origin):
+    origin = studio_origin
+    activities, other, cls = seed(page, origin)
+    codes = [a['code'] for a in activities] + [other['code']]
+    assert page.request.post(origin + '/api/learning/activities/publish', data={'codes': codes}).status == 200
+    ana, bruno, carla = cls['students']
+    lesson = page.request.post(origin + '/api/learning/lessons', data={
+        'title': 'Acompanhar', 'class_id': cls['id'], 'offline': {carla['id']: 'Caderno'},
+        'assignments': [
+            {'title': 'Palavra menina', 'word': 'menina', 'student_ids': [ana['id']],
+             'activity_codes': [a['code'] for a in activities]},
+            {'title': 'Metades', 'student_ids': [bruno['id']], 'activity_codes': [other['code']]},
+        ]}).json()
+    pupil = page.context.browser.new_context()
+    board = page.context.browser.new_context()
+    try:
+        tab = pupil.new_page()
+        tab.goto(origin + f"/{other['code']}?aula={lesson['code']}&aluno={bruno['id']}")
+        tab.get_by_role('button', name='Começar', exact=True).click()
+        expect(tab.locator('#work')).to_be_visible()
+        screen = board.new_page()
+        screen.goto(origin + '/board/')
+        expect(screen.locator('#pairing-code span')).to_have_count(6)
+        pairing = ''.join(screen.locator('#pairing-code span').all_inner_texts())
+        assert page.request.post(origin + '/api/board/pairings/confirm', data={'code': pairing}).status == 200
+        expect(screen.locator('#waiting')).to_be_visible(timeout=8000)
+
+        page.goto(origin + f"/teacher/lesson-live.html?aula={lesson['code']}")
+        rows = page.locator('#rows')
+        expect(rows.get_by_role('row', name=re.compile('^Bruno'))).to_contain_text('A trabalhar')
+        expect(rows.get_by_role('row', name=re.compile('^Bruno'))).to_contain_text('Sem autoavaliação em 1 atividade')
+        expect(rows.get_by_role('row', name=re.compile('^Ana'))).to_contain_text('Ainda não entrou')
+        expect(rows.get_by_role('row', name=re.compile('^Carla'))).to_contain_text('Caderno')
+        page.get_by_role('button', name='Metades na aula · 1 aluno', exact=True).click()
+        expect(page.locator('#board-now')).to_have_text('O quadro mostra: Metades na aula')
+        expect(screen.locator('#session-join-code')).to_have_text(lesson['code'], timeout=8000)
+        expect(screen.locator('#session-title')).to_contain_text('Metades na aula')
+        page.get_by_label('Outra atividade do roteiro', exact=True).select_option(activities[0]['code'])
+        page.get_by_role('button', name='Mostrar no quadro', exact=True).click()
+        expect(screen.locator('#session-title')).to_contain_text(activities[0]['title'], timeout=8000)
+        page.get_by_label('Observação sobre Bruno', exact=True).fill('Precisou de apoio na segunda página.')
+        page.get_by_label('Observação sobre Ana', exact=True).focus()
+        expect(rows.get_by_role('row', name=re.compile('^Bruno'))).to_contain_text('Guardada.')
+        progress = page.request.get(origin + f"/api/learning/lessons/{lesson['code']}/progress").json()
+        assert next(s for s in progress['students'] if s['id'] == bruno['id'])['note'] == 'Precisou de apoio na segunda página.'
+        page.get_by_role('button', name='Tirar do quadro', exact=True).click()
+        expect(page.locator('#board-now')).to_have_text('O quadro não mostra nenhuma atividade deste roteiro.')
+        # O quadro volta à espera no próximo ciclo; consulta-se o mesmo pedido que o quadro faz.
+        assert screen.request.get(origin + '/api/board/session').status == 204
+    finally:
+        pupil.close()
+        board.close()
+
+
+def test_board_leaves_live_session_when_teacher_shows_a_lesson_activity(page, studio_origin):
+    """Sem consultas periódicas: o stream da sessão fecha e o quadro redescobre."""
+    from playwright.sync_api import expect as expect_
+    origin = studio_origin
+    page.request.get(origin + '/api/teacher-bootstrap')
+    _, other, cls = seed(page, origin)
+    page.request.post(origin + '/api/learning/activities/publish', data={'codes': [other['code']]})
+    live = page.request.post(origin + '/api/sessions', data={
+        'class_id': cls['id'], 'activity_slug': 'fraction-test', 'activity_title': 'Sessão ao vivo'}).json()
+    lesson = page.request.post(origin + '/api/learning/lessons', data={
+        'title': 'Roteiro e sessão', 'class_id': cls['id'], 'assignments': [
+            {'title': 'Metades', 'student_ids': [cls['students'][0]['id']], 'activity_codes': [other['code']]}]}).json()
+    board = page.context.browser.new_context()
+    try:
+        screen = board.new_page()
+        challenge = screen.request.post(origin + '/api/board/pairings').json()
+        assert page.request.post(origin + '/api/board/pairings/confirm', data={'code': challenge['code']}).ok
+        assert screen.request.post(origin + '/api/board/pairings/complete', data={'pairing_id': challenge['pairing_id']}).ok
+        screen.goto(origin + '/board/')
+        expect_(screen.locator('#session-title')).to_contain_text('Sessão ao vivo')
+        assert page.request.put(origin + f"/api/learning/lessons/{lesson['code']}/board",
+                                data={'activity_code': other['code']}).ok
+        expect_(screen.locator('#session-join-code')).to_have_text(lesson['code'], timeout=8000)
+        expect_(screen.locator('#session-code-label')).to_have_text('Código do roteiro')
+    finally:
+        board.close()
+        page.request.post(origin + f"/api/sessions/{live['id']}/close")

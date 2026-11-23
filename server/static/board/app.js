@@ -136,8 +136,6 @@ async function checkSession() {
       throw new Error("sessão incompreensível");
     }
     startLiveSession(session);
-    // O professor pode escolher depois uma atividade de roteiro para o quadro.
-    sessionTimer = later(checkSession, 4000);
   } catch (error) {
     show(waiting);
     waitingStatus.textContent = "Sem ligação ao servidor. A tentar novamente…";

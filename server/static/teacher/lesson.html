@@ -39,7 +39,7 @@
         <h2 id="form-title" tabindex="-1">Novo roteiro da aula</h2>
         <div class="row">
           <label>Nome do roteiro<input id="lesson-title" maxlength="120" required></label>
-          <label>Turma<select id="lesson-class" required></select></label>
+          <label>Turma<select id="lesson-class" aria-label="Turma" required></select></label>
         </div>
         <p><a href="/teacher/class.html">Criar ou editar turmas</a></p>
         <label class="selection-label"><input id="lesson-active" type="checkbox" checked> Disponível aos alunos</label>
@@ -56,7 +56,7 @@
             <button type="button" id="mark-none">Desmarcar</button>
           </div>
           <div class="row plan-bulk">
-            <label>Palavra para os marcados<select id="bulk-word"></select></label>
+            <label>Palavra para os marcados<select id="bulk-word" aria-label="Palavra para os marcados"></select></label>
             <button type="button" id="apply-word" class="primary">Dar esta palavra</button>
             <button type="button" id="next-word">Avançar para a palavra seguinte</button>
           </div>

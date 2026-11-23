@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timezone
+
 import asyncio
 import json
 from typing import Literal
@@ -570,10 +572,32 @@ async def support_summary(session_id: str, request: Request):
     return build_support_summary(session_support_events(events, session.get('roster', {})))
 
 
+def _instant(value) -> datetime:
+    instant = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    return instant if instant.tzinfo else instant.replace(tzinfo=timezone.utc)
+
+
+async def current_board_view(request: Request) -> dict | None:
+    """O que o Quadro mostra: a sessão ao vivo ou a atividade de roteiro escolhida.
+
+    Ganha a escolha mais recente do professor: começar ou retomar uma sessão
+    depois de mostrar um roteiro volta a mostrar a sessão, e vice-versa."""
+    svc = _svc(request)
+    session = await svc.current_board_session()
+    focus = await request.app.state.lesson_plans.board_focus()
+    if focus is None or session is None:
+        return focus or session
+    full = await svc.get_session(session["id"]) or {}
+    live_since = full.get("active_since") or full.get("started_at") or session["started_at"]
+    return session if _instant(live_since) > _instant(focus["set_at"]) else focus
+
+
 async def _current_board_session(session_id: str, request: Request) -> dict | None:
     """Use the same current-session selection for board HTML and SSE."""
-    session = await _svc(request).current_board_session()
-    return session if session is not None and session["id"] == session_id else None
+    view = await current_board_view(request)
+    if view is None or view.get("kind") == "lesson":
+        return None
+    return view if view["id"] == session_id else None
 
 
 @router.get("/sessions/{session_id}/stream")

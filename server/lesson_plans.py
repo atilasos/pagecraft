@@ -241,6 +241,10 @@ class LessonPlans:
                 raise HTTPException(409, "Volta a disponibilizar o roteiro antes de o mostrar no quadro.")
             focus = dict(lesson_code=lesson['code'], activity_code=activity_code, set_at=utcnow())
             await self.storage.write_json(self.board_path(), focus)
+        # Acorda os streams vivos: o do Quadro deixa de ser atual e fecha, e o
+        # Quadro redescobre o que mostrar sem consultas periódicas.
+        for session_id in self.classroom.live_session_ids():
+            self.classroom.tick_session(session_id)
         return await self.board_focus(lesson)
 
     async def board_focus(self, lesson=None):
