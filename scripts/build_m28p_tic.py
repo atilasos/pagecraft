@@ -221,7 +221,7 @@ def cycle_guide(data, word):
     count = f"{len(rounds)} {'ronda' if len(rounds) == 1 else 'rondas'}, cerca de cinco minutos."
     if game == 'listen-build':
         body = ("A criança ouve uma palavra e monta-a com sílabas, sem a ver escrita. Há duas ou três sílabas a mais, da mesma família. "
-                "«Com ajuda» mostra a palavra dividida em sílabas; «Sozinho» e «Consigo ajudar um amigo» mostram só o botão de ouvir. "
+                "«Com ajuda» mostra a palavra dividida em sílabas; «Sozinho» mostra o botão de ouvir e um espaço por sílaba; «Consigo ajudar um amigo» mostra só o botão de ouvir. "
                 f"Palavras, uma por ronda: {', '.join('«' + r['target']['label'] + '»' for r in rounds)}.")
     elif game == 'read-choose':
         body = ("A criança lê uma palavra e escolhe a imagem certa entre três. «Com ajuda» mostra a palavra dividida em sílabas e deixa ouvi-la; "
@@ -229,14 +229,15 @@ def cycle_guide(data, word):
                 f"Palavras, uma por ronda: {', '.join('«' + r['target']['label'] + '»' for r in rounds)}.")
     elif game == 'sentence':
         listed = ' / '.join(f"«{r['target']['text']}»" for r in rounds)
+        # A lista termina numa citação com pontuação própria: não acrescentar outro ponto.
         alternatives = [r for r in rounds if r.get('alternatives')]
         equivalent = ''
         if alternatives:
             example = ' '.join(alternatives[0]['alternatives'][0]) + alternatives[0]['target']['text'][-1]
             equivalent = f"Quando duas ordens dizem o mesmo (por exemplo, «{example}»), as duas contam como certas. "
         body = ("A criança ordena as palavras de uma frase. «Com ajuda» mostra a imagem, a frase escrita com as palavras separadas e o botão de ouvir; "
-                "«Sozinho» mostra a imagem e o botão de ouvir; «Consigo ajudar um amigo» mostra só o botão de ouvir. "
-                f"Frases, uma por ronda: {listed}. {equivalent}"
+                "«Sozinho» mostra a imagem, o botão de ouvir e um espaço por palavra; «Consigo ajudar um amigo» mostra só o botão de ouvir. "
+                f"Frases, uma por ronda: {listed} {equivalent}"
                 "Na página da turma, podes guardar as frases ditadas pelas crianças e projetá-las no Quadro. Quando a turma joga numa sessão, até quatro frases da turma surgem primeiro, "
                 "completadas pelas frases fixas. «Com ajuda» mostra as palavras da frase da turma; nos outros níveis, a criança pode tocar em «Ver a frase», "
                 "o que fica registado. As frases da turma só têm leitura em voz alta quando o computador tem uma voz pt-PT instalada.")
