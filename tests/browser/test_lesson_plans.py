@@ -386,3 +386,29 @@ def test_progress_answer_started_before_a_save_does_not_restore_the_old_note(pag
     with page.expect_download() as download:
         page.get_by_role('button', name='Descarregar registo (Markdown)', exact=True).click()
     assert 'Nota nova confirmada.' in open(download.value.path(), encoding='utf-8').read()
+
+
+def test_pending_selection_alone_asks_before_opening_another_roteiro(page, studio_origin):
+    origin = studio_origin
+    page.request.get(origin + '/api/teacher-bootstrap')
+    _, other, cls = seed(page, origin)
+    page.request.post(origin + '/api/learning/activities/publish', data={'codes': [other['code']]})
+    lesson = page.request.post(origin + '/api/learning/lessons', data={
+        'title': 'Só seleção pendente', 'class_id': cls['id'], 'assignments': [
+            {'title': 'Metades', 'student_ids': [cls['students'][0]['id']], 'activity_codes': [other['code']]}]}).json()
+    # Roteiro guardado e sem outras alterações: só a seleção por atribuir é trabalho pendente.
+    page.goto(origin + f"/teacher/lesson.html?aula={lesson['code']}")
+    expect(page.locator('#form-title')).to_have_text('Alterar roteiro da aula')
+    page.get_by_label('Marcar Bruno', exact=True).check()
+    page.get_by_role('button', name='Escolher outras atividades…', exact=True).click()
+    page.get_by_role('checkbox', name='Selecionar Metades na aula', exact=True).check()
+    asked = []
+
+    def refuse(dialog):
+        asked.append(dialog.message)
+        dialog.dismiss()
+
+    page.once('dialog', refuse)
+    page.get_by_role('button', name='Preparar novo roteiro', exact=True).click()
+    assert asked == ['Há alterações por guardar. Queres abrir outro roteiro?']
+    expect(page.get_by_role('checkbox', name='Selecionar Metades na aula', exact=True)).to_be_checked()
