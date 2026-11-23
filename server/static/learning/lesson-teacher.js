@@ -298,7 +298,7 @@ function setStudentsFor(classId) {
   students = classes.find(c => c.id === classId)?.students || [];
 }
 function openLesson(lesson, {copy = false} = {}) {
-  if (dirty && !confirm("Há alterações por guardar. Queres abrir outro roteiro?")) return;
+  if (unsaved() && !confirm("Há alterações por guardar. Queres abrir outro roteiro?")) return;
   current = copy ? null : lesson;
   const select = $("lesson-class");
   if (lesson && ![...select.options].some(o => o.value === lesson.class_id))
@@ -371,7 +371,7 @@ async function loadHints(source, request) {
           const label = wordOf(published.find(a => a.code === c) || {})?.label;
           if (label) perWord.set(label, (perWord.get(label) || 0) + 1); else others++;
         }
-        const pieces = [...perWord].map(([label, n]) => `${label} ${n}`);
+        const pieces = [...perWord].map(([label, n]) => `${label}: ${n}`);
         if (others) pieces.push(plural(others, "outra atividade", "outras atividades"));
         parts.push(finishedCodes.length ? `terminou: ${pieces.join(", ")}` : "não terminou atividades");
         if (student.words.length) parts.push(`no roteiro: ${student.words.map(w => words.get(w)?.label || w).join(", ")}`);
@@ -404,7 +404,10 @@ function closePicker() {
   $("pick-activities").setAttribute("aria-expanded", "false");
   selection?.selected.clear();
   selection?.render();
+  if (selection) renderToolbar();
 }
+// Uma seleção de atividades por atribuir também é trabalho por guardar.
+const unsaved = () => dirty || (!$("picker").hidden && !!selection?.selected.size);
 
 $("new-lesson").onclick = () => openLesson(null);
 $("mark-all").onclick = () => { marked = new Set(students.map(s => s.id)); renderPlan(); };
@@ -427,7 +430,7 @@ $("bulk-offline").onclick = () => bulk(entry => { entry.offline = true; setWord(
   "Alunos marcados fora do PageCraft nesta aula. Podes escrever o que vão fazer.");
 $("bulk-clear").onclick = () => bulk(entry => Object.assign(entry, emptyPlan()), "Atribuição dos alunos marcados limpa.");
 $("pick-activities").onclick = () => $("picker").hidden ? openPicker() : closePicker();
-$("close-picker").onclick = () => { closePicker(); $("pick-activities").focus(); };
+$("close-picker").onclick = () => { closePicker(); ($("pick-activities").disabled ? $("mark-all") : $("pick-activities")).focus(); };
 $("assign-selected").onclick = () => {
   const codes = [...selection.selected];
   if (!codes.length) { $("bulk-status").textContent = "Escolhe pelo menos uma atividade."; return; }
@@ -480,7 +483,7 @@ $("lesson-form").onsubmit = async event => {
   } catch (error) { status(error.message, true); $("save-status").textContent = "Não foi possível guardar."; }
   finally { button.disabled = false; }
 };
-addEventListener("beforeunload", event => { if (dirty) { event.preventDefault(); event.returnValue = ""; } });
+addEventListener("beforeunload", event => { if (unsaved()) { event.preventDefault(); event.returnValue = ""; } });
 (async () => {
   try {
     await api("/api/teacher-bootstrap");

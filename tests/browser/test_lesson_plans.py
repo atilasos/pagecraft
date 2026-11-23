@@ -73,6 +73,14 @@ def test_teacher_distributes_word_and_other_activity_and_pupil_returns_to_own_li
     expect(page.locator('#picker')).to_be_visible()
     page.get_by_role('button', name='Guardar roteiro da aula', exact=True).click()
     expect(page.locator('#status')).to_contain_text('Há atividades selecionadas por atribuir.')
+    # Trocar de roteiro com uma seleção pendente pede confirmação; recusar mantém tudo.
+    asked = []
+    def refuse(dialog):
+        asked.append(dialog.message)
+        dialog.dismiss()
+    page.once('dialog', refuse)
+    page.get_by_role('button', name='Preparar novo roteiro', exact=True).click()
+    assert asked == ['Há alterações por guardar. Queres abrir outro roteiro?']
     page.get_by_label('Marcar Carla', exact=True).check()
     expect(page.get_by_role('checkbox', name='Selecionar Metades na aula', exact=True)).to_be_checked()
     page.get_by_role('button', name='Atribuir ao aluno marcado', exact=True).click()
