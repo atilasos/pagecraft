@@ -12,15 +12,19 @@ Se uma atividade falhar, consulta a mensagem junto da seleção. As atividades p
 
 ## Preparar o roteiro da aula
 
-1. Abre **Distribuir atividades por alunos**.
-2. Dá um nome ao roteiro e escolhe a turma.
-3. Dá um nome ao primeiro conjunto, por exemplo, «Leitura · 28 palavras».
-4. Marca os alunos desse conjunto.
-5. Marca as palavras que podem trabalhar nesta aula, ou seleciona atividades individuais.
-6. Carrega em **Acrescentar conjunto ao roteiro**.
-7. Repete para os restantes alunos e atividades, por exemplo, um conjunto a trabalhar matemática.
-8. Consulta os conjuntos preparados e a indicação dos alunos ainda sem atividades.
-9. Carrega em **Guardar roteiro da aula**.
+1. Abre **Roteiros da aula** e carrega em **Preparar novo roteiro**. O nome sugerido é o dia da aula.
+2. Escolhe a turma. Aparece uma linha por aluno na tabela **Quem faz o quê**.
+3. Em cada linha, escolhe a **Palavra das 28**. As palavras aparecem pela ordem do método e cada uma inclui os jogos da coleção atual dessa palavra; os jogos substituídos por coleções novas nunca são atribuídos.
+4. Para dar o mesmo a vários alunos, marca-os e usa as ações para os marcados:
+   - **Dar esta palavra** atribui a palavra escolhida;
+   - **Avançar para a palavra seguinte** passa cada aluno marcado para a palavra seguinte do método;
+   - **Escolher outras atividades…** abre a seleção de atividades aprovadas e **Atribuir aos alunos marcados** junta-as ao que já tinham;
+   - **Fora do PageCraft** regista que esses alunos trabalham noutro sítio nesta aula. Escreve uma nota curta, por exemplo, «caderno» ou «leitura comigo»;
+   - **Limpar atribuição** retira tudo aos marcados.
+5. Confirma o resumo por baixo da tabela: quem tem atividades, quem está fora do PageCraft e quem ainda não tem nada atribuído.
+6. Carrega em **Guardar roteiro da aula**.
+
+Para a aula seguinte, usa **Preparar a próxima aula** no roteiro anterior: a distribuição é copiada para um roteiro novo; marca os alunos que avançam e carrega em **Avançar para a palavra seguinte**.
 
 Para preparar sem permitir a entrada dos alunos, desmarca **Disponível aos alunos** antes de guardar. Só as atividades já aprovadas aparecem na preparação do roteiro.
 
@@ -34,12 +38,31 @@ Para preparar sem permitir a entrada dos alunos, desmarca **Disponível aos alun
 
 Um aluno em vários conjuntos recebe a união das atividades, sem repetições. Para mudar de criança no mesmo browser, usa **Trocar de aluno**. Escolher um nome no roteiro nunca dá acesso a realizações anteriores desse aluno.
 
+## Acompanhar a aula e escolher o quadro
+
+1. Num roteiro guardado, carrega em **Acompanhar e quadro**.
+2. A tabela mostra cada aluno, atualizada a cada 10 segundos: **A trabalhar** (e em quê), **Sem atividade recente no PageCraft** (3 minutos sem ações), **Terminou uma atividade**, **Ainda não entrou**, **Fora do PageCraft** e **Pediu ajuda**.
+3. Em **No quadro**, as atividades que estão a decorrer aparecem com o número de alunos. Carrega numa para a mostrar no quadro interativo; usa **Outra atividade do roteiro** para mostrar uma que ainda ninguém começou. **Tirar do quadro** volta a deixá-lo em espera.
+4. O quadro mostra a atividade e o código do roteiro, nunca o trabalho de um aluno. Se começares ou retomares uma sessão em **Aula ao vivo**, o quadro passa a mostrá-la; voltar a escolher uma atividade do roteiro devolve-o ao roteiro.
+
+O quadro tem de estar emparelhado uma vez em **Aula ao vivo**.
+
+## Registo da aula
+
+A página **Acompanhar** é também o registo simples da aula. Para cada aluno mostra:
+
+- as atividades atribuídas, terminadas e em curso;
+- a autoavaliação de cada atividade terminada (com autonomia, com ajuda, quer praticar) e as atividades **sem autoavaliação**;
+- as respostas certas, as tentativas erradas e os pedidos de ajuda registados;
+- a tua observação, guardada ao sair do campo.
+
+Os números descrevem acontecimentos registados, não são notas. Usa **Descarregar registo (Markdown)** ou **Imprimir** para guardar uma cópia. O registo continua disponível depois de encerrar o roteiro.
+
 ## Alterar a distribuição e consultar o trabalho
 
-1. Abre um roteiro guardado.
-2. Usa **Alterar conjunto** para mudar os alunos ou as atividades.
-3. Carrega em **Guardar alteração do conjunto**.
-4. Guarda o roteiro.
+1. Num roteiro guardado, carrega em **Alterar**.
+2. Muda a palavra ou as atividades de cada aluno na tabela.
+3. Guarda o roteiro.
 
 Para impedir novas entradas, desmarca **Disponível aos alunos** e guarda. Uma realização já iniciada continua a poder guardar e recuperar o seu trabalho. Para voltar a permitir entradas, marca a opção e guarda novamente.
 
