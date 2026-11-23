@@ -559,6 +559,10 @@ function confirm(){
   // Som de resposta curto e coerente com o ecrã (o ecrã acrescenta a palavra); nas descobertas intermédias, sem convite a continuar.
   // Uma palavra real que não está escondida tem som próprio, como no ecrã.
   const real=r.kind==='discover'&&!result.correct&&(r.celebrate||[]).includes(value.map(id=>r.pieces.find(p=>p.id===id)?.label||'').join('·'));
+  if(real){
+    // Depois da ★, as peças voltam ao tabuleiro e o foco vai para a primeira, para procurar a palavra seguinte.
+    state.answers[r.id]=[];checkpoint();renderGame();document.querySelector('#round-content [data-piece]:not(:disabled)')?.focus();
+  }
   if(value[0]!=='finish'&&!repeatFound)playFeedback(r.kind==='discover'?(real&&data.audio?.realword?'realword':!result.correct?'tryagain':state.confirmed[r.id]?'allfound':'found'):(result.correct?'correct':'tryagain'));
   if(state.confirmed[r.id])$('next').focus();
   else if(r.kind==='discover'&&!selected().length)(document.querySelector('#round-content [data-piece]:not(:disabled)')||$('discover-finish'))?.focus();
