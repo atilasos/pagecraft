@@ -350,15 +350,41 @@ assert.deepEqual(s.last.d,['ma#1','da#2']);
 
 
 def test_full_generation_replaces_the_report_and_filtered_keeps_others(tmp_path,monkeypatch):
+    real_root=motor.ROOT
     monkeypatch.setattr(motor,'BASE',tmp_path)
-    (tmp_path/'cycle.json').write_text((motor.ROOT/'drafts/m28p-v3/cycle.json').read_text())
+    # O gerador apaga os atalhos de jogos omitidos em ROOT/drafts: o teste nunca toca nos reais.
+    monkeypatch.setattr(motor,'ROOT',tmp_path)
+    (tmp_path/'drafts').mkdir()
+    (tmp_path/'cycle.json').write_text((real_root/'drafts/m28p-v3/cycle.json').read_text())
     stale=[dict(keyword='flor',game='sentence',status='generated',slug='x'),dict(keyword='menina',game='discover',status='generated',slug='y')]
     (tmp_path/'cycle-generation-report.json').write_text(json.dumps(stale))
     monkeypatch.setattr(motor,'cycle_content',lambda word,game,pool,lexicon=None:(None,'teste'))
-    words=json.loads((motor.ROOT/'drafts/m28p-v3/words.json').read_text())
+    words=json.loads((real_root/'drafts/m28p-v3/words.json').read_text())
     motor.build_cycle(words,SimpleNamespace(word='menina',game=None,validate_only=False))
     kept=json.loads((tmp_path/'cycle-generation-report.json').read_text())
     assert any(e['keyword']=='flor' for e in kept)
     motor.build_cycle(words,SimpleNamespace(word=None,game=None,validate_only=False))
     full=json.loads((tmp_path/'cycle-generation-report.json').read_text())
     assert all(e['status']=='omitted' for e in full)
+
+
+def test_discover_uses_new_words_and_extra_syllable_only_when_it_adds_no_real_words():
+    from scripts.m28p_cycle import discover_rounds
+    import random
+    pools=validate_cycle(source(),motor.read_words())
+    for slug in ('menina','uva','sapato','cenoura','quadro','peixe'):
+        pool=pools[slug]
+        fresh=[w for w in pool['newWords'] if 2<=len(w['syllables'])<=3]
+        rounds=discover_rounds(pool,random.Random(slug))
+        if len(fresh)>=2 and rounds:
+            assert any(w.get('newIn')==slug for w in rounds[0]['hidden']),slug
+    from itertools import permutations
+    real={'nine','ove','voo','mame','nona','nove','nave'}
+    def made(pieces):
+        return {''.join(pieces[i] for i in order) for n in (2,3) for order in permutations(range(len(pieces)),n)}&real
+    for slug in ('uva','menina'):
+        for r in discover_rounds(pools[slug],random.Random(1),lexicon=lambda w:w in real):
+            labels={w['label'] for w in r['hidden']}
+            if r['extra']:
+                # A sílaba a mais só aparece quando não acrescenta palavras reais fora da lista.
+                assert made(r['pieces'])-labels==made(r['pieces'][:-1])-labels,(slug,r['pieces'])

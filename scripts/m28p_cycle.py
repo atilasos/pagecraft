@@ -395,6 +395,8 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserve
     while len(remaining) >= 2 and len(rounds) < max_rounds:
         sizes = (3, 2) if len(remaining) == 3 else (2,)
         used = {w['label'] for r in rounds for w in r['hidden']}
+        current = pool['keyword']['slug']
+        fresh_left = any(w.get('newIn') == current for w in remaining)
         options = []
         for size, first in ((size, first) for size in sizes for first in range(len(remaining))):
             for others in combinations(range(first + 1, len(remaining)), size - 1):
@@ -403,17 +405,19 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserve
                 if len(hidden) <= max_hidden and honest(pieces, hidden):
                     # Preferir tabuleiros cujas peças base não formem palavras reais fora da lista («ano», «ova»).
                     clashes = len(real_words(pieces, {w['label'] for w in hidden}))
-                    options.append((bool(used & {w['label'] for w in hidden}), clashes, first, pieces, hidden))
+                    # Enquanto houver palavras novas desta palavra-chave por usar, cada ronda leva pelo menos uma.
+                    stale = fresh_left and not any(w.get('newIn') == current for w in hidden)
+                    options.append((bool(used & {w['label'] for w in hidden}), stale, clashes, first, pieces, hidden))
         if not options:
             break
         # Com três palavras por usar, o trio evita deixar uma de fora; os pares só servem se o trio não for honesto.
-        trios = [option for option in options if len(option[4]) >= 3 and len(remaining) == 3]
+        trios = [option for option in options if len(option[5]) >= 3 and len(remaining) == 3]
         options = trios or options
-        options.sort(key=lambda option: option[:3])
+        options.sort(key=lambda option: option[:4])
         best = None
         # Cada tabuleiro compara-se na forma em que a criança o vê: com a melhor sílaba a mais,
         # ou sem ela quando só acrescentaria palavras reais fora da lista.
-        for repeated, _, _, pieces, hidden in options[:12]:
+        for repeated, stale, _, _, pieces, hidden in options[:12]:
             labels = {w['label'] for w in hidden}
             base_clash = len(real_words(pieces, labels))
             shown, clash = pieces, base_clash
@@ -423,15 +427,14 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserve
                 board_pieces = pieces + [candidate]
                 if not honest(board_pieces, hidden):
                     continue
-                total = len(real_words(board_pieces, labels))
-                if total <= base_clash and (shown is pieces or total < clash):
-                    shown, clash = board_pieces, total
-                    if total == base_clash:
-                        break
-            score = (repeated, clash, shown is pieces)
+                # Uma peça a mais nunca tira palavras: só serve se não acrescentar nenhuma.
+                if len(real_words(board_pieces, labels)) == base_clash:
+                    shown = board_pieces
+                    break
+            score = (repeated, stale, clash, shown is pieces)
             if best is None or score < best[0]:
                 best = (score, shown, hidden)
-            if best[0] == (False, 0, False):
+            if best[0] == (False, False, 0, False):
                 break
         _, pieces, hidden = best
         labels = {w['label'] for w in hidden}

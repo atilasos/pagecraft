@@ -71,7 +71,7 @@ with sync_playwright() as p:
                         for label in used:
                             piece(label)
                         key('#confirm')
-                        assert 'é uma palavra, mas não está escondida aqui' in page.locator('#feedback').text_content()
+                        assert 'é uma palavra! Não estava escondida' in page.locator('#feedback').text_content()
                         for _ in used:
                             key('#undo')
                     for w in r['lexicon']:
