@@ -30,7 +30,8 @@ COLLECTIONS = {
         'date': '2026-10-23',
         'reason': 'Substituição por percursos fundamentados e articulados com o MEM.',
         # Os percursos v2 e v3 têm identidade própria e nunca são alvo deste arquivo.
-        'selects': lambda slug, tags: 'm28p' in tags and not {'m28p-v2', 'm28p-v3'} & set(tags),
+        'selects': lambda slug, tags: ('m28p' in tags and not {'m28p-v2', 'm28p-v3'} & set(tags)
+                                       and not slug.startswith(('m28p-v3-', 'm28p-ciclo-'))),
     },
     'm28p-v3-2026-11-23': {
         'title': 'Coleção v3 das 28 palavras: seis minijogos por palavra',
