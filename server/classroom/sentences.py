@@ -35,8 +35,9 @@ def prepare_sentence(text, keyword):
     pool = pools[keyword]
     slugs = [w['slug'] for w in repertoire()[0]]
     index = slugs.index(keyword)
+    # Só contam as palavras funcionais já introduzidas nesta etapa, como no gerador.
     known = ({w['label'].lower() for w in pool['words'] + pool['sentenceWords']}
-             | {w['word'].lower() for w in cycle['functionWords']})
+             | {word.lower() for word in pool['functionWords']})
     families = pool['families']
     letters = set(''.join(families))
     warnings = []
@@ -47,6 +48,6 @@ def prepare_sentence(text, keyword):
         # As mesmas regras de leitura do gerador: unidades, ditongos, dígrafos e contextos.
         if all(readable_word(part, index, cycle['repertoire'], slugs) for part in word.split('-')):
             continue
-        missing = sorted(set(word) - letters)
+        missing = sorted(set(word.replace('-', '')) - letters)
         warnings.append(f'“{token}” tem letras ainda não trabalhadas: {", ".join(missing)}' if missing else f'“{token}” tem sílabas ainda não trabalhadas.')
     return text, tokens, warnings
