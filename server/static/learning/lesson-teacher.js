@@ -301,15 +301,24 @@ function openLesson(lesson, {copy = false} = {}) {
   const wasOffline = copy ? students.filter(s => plan.get(s.id)?.offline).map(s => s.display_name) : [];
   if (copy) for (const entry of plan.values()) if (entry.offline) Object.assign(entry, emptyPlan());
   // Jogos de uma coleção substituída conservam-se ao editar o roteiro original, mas não passam para uma aula nova.
-  let retiredLeft = 0;
-  if (copy) for (const entry of plan.values()) for (const activityCode of [...entry.extras])
-    if (published.find(a => a.code === activityCode)?.retired) { entry.extras.delete(activityCode); retiredLeft++; }
+  // Num roteiro antigo, a palavra só se conhece pelos jogos retirados: quando é uma só,
+  // passa para a coluna da palavra com os jogos atuais.
+  let retiredLeft = 0, withoutWord = 0;
+  if (copy) for (const entry of plan.values()) {
+    const retired = [...entry.extras].map(c => published.find(a => a.code === c)).filter(a => a?.retired);
+    const retiredWords = new Set(retired.map(a => wordOf(a)?.id).filter(Boolean));
+    retired.forEach(a => entry.extras.delete(a.code));
+    retiredLeft += retired.length;
+    if (!entry.word && retiredWords.size === 1 && words.has([...retiredWords][0])) entry.word = [...retiredWords][0];
+    else if (retired.length && !entry.word && !entry.extras.size) withoutWord++;
+  }
   $("lesson-title").value = copy || !lesson ? `Aula de ${today()}` : lesson.title;
   $("lesson-active").checked = current?.active ?? true;
   $("form-title").textContent = current ? "Alterar roteiro da aula" : copy ? "Próxima aula a partir de um roteiro" : "Novo roteiro da aula";
   const notes = [];
   if (copy) notes.push("Por baixo de cada nome está o que aconteceu na aula anterior. Marca os alunos que avançam e carrega em «Avançar para a palavra seguinte».");
   if (retiredLeft) notes.push("Os jogos da coleção anterior não foram copiados; cada palavra traz os jogos atuais.");
+  if (withoutWord) notes.push(`${plural(withoutWord, "aluno ficou", "alunos ficaram")} sem palavra: escolhe-a na linha.`);
   if (wasOffline.length) notes.push(`Na aula anterior estiveram fora do PageCraft: ${wasOffline.join(", ")}. Marca-os de novo se for o caso.`);
   if (droppedCodes.size) notes.push(droppedCodes.size === 1
     ? "1 atividade deixou de estar disponível e não é atribuída ao guardar."

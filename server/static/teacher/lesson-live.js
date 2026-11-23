@@ -139,7 +139,10 @@ function noteCell(student) {
   // As gravações do mesmo aluno seguem em fila: a última escrita é a que fica.
   const save = () => {
     const text = area.value;
-    if (text.trim() === state.queued.trim() && !state.pending) return Promise.resolve();
+    if (text.trim() === state.queued.trim() && !state.pending) {
+      if (text.trim() === state.saved.trim() && line.textContent.startsWith("Não foi possível")) line.textContent = "";
+      return Promise.resolve();
+    }
     // A exportação espera pela gravação real, que pode falhar; a fila só serve para encadear.
     if (text.trim() === state.queued.trim()) return state.latest;
     state.queued = text;
@@ -236,12 +239,16 @@ function renderBoard() {
   for (const id of ["board-show-other", "board-off"]) if (!data.active) $(id).disabled = true;
   $("board-show-other").disabled = !data.active || !all.length;
 }
-async function showOnBoard(activityCode) {
-  try {
-    await api(`/api/learning/lessons/${code}/board`, "PUT", {activity_code: activityCode});
-    // Com dois toques seguidos, só o pedido mais recente escreve o estado.
-    if (await refresh()) status(activityCode ? `No quadro: ${titleOf(activityCode)}.` : "O quadro deixou de mostrar este roteiro.");
-  } catch (error) { status(error.message, true); }
+let boardQueue = Promise.resolve();
+function showOnBoard(activityCode) {
+  // As escolhas seguem pela ordem dos toques; o estado diz o que o servidor confirma.
+  boardQueue = boardQueue.then(async () => {
+    try {
+      await api(`/api/learning/lessons/${code}/board`, "PUT", {activity_code: activityCode});
+      if (await refresh() === true) status(data.board ? `No quadro: ${data.board.activity_title}.` : "O quadro deixou de mostrar este roteiro.");
+    } catch (error) { status(error.message, true); }
+  });
+  return boardQueue;
 }
 
 async function refresh() {
@@ -250,10 +257,10 @@ async function refresh() {
   let applied = false;
   try {
     const fresh = await api(`/api/learning/lessons/${code}/progress`);
-    if (request !== refreshRequest) return false;
+    if (request !== refreshRequest) return "stale";
     data = fresh;
     // Uma atualização que saiu antes de uma gravação não repõe a observação antiga.
-    for (const student of data.students) if (notes.has(student.id)) student.note = notes.get(student.id).saved.trim();
+    for (const student of data.students) syncNote(student);
     $("title").textContent = data.title;
     document.title = `${data.title} · Acompanhar · PageCraft`;
     $("class-name").textContent = `Acompanhar a aula · ${data.class_name}`;
@@ -289,7 +296,24 @@ function markdown() {
   }
   return lines.join("\n");
 }
-async function flushNotes() {
+/* Uma observação sem alterações locais segue o servidor (pode ter sido guardada noutro
+   separador); a que está em edição ou a gravar mantém-se até ser confirmada. */
+function syncNote(student) {
+  const state = notes.get(student.id);
+  const area = [...document.querySelectorAll("#rows textarea")].find(a => a.dataset.student === student.id);
+  if (!state || !area) return;
+  const untouched = !state.pending && document.activeElement !== area && area.value.trim() === state.saved.trim();
+  if (untouched && student.note !== state.saved.trim()) {
+    area.value = state.saved = state.queued = student.note;
+  } else student.note = state.saved.trim();
+}
+let flushing = null;
+function flushNotes() {
+  // Um segundo clique durante a exportação espera pela mesma verificação.
+  flushing ??= checkNotes().finally(() => { flushing = null; });
+  return flushing;
+}
+async function checkNotes() {
   // Grava a observação em edição e espera pela fila de cada aluno antes de exportar.
   const saves = [...document.querySelectorAll("#rows textarea")].map(area => area.saveNote?.());
   const results = await Promise.allSettled(saves);
@@ -300,8 +324,18 @@ async function flushNotes() {
     return false;
   }
   // O registo sai do estado atual da aula, não da última consulta periódica.
-  if (!(await refresh())) {
+  let fresh = await refresh();
+  if (fresh === "stale") fresh = await refresh();
+  if (fresh !== true) {
     status("Não foi possível atualizar o registo. Tenta novamente.", true);
+    return false;
+  }
+  // Uma edição feita enquanto o registo se atualizava também tem de estar guardada.
+  if ([...document.querySelectorAll("#rows textarea")].some(area => {
+    const state = notes.get(area.dataset.student);
+    return state?.pending || area.value.trim() !== (state?.saved || "").trim();
+  })) {
+    status("Há uma observação por guardar. Tenta novamente antes de descarregar ou imprimir.", true);
     return false;
   }
   return true;
@@ -314,7 +348,7 @@ addEventListener("beforeunload", event => {
   if (unsaved) { event.preventDefault(); event.returnValue = ""; }
 });
 $("download").onclick = async () => {
-  if (!data || !(await flushNotes())) return;
+  if (!data || flushing || !(await flushNotes())) return;
   const link = el("a");
   link.href = URL.createObjectURL(new Blob([markdown()], {type: "text/markdown"}));
   link.download = `roteiro-${data.code}.md`;
@@ -322,7 +356,7 @@ $("download").onclick = async () => {
   setTimeout(() => URL.revokeObjectURL(link.href), 1000);
 };
 $("print").onclick = async () => {
-  if (!data || !(await flushNotes())) return;
+  if (!data || flushing || !(await flushNotes())) return;
   document.querySelectorAll(".live-table details").forEach(d => { d.open = true; });
   print();
 };

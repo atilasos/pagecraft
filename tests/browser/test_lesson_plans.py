@@ -290,23 +290,26 @@ def test_note_that_fails_to_save_blocks_the_lesson_record_download(page, studio_
     lesson = page.request.post(origin + '/api/learning/lessons', data={
         'title': 'Notas que falham', 'class_id': cls['id'], 'assignments': [
             {'title': 'Metades', 'student_ids': [cls['students'][0]['id']], 'activity_codes': [other['code']]}]}).json()
-    attempts = []
+    attempts, held = [], []
 
-    def fail_first(route):
+    def hold_first(route):
+        # O primeiro pedido fica retido até depois do clique: a falha chega com a exportação à espera.
         attempts.append(route.request.post_data)
         if len(attempts) == 1:
-            route.fulfill(status=500, content_type='application/json', body='{"detail": "falha simulada"}')
+            held.append(route)
         else:
             route.continue_()
 
-    page.route('**/notes/**', fail_first)
+    page.route('**/notes/**', hold_first)
     downloads = []
     page.on('download', lambda item: downloads.append(item))
     page.goto(origin + f"/teacher/lesson-live.html?aula={lesson['code']}")
     note = page.get_by_label('Observação sobre Ana', exact=True)
     note.fill('Leu as metades sozinha.')
-    # Escrever e carregar logo em descarregar: a gravação falha e nada é descarregado.
     page.get_by_role('button', name='Descarregar registo (Markdown)', exact=True).click()
+    page.wait_for_function('() => true')
+    assert len(held) == 1
+    held.pop().fulfill(status=500, content_type='application/json', body='{"detail": "falha simulada"}')
     expect(page.locator('#status')).to_have_text('Há uma observação por guardar. Tenta novamente antes de descarregar ou imprimir.')
     page.wait_for_timeout(500)
     assert downloads == []
