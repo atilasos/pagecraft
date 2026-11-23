@@ -111,6 +111,7 @@ async function checkSession() {
       return;
     }
     if (response.status === 204) {
+      stopLiveSession();
       show(waiting);
       waitingStatus.textContent = "A aguardar que o professor comece uma sessão.";
       sessionTimer = later(checkSession, 2500);
@@ -123,6 +124,11 @@ async function checkSession() {
       return;
     }
     const session = await response.json();
+    if (session?.kind === "lesson") {
+      startLessonFocus(session);
+      sessionTimer = later(checkSession, 3000);
+      return;
+    }
     if (
       typeof session?.id !== "string" ||
       typeof session?.activity_slug !== "string"
@@ -130,11 +136,38 @@ async function checkSession() {
       throw new Error("sessão incompreensível");
     }
     startLiveSession(session);
+    // O professor pode escolher depois uma atividade de roteiro para o quadro.
+    sessionTimer = later(checkSession, 4000);
   } catch (error) {
     show(waiting);
     waitingStatus.textContent = "Sem ligação ao servidor. A tentar novamente…";
     sessionTimer = later(checkSession, 3000);
   }
+}
+
+/* Atividade de um Roteiro da aula escolhida pelo professor: só a atividade
+   e o código de entrada, sem stream nem trabalho individual. */
+function startLessonFocus(focus) {
+  if (
+    typeof focus.id !== "string" ||
+    typeof focus.lesson_code !== "string" ||
+    typeof focus.activity_code !== "string"
+  ) {
+    throw new Error("roteiro incompreensível");
+  }
+  if (currentSessionId === focus.id && !stream) {
+    show(live);
+    return;
+  }
+  stopLiveSession();
+  show(live);
+  sessionTitle.textContent = `${focus.class_name} · ${focus.activity_title}`;
+  sessionStatus.textContent = "Roteiro da aula";
+  sessionEntryUrl.textContent = `${new URL(publicOrigin).host}/aula/${focus.lesson_code}`;
+  document.getElementById("session-code-label").textContent = "Código do roteiro";
+  sessionJoinCode.textContent = focus.lesson_code;
+  board.src = `/api/board/lesson-content?atividade=${encodeURIComponent(focus.activity_code)}`;
+  currentSessionId = focus.id;
 }
 
 function startLiveSession(session) {
@@ -143,6 +176,7 @@ function startLiveSession(session) {
   show(live);
   sessionTitle.textContent = `${session.class_name} · ${session.activity_title}`;
   sessionStatus.textContent = "Aula em curso";
+  document.getElementById("session-code-label").textContent = "Código da atividade";
   sessionEntryUrl.textContent = new URL(publicOrigin).host;
   sessionJoinCode.textContent = session.join_code;
 
