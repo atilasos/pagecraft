@@ -6,11 +6,11 @@
   <title>Roteiros da aula · PageCraft</title>
   <link rel="stylesheet" href="/learning-assets/fonts.css">
   <link rel="stylesheet" href="/learning-assets/common.css">
-  <link rel="stylesheet" href="/teacher/dashboard.css">
-  <script defer src="/learning-assets/activity-selection.js"></script>
-  <script defer src="/learning-assets/lesson-teacher.js"></script>
+  <link rel="stylesheet" href="/teacher/dashboard.css?v=roteiro-plano-1">
+  <script defer src="/learning-assets/activity-selection.js?v=roteiro-plano-1"></script>
+  <script defer src="/learning-assets/lesson-teacher.js?v=roteiro-plano-1"></script>
 </head>
-<body>
+<body class="teacher-library lesson-planner">
   <a href="#main" class="skip">Saltar para o conteúdo</a>
   <header>
     <div class="teacher-brand-row">
@@ -26,41 +26,61 @@
   </header>
   <main id="main">
     <p class="eyebrow">Preparar a aula</p>
-    <h1>Distribuir atividades por alunos</h1>
-    <p>Na mesma aula, cada conjunto de alunos pode explorar atividades diferentes. Seleciona as palavras para incluir todos os seus jogos.</p>
+    <h1>Roteiros da aula</h1>
+    <p>Escolhe o que cada aluno faz hoje: uma palavra das 28 palavras, outras atividades ou trabalho fora do PageCraft. Durante a aula, acompanha a turma e escolhe o que aparece no quadro.</p>
     <p id="status" class="status" role="status" aria-live="polite"></p>
-    <section class="card">
-      <h2>Roteiros guardados</h2>
-      <div id="lessons"></div>
+    <section class="card" aria-labelledby="saved-heading">
+      <h2 id="saved-heading">Roteiros guardados</h2>
+      <ul id="lessons" class="plain lesson-list"></ul>
       <button id="new-lesson" type="button">Preparar novo roteiro</button>
     </section>
     <form id="lesson-form" inert>
-      <section class="card">
-        <h2 id="form-title">Novo roteiro da aula</h2>
+      <section class="card" aria-labelledby="form-title">
+        <h2 id="form-title" tabindex="-1">Novo roteiro da aula</h2>
         <div class="row">
-          <label>Nome do roteiro<input id="lesson-title" maxlength="120" required placeholder="Leitura e matemática · 2.º ano"></label>
+          <label>Nome do roteiro<input id="lesson-title" maxlength="120" required></label>
           <label>Turma<select id="lesson-class" aria-label="Turma" required></select></label>
         </div>
         <p><a href="/teacher/class.html">Criar ou editar turmas</a></p>
         <label class="selection-label"><input id="lesson-active" type="checkbox" checked> Disponível aos alunos</label>
-        <p id="entry-link" aria-live="polite"></p>
+        <div id="entry-link" aria-live="polite"></div>
       </section>
-      <section class="card">
-        <h2>Atividades atribuídas</h2>
-        <div id="assignments"></div>
-        <p id="unassigned" class="muted"></p>
-      </section>
-      <section class="card" aria-labelledby="assignment-heading">
-        <h2 id="assignment-heading">Acrescentar conjunto de alunos</h2>
-        <label>Nome do conjunto<input id="assignment-title" maxlength="120" placeholder="Ex.: Leitura · 28 palavras"></label>
-        <fieldset><legend>Alunos deste conjunto</legend><div id="students"></div></fieldset>
-        <button id="all-students" type="button">Selecionar todos os alunos</button>
-        <p class="muted">Um aluno pode pertencer a vários conjuntos. Recebe todas as atividades atribuídas, sem repetições.</p>
-        <h3>Atividades para este conjunto</h3>
-        <p>Só aparecem atividades aprovadas. <a href="/teacher/activities.html#atividades">Rever e aprovar rascunhos</a></p>
-        <div id="activity-selection"></div>
-        <p class="row"><button id="add-assignment" type="button">Acrescentar conjunto ao roteiro</button><button id="cancel-assignment" type="button">Limpar conjunto</button></p>
-        <p id="assignment-status" role="status"></p>
+
+      <section class="card" aria-labelledby="plan-heading">
+        <h2 id="plan-heading">Quem faz o quê</h2>
+        <p class="muted">Marca um ou mais alunos e usa as ações abaixo, ou escolhe diretamente em cada linha. Cada aluno pode ter uma palavra das 28 palavras e outras atividades.</p>
+        <div class="plan-toolbar" role="group" aria-labelledby="marked-count">
+          <p id="marked-count" class="plan-marked">Nenhum aluno marcado</p>
+          <div class="row">
+            <button type="button" id="mark-all">Marcar todos</button>
+            <button type="button" id="mark-none">Desmarcar</button>
+          </div>
+          <div class="row plan-bulk">
+            <label>Palavra para os marcados<select id="bulk-word" aria-label="Palavra para os marcados"></select></label>
+            <button type="button" id="apply-word" class="primary">Dar esta palavra</button>
+            <button type="button" id="next-word">Avançar para a palavra seguinte</button>
+          </div>
+          <div class="row plan-bulk">
+            <button type="button" id="pick-activities" aria-controls="picker" aria-expanded="false">Escolher outras atividades…</button>
+            <button type="button" id="bulk-offline">Fora do PageCraft</button>
+            <button type="button" id="bulk-clear">Limpar atribuição</button>
+          </div>
+          <p id="bulk-status" role="status" class="muted"></p>
+        </div>
+        <section id="picker" class="picker" aria-labelledby="picker-heading" hidden>
+          <h3 id="picker-heading">Outras atividades para os alunos marcados</h3>
+          <p class="muted">Só aparecem atividades aprovadas e da coleção atual. <a href="/teacher/activities.html#atividades">Rever e aprovar rascunhos</a></p>
+          <div id="activity-selection"></div>
+          <p class="row"><button type="button" id="assign-selected" class="primary">Atribuir aos alunos marcados</button><button type="button" id="close-picker">Fechar</button></p>
+        </section>
+        <div class="plan-scroll">
+          <table id="plan" class="plan-table">
+            <caption class="sr-only">Atividades de cada aluno neste roteiro</caption>
+            <thead><tr><th scope="col"><span class="sr-only">Marcar</span></th><th scope="col">Aluno</th><th scope="col">Palavra das 28</th><th scope="col">Outras atividades</th><th scope="col">Fora do PageCraft</th></tr></thead>
+            <tbody id="plan-rows"></tbody>
+          </table>
+        </div>
+        <p id="plan-summary" class="muted" role="status"></p>
       </section>
       <p class="row"><button id="save-lesson" class="primary" type="submit">Guardar roteiro da aula</button><span id="save-status" role="status"></span></p>
     </form>

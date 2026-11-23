@@ -31,6 +31,14 @@ _Avoid_: tarefas, checklist, to-do
 **Roteiro da aula**:
 Seleção de atividades que o professor atribui a conjuntos de alunos da mesma turma para uma aula. Cada aluno escolhe o seu nome e recebe todas as atividades que lhe foram atribuídas, sem repetições. Pode escolher entre essas atividades e regressar ao roteiro depois de terminar uma realização.
 
+**Fora do PageCraft**:
+Registo, no Roteiro da aula, de que um aluno trabalha noutro sítio nessa aula (caderno, leitura com o professor, outra aplicação), com uma nota curta do professor. Explica a ausência de realizações sem as tornar falta; o aluno não aparece na escolha de nomes do roteiro.
+_Avoid_: ausente, faltou
+
+**Registo da aula**:
+Resumo por aluno de um Roteiro da aula: atividades atribuídas, terminadas e em curso, autoavaliação de cada realização ou a sua falta, respostas e pedidos de ajuda registados, e a observação do professor. Descreve acontecimentos; não classifica a criança.
+_Avoid_: pauta, nota
+
 **Conjunto de alunos**:
 Seleção feita pelo professor para atribuir as mesmas atividades a várias crianças. Um aluno pode pertencer a vários conjuntos. A pertença ao conjunto não torna o trabalho conjunto: cada realização conserva o seu autor. Distinto do **Grupo de trabalho**, cujos participantes trabalham no mesmo computador.
 

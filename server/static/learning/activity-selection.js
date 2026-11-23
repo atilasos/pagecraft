@@ -52,8 +52,9 @@ window.PageCraftActivitySelection = class {
 
   // Identifica a palavra M28P de um jogo; partilhado com a biblioteca do professor.
   static wordOf(activity) {
-    const match = (activity.slug || "").match(/^m28p-v3-(.+)-(match|pairs|syllables|gap|recall|hunt)$/);
-    return match ? { id: match[1], label: activity.title.split(" · ").pop() } : null;
+    if (activity.m28p) return { id: activity.m28p.word, label: activity.m28p.label, order: activity.m28p.order };
+    const match = (activity.slug || "").match(/^m28p-(?:v3|ciclo)-([a-z]+)-(match|pairs|syllables|gap|recall|hunt|discover|listen-build|read-choose|sentence)$/);
+    return match ? { id: match[1], label: activity.title.split(" · ").pop(), order: null } : null;
   }
 
   word(activity) { return this.constructor.wordOf(activity); }
@@ -87,7 +88,8 @@ window.PageCraftActivitySelection = class {
     }
     this.words.replaceChildren(make("legend", "Selecionar todos os jogos de uma palavra"));
     this.words.hidden = !words.size;
-    for (const word of [...words.values()].sort((a, b) => a.label.localeCompare(b.label, "pt"))) {
+    // Ordem do método quando conhecida; senão, alfabética.
+    for (const word of [...words.values()].sort((a, b) => (a.order ?? 99) - (b.order ?? 99) || a.label.localeCompare(b.label, "pt"))) {
       const label = make("label");
       const check = make("input");
       check.type = "checkbox";

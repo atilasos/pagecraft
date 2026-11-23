@@ -111,6 +111,7 @@ async function checkSession() {
       return;
     }
     if (response.status === 204) {
+      stopLiveSession();
       show(waiting);
       waitingStatus.textContent = "A aguardar que o professor comece uma sessão.";
       sessionTimer = later(checkSession, 2500);
@@ -123,6 +124,11 @@ async function checkSession() {
       return;
     }
     const session = await response.json();
+    if (session?.kind === "lesson") {
+      startLessonFocus(session);
+      sessionTimer = later(checkSession, 3000);
+      return;
+    }
     if (
       typeof session?.id !== "string" ||
       typeof session?.activity_slug !== "string"
@@ -137,12 +143,50 @@ async function checkSession() {
   }
 }
 
+/* Atividade de um Roteiro da aula escolhida pelo professor: só a atividade
+   e o código de entrada, sem stream nem trabalho individual. */
+function startLessonFocus(focus) {
+  if (
+    typeof focus.id !== "string" ||
+    typeof focus.lesson_code !== "string" ||
+    typeof focus.activity_code !== "string"
+  ) {
+    throw new Error("roteiro incompreensível");
+  }
+  if (currentSessionId === focus.id && !stream) {
+    show(live);
+    return;
+  }
+  stopLiveSession();
+  show(live);
+  sessionTitle.textContent = `${focus.class_name} · ${focus.activity_title}`;
+  sessionStatus.textContent = "Roteiro da aula";
+  sessionEntryUrl.textContent = `${new URL(publicOrigin).host}/aula/${focus.lesson_code}`;
+  document.getElementById("session-code-label").textContent = "Código do roteiro";
+  sessionJoinCode.textContent = focus.lesson_code;
+  board.src = `/api/board/lesson-content?atividade=${encodeURIComponent(focus.activity_code)}&presentation=1`;
+  currentSessionId = focus.id;
+}
+
+/* Os jogos do ciclo esperam o arranque que a página do aluno lhes dá. O quadro
+   envia uma realização vazia, sem dados de nenhum aluno. */
+board.addEventListener("load", () => {
+  if (!currentSessionId?.startsWith("lesson-") || !board.getAttribute("src")) return;
+  board.contentWindow?.postMessage({ pagecraft: 1, type: "learning_restore", payload: { events: [] } }, "*");
+  board.contentWindow?.postMessage({
+    pagecraft: 1,
+    type: "learning_preferences",
+    payload: { language: "pt", level: "intermediate", participant_count: 1, route: "permanent" },
+  }, "*");
+});
+
 function startLiveSession(session) {
   if (currentSessionId === session.id && stream) return;
   stopLiveSession();
   show(live);
   sessionTitle.textContent = `${session.class_name} · ${session.activity_title}`;
   sessionStatus.textContent = "Aula em curso";
+  document.getElementById("session-code-label").textContent = "Código da atividade";
   sessionEntryUrl.textContent = new URL(publicOrigin).host;
   sessionJoinCode.textContent = session.join_code;
 

@@ -4,7 +4,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Request
 from fastapi.responses import FileResponse
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 from ..access import RoutePolicy, access_policy
 from .learning import Code, LessonCode, Short
@@ -17,6 +17,8 @@ class Assignment(BaseModel):
     title: Short
     student_ids: list[StudentId] = Field(min_length=1, max_length=40)
     activity_codes: list[Code] = Field(min_length=1, max_length=300)
+    # Palavra do método das 28 palavras escolhida para este conjunto, quando existe.
+    word: Annotated[str, Field(pattern=r'^[a-z]{2,30}$')] | None = None
 
     @field_validator('title')
     @classmethod
@@ -28,7 +30,15 @@ class Assignment(BaseModel):
 
 class LessonContent(BaseModel):
     title: Short
-    assignments: list[Assignment] = Field(min_length=1, max_length=40)
+    assignments: list[Assignment] = Field(max_length=40)
+    # Alunos que trabalham fora do PageCraft nesta aula, com uma nota curta do professor.
+    offline: dict[StudentId, Annotated[str, Field(max_length=120)]] = Field(default_factory=dict, max_length=40)
+
+    @model_validator(mode='after')
+    def something_planned(self):
+        if not self.assignments and not self.offline:
+            raise ValueError('Atribui atividades a pelo menos um aluno.')
+        return self
 
     @field_validator('title')
     @classmethod
@@ -66,6 +76,41 @@ async def update_lesson(code: LessonCode, data: UpdateLesson, request: Request):
     return await request.app.state.lesson_plans.update(code, data.model_dump())
 
 
+class Note(BaseModel):
+    text: str = Field(default='', max_length=2000)
+
+
+class BoardChoice(BaseModel):
+    activity_code: Code | None = None
+
+
+@router.get('/api/learning/lessons/{code}/progress')
+@access_policy(RoutePolicy.TEACHER)
+async def progress(code: LessonCode, request: Request):
+    from .classroom import current_board_view
+    result = await request.app.state.lesson_plans.progress(code)
+    # O painel diz o que o Quadro mostra de facto, também quando é outra coisa.
+    view = await current_board_view(request)
+    mine = view is not None and view.get('kind') == 'lesson' and view['lesson_code'] == result['code']
+    result['board'] = view if mine else None
+    result['board_elsewhere'] = None if view is None or mine else (
+        {'kind': 'lesson', 'title': view['lesson_title']} if view.get('kind') == 'lesson'
+        else {'kind': 'session', 'title': view['activity_title']})
+    return result
+
+
+@router.put('/api/learning/lessons/{code}/notes/{student_id}', status_code=204)
+@access_policy(RoutePolicy.TEACHER)
+async def note(code: LessonCode, student_id: StudentId, data: Note, request: Request):
+    await request.app.state.lesson_plans.set_note(code, student_id, data.text)
+
+
+@router.put('/api/learning/lessons/{code}/board')
+@access_policy(RoutePolicy.TEACHER)
+async def board(code: LessonCode, data: BoardChoice, request: Request):
+    return await request.app.state.lesson_plans.set_board(code, data.activity_code)
+
+
 @router.get('/api/learning/lessons/{code}/entry')
 @access_policy(RoutePolicy.PUBLIC)
 async def entry(code: LessonCode, request: Request):
@@ -78,7 +123,7 @@ async def student_work(code: LessonCode, student_id: StudentId, request: Request
     lesson, student, activities = await request.app.state.lesson_plans.student_work(code, student_id)
     return dict(code=lesson['code'], title=lesson['title'], class_name=lesson['class_name'],
                 student=student, year=lesson['year'], activities=[
-                    {key: activity[key] for key in ('code', 'title', 'year', 'duration')}
+                    {key: activity.get(key) for key in ('code', 'title', 'year', 'duration', 'm28p')}
                     for activity in activities])
 
 

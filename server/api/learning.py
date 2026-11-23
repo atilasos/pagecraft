@@ -142,8 +142,11 @@ async def visible_activity(request, code):
 @router.get('/api/learning/activities')
 @access_policy(RoutePolicy.TEACHER)
 async def activities(request: Request, include_archived: bool = False):
+    from ..activity_collections import describe_all
     items = (await request.app.state.learning.activities()).values()
-    return [item for item in items if include_archived or not item.get('archived_at')]
+    # `retired` vem do meta.json (coleção substituída); `archived_at` é um rascunho retirado.
+    return describe_all([item for item in items if include_archived or not item.get('archived_at')],
+                        request.app.state.config.activities_dir)
 
 
 @router.post('/api/learning/activities', status_code=201)

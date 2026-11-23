@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 
+
 from fastapi.responses import FileResponse
 from fastapi import APIRouter, HTTPException, Request, Response
 from pydantic import BaseModel, ConfigDict, Field
@@ -13,7 +14,7 @@ from ..access import (
     issue_board_cookie,
 )
 from ..classroom.activity_content import session_activity_path
-from .classroom import stream_session, _domain, _current_board_session
+from .classroom import stream_session, _domain, _current_board_session, current_board_view
 from .learning import ACTIVITY_CONTENT_HEADERS
 
 
@@ -92,11 +93,24 @@ async def revoke_pairing(request: Request):
 @router.get("/session")
 @access_policy(RoutePolicy.BOARD)
 async def current_session(request: Request):
-    classroom = request.app.state.classroom
-    session = await classroom.current_board_session()
-    if session is None:
+    view = await current_board_view(request)
+    if view is None:
         return Response(status_code=204)
-    return session
+    return view
+
+
+@router.get("/lesson-content")
+@access_policy(RoutePolicy.BOARD)
+async def board_lesson_content(request: Request, atividade: str = ''):
+    """O quadro só demonstra a atividade de roteiro que o professor escolheu."""
+    focus = await current_board_view(request)
+    # Um pedido para uma escolha anterior não recebe a atual com o título errado;
+    # o Quadro volta a consultar a escolha e carrega a nova.
+    if focus is None or focus.get('kind') != 'lesson' or atividade.upper() != focus['activity_code']:
+        raise HTTPException(404, 'Nenhuma atividade de roteiro está no quadro.')
+    learning = request.app.state.learning
+    path = learning.content_path(await learning.activity(focus['activity_code']))
+    return FileResponse(path, headers=ACTIVITY_CONTENT_HEADERS)
 
 
 @router.get("/sessions/{session_id}/stream")

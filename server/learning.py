@@ -27,6 +27,8 @@ class Learning:
         self.config = config
         self.catalog_lock = asyncio.Lock()
         self.locks: dict[str, asyncio.Lock] = {}
+        # nome do ficheiro -> (mtime, código do roteiro) para o acompanhamento.
+        self._lesson_index: dict[str, tuple[int, str | None]] = {}
 
     def lock(self, key):
         return self.locks.setdefault(key, asyncio.Lock())
@@ -208,6 +210,33 @@ class Learning:
         records = [await self.storage.read_json(p) for p in directory.glob('*.json')]
         return sorted((self.public_attempt(r, teacher=True) for r in records if not r['preview']),
                       key=lambda r: r['started_at'], reverse=True)
+
+    async def lesson_attempts(self, lesson_code):
+        """Realizações de um roteiro, em bruto, para o resumo do professor.
+
+        O acompanhamento pede isto a cada 10 s; um índice por mtime evita reler
+        as realizações de outros roteiros ao longo do ano."""
+        directory = self.storage.root / "learning" / "realizations"
+        index = self._lesson_index
+        result, present = [], set()
+        for path in directory.glob('*.json'):
+            present.add(path.name)
+            try:
+                mtime = path.stat().st_mtime_ns
+            except FileNotFoundError:
+                continue
+            known = index.get(path.name)
+            if known and known[0] == mtime and known[1] != lesson_code.upper():
+                continue
+            record = await self.storage.read_json(path)
+            if not record:
+                continue
+            index[path.name] = (mtime, None if record['preview'] else record.get('lesson_code'))
+            if not record['preview'] and record.get('lesson_code') == lesson_code.upper():
+                result.append(record)
+        for name in set(index) - present:
+            del index[name]
+        return result
 
     @staticmethod
     def public_attempt(attempt, *, teacher=False):
