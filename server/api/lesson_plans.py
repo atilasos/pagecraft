@@ -87,7 +87,16 @@ class BoardChoice(BaseModel):
 @router.get('/api/learning/lessons/{code}/progress')
 @access_policy(RoutePolicy.TEACHER)
 async def progress(code: LessonCode, request: Request):
-    return await request.app.state.lesson_plans.progress(code)
+    from .classroom import current_board_view
+    result = await request.app.state.lesson_plans.progress(code)
+    # O painel diz o que o Quadro mostra de facto, também quando é outra coisa.
+    view = await current_board_view(request)
+    mine = view is not None and view.get('kind') == 'lesson' and view['lesson_code'] == result['code']
+    result['board'] = view if mine else None
+    result['board_elsewhere'] = None if view is None or mine else (
+        {'kind': 'lesson', 'title': view['lesson_title']} if view.get('kind') == 'lesson'
+        else {'kind': 'session', 'title': view['activity_title']})
+    return result
 
 
 @router.put('/api/learning/lessons/{code}/notes/{student_id}', status_code=204)

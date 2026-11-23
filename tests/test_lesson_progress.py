@@ -62,7 +62,7 @@ async def test_word_metadata_marks_cycle_games_and_retired_collection(clients):
     assert items[codes['old']]['retired'] is True
     assert items[codes['sentence']]['retired'] is False
     assert items[codes['sentence']]['m28p'] == {'word': 'zzcasa', 'label': 'casa', 'kind': 'sentence',
-                                                'kind_order': 9, 'order': 8}
+                                                'kind_order': 8, 'order': 8}
     assert items[codes['uva']]['m28p']['order'] == 3
     assert 'm28p' not in items[codes['math']]
 
@@ -80,7 +80,7 @@ async def test_offline_pupils_are_recorded_hidden_from_entry_and_never_assigned(
     assert duarte not in {s['id'] for s in entry['students']}
     work = (await pupil.get(f'/api/learning/lessons/{code}/students/{ana}')).json()
     # Os jogos de uma palavra chegam ao aluno pela ordem do ciclo.
-    assert [a['code'] for a in work['activities']] == [codes['discover'], codes['sentence']]
+    assert [a['code'] for a in work['activities']] == [codes['sentence'], codes['discover']]
     clash = dict(lesson, offline={ana: ''})
     assert (await teacher.post('/api/learning/lessons', json=clash)).status_code == 422
     stranger = dict(lesson, offline={'abcdef12': ''})
@@ -122,7 +122,8 @@ async def test_progress_reports_each_pupil_including_missing_self_assessment(cli
     rows = {s['display_name']: s for s in progress['students']}
     assert rows['Ana']['state'] == 'finished'
     [done] = rows['Ana']['realizations']
-    assert (done['correct'], done['incorrect'], done['help'], done['help_pending']) == (1, 1, 1, True)
+    # Terminada: o pedido de ajuda deixa de estar pendente.
+    assert (done['correct'], done['different'], done['unscored'], done['help'], done['help_pending']) == (1, 1, 0, 1, False)
     assert done['assessment'] == {'alone': 0, 'help': 1, 'practising': 0, 'skip': 0}
     assert rows['Ana']['words'] == ['zzcasa']
     assert rows['Bruno']['state'] == 'working'
@@ -170,6 +171,10 @@ async def test_board_shows_chosen_lesson_activity_until_a_newer_live_session(cli
         live = await teacher.post('/api/sessions', json={'class_id': cls['id'], 'activity_slug': 'zz-dobro-ensaio'})
         assert live.status_code in (200, 201), live.text
         assert (await screen.get('/api/board/session')).json().get('kind') != 'lesson'
+        # O painel do roteiro diz que o quadro passou para a sessão e o conteúdo deixa de ser servido.
+        progress = (await teacher.get(f'/api/learning/lessons/{code}/progress')).json()
+        assert progress['board'] is None and progress['board_elsewhere']['kind'] == 'session'
+        assert (await screen.get('/api/board/lesson-content')).status_code == 404
         session_id = live.json()['id']
         assert (await screen.get(f'/api/board/sessions/{session_id}/content')).status_code == 200
         # Escolher depois um roteiro tira a sessão do quadro, também para o stream e o conteúdo.
@@ -186,3 +191,56 @@ async def test_board_shows_chosen_lesson_activity_until_a_newer_live_session(cli
         assert (await teacher.put(f'/api/learning/lessons/{code}/board', json={'activity_code': None})).status_code == 200
         assert (await screen.get('/api/board/session')).status_code == 204
         assert (await screen.get('/api/board/lesson-content')).status_code == 404
+
+
+async def test_state_follows_latest_action_and_game_end_without_self_assessment(clients):
+    app, teacher, pupil = clients
+    codes, cls, (ana, *_rest) = await setup(app, teacher)
+    lesson = (await teacher.post('/api/learning/lessons', json={
+        'title': 'Terça', 'class_id': cls['id'], 'assignments': [
+            {'title': 'Palavra casa', 'word': 'zzcasa', 'student_ids': [ana],
+             'activity_codes': [codes['discover'], codes['sentence']]}]})).json()
+    code = lesson['code']
+
+    async def begin(activity):
+        pupil.cookies.clear()
+        started = await pupil.post(f'/api/learning/activities/{activity}/start', json={
+            'name': 'x', 'assignment': {'lesson_code': code, 'student_id': ana}})
+        assert started.status_code == 201, started.text
+        pupil.headers['X-PageCraft-Realization'] = started.json()['id']
+
+    # A primeira fica abandonada; na segunda, o jogo chega ao fim sem autoavaliação.
+    await begin(codes['discover'])
+    await pupil.post('/api/learning/me/events', json={'events': [
+        {'id': 'd1', 'type': 'attempt', 'unitId': 'u1', 'payload': {'detail': {'discoveries': ['mana']}}}]})
+    await begin(codes['sentence'])
+    await pupil.post('/api/learning/me/events', json={'events': [
+        {'id': 's1', 'type': 'activity_state', 'unitId': 'u1', 'payload': {'readyForReflection': True, 'state': {}}}]})
+    progress = (await teacher.get(f'/api/learning/lessons/{code}/progress')).json()
+    [row] = [s for s in progress['students'] if s['id'] == ana]
+    assert row['state'] == 'finished' and row['current'] is None
+    discover, sentence = row['realizations']
+    assert (discover['correct'], discover['different'], discover['unscored']) == (0, 0, 1)
+    assert sentence['finished'] and sentence['completed_at'] is None and sentence['assessment'] is None
+
+
+async def test_board_focus_ends_with_the_school_day_or_when_activity_leaves_lesson(clients):
+    app, teacher, _ = clients
+    codes, cls, (ana, bruno, *_rest) = await setup(app, teacher)
+    lesson = (await teacher.post('/api/learning/lessons', json={
+        'title': 'Terça', 'class_id': cls['id'], 'assignments': [
+            {'title': 'Matemática', 'student_ids': [ana], 'activity_codes': [codes['math']]},
+            {'title': 'Palavra', 'student_ids': [bruno], 'activity_codes': [codes['discover']]}]})).json()
+    code = lesson['code']
+    assert (await teacher.put(f'/api/learning/lessons/{code}/board', json={'activity_code': codes['math']})).status_code == 200
+    assert await app.state.lesson_plans.board_focus() is not None
+    update = {'title': 'Terça', 'revision': lesson['revision'], 'active': True, 'assignments': [
+        {'title': 'Palavra', 'student_ids': [bruno], 'activity_codes': [codes['discover']]}]}
+    assert (await teacher.put(f'/api/learning/lessons/{code}', json=update)).status_code == 200
+    assert await app.state.lesson_plans.board_focus() is None
+    await teacher.put(f'/api/learning/lessons/{code}/board', json={'activity_code': codes['discover']})
+    path = app.state.lesson_plans.board_path()
+    focus = json.loads(path.read_text())
+    focus['set_at'] = (datetime.now(timezone.utc) - timedelta(days=1)).isoformat()
+    path.write_text(json.dumps(focus))
+    assert await app.state.lesson_plans.board_focus() is None

@@ -103,8 +103,8 @@ async def current_session(request: Request):
 @access_policy(RoutePolicy.BOARD)
 async def board_lesson_content(request: Request):
     """O quadro só demonstra a atividade de roteiro que o professor escolheu."""
-    focus = await request.app.state.lesson_plans.board_focus()
-    if focus is None:
+    focus = await current_board_view(request)
+    if focus is None or focus.get('kind') != 'lesson':
         raise HTTPException(404, 'Nenhuma atividade de roteiro está no quadro.')
     learning = request.app.state.learning
     path = learning.content_path(await learning.activity(focus['activity_code']))

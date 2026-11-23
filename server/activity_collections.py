@@ -17,9 +17,10 @@ M28P_SLUG = re.compile(
     r"^m28p-(?:v3|ciclo)-(?P<word>[a-z]+)-"
     r"(?P<kind>match|pairs|syllables|gap|recall|hunt|discover|listen-build|read-choose|sentence)$"
 )
-# Ordem pedagógica dentro da palavra: reconhecer, montar, recombinar, ler frases.
-KIND_ORDER = ["match", "pairs", "syllables", "gap", "recall", "hunt",
-              "read-choose", "listen-build", "discover", "sentence"]
+# Ordem pedagógica dentro da palavra (docs/m28p-ciclo-completo.md): ouvir e montar,
+# ler e escolher, montar frases, descobrir. A coleção v3 arquivada fica antes.
+KIND_ORDER = ["match", "pairs", "hunt", "syllables", "gap", "recall",
+              "listen-build", "read-choose", "sentence", "discover"]
 
 
 def m28p_word(slug: str) -> tuple[str, str] | None:

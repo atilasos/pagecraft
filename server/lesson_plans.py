@@ -25,9 +25,15 @@ def summarize_realization(attempt: dict) -> dict:
     """Factos observados numa realização, sem juízos automáticos."""
     events = attempt.get("events") or []
     attempts = [e for e in events if e.get("type") == "attempt" and isinstance(e.get("payload"), dict)]
+    # Só `correct` explícito conta; descobertas e respostas abertas não têm correção automática.
     correct = sum(1 for e in attempts if e["payload"].get("correct") is True)
+    different = sum(1 for e in attempts if e["payload"].get("correct") is False)
     help_events = [e for e in events if e.get("type") in {"help_needed", "help_resolved"}]
-    help_pending = bool(help_events) and help_events[-1]["type"] == "help_needed"
+    completed_at = attempt.get("completed_at")
+    help_pending = not completed_at and bool(help_events) and help_events[-1]["type"] == "help_needed"
+    states = [e for e in events if e.get("type") == "activity_state" and isinstance(e.get("payload"), dict)]
+    # O jogo declara quando chegou ao fim; a autoavaliação pode ficar por fazer.
+    reached_end = bool(states) and states[-1]["payload"].get("readyForReflection") is True
     seen = [e.get("received_at") for e in events if e.get("received_at")]
     assessment = attempt.get("assessment")
     answers = None
@@ -40,10 +46,12 @@ def summarize_realization(attempt: dict) -> dict:
         "title": attempt["title"],
         "level": attempt.get("level"),
         "started_at": attempt["started_at"],
-        "completed_at": attempt.get("completed_at"),
-        "last_at": max(seen + [attempt["started_at"]]),
+        "completed_at": completed_at,
+        "finished": bool(completed_at) or reached_end,
+        "last_at": max(seen + [attempt["started_at"]] + ([completed_at] if completed_at else [])),
         "correct": correct,
-        "incorrect": len(attempts) - correct,
+        "different": different,
+        "unscored": len(attempts) - correct - different,
         "help": sum(1 for e in events if e.get("type") == "help_needed"),
         "help_pending": help_pending,
         "assessment": answers,
@@ -198,10 +206,11 @@ class LessonPlans:
             sid = student['id']
             realizations = by_student.get(sid, [])
             assigned = self.assigned_codes(lesson, sid)
-            open_work = [r for r in realizations if not r['completed_at']]
-            current = open_work[-1] if open_work else None
+            # O estado segue a última ação em qualquer realização, não a última começada.
+            latest = max(realizations, key=lambda r: r['last_at'], default=None)
+            current = latest if latest and not latest['finished'] else None
             if sid in offline:
-                state = 'offline'
+                state, current = 'offline', None
             elif current:
                 idle = (now - _instant(current['last_at'])).total_seconds() >= IDLE_SECONDS
                 state = 'idle' if idle else 'working'
@@ -215,12 +224,13 @@ class LessonPlans:
                 'id': sid, 'display_name': student['display_name'], 'state': state,
                 'offline': offline.get(sid), 'note': notes.get(sid, ''), 'words': words.get(sid, []),
                 'assigned': assigned, 'current': current['code'] if current else None,
+                'current_title': current['title'] if current else None,
                 'realizations': realizations,
             })
         return {
             'code': lesson['code'], 'title': lesson['title'], 'class_name': lesson['class_name'],
             'active': lesson['active'], 'now': now.isoformat(), 'idle_seconds': IDLE_SECONDS,
-            'activities': activities, 'students': students, 'board': await self.board_focus(lesson),
+            'activities': activities, 'students': students,
         }
 
     async def set_board(self, code, activity_code):
@@ -252,12 +262,17 @@ class LessonPlans:
         focus = await self.storage.read_json(self.board_path())
         if not focus:
             return None
+        # Como as sessões ao vivo, a escolha vale só no dia letivo em que foi feita.
+        zone = getattr(self.classroom, '_school_timezone', None) or timezone.utc
+        if _instant(focus['set_at']).astimezone(zone).date() != datetime.now(zone).date():
+            return None
         if lesson is None:
             lesson = await self.storage.read_json(self.path(focus['lesson_code']))
         if not lesson or lesson['code'] != focus['lesson_code'] or not lesson['active']:
             return None
+        used = {c for assignment in lesson['assignments'] for c in assignment['activity_codes']}
         activity = (await self.learning.activities()).get(focus['activity_code'])
-        if not activity or not activity['published']:
+        if focus['activity_code'] not in used or not activity or not activity['published']:
             return None
         return {
             'kind': 'lesson', 'id': f"lesson-{lesson['code']}-{activity['code']}",
