@@ -249,8 +249,12 @@ def cycle_guide(data, word):
                 "a ronda acaba quando as encontra todas ou quando toca em «Não encontro mais palavras», que mostra as que faltavam. "
                 "«Com ajuda» mostra a imagem (quando existe) e o som de cada palavra escondida; «Sozinho» mostra quantas sílabas tem cada uma; "
                 "«Consigo ajudar um amigo» mostra só quantas são. Uma combinação fora da lista recebe «não está escondida».")
-        if all(w.get('newIn') != word['slug'] for r in rounds for w in r['lexicon']):
+        used_new = [w['label'] for r in rounds for w in r['lexicon'] if w.get('newIn') == word['slug']]
+        if not data.get('newWords'):
             body += f" «{word['label']}» não traz palavras novas: este jogo revê palavras de palavras-chave anteriores."
+        elif not used_new:
+            body += (f" As palavras novas de «{word['label']}» ({', '.join(data['newWords'])}) não cabem num tabuleiro honesto; "
+                     "trabalha-as nos outros jogos.")
         without = sum(1 for r in rounds if not r.get('extra'))
         if without:
             body += ((" Nesta ronda" if len(rounds) == 1 else " Numa das rondas") + " não há sílaba a mais: qualquer sílaba disponível formaria outra palavra que não está escondida."
@@ -258,7 +262,7 @@ def cycle_guide(data, word):
         extra = sorted({w for r in rounds for w in r.get('warnings', [])})
         if extra:
             body += (f" Com estas peças também se formam sequências que o dicionário aceita mas que não estão escondidas ({', '.join(extra)}); "
-                     "nesse caso, a criança recebe «é uma palavra, mas não está escondida aqui». "
+                     "nesse caso, a criança recebe «é uma palavra! Não estava escondida, mas descobriste-a.», sem contar para o jogo. "
                      "Podem não ser conhecidas das crianças. Se uma criança as encontrar, aproveita para conversar sobre o que significam, "
                      "por exemplo no Conselho de Cooperação ou no Texto Livre.")
     if game == 'sentence':
@@ -401,7 +405,7 @@ def cycle_content(word, game, pool, lexicon=None):
         r.setdefault('options', [])
         r.setdefault('answer', [])
     return dict(slug=slug, word=illustrated(word), game=game, title=title, instruction=instruction, criteria=[criterion],
-                rounds=rounds, demo=demo,
+                rounds=rounds, demo=demo, newWords=[w['label'] for w in pool['newWords']],
                 audio={k: data_audio(v) for k, v in dict(start='start', instruction=game, word=word['slug'], hint='hint',
                                                           success='success', retry='retry', finish='finish', correct='correct',
                                                           tryagain='tryagain', found='found', allfound='allfound', realword='realword').items()}), None
