@@ -274,6 +274,7 @@ def validate_cycle(cycle, words, lexicon=None):
             keyword=dict(item, article=articles[slug]), words=list(known), newWords=list(current), sentenceWords=list(extra),
             functionWords=sorted(function_words), excluded=cycle['policy'].get('excludedFromSource', []),
             discoverBoards=section.get('discoverBoards'), index=index, repertoire=repertoire, slugs=slugs,
+            avoidWords=sorted(cycle.get('knownWords', {}).get('avoid', [])),
             knownWords=sorted(set(cycle.get('knownWords', {}).get('words', [])) | {w['label'] for w in ordered}
                               | {w['label'] for sec in cycle['keywords'].values() for w in sec['newWords'] + sec.get('sentenceWords', [])}),
             sentences=list(sentences), families=sorted(units_until(repertoire, slugs, index)),
@@ -413,9 +414,10 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserve
     known = set(pool.get('knownWords', []))
     def celebrated(pieces, words):
         return celebrated_sequences(pieces, words, known, pool.get('index', 0), pool['repertoire'], pool['slugs'])
+    familiar = known | set(pool.get('avoidWords', []))
     def weight(words):
-        # Uma palavra que a criança conhece pesa muito mais do que uma forma rara do dicionário («too», «coes»).
-        return sum(1 if word in known else 0.25 for word in words)
+        # Uma palavra que a criança conhece (celebrada ou não) pesa muito mais do que uma forma rara do dicionário («too», «coes»).
+        return sum(1 if word in familiar else 0.25 for word in words)
     if pool.get('discoverBoards'):
         # Tabuleiros já aprovados ficam fixos: uma ronda concluída nunca reabre noutra versão.
         by_label = {w['label']: w for w in pool['words']}

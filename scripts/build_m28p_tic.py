@@ -237,8 +237,9 @@ def cycle_guide(data, word):
             equivalent = f"Quando duas ordens dizem o mesmo (por exemplo, «{example}»), as duas contam como certas. "
         body = ("A criança ordena as palavras de uma frase. «Com ajuda» mostra a imagem, a frase escrita com as palavras separadas e o botão de ouvir; "
                 "«Sozinho» mostra a imagem, o botão de ouvir e um espaço por palavra; «Consigo ajudar um amigo» mostra só o botão de ouvir. "
-                f"Frases, uma por ronda (separadas por « / »): {listed} {equivalent}"
-                + ("Depois das frases desta palavra-chave, as rondas seguintes repetem frases de palavras-chave anteriores. "
+                f"Frases, uma por ronda{' (separadas por « / »)' if len(rounds) > 1 else ''}: {listed} {equivalent}"
+                + (f"As primeiras {sum(1 for r in rounds if r['target'].get('newIn') == word['slug'])} frases são de «{word['label']}»; "
+                   "as restantes repetem frases de palavras-chave anteriores. "
                    if any(r['target'].get('newIn') != word['slug'] for r in rounds) else "")
                 +
                 "Na página da turma, podes guardar as frases ditadas pelas crianças e projetá-las no Quadro. Quando a turma joga numa sessão, até quatro frases da turma surgem primeiro, "
@@ -248,7 +249,7 @@ def cycle_guide(data, word):
     else:
         hidden = ' / '.join(', '.join('«' + w['label'] + '»' for w in r['lexicon']) for r in rounds)
         body = ("Em cada ronda há duas ou três palavras escondidas; o tabuleiro tem só as sílabas dessas palavras e, quando possível, uma sílaba a mais. "
-                f"Palavras escondidas (as rondas estão separadas por « / »): {hidden}. A criança vê quantas já encontrou na ronda (por exemplo, «Encontraste 1 de {len(rounds[0]['lexicon'])}.»; o total é o de cada ronda); "
+                f"Palavras escondidas{' (as rondas estão separadas por « / »)' if len(rounds) > 1 else ''}: {hidden}. A criança vê quantas já encontrou na ronda (por exemplo, «Encontraste 1 de {len(rounds[0]['lexicon'])}.»; o total é o de cada ronda); "
                 "a ronda acaba quando as encontra todas ou quando toca em «Não encontro mais palavras», que mostra as que faltavam. "
                 "«Com ajuda» mostra a imagem (quando existe) e o som de cada palavra escondida; «Sozinho» mostra quantas sílabas tem cada uma; "
                 "«Consigo ajudar um amigo» mostra só quantas palavras há. Uma palavra comum que não estava escondida recebe «É uma palavra! "
@@ -276,7 +277,7 @@ def cycle_guide(data, word):
     if game == 'sentence':
         example = f"A demonstração usa «{demo['target']['text']}.», que não é uma das frases, e mostra os mesmos botões do jogo."
     elif demo['target']['label'] != word['label']:
-        why = "só tem uma sílaba, poucas para este jogo" if len(word['syllables']) < 2 else "tem sílabas a mais para este jogo"
+        why = "só tem uma sílaba" if len(word['syllables']) < 2 else "tem sílabas a mais para este jogo"
         example = (f"A demonstração usa a palavra-chave anterior «{demo['target']['label']}» («{word['label']}» {why}); "
                    "essa palavra não é uma das rondas, e a demonstração mostra os mesmos botões do jogo.")
     else:

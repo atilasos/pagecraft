@@ -382,12 +382,15 @@ def test_discover_uses_new_words_and_extra_syllable_only_when_it_adds_no_real_wo
     real={'nine','ove','voo','mame','nona','nove','nave'}
     def made(pieces):
         return {''.join(pieces[i] for i in order) for n in (2,3) for order in permutations(range(len(pieces)),n)}&real
-    for slug in ('uva','menina'):
+    # Palavras-chave sem tabuleiro fixo, para exercitar a escolha dinâmica da sílaba a mais.
+    for slug in ('dedo','sapato','bota','casa'):
         for r in discover_rounds(pools[slug],random.Random(1),lexicon=lambda w:w in real):
             labels={w['label'] for w in r['hidden']}
             if r['extra']:
                 # A sílaba a mais só aparece quando não acrescenta palavras reais fora da lista.
-                assert made(r['pieces'])-labels==made(r['pieces'][:-1])-labels,(slug,r['pieces'])
+                base={s for w in r['hidden'] for s in w['syllables']}
+                core=[p for p in r['pieces'] if p in base]
+                assert made(r['pieces'])-labels==made(core)-labels,(slug,r['pieces'])
 
 
 def test_pinned_pilot_boards_match_the_approved_order_and_are_validated():
