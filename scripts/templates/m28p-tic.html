@@ -342,7 +342,7 @@ function feedback(r){
     const found=TicModel.discovery(r,last),missing=r.lexicon.length-(state.discoveries[r.id]||[]).length,again=found&&repeatFound;
     const word=last.map(id=>r.pieces.find(p=>p.id===id)?.label||'').join('');
     box.classList.toggle('ok',!!found);box.appendChild(node('span',found?'✓':'↻','icon'));
-    box.appendChild(node('span',found?(again?'Já encontraste «':'Encontraste «')+found.label+'». '+(missing===1?'Falta 1.':'Faltam '+missing+'.'):((r.warnings||[]).includes(word)?'«'+word+'» é uma palavra, mas não está escondida aqui. Experimenta outra vez.':'«'+word+'» não está escondida. Experimenta outra vez.')));
+    box.appendChild(node('span',found?(again?'Já encontraste «':'Encontraste «')+found.label+'». '+(missing===1?'Falta 1.':'Faltam '+missing+'.'):((r.warnings||[]).includes(word)?'«'+word+'» é uma palavra! Não estava escondida, mas descobriste-a.':'«'+word+'» não está escondida. Experimenta outra vez.')));
     return;
   }
   if(!state.confirmed[r.id])return;

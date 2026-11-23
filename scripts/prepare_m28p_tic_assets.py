@@ -54,7 +54,7 @@ INSTRUCTIONS = {
     "tryagain": "Experimenta outra vez.",
     "found": "Encontraste uma palavra!",
     "allfound": "Encontraste todas as palavras!",
-    "realword": "É uma palavra, mas não está escondida aqui.",
+    "realword": "É uma palavra! Não estava escondida, mas descobriste-a.",
 }
 
 
@@ -322,6 +322,10 @@ def compose_scene(scene, art, layout=None):
     if len(scene) != 2:
         raise ValueError('Cada cena tem uma ou duas figuras.')
     left, right = (scene_part(part, art) for part in scene)
+    if layout == 'room':
+        # «Está no quarto/na cozinha»: o lugar ao fundo e o sujeito no chão, à frente, sem tocar no fogão nem na janela.
+        return (f'<g transform="translate(12 6) scale(.9)">{right}</g>'
+                f'<g transform="translate(8 104) scale(.5)">{left}</g>')
     if layout == 'on':
         # «Está no/na», «toma banho», «sobe a»: o sujeito fica em cima ou dentro do lugar, não ao lado.
         return (f'<g transform="translate(12 22) scale(.9)">{right}</g>'
@@ -362,7 +366,8 @@ def generate_cycle_images(overwrite):
             svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"><title>{html.escape(text)}</title><g stroke="{INK}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">{art[slug]}</g></svg>\n'
             write_if_needed(DEST/'images'/f'{slug}.svg', svg, overwrite)
     for slug, text in SENTENCES:
-        scene = compose_scene(*SCENES[slug][:1], art, SCENES[slug][1])
+        scene_parts, layout = SCENES[slug]
+        scene = compose_scene(scene_parts, art, layout)
         svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"><title>{html.escape(text)}</title><g stroke="{INK}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">{scene}</g></svg>\n'
         write_if_needed(DEST/'images'/f'{slug}.svg', svg, overwrite)
 
