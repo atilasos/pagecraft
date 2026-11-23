@@ -305,7 +305,7 @@ function order(r,container){
 }
 function markCue(element){if(!element)return;element.classList.add('visual-cue');const cue=node('span','↻','cue-icon');cue.setAttribute('aria-hidden','true');element.appendChild(cue);}
 function visualFeedback(r,container){
-  if(r.kind==='discover'){const last=state.last[r.id];if(!state.confirmed[r.id]&&last&&selected().length&&JSON.stringify(selected())===JSON.stringify(last)&&!TicModel.discovery(r,last))markCue(container.querySelector('.tray'));return;}
+  if(r.kind==='discover'){const last=state.last[r.id];if(!state.confirmed[r.id]&&last&&selected().length&&JSON.stringify(selected())===JSON.stringify(last)&&!TicModel.discovery(r,last)&&!(r.celebrate||[]).includes(last.map(id=>r.pieces.find(p=>p.id===id)?.label||'').join('·')))markCue(container.querySelector('.tray'));return;}
   if(!state.confirmed[r.id]||TicModel.correct(r,selected()))return;
   if(r.kind==='discover')return;
   if(TicModel.ordered(r)){
@@ -341,8 +341,10 @@ function feedback(r){
     }
     const found=TicModel.discovery(r,last),missing=r.lexicon.length-(state.discoveries[r.id]||[]).length,again=found&&repeatFound;
     const word=last.map(id=>r.pieces.find(p=>p.id===id)?.label||'').join('');
-    box.classList.toggle('ok',!!found);box.appendChild(node('span',found?'✓':'↻','icon'));
-    box.appendChild(node('span',found?(again?'Já encontraste «':'Encontraste «')+found.label+'». '+(missing===1?'Falta 1.':'Faltam '+missing+'.'):((r.warnings||[]).includes(word)?'«'+word+'» é uma palavra! Não estava escondida, mas descobriste-a.':'«'+word+'» não está escondida. Experimenta outra vez.')));
+    // Só se celebra uma palavra comum montada com uma divisão válida («ne·la», não «nel·a»).
+    const celebrated=!found&&(r.celebrate||[]).includes(last.map(id=>r.pieces.find(p=>p.id===id)?.label||'').join('·'));
+    box.classList.toggle('ok',!!found);box.appendChild(node('span',found?'✓':celebrated?'★':'↻','icon'));
+    box.appendChild(node('span',found?(again?'Já encontraste «':'Encontraste «')+found.label+'». '+(missing===1?'Falta 1.':'Faltam '+missing+'.'):(celebrated?'«'+word+'» é uma palavra! Não estava escondida, mas descobriste-a.':'«'+word+'» não está escondida. Experimenta outra vez.')));
     return;
   }
   if(!state.confirmed[r.id])return;
@@ -403,8 +405,7 @@ function confirm(){
   revisionHint=null;checkpoint();renderGame();
   // Som de resposta curto e coerente com o ecrã (o ecrã acrescenta a palavra); nas descobertas intermédias, sem convite a continuar.
   // Uma palavra real que não está escondida tem som próprio, como no ecrã.
-  const formed=r.kind==='discover'?value.map(id=>r.pieces.find(p=>p.id===id)?.label||'').join(''):'';
-  const real=!result.correct&&(r.warnings||[]).includes(formed);
+  const real=r.kind==='discover'&&!result.correct&&(r.celebrate||[]).includes(value.map(id=>r.pieces.find(p=>p.id===id)?.label||'').join('·'));
   if(value[0]!=='finish'&&!repeatFound)playFeedback(r.kind==='discover'?(real&&data.audio?.realword?'realword':!result.correct?'tryagain':state.confirmed[r.id]?'allfound':'found'):(result.correct?'correct':'tryagain'));
   if(state.confirmed[r.id])$('next').focus();
   else if(r.kind==='discover'&&!selected().length)(document.querySelector('#round-content [data-piece]:not(:disabled)')||$('discover-finish'))?.focus();

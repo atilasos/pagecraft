@@ -53,9 +53,9 @@ with sync_playwright() as p:
                         assert 'não está escondida' in page.locator('#feedback').text_content()
                         assert page.locator('.tray.visual-cue').count() == 1
                         key('#undo'); key('#undo')
-                    if r.get('warnings'):
+                    if r.get('celebrate'):
                         # Uma palavra real que não está escondida recebe a resposta própria.
-                        word = r['warnings'][0]
+                        word = r['celebrate'][0].replace('·', '')
                         labels = [x['label'] for x in r['pieces']]
                         def split(rest, used):
                             # Procura uma sequência completa de 2 ou 3 peças, respeitando as repetições disponíveis.
@@ -67,11 +67,12 @@ with sync_playwright() as p:
                                     if found:
                                         return found
                             return None
-                        used = split(word, [])
+                        used = r['celebrate'][0].split('·')
                         for label in used:
                             piece(label)
                         key('#confirm')
                         assert 'é uma palavra! Não estava escondida' in page.locator('#feedback').text_content()
+                        assert page.locator('.tray.visual-cue').count() == 0
                         for _ in used:
                             key('#undo')
                     for w in r['lexicon']:
