@@ -365,6 +365,20 @@ def formable(label, pieces, limit=3):
     return search(label, frozenset(), 0)
 
 
+def celebrated_sequences(pieces, words, known, index, repertoire, slugs):
+    """Sequências de peças («ne·la») que formam uma palavra comum com uma divisão válida nesta etapa.
+
+    «nel·a» não conta (divisão inválida) e «po·sa» não conta antes de casa (s entre vogais)."""
+    result = set()
+    for size in range(2, 4):
+        for order in permutations(range(len(pieces)), size):
+            parts = [pieces[i] for i in order]
+            word = ''.join(parts)
+            if word in words and word in known and readable_at(word, parts, index, repertoire, slugs):
+                result.add('·'.join(parts))
+    return sorted(result)
+
+
 def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserved=()):
     """Agrupa as palavras escondidas por ronda e escolhe sílabas suficientes, sem excesso.
 
@@ -398,16 +412,7 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserve
         return sorted(word for word in made - labels - excluded if lexicon and lexicon(word))
     known = set(pool.get('knownWords', []))
     def celebrated(pieces, words):
-        """Sequências de peças ("ne·la") que formam uma palavra comum com uma divisão válida nesta etapa."""
-        result = []
-        for size in range(2, 4):
-            for order in permutations(range(len(pieces)), size):
-                parts = [pieces[i] for i in order]
-                word = ''.join(parts)
-                if word in words and word in known and readable_at(word, parts, pool.get('index', 0),
-                                                                   pool['repertoire'], pool['slugs']):
-                    result.append('·'.join(parts))
-        return sorted(set(result))
+        return celebrated_sequences(pieces, words, known, pool.get('index', 0), pool['repertoire'], pool['slugs'])
     def weight(words):
         # Uma palavra que a criança conhece pesa muito mais do que uma forma rara do dicionário («too», «coes»).
         return sum(1 if word in known else 0.25 for word in words)

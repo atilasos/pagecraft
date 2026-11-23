@@ -55,7 +55,6 @@ with sync_playwright() as p:
                         key('#undo'); key('#undo')
                     if r.get('celebrate'):
                         # Uma palavra real que não está escondida recebe a resposta própria.
-                        word = r['celebrate'][0].replace('·', '')
                         used = r['celebrate'][0].split('·')
                         for label in used:
                             piece(label)

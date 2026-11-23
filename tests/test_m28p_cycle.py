@@ -399,3 +399,17 @@ def test_pinned_pilot_boards_match_the_approved_order_and_are_validated():
     import random
     with pytest.raises(ValueError,match='Tabuleiro fixo'):
         discover_rounds(validate_cycle(bad,motor.read_words())['menino'],random.Random(0))
+
+
+def test_celebration_needs_a_common_word_a_valid_split_and_the_right_stage():
+    from scripts.m28p_cycle import celebrated_sequences
+    cycle=source();slugs=[w['slug'] for w in sorted(motor.read_words(),key=lambda w:w['order'])];rep=cycle['repertoire']
+    known={'nela','posa','lama'}
+    # «ne·la» celebra-se; «nel·a» não (divisão inválida).
+    assert celebrated_sequences(['ne','la'],{'nela'},known,slugs.index('funil'),rep,slugs)==['ne·la']
+    assert celebrated_sequences(['nel','a'],{'nela'},known,slugs.index('funil'),rep,slugs)==[]
+    # «po·sa» só depois de casa (s entre vogais).
+    assert celebrated_sequences(['po','sa'],{'posa'},known,slugs.index('bota'),rep,slugs)==[]
+    assert celebrated_sequences(['po','sa'],{'posa'},known,slugs.index('casa'),rep,slugs)==['po·sa']
+    # Formas raras (fora do vocabulário infantil) não se celebram.
+    assert celebrated_sequences(['ma','la'],{'mala'},known,slugs.index('leque'),rep,slugs)==[]
