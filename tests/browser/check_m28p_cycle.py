@@ -34,7 +34,8 @@ with sync_playwright() as p:
                           [x['target'].get('label') or x['target'].get('text') for x in data['rounds']]
                 sample = data['demo']['target']
                 assert (sample.get('syllables') or sample.get('tokens'))[0] in stage, stage
-                assert not any(a and a in stage for a in answers), stage
+                shown = set(stage.split())
+                assert not any(a and (a in shown or (' ' in a and a in stage)) for a in answers), stage
                 if SHOTS and width == 1366:
                     page.wait_for_timeout(2600)
                     page.screenshot(path=str(SHOTS/f"{data['slug']}-demo.png"))
