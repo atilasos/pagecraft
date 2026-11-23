@@ -56,17 +56,6 @@ with sync_playwright() as p:
                     if r.get('celebrate'):
                         # Uma palavra real que não está escondida recebe a resposta própria.
                         word = r['celebrate'][0].replace('·', '')
-                        labels = [x['label'] for x in r['pieces']]
-                        def split(rest, used):
-                            # Procura uma sequência completa de 2 ou 3 peças, respeitando as repetições disponíveis.
-                            if not rest:
-                                return used if 2 <= len(used) <= 3 else None
-                            for l in set(labels):
-                                if rest.startswith(l) and labels.count(l) > used.count(l):
-                                    found = split(rest[len(l):], used + [l])
-                                    if found:
-                                        return found
-                            return None
                         used = r['celebrate'][0].split('·')
                         for label in used:
                             piece(label)

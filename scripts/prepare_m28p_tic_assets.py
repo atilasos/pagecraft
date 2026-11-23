@@ -332,8 +332,9 @@ def compose_scene(scene, art, layout=None, place=None):
                 f'<g transform="translate({x} {y}) scale({k})">{right}</g>')
     if layout == 'room':
         # «Está no quarto/na cozinha»: o lugar ao fundo e o sujeito no chão, à direita, longe do fogão e da janela.
+        x, y, k = place or (130, 112, .48)
         return (f'<g transform="translate(12 6) scale(.9)">{right}</g>'
-                f'<g transform="translate(130 112) scale(.48)">{left}</g>')
+                f'<g transform="translate({x} {y}) scale({k})">{left}</g>')
     if layout == 'on':
         # «Está no/na», «toma banho», «sobe a»: o sujeito fica em cima ou dentro do lugar, não ao lado.
         # `place` ajusta o ponto de apoio quando o lugar o exige (o assento de uma cadeira).
