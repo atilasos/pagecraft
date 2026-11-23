@@ -67,7 +67,7 @@ NEW_WORDS = [(asset_id(w['label']),w['label']) for section in CYCLE['keywords'].
 SENTENCES = [(asset_id(s['text'], True),s['text']) for section in CYCLE['keywords'].values() for s in section['sentences']]
 PICTURABLE = {asset_id(w['label']) for section in CYCLE['keywords'].values() for w in section['newWords'] if w['picturable']}
 EXAMPLES = [(f"exemplo-{asset_id(w['label'])}", f"{CYCLE['keywordArticles'][slug].capitalize()} {w['label']}.") for slug, w in ((s, next(x for x in json.loads((ROOT/'drafts/m28p-v3/words.json').read_text()) if x['slug'] == s)) for s in CYCLE['keywordArticles'])]
-SCENES = {asset_id(s['text'], True): s['scene'] for section in CYCLE['keywords'].values() for s in section['sentences']}
+SCENES = {asset_id(s['text'], True): (s['scene'], s.get('layout')) for section in CYCLE['keywords'].values() for s in section['sentences']}
 INSTRUCTIONS.update({key:value[1] for key,value in CYCLE_GAMES.items()})
 
 
@@ -314,7 +314,7 @@ def scene_part(part, art):
     return drawing
 
 
-def compose_scene(scene, art):
+def compose_scene(scene, art, layout=None):
     """Sujeito à esquerda, a olhar para a direita; objeto à direita, à altura do olhar.
     Duas figuras grandes ficam lado a lado (frases do tipo «A menina é a mana.»)."""
     if len(scene) == 1:
@@ -322,6 +322,10 @@ def compose_scene(scene, art):
     if len(scene) != 2:
         raise ValueError('Cada cena tem uma ou duas figuras.')
     left, right = (scene_part(part, art) for part in scene)
+    if layout == 'on':
+        # «Está no/na», «toma banho», «sobe a»: o sujeito fica em cima ou dentro do lugar, não ao lado.
+        return (f'<g transform="translate(12 22) scale(.9)">{right}</g>'
+                f'<g transform="translate(70 40) scale(.42)">{left}</g>')
     if scene[1].get('size') == 'large':
         return (f'<g transform="translate(-6 42) scale(.65)">{left}</g>'
                 f'<g transform="translate(94 42) scale(.65)">{right}</g>')
@@ -358,7 +362,7 @@ def generate_cycle_images(overwrite):
             svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"><title>{html.escape(text)}</title><g stroke="{INK}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">{art[slug]}</g></svg>\n'
             write_if_needed(DEST/'images'/f'{slug}.svg', svg, overwrite)
     for slug, text in SENTENCES:
-        scene = compose_scene(SCENES[slug], art)
+        scene = compose_scene(*SCENES[slug][:1], art, SCENES[slug][1])
         svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"><title>{html.escape(text)}</title><g stroke="{INK}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">{scene}</g></svg>\n'
         write_if_needed(DEST/'images'/f'{slug}.svg', svg, overwrite)
 
