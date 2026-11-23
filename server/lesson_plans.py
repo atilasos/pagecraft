@@ -277,7 +277,7 @@ class LessonPlans:
         if focus['activity_code'] not in used or not activity or not activity['published']:
             return None
         return {
-            'kind': 'lesson', 'id': f"lesson-{lesson['code']}-{activity['code']}",
+            'kind': 'lesson', 'id': f"lesson-{lesson['code']}-{activity['code']}-{focus['set_at']}",
             'lesson_code': lesson['code'], 'lesson_title': lesson['title'],
             'class_name': lesson['class_name'], 'activity_code': activity['code'],
             'activity_title': activity['title'], 'set_at': focus['set_at'],

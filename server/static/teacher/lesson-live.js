@@ -14,7 +14,8 @@ const STATES = {
 const ANSWERS = {alone: "com autonomia", help: "com ajuda", practising: "quer praticar", skip: "sem resposta"};
 let data = null, rows = new Map(), timer = null, publicOrigin = location.origin;
 // Observações: por aluno, o texto confirmado pelo servidor e a fila de gravações.
-const notes = new Map(); // id -> {saved, queued, chain}
+const notes = new Map(); // id -> {saved, queued, pending, chain}
+let refreshRequest = 0; // só a consulta mais recente atualiza o painel e reagenda
 
 function el(tag, text, className) {
   const node = document.createElement(tag);
@@ -39,15 +40,14 @@ const status_of = r => r.completed_at ? `terminada às ${time(r.completed_at)}` 
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 const time = iso => new Date(iso).toLocaleTimeString("pt-PT", {hour: "2-digit", minute: "2-digit"});
 
+/* Respostas somadas de todas as autoavaliações; as contagens de atividades são distintas. */
 function assessmentTotals(student) {
   const totals = {alone: 0, help: 0, practising: 0, skip: 0};
-  let filled = 0;
-  for (const r of student.realizations) {
-    if (!r.assessment) continue;
-    filled++;
-    for (const key of Object.keys(totals)) totals[key] += r.assessment[key] || 0;
-  }
-  return {filled, missing: student.realizations.length - filled, totals};
+  for (const r of student.realizations)
+    if (r.assessment) for (const key of Object.keys(totals)) totals[key] += r.assessment[key] || 0;
+  const assessed = new Set(student.realizations.filter(r => r.assessment).map(r => r.code));
+  const missing = new Set(student.realizations.filter(r => !assessed.has(r.code)).map(r => r.code));
+  return {filled: assessed.size, missing: missing.size, totals};
 }
 /* Atividades distintas: repetir ou reabrir um jogo cria outra realização. */
 function activityCounts(student) {
@@ -59,8 +59,8 @@ function activityCounts(student) {
 function evidenceTotals(student) {
   return student.realizations.reduce((sum, r) => ({
     correct: sum.correct + r.correct, different: sum.different + r.different, unscored: sum.unscored + r.unscored,
-    help: sum.help + r.help, pending: sum.pending || r.help_pending,
-  }), {correct: 0, different: 0, unscored: 0, help: 0, pending: false});
+    help: sum.help + r.help,
+  }), {correct: 0, different: 0, unscored: 0, help: 0});
 }
 
 function nowCell(student) {
@@ -107,10 +107,7 @@ function wordLabel(word) {
 function assessmentCell(student) {
   const cell = el("td");
   if (!student.realizations.length) { cell.append(el("span", "—", "muted")); return cell; }
-  const {filled, totals} = assessmentTotals(student);
-  // Atividades (distintas) começadas no PageCraft sem nenhuma autoavaliação.
-  const assessedCodes = new Set(student.realizations.filter(r => r.assessment).map(r => r.code));
-  const missing = new Set(student.realizations.filter(r => !assessedCodes.has(r.code)).map(r => r.code)).size;
+  const {filled, missing, totals} = assessmentTotals(student);
   if (filled) {
     cell.append(el("p", `Preenchida em ${plural(filled, "atividade", "atividades")}`));
     const said = Object.entries(totals).filter(([, n]) => n).map(([key, n]) => `${n} ${ANSWERS[key]}`);
@@ -137,24 +134,30 @@ function noteCell(student) {
   area.setAttribute("aria-label", `Observação sobre ${student.display_name}`);
   area.placeholder = "Ex.: leu sozinho as frases";
   line.setAttribute("role", "status");
-  const state = notes.get(student.id) || {saved: student.note, queued: student.note, chain: Promise.resolve()};
+  const state = notes.get(student.id) || {saved: student.note, queued: student.note, pending: 0, chain: Promise.resolve()};
   notes.set(student.id, state);
   // As gravações do mesmo aluno seguem em fila: a última escrita é a que fica.
   const save = () => {
     const text = area.value;
+    if (text.trim() === state.queued.trim() && !state.pending) return Promise.resolve();
     if (text.trim() === state.queued.trim()) return state.chain;
     state.queued = text;
+    state.pending++;
     line.textContent = "A guardar…";
-    state.chain = state.chain.catch(() => {}).then(() =>
+    const request = state.chain.then(() =>
       api(`/api/learning/lessons/${code}/notes/${student.id}`, "PUT", {text})).then(() => {
       state.saved = text;
       if (state.queued === text) line.textContent = "Guardada.";
     }, error => {
-      state.queued = state.saved;
-      line.textContent = `Não foi possível guardar: ${error.message}`;
+      // Só a escrita mais recente decide o que falta guardar e a mensagem mostrada.
+      if (state.queued === text) {
+        state.queued = state.saved;
+        line.textContent = `Não foi possível guardar: ${error.message}`;
+      }
       throw error;
-    });
-    return state.chain;
+    }).finally(() => { state.pending--; });
+    state.chain = request.catch(() => {});
+    return request;
   };
   area.onblur = () => { save().catch(() => {}); };
   area.dataset.student = student.id;
@@ -241,8 +244,11 @@ async function showOnBoard(activityCode) {
 
 async function refresh() {
   clearTimeout(timer);
+  const request = ++refreshRequest;
   try {
-    data = await api(`/api/learning/lessons/${code}/progress`);
+    const fresh = await api(`/api/learning/lessons/${code}/progress`);
+    if (request !== refreshRequest) return;
+    data = fresh;
     // Uma atualização que saiu antes de uma gravação não repõe a observação antiga.
     for (const student of data.students) if (notes.has(student.id)) student.note = notes.get(student.id).saved.trim();
     $("title").textContent = data.title;
@@ -254,8 +260,8 @@ async function refresh() {
     renderRows();
     renderBoard();
     if ($("status").classList.contains("error")) status("");
-  } catch (error) { status(error.message, true); }
-  if (!document.hidden) timer = setTimeout(refresh, 10000);
+  } catch (error) { if (request === refreshRequest) status(error.message, true); }
+  if (request === refreshRequest && !document.hidden) timer = setTimeout(refresh, 10000);
 }
 document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
 
@@ -290,8 +296,10 @@ async function flushNotes() {
   return true;
 }
 addEventListener("beforeunload", event => {
-  const unsaved = [...document.querySelectorAll("#rows textarea")].some(area =>
-    area.value.trim() !== (notes.get(area.dataset.student)?.saved || "").trim());
+  const unsaved = [...document.querySelectorAll("#rows textarea")].some(area => {
+    const state = notes.get(area.dataset.student);
+    return state?.pending || area.value.trim() !== (state?.saved || "").trim();
+  });
   if (unsaved) { event.preventDefault(); event.returnValue = ""; }
 });
 $("download").onclick = async () => {

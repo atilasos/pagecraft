@@ -87,8 +87,9 @@ function planFromLesson(lesson) {
         // atribuições, mas abrir um roteiro antigo não apaga o que lá está.
         const activity = published.find(a => a.code === code);
         if (!activity) { droppedCodes.add(code); continue; }
-        // Os jogos da palavra da linha ficam nessa coluna; os de outra palavra passam a outras atividades.
-        if (entry.word && wordOf(activity)?.id === entry.word) continue;
+        // A coluna da palavra só volta a gravar os jogos atuais dessa palavra; tudo o resto
+        // (outra palavra, coleção anterior) fica em outras atividades e não se perde.
+        if (entry.word && words.get(entry.word)?.codes.includes(code)) continue;
         entry.extras.add(code);
       }
     }
