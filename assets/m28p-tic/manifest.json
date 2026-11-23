@@ -4,7 +4,7 @@
     "author": "PageCraft, ilustrações SVG originais criadas com assistência Codex",
     "license": "CC0-1.0",
     "viewBox": "0 0 240 240",
-    "notes": "Sem texto visível nem emoji; os títulos SVG são alternativas acessíveis. A seta no telhado assinala a parte da casa."
+    "notes": "Sem texto visível nem emoji; os títulos SVG são alternativas acessíveis, retirados ao incorporar nos jogos (o nome acessível vem do jogo). A seta no telhado assinala a parte da casa. As cenas das frases compõem as figuras indicadas em cycle.json."
   },
   "audio": {
     "provider": "Microsoft Edge Read Aloud, através de edge-tts",
@@ -54,11 +54,10 @@
       "avo-circ": "avô",
       "frase-3d2f79aca608": "A menina é a mana.",
       "frase-a92eadbc4509": "O menino é o mano.",
-      "frase-b37fff422510": "A mana e o mano.",
       "frase-6f4bc3b2c2d7": "A avó vê a uva.",
       "frase-69fcd4799ba6": "O avô vê o ovo.",
       "frase-9753cfa8e327": "O menino vê a neve.",
-      "frase-20d5affa2353": "A uva é nova.",
+      "frase-a1e84f0d02f5": "A avó vê o menino.",
       "match": "Toca na palavra igual ao modelo.",
       "pairs": "Toca no desenho. Depois, toca na palavra.",
       "hunt": "Procura as palavras iguais ao modelo.",
@@ -258,13 +257,13 @@
       "slug": "mana",
       "text": "mana",
       "audio": "audio/mana.mp3",
-      "image": "images/mana.svg"
+      "image": null
     },
     {
       "slug": "mano",
       "text": "mano",
       "audio": "audio/mano.mp3",
-      "image": "images/mano.svg"
+      "image": null
     },
     {
       "slug": "nova",
@@ -321,12 +320,6 @@
       "image": "images/frase-a92eadbc4509.svg"
     },
     {
-      "slug": "frase-b37fff422510",
-      "text": "A mana e o mano.",
-      "audio": "audio/frase-b37fff422510.mp3",
-      "image": "images/frase-b37fff422510.svg"
-    },
-    {
       "slug": "frase-6f4bc3b2c2d7",
       "text": "A avó vê a uva.",
       "audio": "audio/frase-6f4bc3b2c2d7.mp3",
@@ -345,10 +338,10 @@
       "image": "images/frase-9753cfa8e327.svg"
     },
     {
-      "slug": "frase-20d5affa2353",
-      "text": "A uva é nova.",
-      "audio": "audio/frase-20d5affa2353.mp3",
-      "image": "images/frase-20d5affa2353.svg"
+      "slug": "frase-a1e84f0d02f5",
+      "text": "A avó vê o menino.",
+      "audio": "audio/frase-a1e84f0d02f5.mp3",
+      "image": "images/frase-a1e84f0d02f5.svg"
     }
   ],
   "instructions": {
@@ -430,10 +423,6 @@
       "bytes": 12384,
       "sha256": "eeb92d68df746c6d421bdd754cf7eb591edc6814674501dac0cf8feb4940f5b0"
     },
-    "audio/frase-20d5affa2353.mp3": {
-      "bytes": 14400,
-      "sha256": "275001ebf93b017257165e51bf1d45c627a6377d1a7e136dc9f77948ed623f4a"
-    },
     "audio/frase-3d2f79aca608.mp3": {
       "bytes": 17136,
       "sha256": "6002b9bc449e80ad53206eeea2218cd132e64a18a52eeb8b1fc905ebe1dea153"
@@ -450,13 +439,13 @@
       "bytes": 16848,
       "sha256": "94a68ac7ec34b54607aec3b2f0b5af81d76b36bfd5f359e54063b3c5e5d84b76"
     },
+    "audio/frase-a1e84f0d02f5.mp3": {
+      "bytes": 16416,
+      "sha256": "69af7716fda19239d640ce5c396b04835252e7e14cb75e2ab30706d61b9ffab1"
+    },
     "audio/frase-a92eadbc4509.mp3": {
       "bytes": 16704,
       "sha256": "a43df633bf87b98019c57341df94fa2e0ad2381dc39bb73cc96cc9310d9dbecb"
-    },
-    "audio/frase-b37fff422510.mp3": {
-      "bytes": 16848,
-      "sha256": "5afb660a6f90bc10404b02aa6b2decbd721b475fa034d2dd8a04f330f6b19f96"
     },
     "audio/funil.mp3": {
       "bytes": 10512,
@@ -666,33 +655,29 @@
       "bytes": 638,
       "sha256": "2a7263d9ddf9d7b5b0a80547cc25aca73bcdad39a158d364c3aeb720b04d2a16"
     },
-    "images/frase-20d5affa2353.svg": {
-      "bytes": 1399,
-      "sha256": "17e2e3a4650a8eb4942190ce0365f492e532ead23d90530e1801312e2b7f9c80"
-    },
     "images/frase-3d2f79aca608.svg": {
-      "bytes": 2213,
-      "sha256": "602df4950725a8da5eb0ce4807eed1a905c0d0c116e1411687ecbbb08bb7196b"
+      "bytes": 2069,
+      "sha256": "da23090dc421f64cd50c8fcc24e66e1c853be310603f8feee00bb163c0c37f57"
     },
     "images/frase-69fcd4799ba6.svg": {
-      "bytes": 1217,
-      "sha256": "fb2dee351aa2dc52a0d2cbb63978e26031b78b20effcdb7454ac2a15d5b28237"
+      "bytes": 1577,
+      "sha256": "b281e63fd426dc638c2dd633452f89166c54ff3f09300c347ffca59d538702d9"
     },
     "images/frase-6f4bc3b2c2d7.svg": {
       "bytes": 2341,
       "sha256": "8c9547ac0530879348135f986c8bc542c87c67da9ab6a22385ad2b0012501834"
     },
     "images/frase-9753cfa8e327.svg": {
-      "bytes": 1354,
-      "sha256": "8a2d5f11647122f6520f3fddebe414c128f22e9d3e96e2d0ba31452041898b5f"
+      "bytes": 3955,
+      "sha256": "56782c73800c52c21510e36992fd1d7e4a836d64a090f386c8e5deaa46051a93"
+    },
+    "images/frase-a1e84f0d02f5.svg": {
+      "bytes": 1934,
+      "sha256": "eaf51450599aa34e06362c541b35df76af596195c8889caba11265cac19cb3de"
     },
     "images/frase-a92eadbc4509.svg": {
       "bytes": 1889,
       "sha256": "126c3b377a4452201de67af1817084ee147a04274656ef6e62562e66d0b4e2ec"
-    },
-    "images/frase-b37fff422510.svg": {
-      "bytes": 2048,
-      "sha256": "c6b27e4a04c5e37a708ffd5b2e5e90409032fc6f139f165673acf5785dd45df4"
     },
     "images/funil.svg": {
       "bytes": 495,
@@ -718,33 +703,25 @@
       "bytes": 1145,
       "sha256": "4b663636aa2d3a7bd52d444b46556c3f4de320d8a2f884908e34c2671ff96bf3"
     },
-    "images/mana.svg": {
-      "bytes": 2128,
-      "sha256": "999280de75c99f018b329ba2841482a7e0ec93c1c8504aed52dddc6e8b8f4c3d"
-    },
-    "images/mano.svg": {
-      "bytes": 2133,
-      "sha256": "08bb69ec5ac740dbc3ae9822f25a80bb15a2cafec79c84a71c8792143edae556"
-    },
     "images/menina.svg": {
-      "bytes": 1132,
-      "sha256": "ed0b087af8a721dbebece6633260178dddd49d6a6f37ca5016c1a9241683d4b8"
+      "bytes": 1136,
+      "sha256": "fa78ee2e467f1f9524665b0b33bc9be149d23b16eb2eb1a10e9d99dd05845b4e"
     },
     "images/menino.svg": {
       "bytes": 1046,
       "sha256": "3ac929a92e3b8b4cc2e069e1d12a7835c9ac78f718ead1627de9bdfde2458de9"
     },
     "images/neve.svg": {
-      "bytes": 491,
-      "sha256": "ee2e500149619bcba928d22e2cbb5d14c2b1c7825a666cdf8814531738c95fbc"
+      "bytes": 3046,
+      "sha256": "58a135b5d0de57841a0b787cb8c5b24ef1c383b10e66870eaad28983b7cb579e"
     },
     "images/nove.svg": {
       "bytes": 613,
       "sha256": "3ee11ebc3eb6b731a52469a6474a4f85466f721ba1ff365a6cc80c52f5fb889a"
     },
     "images/ovo.svg": {
-      "bytes": 236,
-      "sha256": "a5abf3ec8c68b45d471a1007a696223a3ceee087f64f45051e50596b3e491291"
+      "bytes": 596,
+      "sha256": "15f8c64d8536fb2bb58ef01fb3c68546a7c7f27a6d4f23b1d8e36d25e2932f84"
     },
     "images/palhaco.svg": {
       "bytes": 1310,

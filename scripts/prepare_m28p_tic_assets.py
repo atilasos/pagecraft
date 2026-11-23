@@ -12,6 +12,7 @@ import hashlib
 import html
 import json
 import math
+import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -59,6 +60,7 @@ CYCLE = json.loads((ROOT/'drafts/m28p-v3/cycle.json').read_text())
 NEW_WORDS = [(asset_id(w['label']),w['label']) for section in CYCLE['keywords'].values() for w in section['newWords']]
 SENTENCES = [(asset_id(s['text'], True),s['text']) for section in CYCLE['keywords'].values() for s in section['sentences']]
 PICTURABLE = {asset_id(w['label']) for section in CYCLE['keywords'].values() for w in section['newWords'] if w['picturable']}
+SCENES = {asset_id(s['text'], True): s['scene'] for section in CYCLE['keywords'].values() for s in section['sentences']}
 INSTRUCTIONS.update({key:value[1] for key,value in CYCLE_GAMES.items()})
 
 
@@ -94,10 +96,12 @@ def eyes(x, y, distance=26):
 def person(girl):
     drawing = ""
     if girl:
-        drawing += ellipse(85, 77, 17, 30, "#604535") + ellipse(155, 77, 17, 30, "#604535")
-        drawing += path("M99 139 L89 204 M141 139 L151 204", stroke=SKIN, stroke_width=17)
-        drawing += path("M95 108 L72 148 M145 108 L168 148", stroke=SKIN, stroke_width=14)
-        drawing += path("M97 101 Q120 93 143 101 L163 169 L77 169 Z", "#b880b3")
+        # Cabelo comprido; camisola e calças, sem vestido nem laços (sem estereótipo de roupa).
+        drawing += path("M86 52 Q62 92 80 124 L99 108 L141 108 L160 124 Q178 90 154 50 Z", "#604535")
+        drawing += path("M100 154 L95 207 M140 154 L145 207", stroke=SKIN, stroke_width=17)
+        drawing += path("M95 109 L72 151 M145 109 L168 151", stroke=SKIN, stroke_width=14)
+        drawing += path("M98 100 L142 100 L156 144 L140 151 L100 151 L84 144 Z", "#b880b3")
+        drawing += path("M95 147 L145 147 L151 204 L128 204 L120 164 L112 204 L89 204 Z", "#536f9c")
     else:
         drawing += path("M100 154 L95 207 M140 154 L145 207", stroke=SKIN, stroke_width=17)
         drawing += path("M95 109 L72 151 M145 109 L168 151", stroke=SKIN, stroke_width=14)
@@ -107,8 +111,6 @@ def person(girl):
     drawing += path("M86 61 Q82 19 119 25 Q156 19 154 61 L144 46 L129 42 L111 48 L96 43 Z", "#604535")
     drawing += eyes(120, 65) + path("M109 82 Q120 91 131 82", stroke_width=3)
     drawing += ellipse(91, 211, 18, 8, "#40576b") + ellipse(149, 211, 18, 8, "#40576b")
-    if girl:
-        drawing += path("M77 52 L66 44 L66 61 Z M77 52 L90 43 L90 61 Z", GOLD)
     return drawing
 
 
@@ -252,7 +254,7 @@ def generate_images(overwrite):
 def cycle_person(kind, looking=False):
     """Pistas sóbrias exclusivas do ciclo; preserva as figuras neutras v3."""
     gray = '#c8c6bf'
-    drawing = person(False)
+    drawing = person(kind == 'menina')
     # Calças compridas para as pessoas idosas, sem bengalas.
     if kind in ('avó', 'avô'):
         drawing = drawing.replace('#604535', gray)
@@ -285,40 +287,76 @@ def cycle_siblings(left, right):
             cycle_person(right).replace(TEAL,GOLD)+'</g>')
 
 
+PEOPLE = {'menina': 'menina', 'menino': 'menino', 'avo': 'avó', 'avo-circ': 'avô'}
+
+
+def snowflake(x, y, r):
+    arms = ''.join(line(x - r * math.cos(a), y - r * math.sin(a), x + r * math.cos(a), y + r * math.sin(a),
+                        stroke='#5b8fb0', stroke_width=3) for a in (0, math.pi / 3, 2 * math.pi / 3))
+    return arms + circle(x, y, 2.5, '#5b8fb0', stroke='none')
+
+
+def inner_svg(slug, art):
+    if slug in art:
+        return art[slug]
+    source = (DEST / 'images' / f'{slug}.svg').read_text(encoding='utf-8')
+    source = re.sub(r'<title\b[^>]*>.*?</title>', '', source, flags=re.S)
+    return source[source.index('>', source.index('<svg')) + 1:source.rindex('</svg>')]
+
+
+def scene_part(part, art):
+    """Uma figura da cena: pessoas desenhadas aqui (com pose), objetos a partir do SVG da palavra."""
+    slug = part['image']
+    if slug in PEOPLE:
+        drawing = cycle_person(PEOPLE[slug], looking=part.get('pose') == 'looking')
+    else:
+        drawing = inner_svg(slug, art)
+    if part.get('tint') == 'gold':
+        drawing = drawing.replace(TEAL, GOLD).replace('#b880b3', GOLD)
+    return drawing
+
+
+def compose_scene(scene, art):
+    """Sujeito à esquerda, a olhar para a direita; objeto à direita, à altura do olhar.
+    Duas figuras grandes ficam lado a lado (frases do tipo «A menina é a mana.»)."""
+    if len(scene) != 2:
+        raise ValueError('Cada cena tem duas figuras.')
+    left, right = (scene_part(part, art) for part in scene)
+    if scene[1].get('size') == 'large':
+        return (f'<g transform="translate(-6 42) scale(.65)">{left}</g>'
+                f'<g transform="translate(94 42) scale(.65)">{right}</g>')
+    return (f'<g transform="translate(-8 25) scale(.75)">{left}</g>'
+            f'<g transform="translate(137 25) scale(.4)">{right}</g>')
+
+
 def generate_cycle_images(overwrite):
     # Cenas compostas exclusivamente por traços SVG originais da coleção.
     art = drawings()
-    art['ovo'] = ellipse(120,125,57,78,'#fff4d9')
-    art['neve'] = path('M20 190 L85 45 L125 122 L158 65 L220 190 Z','#e2eff5') + path('M65 90 L85 45 L108 90 L89 81 Z','#ffffff') + ''.join(circle(x,y,5,'#ffffff') for x,y in [(35,45),(180,25),(205,90),(135,30)])
+    # Ovo inteiro, com casca e brilho, num oveiro: não se confunde com a letra O, uma pedra ou uma bola.
+    art['ovo'] = (path('M120 30 C80 30 66 100 68 136 C70 172 94 192 120 192 C146 192 170 172 172 136 C174 100 160 30 120 30 Z', '#fbeed3')
+                  + path('M96 78 Q102 56 116 50', stroke='#ffffff', stroke_width=7)
+                  + path('M78 160 L162 160 Q160 196 120 198 Q80 196 78 160 Z', TEAL)
+                  + rect(100, 196, 40, 12, TEAL, rx=3) + rect(86, 206, 68, 10, TEAL, rx=4))
+    # Neve: flocos a cair sobre chão coberto de branco e um pinheiro com neve.
+    art['neve'] = (path('M10 214 Q60 172 120 188 Q180 172 230 214 Z', '#f4f8fb')
+                   + path('M176 92 L208 170 L144 170 Z', '#5f8b55') + rect(170, 170, 12, 18, '#8a6244', rx=2)
+                   + path('M176 92 L190 126 Q176 118 162 126 Z', '#ffffff')
+                   + path('M152 152 Q176 140 200 152 L208 170 L144 170 Z', '#ffffff')
+                   + ''.join(snowflake(x, y, r) for x, y, r in [(46, 44, 16), (112, 30, 12), (176, 40, 13), (78, 106, 13), (130, 96, 11), (36, 160, 10), (104, 150, 9)]))
     art['nove'] = ''.join(circle(65+55*(i%3),65+55*(i//3),19,TEAL) for i in range(9))
     art['avo'] = cycle_person('avó')
     art['avo-circ'] = cycle_person('avô')
-    # O par dá contexto familiar; a seta assinala o referente.
-    siblings = cycle_siblings('mana', 'mano')
-    art['mana'] = siblings + path('M66 15 L72 45 M60 35 L72 45 L83 32',stroke=INK,stroke_width=5)
-    art['mano'] = siblings + path('M166 15 L172 45 M160 35 L172 45 L183 32',stroke=INK,stroke_width=5)
-    for slug,text in SENTENCES:
-        if 'mana' in text and 'mano' in text:
-            art[slug] = siblings
-        elif 'mana' in text:
-            art[slug] = cycle_siblings('mana', 'mana')
-        elif 'mano' in text:
-            art[slug] = cycle_siblings('mano', 'mano')
-        elif 'neve' in text:
-            art[slug]=art['neve']+'<g transform="translate(5 50) scale(.65)">'+person(False)+'</g>'
-        elif 'avó' in text or 'avô' in text:
-            obj=art['uva'] if 'uva' in text else art['ovo']
-            elder=cycle_person('avó' if 'avó' in text else 'avô', looking=True)
-            art[slug]='<g transform="translate(-8 25) scale(.75)">'+elder+'</g><g transform="translate(137 25) scale(.4)">'+obj+'</g>'
-        else:
-            art[slug]=art['uva']
-    for slug,text in NEW_WORDS+SENTENCES:
-        if slug not in PICTURABLE and not slug.startswith('frase-'):
-            continue
-        if slug not in art:
+    for slug, text in NEW_WORDS:
+        if slug in PICTURABLE and slug not in art and not (DEST / 'images' / f'{slug}.svg').is_file():
             raise ValueError(f'Falta uma ilustração original para {text}')
-        svg=f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"><title>{html.escape(text)}</title><g stroke="{INK}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">{art[slug]}</g></svg>\n'
-        write_if_needed(DEST/'images'/f'{slug}.svg',svg,overwrite)
+    for slug, text in NEW_WORDS:
+        if slug in PICTURABLE and slug in art:
+            svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"><title>{html.escape(text)}</title><g stroke="{INK}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">{art[slug]}</g></svg>\n'
+            write_if_needed(DEST/'images'/f'{slug}.svg', svg, overwrite)
+    for slug, text in SENTENCES:
+        scene = compose_scene(SCENES[slug], art)
+        svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"><title>{html.escape(text)}</title><g stroke="{INK}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">{scene}</g></svg>\n'
+        write_if_needed(DEST/'images'/f'{slug}.svg', svg, overwrite)
 
 
 async def generate_audio(overwrite):
@@ -353,7 +391,7 @@ def generate_manifest():
             files[str(path_.relative_to(DEST))] = {"bytes": path_.stat().st_size, "sha256": hashlib.sha256(path_.read_bytes()).hexdigest()}
     manifest = {
         "version": 1,
-        "illustrations": {"author": "PageCraft, ilustrações SVG originais criadas com assistência Codex", "license": "CC0-1.0", "viewBox": "0 0 240 240", "notes": "Sem texto visível nem emoji; os títulos SVG são alternativas acessíveis. A seta no telhado assinala a parte da casa."},
+        "illustrations": {"author": "PageCraft, ilustrações SVG originais criadas com assistência Codex", "license": "CC0-1.0", "viewBox": "0 0 240 240", "notes": "Sem texto visível nem emoji; os títulos SVG são alternativas acessíveis, retirados ao incorporar nos jogos (o nome acessível vem do jogo). A seta no telhado assinala a parte da casa. As cenas das frases compõem as figuras indicadas em cycle.json."},
         "audio": {"provider": "Microsoft Edge Read Aloud, através de edge-tts", "voice": VOICE, "locale": "pt-PT", "rate": RATE, "license": "Voz sintética Microsoft; sujeita aos termos do serviço, não abrangida pela licença CC0 dos SVG.", "notes": "Palavras inteiras e instruções. Não usar estes sons para modelar fonemas ou sílabas isoladas. Reprodução só após opção da criança.", "transcripts": recordings},
         "words": assets,
         "cycle": [{"slug":slug,"text":text,"audio":f"audio/{slug}.mp3", "image":f"images/{slug}.svg" if slug in PICTURABLE or slug.startswith("frase-") else None} for slug,text in NEW_WORDS+SENTENCES],
