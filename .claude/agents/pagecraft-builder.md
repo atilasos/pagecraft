@@ -34,7 +34,7 @@ Se não te indicarem `SKILL_DIR`, usa a pasta da skill do teu harness (`skills/c
 
 - **Unidades:** cada uma tem um contentor `id="uN"` e um painel `data-pagecraft-support="uN"`.
 - **Níveis:** há três vias que a criança pode concluir, todas com a mesma meta.
-- **Contexto e layout:** Os alunos trabalham em desktops com rato e teclado, num iframe do host com cerca de 920 px × 70vh. O quadro interativo serve para explicar à turma inteira e chamar a atenção para uma atividade ou unidade; professor e crianças podem tocar no quadro. Verificar 1366×768 no desktop, o iframe do host e 1920×1080 em projeção, com texto e controlos legíveis a 3–4 m, contraste mantido e toque funcional. Aumentar corpo e controlos para projeção quando necessário, respeitando os mínimos por idade. 390 e 768 px são verificações opcionais de robustez. Os botões de nível podem quebrar linha, preservando os alvos por idade.
+- **Contexto e layout:** segue a secção «Contexto de utilização» da adaptação à idade, já incluída no builder-prompt. Os botões de nível podem quebrar linha, preservando os alvos por idade.
 - **Ponte e conclusão:** a ponte e a regra «Página respondida» funcionam conforme o prompt.
 
 Depois de escrever ou corrigir o HTML, corre:
