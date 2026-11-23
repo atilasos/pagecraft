@@ -273,6 +273,9 @@ def validate_cycle(cycle, words, lexicon=None):
         result[slug] = dict(
             keyword=dict(item, article=articles[slug]), words=list(known), newWords=list(current), sentenceWords=list(extra),
             functionWords=sorted(function_words), excluded=cycle['policy'].get('excludedFromSource', []),
+            discoverBoards=section.get('discoverBoards'), index=index, repertoire=repertoire, slugs=slugs,
+            knownWords=sorted(set(cycle.get('knownWords', {}).get('words', [])) | {w['label'] for w in ordered}
+                              | {w['label'] for sec in cycle['keywords'].values() for w in sec['newWords'] + sec.get('sentenceWords', [])}),
             sentences=list(sentences), families=sorted(units_until(repertoire, slugs, index)),
             visualConflicts=conflicts)
     return result
@@ -389,14 +392,37 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserve
         labels = {w['label'] for w in hidden}
         return not any(w['label'] not in labels and formable(w['label'], pieces) for w in vocabulary)
     excluded = {e['label'] for e in pool.get('excluded', [])}
-    def real_words(pieces, labels, must=None):
-        made = set()
-        for size in range(2, 4):
-            for order in permutations(range(len(pieces)), size):
-                if must is None or must in order:
-                    made.add(''.join(pieces[i] for i in order))
+    def real_words(pieces, labels):
+        made = {''.join(pieces[i] for i in order) for size in range(2, 4) for order in permutations(range(len(pieces)), size)}
         # Palavras que o professor excluiu («nina», «nano») não contam como palavras para a criança.
         return sorted(word for word in made - labels - excluded if lexicon and lexicon(word))
+    known = set(pool.get('knownWords', []))
+    def celebrated(pieces, words):
+        """Sequências de peças ("ne·la") que formam uma palavra comum com uma divisão válida nesta etapa."""
+        result = []
+        for size in range(2, 4):
+            for order in permutations(range(len(pieces)), size):
+                parts = [pieces[i] for i in order]
+                word = ''.join(parts)
+                if word in words and word in known and readable_at(word, parts, pool.get('index', 0),
+                                                                   pool['repertoire'], pool['slugs']):
+                    result.append('·'.join(parts))
+        return sorted(set(result))
+    def weight(words):
+        # Uma palavra que a criança conhece pesa muito mais do que uma forma rara do dicionário («too», «coes»).
+        return sum(1 if word in known else 0.25 for word in words)
+    if pool.get('discoverBoards'):
+        # Tabuleiros já aprovados ficam fixos: uma ronda concluída nunca reabre noutra versão.
+        by_label = {w['label']: w for w in pool['words']}
+        for board_spec in pool['discoverBoards']:
+            hidden = [by_label[label] for label in board_spec['hidden']]
+            pieces = list(board_spec['pieces'])
+            labels = {w['label'] for w in hidden}
+            found = real_words(pieces, labels)
+            base = {s for w in hidden for s in w['syllables']}
+            rounds.append(dict(pieces=pieces, hidden=hidden, warnings=found, celebrate=celebrated(pieces, set(found)),
+                               extra=any(piece not in base for piece in pieces)))
+        return rounds
     while len(remaining) >= 2 and len(rounds) < max_rounds:
         sizes = (3, 2) if len(remaining) == 3 else (2,)
         used = {w['label'] for r in rounds for w in r['hidden']}
@@ -409,22 +435,23 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserve
                 pieces, hidden = board(group)
                 if len(hidden) <= max_hidden and honest(pieces, hidden):
                     # Preferir tabuleiros cujas peças base não formem palavras reais fora da lista («ano», «ova»).
-                    clashes = len(real_words(pieces, {w['label'] for w in hidden}))
+                    clashes = weight(real_words(pieces, {w['label'] for w in hidden}))
                     # Enquanto houver palavras novas desta palavra-chave por usar, cada ronda leva pelo menos uma.
                     stale = fresh_left and not any(w.get('newIn') == current for w in hidden)
-                    options.append((bool(used & {w['label'] for w in hidden}), stale, clashes, first, pieces, hidden))
+                    # As palavras novas só passam à frente entre tabuleiros com pouca palavra real por acaso.
+                    options.append((bool(used & {w['label'] for w in hidden}), clashes > 1, stale, clashes, first, pieces, hidden))
         if not options:
             break
         # Com três palavras por usar, o trio evita deixar uma de fora; os pares só servem se o trio não for honesto.
-        trios = [option for option in options if len(option[5]) >= 3 and len(remaining) == 3]
+        trios = [option for option in options if len(option[6]) >= 3 and len(remaining) == 3]
         options = trios or options
-        options.sort(key=lambda option: option[:4])
+        options.sort(key=lambda option: option[:5])
         best = None
         # Cada tabuleiro compara-se na forma em que a criança o vê: com a melhor sílaba a mais,
         # ou sem ela quando só acrescentaria palavras reais fora da lista.
-        for repeated, stale, _, _, pieces, hidden in options[:12]:
+        for repeated, _, stale, _, _, pieces, hidden in options[:40]:
             labels = {w['label'] for w in hidden}
-            base_clash = len(real_words(pieces, labels))
+            base_clash = weight(real_words(pieces, labels))
             shown, clash = pieces, base_clash
             candidates = sorted(s for s in syllables if len(s) >= 2 and plain(s) == s and s not in pieces)
             rng.shuffle(candidates)
@@ -433,18 +460,19 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserve
                 if not honest(board_pieces, hidden):
                     continue
                 # Uma peça a mais nunca tira palavras: só serve se não acrescentar nenhuma.
-                if len(real_words(board_pieces, labels)) == base_clash:
+                if weight(real_words(board_pieces, labels)) == base_clash:
                     shown = board_pieces
                     break
-            score = (repeated, stale, clash, shown is pieces)
+            score = (repeated, clash > 1, stale, clash, shown is pieces)
             if best is None or score < best[0]:
                 best = (score, shown, hidden)
-            if best[0] == (False, False, 0, False):
+            if best[0] == (False, False, False, 0, False):
                 break
         _, pieces, hidden = best
         labels = {w['label'] for w in hidden}
         base = {s for w in hidden for s in w['syllables']}
-        rounds.append(dict(pieces=pieces, hidden=hidden, warnings=real_words(pieces, labels),
+        found = real_words(pieces, labels)
+        rounds.append(dict(pieces=pieces, hidden=hidden, warnings=found, celebrate=celebrated(pieces, set(found)),
                            extra=any(piece not in base for piece in pieces)))
         remaining = [w for w in remaining if w['label'] not in labels]
     return rounds

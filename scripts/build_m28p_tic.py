@@ -262,7 +262,8 @@ def cycle_guide(data, word):
         extra = sorted({w for r in rounds for w in r.get('warnings', [])})
         if extra:
             body += (f" Com estas peças também se formam sequências que o dicionário aceita mas que não estão escondidas ({', '.join(extra)}); "
-                     "nesse caso, a criança recebe «é uma palavra! Não estava escondida, mas descobriste-a.», sem contar para o jogo. "
+                     "se for uma palavra comum, a criança recebe «é uma palavra! Não estava escondida, mas descobriste-a.», sem contar para o jogo; "
+                     "as formas raras recebem «não está escondida». "
                      "Podem não ser conhecidas das crianças. Se uma criança as encontrar, aproveita para conversar sobre o que significam, "
                      "por exemplo no Conselho de Cooperação ou no Texto Livre.")
     if game == 'sentence':
@@ -392,6 +393,7 @@ def cycle_content(word, game, pool, lexicon=None):
             excluded = {e['label'] for e in pool.get('excluded', [])}
             rounds.append(dict(id='descobrir-' + '-'.join(w['slug'] for w in group['hidden']), unit='syllable', extra=group['extra'],
                                target=resource(group['hidden'][0]), warnings=[w for w in group['warnings'] if w not in excluded],
+                               celebrate=[seq for seq in group['celebrate'] if seq.replace('·', '') not in excluded],
                                lexicon=[resource(w) for w in group['hidden']], length=3, pieces=pieces))
         extra = near_syllables(sample['syllables'], pool['families'], seed('demo'), 1, syllables)
         demo = dict(target=example, pieces=[p['label'] for p in mixed(pieces_for(sample['syllables'] + extra), seed('demo'), [sample['syllables']])],
