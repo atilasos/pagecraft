@@ -1,6 +1,6 @@
 # Ouvir e montar · menino
 
-4 rondas, cerca de cinco minutos. A criança ouve uma palavra e monta-a com sílabas, sem a ver escrita. Há duas ou três sílabas a mais, da mesma família. «Com ajuda» mostra a palavra dividida em sílabas; «Sozinho» e «Consigo ajudar um amigo» mostram só o botão de ouvir. Palavras, uma por ronda: mano, mana, nome, menina.
+4 rondas, cerca de cinco minutos. A criança ouve uma palavra e monta-a com sílabas, sem a ver escrita. Há duas ou três sílabas a mais, da mesma família. «Com ajuda» mostra a palavra dividida em sílabas; «Sozinho» e «Consigo ajudar um amigo» mostram só o botão de ouvir. Palavras, uma por ronda: «mano», «mana», «nome», «menina».
 
 A demonstração usa a palavra-chave «menino», que não é uma das rondas, e mostra os mesmos botões do jogo. Ouvir, ver a demonstração, desfazer e mudar de ajuda conservam o trabalho. A criança pode continuar depois de confirmar, mesmo com erro.
 
