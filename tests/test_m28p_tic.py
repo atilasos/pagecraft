@@ -20,6 +20,9 @@ def test_all_generated_games_are_complete_private_artifacts_with_offline_assets(
     from server.api.learning import ActivityInput
     paths = list((ROOT / 'drafts/m28p-v3').glob('*/m28p-v3-*.html'))
     assert len(paths) == 168
+    # Publicados a 26/10 e arquivados a 23/11: as cópias publicadas ficam
+    # preservadas em activities/, mas a coleção nunca volta ao catálogo.
+    listed = {item['slug'] for item in json.loads((ROOT / 'catalog.json').read_text())['items']}
     for path in paths:
         data = content(path)
         assert len(data['rounds']) == 4
@@ -33,7 +36,9 @@ def test_all_generated_games_are_complete_private_artifacts_with_offline_assets(
         assert metadata.duration == 5
         assert (ROOT / 'drafts' / path.name).resolve() == path
         assert (ROOT / 'drafts' / (path.stem + '.md')).is_file()
-        assert not (ROOT / 'activities' / path.stem).exists()
+        assert path.stem not in listed
+        published = ROOT / 'activities' / path.stem / 'meta.json'
+        assert not published.exists() or json.loads(published.read_text())['status'] == 'archived'
 
 
 def test_generated_distractors_are_cumulative_and_each_answer_is_possible():

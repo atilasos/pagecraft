@@ -1,0 +1,454 @@
+{
+  "slug": "unidades-dezenas-2ano-30min",
+  "title": "A oficina dos números",
+  "topic": "Matemática — unidades e dezenas",
+  "year": "2.º ano",
+  "ageRange": "6–8 anos; mínimos de interface de 6–7 anos",
+  "duration": 30,
+  "language": "pt-PT",
+  "objectives": [
+    "Agrupar 10 unidades numa dezena e desfazer a troca sem mudar a quantidade.",
+    "Construir e decompor números até 99 com dezenas e unidades, incluindo zero unidades.",
+    "Distinguir 24 de 42 e identificar o valor do algarismo 4 em cada posição."
+  ],
+  "criteria": [
+    {
+      "id": "agrupar",
+      "text": "Agrupo e separo peças.",
+      "observable": "Agrupa 10 unidades numa dezena e separa-a de novo, conservando o total."
+    },
+    {
+      "id": "construir",
+      "text": "Construo um número com peças.",
+      "observable": "Confirma representações de 24, 30 e 57, incluindo zero unidades em 30."
+    },
+    {
+      "id": "explicar",
+      "text": "Explico o valor de um algarismo.",
+      "observable": "Distingue 24 de 42 e identifica o valor 40 do algarismo 4 em 42."
+    }
+  ],
+  "curriculum": {
+    "ae": [
+      {
+        "subject": "Matemática",
+        "year": "2.º ano",
+        "domain": "Números — sistema de numeração decimal",
+        "descriptor": "Usar o valor posicional dos algarismos para representar quantidades com material de base dez.",
+        "source": "https://www.dge.mec.pt/sites/default/files/Curriculo/Aprendizagens_Essenciais/1_ciclo/aemat_2a_2021.pdf",
+        "page": 23,
+        "paraphrase": true
+      },
+      {
+        "subject": "Matemática",
+        "year": "2.º ano",
+        "domain": "Números — relações numéricas",
+        "descriptor": "Compor e decompor naturais por diferentes recursos e formas de representação.",
+        "source": "https://www.dge.mec.pt/sites/default/files/Curriculo/Aprendizagens_Essenciais/1_ciclo/aemat_2a_2021.pdf",
+        "page": 23,
+        "paraphrase": true
+      },
+      {
+        "subject": "Matemática",
+        "year": "2.º ano",
+        "domain": "Números naturais",
+        "descriptor": "Representar naturais e comparar a sua grandeza.",
+        "source": "https://www.dge.mec.pt/sites/default/files/Curriculo/Aprendizagens_Essenciais/1_ciclo/aemat_2a_2021.pdf",
+        "page": 22,
+        "paraphrase": true
+      }
+    ],
+    "competencies": [
+      "PA-A: Linguagens e textos",
+      "PA-C: Raciocínio e resolução de problemas",
+      "PA-E: Relacionamento interpessoal",
+      "PA-F: Desenvolvimento pessoal e autonomia"
+    ],
+    "scope": "As AE de 2021 trabalham naturais até 1000. Esta sessão delimita unidades/dezenas e exemplos até 99; não pretende cobrir o objetivo anual. Descritores acima são paráfrases, não citações.",
+    "verification": "PDF oficial DGE 2021 consultado em 2026-10-12, páginas 22–23; homologação documentada pela DGE em https://www.dge.mec.pt/node/3935. Não usar proposta de março de 2026 como exigência vigente.",
+    "competencyMapping": {
+      "PA-A": "Relacionar numeral, peças e explicação curta.",
+      "PA-C": "Comparar hipóteses, trocas e representações.",
+      "PA-E": "Conversar com o par e discutir estratégias com a turma.",
+      "PA-F": "Escolher apoio, rever respostas e reconhecer próximos passos."
+    }
+  },
+  "memAlignment": {
+    "modules": [
+      "Trabalho curricular comparticipado",
+      "Circuitos de comunicação"
+    ],
+    "instruments": [
+      "Critérios visíveis antes do trabalho",
+      "Registo das representações confirmadas e das revisões",
+      "Autoavaliação individual facultativa"
+    ],
+    "socialOrganization": "Arranque com a turma; exploração individual ou a pares, alternando quem toca e quem explica por acordo; partilha final com destinatários reais na turma. Não impor papéis fixos nem acrescentar seleção de participantes ao HTML."
+  },
+  "materials": [
+    "Computador ou tablet com o HTML autocontido",
+    "Quadro interativo ou projetor facultativo",
+    "Barras/cubos de base dez facultativos para apoiar conversa; a página não observa trabalho físico"
+  ],
+  "units": [
+    {
+      "id": "comecar",
+      "title": "A oficina dos números",
+      "summary": "Conhecer os critérios e escolher como trabalhar.",
+      "duration": 3,
+      "textDescription": "Mostrar poucas peças, o nome da atividade e os três critérios com ícones. O professor lê os critérios, pede uma ideia inicial e esclarece que se pode experimentar, voltar e mudar de apoio. Não revelar ainda a equivalência entre dezena e unidades.",
+      "requiredRequests": [
+        {
+          "id": "comecar-confirmacao",
+          "prompt": "Vamos experimentar?",
+          "response": "Botão Começar: confirmação intencional.",
+          "required": true
+        }
+      ],
+      "interaction": {
+        "state": [
+          {
+            "name": "started",
+            "type": "toggle",
+            "default": false
+          }
+        ],
+        "render": "Critérios associados aos respetivos gestos: juntar/separar, construir, observar algarismos; um botão principal Começar.",
+        "transition": "Começar confirma a entrada e abre a exploração. O apoio inicial é Passo a passo, salvo configuração enviada pelo host.",
+        "constraint": "As peças e os números representam quantidades que se podem investigar; os critérios orientam o trabalho sem antecipar as descobertas.",
+        "assessment": "A criança ouve/lê os critérios e inicia a atividade; esta entrada não demonstra domínio matemático."
+      },
+      "differentiation": {
+        "support": "O professor ou par lê; ícones apontam para os gestos e peças.",
+        "standard": "Ler em conjunto e escolher um critério para observar no próprio trabalho.",
+        "challenge": "Antecipar oralmente o que pode mudar quando as peças são agrupadas; hipótese sem classificação."
+      }
+    },
+    {
+      "id": "trocas",
+      "title": "Junta e separa",
+      "summary": "Agrupar dez unidades numa dezena conserva a quantidade.",
+      "duration": 7,
+      "textDescription": "Começar com 14 cubos soltos. Selecionar cubos com toque ou teclado. A área de agrupamento tem 10 lugares visíveis, sem revelar uma frase com a regra. Juntar forma uma barra segmentada com as mesmas dez partes. Separar desfaz a barra; comparar os estados antes/depois. Só após experimentar mostrar a síntese 10 unidades = 1 dezena.",
+      "requiredRequests": [
+        {
+          "id": "troca-juntar",
+          "prompt": "Junta peças num grupo.",
+          "response": "Seleciona 10 cubos, toca Juntar e confirma o estado com Mostrar o meu grupo; também aceita confirmação de uma hipótese incompleta como resposta.",
+          "required": true,
+          "expected": {
+            "tens": 1,
+            "units": 4
+          }
+        },
+        {
+          "id": "troca-separar",
+          "prompt": "Separa o grupo.",
+          "response": "Toca Separar numa barra e confirma com Mostrar peças soltas; aceita confirmação mesmo sem separação correta.",
+          "required": true,
+          "expected": {
+            "tens": 0,
+            "units": 14
+          }
+        },
+        {
+          "id": "troca-total",
+          "prompt": "Quantas peças tens ao todo?",
+          "response": "Escolha entre 5, 14, 10, acompanhadas por conjuntos representados.",
+          "required": true,
+          "expected": 14
+        }
+      ],
+      "interaction": {
+        "state": [
+          {
+            "name": "looseUnits",
+            "type": "derived",
+            "default": 14
+          },
+          {
+            "name": "tens",
+            "type": "derived",
+            "default": 0
+          },
+          {
+            "name": "selectedUnits",
+            "type": "quiz",
+            "default": []
+          },
+          {
+            "name": "groupConfirmed",
+            "type": "toggle",
+            "default": false
+          },
+          {
+            "name": "splitConfirmed",
+            "type": "toggle",
+            "default": false
+          },
+          {
+            "name": "totalAnswer",
+            "type": "quiz",
+            "default": null,
+            "options": [
+              "5",
+              "14",
+              "10"
+            ]
+          },
+          {
+            "name": "total",
+            "type": "derived",
+            "default": 14,
+            "derivedFrom": "10 * tens + looseUnits"
+          }
+        ],
+        "render": "14 cubos iguais; moldura vazia de dez lugares; barra formada usa dez segmentos do mesmo tamanho do cubo. Estado selecionado inclui contorno e marca. Reapresentar os dois estados numa pista visual de comparação quando houver erro.",
+        "transition": "Selecionar não conta como resposta. Juntar transforma 10 unidades selecionadas numa barra se houver dez; uma seleção diferente mantém as peças e mostra a moldura. Separar troca uma barra pelas mesmas dez unidades. Confirmações explícitas guardam a hipótese, mesmo incorreta; guardar a resposta ao total imediatamente após escolher. Permitir corrigir e repetir.",
+        "constraint": "10 unidades equivalem a 1 dezena; agrupar e separar não alteram a quantidade total. Não apresentar este invariante como solução antes da manipulação.",
+        "assessment": "Guardar as duas representações confirmadas, contagem proposta e ações de juntar/separar. Avaliar separadamente se realizou a troca e se reconheceu o total 14; erros não bloqueiam avanço."
+      },
+      "differentiation": {
+        "support": "Moldura sempre visível; completar os lugares com seleção guiada de um cubo por vez; permitir contar as peças em ambas as representações.",
+        "standard": "Selecionar peças livremente; moldura aparece como referência no agrupamento e no feedback.",
+        "challenge": "Moldura recolhida inicialmente; prever se o total muda e explicar oralmente a conservação; extensão opcional com 24 unidades e dois agrupamentos."
+      }
+    },
+    {
+      "id": "construir",
+      "title": "Constrói números",
+      "summary": "Representar números com dezenas e unidades, incluindo zero unidades.",
+      "duration": 8,
+      "textDescription": "Três pedidos sucessivos: 24, 30 e 57. Em cada um mostrar apenas o número pedido, barras segmentadas/cubos e botões Acrescentar/Retirar. A criança constrói e confirma; não imprimir o total calculado nem a decomposição certa antes de confirmar. Após resposta, relacionar o numeral com a representação.",
+      "requiredRequests": [
+        {
+          "id": "construir-24",
+          "prompt": "Constrói o número 24.",
+          "response": "Construção livre e botão Confirmar construção.",
+          "required": true,
+          "expected": {
+            "tens": 2,
+            "units": 4
+          }
+        },
+        {
+          "id": "construir-30",
+          "prompt": "Constrói o número 30.",
+          "response": "Construção livre e botão Confirmar construção; zero unidades é permitido e fica explícito na confirmação.",
+          "required": true,
+          "expected": {
+            "tens": 3,
+            "units": 0
+          }
+        },
+        {
+          "id": "construir-57",
+          "prompt": "Constrói o número 57.",
+          "response": "Construção livre e botão Confirmar construção.",
+          "required": true,
+          "expected": {
+            "tens": 5,
+            "units": 7
+          }
+        }
+      ],
+      "interaction": {
+        "state": [
+          {
+            "name": "buildings",
+            "type": "derived",
+            "default": {
+              "24": {
+                "tens": 0,
+                "units": 0,
+                "confirmed": false
+              },
+              "30": {
+                "tens": 0,
+                "units": 0,
+                "confirmed": false
+              },
+              "57": {
+                "tens": 0,
+                "units": 0,
+                "confirmed": false
+              }
+            }
+          },
+          {
+            "name": "activeTarget",
+            "type": "quiz",
+            "default": "24",
+            "options": [
+              "24",
+              "30",
+              "57"
+            ]
+          }
+        ],
+        "render": "Uma construção ativa de cada vez, número alvo grande, espaços Dezenas e Unidades com ícones de barra/cubo; progressão visual das três construções. Um espaço sem cubos tem rótulo Sem unidades soltas. Barras segmentadas distinguem dezena de um único objeto.",
+        "transition": "Acrescentar/Retirar altera a representação sem emitir tentativas. Confirmar guarda dezenas, unidades, total calculado e correspondência com alvo; mesmo a construção 0/0 é uma resposta intencional. Construção incorreta recebe pista visual e opção de corrigir ou continuar. Modificar após confirmar marca apenas esse pedido como por confirmar. Não bloquear por correção.",
+        "constraint": "O algarismo das dezenas conta grupos de dez e o das unidades conta peças soltas; zero unidades significa ausência de peças soltas, não ausência de quantidade.",
+        "assessment": "Comparar cada construção confirmada com o alvo; evidenciar a representação 3 dezenas/0 unidades de 30. Guardar as representações efetivamente construídas, incluindo hipóteses erradas."
+      },
+      "differentiation": {
+        "support": "Molduras segmentadas e leitura visual de dezenas/unidades; botões guiados por uma coluna de cada vez; pista após erro destaca a coluna a observar sem preencher a resposta.",
+        "standard": "Duas colunas e botões livres; decomposição aparece só depois da confirmação.",
+        "challenge": "Ocultar molduras-guia e convidar a prever a construção antes de a realizar. Extensão opcional: representar 24 de outro modo, permitindo 1 dezena e 14 unidades. Os três pedidos base mantêm-se."
+      }
+    },
+    {
+      "id": "comparar",
+      "title": "24 e 42",
+      "summary": "O valor de um algarismo depende da sua posição.",
+      "duration": 7,
+      "textDescription": "Apresentar lado a lado 24 com 2 barras e 4 cubos, e 42 com 4 barras e 2 cubos. Comparar quantidades; destacar o 4 de ambos sem marcar o vencedor. Pedir o maior e o valor do 4 em 42. A explicação estruturada constitui resposta base; escrita livre é facultativa e serve aprofundamento.",
+      "requiredRequests": [
+        {
+          "id": "comparar-maior",
+          "prompt": "Qual tem mais peças?",
+          "response": "Escolha 24 ou 42 com as respetivas representações.",
+          "required": true,
+          "expected": 42
+        },
+        {
+          "id": "comparar-valor",
+          "prompt": "Quanto vale o 4 em 42?",
+          "response": "Escolha entre 4, 40 e 6 com quantidades visuais.",
+          "required": true,
+          "expected": 40
+        }
+      ],
+      "optionalRequests": [
+        {
+          "id": "comparar-explicacao",
+          "prompt": "Como descobriste?",
+          "response": "Texto curto facultativo ou partilha oral sem afirmar gravação de áudio.",
+          "required": false
+        },
+        {
+          "id": "comparar-equivalente",
+          "prompt": "Qual mostra também 24?",
+          "response": "Escolha ilustrada entre 1 dezena e 14 unidades; 1 dezena e 4 unidades; 4 dezenas e 2 unidades. Extensão visível em Mais desafios.",
+          "expected": {
+            "tens": 1,
+            "units": 14
+          },
+          "required": false
+        }
+      ],
+      "interaction": {
+        "state": [
+          {
+            "name": "largerAnswer",
+            "type": "quiz",
+            "default": null,
+            "options": [
+              "24",
+              "42"
+            ]
+          },
+          {
+            "name": "fourValueAnswer",
+            "type": "quiz",
+            "default": null,
+            "options": [
+              "4",
+              "40",
+              "6"
+            ]
+          },
+          {
+            "name": "explanation",
+            "type": "quiz",
+            "default": ""
+          },
+          {
+            "name": "equivalentAnswer",
+            "type": "quiz",
+            "default": null
+          }
+        ],
+        "render": "Duas quantidades com barras de dez segmentos e cubos iguais; numeral associado. A pista visual alinha barras e cubos para apoiar a comparação. O 4 destacado é ligado à respetiva coluna por foco ou linha visível; significado não depende apenas de cor.",
+        "transition": "Escolhas registam tentativas e mostram imediatamente feedback com peças ou coluna relevante. Escolhas incorretas ficam registadas e permitem continuar após os dois pedidos base respondidos; regressar e corrigir está sempre disponível. Mais desafios revela extensão facultativa sem apagar os pedidos base.",
+        "constraint": "Os mesmos algarismos em posições diferentes representam quantidades diferentes; o 4 vale 4 unidades em 24 e 4 dezenas (40 unidades) em 42. Representações diferentes podem conservar 24.",
+        "assessment": "Guardar comparação 24/42, valor atribuído ao 4 e, separadamente, explicações ou extensão efetivamente respondidas; não inferir justificação autónoma a partir de mera escolha correta."
+      },
+      "differentiation": {
+        "support": "Comparar alinhando barras e cubos; contar cada barra com apoio visual; responder escolhendo quantidades representadas.",
+        "standard": "Comparar as representações e escolher valor do algarismo; convidar a descrever oralmente uma estratégia.",
+        "challenge": "Primeiro prever pelos algarismos, depois confrontar as peças; resolver facultativamente a representação equivalente 1 dezena + 14 unidades = 24 e justificar com exemplo."
+      }
+    },
+    {
+      "id": "refletir",
+      "title": "Partilha uma descoberta",
+      "summary": "Retomar critérios, comunicar estratégias e escolher o próximo apoio.",
+      "duration": 5,
+      "textDescription": "O professor convida duas produções à partilha. Pergunta O que mudou? O que ficou igual? e retoma os três critérios. Reflexão individual facultativa; cada criança escolhe o que quer responder. Em sessão integrada usar reflexão do host; em modo autónomo oferecer reflexão local sem promessa de gravação no relatório.",
+      "requiredRequests": [],
+      "interaction": {
+        "state": [
+          {
+            "name": "reflections",
+            "type": "derived",
+            "default": {}
+          },
+          {
+            "name": "nextWish",
+            "type": "quiz",
+            "default": null
+          }
+        ],
+        "render": "Resumo das construções reais, três critérios conhecidos com ícones, seleção facultativa Consegui / Com ajuda / Quero experimentar mais; pergunta curta de estratégia facultativa ajustada ao apoio.",
+        "transition": "Finalizar exploração pede a reflexão ao host uma única vez. O host identifica cada participante à vez; não atribuir acontecimentos a nomes no HTML. Em modo autónomo permitir abrir, editar, saltar ou guardar localmente a reflexão; não exigir respostas para terminar.",
+        "constraint": "A mesma aprendizagem pode ser mostrada por ações e explicações diversas; reconhecer ajuda e próximos passos orienta o trabalho sem classificar a criança.",
+        "assessment": "Guardar no host a voz individual efetivamente respondida. Manter respostas da criança, evidência matemática e observação do professor separadas; não inventar transcrições das partilhas orais."
+      },
+      "differentiation": {
+        "support": "Escolher respostas com ícones e leitura oral do adulto; explicar apontando para a própria construção.",
+        "standard": "Descrever facultativamente uma estratégia: Juntei… / Separei… / Olhei para…",
+        "challenge": "Justificar facultativamente com um exemplo e uma representação equivalente, incluindo o que conservou a quantidade."
+      }
+    }
+  ],
+  "sessionFlow": "0–3 min: critérios e hipótese inicial; 3–10: juntar/separar; 10–18: construir 24, 30 e 57; 18–25: comparar 24/42 e valor posicional; 25–30: comunicação e reflexão. As cinco unidades somam 30 minutos. sessionFlow descreve esses tempos; não acrescenta minutos.",
+  "navigation": {
+    "pageAnswered": "Todos os pedidos obrigatórios foram respondidos, mesmo com erros.",
+    "futurePages": "Bloquear Seguinte e saltos para etapas futuras enquanto houver pedido obrigatório vazio; mostrar o pedido em falta junto do controlo.",
+    "correction": "Voltar e corrigir sempre; após nova manipulação exigir confirmação daquele pedido, sem apagar os restantes.",
+    "emptyRepresentation": "0 dezenas / 0 unidades só conta como resposta após Confirmar construção.",
+    "supportSwitch": "Manter todas as respostas e etapa porque pedidos base e alvos são estáveis; conservar extensões facultativas ao escondê-las; nunca exigir extensão para avançar.",
+    "restore": "Restaurar estado, confirmações e etapa sem emitir novas tentativas."
+  },
+  "differentiationLabels": {
+    "support": "Com pistas",
+    "standard": "Passo a passo",
+    "challenge": "Mais desafios"
+  },
+  "bridge": {
+    "transport": "postMessage, conforme server/pipeline/prompts/references/bridge-contract.md; sem API/credenciais no HTML.",
+    "supportMapping": {
+      "support": "support",
+      "standard": "intermediate",
+      "challenge": "challenge"
+    },
+    "evidence": "Tentativas em confirmações/escolhas, representações reais, revisões e mudanças de apoio. Navegação/restauro não são novas tentativas.",
+    "reflection": "Critérios apresentados antes do trabalho e retomados no host; open_reflection só no final da exploração. Reflexão facultativa e individual.",
+    "authorship": "Autoria/grupo atribuídos pelo host; o HTML não cria autenticação nem reserva nomes. Quadro de demonstração não envia evidência de alunos."
+  },
+  "accessibility": {
+    "bodyMinPx": 22,
+    "unitTitleMinPx": 30,
+    "microcopyMinPx": 18,
+    "tapTargetMinPx": 56,
+    "lineMaxCh": 50,
+    "font": "Century Gothic, Didact Gothic incorporada, URW Gothic, Avant Garde, sans-serif",
+    "instructions": "Texto curto e ícone funcional; uma ação principal por momento; nenhuma operação exige arrastar.",
+    "feedback": "Pista visual imediata e frase curta; âmbar para rever sem censura; foco visível, labels, contraste AA; não usar cor como significado único.",
+    "motion": "Respeitar prefers-reduced-motion; áudio opt-in, não obrigatório."
+  },
+  "sourcesFile": "drafts/unidades-dezenas-2ano-30min-sources.md",
+  "teacherGuide": "drafts/unidades-dezenas-2ano-30min.md",
+  "publication": "Rascunho privado para revisão; requer aprovação expressa desta atividade antes de publicar."
+}

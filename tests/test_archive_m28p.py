@@ -33,3 +33,41 @@ def test_interrupted_archive_keeps_originals_and_rerun_repairs_catalog(tmp_path,
     assert not build_catalog(tmp_path)['items']
     assert json.loads(manifest.read_text())['activities']['menina'] == original
     assert (folder / 'index.html').read_text() == 'Trabalho preservado'
+
+
+COLLECTIONS_V3_TITLE = archive_m28p.COLLECTIONS['m28p-v3-2026-11-23']['title']
+
+
+def _activity(root, slug, tags):
+    folder = root / 'activities' / slug
+    folder.mkdir(parents=True)
+    (folder / 'meta.json').write_text(json.dumps({'slug': slug, 'title': slug, 'tags': tags, 'status': 'published'}))
+    (folder / 'index.html').write_text('Conteúdo ' + slug)
+
+
+def test_v3_archive_keeps_cycle_and_other_collections_and_feeds_archive_zone(tmp_path):
+    from server.publish import build_archive
+
+    _activity(tmp_path, 'm28p-v3-uva-gap', ['m28p', 'm28p-v3'])
+    _activity(tmp_path, 'm28p-ciclo-uva-discover', ['m28p', 'm28p-v3'])
+    _activity(tmp_path, 'canva-agua-4ano', ['canva'])
+    # Sem a etiqueta de versão, o slug continua a decidir a coleção.
+    _activity(tmp_path, 'm28p-v3-uva-pairs', ['m28p'])
+    _activity(tmp_path, 'm28p-ciclo-uva-sentence', ['m28p'])
+    # O arquivo de 23/10 nunca apanha a v3 nem o ciclo, mesmo repetido.
+    assert archive_m28p.archive(tmp_path, apply=True) == []
+    assert archive_m28p.archive(tmp_path, apply=True, collection='m28p-v3-2026-11-23') == ['m28p-v3-uva-gap', 'm28p-v3-uva-pairs']
+    catalog = json.loads((tmp_path / 'catalog.json').read_text())
+    assert [item['slug'] for item in catalog['items']] == [
+        'canva-agua-4ano', 'm28p-ciclo-uva-discover', 'm28p-ciclo-uva-sentence']
+    zone = json.loads((tmp_path / 'archive.json').read_text())
+    assert zone == build_archive(tmp_path)
+    assert {item['archiveCollection'] for item in zone['items']} == {COLLECTIONS_V3_TITLE}
+    item = zone['items'][0]
+    assert item['slug'] == 'm28p-v3-uva-gap' and item['url'] == './activities/m28p-v3-uva-gap/'
+    assert item['archivedAt'] == '2026-11-23' and 'ciclo completo' in item['archiveReason']
+    assert item['archiveCollection'].startswith('Coleção v3')
+    assert (tmp_path / 'activities/m28p-v3-uva-gap/index.html').read_text() == 'Conteúdo m28p-v3-uva-gap'
+    manifest = json.loads((tmp_path / 'docs/archives/m28p-v3-2026-11-23.json').read_text())
+    assert manifest['activities']['m28p-v3-uva-gap']['status'] == 'published'
+    assert archive_m28p.archive(tmp_path, apply=True, collection='m28p-v3-2026-11-23') == []
