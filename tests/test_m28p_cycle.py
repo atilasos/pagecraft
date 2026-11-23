@@ -63,6 +63,7 @@ def test_cumulative_repertoire_and_generation_limits():
     (lambda c:(c['repertoire']['byKeyword']['uva']['onsets'].update(s='aeiou'),c['keywords']['uva']['newWords'].append(dict(label='vaso',syllables=['va','so'],picturable=True))),'s entre vogais'),
     (lambda c:c['keywords']['uva']['sentences'].append(dict(text='A uva mu.',tokens=['A','uva','mu'],scene=[{'image':'uva'},{'image':'uva'}])),'token'),
     (lambda c:c['functionWords'].append(dict(word='da',**{'from':'menina'})),'funcional'),
+    (lambda c:c['keywords']['uva']['sentences'].append(dict(text='A avó vê 1 ovo.',tokens=['A','avó','vê','ovo'],scene=[{'image':'avo'},{'image':'ovo'}])),'fora dos cartões'),
     (lambda c:c['keywords']['uva']['sentences'].append(dict(text='A uva é da avó.',tokens=['A','uva','é','da','avó'],scene=[{'image':'uva'}])),'token'),
 ])
 def test_refuses_invalid_editorial_data(change,match):
@@ -116,7 +117,8 @@ def test_syllable_boundaries_hiatus_and_reserved_keywords():
     # Um hiato declarado não dispensa as outras fronteiras («sal-a» continua inválido).
     from scripts.m28p_cycle import _boundary_errors
     assert _boundary_errors('sala',['sal','a'],hiatus=True)
-    assert not _boundary_errors('saída',['sa','í','da'],hiatus=True)
+    assert _boundary_errors('rainha',['ra','i','nha']) and not _boundary_errors('rainha',['ra','i','nha'],hiatus=True)
+    assert _boundary_errors('pão',['pã','o'],hiatus=True)
     assert readable_at('rainha',['ra','i','nha'],slugs.index('rato'),rep,slugs,hiatus=True)
     assert not readable_at('rainha',['ra','i','nha'],slugs.index('rato'),rep,slugs)
 
@@ -140,6 +142,8 @@ def test_class_sentence_warnings_use_the_reading_rules():
     assert any('meu' in w for w in warnings)
     _,_,warnings=prepare_sentence('A avó vê o ovo','uva')
     assert warnings==[]
+    _,_,warnings=prepare_sentence('A avó vê 1 ovo','uva')
+    assert any('números' in w for w in warnings)
     # Palavras funcionais só a partir da sua etapa: «da» entra em dedo.
     from server.classroom import sentences
     words,cycle,pools=sentences.repertoire()

@@ -20,6 +20,8 @@ VOWEL_BASES = {'a': 'aáâ', 'e': 'eéê', 'i': 'ií', 'o': 'oóô', 'u': 'uú'}
 # Ditongos orais e nasais que só podem aparecer dentro de uma unidade já introduzida.
 DIPHTHONGS = ('ai', 'ao', 'au', 'ei', 'eu', 'iu', 'oi', 'ou', 'ui', 'ão', 'ãe', 'õe',
               'ái', 'áu', 'éi', 'éu', 'êi', 'êu', 'ói', 'ôu', 'óu')
+# Só estes podem ser hiatos declarados («ra-i-nha»); «ão», «ãe», «õe» nunca se separam.
+ORAL_DIPHTHONGS = tuple(d for d in DIPHTHONGS if d not in ('ão', 'ãe', 'õe'))
 # Dígrafos que só se leem dentro de uma unidade já trabalhada («ss» de passarinho, não «s» de escada + «s»).
 DIGRAPHS = ('ch', 'lh', 'nh', 'rr', 'ss', 'qu', 'gu')
 VOWELS = set('aeiouáéíóúâêôãõà')
@@ -78,7 +80,7 @@ def _boundary_errors(label, syllables, hiatus=False):
             errors.append(f'{current}-{following}')
         pair = label[start - 1:start + 1]
         # Um hiato declarado só dispensa a fronteira entre duas vogais («ra-i-nha»), nunca as restantes regras.
-        if (pair in DIPHTHONGS and not (hiatus and pair[0] in VOWELS and pair[1] in VOWELS)) or pair in DIGRAPHS:
+        if (pair in DIPHTHONGS and not (hiatus and pair in ORAL_DIPHTHONGS)) or pair in DIGRAPHS:
             errors.append(pair)
     return errors
 
@@ -93,7 +95,7 @@ def _diphthong_errors(label, syllables, hiatus=False):
     for d in DIPHTHONGS + DIGRAPHS:
         for match in re.finditer(d, label):
             if not any(a <= match.start() and match.end() <= b for a, b in bounds):
-                if hiatus and d in DIPHTHONGS and any(b == match.start() + 1 for _, b in bounds):
+                if hiatus and d in ORAL_DIPHTHONGS and any(b == match.start() + 1 for _, b in bounds):
                     continue
                 errors.append(d)
     return errors
@@ -241,6 +243,9 @@ def validate_cycle(cycle, words, lexicon=None):
             tokens = sentence['tokens']
             if [t.lower() for t in tokens_of(sentence['text'])] != [t.lower() for t in tokens]:
                 raise ValueError(f'{slug}: tokens não reproduzem a frase: {sentence["text"]}')
+            # Tudo o que se lê ou ouve tem de estar nos cartões: só palavras, espaços e pontuação.
+            if TOKEN.sub('', sentence['text']).strip(' ,.;:!?…«»"\'') or not 2 <= len(tokens) <= 12:
+                raise ValueError(f'{slug}: a frase tem conteúdo fora dos cartões ou um número de palavras fora de 2 a 12: {sentence["text"]}')
             for token in tokens:
                 if token.lower() not in allowed:
                     raise ValueError(f'{slug}: token fora do repertório: {token}')
