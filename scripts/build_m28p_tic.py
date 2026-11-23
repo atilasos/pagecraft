@@ -245,7 +245,7 @@ def cycle_guide(data, word):
     else:
         hidden = ' / '.join(', '.join('«' + w['label'] + '»' for w in r['lexicon']) for r in rounds)
         body = ("Em cada ronda há duas ou três palavras escondidas; o tabuleiro tem só as sílabas dessas palavras e, quando possível, uma sílaba a mais. "
-                f"Palavras escondidas (as rondas estão separadas por « / »): {hidden}. A criança vê quantas já encontrou («Encontraste 1 de {len(rounds[0]['lexicon'])}.»); "
+                f"Palavras escondidas (as rondas estão separadas por « / »): {hidden}. A criança vê quantas já encontrou na ronda (por exemplo, «Encontraste 1 de {len(rounds[0]['lexicon'])}.»; o total é o de cada ronda); "
                 "a ronda acaba quando as encontra todas ou quando toca em «Não encontro mais palavras», que mostra as que faltavam. "
                 "«Com ajuda» mostra a imagem (quando existe) e o som de cada palavra escondida; «Sozinho» mostra quantas sílabas tem cada uma; "
                 "«Consigo ajudar um amigo» mostra só quantas são. Uma combinação fora da lista recebe «não está escondida».")
