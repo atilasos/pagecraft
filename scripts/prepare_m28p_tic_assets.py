@@ -271,9 +271,6 @@ def cycle_person(kind, looking=False):
                                   'M86 61 Q80 22 120 26 Q160 22 154 61 Q135 55 120 38 Q106 56 86 61 Z')
     elif kind == 'avô':
         drawing += path('M102 79 Q108 70 120 76 Q132 70 138 79 Q130 86 120 81 Q110 86 102 79 Z', gray)
-    elif kind == 'mana':
-        drawing = path('M86 52 Q65 85 81 116 L99 103 L143 103 L160 116 Q175 80 153 48 Z', '#604535') + drawing
-        drawing += path('M81 49 L68 41 L68 59 Z M81 49 L94 41 L94 59 Z', GOLD)
     if looking:
         drawing = drawing.replace(circle(120, 65, 36, SKIN),
             path('M89 46 Q113 21 142 39 Q153 48 151 62 L163 72 L152 77 Q151 97 132 100 Q96 102 89 78 Z', SKIN))
@@ -284,12 +281,6 @@ def cycle_person(kind, looking=False):
             drawing = drawing.replace('M102 79 Q108 70 120 76 Q132 70 138 79 Q130 86 120 81 Q110 86 102 79 Z',
                                       'M136 77 Q144 72 153 78 L151 83 Q142 86 136 81 Z')
     return drawing
-
-
-def cycle_siblings(left, right):
-    return ('<g transform="translate(-6 42) scale(.65)">'+cycle_person(left)+
-            '</g><g transform="translate(94 42) scale(.65)">'+
-            cycle_person(right).replace(TEAL,GOLD)+'</g>')
 
 
 PEOPLE = {'menina': 'menina', 'menino': 'menino', 'avo': 'avó', 'avo-circ': 'avô'}
@@ -332,6 +323,10 @@ def compose_scene(scene, art):
     if scene[1].get('size') == 'large':
         return (f'<g transform="translate(-6 42) scale(.65)">{left}</g>'
                 f'<g transform="translate(94 42) scale(.65)">{right}</g>')
+    if scene[1]['image'] in PEOPLE:
+        # Uma pessoa como objeto fica no mesmo chão que o sujeito, não a flutuar.
+        return (f'<g transform="translate(-8 25) scale(.75)">{left}</g>'
+                f'<g transform="translate(120 74) scale(.55)">{right}</g>')
     return (f'<g transform="translate(-8 25) scale(.75)">{left}</g>'
             f'<g transform="translate(137 25) scale(.4)">{right}</g>')
 
