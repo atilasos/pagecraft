@@ -413,6 +413,42 @@
     }
     #resultStatus { font-size: 0.8125rem; }
 
+    .archive-zone { margin-top: 28px; }
+    .archive-note { max-width: 62ch; margin: 0 0 10px 10px; color: var(--ink-soft); font-size: 0.9375rem; }
+    .archive-group {
+      margin-bottom: 8px;
+      border: 1px dashed var(--manila-deep);
+      border-radius: var(--radius);
+      background: var(--paper-deep);
+    }
+    .archive-group summary {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 4px 12px;
+      min-height: var(--touch);
+      padding: 12px 16px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .archive-group summary:focus-visible { outline: 3px solid var(--stamp); outline-offset: 2px; border-radius: var(--radius); }
+    .archive-group summary .meta { font-weight: 400; }
+    .archive-reason { margin: 0 16px 10px; color: var(--ink-soft); font-size: 0.9375rem; }
+    .archive-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
+      gap: 6px 14px;
+      margin: 0;
+      padding: 0 16px 14px;
+      list-style: none;
+    }
+    .archive-list a {
+      display: flex;
+      align-items: center;
+      min-height: var(--touch);
+      color: var(--stamp-deep);
+      overflow-wrap: anywhere;
+    }
     @media (max-width: 900px) {
       .shell { grid-template-columns: 1fr; gap: 18px; padding-top: 14px; }
       .rail { position: static; gap: 11px; }
@@ -514,6 +550,15 @@
         <ul class="cards" id="generalList"></ul>
       </section>
 
+      <section class="archive-zone" id="archiveSection" aria-labelledby="archiveTitle" hidden>
+        <div class="section-tab">
+          <h2 id="archiveTitle">Arquivo</h2>
+          <span class="cap num" id="archiveCount"></span>
+        </div>
+        <p class="archive-note">Coleções retiradas do catálogo. Cada atividade continua a abrir no mesmo endereço, para rever o trabalho já feito.</p>
+        <div id="archiveGroups"></div>
+      </section>
+
       <div class="state" id="emptyState" hidden>
         <strong id="emptyTitle">Nenhuma ficha encontrada.</strong>
         <p id="emptyText">Experimenta outra pesquisa, gaveta ou ano de escolaridade.</p>
@@ -546,6 +591,9 @@
       const m28pCount = document.getElementById("m28pCount");
       const generalCount = document.getElementById("generalCount");
       const footer = document.getElementById("footer");
+      const archiveSection = document.getElementById("archiveSection");
+      const archiveGroups = document.getElementById("archiveGroups");
+      const archiveCount = document.getElementById("archiveCount");
 
       const state = { category: "todos", year: "todos", expanded: new Map(), model: null };
 
@@ -844,6 +892,40 @@
         render();
       });
 
+      function archiveDate(value) {
+        const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(value || ""));
+        return match ? match[3] + "/" + match[2] + "/" + match[1] : "";
+      }
+
+      function renderArchive(rawItems) {
+        const groups = new Map();
+        rawItems.forEach(item => {
+          const key = (item.archivedAt || "") + "|" + (item.archiveCollection || item.archiveReason || "");
+          if (!groups.has(key)) groups.set(key, { date: item.archivedAt || "", title: item.archiveCollection || "", reason: item.archiveReason || "", items: [] });
+          groups.get(key).items.push(item);
+        });
+        const ordered = [...groups.values()].sort((a, b) => b.date.localeCompare(a.date));
+        archiveGroups.innerHTML = ordered.map(group => {
+          const items = group.items.slice().sort((a, b) =>
+            (Number(a.order) || 99) - (Number(b.order) || 99) || String(a.title).localeCompare(String(b.title), "pt-PT"));
+          const date = archiveDate(group.date);
+          return '<details class="archive-group"><summary><span>' + esc(group.title || "Atividades arquivadas") + '</span>' +
+            '<span class="meta"><span>' + (date ? 'Arquivada a ' + esc(date) : 'Arquivada') + '</span>' +
+            '<span>' + items.length + (items.length === 1 ? ' atividade' : ' atividades') + '</span></span></summary>' +
+            (group.reason ? '<p class="archive-reason">' + esc(group.reason) + '</p>' : '') +
+            '<ul class="archive-list">' + items.map(item =>
+              '<li><a href="' + esc(item.url) + '">' + esc(item.title || item.slug) + '</a></li>').join("") +
+            '</ul></details>';
+        }).join("");
+        archiveCount.textContent = rawItems.length + (rawItems.length === 1 ? " atividade" : " atividades");
+        archiveSection.hidden = rawItems.length === 0;
+      }
+
+      fetch('./archive.json')
+        .then(response => response.ok ? response.json() : { items: [] })
+        .then(data => renderArchive(Array.isArray(data.items) ? data.items : []))
+        .catch(() => { archiveSection.hidden = true; });
+
       fetch('./catalog.json')
         .then(response => {
           if (!response.ok) throw new Error("HTTP " + response.status);
@@ -854,7 +936,7 @@
           state.model = prepare(rawItems);
           loadingState.hidden = true;
           search.disabled = false;
-          footer.innerHTML = '<span>' + state.model.items.length + ' atividades arquivadas</span>' +
+          footer.innerHTML = '<span>' + state.model.items.length + ' atividades no catálogo</span>' +
             '<span>' + state.model.m28pItems.length + ' M28P em ' + state.model.groups.length + ' fichas</span>' +
             '<span>' + state.model.general.length + ' na estante geral</span>' +
             '<span>PageCraft — oficina de atividades do 1.º ciclo</span>';
