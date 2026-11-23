@@ -3,7 +3,7 @@ import json
 from functools import lru_cache
 from pathlib import Path
 
-from scripts.m28p_cycle import TOKEN, readable_word, tokens_of, validate_cycle
+from scripts.m28p_cycle import leftover, readable_word, tokens_of, validate_cycle
 
 
 @lru_cache(maxsize=1)
@@ -31,7 +31,7 @@ def prepare_sentence(text, keyword):
     if not 2 <= len(tokens) <= 12:
         raise ValueError('Escreve uma frase com 2 a 12 palavras.')
     # Números e símbolos ouvem-se na leitura mas não aparecem nos cartões: avisar o professor.
-    leftover = TOKEN.sub('', text).strip(' ,.;:!?…«»"\'')
+    extra = leftover(text)
     if text[-1] not in '.!?…':
         text += '.'
     pool = pools[keyword]
@@ -52,6 +52,6 @@ def prepare_sentence(text, keyword):
             continue
         missing = sorted(set(word.replace('-', '')) - letters)
         warnings.append(f'“{token}” tem letras ainda não trabalhadas: {", ".join(missing)}' if missing else f'“{token}” tem sílabas ainda não trabalhadas.')
-    if leftover:
-        warnings.append(f'A frase tem números ou símbolos que não aparecem nos cartões: {leftover}')
+    if extra:
+        warnings.append(f'A frase tem números ou símbolos que não aparecem nos cartões: {extra}')
     return text, tokens, warnings

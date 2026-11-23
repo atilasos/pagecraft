@@ -330,3 +330,35 @@ for(const restoreFirst of [true,false]){
 """
     result=subprocess.run(['node'],input=js,capture_output=True,text=True)
     assert result.returncode==0,result.stderr
+
+
+def test_repeating_a_sequence_with_other_pieces_keeps_feedback():
+    template=(motor.ROOT/'scripts/templates/m28p-tic.html').read_text()
+    model=template.split('/* BEGIN M28P TIC MODEL: funções puras verificáveis em Node. */')[1].split('/* END M28P TIC MODEL */')[0]
+    js=model+"""
+const assert=require('node:assert/strict');
+const r={id:'d',kind:'discover',pieces:[{id:'ma#1',label:'ma'},{id:'da#1',label:'da'},{id:'da#2',label:'da'},{id:'na#1',label:'na'}],lexicon:[{label:'dama',syllables:['da','ma']},{label:'nada',syllables:['na','da']}]};
+const s=TicModel.initial();
+TicModel.edit(s,r,['ma#1','da#1']);assert(TicModel.confirm(s,r).emit);
+TicModel.edit(s,r,['ma#1','da#2']);const second=TicModel.confirm(s,r);
+assert.equal(second.emit,false);assert.equal(s.counts.d,1);
+// A última seleção acompanha o ecrã, para a mensagem e a pista não desaparecerem.
+assert.deepEqual(s.last.d,['ma#1','da#2']);
+"""
+    result=subprocess.run(['node'],input=js,capture_output=True,text=True)
+    assert result.returncode==0,result.stderr
+
+
+def test_full_generation_replaces_the_report_and_filtered_keeps_others(tmp_path,monkeypatch):
+    monkeypatch.setattr(motor,'BASE',tmp_path)
+    (tmp_path/'cycle.json').write_text((motor.ROOT/'drafts/m28p-v3/cycle.json').read_text())
+    stale=[dict(keyword='flor',game='sentence',status='generated',slug='x'),dict(keyword='menina',game='discover',status='generated',slug='y')]
+    (tmp_path/'cycle-generation-report.json').write_text(json.dumps(stale))
+    monkeypatch.setattr(motor,'cycle_content',lambda word,game,pool,lexicon=None:(None,'teste'))
+    words=json.loads((motor.ROOT/'drafts/m28p-v3/words.json').read_text())
+    motor.build_cycle(words,SimpleNamespace(word='menina',game=None,validate_only=False))
+    kept=json.loads((tmp_path/'cycle-generation-report.json').read_text())
+    assert any(e['keyword']=='flor' for e in kept)
+    motor.build_cycle(words,SimpleNamespace(word=None,game=None,validate_only=False))
+    full=json.loads((tmp_path/'cycle-generation-report.json').read_text())
+    assert all(e['status']=='omitted' for e in full)

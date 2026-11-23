@@ -39,6 +39,11 @@ def asset_id(text, sentence=False):
     return plain(text).replace(' ', '-') + ('-circ' if 'ô' in text else '')
 
 
+def leftover(text):
+    """O que a frase tem fora das palavras e da pontuação (números, símbolos): não cabe nos cartões."""
+    return TOKEN.sub('', text).strip(' ,.;:!?…«»"\'-—')
+
+
 def tokens_of(text):
     return TOKEN.findall(text)
 
@@ -244,7 +249,7 @@ def validate_cycle(cycle, words, lexicon=None):
             if [t.lower() for t in tokens_of(sentence['text'])] != [t.lower() for t in tokens]:
                 raise ValueError(f'{slug}: tokens não reproduzem a frase: {sentence["text"]}')
             # Tudo o que se lê ou ouve tem de estar nos cartões: só palavras, espaços e pontuação.
-            if TOKEN.sub('', sentence['text']).strip(' ,.;:!?…«»"\'') or not 2 <= len(tokens) <= 12:
+            if leftover(sentence['text']) or not 2 <= len(tokens) <= 12:
                 raise ValueError(f'{slug}: a frase tem conteúdo fora dos cartões ou um número de palavras fora de 2 a 12: {sentence["text"]}')
             for token in tokens:
                 if token.lower() not in allowed:
@@ -406,31 +411,29 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3, reserve
         options = trios or options
         options.sort(key=lambda option: option[:3])
         best = None
+        # Cada tabuleiro compara-se na forma em que a criança o vê: com a melhor sílaba a mais,
+        # ou sem ela quando só acrescentaria palavras reais fora da lista.
         for repeated, _, _, pieces, hidden in options[:12]:
             labels = {w['label'] for w in hidden}
+            base_clash = len(real_words(pieces, labels))
+            shown, clash = pieces, base_clash
             candidates = sorted(s for s in syllables if len(s) >= 2 and plain(s) == s and s not in pieces)
             rng.shuffle(candidates)
             for candidate in candidates:
                 board_pieces = pieces + [candidate]
                 if not honest(board_pieces, hidden):
                     continue
-                # Conta todas as palavras fora da lista no tabuleiro final, base e sílaba a mais.
-                clash = len(real_words(board_pieces, labels))
-                score = (repeated, clash)
-                if best is None or score < best[0]:
-                    best = (score, board_pieces, hidden)
-                if clash == 0:
-                    break
-            if best and best[0] == (False, 0):
+                total = len(real_words(board_pieces, labels))
+                if total <= base_clash and (shown is pieces or total < clash):
+                    shown, clash = board_pieces, total
+                    if total == base_clash:
+                        break
+            score = (repeated, clash, shown is pieces)
+            if best is None or score < best[0]:
+                best = (score, shown, hidden)
+            if best[0] == (False, 0, False):
                 break
-        if best is None:
-            _, _, _, pieces, hidden = options[0]
-        else:
-            _, pieces, hidden = best
-            # Se a sílaba a mais só acrescenta palavras reais fora da lista, o tabuleiro fica sem ela.
-            base = pieces[:-1]
-            if len(real_words(pieces, {w['label'] for w in hidden})) > len(real_words(base, {w['label'] for w in hidden})):
-                pieces = base
+        _, pieces, hidden = best
         labels = {w['label'] for w in hidden}
         base = {s for w in hidden for s in w['syllables']}
         rounds.append(dict(pieces=pieces, hidden=hidden, warnings=real_words(pieces, labels),

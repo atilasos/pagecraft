@@ -56,10 +56,18 @@ with sync_playwright() as p:
                     if r.get('warnings'):
                         # Uma palavra real que não está escondida recebe a resposta própria.
                         word = r['warnings'][0]
-                        labels, used, rest = [x['label'] for x in r['pieces']], [], word
-                        while rest:
-                            label = next(l for l in sorted(set(labels), key=len, reverse=True) if rest.startswith(l) and labels.count(l) > used.count(l))
-                            used.append(label); rest = rest[len(label):]
+                        labels = [x['label'] for x in r['pieces']]
+                        def split(rest, used):
+                            # Procura uma sequência completa de 2 ou 3 peças, respeitando as repetições disponíveis.
+                            if not rest:
+                                return used if 2 <= len(used) <= 3 else None
+                            for l in set(labels):
+                                if rest.startswith(l) and labels.count(l) > used.count(l):
+                                    found = split(rest[len(l):], used + [l])
+                                    if found:
+                                        return found
+                            return None
+                        used = split(word, [])
                         for label in used:
                             piece(label)
                         key('#confirm')
