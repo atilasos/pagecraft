@@ -4,7 +4,7 @@ import re
 from functools import lru_cache
 from pathlib import Path
 
-from scripts.m28p_cycle import validate_cycle
+from scripts.m28p_cycle import tokens_of, validate_cycle
 
 
 @lru_cache(maxsize=1)
@@ -22,18 +22,28 @@ def session_keyword(session):
     return next((w['slug'] for w in repertoire()[0] if slug.startswith(f"m28p-ciclo-{w['slug']}-")), None)
 
 
+def _formable(word, families):
+    reachable = {0}
+    for start in range(len(word)):
+        if start in reachable:
+            reachable.update(start + len(part) for part in families if word.startswith(part, start))
+    return len(word) in reachable
+
+
 def prepare_sentence(text, keyword):
     _, cycle, pools = repertoire()
     if keyword not in pools:
         raise ValueError('Escolhe uma palavra-chave disponível.')
     text = ' '.join(text.split())
-    tokens = re.findall(r'[^\W\d_]+', text)
+    # Palavras com hífen («guarda-chuva») ficam numa só peça.
+    tokens = tokens_of(text)
     if not 2 <= len(tokens) <= 12:
         raise ValueError('Escreve uma frase com 2 a 12 palavras.')
     if text[-1] not in '.!?…':
         text += '.'
     pool = pools[keyword]
-    known = {w['label'].lower() for w in pool['words']} | {w['word'].lower() for w in cycle['functionWords']}
+    known = ({w['label'].lower() for w in pool['words'] + pool['sentenceWords']}
+             | {w['word'].lower() for w in cycle['functionWords']})
     families = pool['families']
     letters = set(''.join(families))
     warnings = []
@@ -41,11 +51,7 @@ def prepare_sentence(text, keyword):
         word = token.lower()
         if word in known:
             continue
-        reachable = {0}
-        for start in range(len(word)):
-            if start in reachable:
-                reachable.update(start + len(part) for part in families if word.startswith(part, start))
-        if len(word) in reachable:
+        if all(_formable(part, families) for part in word.split('-')):
             continue
         missing = sorted(set(word) - letters)
         warnings.append(f'“{token}” tem letras ainda não trabalhadas: {", ".join(missing)}' if missing else f'“{token}” tem sílabas ainda não trabalhadas.')

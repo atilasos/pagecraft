@@ -18,20 +18,25 @@ def test_cumulative_repertoire_and_generation_limits():
     pools=validate_cycle(source(),motor.read_words())
     assert len(pools['menina']['words'])==4
     assert len(pools['menino']['words'])==5
-    assert len(pools['uva']['sentences'])==7
+    assert len(pools['uva']['sentences'])==6
     assert 'vê' not in pools['menino']['families']
     assert 'vê' in pools['uva']['families']
     for word in motor.read_words()[:3]:
         for game in motor.CYCLE_GAMES:
             data,reason=motor.cycle_content(word,game,pools[word['slug']])
+            if data:
+                # A palavra-chave é o exemplo da demonstração e nunca uma ronda.
+                assert word['slug'] not in {r['target'].get('slug') for r in data['rounds']}
+                assert all(word['label'] not in {w['label'] for w in r.get('lexicon',[])} for r in data['rounds'])
+                assert data['demo']
             if data and game=='discover':
-                assert 2<=len(data['rounds'])<=4
+                assert 1<=len(data['rounds'])<=4
                 for r in data['rounds']:
                     assert 2<=len(r['lexicon'])<=3 and len(r['pieces'])<=len({s for w in r['lexicon'] for s in w['syllables']})+1
                 spec=motor.spec_for(data,word)
                 assert '@@' not in motor.render(data,spec)
             elif data:
-                assert 1<=len(data['rounds'])<=4 if game=='sentence' else len(data['rounds'])==4
+                assert 1<=len(data['rounds'])<=4 if game=='sentence' else 3<=len(data['rounds'])<=4
                 assert len({r['target']['slug'] for r in data['rounds']})==len(data['rounds'])
                 if game=='read-choose':
                     assert all(r['target']['picturable'] for r in data['rounds'])
@@ -41,7 +46,7 @@ def test_cumulative_repertoire_and_generation_limits():
                 assert json.loads(re.search(r'<script id="m28p-content" type="application/json">(.*?)</script>',output,re.S)[1])==data
                 assert '@@' not in output
             else:
-                assert 'necessários 4' in reason
+                assert 'necessárias' in reason
 
 
 @pytest.mark.parametrize('change,match',[
@@ -50,6 +55,13 @@ def test_cumulative_repertoire_and_generation_limits():
     (lambda c:c['keywords']['menina']['newWords'][0].update(label='neuma',syllables=['neu','ma']),'repertório'),
     (lambda c:c['keywords']['menina']['sentences'][0].update(text='A menina vê.',tokens=['A','menina','vê']),'token'),
     (lambda c:c['keywords']['menina']['sentences'][0].update(tokens=['A','menina']),'tokens'),
+    (lambda c:c['keywords']['menina']['sentences'][0].pop('alternatives'),'ordem inversa'),
+    (lambda c:c['keywords']['menina']['sentences'][0].pop('scene'),'cena'),
+    (lambda c:c['keywords']['uva']['newWords'].append(dict(label='ama',syllables=['a','ma'],picturable=False)),'formável em menina'),
+    (lambda c:c['keywords']['uva']['newWords'].append(dict(label='nóvo',syllables=['nó','vo'],picturable=False)),'partilhariam'),
+    (lambda c:c['functionWords'].append(dict(word='ai',syllables=['a','i'])),'funcional'),
+    (lambda c:(c['repertoire']['byKeyword']['uva']['onsets'].update(s='aeiou'),c['keywords']['uva']['newWords'].append(dict(label='vaso',syllables=['va','so'],picturable=True))),'s entre vogais'),
+    (lambda c:c['keywords']['uva']['sentences'].append(dict(text='A uva mu.',tokens=['A','uva','mu'],scene=[{'image':'uva'},{'image':'uva'}])),'token'),
 ])
 def test_refuses_invalid_editorial_data(change,match):
     cycle=copy.deepcopy(source());change(cycle)
@@ -60,6 +72,7 @@ def test_refuses_invalid_editorial_data(change,match):
 def test_js_cycle_state_and_recovery():
     pools=validate_cycle(source(),motor.read_words())
     fixtures=[motor.cycle_content(motor.read_words()[2],game,pools['uva'])[0] for game in motor.CYCLE_GAMES]
+    fixtures.append(motor.cycle_content(motor.read_words()[0],'sentence',pools['menina'])[0])
     template=(motor.ROOT/'scripts/templates/m28p-tic.html').read_text()
     model=template.split('/* BEGIN M28P TIC MODEL: funções puras verificáveis em Node. */')[1].split('/* END M28P TIC MODEL */')[0]
     js=model+'''
@@ -78,6 +91,9 @@ for(const data of FIXTURES){
   assert(TicModel.answered(data,s,0));
   saved=TicModel.sanitize(data,s);assert(saved.confirmed[r.id]);
   const other=TicModel.initial();TicModel.edit(other,r,['finish']);TicModel.confirm(other,r);assert(TicModel.answered(data,other,0));
+  // Depois de concluída ou revelada, a ronda não volta a abrir.
+  assert.equal(TicModel.edit(s,r,[]),false);assert(s.confirmed[r.id]);
+  assert.equal(TicModel.edit(other,r,ids(first)),false);assert.deepEqual(other.answers[r.id],['finish']);
  }else{
   const wrong=TicModel.ordered(r)?r.answer.slice().reverse():[r.options.find(o=>!r.answer.includes(o.id)).id];
   TicModel.edit(s,r,wrong);assert(TicModel.confirm(s,r).accepted);assert(TicModel.answered(data,s,0));
@@ -85,6 +101,10 @@ for(const data of FIXTURES){
   s.level='support';assert.deepEqual(saved.answers,s.answers);
   TicModel.edit(s,r,r.answer);assert(TicModel.confirm(s,r).correct);
   assert.equal(TicModel.confirm(s,r).emit,false);
+  for(const labels of r.alternatives||[]){
+   const used=[],ids=labels.map(label=>{const p=r.pieces.find(p=>p.label===label&&!used.includes(p.id));used.push(p.id);return p.id;});
+   const t=TicModel.initial();TicModel.edit(t,r,ids);assert(TicModel.confirm(t,r).correct,'ordem alternativa aceite');
+  }
  }
 }
 '''.replace('FIXTURES',json.dumps(fixtures,ensure_ascii=False))
@@ -145,19 +165,29 @@ def test_distractors_must_also_be_distinguishable_from_each_other():
     assert [w['label'] for w in chosen]==['uva','mana','ovo']
 
 
+def test_every_keyword_is_covered_by_the_repertoire_table():
+    from scripts.m28p_cycle import readable_at
+    cycle=source();words=sorted(motor.read_words(),key=lambda w:w['order']);slugs=[w['slug'] for w in words]
+    for index,word in enumerate(words):
+        assert readable_at(word['label'],word['syllables'],index,cycle['repertoire'],slugs),word['label']
+        if index:
+            assert not readable_at(word['label'],word['syllables'],index-1,cycle['repertoire'],slugs) or word['slug'] in {'menino'},word['label']
+
+
 def test_discover_rounds_show_only_needed_syllables_and_honest_counts():
     from scripts.m28p_cycle import discover_rounds, formable
     import random
     pools=validate_cycle(source(),motor.read_words())
     for word in motor.read_words()[:3]:
         pool=pools[word['slug']]
-        groups=discover_rounds(word['slug'],pool['words'],pool['families'],random.Random(0))
+        groups=discover_rounds(pool,random.Random(0))
         assert groups
         for group in groups:
-            assert len(group['pieces'])<=8
+            assert len(group['pieces'])<=8 and 2<=len(group['hidden'])<=3
+            assert word['label'] not in {w['label'] for w in group['hidden']}
             assert all(formable(w['label'],group['pieces']) for w in group['hidden'])
             hidden={w['label'] for w in group['hidden']}
-            assert not [w['label'] for w in pool['words'] if 2<=len(w['syllables'])<=3 and w['label'] not in hidden and formable(w['label'],group['pieces'])]
+            assert not [w['label'] for w in pool['words'] if w['slug']!=word['slug'] and 2<=len(w['syllables'])<=3 and w['label'] not in hidden and formable(w['label'],group['pieces'])]
     assert formable('ovo',['o','vo']) and not formable('ovo',['vo']) and not formable('nono',['no'])
 
 
@@ -168,12 +198,17 @@ def test_js_class_sentences_and_restore_in_either_order():
 const assert=require('node:assert/strict');
 const fixed=[{id:'r1',kind:'sentence',pieces:[{id:'p0',label:'A'},{id:'p1',label:'menina'}],answer:['p0','p1']}];
 const sentences=[{id:'abc',text:'A menina!',tokens:['A','menina']}];
+assert.equal(TicModel.classRounds(fixed,[{id:'h',text:'Avó, vê o guarda-chuva!',tokens:['Avó','vê','o','guarda-chuva']}])[0].target.text,'Avó, vê o guarda-chuva!');
 const rounds=TicModel.classRounds(fixed,sentences);
 assert.equal(rounds[0].id,'c-abc');assert.equal(rounds[0].target.text,'A menina!');
 assert.deepEqual(rounds,TicModel.classRounds(fixed,sentences));
 assert.equal(TicModel.classRounds(fixed,Array.from({length:5},(_,i)=>({...sentences[0],id:String(i)}))).length,4);
-const raw=TicModel.initial();raw.page=0;
+const raw=TicModel.initial();raw.page=0;raw.pageId='c-abc';
 TicModel.edit(raw,rounds[0],rounds[0].answer);TicModel.confirm(raw,rounds[0]);
+// A retoma volta à mesma frase mesmo quando as frases da turma chegam depois.
+{const later={...TicModel.initial(),page:1,pageId:'r1'};const two=TicModel.classRounds(fixed,sentences);
+ const st=TicModel.initial();TicModel.edit(st,two[0],two[0].answer);TicModel.confirm(st,two[0]);
+ const restored=TicModel.sanitize({rounds:two},{...st,page:0,pageId:'r1'});assert.equal(restored.page,1);}
 for(const restoreFirst of [true,false]){
  let saved=raw;
  if(restoreFirst){const early=TicModel.sanitize({rounds:fixed},raw);saved=TicModel.retainState(raw,early,fixed);}
