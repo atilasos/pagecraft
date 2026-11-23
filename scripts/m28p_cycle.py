@@ -276,12 +276,17 @@ def discover_rounds(pool, rng, lexicon=None, max_rounds=4, max_hidden=3):
     while len(remaining) >= 2 and len(rounds) < max_rounds:
         size = 3 if len(remaining) == 3 else 2
         found = None
-        for first in range(len(remaining)):
-            for others in combinations(range(first + 1, len(remaining)), size - 1):
-                group = [remaining[first]] + [remaining[i] for i in others]
-                pieces, hidden = board(group)
-                if len(hidden) <= max_hidden:
-                    found = pieces, hidden
+        used = {w['label'] for r in rounds for w in r['hidden']}
+        # Primeiro, tabuleiros que não voltam a esconder palavras de rondas anteriores.
+        for strict in (True, False):
+            for first in range(len(remaining)):
+                for others in combinations(range(first + 1, len(remaining)), size - 1):
+                    group = [remaining[first]] + [remaining[i] for i in others]
+                    pieces, hidden = board(group)
+                    if len(hidden) <= max_hidden and not (strict and used & {w['label'] for w in hidden}):
+                        found = pieces, hidden
+                        break
+                if found:
                     break
             if found:
                 break

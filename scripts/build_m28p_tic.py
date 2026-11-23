@@ -136,7 +136,8 @@ def spec_for(data, word):
         'discover': [('Junta duas sílabas e lê o que formaste.', 'Juntem duas sílabas e leiam o que formaram.'), ('Experimenta trocar a ordem das sílabas.', 'Experimentem trocar a ordem das sílabas.')],
     }
     units = []
-    for item in data['rounds']:
+    # As frases da turma podem levar Montar frases até quatro rondas: o apoio precisa de u1..u4.
+    for item in data['rounds'] + [data['rounds'][-1]] * ((4 - len(data['rounds'])) if data['game'] == 'sentence' else 0):
         units.append(dict(summary=data['title'], textDescription=data['instruction'], duration=1,
             interaction=dict(state=[dict(name='resposta', type='matching' if data['game'] == 'pairs' else 'sorting' if data['game'] in {'syllables','recall','listen-build','sentence','discover'} else 'quiz', default=None)],
                 render='Imagem original, cartões grandes e exemplo visual recuperável; áudio PT-PT incorporado por pedido.',
@@ -153,7 +154,7 @@ def spec_for(data, word):
         objectives=[data['criteria'][0], 'Usar a demonstração e as pistas para continuar com apoio pontual.'],
         curriculum={'ae':[],'competencies':['PA-A: Linguagens e textos','PA-F: Desenvolvimento pessoal e autonomia']},
         curriculumNote='Consolidação complementar ao método trabalhado com o professor titular; sem pretender substituir esse ensino.',
-        materials=['Computador ou tablet', 'Auscultadores opcionais'], sessionFlow='Exemplo visual, quatro rondas curtas, reflexão facultativa.',
+        materials=['Computador ou tablet', 'Auscultadores opcionais'], sessionFlow=f"Exemplo visual, {len(data['rounds'])} {'ronda curta' if len(data['rounds']) == 1 else 'rondas curtas'}, reflexão facultativa.",
         support={'version':'m28p-tic-v3','languages':['pt'],'automaticAfterFailures':0}, units=units)
     Draft202012Validator(json.loads((ROOT/'server/pipeline/schemas/docspec.schema.json').read_text())).validate(spec)
     return spec
